@@ -21,8 +21,60 @@
 /* checkout this one - it might be replaceable by something faster */
 #include "dcmpdata.h"
 
+static const UChar *rulesToParse = 0;
 static const InverseTableHeader* invUCA = NULL;
 
+
+/* there are two hashtables - both holding the same stuff but with a little bit different keys */
+/* This one is needed for finding tailored CEs */
+/* This was found by Min Cui and the Shangai team */
+int32_t
+uhash_hashStrRep(const void *k) {
+  int32_t hash = 0;
+  if (k != NULL) {
+    const uint32_t key = (const uint32_t)k;
+      int32_t len = (key & 0xFF000000)>>24;
+      int32_t inc = ((len - 32) / 32) + 1;
+
+      const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
+      const UChar *limit = p + len;    
+
+      while (p<limit) {
+          hash = (hash * 37) + *p;
+          p += inc;
+      }
+  }
+  return hash;
+}
+
+UBool uhash_compareStrReps(const void *key1, const void *key2) {
+  const uint32_t p1 = (const uint32_t)key1;
+  const uint32_t p2 = (const uint32_t)key2;
+
+  const UChar *s1 = (p1 & 0x00FFFFFF) + rulesToParse;
+  const UChar *s2 = (p2 & 0x00FFFFFF) + rulesToParse;
+  uint32_t s1L = ((p1 & 0xFF000000) >> 24);
+  uint32_t s2L = ((p2 & 0xFF000000) >> 24);
+
+  if (p1 == p2) {
+      return TRUE;
+  }
+  if (p1 == NULL || p2 == NULL) {
+      return FALSE;
+  }
+  if(s1L != s2L) {
+    return FALSE;
+  }
+  while(s1 < s1+s1L-1 && *s1 == *s2) {
+    ++s1;
+    ++s2;
+  }
+  if(*s1 == *s2) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
 
 static UBool U_CALLCONV
 isAcceptableInvUCA(void *context, 
@@ -454,7 +506,7 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
 #endif
 }
 
-U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
+U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
 
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
@@ -570,11 +622,60 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
   UCAElements el;
   UColToken *tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
   UColToken *expt = NULL;
-  uint32_t i = 0;
+  uint32_t i = 0, j = 0;
 
   while(tok != NULL) {
     /* first, check if there are any expansions */
+    /* if there are expansions, we need to do a little bit more processing */
+    /* since parts of expansion can be tailored, while others are not */
     if(tok->expansion != 0) {
+      uint32_t len = tok->expansion >> 24;
+      uint32_t currentSequenceLen = len;
+      uint32_t expOffset = tok->expansion & 0x00FFFFFF;
+      uint32_t exp = currentSequenceLen | expOffset;
+
+      while(len > 0) {
+        currentSequenceLen = len;
+        while(currentSequenceLen > 0) {
+          exp = (currentSequenceLen << 24) | expOffset;
+          if((expt = (UColToken *)uhash_get(tailored, (void *)exp)) != NULL) { /* expansion is tailored */
+            uint32_t noOfCEsToCopy = expt->noOfCEs;
+            for(j = 0; j<noOfCEsToCopy; j++) {
+              tok->expCEs[tok->noOfExpCEs + j] = expt->CEs[j];
+            }
+            tok->noOfExpCEs += noOfCEsToCopy;
+            expOffset += noOfCEsToCopy;
+            len -= noOfCEsToCopy;
+            break;
+          } else {
+            currentSequenceLen--;
+          }
+        }
+        if(currentSequenceLen == 0) { /* couldn't find any tailored subsequence */
+          /* will have to get one from UCA */
+          /* first, get the UChars from the rules */
+          /* then pick CEs out until there is no more and stuff them into expansion */
+          UChar source[256],buff[256];
+          collIterate s;
+          uint32_t order = 0;
+          uint32_t normSize = 0;
+          uprv_memcpy(buff, expOffset + src->source, 1*sizeof(UChar));
+          normSize = unorm_normalize(buff, 1, UNORM_NFD, 0, source, 256, status);
+          init_collIterate(src->UCA, source, normSize, &s, FALSE);
+
+          for(;;) {
+            UCOL_GETNEXTCE(order, src->UCA, s, status);
+            if(order == UCOL_NO_MORE_CES) {
+                break;
+            }
+            tok->expCEs[tok->noOfExpCEs++] = order;
+          }
+          expOffset++;
+          len--;
+        }
+      }
+#if 0 
+      /* old version, works bad for expansions longer than one */
       if((expt = (UColToken *)uhash_get(tailored, (void *)tok->expansion)) != NULL) { /* expansion is tailored */
         /* just copy CEs from tailored token to this one */
         for(i = 0; i<expt->noOfCEs; i++) {
@@ -587,7 +688,6 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         UChar source[256],buff[256];
         collIterate s;
         uint32_t order = 0;
-        uint32_t len = tok->expansion >> 24;
         uprv_memcpy(buff, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
         unorm_normalize(buff, len, UNORM_NFD, 0, source, 256, status);
         init_collIterate(src->UCA, source, len, &s, FALSE);
@@ -600,6 +700,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           tok->expCEs[tok->noOfExpCEs++] = order;
         }
       }
+#endif
     } else {
       tok->noOfExpCEs = 0;
     }
@@ -875,7 +976,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     boundaries except where there is only a single-byte primary. That is to 
     ensure that the script reordering will continue to work. 
 */
-  UHashtable *tailored = uhash_open(uhash_hashLong, uhash_compareLong, status);
+  rulesToParse = src->source;
+  UHashtable *tailored = uhash_open(uhash_hashStrRep, uhash_compareStrReps, status);
   UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
   uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
 
@@ -884,7 +986,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
     if(U_SUCCESS(*status)) {
-      ucol_initBuffers(&src->lh[i], tailored, status);
+      ucol_initBuffers(src, &src->lh[i], tailored, status);
     }
   }
 
