@@ -1462,8 +1462,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which);
  *
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
- *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
- *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
  * @return Minimum value returned by u_getIntPropertyValue for a Unicode property.
  *         0 if the property selector is out of range.
  *
@@ -1492,8 +1491,7 @@ u_getIntPropertyMinValue(UProperty which);
  *
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
- *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
- *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
  * @return Maximum value returned by u_getIntPropertyValue for a Unicode property.
  *         <=0 if the property selector is out of range.
  *
@@ -2066,6 +2064,11 @@ u_enumCharNames(UChar32 start, UChar32 limit,
  * Return the Unicode name for a given property, as given in the
  * Unicode database file PropertyAliases.txt.
  *
+ * In addition, this function maps the property
+ * UCHAR_GENERAL_CATEGORY_MASK to the synthetic names "gcm" /
+ * "General_Category_Mask".  These names are not in
+ * PropertyAliases.txt.
+ *
  * @param property UProperty selector other than UCHAR_INVALID_CODE.
  *         If out of range, NULL is returned.
  *
@@ -2097,6 +2100,11 @@ u_getPropertyName(UProperty property,
  * in the Unicode database file PropertyAliases.txt.  Short, long, and
  * any other variants are recognized.
  *
+ * In addition, this function maps the synthetic names "gcm" /
+ * "General_Category_Mask" to the property
+ * UCHAR_GENERAL_CATEGORY_MASK.  These names are not in
+ * PropertyAliases.txt.
+ *
  * @param alias the property name to be matched.  The name is compared
  *         using "loose matching" as described in PropertyAliases.txt.
  *
@@ -2113,6 +2121,12 @@ u_getPropertyEnum(const char* alias);
  * Return the Unicode name for a given property value, as given in the
  * Unicode database file PropertyValueAliases.txt.
  *
+ * Note: Some of the names in PropertyValueAliases.txt can only be
+ * retrieved using UCHAR_GENERAL_CATEGORY_MASK, not
+ * UCHAR_GENERAL_CATEGORY.  These include: "C" / "Other", "L" /
+ * "Letter", "LC" / "Cased_Letter", "M" / "Mark", "N" / "Number", "P"
+ * / "Punctuation", "S" / "Symbol", and "Z" / "Separator".
+ *
  * @param property UProperty selector constant.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
  *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
@@ -2125,7 +2139,7 @@ u_getPropertyEnum(const char* alias);
  *         (1.) UCHAR_BLOCK values begin at the non-zero value
  *         UBLOCK_BASIC_LATIN.  (2.)  UCHAR_CANONICAL_COMBINING_CLASS
  *         values are not contiguous and range from 0..240.  (3.)
- *         UCHAR_GENERAL_CATEGORY values are not values of
+ *         UCHAR_GENERAL_CATEGORY_MASK values are not values of
  *         UCharCategory, but rather mask values produced by
  *         U_GET_GC_MASK().  This allows grouped categories such as
  *         [:L:] to be represented.  Mask values range
@@ -2160,11 +2174,16 @@ u_getPropertyValueName(UProperty property,
  * specified in the Unicode database file PropertyValueAliases.txt.
  * Short, long, and any other variants are recognized.
  *
+ * Note: Some of the names in PropertyValueAliases.txt will only be
+ * recognized with UCHAR_GENERAL_CATEGORY_MASK, not
+ * UCHAR_GENERAL_CATEGORY.  These include: "C" / "Other", "L" /
+ * "Letter", "LC" / "Cased_Letter", "M" / "Mark", "N" / "Number", "P"
+ * / "Punctuation", "S" / "Symbol", and "Z" / "Separator".
+ *
  * @param property UProperty selector constant.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
  *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
  *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
- *        Only these properties can be enumerated.
  *        If out of range, UCHAR_INVALID_CODE is returned.
  *
  * @param alias the value name to be matched.  The name is compared
