@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/Resources.java,v $ 
- * $Date: 2002/05/20 18:53:08 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/05/20 23:04:00 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************
  */
@@ -14,11 +14,12 @@ package com.ibm.rbm;
 
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.JarURLConnection;
 import java.text.MessageFormat;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-import java.util.Locale;
-import java.util.MissingResourceException;
+import java.util.*;
+import java.util.zip.ZipEntry;
 
 /**
  * A class not to be instantiated. Provides methods for translating items from a resource bundle. To use this class
@@ -82,8 +83,29 @@ public class Resources {
     public static String[] getAvailableLocales() {
         Locale loc[] = null;
         String list[] = null;
+        Vector locVect = new Vector();
+//        try {
         try {
-            File locDir = new File("Resources");
+            URL resURL = ClassLoader.getSystemResource("com/ibm/rbm/resources/RBManager.properties");
+            JarURLConnection resConnection = (JarURLConnection)resURL.openConnection();
+            Enumeration enumRes = resConnection.getJarFile().entries();
+            String baseName = "com/ibm/rbm/resources/RBManager";
+            while (enumRes.hasMoreElements()) {
+                String entryName = ((ZipEntry)enumRes.nextElement()).getName();
+                if (entryName.startsWith(baseName)) {
+                    entryName = entryName.substring(baseName.length(), entryName.lastIndexOf('.'));
+                    if (entryName.startsWith("_")) {
+                        entryName = entryName.substring(1);
+                    }
+                    else if (entryName.length() == 0) {
+                        /* For our resources we consider root as English */
+                        entryName = "en";
+                    }
+                    locVect.add(entryName);
+                }
+            }
+
+/*            File locDir = new File("resources");
             list = locDir.list(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
                     boolean accept = true;
@@ -93,11 +115,16 @@ public class Resources {
                     return accept;
                 }
             });
-            loc = new Locale[list.length];
-            for (int i=0; i < list.length; i++) {
-                list[i] = list[i].substring(10,list[i].length()-11);
+*/
+            int listSize = locVect.size();
+            list = new String[listSize];
+            for (int i=0; i < listSize; i++) {
+                list[i] = (String)locVect.get(i);
             }
-        } catch (Exception ioe) {}
+        } catch (IOException ioe) {
+            System.err.println("Can't get resources");
+            ioe.printStackTrace(System.err);
+        }
         return list;
     }
 
