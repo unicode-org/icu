@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/01/12 21:13:00 $
- * $Revision: 1.58 $
+ * $Date: 2004/01/27 23:13:13 $
+ * $Revision: 1.59 $
  *
  *****************************************************************************************
  */
@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.PrintStream;
-import java.io.ByteArrayOutputStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

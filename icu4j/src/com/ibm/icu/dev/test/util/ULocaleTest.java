@@ -14,16 +14,13 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.VersionInfo;
 import java.lang.reflect.*;
 import java.util.Locale;
 
