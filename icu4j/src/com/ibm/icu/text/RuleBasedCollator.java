@@ -5,282 +5,240 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/05/22 01:14:38 $ 
-* $Revision: 1.7 $
+* $Date: 2002/06/21 23:56:47 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
 import java.io.InputStream;
-import java.io.DataInputStream;
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.text.ParseException;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.ICULocaleData;
 
 /**
-* <p>The RuleBasedCollator class is a concrete subclass of Collator that 
-* provides a simple, data-driven, table collator. With this class you can 
-* create a customized table-based Collator. RuleBasedCollator maps characters 
-* to sort keys.</p>
-* <p>RuleBasedCollator has the following restrictions for efficiency (other 
-* subclasses may be used for more complex languages) : 
-* <ol>
-* <li>If a special collation rule controlled by a &lt;modifier&gt; is
-*     specified it applies to the whole collator object.
-* <li>All non-mentioned characters are at the end of the collation order.
-* </ol>
-* </p>
-* <p>The collation table is composed of a list of collation rules, where each 
-* rule is of three forms: 
-*     <pre>
-*    &lt;modifier&gt;
-*    &lt;relation&gt; &lt;text-argument&gt;
-*    &lt;reset&gt; &lt;text-argument&gt;
-* </pre>
-* </p>
-* <p>The definitions of the rule elements is as follows:
-* <UL Type=disc>
-*    <LI><strong>Text-Argument</strong>: A text-argument is any sequence of
-*        characters, excluding special characters (that is, common
-*        whitespace characters [0009-000D, 0020] and rule syntax characters
-*        [0021-002F, 003A-0040, 005B-0060, 007B-007E]). If those
-*        characters are desired, you can put them in single quotes
-*        (e.g. ampersand => '&'). Note that unquoted white space characters
-*        are ignored; e.g. <code>b c</code> is treated as <code>bc</code>.
-*    <LI><strong>Modifier</strong>: There are currently two modifiers that 
-*        turn on special collation rules.
-*        <UL Type=square>
-*            <LI>'@' : Turns on backwards sorting of accents (secondary
-*                      differences), as in French.
-*            <LI>'!' : Turns on Thai/Lao vowel-consonant swapping.  If this
-*                      rule is in force when a Thai vowel of the range
-*                      &#92;U0E40-&#92;U0E44 precedes a Thai consonant of the 
-*                      range &#92;U0E01-&#92;U0E2E OR a Lao vowel of the range 
-*                      &#92;U0EC0-&#92;U0EC4 precedes a Lao consonant of the 
-*                      range &#92;U0E81-&#92;U0EAE then the vowel is placed 
-*                      after the consonant for collation purposes.
-*        </UL>
-*        <p>'@' : Indicates that accents are sorted backwards, as in French.
-*    <LI><strong>Relation</strong>: The relations are the following:
-*        <UL Type=square>
-*            <LI>'&lt;' : Greater, as a letter difference (primary)
-*            <LI>';' : Greater, as an accent difference (secondary)
-*            <LI>',' : Greater, as a case difference (tertiary)
-*            <LI>'=' : Equal
-*        </UL>
-*    <LI><strong>Reset</strong>: There is a single reset
-*        which is used primarily for contractions and expansions, but which
-*        can also be used to add a modification at the end of a set of rules.
-*        <p>'&' : Indicates that the next rule follows the position to where
-*            the reset text-argument would be sorted.
-* </UL>
-* </p>
-* <p>
-* This sounds more complicated than it is in practice. For example, the
-* following are equivalent ways of expressing the same thing:
-* <blockquote>
-* <pre>
-* a &lt; b &lt; c
-* a &lt; b &amp; b &lt; c
-* a &lt; c &amp; a &lt; b
-* </pre>
-* </blockquote>
-* Notice that the order is important, as the subsequent item goes immediately
-* after the text-argument. The following are not equivalent:
-* <blockquote>
-* <pre>
-* a &lt; b &amp; a &lt; c
-* a &lt; c &amp; a &lt; b
-* </pre>
-* </blockquote>
-* Either the text-argument must already be present in the sequence, or some
-* initial substring of the text-argument must be present. 
-* (e.g. "a &lt; b &amp; ae &lt; e" is valid since "a" is present in the 
-* sequence before "ae" is reset). In this latter case, "ae" is not entered and 
-* treated as a single character; instead, "e" is sorted as if it were expanded 
-* to two characters: "a" followed by an "e". This difference appears in 
-* natural languages: in traditional Spanish "ch" is treated as though it 
-* contracts to a single character (expressed as "c &lt; ch &lt; d"), while in 
-* traditional German a-umlaut is treated as though it expanded to two 
-* characters (expressed as 
-* "a,A &lt; b,B ... &amp;ae;&#92;u00e3&amp;AE;&#92;u00c3").
-* [&#92;u00e3 and &#92;u00c3 are, of course, the escape sequences for 
-* a-umlaut.]
-* </p>
-* <p>
-* <strong>Ignorable Characters</strong>
-* <p>
-* For ignorable characters, the first rule must start with a relation (the
-* examples we have used above are really fragments; "a &lt; b" really should 
-* be "&lt; a &lt; b"). If, however, the first relation is not "&lt;", then all 
-* the all text-arguments up to the first "&lt;" are ignorable. For example, 
-* ", - &lt; a &lt; b" makes "-" an ignorable character, as we saw earlier in 
-* the word "black-birds". In the samples for different languages, you see that 
-* most accents are ignorable.</p>
-* <p><strong>Normalization and Accents</strong>
-* <p><code>RuleBasedCollator</code> automatically processes its rule table to
-* include both pre-composed and combining-character versions of accented 
-* characters. Even if the provided rule string contains only base characters 
-* and separate combining accent characters, the pre-composed accented 
-* characters matching all canonical combinations of characters from the rule 
-* string will be entered in the table.</p>
-* <p>This allows you to use a RuleBasedCollator to compare accented strings
-* even when the collator is set to NO_DECOMPOSITION. There are two caveats,
-* however. First, if the strings to be collated contain combining sequences 
-* that may not be in canonical order, you should set the collator to 
-* CANONICAL_DECOMPOSITION or FULL_DECOMPOSITION to enable sorting of combining 
-* sequences. Second, if the strings contain characters with compatibility 
-* decompositions (such as full-width and half-width forms), you must use 
-* FULL_DECOMPOSITION, since the rule tables only include canonical mappings.
-* </p>
-* <p><strong>Errors</strong></p>
-* <p>The following are errors:</p>
-* <UL Type=disc>
-*     <LI>A text-argument contains unquoted punctuation symbols
-*         (e.g. "a &lt; b-c &lt; d").
-*     <LI>A relation or reset character not followed by a text-argument
-*         (e.g. "a &lt; ,b").
-*     <LI>A reset where the text-argument (or an initial substring of the
-*         text-argument) is not already in the sequence.
-*         (e.g. "a &lt; b &amp; e &lt; f")
-* </UL>
-* <p>If you produce one of these errors, a <code>RuleBasedCollator</code> 
-* throws a <code>ParseException</code>.</p>
-* <p><strong>Examples</strong></p>
-* <p>Simple:     "&lt; a &lt; b &lt; c &lt; d"</p>
-* <p>Norwegian:  "&lt; a,A&lt; b,B&lt; c,C&lt; d,D&lt; e,E&lt; f,F&lt; " +
-*                "g,G&lt; h,H&lt; i,I&lt; j,J&lt; k,K&lt; l,L&lt; m,M&lt; " +
-*                "n,N&lt; o,O&lt; p,P&lt; q,Q&lt; r,R&lt; s,S&lt; t,T&lt; " +
-*                "u,U&lt; v,V&lt; w,W&lt; x,X&lt; y,Y&lt; z,Z&lt; " +
-*                "&#92;u00E5=a&#92; u030A,&#92;u00C5=A&#92;u030A;aa,AA&lt; " +
-*                "&#92;u00E6,&#92; u00C6&lt; &#92;u00F8,&#92;u00D8"</p>
-* <p>Normally, to create a rule-based Collator object, you will use
-* <code>Collator</code>'s factory method <code>getInstance</code>. However, to 
-* create a rule-based Collator object with specialized rules tailored to your 
-* needs, you construct the <code>RuleBasedCollator</code> with the rules 
-* contained in a <code>String</code> object. For example:</p>
-* <blockquote>
-* <pre>
-* String Simple = "&lt; a&lt; b&lt; c&lt; d";
-* RuleBasedCollator mySimple = new RuleBasedCollator(Simple);
-* </pre>
-* </blockquote>
-* Or:
-* <blockquote>
-* <pre>
-* String Norwegian = "&lt; a,A&lt; b,B&lt; c,C&lt; d,D&lt; e,E&lt; f,F&lt;" +  
-*                    "g,G&lt; h,H&lt; i,I&lt; j,J &lt; k,K&lt; l,L&lt; " +
-*                    "m,M&lt; n,N&lt; o,O&lt; p,P&lt; q,Q&lt; r,R&lt; " +
-*                    "s,S&lt; t,T &lt; u,U&lt; v,V&lt; w,W&lt; x,X&lt; " +
-*                    "y,Y&lt; z,Z &lt; &#92;u00E5=a&#92;u030A," +
-*                    "&#92;u00C5=A&#92;u030A;aa,AA&lt; &#92;u00E6," +
-*                    "&#92;u00C6&lt; &#92;u00F8,&#92;u00D8";
-* RuleBasedCollator myNorwegian = new RuleBasedCollator(Norwegian);
-* </pre>
-* </blockquote>
-* <p>Combining <code>Collator</code>s is as simple as concatenating strings.
-* Here's an example that combines two <code>Collator</code>s from two
-* different locales:</p>
-* <blockquote>
-* <pre>
-* // Create an en_US Collator object
-* RuleBasedCollator en_USCollator = (RuleBasedCollator)
-*     Collator.getInstance(new Locale("en", "US", ""));
-* // Create a da_DK Collator object
-* RuleBasedCollator da_DKCollator = (RuleBasedCollator)
-*     Collator.getInstance(new Locale("da", "DK", ""));
-* // Combine the two
-* // First, get the collation rules from en_USCollator
-* String en_USRules = en_USCollator.getRules();
-* // Second, get the collation rules from da_DKCollator
-* String da_DKRules = da_DKCollator.getRules();
-* RuleBasedCollator newCollator =
-*     new RuleBasedCollator(en_USRules + da_DKRules);
-* // newCollator has the combined rules
-* </pre>
-* </blockquote>
-* <p>Another more interesting example would be to make changes on an existing
-* table to create a new <code>Collator</code> object. For example, add
-* "&amp;C&lt; ch, cH, Ch, CH" to the <code>en_USCollator</code> object to 
-* create your own:</p>
-* <blockquote>
-* <pre>
-* // Create a new Collator object with additional rules
-* String addRules = "&amp;C&lt; ch, cH, Ch, CH";
-* RuleBasedCollator myCollator =
-*     new RuleBasedCollator(en_USCollator + addRules);
-* // myCollator contains the new rules
-* </pre>
-* </blockquote>
-* <p>The following example demonstrates how to change the order of
-* non-spacing accents,
-* <blockquote>
-* <pre>
-* // old rule
-* String oldRules = 
-*     "=&#92;u0301;&#92;u0300;&#92;u0302;&#92;u0308"    // main accents
-*     + ";&#92;u0327;&#92;u0303;&#92;u0304;&#92;u0305"    // main accents
-*     + ";&#92;u0306;&#92;u0307;&#92;u0309;&#92;u030A"    // main accents
-*     + ";&#92;u030B;&#92;u030C;&#92;u030D;&#92;u030E"    // main accents
-*     + ";&#92;u030F;&#92;u0310;&#92;u0311;&#92;u0312"    // main accents
-*     + "&lt; a , A ; ae, AE ; &#92;u00e6 , &#92;u00c6"
-*     + "&lt; b , B &lt; c, C &lt; e, E & C &lt; d, D";
-* // change the order of accent characters
-* String addOn = "& &#92;u0300 ; &#92;u0308 ; &#92;u0302";
-* RuleBasedCollator myCollator = new RuleBasedCollator(oldRules + addOn);
-* </pre>
-* </blockquote>
-* <p>The last example shows how to put new primary ordering in before the
-* default setting. For example, in Japanese <code>Collator</code>, you
-* can either sort English characters before or after Japanese characters,
-* <blockquote>
-* <pre>
-* // get en_US Collator rules
-* RuleBasedCollator en_USCollator = (RuleBasedCollator)
-*                                             Collator.getInstance(Locale.US);
-* // add a few Japanese character to sort before English characters
-* // suppose the last character before the first base letter 'a' in
-* // the English collation rule is &#92;u2212
-* String jaString = "& &#92;u2212 &lt; &#92;u3041, &#92;u3042 &lt; &#92;u3043, &#92;u3044";
-* RuleBasedCollator myJapaneseCollator = new
-*     RuleBasedCollator(en_USCollator.getRules() + jaString);
-* </pre>
-* @author Syn Wee Quek
-* @since release 2.2, April 18 2002
-* @draft 2.2
-*/
-public class RuleBasedCollator extends Collator implements Trie.DataManipulate
-{     
+ * <p>
+ * The RuleBasedCollator class is a concrete subclass of Collator. It allows
+ * customization of the Collator via user specified rule sets. 
+ * RuleBasedCollator is designed to be fully compliant to the 
+ * <a href = http://www.unicode.org/unicode/reports/tr10/>
+ * Unicode Collation Algorithm (UCA)</a> and conforms to ISO 14651. 
+ * </p>
+ * <p>
+ * Users are strongly encouraged to read  
+ * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Intro.html">
+ * the users guide</a> for more information about the collation service before
+ * using this class.
+ * </p>
+ * <p>
+ * Create a RuleBasedCollator from a locale by calling the getInstance(Locale) 
+ * factory method in the base class Collator. 
+ * Collator.getInstance(Locale) creates a RuleBasedCollator object based on the 
+ * collation rules defined by the argument locale.
+ * If a customized collation ordering ar attributes is required, use the 
+ * RuleBasedCollator(String) constructor with the appropriate rules. The 
+ * customized RuleBasedCollator will base its ordering on UCA, while 
+ * re-adjusting the attributes and orders of the characters in the specified 
+ * rule accordingly. 
+ * <p>
+ * RuleBasedCollator provides correct collation orders for most locales 
+ * supported in ICU. If specific data for a locale is not available, the orders 
+ * eventually falls back to the 
+ * <a href="http://www.unicode.org/unicode/reports/tr10/">UCA collation order
+ * </a>. 
+ * </p>
+ * <p>
+ * For information about the collation rule syntax to use and details about
+ * customization, please refer to the 
+ * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Customization.html">
+ * Collation customization</a> section of the users guide.
+ * </p>
+ * <p>
+ * Note that there are some differences between the Collation rule syntax
+ * used in Java and ICU4J
+ * <ul>
+ * <li>According to the JDK documentation:
+ * <i>
+ * <p>
+ * Modifier '!' : Turns on Thai/Lao vowel-consonant swapping. If this rule 
+ * is in force when a Thai vowel of the range &#92;U0E40-&#92;U0E44 precedes a 
+ * Thai consonant of the range &#92;U0E01-&#92;U0E2E OR a Lao vowel of the 
+ * range &#92;U0EC0-&#92;U0EC4 precedes a Lao consonant of the range 
+ * &#92;U0E81-&#92;U0EAE then the 
+ * vowel is placed after the consonant for collation purposes. 
+ * </p>
+ * <p>
+ * If a rule is without the modifier '!', the Thai/Lao vowel-consonant 
+ * swapping is not turned on.
+ * </p>
+ * </i>
+ * <p>
+ * ICU4J's RuleBasedCollator does not support turning off the Thai/Lao 
+ * vowel-consonant swapping, since the UCA clearly states that it has to be 
+ * supported to ensure a correct sorting order. If a '!' is encountered, it is
+ * ignored.
+ * </p>
+ * <li>According to the JDK documentation:
+ * <i>
+ * <p>
+ * If, however, the first relation is not "&lt;", then all the all 
+ * text-arguments up to the first "&lt;" are ignorable. For example, 
+ * ", - &lt; a &lt; b" makes "-" an ignorable character, as we saw earlier in 
+ * the word "black-birds".
+ * </p>
+ * </i>
+ * <p>
+ * The above allows random characters before the first '&lt;' not in any 
+ * specific sequence to be ignorable. ICU4J does not support this feature.
+ * To define ignorable characters in PRIMARY to TERTIARY strength, users can 
+ * use the rule "& X &lt; [variable top]" to set the variable top to the 
+ * PRIMARY strength of "X". Once alternate handling is set to shifted 
+ * (setAlternateHandling(true)), the Collator using strengths PRIMARY, 
+ * SECONDARY or TERTIARY will ignore all code points with PRIMARY strengths 
+ * less than variable top.    
+ * See the user guide's section on 
+ * <a href=http://www-124.ibm.com/icu/userguide/Collate_Customization.html>
+ * Collation Customization</a> for details.
+ * </p>
+ * <li>As mentioned in the documentation of the base class Collator, 
+ *     compatibility decomposition mode is not supported.
+ * </ul>
+ * </p>
+ * <p>
+ * <strong>Examples</strong>
+ * </p>
+ * <p>
+ * Creating Customized RuleBasedCollators
+ * <blockquote>
+ * <pre>
+ * String Simple = "&amp; a &lt; b &lt; c &lt; d";
+ * RuleBasedCollator mySimple = new RuleBasedCollator(Simple);
+ * 
+ * String Norwegian = "&amp; a , A &lt; b , B &lt; c , C &lt; d , D &lt; e , E "
+ *                    + "&lt; f , F &lt; g , G &lt; h , H &lt; i , I &lt; j , "
+ *                    + "J &lt; k , K &lt; l , L &lt; m , M &lt; n , N &lt; "
+ *                    + "o , O &lt; p , P &lt; q , Q &lt r , R &lt s , S &lt; "
+ *                    + "t , T &lt; u , U &lt; v , V &lt; w , W &lt; x , X "
+ *                    + "&lt; y , Y &lt; z , Z &lt; &#92;u00E5 = a&#92;u030A "
+ *                    + ", &#92;u00C5 = A&#92;u030A ; aa , AA &lt; &#92;u00E6 "
+ *                    + ", &#92;u00C6 &lt; &#92;u00F8 , &#92;u00D8";
+ * RuleBasedCollator myNorwegian = new RuleBasedCollator(Norwegian);
+ * </pre>
+ * </blockquote>
+ * Concatenating rules to combining <code>Collator</code>s
+ * <blockquote>
+ * <pre>
+ * // Create an en_US Collator object
+ * RuleBasedCollator en_USCollator = (RuleBasedCollator)
+ *     Collator.getInstance(new Locale("en", "US", ""));
+ * // Create a da_DK Collator object
+ * RuleBasedCollator da_DKCollator = (RuleBasedCollator)
+ *     Collator.getInstance(new Locale("da", "DK", ""));
+ * // Combine the two
+ * // First, get the collation rules from en_USCollator
+ * String en_USRules = en_USCollator.getRules();
+ * // Second, get the collation rules from da_DKCollator
+ * String da_DKRules = da_DKCollator.getRules();
+ * RuleBasedCollator newCollator =
+ *                             new RuleBasedCollator(en_USRules + da_DKRules);
+ * // newCollator has the combined rules
+ * </pre>
+ * </blockquote>
+ * Making changes on an existing RuleBasedCollator to create a new 
+ * <code>Collator</code> object, by appending the existing rule with the 
+ * changes.
+ * <blockquote>
+ * <pre>
+ * // Create a new Collator object with additional rules
+ * String addRules = "&amp; C &lt; ch, cH, Ch, CH";
+ * RuleBasedCollator myCollator =
+ *     new RuleBasedCollator(en_USCollator + addRules);
+ * // myCollator contains the new rules
+ * </pre>
+ * </blockquote>
+ * The following example demonstrates how to change the order of
+ * non-spacing accents,
+ * <blockquote>
+ * <pre>
+ * // old rule with main accents
+ * String oldRules = "= &#92;u0301 ; &#92;u0300 ; &#92;u0302 ; &#92;u0308 "    
+ *                 + "; &#92;u0327 ; &#92;u0303 ; &#92;u0304 ; &#92;u0305 "
+ *                 + "; &#92;u0306 ; &#92;u0307 ; &#92;u0309 ; &#92;u030A " 
+ *                 + "; &#92;u030B ; &#92;u030C ; &#92;u030D ; &#92;u030E "
+ *                 + "; &#92;u030F ; &#92;u0310 ; &#92;u0311 ; &#92;u0312 "
+ *                 + "&lt; a , A ; ae, AE ; &#92;u00e6 , &#92;u00c6 "
+ *                 + "&lt; b , B &lt; c, C &lt; e, E &amp; C &lt; d , D";
+ * // change the order of accent characters
+ * String addOn = "&amp; &#92;u0300 ; &#92;u0308 ; &#92;u0302";
+ * RuleBasedCollator myCollator = new RuleBasedCollator(oldRules + addOn);
+ * </pre>
+ * </blockquote>
+ * Putting new primary ordering in before the default setting, 
+ * e.g. Sort English characters before or after Japanese characters in Japanese 
+ * <code>Collator</code>.
+ * <blockquote>
+ * <pre>
+ * // get en_US Collator rules
+ * RuleBasedCollator en_USCollator 
+ *                        = (RuleBasedCollator)Collator.getInstance(Locale.US);
+ * // add a few Japanese character to sort before English characters
+ * // suppose the last character before the first base letter 'a' in
+ * // the English collation rule is &#92;u2212
+ * String jaString = "& &#92;u2212 &lt &#92;u3041, &#92;u3042 &lt &#92;u3043, "
+ *                   + "&#92;u3044";
+ * RuleBasedCollator myJapaneseCollator 
+ *              = new RuleBasedCollator(en_USCollator.getRules() + jaString);
+ * </pre>
+ * </blockquote>
+ * </p>
+ * @author Syn Wee Quek
+ * @since release 2.2, April 18 2002
+ * @draft 2.2
+ */
+public final class RuleBasedCollator extends Collator 
+{   
 	// public data members ---------------------------------------------------
 	
 	// public constructors ---------------------------------------------------
 	
 	/**
-     * <p>RuleBasedCollator constructor that takes the rules. 
-     * Please see RuleBasedCollator class description for more details on the 
-     * collation rule syntax.</p>
-     * <p>Note different from Java, does not throw a ParseException</p>
-     * @see java.util.Locale
+     * <p>
+     * RuleBasedCollator constructor that takes the argument rules for 
+     * customization. RuleBasedCollator constructed will be based on UCA, 
+     * with the attributes and re-ordering of the characters specified in the 
+     * argument rules.
+     * </p>
+     * <p>See the user guide's section on 
+     * <a href=http://www-124.ibm.com/icu/userguide/Collate_Customization.html>
+     * Collation Customization</a> for details on the rule syntax.
+     * </p>
      * @param rules the collation rules to build the collation table from.
-     * @exception Exception thrown when there's an error creating the collator
+     * @exception ParseException and IOException thrown. ParseException thrown 
+     *            when argument rules have an invalid syntax. IOException 
+     *            thrown when an error occured while reading internal data.
      * @draft 2.2
      */
     public RuleBasedCollator(String rules) throws Exception
     {
-    	setStrength(Collator.TERTIARY);
-        setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        if (rules == null) {
+            throw new IllegalArgumentException(
+                                            "Collation rules can not be null");
+        }
+    	setWithUCAData();
+        CollationParsedRuleBuilder builder 
+                                       = new CollationParsedRuleBuilder(rules);
+	    
+		builder.setRules(this);
         m_rules_ = rules;
-        // tables = new RBCollationTables(rules, decomp);
         init();
     }
     
@@ -313,36 +271,55 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     // public setters --------------------------------------------------------
     
     /**
-	 * Sets the Hiragana Quartenary sort to be on or off
-	 * @param flag true if Hiragana Quartenary sort is to be on, false 
+	 * Sets the Hiragana Quaternary mode to be on or off.
+	 * When the Hiragana Quaternary mode turned on, the RuleBasedCollator 
+	 * positions Hiragana characters before all non-ignorable characters in 
+	 * QUATERNARY strength. This is to produce a correct JIS collation order,
+	 * distinguishing between Katakana  and Hiragana characters. 
+	 * @param flag true if Hiragana Quaternary mode is to be on, false 
 	 *        otherwise
+	 * @see #setHiraganaQuaternaryDefault
+	 * @see #isHiraganaQuaternary
 	 * @draft 2.2
 	 */
-	public void setHiraganaQuartenary(boolean flag)
+	public void setHiraganaQuaternary(boolean flag)
 	{
 		m_isHiragana4_ = flag;
 	}
 	
 	/**
-	 * Sets the Hiragana Quartenary sort to be on or off depending on the 
-	 * Collator's locale specific default value.
+	 * Sets the Hiragana Quaternary mode to the initial mode set during 
+	 * construction of the RuleBasedCollator.
+	 * See setHiraganaQuaternary(boolean) for more details.
+	 * @see #setHiraganaQuaternary(boolean)
+	 * @see #isHiraganaQuaternary
 	 * @draft 2.2
 	 */
-	public void setHiraganaQuartenaryDefault()
+	public void setHiraganaQuaternaryDefault()
 	{
 		m_isHiragana4_ = m_defaultIsHiragana4_;
 	}
 	
 	/**
-   	 * Sets the Collator to sort with the indicated casing first
-   	 * @param upper true for sorting uppercased characters before lowercased 
-   	 *              characters, false for sorting lowercased characters before
-   	 *              uppercased characters 
+   	 * Sets the orders of upper cased characters to sort before lower cased 
+   	 * characters or vice versa, in strength TERTIARY. The default 
+   	 * mode is false, and that sorts lower cased characters before upper cased 
+   	 * characters. 
+   	 * If true is set, the RuleBasedCollator will sort upper cased characters 
+   	 * before the lower cased ones.
+   	 * @param upperfirst true for sorting upper cased characters before 
+   	 *                   lower cased characters, false for sorting lower cased 
+   	 *                   characters before upper cased characters 
+   	 * @see #setCaseFirstOff
+   	 * @see #isCaseFirstOff
+   	 * @see #isLowerCaseFirst
+   	 * @see #isUpperCaseFirst
+   	 * @see #setCaseFirstDefault
    	 * @draft 2.2
    	 */
-   	public void setCaseFirst(boolean upper)
+   	public void setCaseFirst(boolean upperfirst)
    	{
-   		if (upper) {
+   		if (upperfirst) {
    			m_caseFirst_ = AttributeValue.UPPER_FIRST_;
    		}
    		else {
@@ -355,6 +332,11 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
    	 * Sets the Collator to ignore any previous setCaseFirst(boolean) calls.
    	 * Ignores case preferences.
    	 * @draft 2.2
+   	 * @see #setCaseFirst(boolean)
+   	 * @see #isCaseFirstOff
+   	 * @see #isLowerCaseFirst
+   	 * @see #isUpperCaseFirst
+   	 * @see #setCaseFirstDefault
    	 */
    	public void setCaseFirstOff()
    	{
@@ -363,10 +345,13 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
    	}
    	
    	/**
-   	 * Sets the case sorting preferences to the Collator's locale specific 
-   	 * default value.
-   	 * @see #setCaseFirst(boolean)
+   	 * Sets the case first mode to the initial mode set during 
+	 * construction of the RuleBasedCollator.
+	 * See setCaseFirst(boolean) for more details.
    	 * @see #setCaseFirstOff
+   	 * @see #isCaseFirstOff
+   	 * @see #isUpperCaseFirst
+   	 * @see #setCaseFirst
    	 * @draft 2.2
    	 */
    	public final void setCaseFirstDefault()
@@ -375,10 +360,12 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
    		updateInternalState();
    	}
    
-   /**
-     * Sets the alternate handling value for quartenary strength to the 
-     * Collator's locale specific default value. 
-     * @see #setAlternateHandling
+    /**
+     * Sets the alternate handling mode to the initial mode set during 
+	 * construction of the RuleBasedCollator.
+	 * See setAlternateHandling(boolean) for more details.
+	 * @see #setAlternateHandling(boolean)
+	 * @see #isAlternateHandling(boolean)
      * @draft 2.2
      */
     public void setAlternateHandlingDefault()
@@ -388,8 +375,11 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     }
     
     /**
-     * Sets case level sorting to the Collator's locale specific default value.
-     * @see #setCaseLevel
+     * Sets the case level mode to the initial mode set during 
+	 * construction of the RuleBasedCollator.
+	 * See setCaseLevel(boolean) for more details.
+	 * @see #setCaseLevel(boolean)
+	 * @see #isCaseLevel
      * @draft 2.2
      */
     public void setCaseLevelDefault()
@@ -399,19 +389,24 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     }
     
     /**
-     * Set the decomposition mode to the Collator's locale specific default 
-     * value. 
+     * Sets the decomposition mode to the initial mode set during construction
+     * of the RuleBasedCollator.
+     * See setDecomposition(int) for more details.
      * @see #getDecomposition
+     * @see #setDecomposition(int)
      * @draft 2.2
      */
     public void setDecompositionDefault()
     {
-    	m_decomposition_ = m_defaultDecomposition_;
+    	setDecomposition(m_defaultDecomposition_);
     }
     
     /**
-     * Sets French collation to the Collator's locale specific default value.
-     * @see #getFrenchCollation
+     * Sets the French collation mode to the initial mode set during 
+     * construction of the RuleBasedCollator.
+     * See setFrenchCollation(boolean) for more details.
+     * @see #isFrenchCollation
+     * @see #setFrenchCollation(boolean)
      * @draft 2.2
      */
     public void setFrenchCollationDefault()
@@ -421,20 +416,31 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     }
     
     /**
-     * <p>Sets strength to the Collator's locale specific default value.</p>
-     * @see #setStrength
+     * Sets the collation strength to the initial mode set during the 
+     * construction of the RuleBasedCollator.
+     * See setStrength(int) for more details.
+     * @see #setStrength(int)
+     * @see #getStrength
      * @draft 2.2
      */
     public void setStrengthDefault()
     {
-    	m_strength_ = m_defaultStrength_;
-    	updateInternalState();
+    	setStrength(m_defaultStrength_);
     }
     
     /**
-     * Sets the French collation
+     * Sets the mode for the direction of SECONDARY weights to be used in 
+     * French collation.
+     * The default value is false which treats SECONDARY weights in the order 
+     * they appear.
+     * If true is set, the SECONDARY weights will be sorted backwards.
+     * See the section on 
+     * <a href=http://www-124.ibm.com/icu/userguide/Collate_ServiceArchitecture.html>
+     * French collation</a> for more information.
      * @param flag true to set the French collation on, false to set it off
      * @draft 2.2
+     * @see #isFrenchCollation
+     * @see #setFrenchCollationDefault
      */
     public void setFrenchCollation(boolean flag) 
     {
@@ -443,11 +449,24 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     }
     
     /**
-     * Sets the alternate handling for quartenary strength to be either 
-     * shifted or non-ignorable. This attribute will only be effective with
-     * a quartenary strength sort.
-     * @param shifted true if shifted for alternate handling is desired, false 
-     *        for the non-ignorable.
+     * Sets the alternate handling for Quaternary strength to be either 
+     * shifted or non-ignorable. 
+     * See the UCA definition on 
+     * <a href=http://www.unicode.org/unicode/reports/tr10/#§3.2.2 Variable Collation Elements>
+     * Alternate Weighting</a>.
+     * This attribute will only be effective when QUATERNARY strength is set.
+     * The default value for this mode is false, corresponding to the 
+     * NON_IGNORABLE mode in UCA. In the NON-IGNORABLE mode, the 
+     * RuleBasedCollator will treats all the codepoints with non-ignorable 
+     * primary weights in the same way. 
+     * If the mode is set to true, the behaviour corresponds to SHIFTED defined
+     * in UCA, this causes codepoints with PRIMARY orders that are equal or 
+     * below the variable top value to be ignored in PRIMARY order and 
+     * moved to the QUATERNARY order.
+     * @param shifted true if SHIFTED behaviour for alternate handling is 
+     *        desired, false for the NON_IGNORABLE behaviour.
+     * @see #isAlternateHandling(boolean)
+     * @see #setAlternateHandlingDefault
      * @draft 2.2
      */
     public void setAlternateHandling(boolean shifted)
@@ -457,9 +476,28 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     }
     
     /**
-     * Sets if case level sorting is required.
+     * <p>
+     * When case level is set to true, an additional weight is formed 
+     * between the SECONDARY and TERTIARY weight, known as the case level. 
+     * The case level is used to distinguish large and small Japanese Kana 
+     * characters. Case level could also be used in other situations. 
+     * For example to distinguish certain Pinyin characters. 
+     * The default value is false, where the case level is not generated.
+     * If the case level is set to true, which causes the case level to be 
+     * generated. Contents of the case level are affected by the case first
+     * mode. A simple way to ignore accent differences in a string is to set 
+     * the strength to PRIMARY and enable case level.
+     * </p>
+     * <p>
+     * See the section on 
+     * <a href=http://www-124.ibm.com/icu/userguide/Collate_ServiceArchitecture.html>
+     * case level</a> for more information.
+     * </p>
      * @param flag true if case level sorting is required, false otherwise
      * @draft 2.2
+     * @see #setCaseLevelDefault
+	 * @see #isCaseLevel
+	 * @see #setCaseFirst(boolean)
      */
     public void setCaseLevel(boolean flag) 
     {
@@ -468,12 +506,15 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     }
 
 	/**
-     * <p>Sets this Collator's strength property. The strength property 
+     * <p>
+     * Sets this Collator's strength property. The strength property 
      * determines the minimum level of difference considered significant 
-     * during comparison.</p>
+     * during comparison.
+     * </p>
      * <p>See the Collator class description for an example of use.</p>
      * @param the new strength value.
      * @see #getStrength
+     * @see #setStrengthDefault
      * @see #PRIMARY
      * @see #SECONDARY
      * @see #TERTIARY
@@ -484,58 +525,44 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      * @draft 2.2
      */
     public void setStrength(int newStrength) {
-        if ((newStrength != PRIMARY) &&
-            (newStrength != SECONDARY) &&
-            (newStrength != TERTIARY) &&
-            (newStrength != QUATERNARY) &&
-            (newStrength != IDENTICAL)) {
-            throw new IllegalArgumentException("Incorrect comparison level.");
-        }
-        m_strength_ = newStrength;
+        super.setStrength(newStrength);
         updateInternalState();
     }
 
     // public getters --------------------------------------------------------
     
     /**
-     * Internal method called to parse a lead surrogate's ce for the offset
-     * to the next trail surrogate data.
-     * @param ce collation element of the lead surrogate
-     * @return data offset or 0 for the next trail surrogate
+     * Gets the collation rules for this RuleBasedCollator.     
+     * @return returns the collation rules
      * @draft 2.2
      */
-    public int getFoldingOffset(int ce)
-    {
-    	if (isSpecial(ce) && getTag(ce) == CE_SURROGATE_TAG_) {
-    		return (ce & 0xFFFFFF);
-    	}
-    	return 0;
-    }
-    	
-	/**
-     * Gets the collation rules for this RuleBasedCollator.     * @return returns the collation rules
-     * @draft 2.2
-     */
-    public final String getRules()
+    public String getRules()
     {
     	return m_rules_;
     }
 
 	/**
-     * <p>Transforms the String into a series of bits that can be compared 
-     * bitwise to other CollationKeys. CollationKeys provide better 
-     * performance than Collator.compare() when Strings are involved in 
-     * multiple comparisons.</p> 
-     * <p>Internally CollationKey stores its data in a null-terminated byte
-     * array.</p>
-     * <p>See the Collator class description for an example using 
-     * CollationKeys.</p>
-     * @param source the string to be transformed into a collation key.
-     * @return the CollationKey for the given String based on this Collator's 
-     *         collation rules. If the source String is null, a null 
-     *         CollationKey is returned.
+     * <p>
+     * Get a Collation key for the argument String source from this 
+     * RuleBasedCollator. 
+     * </p>
+     * <p>
+     * General recommendation: <br>
+     * If comparison are to be done to the same String multiple times, it would
+     * be more efficient to generate CollationKeys for the Strings and use 
+     * CollationKey.compareTo(CollationKey) for the comparisons.
+     * If the each Strings are compared to only once, using the method
+     * RuleBasedCollator.compare(String, String) will have a better performance.
+     * </p>
+     * <p>
+     * See the class documentation for an explanation about CollationKeys.
+     * </p>
+     * @param source the text String to be transformed into a collation key.
+     * @return the CollationKey for the given String based on this 
+     *         RuleBasedCollator's collation rules. If the source String is 
+     *         null, a null CollationKey is returned.
      * @see CollationKey
-     * @see compare(String, String)
+     * @see #compare(String, String)
      * @draft 2.2
      */
     public CollationKey getCollationKey(String source)
@@ -543,19 +570,20 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     	if (source == null) {
     		return null;
     	}
+    	int strength = getStrength();
     	boolean compare[] = {m_isCaseLevel_,
     						 true,
-    						 m_strength_ >= SECONDARY,
-    						 m_strength_ >= TERTIARY,
-    						 m_strength_ >= QUATERNARY,
-							 m_strength_ == IDENTICAL
+    						 strength >= SECONDARY,
+    						 strength >= TERTIARY,
+    						 strength >= QUATERNARY,
+							 strength == IDENTICAL
 							};
 
 		byte bytes[][] = {new byte[SORT_BUFFER_INIT_SIZE_CASE_], // case
     					new byte[SORT_BUFFER_INIT_SIZE_1_], // primary 
 						new byte[SORT_BUFFER_INIT_SIZE_2_], // secondary
 						new byte[SORT_BUFFER_INIT_SIZE_3_],	// tertiary	
-						new byte[SORT_BUFFER_INIT_SIZE_4_]	// quartenary
+						new byte[SORT_BUFFER_INIT_SIZE_4_]	// Quaternary
     	};
     	int bytescount[] = {0, 0, 0, 0, 0};
     	int count[] = {0, 0, 0, 0, 0};
@@ -573,31 +601,27 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     	
     	int bottomCount4 = 0xFF - commonBottom4;
     	// If we need to normalize, we'll do it all at once at the beginning!
-    	if ((compare[5] || m_decomposition_ != NO_DECOMPOSITION)
-    		/*&& UNORM_YES != unorm_quickCheck(source, len, normMode, status)*/
-    		) {
-        	/*
-        	 * len = unorm_internalNormalize(normSource, normSourceLen,
-                                      source, len,
-                                      normMode, FALSE,
-                                      status);
-        	source = normSource;*/
-        	String norm = source;
-        	getSortKeyBytes(norm, compare, bytes, bytescount, count, 
-        					doFrench, hiragana4, commonBottom4, bottomCount4);
+    	if ((compare[5] || getDecomposition() != NO_DECOMPOSITION)
+    		&& Normalizer.quickCheck(source, Normalizer.NFD) 
+    												!= Normalizer.YES) {
+        	source = Normalizer.decompose(source, false);
     	}
-		else {
-			getSortKeyBytes(source, compare, bytes, bytescount, count, doFrench,
+		getSortKeyBytes(source, compare, bytes, bytescount, count, doFrench,
 						hiragana4, commonBottom4, bottomCount4);
-		}
 		byte sortkey[] = getSortKey(source, compare, bytes, bytescount, count, 
 									doFrench, commonBottom4, bottomCount4);
 		return new CollationKey(source, sortkey);
     }
     		    
     /**
-	 * Checks if uppercase is sorted before lowercase
-	 * @return true if Collator sorts uppercase before lower, false otherwise
+	 * Checks if upper cased character is sorted before lower cased character.
+	 * See setCaseFirst(boolean) for details.
+	 * @see #setCaseFirstOff
+   	 * @see #setCaseFirst(boolean)
+   	 * @see #isLowerCaseFirst
+   	 * @see #setCaseFirstDefault
+	 * @return true if upper cased characters are sorted before lower cased 
+	 *         characters, false otherwise
 	 * @draft 2.2
 	 */
 	public boolean isUpperCaseFirst()
@@ -606,8 +630,14 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Checks if lowercase is sorted before uppercase
-	 * @return true if Collator sorts lowercase before upper, false otherwise
+	 * Checks if lower cased character is sorted before upper cased character.
+	 * See setCaseFirst(boolean) for details.
+	 * @see #setCaseFirstOff
+   	 * @see #setCaseFirst(boolean)
+   	 * @see #isUpperCaseFirst
+   	 * @see #setCaseFirstDefault
+	 * @return true lower cased characters are sorted before upper cased 
+	 *         characters, false otherwise
 	 * @draft 2.2
 	 */
 	public boolean isLowerCaseFirst()
@@ -616,8 +646,16 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Checks if case sorting is off.
-	 * @return true if case sorting is off, false otherwise
+	 * Checks if a previous call to setCaseFirst(boolean) is turned off
+	 * by setCaseFirstOff().
+	 * See setCaseFirst(boolean) for details.
+	 * @return true if the customized case sorting is turned off, false 
+	 *         otherwise
+	 * @see #setCaseFirstOff
+   	 * @see #setCaseFirst(boolean)
+   	 * @see #isUpperCaseFirst
+   	 * @see #isLowerCaseFirst
+   	 * @see #setCaseFirstDefault
 	 * @draft 2.2
 	 */
 	public boolean isCaseFirstOff()
@@ -626,28 +664,33 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Checks if the alternate handling attribute is shifted or non-ignorable.
+	 * Checks if the alternate handling behaviour is the UCA defined SHIFTED or 
+	 * NON_IGNORABLE.
 	 * <ul>
 	 * <li>If argument shifted is true and
 	 *     <ul>
 	 *     <li>return value is true, then the alternate handling attribute for 
-	 *         the Collator is shifted. Or
+	 *         the Collator is SHIFTED. Or
 	 *     <li>return value is false, then the alternate handling attribute for
-	 *         the Collator is not shifted
+	 *         the Collator is NON_IGNORABLE
 	 *     </ul>
 	 * <li> If argument shifted is false and 
 	 *     <ul>
 	 *     <li>return value is true, then the alternate handling attribute for 
-	 *         the Collator is non-ignorable. Or
+	 *         the Collator is NON_IGNORABLE. Or
 	 *     <li>return value is false, then the alternate handling attribute for
-	 *         the Collator is not non-ignorable.
+	 *         the Collator is SHIFTED.
 	 *     </ul>
 	 * </ul>
-	 * @param shifted true if checks are to be done on shifted, false if 
-	 *        checks are to be done on non-ignorable
+	 * See setAlternateHandling(boolean) for more details.
+	 * @param shifted true if checks are to be done to see if the SHIFTED 
+	 *        behaviour is on, false if checks are to be done to see if the
+	 *        NON_IGNORABLE behaviour is on.
 	 * @return true or false 
-	 * @draft 2.2
-	 */
+	 * @see #setAlternateHandling(boolean)
+	 * @see #setAlternateHandlingDefault
+     * @draft 2.2
+     */
 	public boolean isAlternateHandling(boolean shifted)
 	{
 		if (shifted) {
@@ -657,8 +700,12 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Checks if case level sorting is on
-	 * @return true if case level sorting is on
+	 * Checks if case level is set to true.
+	 * See setCaseLevel(boolean) for details.
+	 * @return the case level mode
+	 * @see #setCaseLevelDefault
+	 * @see #isCaseLevel
+	 * @see #setCaseLevel(boolean)
 	 * @draft 2.2
 	 */
 	public boolean isCaseLevel()
@@ -667,72 +714,103 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Checks if French Collation sorting is on
-	 * @return true if French Collation sorting is on
+	 * Checks if French Collation is set to true.
+	 * See setFrenchCollation(boolean) for details.
+	 * @return true if French Collation is set to true, false otherwise
+	 * @see #setFrenchCollation(boolean)
+	 * @see #setFrenchCollationDefault
 	 * @draft 2.2
 	 */
 	public boolean isFrenchCollation()
 	{
 		return m_isFrenchCollation_;
 	}
+	
+	/**
+	 * Checks if the Hiragana Quaternary mode is set on.
+	 * See setHiraganaQuaternary(boolean) for more details.
+	 * @return flag true if Hiragana Quaternary mode is on, false otherwise
+	 * @see #setHiraganaQuaternaryDefault
+	 * @see #setHiraganaQuaternary(boolean)
+	 * @draft 2.2
+	 */
+	public boolean isHiraganaQuaternary()
+	{
+		return m_isHiragana4_;
+	}
 		
 	// public other methods -------------------------------------------------
 
     /**
-     * Compares the equality of two RuleBasedCollators.
+     * Compares the equality of two RuleBasedCollator objects.
+     * RuleBasedCollator objects are equivalent if they have the same collation
+     * rules and the same attributes.
      * @param obj the RuleBasedCollator to be compared with.
-     * @return true if this RuleBasedCollator has exactly the same behaviour 
-     *         as obj, false otherwise.
+     * @return true if this RuleBasedCollator has exactly the same 
+     *         collation behaviour as obj, false otherwise.
      * @draft 2.2
      */
     public boolean equals(Object obj) {
-        if (obj == null || !super.equals(obj)) {
+        if (obj == null) {
         	return false;  // super does class check
+        }
+        if (this == obj) {
+        	return true;
+        }
+        if (getClass() != obj.getClass()) {
+        	return false;
         }
         RuleBasedCollator other = (RuleBasedCollator)obj;
         // all other non-transient information is also contained in rules.
-        return (m_rules_.equals(other.m_rules_));
-    }
-    
-    /**
-     * Standard override; no change in semantics.
-     * @draft 2.2
-     */
-    public Object clone() {
-    	// synwee todo: do after all implementation done
-        return null;
+        return getStrength() == other.getStrength() 
+               && getDecomposition() == other.getDecomposition() 
+               && other.m_caseFirst_ == m_caseFirst_
+               && other.m_caseSwitch_ == m_caseSwitch_
+               && other.m_isAlternateHandlingShifted_ 
+                                             == m_isAlternateHandlingShifted_
+               && other.m_isCaseLevel_ == m_isCaseLevel_
+               && other.m_isFrenchCollation_ == m_isFrenchCollation_
+               && other.m_isHiragana4_ == m_isHiragana4_
+               && m_rules_.equals(other.m_rules_);
     }
     
 	/**
-     * Generates the hash code for this RuleBasedCollator.
+     * Generates a unique hash code for this RuleBasedCollator.
      * @return the unique hash code for this Collator
      * @draft 2.2
      */
-    public final int hashCode() 
+    public int hashCode() 
     {
     	return getRules().hashCode();
     }
     
     /**
-     * <p>Compares the source string to the target string according to the
-     * collation rules for this Collator. Returns an integer less than, equal 
-     * to or greater than zero depending on whether the source String is less 
-     * than, equal to or greater than the target string. See the Collator
-     * class description for an example of use.</p>
-     * <p>For a one time comparison, this method has the best performance. If 
-     * a given String will be involved in multiple comparisons, 
-     * CollationKey.compareTo() has the best performance. See the Collator
-     * class description for an example using CollationKeys.</p>
-     * @param source the source string.
-     * @param target the target string.
+     * Compares the source text String to the target text String according to 
+     * the collation rules, strength and decomposition mode for this 
+     * RuleBasedCollator. 
+     * Returns an integer less than, 
+     * equal to or greater than zero depending on whether the source String is 
+     * less than, equal to or greater than the target String. See the Collator
+     * class description for an example of use.
+     * </p>
+     * <p>
+     * General recommendation: <br>
+     * If comparison are to be done to the same String multiple times, it would
+     * be more efficient to generate CollationKeys for the Strings and use 
+     * CollationKey.compareTo(CollationKey) for the comparisons.
+     * If the each Strings are compared to only once, using the method
+     * RuleBasedCollator.compare(String, String) will have a better performance.
+     * </p>
+     * @param source the source text String.
+     * @param target the target text String.
      * @return Returns an integer value. Value is less than zero if source is 
      *         less than target, value is zero if source and target are equal, 
      *         value is greater than zero if source is greater than target.
      * @see CollationKey
-     * @see Collator#getCollationKey
+     * @see #getCollationKey
      * @draft 2.2
      */
-    public final int compare(String source, String target)
+    public int compare(String source, String target)
     {
     	if (source == target) {
 	        return 0;
@@ -753,13 +831,14 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	    	return 1;
 	    }
 
+        int strength = getStrength();
 		// setting up the collator parameters	
 		boolean compare[] = {m_isCaseLevel_,
     						 true,
-    						 m_strength_ >= SECONDARY,
-    						 m_strength_ >= TERTIARY,
-    						 m_strength_ >= QUATERNARY,
-							 m_strength_ == IDENTICAL
+    						 strength >= SECONDARY,
+    						 strength >= TERTIARY,
+    						 strength >= QUATERNARY,
+							 strength == IDENTICAL
 							};
 		boolean doFrench = m_isFrenchCollation_ && compare[2];
     	boolean doShift4 = m_isAlternateHandlingShifted_ && compare[4];
@@ -830,15 +909,13 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	    }
 	    return 0;
     }
-        
-    // public abstract methods -----------------------------------------------
 
-	// protected inner interfaces --------------------------------------------
+    // package private inner interfaces --------------------------------------
     
     /**
 	 * Attribute values to be used when setting the Collator options
-	 */	
-	protected static interface AttributeValue
+	 */
+	static interface AttributeValue
 	{
 		/**
 		 * Indicates that the default attribute value will be used. 
@@ -848,158 +925,250 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 		/** 
 		 * Primary collation strength 
 		 */
-  		static final int PRIMARY_ = 0;
-  		/** 
-  		 * Secondary collation strength 
-  		 */
-  		static final int SECONDARY_ = 1;
-  		/** 
-  		 * Tertiary collation strength 
-  		 */
-  		static final int TERTIARY_ = 2;
-  		/** 
-  		 * Default collation strength 
-  		 */
-  		static final int DEFAULT_STRENGTH_ = TERTIARY;
-  		/**
-  		 * Internal use for strength checks in Collation elements
-  		 */
-  		static final int CE_STRENGTH_LIMIT_ = TERTIARY + 1;
-  		/** 
-  		 * Quaternary collation strength 
-  		 */
-  		static final int QUATERNARY_ = 3;
-  		/** 
-  		 * Identical collation strength 
-  		 */
-  		static final int IDENTICAL_ = 15;
-  		/**
-  		 * Internal use for strength checks
-  		 */
-  		static final int STRENGTH_LIMIT_ = IDENTICAL + 1;
-  		/** 
-  		 * Turn the feature off - works for FRENCH_COLLATION, CASE_LEVEL, 
-  		 * HIRAGANA_QUATERNARY_MODE and DECOMPOSITION_MODE
-  		 */
-  		static final int OFF_ = 16;
-  		/** 
-  		 * Turn the feature on - works for FRENCH_COLLATION, CASE_LEVEL, 
-  		 * HIRAGANA_QUATERNARY_MODE and DECOMPOSITION_MODE
-  		 */
-  		static final int ON_ = 17;
+		static final int PRIMARY_ = Collator.PRIMARY;
+		/** 
+		 * Secondary collation strength 
+		 */
+		static final int SECONDARY_ = Collator.SECONDARY;
+		/** 
+		 * Tertiary collation strength 
+		 */
+		static final int TERTIARY_ = Collator.TERTIARY;
+		/** 
+		 * Default collation strength 
+		 */
+		static final int DEFAULT_STRENGTH_ = Collator.TERTIARY;
+		/**
+		 * Internal use for strength checks in Collation elements
+		 */
+		static final int CE_STRENGTH_LIMIT_ = Collator.TERTIARY + 1;
+		/** 
+		 * Quaternary collation strength 
+		 */
+		static final int QUATERNARY_ = 3;
+		/** 
+		 * Identical collation strength 
+		 */
+		static final int IDENTICAL_ = Collator.IDENTICAL;
+		/**
+		 * Internal use for strength checks
+		 */
+		static final int STRENGTH_LIMIT_ = Collator.IDENTICAL + 1;
+		/** 
+		 * Turn the feature off - works for FRENCH_COLLATION, CASE_LEVEL, 
+		 * HIRAGANA_QUATERNARY_MODE and DECOMPOSITION_MODE
+		 */
+		static final int OFF_ = 16;
+		/** 
+		 * Turn the feature on - works for FRENCH_COLLATION, CASE_LEVEL, 
+		 * HIRAGANA_QUATERNARY_MODE and DECOMPOSITION_MODE
+		 */
+		static final int ON_ = 17;
 		/** 
 		 * Valid for ALTERNATE_HANDLING. Alternate handling will be shifted 
 		 */
-  		static final int SHIFTED_ = 20;
-  		/** 
-  		 * Valid for ALTERNATE_HANDLING. Alternate handling will be non 
-  		 * ignorable 
-  		 */
-  		static final int NON_IGNORABLE_ = 21;
-  		/** 
-  		 * Valid for CASE_FIRST - lower case sorts before upper case 
-  		 */
-  		static final int LOWER_FIRST_ = 24;
-  		/** 
-  		 * Upper case sorts before lower case 
-  		 */
-  		static final int UPPER_FIRST_ = 25;
-  		/** 
-  		 * Valid for NORMALIZATION_MODE ON and OFF are also allowed for this 
-  		 * attribute 
-  		 */
-  		static final int ON_WITHOUT_HANGUL_ = 28;
-  		/**
-  		 * Number of attribute values
-  		 */
-  	    static final int LIMIT_ = 29;
-	}
-    
-    /** 
-     * Attributes that collation service understands. All the attributes can 
-     * take DEFAULT value, as well as the values specific to each one. 
-     */
-	protected static interface Attribute {
-     	/** 
-     	 * Attribute for direction of secondary weights - used in French.
-     	 * Acceptable values are ON, which results in secondary weights being 
-     	 * considered backwards and OFF which treats secondary weights in the 
-     	 * order they appear.
-     	 */
-     	static final int FRENCH_COLLATION_ = 0; 
-     	/** 
-     	 * Attribute for handling variable elements. Acceptable values are 
-     	 * NON_IGNORABLE (default) which treats all the codepoints with 
-     	 * non-ignorable primary weights in the same way, and SHIFTED which 
-     	 * causes codepoints with primary weights that are equal or below the 
-     	 * variable top value to be ignored on primary level and moved to the 
-     	 * quaternary level.
-     	 */
-     	static final int ALTERNATE_HANDLING_ = 1;
-     	/** 
-     	 * Controls the ordering of upper and lower case letters. Acceptable 
-     	 * values are OFF (default), which orders upper and lower case letters 
-     	 * in accordance to their tertiary weights, UPPER_FIRST which forces 
-     	 * upper case letters to sort before lower case letters, and 
-     	 * LOWER_FIRST which does the opposite. 
-     	 */
-     	static final int CASE_FIRST_ = 2;
-     	/** 
-     	 * Controls whether an extra case level (positioned before the third 
-     	 * level) is generated or not. Acceptable values are OFF (default),
-     	 * when case level is not generated, and ON which causes the case
-     	 * level to be generated. Contents of the case level are affected by
-     	 * the value of CASE_FIRST attribute. A simple way to ignore accent 
-     	 * differences in a string is to set the strength to PRIMARY and 
-     	 * enable case level. 
-     	 */
-     	static final int CASE_LEVEL_ = 3;
-     	/** 
-     	 * Controls whether the normalization check and necessary 
-     	 * normalizations are performed. When set to OFF (default) no 
-     	 * normalization check is performed. The correctness of the result is 
-     	 * guaranteed only if the input data is in so-called FCD form (see 
-     	 * users manual for more info). When set to ON, an incremental check 
-     	 * is performed to see whether the input data is in the FCD form. If 
-     	 * the data is not in the FCD form, incremental NFD normalization is 
-     	 * performed. 
-     	 */
-     	static final int NORMALIZATION_MODE_ = 4; 
-     	/** 
-     	 * The strength attribute. Can be either PRIMARY, SECONDARY, TERTIARY, 
-     	 * QUATERNARY or IDENTICAL. The usual strength for most locales 
-     	 * (except Japanese) is tertiary. Quaternary strength is useful when 
-     	 * combined with shifted setting for alternate handling attribute and 
-     	 * for JIS x 4061 collation, when it is used to distinguish between 
-     	 * Katakana  and Hiragana (this is achieved by setting the 
-     	 * HIRAGANA_QUATERNARY mode to on. Otherwise, quaternary level is 
-     	 * affected only by the number of non ignorable code points in the 
-     	 * string. Identical strength is rarely useful, as it amounts to 
-     	 * codepoints of the NFD form of the string. 
-     	 */
-     	static final int STRENGTH_ = 5;
-     	/** 
-     	 * When turned on, this attribute positions Hiragana before all  
-     	 * non-ignorables on quaternary level. This is a sneaky way to produce 
-     	 * JIS sort order. 
-     	 */     
-     	static final int HIRAGANA_QUATERNARY_MODE_ = 6;
-     	/**
-     	 * Attribute count
-     	 */
-     	static final int LIMIT_ = 7;
-	} 
+		static final int SHIFTED_ = 20;
+		/** 
+		 * Valid for ALTERNATE_HANDLING. Alternate handling will be non 
+		 * ignorable 
+		 */
+		static final int NON_IGNORABLE_ = 21;
+		/** 
+		 * Valid for CASE_FIRST - lower case sorts before upper case 
+		 */
+		static final int LOWER_FIRST_ = 24;
+		/** 
+		 * Upper case sorts before lower case 
+		 */
+		static final int UPPER_FIRST_ = 25;
+	    /** 
+		 * Valid for NORMALIZATION_MODE ON and OFF are also allowed for this 
+		 * attribute 
+		 */
+		static final int ON_WITHOUT_HANGUL_ = 28;
+		/**
+		 * Number of attribute values
+		 */
+	    static final int LIMIT_ = 29;
+	};
+	    
+	/** 
+	 * Attributes that collation service understands. All the attributes can 
+	 * take DEFAULT value, as well as the values specific to each one. 
+	 */
+	static interface Attribute 
+	{
+	    /** 
+	     * Attribute for direction of secondary weights - used in French.
+	     * Acceptable values are ON, which results in secondary weights being 
+	     * considered backwards and OFF which treats secondary weights in the 
+	     * order they appear.
+	     */
+    	static final int FRENCH_COLLATION_ = 0; 
+	    /** 
+	     * Attribute for handling variable elements. Acceptable values are 
+	     * NON_IGNORABLE (default) which treats all the codepoints with 
+	     * non-ignorable primary weights in the same way, and SHIFTED which 
+	     * causes codepoints with primary weights that are equal or below the 
+	     * variable top value to be ignored on primary level and moved to the 
+	     * quaternary level.
+	     */
+	    static final int ALTERNATE_HANDLING_ = 1;
+	    /** 
+	     * Controls the ordering of upper and lower case letters. Acceptable 
+	     * values are OFF (default), which orders upper and lower case letters 
+	     * in accordance to their tertiary weights, UPPER_FIRST which forces 
+	     * upper case letters to sort before lower case letters, and 
+	     * LOWER_FIRST which does the opposite. 
+	     */
+	    static final int CASE_FIRST_ = 2;
+	    /** 
+	     * Controls whether an extra case level (positioned before the third 
+	     * level) is generated or not. Acceptable values are OFF (default),
+	     * when case level is not generated, and ON which causes the case
+	     * level to be generated. Contents of the case level are affected by
+	     * the value of CASE_FIRST attribute. A simple way to ignore accent 
+	     * differences in a string is to set the strength to PRIMARY and 
+	     * enable case level. 
+	     */
+	    static final int CASE_LEVEL_ = 3;
+	    /** 
+	     * Controls whether the normalization check and necessary 
+	     * normalizations are performed. When set to OFF (default) no 
+	     * normalization check is performed. The correctness of the result is 
+	     * guaranteed only if the input data is in so-called FCD form (see 
+	     * users manual for more info). When set to ON, an incremental check 
+	     * is performed to see whether the input data is in the FCD form. If 
+	     * the data is not in the FCD form, incremental NFD normalization is 
+	     * performed. 
+	     */
+	    static final int NORMALIZATION_MODE_ = 4; 
+	    /** 
+	     * The strength attribute. Can be either PRIMARY, SECONDARY, TERTIARY, 
+	     * QUATERNARY or IDENTICAL. The usual strength for most locales 
+	     * (except Japanese) is tertiary. Quaternary strength is useful when 
+	     * combined with shifted setting for alternate handling attribute and 
+	     * for JIS x 4061 collation, when it is used to distinguish between 
+	     * Katakana  and Hiragana (this is achieved by setting the 
+	     * HIRAGANA_QUATERNARY mode to on. Otherwise, quaternary level is 
+         * affected only by the number of non ignorable code points in the 
+	     * string. Identical strength is rarely useful, as it amounts to 
+	     * codepoints of the NFD form of the string. 
+	     */
+	    static final int STRENGTH_ = 5;
+	    /** 
+	     * When turned on, this attribute positions Hiragana before all  
+	     * non-ignorables on quaternary level. This is a sneaky way to produce 
+	     * JIS sort order. 
+	     */     
+	    static final int HIRAGANA_QUATERNARY_MODE_ = 6;
+        /**
+	     * Attribute count
+	     */
+	    static final int LIMIT_ = 7;
+	};
 	
-    // protected data members ------------------------------------------------
-
 	/**
+     * DataManipulate singleton
+     */
+    static class DataManipulate implements Trie.DataManipulate
+    {
+    	// public methods ----------------------------------------------------
+    	
+    	/**
+	     * Internal method called to parse a lead surrogate's ce for the offset
+	     * to the next trail surrogate data.
+	     * @param ce collation element of the lead surrogate
+	     * @return data offset or 0 for the next trail surrogate
+	     * @draft 2.2
+	     */
+	    public final int getFoldingOffset(int ce)
+	    {
+	    	if (isSpecial(ce) && getTag(ce) == CE_SURROGATE_TAG_) {
+	    		return (ce & 0xFFFFFF);
+	    	}
+	    	return 0;
+	    } 
+	    
+	    /**
+	     * Get singleton object
+	     */
+	    public static final DataManipulate getInstance()
+	    {
+	    	if (m_instance_ == null) {
+	    		m_instance_ =  new DataManipulate();
+	    	}
+	    	return m_instance_;
+	    }
+	    
+	    // private data member ----------------------------------------------
+	    
+	    /**
+	     * Singleton instance
+	     */
+	    private static DataManipulate m_instance_;
+	    
+	    // private constructor ----------------------------------------------
+	    
+	    /**
+	     * private to prevent initialization
+	     */
+	    private DataManipulate()
+	    {
+	    }
+    };
+    
+    // package private data member -------------------------------------------
+    
+    static final byte BYTE_FIRST_TAILORED_ = (byte)0x04;
+    static final byte BYTE_COMMON_ = (byte)0x05;
+    static final int COMMON_TOP_2_ = 0x86; // int for unsigness
+    static final int COMMON_BOTTOM_2_ = BYTE_COMMON_;
+    /**
+	 * Case strength mask
+	 */
+	static final int CE_CASE_BIT_MASK_ = 0xC0;
+	static final int CE_TAG_SHIFT_ = 24;
+	static final int CE_TAG_MASK_ = 0x0F000000;
+	
+	static final int CE_SPECIAL_FLAG_ = 0xF0000000;
+    /** 
+     * Lead surrogate that is tailored and doesn't start a contraction 
+     */
+    static final int CE_SURROGATE_TAG_ = 5;  
+	/**
+  	 * Mask to get the primary strength of the collation element
+  	 */
+  	static final int CE_PRIMARY_MASK_ = 0xFFFF0000;
+  	/**
+  	 * Mask to get the secondary strength of the collation element
+  	 */
+   	static final int CE_SECONDARY_MASK_ = 0xFF00;
+   	/**
+  	 * Mask to get the tertiary strength of the collation element
+  	 */
+   	static final int CE_TERTIARY_MASK_ = 0xFF;
+   	/**
+   	 * Primary strength shift 
+   	 */
+	static final int CE_PRIMARY_SHIFT_ = 16;
+	/** 
+	 * Secondary strength shift 
+	 */
+	static final int CE_SECONDARY_SHIFT_ = 8;
+   	/**
+   	 * Continuation marker
+   	 */
+   	static final int CE_CONTINUATION_MARKER_ = 0xC0;
+   	
+   	/**
 	 * Size of collator raw data headers and options before the expansion
 	 * data. This is used when expansion ces are to be retrieved. ICU4C uses
 	 * the expansion offset starting from UCollator.UColHeader, hence ICU4J
 	 * will have to minus that off to get the right expansion ce offset. In
 	 * number of ints.
 	 */
-	protected int m_expansionOffset_;
+	int m_expansionOffset_;
 	/**
 	 * Size of collator raw data headers, options and expansions before
 	 * contraction data. This is used when contraction ces are to be retrieved. 
@@ -1007,63 +1176,63 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * ICU4J will have to minus that off to get the right contraction ce 
 	 * offset. In number of chars.
 	 */
-	protected int m_contractionOffset_;
+	int m_contractionOffset_;
     /**
      * Flag indicator if Jamo is special
      */
-    protected boolean m_isJamoSpecial_;
+    boolean m_isJamoSpecial_;
  
  	// Collator options ------------------------------------------------------   
- 	protected int m_defaultVariableTopValue_;
-	protected boolean m_defaultIsFrenchCollation_;
-	protected boolean m_defaultIsAlternateHandlingShifted_; 
-    protected int m_defaultCaseFirst_;
-    protected boolean m_defaultIsCaseLevel_;
-    protected int m_defaultDecomposition_;
-    protected int m_defaultStrength_;
-    protected boolean m_defaultIsHiragana4_;
+ 	int m_defaultVariableTopValue_;
+	boolean m_defaultIsFrenchCollation_;
+	boolean m_defaultIsAlternateHandlingShifted_; 
+    int m_defaultCaseFirst_;
+    boolean m_defaultIsCaseLevel_;
+    int m_defaultDecomposition_;
+    int m_defaultStrength_;
+    boolean m_defaultIsHiragana4_;
  	/**
  	 * Value of the variable top
  	 */
-    protected int m_variableTopValue_;
+    int m_variableTopValue_;
     /** 
      * Attribute for special Hiragana 
      */
-    protected boolean m_isHiragana4_;         
+    boolean m_isHiragana4_;         
 	/**
      * Case sorting customization
      */
-    protected int m_caseFirst_;
+    int m_caseFirst_;
     
     // end Collator options --------------------------------------------------
-    
+       
     /**
      * Expansion table
      */
-    protected int m_expansion_[];
+    int m_expansion_[];
     /**
      * Contraction index table
      */
-    protected char m_contractionIndex_[];
+    char m_contractionIndex_[];
     /**
      * Contraction CE table
      */
-    protected int m_contractionCE_[];
+    int m_contractionCE_[];
     /**
      * Data trie
      */
-    protected IntTrie m_trie_;
+    IntTrie m_trie_;
     /**
      * Table to store all collation elements that are the last element of an
      * expansion. This is for use in StringSearch.
      */
-    protected int m_expansionEndCE_[];
+    int m_expansionEndCE_[];
     /**
      * Table to store the maximum size of any expansions that end with the 
      * corresponding collation element in m_expansionEndCE_. For use in
      * StringSearch too
      */
-    protected byte m_expansionEndCEMaxSize_[];
+    byte m_expansionEndCEMaxSize_[];
     /**
      * Heuristic table to store information on whether a char character is 
      * considered "unsafe". "Unsafe" character are combining marks or those 
@@ -1072,33 +1241,33 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      * unsafe. If we have another contraction "ZA" with the one above, then 
      * 'A', 'B', 'C' are "unsafe" but 'Z' is not. 
      */
-    protected byte m_unsafe_[];
+    byte m_unsafe_[];
     /**
      * Table to store information on whether a codepoint can occur as the last
      * character in a contraction
      */
-    protected byte m_contractionEnd_[];
+    byte m_contractionEnd_[];
     /**
-     * Table for UCA use, may be removed
+     * Table for UCA and builder use
      */
-    protected char m_UCAContraction_[];
+    char m_UCAContraction_[];
 	/**
 	 * Original collation rules
 	 */
-	protected String m_rules_;
+	String m_rules_;
 	/**
      * The smallest "unsafe" codepoint
      */
-    protected char m_minUnsafe_;
+    char m_minUnsafe_;
     /**
 	 * The smallest codepoint that could be the end of a contraction
 	 */
-	protected char m_minContractionEnd_;
+	char m_minContractionEnd_;
 	
 	/**
      * UnicodeData.txt property object
      */
-    protected static final RuleBasedCollator UCA_;  
+    static final RuleBasedCollator UCA_;  
     
     // block to initialise character property database
     static
@@ -1124,99 +1293,12 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
         	e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-    }    
+    } 
     
-    // protected constants ---------------------------------------------------
+    // package private constructors ------------------------------------------
     
-    protected static final int CE_SPECIAL_FLAG_ = 0xF0000000;
-    /** 
-     * Lead surrogate that is tailored and doesn't start a contraction 
-     */
-    protected static final int CE_SURROGATE_TAG_ = 5;  
-  
-  	/**
-	 * Minimum size required for the binary collation data in bytes.
-	 * Size of UCA header + size of options to 4 bytes
-	 */
-	private static final int MIN_BINARY_DATA_SIZE_ = (41 + 8) << 2;     
-	/**
-  	 * Mask to get the primary strength of the collation element
-  	 */
-  	protected static final int CE_PRIMARY_MASK_ = 0xFFFF0000;
-  	/**
-  	 * Mask to get the secondary strength of the collation element
-  	 */
-   	protected static final int CE_SECONDARY_MASK_ = 0xFF00;
-   	/**
-  	 * Mask to get the tertiary strength of the collation element
-  	 */
-   	protected static final int CE_TERTIARY_MASK_ = 0xFF;
-   	/**
-   	 * Primary strength shift 
-   	 */
-	protected static final int CE_PRIMARY_SHIFT_ = 16;
-	/** 
-	 * Secondary strength shift 
-	 */
-	protected static final int CE_SECONDARY_SHIFT_ = 8;
-
-   	/**
-   	 * Continuation marker
-   	 */
-   	protected static final int CE_CONTINUATION_MARKER_ = 0xC0;
-    
-    // end protected constants -----------------------------------------------
-    
-    // protected constructor -------------------------------------------------
-  
-  	/**
-     * Constructors a RuleBasedCollator from the argument locale.
-     * If no resource bundle is associated with the locale, UCA is used 
-     * instead.
-     * @param locale
-     * @exception Exception thrown when there's an error creating the Collator
-     */
-    protected RuleBasedCollator(Locale locale) throws Exception
-    {
-    	ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
- 
-    	if (rb != null) {
-    		byte map[] = (byte [])rb.getObject("%%CollationBin");
-			// synwee todo: problem, data in little endian and
-			// ICUListResourceBundle should not calculate size by
-			// using .available() that only gives the buffer size
-			BufferedInputStream input = 
-						new BufferedInputStream(new ByteArrayInputStream(map));
-			CollatorReader reader = new CollatorReader(input, false);
-			if (map.length > MIN_BINARY_DATA_SIZE_) {
-				// synwee todo: undo when problem solved
-				reader.read(this);
-    		} 
-    		else {
-    			reader.readHeader(this);
-    			reader.readOptions(this);
-    			// duplicating UCA_'s data
-    			m_expansion_ = UCA_.m_expansion_;
-    			m_contractionIndex_ = UCA_.m_contractionIndex_;
-    			m_contractionCE_ = UCA_.m_contractionCE_;
-    			m_trie_ = UCA_.m_trie_;
-				m_expansionEndCE_ = UCA_.m_expansionEndCE_;
-    			m_expansionEndCEMaxSize_ = UCA_.m_expansionEndCEMaxSize_;
-    			m_unsafe_ = UCA_.m_unsafe_;
-    			m_contractionEnd_ = UCA_.m_contractionEnd_;
-    			m_minUnsafe_ = UCA_.m_minUnsafe_; 
-    	     	m_minContractionEnd_ = UCA_.m_minContractionEnd_;
-    		}
-    		Object rules = rb.getObject("CollationElements");
-    		if (rules != null) {
-     			m_rules_ = (String)((Object[][])rules)[0][1];
-    		}
-    		init();
-    	}
-    }
-    
-  	/**
-    * <p>Protected constructor for use by subclasses. 
+    /**
+    * <p>Private contructor for use by subclasses. 
     * Public access to creating Collators is handled by the API 
     * Collator.getInstance() or RuleBasedCollator(String rules).
     * </p>
@@ -1225,41 +1307,68 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     * </p>
     * @draft 2.2
     */
-    protected RuleBasedCollator() throws Exception
+    RuleBasedCollator() 
     {
     }
-  	
-    // protected methods -----------------------------------------------------
+    
+    // package private methods -----------------------------------------------
     
     /**
-     * Initializes the RuleBasedCollator
+     * Sets this collator to use the tables in UCA. Note options not taken
+     * care of here.
      */
-    protected final void init()
+    final void setWithUCATables()
     {
-    	for (m_minUnsafe_ = 0; m_minUnsafe_ < DEFAULT_MIN_HEURISTIC_; 
-    	     m_minUnsafe_ ++) {  
-    		// Find the smallest unsafe char.
-        	if (isUnsafe(m_minUnsafe_)) {
-        		break;
-        	}
-    	}
-    	
-    	for (m_minContractionEnd_ = 0; 
-    	     m_minContractionEnd_ < DEFAULT_MIN_HEURISTIC_; 
-    	     m_minContractionEnd_ ++) {  
-    	    // Find the smallest contraction-ending char.
-        	if (isContractionEnd(m_minContractionEnd_)) {
-        		break;
-        	}
-    	}
-    	m_strength_ = m_defaultStrength_;
-    	m_decomposition_ = m_defaultDecomposition_;
-    	m_isFrenchCollation_ = m_defaultIsFrenchCollation_;
-    	m_isAlternateHandlingShifted_ = m_defaultIsAlternateHandlingShifted_;
-    	m_isCaseLevel_ = m_defaultIsCaseLevel_;
-    	m_caseFirst_ = m_defaultCaseFirst_;
-    	m_isHiragana4_ = m_defaultIsHiragana4_;
-    	updateInternalState();
+        m_expansion_ = UCA_.m_expansion_;
+        m_contractionIndex_ = UCA_.m_contractionIndex_;
+        m_contractionCE_ = UCA_.m_contractionCE_;
+        m_trie_ = UCA_.m_trie_;
+        m_expansionEndCE_ = UCA_.m_expansionEndCE_;
+	    m_expansionEndCEMaxSize_ = UCA_.m_expansionEndCEMaxSize_;
+	    m_unsafe_ = UCA_.m_unsafe_;
+	    m_contractionEnd_ = UCA_.m_contractionEnd_;
+	    m_minUnsafe_ = UCA_.m_minUnsafe_; 
+        m_minContractionEnd_ = UCA_.m_minContractionEnd_;
+    }
+    
+    /**
+     * Sets this collator to use the all options and tables in UCA. 
+     */
+    final void setWithUCAData()
+    {
+    	m_addition3_ = UCA_.m_addition3_;
+    	m_bottom3_ = UCA_.m_bottom3_;
+    	m_bottomCount3_ = UCA_.m_bottomCount3_;
+    	m_caseFirst_ = UCA_.m_caseFirst_;
+    	m_caseSwitch_ = UCA_.m_caseSwitch_;
+    	m_common3_ = UCA_.m_common3_;
+    	m_contractionOffset_ = UCA_.m_contractionOffset_;
+    	setDecomposition(UCA_.getDecomposition());
+    	m_defaultCaseFirst_ = UCA_.m_defaultCaseFirst_;
+    	m_defaultDecomposition_ = UCA_.m_defaultDecomposition_;
+    	m_defaultIsAlternateHandlingShifted_ 
+    	                           = UCA_.m_defaultIsAlternateHandlingShifted_;
+    	m_defaultIsCaseLevel_ = UCA_.m_defaultIsCaseLevel_;
+    	m_defaultIsFrenchCollation_ = UCA_.m_defaultIsFrenchCollation_;
+    	m_defaultIsHiragana4_ = UCA_.m_defaultIsHiragana4_;
+    	m_defaultStrength_ = UCA_.m_defaultStrength_;
+    	m_defaultVariableTopValue_ = UCA_.m_defaultVariableTopValue_;
+    	m_expansionOffset_ = UCA_.m_expansionOffset_;
+    	m_isAlternateHandlingShifted_ = UCA_.m_isAlternateHandlingShifted_;
+    	m_isCaseLevel_ = UCA_.m_isCaseLevel_;
+    	m_isFrenchCollation_ = UCA_.m_isFrenchCollation_;
+    	m_isHiragana4_ = UCA_.m_isHiragana4_;
+    	m_isJamoSpecial_ = UCA_.m_isJamoSpecial_;
+    	m_isSimple3_ = UCA_.m_isSimple3_;
+    	m_mask3_ = UCA_.m_mask3_;
+    	m_minContractionEnd_ = UCA_.m_minContractionEnd_;
+    	m_minUnsafe_ = UCA_.m_minUnsafe_;
+    	m_rules_ = UCA_.m_rules_;
+    	setStrength(UCA_.getStrength());
+    	m_top3_ = UCA_.m_top3_;
+    	m_topCount3_ = UCA_.m_topCount3_;
+    	m_variableTopValue_ = UCA_.m_variableTopValue_;
+    	setWithUCATables();
     }
     
     /**
@@ -1272,7 +1381,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      * @param ch character to determin
      * @return true if ch is unsafe, false otherwise
      */
-	protected final boolean isUnsafe(char ch) 
+	final boolean isUnsafe(char ch) 
 	{
     	if (ch < m_minUnsafe_) {
 	        return false;
@@ -1296,7 +1405,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * otherwise it is not deterministic.
 	 * @param ch character to be determined
 	 */
-	protected final boolean isContractionEnd(char ch) 
+	final boolean isContractionEnd(char ch) 
 	{
 		if (UTF16.isTrailSurrogate(ch)) {
       		return true;
@@ -1315,93 +1424,11 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Resets the internal case data members and compression values.
-	 */
-	protected void updateInternalState() 
-	{
-      	if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
-        	m_caseSwitch_ = (byte)CASE_SWITCH_;
-      	} 
-      	else {
-        	m_caseSwitch_ = NO_CASE_SWITCH_;
-      	}
-
-      	if (m_isCaseLevel_ || m_caseFirst_ == AttributeValue.OFF_) {
-        	m_mask3_ = CE_REMOVE_CASE_;
-        	m_common3_ = COMMON_NORMAL_3_;
-        	m_addition3_ = FLAG_BIT_MASK_CASE_SWITCH_OFF_;
-        	m_top3_ = COMMON_TOP_CASE_SWITCH_OFF_3_;
-        	m_bottom3_ = COMMON_BOTTOM_3_;
-      	} 
-      	else {
-        	m_mask3_ = (byte)CE_KEEP_CASE_;
-        	m_addition3_ = FLAG_BIT_MASK_CASE_SWITCH_ON_;
-        	if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
-          		m_common3_ = COMMON_UPPER_FIRST_3_;
-          		m_top3_ = COMMON_TOP_CASE_SWITCH_UPPER_3_;
-          		m_bottom3_ = COMMON_BOTTOM_CASE_SWITCH_UPPER_3_;
-        	} else {
-          		m_common3_ = COMMON_NORMAL_3_;
-          		m_top3_ = COMMON_TOP_CASE_SWITCH_LOWER_3_;
-          		m_bottom3_ = COMMON_BOTTOM_CASE_SWITCH_LOWER_3_;
-        	}
-      	}
-
-      	// Set the compression values
-      	int total3 = m_top3_ - COMMON_BOTTOM_3_ - 1;
-      	// we multilply double with int, but need only int
-      	m_topCount3_ = (int)(PROPORTION_3_ * total3); 
-      	m_bottomCount3_ = total3 - m_topCount3_;
-
-      	if (!m_isCaseLevel_ && m_strength_ == AttributeValue.TERTIARY_ 
-          	&& !m_isFrenchCollation_ && !m_isAlternateHandlingShifted_) {
-        	m_isSimple3_ = true;
-      	} 
-      	else {
-        	m_isSimple3_ = false;
-      	}
-	}
-	
-	/**
- 	 * <p>Converts the C attribute index and values for use and stores it into 
- 	 * the relevant default attribute variable.</p>
- 	 * <p>Note internal use, no sanity checks done on arguments</p>
- 	 */
-    protected void setAttributeDefault(int attribute, int value)
-    {
-    	switch (attribute) {
-    		case Attribute.FRENCH_COLLATION_:
-    			m_defaultIsFrenchCollation_ = (value == AttributeValue.ON_);
-    			break;
-    		case Attribute.ALTERNATE_HANDLING_:
-    			m_defaultIsAlternateHandlingShifted_ = 
-    			                            (value == AttributeValue.SHIFTED_);
-    			break;
-    		case Attribute.CASE_FIRST_:
-    			m_defaultCaseFirst_ = value;
-        		break;
-    		case Attribute.CASE_LEVEL_:
-    			m_defaultIsCaseLevel_ = (value == AttributeValue.ON_);
-    			break;
-    		case Attribute.NORMALIZATION_MODE_:
-    			if (value == AttributeValue.ON_) {
-    				value = Collator.CANONICAL_DECOMPOSITION;
-    			}
-    			m_defaultDecomposition_ = value;
-    			break;
-    		case Attribute.STRENGTH_:
-    			m_defaultStrength_ = value;
-    		case Attribute.HIRAGANA_QUATERNARY_MODE_:
-    			m_defaultIsHiragana4_ = (value == AttributeValue.ON_);
-    	}
-    }
-    
-    /**
 	 * Retrieve the tag of a special ce
 	 * @param ce ce to test
 	 * @return tag of ce
 	 */
-	protected static int getTag(int ce) 
+	static int getTag(int ce) 
 	{
 		return (ce & CE_TAG_MASK_) >> CE_TAG_SHIFT_;
 	}
@@ -1411,60 +1438,62 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * @param ce to check
 	 * @return true if ce is special
 	 */
-	protected static boolean isSpecial(int ce)
+	static boolean isSpecial(int ce)
 	{
 		return (ce & CE_SPECIAL_FLAG_) == CE_SPECIAL_FLAG_; 
 	}
-	
-	/**
-	 * Getting the mask for collation strength
-	 * @param strength collation strength
- 	 * @return collation element mask
-	 */
-	protected static final int getMask(int strength) 
-	{
-	    switch (strength) 
-	    {
-	    	case Collator.PRIMARY:
-	        	return CE_PRIMARY_MASK_;
-	    	case Collator.SECONDARY:
-	        	return CE_SECONDARY_MASK_ | CE_PRIMARY_MASK_;
-	    	default:
-	        	return CE_TERTIARY_MASK_ | CE_SECONDARY_MASK_ 
-	        											| CE_PRIMARY_MASK_;
-	    }
-	}
 
-	/** 
-	 * Gets the primary weights from a CE 
-	 * @param ce collation element
-	 * @return the primary weight of the collation element
-	 */
-	protected static final int getPrimaryWeight(int ce)
-	{
-		return ((ce) & CE_PRIMARY_MASK_) >> CE_PRIMARY_SHIFT_;
-	}
-	
-	/** 
-	 * Gets the secondary weights from a CE 
-	 * @param ce collation element
-	 * @return the secondary weight of the collation element
-	 */
-	protected static final int getSecondaryWeight(int ce)
-	{
-		return (ce & CE_SECONDARY_MASK_) >> CE_SECONDARY_SHIFT_;
-	}
-	
-	/** 
-	 * Gets the tertiary weights from a CE 
-	 * @param ce collation element
-	 * @return the tertiary weight of the collation element
-	 */
-	protected static final int getTertiaryWeight(int ce)
-	{
-		return ce & CE_TERTIARY_MASK_;
-	}
-	
+    /**
+     * Checks if the argument ce is a continuation
+     * @param ce collation element to test
+     * @return true if ce is a continuation
+     */
+    static final boolean isContinuation(int ce) 
+    {
+        return ce != CollationElementIterator.NULLORDER 
+                       && (ce & CE_CONTINUATION_TAG_) == CE_CONTINUATION_TAG_;
+    }
+    
+    // protected constructor -------------------------------------------------
+  
+    /**
+     * Constructors a RuleBasedCollator from the argument locale.
+     * If no resource bundle is associated with the locale, UCA is used 
+     * instead.
+     * @param locale
+     * @exception Exception thrown when there's an error creating the Collator
+     */
+    RuleBasedCollator(Locale locale) throws Exception
+    {
+	    ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+	 
+	    if (rb != null) {
+		    byte map[] = (byte [])rb.getObject("%%CollationBin");
+		    BufferedInputStream input = 
+			            new BufferedInputStream(new ByteArrayInputStream(map));
+			CollatorReader reader = new CollatorReader(input, false);
+			if (map.length > MIN_BINARY_DATA_SIZE_) {
+				reader.read(this);
+		    } 
+		    else {
+			    reader.readHeader(this);
+			    reader.readOptions(this);
+			    // duplicating UCA_'s data
+			    setWithUCATables();
+		    }
+		    Object rules = rb.getObject("CollationElements");
+		    if (rules != null) {
+		        m_rules_ = (String)((Object[][])rules)[0][1];
+		    }
+		    init();
+	    }
+	    else {
+	    	setWithUCAData();
+	    }
+    } 
+    
+    // private inner classes ------------------------------------------------
+    
     // private variables -----------------------------------------------------
 
     /**
@@ -1528,7 +1557,6 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	/**
 	 * Case strength mask
 	 */
-	private static final int CE_CASE_BIT_MASK_ = 0xC0;
 	private static final int CE_CASE_MASK_3_ = 0xFF;
 	/** 
 	 * Sortkey size factor. Values can be changed.
@@ -1547,14 +1575,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     private static final byte BYTE_SORTKEY_GLUE_ = (byte)0x02;
     private static final byte BYTE_SHIFT_PREFIX_ = (byte)0x03;
     private static final byte BYTE_UNSHIFTED_MIN_ = BYTE_SHIFT_PREFIX_;
-    private static final byte BYTE_FIRST_TAILORED_ = (byte)0x04;
-    private static final byte BYTE_COMMON_ = (byte)0x05;
     private static final byte BYTE_FIRST_UCA_ = BYTE_COMMON_;
     private static final byte BYTE_LAST_LATIN_PRIMARY_ = (byte)0x4C;
     private static final byte BYTE_FIRST_NON_LATIN_PRIMARY_ = (byte)0x4D;
     private static final byte BYTE_UNSHIFTED_MAX_ = (byte)0xFF;
-	private static final int COMMON_BOTTOM_2_ = BYTE_COMMON_;
-	private static final int COMMON_TOP_2_ = 0x86; // int for unsigness
 	private static final int TOTAL_2_ = COMMON_TOP_2_ - COMMON_BOTTOM_2_ - 1; 
 	private static final int FLAG_BIT_MASK_CASE_SWITCH_OFF_ = 0x80;
 	private static final int FLAG_BIT_MASK_CASE_SWITCH_ON_ = 0x40;
@@ -1573,6 +1597,12 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	private static final int COMMON_4_ = (byte)0xFF;
 	
 	/**
+	 * Minimum size required for the binary collation data in bytes.
+	 * Size of UCA header + size of options to 4 bytes
+	 */
+	private static final int MIN_BINARY_DATA_SIZE_ = (41 + 8) << 2;     
+	
+	/**
 	 * If this collator is to generate only simple tertiaries for fast path
 	 */
 	private boolean m_isSimple3_;
@@ -1582,7 +1612,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      */
     private boolean m_isFrenchCollation_;
     /**
-     * Flag indicating if shifted is requested for quartenary alternate
+     * Flag indicating if shifted is requested for Quaternary alternate
      * handling. If this is not true, the default for alternate handling will
      * be non-ignorable.
      */
@@ -1591,9 +1621,6 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      * Extra case level for sorting
      */
     private boolean m_isCaseLevel_;
-    
-    private static final int CE_TAG_SHIFT_ = 24;
-	private static final int CE_TAG_MASK_ = 0x0F000000;
 	
 	private static final int SORT_BUFFER_INIT_SIZE_ = 128;
 	private static final int SORT_BUFFER_INIT_SIZE_1_ = 
@@ -1621,19 +1648,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * CE buffer size
 	 */
 	private static final int CE_BUFFER_SIZE_ = 512;
-
-    // private methods -------------------------------------------------------
     
-    /**
-     * Checks if the argument ce is a continuation
-     * @param ce collation element to test
-     * @return true if ce is a continuation
-     */
-    private static final boolean isContinuation(int ce) 
-    {
-    	return ce != CollationElementIterator.NULLORDER 
-    					&& (ce & CE_CONTINUATION_TAG_) == CE_CONTINUATION_TAG_;
-    }
+    // private methods -------------------------------------------------------
     
     /**
      * Gets the 2 bytes of primary order and adds it to the primary byte array
@@ -1645,8 +1661,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      * 			a continuation ce
      * @param doShift flag indicating if ce is to be shifted
      * @param leadPrimary lead primary used for compression
-     * @param commonBottom4 common byte value for quartenary
-     * @param bottomCount4 smallest byte value for quartenary
+     * @param commonBottom4 common byte value for Quaternary
+     * @param bottomCount4 smallest byte value for Quaternary
      * @return the new lead primary for compression
      */
     private final int doPrimaryBytes(int ce, byte bytes[][], int bytescount[],
@@ -1656,7 +1672,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     {
     	
     	int p2 = (ce >>= 16) & LAST_BYTE_MASK_; // in ints for unsigned 
-        int p1 = (ce >> 8) & LAST_BYTE_MASK_;  // comparison
+        int p1 = ce >>> 8;  // comparison
     	if (doShift) {
     		if (count[4] > 0) {
             	while (count[4] > bottomCount4) {
@@ -1931,17 +1947,17 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * Gets the quartenary byte and adds it to the quartenary byte array
+	 * Gets the Quaternary byte and adds it to the Quaternary byte array
      * @param bytes array of byte arrays for each strength
      * @param bytescount array of the size of each strength byte arrays 
      * @param count array of counters for each of the strength
      * @param isCodePointHiragana flag indicator if the previous codepoint 
      * 			we dealt with was Hiragana
-     * @param commonBottom4 smallest common quartenary byte 
-     * @param bottomCount4 smallest quartenary byte 
-     * @param hiragana4 hiragana quartenary byte
+     * @param commonBottom4 smallest common Quaternary byte 
+     * @param bottomCount4 smallest Quaternary byte 
+     * @param hiragana4 hiragana Quaternary byte
 	 */
-	private final void doQuartenaryBytes(byte bytes[][], int bytescount[], 
+	private final void doQuaternaryBytes(byte bytes[][], int bytescount[], 
 									  int count[],	
 									  boolean isCodePointHiragana,
 									  int commonBottom4, int bottomCount4,
@@ -1985,9 +2001,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 									   int count[], boolean doFrench,
 									   byte hiragana4, int commonBottom4, 
 									   int bottomCount4)
+									   
 	{
-		int backupDecomposition = m_decomposition_;
-		m_decomposition_ = NO_DECOMPOSITION; // have to revert to backup later
+		int backupDecomposition = getDecomposition();
+		setDecomposition(NO_DECOMPOSITION); // have to revert to backup later
     	CollationElementIterator coleiter = 
     							new CollationElementIterator(source, this);
     	
@@ -2053,12 +2070,12 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
             }
                 
             if (compare[4] && notIsContinuation) { // compare quad
-                doQuartenaryBytes(bytes, bytescount, count, 
+                doQuaternaryBytes(bytes, bytescount, count, 
                 			 	coleiter.m_isCodePointHiragana_, 
                 			 	commonBottom4, bottomCount4, hiragana4);
             }
         }
-        m_decomposition_ = backupDecomposition; // reverts to original	
+        setDecomposition(backupDecomposition); // reverts to original	
         if (frenchOffset[0] != -1) {
         	// one last round of checks
     		reverseBuffer(bytes[2], frenchOffset);
@@ -2117,14 +2134,16 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	private final void doFrench(byte bytes[][], int bytescount[], int count[]) 
 	{
 		for (int i = 0; i < bytescount[2]; i ++) {
-		    byte s = bytes[2][bytescount[2] - i - 1];
+			byte s = bytes[2][bytescount[2] - i - 1];
 		    // This is compression code.
 		    if (s == COMMON_2_) {
 		      ++ count[2];
 		    } 
 		    else {
 		      	if (count[2] > 0) {
-		        	if (s > COMMON_2_) { // not necessary for 4th level.
+		      		// getting the unsigned value
+		        	if ((s & LAST_BYTE_MASK_) > COMMON_2_) { 
+		        		// not necessary for 4th level.
 		          		while (count[2] > TOP_COUNT_2_) {
 		            		append(bytes, bytescount, 1, 
 		            					(byte)(COMMON_TOP_2_ - TOP_COUNT_2_));
@@ -2336,21 +2355,38 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	private final int getFirstUnmatchedOffset(String source, String target)
 	{
 		int result = 0;
-		int minlength = source.length();
-		if (minlength > target.length()) {
-			minlength = target.length();
+		int slength = source.length();
+		int tlength = target.length();
+		int minlength = slength;
+		if (minlength > tlength) {
+			minlength = tlength;
 		}
 		while (result < minlength 
 				&& source.charAt(result) == target.charAt(result)) {
 			result ++;
 	    }
-	    if (result > 0 && result < minlength) {
+	    if (result > 0) {
 	        // There is an identical portion at the beginning of the two 
 	        // strings. If the identical portion ends within a contraction or a 
 	        // combining character sequence, back up to the start of that 
-	        // sequence.              
-	        char schar = source.charAt(result); // first differing chars   
-	        char tchar = target.charAt(result);
+	        // sequence.
+	        char schar = 0;
+	        char tchar = 0;
+	        if (result < minlength) {              
+	        	schar = source.charAt(result); // first differing chars   
+	        	tchar = target.charAt(result);
+	        }
+	        else {
+	        	if (slength == tlength) {
+	        		return result;
+	        	}
+	        	else if (slength < tlength) {
+	        		tchar = target.charAt(result);
+	        	}
+	        	else {
+	        		schar = source.charAt(result);
+	        	}
+	        }
 	        if (isUnsafe(schar) || isUnsafe(tchar))
 	        {
 	            // We are stopped in the middle of a contraction or combining
@@ -2394,9 +2430,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * to compare. It is used when compare gets in trouble and needs to bail 
 	 * out.
 	 * @param source text string
-	 * @param target text string          
+	 * @param target text string
 	 */
 	private final int compareBySortKeys(String source, String target)
+														
 	{
 	    CollationKey sourcekey = getCollationKey(source);
 	    CollationKey targetkey = getCollationKey(target);	
@@ -2432,6 +2469,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 										String source, String target, 
 										int textoffset, int cebuffer[][], 
 									   	int cebuffersize[])
+									   	
 	{
 		// Preparing the context objects for iterating over strings
 	    StringCharacterIterator siter = new StringCharacterIterator(source, 
@@ -2574,6 +2612,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 										CollationElementIterator coleiter,
 										int lowestpvalue, int cebuffer[][], 
 										int cebuffersize[],	int cebufferindex)
+										
 	{
 		boolean shifted = false;
 		int result = CollationElementIterator.IGNORABLE;
@@ -2966,21 +3005,18 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 */
 	private static final int doIdenticalCompare(String source, String target, 
 												int offset, boolean normalize)
+												
 	{
 	    if (normalize) {
-	        /*
-	        if (unorm_quickCheck(sColl->string, sLen, UNORM_NFD) != UNORM_YES) {
-	            source = unorm_decompose(sColl->writableBuffer, 
-	            							sColl->writableBufSize,
-	                                   		sBuf, sLen, FALSE, FALSE);
+	        if (Normalizer.quickCheck(source, Normalizer.NFD) 
+	        										!= Normalizer.YES) {
+	            source = Normalizer.decompose(source, false);
 	        }
 	
-	        if (unorm_quickCheck(tColl->string, tLen, UNORM_NFD) != UNORM_YES) {
-	            target = unorm_decompose(tColl->writableBuffer, 
-	            							tColl->writableBufSize,
-	                                   		tBuf, tLen, FALSE, FALSE);
+	        if (Normalizer.quickCheck(target, Normalizer.NFD) 
+	        											!= Normalizer.YES) {
+	            target = Normalizer.decompose(target, false);
 	        }
-	        */
 	        offset = 0;
 	    }
 	
@@ -3003,15 +3039,25 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
     	// compare identical prefixes - they do not need to be fixed up
     	char schar = 0;
     	char tchar = 0;
-    	while (true) {
+    	int slength = source.length();
+    	int tlength = target.length();
+    	int minlength = Math.min(slength, tlength);
+    	while (offset < minlength) {
         	schar = source.charAt(offset);
         	tchar = target.charAt(offset ++);
         	if (schar != tchar) {
             	break;
         	}
-        	if (schar == 0) {
-            	return 0;
-        	}
+    	}
+    	
+    	if (schar == tchar && offset == minlength) {
+    		if (slength > minlength) {
+    			return 1;
+    		}
+    		if (tlength > minlength) {
+    			return -1;
+    		}
+    		return 0;
     	}
 
    		//  if both values are in or above the surrogate range, Fix them up.
@@ -3046,6 +3092,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * @return true if source after offset is ignorable. false otherwise
 	 */
 	private final boolean checkIgnorable(String source, int offset)
+													
 	{
 		StringCharacterIterator siter = new StringCharacterIterator(source,
 											offset, source.length(), offset);
@@ -3060,4 +3107,83 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	    }
 	    return true; 
 	}
+	
+	/**
+	 * Resets the internal case data members and compression values.
+	 */
+	private void updateInternalState() 
+	{
+      	if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
+        	m_caseSwitch_ = (byte)CASE_SWITCH_;
+      	} 
+      	else {
+        	m_caseSwitch_ = NO_CASE_SWITCH_;
+      	}
+
+      	if (m_isCaseLevel_ || m_caseFirst_ == AttributeValue.OFF_) {
+        	m_mask3_ = CE_REMOVE_CASE_;
+        	m_common3_ = COMMON_NORMAL_3_;
+        	m_addition3_ = FLAG_BIT_MASK_CASE_SWITCH_OFF_;
+        	m_top3_ = COMMON_TOP_CASE_SWITCH_OFF_3_;
+        	m_bottom3_ = COMMON_BOTTOM_3_;
+      	} 
+      	else {
+        	m_mask3_ = (byte)CE_KEEP_CASE_;
+        	m_addition3_ = FLAG_BIT_MASK_CASE_SWITCH_ON_;
+        	if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
+          		m_common3_ = COMMON_UPPER_FIRST_3_;
+          		m_top3_ = COMMON_TOP_CASE_SWITCH_UPPER_3_;
+          		m_bottom3_ = COMMON_BOTTOM_CASE_SWITCH_UPPER_3_;
+        	} else {
+          		m_common3_ = COMMON_NORMAL_3_;
+          		m_top3_ = COMMON_TOP_CASE_SWITCH_LOWER_3_;
+          		m_bottom3_ = COMMON_BOTTOM_CASE_SWITCH_LOWER_3_;
+        	}
+      	}
+
+      	// Set the compression values
+      	int total3 = m_top3_ - COMMON_BOTTOM_3_ - 1;
+      	// we multilply double with int, but need only int
+      	m_topCount3_ = (int)(PROPORTION_3_ * total3); 
+      	m_bottomCount3_ = total3 - m_topCount3_;
+
+      	if (!m_isCaseLevel_ && getStrength() == AttributeValue.TERTIARY_ 
+          	&& !m_isFrenchCollation_ && !m_isAlternateHandlingShifted_) {
+        	m_isSimple3_ = true;
+      	} 
+      	else {
+        	m_isSimple3_ = false;
+      	}
+	}
+	
+	/**
+     * Initializes the RuleBasedCollator
+     */
+    private final void init()
+    {
+    	for (m_minUnsafe_ = 0; m_minUnsafe_ < DEFAULT_MIN_HEURISTIC_; 
+    	     m_minUnsafe_ ++) {  
+    		// Find the smallest unsafe char.
+        	if (isUnsafe(m_minUnsafe_)) {
+        		break;
+        	}
+    	}
+    	
+    	for (m_minContractionEnd_ = 0; 
+    	     m_minContractionEnd_ < DEFAULT_MIN_HEURISTIC_; 
+    	     m_minContractionEnd_ ++) {  
+    	    // Find the smallest contraction-ending char.
+        	if (isContractionEnd(m_minContractionEnd_)) {
+        		break;
+        	}
+    	}
+    	setStrength(m_defaultStrength_);
+    	setDecomposition(m_defaultDecomposition_);
+    	m_isFrenchCollation_ = m_defaultIsFrenchCollation_;
+    	m_isAlternateHandlingShifted_ = m_defaultIsAlternateHandlingShifted_;
+    	m_isCaseLevel_ = m_defaultIsCaseLevel_;
+    	m_caseFirst_ = m_defaultCaseFirst_;
+    	m_isHiragana4_ = m_defaultIsHiragana4_;
+    	updateInternalState();
+    }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/05/16 20:04:49 $ 
-* $Revision: 1.2 $
+* $Date: 2002/06/21 23:56:47 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -140,26 +140,28 @@ final class CollatorReader
      * @exception IOException thrown when there's a data error.
      * @draft 2.2
      */
-    public void readOptions(RuleBasedCollator rbc) throws IOException
+    protected void readOptions(RuleBasedCollator rbc) throws IOException
     {
     	rbc.m_variableTopValue_ = m_dataInputStream_.readInt();
-    	rbc.setAttributeDefault(RuleBasedCollator.Attribute.FRENCH_COLLATION_,
-    	                 m_dataInputStream_.readInt());
-    	rbc.setAttributeDefault(
-    	                 RuleBasedCollator.Attribute.ALTERNATE_HANDLING_,
-    	                 m_dataInputStream_.readInt());
-    	rbc.setAttributeDefault(RuleBasedCollator.Attribute.CASE_FIRST_,
-    	                 m_dataInputStream_.readInt());
-      	rbc.setAttributeDefault(RuleBasedCollator.Attribute.CASE_LEVEL_,
-    	                 m_dataInputStream_.readInt());
-      	rbc.setAttributeDefault(
-      	                 RuleBasedCollator.Attribute.NORMALIZATION_MODE_,
-    	                 m_dataInputStream_.readInt());
-      	rbc.setAttributeDefault(RuleBasedCollator.Attribute.STRENGTH_,
-    	                 m_dataInputStream_.readInt());
-		rbc.setAttributeDefault(
-		                 RuleBasedCollator.Attribute.HIRAGANA_QUATERNARY_MODE_,
-    	                 m_dataInputStream_.readInt());
+    	rbc.m_defaultIsFrenchCollation_ = (m_dataInputStream_.readInt() 
+    	                                == RuleBasedCollator.AttributeValue.ON_);
+        rbc.m_defaultIsAlternateHandlingShifted_ 
+                                   = (m_dataInputStream_.readInt() == 
+                                    RuleBasedCollator.AttributeValue.SHIFTED_);
+        rbc.m_defaultCaseFirst_ = m_dataInputStream_.readInt();
+        rbc.m_defaultIsCaseLevel_ = (m_dataInputStream_.readInt() 
+                                     == RuleBasedCollator.AttributeValue.ON_);
+        int value = m_dataInputStream_.readInt();
+    	if (value == RuleBasedCollator.AttributeValue.ON_) {
+    		value = Collator.CANONICAL_DECOMPOSITION;
+    	}
+    	else {
+    		value = Collator.NO_DECOMPOSITION;
+    	}
+    	rbc.m_defaultDecomposition_ = value;
+    	rbc.m_defaultStrength_ = m_dataInputStream_.readInt();
+    	rbc.m_defaultIsHiragana4_ = (m_dataInputStream_.readInt() 
+    	                             == RuleBasedCollator.AttributeValue.ON_);
     }
     
     /**
@@ -169,7 +171,7 @@ final class CollatorReader
     * @exception IOException thrown when there's a data error.
     * @draft 2.2
     */
-    public void read(RuleBasedCollator rbc) throws IOException
+    protected void read(RuleBasedCollator rbc) throws IOException
     {
     	readHeader(rbc);
     	readOptions(rbc);
@@ -188,7 +190,8 @@ final class CollatorReader
     	for (int i = 0; i < m_contractionCESize_; i ++) {
     		rbc.m_contractionCE_[i] = m_dataInputStream_.readInt();
     	}
-    	rbc.m_trie_ = new IntTrie(m_dataInputStream_, rbc);
+    	rbc.m_trie_ = new IntTrie(m_dataInputStream_, 
+                           	  RuleBasedCollator.DataManipulate.getInstance());
     	if (!rbc.m_trie_.isLatin1Linear()) {
     		throw new IOException("Data corrupted, " 
     		                      + "Collator Tries expected to have linear "
@@ -213,6 +216,43 @@ final class CollatorReader
     	}
     }
     
+    /**
+     * Reads in the inverse uca data
+     * @param input input stream with the inverse uca data
+     * @return an object containing the inverse uca data
+     * @exception IOException thrown when error occurs while reading the 
+     *            inverse uca
+     */
+    protected static CollationParsedRuleBuilder.InverseUCA readInverseUCA(
+                                                      InputStream inputStream)
+                                                      throws IOException
+    {
+        ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
+                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+        CollationParsedRuleBuilder.InverseUCA result = 
+                                  new CollationParsedRuleBuilder.InverseUCA();
+        DataInputStream input = new DataInputStream(inputStream);        
+        int bytesize = input.readInt();
+        int tablesize = input.readInt(); // in int size
+        int contsize = input.readInt();  // in char size
+        int table = input.readInt(); // in bytes
+        int conts = input.readInt(); // in bytes
+        int size = tablesize * 3; // one column for each strength
+        result.m_table_ = new int[size];
+        result.m_continuations_ = new char[contsize];
+        
+        for (int i = 0; i < size; i ++) {
+            result.m_table_[i] = input.readInt();
+        }
+        for (int i = 0; i < contsize; i ++) {
+            result.m_continuations_[i] = input.readChar();
+        }
+        input.close();
+        return result;
+    }
+    
+    // private inner class -----------------------------------------------
+    
     // private variables -------------------------------------------------
   
     /**
@@ -230,6 +270,14 @@ final class CollatorReader
                                                     (byte)0x6f, (byte)0x6c};
     private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x0, 
                                                     (byte)0x0, (byte)0x0};
+    /**
+    * Inverse UCA file format version and id that this class understands.
+    * No guarantees are made if a older version is used
+    */
+    private static final byte INVERSE_UCA_DATA_FORMAT_ID_[] = {(byte)0x49, 
+                                                               (byte)0x6e,  
+                                                               (byte)0x76, 
+                                                               (byte)0x43};
     /**
     * Corrupted error string
     */
