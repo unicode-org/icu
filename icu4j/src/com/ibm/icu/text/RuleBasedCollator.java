@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/07/29 23:08:09 $
-* $Revision: 1.42 $
+* $Date: 2003/08/17 22:53:41 $
+* $Revision: 1.43 $
 *
 *******************************************************************************
 */
@@ -2942,9 +2942,18 @@ public final class RuleBasedCollator extends Collator
                 // if both primaries are the same
                 if (sorder == torder) {
                     // and there are no more CEs, we advance to the next level
+                    // see if we are at the end of either string
                     if (m_srcUtilCEBuffer_[m_srcUtilCEBufferSize_ - 1]
-                                    == CollationElementIterator.NULLORDER) {
+                                        == CollationElementIterator.NULLORDER) {
+                        if (m_tgtUtilCEBuffer_[m_tgtUtilCEBufferSize_ - 1] 
+                            != CollationElementIterator.NULLORDER) {
+                            return -1;
+                        }
                         break;
+                    }
+                    else if (m_tgtUtilCEBuffer_[m_tgtUtilCEBufferSize_ - 1]
+                             == CollationElementIterator.NULLORDER) {
+                        return 1;
                     }
                     if (doHiragana4 && hiraganaresult == 0
                         && m_srcUtilColEIter_.m_isCodePointHiragana_ !=
@@ -3167,7 +3176,15 @@ public final class RuleBasedCollator extends Collator
                 if (sorder == torder) {
                     if (m_srcUtilCEBuffer_[soffset - 1]
                                     == CollationElementIterator.NULLORDER) {
+                        if (m_tgtUtilCEBuffer_[toffset - 1] 
+                            != CollationElementIterator.NULLORDER) {
+                            return -1;
+                        }
                         break;
+                    }
+                    else if (m_tgtUtilCEBuffer_[toffset - 1]
+                             == CollationElementIterator.NULLORDER) {
+                        return 1;
                     }
                 }
                 else {
@@ -3297,9 +3314,18 @@ public final class RuleBasedCollator extends Collator
             sorder &= CE_CASE_BIT_MASK_;
             torder &= CE_CASE_BIT_MASK_;
             if (sorder == torder) {
+                // checking end of strings
                 if (m_srcUtilCEBuffer_[soffset - 1]
                                         == CollationElementIterator.NULLORDER) {
+                    if (m_tgtUtilCEBuffer_[toffset - 1] 
+                        != CollationElementIterator.NULLORDER) {
+                        return -1;
+                    }
                     break;
+                }
+                else if (m_tgtUtilCEBuffer_[toffset - 1]
+                            == CollationElementIterator.NULLORDER) {
+                    return 1;
                 }
             }
             else {
@@ -3353,7 +3379,15 @@ public final class RuleBasedCollator extends Collator
             if (sorder == torder) {
                 if (m_srcUtilCEBuffer_[soffset - 1]
                                     == CollationElementIterator.NULLORDER) {
+                    if (m_tgtUtilCEBuffer_[toffset - 1]
+                        != CollationElementIterator.NULLORDER) {
+                        return -1;
+                    }
                     break;
+                }
+                else if (m_tgtUtilCEBuffer_[toffset - 1]
+                            == CollationElementIterator.NULLORDER) {
+                    return 1;
                 }
             }
             else {
@@ -3430,7 +3464,15 @@ public final class RuleBasedCollator extends Collator
             if (sorder == torder) {
                 if (m_srcUtilCEBuffer_[soffset - 1]
                     == CollationElementIterator.NULLORDER) {
+                    if (m_tgtUtilCEBuffer_[toffset - 1]
+                        != CollationElementIterator.NULLORDER) {
+                        return -1;
+                    }
                     break;
+                }
+                else if (m_tgtUtilCEBuffer_[toffset - 1]
+                            == CollationElementIterator.NULLORDER) {
+                    return 1;
                 }
             }
             else {
