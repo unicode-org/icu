@@ -11,6 +11,7 @@
  *
  *   Date        Name        Description
  *   04/04/99    helena      Fixed internal header inclusion.
+ *   05/11/00    helena      Added setFallback and usesFallback APIs.
  */
 
 /**
@@ -65,8 +66,7 @@ U_CDECL_END
  */
 
 U_CAPI
-UConverter* U_EXPORT2 ucnv_open   (const char *converterName,
-				   UErrorCode * err);
+UConverter* U_EXPORT2 ucnv_open   (const char *converterName, UErrorCode * err);
 
 
 /**
@@ -83,7 +83,7 @@ UConverter* U_EXPORT2 ucnv_open   (const char *converterName,
  * @stable
  */
 U_CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
-				       UErrorCode * err);
+                                         UErrorCode * err);
 
 
 
@@ -102,7 +102,7 @@ U_CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
 
 U_CAPI UConverter* U_EXPORT2 ucnv_openCCSID (int32_t codepage,
 					   UConverterPlatform platform,
-					   UErrorCode * err);
+                       UErrorCode * err);
 
 
 /**
@@ -692,6 +692,23 @@ U_CAPI void U_EXPORT2 ucnv_fixFileSeparator(const UConverter *cnv, UChar* source
  */
 U_CAPI bool_t U_EXPORT2 ucnv_isAmbiguous(const UConverter *cnv);
 
+/**
+ * Sets the converter to use fallback mapping or not.
+ * @param cnv The converter to set the fallback mapping usage for.
+ * @param usesFallback TRUE if the user wants the converter to take advantage of the fallback 
+ * mapping, FALSE otherwise.
+ * @draft
+ */
+U_CAPI void U_EXPORT2 ucnv_setFallback(UConverter *cnv, bool_t usesFallback);
+
+/**
+ * Determines if the converter uses fallback mappings or not.
+ * @return TRUE if the converter uses fallback, FALSE otherwise.
+ * @draft
+ */
+U_CAPI bool_t U_EXPORT2 ucnv_usesFallback(const UConverter *cnv);
 
 #endif
 /*_UCNV*/
+
+
