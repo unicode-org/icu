@@ -907,7 +907,7 @@ ucnv_toUnicode (UConverter * converter,
  *         and a buffer of the indicated length would need to be passed in
  * @see ucnv_fromUnicode
  * @see ucnv_convert
- * @draft ICU 2.0 (new NUL-termination semantics)
+ * @stable 
  */
 U_CAPI int32_t U_EXPORT2
 ucnv_fromUChars(UConverter *cnv,
@@ -940,7 +940,7 @@ ucnv_fromUChars(UConverter *cnv,
  *         and a buffer of the indicated length would need to be passed in
  * @see ucnv_toUnicode
  * @see ucnv_convert
- * @draft ICU 2.0 (new NUL-termination semantics)
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 ucnv_toUChars(UConverter *cnv,
