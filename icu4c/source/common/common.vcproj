@@ -618,6 +618,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\utracimp.h">
+			</File>
+			<File
 				RelativePath=".\unicode\utypes.h">
 				<FileConfiguration
 					Name="Release|Win32">
