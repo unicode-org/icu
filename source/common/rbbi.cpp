@@ -837,9 +837,11 @@ continueOn:
 
     // Leave the iterator at our result position.
     fText->setIndex(result);
-    if (fTrace) {
-        RBBIDebugPrintf("result = %d\n\n", result);
-    }
+    #ifdef RBBI_DEBUG
+        if (fTrace) {
+            RBBIDebugPrintf("result = %d\n\n", result);
+        }
+    #endif
     return result;
 }
 
