@@ -3105,21 +3105,82 @@ public class LDML2ICUConverter {
     
     private void writeDeprecatedLocale(String fileName, ULocale fromLocale, ULocale toLocale, String xpath)
     {
-        String fullName = destDir + File.separator + fileName;
+        String outputFileName = destDir + File.separator + fileName;
+        ICUResourceWriter.Resource set = null;
         try {
-            System.out.println(" Writing deprecated locale: " + fullName);
-            PrintStream ourFile = new PrintStream(new  FileOutputStream(fullName)); 
-            ourFile.println("// generated.");
-                ourFile.println("sorry not real {} yet.");
-                
-                
-                ourFile.close();
-                
-        }catch( IOException e) {
-            System.err.println("While writing " + fileName);
+                ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
+                table.name = fromLocale.toString();
+                ICUResourceWriter.ResourceString ver = new ICUResourceWriter.ResourceString();
+                ver.name = "\"Version\"";
+                ver.val = "1.0";
+                table.first=ver;
+                if(xpath == null) {
+                    ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
+                    str.name = "\"%%ALIAS\"";
+                    str.val = toLocale.toString();
+                    ver.next = str;
+                } else {
+                    String service = null;
+                    String serviceDefault = null;
+                    
+                    // see if we can find it out using the locale..
+                    String aVal;
+                    
+                    if((aVal = toLocale.getKeywordValue("calendar")) != null) { 
+                        service = "calendar";
+                        serviceDefault = aVal;
+                    } else if((toLocale.getKeywordValue("collation")) != null) {
+                        service = "collations";
+                        serviceDefault = aVal;
+                    } else {
+                        throw new IllegalArgumentException("Don't know how to handle xpath (locale match failed) " + xpath + ", " + toLocale.toString());
+                    }
+                    
+                    ICUResourceWriter.ResourceTable serviceTable = new ICUResourceWriter.ResourceTable();
+                    serviceTable.comment = xpath;
+                    serviceTable.name = service;
+                    
+                    ICUResourceWriter.ResourceString defaultString = new ICUResourceWriter.ResourceString();
+                    defaultString.name = "default";
+                    defaultString.val = serviceDefault;
+                    
+                    serviceTable.first = defaultString;
+                    
+                    ver.next = serviceTable;
+                }
+                set = table;
+            // nothing, yet.
+        } catch (Throwable e) {
+            System.err.println("ERROR: building synthetic locale tree for " + outputFileName + ": "  +e.toString());
             e.printStackTrace();
             System.exit(1);
         }
         
+        
+        try {
+            System.out.println("INFO: Writing deprecated locale: " + outputFileName);
+            FileOutputStream file = new FileOutputStream(outputFileName);
+            BufferedOutputStream writer = new BufferedOutputStream(file);
+            writeHeader(writer,"deprecatedList.xml");
+
+            ICUResourceWriter.Resource current = set;
+            while(current!=null){
+                current.sort();
+                current = current.next;
+            }
+            
+            //Now start writing the resource;
+            /*ICUResourceWriter.Resource */current = set;
+            while(current!=null){
+                current.write(writer, 0, false);
+                current = current.next;
+            }
+            writer.flush();
+            writer.close();
+        }catch( IOException e) {
+            System.err.println("ERROR: While writing deprecated locale " + outputFileName + ": "  +e.toString());
+            e.printStackTrace();
+            System.exit(1);
+        }    
     }
 }
