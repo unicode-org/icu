@@ -304,14 +304,14 @@ public class XMLComparator {
         
         Hashtable colorHash = new Hashtable();
         colorHash.put("icu","#D3D3D3");        
-        colorHash.put("ibm_toronto","#ADD8E6");
+        colorHash.put("ibm_toronto","#FF7777");
         colorHash.put("windows","#98FB98");
-        colorHash.put("sun_jdk","#B0C4DE");
-        colorHash.put("ibm_jdk","#FAFAD2");
+        colorHash.put("sun_jdk","#DDDDFF");
+        colorHash.put("ibm_jdk","#FFBBBB");
         colorHash.put("hp_ux","#FFE4B5");
-        colorHash.put("apple","#F5F5DC");
+        colorHash.put("apple","#FFBBBB");
         colorHash.put("solaris","#E0FFFF");
-        colorHash.put("other","#E0FFFF");
+        colorHash.put("other","#CCCCFF");
         boolean hasData =false;          
         for(int i =0; i<list.getLength();i++){
              Node diffElem = list.item(i);
@@ -332,16 +332,16 @@ public class XMLComparator {
                       
                       //System.out.println(current.getNodeName());
                       String val = current.getFirstChild().getNodeValue();
-                      if(val==null || (val=trim(val)).equals("")) val="D.N.A";
+                      if(val==null || (val=trim(val)).equals("")) val="&nbsp;";
                       String color="#FFFFFF";
-                      if(!val.equals("S.N.A") && !val.equals("D.N.A")){
+                      if(!val.equals("S.N.A") && !val.equals("&nbsp;")){
 	                      for(int k=0; k<childList.getLength();k++){
 	                         Node n = childList.item(k);
 	                         if(n!=null && n.getNodeType()==Node.ELEMENT_NODE){
                                 String nVal =n.getFirstChild().getNodeValue();
                                 //-ibm_jdk c:\NLTC\IBMJDK\XML\cs_CZ.xml -sun_jdk c:\NLTC\Java\xml\cs_CZ.xml -windows c:\NLTC\windows\xml\cs_CZ.xml -hp_ux c:\NLTC\hp\xml\cs_CZ.xml
                                 
-                                if( (!nVal.equals("S.N.A") && !nVal.equals("D.N.A"))&&
+                                if( (!nVal.equals("S.N.A")&& !val.equals("&nbsp;"))&&
                                     (
                                      val.equals(nVal) ||
                                      ((attrb.item(1).getNodeValue().equals("pattern"))&&
@@ -361,16 +361,18 @@ public class XMLComparator {
 	                         }
 	                      }
                       }
-                      NamedNodeMap attList = current.getAttributes();
-                      if(attList.getNamedItem("case_diff").getNodeValue().equals("false")){
-                        writer.println("                <td bgcolor="+color+">"+val+"</td>");
-                      }else{
-                        writer.println("                <td bgcolor="+color+">"+
-                                       val+
-                                       "<font color=#A52A2A> (case difference only)</font>"+
-                                       "</td>");
+                      if(!val.equals("S.N.A")){
+	                      NamedNodeMap attList = current.getAttributes();
+	                      if(attList.getNamedItem("case_diff").getNodeValue().equals("false")){
+	                        writer.println("                <td bgcolor="+color+">"+val+"</td>");
+	                      }else{
+	                        writer.println("                <td bgcolor="+color+">"+
+	                                       val+
+	                                       "<font color=#A52A2A> (case difference only)</font>"+
+	                                       "</td>");
+	                      }
+	                      hasData=true;
                       }
-                      hasData=true;
                  }
              }       
 
@@ -401,46 +403,46 @@ public class XMLComparator {
      */
     private Document goldDoc=null;
     
+    public Document getFullyResolvedLocale(String localeName,String fileName){
+        // here we assume that "_" is the delimiter
+        Document doc = parse(localeName);
+        String temp = localeName;    
+		if((temp.indexOf("icu")>=0 ) || (temp.indexOf("jdk")>=0)){
+		    // OK we have a posix style locale data
+		    // merge all data in inheritence tree into goldDoc
+		    int index = -1;
+		    while((index = temp.indexOf("_")) >0 && index > fileName.lastIndexOf("\\")){
+		        Document parentDoc = parse((temp = temp.substring(0,index)+".xml"));
+		        if(parentDoc!=null){
+		           mergeElements(doc.getDocumentElement(),parentDoc.getDocumentElement());
+		        }
+		    }
+		}
+        
+        String rootFileName="" ;
+        if(fileName.lastIndexOf(File.pathSeparatorChar)!=-1){
+            rootFileName = fileName.substring(0,fileName.lastIndexOf(File.pathSeparatorChar)+1);
+        }
+        rootFileName = rootFileName+"root.xml";        
+		Document rootDoc = parse(rootFileName);
+
+		mergeElements(doc.getDocumentElement(),rootDoc.getDocumentElement());
+        return doc;
+    }
     public boolean compare(String goldFileName, String goldKey, 
                            String testFileName, String testKey, boolean mergeData)
     {
         
-        String temp= goldFileName;
         // parse the gold doc only if it is null
         if(goldDoc==null){
-            goldDoc = parse(goldFileName);
-            
-            if((goldKey.indexOf("icu")>=0 ) || (goldKey.indexOf("jdk")>=0)){
-                // OK we have a posix style locale data
-                // merge all data in inheritence tree into goldDoc
-                int index = -1;
-                while((index = temp.indexOf("_")) >0 && index > goldFileName.lastIndexOf("\\")){
-                    Document parentDoc = parse((temp = temp.substring(0,index)+".xml"));
-                    if(parentDoc!=null){
-                       mergeElements(goldDoc.getDocumentElement(),parentDoc.getDocumentElement());
-                    }
-                }
-            }
+            goldDoc = getFullyResolvedLocale(goldKey,goldFileName);
         }
 
         // parse the test doc only if gold doc was parsed OK
-        Document testDoc = (null != goldDoc)
-                           ? parse(testFileName) : null;
-                           
-        if(((testKey.indexOf("icu")>=0) || (testKey.indexOf("jdk")>=0)) && testDoc!=null){
-            // OK we have a posix style locale data in goldDoc
-            // merge all data in inheritence tree into testDoc
-            temp=testFileName;
-            int index = -1;
-            while((index = temp.indexOf("_")) >0 && index > testFileName.lastIndexOf("\\")){
-                    Document parentDoc = parse((temp = temp.substring(0,index)+".xml"));
-                    if(parentDoc!=null){
-                       mergeElements(testDoc.getDocumentElement(),parentDoc.getDocumentElement());
-                    }
-             }
         
-        }
-        
+        Document testDoc = null;
+        if(goldDoc!=null)
+         testDoc = getFullyResolvedLocale(testKey,testFileName);
         if (null == goldDoc)
         {
             doesNotExist.add(goldKey);
@@ -1117,8 +1119,8 @@ public class XMLComparator {
         // Local class: cheap non-printing ErrorHandler
         // This is used to suppress validation warnings
         ErrorHandler nullHandler = new ErrorHandler() {
-            public void warning(SAXParseException e) throws SAXException {}
-            public void error(SAXParseException e) throws SAXException {}
+            public void warning(SAXParseException e) throws SAXException {System.err.println("Warning: " + e.getMessage());}
+            public void error(SAXParseException e) throws SAXException {System.err.println("Error: " + e.getMessage());}
             public void fatalError(SAXParseException e) throws SAXException 
             {
                 throw e;
