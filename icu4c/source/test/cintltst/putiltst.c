@@ -262,7 +262,7 @@ static void TestPUtilAPI(){
 
     }
 
-// We can deprecate the test code right away; the API itself goes 2002-Jun-30
+/* We can deprecate the test code right away; the API itself goes 2002-Jun-30 */
 #ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
     log_verbose("Testing uprv_nextDouble() where the value is NaN ...\n");
     expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
