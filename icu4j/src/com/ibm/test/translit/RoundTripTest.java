@@ -3,6 +3,7 @@ import com.ibm.test.*;
 import com.ibm.text.*;
 import com.ibm.util.Utility;
 import java.io.*;
+import java.util.BitSet;
 import java.text.ParseException;
 
 /**
@@ -24,7 +25,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestKatakana() throws IOException, ParseException {
         new Test("Latin-Katakana", 
           TestUtility.LATIN_SCRIPT, TestUtility.KATAKANA_SCRIPT)
-          .test("[a-z]", "[\u30A1-\u30FA]", this);
+          .test("[a-z]", "[\u30A1-\u30FA\u30FC]", this);
     }
 
 // Some transliterators removed for 2.0
@@ -65,13 +66,13 @@ public class RoundTripTest extends TestFmwk {
     public void TestGreek() throws IOException, ParseException {
         new Test("Latin-Greek", 
           TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-          .test(null, "[\u0380-\u03CF]", this);
+          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this);
     }
 
     public void TestCyrillic() throws IOException, ParseException {
         new Test("Latin-Cyrillic", 
           TestUtility.LATIN_SCRIPT, TestUtility.CYRILLIC_SCRIPT)
-          .test(null, "[\u0401\u0410-\u044F\u0451]", this);
+          .test(null, "[\u0400-\u045F]", this);
     }
 
     static class Test {
@@ -139,12 +140,10 @@ public class RoundTripTest extends TestFmwk {
             out.println("<HTML><HEAD>");
             out.println("<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
             out.println("<BODY>");
-            out.println("<TABLE>");
             try {
                 test2();
-                out.println("</TABLE>");
             } catch (TestTruncated e) {
-                out.println("</TABLE>" + e.getMessage());
+                out.println(e.getMessage());
             }
             out.println("</BODY></HTML>");
             out.close();
@@ -163,6 +162,8 @@ public class RoundTripTest extends TestFmwk {
             Transliterator targetToSource = sourceToTarget.getInverse();
 
             log.logln("Checking that source characters convert to target - Singles");
+            
+            BitSet failSourceTarg = new BitSet();
 
             for (char c = 0; c < 0xFFFF; ++c) {
                 if (TestUtility.isUnassigned(c) ||
@@ -171,6 +172,7 @@ public class RoundTripTest extends TestFmwk {
                 String targ = sourceToTarget.transliterate(String.valueOf(cs));
                 if (!isReceivingTarget(targ)) {
                     logWrongScript("Source-Target", cs, targ);
+                    failSourceTarg.set(c);
                 }
             }
 
@@ -179,9 +181,13 @@ public class RoundTripTest extends TestFmwk {
             for (char c = 0; c < 0xFFFF; ++c) { 
                 if (TestUtility.isUnassigned(c) ||
                     !isSource(c)) continue;
+                if (failSourceTarg.get(c)) continue;
+                
                 for (char d = 0; d < 0xFFFF; ++d) {
                     if (TestUtility.isUnassigned(d) ||
                         !isSource(d)) continue;
+                    if (failSourceTarg.get(d)) continue;
+                    
                     String cs = String.valueOf(c) + d;
                     String targ = sourceToTarget.transliterate(cs);
                     if (!isReceivingTarget(targ)) {
@@ -191,6 +197,9 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that target characters convert to source and back - Singles");
+            
+            BitSet failTargSource = new BitSet();
+            BitSet failRound = new BitSet();
 
             for (char c = 0; c < 0xFFFF; ++c) {
                 if (TestUtility.isUnassigned(c) ||
@@ -200,8 +209,10 @@ public class RoundTripTest extends TestFmwk {
                 String reverse = sourceToTarget.transliterate(targ);
                 if (!isReceivingSource(targ)) {
                     logWrongScript("Target-Source", cs, targ);
-                } else if (!cs.equals(reverse)) {
+                    failTargSource.set(c);
+                } else if (!cs.equalsIgnoreCase(reverse)) {
                     logRoundTripFailure(cs, targ, reverse);
+                    failRound.set(c);
                 }
             }
 
@@ -223,9 +234,9 @@ public class RoundTripTest extends TestFmwk {
                     String cs = buf.toString();
                     String targ = targetToSource.transliterate(cs);
                     String reverse = sourceToTarget.transliterate(targ);
-                    if (!isReceivingSource(targ)) {
+                    if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)) {
                         logWrongScript("Target-Source", cs, targ);
-                    } else if (!cs.equals(reverse)) {
+                    } else if (!cs.equalsIgnoreCase(reverse) && !failRound.get(c) && !failRound.get(d)) {
                         logRoundTripFailure(cs, targ, reverse);
                     }
                 }
@@ -234,27 +245,27 @@ public class RoundTripTest extends TestFmwk {
         }
 
         final void logWrongScript(String label, String from, String to) {
-            out.println("<TR><TD>Fail " + label + ":</TD><TD><FONT SIZE=\"6\">" +
-                        from + "</FONT></TD><TD>(" +
-                        TestUtility.hex(from) + ") =></TD><TD><FONT SIZE=\"6\">" +
-                        to + "</FONT></TD><TD>(" +
-                        TestUtility.hex(to) + ")</TD></TR>" );
             if (++errorCount >= errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
+            out.println("<br>Fail " + label + ": " +
+                        from + " (" +
+                        TestUtility.hex(from) + ") => " +
+                        to + " (" +
+                        TestUtility.hex(to) + ")" );
         }
 
         final void logRoundTripFailure(String from, String to, String back) {
-            out.println("<TR><TD>Fail Roundtrip:</TD><TD><FONT SIZE=\"6\">" +
-                        from + "</FONT></TD><TD>(" +
-                        TestUtility.hex(from) + ") =></TD><TD>" +
-                        to + "</TD><TD>(" +
-                        TestUtility.hex(to) + ") =></TD><TD><FONT SIZE=\"6\">" +
-                        back + "</TD><TD>(" +
-                        TestUtility.hex(back) + ")</TD></TR>" );
             if (++errorCount >= errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
+            out.println("<br>Fail Roundtrip: " +
+                        from + " (" +
+                        TestUtility.hex(from) + ") => " +
+                        to + " (" +
+                        TestUtility.hex(to) + ") => " +
+                        back + " (" +
+                        TestUtility.hex(back) + ")" );
         }
 
         /*
