@@ -95,6 +95,14 @@ static void TestAPI(void)
     if(uprv_stricmp(src, "1AF") != 0 || i != 3){
         log_err("FAIL: ****integerToString(src, 431, 16); failed. Expected: \"1AF\", Got: %s\n", src);
     }
+    i = T_CString_int64ToString(src, U_INT64_MAX, 10);
+    if(uprv_strcmp(src,  "9223372036854775807") != 0 || i != 19){
+        log_err("FAIL: ****integerToString(src, 9223372036854775807, 10); failed. Got: %s\n", src);
+    }
+    i = T_CString_int64ToString(src, U_INT64_MAX, 16);
+    if(uprv_stricmp(src, "7FFFFFFFFFFFFFFF") != 0 || i != 16){
+        log_err("FAIL: ****integerToString(src, 7FFFFFFFFFFFFFFF, 16); failed. Got: %s\n", src);
+    }
 
     uprv_strcpy(src, "this is lower case");
     if(T_CString_stricmp(src, "THIS is lower CASE") != 0){
