@@ -990,7 +990,12 @@ allocString(StringBlock *block, uint32_t length) {
 static int
 compareAliases(const void *alias1, const void *alias2) {
     /* Names like IBM850 and ibm-850 need to be sorted together */
-    return ucnv_compareNames(GET_ALIAS_STR(*(uint16_t*)alias1), GET_ALIAS_STR(*(uint16_t*)alias2));
+    int result = ucnv_compareNames(GET_ALIAS_STR(*(uint16_t*)alias1), GET_ALIAS_STR(*(uint16_t*)alias2));
+    if (!result) {
+        /* Sort the shortest first */
+        return uprv_strlen(GET_ALIAS_STR(*(uint16_t*)alias1)) - uprv_strlen(GET_ALIAS_STR(*(uint16_t*)alias2));
+    }
+    return result;
 }
 
 /*
