@@ -140,43 +140,49 @@ static const struct AssemblyType {
     const char *beginLine;
 } assemblyHeader[] = {
     {"gcc",
+        ".globl %s\n"
+        "\t.section .rodata\n"
+        "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "%s:\n\n",
 
-    ".globl %s\n"
-    "\t.section .rodata\n"
-    "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
-    "%s:\n\n",
-
-    ".long "
+        ".long "
     },
     {"gcc-darwin",
+        /*"\t.section __TEXT,__text,regular,pure_instructions\n"
+        "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"*/
+        ".globl _%s\n"
+        "\t.data\n"
+        "\t.const\n"
+        "\t.align 4\n"  /* 1<<4 = 16 */
+        "_%s:\n\n",
 
-    /*"\t.section __TEXT,__text,regular,pure_instructions\n"
-    "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"*/
-    ".globl _%s\n"
-    "\t.data\n"
-    "\t.const\n"
-    "\t.align 4\n"  /* 1<<4 = 16 */
-    "_%s:\n\n",
-
-    ".long "
+        ".long "
     },
     {"sun",
+        "\t.section \".rodata\"\n"
+        "\t.align   16\n"
+        ".globl     %s\n"
+        "%s:\n",
 
-    "\t.section \".rodata\"\n"
-    "\t.align   16\n"
-    ".globl     %s\n"
-    "%s:\n",
-
-    ".word "
+        ".word "
     },
     {"xlc",
+        ".globl %s{RO}\n"
+        "\t.toc\n"
+        "%s:\n"
+        "\t.csect %s{RO}, 4\n",
 
-    ".globl %s{RO}\n"
-    "\t.toc\n"
-    "%s:\n"
-    "\t.csect %s{RO}, 4\n",
+        ".long "
+    }
+    {"aCC",
+        "\t.SPACE  $TEXT$\n"
+        "\t.SUBSPA $LIT$\n"
+        "%s\n"
+        "\t.EXPORT %s\n"
+        "\t.ALIGN  16\n",
 
-    ".long"}
+        ".WORD "
+    },
 };
 
 static int32_t assemblyHeaderIndex = -1;
