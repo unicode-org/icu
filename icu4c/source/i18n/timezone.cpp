@@ -63,7 +63,7 @@ const TZHeader *    TimeZone::DATA = 0;
 const uint32_t*     TimeZone::INDEX_BY_ID = 0;
 const OffsetIndex*  TimeZone::INDEX_BY_OFFSET = 0;
 UnicodeString*      TimeZone::ZONE_IDS = 0;
-UBool              TimeZone::DATA_LOADED = FALSE;
+UBool               TimeZone::DATA_LOADED = FALSE;
 UDataMemory*        TimeZone::UDATA_POINTER = 0;
 UMTX                TimeZone::LOCK;
 
@@ -86,41 +86,32 @@ void TimeZone::loadZoneData() {
         if (!DATA_LOADED) {
             UErrorCode status = U_ZERO_ERROR;
             UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
-                                                 isDataAcceptable, 0, &status); // see the comment on udata_close line
+                                             isDataAcceptable, 0, &status); // see the comment on udata_close line
             UDataMemory *data = UDATA_POINTER;
             if (U_SUCCESS(status)) {
                 DATA = (TZHeader*)udata_getMemory(data);
                 // Result guaranteed to be nonzero if data is nonzero
 
-                // We require that standard zones occur before DST
-                // zones.  Do a quick check for this here, and if the
-                // check fails, don't use this zone data.
-                // (Alternatively, we could handle either ordering,
-                // with a little extra logic.)  See
-                // createSystemTimeZone().
-                if (DATA->standardDelta > DATA->dstDelta) {
-                    DATA = 0;
-                } else {
-                    INDEX_BY_ID =
-                        (const uint32_t*)((int8_t*)DATA + DATA->nameIndexDelta);
-                    INDEX_BY_OFFSET =
-                        (const OffsetIndex*)((int8_t*)DATA + DATA->offsetIndexDelta);
-                    
-                    // Construct the available IDs array. The ordering
-                    // of this array conforms to the ordering of the
-                    // index by name table.
-                    ZONE_IDS = new UnicodeString[DATA->count];
-                    // Find start of name table, and walk through it
-                    // linearly.  If you're wondering why we don't use
-                    // the INDEX_BY_ID, it's because that indexes the
-                    // zone objects, not the name table.  The name
-                    // table is unindexed.
-                    const char* name = (const char*)DATA + DATA->nameTableDelta;
-                    for (uint32_t i=0; i<DATA->count; ++i) {
-                        ZONE_IDS[i] = UnicodeString(name, ""); // invariant converter
-                        name += uprv_strlen(name) + 1;
-                    }
+                INDEX_BY_ID =
+                    (const uint32_t*)((int8_t*)DATA + DATA->nameIndexDelta);
+                INDEX_BY_OFFSET =
+                    (const OffsetIndex*)((int8_t*)DATA + DATA->offsetIndexDelta);
+                
+                // Construct the available IDs array. The ordering
+                // of this array conforms to the ordering of the
+                // index by name table.
+                ZONE_IDS = new UnicodeString[DATA->count];
+                // Find start of name table, and walk through it
+                // linearly.  If you're wondering why we don't use
+                // the INDEX_BY_ID, it's because that indexes the
+                // zone objects, not the name table.  The name
+                // table is unindexed.
+                const char* name = (const char*)DATA + DATA->nameTableDelta;
+                for (uint32_t i=0; i<DATA->count; ++i) {
+                    ZONE_IDS[i] = UnicodeString(name, ""); // invariant converter
+                    name += uprv_strlen(name) + 1;
                 }
+
                 //udata_close(data);    // Without udata_close purify will report a leak. However, DATA_LOADED is 
                                         // static, and udata_openChoice will be called only once, and data from
                                         // udata_openChoice needs to stick around.
@@ -144,10 +135,10 @@ TimeZone::isDataAcceptable(void * /*context*/,
         pInfo->size >= sizeof(UDataInfo) &&
         pInfo->isBigEndian == U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily == U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0] == 0x7a && // see TZ_SIG, must be numeric literals to be portable
-        pInfo->dataFormat[1] == 0x6f && // (this is not a string, it just looks like one for debugging)
-        pInfo->dataFormat[2] == 0x6e &&
-        pInfo->dataFormat[3] == 0x65 &&
+        pInfo->dataFormat[0] == TZ_SIG_0 &&
+        pInfo->dataFormat[1] == TZ_SIG_1 &&
+        pInfo->dataFormat[2] == TZ_SIG_2 &&
+        pInfo->dataFormat[3] == TZ_SIG_3 &&
         pInfo->formatVersion[0] == TZ_FORMAT_VERSION;
 }
 
@@ -238,12 +229,13 @@ TimeZone::createSystemTimeZone(const UnicodeString& name) {
         uint32_t i = (low + high) / 2;
         int8_t c = name.compare(ZONE_IDS[i]);
         if (c == 0) {
-            const int8_t* z = (int8_t*)DATA + INDEX_BY_ID[i];
+            const TZEquivalencyGroup *eg = (TZEquivalencyGroup*)
+                ((int8_t*)DATA + INDEX_BY_ID[i]);
             // NOTE: standard zones must be before DST zones.  We test
             // for this when loading up the data; see loadZoneData().
-            return INDEX_BY_ID[i] < DATA->dstDelta ?
-                new SimpleTimeZone(*(const StandardZone*)z, name) :
-                new SimpleTimeZone(*(const DSTZone*)z, name);                
+            return eg->isDST ?
+                new SimpleTimeZone(eg->u.d.zone, name) :
+                new SimpleTimeZone(eg->u.s.zone, name);                
         } else if (c < 0) {
             high = i;
         } else {
