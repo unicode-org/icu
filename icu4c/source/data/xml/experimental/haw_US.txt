@@ -9,7 +9,7 @@
 // Submitted by Deborah Goldsmith, Apple Computer, Inc.
 
 haw_US { 
-    Version { "x0.1" } 
+    Version { "x0.2" } 
 
     DateTimePatterns { 
         "h:mm:ss a z",
