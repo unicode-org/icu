@@ -964,6 +964,8 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           sourceToken->strength = UCOL_TOK_RESET;
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
+          sourceToken->noOfCEs = 0;
+          sourceToken->noOfExpCEs = 0;
           sourceToken->listHeader = &ListList[src->resultLen];
           /*
             3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
