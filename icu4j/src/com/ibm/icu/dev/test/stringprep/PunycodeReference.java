@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/PunycodeReference.java,v $
- * $Date: 2003/08/21 23:42:25 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 21:13:14 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -32,7 +32,7 @@ http://www.nicemice.net/amc/
 */
 
 package com.ibm.icu.dev.test.stringprep;
-import com.ibm.icu.stringprep.ParseException;
+import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
 
@@ -225,7 +225,7 @@ public final class PunycodeReference {
     }
     
     public static final StringBuffer encode(StringBuffer input,char[] case_flags)
-                               throws ParseException{
+                               throws StringPrepParseException{
         int[] in = new int[input.length()];
         int inLen = 0;
         int ch;
@@ -257,21 +257,21 @@ public final class PunycodeReference {
     }
 
     private static void getException(int rc) 
-                   throws ParseException{
+                   throws StringPrepParseException{
          switch(rc){
              case punycode_big_output:
-                throw new ParseException("The output capacity was not sufficient.",ParseException.BUFFER_OVERFLOW_ERROR);
+                throw new StringPrepParseException("The output capacity was not sufficient.",StringPrepParseException.BUFFER_OVERFLOW_ERROR);
              case punycode_bad_input:
-                throw new ParseException("Illegal char found in the input",ParseException.ILLEGAL_CHAR_FOUND);
+                throw new StringPrepParseException("Illegal char found in the input",StringPrepParseException.ILLEGAL_CHAR_FOUND);
              case punycode_overflow:
-                throw new ParseException("Invalid char found in the input",ParseException.INVALID_CHAR_FOUND);   
+                throw new StringPrepParseException("Invalid char found in the input",StringPrepParseException.INVALID_CHAR_FOUND);   
          }
         
     }
     private static final int MAX_BUFFER_SIZE = 100;
     
     public static final StringBuffer decode(StringBuffer input,char[] case_flags)
-                               throws ParseException{
+                               throws StringPrepParseException{
         char[] in = input.toString().toCharArray();
         int[] outLen = new int[1];
         outLen[0] = MAX_BUFFER_SIZE;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestIDNA.java,v $
- * $Date: 2003/08/21 23:42:21 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 21:13:14 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -16,9 +16,9 @@ import java.io.InputStream;
 import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.stringprep.IDNA;
-import com.ibm.icu.stringprep.StringPrep;
-import com.ibm.icu.stringprep.ParseException;
+import com.ibm.icu.text.IDNA;
+import com.ibm.icu.text.StringPrepParseException;
+import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.LocaleUtility;
@@ -31,7 +31,7 @@ public class TestIDNA extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new TestIDNA().run(args);
     }
-    private ParseException unassignedException = new ParseException("",ParseException.UNASSIGNED_ERROR);
+    private StringPrepParseException unassignedException = new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR);
     public void TestToUnicode() throws Exception{
         for(int i=0; i<TestData.asciiIn.length; i++){
             // test StringBuffer toUnicode
@@ -94,7 +94,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToUnicode did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
                 errln("convertToUnicode did not get the expected exception for source: " + prettify(src) +" Got:  "+ ex.toString());
             }
@@ -109,7 +109,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToUnicode did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
                 errln("convertToUnicode did not get the expected exception for source: " + prettify(src) +" Got:  "+ ex.toString());
             }
@@ -124,7 +124,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("Did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
                 errln("Did not get the expected exception for source: " + prettify(src) +" Got:  "+ ex.toString());
             }
@@ -145,7 +145,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToUnicode did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !expectedException.equals(ex)){
                 errln("convertToUnicode did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -159,7 +159,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToUnicode did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !expectedException.equals(ex)){
                 errln("convertToUnicode did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -174,7 +174,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("Did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !expectedException.equals(ex)){
                 errln("Did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -194,7 +194,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToASCII did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !expectedException.equals(ex)){
                 errln("convertToASCII did not get the expected exception for source: " +src +"\n Got:  "+ ex.toString() +"\n Expected: " +ex.toString());
             }
@@ -209,7 +209,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToASCII did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !expectedException.equals(ex)){
                 errln("convertToASCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -224,7 +224,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToASCII did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !expectedException.equals(ex)){
                 errln("convertToASCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -244,7 +244,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToIDNASCII did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
                 errln("convertToIDNASCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -258,7 +258,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertToIDNASCII did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
                 errln("convertToIDNASCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -274,7 +274,7 @@ public class TestIDNA extends TestFmwk {
             if(expectedException!=null && !unassignedException.equals(expectedException)){
                 errln("convertIDNToASCII did not get the expected exception. The operation succeeded!");
             }
-        }catch(ParseException ex){
+        }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
                 errln("convertIDNToASCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
@@ -308,7 +308,7 @@ public class TestIDNA extends TestFmwk {
                 if(testCase.expected!=null && !unassignedException.equals(testCase.expected)){
                     errln("Did not get the expected exception. The operation succeeded!");
                 }
-            }catch(ParseException ex){
+            }catch(StringPrepParseException ex){
                 if(testCase.expected == null || !ex.equals(testCase.expected)){
                     errln("Did not get the expected exception for source: " +testCase.input +" Got:  "+ ex.toString());
                 }
@@ -324,7 +324,7 @@ public class TestIDNA extends TestFmwk {
                 if(testCase.expected!=null && !unassignedException.equals(testCase.expected)){
                     errln("Did not get the expected exception. The operation succeeded!");
                 }
-            }catch(ParseException ex){
+            }catch(StringPrepParseException ex){
                 if(testCase.expected == null || !ex.equals(testCase.expected)){
                     errln("Did not get the expected exception for source: " +testCase.input +" Got:  "+ ex.toString());
                 }
@@ -631,20 +631,20 @@ public class TestIDNA extends TestFmwk {
         
         StringBuffer label = src;  
 
-        ParseException expected = null;
+        StringPrepParseException expected = null;
         StringBuffer ascii = null;
         int options = IDNA.DEFAULT;
         logln("Comparing idnaref_toASCII with uidna_toASCII for input: " + prettify(label));
         try{       
             ascii = IDNAReference.convertToASCII(label, options);
-        }catch( ParseException e){
+        }catch( StringPrepParseException e){
             expected = e;
             if(e.equals(unassignedException)){
                 options = IDNA.ALLOW_UNASSIGNED;
                 expected = null;
                 try{
                     ascii = IDNAReference.convertToASCII(label, options);
-                }catch( ParseException ex){
+                }catch( StringPrepParseException ex){
                     expected = ex;                  
                 }
             }
@@ -662,14 +662,14 @@ public class TestIDNA extends TestFmwk {
             options = IDNA.DEFAULT;
             try{
                  uni = IDNAReference.convertToUnicode(ascii, options);
-            }catch( ParseException e ){
+            }catch( StringPrepParseException e ){
                 expected = e;
                 if(expected.equals(unassignedException)){
                     options = IDNA.ALLOW_UNASSIGNED;
                     expected = null;
                     try{
                         uni = IDNAReference.convertToUnicode(ascii, options);
-                    }catch(ParseException ex){
+                    }catch(StringPrepParseException ex){
                         expected = ex;
                     }
                 }

@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestData.java,v $
- * $Date: 2003/08/21 23:42:25 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 21:13:15 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 
-import com.ibm.icu.stringprep.IDNA;
-import com.ibm.icu.stringprep.ParseException;
+import com.ibm.icu.text.IDNA;
+import com.ibm.icu.text.StringPrepParseException;
 
 /**
  * @author ram
@@ -286,7 +286,7 @@ public class TestData {
            
         },
         "www.XN--8mb5595fsoa28orucya378bqre2tcwop06c5qbw82a1rffmae0361dea96b.com",
-        new ParseException("",ParseException.PROHIBITED_ERROR),
+        new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR),
         false, true, true),
 
         new ErrorCase( new char[]{ 
@@ -298,7 +298,7 @@ public class TestData {
             },
             "www.XN--6lA2Bz548Fj1GuA391Bf1Gb1N59Ab29A7iA.com",
 
-            new ParseException("",ParseException.UNASSIGNED_ERROR),
+            new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR),
             false, true, true
         ),
        new ErrorCase( new char[]{ 
@@ -310,7 +310,7 @@ public class TestData {
                
             },
             "www.xn--ghBGI4851OiyA33VqrD6Az86C4qF83CtRv93D5xBk15AzfG0nAgA0578DeA71C.com",
-            new ParseException("",ParseException.CHECK_BIDI_ERROR),
+            new StringPrepParseException("",StringPrepParseException.CHECK_BIDI_ERROR),
             false, true, true
         ),
         new ErrorCase( new char[]{ 
@@ -324,7 +324,7 @@ public class TestData {
             
             },
             "www.xn----b95Ew8SqA315Ao5FbuMlnNmhA.com",
-            new ParseException("",ParseException.STD3_ASCII_RULES_ERROR),
+            new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
             true, true, false
         ),
         new ErrorCase( new char[]{ 
@@ -340,7 +340,7 @@ public class TestData {
             },
             /* wrong ACE-prefix followed by valid ACE-encoded ASCII */ 
             "www.XY-----b91I0V65S96C2A355Cw1E5yCeQr19CsnP1mFfmAE0361DeA96B.com",
-            new ParseException("",ParseException.ACE_PREFIX_ERROR),
+            new StringPrepParseException("",StringPrepParseException.ACE_PREFIX_ERROR),
             false, false, false
         ),
         /* cannot verify U_IDNA_VERIFICATION_ERROR */
@@ -354,7 +354,7 @@ public class TestData {
            
           },
           "www.xn--989AoMsVi5E83Db1D2A355Cv1E0vAk1DwRv93D5xBh15A0Dt30A5JpSD879Ccm6FeA98C.com",
-          new ParseException("",ParseException.LABEL_TOO_LONG_ERROR),
+          new StringPrepParseException("",StringPrepParseException.LABEL_TOO_LONG_ERROR),
           false, true, true
         ),  
         new ErrorCase( new char[]{
@@ -364,7 +364,7 @@ public class TestData {
            
           },
           "www.xn--01-tvdmo.com",
-          new ParseException("",ParseException.CHECK_BIDI_ERROR),
+          new StringPrepParseException("",StringPrepParseException.CHECK_BIDI_ERROR),
           false, true, true
         ),  
     
@@ -375,7 +375,7 @@ public class TestData {
            
           },
           "www.XN--ghbgi278xia.com",
-          new ParseException("",ParseException.PROHIBITED_ERROR),
+          new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR),
           false, true, true
         ),
         new ErrorCase( new char[] {
@@ -385,7 +385,7 @@ public class TestData {
            
           },
           "www.-abcde.com",
-          new ParseException("",ParseException.STD3_ASCII_RULES_ERROR),
+          new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
           true, true, false
         ),
         new ErrorCase( new char[] {
@@ -395,7 +395,7 @@ public class TestData {
            
           },
           "www.abcde-.com",
-          new ParseException("",ParseException.STD3_ASCII_RULES_ERROR),
+          new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
           true, true, false
         ),
         new ErrorCase( new char[]{
@@ -405,7 +405,7 @@ public class TestData {
            
           },
           "www.abcde@.com",
-          new ParseException("",ParseException.STD3_ASCII_RULES_ERROR),
+          new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
           true, true, false
         ),
 
@@ -469,55 +469,55 @@ public class TestData {
            "Non-ASCII multibyte space character U+1680",
            "\u00E1\u009A\u0080", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Non-ASCII 8bit control character U+0085",
            "\u00C2\u0085", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Non-ASCII multibyte control character U+180E",
            "\u00E1\u00A0\u008E", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Non-ASCII control character U+1D175",
            "\u00F0\u009D\u0085\u00B5", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Plane 0 private use character U+F123",
            "\u00EF\u0084\u00A3", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Plane 15 private use character U+F1234",
            "\u00F3\u00B1\u0088\u00B4", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Plane 16 private use character U+10F234",
            "\u00F4\u008F\u0088\u00B4", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Non-character code point U+8FFFE",
            "\u00F2\u008F\u00BF\u00BE", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Non-character code point U+10FFFF",
            "\u00F4\u008F\u00BF\u00BF", null,
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
      /* 
          {
@@ -530,13 +530,13 @@ public class TestData {
            "Non-plain text character U+FFFD",
            "\u00EF\u00BF\u00BD", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Ideographic description character U+2FF5",
            "\u00E2\u00BF\u00B5", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Display property character U+0341",
@@ -550,38 +550,38 @@ public class TestData {
            "Left-to-right mark U+200E",
            "\u00E2\u0080\u008E", "\u00CC\u0081", 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
 
            "Deprecated U+202A",
            "\u00E2\u0080\u00AA", "\u00CC\u0081", 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Language tagging character U+E0001",
            "\u00F3\u00A0\u0080\u0081", "\u00CC\u0081", 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Language tagging character U+E0042",
            "\u00F3\u00A0\u0081\u0082", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.PROHIBITED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR)
          ),
          new ConformanceTestCase(
            "Bidi: RandALCat character U+05BE and LCat characters",
            "\u0066\u006F\u006F\u00D6\u00BE\u0062\u0061\u0072", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.CHECK_BIDI_ERROR)
+           new StringPrepParseException("",StringPrepParseException.CHECK_BIDI_ERROR)
          ),
          new ConformanceTestCase(
            "Bidi: RandALCat character U+FD50 and LCat characters",
            "\u0066\u006F\u006F\u00EF\u00B5\u0090\u0062\u0061\u0072", null,
            "Nameprep",IDNA.DEFAULT ,
-           new ParseException("",ParseException.CHECK_BIDI_ERROR)
+           new StringPrepParseException("",StringPrepParseException.CHECK_BIDI_ERROR)
          ),
          new ConformanceTestCase(
            "Bidi: RandALCat character U+FB38 and LCat characters",
@@ -593,7 +593,7 @@ public class TestData {
            "Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
            "\u00D8\u00A7\u0031", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.CHECK_BIDI_ERROR)
+           new StringPrepParseException("",StringPrepParseException.CHECK_BIDI_ERROR)
          ),
          new ConformanceTestCase(
            "Bidi: RandALCat character U+0627 U+0031 U+0628",
@@ -605,7 +605,7 @@ public class TestData {
            "Unassigned code point U+E0002",
            "\u00F3\u00A0\u0080\u0082", null, 
            "Nameprep", IDNA.DEFAULT,
-           new ParseException("",ParseException.UNASSIGNED_ERROR)
+           new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR)
          ),
 
     /*  // Invalid UTF-8
