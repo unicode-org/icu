@@ -17,7 +17,8 @@ include $(top_builddir)/icudefs.mk
 subdir = data
 
 #lib icu data for link
-LIB_ICUDATA_NAME=$(LIBPREFIX)$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)
+LIB_ICUDATA_NAME=$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX)
+LIB_STATIC_ICUDATA_NAME=$(LIBSICU)$(DATA_STUBNAME)$(ICULIBSUFFIX)
 
 # Allow Windows to override these options
 ifeq ($(PKGDATA_OPTS),)
@@ -105,7 +106,7 @@ cleanfiles:
 cleanpackage:
 	$(RMV) $(OUTDIR)
 	$(RMV) $(TESTOUTDIR)
-
+	$(RMV) $(LIBDIR)/$(LIB_ICUDATA_NAME)*.$(SO)* $(LIBDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A)
 
 check-local:
 
@@ -124,9 +125,9 @@ install-local: $(OUTTMPDIR)/icudata.lst ./icupkg.inc packagedata $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
 ifneq ($(ENABLE_STATIC),)
 # It is done this way just in case the $(SO) == $(A)
-	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(OUTTMPDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(OUTTMPDIR)/icudata.lst -I $(call native_dir,$(DESTDIR)$(ICUPKGDATA_DIR))
 endif
-	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(OUTTMPDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(OUTTMPDIR)/icudata.lst -I $(call native_dir,$(DESTDIR)$(ICUPKGDATA_DIR))
 
 
 ####
