@@ -103,6 +103,8 @@ UBool ICU_Utility::escapeUnprintable(UnicodeString& result, UChar32 c) {
  * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
  * found by a search for 'h'.
  */
+// FOR FUTURE USE.  DISABLE FOR NOW for coverage reasons.
+/*
 int32_t ICU_Utility::quotedIndexOf(const UnicodeString& text,
                                int32_t start, int32_t limit,
                                UChar charToFind) {
@@ -119,6 +121,7 @@ int32_t ICU_Utility::quotedIndexOf(const UnicodeString& text,
     }
     return -1;
 }
+*/
 
 /**
  * Skip over a sequence of zero or more white space characters at pos.
