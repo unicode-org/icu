@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 
+#include "cstring.h"
 #include "uni2name.h"
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
@@ -93,7 +94,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
         UChar32 c = text.char32At(cursor);
         if ((len=u_charName(c, U_UNICODE_CHAR_NAME, buf, sizeof(buf), &status)) <= 0 || U_FAILURE(status)) {
             sprintf(buf, "U+%04lX", c);
-            len = strlen(buf);
+            len = uprv_strlen(buf);
         }
 
         str.truncate(1);
