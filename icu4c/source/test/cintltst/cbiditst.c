@@ -744,15 +744,6 @@ doArabicShapingTest() {
     errorCode=U_ZERO_ERROR;
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_RESERVED|U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
-                         &errorCode);
-    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("failure in u_shapeArabic(U_SHAPE_LETTERS_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
-    }
-
-    errorCode=U_ZERO_ERROR;
-    length=u_shapeArabic(source, LENGTHOF(source),
-                         dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_RESERVED|U_SHAPE_DIGIT_TYPE_AN,
                          &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
@@ -878,21 +869,13 @@ doLamAlefSpecialVLTRArabicShapingTest() {
         log_err("failure in u_shapeArabic(LAMALEF shape_grow_shrink)\n");
     }
 
-#if 0
-    /*
-     * ### TODO
-     *
-     * The option U_SHAPE_LETTERS_EXCEPT_TASHKEEL was removed from ushape.h for
-     * ICU 1.8 because its semantics were not clear.
-     * See ushape.c.
-     */
-    /* ==================== SHAPE_EXCEPT_TASHKEEL ==================== */
+    /* ==================== U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED ==================== */
 
     errorCode=U_ZERO_ERROR;
 
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
@@ -904,7 +887,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
 
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_AT_END|
+                         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED|U_SHAPE_LENGTH_FIXED_SPACES_AT_END|
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
@@ -916,7 +899,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
 
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING|
+                         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED|U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING|
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
@@ -928,14 +911,13 @@ doLamAlefSpecialVLTRArabicShapingTest() {
 
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_GROW_SHRINK|
+                         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED|U_SHAPE_LENGTH_GROW_SHRINK|
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
     if(U_FAILURE(errorCode) || uprv_memcmp(dest, shape_excepttashkeel_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_grow_shrink)\n");
     }
-#endif
 }
 
 static void
@@ -977,26 +959,17 @@ doTashkeelSpecialVLTRArabicShapingTest() {
         log_err("failure in u_shapeArabic(TASHKEEL shape_near)\n");
     }
 
-#if 0
-    /*
-     * ### TODO
-     *
-     * The option U_SHAPE_LETTERS_EXCEPT_TASHKEEL was removed from ushape.h for
-     * ICU 1.8 because its semantics were not clear.
-     * See ushape.c.
-     */
     errorCode=U_ZERO_ERROR;
 
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
     if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || uprv_memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(TASHKEEL shape_excepttashkeel_near)\n");
     }
-#endif
 }
 
 static void
