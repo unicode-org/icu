@@ -198,7 +198,8 @@ UnicodeString::UnicodeString(UChar32 ch)
     fFlags(kShortString)
 {
   int32_t i = 0;
-  UTF_APPEND_CHAR(fStackBuffer, i, US_STACKBUF_SIZE, ch);
+  UBool isError = FALSE;
+  U16_APPEND(fStackBuffer, i, US_STACKBUF_SIZE, ch, isError);
   fLength = i;
 }
 

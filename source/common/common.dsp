@@ -3100,6 +3100,10 @@ InputPath=.\unicode\utf8.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\utf_old.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\util.h
 # End Source File
 # Begin Source File

@@ -15,141 +15,265 @@
 */
 
 /**
-* \file
-* \brief C API: UTF-16 macros
-* 
-*   This file defines macros to deal with UTF-16 code units and code points.
-*   "Safe" macros check for length overruns and illegal sequences, and
-*   also for irregular sequences when the strict option is set.
-*   "Unsafe" macros are designed for maximum speed.
-*   utf16.h is included by utf.h after unicode/umachine.h
-*   and some common definitions.</p>
-*   <p><b>Usage:</b>  ICU coding guidelines for if() statements should be followed when using these macros.
-*                  Compound statements (curly braces {}) must be used  for if-else-while...
-*                  bodies and all macro statements should be terminated with semicolon.</p>
-*/
+ * \file
+ * \brief C API: 16-bit Unicode handling macros
+ * 
+ * This file defines macros to deal with 16-bit Unicode (UTF-16) code units and strings.
+ * utf16.h is included by utf.h after unicode/umachine.h
+ * and some common definitions.
+ *
+ * For more information see utf.h and the ICU User Guide Strings chapter
+ * (http://oss.software.ibm.com/icu/userguide/).
+ *
+ * <em>Usage:</em>
+ * ICU coding guidelines for if() statements should be followed when using these macros.
+ * Compound statements (curly braces {}) must be used  for if-else-while... 
+ * bodies and all macro statements should be terminated with semicolon.
+ */
+
+/* utf.h must be included first. */
+#ifndef __UTF_H__
+#   include "unicode/utf.h"
+#endif
 
 #ifndef __UTF16_H__
 #define __UTF16_H__
 
 /* single-code point definitions -------------------------------------------- */
 
-/* handle surrogate pairs */
-#define UTF_IS_FIRST_SURROGATE(uchar) (((uchar)&0xfffffc00)==0xd800)
-#define UTF_IS_SECOND_SURROGATE(uchar) (((uchar)&0xfffffc00)==0xdc00)
-
-#define UTF_IS_SURROGATE_FIRST(c) (((c)&0x400)==0)
-
-/** Get the UTF-32 value directly from the surrogate pseudo-characters */
-#define UTF_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
-
-#define UTF16_GET_PAIR_VALUE(first, second) \
-    (((first)<<10UL)+(second)-UTF_SURROGATE_OFFSET)
-
-/* get the first and second surrogates for a supplementary code point */
 /**
- * Takes a supplementary code point (0x10000..0x10ffff)
- * and computes the first surrogate (0xd800..0xdbff)
- * for UTF-16 encoding.
+ * Does this code unit alone encode a code point (BMP, not a surrogate)?
+ * @param c 16-bit code unit
+ * @return TRUE or FALSE
+ * @draft ICU 2.4
  */
-#define UTF_FIRST_SURROGATE(supplementary) (UChar)(((supplementary)>>10)+0xd7c0)
+#define U16_IS_SINGLE(c) !U_IS_SURROGATE(c)
 
 /**
- * Takes a supplementary code point (0x10000..0x10ffff)
- * and computes the second surrogate (0xdc00..0xdfff)
- * for UTF-16 encoding.
+ * Is this code unit a lead surrogate (U+d800..U+dbff)?
+ * @param c 16-bit code unit
+ * @return TRUE or FALSE
+ * @draft ICU 2.4
  */
-#define UTF_SECOND_SURROGATE(supplementary) (UChar)(((supplementary)&0x3ff)|0xdc00)
-
-/** alias for UTF_FIRST_SURROGATE */
-#define UTF16_LEAD(supplementary) UTF_FIRST_SURROGATE(supplementary)
-
-/** alias for UTF_SECOND_SURROGATE */
-#define UTF16_TRAIL(supplementary) UTF_SECOND_SURROGATE(supplementary)
-
-/* classes of code unit values */
-#define UTF16_IS_SINGLE(uchar) !UTF_IS_SURROGATE(uchar)
-#define UTF16_IS_LEAD(uchar) UTF_IS_FIRST_SURROGATE(uchar)
-#define UTF16_IS_TRAIL(uchar) UTF_IS_SECOND_SURROGATE(uchar)
-
-/* number of code units per code point */
-#define UTF16_NEED_MULTIPLE_UCHAR(c) ((uint32_t)(c)>0xffff)
-#define UTF16_CHAR_LENGTH(c) ((uint32_t)(c)<=0xffff ? 1 : 2)
-#define UTF16_MAX_CHAR_LENGTH 2
-
-/* average number of code units compared to UTF-16 */
-#define UTF16_ARRAY_SIZE(size) (size)
+#define U16_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
 
 /**
- * Get a single code point from an offset that points to any
- * of the code units that belong to that code point.
- * Assume 0<=i<length.
+ * Is this code unit a trail surrogate (U+dc00..U+dfff)?
+ * @param c 16-bit code unit
+ * @return TRUE or FALSE
+ * @draft ICU 2.4
+ */
+#define U16_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
+
+/**
+ * Is this code unit a surrogate (U+d800..U+dfff)?
+ * @param c 16-bit code unit
+ * @return TRUE or FALSE
+ * @draft ICU 2.4
+ */
+#define U16_IS_SURROGATE(c) U_IS_SURROGATE(c)
+
+/**
+ * Assuming c is a surrogate code point (U16_IS_SURROGATE(c)),
+ * is it a lead surrogate?
+ * @param c 16-bit code unit
+ * @return TRUE or FALSE
+ * @draft ICU 2.4
+ */
+#define U16_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
+
+/**
+ * Helper constant for U16_GET_SUPPLEMENTARY.
+ * @internal
+ */
+#define U16_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
+
+/**
+ * Get a supplementary code point value (U+10000..U+10ffff)
+ * from its lead and trail surrogates.
+ * The result is undefined if the input values are not
+ * lead and trail surrogates.
  *
- * This could be used for iteration together with
- * UTF16_CHAR_LENGTH() and UTF_IS_ERROR(),
- * but the use of UTF16_NEXT_CHAR_[UN]SAFE() and
- * UTF16_PREV_CHAR_[UN]SAFE() is more efficient for that.
+ * @param lead lead surrogate (U+d800..U+dbff)
+ * @param trail trail surrogate (U+dc00..U+dfff)
+ * @return supplementary code point (U+10000..U+10ffff)
+ * @draft ICU 2.4
  */
-#define UTF16_GET_CHAR_UNSAFE(s, i, c) { \
+#define U16_GET_SUPPLEMENTARY(lead, trail) \
+    (((lead)<<10UL)+(trail)-U16_SURROGATE_OFFSET)
+
+
+/**
+ * Get the lead surrogate (0xd800..0xdbff) for a
+ * supplementary code point (0x10000..0x10ffff).
+ * @param c 32-bit code point (U+10000..U+10ffff)
+ * @return lead surrogate (U+d800..U+dbff) for c
+ * @draft ICU 2.4
+ */
+#define U16_LEAD(supplementary) (UChar)(((supplementary)>>10)+0xd7c0)
+
+/**
+ * Get the trail surrogate (0xdc00..0xdfff) for a
+ * supplementary code point (0x10000..0x10ffff).
+ * @param c 32-bit code point (U+10000..U+10ffff)
+ * @return trail surrogate (U+dc00..U+dfff) for c
+ * @draft ICU 2.4
+ */
+#define U16_TRAIL(supplementary) (UChar)(((supplementary)&0x3ff)|0xdc00)
+
+/**
+ * How many 16-bit code units are used to encode this Unicode code point? (1 or 2)
+ * The result is not defined if c is not a Unicode code point (U+0000..U+10ffff).
+ * @param c 32-bit code point
+ * @return 1 or 2
+ * @draft ICU 2.4
+ */
+#define U16_LENGTH(c) ((uint32_t)(c)<=0xffff ? 1 : 2)
+
+/**
+ * The maximum number of 16-bit code units per Unicode code point (U+0000..U+10ffff).
+ * @return 2
+ * @draft ICU 2.4
+ */
+#define U16_MAX_LENGTH 2
+
+/**
+ * Get a code point from a string at a random-access offset,
+ * without changing the offset.
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * The offset may point to either the lead or trail surrogate unit
+ * for a supplementary code point, in which case the macro will read
+ * the adjacent matching surrogate as well.
+ * The result is undefined if the offset points to a single, unpaired surrogate.
+ * Iteration through a string is more efficient with U16_NEXT_UNSAFE or U16_NEXT.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @param c output UChar32 variable
+ * @see U16_GET
+ * @draft ICU 2.4
+ */
+#define U16_GET_UNSAFE(s, i, c) { \
     (c)=(s)[i]; \
-    if(UTF_IS_SURROGATE(c)) { \
-        if(UTF_IS_SURROGATE_FIRST(c)) { \
-            (c)=UTF16_GET_PAIR_VALUE((c), (s)[(i)+1]); \
+    if(U16_IS_SURROGATE(c)) { \
+        if(U16_IS_SURROGATE_LEAD(c)) { \
+            (c)=U16_GET_SUPPLEMENTARY((c), (s)[(i)+1]); \
         } else { \
-            (c)=UTF16_GET_PAIR_VALUE((s)[(i)-1], (c)); \
+            (c)=U16_GET_SUPPLEMENTARY((s)[(i)-1], (c)); \
         } \
     } \
 }
 
-#define UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
+/**
+ * Get a code point from a string at a random-access offset,
+ * without changing the offset.
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * The offset may point to either the lead or trail surrogate unit
+ * for a supplementary code point, in which case the macro will read
+ * the adjacent matching surrogate as well.
+ * If the offset points to a single, unpaired surrogate, then that itself
+ * will be returned as the code point.
+ * Iteration through a string is more efficient with U16_NEXT_UNSAFE or U16_NEXT.
+ *
+ * @param s const UChar * string
+ * @param start starting string offset (usually 0)
+ * @param i string offset, start<=i<length
+ * @param length string length
+ * @param c output UChar32 variable
+ * @see U16_GET_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_GET(s, start, i, length, c) { \
     (c)=(s)[i]; \
-    if(UTF_IS_SURROGATE(c)) { \
+    if(U16_IS_SURROGATE(c)) { \
         uint16_t __c2; \
-        if(UTF_IS_SURROGATE_FIRST(c)) { \
-            if((i)+1<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)+1])) { \
-                (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
-                /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
-            } else if(strict) {\
-                /* unmatched first surrogate */ \
-                (c)=UTF_ERROR_VALUE; \
+        if(U16_IS_SURROGATE_LEAD(c)) { \
+            if((i)+1<(length) && U16_IS_TRAIL(__c2=(s)[(i)+1])) { \
+                (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
             } \
         } else { \
-            if((i)-1>=(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
-                (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
-                /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
-            } else if(strict) {\
-                /* unmatched second surrogate */ \
-                (c)=UTF_ERROR_VALUE; \
+            if((i)-1>=(start) && U16_IS_LEAD(__c2=(s)[(i)-1])) { \
+                (c)=U16_GET_SUPPLEMENTARY(__c2, (c)); \
             } \
         } \
-    } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) { \
-        (c)=UTF_ERROR_VALUE; \
     } \
 }
 
 /* definitions with forward iteration --------------------------------------- */
 
-/*
- * all the macros that go forward assume that
- * the initial offset is 0<=i<length;
- * they update the offset
- */
-
-/* fast versions, no error-checking */
-
 /**
- * Get a single code point from an offset that points to the first
- * of the code units that belong to that code point.
- * Assume 0<=i<length.
+ * Get a code point from a string at a code point boundary offset,
+ * and advance the offset to the next code point boundary.
+ * (Post-incrementing forward iteration.)
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * The offset may point to the lead surrogate unit
+ * for a supplementary code point, in which case the macro will read
+ * the following trail surrogate as well.
+ * If the offset points to a trail surrogate, then that itself
+ * will be returned as the code point.
+ * The result is undefined if the offset points to a single, unpaired lead surrogate.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @param c output UChar32 variable
+ * @see U16_NEXT
+ * @draft ICU 2.4
  */
-#define UTF16_NEXT_CHAR_UNSAFE(s, i, c) { \
+#define U16_NEXT_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
-    if(UTF_IS_FIRST_SURROGATE(c)) { \
-        (c)=UTF16_GET_PAIR_VALUE((c), (s)[(i)++]); \
+    if(U16_IS_LEAD(c)) { \
+        (c)=U16_GET_SUPPLEMENTARY((c), (s)[(i)++]); \
     } \
 }
 
-#define UTF16_APPEND_CHAR_UNSAFE(s, i, c) { \
+/**
+ * Get a code point from a string at a code point boundary offset,
+ * and advance the offset to the next code point boundary.
+ * (Post-incrementing forward iteration.)
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * The offset may point to the lead surrogate unit
+ * for a supplementary code point, in which case the macro will read
+ * the following trail surrogate as well.
+ * If the offset points to a trail surrogate or
+ * to a single, unpaired lead surrogate, then that itself
+ * will be returned as the code point.
+ *
+ * @param s const UChar * string
+ * @param i string offset, i<length
+ * @param length string length
+ * @param c output UChar32 variable
+ * @see U16_NEXT_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_NEXT(s, i, length, c) { \
+    (c)=(s)[(i)++]; \
+    if(U16_IS_LEAD(c)) { \
+        uint16_t __c2; \
+        if((i)<(length) && U16_IS_TRAIL(__c2=(s)[(i)])) { \
+            ++(i); \
+            (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
+        } \
+    } \
+}
+
+/**
+ * Append a code point to a string, overwriting 1 or 2 code units.
+ * The offset points to the current end of the string contents
+ * and is advanced (post-increment).
+ * "Unsafe" macro, assumes a valid code point and sufficient space in the string.
+ * Otherwise, the result is undefined.
+ *
+ * @param s const UChar * string buffer
+ * @param i string offset
+ * @param c code point to append
+ * @see U16_APPEND
+ * @draft ICU 2.4
+ */
+#define U16_APPEND_UNSAFE(s, i, c) { \
     if((uint32_t)(c)<=0xffff) { \
         (s)[(i)++]=(uint16_t)(c); \
     } else { \
@@ -158,178 +282,323 @@
     } \
 }
 
-#define UTF16_FWD_1_UNSAFE(s, i) { \
-    if(UTF_IS_FIRST_SURROGATE((s)[(i)++])) { \
+/**
+ * Append a code point to a string, overwriting 1 or 2 code units.
+ * The offset points to the current end of the string contents
+ * and is advanced (post-increment).
+ * "Safe" macro, checks for a valid code point.
+ * If a surrogate pair is written, checks for sufficient space in the string.
+ * If the code point is not valid or a trail surrogate does not fit,
+ * then isError is set to TRUE.
+ *
+ * @param s const UChar * string buffer
+ * @param i string offset, i<length
+ * @param capacity size of the string buffer
+ * @param c code point to append
+ * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
+ * @see U16_APPEND_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_APPEND(s, i, capacity, c, isError) { \
+    if((uint32_t)(c)<=0xffff) { \
+        (s)[(i)++]=(uint16_t)(c); \
+    } else if((uint32_t)(c)<=0x10ffff && (i)+1<(capacity)) { \
+        (s)[(i)++]=(uint16_t)(((c)>>10)+0xd7c0); \
+        (s)[(i)++]=(uint16_t)(((c)&0x3ff)|0xdc00); \
+    } else /* c>0x10ffff or not enough space */ { \
+        (isError)=TRUE; \
+    } \
+}
+
+/**
+ * Advance the string offset from one code point boundary to the next.
+ * (Post-incrementing iteration.)
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @see U16_FWD_1
+ * @draft ICU 2.4
+ */
+#define U16_FWD_1_UNSAFE(s, i) { \
+    if(U16_IS_LEAD((s)[(i)++])) { \
         ++(i); \
     } \
 }
 
-#define UTF16_FWD_N_UNSAFE(s, i, n) { \
+/**
+ * Advance the string offset from one code point boundary to the next.
+ * (Post-incrementing iteration.)
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * @param s const UChar * string
+ * @param i string offset, i<length
+ * @param length string length
+ * @see U16_FWD_1_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_FWD_1(s, i, length) { \
+    if(U16_IS_LEAD((s)[(i)++]) && (i)<(length) && U16_IS_TRAIL((s)[i])) { \
+        ++(i); \
+    } \
+}
+
+/**
+ * Advance the string offset from one code point boundary to the n-th next one,
+ * i.e., move forward by n code points.
+ * (Post-incrementing iteration.)
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @param n number of code points to skip
+ * @see U16_FWD_N
+ * @draft ICU 2.4
+ */
+#define U16_FWD_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
     while(__N>0) { \
-        UTF16_FWD_1_UNSAFE(s, i); \
+        U16_FWD_1_UNSAFE(s, i); \
         --__N; \
     } \
 }
 
 /**
- * Set a random-access offset and adjust it so that
- * it points to the beginning of a Unicode character.
- * The offset that is passed in points to
- * any code unit of a code point
- * and will point to the first code unit after
- * the macro invocation.
- * Never increments the offset.
+ * Advance the string offset from one code point boundary to the n-th next one,
+ * i.e., move forward by n code points.
+ * (Post-incrementing iteration.)
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * @param s const UChar * string
+ * @param i string offset, i<length
+ * @param length string length
+ * @param n number of code points to skip
+ * @see U16_FWD_N_UNSAFE
+ * @draft ICU 2.4
  */
-#define UTF16_SET_CHAR_START_UNSAFE(s, i) { \
-    if(UTF_IS_SECOND_SURROGATE((s)[i])) { \
-        --(i); \
-    } \
-}
-
-/* safe versions with error-checking and optional regularity-checking */
-
-#define UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
-    (c)=(s)[(i)++]; \
-    if(UTF_IS_FIRST_SURROGATE(c)) { \
-        uint16_t __c2; \
-        if((i)<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)])) { \
-            ++(i); \
-            (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
-            /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
-        } else if(strict) {\
-            /* unmatched first surrogate */ \
-            (c)=UTF_ERROR_VALUE; \
-        } \
-    } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) { \
-        /* unmatched second surrogate or other non-character */ \
-        (c)=UTF_ERROR_VALUE; \
-    } \
-}
-
-#define UTF16_APPEND_CHAR_SAFE(s, i, length, c) { \
-    if((uint32_t)(c)<=0xffff) { \
-        (s)[(i)++]=(uint16_t)(c); \
-    } else if((uint32_t)(c)<=0x10ffff) { \
-        if((i)+1<(length)) { \
-            (s)[(i)++]=(uint16_t)(((c)>>10)+0xd7c0); \
-            (s)[(i)++]=(uint16_t)(((c)&0x3ff)|0xdc00); \
-        } else /* not enough space */ { \
-            (s)[(i)++]=UTF_ERROR_VALUE; \
-        } \
-    } else /* c>0x10ffff, write error value */ { \
-        (s)[(i)++]=UTF_ERROR_VALUE; \
-    } \
-}
-
-#define UTF16_FWD_1_SAFE(s, i, length) { \
-    if(UTF_IS_FIRST_SURROGATE((s)[(i)++]) && (i)<(length) && UTF_IS_SECOND_SURROGATE((s)[i])) { \
-        ++(i); \
-    } \
-}
-
-#define UTF16_FWD_N_SAFE(s, i, length, n) { \
+#define U16_FWD_N(s, i, length, n) { \
     int32_t __N=(n); \
     while(__N>0 && (i)<(length)) { \
-        UTF16_FWD_1_SAFE(s, i, length); \
+        U16_FWD_1(s, i, length); \
         --__N; \
     } \
 }
 
-#define UTF16_SET_CHAR_START_SAFE(s, start, i) { \
-    if(UTF_IS_SECOND_SURROGATE((s)[i]) && (i)>(start) && UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
+/**
+ * Adjust a random-access offset to a code point boundary
+ * at the start of a code point.
+ * If the offset points to the trail surrogate of a surrogate pair,
+ * then the offset is decremented.
+ * Otherwise, it is not modified.
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @see U16_SET_CP_START
+ * @draft ICU 2.4
+ */
+#define U16_SET_CP_START_UNSAFE(s, i) { \
+    if(U16_IS_TRAIL((s)[i])) { \
+        --(i); \
+    } \
+}
+
+/**
+ * Adjust a random-access offset to a code point boundary
+ * at the start of a code point.
+ * If the offset points to the trail surrogate of a surrogate pair,
+ * then the offset is decremented.
+ * Otherwise, it is not modified.
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * @param s const UChar * string
+ * @param start starting string offset (usually 0)
+ * @param i string offset, start<=i
+ * @see U16_SET_CP_START_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_SET_CP_START(s, start, i) { \
+    if(U16_IS_TRAIL((s)[i]) && (i)>(start) && U16_IS_LEAD((s)[(i)-1])) { \
         --(i); \
     } \
 }
 
 /* definitions with backward iteration -------------------------------------- */
 
-/*
- * all the macros that go backward assume that
- * the valid buffer range starts at offset 0
- * and that the initial offset is 0<i<=length;
- * they update the offset
- */
-
-/* fast versions, no error-checking */
-
 /**
- * Get a single code point from an offset that points behind the last
- * of the code units that belong to that code point.
- * Assume 0<=i<length.
+ * Move the string offset from one code point boundary to the previous one
+ * and get the code point between them.
+ * (Pre-decrementing backward iteration.)
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * The input offset may be the same as the string length.
+ * If the offset is behind a trail surrogate unit
+ * for a supplementary code point, then the macro will read
+ * the preceding lead surrogate as well.
+ * If the offset is behind a lead surrogate, then that itself
+ * will be returned as the code point.
+ * The result is undefined if the offset is behind a single, unpaired trail surrogate.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @param c output UChar32 variable
+ * @see U16_PREV
+ * @draft ICU 2.4
  */
-#define UTF16_PREV_CHAR_UNSAFE(s, i, c) { \
+#define U16_PREV_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
-    if(UTF_IS_SECOND_SURROGATE(c)) { \
-        (c)=UTF16_GET_PAIR_VALUE((s)[--(i)], (c)); \
+    if(U16_IS_TRAIL(c)) { \
+        (c)=U16_GET_SUPPLEMENTARY((s)[--(i)], (c)); \
     } \
 }
 
-#define UTF16_BACK_1_UNSAFE(s, i) { \
-    if(UTF_IS_SECOND_SURROGATE((s)[--(i)])) { \
+/**
+ * Move the string offset from one code point boundary to the previous one
+ * and get the code point between them.
+ * (Pre-decrementing backward iteration.)
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * The input offset may be the same as the string length.
+ * If the offset is behind a trail surrogate unit
+ * for a supplementary code point, then the macro will read
+ * the preceding lead surrogate as well.
+ * If the offset is behind a lead surrogate or behind a single, unpaired
+ * trail surrogate, then that itself
+ * will be returned as the code point.
+ *
+ * @param s const UChar * string
+ * @param start starting string offset (usually 0)
+ * @param i string offset, start<=i
+ * @param length string length
+ * @param c output UChar32 variable
+ * @see U16_PREV_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_PREV(s, start, i, c) { \
+    (c)=(s)[--(i)]; \
+    if(U16_IS_TRAIL(c)) { \
+        uint16_t __c2; \
+        if((i)>(start) && U16_IS_LEAD(__c2=(s)[(i)-1])) { \
+            --(i); \
+            (c)=U16_GET_SUPPLEMENTARY(__c2, (c)); \
+        } \
+    } \
+}
+
+/**
+ * Move the string offset from one code point boundary to the previous one.
+ * (Pre-decrementing backward iteration.)
+ * The input offset may be the same as the string length.
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @see U16_BACK_1
+ * @draft ICU 2.4
+ */
+#define U16_BACK_1_UNSAFE(s, i) { \
+    if(U16_IS_TRAIL((s)[--(i)])) { \
         --(i); \
     } \
 }
 
-#define UTF16_BACK_N_UNSAFE(s, i, n) { \
+/**
+ * Move the string offset from one code point boundary to the previous one.
+ * (Pre-decrementing backward iteration.)
+ * The input offset may be the same as the string length.
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * @param s const UChar * string
+ * @param start starting string offset (usually 0)
+ * @param i string offset, start<=i
+ * @see U16_BACK_1_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_BACK_1(s, start, i) { \
+    if(U16_IS_TRAIL((s)[--(i)]) && (i)>(start) && U16_IS_LEAD((s)[(i)-1])) { \
+        --(i); \
+    } \
+}
+
+/**
+ * Move the string offset from one code point boundary to the n-th one before it,
+ * i.e., move backward by n code points.
+ * (Pre-decrementing backward iteration.)
+ * The input offset may be the same as the string length.
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @param n number of code points to skip
+ * @see U16_BACK_N
+ * @draft ICU 2.4
+ */
+#define U16_BACK_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
     while(__N>0) { \
-        UTF16_BACK_1_UNSAFE(s, i); \
+        U16_BACK_1_UNSAFE(s, i); \
         --__N; \
     } \
 }
 
 /**
- * Set a random-access offset and adjust it so that
- * it points after the end of a Unicode character.
- * The offset that is passed in points behind
- * any code unit of a code point
- * and will point behind the last code unit after
- * the macro invocation.
- * Never decrements the offset.
+ * Move the string offset from one code point boundary to the n-th one before it,
+ * i.e., move backward by n code points.
+ * (Pre-decrementing backward iteration.)
+ * The input offset may be the same as the string length.
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * @param s const UChar * string
+ * @param i string offset, i<length
+ * @param length string length
+ * @param n number of code points to skip
+ * @see U16_BACK_N_UNSAFE
+ * @draft ICU 2.4
  */
-#define UTF16_SET_CHAR_LIMIT_UNSAFE(s, i) { \
-    if(UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
+#define U16_BACK_N(s, start, i, n) { \
+    int32_t __N=(n); \
+    while(__N>0 && (i)>(start)) { \
+        U16_BACK_1(s, start, i); \
+        --__N; \
+    } \
+}
+
+/**
+ * Adjust a random-access offset to a code point boundary after a code point.
+ * If the offset is behind the lead surrogate of a surrogate pair,
+ * then the offset is incremented.
+ * Otherwise, it is not modified.
+ * The input offset may be the same as the string length.
+ * "Unsafe" macro, assumes well-formed UTF-16.
+ *
+ * @param s const UChar * string
+ * @param i string offset
+ * @see U16_SET_CP_LIMIT
+ * @draft ICU 2.4
+ */
+#define U16_SET_CP_LIMIT_UNSAFE(s, i) { \
+    if(U16_IS_LEAD((s)[(i)-1])) { \
         ++(i); \
     } \
 }
 
-/* safe versions with error-checking and optional regularity-checking */
-
-#define UTF16_PREV_CHAR_SAFE(s, start, i, c, strict) { \
-    (c)=(s)[--(i)]; \
-    if(UTF_IS_SECOND_SURROGATE(c)) { \
-        uint16_t __c2; \
-        if((i)>(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
-            --(i); \
-            (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
-            /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
-        } else if(strict) {\
-            /* unmatched second surrogate */ \
-            (c)=UTF_ERROR_VALUE; \
-        } \
-    } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) { \
-        /* unmatched first surrogate or other non-character */ \
-        (c)=UTF_ERROR_VALUE; \
-    } \
-}
-
-#define UTF16_BACK_1_SAFE(s, start, i) { \
-    if(UTF_IS_SECOND_SURROGATE((s)[--(i)]) && (i)>(start) && UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
-        --(i); \
-    } \
-}
-
-#define UTF16_BACK_N_SAFE(s, start, i, n) { \
-    int32_t __N=(n); \
-    while(__N>0 && (i)>(start)) { \
-        UTF16_BACK_1_SAFE(s, start, i); \
-        --__N; \
-    } \
-}
-
-#define UTF16_SET_CHAR_LIMIT_SAFE(s, start, i, length) { \
-    if((start)<(i) && (i)<(length) && UTF_IS_FIRST_SURROGATE((s)[(i)-1]) && UTF_IS_SECOND_SURROGATE((s)[i])) { \
+/**
+ * Adjust a random-access offset to a code point boundary after a code point.
+ * If the offset is behind the lead surrogate of a surrogate pair,
+ * then the offset is incremented.
+ * Otherwise, it is not modified.
+ * The input offset may be the same as the string length.
+ * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
+ *
+ * @param s const UChar * string
+ * @param start starting string offset (usually 0)
+ * @param i string offset, start<=i<=length
+ * @param length string length
+ * @see U16_SET_CP_LIMIT_UNSAFE
+ * @draft ICU 2.4
+ */
+#define U16_SET_CP_LIMIT(s, start, i, length) { \
+    if((start)<(i) && (i)<(length) && U16_IS_LEAD((s)[(i)-1]) && U16_IS_TRAIL((s)[i])) { \
         ++(i); \
     } \
 }
