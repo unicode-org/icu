@@ -1108,14 +1108,56 @@ ucnv_isAmbiguous(const UConverter *cnv);
  * mapping, FALSE otherwise.
  * @stable
  */
-U_CAPI void U_EXPORT2 ucnv_setFallback(UConverter *cnv, UBool usesFallback);
+U_CAPI void U_EXPORT2 
+ucnv_setFallback(UConverter *cnv, UBool usesFallback);
 
 /**
  * Determines if the converter uses fallback mappings or not.
  * @return TRUE if the converter uses fallback, FALSE otherwise.
  * @stable
  */
-U_CAPI UBool U_EXPORT2 ucnv_usesFallback(const UConverter *cnv);
+U_CAPI UBool U_EXPORT2 
+ucnv_usesFallback(const UConverter *cnv);
+
+/**
+ * Detects Unicode signatures in the given byte stream. The signature bytes are not consumed, 
+ * instead the number of bytes that make up the signature is returned. The conversion APIs
+ * donot discard signature bytes, so if the caller wishes to discard them, the caller should 
+ * explicity add code to do that after calling this function.
+ * <p>
+ * Usage:
+ * @code     
+ *      UErrorCode err = U_ZERO_ERROR;
+ *      char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
+ *      char* source = input;
+ *      int32_t signatureLength = 0;
+ *      char* encoding = ucnv_detectUnicodeSignatures(source,sizeof(input),&signatureLength,&err);
+ *      UConverter* conv = NULL;
+ *      if(encoding!=NULL && U_SUCCESS(err)){
+ *          // should signature be discarded ?
+ *          if (discardSignature){
+ *              source += signatureLength;
+ *          }
+ *          conv = ucnv_open(encoding, &err);
+ *          .... do the conversion ....
+ *      }
+ *     
+ * @endcode
+ *
+ * @param source            The source string in which the signature should be detected.
+ * @param sourceLength      Length of the input string, or -1 if NUL-terminated.
+ * @param signatureLength   A pointer to int8_t to receive the number of bytes that make up the signature 
+ *                          of the detected UTF. 0 if not detected.
+ * @param pErrorCode        A pointer to receive information about any errors that may occur during detection.
+ *                          Must be a valid pointer to an error code value, which must not indicate a failure
+ *                          before the function call.
+ * @return The name of the encoding detected. NULL if encoding is not detected. 
+ */
+U_CAPI const char* U_EXPORT2
+ucnv_detectUnicodeSignature( const char* source,
+                             int32_t sourceLength,
+                             int32_t* signatureLength,
+                             UErrorCode* pErrorCode);
 
 #endif
 /*_UCNV*/
