@@ -179,10 +179,10 @@ public:
   virtual void            getText(UnicodeString&  result) = 0;
 
   /**
-   * Returns a ClassID for this CharacterIterator ("poor man's
+   * Returns a UClassID for this CharacterIterator ("poor man's
    * RTTI").<P> Despite the fact that this function is public,
    * DO NOT CONSIDER IT PART OF CHARACTERITERATOR'S API!  */
-  virtual ClassID         getDynamicClassID(void) const = 0;
+  virtual UClassID         getDynamicClassID(void) const = 0;
 
 protected:
   CharacterIterator() {}
