@@ -494,16 +494,10 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
 
-  uint32_t i = 0;
-
   UColToken *tok = lh->last;
   uint32_t t[UCOL_STRENGTH_LIMIT];
 
   uprv_memset(t, 0, UCOL_STRENGTH_LIMIT*sizeof(uint32_t));
-
-  //for(i=0; i<UCOL_STRENGTH_LIMIT; i++) {
-  //  t[i] = 0;
-  //}
 
   tok->toInsert = 1;
   t[tok->strength] = 1;
@@ -879,7 +873,6 @@ _processUCACompleteIgnorables(const void *context, UChar32 start, UChar32 limit,
   UErrorCode status = U_ZERO_ERROR;
   tempUCATable *t = (tempUCATable *)context;
   if(value == 0) {
-    UChar32 stopHere = start;
     while(start < limit) {
       uint32_t CE = utrie_get32(t->mapping, start, NULL);
       if(CE == UCOL_NOT_FOUND) {
