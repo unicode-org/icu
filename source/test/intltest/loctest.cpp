@@ -13,53 +13,61 @@
 #include "unicode/ucurr.h"
 #include "unicode/smpdtfmt.h"
 
-const char* rawData[27][7] = {
+const char* rawData[33][8] = {
 
         // language code
-        {   "en",   "fr",   "ca",   "el",   "no",   "it",   "xx"    },
+        {   "en",   "fr",   "ca",   "el",   "no",   "it",   "xx",   "zh"  },
+        // script code
+        {   "",     "",     "",     "",     "",     "",     "",     "Hans" },
         // country code
-        {   "US",   "FR",   "ES",   "GR",   "NO",   "",     "YY"    },
+        {   "US",   "FR",   "ES",   "GR",   "NO",   "",     "YY",   "CN"  },
         // variant code
-        {   "",     "",     "",     "",     "NY",   "",     ""    },
+        {   "",     "",     "",     "",     "NY",   "",     "",   ""    },
         // full name
-        {   "en_US",    "fr_FR",    "ca_ES",    "el_GR",    "no_NO_NY", "it",   "xx_YY"  },
+        {   "en_US",    "fr_FR",    "ca_ES",    "el_GR",    "no_NO_NY", "it",   "xx_YY",   "zh_Hans_CN" },
         // ISO-3 language
-        {   "eng",  "fra",  "cat",  "ell",  "nor",  "ita",  ""   },
+        {   "eng",  "fra",  "cat",  "ell",  "nor",  "ita",  "",   "zho"   },
         // ISO-3 country
-        {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "",     ""   },
+        {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "",     "",   "CHN"   },
         // LCID
-        {   "409", "40c", "403", "408", "814", "",     ""  },
+        {   "409", "40c", "403", "408", "814", "10",     "0",   "804"  },
 
         // display langage (English)
-        {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx" },
+        {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx",   "Chinese" },
+        // display script (English)
+        {   "",     "",     "",     "",     "",   "",     "",   "Simplified Han" },
         // display country (English)
-        {   "United States",    "France",   "Spain",  "Greece",   "Norway",   "",     "YY" },
+        {   "United States",    "France",   "Spain",  "Greece",   "Norway",   "",     "YY",   "China" },
         // display variant (English)
-        {   "",     "",     "",     "",     "NY",   "",     ""},
+        {   "",     "",     "",     "",     "NY",   "",     "",   ""},
         // display name (English)
         // Updated no_NO_NY English display name for new pattern-based algorithm
         // (part of Euro support).
-        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, NY)", "Italian", "xx (YY)" },
+        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, NY)", "Italian", "xx (YY)", "Chinese (Simplified Han, China)" },
 
         // display langage (French)
-        {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx" },
+        {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx", "chinois" },
+        // display script (French)
+        {   "",     "",     "",     "",     "",     "",     "",   "Hans" },
         // display country (French)
-        {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "",     "YY" },
+        {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "", "YY", "Chine" },
         // display variant (French)
-        {   "",     "",     "",     "",     "NY",     "",     "" },
+        {   "",     "",     "",     "",     "NY",     "",     "",   "" },
         // display name (French)
         //{   "anglais (États-Unis)", "français (France)", "catalan (Espagne)", "grec (Grèce)", "norvégien (Norvège,Nynorsk)", "italien", "xx (YY)" },
-        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)" }, // STILL not right
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)", "chinois (Hans, Chine)" }, // STILL not right
 
 
         /* display language (Catalan) */
-        {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec" },
+        {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "itali\\u00E0", "", "xin\\u00E9s" },
+        /* display script (Catalan) */
+        {   "", "", "",                    "", "", "", "", "Hans" },
         /* display country (Catalan) */
-        {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega" },
+        {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega", "", "", "Xina" },
         /* display variant (Catalan) */
-        {   "", "", "",                    "", "NY" },
+        {   "", "", "",                    "", "NY", "", "" },
         /* display name (Catalan) */
-        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)" },
+        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "itali\\u00E0", "", "xin\\u00E9s (Hans, Xina)" },
 
         // display langage (Greek)[actual values listed below]
         {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
@@ -67,9 +75,12 @@ const char* rawData[27][7] = {
             "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
             "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
             "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac",
+            "\\u0399\\u03c4\\u03b1\\u03bb\\u03b9\\u03ba\\u03ac",
             "",
-            ""
+            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC"
         },
+        // display script (Greek)
+        {   "", "", "", "", "", "", "", "Hans" },
         // display country (Greek)[actual values listed below]
         {   "\\u0397\\u03BD\\u03C9\\u03BC\\u03AD\\u03BD\\u03B5\\u03C2 \\u03A0\\u03BF\\u03BB\\u03B9\\u03C4\\u03B5\\u03AF\\u03B5\\u03C2",
             "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1",
@@ -77,29 +88,33 @@ const char* rawData[27][7] = {
             "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
             "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1",
             "",
-            ""
+            "",
+            "\\u039A\\u03AF\\u03BD\\u03B1"
         },
         // display variant (Greek)
-        {   "", "", "", "", "NY" }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
+        {   "", "", "", "", "NY", "", "" },
         // display name (Greek)[actual values listed below]
         {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03BD\\u03C9\\u03BC\\u03AD\\u03BD\\u03B5\\u03C2 \\u03A0\\u03BF\\u03BB\\u03B9\\u03C4\\u03B5\\u03AF\\u03B5\\u03C2)",
             "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
             "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
             "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
             "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
+            "\\u0399\\u03c4\\u03b1\\u03bb\\u03b9\\u03ba\\u03ac",
             "",
-            ""
+            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)"
         },
 
         // display langage (<root>)
-        {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx" },
+        {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx", "" },
+        // display script (<root>)
+        {   "",     "",     "",     "",     "",   "",     "", ""},
         // display country (<root>)
-        {   "United States",    "France",   "Spain",  "Greece",   "Norway",   "",     "YY" },
+        {   "United States",    "France",   "Spain",  "Greece",   "Norway",   "",     "YY", "" },
         // display variant (<root>)
-        {   "",     "",     "",     "",     "Nynorsk",   "",     ""},
+        {   "",     "",     "",     "",     "Nynorsk",   "",     "", ""},
         // display name (<root>)
         //{   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway,Nynorsk)", "Italian", "xx (YY)" },
-        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway,NY)", "Italian", "xx (YY)" }
+        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway,NY)", "Italian", "xx (YY)", "" }
 };
 
 // * test macros
@@ -164,7 +179,7 @@ LocaleTest::LocaleTest()
 LocaleTest::~LocaleTest()
 {
     if (dataTable != 0) {
-        for (int32_t i = 0; i < 27; i++) {
+        for (int32_t i = 0; i < 33; i++) {
             delete []dataTable[i];
         }
         delete []dataTable;
@@ -229,12 +244,21 @@ void LocaleTest::TestBasicGetters() {
 
     int32_t i;
     for (i = 0; i <= MAX_LOCALES; i++) {
-        Locale testLocale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
+        Locale testLocale("");
+        if (rawData[SCRIPT][i] && rawData[SCRIPT][i][0] != 0) {
+            testLocale = Locale(rawData[LANG][i], rawData[SCRIPT][i], rawData[CTRY][i], rawData[VAR][i]);
+        }
+        else {
+            testLocale = Locale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
+        }
         logln("Testing " + (UnicodeString)testLocale.getName() + "...");
 
         if ( (temp=testLocale.getLanguage()) != (dataTable[LANG][i]))
             errln("  Language code mismatch: " + temp + " versus "
                         + dataTable[LANG][i]);
+        if ( (temp=testLocale.getScript()) != (dataTable[SCRIPT][i]))
+            errln("  Script code mismatch: " + temp + " versus "
+                        + dataTable[SCRIPT][i]);
         if ( (temp=testLocale.getCountry()) != (dataTable[CTRY][i]))
             errln("  Country code mismatch: " + temp + " versus "
                         + dataTable[CTRY][i]);
@@ -248,12 +272,21 @@ void LocaleTest::TestBasicGetters() {
 
     logln("Same thing without variant codes...");
     for (i = 0; i <= MAX_LOCALES; i++) {
-        Locale testLocale(rawData[LANG][i], rawData[CTRY][i]);
+        Locale testLocale("");
+        if (rawData[SCRIPT][i] && rawData[SCRIPT][i][0] != 0) {
+            testLocale = Locale(rawData[LANG][i], rawData[SCRIPT][i], rawData[CTRY][i]);
+        }
+        else {
+            testLocale = Locale(rawData[LANG][i], rawData[CTRY][i]);
+        }
         logln("Testing " + (temp=testLocale.getName()) + "...");
 
         if ( (temp=testLocale.getLanguage()) != (dataTable[LANG][i]))
             errln("  Language code mismatch: " + temp + " versus "
                         + dataTable[LANG][i]);
+        if ( (temp=testLocale.getScript()) != (dataTable[SCRIPT][i]))
+            errln("  Script code mismatch: " + temp + " versus "
+                        + dataTable[SCRIPT][i]);
         if ( (temp=testLocale.getCountry()) != (dataTable[CTRY][i]))
             errln("  Country code mismatch: " + temp + " versus "
                         + dataTable[CTRY][i]);
@@ -266,18 +299,18 @@ void LocaleTest::TestBasicGetters() {
 
     temp = test8.getLanguage();
     if (temp != UnicodeString("x-klingon") )
-      errln("  Language code mismatch: " + temp + "  versus \"x-klingon\"");
+        errln("  Language code mismatch: " + temp + "  versus \"x-klingon\"");
 
     temp = test8.getCountry();
     if (temp != UnicodeString("ZX") )
-      errln("  Country code mismatch: " + temp + "  versus \"ZX\"");
+        errln("  Country code mismatch: " + temp + "  versus \"ZX\"");
 
     temp = test8.getVariant();
     if (temp != UnicodeString("SPECIAL") )
-      errln("  Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
+        errln("  Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
 
     if (Locale::getDefault() != Locale::createFromName(NULL))
-      errln("Locale::getDefault() == Locale::createFromName(NULL)");
+        errln("Locale::getDefault() == Locale::createFromName(NULL)");
 
     /*----------*/
     // NOTE: There used to be a special test for locale names that had language or
@@ -379,40 +412,40 @@ void LocaleTest::TestParallelAPIValues() {
 
 
 void LocaleTest::TestSimpleResourceInfo() {
-  UnicodeString   temp;
-  char            temp2[20];
-  UErrorCode err = U_ZERO_ERROR;
-  int32_t i = 0;
+    UnicodeString   temp;
+    char            temp2[20];
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t i = 0;
 
-  for (i = 0; i <= MAX_LOCALES; i++) {
-    Locale testLocale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
-    logln("Testing " + (temp=testLocale.getName()) + "...");
+    for (i = 0; i <= MAX_LOCALES; i++) {
+        Locale testLocale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
+        logln("Testing " + (temp=testLocale.getName()) + "...");
 
-    if ( (temp=testLocale.getISO3Language()) != (dataTable[LANG3][i]))
-      errln("  ISO-3 language code mismatch: " + temp
-        + " versus " + dataTable[LANG3][i]);
-    if ( (temp=testLocale.getISO3Country()) != (dataTable[CTRY3][i]))
-      errln("  ISO-3 country code mismatch: " + temp
-        + " versus " + dataTable[CTRY3][i]);
+        if ( (temp=testLocale.getISO3Language()) != (dataTable[LANG3][i]))
+            errln("  ISO-3 language code mismatch: " + temp
+                + " versus " + dataTable[LANG3][i]);
+        if ( (temp=testLocale.getISO3Country()) != (dataTable[CTRY3][i]))
+            errln("  ISO-3 country code mismatch: " + temp
+                + " versus " + dataTable[CTRY3][i]);
 
-    sprintf(temp2, "%x", testLocale.getLCID());
-    if (UnicodeString(temp2) != dataTable[LCID][i])
-      errln((UnicodeString)"  LCID mismatch: " + temp2 + " versus "
-        + dataTable[LCID][i]);
+        sprintf(temp2, "%x", testLocale.getLCID());
+        if (UnicodeString(temp2) != dataTable[LCID][i])
+            errln((UnicodeString)"  LCID mismatch: " + temp2 + " versus "
+                + dataTable[LCID][i]);
 
-    if(U_FAILURE(err))
-      {
-        errln((UnicodeString)"Some error on number " + i + u_errorName(err));
-      }
-    err = U_ZERO_ERROR;
-  }
+        if(U_FAILURE(err))
+        {
+            errln((UnicodeString)"Some error on number " + i + u_errorName(err));
+        }
+        err = U_ZERO_ERROR;
+    }
 
-   Locale locale("en");
-   if(strcmp(locale.getName(), "en") != 0||
-       strcmp(locale.getLanguage(), "en") != 0) {
-       errln("construction of Locale(en) failed\n");
-   }
-   /*-----*/
+    Locale locale("en");
+    if(strcmp(locale.getName(), "en") != 0||
+        strcmp(locale.getLanguage(), "en") != 0) {
+        errln("construction of Locale(en) failed\n");
+    }
+    /*-----*/
 
 }
 
@@ -698,20 +731,29 @@ void LocaleTest::doTestDisplayNames(Locale& displayLocale, int32_t compareIndex)
     UnicodeString   temp;
 
     for (int32_t i = 0; i <= MAX_LOCALES; i++) {
-        Locale testLocale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
+        Locale testLocale("");
+        if (rawData[SCRIPT][i] && rawData[SCRIPT][i][0] != 0) {
+            testLocale = Locale(rawData[LANG][i], rawData[SCRIPT][i], rawData[CTRY][i], rawData[VAR][i]);
+        }
+        else {
+            testLocale = Locale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
+        }
         logln("  Testing " + (temp=testLocale.getName()) + "...");
 
         UnicodeString  testLang;
+        UnicodeString  testScript;
         UnicodeString  testCtry;
         UnicodeString  testVar;
         UnicodeString  testName;
 
         testLocale.getDisplayLanguage(displayLocale, testLang);
+        testLocale.getDisplayScript(displayLocale, testScript);
         testLocale.getDisplayCountry(displayLocale, testCtry);
         testLocale.getDisplayVariant(displayLocale, testVar);
         testLocale.getDisplayName(displayLocale, testName);
 
         UnicodeString  expectedLang;
+        UnicodeString  expectedScript;
         UnicodeString  expectedCtry;
         UnicodeString  expectedVar;
         UnicodeString  expectedName;
@@ -720,20 +762,26 @@ void LocaleTest::doTestDisplayNames(Locale& displayLocale, int32_t compareIndex)
         if (expectedLang.length() == 0)
             expectedLang = dataTable[DLANG_EN][i];
 
-        expectedCtry = dataTable[compareIndex + 1][i];
+        expectedScript = dataTable[compareIndex + 1][i];
+        if (expectedScript.length() == 0)
+            expectedScript = dataTable[DSCRIPT_EN][i];
+
+        expectedCtry = dataTable[compareIndex + 2][i];
         if (expectedCtry.length() == 0)
             expectedCtry = dataTable[DCTRY_EN][i];
 
-        expectedVar = dataTable[compareIndex + 2][i];
+        expectedVar = dataTable[compareIndex + 3][i];
         if (expectedVar.length() == 0)
             expectedVar = dataTable[DVAR_EN][i];
 
-        expectedName = dataTable[compareIndex + 3][i];
+        expectedName = dataTable[compareIndex + 4][i];
         if (expectedName.length() == 0)
             expectedName = dataTable[DNAME_EN][i];
 
         if (testLang != expectedLang)
             errln("Display language (" + UnicodeString(displayLocale.getName()) + ") of (" + UnicodeString(testLocale.getName()) + ") got " + testLang + " expected " + expectedLang);
+        if (testScript != expectedScript)
+            errln("Display script (" + UnicodeString(displayLocale.getName()) + ") of (" + UnicodeString(testLocale.getName()) + ") got " + testScript + " expected " + expectedScript);
         if (testCtry != expectedCtry)
             errln("Display country (" + UnicodeString(displayLocale.getName()) + ") of (" + UnicodeString(testLocale.getName()) + ") got " + testCtry + " expected " + expectedCtry);
         if (testVar != expectedVar)
@@ -752,11 +800,11 @@ void LocaleTest::doTestDisplayNames(Locale& displayLocale, int32_t compareIndex)
 void LocaleTest::setUpDataTable()
 {
     if (dataTable == 0) {
-        dataTable = new UnicodeString*[27];
+        dataTable = new UnicodeString*[33];
 
-        for (int32_t i = 0; i < 27; i++) {
-            dataTable[i] = new UnicodeString[7];
-            for (int32_t j = 0; j < 7; j++) {
+        for (int32_t i = 0; i < 33; i++) {
+            dataTable[i] = new UnicodeString[8];
+            for (int32_t j = 0; j < 8; j++) {
                 dataTable[i][j] = CharsToUnicodeString(rawData[i][j]);
             }
         }
