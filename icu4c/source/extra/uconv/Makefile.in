@@ -146,7 +146,7 @@ endif
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
 	$(MKINSTALLDIRS) $(@D)
-	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eUTF-8 -s $(^D) -d $(@D) $(^F)
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -e UTF-8 -s $(^D) -d $(@D) $(^F)
 
 install-man: $(ALL_MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
