@@ -55,17 +55,16 @@ void UVector32Test::runIndexedTest( int32_t index, UBool exec, const char* &name
 //   Error Checking / Reporting macros used in all of the tests.
 //
 //---------------------------------------------------------------------------
-#define TEST_CHECK_STATUS {if (U_FAILURE(status)) {errln("UVector32Test failure at line %d.  status=%s\n", \
-__LINE__, u_errorName(status)); return;}}
+#define TEST_CHECK_STATUS(status) \
+    if (U_FAILURE(status)) {\
+        errln("UVector32Test failure at line %d.  status=%s\n", __LINE__, u_errorName(status));\
+        return;\
+    }
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("RegexTest failure at line %d.\n", __LINE__);};}
-
-
-
-
-
-
-
+#define TEST_ASSERT(expr) \
+    if ((expr)==FALSE) {\
+        errln("RegexTest failure at line %d.\n", __LINE__);\
+    }
 
 //---------------------------------------------------------------------------
 //
