@@ -273,7 +273,7 @@ UnicodeString::UnicodeString(const char *src, int32_t srcLength,
     } else {
       // get input length
       if(srcLength==-1) {
-        srcLength=uprv_strlen(src);
+        srcLength=(int32_t)uprv_strlen(src);
       }
       if(srcLength>0) {
         if(cnv!=0) {
@@ -1358,7 +1358,7 @@ UnicodeString::extract(UTextOffset start,
                        const char *codepage) const
 {
   // if the arguments are illegal, then do nothing
-  if(dstSize < 0 || (dstSize > 0 && target == 0)) {
+  if(/*dstSize < 0 || */(dstSize > 0 && target == 0)) {
     return 0;
   }
 
@@ -1469,7 +1469,7 @@ UnicodeString::doExtract(UTextOffset start, int32_t length,
 
   if(destCapacity==0) {
     destLimit=dest=0;
-  } else if(destCapacity==0xffffffff) {
+  } else if(destCapacity==-1) {
     // Pin the limit to U_MAX_PTR if the "magic" destCapacity is used.
     destLimit=(char*)U_MAX_PTR(dest);
     // for NUL-termination, translate into highest int32_t
