@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2002/09/04 01:37:26 $
- * $Revision: 1.6 $
+ * $Date: 2002/10/08 21:52:23 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -66,14 +66,8 @@ public class CollationTest extends ModuleTest
         if (locale != null) {
             // this is a case where we have locale 
             try {
-                if (locale.equalsIgnoreCase("root")) {
-                    col = (RuleBasedCollator)Collator.getInstance(
-                                                               Locale.ENGLISH);
-                }
-                else {
-                    Locale l = LocaleUtility.getLocaleFromName(locale);
-                    col = (RuleBasedCollator)Collator.getInstance(l);          
-                }
+                Locale l = LocaleUtility.getLocaleFromName(locale);
+                col = (RuleBasedCollator)Collator.getInstance(l);          
             } catch (Exception e) {
                 errln("Error creating collator for locale " + locale);
             }
