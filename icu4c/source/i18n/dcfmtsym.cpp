@@ -150,29 +150,30 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             status = U_INVALID_FORMAT_ERROR;
         }
         else {
-            UnicodeString numberElements[kFormatSymbolCount];
+            const UChar *numberElements[kFormatSymbolCount];
+            int32_t numberElementsStrLen[kFormatSymbolCount];
             int32_t i = 0;
             for(i = 0; i<numberElementsLength; i++) {
                 int32_t len = 0;
-                const UChar *resUChars = ures_getStringByIndex(numberElementsRes, i, &len, &status);
-                numberElements[i].setTo(TRUE, resUChars, len); /* This setTo does aliasing */
+                numberElements[i] = ures_getStringByIndex(numberElementsRes, i, &numberElementsStrLen[i], &status);
             }
 
             if (U_SUCCESS(status)) {
-                initialize(numberElements, numberElementsLength);
+                initialize(numberElements, numberElementsStrLen, numberElementsLength);
 
                 // Obtain currency data from the currency API.  This is strictly
                 // for backward compatibility; we don't use DecimalFormatSymbols
                 // for currency data anymore.
                 UErrorCode internalStatus = U_ZERO_ERROR; // don't propagate failures out
                 UChar curriso[4];
+                UnicodeString tempStr;
                 ucurr_forLocale(locStr, curriso, 4, &internalStatus);
 
                 // Reuse numberElements[0] as a temporary buffer
-                uprv_getStaticCurrencyName(curriso, locStr, numberElements[0], internalStatus);
+                uprv_getStaticCurrencyName(curriso, locStr, tempStr, internalStatus);
                 if (U_SUCCESS(internalStatus)) {
                     fSymbols[kIntlCurrencySymbol] = curriso;
-                    fSymbols[kCurrencySymbol] = numberElements[0];
+                    fSymbols[kCurrencySymbol] = tempStr;
                 }
                 /* else use the default values. */
             }
@@ -191,28 +192,35 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 // from ResourceBundle in the desired locale.
 
 void
-DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t numberElementsLength)
+DecimalFormatSymbols::initialize(const UChar** numberElements, int32_t *numberElementsStrLen, int32_t numberElementsLength)
 {
-    fSymbols[kDecimalSeparatorSymbol].fastCopyFrom(numberElements[0]);
-    fSymbols[kGroupingSeparatorSymbol].fastCopyFrom(numberElements[1]);
-    fSymbols[kPatternSeparatorSymbol].fastCopyFrom(numberElements[2]);
-    fSymbols[kPercentSymbol].fastCopyFrom(numberElements[3]);
-    fSymbols[kZeroDigitSymbol].fastCopyFrom(numberElements[4]);
-    fSymbols[kDigitSymbol].fastCopyFrom(numberElements[5]);
-    fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
-    fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
-    fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
-    fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // TODO: '*' Hard coded for now; get from resource later
-    fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[9]);
-    fSymbols[kNaNSymbol].fastCopyFrom(numberElements[10]);
-    fSymbols[kPlusSignSymbol].fastCopyFrom(numberElements[11]);
-    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[0]);
+    static const int32_t TYPE_MAPPING[][2] = {
+        {kDecimalSeparatorSymbol, 0},
+        {kGroupingSeparatorSymbol, 1},
+        {kPatternSeparatorSymbol, 2},
+        {kPercentSymbol, 3},
+        {kZeroDigitSymbol, 4},
+        {kDigitSymbol, 5},
+        {kMinusSignSymbol, 6},
+        {kExponentialSymbol, 7},
+        {kPerMillSymbol, 8},
+        {kInfinitySymbol, 9},
+        {kNaNSymbol, 10},
+        {kPlusSignSymbol, 11},
+        {kMonetarySeparatorSymbol, 0}
+    };
+    int32_t idx;
+
+    for (idx = 0; idx < (int32_t)(sizeof(TYPE_MAPPING)/sizeof(TYPE_MAPPING[0])); idx++) {
+        fSymbols[TYPE_MAPPING[idx][0]].setTo(TRUE, numberElements[TYPE_MAPPING[idx][1]], numberElementsStrLen[TYPE_MAPPING[idx][1]]);
+    }
 
     // Default values until it's set later on.
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
     fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
     // TODO: read from locale data, if this makes it into CLDR
     fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
+    fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // TODO: '*' Hard coded for now; get from resource later
 }
 
 // initialize with default values

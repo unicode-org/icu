@@ -808,120 +808,96 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         return NULL;
     }
 
-    ResourceBundle resource((char *)0, desiredLocale, status);
-    NumberFormat* f;
+    NumberFormat* f = NULL;
+    DecimalFormatSymbols* symbolsToAdopt = NULL;
+    UnicodeString pattern;
+    UResourceBundle *resource = ures_open((char *)0, desiredLocale.getName(), &status);
+    UResourceBundle *numberPatterns = ures_getByKey(resource, DecimalFormat::fgNumberPatterns, NULL, &status);
 
-    if (U_FAILURE(status))
-    {
+    if (U_FAILURE(status)) {
         // We don't appear to have resource data available -- use the last-resort data
         status = U_USING_FALLBACK_WARNING;
-
-        // Use the DecimalFormatSymbols constructor which uses last-resort data
-        DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(status);
-        if (symbolsToAdopt == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        if (U_FAILURE(status)) {
-            delete symbolsToAdopt; // This should never happen
-            return NULL;
-        }
+        // When the data is unavailable, and locale isn't passed in, last resort data is used.
+        symbolsToAdopt = new DecimalFormatSymbols(status);
 
         // Creates a DecimalFormat instance with the last resort number patterns.
-        f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
-        if (f == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        if (U_FAILURE(status)) {
-            delete f;
-            f = NULL;
-        }
-        return f;
-    }
-
-    ResourceBundle numberPatterns(resource.get(DecimalFormat::fgNumberPatterns, status));
-
-    // If not all the styled patterns exists for the NumberFormat in this locale,
-    // sets the status code to failure and returns nil.
-    //if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
-    if (numberPatterns.getSize() < fgNumberPatternsCount)
-        status = U_INVALID_FORMAT_ERROR;
-    if (U_FAILURE(status))
-        return NULL;
-
-    // Loads the decimal symbols of the desired locale.
-    DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);
-    if (symbolsToAdopt == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    if (U_FAILURE(status)) {
-        delete symbolsToAdopt;
-        return NULL;
-    }
-
-    // Creates the specified decimal format style of the desired locale.
-    if (style < numberPatterns.getSize()) {
-        UnicodeString pattern(numberPatterns.getStringEx(style, status));
-        if (U_SUCCESS(status)) {
-            // Here we assume that the locale passed in is in the canonical
-            // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
-            if(style==kCurrencyStyle){
-                char buf[8]={0};
-                int32_t bufCap = 8;
-                const char* locName = desiredLocale.getName();
-                bufCap = uloc_getKeywordValue(locName, "currency", buf, bufCap, &status);
-                if(U_SUCCESS(status) && bufCap > 0) {
-                    /* An explicit currency was requested */
-                    UErrorCode localStatus = U_ZERO_ERROR;
-                    ResourceBundle currencies(resource.getWithFallback("Currencies", localStatus));
-                    ResourceBundle currency(currencies.getWithFallback(buf,localStatus));
-                    if(U_SUCCESS(localStatus) && currency.getSize()>2) {
-                        ResourceBundle elements = currency.get(2, localStatus);
-                        UnicodeString currPattern = elements.getStringEx((int32_t)0, localStatus);
-                        UnicodeString decimalSep = elements.getStringEx((int32_t)1, localStatus);
-                        UnicodeString groupingSep = elements.getStringEx((int32_t)2, localStatus);
-                        if(U_SUCCESS(localStatus)){
-                            symbolsToAdopt->setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, groupingSep);
-                            symbolsToAdopt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, decimalSep);
-                            pattern = currPattern;
-                        }
-                        if (status == U_ZERO_ERROR) {
-                            status = localStatus;
-                        }
-                    }
-                    /* else An explicit currency was requested and is unknown or locale data is malformed. */
-                    /* ucurr_* API will get the correct value later on. */
-                }
-            }
-            if (U_FAILURE(status)) {
-                delete symbolsToAdopt;
-                return NULL;
-            }
-            f = new DecimalFormat(pattern, symbolsToAdopt, status);
-        }
-        else {
-            return NULL;
-        }
+        pattern.setTo(TRUE, fgLastResortNumberPatterns[style], -1);
     }
     else {
-        // If the requested style doesn't exist, use a last-resort style.
-        // This is to support scientific styles before we have all the
-        // resource data in place.
-        f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
+        // If not all the styled patterns exists for the NumberFormat in this locale,
+        // sets the status code to failure and returns nil.
+        if (ures_getSize(numberPatterns) < fgNumberPatternsCount) {
+            status = U_INVALID_FORMAT_ERROR;
+            goto cleanup;
+        }
+
+        // Loads the decimal symbols of the desired locale.
+        symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);
+
+        int32_t patLen = 0;
+        const UChar *patResStr = ures_getStringByIndex(numberPatterns, (int32_t)style, &patLen, &status);
+        // Creates the specified decimal format style of the desired locale.
+        pattern.setTo(TRUE, patResStr, patLen);
     }
-    
-    if (f == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+    if (U_FAILURE(status) || symbolsToAdopt == NULL) {
+        goto cleanup;
     }
+
+    // Here we assume that the locale passed in is in the canonical
+    // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
+    if(style==kCurrencyStyle){
+        char currencyCode[8]={0};
+        int32_t currencyCodeCap = sizeof(currencyCode);
+        const char* locName = desiredLocale.getName();
+        currencyCodeCap = uloc_getKeywordValue(locName, "currency", currencyCode, currencyCodeCap, &status);
+        if(U_SUCCESS(status) && currencyCodeCap > 0) {
+            /* An explicit currency was requested */
+            UErrorCode localStatus = U_ZERO_ERROR;
+            UResourceBundle *currency = ures_getByKeyWithFallback(resource, "Currencies", NULL, &localStatus);
+            currency = ures_getByKeyWithFallback(currency, currencyCode, currency, &localStatus);
+            if(U_SUCCESS(localStatus) && ures_getSize(currency)>2) {
+                currency = ures_getByIndex(currency, 2, currency, &localStatus);
+                int32_t currPatternLen = 0;
+                const UChar *currPattern = ures_getStringByIndex(currency, (int32_t)0, &currPatternLen, &localStatus);
+                UnicodeString decimalSep = ures_getStringByIndex(currency, (int32_t)1, NULL, &localStatus);
+                UnicodeString groupingSep = ures_getStringByIndex(currency, (int32_t)2, NULL, &localStatus);
+                if(U_SUCCESS(localStatus)){
+                    symbolsToAdopt->setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, groupingSep);
+                    symbolsToAdopt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, decimalSep);
+                    pattern.setTo(TRUE, currPattern, currPatternLen);
+                    status = localStatus;
+                }
+            }
+            ures_close(currency);
+            /* else An explicit currency was requested and is unknown or locale data is malformed. */
+            /* ucurr_* API will get the correct value later on. */
+        }
+        /* else no currency keyword used. */
+    }
+    f = new DecimalFormat(pattern, symbolsToAdopt, status);
+    if (U_FAILURE(status) || f == NULL) {
+        goto cleanup;
+    }
+
+    f->setLocaleIDs(ures_getLocaleByType(numberPatterns, ULOC_VALID_LOCALE, &status),
+                    ures_getLocaleByType(numberPatterns, ULOC_ACTUAL_LOCALE, &status));
+cleanup:
+    ures_close(numberPatterns);
+    ures_close(resource);
     if (U_FAILURE(status)) {
-        delete f;
-        f = NULL;
+        /* If f exists, then it will delete the symbols */
+        if (f==NULL) {
+            delete symbolsToAdopt;
+        }
+        else {
+            delete f;
+        }
         return NULL;
     }
-    f->setLocales(numberPatterns);
+    if (f == NULL || symbolsToAdopt == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        f = NULL;
+    }
     return f;
 }
 

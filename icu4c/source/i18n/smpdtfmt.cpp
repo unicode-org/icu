@@ -30,7 +30,7 @@
 
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtfmtsym.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/msgfmt.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
@@ -278,17 +278,17 @@ void SimpleDateFormat::construct(EStyle timeStyle,
     initializeCalendar(NULL, locale, status);
 
     CalendarData calData(locale, fCalendar?fCalendar->getType():NULL, status);
-    UResourceBundle *dtp = calData.getByKey(gDateTimePatternsTag, status);
-    ResourceBundle dateTimePatterns(dtp, status);
+    UResourceBundle *dateTimePatterns = calData.getByKey(gDateTimePatternsTag, status);
     if (U_FAILURE(status)) return;
 
-    if (dateTimePatterns.getSize() <= kDateTime)
+    if (ures_getSize(dateTimePatterns) <= kDateTime)
     {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
 
-    setLocales(dateTimePatterns);
+    setLocaleIDs(ures_getLocaleByType(dateTimePatterns, ULOC_VALID_LOCALE, &status),
+                 ures_getLocaleByType(dateTimePatterns, ULOC_ACTUAL_LOCALE, &status));
 
     // create a symbols object from the locale
     initializeSymbols(locale,fCalendar, status);
@@ -299,52 +299,43 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         return;
     }
 
-    UnicodeString str;
-
-    // Move dateStyle from the range [0, 3] to [4, 7] if necessary
-    //if (dateStyle >= 0 && dateStyle < DATE_OFFSET) dateStyle = (EStyle)(dateStyle + DATE_OFFSET);
+    const UChar *resStr;
+    int32_t resStrLen = 0;
 
     // if the pattern should include both date and time information, use the date/time
     // pattern string as a guide to tell use how to glue together the appropriate date
     // and time pattern strings.  The actual gluing-together is handled by a convenience
     // method on MessageFormat.
-    if ((timeStyle != kNone) &&
-        (dateStyle != kNone))
+    if ((timeStyle != kNone) && (dateStyle != kNone))
     {
-        //  Object[] dateTimeArgs = {
-        //     dateTimePatterns[timeStyle], dateTimePatterns[dateStyle]
-        //  };
-        //  pattern = MessageFormat.format(dateTimePatterns[8], dateTimeArgs);
+        Formattable timeDateArray[2];
 
-        Formattable *timeDateArray = new Formattable[2];
-        /* test for NULL */
-        if (timeDateArray == 0) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        //timeDateArray[0].setString(UnicodeString(dateTimePatterns[timeStyle]));
-        //timeDateArray[1].setString(UnicodeString(dateTimePatterns[dateStyle]));
         // use Formattable::adoptString() so that we can use fastCopyFrom()
         // instead of Formattable::setString()'s unaware, safe, deep string clone
         // see Jitterbug 2296
-        timeDateArray[0].adoptString(&(new UnicodeString)->fastCopyFrom(dateTimePatterns.getStringEx(timeStyle, status)));
-        timeDateArray[1].adoptString(&(new UnicodeString)->fastCopyFrom(dateTimePatterns.getStringEx(dateStyle, status)));
+        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)timeStyle, &resStrLen, &status);
+        timeDateArray[0].adoptString(new UnicodeString(TRUE, resStr, resStrLen));
+        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
+        timeDateArray[1].adoptString(new UnicodeString(TRUE, resStr, resStrLen));
 
-        //MessageFormat::format(UnicodeString(dateTimePatterns[kDateTime]), timeDateArray, 2, fPattern, status);
-        MessageFormat::format(dateTimePatterns.getStringEx(kDateTime, status), timeDateArray, 2, fPattern, status);
-        delete [] timeDateArray;
+        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)kDateTime, &resStrLen, &status);
+        MessageFormat::format(UnicodeString(TRUE, resStr, resStrLen), timeDateArray, 2, fPattern, status);
     }
-    
     // if the pattern includes just time data or just date date, load the appropriate
     // pattern string from the resources
-    //else if (timeStyle != kNone) fPattern = UnicodeString(dateTimePatterns[timeStyle]);
-    //else if (dateStyle != kNone) fPattern = UnicodeString(dateTimePatterns[dateStyle]);
-    // fastCopyFrom() - see DateFormatSymbols::assignArray comments
-    else if (timeStyle != kNone) fPattern.fastCopyFrom(dateTimePatterns.getStringEx(timeStyle, status));
-    else if (dateStyle != kNone) fPattern.fastCopyFrom(dateTimePatterns.getStringEx(dateStyle, status));
+    // setTo() - see DateFormatSymbols::assignArray comments
+    else if (timeStyle != kNone) {
+        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)timeStyle, &resStrLen, &status);
+        fPattern.setTo(TRUE, resStr, resStrLen);
+    }
+    else if (dateStyle != kNone) {
+        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
+        fPattern.setTo(TRUE, resStr, resStrLen);
+    }
     
     // and if it includes _neither_, that's an error
-    else status = U_INVALID_FORMAT_ERROR;
+    else
+        status = U_INVALID_FORMAT_ERROR;
 
     // finally, finish initializing by creating a Calendar and a NumberFormat
     initialize(locale, status);
