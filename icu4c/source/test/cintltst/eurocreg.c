@@ -64,21 +64,24 @@ char convertersToCheck[][15] = {
   "ibm1148",
   "ibm1149",
   "ibm1153",
+  "ibm1154",
+  "ibm1155",
+  "ibm1156",
+  "ibm1157",
+  "ibm1158",
+  "ibm-1159",
   "ibm12712",
   "ibm16804",
+  "ibm-1160",
+  "ibm-1162",
+  "ibm-1164",
+
   "ibm-858", /* was "cp850" changed 2000nov28 */
   /* duplicate "cp850" removed 2000nov28 */
-  "cpibm1155",
   "cp857",
-  "cp1025",
-  "cp1123",
-  "cpibm1157",
-  "cpibm1156",
   "ibm-12712", /* was "cp424" changed 2000nov28 */
   "ibm-4899", /* was "cp803" changed 2000nov28 */
   "cp862",
-  "cp9030",
-  "cp1130",
   "cp1258",
   "cp950",
   "cp1253",
@@ -101,13 +104,13 @@ char convertersToCheck[][15] = {
       "cp1129",*/
   "cp1027",
   "cp300",
-  /*  "cp4930",
-      "cp1364",*/
-  /* "cp1362" removed 2000nov28
-     "cp1363" removed 2000nov28 */
-  "cp1114",
-  "cp947",
-  "cp28709",
+  /*  "cp4930",*/
+  "cp1364",
+  /* "cp1362" removed 2000nov28 */
+  "cp1363",
+  /* "cp1114", removed 2002jul3 
+     "cp947", removed 2002jul3 */
+  "gb18030",
   ""};
 
 UBool isEuroAware(UConverter*);
