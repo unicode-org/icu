@@ -162,6 +162,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(71,TestAnyX);
         TESTCASE(72,TestSourceTargetSet);
         TESTCASE(73,TestGurmukhiDevanagari);
+        TESTCASE(74,TestRuleWhitespace);
         default: name = ""; break;
     }
 }
@@ -3615,8 +3616,8 @@ void TransliteratorTest::TestSourceTargetSet() {
 
     // Rules
     const char* r =
-	"a > b; "
-	"r [x{lu}] > q;";
+        "a > b; "
+        "r [x{lu}] > q;";
 
     // Expected source
     UnicodeSet expSrc("[arx{lu}]", ec);
@@ -3628,29 +3629,60 @@ void TransliteratorTest::TestSourceTargetSet() {
     Transliterator* t = Transliterator::createFromRules("test", r, UTRANS_FORWARD, pe, ec);
 
     if (U_FAILURE(ec)) {
-	delete t;
-	errln("FAIL: Couldn't set up test");
-	return;
+        delete t;
+        errln("FAIL: Couldn't set up test");
+        return;
     }
 
     UnicodeSet src; t->getSourceSet(src);
     UnicodeSet trg; t->getTargetSet(trg);
 
     if (src == expSrc && trg == expTrg) {
-	UnicodeString a, b;
-	logln((UnicodeString)"Ok: " +
-	      r + " => source = " + src.toPattern(a, TRUE) +
-	      ", target = " + trg.toPattern(b, TRUE));
+        UnicodeString a, b;
+        logln((UnicodeString)"Ok: " +
+              r + " => source = " + src.toPattern(a, TRUE) +
+              ", target = " + trg.toPattern(b, TRUE));
     } else {
-	UnicodeString a, b, c, d;
-	errln((UnicodeString)"FAIL: " +
-	      r + " => source = " + src.toPattern(a, TRUE) +
-	      ", expected " + expSrc.toPattern(b, TRUE) +
-	      "; target = " + trg.toPattern(c, TRUE) +
-	      ", expected " + expTrg.toPattern(d, TRUE));
+        UnicodeString a, b, c, d;
+        errln((UnicodeString)"FAIL: " +
+              r + " => source = " + src.toPattern(a, TRUE) +
+              ", expected " + expSrc.toPattern(b, TRUE) +
+              "; target = " + trg.toPattern(c, TRUE) +
+              ", expected " + expTrg.toPattern(d, TRUE));
     }
 
     delete t;
+}
+
+/**
+ * Test handling of rule whitespace, for both RBT and UnicodeSet.
+ */
+void TransliteratorTest::TestRuleWhitespace() {
+    // Rules
+    const char* r = "a > \\u200E b;";
+    
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+    Transliterator* t = Transliterator::createFromRules("test", CharsToUnicodeString(r), UTRANS_FORWARD, pe, ec);
+    
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Couldn't set up test");
+    } else {
+        expect(*t, "a", "b");
+    }
+    delete t;
+    
+    // UnicodeSet
+    ec = U_ZERO_ERROR;
+    UnicodeSet set(CharsToUnicodeString("[a \\u200E]"), ec);
+    
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Couldn't set up test");
+    } else {
+        if (set.contains(0x200E)) {
+            errln("FAIL: U+200E not being ignored by UnicodeSet");
+        }
+    }
 }
 
 //======================================================================
