@@ -702,7 +702,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     /* first, check if there are any expansions */
     /* if there are expansions, we need to do a little bit more processing */
     /* since parts of expansion can be tailored, while others are not */
-    if(tok->expansion != 0 && tok->prefix == 0) {
+    if(tok->expansion != 0) {
       uint32_t len = tok->expansion >> 24;
       uint32_t currentSequenceLen = len;
       uint32_t expOffset = tok->expansion & 0x00FFFFFF;
@@ -1018,14 +1018,27 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           || (noOfDec == 1 && *decomp != (UChar)u))
         {
           if(ucol_strcoll(tempColl, (UChar *)&u, 1, decomp, noOfDec) != UCOL_EQUAL) {
-            el.uchars[0] = (UChar)u;
-            el.cPoints = el.uchars;
-            el.cSize = 1;
+            el.cPoints = decomp;
+            el.cSize = noOfDec;
             el.noOfCEs = 0;
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
 
-            ucol_setText(colEl, decomp, noOfDec, status);
-            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
-              el.noOfCEs++;
+            UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
+            if(prefix == NULL) {
+              el.uchars[0] = (UChar)u;
+              el.cPoints = el.uchars;
+              el.cSize = 1;
+              el.noOfCEs = 0;
+              el.prefix = el.prefixChars;
+              el.prefixSize = 0;
+              ucol_setText(colEl, decomp, noOfDec, status);
+              while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+                el.noOfCEs++;
+              }
+            } else {
+              el.noOfCEs = 1;
+              el.CEs[0] = prefix->mapCE;
             }
 
             uprv_uca_addAnElement(t, &el, status);
