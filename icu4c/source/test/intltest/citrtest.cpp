@@ -55,7 +55,7 @@ void CharIterTest::TestConstructionAndEquality() {
     if (test1d->endIndex() > testText.length())
         errln("Construction failed: endIndex is greater than the text length");
     if (test1d->getIndex() < test1d->startIndex() || test1d->endIndex() < test1d->getIndex())
-        errln("Construction failed: startIndex is negative");
+        errln("Construction failed: index is invalid");
 
     if (*test1 == *test2 || *test1 == *test3 || *test1 == *test4)
         errln("Construction or operator== failed: Unequal objects compared equal");
@@ -120,18 +120,18 @@ void CharIterTest::TestConstructionAndEquality() {
 
 }
 void CharIterTest::TestConstructionAndEqualityUChariter() {
-    const char* testTextchars= {"Now is the time for all good men to come to the aid of their country."};
-    const char* testText2chars={"Don't bother using this string."};
+    const char testTextchars[]= {"Now is the time for all good men to come to the aid of their country."};
+    const char testText2chars[]={"Don't bother using this string."};
 
-    UChar *testText = new UChar[strlen(testTextchars)+1];
-    UChar *testText2 = new UChar[strlen(testText2chars)+1];
+    UChar *testText = new UChar[sizeof(testTextchars)];
+    UChar *testText2 = new UChar[sizeof(testText2chars)];
 
     u_uastrcpy(testText,  testTextchars);
     u_uastrcpy(testText2, testText2chars);
-    
+
     UnicodeString result, result4, result5;
-    
-  
+
+
     UCharCharacterIterator* test1 = new UCharCharacterIterator(testText, u_strlen(testText));
     UCharCharacterIterator* test2 = new UCharCharacterIterator(testText, u_strlen(testText), 5);
     UCharCharacterIterator* test3 = new UCharCharacterIterator(testText, u_strlen(testText), 2, 20, 5);
@@ -142,14 +142,24 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     UCharCharacterIterator* test7a = new UCharCharacterIterator(testText, -1);
     UCharCharacterIterator* test7b = new UCharCharacterIterator(testText, -1);
     UCharCharacterIterator* test7c = new UCharCharacterIterator(testText, -1, 2, 20, 5);
-    
-     
+
+    // Bad parameters.
+    UCharCharacterIterator* test8a = new UCharCharacterIterator(testText, -1, -1, 20, 5);
+    UCharCharacterIterator* test8b = new UCharCharacterIterator(testText, -1, 2, 100, 5);
+    UCharCharacterIterator* test8c = new UCharCharacterIterator(testText, -1, 2, 20, 100);
+
+    if (test8a->startIndex() < 0)
+        errln("Construction failed: startIndex is negative");
+    if (test8b->endIndex() > sizeof(testTextchars))
+        errln("Construction failed: endIndex is greater than the text length");
+    if (test8c->getIndex() < test8c->startIndex() || test8c->endIndex() < test8c->getIndex())
+        errln("Construction failed: index is invalid");
 
     if (*test1 == *test2 || *test1 == *test3 || *test1 == *test4 )
         errln("Construction or operator== failed: Unequal objects compared equal");
     if (*test1 != *test5 )
         errln("clone() or equals() failed: Two clones tested unequal");
-    
+
     if (*test6 != *test1 )
         errln("copy construction or equals() failed: Two copies tested unequal");
 
@@ -185,6 +195,9 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     test1->setIndex(5);
     if (*test1 != *test2 || *test1 == *test5)
         errln("setIndex() failed");
+    test8b->setIndex32(0);
+    if (*test8a != *test8b)
+        errln("setIndex32() failed");
 
     *test1 = *test3;
     if (*test1 != *test3 || *test1 == *test5)

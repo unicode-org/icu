@@ -116,13 +116,14 @@ UCharCharacterIterator::last() {
 }
 
 UChar
-UCharCharacterIterator::setIndex(UTextOffset pos) {
-    if(pos < begin) {
+UCharCharacterIterator::setIndex(UTextOffset position) {
+    if(position < begin) {
         pos = begin;
-    } else if(pos > end) {
+    } else if(position > end) {
         pos = end;
+    } else {
+        pos = position;
     }
-    this->pos = pos;
     if(pos < end) {
         return text[pos];
     } else {
@@ -216,20 +217,20 @@ UCharCharacterIterator::last32() {
 }
 
 UChar32
-UCharCharacterIterator::setIndex32(UTextOffset pos) {
-    if(pos < begin) {
-        pos = begin;
-    } else if(pos > end) {
-        pos = end;
+UCharCharacterIterator::setIndex32(UTextOffset position) {
+    if(position < begin) {
+        position = begin;
+    } else if(position > end) {
+        position = end;
     }
-    if(pos < end) {
-        UTF_SET_CHAR_START(text, begin, pos);
-        UTextOffset i = this->pos = pos;
+    if(position < end) {
+        UTF_SET_CHAR_START(text, begin, position);
+        UTextOffset i = this->pos = position;
         UChar32 c;
         UTF_NEXT_CHAR(text, i, end, c);
         return c;
     } else {
-        this->pos = pos;
+        this->pos = position;
         return DONE;
     }
 }
