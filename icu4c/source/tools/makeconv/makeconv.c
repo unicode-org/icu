@@ -133,12 +133,14 @@ char *
 char *
   strtoupper (char *name)
 {
+  char *oldPtr = name;
+
   do {
     *name = (char)uprv_toupper(*name);
   }
   while (*(name++));
 
-  return name;
+  return oldPtr;
 }
 
 /* Returns true in c is a in set 'setOfChars', false otherwise
@@ -164,7 +166,7 @@ int32_t
 {
   int32_t i = 0;
 
-  while (line[i] && isInSet (line[i], separators))
+  while (line[i] && isInSet(line[i], separators))
     i++;
 
   return i;
@@ -178,7 +180,7 @@ char *
   int32_t i = nextTokenOffset (line, separators);
   int8_t j = 0;
 
-  while (line[i] && (!isInSet (line[i], separators)))
+  while (line[i] && (!isInSet(line[i], separators)))
     token[j++] = line[i++];
   token[j] = '\0';
 
@@ -410,7 +412,6 @@ int main(int argc, char* argv[])
     }
 
   return err;
-
 }
 
 
@@ -422,8 +423,10 @@ UConverterPlatform getPlatformFromName(char* name)
   getToken(myPlatform, name, mySeparators);
   strtoupper(myPlatform);
 
-  if (uprv_strcmp(myPlatform, "IBM") == 0) return UCNV_IBM;
-  else return UCNV_UNKNOWN;
+  if (uprv_strcmp(myPlatform, "IBM") == 0)
+    return UCNV_IBM;
+  else
+    return UCNV_UNKNOWN;
 }
 
 int32_t getCodepageNumberFromName(char* name)
