@@ -29,6 +29,7 @@
 *                           getLanguagesForCountry()
 *   03/16/99    bertrand    rehaul.
 *   07/21/99    stephen     Added U_CFUNC setDefault
+*	11/09/99	weiv		Added const char * getName() const;
 *******************************************************************************
 */
 
@@ -413,6 +414,12 @@ Locale::getName(UnicodeString& name) const
 {
   name = fullName;
   return name;
+}
+
+const char * 
+Locale::getName() const
+{
+  return fullName;
 }
 
 // deprecated

@@ -47,6 +47,7 @@
 *                           Cleaned up.
 * 06/14/99      stephen     Removed methods taking a filename suffix.
 * 06/22/99      stephen     Added missing T_FileStream_close in parse()
+* 11/09/99		weiv		Added getLocale(), rewritten constructForLocale()
 *******************************************************************************
 */
 
@@ -291,7 +292,7 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const UnicodeString&    localeName,
                                 UErrorCode&              status)
   :   fPath(path, kDefaultSuffix),
-      fRealLocaleID(localeName),
+	  fRealLocale(localeName),
       fIsDataOwned(TRUE),
       fVersionID(0),
       fgCache(fgUserCache),
@@ -376,35 +377,33 @@ ResourceBundle::constructForLocale(const PathInfo& path,
   fPath = path;
   fIsDataOwned = FALSE;
   fVersionID = 0;
-  
+
+  // fRealLocale can be inited in three ways, see 1), 2), 3)
+  UnicodeString returnedLocale;
+  locale.getName(returnedLocale);
+  if (returnedLocale.size()!=0) {
+	// 1) Desired Locale has a name
+	fRealLocale = Locale(returnedLocale); 
+  } else {
+	// 2) Desired Locale name is empty, so we use default locale for the system
+	fRealLocale = Locale(kDefaultLocaleName); 
+  }
   error = U_ZERO_ERROR;
-  
-  locale.getName(fRealLocaleID);
-  
-  // if the locale we were passed is Locale("", "", ""), that, by
-  // convention, refers to the root locale (default.txt), even when
-  // the system default locale is something else (otherwise there's no
-  // way to get to it).  We can accomplish this by changing the locale
-  // name to "default" here.  I'm not sure this is the best way to do
-  // this, but it's simple and it works.
-  if(fRealLocaleID.size() == 0)
-    fRealLocaleID = kDefaultLocaleName;
-  
   for(i = 1; i < kDataCount; ++i) {
     fData[i] = 0;
     fDataStatus[i] = U_INTERNAL_PROGRAM_ERROR;
     fLoaded[i] = FALSE;
   }
   
-  UnicodeString returnedLocale;
   error = U_ZERO_ERROR;
-  fData[0] = getHashtableForLocale(fRealLocaleID, returnedLocale, error);
+  fData[0] = getHashtableForLocale(fRealLocale.getName(), returnedLocale, error);
   fLoaded[0] = TRUE;
   fDataStatus[0] = U_ZERO_ERROR;
-  if(U_SUCCESS(error)) 
-    fRealLocaleID = returnedLocale;
+  if(U_SUCCESS(error))
+		// 3) We're unable to get the desired Locale, so we're using what is provided (fallback occured)
+		fRealLocale = Locale(returnedLocale);
   
-  fLocaleIterator = new LocaleFallbackIterator(fRealLocaleID, 
+  fLocaleIterator = new LocaleFallbackIterator(fRealLocale.getName(), 
 					       kDefaultLocaleName, FALSE);
 }
 
@@ -1119,6 +1118,11 @@ ResourceBundle::addToCache(const UnicodeString& localeName,
     uhash_putKey(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF, 
 		 hashtable, &err);
   }
+}
+
+const Locale &ResourceBundle::getLocale(void) const
+{
+	return fRealLocale;
 }
 
 ResourceBundle::PathInfo::PathInfo()
