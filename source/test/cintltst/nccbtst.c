@@ -431,7 +431,6 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	const UChar *sourceLimit;
 	UBool checkOffsets = TRUE;
 	UBool doFlush;
-	UConverterFromUCallback action;
 	char junk[9999];
 	char offset_str[9999];
 	char *p;
@@ -459,12 +458,11 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	/*----setting the callback routine----*/
 	   
     
-	ucnv_setFromUCallBack (conv,  /*action*/callback, NULL, &oldAction, &oldContext, &status);
+	ucnv_setFromUCallBack (conv, callback, NULL, &oldAction, &oldContext, &status);
 	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
 	}
-	action=ucnv_getFromUCallBack(conv);
     /*------------------------*/
 	src = source;
 	targ = junkout;
@@ -621,7 +619,6 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 	char junk[9999];
 	char offset_str[9999];
 	UChar *p;
-	UConverterToUCallback action;
     UConverterToUCallback oldAction = NULL;
     void* oldContext = NULL;
 
@@ -664,7 +661,6 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
 	}
 
-    action = ucnv_getToUCallBack(conv);
 	/*-------------------------------------*/
 	if ( gOutBufferSize != realBufferSize )
 	  checkOffsets = FALSE;

@@ -393,14 +393,22 @@ UConverterPlatform  ucnv_getPlatform (const UConverter * converter,
   return (UConverterPlatform)converter->sharedData->staticData->platform;
 }
 
-UConverterToUCallback  ucnv_getToUCallBack (const UConverter * converter)
+U_CAPI void U_EXPORT2
+    ucnv_getToUCallBack (const UConverter * converter,
+                         UConverterToUCallback *action,
+                         void **context)
 {
-  return converter->fromCharErrorBehaviour;
+  *action = converter->fromCharErrorBehaviour;
+  *context = converter->toUContext;
 }
 
-UConverterFromUCallback  ucnv_getFromUCallBack (const UConverter * converter)
+U_CAPI void U_EXPORT2
+    ucnv_getFromUCallBack (const UConverter * converter,
+                           UConverterFromUCallback *action,
+                           void **context)
 {
-  return converter->fromUCharErrorBehaviour;
+  *action = converter->fromUCharErrorBehaviour;
+  *context = converter->fromUContext;
 }
 
 void   ucnv_setToUCallBack (UConverter * converter,
@@ -414,9 +422,9 @@ void   ucnv_setToUCallBack (UConverter * converter,
 
   if (U_FAILURE (*err))
     return;
-  oldAction = &converter->fromCharErrorBehaviour;
+  *oldAction = converter->fromCharErrorBehaviour;
   converter->fromCharErrorBehaviour = newAction;
-  oldContext = &converter->toUContext;
+  *oldContext = converter->toUContext;
   converter->toUContext = newContext;
 }
 
@@ -430,9 +438,9 @@ void   ucnv_setFromUCallBack (UConverter * converter,
   
   if (U_FAILURE (*err))
     return;
-  oldAction = &converter->fromUCharErrorBehaviour;
+  *oldAction = converter->fromUCharErrorBehaviour;
   converter->fromUCharErrorBehaviour = newAction;
-  oldContext = &converter->fromUContext;
+  *oldContext = converter->fromUContext;
   converter->fromUContext = newContext;
 }
 void   ucnv_fromUnicode (UConverter * _this,
