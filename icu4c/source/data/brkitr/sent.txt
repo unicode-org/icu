@@ -23,9 +23,7 @@ $Numeric = [:LineBreak = Numeric:];
 
 $ATerm = [.];
 
-$Term  = [\u0021 \u003F \u0589 \u061F \u06D4 \u0700 \u0701 \u0702 \u0964 \u1362
-          \u1367 \u1368 \u104a \u104b \u166e \u1803 \u1809 \u203C \u203D \u2047 
-          \u2048 \u2049 \u3002 \uFE52 \uFE57 \uFF01 \uFF0E \uFF1F \uFF61];
+$Term  = [:STerm:];
 
 $Close   = [[:Open_Punctuation:] [:Close_Punctuation:] [:Linebreak = Quotation:] -
            [[:name = HEBREW PUNCTUATION GERESH:] $ATerm $Term]];
