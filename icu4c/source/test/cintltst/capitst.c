@@ -142,7 +142,7 @@ void TestProperty()
 {    
     UCollator *col, *ruled;
     UChar *disName;
-    int32_t len, i;
+    int32_t len = 0, i = 0;
     UChar *source, *target;
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
@@ -162,7 +162,8 @@ void TestProperty()
         log_err("Default Collator creation failed.: %s\n", myErrorName(status));
         return;
     }
-
+#if 0
+    /* turned off until we settle on a real version number */
     ucol_getVersion(col, versionArray);
     for (i=0; i<4; ++i) {
       if (versionArray[i] < minVersionArray[i] ||
@@ -172,6 +173,8 @@ void TestProperty()
         break;
       }
     }
+#endif
+
     source=(UChar*)malloc(sizeof(UChar) * 12);
     target=(UChar*)malloc(sizeof(UChar) * 12);
     
