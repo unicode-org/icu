@@ -1050,7 +1050,7 @@ uregex_split(   URegularExpression      *regexp,
                 // No fields are left.  Recycle the last one for holding the trailing part of
                 //   the input string.
                 i = destFieldsCapacity-1;
-                destIdx = destFields[i] - destFields[0];
+                destIdx = (int32_t)(destFields[i] - destFields[0]);
             }
             
             destFields[i] = &destBuf[destIdx];

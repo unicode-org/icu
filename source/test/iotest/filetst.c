@@ -416,7 +416,7 @@ static void TestfgetsBuffers(void) {
     UChar expectedBuffer[2048];
     static const char testStr[] = "This is a test string that tests u_fgets. It makes sure that we don't try to read too much!";
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-16");
-    int32_t expectedSize = strlen(testStr);
+    int32_t expectedSize = (int32_t)strlen(testStr);
     int32_t readSize;
     int32_t repetitions;
 
@@ -569,7 +569,7 @@ static void TestfgetsLineCount(void) {
     static const char testStr[] = "This is a test string that tests u_fgets. It makes sure that we don't try to read too much!";
     UFILE *myFile = NULL;
     FILE *stdFile = fopen(STANDARD_TEST_FILE, "w");
-    int32_t expectedSize = strlen(testStr);
+    int32_t expectedSize = (int32_t)strlen(testStr);
     int32_t repetitions;
     int32_t nlRepetitions;
 
@@ -606,7 +606,7 @@ static void TestfgetsLineCount(void) {
             log_err("Didn't get the charBuffer back\n");
             continue;
         }
-        u_uastrncpy(expectedBuffer, charBuffer, strlen(charBuffer)+1);
+        u_uastrncpy(expectedBuffer, charBuffer, (int32_t)strlen(charBuffer)+1);
         if (returnedUCharBuffer != buffer) {
             log_err("Didn't get the buffer back\n");
             continue;
