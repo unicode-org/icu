@@ -100,6 +100,10 @@ typedef unsigned long uint32_t;
 #   define U_SIZEOF_WCHAR_T 2
 #endif
 
+#ifdef AIX
+#   define U_SIZEOF_WCHAR_T 2
+#endif
+
 /*===========================================================================*/
 /* Symbol import-export control                                              */
 /*===========================================================================*/
