@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/08/13 23:43:27 $
- * $Revision: 1.4 $
+ * $Date: 2002/09/07 00:15:35 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -18,6 +18,12 @@ import java.util.MissingResourceException;
 import java.io.Serializable;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.text.DecimalFormatSymbols;
+
+import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.impl.ICUService.Key;
+import com.ibm.icu.impl.ICUService.Factory;
+import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A
@@ -46,18 +52,34 @@ public class Currency implements Serializable {
      */
     private String isoCode;
 
+    private static ICULocaleService service;
+
+    private static ICULocaleService getService() {
+        if (service == null) {
+            service = new ICULocaleService();
+
+            class CurrencyFactory extends ICUResourceBundleFactory {
+                CurrencyFactory() {
+                    super ("LocaleElements", "CurrencyElements", true);
+                }
+
+                protected Object createFromBundle(ResourceBundle bundle, Key key) {
+                    String[] ce = bundle.getStringArray("CurrencyElements");
+                    return new Currency(ce[1]);
+                }
+            }
+                
+            service.registerFactory(new CurrencyFactory());
+        }
+        return service;
+    }
+
     /**
      * Returns a currency object for the default currency in the given
      * locale.
      */
     public static Currency getInstance(Locale locale) {
-        // Look up the CurrencyElements resource for this locale.
-        // It contains: [0] = currency symbol, e.g. "$";
-        // [1] = intl. currency symbol, e.g. "USD";
-        // [2] = monetary decimal separator, e.g. ".".
-        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-        String[] currencyElements = rb.getStringArray("CurrencyElements");
-        return getInstance(currencyElements[1]);
+        return (Currency)getService().get(locale);
     }
 
     /**
@@ -65,6 +87,60 @@ public class Currency implements Serializable {
      */
     public static Currency getInstance(String theISOCode) {
         return new Currency(theISOCode);
+    }
+
+    /**
+     * Registers a new currency for the provided locale.  The returned object
+     * is a key that can be used to unregister this currency object.
+     */
+    public static Object register(Currency currency, Locale locale) {
+        return getService().registerObject(currency, locale);
+    }
+
+    /**
+     * Unregister the currency associated with this key (obtained from
+     * registerInstance).
+     */
+    public static boolean unregister(Object registryKey) {
+        return getService().unregisterFactory((Factory)registryKey);
+    }
+
+    /**
+     * Return an array of the locales for which a currency
+     * is defined.
+     */
+    public static Locale[] getAvailableLocales() {
+        return getService().getAvailableLocales();
+    }
+
+    /**
+     * Return a hashcode for this currency.
+     */
+    public int hashCode() {
+        return isoCode.hashCode();
+    }
+
+    /**
+     * Return true if rhs is a Currency instance, 
+     * is non-null, and has the same currency code.
+     */
+    public boolean equals(Object rhs) {
+        try {
+            return equals((Currency)rhs);
+        }
+        catch (ClassCastException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Return true if c is non-null and has the same currency code.
+     */
+    public boolean equals(Currency c) {
+        if (c == null) return false;
+        if (c == this) return true;
+        return c.getClass() == Currency.class &&
+            this.isoCode.equals(c.isoCode);
     }
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/08/13 23:40:52 $
- * $Revision: 1.5 $
+ * $Date: 2002/09/07 00:15:33 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-
+import java.util.TreeSet;
 
 public class ICULocaleService extends ICUService {
     Locale fallbackLocale;
@@ -33,6 +33,57 @@ public class ICULocaleService extends ICUService {
     public ICULocaleService() {
 	fallbackLocale = Locale.getDefault();
 	fallbackLocaleName = LocaleUtility.canonicalLocaleString(fallbackLocale.toString());
+    }
+
+    /**
+     * Convenience override for callers using locales.
+     */
+    public Object get(Locale locale) {
+        return get(locale, null);
+    }
+
+    /**
+     * Convenience override for callers using locales.
+     */
+    public Object get(Locale locale, Locale[] actualLocaleReturn) {
+        if (actualLocaleReturn == null) {
+            return get(locale.toString());
+        }
+        String[] temp = new String[1];
+        Object result = get(locale.toString(), temp);
+        actualLocaleReturn[0] = LocaleUtility.getLocaleFromName(temp[0]);
+        return result;
+    }
+
+    /**
+     * Convenience override for callers using locales.
+     */
+    public Factory registerObject(Object obj, Locale locale) {
+        return registerObject(obj, locale, true);
+    }
+
+    /**
+     * Convenience override for callers using locales.
+     */
+    public Factory registerObject(Object obj, Locale locale, boolean visible) {
+        return registerObject(obj, locale.toString(), visible);
+    }
+
+    /**
+     * Convenience method for callers using locales.  This is the typical
+     * current API for this operation.
+     */
+    public Locale[] getAvailableLocales() {
+        TreeSet sort = new TreeSet(String.CASE_INSENSITIVE_ORDER);
+        sort.addAll(getVisibleIDs());
+        Iterator iter = sort.iterator();
+        Locale[] locales = new Locale[sort.size()];
+        int n = 0;
+        while (iter.hasNext()) {
+            Locale loc = LocaleUtility.getLocaleFromName((String)iter.next());
+            locales[n++] = loc;
+        }
+        return locales;
     }
 
     /**

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2002/07/31 19:37:06 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/09/07 00:15:25 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -239,6 +239,49 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!s.equals("1,50 " + EURO))
             errln("FAIL: Expected 1,50 F, got " + s);
     
+    }
+
+    /**
+     * Test the Currency registration-related API.
+     */
+    public void TestCurrencyRegistration() {
+        // available locales
+        Locale[] locales = Currency.getAvailableLocales();
+        logln("available locales");
+        for (int i = 0; i < locales.length; ++i) {
+            logln("[" + i + "] " + locales[i].toString());
+        }
+
+        // identical instance
+        Currency fr0 = Currency.getInstance(Locale.FRANCE);
+        Currency fr1 = Currency.getInstance(Locale.FRANCE);
+        if (fr0 != fr1) {
+            errln("non-identical currencies for locale");
+        }
+
+        Currency us0 = Currency.getInstance(Locale.US);
+
+        // replace US with FR
+        Object key = Currency.register(fr0, Locale.US);
+
+        logln("FRENCH currency: " + fr0);
+        logln("US currency: " + us0);
+
+        // query US and get FR back
+        Currency us1 = Currency.getInstance(Locale.US);
+        if (us1 != fr0) {
+            errln("registry failed");
+        }
+        logln("new US currency: " + us1);
+
+        // unregister and get US back
+        if (!Currency.unregister(key)) {
+            errln("failed to unregister key: " + key);
+        }
+        Currency us2 = Currency.getInstance(Locale.US);
+        if (!us2.equals(us0)) {
+            errln("after unregister US didn't get original currency back: " + us2 + " != " + us0);
+        }
     }
 
     /**
