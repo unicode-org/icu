@@ -65,7 +65,7 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            if(TestUtil.isModularBuild()){
+            if(isModularBuild()){
                 infoln("Could not find Locale data");
             }else{
                 throw  e;
@@ -100,7 +100,7 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            if(TestUtil.isModularBuild()){
+            if(isModularBuild()){
                 infoln("Could not find Locale data");
             }else{
                 throw  e;
@@ -174,7 +174,7 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            if(TestUtil.isModularBuild()){
+            if(isModularBuild()){
                 infoln("Could not find Locale data");
             }else{
                 throw e;
@@ -207,7 +207,7 @@ public class TestUScript extends TestFmwk{
             i++;
         }
         if(numErrors >0 ){
-            if(TestUtil.isModularBuild()){
+            if(isModularBuild()){
                 infoln("Could not find Locale data");
             }else{
                 errln("Number of Errors in UScript.getName() : " + numErrors);
@@ -242,7 +242,7 @@ public class TestUScript extends TestFmwk{
             i++;
         }
         if(numErrors >0 ){
-            if(TestUtil.isModularBuild()){
+            if(isModularBuild()){
                 infoln("Could not find Locale data");
             }else{
                 errln("Number of Errors in UScript.getShortName() : " + numErrors);

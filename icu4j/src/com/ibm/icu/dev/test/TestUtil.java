@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/01/28 18:55:32 $
- * $Revision: 1.3 $
+ * $Date: 2003/02/01 00:51:29 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -125,17 +125,6 @@ public class TestUtil {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns true if ICU is built modularly without locale data
-     */
-    public static boolean isModularBuild(){
-        String s = System.getProperty(DATA_MODULAR_BUILD_PROPERTY);
-        if (s == null) {
-            return false;
-        }
-        return true;
     }
 
 }

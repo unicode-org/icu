@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/01/28 18:55:33 $
-* $Revision: 1.47 $
+* $Date: 2003/02/01 00:51:47 $
+* $Revision: 1.48 $
 *
 *******************************************************************************
 */
@@ -904,7 +904,7 @@ public final class UCharacterTest extends TestFmwk
             }
         }catch(IllegalArgumentException e){
             if(e.getMessage().indexOf("unames.icu") >= 0){
-                if(TestUtil.isModularBuild()){
+                if(isModularBuild()){
                     infoln("Could not find unames.icu. No tests executed.");
                 }
             }else{
@@ -1062,7 +1062,7 @@ public final class UCharacterTest extends TestFmwk
             }
         }catch(Exception e){
             if(e.getMessage().indexOf("unames.icu") >= 0){
-                if(TestUtil.isModularBuild()){
+                if(isModularBuild()){
                     infoln("Could not find unames.icu. No tests executed");
                     return;
                 }

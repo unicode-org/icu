@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/01/28 18:55:32 $
- * $Revision: 1.34 $
+ * $Date: 2003/02/01 00:51:30 $
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,9 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +47,7 @@ public class TestFmwk implements TestLog {
      */
     private static final String copyrightNotice
         = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
+    
     //------------------------------------------------------------------------
     // Everything below here is boilerplate code that makes it possible
     // to add a new test by simply adding a function to an existing class
@@ -54,6 +56,16 @@ public class TestFmwk implements TestLog {
     protected TestFmwk() {
     }
 
+    protected TestFmwk getObject(String name) throws Exception{
+        Class cl = Class.forName(name);
+        return (TestFmwk)cl.newInstance();
+    }
+    
+    private Hashtable moduleHashtable= null;
+    
+    protected void setModuleHash(Hashtable hashtable){
+        moduleHashtable = hashtable;
+    }
     /**
      * Default is to create a hashmap containing all the test methods.
      * Data-driven tests can override to provide a different mapping
@@ -155,8 +167,8 @@ public class TestFmwk implements TestLog {
                 params.prompt = true;
             } else if (args[i].equals("-nothrow") || args[i].equals("-n")) {
                 params.nothrow = true;
-        } else if (args[i].equals("-describe")) {
-        params.describe = true;
+    	    } else if (args[i].equals("-describe")) {
+    		    params.describe = true;
             } else if (args[i].startsWith("-e")) {
                 // see above
                 params.inclusion = (args[i].length() == 2) ? 5 : Integer.parseInt(args[i].substring(2));
@@ -165,6 +177,23 @@ public class TestFmwk implements TestLog {
                 }
             } else if (args[i].toLowerCase().startsWith("-filter:")) {
                 params.filter = args[i].substring(8);
+            }else if(args[i].equals("-withoutdata")|| args[i].equals("-w")){
+            	params.withoutData = true;
+        	} else if ( args[i].equals("-module") || args[i].equals("-m")){
+                if(moduleHashtable!= null && i+1 < args.length){
+                    Object o = moduleHashtable.get(args[++i]);
+                    if (testNames == null) {
+                        testNames = new TreeSet();
+                    }
+                    if(o instanceof String){
+                        testNames.add((String) o);
+                    }else if(o instanceof String[]){
+                        String[] arr = (String[]) o;
+                        for(int j=0;j<arr.length;j++){
+                            testNames.add(arr[j]);
+                        }
+                    }
+                } 
             } else {
                 if (testNames == null) {
                     testNames = new TreeSet();
@@ -378,7 +407,9 @@ public class TestFmwk implements TestLog {
      */
     void usage() {
         System.out.println(getClass().getName() +
-                           ": [-verbose] [-nothrow] [-prompt] [-describe]\n                              [-e<n>] [-filter:<str>] [test names]");
+                           ": [-verbose] [-nothrow] [-prompt]\n"+
+                           "                              [-describe] [-e<n>] [-filter:<str>]\n"+
+                           "                              [-m <module name>] [-w[ithoutdata] [test names]");
         System.out.println("Options:");
         System.out.println(" -v[erbose] Show all output");
         System.out.println(" -n[othrow] Message on test failure rather than exception");
@@ -386,31 +417,45 @@ public class TestFmwk implements TestLog {
         System.out.println(" -describe ?");
         System.out.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n       To run all tests, specify -e10.  Giving -e with no <n> is\n       the same as -e5.");
         System.out.println(" -filter:<str> ?");
-
-    boolean valid = params.describe && validate();
-    if (valid) {
-        String testDescription = getDescription();
-        if (testDescription != null) {
-        System.out.println("-- " + testDescription);
+        System.out.println(" -m[odule] <module name>");
+		System.out.println(" -w[ithoutdata] make tests pass even though data is missing");
+        boolean valid = params.describe && validate();
+        if (valid) {
+            String testDescription = getDescription();
+            if (testDescription != null) {
+            System.out.println("-- " + testDescription);
+            }
         }
-    }
 
         Iterator testEntries = getTestEntryIterator(getAvailableTests());
 
         System.out.println("Test names:");
         while(testEntries.hasNext() ) {
             Map.Entry e = (Map.Entry)testEntries.next();
-        String methodName = (String)e.getKey();
+	        String methodName = (String)e.getKey();
+
 
             System.out.print("\t" + methodName );
-        if (valid) {
-        String methodDescription = getMethodDescription(methodName);
-        if (methodDescription != null) {
-            System.out.print(" -- " + methodDescription);
+    	    if (valid) {
+        		String methodDescription = getMethodDescription(methodName);
+        		if (methodDescription != null) {
+        		    System.out.print(" -- " + methodDescription);
+        		}
+    	    }
+    	    System.out.println();
         }
+        if(moduleHashtable != null){
+            System.out.println("Module names:");
+            Enumeration keys = moduleHashtable.keys();
+            while(keys.hasMoreElements() ) {
+                String moduleName = (String)keys.nextElement();
+                System.out.print("\t" + moduleName );
+
+                System.out.println();
+            }
+
         }
-        System.out.println();
-        }
+            
     }
 
     public static String hex(char ch) {
@@ -443,6 +488,15 @@ public class TestFmwk implements TestLog {
     public static String hex(StringBuffer s) {
         return hex(s.toString());
     }
+
+	/**
+     * Returns true if ICU is built modularly without locale data
+     */
+    public boolean isModularBuild(){
+        return params.withoutData;
+    }
+
+
 
     private static class ASCIIWriter extends PrintWriter {
         private Writer w;
@@ -497,8 +551,9 @@ public class TestFmwk implements TestLog {
         public boolean   prompt = false;
         public boolean   nothrow = false;
         public boolean   verbose = false;
-    public boolean   describe = false;
-        public int      inclusion = 0;
+    	public boolean   describe = false;
+    	public boolean   withoutData = false; 
+        public int       inclusion = 0;
         public String    filter = null;
 
         public PrintWriter log = new ASCIIWriter(System.out, true);
