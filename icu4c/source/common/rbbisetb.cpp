@@ -459,9 +459,12 @@ void RBBISetBuilder::printSets() {
 
 //-------------------------------------------------------------------------------------
 //
-//  RangeDesriptor copy constructor
+//  RangeDescriptor copy constructor
 //
 //-------------------------------------------------------------------------------------
+
+const char RangeDescriptor::fgClassID=0;
+
 RangeDescriptor::RangeDescriptor(const RangeDescriptor &other, UErrorCode &status) {
     int  i;
 

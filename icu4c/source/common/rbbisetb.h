@@ -33,7 +33,7 @@ U_NAMESPACE_BEGIN
 //     All of them are strung together in a linked list, which is kept in order
 //     (by character)
 //
-struct RangeDescriptor {
+struct RangeDescriptor : public UObject {
     UChar32            fStartChar;      // Start of range, unicode 32 bit value.
     UChar32            fEndChar;        // End of range, unicode 32 bit value.
     int32_t            fNum;            // runtime-mapped input value for this range.
@@ -49,6 +49,27 @@ struct RangeDescriptor {
                                         //   where appearing in the second (higher) part.
     void setDictionaryFlag();           // Check whether this range appears as part of
                                         //   the Unicode set named "dictionary"
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 

@@ -110,20 +110,25 @@ void
 Normalizer::init(CharacterIterator *iter) {
     UErrorCode errorCode=U_ZERO_ERROR;
 
-    text=new UCharIterator;
-
-    if(unorm_haveData(&errorCode)) {
-        uiter_setCharacterIterator(text, iter);
+    text=(UCharIterator *)uprv_malloc(sizeof(UCharIterator));
+    if(text!=NULL) {
+        if(unorm_haveData(&errorCode)) {
+            uiter_setCharacterIterator(text, iter);
+        } else {
+            delete iter;
+            uiter_setCharacterIterator(text, new UCharCharacterIterator(&_NUL, 0));
+        }
     } else {
         delete iter;
-        uiter_setCharacterIterator(text, new UCharCharacterIterator(&_NUL, 0));
     }
 }
 
 Normalizer::~Normalizer()
 {
-    delete (CharacterIterator *)text->context;
-    delete text;
+    if(text!=NULL) {
+        delete (CharacterIterator *)text->context;
+        uprv_free(text);
+    }
 }
 
 Normalizer* 
@@ -300,7 +305,7 @@ Normalizer::concatenate(UnicodeString &left, UnicodeString &right,
 //-------------------------------------------------------------------------
 
 /**
- * Return the current character in the normalized text->
+ * Return the current character in the normalized text.
  */
 UChar32 Normalizer::current() {
     if(bufferPos<buffer.length() || nextNormalize()) {
