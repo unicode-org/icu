@@ -146,6 +146,13 @@ class BreakIterator;        // unicode/brkiter.h
  * compare equal (to be transitive and prevent endless loops in sorting),
  * and a "bogus" string compares less than any non-"bogus" one.
  *
+ * Read-only UnicodeString methods are thread-safe. Multiple threads can use
+ * read-only methods on the same UnicodeString object simultaneously,
+ * but a method that modifies a UnicodeString must not be concurrent to
+ * any other use of the object.
+ * Copy construction, assignment, and cloning are also thread-safe for the source
+ * object because they are effectively read-only methods for that object.
+ *
  * <p>UnicodeString uses several storage methods.
  * String contents can be stored inside the UnicodeString object itself,
  * in an allocated and shared buffer, or in an outside buffer that is "aliased".
