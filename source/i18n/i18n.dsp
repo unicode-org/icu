@@ -678,6 +678,22 @@ SOURCE=.\buddhcal.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\islamcal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\islamcal.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\astro.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\astro.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\calendar.cpp
 # End Source File
 # Begin Source File

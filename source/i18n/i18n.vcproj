@@ -376,6 +376,18 @@
 				RelativePath=".\buddhcal.h">
 			</File>
 			<File
+				RelativePath=".\islamcal.cpp">
+			</File>
+			<File
+				RelativePath=".\islamcal.h">
+			</File>
+			<File
+				RelativePath=".\astro.cpp">
+			</File>
+			<File
+				RelativePath=".\astro.h">
+			</File>
+			<File
 				RelativePath=".\calendar.cpp">
 			</File>
 			<File
