@@ -13,8 +13,8 @@
 U_NAMESPACE_BEGIN
 
 /**
- * Instances of this class are used by LEFontInstance::mapCharsToGlyphs and
- * LEFontInstance::mapCharToGlyph to adjust character codes before the character
+ * Instances of this class are used by <code>LEFontInstance::mapCharsToGlyphs</code> and
+ * <code>LEFontInstance::mapCharToGlyph</code> to adjust character codes before the character
  * to glyph mapping process. Examples of this are filtering out control characters
  * and character mirroring - replacing a character which has both a left and a right
  * hand form with the opposite form.
@@ -42,6 +42,12 @@ public:
     virtual LEUnicode32 mapChar(LEUnicode32 ch) const = 0;
 };
 
+/**
+ * This is a forward reference to the class which holds the per-glyph
+ * storage.
+ *
+ * @draft ICU 3.0
+ */
 class LEGlyphStorage;
 
 /**
@@ -187,6 +193,13 @@ public:
      * This method maps an array of character codes to an array of glyph
      * indices, using the font's character to glyph map.
      *
+     * The default implementation iterates over all of the characters and calls
+     * <code>mapCharToGlyph(ch, mapper)</code> on each one. It also handles surrogate
+     * characters, storing the glyph ID for the high surrogate, and a deleted glyph (0xFFFF)
+     * for the low surrogate.
+     *
+     * Most sublcasses will not need to implement this method.
+     *
      * @param chars - the character array
      * @param offset - the index of the first character
      * @param count - the number of characters
@@ -196,7 +209,7 @@ public:
      *
      * @see LECharMapper
      *
-     * @draft ICU 2.6
+     * @draft ICU 3.0
      */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphStorage &glyphStorage) const;
 
