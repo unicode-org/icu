@@ -299,8 +299,7 @@ void CollationIteratorTest::TestMaxExpansion(/* char* par */)
 void CollationIteratorTest::TestClearBuffers(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = NULL;
-    c = new RuleBasedCollator((UnicodeString)"&a < b < c & ab = d", status);
+    RuleBasedCollator *c = new RuleBasedCollator((UnicodeString)"&a < b < c & ab = d", status);
 
     if (c == NULL || U_FAILURE(status))
     {
@@ -315,60 +314,49 @@ void CollationIteratorTest::TestClearBuffers(/* char* par */)
 
     if (U_FAILURE(status))
     {
-        errln("call to i->next() failed");
-        goto bail;
+        errln("call to i->next() failed. err=%s", u_errorName(status));
     }
-
-    i->setOffset(3, status);        // go to the expanding character
-
-    if (U_FAILURE(status))
+    else
     {
-        errln("call to i->setOffset(3) failed");
-        goto bail;
-    }
-
-    i->next(status);                // but only use up half of it
-
-    if (U_FAILURE(status))
-    {
-        errln("call to i->next() failed");
-        goto bail;
-    }
-
-    i->setOffset(0, status);        // go back to the beginning
-
-    if (U_FAILURE(status))
-    {
-        errln("call to i->setOffset(0) failed");
-        goto bail;
-    }
-
-    {
-        // This is in it's own block to stop a stupid compiler
-        // error about the goto's skipping the initialization
-        // of e...
-        int32_t e = i->next(status);    // and get this one again
+        i->setOffset(3, status);        // go to the expanding character
 
         if (U_FAILURE(status))
         {
-            errln("call to i->next() failed.");
-            goto bail;
+            errln("call to i->setOffset(3) failed. err=%s", u_errorName(status));
         }
-
-        if (e != e0)
+        else
         {
-            UnicodeString msg;
-            
-            msg += "got 0x";
-            appendHex(e, 8, msg);
-            msg += ", expected 0x";
-            appendHex(e0, 8, msg);
+            i->next(status);                // but only use up half of it
 
-            errln(msg);
+            if (U_FAILURE(status))
+            {
+                errln("call to i->next() failed. err=%s", u_errorName(status));
+            }
+            else
+            {
+                i->setOffset(0, status);        // go back to the beginning
+
+                if (U_FAILURE(status))
+                {
+                    errln("call to i->setOffset(0) failed. err=%s", u_errorName(status));
+                }
+                else
+                {
+                    int32_t e = i->next(status);    // and get this one again
+
+                    if (U_FAILURE(status))
+                    {
+                        errln("call to i->next() failed. err=%s", u_errorName(status));
+                    }
+                    else if (e != e0)
+                    {
+                        errln("got 0x%X, expected 0x%X", e, e0);
+                    }
+                }
+            }
         }
     }
 
-bail:
     delete i;
     delete c;
 }
@@ -391,25 +379,20 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
     {
         if (o != orders[--index])
         {
-          if (o == 0)
-            index ++;
-          else
-          {
-            while (index > 0 && orders[-- index] == 0)
+            if (o == 0)
+                index ++;
+            else
             {
+                while (index > 0 && orders[--index] == 0)
+                {
+                }
+                if (o != orders[index])
+                {
+                    errln("Mismatch at index %d: 0x%X vs 0x%X", index,
+                        orders[index], o);
+                    break;
+                }
             }
-            if (o != orders[index])
-            {
-              UnicodeString msg1("Mismatch at index ");
-              UnicodeString msg2(": 0x");
-              appendHex(orders[index], 8, msg2);
-              msg2 += " vs 0x";
-              appendHex(o, 8, msg2);
-
-              errln(msg1 + index + msg2);
-              break;
-            }
-          }
         }
     }
 
@@ -521,16 +504,7 @@ void CollationIteratorTest::assertEqual(CollationElementIterator &i1, CollationE
 
         if (c1 != c2)
         {
-            UnicodeString msg, msg1("    ");
-            
-            msg += msg1 + count;
-            msg += ": strength(0x";
-            appendHex(c1, 8, msg);
-            msg += ") != strength(0x";
-            appendHex(c2, 8, msg);
-            msg += ")";
-
-            errln(msg);
+            errln("    %d: strength(0x%X) != strength(0x%X)", count, c1, c2);
             break;
         }
 
