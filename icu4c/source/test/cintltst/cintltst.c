@@ -307,7 +307,16 @@ char *aescstrdup(const UChar* unichars,int32_t length){
     UConverterFromUCallback cb;
     const void *p;
     UErrorCode errorCode = U_ZERO_ERROR;
-    UConverter* conv = ucnv_open("US-ASCII",&errorCode);
+#if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   ifdef OS390
+        static const char convName[] = "ibm-1047";
+#   else
+        static const char convName[] = "ibm-37";
+#   endif
+#else
+    static const char convName[] = "US-ASCII";
+#endif
+    UConverter* conv = ucnv_open(convName, &errorCode);
     if(length==-1){
         length = u_strlen( unichars);
     }
