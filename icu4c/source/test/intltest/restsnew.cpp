@@ -456,9 +456,7 @@ NewResourceBundleTest::TestOtherAPI(){
 
     ResourceBundle *p;
 
-    errln("%s:%d: clone test commented out..\n", __FILE__, __LINE__);
-#if 0
-    r = defaultresource.clone();
+    p = defaultresource.clone();
     if(p == &defaultresource || !equalRB(*p, defaultresource)) {
         errln("ResourceBundle.clone() failed");
     }
@@ -469,7 +467,6 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("2nd ResourceBundle.clone() failed");
     }
     delete p;
-#endif
 
     UVersionInfo ver;
     copyRes.getVersion(ver);
