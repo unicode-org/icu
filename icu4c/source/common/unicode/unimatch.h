@@ -57,6 +57,11 @@ enum UMatchDegree {
 class U_COMMON_API UnicodeMatcher /* not : public UObject because this is an interface/mixin class */ {
 
 public:
+    /**
+     * Destructor.
+     * @draft ICU 2.4
+     */
+    virtual inline ~UnicodeMatcher() {};
 
     /**
      * Return a UMatchDegree value indicating the degree of match for

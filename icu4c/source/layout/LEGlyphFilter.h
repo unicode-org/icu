@@ -21,6 +21,12 @@ U_NAMESPACE_BEGIN
 class LEGlyphFilter /* not : public UObject because this is an interface/mixin class */ {
 public:
     /**
+     * Destructor.
+     * @draft ICU 2.4
+     */
+    virtual inline ~LEGlyphFilter() {};
+
+    /**
      * This method is used to test a particular
      * glyph index to see if it is in the set
      * recognized by the filter.
