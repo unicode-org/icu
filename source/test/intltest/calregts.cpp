@@ -11,7 +11,6 @@
 #include "unicode/smpdtfmt.h"
 
 #include <float.h>
-#include <limits.h> // LONG_{MIN,MAX}
 
 // *****************************************************************************
 // class CalendarRegressionTest
