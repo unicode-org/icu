@@ -54,275 +54,275 @@ void addNumFrDepTest(TestNode** root)
 /*Test Various format patterns*/
 static void TestPatterns(void)
 {
-  int32_t pat_length, i, lneed;
-  UNumberFormat *fmt;
-  UChar upat[5];
-  UChar unewpat[5];
-  UChar unum[5];
-  UChar *unewp=NULL;
-  UChar *str=NULL;
-  UErrorCode status = U_ZERO_ERROR;
-  const char* pat[]    = { "#.#", "#.", ".#", "#" };
-  const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
-  const char* num[]    = { "0",   "0.", ".0", "0" };
-
-  log_verbose("\nTesting different format patterns\n");
-  pat_length = sizeof(pat) / sizeof(pat[0]);
-  for (i=0; i < pat_length; ++i)
+    int32_t pat_length, i, lneed;
+    UNumberFormat *fmt;
+    UChar upat[5];
+    UChar unewpat[5];
+    UChar unum[5];
+    UChar *unewp=NULL;
+    UChar *str=NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    const char* pat[]    = { "#.#", "#.", ".#", "#" };
+    const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
+    const char* num[]    = { "0",   "0.", ".0", "0" };
+    
+    log_verbose("\nTesting different format patterns\n");
+    pat_length = sizeof(pat) / sizeof(pat[0]);
+    for (i=0; i < pat_length; ++i)
     {
-      status = U_ZERO_ERROR;
-      u_uastrcpy(upat, pat[i]);
-      fmt= unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
-      if (U_FAILURE(status)) {
-        log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
-        continue; 
-      }
-      lneed=0;
-      lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status= U_ZERO_ERROR;
-        unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
-      }
-      if(U_FAILURE(status)){
-        log_err("FAIL: Number format extracting the pattern failed for %s\n", pat[i]);
-      }
-      u_uastrcpy(unewpat, newpat[i]);
-      if(u_strcmp(unewp, unewpat) != 0)
-        log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
-
-      lneed=0;
-      lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status=U_ZERO_ERROR;
-        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        unum_format(fmt, 0, str, lneed+1,  NULL, &status);
-      }
-      if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-      }
-      u_uastrcpy(unum, num[i]);
-      if (u_strcmp(str, unum) != 0)
-        {
-          log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
-
+        status = U_ZERO_ERROR;
+        u_uastrcpy(upat, pat[i]);
+        fmt= unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
+            continue; 
         }
-      free(unewp);
-      free(str);
-      unum_close(fmt);
+        lneed=0;
+        lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status= U_ZERO_ERROR;
+            unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
+        }
+        if(U_FAILURE(status)){
+            log_err("FAIL: Number format extracting the pattern failed for %s\n", pat[i]);
+        }
+        u_uastrcpy(unewpat, newpat[i]);
+        if(u_strcmp(unewp, unewpat) != 0)
+            log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
+        
+        lneed=0;
+        lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status=U_ZERO_ERROR;
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            unum_format(fmt, 0, str, lneed+1,  NULL, &status);
+        }
+        if(U_FAILURE(status)) {
+            log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+        }
+        u_uastrcpy(unum, num[i]);
+        if (u_strcmp(str, unum) != 0)
+        {
+            log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
+            
+        }
+        free(unewp);
+        free(str);
+        unum_close(fmt);
     }
 }
 
 /* Test the handling of quotes*/
 static void TestQuotes(void)
 {
-  int32_t lneed;
-  UErrorCode status=U_ZERO_ERROR;
-  UChar pat[15];
-  UChar res[15];
-  UChar *str=NULL;
-  UNumberFormat *fmt;
-  char tempBuf[256];
-  log_verbose("\nTestting the handling of quotes in number format\n");
-  u_uastrcpy(pat, "a'fo''o'b#");
-  fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
-  if(U_FAILURE(status)){
-    log_err("Error in number format costruction using pattern \"a'fo''o'b#\"\n");
-  }
-  lneed=0;
-  lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
-  if(status==U_BUFFER_OVERFLOW_ERROR){
-    status=U_ZERO_ERROR;
-    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_format(fmt, 123, str, lneed+1,  NULL, &status);
-  }
-  if(U_FAILURE(status) || !str) {
-    log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-    return;
-  }
-  log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
-  log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
-  u_uastrcpy(res, "afo'ob123");
-  if(u_strcmp(str, res) != 0)
-    log_err("FAIL: Expected afo'ob123");
+    int32_t lneed;
+    UErrorCode status=U_ZERO_ERROR;
+    UChar pat[15];
+    UChar res[15];
+    UChar *str=NULL;
+    UNumberFormat *fmt;
+    char tempBuf[256];
+    log_verbose("\nTestting the handling of quotes in number format\n");
+    u_uastrcpy(pat, "a'fo''o'b#");
+    fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
+    if(U_FAILURE(status)){
+        log_err("Error in number format costruction using pattern \"a'fo''o'b#\"\n");
+    }
+    lneed=0;
+    lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        unum_format(fmt, 123, str, lneed+1,  NULL, &status);
+    }
+    if(U_FAILURE(status) || !str) {
+        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+        return;
+    }
+    log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
+    log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
+    u_uastrcpy(res, "afo'ob123");
+    if(u_strcmp(str, res) != 0)
+        log_err("FAIL: Expected afo'ob123");
     
-  free(str);
-  unum_close(fmt);
-
-
-  u_uastrcpy(pat, "");
-  u_uastrcpy(pat, "a''b#");
-
-
-  fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
-  if(U_FAILURE(status)){
-    log_err("Error in number format costruction using pattern \"a''b#\"\n");
-  }
-  lneed=0;
-  lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
-  if(status==U_BUFFER_OVERFLOW_ERROR){
-    status=U_ZERO_ERROR;
-    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_format(fmt, 123, str, lneed+1,  NULL, &status);
-  }
-  if(U_FAILURE(status)) {
-    log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-  }
-  log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
-  log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
-  u_uastrcpy(res, "");
-  u_uastrcpy(res, "a'b123");
-  if(u_strcmp(str, res) != 0)
-    log_err("FAIL: Expected a'b123\n");
-
-  free(str);
-  unum_close(fmt);
+    free(str);
+    unum_close(fmt);
+    
+    
+    u_uastrcpy(pat, "");
+    u_uastrcpy(pat, "a''b#");
+    
+    
+    fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
+    if(U_FAILURE(status)){
+        log_err("Error in number format costruction using pattern \"a''b#\"\n");
+    }
+    lneed=0;
+    lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        unum_format(fmt, 123, str, lneed+1,  NULL, &status);
+    }
+    if(U_FAILURE(status)) {
+        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+    }
+    log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
+    log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
+    u_uastrcpy(res, "");
+    u_uastrcpy(res, "a'b123");
+    if(u_strcmp(str, res) != 0)
+        log_err("FAIL: Expected a'b123\n");
+    
+    free(str);
+    unum_close(fmt);
 }
 
 /* Test exponential pattern*/
 static void TestExponential(void)
 {
-  int32_t pat_length, val_length, lval_length;
-  int32_t ival, ilval, p, v, lneed;
-  UNumberFormat *fmt;
-  int32_t ppos;
-  UChar *upat;
-  UChar pattern[20];
-  UChar *str=NULL;
-  UChar uvalfor[20], ulvalfor[20];
-  char tempMsgBug[256];
-  double a;
-  UErrorCode status = U_ZERO_ERROR;
+    int32_t pat_length, val_length, lval_length;
+    int32_t ival, ilval, p, v, lneed;
+    UNumberFormat *fmt;
+    int32_t ppos;
+    UChar *upat;
+    UChar pattern[20];
+    UChar *str=NULL;
+    UChar uvalfor[20], ulvalfor[20];
+    char tempMsgBug[256];
+    double a;
+    UErrorCode status = U_ZERO_ERROR;
 #ifdef OS390
-  double val[] = { 0.01234, 123456789, 1.23e75, -3.141592653e-78 };
+    double val[] = { 0.01234, 123456789, 1.23e75, -3.141592653e-78 };
 #else
-  double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
+    double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
 #endif
-  const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]" };
-  int32_t lval[] = { 0, -1, 1, 123456789 };
-
-  const char* valFormat[] =
-  {
-    "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
-    "12.340E-03", "12.346E07", "12.300E299", "-31.416E-272",
-    "12.34E-003", "123.4568E006", "1.23E300", "-314.1593E-273",
-    "1.234E-2", "1.235E8", "1.23E300", "[3.142E-271]"
-  };
-  const char* lvalFormat[] =
-  {
-    "0E0", "-1E0", "1E0", "1.2346E8",
-    "00.000E00", "-10.000E-01", "10.000E-01", "12.346E07",
-    "0E000", "-1E000", "1E000", "123.4568E006",
-    "0E0", "[1E0]", "1E0", "1.235E8"
-  };
-  double valParse[] =
-  {
-#ifdef OS390
-    0.01234, 123460000, 1.23E75, -3.1416E-78,
-    0.01234, 123460000, 1.23E75, -3.1416E-78,
-    0.01234, 123456800, 1.23E75, -3.141593E-78,
-    0.01234, 123500000, 1.23E75, -3.142E-78
-#else
-    0.01234, 123460000, 1.23E300, -3.1416E-271,
-    0.01234, 123460000, 1.23E300, -3.1416E-271,
-    0.01234, 123456800, 1.23E300, -3.141593E-271,
-    0.01234, 123500000, 1.23E300, -3.142E-271
-#endif
-  };
-  int32_t lvalParse[] =
-  {
-    0, -1, 1, 123460000,
-    0, -1, 1, 123460000,
-    0, -1, 1, 123456800,
-    0, -1, 1, 123500000
-  };
-
-
-  pat_length = sizeof(pat) / sizeof(pat[0]);
-  val_length = sizeof(val) / sizeof(val[0]);
-  lval_length = sizeof(lval) / sizeof(lval[0]);
-  ival = 0;
-  ilval = 0;
-  for (p=0; p < pat_length; ++p)
+    const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]" };
+    int32_t lval[] = { 0, -1, 1, 123456789 };
+    
+    const char* valFormat[] =
     {
-      upat=(UChar*)malloc(sizeof(UChar) * (strlen(pat[p])+1) );
-      u_uastrcpy(upat, pat[p]);
-      fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
-      if (U_FAILURE(status)) { 
-        log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]"); 
-        continue; 
-      }
-      lneed= u_strlen(upat) + 1;
-      unum_toPattern(fmt, FALSE, pattern, lneed, &status);
-      log_verbose("Pattern \" %s \" -toPattern-> \" %s \" \n", upat, u_austrcpy(tempMsgBug, pattern) );
-      for (v=0; v<val_length; ++v)
-        {
-          /*format*/
-          lneed=0; 
-          lneed=unum_formatDouble(fmt, val[v], NULL, lneed, NULL, &status);
-          if(status==U_BUFFER_OVERFLOW_ERROR){
-            status=U_ZERO_ERROR;
-            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            unum_formatDouble(fmt, val[v], str, lneed+1,  NULL, &status);
-          }
-          if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-          }
-
-
-
-          u_uastrcpy(uvalfor, valFormat[v+ival]);
-          if(u_strcmp(str, uvalfor) != 0)
-            log_verbose("FAIL: Expected %s ( %s )\n", valFormat[v+ival], u_austrcpy(tempMsgBug, uvalfor) );
-
-          /*parsing*/
-          ppos=0;
-          a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
-          if (ppos== u_strlen(str)) {
-             if (a != valParse[v+ival])
-              log_err("FAIL: Expected: %e, Got: %g\n", valParse[v+ival], a);
-          }
-          else
-            log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
-
-          free(str);
+        "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
+            "12.340E-03", "12.346E07", "12.300E299", "-31.416E-272",
+            "12.34E-003", "123.4568E006", "1.23E300", "-314.1593E-273",
+            "1.234E-2", "1.235E8", "1.23E300", "[3.142E-271]"
+    };
+    const char* lvalFormat[] =
+    {
+        "0E0", "-1E0", "1E0", "1.2346E8",
+            "00.000E00", "-10.000E-01", "10.000E-01", "12.346E07",
+            "0E000", "-1E000", "1E000", "123.4568E006",
+            "0E0", "[1E0]", "1E0", "1.235E8"
+    };
+    double valParse[] =
+    {
+#ifdef OS390
+        0.01234, 123460000, 1.23E75, -3.1416E-78,
+            0.01234, 123460000, 1.23E75, -3.1416E-78,
+            0.01234, 123456800, 1.23E75, -3.141593E-78,
+            0.01234, 123500000, 1.23E75, -3.142E-78
+#else
+            0.01234, 123460000, 1.23E300, -3.1416E-271,
+            0.01234, 123460000, 1.23E300, -3.1416E-271,
+            0.01234, 123456800, 1.23E300, -3.141593E-271,
+            0.01234, 123500000, 1.23E300, -3.142E-271
+#endif
+    };
+    int32_t lvalParse[] =
+    {
+        0, -1, 1, 123460000,
+            0, -1, 1, 123460000,
+            0, -1, 1, 123456800,
+            0, -1, 1, 123500000
+    };
+    
+    
+    pat_length = sizeof(pat) / sizeof(pat[0]);
+    val_length = sizeof(val) / sizeof(val[0]);
+    lval_length = sizeof(lval) / sizeof(lval[0]);
+    ival = 0;
+    ilval = 0;
+    for (p=0; p < pat_length; ++p)
+    {
+        upat=(UChar*)malloc(sizeof(UChar) * (strlen(pat[p])+1) );
+        u_uastrcpy(upat, pat[p]);
+        fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
+        if (U_FAILURE(status)) { 
+            log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]"); 
+            continue; 
         }
-      for (v=0; v<lval_length; ++v)
+        lneed= u_strlen(upat) + 1;
+        unum_toPattern(fmt, FALSE, pattern, lneed, &status);
+        log_verbose("Pattern \" %s \" -toPattern-> \" %s \" \n", upat, u_austrcpy(tempMsgBug, pattern) );
+        for (v=0; v<val_length; ++v)
         {
-          /*format*/
-          lneed=0; 
-          lneed=unum_formatDouble(fmt, lval[v], NULL, lneed, NULL, &status);
-          if(status==U_BUFFER_OVERFLOW_ERROR){
-            status=U_ZERO_ERROR;
-            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            unum_formatDouble(fmt, lval[v], str, lneed+1,  NULL, &status);
-          }
-          if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-          }
-          /*printf(" Format %e -> %s\n",  lval[v], austrdup(str) );*/
-          u_uastrcpy(ulvalfor, lvalFormat[v+ilval]);
-          if(u_strcmp(str, ulvalfor) != 0)
-            log_err("FAIL: Expected %s ( %s )\n", valFormat[v+ilval], austrdup(ulvalfor) );
-
-          /*parsing*/
-          ppos=0;
-          a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
-          if (ppos== u_strlen(str)) {
-            /*printf(" Parse -> %e\n",  a);*/
-            if (a != lvalParse[v+ilval])
-              log_err("FAIL: Expected : %e\n", valParse[v+ival]);
-          }
-          else
-            log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
-
-          free(str);
-
+            /*format*/
+            lneed=0; 
+            lneed=unum_formatDouble(fmt, val[v], NULL, lneed, NULL, &status);
+            if(status==U_BUFFER_OVERFLOW_ERROR){
+                status=U_ZERO_ERROR;
+                str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+                unum_formatDouble(fmt, val[v], str, lneed+1,  NULL, &status);
+            }
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+            }
+            
+            
+            
+            u_uastrcpy(uvalfor, valFormat[v+ival]);
+            if(u_strcmp(str, uvalfor) != 0)
+                log_verbose("FAIL: Expected %s ( %s )\n", valFormat[v+ival], u_austrcpy(tempMsgBug, uvalfor) );
+            
+            /*parsing*/
+            ppos=0;
+            a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
+            if (ppos== u_strlen(str)) {
+                if (a != valParse[v+ival])
+                    log_err("FAIL: Expected: %e, Got: %g\n", valParse[v+ival], a);
+            }
+            else
+                log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
+            
+            free(str);
         }
-      ival += val_length;
-      ilval += lval_length;
-      unum_close(fmt);
-      free(upat);
+        for (v=0; v<lval_length; ++v)
+        {
+            /*format*/
+            lneed=0; 
+            lneed=unum_formatDouble(fmt, lval[v], NULL, lneed, NULL, &status);
+            if(status==U_BUFFER_OVERFLOW_ERROR){
+                status=U_ZERO_ERROR;
+                str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+                unum_formatDouble(fmt, lval[v], str, lneed+1,  NULL, &status);
+            }
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+            }
+            /*printf(" Format %e -> %s\n",  lval[v], austrdup(str) );*/
+            u_uastrcpy(ulvalfor, lvalFormat[v+ilval]);
+            if(u_strcmp(str, ulvalfor) != 0)
+                log_err("FAIL: Expected %s ( %s )\n", valFormat[v+ilval], austrdup(ulvalfor) );
+            
+            /*parsing*/
+            ppos=0;
+            a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
+            if (ppos== u_strlen(str)) {
+                /*printf(" Parse -> %e\n",  a);*/
+                if (a != lvalParse[v+ilval])
+                    log_err("FAIL: Expected : %e\n", valParse[v+ival]);
+            }
+            else
+                log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
+            
+            free(str);
+            
+        }
+        ival += val_length;
+        ilval += lval_length;
+        unum_close(fmt);
+        free(upat);
     }
 }
 
@@ -331,72 +331,72 @@ static void TestExponential(void)
  */
 static void TestCurrencySign(void)
 {
-  int32_t lneed;
-  UNumberFormat *fmt;
-  UChar *pattern=NULL;
-  UChar *str=NULL;
-  UChar *pat=NULL;
-  UChar *res=NULL;
-  UErrorCode status = U_ZERO_ERROR;
-  char tempBuf[256];
-
-  pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
-  u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
-  pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
-  fmt = unum_open(UNUM_IGNORE,pattern, u_strlen(pattern), "en_US",NULL, &status);
-  if(U_FAILURE(status)){
-    log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
-  }
-  lneed=0; 
-  lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, NULL, &status);
-  if(status==U_BUFFER_OVERFLOW_ERROR){
-    status=U_ZERO_ERROR;
-    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_formatDouble(fmt, 1234.56, str, lneed+1, NULL, &status);
-  }
-  if(U_FAILURE(status)) {
-    log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-  }
-  lneed=0;
-  lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
-  if(status==U_BUFFER_OVERFLOW_ERROR){
-    status=U_ZERO_ERROR;
-    pat=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_formatDouble(fmt, FALSE, pat, lneed+1, NULL, &status);
-  }
-  log_verbose("Pattern \" %s \" \n", u_austrcpy(tempBuf, pat));
-  log_verbose("Format 1234.56 -> %s\n", u_austrcpy(tempBuf, str) );
-  if(U_SUCCESS(status) && str) {
-    res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
-    u_uastrcpy(res, "$1,234.56");
-    if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
-  } else {
-    log_err("Error formatting\n");
-  }
-  free(str);
-  free(res);
-  free(pat);
-
-  lneed=0; 
-  lneed=unum_formatDouble(fmt, -1234.56, NULL, lneed, NULL, &status);
-  if(status==U_BUFFER_OVERFLOW_ERROR){
-    status=U_ZERO_ERROR;
-    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_formatDouble(fmt, -1234.56, str, lneed+1, NULL, &status);
-  }
-  if(U_FAILURE(status)) {
-    log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-  }
-  if(str) {
-    res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
-    u_uastrcpy(res, "-$1,234.56");
-    if (u_strcmp(str, res) != 0) log_err("FAIL: Expected -$1,234.56\n");
+    int32_t lneed;
+    UNumberFormat *fmt;
+    UChar *pattern=NULL;
+    UChar *str=NULL;
+    UChar *pat=NULL;
+    UChar *res=NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    char tempBuf[256];
+    
+    pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
+    u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
+    pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
+    fmt = unum_open(UNUM_IGNORE,pattern, u_strlen(pattern), "en_US",NULL, &status);
+    if(U_FAILURE(status)){
+        log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
+    }
+    lneed=0; 
+    lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        unum_formatDouble(fmt, 1234.56, str, lneed+1, NULL, &status);
+    }
+    if(U_FAILURE(status)) {
+        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+    }
+    lneed=0;
+    lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        pat=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        unum_formatDouble(fmt, FALSE, pat, lneed+1, NULL, &status);
+    }
+    log_verbose("Pattern \" %s \" \n", u_austrcpy(tempBuf, pat));
+    log_verbose("Format 1234.56 -> %s\n", u_austrcpy(tempBuf, str) );
+    if(U_SUCCESS(status) && str) {
+        res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
+        u_uastrcpy(res, "$1,234.56");
+        if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
+    } else {
+        log_err("Error formatting\n");
+    }
     free(str);
     free(res);
-  }
-
-  unum_close(fmt);  
-  free(pattern);
+    free(pat);
+    
+    lneed=0; 
+    lneed=unum_formatDouble(fmt, -1234.56, NULL, lneed, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        unum_formatDouble(fmt, -1234.56, str, lneed+1, NULL, &status);
+    }
+    if(U_FAILURE(status)) {
+        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+    }
+    if(str) {
+        res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
+        u_uastrcpy(res, "-$1,234.56");
+        if (u_strcmp(str, res) != 0) log_err("FAIL: Expected -$1,234.56\n");
+        free(str);
+        free(res);
+    }
+    
+    unum_close(fmt);  
+    free(pattern);
 }
 
 /**
@@ -404,40 +404,40 @@ static void TestCurrencySign(void)
  */
 static void TestCurrency(void)
 {
-  UNumberFormat *currencyFmt;
-  UChar *str;
-  int32_t lneed, i;
-  UFieldPosition pos;
-  UChar res[100];
-  UErrorCode status = U_ZERO_ERROR;
-  const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
-  const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
-  log_verbose("\nTesting the number format with different currency patterns\n");
-  for(i=0; i < 3; i++)
+    UNumberFormat *currencyFmt;
+    UChar *str;
+    int32_t lneed, i;
+    UFieldPosition pos;
+    UChar res[100];
+    UErrorCode status = U_ZERO_ERROR;
+    const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
+    const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
+    log_verbose("\nTesting the number format with different currency patterns\n");
+    for(i=0; i < 3; i++)
     {
-      str=NULL;
-      currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
-      if(U_FAILURE(status)){
-          log_err("Error in the construction of number format with style currency:\n%s\n",
-                  myErrorName(status));
-      }
-      lneed=0;
-      lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status=U_ZERO_ERROR;
-        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        pos.field = 0;
-        unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
-      }
-      if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-      }
-      u_charsToUChars(result[i], res, strlen(result[i])+1);
-      if (u_strcmp(str, res) != 0){
-          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i], aescstrdup(str, -1), locale[i]);
-      }
-      unum_close(currencyFmt);
-      free(str);
+        str=NULL;
+        currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
+        if(U_FAILURE(status)){
+            log_err("Error in the construction of number format with style currency:\n%s\n",
+                myErrorName(status));
+        }
+        lneed=0;
+        lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status=U_ZERO_ERROR;
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            pos.field = 0;
+            unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
+        }
+        if(U_FAILURE(status)) {
+            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+        }
+        u_charsToUChars(result[i], res, strlen(result[i])+1);
+        if (u_strcmp(str, res) != 0){
+            log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i], aescstrdup(str, -1), locale[i]);
+        }
+        unum_close(currencyFmt);
+        free(str);
     }
 }
 /**
@@ -445,55 +445,55 @@ static void TestCurrency(void)
  */
 static void TestCurrencyPreEuro(void)
 {
-  UNumberFormat *currencyFmt;
-  UChar *str=NULL, *res=NULL;
-  int32_t lneed, i;
-  UFieldPosition pos;
-  UErrorCode status = U_ZERO_ERROR;
-
-  const char* locale[]={
+    UNumberFormat *currencyFmt;
+    UChar *str=NULL, *res=NULL;
+    int32_t lneed, i;
+    UFieldPosition pos;
+    UErrorCode status = U_ZERO_ERROR;
+    
+    const char* locale[]={
         "ca_ES_PREEURO",  "de_LU_PREEURO",  "en_IE_PREEURO",              "fi_FI_PREEURO",  "fr_LU_PREEURO",  "it_IT_PREEURO",  
         "pt_PT_PREEURO",  "de_AT_PREEURO",  "el_GR_PREEURO",              "es_ES_PREEURO",  "fr_BE_PREEURO",  "ga_IE_PREEURO",  
         "nl_BE_PREEURO",  "de_DE_PREEURO",  "en_BE_PREEURO",              "eu_ES_PREEURO",  "fr_FR_PREEURO",  "gl_ES_PREEURO",  
         "nl_NL_PREEURO",
-  };
-
-  const char* result[]={
+    };
+    
+    const char* result[]={
         "\\u20A7 2",      "2 F",            "\\u00A31.50",                "1,50 mk",        "1,50 F",         "\\u20A4 2", 
         "2 Esc.",         "\\u00F6S 1,50",  "1,50 \\u0394\\u03C1\\u03C7", "2 \\u20A7",      "1,50 FB",        "\\u00a31.50", 
         "1,50 BF",        "1,50 DM",        "1,50 BF",                    "\\u20A7 2",      "1,50 F",         "\\u20A7 2", 
         "fl 1,50"
-  };
-
-  log_verbose("\nTesting the number format with different currency patterns\n");
-  for(i=0; i < 19; i++)
+    };
+    
+    log_verbose("\nTesting the number format with different currency patterns\n");
+    for(i=0; i < 19; i++)
     {
-      char cStr[20]={0};
-      currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
-      if(U_FAILURE(status)){
-          log_err("Error in the construction of number format with style currency:\n%s\n",
-                  myErrorName(status));
-      }
-      lneed=0;
-      lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status=U_ZERO_ERROR;
-        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        pos.field = 0;
-        unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
-      }
-      if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-      }
-      res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
-      u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
-      if (u_strcmp(str, res) != 0){
-          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
-      }
-      
-      unum_close(currencyFmt);
-      free(str);
-      free(res);
+        char cStr[20]={0};
+        currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
+        if(U_FAILURE(status)){
+            log_err("Error in the construction of number format with style currency:\n%s\n",
+                myErrorName(status));
+        }
+        lneed=0;
+        lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status=U_ZERO_ERROR;
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            pos.field = 0;
+            unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
+        }
+        if(U_FAILURE(status)) {
+            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+        }
+        res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
+        u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
+        if (u_strcmp(str, res) != 0){
+            log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
+        }
+        
+        unum_close(currencyFmt);
+        free(str);
+        free(res);
     }
 }
 
@@ -504,76 +504,76 @@ static void TestCurrencyPreEuro(void)
  */
 static void TestCurrencyObject(void)
 {
-  UNumberFormat *currencyFmt;
-  UChar *str=NULL, *res=NULL;
-  int32_t lneed, i;
-  UFieldPosition pos;
-  UErrorCode status = U_ZERO_ERROR;
-
-  const char* locale[]={
-      "fr_FR",
-      "fr_FR",
-  };
-
-  const char* currency[]={
-      "",
-      "JPY",
-  };
-
-  const char* result[]={
-      "1\\u00A0234,56 \\u20AC",
-      "1\\u00A0235 \\u00A5",
-  };
-
-  log_verbose("\nTesting the number format with different currency codes\n");
-  for(i=0; i < 2; i++)
+    UNumberFormat *currencyFmt;
+    UChar *str=NULL, *res=NULL;
+    int32_t lneed, i;
+    UFieldPosition pos;
+    UErrorCode status = U_ZERO_ERROR;
+    
+    const char* locale[]={
+        "fr_FR",
+            "fr_FR",
+    };
+    
+    const char* currency[]={
+        "",
+            "JPY",
+    };
+    
+    const char* result[]={
+        "1\\u00A0234,56 \\u20AC",
+            "1\\u00A0235 \\u00A5",
+    };
+    
+    log_verbose("\nTesting the number format with different currency codes\n");
+    for(i=0; i < 2; i++)
     {
-      char cStr[20]={0};
-      UChar isoCode[16]={0};
-      currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
-      if(U_FAILURE(status)){
-          log_err("Error in the construction of number format with style currency:\n%s\n",
-                  myErrorName(status));
-      }
-      if (*currency[i]) {
-          u_uastrcpy(isoCode, currency[i]);
-          unum_setTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
-                                isoCode, u_strlen(isoCode), &status);
-          if(U_FAILURE(status)) {
-              log_err("FAIL: can't set currency code %s\n", myErrorName(status) );
-          }
-      }
-      unum_getTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
-                            isoCode, sizeof(isoCode), &status);
-      if(U_FAILURE(status)) {
-          log_err("FAIL: can't get currency code %s\n", myErrorName(status) );
-      }
-      u_UCharsToChars(isoCode,cStr,u_strlen(isoCode));
-      log_verbose("ISO code %s\n", cStr);
-      if (*currency[i] && uprv_strcmp(cStr, currency[i])) {
-          log_err("FAIL: currency should be %s, but is %s\n", currency[i], cStr);
-      }
-          
-      lneed=0;
-      lneed= unum_formatDouble(currencyFmt, 1234.56, NULL, lneed, NULL, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status=U_ZERO_ERROR;
-        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        pos.field = 0;
-        unum_formatDouble(currencyFmt, 1234.56, str, lneed+1, &pos, &status);
-      }
-      if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-      }
-      res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
-      u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
-      if (u_strcmp(str, res) != 0){
-          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
-      }
-      
-      unum_close(currencyFmt);
-      free(str);
-      free(res);
+        char cStr[20]={0};
+        UChar isoCode[16]={0};
+        currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
+        if(U_FAILURE(status)){
+            log_err("Error in the construction of number format with style currency:\n%s\n",
+                myErrorName(status));
+        }
+        if (*currency[i]) {
+            u_uastrcpy(isoCode, currency[i]);
+            unum_setTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
+                isoCode, u_strlen(isoCode), &status);
+            if(U_FAILURE(status)) {
+                log_err("FAIL: can't set currency code %s\n", myErrorName(status) );
+            }
+        }
+        unum_getTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
+            isoCode, sizeof(isoCode), &status);
+        if(U_FAILURE(status)) {
+            log_err("FAIL: can't get currency code %s\n", myErrorName(status) );
+        }
+        u_UCharsToChars(isoCode,cStr,u_strlen(isoCode));
+        log_verbose("ISO code %s\n", cStr);
+        if (*currency[i] && uprv_strcmp(cStr, currency[i])) {
+            log_err("FAIL: currency should be %s, but is %s\n", currency[i], cStr);
+        }
+        
+        lneed=0;
+        lneed= unum_formatDouble(currencyFmt, 1234.56, NULL, lneed, NULL, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status=U_ZERO_ERROR;
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            pos.field = 0;
+            unum_formatDouble(currencyFmt, 1234.56, str, lneed+1, &pos, &status);
+        }
+        if(U_FAILURE(status)) {
+            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+        }
+        res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
+        u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
+        if (u_strcmp(str, res) != 0){
+            log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
+        }
+        
+        unum_close(currencyFmt);
+        free(str);
+        free(res);
     }
 }
 
@@ -582,57 +582,57 @@ static void TestCurrencyObject(void)
  */
 static void TestRounding487(void)
 {
-  UNumberFormat *nnf;
-  UErrorCode status = U_ZERO_ERROR;
-  /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+    UNumberFormat *nnf;
+    UErrorCode status = U_ZERO_ERROR;
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
      - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
-  /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
-  nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
-  if(U_FAILURE(status)){
-    log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
-  }
-  roundingTest(nnf, 0.00159999, 4, "0.0016");
-  roundingTest(nnf, 0.00995, 4, "0.01");
-
-  roundingTest(nnf, 12.3995, 3, "12.4");
-
-  roundingTest(nnf, 12.4999, 0, "12");
-  roundingTest(nnf, - 19.5, 0, "-20");
-  unum_close(nnf);
+    /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
+    nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
+    if(U_FAILURE(status)){
+        log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
+    }
+    roundingTest(nnf, 0.00159999, 4, "0.0016");
+    roundingTest(nnf, 0.00995, 4, "0.01");
+    
+    roundingTest(nnf, 12.3995, 3, "12.4");
+    
+    roundingTest(nnf, 12.4999, 0, "12");
+    roundingTest(nnf, - 19.5, 0, "-20");
+    unum_close(nnf);
 }
  
 /*-------------------------------------*/
  
 static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const char* expected)
 {
-  UChar *out = NULL;
-  UChar *res;
-  UFieldPosition pos;
-  UErrorCode status;
-  int32_t lneed;
-  status=U_ZERO_ERROR;
-  unum_setAttribute(nf, UNUM_MAX_FRACTION_DIGITS, maxFractionDigits);
-  lneed=0;
-  lneed=unum_formatDouble(nf, x, NULL, lneed, NULL, &status);
-  if(status==U_BUFFER_OVERFLOW_ERROR){
+    UChar *out = NULL;
+    UChar *res;
+    UFieldPosition pos;
+    UErrorCode status;
+    int32_t lneed;
     status=U_ZERO_ERROR;
-    out=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    pos.field=0;
-    unum_formatDouble(nf, x, out, lneed+1, &pos, &status);
-  }
-  if(U_FAILURE(status)) {
-    log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-  }
-  /*Need to use log_verbose here. Problem with the float*/
-  /*printf("%f format with %d fraction digits to %s\n", x, maxFractionDigits, austrdup(out) );*/
-  res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
-  u_uastrcpy(res, expected);
-  if (u_strcmp(out, res) != 0)
-    log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
-  free(res);
-  if(out != NULL) {
-    free(out);
-  }
+    unum_setAttribute(nf, UNUM_MAX_FRACTION_DIGITS, maxFractionDigits);
+    lneed=0;
+    lneed=unum_formatDouble(nf, x, NULL, lneed, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        out=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        pos.field=0;
+        unum_formatDouble(nf, x, out, lneed+1, &pos, &status);
+    }
+    if(U_FAILURE(status)) {
+        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+    }
+    /*Need to use log_verbose here. Problem with the float*/
+    /*printf("%f format with %d fraction digits to %s\n", x, maxFractionDigits, austrdup(out) );*/
+    res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
+    u_uastrcpy(res, expected);
+    if (u_strcmp(out, res) != 0)
+        log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
+    free(res);
+    if(out != NULL) {
+        free(out);
+    }
 }
 
 /*
@@ -762,68 +762,68 @@ static void TestSecondaryGrouping(void) {
 
 static void TestCurrencyKeywords(void)
 {
-  static char *currencies[] = { 
-    "ADD", "ADP", "AED", "AFA", "AFN", "AIF", "ALK", "ALL", "ALV", "ALX", "AMD",
-    "ANG", "AOA", "AOK", "AON", "AOR", "AOS", "ARA", "ARM", "ARP", "ARS", "ATS",
-    "AUD", "AUP", "AWG", "AZM", "BAD", "BAM", "BAN", "BBD", "BDT", "BEC", "BEF",
-    "BEL", "BGL", "BGM", "BGN", "BGO", "BGX", "BHD", "BIF", "BMD", "BMP", "BND",
-    "BOB", "BOL", "BOP", "BOV", "BRB", "BRC", "BRE", "BRL", "BRN", "BRR", "BRZ",
-    "BSD", "BSP", "BTN", "BTR", "BUK", "BUR", "BWP", "BYB", "BYL", "BYR", "BZD",
-    "BZH", "CAD", "CDF", "CDG", "CDL", "CFF", "CHF", "CKD", "CLC", "CLE", "CLF",
-    "CLP", "CMF", "CNP", "CNX", "CNY", "COB", "COF", "COP", "CRC", "CSC", "CSK",
-    "CUP", "CUX", "CVE", "CWG", "CYP", "CZK", "DDM", "DEM", "DES", "DJF", "DKK", 
-    "DOP", "DZD", "DZF", "DZG", "ECS", "ECV", "EEK", "EGP", "ERN", "ESP", "ETB", 
-    "ETD", "EUR", "FIM", "FIN", "FJD", "FJP", "FKP", "FOK", "FRF", "FRG", "GAF", 
-    "GBP", "GEK", "GEL", "GHC", "GHO", "GHP", "GHR", "GIP", "GLK", "GMD", "GMP", 
-    "GNF", "GNI", "GNS", "GPF", "GQE", "GQF", "GQP", "GRD", "GRN", "GTQ", "GUF", 
-    "GWE", "GWM", "GWP", "GYD", "HKD", "HNL", "HRD", "HRK", "HTG", "HUF", "IBP", 
-    "IDG", "IDJ", "IDN", "IDR", "IEP", "ILL", "ILP", "ILS", "IMP", "INR", "IQD", 
-    "IRR", "ISK", "ITL", "JEP", "JMD", "JMP", "JOD", "JPY", "KES", "KGS", "KHO", 
-    "KHR", "KID", "KMF", "KPP", "KPW", "KRH", "KRO", "KRW", "KWD", "KYD", "KZR", 
-    "KZT", "LAK", "LBP", "LIF", "LKR", "LNR", "LRD", "LSL", "LTL", "LTT", "LUF", 
-    "LVL", "LVR", "LYB", "LYD", "LYP", "MAD", "MAF", "MCF", "MCG", "MDC", "MDL", 
-    "MDR", "MGA", "MGF", "MHD", "MKD", "MKN", "MLF", "MMK", "MMX", "MNT", "MOP", 
-    "MQF", "MRO", "MTL", "MTP", "MUR", "MVP", "MVR", "MWK", "MWP", "MXN", "MXP", 
-    "MXV", "MYR", "MZE", "MZM", "NAD", "NCF", "NGN", "NGP", "NHF", "NIC", "NIG", 
-    "NIO", "NLG", "NOK", "NPR", "NZD", "NZP", "OMR", "OMS", "PAB", "PDK", "PDN", 
-    "PDR", "PEI", "PEN", "PES", "PGK", "PHP", "PKR", "PLN", "PLX", "PLZ", "PSP", 
-    "PTC", "PTE", "PYG", "QAR", "REF", "ROL", "RON", "RUB", "RUR", "RWF", "SAR", 
-    "SAS", "SBD", "SCR", "SDD", "SDP", "SEK", "SGD", "SHP", "SIB", "SIT", "SKK", 
-    "SLL", "SML", "SOS", "SQS", "SRG", "SSP", "STD", "STE", "SUN", "SUR", "SVC", 
-    "SYP", "SZL", "TCC", "TDF", "THB", "TJR", "TJS", "TMM", "TND", "TOP", "TOS", 
-    "TPE", "TPP", "TRL", "TTD", "TTO", "TVD", "TWD", "TZS", "UAH", "UAK", "UGS", 
-    "UGX", "USD", "USN", "USS", "UYF", "UYP", "UYU", "UZC", "UZS", "VAL", "VDD", 
-    "VDN", "VDP", "VEB", "VGD", "VND", "VNN", "VNR", "VNS", "VUV", "WSP", "WST", 
-    "XAD", "XAF", "XAM", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XCF", "XDR", 
-    "XEF", "XEU", "XFO", "XFU", "XID", "XMF", "XNF", "XOF", "XPF", "XPS", "XSS", 
-    "XTR", "YDD", "YEI", "YER", "YUD", "YUF", "YUG", "YUM", "YUN", "YUO", "YUR", 
-    "ZAL", "ZAP", "ZAR", "ZMK", "ZMP", "ZRN", "ZRZ", "ZWD"
-  };
-
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t i = 0, j = 0;
-  int32_t noLocales = uloc_countAvailable();
-  char locale[256];
-  char currLoc[256];
-  UChar result[4];
-  UChar currBuffer[256];
-
-   
-  for(i = 0; i < noLocales; i++) {
-    strcpy(currLoc, uloc_getAvailable(i));
-    for(j = 0; j < sizeof(currencies)/sizeof(currencies[0]); j++) {
-      strcpy(locale, currLoc);
-      strcat(locale, "@currency=");
-      strcat(locale, currencies[j]);
-      ucurr_forLocale(locale, result, 4, &status);
-      u_charsToUChars(currencies[j], currBuffer, 3);
-      currBuffer[3] = 0;
-      if(u_strcmp(currBuffer, result) != 0) {
-        log_err("Didn't get the right currency for %s\n", locale);
-      }
+    static const char *currencies[] = { 
+        "ADD", "ADP", "AED", "AFA", "AFN", "AIF", "ALK", "ALL", "ALV", "ALX", "AMD",
+        "ANG", "AOA", "AOK", "AON", "AOR", "AOS", "ARA", "ARM", "ARP", "ARS", "ATS",
+        "AUD", "AUP", "AWG", "AZM", "BAD", "BAM", "BAN", "BBD", "BDT", "BEC", "BEF",
+        "BEL", "BGL", "BGM", "BGN", "BGO", "BGX", "BHD", "BIF", "BMD", "BMP", "BND",
+        "BOB", "BOL", "BOP", "BOV", "BRB", "BRC", "BRE", "BRL", "BRN", "BRR", "BRZ",
+        "BSD", "BSP", "BTN", "BTR", "BUK", "BUR", "BWP", "BYB", "BYL", "BYR", "BZD",
+        "BZH", "CAD", "CDF", "CDG", "CDL", "CFF", "CHF", "CKD", "CLC", "CLE", "CLF",
+        "CLP", "CMF", "CNP", "CNX", "CNY", "COB", "COF", "COP", "CRC", "CSC", "CSK",
+        "CUP", "CUX", "CVE", "CWG", "CYP", "CZK", "DDM", "DEM", "DES", "DJF", "DKK", 
+        "DOP", "DZD", "DZF", "DZG", "ECS", "ECV", "EEK", "EGP", "ERN", "ESP", "ETB", 
+        "ETD", "EUR", "FIM", "FIN", "FJD", "FJP", "FKP", "FOK", "FRF", "FRG", "GAF", 
+        "GBP", "GEK", "GEL", "GHC", "GHO", "GHP", "GHR", "GIP", "GLK", "GMD", "GMP", 
+        "GNF", "GNI", "GNS", "GPF", "GQE", "GQF", "GQP", "GRD", "GRN", "GTQ", "GUF", 
+        "GWE", "GWM", "GWP", "GYD", "HKD", "HNL", "HRD", "HRK", "HTG", "HUF", "IBP", 
+        "IDG", "IDJ", "IDN", "IDR", "IEP", "ILL", "ILP", "ILS", "IMP", "INR", "IQD", 
+        "IRR", "ISK", "ITL", "JEP", "JMD", "JMP", "JOD", "JPY", "KES", "KGS", "KHO", 
+        "KHR", "KID", "KMF", "KPP", "KPW", "KRH", "KRO", "KRW", "KWD", "KYD", "KZR", 
+        "KZT", "LAK", "LBP", "LIF", "LKR", "LNR", "LRD", "LSL", "LTL", "LTT", "LUF", 
+        "LVL", "LVR", "LYB", "LYD", "LYP", "MAD", "MAF", "MCF", "MCG", "MDC", "MDL", 
+        "MDR", "MGA", "MGF", "MHD", "MKD", "MKN", "MLF", "MMK", "MMX", "MNT", "MOP", 
+        "MQF", "MRO", "MTL", "MTP", "MUR", "MVP", "MVR", "MWK", "MWP", "MXN", "MXP", 
+        "MXV", "MYR", "MZE", "MZM", "NAD", "NCF", "NGN", "NGP", "NHF", "NIC", "NIG", 
+        "NIO", "NLG", "NOK", "NPR", "NZD", "NZP", "OMR", "OMS", "PAB", "PDK", "PDN", 
+        "PDR", "PEI", "PEN", "PES", "PGK", "PHP", "PKR", "PLN", "PLX", "PLZ", "PSP", 
+        "PTC", "PTE", "PYG", "QAR", "REF", "ROL", "RON", "RUB", "RUR", "RWF", "SAR", 
+        "SAS", "SBD", "SCR", "SDD", "SDP", "SEK", "SGD", "SHP", "SIB", "SIT", "SKK", 
+        "SLL", "SML", "SOS", "SQS", "SRG", "SSP", "STD", "STE", "SUN", "SUR", "SVC", 
+        "SYP", "SZL", "TCC", "TDF", "THB", "TJR", "TJS", "TMM", "TND", "TOP", "TOS", 
+        "TPE", "TPP", "TRL", "TTD", "TTO", "TVD", "TWD", "TZS", "UAH", "UAK", "UGS", 
+        "UGX", "USD", "USN", "USS", "UYF", "UYP", "UYU", "UZC", "UZS", "VAL", "VDD", 
+        "VDN", "VDP", "VEB", "VGD", "VND", "VNN", "VNR", "VNS", "VUV", "WSP", "WST", 
+        "XAD", "XAF", "XAM", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XCF", "XDR", 
+        "XEF", "XEU", "XFO", "XFU", "XID", "XMF", "XNF", "XOF", "XPF", "XPS", "XSS", 
+        "XTR", "YDD", "YEI", "YER", "YUD", "YUF", "YUG", "YUM", "YUN", "YUO", "YUR", 
+        "ZAL", "ZAP", "ZAR", "ZMK", "ZMP", "ZRN", "ZRZ", "ZWD"
+    };
+    
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i = 0, j = 0;
+    int32_t noLocales = uloc_countAvailable();
+    char locale[256];
+    char currLoc[256];
+    UChar result[4];
+    UChar currBuffer[256];
+    
+    
+    for(i = 0; i < noLocales; i++) {
+        strcpy(currLoc, uloc_getAvailable(i));
+        for(j = 0; j < sizeof(currencies)/sizeof(currencies[0]); j++) {
+            strcpy(locale, currLoc);
+            strcat(locale, "@currency=");
+            strcat(locale, currencies[j]);
+            ucurr_forLocale(locale, result, 4, &status);
+            u_charsToUChars(currencies[j], currBuffer, 3);
+            currBuffer[3] = 0;
+            if(u_strcmp(currBuffer, result) != 0) {
+                log_err("Didn't get the right currency for %s\n", locale);
+            }
+        }
+        
     }
-
-  }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

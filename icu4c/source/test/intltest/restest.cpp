@@ -542,10 +542,10 @@ void
 ResourceBundleTest::TestGetLocaleByType(void) 
 {
   const struct {
-    char *requestedLocale;
-    char *resourceKey;
-    char *validLocale;
-    char *actualLocale;
+    const char *requestedLocale;
+    const char *resourceKey;
+    const char *validLocale;
+    const char *actualLocale;
   } test[] = {
     { "te_IN_BLAH", "string_only_in_te_IN", "te_IN", "te_IN" },
     { "te_IN_BLAH", "string_only_in_te", "te_IN", "te" },
