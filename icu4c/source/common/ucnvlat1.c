@@ -275,11 +275,7 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         --targetCapacity;
     }
 
-    /*
-     * not a real loop: just using while() to use a break inside instead of goto
-     * logically, this is just if(c>max) ...
-     */
-    while(c>max) {
+    if(c>max) {
         cp=c;
         if(!U_IS_SURROGATE(cp)) {
             /* callback(unassigned) */
@@ -300,7 +296,7 @@ getTrail:
             } else {
                 /* no more input */
                 cnv->fromUChar32=cp;
-                break;
+                goto noMoreInput;
             }
         } else {
             /* this is an unmatched trail code unit (2nd surrogate) */
@@ -309,8 +305,8 @@ getTrail:
 
         *pErrorCode= U_IS_SURROGATE(cp) ? U_ILLEGAL_CHAR_FOUND : U_INVALID_CHAR_FOUND;
         cnv->fromUChar32=cp;
-        break;
     }
+noMoreInput:
 
     /* set offsets since the start */
     if(offsets!=NULL) {
