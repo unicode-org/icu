@@ -173,6 +173,10 @@ private:
     UBool           fBadState;     // True if any prior error has left this
                                    //  RegexPattern unusable.
 
+    RegexMatcher    *fMatcher;     // A cached matcher for this pattern, used for
+                                   //  split(), to avoid having to
+                                   //  make new ones on each call.
+
     int32_t         fNumCaptureGroups;
 
     friend class RegexCompile;
