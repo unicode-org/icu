@@ -15,7 +15,7 @@
 */
 /**
 * \file
-* \brief Description of UTF-32 macros
+* \brief C API: UTF-32 macros
 *
 *   This file defines macros to deal with UTF-32 code units and code points.
 *   Signatures and semantics are the same as for the similarly named macros
