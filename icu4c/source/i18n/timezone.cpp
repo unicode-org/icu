@@ -55,7 +55,7 @@ TimeZone*           TimeZone::fgDefaultZone = NULL;
 
 const UnicodeString TimeZone::GMT_ID        = UNICODE_STRING("GMT", 3);
 const int32_t       TimeZone::GMT_ID_LENGTH = 3;
-const UnicodeString TimeZone::CUSTOM_ID     = UNICODE_STRING("Custom", 3);
+const UnicodeString TimeZone::CUSTOM_ID     = UNICODE_STRING("Custom", 6);
 
 const TimeZone*     TimeZone::GMT = new SimpleTimeZone(0, GMT_ID);
 
