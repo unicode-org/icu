@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.1 2003/02/11 00:13:48 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.2 2003/02/17 17:48:50 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -23,16 +23,16 @@ DEFS+=/D"WIN32"
 LDFLAGS+=/nologo
 
 # Commands to compile
-COMPILE.c=	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) /c
-COMPILE.cc=	$(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) /c
+COMPILE.c=	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) /GF /c
+COMPILE.cc=	$(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) /GF /c
 
 # Commands to link
-LINK.c=		LINK.EXE /subsystem:console $(CFLAGS) $(LDFLAGS)
-LINK.cc=	LINK.EXE /subsystem:console $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		LINK.EXE /subsystem:console $(LDFLAGS)
+LINK.cc=	LINK.EXE /subsystem:console $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	LINK.EXE /DLL $(CFLAGS) $(LDFLAGS)
-SHLIB.cc=	LINK.EXE /DLL $(CXXFLAGS) $(LDFLAGS)
+SHLIB.c=	LINK.EXE /DLL $(LDFLAGS)
+SHLIB.cc=	LINK.EXE /DLL $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
@@ -44,7 +44,7 @@ LD_SONAME =
 ## Shared object suffix
 SO = dll
 ## Non-shared intermediate object suffix
-STATIC_O = lib
+STATIC_O = o
 # OUTOPT is for creating a specific output name
 OUTOPT = /out:
 
@@ -96,6 +96,10 @@ LIBUSTDIO=	$(top_builddir)/extra/ustdio/libustdio$(ICULIBSUFFIX)$(SO_TARGET_VERS
 %.d : $(srcdir)/%.cpp
 	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.cc) $< > $@
+
+## Compile a Windows resource file
+%.res : $(srcdir)/%.rc
+	@rc.exe /fo$@ $<
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
