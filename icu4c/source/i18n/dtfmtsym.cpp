@@ -37,7 +37,7 @@ UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwW
 // files.  They aren't designed for actual use, just for backup.
 
 // These are the month names and abbreviations of last resort.
-const UChar DateFormatSymbols::fgLastResortMonthNames[DateFormatSymbols::kMonthNum][DateFormatSymbols::kMonthLen] =
+const UChar DateFormatSymbols::fgLastResortMonthNames[13][3] =
 {
     {0x0030, 0x0031, 0x0000}, /* "01" */
     {0x0030, 0x0032, 0x0000}, /* "02" */
@@ -55,7 +55,7 @@ const UChar DateFormatSymbols::fgLastResortMonthNames[DateFormatSymbols::kMonthN
 };
 
 // These are the weekday names and abbreviations of last resort.
-const UChar DateFormatSymbols::fgLastResortDayNames[DateFormatSymbols::kDayNum][DateFormatSymbols::kDayLen] =
+const UChar DateFormatSymbols::fgLastResortDayNames[8][2] =
 {
     {0x0000, 0x0000}, /* "" */
     {0x0031, 0x0000}, /* "1" */
@@ -68,13 +68,13 @@ const UChar DateFormatSymbols::fgLastResortDayNames[DateFormatSymbols::kDayNum][
 };
 
 // These are the am/pm and BC/AD markers of last resort.
-const UChar DateFormatSymbols::fgLastResortAmPmMarkers[DateFormatSymbols::kAmPmNum][DateFormatSymbols::kAmPmLen] =
+const UChar DateFormatSymbols::fgLastResortAmPmMarkers[2][3] =
 {
     {0x0041, 0x004D, 0x0000}, /* "AM" */
     {0x0050, 0x004D, 0x0000}  /* "PM" */
 };
 
-const UChar DateFormatSymbols::fgLastResortEras[DateFormatSymbols::kEraNum][DateFormatSymbols::kEraLen] =
+const UChar DateFormatSymbols::fgLastResortEras[2][3] =
 {
     {0x0042, 0x0043, 0x0000}, /* "BC" */
     {0x0041, 0x0044, 0x0000}  /* "AD" */
@@ -82,7 +82,7 @@ const UChar DateFormatSymbols::fgLastResortEras[DateFormatSymbols::kEraNum][Date
 
 
 // These are the zone strings of last resort.
-const UChar DateFormatSymbols::fgLastResortZoneStrings[DateFormatSymbols::kZoneNum][DateFormatSymbols::kZoneLen] =
+const UChar DateFormatSymbols::fgLastResortZoneStrings[5][4] =
 {
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
