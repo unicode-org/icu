@@ -23,7 +23,7 @@ dirPropNames[dirPropCount]={
     "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
-const UChar
+UChar
 charFromDirProp[dirPropCount]={
  /* L     R      EN    ES    ET    AN     CS    B    S    WS    ON */
     0x61, 0x5d0, 0x30, 0x2f, 0x25, 0x660, 0x2c, 0xa, 0x9, 0x20, 0x26,
