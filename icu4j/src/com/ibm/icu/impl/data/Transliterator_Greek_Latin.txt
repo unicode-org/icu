@@ -1,10 +1,6 @@
-???#--------------------------------------------------------------------
+﻿#--------------------------------------------------------------------
 # Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
-# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2004/05/21 01:01:51 $
-# $Revision: 1.23 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -16,13 +12,13 @@
 
 # TEST CASES
 
-# ????????????? ??????????????? ????????????? ??????????????? ?????????????????????? ??? ????????????????
-# ??? ??? ??? ??? ??? ???
-# ??? ??? ??? ??? ???
-# ????? ????? ????? ?????
-# ????? ????? ????? ?????
-# ????? ????? ????? ?????
-# ???, ???, ???, ???, ???, ???
+# Ὀλίγοι ἔμφονες πολλῶν ἀφρόνων φοβερώτεροι — Πλάτωνος
+# ᾂ ᾒ ᾢ ᾃ ᾓ ᾣ
+# ᾳ ῃ ῳ ὃ ὄ
+# ὠς ὡς ὢς ὣς
+# Ὠς Ὡς Ὢς Ὣς
+# ὨΣ ὩΣ ὪΣ ὫΣ
+# Ạ, ạ, Ẹ, ẹ, Ọ, ọ
 
 # Useful variables
 
@@ -39,8 +35,8 @@ $macron = \u0304 ;
 $ddot = \u0308 ;
 $ddotmac = [$ddot$macron];
 
-$lcgvowel = [??????????????] ; 
-$ucgvowel = [??????????????] ; 
+$lcgvowel = [αεηιουω] ; 
+$ucgvowel = [ΑΕΗΙΟΥΩ] ; 
 $gvowel = [$lcgvowel $ucgvowel] ; 
 $lcgvowelC = [$lcgvowel $accent] ; 
 
@@ -48,11 +44,11 @@ $evowel = [aeiouyAEIOUY];
 $evowel2 = [iuyIUY];
 $vowel = [ $evowel $gvowel] ; 
 
-$gammaLike = [??????????????????] ; 
+$gammaLike = [ΓΚΞΧγκξχϰ] ; 
 $egammaLike = [GKXCgkxc] ; 
-$smooth = ?? ; 
-$rough = ?? ; 
-$iotasub = ?? ; 
+$smooth = ̓ ; 
+$rough = ̔ ; 
+$iotasub = ͅ ; 
 
 $evowel_i = [$evowel-[iI]] ;
 $evowel2_i = [uyUY];
@@ -64,7 +60,7 @@ $beforeLetter = [[:M:]\']* [:L:] ;
 $beforeLower = $accent * $lower ; 
 
 $notLetter = [^[:L:][:M:]] ;
-$under = ??;
+$under = ̱;
 
 # Fix punctuation
 # preserve original
@@ -72,7 +68,7 @@ $under = ??;
 \? <> \? $under ;
 
 \; <> \? ;
-?? <> \: ;
+· <> \: ;
 
 # CIRCUMFLEX: convert greek circumflex to normal one. Could use tilde or inverted breve
 
@@ -83,8 +79,8 @@ $under = ??;
 
 $accent_minus = [[$accent]-[$iotasub$macron]];
 
-?? } $accent_minus * $iotasub > | ?? $macron ;  
-?? } $accent_minus * $iotasub > | ?? $macron ; 
+Α } $accent_minus * $iotasub > | Α $macron ;  
+α } $accent_minus * $iotasub > | α $macron ; 
 
 # now convert to uppercase if after uppercase, ow to lowercase
 
@@ -100,23 +96,23 @@ $iotasub > i ;
 
 # Make A ` x = > H a x
 
- ?? ($macron?) $rough } $beforeLower > H | ?? $1; 
- ?? $rough } $beforeLower > H | ??; 
- ?? $rough } $beforeLower > H | ?? ; 
- ?? ($ddot?) $rough } $beforeLower > H | ??  $1; 
- ?? $rough } $beforeLower > H | ?? ; 
- ?? $rough } $beforeLower > H | ?? ; 
- ?? ($ddot?) $rough } $beforeLower > H | ?? $1; 
+ Α ($macron?) $rough } $beforeLower > H | α $1; 
+ Ε $rough } $beforeLower > H | ε; 
+ Η $rough } $beforeLower > H | η ; 
+ Ι ($ddot?) $rough } $beforeLower > H | ι  $1; 
+ Ο $rough } $beforeLower > H | ο ; 
+ Υ $rough } $beforeLower > H | υ ; 
+ Ω ($ddot?) $rough } $beforeLower > H | ω $1; 
 
 # Make A x ` = > H a x
 
-?? ($glower $macron?) $rough > H | ?? $1 ; 
-?? ($glower) $rough > H | ?? $1 ; 
-?? ($glower) $rough > H | ?? $1 ; 
-?? ($glower $ddot?) $rough > H | ?? $1 ; 
-?? ($glower) $rough > H | ?? $1 ; 
-?? ($glower) $rough > H | ?? $1 ; 
-?? ($glower  $ddot?) $rough > H | ?? $1 ; 
+Α ($glower $macron?) $rough > H | α $1 ; 
+Ε ($glower) $rough > H | ε $1 ; 
+Η ($glower) $rough > H | η $1 ; 
+Ι ($glower $ddot?) $rough > H | ι $1 ; 
+Ο ($glower) $rough > H | ο $1 ; 
+Υ ($glower) $rough > H | υ $1 ; 
+Ω ($glower  $ddot?) $rough > H | ω $1 ; 
 
 #Otherwise, make x ` into h x and X ` into H X
 
@@ -176,120 +172,120 @@ $smooth > ;
 
 # remove now superfluous macron when returning
 
-?? < A $macron ;  
-?? < a $macron ; 
+Α < A $macron ;  
+α < a $macron ; 
 
-?? <> e $macron ;
-?? <> E $macron ;
+η <> e $macron ;
+Η <> E $macron ;
 
-?? <> ph ; 
-?? } $beforeLower <> Ps ; 
-?? <> PS ; 
+φ <> ph ; 
+Ψ } $beforeLower <> Ps ; 
+Ψ <> PS ; 
 
-?? } $beforeLower <> Ph ; 
-?? <> PH ;
-?? <> ps ; 
+Φ } $beforeLower <> Ph ; 
+Φ <> PH ;
+ψ <> ps ; 
 
-?? <> o $macron ;
-?? <>  O $macron;
+ω <> o $macron ;
+Ω <>  O $macron;
 
 # NORMAL
 
-?? <> a ; 
-?? <> A ; 
+α <> a ; 
+Α <> A ; 
 
-?? <> b ; 
-?? <> B ; 
+β <> b ; 
+Β <> B ; 
 
-?? } $gammaLike <> n } $egammaLike ; 
-?? <> g ; 
-?? } $gammaLike <> N } $egammaLike ; 
-?? <> G ; 
+γ } $gammaLike <> n } $egammaLike ; 
+γ <> g ; 
+Γ } $gammaLike <> N } $egammaLike ; 
+Γ <> G ; 
 
-?? <> d ; 
-?? <> D ; 
+δ <> d ; 
+Δ <> D ; 
 
-?? <> e ; 
-?? <> E ; 
+ε <> e ; 
+Ε <> E ; 
 
-?? <> z ; 
-?? <> Z ; 
+ζ <> z ; 
+Ζ <> Z ; 
 
-?? <> th ; 
-?? } $beforeLower <> Th ; 
-?? <> TH ; 
+θ <> th ; 
+Θ } $beforeLower <> Th ; 
+Θ <> TH ; 
 
-?? <> i ; 
-?? <> I ; 
+ι <> i ; 
+Ι <> I ; 
 
-?? <> k ;
-?? <> K ; 
+κ <> k ;
+Κ <> K ; 
 
-?? <> l ; 
-?? <> L ; 
+λ <> l ; 
+Λ <> L ; 
 
-?? <> m ; 
-?? <> M ; 
+μ <> m ; 
+Μ <> M ; 
 
-?? } $gammaLike > n\' ; 
-?? <> n ; 
-?? } $gammaLike <> N\' ; 
-?? <> N ; 
+ν } $gammaLike > n\' ; 
+ν <> n ; 
+Ν } $gammaLike <> N\' ; 
+Ν <> N ; 
 
-?? <> x ; 
-?? <> X ; 
+ξ <> x ; 
+Ξ <> X ; 
 
-?? <> o ; 
-?? <> O ; 
+ο <> o ; 
+Ο <> O ; 
 
-?? <> p ; 
-?? <> P ; 
+π <> p ; 
+Π <> P ; 
 
-?? $rough <> rh; 
-?? $rough } $beforeLower <> Rh ; 
-?? $rough <> RH ; 
-?? <> r ; 
-?? <> R ; 
+ρ $rough <> rh; 
+Ρ $rough } $beforeLower <> Rh ; 
+Ρ $rough <> RH ; 
+ρ <> r ; 
+Ρ <> R ; 
 
 # insert separator before things that turn into s
 
-[Pp] { } [??????????????] > \' ; 
+[Pp] { } [ςσΣϷϸϺϻ] > \' ; 
 
 # special S variants
 
-?? <> S?? ; # ?? GREEK CAPITAL LETTER SHO Uppercase_Letter Grek - L 
-?? <> s?? ; #?? GREEK SMALL LETTER SHO Lowercase_Letter Grek - L 
-?? <> S?? ; # ?? GREEK CAPITAL LETTER SAN Uppercase_Letter Grek - L 
-?? <> s?? ; # ?? GREEK SMALL LETTER SAN Lowercase_Letter Grek - L 
+Ϸ <> Š ; # Ϸ GREEK CAPITAL LETTER SHO Uppercase_Letter Grek - L 
+ϸ <> š ; #ϸ GREEK SMALL LETTER SHO Lowercase_Letter Grek - L 
+Ϻ <> Ŝ ; # Ϻ GREEK CAPITAL LETTER SAN Uppercase_Letter Grek - L 
+ϻ <> ŝ ; # ϻ GREEK SMALL LETTER SAN Lowercase_Letter Grek - L 
 
 # underbar means exception
 
 # before a letter, initial
-?? } $beforeLetter <> s $underbar } $beforeLetter;
-?? } $beforeLetter <> s } $beforeLetter;
+ς } $beforeLetter <> s $underbar } $beforeLetter;
+σ } $beforeLetter <> s } $beforeLetter;
 
 # otherwise, after a letter = final 
-$afterLetter { ?? <> $afterLetter { s $underbar;
-$afterLetter { ?? <> $afterLetter { s ;
+$afterLetter { σ <> $afterLetter { s $underbar;
+$afterLetter { ς <> $afterLetter { s ;
 
 # otherwise (isolated) = initial
-?? <> s $underbar;
-?? <> s ;
+ς <> s $underbar;
+σ <> s ;
 
-# [Pp] { ?? <> \'S ; 
-?? <> S ; 
+# [Pp] { Σ <> \'S ; 
+Σ <> S ; 
 
-?? <> t ; 
-?? <> T ; 
+τ <> t ; 
+Τ <> T ; 
 
-$vowel {?? } <> u ; 
-?? <> y ; 
-$vowel { ?? <> U ; 
-?? <> Y ; 
+$vowel {υ } <> u ; 
+υ <> y ; 
+$vowel { Υ <> U ; 
+Υ <> Y ; 
 
-?? <> ch ; 
-?? } $beforeLower <> Ch ; 
-?? <> CH ; 
+χ <> ch ; 
+Χ } $beforeLower <> Ch ; 
+Χ <> CH ; 
 
 # Completeness for ASCII
 
@@ -319,28 +315,28 @@ $rough <> h ;
 
 # Completeness for Greek
 
-?? > | ?? ;
-?? > | ?? ;
-?? > | ?? ;
-?? > | ?? ;
-?? > | ?? ;
+ϐ > | β ;
+ϑ > | θ ;
+ϒ > | Υ ;
+ϕ > | φ ;
+ϖ > | π ;
 
-?? > | ?? ;
-?? > | ?? ;
-?? > | ?? ;
-?? > | ??; #U+03F9 GREEK CAPITAL LUNATE SIGMA SYMBOL
-?? > j ;
-?? > | ?? ;
-?? > | ?? ;
+ϰ > | κ ;
+ϱ > | ρ ;
+ϲ > | σ ;
+Ϲ > | Σ; #U+03F9 GREEK CAPITAL LUNATE SIGMA SYMBOL
+ϳ > j ;
+ϴ > | Θ ;
+ϵ > | ε ;
 
-?? > | ?? ;
+µ > | μ ;
 
- ?? > i;
+ ͺ > i;
 
 # delete any trailing ' marks used for roundtripping
 
- < [????] { \' } [Ss] ;
- < [????] { \' } $egammaLike ;
+ < [Ππ] { \' } [Ss] ;
+ < [Νν] { \' } $egammaLike ;
 
 ::NFC (NFD) ;
 # ([\u0000-\u007F [:Latin:] [:Greek:] [:nonspacing mark:]]) ;
