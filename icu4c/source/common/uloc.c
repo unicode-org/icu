@@ -2816,7 +2816,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
                             UErrorCode *status)
 {
     _acceptLangItem *j;
-	_acceptLangItem smallBuffer[30];
+    _acceptLangItem smallBuffer[30];
     char **strs;
     char tmp[ULOC_FULLNAME_CAPACITY +1];
     int32_t n = 0;
@@ -2827,23 +2827,13 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     int32_t res;
     int32_t i;
     int32_t l = uprv_strlen(httpAcceptLanguage);
-	int32_t jSize;
-	static char gDecimal = 0;
-	
-	j = smallBuffer;
-	jSize = sizeof(smallBuffer)/sizeof(smallBuffer[0]);
+    int32_t jSize;
+
+    j = smallBuffer;
+    jSize = sizeof(smallBuffer)/sizeof(smallBuffer[0]);
     if(U_FAILURE(*status)) {
         return -1;
     }
-
-	if (!gDecimal) {
-		char rep[5];
-		// For machines that decide to change the decimal on you,
-		// and try to be too smart with localization.
-		// This normally should be just a '.'.
-		sprintf(rep, "%+1.1f", 1.0);
-		gDecimal = rep[2];
-	}
 
     for(s=httpAcceptLanguage;s&&*s;) {
         while(isspace(*s)) /* eat space at the beginning */
@@ -2854,7 +2844,6 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             itemEnd = httpAcceptLanguage+l; /* end of string */
         }
         if(paramEnd && paramEnd<itemEnd) { 
-			char *decimal;
             /* semicolon (;) is closer than end (,) */
             t = paramEnd+1;
             if(*t=='q') {
@@ -2869,9 +2858,6 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             while(isspace(*t)) {
                 t++;
             }
-			if((decimal=uprv_strchr(t,'.'))<paramEnd) {
-				*decimal = gDecimal;
-			}
             j[n].q = uprv_strtod(t,NULL);
         } else {
             /* no semicolon - it's 1.0 */
@@ -2896,25 +2882,25 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             s++;
         }
         if(n>=jSize) {
-			if(j==smallBuffer) {  /* overflowed the small buffer. */
-				j = uprv_malloc(sizeof(j[0])*(jSize*2));
-				if(j!=NULL) {
-					uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
-				}
+          if(j==smallBuffer) {  /* overflowed the small buffer. */
+            j = uprv_malloc(sizeof(j[0])*(jSize*2));
+            if(j!=NULL) {
+              uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
+            }
 #if defined(ULOC_DEBUG)
-				fprintf(stderr,"malloced at size %d\n", jSize);
+            fprintf(stderr,"malloced at size %d\n", jSize);
 #endif
-			} else {
-				j = uprv_realloc(j, sizeof(j[0])*jSize*2);
+          } else {
+            j = uprv_realloc(j, sizeof(j[0])*jSize*2);
 #if defined(ULOC_DEBUG)
-				fprintf(stderr,"re-alloced at size %d\n", jSize);
+            fprintf(stderr,"re-alloced at size %d\n", jSize);
 #endif
-			}
-			jSize *= 2;
-			if(j==NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				return -1;
-			}
+          }
+          jSize *= 2;
+          if(j==NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return -1;
+          }
         }
     }
     qsort(j, n, sizeof(j[0]), uloc_acceptLanguageCompare);
@@ -2931,12 +2917,12 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         uprv_free(strs[i]);
     }
     uprv_free(strs);
-	if(j != smallBuffer) {
+    if(j != smallBuffer) {
 #if defined(ULOC_DEBUG)
-        fprintf(stderr,"freeing j %p\n", j);
+      fprintf(stderr,"freeing j %p\n", j);
 #endif
-		uprv_free(j);
-	}
+      uprv_free(j);
+    }
     return res;
 }
 
@@ -2958,10 +2944,10 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
         return -1;
     }
     fallbackList = uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount));
-	if(fallbackList==NULL) {
-		*status = U_MEMORY_ALLOCATION_ERROR;
-		return -1;
-	}
+    if(fallbackList==NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return -1;
+    }
     for(i=0;i<acceptListCount;i++) {
 #if defined(ULOC_DEBUG)
         fprintf(stderr,"%02d: %s\n", i, acceptList[i]);

@@ -22,6 +22,7 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -326,3 +327,38 @@ uprv_strndup(const char *src, int32_t n) {
     return dup;
 }
 
+static char gDecimal = 0;
+
+U_CAPI double U_EXPORT2
+uprv_strtod(const char *start, char **end) {
+  char *decimal;
+  char *myEnd;
+  char buf[30];
+  double rv;
+  if (!gDecimal) {
+    char rep[5];
+    // For machines that decide to change the decimal on you,
+    // and try to be too smart with localization.
+    // This normally should be just a '.'.
+    sprintf(rep, "%+1.1f", 1.0);
+    gDecimal = rep[2];
+  }
+
+  if(gDecimal == '.') {
+    return strtod(start, end); /* fall through to OS */
+  } else {
+    uprv_strncpy(buf, start, 29);
+    buf[29]=0;
+    decimal = uprv_strchr(buf, '.');
+    if(decimal) {
+      *decimal = gDecimal;
+    } else {
+      return strtod(start, end); /* no decimal point */
+    }
+    rv = strtod(buf, &myEnd);
+    if(end) {
+      *end = start+(myEnd-buf);
+    }
+    return rv;
+  }
+}
