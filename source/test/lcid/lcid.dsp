@@ -92,7 +92,7 @@ SOURCE=.\lcid.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\common\locmap.cpp
+SOURCE=..\..\common\locmap.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

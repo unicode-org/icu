@@ -53,7 +53,7 @@ testLCID(const char *localeName,
     lcidStringC[lcidString.length()] = '\0';
     expectedLCID = uprv_strtoul(lcidStringC, NULL, 16);
 
-    lcid = IGlobalLocales::convertToLCID(localeName, &status);
+    lcid = T_convertToLCID(localeName, &status);
     if (U_FAILURE(status)) {
         if (expectedLCID == 0) {
             printf("INFO:    %-5s does not have any LCID mapping\n", localeName);
@@ -66,7 +66,7 @@ testLCID(const char *localeName,
     }
 
     status = U_ZERO_ERROR;
-    uprv_strcpy(lcidStringC, IGlobalLocales::convertToPosix(expectedLCID, &status));
+    uprv_strcpy(lcidStringC, T_convertToPosix(expectedLCID, &status));
     if (U_FAILURE(status)) {
         printf("ERROR:   %.4x does not have a POSIX mapping due to %s\n", expectedLCID, u_errorName(status));
         (*errors)++;
