@@ -22,8 +22,6 @@
 #include "unicode/ustring.h"
 #include "ucbuf.h"
 
-#define DEBUG 1
-
 #define MAX_IN_BUF 1000
 #define MAX_U_BUF 1500
 
@@ -89,11 +87,10 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     UChar* pTarget=NULL;
     UChar* target=NULL;
     const char* source=NULL;
-    char* cbuf =NULL;
+    char  cbuf[MAX_IN_BUF] = {'\0'};
     int numRead=0;
     int offset=0;
 
-    cbuf =(char*)uprv_malloc(sizeof(char) * MAX_IN_BUF);
     pTarget = buf->buffer;
     /* check if we arrived here without exhausting the buffer*/
     if(buf->currentPos<buf->bufLimit){
@@ -126,7 +123,6 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     }
     buf->currentPos = pTarget;
     buf->bufLimit=pTarget+numRead;
-    uprv_free(cbuf);
     return buf;
 }
 
