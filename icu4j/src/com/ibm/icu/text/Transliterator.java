@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2003/05/14 19:43:44 $
- * $Revision: 1.89 $
+ * $Date: 2003/05/26 17:35:54 $
+ * $Revision: 1.90 $
  *
  *****************************************************************************************
  */
@@ -388,6 +388,7 @@ public abstract class Transliterator {
 
         /**
          * Returns true if this Position is equal to the given object.
+         * @draft ICU 2.6
          */
         public boolean equals(Object obj) {
             if (obj instanceof Position) {

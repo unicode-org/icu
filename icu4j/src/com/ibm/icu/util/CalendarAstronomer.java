@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2003/05/14 19:43:45 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/05/26 17:35:54 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -610,30 +610,34 @@ public class CalendarAstronomer {
         return sunLongitude;
     }
   
-	public double[] getSunLongitude(double julianDay)
-	{
-		// See page 86 of "Practial Astronomy with your Calculator",
-		// by Peter Duffet-Smith, for details on the algorithm.
+    /**
+     * TODO Make this public when the entire class is package-private.
+     */
+    /*public*/ double[] getSunLongitude(double julianDay)
+    {
+        // See page 86 of "Practial Astronomy with your Calculator",
+        // by Peter Duffet-Smith, for details on the algorithm.
         
-		double day = julianDay - JD_EPOCH;       // Days since epoch
+        double day = julianDay - JD_EPOCH;       // Days since epoch
         
-		// Find the angular distance the sun in a fictitious
-		// circular orbit has travelled since the epoch.
-		double epochAngle = norm2PI(PI2/TROPICAL_YEAR*day);
+        // Find the angular distance the sun in a fictitious
+        // circular orbit has travelled since the epoch.
+        double epochAngle = norm2PI(PI2/TROPICAL_YEAR*day);
         
-		// The epoch wasn't at the sun's perigee; find the angular distance
-		// since perigee, which is called the "mean anomaly"
-		double meanAnomaly = norm2PI(epochAngle + SUN_ETA_G - SUN_OMEGA_G);
+        // The epoch wasn't at the sun's perigee; find the angular distance
+        // since perigee, which is called the "mean anomaly"
+        double meanAnomaly = norm2PI(epochAngle + SUN_ETA_G - SUN_OMEGA_G);
         
-		// Now find the "true anomaly", e.g. the real solar longitude
-		// by solving Kepler's equation for an elliptical orbit
-		// NOTE: The 3rd ed. of the book lists omega_g and eta_g in different
-		// equations; omega_g is to be correct.
-		return new double[] {
-			norm2PI(trueAnomaly(meanAnomaly, SUN_E) + SUN_OMEGA_G),
-			meanAnomaly
-		};
-	}
+        // Now find the "true anomaly", e.g. the real solar longitude
+        // by solving Kepler's equation for an elliptical orbit
+        // NOTE: The 3rd ed. of the book lists omega_g and eta_g in different
+        // equations; omega_g is to be correct.
+        return new double[] {
+            norm2PI(trueAnomaly(meanAnomaly, SUN_E) + SUN_OMEGA_G),
+            meanAnomaly
+        };
+    }
+
     /**
      * The position of the sun at this object's current date and time,
      * in equatorial coordinates.
@@ -738,7 +742,10 @@ public class CalendarAstronomer {
     //-------------------------------------------------------------------------
 
     // This yields worse results (as compared to USNO data) than getSunRiseSet().
-    public long getSunRiseSet2(boolean rise) {
+    /**
+     * TODO Make this public when the entire class is package-private.
+     */
+    /*public*/ long getSunRiseSet2(boolean rise) {
         // 1. Calculate coordinates of the sun's center for midnight
         double jd = Math.floor(getJulianDay() - 0.5) + 0.5;
         double[] sl = getSunLongitude(jd);
@@ -860,8 +867,12 @@ public class CalendarAstronomer {
     //-------------------------------------------------------------------------
 
     // Note: This method appears to produce inferior accuracy as
-    // compared to getSunRiseSet().
-    public long getSunRiseSet3(boolean rise) {
+    // compared to getSunRiseSet(). 
+
+    /**
+     * TODO Make this public when the entire class is package-private.
+     */
+    /*public*/ long getSunRiseSet3(boolean rise) {
 
         // Compute day number for 0.0 Jan 2000 epoch
         double d = (double)(time - EPOCH_2000_MS) / DAY_MS;
