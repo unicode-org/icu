@@ -1379,27 +1379,21 @@ static UnicodeString& escape(const UnicodeString& s, UnicodeString& result) {
 
 #define VERBOSE_ASSERTIONS
 
-UBool IntlTest::assertTrue(const char* message, UBool condition) {
+UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet) {
     if (!condition) {
         errln("FAIL: assertTrue() failed: %s", message);
-    }
-#ifdef VERBOSE_ASSERTIONS
-    else {
+    } else if (!quiet) {
         logln("Ok: %s", message);
     }
-#endif
     return condition;
 }
 
-UBool IntlTest::assertFalse(const char* message, UBool condition) {
+UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
     if (condition) {
         errln("FAIL: assertFalse() failed: %s", message);
-    }
-#ifdef VERBOSE_ASSERTIONS
-    else {
+    } else if (!quiet) {
         logln("Ok: %s", message);
     }
-#endif
     return !condition;
 }
 
@@ -1472,12 +1466,12 @@ static const char* extractToAssertBuf(const UnicodeString& message) {
     return ASSERT_BUF;
 }
 
-UBool IntlTest::assertTrue(const UnicodeString& message, UBool condition) {
-    return assertTrue(extractToAssertBuf(message), condition);
+UBool IntlTest::assertTrue(const UnicodeString& message, UBool condition, UBool quiet) {
+    return assertTrue(extractToAssertBuf(message), condition, quiet);
 }
 
-UBool IntlTest::assertFalse(const UnicodeString& message, UBool condition) {
-    return assertFalse(extractToAssertBuf(message), condition);
+UBool IntlTest::assertFalse(const UnicodeString& message, UBool condition, UBool quiet) {
+    return assertFalse(extractToAssertBuf(message), condition, quiet);
 }
 
 UBool IntlTest::assertSuccess(const UnicodeString& message, UErrorCode ec) {

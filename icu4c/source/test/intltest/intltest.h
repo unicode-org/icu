@@ -133,8 +133,8 @@ public:
 
 protected:
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
-    UBool assertTrue(const char* message, UBool condition);
-    UBool assertFalse(const char* message, UBool condition);
+    UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE);
+    UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE);
     UBool assertSuccess(const char* message, UErrorCode ec);
     UBool assertEquals(const char* message, const UnicodeString& expected,
                        const UnicodeString& actual);
@@ -142,8 +142,8 @@ protected:
                        const char* actual);
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual);
-    UBool assertTrue(const UnicodeString& message, UBool condition);
-    UBool assertFalse(const UnicodeString& message, UBool condition);
+    UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
+    UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
     UBool assertEquals(const UnicodeString& message, const UnicodeString& expected,
                        const UnicodeString& actual);
