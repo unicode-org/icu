@@ -461,6 +461,8 @@ Locale &Locale::operator=(const Locale &other)
     if(other.baseName) {
         if(other.baseName != other.baseNameBuffer) {
             baseName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
+        } else {
+            baseName = baseNameBuffer;
         }
         uprv_strcpy(baseName, other.baseName);
     }
