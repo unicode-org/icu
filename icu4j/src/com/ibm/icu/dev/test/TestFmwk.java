@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/05 05:45:15 $
- * $Revision: 1.36 $
+ * $Date: 2003/02/05 16:50:13 $
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -50,6 +51,11 @@ public class TestFmwk extends AbstractTestLog {
      * The default time zone for all of our tests.  Used in Target.run();
      */
     private final static TimeZone defaultTimeZone = TimeZone.getTimeZone("PST");
+
+    /**
+     * The default locale used for all of our tests.  Used in Target.run();
+     */
+    private final static Locale defaultLocale = Locale.US;
 
     public static final class TestFmwkException extends Exception {
         TestFmwkException(String msg) {
@@ -225,6 +231,7 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         public void run() {
+            Locale.setDefault(defaultLocale);
             TimeZone.setDefault(defaultTimeZone);
 
             if (!validate()) {
