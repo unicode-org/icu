@@ -64,11 +64,12 @@ enum {
  * It physically contains the following:
  *
  *   Resource root; -- 32-bit Resource item, root item for this bundle's tree;
- *                     currently, the root item must be a table resource item
+ *                     currently, the root item must be a table or table32 resource item
  *   int32_t indexes[indexes[0]]; -- array of indexes for friendly
  *                                   reading and swapping; see URES_INDEX_* above
  *                                   new in formatVersion 1.1
- *   char keys[]; -- up to 65k of characters for key strings
+ *   char keys[]; -- characters for key strings
+ *                   (formatVersion 1.0: up to 65k of characters; 1.1: <2G)
  *                   (minus the space for root and indexes[]),
  *                   which consist of invariant characters (ASCII/EBCDIC) and are NUL-terminated;
  *                   padded to multiple of 4 bytes for 4-alignment of the following data
@@ -132,6 +133,8 @@ enum {
  *                      - this value should be 32-aligned -
  * 2  Table:            uint16_t count, uint16_t keyStringOffsets[count], (uint16_t padding), Resource[count]
  * 3  Alias:            (physically same value layout as string, new in ICU 2.4)
+ * 4  Table32:          int32_t count, int32_t keyStringOffsets[count], Resource[count]
+ *                      (new in formatVersion 1.1/ICU 2.8)
  *
  * 7  Integer:          (28-bit offset is integer value)
  * 8  Array:            int32_t count, Resource[count]
@@ -192,8 +195,6 @@ res_getResource(const ResourceData *pResData, const char *key);
 
 U_CFUNC int32_t
 res_countArrayItems(const ResourceData *pResData, const Resource res);
-
-U_CFUNC int32_t res_getTableSize(const ResourceData *pResData, Resource table);
 
 U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t indexS);
 U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, Resource table, int32_t indexS, const char ** key);
