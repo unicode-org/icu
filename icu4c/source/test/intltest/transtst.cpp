@@ -133,6 +133,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(51,TestSanskritLatinRT);
         TESTCASE(52,TestLocaleInstantiation);
         TESTCASE(53,TestTitleAccents);
+        TESTCASE(54,TestLocaleResource);
         default: name = ""; break;
     }
 }
@@ -2568,6 +2569,35 @@ void TransliteratorTest::TestTitleAccents(void) {
     }
     expect(*t, CharsToUnicodeString("a\\u0300b can't abe"), CharsToUnicodeString("A\\u0300b Can't Abe"));
     delete t;
+}
+
+/**
+ * Basic test of a locale resource based rule.
+ */
+void TransliteratorTest::TestLocaleResource() {
+    const char* DATA[] = {
+        // id                    from               to
+        //"Latin-Greek/UNGEGN",    "b",               "\\u03bc\\u03c0",
+        "Latin-el",              "b",               "\\u03bc\\u03c0",
+        "Latin-Greek",           "b",               "\\u03B2",
+        "Greek-Latin/UNGEGN",    "\\u03bc\\u03c0",  "b",
+        "el-Latin",              "\\u03bc\\u03c0",  "b",
+        "Greek-Latin",           "\\u03B2",         "b",
+    };
+    const int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        UParseError pe;
+        UErrorCode ec = U_ZERO_ERROR;
+        Transliterator *t = Transliterator::createInstance(DATA[i], UTRANS_FORWARD, pe, ec);
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: createInstance(" + DATA[i] + ")");
+            delete t;
+            continue;
+        }
+        expect(*t, CharsToUnicodeString(DATA[i+1]),
+               CharsToUnicodeString(DATA[i+2]));
+        delete t;
+    }
 }
 
 //======================================================================

@@ -251,6 +251,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestTitleAccents(void);
 
+    /**
+     * Basic test of a locale resource based rule.
+     */
+    void TestLocaleResource(void);
+
     //======================================================================
     // Support methods
     //======================================================================
