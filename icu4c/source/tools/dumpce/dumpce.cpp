@@ -37,6 +37,9 @@
 #include "cstring.h"
 #include "uoptions.h"
 #include "ucol_imp.h"
+#include <unicode/ures.h>
+#include <unicode/uniset.h>
+#include <unicode/usetiter.h>
 
 /**
 * Command line option variables. 
@@ -44,18 +47,19 @@
 * command line by the user.
 */
 static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    {"locale",        NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0},
-    {"serialize",     NULL, NULL, NULL, 'z', UOPT_NO_ARG, 0},
-	UOPTION_DESTDIR,
-    UOPTION_SOURCEDIR,
-    {"attribute",     NULL, NULL, NULL, 'a', UOPT_REQUIRES_ARG, 0},
-    {"rule",          NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0},
-    {"normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0},
-    {"scripts",       NULL, NULL, NULL, 't', UOPT_NO_ARG, 0},
-    {"reducehan",     NULL, NULL, NULL, 'e', UOPT_NO_ARG, 0},
-	UOPTION_VERBOSE
+    /* 00 */ UOPTION_HELP_H, 
+    /* 01 */ UOPTION_HELP_QUESTION_MARK,
+    /* 02 */ {"locale",        NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0},
+    /* 03 */ {"serialize",     NULL, NULL, NULL, 'z', UOPT_NO_ARG, 0},
+	/* 04 */ UOPTION_DESTDIR,
+    /* 05 */ UOPTION_SOURCEDIR,
+    /* 06 */ {"attribute",     NULL, NULL, NULL, 'a', UOPT_REQUIRES_ARG, 0},
+    /* 07 */ {"rule",          NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0},
+    /* 08 */ {"normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0},
+    /* 09 */ {"scripts",       NULL, NULL, NULL, 't', UOPT_NO_ARG, 0},
+    /* 10 */ {"reducehan",     NULL, NULL, NULL, 'e', UOPT_NO_ARG, 0},
+	/* 11 */ UOPTION_VERBOSE,
+    /* 12 */ {"wholescripts",      NULL, NULL, NULL, 'W', UOPT_NO_ARG, 0}
 };
 
 /**
@@ -263,6 +267,8 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
         
     while ((current = ucol_tok_parseNextToken(&src, rstart, &parseError,
                                               &error)) != NULL) {
+      chOffset = src.parsedToken.charsOffset;
+      chLen = src.parsedToken.charsLen;
         // contractions handled here
         if (!contractiononly || chLen > 1) {
             ucol_setText(iter, rule + chOffset, chLen, &error);
@@ -942,6 +948,85 @@ inline UBool checkInScripts(UScriptCode script[], int scriptcount,
 
 /**
 * Gets the script elements and contractions belonging to the script
+* @param elems output list
+* @param locale locale
+* @return number of script elements
+* Add by Richard
+*/
+int getScriptElementsFromExemplars(ScriptElement scriptelem[], const char* locale) {
+	UErrorCode error = U_ZERO_ERROR;
+    UChar32    codepoint = 0;
+
+	UResourceBundle* ures = ures_open(NULL, locale, &error);
+	if (U_FAILURE(error)) {
+		fprintf(stdout, "Can not find resource bundle for locale: %s\n", locale);
+        return -1;
+	}
+	int32_t length;
+	const UChar* exemplarChars = ures_getStringByKey(ures, "ExemplarCharacters", &length, &error);
+	
+	if (U_FAILURE(error)) {
+		fprintf(stdout, "Can not find ExemplarCharacters in resource bundle\n");
+        return -1;
+	}
+
+	UChar* upperChars = new UChar[length*2];
+	if (upperChars == 0) {
+		fprintf(stdout, "Memory error\n");
+        return -1;
+	}
+
+	int32_t destLength = u_strToUpper(upperChars, length*2, exemplarChars, -1, locale, &error);
+	if (U_FAILURE(error)) {
+		fprintf(stdout, "Error when u_strToUpper() \n");
+        return -1;
+	}
+
+	UChar* pattern = new UChar[length + destLength + 10];
+	UChar left[2] = {0x005b, 0x0};
+	UChar right[2] = {0x005d, 0x0};
+	pattern = u_strcpy(pattern, left);
+	pattern = u_strcat(pattern, exemplarChars);
+	pattern = u_strcat(pattern, upperChars);
+	pattern = u_strcat(pattern, right);
+
+	UnicodeSet * uniset = new UnicodeSet(UnicodeString(pattern), error);
+	if (U_FAILURE(error)) {
+		fprintf(stdout, "Can not open USet \n");
+        return -1;
+	}
+	
+	UnicodeSetIterator* usetiter = new UnicodeSetIterator(*uniset);
+
+	int32_t count = 0;
+
+	while (usetiter -> next()) {
+		if (usetiter -> isString()) {
+			UnicodeString strItem = usetiter -> getString();
+
+			scriptelem[count].count = 0;
+			for (int i = 0; i < strItem.length(); i++) {
+				codepoint = strItem.char32At(i);
+				UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, 
+										scriptelem[count].count, codepoint);
+				scriptelem[count].tailored = FALSE;
+			}
+		} else {
+			codepoint = usetiter -> getCodepoint();
+			scriptelem[count].count = 0;
+			UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, 
+				                     scriptelem[count].count, codepoint);
+			scriptelem[count].tailored = FALSE;
+		}
+
+		count++;
+	}
+
+	return count;
+}
+
+/**
+* Gets the script elements and contractions belonging to the script
 * @param script list
 * @param scriptcount number of scripts
 * @param elems output list
@@ -1173,7 +1258,9 @@ void outputHTMLFooter()
 * @param script code list
 * @param scriptcount number of scripts
 */
-void serializeScripts(UScriptCode script[], int scriptcount) 
+//void serializeScripts(UScriptCode script[], int scriptcount) 
+//Richard
+void serializeScripts(UScriptCode script[], int scriptcount, const char* locale = NULL) 
 {
     UErrorCode  error  = U_ZERO_ERROR;
     
@@ -1183,7 +1270,13 @@ void serializeScripts(UScriptCode script[], int scriptcount)
         fprintf(stdout, "Memory error\n");
         return;
     }
-    int count = getScriptElements(script, scriptcount, scriptelem);    
+    int count = 0;
+    if(locale) {
+      count = getScriptElementsFromExemplars(scriptelem, locale);
+    } else {
+      count = getScriptElements(script, scriptcount, scriptelem); 
+    }
+
     // Sort script elements using Quicksort algorithm:
     qsort(scriptelem, count, sizeof(ScriptElement), compareCodepoints);
     markTailored(script, scriptcount, scriptelem, count);
@@ -1247,7 +1340,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "<table border=0>\n");
     UChar      displayname[64];
     UErrorCode error = U_ZERO_ERROR;
-    int32_t size = uloc_getDisplayName(locale, NULL, displayname, 64, &error);
+    int32_t size = uloc_getDisplayName(locale, "en_US", displayname, 64, &error);
     char       utf8displayname[128];
     if (U_FAILURE(error)) {
         utf8displayname[0] = 0;
@@ -1362,6 +1455,8 @@ void serializeScripts() {
     if (options[4].doesOccur) {
         strcpy(filename, options[4].value);
         dirlength = appendDirSeparator(filename);
+    } else {
+      filename[0] = 0;
     }
 
     const char    *locale;
@@ -1417,7 +1512,14 @@ void serializeScripts() {
             }
             outputHTMLHeader(locale, scriptcode, scriptcount);
 			fprintf(stdout, "%s\n", locale);
-			serializeScripts(scriptcode, scriptcount);
+			
+            if(options[12].doesOccur) {
+              // use whole scripts
+			  serializeScripts(scriptcode, scriptcount); 
+            } else {
+              // use exemplar chars
+              serializeScripts(scriptcode, scriptcount, locale);
+            }
             fclose(OUTPUT_);
         }
         ucol_close(COLLATOR_);
@@ -1451,7 +1553,7 @@ int main(int argc, char *argv[]) {
         fprintf(stdout, "\n");
     }
     if (argc < 0 || options[0].doesOccur || options[1].doesOccur) {
-        fprintf(stdout, "Usage: strperf options...\n"
+        fprintf(stdout, "Usage: dumpce options...\n"
                         "--help\n"
                         "    Display this message.\n"
                         "--locale name|all\n"
@@ -1471,7 +1573,9 @@ int main(int argc, char *argv[]) {
                         "--scripts\n" 
                         "    Codepoints from all scripts are sorted and serialized.\n"
                         "--reducehan\n" 
-                        "    Only 200 Han script characters will be displayed with the use of --scripts.\n\n");
+                        "    Only 200 Han script characters will be displayed with the use of --scripts.\n"
+                        "--wholescripts\n"
+                        "    Show collation order for whole scripts instead of just for exemplar characters of a locale\n\n");
 
         fprintf(stdout, "Example to generate *.txt files : dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17\n\n");
         fprintf(stdout, "Example to generate *.html files for oss web display: dumpce --scripts --destdir /temp --reducehan\n");
