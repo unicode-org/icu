@@ -51,7 +51,8 @@ static void debug_islamcal_msg(const char *pat, ...)
 // --- The cache --
 // cache of months
 static UMTX astroLock = 0;  // pod bay door lock
-static CalendarCache *monthCache = NULL;
+static CalendarCache *gMonthCache = NULL;
+static CalendarAstronomer *gIslamicCalendarAstro = NULL;
 
 U_NAMESPACE_BEGIN
 
@@ -206,7 +207,7 @@ int32_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
 int32_t IslamicCalendar::trueMonthStart(int32_t month) const
 {
   UErrorCode status = U_ZERO_ERROR;
-  int32_t start = CalendarCache::get(&monthCache, month, status);
+  int32_t start = CalendarCache::get(&gMonthCache, month, status);
   
   if (start==0) {
     // Make a guess at when the month started, using the average length
@@ -230,7 +231,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
       } while (age < 0);
     }
     start = (int32_t)Math::floorDivide((origin - HIJRA_MILLIS), (double)kOneDay) + 1;
-    CalendarCache::put(&monthCache, month, start, status);
+    CalendarCache::put(&gMonthCache, month, start, status);
   }
   if(U_FAILURE(status)) {
     start = 0;
@@ -250,14 +251,14 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
 double IslamicCalendar::moonAge(UDate time)
 {
   double age = 0;
-  static CalendarAstronomer *astro = NULL;
 
   umtx_lock(&astroLock);
-  if(astro == NULL) {
-    astro = new CalendarAstronomer();
+  if(gIslamicCalendarAstro == NULL) {
+    gIslamicCalendarAstro = new CalendarAstronomer();
   }
-  astro->setTime(time);
-  age = astro->getMoonAge();
+  gIslamicCalendarAstro->setTime(time);
+  age = gIslamicCalendarAstro->getMoonAge();
+  ucln_i18n_registerCleanup();
   umtx_unlock(&astroLock);
 
   // Convert to degrees and normalize...
@@ -511,9 +512,16 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IslamicCalendar)
 U_NAMESPACE_END
 
 U_CFUNC UBool calendar_islamic_cleanup(void) {
-  delete monthCache;
-  monthCache = NULL;
-  return TRUE;
+    if (gMonthCache) {
+        delete gMonthCache;
+        gMonthCache = NULL;
+    }
+    if (gIslamicCalendarAstro) {
+        delete gIslamicCalendarAstro;
+        gIslamicCalendarAstro = NULL;
+    }
+    umtx_destroy(&astroLock);
+    return TRUE;
 }
 
 #endif
