@@ -174,7 +174,7 @@ static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
-    return
+    return (UBool)(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -182,7 +182,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x61 &&
         pInfo->dataFormat[3]==0x6d &&
-        pInfo->formatVersion[0]==1;
+        pInfo->formatVersion[0]==1);
 }
 
 static uint16_t
@@ -196,7 +196,7 @@ getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
 
     /* binary search for the group of names that contains the one for code */
     while(start<limit-1) {
-        number=(start+limit)/2;
+        number=(uint16_t)((start+limit)/2);
         if(groupMSB<groups[number].groupMSB) {
             limit=number;
         } else {
@@ -235,14 +235,14 @@ expandGroupName(UCharNames *names, Group *group,
         /* read even nibble - MSBs of lengthByte */
         if(length>=12) {
             /* double-nibble length spread across two bytes */
-            length=((length&0x3)<<4|lengthByte>>4)+12;
+            length=(uint16_t)(((length&0x3)<<4|lengthByte>>4)+12);
             lengthByte&=0xf;
         } else if((lengthByte&0xf0)>=0xc0) {
             /* double-nibble length spread across this one byte */
-            length=(lengthByte&0x3f)+12;
+            length=(uint16_t)((lengthByte&0x3f)+12);
         } else {
             /* single-nibble length in MSBs */
-            length=lengthByte>>4;
+            length=(uint16_t)(lengthByte>>4);
             lengthByte&=0xf;
         }
 
@@ -373,7 +373,7 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
 
         for(i=count; i>0;) {
             if(--i<bufferLength) {
-                c=(char)code&0xf;
+                c=(char)(code&0xf);
                 if(c<10) {
                     c+='0';
                 } else {
@@ -410,7 +410,7 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
          *
          * note that for fewer operations, count is decremented here
          */
-        count=range->variant-1;
+        count=(uint16_t)(range->variant-1);
         for(i=count; i>0; --i) {
             factor=factors[i];
             indeces[i]=(uint16_t)(code%factor);
@@ -442,7 +442,7 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
             }
 
             /* skip the rest of the strings for this factors[i] */
-            factor=factors[i]-indeces[i]-1;
+            factor=(uint16_t)(factors[i]-indeces[i]-1);
             while(factor>0) {
                 while(*s++!=0) {}
                 --factor;

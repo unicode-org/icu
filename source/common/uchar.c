@@ -274,9 +274,9 @@ loadPropsData() {
 
         /* initialize some variables */
         uprv_memcpy(indexes, propsTable, 16);
-        stage23Bits=indexes[INDEX_STAGE_2_BITS]+indexes[INDEX_STAGE_3_BITS];
-        stage2Mask=(1<<indexes[INDEX_STAGE_2_BITS])-1;
-        stage3Mask=(1<<indexes[INDEX_STAGE_3_BITS])-1;
+        stage23Bits=(uint16_t)(indexes[INDEX_STAGE_2_BITS]+indexes[INDEX_STAGE_3_BITS]);
+        stage2Mask=(uint16_t)((1<<indexes[INDEX_STAGE_2_BITS])-1);
+        stage3Mask=(uint16_t)((1<<indexes[INDEX_STAGE_3_BITS])-1);
         havePropsData=1;
 
         /* if a different thread set it first, then close the extra data */

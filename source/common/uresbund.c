@@ -42,7 +42,7 @@ UBool compareEntries(const void *p1, const void *p2) {
     UResourceDataEntry *b1 = (UResourceDataEntry *)p1;
     UResourceDataEntry *b2 = (UResourceDataEntry *)p2;
 
-    return(uhash_compareChars(b1->fName, b2->fName) & 
+    return (UBool)(uhash_compareChars(b1->fName, b2->fName) & 
         uhash_compareChars(b1->fPath, b2->fPath));
 }
 
@@ -277,7 +277,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
     UBool isDefault = FALSE;
-        UBool isRoot = FALSE;
+    UBool isRoot = FALSE;
     UBool hasRealData = FALSE;
     UBool hasChopped = FALSE;
     char name[96];
@@ -291,10 +291,10 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     umtx_lock(&resbMutex);
     r = init_entry(localeID, path, &initstatus);
     uprv_strcpy(name, r->fName);
-    isDefault = (uprv_strncmp(name, uloc_getDefault(), uprv_strlen(name)) == 0);
-    hasRealData = (r->fBogus == U_ZERO_ERROR);
+    isDefault = (UBool)(uprv_strncmp(name, uloc_getDefault(), uprv_strlen(name)) == 0);
+    hasRealData = (UBool)(r->fBogus == U_ZERO_ERROR);
 
-    isRoot = (uprv_strcmp(name, kRootLocaleName) == 0);
+    isRoot = (UBool)(uprv_strcmp(name, kRootLocaleName) == 0);
 
     /*Fallback data stuff*/
     hasChopped = chopLocale(name);
@@ -303,7 +303,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     while (hasChopped && !isRoot && t1->fParent == NULL) {
         /* insert regular parents */
         t2 = init_entry(name, r->fPath, status);
-        hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
+        hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
         t1->fParent = t2;
         t1 = t2;
         hasChopped = chopLocale(name);
@@ -313,7 +313,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
         /* insert default locale */
         uprv_strcpy(name, uloc_getDefault());
         t2 = init_entry(name, r->fPath, status);
-        hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
+        hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
         r->fBogus = U_USING_DEFAULT_ERROR;
         isDefault = TRUE;
         t1->fParent = t2;
@@ -322,7 +322,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
         while (hasChopped && t1->fParent == NULL) {
             /* insert chopped defaults */
             t2 = init_entry(name, r->fPath, status);
-            hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
+            hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
             t1->fParent = t2;
             t1 = t2;
             hasChopped = chopLocale(name);
@@ -335,7 +335,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
         if(!hasRealData) {
           r->fBogus = U_USING_DEFAULT_ERROR;
         }
-        hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
+        hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
         t1->fParent = t2;
         t1 = t2;
     }
@@ -343,7 +343,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     while(!isRoot && t1->fParent != NULL) {
         t1->fParent->fCountExisting++;
         t1 = t1->fParent;
-        hasRealData = (t1->fBogus == U_ZERO_ERROR) | hasRealData;
+        hasRealData = (UBool)((t1->fBogus == U_ZERO_ERROR) | hasRealData);
     }
 
     if(!hasRealData) {
@@ -568,7 +568,7 @@ U_CAPI UBool U_EXPORT2 ures_hasNext(UResourceBundle *resB) {
   if(resB == NULL) {
     return FALSE;
   }
-  return(resB->fIndex < resB->fSize-1);
+  return (UBool)(resB->fIndex < resB->fSize-1);
 }
 
 U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t* len, const char ** key, UErrorCode *status) {
