@@ -35,6 +35,7 @@ public:
     int32_t getField(UDate d, int32_t f);
     UnicodeString& escape(const UnicodeString& src, UnicodeString& dst);
     UDate generateDate(void); 
+    UDate generateDate(UDate minDate); 
 
 
 //============================================================
