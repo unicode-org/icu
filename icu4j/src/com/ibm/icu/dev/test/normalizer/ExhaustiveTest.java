@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/Attic/ExhaustiveTest.java,v $ 
- * $Date: 2000/07/13 21:26:01 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/03/15 23:35:50 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.test.normalizer;
 
 import com.ibm.test.*;
 import com.ibm.text.*;
+import com.ibm.icu.internal.UInfo;
 
 public class ExhaustiveTest extends TestFmwk
 {
