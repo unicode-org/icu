@@ -98,6 +98,9 @@ U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle
  * and path inside the locale, for example: "/myData/en/zoneStrings/3". Keys and indexes are supported. Keys
  * need to reference data in named structures, while indexes can reference both named and anonymous resources.
  * Features a fill-in parameter. 
+ * 
+ * Note, this function does NOT have a syntax for specifying items within a tree.  May want to consider a
+ * syntax that delineates between package/tree and resource.  
  *
  * @param pathToResource    a path that will lead to the requested resource
  * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
