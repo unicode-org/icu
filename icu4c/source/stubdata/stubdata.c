@@ -16,14 +16,20 @@ U_EXPORT const struct {
 
 } U_EXPORT2 U_ICUDATA_ENTRY_POINT = {
     32,          /* headerSize */
-    0xda,        /* magic1,    */
+    0xda,        /* magic1,  (see struct MappedData in udata.c)  */
     0x27,        /* magic2     */
     {            /*UDataInfo   */
-       20,           /* size        */
+        sizeof(UDataInfo),      /* size        */
         0,           /* reserved    */
-        0,           /* isBigEndian */
-        0,           /* charsetFamily */
-        2,           /* sizeof UChar  */
+
+#if U_IS_BIG_ENDIAN
+        1,
+#else
+        0,
+#endif
+
+        U_CHARSET_FAMILY,
+        sizeof(UChar),   
         0,           /* reserved      */
        {             /* data format identifier */
            0x54, 0x6f, 0x43, 0x50}, /* "ToCP" */
