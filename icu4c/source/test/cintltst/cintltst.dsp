@@ -300,6 +300,14 @@ SOURCE=.\udatatst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\usrchdat.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\usrchtst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\utf16tst.c
 # End Source File
 # Begin Source File

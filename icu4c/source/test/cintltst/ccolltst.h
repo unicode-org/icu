@@ -48,5 +48,6 @@ void addRuleBasedCollTest(TestNode**);
 void addCollIterTest(TestNode**);
 void addAllCollTest(TestNode**);
 void addMiscCollTest(TestNode**);
+void addSearchTest(TestNode**);
 
 #endif
