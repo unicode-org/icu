@@ -1454,7 +1454,7 @@ u_isUUppercase(UChar32 c);
  *       general categories "Z" (separators) + whitespace ISO controls
  *       (including no-break spaces)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
  *
  * @param c Code point to test
@@ -1571,7 +1571,8 @@ u_getIntPropertyMaxValue(UProperty which);
  * this function will return U_NO_NUMERIC_VALUE.
  *
  * Similar to java.lang.Character.getNumericValue(), but u_getNumericValue()
- * also supports negative values, large values, and fractions.
+ * also supports negative values, large values, and fractions,
+ * while Java's getNumericValue() returns values 10..35 for ASCII letters.
  *
  * @param c Code point to get the numeric value for.
  * @return Numeric value of c, or U_NO_NUMERIC_VALUE if none is defined.
