@@ -1734,7 +1734,7 @@ static void TestCEValidity()
 
         UColTokenParser src;
         uint32_t strength = 0;
-        uint8_t specs = 0;
+        uint16_t specs = 0;
 
         coll      = ucol_open(locale[count], &status);
         if (U_FAILURE(status)) {
@@ -1914,7 +1914,7 @@ static void TestSortKeyValidity(void)
 
         UColTokenParser src;
         uint32_t strength = 0;
-        uint8_t specs = 0;
+        uint16_t specs = 0;
 
         coll      = ucol_open(locale[count], &status);
         if (U_FAILURE(status)) {
