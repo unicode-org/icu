@@ -46,117 +46,114 @@ class UnicodeString;
  * @draft ICU 2.4 
  */
 class U_COMMON_API StringEnumeration : public UObject { 
- public:
-  /**
-   * Destructor.
-   * @draft ICU 2.4
-   */
-  virtual ~StringEnumeration();
+public:
+    /**
+     * Destructor.
+     * @draft ICU 2.4
+     */
+    virtual ~StringEnumeration();
 
-  /**
-   * <p>Return the number of elements that the iterator traverses.  If
-   * the iterator is out of sync with its service, status is set to
-   * U_ENUM_OUT_OF_SYNC_ERROR, and the return value is zero.</p>
-   *
-   * <p>The return value will not change except possibly as a result of
-   * a subsequent call to reset, or if the iterator becomes out of sync.</p>
-   *
-   * <p>This is a convenience function. It can end up being very
-   * expensive as all the items might have to be pre-fetched
-   * (depending on the storage format of the data being
-   * traversed).</p>
-   *
-   * @param status the error code.
-   * @return number of elements in the iterator.
-   *
-   * @draft ICU 2.4 */
-  virtual int32_t count(UErrorCode& status) const = 0;
+    /**
+     * <p>Return the number of elements that the iterator traverses.  If
+     * the iterator is out of sync with its service, status is set to
+     * U_ENUM_OUT_OF_SYNC_ERROR, and the return value is zero.</p>
+     *
+     * <p>The return value will not change except possibly as a result of
+     * a subsequent call to reset, or if the iterator becomes out of sync.</p>
+     *
+     * <p>This is a convenience function. It can end up being very
+     * expensive as all the items might have to be pre-fetched
+     * (depending on the storage format of the data being
+     * traversed).</p>
+     *
+     * @param status the error code.
+     * @return number of elements in the iterator.
+     *
+     * @draft ICU 2.4 */
+    virtual int32_t count(UErrorCode& status) const = 0;
 
-  /**
-   * <p>Returns the next element as a NUL-terminated char*.  If there
-   * are no more elements, returns NULL.  If the resultLength pointer
-   * is not NULL, the length of the string (not counting the
-   * terminating NUL) is returned at that address.  If an error
-   * status is returned, the value at resultLength is undefined.</p>
-   *
-   * <p>The returned pointer is owned by this iterator and must not be
-   * deleted by the caller.  The pointer is valid until the next call
-   * to next, unext, snext, reset, or the enumerator's destructor.</p>
-   *
-   * <p>If the iterator is out of sync with its service, status is set
-   * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
-   *
-   * <p>If the native service string is a UChar* string, it is
-   * converted to char* with the invariant converter.  If the
-   * conversion fails (because a character cannot be converted) then
-   * status is set to U_INVARIANT_CONVERSION_ERROR and the return
-   * value is undefined (though not NULL).</p>
-   *
-   * @param status the error code.
-   * @param resultLength a pointer to receive the length, can be NULL.
-   * @return a pointer to the string, or NULL.
-   *
-   * @draft ICU 2.4 
-   */
-  virtual const char* next(int32_t *resultLength, UErrorCode& status) = 0;
+    /**
+     * <p>Returns the next element as a NUL-terminated char*.  If there
+     * are no more elements, returns NULL.  If the resultLength pointer
+     * is not NULL, the length of the string (not counting the
+     * terminating NUL) is returned at that address.  If an error
+     * status is returned, the value at resultLength is undefined.</p>
+     *
+     * <p>The returned pointer is owned by this iterator and must not be
+     * deleted by the caller.  The pointer is valid until the next call
+     * to next, unext, snext, reset, or the enumerator's destructor.</p>
+     *
+     * <p>If the iterator is out of sync with its service, status is set
+     * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
+     *
+     * <p>If the native service string is a UChar* string, it is
+     * converted to char* with the invariant converter.  If the
+     * conversion fails (because a character cannot be converted) then
+     * status is set to U_INVARIANT_CONVERSION_ERROR and the return
+     * value is undefined (though not NULL).</p>
+     *
+     * @param status the error code.
+     * @param resultLength a pointer to receive the length, can be NULL.
+     * @return a pointer to the string, or NULL.
+     *
+     * @draft ICU 2.4 
+     */
+    virtual const char* next(int32_t *resultLength, UErrorCode& status) = 0;
 
-  /**
-   * <p>Returns the next element as a NUL-terminated UChar*.  If there
-   * are no more elements, returns NULL.  If the resultLength pointer
-   * is not NULL, the length of the string (not counting the
-   * terminating NUL) is returned at that address.  If an error
-   * status is returned, the value at resultLength is undefined.</p>
-   *
-   * <p>The returned pointer is owned by this iterator and must not be
-   * deleted by the caller.  The pointer is valid until the next call
-   * to next, unext, snext, reset, or the enumerator's destructor.</p>
-   *
-   * <p>If the iterator is out of sync with its service, status is set
-   * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
-   *
-   * @param status the error code.
-   * @param resultLength a ponter to receive the length, can be NULL.
-   * @return a pointer to the string, or NULL.
-   *
-   * @draft ICU 2.4 
-   */
-  virtual const UChar* unext(int32_t *resultLength, UErrorCode& status) = 0;
+    /**
+     * <p>Returns the next element as a NUL-terminated UChar*.  If there
+     * are no more elements, returns NULL.  If the resultLength pointer
+     * is not NULL, the length of the string (not counting the
+     * terminating NUL) is returned at that address.  If an error
+     * status is returned, the value at resultLength is undefined.</p>
+     *
+     * <p>The returned pointer is owned by this iterator and must not be
+     * deleted by the caller.  The pointer is valid until the next call
+     * to next, unext, snext, reset, or the enumerator's destructor.</p>
+     *
+     * <p>If the iterator is out of sync with its service, status is set
+     * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
+     *
+     * @param status the error code.
+     * @param resultLength a ponter to receive the length, can be NULL.
+     * @return a pointer to the string, or NULL.
+     *
+     * @draft ICU 2.4 
+     */
+    virtual const UChar* unext(int32_t *resultLength, UErrorCode& status) = 0;
 
-  /**
-   * <p>Returns the next element a UnicodeString*.  If there are no
-   * more elements, returns NULL.</p>
-   *
-   * <p>The returned pointer is owned by this iterator and must not be
-   * deleted by the caller.  The pointer is valid until the next call
-   * to next, unext, snext, reset, or the enumerator's destructor.</p>
-   *
-   * <p>If the iterator is out of sync with its service, status is set
-   * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
-   *
-   * @param status the error code.
-   * @return a pointer to the string, or NULL.
-   *
-   * @draft ICU 2.4 
-   */
-  virtual const UnicodeString* snext(UErrorCode& status) = 0;
+    /**
+     * <p>Returns the next element a UnicodeString*.  If there are no
+     * more elements, returns NULL.</p>
+     *
+     * <p>The returned pointer is owned by this iterator and must not be
+     * deleted by the caller.  The pointer is valid until the next call
+     * to next, unext, snext, reset, or the enumerator's destructor.</p>
+     *
+     * <p>If the iterator is out of sync with its service, status is set
+     * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
+     *
+     * @param status the error code.
+     * @return a pointer to the string, or NULL.
+     *
+     * @draft ICU 2.4 
+     */
+    virtual const UnicodeString* snext(UErrorCode& status) = 0;
 
-  /**
-   * <p>Resets the iterator.  This re-establishes sync with the
-   * service and rewinds the iterator to start at the first
-   * element.</p>
-   *
-   * <p>Previous pointers returned by next, unext, or snext become
-   * invalid, and the value returned by count might change.</p>
-   *
-   * @param status the error code.
-   *
-   * @draft ICU 2.4 
-   */
-  virtual void reset(UErrorCode& status) = 0;
+    /**
+     * <p>Resets the iterator.  This re-establishes sync with the
+     * service and rewinds the iterator to start at the first
+     * element.</p>
+     *
+     * <p>Previous pointers returned by next, unext, or snext become
+     * invalid, and the value returned by count might change.</p>
+     *
+     * @param status the error code.
+     *
+     * @draft ICU 2.4 
+     */
+    virtual void reset(UErrorCode& status) = 0;
 };
-
-inline StringEnumeration::~StringEnumeration() {
-}
 
 U_NAMESPACE_END
 

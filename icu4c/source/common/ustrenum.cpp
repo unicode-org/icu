@@ -17,6 +17,8 @@
 
 #define THIS(en) ((StringEnumeration*)(en->context))
 
+StringEnumeration::~StringEnumeration() {}
+
 U_CDECL_BEGIN
 
 /**
