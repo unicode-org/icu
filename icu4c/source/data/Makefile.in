@@ -310,7 +310,7 @@ TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/$(TESTDT)%.cnv)
 
-TEST_RES = casing.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt idna_rules.txt 
+TEST_RES = casing.txt mc.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt idna_rules.txt 
 TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTBUILDDIR)/$(TESTDT)%.res) $(TESTBUILDDIR)/$(TESTDT)iscii.res
 
 ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RES_FILES) $(TESTOUTDIR)/$(TESTDT)nam.typ
