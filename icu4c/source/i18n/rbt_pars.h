@@ -158,7 +158,7 @@ private:
      * @param rule pattern string
      * @param start position of first character of current rule
      */
-    int32_t syntaxError(int32_t parseErrorCode, const UnicodeString&, int32_t start);
+    int32_t syntaxError(UErrorCode parseErrorCode, const UnicodeString&, int32_t start);
 
     /**
      * Parse a UnicodeSet out, store it, and return the stand-in character

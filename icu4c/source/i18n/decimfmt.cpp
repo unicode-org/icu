@@ -2312,7 +2312,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (digitRightCount > 0) {
                         // Unexpected '0'
                         debug("Unexpected '0'")
-                        syntaxError(pattern,pos,parseError,status);
+                        status = U_UNEXPECTED_TOKEN;
+                        syntaxError(pattern,pos,parseError);
                         return;
                     }
                     ++zeroDigitCount;
@@ -2329,7 +2330,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (decimalPos >= 0) {
                         // Grouping separator after decimal
                         debug("Grouping separator after decimal")
-                        syntaxError(pattern,pos,parseError,status);
+                        status = U_UNEXPECTED_TOKEN;
+                        syntaxError(pattern,pos,parseError);
                         return;
                     }
                     groupingCount2 = groupingCount;
@@ -2338,7 +2340,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (decimalPos >= 0) {
                         // Multiple decimal separators
                         debug("Multiple decimal separators")
-                        syntaxError(pattern,pos,parseError,status);
+                        status = U_MULTIPLE_DECIMAL_SEPERATORS;
+                        syntaxError(pattern,pos,parseError);
                         return;
                     }
                     // Intentionally incorporate the digitRightCount,
@@ -2350,13 +2353,15 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         if (expDigits >= 0) {
                             // Multiple exponential symbols
                             debug("Multiple exponential symbols")
-                            syntaxError(pattern,pos,parseError,status);
+                            status = U_MULTIPLE_EXPONENTIAL_SYMBOLS;
+                            syntaxError(pattern,pos,parseError);
                             return;
                         }
                         if (groupingCount >= 0) {
                             // Grouping separator in exponential pattern
                             debug("Grouping separator in exponential pattern")
-                            syntaxError(pattern,pos,parseError,status);
+                            status = U_MALFORMED_EXPONENTIAL_PATTERN;
+                            syntaxError(pattern,pos,parseError);
                             return;
                         }
                         // Check for positive prefix
@@ -2377,7 +2382,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             expDigits < 1) {
                             // Malformed exponential pattern
                             debug("Malformed exponential pattern")
-                            syntaxError(pattern,pos,parseError,status);
+                            status = U_MALFORMED_EXPONENTIAL_PATTERN;
+                            syntaxError(pattern,pos,parseError);
                             return;
                         }
                     }
@@ -2436,7 +2442,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (subpart == 1 || part == 1) {
                         // Unexpected separator
                         debug("Unexpected separator")
-                        syntaxError(pattern,pos,parseError,status);
+                        status = U_UNEXPECTED_TOKEN;
+                        syntaxError(pattern,pos,parseError);
                         return;
                     }
                     sub2Limit = pos;
@@ -2447,7 +2454,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (multiplier != 1) {
                         // Too many percent/perMill characters
                         debug("Too many percent/perMill characters")
-                        syntaxError(pattern,pos,parseError,status);
+                        status = U_MULTIPLE_PERCENT_SYMBOLS;
+                        syntaxError(pattern,pos,parseError);
                         return;
                     }
                     affix->append(kQuote); // Encode percent/perMill
@@ -2463,7 +2471,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (padPos >= 0 ||               // Multiple pad specifiers
                         (pos+1) == pattern.length()) { // Nothing after padEscape
                         debug("Multiple pad specifiers")
-                        syntaxError(pattern,pos,parseError,status);
+                        status = U_MULTIPLE_PAD_SPECIFIERS;
+                        syntaxError(pattern,pos,parseError);
                         return;
                     }
                     padPos = pos;
@@ -2543,7 +2552,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             groupingCount == 0 || groupingCount2 == 0 ||
             subpart > 2) { // subpart > 2 == unmatched quote
             debug("Syntax error")
-            syntaxError(pattern,pos,parseError,status);
+            status = U_PATTERN_SYNTAX_ERROR;
+            syntaxError(pattern,pos,parseError);
             return;
         }
 
@@ -2560,7 +2570,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             } else {
                 // Illegal pad position
                 debug("Illegal pad position")
-                syntaxError(pattern,pos,parseError,status);
+                status = U_ILLEGAL_PAD_POSITION;
+                syntaxError(pattern,pos,parseError);
                 return;
             }
         }
