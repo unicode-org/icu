@@ -82,6 +82,9 @@ struct SResString {
 struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status);
 void string_close(struct SResource *string, UErrorCode *status);
 
+struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status);
+void alias_close(struct SResource *string, UErrorCode *status);
+
 struct SResIntVector {
     uint32_t fCount;
     uint32_t *fArray;
