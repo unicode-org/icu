@@ -740,12 +740,6 @@ private:
   void setUCollator(const char* locale, UErrorCode& status);
 
   /**
-  * Creates the c struct for ucollator
-  * @param collator new ucollator data
-  */
-  void setUCollator(UCollator *collator);
-
-  /**
   * Creates the c struct for ucollator. This used internally by StringSearch.
   * Hence the responsibility of cleaning up the ucollator is not done by
   * this RuleBasedCollator. The isDataOwned flag is set to FALSE.
@@ -806,14 +800,6 @@ inline void RuleBasedCollator::setUCollator(const Locale &locale,
                                                UErrorCode &status)
 {
   setUCollator(locale.getName(), status);
-}
-
-inline void RuleBasedCollator::setUCollator(UCollator *collator)
-{
-  if (ucollator && dataIsOwned) {
-    ucol_close(ucollator);
-  }
-  ucollator = collator;
 }
 
 inline void RuleBasedCollator::setUCollator(UCollator     *collator, 
