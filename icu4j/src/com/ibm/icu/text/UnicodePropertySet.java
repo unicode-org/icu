@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2002/06/06 16:27:56 $
-* $Revision: 1.11 $
+* $Date: 2002/06/06 22:39:15 $
+* $Revision: 1.12 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -49,12 +49,12 @@ import com.ibm.icu.lang.*;
  *      LineBreak
  *      JoiningType
  *    + Script
- *      Binary properties
+ *    + Binary properties
  *
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.11 $ $Date: 2002/06/06 16:27:56 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.12 $ $Date: 2002/06/06 22:39:15 $
  */
 class UnicodePropertySet {
 
@@ -68,6 +68,8 @@ class UnicodePropertySet {
     
     private static Hashtable BINARY_PROPERTY_MAP = null;
     
+    private static Hashtable BOOLEAN_VALUE_MAP = null;
+
     /**
      * A cache mapping character category integers, as returned by
      * UCharacter.getType(), to sets.  Entries are initially
@@ -84,6 +86,8 @@ class UnicodePropertySet {
 
     // Special value codes
     private static final int ANY = -1; // general category: all code points
+
+    private static final int ASCII = -2; // [\u0000-\u007F]
 
     // >From UnicodeData:
     // 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
@@ -220,10 +224,22 @@ class UnicodePropertySet {
             SetFactory factory;
             factory = (SetFactory) NAME_MAP.get(typeName);
             if (factory == null) {
-                // Syntax error; type name not recognized
-                return null;
+                // Not a factory; try a binary property of the form
+                // \p{foo=true}, where the value can be 'true', 't',
+                // 'false', or 'f'.
+                Integer v = (Integer) BOOLEAN_VALUE_MAP.get(valueName);
+                if (v != null) {
+                    set = createBinaryPropertySet(typeName);
+                    invert ^= (v.intValue() == 0);
+                }
+
+                if (set == null) {
+                    // Syntax error; type name not recognized
+                    return null;
+                }
+            } else {
+                set = factory.create(valueName);
             }
-            set = factory.create(valueName);
         } else {
             // No equals seen; parse short format \p{Cf}
             String shortName = munge(pattern, pos, close);
@@ -236,12 +252,10 @@ class UnicodePropertySet {
                 set = createScriptSet(shortName);
             }
 
-            /* TODO Enable later
             // If this fails, try binary property
             if (set == null) {
                 set = createBinaryPropertySet(shortName);
             }
-            */
         }
 
         if (invert) {
@@ -344,12 +358,14 @@ class UnicodePropertySet {
 
         UnicodeSet set = new UnicodeSet();
         if (valueCode == ANY) {
-            set.complement();
-            return set;
-        }
-        for (int cat=0; cat<UCharacterCategory.CHAR_CATEGORY_COUNT; ++cat) {
-            if ((valueCode & (1 << cat)) != 0) {
-                set.addAll(UnicodePropertySet.getCategorySet(cat));
+            set.set(0, 0x10FFFF);
+        } else if (valueCode == ASCII) {
+            set.set(0, 0x7F);
+        } else {
+            for (int cat=0; cat<UCharacterCategory.CHAR_CATEGORY_COUNT; ++cat) {
+                if ((valueCode & (1 << cat)) != 0) {
+                    set.addAll(UnicodePropertySet.getCategorySet(cat));
+                }
             }
         }
         return set;
@@ -369,28 +385,23 @@ class UnicodePropertySet {
         return new UnicodeSet(getScriptSet(script[0]));
     }
 
-// TODO Enable when API support exists for binary props
-//
-//  static UBool _binaryPropertyFilter(UChar32 c, void* context) {
-//      int32_t code = * (int32_t*) context;
-//      return u_hasBinaryProperty(c, (UProperty) code);
-//  }
-//  
-//  /**
-//   * Given a binary property name, create a corresponding
-//   * set and return it, or return null if the name is invalid.
-//   * @param valueName a pre-munged binary property name
-//   */
-//  UnicodeSet* UnicodePropertySet::createBinaryPropertySet(const UnicodeString& name) {
-//      int32_t code = BINARY_PROPERTY_MAP->geti(name) - MAPVAL;
-//      if (code < 0) {
-//          return NULL;
-//      }
-//      
-//      UnicodeSet* set = new UnicodeSet(); 
-//      initSetFromFilter(*set, _binaryPropertyFilter, &code);
-//      return set;
-//  }
+    /**
+     * Given a binary property name, create a corresponding
+     * set and return it, or return null if the name is invalid.
+     * @param valueName a pre-munged binary property name
+     */
+    private static UnicodeSet createBinaryPropertySet(String valueName) {
+        Integer obj = (Integer) BINARY_PROPERTY_MAP.get(valueName);
+        if (obj == null) {
+            return null;
+        }
+        final int ivalue = obj.intValue();
+        return createSetFromFilter(new Filter() {
+            public boolean contains(int cp) {
+                return UCharacter.hasBinaryProperty(cp, ivalue);
+            }
+        });
+    }
 
     //----------------------------------------------------------------
     // Utility methods
@@ -523,7 +534,7 @@ class UnicodePropertySet {
     private static void addType(String shortName, String longName,
                                 SetFactory factory) {
         // DEBUGGING CODE: DISABLE FOR PRODUCTION BUILD
-        if (false) {
+        if (true) {
             if (NAME_MAP.get(shortName) != null) {
                 throw new InternalError("Duplicate name " + shortName);
             }
@@ -543,7 +554,7 @@ class UnicodePropertySet {
                                  String shortName, String longName,
                                  int value) {
         // DEBUGGING CODE: DISABLE FOR PRODUCTION BUILD
-        if (false) {
+        if (true) {
             if (map.get(shortName) != null) {
                 throw new InternalError("Duplicate name " + shortName);
             }
@@ -570,7 +581,11 @@ class UnicodePropertySet {
         COMBINING_CLASS_MAP = new Hashtable();
         BIDI_CLASS_MAP = new Hashtable();
         BINARY_PROPERTY_MAP = new Hashtable();
+        BOOLEAN_VALUE_MAP = new Hashtable();
         SCRIPT_CACHE = new UnicodeSet[UScript.CODE_LIMIT];
+
+        // NOTE:  All short and long names taken from
+        // PropertyAliases.txt and PropertyValueAliases.txt.
 
         // NOTE:  We munge all search keys to have no whitespace
         // and upper case.  As such, all stored keys should have
@@ -585,7 +600,7 @@ class UnicodePropertySet {
             }
         });
 
-        addType("CC", "COMBININGCLASS", new CombiningClassFactory());
+        addType("CCC", "CANONICALCOMBININGCLASS", new CombiningClassFactory());
 
         addType("BC", "BIDICLASS", new BidiClassFactory());
 
@@ -605,9 +620,17 @@ class UnicodePropertySet {
         });
 
         //------------------------------------------------------------
+        // Boolean Value MAP
+        
+        addValue(BOOLEAN_VALUE_MAP, "T", "TRUE", 1);
+        addValue(BOOLEAN_VALUE_MAP, "F", "FALSE", 0);
+
+        //------------------------------------------------------------
         // General Category MAP
 
         addValue(CATEGORY_MAP, "ANY", null, ANY); // special case
+
+        addValue(CATEGORY_MAP, "ASCII", null, ASCII); // special case
 
         addValue(CATEGORY_MAP, "C", "OTHER",
                  (1 << UCharacterCategory.CONTROL) |
@@ -724,18 +747,12 @@ class UnicodePropertySet {
         // Combining Class MAP
 
         addValue(COMBINING_CLASS_MAP, "NR", "NOTREORDERED", 0);
-        addValue(COMBINING_CLASS_MAP, "OV", "OVERLAYSINTERIORS", 1);
-        addValue(COMBINING_CLASS_MAP, "NU", "NUKTAS", 7);
-        addValue(COMBINING_CLASS_MAP, "KV", "KANAVOICINGMARKS", 8);
-        addValue(COMBINING_CLASS_MAP, "V", "VIRAMAS", 9);
-        addValue(COMBINING_CLASS_MAP, "BLA", "BELOWLEFTATTACHED", 200);
-        addValue(COMBINING_CLASS_MAP, "BA", "BELOWATTACHED", 202);
-        addValue(COMBINING_CLASS_MAP, "BRA", "BELOWRIGHTATTACHED", 204);
-        addValue(COMBINING_CLASS_MAP, "LAR", "LEFTATTACHEDREORDRANT", 208);
-        addValue(COMBINING_CLASS_MAP, "RA", "RIGHTATTACHED", 210);
-        addValue(COMBINING_CLASS_MAP, "ALA", "ABOVELEFTATTACHED", 212);
-        addValue(COMBINING_CLASS_MAP, "AA", "ABOVEATTACHED", 214);
-        addValue(COMBINING_CLASS_MAP, "ARA", "ABOVERIGHTATTACHED", 216);
+        addValue(COMBINING_CLASS_MAP, "OV", "OVERLAY", 1);
+        addValue(COMBINING_CLASS_MAP, "NU", "NUKTA", 7);
+        addValue(COMBINING_CLASS_MAP, "KV", "KANAVOICING", 8);
+        addValue(COMBINING_CLASS_MAP, "V", "VIRAMA", 9);
+        addValue(COMBINING_CLASS_MAP, "ATBL", "ATTACHEDBELOWLEFT", 202);
+        addValue(COMBINING_CLASS_MAP, "ATAR", "ATTACHEDABOVERIGHT", 216);
         addValue(COMBINING_CLASS_MAP, "BL", "BELOWLEFT", 218);
         addValue(COMBINING_CLASS_MAP, "B", "BELOW", 220);
         addValue(COMBINING_CLASS_MAP, "BR", "BELOWRIGHT", 222);
@@ -751,65 +768,78 @@ class UnicodePropertySet {
         //------------------------------------------------------------
         // Bidi Class MAP
 
-        addValue(BIDI_CLASS_MAP, "L", "LEFTTORIGHT", UCharacterDirection.LEFT_TO_RIGHT); 
-        addValue(BIDI_CLASS_MAP, "R", "RIGHTTOLEFT", UCharacterDirection.RIGHT_TO_LEFT); 
-        addValue(BIDI_CLASS_MAP, "EN", "EUROPEANNUMBER", UCharacterDirection.EUROPEAN_NUMBER);
-        addValue(BIDI_CLASS_MAP, "ES", "EUROPEANNUMBERSEPARATOR", UCharacterDirection.EUROPEAN_NUMBER_SEPARATOR);
-        addValue(BIDI_CLASS_MAP, "ET", "EUROPEANNUMBERTERMINATOR", UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR);
+        addValue(BIDI_CLASS_MAP, "AL", "ARABICLETTER", UCharacterDirection.RIGHT_TO_LEFT_ARABIC);
         addValue(BIDI_CLASS_MAP, "AN", "ARABICNUMBER", UCharacterDirection.ARABIC_NUMBER);
-        addValue(BIDI_CLASS_MAP, "CS", "COMMONNUMBERSEPARATOR", UCharacterDirection.COMMON_NUMBER_SEPARATOR);
-        addValue(BIDI_CLASS_MAP, "B", "BLOCKSEPARATOR", UCharacterDirection.BLOCK_SEPARATOR);
-        addValue(BIDI_CLASS_MAP, "S", "SEGMENTSEPARATOR", UCharacterDirection.SEGMENT_SEPARATOR);
-        addValue(BIDI_CLASS_MAP, "WS", "WHITESPACENEUTRAL", UCharacterDirection.WHITE_SPACE_NEUTRAL); 
-        addValue(BIDI_CLASS_MAP, "ON", "OTHERNEUTRAL", UCharacterDirection.OTHER_NEUTRAL); 
+        addValue(BIDI_CLASS_MAP, "B", "PARAGRAPHSEPARATOR", UCharacterDirection.BLOCK_SEPARATOR);
+        addValue(BIDI_CLASS_MAP, "BN", "BOUNDARYNEUTRAL", UCharacterDirection.BOUNDARY_NEUTRAL);
+        addValue(BIDI_CLASS_MAP, "CS", "COMMONSEPARATOR", UCharacterDirection.COMMON_NUMBER_SEPARATOR);
+        addValue(BIDI_CLASS_MAP, "EN", "EUROPEANNUMBER", UCharacterDirection.EUROPEAN_NUMBER);
+        addValue(BIDI_CLASS_MAP, "ES", "EUROPEANSEPARATOR", UCharacterDirection.EUROPEAN_NUMBER_SEPARATOR);
+        addValue(BIDI_CLASS_MAP, "ET", "EUROPEANTERMINATOR", UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR);
+        addValue(BIDI_CLASS_MAP, "L", "LEFTTORIGHT", UCharacterDirection.LEFT_TO_RIGHT); 
         addValue(BIDI_CLASS_MAP, "LRE", "LEFTTORIGHTEMBEDDING", UCharacterDirection.LEFT_TO_RIGHT_EMBEDDING);
         addValue(BIDI_CLASS_MAP, "LRO", "LEFTTORIGHTOVERRIDE", UCharacterDirection.LEFT_TO_RIGHT_OVERRIDE);
-        addValue(BIDI_CLASS_MAP, "AL", "RIGHTTOLEFTARABIC", UCharacterDirection.RIGHT_TO_LEFT_ARABIC);
+        addValue(BIDI_CLASS_MAP, "NSM", "NONSPACINGMARK", UCharacterDirection.DIR_NON_SPACING_MARK);
+        addValue(BIDI_CLASS_MAP, "ON", "OTHERNEUTRAL", UCharacterDirection.OTHER_NEUTRAL); 
+        addValue(BIDI_CLASS_MAP, "PDF", "POPDIRECTIONALFORMAT", UCharacterDirection.POP_DIRECTIONAL_FORMAT);
+        addValue(BIDI_CLASS_MAP, "R", "RIGHTTOLEFT", UCharacterDirection.RIGHT_TO_LEFT); 
         addValue(BIDI_CLASS_MAP, "RLE", "RIGHTTOLEFTEMBEDDING", UCharacterDirection.RIGHT_TO_LEFT_EMBEDDING);
         addValue(BIDI_CLASS_MAP, "RLO", "RIGHTTOLEFTOVERRIDE", UCharacterDirection.RIGHT_TO_LEFT_OVERRIDE);
-        addValue(BIDI_CLASS_MAP, "PDF", "POPDIRECTIONALFORMAT", UCharacterDirection.POP_DIRECTIONAL_FORMAT);
-        addValue(BIDI_CLASS_MAP, "NSM", "DIRNONSPACINGMARK", UCharacterDirection.DIR_NON_SPACING_MARK);
-        addValue(BIDI_CLASS_MAP, "BN", "BOUNDARYNEUTRAL", UCharacterDirection.BOUNDARY_NEUTRAL);
+        addValue(BIDI_CLASS_MAP, "S", "SEGMENTSEPARATOR", UCharacterDirection.SEGMENT_SEPARATOR);
+        addValue(BIDI_CLASS_MAP, "WS", "WHITESPACENEUTRAL", UCharacterDirection.WHITE_SPACE_NEUTRAL);
 
         //------------------------------------------------------------
-        // Binary Properties MAP
+        // Binary Properties MAP.  Names taken from PropertyAliases.txt.
+        // The following are not supported:
 
-        /* TODO Enable when this API exists in icu4j, possible ICU 2.4
+        // CE        ; Composition_Exclusion
+        // NBrk      ; Non_Break
+        // NFD_QC    ; NFD_Quick_Check
+        // NFKD_QC   ; NFKD_Quick_Check
+        // OAlpha    ; Other_Alphabetic
+        // ODI       ; Other_Default_Ignorable_Code_Point
+        // OGr_Ext   ; Other_Grapheme_Extend
+        // OLower    ; Other_Lowercase
+        // OMath     ; Other_Math
+        // OUpper    ; Other_Uppercase
+        // XO_NFC    ; Expands_On_NFC
+        // XO_NFD    ; Expands_On_NFD
+        // XO_NFKC   ; Expands_On_NFKC
+        // XO_NFKD   ; Expands_On_NFKD
 
-        addValue(BINARY_PROPERTY_MAP, "ALPH", "ALPHABETIC", UCHAR_ALPHABETIC);
-        addValue(BINARY_PROPERTY_MAP, "AHEXD", "ASCII_HEXDIGIT", UCHAR_ASCII_HEX_DIGIT);
-        addValue(BINARY_PROPERTY_MAP, "BDCON", "BIDICONTROL", UCHAR_BIDI_CONTROL);
-        addValue(BINARY_PROPERTY_MAP, "BDMIR", "BIDIMIRRORED", UCHAR_BIDI_MIRRORED);
-        addValue(BINARY_PROPERTY_MAP, "DASH", "", UCHAR_DASH);
-        addValue(BINARY_PROPERTY_MAP, "DICP", "DEFAULTIGNORABLECODEPOINT", UCHAR_DEFAULT_IGNORABLE_CODE_POINT);
-        addValue(BINARY_PROPERTY_MAP, "DEPR", "DEPRECATED", UCHAR_DEPRECATED);
-        addValue(BINARY_PROPERTY_MAP, "DIAC", "DIACRITIC", UCHAR_DIACRITIC);
-        addValue(BINARY_PROPERTY_MAP, "EXT", "EXTENDER", UCHAR_EXTENDER);
-        addValue(BINARY_PROPERTY_MAP, "FCE", "FULLCOMPOSITIONEXCLUSION", UCHAR_FULL_COMPOSITION_EXCLUSION);
-        addValue(BINARY_PROPERTY_MAP, "GBASE", "GRAPHEMEBASE", UCHAR_GRAPHEME_BASE);
-        addValue(BINARY_PROPERTY_MAP, "GEXT", "GRAPHEMEEXTEND", UCHAR_GRAPHEME_EXTEND);
-        addValue(BINARY_PROPERTY_MAP, "GLINK", "GRAPHEMELINK", UCHAR_GRAPHEME_LINK);
-        addValue(BINARY_PROPERTY_MAP, "HEXD", "HEXDIGIT", UCHAR_HEX_DIGIT);
-        addValue(BINARY_PROPERTY_MAP, "HYPH", "HYPHEN", UCHAR_HYPHEN);
-        addValue(BINARY_PROPERTY_MAP, "IDC", "IDCONTINUE", UCHAR_ID_CONTINUE);
-        addValue(BINARY_PROPERTY_MAP, "IDS", "IDSTART", UCHAR_ID_START);
-        addValue(BINARY_PROPERTY_MAP, "IDEO", "IDEOGRAPHIC", UCHAR_IDEOGRAPHIC);
-        addValue(BINARY_PROPERTY_MAP, "IDSB", "IDSBINARYOPERATOR", UCHAR_IDS_BINARY_OPERATOR);
-        addValue(BINARY_PROPERTY_MAP, "IDST", "IDSTRINARYOPERATOR", UCHAR_IDS_TRINARY_OPERATOR);
-        addValue(BINARY_PROPERTY_MAP, "JCON", "JOINCONTROL", UCHAR_JOIN_CONTROL);
-        addValue(BINARY_PROPERTY_MAP, "LOE", "LOGICALORDEREXCEPTION", UCHAR_LOGICAL_ORDER_EXCEPTION);
-        addValue(BINARY_PROPERTY_MAP, "LC", "LOWERCASE", UCHAR_LOWERCASE);
-        addValue(BINARY_PROPERTY_MAP, "MATH", "", UCHAR_MATH);
-        addValue(BINARY_PROPERTY_MAP, "NCHAR", "NONCHARACTERCODEPOINT", UCHAR_NONCHARACTER_CODE_POINT);
-        addValue(BINARY_PROPERTY_MAP, "QUOT", "QUOTATIONMARK", UCHAR_QUOTATION_MARK);
-        addValue(BINARY_PROPERTY_MAP, "RAD", "RADICAL", UCHAR_RADICAL);
-        addValue(BINARY_PROPERTY_MAP, "SOFT", "SOFTDOTTED", UCHAR_SOFT_DOTTED);
-        addValue(BINARY_PROPERTY_MAP, "TERM", "TERMINALPUNCTUATION", UCHAR_TERMINAL_PUNCTUATION);
-        addValue(BINARY_PROPERTY_MAP, "UID", "UNIFIEDIDEOGRAPH", UCHAR_UNIFIED_IDEOGRAPH);
-        addValue(BINARY_PROPERTY_MAP, "UC", "UPPERCASE", UCHAR_UPPERCASE);
-        addValue(BINARY_PROPERTY_MAP, "SPAC", "WHITESPACE", UCHAR_WHITE_SPACE);
-        addValue(BINARY_PROPERTY_MAP, "XIDC", "XIDCONTINUE", UCHAR_XID_CONTINUE);
-        addValue(BINARY_PROPERTY_MAP, "XIDS", "XIDSTART", UCHAR_XID_START);
-        */
+        addValue(BINARY_PROPERTY_MAP, "ALPHA", "ALPHABETIC", UProperty.ALPHABETIC);
+        addValue(BINARY_PROPERTY_MAP, "AHEX", "ASCII_HEXDIGIT", UProperty.ASCII_HEX_DIGIT);
+        addValue(BINARY_PROPERTY_MAP, "BIDIC", "BIDICONTROL", UProperty.BIDI_CONTROL);
+        addValue(BINARY_PROPERTY_MAP, "BIDIM", "BIDIMIRRORED", UProperty.BIDI_MIRRORED);
+        addValue(BINARY_PROPERTY_MAP, "DASH", null, UProperty.DASH);
+        addValue(BINARY_PROPERTY_MAP, "DI", "DEFAULTIGNORABLECODEPOINT", UProperty.DEFAULT_IGNORABLE_CODE_POINT);
+        addValue(BINARY_PROPERTY_MAP, "DEP", "DEPRECATED", UProperty.DEPRECATED);
+        addValue(BINARY_PROPERTY_MAP, "DIA", "DIACRITIC", UProperty.DIACRITIC);
+        addValue(BINARY_PROPERTY_MAP, "EXT", "EXTENDER", UProperty.EXTENDER);
+        addValue(BINARY_PROPERTY_MAP, "COMPEX", "FULLCOMPOSITIONEXCLUSION", UProperty.FULL_COMPOSITION_EXCLUSION);
+        addValue(BINARY_PROPERTY_MAP, "GRBASE", "GRAPHEMEBASE", UProperty.GRAPHEME_BASE);
+        addValue(BINARY_PROPERTY_MAP, "GREXT", "GRAPHEMEEXTEND", UProperty.GRAPHEME_EXTEND);
+        addValue(BINARY_PROPERTY_MAP, "GRLINK", "GRAPHEMELINK", UProperty.GRAPHEME_LINK);
+        addValue(BINARY_PROPERTY_MAP, "HEX", "HEXDIGIT", UProperty.HEX_DIGIT);
+        addValue(BINARY_PROPERTY_MAP, "HYPHEN", null, UProperty.HYPHEN);
+        addValue(BINARY_PROPERTY_MAP, "IDC", "IDCONTINUE", UProperty.ID_CONTINUE);
+        addValue(BINARY_PROPERTY_MAP, "IDS", "IDSTART", UProperty.ID_START);
+        addValue(BINARY_PROPERTY_MAP, "IDEO", "IDEOGRAPHIC", UProperty.IDEOGRAPHIC);
+        addValue(BINARY_PROPERTY_MAP, "IDSB", "IDSBINARYOPERATOR", UProperty.IDS_BINARY_OPERATOR);
+        addValue(BINARY_PROPERTY_MAP, "IDST", "IDSTRINARYOPERATOR", UProperty.IDS_TRINARY_OPERATOR);
+        addValue(BINARY_PROPERTY_MAP, "JOINC", "JOINCONTROL", UProperty.JOIN_CONTROL);
+        addValue(BINARY_PROPERTY_MAP, "LOE", "LOGICALORDEREXCEPTION", UProperty.LOGICAL_ORDER_EXCEPTION);
+        addValue(BINARY_PROPERTY_MAP, "LOWER", "LOWERCASE", UProperty.LOWERCASE);
+        addValue(BINARY_PROPERTY_MAP, "MATH", null, UProperty.MATH);
+        addValue(BINARY_PROPERTY_MAP, "NCHAR", "NONCHARACTERCODEPOINT", UProperty.NONCHARACTER_CODE_POINT);
+        addValue(BINARY_PROPERTY_MAP, "QMARK", "QUOTATIONMARK", UProperty.QUOTATION_MARK);
+        addValue(BINARY_PROPERTY_MAP, "RADICAL", null, UProperty.RADICAL);
+        addValue(BINARY_PROPERTY_MAP, "SD", "SOFTDOTTED", UProperty.SOFT_DOTTED);
+        addValue(BINARY_PROPERTY_MAP, "TERM", "TERMINALPUNCTUATION", UProperty.TERMINAL_PUNCTUATION);
+        addValue(BINARY_PROPERTY_MAP, "UIDEO", "UNIFIEDIDEOGRAPH", UProperty.UNIFIED_IDEOGRAPH);
+        addValue(BINARY_PROPERTY_MAP, "UPPER", "UPPERCASE", UProperty.UPPERCASE);
+        addValue(BINARY_PROPERTY_MAP, "WSPACE", "WHITESPACE", UProperty.WHITE_SPACE);
+        addValue(BINARY_PROPERTY_MAP, "XIDC", "XIDCONTINUE", UProperty.XID_CONTINUE);
+        addValue(BINARY_PROPERTY_MAP, "XIDS", "XIDSTART", UProperty.XID_START);
     }
 }
