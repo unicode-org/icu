@@ -181,7 +181,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.2 $ $Date: 1999/12/20 19:13:41 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.3 $ $Date: 1999/12/20 20:25:00 $
  */
 public class RuleBasedTransliterator extends Transliterator {
     /**
@@ -538,8 +538,13 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char VARIABLE_DEF_OP   = '=';
         private static final char FORWARD_RULE_OP   = '>';
         private static final char REVERSE_RULE_OP   = '<';
+        private static final char FWDREV_RULE_OP    = '~'; // internal rep of FWDREF_OP_STRING
 
         private static final String OPERATORS = "=><";
+
+        // Forward-Reverse operator
+        // a<>b is equivalent to a<b;a>b
+        private static final String FWDREV_OP_STRING  = "<>"; // must have length 2
 
         // Other special characters
         private static final char QUOTE               = '\'';
@@ -685,6 +690,13 @@ public class RuleBasedTransliterator extends Transliterator {
                                              cursorPos[0]));
                 } // otherwise ignore the rule; it's not the direction we want
                 break;
+            case FWDREV_RULE_OP:
+                data.ruleSet.addRule(new TransliterationRule(
+                                         direction == FORWARD ? left.toString() : right.toString(),
+                                         direction == FORWARD ? right.toString() : left.toString(),
+                                         // Context & cursor disallowed
+                                         "", "", -1));
+                break;
             }
         }
 
@@ -767,6 +779,24 @@ public class RuleBasedTransliterator extends Transliterator {
                               + rules.substring(start, limit));
             }
             char c = rules.charAt(i);
+            
+            // Look for "<>" double rules.
+            if ((i+1) < limit && rules.substring(i, i+2).equals(FWDREV_OP_STRING)) {
+                if (i == start) {
+                    throw new IllegalArgumentException(
+                                  "Empty left side: "
+                                  + rules.substring(start, limit));
+                }
+                if (i+2 == limit) {
+                    throw new IllegalArgumentException(
+                                  "Empty right side: "
+                                  + rules.substring(start, limit));
+                }
+                parseSubPattern(start, i, left, null, SPECIALS);
+                parseSubPattern(i+2, limit, right, null, SPECIALS);
+                return FWDREV_RULE_OP;
+            }
+
             switch (c) {
             case FORWARD_RULE_OP:
                 if (i == start) {
@@ -790,7 +820,7 @@ public class RuleBasedTransliterator extends Transliterator {
                 }
                 parseMatchPattern(i+1, limit, right, anteContext, postContext);
                 break;
-            default:
+            case VARIABLE_DEF_OP:
                 if (i == start || i == (limit-1)) {
                     throw new IllegalArgumentException(
                                   "Empty left or right side: "
@@ -799,6 +829,8 @@ public class RuleBasedTransliterator extends Transliterator {
                 parseSubPattern(start, i, left);
                 parseDefPattern(i+1, limit, right);
                 break;
+            default:
+                throw new RuntimeException();
             }
             return c;
         }
