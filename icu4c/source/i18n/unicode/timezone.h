@@ -32,6 +32,7 @@
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "unicode/ures.h"
 
 U_NAMESPACE_BEGIN
 
@@ -616,6 +617,17 @@ protected:
      * @stable ICU 2.0
      */
     TimeZone& operator=(const TimeZone& right);
+
+    /**
+     * Utility function. For internally loading rule data.
+     * @param top Top resource bundle for tz data
+     * @param ruleid ID of rule to load
+     * @param oldbundle Old bundle to reuse or NULL
+     * @param status Status parameter
+     * @return either a new bundle or *oldbundle
+     * @internal
+     */
+    static UResourceBundle* loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode&status);
 
 private:
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.

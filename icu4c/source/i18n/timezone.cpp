@@ -36,6 +36,31 @@
 *********************************************************************************/
 
 #include "unicode/utypes.h"
+#include "unicode/ustring.h"
+
+#ifdef U_DEBUG_TZ
+# include <stdio.h>
+# include "uresimp.h" // for debugging
+
+static void debug_tz_loc(const char *f, int32_t l)
+{
+  fprintf(stderr, "%s:%d: ", f, l);
+}
+
+static void debug_tz_msg(const char *pat, ...)
+{
+  va_list ap;
+  va_start(ap, pat);
+  vfprintf(stderr, pat, ap);
+  fflush(stderr);
+}
+static char gStrBuf[256];
+#define U_DEBUG_TZ_STR(x) u_austrncpy(gStrBuf,x,sizeof(gStrBuf)-1)
+// must use double parens, i.e.:  U_DEBUG_TZ_MSG(("four is: %d",4));
+#define U_DEBUG_TZ_MSG(x) {debug_tz_loc(__FILE__,__LINE__);debug_tz_msg x;}
+#else
+#define U_DEBUG_TZ_MSG(x)
+#endif
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -55,7 +80,12 @@
 #include "unicode/strenum.h"
 #include "uassert.h"
 
-#define ZONEINFO "zoneinfo"
+#define kZONEINFO "zoneinfo"
+#define kREGIONS  "Regions"
+#define kZONES    "Zones"
+#define kRULES    "Rules"
+#define kNAMES    "Names"
+#define kDEFAULT  "Default"
 
 // Static data and constants
 
@@ -102,18 +132,10 @@ U_NAMESPACE_BEGIN
  * Sub-resources are organized into three ranges of data: Zones, final
  * rules, and country tables.  There is also a meta-data resource
  * which has 3 integers: The number of zones, rules, and countries,
- * respectively.  The country count includes the non-country '%' and
- * the rule count includes the non-rule '_' (the metadata).
+ * respectively.  The country count includes the non-country 'Default'.
  */
 static int32_t OLSON_ZONE_START = -1; // starting index of zones
 static int32_t OLSON_ZONE_COUNT = 0;  // count of zones
-
-/* We could compute all of the following, but we don't need them
-static int32_t OLSON_RULE_START = 0;  // starting index of rules
-static int32_t OLSON_RULE_COUNT = 0;  // count of zones
-static int32_t OLSON_COUNTRY_START = 0; // starting index of countries
-static int32_t OLSON_COUNTRY_COUNT = 0; // count of zones
-*/
 
 /**
  * Given a pointer to an open "zoneinfo" resource, load up the Olson
@@ -124,29 +146,11 @@ static UBool getOlsonMeta(const UResourceBundle* top) {
         UErrorCode ec = U_ZERO_ERROR;
         UResourceBundle res;
         ures_initStackObject(&res);
-        ures_getByKey(top, "_", &res, &ec);
-        int32_t len;
-        const int32_t* v = ures_getIntVector(&res, &len, &ec);
-        if (U_SUCCESS(ec) && len == 3) {
-            OLSON_ZONE_COUNT = v[0];
-            // Note: Remove the following `int32_t' declarations if you
-            //       uncomment the declarations above!
-            int32_t OLSON_RULE_COUNT = v[1];
-            int32_t OLSON_COUNTRY_COUNT = v[2];
-
-            // Try to figure out how strcmp in genrb is going to sort
-            // things.  This has to be done here, dynamically, rather
-            // than at build time.
-            char zoneCh='A', ruleCh='_', countryCh='%'; // [sic]
-            OLSON_ZONE_START = ((ruleCh < zoneCh) ? OLSON_RULE_COUNT : 0) +
-                               ((countryCh < zoneCh) ? OLSON_COUNTRY_COUNT : 0);
-
-            /* We could compute the following, but we don't need them -- yet
-            OLSON_RULE_START = ((zoneCh < ruleCh) ? OLSON_ZONE_COUNT : 0) +
-                               ((countryCh < ruleCh) ? OLSON_COUNTRY_COUNT : 0);
-            OLSON_COUNTRY_START = ((ruleCh < countryCh) ? OLSON_RULE_COUNT : 0) +
-                                  ((zoneCh < countryCh) ? OLSON_ZONE_COUNT : 0);
-            */
+        ures_getByKey(top, kZONES, &res, &ec);
+        if(U_SUCCESS(ec)) {
+          OLSON_ZONE_COUNT = ures_getSize(&res);
+          OLSON_ZONE_START = 0;
+          U_DEBUG_TZ_MSG(("OZC%d OZS%d\n",OLSON_ZONE_COUNT, OLSON_ZONE_START));
         }
         ures_close(&res);
     }
@@ -159,13 +163,120 @@ static UBool getOlsonMeta(const UResourceBundle* top) {
 static UBool getOlsonMeta() {
     if (OLSON_ZONE_START < 0) {
         UErrorCode ec = U_ZERO_ERROR;
-        UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
+        UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
         if (U_SUCCESS(ec)) {
-            getOlsonMeta(top);
+          getOlsonMeta(top);
         }
         ures_close(top);
     }
     return (OLSON_ZONE_START >= 0);
+}
+
+static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
+{
+#if 1
+  UResourceBundle *n = NULL;
+  UnicodeString copy = id;
+  const UChar* buf = copy.getTerminatedBuffer();
+  int32_t myLen = copy.length();
+  const UChar* u = NULL;
+
+  int32_t count = ures_getSize(array);
+  int32_t start = 0;
+  int32_t i;
+  int32_t len;
+  int32_t limit = count;
+  if(U_FAILURE(status) || (count < 1)) { 
+    return -1;
+  }
+  U_DEBUG_TZ_MSG(("fisa: Looking for %s, between %d and %d\n", U_DEBUG_TZ_STR(buf), start, limit));
+
+  while(U_SUCCESS(status) && (start<limit-1)) {
+    i = (int32_t)((start+limit)/2);
+    u = ures_getStringByIndex(array, i, &len, &status);
+    U_DEBUG_TZ_MSG(("tz: compare to %s, %d .. [%d] .. %d\n", U_DEBUG_TZ_STR(u), start, i, limit));
+    int r = u_strcmp(buf,u);
+    if((r==0) && U_SUCCESS(status)) {
+      U_DEBUG_TZ_MSG(("fisa: found at %d\n", i));
+      return i;
+    } else if(r<0) {
+      limit = i;
+    } else {
+      start = i;
+    }
+  }
+  u = ures_getStringByIndex(array, start, &len, &status);
+  if(u_strcmp(buf,u)==0) {
+    U_DEBUG_TZ_MSG(("fisa: finally found at %d\n", start));
+    return start;
+  }
+  U_DEBUG_TZ_MSG(("fisa: not found\n"));
+  return -1;
+ 
+#else
+  // Linear search
+  if(U_FAILURE(status)) return -1;
+  int32_t idx=0;
+  UnicodeString check;
+  const char *key;
+  while(U_SUCCESS(status)) {
+    check = ures_getNextUnicodeString(array, &key, &status);
+    if(check==id) {
+      U_DEBUG_TZ_MSG(("fisa: %d\n", idx));
+      return idx;
+    }
+    idx++;
+  }
+  U_DEBUG_TZ_MSG(("fisa: -1\n"));
+  return -1;
+#endif
+}
+
+/**
+ * Fetch a specific zone by name.  Replaces the getByKey call. 
+ * @param top Top timezone resource
+ * @param id Time zone ID
+ * @param oldbundle Bundle for reuse (or NULL).   see 'ures_open()'
+ * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
+ */
+static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeString& id, UResourceBundle *oldbundle, UErrorCode& status) {
+  // load the Rules object
+  UResourceBundle *tmp = ures_getByKey(top, kNAMES, NULL, &status);
+
+  // search for the string
+  int32_t idx = findInStringArray(tmp, id, status);
+
+  if((idx == -1) && U_SUCCESS(status)) {
+    // not found 
+    status = U_MISSING_RESOURCE_ERROR;
+    //ures_close(oldbundle);
+    //oldbundle = NULL;
+  } else {
+    U_DEBUG_TZ_MSG(("gzbn: oldbundle= size %d, type %d, %s\n", ures_getSize(tmp), ures_getType(tmp), u_errorName(status)));
+    tmp = ures_getByKey(top, kZONES, tmp, &status); // get Zones object from top
+    U_DEBUG_TZ_MSG(("gzbn: loaded ZONES, size %d, type %d, path %s %s\n", ures_getSize(tmp), ures_getType(tmp), ures_getPath(tmp), u_errorName(status)));
+    oldbundle = ures_getByIndex(tmp, idx, oldbundle, &status); // get nth Zone object
+    U_DEBUG_TZ_MSG(("gzbn: loaded z#%d, size %d, type %d, path %s, %s\n", idx, ures_getSize(oldbundle), ures_getType(oldbundle), ures_getPath(oldbundle),  u_errorName(status)));
+  }
+  ures_close(tmp);
+  if(U_FAILURE(status)) { 
+    //ures_close(oldbundle);
+    return NULL;
+  } else {
+    return oldbundle;
+  }
+}
+
+
+UResourceBundle* TimeZone::loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode& status) {
+  char key[64];
+  ruleid.extract(0, sizeof(key)-1, key, sizeof(key)-1, "");
+  U_DEBUG_TZ_MSG(("loadRule(%s)\n", key));
+  UResourceBundle *r = ures_getByKey(top, kRULES, oldbundle, &status);
+  U_DEBUG_TZ_MSG(("loadRule(%s) -> kRULES [%s]\n", key, u_errorName(status)));
+  r = ures_getByKey(r, key, r, &status);
+  U_DEBUG_TZ_MSG(("loadRule(%s) -> item [%s]\n", key, u_errorName(status)));
+  return r;
 }
 
 /**
@@ -181,15 +292,25 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
                                           UErrorCode& ec) {
     char buf[128];
     id.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
-    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
-    ures_getByKey(top, buf, &res, &ec);
+    UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+    U_DEBUG_TZ_MSG(("pre: res sz=%d\n", ures_getSize(&res)));
+    UResourceBundle *newRes = getZoneByName(top, id, &res, ec);
+    U_DEBUG_TZ_MSG(("NewRes=%p, &res=%p\n", newRes, &res));
     // Dereference if this is an alias.  Docs say result should be 1
     // but it is 0 in 2.8 (?).
+    U_DEBUG_TZ_MSG(("Loading zone '%s' (%s, size %d) - %s\n", buf, ures_getKey((UResourceBundle*)&res), ures_getSize(&res), u_errorName(ec)));
     if (ures_getSize(&res) <= 1 && getOlsonMeta(top)) {
-        int32_t deref = ures_getInt(&res, &ec) + OLSON_ZONE_START;
-        ures_close(&res);
-        ures_getByIndex(top, deref, &res, &ec);
+      int32_t deref = ures_getInt(&res, &ec) + 0;
+      U_DEBUG_TZ_MSG(("getInt: %s - type is %d\n", u_errorName(ec), ures_getType(&res)));
+      ures_close(&res);
+      UResourceBundle *ares = ures_getByKey(top, kZONES, NULL, &ec); // dereference Zones section
+      ures_getByIndex(ares, deref, &res, &ec);
+      ures_close(ares);
+      U_DEBUG_TZ_MSG(("alias to #%d (%s) - %s\n", deref, "??", u_errorName(ec)));
+    } else {
+      U_DEBUG_TZ_MSG(("not an alias - size %d\n", ures_getSize(&res)));
     }
+    U_DEBUG_TZ_MSG(("%s - final status is %s\n", buf, u_errorName(ec)));
     return top;
 }
 
@@ -209,29 +330,21 @@ static UBool loadOlsonIDs() {
     UErrorCode ec = U_ZERO_ERROR;
     UnicodeString* ids = 0;
     int32_t count = 0;
-    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
+    UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+    UResourceBundle *nres = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Names section
     if (U_SUCCESS(ec)) {
         getOlsonMeta(top);
-        int32_t start = OLSON_ZONE_START;
-        count = OLSON_ZONE_COUNT;
+        int32_t start = 0;
+        count = ures_getSize(nres);
         ids = new UnicodeString[(count > 0) ? count : 1];
-        UResourceBundle res;
-        ures_initStackObject(&res);
         for (int32_t i=0; i<count; ++i) {
-            ures_getByIndex(top, start+i, &res, &ec);
+            ids[i]=ures_getUnicodeStringByIndex(nres, i, &ec);
             if (U_FAILURE(ec)) {
-                ures_close(&res);
                 break;
             }
-            const char* key = ures_getKey(&res);
-            U_ASSERT(*key != '_' && *key != '%');
-            int32_t len = uprv_strlen(key);
-            ids[i] = UnicodeString(key, len+1, "");
-            ids[i].truncate(len); // add a NUL but don't count it so that
-                                  // getBuffer() gets a terminated string
-            ures_close(&res);
         }
     }
+    ures_close(nres);
     ures_close(top);
 
     if (U_FAILURE(ec)) {
@@ -336,9 +449,11 @@ TimeZone::createTimeZone(const UnicodeString& ID)
     TimeZone* result = createSystemTimeZone(ID);
 
     if (result == 0) {
+        U_DEBUG_TZ_MSG(("failed to load system time zone with id - falling to custom"));
         result = createCustomTimeZone(ID);
     }
     if (result == 0) {
+        U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to GMT"));
         result = getGMT()->clone();
     }
     return result;
@@ -355,14 +470,21 @@ TimeZone::createSystemTimeZone(const UnicodeString& id) {
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle res;
     ures_initStackObject(&res);
+    U_DEBUG_TZ_MSG(("pre-err=%s\n", u_errorName(ec)));
     UResourceBundle *top = openOlsonResource(id, res, ec);
+    U_DEBUG_TZ_MSG(("post-err=%s\n", u_errorName(ec)));
     if (U_SUCCESS(ec)) {
         z = new OlsonTimeZone(top, &res, ec);
-        if (z) z->setID(id);
+        if (z) {
+          z->setID(id);
+        } else {
+          U_DEBUG_TZ_MSG(("cstz: olson time zone failed to initialize - err %s\n", u_errorName(ec)));
+        }
     }
     ures_close(&res);
     ures_close(top);
     if (U_FAILURE(ec)) {
+        U_DEBUG_TZ_MSG(("cstz: failed to create, err %s\n", u_errorName(ec)));
         delete z;
         z = 0;
     }
@@ -623,11 +745,16 @@ public:
             return;
         }
 
-        char key[4] = {'%', 0, 0, 0}; // e.g., "%US", or "%" for no country
-        if (country) uprv_strncat(key, country, 2);
+        char key[] = {0, 0, 0, 0,0, 0, 0,0, 0, 0,0}; // e.g., "US", or "Default" for no country
+        if (country)  {
+          uprv_strncat(key, country, 2);
+        } else {
+          uprv_strcpy(key, kDEFAULT);
+        }
 
         UErrorCode ec = U_ZERO_ERROR;
-        UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
+        UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+        top = ures_getByKey(top, kREGIONS, top, &ec); // dereference 'Regions' section
         if (U_SUCCESS(ec)) {
             UResourceBundle res;
             ures_initStackObject(&res);
@@ -644,6 +771,8 @@ public:
                         map[i] = v[i];
                     }
                 }
+            } else {
+              U_DEBUG_TZ_MSG(("Failed to load tz for region %s: %s\n", country, u_errorName(ec)));
             }
             ures_close(&res);
         }
@@ -695,17 +824,13 @@ private:
 
     UBool getID(int32_t i) {
         UErrorCode ec = U_ZERO_ERROR;
-        UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
-        UResourceBundle res;
-        ures_initStackObject(&res);
-        ures_getByIndex(top, OLSON_ZONE_START + i, &res, &ec);
-        if (U_SUCCESS(ec)) {
-            const char* key = ures_getKey(&res);
-            unistr = UnicodeString(key, "");
-        } else {
-            unistr.truncate(0);
+        UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+        top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
+        int32_t len;
+        unistr = ures_getUnicodeStringByIndex(top, i,&ec);
+        if(U_FAILURE(ec)) {
+          unistr.truncate(0);
         }
-        ures_close(&res);
         ures_close(top);
         return U_SUCCESS(ec);
     }
@@ -791,18 +916,24 @@ TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
         return 0;
     }
     
-    char key[4] = {'%', 0, 0, 0}; // e.g., "%US", or "%" for non-country zones
-    if (country) uprv_strncat(key, country, 2);
+    char key[] = { 0, 0, 0,0, 0, 0,0, 0, 0 }; // e.g., "US", or "Default" for non-country zones
+    if (country) { 
+      uprv_strncat(key, country, 2);
+    } else {
+      uprv_strcpy(key, kDEFAULT);
+    }
 
     const UnicodeString** ids = 0;
 
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
+    UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+    UResourceBundle *ares = ures_getByKey(top, kREGIONS, NULL, &ec); // dereference Regions section
     if (U_SUCCESS(ec)) {
         getOlsonMeta(top);
         UResourceBundle res;
         ures_initStackObject(&res);
-        ures_getByKey(top, key, &res, &ec);
+        ures_getByKey(ares, key, &res, &ec);
+        U_DEBUG_TZ_MSG(("caI: on %s, err %s\n", country, u_errorName(ec)));
         if (U_SUCCESS(ec)) {
             /* The list of zones is a list of integers, from 0..n-1,
              * where n is the total number of system zones.  The
@@ -822,6 +953,7 @@ TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
         }
         ures_close(&res);
     }
+    ures_close(ares);
     ures_close(top);
 
     return ids;
@@ -864,17 +996,22 @@ TimeZone::countEquivalentIDs(const UnicodeString& id) {
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle res;
     ures_initStackObject(&res);
+    U_DEBUG_TZ_MSG(("countEquivalentIDs..\n"));
     UResourceBundle *top = openOlsonResource(id, res, ec);
     if (U_SUCCESS(ec)) {
         int32_t size = ures_getSize(&res);
+        U_DEBUG_TZ_MSG(("cEI: success (size %d, key %s)..\n", size, ures_getKey(&res)));
         if (size == 4 || size == 6) {
             UResourceBundle r;
             ures_initStackObject(&r);
             ures_getByIndex(&res, size-1, &r, &ec);
-            // result = ures_getSize(&r); // doesn't work
+            //result = ures_getSize(&r); // doesn't work
             ures_getIntVector(&r, &result, &ec);
+            U_DEBUG_TZ_MSG(("ceI: result %d, err %s\n", result, u_errorName(ec)));
             ures_close(&r);
         }
+    } else {
+      U_DEBUG_TZ_MSG(("cEI: fail, %s\n", u_errorName(ec)));
     }
     ures_close(&res);
     ures_close(top);
@@ -885,6 +1022,7 @@ TimeZone::countEquivalentIDs(const UnicodeString& id) {
 
 const UnicodeString
 TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
+    U_DEBUG_TZ_MSG(("gEI(%d)\n", index));
     UnicodeString result;
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle res;
@@ -899,21 +1037,27 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
             ures_getByIndex(&res, size-1, &r, &ec);
             const int32_t* v = ures_getIntVector(&r, &size, &ec);
             if (index >= 0 && index < size && getOlsonMeta()) {
-                zone = v[index] + OLSON_ZONE_START;
+                zone = v[index];
             }
             ures_close(&r);
         }
     }
     ures_close(&res);
     if (zone >= 0) {
-        ures_getByIndex(top, zone, &res, &ec);
+        UResourceBundle *ares = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
-            const char* key = ures_getKey(&res);
-            result = UnicodeString(key, "");
+          int32_t len;
+          result = ures_getUnicodeStringByIndex(ares, zone, &ec);
+          U_DEBUG_TZ_MSG(("gei(%d) -> %d, len%d, %s\n", index, zone, result.length(), u_errorName(ec)));
         }
-        ures_close(&res);
+        ures_close(ares);
     }
     ures_close(top);
+#if defined(U_DEBUG_TZ)
+    if(result.length() ==0) {
+      U_DEBUG_TZ_MSG(("equiv [__, #%d] -> 0 (%s)\n", index, u_errorName(ec)));
+    }
+#endif
     return result;
 }
 
@@ -943,13 +1087,20 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
 {
     // SRL TODO: cache the SDF, just like java.
     UErrorCode status = U_ZERO_ERROR;
-
+#ifdef U_DEBUG_TZ
+    char buf[128];
+    fID.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
+#endif
     SimpleDateFormat format(style == LONG ? "zzzz" : "z",locale,status);
-
+    U_DEBUG_TZ_MSG(("getDisplayName(%s)\n", buf));
     if(!U_SUCCESS(status))
     {
-        // *** SRL what do I do here?!!
-        return result.remove();
+#ifdef U_DEBUG_TZ
+      char buf2[128];
+      result.extract(0, sizeof(buf2)-1, buf2, sizeof(buf2), "");
+      U_DEBUG_TZ_MSG(("getDisplayName(%s) -> %s\n", buf, buf2));
+#endif
+      return result.remove();
     }
 
     // Create a new SimpleTimeZone as a stand-in for this zone; the
