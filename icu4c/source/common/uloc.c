@@ -18,6 +18,14 @@
 *   07/21/99    stephen     Modified setDefault() to propagate to C++
 ******************************************************************************/
 
+/*
+   POSIX's locale format, from putil.c: [no spaces]
+
+     ll [ _CC ] [ . MM ] [ @ VV]
+
+     l = lang, C = ctry, M = charmap, V = variant
+*/
+
 
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
@@ -171,6 +179,17 @@ static void _lazyEvaluate_installedLocales(void);
 /*returns TRUE if a is an ID separator FALSE otherwise*/
 #define _isIDSeparator(a) (a == '_' || a == '-')
 
+#define _isPrefixLetter(a) ((a=='x')||(a=='X')||(a=='i')||(a=='I'))
+/*returns TRUE if one of the special prefixes is here (s=string)
+  'x-' or 'i-' */
+#define _isIDPrefix(s) (_isPrefixLetter(s[0])&&_isIDSeparator(s[1]))
+
+/* Dot terminates it because of POSIX form  where dot precedes the codepage
+ * except for variant
+ */
+#define _isTerminator(a)  ((a==0)||(a=='.')||(a=='@'))
+
+
 
 /*******************************************************************************
   API function definitions
@@ -300,11 +319,29 @@ uloc_getLanguage(const char*    localeID,
 
   if (localeID == NULL)    localeID = uloc_getDefault();
 
+  /* If it starts with i- or x- */
+  if(_isIDPrefix(localeID))
+  {
+    if(languageCapacity > i)
+    {
+      language[i] = (char)uprv_tolower(*localeID);
+    }
+    i++;
+    localeID++;
+
+    if(languageCapacity > i)
+    {
+      language[i] = '-';
+    }
+    i++;
+    localeID++;
+  }
+
   /*Loop updates i to the size of the language
     but only copies into the buffer as much as the buffer can bare*/
-  while ((*localeID != '\0') && !_isIDSeparator(*localeID))
+  while (!_isTerminator(*localeID) && !_isIDSeparator(*localeID))
     {
-      if (languageCapacity > i) language[i] = (char)tolower(*localeID);
+      if (languageCapacity > i) language[i] = (char)uprv_tolower(*localeID);
       i++;
       localeID++;
     }
@@ -333,6 +370,13 @@ int32_t uloc_getCountry(const char* localeID,
   if (U_FAILURE(*err)) return 0;
   if (localeID == NULL)    localeID = uloc_getDefault();
   
+
+  /* skip over i- or x- */
+  if(_isIDPrefix(localeID))
+  {
+    localeID += 2;
+  }
+
   localeID = _findCharSeparator(localeID);
   
   /*Loop updates i to the size of the language
@@ -340,9 +384,9 @@ int32_t uloc_getCountry(const char* localeID,
   if (localeID)
     {
       ++localeID;
-      while ((*localeID != '\0') && !_isIDSeparator(*localeID))
+      while (!_isTerminator(*localeID) && !_isIDSeparator(*localeID))
       {
-        if (countryCapacity > i) country[i] = (char)toupper(*localeID);
+        if (countryCapacity > i) country[i] = (char)uprv_toupper(*localeID);
         i++;
         localeID++;
       }
@@ -363,31 +407,59 @@ int32_t uloc_getVariant(const char* localeID,
                         UErrorCode* err) 
 {
   int i=0;
+  const char *p = localeID;
 
   if (U_FAILURE(*err)) return 0;
   if (localeID == NULL)    localeID = uloc_getDefault();
 
+  /* skip over i- or x- */
+  if(_isIDPrefix(localeID))
+  {
+    localeID += 2;
+  }
+
   localeID = _findCharSeparator(localeID);
-  if (localeID)    localeID = _findCharSeparator(++localeID);
+  if (localeID)
+  {
+    localeID = _findCharSeparator(++localeID);
+  }
 
   if (localeID)
-    {
+  {
       ++localeID;
       /*Loop updates i to the size of the language
-    but only copies into the buffer as much as the buffer can bare*/
-      while (*localeID != '\0')
+    but only copies into the buffer as much as the buffer can bear*/
+      while (!_isTerminator(*localeID))
     {
-      if (variantCapacity > i) variant[i] = (char)toupper(*localeID);
+      if (variantCapacity > i) variant[i] = (char)uprv_toupper(*localeID);
       i++;
       localeID++;
     }
-
+  }
+  
+  /* But wait, there's more! 
+     **IFF** no variant was otherwise found, take one from @...
+   */
+  if ( (i == 0) &&  /* Found nothing (zero chars copied) */
+       (localeID = uprv_strrchr(p, '@')))
+  {
+    localeID++; /* point after the @ */
+    /* Note that we will stop at a period if the user accidentally
+       put a period after the @ sign */
+    
+    /* repeat above copying loop */
+    while (!_isTerminator(*localeID))
+    {
+      if (variantCapacity > i) variant[i] = (char)uprv_toupper(*localeID);
+      i++;
+      localeID++;
     }
+  }
 
   if (i >= variantCapacity )
-    {
+  {
       *err = U_BUFFER_OVERFLOW_ERROR;
-    }
+  }
 
 
   if (variantCapacity>0) {variant[uprv_min(i,variantCapacity-1)] = '\0';}
@@ -399,12 +471,16 @@ int32_t uloc_getName(const char* localeID,
              int32_t nameCapacity,
              UErrorCode* err)  
 {
-  int i= 0;
-  int varSze = 0;
-  int cntSze = 0;
+  int i= 0;       /* total required size */
+  int n= 0;       /* How much has been copied currently */
+  int varSze = 0; /* How big the variant is */
+  int cntSze = 0; /* How big the country is */
+
   UErrorCode int_err = U_ZERO_ERROR;
+  int remainingCapacity;
 
   if (U_FAILURE(*err)) return 0;
+
   /*First we preflight the components in order to ensure a valid return value*/
   if (localeID == NULL)    localeID = uloc_getDefault();
 
@@ -423,47 +499,92 @@ int32_t uloc_getName(const char* localeID,
                NULL,
                0, 
                &int_err);
-  /*Adjust for the zero terminators*/
-  --varSze; 
-  --cntSze;
 
-  if (cntSze) i++;
-  if (varSze) i++;
+  /*Adjust for the zero terminators*/
+  --varSze;
+  --cntSze;
+  /* i is still languagesize+1 for the terminator */
+
+  /* Add space for underscores */
+  if (varSze)
+  {
+    i+= 2;  /* if theres a variant, it will ALWAYS contain two underscores. */
+  }
+  else
+  {
+    if (cntSze)
+    {
+      i++; /* Otherwise - only language _ country. */
+    }
+  }
+
+  /* Update i (total req'd size) */
   i += cntSze + varSze;
 
-  int_err = U_ZERO_ERROR;
-
-  uloc_getLanguage(localeID, 
-           name,
-           nameCapacity, 
-           &int_err);
-
-  /*We fill in the users buffer*/
-  if ((nameCapacity>0) && cntSze)
+  if(nameCapacity)  /* If size is zero, skip the actual copy */
+  {
+    /* Now, the real copying */
+    int_err = U_ZERO_ERROR;
+    
+    uloc_getLanguage(localeID, 
+                     name,
+                     nameCapacity /* -(n=0) */,  
+                     &int_err);
+    
+    n += uprv_strlen(name);
+    
+    /*We fill in the users buffer*/
+    if ((n<nameCapacity) && cntSze)
     {
-      if (U_SUCCESS(int_err)) uprv_strcat(name, "_");
-
+      if(U_SUCCESS(int_err))
+      {
+        name[n++] = '_';
+      }
+      
       uloc_getCountry(localeID,
-          name + uprv_strlen(name),
-              nameCapacity - uprv_strlen(name),
-              &int_err);
-
-      if (varSze)
+                      name + n,
+                      nameCapacity - n,
+                      &int_err);
+      n += cntSze;
+      
+      if (varSze && (n<nameCapacity))
+      {
+        if(U_SUCCESS(int_err))
+        {
+          name[n++] = '_';
+        }
+        
+        uloc_getVariant(localeID,
+                        name + n,
+                        nameCapacity - n,
+                        &int_err);
+      }
+      
+    }
+    else if((n<nameCapacity) && varSze)
     {
-      if (U_SUCCESS(int_err)) uprv_strcat(name, "_");
-
+      if (U_SUCCESS(int_err))
+      {
+        name[n++] = '_';
+        if(n<nameCapacity)
+          name[n++] = '_';
+      }
+      
       uloc_getVariant(localeID,
-                   name + uprv_strlen(name),
-                   nameCapacity - uprv_strlen(name), 
-                   &int_err);
+                      name + n,
+                      nameCapacity - n,
+                      &int_err);
     }
+    
+    /* Tie it off */
+    name[uprv_min(i,nameCapacity-1)] = '\0';
+  }   /* end (if nameCapacity > 0) */
 
-    }
   *err  = int_err;
-
+  
   return i;
 }
-
+       
 const char* uloc_getISO3Language(const char* localeID) 
 {
   int16_t offset;
@@ -541,7 +662,10 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       inLocale = uloc_getDefault();
       isDefaultLocale = TRUE;
     }
-  else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
+  else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0)
+  {
+    isDefaultLocale = TRUE;
+  }
   /*truncates the fallback mechanism if we start out with a defaultLocale*/
 
   if (locale == NULL) locale = uloc_getDefault();

@@ -177,6 +177,21 @@
  * \endcode
  * </pre>
  * </blockquote>
+ * <P>
+ * Concerning POSIX/RFC1766 Locale IDs, 
+ *  the getLanguage/getCountry/getVariant/getName functions do understand
+ * the POSIX type form of  language_COUNTRY.ENCODING@VARIANT
+ * and if there is not an ICU-stype variant, uloc_getVariant() for example
+ * will return the one listed after the @at sign. As well, the hyphen
+ * "-" is recognized as a country/variant separator similarly to RFC1766.
+ * So for example, "en-us" will be interpreted as en_US.  
+ * As a result, uloc_getName() is far from a no-op, and will have the
+ * effect of converting POSIX/RFC1766 IDs into ICU form, although it does
+ * NOT map any of the actual codes (i.e. russian->ru) in any way.
+ * Applications should call uloc_getName() at the point where a locale ID
+ * is coming from an external source (user entry, OS, web browser)
+ * and pass the resulting string to other ICU functions.  For example,
+ * don't use de-de@EURO as an argument to resourcebundle.
  */
 
 /*
@@ -297,6 +312,11 @@ uloc_getVariant(const char*    localeID,
         UErrorCode* err);
 /**
  * Gets the full name for the specified locale.
+ * Note: This has the effect of 'canonicalizing' the string to
+ * a certain extent. Upper and lower case are set as needed,
+ * and if the components were in 'POSIX' format they are changed to
+ * ICU format.  It does NOT map aliased names in any way.
+ * See the top of this header file.
  *
  * @param localeID the locale to get the full name with
  * @param name the full name for localeID
