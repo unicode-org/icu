@@ -992,20 +992,12 @@ char* u_austrcpy(char *s1,
 /* mutexed access to a shared default converter ----------------------------- */
 
 UBool ustring_cleanup(void) {
-    UConverter *converter = 0;
-
     if (gDefaultConverter) {
-        umtx_lock(NULL);
-        
-        if (gDefaultConverter) {
-            converter = gDefaultConverter;
-            gDefaultConverter = NULL;
-        }
-        umtx_unlock(NULL);
+        ucnv_close(gDefaultConverter);
+        gDefaultConverter = NULL;
     }
     
     /* it's safe to close a 0 converter  */
-    ucnv_close(converter);
     return TRUE;
 }
 
