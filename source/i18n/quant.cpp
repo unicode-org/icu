@@ -114,6 +114,13 @@ UBool Quantifier::matchesIndexValue(uint8_t v) const {
     return (minCount == 0) || matcher->toMatcher()->matchesIndexValue(v);
 }
 
+/**
+ * Implement UnicodeFunctor
+ */
+void Quantifier::setData(const TransliterationRuleData* d) {
+    matcher->setData(d);
+}
+
 U_NAMESPACE_END
 
 //eof

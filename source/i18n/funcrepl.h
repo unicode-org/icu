@@ -80,6 +80,11 @@ class FunctionReplacer : public UnicodeFunctor, public UnicodeReplacer {
      */
     virtual UnicodeString& toReplacerPattern(UnicodeString& rule,
                                              UBool escapeUnprintable) const;
+
+    /**
+     * UnicodeFunctor API
+     */
+    virtual void setData(const TransliterationRuleData*);
 };
 
 U_NAMESPACE_END

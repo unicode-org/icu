@@ -23,7 +23,7 @@ class UnicodeString;
  * A set of rules for a <code>RuleBasedTransliterator</code>.
  * @author Alan Liu
  */
-class TransliterationRuleSet {
+class U_I18N_API TransliterationRuleSet {
     /**
      * Vector of rules, in the order added.  This is used while the
      * rule set is getting built.  After that, freeze() reorders and

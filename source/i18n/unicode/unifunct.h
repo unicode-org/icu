@@ -16,6 +16,7 @@ U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
 class UnicodeReplacer;
+class TransliterationRuleData;
 
 /**
  * <code>UnicodeFunctor</code> is an abstract base class for objects
@@ -96,6 +97,16 @@ class U_I18N_API UnicodeFunctor {
      * different class IDs.
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
+
+    /**
+     * Set the data object associated with this functor.  The data
+     * object provides context for functor-to-standin mapping.  This
+     * method is required when assigning a functor to a different data
+     * object.  This function MAY GO AWAY later if the architecture is
+     * changed to pass data object pointers through the API.
+     * @draft
+     */
+    virtual void setData(const TransliterationRuleData*) = 0;
 
  protected:
 

@@ -91,6 +91,13 @@ UnicodeString& FunctionReplacer::toReplacerPattern(UnicodeString& rule,
     return rule;
 }
 
+/**
+ * UnicodeFunctor API
+ */
+void FunctionReplacer::setData(const TransliterationRuleData* d) {
+    replacer->setData(d);
+}
+
 U_NAMESPACE_END
 
 //eof
