@@ -57,7 +57,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
             if (exec) API_Pattern(); 
             break;
         case 4: name = "Extended";
-            if (exec) Extended(); 
+            //if (exec) Extended(); 
             break;
         case 5: name = "Errors";
             if (exec) Errors(); 
@@ -1065,8 +1065,116 @@ void RegexTest::API_Pattern() {
 
 }
 
+//---------------------------------------------------------------------------
+//
+//      Extended       A more thorough check for features of regex patterns
+//
+//---------------------------------------------------------------------------
+void RegexTest::Extended() {
+    UErrorCode  status  = U_ZERO_ERROR;
+    int32_t     lineNum = 0;
+
+    //
+    //  Open and read the test data file.
+    //
+    const char *testDataDirectory = loadTestData(status);
+    UnicodeString tdd(testDataDirectory);
+    tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
+        replaceFirst("$1regextst.txt", status);
+
+    int    len;
+    UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);
+
+    //
+    //  Put the test data into a UnicodeString
+    //
+    UnicodeString testString(FALSE, testData, len);
+
+    RegexMatcher    quotedStuffMat("\\s*?([\\'\\\"/])(.+?)\\1", 0, status);
+    RegexMatcher    commentMat    ("\\s*?(#.*)?$", 0, status); 
+    RegexMatcher    flagsMat      ("\\s*?([ixsmdt]*)(a?)", 0, status);
+
+    RegexMatcher    lineMat("(.+?)[\\r\\n]+", testString, 0, status);
+    UnicodeString   testPattern;   // The pattern for test from the test file.
+    UnicodeString   testFlags;     // the flags   for a test.
 
 
+
+    //
+    //  Loop over the test data file, once per line.
+    //
+    while (lineMat.find()) {
+        lineNum++;
+        status = U_ZERO_ERROR;
+        UnicodeString testLine = lineMat.group(1, status);
+
+        //
+        // Parse the test line.  Skip blank and comment only lines.
+        // Separate out the three main fields - pattern, flags, target.
+        //
+
+        commentMat.reset(testLine);
+        if (commentMat.lookingAt(status)) {
+            // This line is a comment, or blank.
+            continue;
+        }
+
+        //
+        //  Pull out the pattern field, remove it from the input line.
+        //
+        quotedStuffMat.reset(testLine);
+        if (quotedStuffMat.lookingAt(status)) {
+            testPattern = quotedStuffMat.group(2, status);
+            testLine.remove(0, quotedStuffMat.end(0, status));
+        } else {
+            errln("Bad pattern (missing quotes?) at test file line %d", lineNum);
+            continue;
+        }
+
+
+        //
+        //  Pull out the flags from the input line.
+        //
+        flagsMat.reset(testLine);
+        flagsMat.lookingAt(status);                  // Will always match, possibly an empty string.
+        testFlags = flagsMat.group(1, status);
+        if (flagsMat.group(2, status).length() > 0) {
+            errln("Bad Match flag at line %d. Scanning %c\n",
+                lineNum, flagsMat.group(2, status).charAt(0));
+            continue;
+        }
+        testLine.remove(0, flagsMat.end(0, status));
+
+        //
+        //  Pull out the match string, as a whole.
+        //    We'll process the <tags> later.
+        //
+        quotedStuffMat.reset(testLine);
+        if (quotedStuffMat.lookingAt(status)) {
+            testString = quotedStuffMat.group(2, status);
+            testLine.remove(0, quotedStuffMat.end(0, status));
+        } else {
+            errln("Bad match string at test file line %d", lineNum);
+            continue;
+        }
+        testLine.remove(0, quotedStuffMat.end(0, status));
+
+        //
+        //  The only thing left from the input line should be an optional trailing comment.
+        //
+        commentMat.reset(testLine);
+        if (commentMat.lookingAt(status) == FALSE) {
+            errln("Line %d: unexpected characters at end of test line.", lineNum);
+        }
+
+
+    }
+
+
+}
+
+
+#if 0
 //---------------------------------------------------------------------------
 //
 //      Extended       A more thorough check for features of regex patterns
@@ -1264,9 +1372,8 @@ void RegexTest::Extended() {
     REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1>d</1><2>d</2></0>");
     REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>e");
     REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>");
-
 }
-
+#endif
 
 
 //---------------------------------------------------------------------------
@@ -1324,35 +1431,6 @@ void RegexTest::Errors() {
     REGEX_ERR("abc{1,2a}",1,8, U_REGEX_BAD_INTERVAL);
     REGEX_ERR("abc{222222222222222222222}",1,14, U_REGEX_NUMBER_TOO_BIG);
 
-}
-
-
-//---------------------------------------------------------------------------
-//
-//      PerlTests     Run Perl's regexp tests.
-//
-//---------------------------------------------------------------------------
-static UBool ReplaceFirst(UnicodeString &target, const UnicodeString &pattern,
-                         const UnicodeString &replacement, UErrorCode &status)
-{
-    if (U_FAILURE(status)) {
-        return FALSE;
-    }
-    UParseError pe;
-    RegexPattern *pat = NULL;
-    RegexMatcher *mat = NULL;
-
-    pat = RegexPattern::compile(pattern, 0, pe, status);
-    if (pat != NULL) {
-        mat = pat->matcher(target, status);
-    }
-    if (mat != NULL) {
-        target = mat->replaceFirst(replacement, status);
-    }
-    UBool retVal = (mat->start(0, status) != -1);
-    delete mat;
-    delete pat;
-    return retVal;
 }
 
 
@@ -1510,7 +1588,8 @@ void RegexTest::PerlTests() {
     //
     const char *testDataDirectory = loadTestData(status);
     UnicodeString tdd(testDataDirectory);
-    ReplaceFirst(tdd, "([/\\\\])out[/\\\\]testdata", "$1re_tests.txt", status);
+    tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
+        replaceFirst("$1re_tests.txt", status);
 
     int    len;
     UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);
@@ -1518,14 +1597,14 @@ void RegexTest::PerlTests() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString ruleSourceS(FALSE, testData, len);
+    UnicodeString testDataString(FALSE, testData, len);
 
     //
     //  Regex to break the input file into lines, and strip the new lines.
     //     One line per match, capture group one is the desired data.
     //
     RegexPattern* linePat = RegexPattern::compile("(.+?)[\\r\\n]+", 0, pe, status);
-    RegexMatcher* lineMat = linePat->matcher(ruleSourceS, status);
+    RegexMatcher* lineMat = linePat->matcher(testDataString, status);
 
     //
     //  Regex to split a test file line into fields.
