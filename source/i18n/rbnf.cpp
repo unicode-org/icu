@@ -899,7 +899,7 @@ RuleBasedNumberFormat::getNumberOfRuleSetDisplayNameLocales(void) const {
 Locale 
 RuleBasedNumberFormat::getRuleSetDisplayNameLocale(int32_t index, UErrorCode& status) const {
     if (U_FAILURE(status)) {
-        return Locale();
+        return Locale("");
     }
     if (localizations && index >= 0 && index < localizations->getNumberOfDisplayLocales()) {
         UnicodeString name(TRUE, localizations->getLocaleName(index), -1);
@@ -910,7 +910,7 @@ RuleBasedNumberFormat::getRuleSetDisplayNameLocale(int32_t index, UErrorCode& st
             bp = (char *)uprv_malloc(cap);
             if (bp == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
-                return Locale();
+                return Locale("");
             }
         }
         name.extract(0, name.length(), bp, cap, UnicodeString::kInvariant);
