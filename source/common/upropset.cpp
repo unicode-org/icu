@@ -102,10 +102,14 @@ static const UChar POSIX_CLOSE[] = { 58,93,0 }; // ":]"
 static const UChar PERL_OPEN[]  = { 92,112,0 }; // "\\p"
 static const UChar PERL_CLOSE[] = { 125,0 };    // "}"
 
+static const UChar NAME_OPEN[]  = { 92,78,0 }; // "\\N"
+
 static const UChar HAT        = 0x005E; /*^*/
 static const UChar UPPER_P    = 0x0050; /*P*/
+static const UChar UPPER_N    = 78;     /*N*/
 static const UChar LEFT_BRACE = 0x007B; /*{*/
 static const UChar EQUALS     = 0x003D; /*=*/
+static const UChar U_SPACE    = 0x20;   /* */
 
 // TODO: The Inclusion List should be generated from the UCD for each
 // version, and thus should be accessed from the properties data file
@@ -248,7 +252,8 @@ UBool UnicodePropertySet::resemblesPattern(const UnicodeString& pattern,
 
     // Look for an opening [:, [:^, \p, or \P
     return (0 == pattern.compare(pos, 2, POSIX_OPEN)) ||
-        (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT));
+        (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT)) ||
+        (0 == pattern.compare(pos, 2, NAME_OPEN));
 }
 
 /**
@@ -257,10 +262,10 @@ UBool UnicodePropertySet::resemblesPattern(const UnicodeString& pattern,
  *
  * @param pattern the pattern string
  * @param ppos on entry, the position at which to begin parsing.
- * This shold be one of the locations marked '^':
+ * This should be one of the locations marked '^':
  *
- *   [:blah:]     \p{blah}     \P{blah}
- *   ^       %    ^       %    ^       %
+ *   [:blah:]     \p{blah}     \P{blah}     \N{name}
+ *   ^       %    ^       %    ^       %    ^       %
  *
  * On return, the position after the last character parsed, that is,
  * the locations marked '%'.  If the parse fails, ppos is returned
@@ -285,7 +290,8 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
             return NULL;
         }
 
-        UBool posix = FALSE; // true for [:pat:], false for \p{pat} \P{pat}
+        UBool posix = FALSE; // true for [:pat:], false for \p{pat} \P{pat} \N{pat}
+        UBool isName = FALSE; // true for \N{pat}, o/w false
         UBool invert = FALSE;
 
         // Look for an opening [:, [:^, \p, or \P
@@ -296,8 +302,11 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
                 ++pos;
                 invert = TRUE;
             }
-        } else if (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT)) {
-            invert = (pattern.charAt(pos+1) == UPPER_P);
+        } else if (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT) ||
+                   0 == pattern.compare(pos, 2, NAME_OPEN)) {
+            UChar c = pattern.charAt(pos+1);
+            invert = (c == UPPER_P);
+            isName = (c == UPPER_N);
             pos = skipWhitespace(pattern, pos+2);
             if (pos == pattern.length() || pattern.charAt(pos++) != LEFT_BRACE) {
                 // Syntax error; "\p" or "\P" not followed by "{"
@@ -319,16 +328,16 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
         // medium \p{gc=Cf} or long \p{GeneralCategory=Format}
         // pattern.
         int32_t equals = pattern.indexOf(EQUALS, pos);
-        if (equals >= 0 && equals < close) {
+        if (equals >= 0 && equals < close && !isName) {
             // Equals seen; parse medium/long pattern
-            UnicodeString typeName = munge(pattern, pos, equals);
-            UnicodeString valueName = munge(pattern, equals+1, close);
+            UnicodeString typeName = munge(pattern, pos, equals, FALSE);
             SetFactory factory;
             factory = voidPtrToSetFactory(NAME_MAP->get(typeName));
             if (factory == NULL) {
                 // Not a factory; try a binary property of the form
                 // \p{foo=true}, where the value can be 'true', 't',
                 // 'false', or 'f'.
+                UnicodeString valueName = munge(pattern, equals+1, close, FALSE);
                 int32_t v = BOOLEAN_VALUE_MAP->geti(valueName) - MAPVAL;
                 if (v >= 0) {
                     set = createBinaryPropertySet(typeName, status);
@@ -340,29 +349,48 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
                     return NULL;
                 }
             } else {
+                // TODO:  This is ugly.  It's cleaner in Java, but it's not
+                // worth making the function pointers into functor objects
+                // etc. since this code will be largely rewritten when the
+                // name->property API is in place.
+                UBool n = (factory == createNameSet); // TODO: Remove hard-coded check!
+                UnicodeString valueName = munge(pattern, equals+1, close, n);
                 set = (*factory)(valueName, status);
             }
         } else {
-            // No equals seen; parse short format \p{Cf}
-            UnicodeString shortName = munge(pattern, pos, close);
+            // Handle case where no '=' is seen, and \N{}
+            UnicodeString shortName = munge(pattern, pos, close, isName);
 
-            // Do not propagate error codes from just not finding the name.
-            UErrorCode localErrorCode;
-
-            // First try general category
-            localErrorCode = U_ZERO_ERROR;
-            set = createCategorySet(shortName, localErrorCode);
-
-            // If this fails, try script
-            if (set == NULL) {
-                localErrorCode = U_ZERO_ERROR;
-                set = createScriptSet(shortName, localErrorCode);
+            // Handle \N{name}
+            if (isName) {
+                UErrorCode ec = U_ZERO_ERROR;
+                set = createNameSet(shortName, ec);
+                if (U_FAILURE(ec)) {
+                    delete set;
+                    set = NULL;
+                }
             }
 
-            // If this fails, try binary property
-            if (set == NULL) {
+            // No equals seen; parse short format \p{Cf}
+            else {
+                // Do not propagate error codes from just not finding the name.
+                UErrorCode localErrorCode;
+
+                // First try general category
                 localErrorCode = U_ZERO_ERROR;
-                set = createBinaryPropertySet(shortName, localErrorCode);
+                set = createCategorySet(shortName, localErrorCode);
+                
+                // If this fails, try script
+                if (set == NULL) {
+                    localErrorCode = U_ZERO_ERROR;
+                    set = createScriptSet(shortName, localErrorCode);
+                }
+                
+                // If this fails, try binary property
+                if (set == NULL) {
+                    localErrorCode = U_ZERO_ERROR;
+                    set = createBinaryPropertySet(shortName, localErrorCode);
+                }
             }
         }
 
@@ -401,26 +429,45 @@ UnicodeSet* UnicodePropertySet::createNumericValueSet(const UnicodeString& value
         return NULL;
     }
     CharString cvalueName(valueName);
-    UnicodeSet* set = new UnicodeSet();
     char* end;
     double value = uprv_strtod(cvalueName, &end);
     int32_t ivalue = (int32_t) value;
-    if (set == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    if (ivalue != value || ivalue < 0 || *end != 0) {
         return NULL;
     }
-    if (ivalue != value || ivalue < 0 || *end != 0) {
-        // UCharacter doesn't support negative or non-integral
-        // values, so just return an empty set
-        return set;
+    UnicodeSet* set = new UnicodeSet();
+    if (set == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        initSetFromFilter(*set, _numericValueFilter, &ivalue, status);
     }
-    initSetFromFilter(*set, _numericValueFilter, &ivalue, status);
     return set;
 }
 
 static UBool _combiningClassFilter(UChar32 c, void* context) {
     int32_t value = * (int32_t*) context;
     return u_getCombiningClass(c) == value;
+}
+
+// As of Unicode 3.0.0, the longest name is 83 characters long.
+// TODO Replace this with a function call to uprv_getMaximumNameLength
+//      when such API exists
+#define LONGEST_NAME 83
+
+UnicodeSet* UnicodePropertySet::createNameSet(const UnicodeString& valueName,
+                                              UErrorCode& status) {
+
+    // Accomodate the longest possible name plus padding
+    char cbuf[LONGEST_NAME + 8]; // Default converter
+
+    cbuf[valueName.extract(0, valueName.length(), cbuf, LONGEST_NAME, "")] = 0;
+
+    UChar32 ch = u_charFromName(U_EXTENDED_CHAR_NAME, cbuf, &status);
+    if (U_SUCCESS(status)) {
+        return new UnicodeSet(ch, ch);
+    } else {
+        return NULL;
+    }
 }
 
 UnicodeSet* UnicodePropertySet::createCombiningClassSet(const UnicodeString& valueName,
@@ -647,20 +694,34 @@ const UnicodeSet* UnicodePropertySet::getScriptSet(UScriptCode script,
 /**
  * Given a string, munge it to lose the whitespace, underscores, and hyphens.
  * So "General  Category " or "General_Category" or " General-Category"
- * become "GeneralCategory". We munge all type and value
+ * become "GENERALCATEGORY". We munge all type and value
  * strings, and store all type and value keys pre-munged.  NOTE:
  * Unlike the Java version, we do not modify the case, since we use a
  * case-insensitive compare function.
+ * @param keepSpace if false, completely delete white space.
+ * Otherwise compress runs of whitespace to a single space,
+ * and delete leading and trailing whitespace.  If keepSpace
+ * is true, we also keep underscores and hyphens.
  */
 UnicodeString UnicodePropertySet::munge(const UnicodeString& str,
-                                        int32_t start, int32_t limit) {
+                                        int32_t start, int32_t limit,
+                                        UBool keepSpace) {
     UnicodeString buf;
     for (int32_t i=start; i<limit; ) {
         UChar32 c = str.char32At(i);
         i += UTF_CHAR_LENGTH(c);
-        if (c != 95/*_*/ && c != 45/*-*/ && !uprv_isRuleWhiteSpace(c)) {
+
+        if (uprv_isRuleWhiteSpace(c)) {
+            if (keepSpace &&
+                buf.length() > 0 && buf.charAt(buf.length()-1) != U_SPACE) {
+                buf.append(U_SPACE);
+            }
+        } else if (keepSpace || (c != 95/*_*/ && c != 45/*-*/)) {
             buf.append(c);
         }
+    }
+    if (buf.length() > 0 && buf.charAt(buf.length()-1) == U_SPACE) {
+        buf.truncate(buf.length()-1);
     }
     return buf;
 }
@@ -847,6 +908,8 @@ void UnicodePropertySet::init(UErrorCode &status) {
     //addType("DT", "DECOMPOSITIONTYPE", DECOMPOSITION_TYPE);
 
     ADDTYPE("NV", "NUMERICVALUE", createNumericValueSet);
+
+    ADDTYPE("NA", "NAME", createNameSet);
 
     //addType("NT", "NUMERICTYPE", NUMERIC_TYPE);
     //addType("EA", "EASTASIANWIDTH", EAST_ASIAN_WIDTH);

@@ -652,6 +652,15 @@ void UnicodeSetTest::TestPropertySet() {
         "[:math=false:]",
         "q",
         "(*+)",
+
+        // JB#1767 \N{}, \p{ASCII}
+        "[:Ascii:]",
+        "abc\\u0000\\u007F",
+        "\\u0080\\u4E00",
+        
+        "[\\N{ latin small letter  a  }[:name= latin small letter z:]]",
+        "az",
+        "qrs",
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
