@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/06/22 01:21:09 $
-* $Revision: 1.15 $
+* $Date: 2002/06/22 21:02:16 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -745,8 +745,8 @@ of characters, the first of which has a non-zero combining class.
     
     public static void test() {
         Default.setUCD();
-        DerivedProperty dprop = new DerivedProperty(Default.ucd);
         /*
+        DerivedProperty dprop = new DerivedProperty(Default.ucd);
         for (int j = 0; j < LIMIT; ++j) {
             System.out.println();
             System.out.println(j + "\t" + dprop.getName(j));

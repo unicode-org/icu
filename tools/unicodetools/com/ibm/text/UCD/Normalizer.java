@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.10 $
+* $Date: 2002/06/22 21:02:16 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -224,6 +224,19 @@ public final class Normalizer implements UCD_Types {
     */
     public boolean isNormalized(int ch) {
         return !data.normalizationDiffers(ch, composition, compatibility);
+    }
+
+    /**
+    * Utility: Checks whether there is a recursive decomposition of a character from the
+    * Unicode Character Database. It is compatibility or canonical according to the particular
+    * normalizer.
+    * @param   ch      the source character
+    */
+    public boolean isNormalized(String s) {
+        if (UTF16.countCodePoint(s) > 1) {
+            return !data.normalizationDiffers(UTF16.charAt(s,0), composition, compatibility);
+        }
+        return s.equals(normalize(s)); // TODO: OPTIMIZE LATER
     }
 
     /**
