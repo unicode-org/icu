@@ -32,6 +32,8 @@
 #include "ustr_imp.h"
 #include "uprops.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 /* statically loaded Unicode character properties -------------------------- */
 
 /* MACHINE-GENERATED: Do not edit (see com.ibm.icu.dev.tools.translit.UnicodeSetCloseOver) */
@@ -1912,6 +1914,54 @@ u_foldCase(UChar32 c, uint32_t options) {
     return c; /* no mapping - return c itself */
 }
 
+#if 0
+/* ### TODO Turkic-i case folding prototype, j2021 */
+enum {
+    FOLD_T_LENGTH=3
+};
+
+/*
+ * Turkic full case foldings.
+ * First UChar is the source, second the default mapping,
+ * then the Turkic mapping.
+ */
+static const UChar fold_T[][2+FOLD_T_LENGTH]={
+    { 0x0049, 0x0069, 0x131 },
+    { 0x0069, 0x0069, 0x131, 0x307 },
+    { 0x00cc, 0x00ec, 0x131, 0x300 },
+    { 0x00cd, 0x00ed, 0x131, 0x301 },
+    { 0x00ce, 0x00ee, 0x131, 0x302 },
+    { 0x00cf, 0x00ef, 0x131, 0x308 },
+    { 0x00ec, 0x00ec, 0x131, 0x300 },
+    { 0x00ed, 0x00ed, 0x131, 0x301 },
+    { 0x00ee, 0x00ee, 0x131, 0x302 },
+    { 0x00ef, 0x00ef, 0x131, 0x308 },
+    { 0x0128, 0x0129, 0x131, 0x303 },
+    { 0x0129, 0x0129, 0x131, 0x303 },
+    { 0x012a, 0x012b, 0x131, 0x304 },
+    { 0x012b, 0x012b, 0x131, 0x304 },
+    { 0x012c, 0x012d, 0x131, 0x306 },
+    { 0x012d, 0x012d, 0x131, 0x306 },
+    { 0x012e, 0x012f, 0x131, 0x328 },
+    { 0x012f, 0x012f, 0x131, 0x328 },
+    { 0x0130, 0,      0x131, 0x307 }, /* normal mapping is 0069 0307 */
+    { 0x01cf, 0x01d0, 0x131, 0x30c },
+    { 0x01d0, 0x01d0, 0x131, 0x30c },
+    { 0x0208, 0x0209, 0x131, 0x30f },
+    { 0x0209, 0x0209, 0x131, 0x30f },
+    { 0x020a, 0x020b, 0x131, 0x311 },
+    { 0x020b, 0x020b, 0x131, 0x311 },
+    { 0x1e2c, 0x1e2d, 0x131, 0x330 },
+    { 0x1e2d, 0x1e2d, 0x131, 0x330 },
+    { 0x1e2e, 0x1e2f, 0x131, 0x308, 0x301 },
+    { 0x1e2f, 0x1e2f, 0x131, 0x308, 0x301 },
+    { 0x1ec8, 0x1ec9, 0x131, 0x309 },
+    { 0x1ec9, 0x1ec9, 0x131, 0x309 },
+    { 0x1eca, 0x1ecb, 0x131, 0x323 },
+    { 0x1ecb, 0x1ecb, 0x131, 0x323 }
+};
+#endif
+
 /* internal, see ustr_imp.h */
 U_CAPI int32_t U_EXPORT2
 u_internalFoldCase(UChar32 c,
@@ -1966,9 +2016,37 @@ u_internalFoldCase(UChar32 c,
                             dest[1]=0x307;
                         }
                         return 2;
+#if 0
+                        /* ### TODO Turkic-i case folding prototype, j2021 */
+                    } else if(c<=fold_T[LENGTHOF(fold_T)-1][0]) {
+                        for(i=0; i<LENGTHOF(fold_T) && c>=fold_T[i][0]; ++i) {
+                            if(c==fold_T[i][0]) {
+                                result=fold_T[i][1];
+                                break;
+                            }
+                        }
+#endif
                     }
                 } else {
                     /* Turkic mappings */
+#if 0
+                    /* ### TODO Turkic-i case folding prototype, j2021 */
+                    if(c<=fold_T[LENGTHOF(fold_T)-1][0]) {
+                        for(i=0; i<LENGTHOF(fold_T) && c>=fold_T[i][0]; ++i) {
+                            if(c==fold_T[i][0]) {
+                                const UChar *p=&(fold_T[i][2]);
+                                length=0;
+                                while(length<FOLD_T_LENGTH && *p!=0) {
+                                    if(length<destCapacity) {
+                                        dest[length]=*p++;
+                                    }
+                                    ++length;
+                                }
+                                return length;
+                            }
+                        }
+                    }
+#else
                     if(c==0x49) {
                         /* 0049; T; 0131; # LATIN CAPITAL LETTER I */
                         result=0x131;
@@ -1976,6 +2054,7 @@ u_internalFoldCase(UChar32 c,
                         /* 0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE */
                         result=0x69;
                     }
+#endif
                 }
                 /* return c itself because there is no special mapping for it */
                 /* goto single; */
