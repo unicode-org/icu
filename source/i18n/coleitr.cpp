@@ -136,9 +136,10 @@ CollationElementIterator::CollationElementIterator( const CharacterIterator& sou
 }
 
 CollationElementIterator::CollationElementIterator(const    CollationElementIterator& other)
-    : ownBuffer(new VectorOfInt(2)),
+    : text(0),
+      ownBuffer(new VectorOfInt(2)),
       reorderBuffer(0),
-      expIndex(other.expIndex), text(0)
+      expIndex(other.expIndex)
 {
     *this = other;
 }

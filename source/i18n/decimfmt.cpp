@@ -213,12 +213,12 @@ DecimalFormat::construct(UErrorCode&             status,
 
 DecimalFormat::~DecimalFormat()
 {
-    delete fSymbols;
     delete fDigitList;
     delete fPosPrefixPattern;
     delete fPosSuffixPattern;
     delete fNegPrefixPattern;
     delete fNegSuffixPattern;
+    delete fSymbols;
     delete fRoundingIncrement;
 }
 
@@ -227,12 +227,12 @@ DecimalFormat::~DecimalFormat()
 
 DecimalFormat::DecimalFormat(const DecimalFormat &source)
 :   NumberFormat(source),
-    fSymbols(NULL),
     fDigitList(NULL),
     fPosPrefixPattern(NULL),
     fPosSuffixPattern(NULL),
     fNegPrefixPattern(NULL),
     fNegSuffixPattern(NULL),
+    fSymbols(NULL),
     fRoundingIncrement(NULL)
 {
     *this = source;
