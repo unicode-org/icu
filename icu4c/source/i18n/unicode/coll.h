@@ -49,6 +49,7 @@
 #include "unicode/ucol.h"
 #include "unicode/normlzr.h"
 #include "unicode/locid.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -606,6 +607,15 @@ public:
    */
   virtual uint32_t getVariableTop(UErrorCode &status) const = 0;
 
+  /**
+   * Get an UnicodeSet that contains all the characters and sequences tailored in 
+   * this collator.
+   * @param status      error code of the operation
+   * @return an UnicodeSet object containing all the tailored code points and sequences
+   * @draft ICU 2.4
+   */
+  virtual UnicodeSet getTailoredSet(UErrorCode &status) const;
+
 
   /**
   * Thread safe cloning operation
@@ -773,6 +783,12 @@ inline UBool Collator::operator==(const Collator& other) const
 inline UBool Collator::operator!=(const Collator& other) const
 {
   return (UBool)!(*this == other);
+}
+
+inline UnicodeSet Collator::getTailoredSet(UErrorCode &status) const
+{
+  status = U_UNSUPPORTED_ERROR;
+  return UnicodeSet();
 }
 
 /*

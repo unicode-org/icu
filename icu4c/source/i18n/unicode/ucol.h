@@ -12,6 +12,7 @@
 #include "unicode/unorm.h"
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
+#include "unicode/uset.h"
 
 /**
  * \file
@@ -705,6 +706,19 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
 U_CAPI const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
+
+/**
+ * Get an Unicode set that contains all the characters and sequences tailored in 
+ * this collator. The result must be disposed of by using uset_close.
+ * @param coll        The UCollator for which we want to get tailored chars
+ * @param status      error code of the operation
+ * @return a pointer to newly created USet. Must be be disposed by using uset_close
+ * @see ucol_openRules
+ * @see uset_close
+ * @draft ICU 2.4
+ */
+U_CAPI USet * U_EXPORT2
+ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 
 #ifdef U_USE_DEPRECATED_UCOL_API
 

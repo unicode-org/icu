@@ -6714,3 +6714,32 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
   return result;
 }
 
+U_CAPI USet * U_EXPORT2
+ucol_getTailoredSet(const UCollator *coll, UErrorCode *status) 
+{
+  if(status == NULL || U_FAILURE(*status)) {
+    return NULL;
+  }
+  if(coll == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+  }
+  UParseError parseError;
+  UColTokenParser src;
+  int32_t rulesLen = 0;
+  const UChar *rules = ucol_getRules(coll, &rulesLen);
+  const UChar *current = NULL;
+  UBool startOfRules = TRUE;
+  USet *tailored = uset_open(1, 0);
+  UnicodeString pattern;
+
+  ucol_tok_initTokenList(&src, rules, rulesLen, UCA, status);
+  while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError, status)) != NULL) {
+    startOfRules = FALSE;
+    if(src.parsedToken.strength != UCOL_TOK_RESET) {
+      const UChar *stuff = src.source+(src.parsedToken.charsOffset);
+      uset_addString(tailored, stuff, src.parsedToken.charsLen);
+    }
+  }
+  ucol_tok_closeTokenList(&src);
+  return tailored;
+}
