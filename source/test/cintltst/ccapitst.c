@@ -209,6 +209,9 @@ void TestConvert()
         }
     };
 
+    /* flush the converter cache to get a consistent state before the flushing is tested */
+    ucnv_flushCache();
+
     /*Calling all the UnicodeConverterCPP API and checking functionality*/
   
         /*Tests ucnv_getAvailableName(), getAvialableCount()*/
