@@ -50,6 +50,9 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->lh = 0;
   src->varTop = NULL;
   src->tailored = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
+  if(U_FAILURE(*status)) {
+    return;
+  }
   uhash_setValueDeleter(src->tailored, deleteToken);
 
   src->opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
