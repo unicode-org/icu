@@ -405,12 +405,24 @@ public:
     inline const char * getName() const;
 
     /**
+     * Returns the programmatic name of the entire locale, with the language,
+     * country and variant separated by underbars and without keywords. 
+     * If a field is missing, up
+     * to two leading underbars will occur. Example: "en", "de_DE", "en_US_WIN",
+     * "de__POSIX", "fr__MAC", "__MAC", "_MT", "_FR_EURO"
+     * @return      A pointer to "name".
+     * @draft ICU 2.8
+     */
+    const char * getBaseName() const;
+
+
+    /**
      * Gets the list of keywords for the specified locale. 
      *
      * @return pointer to StringEnumeration class. Client must dispose of it by calling delete.
      * @draft ICU 2.8
      */
-    StringEnumeration * getKeywords(UErrorCode &status) const;
+    StringEnumeration * createKeywords(UErrorCode &status) const;
 
     /**
      * Get the value for a keyword. 
@@ -682,6 +694,9 @@ private:
     int32_t variantBegin;
     char* fullName;
     char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
+    // name without keywords
+    char* baseName;
+    char baseNameBuffer[ULOC_FULLNAME_CAPACITY];
 
     UBool fIsBogus;
 
