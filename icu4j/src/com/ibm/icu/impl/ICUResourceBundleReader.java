@@ -1,6 +1,8 @@
 package com.ibm.icu.impl;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -129,21 +131,30 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
     private static final int    URES_INDEX_MAX_TABLE_LENGTH = 4;        /* [4] max. length of any table */
     private static final int    URES_INDEX_TOP              = 5;
     //private static final int    URES_STRINGS_BOTTOM=(1+URES_INDEX_TOP)*4;
+    private static final boolean DEBUG = false;
     
     private ByteBuffer data;
     
     public ICUResourceBundleReader(String baseName, String localeName, ClassLoader root){
         String resolvedName = getFullName(baseName, localeName);
         InputStream stream = ICUData.getStream(root,resolvedName);
+        
         if(stream==null){
             throw new MissingResourceException(baseName, localeName,root.toString());
         }
-        try{
-            DataInputStream ds = new DataInputStream(stream);
-            version = ICUBinary.readHeader(ds,DATA_FORMAT_ID,this);
 
-            data = readData(ds);
-            ds.close();
+        BufferedInputStream bs = new BufferedInputStream(stream);
+        try{
+            if(DEBUG) System.out.println("The InputStream class is: " + stream.getClass().getName());
+            if(DEBUG) System.out.println("The BufferedInputStream class is: " + bs.getClass().getName());
+            if(DEBUG) System.out.println("The bytes avialable in stream before reading the header: " + bs.available());
+            
+            version = ICUBinary.readHeader(bs,DATA_FORMAT_ID,this);
+
+            if(DEBUG) System.out.println("The bytes avialable in stream after reading the header: " + bs.available());
+                 
+            data = readData(bs);
+            
             stream.close();
         }catch(IOException ex){
             throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.", ex);   
@@ -152,18 +163,38 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
 
     /* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
         
-    private static ByteBuffer readData(DataInputStream stream)
+    private static ByteBuffer readData(InputStream stream)
             throws IOException{
-        int length = stream.available();
-        byte[] data = new byte[length];
-        for(int i=0;i<length; i++){
-            data[i]=stream.readByte();   
+        
+        DataInputStream ds = new DataInputStream(stream);
+
+        if(DEBUG) System.out.println("The DataInputStream class is: " + ds.getClass().getName());
+        if(DEBUG) System.out.println("The available bytes in the stream before reading the data: "+ds.available());
+        
+        ds.mark((1+URES_INDEX_TOP)*4);
+        int[] indexes = new int[URES_INDEX_TOP];
+        ds.readInt(); // ignore the root resource
+        
+        for(int i=1; i< URES_INDEX_TOP; i++){
+            indexes[i] = ds.readInt();   
         }
+        ds.reset();
+        
+        int length = indexes[URES_INDEX_BUNDLE_TOP]*4;
+        if(DEBUG) System.out.println("The number of bytes in the bundle: "+length);
+
+        byte[] data = new byte[length];
+        ds.readFully(data);
         return ByteBuffer.wrap(data);
+        
     }
     
     public static String getFullName(String baseName, String localeName){
-        return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;   
+        if(baseName.charAt(baseName.length()-1)!= '/'){
+            return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
+        }else{
+            return baseName+localeName+ICU_RESOURCE_SUFFIX;   
+        }
     }
     
     public VersionInfo getVersion(){
