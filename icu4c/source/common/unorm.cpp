@@ -27,6 +27,8 @@
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/uiter.h"
+#include "unicode/uniset.h"
+#include "unicode/usetiter.h"
 #include "unicode/unorm.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
@@ -35,24 +37,31 @@
 #include "unicode/uset.h"
 #include "unormimp.h"
 
-/* ### TODO: These depend on whether tailored normalization becomes permanent. */
-#include "unicode/uniset.h"
-#include "unicode/usetiter.h"
-
 /*
- * ### TODO: status of prototype for tailored normalization
+ * Status of tailored normalization
  *
- * My main thrust so far was for unorm_normalize() and unorm_quickCheck().
- * isNormalized() should work, I think.
- * I have not yet thought about iterative normalization at all.
+ * This was done initially for investigation on Unicode public review issue 7
+ * (http://www.unicode.org/review/). See Jitterbug 2481.
+ * While the UTC at meeting #94 (2003mar) did not take up the issue, this is
+ * a permanent feature in ICU 2.6 in support of IDNA which requires true
+ * Unicode 3.2 normalization.
+ * (NormalizationCorrections are rolled into IDNA mapping tables.)
  *
- * Generally, any function that searches for a safe boundary has not been touched,
+ * Tailored normalization as implemented here allows to "normalize less"
+ * than full Unicode normalization would.
+ * Based internally on a UnicodeSet of code points that are
+ * "excluded from normalization", the normalization functions leave those
+ * code points alone ("inert"). This means that tailored normalization
+ * still transforms text into a canonically equivalent form.
+ * It does not add decompositions to code points that do not have any or
+ * change decomposition results.
+ *
+ * Any function that searches for a safe boundary has not been touched,
  * which means that these functions will be over-pessimistic when
  * exclusions are applied.
- * This may not matter because subsequent checks and normalizations do apply the exclusions.
- *
- * 2003feb25: Added support for Unicode 3.2 normalization, for IDNA.
- * This excludes all post-Unicode 3.2 code points.
+ * This should not matter because subsequent checks and normalizations
+ * do apply the exclusions; only a little more of the text may be processed
+ * than necessary under exclusions.
  *
  * Normalization exclusions have the following effect on excluded code points c:
  * - c is not decomposed
@@ -75,11 +84,12 @@ enum {
     _STACK_BUFFER_CAPACITY=100
 };
 
-/* ### TODO prototype
+/*
  * Constants for the bit fields in the options bit set parameter.
  * These need not be public.
  * A user only needs to know the currently assigned values.
- * The number and positions of reserved bits per field can remain private.
+ * The number and positions of reserved bits per field can remain private
+ * and may change in future implementations.
  */
 enum {
     _NORM_OPTIONS_NX_MASK=0x1f,
@@ -175,7 +185,7 @@ static UBool formatVersion_2_1=FALSE, formatVersion_2_2=FALSE;
 /* the Unicode version of the normalization data */
 static UVersionInfo dataVersion={ 3, 1, 0, 0 };
 
-/* ### TODO: prototype ### cache UnicodeSets for each combination of exclusion flags */
+/* cache UnicodeSets for each combination of exclusion flags */
 static UnicodeSet *nxCache[_NORM_OPTIONS_SETS_MASK+1]={ NULL };
 
 U_CDECL_BEGIN
@@ -411,13 +421,11 @@ _getExtraData(uint32_t norm32) {
 /* normalization exclusion sets --------------------------------------------- */
 
 /*
- * Normalization exclusion UnicodeSets are used for tailored normalization,
- * Unicode public review issue number 7. (http://www.unicode.org/review/)
+ * Normalization exclusion UnicodeSets are used for tailored normalization;
+ * see the comment near the beginning of this file.
  *
  * By specifying one or several sets of code points,
  * those code points become inert for normalization.
- *
- * ### TODO: This is a prototype. Assess if it should become a permanent part of ICU.
  */
 
 static const UnicodeSet *
@@ -504,30 +512,6 @@ internalGetNXCJKCompat(UErrorCode &errorCode) {
 }
 
 static const UnicodeSet *
-internalGetNXAUmlaut(UErrorCode &errorCode) {
-    /* internal function, does not check for incoming U_FAILURE */
-
-    if(nxCache[UNORM_NX_A_UMLAUT]==NULL) {
-        UnicodeSet *set=new UnicodeSet(0xe4, 0xe4);
-        if(set==NULL) {
-            errorCode=U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-
-        umtx_lock(NULL);
-        if(nxCache[UNORM_NX_A_UMLAUT]==NULL) {
-            nxCache[UNORM_NX_A_UMLAUT]=set;
-            set=NULL;
-        }
-        umtx_unlock(NULL);
-
-        delete set;
-    }
-
-    return nxCache[UNORM_NX_A_UMLAUT];
-}
-
-static const UnicodeSet *
 internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
     options&=_NORM_OPTIONS_UNICODE_MASK;
@@ -583,9 +567,6 @@ internalGetNX(int32_t options, UErrorCode &errorCode) {
         if(options==UNORM_NX_CJK_COMPAT) {
             return internalGetNXCJKCompat(errorCode);
         }
-        if(options==UNORM_NX_A_UMLAUT) {
-            return internalGetNXAUmlaut(errorCode);
-        }
         if((options&_NORM_OPTIONS_UNICODE_MASK)!=0 && (options&_NORM_OPTIONS_NX_MASK)==0) {
             return internalGetNXUnicode(options, errorCode);
         }
@@ -604,9 +585,6 @@ internalGetNX(int32_t options, UErrorCode &errorCode) {
             set->addAll(*other);
         }
         if((options&UNORM_NX_CJK_COMPAT)!=0 && NULL!=(other=internalGetNXCJKCompat(errorCode))) {
-            set->addAll(*other);
-        }
-        if((options&UNORM_NX_A_UMLAUT)!=0 && NULL!=(other=internalGetNXAUmlaut(errorCode))) {
             set->addAll(*other);
         }
         if((options&_NORM_OPTIONS_UNICODE_MASK)!=0 && NULL!=(other=internalGetNXUnicode(options, errorCode))) {

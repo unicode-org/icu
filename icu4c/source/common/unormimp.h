@@ -60,7 +60,7 @@ enum {
     _NORM_EXTRA_SURROGATE_TOP=0x3f0,    /* hangul etc. */
 
     _NORM_EXTRA_HANGUL=_NORM_EXTRA_SURROGATE_TOP,
-    _NORM_EXTRA_JAMO_L,                 /* ### not used */
+    _NORM_EXTRA_JAMO_L,
     _NORM_EXTRA_JAMO_V,
     _NORM_EXTRA_JAMO_T
 };
@@ -162,14 +162,12 @@ enum {
     HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT
 };
 
-/* Constants for options flags for normalization. ### TODO prototype, see unorm.cpp */
+/* Constants for options flags for normalization. @draft ICU 2.6 */
 enum {
     /** Options bit 0, do not decompose Hangul syllables. @draft ICU 2.6 */
     UNORM_NX_HANGUL=1,
     /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
     UNORM_NX_CJK_COMPAT=2,
-    /** Options bit 2, do not decompose a-umlaut, only for testing. @internal */
-    UNORM_NX_A_UMLAUT=4,
 
     /**
      * Options bit set value to select Unicode 3.2 normalization (except NormalizationCorrections).
@@ -189,7 +187,6 @@ enum {
  * to the normalization implementation.
  * (options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT)
  *
- * ### TODO prototype, see unorm.cpp
  * @draft ICU 2.6
  */
 #define UNORM_COMPARE_NORM_OPTIONS_SHIFT 20
