@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2000/04/22 00:04:39 $ 
- * $Revision: 1.16 $
+ * $Date: 2000/04/22 01:29:14 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -422,6 +422,29 @@ public class TransliteratorTest extends TestFmwk {
             "([a-z]) '.' ([0-9]) > $2 '-' $1",
             "abc.123.xyz.456",
             "ab1-c23.xy4-z56",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            logln("Pattern: " + Utility.escape(DATA[i]));
+            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
+    }
+
+    /**
+     * Test cursor positioning outside of the key
+     */
+    public void TestCursorOffset() {
+        // Array of 3n items
+        // Each item is <rules>, <input>, <expected output>
+        String[] DATA = {
+            "pre {alpha} post > | @ ALPHA ;" +
+            "eALPHA > beta ;" +
+            "pre {beta} post > BETA @@ | ;" +
+            "post > xyz",
+
+            "prealphapost prebetapost",
+            "prbetaxyz preBETApost",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
