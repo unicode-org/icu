@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/QuickCheckBuilder.java,v $ 
-* $Date: 2001/03/08 02:06:48 $ 
-* $Revision: 1.3 $
+* $Date: 2001/05/18 20:45:10 $ 
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -80,7 +80,9 @@ public class QuickCheckBuilder
       FileWriter f = new FileWriter(output);
       BufferedWriter w = new BufferedWriter(f);
       
-      w.write("UChar32 UQUICK_CHECK_MIN_VALUES_[] = {");
+      w.write("# QuickCheck data\n");
+      w.write("# Generated from NormalizationQuickCheck.txt\n\n");
+      w.write("int UQUICK_CHECK_MIN_VALUES_[] = {");
       w.write("0x" + Integer.toHexString(notyes[0]) + ", 0x" + 
               Integer.toHexString(notyes[1]) + ", 0x" + 
               Integer.toHexString(notyes[2]) + ", 0x" + 
@@ -386,7 +388,7 @@ public class QuickCheckBuilder
   /**
   * Output file path
   */
-  private final String DEFAULT_OUTPUT_PATH_ = "quickcheck.txt";
+  private final String DEFAULT_OUTPUT_PATH_ = "QuickCheck.txt";
   
   /**
   * 16 bits mask
