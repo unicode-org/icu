@@ -804,6 +804,7 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
 {
     u_printf_spec_info scidbl_info;
     double      num = args[0].doubleValue;
+    int32_t     retVal;
 
     memcpy(&scidbl_info, info, sizeof(u_printf_spec_info));
 
@@ -814,7 +815,7 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
         scidbl_info.fSpec = 0x0066;
         scidbl_info.fPrecision = 0;
         /* call the double handler */
-        return u_printf_double_handler(handler, context, formatBundle, &scidbl_info, args);
+        retVal = u_printf_double_handler(handler, context, formatBundle, &scidbl_info, args);
     }
     else if(num < 0.0001 || (scidbl_info.fPrecision < 1 && 1000000.0 <= num)
         || (scidbl_info.fPrecision != -1 && num > uprv_pow10(scidbl_info.fPrecision)))
@@ -825,14 +826,26 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
             scidbl_info.fPrecision = 5;
         }
         /* call the scientific handler */
-        return u_printf_scientific_handler(handler, context, formatBundle, &scidbl_info, args);
+        retVal = u_printf_scientific_handler(handler, context, formatBundle, &scidbl_info, args);
     }
     else {
+        UNumberFormat   *format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
+        int32_t maxSigDecimalDigits = unum_getAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS);
+        int32_t significantDigits = scidbl_info.fPrecision;
+
         /* use 'f' notation */
         scidbl_info.fSpec = 0x0066;
+        if (significantDigits == -1) {
+            significantDigits = 6;
+        }
+        unum_setAttribute(format, UNUM_SIGNIFICANT_DIGITS_USED, TRUE);
+        unum_setAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS, significantDigits);
         /* call the double handler */
-        return u_printf_double_handler(handler, context, formatBundle, &scidbl_info, args);
+        retVal = u_printf_double_handler(handler, context, formatBundle, &scidbl_info, args);
+        unum_setAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS, maxSigDecimalDigits);
+        unum_setAttribute(format, UNUM_SIGNIFICANT_DIGITS_USED, FALSE);
     }
+    return retVal;
 }
 
 static int32_t
