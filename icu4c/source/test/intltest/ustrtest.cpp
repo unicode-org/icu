@@ -35,20 +35,20 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 4:
             name = "StringCaseTest";
             if (exec) {
+                logln("StringCaseTest---"); logln("");
                 StringCaseTest test;
                 callTest(test, par);
-                break;
             }
-        case 5: name = "TestNothing"; break;
-        case 6: name = "TestSearching"; if (exec) TestSearching(); break;
-        case 7: name = "TestSpacePadding"; if (exec) TestSpacePadding(); break;
-        case 8: name = "TestPrefixAndSuffix"; if (exec) TestPrefixAndSuffix(); break;
-        case 9: name = "TestFindAndReplace"; if (exec) TestFindAndReplace(); break;
-        case 10: name = "TestCellWidth"; if (exec) TestCellWidth(); break;
-        case 11: name = "TestReverse"; if (exec) TestReverse(); break;
-        case 12: name = "TestMiscellaneous"; if (exec) TestMiscellaneous(); break;
-        case 13: name = "TestStackAllocation"; if (exec) TestStackAllocation(); break;
-        case 14: name = "TestUnescape"; if (exec) TestUnescape(); break;
+            break;
+        case 5: name = "TestSearching"; if (exec) TestSearching(); break;
+        case 6: name = "TestSpacePadding"; if (exec) TestSpacePadding(); break;
+        case 7: name = "TestPrefixAndSuffix"; if (exec) TestPrefixAndSuffix(); break;
+        case 8: name = "TestFindAndReplace"; if (exec) TestFindAndReplace(); break;
+        case 9: name = "TestCellWidth"; if (exec) TestCellWidth(); break;
+        case 10: name = "TestReverse"; if (exec) TestReverse(); break;
+        case 11: name = "TestMiscellaneous"; if (exec) TestMiscellaneous(); break;
+        case 12: name = "TestStackAllocation"; if (exec) TestStackAllocation(); break;
+        case 13: name = "TestUnescape"; if (exec) TestUnescape(); break;
 
         default: name = ""; break; //needed to end loop
     }
