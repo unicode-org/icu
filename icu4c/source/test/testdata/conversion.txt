@@ -43,6 +43,116 @@ conversion {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // ISO-2022-KR
+
+        // truncated, partial escape sequence
+        {
+          "ibm-25546",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ibm-25546",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        {
+          "ibm-25546",
+          :bin{ 1b2429 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b2429 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ibm-25546",
+          :bin{ 1b242943 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        {
+          "ibm-25546",
+          :bin{ 1b2429430e }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus ASCII character
+        {
+          "ibm-25546",
+          :bin{ 1b24294341 }, "A", :intvector{ 4 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ibm-25546",
+          :bin{ 1b2429430e41 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ibm-25546",
+          :bin{ 1b2429430e4141 }, "\uc88b", :intvector{ 5 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // more complicated example
+        {
+          "ibm-25546",
+          :bin{ 411b242943420e4141affe0f43 },
+          "AB\uc88b%XAF%XFEC",
+          :intvector{ 0, 5, 7, 9, 9, 9, 9, 9, 9, 9, 9, 12 },
+          :int{1}, :int{1}, "", "&", :bin{""}
+        }
+
+        // truncated, partial escape sequence
+        {
+          "ISO-2022-KR",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b2429 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ISO-2022-KR",
+          :bin{ 1b242943 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429430e }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus ASCII character
+        {
+          "ISO-2022-KR",
+          :bin{ 1b24294341 }, "A", :intvector{ 4 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429430e41 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429430e4141 }, "\uc88b", :intvector{ 5 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // more complicated example
+        {
+          "ISO-2022-KR",
+          :bin{ 411b242943420e4141affe0f43 },
+          "AB\uc88b%XAF%XFEC",
+          :intvector{ 0, 5, 7, 9, 9, 9, 9, 9, 9, 9, 9, 12 },
+          :int{1}, :int{1}, "", "&", :bin{""}
+        }
+
         // ISO-2022-JP
 
         // truncated, partial escape sequence
@@ -310,6 +420,50 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // ISO-2022-KR
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f7b552b35303030357d0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,3,3,3,3,3,3,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "&U", ""
+        }
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f1a0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "?\x00\x1a", ""
+        }
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41412f7e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,6,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f7b552b35303030357d0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,3,3,3,3,3,3,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "&U", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f1a0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41412f7e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,6,6 },
+          :int{1}, :int{1}, "", "?\x00\x2f\x7e", ""
+        }
+
         // ISO-2022-JP-2 with G2 designator & SS2 shift
         {
           "ISO-2022-JP-2",
