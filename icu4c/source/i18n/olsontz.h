@@ -171,6 +171,12 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
     int32_t finalYear;
 
     /**
+     * The millis for the start of the first year for which finalZone
+     * is to be used, or DBL_MAX if finalZone is 0.
+     */
+    double finalMillis;
+
+    /**
      * A SimpleTimeZone that governs the behavior for years > finalYear.
      * If and only if finalYear == INT32_MAX then finalZone == 0.
      */
