@@ -42,7 +42,7 @@ u_parseArgs(int argc, char* argv[],
                     /* search for the option string */
                     int j;
                     for(j=0; j<optionCount; ++j) {
-                        if(uprv_strcmp(arg, options[j].longName)==0) {
+                        if(options[j].longName && uprv_strcmp(arg, options[j].longName)==0) {
                             option=options+j;
                             break;
                         }
