@@ -138,7 +138,7 @@ inline void backupState(const collIterate *data, collIterateState *backup)
     backup->flags       = data->flags;
     backup->origFlags   = data->origFlags;
     backup->pos         = data->pos;
-    backup->bufferaddress = (long)(data->writableBuffer);
+    backup->bufferaddress = data->writableBuffer;
     backup->buffersize    = data->writableBufSize;
 }
 
@@ -146,22 +146,32 @@ inline void backupState(const collIterate *data, collIterateState *backup)
 * Loads the state into the collIterate struct data
 * @param data collIterate to backup
 * @param backup storage
+* @param forwards boolean to indicate if forwards iteration is used, 
+*        false indicates backwards iteration
 */
-inline void loadState(collIterate *data, const collIterateState *backup)
+inline void loadState(collIterate *data, const collIterateState *backup, 
+                      UBool        forwards)
 {
     data->flags       = backup->flags;
     data->origFlags   = backup->origFlags;
     data->pos         = backup->pos;
     if ((data->flags & UCOL_ITER_INNORMBUF) && 
-        (long)(data->writableBuffer) != backup->bufferaddress) {
+        data->writableBuffer != backup->bufferaddress) {
         /* 
         this is when a new buffer has been reallocated and we'll have to 
         calculate the new position.
         note the new buffer has to contain the contents of the old buffer.
         */
-        uint32_t temp = backup->buffersize - 
-                                  ((long)(data->pos) - backup->bufferaddress);
-        data->pos = data->writableBuffer + (data->writableBufSize - temp);
+        if (forwards) {
+            data->pos = data->writableBuffer + 
+                                         (data->pos - backup->bufferaddress);
+        }
+        else {
+            /* backwards direction */
+            uint32_t temp = backup->buffersize - 
+                                  (data->pos - backup->bufferaddress);
+            data->pos = data->writableBuffer + (data->writableBufSize - temp);
+        }
     }
     if ((data->flags & UCOL_ITER_INNORMBUF) == 0) {
         /* 
@@ -1823,7 +1833,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
               if(firstCE != UCOL_NOT_FOUND) {
                 CE = firstCE;
               }
-              loadState(source, &state);
+              loadState(source, &state, TRUE);
             }
           }
           break;
@@ -1847,7 +1857,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
 
         if(CE == UCOL_NOT_FOUND) {
           // source->pos   = firstUChar; /* spit all the not found chars, which led us in this contraction */
-          loadState(source, &state);
+          loadState(source, &state, TRUE);
           if(firstCE != UCOL_NOT_FOUND) {
             CE = firstCE;
           }
@@ -2208,7 +2218,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                   if (firstCE != UCOL_NOT_FOUND) {
                       CE            = firstCE;
                   }
-                loadState(source, &state);
+                loadState(source, &state, FALSE);
               }
 
               break;
@@ -2236,7 +2246,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             if (!isContraction(CE)) {
               if (CE == UCOL_NOT_FOUND) {
                 CE            = firstCE;
-                loadState(source, &state);
+                loadState(source, &state, FALSE);
               }
               firstCE = UCOL_NOT_FOUND;
 
