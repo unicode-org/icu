@@ -18,12 +18,12 @@
 
 #define TEST(x) addTest(root, &x, "utrans/" # x)
 
-static void TestAPI();
-static void TestSimpleRules();
-static void TestFilter();
-static void TestOpenInverse();
-static void TestClone();
-static void TestRegisterUnregister();
+static void TestAPI(void);
+static void TestSimpleRules(void);
+static void TestFilter(void);
+static void TestOpenInverse(void);
+static void TestClone(void);
+static void TestRegisterUnregister(void);
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);

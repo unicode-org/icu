@@ -60,14 +60,14 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 }
 
 
-static void TestSurrogateBehaviour();
-static void TestErrorBehaviour();
-static void TestToUnicodeErrorBehaviour();
-static void TestGetNextErrorBehaviour();
-static void TestRegressionUTF8();
-static void TestRegressionUTF32();
-static void TestAvailableConverters();
-static void TestFlushInternalBuffer();  /*for improved code coverage in ucnv_cnv.c*/
+static void TestSurrogateBehaviour(void);
+static void TestErrorBehaviour(void);
+static void TestToUnicodeErrorBehaviour(void);
+static void TestGetNextErrorBehaviour(void);
+static void TestRegressionUTF8(void);
+static void TestRegressionUTF32(void);
+static void TestAvailableConverters(void);
+static void TestFlushInternalBuffer(void);  /*for improved code coverage in ucnv_cnv.c*/
 
 static void TestWithBufferSize(int32_t osize, int32_t isize);
 
