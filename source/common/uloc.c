@@ -815,7 +815,7 @@ locale_getKeywords(const char *localeID,
       }
       keywordList[numKeywords].valueStart = nextSeparator;
 
-      startSearchHere = strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
+      startSearchHere = uprv_strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
       i = 0;
       if(startSearchHere) {
         while(*(startSearchHere - i - 1) == ' ') {
@@ -1245,7 +1245,7 @@ uloc_canonicalize(const char* localeID,
         }
         /* convert the POSIX euro variant */
         euroVariant = (char *)uprv_strstr(localeBuffer, "_EURO");
-        if (euroVariant && strlen(euroVariant) == 5) {
+        if (euroVariant && uprv_strlen(euroVariant) == 5) {
             int32_t euroKeyLen = 13;  /* strlen("@currency=EUR")13 */
             int32_t euroDiff = 8;  /* strlen("@currency=EUR")13 - strlen("_EURO")5 */
             len += euroDiff;
@@ -2130,7 +2130,7 @@ uloc_getKeywordValue(const char* localeID,
           }
           localeKeywordNameBuffer[i] = 0;
         
-          startSearchHere = strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
+          startSearchHere = uprv_strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
         
           if(uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer) == 0) {
               nextSeparator++;

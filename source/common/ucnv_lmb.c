@@ -480,7 +480,7 @@ FindLMBCSLocale(const char *LocaleID)
       if (*pTable->LocaleID == *LocaleID) /* Check only first char for speed */
       {
          /* First char matches - check whole name, for entry-length */
-         if (strncmp(pTable->LocaleID, LocaleID, strlen(pTable->LocaleID)) == 0)
+         if (uprv_strncmp(pTable->LocaleID, LocaleID, strlen(pTable->LocaleID)) == 0)
             return pTable->OptGroup;
       }
       else
@@ -826,7 +826,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
          }
          if (!bytes_written)    /* the ambiguous group cases  (Strategy 3) */
          {
-            memset(groups_tried, 0, sizeof(groups_tried));
+            uprv_memset(groups_tried, 0, sizeof(groups_tried));
 
          /* check for non-default optimization group (Strategy 3A )*/
             if (extraInfo->OptGroup != 1 

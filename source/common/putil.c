@@ -234,14 +234,14 @@ uprv_getUTCtime()
     time_t t, t1, t2;
     struct tm tmrec;
 
-    memset( &tmrec, 0, sizeof(tmrec) );
+    uprv_memset( &tmrec, 0, sizeof(tmrec) );
     tmrec.tm_year = 70;
     tmrec.tm_mon = 0;
     tmrec.tm_mday = 1;
     t1 = mktime(&tmrec);    /* seconds of 1/1/1970*/
 
     time(&t);
-    memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
+    uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);    /* seconds of current GMT*/
     return t2 - t1;         /* GMT (or UTC) in seconds since 1970*/
 #else
@@ -981,12 +981,12 @@ static const char* detectWindowsTimeZone() {
     /* Obtain TIME_ZONE_INFORMATION from the API, and then convert it
        to TZI.  We could also interrogate the registry directly; we do
        this below if needed. */
-    memset(&apiTZI, 0, sizeof(apiTZI));
+    uprv_memset(&apiTZI, 0, sizeof(apiTZI));
     GetTimeZoneInformation(&apiTZI);
     tziKey.Bias = apiTZI.Bias;
-    memcpy((char *)&tziKey.StandardDate, (char*)&apiTZI.StandardDate,
+    uprv_memcpy((char *)&tziKey.StandardDate, (char*)&apiTZI.StandardDate,
            sizeof(apiTZI.StandardDate));
-    memcpy((char *)&tziKey.DaylightDate, (char*)&apiTZI.DaylightDate,
+    uprv_memcpy((char *)&tziKey.DaylightDate, (char*)&apiTZI.DaylightDate,
            sizeof(apiTZI.DaylightDate));
 
     /* For each zone that can be identified by Offset+Rules, see if we
@@ -1018,7 +1018,7 @@ static const char* detectWindowsTimeZone() {
                these unreliable fields. */
             tziKey.StandardBias = tziReg.StandardBias;
             tziKey.DaylightBias = tziReg.DaylightBias;
-            if (memcmp((char *)&tziKey, (char*)&tziReg,
+            if (uprv_memcmp((char *)&tziKey, (char*)&tziReg,
                        sizeof(tziKey)) == 0) {
                 if (firstMatch < 0) {
                     firstMatch = j;
@@ -1072,7 +1072,7 @@ static const char* detectWindowsTimeZone() {
                 RegCloseKey(hkey);
                 if (result == ERROR_SUCCESS &&
                     stdRegNameSize == stdNameSize &&
-                    memcmp(stdName, stdRegName, stdNameSize) == 0) {
+                    uprv_memcmp(stdName, stdRegName, stdNameSize) == 0) {
                     firstMatch = j; /* record the match */
                     break;
                 }
@@ -1104,18 +1104,18 @@ static LONG openTZRegKey(HKEY *hkey, const char* winid, int winType) {
     char* name;
     int i;
 
-    strcpy(subKeyName, TZ_REGKEY[(winType == WIN_9X_ME_TYPE) ? 0 : 1]);
+    uprv_strcpy(subKeyName, TZ_REGKEY[(winType == WIN_9X_ME_TYPE) ? 0 : 1]);
     name = &subKeyName[strlen(subKeyName)];
-    strcat(subKeyName, winid);
+    uprv_strcat(subKeyName, winid);
     if (winType != WIN_9X_ME_TYPE) {
         /* Don't modify "Mexico Standard Time 2", which does not occur
            on WIN_9X_ME_TYPE.  Also, if the type is WIN_NT_TYPE, then
            in practice this means the GMT key is not followed by
            " Standard Time", so don't append in that case. */
-        int isMexico2 = (winid[strlen(winid)- 1] == '2');
+        int isMexico2 = (winid[uprv_strlen(winid)- 1] == '2');
         if (!isMexico2 &&
-            !(winType == WIN_NT_TYPE && strcmp(winid, "GMT") == 0)) {
-            strcat(subKeyName, STANDARD_TIME_REGKEY);
+            !(winType == WIN_NT_TYPE && uprv_strcmp(winid, "GMT") == 0)) {
+            uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
         }
     }
     result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -1128,11 +1128,11 @@ static LONG openTZRegKey(HKEY *hkey, const char* winid, int winType) {
         /* If the primary lookup fails, try to remap the Windows zone
            ID, according to the remapping table. */
         for (i=0; ZONE_REMAP[i].winid; ++i) {
-            if (strcmp(winid, ZONE_REMAP[i].winid) == 0) {
-                strcpy(name, ZONE_REMAP[i].altwinid + 1);
+            if (uprv_strcmp(winid, ZONE_REMAP[i].winid) == 0) {
+                uprv_strcpy(name, ZONE_REMAP[i].altwinid + 1);
                 if (*(ZONE_REMAP[i].altwinid) == '+' &&
                     winType != WIN_9X_ME_TYPE) {
-                    strcat(subKeyName, STANDARD_TIME_REGKEY);                
+                    uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);                
                 }
                 result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                       subKeyName,
@@ -1174,10 +1174,10 @@ uprv_timezone()
     int32_t tdiff = 0;
 
     time(&t);
-    memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
+    uprv_memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
     dst_checked = (tmrec.tm_isdst != 0); /* daylight savings time is checked*/
     t1 = mktime(&tmrec);                 /* local time in seconds*/
-    memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
+    uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
     tdiff = t2 - t1;
     /* imitate NT behaviour, which returns same timezone offset to GMT for
@@ -1240,7 +1240,7 @@ uprv_tzname(int n)
         ret = readlink(TZZONELINK, gTimeZoneBuffer, MAXPATHLEN + 2);
         if (0 < ret) {
             gTimeZoneBuffer[ret] = '\0';
-            if (strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
+            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
                 return (gTimeZoneBuffer += sizeof(TZZONEINFO) - 1);
             }
         }

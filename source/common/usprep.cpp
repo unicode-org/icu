@@ -250,7 +250,7 @@ usprep_getProfile(const char* path,
         profile->refCount    = 0;
     
         /* initialize the  key memebers */
-        key->name  = (char*) uprv_malloc(strlen(name)+1);
+        key->name  = (char*) uprv_malloc(uprv_strlen(name)+1);
         if(key->name == NULL){
             *status = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(key);
@@ -263,7 +263,7 @@ usprep_getProfile(const char* path,
         key->path=NULL;
 
         if(path != NULL){
-            key->path      = (char*) uprv_malloc(strlen(path)+1);
+            key->path      = (char*) uprv_malloc(uprv_strlen(path)+1);
             if(key->path == NULL){
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 uprv_free(key->path);
