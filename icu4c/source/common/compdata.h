@@ -7,7 +7,7 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Thu Jul 13 15:14:02 PDT 2000
+* Creation date: Tue Jul 18 11:10:21 PDT 2000
 */
 #include "unicode/utypes.h"
 #include "ucmp8.h"
@@ -15,7 +15,7 @@
 
 struct ComposeData {
     enum { BASE_COUNT = 748 };
-    enum { COMBINING_COUNT = 55 };
+    enum { COMBINING_COUNT = 226 };
     enum { MAX_COMPAT = 4341 };
     enum { MAX_CANONICAL = 5199 };
     enum { MAX_COMPOSED = 0xFB1D };
