@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2003/12/13 00:30:57 $
- * $Revision: 1.13 $
+ * $Date: 2004/02/25 00:01:56 $
+ * $Revision: 1.14 $
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
@@ -527,7 +527,7 @@ public class ChineseTest extends CalendarTest {
 		ChineseCalendar cal = new ChineseCalendar();
 		ChineseDateFormat fmt = (ChineseDateFormat)DateFormat.getInstance(cal);
 		fmt.applyPattern("llyyll");
-		Date time = new Date(2100-1900, Calendar.JANUARY, 1);
+		Date time = getDate(2100, Calendar.JANUARY, 1);
 		String str = fmt.format(time);
 		try {
 			Date e = fmt.parse(str);
