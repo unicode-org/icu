@@ -47,7 +47,7 @@ TransliterationRuleData::lookupVariable(const UnicodeString& name,
     if (value == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    return (UChar) (int32_t) value;
+    return (UChar) (int32_t) (unsigned long) value;
 }
 
 const UnicodeSet*

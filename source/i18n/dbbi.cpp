@@ -380,7 +380,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 }
                 else {
                     if ((currentBreakPositions.isEmpty()
-                            || (int32_t)currentBreakPositions.peek() != text->getIndex())
+                            || (int32_t)(unsigned long)currentBreakPositions.peek() != text->getIndex())
                             && text->getIndex() != startPos) {
                         currentBreakPositions.push((void*)text->getIndex());
                     }
@@ -395,15 +395,15 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
             // it.  Then back up to that position and start over from there (i.e.,
             // treat that position as the beginning of a new word)
             else {
-                int32_t temp = (int32_t)possibleBreakPositions.pop();
+                int32_t temp = (int32_t)(unsigned long)possibleBreakPositions.pop();
                 void* temp2 = NULL;
                 while (!currentBreakPositions.isEmpty() && temp <
-                       (int32_t)currentBreakPositions.peek()) {
+                       (int32_t)(unsigned long)currentBreakPositions.peek()) {
                     temp2 = currentBreakPositions.pop();
                     wrongBreakPositions.addElement(temp2);
                 }
                 currentBreakPositions.push((void*)temp);
-                text->setIndex((int32_t)currentBreakPositions.peek());
+                text->setIndex((int32_t)(unsigned long)currentBreakPositions.peek());
             }
 
             // re-sync "c" for the next go-round, and drop out of the loop if
@@ -440,7 +440,8 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     cachedBreakPositions[0] = startPos;
 
     for (int32_t i = 0; i < currentBreakPositions.size(); i++) {
-        cachedBreakPositions[i + 1] = (int32_t)currentBreakPositions.elementAt(i);
+        cachedBreakPositions[i + 1] = (int32_t)(unsigned long)currentBreakPositions.elementAt(i);
     }
     positionInCache = 0;
 }
+

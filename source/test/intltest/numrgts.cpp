@@ -1793,15 +1793,15 @@ void
 NumberFormatRegressionTest::Test4162198(void) 
 {
     // for some reason, DBL_MAX will not round trip. (bug in sprintf/atof)
-    double dbl = LONG_MAX * 1000.0;
+    double dbl = T_INT32_MAX * 1000.0;
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *f = NumberFormat::createInstance(status);
     if(U_FAILURE(status)) {
         errln("Couldn't create number format");
         return;
     }
-    f->setMaximumFractionDigits(LONG_MAX);
-    f->setMaximumIntegerDigits(LONG_MAX);
+    f->setMaximumFractionDigits(T_INT32_MAX);
+    f->setMaximumIntegerDigits(T_INT32_MAX);
     UnicodeString s;
     f->format(dbl,s);
     logln(UnicodeString("The number ") + dbl + " formatted to " + s);
@@ -2167,7 +2167,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = (DecimalFormat*) NumberFormat::createInstance(Locale::US, status);
     failure(status, "createInstance");
-    int32_t DATA[] = { LONG_MIN, LONG_MAX, -100000000, 100000000 };
+    int32_t DATA[] = { T_INT32_MIN, T_INT32_MAX, -100000000, 100000000 };
     int DATA_length = sizeof(DATA) / sizeof(DATA[0]);
     for (int i=0; i<DATA_length; ++i) {
         char buf[64];

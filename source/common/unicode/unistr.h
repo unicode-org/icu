@@ -1334,7 +1334,7 @@ public:
    * @stable
    */
   inline UnicodeString& remove(UTextOffset start, 
-            int32_t length = LONG_MAX);
+            int32_t length = T_INT32_MAX);
 
   /**
    * Remove the characters in the range 
@@ -1345,7 +1345,7 @@ public:
    * @stable
    */
   inline UnicodeString& removeBetween(UTextOffset start,
-                   UTextOffset limit = LONG_MAX);
+                   UTextOffset limit = T_INT32_MAX);
 
 
   /* Length operations */
@@ -1603,7 +1603,7 @@ public:
    * @stable
    */
   int32_t numDisplayCells(UTextOffset start = 0,
-              int32_t length = LONG_MAX,
+              int32_t length = T_INT32_MAX,
               bool_t asian = TRUE) const;
 
 
