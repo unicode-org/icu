@@ -529,7 +529,9 @@ TestOpenDirect(void) {
     if(U_FAILURE(errorCode) || errorCode==U_USING_DEFAULT_ERROR || errorCode==U_USING_FALLBACK_ERROR) {
         /* falling back to default or root is ok */
         errorCode=U_ZERO_ERROR;
-    } else {
+    } else if(0!=uprv_strcmp("translit_INDEX", ures_getLocale(translit_index, &errorCode))) {
+        /* Opening this file will work in "files mode" on Windows and the Mac,
+           which have case insensitive file systems */
         log_err("ures_open(\"translit_index\") succeeded, should fail! Got: %s\n", u_errorName(errorCode));
     }
     ures_close(translit_index);
