@@ -145,13 +145,12 @@ void TestProperty()
     UChar *source, *target;
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
-    /* In general, we don't want to hard-code data from resource files
-       etc. into tests.  To make things somewhat flexible we encode
-       a min and max version that seem reasonable at this time.  This
-       still will have to be updated if we go beyond 32.128.207.207
+    /* 
+      All the collations have the same version in an ICU
+      version.
+      ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
     */
-    UVersionInfo minVersionArray = {0x08, 0x40, 0x01, 0xc8};
-    UVersionInfo maxVersionArray = {0x20, 0x80, 0xcf, 0xcf};
+    UVersionInfo currVersionArray = {0x18, 0xC0, 0x02, 0x02};
     UVersionInfo versionArray;
     
     log_verbose("The property tests begin : \n");
@@ -161,18 +160,15 @@ void TestProperty()
         log_err("Default Collator creation failed.: %s\n", myErrorName(status));
         return;
     }
-#if 0
-    /* turned off until we settle on a real version number */
+
     ucol_getVersion(col, versionArray);
     for (i=0; i<4; ++i) {
-      if (versionArray[i] < minVersionArray[i] ||
-          versionArray[i] > maxVersionArray[i]) {
+      if (versionArray[i] != currVersionArray[i]) {
         log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
             versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
         break;
       }
     }
-#endif
 
     source=(UChar*)malloc(sizeof(UChar) * 12);
     target=(UChar*)malloc(sizeof(UChar) * 12);
