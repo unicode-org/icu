@@ -53,17 +53,14 @@ udata_create(const char *dir, const char *type, const char *name,
     }
 
     /* open the output file */
-    if(dir==NULL) {
-        dir=u_getDataDirectory();
-    }
-    if(dir!=NULL && *dir!=0) {
+    if(dir!=NULL && *dir!=0) { /* if dir has a value, we prepend it to the filename */
         char *p=filename+strlen(dir);
         uprv_strcpy(filename, dir);
         if (*(p-1)!=U_FILE_SEP_CHAR) {
             *p++=U_FILE_SEP_CHAR;
             *p=0;
         }
-    } else {
+    } else { /* otherwise, we'll output to the current dir */
         filename[0]=0;
     }
     uprv_strcat(filename, name);
