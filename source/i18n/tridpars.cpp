@@ -287,13 +287,15 @@ UnicodeSet* TransliteratorIDParser::parseGlobalFilter(const UnicodeString& id, i
     return filter;
 }
 
-static void _deleteSingleID(void* obj) {
+U_CDECL_BEGIN
+static void U_CALLCONV _deleteSingleID(void* obj) {
     delete (TransliteratorIDParser::SingleID*) obj;
 }
 
-static void _deleteTransliterator(void* obj) {
+static void U_CALLCONV _deleteTransliterator(void* obj) {
     delete (Transliterator*) obj;
 }
+U_CDECL_END
 
 /**
  * Parse a compound ID, consisting of an optional forward global

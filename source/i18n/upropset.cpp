@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2002/01/23 02:01:18 $
-* $Revision: 1.13 $
+* $Date: 2002/03/01 03:41:39 $
+* $Revision: 1.14 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -339,11 +339,13 @@ UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) 
 // Utility methods
 //----------------------------------------------------------------
 
+U_CDECL_BEGIN
 static UBool U_CALLCONV
 _enumCategoryRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
     CATEGORY_CACHE[type].add(start, limit-1);
     return TRUE;
 }
+U_CDECL_END
 
 /**
  * Returns a UnicodeSet for the given category.  This set is
