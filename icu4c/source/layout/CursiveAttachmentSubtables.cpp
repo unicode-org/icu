@@ -31,7 +31,7 @@ le_uint32 CursiveAttachmentSubtable::process(GlyphIterator *glyphIterator, const
 
     LEPoint entryAnchor, exitAnchor, pixels;
 
-    if (glyphIterator->hasCursiveLastExitPoint()) {
+    if (glyphIterator->hasCursiveLastExitPoint() && entryExitRecords[coverageIndex].entryAnchor != 0) {
         Offset entryOffset = SWAPW(entryExitRecords[coverageIndex].entryAnchor);
 
         const AnchorTable *entryAnchorTable = (const AnchorTable *) ((char *) this + entryOffset);
@@ -65,15 +65,33 @@ le_uint32 CursiveAttachmentSubtable::process(GlyphIterator *glyphIterator, const
 
     Offset exitOffset = SWAPW(entryExitRecords[coverageIndex].exitAnchor);
 
-    const AnchorTable *exitAnchorTable = (const AnchorTable *) ((char *) this + exitOffset);
+    if (exitOffset != 0) {
+        const AnchorTable *exitAnchorTable = (const AnchorTable *) ((char *) this + exitOffset);
 
-    exitAnchorTable->getAnchor(glyphID, fontInstance, exitAnchor);
+        exitAnchorTable->getAnchor(glyphID, fontInstance, exitAnchor);
 
-    if (!glyphIterator->hasCursiveFirstExitPoint()) {
-        glyphIterator->setCursiveFirstExitPoint();
+        if (!glyphIterator->hasCursiveFirstExitPoint()) {
+            glyphIterator->setCursiveFirstExitPoint();
+        }
+
+        glyphIterator->setCursiveLastExitPoint(exitAnchor);
+    } else {
+        /*
+         * We've got a glyph which is covered but doesn't have an
+         * exit point. We call setCursiveLastExitPoint just to set
+         * the position of this glyph, then resetCursiveLastExitPoint
+         * to do any baseline adjustments that are required for the
+         * sequence of attached glyphs.
+         *
+         * NOTE: we don't really care about the value of
+         * extiAnchor, because after we reset the last exit
+         * point, it won't be used. This is a bit of a hack.
+         * There should probably be a setCursiveLastExitPoint
+         * call that doesn't take an anchor...
+         */
+        glyphIterator->setCursiveLastExitPoint(exitAnchor);
+        glyphIterator->resetCursiveLastExitPoint();
     }
-
-    glyphIterator->setCursiveLastExitPoint(exitAnchor);
 
     return 1;
 }
