@@ -24,12 +24,14 @@ void addCollTest(TestNode** root);
 void addComplexTest(TestNode** root);
 void addUDataTest(TestNode** root);
 void addUTF16Test(TestNode** root);
+void addUTF8Test(TestNode** root);
 void addUTransTest(TestNode** root);
 void addPUtilTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
     addUTF16Test(root);
+    addUTF8Test(root);
 	addUtility(root);
     addBreakIter(root);
     addFormatTest(root);
