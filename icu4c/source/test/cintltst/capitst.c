@@ -986,7 +986,7 @@ struct teststruct {
   } ;
 
 static int compare_teststruct(const void *string1, const void *string2) {
-  return(strcmp(((struct teststruct *)string1)->key, ((struct teststruct *)string2)->key));
+  return(strcmp((const char *)((struct teststruct *)string1)->key, (const char *)((struct teststruct *)string2)->key));
 }
 
 void TestBounds() {
@@ -1086,10 +1086,10 @@ void TestBounds() {
       lowerSize = ucol_getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, &status);
       upperSize = ucol_getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, &status);
       for(k = i; k <= j; k++) {
-        if(strcmp(lower, tests[k].key) > 0) {
+        if(strcmp((const char *)lower, (const char *)tests[k].key) > 0) {
           log_err("Problem with lower! j = %i (%s vs %s)\n", k, tests[k].original, tests[i].original);
         }
-        if(strcmp(upper, tests[k].key) <= 0) {
+        if(strcmp((const char *)upper, (const char *)tests[k].key) <= 0) {
           log_err("Problem with upper! j = %i (%s vs %s)\n", k, tests[k].original, tests[j].original);
         }
       }
@@ -1128,10 +1128,10 @@ void TestBounds() {
     for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
       buffSize = u_unescape(test[j], buffer, 512);
       skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
-      if(strcmp(lower, sortkey) > 0) {
+      if(strcmp((const char *)lower, (const char *)sortkey) > 0) {
         log_err("Problem with lower! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
       }
-      if(strcmp(upper, sortkey) <= 0) {
+      if(strcmp((const char *)upper, (const char *)sortkey) <= 0) {
         log_err("Problem with upper! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
       }
     }
