@@ -15,6 +15,8 @@
 #include "AttachmentPosnSubtables.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct MarkToBasePositioningSubtable : AttachmentPositioningSubtable
 {
     le_int32   process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
@@ -32,5 +34,6 @@ struct BaseArray
     BaseRecord baseRecordArray[ANY_NUMBER];
 };
 
+U_NAMESPACE_END
 #endif
 

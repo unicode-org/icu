@@ -13,6 +13,8 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
@@ -38,3 +40,5 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
 
     return 0;
 }
+
+U_NAMESPACE_END

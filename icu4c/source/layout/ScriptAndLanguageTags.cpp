@@ -12,6 +12,8 @@
 #include "ScriptAndLanguageTags.h"
 #include "OpenTypeLayoutEngine.h"
 
+U_NAMESPACE_BEGIN
+
 const LETag OpenTypeLayoutEngine::scriptTags[] = {
     zyyyScriptTag, /* 'zyyy' (COMMON) */
     qaaiScriptTag, /* 'qaai' (INHERITED) */
@@ -56,3 +58,5 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     cansScriptTag, /* 'cans' (CANADIAN-ABORIGINAL) */
     yiiiScriptTag  /* 'yiii' (YI) */
 };
+
+U_NAMESPACE_END

@@ -14,6 +14,7 @@
 #include "StateTableProcessor.h"
 #include "LigatureSubstitution.h"
 
+U_NAMESPACE_BEGIN
 
 #define nComponents 16
 
@@ -46,4 +47,5 @@ protected:
     const LigatureSubstitutionHeader *ligatureSubstitutionHeader;
 };
 
+U_NAMESPACE_END
 #endif

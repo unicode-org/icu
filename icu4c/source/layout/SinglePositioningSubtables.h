@@ -15,6 +15,8 @@
 #include "ValueRecords.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct SinglePositioningSubtable : GlyphPositioningSubtable
 {
     le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
@@ -37,6 +39,7 @@ struct SinglePositioningFormat2Subtable : SinglePositioningSubtable
     le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 };
 
+U_NAMESPACE_END
 #endif
 
 

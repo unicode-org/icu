@@ -13,6 +13,8 @@
 #include "SimpleArrayProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 SimpleArrayProcessor::SimpleArrayProcessor()
 {
 }
@@ -42,3 +44,4 @@ void SimpleArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_
     }
 }
  
+U_NAMESPACE_END

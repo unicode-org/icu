@@ -15,6 +15,8 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
 
+U_NAMESPACE_BEGIN
+
 struct GlyphPositioningTableHeader
 {
     fixed32 version;
@@ -43,4 +45,5 @@ enum GlyphPositioningSubtableTypes
 
 typedef LookupSubtable GlyphPositioningSubtable;
 
+U_NAMESPACE_END
 #endif

@@ -12,6 +12,8 @@
 
 #include "MorphTables.h"
 
+U_NAMESPACE_BEGIN
+
 GXLayoutEngine::GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable) 
     : LayoutEngine(fontInstance, scriptCode, languageCode), fMorphTable(morphTable)
 {
@@ -61,3 +63,4 @@ void GXLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offs
     // FIXME: no positional processing yet...
 }
 
+U_NAMESPACE_END

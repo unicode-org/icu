@@ -13,6 +13,8 @@
 #include "StateTables.h"
 #include "MorphTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct ContextualGlyphSubstitutionHeader : MorphStateTableHeader
 {
     ByteOffset  substitutionTableOffset;
@@ -31,4 +33,5 @@ struct ContextualGlyphSubstitutionStateEntry : StateEntry
     WordOffset currOffset;
 };
 
+U_NAMESPACE_END
 #endif

@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "MorphTables.h"
 
+U_NAMESPACE_BEGIN
+
 class SubtableProcessor
 {
 public:
@@ -29,5 +31,6 @@ protected:
     const MorphSubtableHeader *subtableHeader;
 };
 
+U_NAMESPACE_END
 #endif
 

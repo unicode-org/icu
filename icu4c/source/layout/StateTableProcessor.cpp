@@ -13,6 +13,8 @@
 #include "StateTableProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 StateTableProcessor::StateTableProcessor()
 {
 }
@@ -71,3 +73,4 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
     endStateTable();
 }
 
+U_NAMESPACE_END

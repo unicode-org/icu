@@ -11,6 +11,8 @@
 
 #include "LETypes.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * These are convenience macros which invoke the swap functions
  * from a concise call.
@@ -75,4 +77,5 @@ public:
     };
 };
 
+U_NAMESPACE_END
 #endif

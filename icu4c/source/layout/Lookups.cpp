@@ -11,6 +11,8 @@
 #include "CoverageTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 const LookupTable *LookupListTable::getLookupTable(le_uint16 lookupTableIndex) const
 {
     if (lookupTableIndex >= SWAPW(lookupCount)) {
@@ -40,3 +42,4 @@ le_int32 LookupSubtable::getGlyphCoverage(Offset tableOffset, LEGlyphID glyphID)
     return coverageTable->getGlyphCoverage(glyphID);
 }
 
+U_NAMESPACE_END

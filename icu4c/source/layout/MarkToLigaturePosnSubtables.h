@@ -15,6 +15,8 @@
 #include "AttachmentPosnSubtables.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct MarkToLigaturePositioningSubtable : AttachmentPositioningSubtable
 {
     le_int32   process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
@@ -38,5 +40,6 @@ struct LigatureArray
     Offset ligatureAttachTableOffsetArray[ANY_NUMBER];
 };
 
+U_NAMESPACE_END
 #endif
 

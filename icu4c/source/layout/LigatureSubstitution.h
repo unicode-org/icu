@@ -14,6 +14,8 @@
 #include "MorphTables.h"
 #include "MorphStateTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct LigatureSubstitutionHeader : MorphStateTableHeader
 {
     ByteOffset ligatureActionTableOffset;
@@ -41,4 +43,5 @@ enum LigatureActionFlags
     lafComponentOffsetMask  = 0x3FFFFFFF
 };
 
+U_NAMESPACE_END
 #endif

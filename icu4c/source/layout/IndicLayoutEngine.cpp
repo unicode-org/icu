@@ -20,6 +20,8 @@
 
 #include "IndicReordering.h"
 
+U_NAMESPACE_BEGIN
+
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                     const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
@@ -103,3 +105,4 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
     return IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, charIndices, featureTags);
 }
 
+U_NAMESPACE_END

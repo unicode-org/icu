@@ -15,6 +15,8 @@
 #include "CoverageTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 /*
     NOTE: This could be optimized somewhat by keeping track
     of the previous sequenceIndex in the loop and doing next()
@@ -42,3 +44,4 @@ void SubstitutionLookup::applySubstitutionLookups(
     }
 }
 
+U_NAMESPACE_END

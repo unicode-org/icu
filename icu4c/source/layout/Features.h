@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct FeatureRecord
 {
     ATag		featureTag;
@@ -32,4 +34,5 @@ struct FeatureListTable
     const FeatureTable	*getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const;
 };
 
+U_NAMESPACE_END
 #endif

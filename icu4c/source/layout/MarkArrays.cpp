@@ -12,6 +12,8 @@
 #include "MarkArrays.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 le_int32 MarkArray::getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, const LEFontInstance *fontInstance,
                               LEPoint &anchor) const
 {
@@ -34,3 +36,5 @@ le_int32 MarkArray::getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, cons
 
     return markClass;
 }
+
+U_NAMESPACE_END

@@ -14,6 +14,8 @@
 #include "GlyphIterator.h"
 #include "GlyphPositionAdjustments.h"
 
+U_NAMESPACE_BEGIN
+
 typedef le_uint16 ValueFormat;
 typedef le_int16 ValueRecordField;
 
@@ -61,7 +63,7 @@ enum ValueFormatBits
     vfbAnyDevice    = vfbXPlaDevice + vfbYPlaDevice + vfbXAdvDevice + vfbYAdvDevice
 };
 
-
+U_NAMESPACE_END
 #endif
 
 

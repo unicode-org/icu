@@ -21,6 +21,8 @@
 
 #include <string.h>
 
+U_NAMESPACE_BEGIN
+
 /**
  * This class implements OpenType layout for Indic OpenType fonts, as
  * specified by Microsoft in "Creating and Supporting OpenType Fonts for
@@ -128,5 +130,6 @@ protected:
             const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 };
 
+U_NAMESPACE_END
 #endif
 

@@ -14,6 +14,8 @@
 #include "GlyphSubstitutionTables.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct LigatureSetTable
 {
     le_uint16 ligatureCount;
@@ -35,4 +37,5 @@ struct LigatureSubstitutionSubtable : GlyphSubstitutionSubtable
     le_uint32  process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
 };
 
+U_NAMESPACE_END
 #endif

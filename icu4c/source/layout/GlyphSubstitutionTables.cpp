@@ -16,6 +16,8 @@
 #include "ScriptAndLanguage.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 void GlyphSubstitutionTableHeader::process(LEGlyphID *glyphs, const LETag **glyphTags, le_int32 glyphCount,
                                            le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                                            const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
@@ -33,3 +35,4 @@ le_bool GlyphSubstitutionTableHeader::coversScript(LETag scriptTag) const
     return scriptListTable->findScript(scriptTag) != NULL;
 }
 
+U_NAMESPACE_END

@@ -13,6 +13,8 @@
 #include "SubtableProcessor.h"
 #include "NonContextualGlyphSubst.h"
 
+U_NAMESPACE_BEGIN
+
 class NonContextualGlyphSubstitutionProcessor : public SubtableProcessor
 {
 public:
@@ -27,4 +29,5 @@ protected:
     virtual ~NonContextualGlyphSubstitutionProcessor();
 };
 
+U_NAMESPACE_END
 #endif

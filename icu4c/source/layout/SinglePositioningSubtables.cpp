@@ -15,6 +15,8 @@
 #include "GlyphPositionAdjustments.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 le_uint32 SinglePositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     switch(SWAPW(subtableFormat))
@@ -81,3 +83,4 @@ le_uint32 SinglePositioningFormat2Subtable::process(GlyphIterator *glyphIterator
     return 0;
 }
 
+U_NAMESPACE_END

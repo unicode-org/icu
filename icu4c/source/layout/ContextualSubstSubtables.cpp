@@ -15,6 +15,8 @@
 #include "CoverageTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 /*
     NOTE: This could be optimized somewhat by keeping track
     of the previous sequenceIndex in the loop and doing next()
@@ -464,3 +466,5 @@ le_uint32 ChainingContextualSubstitutionFormat3Subtable::process(const LookupPro
 
     return 0;
 }
+
+U_NAMESPACE_END

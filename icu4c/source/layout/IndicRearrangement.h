@@ -14,6 +14,8 @@
 #include "MorphTables.h"
 #include "MorphStateTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct IndicRearrangementSubtableHeader : MorphStateTableHeader
 {
 };
@@ -54,5 +56,6 @@ struct IndicRearrangementStateEntry : StateEntry
 {
 };
 
+U_NAMESPACE_END
 #endif
 

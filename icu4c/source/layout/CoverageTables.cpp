@@ -11,6 +11,8 @@
 #include "CoverageTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 le_int32 CoverageTable::getGlyphCoverage(LEGlyphID glyphID) const
 {
     switch(SWAPW(coverageFormat))
@@ -80,3 +82,5 @@ le_int32 CoverageFormat2Table::getGlyphCoverage(LEGlyphID glyphID) const
 
     return startCoverageIndex + (glyphID - firstInRange);
 }
+
+U_NAMESPACE_END

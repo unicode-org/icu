@@ -15,6 +15,8 @@
 
 #include <string.h>
 
+U_NAMESPACE_BEGIN
+
 class LEFontInstance;
 class LEGlyphFilter;
 
@@ -464,5 +466,6 @@ public:
     
 };
 
+U_NAMESPACE_END
 #endif
 

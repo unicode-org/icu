@@ -18,6 +18,8 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositioningTables.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * OpenTypeLayoutEngine implements complex text layout for OpenType fonts - that is
  * fonts which have GSUB and GPOS tables associated with them. In order to do this,
@@ -299,5 +301,6 @@ protected:
     virtual void reset();
 };
 
+U_NAMESPACE_END
 #endif
 

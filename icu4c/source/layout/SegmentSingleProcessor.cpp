@@ -13,6 +13,8 @@
 #include "SegmentSingleProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 SegmentSingleProcessor::SegmentSingleProcessor()
 {
 }
@@ -42,3 +44,5 @@ void SegmentSingleProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, l
         }
     }
 }
+
+U_NAMESPACE_END

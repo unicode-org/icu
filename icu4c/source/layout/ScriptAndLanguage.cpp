@@ -11,6 +11,8 @@
 #include "ScriptAndLanguage.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 const LangSysTable *ScriptTable::findLanguage(LETag languageTag) const
 {
     le_uint16 count = SWAPW(langSysCount);
@@ -55,3 +57,5 @@ const LangSysTable *ScriptListTable::findLanguage(LETag scriptTag, LETag languag
 
     return scriptTable->findLanguage(languageTag);
 }
+
+U_NAMESPACE_END

@@ -16,6 +16,8 @@
 #include "LookupProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 LETag LookupProcessor::notSelected    = 0x00000000;
 LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
 
@@ -168,3 +170,4 @@ LookupProcessor::~LookupProcessor()
     delete[] lookupSelectArray;
 };
 
+U_NAMESPACE_END

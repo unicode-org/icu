@@ -10,6 +10,8 @@
 #include "SubtableProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 SubtableProcessor::SubtableProcessor()
 {
 }
@@ -27,3 +29,4 @@ SubtableProcessor::~SubtableProcessor()
 {
 }
 
+U_NAMESPACE_END

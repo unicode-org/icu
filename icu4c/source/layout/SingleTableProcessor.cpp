@@ -13,6 +13,8 @@
 #include "SingleTableProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 SingleTableProcessor::SingleTableProcessor()
 {
 }
@@ -42,3 +44,5 @@ void SingleTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_
         }
     }
 } 
+
+U_NAMESPACE_END
