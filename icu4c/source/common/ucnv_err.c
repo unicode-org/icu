@@ -42,7 +42,7 @@ UBool
 /*Takes a int32_t and fills in  a UChar* string with that number "radix"-based
  * and padded with "pad" zeroes
  */
-static void   itou (UChar * buffer, int32_t i, int32_t radix, int32_t pad)
+static void   itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
 {
   int32_t length = 0;
   int32_t num = 0;
@@ -419,7 +419,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
     {
       uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
       uniValueString[valueStringLength++] = (UChar) UNICODE_X_CODEPOINT;	/* adding X */
-      itou (uniValueString + valueStringLength, codeUnits[i++], 16, 2);
+      itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
       valueStringLength += 2;
     }
   
