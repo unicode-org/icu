@@ -927,6 +927,7 @@ case "${host}" in
 			  tools/gencnval/gencnval tools/gennorm/gennorm \
 			  tools/gennames/gennames tools/gentest/gentest \
 			  tools/pkgdata/pkgdata tools/genprops/genprops \
+                          tools/gencase/gencase \
 			  tools/gensprep/gensprep
 			do
 			  if test -f $file.c; then
@@ -989,6 +990,7 @@ AC_OUTPUT([icudefs.mk \
 		tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
+		tools/gencase/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \
