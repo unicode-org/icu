@@ -430,7 +430,11 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         } else {
             result += dtos(fChoiceLimits[i], buf, status);
         }
-        result += fClosures[i] ? LESS_THAN : LESS_EQUAL;
+        if (fClosures[i]) {
+            result += LESS_THAN;
+        } else {
+            result += LESS_EQUAL;
+        }
         // Append fChoiceFormats[i], using quotes if there are special
         // characters.  Single quotes themselves must be escaped in
         // either case.
