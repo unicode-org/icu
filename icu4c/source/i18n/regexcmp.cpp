@@ -1197,7 +1197,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             //  the compiled code for it. 
             // Because capture groups can be forward-referenced by back-references,
             //  we fill the operand with the capture group number.  At the end
-            //  of compilation, it will be changed to the variables location.
+            //  of compilation, it will be changed to the variable's location.
             U_ASSERT(groupNum > 0);
             int32_t  op;
             if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
@@ -2498,7 +2498,7 @@ void   RegexCompile::matchStartType() {
         fRXPat->fStartType   = START_STRING;
         fRXPat->fInitialChar = c;
     } else if (fRXPat->fStartType == START_LINE) {
-        // Match at start of line in Mulit-Line mode.
+        // Match at start of line in Multi-Line mode.
         // Nothing to do here; everything is already set.
     } else if (fRXPat->fMinMatchLen == 0) {
         // Zero length match possible.  We could start anywhere.

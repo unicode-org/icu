@@ -516,6 +516,11 @@ const UnicodeString &RegexMatcher::input() const {
 
 
 
+//--------------------------------------------------------------------------------
+//
+//  lookingAt()
+//
+//--------------------------------------------------------------------------------
 UBool RegexMatcher::lookingAt(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
@@ -530,7 +535,30 @@ UBool RegexMatcher::lookingAt(UErrorCode &status) {
 }
 
 
+UBool RegexMatcher::lookingAt(int32_t start, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return FALSE;
+    }
+    if (start < 0 || start >= fInput->length()) {
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
+        return FALSE;
+    }
+    reset();
+    MatchAt(start, status);
+    return fMatch;
+}
 
+
+
+//--------------------------------------------------------------------------------
+//
+//  matches()
+//
+//--------------------------------------------------------------------------------
 UBool RegexMatcher::matches(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
@@ -545,6 +573,24 @@ UBool RegexMatcher::matches(UErrorCode &status) {
     return success;
 }
 
+
+UBool RegexMatcher::matches(int32_t start, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return FALSE;
+    }
+    if (start < 0 || start >= fInput->length()) {
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
+        return FALSE;
+    }
+    reset();
+    MatchAt(start, status);
+    UBool   success  = (fMatch && fMatchEnd==fInput->length());
+    return success;
+}
 
 
 
@@ -618,6 +664,7 @@ RegexMatcher &RegexMatcher::reset() {
     fMatchEnd     = 0;
     fLastMatchEnd = 0;
     fMatch        = FALSE;
+    fTouchedEnd   = FALSE;
     resetStack();
     return *this;
 }
@@ -631,20 +678,20 @@ RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
 }
 
 
-
-REStackFrame *RegexMatcher::resetStack() {
-    // Discard any previous contents of the state save stack, and initialize a
-    //  new stack frame to all -1.  The -1s are needed for capture group limits, where
-    //  they indicate that a group has not yet matched anything.
-    fStack->removeAllElements();
-
-    int32_t *iFrame = fStack->reserveBlock(fPattern->fFrameSize, fDeferredStatus);
-    int i;
-    for (i=0; i<fPattern->fFrameSize; i++) {
-        iFrame[i] = -1;
+RegexMatcher &RegexMatcher::reset(int32_t position, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
     }
-    return (REStackFrame *)iFrame;
+    reset();
+    if (position < 0 || position >= fInput->length()) {
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
+        return *this;
+    }
+    fMatchEnd = position;
+    return *this;
 }
+
+
 
 
 
@@ -791,6 +838,48 @@ int32_t RegexMatcher::start(int group, UErrorCode &status) const {
 }
 
 
+//--------------------------------------------------------------------------------
+//
+//     touchedEnd
+//
+//--------------------------------------------------------------------------------
+UBool RegexMatcher::touchedEnd() {
+    return fTouchedEnd;
+}
+
+
+
+
+//================================================================================
+//
+//    Code following this point in this file is the internal
+//    Match Engine Implementation.
+//
+//================================================================================
+
+
+//--------------------------------------------------------------------------------
+//
+//   resetStack
+//           Discard any previous contents of the state save stack, and initialize a
+//           new stack frame to all -1.  The -1s are needed for capture group limits, 
+//           where they indicate that a group has not yet matched anything.
+//--------------------------------------------------------------------------------
+REStackFrame *RegexMatcher::resetStack() {
+    // Discard any previous contents of the state save stack, and initialize a
+    //  new stack frame to all -1.  The -1s are needed for capture group limits, where
+    //  they indicate that a group has not yet matched anything.
+    fStack->removeAllElements();
+
+    int32_t *iFrame = fStack->reserveBlock(fPattern->fFrameSize, fDeferredStatus);
+    int i;
+    for (i=0; i<fPattern->fFrameSize; i++) {
+        iFrame[i] = -1;
+    }
+    return (REStackFrame *)iFrame;
+}
+
+
 
 //--------------------------------------------------------------------------------
 //
@@ -915,6 +1004,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
+    fTouchedEnd = FALSE;
 
     //  Cache frequently referenced items from the compiled pattern
     //  in local variables.
@@ -982,6 +1072,8 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 if (c == opValue) {           
                     break;
                 }
+            } else {
+                fTouchedEnd = TRUE;
             }
             fp = (REStackFrame *)fStack->popFrame(frameSize);
             break;
@@ -1004,6 +1096,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
                 if (fp->fInputIdx + stringLen > inputLen) {
                     // No match.  String is longer than the remaining input text.
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1188,6 +1281,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
                 // Fail if at end of input
                 if (fp->fInputIdx >= inputLen) {
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1277,6 +1371,7 @@ GC_Done:
                 //    0:   success if input char is in set.
                 //    1:   success if input char is not in set.
                 if (fp->fInputIdx >= inputLen) {
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1309,6 +1404,7 @@ GC_Done:
                 // Test input character for NOT being a member of  one of 
                 //    the predefined sets (Word Characters, for example)
                 if (fp->fInputIdx >= inputLen) {
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1352,6 +1448,8 @@ GC_Done:
                         break;
                     }
                 }
+            } else {
+                fTouchedEnd = TRUE;
             }
             // Either at end of input, or the character wasn't in the set.
             // Either way, we need to back track out.
@@ -1364,6 +1462,7 @@ GC_Done:
                 // . matches anything, but stops at end-of-line.
                 if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1385,6 +1484,7 @@ GC_Done:
                 // ., in dot-matches-all (including new lines) mode
                 if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1407,6 +1507,7 @@ GC_Done:
             {
                 //  Fail if input already exhausted.
                 if (fp->fInputIdx >= inputLen) {
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1439,6 +1540,7 @@ GC_Done:
             {
                 // Match up to end of input.  Fail if already at end of input.
                 if (fp->fInputIdx >= inputLen) {
+                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                 } else {
                     fp->fInputIdx = inputLen;
@@ -1639,14 +1741,7 @@ GC_Done:
                         //   we do too.
                         break;
                     }
-                /*
-                if ((fp->fInputIdx + len > inputLen) || 
-                    u_strncmp(inputBuf+groupStartIdx, inputBuf+fp->fInputIdx, len) != 0) {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
-                } else {
-                    fp->fInputIdx += len;     // Match.  Advance current input position.
-                }
-                */
+
                 UBool  haveMatch = FALSE;
                 if (fp->fInputIdx + len <= inputLen) {
                     if (opType == URX_BACKREF) {
@@ -1659,6 +1754,8 @@ GC_Done:
                             haveMatch = TRUE;
                         }
                     }
+                } else {
+                    fTouchedEnd = TRUE;
                 }
                 if (haveMatch) {
                     fp->fInputIdx += len;     // Match.  Advance current input position.
@@ -1729,7 +1826,10 @@ GC_Done:
                 if (u_foldCase(c, U_FOLD_CASE_DEFAULT) == opValue) {           
                     break;
                 }
+            } else {
+                fTouchedEnd = TRUE;
             }
+
             fp = (REStackFrame *)fStack->popFrame(frameSize);
             break;
 
@@ -1747,17 +1847,21 @@ GC_Done:
                 opValue = URX_VAL(op);
                 U_ASSERT(opType == URX_STRING_LEN);
                 stringLen = opValue;
-
+                
                 int32_t stringEndIndex = fp->fInputIdx + stringLen;
-                if (stringEndIndex <= inputLen &&
-                    u_strncasecmp(inputBuf+fp->fInputIdx, litText+stringStartIdx,
-                                  stringLen, U_FOLD_CASE_DEFAULT) == 0) {
-                    // Success.  Advance the current input position.
-                    fp->fInputIdx = stringEndIndex;
+                if (stringEndIndex <= inputLen) {
+                    if (u_strncasecmp(inputBuf+fp->fInputIdx, litText+stringStartIdx,
+                        stringLen, U_FOLD_CASE_DEFAULT) == 0) {
+                        // Success.  Advance the current input position.
+                        fp->fInputIdx = stringEndIndex;
+                        break;
+                    }
                 } else {
-                    // No match.  Back up matching to a saved state
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fTouchedEnd = TRUE;
                 }
+                
+                // No match.  Back up matching to a saved state
+                fp = (REStackFrame *)fStack->popFrame(frameSize);
             }
             break;
 
@@ -1953,6 +2057,7 @@ GC_Done:
                 int32_t ix = fp->fInputIdx;
                 for (;;) {
                     if (ix >= inputLen) {
+                        fTouchedEnd = TRUE;
                         break;
                     }
                     UChar32   c;
@@ -2003,13 +2108,19 @@ GC_Done:
             {
                 // Loop through input until the input is exhausted (we reach an end-of-line)
                 // In multi-line mode, we can just go straight to the end of the input.
-                int32_t ix = inputLen;
-                if (opValue == 0) {
+                int32_t ix;
+                if (opValue == 1) {
+                    // Multi-line mode.
+                    ix = inputLen;
+                    fTouchedEnd = TRUE;
+                } else {
                     // NOT multi-line mode.  Line endings do not match '.'
                     // Scan forward until a line ending or end of input.
                     ix = fp->fInputIdx;
                     for (;;) {
                         if (ix >= inputLen) {
+                            ix = inputLen;
+                            fTouchedEnd = TRUE;
                             break;
                         }
                         UChar32   c;
