@@ -545,7 +545,7 @@ void TransliterationRuleParser::parseRules(void) {
     
     // Convert the set vector to an array
     data->setVariablesLength = setVariablesVector.size();
-    data->setVariables = new UnicodeSet*[data->setVariablesLength];
+    data->setVariables = data->setVariablesLength == 0 ? 0 : new UnicodeSet*[data->setVariablesLength];
     // orphanElement removes the given element and shifts all other
     // elements down.  For performance (and code clarity) we work from
     // the end back to index 0.

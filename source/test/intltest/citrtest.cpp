@@ -184,6 +184,8 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
         errln("operator= failed");
 
     
+    free(testText);
+    free(testText2);
 
     delete test1;
     delete test2;

@@ -24,6 +24,9 @@
 #define kVersionSeparator       "."
 #define kVersionTag             "Version"
 
+#define MAGIC1 19700503
+#define MAGIC2 19641227
+
 
 enum UResEntryType {
     ENTRY_OK = 0,
@@ -53,7 +56,9 @@ struct UResourceBundle {
     char *fVersion;
     UBool fHasFallback;
     UBool fIsTopLevel;
-    UBool fIsStackObject;
+    uint32_t fMagic1;
+    uint32_t fMagic2;
+    /*UBool fIsStackObject;*/
     UResourceDataEntry *fData; /*for low-level access*/
     int32_t fIndex;
     int32_t fSize;
@@ -64,7 +69,9 @@ struct UResourceBundle {
 /*U_CFUNC UResourceBundle* ures_openNoFallback(UResourceBundle *r, const char* path, const char* localeID, UErrorCode* status);*/
 U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status);
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
-U_CAPI void ures_initStackObject( UResourceBundle* resB);
+U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state);
+U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status);
+
 /*U_CFUNC UChar** ures_listInstalledLocales(const char *path, int32_t* count);*/
 U_CFUNC const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status);
 U_CFUNC int32_t hashBundle(const void *parm);
