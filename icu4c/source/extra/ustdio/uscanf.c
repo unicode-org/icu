@@ -30,6 +30,7 @@
 #include "unicode/udat.h"
 
 #include "cmemory.h"
+#include "ustr_imp.h"
 
 /* --- Prototypes ---------------------------- */
 
@@ -339,11 +340,11 @@ u_scanf_skip_leading_ws(UFILE     *stream,
     int32_t    count = 0;
 
     /* skip all leading ws in the stream */
-    while( ((c = u_fgetc(stream)) != 0xFFFF) && (c == pad || ufmt_isws(c)) )
+    while( ((c = u_fgetc(stream)) != U_EOF) && (c == pad || u_isWhitespace(c)) )
         ++count;
 
     /* put the final character back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         u_fungetc(c, stream);
 
     return count;
@@ -386,20 +387,20 @@ u_scanf_string_handler(UFILE             *stream,
     count = 0;
 
     /* open the default converter */
-    conv = ucnv_open(ucnv_getDefaultName(), &status);
+    conv = u_getDefaultConverter(&status);
 
     if(U_FAILURE(status))
         return -1;
 
-    /* since there is no real limit, just use a reasonable value */
-    limit = alias + 2048; /* TODO: Specify a real limit! */
-
-    while( ((c = u_fgetc(stream)) != 0xFFFF) &&
-        (c != info->fPadChar && ! ufmt_isws(c)) &&
-        (info->fWidth == -1 || count < info->fWidth) ) {
+    while( ((c = u_fgetc(stream)) != U_EOF) &&
+        (c != info->fPadChar && !u_isWhitespace(c)) &&
+        (info->fWidth == -1 || count < info->fWidth) )
+    {
 
         /* put the character from the stream onto the target */
         source = &c;
+        /* Since we do this one character at a time, do it this way. */
+        limit = alias + ucnv_getMaxCharSize(conv);
 
         /* convert the character to the default codepage */
         ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
@@ -413,14 +414,14 @@ u_scanf_string_handler(UFILE             *stream,
     }
 
     /* put the final character we read back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         u_fungetc(c, stream);
 
     /* add the terminator */
     *alias = 0x00;
 
     /* clean up */
-    ucnv_close(conv);
+    u_releaseDefaultConverter(conv);
 
     /* we converted 1 arg */
     return 1;
@@ -444,8 +445,8 @@ u_scanf_ustring_handler(UFILE             *stream,
     /* get the string one character at a time, truncating to the width */
     count = 0;
 
-    while( ((c = u_fgetc(stream)) != 0xFFFF) &&
-        (c != info->fPadChar && ! ufmt_isws(c)) &&
+    while( ((c = u_fgetc(stream)) != U_EOF) &&
+        (c != info->fPadChar && ! u_isWhitespace(c)) &&
         (info->fWidth == -1 || count < info->fWidth) ) {
 
         /* put the character from the stream onto the target */
@@ -456,7 +457,7 @@ u_scanf_ustring_handler(UFILE             *stream,
     }
 
     /* put the final character we read back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         u_fungetc(c, stream);
 
     /* add the terminator */
@@ -923,7 +924,7 @@ u_scanf_char_handler(UFILE             *stream,
         uc = u_fgetc(stream);
 
     /* handle EOF */
-    if(uc == 0xFFFF)
+    if(uc == U_EOF)
         return -1;
 
     /* convert the character to the default codepage */
@@ -954,7 +955,7 @@ u_scanf_uchar_handler(UFILE             *stream,
         *c = u_fgetc(stream);
 
     /* handle EOF */
-    if(*c == 0xFFFF)
+    if(*c == U_EOF)
         return -1;
 
     /* we converted 1 arg */
@@ -1172,14 +1173,14 @@ u_scanf_scanset_handler(UFILE             *stream,
     ++(*consumed);
 
     /* open the default converter */
-    conv = ucnv_open(ucnv_getDefaultName(), &status);
+    conv = u_getDefaultConverter(&status);
 
     /* verify that the parse was successful and the converter opened */
     if(! success || U_FAILURE(status))
         return -1;
 
     /* grab characters one at a time and make sure they are in the scanset */
-    while( (c = u_fgetc(stream)) != 0xFFFF && alias < limit) {
+    while( (c = u_fgetc(stream)) != U_EOF && alias < limit) {
         if(u_scanf_scanset_in(&scanset, c)) {
             source = &c;
             /* convert the character to the default codepage */
@@ -1196,7 +1197,7 @@ u_scanf_scanset_handler(UFILE             *stream,
     }
 
     /* put the final character we read back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         u_fungetc(c, stream);
 
     /* if we didn't match at least 1 character, fail */
@@ -1207,7 +1208,7 @@ u_scanf_scanset_handler(UFILE             *stream,
         *alias = 0x00;
 
     /* clean up */
-    ucnv_close(conv);
+    u_releaseDefaultConverter(conv);
 
     /* we converted 1 arg */
     return 1;

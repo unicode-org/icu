@@ -67,7 +67,7 @@ typedef union ufmt_args ufmt_args;
 #define ufmt_min(a,b) ((a) < (b) ? (a) : (b))
 
 /**
- * Convert a UChar in a some radix to an integer value.
+ * Convert a UChar in hex radix to an integer value.
  * @param c The UChar to convert.
  * @return The integer value of <TT>c</TT>.
  */
@@ -115,17 +115,6 @@ long
 ufmt_utol(const UChar     *buffer, 
       int32_t     *len,
       int32_t     radix);
-
-/**
- * Determine if a UChar is a whitespace character.
- * @param c The UChar to test.
- * @return TRUE if the UChar is a space (U+0020), tab (U+0009), 
- * carriage-return (U+000D), newline (U+000A), vertical-tab (U+000B),
- * form-feed (U+000C), or any other Unicode-defined space, line, or paragraph
- * separator.
- */
-UBool
-ufmt_isws(UChar c);
 
 /**
  * Convert a string from the default codepage to Unicode.
