@@ -10,7 +10,7 @@
 #include "hextouni.h"
 #include "rep.h"
 #include "unifilt.h"
-#include "uniset.h" // For UnicodeSet::digit REMOVE LATER
+#include "unicode.h"
 
 /**
  * ID for this transliterator.
@@ -80,7 +80,7 @@ void HexToUnicodeTransliterator::handleKeyboardTransliterate(Replaceable& text,
 
     while (cursor <= maxCursor) {
         UChar c = filteredCharAt(text, cursor + 5);
-        int32_t digit0 = UnicodeSet::digit(c, 16);
+        int32_t digit0 = Unicode::digit(c, 16);
         if (digit0 < 0) {
             if (c == '\\') {
                 cursor += 5;
@@ -97,7 +97,7 @@ void HexToUnicodeTransliterator::handleKeyboardTransliterate(Replaceable& text,
 
         for (int32_t i=4; i>=2; --i) {
             c = filteredCharAt(text, cursor + i);
-            int32_t digit = UnicodeSet::digit(c, 16);
+            int32_t digit = Unicode::digit(c, 16);
             if (digit < 0) {
                 if (c == 'U' || c == 'u' || c == '+') {
                     cursor += i-1;
