@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 2000-2002, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************
@@ -38,6 +38,10 @@
                           }                                   \
                           break
 
+#define SKIPCASE(id) case id:                                 \
+                          name = "(skipped)";                 \
+                          break
+
 void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite Transliterator");
@@ -47,7 +51,11 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(2, CompoundTransliteratorTest);
         CASE(3, UniToHexTransliteratorTest);
         CASE(4, HexToUniTransliteratorTest);
+#if !UCONFIG_NO_TRANSLITERATION && defined(U_USE_UNICODE_FILTER_LOGIC_OBSOLETE_2_8)
         CASE(5, UnicodeFilterLogicTest);
+#else
+        SKIPCASE(5);
+#endif
         CASE(6, TransliteratorRoundTripTest);
         CASE(7, UnicodeSetTest);
         CASE(8, JamoTest);

@@ -51,6 +51,7 @@ CollationAPITest::doAssert(UBool condition, const char *message)
     }
 }
 
+#ifdef U_USE_COLLATION_OBSOLETE_2_6
 /*
  * Test Collator::createInstance(... version...) for some locale. Called by TestProperty().
  */
@@ -80,6 +81,7 @@ TestOpenVersion(IntlTest &test, const Locale &locale) {
         }
     }
 }
+#endif
 
 // Collator Class Properties
 // ctor, dtor, createInstance, compare, getStrength/setStrength
@@ -233,6 +235,7 @@ CollationAPITest::TestProperty(/* char* par */)
     delete aFrCol;
     delete junk;
 
+#ifdef U_USE_COLLATION_OBSOLETE_2_6
     /* test Collator::createInstance(...version...) */
     TestOpenVersion(*this, "");
     TestOpenVersion(*this, "da");
@@ -249,6 +252,7 @@ CollationAPITest::TestProperty(/* char* par */)
         errln("error: ucol_openVersion(bogus version) succeeded");
         delete col;
     }
+#endif
 }
 
 void 
