@@ -36,7 +36,7 @@
 
 /**
  *\file
- * \brief Description of BIDI algorithm for ICU C API
+ * \brief C API: BIDI algorithm 
  *
  * <h2>BIDI algorithm for ICU</h2>
  *

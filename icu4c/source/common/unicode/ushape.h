@@ -23,7 +23,7 @@
 
 /**
  * \file
- * \brief Description of Arabic shaping C API
+ * \brief C API:  Arabic shaping
  * 
  */
 

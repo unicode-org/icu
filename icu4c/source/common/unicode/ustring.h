@@ -345,6 +345,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
+ * @unimplemented
  */
 U_CAPI int32_t U_EXPORT2
 u_strToUpper(const UChar *src, int32_t srcLength,
@@ -369,6 +370,7 @@ u_strToUpper(const UChar *src, int32_t srcLength,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
+ * @unimplemented
  */
 U_CAPI int32_t U_EXPORT2
 u_strToLower(const UChar *src, int32_t srcLength,

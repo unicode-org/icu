@@ -300,7 +300,7 @@ class U_COMMON_API Normalizer
    *              Currently the only available option is {@link #IGNORE_HANGUL}
    *              If you want the default behavior corresponding to one of the
    *              standard Unicode Normalization Forms, use 0 for this argument
-   * @add
+   * @unimplemented 
    *
    */
   Normalizer(const UChar* str,
@@ -680,7 +680,7 @@ class U_COMMON_API Normalizer
   /**
    * Returns the text under iteration into the UChar* buffer pointer.
    * @param result Receives a copy of the text under iteration.
-   * @add
+   * @unimplemented
    */
   const UChar*     getText(int32_t&  count);
 

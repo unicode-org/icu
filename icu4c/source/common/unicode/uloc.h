@@ -25,7 +25,7 @@
 
 /**    
  * \file
- * \brief Description of Locale C API
+ * \brief  C API: Locale 
  *
  * <h2> ULoc C API for Locale </h2>
  * A <code>Locale</code> represents a specific geographical, political,

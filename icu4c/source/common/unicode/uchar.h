@@ -31,7 +31,7 @@
 
 /**
  * \file
- * \brief  Description of ICU's Unicode Char C API
+ * \brief   C API: Unicode Char 
  *
  * <h2> Unicode C API </h2>
  * The Unicode C API allows you to query the properties associated with individual 
