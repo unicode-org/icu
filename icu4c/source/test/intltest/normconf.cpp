@@ -40,6 +40,15 @@ NormalizerConformanceTest::NormalizerConformanceTest() :
 
 NormalizerConformanceTest::~NormalizerConformanceTest() {}
 
+// more interesting conformance test cases, not in the unicode.org NormalizationTest.txt
+static const char *moreCases[]={
+    // Markus 2001aug30
+    "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
+
+    // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
+    "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
+};
+
 /**
  * Test the conformance of Normalizer to
  * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.
@@ -84,13 +93,21 @@ void NormalizerConformanceTest::TestConformance(void) {
     // UnicodeSet for all code points that are not mentioned in NormalizationTest.txt
     UnicodeSet other(0, 0x10ffff);
 
-    int32_t count;
+    int32_t count, countMoreCases = sizeof(moreCases)/sizeof(moreCases[0]);
     for (count = 1;;++count) {
-        if (T_FileStream_eof(input)) {
-            break;
+        if (!T_FileStream_eof(input)) {
+            T_FileStream_readLine(input, lineBuf, (int32_t)sizeof(lineBuf));
+        } else {
+            // once NormalizationTest.txt is finished, use moreCases[]
+            if(count > countMoreCases) {
+                count = 0;
+            } else if(count == countMoreCases) {
+                // all done
+                break;
+            }
+            uprv_strcpy(lineBuf, moreCases[count]);
         }
-        T_FileStream_readLine(input, lineBuf, (int32_t)sizeof(lineBuf));
-        if (lineBuf[0] == 0 || lineBuf[0] == 10 || lineBuf[0] == 13) continue;
+        if (lineBuf[0] == 0 || lineBuf[0] == '\n' || lineBuf[0] == '\r') continue;
 
         // Expect 5 columns of this format:
         // 1E0C;1E0C;0044 0323;1E0C;0044 0323; # <comments>
@@ -166,10 +183,10 @@ void NormalizerConformanceTest::TestConformance(void) {
     }
 
     if (failCount != 0) {
-        errln((UnicodeString)"Total: " + failCount + " lines failed, " +
-              passCount + " lines passed");
+        errln((UnicodeString)"Total: " + failCount + " lines/code points failed, " +
+              passCount + " lines/code points passed");
     } else {
-        logln((UnicodeString)"Total: " + passCount + " lines passed");
+        logln((UnicodeString)"Total: " + passCount + " lines/code points passed");
     }
 }
 
