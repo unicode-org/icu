@@ -193,11 +193,13 @@ public class ICULocaleData {
         if (b == null) {
             ResourceBundle parent = null;
             int i = name.lastIndexOf('_');
+            final Locale rootLocale = new Locale("", "", "");
+ 
             if (i != -1) {
                 parent = instantiate(name.substring(0, i));
+
             }
             try {
-                final Locale rootLocale = new Locale("", "", "");
                 Locale locale = rootLocale;
                 i = name.indexOf('_');
                 if (i != -1) {
@@ -208,6 +210,8 @@ public class ICULocaleData {
                 Class cls = ICULocaleData.class.getClassLoader().loadClass(name);
                 if (ICUListResourceBundle.class.isAssignableFrom(cls)) {
                     ICUListResourceBundle bx = (ICUListResourceBundle)cls.newInstance();
+                    
+
                     if (parent != null) {
                         bx.setParentX(parent);
                     }
@@ -221,6 +225,22 @@ public class ICULocaleData {
                 addToCache(name, b);
             }
             catch (ClassNotFoundException e) {
+
+                int j = name.indexOf('_');
+                int k = name.lastIndexOf('_');
+                // if a bogus locale is passed then the parent should be
+                // the default locale not the root locale!
+                if(k==j && j!=-1){
+                    
+                    String locName = name.substring(j+1,name.length());
+                    String defaultName = Locale.getDefault().toString();
+                    
+                    if(!locName.equals(rootLocale.toString()) &&
+                        defaultName.indexOf(locName)==-1){
+                        String bundle =  name.substring(0,j);
+                        parent = instantiate(bundle+"_"+defaultName);
+                    }
+                }
                 b = parent;
             }
             catch (Exception e) {
@@ -237,7 +257,12 @@ public class ICULocaleData {
      * class path?
      */
     private synchronized static ResourceBundle instantiateBundle(String name, Locale l) {
-        return instantiate(name + "_" + l);
+        String s = l.toString();
+        if(s.length()!=0){
+            return instantiate(name + "_" + l);
+        }else{
+            return instantiate(name);
+        }
         //    ResourceBundle rb = ResourceBundle.getBundle(name, l);
 //          try {
 //              Class cls = ICULocaleData.class.getClassLoader().loadClass(name + "_" + l);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/11/21 00:23:35 $
- * $Revision: 1.17 $
+ * $Date: 2003/12/31 21:23:41 $
+ * $Revision: 1.18 $
  *
  *******************************************************************************
  */
@@ -158,7 +158,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         return data;
     }
 
-    private static char[] readToEOS(InputStreamReader stream) {
+    private static char[] readToEOS(InputStreamReader stream)throws Exception {
         ArrayList vec = new ArrayList();
         int count = 0;
         int pos = 0;
@@ -178,7 +178,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
                 } while (pos < length);
             }
             catch (IOException e) {
-                e.printStackTrace();
+                throw e;
             }
             vec.add(buffer);
             count += pos;
@@ -260,7 +260,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         public ResourceString(String name){
             resName=name;
         }
-        public Object getResource(Object obj){
+        public Object getResource(Object obj) throws Exception{
             if(expanded==null){
                 // Resource strings are always UTF-8
                 InputStream stream = obj.getClass().getResourceAsStream(resName);
@@ -316,7 +316,12 @@ public class ICUListResourceBundle extends ListResourceBundle {
                 //if not we donot guarantee that this will work
                 int j = className.lastIndexOf(".");
                 packageName=className.substring(0,j);
-                bundleName=className.substring(j+1,className.indexOf("_"));
+                int underScoreIndex = className.indexOf("_");
+                if(underScoreIndex>=0){
+                    bundleName=className.substring(j+1,className.indexOf("_"));
+                }else{
+                    bundleName = className.substring(j+1,className.length());
+                }
                 keyPath=pathToResource.substring(i+1);
 
                 if(i!=-1){
@@ -324,14 +329,24 @@ public class ICUListResourceBundle extends ListResourceBundle {
                 }else{
                     locale=keyPath;
                     keyPath=parentKey;
-                    className=packageName+"."+bundleName+"_"+locale;
+                    if(locale==null || locale.equals("root")){
+                        className=packageName+"."+bundleName;
+                    }else{
+                        className=packageName+"."+bundleName+"_"+ locale;
+                    }
+                    
                 }
 
             }
+            
             ResourceBundle bundle = null;
             // getResourceBundle guarantees that the CLASSPATH will be searched
             // for loading the resource with name <bundleName>_<localeName>.class
-            bundle = ICULocaleData.getResourceBundle(packageName,bundleName,locale);
+            if(locale==null || locale.equals("root")){
+                bundle = ICULocaleData.getResourceBundle(packageName,bundleName,"");
+            }else{
+                bundle = ICULocaleData.getResourceBundle(packageName,bundleName,locale);
+            }
             
             return findResource(bundle, className, parentKey, index, keyPath, visited);
         
