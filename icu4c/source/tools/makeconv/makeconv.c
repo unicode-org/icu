@@ -446,6 +446,8 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
 
   UConverterStaticData *myConverter = (UConverterStaticData *)mySharedData->staticData;
 
+  myConverter->conversionType = UCNV_UNSUPPORTED_CONVERTER;
+
   if (U_FAILURE(*err)) return;
   while (T_FileStream_readLine(convFile, line, sizeof(storeLine))) 
     {
@@ -594,12 +596,24 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
             }
           else if (uprv_strcmp(key, "icu:state") == 0)
             {
-              if (myConverter->conversionType != UCNV_MBCS)
-                {
+              /* if an SBCS/DBCS/EBCDIC_STATEFUL converter has icu:state, then turn it into MBCS */
+              switch(myConverter->conversionType) {
+              case UCNV_SBCS:
+              case UCNV_DBCS:
+              case UCNV_EBCDIC_STATEFUL:
+                  myConverter->conversionType = UCNV_MBCS;
+                  break;
+              case UCNV_MBCS:
+                  break;
+              default:
                   fprintf(stderr, "error: <icu:state> entry for non-MBCS table or before the <uconv_class> line\n");
                   *err = U_INVALID_TABLE_FORMAT;
                   break;
-                }
+              }
+              if(U_FAILURE(*err)) {
+                  break;
+              }
+
               if (myConverter->maxBytesPerChar == 0)
                 {
                   fprintf(stderr, "error: <icu:state> before the <mb_cur_max> line\n");
