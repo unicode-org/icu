@@ -48,6 +48,15 @@ public:
      * Test localized currency patterns.
      */
     virtual void TestCurrency(void);
+
+    /**
+     * Test the Currency object handling, new as of ICU 2.2.
+     */
+    void TestCurrencyObject(void);
+
+    void expectCurrency(NumberFormat& nf, const Locale& locale,
+                        double value, const UnicodeString& string);
+
     /**
      * Do rudimentary testing of parsing.
      */
