@@ -26,7 +26,7 @@ FILESEPCHAR=/
 include $(srcdir)/resfiles.mk
 
 RESDIR=$(MSGNAME)
-RESFILES=$(RESSRC:%.txt=$(RESDIR)/%.res)
+RESFILES=$(RESSRC:$(RESOURCESDIR)$(FILESEPCHAR)%.txt=$(RESDIR)/$(RESOURCESDIR)$(FILESEPCHAR)$(MSGNAME)_%.res)
 
 ##
 
@@ -146,9 +146,9 @@ endif
 ##
 $(UCONVMSG_LIB): resfiles
 
-$(RESDIR)/%.res: $(srcdir)/%.txt
+$(RESDIR)/$(RESOURCESDIR)/$(MSGNAME)_%.res: $(srcdir)/$(RESOURCESDIR)/%.txt
 	$(MKINSTALLDIRS) $(@D)
-	$(INVOKE) $(top_builddir)/tools/genrb/genrb -e UTF-8 -s $(^D) -d $(@D) $(^F)
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -p $(MSGNAME) -e UTF-8 -s $(^D) -d $(@D) $(^F)
 
 install-man: $(ALL_MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)

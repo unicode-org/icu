@@ -148,15 +148,9 @@
  *                              The net result will be something of the form
  *                                  #define U_ICU_ENTRY_POINT icudt19_dat
  */
-#if U_HAVE_LIB_SUFFIX
-#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_LIB_SUFFIX_C_NAME) 
-#define U_DEF2_ICUDATA_ENTRY_POINT(major, minor, suffix) U_DEF_ICUDATA_ENTRY_POINT(major, minor, suffix)
-#define U_DEF_ICUDATA_ENTRY_POINT(major, minor, suffix) icudt##major##minor##suffix##_dat
-#else
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM) 
 #define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
-#endif
 
 /**
  * \def U_CALLCONV
