@@ -53,7 +53,7 @@ use FileHandle;
 use strict;
 use Dumpvalue;
 
-my $DEBUG = 0;
+my $DEBUG = 1;
 my $DUMPER = new Dumpvalue;
 
 my $count = @ARGV;
@@ -298,7 +298,7 @@ END
                 $i = $groupToInt{$groupString};
             } else {
                 my @names = split(/\|/, $groupString);
-                die "Error: Wrong number of names in " . $groupString if (@names != 2);
+                die "Error: Wrong number of names in " . $groupString if (@names < 2);
                 $i = @nameGroups; # index of group we are making 
                 $groupToInt{$groupString} = $i; # Cache for reuse
                 push @nameGroups, map { $stringToID{$_} } @names;
@@ -314,6 +314,7 @@ END
 
     print "int32_t NAME_GROUP[] = {\n";
     # emit one group per line, with annotations
+    my $max_names = 0;
     for (my $i=0; $i<@nameGroups; ) {
         my @a;
         my $line;
@@ -329,12 +330,14 @@ END
               ' 'x(20-length($line)),
               "/* ", sprintf("%3d", $start),
               ": \"", join("\", \"", map { $strings[$_] } @a), "\" */\n";
+        $max_names = @a if(@a > $max_names);
+          
     }
     print "};\n\n";
     
     # This is fixed for 3.2 at "2" but should be calculated dynamically
     # when more than 2 names appear in Property[Value]Aliases.txt.
-    print "#define MAX_NAMES_PER_GROUP 2\n\n";
+    print "#define MAX_NAMES_PER_GROUP $max_names\n\n";
 
     #------------------------------------------------------------
     # Emit enumerated property values
