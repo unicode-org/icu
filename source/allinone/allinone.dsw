@@ -98,6 +98,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name gensprep
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name icuswap
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -701,3 +704,4 @@ Package=<3>
 }}}
 
 ###############################################################################
+
