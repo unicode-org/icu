@@ -340,10 +340,10 @@ void TestToUnicodeErrorBehaviour()
         const UChar expected2[] = { 0x0073 };*/
 
         if(!convertToU(sampleText, sizeof(sampleText), 
-                (const char*)expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, TRUE, U_ZERO_ERROR ))
+                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, TRUE, U_ZERO_ERROR ))
             log_err("SBCS (ibm-1051)->Unicode  did not match.\n");
         if(!convertToU(sampleText, sizeof(sampleText), 
-                (const char*)expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, FALSE, U_ZERO_ERROR ))
+                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, FALSE, U_ZERO_ERROR ))
             log_err("SBCS (ibm-1051)->Unicode  with flush = false did not match.\n");
 
     }
