@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/translit/Attic/Demo.java,v $ 
- * $Date: 2000/03/10 03:47:44 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/20 19:51:37 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -27,18 +27,24 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.4 $ $Date: 2000/03/10 03:47:44 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.5 $ $Date: 2001/11/20 19:51:37 $
  */
 public class Demo extends Frame {
 
     static final boolean DEBUG = false;
 
     Transliterator translit = null;
+    String fontName = "Arial Unicode MS";
+    int fontSize = 36;
+    
+    
 
+    /*
     boolean compound = false;
     Transliterator[] compoundTranslit = new Transliterator[MAX_COMPOUND];
     static final int MAX_COMPOUND = 128;
     int compoundCount = 0;
+    */
 
     TransliteratingTextComponent text = null;
 
@@ -73,7 +79,7 @@ public class Demo extends Frame {
         });
         
         text = new TransliteratingTextComponent();
-        Font font = new Font("serif", Font.PLAIN, 48);
+        Font font = new Font(fontName, Font.PLAIN, fontSize);
         text.setFont(font);
         text.setSize(width, height);
         text.setVisible(true);
@@ -81,6 +87,10 @@ public class Demo extends Frame {
         add(text);
 
         setSize(width, height);
+        
+        translit = Transliterator.getInstance("Latin-Greek");
+        text.setTransliterator(translit);
+        
     }
 
     private void initMenus() {
@@ -97,7 +107,7 @@ public class Demo extends Frame {
                 handleClose();
             }
         });
-
+/*
         final ItemListener setTransliteratorListener = new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 CheckboxMenuItem item = (CheckboxMenuItem) e.getSource();
@@ -117,9 +127,8 @@ public class Demo extends Frame {
                 }
             }
         };
-
-        translit = null;
-        mbar.add(translitMenu = new Menu("Transliterator"));
+*/
+        /*
         translitMenu.add(translitItem = noTranslitItem =
                          new CheckboxMenuItem(NO_TRANSLITERATOR, true));
         noTranslitItem.addItemListener(new ItemListener() {
@@ -130,7 +139,9 @@ public class Demo extends Frame {
         });
 
         translitMenu.addSeparator();
+        */
 
+/*
         translitMenu.add(citem = new CheckboxMenuItem("Compound"));
         citem.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
@@ -153,13 +164,64 @@ public class Demo extends Frame {
         });
       
         translitMenu.addSeparator();
+       */
 
+        /*
         for (Enumeration e=getSystemTransliteratorNames().elements();
              e.hasMoreElements(); ) {
             String s = (String) e.nextElement();
             translitMenu.add(citem = new CheckboxMenuItem(s));
             citem.addItemListener(setTransliteratorListener);
         }
+        */
+        
+        Menu fontMenu = new Menu("Font");
+        String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        for (int i = 0; i < fonts.length; ++i) {
+            MenuItem mItem = new MenuItem(fonts[i]);
+            mItem.addActionListener(new FontActionListener(fonts[i]));
+            fontMenu.add(mItem);
+        }
+        mbar.add(fontMenu);
+        
+        Menu sizeMenu = new Menu("Size");
+        for (double i = 9; i < 100; i = i * 4/3) {
+            MenuItem mItem = new MenuItem("" + (int)i);
+            mItem.addActionListener(new SizeActionListener((int)i));
+            sizeMenu.add(mItem);
+        }
+        mbar.add(sizeMenu);
+        
+        translit = null;
+        mbar.add(translitMenu = new Menu("Transliterator"));
+        
+        Iterator sources = add(new TreeSet(), Transliterator.getAvailableSources()).iterator();
+        while(sources.hasNext()) {
+            String source = (String) sources.next();
+            Iterator targets = add(new TreeSet(), Transliterator.getAvailableTargets(source)).iterator();
+            Menu targetMenu = new Menu(source);
+            while(targets.hasNext()) {
+                String target = (String) targets.next();
+                Set variantSet = add(new TreeSet(), Transliterator.getAvailableVariants(source, target));
+                if (variantSet.size() < 2) {
+                    mitem = new MenuItem(target);
+                    mitem.addActionListener(new TransliterationListener(source + "-" + target));
+                    targetMenu.add(mitem);
+                } else {
+                    Iterator variants = variantSet.iterator();
+                    Menu variantMenu = new Menu(target);
+                    while(variants.hasNext()) {
+                        String variant = (String) variants.next();
+                        mitem = new MenuItem(variant == "" ? "<default>" : variant);
+                        mitem.addActionListener(new TransliterationListener(source + "-" + target + "/" + variant));
+                        variantMenu.add(mitem);
+                    }
+                    targetMenu.add(variantMenu);
+                }
+            }
+            translitMenu.add(targetMenu);
+        }
+        
 
         mbar.add(menu = new Menu("Batch"));
         menu.add(mitem = new MenuItem("Transliterate Selection"));
@@ -169,10 +231,54 @@ public class Demo extends Frame {
             }
         });
     }
+    
+    class TransliterationListener implements ActionListener {
+        String name;
+        public TransliterationListener(String name) {
+            this.name = name;
+        }
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Got: " + name);
+            translit = Transliterator.getInstance(name);
+            text.setTransliterator(translit);
+        }
+    }
+    
+    class FontActionListener implements ActionListener {
+        String name;
+        public FontActionListener(String name) {
+            this.name = name;
+        }
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Font: " + name);
+            fontName = name;
+            text.setFont(new Font(fontName, Font.PLAIN, fontSize));
+        }
+    }
+    
+    class SizeActionListener implements ActionListener {
+        int size;
+        public SizeActionListener(int size) {
+            this.size = size;
+        }
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Size: " + size);
+            fontSize = size;
+            text.setFont(new Font(fontName, Font.PLAIN, fontSize));
+        }
+    }
+    
+    Set add(Set s, Enumeration enum) {
+        while(enum.hasMoreElements()) {
+            s.add(enum.nextElement());
+        }
+        return s;
+    }
 
     /**
      * Get a sorted list of the system transliterators.
      */
+     /*
     private static Vector getSystemTransliteratorNames() {
         Vector v = new Vector();
         for (Enumeration e=Transliterator.getAvailableIDs();
@@ -193,7 +299,9 @@ public class Demo extends Frame {
         }
         return v;
     }
+    */
 
+/*
     private void setNoTransliterator() {
         translitItem = noTranslitItem;
         noTranslitItem.setState(true);
@@ -206,7 +314,8 @@ public class Demo extends Frame {
             }
         }
     }
-
+*/
+/*
     private void handleAddToCompound(String name) {
         if (compoundCount < MAX_COMPOUND) {
             compoundTranslit[compoundCount] = decodeTranslitItem(name);
@@ -217,19 +326,23 @@ public class Demo extends Frame {
             text.setTransliterator(translit);
         }
     }
-
+*/
+/*
     private void handleSetTransliterator(String name) {
         translit = decodeTranslitItem(name);
         text.setTransliterator(translit);
     }
+    */
 
     /**
      * Decode a menu item that looks like <translit name>.
      */
+     /*
     private static Transliterator decodeTranslitItem(String name) {
         return (name.equals(NO_TRANSLITERATOR))
             ? null : Transliterator.getInstance(name);
     }
+    */
 
     private void handleBatchTransliterate() {
         if (translit == null) {
