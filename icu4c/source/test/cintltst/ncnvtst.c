@@ -46,9 +46,9 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
                const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
 
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets);
+                const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets, UBool testReset);
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets);
+               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets, UBool testReset);
 
 static void setNuConvTestName(const char *codepage, const char *direction)
 {
@@ -68,6 +68,7 @@ static void TestRegressionUTF8(void);
 static void TestRegressionUTF32(void);
 static void TestAvailableConverters(void);
 static void TestFlushInternalBuffer(void);  /*for improved code coverage in ucnv_cnv.c*/
+static void TestResetBehaviour(void);
 
 static void TestWithBufferSize(int32_t osize, int32_t isize);
 
@@ -117,6 +118,7 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestRegressionUTF32,             "tsconv/ncnvtst/TestRegressionUTF32");
      addTest(root, &TestAvailableConverters,        "tsconv/ncnvtst/TestAvailableConverters");
      addTest(root, &TestFlushInternalBuffer,        "tsconv/ncnvtst/TestFlushInternalBuffer");
+     addTest(root, &TestResetBehaviour,              "tsconv/ncnvtst/TestResetBehaviour");
 
 }
 
@@ -973,7 +975,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
 
         /*UTF-8*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedUTF8, sizeof(expectedUTF8), "UTF8", UCNV_FROM_U_CALLBACK_SUBSTITUTE, toUTF8Offs ))
+            expectedUTF8, sizeof(expectedUTF8), "UTF8", UCNV_FROM_U_CALLBACK_SUBSTITUTE, toUTF8Offs ,FALSE))
              log_err("u-> UTF8 did not match.\n");
     }
 
@@ -989,7 +991,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
 
         if(!testConvertFromU(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, offset))
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, offset,FALSE))
             log_err("u-> ibm-943 with subst with value did not match.\n");
     }
 
@@ -1001,7 +1003,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
         int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0006};
 
         if(!testConvertToU(sampleText1, sizeof(sampleText1),
-                 expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8", UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1))
+                 expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8", UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1,FALSE))
             log_err("utf8->u with substitute did not match.\n");;
     }
 
@@ -1019,7 +1021,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
 
         if(!testConvertToU(sampleTxtToU, sizeof(sampleTxtToU),
                  IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode[0]),"ibm-943",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs))
+                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs,FALSE))
             log_err("ibm-943->u with substitute with value did not match.\n");
 
     }
@@ -1213,7 +1215,7 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
 
 
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets)
+                const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets, UBool testReset)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -1298,6 +1300,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
                   offs,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
+        if(testReset) ucnv_resetToUnicode(conv);
       } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
 
     if(U_FAILURE(status)) {
@@ -1379,7 +1382,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 }
 
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets)
+               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets, UBool testReset)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -1464,7 +1467,8 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
                 offs,
                 (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
                 &status);
-
+        if(testReset) ucnv_resetFromUnicode(conv);
+            
         /*        offs += (targ-oldTarg); */
 
       } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
@@ -1540,4 +1544,279 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
         printUSeq(expect, expectlen); 
         return FALSE;
     }
+}
+
+
+static void TestResetBehaviour(void){
+    log_verbose("Testing  Reset for SBCS and LATIN_1\n");
+    {
+        UChar sampleText[] = {0x0031, 0xd801, 0xdc01, 0x0032};
+        const uint8_t expected[] = {0x31, 0x1a, 0x32};
+        int offsets[] =  { 0,1,3};
+
+        UChar sampleText1[] = {0x0031, 0x0033, 0x0034, 0x0032};
+        const uint8_t expected1[] = {0x31, 0x33,0x34, 0x32};
+        int offsets1[] =  { 0,1,2,3};
+
+        /*SBCS*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-920", UCNV_FROM_U_CALLBACK_SUBSTITUTE , offsets, TRUE))
+            log_err("u-> ibm-920 [UCNV_SBCS] not match.\n");
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "ibm-920",UCNV_TO_U_CALLBACK_SUBSTITUTE , 
+                offsets1, TRUE))
+           log_err("ibm -920 -> did not match.\n");
+
+        /*LATIN_1*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "LATIN1", UCNV_FROM_U_CALLBACK_SUBSTITUTE , offsets, TRUE))
+            log_err("u-> LATIN_1 not match.\n");
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "LATIN1",UCNV_TO_U_CALLBACK_SUBSTITUTE , 
+                offsets1, TRUE))
+           log_err("LATIN1 -> did not match.\n");
+        
+
+
+    }
+    log_verbose("Testing Reset for DBCS and MBCS\n");
+    {
+        UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
+        const uint8_t expected[] = {0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
+        int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x03, 0x03 };
+
+        
+        UChar sampleText1[] = {0x00a1, 0x00a4, 0x00a7, 0x00a8};
+        const uint8_t expected1[] = {0xa2, 0xae,0xA2,0xB4,0xA1,0xD7,0xA1,0xA7};
+        int offsets1[] =  { 0,2,4,6};
+
+        /*DBCS*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-1362", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-1362", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+       
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "ibm-1362",UCNV_TO_U_CALLBACK_SUBSTITUTE , 
+                offsets1, TRUE))
+           log_err("ibm-1362 -> did not match.\n");
+        /*MBCS*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-1363", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-1363", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
+      
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "ibm-1363",UCNV_TO_U_CALLBACK_SUBSTITUTE , 
+                offsets1, TRUE))
+           log_err("ibm-1363 -> did not match.\n");
+
+    }
+    log_verbose("Testing Reset for ISO-2022-jp\n");
+    {
+        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+
+        const uint8_t expected[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
+                                    0x31,0x1A, 0x32};
+
+
+        int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,5 };
+
+        
+        UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
+        const uint8_t expected1[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
+                                    0x31,0x1A, 0x32};
+        int offsets1[] =  { 3,5,10,11,12};
+
+        /*iso-2022-jp*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "iso-2022-jp",  UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("u-> not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "iso-2022-jp", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u->  not match.\n");
+        
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "iso-2022-jp",UCNV_TO_U_CALLBACK_SUBSTITUTE ,
+                offsets1, TRUE))
+           log_err("iso-2022-jp -> did not match.\n");
+
+    }
+    log_verbose("Testing Reset for ISO-2022-cn\n");
+    {
+        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+
+        const uint8_t expected[] = {
+                                    0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
+                                    0x36, 0x21,
+                                    0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
+                                    0x0f, 0x1A, 
+                                    0x0f, 0x32
+                                    };
+        
+
+        int32_t offsets[] = {
+                                    0,    0,    0,    0,    0,    0,    0,      
+                                    1,    1,
+                                    2,    2,    2,    2,    2,    2,    2,    2,
+                                    3,    3,
+                                    5,    5,  };
+        
+        UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
+        const uint8_t expected1[] = {
+                                    0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
+                                    0x36, 0x21,
+                                    0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
+                                    0x0f, 0x1A, 
+                                    0x32
+                                    };
+        int offsets1[] =  { 5,7,15,18,19};
+
+        /*iso-2022-CN*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "iso-2022-cn", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("u-> not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "iso-2022-cn", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> not match.\n");
+
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "iso-2022-cn",UCNV_TO_U_CALLBACK_SUBSTITUTE ,
+                offsets1, TRUE))
+           log_err("iso-2022-cn -> did not match.\n");
+    }
+        log_verbose("Testing Reset for ISO-2022-kr\n");
+    {
+        UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+
+        const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 
+                                    0x0E, 0x6C, 0x69, 
+                                    0x0f, 0x1A, 
+                                    0x0e, 0x6F, 0x4B, 
+                                    0x0F, 0x31, 
+                                    0x1A, 
+                                    0x32 };        
+
+        int32_t offsets[] = {-1, -1, -1, -1,
+                              0, 0, 0, 
+                              1, 1,  
+                              3, 3, 3, 
+                              4, 4, 
+                              5, 
+                              7,
+                            };
+        UChar    sampleText1[] =   { 0x4e00,0x0041, 0x04e01, 0x0031, 0x0042, 0x0032};
+
+        const uint8_t expected1[] = {0x1B, 0x24, 0x29, 0x43, 
+                                    0x0E, 0x6C, 0x69, 
+                                    0x0f, 0x41, 
+                                    0x0e, 0x6F, 0x4B, 
+                                    0x0F, 0x31, 
+                                    0x42, 
+                                    0x32 };        
+
+        int32_t offsets1[] = {
+                              5, 8, 10, 
+                              13, 14, 15  
+                      
+                            };
+        /*iso-2022-kr*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "iso-2022-kr",  UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "iso-2022-kr",  UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "iso-2022-kr",UCNV_TO_U_CALLBACK_SUBSTITUTE ,
+                offsets1, TRUE))
+           log_err("iso-2022-kr -> did not match.\n");
+    }
+        log_verbose("Testing Reset for HZ\n");
+    {
+        UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+
+        const uint8_t expected[] = {0x7E, 0x7B, 0x52, 0x3B,
+                                    0x7E, 0x7D, 0x1A, 
+                                    0x7E, 0x7B, 0x36, 0x21, 
+                                    0x7E, 0x7D, 0x31, 
+                                    0x1A,
+                                    0x32 };
+
+
+        int32_t offsets[] = {0,0,0,0,
+                             1,1,1,
+                             3,3,3,3,
+                             4,4,4,
+                             5,
+                             7,};
+        UChar    sampleText1[] =   { 0x4e00, 0x0035, 0x04e01, 0x0031, 0x0041, 0x0032};
+
+        const uint8_t expected1[] = {0x7E, 0x7B, 0x52, 0x3B,
+                                    0x7E, 0x7D, 0x35, 
+                                    0x7E, 0x7B, 0x36, 0x21, 
+                                    0x7E, 0x7D, 0x31, 
+                                    0x41,
+                                    0x32 };
+
+
+        int32_t offsets1[] = {2,6,9,13,14,15
+                            };
+
+        /*hz*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "HZ", UCNV_FROM_U_CALLBACK_SUBSTITUTE,NULL , TRUE))
+            log_err("u->  not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "HZ", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u->  not match.\n");
+        if(!testConvertToU(expected1, sizeof(expected1), 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "hz",UCNV_TO_U_CALLBACK_SUBSTITUTE ,
+                offsets1, TRUE))
+           log_err("hz -> did not match.\n");
+    }
+    /*UTF-8*/
+     log_verbose("Testing for UTF8\n");
+    {
+        UChar    sampleText[] =   { 0x4e00, 0x0701, 0x0031, 0xbfc1, 0xd801, 0xdc01, 0x0032};
+        int32_t offsets[]={0x00, 0x00, 0x00, 0x01, 0x01, 0x02,
+                           0x03, 0x03, 0x03, 0x04, 0x04, 0x04,
+                           0x04, 0x06 };
+        const uint8_t expected[] = {0xe4, 0xb8, 0x80, 0xdc, 0x81, 0x31, 
+            0xeb, 0xbf, 0x81, 0xF0, 0x90, 0x90, 0x81, 0x32};
+
+
+        int32_t fromOffsets[] = { 0x0000, 0x0003, 0x0005, 0x0006, 0x0009, 0x0009, 0x000D }; 
+        /*UTF-8*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expected, sizeof(expected), "UTF8", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expected, sizeof(expected), "UTF8",  UCNV_FROM_U_CALLBACK_SUBSTITUTE,NULL , TRUE))
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expected, sizeof(expected), "UTF8", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expected, sizeof(expected), "UTF8",  UCNV_FROM_U_CALLBACK_SUBSTITUTE,NULL , TRUE))
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
+        if(!testConvertToU(expected, sizeof(expected), 
+            sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8",UCNV_TO_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("UTF8 -> did not match.\n");
+        if(!testConvertToU(expected, sizeof(expected), 
+            sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", UCNV_TO_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("UTF8 -> did not match.\n");
+        if(!testConvertToU(expected, sizeof(expected), 
+            sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8",UCNV_TO_U_CALLBACK_SUBSTITUTE , fromOffsets, TRUE))
+            log_err("UTF8 -> did not match.\n");
+        if(!testConvertToU(expected, sizeof(expected), 
+            sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", UCNV_TO_U_CALLBACK_SUBSTITUTE , fromOffsets, TRUE))
+            log_err("UTF8 -> did not match.\n");
+
+    }
+
 }
