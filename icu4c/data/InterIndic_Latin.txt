@@ -5,7 +5,7 @@
 
 // InterIndic-Latin
 
-InterIndic-Latin{
+InterIndic_Latin{
   Rule{
     ":: NFD (NFC) ;"
     //\u0e00 reserved

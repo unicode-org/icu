@@ -10,7 +10,7 @@
 
 // InterIndic_Malayalam
 
-InterIndic-Malayalam {
+InterIndic_Malayalam {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
