@@ -368,7 +368,7 @@ print_month(UCalendar *c,
     /* ========== Generate the header containing the month and year */
     
     /* Open a formatter with a month and year only pattern */
-    dfmt = udat_openPattern(pat, len, 0, status);
+    dfmt = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pat, len,status);
     
     /* Format the date */
     udat_format(dfmt, ucal_getMillis(c, status), s, BUF_SIZE, 0, status);
@@ -409,7 +409,7 @@ print_month(UCalendar *c,
     firstday -= fdow;
     
     /* Open the formatter */
-    nfmt = unum_open(UNUM_DECIMAL, 0, status);
+    nfmt = unum_open(UNUM_DECIMAL, NULL,0,NULL,NULL, status);
     
     /* Indent the correct number of spaces for the first week */
     current = firstday;
@@ -483,7 +483,7 @@ print_year(UCalendar *c,
     /* ========== Generate the header containing the year (only) */
     
     /* Open a formatter with a month and year only pattern */
-    dfmt = udat_openPattern(pat, len, 0, status);
+    dfmt = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pat, len, status);
     
     /* Format the date */
     udat_format(dfmt, ucal_getMillis(left_cal, status), s, BUF_SIZE, 0, status);
@@ -513,7 +513,7 @@ print_year(UCalendar *c,
     ucal_setMillis(right_cal, ucal_getMillis(left_cal, status), status);
     
     /* Open the formatter */
-    nfmt = unum_open(UNUM_DECIMAL, 0, status);
+    nfmt = unum_open(UNUM_DECIMAL,NULL, 0,NULL,NULL, status);
     
     /* ========== Calculate and display the months, two at a time */
     for(i = 0; i < MONTH_COUNT - 1; i += 2) {

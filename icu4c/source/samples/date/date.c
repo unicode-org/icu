@@ -156,7 +156,7 @@ date(const UChar *tz,
   int32_t len = 0;
   UDateFormat *fmt;
 
-  fmt = udat_open(style, style, 0, tz, -1, status);
+  fmt = udat_open(style, style, 0, tz, -1,NULL,0, status);
   len = udat_format(fmt, ucal_getNow(), 0, len, 0, status);
   if(*status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
