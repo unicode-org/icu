@@ -170,7 +170,7 @@
  */
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
 #   define UBRK_TYPEDEF_UBREAK_ITERATOR
-    typedef void* UBreakIterator;
+    typedef void UBreakIterator;
 #endif
 
 /** The possible types of text boundaries. */
