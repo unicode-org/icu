@@ -1073,7 +1073,6 @@ static void TestFScanset(void) {
     TestFScanSetFormat("%[^dc]", abcUChars, abcChars, TRUE);
     TestFScanSetFormat("%[^e]  ", abcUChars, abcChars, TRUE);
 
-    TestFScanSetFormat("%[]  ", abcUChars, abcChars, TRUE);
     TestFScanSetFormat("%1[ab]  ", abcUChars, abcChars, TRUE);
     TestFScanSetFormat("%2[^f]", abcUChars, abcChars, TRUE);
 
@@ -1085,6 +1084,33 @@ static void TestFScanset(void) {
 /*    TestFScanSetFormat("%[a-", abcUChars, abcChars);*/
 
     /* TODO: Need to specify precision with a "*" */
+}
+
+static void TestBadFScanfFormat(const char *format, const UChar *uValue, const char *cValue) {
+    UFILE *myFile;
+    UChar uBuffer[256];
+    int32_t uNumScanned;
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    /* Reinitialize the buffer to verify null termination works. */
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
+    
+    u_fprintf(myFile, "%S", uValue);
+    u_fclose(myFile);
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);
+    uNumScanned = u_fscanf(myFile, format, uBuffer);
+    u_fclose(myFile);
+    if (uNumScanned != 0 || uBuffer[0] != 0x2a || uBuffer[1] != 0x2a) {
+        log_err("%s too much stored on a failure\n", format);
+    }
+}
+
+static void TestBadScanfFormat(void) {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
+    static const char abcChars[] = "abccdefg";
+
+    TestBadFScanfFormat("%[]  ", abcUChars, abcChars);
 }
 
 static void TestTranslitOps(void)
@@ -1248,6 +1274,7 @@ addFileTest(TestNode** root) {
     addTest(root, &TestFScanset, "file/TestFScanset");
     addTest(root, &TestCodepage, "file/TestCodepage");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
+    addTest(root, &TestBadScanfFormat, "file/TestBadScanfFormat");
 
     addTest(root, &TestTranslitOps, "file/translit/ops");
     addTest(root, &TestTranslitOut, "file/translit/out");
