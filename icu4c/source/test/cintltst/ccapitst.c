@@ -31,6 +31,7 @@
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
+static void TestDuplicateAlias(void);
 static void TestCCSID(void);
 static void TestJ932(void);
 static void TestJ1968(void);
@@ -42,6 +43,7 @@ void addTestConvert(TestNode** root)
 {
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
+    addTest(root, &TestDuplicateAlias,   "tsconv/ccapitst/TestDuplicateAlias"); 
     addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
     addTest(root, &TestConvertSafeCloneCallback,   "tsconv/ccapitst/TestConvertSafeCloneCallback"); 
     addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
@@ -1132,7 +1134,30 @@ static void TestAlias() {
                     CONVERTERS_NAMES[i].alias, mapBack, CONVERTERS_NAMES[i].name);
         }
     }
+
 }
+
+static void TestDuplicateAlias(void) {
+    const char *alias;
+    UErrorCode status = U_ZERO_ERROR;
+
+    status = U_ZERO_ERROR;
+    alias = ucnv_getStandardName("Shift_JIS", "IBM", &status);
+    if (alias == NULL || uprv_strcmp(alias, "ibm-943") != 0 || status != U_AMBIGUOUS_ALIAS_WARNING) {
+        log_err("FAIL: Didn't get ibm-943 for Shift_JIS {IBM}. Got %s\n", alias);
+    }
+    status = U_ZERO_ERROR;
+    alias = ucnv_getStandardName("ibm-943", "IANA", &status);
+    if (alias == NULL || uprv_strcmp(alias, "Shift_JIS") != 0 || status != U_AMBIGUOUS_ALIAS_WARNING) {
+        log_err("FAIL: Didn't get Shift_JIS for ibm-943 {IANA}. Got %s\n", alias);
+    }
+    status = U_ZERO_ERROR;
+    alias = ucnv_getStandardName("ibm-943_P130-2000", "IANA", &status);
+    if (alias != NULL || status == U_AMBIGUOUS_ALIAS_WARNING) {
+        log_err("FAIL: Didn't get NULL for ibm-943 {IANA}. Got %s\n", alias);
+    }
+}
+
 
 /* Test safe clone callback */
 
