@@ -27,7 +27,7 @@
  * \file
  * \brief C API: Unicode string handling functions
  *
- * These C API functions provide Unicode string handling.
+ * These C API functions provide general Unicode string handling.
  *
  * Some functions are equivalent in name, signature, and behavior to the ANSI C <string.h>
  * functions. (For example, they do not check for bad arguments like NULL string pointers.)
@@ -39,25 +39,32 @@
  *
  * ICU uses 16-bit Unicode (UTF-16) in the form of arrays of UChar code units.
  * UTF-16 encodes each Unicode code point with either one or two UChar code units.
- * Some APIs accept a 32-bit UChar32 value for a single code point.
  * (This is the default form of Unicode, and a forward-compatible extension of the original,
  * fixed-width form that was known as UCS-2. UTF-16 superseded UCS-2 with Unicode 2.0
  * in 1996.)
+ *
+ * Some APIs accept a 32-bit UChar32 value for a single code point.
+ *
+ * ICU also handles 16-bit Unicode text with unpaired surrogates.
+ * Such text is not well-formed UTF-16.
+ * Code-point-related functions treat unpaired surrogates as surrogate code points,
+ * i.e., as separate units.
  *
  * Although UTF-16 is a variable-width encoding form (like some legacy multi-byte encodings),
  * it is much more efficient even for random access because the code unit values
  * for single-unit characters vs. lead units vs. trail units are completely disjoint.
  * This means that it is easy to determine character (code point) boundaries from
  * random offsets in the string.
- * (It also means, e.g., that u_strstr() does not need to verify that a match was
- * found on actual character boundaries; with some legacy encodings, strstr() may need to
- * scan back to the start of the text to verify this.)
  *
  * Unicode (UTF-16) string processing is optimized for the single-unit case.
  * Although it is important to support supplementary characters
  * (which use pairs of lead/trail code units called "surrogates"),
  * their occurrence is rare. Almost all characters in modern use require only
  * a single UChar code unit (i.e., their code point values are <=0xffff).
+ *
+ * For more details see the User Guide Strings chapter (http://oss.software.ibm.com/icu/userguide/strings.html).
+ * For a discussion of the handling of unpaired surrogates see also
+ * Jitterbug 2145 and its icu mailing list proposal on 2002-sep-18.
  */
 
 /**
@@ -138,57 +145,178 @@ u_strncat(UChar     *dst,
      int32_t     n);
 
 /**
- * Find the first occurrence of a specified character in a ustring.
- *
- * @param s The string to search.
- * @param c The character to find.
- * @return A pointer to the first occurrence of <TT>c</TT> in <TT>s</TT>,
- * or a null pointer if <TT>s</TT> does not contain <TT>c</TT>.
- * @stable
- */
-U_CAPI UChar*  U_EXPORT2
-u_strchr(const UChar     *s, 
-    UChar     c);
-
-/**
  * Find the first occurrence of a substring in a string.
+ * The substring is found at code point boundaries.
+ * That means that if the substring begins with
+ * a trail surrogate or ends with a lead surrogate,
+ * then it is found only if these surrogates stand alone in the text.
+ * Otherwise, the substring edge units would be matched against
+ * halves of surrogate pairs.
  *
- * @param s The string to search.
- * @param substring The substring to find
- * @return A pointer to the first occurrence of <TT>substring</TT> in 
- * <TT>s</TT>, or a null pointer if <TT>substring</TT>
- * is not in <TT>s</TT>.
+ * @param s The string to search (NUL-terminated).
+ * @param substring The substring to find (NUL-terminated).
+ * @return A pointer to the first occurrence of <code>substring</code> in <code>s</code>,
+ *         or <code>s</code> itself if the <code>substring</code> is empty,
+ *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
  * @stable
+ *
+ * @see u_strrstr
+ * @see u_strFindFirst
+ * @see u_strFindLast
  */
 U_CAPI UChar * U_EXPORT2
 u_strstr(const UChar *s, const UChar *substring);
 
 /**
- * Find the first occurence of a specified code point in a string.
- *
- * This function finds code points, which differs for BMP code points
- * from u_strchr() only for surrogates:
- * While u_strchr() finds any surrogate code units in a string,
- * u_strchr32() finds only unmatched surrogate code points,
- * i.e., only those that do not combine with an adjacent surrogate
- * to form a supplementary code point.
- * For example, in a string "\ud800\udc00" u_strchr()
- * will find code units U+d800 at 0 and U+dc00 at 1,
- * but u_strchr32() will find neither because they
- * combine to the code point U+10000.
- * Either function will find U+d800 in "a\ud800b".
- * This behavior ensures that U16_GET(u_strchr32(c))==c.
+ * Find the first occurrence of a substring in a string.
+ * The substring is found at code point boundaries.
+ * That means that if the substring begins with
+ * a trail surrogate or ends with a lead surrogate,
+ * then it is found only if these surrogates stand alone in the text.
+ * Otherwise, the substring edge units would be matched against
+ * halves of surrogate pairs.
  *
  * @param s The string to search.
- * @param c The code point (0..0x10ffff) to find.
- * @return A pointer to the first occurrence of <TT>c</TT> in <TT>s</TT>,
- * or a null pointer if there is no such character.
- * If <TT>c</TT> is represented with several UChars, then the returned
- * pointer will point to the first of them.
+ * @param length The length of s (number of UChars), or -1 if it is NUL-terminated.
+ * @param substring The substring to find (NUL-terminated).
+ * @param subLength The length of substring (number of UChars), or -1 if it is NUL-terminated.
+ * @return A pointer to the first occurrence of <code>substring</code> in <code>s</code>,
+ *         or <code>s</code> itself if the <code>substring</code> is empty,
+ *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
  * @stable
+ *
+ * @see u_strstr
+ * @see u_strFindLast
+ */
+U_CAPI UChar * U_EXPORT2
+u_strFindFirst(const UChar *s, int32_t length, const UChar *substring, int32_t subLength);
+
+/**
+ * Find the first occurrence of a BMP code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
+ *
+ * @param s The string to search (NUL-terminated).
+ * @param c The BMP code point to find.
+ * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strchr32
+ * @see u_memchr
+ * @see u_strstr
+ * @see u_strFindFirst
+ */
+U_CAPI UChar * U_EXPORT2
+u_strchr(const UChar *s, UChar c);
+
+/**
+ * Find the first occurrence of a code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
+ *
+ * @param s The string to search (NUL-terminated).
+ * @param c The code point to find.
+ * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strchr
+ * @see u_memchr32
+ * @see u_strstr
+ * @see u_strFindFirst
  */
 U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c);
+
+/**
+ * Find the last occurrence of a substring in a string.
+ * The substring is found at code point boundaries.
+ * That means that if the substring begins with
+ * a trail surrogate or ends with a lead surrogate,
+ * then it is found only if these surrogates stand alone in the text.
+ * Otherwise, the substring edge units would be matched against
+ * halves of surrogate pairs.
+ *
+ * @param s The string to search (NUL-terminated).
+ * @param substring The substring to find (NUL-terminated).
+ * @return A pointer to the last occurrence of <code>substring</code> in <code>s</code>,
+ *         or <code>s</code> itself if the <code>substring</code> is empty,
+ *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strstr
+ * @see u_strFindFirst
+ * @see u_strFindLast
+ */
+U_CAPI UChar * U_EXPORT2
+u_strrstr(const UChar *s, const UChar *substring);
+
+/**
+ * Find the last occurrence of a substring in a string.
+ * The substring is found at code point boundaries.
+ * That means that if the substring begins with
+ * a trail surrogate or ends with a lead surrogate,
+ * then it is found only if these surrogates stand alone in the text.
+ * Otherwise, the substring edge units would be matched against
+ * halves of surrogate pairs.
+ *
+ * @param s The string to search.
+ * @param length The length of s (number of UChars), or -1 if it is NUL-terminated.
+ * @param substring The substring to find (NUL-terminated).
+ * @param subLength The length of substring (number of UChars), or -1 if it is NUL-terminated.
+ * @return A pointer to the last occurrence of <code>substring</code> in <code>s</code>,
+ *         or <code>s</code> itself if the <code>substring</code> is empty,
+ *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strstr
+ * @see u_strFindLast
+ */
+U_CAPI UChar * U_EXPORT2
+u_strFindLast(const UChar *s, int32_t length, const UChar *substring, int32_t subLength);
+
+/**
+ * Find the last occurrence of a BMP code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
+ *
+ * @param s The string to search (NUL-terminated).
+ * @param c The BMP code point to find.
+ * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strrchr32
+ * @see u_memrchr
+ * @see u_strrstr
+ * @see u_strFindLast
+ */
+U_CAPI UChar * U_EXPORT2
+u_strrchr(const UChar *s, UChar c);
+
+/**
+ * Find the last occurrence of a code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
+ *
+ * @param s The string to search (NUL-terminated).
+ * @param c The code point to find.
+ * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strrchr
+ * @see u_memchr32
+ * @see u_strrstr
+ * @see u_strFindLast
+ */
+U_CAPI UChar * U_EXPORT2
+u_strrchr32(const UChar *s, UChar32 c);
 
 /**
  * Locates the first occurrence in the string str of any of the characters
@@ -621,46 +749,84 @@ U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
 
 /**
- * Search for a UChar within a Unicode string until <TT>count</TT>
- * is reached.
+ * Find the first occurrence of a BMP code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
  *
- * @param src string to search in
- * @param ch character to find
- * @param count maximum number of UChars in <TT>src</TT>to search for
- *      <TT>ch</TT>.
- * @return A pointer within src, pointing to <TT>ch</TT>, or NULL if it
- *      was not found.
+ * @param s The string to search (contains <code>count</code> UChars).
+ * @param c The BMP code point to find.
+ * @param count The length of the string.
+ * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
  * @stable
+ *
+ * @see u_strchr
+ * @see u_memchr32
+ * @see u_strFindFirst
  */
 U_CAPI UChar* U_EXPORT2
-u_memchr(const UChar *src, UChar ch, int32_t count);
+u_memchr(const UChar *s, UChar c, int32_t count);
 
 /**
- * Find the first occurence of a specified code point in a string.
+ * Find the first occurrence of a code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
  *
- * This function finds code points, which differs for BMP code points
- * from u_memchr() only for surrogates:
- * While u_memchr() finds any surrogate code units in a string,
- * u_memchr32() finds only unmatched surrogate code points,
- * i.e., only those that do not combine with an adjacent surrogate
- * to form a supplementary code point.
- * For example, in a string "\ud800\udc00" u_memchr()
- * will find code units U+d800 at 0 and U+dc00 at 1,
- * but u_memchr32() will find neither because they
- * combine to the code point U+10000.
- * Either function will find U+d800 in "a\ud800b".
- * This behavior ensures that U16_GET(u_memchr32(c))==c.
- *
- * @param src string to search in
- * @param ch character to find
- * @param count maximum number of UChars in <TT>src</TT>to search for
- *      <TT>ch</TT>.
- * @return A pointer within src, pointing to <TT>ch</TT>, or NULL if it
- *      was not found.
+ * @param s The string to search (contains <code>count</code> UChars).
+ * @param c The code point to find.
+ * @param count The length of the string.
+ * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
  * @stable
+ *
+ * @see u_strchr32
+ * @see u_memchr
+ * @see u_strFindFirst
  */
 U_CAPI UChar* U_EXPORT2
-u_memchr32(const UChar *src, UChar32 ch, int32_t count);
+u_memchr32(const UChar *s, UChar32 c, int32_t count);
+
+/**
+ * Find the last occurrence of a BMP code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
+ *
+ * @param s The string to search (contains <code>count</code> UChars).
+ * @param c The BMP code point to find.
+ * @param count The length of the string.
+ * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strrchr
+ * @see u_memrchr32
+ * @see u_strFindLast
+ */
+U_CAPI UChar* U_EXPORT2
+u_memrchr(const UChar *s, UChar c, int32_t count);
+
+/**
+ * Find the last occurrence of a code point in a string.
+ * A surrogate code point is found only if its match in the text is not
+ * part of a surrogate pair.
+ * A NUL character is found at the string terminator.
+ *
+ * @param s The string to search (contains <code>count</code> UChars).
+ * @param c The code point to find.
+ * @param count The length of the string.
+ * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
+ *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
+ * @stable
+ *
+ * @see u_strrchr32
+ * @see u_memrchr
+ * @see u_strFindLast
+ */
+U_CAPI UChar* U_EXPORT2
+u_memrchr32(const UChar *s, UChar32 c, int32_t count);
 
 /**
  * Unicode String literals in C.

@@ -890,7 +890,7 @@ public:
               int32_t length) const;
 
   /**
-   * Locate in this the first occurrence of the code unit <TT>c</TT>, 
+   * Locate in this the first occurrence of the BMP code point <code>c</code>,
    * using bitwise comparison.
    * @param c The code unit to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
@@ -902,19 +902,6 @@ public:
    * Locate in this the first occurrence of the code point <TT>c</TT>, 
    * using bitwise comparison.
    *
-   * This function finds code points, which differs for BMP code points
-   * from indexOf(UChar c, ...) only for surrogates:
-   * While indexOf(UChar c, ...) finds any surrogate code units in a string,
-   * indexOf(UChar32 c, ...) finds only unmatched surrogate code points,
-   * i.e., only those that do not combine with an adjacent surrogate
-   * to form a supplementary code point.
-   * For example, in a string "\ud800\udc00" indexOf(UChar c, ...)
-   * will find code units U+d800 at 0 and U+dc00 at 1,
-   * but indexOf(UChar32 c, ...) will find neither because they
-   * combine to the code point U+10000.
-   * Either function will find U+d800 in "a\ud800b".
-   * This behavior ensures that char32At(indexOf(UChar32 c))==c.
-   *
    * @param c The code point to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
@@ -922,7 +909,7 @@ public:
   inline int32_t indexOf(UChar32 c) const;
 
   /**
-   * Locate in this the first occurrence of the code unit <TT>c</TT>
+   * Locate in this the first occurrence of the BMP code point <code>c</code>,
    * starting at offset <TT>start</TT>, using bitwise comparison.
    * @param c The code unit to search for.
    * @param start The offset at which searching will start.
@@ -936,19 +923,6 @@ public:
    * Locate in this the first occurrence of the code point <TT>c</TT>
    * starting at offset <TT>start</TT>, using bitwise comparison.
    *
-   * This function finds code points, which differs for BMP code points
-   * from indexOf(UChar c, ...) only for surrogates:
-   * While indexOf(UChar c, ...) finds any surrogate code units in a string,
-   * indexOf(UChar32 c, ...) finds only unmatched surrogate code points,
-   * i.e., only those that do not combine with an adjacent surrogate
-   * to form a supplementary code point.
-   * For example, in a string "\ud800\udc00" indexOf(UChar c, ...)
-   * will find code units U+d800 at 0 and U+dc00 at 1,
-   * but indexOf(UChar32 c, ...) will find neither because they
-   * combine to the code point U+10000.
-   * Either function will find U+d800 in "a\ud800b".
-   * This behavior ensures that char32At(indexOf(UChar32 c))==c.
-   *
    * @param c The code point to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
@@ -958,7 +932,7 @@ public:
               int32_t start) const;
 
   /**
-   * Locate in this the first occurrence of the code unit <TT>c</TT> 
+   * Locate in this the first occurrence of the BMP code point <code>c</code>
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
    * @param c The code unit to search for.
@@ -975,19 +949,6 @@ public:
    * Locate in this the first occurrence of the code point <TT>c</TT> 
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
-   *
-   * This function finds code points, which differs for BMP code points
-   * from indexOf(UChar c, ...) only for surrogates:
-   * While indexOf(UChar c, ...) finds any surrogate code units in a string,
-   * indexOf(UChar32 c, ...) finds only unmatched surrogate code points,
-   * i.e., only those that do not combine with an adjacent surrogate
-   * to form a supplementary code point.
-   * For example, in a string "\ud800\udc00" indexOf(UChar c, ...)
-   * will find code units U+d800 at 0 and U+dc00 at 1,
-   * but indexOf(UChar32 c, ...) will find neither because they
-   * combine to the code point U+10000.
-   * Either function will find U+d800 in "a\ud800b".
-   * This behavior ensures that char32At(indexOf(UChar32 c))==c.
    *
    * @param c The code point to search for.
    * @param start the offset into this at which to start matching
@@ -1112,7 +1073,7 @@ public:
               int32_t length) const;
 
   /**
-   * Locate in this the last occurrence of the code unit <TT>c</TT>, 
+   * Locate in this the last occurrence of the BMP code point <code>c</code>,
    * using bitwise comparison.
    * @param c The code unit to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
@@ -1124,19 +1085,6 @@ public:
    * Locate in this the last occurrence of the code point <TT>c</TT>, 
    * using bitwise comparison.
    *
-   * This function finds code points, which differs for BMP code points
-   * from lastIndexOf(UChar c, ...) only for surrogates:
-   * While lastIndexOf(UChar c, ...) finds any surrogate code units in a string,
-   * lastIndexOf(UChar32 c, ...) finds only unmatched surrogate code points,
-   * i.e., only those that do not combine with an adjacent surrogate
-   * to form a supplementary code point.
-   * For example, in a string "\ud800\udc00" lastIndexOf(UChar c, ...)
-   * will find code units U+d800 at 0 and U+dc00 at 1,
-   * but lastIndexOf(UChar32 c, ...) will find neither because they
-   * combine to the code point U+10000.
-   * Either function will find U+d800 in "a\ud800b".
-   * This behavior ensures that char32At(lastIndexOf(UChar32 c))==c.
-   *
    * @param c The code point to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
@@ -1144,7 +1092,7 @@ public:
   inline int32_t lastIndexOf(UChar32 c) const;
 
   /**
-   * Locate in this the last occurrence of the code unit <TT>c</TT>
+   * Locate in this the last occurrence of the BMP code point <code>c</code>
    * starting at offset <TT>start</TT>, using bitwise comparison.
    * @param c The code unit to search for.
    * @param start The offset at which searching will start.
@@ -1158,19 +1106,6 @@ public:
    * Locate in this the last occurrence of the code point <TT>c</TT>
    * starting at offset <TT>start</TT>, using bitwise comparison.
    *
-   * This function finds code points, which differs for BMP code points
-   * from lastIndexOf(UChar c, ...) only for surrogates:
-   * While lastIndexOf(UChar c, ...) finds any surrogate code units in a string,
-   * lastIndexOf(UChar32 c, ...) finds only unmatched surrogate code points,
-   * i.e., only those that do not combine with an adjacent surrogate
-   * to form a supplementary code point.
-   * For example, in a string "\ud800\udc00" lastIndexOf(UChar c, ...)
-   * will find code units U+d800 at 0 and U+dc00 at 1,
-   * but lastIndexOf(UChar32 c, ...) will find neither because they
-   * combine to the code point U+10000.
-   * Either function will find U+d800 in "a\ud800b".
-   * This behavior ensures that char32At(lastIndexOf(UChar32 c))==c.
-   *
    * @param c The code point to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
@@ -1180,7 +1115,7 @@ public:
               int32_t start) const;
 
   /**
-   * Locate in this the last occurrence of the code unit <TT>c</TT> 
+   * Locate in this the last occurrence of the BMP code point <code>c</code>
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
    * @param c The code unit to search for.
@@ -1197,19 +1132,6 @@ public:
    * Locate in this the last occurrence of the code point <TT>c</TT> 
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
-   *
-   * This function finds code points, which differs for BMP code points
-   * from lastIndexOf(UChar c, ...) only for surrogates:
-   * While lastIndexOf(UChar c, ...) finds any surrogate code units in a string,
-   * lastIndexOf(UChar32 c, ...) finds only unmatched surrogate code points,
-   * i.e., only those that do not combine with an adjacent surrogate
-   * to form a supplementary code point.
-   * For example, in a string "\ud800\udc00" lastIndexOf(UChar c, ...)
-   * will find code units U+d800 at 0 and U+dc00 at 1,
-   * but lastIndexOf(UChar32 c, ...) will find neither because they
-   * combine to the code point U+10000.
-   * Either function will find U+d800 in "a\ud800b".
-   * This behavior ensures that char32At(lastIndexOf(UChar32 c))==c.
    *
    * @param c The code point to search for.
    * @param start the offset into this at which to start matching
@@ -2981,7 +2903,6 @@ private:
             int32_t start,
             int32_t length) const;
 
-  // only for c>=0xd800
   int32_t doIndexOf(UChar32 c,
                         int32_t start,
                         int32_t length) const;
@@ -2990,7 +2911,6 @@ private:
                 int32_t start,
                 int32_t length) const;
 
-  // only for c>=0xd800
   int32_t doLastIndexOf(UChar32 c,
                             int32_t start,
                             int32_t length) const;
@@ -3490,11 +3410,7 @@ inline int32_t
 UnicodeString::indexOf(UChar32 c,
                int32_t start,
                int32_t length) const {
-  if((uint32_t)c<0xd800) {
-    return doIndexOf((UChar)c, start, length);
-  } else {
-    return doIndexOf(c, start, length);
-  }
+  return doIndexOf(c, start, length);
 }
 
 inline int32_t 
@@ -3571,11 +3487,7 @@ inline int32_t
 UnicodeString::lastIndexOf(UChar32 c,
                int32_t start,
                int32_t length) const {
-  if((uint32_t)c<0xd800) {
-    return doLastIndexOf((UChar)c, start, length);
-  } else {
-    return doLastIndexOf(c, start, length);
-  }
+  return doLastIndexOf(c, start, length);
 }
 
 inline UBool 

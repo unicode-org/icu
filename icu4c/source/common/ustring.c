@@ -34,128 +34,426 @@ static UConverter *gDefaultConverter = NULL;
 
 #define MAX_STRLEN 0x0FFFFFFF
 
-/* ---- String searching functions ---- */
+/* Forward binary string search functions ----------------------------------- */
 
-U_CAPI UChar* U_EXPORT2
-u_strchr(const UChar *s, UChar c) 
-{
-  while (*s && *s != c) {
-    ++s;
-  }
-  if (*s == c)
-    return (UChar *)s;
-  return NULL;
-}
-
-/* A Boyer-Moore algorithm would be better, but that would require a hashtable
-   because UChar is so big. This algorithm doesn't use a lot of extra memory.
- */
-U_CAPI UChar * U_EXPORT2
-u_strstr(const UChar *s, const UChar *substring) {
-
-  UChar *strItr, *subItr;
-
-  if (*substring == 0) {
-    return (UChar *)s;
-  }
-
-  do {
-    strItr = (UChar *)s;
-    subItr = (UChar *)substring;
-
-    /* Only one string iterator needs checking for null terminator */
-    while ((*strItr != 0) && (*strItr == *subItr)) {
-      strItr++;
-      subItr++;
-    }
-
-    if (*subItr == 0) {             /* Was the end of the substring reached? */
-      return (UChar *)s;
-    }
-
-    s++;
-  } while (*strItr != 0);           /* Was the end of the string reached? */
-
-  return NULL;                      /* No match */
-}
-
-/**
- * Check if there is an unmatched surrogate c in a string [start..limit[ at s.
- * start<=s<limit or limit==NULL
- * @return TRUE if *s is unmatched
+/*
+ * Test if a substring match inside a string is at code point boundaries.
+ * All pointers refer to the same buffer.
+ * The limit pointer may be NULL, all others must be real pointers.
  */
 static U_INLINE UBool
-uprv_isSingleSurrogate(const UChar *start, const UChar *s, UChar c, const UChar *limit) {
-    if(UTF_IS_SURROGATE_FIRST(c)) {
-        ++s;
-        return (UBool)(s==limit || !UTF_IS_TRAIL(*s));
-    } else {
-        return (UBool)(s==start || !UTF_IS_LEAD(*(s-1)));
+isMatchAtCPBoundary(const UChar *start, const UChar *match, const UChar *matchLimit, const UChar *limit) {
+    if(U16_IS_TRAIL(*match) && start!=match && U16_IS_LEAD(*(match-1))) {
+        /* the leading edge of the match is in the middle of a surrogate pair */
+        return FALSE;
     }
+    if(U16_IS_LEAD(*(matchLimit-1)) && match!=limit && U16_IS_TRAIL(*matchLimit)) {
+        /* the trailing edge of the match is in the middle of a surrogate pair */
+        return FALSE;
+    }
+    return TRUE;
 }
 
-U_CFUNC const UChar *
-uprv_strFindSurrogate(const UChar *s, int32_t length, UChar surrogate) {
-    const UChar *limit, *t;
-    UChar c;
+U_CAPI UChar * U_EXPORT2
+u_strFindFirst(const UChar *s, int32_t length,
+               const UChar *sub, int32_t subLength) {
+    const UChar *start, *p, *q, *subLimit;
+    UChar c, cs, cq;
 
-    if(length>=0) {
-        limit=s+length;
-    } else {
-        limit=NULL;
+    if(sub==NULL || subLength<-1) {
+        return (UChar *)s;
+    }
+    if(s==NULL || length<-1) {
+        return NULL;
     }
 
-    for(t=s; t!=limit && ((c=*t)!=0 || limit!=NULL); ++t) {
-        if(c==surrogate && uprv_isSingleSurrogate(s, t, c, limit)) {
-            return t;
+    start=s;
+
+    if(length<0 && subLength<0) {
+        /* both strings are NUL-terminated */
+        if((cs=*sub++)==0) {
+            return (UChar *)s;
+        }
+        if(*sub==0 && !U16_IS_SURROGATE(cs)) {
+            /* the substring consists of a single, non-surrogate BMP code point */
+            return u_strchr(s, cs);
+        }
+
+        while((c=*s++)!=0) {
+            if(c==cs) {
+                /* found first substring UChar, compare rest */
+                p=s;
+                q=sub;
+                for(;;) {
+                    if((cq=*q)==0) {
+                        if(isMatchAtCPBoundary(start, s-1, p, NULL)) {
+                            return (UChar *)(s-1); /* well-formed match */
+                        } else {
+                            break; /* no match because surrogate pair is split */
+                        }
+                    }
+                    if((c=*p)==0) {
+                        return NULL; /* no match, and none possible after s */
+                    }
+                    if(c!=cq) {
+                        break; /* no match */
+                    }
+                    ++p;
+                    ++q;
+                }
+            }
+        }
+
+        /* not found */
+        return NULL;
+    }
+
+    if(subLength<0) {
+        subLength=u_strlen(sub);
+    }
+    if(subLength==0) {
+        return (UChar *)s;
+    }
+
+    /* get sub[0] to search for it fast */
+    cs=*sub++;
+    --subLength;
+    subLimit=sub+subLength;
+
+    if(subLength==0 && !U16_IS_SURROGATE(cs)) {
+        /* the substring consists of a single, non-surrogate BMP code point */
+        return length<0 ? u_strchr(s, cs) : u_memchr(s, cs, length);
+    }
+
+    if(length<0) {
+        /* s is NUL-terminated */
+        while((c=*s++)!=0) {
+            if(c==cs) {
+                /* found first substring UChar, compare rest */
+                p=s;
+                q=sub;
+                for(;;) {
+                    if(q==subLimit) {
+                        if(isMatchAtCPBoundary(start, s-1, p, NULL)) {
+                            return (UChar *)(s-1); /* well-formed match */
+                        } else {
+                            break; /* no match because surrogate pair is split */
+                        }
+                    }
+                    if((c=*p)==0) {
+                        return NULL; /* no match, and none possible after s */
+                    }
+                    if(c!=*q) {
+                        break; /* no match */
+                    }
+                    ++p;
+                    ++q;
+                }
+            }
+        }
+    } else {
+        const UChar *limit, *preLimit;
+
+        /* subLength was decremented above */
+        if(length<=subLength) {
+            return NULL; /* s is shorter than sub */
+        }
+
+        limit=s+length;
+
+        /* the substring must start before preLimit */
+        preLimit=limit-subLength;
+
+        while(s!=preLimit) {
+            c=*s++;
+            if(c==cs) {
+                /* found first substring UChar, compare rest */
+                p=s;
+                q=sub;
+                for(;;) {
+                    if(q==subLimit) {
+                        if(isMatchAtCPBoundary(start, s-1, p, limit)) {
+                            return (UChar *)(s-1); /* well-formed match */
+                        } else {
+                            break; /* no match because surrogate pair is split */
+                        }
+                    }
+                    if(*p!=*q) {
+                        break; /* no match */
+                    }
+                    ++p;
+                    ++q;
+                }
+            }
         }
     }
 
+    /* not found */
     return NULL;
 }
 
-U_CFUNC const UChar *
-uprv_strFindLastSurrogate(const UChar *s, int32_t length, UChar surrogate) {
-    const UChar *limit, *t;
-    UChar c;
+U_CAPI UChar * U_EXPORT2
+u_strstr(const UChar *s, const UChar *substring) {
+    return u_strFindFirst(s, -1, substring, -1);
+}
 
-    if(length>=0) {
-        limit=s+length;
+U_CAPI UChar * U_EXPORT2
+u_strchr(const UChar *s, UChar c) {
+    if(U16_IS_SURROGATE(c)) {
+        /* make sure to not find half of a surrogate pair */
+        return u_strFindFirst(s, -1, &c, 1);
     } else {
-        limit=s+u_strlen(s);
-    }
+        UChar cs;
 
-    for(t=limit; t!=s;) {
-        c=*--t;
-        if(c==surrogate && uprv_isSingleSurrogate(s, t, c, limit)) {
-            return t;
+        /* trivial search for a BMP code point */
+        for(;;) {
+            if((cs=*s)==c) {
+                return (UChar *)s;
+            }
+            if(cs==0) {
+                return NULL;
+            }
+            ++s;
         }
     }
-
-    return NULL;
 }
 
 U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c) {
-  if(c < 0xd800) {
-    /* non-surrogate BMP code point */
-    return u_strchr(s, (UChar)c);
-  } else if(c <= 0xdfff) {
-    /* surrogate code point */
-    return (UChar *)uprv_strFindSurrogate(s, -1, (UChar)c);
-  } else if(c <= 0xffff) {
-    /* non-surrogate BMP code point */
-    return u_strchr(s, (UChar)c);
-  } else {
-    /* supplementary code point, search for string */
-    UChar buffer[3];
+    if((uint32_t)c<=0xffff) {
+        /* find BMP code point */
+        return u_strchr(s, (UChar)c);
+    } else if((uint32_t)c<=0x10ffff) {
+        /* find supplementary code point as surrogate pair */
+        UChar cs, lead=U16_LEAD(c), trail=U16_TRAIL(c);
 
-    buffer[0] = UTF16_LEAD(c);
-    buffer[1] = UTF16_TRAIL(c);
-    buffer[2] = 0;
-    return u_strstr(s, buffer);
-  }
+        while((cs=*s++)!=0) {
+            if(cs==lead && *s==trail) {
+                return (UChar *)(s-1);
+            }
+        }
+        return NULL;
+    } else {
+        /* not a Unicode code point, not findable */
+        return NULL;
+    }
 }
+
+U_CAPI UChar * U_EXPORT2
+u_memchr(const UChar *s, UChar c, int32_t count) {
+    if(count<=0) {
+        return NULL; /* no string */
+    } else if(U16_IS_SURROGATE(c)) {
+        /* make sure to not find half of a surrogate pair */
+        return u_strFindFirst(s, count, &c, 1);
+    } else {
+        /* trivial search for a BMP code point */
+        const UChar *limit=s+count;
+        do {
+            if(*s==c) {
+                return (UChar *)s;
+            }
+        } while(++s!=limit);
+        return NULL;
+    }
+}
+
+U_CAPI UChar * U_EXPORT2
+u_memchr32(const UChar *s, UChar32 c, int32_t count) {
+    if((uint32_t)c<=0xffff) {
+        /* find BMP code point */
+        return u_memchr(s, (UChar)c, count);
+    } else if(count<2) {
+        /* too short for a surrogate pair */
+        return NULL;
+    } else if((uint32_t)c<=0x10ffff) {
+        /* find supplementary code point as surrogate pair */
+        const UChar *limit=s+count-1; /* -1 so that we do not need a separate check for the trail unit */
+        UChar lead=U16_LEAD(c), trail=U16_TRAIL(c);
+
+        do {
+            if(*s==lead && *(s+1)==trail) {
+                return (UChar *)s;
+            }
+        } while(++s!=limit);
+        return NULL;
+    } else {
+        /* not a Unicode code point, not findable */
+        return NULL;
+    }
+}
+
+/* Backward binary string search functions ---------------------------------- */
+
+U_CAPI UChar * U_EXPORT2
+u_strFindLast(const UChar *s, int32_t length,
+              const UChar *sub, int32_t subLength) {
+    const UChar *start, *limit, *p, *q, *subLimit;
+    UChar c, cs;
+
+    if(sub==NULL || subLength<-1) {
+        return (UChar *)s;
+    }
+    if(s==NULL || length<-1) {
+        return NULL;
+    }
+
+    /*
+     * This implementation is more lazy than the one for u_strFindFirst():
+     * There is no special search code for NUL-terminated strings.
+     * It does not seem to be worth it for searching substrings to
+     * search forward and find all matches like in u_strrchr() and similar.
+     * Therefore, we simply get both string lengths and search backward.
+     *
+     * markus 2002oct23
+     */
+
+    if(subLength<0) {
+        subLength=u_strlen(sub);
+    }
+    if(subLength==0) {
+        return (UChar *)s;
+    }
+
+    /* get sub[subLength-1] to search for it fast */
+    subLimit=sub+subLength;
+    cs=*(--subLimit);
+    --subLength;
+
+    if(subLength==0 && !U16_IS_SURROGATE(cs)) {
+        /* the substring consists of a single, non-surrogate BMP code point */
+        return length<0 ? u_strrchr(s, cs) : u_memrchr(s, cs, length);
+    }
+
+    if(length<0) {
+        length=u_strlen(s);
+    }
+
+    /* subLength was decremented above */
+    if(length<=subLength) {
+        return NULL; /* s is shorter than sub */
+    }
+
+    start=s;
+    limit=s+length;
+
+    /* the substring must start no later than s+subLength */
+    s+=subLength;
+
+    while(s!=limit) {
+        c=*(--limit);
+        if(c==cs) {
+            /* found last substring UChar, compare rest */
+            p=limit;
+            q=subLimit;
+            for(;;) {
+                if(q==sub) {
+                    if(isMatchAtCPBoundary(start, p, limit+1, s+length)) {
+                        return (UChar *)p; /* well-formed match */
+                    } else {
+                        break; /* no match because surrogate pair is split */
+                    }
+                }
+                if(*(--p)!=*(--q)) {
+                    break; /* no match */
+                }
+            }
+        }
+    }
+
+    /* not found */
+    return NULL;
+}
+
+U_CAPI UChar * U_EXPORT2
+u_strrchr(const UChar *s, UChar c) {
+    if(U16_IS_SURROGATE(c)) {
+        /* make sure to not find half of a surrogate pair */
+        return u_strFindLast(s, -1, &c, 1);
+    } else {
+        const UChar *result=NULL;
+        UChar cs;
+
+        /* trivial search for a BMP code point */
+        for(;;) {
+            if((cs=*s)==c) {
+                result=s;
+            }
+            if(cs==0) {
+                return (UChar *)result;
+            }
+            ++s;
+        }
+    }
+}
+
+U_CAPI UChar * U_EXPORT2
+u_strrchr32(const UChar *s, UChar32 c) {
+    if((uint32_t)c<=0xffff) {
+        /* find BMP code point */
+        return u_strrchr(s, (UChar)c);
+    } else if((uint32_t)c<=0x10ffff) {
+        /* find supplementary code point as surrogate pair */
+        const UChar *result=NULL;
+        UChar cs, lead=U16_LEAD(c), trail=U16_TRAIL(c);
+
+        while((cs=*s++)!=0) {
+            if(cs==lead && *s==trail) {
+                result=s-1;
+            }
+        }
+        return (UChar *)result;
+    } else {
+        /* not a Unicode code point, not findable */
+        return NULL;
+    }
+}
+
+U_CAPI UChar * U_EXPORT2
+u_memrchr(const UChar *s, UChar c, int32_t count) {
+    if(count<=0) {
+        return NULL; /* no string */
+    } else if(U16_IS_SURROGATE(c)) {
+        /* make sure to not find half of a surrogate pair */
+        return u_strFindLast(s, count, &c, 1);
+    } else {
+        /* trivial search for a BMP code point */
+        const UChar *limit=s+count;
+        do {
+            if(*(--limit)==c) {
+                return (UChar *)limit;
+            }
+        } while(s!=limit);
+        return NULL;
+    }
+}
+
+U_CAPI UChar * U_EXPORT2
+u_memrchr32(const UChar *s, UChar32 c, int32_t count) {
+    if((uint32_t)c<=0xffff) {
+        /* find BMP code point */
+        return u_memrchr(s, (UChar)c, count);
+    } else if(count<2) {
+        /* too short for a surrogate pair */
+        return NULL;
+    } else if((uint32_t)c<=0x10ffff) {
+        /* find supplementary code point as surrogate pair */
+        const UChar *limit=s+count-1;
+        UChar lead=U16_LEAD(c), trail=U16_TRAIL(c);
+
+        do {
+            if(*limit==trail && *(limit-1)==lead) {
+                return (UChar *)(limit-1);
+            }
+        } while(s!=--limit);
+        return NULL;
+    } else {
+        /* not a Unicode code point, not findable */
+        return NULL;
+    }
+}
+
+/* Tokenization functions --------------------------------------------------- */
 
 /*
  * Match each code point in a string against each code point in the matchSet.
@@ -320,6 +618,8 @@ u_strtok_r(UChar    *src,
     }
     return NULL;
 }
+
+/* Miscellaneous functions -------------------------------------------------- */
 
 U_CAPI UChar* U_EXPORT2
 u_strcat(UChar     *dst, 
@@ -752,50 +1052,6 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count) {
 U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
     return uprv_strCompare(s1, count, s2, count, FALSE, TRUE);
-}
-
-U_CAPI UChar * U_EXPORT2
-u_memchr(const UChar *src, UChar ch, int32_t count) {
-    if(count > 0) {
-        const UChar *ptr = src;
-        const UChar *limit = src + count;
-
-        do {
-            if (*ptr == ch) {
-                return (UChar *)ptr;
-            }
-        } while (++ptr < limit);
-    }
-    return NULL;
-}
-
-U_CAPI UChar * U_EXPORT2
-u_memchr32(const UChar *src, UChar32 ch, int32_t count) {
-    if(count<=0 || (uint32_t)ch>0x10ffff) {
-        return NULL; /* no string, or illegal arguments */
-    }
-
-    if(ch<0xd800) {
-        /* non-surrogate BMP code point */
-        return u_memchr(src, (UChar)ch, count); /* BMP, single UChar */
-    } else if(ch<=0xdfff) {
-        /* surrogate code point */
-        return (UChar *)uprv_strFindSurrogate(src, count, (UChar)ch);
-    } else if(ch<=0xffff) {
-        return u_memchr(src, (UChar)ch, count); /* BMP, single UChar */
-    } else if(count<2) {
-        return NULL; /* too short for a surrogate pair */
-    } else {
-        const UChar *limit=src+count-1; /* -1 so that we do not need a separate check for the trail unit */
-        UChar lead=UTF16_LEAD(ch), trail=UTF16_TRAIL(ch);
-
-        do {
-            if(*src==lead && *(src+1)==trail) {
-                return (UChar *)src;
-            }
-        } while(++src<limit);
-        return NULL;
-    }
 }
 
 /* conversions between char* and UChar* ------------------------------------- */
