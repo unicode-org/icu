@@ -34,10 +34,6 @@ public class TestAll extends TestFmwk {
 		run(new com.ibm.test.normalizer.ExhaustiveTest());
 	}
 
-	public void TestNormalizer3() throws Exception {
-		run(new com.ibm.test.normalizer.FooTest());
-	}
-
 	public void TestRuleBasedNumberFormat1() throws Exception {
 		run(new com.ibm.test.rbnf.RbnfTest());
 	}
