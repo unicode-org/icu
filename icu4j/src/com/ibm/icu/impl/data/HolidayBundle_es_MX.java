@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/HolidayBundle_es_MX.java,v $ 
- * $Date: 2000/03/10 04:18:03 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/09/20 22:51:23 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -21,12 +21,12 @@ public class HolidayBundle_es_MX extends ListResourceBundle {
     static private final Holiday[] fHolidays = {
         SimpleHoliday.NEW_YEARS_DAY,
         new SimpleHoliday(Calendar.FEBRUARY,   5,  0,    "Constitution Day"),
-        new SimpleHoliday(Calendar.MARCH,     21,  0,    "Benito Juﬂrez Day"),
+        new SimpleHoliday(Calendar.MARCH,     21,  0,    "Benito Ju\u00E1rez Day"),
         SimpleHoliday.MAY_DAY,
         new SimpleHoliday(Calendar.MAY,        5,  0,    "Cinco de Mayo"),
         new SimpleHoliday(Calendar.JUNE,       1,  0,    "Navy Day"),
         new SimpleHoliday(Calendar.SEPTEMBER, 16,  0,    "Independence Day"),
-        new SimpleHoliday(Calendar.OCTOBER,   12,  0,    "Dça de la Raza"),
+        new SimpleHoliday(Calendar.OCTOBER,   12,  0,    "D\u00EDa de la Raza"),
         SimpleHoliday.ALL_SAINTS_DAY,
         new SimpleHoliday(Calendar.NOVEMBER,   2,  0,    "Day of the Dead"),
         new SimpleHoliday(Calendar.NOVEMBER,  20,  0,    "Revolution Day"),
