@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/10/09 18:56:58 $
- * $Revision: 1.11 $
+ * $Date: 2002/12/12 18:02:09 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -279,6 +279,14 @@ public class ICULocaleService extends ICUService {
 	    }
 	    currentID = null;
 	    return false;
+        }
+
+        /**
+         * If a key created from id would eventually fallback to match the 
+         * canonical ID of this key, return true.
+         */
+        public boolean isFallbackOf(String id) {
+            return LocaleUtility.isFallbackOf(canonicalID(), id);
         }
     }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2002/10/09 18:56:58 $
- * $Revision: 1.12 $
+ * $Date: 2002/12/12 18:02:09 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -203,10 +204,10 @@ public class ICUService extends ICUNotifier {
 
         /**
          * If a key created from id would eventually fallback to match the 
-         * current ID of this key, return true.
+         * canonical ID of this key, return true.
          */
         public boolean isFallbackOf(String id) {
-            return currentID().equals(id);
+            return canonicalID().equals(id);
         }
     }
 
@@ -642,7 +643,7 @@ public class ICUService extends ICUNotifier {
      * the locale as the comparator to sort the display names, and null for
      * the matchID.
      */
-    public Map getDisplayNames() {
+    public SortedMap getDisplayNames() {
         Locale locale = Locale.getDefault();
         Collator col = Collator.getInstance(locale);
 	return getDisplayNames(locale, col, null);
@@ -653,7 +654,7 @@ public class ICUService extends ICUNotifier {
      * uses the default collator for the locale as the comparator to
      * sort the display names, and null for the matchID.
      */
-    public Map getDisplayNames(Locale locale) {
+    public SortedMap getDisplayNames(Locale locale) {
         Collator col = Collator.getInstance(locale);
         return getDisplayNames(locale, col, null);
     }
@@ -661,8 +662,8 @@ public class ICUService extends ICUNotifier {
     /**
      * Convenience override of getDisplayNames(Locale, Comparator, String) that
      * uses null for the matchID, thus returning all display names.
-     * /
-    public Map getDisplayNames(Locale locale, Comparator col) {
+     */
+    public SortedMap getDisplayNames(Locale locale, Comparator col) {
         return getDisplayNames(locale, col, null);
     }
 
@@ -671,7 +672,7 @@ public class ICUService extends ICUNotifier {
      * uses the default collator for the locale as the comparator to
      * sort the display names.
      */
-    public Map getDisplayNames(Locale locale, String matchID) {
+    public SortedMap getDisplayNames(Locale locale, String matchID) {
         Collator col = Collator.getInstance(locale);
         return getDisplayNames(locale, col, matchID);
     }
@@ -686,11 +687,11 @@ public class ICUService extends ICUNotifier {
      * those in the set.  The display names are sorted based on the 
      * comparator provided.
      */
-    public Map getDisplayNames(Locale locale, Comparator col, String matchID) {
-        Map dncache = null;
+    public SortedMap getDisplayNames(Locale locale, Comparator col, String matchID) {
+        SortedMap dncache = null;
 	LocaleRef ref = dnref;
         if (ref != null) {
-            dncache = ref.get(locale, col);
+            dncache = (SortedMap)ref.get(locale, col);
         }
 
         while (dncache == null) {
@@ -707,7 +708,7 @@ public class ICUService extends ICUNotifier {
 			dncache.put(f.getDisplayName(id, locale), id);
 		    }
 
-		    dncache = Collections.unmodifiableMap(dncache);
+		    dncache = Collections.unmodifiableSortedMap(dncache);
 		    dnref = new LocaleRef(dncache, locale, col);
 		} else {
 		    ref = dnref;
@@ -721,7 +722,7 @@ public class ICUService extends ICUNotifier {
             return dncache;
         }
 
-        HashMap result = new HashMap(dncache);
+        SortedMap result = new TreeMap(dncache);
         Iterator iter = result.entrySet().iterator();
         while (iter.hasNext()) {
             Entry e = (Entry)iter.next();
@@ -745,8 +746,8 @@ public class ICUService extends ICUNotifier {
 	    this.ref = new SoftReference(dnCache);
 	}
 
-	Map get(Locale locale, Comparator col) {
-            Map m = (Map)ref.get();
+	SortedMap get(Locale locale, Comparator col) {
+            SortedMap m = (SortedMap)ref.get();
 	    if (m != null && 
                 this.locale.equals(locale) &&
                 (this.col == col || (this.col != null && this.col.equals(col)))) {
