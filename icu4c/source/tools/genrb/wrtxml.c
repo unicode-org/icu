@@ -52,7 +52,7 @@ static void write_tabs(FileStream* os){
 }
 
 /*get ID for each element. ID is globally unique.*/
-static char* getID(char* id, char* curKey, char* result) {
+static char* getID(const char* id, char* curKey, char* result) {
     if(curKey == NULL) { 
         result = uprv_malloc(sizeof(char)*uprv_strlen(id) + 1);
         uprv_memset(result, 0, sizeof(char)*uprv_strlen(id) + 1);
@@ -289,7 +289,7 @@ static const char* xmlHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
 static const char* bundleStart = "<xliff version = \"1.0\">\n";
 static const char* bundleEnd   = "</xliff>\n";
 
-void res_write_xml(struct SResource *res, char* id, const char* language, UErrorCode *status);
+void res_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status);
 
 static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength, 
                               const UChar* src, int32_t srcLen, UErrorCode* status){
@@ -297,8 +297,6 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
     char* dest=NULL;
     char* temp=NULL;
     int32_t destLen=0;
-    char buf[4] = {'\0'};
-    int32_t offset = 0;
     UChar32 c = 0;
 
     if(status==NULL || U_FAILURE(*status) || pDest==NULL  || srcLen==0 || src == NULL){
@@ -425,7 +423,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
     
 /* Writing Functions */
 static void 
-string_write_xml(struct SResource *res, char* id, const char* language, UErrorCode *status) {
+string_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
 
     char* buf = NULL;
     int32_t bufLen = 0;
@@ -503,7 +501,7 @@ string_write_xml(struct SResource *res, char* id, const char* language, UErrorCo
 }
 
 static void 
-alias_write_xml(struct SResource *res, char* id, const char* language, UErrorCode *status) {
+alias_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     static const char* startKey    = "resname=\"";
     static const char* val           = "<source>";
     static const char* endKey      = "</source>\n";
@@ -554,7 +552,7 @@ alias_write_xml(struct SResource *res, char* id, const char* language, UErrorCod
 }
 
 static void 
-array_write_xml( struct SResource *res, char* id, const char* language, UErrorCode *status) {
+array_write_xml( struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     const char* start = "<group restype = \"array\" xml:space = \"preserve\" id = \"";
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
@@ -606,7 +604,7 @@ array_write_xml( struct SResource *res, char* id, const char* language, UErrorCo
 }
 
 static void 
-intvector_write_xml( struct SResource *res, char* id, const char* language, UErrorCode *status) {
+intvector_write_xml( struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     const char* start = "<group restype = \"intvector\" xml:space = \"preserve\" id = \"";
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
@@ -641,7 +639,6 @@ intvector_write_xml( struct SResource *res, char* id, const char* language, UErr
     tabCount++;
     
     for(i = 0; i<res->u.fIntVector.fCount; i++) {
-        int m = 0;
         char c[256] = {0};
         itostr(c, i,10,0);
         ivd = getID(sid, c, ivd);
@@ -675,7 +672,7 @@ intvector_write_xml( struct SResource *res, char* id, const char* language, UErr
 }
 
 static void 
-int_write_xml(struct SResource *res, char* id, const char* language, UErrorCode *status) {
+int_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     const char* intStart = "<trans-unit restype = \"int\" translate = \"no\" xml:space = \"preserve\" id = \"";
     const char* valIntStart = "<source>";
     const char* valIntEnd = "</source>\n";
@@ -721,7 +718,7 @@ int_write_xml(struct SResource *res, char* id, const char* language, UErrorCode 
 }
 
 static void 
-bin_write_xml( struct SResource *res, char* id, const char* language, UErrorCode *status) {
+bin_write_xml( struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     const char* start = "<bin-unit restype = \"bin\" translate = \"no\" id = \"";
     const char* importStart = "<bin-unit restype = \"import\" translate = \"no\" id = \"";
     const char* mime = " mime-type = ";
@@ -742,7 +739,6 @@ bin_write_xml( struct SResource *res, char* id, const char* language, UErrorCode
     char* fn =  (char*) uprv_malloc(sizeof(char) * (tLen+1024 + 
                                                     (res->u.fBinaryValue.fFileName !=NULL ? 
                                                     uprv_strlen(res->u.fBinaryValue.fFileName) :0)));
-    char* buffer = NULL;
     const char* ext = NULL;
     
     char* f = NULL;    
@@ -859,7 +855,7 @@ bin_write_xml( struct SResource *res, char* id, const char* language, UErrorCode
 
 
 static void 
-table_write_xml(struct SResource *res, char* id, const char* language, UErrorCode *status) {
+table_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
 
     uint32_t  i         = 0;
 
@@ -949,7 +945,7 @@ table_write_xml(struct SResource *res, char* id, const char* language, UErrorCod
 }
 
 void 
-res_write_xml(struct SResource *res, char* id, const char* language, UErrorCode *status) {
+res_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     
     if (U_FAILURE(*status)) {
         return ;
@@ -1006,7 +1002,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     const char* headerEnd = "</header>\n";
     const char* bodyStart = "<body>\n";
     const char* bodyEnd = "</body>\n";
-    char* defaultLang = "en";
+    const char* defaultLang = "en";
     char* pid = NULL;
     char* temp = NULL;
     char* lang = NULL;
