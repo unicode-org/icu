@@ -301,7 +301,7 @@ private:
 private:
 
     /* Sizes for the last resort string arrays */
-    typedef enum {
+    typedef enum LastResortSize {
         kMonthNum = 13,
         kMonthLen = 3,
 
