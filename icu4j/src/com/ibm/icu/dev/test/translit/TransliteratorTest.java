@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/10/07 23:18:09 $
- * $Revision: 1.127 $
+ * $Date: 2004/02/25 01:29:54 $
+ * $Revision: 1.128 $
  *
  *****************************************************************************************
  */
@@ -86,18 +86,15 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator t = null;
             try {
                 t = Transliterator.getInstance(ID);
-                // We should get a new instance if we try again
-                Transliterator t2 = null;
-                // This is true only of RBT
-                if (t instanceof RuleBasedTransliterator) {
-                    t = Transliterator.getInstance(ID);
-                }
-                if (t != t2) {
-                    logln("OK: " + Transliterator.getDisplayName(ID) + " (" + ID + "): " + t);
-                } else {
-                    errln("FAIL: " + ID + " returned identical instances");
-                    t = null;
-                }
+                // This is only true for some subclasses
+//                // We should get a new instance if we try again
+//                Transliterator t2 = Transliterator.getInstance(ID);
+//                if (t != t2) {
+//                    logln("OK: " + Transliterator.getDisplayName(ID) + " (" + ID + "): " + t);
+//                } else {
+//                    errln("FAIL: " + ID + " returned identical instances");
+//                    t = null;
+//                }
             } catch (IllegalArgumentException ex) {
                 errln("FAIL: " + ID);
                 throw ex;
@@ -166,7 +163,7 @@ public class TransliteratorTest extends TestFmwk {
 
         /* Test categories
          */
-        Transliterator t = new RuleBasedTransliterator("<ID>",
+        Transliterator t = Transliterator.createFromRules("<ID>",
                                                        "$dummy=\uE100;" +
                                                        "$vowel=[aeiouAEIOU];" +
                                                        "$lu=[:Lu:];" +
@@ -174,7 +171,8 @@ public class TransliteratorTest extends TestFmwk {
                                                        "$vowel > '&';" +
                                                        "'!' { $lu > '^';" +
                                                        "$lu > '*';" +
-                                                       "a>ERROR");
+                                                       "a>ERROR",
+                                                       Transliterator.FORWARD);
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
     }
 
@@ -232,9 +230,8 @@ public class TransliteratorTest extends TestFmwk {
             "caccb", "xyzzy",
         };
 
-        Transliterator fwd = new RuleBasedTransliterator("<ID>", RULES);
-        Transliterator rev = new RuleBasedTransliterator("<ID>", RULES,
-                                     RuleBasedTransliterator.REVERSE, null);
+        Transliterator fwd = Transliterator.createFromRules("<ID>", RULES, Transliterator.FORWARD);
+        Transliterator rev = Transliterator.createFromRules("<ID>", RULES, Transliterator.REVERSE);
         for (int i=0; i<DATA.length; i+=2) {
             expect(fwd, DATA[i], DATA[i+1]);
             expect(rev, DATA[i+1], DATA[i]);
@@ -245,11 +242,11 @@ public class TransliteratorTest extends TestFmwk {
      * Basic test of keyboard.
      */
     public void TestKeyboard() {
-        Transliterator t = new RuleBasedTransliterator("<ID>",
+        Transliterator t = Transliterator.createFromRules("<ID>",
                                                        "psch>Y;"
                                                        +"ps>y;"
                                                        +"ch>x;"
-                                                       +"a>A;");
+                                                       +"a>A;", Transliterator.FORWARD);
         String DATA[] = {
             // insertion, buffer
             "a", "A",
@@ -268,11 +265,11 @@ public class TransliteratorTest extends TestFmwk {
      * Basic test of keyboard with cursor.
      */
     public void TestKeyboard2() {
-        Transliterator t = new RuleBasedTransliterator("<ID>",
+        Transliterator t = Transliterator.createFromRules("<ID>",
                                                        "ych>Y;"
                                                        +"ps>|y;"
                                                        +"ch>x;"
-                                                       +"a>A;");
+                                                       +"a>A;", Transliterator.FORWARD);
         String DATA[] = {
             // insertion, buffer
             "a", "A",
@@ -315,7 +312,7 @@ public class TransliteratorTest extends TestFmwk {
             null, "abycz", // null means finishKeyboardTransliteration
         };
 
-        Transliterator t = new RuleBasedTransliterator("<ID>", RULES);
+        Transliterator t = Transliterator.createFromRules("<ID>", RULES, Transliterator.FORWARD);
         keyboardAux(t, DATA);
     }
 
@@ -367,7 +364,7 @@ public class TransliteratorTest extends TestFmwk {
      * some strings that should come out unchanged.
      */
     public void TestCompoundKana() {
-        Transliterator t = new CompoundTransliterator("Latin-Katakana;Katakana-Latin");
+        Transliterator t = Transliterator.getInstance("Latin-Katakana;Katakana-Latin");
         expect(t, "aaaaa", "aaaaa");
     }
 
@@ -377,8 +374,9 @@ public class TransliteratorTest extends TestFmwk {
     public void TestCompoundHex() {
         Transliterator a = Transliterator.getInstance("Any-Hex");
         Transliterator b = Transliterator.getInstance("Hex-Any");
-        Transliterator[] trans = { a, b };
-        Transliterator ab = new CompoundTransliterator(trans);
+        // Transliterator[] trans = { a, b };
+        // Transliterator ab = Transliterator.getInstance(trans);
+        Transliterator ab = Transliterator.getInstance("Any-Hex;Hex-Any");
 
         // Do some basic tests of b
         expect(b, "\\u0030\\u0031", "01");
@@ -386,8 +384,9 @@ public class TransliteratorTest extends TestFmwk {
         String s = "abcde";
         expect(ab, s, s);
 
-        trans = new Transliterator[] { b, a };
-        Transliterator ba = new CompoundTransliterator(trans);
+        // trans = new Transliterator[] { b, a };
+        // Transliterator ba = Transliterator.getInstance(trans);
+        Transliterator ba = Transliterator.getInstance("Hex-Any;Any-Hex");
         ReplaceableString str = new ReplaceableString(s);
         a.transliterate(str);
         expect(ba, str.toString(), str.toString());
@@ -455,7 +454,7 @@ public class TransliteratorTest extends TestFmwk {
 
         for (int i=0; i<DATA.length; i+=3) {
             logln("Pattern: " + Utility.escape(DATA[i]));
-            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            Transliterator t = Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i+1], DATA[i+2]);
         }
     }
@@ -499,8 +498,8 @@ public class TransliteratorTest extends TestFmwk {
                     "u <>  $vowel { $ypsilon;" +
                     "y <>           $ypsilon;" +
                     "n <>           $nu;";
-        RuleBasedTransliterator mini = new RuleBasedTransliterator
-            ("mini", rules, Transliterator.REVERSE, null);
+        Transliterator mini = Transliterator.createFromRules
+            ("mini", rules, Transliterator.REVERSE);
         expect(mini, syn, "syn");
         expect(mini, sayn, "saun");
 
@@ -531,25 +530,25 @@ public class TransliteratorTest extends TestFmwk {
 //|    }
     }
 
-    /**
-     * Prefix, suffix support in hex transliterators
-     */
-    public void TestJ243() {
-        // Test default Hex-Any, which should handle
-        // \\u, \\U, u+, and U+
-        HexToUnicodeTransliterator hex = new HexToUnicodeTransliterator();
-        expect(hex, "\\u0041+\\U0042,u+0043uu+0044z", "A+B,CuDz");
-
-        // Try a custom Hex-Any
-        // \\uXXXX and &#xXXXX;
-        HexToUnicodeTransliterator hex2 = new HexToUnicodeTransliterator("\\\\u###0;&\\#x###0\\;");
-        expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
-               "abcd5fx012&#x00033;");
-
-        // Try custom Any-Hex (default is tested elsewhere)
-        UnicodeToHexTransliterator hex3 = new UnicodeToHexTransliterator("&\\#x###0;");
-        expect(hex3, "012", "&#x30;&#x31;&#x32;");
-    }
+//    /**
+//     * Prefix, suffix support in hex transliterators
+//     */
+//    public void TestJ243() {
+//        // Test default Hex-Any, which should handle
+//        // \\u, \\U, u+, and U+
+//        HexToUnicodeTransliterator hex = new HexToUnicodeTransliterator();
+//        expect(hex, "\\u0041+\\U0042,u+0043uu+0044z", "A+B,CuDz");
+//
+//        // Try a custom Hex-Any
+//        // \\uXXXX and &#xXXXX;
+//        HexToUnicodeTransliterator hex2 = new HexToUnicodeTransliterator("\\\\u###0;&\\#x###0\\;");
+//        expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
+//               "abcd5fx012&#x00033;");
+//
+//        // Try custom Any-Hex (default is tested elsewhere)
+//        UnicodeToHexTransliterator hex3 = new UnicodeToHexTransliterator("&\\#x###0;");
+//        expect(hex3, "012", "&#x30;&#x31;&#x32;");
+//    }
 
     public void TestJ329() {
 
@@ -561,11 +560,10 @@ public class TransliteratorTest extends TestFmwk {
         for (int i=0; i<DATA.length; i+=2) {
             String err = null;
             try {
-                Transliterator t = new
-                    RuleBasedTransliterator("<ID>",
+                Transliterator t =
+                    Transliterator.createFromRules("<ID>",
                                             (String) DATA[i+1],
-                                            Transliterator.FORWARD,
-                                            null);
+                                            Transliterator.FORWARD);
             } catch (IllegalArgumentException e) {
                 err = e.getMessage();
             }
@@ -594,7 +592,7 @@ public class TransliteratorTest extends TestFmwk {
 
         for (int i=0; i<DATA.length; i+=3) {
             logln("Pattern: " + Utility.escape(DATA[i]));
-            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            Transliterator t = Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i+1], DATA[i+2]);
         }
     }
@@ -617,7 +615,7 @@ public class TransliteratorTest extends TestFmwk {
 
         for (int i=0; i<DATA.length; i+=3) {
             logln("Pattern: " + Utility.escape(DATA[i]));
-            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            Transliterator t = Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i+1], DATA[i+2]);
         }
     }
@@ -650,7 +648,7 @@ public class TransliteratorTest extends TestFmwk {
 
         for (int i=0; i<DATA.length; i+=3) {
             logln("Pattern: " + Utility.escape(DATA[i]));
-            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            Transliterator t = Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i+1], DATA[i+2]);
         }
     }
@@ -686,7 +684,7 @@ public class TransliteratorTest extends TestFmwk {
 
         int n = DATA.length/3;
         for (int i=0; i<n; i++) {
-            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[3*i]);
+            Transliterator t = Transliterator.createFromRules("<ID>", DATA[3*i], Transliterator.FORWARD);
             Transliterator.Position pos = new Transliterator.Position(
                 POS[4*i], POS[4*i+1], POS[4*i+2], POS[4*i+3]);
             ReplaceableString rsource = new ReplaceableString(DATA[3*i+1]);
@@ -1416,9 +1414,13 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     static class TestFact implements Transliterator.Factory {
-        static class NameableNullTrans extends NullTransliterator {
+        static class NameableNullTrans extends Transliterator {
             public NameableNullTrans(String id) {
-                setID(id);
+                super(id, null);
+            }
+            protected void handleTransliterate(Replaceable text,
+                                               Position offsets, boolean incremental) {
+                offsets.start = offsets.limit;
             }
         };
         String id;
@@ -1691,18 +1693,30 @@ public class TransliteratorTest extends TestFmwk {
             // limitation of global filters in incremental mode.
 
             Transliterator a =
-                Transliterator.createFromRules("a", "a > A;", Transliterator.FORWARD);
+                Transliterator.createFromRules("a_to_A", "a > A;", Transliterator.FORWARD);
             Transliterator A =
-                Transliterator.createFromRules("A", "A > b;", Transliterator.FORWARD);
+                Transliterator.createFromRules("A_to_b", "A > b;", Transliterator.FORWARD);
 
-            Transliterator array[] = new Transliterator[] {
-                a,
-                Transliterator.getInstance("NFD"),
-                A };
+            //Transliterator array[] = new Transliterator[] {
+            //    a,
+            //    Transliterator.getInstance("NFD"),
+            //    A };
+            //t = Transliterator.getInstance(array, new UnicodeSet("[:Ll:]"));
 
-            t = new CompoundTransliterator(array, new UnicodeSet("[:Ll:]"));
+            try {
+                Transliterator.registerInstance(a);
+                Transliterator.registerInstance(A);
 
-            expect(t, "aAaA", "bAbA");
+                t = Transliterator.getInstance("[:Ll:];a_to_A;NFD;A_to_b");
+                expect(t, "aAaA", "bAbA");
+
+                t = Transliterator.getInstance("a_to_A;NFD;A_to_b");
+                t.setFilter(new UnicodeSet("[:Ll:]"));
+                expect(t, "aAaA", "bAbA");
+            } finally {
+                Transliterator.unregister("a_to_A"); 
+                Transliterator.unregister("A_to_b");   
+            }
         }
 
         expect("$smooth = x; $macron = q; [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$macron] > | $1 $smooth ;",

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ErrorTest.java,v $
- * $Date: 2003/06/03 18:49:31 $
- * $Revision: 1.7 $
+ * $Date: 2004/02/25 01:28:19 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -175,29 +175,29 @@ public class ErrorTest extends TestFmwk {
 		}
 	}
 
-	public void TestUniToHexErrors() {
-		Transliterator t = null;
-		try {
-			t = new UnicodeToHexTransliterator("", true, null);
-			if (t != null) {
-				errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
-			}
-		} catch (IllegalArgumentException e) {
-		}
-		try {
-			t = new UnicodeToHexTransliterator("\\x", true, null);
-			if (t != null) {
-				errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
-			}
-		} catch (IllegalArgumentException e) {
-		}
-		t = new UnicodeToHexTransliterator();
-		try {
-			((UnicodeToHexTransliterator) t).applyPattern("\\x");
-			errln("FAIL: UnicodeToHexTransliterator::applyPattern succeeded with a bad pattern.");
-		} catch (Exception e) {
-		}
-	}
+//	public void TestUniToHexErrors() {
+//		Transliterator t = null;
+//		try {
+//			t = new UnicodeToHexTransliterator("", true, null);
+//			if (t != null) {
+//				errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
+//			}
+//		} catch (IllegalArgumentException e) {
+//		}
+//		try {
+//			t = new UnicodeToHexTransliterator("\\x", true, null);
+//			if (t != null) {
+//				errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
+//			}
+//		} catch (IllegalArgumentException e) {
+//		}
+//		t = new UnicodeToHexTransliterator();
+//		try {
+//			((UnicodeToHexTransliterator) t).applyPattern("\\x");
+//			errln("FAIL: UnicodeToHexTransliterator::applyPattern succeeded with a bad pattern.");
+//		} catch (Exception e) {
+//		}
+//	}
 
 	public void TestRBTErrors() {
 
@@ -208,12 +208,9 @@ public class ErrorTest extends TestFmwk {
 		try {
 			set = new UnicodeSet(goodPattern);
 			try {
-				RuleBasedTransliterator t = 
-					new RuleBasedTransliterator(
-						id,
-						rules,
-						Transliterator.REVERSE,
-						set);
+                Transliterator t =
+                	Transliterator.createFromRules(id, rules, Transliterator.REVERSE);
+                t.setFilter(set);
 				Transliterator.registerClass(id, t.getClass(), null);
 				Transliterator.unregister(id);
 				try {
@@ -231,24 +228,24 @@ public class ErrorTest extends TestFmwk {
 		}
 	}
 
-	public void TestHexToUniErrors() {
-		Transliterator t = null;
-		//try { // unneeded - exception cannot be thrown
-		t = new HexToUnicodeTransliterator("", null);
-		//} catch (Exception e) {
-		//    errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
-		//}
-		try {
-			t = new HexToUnicodeTransliterator("\\x", null);
-			errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
-		} catch (IllegalArgumentException e) {
-		}
-
-		t = new HexToUnicodeTransliterator();
-		try {
-			((HexToUnicodeTransliterator) t).applyPattern("\\x");
-			errln("FAIL: HexToUnicodeTransliterator::applyPattern succeeded with a bad pattern.");
-		} catch (IllegalArgumentException e) {
-		}
-	}
+//	public void TestHexToUniErrors() {
+//		Transliterator t = null;
+//		//try { // unneeded - exception cannot be thrown
+//		t = new HexToUnicodeTransliterator("", null);
+//		//} catch (Exception e) {
+//		//    errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
+//		//}
+//		try {
+//			t = new HexToUnicodeTransliterator("\\x", null);
+//			errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
+//		} catch (IllegalArgumentException e) {
+//		}
+//
+//		t = new HexToUnicodeTransliterator();
+//		try {
+//			((HexToUnicodeTransliterator) t).applyPattern("\\x");
+//			errln("FAIL: HexToUnicodeTransliterator::applyPattern succeeded with a bad pattern.");
+//		} catch (IllegalArgumentException e) {
+//		}
+//	}
 }

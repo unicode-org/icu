@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/CompoundTransliteratorTest.java,v $ 
- * $Date: 2004/02/06 21:54:06 $ 
- * $Revision: 1.9 $
+ * $Date: 2004/02/25 01:26:54 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -61,15 +61,14 @@ public class CompoundTransliteratorTest extends TestFmwk {
    
         for(int i=0; i<4; i++){
             try{
-                CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i]);
-                cpdtrans = null;
+                Transliterator cpdtrans=Transliterator.getInstance(IDs[i]);
             }catch(IllegalArgumentException ex1) {
                 errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + IDs[i]);
                 throw ex1;
             }
 
             try{
-                CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.FORWARD);
+                Transliterator cpdtrans=Transliterator.getInstance(IDs[i], Transliterator.FORWARD);
                 cpdtrans = null;
             }catch(IllegalArgumentException ex2) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=FORWARD) failed for " + IDs[i]);
@@ -77,31 +76,31 @@ public class CompoundTransliteratorTest extends TestFmwk {
             }
 
             try{
-                CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.REVERSE);
+                Transliterator cpdtrans=Transliterator.getInstance(IDs[i], Transliterator.REVERSE);
                 cpdtrans = null;
             }catch(IllegalArgumentException ex3) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=REVERSE) failed for " + IDs[i]);
                 throw ex3;
             }
 
-            try{
-                CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.FORWARD, null);
-                cpdtrans = null;
-            }catch(IllegalArgumentException ex4) {
-                errln("FAIL: construction using CompoundTransliterator(String ID, int direction=FORWARD," +
-                        "UnicodeFilter adoptedFilter=0) failed for " + IDs[i]);
-                throw ex4;
-            }
-  
-       
-            try{
-                CompoundTransliterator cpdtrans2=new CompoundTransliterator(transarray[i], null);
-                cpdtrans2 = null;
-            }catch(IllegalArgumentException ex5) {
-                errln("FAIL: Construction using CompoundTransliterator(Transliterator transliterators[]," +
-                       "UnicodeFilter adoptedFilter = 0)  failed");
-                throw ex5;
-            }
+//            try{
+//                CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.FORWARD, null);
+//                cpdtrans = null;
+//            }catch(IllegalArgumentException ex4) {
+//                errln("FAIL: construction using CompoundTransliterator(String ID, int direction=FORWARD," +
+//                        "UnicodeFilter adoptedFilter=0) failed for " + IDs[i]);
+//                throw ex4;
+//            }
+//  
+//       
+//            try{
+//                CompoundTransliterator cpdtrans2=new CompoundTransliterator(transarray[i], null);
+//                cpdtrans2 = null;
+//            }catch(IllegalArgumentException ex5) {
+//                errln("FAIL: Construction using CompoundTransliterator(Transliterator transliterators[]," +
+//                       "UnicodeFilter adoptedFilter = 0)  failed");
+//                throw ex5;
+//            }
 
             
         }
@@ -111,20 +110,24 @@ public class CompoundTransliteratorTest extends TestFmwk {
     public void TestGetTransliterator(){
         logln("Testing the getTransliterator() API of CompoundTransliterator");
         String ID="Latin-Greek;Greek-Latin;Latin-Devanagari;Devanagari-Latin;Latin-Cyrillic;Cyrillic-Latin;Any-Hex;Hex-Any";
-        CompoundTransliterator ct1=null;
+        Transliterator ct1=null;
         try{
-            ct1=new CompoundTransliterator(ID);
+            //ct1=new CompoundTransliterator(ID);
+            ct1 = Transliterator.getInstance(ID);
         }catch(IllegalArgumentException iae) {
             errln("CompoundTransliterator construction failed for ID=" + ID);
             throw iae;
-         }
-        int count=ct1.getCount();
+        }
+        //int count=ct1.getCount();
+        Transliterator elems[] = ct1.getElements();
+        int count = elems.length;
         String array[]=split(ID, ';');
         if (count != array.length) {
             errln("Error: getCount() failed. Expected:" + array.length + " got:" + count);
         }
         for(int i=0; i < count; i++){
-            String child= ct1.getTransliterator(i).getID();
+            //String child= ct1.getTransliterator(i).getID();
+            String child = elems[i].getID();
             if(!child.equals(array[i])){
                 errln("Error getTransliterator() failed: Expected->" + array[i] + " Got->" + child);
             }else {
@@ -138,9 +141,9 @@ public class CompoundTransliteratorTest extends TestFmwk {
        
     public void TestTransliterate(){
         logln("Testing the handleTransliterate() API of CompoundTransliterator");
-        CompoundTransliterator ct1=null;
+        Transliterator ct1=null;
         try{
-            ct1=new CompoundTransliterator("Any-Hex;Hex-Any");
+            ct1=Transliterator.getInstance("Any-Hex;Hex-Any");
         }catch(IllegalArgumentException iae){
             errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + "Any-Hex;Hex-Any");
             throw iae;
@@ -181,10 +184,10 @@ public class CompoundTransliteratorTest extends TestFmwk {
              "Latin-Katakana;Katakana-Latin",                   "vavivuvevohuzizuzoninunasesuzezu", 
                                                                  "vavivuvevohuzizuzoninunasesuzezu",  
         };
-        CompoundTransliterator ct2=null;
+        Transliterator ct2=null;
         for(int i=0; i<Data.length; i+=3){
             try{
-                ct2=new CompoundTransliterator(Data[i+0]);
+                ct2=Transliterator.getInstance(Data[i+0]);
             }catch(IllegalArgumentException iae2){
                 errln("FAIL: CompoundTransliterator construction failed for " + Data[i+0]);
                 throw iae2;
@@ -225,7 +228,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
 	return result;
     }
 
-    private void expect(CompoundTransliterator t, String source, String expectedResult) {
+    private void expect(Transliterator t, String source, String expectedResult) {
         String result = t.transliterate(source);
         expectAux(t.getID() + ":String", source, result, expectedResult);
 
