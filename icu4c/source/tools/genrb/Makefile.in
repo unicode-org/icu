@@ -52,13 +52,21 @@ CLEANFILES = *~ $(TARGET).$(SECTION)
 ## Target information
 TARGET = genrb
 
+ENABLE_STATIC = @ENABLE_STATIC@
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/extra/ustdio -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/extra/ustdio@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL) $(LIBUSTDIO)
+LIBS = $(LIBUSTDIO) $(LIBICU-I18N) $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@ 
 
 ##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
 ##rblist.o  util.o
@@ -106,7 +114,7 @@ install-local: all-local install-man
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
-dist-local:
+<dist-local:
 
 clean-local: 
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
@@ -122,7 +130,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK) -o $@ $^ $(LIBS) 
 
 ## Rule to build a compiled res file.
 ## Note the order of the next three rules here is important!

@@ -62,7 +62,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
-LIBS = $(LIBICU-UC)  @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL)
+LIBS = $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = gencnval.o
 

@@ -52,8 +52,21 @@ subdir = common
 CLEANFILES = *~
 
 ## Target information
+
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
+
+ifneq ($(ENABLE_STATIC),)
+TARGET = $(LIBICU)uc.a
+RANLIB = @RANLIB@
+endif
+
+ifneq ($(ENABLE_SHARED),)
 SO_TARGET = $(LIBICU)uc.$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
+endif
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I. -I$(srcdir) -DICU_DATA_DIR=\"$(pkgdatadir)/$(VERSION)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\"
@@ -95,16 +108,21 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(ALL_SO_TARGETS)
+all-local: $(ALL_TARGETS)
 
 install-local: install-headers install-library
 
 install-library: all-local
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
+ifneq ($(ENABLE_SHARED),)
+	$(INSTALL-S) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+endif
+ifneq ($(ENABLE_SHARED),)
 	$(INSTALL-S) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
 ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
 	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
+endif
 endif
 
 install-headers:
@@ -118,7 +136,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(ALL_SO_TARGETS)
+	$(RMV) $(OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile $(DEPS)
@@ -133,8 +151,15 @@ unicode/platform.h: $(srcdir)/unicode/platform.h.in $(top_builddir)/config.statu
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+ifneq ($(ENABLE_STATIC),)
+$(TARGET): $(TARGET)($(OBJECTS))
+	$(RANLIB) $@
+endif
+
+ifneq ($(ENABLE_SHARED),)
 $(FINAL_SO_TARGET): $(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+endif
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
