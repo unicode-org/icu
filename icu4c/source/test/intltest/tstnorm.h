@@ -44,7 +44,6 @@ public:
     void TestTibetan(void);
     void TestCompositionExclusion(void);
     void TestZeroIndex(void);
-    void TestComposedCharIter(void);
     void TestVerisign(void);
 
 private:
