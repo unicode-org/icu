@@ -16,6 +16,42 @@ import java.text.StringCharacterIterator;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
+    
+    private static final int  START_STATE = 1;     // The state number of the starting state
+    private static final int  STOP_STATE  = 0;     // The state-transition value indicating "stop"
+
+    /**
+     * The character iterator through which this BreakIterator accesses the text
+     * @internal
+     */
+    private CharacterIterator   fText;
+    
+    /**
+     * The rule data for this BreakIterator instance
+     * @internal
+     */
+    private RBBIDataWrapper     fData;
+
+    /** Index of the Rule {tag} values for the most recent match. 
+     *  @internal
+    */
+    private int                 fLastRuleStatusIndex;
+
+    /**
+     * Rule tag value valid flag.
+     * Some iterator operations don't intrinsically set the correct tag value.
+     * This flag lets us lazily compute the value if we are ever asked for it.
+     * @internal
+     */
+    private boolean             fLastStatusIndexValid;
+    
+    /**
+     * Debugging flag.  Trace operation of state machine when true.
+     * @internal
+     */
+    public static boolean       fTrace;
+
+
     //=======================================================================
     // boilerplate
     //=======================================================================
@@ -42,11 +78,16 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     }
 
     /**
-     * Returns the description used to create this iterator
+     * Returns the description (rules) used to create this iterator.
+     * (In ICU4C, the same function is RuleBasedBreakIterator::getRules())
      * @stable ICU 2.0
      */
     public String toString() {
-        return "";      // TODO:
+        String   retStr = null;
+        if (fData != null) {
+            retStr =  fData.fRuleSource;
+        }
+        return retStr;
     }
 
     /**
@@ -70,8 +111,16 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
 	public int first() {
-		return 0;             // TODO;
+        fLastRuleStatusIndex  = 0;
+        fLastStatusIndexValid = true;
+        if (fText == null) {
+            return BreakIterator.DONE;
+        }
+        fText.first();
+        return fText.getIndex();
 	}
+    
+    
     /**
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
@@ -79,8 +128,26 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
 	public int last() {
-		return 0;             // TODO:
+        if (fText == null) {
+            fLastRuleStatusIndex  = 0;
+            fLastStatusIndexValid = true;
+            return BreakIterator.DONE;
+        }
+
+        // I'm not sure why, but t.last() returns the offset of the last character,
+        // rather than the past-the-end offset
+        //
+        //   (It's so a loop like for(p=it.last(); p!=DONE; p=it.previous()) ...
+        //     will work correctly.)
+
+
+        fLastStatusIndexValid = false;
+        int pos = fText.getEndIndex();
+        fText.setIndex(pos);
+        return pos;
 	}
+    
+    
     /**
      * Advances the iterator either forward or backward the specified number of steps.
      * Negative values move backward, and positive values move forward.  This is
@@ -92,23 +159,88 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
 	public int next(int n) {
-		return  0;             // TODO:
+        int result = current();
+        while (n > 0) {
+            result = handleNext();
+            --n;
+        }
+        while (n < 0) {
+            result = previous();
+            ++n;
+        }
+        return result;
 	}
+    
+    
     /**
      * Advances the iterator to the next boundary position.
      * @return The position of the first boundary after this one.
      * @stable ICU 2.0
      */
 	public int next() {
-		return  0;             // TODO:
+		return  handleNext();
 	}
+    
+    
     /**
-     * Advances the iterator backwards, to the last boundary preceding this one.
+     * Moves the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
      * @stable ICU 2.0
      */
 	public int previous() {
-		return  0;             // TODO:
+        // if we're already sitting at the beginning of the text, return DONE
+        if (fText == null || current() == fText.getBeginIndex()) {
+            fLastRuleStatusIndex  = 0;
+            fLastStatusIndexValid = true;
+            return BreakIterator.DONE;
+        }
+
+        if (fData.fSRTable != null || fData.fSFTable != null) {
+            return handlePrevious(fData.fRTable);
+        }
+
+        // old rule syntax
+        // set things up.  handlePrevious() will back us up to some valid
+        // break position before the current position (we back our internal
+        // iterator up one step to prevent handlePrevious() from returning
+        // the current position), but not necessarily the last one before
+        // where we started
+
+        int       start = current();
+
+        CIPrevious32(fText);
+        int       lastResult    = handlePrevious();
+        int       result        = lastResult;
+        int       lastTag       = 0;
+        boolean   breakTagValid = false;
+
+        // iterate forward from the known break position until we pass our
+        // starting point.  The last break position before the starting
+        // point is our return value
+
+        for (;;) {
+            result         = handleNext();
+            if (result == BreakIterator.DONE || result >= start) {
+                break;
+            }
+            lastResult     = result;
+            lastTag        = fLastRuleStatusIndex;
+            breakTagValid  = true;
+        }
+
+        // fLastBreakTag wants to have the value for section of text preceding
+        // the result position that we are to return (in lastResult.)  If
+        // the backwards rules overshot and the above loop had to do two or more
+        // handleNext()s to move up to the desired return position, we will have a valid
+        // tag value. But, if handlePrevious() took us to exactly the correct result positon,
+        // we wont have a tag value for that position, which is only set by handleNext().
+
+        // set the current iteration position to be the last break position
+        // before where we started, and then return that value
+        fText.setIndex(lastResult);
+        fLastRuleStatusIndex  = lastTag;       // for use by getRuleStatus()
+        fLastStatusIndexValid = breakTagValid;
+        return lastResult;
 	}
     /**
      * Sets the iterator to refer to the first boundary position following
@@ -218,7 +350,7 @@ public int getRuleStatusVec(int[] fillInArray) {
  * @stable ICU 2.0
  */
 	public CharacterIterator getText() {
-		return new StringCharacterIterator("");
+		return fText;
 	}
 
 
@@ -229,6 +361,66 @@ public int getRuleStatusVec(int[] fillInArray) {
      * @stable ICU 2.0
      */
 	public void setText(CharacterIterator newText) {
+        fText = newText;
+        this.first();
 	}
+    
+    
+    private static int CINext32(CharacterIterator ci) {
+        int retVal = 0;
+        char cLead = ci.next();
+        retVal = (int)cLead;
+        if (UTF16.isLeadSurrogate(cLead)) {
+            char cTrail = ci.next();
+            if (UTF16.isTrailSurrogate(cTrail)) {
+                retVal = ((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10 +
+                         ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE);
+            } else {
+                ci.previous();
+            }           
+        }
+        return retVal;
+    }
+    
+    private static int CIPrevious32(CharacterIterator ci) {
+        int retVal = 0;
+        char cTrail = ci.previous();
+        retVal = (int)cTrail;
+        if (UTF16.isTrailSurrogate(cTrail)) {
+            char cLead = ci.previous();
+            if (UTF16.isLeadSurrogate(cLead)) {
+                retVal = ((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10 +
+                         ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE);
+            } else {
+                ci.next();
+            }           
+        }
+        return retVal;
+    }
+    /**
+     * Internal implementation of next() for RBBI.
+     * @internal
+     */
+    private int handleNext() {
+        // TODO:
+        return 0;
+    }
+
+    
+    private int  handlePrevious() {
+        // TODO:
+        return 0;
+    }
+    
+    
+    private int handlePrevious(short statetable[]) {
+        // TODO:
+        return 0;
+    }
 
 }
+
+
+
+
+
