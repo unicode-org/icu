@@ -1325,6 +1325,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                         /* We hit an alias, but we didn't finish following the path. */
                         /* TODO: Fix this so that complete fallback occurs with aliases. */
                         res = RES_BOGUS;
+                        break;
                     }
                 }
             }
