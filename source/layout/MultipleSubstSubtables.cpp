@@ -29,8 +29,15 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
         if (glyphCount == 0) {
             glyphIterator->setCurrGlyphID(0xFFFF);
             return 1;
-        }
-        else {
+        } else if (glyphCount == 1) {
+            TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[0]);
+
+            if (filter == NULL || filter->accept(LE_SET_GLYPH(glyph, substitute))) {
+                glyphIterator->setCurrGlyphID(substitute);
+            }
+
+            return 1;
+        } else {
             // Can't do this 'till there's a way to
             // grow the glyph array...
             return 1;
