@@ -137,7 +137,7 @@ static CReg* gCRegHead = 0;
 struct CReg : public UMemory {
     CReg *next;
     UChar iso[4];
-    char  id[12];
+    char  id[ULOC_FULLNAME_CAPACITY];
     
     CReg(const UChar* _iso, const char* _id)
         : next(0)
