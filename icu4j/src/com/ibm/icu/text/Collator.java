@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/06/04 20:24:14 $
-* $Revision: 1.32 $
+* $Date: 2003/06/09 23:31:10 $
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,6 @@ package com.ibm.icu.text;
 
 import java.util.Comparator;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;

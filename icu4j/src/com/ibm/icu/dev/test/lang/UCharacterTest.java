@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/06/09 23:15:00 $
-* $Revision: 1.58 $
+* $Date: 2003/06/09 23:31:10 $
+* $Revision: 1.59 $
 *
 *******************************************************************************
 */
@@ -1944,10 +1944,10 @@ public final class UCharacterTest extends TestFmwk
 	 //  int start, end; 
 	   int i, count; 
 	
-	   count=sset.countSerializedRanges(); 
+	   count=sset.countRanges(); 
 	   int[] range = new int[2];
 	   for(i=0; i<count; ++i) { 
-	       sset.getSerializedRange(i,range); 
+	       sset.getRange(i,range); 
 	       set.add(range[0],range[1]); 
 	   } 
 	} 
