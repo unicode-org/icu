@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2000/11/18 00:17:43 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/12/26 22:44:20 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -98,4 +98,8 @@ public class TestAll extends TestFmwk {
             new com.ibm.test.timezone.TimeZoneBoundaryTest()
             });
     }
+
+    public void TestCharacter() throws Exception {
+	    run(new com.ibm.icu.test.text.UCharacterTest());
+	}
 }
