@@ -4,13 +4,13 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/compression/TestAll.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.2 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestAll.java,v $
+ * $Date: 2003/02/05 05:50:05 $
+ * $Revision: 1.1 $
  *
  *******************************************************************************
  */
-package com.ibm.icu.dev.test.compression;
+package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk.TestGroup;
 
@@ -23,11 +23,18 @@ public class TestAll extends TestGroup {
     }
 
     public TestAll() {
-        super(new String[] {
-            "DecompressionTest",
-            "ExhaustiveTest",
-        });
+        super(
+              new String[] {
+            "VersionInfoTest",
+            "ICUListResourceBundleTest",
+            "CompactArrayTest",
+            "StringTokenizerTest",
+            "CurrencyTest",
+        },
+              "Test miscellaneous public utilities");
     }
 
-    public static final String CLASS_TARGET_NAME = "Compression";
+    public static final String CLASS_TARGET_NAME = "Util";
 }
+
+

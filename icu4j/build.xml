@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/02/01 00:56:57 $
-* $Revision: 1.64 $
+* $Date: 2003/02/05 05:45:15 $
+* $Revision: 1.65 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -95,6 +95,7 @@
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
+        <echo message="clover initstring = '${clover.initstring}'"/>
     </target>
 
     <!-- build everything but dist-related stuff -->

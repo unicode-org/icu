@@ -5,35 +5,38 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/TestAll.java,v $
- * $Date: 2003/01/28 18:55:32 $
- * $Revision: 1.1 $
+ * $Date: 2003/02/05 05:45:15 $
+ * $Revision: 1.2 $
  *
- *****************************************************************************************
+ *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import com.ibm.icu.dev.test.TestFmwk;
-import java.util.TimeZone;
+import com.ibm.icu.dev.test.TestFmwk.TestGroup;
 
 /**
- * Top level test used to run all other tests as a batch.
+ * Top level test used to run all other calendar tests as a batch.
  */
+public class TestAll extends TestGroup {
+    public static void main(String[] args) {
+        new TestAll().run(args);
+    }
 
-public class TestAll extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-            TimeZone.setDefault(TimeZone.getTimeZone("PST"));
-            new TestAll().run(args);
+    public TestAll() {
+        super(
+              new String[] {
+                  "AstroTest",
+                  "CalendarRegression",
+                  "CompatibilityTest",
+                  "HebrewTest",
+                  "IBMCalendarTest",
+                  "IslamicTest",
+                  "JapaneseTest",
+                  "ChineseTest",
+                  "HolidayTest"
+              },
+              "Calendars, Holiday, and Astro tests"
+              );
     }
-    public void TestCalendar() throws Exception {
-        run(new TestFmwk[] {
-            new com.ibm.icu.dev.test.calendar.AstroTest(),
-            new com.ibm.icu.dev.test.calendar.CalendarRegression(),
-            new com.ibm.icu.dev.test.calendar.CompatibilityTest(),
-            new com.ibm.icu.dev.test.calendar.HebrewTest(),
-            new com.ibm.icu.dev.test.calendar.IBMCalendarTest(),
-            new com.ibm.icu.dev.test.calendar.IslamicTest(),
-            new com.ibm.icu.dev.test.calendar.JapaneseTest(),
-            new com.ibm.icu.dev.test.calendar.ChineseTest(),
-            new com.ibm.icu.dev.test.calendar.HolidayTest()
-                });
-    }
+
+    public static final String CLASS_TARGET_NAME = "Calendar";
 }

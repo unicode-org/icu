@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2003/01/28 18:55:35 $
- * $Revision: 1.11 $
+ * $Date: 2003/02/05 05:45:16 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -56,20 +56,21 @@ public class ICUServiceTest extends TestFmwk
     }
 
     public void confirmBoolean(String message, boolean val) {
-	logln(message, val, !val);
+	msg(message, val ? LOG : ERR, !val, true);
     }
 
     public void confirmEqual(String message, Object lhs, Object rhs) {
-	logln(lrmsg(message, lhs, rhs), lhs == null ? rhs == null : lhs.equals(rhs));
+        msg(lrmsg(message, lhs, rhs), (lhs == null ? rhs == null : lhs.equals(rhs)) ? LOG : ERR, true, true);
     }
 
     public void confirmIdentical(String message, Object lhs, Object rhs) {
-	logln(lrmsg(message, lhs, rhs), lhs == rhs);
+	msg(lrmsg(message, lhs, rhs), lhs == rhs ? LOG : ERR, true, true);
     }
 
     public void confirmIdentical(String message, int lhs, int rhs) {
-	logln(message + " lhs: " + lhs + " rhs: " + rhs, lhs == rhs);
+	msg(message + " lhs: " + lhs + " rhs: " + rhs, lhs == rhs ? LOG : ERR, true, true);
     }
+
     /**
      * Convenience override of getDisplayNames(Locale, Comparator, String) that
      * uses the current default Locale as the locale, the default collator for
@@ -812,11 +813,6 @@ public class ICUServiceTest extends TestFmwk
         service.registerFactory(new WrapFactory());
 
         confirmEqual("wrap test: ", service.get(greetingID), "A different greeting: \"" + greeting + "\"");
-    }
-
-    public void errln(String msg) {
-        // System.out.println(msg);
-        super.errln(msg);
     }
 
     // misc coverage tests
