@@ -233,6 +233,26 @@ ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */     
 };
 
+int32_t  
+u_strncmpNoCase(const UChar     *s1, 
+     const UChar     *s2, 
+     int32_t     n) 
+{
+    if(n > 0) {
+        int32_t rc;
+        for(;;) {
+            rc = (int32_t)u_tolower(*s1) - (int32_t)u_tolower(*s2);
+            if(rc != 0 || *s1 == 0 || --n == 0) {
+                return rc;
+            }
+            ++s1;
+            ++s2;
+        }
+    } else {
+        return 0;
+    }
+}
+
 UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status) {
   uint32_t i = 0;
   int32_t j=0;
@@ -265,7 +285,7 @@ UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, co
   }
   start++; /*skip opening '['*/
   while(i < UTOK_OPTION_COUNT) {
-    if(u_strncmp(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
+    if(u_strncmpNoCase(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
       foundOption = TRUE;
       if(end - start > rulesOptions[i].optionLen) {
         optionArg = start+rulesOptions[i].optionLen+1; /* start of the options, skip space */
@@ -439,8 +459,15 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
                 *status = U_INVALID_FORMAT_ERROR;
               }
             } else if(variableTop == TRUE) {
-              src->current++;
-              goto EndOfLoop;
+              if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
+                charsOffset = src->extraCurrent - src->source;
+                newCharsLen = 1;
+                *src->extraCurrent++ = 0xFFFF;
+                src->current++;
+                goto EndOfLoop;
+              } else {
+                *status = U_INVALID_FORMAT_ERROR;
+              }
             }
 
             if(U_FAILURE(*status)) {
@@ -547,7 +574,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
     return NULL;
   }
 
-  if (newCharsLen == 0 && top == FALSE && variableTop == FALSE) {
+  if (newCharsLen == 0 && top == FALSE) {
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
   }
@@ -615,16 +642,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           *status = U_INVALID_FORMAT_ERROR;
           return 0;
         }
-        /* if we had a variable top, we're gonna put it in */
-        if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
-          variableTop = FALSE;
-          if(key.source == 0) { /* we read just the variable top, take the last one */
-            src->opts->variableTopValue = *(src->source + (lastToken->source & 0x00FFFFFF));
-            continue;
-          } else { /* we read variable top after an element (or before), use that one */
-            src->opts->variableTopValue = *(src->source + charsOffset);
-          }
-        }
       /*  6 Otherwise (when relation != reset) */
         if(sourceToken == NULL) {
           /* If sourceToken is null, create new one, */
@@ -666,6 +683,13 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
 
         sourceToken->strength = newStrength;
         sourceToken->listHeader = lastToken->listHeader;
+
+        /* if we had a variable top, we're gonna put it in */
+        if(variableTop == TRUE && src->varTop == NULL) {
+          variableTop = FALSE;
+          src->varTop = sourceToken;
+        }
+
         /*
         1.	Find the strongest strength in each list, and set strongestP and strongestN 
         accordingly in the headers. 
@@ -694,7 +718,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
             expandNext = 0;
           }
-
         } else {
         /* Otherwise (when LAST is not a reset) 
               if polarity (LAST) == polarity(relation), insert sourceToken after LAST, 
@@ -793,11 +816,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 earlier in the list. 
           */
           if(top == FALSE) {
-            /* if we had a variable top, we're gonna put it in */
-            if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
-              variableTop = FALSE;
-              src->opts->variableTopValue = *(src->source + charsOffset);
-            }
             if(newCharsLen > 1) {
               sourceToken->source = 0x01000000 | charsOffset;
             } 
@@ -818,10 +836,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               ListList[src->resultLen].baseContCE = 0;
             }
           } else { /* top == TRUE */
-            if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
-              variableTop = FALSE;
-              src->opts->variableTopValue = 0xFA30;
-            }
             top = FALSE;
             ListList[src->resultLen].baseCE = UCOL_RESET_TOP_VALUE;
             ListList[src->resultLen].baseContCE = 0;
