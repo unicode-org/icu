@@ -139,15 +139,15 @@ void TestUCMP16API(){
         log_err("Error: ucmp16_set didn't expand the compact data\n");
     } 
     /*ucmp16_set where the value != defaultValue*/
-    /*ucmp16_compact(ucmp16Array);
+    ucmp16_compact(ucmp16Array);
     ucmp16_set(ucmp16Array, 0,  0xfe);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     if(values[0] != 0xfe){
         log_err("ERROR: ucmp16_set() failed\n");
-    }*/
+    }
 
     /*ucmp16_setRange*/
-    /*ucmp16_compact(ucmp16Array);*/
+    ucmp16_compact(ucmp16Array);
     ucmp16_setRange(ucmp16Array, 0,  10, 0xff);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     for(i=0; i<10; i++){
@@ -157,7 +157,7 @@ void TestUCMP16API(){
         }
     }
     /*ucmp16_setRange where the value != defaultValue*/
-    /*ucmp16_compact(ucmp16Array);
+    ucmp16_compact(ucmp16Array);
     ucmp16_setRange(ucmp16Array, 0,  10, 0xfe);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     for(i=0; i<10; i++){
@@ -166,9 +166,7 @@ void TestUCMP16API(){
             break;
         }
     }
-    */
-
-   ucmp16_close(ucmp16Array);
+    ucmp16_close(ucmp16Array);
   
     /*ucmp16_openAlias*/
     log_verbose("Testing ucmp16_openAlias()\n");
