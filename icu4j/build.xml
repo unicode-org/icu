@@ -721,7 +721,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="propertiesFullTests" depends="propertiesFull" description="test propertiesFull modular build target>
+    <target name="propertiesFullTests" depends="propertiesFull" description="test propertiesFull modular build target">
         <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/unicode/"/>
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/lang/**/*.java"
