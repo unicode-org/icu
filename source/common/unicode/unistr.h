@@ -2729,12 +2729,6 @@ private:
                             int32_t **pBufferToDelete = 0,
                             UBool forceClone = FALSE);
 
-  // UGrowBuffer function for string case mapping and similar
-  static UBool U_CALLCONV
-  growBuffer(void *context,
-             UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
-             int32_t length);
-
   // common function for case mappings
   UnicodeString &
   caseMap(const Locale& locale,

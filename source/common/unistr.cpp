@@ -1039,23 +1039,6 @@ UnicodeString::foldCase(uint32_t options) {
     return caseMap(Locale::getDefault(), options, FOLD_CASE);
 }
 
-// static helper function for string case mapping
-// called by u_internalStrToUpper/Lower()
-UBool U_CALLCONV
-UnicodeString::growBuffer(void *context,
-                          UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
-                          int32_t length) {
-  UnicodeString *me = (UnicodeString *)context;
-  me->fLength = length;
-  if(me->cloneArrayIfNeeded(reqCapacity)) {
-    *buffer = me->fArray;
-    *pCapacity = me->fCapacity;
-    return TRUE;
-  } else {
-    return FALSE;
-  }
-}
-
 UnicodeString &
 UnicodeString::caseMap(const Locale& locale,
                        uint32_t options,
@@ -1082,32 +1065,33 @@ UnicodeString::caseMap(const Locale& locale,
       capacity = US_STACKBUF_SIZE;
     }
   } else {
-    capacity = fLength + 2;
+    capacity = fLength + 20;
   }
   if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
     return *this;
   }
 
-  UErrorCode errorCode = U_ZERO_ERROR;
-  if(toWhichCase==TO_LOWER) {
-    fLength = u_internalStrToLower(fArray, fCapacity,
-                                   oldArray, oldLength,
-                                   locale.getName(),
-                                   growBuffer, this,
-                                   &errorCode);
-  } else if(toWhichCase==TO_UPPER) {
-    fLength = u_internalStrToUpper(fArray, fCapacity,
-                                   oldArray, oldLength,
-                                   locale.getName(),
-                                   growBuffer, this,
-                                   &errorCode);
-  } else {
-    fLength = u_internalStrFoldCase(fArray, fCapacity,
-                                    oldArray, oldLength,
-                                    options,
-                                    growBuffer, this,
-                                    &errorCode);
-  }
+  // Case-map, and if the result is too long, then reallocate and repeat.
+  UErrorCode errorCode;
+  do {
+    errorCode = U_ZERO_ERROR;
+    if(toWhichCase==TO_LOWER) {
+      fLength = u_internalStrToLower(fArray, fCapacity,
+                                     oldArray, oldLength,
+                                     locale.getName(),
+                                     &errorCode);
+    } else if(toWhichCase==TO_UPPER) {
+      fLength = u_internalStrToUpper(fArray, fCapacity,
+                                     oldArray, oldLength,
+                                     locale.getName(),
+                                     &errorCode);
+    } else {
+      fLength = u_internalStrFoldCase(fArray, fCapacity,
+                                      oldArray, oldLength,
+                                      options,
+                                      &errorCode);
+    }
+  } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(fLength, fLength, FALSE));
 
   delete [] bufferToDelete;
   if(U_FAILURE(errorCode)) {
