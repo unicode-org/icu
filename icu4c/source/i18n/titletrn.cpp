@@ -127,16 +127,14 @@ void TitlecaseTransliterator::handleTransliterate(
     int32_t textPos = offsets.start;
     if (textPos >= offsets.limit) return;
 
-    // get string for context
-    // TODO: add convenience method to do this, since we do it all over
-
-    int32_t loop = 0;
     UnicodeString original;
-    /* UChar *original = new UChar[offsets.contextLimit - offsets.contextStart+1]; */// get whole context
-    /* Extract the characters from Replaceable */
-    for (loop = offsets.contextStart; loop < offsets.contextLimit; loop++) {
-        original.append(text.charAt(loop));
-    }
+    text.extractBetween(offsets.contextStart, offsets.contextLimit, original);
+
+    UCharIterator iter;
+    uiter_setReplaceable(&iter, &text);
+    iter.start = offsets.contextStart;
+    iter.limit = offsets.contextLimit;
+
     // Walk through original string
     // If there is a case change, modify corresponding position in replaceable
 
@@ -153,11 +151,12 @@ void TitlecaseTransliterator::handleTransliterate(
         UTF_GET_CHAR(original.getBuffer(), 0, i, original.length(), cp);
         oldLen = UTF_CHAR_LENGTH(cp);
         i += oldLen;
+        iter.index = i; // Point _past_ current char
         if (!SKIP->contains(cp)) {
             if (doTitle) {
-                newLen = u_internalToTitle(cp, /* ### TODO: pass in UCharIterator */ 0, buffer, u_getMaxCaseExpansion(), loc.getName());
+                newLen = u_internalToTitle(cp, &iter, buffer, u_getMaxCaseExpansion(), loc.getName());
             } else {
-                newLen = u_internalToLower(cp, /* ### TODO: pass in UCharIterator */ 0, buffer, u_getMaxCaseExpansion(), loc.getName());
+                newLen = u_internalToLower(cp, &iter, buffer, u_getMaxCaseExpansion(), loc.getName());
             }
             doTitle = !CASED->contains(cp);
             if (newLen >= 0) {
