@@ -36,7 +36,6 @@ icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/uni-text.txt -text
 icu4c/source/test/thaitest/space.txt svneol=native#unset
-icu4c/source/tools/makeconv/gb18030/gb18030.html svneol=native#text/html
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
 icu4j/readme.html svneol=native#text/html
