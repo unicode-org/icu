@@ -290,6 +290,12 @@
 		<Filter
 			Name="collections"
 			Filter="">
+			<File
+				RelativePath=".\v32test.cpp">
+			</File>
+			<File
+				RelativePath=".\v32test.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="configuration"
