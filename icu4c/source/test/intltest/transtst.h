@@ -256,6 +256,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestLocaleResource(void);
 
+    /**
+     * Make sure parse errors reference the right line.
+     */
+    void TestParseError();
+
     //======================================================================
     // Support methods
     //======================================================================
