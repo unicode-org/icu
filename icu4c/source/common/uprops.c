@@ -77,10 +77,14 @@ getEBCDICPropertyNameChar(const char *name) {
 }
 
 /**
- * Unicode property names and property value names are compared
- * "loosely". Property[Value]Aliases.txt say:
- *   "With loose matching of property names, the case distinctions, whitespace,
- *    and '_' are ignored."
+ * Unicode property names and property value names are compared "loosely".
+ *
+ * UCD.html 4.0.1 says:
+ *   For all property names, property value names, and for property values for
+ *   Enumerated, Binary, or Catalog properties, use the following
+ *   loose matching rule:
+ *
+ *   LM3. Ignore case, whitespace, underscore ('_'), and hyphens.
  *
  * This function does just that, for (char *) name strings.
  * It is almost identical to ucnv_compareNames() but also ignores
