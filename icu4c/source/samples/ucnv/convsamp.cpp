@@ -42,16 +42,23 @@ void prettyPrintUChar(UChar c)
        (isgraph(c))  ) {
     printf("  '%c'  ", (char)(0x00FF&c));
   } else if ( c > 0x007F ) {
-    char buf[100];
+    char buf[1000];
     UErrorCode status = U_ZERO_ERROR;
     UTextOffset o;
     
-    o = u_charName(c, U_UNICODE_CHAR_NAME, buf, 100, &status);
-    if(U_SUCCESS(status)) {
+    o = u_charName(c, U_UNICODE_CHAR_NAME, buf, 1000, &status);
+    if(U_SUCCESS(status) && (o>0) ) {
       buf[6] = 0;
       printf("%- 7s", buf);
     } else {
-      printf("??????? ");
+      o = u_charName(c, U_UNICODE_10_CHAR_NAME, buf, 1000, &status);
+      if(U_SUCCESS(status) && (o>0)) {
+        buf[5] = 0;
+        printf("~%- 6s", buf);
+      }
+      else {
+        printf("??????? ");
+      }
     }
   } else {
     switch((char)(c & 0x007F)) {
@@ -59,13 +66,13 @@ void prettyPrintUChar(UChar c)
       printf("  ' '  ");
       break;
     case '\t':
-      printf("  \t   ");
+      printf("  \\t   ");
       break;
     case '\n':
-      printf("  \n   ");
+      printf("  \\n   ");
       break;
     default:
-      printf("       ");
+      printf("   _   ");
       break;
     }
   }
@@ -99,6 +106,17 @@ void printUChars(const char  *name = "?",
     prettyPrintUChar(uch[i]);
   }
   printf("\n");
+}
+
+void printString(const char *name, const UnicodeString& string)
+{
+  UChar *uch;
+  int32_t len = string.size();
+  uch = (UChar*)malloc(sizeof(UChar)*(len+1));
+  string.extract(0,len,uch,0);
+  uch[len]=0;
+  printUChars(name, uch, -1);
+  delete(uch);
 }
 
 void printBytes(const char  *name = "?", 
@@ -199,41 +217,29 @@ UErrorCode convsample_01()
   converter.
 
   'len' returns the number of OUTPUT bytes resulting from the 
-  conversion. In this case, it will be 9 even though there are
-  only 6 unicode characters going in. This is because the 
-  letters 'cat' each only take up one byte, but the remaining
-  three UChars each take up 2 bytes in the output codepage.
-
-  src: 0      1      2      3      4      5     
-  uni: \u0063 \u0061 \u0074 \u732B \uFF2F \uFF2B 
-   ch:   'c'    'a'    't'  CJK UN               
-
- targ:  0    1    2    3    4    5    6    7    8  
-  uni: \x63 \x61 \x74 \x94 \x4C \x82 \x6E \x82 \x6A 
-   ch:  'c'  'a'  't'   [not readable here........]
-
+  conversion.
  */
 
 UErrorCode convsample_02()
 {
   printf("\n\n==============================================\n"
-         "Sample 02: C: simple Unicode -> Shift_Jis conversion\n");
+         "Sample 02: C: simple Unicode -> koi8-r conversion\n");
 
 
   // **************************** START SAMPLE *******************
   // "cat<cat>OK"
-  UChar source[] = {   0x0063, 0x0061, 0x0074, 0x732B, 0xFF2F, 0xFF2B,
-                     0x0000 };
+  UChar source[] = { 0x041C, 0x043E, 0x0441, 0x043A, 0x0432,
+                     0x0430, 0x0021, 0x0000 };
   char target[100];
   UErrorCode status = U_ZERO_ERROR;
   UConverter *conv;
   int32_t     len;
 
   // set up the converter
-  conv = ucnv_open("shift_jis", &status);
+  conv = ucnv_open("koi8-r", &status);
   assert(U_SUCCESS(status));
 
-  // convert to shift-jis
+  // convert to koi8-r
   len = ucnv_fromUChars(conv, target, 100, source, -1, &status);
   assert(U_SUCCESS(status));
 
@@ -396,13 +402,230 @@ UErrorCode convsample_05()
 }
 #undef BUFFERSIZE
 
+
+
+/*******************************************************************
+  Very simple C++ sample to convert a string into Unicode from SJIS
+
+  This example creates a UnicodeString out of the chars.
+
+ */
+UErrorCode convsample_11()
+{
+  printf("\n\n==============================================\n"
+         "Sample 01: C++: simple Unicode -> koi8-r conversion\n");
+
+
+  // **************************** START SAMPLE *******************
+
+  char source[] = { 0x63, 0x61, 0x74, 0x94, 0x4C, 0x82, 0x6E, 0x82, 0x6A, 0x00 };
+  int32_t sourceSize = sizeof(source);
+  UnicodeString target;
+  UErrorCode status = U_ZERO_ERROR;
+
+  // set up the converter
+  UnicodeConverterCPP conv("shift_jis", status);
+  assert(U_SUCCESS(status));
+
+  // convert from JIS
+  conv.toUnicodeString(target, source, sourceSize, status);
+  assert(U_SUCCESS(status));
+
+  // ***************************** END SAMPLE ********************
+  
+  // Print it out
+  printBytes("src", source, sourceSize);
+  printf("\n");
+  printString("targ", target );
+  printf("\n");
+
+  return U_ZERO_ERROR;
+}
+
+
+/******************************************************
+  Similar sample to the preceding one. 
+  You must call ucnv_close to clean up the memory used by the
+  converter.
+
+  'len' returns the number of OUTPUT bytes resulting from the 
+  conversion.
+ */
+
+UErrorCode convsample_12()
+{
+#if 0
+  printf("\n\n==============================================\n"
+         "Sample 02: C: simple Unicode -> koi8-r conversion\n");
+
+
+  // **************************** START SAMPLE *******************
+  // "cat<cat>OK"
+  UChar source[] = { 0x041C, 0x043E, 0x0441, 0x043A, 0x0432,
+                     0x0430, 0x0021, 0x0000 };
+  char target[100];
+  UErrorCode status = U_ZERO_ERROR;
+  UConverter *conv;
+  int32_t     len;
+
+  // set up the converter
+  conv = ucnv_open("koi8-r", &status);
+  assert(U_SUCCESS(status));
+
+  // convert to koi8-r
+  len = ucnv_fromUChars(conv, target, 100, source, -1, &status);
+  assert(U_SUCCESS(status));
+
+  // close the converter
+  ucnv_close(conv);
+
+  // ***************************** END SAMPLE ********************
+  
+  // Print it out
+  printUChars("src", source);
+  printf("\n");
+  printBytes("targ", target, len);
+#endif
+  return U_ZERO_ERROR;
+}
+
 /* main */
+const char *scriptName(UCharScript script)
+{
+  switch(script)
+    {
+case U_BASIC_LATIN: return ("BASIC_LATIN"); return;
+case U_LATIN_1_SUPPLEMENT: return ("LATIN_1_SUPPLEMENT"); return;
+case U_LATIN_EXTENDED_A: return ("LATIN_EXTENDED_A"); return;
+case U_LATIN_EXTENDED_B: return ("LATIN_EXTENDED_B"); return;
+case U_IPA_EXTENSIONS: return ("IPA_EXTENSIONS"); return;
+case U_SPACING_MODIFIER_LETTERS: return ("SPACING_MODIFIER_LETTERS"); return;
+case U_COMBINING_DIACRITICAL_MARKS: return ("COMBINING_DIACRITICAL_MARKS"); return;
+case U_GREEK: return ("GREEK"); return;
+case U_CYRILLIC: return ("CYRILLIC"); return;
+case U_ARMENIAN: return ("ARMENIAN"); return;
+case U_HEBREW: return ("HEBREW"); return;
+case U_ARABIC: return ("ARABIC"); return;
+case U_SYRIAC: return ("SYRIAC"); return;
+case U_THAANA: return ("THAANA"); return;
+case U_DEVANAGARI: return ("DEVANAGARI"); return;
+case U_BENGALI: return ("BENGALI"); return;
+case U_GURMUKHI: return ("GURMUKHI"); return;
+case U_GUJARATI: return ("GUJARATI"); return;
+case U_ORIYA: return ("ORIYA"); return;
+case U_TAMIL: return ("TAMIL"); return;
+case U_TELUGU: return ("TELUGU"); return;
+case U_KANNADA: return ("KANNADA"); return;
+case U_MALAYALAM: return ("MALAYALAM"); return;
+case U_SINHALA: return ("SINHALA"); return;
+case U_THAI: return ("THAI"); return;
+case U_LAO: return ("LAO"); return;
+case U_TIBETAN: return ("TIBETAN"); return;
+case U_MYANMAR: return ("MYANMAR"); return;
+case U_GEORGIAN: return ("GEORGIAN"); return;
+case U_HANGUL_JAMO: return ("HANGUL_JAMO"); return;
+case U_ETHIOPIC: return ("ETHIOPIC"); return;
+case U_CHEROKEE: return ("CHEROKEE"); return;
+case U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS: return ("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS"); return;
+case U_OGHAM: return ("OGHAM"); return;
+case U_RUNIC: return ("RUNIC"); return;
+case U_KHMER: return ("KHMER"); return;
+case U_MONGOLIAN: return ("MONGOLIAN"); return;
+case U_LATIN_EXTENDED_ADDITIONAL: return ("LATIN_EXTENDED_ADDITIONAL"); return;
+case U_GREEK_EXTENDED: return ("GREEK_EXTENDED"); return;
+case U_GENERAL_PUNCTUATION: return ("GENERAL_PUNCTUATION"); return;
+case U_SUPERSCRIPTS_AND_SUBSCRIPTS: return ("SUPERSCRIPTS_AND_SUBSCRIPTS"); return;
+case U_CURRENCY_SYMBOLS: return ("CURRENCY_SYMBOLS"); return;
+case U_COMBINING_MARKS_FOR_SYMBOLS: return ("COMBINING_MARKS_FOR_SYMBOLS"); return;
+case U_LETTERLIKE_SYMBOLS: return ("LETTERLIKE_SYMBOLS"); return;
+case U_NUMBER_FORMS: return ("NUMBER_FORMS"); return;
+case U_ARROWS: return ("ARROWS"); return;
+case U_MATHEMATICAL_OPERATORS: return ("MATHEMATICAL_OPERATORS"); return;
+case U_MISCELLANEOUS_TECHNICAL: return ("MISCELLANEOUS_TECHNICAL"); return;
+case U_CONTROL_PICTURES: return ("CONTROL_PICTURES"); return;
+case U_OPTICAL_CHARACTER_RECOGNITION: return ("OPTICAL_CHARACTER_RECOGNITION"); return;
+case U_ENCLOSED_ALPHANUMERICS: return ("ENCLOSED_ALPHANUMERICS"); return;
+case U_BOX_DRAWING: return ("BOX_DRAWING"); return;
+case U_BLOCK_ELEMENTS: return ("BLOCK_ELEMENTS"); return;
+case U_GEOMETRIC_SHAPES: return ("GEOMETRIC_SHAPES"); return;
+case U_MISCELLANEOUS_SYMBOLS: return ("MISCELLANEOUS_SYMBOLS"); return;
+case U_DINGBATS: return ("DINGBATS"); return;
+case U_BRAILLE_PATTERNS: return ("BRAILLE_PATTERNS"); return;
+case U_CJK_RADICALS_SUPPLEMENT: return ("CJK_RADICALS_SUPPLEMENT"); return;
+case U_KANGXI_RADICALS: return ("KANGXI_RADICALS"); return;
+case U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS: return ("IDEOGRAPHIC_DESCRIPTION_CHARACTERS"); return;
+case U_CJK_SYMBOLS_AND_PUNCTUATION: return ("CJK_SYMBOLS_AND_PUNCTUATION"); return;
+case U_HIRAGANA: return ("HIRAGANA"); return;
+case U_KATAKANA: return ("KATAKANA"); return;
+case U_BOPOMOFO: return ("BOPOMOFO"); return;
+case U_HANGUL_COMPATIBILITY_JAMO: return ("HANGUL_COMPATIBILITY_JAMO"); return;
+case U_KANBUN: return ("KANBUN"); return;
+case U_BOPOMOFO_EXTENDED: return ("BOPOMOFO_EXTENDED"); return;
+case U_ENCLOSED_CJK_LETTERS_AND_MONTHS: return ("ENCLOSED_CJK_LETTERS_AND_MONTHS"); return;
+case U_CJK_COMPATIBILITY: return ("CJK_COMPATIBILITY"); return;
+case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A: return ("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A"); return;
+case U_CJK_UNIFIED_IDEOGRAPHS: return ("CJK_UNIFIED_IDEOGRAPHS"); return;
+case U_YI_SYLLABLES: return ("YI_SYLLABLES"); return;
+case U_YI_RADICALS: return ("YI_RADICALS"); return;
+case U_HANGUL_SYLLABLES: return ("HANGUL_SYLLABLES"); return;
+case U_HIGH_SURROGATES: return ("HIGH_SURROGATES"); return;
+case U_HIGH_PRIVATE_USE_SURROGATES: return ("HIGH_PRIVATE_USE_SURROGATES"); return;
+case U_LOW_SURROGATES: return ("LOW_SURROGATES"); return;
+case U_PRIVATE_USE_AREA /* PRIVATE_USE */: return ("PRIVATE_USE_AREA /* PRIVATE_USE */"); return;
+case U_CJK_COMPATIBILITY_IDEOGRAPHS: return ("CJK_COMPATIBILITY_IDEOGRAPHS"); return;
+case U_ALPHABETIC_PRESENTATION_FORMS: return ("ALPHABETIC_PRESENTATION_FORMS"); return;
+case U_ARABIC_PRESENTATION_FORMS_A: return ("ARABIC_PRESENTATION_FORMS_A"); return;
+case U_COMBINING_HALF_MARKS: return ("COMBINING_HALF_MARKS"); return;
+case U_CJK_COMPATIBILITY_FORMS: return ("CJK_COMPATIBILITY_FORMS"); return;
+case U_SMALL_FORM_VARIANTS: return ("SMALL_FORM_VARIANTS"); return;
+case U_ARABIC_PRESENTATION_FORMS_B: return ("ARABIC_PRESENTATION_FORMS_B"); return;
+case U_SPECIALS: return ("SPECIALS"); return;
+case U_HALFWIDTH_AND_FULLWIDTH_FORMS: return ("HALFWIDTH_AND_FULLWIDTH_FORMS"); return;
+  /*case U_CHAR_SCRIPT_COUNT: return ("SCRIPT_COUNT"); return; */
+case U_NO_SCRIPT: return ("NO_SCRIPT"); return;
+
+    default: return("Unknown??????");
+    }
+}
+
+void dumpTest()
+{
+    char buf[1000];
+    UErrorCode status = U_ZERO_ERROR;
+    UTextOffset o;
+    int32_t n;
+    UChar c;
+    FILE *q;
+
+    q = fopen("nt.txt", "w");
+
+    for(n=0;n<0x10000;n++)
+      {
+        c = (UChar)n;
+        status = U_ZERO_ERROR;
+        o = u_charName(c, U_UNICODE_10_CHAR_NAME, buf, 1000, &status);
+        if(U_SUCCESS(status) && (o>0) ) {
+          fprintf(q, "%06X:% 8s:%s\n", n, scriptName(u_charScript(c)), buf);
+        }
+        else {
+          fprintf(q, "%06X:% 8s:_______________\n", n, scriptName(u_charScript(c)));
+        }
+      }
+    fclose(q);
+}
 
 int main()
 {
+  //  dumpTest();
+  //  return 0;
+
+  printf("DEFCONV=%s, DEVLOC=%s\n", ucnv_getDefaultName(), uloc_getDefault());
+  
   convsample_01();
   convsample_02();
   convsample_03();
 //convsample_04();  /* not written yet */
   convsample_05();
+  convsample_11();
+  convsample_12();
 }
