@@ -31,9 +31,13 @@
 .BI "\-x" " trasnsliterator
 ]
 [
+.BI "\-\-to\-callback" " callback"
+|
 .B "\-c"
 ]
 [
+.BI "\-\-from\-callback" " callback"
+|
 .B "\-i"
 ]
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
@@ -48,7 +52,11 @@ converts its input from one given
 to another. The transcoding is done using Unicode as a pivot encoding
 (e.g. the data are first transcoded from their orifinal encoding to
 Unicode, and then from Unicode to the destination encoding).
-It can also run the transcoding to a specified
+It is possible to specify callbacks that are used to handle invalid
+characters in the input, or characters that cannot be transcoded to
+the destination encoding.
+.B uconv
+can also run the transcoding through a specified
 .IR transliterator ,
 in which case transliteration will happen as an intermediate step,
 after the data have been transcoded to Unicode.
@@ -90,11 +98,31 @@ Run the transcoded Unicode data through the given
 and use the transliterated data as input for the transcoding to
 the the destination encoding.
 .TP
+.BI "\-\-to\-callback" " callback"
+Use
+.I callback
+to handle characters that cannot be transcoded to the destination
+encoding. See section
+.B CALLBACKS
+for details on valid callbacks.
+.TP
 .B "\-c"
 Omit invalid characters from the output.
+Same as
+.BR "\-\-to\-callback skip" .
+.TP
+.BI "\-\-from\-callback" " callback"
+Use
+.I callback
+to handle characters that cannot be transcoded from the original
+encoding. See section
+.B CALLBACKS
+for details on valid callbacks.
 .TP
 .B "\-i"
 Ignore invalid sequences in the input.
+Same as
+.BR "\-\-from\-callback skip" .
 .TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
@@ -103,6 +131,83 @@ Set the original encoding of the data to
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 Transcode the data to
 .IR encoding .
+.SH CALLBACKS
+.B uconv
+supports specifying callbacks to handle invalid data. Callbacks can be
+set for both directions of transcoding: from the original encoding to
+Unicode, with the
+.BR "\-\-from\-callback"
+option, and from Unicode to the destination encoding, with the
+.BR "\-\-to\-callback"
+option.
+.PP
+The following is a list of valid
+.I callback
+names, alonmg with a description of their behavior. The list of
+callbacks actually supported by
+.B uconv
+is displayed when it is called with
+.BR "\-h\fP, \fB\-\-help" .
+.PP
+.TP \w'\fBescape-xml-hex'u+3n
+.B substitute
+Write the the encoding's substitute sequence, or the Unicode
+replacement character
+.B U+FFFD
+when transcoding to Unicode.
+.TP
+.B skip
+Ignore the invalid data.
+.TP
+.B stop
+Stop with an error when encountering invalid data.
+.TP
+.B escape
+Same as
+.BR escape-icu .
+.TP
+.B escape-icu
+Replace the missing characters with a string of the format
+.BR %U\fIhhhh\fP ,
+where
+.I hhhh
+is the hexadecimal value of the character.
+.TP
+.B escape-java
+Replace the missing characters with a string of the format
+.BR "\eu\fIhhhh\fP" ,
+where
+.I hhhh
+is the hexadecimal value of the character.
+.TP
+.B escape-c
+Replace the missing characters with a string of the format
+.BR \eu\fIhhhh\fP
+for plane 0 characters, and
+.BR \eu\fIhhhh\fP\\u\fIhhhh\fP
+for planes 1 and above characters,
+where
+.I hhhh
+is the hexadecimal value of the character. Characters from planes 1
+and above are written as surrogate pairs.
+.TP
+.B escape-xml
+Same as
+.BR escape-xml-dec .
+.TP
+.B escape-xml-dec
+Replace the missing characters with a string of the format
+.BR &#x\fInnnn\fP; ,
+where
+.I nnnn
+is the decimal value of the character.
+.TP
+.B escape-xml-hex
+Replace the missing characters with a string of the format
+.BR &#x\fIhhhh\fP; ,
+where
+.I hhhh
+is the hexadecimal value of the character.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
