@@ -9,6 +9,7 @@ package com.ibm.text;
 
 import com.ibm.text.resources.LocaleScript;
 import java.util.ResourceBundle;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import com.ibm.text.UCharacter;
 
@@ -762,12 +763,14 @@ public final class UScript {
 
     private static final String localeScript = "com.ibm.text.resources.LocaleScript";
      
-    private static int findCodeFromLocale(String localeName)
+    private static int findCodeFromLocale(Locale locale)
             throws MissingResourceException{
-                
+        //TODO: Currently we use a hacked fallback mechanism.
+        //Should be changed once ICU4J bundles locale data
+        //with the distribution
         int code = USCRIPT_INVALID_CODE;
         ResourceBundle resB = ResourceBundle.getBundle(localeScript);
-        String temp = localeName;
+        String temp = locale.toString();
         do{
             try{
                 String[] scriptArray = resB.getStringArray(temp);
@@ -820,6 +823,21 @@ public final class UScript {
         return -1;
     }
     
+        
+    /**
+    * Gets a script code associated with the given locale or ISO 15924 abbreviation or name. 
+    * Returns USCRIPT_MALAYAM given "Malayam" OR "Mlym".
+    * Returns USCRIPT_LATIN given "en" OR "en_US" 
+    * @param locale Locale
+    * @return The script code 
+    * @exception IllegalArgumentException, MissingResourceException
+    * @draft
+    */
+    public static final int getCode(Locale locale)
+        throws IllegalArgumentException, MissingResourceException{
+            return findCodeFromLocale(locale);
+    }
+    
     /**
     * Gets a script code associated with the given locale or ISO 15924 abbreviation or name. 
     * Returns USCRIPT_MALAYAM given "Malayam" OR "Mlym".
@@ -848,10 +866,9 @@ public final class UScript {
                 code =  scriptAbbrCodes[strIndex];
             }
         }
-        /* we still haven't found it try locale */
-        if(code==USCRIPT_INVALID_CODE){
-            //TODO: Confirm with Alan 
-            code = findCodeFromLocale(nameOrAbbrOrLocale);
+        /* we still haven't found it try locale */        
+        if(code==USCRIPT_INVALID_CODE){            
+            code = findCodeFromLocale(new Locale(nameOrAbbrOrLocale));
         }
         return code;
     }
