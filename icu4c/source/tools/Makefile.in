@@ -178,9 +178,11 @@ $(TMPDATADIR)/testdata.lst: Makefile
 	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	@echo $(DATABUILDDIR)/test.dat > $@
 
-$(TMPDATADIR)2/testdata.lst: Makefile
+$(TMPDATADIR)2/testdata.lst: Makefile $(top_builddir)/test/testdata/root.res
 	@$(MKINSTALLDIRS) $(TMPDATADIR)2
 	@echo $(DATABUILDDIR)/test.dat > $@
+	cp $(top_builddir)/test/testdata/root.res $(TMPDATADIR)2/
+	@echo root.res >> $@
 
 $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 	@$(MKINSTALLDIRS) $(TMPDATADIR)
@@ -192,7 +194,7 @@ $(TMPDATADIR)2/icupkg.inc: pkgdata/icupkg.inc
 
 # build the ICU and test data
 
-build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/icupkg.inc $(TMPDATADIR)2/testdata.lst $(DATAFILES) 
+build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/icupkg.inc $(TMPDATADIR)2/testdata.lst $(DATAFILES) $(top_builddir)/test/testdata/root.res
 	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	@$(MKINSTALLDIRS) $(TMPDATADIR)2
 	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst   )
