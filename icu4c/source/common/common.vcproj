@@ -898,12 +898,6 @@
 			Name="formatting"
 			Filter="">
 			<File
-				RelativePath=".\digitlst.cpp">
-			</File>
-			<File
-				RelativePath=".\digitlst.h">
-			</File>
-			<File
 				RelativePath=".\unicode\parseerr.h">
 				<FileConfiguration
 					Name="Release|Win32">
