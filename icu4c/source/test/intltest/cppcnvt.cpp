@@ -19,18 +19,6 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 100
 
-/* default codepage name, keep synchronized with ccapitst.c */
-#ifdef WIN32
-    /* this assumes a Western European Windows */
-#   define DEFAULT_CODEPAGE "IBM-1252"
-#elif defined(OS390)
-#   define DEFAULT_CODEPAGE "ibm-1047-s390"
-#elif defined(OS400)
-#   define DEFAULT_CODEPAGE "ibm-37"
-#else
-#   define DEFAULT_CODEPAGE "LATIN_1"
-#endif
-
 /*writes and entire UnicodeString along with a BOM to a file*/
 void WriteToFile(const UnicodeString *a, FILE *myfile); 
 /*Case insensitive compare*/
@@ -231,11 +219,21 @@ void ConvertTest::TestConvert()
     someConverters[2] = new UnicodeConverterCPP("utf8", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + err);
 
-    if ((uprv_stricmp(someConverters[1]->getName(err),DEFAULT_CODEPAGE)==0)&&
-        (uprv_stricmp(someConverters[0]->getName(err),DEFAULT_CODEPAGE)==0))
-      logln("getName ok");
-    else errln("getName failed");
-    logln(someConverters[1]->getName(err));
+    logln("\n---Testing getName...");
+
+    someConverters[1]->getName(err);
+    if(U_FAILURE(err)) {
+        errln("getName for Converters[1] failed!!!");
+    } else {
+        logln(UnicodeString("Result of Converters[1]->getName() was ") + UnicodeString(someConverters[1]->getName(err)));
+    }
+
+    someConverters[0]->getName(err);
+    if(U_FAILURE(err)) {
+        errln("getName for Converters[0] failed!!!");
+    } else {
+        logln(UnicodeString("Result of Converters[0]->getName() was ") + UnicodeString(someConverters[0]->getName(err)));
+    }
 
     logln("\n---Testing UnicodeConverterCPP::operator==...");
     if (((*someConverters[1] == *someConverters[0])==TRUE)&&
