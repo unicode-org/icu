@@ -325,6 +325,40 @@ UnicodeStringTest::TestCompare()
             errln("error: mixed.caseCompare(1, 4, different, 1, 4, default)=%ld instead of positive\n", result);
         }
     }
+
+    // test that srcLength=-1 is handled in functions that
+    // take input const UChar */int32_t srcLength (j785)
+    {
+        static const UChar u[]={ 0x61, 0x308, 0x62, 0 };
+        UnicodeString s=UNICODE_STRING("a\\u0308b", 8).unescape();
+
+        if(s.compare(u, -1)!=0 || s.compare(0, 999, u, 0, -1)!=0) {
+            errln("error UnicodeString::compare(..., const UChar *, srcLength=-1) does not work");
+        }
+
+        if(s.compareCodePointOrder(u, -1)!=0 || s.compareCodePointOrder(0, 999, u, 0, -1)!=0) {
+            errln("error UnicodeString::compareCodePointOrder(..., const UChar *, srcLength=-1, ...) does not work");
+        }
+
+        if(s.caseCompare(u, -1, U_FOLD_CASE_DEFAULT)!=0 || s.caseCompare(0, 999, u, 0, -1, U_FOLD_CASE_DEFAULT)!=0) {
+            errln("error UnicodeString::caseCompare(..., const UChar *, srcLength=-1, ...) does not work");
+        }
+
+        if(s.indexOf(u, 1, -1, 0, 999)!=1 || s.indexOf(u+1, -1, 0, 999)!=1 || s.indexOf(u+1, -1, 0)!=1) {
+            errln("error UnicodeString::indexOf(const UChar *, srcLength=-1, ...) does not work");
+        }
+
+        if(s.lastIndexOf(u, 1, -1, 0, 999)!=1 || s.lastIndexOf(u+1, -1, 0, 999)!=1 || s.lastIndexOf(u+1, -1, 0)!=1) {
+            errln("error UnicodeString::lastIndexOf(const UChar *, srcLength=-1, ...) does not work");
+        }
+
+        UnicodeString s2, s3;
+        s2.replace(0, 0, u+1, -1);
+        s3.replace(0, 0, u, 1, -1);
+        if(s.compare(1, 999, s2)!=0 || s2!=s3) {
+            errln("error UnicodeString::replace(..., const UChar *, srcLength=-1, ...) does not work");
+        }
+    }
 }
 
 void
