@@ -258,11 +258,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
  
         ucnv_fromUnicode (conv,
                   (char **)&targ,
-#if defined(OS400)
                   (const char*)end,
-#else
-                  (const int8_t*)end,
-#endif
                   &src,
                   sourceLimit,
                   checkOffsets ? offs : NULL,

@@ -944,4 +944,4 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
     }
 }
 
-static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? ZERO : (UPPER_A - 10))); }
+/*static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? ZERO : (UPPER_A - 10))); }*/
