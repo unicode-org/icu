@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/01/12 00:53:34 $ 
-* $Revision: 1.2 $
+* $Date: 2001/01/18 21:58:05 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.icu.test.text;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileNotFoundException;
 import com.ibm.test.TestFmwk;
 import com.ibm.icu.text.UCharacter;
 import com.ibm.icu.text.UCharacterCategoryEnum;
@@ -492,6 +493,13 @@ public final class UCharacterTest extends TestFmwk
         }
       }
       input.close();
+    }
+    catch (FileNotFoundException e)
+    {
+      errln("FAIL UnicodeData.txt not found\n" +
+            "Configure the system setting UnicodeData to the right path\n" +
+            "e.g. java -DUnicodeData=\"anyfile.dat\" " +
+            "com.ibm.icu.test.text.UCharacterTest");
     }
     catch (Exception e)
     {
