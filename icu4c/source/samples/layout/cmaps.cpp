@@ -17,6 +17,9 @@
 #include "sfnt.h"
 #include "cmaps.h"
 
+#define SWAPU16(code) ((LEUnicode16) SWAPW(code))
+#define SWAPU32(code) ((LEUnicode32) SWAPL(code))
+
 //
 // Finds the high bit by binary searching
 // through the bits in value.
@@ -128,19 +131,19 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
     le_uint16 probe = 1 << fEntrySelector;
     LEGlyphID result = 0;
 
-    if (SWAPW(fStartCodes[fRangeShift]) <= unicode) {
+    if (SWAPU16(fStartCodes[fRangeShift]) <= unicode) {
         index = fRangeShift;
     }
 
     while (probe > (1 << 0)) {
         probe >>= 1;
 
-        if (SWAPW(fStartCodes[index + probe]) <= unicode) {
+        if (SWAPU16(fStartCodes[index + probe]) <= unicode) {
             index += probe;
         }
     }
 
-    if (unicode >= SWAPW(fStartCodes[index]) && unicode <= SWAPW(fEndCodes[index])) {
+    if (unicode >= SWAPU16(fStartCodes[index]) && unicode <= SWAPU16(fEndCodes[index])) {
         if (fIdRangeOffset[index] == 0) {
             result = (LEGlyphID) unicode;
         } else {
@@ -177,20 +180,20 @@ LEGlyphID CMAPGroupMapper::unicodeToGlyph(LEUnicode32 unicode32) const
     le_int32 probe = fPower;
     le_int32 range = 0;
 
-    if (SWAPL(fGroups[fRangeOffset].startCharCode) <= unicode32) {
+    if (SWAPU32(fGroups[fRangeOffset].startCharCode) <= unicode32) {
         range = fRangeOffset;
     }
 
     while (probe > (1 << 0)) {
         probe >>= 1;
 
-        if (SWAPL(fGroups[range + probe].startCharCode) <= unicode32) {
+        if (SWAPU32(fGroups[range + probe].startCharCode) <= unicode32) {
             range += probe;
         }
     }
 
-    if (SWAPL(fGroups[range].startCharCode) <= unicode32 && SWAPL(fGroups[range].endCharCode) >= unicode32) {
-        return (LEGlyphID) (SWAPL(fGroups[range].startGlyphCode) + unicode32 - SWAPL(fGroups[range].startCharCode));
+    if (SWAPU32(fGroups[range].startCharCode) <= unicode32 && SWAPU32(fGroups[range].endCharCode) >= unicode32) {
+        return (LEGlyphID) (SWAPU32(fGroups[range].startGlyphCode) + unicode32 - SWAPU32(fGroups[range].startCharCode));
     }
 
     return 0;
