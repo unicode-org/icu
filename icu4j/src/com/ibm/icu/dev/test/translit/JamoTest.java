@@ -71,8 +71,8 @@ public class JamoTest extends TransliteratorTest {
         
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
-        Transliterator jamoHangul = Transliterator.getInstance("Jamo-Hangul");
-        Transliterator hangulJamo = jamoHangul.getInverse();
+        Transliterator jamoHangul = Transliterator.getInstance("NFC");
+        Transliterator hangulJamo = Transliterator.getInstance("NFD");
 
         StringBuffer buf = new StringBuffer();
         for (int i=0; i<HANGUL.length; ++i) {
@@ -95,11 +95,50 @@ public class JamoTest extends TransliteratorTest {
         }
     }
 
+    /**
+     * Test various step-at-a-time transformation of hangul to jamo to
+     * latin and back.
+     */
+    public void TestPiecemeal() {
+        String hangul = "\uBC0F";
+        String jamo = nameToJamo("(Mi)(I)(Cf)");
+        String latin = "mic";
+
+        Transliterator t = null;
+
+        t = Transliterator.getInstance("NFD"); // was Hangul-Jamo
+        expect(t, hangul, jamo);
+
+        t = Transliterator.getInstance("NFC"); // was Jamo-Hangul
+        expect(t, jamo, hangul);
+
+        t = Transliterator.getInstance("Latin-Jamo");
+        expect(t, latin, jamo);
+
+        t = Transliterator.getInstance("Jamo-Latin");
+        expect(t, jamo, latin);
+
+        t = Transliterator.getInstance("Hangul-Latin");
+        expect(t, hangul, latin);
+
+        t = Transliterator.getInstance("Latin-Hangul");
+        expect(t, latin, hangul);
+
+        t = Transliterator.getInstance("Hangul-Latin; Latin-Jamo");
+        expect(t, hangul, jamo);
+
+        t = Transliterator.getInstance("Jamo-Latin; Latin-Hangul");
+        expect(t, jamo, hangul);
+
+        t = Transliterator.getInstance("Hangul-Latin; Latin-Hangul");
+        expect(t, hangul, hangul);
+    }
+
     public void TestRealText() {
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
-        Transliterator jamoHangul = Transliterator.getInstance("Jamo-Hangul");
-        Transliterator hangulJamo = jamoHangul.getInverse();
+        Transliterator jamoHangul = Transliterator.getInstance("NFC");
+        Transliterator hangulJamo = Transliterator.getInstance("NFD");
         Transliterator rt = new CompoundTransliterator(new Transliterator[] {
             hangulJamo, jamoLatin, latinJamo, jamoHangul });
 
@@ -122,21 +161,44 @@ public class JamoTest extends TransliteratorTest {
                     String latin = jamoLatin.transliterate(jamo);
                     String jamo2 = latinJamo.transliterate(latin);
                     String hangul2 = jamoHangul.transliterate(jamo2);
-                    
-                    buf.setLength(0);
-                    buf.append("FAIL: ");
-                    if (!hangul2.equals(hangulX)) {
-                        buf.append("(Weird: " + hangulX + " != " + hangul2 + ")");
+                    if (hangul.equals(hangul2)) {
+                        buf.setLength(0);
+                        buf.append("FAIL (Compound transliterator problem): ");
+                        buf.append(hangul + " => " +
+                                   jamoToName(jamo) + " => " +
+                                   latin + " => " + jamoToName(jamo2)
+                                   + " => " + hangul2 +
+                                   "; but " + hangul + " =cpd=> " + jamoToName(hangulX)
+                                   );
+                        errln(Utility.escape(buf.toString()));                        
+                    } else if (jamo.equals(jamo2)) {
+                        buf.setLength(0);
+                        buf.append("FAIL (Jamo<>Hangul problem): ");
+                        if (!hangul2.equals(hangulX)) {
+                            buf.append("(Weird: " + hangulX + " != " + hangul2 + ")");
+                        }
+                        buf.append(hangul + " => " +
+                                   jamoToName(jamo) + " => " +
+                                   latin + " => " + jamoToName(jamo2)
+                                   + " => " + hangul2
+                                   );
+                        errln(Utility.escape(buf.toString()));                        
+                    } else {
+                        buf.setLength(0);
+                        buf.append("FAIL: ");
+                        if (!hangul2.equals(hangulX)) {
+                            buf.append("(Weird: " + hangulX + " != " + hangul2 + ")");
+                        }
+                        // The Hangul-Jamo conversion is not usually the
+                        // bug here, so we hide it from display.
+                        // Uncomment lines to see the Hangul.
+                        buf.append(//hangul + " => " +
+                                   jamoToName(jamo) + " => " +
+                                   latin + " => " + jamoToName(jamo2)
+                                   //+ " => " + hangul2
+                                   );
+                        errln(Utility.escape(buf.toString()));
                     }
-                    // The Hangul-Jamo conversion is not usually the
-                    // bug here, so we hide it from display.
-                    // Uncomment lines to see the Hangul.
-                    buf.append(//hangul + " => " +
-                               jamoToName(jamo) + " => " +
-                               latin + " => " + jamoToName(jamo2)
-                               //+ " => " + hangul2
-                               );
-                    errln(Utility.escape(buf.toString()));
                 }
             }
             pos = space+1;

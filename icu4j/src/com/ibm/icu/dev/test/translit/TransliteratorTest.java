@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/09/24 19:56:41 $
- * $Revision: 1.46 $
+ * $Date: 2001/09/28 05:47:30 $
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -704,10 +704,10 @@ public class TransliteratorTest extends TestFmwk {
      * Test IDs of inverses of compound transliterators. (J20)
      */
     public void TestCompoundInverseID() {
-        String ID = "Latin-Jamo;Jamo-Hangul";
+        String ID = "Latin-Jamo;NFC(NFD)";
         Transliterator t = Transliterator.getInstance(ID);
         Transliterator u = t.getInverse();
-        String exp = "Hangul-Jamo;Jamo-Latin";
+        String exp = "NFD(NFC);Jamo-Latin";
         String got = u.getID();
         if (!got.equals(exp)) {
             errln("FAIL: Inverse of " + ID + " is " + got +
@@ -1045,21 +1045,8 @@ public class TransliteratorTest extends TestFmwk {
             expect(NFKC, in, expkc);
         }
 
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        // TODO Re-enable this test!!!!
-        if (false) {
         Transliterator t = Transliterator.getInstance("NFD; [x]Remove");
         expect(t, "\u010dx", "c\u030C");
-        }
     }
 
     /**
