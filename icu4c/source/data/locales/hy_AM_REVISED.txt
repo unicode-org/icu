@@ -55,17 +55,17 @@ hy_AM_REVISED{
         "\u0544\u2024\u0539\u2024"
     }
 
-//    LocaleString{ "hy_AM_REVISED" }
-
-    DateTimePatterns {
-        "HH:mm:ss z",
-        "H:mm:ss z",
-        "h:mm:ss",
-        "h:mm",
-        "EEEE,d MMMM, yyyy",
-        "d MMMM yyyy",
-        "d MMM yyyy",
-        "dd-MM-yy",
-        "{1} {0}",
-    }
+    // Just use the data from the parent.
+    // The original data in this locale looked suspicious.
+//    DateTimePatterns {
+//        "HH:mm:ss z",
+//        "H:mm:ss z",
+//        "H:mm:ss",
+//        "H:mm",
+//        "EEEE,d MMMM, yyyy",
+//        "d MMMM yyyy",
+//        "d MMM yyyy",
+//        "dd-MM-yy",
+//        "{1} {0}",
+//    }
 }  
