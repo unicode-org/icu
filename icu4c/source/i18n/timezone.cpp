@@ -149,7 +149,7 @@ static void loadZoneData() {
         if (!DATA_LOADED) {
             UErrorCode status = U_ZERO_ERROR;
             UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
-                                             isTimeZoneDataAcceptable, 0, &status); // see the comment on udata_close line
+                   (UDataMemoryIsAcceptable*)isTimeZoneDataAcceptable, 0, &status); // see the comment on udata_close line
             UDataMemory *data = UDATA_POINTER;
             if (U_SUCCESS(status)) {
                 DATA = (TZHeader*)udata_getMemory(data);

@@ -107,7 +107,7 @@ uchar_cleanup()
 }
 
 static int8_t
-loadPropsData() {
+loadPropsData(void) {
     /* load Unicode character properties data from file if necessary */
     if(havePropsData==0) {
         UTrie trie={ 0 }, trie2={ 0 };

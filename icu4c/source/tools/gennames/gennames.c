@@ -280,6 +280,8 @@ main(int argc, char* argv[]) {
     UVersionInfo version;
     UBool store10Names=FALSE;
 
+    U_MAIN_INIT_ARGS(argc, argv);
+
     /* preset then read command line options */
     options[5].value=u_getDataDirectory();
     options[6].value="3.1.1";
