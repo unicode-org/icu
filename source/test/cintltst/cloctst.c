@@ -2789,9 +2789,6 @@ static void TestDisplayKeywordValues(void){
     {
         /* Test non existent keywords */
         UErrorCode status = U_ZERO_ERROR;
-        const char* keyword =NULL;
-        int32_t keywordLen = 0;
-        int32_t keywordCount = 0;
         const char* localeID = "es";
         const char* displayLocale = "de";
         UChar *displayKeywordValue = NULL;

@@ -469,7 +469,7 @@ static void TestCurrencyPreEuro(void)
     for(i=0; i < 19; i++)
     {
         char curID[256] = {0};
-        int len = uloc_canonicalize(locale[i], curID, 256, &status);
+        uloc_canonicalize(locale[i], curID, 256, &status);
         if(U_FAILURE(status)){
             log_err("Could not canonicalize %s. Error: %s \n", locale[i], u_errorName(status));
             continue;
