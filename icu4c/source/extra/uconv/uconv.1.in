@@ -141,7 +141,8 @@ print only one transliterator name per line.
 Run the transcoded Unicode data through the given
 .IR transliterator 
 and use the transliterated data as input for the transcoding to
-the the destination encoding.
+the the destination encoding. Compound transliterators can be
+created by separating individual names with a semicolon.
 .TP
 .BI "\-\-to\-callback" " callback"
 Use
