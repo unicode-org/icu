@@ -392,21 +392,16 @@ TimeZone::initDefault()
         Mutex lock; 
         uprv_tzset(); // Initialize tz... system data
         
-        // get the timezone ID from the host.
+        // Get the timezone ID from the host.  This function should do
+        // any required host-specific remapping; e.g., on Windows this
+        // function maps the Date and Time control panel setting to an
+        // ICU timezone ID.
         hostID = uprv_tzname(0);
         
         // Invert sign because UNIX semantics are backwards
         rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
     }
 
-    // Try to create a system zone with the given ID.  This
-    // _always fails on Windows_ because Windows returns a
-    // non-standard localized zone name, e.g., "Pacific
-    // Standard Time" on U.S. systems set to PST.  One way to
-    // fix this is to add a Windows-specific mapping table,
-    // but that means we'd have to do so for every locale.  A
-    // better way is to use the offset and find a
-    // corresponding zone, which is what we do below.
     TimeZone* default_zone = createSystemTimeZone(hostID);
 
     // If we couldn't get the time zone ID from the host, use
@@ -543,8 +538,7 @@ public:
          * conditions.  We currently just let that be the
          * lexicographically first zone, but we could also adjust the list
          * to pick which zone was first for this situation -- probably not
-         * worth the trouble, except for the fact that this fallback is
-         * _always_ used to determine the default zone on Windows.
+         * worth the trouble.
          *
          * The list of zones is actually just a list of integers, from
          * 0..n-1, where n is the total number of system zones.  The
@@ -756,8 +750,7 @@ TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
      * conditions.  We currently just let that be the
      * lexicographically first zone, but we could also adjust the list
      * to pick which zone was first for this situation -- probably not
-     * worth the trouble, except for the fact that this fallback is
-     * _always_ used to determine the default zone on Windows.
+     * worth the trouble.
      *
      * The list of zones is actually just a list of integers, from
      * 0..n-1, where n is the total number of system zones.  The
