@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.91 2000/10/30 21:21:53 yves Exp $
+dnl $Id: configure.in,v 1.92 2000/11/09 23:03:25 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -45,6 +45,15 @@ dnl Checks for programs
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+
+# make sure install is relative to srcdir - if a script
+if test "$srcdir" = "."; then
+  # If srcdir isn't just ., then (srcdir) is already prepended.
+  if test "${ac_install_sh}" = "${INSTALL}"; then
+   INSTALL="\\\$(top_srcdir)/${ac_install_sh}"
+  fi
+fi
+
 AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 AC_CHECK_PROG(STRIP, strip, strip, true)
 
