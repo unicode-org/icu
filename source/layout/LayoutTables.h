@@ -8,6 +8,11 @@
 #ifndef __LAYOUTTABLES_H
 #define __LAYOUTTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 
 U_NAMESPACE_BEGIN

@@ -8,6 +8,11 @@
 #ifndef __GLYPHDEFINITIONTABLES_H
 #define __GLYPHDEFINITIONTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 #include "ClassDefinitionTables.h"

@@ -8,6 +8,11 @@
 #ifndef __LOOKUPPROCESSOR_H
 #define __LOOKUPPROCESSOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"

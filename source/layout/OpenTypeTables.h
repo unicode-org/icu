@@ -8,6 +8,11 @@
 #ifndef __OPENTYPETABLES_H
 #define __OPENTYPETABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 
 U_NAMESPACE_BEGIN

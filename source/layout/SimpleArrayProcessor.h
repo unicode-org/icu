@@ -8,6 +8,11 @@
 #ifndef __SIMPLEARRAYPROCESSOR_H
 #define __SIMPLEARRAYPROCESSOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"

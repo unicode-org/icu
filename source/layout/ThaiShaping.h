@@ -8,32 +8,16 @@
 #ifndef __THAISHAPING_H
 #define __THAISHAPING_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"
 
 U_NAMESPACE_BEGIN
-
-class ThaiMarkFilter : public UMemory, public LEGlyphFilter
-{
-private:
-    struct MarkRange
-    {
-        LEUnicode first;
-        LEUnicode last;
-    };
-
-    MarkRange *rangeList;
-
-    ThaiMarkFilter(const ThaiMarkFilter &other); // forbid copying of this class
-    ThaiMarkFilter &operator=(const ThaiMarkFilter &other); // forbid copying of this class
-
-public:
-    ThaiMarkFilter(le_uint8 glyphSet);
-    ~ThaiMarkFilter();
-
-    virtual le_bool filter(LEGlyphID glyph);
-};
 
 class ThaiShaping /* not : public UObject because all methods are static */ {
 public:

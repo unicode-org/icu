@@ -8,6 +8,11 @@
 #ifndef __CONTEXTUALGLYPHINSERTION_H
 #define __CONTEXTUALGLYPHINSERTION_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LayoutTables.h"
 #include "StateTables.h"

@@ -8,6 +8,11 @@
 #ifndef __COVERAGETABLES_H
 #define __COVERAGETABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 

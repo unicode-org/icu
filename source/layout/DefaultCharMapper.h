@@ -8,6 +8,11 @@
 #ifndef __DEFAULTCHARMAPPER_H
 #define __DEFAULTCHARMAPPER_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEFontInstance.h"
 

@@ -8,6 +8,11 @@
 #ifndef __ARABICSHAPING_H
 #define __ARABICSHAPING_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 

@@ -8,6 +8,11 @@
 #ifndef __NONCONTEXTUALGLYPHSUBSTITUTION_H
 #define __NONCONTEXTUALGLYPHSUBSTITUTION_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LayoutTables.h"
 #include "LookupTables.h"

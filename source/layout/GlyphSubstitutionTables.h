@@ -8,6 +8,11 @@
 #ifndef __GLYPHSUBSTITUTIONTABLES_H
 #define __GLYPHSUBSTITUTIONTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"

@@ -8,6 +8,11 @@
 #ifndef __LIGATURESUBSTITUTIONSUBTABLES_H
 #define __LIGATURESUBSTITUTIONSUBTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"

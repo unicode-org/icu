@@ -8,6 +8,11 @@
 #ifndef __GDEFMARKFILTER__H
 #define __GDEFMARKFILTER__H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEGlyphFilter.h"
 #include "GlyphDefinitionTables.h"

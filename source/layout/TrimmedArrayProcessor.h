@@ -8,6 +8,11 @@
 #ifndef __TRIMMEDARRAYPROCESSOR_H
 #define __TRIMMEDARRAYPROCESSOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"
