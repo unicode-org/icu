@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorServiceShim.java,v $
-* $Date: 2003/04/19 00:01:53 $
-* $Revision: 1.1 $
+* $Date: 2003/05/05 23:42:17 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -30,7 +30,7 @@ import com.ibm.icu.text.Collator.CollatorFactory;
 final class CollatorServiceShim extends Collator.ServiceShim {
 
     Collator getInstance(Locale locale) {
-        if (service == null) {
+        if (service.isDefault()) {
             return new RuleBasedCollator(locale);
         }
 
@@ -43,7 +43,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
     }
 
     Object registerInstance(Collator collator, Locale locale) {
-        return getService().registerObject(collator, locale);
+        return service.registerObject(collator, locale);
     }
 
     Object registerFactory(CollatorFactory f) {
@@ -73,18 +73,15 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             }
         }
 
-        return getService().registerFactory(new CFactory(f));
+        return service.registerFactory(new CFactory(f));
     }
 
     boolean unregister(Object registryKey) {
-        if (service == null) {
-            return false;
-        }
         return service.unregisterFactory((Factory)registryKey);
     }
 
     Locale[] getAvailableLocales() {
-        if (service == null) {
+        if (service.isDefault()) {
             return ICULocaleData.getAvailableLocales();
         }
         return service.getAvailableLocales();
@@ -92,25 +89,17 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
     Map getDisplayNames(Locale locale) {
         Collator col = Collator.getInstance(locale);
-        return getService().getDisplayNames(locale, col, null);
+        return service.getDisplayNames(locale, col, null);
     }
 
     String getDisplayName(Locale objectLocale, Locale displayLocale) {
         String id = LocaleUtility.canonicalLocaleString(objectLocale);
-        return getService().getDisplayName(id, displayLocale);
+        return service.getDisplayName(id, displayLocale);
     }
 
-    private static ICULocaleService service;
-    private static ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("Collator") {
-                    protected Object handleDefault(Key key, String[] actualIDReturn) {
-                        if (actualIDReturn != null) {
-                            actualIDReturn[0] = "root";
-                        }
-                        return new RuleBasedCollator(new Locale("", "", ""));
-                    }
-                };
+    private static class CService extends ICULocaleService {
+        CService() {
+            super("Collator");
 
             class CollatorFactory extends ICUResourceBundleFactory {
                 protected Object handleCreate(Locale loc, int kind, ICUService service) {
@@ -121,14 +110,17 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                     return ICULocaleData.getAvailableLocaleNameSet();
                 }
             }
-            newService.registerFactory(new CollatorFactory());
 
-            synchronized (Collator.class) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
+            registerFactory(new CollatorFactory());
+            markDefault();
         }
-        return service;
+
+        protected Object handleDefault(Key key, String[] actualIDReturn) {
+            if (actualIDReturn != null) {
+                actualIDReturn[0] = "root";
+            }
+            return new RuleBasedCollator(new Locale("", "", ""));
+        }
     }
+    private static ICULocaleService service = new CService();
 }

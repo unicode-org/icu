@@ -1692,20 +1692,9 @@ public abstract class Calendar implements Serializable, Cloneable {
 
     private static ICULocaleService service = null;
     private static ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("Calendar");
-            /*
-            class RBCalendarFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale locale, int kind, ICUService service) {
-                    return GregorianCalendar.factory();
-                }
-            }
-            newService.registerFactory(new RBCalendarFactory());
-            */
-            synchronized (Calendar.class) {
-                if (service == null) {
-                    service = newService;
-                }
+        synchronized (Calendar.class) {
+            if (service == null) {
+                service = new ICULocaleService("Calendar");
             }
         }
         return service;

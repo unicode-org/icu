@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIteratorFactory.java,v $ 
- * $Date: 2003/02/15 00:29:04 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/05/05 23:42:17 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -39,14 +39,14 @@ import com.ibm.icu.impl.LocaleUtility;
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
 
     public Object registerInstance(BreakIterator iter, Locale locale, int kind) {
-        return getService().registerObject(iter, locale, kind);
+        return service.registerObject(iter, locale, kind);
     }
     
     public boolean unregister(Object key) {
-        if (service != null) {
-            return service.unregisterFactory((Factory)key);
+        if (service.isDefault()) {
+            return false;
         }
-        return false;
+        return service.unregisterFactory((Factory)key);
     } 
     
     public Locale[] getAvailableLocales() {
@@ -58,33 +58,27 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     }
     
     public BreakIterator createBreakIterator(Locale locale, int kind) {
-        if (service == null) {
+        if (service.isDefault()) {
             return createBreakInstance(locale, kind);
         }
         return (BreakIterator)service.get(locale, kind);
     }
 
-    private ICULocaleService service;
-    private ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("BreakIterator");
+    private static class BFService extends ICULocaleService {
+        BFService() {
+            super("BreakIterator");
 
             class RBBreakIteratorFactory extends ICUResourceBundleFactory {
                 protected Object handleCreate(Locale loc, int kind, ICUService service) {
                     return createBreakInstance(loc, kind);
                 }
             }
-            newService.registerFactory(new RBBreakIteratorFactory());
+            registerFactory(new RBBreakIteratorFactory());
 
-            synchronized (this) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
+            markDefault();
         }
-        return service;
     }
-
+    static final ICULocaleService service = new BFService();
 
     private static final String[] KIND_NAMES = {
         "Character", "Word", "Line", "Sentence", "Title"

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormatServiceShim.java,v $ 
- * $Date: 2003/02/25 23:39:44 $ 
- * $Revision: 1.1 $
+ * $Date: 2003/05/05 23:42:17 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -30,11 +30,10 @@ import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
     
     Locale[] getAvailableLocales() {
-        if (service == null) {
+        if (service.isDefault()) {
             return ICULocaleData.getAvailableLocales();
-        } else {
-            return service.getAvailableLocales();
         }
+        return service.getAvailableLocales();
     }
 
     private static final class NFFactory extends LocaleKeyFactory {
@@ -67,43 +66,33 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
     }
 
     Object registerFactory(NumberFormatFactory factory) {
-        return getService().registerFactory(new NFFactory(factory));
+        return service.registerFactory(new NFFactory(factory));
     }
 
     boolean unregister(Object registryKey) {
-        if (service == null) {
-            return false;
-        } else {
-            return service.unregisterFactory((Factory)registryKey);
-        }
+        return service.unregisterFactory((Factory)registryKey);
     }
 
     NumberFormat createInstance(Locale desiredLocale, int choice) {
-        if (service == null) {
+        if (service.isDefault()) {
             return NumberFormat.createInstance(desiredLocale, choice);
         }
-        NumberFormat result = (NumberFormat)service.get(desiredLocale, choice);
-        return (NumberFormat)result.clone();
+        return (NumberFormat)service.get(desiredLocale, choice);
     }
 
-    private ICULocaleService service = null;
-    private ICULocaleService getService() {
-        if (service == null) {
+    private static class NFService extends ICULocaleService {
+        NFService() {
+            super("NumberFormat");
+
             class RBNumberFormatFactory extends ICUResourceBundleFactory {
                 protected Object handleCreate(Locale loc, int kind, ICUService service) {
                     return NumberFormat.createInstance(loc, kind);
                 }
             }
                 
-            ICULocaleService newService = new ICULocaleService("NumberFormat");
-            newService.registerFactory(new RBNumberFormatFactory());
-            
-            synchronized (NumberFormatServiceShim.class) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
+            registerFactory(new RBNumberFormatFactory());
+            markDefault();
         }
-        return service;
     }
+    private ICULocaleService service = new NFService();
 }

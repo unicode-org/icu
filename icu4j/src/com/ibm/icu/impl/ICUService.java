@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.15 $
+ * $Date: 2003/05/05 23:42:18 $
+ * $Revision: 1.16 $
  *
  *******************************************************************************
  */
@@ -98,6 +98,9 @@ import java.util.TreeMap;
  * resource bundle fallback strategy.<p>
  */
 public class ICUService extends ICUNotifier {
+    /**
+     * Name used for debugging.
+     */
     protected final String name;
 
     /**
@@ -125,6 +128,12 @@ public class ICUService extends ICUNotifier {
      * All the factories registered with this service.
      */
     private final List factories = new ArrayList();
+
+    /**
+     * Record the default number of factories for this service.
+     * Can be set by markDefault.
+     */
+    private int defaultSize = 0;
 
     /**
      * Keys are used to communicate with factories to generate an
@@ -869,7 +878,15 @@ public class ICUService extends ICUNotifier {
      * implementation returns true if there are no factories registered.
      */
     public boolean isDefault() {
-        return factories.size() == 0;
+        return factories.size() == defaultSize;
+    }
+
+    /**
+     * Set the default size to the current number of registered factories.
+     * Used by subclasses to customize the behavior of isDefault.
+     */
+    protected void markDefault() {
+        defaultSize = factories.size();
     }
 
     /**
