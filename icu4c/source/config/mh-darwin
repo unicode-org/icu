@@ -42,7 +42,7 @@ LIBICU = libicu-
 ## Shared object suffix
 SO=		dylib
 ## Non-shared intermediate object suffix
-STATIC_O = static.o
+STATIC_O = ao
 
 ## Force removal [for make clean]
 RMV = rm -rf
