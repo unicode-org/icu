@@ -1,3 +1,5 @@
+package test.translit;
+import test.IntlTest;
 import com.ibm.text.*;
 import java.text.*;
 import java.util.*;
