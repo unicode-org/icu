@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2000/11/28 00:51:41 $
- * $Revision: 1.4 $
+ * $Date: 2000/11/28 16:41:38 $
+ * $Revision: 1.5 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
@@ -297,13 +297,17 @@ public class ChineseTest extends CalendarTest {
             END,
             4,1,2, // Expect 4*-2
             
-            // If we set MONTH last, that should take precedence
-            ChineseCalendar.IS_LEAP_MONTH, 1,
-            Calendar.DAY_OF_MONTH, 1,
-            Calendar.DAY_OF_YEAR, 5, // Should ignore
-            Calendar.MONTH, 3,
-            END,
-            4,1,1, // Expect 4*-1
+            // I've disabled this test because it doesn't work this way,
+            // not even with a GregorianCalendar.  MONTH alone isn't enough
+            // to supercede DAY_OF_YEAR.  Some other month-related field is
+            // also required. - Liu 11/28/00
+            //! // If we set MONTH last, that should take precedence
+            //! ChineseCalendar.IS_LEAP_MONTH, 1,
+            //! Calendar.DAY_OF_MONTH, 1,
+            //! Calendar.DAY_OF_YEAR, 5, // Should ignore
+            //! Calendar.MONTH, 3,
+            //! END,
+            //! 4,1,1, // Expect 4*-1
             
             // If we set IS_LEAP_MONTH last, that should take precedence
             Calendar.MONTH, 3,
@@ -342,9 +346,9 @@ public class ChineseTest extends CalendarTest {
                 cal.set(ChineseCalendar.IS_LEAP_MONTH, expIsLeapMonth);
                 cal.set(Calendar.DAY_OF_MONTH, expDOM);
                 errln("Fail: " + buf + " => " + s +
-                      " | " + (month+1) + "," + isLeapMonth + "," + dom +
+                      "=" + (month+1) + "," + isLeapMonth + "," + dom +
                       ", expected " + fmt.format(cal.getTime()) +
-                      " | " + (expMonth+1) + "," + expIsLeapMonth + "," + expDOM);
+                      "=" + (expMonth+1) + "," + expIsLeapMonth + "," + expDOM);
             }
         }
     }
