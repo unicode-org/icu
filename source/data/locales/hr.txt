@@ -108,7 +108,7 @@ hr {
                 "GMT",
         }
     }
-    LocaleScript{  
-                "Latn",  // ISO 15924 Name 
+    LocaleScript:array {
+        "Latn"  // ISO 15924 Name 
     }
 }

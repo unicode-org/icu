@@ -136,7 +136,7 @@ ar {
                 "GMT",
         }
     }
-    LocaleScript{
+    LocaleScript:array {
             "Arab"
     }
 }
