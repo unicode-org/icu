@@ -161,6 +161,9 @@ UBool SearchIterator::operator==(const SearchIterator &that) const
 
 UTextOffset SearchIterator::first(UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
     setOffset(0, status);
     return handleNext(0, status);
 }
@@ -168,12 +171,18 @@ UTextOffset SearchIterator::first(UErrorCode &status)
 UTextOffset SearchIterator::following(UTextOffset position, 
                                       UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
     setOffset(position, status);
     return handleNext(position, status);
 }
     
 UTextOffset SearchIterator::last(UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
     setOffset(m_search_->textLength, status);
     return handlePrev(m_search_->textLength, status);
 }
@@ -181,6 +190,9 @@ UTextOffset SearchIterator::last(UErrorCode &status)
 UTextOffset SearchIterator::preceding(UTextOffset position, 
                                       UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
     setOffset(position, status);
     return handlePrev(position, status);
 }
