@@ -753,9 +753,11 @@ UChar TransliterationRuleParser::parseSet(const UnicodeString& rule,
     UnicodeSet* set = new UnicodeSet(rule, pos, *parseData, status);
     if (variableNext >= variableLimit) {
         // throw new RuntimeException("Private use variables exhausted");
+        delete set;
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+    set->compact();
     setVariablesVector.addElement(set);
     return variableNext++;
 }
