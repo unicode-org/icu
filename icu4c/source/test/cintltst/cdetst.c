@@ -104,7 +104,7 @@ static void TestTertiary( )
 	return;
     }
     log_verbose("Testing German Collation with Tertiary strength\n");
-    ucol_setNormalization(myCollation, UCOL_DECOMP_CAN_COMP_COMPAT);
+    ucol_setNormalization(myCollation, UNORM_NFC);
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < 12 ; i++)
     {
@@ -124,7 +124,6 @@ static void TestPrimary()
 	return;
     }
     log_verbose("Testing German Collation with primary strength\n");
-       ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION);
     ucol_setStrength(myCollation, UCOL_PRIMARY);
     for (i = 0; i < 12 ; i++)
     {
