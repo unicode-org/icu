@@ -536,15 +536,16 @@ public:
   * Sets the minimum strength to be used in comparison or transformation.
   * <p>Example of use:
   * <pre>
-  * . UErrorCode status = U_ZERO_ERROR;
-  * . Collator*myCollation = Collator::createInstance(Locale::US, 
+  *  \code
+  *  UErrorCode status = U_ZERO_ERROR;
+  *  Collator*myCollation = Collator::createInstance(Locale::US, 
   *                                                         status);
-  * . if (U_FAILURE(status)) return;
-  * . myCollation->setStrength(Collator::PRIMARY);
-  * . // result will be "abc" == "ABC"
-  * . // tertiary differences will be ignored
-  * . Collator::ComparisonResult result = myCollation->compare("abc", 
-  *                                                               "ABC");
+  *  if (U_FAILURE(status)) return;
+  *  myCollation->setStrength(Collator::PRIMARY);
+  *  // result will be "abc" == "ABC"
+  *  // tertiary differences will be ignored
+  *  Collator::ComparisonResult result = myCollation->compare("abc", 
+  * \endcode                                                              "ABC");
   * </pre>
   * @see Collator#getStrength
   * @param newStrength the new comparison level.
