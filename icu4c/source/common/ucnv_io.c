@@ -1214,8 +1214,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
         ds->swapInvChars(ds, inTable+offsets[stringTableIndex], 2*(int32_t)toc[stringTableIndex],
                              outTable+offsets[stringTableIndex], pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ucnv_swapAliases().swapInvChars(charset names) failed - %s\n",
-                             u_errorName(*pErrorCode));
+            udata_printError(ds, "ucnv_swapAliases().swapInvChars(charset names) failed\n");
             return 0;
         }
 
@@ -1311,8 +1310,8 @@ ucnv_swapAliases(const UDataSwapper *ds,
             }
 
             if(U_FAILURE(*pErrorCode)) {
-                udata_printError(ds, "ucnv_swapAliases().uprv_sortArray(%u items) failed - %s\n",
-                                 count, u_errorName(*pErrorCode));
+                udata_printError(ds, "ucnv_swapAliases().uprv_sortArray(%u items) failed\n",
+                                 count);
                 return 0;
             }
 

@@ -1069,8 +1069,7 @@ ucnv_swap(const UDataSwapper *ds,
         ds->swapInvChars(ds, inStaticData->name, uprv_strlen(inStaticData->name),
                             outStaticData->name, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ucnv_swap(): error swapping converter name - %s\n",
-                             u_errorName(*pErrorCode));
+            udata_printError(ds, "ucnv_swap(): error swapping converter name\n");
             return 0;
         }
     }
