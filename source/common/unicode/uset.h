@@ -633,7 +633,7 @@ uset_containsAll(const USet* set1, const USet* set2);
  * @draft ICU 3.4
  */
 U_DRAFT UBool U_EXPORT2
-uset_containsAllCodePoints(USet* set, const UChar *str, int32_t strLen);
+uset_containsAllCodePoints(const USet* set, const UChar *str, int32_t strLen);
 
 /**
  * Returns true if set1 contains none of the characters and strings
