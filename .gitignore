@@ -189,6 +189,7 @@ icu4c/source/test/testmap/Release
 icu4c/source/test/testmap/testmap
 icu4c/source/test/testmap/testmap.plg
 icu4c/source/test/thaitest/Makefile
+icu4c/source/test/threadtest/Makefile
 icu4c/source/tools/*.d
 icu4c/source/tools/*.pdb
 icu4c/source/tools/*.plg
