@@ -89,6 +89,10 @@ LPATHS=../../source/common:../../source/i18n:../../source/tools/toolutil
 
 TOOL=env LD_LIBRARY_PATH=$(LPATHS) LIBPATH=$(LPATHS) 
 
+ifeq ($(strip $(PLATFORM)),OS390)
+  TOOL=
+endif
+
 ifeq ($(strip $(PLATFORM)),AIX)
   TOOL=env LIBPATH=$(LPATHS)
 endif
