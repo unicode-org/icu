@@ -32,10 +32,6 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
     if (exec) logln("TestSuite Utilities: ");
     switch (index) {
         case 0:
-            name = "Reserved";   // Was MutexTest, test retired with removal of ICU static init.
-            break;
-
-        case 1:
             name = "MultithreadTest"; 
             if (exec) {
                 logln("MultithreadTest---"); logln("");
@@ -44,7 +40,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 2:
+        case 1:
             name = "StringTest"; 
             if (exec) {
                 logln("StringTest---"); logln("");
@@ -53,7 +49,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 3:
+        case 2:
             name = "UnicodeStringTest"; 
             if (exec) {
                 logln("UnicodeStringTest---"); logln("");
@@ -62,7 +58,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 4:
+        case 3:
             name = "LocaleTest"; 
             if (exec) {
                 logln("LocaleTest---"); logln("");
@@ -71,7 +67,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 5:
+        case 4:
             name = "CharIterTest"; 
             if (exec) {
                 logln("CharIterTest---"); logln("");
@@ -80,7 +76,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 6:
+        case 5:
             name = "UnicodeTest"; 
             if (exec) {
                 logln("UnicodeTest---"); logln("");
@@ -89,7 +85,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 7:
+        case 6:
             name = "ResourceBundleTest"; 
             if (exec) {
                 logln("ResourceBundleTest---"); logln("");
@@ -97,7 +93,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 callTest( test, par );
             }
             break;
-        case 8:
+        case 7:
             name = "NewResourceBundleTest"; 
             if (exec) {
                 logln("NewResourceBundleTest---"); logln("");
@@ -106,7 +102,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 9:
+        case 8:
             name = "PUtilTest"; 
             if (exec) {
                 logln("PUtilTest---"); logln("");
@@ -115,14 +111,14 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
             
-    case 10:
-      name = "UObjectTest";
-      if(exec) {
-        logln ("UObjectTest---"); logln("");
-        UObjectTest test;
-        callTest( test, par );
-      }
-      break;;
+        case 9:
+            name = "UObjectTest";
+            if(exec) {
+                logln ("UObjectTest---"); logln("");
+                UObjectTest test;
+                callTest( test, par );
+            }
+            break;;
 
         /*
         case 8:
@@ -131,44 +127,6 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 logln("LocaleTest---"); logln("");
                 CLocaleTest test;
                 callTest( test, par );
-            }
-            break;
-
-
-        case 9:
-            name = "UnicodeStringCAPI";
-            if (exec) {
-                logln("UnicodeString C Round Trip test---"); logln("");
-                CUnicodeStringTest test;
-                callTest(test, par);
-            }
-            break;
-
-        case 10:
-            name = "CharacterIteratorCAPI";
-            if (exec) {
-                logln("CharacterIterator C Round Trip test---"); logln("");
-                CCharIterTest test;
-                callTest(test, par);
-            }
-            break;
-
-
-        case 11:
-            name = "UnicodeCAPI";
-            if (exec) {
-                logln("Unicode C-API test---"); logln();
-                TestCwrapperUnicode test;
-                callTest(test, par);
-            }
-            break;
-
-        case 12:
-            name = "ResourceBundleCAPI";
-            if (exec) {
-                logln("ResourceBundle C-API test---"); logln();
-                TestCwrapperResourceBundle test;
-                callTest(test, par);
             }
             break;
         */
