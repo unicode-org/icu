@@ -396,7 +396,7 @@ static void TestMaxExpansion()
   UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
   int                 count  = 1;
 
-  UChar rule[20];
+  UChar rule[256];
   u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
   coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  
                         UCOL_DEFAULT_STRENGTH, &status);
