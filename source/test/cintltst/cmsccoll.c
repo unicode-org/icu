@@ -3390,15 +3390,17 @@ static void TestMergeSortKeys() {
     }
   }
 
-  
-
 
   for(i = 0; i<casesSize; i++) {
     uprv_free(sortkeys[i]);
     uprv_free(mergedPrefixkeys[i]);
     uprv_free(mergedSuffixkeys[i]);
   }
+  uprv_free(sortkeys);
+  uprv_free(mergedPrefixkeys);
+  uprv_free(mergedSuffixkeys);
   uprv_free(sortKeysLen);
+  ucol_close(coll);
   /* need to finish this up */
 }
 
