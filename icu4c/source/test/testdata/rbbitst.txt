@@ -462,7 +462,7 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 
 #      Surrogate line break tests.
 #
-<data>•\u4e01•\ud840\udc01•\u4e02•abc•\ue000•\udb80\udc01•</data>
+<data>•\u4e01•\ud840\udc01•\u4e02•abc •\ue000 •\udb80\udc01•</data>
 
 #      Regression for bug 836
 <data>•AAA•(AAA •</data> 
