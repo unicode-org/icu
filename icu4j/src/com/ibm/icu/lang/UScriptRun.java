@@ -325,7 +325,19 @@ public final class UScriptRun
 			// characters above it on the stack will be poped.
 			if (pairIndex >= 0) {
 				if ((pairIndex & 1) == 0) {
-				    parenStack[++parenSP] = new ParenStackEntry(pairIndex, scriptCode);
+				    
+                    /*
+                     * If the paren stack is full, empty it. This
+                     * means that deeply nested paired punctuation
+                     * characters will be ignored, but that's an unusual
+                     * case, and it's better to ignore them than to
+                     * write off the end of the stack...
+                     */
+				    if (++parenSP >= PAREN_STACK_DEPTH) {
+				        parenSP = 0;
+				    }
+				    
+				    parenStack[parenSP] = new ParenStackEntry(pairIndex, scriptCode);
 				} else if (parenSP >= 0) {
 					int pi = pairIndex & ~1;
 
@@ -413,7 +425,8 @@ public final class UScriptRun
     private int  scriptLimit;
     private int  scriptCode;
 
-    private static ParenStackEntry parenStack[] = new ParenStackEntry[128];
+    private static int PAREN_STACK_DEPTH = 128;
+    private static ParenStackEntry parenStack[] = new ParenStackEntry[PAREN_STACK_DEPTH];
     private int  parenSP;
 
     /**
