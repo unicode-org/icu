@@ -32,6 +32,7 @@ void TestUDataGetInfo();
 void TestUDataGetMemory();
 void TestErrorConditions();
 void TestAppData();
+void TestICUDataName();
 
 void
 addUDataTest(TestNode** root)
@@ -43,6 +44,7 @@ addUDataTest(TestNode** root)
     addTest(root, &TestUDataGetMemory,  "udatatst/TestUDataGetMemory" );
     addTest(root, &TestErrorConditions, "udatatst/TestErrorConditions");
     addTest(root, &TestAppData, "udatatst/TestAppData" );
+    addTest(root, &TestICUDataName, "udatatst/TestICUDataName" );
 
 }
 
@@ -59,10 +61,10 @@ void TestUDataOpen(){
     const char* name = "test";
     const char* type="dat";
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
     char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
 
-    strcat(strcpy(path, u_getDataDirectory()), "icudata");
+    strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
     strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
 
 
@@ -347,10 +349,10 @@ void TestUDataGetInfo() {
     const char* name2="test";
     const char* type="dat";
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
     char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
 
-    strcat(strcpy(path, u_getDataDirectory()), "icudata");
+    strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
     strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
 
 
@@ -470,10 +472,10 @@ void TestErrorConditions(){
     const char* name = "test";
     const char* type="dat";
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
     char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
 
-    strcat(strcpy(path, u_getDataDirectory()), "icudata");
+    strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
     strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
 
     status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -652,4 +654,65 @@ void TestAppData()
   ures_close(app);
 
   return;
+}
+
+void TestICUDataName()
+{
+	UVersionInfo icuVersion;
+	char expectDataName[20];
+	unsigned int expectLen = 8;
+
+	char typeChar  = '?';
+
+	/* Print out the version # we have .. */
+	log_verbose("utypes.h says U_ICUDATA_NAME = %s\n", U_ICUDATA_NAME);
+
+	/* Build up the version # we expect to get */
+	u_getVersion(icuVersion);
+
+	switch(U_CHARSET_FAMILY)
+	{
+	case U_ASCII_FAMILY:
+		  switch(U_IS_BIG_ENDIAN)
+		  {
+		  case 1:
+				typeChar = 'b';
+				break;
+		  case 0:
+			    typeChar = 'l';
+				break;
+		  default:
+				log_err("Expected 1 or 0 for U_IS_BIG_ENDIAN, got %d!\n", (int)U_IS_BIG_ENDIAN);
+				/* return; */
+		  }
+		  break;
+	case U_EBCDIC_FAMILY:
+		typeChar = 'e';
+		break;
+	}
+
+	sprintf(expectDataName, "%s%d%d%c",
+				"icudt",
+				(int)icuVersion[0],
+				(int)icuVersion[1],
+				typeChar);
+
+	log_verbose("Expected: %s\n", expectDataName);
+	if(uprv_strlen(expectDataName) != expectLen)
+	{
+		log_err("*Expected* length is wrong (test err?), should be %d is %d\n",
+			expectLen, uprv_strlen(expectDataName));	
+	}
+
+	if(uprv_strlen(U_ICUDATA_NAME) != expectLen)
+	{
+		log_err("U_ICUDATA_NAME length should be %d is %d\n",
+			expectLen, uprv_strlen(U_ICUDATA_NAME));
+	}
+	
+	if(uprv_strcmp(U_ICUDATA_NAME, expectDataName))
+	{
+		log_err("U_ICUDATA_NAME should be %s but is %s\n",
+				expectDataName, U_ICUDATA_NAME);
+	}
 }
