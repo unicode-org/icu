@@ -1,0 +1,140 @@
+#******************************************************************************
+#
+#   Copyright (C) 1999, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
+#******************************************************************************
+## Makefile.in for ICU extras
+## Stephen F. Booth
+
+SO_TARGET_VERSION = @LIB_VERSION@
+SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ..
+
+include $(top_builddir)/icudefs.mk
+
+## Build directory information
+subdir = stubdata
+
+## Platform-specific setup
+include @platform_make_fragment@
+
+## Files to remove for 'make clean'
+CLEANFILES = *~ $(DEPS)
+
+## Target information
+
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
+
+ifneq ($(ENABLE_STATIC),)
+TARGET = libicudata.a
+RANLIB = @RANLIB@
+endif
+
+#
+#  note:  the variable $MIDDLE_SO_TARGET is special, in that it also appears
+#         in the definition of LD_SONAME in the config/mh<platform> files, which
+#         ends up defining the actual name of the library to the linker.
+#
+#         Also, data probably wants to have three alias names, in the same
+#         way that the code libraries do.  Doing that would require changing
+#         the stub data and the real data at the same time.
+#
+ifneq ($(ENABLE_SHARED),)
+SO_TARGET = libicudata.$(SO)
+ifeq (@U_IS_BIG_ENDIAN@,1)
+MIDDLE_SO_TARGET = libicudt$(SO_TARGET_VERSION_MAJOR)b.$(SO)
+else
+MIDDLE_SO_TARGET = libicudt$(SO_TARGET_VERSION_MAJOR)l.$(SO)
+endif
+ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) 
+endif
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
+
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
+DEFS = @DEFS@ 
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(top_builddir)/common -I$(top_srcdir)/common 
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+LIBS = @LIBS@
+
+OBJECTS = stubdata.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
+
+HEADERS = 
+
+DEPS = $(OBJECTS:.o=.d)
+
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local \
+distclean distclean-local dist dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+
+all-local: $(ALL_TARGETS)
+
+install-local:
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+
+check-local:
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+ifneq ($(ENABLE_STATIC),)
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
+	$(RANLIB) $@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+$(MIDDLE_SO_TARGET): $(OBJECTS)
+	$(SHLIB.c) $(LD_SONAME) -o $@ $^ $(LIBS)
+
+$(SO_TARGET): $(MIDDLE_SO_TARGET)
+	$(RM) $(SO_TARGET) && ln -s $(MIDDLE_SO_TARGET) $(SO_TARGET)
+endif
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
+
