@@ -484,6 +484,36 @@ void ucol_initInverseUCA(UErrorCode *status) {
 /* some more sofisticated and slower functions are invoked             */
 uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
+    if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
+      order = *(collationSource->toReturn++);                         /* if so, return them */
+      if(collationSource->CEpos == collationSource->toReturn) {
+        collationSource->CEpos = collationSource->toReturn = collationSource->CEs; 
+      }
+    } else if(collationSource->pos < collationSource->len) {          /* This is the real business now */
+      UChar ch = *collationSource->pos;
+      if(ch <= 0xFF) {                                                 /* if it's Latin One, we'll try to fast track it */
+        order = coll->latinOneMapping[ch];                            /* by looking in up in an array */
+      } else {                                                        /* otherwise, */
+        order = ucmp32_get(coll->mapping, ch);                        /* we'll go for slightly slower trie */
+      }
+      if(order >= UCOL_NOT_FOUND) {                                   /* if a CE is special */
+        *(collationSource->CEpos) = order;                            /* prepare the buffer */
+        order = getSpecialCE(coll, collationSource, status);       /* and try to get the special CE */
+        if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
+          order = ucol_getNextUCA(ch, collationSource, status);
+        }
+      } 
+      collationSource->pos++; /* we're advancing to the next codepoint */
+    } else {
+      order = UCOL_NO_MORE_CES;                                       /* if so, we won't play any more        */
+    } 
+    /* This means that contraction should spit back the last codepoint eaten! */
+    return order; /* return the CE */
+}
+
+#if 0
+uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
+    uint32_t order;
     if (U_FAILURE(*status) || (collationSource->pos>=collationSource->len
       && collationSource->CEpos <= collationSource->toReturn)) {      /* have we run out of string and CEs??  */
       order = UCOL_NO_MORE_CES;                                         /* if so, we won't play any more        */
@@ -510,6 +540,7 @@ uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UEr
     /* This means that contraction should spit back the last codepoint eaten! */
     return order; /* return the CE */
 }
+#endif
 
 /* This function tries to get a CE from UCA, which should be always around  */
 /* UChar is passed in in order to speed things up                           */
@@ -784,8 +815,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     
 
     for(;;) {
-          order = ucol_getNextCE(coll, s, &status);
-          /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
+          /*order = ucol_getNextCE(coll, s, &status);*/
+          UCOL_GETNEXTCE(order, coll, *s, &status);
           
           if((order & 0xFFFFFFBF) == 0) {
             continue;
@@ -952,6 +983,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         primaries = *result = (uint8_t *)uprv_malloc(2*UCOL_MAX_BUFFER);
         resultLength = 2*UCOL_MAX_BUFFER;
     }
+    uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
     int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER, 
       caseSize = UCOL_MAX_BUFFER, quadSize = UCOL_MAX_BUFFER;
@@ -993,7 +1025,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
-    if(normMode != UCOL_OFF) {
+    if((normMode != UCOL_OFF) && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
@@ -1026,7 +1058,6 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t carry = 0;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
-    uint8_t primary3 = 0;
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
     UBool caseBit = FALSE;
@@ -1034,6 +1065,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool finished = FALSE;
     UBool resultOverflow = FALSE;
     UBool wasShifted = FALSE;
+    UBool notIsContinuation = FALSE;
 
     int32_t prevBuffSize = 0;
 
@@ -1045,7 +1077,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
             order = ucol_getNextCE(coll, &s, status);
-            /*UCOL_GETNEXTCENEW(order, coll, s, status);*/
+            /*UCOL_GETNEXTCE(order, coll, s, status);*/
 
             if((order & 0xFFFFFFBF) == 0) {
               continue;
@@ -1058,30 +1090,17 @@ ucol_calcSortKey(const    UCollator    *coll,
 
             /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
             ce = order;
+            notIsContinuation = !isContinuation(ce);
 
             caseBit = ((tertiary & 0x40) != 0);
 
             //tertiary = (order & UCOL_TERTIARYORDERMASK);
             tertiary = (order & 0x3f); /* this is temporary - removing case bit */         
             secondary = (order >>= 8) & 0xFF;
-            primary3 = 0; /* the third primary */
             primary2 = (order >>= 8) & 0xFF;;
             primary1 = order >>= 8;
 
-#if 0
-            if(isFlagged(ce)) { 
-              if(isLongPrimary(ce)) {
-                /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
-                primary3 = secondary;
-                secondary = UCOL_UNMARKED;
-                if(scriptOrder != NULL) {
-                  primary1 = scriptOrder[primary1];
-                }
-              }
-              tertiary &= 0x3F;
-            } else {
-#endif /* we have decided to scrap long primaries */
-            if(!isContinuation(ce)) {
+            if(notIsContinuation) {
               /* it appears tht something should be done with the case bit */
               /* however, it is not clear when */
               if(upperFirst) { /* if there is a case bit */
@@ -1101,28 +1120,24 @@ ucol_calcSortKey(const    UCollator    *coll,
             /* we're using too much space and need to reallocate the primary buffer or easily bail */
             /* out to ucol_getSortKeySizeNew.                                                      */
 
-            if(shifted && ((!isContinuation(ce) && primary1 <= variableMax1 && primary1 > 0 
+            if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0 
               && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2)) 
-              || (isContinuation(ce) && wasShifted))) { 
+              || (!notIsContinuation && wasShifted))) { 
               if(count4 > 0) {
 				while (count4 >= UCOL_BOT_COUNT4) {
 				  *quads++ = UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4;
-                  sortKeySize++;
 				  count4 -= UCOL_BOT_COUNT4;
 				}
 				*quads++ = UCOL_COMMON_BOT4 + count4;
-                sortKeySize++;
                 count4 = 0;
               }
               /* We are dealing with a variable and we're treating them as shifted */
               /* This is a shifted ignorable */
               if(primary1 != 0) {
                 *quads++ = primary1;
-                sortKeySize++;
               }
               if(primary2 != 0) {
                 *quads++ = primary2;
-                sortKeySize++;
               }
               wasShifted = TRUE;
             } else {
@@ -1132,53 +1147,41 @@ ucol_calcSortKey(const    UCollator    *coll,
               /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
               if(primary1 != UCOL_NEW_IGNORABLE) {
                 *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
-                sortKeySize++;
                 if(primary2 != UCOL_NEW_IGNORABLE) {
                   *primaries++ = primary2; /* second part */
-                  sortKeySize++;
-                  if(primary3 != UCOL_NEW_IGNORABLE) {
-                    *primaries++ = primary3; /* third part */
-                    sortKeySize++;
-                  }
                 }
               }               
 
             if(secondary > compareSec) { 
               if(!isFrenchSec) {
                 /* This is compression code. */
-                if (secondary == UCOL_COMMON2 && !(isContinuation(ce))) {
+                if (secondary == UCOL_COMMON2 && notIsContinuation) {
 				  ++count2;
                 } else {
 				  if (count2 > 0) {
 					if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
 					  while (count2 >= UCOL_TOP_COUNT2) {
 						*secondaries++ = UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2;
-                        sortKeySize++;
 						count2 -= UCOL_TOP_COUNT2;
 					  }
 					  *secondaries++ = UCOL_COMMON_TOP2 - count2;
-                      sortKeySize++;
 					} else {
 					  while (count2 >= UCOL_BOT_COUNT2) {
 						*secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
-                        sortKeySize++;
 						count2 -= UCOL_BOT_COUNT2;
 					  }
 					  *secondaries++ = UCOL_COMMON_BOT2 + count2;
-                      sortKeySize++;
 					}
 					count2 = 0;
 				  }
                   *secondaries++ = secondary;
-                  sortKeySize++;
                 }
               } else {
                   *secondaries++ = secondary;
-                  sortKeySize++;
                   /* Do the special handling for French secondaries */
                   /* We need to get continuation elements and do intermediate restore */
                   /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
-                  if(isContinuation(ce)) {
+                  if(!notIsContinuation) {
                     if (frenchStartPtr == NULL) {
                       frenchStartPtr = secondaries - 2;
                     }
@@ -1194,7 +1197,6 @@ ucol_calcSortKey(const    UCollator    *coll,
               if(doCase) {
                 if (caseShift  == 0) {
                   *cases++ = 0x80;
-                  sortKeySize++;
                   caseShift = 7;
                 }
                 if(tertiary > 0) {
@@ -1205,7 +1207,7 @@ ucol_calcSortKey(const    UCollator    *coll,
               if(tertiary > compareTer) { 
                 /* This is compression code. */
                 /* sequence size check is included in the if clause */
-                if (tertiary == UCOL_COMMON3 && !(isContinuation(ce))) {
+                if (tertiary == UCOL_COMMON3 && notIsContinuation) {
 				  ++count3;
                 } else {
                   if(tertiary > UCOL_COMMON3) {
@@ -1215,32 +1217,28 @@ ucol_calcSortKey(const    UCollator    *coll,
 					if (tertiary > UCOL_COMMON3) {
 					  while (count3 >= UCOL_TOP_COUNT3) {
 						*tertiaries++ = UCOL_COMMON_TOP3 - UCOL_TOP_COUNT3;
-                        sortKeySize++;
   						count3 -= UCOL_TOP_COUNT3;
 					  }
 					  *tertiaries++ = UCOL_COMMON_TOP3 - count3;
-                      sortKeySize++;
 					} else {
 					  while (count3 >= UCOL_BOT_COUNT3) {
 						*tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
-                        sortKeySize++;
 						count3 -= UCOL_BOT_COUNT3;
 					  }
 					  *tertiaries++ = UCOL_COMMON_BOT3 + count3;
-                      sortKeySize++;
 					}
 					count3 = 0;
 				  }
                   *tertiaries++ = tertiary;
-                  sortKeySize++;
                 }
               }
-              if(shifted && !(isContinuation(ce))) {
+              if(shifted && notIsContinuation) {
                 count4++;
               }
             }
 
-            if(sortKeySize>resultLength) { /* We have stepped over the primary buffer */
+            if(primaries > primarySafeEnd) { /* We have stepped over the primary buffer */
+              sortKeySize += (primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart)+(cases-caseStart)+(quads-quadStart);
               if(allocatePrimary == FALSE) { /* need to save our butts if we cannot reallocate */
                 resultOverflow = TRUE;
                 sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
@@ -1272,6 +1270,8 @@ ucol_calcSortKey(const    UCollator    *coll,
           minBufferSize *= 2;
         }
     }
+
+    sortKeySize += (primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart)+(cases-caseStart)+(quads-quadStart);
 
     if(U_SUCCESS(*status)) {
       /* we have done all the CE's, now let's put them together to form a key */
@@ -1738,6 +1738,13 @@ ucol_strcoll(    const    UCollator    *coll,
         return UCOL_EQUAL;
     }
 
+    sourceLength = -1 ? u_strlen(source) : sourceLength;
+    targetLength = -1 ? u_strlen(target) : targetLength;
+
+    if(sourceLength == targetLength && uprv_memcmp(source, target, sizeof(UChar)*sourceLength) == 0) {
+      return UCOL_EQUAL;
+    }
+
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -1748,12 +1755,9 @@ ucol_strcoll(    const    UCollator    *coll,
 
     collIterate sColl, tColl;
 
-    if(coll->normalizationMode == UCOL_OFF) {
-        init_collIterate(source, sourceLength == -1 ? u_strlen(source) : sourceLength, &sColl, FALSE);
-        init_collIterate(target, targetLength == -1 ? u_strlen(target) : targetLength, &tColl, FALSE);
-    } else { /* TODO: This is bad behaved if we're working with small buffers */
-             /* We really need the normalization quick check here*/
-	    /*UNormalizationMode normMode = ucol_getNormalization(coll);*/
+    
+    init_collIterate(source, sourceLength, &sColl, FALSE);
+    if((coll->normalizationMode == UCOL_ON) && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
         normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
         /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
         /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
@@ -1778,20 +1782,24 @@ ucol_strcoll(    const    UCollator    *coll,
             }
             return result;
         }
-        normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
-        if(U_FAILURE(status)) { /* This would be buffer overflow */
-            UColAttributeValue mode = coll->normalizationMode;
-            normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-            status = U_ZERO_ERROR;
-            normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
-            ((UCollator *)coll)->normalizationMode = UCOL_OFF;
-            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-            ((UCollator *)coll)->normalizationMode = mode;
-            uprv_free(normTargetP);
-            return result;
-        }
         init_collIterate(normSource, normSourceLength, &sColl, TRUE);
-        init_collIterate(normTarget, normTargetLength, &tColl, TRUE);
+    }
+
+    init_collIterate(target, targetLength, &tColl, FALSE);
+    if((coll->normalizationMode == UCOL_ON) && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
+      normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
+      if(U_FAILURE(status)) { /* This would be buffer overflow */
+          UColAttributeValue mode = coll->normalizationMode;
+          normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+          status = U_ZERO_ERROR;
+          normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
+          ((UCollator *)coll)->normalizationMode = UCOL_OFF;
+          UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+          ((UCollator *)coll)->normalizationMode = mode;
+          uprv_free(normTargetP);
+          return result;
+      }
+      init_collIterate(normTarget, normTargetLength, &tColl, TRUE);
 	}
 
     if (U_FAILURE(status))
@@ -1907,7 +1915,7 @@ ucol_strcoll(    const    UCollator    *coll,
 
         for(;;) {
           /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
-          tOrder = ucol_getNextCE(coll, &tColl, &status);
+          tOrder = ucol_getNextCE(coll, &tColl, &status);*/
           if(tOrder == 0x00010101) {
             *(tCEs++) = tOrder;
             break;
