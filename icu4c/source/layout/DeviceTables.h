@@ -1,5 +1,5 @@
 /*
- * @(#)DeviceTables.h	1.5 00/03/15
+ * @(#)DeviceTables.h   1.5 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -25,9 +25,9 @@ struct DeviceTable
     le_int16   getAdjustment(le_uint16 ppem) const;
 
 private:
-    static le_uint16 fieldMasks[];
-    static le_uint16 fieldSignBits[];
-    static le_uint16 fieldBits[];
+    static const le_uint16 fieldMasks[];
+    static const le_uint16 fieldSignBits[];
+    static const le_uint16 fieldBits[];
 };
 
 U_NAMESPACE_END

@@ -19,10 +19,10 @@
 
 U_NAMESPACE_BEGIN
 
-LETag LookupProcessor::notSelected    = 0x00000000;
-LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
+const LETag LookupProcessor::notSelected    = 0x00000000;
+const LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
 
-LETag emptyTag = 0x00000000;
+const LETag emptyTag = 0x00000000;
 
 
 le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator,
@@ -119,9 +119,9 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
         scriptListTable = (const ScriptListTable *) (baseAddress + scriptListOffset);
         langSysTable = scriptListTable->findLanguage(scriptTag, languageTag);
 
-		if (langSysTable != 0) {
-			featureCount = SWAPW(langSysTable->featureCount);
-		}
+        if (langSysTable != 0) {
+            featureCount = SWAPW(langSysTable->featureCount);
+        }
     }
 
     if (featureListOffset != 0) {

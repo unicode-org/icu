@@ -26,11 +26,11 @@ private:
     le_bool fFilterControls;
     le_bool fMirror;
 
-    static LEUnicode32 controlChars[];
+    static const LEUnicode32 controlChars[];
 
     static const le_int32 controlCharsCount;
 
-    static LEUnicode32 mirroredChars[];
+    static const LEUnicode32 mirroredChars[];
 
     static const le_int32 mirroredCharsCount;
 
