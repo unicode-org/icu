@@ -35,7 +35,8 @@
  * Unicode character values.  
  * <p>
  * The Unicode character information, provided implicitly by the 
- * Unicode character encoding standard, includes information about the sript 
+ * <a href="http://www.unicode.org/">Unicode Standard</a>,
+ * includes information about the sript
  * (for example, symbols or control characters) to which the character belongs,
  * as well as semantic information such as whether a character is a digit or 
  * uppercase, lowercase, or uncased.
@@ -45,17 +46,55 @@
 class U_COMMON_API Unicode
 {
 public:
-    /**
-     * The minimum value a UChar can have.  The lowest value a
-     * UChar can have is 0x0000.
+    /*
+     * In C++, static const members actually take up memory and need to be accessed.
+     * enum values are more like C #define's.
+     * The following is a collection of constants, not an enumeration type.
      */
-    static const UChar   MIN_VALUE;
+    enum {
+        /** The lowest Unicode code point value. Code points are non-negative. */
+        MIN_VALUE=0,
 
-    /**
-     * The maximum value a UChar can have.  The greatest value a
-     * UChar can have is 0xffff.
-     */
-    static const UChar   MAX_VALUE;
+        /**
+         * The highest Unicode code point value (scalar value) according to
+         * The Unicode Standard. This is a 21-bit value (20.1 bits, rounded up).
+         * For a single character, UChar32 is a simple type that can hold any code point value.
+         */
+        MAX_VALUE=0x10ffff,
+
+        /**
+         * The maximum number of code units (UChar's) per code point (UChar32).
+         * This depends on the default UTF that the ICU library is compiled for.
+         * Currently, the only natively supported UTF is UTF-16, which means that
+         * UChar is 16 bits wide and this value is 2 (for surrogate pairs).
+         * This may change in the future.
+         */
+        MAX_CHAR_LENGTH=UTF_MAX_CHAR_LENGTH,
+
+        /**
+         * The minimum radix available for conversion to and from Strings.  
+         * The constant value of this field is the smallest value permitted 
+         * for the radix argument in radix-conversion methods such as the 
+         * <code>digit</code> method and the <code>forDigit</code>
+         * method. 
+         *
+         * @see     Unicode#digit
+         * @see     Unicode#forDigit
+         */
+        MIN_RADIX=2,
+
+        /**
+         * The maximum radix available for conversion to and from Strings.
+         * The constant value of this field is the largest value permitted 
+         * for the radix argument in radix-conversion methods such as the 
+         * <code>digit</code> method and the <code>forDigit</code>
+         * method.
+         *
+         * @see     Unicode#digit
+         * @see     Unicode#forDigit
+         */
+        MAX_RADIX=36
+    };
 
     /**
      * Public data for enumerated Unicode general category types
@@ -207,28 +246,114 @@ public:
     };
 
     /**
-     * The minimum radix available for conversion to and from Strings.  
-     * The constant value of this field is the smallest value permitted 
-     * for the radix argument in radix-conversion methods such as the 
-     * <code>digit</code> method and the <code>forDigit</code>
-     * method. 
+     * Does this code unit alone represent a Unicode code point?
+     * If so, then the code point value is the same as the code unit value,
+     * or <code>(UChar32)c</code>.
+     * Being a single, lead, or trail unit are mutually exclusive properties.
      *
-     * @see     Unicode#digit
-     * @see     Unicode#forDigit
+     * @param c The code unit to be tested.
+     * @return Boolean value.
      */
-    static const int8_t MIN_RADIX;
+    static inline bool_t isSingle(UChar c);
 
     /**
-     * The maximum radix available for conversion to and from Strings.
-     * The constant value of this field is the largest value permitted 
-     * for the radix argument in radix-conversion methods such as the 
-     * <code>digit</code> method and the <code>forDigit</code>
-     * method.
+     * Is this code unit the first of a multiple-unit sequence?
+     * Being a single, lead, or trail unit are mutually exclusive properties.
      *
-     * @see     Unicode#digit
-     * @see     Unicode#forDigit
+     * @param c The code unit to be tested.
+     * @return Boolean value.
      */
-    static const int8_t MAX_RADIX;
+    static inline bool_t isLead(UChar c);
+
+    /**
+     * Is this code unit one of, but not the first, of a multiple-unit sequence?
+     * Being a single, lead, or trail unit are mutually exclusive properties.
+     *
+     * @param c The code unit to be tested.
+     * @return Boolean value.
+     */
+    static inline bool_t isTrail(UChar c);
+
+    /**
+     * Is this code point a surrogate character?
+     * Surrogates are not characters; they are reserved for
+     * use in UTF-16 strings as leading and trailing code units
+     * of multiple-unit sequences for single code points.
+     *
+     * @param c The code point to be tested.
+     * @return Boolean value.
+     */
+    static inline bool_t isSurrogate(UChar32 c);
+
+    /**
+     * Is this code point a Unicode character?
+     * The value range for Unicode characters is limited to
+     * 0x10ffff==MAX_VALUE, and some values within this
+     * range are reserved and not characters, too.
+     * Those are the surrogate values and all values where the least
+     * significant 16 bits are either 0xfffe or 0xffff.
+     *
+     * @param c The code point to be tested.
+     * @return Boolean value.
+     */
+    static inline bool_t isUnicodeChar(UChar32 c);
+
+    /**
+     * Is this code point an error value?
+     * In ICU, code point access with macros or functions does not result
+     * in a UErrorCode to be set if a code unit sequence is illegal
+     * or irregular, but instead the resulting code point will be
+     * one of few special error values. This function tests for one of those.
+     *
+     * @param c The code point to be tested.
+     * @return Boolean value.
+     */
+    static inline bool_t isError(UChar32 c);
+
+    /**
+     * Is this code point a Unicode character, and not an error value?
+     * This is an efficient combination of
+     * <code>isUnicodeChar(c) && !isError(c)</code>.
+     *
+     * @param c The code point to be tested.
+     * @return Boolean value.
+     */
+    static inline bool_t isValid(UChar32 c);
+
+    /**
+     * When writing code units for a given code point, is more than one
+     * code unit necessary?
+     * If not, then a single UChar value of <code>(UChar)c</code> can
+     * be written to a UChar array. Otherwise, multiple code units need to be
+     * calculated and written.
+     *
+     * @param c The code point to be tested.
+     * @return Boolean value.
+     */
+    static inline bool_t needMultipleUChar(UChar32 c);
+
+    /**
+     * When writing code units for a given code point, how many
+     * code units are necessary?
+     *
+     * @param c The code point to be tested.
+     * @return Boolean value.
+     */
+    static inline int32_t charLength(UChar32 c);
+
+    /**
+     * This function returns an average size of a UChar array compared to the
+     * size that it would need to hold similar text if UTF-16 were used.
+     * With UTF-16, this always returns its argument.
+     * With UTF-8, the number returned will be larger, with UTF-32, smaller.
+     * It will typically be less than <code>size*MAX_CHAR_LENGTH</code>.
+     *
+     * @param size The size of the array if UTF-16 were used.
+     * @return An average size necessary for the UTF that ICU was compiled for.
+     *         (Only UTF-16 is supported right now, therefore,
+     *         this will always be <code>size</code> itself. This may change in the future.)
+     */
+    static inline int32_t arraySize(int32_t size);
 
    /**
      * Determines whether the specified UChar is a lowercase character
@@ -242,7 +367,7 @@ public:
      * @see Unicode#toLowerCase
      * @draft
      */
-    static  bool_t          isLowerCase(UChar     ch);
+    static inline bool_t isLowerCase(UChar32 ch);
 
     /**
      * Determines whether the specified character is an uppercase character
@@ -255,7 +380,7 @@ public:
      * @see Unicode#toUpperCase
      * @draft
      */
-    static  bool_t          isUpperCase(UChar ch);
+    static inline bool_t isUpperCase(UChar32 ch);
 
     /**
      * Determines whether the specified character is a titlecase character
@@ -268,7 +393,7 @@ public:
      * @see Unicode#toTitleCase
      * @draft
      */
-    static  bool_t          isTitleCase(UChar ch);
+    static inline bool_t isTitleCase(UChar32 ch);
 
     /**
      * Determines whether the specified character is a digit according to Unicode
@@ -281,7 +406,7 @@ public:
      * @see     Unicode#digitValue
      * @draft
      */
-    static  bool_t          isDigit(UChar ch);
+    static inline bool_t isDigit(UChar32 ch);
 
     /**
      * Determines whether the specified numeric value is actually a defined character
@@ -298,7 +423,7 @@ public:
      * @see Unicode#isTitleCase
      * @draft
      */
-    static  bool_t          isDefined(UChar       ch);
+    static inline bool_t isDefined(UChar32 ch);
 
     /**
      * Determines whether the specified character is a control character according 
@@ -310,7 +435,7 @@ public:
      * @see Unicode#isPrintable
      * @draft
      */
-    static  bool_t          isControl(UChar ch);
+    static inline bool_t isControl(UChar32 ch);
 
     /**
      * Determines whether the specified character is a printable character according 
@@ -322,7 +447,7 @@ public:
      * @see Unicode#isControl
      * @draft
      */
-    static  bool_t          isPrintable(UChar ch);
+    static inline bool_t isPrintable(UChar32 ch);
 
     /**
      * Determines whether the specified character is of the base form according 
@@ -335,8 +460,8 @@ public:
      * @see Unicode#isDigit
      * @draft
      */
+     static inline bool_t isBaseForm(UChar32 ch);
 
-     static  bool_t          isBaseForm(UChar ch);
     /**
      * Determines whether the specified character is a letter
      * according to Unicode 2.1.2.
@@ -352,7 +477,7 @@ public:
      * @see Unicode#isTitleCase
      * @draft
      */
-    static  bool_t          isLetter(UChar        ch);
+    static inline bool_t isLetter(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character
@@ -374,7 +499,7 @@ public:
      * @see     isUnicodeIdentifierStart
      * @draft
      */
-    static bool_t isJavaIdentifierStart(UChar ch);
+    static inline bool_t isJavaIdentifierStart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character 
@@ -404,7 +529,7 @@ public:
      * @see     isUnicodeIdentifierPart
      * @draft
      */
-    static bool_t isJavaIdentifierPart(UChar ch);
+    static inline bool_t isJavaIdentifierPart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character 
@@ -420,7 +545,7 @@ public:
      * @see     isUnicodeIdentifierPart
      * @draft
      */
-    static bool_t isUnicodeIdentifierStart(UChar ch);
+    static inline bool_t isUnicodeIdentifierStart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character
@@ -448,7 +573,7 @@ public:
      * @see     isUnicodeIdentifierStart
      * @draft
      */
-    static bool_t isUnicodeIdentifierPart(UChar ch);
+    static inline bool_t isUnicodeIdentifierPart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character 
@@ -475,7 +600,7 @@ public:
      * @see     isUnicodeIdentifierPart
      * @draft
      */
-    static bool_t isIdentifierIgnorable(UChar ch);
+    static inline bool_t isIdentifierIgnorable(UChar32 ch);
 
     /**
      * The given character is mapped to its lowercase equivalent according to
@@ -501,7 +626,7 @@ public:
      * @see Unicode#toTitleCase
      * @draft
      */
-   static   UChar         toLowerCase(UChar     ch); 
+   static inline UChar32 toLowerCase(UChar32 ch); 
 
     /**
      * The given character is mapped to its uppercase equivalent according to Unicode
@@ -524,7 +649,7 @@ public:
      * @see Unicode#toTitleCase
      * @draft
      */
-    static  UChar         toUpperCase(UChar     ch);
+    static inline UChar32 toUpperCase(UChar32 ch);
 
     /**
      * The given character is mapped to its titlecase equivalent according to Unicode
@@ -543,7 +668,7 @@ public:
      * @see Unicode#toLowerCase
      * @draft
      */
-    static  UChar             toTitleCase(UChar     ch);
+    static inline UChar32 toTitleCase(UChar32 ch);
 
     /**
      * Determines if the specified character is a Unicode space character
@@ -553,7 +678,7 @@ public:
      * @return  true if the character is a space character; false otherwise.
      * @draft
      */
-    static  bool_t              isSpaceChar(UChar     ch);
+    static inline bool_t isSpaceChar(UChar32 ch);
 
     /**
      * Determines if the specified character is white space according to ICU.
@@ -583,7 +708,7 @@ public:
      * @see     #isSpaceChar
      * @draft
      */
-    static bool_t isWhitespace(UChar ch);
+    static inline bool_t isWhitespace(UChar32 ch);
 
    /**
      * Returns a value indicating a character category according to Unicode
@@ -619,7 +744,7 @@ public:
      * @see Unicode#OTHER_SYMBOL
      * @draft
      */
-    static  int8_t          getType(UChar     ch);
+    static inline int8_t getType(UChar32 ch);
 
     /**
      * Returns the linguistic direction property of a character.
@@ -630,14 +755,14 @@ public:
      * @see #EDirectionProperty
      * @draft
      */
-    static EDirectionProperty characterDirection(UChar ch);
+    static inline EDirectionProperty characterDirection(UChar32 ch);
 
     /**
      * Returns the script associated with a character.
      * @see #EUnicodeScript
      * @draft
      */
-    static EUnicodeScript    getScript(UChar    ch);
+    static inline EUnicodeScript getScript(UChar32 ch);
 
     /**
      * Returns a value indicating the display-cell width of the character
@@ -690,7 +815,7 @@ public:
      * conventions.
      * @draft
      */
-    static uint16_t         getCellWidth(UChar    ch);
+    static inline uint16_t getCellWidth(UChar32 ch);
 
     /**
      * Retrieve the name of a Unicode character.
@@ -734,7 +859,7 @@ public:
      * @see     Unicode#isDigit
      * @deprecated HSYS: use Unicode::digit instead.
      */
-    static int32_t            digitValue(UChar ch);     
+    static inline int32_t digitValue(UChar32 ch);     
 
     /**
      * Returns the numeric value of the character <code>ch</code> in the 
@@ -773,7 +898,7 @@ public:
      * @see     Unicode#isDigit
      * @draft
      */
-    static int8_t digit(UChar ch, int8_t radix);
+    static inline int8_t digit(UChar32 ch, int8_t radix);
 	
     /**
      * Determines the character representation for a specific digit in 
@@ -802,27 +927,257 @@ public:
      * @see     Unicode#isDigit
      * @draft
      */
-    static UChar forDigit(int32_t digit, int8_t radix);
+    static inline UChar32 forDigit(int32_t digit, int8_t radix);
 
     /**
      * Retrieves the Unicode Standard Version number that is used
      * @param info the version # information, the result will be filled in
      * @draft
      */
-	static void   getUnicodeVersion(UVersionInfo info);
+	static void getUnicodeVersion(UVersionInfo info);
 
 protected:
     // These constructors, destructor, and assignment operator must
     // be protected (not private, as they semantically are) to make
     // various UNIX compilers happy. [LIU]
-                            Unicode();
-                            Unicode(    const   Unicode&    other);
-                            ~Unicode();
-    const   Unicode&        operator=(  const   Unicode&    other);
-
-
-
+    // They should be private to prevent anyone from instantiating or
+    // subclassing Unicode.
+    Unicode();
+    Unicode(const Unicode &other);
+    ~Unicode();
+    const Unicode &operator=(const Unicode &other);
 };
+
+/* inline implementations --------------------------------------------------- */
+
+static inline bool_t
+isSingle(UChar c) {
+    return UTF_IS_SINGLE(c);
+}
+
+static inline bool_t
+isLead(UChar c) {
+    return UTF_IS_LEAD(c);
+}
+
+static inline bool_t
+isTrail(UChar c) {
+    return UTF_IS_TRAIL(c);
+}
+
+static inline bool_t
+isSurrogate(UChar32 c) {
+    return UTF_IS_SURROGATE(c);
+}
+
+static inline bool_t
+isUnicodeChar(UChar32 c) {
+    return UTF_IS_UNICODE_CHAR(c);
+}
+
+static inline bool_t
+isError(UChar32 c) {
+    return UTF_IS_ERROR(c);
+}
+
+static inline bool_t
+isValid(UChar32 c) {
+    return UTF_IS_VALID(c);
+}
+
+static inline bool_t
+needMultipleUChar(UChar32 c) {
+    return UTF_NEED_MULTIPLE_UCHAR(c);
+}
+
+static inline int32_t
+charLength(UChar32 c) {
+    return UTF_CHAR_LENGTH(c);
+}
+
+static inline int32_t
+arraySize(int32_t size) {
+    return UTF_ARRAY_SIZE(size);
+}
+
+// Checks if ch is a lower case letter.
+inline bool_t
+Unicode::isLowerCase(UChar32 ch) {
+    return u_islower(ch);
+}
+
+// Checks if ch is a upper case letter.
+inline bool_t
+Unicode::isUpperCase(UChar32 ch) {
+    return u_isupper(ch);
+}
+
+// Checks if ch is a title case letter; usually upper case letters.
+inline bool_t
+Unicode::isTitleCase(UChar32 ch) {
+    return u_istitle(ch);
+}
+
+// Checks if ch is a decimal digit.
+inline bool_t
+Unicode::isDigit(UChar32 ch) {
+    return u_isdigit(ch);
+}
+
+// Checks if ch is a unicode character with assigned character type.
+inline bool_t
+Unicode::isDefined(UChar32 ch) {
+    return u_isdefined(ch);
+}
+
+// Checks if the Unicode character is a control character.
+inline bool_t
+Unicode::isControl(UChar32 ch) {
+    return u_iscntrl(ch);
+}
+
+// Checks if the Unicode character is printable.
+inline bool_t
+Unicode::isPrintable(UChar32 ch) {
+    return u_isprint(ch);
+}
+
+// Checks if the Unicode character is a base form character that can take a diacritic.
+inline bool_t
+Unicode::isBaseForm(UChar32 ch) {
+    return u_isbase(ch);
+}
+
+// Checks if the Unicode character is a letter.
+inline bool_t
+Unicode::isLetter(UChar32 ch) {
+    return u_isalpha(ch);
+}
+
+// Checks if the Unicode character can start a Java identifier.
+inline bool_t
+Unicode::isJavaIdentifierStart(UChar32 ch) {
+    return u_isJavaIDStart(ch);
+}
+
+// Checks if the Unicode character can be a Java identifier part other than starting the
+// identifier.
+inline bool_t
+Unicode::isJavaIdentifierPart(UChar32 ch) {
+    return u_isJavaIDPart(ch);
+}
+
+// Checks if the Unicode character can start a Unicode identifier.
+inline bool_t
+Unicode::isUnicodeIdentifierStart(UChar32 ch) {
+    return u_isIDStart(ch);
+}
+
+// Checks if the Unicode character can be a Unicode identifier part other than starting the
+// identifier.
+inline bool_t
+Unicode::isUnicodeIdentifierPart(UChar32 ch) {
+    return u_isIDPart(ch);
+}
+
+// Checks if the Unicode character can be ignorable in a Java or Unicode identifier.
+inline bool_t
+Unicode::isIdentifierIgnorable(UChar32 ch) {
+    return u_isIDIgnorable(ch);
+}
+
+// Transforms the Unicode character to its lower case equivalent.
+inline UChar32       
+Unicode::toLowerCase(UChar32 ch) {
+    return u_tolower(ch);
+}
+    
+// Transforms the Unicode character to its upper case equivalent.
+inline UChar32
+Unicode::toUpperCase(UChar32 ch) {
+    return u_toupper(ch);
+}
+
+// Transforms the Unicode character to its title case equivalent.
+inline UChar32
+Unicode::toTitleCase(UChar32 ch) {
+    return u_totitle(ch);
+}
+
+// Checks if the Unicode character is a space character.
+inline bool_t
+Unicode::isSpaceChar(UChar32 ch) {
+    return u_isspace(ch);
+}
+
+// Determines if the specified character is white space according to ICU.
+inline bool_t
+Unicode::isWhitespace(UChar32 ch) {
+    // ### TODO Move this implementation to C, and make this call the C
+    //      implementation.
+    // TODO Optional -- reimplement in terms of modified category
+    //      code -- see Mark Davis's note (below).  If this is done,
+    //      the implementation still must conform to the specified
+    //      semantics.  That is, U+00A0 and U+FEFF must return false,
+    //      and the ranges U+0009 - U+000D and U+001C - U+001F must
+    //      return true.  Characters other than these in Zs, Zl, or Zp
+    //      must return true.
+
+    int8_t cat = Unicode::getType(ch);
+    return
+        (cat == SPACE_SEPARATOR && ch != 0x00A0 && ch != 0xFEFF) ||
+        (((((int32_t(1) << LINE_SEPARATOR) |
+            (int32_t(1) << PARAGRAPH_SEPARATOR)) >> cat) & int32_t(1)) != 0) ||
+        (ch <= 0x1F && ((((int32_t(1) << 0x0009) |
+                          (int32_t(1) << 0x000A) |
+                          (int32_t(1) << 0x000B) |
+                          (int32_t(1) << 0x000C) |
+                          (int32_t(1) << 0x000D) |
+                          (int32_t(1) << 0x001C) |
+                          (int32_t(1) << 0x001D) |
+                          (int32_t(1) << 0x001E) |
+                          (int32_t(1) << 0x001F)) >> ch) & int32_t(1)) != 0);
+
+    // From Mark Davis:
+    //| What we should do is to make sure that the special Cc characters like CR
+    //| have either Zs, Zl, or Zp in the property database. We can then just call
+    //| the equivalent of:
+    //| 
+    //|  public static boolean isWhileSpace(char ch) {
+    //|   return ((1 << Character.getType(c)) & WHITESPACE_MASK) != 0; }
+    //| 
+    //| where WHITESPACE_MASK = (1 << Zs) | (1 << Zl) | (1 << Zp);
+    //| 
+    //| This is much faster code, since it just looksup the property value and does
+    //| a couple of arithmetics to get the right answer.
+    //
+    // (We still have to make sure U+00A0 and U+FEFF are excluded, so the code
+    //  might not be as simple as this. - aliu)
+}
+
+// Gets if the Unicode character's character property.
+inline int8_t
+Unicode::getType(UChar32 ch) {
+    return u_charType(ch);
+}
+
+// Gets the character's linguistic directionality.
+inline Unicode::EDirectionProperty
+Unicode::characterDirection(UChar32 ch) {
+    return (EDirectionProperty)u_charDirection(ch);
+}
+
+// Get the script associated with the character
+inline Unicode::EUnicodeScript
+Unicode::getScript(UChar32 ch) {
+    return (EUnicodeScript) u_charScript(ch);
+}
+
+// Gets table cell width of the Unicode character.
+inline uint16_t
+Unicode::getCellWidth(UChar32 ch) {
+    return u_charCellWidth(ch);
+}
 
 inline UTextOffset
 Unicode::getCharName(uint32_t code,
@@ -831,6 +1186,50 @@ Unicode::getCharName(uint32_t code,
     UErrorCode errorCode=U_ZERO_ERROR;
     UTextOffset length=u_charName(code, nameChoice, buffer, bufferLength, &errorCode);
     return U_SUCCESS(errorCode) ? length : 0;
+}
+
+inline int32_t            
+Unicode::digitValue(UChar32 ch) {
+    return u_charDigitValue(ch);
+}
+
+inline int8_t
+Unicode::digit(UChar32 ch, int8_t radix) {
+    // ### TODO this should probably move to a C u_charDigitValueEx(ch, radix) and be called here
+    int8_t value;
+    if((uint8_t)(radix-MIN_RADIX)<=(MAX_RADIX-MIN_RADIX)) {
+        value=(int8_t)u_charDigitValue(ch);
+        if(value<0) {
+            // ch is not a decimal digit, try latin letters
+            if ((uint32_t)(ch-0x41)<26) {
+                value=(int8_t)(ch-(0x41-10)); // A-Z, subtract A
+            } else if ((uint32_t)(ch-0x61)<26) {
+                value=(int8_t)(ch-(0x61-10)); // a-z, subtract a
+            } else {
+                return -1; // ch is not a digit character
+            }
+        }
+    } else {
+        return -1; // invalid radix
+    }
+    return (value<radix) ? value : -1;
+}
+
+inline UChar32
+Unicode::forDigit(int32_t digit, int8_t radix) {
+    // ### TODO this should probably move to a C u_forDigit(digit, radix) and be called here
+    if((uint8_t)(radix-MIN_RADIX)>(MAX_RADIX-MIN_RADIX) || (uint32_t)digit>=(uint32_t)radix) {
+        return 0;
+    } else if(digit<10) {
+        return (UChar32)(0x30+digit);
+    } else {
+        return (UChar32)((0x61-10)+digit);
+    }
+}
+
+inline void
+Unicode::getUnicodeVersion(UVersionInfo versionArray) {
+	u_getUnicodeVersion(versionArray);
 }
 
 #endif
