@@ -224,7 +224,8 @@ typedef struct {
 #include <stdio.h>
 #endif
 
-#   if defined(UDATA_DLL) /* POSIX dll implementation ----------------------- */
+/* add more to this list as more platform's dll support is written */  
+#   if defined(UDATA_DLL) && (defined(LINUX)||defined(SOLARIS)) /* POSIX dll implementation ----------------------- */
 
 struct UDataMemory {
     void *lib;
@@ -294,6 +295,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     const char *dataDir;
     struct stat mystat;
     void *data;
+    UErrorCode errorCode = U_ZERO_ERROR;
 
     /* determine the length of the file */
     if(stat(path, &mystat))
@@ -338,7 +340,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     pData->p =(MappedData *)data;
 
     /* is it acceptable? */
-    if(NULL=getChoice(pData, NULL, DATA_TYPE, COMMON_DATA_NAME, isCommonDataAcceptable, NULL, &errorCode)) {
+    if(NULL==getChoice(pData, NULL, DATA_TYPE, COMMON_DATA_NAME, isCommonDataAcceptable, NULL, &errorCode)) {
         udata_close(pData);
         return NULL;
     }

@@ -26,8 +26,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "../toolutil/toolutil.h"
-#include "../toolutil/unewdata.h"
+#include "toolutil.h"
+#include "unewdata.h"
 
 #define STRING_STORE_SIZE 100000
 #define MAX_FILE_COUNT 2000

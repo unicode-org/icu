@@ -776,7 +776,7 @@ getLibraryPath(char *path, int size) {
 #   elif defined(OS400)
 #   elif defined(XP_MAC)
 #   elif defined(SOLARIS)
-        void *handle=dlopen("libicuuc.so", RTLD_LAZY);
+        void *handle=dlopen(U_COMMON_LIBNAME, RTLD_LAZY); /* "libicu-uc.so" */
         if(handle!=NULL) {
             Link_map *p=NULL;
             char *s;
@@ -787,7 +787,7 @@ getLibraryPath(char *path, int size) {
             if(rc>=0) {
                 /* search for the list item for the library itself */
                 while(p!=NULL) {
-                    s=icu_strstr(p->l_name, "libicuuc.so");
+       	           s=icu_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
                     if(s!=NULL) {
                         if(s>p->l_name) {
                             /* copy the path, without the basename and the last separator */
@@ -809,7 +809,7 @@ getLibraryPath(char *path, int size) {
         }
 #   elif defined(LINUX)
 #   elif defined(AIX)
-        void *handle=load("libicuuc.a", L_LIBPATH_EXEC, ".");
+        void *handle=load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
         if(handle!=NULL) {
             uint8_t buffer[4096];
             struct ld_info *p=NULL;
@@ -828,7 +828,7 @@ getLibraryPath(char *path, int size) {
                     }
                     p=(struct ld_info *)((uint8_t *)p+p->ldinfo_next);
 
-                    s=icu_strstr(p->ldinfo_filename, "libicuuc.a");
+                    s=icu_strstr(p->ldinfo_filename, U_COMMON_LIBNAME); /*  "libicuuc.a"    */
                     if(s!=NULL) {
                         if(s>p->ldinfo_filename) {
                             /* copy the path, without the basename and the last separator */
@@ -861,7 +861,7 @@ getLibraryPath(char *path, int size) {
                 break;
             }
 
-            s=icu_strstr(p->filename, "libicuuc.sl");
+            s=icu_strstr(p->filename, U_COMMON_LIBNAME);
             if(s!=NULL) {
                 if(s>p->l_name) {
                     /* copy the path, without the basename and the last separator */
@@ -971,6 +971,10 @@ findLibraryPath(char *path, int size) {
 /* define a path for fallbacks */
 #define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING ICU_VERSION U_FILE_SEP_STRING
 
+/* #include <stdio.h> */
+/* #include <unistd.h> */
+
+
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     /* if we have the directory, then return it immediately */
@@ -983,6 +987,14 @@ u_getDataDirectory(void) {
 #       if !defined(OS400) && !defined(XP_MAC)
             /* first try to get the environment variable */
             path=getenv("ICU_DATA");
+/* 	    fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
+/* 	    { */
+/* 	      int i; */
+/* 	      fprintf(stderr, "E=%08X\n", __environ); */
+/* 	      if(__environ) */
+/* 	      for(i=0;__environ[i] && __environ[i][0];i++) */
+/* 		puts(__environ[i]); */
+/* 	    } */
 #       endif
 
 #       ifdef WIN32

@@ -1,11 +1,8 @@
-## Makefile.in for ICU - test/cintltst
-## Stephen F. Booth
+## Makefile.in for ICU - tools/gencmn
+## Steven R. Loomi
 
 ## Shell to use
 SHELL = @SHELL@
-
-UNICODE_VERSION = @UNICODE_VERSION@
-
 
 ## Install directory information
 srcdir = @srcdir@
@@ -41,39 +38,31 @@ VERSION = @VERSION@
 
 ## Build directory information
 top_builddir = ../..
-subdir = test/cintltst
+subdir = tools/gencmn
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~
 
 ## Target information
-TARGET = cintltst
-
+TARGET = gencmn
 
 DEFS = @DEFS@
-
-# we define ICU_UNICODE_VERSION so we can test it
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw  \
- -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\"
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/ctestfw
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) $(LIBCTESTFW) @LIBS@ @LIB_M@
+$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil
+LIBS = $(LIBICU-UC)  @LIBS@ @LIB_M@  -L$(top_builddir)/tools/toolutil -licu-toolutil
 
-OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o		\
-ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o		\
-cdattst.o cdetst.o cdtdptst.o cdtrgtst.o cestst.o cfintst.o cformtst.o	\
-cfrtst.o cg7coll.o cintltst.o citertst.o cjaptst.o cloctst.o cmsgtst.o	\
-cnmdptst.o cnormtst.o cnumtst.o cregrtst.o crestst.o cturtst.o		\
-cucdtst.o cutiltst.o encoll.o nucnvtst.o susctest.o nccbtst.o \
-cbiditst.o cbididat.o eurocreg.o
+OBJECTS = gencmn.o
 
 DEPS = $(OBJECTS:.o=.d)
 
+
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check check-local
+.PHONY : all all-local install install-local clean clean-local		\
+distclean distclean-local target-clean-local dist dist-local check	\
+check-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -86,29 +75,35 @@ distclean : distclean-local
 dist: dist-local
 check: check-local
 
-all-local: $(TARGET)
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
-install-local: all-local
+install-local: target-clean-local all-local
+	$(mkinstalldirs) $(sbindir)
+	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 
 dist-local:
 
-clean-local:
+target-clean-local:
+	rm -f $(TARGET)
+
+clean-local: target-clean-local
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS)
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS)
+	rm -f Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
 
-check-local: $(TARGET)
-	HOME=$(top_builddir)/../.. ICU_DATA=$(top_builddir)/../data/ TZ=PST8PDT ./$(TARGET)
+check-local:
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS)
+	$(LINK.c) -o $@ $^ $(LIBS) 
 
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)
 endif
+
+

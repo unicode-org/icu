@@ -3,12 +3,18 @@
 
 ## Shell to use
 SHELL = @SHELL@
+VERSION = @VERSION@
 
 ## Install directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
+
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
+
+
+@host_frag@
 
 bindir = @bindir@
 sbindir = @sbindir@
@@ -19,6 +25,9 @@ includedir = @includedir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
+
+ICUDATADIR=$(pkgdatadir)/$(VERSION)
+SRCDATADIR=$(top_builddir)/../data/
 
 ## Build directory information
 top_builddir = ..
@@ -32,6 +41,9 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 
+## for cleaning up libraries
+STRIP = @STRIP@
+
 ## Package information
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
@@ -39,10 +51,11 @@ VERSION = @VERSION@
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = ctestfw makeconv genrb gencol rbdump
+SUBDIRS = ctestfw makeconv genrb gencol rbdump \
+toolutil genccode gennames gencmn 
 
 ## List of phony targets
-.PHONY : all all-local all-recursive install install-local		\
+.PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
 check check-local check-recursive
@@ -76,9 +89,66 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit 1; \
 	fi
 
-all-local:
+all-local: build-local
 
-install-local:
+DATAFILES=$(SRCDATADIR)/unames.dat
+SRCDATAFILES=$(DATAFILES:.dat=_dat.c)
+OBJDATAFILES=$(SRCDATAFILES:.c=.o)
+COMMONFILE=$(SRCDATADIR)/icudata.dat
+COMMONDLL=$(SRCDATADIR)/libicudata.$(SO)
+
+# the files to be installed -- the COMMON ones + any stragglers
+UDATA_FILES=icudata.dat
+UDATA_DLLS=libicudata.$(SO)
+
+build-local: build-data build-cmnfile build-dll
+
+# check for any other generated data here
+install-data: $(DATAFILES)
+
+build-cmnfile:  $(COMMONFILE)
+
+$(COMMONFILE):	$(DATAFILES)
+	-rm -f $(COMMONFILE)
+	echo "$(DATAFILES)" > mkmap.tmp
+	ICU_DATA=$(SRCDATADIR)	./gencmn/gencmn 1000000 mkmap.tmp
+
+build-dll: $(COMMONDLL)
+
+%_dat.c: %.dat
+	./genccode/genccode $<
+
+# strip is optional 
+$(COMMONDLL): $(OBJDATAFILES)
+	$(SHLIB.c) -o $@ $^
+	-$(STRIP) $@
+	-ls -l $@
+
+
+### use the "--enable-mapped=" option to configure, to get mapped file behavior.
+# the case where '--enable-mapped=yes' - raw files [which can be mapped]
+@USE_MAPPED_TRUE@install-udata:  install-files
+
+# the case where '--enable-mapped=no'  (DEFAULT) - DLL's [so's to you]
+@USE_MAPPED_FALSE@install-udata: install-dlls
+###
+
+install-local: build-local install-udata
+
+install-everything: install-files install-dlls
+
+install-files:
+	@for file in $(UDATA_FILES); do \
+	  echo $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	done
+
+install-dlls:
+	@for file in $(UDATA_DLLS); do \
+	  echo $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	done
+
 
 dist-local:
 
