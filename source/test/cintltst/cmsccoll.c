@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -31,15 +31,15 @@
 #ifdef WIN32
 #define UNICODE
 #include <windows.h>
-#else 
+#else
 #define LCID uint32_t
 #define LOCALE_SYSTEM_DEFAULT 0
-#endif 
+#endif
 
 #define MAX_TOKEN_LEN 16
 
-typedef int tst_strcoll(void *collator, const int object, 
-                        const UChar *source, const int sLen, 
+typedef int tst_strcoll(void *collator, const int object,
+                        const UChar *source, const int sLen,
                         const UChar *target, const int tLen);
 
 const static UChar gRules[MAX_TOKEN_LEN] =
@@ -113,7 +113,7 @@ static void TestCase( )
         }
       }
     }
-    ucol_close(myCollation);    
+    ucol_close(myCollation);
 
 }
 
@@ -142,7 +142,7 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
             memcpy(temp, orders, size * sizeof(int32_t));
             free(orders);
             orders = temp;
-            
+
         }
 
         orders[size++] = order;
@@ -171,12 +171,12 @@ static void backAndForth(UCollationElements *iter)
     int32_t orderLength = 0;
     int32_t *orders;
     orders= getOrders(iter, &orderLength);
-    
-    
+
+
     /* Now go through it backwards and make sure we get the same values */
     index = orderLength;
     ucol_reset(iter);
-    
+
     /* synwee : changed */
     while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
     {
@@ -220,7 +220,7 @@ static void backAndForth(UCollationElements *iter)
         log_verbose("\n");
     }
 
-    free(orders);    
+    free(orders);
 }
 
 const static char cnt1[][10] = {
@@ -259,10 +259,10 @@ static void IncompleteCntTest( )
   UCollator *coll =  NULL;
   uint32_t i = 0, j = 0;
   uint32_t size = 0;
-  
+
   u_uastrcpy(temp, " & Z < ABC < Q < B");
 
-  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
+  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION,
                                                 UCOL_DEFAULT_STRENGTH, &status);
 
   if(U_SUCCESS(status)) {
@@ -283,13 +283,13 @@ static void IncompleteCntTest( )
         free(iter);
       }
     }
-  } 
+  }
 
   ucol_close(coll);
 
 
   u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
-  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
+  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION,
                                                 UCOL_DEFAULT_STRENGTH, &status);
 
   if(U_SUCCESS(status)) {
@@ -311,7 +311,7 @@ static void IncompleteCntTest( )
         free(iter);
       }
     }
-  } 
+  }
 
   ucol_close(coll);
 
@@ -375,7 +375,7 @@ static void BlackBirdTest( ) {
         doTest(coll, t1, t2, UCOL_LESS);
       }
     }
-  } 
+  }
 
   ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
@@ -389,7 +389,7 @@ static void BlackBirdTest( ) {
         doTest(coll, t1, t2, UCOL_LESS);
       }
     }
-  } 
+  }
 
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
   if(U_SUCCESS(status)) {
@@ -399,7 +399,7 @@ static void BlackBirdTest( ) {
       u_uastrcpy(t2, shifted[i]);
       doTest(coll, t1, t2, shiftedTert[i]);
     }
-  } 
+  }
 
   ucol_close(coll);
 }
@@ -432,7 +432,7 @@ const static UCollationResult results[] = {
 
 static void FunkyATest( )
 {
-    
+
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
@@ -613,7 +613,7 @@ static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     fprintf(file,"Primary swamps 2nd failed  source: %s target: %s \n", utfSource,utfTarget);
 */
 }
-   
+
 static void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
@@ -730,7 +730,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength, 
+    while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
                       &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
@@ -742,7 +742,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       if(exLen > 0 && firstEx == 0) {
         u_strncat(first, rulesCopy+exOffset, exLen);
         first[firstLen+exLen] = 0;
-      } 
+      }
 
       lastReset = FALSE;
 
@@ -789,13 +789,13 @@ static int winTest(void *collator, const int object, const UChar *source, const 
 }
 */
 
-static UCollationResult swampEarlier(tst_strcoll* func, void *collator, int opts, 
-                                     UChar s1, UChar s2, 
-                                     const UChar *s, const uint32_t sLen, 
+static UCollationResult swampEarlier(tst_strcoll* func, void *collator, int opts,
+                                     UChar s1, UChar s2,
+                                     const UChar *s, const uint32_t sLen,
                                      const UChar *t, const uint32_t tLen) {
   UChar source[256] = {0};
   UChar target[256] = {0};
-  
+
   source[0] = s1;
   u_strcpy(source+1, s);
   target[0] = s2;
@@ -804,13 +804,13 @@ static UCollationResult swampEarlier(tst_strcoll* func, void *collator, int opts
   return func(collator, opts, source, sLen+1, target, tLen+1);
 }
 
-static UCollationResult swampLater(tst_strcoll* func, void *collator, int opts, 
-                                   UChar s1, UChar s2, 
-                                   const UChar *s, const uint32_t sLen, 
+static UCollationResult swampLater(tst_strcoll* func, void *collator, int opts,
+                                   UChar s1, UChar s2,
+                                   const UChar *s, const uint32_t sLen,
                                    const UChar *t, const uint32_t tLen) {
   UChar source[256] = {0};
   UChar target[256] = {0};
-  
+
   u_strcpy(source, s);
   source[sLen] = s1;
   u_strcpy(target, t);
@@ -819,8 +819,8 @@ static UCollationResult swampLater(tst_strcoll* func, void *collator, int opts,
   return func(collator, opts, source, sLen+1, target, tLen+1);
 }
 
-static uint32_t probeStrength(tst_strcoll* func, void *collator, int opts, 
-                              const UChar *s, const uint32_t sLen, 
+static uint32_t probeStrength(tst_strcoll* func, void *collator, int opts,
+                              const UChar *s, const uint32_t sLen,
                               const UChar *t, const uint32_t tLen,
                               UCollationResult result) {
   UChar fPrimary = 0x6d;
@@ -841,13 +841,13 @@ static uint32_t probeStrength(tst_strcoll* func, void *collator, int opts,
 
   if(swampEarlier(func, collator, opts, sSecondary, fSecondary, s, sLen, t, tLen) == result) {
     return UCOL_PRIMARY;
-  } else if((swampEarlier(func, collator, opts, sTertiary, 0x310f, s, sLen, t, tLen) == result) && 
+  } else if((swampEarlier(func, collator, opts, sTertiary, 0x310f, s, sLen, t, tLen) == result) &&
     (swampEarlier(func, collator, opts, 0x310f, sTertiary, s, sLen, t, tLen) == result)) {
     return UCOL_SECONDARY;
-  } else if((swampLater(func, collator, opts, sTertiary, fTertiary, s, sLen, t, tLen) == result) && 
+  } else if((swampLater(func, collator, opts, sTertiary, fTertiary, s, sLen, t, tLen) == result) &&
     (swampLater(func, collator, opts, fTertiary, sTertiary, s, sLen, t, tLen) == result)) {
     return UCOL_TERTIARY;
-  } else if((swampLater(func, collator, opts, sTertiary, 0x310f, s, sLen, t, tLen) == oposite) && 
+  } else if((swampLater(func, collator, opts, sTertiary, 0x310f, s, sLen, t, tLen) == oposite) &&
     (swampLater(func, collator, opts, fTertiary, sTertiary, s, sLen, t, tLen) == oposite)) {
     return UCOL_QUATERNARY;
   } else {
@@ -876,14 +876,14 @@ static char *getRelationSymbol(UCollationResult res, uint32_t strength, char *bu
 
   return buffer;
 }
-  
 
 
-static void logFailure (const char *platform, const char *test, 
+
+static void logFailure (const char *platform, const char *test,
                         const UChar *source, const uint32_t sLen,
                         const UChar *target, const uint32_t tLen,
                         UCollationResult realRes, uint32_t realStrength,
-                        UCollationResult expRes, uint32_t expStrength) { 
+                        UCollationResult expRes, uint32_t expStrength) {
 
   uint32_t i = 0;
 
@@ -1003,7 +1003,7 @@ static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t
   } else if(realResult != UCOL_LESS || realStrength != strength) {
     logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_LESS, strength);
     diffs++;
-  } 
+  }
   return diffs;
 }
 
@@ -1044,9 +1044,9 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength, 
+    while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &specs, startOfRules, status)) != NULL) { 
+                      &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
       varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = ((specs & UCOL_TOK_TOP) != 0);
@@ -1059,7 +1059,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
         u_strncat(first, rulesCopy+exOffset, exLen);
         first[firstLen+exLen] = 0;
         firstLen += exLen;
-      } 
+      }
 
       if(strength != UCOL_TOK_RESET) {
         if((*first<0x3400 || *first>=0xa000) && (*second<0x3400 || *second>=0xa000)) {
@@ -1129,7 +1129,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength, 
+    while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
                       &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
@@ -1213,13 +1213,13 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
 static const char* localesToTest[] = {
 "ar", "bg", "ca", "cs", "da",
-"el", "en_BE", "en_US_POSIX", 
-"es", "et", "fi", "fr", "hi", 
-"hr", "hu", "is", "iw", "ja", 
-"ko", "lt", "lv", "mk", "mt", 
-"nb", "nn", "nn_NO", "pl", "ro", 
+"el", "en_BE", "en_US_POSIX",
+"es", "et", "fi", "fr", "hi",
+"hr", "hu", "is", "iw", "ja",
+"ko", "lt", "lv", "mk", "mt",
+"nb", "nn", "nn_NO", "pl", "ro",
 "ru", "sh", "sk", "sl", "sq",
-"sr", "sv", "th", "tr", "uk", 
+"sr", "sv", "th", "tr", "uk",
 "vi", "zh", "zh_TW"
 };
 
@@ -1266,7 +1266,7 @@ static void TestCollations( ) {
   char cName[256];
   UChar name[256];
   int32_t nameSize;
-  
+
 
   const char *locName = NULL;
   UCollator *coll = NULL;
@@ -1345,7 +1345,7 @@ static void IsTailoredTest( ) {
   uint32_t ruleLen, tailoredLen, notTailoredLen;
 
   log_verbose("IsTailoredTest\n");
- 
+
   u_uastrcpy(rule, "&Z < A, B, C;c < d");
   ruleLen = u_strlen(rule);
 
@@ -1391,10 +1391,10 @@ static void TestVariableTop(void) {
     u_uastrcpy(rules, str);
 
     enCollation = ucol_open("en_US", &status);
-    myCollation = ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, 
+    myCollation = ucol_openRules(rules, len, UCOL_NO_NORMALIZATION,
                                  UCOL_PRIMARY, &status);
     if (U_FAILURE(status)) {
-        log_err("ERROR: in creation of rule based collator :%s\n", 
+        log_err("ERROR: in creation of rule based collator :%s\n",
                 myErrorName(status));
     }
 
@@ -1410,26 +1410,26 @@ static void TestVariableTop(void) {
 
     /* space is supposed to be a variable */
     source[0] = ' ';
-    len = ucol_getSortKey(enCollation, source, 1, result, 
+    len = ucol_getSortKey(enCollation, source, 1, result,
                           sizeof(result));
 
     ch = 'A';
     while (ch < 'z') {
         source[0] = ch;
-        len = ucol_getSortKey(enCollation, source, 1, result, 
+        len = ucol_getSortKey(enCollation, source, 1, result,
                               sizeof(result));
         len = ucol_getSortKey(myCollation, source, 1, result,
                               sizeof(result));
         ch ++;
     }
-  
+
     free(rules);
     ucol_close(enCollation);
     ucol_close(myCollation);
     enCollation = NULL;
     myCollation = NULL;
 }
- 
+
 static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size) {
   UChar t1[256] = {0};
   UChar t2[256] = {0};
@@ -1479,7 +1479,7 @@ const static char chTest[][20] = {
   "ha", "Ha", "harly", "hb", "HB", "hx", "HX", "hy", "HY",
   "ch", "cH", "Ch", "CH",
   "cha", "charly", "che", "chh", "chch", "chr",
-  "i", "I", "iarly", 
+  "i", "I", "iarly",
   "r", "R",
   "r\\u030C", "R\\u030C",
   "s",
@@ -1508,7 +1508,7 @@ static void TestChMove(void) {
         doTest(coll, t1, t2, UCOL_LESS);
       }
     }
-  } 
+  }
 }
 
 const static char impTest[][20] = {
@@ -1545,7 +1545,7 @@ static void TestImplicitTailoring(void) {
         doTest(coll, t1, t2, UCOL_LESS);
       }
     }
-  } 
+  }
 }
 
 static void TestFCDProblem(void) {
@@ -1578,11 +1578,11 @@ typedef struct {
 static void TestComposeDecompose(void) {
     int32_t noOfLoc = uloc_countAvailable();
     int32_t i = 0, j = 0;
-    
+
     UErrorCode status = U_ZERO_ERROR;
-    
+
     const char *locName = NULL;
-    
+
     UChar u = 0;
     /*
     UChar NFC[256] = {0};
@@ -1593,20 +1593,20 @@ static void TestComposeDecompose(void) {
     tester **t = uprv_malloc(0xFFFF * sizeof(tester *));
     uint32_t noCases = 0;
     UCollator *coll = NULL;
-    
+
     t[0] = (tester *)uprv_malloc(sizeof(tester));
-    
+
     for(u = 0; u < 0xFFFF; u++) {
         nfcSize = unorm_normalize(&u, 1, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
         nfdSize = unorm_normalize(&u, 1, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
-        
+
         if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)) {
             t[noCases]->u = u;
             noCases++;
             t[noCases] = (tester *)uprv_malloc(sizeof(tester));
         }
     }
-    
+
     for(i = 0; i<noOfLoc; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
@@ -1622,15 +1622,15 @@ static void TestComposeDecompose(void) {
                 cName[nameSize] = 0;
                 log_verbose("\nTesting locale %s (%s)\n", locName, cName);
             }
-            
+
             coll = ucol_open(locName, &status);
-            
+
             for(u=0; u<noCases; u++) {
                 doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
             }
-            
+
             ucol_close(coll);
-            
+
         }
     }
     for(u = 0; u <= noCases; u++) {
@@ -1669,7 +1669,7 @@ static void TestUCAZero() {
   u_unescape(blah, b, 256);
   ucol_getSortKey(coll, b, 1, res, 256);
 
-  
+
 
   ucol_close(coll);
 }
@@ -1682,7 +1682,7 @@ static void TestUCAZero() {
     E < .. (\u0113) < .. (\u00e9) < .. (\u011b) < .. (\u00e8)
     I < .. (\u012b) < .. (\u00ed) < .. (\u01d0) < .. (\u00ec)
     O < .. (\u014d) < .. (\u00f3) < .. (\u01d2) < .. (\u00f2)
-    U < .. (\u016b) < .. (\u00fa) < .. (\u01d4) < .. (\u00f9) 
+    U < .. (\u016b) < .. (\u00fa) < .. (\u01d4) < .. (\u00f9)
       < .. (\u01d6) < .. (\u01d8) < .. (\u01da) < .. (\u01dc) <
 .. (\u00fc)
 
@@ -1694,17 +1694,17 @@ However, in testing we got the following order:
     I < .. (\u00ed) < .. (\u00ec) < .. (\u01d0) < .. (\u012b)
     O < .. (\u00f3) < .. (\u00f2) < .. (\u01d2) < .. (\u014d)
     U < .. (\u00fa) < .. (\u00f9) < .. (\u01d4) < .. (\u00fc) <
-.. (\u01d8) 
+.. (\u01d8)
       < .. (\u01dc) < .. (\u01da) < .. (\u01d6) < .. (\u016b)
 */
 
 static void TestBefore() {
   const static char *data[] = {
-      "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0", "A", 
-      "\\u0113", "\\u00e9", "\\u011b", "\\u00e8", "E", 
-      "\\u012b", "\\u00ed", "\\u01d0", "\\u00ec", "I", 
-      "\\u014d", "\\u00f3", "\\u01d2", "\\u00f2", "O", 
-      "\\u016b", "\\u00fa", "\\u01d4", "\\u00f9", "U", 
+      "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0", "A",
+      "\\u0113", "\\u00e9", "\\u011b", "\\u00e8", "E",
+      "\\u012b", "\\u00ed", "\\u01d0", "\\u00ec", "I",
+      "\\u014d", "\\u00f3", "\\u01d2", "\\u00f2", "O",
+      "\\u016b", "\\u00fa", "\\u01d4", "\\u00f9", "U",
       "\\u01d6", "\\u01d8", "\\u01da", "\\u01dc", "\\u00fc"
   };
   genericRulesStarter(
@@ -1763,8 +1763,53 @@ static void TestJ815() {
 }
 
 
+static void TestIncrementalNormalize() {
+
+    UChar baseA     =0x41;
+    UChar baseB     = 0x42;
+    UChar ccMix[]   = {0x316, 0x321, 0x300};
+    //  0x316 is combining grave accent below, cc=220
+    //  0x321 is combining palatalized hook below, cc=202
+    //  0x300 is combining grave accent, cc=230
+
+    int          maxSLen   = 2000;
+    int          sLen;
+    int          i;
+
+    UChar        *strA;
+    UChar        *strB;
+    UCollator    *coll;
+    UErrorCode    status = U_ZERO_ERROR;
+
+    strA = uprv_malloc((maxSLen+1) * sizeof(UChar));
+    strB = uprv_malloc((maxSLen+1) * sizeof(UChar));
+
+    coll = ucol_open("en_US", &status);
+    ucol_setNormalization(coll, UNORM_NFD);
+
+    // for (sLen = 4; sLen<maxSLen; sLen++) {
+    for (sLen = 1000; sLen<1001; sLen++) {
+        strA[0] = baseA;
+        strB[0] = baseA;
+        for (i=1; i<=sLen-1; i++) {
+            strA[i] = ccMix[i % 3];
+            strB[sLen-i] = ccMix[i % 3];
+        }
+        strA[sLen]   = 0;
+        strB[sLen]   = 0;
+
+        doTest(coll, strA, strB, UCOL_EQUAL);
+    }
+
+    ucol_close(coll);
+    uprv_free(strA);
+    uprv_free(strB);
+}
+
+
+
 void addMiscCollTest(TestNode** root)
-{ 
+{
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
@@ -1775,16 +1820,17 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
     addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
     addTest(root, &TestImplicitTailoring, "tscoll/cmsccoll/TestImplicitTailoring");
-    addTest(root, &TestFCDProblem, "tscoll/cmsccoll/TestFCDProblem");   
-    addTest(root, &TestEmptyRule, "tscoll/cmsccoll/TestEmptyRule");   
+    addTest(root, &TestFCDProblem, "tscoll/cmsccoll/TestFCDProblem");
+    addTest(root, &TestEmptyRule, "tscoll/cmsccoll/TestEmptyRule");
     addTest(root, &TestJ784, "tscoll/cmsccoll/TestJ784");
     addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
     addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
     addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
     /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
-    /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/   
+    /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
     /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
+    addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
 }
 
