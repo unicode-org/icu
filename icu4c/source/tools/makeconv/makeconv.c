@@ -700,6 +700,7 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   uint32_t i = 0;
   CompactShortArray *myFromUnicode = NULL, *myFromUnicodeFallback = NULL;
   CompactShortArray *myToUnicode = NULL, *myToUnicodeFallback = NULL;
+  char endOfLine;
 
   /*Evaluates the replacement codepoint*/
   replacementChar = 0xFFFF;
@@ -748,7 +749,9 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
           if (!uprv_strcmp(codepointBytes, "END")) break;
           unicodeValue = (UChar)T_CString_stringToInteger(codepointBytes, 16);
           line = getToken(codepointBytes, line, CODEPOINT_SEPARATORS);
-          if (line[nextTokenOffset(line, CODEPOINT_SEPARATORS)] != '\0') 
+
+          endOfLine= line[nextTokenOffset(line, CODEPOINT_SEPARATORS)];
+          if ( (endOfLine!= '\0') && (endOfLine != FALLBACK_SEPARATOR) ) /* End of line could be \0 or | (if fallback) */
             {
               /*When there is a second byte*/
               myUConverterTable->mbcs.starters[T_CString_stringToInteger(codepointBytes, 16)] = TRUE;
@@ -827,6 +830,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
   uint32_t i = 0;
+  char endOfLine;
   UBool seenFallback = FALSE;
   CompactShortArray* myFromUnicode = NULL;
   CompactShortArray* myToUnicode = NULL;
@@ -865,7 +869,8 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
           if (!uprv_strcmp(codepointBytes, "END")) break;
           unicodeValue = (UChar)T_CString_stringToInteger(codepointBytes, 16);
           line = getToken(codepointBytes, line, CODEPOINT_SEPARATORS);
-          if (line[nextTokenOffset(line, CODEPOINT_SEPARATORS)] != '\0') 
+          endOfLine= line[nextTokenOffset(line, CODEPOINT_SEPARATORS)];
+          if ( (endOfLine!= '\0') && (endOfLine != FALLBACK_SEPARATOR) )
             {
               /*two-byter!*/
               line = getToken(codepointBytes+2, line, CODEPOINT_SEPARATORS);
