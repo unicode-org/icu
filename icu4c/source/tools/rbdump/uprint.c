@@ -77,7 +77,7 @@ uprint(const UChar *s,
     myTarget     = buf;
     arraySize    = BUF_SIZE;
   }
-  while(*status == U_INDEX_OUTOFBOUNDS_ERROR); 
+  while(*status == U_BUFFER_OVERFLOW_ERROR); 
 
  finish:
   
