@@ -159,6 +159,18 @@ public:
       { result=*fValue.fString; return result; }
 
     /**
+     * Gets a const reference to the string value of this object.
+     * @draft
+     */
+    inline const UnicodeString& getString(void) const;
+
+    /**
+     * Gets a reference to the string value of this object.
+     * @draft
+     */
+    inline UnicodeString& getString(void);
+
+    /**
      * Gets the array value and count of this object.
      * @stable
      */ 
@@ -249,6 +261,14 @@ Formattable::createArrayCopy(const Formattable* array, int32_t count)
     Formattable *result = new Formattable[count];
     for (int32_t i=0; i<count; ++i) result[i] = array[i]; // Don't memcpy!
     return result;
+}
+
+inline const UnicodeString& Formattable::getString(void) const {
+    return *fValue.fString;
+}
+
+inline UnicodeString& Formattable::getString(void) {
+    return *fValue.fString;
 }
 
 #endif //_FMTABLE
