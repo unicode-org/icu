@@ -237,30 +237,30 @@ static void DataDrivenPrintf(void) {
                 switch (testCase->getString("argumentType", errorCode)[0]) {
                 case 0x64:  // 'd' double
                     dbl = atof(u_austrcpy(cBuffer, argument));
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, dbl);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, dbl);
                     break;
                 case 0x31:  // '1' int8_t
                     i8 = (int8_t)uto64(argument);
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i8);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, i8);
                     break;
                 case 0x32:  // '2' int16_t
                     i16 = (int16_t)uto64(argument);
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i16);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, i16);
                     break;
                 case 0x34:  // '4' int32_t
                     i32 = (int32_t)uto64(argument);
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i32);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, i32);
                     break;
                 case 0x38:  // '8' int64_t
                     i64 = uto64(argument);
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i64);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, i64);
                     break;
                 case 0x73:  // 's' char *
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, cBuffer);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, cBuffer);
                     break;
                 case 0x53:  // 'S' UChar *
-                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, argument);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, argument);
                     break;
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {

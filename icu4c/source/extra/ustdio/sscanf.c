@@ -878,7 +878,6 @@ u_scanf_scanset_handler(UFILE    *input,
 
 U_CAPI int32_t  U_EXPORT2 
 u_sscanf(const UChar   *buffer,
-         const char    *locale,
          const char    *patternSpecification,
          ... )
 {
@@ -886,7 +885,7 @@ u_sscanf(const UChar   *buffer,
     int32_t converted;
 
     va_start(ap, patternSpecification);
-    converted = u_vsscanf(buffer, locale, patternSpecification, ap);
+    converted = u_vsscanf(buffer, patternSpecification, ap);
     va_end(ap);
 
     return converted;
@@ -894,7 +893,6 @@ u_sscanf(const UChar   *buffer,
 
 U_CAPI int32_t  U_EXPORT2 
 u_sscanf_u(const UChar    *buffer,
-           const char     *locale,
            const UChar    *patternSpecification,
            ... )
 {
@@ -902,7 +900,7 @@ u_sscanf_u(const UChar    *buffer,
     int32_t converted;
 
     va_start(ap, patternSpecification);
-    converted = u_vsscanf_u(buffer, locale, patternSpecification, ap);
+    converted = u_vsscanf_u(buffer, patternSpecification, ap);
     va_end(ap);
 
     return converted;
@@ -910,7 +908,6 @@ u_sscanf_u(const UChar    *buffer,
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsscanf(const UChar   *buffer,
-          const char    *locale,
           const char    *patternSpecification,
           va_list        ap)
 {
@@ -932,7 +929,7 @@ u_vsscanf(const UChar   *buffer,
     u_charsToUChars(patternSpecification, pattern, size);
 
     /* do the work */
-    converted = u_vsscanf_u(buffer, locale, pattern, ap);
+    converted = u_vsscanf_u(buffer, pattern, ap);
 
     /* clean up */
     if (pattern != patBuffer) {
@@ -986,7 +983,6 @@ static const u_scanf_info g_u_scanf_infos[USCANF_NUM_FMT_HANDLERS] = {
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsscanf_u(const UChar *buffer,
-            const char  *locale,
             const UChar *patternSpecification,
             va_list     ap)
 {
@@ -1015,7 +1011,7 @@ u_vsscanf_u(const UChar *buffer,
     /* haven't converted anything yet */
     converted = 0;
 
-    if(u_locbund_init(&inStr.str.fBundle, locale) == 0) {
+    if(u_locbund_init(&inStr.str.fBundle, "en_US_POSIX") == 0) {
         return 0;
     }
 
