@@ -22,7 +22,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.8 $ $Date: 2001/03/22 00:09:10 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.9 $ $Date: 2001/08/06 23:57:45 $
  * @draft
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
@@ -35,7 +35,7 @@ class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
     /**
      * The pattern used by the default constructor
      */
-    static const UnicodeString DEFAULT_PATTERN;
+    static const UChar *DEFAULT_PATTERN;
 
     // Character constants defined here to avoid ASCII dependency
     enum {
