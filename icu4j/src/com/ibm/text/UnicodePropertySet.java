@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2001/10/17 19:17:06 $
-* $Revision: 1.1 $
+* $Date: 2001/10/22 05:36:25 $
+* $Revision: 1.2 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -52,7 +52,7 @@ import com.ibm.util.Utility;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.1 $ $Date: 2001/10/17 19:17:06 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.2 $ $Date: 2001/10/22 05:36:25 $
  */
 class UnicodePropertySet {
 
@@ -135,14 +135,14 @@ class UnicodePropertySet {
         // Look for an opening [:, [:^, \p, or \P
         if (pattern.regionMatches(pos, "[:", 0, 2)) {
             posix = true;
-            pos = skipWhitespace(pattern, pos+2);
+            pos = Utility.skipWhitespace(pattern, pos+2);
             if (pos < pattern.length() && pattern.charAt(pos) == '^') {
                 ++pos;
                 invert = true;
             }
         } else if (pattern.regionMatches(true, pos, "\\p", 0, 2)) {
             invert = (pattern.charAt(pos+1) == 'P');
-            pos = skipWhitespace(pattern, pos+2);
+            pos = Utility.skipWhitespace(pattern, pos+2);
             if (pos == pattern.length() || pattern.charAt(pos++) != '{') {
                 // Syntax error; "\p" or "\P" not followed by "{"
                 return null;
@@ -330,22 +330,6 @@ class UnicodePropertySet {
             }
         }
         return buf.toString();
-    }
-
-    /**
-     * Skip over a sequence of zero or more white space characters
-     * at pos.  Return the index of the first non-white-space character
-     * at or after pos, or str.length(), if there is none.
-     */
-    private static int skipWhitespace(String str, int pos) {
-        while (pos < str.length()) {
-            int c = UTF16.charAt(str, pos);
-            if (!UCharacter.isWhitespace(c)) {
-                break;
-            }
-            pos += UTF16.getCharCount(c);
-        }
-        return pos;
     }
 
     //----------------------------------------------------------------
