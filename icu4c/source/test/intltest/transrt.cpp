@@ -48,9 +48,37 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(11,TestDevanagariTelugu);
         CASE(12,TestDevanagariKannada);
         CASE(13,TestDevanagariMalayalam);
+        CASE(14,TestBengaliGurmukhi);
+        CASE(15,TestBengaliGujarati);
+        CASE(16,TestBengaliOriya);
+        CASE(17,TestBengaliTamil);
+        CASE(18,TestBengaliTelugu);
+        CASE(19,TestBengaliKannada);
+        CASE(20,TestBengaliMalayalam );
+        CASE(21,TestGurmukhiGujarati);
+        CASE(22,TestGurmukhiOriya);
+        CASE(23,TestGurmukhiTamil);
+        CASE(24,TestGurmukhiTelugu);
+        CASE(25,TestGurmukhiKannada);
+        CASE(26,TestGurmukhiMalayalam);
+        CASE(27,TestGujaratiOriya);
+        CASE(28,TestGujaratiTamil);
+        CASE(29,TestGujaratiTelugu);
+        CASE(30,TestGujaratiKannada);
+        CASE(31,TestGujaratiMalayalam);
+        CASE(32,TestOriyaTamil);
+        CASE(33,TestOriyaTelugu);
+        CASE(34,TestOriyaKannada);
+        CASE(35,TestOriyaMalayalam);
+        CASE(36,TestTamilTelugu);
+        CASE(37,TestTamilKannada);
+        CASE(38,TestTamilMalayalam);
+        CASE(39,TestTeluguKannada);
+        CASE(40,TestTeluguMalayalam);
+        CASE(41,TestKannadaMalayalam);
 #ifdef ENABLE_FAILING_TESTS
-        CASE(14,TestJamo);
-        CASE(15,TestJamoHangul);
+        CASE(42,TestJamo);
+        CASE(43,TestJamoHangul);
 #endif
         default: name = ""; break;
     }
@@ -718,7 +746,347 @@ void TransliteratorRoundTripTest::TestDevanagariMalayalam()  {
       test1.test( "[:Devanagari:]", "[:MALAYALAM:]",
               "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
               this, new Legal());
+}
+void TransliteratorRoundTripTest::TestBengaliGurmukhi()  {
+    RTTest test("GURMUKHI-BENGALI", 
+      TestUtility::GURMUKHI_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:GURMUKHI:]", "[:BENGALI:]",  
+            "[\\u098B\\u098C\\u09B7\\u09E0\\u09E1\\u09F0\\u09F1]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("BENGALI-GURMUKHI", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:GURMUKHI:]",
+              "[\\u0A33\\u0A35\\u0A59\\u0A5A\\u0A5B\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+              this, new Legal());
 } 
+void TransliteratorRoundTripTest::TestBengaliGujarati()  {
+    RTTest test("GUJARATI-BENGALI", 
+      TestUtility::GUJARATI_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:GUJARATI:]", "[:BENGALI:]", 
+            "[\\u098c\\u09e1\\u09f0\\u09f1]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("BENGALI-GUJARATI", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::GUJARATI_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:GUJARATI:]",
+              "[\\u0A8D\\u0A91\\u0AB3\\u0AB5\\u0ABD\\u0AD0]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestBengaliOriya()  {
+    RTTest test("ORIYA-BENGALI", 
+      TestUtility::ORIYA_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:ORIYA:]", "[:BENGALI:]", 
+            "[\\u09f0\\u09f1]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("BENGALI-ORIYA", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::ORIYA_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:ORIYA:]",
+              "[\\u0b33\\u0b3d]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestBengaliTamil()  {
+    RTTest test("Tamil-BENGALI", 
+      TestUtility::TAMIL_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:tamil:]", "[:BENGALI:]", 
+              "[\\u09f0\\u09f1\\u098B\\u098C\\u0996\\u0997\\u0998\\u099B\\u099D\\u09A0\\u09A1\\u09A2\\u09A5\\u09A6\\u09A7\\u09AB\\u09AC\\u09AD\\u09B6\\u09DC\\u09DD\\u09DF\\u09E0\\u09E1]", /*roundtrip exclusions*/
+              this, new Legal());
+    RTTest test1("BENGALI-Tamil", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::TAMIL_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:tamil:]",
+              "[\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB3\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestBengaliTelugu()  {
+    RTTest test("Telugu-BENGALI", 
+      TestUtility::TELUGU_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:telugu:]", "[:BENGALI:]", 
+            "[\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("BENGALI-TELUGU", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::TELUGU_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:TELUGU:]",
+              "[\\u0C0E\\u0C12\\u0C31\\u0C33\\u0C35]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestBengaliKannada()  {
+    RTTest test("KANNADA-BENGALI", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:KANNADA:]", "[:BENGALI:]", 
+            "[\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("BENGALI-KANNADA", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::KANNADA_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:KANNADA:]",
+              "[\\u0C8E\\u0C92\\u0CB1\\u0cb3\\u0cb5\\u0cde]", /*roundtrip exclusions*/ 
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestBengaliMalayalam()  {
+    RTTest test("MALAYALAM-BENGALI", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::BENGALI_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:BENGALI:]", 
+            "[\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("BENGALI-MALAYALAM", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::MALAYALAM_SCRIPT);
+      test1.test( "[:BENGALI:]", "[:MALAYALAM:]",
+              "[\\u0d31-\\u0d35\\u0d0e\\u0d12]", /*roundtrip exclusions*/
+              this, new Legal());
+} 
+void TransliteratorRoundTripTest::TestGurmukhiGujarati()  {
+    RTTest test("GUJARATI-GURMUKHI", 
+      TestUtility::GUJARATI_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test.test("[:GUJARATI:]", "[:GURMUKHI:]", 
+            "[\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0abd]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GURMUKHI-GUJARATI", 
+        TestUtility::GURMUKHI_SCRIPT, TestUtility::GUJARATI_SCRIPT);;
+      test1.test( "[:GURMUKHI:]", "[:GUJARATI:]",
+              "[\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0ab7\\u0abd\\u0ad0\\u0ae0]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGurmukhiOriya()  {
+    RTTest test("ORIYA-GURMUKHI", 
+      TestUtility::ORIYA_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test.test("[:ORIYA:]", "[:GURMUKHI:]", 
+            "[\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GURMUKHI-ORIYA", 
+        TestUtility::GURMUKHI_SCRIPT, TestUtility::ORIYA_SCRIPT);;
+      test1.test( "[:GURMUKHI:]", "[:ORIYA:]",
+              "[\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGurmukhiTamil()  {
+    RTTest test("TAMIL-GURMUKHI", 
+      TestUtility::TAMIL_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test.test("[:TAMIL:]", "[:GURMUKHI:]", 
+            "[\\u0A16\\u0A17\\u0A18\\u0A1B\\u0A1D\\u0A20\\u0A21\\u0A22\\u0A25\\u0A26\\u0A27\\u0A2B\\u0A2C\\u0A2D\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GURMUKHI-TAMIL", 
+        TestUtility::GURMUKHI_SCRIPT, TestUtility::TAMIL_SCRIPT);;
+      test1.test( "[:GURMUKHI:]", "[:TAMIL:]",
+              "[\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGurmukhiTelugu()  {
+    RTTest test("TELUGU-GURMUKHI", 
+      TestUtility::TELUGU_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test.test("[:TELUGU:]", "[:GURMUKHI:]", 
+            "[\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GURMUKHI-TELUGU", 
+        TestUtility::GURMUKHI_SCRIPT, TestUtility::TELUGU_SCRIPT);;
+      test1.test( "[:GURMUKHI:]", "[:TELUGU:]",
+              "[\\u0C0B\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C37\\u0C60\\u0C61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGurmukhiKannada()  {
+    RTTest test("KANNADA-GURMUKHI", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test.test("[:KANNADA:]", "[:GURMUKHI:]", 
+            "[\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GURMUKHI-KANNADA", 
+        TestUtility::GURMUKHI_SCRIPT, TestUtility::KANNADA_SCRIPT);;
+      test1.test( "[:GURMUKHI:]", "[:KANNADA:]",
+              "[\\u0C8B\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CB7\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGurmukhiMalayalam()  {
+    RTTest test("MALAYALAM-GURMUKHI", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::GURMUKHI_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:GURMUKHI:]", 
+            "[\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GURMUKHI-MALAYALAM", 
+        TestUtility::GURMUKHI_SCRIPT, TestUtility::MALAYALAM_SCRIPT);;
+      test1.test( "[:GURMUKHI:]", "[:MALAYALAM:]",
+              "[\\u0D0B\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D37\\u0D60\\u0D61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+
+ void TransliteratorRoundTripTest::TestGujaratiOriya()  {
+    RTTest test("GUJARATI-ORIYA", 
+      TestUtility::GUJARATI_SCRIPT, TestUtility::ORIYA_SCRIPT);
+      test.test("[:GUJARATI:]", "[:ORIYA:]", 
+            "[\\u0B0C\\u0B5F\\u0B61]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("ORIYA-GUJARATI", 
+        TestUtility::ORIYA_SCRIPT, TestUtility::GUJARATI_SCRIPT);;
+      test1.test( "[:ORIYA:]", "[:GUJARATI:]",
+              "[\\u0A8D\\u0A91\\u0AB5\\u0Ad0]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGujaratiTamil()  {
+    RTTest test("TAMIL-GUJARATI", 
+      TestUtility::TAMIL_SCRIPT, TestUtility::GUJARATI_SCRIPT);
+      test.test("[:TAMIL:]", "[:GUJARATI:]", 
+            "[\\u0A8B\\u0A8D\\u0A91\\u0A96\\u0A97\\u0A98\\u0A9B\\u0A9D\\u0AA0\\u0AA1\\u0AA2\\u0AA5\\u0AA6\\u0AA7\\u0AAB\\u0AAC\\u0AAD\\u0AB6\\u0ABD\\u0AD0\\u0AE0]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GUJARATI-TAMIL", 
+        TestUtility::GUJARATI_SCRIPT, TestUtility::TAMIL_SCRIPT);;
+      test1.test( "[:GUJARATI:]", "[:TAMIL:]",
+              "[\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGujaratiTelugu()  {
+    RTTest test("TELUGU-GUJARATI", 
+      TestUtility::TELUGU_SCRIPT, TestUtility::GUJARATI_SCRIPT);
+      test.test("[:TELUGU:]", "[:GUJARATI:]", 
+            "[\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GUJARATI-TELUGU", 
+        TestUtility::GUJARATI_SCRIPT, TestUtility::TELUGU_SCRIPT);;
+      test1.test( "[:GUJARATI:]", "[:TELUGU:]",
+              "[\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGujaratiKannada()  {
+    RTTest test("KANNADA-GUJARATI", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::GUJARATI_SCRIPT);
+      test.test("[:KANNADA:]", "[:GUJARATI:]", 
+            "[\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GUJARATI-KANNADA", 
+        TestUtility::GUJARATI_SCRIPT, TestUtility::KANNADA_SCRIPT);;
+      test1.test( "[:GUJARATI:]", "[:KANNADA:]",
+              "[\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CDE\\u0CE1]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestGujaratiMalayalam()  {
+    RTTest test("MALAYALAM-GUJARATI", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::GUJARATI_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:GUJARATI:]", 
+            "[\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("GUJARATI-MALAYALAM", 
+        TestUtility::GUJARATI_SCRIPT, TestUtility::MALAYALAM_SCRIPT);;
+      test1.test( "[:GUJARATI:]", "[:MALAYALAM:]",
+              "[\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestOriyaTamil()  {
+    RTTest test("TAMIL-ORIYA", 
+      TestUtility::TAMIL_SCRIPT, TestUtility::ORIYA_SCRIPT);
+      test.test("[:TAMIL:]", "[:ORIYA:]", 
+            "[\\u0B0B\\u0B0C\\u0B16\\u0B17\\u0B18\\u0B1B\\u0B1D\\u0B20\\u0B21\\u0B22\\u0B25\\u0B26\\u0B27\\u0B2B\\u0B2C\\u0B2D\\u0B36\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("ORIYA-TAMIL", 
+        TestUtility::ORIYA_SCRIPT, TestUtility::TAMIL_SCRIPT);;
+      test1.test( "[:ORIYA:]", "[:TAMIL:]",
+              "[\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestOriyaTelugu()  {
+    RTTest test("TELUGU-ORIYA", 
+      TestUtility::TELUGU_SCRIPT, TestUtility::ORIYA_SCRIPT);
+      test.test("[:TELUGU:]", "[:ORIYA:]", 
+            "[\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("ORIYA-TELUGU", 
+        TestUtility::ORIYA_SCRIPT, TestUtility::TELUGU_SCRIPT);;
+      test1.test( "[:ORIYA:]", "[:TELUGU:]",
+              "[\\u0C0E\\u0C12\\u0C31\\u0C35]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestOriyaKannada()  {
+    RTTest test("KANNADA-ORIYA", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::ORIYA_SCRIPT);
+      test.test("[:KANNADA:]", "[:ORIYA:]", 
+            "[\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("ORIYA-KANNADA", 
+        TestUtility::ORIYA_SCRIPT, TestUtility::KANNADA_SCRIPT);;
+      test1.test( "[:ORIYA:]", "[:KANNADA:]",
+              "[\\u0C8E\\u0C92\\u0CB1\\u0CB5\\u0CDE]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestOriyaMalayalam()  {
+    RTTest test("MALAYALAM-ORIYA", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::ORIYA_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:ORIYA:]", 
+            "[\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("ORIYA-MALAYALAM", 
+        TestUtility::ORIYA_SCRIPT, TestUtility::MALAYALAM_SCRIPT);;
+      test1.test( "[:ORIYA:]", "[:MALAYALAM:]",
+              "[\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D35]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+
+void TransliteratorRoundTripTest::TestTamilTelugu()  {
+    RTTest test("TELUGU-TAMIL", 
+      TestUtility::TELUGU_SCRIPT, TestUtility::TAMIL_SCRIPT);
+      test.test("[:TELUGU:]", "[:TAMIL:]", 
+            "[\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("TAMIL-TELUGU", 
+        TestUtility::TAMIL_SCRIPT, TestUtility::TELUGU_SCRIPT);;
+      test1.test( "[:TAMIL:]", "[:TELUGU:]",
+              "[\\u0C0B\\u0C0C\\u0C16\\u0C17\\u0C18\\u0C1B\\u0C1D\\u0C20\\u0C21\\u0C22\\u0C25\\u0C26\\u0C27\\u0C2B\\u0C2C\\u0C2D\\u0C36\\u0C60\\u0C61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestTamilKannada()  {
+    RTTest test("KANNADA-TAMIL", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::TAMIL_SCRIPT);
+      test.test("[:KANNADA:]", "[:TAMIL:]", 
+            "[\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("TAMIL-KANNADA", 
+        TestUtility::TAMIL_SCRIPT, TestUtility::KANNADA_SCRIPT);;
+      test1.test( "[:TAMIL:]", "[:KANNADA:]",
+              "[\\u0C8B\\u0C8C\\u0C96\\u0C97\\u0C98\\u0C9B\\u0C9D\\u0CA0\\u0CA1\\u0CA2\\u0CA5\\u0CA6\\u0CA7\\u0CAB\\u0CAC\\u0CAD\\u0CB6\\u0CDE\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestTamilMalayalam()  {
+    RTTest test("MALAYALAM-TAMIL", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::TAMIL_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:TAMIL:]", 
+            "[\\u0ba9]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("TAMIL-MALAYALAM", 
+        TestUtility::TAMIL_SCRIPT, TestUtility::MALAYALAM_SCRIPT);;
+      test1.test( "[:TAMIL:]", "[:MALAYALAM:]",
+              "[\\u0D0B\\u0D0C\\u0D16\\u0D17\\u0D18\\u0D1B\\u0D1D\\u0D20\\u0D21\\u0D22\\u0D25\\u0D26\\u0D27\\u0D2B\\u0D2C\\u0D2D\\u0D36\\u0D60\\u0D61]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestTeluguKannada()  {
+    RTTest test("KANNADA-TELUGU", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::TELUGU_SCRIPT);
+      test.test("[:KANNADA:]", "[:TELUGU:]", 
+            "[]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("TELUGU-KANNADA", 
+        TestUtility::TELUGU_SCRIPT, TestUtility::KANNADA_SCRIPT);;
+      test1.test( "[:TELUGU:]", "[:KANNADA:]",
+              "[\\u0CDE]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestTeluguMalayalam()  {
+    RTTest test("MALAYALAM-TELUGU", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::TELUGU_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:TELUGU:]", 
+            "[]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("TELUGU-MALAYALAM", 
+        TestUtility::TELUGU_SCRIPT, TestUtility::MALAYALAM_SCRIPT);;
+      test1.test( "[:TELUGU:]", "[:MALAYALAM:]",
+              "[\\u0D34]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+
+void TransliteratorRoundTripTest::TestKannadaMalayalam()  {
+    RTTest test("MALAYALAM-KANNADA", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::KANNADA_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:KANNADA:]", 
+            "[\\u0cDe]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("KANNADA-MALAYALAM", 
+        TestUtility::KANNADA_SCRIPT, TestUtility::MALAYALAM_SCRIPT);
+      test1.test( "[:KANNADA:]", "[:MALAYALAM:]",
+              "[\\u0D34]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+
 //---------------
 // End Indic
 //---------------
