@@ -774,7 +774,7 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     if (testCount != 142)
-        errln("Expected getISOLanguages() to return 142 languages; it returned" + testCount);
+        errln("Expected getISOLanguages() to return 142 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
