@@ -87,6 +87,27 @@ U_CAPI int32_t U_EXPORT2
 u_countChar32(const UChar *s, int32_t length);
 
 /**
+ * Check if the string contains more Unicode code points than a certain number.
+ * This is more efficient than counting all code points in the entire string
+ * and comparing that number with a threshold.
+ * This function may not need to scan the string at all if the length is known
+ * (not -1 for NUL-termination) and falls within a certain range, and
+ * never needs to count more than 'number+1' code points.
+ * Logically equivalent to (u_countChar32(s, length)>number).
+ * A Unicode code point may occupy either one or two UChar code units.
+ *
+ * @param s The input string.
+ * @param length The length of the string, or -1 if it is NUL-terminated.
+ * @param number The number of code points in the string is compared against
+ *               the 'number' parameter.
+ * @return Boolean value for whether the string contains more Unicode code points
+ *         than 'number'. Same as (u_countChar32(s, length)>number).
+ * @draft ICU 2.4
+ */
+U_CAPI UBool U_EXPORT2
+u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number);
+
+/**
  * Concatenate two ustrings.  Appends a copy of <TT>src</TT>,
  * including the null terminator, to <TT>dst</TT>. The initial copied
  * character from <TT>src</TT> overwrites the null terminator in <TT>dst</TT>.
