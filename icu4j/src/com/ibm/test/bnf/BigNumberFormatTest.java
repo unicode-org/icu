@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/bnf/Attic/BigNumberFormatTest.java,v $ 
- * $Date: 2000/03/10 03:47:44 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/04/05 18:00:19 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -135,10 +135,9 @@ public class BigNumberFormatTest extends TestFmwk {
         }
     }
 
-//This has been removed pending addition of com.ibm.math package to ICU4J
-    /*
+    /**
      * Test the handling of the AlphaWorks BigDecimal
-     *
+     */
     public void TestAlphaBigDecimal() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         expect(NumberFormat.getScientificInstance(Locale.US),
@@ -155,7 +154,7 @@ public class BigNumberFormatTest extends TestFmwk {
                               new com.ibm.math.BigDecimal("12346.5000"),
                             },
                "12.346E3");
-    } */
+    }
 
     /**
      */
@@ -297,9 +296,8 @@ public class BigNumberFormatTest extends TestFmwk {
 
     private static String showNumber(Number n) {
         String cls = n.getClass().getName();
-        //This has been removed pending addition of com.ibm.math package to ICU4J
-        if (!(/*n instanceof com.ibm.math.BigDecimal
-              ||*/ n instanceof java.math.BigDecimal)) {
+        if (!(n instanceof com.ibm.math.BigDecimal
+              || n instanceof java.math.BigDecimal)) {
             int i = cls.lastIndexOf('.');
             cls = cls.substring(i+1);
         }
