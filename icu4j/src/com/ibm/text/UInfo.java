@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UInfo.java,v $ 
- * $Date: 2000/05/18 19:08:40 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/07/13 21:24:42 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -129,17 +129,10 @@ public final class UInfo {
     }
 
     //
-    // Characters excluded from composition.  This will eventually be read from
-    // an auxiliary data file, but for now it's hardcoded
+    // Characters excluded from composition.  This is read from the Unicode
+    // file CompositionExclusions.txt.
     //
-    static final String composeExclude =
-            "\u0958\u0959\u095a\u095b\u095c\u095d\u095e\u095f"  // Devanagari
-        +   "\ufb1f\ufb2a\ufb2b\ufb2c\ufb2d\ufb2e\ufb2f"        // Hebrew
-        +   "\ufb30\ufb31\ufb32\ufb33\ufb34\ufb35\ufb36"
-        +   "\ufb38\ufb39\ufb3a\ufb3b\ufb3c\ufb3e"
-        +   "\ufb40\ufb41\ufb43\ufb44\ufb46\ufb47\ufb48"
-        +   "\ufb49\ufb4a\ufb4b\ufb4c\ufb4d\ufb4e"
-        ;
+    String composeExclude = "";
 
     /**
      * Is this character excluded from the composition algorithm by virtue
@@ -397,7 +390,7 @@ public final class UInfo {
         return output.toString();
     }
 
-    public UInfo(String fileName) {
+    public UInfo(String fileName, String composeExcludeFileName) {
         long startTime,endTime;
 
         BufferedReader input = null;
@@ -413,6 +406,18 @@ public final class UInfo {
                     System.out.println("[" + count + "," + hex(ch) + ']');
                 cache[ch] = line;
             }
+
+            // Read composition exlusions
+            input = new BufferedReader(new FileReader(composeExcludeFileName),64*1024);
+            StringBuffer ce = new StringBuffer();
+            for (;;) {
+                line = input.readLine();
+                if (line == null) break;
+                if (line.length() == 0 ||
+                    Character.digit(line.charAt(0), 16) < 0) continue;
+                ce.append(charFrom(line.substring(0,4)));
+            }
+            composeExclude = ce.toString();
         } catch (Exception ex) {
             try {
                 input.close();
@@ -434,7 +439,8 @@ public final class UInfo {
         // classes...".  A better way to do this might be to get it
         // from a system property that is defined on the command line,
         // e.g., "java -Dicu4j=D:/icu4j..." - liu
-        this("src/data/unicode/UnicodeData.txt");
+        this("src/data/unicode/UnicodeData.txt",
+             "src/data/unicode/CompositionExclusions.txt");
     }
 
     /*
