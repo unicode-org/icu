@@ -45,6 +45,10 @@ U_NAMESPACE_END
 
 U_NAMESPACE_BEGIN
 
+/**
+ * Opaque type returned by registerInstance.
+ * @stable
+ */
 typedef const void* URegistryKey;
 
 /**

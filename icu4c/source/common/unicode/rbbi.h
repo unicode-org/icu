@@ -26,6 +26,7 @@ struct UTrie;
 
 U_NAMESPACE_BEGIN
 
+/** @internal */
 struct RBBIDataHeader;
 class  RuleBasedBreakIteratorTables;
 class  BreakIterator;
