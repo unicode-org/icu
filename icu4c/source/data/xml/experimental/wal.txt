@@ -1,0 +1,62 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Walaita language locale.
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+
+wal{ 
+    Version{ "x0.1" }
+    Countries:alias { "am" }
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
+    }
+    DateTimeElements:intvector { 
+        7,
+        1,
+    }
+    Languages {
+	wal { "\u12C8\u120B\u12ED\u1273\u1271" }
+    }
+    LocaleScript{ "Ethi", }
+    ExemplarCharacters{"[:Ethi:]"}
+    MonthAbbreviations:alias { "am" }
+    MonthNames:alias { "am" }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+        	"\u121B\u1208\u12F6", // also \u130B\u120B\u1233
+        	"\u1243\u121B"        // also \u12A1\u1218\u122D\u1232
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                	"\u12C8\u130B",
+                	"\u1233\u12ED\u1296",        // also \u1230\u129E
+                	"\u121B\u1246\u1233",        // also \u121B\u1230\u12A8
+                	"\u12A0\u1229\u12CB",        // also \u122E\u12CB
+                	"\u1203\u1219\u1233",        // also \u1210\u1219\u1233
+                	"\u12A0\u122D\u1263", 
+                	"\u1244\u122B" 
+                    }
+                    wide{
+                	"\u12C8\u130B",
+                	"\u1233\u12ED\u1296",        // also \u1230\u129E
+                	"\u121B\u1246\u1233\u129B",  // also \u121B\u1230\u12A8\u129E
+                	"\u12A0\u1229\u12CB",        // also \u122E\u12CB
+                	"\u1203\u1219\u1233",        // also \u1210\u1219\u1233
+                	"\u12A0\u122D\u1263", 
+                	"\u1244\u122B" 
+                    }
+                }
+            }
+            eras{
+        	"\u12A0\u12F3 \u12CE\u12F4",                   // also  \u12AD\u122D\u1235\u1276\u1235\u1354 \u12A8\u1234
+        	"\u130D\u122E\u1270\u1273 \u120B\u12ED\u1273"  // also \u1210\u12ED\u124B\u1334 \u1309\u12F3\u129D
+            }
+        }
+    }
+}
