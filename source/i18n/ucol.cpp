@@ -53,6 +53,7 @@ static UCollator* UCA = NULL;
 
 extern "C" UBool checkFCD(const UChar*, int32_t, UErrorCode*);
 
+U_CDECL_BEGIN
 static UBool U_CALLCONV
 isAcceptableUCA(void * /*context*/,
              const char * /*type*/, const char * /*name*/,
@@ -75,6 +76,7 @@ isAcceptableUCA(void * /*context*/,
         return FALSE;
     }
 }
+U_CDECL_END
 
 /* added for Han implicit CE */
 static const uint32_t IMPLICIT_HAN_START_ = 0x3400;
