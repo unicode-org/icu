@@ -44,11 +44,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib"
-				OutputFile="..\..\bin\icuin26.dll"
+				OutputFile="..\..\bin\icuin28.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
-				ProgramDatabaseFile=".\..\..\lib/icuin26.pdb"
+				ProgramDatabaseFile=".\..\..\lib/icuin28.pdb"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuin.lib"/>
 			<Tool
@@ -107,12 +107,12 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib"
-				OutputFile="..\..\bin\icuin26d.dll"
+				OutputFile="..\..\bin\icuin28d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icuin26d.pdb"
+				ProgramDatabaseFile=".\..\..\lib/icuin28d.pdb"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuind.lib"/>
 			<Tool

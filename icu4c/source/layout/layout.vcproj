@@ -43,11 +43,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="..\..\lib\icuucd.lib"
-				OutputFile="..\..\bin\icule26d.dll"
+				OutputFile="..\..\bin\icule28d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icule26d.pdb"
+				ProgramDatabaseFile=".\..\..\lib/icule28d.pdb"
 				ImportLibrary="..\..\lib\iculed.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -103,10 +103,10 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="..\..\lib\icuuc.lib"
-				OutputFile="..\..\bin\icule26.dll"
+				OutputFile="..\..\bin\icule28.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icule26.pdb"
+				ProgramDatabaseFile=".\..\..\lib/icule28.pdb"
 				ImportLibrary="..\..\lib\icule.lib"/>
 			<Tool
 				Name="VCMIDLTool"
