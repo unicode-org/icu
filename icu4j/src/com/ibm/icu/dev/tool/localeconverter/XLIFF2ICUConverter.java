@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.11 $
+* $Revision: 1.12 $
 *
 ******************************************************************************
 */
@@ -530,6 +530,7 @@ public final class XLIFF2ICUConverter {
                 throw new RuntimeException("The <trans-unit> elements must be bilingual, multilingual tranlations not supported. xml:lang = " + oldLangName + 
                                            " and xml:lang = " + langName);
             }
+            oldLangName = langName;
         }
         return oldLangName;
     }
