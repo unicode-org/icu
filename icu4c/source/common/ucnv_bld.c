@@ -641,17 +641,17 @@ UConverter *
   const char *realName;
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
+  UErrorCode internalErrorCode = U_ZERO_ERROR;
 
   if (U_FAILURE (*err))
     return NULL;
 
-  realName = ucnv_io_getConverterName(converterName, err);
-  if (U_FAILURE(*err)) {
-    return NULL;
-  }
-
-  if (realName == NULL) {
-    /* set the input name in case the converter was added without updating the alias table */
+  realName = ucnv_io_getConverterName(converterName, &internalErrorCode);
+  if (U_FAILURE(internalErrorCode) || realName == NULL) {
+    /*
+     * set the input name in case the converter was added
+     * without updating the alias table, or when there is no alias table
+     */
     realName = converterName;
   }
 
