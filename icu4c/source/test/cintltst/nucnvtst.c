@@ -2354,7 +2354,9 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
         uSourceLimit=uSource;
         do{
 
-            uSourceLimit = uSourceLimit+1;
+            if (uSourceLimit < sourceLimit) {
+                uSourceLimit = uSourceLimit+1;
+            }
             ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
@@ -2370,7 +2372,9 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
 
         cSourceLimit =cBuf;
         do{
-            cSourceLimit =cSourceLimit+1;
+            if (cSourceLimit < cBuf + (cTarget - cBuf)) {
+                cSourceLimit = cSourceLimit+1;
+            }
             ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
@@ -3056,7 +3060,7 @@ TestSCSU() {
           "\\ud8ff\\udcff",
           "\\udBff\\udFff", /* largest surrogate pair*/
           "\\ud834\\udc00",
-          "\\U10FFFF",
+          "\\U0010FFFF",
           "Hello \\u9292 \\u9192 World!",
           "Hell\\u0429o \\u9292 \\u9192 W\\u00e4rld!",
           "Hell\\u0429o \\u9292 \\u9292W\\u00e4rld!",
@@ -3106,7 +3110,7 @@ TestSCSU() {
         UChar* src;
         /* UConverter* cnv = ucnv_open("SCSU",&status); */
         cSrcLen= srcLen =  uprv_strlen(fTestCases[i]);
-        src = (UChar*) uprv_malloc(sizeof(UChar) * srcLen);
+        src = (UChar*) uprv_malloc((sizeof(UChar) * srcLen) + sizeof(UChar));
         srcLen=unescape(src,srcLen,cSrc,cSrcLen,&status);
         log_verbose("Testing roundtrip for src: %s at index :%d\n",cSrc,i);
         TestConv(src,srcLen,"SCSU","Coverage",NULL,0);
