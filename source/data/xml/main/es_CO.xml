@@ -7,20 +7,13 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="es"></language>
-		<territory type="COL">CO</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="es" /> 
+		<territory type="CO" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<dateFormats>
 					<default type="medium"/>
@@ -104,21 +97,21 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation type="TRADITIONAL" >
-		<rules>
-			<reset>N</reset>
-			<p>ñ</p>
-			<t>Ñ</t>
-			<reset>C</reset>
-			<p>ch</p>
-			<t>Ch</t>
-			<t>CH</t>
-			<reset>l</reset>
-			<p>ll</p>
-			<t>Ll</t>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation type="TRADITIONAL" >
+			<rules>
+				<reset>N</reset>
+				<p>ñ</p>
+				<t>Ñ</t>
+				<reset>C</reset>
+				<p>ch</p>
+				<t>Ch</t>
+				<t>CH</t>
+				<reset>l</reset>
+				<p>ll</p>
+				<t>Ll</t>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

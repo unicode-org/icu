@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="nb"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="nb" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -20,20 +20,12 @@
 		<territories>
 			<territory type="NO">Norge</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z æ å ø é ó ô à ü ǎ]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">januar</month>
@@ -184,30 +176,30 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>Z</reset>
-			<p>æ</p>
-			<t>Æ</t>
-			<p>ä</p>
-			<t>Ä</t>
-			<p>ø</p>
-			<t>Ø</t>
-			<p>ö</p>
-			<t>Ö</t>
-			<p>ő</p>
-			<t>Ő</t>
-			<p>å</p>
-			<t>Å</t>
-			<t>aa</t>
-			<t>aA</t>
-			<t>Aa</t>
-			<t>AA</t>
-			<reset>V</reset>
-			<t>w</t>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>Z</reset>
+				<p>æ</p>
+				<t>Æ</t>
+				<p>ä</p>
+				<t>Ä</t>
+				<p>ø</p>
+				<t>Ø</t>
+				<p>ö</p>
+				<t>Ö</t>
+				<p>ő</p>
+				<t>Ő</t>
+				<p>å</p>
+				<t>Å</t>
+				<t>aa</t>
+				<t>aA</t>
+				<t>Aa</t>
+				<t>AA</t>
+				<reset>V</reset>
+				<t>w</t>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

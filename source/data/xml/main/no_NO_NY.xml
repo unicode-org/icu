@@ -7,25 +7,12 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0">Various notes and changes in version 3.0</version>
-		<generation date="2003-06-25" />
-		<language type="no"></language>
-		<territory type="NOR">NO</territory>
-		<variant type="NY">{2}</variant>
+		<version number="3.0"/>
+		<generation date="2003-06-26" />
+		<language type="no" /> 
+		<territory type="NO" /> 
+		<variant type="NY" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
-	<dates>
-		<calendars>
-			<default type="gregorian"/>
-			<calendar type="gregorian">
-			</calendar>
-		</calendars>
-	</dates>
 	<numbers>
 		<decimalFormats>
 			<decimalFormatLength >

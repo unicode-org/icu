@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="ru"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="ru" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -204,14 +204,7 @@
 			<territory type="US">США</territory>
 			<territory type="ZA">ЮАР</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[а-я ё і ѣ ѳ ѵ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -223,7 +216,6 @@
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Январь</month>
@@ -351,15 +343,35 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<suppress_contractions>[Ѐ-џ]</suppress_contractions>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
-	</collation  >
-</collations >
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">ноль; один; два; три; четыре; пят; шест; семь; восемь; девят;<cp hex="000A" />10: десят; одиннадцать;<cp hex="000A" />двеннадцать; тринадцать; четырнадцать;<cp hex="000A" />15: пятнадцать; шестнадцать; семнадцать; восемнадцать; девятнадцать;<cp hex="000A" />20: двадцать[ &gt;&gt;];<cp hex="000A" />30: трлдцать[ &gt;&gt;];<cp hex="000A" />40: сорок[ &gt;&gt;];<cp hex="000A" />50: пятьдесят[ &gt;&gt;];<cp hex="000A" />60: шестьдесят[ &gt;&gt;];<cp hex="000A" />70: семьдесят[ &gt;&gt;];<cp hex="000A" />80: восемьдесят[ &gt;&gt;];<cp hex="000A" />90: девяносто[ &gt;&gt;];<cp hex="000A" />100: сто[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt; сто[ &gt;&gt;];<cp hex="000A" />1000: тысяча[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; тысяча[ &gt;&gt;];<cp hex="000A" />1,000,000: миллион[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; миллион[ &gt;&gt;];<cp hex="000A" />1,000,000,000: =#,##0=;</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+	<collations version="3.1.1">
+		<collation  >
+			<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
+		</collation  >
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+ноль; один; два; три; четыре; пят; шест; семь; восемь; девят;
+10: десят; одиннадцать;
+двеннадцать; тринадцать; четырнадцать;
+15: пятнадцать; шестнадцать; семнадцать; восемнадцать; девятнадцать;
+20: двадцать[ &gt;&gt;];
+30: трлдцать[ &gt;&gt;];
+40: сорок[ &gt;&gt;];
+50: пятьдесят[ &gt;&gt;];
+60: шестьдесят[ &gt;&gt;];
+70: семьдесят[ &gt;&gt;];
+80: восемьдесят[ &gt;&gt;];
+90: девяносто[ &gt;&gt;];
+100: сто[ &gt;&gt;];
+200: &lt;&lt; сто[ &gt;&gt;];
+1000: тысяча[ &gt;&gt;];
+2000: &lt;&lt; тысяча[ &gt;&gt;];
+1,000,000: миллион[ &gt;&gt;];
+2,000,000: &lt;&lt; миллион[ &gt;&gt;];
+1,000,000,000: =#,##0=;
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

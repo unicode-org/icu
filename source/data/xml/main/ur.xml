@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="x0.4">Various notes and changes in version x0.4</version>
-		<generation date="2003-06-25" />
-		<language type="ur"></language>
+		<version number="x0.4"/>
+		<generation date="2003-06-26" />
+		<language type="ur" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,14 +18,7 @@
 		<territories>
 			<territory type="PK">پاكِستان</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[[:Arab:]‌‍‏‎]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -36,7 +29,6 @@
 	</characters>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">جنورى</month>
@@ -95,9 +87,9 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

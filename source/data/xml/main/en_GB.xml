@@ -7,20 +7,13 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="en"></language>
-		<territory type="GBR">GB</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="en" /> 
+		<territory type="GB" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<week>
 					<minDays count="1"/>
@@ -86,7 +79,47 @@
 	</dates>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">%simplified:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; point &gt;&gt;;<cp hex="000A" />    zero; one; two; three; four; five; six; seven; eight; nine;<cp hex="000A" />    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;<cp hex="000A" />        seventeen; eighteen; nineteen;<cp hex="000A" />    20: twenty[-&gt;&gt;];<cp hex="000A" />    30: thirty[-&gt;&gt;];<cp hex="000A" />    40: forty[-&gt;&gt;];<cp hex="000A" />    50: fifty[-&gt;&gt;];<cp hex="000A" />    60: sixty[-&gt;&gt;];<cp hex="000A" />    70: seventy[-&gt;&gt;];<cp hex="000A" />    80: eighty[-&gt;&gt;];<cp hex="000A" />    90: ninety[-&gt;&gt;];<cp hex="000A" />    100: &lt;&lt; hundred[ &gt;&gt;];<cp hex="000A" />    1000: &lt;&lt; thousand[ &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; point &gt;&gt;;<cp hex="000A" />    =%simplified=;<cp hex="000A" />    100: &lt;&lt; hundred[ &gt;%%and&gt;];<cp hex="000A" />    1000: &lt;&lt; thousand[ &gt;%%and&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%and:<cp hex="000A" />    and =%default=;<cp hex="000A" />    100: =%default=;<cp hex="000A" />%%commas:<cp hex="000A" />    ' and =%default=;<cp hex="000A" />    100: , =%default=;<cp hex="000A" />    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;<cp hex="000A" />    1,000,000: , =%default=;%%lenient-parse:<cp hex="000A" />    &amp; ' ' , ',' ;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="spellout">
+%simplified:
+    -x: minus &gt;&gt;;
+    x.x: &lt;&lt; point &gt;&gt;;
+    zero; one; two; three; four; five; six; seven; eight; nine;
+    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
+        seventeen; eighteen; nineteen;
+    20: twenty[-&gt;&gt;];
+    30: thirty[-&gt;&gt;];
+    40: forty[-&gt;&gt;];
+    50: fifty[-&gt;&gt;];
+    60: sixty[-&gt;&gt;];
+    70: seventy[-&gt;&gt;];
+    80: eighty[-&gt;&gt;];
+    90: ninety[-&gt;&gt;];
+    100: &lt;&lt; hundred[ &gt;&gt;];
+    1000: &lt;&lt; thousand[ &gt;&gt;];
+    1,000,000: &lt;&lt; million[ &gt;&gt;];
+    1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];
+    1,000,000,000,000,000: =#,##0=;
+%default:
+    -x: minus &gt;&gt;;
+    x.x: &lt;&lt; point &gt;&gt;;
+    =%simplified=;
+    100: &lt;&lt; hundred[ &gt;%%and&gt;];
+    1000: &lt;&lt; thousand[ &gt;%%and&gt;];
+    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
+    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
+    1,000,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
+    1,000,000,000,000,000: =#,##0=;
+%%and:
+    and =%default=;
+    100: =%default=;
+%%commas:
+    ' and =%default=;
+    100: , =%default=;
+    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
+    1,000,000: , =%default=;%%lenient-parse:
+    &amp; ' ' , ',' ;
+
+			</icu:ruleBasedNumberFormat>
 		</icu:ruleBasedNumberFormats>
 	</special>
 </ldml>

@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="th"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="th" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -353,14 +353,7 @@
 			<territory type="ZM">แซมเบีย</territory>
 			<territory type="ZW">ซิมบาบเว</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[:Thai:]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -372,7 +365,6 @@
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">มกราคม</month>
@@ -507,27 +499,59 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>Z</reset>
-			<pc>กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤ</pc>
-			<pc>ฤๅลฦ</pc>
-			<pc>ฦๅวศษสหฬอฮะัาำิีึืุูเแโใไ๐๑๒๓๔๕๖๗๘๙ํ</pc>
-			<reset>}</reset>
-			<pc>ฯๆ๏๚๛฿๎ๅ</pc>
-			<reset>́</reset>
-			<sc>็่้๊๋์</sc>
-			<reset><cp hex="0001" /></reset>
-			<i>ฺ</i>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">%default:<cp hex="000A" />  -x: ลบ&gt;&gt;;<cp hex="000A" />  x.x: &lt;&lt;จุด&gt;&gt;&gt;;<cp hex="000A" />  ศูนย์; หนึ่ง; สอง; สาม;<cp hex="000A" />  สี่; ห้า; หก; เจ็ด; แปด;<cp hex="000A" />  เก้า; สิบ; สิบเอ็ด;<cp hex="000A" />  สิบสอง; สิบสาม;<cp hex="000A" />  สิบสี่; สิบห้า;<cp hex="000A" />  สิบหก; สิบเจ็ด;<cp hex="000A" />  สิบแปด; สิบเก้า;<cp hex="000A" />  20: ยี่สิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  30: สามสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  40: สี่สิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  50: ห้าสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  60: หกสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  70: เจ็ดสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  80: แปดสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  90: เก้าสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  100: &lt;&lt;ร้อย[&gt;&gt;];<cp hex="000A" />  1000: &lt;&lt;พัน[&gt;&gt;];<cp hex="000A" />  10000: &lt;&lt;หมื่น[&gt;&gt;];<cp hex="000A" />  100000: &lt;&lt;แสน[&gt;&gt;];<cp hex="000A" />  1,000,000: &lt;&lt;ล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%alt-ones:<cp hex="000A" />  ศูนย์;<cp hex="000A" />  เอ็ด;<cp hex="000A" />  =%default=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+	<collations version="3.1.1">
+		<collation  >
+			<settings normalization="on"  />
+			<rules>
+				<reset>Z</reset>
+				<pc>กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤ</pc>
+				<pc>ฤๅลฦ</pc>
+				<pc>ฦๅวศษสหฬอฮะัาำิีึืุูเแโใไ๐๑๒๓๔๕๖๗๘๙ํ</pc>
+				<reset>}</reset>
+				<pc>ฯๆ๏๚๛฿๎ๅ</pc>
+				<reset>́</reset>
+				<sc>็่้๊๋์</sc>
+				<reset><cp hex="0001" /></reset>
+				<i>ฺ</i>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+		</collation  >
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%default:
+  -x: ลบ&gt;&gt;;
+  x.x: &lt;&lt;จุด&gt;&gt;&gt;;
+  ศูนย์; หนึ่ง; สอง; สาม;
+  สี่; ห้า; หก; เจ็ด; แปด;
+  เก้า; สิบ; สิบเอ็ด;
+  สิบสอง; สิบสาม;
+  สิบสี่; สิบห้า;
+  สิบหก; สิบเจ็ด;
+  สิบแปด; สิบเก้า;
+  20: ยี่สิบ[&gt;%%alt-ones&gt;];
+  30: สามสิบ[&gt;%%alt-ones&gt;];
+  40: สี่สิบ[&gt;%%alt-ones&gt;];
+  50: ห้าสิบ[&gt;%%alt-ones&gt;];
+  60: หกสิบ[&gt;%%alt-ones&gt;];
+  70: เจ็ดสิบ[&gt;%%alt-ones&gt;];
+  80: แปดสิบ[&gt;%%alt-ones&gt;];
+  90: เก้าสิบ[&gt;%%alt-ones&gt;];
+  100: &lt;&lt;ร้อย[&gt;&gt;];
+  1000: &lt;&lt;พัน[&gt;&gt;];
+  10000: &lt;&lt;หมื่น[&gt;&gt;];
+  100000: &lt;&lt;แสน[&gt;&gt;];
+  1,000,000: &lt;&lt;ล้าน[&gt;&gt;];
+  1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];
+  1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];
+  1,000,000,000,000,000: =#,##0=;
+%%alt-ones:
+  ศูนย์;
+  เอ็ด;
+  =%default=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

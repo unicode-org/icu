@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="sh"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="sh" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -228,21 +228,13 @@
 			<territory type="ZM">Zambija</territory>
 			<territory type="ZW">Zimbabve</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-p r-v z đ ć č ž š {lj} {nj} {dž}]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">januar</month>
@@ -376,33 +368,33 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>C</reset>
-			<p>č</p>
-			<t>Č</t>
-			<p>ć</p>
-			<t>Ć</t>
-			<reset>Đ</reset>
-			<p>dž</p>
-			<t>Dž</t>
-			<t>DŽ</t>
-			<reset>L</reset>
-			<p>lj</p>
-			<t>Lj</t>
-			<t>LJ</t>
-			<reset>N</reset>
-			<p>nj</p>
-			<t>Nj</t>
-			<t>NJ</t>
-			<reset>S</reset>
-			<p>š</p>
-			<t>Š</t>
-			<reset>Z</reset>
-			<p>ž</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>C</reset>
+				<p>č</p>
+				<t>Č</t>
+				<p>ć</p>
+				<t>Ć</t>
+				<reset>Đ</reset>
+				<p>dž</p>
+				<t>Dž</t>
+				<t>DŽ</t>
+				<reset>L</reset>
+				<p>lj</p>
+				<t>Lj</t>
+				<t>LJ</t>
+				<reset>N</reset>
+				<p>nj</p>
+				<t>Nj</t>
+				<t>NJ</t>
+				<reset>S</reset>
+				<p>š</p>
+				<t>Š</t>
+				<reset>Z</reset>
+				<p>ž</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+		</collation  >
+	</collations >
 </ldml>

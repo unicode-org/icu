@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="tr"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="tr" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,21 +18,13 @@
 		<territories>
 			<territory type="TR">Türkiye</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z â î û ö ü ı ç ş ğ]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Ocak</month>
@@ -168,30 +160,30 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>C</reset>
-			<p>ç</p>
-			<t>Ç</t>
-			<reset>G</reset>
-			<p>ğ</p>
-			<t>Ğ</t>
-			<reset>H</reset>
-			<p>ı</p>
-			<t>I</t>
-			<p>i</p>
-			<t>İ</t>
-			<reset>O</reset>
-			<p>ö</p>
-			<t>Ö</t>
-			<reset>S</reset>
-			<p>ş</p>
-			<t>Ş</t>
-			<reset>U</reset>
-			<p>ü</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>C</reset>
+				<p>ç</p>
+				<t>Ç</t>
+				<reset>G</reset>
+				<p>ğ</p>
+				<t>Ğ</t>
+				<reset>H</reset>
+				<p>ı</p>
+				<t>I</t>
+				<p>i</p>
+				<t>İ</t>
+				<reset>O</reset>
+				<p>ö</p>
+				<t>Ö</t>
+				<reset>S</reset>
+				<p>ş</p>
+				<t>Ş</t>
+				<reset>U</reset>
+				<p>ü</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2" />
+		</collation  >
+	</collations >
 </ldml>

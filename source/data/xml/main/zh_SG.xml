@@ -7,10 +7,10 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="zh"></language>
-		<territory type="SGP">SG</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="zh" /> 
+		<territory type="SG" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -29,14 +29,9 @@
 			<territory type="PR">波多黎各</territory>
 			<territory type="SA">沙地阿拉伯</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<dateFormats>
 					<default type="medium"/>

@@ -7,22 +7,12 @@
 >
 <ldml>
 	<identity>
-		<version number="x1.1">Various notes and changes in version x1.1</version>
-		<generation date="2003-06-25" />
-		<language type="ms"></language>
+		<version number="x1.1"/>
+		<generation date="2003-06-26" />
+		<language type="ms" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Januari</month>
