@@ -1168,6 +1168,9 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\uregexc.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="transforms"
