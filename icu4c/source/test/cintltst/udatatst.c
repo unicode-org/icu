@@ -122,12 +122,12 @@ isAcceptable1(void *context,
 		return TRUE;
 	} else {
 		log_verbose("The data from \"%s.%s\" IS NOT acceptable using the verifing function isAcceptable1():-\n"
-			"size              = %d\n"
-			"isBigEndian       = %d\n"
-			"charsetFamily     = %d\n"
-			"formatVersion[0]  = %d\n"
-		  	"dataVersion[0]    = %d\n"
-			"dataFormat        = %c%c%c%c\n",
+			"\tsize              = %d\n"
+			"\tisBigEndian       = %d\n"
+			"\tcharsetFamily     = %d\n"
+			"\tformatVersion[0]  = %d\n"
+		  	"\tdataVersion[0]    = %d\n"
+			"\tdataFormat        = %c%c%c%c\n",
 			  name, type, pInfo->size,  pInfo->isBigEndian, pInfo->charsetFamily, pInfo->formatVersion[0], 
 			  pInfo->dataVersion[0], pInfo->dataFormat[0], pInfo->dataFormat[1], pInfo->dataFormat[2], 
 			  pInfo->dataFormat[3]);  
@@ -287,14 +287,24 @@ void TestUDataOpenChoiceDemo2() {
 		path=realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base[i]") +1 ) );
 		strcat(strcpy(path, u_getDataDirectory()), "base[i]");
 		result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
-		if(U_FAILURE(status) && p<2 && status==U_INVALID_FORMAT_ERROR){
-			log_verbose("Loads the data but rejects it as expected %s", myErrorName(status) );
-			status=U_ZERO_ERROR;
-			p++;
-		}
-		if(U_SUCCESS(status) && p == 2) {
-			log_verbose("Loads the data and accepts it for p==2 as expected");
+		if(p<2) {
+			if(U_FAILURE(status) && status==U_INVALID_FORMAT_ERROR){
+				log_verbose("Loads the data but rejects it as expected %s\n");
+				status=U_ZERO_ERROR;
+				p++;
+			}
+			else {
+				log_err("ERROR: failed to either load the data or to reject the loaded data. ERROR=%s\n", myErrorName(status) );
+			}
+		}	
+		else if(p == 2) {
+			if(U_FAILURE(status)) {
+				log_err("ERROR: failed to load the data and accept it.  ERROR=%s\n", myErrorName(status) );
+			}
+			else {
+			log_verbose("Loads the data and accepts it for p==2 as expected\n");
 			udata_close(result);
+			}
 		}
 		strcpy(path, "");
 		    
