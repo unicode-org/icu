@@ -426,96 +426,109 @@ void StringSearchTest::TestOpenClose()
 
     /* testing null arguments */
     result = new StringSearch(pattern, text, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: NULL arguments should produce an error");
     }
+    delete result;
+
     chariter.setText(text);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: NULL arguments should produce an error");
     }
+    delete result;
+
     text.append(0, 0x1);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: Empty pattern should produce an error");
     }
+    delete result;
+
     chariter.setText(text);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: Empty pattern should produce an error");
     }
+    delete result;
+
     text.remove();
     pattern.append(temp);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: Empty text should produce an error");
     }
+    delete result;
+
     chariter.setText(text);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: Empty text should produce an error");
     }
+    delete result;
+
     text.append(temp);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: NULL arguments should produce an error");
     }
+    delete result;
+
     chariter.setText(text);
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, NULL, NULL, status);
-    delete result;
     if (U_SUCCESS(status)) {
         errln("Error: NULL arguments should produce an error");
     }
+    delete result;
+
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, m_en_us_, NULL, status);
-    delete result;
     if (U_FAILURE(status)) {
         errln("Error: NULL break iterator is valid for opening search");
     }
+    delete result;
+
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, m_en_us_, NULL, status);
-    delete result;
     if (U_FAILURE(status)) {
         errln("Error: NULL break iterator is valid for opening search");
     }
+    delete result;
+
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, Locale::ENGLISH, NULL, status);
-    delete result;
     if (U_FAILURE(status) || result == NULL) {
         errln("Error: NULL break iterator is valid for opening search");
     }
+    delete result;
+
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, Locale::ENGLISH, NULL, status);
-    delete result;
     if (U_FAILURE(status)) {
         errln("Error: NULL break iterator is valid for opening search");
     }
+    delete result;
+
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, m_en_us_, breakiter, status);
-    delete result;
     if (U_FAILURE(status)) {
         errln("Error: Break iterator is valid for opening search");
     }
+    delete result;
+
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, chariter, m_en_us_, NULL, status);
-    delete result;
     if (U_FAILURE(status)) {
         errln("Error: Break iterator is valid for opening search");
     }
+    delete result;
 }
  
 void StringSearchTest::TestInitialization()
