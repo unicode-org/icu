@@ -64,7 +64,8 @@ static void TestSurrogateBehaviour();
 static void TestErrorBehaviour();
 static void TestToUnicodeErrorBehaviour();
 static void TestGetNextErrorBehaviour();
-static void TestRegression();
+static void TestRegressionUTF8();
+static void TestRegressionUTF32();
 static void TestAvailableConverters();
 static void TestFlushInternalBuffer();  /*for improved code coverage in ucnv_cnv.c*/
 
@@ -112,7 +113,8 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestErrorBehaviour,             "tsconv/ncnvtst/TestErrorBehaviour");
      addTest(root, &TestToUnicodeErrorBehaviour,    "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
      addTest(root, &TestGetNextErrorBehaviour,      "tsconv/ncnvtst/TestGetNextErrorBehaviour");
-     addTest(root, &TestRegression,                 "tsconv/ncnvtst/TestRegression");
+     addTest(root, &TestRegressionUTF8,             "tsconv/ncnvtst/TestRegressionUTF8");
+     addTest(root, &TestRegressionUTF32,             "tsconv/ncnvtst/TestRegressionUTF32");
      addTest(root, &TestAvailableConverters,        "tsconv/ncnvtst/TestAvailableConverters");
      addTest(root, &TestFlushInternalBuffer,        "tsconv/ncnvtst/TestFlushInternalBuffer");
 
@@ -708,7 +710,7 @@ static void TestGetNextErrorBehaviour(){
 }
 
 /*Regression test for utf8 converter*/
-static void TestRegression(){
+static void TestRegressionUTF8(){
     uint8_t *buffer=0;
     UChar32 c;
     char *targ;
@@ -731,7 +733,7 @@ static void TestRegression(){
     }
     source=(UChar*)malloc(sizeof(UChar) * TEST_BUFFER_SIZE);
     extractedTargetBuffer=(UChar*)malloc(sizeof(UChar) * TEST_BUFFER_SIZE);
-    buffer=(uint8_t*)malloc(sizeof(char) * TEST_BUFFER_SIZE);
+    buffer=(uint8_t*)malloc(sizeof(uint8_t) * TEST_BUFFER_SIZE);
 
     for(i =0; i< TEST_BUFFER_SIZE; i++){
         buffer[i]=0xF0;
@@ -761,6 +763,114 @@ static void TestRegression(){
     }
 
     log_verbose("The No: of bytes in target buffer =%ld\n", (const char *)(targ-(const char *)buffer));
+
+    targetLimit=targ;
+    targ=(char *)buffer;
+
+    extractedTarget=extractedTargetBuffer;
+    limit=extractedTarget+TEST_BUFFER_SIZE;
+    ucnv_toUnicode(conv, 
+                   &extractedTarget, 
+                   limit, 
+                   (const char **) &targ, 
+                   targetLimit, 
+                   NULL, 
+                   TRUE, 
+                   &status);
+
+    /*if(memcmp(source, extractedTarget, extractedTarget-extractedTargetBuffer) != 0){
+        log_err("FAILED\n");
+    }*/
+    src=source;
+    target=extractedTargetBuffer;
+    while(target < extractedTarget){
+        if(*src != *target){
+            log_err("FAILED: comparision failed at source=0x%04X, extracted=0x%04X\n", *src, *target);
+            break;
+        }
+        src++;
+        target++;
+
+    }
+    if((extractedTarget-extractedTargetBuffer) != (sourceLimit-source)){
+        log_err("The conversion didn't go through the whole range: Expected= %d, Got=%d\n", (sourceLimit-source), (extractedTarget-extractedTargetBuffer));
+
+    }
+    ucnv_close(conv);
+    free(source);
+    free(extractedTargetBuffer);
+    free(buffer);
+
+}
+
+static void TestRegressionUTF32(){
+    uint32_t *buffer=0;
+    UChar32 c;
+    char *targ;
+    char *targetLimit;
+    UChar *source;
+    const UChar *src=0;
+    const UChar *sourceLimit=0;
+    UChar *extractedTargetBuffer=0;
+    UChar *extractedTarget=0;
+    UChar *target=0;
+    UChar *limit=0;
+    int32_t count=0;
+
+    int32_t offset=0;
+    int32_t i=0;
+    UErrorCode status=U_ZERO_ERROR;
+    UConverter *conv=ucnv_open("utf32", &status);
+    if(U_FAILURE(status)) {
+        log_err("Unable to open a utf-32 converter: %s\n", u_errorName(status));
+    }
+    source=(UChar*)malloc(sizeof(UChar) * TEST_BUFFER_SIZE);
+    extractedTargetBuffer=(UChar*)malloc(sizeof(UChar) * TEST_BUFFER_SIZE);
+    buffer=(uint32_t*)malloc(sizeof(uint32_t) * TEST_BUFFER_SIZE);
+
+    for(i =0; i< TEST_BUFFER_SIZE; i++){
+        buffer[i]=0xF0;
+        source[i]=(UChar)0xFFFE;
+        extractedTargetBuffer[i]=(UChar)0xFFFE;
+    }
+    for(c=0x0000; c <= UNICODE_LIMIT; c++){
+        UTF16_APPEND_CHAR_SAFE(source, offset, TEST_BUFFER_SIZE, c);
+        count++;
+    }
+    log_verbose("\nThe the No: of code units=%ld,  The no: of Code Points=%d\n", offset, count);
+    
+    src=source;
+    sourceLimit=src+(offset);
+    targ=(char *)buffer;
+    targetLimit=targ+(TEST_BUFFER_SIZE);
+    ucnv_fromUnicode (conv,
+                  &targ,
+                  targetLimit,
+                  &src,
+                  sourceLimit,
+                  NULL,
+                  TRUE, 
+                  &status);
+    if(U_FAILURE(status)){
+        log_err("FAILED: error= %s at offset=0x%04X and target=0x%02X\n", myErrorName(status), (UNICODE_LIMIT-(sourceLimit-src)/sizeof(UChar)) , *targ);
+    }
+
+    log_verbose("The No: of bytes in target buffer =%ld\n", (const char *)(targ-(const char *)buffer));
+
+    for(c=0x0000; c <= UNICODE_LIMIT && buffer[c] == c; c++){
+    }
+
+    if (c == 0xDBFF && buffer[c] == 0x10FC00) {
+        /* skip the surrogate and compare with rest of UTF-32 skipping DC00 in UTF-16 */
+        for(c++; c < UNICODE_LIMIT && buffer[c] == c+1; c++){
+        }
+        if (c < UNICODE_LIMIT) {
+            log_err("FAILED: at offset=0x%04X and target=0x%02X\n", c, buffer[c]);
+        }
+    }
+    else {
+        log_err("FAILED: surrogate not found at offset=0x%04X and target=0x%02X\n", c, buffer[c]);
+    }
 
     targetLimit=targ;
     targ=(char *)buffer;
