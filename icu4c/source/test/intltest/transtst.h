@@ -277,6 +277,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestInvalidPostContext();
 
+    /**
+     * Test ID form variants
+     */
+    void TestIDForms();
+
     //======================================================================
     // Support methods
     //======================================================================
