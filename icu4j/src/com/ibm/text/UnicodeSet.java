@@ -230,7 +230,7 @@ import java.util.Dictionary;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.4 $ $Date: 2000/01/11 04:03:54 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.5 $ $Date: 2000/01/13 23:53:23 $
  */
 public class UnicodeSet {
     /**
@@ -352,10 +352,17 @@ public class UnicodeSet {
     public void applyPattern(String pattern) {
         ParsePosition pos = new ParsePosition(0);
         pairs = parse(pattern, pos, null, null);
-        if (pos.getIndex() != pattern.length()) {
+
+        // Skip over trailing whitespace
+        int i = pos.getIndex();
+        int n = pattern.length();
+        while (i < n && Character.isWhitespace(pattern.charAt(i))) {
+            ++i;
+        }
+
+        if (i != n) {
             throw new IllegalArgumentException("Parse of \"" + pattern +
-                                               "\" failed at " +
-                                               pos.getIndex());
+                                               "\" failed at " + i);
         }
     }
 
