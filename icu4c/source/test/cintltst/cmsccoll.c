@@ -1791,7 +1791,9 @@ static void TestExpansionSyntax() {
     rlen = u_unescape(expectedRules[i], rlz, 2048);
     cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
 
-    // testAgainstUCA(cresulting, credundant, 0, "expected", TRUE, &status);
+    /* testAgainstUCA still doesn't handle expansions correctly, so this is not run */
+    /* as a hard error test, but only in information mode */
+    testAgainstUCA(cresulting, credundant, 0, "expected", FALSE, &status);
 
     ucol_close(credundant);
     ucol_close(cresulting);
