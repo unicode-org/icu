@@ -191,7 +191,37 @@ public class G7CollationTest extends TestFmwk{
         }
     }
     
-    
+    public void TestG7Data() {
+        Locale locales[] = {
+                Locale.US,
+                Locale.UK,
+                Locale.CANADA,
+                Locale.FRANCE,
+                Locale.CANADA_FRENCH,
+                Locale.GERMANY,
+                Locale.JAPAN,
+                Locale.ITALY
+            };
+        int i = 0, j = 0;
+        for (i = 0; i < locales.length; i++) {
+            Collator myCollation= null;
+            RuleBasedCollator tblColl1 = null;
+            try {
+                myCollation = Collator.getInstance(locales[i]);
+                tblColl1 = new RuleBasedCollator(((RuleBasedCollator)myCollation).getRules());
+            } catch (Exception foo) {
+                errln("Exception: " + foo.getMessage() +
+                      "; Locale : " + locales[i].getDisplayName() + " getRules failed\n");
+                continue;
+            }
+            for (j = 0; j < FIXEDTESTSET; j++) {
+                for (int n = j+1; n < FIXEDTESTSET; n++) {
+                    doTest(tblColl1, testCases[results[i][j]], testCases[results[i][n]], -1);
+                }
+            }
+            myCollation = null;
+        }
+    }
     
     
     // main test routine, tests comparisons for a set of strings against sets of expected results

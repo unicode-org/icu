@@ -19,7 +19,10 @@ package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+
 import java.util.Locale;
+import java.util.Vector;
+import java.text.ParseException;
 
 public class CollationRegressionTest extends TestFmwk {
     public static void main(String[] args) throws Exception{
@@ -830,6 +833,304 @@ public class CollationRegressionTest extends TestFmwk {
                 msg += "Could not create collator for locale ";
                 msg += locales[i].getDisplayName();
                 errln(msg);
+            }
+        }
+    }
+    
+    private void checkListOrder(String[] sortedList, Collator c) {
+        // this function uses the specified Collator to make sure the
+        // passed-in list is already sorted into ascending order
+        for (int i = 0; i < sortedList.length - 1; i++) {
+            if (c.compare(sortedList[i], sortedList[i + 1]) >= 0) {
+                errln("List out of order at element #" + i + ": "
+                        + sortedList[i] + " >= "
+                        + sortedList[i + 1]);
+            }
+        }
+    }
+
+    public void Test4171974() {
+        // test French accent ordering more thoroughly
+        /*String[] frenchList = {
+            "\u0075\u0075",     // u u
+            "\u00fc\u0075",     // u-umlaut u
+            "\u01d6\u0075",     // u-umlaut-macron u
+            "\u016b\u0075",     // u-macron u
+            "\u1e7b\u0075",     // u-macron-umlaut u
+            "\u0075\u00fc",     // u u-umlaut
+            "\u00fc\u00fc",     // u-umlaut u-umlaut
+            "\u01d6\u00fc",     // u-umlaut-macron u-umlaut
+            "\u016b\u00fc",     // u-macron u-umlaut
+            "\u1e7b\u00fc",     // u-macron-umlaut u-umlaut
+            "\u0075\u01d6",     // u u-umlaut-macron
+            "\u00fc\u01d6",     // u-umlaut u-umlaut-macron
+            "\u01d6\u01d6",     // u-umlaut-macron u-umlaut-macron
+            "\u016b\u01d6",     // u-macron u-umlaut-macron
+            "\u1e7b\u01d6",     // u-macron-umlaut u-umlaut-macron
+            "\u0075\u016b",     // u u-macron
+            "\u00fc\u016b",     // u-umlaut u-macron
+            "\u01d6\u016b",     // u-umlaut-macron u-macron
+            "\u016b\u016b",     // u-macron u-macron
+            "\u1e7b\u016b",     // u-macron-umlaut u-macron
+            "\u0075\u1e7b",     // u u-macron-umlaut
+            "\u00fc\u1e7b",     // u-umlaut u-macron-umlaut
+            "\u01d6\u1e7b",     // u-umlaut-macron u-macron-umlaut
+            "\u016b\u1e7b",     // u-macron u-macron-umlaut
+            "\u1e7b\u1e7b"      // u-macron-umlaut u-macron-umlaut
+        };
+        Collator french = Collator.getInstance(Locale.FRENCH);
+
+        logln("Testing French order...");
+        checkListOrder(frenchList, french);
+
+        logln("Testing French order without decomposition...");
+        french.setDecomposition(Collator.NO_DECOMPOSITION);
+        checkListOrder(frenchList, french);*/
+
+        String[] englishList = {
+            "\u0075\u0075",     // u u
+            "\u0075\u00fc",     // u u-umlaut
+            "\u0075\u01d6",     // u u-umlaut-macron
+            "\u0075\u016b",     // u u-macron
+            "\u0075\u1e7b",     // u u-macron-umlaut
+            "\u00fc\u0075",     // u-umlaut u
+            "\u00fc\u00fc",     // u-umlaut u-umlaut
+            "\u00fc\u01d6",     // u-umlaut u-umlaut-macron
+            "\u00fc\u016b",     // u-umlaut u-macron
+            "\u00fc\u1e7b",     // u-umlaut u-macron-umlaut
+            "\u01d6\u0075",     // u-umlaut-macron u
+            "\u01d6\u00fc",     // u-umlaut-macron u-umlaut
+            "\u01d6\u01d6",     // u-umlaut-macron u-umlaut-macron
+            "\u01d6\u016b",     // u-umlaut-macron u-macron
+            "\u01d6\u1e7b",     // u-umlaut-macron u-macron-umlaut
+            "\u016b\u0075",     // u-macron u
+            "\u016b\u00fc",     // u-macron u-umlaut
+            "\u016b\u01d6",     // u-macron u-umlaut-macron
+            "\u016b\u016b",     // u-macron u-macron
+            "\u016b\u1e7b",     // u-macron u-macron-umlaut
+            "\u1e7b\u0075",     // u-macron-umlaut u
+            "\u1e7b\u00fc",     // u-macron-umlaut u-umlaut
+            "\u1e7b\u01d6",     // u-macron-umlaut u-umlaut-macron
+            "\u1e7b\u016b",     // u-macron-umlaut u-macron
+            "\u1e7b\u1e7b"      // u-macron-umlaut u-macron-umlaut
+        };
+        Collator english = Collator.getInstance(Locale.ENGLISH);
+
+        logln("Testing English order...");
+        checkListOrder(englishList, english);
+
+        logln("Testing English order without decomposition...");
+        english.setDecomposition(Collator.NO_DECOMPOSITION);
+        checkListOrder(englishList, english);
+    }
+
+    public void Test4179216() throws Exception {
+        // you can position a CollationElementIterator in the middle of
+        // a contracting character sequence, yielding a bogus collation
+        // element
+        RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(Locale.US);
+        coll = new RuleBasedCollator(coll.getRules()
+                + " & C < ch , cH , Ch , CH < cat < crunchy");
+        String testText = "church church catcatcher runcrunchynchy";
+        CollationElementIterator iter = coll.getCollationElementIterator(
+                testText);
+
+        // test that the "ch" combination works properly
+        iter.setOffset(4);
+        int elt4 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.reset();
+        int elt0 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.setOffset(5);
+        int elt5 = CollationElementIterator.primaryOrder(iter.next());
+
+        if (elt4 != elt0 || elt5 != elt0)
+            errln("The collation elements at positions 0 (" + elt0 + "), 4 ("
+                    + elt4 + "), and 5 (" + elt5 + ") don't match.");
+
+        // test that the "cat" combination works properly
+        iter.setOffset(14);
+        int elt14 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.setOffset(15);
+        int elt15 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.setOffset(16);
+        int elt16 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.setOffset(17);
+        int elt17 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.setOffset(18);
+        int elt18 = CollationElementIterator.primaryOrder(iter.next());
+
+        iter.setOffset(19);
+        int elt19 = CollationElementIterator.primaryOrder(iter.next());
+
+        if (elt14 != elt15 || elt14 != elt16 || elt14 != elt17
+                || elt14 != elt18 || elt14 != elt19)
+            errln("\"cat\" elements don't match: elt14 = " + elt14 + ", elt15 = "
+            + elt15 + ", elt16 = " + elt16 + ", elt17 = " + elt17
+            + ", elt18 = " + elt18 + ", elt19 = " + elt19);
+
+        // now generate a complete list of the collation elements,
+        // first using next() and then using setOffset(), and
+        // make sure both interfaces return the same set of elements
+        iter.reset();
+
+        int elt = iter.next();
+        int count = 0;
+        while (elt != CollationElementIterator.NULLORDER) {
+            ++count;
+            elt = iter.next();
+        }
+
+        String[] nextElements = new String[count];
+        String[] setOffsetElements = new String[count];
+        int lastPos = 0;
+
+        iter.reset();
+        elt = iter.next();
+        count = 0;
+        while (elt != CollationElementIterator.NULLORDER) {
+            nextElements[count++] = testText.substring(lastPos, iter.getOffset());
+            lastPos = iter.getOffset();
+            elt = iter.next();
+        }
+        count = 0;
+        for (int i = 0; i < testText.length(); ) {
+            iter.setOffset(i);
+            lastPos = iter.getOffset();
+            elt = iter.next();
+            setOffsetElements[count++] = testText.substring(lastPos, iter.getOffset());
+            i = iter.getOffset();
+        }
+        for (int i = 0; i < nextElements.length; i++) {
+            if (nextElements[i].equals(setOffsetElements[i])) {
+                logln(nextElements[i]);
+            } else {
+                errln("Error: next() yielded " + nextElements[i] + ", but setOffset() yielded "
+                    + setOffsetElements[i]);
+            }
+        }
+    }
+
+    public void Test4216006() throws Exception {
+        // rule parser barfs on "<\u00e0=a\u0300", and on other cases
+        // where the same token (after normalization) appears twice in a row
+        boolean caughtException = false;
+        try {
+            RuleBasedCollator dummy = new RuleBasedCollator("\u00e0<a\u0300");
+        }
+        catch (ParseException e) {
+            caughtException = true;
+        }
+        if (!caughtException) {
+            throw new Exception("\"a<a\" collation sequence didn't cause parse error!");
+        }
+
+        RuleBasedCollator collator = new RuleBasedCollator("<\u00e0=a\u0300");
+        //commented by Kevin 2003/10/21 
+        //for "FULL_DECOMPOSITION is not supported here." in ICU4J DOC
+        //collator.setDecomposition(Collator.FULL_DECOMPOSITION);
+        collator.setStrength(Collator.IDENTICAL);
+
+        String[] tests = {
+            "a\u0300", "=", "\u00e0",
+            "\u00e0",  "=", "a\u0300"
+        };
+
+        compareArray(collator, tests);
+    }
+
+    // CollationElementIterator.previous broken for expanding char sequences
+    //
+    public void Test4179686() throws Exception {
+
+        // Create a collator with a few expanding character sequences in it....
+        RuleBasedCollator coll = new RuleBasedCollator(en_us.getRules()
+                                                    + " & ae ; \u00e4 & AE ; \u00c4"
+                                                    + " & oe ; \u00f6 & OE ; \u00d6"
+                                                    + " & ue ; \u00fc & UE ; \u00dc");
+
+        String text = "T\u00f6ne"; // o-umlaut
+
+        CollationElementIterator iter = coll.getCollationElementIterator(text);
+        Vector elements = new Vector();
+        int elem;
+
+        // Iterate forward and collect all of the elements into a Vector
+        while ((elem = iter.next()) != CollationElementIterator.NULLORDER) {
+            elements.addElement(new Integer(elem));
+        }
+
+        // Now iterate backward and make sure they're the same
+        int index = elements.size() - 1;
+        while ((elem = iter.previous()) != CollationElementIterator.NULLORDER) {
+            int expect = ((Integer)elements.elementAt(index)).intValue();
+
+            if (elem != expect) {
+                errln("Mismatch at index " + index
+                      + ": got " + Integer.toString(elem,16)
+                      + ", expected " + Integer.toString(expect,16));
+            }
+            index--;
+        }
+    }
+
+    static RuleBasedCollator en_us = (RuleBasedCollator)Collator.getInstance(Locale.US);
+
+    public void Test4244884() throws Exception {
+        RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(Locale.US);
+        coll = new RuleBasedCollator(coll.getRules()
+                + " & C < ch , cH , Ch , CH < cat < crunchy");
+
+        String[] testStrings = new String[] {
+            "car",
+            "cave",
+            "clamp",
+            "cramp",
+            "czar",
+            "church",
+            "catalogue",
+            "crunchy",
+            "dog"
+        };
+
+        for (int i = 1; i < testStrings.length; i++) {
+            if (coll.compare(testStrings[i - 1], testStrings[i]) >= 0) {
+                errln("error: \"" + testStrings[i - 1]
+                    + "\" is greater than or equal to \"" + testStrings[i]
+                    + "\".");
+            }
+        }
+    }
+
+    //  CollationElementIterator set doesn't work propertly with next/prev
+    public void Test4663220() {
+        RuleBasedCollator collator = (RuleBasedCollator)Collator.getInstance(Locale.US);
+        java.text.StringCharacterIterator stringIter = new java.text.StringCharacterIterator("fox");
+        CollationElementIterator iter = collator.getCollationElementIterator(stringIter);
+    
+        int[] elements_next = new int[3];
+        logln("calling next:");
+        for (int i = 0; i < 3; ++i) {
+            logln("[" + i + "] " + (elements_next[i] = iter.next()));
+        }
+    
+        int[] elements_fwd = new int[3];
+        logln("calling set/next:");
+        for (int i = 0; i < 3; ++i) {
+            iter.setOffset(i);
+            logln("[" + i + "] " + (elements_fwd[i] = iter.next()));
+        }
+    
+        for (int i = 0; i < 3; ++i) {
+            if (elements_next[i] != elements_fwd[i]) {
+                errln("mismatch at position " + i + 
+                ": " + elements_next[i] + 
+                " != " + elements_fwd[i]);
             }
         }
     }

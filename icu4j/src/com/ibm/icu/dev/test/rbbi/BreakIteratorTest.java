@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $
- * $Date: 2003/06/03 18:49:30 $
- * $Revision: 1.12 $
+ * $Date: 2004/02/04 02:40:14 $
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -1305,6 +1305,95 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
     }
 
     /**
+     * Bug 4638433
+     */
+    public void TestLineBreakBasedOnUnicode3_0_0() {
+        BreakIterator iter;
+        int i;
+
+        /* Latin Extend-B characters
+         * 0x0218-0x0233 which have been added since Unicode 3.0.0.
+         */
+        iter = BreakIterator.getWordInstance(Locale.US);
+        iter.setText("\u0216\u0217\u0218\u0219\u021A");
+        i = iter.first();
+        i = iter.next();
+        if (i != 5) {   
+            errln("Word break failure: failed to stop at 5 and bounded at " + i);
+        }
+
+
+        iter = BreakIterator.getLineInstance(Locale.US);
+
+        /* <Three(Nd)><Two(Nd)><Low Double Prime Quotation Mark(Pe)><One(Nd)>
+         * \u301f has changed its category from Ps to Pe since Unicode 2.1.
+         */
+        iter.setText("32\u301f1");
+        i = iter.first();
+        i = iter.next();
+        if (i != 3) {   
+            errln("Line break failure: failed to skip before \\u301F(Pe) at 3 and bounded at " + i);
+        }
+
+        /* Mongolian <Letter A(Lo)><Todo Soft Hyphen(Pd)><Letter E(Lo)>
+         * which have been added since Unicode 3.0.0.
+         */
+        iter.setText("\u1820\u1806\u1821");
+        i = iter.first();
+        i = iter.next();
+        if (i != 2) {   
+            errln("Mongolian line break failure: failed to skip position before \\u1806(Pd) at 2 and bounded at " + i);
+        }
+
+        /* Khmer <ZERO(Nd)><Currency Symbol(Sc)><ONE(Nd)> which have
+         * been added since Unicode 3.0.0.
+         */
+        /*
+         * Richard: fail to pass, refer to #3550
+        iter.setText("\u17E0\u17DB\u17E1");
+        i = iter.first();
+        i = iter.next();
+        if (i != 1) {   
+            errln("Khmer line break failure: failed to stop before \\u17DB(Sc) at 1 and bounded at " + i);
+        }
+        i = iter.next();
+        if (i != 3) {   
+            errln("Khmer line break failure: failed to skip position after \\u17DB(Sc) at 3 and bounded at " + i);
+        }*/
+
+        /* Ogham <Letter UR(Lo)><Space Mark(Zs)><Letter OR(Lo)> which have
+         * been added since Unicode 3.0.0.
+         */
+        iter.setText("\u1692\u1680\u1696");
+        i = iter.first();
+        i = iter.next();
+        if (i != 2) {   
+            errln("Ogham line break failure: failed to skip postion before \\u1680(Zs) at 2 and bounded at " + i);
+        }
+
+
+        // Confirm changes in BreakIteratorRules_th.java have been reflected.
+        iter = BreakIterator.getLineInstance(new Locale("th", ""));
+
+        /* Thai <Seven(Nd)>
+         *      <Left Double Quotation Mark(Pi)>
+         *      <Five(Nd)>
+         *      <Right Double Quotation Mark(Pf)>
+         *      <Three(Nd)>
+         */
+        iter.setText("\u0E57\u201C\u0E55\u201D\u0E53");
+        i = iter.first();
+        i = iter.next();
+        if (i != 1) {   
+            errln("Thai line break failure: failed to stop before \\u201C(Pi) at 1 and bounded at " + i);
+        }
+        i = iter.next();
+        if (i != 4) {   
+            errln("Thai line break failure: failed to stop after \\u201D(Pf) at 4 and bounded at " + i);
+        }
+    }
+    
+    /**
      * @bug 4068137
      */
     public void TestEndBehavior()
@@ -1415,6 +1504,21 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         BreakIterator e = BreakIterator.getWordInstance(new Locale("th","",""));
 
         generalIteratorTest(e, thaiWordSelection);
+    }
+    
+    /**
+     * Bug 4450804
+     */
+    public void TestLineBreakContractions() {
+        Vector expected = new Vector();
+        expected.add("These ");
+        expected.add("are ");
+        expected.add("'foobles'. ");
+        expected.add("Don't ");
+        expected.add("you ");
+        expected.add("like ");
+        expected.add("them?");
+        generalIteratorTest(lineBreak, expected);
     }
 }
 
