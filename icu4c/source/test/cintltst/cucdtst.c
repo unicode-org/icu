@@ -1879,6 +1879,7 @@ static void TestUScriptCodeAPI(){
 /* test additional, non-core properties */
 static void
 TestAdditionalProperties() {
+    /* test data for u_charAge() */
     static struct {
         UChar32 c;
         UVersionInfo version;
@@ -1895,14 +1896,151 @@ TestAdditionalProperties() {
         0xff60,  { 3, 2, 0, 0 }
     };
 
+    /* test data for u_hasBinaryProperty() */
+    static int32_t
+    props[][3]={ /* code point, property, value */
+        { 0x0627, UCHAR_ALPHABETIC, TRUE },
+        { 0x1034a, UCHAR_ALPHABETIC, TRUE },
+        { 0x2028, UCHAR_ALPHABETIC, FALSE },
+
+        { 0x0066, UCHAR_ASCII_HEX_DIGIT, TRUE },
+        { 0x0067, UCHAR_ASCII_HEX_DIGIT, FALSE },
+
+        { 0x202c, UCHAR_BIDI_CONTROL, TRUE },
+        { 0x202f, UCHAR_BIDI_CONTROL, FALSE },
+
+        { 0x003c, UCHAR_BIDI_MIRRORED, TRUE },
+        { 0x003d, UCHAR_BIDI_MIRRORED, FALSE },
+
+        { 0x058a, UCHAR_DASH, TRUE },
+        { 0x007e, UCHAR_DASH, FALSE },
+
+        { 0x0c4d, UCHAR_DIACRITIC, TRUE },
+        { 0x3000, UCHAR_DIACRITIC, FALSE },
+
+        { 0x0e46, UCHAR_EXTENDER, TRUE },
+        { 0x0020, UCHAR_EXTENDER, FALSE },
+
+        { 0xfb1d, UCHAR_FULL_COMPOSITION_EXCLUSION, TRUE },
+        { 0x1d15f, UCHAR_FULL_COMPOSITION_EXCLUSION, TRUE },
+        { 0xfb1e, UCHAR_FULL_COMPOSITION_EXCLUSION, FALSE },
+
+        { 0x0044, UCHAR_HEX_DIGIT, TRUE },
+        { 0xff46, UCHAR_HEX_DIGIT, TRUE },
+        { 0x0047, UCHAR_HEX_DIGIT, FALSE },
+
+        { 0x30fb, UCHAR_HYPHEN, TRUE },
+        { 0xfe58, UCHAR_HYPHEN, FALSE },
+
+        { 0x2172, UCHAR_ID_CONTINUE, TRUE },
+        { 0x0307, UCHAR_ID_CONTINUE, TRUE },
+        { 0x005c, UCHAR_ID_CONTINUE, FALSE },
+
+        { 0x2172, UCHAR_ID_START, TRUE },
+        { 0x007a, UCHAR_ID_START, TRUE },
+        { 0x0039, UCHAR_ID_START, FALSE },
+
+        { 0x4db5, UCHAR_IDEOGRAPHIC, TRUE },
+        { 0x2f999, UCHAR_IDEOGRAPHIC, TRUE },
+        { 0x2f99, UCHAR_IDEOGRAPHIC, FALSE },
+
+        { 0x200c, UCHAR_JOIN_CONTROL, TRUE },
+        { 0x2029, UCHAR_JOIN_CONTROL, FALSE },
+
+        { 0x1d7bc, UCHAR_LOWERCASE, TRUE },
+        { 0x0345, UCHAR_LOWERCASE, TRUE },
+        { 0x0030, UCHAR_LOWERCASE, FALSE },
+
+        { 0x1d7a9, UCHAR_MATH, TRUE },
+        { 0x2135, UCHAR_MATH, TRUE },
+        { 0x0062, UCHAR_MATH, FALSE },
+
+        { 0xfde1, UCHAR_NONCHARACTER_CODE_POINT, TRUE },
+        { 0x10ffff, UCHAR_NONCHARACTER_CODE_POINT, TRUE },
+        { 0x10fffd, UCHAR_NONCHARACTER_CODE_POINT, FALSE },
+
+        { 0x0022, UCHAR_QUOTATION_MARK, TRUE },
+        { 0xff62, UCHAR_QUOTATION_MARK, TRUE },
+        { 0xd840, UCHAR_QUOTATION_MARK, FALSE },
+
+        { 0x061f, UCHAR_TERMINAL_PUNCTUATION, TRUE },
+        { 0xe003f, UCHAR_TERMINAL_PUNCTUATION, FALSE },
+
+        { 0x1d44a, UCHAR_UPPERCASE, TRUE },
+        { 0x2162, UCHAR_UPPERCASE, TRUE },
+        { 0x0345, UCHAR_UPPERCASE, FALSE },
+
+        { 0x0020, UCHAR_WHITE_SPACE, TRUE },
+        { 0x202f, UCHAR_WHITE_SPACE, TRUE },
+        { 0x3001, UCHAR_WHITE_SPACE, FALSE },
+
+        { 0x0711, UCHAR_XID_CONTINUE, TRUE },
+        { 0x1d1aa, UCHAR_XID_CONTINUE, TRUE },
+        { 0x007c, UCHAR_XID_CONTINUE, FALSE },
+
+        { 0x16ee, UCHAR_XID_START, TRUE },
+        { 0x23456, UCHAR_XID_START, TRUE },
+        { 0x1d1aa, UCHAR_XID_START, FALSE },
+
+        /*
+         * Version break:
+         * The following properties are only supported starting with the
+         * Unicode version indicated in the second field.
+         */
+        { -1, 0x32, 0 },
+
+        { 0x180c, UCHAR_DEFAULT_IGNORABLE_CODE_POINT, TRUE },
+        { 0xfe02, UCHAR_DEFAULT_IGNORABLE_CODE_POINT, TRUE },
+        { 0x1801, UCHAR_DEFAULT_IGNORABLE_CODE_POINT, FALSE },
+
+        { 0x0341, UCHAR_DEPRECATED, TRUE },
+        { 0xe0041, UCHAR_DEPRECATED, FALSE },
+
+        { 0x00a0, UCHAR_GRAPHEME_BASE, TRUE },
+        { 0x0a4d, UCHAR_GRAPHEME_BASE, FALSE },
+        { 0xff9f, UCHAR_GRAPHEME_BASE, FALSE },
+
+        { 0x0300, UCHAR_GRAPHEME_EXTEND, TRUE },
+        { 0xff9f, UCHAR_GRAPHEME_EXTEND, TRUE },
+        { 0x0a4d, UCHAR_GRAPHEME_EXTEND, FALSE },
+
+        { 0x0a4d, UCHAR_GRAPHEME_LINK, TRUE },
+        { 0xff9f, UCHAR_GRAPHEME_LINK, FALSE },
+
+        { 0x2ff7, UCHAR_IDS_BINARY_OPERATOR, TRUE },
+        { 0x2ff3, UCHAR_IDS_BINARY_OPERATOR, FALSE },
+
+        { 0x2ff3, UCHAR_IDS_TRINARY_OPERATOR, TRUE },
+        { 0x2f03, UCHAR_IDS_TRINARY_OPERATOR, FALSE },
+
+        { 0x0ec1, UCHAR_LOGICAL_ORDER_EXCEPTION, TRUE },
+        { 0xdcba, UCHAR_LOGICAL_ORDER_EXCEPTION, FALSE },
+
+        { 0x2e9b, UCHAR_RADICAL, TRUE },
+        { 0x4e00, UCHAR_RADICAL, FALSE },
+
+        { 0x012f, UCHAR_SOFT_DOTTED, TRUE },
+        { 0x0049, UCHAR_SOFT_DOTTED, FALSE },
+
+        { 0xfa11, UCHAR_UNIFIED_IDEOGRAPH, TRUE },
+        { 0xfa12, UCHAR_UNIFIED_IDEOGRAPH, FALSE }
+    };
+
     UVersionInfo version;
-    int32_t i;
+    int32_t i, uVersion;
+
+    /* what is our Unicode version? */
+    u_getUnicodeVersion(version);
+    uVersion=(version[0]<<4)|version[1]; /* major/minor version numbers */
 
     u_charAge(0x20, version);
     if(version[0]==0) {
         /* no additional properties available */
+        log_err("TestAdditionalProperties: no additional properties available, not tested\n");
+        return;
     }
 
+    /* test u_charAge() */
     for(i=0; i<sizeof(charAges)/sizeof(charAges[0]); ++i) {
         u_charAge(charAges[i].c, version);
         if(0!=uprv_memcmp(version, charAges[i].version, sizeof(UVersionInfo))) {
@@ -1910,6 +2048,53 @@ TestAdditionalProperties() {
                 charAges[i].c,
                 version[0], version[1], version[2], version[3],
                 charAges[i].version[0], charAges[i].version[1], charAges[i].version[2], charAges[i].version[3]);
+        }
+    }
+
+    /* test u_hasBinaryProperty() */
+    for(i=0; i<sizeof(props)/sizeof(props[0]); ++i) {
+        if(props[i][0]<0) {
+            /* Unicode version break */
+            if(uVersion<props[i][1]) {
+                break; /* do not test properties that are not yet supported */
+            } else {
+                continue; /* skip this row */
+            }
+        }
+
+        if(u_hasBinaryProperty((UChar32)props[i][0], (UProperty)props[i][1])!=(UBool)props[i][2]) {
+            log_err("error: u_hasBinaryProperty(U+%04lx, %d)=%d is wrong (props[%d])\n",
+                    props[i][0], props[i][1], props[i][2], i);
+        }
+
+        /* test separate functions, too */
+        switch((UProperty)props[i][1]) {
+        case UCHAR_ALPHABETIC:
+            if(u_isUAlphabetic((UChar32)props[i][0])!=(UBool)props[i][2]) {
+                log_err("error: u_isUAlphabetic(U+%04lx)=%d is wrong (props[%d])\n",
+                        props[i][0], props[i][2], i);
+            }
+            break;
+        case UCHAR_LOWERCASE:
+            if(u_isULowercase((UChar32)props[i][0])!=(UBool)props[i][2]) {
+                log_err("error: u_isULowercase(U+%04lx)=%d is wrong (props[%d])\n",
+                        props[i][0], props[i][2], i);
+            }
+            break;
+        case UCHAR_UPPERCASE:
+            if(u_isUUppercase((UChar32)props[i][0])!=(UBool)props[i][2]) {
+                log_err("error: u_isUUppercase(U+%04lx)=%d is wrong (props[%d])\n",
+                        props[i][0], props[i][2], i);
+            }
+            break;
+        case UCHAR_WHITE_SPACE:
+            if(u_isUWhiteSpace((UChar32)props[i][0])!=(UBool)props[i][2]) {
+                log_err("error: u_isUWhiteSpace(U+%04lx)=%d is wrong (props[%d])\n",
+                        props[i][0], props[i][2], i);
+            }
+            break;
+        default:
+            break;
         }
     }
 }
