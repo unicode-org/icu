@@ -1363,6 +1363,7 @@ TestUTF32BE() {
         0x00, 0x11, 0x00, 0x00,         /* 0x110000 out of range */
         0x00, 0x00, 0x00, 0x62,
         0xff, 0xff, 0xff, 0xff,         /* 0xffffffff out of range */
+        0x7f, 0xff, 0xff, 0xff,         /* 0x7fffffff out of range */
         0x00, 0x00, 0x01, 0x62,
         0x00, 0x00, 0x02, 0x62
     };
@@ -1370,10 +1371,10 @@ TestUTF32BE() {
     /* expected error test results */
     static const uint32_t results2[]={
         /* number of bytes read, code point */
-        4, 0x61,
-        8, 0x62,
-        8, 0x162,
-        4, 0x262
+        4,  0x61,
+        8,  0x62,
+        12, 0x162,
+        4,  0x262
     };
 
     UConverterToUCallback cb;
@@ -1431,6 +1432,7 @@ TestUTF32LE() {
         0x00, 0x00, 0x11, 0x00,         /* 0x110000 out of range */
         0x62, 0x00, 0x00, 0x00,
         0xff, 0xff, 0xff, 0xff,         /* 0xffffffff out of range */
+        0xff, 0xff, 0xff, 0x7f,         /* 0x7fffffff out of range */
         0x62, 0x01, 0x00, 0x00,
         0x62, 0x02, 0x00, 0x00,
     };
@@ -1438,10 +1440,10 @@ TestUTF32LE() {
     /* expected error test results */
     static const uint32_t results2[]={
         /* number of bytes read, code point */
-        4, 0x61,
-        8, 0x62,
-        8, 0x162,
-        4, 0x262,
+        4,  0x61,
+        8,  0x62,
+        12, 0x162,
+        4,  0x262,
     };
 
     UConverterToUCallback cb;
