@@ -105,7 +105,7 @@ setUnicodeVersion(const char *v) {
 }
 
 
-static UNewTrie idnTrie={ {0},0,0,0,0,0,0,0,0,{0} };
+static UNewTrie *idnTrie;
 
 static int32_t currentIndex = 1; /* the current index into the data trie */
 static int32_t maxLength = 0;  /* maximum length of mapping string */
@@ -115,8 +115,11 @@ static int32_t maxLength = 0;  /* maximum length of mapping string */
 extern void
 init() {
 
+    idnTrie = (UNewTrie *)uprv_malloc(sizeof(UNewTrie));
+    uprv_memset(idnTrie, 0, sizeof(UNewTrie));
+
     /* initialize the two tries */
-    if(NULL==utrie_open(&idnTrie, NULL, MAX_DATA_LENGTH, 0, FALSE)) {
+    if(NULL==utrie_open(idnTrie, NULL, MAX_DATA_LENGTH, 0, FALSE)) {
         fprintf(stderr, "error: failed to initialize tries\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
@@ -207,11 +210,11 @@ store(uint32_t codepoint, uint32_t* mapping, int32_t length, uint32_t flags, UEr
     }
 
 
-    i = utrie_get32(&idnTrie,codepoint,NULL);
+    i = utrie_get32(idnTrie,codepoint,NULL);
     
     if(i==0){
         /* now set the value in the trie */
-        if(!utrie_set32(&idnTrie,codepoint,trieWord)){
+        if(!utrie_set32(idnTrie,codepoint,trieWord)){
             fprintf(stderr, "error:  too many mapping entries\n");
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
@@ -220,7 +223,7 @@ store(uint32_t codepoint, uint32_t* mapping, int32_t length, uint32_t flags, UEr
         if(i== UIDNA_PROHIBITED){
             i += _IDNA_MAP_TO_NOTHING << 5;
             /* now set the value in the trie */
-            if(!utrie_set32(&idnTrie,codepoint,i)){
+            if(!utrie_set32(idnTrie,codepoint,i)){
                 fprintf(stderr, "error:  too many mapping entries\n");
                 exit(U_BUFFER_OVERFLOW_ERROR);
             }
@@ -249,9 +252,9 @@ storeRange(uint32_t start, uint32_t end, int8_t flag,UErrorCode* status){
     trieWord += flag;
 
     if(start == end){
-        i = utrie_get32(&idnTrie,start,NULL);
+        i = utrie_get32(idnTrie,start,NULL);
         if(i == 0 || i==(uint8_t)flag){
-            if(!utrie_set32(&idnTrie,start,trieWord)){
+            if(!utrie_set32(idnTrie,start,trieWord)){
                 fprintf(stderr, "error: too  many entries\n");
                 exit(U_BUFFER_OVERFLOW_ERROR);
             }
@@ -260,7 +263,7 @@ storeRange(uint32_t start, uint32_t end, int8_t flag,UErrorCode* status){
             exit(U_INTERNAL_PROGRAM_ERROR);
         }
     }else{
-        if(!utrie_setRange32(&idnTrie,start,end+1,trieWord,FALSE)){
+        if(!utrie_setRange32(idnTrie,start,end+1,trieWord,FALSE)){
             fprintf(stderr, "error: too  many entries\n");
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
@@ -313,7 +316,7 @@ generateData(const char *dataDir) {
 
     int32_t idnTrieSize;
 
-    idnTrieSize=utrie_serialize(&idnTrie, idnTrieBlock, sizeof(idnTrieBlock), getFoldedValue, TRUE, &errorCode);
+    idnTrieSize=utrie_serialize(idnTrie, idnTrieBlock, sizeof(idnTrieBlock), getFoldedValue, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(idn trie) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -367,8 +370,8 @@ generateData(const char *dataDir) {
 extern void
 cleanUpData(void) {
 
-    utrie_close(&idnTrie);
-
+    utrie_close(idnTrie);
+    uprv_free(idnTrie);
 }
 
 #endif /* #if !UCONFIG_NO_IDNA */
