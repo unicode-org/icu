@@ -789,7 +789,7 @@ FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInser
       } else {
         pad = TRUE;
       }
-      getRuleSet()->format((int64_t)(dl.fDigits[--dl.fCount] - gZero), toInsertInto, _pos + getPos());
+      getRuleSet()->format((int64_t)(dl.fDigits[--dl.fCount] - '0'), toInsertInto, _pos + getPos());
     }
     while (dl.fDecimalAt < 0) {
       if (pad && useSpaces) {
