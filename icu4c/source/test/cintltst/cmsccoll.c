@@ -169,7 +169,7 @@ const static char cnt2[][10] = {
   "DAVI"
 };
 
-static void IncompleteCntTest( )
+static void IncompleteCntTest(void)
 {
   UErrorCode status = U_ZERO_ERROR;
   UChar temp[90];
@@ -272,7 +272,7 @@ const static char nonignorable[][20] = {
   "blackbirds"
 };
 
-static void BlackBirdTest( ) {
+static void BlackBirdTest(void) {
   UErrorCode status = U_ZERO_ERROR;
   UChar t1[90];
   UChar t2[90];
@@ -348,7 +348,7 @@ const static UCollationResult results[] = {
     UCOL_EQUAL
 };
 
-static void FunkyATest( )
+static void FunkyATest(void)
 {
 
     int32_t i;
@@ -421,7 +421,7 @@ static const char * caseLevelC[] = {
 };
 
 /* not used currently - does not test only prints */
-static void PrintMarkDavis( )
+static void PrintMarkDavis(void)
 {
   UErrorCode status = U_ZERO_ERROR;
   UChar m[256];
@@ -472,7 +472,7 @@ static void PrintMarkDavis( )
 }
 #endif
 
-static void BillFairmanTest( ) {
+static void BillFairmanTest(void) {
 /*
 ** check for actual locale via ICU resource bundles
 **
@@ -1250,7 +1250,7 @@ static UBool hasCollationElements(const char *locName) {
 }
 
 
-static void TestCollations( ) {
+static void TestCollations(void) {
   int32_t noOfLoc = uloc_countAvailable();
   int32_t i = 0, j = 0;
 
@@ -1289,7 +1289,7 @@ static void TestCollations( ) {
   ucol_close(UCA);
 }
 
-static void RamsRulesTest( ) {
+static void RamsRulesTest(void) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t i = 0;
   UCollator *coll = NULL;
@@ -1337,7 +1337,7 @@ static void RamsRulesTest( ) {
 
 }
 
-static void IsTailoredTest( ) {
+static void IsTailoredTest(void) {
   UErrorCode status = U_ZERO_ERROR;
   uint32_t i = 0;
   UCollator *coll = NULL;
@@ -1704,7 +1704,7 @@ static void TestComposeDecompose(void) {
     uprv_free(t);
 }
 
-static void TestEmptyRule() {
+static void TestEmptyRule(void) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rulez[] = { 0 };
   UCollator *coll = ucol_openRules(rulez, 0, UCOL_OFF, UCOL_TERTIARY,NULL, &status);
@@ -1712,7 +1712,7 @@ static void TestEmptyRule() {
   ucol_close(coll);
 }
 
-static void TestUCARules() {
+static void TestUCARules(void) {
   UErrorCode status = U_ZERO_ERROR;
   UChar b[256];
   UChar *rules = b;
@@ -1766,7 +1766,7 @@ However, in testing we got the following order:
       < .. (\u01dc) < .. (\u01da) < .. (\u01d6) < .. (\u016b)
 */
 
-static void TestBefore() {
+static void TestBefore(void) {
   const static char *data[] = {
       "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0", "A",
       "\\u0113", "\\u00e9", "\\u011b", "\\u00e8", "E",
@@ -1785,7 +1785,7 @@ static void TestBefore() {
     data, sizeof(data)/sizeof(data[0]));
 }
 
-static void TestJ784() {
+static void TestJ784(void) {
   const static char *data[] = {
       "A", "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0",
       "E", "\\u0113", "\\u00e9", "\\u011b", "\\u00e8",
@@ -1799,7 +1799,7 @@ static void TestJ784() {
 }
 
 
-static void TestJ831() {
+static void TestJ831(void) {
   const static char *data[] = {
     "I",
       "i",
@@ -1809,7 +1809,7 @@ static void TestJ831() {
   genericLocaleStarter("lv", data, sizeof(data)/sizeof(data[0]));
 }
 
-static void TestJ815() {
+static void TestJ815(void) {
   const static char *data[] = {
     "aa",
       "Aa",
@@ -1842,7 +1842,7 @@ static void TestJ815() {
 "& a < b <<< c << d <<< e& [before 1] e <<< x",            "& a <<< x < b <<< c << d <<< e",
 "& a < b <<< c << d <<< e <<< f < g& [before 1] g < x",    "& a < b <<< c << d <<< e <<< f < x < g",
 */
-static void TestRedundantRules() {
+static void TestRedundantRules(void) {
   int32_t i;
 
   const static char *rules[] = {
@@ -1941,7 +1941,7 @@ static void TestRedundantRules() {
 
 }
 
-static void TestExpansionSyntax() {
+static void TestExpansionSyntax(void) {
   int32_t i;
 
   const static char *rules[] = {
@@ -1997,7 +1997,7 @@ static void TestExpansionSyntax() {
   }
 }
 
-static void TestCase( )
+static void TestCase(void)
 {
     const static UChar gRules[MAX_TOKEN_LEN] =
     /*" & 0 < 1,\u2461<a,A"*/
@@ -2115,7 +2115,7 @@ static void TestCase( )
 
 }
 
-static void TestIncrementalNormalize() {
+static void TestIncrementalNormalize(void) {
 
     UChar baseA     =0x41;
 /*    UChar baseB     = 0x42;*/
@@ -2328,7 +2328,7 @@ static void TestIncrementalNormalize() {
 
 
 #if 0
-static void TestGetCaseBit() {
+static void TestGetCaseBit(void) {
   static const char *caseBitData[] = {
     "a", "A", "ch", "Ch", "CH",
       "\\uFF9E", "\\u0009"
@@ -2355,7 +2355,7 @@ static void TestGetCaseBit() {
 }
 #endif
 
-static void TestHangulTailoring() {
+static void TestHangulTailoring(void) {
     static const char *koreanData[] = {
         "\\uac00", "\\u4f3d", "\\u4f73", "\\u5047", "\\u50f9", "\\u52a0", "\\u53ef", "\\u5475",
             "\\u54e5", "\\u5609", "\\u5ac1", "\\u5bb6", "\\u6687", "\\u67b6", "\\u67b7", "\\u67ef",
@@ -2398,7 +2398,7 @@ static void TestHangulTailoring() {
   genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
 }
 
-static void TestCompressOverlap() {
+static void TestCompressOverlap(void) {
     UChar       secstr[150];
     UChar       tertstr[150];
     UErrorCode  status = U_ZERO_ERROR;
@@ -2497,7 +2497,7 @@ static void TestCyrillicTailoring(void) {
     genericRulesStarter("&Z < \\u0410 < \\u0410\\u0301", test, 3);
 }
 
-static void TestContraction() {
+static void TestContraction(void) {
     const static char *testrules[] = {
         "&A = AB / B",
         "&A = A\\u0306/\\u0306",
@@ -2637,7 +2637,7 @@ static void TestContraction() {
     }
 }
 
-static void TestExpansion() {
+static void TestExpansion(void) {
     const static char *testrules[] = {
         "&J << K / B & K << M",
         "&J << K / B << M"
@@ -2677,7 +2677,7 @@ static void TestExpansion() {
 #if 0
 /* this test tests the current limitations of the engine */
 /* it always fail, so it is disabled by default */
-static void TestLimitations() {
+static void TestLimitations(void) {
   /* recursive expansions */
   {
     static const char *rule = "&a=b/c&d=c/e";
@@ -2766,7 +2766,7 @@ static void TestLimitations() {
 }
 #endif
 
-static void TestBocsuCoverage() {
+static void TestBocsuCoverage(void) {
   UErrorCode status = U_ZERO_ERROR;
   const char *testString = "\\u0041\\u0441\\u4441\\U00044441\\u4441\\u0441\\u0041";
   UChar       test[256] = {0};
@@ -2782,7 +2782,7 @@ static void TestBocsuCoverage() {
   ucol_close(coll);
 }
 
-static void TestVariableTopSetting() {
+static void TestVariableTopSetting(void) {
   UErrorCode status = U_ZERO_ERROR;
   const UChar *current = NULL;
   uint32_t varTopOriginal = 0, varTop1, varTop2;
@@ -2955,7 +2955,7 @@ static void TestVariableTopSetting() {
   ucol_close(coll);
 }
 
-static void TestNonChars() {
+static void TestNonChars(void) {
   static const char *test[] = {
     "\\u0000",
     "\\uFFFE", "\\uFFFF",
@@ -2990,7 +2990,7 @@ static void TestNonChars() {
   ucol_close(coll);
 }
 
-static void TestExtremeCompression() {
+static void TestExtremeCompression(void) {
   static char *test[4];
   int32_t i = 0;
 
@@ -3008,7 +3008,7 @@ static void TestExtremeCompression() {
   }
 }
 
-static void TestSurrogates() {
+static void TestSurrogates(void) {
   static const char *test[] = {
     "z","\\ud900\\udc25",  "\\ud805\\udc50",
        "\\ud800\\udc00y",  "\\ud800\\udc00r",
@@ -3030,7 +3030,7 @@ static void TestSurrogates() {
 }
 
 /* This is a test for prefix implementation, used by JIS X 4061 collation rules */
-static void TestPrefix() {
+static void TestPrefix(void) {
   uint32_t i;
 
   static struct {
@@ -3054,7 +3054,7 @@ static void TestPrefix() {
 
 /* This test uses data suplied by Masashiko Maedera to test the implementation */
 /* JIS X 4061 collation order implementation                                   */
-static void TestNewJapanese() {
+static void TestNewJapanese(void) {
 
   static const char *test1[] = {
       "\\u30b7\\u30e3\\u30fc\\u30ec",
@@ -3211,7 +3211,7 @@ static void TestNewJapanese() {
   genericLocaleStarterWithOptions("ja", test2, sizeof(test2)/sizeof(test2[0]), att, valShifted, 1);
 }
 
-static void TestStrCollIdenticalPrefix() {
+static void TestStrCollIdenticalPrefix(void) {
   const char* rule = "&\\ud9b0\\udc70=\\ud9b0\\udc71";
   const char* test[] = {
     "ab\\ud9b0\\udc70",
@@ -3221,7 +3221,7 @@ static void TestStrCollIdenticalPrefix() {
 }
 /* Contractions should have all their canonically equivalent */
 /* strings included */
-static void TestContractionClosure() {
+static void TestContractionClosure(void) {
   static struct {
     const char *rules;
     const char *data[50];
@@ -3241,7 +3241,7 @@ static void TestContractionClosure() {
 }
 
 /* This tests also fails*/
-static void TestBeforePrefixFailure() {
+static void TestBeforePrefixFailure(void) {
   static struct {
     const char *rules;
     const char *data[50];
@@ -3318,7 +3318,7 @@ static void TestBeforePrefixFailure() {
 #endif
 }
 
-static void TestPrefixCompose() {
+static void TestPrefixCompose(void) {
   const char* rule1 = 
         "&\\u30a7<<<\\u30ab|\\u30fc=\\u30ac|\\u30fc";
   /*
@@ -3353,7 +3353,7 @@ static int tMemCmp(const uint8_t *first, const uint8_t *second) {
 
 
 
-static void TestMergeSortKeys() {
+static void TestMergeSortKeys(void) {
   UErrorCode status = U_ZERO_ERROR;
 
   const char* cases[] = {
@@ -3457,7 +3457,7 @@ static void TestMergeSortKeys() {
 [top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8) 
 */
 
-static void TestRuleOptions() {
+static void TestRuleOptions(void) {
   static struct {
     const char *rules;
     const char *data[50];
