@@ -19,7 +19,7 @@
 <icu:alias>                   "ibm-1373_VSUB_VPUA"
 
 <icu:state>                   0-7f, 81-fe:1
-<icu:state>                   40-7e, 81-fe
+<icu:state>                   40-7e, 80-fe
 
 CHARMAP
 <U0000> \x00 |0
