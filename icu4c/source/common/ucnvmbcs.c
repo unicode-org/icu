@@ -340,92 +340,6 @@ gb18030Ranges[13][4]={
 
 /* Miscellaneous ------------------------------------------------------------ */
 
-static uint32_t
-ucnv_MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
-    const uint16_t *table;
-
-    uint32_t st3, maxStage3;
-    uint16_t st1, maxStage1, st2;
-
-    if(mbcsTable->fromUBytesLength>0) {
-        /*
-         * We _know_ the number of bytes in the fromUnicodeBytes array
-         * starting with header.version 4.1.
-         * Otherwise, below, we need to enumerate the fromUnicode
-         * trie and find the highest entry.
-         */
-        return mbcsTable->fromUBytesLength;
-    }
-
-    /* Enumerate the from-Unicode trie table to find the highest stage 3 index. */
-    table=mbcsTable->fromUnicodeTable;
-    maxStage3=0;
-    if(mbcsTable->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
-        maxStage1=0x440;
-    } else {
-        maxStage1=0x40;
-    }
-
-
-    if(mbcsTable->outputType==MBCS_OUTPUT_1) {
-        const uint16_t *stage2;
-
-        for(st1=0; st1<maxStage1; ++st1) {
-            st2=table[st1];
-            if(st2>maxStage1) {
-                stage2=table+st2;
-                for(st2=0; st2<64; ++st2) {
-                    st3=stage2[st2];
-                    if(st3>maxStage3) {
-                        maxStage3=st3;
-                    }
-                }
-            }
-        }
-
-        /*
-         * add 16 to get the limit not start index of the last stage 3 block,
-         * times 2 for number of bytes
-         */
-        return (maxStage3+16)*2;
-    } else {
-        const uint32_t *stage2;
-
-        for(st1=0; st1<maxStage1; ++st1) {
-            st2=table[st1];
-            if(st2>(maxStage1>>1)) {
-                stage2=(const uint32_t *)table+st2;
-                for(st2=0; st2<64; ++st2) {
-                    st3=stage2[st2]&0xffff;
-                    if(st3>maxStage3) {
-                        maxStage3=st3;
-                    }
-                }
-            }
-        }
-
-        /*
-         * add 16 to get the limit not start index of the last stage 3 block,
-         * times 2..4 for number of bytes
-         */
-        maxStage3=16*maxStage3+16;
-        switch(mbcsTable->outputType) {
-        case MBCS_OUTPUT_3:
-        case MBCS_OUTPUT_4_EUC:
-            maxStage3*=3;
-            break;
-        case MBCS_OUTPUT_4:
-            maxStage3*=4;
-            break;
-        default:
-            /* MBCS_OUTPUT_2... and MBCS_OUTPUT_3_EUC */
-            maxStage3*=2;
-            break;
-        }
-        return maxStage3;
-    }
-}
-
 /* similar to ucnv_MBCSGetNextUChar() but recursive */
 static void
 _getUnicodeSetForBytes(const UConverterSharedData *sharedData,
@@ -898,6 +812,29 @@ _EBCDICSwapLFNL(UConverterSharedData *sharedData, UErrorCode *pErrorCode) {
         }
     }
 
+    if(mbcsTable->fromUBytesLength>0) {
+        /*
+         * We _know_ the number of bytes in the fromUnicodeBytes array
+         * starting with header.version 4.1.
+         */
+        sizeofFromUBytes=mbcsTable->fromUBytesLength;
+    } else {
+        /*
+         * Otherwise:
+         * There used to be code to enumerate the fromUnicode
+         * trie and find the highest entry, but it was removed in ICU 3.2
+         * because it was not tested and caused a low code coverage number.
+         * See Jitterbug 3674.
+         * This affects only some .cnv file formats with a header.version
+         * below 4.1, and only when swaplfnl is requested.
+         *
+         * ucnvmbcs.c revision 1.99 is the last one with the
+         * ucnv_MBCSSizeofFromUBytes() function.
+         */
+        *pErrorCode=U_INVALID_FORMAT_ERROR;
+        return FALSE;
+    }
+
     /*
      * The table has an appropriate format.
      * Allocate and build
@@ -905,7 +842,6 @@ _EBCDICSwapLFNL(UConverterSharedData *sharedData, UErrorCode *pErrorCode) {
      * - a modified from-Unicode output array
      * - a converter name string with the swap option appended
      */
-    sizeofFromUBytes=ucnv_MBCSSizeofFromUBytes(mbcsTable);
     size=
         mbcsTable->countStates*1024+
         sizeofFromUBytes+
@@ -1211,6 +1147,10 @@ ucnv_MBCSOpen(UConverter *cnv,
 
         if(!isCached) {
             if(!_EBCDICSwapLFNL(cnv->sharedData, pErrorCode)) {
+                if(U_FAILURE(*pErrorCode)) {
+                    return; /* something went wrong */
+                }
+
                 /* the option does not apply, remove it */
                 cnv->options=options&=~UCNV_OPTION_SWAP_LFNL;
             }
@@ -3719,7 +3659,10 @@ ucnv_MBCSFromUChar32(UConverterSharedData *sharedData,
                  UBool useFallback) {
     const int32_t *cx;
     const uint16_t *table;
+#if 0
+/* #if 0 because this is not currently used in ICU - reduce code, increase code coverage */
     const uint8_t *p;
+#endif
     uint32_t stage2Entry;
     uint32_t value;
     int32_t length;
@@ -3749,6 +3692,8 @@ ucnv_MBCSFromUChar32(UConverterSharedData *sharedData,
                     length=2;
                 }
                 break;
+#if 0
+/* #if 0 because this is not currently used in ICU - reduce code, increase code coverage */
             case MBCS_OUTPUT_DBCS_ONLY:
                 /* table with single-byte results, but only DBCS mappings used */
                 value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
@@ -3816,6 +3761,7 @@ ucnv_MBCSFromUChar32(UConverterSharedData *sharedData,
                     length=3;
                 }
                 break;
+#endif
             default:
                 /* must not occur */
                 return -1;
