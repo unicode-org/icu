@@ -143,13 +143,12 @@ void    BITestData::err(const char *heading, RBBITest *test, int32_t expectedIdx
     int32_t   expected = fExpectedBreakPositions.elementAti(expectedIdx);
     int32_t   actual   = fActualBreakPositions.elementAti(actualIdx);
     int32_t   o        = 0;
-    int32_t   line     = fLineNum.elementAti(0);
+    int32_t   line     = fLineNum.elementAti(expectedIdx);
     if (expectedIdx > 0) {
         // The line numbers are off by one because a premature break occurs somewhere
         //    within the previous item, rather than at the start of the current (expected) item.
-        //    Similarly, we want to report the offset of the unexpected break from the start of
+        //    We want to report the offset of the unexpected break from the start of
         //      this previous item.
-        line = fLineNum.elementAti(expectedIdx-1);
         o    = actual - fExpectedBreakPositions.elementAti(expectedIdx-1);
     }
     if (actual < expected) {
@@ -591,7 +590,6 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       ADD_DATACHUNK(sentdata, "Testing the sentence iterator. ", 0, status);
       ADD_DATACHUNK(sentdata, "\"This isn\'t it.\" ", 0, status);
       ADD_DATACHUNK(sentdata, "Hi! ", 0, status);
-      //sentdata = new Vector();
       ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
       ADD_DATACHUNK(sentdata, "(This is it.) ", 0, status);
       ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
@@ -609,7 +607,6 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       ADD_DATACHUNK(sentdata, "Not on my time (el timo.)! ", 0, status);
 
       ADD_DATACHUNK(sentdata, "So what!!\\u2029", 0, status);              // Paragraph Separator
-
       ADD_DATACHUNK(sentdata, "\"But now,\" he said, \"I know!\" ", 0, status);
       ADD_DATACHUNK(sentdata, "Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ", 0, status);
       ADD_DATACHUNK(sentdata, "One species, B. anthracis, is highly virulent.\n", 0, status);
@@ -621,7 +618,18 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       ADD_DATACHUNK(sentdata, "What is the proper use of the abbreviation pp.? ", 0, status);
       ADD_DATACHUNK(sentdata, "Yes, I am definatelly 12\" tall!!", 0, status);
       // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-      ADD_DATACHUNK(sentdata, "Now\ris\nthe\r\ntime\n\rfor\r\rall\\u037e", 0, status);
+      //   And then, revised again for TR29.   \n and \r do count as paragraph breaks.
+      ADD_DATACHUNK(sentdata, "Now\r", 0, status);
+      ADD_DATACHUNK(sentdata, "is\n", 0, status);
+      ADD_DATACHUNK(sentdata, "the\r\n", 0, status);
+      ADD_DATACHUNK(sentdata, "time\n", 0, status);
+      ADD_DATACHUNK(sentdata, "\r", 0, status);
+      ADD_DATACHUNK(sentdata, "for\r", 0, status);
+      ADD_DATACHUNK(sentdata, "\r", 0, status);
+     // ADD_DATACHUNK(sentdata, "all\\u037e", 0, status);  TODO:  Greek question mark
+      //                                                           Why isn't it a sentence ender?
+
+      ADD_DATACHUNK(sentdata, "No breaks when . is followed .Immediately by an .Upper case Letter.  ", 0, status);
 
     // test that it doesn't break sentences at the boundary between CJK
     // and other letters
@@ -638,21 +646,19 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
 
       // Treat fullwidth variants of .!? the same as their
       // normal counterparts
-#if 0   // Not according to TR29.  TODO:  what is the right thing for these chars?
       ADD_DATACHUNK(sentdata, "I know I'm right\\uff0e ", 0, status);
       ADD_DATACHUNK(sentdata, "Right\\uff1f ", 0, status);
       ADD_DATACHUNK(sentdata, "Right\\uff01 ", 0, status);
-#endif
 
       // Don't break sentences at boundary between CJK and digits
       ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8"
                    "\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0"
-                   "\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3001", 0, status);
+                   "\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3002", 0, status);
 
       // Break sentence between a sentence terminator and
       // opening punctuation
       ADD_DATACHUNK(sentdata, "How do you do?", 0, status);
-      ADD_DATACHUNK(sentdata, "(fine).", 0, status);
+      ADD_DATACHUNK(sentdata, "(fine). ", 0, status);
 
       // test for bug #4158381: Don't break sentence after period if it isn't
       // followed by a space
@@ -675,7 +681,8 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       // letter are treated correctly
       // Unicode TR29 reverses above bug:  Don't break a sentence if the last word begins with an upper case letter.
       ADD_DATACHUNK(sentdata, "The type of all primitive <code>boolean</code> values accessed in the "            
-          "target VM.  Calls to xxx will return an implementor of this interface.  \\u2029", 0, status);
+          "target VM.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "Calls to xxx will return an implementor of this interface.  \\u2029", 0, status);
       
       // test for bug #4152117: Make sure sentence breaking is handling
       // punctuation correctly [COULD NOT REPRODUCE THIS BUG, BUT TEST IS
@@ -697,8 +704,10 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
                                     "\\u0939\\u0948?", 0, status);
       ADD_DATACHUNK(sentdata,
               "\\u092e\\u0948 \\u0905"  halfCHA "\\u091b\\u093e \\u0939\\u0942\\u0901\\u0964 ", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0905\\u093e\\u092a\r\n \\u0915\\u0948\\u0938\\u0947 \\u0939\\u0948?", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0935\\u0939 " halfKA "\\u092f\\u093e\n \\u0939\\u0948?", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0905\\u093e\\u092a\r\n", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0915\\u0948\\u0938\\u0947 \\u0939\\u0948?", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0935\\u0939 " halfKA "\\u092f\\u093e\n", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0939\\u0948?", 0, status);
       ADD_DATACHUNK(sentdata, "\\u092f\\u0939 \\u0905\\u093e\\u092e \\u0939\\u0948. ", 0, status);
       ADD_DATACHUNK(sentdata, "\\u092f\\u0939 means \"this\". ", 0, status);
       ADD_DATACHUNK(sentdata, "\"\\u092a\\u095d\\u093e\\u0908\" meaning \"education\" or \"studies\". ", 0, status);
@@ -734,11 +743,10 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
 
       // Try a few more of the less common sentence endings.
       ADD_DATACHUNK(sentdata, "Hello, world\\u3002 ", 0, status);
-      ADD_DATACHUNK(sentdata, "Hello, world\\u037e ", 0, status);  
+      // ADD_DATACHUNK(sentdata, "Hello, world\\u037e ", 0, status);  // Greek Question Mark, omitted from TR29.  TODO:
       ADD_DATACHUNK(sentdata, "Hello, world\\u2048 ", 0, status);
       ADD_DATACHUNK(sentdata, "Hello, world\\u203c ", 0, status);
       ADD_DATACHUNK(sentdata, "Let's end here. ", 0, status);
-
 
       generalIteratorTest(*sentIterDefault, sentdata);
 
@@ -2186,8 +2194,9 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
             tb.setText(work);
             for (int k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
-                    errln("Break between U+" + UCharToUnicodeString(work[1])
-                            + " and U+" + UCharToUnicodeString(work[2]));
+                    //errln("Break between U+" + UCharToUnicodeString(work[1])
+                    //        + " and U+" + UCharToUnicodeString(work[2]));
+                    errln("Unexpected Break between %6x and %6x", c1, c2);
                     errCount++;
                     if (errCount >= 75)
                         return;
