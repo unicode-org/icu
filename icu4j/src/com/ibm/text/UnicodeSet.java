@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/11/12 20:54:46 $
- * $Revision: 1.45 $
+ * $Date: 2001/11/21 22:21:45 $
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -220,37 +220,9 @@ import com.ibm.util.Utility;
  * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.45 $ $Date: 2001/11/12 20:54:46 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.46 $ $Date: 2001/11/21 22:21:45 $
  */
 public class UnicodeSet extends UnicodeFilter {
-
-    /* Implementation Notes.
-     * NOTE: This conversion has been completed as of 2.0.
-     *
-     * UnicodeSet currently represents only the characters U+0000 to
-     * U+FFFF.  This allows the API to be written in terms of the Java
-     * char type, which is natural for Java at this time.  Since the
-     * char data type is range-limited, we don't have to do range
-     * checks.
-     *
-     * In order to modify UnicodeSet to work with code points up to
-     * U+10FFFF, do the following: (1) Change the value of HIGH to
-     * 0x110000.  (2) Change every API that takes or returns a char
-     * code point to take or return an int.  (3) For those APIs taking
-     * an int code point, add a range check that looks like this:
-     *
-     * void foo(int ch) {
-     *   if (ch < MIN_VALUE || ch > MAX_VALUE) {
-     *     throw new IllegalArgumentException("Invalid code point " + ch);
-     *   }
-     *   // ...
-     * }
-     *
-     * (4) Modify toPattern() to handle characters past 0xFFFF.  (5)
-     * Modify applyPattern() to parse escapes from \U100000 to \U10FFFF.
-     * Note uppercase U. (6) Modify MIN_VALUE and MAX_VALUE to be of
-     * type int.
-     */
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
@@ -473,7 +445,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (useHexEscape) {
             // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
             // unprintable
-            if (_escapeUnprintable(buf, c)) {
+            if (Utility.escapeUnprintable(buf, c)) {
                 return;
             }
         }
@@ -499,49 +471,6 @@ public class UnicodeSet extends UnicodeFilter {
         UTF16.append(buf, c);
     }
 
-    private static final char[] HEX = {'0','1','2','3','4','5','6','7',
-                                       '8','9','A','B','C','D','E','F'};
-
-    /**
-     * Return true if the character is NOT printable ASCII.
-     *
-     * This method should really be in UnicodeString (or similar).  For
-     * now, we implement it here and share it with friend classes.
-     */
-    static boolean _isUnprintable(int c) {
-        return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
-    }
-
-    /**
-     * Escape unprintable characters using <backslash>uxxxx notation for U+0000 to
-     * U+FFFF and <backslash>Uxxxxxxxx for U+10000 and above.  If the character is
-     * printable ASCII, then do nothing and return FALSE.  Otherwise,
-     * append the escaped notation and return TRUE.
-     *
-     * This method should really be in UnicodeString.  For now, we
-     * implement it here and share it with friend classes.
-     */
-    static boolean _escapeUnprintable(StringBuffer result, int c) {
-        if (_isUnprintable(c)) {
-            result.append('\\');
-            if ((c & ~0xFFFF) != 0) {
-                result.append('U');
-                result.append(HEX[0xF&(c>>28)]);
-                result.append(HEX[0xF&(c>>24)]);
-                result.append(HEX[0xF&(c>>20)]);
-                result.append(HEX[0xF&(c>>16)]);
-            } else {
-                result.append('u');
-            }
-            result.append(HEX[0xF&(c>>12)]);
-            result.append(HEX[0xF&(c>>8)]);
-            result.append(HEX[0xF&(c>>4)]);
-            result.append(HEX[0xF&c]);
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Returns a string representation of this set.  If the result of
      * calling this function is passed to a UnicodeSet constructor, it
@@ -564,7 +493,7 @@ public class UnicodeSet extends UnicodeFilter {
             int backslashCount = 0;
             for (i=0; i<pat.length(); ++i) {
                 char c = pat.charAt(i);
-                if (escapeUnprintable && _isUnprintable(c)) {
+                if (escapeUnprintable && Utility.isUnprintable(c)) {
                     // If the unprintable character is preceded by an odd
                     // number of backslashes, then it has been escaped.
                     // Before unescaping it, we delete the final
@@ -572,7 +501,7 @@ public class UnicodeSet extends UnicodeFilter {
                     if ((backslashCount % 2) == 1) {
                         result.setLength(result.length() - 1);
                     }
-                    _escapeUnprintable(result, c);
+                    Utility.escapeUnprintable(result, c);
                     backslashCount = 0;
                 } else {
                     result.append(c);

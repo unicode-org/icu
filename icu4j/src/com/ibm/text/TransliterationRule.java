@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $
- * $Date: 2001/11/02 17:46:05 $
- * $Revision: 1.35 $
+ * $Date: 2001/11/21 22:21:45 $
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.35 $ $Date: 2001/11/02 17:46:05 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.36 $ $Date: 2001/11/21 22:21:45 $
  */
 class TransliterationRule {
 
@@ -639,7 +639,7 @@ class TransliterationRule {
         // quotes.  <backslash>u and <backslash>U are not recognized within quotes.  The same
         // logic applies to literals, but literals are never escaped.
         if (isLiteral ||
-            (escapeUnprintable && UnicodeSet._isUnprintable(c))) {
+            (escapeUnprintable && Utility.isUnprintable(c))) {
             if (quoteBuf.length() > 0) {
                 // We prefer backslash APOSTROPHE to double APOSTROPHE
                 // (more readable, less similar to ") so if there are
@@ -674,7 +674,7 @@ class TransliterationRule {
                 }
             }
             if (c != -1) {
-                if (!escapeUnprintable || !UnicodeSet._escapeUnprintable(rule, c)) {
+                if (!escapeUnprintable || !Utility.escapeUnprintable(rule, c)) {
                     UTF16.append(rule, c);
                 }
             }
@@ -853,6 +853,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.36  2001/11/21 22:21:45  alan
+ * jitterbug 1533: incorporate Mark's review comments; move escape handling methods to Utility
+ *
  * Revision 1.35  2001/11/02 17:46:05  alan
  * jitterbug 1426: eliminate NOP call to copy()
  *
