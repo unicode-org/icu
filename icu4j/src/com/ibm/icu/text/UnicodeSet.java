@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $ 
- * $Date: 2000/05/24 22:03:13 $ 
- * $Revision: 1.23 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
+ * $Date: 2000/05/24 22:20:45 $
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -203,28 +203,28 @@ import java.text.*;
  *     Mn = Mark, Non-Spacing
  *     Mc = Mark, Spacing Combining
  *     Me = Mark, Enclosing
- * 
+ *
  *     Nd = Number, Decimal Digit
  *     Nl = Number, Letter
  *     No = Number, Other
- * 
+ *
  *     Zs = Separator, Space
  *     Zl = Separator, Line
  *     Zp = Separator, Paragraph
- * 
+ *
  *     Cc = Other, Control
  *     Cf = Other, Format
  *     Cs = Other, Surrogate
  *     Co = Other, Private Use
  *     Cn = Other, Not Assigned
- * 
+ *
  * Informative
  *     Lu = Letter, Uppercase
  *     Ll = Letter, Lowercase
  *     Lt = Letter, Titlecase
  *     Lm = Letter, Modifier
  *     Lo = Letter, Other
- * 
+ *
  *     Pc = Punctuation, Connector
  *     Pd = Punctuation, Dash
  *     Ps = Punctuation, Open
@@ -232,7 +232,7 @@ import java.text.*;
  *    *Pi = Punctuation, Initial quote
  *    *Pf = Punctuation, Final quote
  *     Po = Punctuation, Other
- * 
+ *
  *     Sm = Symbol, Math
  *     Sc = Symbol, Currency
  *     Sk = Symbol, Modifier
@@ -241,12 +241,12 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.23 $ $Date: 2000/05/24 22:03:13 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.24 $ $Date: 2000/05/24 22:20:45 $
  */
 public class UnicodeSet implements UnicodeFilter {
-    
+
     /* Implementation Notes.
-     * 
+     *
      * UnicodeSet currently represents only the characters U+0000 to
      * U+FFFF.  This allows the API to be written in terms of the Java
      * char type, which is natural for Java at this time.  Since the
@@ -256,8 +256,8 @@ public class UnicodeSet implements UnicodeFilter {
      * In order to modify UnicodeSet to work with code points up to
      * U+10FFFF, do the following: (1) Change the value of HIGH to
      * 0x110000.  (2) Change every API that takes or returns a char
-     * code point to return an int.  (3) For those APIs taking an int
-     * code point, add a range check that looks like this:
+     * code point to take or return an int.  (3) For those APIs taking
+     * an int code point, add a range check that looks like this:
      *
      * void foo(int ch) {
      *   if (ch < MIN_VALUE || ch > MAX_VALUE) {
@@ -280,21 +280,19 @@ public class UnicodeSet implements UnicodeFilter {
      * Minimum value that can be stored in a UnicodeSet.
      */
     public static final char MIN_VALUE = (char) LOW;
-    
+
     /**
      * Maximum value that can be stored in a UnicodeSet.
      */
     public static final char MAX_VALUE = (char) (HIGH - 1);
 
-    private int len;                            // length used. Array may be longer to prevent multiple reallocs
-    private int[] list;                        // The list MUST be terminated with HIGH
-    private int[] smallList = new int[] {0,0,HIGH};    // internal buffer
-    private int[] buffer = new int[START_EXTRA];       // internal buffer, used to avoid reallocations
-    // since we are not going to have a huge number of these floating around, keeping a double buffer
-    // saves on allocations.
+    private int len;      // length used; list may be longer to minimize reallocs
+    private int[] list;   // MUST be terminated with HIGH
+    private int[] smallList; // internal buffer
+    private int[] buffer; // internal buffer
 
-    private static final int START_EXTRA = 16;          // initial storage. Must be >= 0
-    private static final int GROW_EXTRA = START_EXTRA;  // extra amount for growth. Must be >= 0
+    private static final int START_EXTRA = 16;         // initial storage. Must be >= 0
+    private static final int GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
 
     private static final String CATEGORY_NAMES =
         //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
@@ -525,7 +523,7 @@ public class UnicodeSet implements UnicodeFilter {
     public String toPattern() {
         StringBuffer result = new StringBuffer();
         result.append('[');
-        
+
         int count = getRangeCount();
         for (int i = 0; i < count; ++i) {
             char start = getRangeStart(i);
@@ -537,7 +535,7 @@ public class UnicodeSet implements UnicodeFilter {
             }
         }
 
-        return result.append(']').toString();        
+        return result.append(']').toString();
     }
 
     /**
@@ -643,7 +641,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void add(char start, char end) {
         if (start <= end) {
-            add(setSmallList(start, end), 2, 0);
+            add(smallList(start, end), 2, 0);
         }
     }
 
@@ -657,11 +655,26 @@ public class UnicodeSet implements UnicodeFilter {
     }
 
     /**
+     * Retain only the elements in this set that are contained in the
+     * specified range.
+     *
+     * @param start first character, inclusive, of range to be retained
+     * to this set.
+     * @param end last character, inclusive, of range to be retained
+     * to this set.
+     */
+    public void retain(char start, char end) {
+        if (start <= end) {
+            retain(smallList(start, end), 2, 0);
+        }
+    }
+
+    /**
      * Removes the specified range from this set if it is present.
      * The set will not contain the specified range once the call
      * returns.  If <code>end > start</code> then an empty range is
      * removed, leaving the set unchanged.
-     * 
+     *
      * @param start first character, inclusive, of range to be removed
      * from this set.
      * @param end last character, inclusive, of range to be removed
@@ -669,7 +682,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void remove(char start, char end) {
         if (start <= end) {
-            retain(setSmallList(start, end), 2, 2);
+            retain(smallList(start, end), 2, 2);
         }
     }
 
@@ -687,7 +700,7 @@ public class UnicodeSet implements UnicodeFilter {
      * the range will be removed if it is in this set, or will be
      * added if it is not in this set.  If <code>end > start</code>
      * then an empty range is xor'ed, leaving the set unchanged.
-     * 
+     *
      * @param start first character, inclusive, of range to be removed
      * from this set.
      * @param end last character, inclusive, of range to be removed
@@ -695,10 +708,10 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void xor(int start, int end) {
         if (start <= end) {
-            xor(setSmallList(start, end), 2, 0);
+            xor(smallList(start, end), 2, 0);
         }
     }
-    
+
     /**
      * Returns <tt>true</tt> if the specified set is a <i>subset</i>
      * of this set.
@@ -764,14 +777,14 @@ public class UnicodeSet implements UnicodeFilter {
      * Complements in this set all elements contained in the specified
      * set.  Any character in the other set will be removed if it is
      * in this set, or will be added if it is not in this set.
-     * 
+     *
      * @param c set that defines which elements will be xor'ed from
      *          this set.
      */
     public void xorAll(UnicodeSet c) {
         xor(c.list, c.len, 0);
     }
-    
+
     /**
      * Inverts this set.  This operation modifies this set so that its
      * value is its complement.  This is equivalent to the pseudo
@@ -808,7 +821,7 @@ public class UnicodeSet implements UnicodeFilter {
     public int getRangeCount() {
         return len/2;
     }
-    
+
     /**
      * Iteration method that returns the first character in the
      * specified range of this set.
@@ -820,7 +833,7 @@ public class UnicodeSet implements UnicodeFilter {
     public char getRangeStart(int index) {
         return (char) list[index*2];
     }
-    
+
     /**
      * Iteration method that returns the last character in the
      * specified range of this set.
@@ -842,6 +855,8 @@ public class UnicodeSet implements UnicodeFilter {
         int[] temp = new int[len];
         System.arraycopy(list, 0, temp, 0, len);
         list = temp;
+        smallList = null;
+        buffer = null;
     }
 
     /**
@@ -1198,7 +1213,7 @@ public class UnicodeSet implements UnicodeFilter {
 
         if (false) {
             // Debug parser
-            System.out.println("UnicodeSet(" + 
+            System.out.println("UnicodeSet(" +
                                pattern.substring(start, i+1) + ") -> " +
                                set.toString());
         }
@@ -1209,7 +1224,7 @@ public class UnicodeSet implements UnicodeFilter {
     //----------------------------------------------------------------
     // Implementation: Generation of Unicode categories
     //----------------------------------------------------------------
-    
+
     /**
      * Returns an inversion list string for the given category, given its name.
      * The category name must be either a two-letter name, such as
@@ -1235,7 +1250,7 @@ public class UnicodeSet implements UnicodeFilter {
 
         // BE CAREFUL not to modify the return value from
         // getCategorySet(int).
-        
+
         // if we have two characters, search the category map for that
         // code and either construct and return a UnicodeSet from the
         // data in the category map or throw an exception
@@ -1270,7 +1285,7 @@ public class UnicodeSet implements UnicodeFilter {
         }
 
         if (cat == null) {
-            throw new IllegalArgumentException("Bad category");            
+            throw new IllegalArgumentException("Bad category");
         }
 
         if (invert) {
@@ -1331,23 +1346,26 @@ public class UnicodeSet implements UnicodeFilter {
         int[] temp = new int[newLen + GROW_EXTRA];
         System.arraycopy(list, 0, temp, 0, len);
         list = temp;
-    }        
-    
+    }
+
     private void ensureBufferCapacity(int newLen) {
-        if (newLen <= buffer.length) return;
+        if (buffer != null && newLen <= buffer.length) return;
         buffer = new int[newLen + GROW_EXTRA];
-    }        
-    
-    private int[] setSmallList(int start, int end) {
-        smallList[0] = start;
-        smallList[1] = end+1;
-        if (start > end) {
-            smallList[0] = end;
-            smallList[1] = start+1;
+    }
+
+    /**
+     * Assumes start <= end.
+     */
+    private int[] smallList(int start, int end) {
+        if (smallList == null) {
+            smallList = new int[] { start, end+1, HIGH };
+        } else {
+            smallList[0] = start;
+            smallList[1] = end+1;
         }
         return smallList;
     }
-    
+
     //----------------------------------------------------------------
     // Implementation: Fundamental operations
     //----------------------------------------------------------------
@@ -1399,7 +1417,7 @@ public class UnicodeSet implements UnicodeFilter {
     // polarity = 2: x union ~y
     // polarity = 1: ~x union y
     // polarity = 3: ~x union ~y
-    
+
     private UnicodeSet add(int[] other, int otherLen, int polarity) {
         ensureBufferCapacity(len + otherLen);
         int i = 0, j = 0, k = 0;
@@ -1506,7 +1524,7 @@ public class UnicodeSet implements UnicodeFilter {
         buffer = temp;
         return this;
     }
-    
+
     // polarity = 0 is normal: x intersect y
     // polarity = 2: x intersect ~y == set-minus
     // polarity = 1: ~x intersect y
