@@ -143,6 +143,7 @@ void TestOutBufSizes(void)
   TestNewConvertWithBufferSizes(3,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(4,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(5,NEW_MAX_BUFFER);
+  
 #endif
 }
 
@@ -263,7 +264,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
         
     if(U_FAILURE(status))
       {
-        log_err("Problem doing fromUnicode, errcode %d %s\n", codepage, status, gNuConvTestName);
+        log_err("Problem doing fromUnicode to %s, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
         return FALSE;
       }
 
@@ -299,7 +300,9 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
+        printf("\nGot:");
 		printSeqErr(junkout, targ-junkout);
+        printf("\nExpected:");
 		printSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -329,7 +332,9 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
     {    
         log_err("String does not match. %s\n", gNuConvTestName);
         printUSeqErr(source, sourceLen);
+        printf("\nGot:");
         printSeqErr((const unsigned char *)junkout, expectLen);
+        printf("\nExpected:");
         printSeqErr((const unsigned char *)expect, expectLen);
         
         return FALSE;
@@ -421,7 +426,7 @@ UBool testConvertToU( const char *source, int sourcelen, const UChar *expect, in
 
     if(U_FAILURE(status))
     {
-        log_err("Problem doing toUnicode, errcode %d %s\n", status, gNuConvTestName);
+        log_err("Problem doing %s toUnicode, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
         return FALSE;
     }
 
@@ -484,7 +489,9 @@ UBool testConvertToU( const char *source, int sourcelen, const UChar *expect, in
     {    
         log_err("String does not match. %s\n", gNuConvTestName);
         log_verbose("String does not match. %s\n", gNuConvTestName);
+        printf("\nGot:");
 		printUSeq(junkout, expectlen);
+        printf("\nExpected:");
         printUSeq(expect, expectlen); 
         return FALSE;
     }
@@ -599,6 +606,20 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedUTF8, sizeof(expectedUTF8), "UTF8", toUTF8Offs ))
         log_err("u-> UTF8 did not match.\n");
+    
+    log_verbose("Test surrogate behaviour for UTF8\n");
+    {
+        const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01, 0xd801};
+        const char expectedUTF8[]= { (char)0xe2, (char)0x82, (char)0xac, 
+                           (char)0xf0, (char)0x90, (char)0x90, (char)0x81, 
+                           (char)0xed, (char)0xb0, (char)0x81, (char)0xed, (char)0xa0, (char)0x81 
+        };
+        int32_t offsets[]={ 0, 1, 3, 4 };
+        if(!testConvertFromU(testinput, sizeof(testinput)/sizeof(testinput[0]),
+            expectedUTF8, sizeof(expectedUTF8), "UTF8", offsets ))
+        log_err("u-> UTF8 did not match.\n");  
+
+    }
     /*ISO-2022*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedISO2022, sizeof(expectedISO2022), "iso-2022", toISO2022Offs ))
@@ -859,7 +880,8 @@ TestUTF8() {
         0xc0, 0x80,
         0xe0, 0x80, 0x80,
         0xf0, 0x80, 0x80, 0x80,
-        0xf4, 0x84, 0x8c, 0xa1
+        0xf4, 0x84, 0x8c, 0xa1,
+        0xf0, 0x90, 0x90, 0x81,
     };
 
     /* expected test results */
@@ -869,7 +891,8 @@ TestUTF8() {
         2, 0,
         3, 0,
         4, 0,
-        4, 0x104321
+        4, 0x104321,
+        4, 0x10401,
     };
 
     const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
@@ -1098,6 +1121,7 @@ TestMBCS() {
         0x08,
         0xc2, 0x76,
         0xc2, 0x78,  
+       
     };
 
     /* expected test results */
@@ -1109,7 +1133,7 @@ TestMBCS() {
         2, 0x2500,
         1, 0x0008,  
         2, 0xd60c,
-        2, 0xd60e
+        2, 0xd60e,
     };
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
