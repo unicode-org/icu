@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2004, International Business Machines
+* Copyright (c) 1996-2005, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -173,6 +173,8 @@ static int8_t haveNormData=0;
 static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
 static UTrie normTrie={ 0,0,0,0,0,0,0 }, fcdTrie={ 0,0,0,0,0,0,0 }, auxTrie={ 0,0,0,0,0,0,0 };
 
+static uint8_t *gFCDBlock=NULL;
+
 /*
  * pointers into the memory-mapped unorm.icu
  */
@@ -198,6 +200,9 @@ unorm_cleanup() {
     if(normData!=NULL) {
         udata_close(normData);
         normData=NULL;
+
+        uprv_free(gFCDBlock);
+        gFCDBlock=NULL;
     }
     dataErrorCode=U_ZERO_ERROR;
     haveNormData=0;
@@ -221,12 +226,6 @@ getFoldingNormOffset(uint32_t norm32) {
     } else {
         return 0;
     }
-}
-
-/* fcdTrie: the folding offset is the lead FCD value itself */
-static int32_t U_CALLCONV
-getFoldingFCDOffset(uint32_t data) {
-    return (int32_t)data;
 }
 
 /* auxTrie: the folding offset is in bits 9..0 of the 16-bit trie result */
@@ -267,7 +266,98 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*limit*/, 
     return TRUE;
 }
 
+struct EnumNormFCDContext {
+    UNewTrie *newFCD;
+    const uint16_t *eData;
+    UBool ok;
+};
+
+static UBool U_CALLCONV
+_enumNormFCD(const void *context, UChar32 start, UChar32 limit, uint32_t norm32) {
+    uint32_t fcd;
+
+    fcd=0;
+
+    if((norm32&_NORM_QC_NFD) && isNorm32Regular(norm32)) {
+        /* get the lead/trail cc from the decomposition data */
+        const uint16_t *nfd=
+            ((EnumNormFCDContext *)context)->eData+
+            (norm32>>_NORM_EXTRA_SHIFT);
+        if(*nfd&_NORM_DECOMP_FLAG_LENGTH_HAS_CC) {
+            fcd=nfd[1];
+        }
+    } else {
+        fcd=norm32&_NORM_CC_MASK;
+        if(fcd!=0) {
+            /* use the code point cc value for both lead and trail cc's */
+            fcd|=fcd>>_NORM_CC_SHIFT; /* assume that the cc is in bits 15..8 */
+        }
+    }
+
+    if(fcd!=0) {
+        if(!utrie_setRange32(((EnumNormFCDContext *)context)->newFCD, start, limit, fcd, TRUE)) {
+            return ((EnumNormFCDContext *)context)->ok=FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
 U_CDECL_END
+
+/* make the FCD trie on the fly if it was not stored in the data file */
+static uint8_t *
+makeFCDTrie(UTrie &nTrie, const uint16_t *eData, int32_t &fcdLength, UErrorCode &errorCode) {
+    UNewTrie *newFCD;
+    uint8_t *fcdBlock;
+
+    fcdLength=0;
+
+    if(U_FAILURE(errorCode)) {
+        return NULL;
+    }
+
+    newFCD=utrie_open(NULL, NULL, 20000, 0, 0, TRUE);
+    if(newFCD==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    /*
+     * enumerate the just-loaded normalization main data trie,
+     * compute the FCD value for each range,
+     * and store it in newFCD
+     */
+    EnumNormFCDContext context={ newFCD, eData, TRUE };
+    utrie_enum(&nTrie, NULL, _enumNormFCD, &context);
+    if(!context.ok) {
+        errorCode=U_BUFFER_OVERFLOW_ERROR;
+        utrie_close(newFCD);
+        return NULL;
+    }
+
+    fcdLength=utrie_serialize(newFCD, NULL, 0, NULL, TRUE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        utrie_close(newFCD);
+        return NULL;
+    }
+
+    fcdBlock=(uint8_t *)uprv_malloc(fcdLength);
+    if(fcdBlock==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+        utrie_close(newFCD);
+        return NULL;
+    }
+
+    fcdLength=utrie_serialize(newFCD, fcdBlock, fcdLength, NULL, TRUE, &errorCode);
+    utrie_close(newFCD);
+    if(U_FAILURE(errorCode)) {
+        uprv_free(fcdBlock);
+        return NULL;
+    }
+
+    return fcdBlock;
+}
 
 static int8_t
 loadNormData(UErrorCode &errorCode) {
@@ -290,6 +380,8 @@ loadNormData(UErrorCode &errorCode) {
     if(haveNormData==0) {
         UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 }, _auxTrie={ 0,0,0,0,0,0,0 };
         UDataMemory *data;
+        uint8_t *fcdBlock=NULL;
+
         const int32_t *p=NULL;
         const uint8_t *pb;
 
@@ -310,11 +402,19 @@ loadNormData(UErrorCode &errorCode) {
         _normTrie.getFoldingOffset=getFoldingNormOffset;
 
         pb+=p[_NORM_INDEX_TRIE_SIZE]+p[_NORM_INDEX_UCHAR_COUNT]*2+p[_NORM_INDEX_COMBINE_DATA_COUNT]*2;
-        utrie_unserialize(&_fcdTrie, pb, p[_NORM_INDEX_FCD_TRIE_SIZE], &errorCode);
-        _fcdTrie.getFoldingOffset=getFoldingFCDOffset;
-
         if(p[_NORM_INDEX_FCD_TRIE_SIZE]!=0) {
-            pb+=p[_NORM_INDEX_FCD_TRIE_SIZE];
+            utrie_unserialize(&_fcdTrie, pb, p[_NORM_INDEX_FCD_TRIE_SIZE], &errorCode);
+        } else {
+            /* the FCD trie was not stored, create one on the fly */
+            int32_t fcdLength;
+            fcdBlock=makeFCDTrie(_normTrie,
+                                 (uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+p[_NORM_INDEX_TRIE_SIZE]),
+                                 fcdLength, errorCode);
+            utrie_unserialize(&_fcdTrie, fcdBlock, fcdLength, &errorCode);
+        }
+        pb+=p[_NORM_INDEX_FCD_TRIE_SIZE];
+
+        if(p[_NORM_INDEX_AUX_TRIE_SIZE]!=0) {
             utrie_unserialize(&_auxTrie, pb, p[_NORM_INDEX_AUX_TRIE_SIZE], &errorCode);
             _auxTrie.getFoldingOffset=getFoldingAuxOffset;
         }
@@ -330,6 +430,9 @@ loadNormData(UErrorCode &errorCode) {
         if(normData==NULL) {
             normData=data;
             data=NULL;
+
+            gFCDBlock=fcdBlock;
+            fcdBlock=NULL;
 
             uprv_memcpy(&indexes, p, sizeof(indexes));
             uprv_memcpy(&normTrie, &_normTrie, sizeof(UTrie));
@@ -356,6 +459,7 @@ loadNormData(UErrorCode &errorCode) {
         /* if a different thread set it first, then close the extra data */
         if(data!=NULL) {
             udata_close(data); /* NULL if it was set correctly */
+            uprv_free(fcdBlock);
         }
     }
 
@@ -896,7 +1000,7 @@ u_getCombiningClass(UChar32 c) {
 U_CAPI UBool U_EXPORT2
 unorm_internalIsFullCompositionExclusion(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    if(_haveData(errorCode) && formatVersion_2_1) {
+    if(_haveData(errorCode) && auxTrie.index!=NULL) {
         uint16_t aux;
 
         UTRIE_GET16(&auxTrie, c, aux);
@@ -909,7 +1013,7 @@ unorm_internalIsFullCompositionExclusion(UChar32 c) {
 U_CAPI UBool U_EXPORT2
 unorm_isCanonSafeStart(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    if(_haveData(errorCode) && formatVersion_2_1) {
+    if(_haveData(errorCode) && auxTrie.index!=NULL) {
         uint16_t aux;
 
         UTRIE_GET16(&auxTrie, c, aux);
@@ -1031,7 +1135,7 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    if(!_haveData(*pErrorCode) || !formatVersion_2_1) {
+    if(!_haveData(*pErrorCode) || auxTrie.index==NULL) {
         return 0;
     }
 
@@ -1118,7 +1222,7 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
 
     /* if(mode<=UNORM_NFKC) { -- enable when implementing FCC */
     /* NF*C, test (f) flag */
-    if(!formatVersion_2_2) {
+    if(!formatVersion_2_2 || auxTrie.index==NULL) {
         return FALSE; /* no (f) data, say not skippable to be safe */
     }
 
@@ -1139,7 +1243,7 @@ unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     /* add the start code point of each same-value range of each trie */
     utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, sa);
     utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, sa);
-    if(formatVersion_2_1) {
+    if(auxTrie.index!=NULL) {
         utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, sa);
     }
 
