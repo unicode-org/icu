@@ -99,6 +99,7 @@ static const uint32_t IMPLICIT_BOUNDARY_ = 2 * IMPLICIT_OTHER_COUNT_ *
 static const uint32_t IMPLICIT_LAST2_MULTIPLIER_ = IMPLICIT_OTHER_COUNT_ /
                                                         IMPLICIT_LAST_COUNT2_;
 
+static
 inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceString,
                               int32_t sourceLen, collIterate *s) {
     (s)->string = (s)->pos = (UChar *)(sourceString);
@@ -136,6 +137,7 @@ U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceStrin
 * @param data collIterate to backup
 * @param backup storage
 */
+static
 inline void backupState(const collIterate *data, collIterateState *backup)
 {
     backup->fcdPosition = data->fcdPosition;
@@ -153,6 +155,7 @@ inline void backupState(const collIterate *data, collIterateState *backup)
 * @param forwards boolean to indicate if forwards iteration is used,
 *        false indicates backwards iteration
 */
+static
 inline void loadState(collIterate *data, const collIterateState *backup,
                       UBool        forwards)
 {
@@ -201,6 +204,7 @@ inline void loadState(collIterate *data, const collIterateState *backup,
 *     its source string.
 *
 */
+static
 inline UBool collIter_eos(collIterate *s) {
     if ((s->flags & UCOL_ITER_HASLEN) == 0 && *s->pos != 0) {
         // Null terminated string, but not at null, so not at end.
@@ -239,6 +243,7 @@ inline UBool collIter_eos(collIterate *s) {
 * in collIterate. This function does not reassign the writable buffer.
 * @param data collIterate struct to determine and free the writable buffer
 */
+static
 inline void freeHeapWritableBuffer(collIterate *data)
 {
     if (data->writableBuffer != data->stackWritableBuffer) {
@@ -549,6 +554,7 @@ static const uint16_t *fcdTrieIndex=NULL;
 * @param c character to be determined
 * @param coll collator
 */
+static
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
     if (UTF_IS_TRAIL(c)) {
       return TRUE;
@@ -575,6 +581,7 @@ inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
 *        This is a candidate for further optimization.  Used heavily
 *        in contraction processing.
 */
+static
 inline uint8_t i_getCombiningClass(UChar c, const UCollator *coll) {
     uint8_t sCC = 0;
     if (c >= 0x300 && ucol_unsafeCP(c, coll)) {
@@ -813,6 +820,7 @@ void collIterNormalize(collIterate *collationSource)
 /*          the trailing combining class of the previous char was zero.                   */
 /*          True because the previous call to this function will have always exited       */
 /*          that way, and we get called for every char where cc might be non-zero.        */
+static
 inline UBool collIterFCD(collIterate *collationSource) {
     UChar       c, c2;
     const UChar *srcP, *endP;
@@ -894,6 +902,7 @@ inline UBool collIterFCD(collIterate *collationSource) {
 /* This is the first function that tries to fetch a collation element  */
 /* If it's not succesfull or it encounters a more difficult situation  */
 /* some more sofisticated and slower functions are invoked             */
+static
 inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
@@ -1116,6 +1125,7 @@ void collPrevIterNormalize(collIterate *data)
 * @return normalization status, TRUE for normalization to be done, FALSE
 *         otherwise
 */
+static
 inline UBool collPrevIterFCD(collIterate *data)
 {
     const UChar *src, *start;
@@ -1194,6 +1204,7 @@ inline UBool collPrevIterFCD(collIterate *data)
 * @param data collation iterator
 * @return TRUE if we are at the start
 */
+static
 inline UBool isAtStartPrevIterate(collIterate *data) {
     return (data->pos == data->string) ||
             ((data->flags & UCOL_ITER_INNORMBUF) &&
@@ -1211,6 +1222,7 @@ inline UBool isAtStartPrevIterate(collIterate *data) {
 * @param data collation iterator struct
 * @param status error status
 */
+static
 inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                                UErrorCode *status)
 {
@@ -1388,6 +1400,7 @@ uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
 * @param ch character to be appended
 * @return the position of the new addition
 */
+static
 inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
 {
           uint32_t  size    = data->writableBufSize;
@@ -1428,6 +1441,7 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
 * @param length of the string to be appended
 * @return the position of the new addition
 */
+static
 inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
                                int32_t length)
 {
@@ -1464,6 +1478,7 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
 * Flags will be changed accordingly.
 * @param data collation iterator data
 */
+static
 inline void normalizeNextContraction(collIterate *data)
 {
     UChar      *buffer     = data->writableBuffer;
@@ -1523,6 +1538,7 @@ inline void normalizeNextContraction(collIterate *data)
 * @param data collation element iterator data
 * @return next character
 */
+static
 inline UChar getNextNormalizedChar(collIterate *data)
 {
     UChar  nextch;
@@ -1621,6 +1637,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
 * @param buffer character buffer
 * @param tempdb current position in buffer that has been used up
 */
+static
 inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
                                      UChar *tempdb)
 {
@@ -1763,6 +1780,7 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
     return *(coll->contractionCEs + (constart - coll->contractionIndex));
 }
 
+static
 inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
   if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
       return 0;  /* illegal code value, use completely ignoreable! */
@@ -2175,6 +2193,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 * @param ch character to be appended
 * @return positon of added character
 */
+static
 inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
 {
           uint32_t  size    = data->writableBufSize;
@@ -2216,6 +2235,7 @@ inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
 * Flags will be changed accordingly.
 * @param data collation iterator data
 */
+static
 inline void normalizePrevContraction(collIterate *data)
 {
     UChar      *buffer     = data->writableBuffer;
@@ -2371,6 +2391,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     return ch;
 }
 
+static
 inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
       if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
           return 0;  /* illegal code value, use completely ignoreable! */
@@ -3221,6 +3242,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
 }
 
+static
 inline void doCaseShift(uint8_t **cases, uint32_t &caseShift) {
   if (caseShift  == 0) {
     *(*cases)++ = UCOL_CASE_BYTE_START;
@@ -3228,6 +3250,7 @@ inline void doCaseShift(uint8_t **cases, uint32_t &caseShift) {
   }
 }
 
+static
 inline uint8_t *packFrench(uint8_t *primaries, uint8_t *secondaries, uint32_t *secsize, uint8_t *frenchStartPtr, uint8_t *frenchEndPtr) {
   uint8_t secondary;
   int32_t count2 = 0;
@@ -4151,6 +4174,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     return sortKeySize;
 }
 
+static
 inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
   uint32_t len = (uint32_t)uprv_strlen(dst);
   *(dst+len) = T_CString_itosOffset((val >> 4));
@@ -4802,6 +4826,7 @@ typedef struct ucol_CEBuf {
 } ucol_CEBuf;
 
 
+static
 inline void UCOL_INIT_CEBUF(ucol_CEBuf *b) {
     (b)->buf = (b)->pos = (b)->localArray;
     (b)->endp = (b)->buf + UCOL_CEBUF_SIZE;
@@ -4826,6 +4851,7 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
     b->pos  = b->buf + oldSize;
 }
 
+static
 inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
     if (b->pos == b->endp) {
         ucol_CEBuf_Expand(b, ci);
