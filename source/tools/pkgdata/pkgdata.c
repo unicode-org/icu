@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -51,7 +51,8 @@ static struct
 #ifdef UDATA_SO_SUFFIX
   { "dll",    "library", pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },
 #endif
-  { "common", "archive", pkg_mode_common, "Generates one common data file, <package>.dat" }
+  { "common", "archive", pkg_mode_common, "Generates one common data file, <package>.dat" },
+  { "static", "static",  pkg_mode_static, "Generates one statically linked library, " LIB_PREFIX "<package>" UDATA_LIB_SUFFIX }
 #endif /*#ifdef WIN32*/
 };
 
