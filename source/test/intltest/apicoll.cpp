@@ -1849,6 +1849,9 @@ public:
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
     virtual UBool operator!=(const Collator& other) const;
     virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
+    TestCollator() : Collator() {};
+    TestCollator(UCollationStrength collationStrength, 
+           UNormalizationMode decompositionMode) : Collator(collationStrength, decompositionMode) {};
 };
 
 inline UBool TestCollator::operator!=(const Collator& other) const {
@@ -2089,6 +2092,20 @@ void CollationAPITest::TestSubclass()
 
     UnicodeString displayName;
     col1.getDisplayName(loc1, loc2, displayName); // de_DE collator in fr_FR locale
+
+    TestCollator col3(UCOL_TERTIARY, UNORM_NONE);
+    UnicodeString a("a");
+    UnicodeString b("b");
+    UCollationResult result = UCollationResult(a.compare(b));
+    if(col1.compare(a, b) != result) {
+      errln("Collator doesn't give default result");
+    }
+    if(col1.compare(a, b, 1) != result) {
+      errln("Collator doesn't give default result");
+    }
+    if(col1.compare(a.getBuffer(), a.length(), b.getBuffer(), b.length()) != result) {
+      errln("Collator doesn't give default result");
+    }
 }
 
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
