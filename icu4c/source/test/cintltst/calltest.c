@@ -36,7 +36,7 @@ void addUStringPrepTest(TestNode** root);
 void addIDNATest(TestNode** root);
 void addHeapMutexTest(TestNode **root);
 void addUTraceTest(TestNode** root);
-
+void addURegexTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
@@ -70,6 +70,8 @@ void addAllTests(TestNode** root)
 #endif
     addHeapMutexTest(root);
     addUTraceTest(root);
-
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    addURegexTest(root);
+#endif
 }
 
