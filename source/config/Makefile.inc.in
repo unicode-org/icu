@@ -2,11 +2,10 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
-
 
 SHELL = @SHELL@
 CFLAGS = @CFLAGS@ 
@@ -53,7 +52,10 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_DATA = @INSTALL_DATA@
 AUTOCONF = @AUTOCONF@
 
-MKINSTALLDIRS = $(SHELL) $(datadir)/$(PACKAGE)/mkinstalldirs
+pkgdatadir = $(datadir)/$(PACKAGE)
+pkglibdir = $(libdir)/$(PACKAGE)
+
+MKINSTALLDIRS = $(SHELL) $(pkgdatadir)/mkinstalldirs
 
 host = @host@
 host_alias = @host_alias@
@@ -83,9 +85,7 @@ platform = @platform@
 
 ld_rpath_suf = @ld_rpath_suf@
 
-# begin host fragment
-@host_frag@
-# end host fragment
+include $(pkgdatadir)/config/@platform_make_fragment_name@
 
 DEFAULT_MODE = @DATA_PACKAGING_MODE@
 

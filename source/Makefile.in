@@ -7,48 +7,21 @@
 ## Top-level Makefile.in for ICU
 ## Stephen F. Booth
 
-## Shell to use
-SHELL = @SHELL@
-
-## Install directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
 
-bindir = @bindir@
-sbindir = @sbindir@
-datadir = @datadir@
-libdir = @libdir@
-includedir = @includedir@
-
-pkgdatadir = $(datadir)/@PACKAGE@
-pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
+include $(top_srcdir)/icudefs.mk
 
 ## Build directory information
 top_builddir = .
 subdir = .
 
-## Install program information
-MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
-
-INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
-INSTALL_DATA = @INSTALL_DATA@
-INSTALL_SCRIPT = @INSTALL_SCRIPT@
+##
 
 AUTOCONF = @AUTOCONF@
 
-
 ## Platform-specific setup
-@host_frag@
-
-
-## Package information
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
-UNICODE_VERSION = @UNICODE_VERSION@
+include @platform_make_fragment@
 
 ## Optional directory setup
 @EXTRAS_TRUE@EXTRA = extra
@@ -99,7 +72,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  else \
 	    local_target="$$target"; \
 	  fi; \
-	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
+	  (cd $$subdir && $(MAKE) RECURSIVE=YES $$local_target) || exit; \
 	done; \
 	if test "$$dot_seen" = "no"; then \
 	  $(MAKE) "$$target-local" || exit; \
@@ -108,15 +81,17 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 clean-recursive-with-twist:
 	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out $(CLEAN_FIRST_SUBDIRS),$(LOCAL_SUBDIRS))'
 
-all-local: $(srcdir)/configure
+all-local: $(srcdir)/configure $(srcdir)/icudefs.mk
 
-install-local: $(top_builddir)/config/Makefile.inc $(EXTRA_DATA:%=$(DESTDIR)$(pkgdatadir)/$(VERSION)/%)
-	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)
+install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/$(VERSION)/%)
+	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
+	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkgdatadir)/Makefile.inc
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
+	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 
-$(DESTDIR)$(pkgdatadir)/$(VERSION)/%: $(top_srcdir)/../data/%
+$(DESTDIR)$(pkglibdir)/$(VERSION)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@
 
 ## Generate HTML documentation
@@ -138,8 +113,9 @@ clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 distclean-local: clean-local
-	$(RMV) Makefile config.cache config.log config.status config/Makefile
+	$(RMV) Makefile icudefs.mk config/Makefile
 	$(RMV) $(top_builddir)/config/Makefile.inc
+	$(RMV) config.cache config.log config.status
 	$(RMV) common/unicode/platform.h common/icucfg.h
 
 check-local:
@@ -147,7 +123,11 @@ check-local:
 #$(srcdir)/configure : $(srcdir)/configure.in $(top_srcdir)/aclocal.m4
 #	cd $(srcdir) && $(AUTOCONF)
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+icudefs.mk: $(srcdir)/icudefs.mk.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+Makefile: $(srcdir)/Makefile.in $(srcdir)/icudefs.mk $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 

@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.87 2000/10/20 06:17:23 yves Exp $
+dnl $Id: configure.in,v 1.88 2000/10/24 19:50:05 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -623,8 +623,10 @@ case "${host}" in
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 AC_SUBST(platform)
-host_frag=$icu_cv_host_frag
-AC_SUBST_FILE(host_frag)
+platform_make_fragment_name="$icu_cv_host_frag"
+platform_make_fragment='$(top_srcdir)/config/'"$platform_make_fragment_name"
+AC_SUBST(platform_make_fragment_name)
+AC_SUBST(platform_make_fragment)
 
 dnl Handle -rpath options for shared library paths
 case "${host}" in
@@ -695,7 +697,7 @@ if test "$ac_cv_func_dllload" = "yes"; then
 fi
 
 dnl output the Makefiles
-AC_OUTPUT([Makefile \
+AC_OUTPUT([icudefs.mk Makefile \
 		data/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \

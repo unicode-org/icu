@@ -78,10 +78,7 @@ platform=@platform@
 
 ld_rpath_suf=@ld_rpath_suf@
 
-
-# begin host fragment
-@host_frag@
-# end host fragment
+include @platform_make_fragment@
 
 top_builddir = ../..
 subdir = tools/tmp
