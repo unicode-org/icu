@@ -595,13 +595,25 @@ public:
      */
     static UClassID getStaticClassID(void);
     
-    /** Get the locale for this date format object. You can choose between valid and actual locale.
+    /** Get the locale for this message format object. You can choose between valid and actual locale.
+     *  In the case of message format, both locales are the same as the locale passed during the
+     *  construction.
      *  @param type type of the locale we're looking for (valid or actual) 
      *  @param status error code for the operation
      *  @return the locale
      *  @draft ICU 2.8
      */
     virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
+    /** Get the locale for this message format object. You can choose between valid and actual locale.
+     *  In the case of message format, both locales are the same as the locale passed during the
+     *  construction.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @internal
+     */
+    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const;
 
 private:
 

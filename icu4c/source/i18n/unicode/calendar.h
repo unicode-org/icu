@@ -1998,8 +1998,8 @@ private:
      */
     static uint8_t julianDayToDayOfWeek(double julian);
 
-    Locale validLocale;
-    Locale actualLocale;
+    char validLocale[50];
+    char actualLocale[50];
 
  public:
     /** 
@@ -2077,7 +2077,7 @@ private:
      *  @return the locale
      *  @draft ICU 2.8
      */
-    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode &status);
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode &status) const;
 
     /** Get the locale for this calendar object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual) 
@@ -2085,7 +2085,7 @@ private:
      *  @return the locale
      *  @internal
      */
-    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status);
+    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const;
 
 };
 

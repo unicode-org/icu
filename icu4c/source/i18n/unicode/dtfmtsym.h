@@ -378,6 +378,12 @@ private:
     UnicodeString   fLocalPatternChars;
 
 private:
+    /** valid/actual locale information 
+     *  these are always ICU locales, so the length should not be a problem
+     */
+    char validLocale[50];
+    char actualLocale[50];
+
 
     /* Sizes for the last resort string arrays */
     typedef enum LastResortSize {
