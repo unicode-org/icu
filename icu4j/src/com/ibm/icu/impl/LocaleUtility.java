@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/LocaleUtility.java,v $
- * $Date: 2002/10/02 20:20:21 $
- * $Revision: 1.6 $
+ * $Date: 2003/04/21 21:03:25 $
+ * $Revision: 1.7 $
  *  *****************************************************************************************
  */
  
@@ -104,5 +104,31 @@ public class LocaleUtility {
 	    }
 	}
 	return id;
+    }
+
+    /**
+     * Fallback from the given locale name by removing the rightmost
+     * _-delimited element.  If there is none, return the root locale ("",
+     * "", "").  If this is the root locale, return null.  NOTE: The
+     * string "root" is not recognized; do not use it.
+     * @return a new Locale that is a fallback from the given locale, or
+     * null.
+     */
+    public static Locale fallback(Locale loc) {
+
+        // Split the locale into parts and remove the rightmost part
+        String[] parts = new String[]
+            { loc.getLanguage(), loc.getCountry(), loc.getVariant() };
+        int i;
+        for (i=2; i>=0; --i) {
+            if (parts[i].length() != 0) {
+                parts[i] = "";
+                break;
+            }
+        }
+        if (i<0) {
+            return null; // All parts were empty
+        }
+        return new Locale(parts[0], parts[1], parts[2]);
     }
 }
