@@ -786,35 +786,6 @@ CLEANUP:
 }
 
 
-U_CFUNC UBool 
-usprep_isLabelSeparator(UStringPrepProfile* profile, 
-                        UChar32 ch, UErrorCode* status){
-    // check error status
-    if(status==NULL || U_FAILURE(*status)){
-        return FALSE;
-    }
-    //check the arguments
-    if(profile==NULL){
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
-    }
-
-    uint16_t result;
-    UStringPrepType type;
-    int16_t value;
-    UBool isIndex;
-
-    UTRIE_GET16(&profile->sprepTrie,ch, result);
-    
-    type = getValues(result,value,isIndex);
-
-    if( type  == USPREP_LABEL_SEPARATOR){
-        return TRUE;
-    }
-    
-    return FALSE;
-}
-
 /* data swapping ------------------------------------------------------------ */
 
 U_CAPI int32_t U_EXPORT2

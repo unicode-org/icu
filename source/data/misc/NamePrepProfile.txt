@@ -1942,11 +1942,3 @@ E0001; ; PROHIBITED
 E0020..E007F; ; PROHIBITED
 
 # Total code points 82
-
-# code points for LDH chars 
-002E; ; LABEL_SEPARATOR
-3002; ; LABEL_SEPARATOR
-FF0E; ; LABEL_SEPARATOR
-FF61; ; LABEL_SEPARATOR
-
-# Total code points 4
