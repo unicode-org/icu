@@ -21,7 +21,7 @@ include @platform_make_fragment@
 subdir = tools/ctestfw
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS)
+CLEANFILES = *~ $(DEPS) $(ALL_TARGETS)
 
 ## Target information
 #TARGET = libctestfw.$(SO)

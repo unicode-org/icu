@@ -93,7 +93,7 @@ ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RE
 # General data build rules
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES)
+CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES) *.o *.c thaidict.brk
 
 icudata.lst: $(SRCLISTDEPS)
 	@echo Generating $@ list of data files
@@ -122,7 +122,7 @@ build-data: $(ALL_FILES) icudata.lst  $(OS390LIST)
 
 clean-local:
 	@echo '#' removing built files: .brk .dat .cnv .res ...
-	@$(RMV) $(CLEANFILES) thaidict.brk
+	@$(RMV) $(CLEANFILES)
 	@echo Cleaning up..
 
 #$(ALL_TEST_FILES)
