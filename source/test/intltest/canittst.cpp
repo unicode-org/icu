@@ -232,7 +232,8 @@ UnicodeString CanonicalIteratorTest::getReadable(const UnicodeString &s) {
     //return "[" + (verbose ? name->transliterate(s) + "; " : "") + hex->transliterate(s) + "]";
 }
 
-U_CFUNC int compareUnicodeStrings(const void *s1, const void *s2) {
+U_CFUNC int U_CALLCONV
+compareUnicodeStrings(const void *s1, const void *s2) {
   UnicodeString **st1 = (UnicodeString **)s1;
   UnicodeString **st2 = (UnicodeString **)s2;
 

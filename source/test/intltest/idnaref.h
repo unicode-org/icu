@@ -59,7 +59,7 @@
  * @return                  Number of ASCII characters converted.
  * @draft ICU 2.6
  */
-U_CFUNC int32_t 
+U_CFUNC int32_t U_EXPORT2
 idnaref_toASCII(const UChar* src, int32_t srcLength, 
               UChar* dest, int32_t destCapacity,
               int32_t options,
@@ -98,7 +98,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
  * @return                  Number of Unicode characters converted.
  * @draft ICU 2.6
  */
-U_CFUNC int32_t 
+U_CFUNC int32_t U_EXPORT2
 idnaref_toUnicode(const UChar* src, int32_t srcLength,
                 UChar* dest, int32_t destCapacity,
                 int32_t options,
@@ -142,7 +142,7 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
  * @return                  Number of ASCII characters converted.
  * @draft ICU 2.6
  */
-U_CFUNC int32_t  
+U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
                    UChar* dest, int32_t destCapacity,
                    int32_t options,
@@ -182,7 +182,7 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
  * @return                  Number of ASCII characters converted.
  * @draft ICU 2.6
  */
-U_CFUNC int32_t  
+U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UChar* dest, int32_t destCapacity,
                      int32_t options,
@@ -217,7 +217,7 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
  * @return <0 or 0 or >0 as usual for string comparisons
  * @draft ICU 2.6
  */
-U_CFUNC int32_t  
+U_CFUNC int32_t U_EXPORT2
 idnaref_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 int32_t options,
