@@ -719,6 +719,7 @@ protected:
   * Constructor is different from the old default Collator constructor.
   * The task for determing the default collation strength and normalization 
   * mode is left to the child class.
+  * @stable
   */
   Collator();
 
@@ -730,6 +731,7 @@ protected:
   * mode is left to the child class.
   * @param collationStrength collation strength
   * @param decompositionMode 
+  * @stable
   */
   Collator(UCollationStrength collationStrength, 
               UNormalizationMode decompositionMode);
@@ -737,6 +739,7 @@ protected:
   /**
   * Copy constructor.
   * @param other Collator object to be copied from
+  * @stable
   */
   Collator(const Collator& other);
   

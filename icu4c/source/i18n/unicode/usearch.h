@@ -220,7 +220,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 
 /**
 * Destroying and cleaning up the search iterator data struct.
-* If a collator is created in usearch_open, it will be destroyed here.
+* If a collator is created in <tt>usearch_open</tt>, it will be destroyed here.
 * @param searchiter data struct to clean up
 * @draft ICU 2.0
 */
@@ -250,8 +250,9 @@ U_CAPI void U_EXPORT2 usearch_setOffset(UStringSearch *strsrch,
 /**
 * Return the current index in the string text being searched.
 * If the iteration has gone past the end of the text (or past the beginning 
-* for a backwards search), {@link #USEARCH_DONE} is returned.
+* for a backwards search), <tt>USEARCH_DONE</tt> is returned.
 * @param strsrch search iterator data struct
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_getOffset(const UStringSearch *strsrch);
@@ -259,7 +260,7 @@ U_CAPI int32_t U_EXPORT2 usearch_getOffset(const UStringSearch *strsrch);
 /**
 * Sets the text searching attributes located in the enum USearchAttribute
 * with values from the enum USearchAttributeValue.
-* USEARCH_DEFAULT can be used for all attributes for resetting.
+* <tt>USEARCH_DEFAULT</tt> can be used for all attributes for resetting.
 * @param strsrch search iterator data struct
 * @param attribute text attribute to be set
 * @param value text attribute value
@@ -287,15 +288,20 @@ U_CAPI USearchAttributeValue U_EXPORT2 usearch_getAttribute(
 /**
 * Returns the index to the match in the text string that was searched.
 * This call returns a valid result only after a successful call to 
-* {@link #usearch_first}, {@link #usearch_next}, 
-* {@link #usearch_previous}, or {@link #usearch_last}.
+* <tt>usearch_first</tt>, <tt>usearch_next</tt>, <tt>usearch_previous</tt>, 
+* or <tt>usearch_last</tt>.
 * Just after construction, or after a searching method returns 
 * <tt>USEARCH_DONE</tt>, this method will return <tt>USEARCH_DONE</tt>.
 * <p>
-* Use usearch_getMatchedLength to get the matched string length.
+* Use <tt>usearch_getMatchedLength</tt> to get the matched string length.
 * @param strsrch search iterator data struct
 * @return index to a substring within the text string that is being 
 *         searched.
+* @see #usearch_first
+* @see #usearch_next
+* @see #usearch_previous
+* @see #usearch_last
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedStart(
@@ -304,13 +310,18 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedStart(
 /**
 * Returns the length of text in the string which matches the search pattern. 
 * This call returns a valid result only after a successful call to 
-* {@link #usearch_first}, {@link #usearch_next}, 
-* {@link #usearch_previous}, or {@link #usearch_last}.
+* <tt>usearch_first</tt>, <tt>usearch_next</tt>, <tt>usearch_previous</tt>, 
+* or <tt>usearch_last</tt>.
 * Just after construction, or after a searching method returns 
 * <tt>USEARCH_DONE</tt>, this method will return 0.
 * @param strsrch search iterator data struct
 * @return The length of the match in the string text, or 0 if there is no 
 *         match currently.
+* @see #usearch_first
+* @see #usearch_next
+* @see #usearch_previous
+* @see #usearch_last
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
@@ -318,8 +329,8 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
 
 /**
 * Returns the text that was matched by the most recent call to 
-* {@link #usearch_first}, {@link #usearch_next}, 
-* {@link #usearch_previous}, or {@link #usearch_last}.
+* <tt>usearch_first</tt>, <tt>usearch_next</tt>, <tt>usearch_previous</tt>, 
+* or <tt>usearch_last</tt>.
 * If the iterator is not pointing at a valid match (e.g. just after 
 * construction or after <tt>USEARCH_DONE</tt> has been returned, returns
 * an empty string. If result is not large enough to store the matched text,
@@ -328,12 +339,17 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
 * possible. If the buffer fits the matched text exactly, a null-termination 
 * is not possible, then a U_STRING_NOT_TERMINATED_ERROR set in status.
 * Pre-flighting can be either done with length = 0 or the API 
-* usearch_getMatchLength().
+* <tt>usearch_getMatchLength</tt>.
 * @param strsrch search iterator data struct
 * @param result UChar buffer to store the matched string
 * @param resultCapacity length of the result buffer
 * @param status error returned if result is not large enough
 * @return exact length of the matched text, not counting the null-termination
+* @see #usearch_first
+* @see #usearch_next
+* @see #usearch_previous
+* @see #usearch_last
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedText(const UStringSearch *strsrch, 
@@ -465,13 +481,15 @@ U_CAPI const UChar * U_EXPORT2 usearch_getPattern(
 * Returns the first index at which the string text matches the search 
 * pattern.  
 * The iterator is adjusted so that its current index (as returned by 
-* {@link #usearch_getOffset}) is the match position if one was found.
+* <tt>usearch_getOffset</tt>) is the match position if one was found.
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
-* the iterator will be adjusted to the index USEARCH_DONE.
+* the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>.
 * @param strsrch search iterator data struct
 * @param status for errors if it occurs
 * @return The character index of the first match, or 
 * <tt>USEARCH_DONE</tt> if there are no matches.
+* @see #usearch_getOffset
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch, 
@@ -481,10 +499,10 @@ U_CAPI int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch,
 * Returns the first index greater than <tt>position</tt> at which the string 
 * text 
 * matches the search pattern. The iterator is adjusted so that its current 
-* index (as returned by {@link #usearch_getOffset}) is the match position if 
+* index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
-* the iterator will be adjusted to the index USEARCH_DONE
+* the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>
 * <p>
 * Search positions that may render incorrect results are highlighted in the
 * header comments. If position is less than or greater than the text range 
@@ -494,6 +512,8 @@ U_CAPI int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch,
 * @param status for errors if it occurs
 * @return The character index of the first match following <tt>pos</tt>,
 *         or <tt>USEARCH_DONE</tt> if there are no matches.
+* @see #usearch_getOffset
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_following(UStringSearch *strsrch, 
@@ -503,14 +523,16 @@ U_CAPI int32_t U_EXPORT2 usearch_following(UStringSearch *strsrch,
 /**
 * Returns the last index in the target text at which it matches the search 
 * pattern. The iterator is adjusted so that its current 
-* index (as returned by {@link #usearch_getOffset}) is the match position if 
+* index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
-* the iterator will be adjusted to the index USEARCH_DONE.
+* the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>.
 * @param strsrch search iterator data struct
 * @param status for errors if it occurs
 * @return The index of the first match, or <tt>USEARCH_DONE</tt> if there 
 *         are no matches.
+* @see #usearch_getOffset
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch, 
@@ -519,10 +541,10 @@ U_CAPI int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch,
 /**
 * Returns the first index less than <tt>position</tt> at which the string text 
 * matches the search pattern. The iterator is adjusted so that its current 
-* index (as returned by {@link #usearch_getOffset}) is the match position if 
+* index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
-* the iterator will be adjusted to the index USEARCH_DONE
+* the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>
 * <p>
 * Search positions that may render incorrect results are highlighted in the
 * header comments. If position is less than or greater than the text range 
@@ -532,6 +554,8 @@ U_CAPI int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch,
 * @param status for errors if it occurs
 * @return The character index of the first match preceding <tt>pos</tt>,
 *         or <tt>USEARCH_DONE</tt> if there are no matches.
+* @see #usearch_getOffset
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_preceding(UStringSearch *strsrch, 
@@ -542,15 +566,17 @@ U_CAPI int32_t U_EXPORT2 usearch_preceding(UStringSearch *strsrch,
 * Returns the index of the next point at which the string text matches the
 * search pattern, starting from the current position.
 * The iterator is adjusted so that its current 
-* index (as returned by {@link #usearch_getOffset}) is the match position if 
+* index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
-* the iterator will be adjusted to the index USEARCH_DONE
+* the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>
 * @param strsrch search iterator data struct
 * @param status for errors if it occurs
 * @return The index of the next match after the current position, or 
 *         <tt>USEARCH_DONE</tt> if there are no more matches.
 * @see #usearch_first
+* @see #usearch_getOffset
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch, 
@@ -560,14 +586,17 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
 * Returns the index of the previous point at which the string text matches
 * the search pattern, starting at the current position.
 * The iterator is adjusted so that its current 
-* index (as returned by {@link #usearch_getOffset}) is the match position if 
+* index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
-* the iterator will be adjusted to the index USEARCH_DONE
+* the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>
 * @param strsrch search iterator data struct
 * @param status for errors if it occurs
 * @return The index of the previous match before the current position,
 *         or <tt>USEARCH_DONE</tt> if there are no more matches.
+* @see #usearch_last
+* @see #usearch_getOffset
+* @see #USEARCH_DONE
 * @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_previous(UStringSearch *strsrch, 
@@ -580,6 +609,7 @@ U_CAPI int32_t U_EXPORT2 usearch_previous(UStringSearch *strsrch,
 * iteration is initiated before a forwards iteration, the search will begin
 * at the end of the text string.
 * @param strsrch search iterator data struct
+* @see #usearch_first
 * @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch);
