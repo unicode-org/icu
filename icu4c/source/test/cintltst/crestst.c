@@ -275,11 +275,7 @@ UBool testTag(const char* frag,
     int32_t i,j;
     int32_t actual_bundle;
     int32_t resultLen;
-    char testdatapath[256];
-    const char *directory= u_getDataDirectory();
-
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    const char *testdatapath = loadTestData(&status);
 
     is_in[0] = in_Root;
     is_in[1] = in_te;
@@ -534,7 +530,7 @@ TestOpenDirect(void) {
         /* falling back to default or root is ok */
         errorCode=U_ZERO_ERROR;
     } else {
-        log_err("ures_open(\"translit_index\") succeeded, should fail!\n");
+        log_err("ures_open(\"translit_index\") succeeded, should fail! Got: %s\n", u_errorName(errorCode));
     }
     ures_close(translit_index);
 
