@@ -36,7 +36,7 @@ U_NAMESPACE_BEGIN
 class MessageFormat;
 
 /**
- * <p><code>ChoiceFormat</code> converts between ranges of numeric values
+ * ChoiceFormat converts between ranges of numeric values
  * and string names for those ranges. A <code>ChoiceFormat</code> splits
  * the real number line <code>-Inf</code> to <code>+Inf</code> into two
  * or more contiguous ranges. Each range is mapped to a
