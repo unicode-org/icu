@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/DumbTextComponent.java,v $ 
- * $Date: 2001/11/25 23:18:03 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/28 01:12:29 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -26,6 +26,7 @@ public class DumbTextComponent extends Canvas
 
     private String contents = "";
     private Selection selection = new Selection();
+    private int activeStart = -1;
     private boolean editable = true;
 
     private transient Selection tempSelection = new Selection();
@@ -501,6 +502,9 @@ public class DumbTextComponent extends Canvas
 
     public void drawSelection(Graphics g, String lastSubstring) {
         g.setXORMode(Color.black);
+        if (activeStart != -1) {
+            
+        }
         if (selection.isCaret()) {
             offset2Point(selection.caret, selection.clickAfter, caretPoint);
         } else {
