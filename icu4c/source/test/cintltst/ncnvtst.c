@@ -696,8 +696,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
         return FALSE;
     }
 
-   
-    
+    return TRUE;    
 }
 
 
