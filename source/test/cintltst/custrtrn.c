@@ -474,8 +474,12 @@ static void Test_UChar_WCHART_API(void){
     int i =0;
     {
         /* Bad UErrorCode arguments. Make sure that the API doesn't crash, and that Purify doesn't complain. */
-        u_strFromWCS(NULL,0,NULL,NULL,0,NULL);
-        u_strToWCS(NULL,0,NULL,NULL,0,NULL);
+        if (u_strFromWCS(NULL,0,NULL,NULL,0,NULL) != NULL) {
+            log_err("u_strFromWCS() should return NULL with a bad argument\n");
+        }
+        if (u_strToWCS(NULL,0,NULL,NULL,0,NULL) != NULL) {
+            log_err("u_strToWCS() should return NULL with a bad argument\n");
+        }
 
         /* Bad UErrorCode arguments. */
         err = U_ZERO_ERROR;
