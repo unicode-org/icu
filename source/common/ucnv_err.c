@@ -24,15 +24,15 @@
 
 #define VALUE_STRING_LENGTH 32
 /*Magic # 32 = 4(number of char in value string) * 8(max number of bytes per char for any converter) */
-#define UNICODE_PERCENT_SIGN_CODEPOINT 0x0025
-#define UNICODE_U_CODEPOINT     0x0055
-#define UNICODE_X_CODEPOINT     0x0058
-#define UNICODE_RS_CODEPOINT    0x005C
-#define UNICODE_U_LOW_CODEPOINT 0x0075
-#define UNICODE_X_LOW_CODEPOINT 0x0078
-#define UNICODE_AMP_CODEPOINT   0x0026
-#define UNICODE_HASH_CODEPOINT  0x0023
-
+#define UNICODE_PERCENT_SIGN_CODEPOINT  0x0025
+#define UNICODE_U_CODEPOINT             0x0055
+#define UNICODE_X_CODEPOINT             0x0058
+#define UNICODE_RS_CODEPOINT            0x005C
+#define UNICODE_U_LOW_CODEPOINT         0x0075
+#define UNICODE_X_LOW_CODEPOINT         0x0078
+#define UNICODE_AMP_CODEPOINT           0x0026
+#define UNICODE_HASH_CODEPOINT          0x0023
+#define UNICODE_SEMICOLON_CODEPOINT     0x003B
 #define UCNV_PRV_ESCAPE_ICU      0
 #define UCNV_PRV_ESCAPE_C       'C'
 #define UCNV_PRV_ESCAPE_XML_DEC 'D'
@@ -214,12 +214,12 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
-                valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT; /* adding u */
+                valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT; /* adding U */
                 valueStringLength += uprv_itou (valueString + valueStringLength, temp, 16, 8);
                 
             }
             else{
-                valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT; /* adding U */
+                valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT; /* adding u */
                 valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[0], 16, 4);
             }
           break;
@@ -236,6 +236,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
             else{
                 valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[0], 10, 4);
             }
+            valueString[valueStringLength++] = (UChar) UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
           break;
 
         case UCNV_PRV_ESCAPE_XML_HEX:
@@ -251,6 +252,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
             else{
                 valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[0], 16, 4);
             }
+            valueString[valueStringLength++] = (UChar) UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
           break;
        default:
           while (i < length)
@@ -384,7 +386,8 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
      * "tricks" as before we had a good callback API!
      * (Actually, this function is not all that bad.)
      */
-
+  if(context==NULL)
+  {    
     while (i < length)
     {
         uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
@@ -392,8 +395,49 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
         uprv_itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
         valueStringLength += 2;
     }
+  }
+  else
+  {
+      switch(*((char*)context))
+      {
+        case UCNV_PRV_ESCAPE_XML_DEC:
+           while (i < length)
+           {
+                uniValueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;   /* adding & */
+                uniValueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;  /* adding # */
+                valueStringLength += uprv_itou (uniValueString + valueStringLength, codeUnits[i++], 10, 2);
+                uniValueString[valueStringLength++] = (UChar) UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
+           }
+          break;
 
-
+        case UCNV_PRV_ESCAPE_XML_HEX:
+          while (i < length)
+          {
+                uniValueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;   /* adding & */
+                uniValueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;  /* adding # */
+                uniValueString[valueStringLength++] = (UChar) UNICODE_X_LOW_CODEPOINT; /* adding x */
+                valueStringLength += uprv_itou (uniValueString + valueStringLength, codeUnits[i++], 16, 4);
+                uniValueString[valueStringLength++] = (UChar) UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
+          }
+          break;
+        case UCNV_PRV_ESCAPE_C:
+          while (i < length)
+          {
+                uniValueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
+                uniValueString[valueStringLength++] = (UChar) UNICODE_X_LOW_CODEPOINT; /* adding x */
+                valueStringLength += uprv_itou (uniValueString + valueStringLength, codeUnits[i++], 16, 4);
+          }
+          break;
+        default:
+          while (i < length)
+          {
+                uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
+                uniValueString[valueStringLength++] = (UChar) UNICODE_X_CODEPOINT;    /* adding X */
+                uprv_itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
+                valueStringLength += 2;
+          }
+      }
+  }
     /* reset the error */
     *err = U_ZERO_ERROR;
 
