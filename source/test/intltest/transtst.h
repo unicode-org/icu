@@ -115,6 +115,12 @@ class TransliteratorTest : public IntlTest {
      */
     void TestPositionHandling(void);
 
+    /**
+     * Test the Hiragana-Katakana transliterator.
+     */
+    void TestHiraganaKatakana(void);
+
+
     //======================================================================
     // Support methods
     //======================================================================
