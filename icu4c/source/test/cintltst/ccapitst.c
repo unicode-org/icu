@@ -190,9 +190,21 @@ static void TestConvert()
     else {
         const char *string = NULL;
         int32_t len = 0;
+        int32_t count1 = 0;
+        int32_t count2 = 0;
         allNamesCount = uenum_count(allNamesEnum, &err);
         while ((string = uenum_next(allNamesEnum, &len, &err))) {
+            count1++;
             log_verbose("read \"%s\", length %i\n", string, len);
+        }
+        err = U_ZERO_ERROR;
+        uenum_reset(allNamesEnum, &err);
+        while ((string = uenum_next(allNamesEnum, &len, &err))) {
+            count2++;
+            log_verbose("read \"%s\", length %i\n", string, len);
+        }
+        if (count1 != count2) {
+            log_err("FAILURE! uenum_reset(allNamesEnum, &err); doesn't work\n");
         }
     }
     uenum_close(allNamesEnum);
