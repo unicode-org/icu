@@ -250,6 +250,7 @@ static void TestLocalizedString(void) {
     UChar uBuffer[256];
     char cBuffer[256];
     int32_t numResult = -1;
+    const char *locale;
     UFILE *strFile = u_fstropen(testStr, sizeof(testStr)/sizeof(testStr[0]), "en_US");
 
     if (!strFile) {
@@ -259,14 +260,37 @@ static void TestLocalizedString(void) {
     u_fprintf(strFile, "%d", 1234);
     u_frewind(strFile);
     u_fscanf(strFile, "%d", &numResult);
-    u_fclose(strFile);
     u_uastrcpy(uBuffer,"1,234");
     u_austrcpy(cBuffer,testStr);
     if (u_strcmp(testStr, uBuffer) != 0) {
-        log_err("u_fprintf failed to work on a string Got: %s\n", cBuffer);
+        log_err("u_fprintf failed to work on an en string Got: %s\n", cBuffer);
     }
     if (numResult != 1234) {
-        log_err("u_fscanf failed to work on a string Got: %d\n", numResult);
+        log_err("u_fscanf failed to work on an en string Got: %d\n", numResult);
+    }
+
+    u_frewind(strFile);
+    locale = u_fgetlocale(strFile);
+    if (locale == NULL || strcmp(locale, "en_US") != 0) {
+        log_err("u_fgetlocale didn't return \"en\" Got: %d\n", u_fgetlocale(strFile));
+    }
+    u_fsetlocale("de_DE", strFile);
+    locale = u_fgetlocale(strFile);
+    if (locale == NULL || strcmp(locale, "de_DE") != 0) {
+        log_err("u_fgetlocale didn't return \"de\" Got: %d\n", u_fgetlocale(strFile));
+    }
+
+    u_fprintf(strFile, "%d", 1234);
+    u_frewind(strFile);
+    u_fscanf(strFile, "%d", &numResult);
+    u_fclose(strFile);
+    u_uastrcpy(uBuffer,"1.234");
+    u_austrcpy(cBuffer,testStr);
+    if (u_strcmp(testStr, uBuffer) != 0) {
+        log_err("u_fprintf failed to work on a de string Got: %s\n", cBuffer);
+    }
+    if (numResult != 1234) {
+        log_err("u_fscanf failed to work on a de string Got: %d\n", numResult);
     }
 }
 
