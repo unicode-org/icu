@@ -1,0 +1,369 @@
+<html><body>
+<h1
+ >1. Mismatches when NFD is OFF</h1><h2
+ >Date:Mon Jun 03 08:45:38 PDT 2002</h2><h2
+ >File Version:-3.1.1d1</h2><p
+ >Alternate Handling = NON_IGNORABLE</p><table border="1"
+ ><caption
+  >Mismatches in UCA-NOD: Plain vs NFC: 4</caption><tr
+  ><th
+   >Code</th><th
+   >Type</th><th
+   >CC?</th><th
+   >Key</th></tr><tr
+  ><th rowSpan="2" align="right"
+   >F951 CJK COMPATIBILITY IDEOGRAPH-F951<br
+    ></br>NFC=964B</th><th
+   >Plain</th><th
+   >n</th><td
+   >[FF41 96FB | 0020 0020 | 0002 0002]</td></tr><tr
+  ><th
+   >NFC</th><th
+   >ERROR</th><td
+   >[FF41 964B | 0020 0020 | 0002 0002]</td></tr><tr
+  ><th rowSpan="2" align="right"
+   >FB1F HEBREW LIGATURE YIDDISH YOD YOD PATAH<br
+    ></br>NFC=05F2 05B7</th><th
+   >Plain</th><th
+   >n</th><td
+   >[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 001F]</td></tr><tr
+ 
+  ><th
+   >NFC</th><th
+   >Y</th><td
+   >[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 0002]</td></tr><tr
+ 
+  ><th rowSpan="2" align="right"
+   >FB3A HEBREW LETTER FINAL KAF WITH DAGESH<br
+    ></br>NFC=05DA 05BC</th><th
+   >Plain</th><th
+   >n</th><td
+   >[0EC1 | 0020 00B6 | 0019 0019]</td></tr><tr
+  ><th
+   >NFC</th><th
+   >Y</th><td
+   >[0EC1 | 0020 00B6 | 0019 0002]</td></tr><tr
+  ><th rowSpan="2" align="right"
+   >FB43 HEBREW LETTER FINAL PE WITH DAGESH<br
+    ></br>NFC=05E3 05BC</th><th
+   >Plain</th><th
+   >n</th><td
+   >[0EC7 | 0020 00B6 | 0019 0019]</td></tr><tr
+  ><th
+   >NFC</th><th
+   >Y</th><td
+   >[0EC7 | 0020 00B6 | 0019 0002]</td></tr></table><br>
+<h1>2. Differences in Ordering</h1>
+<p>Codes and names are in the white rows: bold means that the NO-NFD sort key differs from UCA key.</p>
+<p>Keys are in the light blue rows: green is the bad key, blue is UCA, black is where they equal.</p>
+<table border='1'>
+<tr><th>File Order</th><th>Code and Decomp</th><th>Key and Decomp-Key</th></tr>
+<tr><td colspan='3'></td><tr>
+<tr><td>12573</td><td>F951 CJK COMPATIBILITY IDEOGRAPH-F951<br><964B> </td><td>
+<font color='#009900'>[FF41 96FB | 0020 0020 | 0002 0002 | |]</font><br><font color='#000099'>[FF41 964B | 0020 0020 | 0002 0002 | |]</font>
+</td></tr>
+<tr><td>12574</td><td>FA09 CJK COMPATIBILITY IDEOGRAPH-FA09<br><964D> </td><td>
+[FF41 964D | 0020 0020 | 0002 0002 | |]
+</td></tr>
+</table>
+<h2>3. Primaries Incompatible with Decompositions</h2><table border='1'>
+<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>
+<tr><td>00A8</td><td>[0214]</td><td>[0209]</td><td>DIAERESIS</td></tr>
+<tr><td>00AF</td><td>[0210]</td><td>[0209]</td><td>MACRON</td></tr>
+<tr><td>00B4</td><td>[020D]</td><td>[0209]</td><td>ACUTE ACCENT</td></tr>
+<tr><td>00B8</td><td>[0219]</td><td>[0209]</td><td>CEDILLA</td></tr>
+<tr><td>02D8</td><td>[0212]</td><td>[0209]</td><td>BREVE</td></tr>
+<tr><td>02D9</td><td>[0213]</td><td>[0209]</td><td>DOT ABOVE</td></tr>
+<tr><td>02DA</td><td>[0215]</td><td>[0209]</td><td>RING ABOVE</td></tr>
+<tr><td>02DB</td><td>[021A]</td><td>[0209]</td><td>OGONEK</td></tr>
+<tr><td>02DC</td><td>[020E]</td><td>[0209]</td><td>SMALL TILDE</td></tr>
+<tr><td>02DD</td><td>[0216]</td><td>[0209]</td><td>DOUBLE ACUTE ACCENT</td></tr>
+<tr><td>037A</td><td>[0C9B]</td><td>[0209]</td><td>GREEK YPOGEGRAMMENI</td></tr>
+<tr><td>0384</td><td>[020D]</td><td>[0209]</td><td>GREEK TONOS</td></tr>
+<tr><td>0385</td><td>[0214]</td><td>[0209]</td><td>GREEK DIALYTIKA TONOS</td></tr>
+<tr><td>0CCB</td><td>[12C4]</td><td>[12C3 12C7]</td><td>KANNADA VOWEL SIGN OO</td></tr>
+<tr><td>0DDD</td><td>[1353]</td><td>[1352 1346]</td><td>SINHALA VOWEL SIGN KOMBUVA HAA DIGA AELA-PILLA</td></tr>
+<tr><td>1FBD</td><td>[0217]</td><td>[0209]</td><td>GREEK KORONIS</td></tr>
+<tr><td>1FBF</td><td>[0217]</td><td>[0209]</td><td>GREEK PSILI</td></tr>
+<tr><td>1FC0</td><td>[021D]</td><td>[0209]</td><td>GREEK PERISPOMENI</td></tr>
+<tr><td>1FC1</td><td>[0214]</td><td>[0209]</td><td>GREEK DIALYTIKA AND PERISPOMENI</td></tr>
+<tr><td>1FCD</td><td>[0217]</td><td>[0209]</td><td>GREEK PSILI AND VARIA</td></tr>
+<tr><td>1FCE</td><td>[0217]</td><td>[0209]</td><td>GREEK PSILI AND OXIA</td></tr>
+<tr><td>1FCF</td><td>[0217]</td><td>[0209]</td><td>GREEK PSILI AND PERISPOMENI</td></tr>
+<tr><td>1FDD</td><td>[0218]</td><td>[0209]</td><td>GREEK DASIA AND VARIA</td></tr>
+<tr><td>1FDE</td><td>[0218]</td><td>[0209]</td><td>GREEK DASIA AND OXIA</td></tr>
+<tr><td>1FDF</td><td>[0218]</td><td>[0209]</td><td>GREEK DASIA AND PERISPOMENI</td></tr>
+<tr><td>1FED</td><td>[0214]</td><td>[0209]</td><td>GREEK DIALYTIKA AND VARIA</td></tr>
+<tr><td>1FEE</td><td>[0214]</td><td>[0209]</td><td>GREEK DIALYTIKA AND OXIA</td></tr>
+<tr><td>1FFD</td><td>[020D]</td><td>[0209]</td><td>GREEK OXIA</td></tr>
+<tr><td>1FFE</td><td>[0218]</td><td>[0209]</td><td>GREEK DASIA</td></tr>
+<tr><td>2017</td><td>[021C]</td><td>[0209]</td><td>DOUBLE LOW LINE</td></tr>
+<tr><td>203E</td><td>[0211]</td><td>[0209]</td><td>OVERLINE</td></tr>
+<tr><td>2047</td><td>[FFC0 A047]</td><td>[024E 024E]</td><td>DOUBLE QUESTION MARK</td></tr>
+<tr><td>2057</td><td>[FFC0 A057]</td><td>[02B6 02B6 02B6 02B6]</td><td>QUADRUPLE PRIME</td></tr>
+<tr><td>205F</td><td>[FFC0 A05F]</td><td>[0209]</td><td>MEDIUM MATHEMATICAL SPACE</td></tr>
+<tr><td>2071</td><td>[FFC0 A071]</td><td>[0AD3]</td><td>SUPERSCRIPT LATIN SMALL LETTER I</td></tr>
+<tr><td>213D</td><td>[FFC0 A13D]</td><td>[0C93]</td><td>DOUBLE-STRUCK SMALL GAMMA</td></tr>
+<tr><td>213E</td><td>[FFC0 A13E]</td><td>[0C93]</td><td>DOUBLE-STRUCK CAPITAL GAMMA</td></tr>
+<tr><td>213F</td><td>[FFC0 A13F]</td><td>[0CA3]</td><td>DOUBLE-STRUCK CAPITAL PI</td></tr>
+<tr><td>2140</td><td>[FFC0 A140]</td><td>[039E]</td><td>DOUBLE-STRUCK N-ARY SUMMATION</td></tr>
+<tr><td>2145</td><td>[FFC0 A145]</td><td>[0A49]</td><td>DOUBLE-STRUCK ITALIC CAPITAL D</td></tr>
+<tr><td>2146</td><td>[FFC0 A146]</td><td>[0A49]</td><td>DOUBLE-STRUCK ITALIC SMALL D</td></tr>
+<tr><td>2147</td><td>[FFC0 A147]</td><td>[0A65]</td><td>DOUBLE-STRUCK ITALIC SMALL E</td></tr>
+<tr><td>2148</td><td>[FFC0 A148]</td><td>[0AD3]</td><td>DOUBLE-STRUCK ITALIC SMALL I</td></tr>
+<tr><td>2149</td><td>[FFC0 A149]</td><td>[0AE7]</td><td>DOUBLE-STRUCK ITALIC SMALL J</td></tr>
+<tr><td>2A0C</td><td>[FFC0 AA0C]</td><td>[03C2 03C2 03C2 03C2]</td><td>QUADRUPLE INTEGRAL OPERATOR</td></tr>
+<tr><td>2A74</td><td>[FFC0 AA74]</td><td>[0237 0237 03A4]</td><td>DOUBLE COLON EQUAL</td></tr>
+<tr><td>2A75</td><td>[FFC0 AA75]</td><td>[03A4 03A4]</td><td>TWO CONSECUTIVE EQUALS SIGNS</td></tr>
+<tr><td>2A76</td><td>[FFC0 AA76]</td><td>[03A4 03A4 03A4]</td><td>THREE CONSECUTIVE EQUALS SIGNS</td></tr>
+<tr><td>2ADC</td><td>[FFC0 AADC]</td><td>[FFC0 AADD]</td><td>FORKING</td></tr>
+<tr><td>309B</td><td>[021E]</td><td>[0209]</td><td>KATAKANA-HIRAGANA VOICED SOUND MARK</td></tr>
+<tr><td>309C</td><td>[021F]</td><td>[0209]</td><td>KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK</td></tr>
+<tr><td>309F</td><td>[FFC0 B09F]</td><td>[1946 1948]</td><td>HIRAGANA DIGRAPH YORI</td></tr>
+<tr><td>30FF</td><td>[FFC0 B0FF]</td><td>[192A 1934]</td><td>KATAKANA DIGRAPH KOTO</td></tr>
+<tr><td>3251</td><td>[FFC0 B251]</td><td>[0A0D 0A0C]</td><td>CIRCLED NUMBER TWENTY ONE</td></tr>
+<tr><td>3252</td><td>[FFC0 B252]</td><td>[0A0D 0A0D]</td><td>CIRCLED NUMBER TWENTY TWO</td></tr>
+<tr><td>3253</td><td>[FFC0 B253]</td><td>[0A0D 0A0E]</td><td>CIRCLED NUMBER TWENTY THREE</td></tr>
+<tr><td>3254</td><td>[FFC0 B254]</td><td>[0A0D 0A0F]</td><td>CIRCLED NUMBER TWENTY FOUR</td></tr>
+<tr><td>3255</td><td>[FFC0 B255]</td><td>[0A0D 0A10]</td><td>CIRCLED NUMBER TWENTY FIVE</td></tr>
+<tr><td>3256</td><td>[FFC0 B256]</td><td>[0A0D 0A11]</td><td>CIRCLED NUMBER TWENTY SIX</td></tr>
+<tr><td>3257</td><td>[FFC0 B257]</td><td>[0A0D 0A12]</td><td>CIRCLED NUMBER TWENTY SEVEN</td></tr>
+<tr><td>3258</td><td>[FFC0 B258]</td><td>[0A0D 0A13]</td><td>CIRCLED NUMBER TWENTY EIGHT</td></tr>
+<tr><td>3259</td><td>[FFC0 B259]</td><td>[0A0D 0A14]</td><td>CIRCLED NUMBER TWENTY NINE</td></tr>
+<tr><td>325A</td><td>[FFC0 B25A]</td><td>[0A0E 0A0B]</td><td>CIRCLED NUMBER THIRTY</td></tr>
+<tr><td>325B</td><td>[FFC0 B25B]</td><td>[0A0E 0A0C]</td><td>CIRCLED NUMBER THIRTY ONE</td></tr>
+<tr><td>325C</td><td>[FFC0 B25C]</td><td>[0A0E 0A0D]</td><td>CIRCLED NUMBER THIRTY TWO</td></tr>
+<tr><td>325D</td><td>[FFC0 B25D]</td><td>[0A0E 0A0E]</td><td>CIRCLED NUMBER THIRTY THREE</td></tr>
+<tr><td>325E</td><td>[FFC0 B25E]</td><td>[0A0E 0A0F]</td><td>CIRCLED NUMBER THIRTY FOUR</td></tr>
+<tr><td>325F</td><td>[FFC0 B25F]</td><td>[0A0E 0A10]</td><td>CIRCLED NUMBER THIRTY FIVE</td></tr>
+<tr><td>32B1</td><td>[FFC0 B2B1]</td><td>[0A0E 0A11]</td><td>CIRCLED NUMBER THIRTY SIX</td></tr>
+<tr><td>32B2</td><td>[FFC0 B2B2]</td><td>[0A0E 0A12]</td><td>CIRCLED NUMBER THIRTY SEVEN</td></tr>
+<tr><td>32B3</td><td>[FFC0 B2B3]</td><td>[0A0E 0A13]</td><td>CIRCLED NUMBER THIRTY EIGHT</td></tr>
+<tr><td>32B4</td><td>[FFC0 B2B4]</td><td>[0A0E 0A14]</td><td>CIRCLED NUMBER THIRTY NINE</td></tr>
+<tr><td>32B5</td><td>[FFC0 B2B5]</td><td>[0A0F 0A0B]</td><td>CIRCLED NUMBER FORTY</td></tr>
+<tr><td>32B6</td><td>[FFC0 B2B6]</td><td>[0A0F 0A0C]</td><td>CIRCLED NUMBER FORTY ONE</td></tr>
+<tr><td>32B7</td><td>[FFC0 B2B7]</td><td>[0A0F 0A0D]</td><td>CIRCLED NUMBER FORTY TWO</td></tr>
+<tr><td>32B8</td><td>[FFC0 B2B8]</td><td>[0A0F 0A0E]</td><td>CIRCLED NUMBER FORTY THREE</td></tr>
+<tr><td>32B9</td><td>[FFC0 B2B9]</td><td>[0A0F 0A0F]</td><td>CIRCLED NUMBER FORTY FOUR</td></tr>
+<tr><td>32BA</td><td>[FFC0 B2BA]</td><td>[0A0F 0A10]</td><td>CIRCLED NUMBER FORTY FIVE</td></tr>
+<tr><td>32BB</td><td>[FFC0 B2BB]</td><td>[0A0F 0A11]</td><td>CIRCLED NUMBER FORTY SIX</td></tr>
+<tr><td>32BC</td><td>[FFC0 B2BC]</td><td>[0A0F 0A12]</td><td>CIRCLED NUMBER FORTY SEVEN</td></tr>
+<tr><td>32BD</td><td>[FFC0 B2BD]</td><td>[0A0F 0A13]</td><td>CIRCLED NUMBER FORTY EIGHT</td></tr>
+<tr><td>32BE</td><td>[FFC0 B2BE]</td><td>[0A0F 0A14]</td><td>CIRCLED NUMBER FORTY NINE</td></tr>
+<tr><td>32BF</td><td>[FFC0 B2BF]</td><td>[0A10 0A0B]</td><td>CIRCLED NUMBER FIFTY</td></tr>
+<tr><td>F951</td><td>[FF41 96FB]</td><td>[FF41 964B]</td><td>CJK COMPATIBILITY IDEOGRAPH-F951</td></tr>
+<tr><td>FA30</td><td>[FFC1 FA30]</td><td>[FF40 CFAE]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA30</td></tr>
+<tr><td>FA31</td><td>[FFC1 FA31]</td><td>[FF40 D0E7]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA31</td></tr>
+<tr><td>FA32</td><td>[FFC1 FA32]</td><td>[FF40 D14D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA32</td></tr>
+<tr><td>FA33</td><td>[FFC1 FA33]</td><td>[FF40 D2C9]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA33</td></tr>
+<tr><td>FA34</td><td>[FFC1 FA34]</td><td>[FF40 D2E4]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA34</td></tr>
+<tr><td>FA35</td><td>[FFC1 FA35]</td><td>[FF40 D351]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA35</td></tr>
+<tr><td>FA36</td><td>[FFC1 FA36]</td><td>[FF40 D59D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA36</td></tr>
+<tr><td>FA37</td><td>[FFC1 FA37]</td><td>[FF40 D606]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA37</td></tr>
+<tr><td>FA38</td><td>[FFC1 FA38]</td><td>[FF40 D668]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA38</td></tr>
+<tr><td>FA39</td><td>[FFC1 FA39]</td><td>[FF40 D840]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA39</td></tr>
+<tr><td>FA3A</td><td>[FFC1 FA3A]</td><td>[FF40 D8A8]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3A</td></tr>
+<tr><td>FA3B</td><td>[FFC1 FA3B]</td><td>[FF40 DC64]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3B</td></tr>
+<tr><td>FA3C</td><td>[FFC1 FA3C]</td><td>[FF40 DC6E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3C</td></tr>
+<tr><td>FA3D</td><td>[FFC1 FA3D]</td><td>[FF40 E094]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3D</td></tr>
+<tr><td>FA3E</td><td>[FFC1 FA3E]</td><td>[FF40 E168]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3E</td></tr>
+<tr><td>FA3F</td><td>[FFC1 FA3F]</td><td>[FF40 E18E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3F</td></tr>
+<tr><td>FA40</td><td>[FFC1 FA40]</td><td>[FF40 E1F2]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA40</td></tr>
+<tr><td>FA41</td><td>[FFC1 FA41]</td><td>[FF40 E54F]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA41</td></tr>
+<tr><td>FA42</td><td>[FFC1 FA42]</td><td>[FF40 E5E2]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA42</td></tr>
+<tr><td>FA43</td><td>[FFC1 FA43]</td><td>[FF40 E691]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA43</td></tr>
+<tr><td>FA44</td><td>[FFC1 FA44]</td><td>[FF40 E885]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA44</td></tr>
+<tr><td>FA45</td><td>[FFC1 FA45]</td><td>[FF40 ED77]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA45</td></tr>
+<tr><td>FA46</td><td>[FFC1 FA46]</td><td>[FF40 EE1A]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA46</td></tr>
+<tr><td>FA47</td><td>[FFC1 FA47]</td><td>[FF40 EF22]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA47</td></tr>
+<tr><td>FA48</td><td>[FFC1 FA48]</td><td>[FF40 F16E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA48</td></tr>
+<tr><td>FA49</td><td>[FFC1 FA49]</td><td>[FF40 F22B]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA49</td></tr>
+<tr><td>FA4A</td><td>[FFC1 FA4A]</td><td>[FF40 F422]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4A</td></tr>
+<tr><td>FA4B</td><td>[FFC1 FA4B]</td><td>[FF40 F891]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4B</td></tr>
+<tr><td>FA4C</td><td>[FFC1 FA4C]</td><td>[FF40 F93E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4C</td></tr>
+<tr><td>FA4D</td><td>[FFC1 FA4D]</td><td>[FF40 F949]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4D</td></tr>
+<tr><td>FA4E</td><td>[FFC1 FA4E]</td><td>[FF40 F948]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4E</td></tr>
+<tr><td>FA4F</td><td>[FFC1 FA4F]</td><td>[FF40 F950]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4F</td></tr>
+<tr><td>FA50</td><td>[FFC1 FA50]</td><td>[FF40 F956]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA50</td></tr>
+<tr><td>FA51</td><td>[FFC1 FA51]</td><td>[FF40 F95D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA51</td></tr>
+<tr><td>FA52</td><td>[FFC1 FA52]</td><td>[FF40 F98D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA52</td></tr>
+<tr><td>FA53</td><td>[FFC1 FA53]</td><td>[FF40 F98E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA53</td></tr>
+<tr><td>FA54</td><td>[FFC1 FA54]</td><td>[FF40 FA40]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA54</td></tr>
+<tr><td>FA55</td><td>[FFC1 FA55]</td><td>[FF40 FA81]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA55</td></tr>
+<tr><td>FA56</td><td>[FFC1 FA56]</td><td>[FF40 FBC0]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA56</td></tr>
+<tr><td>FA57</td><td>[FFC1 FA57]</td><td>[FF40 FDF4]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA57</td></tr>
+<tr><td>FA58</td><td>[FFC1 FA58]</td><td>[FF40 FE09]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA58</td></tr>
+<tr><td>FA59</td><td>[FFC1 FA59]</td><td>[FF40 FE41]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA59</td></tr>
+<tr><td>FA5A</td><td>[FFC1 FA5A]</td><td>[FF40 FF72]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5A</td></tr>
+<tr><td>FA5B</td><td>[FFC1 FA5B]</td><td>[FF41 8005]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5B</td></tr>
+<tr><td>FA5C</td><td>[FFC1 FA5C]</td><td>[FF41 81ED]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5C</td></tr>
+<tr><td>FA5D</td><td>[FFC1 FA5D]</td><td>[FF41 8279]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5D</td></tr>
+<tr><td>FA5E</td><td>[FFC1 FA5E]</td><td>[FF41 8279]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5E</td></tr>
+<tr><td>FA5F</td><td>[FFC1 FA5F]</td><td>[FF41 8457]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5F</td></tr>
+<tr><td>FA60</td><td>[FFC1 FA60]</td><td>[FF41 8910]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA60</td></tr>
+<tr><td>FA61</td><td>[FFC1 FA61]</td><td>[FF41 8996]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA61</td></tr>
+<tr><td>FA62</td><td>[FFC1 FA62]</td><td>[FF41 8B01]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA62</td></tr>
+<tr><td>FA63</td><td>[FFC1 FA63]</td><td>[FF41 8B39]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA63</td></tr>
+<tr><td>FA64</td><td>[FFC1 FA64]</td><td>[FF41 8CD3]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA64</td></tr>
+<tr><td>FA65</td><td>[FFC1 FA65]</td><td>[FF41 8D08]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA65</td></tr>
+<tr><td>FA66</td><td>[FFC1 FA66]</td><td>[FF41 8FB6]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA66</td></tr>
+<tr><td>FA67</td><td>[FFC1 FA67]</td><td>[FF41 9038]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA67</td></tr>
+<tr><td>FA68</td><td>[FFC1 FA68]</td><td>[FF41 96E3]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA68</td></tr>
+<tr><td>FA69</td><td>[FFC1 FA69]</td><td>[FF41 97FF]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA69</td></tr>
+<tr><td>FA6A</td><td>[FFC1 FA6A]</td><td>[FF41 983B]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA6A</td></tr>
+<tr><td>FC5E</td><td>[]</td><td>[0209]</td><td>ARABIC LIGATURE SHADDA WITH DAMMATAN ISOLATED FORM</td></tr>
+<tr><td>FC5F</td><td>[]</td><td>[0209]</td><td>ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM</td></tr>
+<tr><td>FC60</td><td>[]</td><td>[0209]</td><td>ARABIC LIGATURE SHADDA WITH FATHA ISOLATED FORM</td></tr>
+<tr><td>FC61</td><td>[]</td><td>[0209]</td><td>ARABIC LIGATURE SHADDA WITH DAMMA ISOLATED FORM</td></tr>
+<tr><td>FC62</td><td>[]</td><td>[0209]</td><td>ARABIC LIGATURE SHADDA WITH KASRA ISOLATED FORM</td></tr>
+<tr><td>FC63</td><td>[]</td><td>[0209]</td><td>ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM</td></tr>
+<tr><td>FCF2</td><td>[]</td><td>[020B]</td><td>ARABIC LIGATURE SHADDA WITH FATHA MEDIAL FORM</td></tr>
+<tr><td>FCF3</td><td>[]</td><td>[020B]</td><td>ARABIC LIGATURE SHADDA WITH DAMMA MEDIAL FORM</td></tr>
+<tr><td>FCF4</td><td>[]</td><td>[020B]</td><td>ARABIC LIGATURE SHADDA WITH KASRA MEDIAL FORM</td></tr>
+<tr><td>FDFC</td><td>[FFC1 FDFC]</td><td>[0EF9 0F4A 0ED6 0F2D]</td><td>RIAL SIGN</td></tr>
+<tr><td>FE49</td><td>[0211]</td><td>[0209]</td><td>DASHED OVERLINE</td></tr>
+<tr><td>FE4A</td><td>[0211]</td><td>[0209]</td><td>CENTRELINE OVERLINE</td></tr>
+<tr><td>FE4B</td><td>[0211]</td><td>[0209]</td><td>WAVY OVERLINE</td></tr>
+<tr><td>FE4C</td><td>[0211]</td><td>[0209]</td><td>DOUBLE WAVY OVERLINE</td></tr>
+<tr><td>FE70</td><td>[]</td><td>[0209]</td><td>ARABIC FATHATAN ISOLATED FORM</td></tr>
+<tr><td>FE71</td><td>[]</td><td>[020B]</td><td>ARABIC TATWEEL WITH FATHATAN ABOVE</td></tr>
+<tr><td>FE72</td><td>[]</td><td>[0209]</td><td>ARABIC DAMMATAN ISOLATED FORM</td></tr>
+<tr><td>FE74</td><td>[]</td><td>[0209]</td><td>ARABIC KASRATAN ISOLATED FORM</td></tr>
+<tr><td>FE76</td><td>[]</td><td>[0209]</td><td>ARABIC FATHA ISOLATED FORM</td></tr>
+<tr><td>FE77</td><td>[]</td><td>[020B]</td><td>ARABIC FATHA MEDIAL FORM</td></tr>
+<tr><td>FE78</td><td>[]</td><td>[0209]</td><td>ARABIC DAMMA ISOLATED FORM</td></tr>
+<tr><td>FE79</td><td>[]</td><td>[020B]</td><td>ARABIC DAMMA MEDIAL FORM</td></tr>
+<tr><td>FE7A</td><td>[]</td><td>[0209]</td><td>ARABIC KASRA ISOLATED FORM</td></tr>
+<tr><td>FE7B</td><td>[]</td><td>[020B]</td><td>ARABIC KASRA MEDIAL FORM</td></tr>
+<tr><td>FE7C</td><td>[]</td><td>[0209]</td><td>ARABIC SHADDA ISOLATED FORM</td></tr>
+<tr><td>FE7D</td><td>[]</td><td>[020B]</td><td>ARABIC SHADDA MEDIAL FORM</td></tr>
+<tr><td>FE7E</td><td>[]</td><td>[0209]</td><td>ARABIC SUKUN ISOLATED FORM</td></tr>
+<tr><td>FE7F</td><td>[]</td><td>[020B]</td><td>ARABIC SUKUN MEDIAL FORM</td></tr>
+<tr><td>FF5F</td><td>[FFC1 FF5F]</td><td>[FFC0 A985]</td><td>FULLWIDTH LEFT WHITE PARENTHESIS</td></tr>
+<tr><td>FF60</td><td>[FFC1 FF60]</td><td>[FFC0 A986]</td><td>FULLWIDTH RIGHT WHITE PARENTHESIS</td></tr>
+<tr><td>FFE3</td><td>[0210]</td><td>[0209]</td><td>FULLWIDTH MACRON</td></tr>
+</table>
+<h2>4. Secondaries Incompatible with Decompositions</h2><table border='1'>
+<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>
+<tr><td>00A8</td><td>[0214 | 0020]</td><td>[0209 | 0020 0047]</td><td>DIAERESIS</td></tr>
+<tr><td>00AF</td><td>[0210 | 0020]</td><td>[0209 | 0020 005A]</td><td>MACRON</td></tr>
+<tr><td>00B4</td><td>[020D | 0020]</td><td>[0209 | 0020 0032]</td><td>ACUTE ACCENT</td></tr>
+<tr><td>00B8</td><td>[0219 | 0020]</td><td>[0209 | 0020 0055]</td><td>CEDILLA</td></tr>
+<tr><td>017F</td><td>[0BA7 | 0020 0154]</td><td>[0BA7 | 0020]</td><td>LATIN SMALL LETTER LONG S</td></tr>
+<tr><td>02D8</td><td>[0212 | 0020]</td><td>[0209 | 0020 0037]</td><td>BREVE</td></tr>
+<tr><td>02D9</td><td>[0213 | 0020]</td><td>[0209 | 0020 0052]</td><td>DOT ABOVE</td></tr>
+<tr><td>02DA</td><td>[0215 | 0020]</td><td>[0209 | 0020 0043]</td><td>RING ABOVE</td></tr>
+<tr><td>02DB</td><td>[021A | 0020]</td><td>[0209 | 0020 0058]</td><td>OGONEK</td></tr>
+<tr><td>02DC</td><td>[020E | 0020]</td><td>[0209 | 0020 004E]</td><td>SMALL TILDE</td></tr>
+<tr><td>02DD</td><td>[0216 | 0020]</td><td>[0209 | 0020 004D]</td><td>DOUBLE ACUTE ACCENT</td></tr>
+<tr><td>037A</td><td>[0C9B | 0020]</td><td>[0209 | 0020 0096]</td><td>GREEK YPOGEGRAMMENI</td></tr>
+<tr><td>0384</td><td>[020D | 0020]</td><td>[0209 | 0020 0032]</td><td>GREEK TONOS</td></tr>
+<tr><td>0385</td><td>[0214 | 0020 0032]</td><td>[0209 | 0020 0047 0032]</td><td>GREEK DIALYTIKA TONOS</td></tr>
+<tr><td>1E9B</td><td>[0BA7 | 0020 0154 0052]</td><td>[0BA7 | 0020 0052]</td><td>LATIN SMALL LETTER LONG S WITH DOT ABOVE</td></tr>
+<tr><td>1FBD</td><td>[0217 | 0020]</td><td>[0209 | 0020 0022]</td><td>GREEK KORONIS</td></tr>
+<tr><td>1FBF</td><td>[0217 | 0020]</td><td>[0209 | 0020 0022]</td><td>GREEK PSILI</td></tr>
+<tr><td>1FC0</td><td>[021D | 0020]</td><td>[0209 | 0020 0045]</td><td>GREEK PERISPOMENI</td></tr>
+<tr><td>1FC1</td><td>[0214 | 0020 0045]</td><td>[0209 | 0020 0047 0045]</td><td>GREEK DIALYTIKA AND PERISPOMENI</td></tr>
+<tr><td>1FCD</td><td>[0217 | 0020 0035]</td><td>[0209 | 0020 0022 0035]</td><td>GREEK PSILI AND VARIA</td></tr>
+<tr><td>1FCE</td><td>[0217 | 0020 0032]</td><td>[0209 | 0020 0022 0032]</td><td>GREEK PSILI AND OXIA</td></tr>
+<tr><td>1FCF</td><td>[0217 | 0020 0045]</td><td>[0209 | 0020 0022 0045]</td><td>GREEK PSILI AND PERISPOMENI</td></tr>
+<tr><td>1FDD</td><td>[0218 | 0020 0035]</td><td>[0209 | 0020 002A 0035]</td><td>GREEK DASIA AND VARIA</td></tr>
+<tr><td>1FDE</td><td>[0218 | 0020 0032]</td><td>[0209 | 0020 002A 0032]</td><td>GREEK DASIA AND OXIA</td></tr>
+<tr><td>1FDF</td><td>[0218 | 0020 0045]</td><td>[0209 | 0020 002A 0045]</td><td>GREEK DASIA AND PERISPOMENI</td></tr>
+<tr><td>1FED</td><td>[0214 | 0020 0035]</td><td>[0209 | 0020 0047 0035]</td><td>GREEK DIALYTIKA AND VARIA</td></tr>
+<tr><td>1FEE</td><td>[0214 | 0020 0032]</td><td>[0209 | 0020 0047 0032]</td><td>GREEK DIALYTIKA AND OXIA</td></tr>
+<tr><td>1FFD</td><td>[020D | 0020]</td><td>[0209 | 0020 0032]</td><td>GREEK OXIA</td></tr>
+<tr><td>1FFE</td><td>[0218 | 0020]</td><td>[0209 | 0020 002A]</td><td>GREEK DASIA</td></tr>
+<tr><td>2017</td><td>[021C | 0020]</td><td>[0209 | 0020 008A]</td><td>DOUBLE LOW LINE</td></tr>
+<tr><td>203E</td><td>[0211 | 0020]</td><td>[0209 | 0020 005E]</td><td>OVERLINE</td></tr>
+<tr><td>2047</td><td>[FFC0 A047 | 0020 0020]</td><td>[024E 024E | 0020 0020]</td><td>DOUBLE QUESTION MARK</td></tr>
+<tr><td>2057</td><td>[FFC0 A057 | 0020 0020]</td><td>[02B6 02B6 02B6 02B6 | 0020 0020 0020 0020]</td><td>QUADRUPLE PRIME</td></tr>
+<tr><td>205F</td><td>[FFC0 A05F | 0020 0020]</td><td>[0209 | 0020]</td><td>MEDIUM MATHEMATICAL SPACE</td></tr>
+<tr><td>2071</td><td>[FFC0 A071 | 0020 0020]</td><td>[0AD3 | 0020]</td><td>SUPERSCRIPT LATIN SMALL LETTER I</td></tr>
+<tr><td>213D</td><td>[FFC0 A13D | 0020 0020]</td><td>[0C93 | 0020]</td><td>DOUBLE-STRUCK SMALL GAMMA</td></tr>
+<tr><td>213E</td><td>[FFC0 A13E | 0020 0020]</td><td>[0C93 | 0020]</td><td>DOUBLE-STRUCK CAPITAL GAMMA</td></tr>
+<tr><td>213F</td><td>[FFC0 A13F | 0020 0020]</td><td>[0CA3 | 0020]</td><td>DOUBLE-STRUCK CAPITAL PI</td></tr>
+<tr><td>2140</td><td>[FFC0 A140 | 0020 0020]</td><td>[039E | 0020]</td><td>DOUBLE-STRUCK N-ARY SUMMATION</td></tr>
+<tr><td>2145</td><td>[FFC0 A145 | 0020 0020]</td><td>[0A49 | 0020]</td><td>DOUBLE-STRUCK ITALIC CAPITAL D</td></tr>
+<tr><td>2146</td><td>[FFC0 A146 | 0020 0020]</td><td>[0A49 | 0020]</td><td>DOUBLE-STRUCK ITALIC SMALL D</td></tr>
+<tr><td>2147</td><td>[FFC0 A147 | 0020 0020]</td><td>[0A65 | 0020]</td><td>DOUBLE-STRUCK ITALIC SMALL E</td></tr>
+<tr><td>2148</td><td>[FFC0 A148 | 0020 0020]</td><td>[0AD3 | 0020]</td><td>DOUBLE-STRUCK ITALIC SMALL I</td></tr>
+<tr><td>2149</td><td>[FFC0 A149 | 0020 0020]</td><td>[0AE7 | 0020]</td><td>DOUBLE-STRUCK ITALIC SMALL J</td></tr>
+<tr><td>2A0C</td><td>[FFC0 AA0C | 0020 0020]</td><td>[03C2 03C2 03C2 03C2 | 0020 0020 0020 0020]</td><td>QUADRUPLE INTEGRAL OPERATOR</td></tr>
+<tr><td>2A74</td><td>[FFC0 AA74 | 0020 0020]</td><td>[0237 0237 03A4 | 0020 0020 0020]</td><td>DOUBLE COLON EQUAL</td></tr>
+<tr><td>2A75</td><td>[FFC0 AA75 | 0020 0020]</td><td>[03A4 03A4 | 0020 0020]</td><td>TWO CONSECUTIVE EQUALS SIGNS</td></tr>
+<tr><td>2A76</td><td>[FFC0 AA76 | 0020 0020]</td><td>[03A4 03A4 03A4 | 0020 0020 0020]</td><td>THREE CONSECUTIVE EQUALS SIGNS</td></tr>
+<tr><td>309B</td><td>[021E | 0020]</td><td>[0209 | 0020 013D]</td><td>KATAKANA-HIRAGANA VOICED SOUND MARK</td></tr>
+<tr><td>309C</td><td>[021F | 0020]</td><td>[0209 | 0020 013E]</td><td>KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK</td></tr>
+<tr><td>309F</td><td>[FFC0 B09F | 0020 0020]</td><td>[1946 1948 | 0020 0020]</td><td>HIRAGANA DIGRAPH YORI</td></tr>
+<tr><td>30FF</td><td>[FFC0 B0FF | 0020 0020]</td><td>[192A 1934 | 0020 0020]</td><td>KATAKANA DIGRAPH KOTO</td></tr>
+<tr><td>3251</td><td>[FFC0 B251 | 0020 0020]</td><td>[0A0D 0A0C | 0020 0020]</td><td>CIRCLED NUMBER TWENTY ONE</td></tr>
+<tr><td>3252</td><td>[FFC0 B252 | 0020 0020]</td><td>[0A0D 0A0D | 0020 0020]</td><td>CIRCLED NUMBER TWENTY TWO</td></tr>
+<tr><td>3253</td><td>[FFC0 B253 | 0020 0020]</td><td>[0A0D 0A0E | 0020 0020]</td><td>CIRCLED NUMBER TWENTY THREE</td></tr>
+<tr><td>3254</td><td>[FFC0 B254 | 0020 0020]</td><td>[0A0D 0A0F | 0020 0020]</td><td>CIRCLED NUMBER TWENTY FOUR</td></tr>
+<tr><td>3255</td><td>[FFC0 B255 | 0020 0020]</td><td>[0A0D 0A10 | 0020 0020]</td><td>CIRCLED NUMBER TWENTY FIVE</td></tr>
+<tr><td>3256</td><td>[FFC0 B256 | 0020 0020]</td><td>[0A0D 0A11 | 0020 0020]</td><td>CIRCLED NUMBER TWENTY SIX</td></tr>
+<tr><td>3257</td><td>[FFC0 B257 | 0020 0020]</td><td>[0A0D 0A12 | 0020 0020]</td><td>CIRCLED NUMBER TWENTY SEVEN</td></tr>
+<tr><td>3258</td><td>[FFC0 B258 | 0020 0020]</td><td>[0A0D 0A13 | 0020 0020]</td><td>CIRCLED NUMBER TWENTY EIGHT</td></tr>
+<tr><td>3259</td><td>[FFC0 B259 | 0020 0020]</td><td>[0A0D 0A14 | 0020 0020]</td><td>CIRCLED NUMBER TWENTY NINE</td></tr>
+<tr><td>325A</td><td>[FFC0 B25A | 0020 0020]</td><td>[0A0E 0A0B | 0020 0020]</td><td>CIRCLED NUMBER THIRTY</td></tr>
+<tr><td>325B</td><td>[FFC0 B25B | 0020 0020]</td><td>[0A0E 0A0C | 0020 0020]</td><td>CIRCLED NUMBER THIRTY ONE</td></tr>
+<tr><td>325C</td><td>[FFC0 B25C | 0020 0020]</td><td>[0A0E 0A0D | 0020 0020]</td><td>CIRCLED NUMBER THIRTY TWO</td></tr>
+<tr><td>325D</td><td>[FFC0 B25D | 0020 0020]</td><td>[0A0E 0A0E | 0020 0020]</td><td>CIRCLED NUMBER THIRTY THREE</td></tr>
+<tr><td>325E</td><td>[FFC0 B25E | 0020 0020]</td><td>[0A0E 0A0F | 0020 0020]</td><td>CIRCLED NUMBER THIRTY FOUR</td></tr>
+<tr><td>325F</td><td>[FFC0 B25F | 0020 0020]</td><td>[0A0E 0A10 | 0020 0020]</td><td>CIRCLED NUMBER THIRTY FIVE</td></tr>
+<tr><td>32B1</td><td>[FFC0 B2B1 | 0020 0020]</td><td>[0A0E 0A11 | 0020 0020]</td><td>CIRCLED NUMBER THIRTY SIX</td></tr>
+<tr><td>32B2</td><td>[FFC0 B2B2 | 0020 0020]</td><td>[0A0E 0A12 | 0020 0020]</td><td>CIRCLED NUMBER THIRTY SEVEN</td></tr>
+<tr><td>32B3</td><td>[FFC0 B2B3 | 0020 0020]</td><td>[0A0E 0A13 | 0020 0020]</td><td>CIRCLED NUMBER THIRTY EIGHT</td></tr>
+<tr><td>32B4</td><td>[FFC0 B2B4 | 0020 0020]</td><td>[0A0E 0A14 | 0020 0020]</td><td>CIRCLED NUMBER THIRTY NINE</td></tr>
+<tr><td>32B5</td><td>[FFC0 B2B5 | 0020 0020]</td><td>[0A0F 0A0B | 0020 0020]</td><td>CIRCLED NUMBER FORTY</td></tr>
+<tr><td>32B6</td><td>[FFC0 B2B6 | 0020 0020]</td><td>[0A0F 0A0C | 0020 0020]</td><td>CIRCLED NUMBER FORTY ONE</td></tr>
+<tr><td>32B7</td><td>[FFC0 B2B7 | 0020 0020]</td><td>[0A0F 0A0D | 0020 0020]</td><td>CIRCLED NUMBER FORTY TWO</td></tr>
+<tr><td>32B8</td><td>[FFC0 B2B8 | 0020 0020]</td><td>[0A0F 0A0E | 0020 0020]</td><td>CIRCLED NUMBER FORTY THREE</td></tr>
+<tr><td>32B9</td><td>[FFC0 B2B9 | 0020 0020]</td><td>[0A0F 0A0F | 0020 0020]</td><td>CIRCLED NUMBER FORTY FOUR</td></tr>
+<tr><td>32BA</td><td>[FFC0 B2BA | 0020 0020]</td><td>[0A0F 0A10 | 0020 0020]</td><td>CIRCLED NUMBER FORTY FIVE</td></tr>
+<tr><td>32BB</td><td>[FFC0 B2BB | 0020 0020]</td><td>[0A0F 0A11 | 0020 0020]</td><td>CIRCLED NUMBER FORTY SIX</td></tr>
+<tr><td>32BC</td><td>[FFC0 B2BC | 0020 0020]</td><td>[0A0F 0A12 | 0020 0020]</td><td>CIRCLED NUMBER FORTY SEVEN</td></tr>
+<tr><td>32BD</td><td>[FFC0 B2BD | 0020 0020]</td><td>[0A0F 0A13 | 0020 0020]</td><td>CIRCLED NUMBER FORTY EIGHT</td></tr>
+<tr><td>32BE</td><td>[FFC0 B2BE | 0020 0020]</td><td>[0A0F 0A14 | 0020 0020]</td><td>CIRCLED NUMBER FORTY NINE</td></tr>
+<tr><td>32BF</td><td>[FFC0 B2BF | 0020 0020]</td><td>[0A10 0A0B | 0020 0020]</td><td>CIRCLED NUMBER FIFTY</td></tr>
+<tr><td>FB05</td><td>[0BA7 0BBF | 0020 0154 0020]</td><td>[0BA7 0BBF | 0020 0020]</td><td>LATIN SMALL LIGATURE LONG S T</td></tr>
+<tr><td>FBA4</td><td>[0F3D | 00CC]</td><td>[0F3D | 0020 00CC]</td><td>ARABIC LETTER HEH WITH YEH ABOVE ISOLATED FORM</td></tr>
+<tr><td>FBA5</td><td>[0F3D | 00CC]</td><td>[0F3D | 0020 00CC]</td><td>ARABIC LETTER HEH WITH YEH ABOVE FINAL FORM</td></tr>
+<tr><td>FBB0</td><td>[0F4F | 00CC]</td><td>[0F4F | 0020 00CC]</td><td>ARABIC LETTER YEH BARREE WITH HAMZA ABOVE ISOLATED FORM</td></tr>
+<tr><td>FBB1</td><td>[0F4F | 00CC]</td><td>[0F4F | 0020 00CC]</td><td>ARABIC LETTER YEH BARREE WITH HAMZA ABOVE FINAL FORM</td></tr>
+<tr><td>FC5E</td><td>[| 00C8]</td><td>[0209 | 0020 00BE 00C8]</td><td>ARABIC LIGATURE SHADDA WITH DAMMATAN ISOLATED FORM</td></tr>
+<tr><td>FC5F</td><td>[| 00C8]</td><td>[0209 | 0020 00C0 00C8]</td><td>ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM</td></tr>
+<tr><td>FC60</td><td>[| 00C8]</td><td>[0209 | 0020 00C2 00C8]</td><td>ARABIC LIGATURE SHADDA WITH FATHA ISOLATED FORM</td></tr>
+<tr><td>FC61</td><td>[| 00C8]</td><td>[0209 | 0020 00C4 00C8]</td><td>ARABIC LIGATURE SHADDA WITH DAMMA ISOLATED FORM</td></tr>
+<tr><td>FC62</td><td>[| 00C8]</td><td>[0209 | 0020 00C6 00C8]</td><td>ARABIC LIGATURE SHADDA WITH KASRA ISOLATED FORM</td></tr>
+<tr><td>FC63</td><td>[| 00C8 00CE]</td><td>[0209 | 0020 00C8 00CE]</td><td>ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM</td></tr>
+<tr><td>FCF2</td><td>[| 00C8]</td><td>[020B | 0020 00C2 00C8]</td><td>ARABIC LIGATURE SHADDA WITH FATHA MEDIAL FORM</td></tr>
+<tr><td>FCF3</td><td>[| 00C8]</td><td>[020B | 0020 00C4 00C8]</td><td>ARABIC LIGATURE SHADDA WITH DAMMA MEDIAL FORM</td></tr>
+<tr><td>FCF4</td><td>[| 00C8]</td><td>[020B | 0020 00C6 00C8]</td><td>ARABIC LIGATURE SHADDA WITH KASRA MEDIAL FORM</td></tr>
+<tr><td>FD3C</td><td>[0ED6 | 00BD]</td><td>[0ED6 | 0020 00BD]</td><td>ARABIC LIGATURE ALEF WITH FATHATAN FINAL FORM</td></tr>
+<tr><td>FD3D</td><td>[0ED6 | 00BD]</td><td>[0ED6 | 0020 00BD]</td><td>ARABIC LIGATURE ALEF WITH FATHATAN ISOLATED FORM</td></tr>
+<tr><td>FDFC</td><td>[FFC1 FDFC | 0020 0020]</td><td>[0EF9 0F4A 0ED6 0F2D | 0020 0020 0020 0020]</td><td>RIAL SIGN</td></tr>
+<tr><td>FE49</td><td>[0211 | 0020]</td><td>[0209 | 0020 005E]</td><td>DASHED OVERLINE</td></tr>
+<tr><td>FE4A</td><td>[0211 | 0020]</td><td>[0209 | 0020 005E]</td><td>CENTRELINE OVERLINE</td></tr>
+<tr><td>FE4B</td><td>[0211 | 0020]</td><td>[0209 | 0020 005E]</td><td>WAVY OVERLINE</td></tr>
+<tr><td>FE4C</td><td>[0211 | 0020]</td><td>[0209 | 0020 005E]</td><td>DOUBLE WAVY OVERLINE</td></tr>
+<tr><td>FE70</td><td>[| 00BD]</td><td>[0209 | 0020 00BD]</td><td>ARABIC FATHATAN ISOLATED FORM</td></tr>
+<tr><td>FE71</td><td>[| 00BD]</td><td>[020B | 0020 00BD]</td><td>ARABIC TATWEEL WITH FATHATAN ABOVE</td></tr>
+<tr><td>FE72</td><td>[| 00BE]</td><td>[0209 | 0020 00BE]</td><td>ARABIC DAMMATAN ISOLATED FORM</td></tr>
+<tr><td>FE74</td><td>[| 00C0]</td><td>[0209 | 0020 00C0]</td><td>ARABIC KASRATAN ISOLATED FORM</td></tr>
+<tr><td>FE76</td><td>[| 00C2]</td><td>[0209 | 0020 00C2]</td><td>ARABIC FATHA ISOLATED FORM</td></tr>
+<tr><td>FE77</td><td>[| 00C2]</td><td>[020B | 0020 00C2]</td><td>ARABIC FATHA MEDIAL FORM</td></tr>
+<tr><td>FE78</td><td>[| 00C4]</td><td>[0209 | 0020 00C4]</td><td>ARABIC DAMMA ISOLATED FORM</td></tr>
+<tr><td>FE79</td><td>[| 00C4]</td><td>[020B | 0020 00C4]</td><td>ARABIC DAMMA MEDIAL FORM</td></tr>
+<tr><td>FE7A</td><td>[| 00C6]</td><td>[0209 | 0020 00C6]</td><td>ARABIC KASRA ISOLATED FORM</td></tr>
+<tr><td>FE7B</td><td>[| 00C6]</td><td>[020B | 0020 00C6]</td><td>ARABIC KASRA MEDIAL FORM</td></tr>
+<tr><td>FE7C</td><td>[| 00C8]</td><td>[0209 | 0020 00C8]</td><td>ARABIC SHADDA ISOLATED FORM</td></tr>
+<tr><td>FE7D</td><td>[| 00C8]</td><td>[020B | 0020 00C8]</td><td>ARABIC SHADDA MEDIAL FORM</td></tr>
+<tr><td>FE7E</td><td>[| 00CA]</td><td>[0209 | 0020 00CA]</td><td>ARABIC SUKUN ISOLATED FORM</td></tr>
+<tr><td>FE7F</td><td>[| 00CA]</td><td>[020B | 0020 00CA]</td><td>ARABIC SUKUN MEDIAL FORM</td></tr>
+<tr><td>FF5F</td><td>[FFC1 FF5F | 0020 0020]</td><td>[FFC0 A985 | 0020 0020]</td><td>FULLWIDTH LEFT WHITE PARENTHESIS</td></tr>
+<tr><td>FF60</td><td>[FFC1 FF60 | 0020 0020]</td><td>[FFC0 A986 | 0020 0020]</td><td>FULLWIDTH RIGHT WHITE PARENTHESIS</td></tr>
+<tr><td>FFE3</td><td>[0210 | 0020]</td><td>[0209 | 0020 005A]</td><td>FULLWIDTH MACRON</td></tr>
+</table>
+</body></html>
