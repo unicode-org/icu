@@ -101,9 +101,6 @@ const int32_t G7CollationTest::results[G7CollationTest::TESTLOCALES][G7Collation
 void G7CollationTest::doTest( Collator* myCollation, UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    SimpleFwdCharIterator src(source);
-    SimpleFwdCharIterator trg(target);
-    Collator::EComparisonResult incResult = myCollation->compare(src, trg);
     CollationKey sortKey1, sortKey2;
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
@@ -113,7 +110,7 @@ void G7CollationTest::doTest( Collator* myCollation, UnicodeString source, Unico
         return;
     }
     Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
+    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
 }
 
 void G7CollationTest::TestG7Locales(/* char* par */)
