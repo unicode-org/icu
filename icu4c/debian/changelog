@@ -1,3 +1,45 @@
+icu (2.6.1-1) experimental; urgency=low
+
+  * New upstream version.
+  * Ivo Timmermans:
+      * debian/rules Don't create arch-all packages in the binary-arch
+        target.  Closes: #184403
+
+ -- Ivo Timmermans <ivo@debian.org>  Thu,  6 Nov 2003 09:03:44 +0100
+
+icu (2.6-1) experimental; urgency=low
+
+  * New upstream version. Closes: #162975
+  * debian/control: New maintainers
+  * Daniel Glassey:
+      * debian/rules Change the optimisations to -O3 and -O to get it to build
+      * debian/rules get the latest config.{sub,guess} from /usr/share/misc
+        so add build-dep on autotools-dev
+      * debian/postinst gencnval is now in {prefix}/bin
+  * Ivo Timmermans:
+      * debian/control Tightened debhelper build dependency
+      * debian/control Update Standards-Version
+
+ -- Daniel Glassey <wdg@debian.org>  Wed,  3 Sep 2003 12:39:35 +0200
+
+icu (2.1-1.2) unstable; urgency=low
+
+  * NMU.
+  * Updated source/config.{sub,guess}.  Closes: #182697
+
+ -- Ivo Timmermans <ivo@debian.org>  Fri,  7 Mar 2003 20:58:23 +0100
+
+icu (2.1-1.1) unstable; urgency=low
+
+  * NMU.
+  * debian/control: Go through G++ ABI transition. Closes: #180124
+  * source/common/unicode/docmain.h: Fix \mainpage and \section tags,
+    so doxygen doesn't get confused any more. Closes: #178344
+  * debian/copyright: Added upstream URL. Closes: #165780
+  * 
+
+ -- Ivo Timmermans <ivo@debian.org>  Fri, 14 Feb 2003 15:21:56 +0100
+
 icu (2.1-1) unstable; urgency=low
 
   * ICU 2.1 release.
