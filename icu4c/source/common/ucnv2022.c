@@ -39,7 +39,7 @@ typedef enum  {
 	JISX208 ,
 	JISX212 ,
 	GB2312  ,
-	KSC5601 ,
+	KSC5601 
 
 } StateEnum;
 
