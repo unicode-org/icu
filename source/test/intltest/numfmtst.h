@@ -94,6 +94,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
      */
     void TestRegCurrency(void);
 
+    void TestSymbolsWithBadLocale(void);
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
