@@ -144,7 +144,9 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
 
         // Process final rule and data, if any
         if (size >= 5) {
-            UnicodeString ruleid = ures_getUnicodeStringByIndex(res, 3, &ec);
+            int32_t ruleidLen = 0;
+            const UChar* idUStr = ures_getStringByIndex(res, 3, &ruleidLen, &ec);
+            UnicodeString ruleid(TRUE, idUStr, ruleidLen);
             r = ures_getByIndex(res, 4, NULL, &ec);
             const int32_t* data = ures_getIntVector(r, &len, &ec);
 #if defined U_DEBUG_TZ
@@ -172,7 +174,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                         // 3, 1, -1, 7200, 0, 9, -31, -1, 7200, 0, 3600
                         data = ures_getIntVector(r, &len, &ec);
                         if (U_SUCCESS(ec) && len == 11) {
-                          U_DEBUG_TZ_MSG(("zone%s, rule%s: {%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}", zKey, ures_getKey(r), 
+                            U_DEBUG_TZ_MSG(("zone%s, rule%s: {%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}", zKey, ures_getKey(r), 
                                           data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10]));
                             finalZone = new SimpleTimeZone(rawOffset, "",
                                 (int8_t)data[0], (int8_t)data[1], (int8_t)data[2],

@@ -338,7 +338,9 @@ static UBool loadOlsonIDs() {
         count = ures_getSize(nres);
         ids = new UnicodeString[(count > 0) ? count : 1];
         for (int32_t i=0; i<count; ++i) {
-            ids[i]=ures_getUnicodeStringByIndex(nres, i, &ec);
+            int32_t idLen = 0;
+            const UChar* id = ures_getStringByIndex(nres, i, &idLen, &ec);
+            ids[i].fastCopyFrom(UnicodeString(TRUE, id, idLen));
             if (U_FAILURE(ec)) {
                 break;
             }
@@ -824,11 +826,16 @@ private:
 
     UBool getID(int32_t i) {
         UErrorCode ec = U_ZERO_ERROR;
+        int32_t idLen = 0;
+        const UChar* id = NULL;
         UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
         top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
-        unistr = ures_getUnicodeStringByIndex(top, i,&ec);
+        id = ures_getStringByIndex(top, i, &idLen, &ec);
         if(U_FAILURE(ec)) {
-          unistr.truncate(0);
+            unistr.truncate(0);
+        }
+        else {
+            unistr.fastCopyFrom(UnicodeString(TRUE, id, idLen));
         }
         ures_close(top);
         return U_SUCCESS(ec);
@@ -1045,8 +1052,10 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
     if (zone >= 0) {
         UResourceBundle *ares = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
-          result = ures_getUnicodeStringByIndex(ares, zone, &ec);
-          U_DEBUG_TZ_MSG(("gei(%d) -> %d, len%d, %s\n", index, zone, result.length(), u_errorName(ec)));
+            int32_t idLen = 0;
+            const UChar* id = ures_getStringByIndex(ares, zone, &idLen, &ec);
+            result.fastCopyFrom(UnicodeString(TRUE, id, idLen));
+            U_DEBUG_TZ_MSG(("gei(%d) -> %d, len%d, %s\n", index, zone, result.length(), u_errorName(ec)));
         }
         ures_close(ares);
     }
@@ -1223,4 +1232,3 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
-
