@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
-# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_LINK" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -82,7 +82,7 @@ SOURCE="$(InputPath)"
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_LINK" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -107,7 +107,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
-# ADD CPP /nologo /W3 /GX /Zi /O2 /Op /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /W3 /GX /Zi /O2 /Op /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_LINK" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -143,7 +143,7 @@ SOURCE="$(InputPath)"
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /Op /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /Op /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_LINK" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
