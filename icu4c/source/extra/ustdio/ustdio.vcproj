@@ -204,9 +204,6 @@
 				RelativePath=".\locbund.h">
 			</File>
 			<File
-				RelativePath=".\sprintf.h">
-			</File>
-			<File
 				RelativePath=".\ufile.h">
 			</File>
 			<File
@@ -216,13 +213,7 @@
 				RelativePath=".\uprintf.h">
 			</File>
 			<File
-				RelativePath=".\uprntf_p.h">
-			</File>
-			<File
 				RelativePath=".\uscanf.h">
-			</File>
-			<File
-				RelativePath=".\uscanf_p.h">
 			</File>
 			<File
 				RelativePath=".\unicode\ustdio.h">

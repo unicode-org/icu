@@ -65,22 +65,23 @@ typedef struct u_printf_stream_handler {
     u_printf_pad_and_justify_stream *pad_and_justify;
 } u_printf_stream_handler;
 
+#define UP_PERCENT 0x0025
+
 /**
- * A u_printf handler function.  
- * A u_printf handler is responsible for handling a single u_printf 
- * format specification, for example 'd' or 's'.
- * @param stream The UFILE to which to write output.
- * @param info A pointer to a <TT>u_printf_spec_info</TT> struct containing
- * information on the format specification.
- * @param args A pointer to the argument data
- * @return The number of Unicode characters written to <TT>stream</TT>.
+ * Parse a single u_printf format specifier.
+ * @param fmt A pointer to a '%' character in a u_printf format specification.
+ * @param spec A pointer to a <TT>u_printf_spec</TT> to receive the parsed
+ * format specifier.
+ * @return The number of characters contained in this specifier.
  */
-typedef int32_t U_EXPORT2
-u_printf_handler(const u_printf_stream_handler  *handler,
-                 void                           *context,
-                 ULocaleBundle                  *formatBundle,
-                 const u_printf_spec_info       *info,
-                 const ufmt_args                *args);
+int32_t
+u_printf_print_spec(const u_printf_stream_handler *streamHandler,
+                    const UChar     *fmt,
+                    void            *context,
+                    ULocaleBundle   *formatBundle,
+                    int32_t         patCount,
+                    int32_t         *written,
+                    va_list         *ap);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

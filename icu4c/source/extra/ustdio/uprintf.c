@@ -28,7 +28,6 @@
 #include "unicode/udat.h"
 
 #include "uprintf.h"
-#include "uprntf_p.h"
 #include "ufile.h"
 #include "locbund.h"
 
