@@ -26,8 +26,8 @@ Options: -h, --help         Print this message and exit
 
 The following names can be supplied as the argument for platform:
 
-    AIX4.3xlC               Use xlC on AIX 4.3
-    AIX4.3VA                Use the VA compiler on AIX 4.3
+    AIX4.3xlC               Use IBM's xlC on AIX 4.3
+    AIX4.3VA                Use IBM's Visual Age xlC_r compiler on AIX 4.3
     ALPHA/LINUXGCC          Use GCC on Alpha/Linux systems
     ALPHA/LINUXCCC          Use Compaq C compiler on Alpha/Linux systems
     FreeBSD                 Use the GNU C++ compiler on Free BSD
@@ -39,6 +39,7 @@ The following names can be supplied as the argument for platform:
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
     TRU64V5.1/CXX           Use Copmaq's cxx compiler on Tru64 (OSF) 
+    zOS/cxx                 Use IBM's cxx compiler on z/OS (os/390)
 EOE
     fi
 
@@ -112,7 +113,7 @@ fi
 case $platform in
     AIX4.3xlC)
         THE_OS=AIX
-        THE_COMP=xlC
+        THE_COMP="xlC_r"
         CC=/usr/ibmcxx/bin/xlc; export CC
         CXX=/usr/ibmcxx/bin/xlC_r; export CXX
         RELEASE_CFLAGS="-O -qmaxmem=-1"
@@ -120,7 +121,7 @@ case $platform in
         ;;
     AIX4.3VA)
         THE_OS=AIX
-        THE_COMP=xlC
+        THE_COMP="xlC_r"
         CC=/usr/vacpp/bin/xlc_r; export CC
         CXX=/usr/vacpp/bin/xlC_r; export CXX
         #RELEASE_CFLAGS=-O2
@@ -200,6 +201,15 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX 
+        ;;
+    zOS/cxx)
+        THE_OS="z/OS"
+        THE_COMP="r10 cxx"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        export IEEE390=1
+        export RELEASE_CFLAGS='-2'
+        export RELEASE_CXXFLAGS='-2'
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
