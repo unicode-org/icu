@@ -302,7 +302,7 @@ void TransliteratorTest::TestKeyboard3(void) {
 void TransliteratorTest::keyboardAux(const Transliterator& t,
                                      const char* DATA[], int32_t DATA_length) {
     UErrorCode status = U_ZERO_ERROR;
-    Transliterator::Position index = {0, 0, 0};
+    Transliterator::Position index(0, 0);
     UnicodeString s;
     for (int32_t i=0; i<DATA_length; i+=2) {
         UnicodeString log;
@@ -506,7 +506,7 @@ void TransliteratorTest::expect(const Transliterator& t,
     // Test keyboard (incremental) transliteration -- this result
     // must be the same after we finalize (see below).
     rsource.remove();
-    Transliterator::Position index = { 0, 0, 0 };
+    Transliterator::Position index(0, 0);
     UnicodeString log;
 
     for (int32_t i=0; i<source.length(); ++i) {
