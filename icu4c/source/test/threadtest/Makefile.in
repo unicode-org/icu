@@ -33,7 +33,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
 
-OBJECTS = threadtest.o
+OBJECTS = threadtest.o stringtest.o converttest.o
 
 DEPS = $(OBJECTS:.o=.d)
 
