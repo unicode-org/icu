@@ -18,10 +18,6 @@
 #include "unicode/ucnv.h"
 #include "ustr_imp.h"
 
-class UnicodeStreamer {
-public:
-    inline static const UChar *getArrayStart(const UnicodeString& s) {return s.getArrayStart();}
-};
 // console IO
 
 #if U_IOSTREAM_SOURCE >= 198506
@@ -44,7 +40,7 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& s)
         // use the default converter to convert chunks of text
         converter = u_getDefaultConverter(&errorCode);
         if(U_SUCCESS(errorCode)) {
-            const UChar *us = UnicodeStreamer::getArrayStart(s);
+            const UChar *us = s.getBuffer();
             const UChar *uLimit = us + s.length();
             char *s, *sLimit = buffer + sizeof(buffer);
             do {
