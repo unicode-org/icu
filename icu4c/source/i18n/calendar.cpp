@@ -205,11 +205,10 @@ protected:
     return NULL;
   }
 
-  int32_t len = 0;
-
   UnicodeString myString = ures_getUnicodeStringByKey(rb, Calendar::kDefaultCalendar, &status);
 
 #ifdef U_DEBUG_CALSVC
+  int32_t len = 0;
   UErrorCode debugStatus = U_ZERO_ERROR;
   const UChar *defCal = ures_getStringByKey(rb, Calendar::kDefaultCalendar, &len,  &debugStatus);
   fprintf(stderr, "... get string(%d) -> %s\n", len, u_errorName(debugStatus));
@@ -504,8 +503,7 @@ Calendar::Calendar(const Calendar &source)
 Calendar &
 Calendar::operator=(const Calendar &right)
 {
-    if (this != &right)
-    {
+    if (this != &right) {
         uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fIsSet, fIsSet, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fStamp, fStamp, UCAL_FIELD_COUNT);
@@ -572,8 +570,9 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     const UnicodeString& str = *(UnicodeString*)u;
     // Extract a char* out of it..
     int32_t len = str.length();
-    if(len > sizeof(tmp)-1) {
-      len = sizeof(tmp)-1;
+    int32_t actLen = sizeof(tmp)-1;
+    if(len > actLen) {
+      len = actLen;
     }
     str.extract(0,len,tmp);
     tmp[len]=0;
@@ -1906,8 +1905,9 @@ int32_t Calendar::getLimit(UCalendarDateFields field, ELimitType limitType) cons
     case UCAL_JULIAN_DAY:
     case UCAL_MILLISECONDS_IN_DAY:
         return kCalendarLimits[field][limitType];
+    default:
+        return handleGetLimit(field, limitType);
     }
-    return handleGetLimit(field, limitType);
 }
 
 
@@ -2489,6 +2489,8 @@ int32_t Calendar::getLocalDOW()
   case DOW_LOCAL:
     dowLocal = internalGet(UCAL_DOW_LOCAL) - 1;
     break;
+  default:
+    break;
   }
   dowLocal = dowLocal % 7;
   if (dowLocal < 0) {
@@ -2506,11 +2508,6 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
 
    // First, we need a reliable DOW.
    UCalendarDateFields bestField = resolveFields(kDatePrecedence); // !! Note: if subclasses have a different table, they should override handleGetExtendedYearFromWeekFields 
-
-   UBool useMonth = (bestField == UCAL_DAY_OF_MONTH ||
-                     bestField == UCAL_WEEK_OF_MONTH ||
-                     bestField == UCAL_DAY_OF_WEEK_IN_MONTH);
-
 
    // Now, a local DOW
    int32_t dowLocal = getLocalDOW(); // 0..6
@@ -2748,6 +2745,8 @@ void Calendar::prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErr
             set(UCAL_DAY_OF_WEEK, dow);
         }
         break;
+    default:
+	;
     }
 
     // Do this last to give it the newest time stamp
