@@ -15,7 +15,7 @@ top_builddir = .
 include $(top_builddir)/icudefs.mk
 
 docdir = $(datadir)/doc
-docsubdir = $(PACKAGE)/html
+docsubdir = $(PACKAGE)$(ICULIBDASHSUFFIX)/html
 
 ##
 
@@ -111,10 +111,10 @@ install-icu: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile$(ICULIBSUFFIX).inc
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
 	cd $(DESTDIR)$(pkglibdir)/..; \
 	    $(RM) current && ln -s $(VERSION) current; \
-	    $(RM) Makefile$(ICULIBSUFFIX).inc && ln -s current/Makefile$(ICULIBSUFFIX).inc .
+	    $(RM) Makefile.inc && ln -s current/Makefile.inc .
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/README
