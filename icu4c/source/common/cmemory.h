@@ -65,4 +65,28 @@ typedef union {
  */
 #define U_ALIGNMENT_OFFSET_UP(ptr) (sizeof(UAlignedMemory) - U_ALIGNMENT_OFFSET(ptr))
 
+/**
+  *  Indicate whether the ICU allocation functions have been used.
+  *  This is used to determine whether ICU is in an initial, unused state.
+  */
+U_CFUNC UBool 
+cmemory_inUse();
+
+/**
+  *  Mark the ICU heap as not being in use, even if it is.
+  *  Needed so that we can ignore any allocations triggered by ICU 
+  *    static initialization, and still pretend that we are in a pristine state.
+  *    TODO:  this is awkward.  Think about something cleaner.
+  */
+U_CFUNC void 
+cmemory_clearInUse();
+
+/**
+  *  Heap clean up function, called from u_cleanup()
+  *    Clears any user heap functions from u_setMemoryFunctions()
+  *    Does NOT deallocate any remaining allocated memory.
+  */
+U_CFUNC UBool 
+cmemory_cleanup(void);
+
 #endif

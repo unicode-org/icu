@@ -27,7 +27,7 @@
 U_NAMESPACE_BEGIN
 
 //----------------------------------------------------------------------------
-// Code within this library which accesses protected data
+// Code within that accesses shared static or global data should
 // should instantiate a Mutex object while doing so. You should make your own 
 // private mutex where possible.
 
@@ -45,7 +45,7 @@ U_NAMESPACE_BEGIN
 //
 // void Function(int arg1, int arg2)
 // {
-//    static Object* foo; // Shared read-write object
+//    static Object* foo;     // Shared read-write object
 //    Mutex mutex(&myMutex);  // or no args for the global lock
 //    foo->Method();
 //    // When 'mutex' goes out of scope and gets destroyed here, the lock is released

@@ -5,30 +5,15 @@
  **********************************************************************
 */
 
-#include "mutex.h"
+// C++ static initialization.
+//
+//    The purpose of this C++ file is to trigger the calling of
+//      u_ICUStaticInitFunc() during static initialization.
+//      (The function itself is in ucln_cmn.c, along with the rest
+//       of ICU's initialization and clean up code.)
+// 
 #include "ucln_cmn.h"
 
-/* Initialize the global mutex only when we can use it. */
-#if (ICU_USE_THREADS == 1)
+static UBool initializesGlobalMutex = u_ICUStaticInitFunc();
 
-/*
- * NOTE:  This function replicates functionality from the start
- *        u_init().  Any changes must be made in both places.
- *        TODO:  combine them.
- *
- *        This function runs only during C++ static initialization.
- */
-static int GlobalMutexInitialize()
-{
-    UErrorCode status = U_ZERO_ERROR;
-
-    umtx_init(NULL);
-    ucnv_init(&status);
-    ures_init(&status);
-    return 0;
-}
-
-static int initializesGlobalMutex = GlobalMutexInitialize();
-
-#endif /* ICU_USE_THREADS==1 */
 

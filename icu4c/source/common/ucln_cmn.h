@@ -51,11 +51,18 @@ U_CFUNC UBool uset_cleanup(void);
 
 U_CFUNC UBool service_cleanup(void);
 
+U_CFUNC UBool cmemory_cleanup(void);
+
 
 /* Only mutexes should be initialized in these functions. */
 
 U_CFUNC void ucnv_init(UErrorCode *status);
 
 U_CFUNC void ures_init(UErrorCode *status);
+
+/* Static Initialization and un-initializatin functions.    */
+U_CFUNC UBool u_ICUStaticInitFunc();
+U_CFUNC void u_ICUStaticUnInitFunc();
+
 
 #endif
