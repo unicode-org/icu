@@ -57,8 +57,8 @@ static void TestEBCDICUS4XML(void);
 
 #define NEW_MAX_BUFFER 999
 
-static int32_t  gInBufferSize = 0;
-static int32_t  gOutBufferSize = 0;
+static int32_t  gInBufferSize = NEW_MAX_BUFFER;
+static int32_t  gOutBufferSize = NEW_MAX_BUFFER;
 static char     gNuConvTestName[1024];
 
 #define nct_min(x,y)  ((x<y) ? x : y)
@@ -214,6 +214,8 @@ static void setNuConvTestName(const char *codepage, const char *direction)
       gOutBufferSize);
 }
 
+/* Note: This function uses global variables and it will not do offset
+checking without gOutBufferSize and gInBufferSize set to NEW_MAX_BUFFER */
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
                 const char *codepage, const int32_t *expectOffsets)
 {
@@ -260,12 +262,9 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     realBufferEnd = junkout + realBufferSize;
     realSourceEnd = source + sourceLen;
 
-    if ( gOutBufferSize != realBufferSize )
+    if ( gOutBufferSize != realBufferSize || gInBufferSize != NEW_MAX_BUFFER )
         checkOffsets = FALSE;
  
-    if( gInBufferSize != NEW_MAX_BUFFER )
-        checkOffsets = FALSE;
-
     do
     {
         end = nct_min(targ + gOutBufferSize, realBufferEnd);
@@ -377,6 +376,8 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     }
 }
 
+/* Note: This function uses global variables and it will not do offset
+checking without gOutBufferSize and gInBufferSize set to NEW_MAX_BUFFER */
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, const int32_t *expectOffsets)
 {
@@ -425,22 +426,19 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     realBufferEnd = junkout + realBufferSize;
     realSourceEnd = src + sourcelen;
 
-    if ( gOutBufferSize != realBufferSize )
-      checkOffsets = FALSE;
-
-    if( gInBufferSize != NEW_MAX_BUFFER )
-      checkOffsets = FALSE;
+    if ( gOutBufferSize != realBufferSize ||  gInBufferSize != NEW_MAX_BUFFER )
+        checkOffsets = FALSE;
 
     do
-      {
+    {
         end = nct_min( targ + gOutBufferSize, realBufferEnd);
         srcLimit = nct_min(realSourceEnd, src + gInBufferSize);
 
         if(targ == realBufferEnd)
-          {
-        log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjey=%08lx %s",targ,gNuConvTestName);
-        return FALSE;
-          }
+        {
+            log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjet=%08lx %s",targ,gNuConvTestName);
+            return FALSE;
+        }
         log_verbose("calling toUnicode @ %08lx to %08lx\n", targ,end);
 
         /* oldTarg = targ; */
@@ -974,6 +972,107 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             log_err("UTF-7,version=1 -> u  did not match.\n");
         }
     }
+
+    /* Test UTF-8 bad data handling*/
+    {
+        static const uint8_t utf8[]={
+            0x61,
+            0xf7, 0xbf, 0xbf, 0xbf,         /* > 10FFFF */
+            0x00,
+            0x62,
+            0xfb, 0xbf, 0xbf, 0xbf, 0xbf,   /* > 10FFFF */
+            0xfb, 0xbf, 0xbf, 0xbf, 0xbf,   /* > 10FFFF */
+            0xf4, 0x8f, 0xbf, 0xbf,         /* 10FFFF */
+            0xdf, 0xbf,                     /* 7ff */
+            0xbf,                           /* truncated tail */
+            0xf4, 0x90, 0x80, 0x80,         /* 11FFFF */
+            0x02
+        };
+
+        static const uint16_t utf8Expected[]={
+            0x0061,
+            0xfffd,
+            0x0000,
+            0x0062,
+            0xfffd,
+            0xfffd,
+            0xdbff, 0xdfff,
+            0x07ff,
+            0xfffd,
+            0xfffd,
+            0x0002
+        };
+
+        static const int32_t utf8Offsets[]={
+            0, 1, 5, 6, 7, 12, 17, 17, 21, 23, 24, 28
+        };
+        if(!testConvertToU(utf8, sizeof(utf8),
+                utf8Expected, sizeof(utf8Expected)/sizeof(utf8Expected[0]), "utf-8", utf8Offsets ))
+            log_err("u-> utf-8 did not match.\n");
+
+    }
+
+    /* Test UTF-32BE bad data handling*/
+    {
+        static const uint8_t utf32[]={
+            0x00, 0x00, 0x00, 0x61,
+            0x00, 0x11, 0x00, 0x00,         /* 0x110000 out of range */
+            0x00, 0x00, 0x00, 0x62,
+            0xff, 0xff, 0xff, 0xff,         /* 0xffffffff out of range */
+            0x7f, 0xff, 0xff, 0xff,         /* 0x7fffffff out of range */
+            0x00, 0x00, 0x01, 0x62,
+            0x00, 0x00, 0x02, 0x62
+        };
+
+        static const uint16_t utf32Expected[]={
+            0x0061,
+            0xfffd,         /* 0x110000 out of range */
+            0x0062,
+            0xfffd,         /* 0xffffffff out of range */
+            0xfffd,         /* 0x7fffffff out of range */
+            0x0162,
+            0x0262
+        };
+
+        static const int32_t utf32Offsets[]={
+            0, 4, 8, 12, 16, 20, 24
+        };
+        if(!testConvertToU(utf32, sizeof(utf32),
+                utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32be", utf32Offsets ))
+            log_err("u-> utf-32be did not match.\n");
+
+    }
+
+    /* Test UTF-32LE bad data handling*/
+    {
+        static const uint8_t utf32[]={
+            0x61, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x11, 0x00,         /* 0x110000 out of range */
+            0x62, 0x00, 0x00, 0x00,
+            0xff, 0xff, 0xff, 0xff,         /* 0xffffffff out of range */
+            0xff, 0xff, 0xff, 0x7f,         /* 0x7fffffff out of range */
+            0x62, 0x01, 0x00, 0x00,
+            0x62, 0x02, 0x00, 0x00,
+        };
+
+        static const uint16_t utf32Expected[]={
+            0x0061,
+            0xfffd,         /* 0x110000 out of range */
+            0x0062,
+            0xfffd,         /* 0xffffffff out of range */
+            0xfffd,         /* 0x7fffffff out of range */
+            0x0162,
+            0x0262
+        };
+
+        static const int32_t utf32Offsets[]={
+            0, 4, 8, 12, 16, 20, 24
+        };
+        if(!testConvertToU(utf32, sizeof(utf32),
+                utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32le", utf32Offsets ))
+            log_err("u-> utf-32le did not match.\n");
+
+    }
 }  
      
 
@@ -1020,30 +1119,34 @@ static void TestConverterTypesAndStarters()
       return;
     }
     else
-      {
-        if (ucnv_getType(myConverter[0])!=UCNV_MBCS) log_err("ucnv_getType Failed for ibm-949\n");
-        else log_verbose("ucnv_getType ibm-949 ok\n");
+    {
+        if (ucnv_getType(myConverter[0])!=UCNV_MBCS)
+            log_err("ucnv_getType Failed for ibm-949\n");
+        else
+            log_verbose("ucnv_getType ibm-949 ok\n");
 
         if(myConverter[0]!=NULL)
-          ucnv_getStarters(myConverter[0], mystarters, &err);
+            ucnv_getStarters(myConverter[0], mystarters, &err);
 
         /*if (memcmp(expectedKSCstarters, mystarters, sizeof(expectedKSCstarters)))
           log_err("Failed ucnv_getStarters for ksc\n");
           else
           log_verbose("ucnv_getStarters ok\n");*/
         
-      }
+    }
 
     myConverter[1] = ucnv_open("ibm-930", &err);
     if (U_FAILURE(err)) {
-      log_err("Failed to create an ibm-930 converter\n");
-      return;
+        log_err("Failed to create an ibm-930 converter\n");
+        return;
     }
     else
-      {
-        if (ucnv_getType(myConverter[1])!=UCNV_EBCDIC_STATEFUL) log_err("ucnv_getType Failed for ibm-930\n");
-        else log_verbose("ucnv_getType ibm-930 ok\n");
-      }
+    {
+        if (ucnv_getType(myConverter[1])!=UCNV_EBCDIC_STATEFUL)
+            log_err("ucnv_getType Failed for ibm-930\n");
+        else
+            log_verbose("ucnv_getType ibm-930 ok\n");
+    }
 
     myConverter[2] = ucnv_open("ibm-878", &err);
     if (U_FAILURE(err)) {
