@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2003/08/22 16:51:21 $ 
-* $Revision: 1.16 $
+* $Date: 2004/01/13 18:32:12 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -17,7 +17,7 @@ import com.ibm.text.utility.*;
 
 
 public class Main {
-	static final String UCDVersion = "";
+	static final String UCDVersion = "4.0.0";
 	static final String[] ICU_FILES = {"writeCollationValidityLog", "writeFractionalUCA",
 		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted", 
 		"short", 
@@ -89,7 +89,7 @@ public class Main {
                 else if (arg.equalsIgnoreCase("noCE")) noCE = !noCE;
                 
     			else if (arg.equalsIgnoreCase("writeAllocation")) WriteCharts.writeAllocation();
-    			else if (arg.equalsIgnoreCase("probe")) Probe.test();
+    			// else if (arg.equalsIgnoreCase("probe")) Probe.test(); 
                 
                 
                 else {
