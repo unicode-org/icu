@@ -661,12 +661,14 @@ private:
     static Locale *localeList;
     static int32_t localeListCount;
 
+#ifdef ICU_LOCID_USE_DEPRECATES
 /* Begin deprecated fields */
     static UnicodeString *isoLanguages;
     static int32_t isoLanguagesCount;
     static UnicodeString *isoCountries;
     static int32_t isoCountriesCount;
 /* End deprecated fields */
+#endif
 
     static UHashtable *ctry2LangMapping;
     static const UnicodeString compressedCtry2LangMapping;
