@@ -204,7 +204,7 @@ case $platform in
     TRU64V5.1/CXX)
         THE_OS="OSF1"
         THE_COMP="Compaq cxx"
-        CC=cxx; export CC
+        CC=ccc; export CC
         CXX=cxx; export CXX
         ;;
     ALPHA/LINUXGCC)
