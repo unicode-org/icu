@@ -1200,7 +1200,7 @@ ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
              */
             ucnv_fromUnicode(targetCnv,
                              target, targetLimit,
-                             pivotSource, *pivotTarget,
+                             (const UChar **)pivotSource, *pivotTarget,
                              NULL,
                              (UBool)(flush && *source==sourceLimit),
                              pErrorCode);
