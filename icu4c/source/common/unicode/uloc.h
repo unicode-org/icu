@@ -40,7 +40,7 @@
  * <P>
  * You create a <code>Locale</code> with one of the three options listed below.
  * Each of the component is separated by '_' in the locale string.
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  *       newLanguage
@@ -50,7 +50,7 @@
  *       newLanguage + newCountry + newVariant
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * The first option is a valid <STRONG>ISO
  * Language Code.</STRONG> These codes are the lower-case two-letter
  * codes as defined by ISO-639.
@@ -93,13 +93,13 @@
  * that you can use to specify the commonly used
  * locales. For example, the following refers to a locale
  * for the United States:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  *       ULOC_US
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * <P>
  * Once you've specified a locale you can query it for information about
@@ -119,7 +119,7 @@
  * operations. For example, the <code>unum_xxx</code> functions format
  * numbers, currency, or percentages in a locale-sensitive manner. 
  * </P>
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  *     UErrorCode success = U_ZERO_ERROR;
@@ -134,10 +134,10 @@
  *     unum_close(nf);
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * Each of these methods has two variants; one with an explicit locale
  * and one without; the latter using the default locale.
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code 
  * 
@@ -149,7 +149,7 @@
  *     unum_close(nf);
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * A <code>Locale</code> is the mechanism for identifying the kind of services
  * (<code>UNumberFormat</code>) that you would like to get. The locale is
  * <STRONG>just</STRONG> a mechanism for identifying these services.
@@ -163,7 +163,7 @@
  * For example, you can create a menu of all the collation objects
  * suitable for a given language. Such classes implement these
  * three class methods:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  *       const char* uloc_getAvailable(int32_t index);
@@ -177,7 +177,7 @@
  * 
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * <P>
  * Concerning POSIX/RFC1766 Locale IDs, 
  *  the getLanguage/getCountry/getVariant/getName functions do understand

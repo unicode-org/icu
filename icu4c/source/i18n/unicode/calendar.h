@@ -73,11 +73,11 @@ typedef int32_t UFieldResolutionTable[12][8];
  * object of this type. <code>Calendar</code>'s <code>createInstance</code> method 
  * returns the appropriate <code>Calendar</code> subclass whose
  * time fields have been initialized with the current date and time:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * Calendar *rightNow = Calendar::createInstance(errCode);
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * <p>
  * A <code>Calendar</code> object can produce all the time field values
@@ -104,7 +104,7 @@ typedef int32_t UFieldResolutionTable[12][8];
  * combinations of fields.  The most recent combination, as determined by the
  * most recently set single field, will be used.
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * MONTH + DAY_OF_MONTH
  * MONTH + WEEK_OF_MONTH + DAY_OF_WEEK
@@ -112,16 +112,16 @@ typedef int32_t UFieldResolutionTable[12][8];
  * DAY_OF_YEAR
  * DAY_OF_WEEK + WEEK_OF_YEAR
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * For the time of day:
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * HOUR_OF_DAY
  * AM_PM + HOUR
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * <p>
  * <strong>Note:</strong> for some non-Gregorian calendars, different
