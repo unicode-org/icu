@@ -453,7 +453,7 @@ TimeZone::setDefault(const TimeZone& zone)
 
 // -------------------------------------
 
-const UnicodeString** const
+const UnicodeString** 
 TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
 {
     // We are creating a new array to existing UnicodeString pointers.
@@ -496,8 +496,8 @@ TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
         }
         if (index->gmtOffset == rawOffset) {
             // Found our desired offset
-            const UnicodeString** const result =
-                (const UnicodeString** const) new UnicodeString*[index->count];
+            const UnicodeString** result =
+                (const UnicodeString**) new UnicodeString*[index->count];
             const uint16_t* zoneNumberArray = &(index->zoneNumber);
             for (uint16_t i=0; i<index->count; ++i) {
                 // Pointer assignment - use existing UnicodeString object!
@@ -522,7 +522,7 @@ TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
 
 // -------------------------------------
 
-const UnicodeString** const
+const UnicodeString** 
 TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
 
     // We are creating a new array to existing UnicodeString pointers.
@@ -565,8 +565,8 @@ TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
         }
         if (index->intcode == intcode) {
             // Found our desired country
-            const UnicodeString** const result =
-                (const UnicodeString** const) new UnicodeString*[index->count];
+            const UnicodeString** result =
+                (const UnicodeString**) new UnicodeString*[index->count];
             const uint16_t* zoneNumberArray = &(index->zoneNumber);
             for (uint16_t i=0; i<index->count; ++i) {
                 // Pointer assignment - use existing UnicodeString object!
@@ -591,7 +591,7 @@ TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
 
 // -------------------------------------
 
-const UnicodeString** const
+const UnicodeString** 
 TimeZone::createAvailableIDs(int32_t& numIDs)
 {
     // We are creating a new array to existing UnicodeString pointers.
@@ -611,8 +611,8 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
         return 0;
     }
 
-    const UnicodeString** const result =
-        (const UnicodeString** const) new UnicodeString*[DATA->count];
+    const UnicodeString** result =
+        (const UnicodeString** ) new UnicodeString*[DATA->count];
 
     // Create a list of pointers to each and every zone ID
     for (uint32_t i=0; i<DATA->count; ++i) {

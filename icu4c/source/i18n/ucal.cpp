@@ -25,7 +25,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
   int32_t count = 0;
   const UChar *retVal = 0;
   
-  const UnicodeString** const tzs = TimeZone::createAvailableIDs(rawOffset, 
+  const UnicodeString** tzs = TimeZone::createAvailableIDs(rawOffset, 
                                  count);
 
   if(tzs == 0) {
@@ -48,7 +48,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
 
   int32_t count = 0;
   
-  const UnicodeString** const tzs  = TimeZone::createAvailableIDs(rawOffset, 
+  const UnicodeString** tzs = TimeZone::createAvailableIDs(rawOffset, 
                                   count);
 
   if(tzs == 0) {
