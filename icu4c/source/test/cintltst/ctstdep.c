@@ -32,11 +32,16 @@
 #include <stdio.h>
 
 
+#ifdef U_USE_DEPRECATED_UCOL_API
 static void TestDeprecatedCollationAPI(void);
+#endif
+#ifdef U_USE_DEPRECATED_FORMAT_API
 static void TestDeprecatedNumFmtAPI(void);
 static void TestDeprecatedDateFmtAPI(void);
 static void TestDeprecatedUErrorCode(void);
 static void TestDeprecatedUCharScript(void);
+#endif
+
 const static char cnt1[][10] = {
   "AA",
   "AC",

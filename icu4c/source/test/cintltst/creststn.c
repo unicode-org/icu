@@ -32,6 +32,10 @@
 #include "creststn.h"
 #include "unicode/ctest.h"
 
+#ifdef ICU_URES_USE_DEPRECATES
+static void TestConstruction2(void);
+#endif
+
 static int32_t pass;
 static int32_t fail;
 

@@ -25,8 +25,10 @@ void addExtraTests(TestNode** root);
 U_CFUNC void
 addBOCU1Tests(TestNode** root);
 
+void addConvert(TestNode** root);
+
 void addConvert(TestNode** root)
-{    
+{
     addTestConvert(root);
     addTestNewConvert(root);
     addBOCU1Tests(root);
