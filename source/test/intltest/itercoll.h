@@ -48,6 +48,13 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
 
     /**
+    * Test that results from CollationElementIterator.next is equivalent to
+    * the reversed results from CollationElementIterator.previous, for the set 
+    * of BMP characters.
+    */
+    void TestUnicodeChar();
+
+    /**
      * Test for CollationElementIterator.previous()
      *
      * @bug 4108758 - Make sure it works with contracting characters

@@ -252,11 +252,8 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
             logln("CollationIteratorTest---");
             logln("Temporary removed");
 
-            /* 
-            synwee TODO
             CollationIteratorTest test;
             callTest( test, par );
-            */
         }
         break;
 
