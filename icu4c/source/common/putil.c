@@ -1754,7 +1754,8 @@ The leftmost codepage (.xxx) wins.
     */
     if ((uprv_strcmp("C", correctedLocale) == 0) ||
         (uprv_strcmp("POSIX", correctedLocale) == 0) ||
-        (uprv_strcmp("QLGPGCMA", correctedLocale) == 0))
+        (uprv_strcmp("QLGPGCMA", correctedLocale) == 0) ||
+        (uprv_strcmp("QLGPGCMA2", correctedLocale) == 0))
     {
         uprv_strcpy(correctedLocale, "en_US_POSIX");
     }
