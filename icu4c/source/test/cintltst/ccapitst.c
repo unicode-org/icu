@@ -30,47 +30,18 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 100
 
-/*Case insensitive compare*/
-static int32_t strCaseIcmp(const char* a1,const char * a2); 
 /*returns an action other than the one provided*/
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
+static void TestCCSID();
 
 void addTestConvert(TestNode** root)
 {
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
 	addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
-}
-
-#if 0
-/*writes an entire UChar* (string) along with a BOM to a file*/
-static void WriteToFile(const UChar *a, FILE *myfile)
-{
-    uint32_t  size    = u_strlen(a);
-    uint16_t  i       = 0;
-    UChar     b       = 0xFEFF;
-
-    /*Writes the BOM*/
-    fwrite(&b, sizeof(UChar), 1, myfile);
-    for (i=0; i< size; i++)
-    {
-        b = a[i];
-        fwrite(&b, sizeof(UChar), 1, myfile);
-    }
-}
-#endif
-
-static int32_t strCaseIcmp(const char* a1, const char * a2)
-{
-    int32_t i=0, ret=0;
-    while(a1[i]&&a2[i]) 
-    {
-        ret += tolower(a1[i])-tolower(a2[i]); 
-        i++;
-    }
-    return ret;
+    addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
 }
 
 static void TestConvert() 
@@ -132,7 +103,7 @@ static void TestConvert()
 
     const char*      CodePagesToTest[NUM_CODEPAGE]       =
     {
-       "IBM-949"
+       "ibm-949_P110-2000"
 
         
     }; 
@@ -141,19 +112,6 @@ static void TestConvert()
         949
     };
     
-
-/*    const int32_t        CodePagesAsciiControls[NUM_CODEPAGE]    =
-    { 
-        0xFFFFFFFF
-            
-    
-    };
-
-    const int32_t        CodePagesOtherControls[NUM_CODEPAGE]    =
-    {
-         0x00000005
-    };*/
-
 
     const int8_t     CodePagesMinChars[NUM_CODEPAGE] =
     { 
@@ -183,16 +141,6 @@ static void TestConvert()
         UCNV_IBM
     
     };
-
-/*    const UConverterToUCallback CodePagesMissingCharAction[NUM_CODEPAGE] =
-    {
-      UCNV_TO_U_CALLBACK_SUBSTITUTE
-    };
-    
-    const UConverterFromUCallback CodePagesMissingUnicodeAction[NUM_CODEPAGE] =
-    {
-      UCNV_FROM_U_CALLBACK_SUBSTITUTE
-    };*/
 
     const char* CodePagesLocale[NUM_CODEPAGE] =
     {
@@ -535,7 +483,7 @@ static void TestConvert()
         {
             log_verbose("getName o.k. %s\n", ucnv_getName(myConverter, &err));
         }
-        if (strCaseIcmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
+        if (uprv_stricmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
             log_err("getName failed\n");
         else 
             log_verbose("getName ok\n");
@@ -1253,4 +1201,32 @@ static void TestConvertSafeClone()
 		ucnv_close(someClonedConverters[index]);
 		ucnv_close(someConverters[index]);
 	}
+}
+
+static void TestCCSID() {
+    UConverter *cnv;
+    UErrorCode errorCode;
+    int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 5050, 33722 };
+    int32_t i, ccsid;
+
+    for(i=0; i<(int32_t)(sizeof(ccsids)/sizeof(int32_t)); ++i) {
+        ccsid=ccsids[i];
+
+        errorCode=U_ZERO_ERROR;
+        cnv=ucnv_openCCSID(ccsid, UCNV_IBM, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: ucnv_openCCSID(%ld) failed (%s)\n", ccsid, u_errorName(errorCode));
+            continue;
+        }
+
+        if(ccsid!=ucnv_getCCSID(cnv, &errorCode)) {
+            log_err("error: ucnv_getCCSID(ucnv_openCCSID(%ld))=%ld\n", ccsid, ucnv_getCCSID(cnv, &errorCode));
+        }
+
+        if(UCNV_IBM!=ucnv_getPlatform(cnv, &errorCode)) {
+            log_err("error: ucnv_getPlatform(ucnv_openCCSID(%ld))=%ld!=UCNV_IBM\n", ccsid, ucnv_getPlatform(cnv, &errorCode));
+        }
+
+        ucnv_close(cnv);
+    }
 }
