@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.29 2001/11/08 20:03:44 grhoten-oss Exp $
+## $Id: mh-os390,v 1.30 2001/11/09 18:09:54 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -58,6 +58,9 @@ SHLIB.cc=	$(LINK.cc) -Wl,dll
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
