@@ -961,11 +961,11 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
 
 U_CAPI int32_t U_EXPORT2
 u_shapeArabic(const UChar *source, int32_t sourceLength,
-              UChar *dest, int32_t destSize,
+              UChar *dest, int32_t destCapacity,
               uint32_t options,
               UErrorCode *pErrorCode) {
 
-    int32_t destCapacity;
+    int32_t destLength;
 
     /* usual error checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -974,7 +974,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
     /* make sure that no reserved options values are used; allow dest==NULL only for preflighting */
     if( source==NULL || sourceLength<-1 ||
-        (dest==NULL && destSize!=0) || destSize<0 ||
+        (dest==NULL && destCapacity!=0) || destCapacity<0 ||
         options>=U_SHAPE_DIGIT_TYPE_RESERVED ||
         (options&U_SHAPE_DIGITS_MASK)>=U_SHAPE_DIGITS_RESERVED
     ) {
@@ -987,19 +987,17 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         sourceLength=u_strlen(source);
     }
     if(sourceLength==0) {
-        return u_terminateUChars(dest, destSize, 0, pErrorCode);
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 
     /* check that source and destination do not overlap */
     if( dest!=NULL &&
         ((source<=dest && dest<source+sourceLength) ||
-         (dest<=source && source<dest+destSize))
+         (dest<=source && source<dest+destCapacity))
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-
-    destCapacity=destSize;
 
     if((options&U_SHAPE_LETTERS_MASK)!=U_SHAPE_LETTERS_NOOP) {
         UChar buffer[300];
@@ -1009,13 +1007,21 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         /* calculate destination size */
         /* TODO: do we ever need to do this pure preflighting? */
         if((options&U_SHAPE_LENGTH_MASK)==U_SHAPE_LENGTH_GROW_SHRINK) {
-            outputSize=calculateSize(source,sourceLength,destSize,options);
+            outputSize=calculateSize(source,sourceLength,destCapacity,options);
         } else {
             outputSize=sourceLength;
         }
-        if(outputSize>destSize) {
+        if(outputSize>destCapacity) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return outputSize;
+        }
+
+        /*
+         * need a temporary buffer of size max(outputSize, sourceLength)
+         * because at first we copy source->temp
+         */
+        if(sourceLength>outputSize) {
+            outputSize=sourceLength;
         }
 
         /* Start of Arabic letter shaping part */
@@ -1044,37 +1050,43 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         switch(options&U_SHAPE_LETTERS_MASK) {
         case U_SHAPE_LETTERS_SHAPE :
             /* Call the shaping function with tashkeel flag == 1 */
-            outputSize = shapeUnicode(tempbuffer,sourceLength,destSize,options,pErrorCode,1);
+            destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,1);
             break;
         case U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED :
             /* Call the shaping function with tashkeel flag == 0 */
-            outputSize = shapeUnicode(tempbuffer,sourceLength,destSize,options,pErrorCode,0);
+            destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,0);
             break;
         case U_SHAPE_LETTERS_UNSHAPE :
             /* Call the deshaping function */
-            outputSize = deShapeUnicode(tempbuffer,sourceLength,destSize,options,pErrorCode);
+            destLength = deShapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode);
             break;
         default :
             /* will never occur because of validity checks above */
-            outputSize = 0;
+            destLength = 0;
             break;
         }
 
+        /*
+         * TODO: (markus 2002aug01)
+         * For as long as we always preflight the outputSize above
+         * we should U_ASSERT(outputSize==destLength)
+         * except for the adjustment above before the tempbuffer allocation
+         */
+
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL) {
-            countSpaces(tempbuffer,outputSize,options,&spacesCountl,&spacesCountr);
-            invertBuffer(tempbuffer,outputSize,options,&spacesCountl,&spacesCountr);
+            countSpaces(tempbuffer,destLength,options,&spacesCountl,&spacesCountr);
+            invertBuffer(tempbuffer,destLength,options,&spacesCountl,&spacesCountr);
         }
-        uprv_memcpy(dest, tempbuffer, uprv_min(outputSize, destSize)*U_SIZEOF_UCHAR);
+        uprv_memcpy(dest, tempbuffer, uprv_min(destLength, destCapacity)*U_SIZEOF_UCHAR);
 
         if(tempbuffer!=buffer) {
             uprv_free(tempbuffer);
         }
 
-        if(outputSize>destSize) {
+        if(destLength>destCapacity) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return outputSize;
+            return destLength;
         }
-        destSize = outputSize;
 
         /* End of Arabic letter shaping part */
     } else {
@@ -1082,13 +1094,13 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
          * No letter shaping:
          * just make sure the destination is large enough and copy the string.
          */
-        if(destSize<sourceLength) {
+        if(destCapacity<sourceLength) {
             /* this catches preflighting, too */
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             return sourceLength;
         }
         uprv_memcpy(dest, source, sourceLength*U_SIZEOF_UCHAR);
-        destSize=sourceLength;
+        destLength=sourceLength;
     }
 
     /*
@@ -1120,7 +1132,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         case U_SHAPE_DIGITS_EN2AN:
             /* add (digitBase-'0') to each European (ASCII) digit code point */
             digitBase-=0x30;
-            for(i=0; i<destSize; ++i) {
+            for(i=0; i<destLength; ++i) {
                 if(((uint32_t)dest[i]-0x30)<10) {
                     dest[i]+=digitBase;
                 }
@@ -1128,20 +1140,20 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             break;
         case U_SHAPE_DIGITS_AN2EN:
             /* subtract (digitBase-'0') from each Arabic digit code point */
-            for(i=0; i<destSize; ++i) {
+            for(i=0; i<destLength; ++i) {
                 if(((uint32_t)dest[i]-(uint32_t)digitBase)<10) {
                     dest[i]-=digitBase-0x30;
                 }
             }
             break;
         case U_SHAPE_DIGITS_ALEN2AN_INIT_LR:
-            _shapeToArabicDigitsWithContext(dest, destSize,
+            _shapeToArabicDigitsWithContext(dest, destLength,
                                             digitBase,
                                             (UBool)((options&U_SHAPE_TEXT_DIRECTION_MASK)==U_SHAPE_TEXT_DIRECTION_LOGICAL),
                                             FALSE);
             break;
         case U_SHAPE_DIGITS_ALEN2AN_INIT_AL:
-            _shapeToArabicDigitsWithContext(dest, destSize,
+            _shapeToArabicDigitsWithContext(dest, destLength,
                                             digitBase,
                                             (UBool)((options&U_SHAPE_TEXT_DIRECTION_MASK)==U_SHAPE_TEXT_DIRECTION_LOGICAL),
                                             TRUE);
@@ -1152,5 +1164,5 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         }
     }
 
-    return u_terminateUChars(dest, destCapacity, destSize, pErrorCode);
+    return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
 }
