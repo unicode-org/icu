@@ -179,6 +179,8 @@ class TransliteratorTest : public IntlTest {
      */
     void TestSTV(void);
 
+    void TestCompoundInverse(void);
+
     //======================================================================
     // Support methods
     //======================================================================

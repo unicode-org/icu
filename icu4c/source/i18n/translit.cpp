@@ -925,6 +925,11 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
         }
         // assert(revLimit < ID.length() && ID.charAt(revLimit) == ')');
         limit = revLimit+1;
+    } else {
+        // Ignore () exprs outside of this atomic ID, that is, in
+        // "Greek-Latin; Title()", ignore the "()" after Title when
+        // parsing Greek-Latin.
+        revStart = -1;
     }
 
     // Advance limit past /\s*;?\s*/
