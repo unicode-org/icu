@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.13 $
+// $Revision: 1.14 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -58,10 +58,10 @@ struct ILcidPosixMap
     uint32_t hostID(const char* fromPosixID) const;
     const char* posixID(uint32_t fromHostID) const;
 
-    static const char* fgWildCard;
+//    static const char* fgWildCard;
 
-    uint16_t hostLangID;
-    const char *posixLangID;
+//    uint16_t hostLangID;
+//    const char *posixLangID;
 
     uint32_t numRegions;
     const ILcidPosixElement* regionMaps;
@@ -90,11 +90,14 @@ static const ILcidPosixElement posixID[] = { \
  in the ILcidPosixElement is just the language.
  */
 #define ILCID_POSIX_MAP(_posixID) \
-    {LANGUAGE_LCID(_posixID[0].hostID), #_posixID, sizeof(_posixID)/sizeof(ILcidPosixElement), _posixID}
+    {sizeof(_posixID)/sizeof(ILcidPosixElement), _posixID}
+//#define ILCID_POSIX_MAP(_posixID) \
+//    {LANGUAGE_LCID(_posixID[0].hostID), #_posixID, sizeof(_posixID)/sizeof(ILcidPosixElement), _posixID}
 
 ////////////////////////////////////////////
 //
 // Create the table of LCID to POSIX Mapping
+// None of it should be dynamically created.
 //
 ////////////////////////////////////////////
 
@@ -246,6 +249,7 @@ static const ILcidPosixElement ms[] = {         //Todo: Data does not exist
     {0x043e, "ms_MY"}    // Malaysia
 };
 
+// The MSJDK documentation says this is maltese, but it's not supported.
 ILCID_POSIX_ELEMENT_ARRAY(0x043a, mt,  mt_MT)
 
 static const ILcidPosixElement ne[] = {         //Todo: Data does not exist
@@ -297,10 +301,8 @@ static const ILcidPosixElement sv[] = {
     {0x041d, "sv_SE"}
 };
 
-static const ILcidPosixElement sw[] = {         //Todo: Data does not exist
-    {0x41,   "sw"},
-    {0x0441, "sw_KE"}   // The MSJDK documentation says the default country is Kenya.
-};
+// The MSJDK documentation says the default country is Kenya.
+ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)    //Todo: Data does not exist
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)    //Todo: Data does not exist
@@ -568,6 +570,7 @@ IGlobalLocales::initializeMapRegions()
         ILCID_POSIX_MAP(mni_IN),      //  mni Manipuri                  0x58
         ILCID_POSIX_MAP(mr_IN),       //  mr  Marathi                   0x4e
         ILCID_POSIX_MAP(ms),          //  ms  Malay                     0x3e
+        ILCID_POSIX_MAP(mt_MT),       //  mt  Maltese                   0x3a
         ILCID_POSIX_MAP(ne),          //  ne  Nepali                    0x61
         ILCID_POSIX_MAP(nl),          //  nl  Dutch                     0x13
         ILCID_POSIX_MAP(no),          //  no  Norwegian                 0x14
@@ -586,7 +589,7 @@ IGlobalLocales::initializeMapRegions()
         ILCID_POSIX_MAP(sq_AL),       //  sq  Albanian                  0x1c
         ILCID_POSIX_MAP(sr_YU),       //  sr  Serbian                   0x1a
         ILCID_POSIX_MAP(sv),          //  sv  Swedish                   0x1d
-        ILCID_POSIX_MAP(sw),          //  sw  Swahili                   0x41
+        ILCID_POSIX_MAP(sw_KE),       //  sw  Swahili                   0x41
         ILCID_POSIX_MAP(ta_IN),       //  ta  Tamil                     0x49
         ILCID_POSIX_MAP(te_IN),       //  te  Telugu                    0x4a
         ILCID_POSIX_MAP(th_TH),       //  th  Thai                      0x1e
@@ -606,12 +609,14 @@ IGlobalLocales::initializeMapRegions()
             // This assignment is okay because the local variable is static too.
             PosixIDmap  = localPosixIDmap;
             LocaleCount = sizeof(localPosixIDmap)/sizeof(ILcidPosixMap);
+            WildCard = "??_??";
         }
     }
 }
 
 uint32_t       IGlobalLocales::LocaleCount = sizeof(PosixIDmap)/sizeof(ILcidPosixMap);
 ILcidPosixMap *IGlobalLocales::PosixIDmap  = NULL;
+const char    *IGlobalLocales::WildCard = "??_??";
 
 //////////////////////////////////////
 //
@@ -622,14 +627,14 @@ ILcidPosixMap *IGlobalLocales::PosixIDmap  = NULL;
 const char*
 IGlobalLocales::convertToPosix(uint32_t hostid, UErrorCode *status)
 {
-    uint16_t langID = languageLCID(hostid);
+    uint16_t langID = LANGUAGE_LCID(hostid);
     uint32_t index;
 
     initializeMapRegions();
 
     for (index = 0; index < LocaleCount; index++)
     {
-        if (langID == PosixIDmap[index].hostLangID)
+        if (langID == PosixIDmap[index].regionMaps->hostID)
         {
             return PosixIDmap[index].posixID(hostid);
         }
@@ -637,7 +642,7 @@ IGlobalLocales::convertToPosix(uint32_t hostid, UErrorCode *status)
 
     //no match found
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return ILcidPosixMap::fgWildCard;
+    return WildCard;
 }
 
 U_CFUNC const char *
@@ -677,10 +682,8 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
     while (low <= high) {
 
         mid = (low + high) / 2;
-        if (mid == 0)  // not found
-            break;
 
-        compVal = uprv_strcmp(langID, PosixIDmap[mid].posixLangID);
+        compVal = uprv_strcmp(langID, PosixIDmap[mid].regionMaps->posixID);
 
         if (compVal < 0)
             high = mid - 1;
@@ -688,6 +691,9 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
             low = mid + 1;
         else  // found match!
             return PosixIDmap[mid].hostID(posixID);
+
+        if (mid == 0)  // not found
+            break;
     }
 
     // no match found
@@ -695,7 +701,6 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
     return 0;
 }
 
-const char*  ILcidPosixMap::fgWildCard = "??_??";
 
 /* Assumes Posix IDs are sorted alphabetically
  */
@@ -712,7 +717,7 @@ ILcidPosixMap::hostID(const char* posixID) const
     // So Windows may not like hostLangID without a default
     // country.
     if (!numRegions || strlen(posixID) < 5)
-        return hostLangID;
+        return regionMaps->hostID;
 
     // Binary search for the map entry
     // The element at index 0 is always the POSIX wild card,
@@ -732,7 +737,7 @@ ILcidPosixMap::hostID(const char* posixID) const
     }
 
     //no match found
-    return hostLangID;
+    return regionMaps->hostID;
 }
 
 const char*
