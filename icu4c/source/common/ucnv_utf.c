@@ -83,7 +83,7 @@ T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
         *err = U_ILLEGAL_CHAR_FOUND;
     }
 
-    /* Make the toUBytes invalid */
+    /* copy the toUBytes to the invalidCharBuffer */
     uprv_memcpy(converter->invalidCharBuffer,
                 converter->toUBytes,
                 converter->invalidCharLength);
@@ -128,11 +128,6 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     uint32_t ch, ch2 = 0, i;
     uint32_t inBytes;  /* Total number of bytes in the current UTF8 sequence */
   
-    if (U_FAILURE(*err))
-    {
-        return;
-    }
-
     /* Restore size of current sequence */
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
@@ -799,167 +794,155 @@ const UConverterSharedData _UTF8Data={
 U_CFUNC void
 _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
-    UConverter *cnv;
-    const uint8_t *source;
-    UChar *target;
-    int32_t *offsets;
-    int32_t targetCapacity, length, count, sourceIndex;
+    UConverter *cnv         = pArgs->converter;
+    const uint8_t *source   = (const uint8_t *)pArgs->source;
+    UChar *target           = pArgs->target;
+    int32_t *offsets        = pArgs->offsets;
+    int32_t targetCapacity  = pArgs->targetLimit - pArgs->target;
+    int32_t length          = (const uint8_t *)pArgs->sourceLimit - source;
+    int32_t count;
+    int32_t sourceIndex     = 0;
 
-    /* set up the local pointers */
-    cnv=pArgs->converter;
-    source=(const uint8_t *)pArgs->source;
-    length=(const uint8_t *)pArgs->sourceLimit-source;
-    target=pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
-    offsets=pArgs->offsets;
-    sourceIndex=0;
-
-    if(length<=0) {
+    if(length <= 0) {
         /* no input, nothing to do */
         return;
     }
 
-    if(targetCapacity<=0) {
+    if(targetCapacity <= 0) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
     /* complete a partial UChar from the last call */
-    if(cnv->toUnicodeStatus!=0) {
+    if(cnv->toUnicodeStatus != 0) {
         /*
          * copy the byte from the last call and the first one here into the target,
          * byte-wise to keep the platform endianness
          */
-        uint8_t *p=(uint8_t *)target++;
-        *p++=(uint8_t)cnv->toUnicodeStatus;
-        cnv->toUnicodeStatus=0;
-        *p=*source++;
+        uint8_t *p = (uint8_t *)target++;
+        *p++ = (uint8_t)cnv->toUnicodeStatus;
+        cnv->toUnicodeStatus = 0;
+        *p = *source++;
         --length;
         --targetCapacity;
-        if(offsets!=NULL) {
-            *offsets++=-1;
+        if(offsets != NULL) {
+            *offsets++ = -1;
         }
     }
 
     /* copy an even number of bytes for complete UChars */
-    count=2*targetCapacity;
-    if(count>length) {
-        count=length&~1;
+    count = 2 * targetCapacity;
+    if(count > length) {
+        count = length & ~1;
     }
-    if(count>0) {
+    if(count > 0) {
         uprv_memcpy(target, source, count);
-        source+=count;
-        length-=count;
-        count>>=1;
-        target+=count;
-        targetCapacity-=count;
-        if(offsets!=NULL) {
-            while(count>0) {
-                *offsets++=sourceIndex;
-                sourceIndex+=2;
+        source += count;
+        length -= count;
+        count >>= 1;
+        target += count;
+        targetCapacity -= count;
+        if(offsets != NULL) {
+            while(count > 0) {
+                *offsets++ = sourceIndex;
+                sourceIndex += 2;
                 --count;
             }
         }
     }
 
     /* check for a remaining source byte and store the status */
-    if(length>=2) {
+    if(length >= 2) {
         /* it must be targetCapacity==0 because otherwise the above would have copied more */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    } else if(length==1) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+    } else if(length == 1) {
         if(pArgs->flush) {
             /* a UChar remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+            *pErrorCode = U_TRUNCATED_CHAR_FOUND;
         } else {
             /* consume the last byte and store it, making sure that it will never set the status to 0 */
-            cnv->toUnicodeStatus=*source++|0x100;
+            cnv->toUnicodeStatus = *source++ | 0x100;
         }
     /* } else length==0 { nothing to do */
     }
 
     /* write back the updated pointers */
-    pArgs->source=(const char *)source;
-    pArgs->target=target;
-    pArgs->offsets=offsets;
+    pArgs->source = (const char *)source;
+    pArgs->target = target;
+    pArgs->offsets = offsets;
 }
 
 U_CFUNC void
 _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
-    UConverter *cnv;
-    const UChar *source;
-    uint8_t *target;
-    int32_t *offsets;
-    int32_t targetCapacity, length, count, sourceIndex;
+    UConverter *cnv         = pArgs->converter;
+    const UChar *source     = pArgs->source;
+    uint8_t *target         = (uint8_t *)pArgs->target;
+    int32_t *offsets        = pArgs->offsets;
+    int32_t targetCapacity  = pArgs->targetLimit - pArgs->target;
+    int32_t length          = pArgs->sourceLimit - source;
+    int32_t count;
+    int32_t sourceIndex     = 0;
 
-    /* set up the local pointers */
-    cnv=pArgs->converter;
-    source=pArgs->source;
-    length=pArgs->sourceLimit-source;
-    target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
-    offsets=pArgs->offsets;
-    sourceIndex=0;
-
-    if(length<=0 && cnv->fromUnicodeStatus==0) {
+    if(length <= 0 && cnv->fromUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
     }
 
-    if(targetCapacity<=0) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    if(targetCapacity <= 0) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
     /* complete a partial UChar from the last call */
-    if(cnv->fromUnicodeStatus!=0) {
-        *target++=(uint8_t)cnv->fromUnicodeStatus;
-        cnv->fromUnicodeStatus=0;
+    if(cnv->fromUnicodeStatus != 0) {
+        *target++ = (uint8_t)cnv->fromUnicodeStatus;
+        cnv->fromUnicodeStatus = 0;
         --targetCapacity;
-        if(offsets!=NULL) {
-            *offsets++=-1;
+        if(offsets != NULL) {
+            *offsets++ = -1;
         }
     }
 
     /* copy an even number of bytes for complete UChars */
-    count=2*length;
-    if(count>targetCapacity) {
-        count=targetCapacity&~1;
+    count = 2 * length;
+    if(count > targetCapacity) {
+        count = targetCapacity & ~1;
     }
     if(count>0) {
         uprv_memcpy(target, source, count);
-        target+=count;
-        targetCapacity-=count;
-        count>>=1;
-        source+=count;
-        length-=count;
-        if(offsets!=NULL) {
-            while(count>0) {
-                *offsets++=sourceIndex;
-                *offsets++=sourceIndex++;
+        target += count;
+        targetCapacity -= count;
+        count >>= 1;
+        source += count;
+        length -= count;
+        if(offsets != NULL) {
+            while(count > 0) {
+                *offsets++ = sourceIndex;
+                *offsets++ = sourceIndex++;
                 --count;
             }
         }
     }
 
-    if(length>0) {
+    if(length > 0) {
         /* it must be targetCapacity<=1 because otherwise the above would have copied more */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        if(targetCapacity>0) /* targetCapacity==1 */ {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        if(targetCapacity > 0) /* targetCapacity==1 */ {
             /* copy one byte and keep the other in the status */
-            const uint8_t *p=(const uint8_t *)source++;
-            *target++=*p++;
-            cnv->fromUnicodeStatus=*p|0x100;
-            if(offsets!=NULL) {
-                *offsets++=sourceIndex;
+            const uint8_t *p = (const uint8_t *)source++;
+            *target++ = *p++;
+            cnv->fromUnicodeStatus = *p | 0x100;
+            if(offsets != NULL) {
+                *offsets++ = sourceIndex;
             }
         }
     }
 
     /* write back the updated pointers */
-    pArgs->source=source;
-    pArgs->target=(char *)target;
-    pArgs->offsets=offsets;
+    pArgs->source = source;
+    pArgs->target = (char *)target;
+    pArgs->offsets = offsets;
 }
 
 /* UTF-16 Opposite Endian --------------------------------------------------- */
@@ -972,73 +955,66 @@ _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 U_CFUNC void
 _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
-    UConverter *cnv;
-    const uint8_t *source;
-    UChar *target;
-    uint8_t *target8; /* byte pointer to the target */
-    int32_t *offsets;
-    int32_t targetCapacity, length, count, sourceIndex;
+    UConverter *cnv         = pArgs->converter;
+    const uint8_t *source   = (const uint8_t *)pArgs->source;
+    UChar *target           = pArgs->target;
+    uint8_t *target8        = (uint8_t *)target; /* byte pointer to the target */
+    int32_t *offsets        = pArgs->offsets;
+    int32_t targetCapacity  = pArgs->targetLimit - pArgs->target;
+    int32_t length          = (const uint8_t *)pArgs->sourceLimit - source;
+    int32_t count;
+    int32_t sourceIndex     = 0;
 
-    /* set up the local pointers */
-    cnv=pArgs->converter;
-    source=(const uint8_t *)pArgs->source;
-    length=(const uint8_t *)pArgs->sourceLimit-source;
-    target=pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
-    target8=(uint8_t *)target;
-    offsets=pArgs->offsets;
-    sourceIndex=0;
-
-    if(length<=0) {
+    if(length <= 0) {
         /* no input, nothing to do */
         return;
     }
 
-    if(targetCapacity<=0) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    if(targetCapacity <= 0) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
     /* complete a partial UChar from the last call */
-    if(cnv->toUnicodeStatus!=0) {
+    if(cnv->toUnicodeStatus != 0) {
         /*
          * copy the byte from the last call and the first one here into the target,
          * byte-wise, reversing the platform endianness
          */
-        *target8++=*source++;
-        *target8++=(uint8_t)cnv->toUnicodeStatus;
-        cnv->toUnicodeStatus=0;
+        *target8++ = *source++;
+        *target8++ = (uint8_t)cnv->toUnicodeStatus;
+        cnv->toUnicodeStatus = 0;
         ++target;
         --length;
         --targetCapacity;
-        if(offsets!=NULL) {
-            *offsets++=-1;
+        if(offsets != NULL) {
+            *offsets++ = -1;
         }
     }
 
     /* copy an even number of bytes for complete UChars */
-    count=2*targetCapacity;
-    if(count>length) {
-        count=length&~1;
+    count = 2 * targetCapacity;
+    if(count > length) {
+        count = length & ~1;
     }
     if(count>0) {
-        length-=count;
-        count>>=1;
-        targetCapacity-=count;
-        if(offsets==NULL) {
-            while(count>0) {
-                target8[1]=*source++;
-                target8[0]=*source++;
-                target8+=2;
+        length -= count;
+        count >>= 1;
+        targetCapacity -= count;
+        if(offsets == NULL) {
+            while(count > 0) {
+                target8[1] = *source++;
+                target8[0] = *source++;
+                target8 += 2;
                 --count;
             }
         } else {
             while(count>0) {
-                target8[1]=*source++;
-                target8[0]=*source++;
-                target8+=2;
-                *offsets++=sourceIndex;
-                sourceIndex+=2;
+                target8[1] = *source++;
+                target8[0] = *source++;
+                target8 += 2;
+                *offsets++ = sourceIndex;
+                sourceIndex += 2;
                 --count;
             }
         }
@@ -1046,113 +1022,106 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* check for a remaining source byte and store the status */
-    if(length>=2) {
+    if(length >= 2) {
         /* it must be targetCapacity==0 because otherwise the above would have copied more */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    } else if(length==1) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+    } else if(length == 1) {
         if(pArgs->flush) {
             /* a UChar remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+            *pErrorCode = U_TRUNCATED_CHAR_FOUND;
         } else {
             /* consume the last byte and store it, making sure that it will never set the status to 0 */
-            cnv->toUnicodeStatus=*source++|0x100;
+            cnv->toUnicodeStatus = *source++ | 0x100;
         }
     /* } else length==0 { nothing to do */
     }
 
     /* write back the updated pointers */
-    pArgs->source=(const char *)source;
-    pArgs->target=target;
-    pArgs->offsets=offsets;
+    pArgs->source = (const char *)source;
+    pArgs->target = target;
+    pArgs->offsets = offsets;
 }
 
 U_CFUNC void
 _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
-    UConverter *cnv;
-    const UChar *source;
-    const uint8_t *source8; /* byte pointer to the source */
-    uint8_t *target;
-    int32_t *offsets;
-    int32_t targetCapacity, length, count, sourceIndex;
+    UConverter *cnv         = pArgs->converter;
+    const UChar *source     = pArgs->source;
+    const uint8_t *source8  = (const uint8_t *)source; /* byte pointer to the source */
+    uint8_t *target         = (uint8_t *)pArgs->target;
+    int32_t *offsets        = pArgs->offsets;
+    int32_t targetCapacity  = pArgs->targetLimit - pArgs->target;
+    int32_t length          = pArgs->sourceLimit - source;
+    int32_t count;
+    int32_t sourceIndex = 0;
 
-    /* set up the local pointers */
-    cnv=pArgs->converter;
-    source=pArgs->source;
-    length=pArgs->sourceLimit-source;
-    source8=(const uint8_t *)source;
-    target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
-    offsets=pArgs->offsets;
-    sourceIndex=0;
-
-    if(length<=0 && cnv->fromUnicodeStatus==0) {
+    if(length <= 0 && cnv->fromUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
     }
 
-    if(targetCapacity<=0) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    if(targetCapacity <= 0) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
     /* complete a partial UChar from the last call */
-    if(cnv->fromUnicodeStatus!=0) {
-        *target++=(uint8_t)cnv->fromUnicodeStatus;
-        cnv->fromUnicodeStatus=0;
+    if(cnv->fromUnicodeStatus != 0) {
+        *target++ = (uint8_t)cnv->fromUnicodeStatus;
+        cnv->fromUnicodeStatus = 0;
         --targetCapacity;
-        if(offsets!=NULL) {
-            *offsets++=-1;
+        if(offsets != NULL) {
+            *offsets++ = -1;
         }
     }
 
     /* copy an even number of bytes for complete UChars */
-    count=2*length;
-    if(count>targetCapacity) {
-        count=targetCapacity&~1;
+    count = 2 * length;
+    if(count > targetCapacity) {
+        count = targetCapacity & ~1;
     }
-    if(count>0) {
-        targetCapacity-=count;
-        count>>=1;
-        length-=count;
-        if(offsets==NULL) {
-            while(count>0) {
-                target[1]=*source8++;
-                target[0]=*source8++;
-                target+=2;
+    if(count > 0) {
+        targetCapacity -= count;
+        count >>= 1;
+        length -= count;
+        if(offsets == NULL) {
+            while(count > 0) {
+                target[1] = *source8++;
+                target[0] = *source8++;
+                target += 2;
                 --count;
             }
         } else {
             while(count>0) {
-                target[1]=*source8++;
-                target[0]=*source8++;
-                target+=2;
-                *offsets++=sourceIndex;
-                *offsets++=sourceIndex++;
+                target[1] = *source8++;
+                target[0] = *source8++;
+                target += 2;
+                *offsets++ = sourceIndex;
+                *offsets++ = sourceIndex++;
                 --count;
             }
         }
         source=(const UChar *)source8;
     }
 
-    if(length>0) {
+    if(length > 0) {
         /* it must be targetCapacity<=1 because otherwise the above would have copied more */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        if(targetCapacity>0) /* targetCapacity==1 */ {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        if(targetCapacity > 0) /* targetCapacity==1 */ {
             /* copy one byte and keep the other in the status */
-            cnv->fromUnicodeStatus=*source8++|0x100;
-            *target++=*source8;
+            cnv->fromUnicodeStatus = *source8++ | 0x100;
+            *target++ = *source8;
             ++source;
-            if(offsets!=NULL) {
-                *offsets++=sourceIndex;
+            if(offsets != NULL) {
+                *offsets++ = sourceIndex;
             }
         }
     }
 
     /* write back the updated pointers */
-    pArgs->source=source;
-    pArgs->target=(char *)target;
-    pArgs->offsets=offsets;
+    pArgs->source = source;
+    pArgs->target = (char *)target;
+    pArgs->offsets = offsets;
 }
 
 /* UTF-16BE ----------------------------------------------------------------- */
@@ -1458,6 +1427,118 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
+void T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
+                                     UErrorCode * err)
+{
+    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar *myTarget = args->target;
+    int32_t *myOffsets = args->offsets;
+    const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
+    const UChar *targetLimit = args->targetLimit;
+    unsigned char *toUBytes = args->converter->toUBytes;
+    uint32_t ch, i;
+    int32_t offsetNum = 0;
+
+    if (args->converter->toUnicodeStatus && myTarget < targetLimit)
+    {
+        i = args->converter->toULength;       /* restore # of bytes consumed */
+
+        ch = args->converter->toUnicodeStatus - 1;/*Stores the previously calculated ch from a previous call*/
+        args->converter->toUnicodeStatus = 0;
+        goto morebytes;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        i = 0;
+        ch = 0;
+morebytes:
+        while (i < sizeof(uint32_t))
+        {
+            if (mySource < sourceLimit)
+            {
+                ch = (ch << 8) | (uint8_t)(*mySource);
+                toUBytes[i++] = (char) *(mySource++);
+            }
+            else
+            {
+                if (args->flush)
+                {
+                    if (U_SUCCESS(*err))
+                    {
+                        *err = U_TRUNCATED_CHAR_FOUND;
+                        args->converter->toUnicodeStatus = MAXIMUM_UCS4;
+                    }
+                }
+                else
+                {   /* stores a partially calculated target*/
+                    /* + 1 to make 0 a valid character */
+                    args->converter->toUnicodeStatus = ch + 1;
+                    args->converter->toULength = (int8_t) i;
+                }
+                goto donefornow;
+            }
+        }
+
+        if (ch <= MAXIMUM_UTF)
+        {
+            /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+            if (ch <= MAXIMUM_UCS2) 
+            {
+                /* fits in 16 bits */
+                *(myTarget++) = (UChar) ch;
+                *(myOffsets++) = offsetNum;
+            }
+            else
+            {
+                /* write out the surrogates */
+                ch -= HALF_BASE;
+                *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
+                *myOffsets++ = offsetNum;
+                ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
+                if (myTarget < targetLimit)
+                {
+                    *(myTarget++) = (UChar)ch;
+                    *(myOffsets++) = offsetNum;
+                }
+                else
+                {
+                    /* Put in overflow buffer (not handled here) */
+                    args->converter->UCharErrorBuffer[0] = (UChar) ch;
+                    args->converter->UCharErrorBufferLength = 1;
+                    *err = U_BUFFER_OVERFLOW_ERROR;
+                    break;
+                }
+            }
+            offsetNum += i;
+        }
+        else
+        {
+            args->source = (const char *) mySource;
+            args->target = myTarget;
+            args->converter->invalidCharLength = (int8_t)i;
+            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            {
+                /* Stop if the error wasn't handled */
+                break;
+            }
+            args->converter->invalidCharLength = 0;
+            mySource = (unsigned char *) args->source;
+            myTarget = args->target;
+        }
+    }
+
+donefornow:
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        /* End of target buffer */
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = myTarget;
+    args->source = (const char *) mySource;
+}
+
 void T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
                                        UErrorCode * err)
 {
@@ -1531,11 +1612,142 @@ lowsurogate:
     args->source = mySource;
 }
 
+void T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
+                                       UErrorCode * err)
+{
+    const UChar *mySource = args->source;
+    unsigned char *myTarget = (unsigned char *) args->target;
+    int32_t *myOffsets = args->offsets;
+    const UChar *sourceLimit = args->sourceLimit;
+    const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
+    UChar32 ch, ch2;
+    int32_t offsetNum = 0;
+    unsigned int indexToWrite;
+    unsigned char temp[sizeof(uint32_t)];
+
+    temp[0] = 0;
+
+    if (args->converter->fromUnicodeStatus)
+    {
+        ch = args->converter->fromUnicodeStatus;
+        args->converter->fromUnicodeStatus = 0;
+        goto lowsurogate;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        ch = *(mySource++);
+
+        if (SURROGATE_HIGH_START <= ch && ch < SURROGATE_LOW_START)
+        {
+lowsurogate:
+            if (mySource < sourceLimit)
+            {
+                ch2 = *mySource;
+                if (SURROGATE_LOW_START <= ch2 && ch2 <= SURROGATE_LOW_END)
+                {
+                    ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
+                    mySource++;
+                }
+            }
+            else if (!args->flush)
+            {
+                /* ran out of source */
+                args->converter->fromUnicodeStatus = ch;
+                break;
+            }
+        }
+
+        /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
+        /* Todo: Can the & part be left off implicitly? Does it really save time? */
+        temp[1] = (uint8_t) (ch >> 16 & 0x1F);
+        temp[2] = (uint8_t) (ch >> 8 & 0xFF);
+        temp[3] = (uint8_t) (ch & 0xFF);
+
+        for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
+        {
+            if (myTarget < targetLimit)
+            {
+                *(myTarget++) = temp[indexToWrite];
+                *(myOffsets++) = offsetNum;
+            }
+            else
+            {
+                args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
+                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+            }
+        }
+        offsetNum++;
+    }
+
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = (char *) myTarget;
+    args->source = mySource;
+}
+
 UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
-    *err = U_UNSUPPORTED_ERROR;
-    return 0;
+    /* Todo: This needs testing */
+    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar32 myUChar;
+
+    if (args->source + 4 > args->sourceLimit) 
+    {
+        if (args->source >= args->sourceLimit)
+        {
+            /*Either caller has reached the end of the byte stream*/
+            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        }
+        else
+        {
+            /* got a partial character */
+            *err = U_TRUNCATED_CHAR_FOUND;
+        }
+
+        return 0xffff;
+    }
+
+    /* Don't even try to do a direct cast because the value may be on an odd address. */
+    myUChar = (mySource[0] << 24)
+            | (mySource[1] << 16)
+            | (mySource[2] << 8)
+            | (mySource[3]);
+
+    if (myUChar <= MAXIMUM_UTF) {
+        /*updates the source*/
+        args->source += 4;  
+    }
+    else {
+        UChar myUCharBuf[2];
+        *err = U_ILLEGAL_CHAR_FOUND;
+
+        uprv_memcpy(args->converter->invalidCharBuffer, mySource, sizeof(int32_t));
+
+        /*It is very likely that the ErrorFunctor will write to the
+         *internal buffers */
+        args->target = myUCharBuf;
+        args->targetLimit = myUCharBuf + sizeof(int32_t);
+        args->converter->fromCharErrorBehaviour(args->converter->toUContext,
+                                        args,
+                                        args->source,
+                                        (int32_t)sizeof(int32_t),
+                                        UCNV_ILLEGAL,
+                                        err);
+
+        UTF_GET_CHAR_SAFE(myUCharBuf, 0, 0, sizeof(myUCharBuf), myUChar, TRUE);
+
+        /*makes the internal caching transparent to the user*/
+        if (*err == U_BUFFER_OVERFLOW_ERROR)
+            *err = U_ZERO_ERROR;
+
+    }
+
+    return myUChar;
 }
 
 static const UConverterImpl _UTF32BEImpl = {
@@ -1549,12 +1761,10 @@ static const UConverterImpl _UTF32BEImpl = {
     NULL,
 
     T_UConverter_toUnicode_UTF32_BE,
-    NULL,
-/*    T_UConverter_toUnicode_UTF32_BE_OFFSETS_LOGIC, */
+    T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC,
     T_UConverter_fromUnicode_UTF32_BE,
-    NULL,
-/*    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC, */
-    NULL, /* T_UConverter_getNextUChar_UTF32_BE, */
+    T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC,
+    T_UConverter_getNextUChar_UTF32_BE,
 
     NULL,
     NULL
@@ -1687,6 +1897,119 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
+void T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
+                                      UErrorCode * err)
+{
+    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar *myTarget = args->target;
+    int32_t *myOffsets = args->offsets;
+    const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
+    const UChar *targetLimit = args->targetLimit;
+    unsigned char *toUBytes = args->converter->toUBytes;
+    uint32_t ch, i;
+    int32_t offsetNum = 0;
+
+    /* UTF-8 returns here for only non-offset, this needs to change.*/
+    if (args->converter->toUnicodeStatus && myTarget < targetLimit)
+    {
+        i = args->converter->toULength;       /* restore # of bytes consumed */
+
+        /* Stores the previously calculated ch from a previous call*/
+        ch = args->converter->toUnicodeStatus - 1;
+        args->converter->toUnicodeStatus = 0;
+        goto morebytes;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        i = 0;
+        ch = 0;
+morebytes:
+        while (i < sizeof(uint32_t))
+        {
+            if (mySource < sourceLimit)
+            {
+                ch |= ((uint8_t)(*mySource)) << (i * 8);
+                toUBytes[i++] = (char) *(mySource++);
+            }
+            else
+            {
+                if (args->flush)
+                {
+                    if (U_SUCCESS(*err))
+                    {
+                        *err = U_TRUNCATED_CHAR_FOUND;
+                        args->converter->toUnicodeStatus = 0;
+                    }
+                }
+                else
+                {   /* stores a partially calculated target*/
+                    /* + 1 to make 0 a valid character */
+                    args->converter->toUnicodeStatus = ch + 1;
+                    args->converter->toULength = (int8_t) i;
+                }
+                goto donefornow;
+            }
+        }
+
+        if (ch <= MAXIMUM_UTF)
+        {
+            /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+            if (ch <= MAXIMUM_UCS2) 
+            {
+                /* fits in 16 bits */
+                *(myTarget++) = (UChar) ch;
+                *(myOffsets++) = offsetNum;
+            }
+            else
+            {
+                /* write out the surrogates */
+                ch -= HALF_BASE;
+                *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
+                ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
+                if (myTarget < targetLimit)
+                {
+                    *(myTarget++) = (UChar)ch;
+                    *(myOffsets++) = offsetNum;
+                }
+                else
+                {
+                    /* Put in overflow buffer (not handled here) */
+                    args->converter->UCharErrorBuffer[0] = (UChar) ch;
+                    args->converter->UCharErrorBufferLength = 1;
+                    *err = U_BUFFER_OVERFLOW_ERROR;
+                    break;
+                }
+            }
+            offsetNum += i;
+        }
+        else
+        {
+            args->source = (const char *) mySource;
+            args->target = myTarget;
+            args->converter->invalidCharLength = (int8_t)i;
+            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            {
+                /* Stop if the error wasn't handled */
+                break;
+            }
+            args->converter->invalidCharLength = 0;
+            mySource = (unsigned char *) args->source;
+            myTarget = args->target;
+        }
+    }
+
+donefornow:
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        /* End of target buffer */
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = myTarget;
+    args->source = (const char *) mySource;
+}
+
 void  T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
                                          UErrorCode * err)
 {
@@ -1760,11 +2083,142 @@ lowsurogate:
     args->source = mySource;
 }
 
+void  T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
+                                         UErrorCode * err)
+{
+    const UChar *mySource = args->source;
+    unsigned char *myTarget = (unsigned char *) args->target;
+    int32_t *myOffsets = args->offsets;
+    const UChar *sourceLimit = args->sourceLimit;
+    const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
+    UChar32 ch, ch2;
+    unsigned int indexToWrite;
+    unsigned char temp[sizeof(uint32_t)];
+    int32_t offsetNum = 0;
+
+    temp[3] = 0;
+
+    if (args->converter->fromUnicodeStatus)
+    {
+        ch = args->converter->fromUnicodeStatus;
+        args->converter->fromUnicodeStatus = 0;
+        goto lowsurogate;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        ch = *(mySource++);
+
+        if (SURROGATE_HIGH_START <= ch && ch < SURROGATE_LOW_START)
+        {
+lowsurogate:
+            if (mySource < sourceLimit)
+            {
+                ch2 = *mySource;
+                if (SURROGATE_LOW_START <= ch2 && ch2 <= SURROGATE_LOW_END)
+                {
+                    ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
+                    mySource++;
+                }
+            }
+            else if (!args->flush)
+            {
+                /* ran out of source */
+                args->converter->fromUnicodeStatus = ch;
+                break;
+            }
+        }
+
+        /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
+        /* Todo: Can the & part be left off implicitly? Does it really save time? */
+        temp[2] = (uint8_t) (ch >> 16 & 0x1F);
+        temp[1] = (uint8_t) (ch >> 8 & 0xFF);
+        temp[0] = (uint8_t) (ch & 0xFF);
+
+        for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
+        {
+            if (myTarget < targetLimit)
+            {
+                *(myTarget++) = temp[indexToWrite];
+                *(myOffsets++) = offsetNum;
+            }
+            else
+            {
+                args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
+                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+            }
+        }
+        offsetNum++;
+    }
+
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = (char *) myTarget;
+    args->source = mySource;
+}
+
 UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
-    *err = U_UNSUPPORTED_ERROR;
-    return 0;
+    /* Todo: This needs testing */
+    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar32 myUChar;
+
+    if (args->source + 4 > args->sourceLimit) 
+    {
+        if (args->source >= args->sourceLimit)
+        {
+            /*Either caller has reached the end of the byte stream*/
+            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        }
+        else
+        {
+            /* got a partial character */
+            *err = U_TRUNCATED_CHAR_FOUND;
+        }
+
+        return 0xffff;
+    }
+
+    /* Don't even try to do a direct cast because the value may be on an odd address. */
+    myUChar = (mySource[0])
+            | (mySource[1] << 8)
+            | (mySource[2] << 16)
+            | (mySource[3] << 24);
+
+    if (myUChar <= MAXIMUM_UTF) {
+        /*updates the source*/
+        args->source += 4;  
+    }
+    else {
+        UChar myUCharBuf[2];
+        *err = U_ILLEGAL_CHAR_FOUND;
+
+        uprv_memcpy(args->converter->invalidCharBuffer, mySource, sizeof(int32_t));
+
+        /*It is very likely that the ErrorFunctor will write to the
+         *internal buffers */
+        args->target = myUCharBuf;
+        args->targetLimit = myUCharBuf + sizeof(int32_t);
+        args->converter->fromCharErrorBehaviour(args->converter->toUContext,
+                                        args,
+                                        args->source,
+                                        (int32_t)sizeof(int32_t),
+                                        UCNV_ILLEGAL,
+                                        err);
+
+        UTF_GET_CHAR_SAFE(myUCharBuf, 0, 0, sizeof(myUCharBuf), myUChar, TRUE);
+
+        /*makes the internal caching transparent to the user*/
+        if (*err == U_BUFFER_OVERFLOW_ERROR)
+            *err = U_ZERO_ERROR;
+
+    }
+
+    return myUChar;
 }
 
 static const UConverterImpl _UTF32LEImpl = {
@@ -1778,12 +2232,10 @@ static const UConverterImpl _UTF32LEImpl = {
     NULL,
 
     T_UConverter_toUnicode_UTF32_LE,
-    NULL,
-/*    T_UConverter_toUnicode_UTF32_LE_OFFSETS_LOGIC, */
+    T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC,
     T_UConverter_fromUnicode_UTF32_LE,
-    NULL,
-/*    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC, */
-    NULL, /* T_UConverter_getNextUChar_UTF32_LE, */
+    T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC,
+    T_UConverter_getNextUChar_UTF32_LE,
 
     NULL,
     NULL
