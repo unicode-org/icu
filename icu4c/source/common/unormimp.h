@@ -147,18 +147,21 @@ enum {
     _NORM_DECOMP_LENGTH_MASK=0x7f
 };
 
-/* Constants for options flags for tailored normalization. ### TODO prototype, see unorm.cpp */
+/* Constants for options flags for normalization. ### TODO prototype, see unorm.cpp */
 enum {
     /** Options bit 0, do not decompose Hangul syllables. @draft ICU 2.6 */
-    UNORM_DX_HANGUL=1,
+    UNORM_NX_HANGUL=1,
     /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
-    UNORM_DX_CJK_COMPAT=2,
+    UNORM_NX_CJK_COMPAT=2,
     /** Options bit 2, do not decompose a-umlaut, only for testing. @internal */
-    UNORM_DX_A_UMLAUT=4,
-    /** This many of the least significant options bits are used to specify decomposition exclusions. @draft ICU 2.6 */
-    UNORM_DX_COUNT=4,
-    /** Options bit mask for decomposition exclusions. @draft ICU 2.6 */
-    UNORM_DX_MASK=(1<<UNORM_DX_COUNT)-1
+    UNORM_NX_A_UMLAUT=4,
+
+    /**
+     * Options bit set value to select Unicode 3.2 normalization (except NormalizationCorrections).
+     * At most one Unicode version can be selected at a time.
+     * @draft ICU 2.6
+     */
+    UNORM_UNICODE_3_2=0x20,
 };
 
 /**
@@ -181,9 +184,15 @@ enum {
  * @draft ICU 2.6
  */
 U_CAPI UNormalizationCheckResult U_EXPORT2
-unorm_quickCheckTailored(const UChar *src, int32_t srcLength, 
-                         UNormalizationMode mode, int32_t options,
-                         UErrorCode *pErrorCode);
+unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength, 
+                            UNormalizationMode mode, int32_t options,
+                            UErrorCode *pErrorCode);
+
+/** ### TODO @draft ICU 2.6 */
+U_CAPI UBool U_EXPORT2
+unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
+                              UNormalizationMode mode, int32_t options,
+                              UErrorCode *pErrorCode);
 
 /**
  * Is the normalizer data loaded?
