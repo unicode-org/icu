@@ -252,7 +252,6 @@ void BasicNormalizerTest::TestHangulDecomp()
 
 /**
  * The Tibetan vowel sign AA, 0f71, was messed up prior to Unicode version 2.1.9.
- * Once 2.1.9 or 3.0 is released, uncomment this test.
  */
 void BasicNormalizerTest::TestTibetan(void) {
     UnicodeString decomp[1][3];
@@ -281,6 +280,8 @@ void BasicNormalizerTest::TestCompositionExclusion(void) {
     // that we test all characters listed, even those that can be
     // derived from the Unicode DB and are therefore commented
     // out.
+    // ### TODO read composition exclusion from source/data/unidata file
+    // and test against that
     UnicodeString EXCLUDED = str(
         "\\u0340\\u0341\\u0343\\u0344\\u0374\\u037E\\u0387\\u0958"
         "\\u0959\\u095A\\u095B\\u095C\\u095D\\u095E\\u095F\\u09DC"
