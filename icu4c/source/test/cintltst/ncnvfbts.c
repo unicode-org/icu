@@ -536,49 +536,65 @@ void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 		log_err("ibm-1370->u(MBCS) with Fallback did not match.\n");
     
    /*commented untill data table is available*/
-   /* log_verbose("toUnicode fallback with fallback data for MBCS\n");
+    log_verbose("toUnicode fallback with fallback data for MBCS\n");
     {
         const char IBM1370input[] =   {  
             (char)0xf4, (char)0x87, (char)0xa4, (char)0x4a, (char)0xf4, (char)0x88, (char)0xa4, (char)0x4b,
                 (char)0xf9, (char)0x92, (char)0xdc, (char)0xb0, };
         UChar expectedUnicodeText[]= { 0x5165, 0x5165, 0x516b, 0x516b, 0x9ef9, 0x9ef9};
-        int32_t fromIBM1370offs []  =   {  0, 1, 2, 3, 4, 5};
+        int32_t fromIBM1370offs []  =   {  0, 2, 4, 6, 8, 10};
+
+        UChar expectedFallbackFalse[]= { 0xfffd, 0x5165, 0xfffd, 0x516b, 0xfffd, 0x9ef9};
 
         if(!testConvertToUnicode(IBM1370input, sizeof(IBM1370input), 
                 expectedUnicodeText, sizeof(expectedUnicodeText)/sizeof(expectedUnicodeText[0]),"ibm-1370", TRUE, fromIBM1370offs ))
 		    log_err("ibm-1370->u(MBCS) with Fallback did not match.\n");
+        if(!testConvertToUnicode(IBM1370input, sizeof(IBM1370input), 
+                expectedFallbackFalse, sizeof(expectedFallbackFalse)/sizeof(expectedFallbackFalse[0]),"ibm-1370", FALSE, fromIBM1370offs ))
+		    log_err("ibm-1370->u(MBCS) with Fallback did not match.\n");
 
-    }*/
-     /* log_verbose("toUnicode fallback with fallback data for euc-tw\n");
+    }
+    log_verbose("toUnicode fallback with fallback data for euc-tw\n");
     {
         const char euc_tw_input[] =   {  
             (char)0xA7, (char)0xCC, (char)0x8E, (char)0xA2, (char)0xA1, (char)0xAB, 
             (char)0xA8, (char)0xC7, (char)0xC8, (char)0xDE, 
             (char)0xA8, (char)0xCD, (char)0x8E, (char)0xA2, (char)0xA2, (char)0xEA,};
         UChar expectedUnicodeText[]= { 0x5C6E, 0x5C6E, 0x81FC, 0x81FC, 0x8278, 0x8278};
-        int32_t from_euc_tw_offs []  =   {  0, 1, 2, 3, 4, 5};
+        int32_t from_euc_tw_offs []  =   {  0, 2, 6, 8, 10, 12};
+
+        UChar expectedFallbackFalse[]= { 0xfffd, 0x5C6E, 0xfffd, 0x81FC, 0xfffd, 0x8278};
 
         if(!testConvertToUnicode(euc_tw_input, sizeof(euc_tw_input), 
                 expectedUnicodeText, sizeof(expectedUnicodeText)/sizeof(expectedUnicodeText[0]),"euc-tw", TRUE, from_euc_tw_offs ))
 		    log_err("from euc-tw->u with Fallback did not match.\n");
+        
+        if(!testConvertToUnicode(euc_tw_input, sizeof(euc_tw_input), 
+                expectedFallbackFalse, sizeof(expectedFallbackFalse)/sizeof(expectedFallbackFalse[0]),"euc-tw", FALSE, from_euc_tw_offs ))
+		    log_err("from euc-tw->u with Fallback false did not match.\n");
 
-    }*/
-     /* log_verbose("fromUnicode to euc-tw with fallback data euc-tw\n");
+
+    }
+    log_verbose("fromUnicode to euc-tw with fallback data euc-tw\n");
     {
-        UChar inputText[]= { 0x0001, 0x008e, 0x00af, 0x203e, 0x2223, 0xff5c, 0x5296, 
+        UChar inputText[]= { 0x0001, 0x008e, 0x203e, 0x2223, 0xff5c, 0x5296, 
                              0x5C6E, 0x5C6E, 0x81FC, 0x81FC, 0x8278, 0x8278, 0xEDEC};
         const char expected_euc_tw[] =   {  
-            (char)0x01, (char)0x1a, (char)0x1a, (char)0xa2, (char)0xa3, (char)0xa2, (char)0xa3,
-            (char)0xa2, (char)0xde, (char)0xa2, (char)0xde,
+            (char)0x01, (char)0xfd, (char)0xfe,  (char)0xa2, (char)0xa3, 
+            (char)0xa2, (char)0xde,  (char)0xa2, (char)0xde, 
             (char)0x8e, (char)0xa2, (char)0xe5, (char)0xb9,
+            (char)0x8e, (char)0xa2, (char)0xa1, (char)0xab, (char)0x8e, (char)0xa2, (char)0xa1, (char)0xab,
+            (char)0xc8, (char)0xde, (char)0xc8, (char)0xde,
+            (char)0x8e, (char)0xa2, (char)0xa2, (char)0xea, (char)0x8e, (char)0xa2, (char)0xa2, (char)0xea,
             (char)0x8e, (char)0xac, (char)0xc6, (char)0xf7};
-        int32_t to_euc_tw_offs []  =   {  0, 1, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 7, 7, 9, 9, 9, 9};
+        int32_t to_euc_tw_offs []  =   {  0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, 
+            6, 6, 7, 7, 7, 7, 8, 8, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12};
 
         if(!testConvertFromUnicode(inputText, sizeof(inputText)/sizeof(inputText[0]),
 		        expected_euc_tw, sizeof(expected_euc_tw), "euc-tw", TRUE, to_euc_tw_offs ))
 	        log_err("u-> euc-tw with FallBack did not match.\n");
        
-    }*/
+    }
 
     /*MBCS 1363*/
     if(!testConvertFromUnicode(MBCSText1363, sizeof(MBCSText1363)/sizeof(MBCSText1363[0]),
