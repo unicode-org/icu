@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -94,6 +94,7 @@ static void TestNumberFormat()
     double d1;
     int32_t l1;
     double d = -10456.37;
+    double a = 1234.56, a1 = 1235.0;
     int32_t l = 100000000;
     UFieldPosition pos1;
     UFieldPosition pos2;
@@ -263,6 +264,58 @@ free(result);
         log_err("Fail: Error in parsing\n");
     else
         log_verbose("Pass: parsing successful\n");
+
+
+    /* Testing unum_formatDoubleCurrency / unum_parseDoubleCurrency */
+    log_verbose("\nTesting unum_formatDoubleCurrency\n");
+    u_uastrcpy(temp1, "Y1,235");
+    temp1[0] = 0xA5; /* Yen sign */
+    u_uastrcpy(temp, "JPY");
+    resultlength=0;
+    pos2.field = 0; /* integer part */
+    resultlengthneeded=unum_formatDoubleCurrency(cur_def, a, temp, NULL, resultlength, &pos2, &status);
+    if (status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        resultlength=resultlengthneeded+1;
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
+        unum_formatDoubleCurrency(cur_def, a, temp, result, resultlength, &pos2, &status);
+    }
+    if (U_FAILURE(status)) {
+        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
+    }
+    if (u_strcmp(result, temp1)==0) {
+        log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
+    } else {
+        log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
+    }
+    if (pos2.beginIndex == 1 && pos2.endIndex == 6) {
+        log_verbose("Pass: Complete number formatting using unum_format() successful\n");
+    } else {
+        log_err("Fail: Error in complete number Formatting using unum_formatDouble()\nGot: b=%d end=%d\nExpected: b=1 end=6",
+                pos1.beginIndex, pos1.endIndex);
+    }
+
+    log_verbose("\nTesting unum_parseDoubleCurrency\n");
+    parsepos=0;
+    d1=unum_parseDoubleCurrency(cur_def, result, u_strlen(result), &parsepos, temp2, &status);
+    if (U_FAILURE(status)) {
+        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+    }
+    /* Note: a==1234.56, but on parse expect a1=1235.0 */
+    if (d1!=a1) {
+        log_err("Fail: Error in parsing currency, got %f, expected %f\n", d1, a1);
+    } else {
+        log_verbose("Pass: parsed currency ammount successfully\n");
+    }
+    if (u_strcmp(temp2, temp)==0) {
+        log_verbose("Pass: parsed correct currency\n");
+    } else {
+        log_err("Fail: parsed incorrect currency\n");
+    }
+
+free(result);
+    result = 0;
+
 
 /* performance testing */
     u_uastrcpy(temp1, "$462.12345");
