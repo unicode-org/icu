@@ -24,6 +24,7 @@
 #include "unicode/uscript.h"
 #include "usc_impl.h"
 #include "uprops.h"
+#include "unormimp.h"
 #include "cstring.h"
 #include <string.h>
 #include <math.h>
@@ -53,6 +54,7 @@ static void TestAdditionalProperties(void);
 static void TestNumericProperties(void);
 static void TestPropertyNames(void);
 static void TestPropertyValues(void);
+static void TestConsistency(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -139,6 +141,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestUScriptRunAPI, "tsutil/cucdtst/TestUScriptRunAPI");
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
+    addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
 }
 
 /*==================================================== */
@@ -278,7 +281,7 @@ Checks LetterLike Symbols which were previously a source of confusion
 /* compare two sets, which is not easy with the current (ICU 2.4) C API... */
 
 static UBool
-showAMinusB(const USet *a, const USet *b, const char *a_name, const char *b_name) {
+showADiffB(const USet *a, const USet *b, const char *a_name, const char *b_name, UBool expect) {
     int32_t i, start, end, length;
     UBool equal;
     UErrorCode errorCode;
@@ -300,11 +303,15 @@ showAMinusB(const USet *a, const USet *b, const char *a_name, const char *b_name
             return equal; /* done with code points, got a string or -1 */
         }
 
-        if(!uset_containsRange(b, start, end)) {
+        if(expect!=uset_containsRange(b, start, end)) {
             equal=FALSE;
             while(start<=end) {
-                if(!uset_contains(b, start)) {
-                    log_err("error: %s contains U+%04x but %s does not\n", a_name, start, b_name);
+                if(expect!=uset_contains(b, start)) {
+                    if(expect) {
+                        log_err("error: %s contains U+%04x but %s does not\n", a_name, start, b_name);
+                    } else {
+                        log_err("error: %s and %s both contain U+%04x but should not intersect\n", a_name, b_name, start);
+                    }
                 }
                 ++start;
             }
@@ -312,6 +319,16 @@ showAMinusB(const USet *a, const USet *b, const char *a_name, const char *b_name
 
         ++i;
     }
+}
+
+static UBool
+showAMinusB(const USet *a, const USet *b, const char *a_name, const char *b_name) {
+    return showADiffB(a, b, a_name, b_name, TRUE);
+}
+
+static UBool
+showAIntersectB(const USet *a, const USet *b, const char *a_name, const char *b_name) {
+    return showADiffB(a, b, a_name, b_name, FALSE);
 }
 
 static UBool
@@ -2571,3 +2588,142 @@ TestPropertyValues(void) {
     }
 }
 
+/* add characters from a serialized set to a normal one */
+static void
+_setAddSerialized(USet *set, const USerializedSet *sset) {
+    UChar32 start, end;
+    int32_t i, count;
+
+    count=uset_getSerializedRangeCount(sset);
+    for(i=0; i<count; ++i) {
+        uset_getSerializedRange(sset, i, &start, &end);
+        uset_addRange(set, start, end);
+    }
+}
+
+/* various tests for consistency of UCD data and API behavior */
+static void
+TestConsistency() {
+    UChar buffer16[300];
+    char buffer[300];
+    USet *set1, *set2, *set3, *set4;
+    UErrorCode errorCode;
+
+    USerializedSet sset;
+    UChar32 start, end;
+    int32_t i, length;
+
+    U_STRING_DECL(hyphenPattern, "[:Hyphen:]", 10);
+    U_STRING_DECL(dashPattern, "[:Dash:]", 8);
+    U_STRING_DECL(lowerPattern, "[:Lowercase:]", 13);
+    U_STRING_DECL(formatPattern, "[:Cf:]", 6);
+    U_STRING_DECL(alphaPattern, "[:Alphabetic:]", 14);
+
+    U_STRING_INIT(hyphenPattern, "[:Hyphen:]", 10);
+    U_STRING_INIT(dashPattern, "[:Dash:]", 8);
+    U_STRING_INIT(lowerPattern, "[:Lowercase:]", 13);
+    U_STRING_INIT(formatPattern, "[:Cf:]", 6);
+    U_STRING_INIT(alphaPattern, "[:Alphabetic:]", 14);
+
+    /*
+     * All Hyphens except [HALFWIDTH] KATAKANA MIDDLE DOT should also be Dashes
+     * according to UCD.html (version 4):
+     * "Those dashes used to mark connections between pieces of words,
+     *  plus the Katakana middle dot."
+     */
+    errorCode=U_ZERO_ERROR;
+    set1=uset_openPattern(hyphenPattern, 10, &errorCode);
+    set2=uset_openPattern(dashPattern, 8, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        /* remove the Katakana middle dot(s) from set1 */
+        uset_remove(set1, 0x30fb);
+        uset_remove(set1, 0xff65); /* halfwidth variant */
+        showAMinusB(set1, set2, "[:Hyphen:]", "[:Dash:]");
+    } else {
+        log_err("error opening [:Hyphen:] or [:Dash:] - %s\n", u_errorName(errorCode));
+    }
+
+    /* check that Cf is neither Hyphen nor Dash nor Alphabetic */
+    set3=uset_openPattern(formatPattern, 6, &errorCode);
+    set4=uset_openPattern(alphaPattern, 14, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        showAIntersectB(set3, set1, "[:Cf:]", "[:Hyphen:]");
+        showAIntersectB(set3, set2, "[:Cf:]", "[:Dash:]");
+        showAIntersectB(set3, set4, "[:Cf:]", "[:Alphabetic:]");
+    } else {
+        log_err("error opening [:Cf:] or [:Alpbabetic:] - %s\n", u_errorName(errorCode));
+    }
+
+    uset_close(set1);
+    uset_close(set2);
+    uset_close(set3);
+    uset_close(set4);
+
+    /*
+     * Check that each lowercase character has "small" in its name
+     * and not "capital".
+     * In Unicode 3.2 there are 75 such characters, some of which
+     * ("SMALL CAPITAL" letters) seem wrong. Others are greek letters etc.
+     * Use the verbose flag to see these notices.
+     */
+    errorCode=U_ZERO_ERROR;
+    set1=uset_openPattern(lowerPattern, 13, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        for(i=0;; ++i) {
+            length=uset_getItem(set1, i, &start, &end, NULL, 0, &errorCode);
+            if(errorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+                break; /* done */
+            }
+            if(U_FAILURE(errorCode)) {
+                log_err("error iterating over [:Lowercase:] at item %d: %s\n",
+                        i, u_errorName(errorCode));
+                break;
+            }
+            if(length!=0) {
+                break; /* done with code points, got a string or -1 */
+            }
+
+            while(start<=end) {
+                length=u_charName(start, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+                if(U_FAILURE(errorCode)) {
+                    log_err("error getting the name of U+%04x - %s\n", start, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+                if(strstr(buffer, "SMALL")==NULL || strstr(buffer, "CAPITAL")!=NULL) {
+                    log_verbose("[:Lowercase:] contains U+%04x whose name does not suggest lowercase: %s\n", start, buffer);
+                }
+                ++start;
+            }
+        }
+    } else {
+        log_err("error opening [:Lowercase:] - %s\n", u_errorName(errorCode));
+    }
+    uset_close(set1);
+
+    /*
+     * Test for an example that unorm_getCanonStartSet() delivers
+     * all characters that compose from the input one,
+     * even in multiple steps.
+     * For example, the set for "I" (0049) should contain both
+     * I-diaeresis (00CF) and I-diaeresis-acute (1E2E).
+     * In general, the set for the middle such character should be a subset
+     * of the set for the first.
+     */
+    set1=uset_open(1, 0);
+    set2=uset_open(1, 0);
+
+    unorm_getCanonStartSet(0x49, &sset);
+    _setAddSerialized(set1, &sset);
+
+    /* enumerate all characters that are plausible to be latin letters */
+    for(start=0xa0; start<0x2000; ++start) {
+        if(unorm_getDecomposition(start, FALSE, buffer16, LENGTHOF(buffer16))>1 && buffer16[0]==0x49) {
+            uset_add(set2, start);
+        }
+    }
+
+    compareUSets(set1, set2, "[canon start set of 0049]", "[all c with canon decomp with 0049]");
+    uset_close(set1);
+    uset_close(set2);
+}
