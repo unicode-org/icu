@@ -14,8 +14,9 @@ package com.ibm.test.RuleBasedBreakIterator;
 
 import java.util.Locale;
 import com.ibm.text.BreakIterator;
+import com.ibm.test.TestFmwk;
 
-public class SimpleBITest {
+public class SimpleBITest extends TestFmwk{
     public static final String testText =
 //        "The rain in Spain stays mainly on the plain.  The plains in Spain are mainly pained with rain.";
 //"one-two now--  Hah!  You owe me exactly $1,345.67...  Pay up, huh?  By the way, why don't I send you my re\u0301sume\u0301?  This is a line\r\nbreak.";
@@ -99,136 +100,51 @@ public class SimpleBITest {
 + "statesmayofrightdo.Andforthesupportofthisdeclaration,withafirmrelianceontheprotectionofDivineProvidence,we"
 + "mutuallypledgetoeachotherourlives,ourfortunesandoursacredhonor.\n";
 
-    public static void main(String[] args) throws java.io.IOException {
-        Locale locale = new Locale("en", "US", "TEST");
+	public static void main(String[] args) throws Exception {
+		new SimpleBITest().run(args);
+	}
 
-/*
-        System.out.println("==================================");
-        System.out.println("Character break:");
-        BreakIterator charBreak = BreakIterator.getCharacterInstance(locale);
-        doTest(charBreak);
-*/
+    public void testWordBreak() throws Exception {
+        BreakIterator wordBreak = BreakIterator.getWordInstance(new Locale("en", "US", "TEST"));
+        int breaks = doTest(wordBreak);
+        errln(String.valueOf(breaks));
+	}
 
-        System.out.println("==================================");
-        System.out.println("Word break:");
-        BreakIterator wordBreak = BreakIterator.getWordInstance(locale);
-        doTest(wordBreak);
+    public void testLineBreak() throws Exception {
+        BreakIterator lineBreak = BreakIterator.getLineInstance(new Locale("en", "US", "TEST"));
+        int breaks = doTest(lineBreak);
+        errln(String.valueOf(breaks));
+	}
 
-        System.out.println("==================================");
-        System.out.println("Line break:");
-        BreakIterator lineBreak = BreakIterator.getLineInstance(locale);
-        doTest(lineBreak);
-
-        System.out.println("==================================");
-        System.out.println("Sentence break:");
-        BreakIterator sentenceBreak = BreakIterator.getSentenceInstance(locale);
-        doTest(sentenceBreak);
-/*
-java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
-System.out.print("?");
-String line = in.readLine();
-while (line.length() != 0) {
-System.out.println(line);
-RuleBasedBreakIterator test = new RuleBasedBreakIterator(line);
-System.out.print("?");
-line = in.readLine();
-}
-*/
+    public void testSentenceBreak() throws Exception {
+        BreakIterator sentenceBreak = BreakIterator.getSentenceInstance(new Locale("en", "US", "TEST"));
+        int breaks = doTest(sentenceBreak);
+        errln(String.valueOf(breaks));
     }
 
-    public static void doTest(BreakIterator bi) {
-        {
-//System.out.println("Total number of characters in test string = " + testText.length());
-            // forward
-            bi.setText(testText);
-            int p = bi.first();
-            int lastP = p;
-            String fragment;
-            int breaks = 0;
-            System.out.println("Forward...");
-            while (p != BreakIterator.DONE) {
-//System.out.print(">>>");
-                p = bi.next();
-System.out.print(p);
-                if (p != BreakIterator.DONE)
-                    fragment = testText.substring(lastP, p);
-                else
-                    fragment = testText.substring(lastP);
-//System.out.println();
-                debugPrintln(": >" + fragment + "<");
-                ++breaks;
-                lastP = p;
-            }
-//RuleBasedBreakIterator.printVisitedCharCount();
-//System.out.println("Total number of break positions encountered = " + breaks);
-        }
-/*
-        {
-            // backward
-            bi.setText(testText);
-            int p = bi.last();
-            int lastP = p;
-            int breaks = 0;
-            String fragment;
-            System.out.println("Backward...");
-            while (p != BreakIterator.DONE) {
-//System.out.print(">>>");
-                p = bi.previous();
-                if (p != BreakIterator.DONE)
-                    fragment = testText.substring(p, lastP);
-                else
-                    fragment = testText.substring(0, lastP);
-//System.out.println();
-                debugPrintln(">" + fragment + "<");
-                ++breaks;
-                lastP = p;
-            }
-//RuleBasedBreakIterator.printVisitedCharCount();
-//System.out.println("Total number of break positions encountered = " + breaks);
-        }
-
-        {
-            // forward with following()
-            bi.setText(testText);
-            int p = 0;
-            int lastP = p;
-            int breaks = 0;
-            String fragment;
-            System.out.println("Following...");
-            while (p < testText.length()) {
-//System.out.print(">>>");
-                p = bi.following(p);
+    private int doTest(BreakIterator bi) {
+        // forward
+        bi.setText(testText);
+        int p = bi.first();
+        int lastP = p;
+        String fragment;
+        int breaks = 0;
+        logln("Forward...");
+        while (p != BreakIterator.DONE) {
+            p = bi.next();
+            if (p != BreakIterator.DONE) {
                 fragment = testText.substring(lastP, p);
-//System.out.println();
-                debugPrintln(">" + fragment + "<");
-                ++breaks;
-                lastP = p;
-            }
+            } else {
+                fragment = testText.substring(lastP);
+			}
+            debugPrintln(": >" + fragment + "<");
+            ++breaks;
+            lastP = p;
         }
-        {
-            // backward with preceding()
-            bi.setText(testText);
-            int p = testText.length();
-            int lastP = p;
-            int breaks = 0;
-            String fragment;
-            System.out.println("Preceding...");
-            while (p > 0) {
-//System.out.print(">>>");
-                p = bi.preceding(p);
-                fragment = testText.substring(p, lastP);
-//System.out.println();
-                debugPrintln(">" + fragment + "<");
-                ++breaks;
-                lastP = p;
-            }
-//RuleBasedBreakIterator.printVisitedCharCount();
-//System.out.println("Total number of break positions encountered = " + breaks);
-        }
-*/
+        return breaks;
     }
 
-    public static void debugPrintln(String s) {
+    private void debugPrintln(String s) {
         final String zeros = "0000";
         String temp;
         StringBuffer out = new StringBuffer();
@@ -243,10 +159,10 @@ System.out.print(p);
                 out.append(temp);
             }
         }
-        System.out.println(out);
+        logln(out.toString());
     }
 
-    public static void debugPrintln2(String s) {
+    private void debugPrintln2(String s) {
         StringBuffer out = new StringBuffer();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -255,7 +171,7 @@ System.out.print(p);
             else
                 out.append(c);
         }
-        System.out.println(out);
+        logln(out.toString());
     }
 }
 
