@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2000/11/28 00:50:12 $
- * $Revision: 1.6 $
+ * $Date: 2000/11/28 16:41:23 $
+ * $Revision: 1.7 $
  */
 package com.ibm.util;
 import com.ibm.text.*;
@@ -255,7 +255,6 @@ public class ChineseCalendar extends Calendar {
         return nextStart - thisStart;
     }
 
-
     /**
      * Framework method to create a calendar-specific DateFormat object
      * using the the given pattern.  This method is responsible for
@@ -264,6 +263,38 @@ public class ChineseCalendar extends Calendar {
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
         return new ChineseDateFormat(pattern, locale);
+    }
+
+    /**
+     * Field resolution table that incorporates IS_LEAP_MONTH.
+     */
+    static final int[][][] CHINESE_DATE_PRECEDENCE = {
+        {
+            { DAY_OF_MONTH },
+            { WEEK_OF_YEAR, DAY_OF_WEEK },
+            { WEEK_OF_MONTH, DAY_OF_WEEK },
+            { DAY_OF_WEEK_IN_MONTH, DAY_OF_WEEK },
+            { WEEK_OF_YEAR, DOW_LOCAL },
+            { WEEK_OF_MONTH, DOW_LOCAL },
+            { DAY_OF_WEEK_IN_MONTH, DOW_LOCAL },
+            { DAY_OF_YEAR },
+            { RESOLVE_REMAP | DAY_OF_MONTH, ChineseCalendar.IS_LEAP_MONTH },
+        },
+        {
+            { WEEK_OF_YEAR },
+            { WEEK_OF_MONTH },
+            { DAY_OF_WEEK_IN_MONTH },
+            { RESOLVE_REMAP | DAY_OF_WEEK_IN_MONTH, DAY_OF_WEEK },
+            { RESOLVE_REMAP | DAY_OF_WEEK_IN_MONTH, DOW_LOCAL },
+        },
+    };
+
+    /**
+     * Override Calendar to add IS_LEAP_MONTH to the field resolution
+     * table.
+     */
+    protected int[][][] getFieldResolutionTable() {
+        return CHINESE_DATE_PRECEDENCE;
     }
 
     //------------------------------------------------------------------
@@ -331,7 +362,7 @@ public class ChineseCalendar extends Calendar {
             // using our algorithms, e.g.: 1298 1391 1492 1553 1560.  That
             // is, winterSolstice(1298) starts search at Dec 14 08:00:00
             // PST 1298 with a final result of Dec 14 10:31:59 PST 1299.
-            long ms = daysToMillis(computeGregorianMonthStart(gyear, Calendar.DECEMBER) +
+            long ms = daysToMillis(computeGregorianMonthStart(gyear, DECEMBER) +
                                    1 - EPOCH_JULIAN_DAY);
             astro.setTime(ms);
             
@@ -510,7 +541,7 @@ public class ChineseCalendar extends Calendar {
 
             int year = gyear - CHINESE_EPOCH_YEAR;
             if (month < 11 ||
-                gmonth >= Calendar.JULY) {
+                gmonth >= JULY) {
                 year++;
             }
             int dayOfMonth = days - thisMoon + 1;
