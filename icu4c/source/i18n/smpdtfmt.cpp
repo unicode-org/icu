@@ -44,13 +44,13 @@
 // For time zones that have no names, use strings GMT+minutes and
 // GMT-minutes. For instance, in France the time zone is GMT+60.
 // Also accepted are GMT+H:MM or GMT-H:MM.
-const UnicodeString     SimpleDateFormat::fgGmt("GMT", "");
-const UnicodeString     SimpleDateFormat::fgGmtPlus("GMT+", "");
-const UnicodeString     SimpleDateFormat::fgGmtMinus("GMT-", "");
+const UChar SimpleDateFormat::fgGmt[]      = {0x0047, 0x004D, 0x0054, 0x0000};         // "GMT"
+const UChar SimpleDateFormat::fgGmtPlus[]  = {0x0047, 0x004D, 0x0054, 0x002B, 0x0000}; // "GMT+"
+const UChar SimpleDateFormat::fgGmtMinus[] = {0x0047, 0x004D, 0x0054, 0x002D, 0x0000}; // "GMT-"
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
 // of a resource.
-const UnicodeString     SimpleDateFormat::fgDefaultPattern("yyMMdd hh:mm a", "");
+const UnicodeString SimpleDateFormat::fgDefaultPattern = UNICODE_STRING("yyMMdd hh:mm a", 14);
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
@@ -1222,8 +1222,12 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // in case localized DateFormatZoneData contains the string "GMT"
         // for a zone; in that case, we don't want to match the first three
         // characters of GMT+/-HH:MM etc.
+
+        UnicodeString lcaseText(text);
+        UnicodeString lcaseGMT(fgGmt);
         int32_t sign = 0;
         int32_t offset;
+        int32_t gmtLen = lcaseGMT.length();
 
         // For time zones that have no known names, look for strings
         // of the form:
@@ -1232,17 +1236,15 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         //    GMT.
         
         // {sfb} kludge for case-insensitive compare
-        UnicodeString lcaseText(text);
         lcaseText.toLower();
-        UnicodeString lcaseGMT(fgGmt);
         lcaseGMT.toLower();
         
-        if ((text.length() - start) > fgGmt.length() &&
-            (lcaseText.compare(start, lcaseGMT.length(), lcaseGMT, 0, lcaseGMT.length())) == 0)
+        if ((text.length() - start) > gmtLen &&
+            (lcaseText.compare(start, gmtLen, lcaseGMT, 0, gmtLen)) == 0)
         {
             fCalendar->set(Calendar::DST_OFFSET, 0);
 
-            pos.setIndex(start + fgGmt.length());
+            pos.setIndex(start + gmtLen);
 
             if( text[pos.getIndex()] == 0x002B /*'+'*/ )
                 sign = 1;
