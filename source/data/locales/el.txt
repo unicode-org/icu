@@ -112,4 +112,8 @@ el {
                 "GMT",
         }
     }
+    LocaleScript{ 
+                "Greek",// Script Name  
+                "Grek"  // ISO 15924 Name 
+    }
 }

@@ -134,4 +134,10 @@ eo {
     }
     ShortLanguage { "epo" }
     localPatternChars { "GjMtkHmslTJUSnahKz" }
+    LocaleScript{ 
+                "Latin", // Script Name  
+                "Latn",  // ISO 15924 Name 
+                "Latf",  // ISO 15924 Name 
+                "Latg",  // ISO 15924 Name 
+    }
 }

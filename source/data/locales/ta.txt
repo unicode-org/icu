@@ -249,6 +249,10 @@ ta {
 	    Version { "1.0" }
 		Sequence { "[normalization on]" }
 	}
+    LocaleScript{ 
+                "Tamil", // Script Name  
+                "Taml"   // ISO 15924 Name 
+    }
 
 }
 

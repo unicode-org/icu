@@ -249,6 +249,10 @@ mr {
             "[normalization on]"
 		}
       }
+    LocaleScript{ 
+                "Devanagari", // Script Name  
+                "Deva"        // ISO 15924 Name 
+    }
 }
 
 

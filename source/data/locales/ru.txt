@@ -117,4 +117,9 @@ ru {
                 "GMT",
         }
     }
+    LocaleScript{ 
+                "Cyrillic", // Script Name  
+                "Cyrs"      // ISO 15924 Name 
+
+    }
 }
