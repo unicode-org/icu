@@ -59,8 +59,9 @@ dtfmtsym.o fmtable.o format.o gregocal.o hextouni.o \
 msgfmt.o numfmt.o rbt.o rbt_data.o rbt_pars.o \
 rbt_rule.o rbt_set.o simpletz.o smpdtfmt.o \
 sortkey.o tblcoll.o timezone.o translit.o \
-ubrk.o ucal.o ucol.o ucol_bld.o ucol_elm.o ucol_cnt.o ucol_tok.o \
-ucoleitr.o udat.o umsg.o \
+ubrk.o ucal.o \
+ucol.o ucol_bld.o ucol_elm.o ucol_cnt.o ucol_tok.o ucol_wgt.o ucoleitr.o \
+udat.o umsg.o \
 unifltlg.o unirange.o uniset.o unitohex.o unum.o \
 dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o \
  utrans.o
