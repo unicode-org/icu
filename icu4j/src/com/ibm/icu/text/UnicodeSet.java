@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/07/10 17:36:42 $
- * $Revision: 1.69 $
+ * $Date: 2002/07/26 21:12:36 $
+ * $Revision: 1.70 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ package com.ibm.icu.text;
 import java.text.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
+import com.ibm.icu.impl.UCharacterProperty;
 import java.util.TreeSet;
 import java.util.SortedSet;
 import java.util.Iterator;
@@ -146,7 +147,7 @@ import java.util.Iterator;
  * </blockquote>
  *
  * Any character may be preceded by a backslash in order to remove any special
- * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
+ * meaning.  White space characters, as defined by UCharacterProperty.isRuleWhiteSpace(), are
  * ignored, unless they are escaped.
  *
  * <p>Property patterns specify a set of characters having a certain
@@ -209,7 +210,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.69 $ $Date: 2002/07/10 17:36:42 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.70 $ $Date: 2002/07/26 21:12:36 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -297,7 +298,7 @@ public class UnicodeSet extends UnicodeFilter {
      * for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
      * @param ignoreWhitespace if true, ignore characters for which
-     * Character.isWhitespace() returns true
+     * UCharacterProperty.isRuleWhiteSpace() returns true
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
      */
@@ -399,7 +400,7 @@ public class UnicodeSet extends UnicodeFilter {
      * See the class description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
      * @param ignoreWhitespace if true then characters for which
-     * Character.isWhitespace() returns true are ignored
+     * UCharacterProperty.isRuleWhiteSpace() returns true are ignored
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
@@ -470,7 +471,7 @@ public class UnicodeSet extends UnicodeFilter {
             break;
         default:
             // Escape whitespace
-            if (UCharacter.isWhitespace(c)) {
+            if (UCharacterProperty.isRuleWhiteSpace(c)) {
                 buf.append('\\');
             }
             break;
@@ -1674,9 +1675,7 @@ public class UnicodeSet extends UnicodeFilter {
                 i += UTF16.getCharCount(c);
             }
 
-            // Ignore whitespace.  This is not Unicode whitespace, but Java
-            // whitespace, a subset of Unicode whitespace.
-            if (ignoreWhitespace && UCharacter.isWhitespace(c)) {
+            if (ignoreWhitespace && UCharacterProperty.isRuleWhiteSpace(c)) {
                 continue;
             }
 

@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2002/07/26 20:40:46 $
-* $Revision: 1.14 $
+* $Date: 2002/07/26 21:12:36 $
+* $Revision: 1.15 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -15,6 +15,7 @@ import java.util.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.UCharacterProperty;
 
 /**
  * INTERNAL CLASS implementing the UnicodeSet properties as outlined
@@ -55,7 +56,7 @@ import com.ibm.icu.impl.NormalizerImpl;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.14 $ $Date: 2002/07/26 20:40:46 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.15 $ $Date: 2002/07/26 21:12:36 $
  */
 class UnicodePropertySet {
 
@@ -458,7 +459,7 @@ class UnicodePropertySet {
         for (int i=start; i<limit; ) {
             int c = UTF16.charAt(str, i);
             i += UTF16.getCharCount(c);
-            if (c != '_' && c != '-' && !UCharacter.isWhitespace(c)) {
+            if (c != '_' && c != '-' && !UCharacterProperty.isRuleWhiteSpace(c)) {
                 UTF16.append(buf, UCharacter.toUpperCase(c));
             }
         }
