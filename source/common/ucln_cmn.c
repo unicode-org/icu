@@ -46,7 +46,7 @@ void u_cleanup(void)
         }
 
     }
-    /*unorm_cleanup();*/
+    unorm_cleanup();
     unames_cleanup();
     uchar_cleanup();
     locale_cleanup();
