@@ -1009,7 +1009,7 @@ void TimeZoneTest::TestCountries() {
     // Asia/Tokyo isn't.  Vice versa for the "JP" group.
     int32_t n;
     const UnicodeString** s = TimeZone::createAvailableIDs("US", n);
-    UBool la = false, tokyo = false;
+    UBool la = FALSE, tokyo = FALSE;
     UnicodeString laZone("America/Los_Angeles", "");
     UnicodeString tokyoZone("Asia/Tokyo", "");
     int32_t i;
@@ -1029,7 +1029,7 @@ void TimeZoneTest::TestCountries() {
     delete[] s;
     
     s = TimeZone::createAvailableIDs("JP", n);
-    la = false; tokyo = false;
+    la = FALSE; tokyo = FALSE;
     
     for (i=0; i<n; ++i) {
         if (*s[i] == (laZone)) {
