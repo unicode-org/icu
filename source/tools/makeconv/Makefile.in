@@ -31,6 +31,10 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 
+## Echo w/o newline
+ECHO_N = @ECHO_N@
+ECHO_C = @ECHO_C@
+
 ## Compiler/tools information
 CC = @CC@
 CXX = @CXX@
@@ -122,11 +126,11 @@ $(TARGET) : $(OBJECTS)
 
 # Rule to build a compiled cnv file
 $(top_builddir)/data/test%.cnv : $(top_srcdir)/test/testdata/test%.ucm
-	@echo -n "$< -> "
+	@echo $(ECHO_N) "$< -> $(ECHO_C)"
 	@./makeconv -d $(top_builddir)/data $<
 
 $(top_builddir)/data/%.cnv : $(top_srcdir)/../data/%.ucm
-	@echo -n "$< -> "
+	@echo $(ECHO_N) "$< -> $(ECHO_C)"
 	@./makeconv -d $(top_builddir)/data $<
 
 ifeq (,$(MAKECMDGOALS))
