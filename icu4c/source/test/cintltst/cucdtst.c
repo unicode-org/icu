@@ -33,9 +33,6 @@
 
 /* prototypes --------------------------------------------------------------- */
 
-static void setUpDataTable(void);
-static void cleanUpDataTable(void);
-
 static void TestUpperLower(void);
 static void TestLetterNumber(void);
 static void TestMisc(void);
@@ -48,7 +45,7 @@ static void TestCodePoint(void);
 static void TestCharLength(void);
 static void TestCharNames(void);
 static void TestMirroring(void);
-       void TestUScriptCodeAPI(void);	/* defined in cucdapi.c */
+       void TestUScriptCodeAPI(void);    /* defined in cucdapi.c */
 static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
 static void TestNumericProperties(void);
@@ -64,9 +61,9 @@ static int32_t MakeDir(char* str);
 
 /* test data ---------------------------------------------------------------- */
 
-const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
-const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";
-const int32_t tagValues[] =
+static const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
+static const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";
+static const int32_t tagValues[] =
     {
     /* Mn */ U_NON_SPACING_MARK,
     /* Mc */ U_COMBINING_SPACING_MARK,
@@ -100,7 +97,7 @@ const int32_t tagValues[] =
     /* Pf */ U_FINAL_PUNCTUATION
     };
 
-const char dirStrings[][5] = {
+static const char dirStrings[][5] = {
     "L",
     "R",
     "EN",
@@ -121,6 +118,8 @@ const char dirStrings[][5] = {
     "NSM",
     "BN"
 };
+
+void addUnicodeTest(TestNode** root);
 
 void addUnicodeTest(TestNode** root)
 {
@@ -154,7 +153,7 @@ static void TestUpperLower()
     const UChar lower[] = {0x61, 0x62, 0x00b2, 0x01c6, 0x01c6, 0x01c9, 0x01c9, 0x01c9, 0x000c, 0x0000};
     U_STRING_DECL(upperTest, "abcdefg123hij.?:klmno", 21);
     U_STRING_DECL(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
-    int i;
+    int32_t i;
 
     U_STRING_INIT(upperTest, "abcdefg123hij.?:klmno", 21);
     U_STRING_INIT(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
@@ -212,69 +211,68 @@ Checks LetterLike Symbols which were previously a source of confusion
     
     log_verbose("testing u_istitle\n");
     {
-    	UChar expected[] = {
-    					0x1F88,
-    					0x1F89,
-    					0x1F8A,
-    					0x1F8B,
-    					0x1F8C,
-    					0x1F8D,
-    					0x1F8E,
-    					0x1F8F,
-    					0x1F88,
-    					0x1F89,
-    					0x1F8A,
-    					0x1F8B,
-    					0x1F8C,
-    					0x1F8D,
-    					0x1F8E,
-    					0x1F8F,
-    					0x1F98,
-    					0x1F99,
-    					0x1F9A,
-    					0x1F9B,
-    					0x1F9C,
-    					0x1F9D,
-    					0x1F9E,
-    					0x1F9F,
-    					0x1F98,
-    					0x1F99,
-    					0x1F9A,
-    					0x1F9B,
-    					0x1F9C,
-    					0x1F9D,
-    					0x1F9E,
-    					0x1F9F,
-    					0x1FA8,
-    					0x1FA9,
-    					0x1FAA,
-    					0x1FAB,
-    					0x1FAC,
-    					0x1FAD,
-    					0x1FAE,
-    					0x1FAF,
-    					0x1FA8,
-    					0x1FA9,
-    					0x1FAA,
-    					0x1FAB,
-    					0x1FAC,
-    					0x1FAD,
-    					0x1FAE,
-    					0x1FAF,
-    					0x1FBC,
-    					0x1FBC,
-    					0x1FCC,
-    					0x1FCC,
-    					0x1FFC,
-    					0x1FFC,
-    			};
-    	int32_t num = sizeof(expected)/sizeof(expected[0]);
-    	int32_t i=0;
-    	for(;i<num;i++){
-    		if(!u_istitle(expected[i])){
-    			log_err("u_istitle failed for 0x%4X. Expected TRUE, got FALSE\n",expected[i]);
-    		}
-    	}
+        static const UChar expected[] = {
+            0x1F88,
+            0x1F89,
+            0x1F8A,
+            0x1F8B,
+            0x1F8C,
+            0x1F8D,
+            0x1F8E,
+            0x1F8F,
+            0x1F88,
+            0x1F89,
+            0x1F8A,
+            0x1F8B,
+            0x1F8C,
+            0x1F8D,
+            0x1F8E,
+            0x1F8F,
+            0x1F98,
+            0x1F99,
+            0x1F9A,
+            0x1F9B,
+            0x1F9C,
+            0x1F9D,
+            0x1F9E,
+            0x1F9F,
+            0x1F98,
+            0x1F99,
+            0x1F9A,
+            0x1F9B,
+            0x1F9C,
+            0x1F9D,
+            0x1F9E,
+            0x1F9F,
+            0x1FA8,
+            0x1FA9,
+            0x1FAA,
+            0x1FAB,
+            0x1FAC,
+            0x1FAD,
+            0x1FAE,
+            0x1FAF,
+            0x1FA8,
+            0x1FA9,
+            0x1FAA,
+            0x1FAB,
+            0x1FAC,
+            0x1FAD,
+            0x1FAE,
+            0x1FAF,
+            0x1FBC,
+            0x1FBC,
+            0x1FCC,
+            0x1FCC,
+            0x1FFC,
+            0x1FFC,
+        };
+        int32_t num = sizeof(expected)/sizeof(expected[0]);
+        for(i=0; i<num; i++){
+            if(!u_istitle(expected[i])){
+                log_err("u_istitle failed for 0x%4X. Expected TRUE, got FALSE\n",expected[i]);
+            }
+        }
 
     }
 }
@@ -450,25 +448,24 @@ static void TestLetterNumber()
 /* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue() */
 static void TestMisc()
 {
-    const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
-    const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
-    const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa6b };
-    const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
-    const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
-    const UChar sampleNonBase[] = {0x002B, 0x0020, 0x203B};
-    const UChar sampleChars[] = {0x000a, 0x0045, 0x4e00, 0xDC00, 0xFFE8, 0xFFF0};
-    const UChar sampleDigits[]= {0x0030, 0x0662, 0x0F23, 0x0ED5};
-    const UChar sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
-    const UChar sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
-    const UChar sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
+    static const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
+    static const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
+    static const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa6b };
+    static const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
+    static const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
+    static const UChar sampleNonBase[] = {0x002B, 0x0020, 0x203B};
+/*    static const UChar sampleChars[] = {0x000a, 0x0045, 0x4e00, 0xDC00, 0xFFE8, 0xFFF0};*/
+    static const UChar sampleDigits[]= {0x0030, 0x0662, 0x0F23, 0x0ED5};
+    static const UChar sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
+    static const UChar sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
+    static const UChar sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
 
 
-    const int32_t sampleDigitValues[] = {0, 2, 3, 5};
-    const int32_t sample2DigitValues[]= {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; /*special characters not in the properties table*/
+    static const int32_t sampleDigitValues[] = {0, 2, 3, 5};
 
     uint32_t mask;
 
-    int i;
+    int32_t i;
     char icuVersion[U_MAX_VERSION_STRING_LENGTH];
     UVersionInfo realVersion;
 
@@ -608,13 +605,12 @@ static void TestMisc()
         log_err("error: problems with U_GC_Y_MASK constants\n");
     }
     {
-    	UChar32 digit[10]={ 0x0030,0x0031,0x0032,0x0033,0x0034,0x0035,0x0036,0x0037,0x0038,0x0039 };
-    	int32_t i=0;
-    	for(i=0;i<10;i++){
-    		if(digit[i]!=u_forDigit(i,10)){
-    			log_err("u_forDigit failed for %i. Expected: 0x%4X Got: 0x%4X\n",i,digit[i],u_forDigit(i,10));
-    		}
-    	}
+        static const UChar32 digit[10]={ 0x0030,0x0031,0x0032,0x0033,0x0034,0x0035,0x0036,0x0037,0x0038,0x0039 };
+        for(i=0; i<10; i++){
+            if(digit[i]!=u_forDigit(i,10)){
+                log_err("u_forDigit failed for %i. Expected: 0x%4X Got: 0x%4X\n",i,digit[i],u_forDigit(i,10));
+            }
+        }
     }
 
     /* test u_digit() */
@@ -655,8 +651,6 @@ static void TestMisc()
             { 0x0031, 1, -1 },
             { 0xff3a, 37, -1 }
         };
-
-        int32_t i;
 
         for(i=0; i<LENGTHOF(data); ++i) {
             if(u_digit(data[i].c, data[i].radix)!=data[i].value) {
@@ -1514,7 +1508,7 @@ TestCharNames() {
     struct enumExtCharNamesContext extContext;
     int32_t length;
     UChar32 c;
-    int i;
+    int32_t i;
 
     log_verbose("Testing uprv_getMaxCharNameLength()\n");
     length=uprv_getMaxCharNameLength();
@@ -1528,7 +1522,7 @@ TestCharNames() {
     /* ### TODO same tests for max ISO comment length as for max name length */
 
     log_verbose("Testing u_charName()\n");
-    for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
+    for(i=0; i<(int32_t)(sizeof(names)/sizeof(names[0])); ++i) {
         /* modern Unicode character name */
         length=u_charName(names[i].code, U_UNICODE_CHAR_NAME, name, sizeof(name), &errorCode);
         if(U_FAILURE(errorCode)) {
@@ -1600,7 +1594,7 @@ TestCharNames() {
         enum { BUFSIZE = 256 };
         UErrorCode ec = U_ZERO_ERROR;
         char buf[BUFSIZE];
-        int32_t i, maxLength;
+        int32_t maxLength;
         UChar32 cp;
         UChar pat[BUFSIZE], dumbPat[BUFSIZE];
         int32_t l1, l2;
@@ -1619,7 +1613,8 @@ TestCharNames() {
         uprv_getCharNameCharacters(set);
 
         /* build set the dumb (but sure-fire) way */
-        for (i=0; i<256; ++i) map[i] = FALSE;
+        for (i=0; i<256; ++i)
+            map[i] = FALSE;
 
         maxLength=0;
         for (cp=0; cp<0x110000; ++cp) {
@@ -2531,6 +2526,9 @@ TestPropertyValues(void) {
             script = u_getIntPropertyValue(-1, UCHAR_SCRIPT);
             desc = "u_getIntPropertyValue(-1, UCHAR_SCRIPT)";
             break;
+        default:
+            log_err("Internal test error. Too many scripts\n");
+            return;
         }
         /* We don't explicitly test ec.  It should be U_FAILURE but it
            isn't documented as such. */
