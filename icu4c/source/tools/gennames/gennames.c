@@ -702,7 +702,7 @@ generateData() {
     udata_writeBlock(pData, stringStore+groupTop, lineTop-groupTop);
     if((lineTop-groupTop)&1) {
         /* 2-padding */
-        udata_write8(pData, 0);
+        udata_writePadding(pData, 1);
     }
 
     /* group table */
@@ -722,11 +722,7 @@ generateData() {
     udata_writeBlock(pData, stringStore, groupTop);
 
     /* 4-align the algorithmic names data */
-    offset=groupStringOffset+groupTop;
-    while(offset<algNamesOffset) {
-        udata_write8(pData, 0);
-        ++offset;
-    }
+    udata_writePadding(pData, algNamesOffset-(groupStringOffset+groupTop));
 
     generateAlgorithmicData(pData);
 
@@ -794,7 +790,6 @@ generateAlgorithmicData(UNewDataMemory *pData) {
         19, 21, 28
     };
 
-    uint8_t bytes[4]={ 0, 0, 0, 0 };
     uint32_t size;
 
     size=0;
@@ -821,7 +816,7 @@ generateAlgorithmicData(UNewDataMemory *pData) {
         udata_writeBlock(pData, &cjkExtA, sizeof(AlgorithmicRange));
         udata_writeString(pData, prefix, PREFIX_LENGTH);
         if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-            udata_writeBlock(pData, bytes, PREFIX_LENGTH_4-PREFIX_LENGTH);
+            udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
         }
     } else {
         size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
@@ -832,7 +827,7 @@ generateAlgorithmicData(UNewDataMemory *pData) {
         udata_writeBlock(pData, &cjk, sizeof(AlgorithmicRange));
         udata_writeString(pData, prefix, PREFIX_LENGTH);
         if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-            udata_writeBlock(pData, bytes, PREFIX_LENGTH_4-PREFIX_LENGTH);
+            udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
         }
     } else {
         size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;

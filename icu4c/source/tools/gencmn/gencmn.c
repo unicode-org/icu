@@ -180,9 +180,7 @@ main(int argc, char *argv[]) {
         /* pad to 16-align the next file */
         length&=0xf;
         if(length!=0) {
-            length=16-length;
-            icu_memset(buffer, 0, length);
-            udata_writeBlock(out, buffer, length);
+            udata_writePadding(out, 16-length);
         }
 
         /* copy the next file */
