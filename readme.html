@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.1 ReadMe</h1>
 
-    <p>Version: 2002-May-31<br>
+    <p>Version: 2002-Jun-11<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -612,7 +612,7 @@
       <tr>
         <td>AIX 4.3.3</td>
 
-        <td>xlC 3.6.6</td>
+        <td>xlC_r 3.6.6</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -846,12 +846,21 @@
 
     <p>Building International Components for Unicode on Unix requires:</p>
 
-    <p>A UNIX C++ compiler, (gcc, CC, xlC_r, etc...) installed on the target
-    machine. A recent version of GNU make (3.7+). For a list of OS/390 tools
-    please view the <a href="#HowToBuildOS390">OS/390 build section</a> of this
-    document for further details.</p>
+    <ul>
+      <li>A C++ compiler installed on the target machine (for example: gcc, CC,
+      xlC_r, aCC, cxx, etc...).</li>
 
-    <p>The steps are:</p>
+      <li>An ANSI C compiler installed on the target machine (for example:
+      cc).</li>
+
+      <li>A recent version of GNU make (3.7+).</li>
+
+      <li>For a list of OS/390 tools please view the <a href=
+      "#HowToBuildOS390">OS/390 build section</a> of this document for further
+      details.</li>
+    </ul>
+
+    <p>Here are the steps to build ICU:</p>
 
     <ol>
       <li>Decompress the icuXXXX.tar (or icuXXXX.tgz) file. For example,
@@ -859,8 +868,8 @@
 
       <li>Change directory to the "icu/source".</li>
 
-      <li>Run "chmod +x runConfigureICU configure install-sh" as these files
-      may have the wrong permissions.</li>
+      <li>Run "chmod +x runConfigureICU configure install-sh" because these
+      files may have the wrong permissions.</li>
 
       <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
       for your platform. (See <a href="#HowToConfigureICU">note</a>
@@ -1109,7 +1118,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                                                                        the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                                                                  the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
