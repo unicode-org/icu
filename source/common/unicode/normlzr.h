@@ -27,6 +27,8 @@ U_NAMESPACE_BEGIN
  * - a Normalizer object is an iterator that takes any kind of text and
  *   provides iteration over its normalized form
  *
+ * The Normalizer class is not suitable for subclassing.
+ *
  * The static functions are basically wrappers around the C implementation,
  * using UnicodeString instead of UChar*.
  * For basic information about normalization forms and details about the C API

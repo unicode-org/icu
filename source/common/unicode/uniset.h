@@ -31,6 +31,8 @@ class UVector;
  * A character specifies a subset of Unicode code points.  Legal
  * code points are U+0000 to U+10FFFF, inclusive.
  *
+ * The UnicodeSet class is not suitable for subclassing.
+ *
  * <p><code>UnicodeSet</code> supports two APIs. The first is the
  * <em>operand</em> API that allows the caller to modify the value of
  * a <code>UnicodeSet</code> object. It conforms to Java 2's

@@ -32,6 +32,8 @@ U_NAMESPACE_BEGIN
  * you can use the same <code>ParsePosition</code>, since the index parameter
  * records the current position.
  *
+ * The ParsePosition class is not suitable for subclassing.
+ *
  * @version     1.3 10/30/97
  * @author      Mark Davis, Helena Shih
  * @see         java.text.Format
