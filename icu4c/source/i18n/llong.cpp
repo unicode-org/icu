@@ -57,9 +57,8 @@ const double llong::kDMin = -kDMax;
 
 #define SQRT231 46340
 
-// solaris 64-bit computes zero for this!
-//const double llong::kD32 = ((double)(0xffffffffu)) + 1;
-const double llong::kD32 = uprv_pow(2, 32);
+// Keep all math as a double. Solaris 64-bit fails otherwise
+const double llong::kD32 = ((double)((uint32_t)0xffffffffu)) + 1.0;
 
 llong::llong(double d) { // avoid dependency on bit representation of double
     if (uprv_isNaN(d)) {
