@@ -698,19 +698,18 @@ HebrewCalendar::initializeSystemDefaultCentury()
   if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
   {
     UErrorCode status = U_ZERO_ERROR;
-    Calendar *calendar = new HebrewCalendar(Locale("he@calendar=hebrew"),status);
-    if (calendar != NULL && U_SUCCESS(status))
+    HebrewCalendar calendar(Locale("he@calendar=hebrew"),status);
+    if (U_SUCCESS(status))
     {
-      calendar->setTime(Calendar::getNow(), status);
-      calendar->add(UCAL_YEAR, -80, status);
-      UDate    newStart =  calendar->getTime(status);
-      int32_t  newYear  =  calendar->get(UCAL_YEAR, status);
+      calendar.setTime(Calendar::getNow(), status);
+      calendar.add(UCAL_YEAR, -80, status);
+      UDate    newStart =  calendar.getTime(status);
+      int32_t  newYear  =  calendar.get(UCAL_YEAR, status);
       {
         Mutex m;
         fgSystemDefaultCenturyStart = newStart;
         fgSystemDefaultCenturyStartYear = newYear;
       }
-      delete calendar;
     }
     // We have no recourse upon failure unless we want to propagate the failure
     // out.
