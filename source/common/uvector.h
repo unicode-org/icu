@@ -63,7 +63,7 @@
  *
  * @author Alan Liu
  */
-class UVector {
+class U_COMMON_API UVector {
 public:
     typedef void (*Deleter)(void*);
     typedef bool_t (*Comparer)(void*, void*);
@@ -87,6 +87,10 @@ public:
     UVector(Deleter d, Comparer c, int32_t initialCapacity = 8);
 
     ~UVector();
+
+    //------------------------------------------------------------
+    // java.util.Vector API
+    //------------------------------------------------------------
 
     void addElement(void* obj);
 
@@ -116,7 +120,10 @@ public:
 
     bool_t ensureCapacity(int32_t minimumCapacity);
 
+    //------------------------------------------------------------
     // New API
+    //------------------------------------------------------------
+
     Deleter setDeleter(Deleter d);
 
     Comparer setComparer(Comparer c);
@@ -124,6 +131,17 @@ public:
     static bool_t isOutOfMemory();
 
     void* operator[](int32_t index) const;
+
+    /**
+     * Removes the element at the given index from this vector and
+     * transfer ownership of it to the caller.  After this call, the
+     * caller owns the result and must delete it and the vector entry
+     * at 'index' is removed, shifting all subsequent entries back by
+     * one index and shortening the size of the vector by one.  If the
+     * index is out of range or if there is no item at the given index
+     * then 0 is returned and the vector is unchanged.
+     */
+    void* orphanElementAt(int32_t index);
 
 private:
     void _init(int32_t initialCapacity);
@@ -152,7 +170,7 @@ private:
  *
  * @author Alan Liu
  */
-class UStack : public UVector {
+class U_COMMON_API UStack : public UVector {
 public:
     UStack(int32_t initialCapacity = 8);
 
@@ -207,10 +225,10 @@ inline void* UVector::operator[](int32_t index) const {
 }
 
 // Dummy implementation - disallowed method
-UVector::UVector(const UVector&) {}
+inline UVector::UVector(const UVector&) {}
 
 // Dummy implementation - disallowed method
-UVector& UVector::operator=(const UVector&) {
+inline UVector& UVector::operator=(const UVector&) {
     return *this;
 }
 
@@ -231,10 +249,10 @@ inline void* UStack::push(void* obj) {
 }
 
 // Dummy implementation - disallowed method
-UStack::UStack(const UStack&) {}
+inline UStack::UStack(const UStack&) {}
 
 // Dummy implementation - disallowed method
-UStack& UStack::operator=(const UStack&) {
+inline UStack& UStack::operator=(const UStack&) {
     return *this;
 }
 
