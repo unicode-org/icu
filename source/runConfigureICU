@@ -1,0 +1,105 @@
+#!/bin/sh
+
+# runConfigureICU: This script will run the "configure" script for the appropriate platform
+# Only supported platforms are recognized
+
+usage()
+{
+    echo "runConfigure: Helper script to run \"configure\" for one of the supported platforms"
+    echo "Usage: runConfigure \"<platform_name>\""
+    echo "       where <platform is the platform you want"
+    echo "       valid choices are :"
+    echo "          1. 'AIX4.1.5xlC' if you are using xlC on AIX4.1.5"
+    echo "          2. 'SOLARISCC' if you are using native CC compiler on Solaris"
+    echo "          3. 'SOLARISGCC' if you are using GNU C++ compiler on Solaris"
+    echo "          4. 'LinuxRedHat5.2' if you are using GNU C++ compiler on Linux"
+    echo "          5. 'HP/UX10.2CC' if you are using native C++ compiler on HP-UX10.2"
+    echo "          6. 'HP/UX10.2ACC' if you are using Advanced C++ compiler on HP-UX10.2"
+    echo "          7. 'HP/UX11CC' if you are using native C++ compiler on HP-UX11"
+    echo "          8. 'HP/UX11ACC' if you are using Advanced C++ compiler on HP-UX11"
+    echo "          9. 'AIX4.3xlC' if you are using xlC on AIX4.3"
+    echo "          10. 'SOL2.7CC'if you are using native CC compiler on Solaris"
+
+ }
+
+if test ${1}o = "o"; then
+   usage
+   exit 0
+fi
+
+if test $1 = "-h"; then
+   usage
+   exit 0
+fi
+
+platform=${1};
+rm -f config.cache
+rm -f config.log
+rm -f config.status
+
+case $platform in
+        AIX4.1.5xlC)
+                echo Running configure for AIX using xlC compiler ...
+                CC=/usr/lpp/xlC/bin/xlc; export CC
+                CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
+                #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+                #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+                ./configure;;
+        AIX4.3xlC)
+                echo Running configure for AIX using xlC compiler ...
+                CC=/usr/ibmcxx/bin/xlc; export CC
+                CXX=/usr/ibmcxx/bin/xlC_r; export CXX
+                #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+                #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+                ./configure;;
+        SOLARISCC)
+                echo Running configure for SOLARIS using native CC compiler ...
+                CC=/usr/local/SUNWspro/bin/cc; export CC
+                CXX=/usr/local/SUNWspro/bin/CC; export CXX
+                ./configure;;
+        SOLARISGCC)
+                echo Running configure for Solaris using gcc compiler ...
+                CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
+				LDFLAGS=-R/usr/local/lib; export LDFLAGS
+                ./configure;;
+        SOL2.7CC)
+                echo Running configure for SOLARIS2.7cc using native CC compiler
+                CC=/usr/local/SUNWspro/bin/cc; export CC
+                CXX=/usr/local/SUNWspro/bin/CC; export CXX 
+                ./configure;;
+
+        LinuxRedHat5.2)
+                echo Running configure for Linux using gcc compiler ...
+                CXX=g++; export CXX 
+		        CC=gcc; export CC
+                CXXFLAGS=-g; export CXXFLAGS
+		        CFLAGS=-g; export CFLAGS
+		        ./configure;; 
+        HP/UX10.2CC)
+                echo Running configure for HP10.2 using native CC compiler ...
+				CC=cc; export CC
+				CXX=CC; export CXX
+			    ./configure;;
+        HP/UX10.2ACC)
+                echo Running configure for HP10.2 using aCC compiler ...
+				CC=cc; export CC
+				CXX=aCC; export CXX
+                ./configure;;
+        HP/UX11CC)
+                echo Running configure for HP11 using native CC compiler ...
+                CC=cc; export CC
+				CXX=/opt/CC/bin/CC; export CXX
+                ./configure;;
+        HP/UX11ACC)
+                echo Running configure for HP11 using aCC compiler ...
+                CC=cc; export CC
+				CXX=/opt/aCC/bin/aCC; export CXX
+			    ./configure;;
+        *)
+                echo I do not recognize the option \"$platform\". Please type ${0} -h for help.
+                exit 0;;
+esac
+
+echo
+echo If the result of the above commands look OK to you, go to the directory
+echo $icu/source and type \"make\" to make the icu.
