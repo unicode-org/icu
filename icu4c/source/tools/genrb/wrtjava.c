@@ -93,8 +93,12 @@ static void write_tabs(FileStream* os){
         T_FileStream_write(os,"    ",4);
     }
 }
+
+#define ZERO 0x30
+
 static const char* enc ="";
 static UConverter* conv = NULL;
+static char NUMBER = ZERO;
 
 static int32_t 
 uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,UErrorCode* status){
@@ -535,6 +539,11 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             if(uprv_strcmp(srBundle->fLocale,"root")!=0){
                 uprv_strcat(fileName,"_");
                 uprv_strcat(fileName,srBundle->fLocale);
+                if(NUMBER > ZERO){
+                    uprv_strcat(fileName, "_");
+                    uprv_strcat(fileName, &NUMBER);
+                }
+                NUMBER++;
             }
             
             uprv_strcat(fileName,ext);
