@@ -3418,7 +3418,7 @@ TestLMBCS() {
          pUOut = UOut;
             
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
-         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 3)
+         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 5)
          {
             log_err("Unexpected results on chopped low surrogate\n");
          }
@@ -3466,7 +3466,7 @@ TestLMBCS() {
          pUOut = UOut;
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
-         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 3)
+         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 5)
          {
             log_err("Unexpected results after unpaired surrogate plus chopped Unichar \n");
          }
@@ -3500,7 +3500,7 @@ TestLMBCS() {
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+4),off,TRUE, &errorCode);
 
-         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 3)
+         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 4)
          {
             log_err("Unexpected results after unpaired surrogate plus chopped non-Unichar\n");
          }
