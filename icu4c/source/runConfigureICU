@@ -136,8 +136,8 @@ case $platform in
     AIX4.3VA)
         THE_OS=AIX
         THE_COMP="xlC_r"
-        CC=/usr/vacpp/bin/xlc_r; export CC
-        CXX=/usr/vacpp/bin/xlC_r; export CXX
+        CC=`which xlc_r`; export CC
+        CXX=`which xlC_r`; export CXX
         RELEASE_CFLAGS="-O2 -qmaxmem=-1"
         RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
@@ -145,8 +145,9 @@ case $platform in
     AIX4.3VA_nothreads)
         THE_OS=AIX
         THE_COMP="xlC"
-        CC=/usr/vacpp/bin/xlc; export CC
-        CXX=/usr/vacpp/bin/xlC; export CXX
+        # Only in Visual Age, there is no different between xlc and xlc_r.
+        CC=`which xlc`; export CC
+        CXX=`which xlC`; export CXX
         OPTS="$OPTS --enable-threads=no"
         RELEASE_CFLAGS="-O2 -qmaxmem=-1"
         RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
