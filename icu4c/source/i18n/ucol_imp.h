@@ -377,7 +377,14 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
 
-#define isContinuation(CE) (((CE) & 0x80) == 0x80)
+#define UCOL_UPPER_CASE 0x80
+#define UCOL_MIXED_CASE 0x40
+#define UCOL_LOWER_CASE 0x00
+
+#define UCOL_CONTINUATION_MARKER 0xC0
+#define UCOL_REMOVE_CONTINUATION 0xFFFFFF3F
+
+#define isContinuation(CE) (((CE) & UCOL_CONTINUATION_MARKER) == UCOL_CONTINUATION_MARKER)
 #define isFlagged(CE) (((CE) & 0x80) == 0x80)
 #define isLongPrimary(CE) (((CE) & 0xC0) == 0xC0)
 
@@ -392,8 +399,6 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define UCA_DATA_TYPE "dat"
 #define UCA_DATA_NAME "ucadata"
-#define UCOL_CASE_BIT_MASK 0x40
-#define UCOL_FLAG_BIT_MASK 0x80
 #define INVC_DATA_TYPE "dat"
 #define INVC_DATA_NAME "invuca"
 
@@ -422,37 +427,38 @@ enum {
 #define UCOL_PROPORTION3 0.667
 
 /* These values come from the UCA */
-#define UCOL_COMMON_TOP2 0x86
 #define UCOL_COMMON_BOT2 UCOL_BYTE_COMMON
+#define UCOL_COMMON_TOP2 0x86
 #define UCOL_TOTAL2 (UCOL_COMMON_TOP2-UCOL_COMMON_BOT2-1) 
 
+#define UCOL_FLAG_BIT_MASK_CASE_SW_OFF 0x80
+#define UCOL_FLAG_BIT_MASK_CASE_SW_ON 0x40
+#define UCOL_COMMON_TOP3_CASE_SW_OFF 0x86
+#define UCOL_COMMON_TOP3_CASE_SW_ON 0x46
 /* These values come from the UCA */
-#define UCOL_COMMON_TOP3 0x86
 #define UCOL_COMMON_BOT3 0x05
-#define UCOL_TOTAL3 (UCOL_COMMON_TOP3-UCOL_COMMON_BOT3-1) 
 
 #define UCOL_TOP_COUNT2  (UCOL_PROPORTION2*UCOL_TOTAL2)
 #define UCOL_BOT_COUNT2  (UCOL_TOTAL2-UCOL_TOP_COUNT2)
 
-#define UCOL_TOP_COUNT3  (UCOL_PROPORTION3*UCOL_TOTAL3)
-#define UCOL_BOT_COUNT3  (UCOL_TOTAL3-UCOL_TOP_COUNT3)
 
 #define UCOL_COMMON2 UCOL_COMMON_BOT2
-#define UCOL_COMMON3 UCOL_COMMON_BOT3
+#define UCOL_COMMON3_UPPERFIRST 0xC5
+#define UCOL_COMMON3_NORMAL UCOL_COMMON_BOT3
 
 #define UCOL_COMMON4 0xFF
 
 /* constants for case level/case first handling */
 /* used to instantiate UCollators fields in ucol_updateInternalState */
-#define UCOL_CASE_SWITCH      0x40
+#define UCOL_CASE_SWITCH      0xC0
 #define UCOL_NO_CASE_SWITCH   0x00
 
 #define UCOL_REMOVE_CASE      0x3F
-#define UCOL_KEEP_CASE        0x7F
+#define UCOL_KEEP_CASE        0xFF
 
-#define UCOL_CASE_BIT_MASK    0x40
+#define UCOL_CASE_BIT_MASK    0xC0
 
-#define UCOL_TERT_CASE_MASK   0x7F
+#define UCOL_TERT_CASE_MASK   0xFF
 
 /* Constants for Markus's LSCU */
 /* If a change is needed for SLOPE_MIN constant, other magic numbers need to be changed */
@@ -581,7 +587,13 @@ struct UCollator {
     uint8_t variableMax1;
     uint8_t variableMax2;
     uint8_t caseSwitch;
+    uint8_t tertiaryCommon;
     uint8_t tertiaryMask;
+    int32_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
+    uint8_t tertiaryTop; /* Upper range when compressing */
+    uint8_t tertiaryTopCount;
+    uint8_t tertiaryBottomCount;
+
     UChar32 variableTopValue;
     UColAttributeValue frenchCollation;
     UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
