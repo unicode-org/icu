@@ -23,7 +23,7 @@ testaliases
 
     // alias that uses another alias and references parts of the end structure
     referencingalias:alias { "testaliases/anotheralias/2" } // Referencing through another alias
-    anotheralias:alias { "/ICUDATA/ja/LocaleScript" }
+    anotheralias:alias { "/ICUDATA/ja_JP/LocaleScript" } // Provoke a fallback too
 
     LocaleScript:alias { "/ICUDATA/ja/LocaleScript" }
 
