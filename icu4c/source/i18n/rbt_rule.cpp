@@ -14,6 +14,8 @@
 #include "unicode/uniset.h"
 #include "cmemory.h"
 
+const UChar TransliterationRule::ETHER = 0xFFFF;
+
 /**
  * Construct a new rule with the given input, output text, and other
  * attributes.  A cursor position may be specified for the output text.
@@ -35,15 +37,21 @@
  * refer to these segments if they are in a special range determined by the
  * associated RuleBasedTransliterator.Data object.  May be null if there are
  * no segments.
+ * @param anchorStart TRUE if the the rule is anchored on the left to
+ * the context start
+ * @param anchorEnd TRUE if the rule is anchored on the right to the
+ * context limit
  */
 TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
                                          const UnicodeString& output,
                                          int32_t cursorPos, int32_t cursorOffset,
                                          int32_t* adoptedSegs,
+                                         UBool anchorStart, UBool anchorEnd,
                                          UErrorCode& status) {
     init(input, anteContextPos, postContextPos,
-         output, cursorPos, cursorOffset, adoptedSegs, status);
+         output, cursorPos, cursorOffset, adoptedSegs,
+         anchorStart, anchorEnd, status);
 }
 
 /**
@@ -69,7 +77,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t cursorPos,
                                          UErrorCode& status) {
     init(input, anteContextPos, postContextPos,
-         output, cursorPos, 0, NULL, status);
+         output, cursorPos, 0, NULL, FALSE, FALSE, status);
 }
 
 /**
@@ -98,6 +106,7 @@ void TransliterationRule::init(const UnicodeString& input,
                                const UnicodeString& output,
                                int32_t cursorPos, int32_t cursorOffset,
                                int32_t* adoptedSegs,
+                               UBool anchorStart, UBool anchorEnd,
                                UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
@@ -134,11 +143,38 @@ void TransliterationRule::init(const UnicodeString& input,
         }
     }
     this->cursorPos = cursorPos + cursorOffset;
-    pattern = input;
     this->output = output;
     // We don't validate the segments array.  The caller must
     // guarantee that the segments are well-formed.
     this->segments = adoptedSegs;
+
+    // Implement anchors by inserting an ETHER character on the
+    // left or right.  If on the left, then the indices must be
+    // incremented.  If on the right, no index change is
+    // necessary.
+    if (anchorStart || anchorEnd) {
+        pattern.truncate(0);
+        if (anchorStart) {
+            pattern.append(ETHER);
+            ++anteContextLength;
+            ++cursorPos;
+            // Adjust segment offsets
+            if (segments != 0) {
+                int32_t *p = segments;
+                // The end marker is a -1.
+                while (*p != -1) {
+                    ++(*p);
+                    ++p;
+                }
+            }
+        }
+        pattern.append(input);
+        if (anchorEnd) {
+            pattern.append(ETHER);
+        }
+    } else {
+        pattern = input;
+    }
 }
 
 TransliterationRule::~TransliterationRule() {
@@ -324,12 +360,14 @@ UBool TransliterationRule::matches(const Replaceable& text,
                                    const UnicodeFilter* filter) const {
     // Match anteContext, key, and postContext
     int32_t cursor = pos.start - anteContextLength;
-    if (cursor < pos.contextStart ||
-        (cursor + pattern.length()) > pos.contextLimit) {
+    // Quick length check; this is a performance win for long rules.
+    // Widen by one (on both sides) to allow anchor matching.
+    if (cursor < (pos.contextStart - 1) ||
+        (cursor + pattern.length()) > (pos.contextLimit + 1)) {
         return FALSE;
     }
     for (int32_t i=0; i<pattern.length(); ++i, ++cursor) {
-        if (!charMatches(pattern.charAt(i), text.charAt(cursor),
+        if (!charMatches(pattern.charAt(i), text, cursor, pos,
                          data, filter)) {
             return FALSE;
         }
@@ -366,7 +404,7 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
                                             const UTransPosition& pos,
                                             const TransliterationRuleData& data,
                                             const UnicodeFilter* filter) const {
-    int len = getRegionMatchLength(text, pos, pattern, data, filter);
+    int len = getRegionMatchLength(text, pos, data, filter);
     return len < anteContextLength ? MISMATCH :
         (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
 }
@@ -383,7 +421,6 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
  * @param cursor position at which to translate next, representing offset
  * into text.  This value must be between <code>start</code> and
  * <code>limit</code>.
- * @param templ the text to match against.  All characters must match.
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
  * @param filter the filter.  Any character for which
@@ -396,16 +433,17 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
  */
 int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
                                           const UTransPosition& pos,
-                                          const UnicodeString& templ,
                                           const TransliterationRuleData& data,
                                           const UnicodeFilter* filter) const {
     int32_t cursor = pos.start - anteContextLength;
-    if (cursor < pos.contextStart) {
+    // Quick length check; this is a performance win for long rules.
+    // Widen by one to allow anchor matching.
+    if (cursor < (pos.contextStart - 1)) {
         return -1;
     }
     int32_t i;
-    for (i=0; i<templ.length() && cursor<pos.contextLimit; ++i, ++cursor) {
-        if (!charMatches(templ.charAt(i), text.charAt(cursor),
+    for (i=0; i<pattern.length() && cursor<pos.contextLimit; ++i, ++cursor) {
+        if (!charMatches(pattern.charAt(i), text, cursor, pos,
                          data, filter)) {
             return -1;
         }
@@ -427,11 +465,38 @@ int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
-UBool TransliterationRule::charMatches(UChar keyChar, UChar textChar,
-                                        const TransliterationRuleData& data,
-                                        const UnicodeFilter* filter) const {
+UBool TransliterationRule::charMatches(UChar keyChar, const Replaceable& text,
+                                       int32_t index,
+                                       const UTransPosition& pos,
+                                       const TransliterationRuleData& data,
+                                       const UnicodeFilter* filter) const {
     const UnicodeSet* set = 0;
+    UChar textChar = (index >= pos.contextStart && index < pos.contextLimit)
+            ? text.charAt(index) : ETHER;
     return (filter == 0 || filter->contains(textChar)) &&
         (((set = data.lookupSet(keyChar)) == 0) ?
          keyChar == textChar : set->contains(textChar));
 }
+
+/**
+ * Return true if the given key matches the given text.  This method
+ * accounts for the fact that the key character may represent a character
+ * set.  Note that the key and text characters may not be interchanged
+ * without altering the results.
+ * @param keyChar a character in the match key
+ * @param textChar a character in the text being transliterated
+ * @param data a dictionary of variables mapping <code>Character</code>
+ * to <code>UnicodeSet</code>
+ * @param filter the filter.  Any character for which
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
+ * altered by this transliterator.  If <tt>filter</tt> is
+ * <tt>null</tt> then no filtering is applied.
+ */
+//[ANCHOR]UBool TransliterationRule::charMatches(UChar keyChar, UChar textChar,
+//[ANCHOR]                                        const TransliterationRuleData& data,
+//[ANCHOR]                                        const UnicodeFilter* filter) const {
+//[ANCHOR]    const UnicodeSet* set = 0;
+//[ANCHOR]    return (filter == 0 || filter->contains(textChar)) &&
+//[ANCHOR]        (((set = data.lookupSet(keyChar)) == 0) ?
+//[ANCHOR]         keyChar == textChar : set->contains(textChar));
+//[ANCHOR]}
