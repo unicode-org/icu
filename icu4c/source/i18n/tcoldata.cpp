@@ -193,20 +193,16 @@ void TableCollationData::streamIn(UMemoryStream* is, UErrorCode &status)
         }
         else
         {
-            // Slight ugliness: We are a friend of TableCollation solely so
-            // we can access the constant UNMAPPED here.  In fact, this code
-            // path shouldn't really happen, because mapping should always != 0.
-            if (mapping == 0) mapping = ucmp32_openAlias(NULL, NULL, 0);
-            if (mapping->fBogus ){
-                fBogus = TRUE;
-                return;
-            }
+            if(mapping != 0) {
+                ucmp32_close(mapping);
+            } 
 			int32_t len = 0;
 			const uint8_t *map = uprv_mstrm_getCurrentBuffer(is, &len);
-			ucmp32_initFromData(mapping, &map, &status);
+    		mapping = ucmp32_openFromData(&map, &status);
+            
 			uprv_mstrm_jump(is, map);
             // ucmp32_streamMemIn(mapping, is);
-            if (mapping->fBogus) {
+            if (mapping->fBogus || U_FAILURE(status)) {
                 fBogus = TRUE;
                 ucmp32_close(mapping);
                 mapping = 0;
