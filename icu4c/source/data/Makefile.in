@@ -136,7 +136,7 @@ package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu uidna.icu 
+DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu uidna.spp 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
 
 ## BRK files
@@ -231,9 +231,9 @@ $(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/
 $(BUILDDIR)/$(ICUDT)tz.icu: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentz/gentz -d $(BUILDDIR) $(MISCSRCDIR)/timezone.txt
 
-# uidna.icu
-$(BUILDDIR)/$(ICUDT)uidna.icu: $(MISCSRCDIR)/rfc3454_A_1.txt $(MISCSRCDIR)/rfc3454_B_1.txt $(MISCSRCDIR)/rfc3454_B_2.txt $(MISCSRCDIR)/rfc3454_C_X.txt $(TOOLDIR)/genidna/genidna$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genidna/genidna -d $(BUILDDIR) -s $(SRCDATADIR)
+# uidna.spp
+$(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gensprep/gensprep$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -s $(MISSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
 
 ####################################################    BRK
 # BRK FILES
@@ -314,7 +314,7 @@ TESTDATA=testdata
 TESTDT=$(TESTDATA)_
 
 # File definitions 
-TEST_DAT_FILES=$(TESTBUILDDIR)/$(TESTDT)test.icu
+TEST_DAT_FILES=$(TESTBUILDDIR)/$(TESTDT)test.icu $(TESTBUILDDIR)/$(TESTDT)nfscsi.spp $(TESTBUILDDIR)/$(TESTDT)nfscss.spp $(TESTBUILDDIR)/$(TESTDT)nfscis.spp $(TESTBUILDDIR)/$(TESTDT)nfsmxs.spp $(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp
 
 TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm ibm9027.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
@@ -340,6 +340,31 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/
 # test.icu
 $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
+
+# Targets for nfscsi.icu
+$(TESTBUILDDIR)/$(TESTDT)nfscsi.icu: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
+	@echo Building nfscsi.icu
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
+
+# Targets for nfscss.icu
+$(TESTBUILDDIR)/$(TESTDT)nfscss.icu: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
+	@echo Building nfscss.icu
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
+
+# Targets for nfscis.spp
+$(TESTBUILDDIR)/$(TESTDT)nfscis.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cis_prep.txt
+	@echo Building nfscis.spp
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
+
+# Targets for nfsmxs.spp
+$(TESTBUILDDIR)/$(TESTDT)nfsmxs.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_s.txt
+	@echo Building nfsmxs.spp
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
+
+# Targets for nfsmxp.spp
+$(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_p.txt
+	@echo Building nfsmxp.spp
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
 
 $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)

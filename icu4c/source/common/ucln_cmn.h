@@ -35,7 +35,7 @@ U_CFUNC UBool uloc_cleanup(void);
 
 U_CFUNC UBool breakiterator_cleanup(void);
 
-U_CFUNC UBool ustrprep_cleanup(void);
+U_CFUNC UBool usprep_cleanup(void);
 
 U_CFUNC UBool U_EXPORT2 ucnv_cleanup(void);
 

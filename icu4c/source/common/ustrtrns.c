@@ -77,7 +77,7 @@ u_strFromUTF32(UChar   *dest,
         return NULL;
     }
     
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -163,7 +163,7 @@ u_strToUTF32(UChar32 *dest,
     }
     
     
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -234,7 +234,7 @@ u_strFromUTF8(UChar *dest,
         return NULL;
     }
         
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -332,7 +332,7 @@ u_strToUTF8(char *dest,
         return NULL;
     }
         
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((pSrc==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -614,7 +614,7 @@ u_strToWCS(wchar_t *dest,
         return NULL;
     }
         
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -866,7 +866,7 @@ u_strFromWCS(UChar   *dest,
         return NULL;
     }
         
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }

@@ -22,7 +22,6 @@
 #if !UCONFIG_NO_IDNA
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include "strprep.h"
 #include "unicode/uniset.h"
 #include "unicode/ures.h"
 #include "unicode/translit.h"

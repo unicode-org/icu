@@ -34,7 +34,8 @@
 U_CAPI UNewTrie * U_EXPORT2
 utrie_open(UNewTrie *fillIn,
            uint32_t *aliasData, int32_t maxDataLength,
-           uint32_t initialValue, UBool latin1Linear) {
+           uint32_t initialValue, uint32_t leadUnitValue,
+           UBool latin1Linear) {
     UNewTrie *trie;
     int32_t i, j;
 
@@ -89,6 +90,7 @@ utrie_open(UNewTrie *fillIn,
         trie->data[--j]=initialValue;
     }
 
+    trie->leadUnitValue=leadUnitValue;
     trie->indexLength=UTRIE_MAX_INDEX_LENGTH;
     trie->dataCapacity=maxDataLength;
     trie->isLatin1Linear=latin1Linear;
@@ -118,7 +120,9 @@ utrie_clone(UNewTrie *fillIn, const UNewTrie *other, uint32_t *aliasData, int32_
         isDataAllocated=TRUE;
     }
 
-    trie=utrie_open(fillIn, aliasData, aliasDataCapacity, other->data[0], other->isLatin1Linear);
+    trie=utrie_open(fillIn, aliasData, aliasDataCapacity,
+                    other->data[0], other->leadUnitValue,
+                    other->isLatin1Linear);
     if(trie==NULL) {
         uprv_free(aliasData);
     } else {
@@ -397,6 +401,22 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
     }
 
     /*
+     * set all values for lead surrogate code *units* to leadUnitValue
+     * so that by default runtime lookups will find no data for associated
+     * supplementary code points, unless there is data for such code points
+     * which will result in a non-zero folding value below that is set for
+     * the respective lead units
+     *
+     * the above saved the indexes for surrogate code *points* and
+     * write-protected their data values
+     */
+    if(!utrie_setRange32(trie, 0xd800, 0xdc00, trie->leadUnitValue, TRUE)) {
+        /* data table overflow */
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    /*
      * Fold significant index values into the area just after the BMP indexes.
      * In case the first lead surrogate has significant data,
      * its index block must be used first (in which case the folding is a no-op).
@@ -418,15 +438,19 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
             /* is there an identical index block? */
             block=_findSameIndexBlock(index, indexLength, c>>UTRIE_SHIFT);
 
-            /* get a folded value for [c..c+0x400[ and, if 0, set it for the lead surrogate */
+            /*
+             * get a folded value for [c..c+0x400[ and,
+             * if different from the value for the lead surrogate code point,
+             * set it for the lead surrogate code unit
+             */
             value=getFoldedValue(trie, c, block+UTRIE_SURROGATE_BLOCK_COUNT);
-            if(value!=0) {
-                if(!utrie_set32(trie, 0xd7c0+(c>>10), value)) {
+            if(value!=utrie_get32(trie, U16_LEAD(c), NULL)) {
+                if(!utrie_set32(trie, U16_LEAD(c), value)) {
                     /* data table overflow */
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
-
+utrie_get32(trie, U16_LEAD(c), NULL);
                 /* if we did not find an identical index block... */
                 if(block==indexLength) {
                     /* move the actual index (stage 1) entries from the supplementary position to the new one */
@@ -435,6 +459,7 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
                                  4*UTRIE_SURROGATE_BLOCK_COUNT);
                     indexLength+=UTRIE_SURROGATE_BLOCK_COUNT;
                 }
+utrie_get32(trie, U16_LEAD(c), NULL);
             }
             c+=0x400;
         } else {
@@ -727,9 +752,11 @@ utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
 
         /* fold the supplementary part of the index array */
         utrie_fold(trie, getFoldedValue, pErrorCode);
+utrie_get32(trie, U16_LEAD(0x10400), NULL);
 
         /* compact again with overlap for minimum data array length */
         utrie_compact(trie, TRUE, pErrorCode);
+utrie_get32(trie, U16_LEAD(0x10400), NULL);
 
         trie->isCompacted=TRUE;
         if(U_FAILURE(*pErrorCode)) {

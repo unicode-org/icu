@@ -237,6 +237,7 @@ void RBBISetBuilder::build() {
                       NULL,    //  Data array  (utrie will allocate one)
                       100000,  //  Max Data Length
                       0,       //  Initial value for all code points
+                      0,       //  Lead surrogate unit value
                       TRUE);   //  Keep Latin 1 in separately
 
 

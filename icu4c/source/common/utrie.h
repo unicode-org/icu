@@ -492,6 +492,7 @@ struct UNewTrie {
     int32_t index[UTRIE_MAX_INDEX_LENGTH];
     uint32_t *data;
 
+    uint32_t leadUnitValue;
     int32_t indexLength, dataCapacity, dataLength;
     UBool isAllocated, isDataAllocated;
     UBool isLatin1Linear, isCompacted;
@@ -546,6 +547,8 @@ UNewTrieGetFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset);
  * @param maxDataLength the capacity of aliasData (if not NULL) or
  *                      the length of the data array to be allocated
  * @param initialValue the initial value that is set for all code points
+ * @param leadUnitValue the value for lead surrogate code _units_ that do not
+ *                      have associated supplementary data
  * @param latin1Linear a flag indicating whether the Latin-1 range is to be allocated and
  *                     kept in a linear, contiguous part of the data array
  * @return a pointer to the initialized fillIn or the allocated and initialized new UNewTrie
@@ -553,7 +556,8 @@ UNewTrieGetFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset);
 U_CAPI UNewTrie * U_EXPORT2
 utrie_open(UNewTrie *fillIn,
            uint32_t *aliasData, int32_t maxDataLength,
-           uint32_t initialValue, UBool latin1Linear);
+           uint32_t initialValue, uint32_t leadUnitValue,
+           UBool latin1Linear);
 
 /**
  * Clone a build-time trie structure with all entries.

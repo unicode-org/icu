@@ -605,5 +605,29 @@ SOURCE=.\utf8tst.c
 SOURCE=.\utransts.c
 # End Source File
 # End Group
+# Begin Group "sprep & idna"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\idnatest.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfsprep.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfsprep.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\spreptst.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\sprpdata.c
+# End Source File
+# End Group
 # End Target
 # End Project

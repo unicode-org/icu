@@ -37,39 +37,22 @@
 #include "umutex.h"
 #include "sprpimpl.h"
 #include "testidna.h"
+#include "punyref.h"
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
 /* prototypes --------------------------------------------------------------- */
 
 
-static UBool isDataLoaded = FALSE;
-static UTrie idnTrie={ 0,0,0,0,0,0,0 };
-static UDataMemory *idnData=NULL;
-static UErrorCode dataErrorCode =U_ZERO_ERROR;
-
-
-static const uint16_t* mappingData = NULL;
-static int32_t indexes[_IDNA_INDEX_TOP]={ 0 };
-
-
 static void
-parseMappings(const char *filename, UBool withNorm, UBool reportError,TestIDNA& test, UErrorCode *pErrorCode);
-
-static void
-parseTable(const char *filename, UBool isUnassigned, TestIDNA& test, UErrorCode *pErrorCode);
-
-static UBool loadIDNData(UErrorCode &errorCode);
-
-static UBool cleanup();
+parseMappings(const char *filename, UBool reportError,TestIDNA& test, UErrorCode *pErrorCode);
 
 static void 
 compareMapping(uint32_t codepoint, uint32_t* mapping, int32_t mapLength, 
-               UBool withNorm);
+               UStringPrepType option);
 
 static void
-compareFlagsForRange(uint32_t start, uint32_t end,
-                     UBool isUnassigned);
+compareFlagsForRange(uint32_t start, uint32_t end,UStringPrepType option);
 
 static void
 testAllCodepoints(TestIDNA& test);
@@ -77,12 +60,12 @@ testAllCodepoints(TestIDNA& test);
 static TestIDNA* pTestIDNA =NULL;
 
 static const char* fileNames[] = {
-                                    "rfc3454_A_1.txt", /* contains unassigned code points */
-                                    "rfc3454_C_X.txt", /* contains code points that are prohibited */
-                                    "rfc3454_B_1.txt", /* contains case mappings when normalization is turned off */
-                                    "rfc3454_B_2.txt", /* contains case mappings when normalization it turned on */
-                                    /* "NormalizationCorrections.txt",contains NFKC case mappings whicha are not included in UTR 21  */
-                                };
+                                    "NamePrepProfile.txt"
+                                 };
+static       UStringPrepProfile *profile = NULL;
+static const UTrie *idnTrie              = NULL;
+static const int32_t *indexes            = NULL;
+static const uint16_t *mappingData       = NULL;
 /* -------------------------------------------------------------------------- */
 
 /* file definitions */
@@ -100,12 +83,16 @@ testData(TestIDNA& test) {
     UErrorCode errorCode=U_ZERO_ERROR;
     char *saveBasename =NULL;
 
-    loadIDNData(errorCode);
-    if(U_FAILURE(dataErrorCode)){
-        test.errln( "Could not load data. Error: %s\n",u_errorName(dataErrorCode));
-        return dataErrorCode;
+    profile = usprep_open(NULL, DATA_NAME, &errorCode);
+    if(U_FAILURE(errorCode)){
+        test.errln("Failed to load IDNA data file. " + UnicodeString(u_errorName(errorCode)));
+        return errorCode;
     }
     
+    idnTrie     = &profile->sprepTrie;
+    indexes     = profile->indexes;
+    mappingData = profile->mappingData;
+
     //initialize
     pTestIDNA = &test;
     
@@ -136,28 +123,7 @@ testData(TestIDNA& test) {
     
     /* process unassigned */
     uprv_strcpy(basename,fileNames[0]);
-    parseTable(filename,TRUE, test,&errorCode);
-    if(U_FAILURE(errorCode)) {
-        test.errln( "Could not open file %s for reading \n", filename);
-        return errorCode;
-    }
-    /* process prohibited */
-    uprv_strcpy(basename,fileNames[1]);
-    parseTable(filename,FALSE, test, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        test.errln( "Could not open file %s for reading \n", filename);
-        return errorCode;
-    }
-
-    /* process mappings */
-    uprv_strcpy(basename,fileNames[2]);
-    parseMappings(filename, FALSE, FALSE,test, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        test.errln( "Could not open file %s for reading \n", filename);
-        return errorCode;
-    }
-    uprv_strcpy(basename,fileNames[3]);
-    parseMappings(filename, TRUE, FALSE,test, &errorCode);
+    parseMappings(filename,TRUE, test,&errorCode);
     if(U_FAILURE(errorCode)) {
         test.errln( "Could not open file %s for reading \n", filename);
         return errorCode;
@@ -165,48 +131,76 @@ testData(TestIDNA& test) {
 
     testAllCodepoints(test);
 
-    cleanup();
+    usprep_close(profile);
     pTestIDNA = NULL;
     free(filename);
     return errorCode;
 }
 U_CDECL_BEGIN
+
 static void U_CALLCONV
-caseMapLineFn(void *context,
-              char *fields[][2], int32_t /*fieldCount*/,
+strprepProfileLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
     uint32_t mapping[40];
-    char *end, *s;
+    char *end, *map;
     uint32_t code;
     int32_t length;
-    UBool* mapWithNorm = (UBool*) context;
+   /*UBool* mapWithNorm = (UBool*) context;*/
+    const char* typeName;
+    uint32_t rangeStart=0,rangeEnd =0;
+    const char* filename = (const char*) context;
+ 
+    typeName = fields[2][0];
+    map = fields[1][0];
+   
+    if(uprv_strstr(typeName, usprepTypeNames[USPREP_UNASSIGNED])!=NULL){
 
-    /* get the character code, field 0 */
-    code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
-    if(end<=fields[0][0] || end!=fields[0][1]) {
-        *pErrorCode=U_PARSE_ERROR;
+        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
 
+        /* store the range */
+        compareFlagsForRange(rangeStart,rangeEnd,USPREP_UNASSIGNED);
+
+    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_PROHIBITED])!=NULL){
+
+        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
+
+        /* store the range */
+        compareFlagsForRange(rangeStart,rangeEnd,USPREP_PROHIBITED);
+
+    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_MAP])!=NULL){
+        /* get the character code, field 0 */
+        code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
+
+        /* parse the mapping string */
+        length=u_parseCodePoints(map, mapping, sizeof(mapping)/4, pErrorCode);
+        
+        /* store the mapping */
+        compareMapping(code,mapping, length,USPREP_MAP);
+
+    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_LABEL_SEPARATOR])!=NULL){
+
+        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
+
+        /* store the range */
+        compareFlagsForRange(rangeStart,rangeEnd,USPREP_LABEL_SEPARATOR);
+    }else{
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
     }
 
-    s = fields[1][0];
-    /* parse the mapping string */
-    length=u_parseCodePoints(s, mapping, sizeof(mapping)/4, pErrorCode);
-
-    /* store the mapping */
-
-    compareMapping(code,mapping, length, *mapWithNorm);
 }
+
 U_CDECL_END
 
 static void
-parseMappings(const char *filename,UBool withNorm, UBool reportError, TestIDNA& test, UErrorCode *pErrorCode) {
+parseMappings(const char *filename,UBool reportError, TestIDNA& test, UErrorCode *pErrorCode) {
     char *fields[3][2];
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
 
-    u_parseDelimitedFile(filename, ';', fields, 3, caseMapLineFn, &withNorm, pErrorCode);
+    u_parseDelimitedFile(filename, ';', fields, 3, strprepProfileLineFn, (void*)filename, pErrorCode);
 
     //fprintf(stdout,"Number of code points that have mappings with length >1 : %i\n",len);
 
@@ -215,142 +209,167 @@ parseMappings(const char *filename,UBool withNorm, UBool reportError, TestIDNA& 
     }
 }
 
-/* parser for UnicodeData.txt ----------------------------------------------- */
-U_CDECL_BEGIN
 
-static void U_CALLCONV
-unicodeDataLineFn(void *context,
-                  char *fields[][2], int32_t /*fieldCount*/,
-                  UErrorCode *pErrorCode) {
-    uint32_t rangeStart=0,rangeEnd =0;
-    UBool* isUnassigned = (UBool*) context;
+static inline UStringPrepType
+getValues(uint32_t result, int32_t& value, UBool& isIndex){
 
-    u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
-    
-    if(U_FAILURE(*pErrorCode)){
-        *pErrorCode  = U_PARSE_ERROR;
-        return;
+    UStringPrepType type;
+
+    if(result == 0){
+        /* 
+         * Initial value stored in the mapping table 
+         * just return USPREP_TYPE_LIMIT .. so that
+         * the source codepoint is copied to the destination
+         */
+        type = USPREP_TYPE_LIMIT;
+    }else if(result >= _SPREP_TYPE_THRESHOLD){
+        type = (UStringPrepType) (result - _SPREP_TYPE_THRESHOLD);
+    }else{
+        /* get the state */
+        type = USPREP_MAP;
+        /* ascertain if the value is index or delta */
+        if(result & 0x02){
+            isIndex = TRUE;
+            value = result  >> 2; //mask off the lower 2 bits and shift
+
+        }else{
+            isIndex = FALSE;
+            value = (int16_t)result;
+            value =  (value >> 2);
+
+        }
+        if((result>>2) == _SPREP_MAX_INDEX_VALUE){
+            type = USPREP_DELETE;
+            isIndex =FALSE;
+            value = 0;
+        }
     }
-
-
-    compareFlagsForRange(rangeStart,rangeEnd,*isUnassigned);
-
+    return type;
 }
 
-U_CDECL_END
 
-static void
-parseTable(const char *filename,UBool isUnassigned,TestIDNA& test, UErrorCode *pErrorCode) {
-    char *fields[2][2];
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    u_parseDelimitedFile(filename, ';', fields, 1, unicodeDataLineFn, &isUnassigned, pErrorCode);
-
-
-    if(U_FAILURE(*pErrorCode)) {
-        test.errln( "testidn error: u_parseDelimitedFile(\"%s\") failed - %s\n", filename, u_errorName(*pErrorCode));
-    }
-}
 
 static void
 testAllCodepoints(TestIDNA& test){
-    if(isDataLoaded){
-        uint32_t i = 0;
-        int32_t unassigned      = 0;
-        int32_t prohibited      = 0;
-        int32_t mappedWithNorm  = 0;
-        int32_t mapped          = 0;
-        int32_t noValueInTrie   = 0;
+    /*
+    {
+        UChar str[19] = {            
+                            0xC138, 0xACC4, 0xC758, 0xBAA8, 0xB4E0, 0xC0AC, 0xB78C, 0xB4E4, 0xC774,
+                            0x070F,//prohibited
+                            0xD55C, 0xAD6D, 0xC5B4, 0xB97C, 0xC774, 0xD574, 0xD55C, 0xB2E4, 0xBA74
+                        };
+        uint32_t in[19] = {0};
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t inLength=0, outLength=100;
+        char output[100] = {0};
+        punycode_status error;
+        u_strToUTF32((UChar32*)in,19,&inLength,str,19,&status);
 
-
-        for(i=0;i<=0x10FFFF;i++){
-            uint32_t result = 0;
-            UTRIE_GET16(&idnTrie,i, result);
-
-            if(result != UIDNA_NO_VALUE ){
-                if((result & 0x07) == UIDNA_UNASSIGNED){
-                    unassigned++;
-                }
-                if((result & 0x07) == UIDNA_PROHIBITED){
-                    prohibited++;
-                }
-                if((result>>5) == _IDNA_MAP_TO_NOTHING){
-                    mapped++;
-                }
-                if((result & 0x07) == UIDNA_MAP_NFKC){
-                    mappedWithNorm++;
-                }
-            }else{
-                noValueInTrie++;
-                if(result > 0){
-                    test.errln("The return value for 0x%06X is wrong. %i\n",i,result);
-                }
-            }
-        }
-
-        test.logln("Number of Unassinged code points : %i \n",unassigned);
-        test.logln("Number of Prohibited code points : %i \n",prohibited);
-        test.logln("Number of Mapped code points : %i \n",mapped);
-        test.logln("Number of Mapped with NFKC code points : %i \n",mappedWithNorm);
-        test.logln("Number of code points that have no value in Trie: %i \n",noValueInTrie);
+        error= punycode_encode(inLength, in, NULL, (uint32_t*)&outLength, output);
+        printf(output);
 
     }
-}
+    */
 
-static inline void getValues(uint32_t result, int8_t& flag, 
-                             int8_t& length, int32_t& index){
-    /* first 3 bits contain the flag */
-    flag = (int8_t) (result & 0x07);
-    /* next 2 bits contain the length */
-    length = (int8_t) ((result>>3) & 0x03);
-    /* next 11 bits contain the index */
-    index  = (result>> 5);
+    uint32_t i = 0;
+    int32_t unassigned      = 0;
+    int32_t prohibited      = 0;
+    int32_t mappedWithNorm  = 0;
+    int32_t mapped          = 0;
+    int32_t noValueInTrie   = 0;
+
+    UStringPrepType type;
+    int32_t value;
+    UBool isIndex = FALSE;
+
+    for(i=0;i<=0x10FFFF;i++){
+        uint32_t result = 0;
+        UTRIE_GET16(idnTrie,i, result);
+        type = getValues(result,value, isIndex);
+        if(type != USPREP_TYPE_LIMIT ){
+            if(type == USPREP_UNASSIGNED){
+                unassigned++;
+            }
+            if(type == USPREP_PROHIBITED){
+                prohibited++;
+            }
+            if(type == USPREP_MAP){
+                mapped++;
+            }
+            if(type == USPREP_LABEL_SEPARATOR){
+                mappedWithNorm++;
+            }
+        }else{
+            noValueInTrie++;
+            if(result > 0){
+                test.errln("The return value for 0x%06X is wrong. %i\n",i,result);
+            }
+        }
+    }
+
+    test.logln("Number of Unassinged code points : %i \n",unassigned);
+    test.logln("Number of Prohibited code points : %i \n",prohibited);
+    test.logln("Number of Mapped code points : %i \n",mapped);
+    test.logln("Number of Mapped with NFKC code points : %i \n",mappedWithNorm);
+    test.logln("Number of code points that have no value in Trie: %i \n",noValueInTrie);
+
+    
 }
 
 static void 
 compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength, 
-               UBool withNorm){
-    if(isDataLoaded){
-        uint32_t result = 0;
-        UTRIE_GET16(&idnTrie,codepoint, result);
+               UStringPrepType type){
+    uint32_t result = 0;
+    UTRIE_GET16(idnTrie,codepoint, result);
 
-        int8_t flag, length;
-        int32_t index;
-        getValues(result,flag,length, index);
+    int32_t length=0;
+    UBool isIndex;
+    UStringPrepType retType;
+    int32_t value, index=0, delta=0;
+  
+    retType = getValues(result,value,isIndex);
 
 
-        if(withNorm){
-            if(flag != UIDNA_MAP_NFKC){
-                pTestIDNA->errln( "Did not get the assigned flag for codepoint 0x%08X. Expected: %i Got: %i\n",codepoint, UIDNA_MAP_NFKC, flag);
-            }
+    if(type != retType && retType != USPREP_DELETE){
+
+        pTestIDNA->errln( "Did not get the assigned type for codepoint 0x%08X. Expected: %i Got: %i\n",codepoint, USPREP_MAP, type);
+
+    }
+
+    if(isIndex){
+        index = value;
+        if(index >= indexes[_SPREP_ONE_UCHAR_MAPPING_INDEX_START] &&
+                 index < indexes[_SPREP_TWO_UCHARS_MAPPING_INDEX_START]){
+            length = 1;
+        }else if(index >= indexes[_SPREP_TWO_UCHARS_MAPPING_INDEX_START] &&
+                 index < indexes[_SPREP_THREE_UCHARS_MAPPING_INDEX_START]){
+            length = 2;
+        }else if(index >= indexes[_SPREP_THREE_UCHARS_MAPPING_INDEX_START] &&
+                 index < indexes[_SPREP_FOUR_UCHARS_MAPPING_INDEX_START]){
+            length = 3;
         }else{
-            if(flag==UIDNA_NO_VALUE || flag == UIDNA_PROHIBITED){
-                if(index != _IDNA_MAP_TO_NOTHING ){
-                    pTestIDNA->errln( "Did not get the assigned flag for codepoint 0x%08X. Expected: %i Got: %i\n", codepoint, _IDNA_MAP_TO_NOTHING, index);
-                }
-            }
+            length = mappingData[index++];
         }
-        if(length ==_IDNA_LENGTH_IN_MAPPING_TABLE){
-            length = (int8_t)mappingData[index];
-            index++;
-        }
-        int32_t realLength =0;
-        /* figure out the real length */ 
-        for(int32_t j=0; j<mapLength; j++){
-            if(mapping[j] > 0xFFFF){
-                realLength +=2;
-            }else{
-                realLength++;
-            }      
-        }
+    }else{
+        delta = value;
+        length = (retType == USPREP_DELETE)? 0 :  1;
+    }
 
-        if(realLength != length){
-            pTestIDNA->errln( "Did not get the expected length. Expected: %i Got: %i\n", mapLength, length);
-        }
-        
+    int32_t realLength =0;
+    /* figure out the real length */ 
+    for(int32_t j=0; j<mapLength; j++){
+        if(mapping[j] > 0xFFFF){
+            realLength +=2;
+        }else{
+            realLength++;
+        }      
+    }
 
+    if(realLength != length){
+        pTestIDNA->errln( "Did not get the expected length. Expected: %i Got: %i\n", mapLength, length);
+    }
+    
+    if(isIndex){
         for(int8_t i =0; i< mapLength; i++){
             if(mapping[i] <= 0xFFFF){
                 if(mappingData[index+i] != (uint16_t)mapping[i]){
@@ -365,132 +384,58 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
                 }
             }
         }
-
+    }else{
+        if(retType!=USPREP_DELETE && (codepoint-delta) != (uint16_t)mapping[0]){
+            pTestIDNA->errln("Did not get the expected result. Expected: 0x%04X Got: 0x%04X \n", mapping[0],(codepoint-delta));
+        }
     }
 
 }
 
 static void
 compareFlagsForRange(uint32_t start, uint32_t end,
-                     UBool isUnassigned){
-    if(isDataLoaded){
-        uint32_t result =0 ;
-        while(start < end+1){
-            UTRIE_GET16(&idnTrie,start, result);
-            if(isUnassigned){
-                if(result != UIDNA_UNASSIGNED){
-                    pTestIDNA->errln( "UIDNA_UASSIGNED flag failed for 0x%06X. Expected: %04X Got: %04X\n",start,UIDNA_UNASSIGNED, result);
-                }
-            }else{
-                if((result & 0x03) != UIDNA_PROHIBITED){
-                    pTestIDNA->errln( "UIDNA_PROHIBITED flag failed for 0x%06X. Expected: %04X Got: %04X\n\n",start,UIDNA_PROHIBITED, result);
-                }
+                     UStringPrepType type){
+
+    uint32_t result =0 ;
+    UStringPrepType retType;
+    UBool isIndex=FALSE;
+    int32_t value=0;
+/*        
+    // supplementary code point 
+    UChar __lead16=UTF16_LEAD(0x2323E);
+    int32_t __offset;
+
+    // get data for lead surrogate 
+    (result)=_UTRIE_GET_RAW((&idnTrie), index, 0, (__lead16));
+    __offset=(&idnTrie)->getFoldingOffset(result);
+
+    // get the real data from the folded lead/trail units 
+    if(__offset>0) {
+        (result)=_UTRIE_GET_RAW((&idnTrie), index, __offset, (0x2323E)&0x3ff);
+    } else {
+        (result)=(uint32_t)((&idnTrie)->initialValue);
+    }
+
+    UTRIE_GET16(&idnTrie,0x2323E, result);
+*/
+    while(start < end+1){
+        UTRIE_GET16(idnTrie,start, result);
+        retType = getValues(result,value,isIndex);
+        if(result > _SPREP_TYPE_THRESHOLD){
+            if(retType != type){
+                pTestIDNA->errln( "FAIL: Did not get the expected type for 0x%06X. Expected: %s Got: %s\n",start,usprepTypeNames[type], usprepTypeNames[retType]);
             }
-            start++;
+        }else{
+            if(type == USPREP_PROHIBITED && ((result & 0x01) != 0x01)){
+                pTestIDNA->errln( "FAIL: Did not get the expected type for 0x%06X. Expected: %s Got: %s\n",start,usprepTypeNames[type], usprepTypeNames[retType]);
+            }
         }
+
+        start++;
     }
+    
 }
 
-UBool
-cleanup() {
-    if(idnData!=NULL) {
-        udata_close(idnData);
-        idnData=NULL;
-    }
-    dataErrorCode=U_ZERO_ERROR;
-    isDataLoaded=FALSE;
-
-    return TRUE;
-}
-U_CDECL_BEGIN
-static UBool U_CALLCONV
-isAcceptable(void * /* context */,
-             const char * /* type */, const char * /* name */,
-             const UDataInfo *pInfo) {
-    if(
-        pInfo->size>=20 &&
-        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
-        pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==0x49 &&   /* dataFormat="IDNA" 0x49, 0x44, 0x4e, 0x41  */
-        pInfo->dataFormat[1]==0x44 &&
-        pInfo->dataFormat[2]==0x4e &&
-        pInfo->dataFormat[3]==0x41 &&
-        pInfo->formatVersion[0]==2 &&
-        pInfo->formatVersion[2]==UTRIE_SHIFT &&
-        pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
-    ) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
-/* idnTrie: the folding offset is the lead FCD value itself */
-static int32_t U_CALLCONV
-getFoldingOffset(uint32_t data) {
-    if(data&0x8000) {
-        return (int32_t)(data&0x7fff);
-    } else {
-        return 0;
-    }
-}
-U_CDECL_END
-
-static UBool
-loadIDNData(UErrorCode &errorCode) {
-    /* load Unicode normalization data from file */
-    if(isDataLoaded==FALSE) {
-        UTrie _idnTrie={ 0,0,0,0,0,0,0 };
-        UDataMemory *data;
-        const int32_t *p=NULL;
-        const uint8_t *pb;
-        if(&errorCode==NULL || U_FAILURE(errorCode)) {
-            return 0;
-        }
-
-        /* open the data outside the mutex block */
-        data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &errorCode);
-        dataErrorCode=errorCode;
-        if(U_FAILURE(errorCode)) {
-            return isDataLoaded=FALSE;
-        }
-
-        p=(const int32_t *)udata_getMemory(data);
-        pb=(const uint8_t *)(p+_IDNA_INDEX_TOP);
-        utrie_unserialize(&_idnTrie, pb, p[_IDNA_INDEX_TRIE_SIZE], &errorCode);
-        _idnTrie.getFoldingOffset=getFoldingOffset;
-
-
-        if(U_FAILURE(errorCode)) {
-            dataErrorCode=errorCode;
-            udata_close(data);
-            return isDataLoaded=FALSE;
-        }
-
-        /* in the mutex block, set the data for this process */
-        umtx_lock(NULL);
-        if(idnData==NULL) {
-            idnData=data;
-            data=NULL;
-            uprv_memcpy(&indexes, p, sizeof(indexes));
-            uprv_memcpy(&idnTrie, &_idnTrie, sizeof(UTrie));
-        } else {
-            p=(const int32_t *)udata_getMemory(idnData);
-        }
-        umtx_unlock(NULL);
-        /* initialize some variables */
-        mappingData=(uint16_t *)((uint8_t *)(p+_IDNA_INDEX_TOP)+indexes[_IDNA_INDEX_TRIE_SIZE]);
-
-        isDataLoaded = TRUE;
-
-        /* if a different thread set it first, then close the extra data */
-        if(data!=NULL) {
-            udata_close(data); /* NULL if it was set correctly */
-        }
-    }
-
-    return isDataLoaded;
-}
 
 #endif /* #if !UCONFIG_NO_IDNA */
 

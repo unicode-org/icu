@@ -74,7 +74,7 @@ private:
     void testCompare(const char* testName, CompareFunc func);
     void testChaining(const char* toASCIIName, TestFunc toASCII,
                     const char* toUnicodeName, TestFunc toUnicode);
-
+    void debug(const UChar* src, int32_t srcLength, int32_t options);
     // main testing functions
     void testAPI(const UChar *src, const UChar *expected, const char *testName, 
              UBool useSTD3ASCIIRules, UErrorCode expectedStatus,
