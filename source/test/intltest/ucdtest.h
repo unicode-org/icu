@@ -4,6 +4,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/uniset.h"
 #include "intltest.h"
 
 /** Helper function for TestUnicodeData */
@@ -65,6 +66,8 @@ public:
       **/
     void TestScript();
 
+    void TestAdditionalProperties();
+
 private:
     /**
      * internal utility used by TestUnicodeData
@@ -78,5 +81,12 @@ private:
     friend void U_CALLCONV unicodeDataLineFn(void *context,
                               char *fields[][2], int32_t fieldCount,
                               UErrorCode *pErrorCode);
+
+    static void U_CALLCONV
+    derivedCorePropsLineFn(void *context,
+                           char *fields[][2], int32_t fieldCount,
+                           UErrorCode *pErrorCode);
+
+    UnicodeSet derivedCoreProps[30];
 };
 
