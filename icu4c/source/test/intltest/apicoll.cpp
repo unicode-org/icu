@@ -326,6 +326,34 @@ CollationAPITest::TestRuleBasedColl()
 }
 
 void 
+CollationAPITest::TestRules()
+{
+    RuleBasedCollator *coll;
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString rules;
+
+    coll = (RuleBasedCollator *)Collator::createInstance(Locale::getEnglish(), status); 
+    if (U_FAILURE(status)) {
+        errln("English Collator creation failed.\n");
+        return;
+    }
+    else {
+        logln("PASS: RuleBased Collator creation passed\n");
+    }
+
+    coll->getRules(UCOL_TAILORING_ONLY, rules);
+    if (rules.length() != 0) {
+        errln("English tailored rules failed");
+    }
+    
+    coll->getRules(UCOL_FULL_RULES, rules);
+    if (rules.length() < 0) {
+        errln("English full rules failed");
+    }
+    delete coll;
+}
+
+void 
 CollationAPITest::TestDecomposition() {
   UErrorCode status = U_ZERO_ERROR;
   Collator *en_US = Collator::createInstance("en_US", status),
@@ -1380,6 +1408,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 13: name = "TestDisplayName";   if (exec)   TestDisplayName(); break;
         case 14: name = "TestAttribute";   if (exec)   TestAttribute(); break;
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
+        case 16: name = "TestRules"; if (exec) TestRules(); break;
         default: name = ""; break;
     }
 }

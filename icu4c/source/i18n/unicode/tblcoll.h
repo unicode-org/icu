@@ -396,14 +396,14 @@ public:
    */
   uint8_t *cloneRuleData(int32_t &length, UErrorCode &status);
 
-    /**
-     * Returns current rules. Delta defines whether full rules are returned or
-     * just the tailoring.
-     * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
-     * @return UnicodeString with rules
-     * @draft ICU 1.8
-     */
-    UnicodeString getRules(UColRuleOption delta);
+  /**
+   * Returns current rules. Delta defines whether full rules are returned or
+   * just the tailoring.
+   * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
+   * @param buffer UnicodeString to store the result rules
+   * @draft ICU 1.8
+   */
+  void getRules(UColRuleOption delta, UnicodeString &buffer);
 
   /**
    * Universal attribute setter
