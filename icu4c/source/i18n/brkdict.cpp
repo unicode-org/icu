@@ -33,8 +33,14 @@ BreakDictionary::~BreakDictionary()
 // macros to support readDictionaryFile.  The data files originated from a Java
 // program, and Java always writes data out in big-endian format.  These macros will
 // byte-swap the data for appropriate use on Windows.
+
+#if U_IS_BIG_ENDIAN
+#define SWAP32(x)
+#define SWAP16(x)
+#else
 #define SWAP32(x) x = (x >> 24 & 0xff) | (x >> 8 & 0xff00) | (x << 8 & 0xff0000) | (x << 24 & 0xff000000)
 #define SWAP16(x) x = (x << 8 & 0xff00) | (x >> 8 & 0xff)
+#endif
 
 #include <stdio.h>
 
