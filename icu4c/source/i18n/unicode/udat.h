@@ -11,7 +11,10 @@
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 /**
- * @name Date Format C API
+ * \file
+ * \brief Description of DateFormat C API
+ *
+ * <h2> Date Format C API</h2>
  *
  * Date Format C API  consists of functions that convert dates and
  * times from their internal representations to textual form and back again in a
@@ -28,52 +31,60 @@
  * To format a date for the current Locale with default time and date style, 
  * use one of the static factory methods:
  * <pre>
- * .    UErrorCode status;
- * .    UFieldPosition pos;
- * .    UChar *myString;
- * .    t_int32 myStrlen=0;
- * .    UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
- * .    myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
- * .    if(status==U_BUFFER_OVERFLOW_ERROR){
- * .		status=U_ZERO_ERROR;
- * .		myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * .		udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
- * .    }
+ * \code
+ *     UErrorCode status;
+ *     UFieldPosition pos;
+ *     UChar *myString;
+ *     t_int32 myStrlen=0;
+ *     UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
+ *     myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
+ *     if(status==U_BUFFER_OVERFLOW_ERROR){
+ * 		status=U_ZERO_ERROR;
+ * 		myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ * 		udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
+ *     }
+ * \endcode
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get the
  * format and use it multiple times so that the system doesn't have to fetch the
  * information about the local language and country conventions multiple times.
  * <pre>
- * .    t_int32 i, myStrlen=0;
- * .    UChar* myString;
- * .    UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
- * .    UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
- * .    for (i = 0; i < 3; ++i) {
- * .		myStrlen = udat_format(df, myDate, NULL, myStrlen, &pos, &status);
- * .		if(status==U_BUFFER_OVERFLOW_ERROR){
- * .			status=U_ZERO_ERROR;
- * .			myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * .			udat_format(df, myDate, myString, myStrlen+1, &pos, &status);
- * .		}
- * .		printf("%s \n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
- * .		free(myString);
- * .    }
+ * \code
+ *     t_int32 i, myStrlen=0;
+ *     UChar* myString;
+ *     UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
+ *     UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
+ *     for (i = 0; i < 3; ++i) {
+ * 		myStrlen = udat_format(df, myDate, NULL, myStrlen, &pos, &status);
+ * 		if(status==U_BUFFER_OVERFLOW_ERROR){
+ * 			status=U_ZERO_ERROR;
+ * 			myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ * 			udat_format(df, myDate, myString, myStrlen+1, &pos, &status);
+ * 		}
+ * 		printf("%s \n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
+ * 		free(myString);
+ *     }
+ * \endcode
  * </pre>
  * To format a date for a different Locale, specify it in the call to
  * udat_open()
  * <pre>
- * .       UDateFormat* df = udat_open(UDAT_SHORT, UDAT_SHORT, "fr_FR", "GMT", &status);
+ * \code
+ *        UDateFormat* df = udat_open(UDAT_SHORT, UDAT_SHORT, "fr_FR", "GMT", &status);
+ * \endcode
  * </pre>
  * You can use a DateFormat API udat_parse() to parse.
  * <pre>
- * .       UErrorCode status = U_ZERO_ERROR;
- * .       t_int32 parsepos=0;     
- * .       UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
+ * \code
+ *        UErrorCode status = U_ZERO_ERROR;
+ *        t_int32 parsepos=0;     
+ *        UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
+ * \endcode
  * </pre>
- * . You can pass in different options for the arguments for date and time style 
- * . to control the length of the result; from SHORT to MEDIUM to LONG to FULL. 
- * . The exact result depends on the locale, but generally:
- * . see UDateFormatStyle for more details
+ *  You can pass in different options for the arguments for date and time style 
+ *  to control the length of the result; from SHORT to MEDIUM to LONG to FULL. 
+ *  The exact result depends on the locale, but generally:
+ *  see UDateFormatStyle for more details
  * <ul type=round>
  *   <li>   UDAT_SHORT is completely numeric, such as 12/13/52 or 3:30pm
  *   <li>   UDAT_MEDIUM is longer, such as Jan 12, 1952

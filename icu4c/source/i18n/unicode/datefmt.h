@@ -42,32 +42,40 @@ class TimeZone;
  * To format a date for the current Locale, use one of the static factory
  * methods:
  * <pre>
- * .    DateFormat* dfmt = DateFormat::createDateInstance();
- * .    UnicodeString myString;
- * .    myString = dfmt->format( myDate, myString );
+ * \code
+ *     DateFormat* dfmt = DateFormat::createDateInstance();
+ *     UnicodeString myString;
+ *     myString = dfmt->format( myDate, myString );
+ * \endcode
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get the
  * format and use it multiple times so that the system doesn't have to fetch the
  * information about the local language and country conventions multiple times.
  * <pre>
- * .    DateFormat* df = DateFormat::createDateInstance();
- * .    UnicodeString myString;
- * .    UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
- * .    for (int32_t i = 0; i < 3; ++i) {
- * .        myString.remove();
- * .        cout &lt;&lt; df->format( myDateArr[i], myString ) &lt;&lt; endl;
- * .    }
+ * \code
+ *     DateFormat* df = DateFormat::createDateInstance();
+ *     UnicodeString myString;
+ *     UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
+ *     for (int32_t i = 0; i < 3; ++i) {
+ *         myString.remove();
+ *         cout &lt;&lt; df->format( myDateArr[i], myString ) &lt;&lt; endl;
+ *     }
+ * \endcode
  * </pre>
  * To format a date for a different Locale, specify it in the call to
  * getDateInstance().
  * <pre>
- * .       DateFormat* df =
- * .          DateFormat::createDateInstance( DateFormat::SHORT, Locale::FRANCE);
+ * \code
+ *        DateFormat* df =
+ *           DateFormat::createDateInstance( DateFormat::SHORT, Locale::FRANCE);
+ * \endcode
  * </pre>
  * You can use a DateFormat to parse also.
  * <pre>
- * .       UErrorCode status = U_ZERO_ERROR;
- * .       UDate myDate = df->parse(myString, status);
+ * \code
+ *        UErrorCode status = U_ZERO_ERROR;
+ *        UDate myDate = df->parse(myString, status);
+ * \endcode
  * </pre>
  * Use createDateInstance() to produce the normal date format for that country.
  * There are other static factory methods available. Use createTimeInstance()

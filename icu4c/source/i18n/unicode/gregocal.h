@@ -59,74 +59,75 @@
  *
  * <p>Example for using GregorianCalendar:
  * <pre>
- * .    // get the supported ids for GMT-08:00 (Pacific Standard Time)
- * .    int32_t idsCount;
- * .    const UnicodeString** ids = TimeZone::createAvailableIDs(-8 * 60 * 60 * 1000, idsCount);
- * .    // if no ids were returned, something is wrong. get out.
- * .    if (idsCount == 0) {
- * .        return;
- * .    }
- * .
- * .    // begin output
- * .    cout << "Current Time" << endl;
- * .
- * .    // create a Pacific Standard Time time zone
- * .    SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *(ids[0]));
- * .    
- * .    // set up rules for daylight savings time
- * .    pdt->setStartRule(Calendar::APRIL, 1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
- * .    pdt->setEndRule(Calendar::OCTOBER, -1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
- * .    
- * .    // create a GregorianCalendar with the Pacific Daylight time zone
- * .    // and the current date and time
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    Calendar* calendar = new GregorianCalendar( pdt, success );
- * .    
- * .    // print out a bunch of interesting things
- * .    cout << "ERA: " << calendar->get( Calendar::ERA, success ) << endl;
- * .    cout << "YEAR: " << calendar->get( Calendar::YEAR, success ) << endl;
- * .    cout << "MONTH: " << calendar->get( Calendar::MONTH, success ) << endl;
- * .    cout << "WEEK_OF_YEAR: " << calendar->get( Calendar::WEEK_OF_YEAR, success ) << endl;
- * .    cout << "WEEK_OF_MONTH: " << calendar->get( Calendar::WEEK_OF_MONTH, success ) << endl;
- * .    cout << "DATE: " << calendar->get( Calendar::DATE, success ) << endl;
- * .    cout << "DAY_OF_MONTH: " << calendar->get( Calendar::DAY_OF_MONTH, success ) << endl;
- * .    cout << "DAY_OF_YEAR: " << calendar->get( Calendar::DAY_OF_YEAR, success ) << endl;
- * .    cout << "DAY_OF_WEEK: " << calendar->get( Calendar::DAY_OF_WEEK, success ) << endl;
- * .    cout << "DAY_OF_WEEK_IN_MONTH: " << calendar->get( Calendar::DAY_OF_WEEK_IN_MONTH, success ) << endl;
- * .    cout << "AM_PM: " << calendar->get( Calendar::AM_PM, success ) << endl;
- * .    cout << "HOUR: " << calendar->get( Calendar::HOUR, success ) << endl;
- * .    cout << "HOUR_OF_DAY: " << calendar->get( Calendar::HOUR_OF_DAY, success ) << endl;
- * .    cout << "MINUTE: " << calendar->get( Calendar::MINUTE, success ) << endl;
- * .    cout << "SECOND: " << calendar->get( Calendar::SECOND, success ) << endl;
- * .    cout << "MILLISECOND: " << calendar->get( Calendar::MILLISECOND, success ) << endl;
- * .    cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl;
- * .    cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl;
- * .
- * .    cout << "Current Time, with hour reset to 3" << endl;
- * .    calendar->clear(Calendar::HOUR_OF_DAY); // so doesn't override
- * .    calendar->set(Calendar::HOUR, 3);
- * .    cout << "ERA: " << calendar->get( Calendar::ERA, success ) << endl;
- * .    cout << "YEAR: " << calendar->get( Calendar::YEAR, success ) << endl;
- * .    cout << "MONTH: " << calendar->get( Calendar::MONTH, success ) << endl;
- * .    cout << "WEEK_OF_YEAR: " << calendar->get( Calendar::WEEK_OF_YEAR, success ) << endl;
- * .    cout << "WEEK_OF_MONTH: " << calendar->get( Calendar::WEEK_OF_MONTH, success ) << endl;
- * .    cout << "DATE: " << calendar->get( Calendar::DATE, success ) << endl;
- * .    cout << "DAY_OF_MONTH: " << calendar->get( Calendar::DAY_OF_MONTH, success ) << endl;
- * .    cout << "DAY_OF_YEAR: " << calendar->get( Calendar::DAY_OF_YEAR, success ) << endl;
- * .    cout << "DAY_OF_WEEK: " << calendar->get( Calendar::DAY_OF_WEEK, success ) << endl;
- * .    cout << "DAY_OF_WEEK_IN_MONTH: " << calendar->get( Calendar::DAY_OF_WEEK_IN_MONTH, success ) << endl;
- * .    cout << "AM_PM: " << calendar->get( Calendar::AM_PM, success ) << endl;
- * .    cout << "HOUR: " << calendar->get( Calendar::HOUR, success ) << endl;
- * .    cout << "HOUR_OF_DAY: " << calendar->get( Calendar::HOUR_OF_DAY, success ) << endl;
- * .    cout << "MINUTE: " << calendar->get( Calendar::MINUTE, success ) << endl;
- * .    cout << "SECOND: " << calendar->get( Calendar::SECOND, success ) << endl;
- * .    cout << "MILLISECOND: " << calendar->get( Calendar::MILLISECOND, success ) << endl;
- * .    cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl; // in hours
- * .    cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl; // in hours
- * .
- * .    delete[] ids;
- * .    delete calendar; // also deletes pdt
- * .
+ * \code
+ *     // get the supported ids for GMT-08:00 (Pacific Standard Time)
+ *     int32_t idsCount;
+ *     const UnicodeString** ids = TimeZone::createAvailableIDs(-8 * 60 * 60 * 1000, idsCount);
+ *     // if no ids were returned, something is wrong. get out.
+ *     if (idsCount == 0) {
+ *         return;
+ *     }
+ * 
+ *     // begin output
+ *     cout << "Current Time" << endl;
+ * 
+ *     // create a Pacific Standard Time time zone
+ *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *(ids[0]));
+ *     
+ *     // set up rules for daylight savings time
+ *     pdt->setStartRule(Calendar::APRIL, 1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
+ *     pdt->setEndRule(Calendar::OCTOBER, -1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
+ *     
+ *     // create a GregorianCalendar with the Pacific Daylight time zone
+ *     // and the current date and time
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     Calendar* calendar = new GregorianCalendar( pdt, success );
+ *     
+ *     // print out a bunch of interesting things
+ *     cout << "ERA: " << calendar->get( Calendar::ERA, success ) << endl;
+ *     cout << "YEAR: " << calendar->get( Calendar::YEAR, success ) << endl;
+ *     cout << "MONTH: " << calendar->get( Calendar::MONTH, success ) << endl;
+ *     cout << "WEEK_OF_YEAR: " << calendar->get( Calendar::WEEK_OF_YEAR, success ) << endl;
+ *     cout << "WEEK_OF_MONTH: " << calendar->get( Calendar::WEEK_OF_MONTH, success ) << endl;
+ *     cout << "DATE: " << calendar->get( Calendar::DATE, success ) << endl;
+ *     cout << "DAY_OF_MONTH: " << calendar->get( Calendar::DAY_OF_MONTH, success ) << endl;
+ *     cout << "DAY_OF_YEAR: " << calendar->get( Calendar::DAY_OF_YEAR, success ) << endl;
+ *     cout << "DAY_OF_WEEK: " << calendar->get( Calendar::DAY_OF_WEEK, success ) << endl;
+ *     cout << "DAY_OF_WEEK_IN_MONTH: " << calendar->get( Calendar::DAY_OF_WEEK_IN_MONTH, success ) << endl;
+ *     cout << "AM_PM: " << calendar->get( Calendar::AM_PM, success ) << endl;
+ *     cout << "HOUR: " << calendar->get( Calendar::HOUR, success ) << endl;
+ *     cout << "HOUR_OF_DAY: " << calendar->get( Calendar::HOUR_OF_DAY, success ) << endl;
+ *     cout << "MINUTE: " << calendar->get( Calendar::MINUTE, success ) << endl;
+ *     cout << "SECOND: " << calendar->get( Calendar::SECOND, success ) << endl;
+ *     cout << "MILLISECOND: " << calendar->get( Calendar::MILLISECOND, success ) << endl;
+ *     cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl;
+ *     cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl;
+ * 
+ *     cout << "Current Time, with hour reset to 3" << endl;
+ *     calendar->clear(Calendar::HOUR_OF_DAY); // so doesn't override
+ *     calendar->set(Calendar::HOUR, 3);
+ *     cout << "ERA: " << calendar->get( Calendar::ERA, success ) << endl;
+ *     cout << "YEAR: " << calendar->get( Calendar::YEAR, success ) << endl;
+ *     cout << "MONTH: " << calendar->get( Calendar::MONTH, success ) << endl;
+ *     cout << "WEEK_OF_YEAR: " << calendar->get( Calendar::WEEK_OF_YEAR, success ) << endl;
+ *     cout << "WEEK_OF_MONTH: " << calendar->get( Calendar::WEEK_OF_MONTH, success ) << endl;
+ *     cout << "DATE: " << calendar->get( Calendar::DATE, success ) << endl;
+ *     cout << "DAY_OF_MONTH: " << calendar->get( Calendar::DAY_OF_MONTH, success ) << endl;
+ *     cout << "DAY_OF_YEAR: " << calendar->get( Calendar::DAY_OF_YEAR, success ) << endl;
+ *     cout << "DAY_OF_WEEK: " << calendar->get( Calendar::DAY_OF_WEEK, success ) << endl;
+ *     cout << "DAY_OF_WEEK_IN_MONTH: " << calendar->get( Calendar::DAY_OF_WEEK_IN_MONTH, success ) << endl;
+ *     cout << "AM_PM: " << calendar->get( Calendar::AM_PM, success ) << endl;
+ *     cout << "HOUR: " << calendar->get( Calendar::HOUR, success ) << endl;
+ *     cout << "HOUR_OF_DAY: " << calendar->get( Calendar::HOUR_OF_DAY, success ) << endl;
+ *     cout << "MINUTE: " << calendar->get( Calendar::MINUTE, success ) << endl;
+ *     cout << "SECOND: " << calendar->get( Calendar::SECOND, success ) << endl;
+ *     cout << "MILLISECOND: " << calendar->get( Calendar::MILLISECOND, success ) << endl;
+ *     cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl; // in hours
+ *     cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl; // in hours
+ * 
+ *     delete[] ids;
+ *     delete calendar; // also deletes pdt
+ * \endcode
  * </pre>
  */
 class U_I18N_API GregorianCalendar: public Calendar {

@@ -34,74 +34,82 @@ class NumberFormat;
  * Here are some examples of usage:
  * Example 1:
  * <pre>
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    GregorianCalendar cal(success);
- * .    Formattable arguments[] = {
- * .        7L,
- * .        Formattable( (Date) cal.getTime(success), Formattable::kIsDate),
- * .        "a disturbance in the Force"
- * .    };
- * .    
- * .    UnicodeString result;
- * .    MessageFormat::format(
- * .         "At {1,time} on {1,date}, there was {2} on planet {0,number}.",
- * .         arguments, 3, result, success );
- * .    
- * .    cout &lt;&lt; "result: " &lt;&lt; result &lt;&lt; endl;
- * .    //&lt;output>: At 4:34:20 PM on 23-Mar-98, there was a disturbance
- * .    //             in the Force on planet 7.
+ * \code
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     GregorianCalendar cal(success);
+ *     Formattable arguments[] = {
+ *         7L,
+ *         Formattable( (Date) cal.getTime(success), Formattable::kIsDate),
+ *         "a disturbance in the Force"
+ *     };
+ *     
+ *     UnicodeString result;
+ *     MessageFormat::format(
+ *          "At {1,time} on {1,date}, there was {2} on planet {0,number}.",
+ *          arguments, 3, result, success );
+ *     
+ *     cout &lt;&lt; "result: " &lt;&lt; result &lt;&lt; endl;
+ *     //&lt;output>: At 4:34:20 PM on 23-Mar-98, there was a disturbance
+ *     //             in the Force on planet 7.
+ * \endcode
  * </pre>  
  * Typically, the message format will come from resources, and the
  * arguments will be dynamically set at runtime.
  * <P>
  * Example 2:
  * <pre>
- * .    success = U_ZERO_ERROR;
- * .    Formattable testArgs[] = {3L, "MyDisk"};
- * .   
- * .    MessageFormat* form = new MessageFormat(
- * .        "The disk \"{1}\" contains {0} file(s).", success );
- * .        
- * .    UnicodeString string;
- * .    FieldPosition fpos = 0;
- * .    cout &lt;&lt; "format: " &lt;&lt; form->format(testArgs, 2, string, fpos, success ) &lt;&lt; endl;
- * .
- * .    // output, with different testArgs:
- * .    // output: The disk "MyDisk" contains 0 file(s).
- * .    // output: The disk "MyDisk" contains 1 file(s).
- * .    // output: The disk "MyDisk" contains 1,273 file(s).
- * .    de lete form;
+ *  \code
+ *     success = U_ZERO_ERROR;
+ *     Formattable testArgs[] = {3L, "MyDisk"};
+ *    
+ *     MessageFormat* form = new MessageFormat(
+ *         "The disk \"{1}\" contains {0} file(s).", success );
+ *         
+ *     UnicodeString string;
+ *     FieldPosition fpos = 0;
+ *     cout &lt;&lt; "format: " &lt;&lt; form->format(testArgs, 2, string, fpos, success ) &lt;&lt; endl;
+ * 
+ *     // output, with different testArgs:
+ *     // output: The disk "MyDisk" contains 0 file(s).
+ *     // output: The disk "MyDisk" contains 1 file(s).
+ *     // output: The disk "MyDisk" contains 1,273 file(s).
+ *     delete form;
+ *  \endcode
  *  </pre>
  *
  *  The pattern is of the following form.  Legend:
  *  <pre>
- * .      {optional item}
- * .      (group that may be repeated)*
+ * \code
+ *       {optional item}
+ *       (group that may be repeated)*
+ * \endcode
  *  </pre>
  *  Do not confuse optional items with items inside quotes braces, such
  *  as this: "{".  Quoted braces are literals.
  *  <pre>
- * .      messageFormatPattern := string ( "{" messageFormatElement "}" string )*
- * .       
- * .      messageFormatElement := argument { "," elementFormat }
- * .       
- * .      elementFormat := "time" { "," datetimeStyle }
- * .                     | "date" { "," datetimeStyle }
- * .                     | "number" { "," numberStyle }
- * .                     | "choice" "," choiceStyle
- * .  
- * .      datetimeStyle := "short"
- * .                     | "medium"
- * .                     | "long"
- * .                     | "full"
- * .                     | dateFormatPattern
- * .
- * .      numberStyle :=   "currency"
- * .                     | "percent"
- * .                     | "integer"
- * .                     | numberFormatPattern
- * . 
- * .      choiceStyle :=   choiceFormatPattern
+ *  \code
+ *       messageFormatPattern := string ( "{" messageFormatElement "}" string )*
+ *        
+ *       messageFormatElement := argument { "," elementFormat }
+ *        
+ *       elementFormat := "time" { "," datetimeStyle }
+ *                      | "date" { "," datetimeStyle }
+ *                      | "number" { "," numberStyle }
+ *                      | "choice" "," choiceStyle
+ *   
+ *       datetimeStyle := "short"
+ *                      | "medium"
+ *                      | "long"
+ *                      | "full"
+ *                      | dateFormatPattern
+ * 
+ *       numberStyle :=   "currency"
+ *                      | "percent"
+ *                      | "integer"
+ *                      | numberFormatPattern
+ *  
+ *       choiceStyle :=   choiceFormatPattern
+ * \endcode
  * </pre>
  * If there is no elementFormat, then the argument must be a string,
  * which is substituted. If there is no dateTimeStyle or numberStyle,
@@ -130,29 +138,33 @@ class NumberFormat;
  * For more sophisticated patterns, you can use a ChoiceFormat to get
  * output such as:
  * <pre>
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    MessageFormat* form = new MessageFormat("The disk \"{1}\" contains {0}.", success);
- * .    double filelimits[] = {0,1,2};
- * .    UnicodeString filepart[] = {"no files","one file","{0,number} files"};
- * .    ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3);
- * .    form->setFormat(1, *fileform); // NOT zero, see below
- * .    
- * .    Formattable testArgs[] = {1273L, "MyDisk"};
- * .     
- * .    UnicodeString string;
- * .    FieldPosition fpos = 0;
- * .    cout &lt;&lt; form->format(testArgs, 2, string, fpos, success) &lt;&lt; endl;
- * .    
- * .    // output, with different testArgs
- * .    // output: The disk "MyDisk" contains no files.
- * .    // output: The disk "MyDisk" contains one file.
- * .    // output: The disk "MyDisk" contains 1,273 files.
+ * \code
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     MessageFormat* form = new MessageFormat("The disk \"{1}\" contains {0}.", success);
+ *     double filelimits[] = {0,1,2};
+ *     UnicodeString filepart[] = {"no files","one file","{0,number} files"};
+ *     ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3);
+ *     form->setFormat(1, *fileform); // NOT zero, see below
+ *     
+ *     Formattable testArgs[] = {1273L, "MyDisk"};
+ *      
+ *     UnicodeString string;
+ *     FieldPosition fpos = 0;
+ *     cout &lt;&lt; form->format(testArgs, 2, string, fpos, success) &lt;&lt; endl;
+ *     
+ *     // output, with different testArgs
+ *     // output: The disk "MyDisk" contains no files.
+ *     // output: The disk "MyDisk" contains one file.
+ *     // output: The disk "MyDisk" contains 1,273 files.
+ * \endcode
  * </pre>
  * You can either do this programmatically, as in the above example,
  * or by using a pattern (see ChoiceFormat for more information) as in:
  * <pre>
- * .   form->applyPattern(
- * .     "There {0,choice,0#are no files|1#is one file|1&lt;are {0,number,integer} files}.");
+ * \code
+ *    form->applyPattern(
+ *      "There {0,choice,0#are no files|1#is one file|1&lt;are {0,number,integer} files}.");
+ * \endcode
  * </pre>
  * <P>
  * [Note:] As we see above, the string produced by a ChoiceFormat in
@@ -165,11 +177,13 @@ class NumberFormat;
  * [Note:] Formats are numbered by order of variable in the string.
  * This is [not] the same as the argument numbering!
  * <pre>
- * .   For example: with "abc{2}def{3}ghi{0}...",
- * .   
- * .   format0 affects the first variable {2}
- * .   format1 affects the second variable {3}
- * .   format2 affects the second variable {0}
+ * \code
+ *    For example: with "abc{2}def{3}ghi{0}...",
+ *    
+ *    format0 affects the first variable {2}
+ *    format1 affects the second variable {3}
+ *    format2 affects the second variable {0}
+ * \endcode
  * </pre>
  * and so on.
  */

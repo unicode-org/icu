@@ -76,7 +76,9 @@
  * [Subclassing.] All base classes that provide static functions that
  * create objects for Locales must implement the following static:
  * <pre>
- * .      public static const Locale* getAvailableLocales(long&)
+ * \code
+ *       public static const Locale* getAvailableLocales(long&)
+ * \endcode
  * </pre>
  */
 class U_I18N_API Format {

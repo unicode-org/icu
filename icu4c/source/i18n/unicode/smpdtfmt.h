@@ -49,30 +49,32 @@ class DateFormat;
  * pattern, all ASCII letters are reserved as pattern letters, which are defined
  * as the following:
  * <pre>
- * .   Symbol   Meaning                 Presentation       Example
- * .   ------   -------                 ------------       -------
- * .   G        era designator          (Text)             AD
- * .   y        year                    (Number)           1996
- * .   Y        year/week of year       (Number)           1996
- * .   M        month in year           (Text & Number)    July & 07
- * .   d        day in month            (Number)           10
- * .   h        hour in am/pm (1~12)    (Number)           12
- * .   H        hour in day (0~23)      (Number)           0
- * .   m        minute in hour          (Number)           30
- * .   s        second in minute        (Number)           55
- * .   S        millisecond             (Number)           978
- * .   E        day of week             (Text)             Tuesday
- * .   e        day of week/local (1~7) (Number)           2
- * .   D        day of year             (Number)           189
- * .   F        day of week in month    (Number)           2 (2nd Wed in July)
- * .   w        week in year            (Number)           27
- * .   W        week in month           (Number)           2
- * .   a        am/pm marker            (Text)             PM
- * .   k        hour in day (1~24)      (Number)           24
- * .   K        hour in am/pm (0~11)    (Number)           0
- * .   z        time zone               (Text)             Pacific Standard Time
- * .   '        escape for text
- * .   ''       single quote                               '
+ * \code
+ *    Symbol   Meaning                 Presentation       Example
+ *    ------   -------                 ------------       -------
+ *    G        era designator          (Text)             AD
+ *    y        year                    (Number)           1996
+ *    Y        year/week of year       (Number)           1996
+ *    M        month in year           (Text & Number)    July & 07
+ *    d        day in month            (Number)           10
+ *    h        hour in am/pm (1~12)    (Number)           12
+ *    H        hour in day (0~23)      (Number)           0
+ *    m        minute in hour          (Number)           30
+ *    s        second in minute        (Number)           55
+ *    S        millisecond             (Number)           978
+ *    E        day of week             (Text)             Tuesday
+ *    e        day of week/local (1~7) (Number)           2
+ *    D        day of year             (Number)           189
+ *    F        day of week in month    (Number)           2 (2nd Wed in July)
+ *    w        week in year            (Number)           27
+ *    W        week in month           (Number)           2
+ *    a        am/pm marker            (Text)             PM
+ *    k        hour in day (1~24)      (Number)           24
+ *    K        hour in am/pm (0~11)    (Number)           0
+ *    z        time zone               (Text)             Pacific Standard Time
+ *    '        escape for text
+ *    ''       single quote                               '
+ * \endcode
  * </pre>
  * The count of pattern letters determine the format.
  * <P>
@@ -97,35 +99,39 @@ class DateFormat;
  * <P>
  * Examples using the US locale:
  * <pre>
- * .   Format Pattern                         Result
- * .   --------------                         -------
- * .   "yyyy.MM.dd G 'at' HH:mm:ss z"    ->>  1996.07.10 AD at 15:08:56 PDT
- * .   "EEE, MMM d, ''yy"                ->>  Wed, July 10, '96
- * .   "h:mm a"                          ->>  12:08 PM
- * .   "hh 'o''clock' a, zzzz"           ->>  12 o'clock PM, Pacific Daylight Time
- * .   "K:mm a, z"                       ->>  0:00 PM, PST
- * .   "yyyyy.MMMMM.dd GGG hh:mm aaa"    ->>  1996.July.10 AD 12:08 PM
+ * \code
+ *    Format Pattern                         Result
+ *    --------------                         -------
+ *    "yyyy.MM.dd G 'at' HH:mm:ss z"    ->>  1996.07.10 AD at 15:08:56 PDT
+ *    "EEE, MMM d, ''yy"                ->>  Wed, July 10, '96
+ *    "h:mm a"                          ->>  12:08 PM
+ *    "hh 'o''clock' a, zzzz"           ->>  12 o'clock PM, Pacific Daylight Time
+ *    "K:mm a, z"                       ->>  0:00 PM, PST
+ *    "yyyyy.MMMMM.dd GGG hh:mm aaa"    ->>  1996.July.10 AD 12:08 PM
+ * \endcode
  * </pre>
  * Code Sample:
  * <pre>
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, "PST");
- * .    pdt->setStartRule( Calendar::APRIL, 1, Calendar::SUNDAY, 2*60*60*1000);
- * .    pdt->setEndRule( Calendar::OCTOBER, -1, Calendar::SUNDAY, 2*60*60*1000);
- * .    
- * .    // Format the current time.
- * .    SimpleDateFormat* formatter
- * .        = new SimpleDateFormat ("yyyy.MM.dd G 'at' hh:mm:ss a zzz", success );
- * .    GregorianCalendar cal(success);
- * .    UDate currentTime_1 = cal.getTime(success);
- * .    FieldPosition fp(0);
- * .    UnicodeString dateString;
- * .    formatter->format( currentTime_1, dateString, fp );
- * .    cout &lt;&lt; "result: " &lt;&lt; dateString &lt;&lt; endl;
- * .    
- * .    // Parse the previous string back into a Date.
- * .    ParsePosition pp(0);
- * .    UDate currentTime_2 = formatter->parse(dateString, pp );
+ * \code
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, "PST");
+ *     pdt->setStartRule( Calendar::APRIL, 1, Calendar::SUNDAY, 2*60*60*1000);
+ *     pdt->setEndRule( Calendar::OCTOBER, -1, Calendar::SUNDAY, 2*60*60*1000);
+ *     
+ *     // Format the current time.
+ *     SimpleDateFormat* formatter
+ *         = new SimpleDateFormat ("yyyy.MM.dd G 'at' hh:mm:ss a zzz", success );
+ *     GregorianCalendar cal(success);
+ *     UDate currentTime_1 = cal.getTime(success);
+ *     FieldPosition fp(0);
+ *     UnicodeString dateString;
+ *     formatter->format( currentTime_1, dateString, fp );
+ *     cout &lt;&lt; "result: " &lt;&lt; dateString &lt;&lt; endl;
+ *     
+ *     // Parse the previous string back into a Date.
+ *     ParsePosition pp(0);
+ *     UDate currentTime_2 = formatter->parse(dateString, pp );
+ * \endcode
  * </pre>
  * In the above example, the time value "currentTime_2" obtained from parsing
  * will be equal to currentTime_1. However, they may not be equal if the am/pm

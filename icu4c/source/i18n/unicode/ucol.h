@@ -10,7 +10,10 @@
 #include "unicode/utypes.h"
 #include "unicode/unorm.h"
 /**
- * @name Collator C API
+ * \file
+ * \brief Description of Collator C API
+ *
+ * <h2> Collator C API </h2>
  *
  * The C API for Collator performs locale-sensitive
  * <code>String</code> comparison. You use this class to build
@@ -29,6 +32,7 @@
  * the <code>UCollator</code> for the default locale.
  * <blockquote>
  * <pre>
+ * \code
  * // Compare two strings in the default locale
  * UErrorCode success = U_ZERO_ERROR;
  * UCollator* myCollator = ucol_open(NULL, &success);
@@ -40,6 +44,7 @@
  * }else{
  *     printf("abc is greater than or equal to ABC\n");
  * }
+ * \endcode
  * </pre>
  * </blockquote>
  *
@@ -57,6 +62,7 @@
  * US English.
  * <blockquote>
  * <pre>
+ * \code
  * //Get the Collator for US English and set its strength to UCOL_PRIMARY
  * UErrorCode success = U_ZERO_ERROR;
  * UCollator* usCollator = ucol_open("en_US", &success);
@@ -67,6 +73,7 @@
  * if( u_strcoll(myCollator, source, u_strlen(source), target, u_strlen(target)) == UCOL_EQUAL) {
  *     printf("'abc' and 'ABC' strings are equivalent with strength UCOL_PRIMARY\n");
  * }
+ * \endcode
  * </pre>
  * </blockquote>
  * <p>
