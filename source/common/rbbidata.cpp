@@ -267,6 +267,10 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     if (status == NULL || U_FAILURE(*status)) {
         return 0;
     }
+    if(ds==NULL || inData==NULL || length<-1 || (length>0 && outData==NULL)) {
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     //
     //  Check that the data header is for for break data.
