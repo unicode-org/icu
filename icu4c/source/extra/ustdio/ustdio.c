@@ -37,7 +37,7 @@ static const UChar DELIMITERS [] = { 0x000A, 0x0000 };
 
 /* Input/output */
 
-int32_t
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fputs(const UChar    *s,
     UFILE        *f)
 {
@@ -46,14 +46,14 @@ u_fputs(const UChar    *s,
   return count;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fputc(UChar        uc,
     UFILE        *f)
 {
   return u_file_write(&uc, 1, f) == 1 ? uc : EOF;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_file_write(    const UChar     *chars, 
         int32_t        count, 
         UFILE         *f)
@@ -165,7 +165,7 @@ ufile_fill_uchar_buffer(UFILE *f)
   f->fUCLimit     = myTarget;
 }
 
-UChar*
+U_CAPI UChar* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgets(UFILE        *f,
     int32_t        n,
     UChar        *s)
@@ -268,7 +268,7 @@ u_fgets(UFILE        *f,
   return s;
 }
 
-UChar
+U_CAPI UChar U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetc(UFILE        *f)
 {
   /* if we have an available character in the buffer, return it */
@@ -290,7 +290,7 @@ static UChar _charAt(int32_t offset, void *context) {
 }
 
 /* Read a UChar from a UFILE and process escape sequences */
-UChar32
+U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetcx(UFILE        *f) {
     int32_t length;
     int32_t offset;
@@ -335,7 +335,7 @@ u_fgetcx(UFILE        *f) {
     return c32;
 }
 
-UChar
+U_CAPI UChar U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fungetc(UChar        c,
       UFILE        *f)
 {
@@ -349,7 +349,7 @@ u_fungetc(UChar        c,
   }
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_file_read(    UChar        *chars, 
         int32_t        count, 
         UFILE         *f)

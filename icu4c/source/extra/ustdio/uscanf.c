@@ -308,7 +308,7 @@ u_fscanf_u(    UFILE        *f,
   return converted;
 }
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vfscanf(    UFILE        *f,
         const char    *patternSpecification,
         va_list        ap)
@@ -1217,7 +1217,7 @@ u_scanf_scanset_handler(UFILE             *stream,
 
 #define UP_PERCENT 0x0025
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vfscanf_u(    UFILE        *f,
         const UChar    *patternSpecification,
         va_list        ap)

@@ -194,7 +194,7 @@ u_fsetcodepage(const char    *codepage,
  * @return alias to the converter
  * @draft
  */
-U_CAPI UConverter U_EXPORT2 *u_fgetConverter(UFILE *f);
+U_CAPI UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
 
 /* Output functions */
 

@@ -53,7 +53,7 @@ static UBool hasICUData(const char *cp) {
 
 
 
-UFILE*
+U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fopen(const char    *filename,
     const char    *perm,
     const char    *locale,
@@ -109,7 +109,7 @@ u_fopen(const char    *filename,
   return result;
 }
 
-UFILE*
+U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_finit(FILE        *f,
     const char    *locale,
     const char    *codepage)
@@ -177,7 +177,7 @@ u_finit(FILE        *f,
   return result;
 }
 
-void
+U_CAPI void U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fclose(UFILE *file)
 {
   fflush(file->fFile);
@@ -193,19 +193,19 @@ u_fclose(UFILE *file)
   free(file);
 }
 
-FILE*
+U_CAPI FILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetfile(    UFILE         *f)
 {
   return f->fFile;
 }
 
-const char*
+U_CAPI const char*  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetlocale(    UFILE        *file)
 {
   return file->fBundle->fLocale;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fsetlocale(const char        *locale,
          UFILE        *file)
 {
@@ -218,7 +218,7 @@ u_fsetlocale(const char        *locale,
   return file->fBundle == 0 ? -1 : 0;
 }
 
-const char*
+U_CAPI const char* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetcodepage(UFILE        *file)
 {
   UErrorCode     status = U_ZERO_ERROR;
@@ -229,7 +229,7 @@ u_fgetcodepage(UFILE        *file)
   return codepage;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fsetcodepage(    const char    *codepage,
         UFILE        *file)
 {
@@ -250,7 +250,8 @@ u_fsetcodepage(    const char    *codepage,
 }
 
 
-UConverter * u_fgetConverter(UFILE *file)
+U_CAPI UConverter * U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_fgetConverter(UFILE *file)
 {
   return file->fConverter;
 }
