@@ -226,19 +226,11 @@ ucnv_shareConverterData(UConverterSharedData * data)
     /*Lazy evaluates the Hashtable itself */
     /*void *sanity = NULL;*/
 
-    if (SHARED_DATA_HASHTABLE == NULL) {
-        UHashtable *myTable = uhash_openSize(uhash_hashIChars, uhash_compareIChars,
+    if (SHARED_DATA_HASHTABLE == NULL)
+    {
+        SHARED_DATA_HASHTABLE = uhash_openSize (uhash_hashIChars, uhash_compareIChars,
                             ucnv_io_countAvailableAliases(&err),
                             &err);
-        umtx_lock(&cnvCacheMutex);
-        if (U_SUCCESS(err) && SHARED_DATA_HASHTABLE == NULL) {
-            SHARED_DATA_HASHTABLE = myTable;
-            myTable = NULL;
-        }
-        umtx_unlock(&cnvCacheMutex);
-        if (myTable != NULL) {
-            uhash_close(myTable);
-        }
         if (U_FAILURE(err)) 
             return;
     }
