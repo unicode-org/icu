@@ -24,6 +24,10 @@
 <icu:state>                   a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4
 <icu:state>                   a1-fe.u
 
+# build an extension-only (delta) .cnv file
+# requires the base .cnv file at runtime
+<icu:base>                    "ibm-33722_P12A-1999"
+
 CHARMAP
 <U0000> \x00 |0
 <U0001> \x01 |0

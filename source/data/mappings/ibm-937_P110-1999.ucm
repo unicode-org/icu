@@ -18,6 +18,10 @@
 <icu:charsetFamily>           "EBCDIC"
 <icu:alias>                   "ibm-937_VPUA"
 
+# build an extension-only (delta) .cnv file
+# requires the base .cnv file at runtime
+<icu:base>                    "ibm-1371_P100-1999"
+
 CHARMAP
 <U0000> \x00 |0
 <U0001> \x01 |0
