@@ -34,22 +34,9 @@ typedef struct UConverter UConverter;
 
 U_CDECL_BEGIN
 
-
-#define UCNV_MAX_SUBCHAR_LEN 4
-#define UCNV_ERROR_BUFFER_LENGTH 20
-#define UCNV_MAX_AMBIGUOUSCCSIDS 5
-
-#define UCNV_IMPLEMENTED_CONVERSION_TYPES 9
-/*Sentinel Value used to check the integrity of the binary data files */
-
-#define UCNV_FILE_CHECK_MARKER 0xBEDA
-
 /*maximum length of the converter names */
 #define UCNV_MAX_CONVERTER_NAME_LENGTH 60
 #define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
-
-/*Pointer to the aforementioned file */
-#define UCNV_MAX_LINE_TEXT (UCNV_MAX_CONVERTER_NAME_LENGTH*400)
 
 #define  UCNV_SI 0x0F           /*Shift in for EBDCDIC_STATEFUL and iso2022 states */
 #define  UCNV_SO 0x0E           /*Shift out for EBDCDIC_STATEFUL and iso2022 states */
