@@ -500,7 +500,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             fRXPat->fCompiledPat->setElementAt(op, savePosition);
 
             // Append an JMP operation into the compiled pattern.  The operand for
-            //  the OR will eventually be the location following the ')' for the
+            //  the JMP will eventually be the location following the ')' for the
             //  group.  This will be patched in later, when the ')' is encountered.
             op = URX_BUILD(URX_JMP, 0);
             fRXPat->fCompiledPat->addElement(op, *fStatus);
@@ -601,18 +601,70 @@ UBool RegexCompile::doParseActions(EParseAction action)
             fParenStack.push(fRXPat->fCompiledPat->size()-3, *fStatus);   // The first NOP
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
         }
-         break;
-
         break;
 
+
     case doOpenLookAhead:
-        // Open Paren.
-        error(U_REGEX_UNIMPLEMENTED);
+        // Positive Look-ahead   (?=  stuff  )
+        // Compiles to
+        //    1    START_LA     dataLoc
+        //    2.   NOP              reserved for use by quantifiers on the block.
+        //                          Look-ahead can't have quantifiers, but paren stack
+        //                             compile time conventions require the slot anyhow.
+        //    3.   NOP              may be replaced if there is are '|' ops in the block.
+        //    4.     code for parenthesized stuff.
+        //    5.   ENDLA
+        //     
+        //  Two data slots are reserved, for saving the stack ptr and the input position.
+        {
+            int32_t dataLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize += 2; 
+            int32_t op = URX_BUILD(URX_LA_START, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            op = URX_BUILD(URX_NOP, 0);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the NOPs.  
+            fParenStack.push(EParenClass::lookAhead, *fStatus);           // Begin a new frame.
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+        }
         break;
 
     case doOpenLookAheadNeg:
-        // Open Paren.
-        error(U_REGEX_UNIMPLEMENTED);
+        // Negated Lookahead.   (?! stuff )
+        // Compiles to
+        //    1.    START_LA    dataloc
+        //    2.    SAVE_STATE  7         // Fail within look-ahead block restores to this state,
+        //                                //   which continues with the match.
+        //    3.    NOP                   // Std. Open Paren sequence, for possible '|'
+        //    4.       code for parenthesized stuff.
+        //    5.    END_LA                // Cut back stack, remove saved state from step 2.
+        //    6.    FAIL                  // code in block succeeded, so neg. lookahead fails.
+        //    7.    ...
+        {
+            int32_t dataLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize += 2; 
+            int32_t op = URX_BUILD(URX_LA_START, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            op = URX_BUILD(URX_STATE_SAVE, 0);    // dest address will be patched later.
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            op = URX_BUILD(URX_NOP, 0);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the StateSave and NOP.  
+            fParenStack.push(EParenClass::negLookAhead, *fStatus);        // Begin a new frame.
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The STATE_SAVE
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+            
+            // Instructions #5 and #6 will be added when the ')' is encountered.
+        }
         break;
 
     case doOpenLookBehind:
@@ -1410,11 +1462,12 @@ void  RegexCompile::handleCloseParen() {
 
     // Fixup any operations within the just-closed parenthesized group
     //    that need to reference the end of the (block).
-    //    (The first one on popped from the stack is an unused slot for
+    //    (The first one popped from the stack is an unused slot for
     //     alternation (OR) state save, but applying the fixup to it does no harm.)
     for (;;) {
         patIdx = fParenStack.popi();
         if (patIdx < 0) {
+            // value < 0 flags the start of the frame on the paren stack.
             break;
         }
         U_ASSERT(patIdx>0 && patIdx <= fRXPat->fCompiledPat->size());
@@ -1429,11 +1482,11 @@ void  RegexCompile::handleCloseParen() {
     // parentesized grouping this is
 
     switch (patIdx) {
-    case -1:
+    case plain:
         // No additional fixups required.
-        //   This is the case with most kinds of groupings.
+        //   (Grouping-only parentheses)
         break;
-    case -2:
+    case capturing:
         // Capturing Parentheses.
         //   Insert a End Capture op into the pattern.
         //   The frame offset of the variables for this cg is obtained from the
@@ -1447,7 +1500,7 @@ void  RegexCompile::handleCloseParen() {
             fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
         }
         break;
-    case -3:
+    case atomic:
         // Atomic Parenthesis.
         //   Insert a LD_SP operation to restore the state stack to the position
         //   it was when the atomic parens were entered.
@@ -1459,6 +1512,37 @@ void  RegexCompile::handleCloseParen() {
             fRXPat->fCompiledPat->addElement(ldOp, *fStatus);
         }
         break;
+
+    case EParenClass::lookAhead:
+        {
+            int32_t  startOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen-1);
+            U_ASSERT(URX_TYPE(startOp) == URX_LA_START);
+            int32_t dataLoc  = URX_VAL(startOp);
+            int32_t op       = URX_BUILD(URX_LA_END, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
+        break;
+
+    case negLookAhead:
+        {
+            // See comment at doOpenLookAheadNeg
+            int32_t  startOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen-1);
+            U_ASSERT(URX_TYPE(startOp) == URX_LA_START);
+            int32_t dataLoc  = URX_VAL(startOp);
+            int32_t op       = URX_BUILD(URX_LA_END, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+             op              = URX_BUILD(URX_FAIL, 0);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // Patch the URX_SAVE near the top of the block.
+            int32_t saveOp   = fRXPat->fCompiledPat->elementAti(fMatchOpenParen);
+            U_ASSERT(URX_TYPE(saveOp) == URX_STATE_SAVE);
+            int32_t dest     = fRXPat->fCompiledPat->size();
+            saveOp           = URX_BUILD(URX_STATE_SAVE, dest);
+            fRXPat->fCompiledPat->setElementAt(saveOp, fMatchOpenParen);
+        }
+        break;
+
 
     default:
         U_ASSERT(FALSE);

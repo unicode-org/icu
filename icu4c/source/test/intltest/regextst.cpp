@@ -1294,8 +1294,6 @@ void RegexTest::Errors() {
     REGEX_ERR("(?-si) stuff", 1, 3, U_REGEX_UNIMPLEMENTED);
 
     // Look-ahead, Look-behind
-    REGEX_ERR("abc(?=xyz).*", 1, 6, U_REGEX_UNIMPLEMENTED);    // look-ahead
-    REGEX_ERR("abc(?!xyz).*", 1, 6, U_REGEX_UNIMPLEMENTED);    // negated look-ahead
     REGEX_ERR("abc(?<=xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // look-behind
     REGEX_ERR("abc(?<!xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // negated look-behind
     REGEX_ERR("abc(?<@xyz).*", 1, 7, U_REGEX_RULE_SYNTAX);       // illegal construct
@@ -1699,10 +1697,10 @@ void RegexTest::PerlTests() {
         //
         UnicodeString resultString;
         UnicodeString perlExpr = fields[3];
+        groupsMat->reset(perlExpr);
+        cgMat->reset(perlExpr);
 
         while (perlExpr.length() > 0) {
-            groupsMat->reset(perlExpr);
-            cgMat->reset(perlExpr);
             if (perlExpr.startsWith("$&")) {
                 resultString.append(testMat->group(status));
                 perlExpr.remove(0, 2);
