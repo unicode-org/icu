@@ -342,7 +342,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    new GetThread("[" + Integer.toString(i) + "]",  stableService(), 0, this).start();
 	}
 	runThreads();
-	logln(stableService.stats());
+	System.out.println(stableService.stats());
     }
 
     // run multiple getVisibleID on a stable service
@@ -351,7 +351,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    new GetVisibleThread("[" + Integer.toString(i) + "]",  stableService(), 0, this).start();
 	}
 	runThreads();
-	logln(stableService.stats());
+	System.out.println(stableService.stats());
     }
 
     // run multiple getDisplayName on a stable service
@@ -368,7 +368,7 @@ public class ICUServiceThreadTest extends TestFmwk
 				 this).start();
 	}
 	runThreads();
-	logln(stableService.stats());
+	System.out.println(stableService.stats());
     }
 
     // run register/unregister on a service
@@ -381,7 +381,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    new UnregisterFactoryThread("[" + i + "]", service, 0, this).start();
 	}
 	runThreads();
-	logln(service.stats());
+	System.out.println(service.stats());
     }
     
     public void Test04_WitheringService() {
@@ -402,7 +402,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	new UnregisterFactoryListThread("", service, 3, factories, this).start();
 
 	runThreads(2000);
-	logln(service.stats());
+	System.out.println(service.stats());
     }
 	
     // "all hell breaks loose"
@@ -438,6 +438,6 @@ public class ICUServiceThreadTest extends TestFmwk
 
 	// yoweee!!!
 	runThreads(10000);
-	logln(service.stats());
+	System.out.println(service.stats());
     }
 }

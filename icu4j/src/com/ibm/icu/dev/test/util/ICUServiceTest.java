@@ -568,4 +568,38 @@ public class ICUServiceTest extends TestFmwk
 	    return prefix + suffix;
 	}
     }
+
+    public void TestLocale() {
+	ICULocaleService service = new ICULocaleService();
+	service.registerObject("root", "");
+	service.registerObject("german", "de");
+	service.registerObject("german_Germany", "de_DE");
+	service.registerObject("japanese", "ja");
+	service.registerObject("japanese_Japan", "ja_JP");
+
+	Object target = service.get("de_US");
+	confirmEqual("test de_US", "german", target);
+
+	target = service.get("za_PPP");
+	confirmEqual("test zappp", "root", target);
+
+	Locale loc = Locale.getDefault();
+	Locale.setDefault(Locale.JAPANESE);
+	target = service.get("za_PPP");
+	confirmEqual("test with ja locale", "japanese", target);
+
+	Set ids = service.getVisibleIDs();
+	for (Iterator iter = ids.iterator(); iter.hasNext();) {
+	    logln("id: " + iter.next());
+	}
+
+	Locale.setDefault(loc);
+	ids = service.getVisibleIDs();
+	for (Iterator iter = ids.iterator(); iter.hasNext();) {
+	    logln("id: " + iter.next());
+	}
+
+	target = service.get("za_PPP");
+	confirmEqual("test with en locale", "root", target);
+    }
 }

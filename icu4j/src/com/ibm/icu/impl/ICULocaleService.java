@@ -12,21 +12,16 @@ import java.util.Set;
 import java.util.Enumeration;
 
 public class ICULocaleService extends ICUService {
-    private String fallbackLocale;
+    Locale fallbackLocale;
+    String fallbackLocaleName;
 
     /**
      * Construct an ICULocaleService with a fallback locale string based on the current
      * default locale at the time of construction.
      */
     public ICULocaleService() {
-	fallbackLocale = LocaleUtility.canonicalLocaleString(Locale.getDefault().toString());
-    }
-
-    /**
-     * Construct an ICULocaleService with the provided fallback locale string.
-     */
-    public ICULocaleService(String fallbackLocale) {
-        this.fallbackLocale = fallbackLocale;
+	fallbackLocale = Locale.getDefault();
+	fallbackLocaleName = LocaleUtility.canonicalLocaleString(fallbackLocale.toString());
     }
 
     /**
@@ -359,6 +354,17 @@ public class ICULocaleService extends ICUService {
     }
 
     protected Key createKey(String id) {
-	return LocaleKey.createWithCanonicalFallback(id, fallbackLocale);
+	Locale loc = Locale.getDefault();
+	if (loc != fallbackLocale) {
+	    synchronized (this) {
+		if (loc != fallbackLocale) {
+		    fallbackLocale = loc;
+		    fallbackLocaleName = LocaleUtility.canonicalLocaleString(loc.toString());
+		    clearServiceCache();
+		}
+	    }
+	}
+	    
+	return LocaleKey.createWithCanonicalFallback(id, fallbackLocaleName);
     }
 }

@@ -609,6 +609,16 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
+     * Clears only the service cache.
+     * This can be called by subclasses when a change affects the service
+     * cache but not the id caches, e.g., when the default locale changes
+     * the resolution of ids changes, but not the visible ids themselves.
+     */
+    protected void clearServiceCache() {
+	cacheref = null;
+    }
+
+    /**
      * ServiceListener is the listener that ICUService provides by default.
      * ICUService will notifiy this listener when factories are added to
      * or removed from the service.  Subclasses can provide
