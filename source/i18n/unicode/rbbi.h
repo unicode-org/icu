@@ -421,6 +421,11 @@ RuleBasedBreakIterator(UDataMemory* image);
      */
     inline static UClassID getStaticClassID(void);
 
+	virtual BreakIterator *  createBufferClone(void *stackBuffer,
+                                               int32_t &BufferSize,
+                                               UErrorCode &status);
+ 
+
 protected:
     //=======================================================================
     // implementation
@@ -459,6 +464,7 @@ private:
     RuleBasedBreakIterator(RuleBasedBreakIteratorTables* adoptTables);
 
     friend class BreakIterator;
+
 };
 
 inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {

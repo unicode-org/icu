@@ -80,14 +80,24 @@ ubrk_safeClone(
           int32_t *pBufferSize,
           UErrorCode *status)
 {
-	return 0; /* Hey! Add code here! */
+    if (status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+    if (!pBufferSize || !bi){
+       *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+	return (UBreakIterator *)(((BreakIterator*)bi)->
+        createBufferClone(stackBuffer, *pBufferSize, *status)); 	
 }
-
 
 U_CAPI void
 ubrk_close(UBreakIterator *bi)
 {
-  delete (BreakIterator*) bi;
+    if (!((BreakIterator*) bi)->isBufferClone())
+    {
+        delete (BreakIterator*) bi;
+    }
 }
 
 U_CAPI void
