@@ -153,7 +153,7 @@ public:
                 FieldPosition&) const
     { return foo.remove(); }
 
-    virtual void applyPattern(const UnicodeString&, UParseError& parseError, UErrorCode& status){
+    virtual void applyPattern(const UnicodeString&, UParseError&, UErrorCode&){
     }
 };
 
