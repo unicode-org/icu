@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.11 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ package com.ibm.text.utility;
 import java.util.*;
 import java.text.*;
 import java.io.*;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.UCD.*;
 
 public final class Utility {    // COMMON UTILITIES

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.9 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -20,9 +20,9 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.io.*;
 //import java.text.Un;
-import com.ibm.text.CanonicalIterator;
-import com.ibm.text.UnicodeSet;
-import com.ibm.text.UTF16;
+import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
 import com.ibm.text.utility.*;
 
 public class VerifyUCD implements UCD_Types {

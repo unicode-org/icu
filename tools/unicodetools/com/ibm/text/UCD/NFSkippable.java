@@ -1,6 +1,6 @@
 package com.ibm.text.UCD;
-import com.ibm.text.UTF16;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.util.BitSet;
 import com.ibm.text.utility.*;
 import java.io.PrintWriter;

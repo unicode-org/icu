@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2001/10/31 00:01:28 $ 
-* $Revision: 1.7 $
+* $Date: 2002/03/15 01:57:01 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,7 @@
 package com.ibm.text.UCA;
 
 import java.util.*;
-import com.ibm.text.UTF16;
+import com.ibm.icu.text.UTF16;
 
 import java.io.*;
 //import java.text.*;
@@ -27,6 +27,7 @@ import java.text.Collator;
 import com.ibm.text.UCD.*;
 import com.ibm.text.UCD.UCD_Types;
 import com.ibm.text.utility.*;
+import com.ibm.text.UCD.Normalizer;
 
 public class WriteCollationData implements UCD_Types {
     public static final String copyright = 
@@ -36,6 +37,8 @@ public class WriteCollationData implements UCD_Types {
     static final boolean GENERATED_NFC_MISMATCHES = true;    
     static final boolean DO_CHARTS = true;   
     
+    
+    static final String UNICODE_VERSION = UCD.latestVersion;
     
     static UCA collator;
     static char unique = '\u0000';
@@ -162,7 +165,7 @@ public class WriteCollationData implements UCD_Types {
     
     static public void writeCaseExceptions() {
         System.err.println("Writing Case Exceptions");
-        Normalizer NFKC = new Normalizer(Normalizer.NFKC);
+        Normalizer NFKC = new Normalizer(Normalizer.NFKC, UNICODE_VERSION);
         for (char a = 0; a < 0xFFFF; ++a) {
             if (!ucd.isRepresented(a)) continue;
             //if (0xA000 <= a && a <= 0xA48F) continue; // skip YI
@@ -195,7 +198,7 @@ public class WriteCollationData implements UCD_Types {
  
     static public void writeCaseFolding() throws IOException {
         System.err.println("Writing Javascript data");
-        BufferedReader in = Utility.openUnicodeFile("CaseFolding", "");
+        BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true);
         // new BufferedReader(new FileReader(DIR31 + "CaseFolding-3.d3.alpha.txt"), 64*1024);
         log = new PrintWriter(new FileOutputStream("CaseFolding_data.js"));
         log.println("var CF = new Object();");
@@ -239,8 +242,8 @@ public class WriteCollationData implements UCD_Types {
     
     static public void writeJavascriptInfo() throws IOException {
         System.err.println("Writing Javascript data");
-        Normalizer normKD = new Normalizer(Normalizer.NFKD);
-        Normalizer normD = new Normalizer(Normalizer.NFD);
+        Normalizer normKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
+        Normalizer normD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         log = new PrintWriter(new FileOutputStream("Normalization_data.js"));
         
         int count = 0;
@@ -464,7 +467,7 @@ public class WriteCollationData implements UCD_Types {
     static void checkBadDecomps(int strength, boolean decomposition) {
         int oldStrength = collator.getStrength();
         collator.setStrength(strength);
-        Normalizer nfkd = new Normalizer(Normalizer.NFKD);
+        Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         if (strength == 1) {
             log.println("<h2>3. Primaries Incompatible with Decompositions</h2><table border='1'>");
         } else {
@@ -764,7 +767,7 @@ public class WriteCollationData implements UCD_Types {
                 32*1024));
         diLog.write('\uFEFF');
 
-        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         Set sorted = new TreeSet();
         
@@ -805,7 +808,7 @@ public class WriteCollationData implements UCD_Types {
                 32*1024));
         diLog.write('\uFEFF');
 
-        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         
@@ -848,7 +851,7 @@ public class WriteCollationData implements UCD_Types {
         
         //diLog = new PrintWriter(new FileOutputStream(GEN_DIR + "DisjointIgnorables.txt"));
         
-        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         int[] secondariesZP = new int[400];
@@ -1016,7 +1019,7 @@ public class WriteCollationData implements UCD_Types {
 
         //diLog = new PrintWriter(new FileOutputStream(GEN_DIR + "DisjointIgnorables.txt"));
         
-        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         int[] secondariesZP = new int[400];
@@ -1218,7 +1221,7 @@ public class WriteCollationData implements UCD_Types {
         //if (true) return;
         
         int[] ces = new int[50];
-        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         if (false) {
         int len2 = collator.getCEs("\u2474", true, ces);
@@ -1650,8 +1653,8 @@ public class WriteCollationData implements UCD_Types {
             || primary > oldJamo5 && primary <= oldJamo6;
     }
     
-    static Normalizer NFKD = new Normalizer(Normalizer.NFKD);
-    static Normalizer NFD = new Normalizer(Normalizer.NFD);
+    static Normalizer NFKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
+    static Normalizer NFD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
     
     static int variableHigh = 0;
     static final int COMMON = 5;
@@ -2698,8 +2701,8 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     static final char MARK2 = '\u0002';
     //Normalizer normalizer = new Normalizer(Normalizer.NFC, true);
     
-    static Normalizer toC = new Normalizer(Normalizer.NFC);
-    static Normalizer toD = new Normalizer(Normalizer.NFD);
+    static Normalizer toC = new Normalizer(Normalizer.NFC, UNICODE_VERSION);
+    static Normalizer toD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
     static TreeMap MismatchedC = new TreeMap();
     static TreeMap MismatchedN = new TreeMap();
     static TreeMap MismatchedD = new TreeMap();

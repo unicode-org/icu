@@ -1,5 +1,5 @@
 package com.ibm.text.UCD;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.*;
 
 public abstract class UnicodeProperty implements UCD_Types {

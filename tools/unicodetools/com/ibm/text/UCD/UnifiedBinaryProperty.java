@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.5 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.*;
 
 import com.ibm.text.utility.*;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSet;
 
 final class UnifiedBinaryProperty extends UnicodeProperty {
     int majorProp;

@@ -5,15 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/12/13 23:35:54 $
-* $Revision: 1.10 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
-import com.ibm.text.*;
+import com.ibm.icu.text.UTF16;
 import java.util.*;
 
 public final class DerivedProperty implements UCD_Types {

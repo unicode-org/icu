@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.7 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 import java.io.*;
 import com.ibm.text.utility.*;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSet;
 import java.text.NumberFormat;
 
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2001/10/26 23:32:03 $ 
-* $Revision: 1.3 $
+* $Date: 2002/03/15 01:57:01 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ import java.util.*;
 import java.io.*;
 import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
-import com.ibm.text.UTF16;
+import com.ibm.icu.text.UTF16;
 
 public class WriteCharts implements UCD_Types {
     
