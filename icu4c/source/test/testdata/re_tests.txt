@@ -1,4 +1,4 @@
-﻿abc	abc	y	$&	abc
+abc	abc	y	$&	abc
 abc	abc	y	$-[0]	0
 abc	abc	y	$+[0]	3
 abc	xbc	n	-	-
@@ -557,14 +557,14 @@ $(?<=^(a))	a	y	$1	a
 (?{$a=2})(a(?{local$a=$a+1}))*aak*c(?{$b=$a})	yaaxxaaaacd	y	$b	4
 (>a+)ab	aaab	n	-	-
 (?>a+)b	aaab	y	-	-
-([[:]+)	a:[b]:	y	$1	:[
-([[=]+)	a=[b]=	y	$1	=[
-([[.]+)	a.[b].	y	$1	.[
+([[:]+)	a:[b]:	iy	$1	:[
+([[=]+)	a=[b]=	iy	$1	=[
+([[.]+)	a.[b].	iy	$1	.[
 [a[:xyz:	-	c	-	Unmatched [
 [a[:xyz:]	-	c	-	POSIX class [:xyz:] unknown
-[a[:]b[:c]	abc	y	$&	abc
+[a[:]b[:c]	abc	iy	$&	abc
 ([a[:xyz:]b]+)	pbaq	c	-	POSIX class [:xyz:] unknown
-[a[:]b[:c]	abc	y	$&	abc
+[a[:]b[:c]	abc	iy	$&	abc
 ([[:alpha:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd
 ([[:alnum:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy
 ([[:ascii:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy__--  ${nulnul}
@@ -803,31 +803,31 @@ round\(((?>[^()]+))\)	_I(round(xs * sz),1)	y	$1	xs * sz
 '((?-x:.) )'x	x 	y	$1-	x-
 foo.bart	foo.bart	y	-	-
 '^d[x][x][x]'m	abcd\ndxxx	y	-	-
-.X(.+)+X	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.X(.+)+XX	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.XX(.+)+X	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.X(.+)+X	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.X(.+)+XX	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.XX(.+)+X	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.X(.+)+[X]	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.X(.+)+[X][X]	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.XX(.+)+[X]	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.X(.+)+[X]	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.X(.+)+[X][X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.XX(.+)+[X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.[X](.+)+[X]	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.[X](.+)+[X][X]	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.[X][X](.+)+[X]	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	y	-	-
-.[X](.+)+[X]	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.[X](.+)+[X][X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
-.[X][X](.+)+[X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	n	-	-
+.X(.+)+X	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.X(.+)+XX	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.XX(.+)+X	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.X(.+)+X	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.X(.+)+XX	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.XX(.+)+X	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.X(.+)+[X]	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.X(.+)+[X][X]	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.XX(.+)+[X]	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.X(.+)+[X]	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.X(.+)+[X][X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.XX(.+)+[X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.[X](.+)+[X]	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.[X](.+)+[X][X]	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.[X][X](.+)+[X]	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.[X](.+)+[X]	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.[X](.+)+[X][X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
+.[X][X](.+)+[X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
 tt+$	xxxtt	y	-	-
 ([a-\d]+)	za-9z	y	$1	a-9
 ([\d-z]+)	a0-za	y	$1	0-z
 ([\d-\s]+)	a0- z	y	$1	0- 
-([a-[:digit:]]+)	za-9z	y	$1	a-9
-([[:digit:]-z]+)	=0-z=	y	$1	0-z
-([[:digit:]-[:alpha:]]+)	=0-z=	y	$1	0-z
+([a-[:digit:]]+)	za-9z	iy	$1	a-9
+([[:digit:]-z]+)	=0-z=	iy	$1	0-z
+([[:digit:]-[:alpha:]]+)	=0-z=	iy	$1	0-z
 \GX.*X	aaaXbX	n	-	-
 (\d+\.\d+)	3.1415926	y	$1	3.1415926
 (\ba.{0,10}br)	have a web browser	y	$1	a web br
@@ -876,7 +876,7 @@ tt+$	xxxtt	y	-	-
 (abc)?(abc)+	abc	y	$1:$2	:abc	-
 'b\s^'m	a\nb\n	n	-	-
 \ba	a	y	-	-
-^(a(??{"(?!)"})|(a)(?{1}))b	ab	y	$2	a	# [ID 20010811.006]
+^(a(??{"(?!)"})|(a)(?{1}))b	ab	yi	$2	a	# [ID 20010811.006]
 ab(?i)cd	AbCd	n	-	-	# [ID 20010809.023]
 ab(?i)cd	abCd	y	-	-
 (A|B)*(?(1)(CD)|(CD))	CD	y	$2-$3	-CD
@@ -921,4 +921,4 @@ ab(?i)cd	abCd	y	-	-
 (.*?)(?<=[bc])	abcd	y	$1	ab
 (.*?)(?<=[bc])c	abcd	y	$1	ab
 2(]*)?$\1	2	y	$&	2
-(??{})	x	y	-	-
+(??{})	x	yi	-	-

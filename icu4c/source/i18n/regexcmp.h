@@ -87,6 +87,8 @@ private:
     void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the
                                                      //   generated code at the specified location.
+    UBool       possibleNullMatch(int32_t start,     // Test a range of compiled pattern for
+                                  int32_t end);      //   for possibly matching an empty string.
 
 
     UErrorCode                    *fStatus;
@@ -152,14 +154,6 @@ private:
                                                      //   -1 for the upper interval value means none
                                                      //   was specified (unlimited occurences.)
 
-    int32_t                       fMatcherDataEnd;   // Location Counter for allocation of data
-                                                     //   to be used by the matcher at match time.
-
-    int32_t                       fBackRefMax;       // Number of the largest capture group with a
-                                                     //   back reference.  Capture groups can be forward-
-                                                     //   referenced, so we can't flag an error on
-                                                     //   a too-big back ref number until the end of the
-                                                     //   pattern is reached.
 };
 
 U_NAMESPACE_END
