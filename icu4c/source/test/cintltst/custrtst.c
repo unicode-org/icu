@@ -1680,25 +1680,19 @@ compareIterNoIndexes(UCharIterator *iter1, const char *n1,
     }
 }
 
+/* n2 must have a digit 1 at the end, will be incremented with the normalization mode */
 static void
-TestUNormIterator() {
-    static const UChar text[]={ /* must contain <00C5 0327> see u_strchr() below */
-        0x61,                                                   /* 'a' */
-        0xe4, 0x61, 0x308,                                      /* variations of 'a'+umlaut */
-        0xc5, 0x327, 0x41, 0x30a, 0x327, 0x41, 0x327, 0x30a,    /* variations of 'A'+ring+cedilla */
-        0xfb03, 0xfb00, 0x69, 0x66, 0x66, 0x69, 0x66, 0xfb01,   /* variations of 'ffi' */
-        0
-    };
-
-    UChar longText[300], buffer[300];
-    char *name1, name2[40]="UNormIter0";
+testUNormIteratorWithText(const UChar *text, int32_t textLength, int32_t middle,
+                          const char *name1, const char *n2) {
+    UChar buffer[300];
+    char name2[40];
 
     UCharIterator iter1, iter2, *iter;
     UNormIterator *uni;
 
     UNormalizationMode mode;
     UErrorCode errorCode;
-    int32_t i, middle, length, loops;
+    int32_t length;
 
     /* open a normalizing iterator */
     errorCode=U_ZERO_ERROR;
@@ -1709,52 +1703,69 @@ TestUNormIterator() {
     }
 
     /* set iterator 2 to the original text */
-    uiter_setString(&iter2, text, LENGTHOF(text)-1);
+    uiter_setString(&iter2, text, textLength);
 
-    name1="UCharIter";
+    strcpy(name2, n2);
 
-    /* loop twice */
-    for(loops=0; /* break in the loop body */; ++loops) {
-        /* test the normalizing iterator for each mode */
-        for(mode=UNORM_NONE; mode<UNORM_MODE_COUNT; ++mode) {
-            length=unorm_normalize(text, LENGTHOF(text)-1, mode, 0, buffer, LENGTHOF(buffer), &errorCode);
-            if(U_FAILURE(errorCode)) {
-                log_err("unorm_normalize(mode %d) failed: %s\n", mode, u_errorName(errorCode));
-                goto cleanup;
-            }
-
-            /* set iterator 1 to the normalized text  */
-            uiter_setString(&iter1, buffer, length);
-
-            /* set the normalizing iterator to use iter2 */
-            iter=unorm_setIter(uni, &iter2, mode, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                log_err("unorm_setIter(mode %d) failed: %s\n", mode, u_errorName(errorCode));
-                goto cleanup;
-            }
-
-            compareIterNoIndexes(&iter1, name1, iter, name2, LENGTHOF(text)/2);
-            ++name2[strlen(name2)-1];
-        }
-
-        if(loops==1) {
+    /* test the normalizing iterator for each mode */
+    for(mode=UNORM_NONE; mode<UNORM_MODE_COUNT; ++mode) {
+        length=unorm_normalize(text, textLength, mode, 0, buffer, LENGTHOF(buffer), &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("unorm_normalize(mode %d) failed: %s\n", mode, u_errorName(errorCode));
             break;
         }
 
-        /* test again, this time with an insane string to cause internal buffer overflows */
-        middle=u_strchr(text, 0x327)-text; /* see comment at text[] */
-        memcpy(longText, text, middle*U_SIZEOF_UCHAR);
-        for(i=0; i<150; ++i) {
-            longText[middle+i]=0x30a; /* insert many rings between 'A-ring' and cedilla */
-        }
-        memcpy(longText+middle+i, text+middle, (LENGTHOF(text)-middle)*U_SIZEOF_UCHAR);
+        /* set iterator 1 to the normalized text  */
+        uiter_setString(&iter1, buffer, length);
 
-        name1="UCharIterLong";
-        strcpy(name2, "UNormIterLong0");
+        /* set the normalizing iterator to use iter2 */
+        iter=unorm_setIter(uni, &iter2, mode, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("unorm_setIter(mode %d) failed: %s\n", mode, u_errorName(errorCode));
+            break;
+        }
+
+        compareIterNoIndexes(&iter1, name1, iter, name2, middle);
+        ++name2[strlen(name2)-1];
     }
 
-cleanup:
     unorm_closeIter(uni);
+}
+
+static void
+TestUNormIterator() {
+    static const UChar text[]={ /* must contain <00C5 0327> see u_strchr() below */
+        0x61,                                                   /* 'a' */
+        0xe4, 0x61, 0x308,                                      /* variations of 'a'+umlaut */
+        0xc5, 0x327, 0x41, 0x30a, 0x327, 0x41, 0x327, 0x30a,    /* variations of 'A'+ring+cedilla */
+        0xfb03, 0xfb00, 0x69, 0x66, 0x66, 0x69, 0x66, 0xfb01    /* variations of 'ffi' */
+    };
+    static const UChar surrogateText[]={
+        0x6e, 0xd900, 0x6a, 0xdc00, 0xd900, 0xdc00, 0x61
+    };
+
+    UChar longText[300];
+    int32_t i, middle, length;
+
+    length=LENGTHOF(text);
+    testUNormIteratorWithText(text, length, length/2, "UCharIter", "UNormIter1");
+    testUNormIteratorWithText(text, length, length, "UCharIterEnd", "UNormIterEnd1");
+
+    /* test again, this time with an insane string to cause internal buffer overflows */
+    middle=u_strchr(text, 0x327)-text; /* see comment at text[] */
+    memcpy(longText, text, middle*U_SIZEOF_UCHAR);
+    for(i=0; i<150; ++i) {
+        longText[middle+i]=0x30a; /* insert many rings between 'A-ring' and cedilla */
+    }
+    memcpy(longText+middle+i, text+middle, (LENGTHOF(text)-middle)*U_SIZEOF_UCHAR);
+
+    length=LENGTHOF(text)+i;
+    testUNormIteratorWithText(longText, length, length/2, "UCharIterLong", "UNormIterLong1");
+    testUNormIteratorWithText(longText, length, length, "UCharIterLongEnd", "UNormIterLongEnd1");
+
+    length=LENGTHOF(surrogateText);
+    testUNormIteratorWithText(surrogateText, length, length/2, "UCharIterSurr", "UNormIterSurr1");
+    testUNormIteratorWithText(surrogateText, length, length, "UCharIterSurrEnd", "UNormIterSurrEnd1");
 }
 
 #endif
