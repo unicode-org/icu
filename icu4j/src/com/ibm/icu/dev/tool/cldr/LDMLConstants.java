@@ -28,6 +28,7 @@ public class LDMLConstants {
     public static final String REGISTRY        = "registry";
     public static final String ALT             = "alt";
     public static final String DRAFT           = "draft";
+    public static final String REFERENCES      = "references";
     public static final String PROPOSED        = "proposed";
     public static final String ALIAS           = "alias";
     public static final String VERSION         = "version";
