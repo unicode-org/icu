@@ -19,7 +19,6 @@
 #include "unicode/putil.h"
 #include "cloctst.h"
 #include "unicode/uloc.h"
-#include "unicode/locid.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
@@ -1265,6 +1264,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                                 ures_getKey(currentBundle),
                                 locale);
                     }
+                    ures_close(subBundle);
                     continue;
 /*                }
             }*/
@@ -1659,6 +1659,7 @@ TestLocaleStructure(void) {
                     u_errorName(errorCode),
                     uloc_getAvailable(locIndex));
             }
+            ures_close(currentLocale);
             continue;
         }
         ures_getStringByKey(currentLocale, "Version", NULL, &errorCode);
@@ -1676,6 +1677,8 @@ TestLocaleStructure(void) {
 #endif
         ures_close(currentLocale);
     }
+
+    ures_close(root);
 }
 
 static void
