@@ -255,6 +255,12 @@ Entry::Entry() {
 Entry::~Entry() {
     if (entryType == PROTOTYPE) {
         delete u.prototype;
+    } else if (entryType == RBT_DATA) {
+        // The data object is shared between instances of RBT.  The
+        // entry object owns it.  It should only be deleted when the
+        // transliterator component is being cleaned up.  Doing so
+        // invalidates any RBTs that the user has instantiated.
+        delete u.data;
     }
 }
 
