@@ -170,6 +170,24 @@ public class CollationFrenchTest extends TestFmwk{
             }
         }
     }
+    
+    public void TestContinuationReordering()
+    {
+        String rule = "&0x2f00 << 0x2f01";
+        try {
+            RuleBasedCollator collator = new RuleBasedCollator(rule);
+            collator.setFrenchCollation(true);
+            CollationKey key1 
+                        = collator.getCollationKey("a\u0325\u2f00\u2f01b\u0325");
+            CollationKey key2
+                        = collator.getCollationKey("a\u0325\u2f01\u2f01b\u0325");
+            if (key1.compareTo(key2) >= 0) {
+                errln("Error comparing continuation strings");
+            }
+        } catch (Exception e) {
+            errln(e.toString());
+        }
+    }
      
     // main test routine, test rules specific to the french locale
     private void doTest(char[] source, char[] target, int result) {
