@@ -41,7 +41,7 @@ ufltlgts.o testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o tstdtmod.o testdata.o datamap.o ucaconf.o icusvtst.o \
 uobjtest.o idnaref.o nptrans.o punyref.o testidn.o testidna.o incaltst.o \
-calcasts.o
+calcasts.o v32test.o
 
 
 DEPS = $(OBJECTS:.o=.d)

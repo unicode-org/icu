@@ -15,6 +15,7 @@
 #include "unicode/uclean.h"
 #include "unicode/uchar.h"
 #include "unicode/ures.h"
+#include "unicode/ucnv.h"
 #include "cintltst.h"
 #include <stdlib.h>
 #include <string.h>
@@ -94,15 +95,22 @@ static void test_format(const char *format, int32_t bufCap, int32_t indent,
 /*
  *  define trace functions for use in this test.
  */
+static int gTraceEntryCount;
+static int gTraceExitCount;
+static int gTraceDataCount;
+
 static void testTraceEntry(const void *context, int32_t fnNumber) {
+    gTraceEntryCount++;
 }
 
 static void testTraceExit(const void *context, int32_t fnNumber,
                    const char *fmt, va_list args) {
+    gTraceExitCount++;
 }
 
 static void testTraceData(const void *context, int32_t fnNumber, int32_t level,
                    const char *fmt, va_list args) {
+    gTraceDataCount++;
 }
 
 
@@ -165,6 +173,27 @@ static void TestTraceAPI() {
         utrace_setLevel(UTRACE_INFO);
     }
 
+    /*
+     * Open and close a converter with tracing enabled.
+     *   Verify that our tracing callback functions get called.
+     */
+    {
+        UErrorCode  status = U_ZERO_ERROR;
+        UConverter *cnv;
+        
+        gTraceEntryCount = 0;
+        gTraceExitCount  = 0;
+        gTraceDataCount  = 0;
+        utrace_setLevel(UTRACE_OPEN_CLOSE);
+        cnv = ucnv_open(NULL, &status);
+        TEST_ASSERT(U_SUCCESS(status));
+        ucnv_close(cnv);
+        TEST_ASSERT(gTraceEntryCount > 0);
+        TEST_ASSERT(gTraceExitCount  > 0);
+        TEST_ASSERT(gTraceDataCount  > 0);
+    }
+
+
 
     /*
      * trace data formatter operation.
@@ -219,6 +248,32 @@ static void TestTraceAPI() {
         test_format("Null vector - %vd", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
 
     }
+
+    /*
+     * utrace_format.  Only need a minimal test to see that the function works at all.
+     *                 Full functionality is tested via utrace_vformat.
+     */
+    {
+        char      buf[100];
+        int32_t   x;
+        x = utrace_format(buf, 100, 0, "%s", "Hello, World.");
+        TEST_ASSERT(strcmp(buf, "Hello, World.") == 0);
+        TEST_ASSERT(x == 14);
+    }
+
+    /*
+     * utrace_functionName.  Just spot-check a couple of them.
+     */
+    {
+        const char   *name;
+        name = utrace_functionName(UTRACE_U_INIT);
+        TEST_ASSERT(strcmp(name, "u_init") == 0);
+        name = utrace_functionName(UTRACE_UCNV_OPEN);
+        TEST_ASSERT(strcmp(name, "ucnv_open") == 0);
+        name = utrace_functionName(UTRACE_UCOL_GET_SORTKEY);
+        TEST_ASSERT(strcmp(name, "ucol_getSortKey") == 0);
+    }
+
 
 
     /*  Restore the trace function settings to their original values. */
