@@ -318,7 +318,7 @@ free(result);
     if(U_FAILURE(status)){
         log_err("Fail: error in unum_setSymbols: %s\n", myErrorName(status));
     }
-
+    unum_applyPattern(cur_frpattern, FALSE, result, u_strlen(result));
     unum_getSymbols(cur_frpattern, &symbols2);
     if((symbols1.decimalSeparator != symbols2.decimalSeparator) ||
        (symbols1.groupingSeparator != symbols2.groupingSeparator) ||
