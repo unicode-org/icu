@@ -217,7 +217,7 @@ CharList *pkg_appendUniqueDirToList(CharList *l, CharList** end, const char *str
         return l; /* no dir path */
     }
     if((rPtr-strAlias) > (sizeof(aBuf)/sizeof(aBuf[0]))) {
-        fprintf(stderr, "## ERR: Path too long [%d chars]: %s\n", sizeof(aBuf), strAlias);
+        fprintf(stderr, "## ERR: Path too long [%d chars]: %s\n", (int)sizeof(aBuf), strAlias);
         return l;
     }
     strncpy(aBuf, strAlias,(rPtr-strAlias));
