@@ -662,7 +662,7 @@ uprv_timezone()
 #endif
 #endif
 
-#if defined(OS400) || defined(XP_MAC)
+#if defined(OS400) || defined(XP_MAC) || defined(RHAPSODY)
   time_t t, t1, t2;
   struct tm tmrec;
   bool_t dst_checked;
