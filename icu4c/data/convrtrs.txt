@@ -5,10 +5,29 @@
 # *
 # *******************************************************************************
 
-#This is an alias file used by the character set converter
-#format:
-#Actual File Name || Algorithm name     alias1 alias2 ...
-#except for column1(file names) case insensitive
+# IMPORTANT NOTE
+#
+# This file is not read directly by ICU. If you change it, you need to
+# run gencnval, and evantually pkgdata to update the representation that
+# ICU uses for aliases.
+
+# This is an alias file used by the character set converter.
+#
+# Format:
+#
+#     Actual file name || Algorithm name     alias1 alias2 ...
+#
+# except for column 1 (file names) case insensitive
+#
+# Aliases can be tagged by including a comma-separated list of tags in
+# curly braces, as in ISO_8859-1:1987{IANA} iso-8859-1 { MIME } or
+# some-charset{MIME IANA}. The order of tags does not matter, and
+# whitespace is allowed between the alias name and the tags list.
+#
+# Here is a list of tags used in this file:
+#
+# IANA		The IANA charset name, as documented in RFC 1700.
+# MIME		The MIME charset name, used for content type tagging. 
 
 # The world is getting more complicated...
 # Supporting XML parsers, HTML, MIME, and similar applications
@@ -34,19 +53,20 @@
 # Currently, the IANA list is at
 # http://www.isi.edu/in-notes/iana/assignments/character-sets
 
-# Name matching is case-insensitive.
+# Name matching is case-insensitive. Also, dashes '-', underscores '_'
+# and spaces ' ' can be used interchangeably in names.
 # However, the names in the left column are directly file names
 # or names of algorithmic converters, and their case must not
 # be changed - or else code and/or file names must also be changed.
 
 # Algorithmic
-UTF8                    UTF-8 ibm-1208 cp1208
-UTF16_BigEndian         utf-16be
-UTF16_LittleEndian      utf-16le
-UTF16_PlatformEndian    iso-10646-ucs-2 csUnicode UTF-16 ibm-1200 cp1200 ucs-2
+UTF8                    utf-8 { MIME } ibm-1208 cp1208
+UTF16_BigEndian         utf-16be { MIME }
+UTF16_LittleEndian { MIME }      utf-16le { MIME }
+UTF16_PlatformEndian { MIME }    ISO-10646-UCS-2 { IANA } csUnicode utf-16 { MIME } ibm-1200 cp1200 ucs-2
 UTF16_OppositeEndian
-LATIN_1                 ISO-8859-1 ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 l1 ansi_x3.110-1983   #!!!!! There's whole lot of names for this
-#ISO_2022                ISO-2022 2022 cp2022
+LATIN_1                 iso-8859-1 { MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ansi_x3.110-1983   #!!!!! There's whole lot of names for this
+#ISO_2022                iso-2022 { MIME } 2022 cp2022
 LMBCS-1                 lmbcs 
 LMBCS-2
 LMBCS-3		
@@ -62,25 +82,25 @@ LMBCS-19
 
 # Table-based
 
-ibm-367                 ascii ascii-7 US-ASCII ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us csASCII 646
+ibm-367                 us-acii { MIME } ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646
 
 # Special mapping for S/390 new line characters
 ebcdic-xml-us
 
 # Interchange codepages
-ibm-912                 ISO-8859-2 cp912 latin2 8859-2 csisolatin2 iso-ir-101 iso_8859-2:1987 l2 # Central Europe
-ibm-913                 ISO-8859-3 latin3 cp913 8859-3 csisolatin3 iso-ir-109 iso_8859-3:1988 l3 # Maltese Esperanto
-ibm-914                 ISO-8859-4 latin4 cp914 8859-4 csisolatin4 iso-ir-110 iso_8859-4:1988 l4 # Baltic
-ibm-915                 ISO-8859-5 cyrillic cp915 8859-5 csisolatincyrillic iso-ir-144 iso_8859-5:1988 # Cyrillic
-ibm-1089                ISO-8859-6 arabic cp1089 8859-6 csisolatinarabic iso-ir-127 iso_8859-6:1987 ecma-114 asmo-708   # Arabic
-ibm-4909                cp813 ISO-8859-7 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # ISO Greek (w/ euro update)
+ibm-912                 iso-8859-2 { MIME } cp912 latin2 8859-2 csisolatin2 iso-ir-101 ISO_8859-2:1987 { IANA } l2 # Central Europe
+ibm-913                 iso-8859-3 { MIME } latin3 cp913 8859-3 csisolatin3 iso-ir-109 ISO_8859-3:1988 { IANA } l3 # Maltese Esperanto
+ibm-914                 iso-8859-4 { MIME } latin4 cp914 8859-4 csisolatin4 iso-ir-110 ISO_8859-4:1988 { IANA } l4 # Baltic
+ibm-915                 iso-8859-5 { MIME } cyrillic cp915 8859-5 csisolatincyrillic iso-ir-144 ISO_8859-5:1988 { IANA } # Cyrillic
+ibm-1089                iso-8859-6 { MIME } arabic cp1089 8859-6 csisolatinarabic iso-ir-127 ISO_8859-6:1987 { IANA } ecma-114 asmo-708   # Arabic
+ibm-4909                cp813 iso-8859-7 { MIME } greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 ISO_8859-7:1987 { IANA }  # ISO Greek (w/ euro update)
 ibm-813                 # same as 4909 (w/o euro update)
-ibm-916                 ISO-8859-8 hebrew cp916 8859-8 csisolatinhebrew iso-ir-138 iso_8859-8:1988   # hebrew iso-8859-8i - typo?
-ibm-920                 ISO-8859-9 ECMA-128 latin5 cp920 8859-9 csisolatin5 iso-ir-148 l5 # Turkish
-ibm-923                 ISO-8859-15 latin9 cp923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
-ibm-1252                windows-1252  cp1252  ibm-1004 cp1004        # Windows Latin 1 We don't have an ibm-5348, so this is a best possible match
+ibm-916                 iso-8859-8 { MIME } hebrew cp916 8859-8 csisolatinhebrew iso-ir-138 ISO_8859-8:1988 { IANA }   # hebrew iso-8859-8i - typo?
+ibm-920                 iso-8859-9 { MIME } ECMA-128 latin5 cp920 8859-9 csisolatin5 iso-ir-148 l5 # Turkish
+ibm-923                 iso-8859-15 { MIME } latin9 cp923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
+ibm-1252                windows-1252  cp1252 { MIME }  ibm-1004 cp1004        # Windows Latin 1 We don't have an ibm-5348, so this is a best possible match
 ibm-943                 Shift_JIS csWindows31J sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
-ibm-949                 KS_C_5601-1987 iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 johab ks_x_1001:1992       # KSC-5601-1992, korean
+ibm-949                 KS_C_5601-1987 { MIME } iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 johab ks_x_1001:1992       # KSC-5601-1992, korean
 ibm-1370                Big5 csBig5 x-big5 cp950                # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 
 ibm-1386                GB_2312-80 iso-ir-58 csISO58GB231280 gbk chinese gb gb2312 gb2312-1980 cp936 zh_cn # Chinese GBK removed
@@ -127,14 +147,14 @@ ibm-902                 cp922 # PC Estonian (w/ euro update) moved cp922 down
 ibm-922                 # PC Estonian (w/o euro update) from above
 ibm-942                 shift_jis78 sjis78 ibm-932    # Old s_jis ibm-932 added!
 ibm-1038                Adobe-Symbol-Encoding csHPPSMath symbol
-ibm-5346                windows-1250  cp1250    # Windows Latin2 (w/ euro update)
-ibm-5347                windows-1251  cp1251    # Windows Cyrillic (w/ euro update)
-ibm-5349                windows-1253  cp1253    # Windows Greek (w/ euro update)
-ibm-5350                windows-1254  cp1254    # Windows Turkish (w/ euro update)
-ibm-5351                windows-1255  cp1255    # Windows Hebrew (w/ euro update)
-ibm-5352                windows-1256  cp1256    # Windows Arabic (w/ euro update)
-ibm-5353                windows-1257  cp1257    # Windows Baltic (w/ euro update)
-ibm-5354                windows-1258  cp1258    # Windows Vietnamese (w/ euro update)
+ibm-5346                windows-1250  cp1250 { MIME }    # Windows Latin2 (w/ euro update)
+ibm-5347                windows-1251  cp1251 { MIME }    # Windows Cyrillic (w/ euro update)
+ibm-5349                windows-1253  cp1253 { MIME }    # Windows Greek (w/ euro update)
+ibm-5350                windows-1254  cp1254 { MIME }    # Windows Turkish (w/ euro update)
+ibm-5351                windows-1255  cp1255 { MIME }    # Windows Hebrew (w/ euro update)
+ibm-5352                windows-1256  cp1256 { MIME }    # Windows Arabic (w/ euro update)
+ibm-5353                windows-1257  cp1257 { MIME }    # Windows Baltic (w/ euro update)
+ibm-5354                windows-1258  cp1258 { MIME }    # Windows Vietnamese (w/ euro update)
 ibm-1250                # Windows Latin2 (w/o euro update)
 ibm-1251                # Windows Cyrillic (w/o euro update)
 ibm-1253                # Windows Greek (w/o euro update)
