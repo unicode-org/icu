@@ -8,19 +8,223 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="vi" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
+			<language type="ca">Tiếng Catalan</language>
+			<language type="da">Tiếng Đan Mạch</language>
+			<language type="de">Tiếng Đức</language>
+			<language type="en">Tiếng Anh</language>
+			<language type="eo">Tiếng Espéranto</language>
+			<language type="es">Tiếng Tây Ban Nha</language>
+			<language type="fr">Tiếng Pháp</language>
+			<language type="hr">Tiếng Crôatia</language>
+			<language type="hu">Tiếng Hung-ga-ri</language>
+			<language type="it">Tiếng Ý</language>
+			<language type="ja">Tiếng Nhật</language>
+			<language type="ko">Tiếng Hàn Quốc</language>
+			<language type="nl">Tiếng Hà Lan</language>
+			<language type="pt">Tiếng Bồ Đào Nha</language>
+			<language type="ro">Tiếng La Mã</language>
+			<language type="ru">Tiếng Nga</language>
+			<language type="sv">Tiếng Thuỵ Điển</language>
+			<language type="tr">Tiếng Thổ Nhĩ Kỳ</language>
 			<language type="vi">Tiếng Việt</language>
+			<language type="zh">Tiếng Trung Quốc</language>
 		</languages>
 		<territories>
+			<territory type="AE">Các Tiểu Vương quốc A-rập Thống nhất</territory>
+			<territory type="AF">Áp-ga-ni-xtan</territory>
+			<territory type="AG">An-ti-gu-a và Ba-bu-đa</territory>
+			<territory type="AL">An-ba-ni</territory>
+			<territory type="AM">Ác-mê-ni-a</territory>
+			<territory type="AO">Ăng-gô-la</territory>
+			<territory type="AR">Ác-hen-ti-na</territory>
+			<territory type="AT">Áo</territory>
+			<territory type="AU">Úc Ðại Lợi</territory>
+			<territory type="AZ">Ai-déc-bai-gian</territory>
+			<territory type="BA">Bô-xni-a Héc-xê-gô-vi-na</territory>
+			<territory type="BB">Bác-ba-đốt</territory>
+			<territory type="BD">Băng-la-đét</territory>
+			<territory type="BE">Bỉ</territory>
+			<territory type="BF">Buốc-ki-na Pha-xô</territory>
+			<territory type="BG">Bun-ga-ri</territory>
+			<territory type="BH">Ba-ren</territory>
+			<territory type="BI">Bu-run-đi</territory>
+			<territory type="BJ">Bê-nanh</territory>
+			<territory type="BN">Bru-nây</territory>
+			<territory type="BO">Bô-li-vi-a</territory>
+			<territory type="BR">Bra-xin</territory>
+			<territory type="BS">Ba-ha-ma</territory>
+			<territory type="BW">Bốt-xoa-na</territory>
+			<territory type="BY">Bê-la-rút</territory>
+			<territory type="BZ">Bê-li-xê</territory>
+			<territory type="CA">Ca-na-đa</territory>
+			<territory type="CF">Cộng hòa Trung Phi</territory>
+			<territory type="CG">Công-gô</territory>
+			<territory type="CH">Thuỵ Sĩ</territory>
+			<territory type="CI">Bờ Biển Ngà</territory>
+			<territory type="CL">Chi-lê</territory>
+			<territory type="CM">Ca-mơ-run</territory>
+			<territory type="CN">Trung Quốc</territory>
+			<territory type="CO">Cô-lôm-bi-a</territory>
+			<territory type="CR">Cốt-xta Ri-ca</territory>
+			<territory type="CU">Cu-ba</territory>
+			<territory type="CV">Cáp-ve</territory>
+			<territory type="CY">Síp</territory>
+			<territory type="CZ">Cộng hòa Séc</territory>
+			<territory type="DE">Ðức</territory>
+			<territory type="DJ">Gi-bu-ti</territory>
+			<territory type="DK">Đan Mạc</territory>
+			<territory type="DZ">An-giê-ri</territory>
+			<territory type="EC">Ê-cu-a-đo</territory>
+			<territory type="EE">E-xtô-ni-a</territory>
+			<territory type="EG">Ai-cập</territory>
+			<territory type="EH">Phía tây Sahara</territory>
+			<territory type="ER">Ê-ri-tơ-rê-a</territory>
+			<territory type="ES">Tây Ban Nha</territory>
+			<territory type="ET">Ê-ti-ô-pi-a</territory>
+			<territory type="FI">Phần Lan</territory>
+			<territory type="FJ">Phi-gi</territory>
+			<territory type="FM">Mi-crô-nê-xi-a</territory>
+			<territory type="FR">Pháp</territory>
+			<territory type="GA">Ga-bông</territory>
+			<territory type="GB">Vương quốc Anh</territory>
+			<territory type="GD">Grê-na-đa</territory>
+			<territory type="GE">Gru-di-a</territory>
+			<territory type="GH">Gha-na</territory>
+			<territory type="GM">Găm-bi-a</territory>
+			<territory type="GN">Ghi-nê</territory>
+			<territory type="GQ">Ghi-nê Xích-đạo</territory>
+			<territory type="GR">Hy Lạp</territory>
+			<territory type="GT">Goa-tê-ma-la</territory>
+			<territory type="GW">Ghi-nê Bít-xao</territory>
+			<territory type="GY">Guy-a-na</territory>
+			<territory type="HN">Hôn-đu-rát</territory>
+			<territory type="HR">Crô-a-ti-a</territory>
+			<territory type="HT">Ha-i-ti</territory>
+			<territory type="HU">Hung-ga-ri</territory>
+			<territory type="ID">Nam Dương</territory>
+			<territory type="IE">Ai-len</territory>
+			<territory type="IL">I-xra-en</territory>
+			<territory type="IN">Ấn Ðộ</territory>
+			<territory type="IQ">I-rắc</territory>
+			<territory type="IR">I-ran</territory>
+			<territory type="IS">Ai-xơ-len</territory>
+			<territory type="IT">Ý</territory>
+			<territory type="JM">Ha-mai-ca</territory>
+			<territory type="JO">Gióc-đa-ni</territory>
+			<territory type="JP">Nhật Bản</territory>
+			<territory type="KE">Kê-ni-a</territory>
+			<territory type="KG">Cư-rơ-gư-xtan</territory>
+			<territory type="KH">Cam-pu-chia</territory>
+			<territory type="KI">Ki-ri-ba-ti</territory>
+			<territory type="KM">Cô-mô</territory>
+			<territory type="KN">Xan-kít và Nê-vi</territory>
+			<territory type="KP">Triều Tiên</territory>
+			<territory type="KR">Hàn Quốc</territory>
+			<territory type="KW">Cô-oét</territory>
+			<territory type="KZ">Ka-dắc-xtan</territory>
+			<territory type="LA">Lào</territory>
+			<territory type="LB">Li-băng</territory>
+			<territory type="LC">Xan Lu-xi</territory>
+			<territory type="LI">Lich-ten-xtên</territory>
+			<territory type="LK">Xri Lan-ca</territory>
+			<territory type="LR">Li-bê-ri-a</territory>
+			<territory type="LS">Lê-xô-thô</territory>
+			<territory type="LT">Li-tu-a-ni-a</territory>
+			<territory type="LU">Lúc-xăm-bua</territory>
+			<territory type="LV">Lát-vi-a</territory>
+			<territory type="LY">Li-bi</territory>
+			<territory type="MA">Ma-rốc</territory>
+			<territory type="MC">Mô-na-cô</territory>
+			<territory type="MD">Môn-đô-va</territory>
+			<territory type="MG">Ma-đa-gát-xca</territory>
+			<territory type="MH">Quần đảo Mác-san</territory>
+			<territory type="MK">Ma-xê-đô-ni-a</territory>
+			<territory type="ML">Ma-li</territory>
+			<territory type="MM">Mi-an-ma</territory>
+			<territory type="MN">Mông Cổ</territory>
+			<territory type="MR">Mô-ri-ta-ni</territory>
+			<territory type="MT">Man-ta</territory>
+			<territory type="MU">Mô-ri-xơ</territory>
+			<territory type="MV">Man-đi-vơ</territory>
+			<territory type="MW">Ma-la-uy</territory>
+			<territory type="MX">Mê-hi-cô</territory>
+			<territory type="MY">Ma-lay-xi-a</territory>
+			<territory type="MZ">Mô-dăm-bích</territory>
+			<territory type="NA">Nam-mi-bi-a</territory>
+			<territory type="NE">Ni-giê</territory>
+			<territory type="NG">Ni-giê-ri-a</territory>
+			<territory type="NI">Ni-ca-ra-goa</territory>
+			<territory type="NL">Hà Lan</territory>
+			<territory type="NO">Na Uy</territory>
+			<territory type="NP">Nê-pan</territory>
+			<territory type="NZ">Niu Di-lân</territory>
+			<territory type="OM">Ô-man</territory>
+			<territory type="PA">Pa-na-ma</territory>
+			<territory type="PE">Pê-ru</territory>
+			<territory type="PG">Pa-pu-a Niu Ghi-nê</territory>
+			<territory type="PH">Phi-lip-pin</territory>
+			<territory type="PK">Pa-ki-xtan</territory>
+			<territory type="PL">Ba Lan</territory>
+			<territory type="PT">Bồ Ðào Nha</territory>
+			<territory type="PY">Pa-ra-goay</territory>
+			<territory type="QA">Ca-ta</territory>
+			<territory type="RO">Ru-ma-ni</territory>
+			<territory type="RU">Nga</territory>
+			<territory type="RW">Ru-an-đa</territory>
+			<territory type="SA">Ả-rập Xê-út</territory>
+			<territory type="SB">Quần đảo Xô-lô-mông</territory>
+			<territory type="SC">Xây-sen</territory>
+			<territory type="SD">Xu-đăng</territory>
+			<territory type="SE">Thuỵ Điể</territory>
+			<territory type="SG">Xin-ga-po</territory>
+			<territory type="SI">Xlô-ven-ni-a</territory>
+			<territory type="SK">Xlô-va-ki-a</territory>
+			<territory type="SL">Xi-ê-ra Lê-ôn</territory>
+			<territory type="SM">Xan Ma-ri-nô</territory>
+			<territory type="SN">Xê-nê-gan</territory>
+			<territory type="SO">Xô-ma-li</territory>
+			<territory type="SP">Sécbia</territory>
+			<territory type="SR">Xu-ri-nam</territory>
+			<territory type="ST">Xao Tô-mê và Prin-xi-pê</territory>
+			<territory type="SV">En-san-va-đo</territory>
+			<territory type="SY">Xi-ri</territory>
+			<territory type="SZ">Xoa-di-len</territory>
+			<territory type="TD">Sát</territory>
+			<territory type="TG">Tô-gô</territory>
+			<territory type="TH">Thái Lan</territory>
+			<territory type="TJ">Tát-gi-ki-xtan</territory>
+			<territory type="TM">Tuốc-mê-ni-xtan</territory>
+			<territory type="TN">Tuy-ni-di</territory>
+			<territory type="TO">Tông-ga</territory>
+			<territory type="TR">Thổ Nhĩ Kỳ</territory>
+			<territory type="TT">Tri-ni-đát và Tô-ba-gô</territory>
+			<territory type="TV">Tu-va-lu</territory>
+			<territory type="TW">Ðài Loan</territory>
+			<territory type="TZ">Tan-da-ni-a</territory>
+			<territory type="UA">U-crai-na</territory>
+			<territory type="UG">U-gan-đa</territory>
+			<territory type="US">Hợp chúng quốc Hoa kỳ</territory>
+			<territory type="UY">U-ru-goay</territory>
+			<territory type="UZ">U-dơ-bê-ki-xtan</territory>
+			<territory type="VA">Va-ti-căng</territory>
+			<territory type="VC">Xan Vin-xen và Grê-na-din</territory>
+			<territory type="VE">Vê-nê-zu-ê-la</territory>
 			<territory type="VN">Việt Nam</territory>
+			<territory type="VU">Va-nu-a-tu</territory>
+			<territory type="WS">Xa-moa</territory>
+			<territory type="YE">Y-ê-men</territory>
+			<territory type="ZA">Nam Phi</territory>
+			<territory type="ZM">Dăm-bi-a</territory>
+			<territory type="ZW">Dim-ba-bu-ê</territory>
 		</territories>
 </localeDisplayNames>
 <characters>
-	<exemplarCharacters>[a-z Ạ-ỹ đ ơ à-ã è-ê ì í ò-õ ù ú ý ă ĩ ũ ư]</exemplarCharacters>
+	<exemplarCharacters>[a-zẠ-ỹđơà-ãè-êìíò-õùúýăĩũư]</exemplarCharacters>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 		<icu:scripts>
 			<icu:script type="1">Latn</icu:script>
@@ -76,6 +280,12 @@
 				<day type="fri">Th 7</day>
 				<day type="sat">CN</day>
 			</dayAbbr>
+			<week>
+				<minDays count="1"/>
+				<firstDay day="mon"/>
+			</week>
+			<am>SA</am>
+			<pm>CH</pm>
 			<dateFormats>
 				<default type="medium"/>
 				<dateFormatLength type="full">
@@ -85,17 +295,17 @@
 				</dateFormatLength >
 				<dateFormatLength type="long">
 					<dateFormat >
-						<pattern>EEE dd MMM yyyy</pattern>
+						<pattern>dd MMMM yyyy</pattern>
 					</dateFormat>
 				</dateFormatLength >
 				<dateFormatLength type="medium">
 					<dateFormat >
-						<pattern>dd MMM yyyy</pattern>
+						<pattern>dd-MM-yyyy</pattern>
 					</dateFormat>
 				</dateFormatLength >
 				<dateFormatLength type="short">
 					<dateFormat >
-						<pattern>dd/MM/yy</pattern>
+						<pattern>dd/MM/yyyy</pattern>
 					</dateFormat>
 				</dateFormatLength >
 			</dateFormats>
@@ -177,21 +387,9 @@
 	</currencyFormats>
 	<currencies>
 		<currency type="VND">
-			<displayName>VND</displayName>
-			<symbol>₫</symbol>
+			<displayName>Ðông</displayName>
+			<symbol>đ</symbol>
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>̀</reset>
-			<sc>̛̣̉̃́̆̂</sc>
-			<reset>D</reset>
-			<p>đ</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="en" /> 
 		<territory type="GB" /> 
 	</identity>
@@ -74,50 +74,48 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 	<icu:ruleBasedNumberFormats>
 		<icu:ruleBasedNumberFormat type="spellout">
 %simplified:
-    -x: minus &gt;&gt;;
-    x.x: &lt;&lt; point &gt;&gt;;
-    zero; one; two; three; four; five; six; seven; eight; nine;
-    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
-        seventeen; eighteen; nineteen;
-    20: twenty[-&gt;&gt;];
-    30: thirty[-&gt;&gt;];
-    40: forty[-&gt;&gt;];
-    50: fifty[-&gt;&gt;];
-    60: sixty[-&gt;&gt;];
-    70: seventy[-&gt;&gt;];
-    80: eighty[-&gt;&gt;];
-    90: ninety[-&gt;&gt;];
-    100: &lt;&lt; hundred[ &gt;&gt;];
-    1000: &lt;&lt; thousand[ &gt;&gt;];
-    1,000,000: &lt;&lt; million[ &gt;&gt;];
-    1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];
-    1,000,000,000,000,000: =#,##0=;
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; point &gt;&gt;;
+zero; one; two; three; four; five; six; seven; eight; nine;
+ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
+    seventeen; eighteen; nineteen;
+20: twenty[-&gt;&gt;];
+30: thirty[-&gt;&gt;];
+40: forty[-&gt;&gt;];
+50: fifty[-&gt;&gt;];
+60: sixty[-&gt;&gt;];
+70: seventy[-&gt;&gt;];
+80: eighty[-&gt;&gt;];
+90: ninety[-&gt;&gt;];
+100: &lt;&lt; hundred[ &gt;&gt;];
+1000: &lt;&lt; thousand[ &gt;&gt;];
+1,000,000: &lt;&lt; million[ &gt;&gt;];
+1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
 %default:
-    -x: minus &gt;&gt;;
-    x.x: &lt;&lt; point &gt;&gt;;
-    =%simplified=;
-    100: &lt;&lt; hundred[ &gt;%%and&gt;];
-    1000: &lt;&lt; thousand[ &gt;%%and&gt;];
-    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
-    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
-    1,000,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
-    1,000,000,000,000,000: =#,##0=;
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; point &gt;&gt;;
+=%simplified=;
+100: &lt;&lt; hundred[ &gt;%%and&gt;];
+1000: &lt;&lt; thousand[ &gt;%%and&gt;];
+100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
+1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
+1,000,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
+1,000,000,000,000,000: =#,##0=;
 %%and:
-    and =%default=;
-    100: =%default=;
+and =%default=;
+100: =%default=;
 %%commas:
-    ' and =%default=;
-    100: , =%default=;
-    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
-    1,000,000: , =%default=;%%lenient-parse:
-    &amp; ' ' , ',' ;
+' and =%default=;
+100: , =%default=;
+1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
+1,000,000: , =%default=;%%lenient-parse:
+&amp; ' ' , ',' ;
 
 		</icu:ruleBasedNumberFormat>
 	</icu:ruleBasedNumberFormats>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="zh" /> 
 		<territory type="CN" /> 
 	</identity>
@@ -19,7 +19,7 @@
 				<default type="medium"/>
 				<dateFormatLength type="full">
 					<dateFormat >
-						<pattern>yyyy'年'M'月'd'日'</pattern>
+						<pattern>yyyy'年'M'月'd'日'EEEE</pattern>
 					</dateFormat>
 				</dateFormatLength >
 				<dateFormatLength type="long">

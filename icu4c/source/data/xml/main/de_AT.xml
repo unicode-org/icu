@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="de" /> 
 		<territory type="AT" /> 
 	</identity>
@@ -102,8 +102,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <collations version="3.1.1">
 	<collation type="PHONEBOOK" >

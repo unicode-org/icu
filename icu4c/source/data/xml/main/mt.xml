@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="1.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="mt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -179,6 +179,7 @@
 			<language type="hmn">Ħmong</language>
 			<language type="ho">Ħiri Motu</language>
 			<language type="hr">Kroat</language>
+			<language type="ht">Haitian</language>
 			<language type="hu">Ungeriż</language>
 			<language type="hup">Ħupa</language>
 			<language type="hy">Armenjan</language>
@@ -716,9 +717,6 @@
 			<territory type="ZM">Żambja</territory>
 			<territory type="ZW">Żimbabwe</territory>
 		</territories>
-		<variants>
-			<variant type="PREEURO">Qabel il-Euro</variant>
-		</variants>
 </localeDisplayNames>
 <characters>
 	<exemplarCharacters>[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]</exemplarCharacters>
@@ -838,8 +836,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<currencies>
@@ -849,112 +845,84 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>B</reset>
-			<p>ċ</p>
-			<t>Ċ</t>
-			<p>c</p>
-			<t>C</t>
-			<reset>F</reset>
-			<p>ġ</p>
-			<t>Ġ</t>
-			<p>g</p>
-			<t>G</t>
-			<p>għ</p>
-			<t>gĦ</t>
-			<t>Għ</t>
-			<t>GĦ</t>
-			<reset>H</reset>
-			<p>ħ</p>
-			<t>Ħ</t>
-			<reset>Y</reset>
-			<p>ż</p>
-			<t>Ż</t>
-			<p>z</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
 <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 	<icu:ruleBasedNumberFormats>
 		<icu:ruleBasedNumberFormat type="spellout">
 %simplified:
-    -x: minus &gt;&gt;;
-    x.x: &lt;&lt; punt &gt;&gt;;
-    żero; wieħed; tnejn; tlieta; erbgħa; ħamsa; sitta; sebgħa; tmienja; disgħa;
-    għaxra; ħdax; tnax; tlettax; erbatax; ħmistax; sittax;
-        sbatax; tmintax; dsatax;
-    20: [&gt;&gt; u ]għoxrin;
-    30: [&gt;&gt; u ]tletin;
-    40: [&gt;&gt; u ]erbgħin;
-    50: [&gt;&gt; u ]ħamsin;
-    60: [&gt;&gt; u ]sittin;
-    70: [&gt;&gt; u ]sebgħin;
-    80: [&gt;&gt; u ]tmenin;
-    90: [&gt;&gt; u ]disgħin;
-    100: mija[ u &gt;&gt;];
-    200: mitejn[ u &gt;&gt;];
-    1000: &lt;&lt; elf[ u &gt;&gt;];
-    2000: &lt;&lt; elfejn[ u &gt;&gt;];
-    3000: tliet elef [ u &gt;&gt;];
-    1,000,000: &lt;&lt; miljun[ u &gt;&gt;];
-    1,000,000,000: &lt;&lt; biljun[ &gt;&gt;];
-    1,000,000,000,000: &lt;&lt; triljun[ &gt;&gt;];
-    1,000,000,000,000,000: =#,##0=;
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; punt &gt;&gt;;
+żero; wieħed; tnejn; tlieta; erbgħa; ħamsa; sitta; sebgħa; tmienja; disgħa;
+għaxra; ħdax; tnax; tlettax; erbatax; ħmistax; sittax;
+    sbatax; tmintax; dsatax;
+20: [&gt;&gt; u ]għoxrin;
+30: [&gt;&gt; u ]tletin;
+40: [&gt;&gt; u ]erbgħin;
+50: [&gt;&gt; u ]ħamsin;
+60: [&gt;&gt; u ]sittin;
+70: [&gt;&gt; u ]sebgħin;
+80: [&gt;&gt; u ]tmenin;
+90: [&gt;&gt; u ]disgħin;
+100: mija[ u &gt;&gt;];
+200: mitejn[ u &gt;&gt;];
+1000: &lt;&lt; elf[ u &gt;&gt;];
+2000: &lt;&lt; elfejn[ u &gt;&gt;];
+3000: tliet elef [ u &gt;&gt;];
+1,000,000: &lt;&lt; miljun[ u &gt;&gt;];
+1,000,000,000: &lt;&lt; biljun[ &gt;&gt;];
+1,000,000,000,000: &lt;&lt; triljun[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
 %default:
-    -x: minus &gt;&gt;;
-    x.x: &lt;&lt; punt &gt;&gt;;
-    =%simplified=;
-    100: mija[ &gt;%%and&gt;];
-    200: mitejn[ &gt;%%and&gt;];
-    300: tlett mija[ &gt;%%and&gt;];
-    400: erbgħa mija[ &gt;%%and&gt;];
-    500: ħames mija[ &gt;%%and&gt;];
-    600: sitt mija[ &gt;%%and&gt;];
-    700: sebgħa mija[ &gt;%%and&gt;];
-    800: tmin mija[ &gt;%%and&gt;];
-    900: disgħa mija[ &gt;%%and&gt;];
-    1000: &lt;&lt; elf[ &gt;%%and&gt;];
-    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
-    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
-    1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
-    1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
-    1,000,000,000,000,000: =#,##0=;
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; punt &gt;&gt;;
+=%simplified=;
+100: mija[ &gt;%%and&gt;];
+200: mitejn[ &gt;%%and&gt;];
+300: tlett mija[ &gt;%%and&gt;];
+400: erbgħa mija[ &gt;%%and&gt;];
+500: ħames mija[ &gt;%%and&gt;];
+600: sitt mija[ &gt;%%and&gt;];
+700: sebgħa mija[ &gt;%%and&gt;];
+800: tmin mija[ &gt;%%and&gt;];
+900: disgħa mija[ &gt;%%and&gt;];
+1000: &lt;&lt; elf[ &gt;%%and&gt;];
+100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
+1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
+1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
+1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
+1,000,000,000,000,000: =#,##0=;
 %%and:
-    u =%default=;
-    100: =%default=;
+u =%default=;
+100: =%default=;
 %%commas:
-    ' and =%default=;
-    100: , =%default=;
-    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
-    1,000,000: , =%default=;%%lenient-parse:
-   &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
+' and =%default=;
+100: , =%default=;
+1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
+1,000,000: , =%default=;%%lenient-parse:
+&amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
 
 		</icu:ruleBasedNumberFormat>
 		<icu:ruleBasedNumberFormat type="duration">
 %with-words:
-    0 sekondi; 1 sekonda; =0= sekondi;
-    60/60: &lt;%%min&lt;[, &gt;&gt;];
-    3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
+0 sekondi; 1 sekonda; =0= sekondi;
+60/60: &lt;%%min&lt;[, &gt;&gt;];
+3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
 %%min:
-    0 minuti; 1 minuta; =0= minuti;
+0 minuti; 1 minuta; =0= minuti;
 %%hr:
-    0 siegħat; 1 siegħa; =0= siegħat;
+0 siegħat; 1 siegħa; =0= siegħat;
 %in-numerals:
-    =0= sek.;
-    60: =%%min-sec=;
-    3600: =%%hr-min-sec=;
+=0= sek.;
+60: =%%min-sec=;
+3600: =%%hr-min-sec=;
 %%min-sec:
-    0: :=00=;
-    60/60: &lt;0&lt;&gt;&gt;;
+0: :=00=;
+60/60: &lt;0&lt;&gt;&gt;;
 %%hr-min-sec:
-    0: :=00=;
-    60/60: &lt;00&lt;&gt;&gt;;
-    3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
+0: :=00=;
+60/60: &lt;00&lt;&gt;&gt;;
+3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
 %%lenient-parse:
-    &amp; ':' = '.' = ' ' = '-';
+&amp; ':' = '.' = ' ' = '-';
 
 		</icu:ruleBasedNumberFormat>
 	</icu:ruleBasedNumberFormats>

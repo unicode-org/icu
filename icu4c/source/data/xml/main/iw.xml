@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="iw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -405,8 +405,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<currencies>
@@ -416,26 +414,6 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>Z</reset>
-			<pc>אבגדהוװױזחטיײך</pc>
-			<t>כ</t>
-			<pc>לם</pc>
-			<t>מ</t>
-			<p>ן</p>
-			<t>נ</t>
-			<pc>סעף</pc>
-			<t>פ</t>
-			<p>ץ</p>
-			<t>צ</t>
-			<pc>קרש</pc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
 <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 	<icu:ruleBasedNumberFormats>
 		<icu:ruleBasedNumberFormat type="spellout">

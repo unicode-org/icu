@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="de" /> 
 		<territory type="BE" /> 
 	</identity>
@@ -127,6 +127,12 @@
 			</currencyFormat>
 		</currencyFormatLength >
 	</currencyFormats>
+	<currencies>
+		<currency type="FRF">
+			<displayName>Franken</displayName>
+			<symbol>FF</symbol>
+		</currency>
+	</currencies>
 </numbers>
 <collations version="3.1.1">
 	<collation type="PHONEBOOK" >

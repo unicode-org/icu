@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="tr" /> 
 		<territory type="TR" /> 
 	</identity>
@@ -37,7 +37,7 @@
 	<currencyFormats>
 		<currencyFormatLength >
 			<currencyFormat >
-				<pattern>#,##0 ¤;-#,##0 ¤</pattern>
+				<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
 			</currencyFormat>
 		</currencyFormatLength >
 	</currencyFormats>

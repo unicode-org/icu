@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="en" /> 
 		<territory type="BE" /> 
 	</identity>
@@ -119,9 +119,4 @@
 		</currencyFormatLength >
 	</currencyFormats>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0.1" />
-	</collation  >
-</collations >
 </ldml>
