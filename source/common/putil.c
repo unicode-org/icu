@@ -1897,7 +1897,7 @@ uprv_getDefaultCodepage()
     {
         uprv_memset(codesetName, 0, sizeof(codesetName));
     }
-    localeName = setlocale(LC_CTYPE, "");
+    localeName = setlocale(LC_CTYPE, NULL);
     if (localeName != NULL && (name = (uprv_strchr(localeName, (int)'.'))) != NULL)
     {
         /* strip the locale name and look at the suffix only */
