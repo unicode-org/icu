@@ -212,6 +212,9 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     delete test7a;
     delete test7b;
     delete test7c;
+    delete test8a;
+    delete test8b;
+    delete test8c;
 }
 
 
@@ -387,6 +390,7 @@ void CharIterTest::TestIteration() {
 
     }
 }
+
 //Tests for new API for utf-16 support 
 void CharIterTest::TestIterationUChar32() {
     UChar textChars[]={ 0x0061, 0x0062, 0xd841, 0xdc02, 0x20ac, 0xd7ff, 0xd842, 0xdc06, 0xd801, 0xdc00, 0x0061, 0x0000};
@@ -437,6 +441,7 @@ void CharIterTest::TestIterationUChar32() {
 
         logln("Testing forward iteration...");
         do {
+            /* logln("c=%d i=%d char32At=%d", c, i, text.char32At(i)); */
             if (c == CharacterIterator::DONE && i != text.length())
                 errln("Iterator reached end prematurely");
             else if(iter.hasNext() == FALSE && i != text.length())
@@ -453,7 +458,6 @@ void CharIterTest::TestIterationUChar32() {
             if (c != CharacterIterator::DONE) {
                 c = iter.next32();
                 i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
-              
             }
         } while (c != CharacterIterator::DONE);
         if(iter.hasNext() == TRUE)
