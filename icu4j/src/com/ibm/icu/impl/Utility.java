@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/11/07 23:14:46 $
- * $Revision: 1.33 $
+ * $Date: 2003/01/14 19:32:37 $
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -1223,12 +1223,11 @@ public final class Utility {
         return b.delete(i+1, b.length());
     }
 
-    // "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     static final char DIGITS[] = {
-        48,49,50,51,52,53,54,55,56,57,
-        65,66,67,68,69,70,71,72,73,74,
-        75,76,77,78,79,80,81,82,83,84,
-        85,86,87,88,89,90
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+		'U', 'V', 'W', 'X', 'Y', 'Z'
     };
 
     /**
@@ -1240,49 +1239,61 @@ public final class Utility {
     }
 
     /**
-     * Append a number to the given StringBuffer in the given radix.
-     * Standard digits '0'-'9' are used and letters 'A'-'Z' for
-     * radices 11 through 36.
-     * @param result the digits of the number are appended here
-     * @param n the number to be converted to digits; may be negative.
-     * If negative, a '-' is prepended to the digits.
-     * @param radix a radix from 2 to 36 inclusive.
-     * @param minDigits the minimum number of digits, not including
-     * any '-', to produce.  Values less than 2 have no effect.  One
-     * digit is always emitted regardless of this parameter.
-     * @return a reference to result
+     * Append the digits of a positive integer to the given
+     * <code>StringBuffer</code> in the given radix. This is
+     * done recursively since it is easiest to generate the low-
+     * order digit first, but it must be appended last.
+     * 
+     * @param result is the <code>StringBuffer</code> to append to
+     * @param n is the positive integer
+     * @param radix is the radix, from 2 to 36 inclusive
+     * @param minDigits is the minimum number of digits to append.
      */
-    public static StringBuffer appendNumber(StringBuffer result, int n,
-                                            int radix, int minDigits) {
-        if (radix < 2 || radix > 36) {
-            // Bogus radix
-            throw new IllegalArgumentException("Illegal radix " + radix);
-        }
-        // Handle negatives
-        if (n < 0) {
-            n = -n;
-            result.append('-');
-        }
-        // First determine the number of digits
-        int nn = n;
-        int r = 1;
-        while (nn >= radix) {
-            nn /= radix;
-            r *= radix;
-            --minDigits;
-        }
-        // Now generate the digits
-        while (--minDigits > 0) {
-            result.append(DIGITS[0]);
-        }
-        while (r > 0) {
-            int digit = n / r;
-            result.append(DIGITS[digit]);
-            n -= digit * r;
-            r /= radix;
-        }
-        return result;
-    }
+	private static void recursiveAppendNumber(StringBuffer result, int n,
+                                                int radix, int minDigits)
+	{
+		int digit = n % radix;
+
+		if (n >= radix || minDigits > 1) {
+			recursiveAppendNumber(result, n / radix, radix, minDigits - 1);
+		}
+
+		result.append(DIGITS[digit]);
+	}
+
+	/**
+	 * Append a number to the given StringBuffer in the given radix.
+	 * Standard digits '0'-'9' are used and letters 'A'-'Z' for
+	 * radices 11 through 36.
+	 * @param result the digits of the number are appended here
+	 * @param n the number to be converted to digits; may be negative.
+	 * If negative, a '-' is prepended to the digits.
+	 * @param radix a radix from 2 to 36 inclusive.
+	 * @param minDigits the minimum number of digits, not including
+	 * any '-', to produce.  Values less than 2 have no effect.  One
+	 * digit is always emitted regardless of this parameter.
+	 * @return a reference to result
+	 */
+	public static StringBuffer appendNumber(StringBuffer result, int n,
+                                             int radix, int minDigits)
+		throws IllegalArgumentException
+	{
+		if (radix < 2 || radix > 36) {
+			throw new IllegalArgumentException("Illegal radix " + radix);
+		}
+
+
+		int abs = n;
+
+		if (n < 0) {
+			abs = -n;
+			result.append("-");
+		}
+
+		recursiveAppendNumber(result, abs, radix, minDigits);
+
+		return result;
+	}
 
     /**
      * Parse an unsigned 31-bit integer at the given offset.  Use
@@ -1327,9 +1338,6 @@ public final class Utility {
         return n;
     }
 
-    private static final char[] HEX = {'0','1','2','3','4','5','6','7',
-                                       '8','9','A','B','C','D','E','F'};
-
     /**
      * Return true if the character is NOT printable ASCII.  The tab,
      * newline and linefeed characters are considered unprintable.
@@ -1350,17 +1358,17 @@ public final class Utility {
             result.append('\\');
             if ((c & ~0xFFFF) != 0) {
                 result.append('U');
-                result.append(HEX[0xF&(c>>28)]);
-                result.append(HEX[0xF&(c>>24)]);
-                result.append(HEX[0xF&(c>>20)]);
-                result.append(HEX[0xF&(c>>16)]);
+                result.append(DIGITS[0xF&(c>>28)]);
+                result.append(DIGITS[0xF&(c>>24)]);
+                result.append(DIGITS[0xF&(c>>20)]);
+                result.append(DIGITS[0xF&(c>>16)]);
             } else {
                 result.append('u');
             }
-            result.append(HEX[0xF&(c>>12)]);
-            result.append(HEX[0xF&(c>>8)]);
-            result.append(HEX[0xF&(c>>4)]);
-            result.append(HEX[0xF&c]);
+            result.append(DIGITS[0xF&(c>>12)]);
+            result.append(DIGITS[0xF&(c>>8)]);
+            result.append(DIGITS[0xF&(c>>4)]);
+            result.append(DIGITS[0xF&c]);
             return true;
         }
         return false;
@@ -1647,4 +1655,49 @@ public final class Utility {
         }
         return 1;
     }
+
+	/**
+	 * Find the highest bit in a positive integer. This is done
+	 * by doing a binary search through the bits.
+	 * 
+	 * @param n is the integer
+	 * 
+	 * @return the bit number of the highest bit, with 0 being
+	 * the low order bit, or -1 if <code>n</code> is not positive
+	 */
+	public static final byte highBit(int n)
+	{
+	    if (n <= 0) {
+	        return -1;
+	    }
+	
+	    byte bit = 0;
+	
+	    if (n >= 1 << 16) {
+	        n >>= 16;
+	        bit += 16;
+	    }
+	
+	    if (n >= 1 << 8) {
+	        n >>= 8;
+	        bit += 8;
+	    }
+	
+	    if (n >= 1 << 4) {
+	        n >>= 4;
+	        bit += 4;
+	    }
+	
+	    if (n >= 1 << 2) {
+	        n >>= 2;
+	        bit += 2;
+	    }
+	
+	    if (n >= 1 << 1) {
+	        n >>= 1;
+	        bit += 1;
+	    }
+	
+	    return bit;
+	}
 }
