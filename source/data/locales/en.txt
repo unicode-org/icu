@@ -855,8 +855,8 @@ en {
         gu  { "Gujarati" }
         gv  { "Manx" }
         gwi { "Gwich'in" }
-        hai { "Haida" }
         ha  { "Hausa" }
+        hai { "Haida" }
         haw { "Hawaiian" }
         he  { "Hebrew" }
         hi  { "Hindi" }
@@ -1112,8 +1112,8 @@ en {
         tet { "Tetum" }
         tg  { "Tajik" }
         th  { "Thai" }
-        tig { "Tigre" }
         ti  { "Tigrinya" }
+        tig { "Tigre" }
         tiv { "Tiv" }
         tk  { "Turkmen" }
         tkl { "Tokelau" }
@@ -1121,8 +1121,8 @@ en {
         tli { "Tlingit" }
         tmh { "Tamashek" }
         tn  { "Tswana" }
-        tog { "Tonga (Nyasa)" }
         to  { "Tonga (Tonga Islands)" }
+        tog { "Tonga (Nyasa)" }
         tpi { "Tok Pisin" }
         tr  { "Turkish" }
         ts  { "Tsonga" }
@@ -1230,8 +1230,8 @@ en {
         Hang { "Hangul" }
         Hano { "Hanunoo" }
         Hani { "Han" }
-        Hans { "Simplified Han" } // Not a formal part of ISO-15924 yet
-        Hant { "Traditional Han" } // Not a formal part of ISO-15924 yet
+        Hans { "Simplified Han" }
+        Hant { "Traditional Han" }
         Hebr { "Hebrew" }
         Hira { "Hiragana" }
         Hrkt { "Katakana or Hiragana" }
