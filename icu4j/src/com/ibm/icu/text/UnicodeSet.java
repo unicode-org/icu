@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/07 21:10:51 $
- * $Revision: 1.87 $
+ * $Date: 2003/02/12 01:00:56 $
+ * $Revision: 1.88 $
  *
  *****************************************************************************************
  */
@@ -3149,8 +3149,6 @@ public class UnicodeSet extends UnicodeFilter {
     // DEFAULT_CASE_MAP is changed), set CASE_GENERATE to true and
     // load this class.  The new data will be emitted to System.out.
 
-    private static final boolean CASE_GENERATE = false;
-
     // MACHINE-GENERATED: Do not edit
     private static final String CASE_PAIRS =
         "AaBbCcDdEeFfGgHhIiJjLlMmNnOoPpQqRrTtUuVvWwXxYyZz\u00C0\u00E0\u00C1\u00E1"+
@@ -3397,97 +3395,8 @@ public class UnicodeSet extends UnicodeFilter {
     static {
         // Create case-fold equivalency class map CASE_EQUIV_CLASS.
 
-        // To regenerate the equivalency class data, set this static
-        // boolean to true, and reload this class object.  Then paste
-        // the result in above.
-
-        // In normal use, this entire block is not executed and should
-        // be absent from the compiled class file.
-        if (CASE_GENERATE) {
-            // Create a map of String => Set.  The String in this case is
-            // a folded string for which
-            // UCharacter.foldCase(folded. DEFAULT_CASE_MAP).equals(folded).
-            // The Set contains all single-character strings x for which
-            // UCharacter.foldCase(x, DEFAULT_CASE_MAP).equals(folded), as
-            // well as folded itself.
-            Map equivClasses = new HashMap();
-            for (int i = 0; i <= 0x10FFFF; ++i) {
-                int cat = UCharacter.getType(i);
-                if (cat == Character.UNASSIGNED || cat == Character.PRIVATE_USE)
-                    continue;
-
-                String cp = UTF16.valueOf(i);
-                String folded = UCharacter.foldCase(cp, DEFAULT_CASE_MAP);
-                if (folded.equals(cp)) continue;
-
-                // At this point, have different case folding.  Add
-                // the code point and its folded equivalent into the
-                // equivalency class.
-                TreeSet s = (TreeSet) equivClasses.get(folded);
-                if (s == null) {
-                    s = new TreeSet();
-                    s.add(folded); // add the case fold result itself
-                    equivClasses.put(folded, s);
-                }
-                s.add(cp);
-            }
-
-            /* Structure of equivalency classes, as of Unicode 3.2.
-               Most of the classes (83%) have two single codepoints.
-              11:656
-              111:16
-              1111:3
-              112:28 => strings of length 1, 1, and 2: 28 classes
-              113:2
-              12:31
-              13:12
-              22:38
-            */
-            
-            // Accumulate equivalency classes that consist of exactly
-            // two codepoints here.  This is about 83% of the classes.
-            // E.g., {"a", "A"}.
-            StringBuffer pairs = new StringBuffer();
-
-            // Accumulate other equivalency classes here, as lists
-            // of strings.  E,g, {"st", "\uFB05", "\uFB06"}.
-            Vector nonpairs = new Vector(); // contains String[]
-
-            Iterator i = new TreeSet(equivClasses.keySet()).iterator();
-            while (i.hasNext()) {
-                Object key = i.next();
-                Vector v = new Vector((Set) equivClasses.get(key));
-                if (v.size() == 2) {
-                    String a = (String) v.elementAt(0);
-                    String b = (String) v.elementAt(1);
-                    if (a.length() == 1 && b.length() == 1) {
-                        pairs.append(a).append(b);
-                        continue;
-                    }
-                }
-                String[] a = new String[v.size()];
-                v.toArray(a);
-                nonpairs.add(a);
-            }
-
-            System.out.println("\n    // MACHINE-GENERATED: Do not edit");
-            System.out.println("    private static final String CASE_PAIRS =\n" +
-                               Utility.formatForSource(pairs.toString()) +
-                               ";\n");
-
-            System.out.println("    // MACHINE-GENERATED: Do not edit");
-            System.out.println("    private static final String[][] CASE_NONPAIRS = {");
-            for (int j=0; j<nonpairs.size(); ++j) {
-                String[] a = (String[]) nonpairs.elementAt(j);
-                System.out.print("        {");
-                for (int k=0; k<a.length; ++k) {
-                    if (k != 0) System.out.print(", ");
-                    System.out.print(Utility.format1ForSource(a[k]));
-                }
-                System.out.println("},");
-            }
-            System.out.println("    };");
-        }
+        // To regenerate the equivalency class data, see class
+        // com.ibm.icu.dev.tools.translit.UnicodeSetCloseOver.
 
         // Read the pre-compiled case fold equivalency classes.  Store
         // each class in a Map, so that for any equivalency class 'E',
