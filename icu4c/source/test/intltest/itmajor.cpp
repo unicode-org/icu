@@ -8,6 +8,12 @@
  * MajorTestLevel is the top level test class for everything in the directory "IntlWork".
  */
 
+/***********************************************************************
+* Modification history
+* Date        Name        Description
+* 02/14/2001  synwee      Release collation for testing.
+***********************************************************************/
+
 #include "unicode/utypes.h"
 #include "itmajor.h"
 
@@ -34,10 +40,8 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 if (exec) {
                     logln("TestSuite Collator----"); logln();
                     logln("Is currently not being executed---");
-                    /* WEIVTODO: return collation here */
-                    //TODO: this should work
-                    //IntlTestCollator test;
-                    //callTest( test, par );
+                    IntlTestCollator test;
+                    callTest( test, par );
                 }
                 break;
 
