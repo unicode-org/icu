@@ -222,7 +222,7 @@ ures_openU(const UChar* path,
  *                <STRONG>Tables</STRONG>: returns the number of resources in the table
  *                <STRONG>single string</STRONG>: returns 1
  *@see ures_getSize
- * @stable ICU 2.0
+ * @deprecated ICU 2.8 User ures_getSize instead
  */
 U_CAPI int32_t U_EXPORT2 
 ures_countArrayItems(const UResourceBundle* resourceBundle,
@@ -247,7 +247,7 @@ ures_close(UResourceBundle* resourceBundle);
  * @return  A version number string as specified in the resource bundle or its parent.
  *          The caller does not own this string.
  * @see ures_getVersion
- * @stable ICU 2.0
+ * @deprecated ICU 2.8 Use ures_getVersion instead.
  */
 U_CAPI const char* U_EXPORT2 
 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
@@ -275,11 +275,30 @@ ures_getVersion(const UResourceBundle* resB,
  * @param resourceBundle resource bundle in question
  * @param status just for catching illegal arguments
  * @return  A Locale name
- * @stable ICU 2.0
+ * @deprecated ICU 2.8 Use ures_getLocaleByType instead.
  */
 U_CAPI const char* U_EXPORT2 
 ures_getLocale(const UResourceBundle* resourceBundle, 
                UErrorCode* status);
+
+
+/**
+ * Return the name of the Locale associated with this ResourceBundle. 
+ * You can choose between requested, valid and real locale.
+ *
+ * @param resourceBundle resource bundle in question
+ * @param type You can choose between requested, valid and actual
+ *             locale. For description see the definition of
+ *             ULocDataLocaleType in uloc.h
+ * @param status just for catching illegal arguments
+ * @return  A Locale name
+ * @draft ICU 2.8
+ */
+U_CAPI const char* U_EXPORT2 
+ures_getLocaleByType(const UResourceBundle* resourceBundle, 
+                     ULocDataLocaleType type, 
+                     UErrorCode* status);
+
 
 /**
  * Same as ures_open() but uses the fill-in parameter instead of allocating
@@ -409,10 +428,9 @@ ures_getInt(const UResourceBundle* resourceBundle,
 /**
  * Returns the size of a resource. Size for scalar types is always 1, 
  * and for vector/table types is the number of child resources.
- * @warning Currently, this function works correctly for string, table and 
- *          array resources. For other types of resources, the result is
- *          undefined. This is a bug and will be fixed.
- *
+ * @warning Integer array is treated as a scalar type. There are no 
+ *          APIs to access individual members of an integer array. It
+ *          is always returned as a whole.
  * @param resourceBundle a resource
  * @return number of resources in a given resource.
  * @stable ICU 2.0
