@@ -18,12 +18,15 @@ import com.ibm.icu.util.UResourceBundle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.ref.WeakReference;
 import java.text.FieldPosition;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and
@@ -317,8 +320,45 @@ public class SimpleDateFormat extends DateFormat {
         initialize(Locale.getDefault());
     }
 
+    // try caching
+    private static final boolean CACHE = true;
+    private static long cacheAge;
+    private static WeakReference highCacheRef;
+    
     /* Package-private, called by DateFormat factory methods */
     SimpleDateFormat(int timeStyle, int dateStyle, Locale loc) {
+	// try a high level cache first!
+
+	Map map = null;
+	String key = null;
+	if (CACHE) {
+	    // age test is so we don't have to compute the century start all the time... once a day is enough.
+	    long time = System.currentTimeMillis();
+	    if (((time - cacheAge) < 1000*60*60*24L) && highCacheRef != null) {
+		map = (Map)highCacheRef.get();
+	    }
+	    if (map == null) {
+		map = new HashMap(3);
+		highCacheRef = new WeakReference(map);
+		cacheAge = time;
+	    }
+	    key = loc.toString() + timeStyle + dateStyle;
+	    SimpleDateFormat target = (SimpleDateFormat)map.get(key);
+	    if (target != null) { // kindof skanky
+//  		if ("en_US22".equals(key))
+//  		    System.out.println("\nfound key: " + key + " pat: " + target.pattern +
+//  				       " cal: " + target.calendar + " fmt: " + target.numberFormat);
+		this.pattern = target.pattern;
+		this.formatData = target.formatData;
+  		this.defaultCenturyStart = target.defaultCenturyStart;
+  		this.defaultCenturyStartYear = target.defaultCenturyStartYear;
+		this.calendar = (Calendar)target.calendar.clone();
+		this.calendar.setTimeZone(TimeZone.getDefault()); // might have changed since cached
+		this.numberFormat = (NumberFormat)target.numberFormat.clone();
+		return;
+	    }
+	}
+  
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
@@ -348,6 +388,13 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         initialize(loc);
+
+	if (CACHE) {
+//  	    if ("en_US22".equals(key))
+//  		System.out.println("\nregister key: " + key + " pat: " + this.pattern +
+//  				   " cal: " + this.calendar + " fmt: " + this.numberFormat);
+	    map.put(key, this.clone()); // ok if we stomp existing target due to threading
+	}
     }
 
     /* Initialize calendar and numberFormat fields */
@@ -1449,7 +1496,7 @@ public class SimpleDateFormat extends DateFormat {
      * Apply the given unlocalized pattern string to this date format.
      * @stable ICU 2.0
      */
-    public void applyPattern (String pattern)
+    public void applyPattern(String pattern)
     {
         this.pattern = pattern;
         setLocale(null, null);

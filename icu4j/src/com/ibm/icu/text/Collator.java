@@ -424,6 +424,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @draft ICU 3.0
      */
     public static final Collator getInstance(ULocale locale) {
+	/*
         Collator coll = null;
         if (shim == null) {
             coll = new RuleBasedCollator(locale);
@@ -433,6 +434,8 @@ public abstract class Collator implements Comparator, Cloneable
             coll = shim.getInstance(locale);
         }
         return coll;
+	*/
+	return getShim().getInstance(locale);
     }
 
     /**
