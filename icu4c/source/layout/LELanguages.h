@@ -6,12 +6,14 @@
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/LELanguages.h,v $
- * $Date: 2003/06/03 20:58:21 $
- * $Revision: 1.4 $
+ * $Date: 2003/12/10 22:30:48 $
+ * $Revision: 1.5 $
  */
 
 #ifndef __LELANGUAGES_H
 #define __LELANGUAGES_H
+
+#include "LETypes.h"
 
 U_NAMESPACE_BEGIN
 
