@@ -44,9 +44,9 @@ static const UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x43, 0x6d, 0x6e, 0x44,     /* dataFormat="CmnD" */
-    1, 0, 0, 0,                 /* formatVersion */
-    3, 0, 0, 0                  /* dataVersion */
+    {0x43, 0x6d, 0x6e, 0x44},     /* dataFormat="CmnD" */
+    {1, 0, 0, 0},                 /* formatVersion */
+    {3, 0, 0, 0}                  /* dataVersion */
 };
 
 static uint32_t maxSize;
@@ -92,10 +92,9 @@ char symPrefix[100];
 
 extern int
 main(int argc, char* argv[]) {
-    static uint8_t buffer[4096];
+    static char buffer[4096];
     char line[512];
     FileStream *in, *file;
-    UNewDataMemory *out;
     char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t i, fileOffset, basenameOffset, length;
@@ -144,7 +143,7 @@ main(int argc, char* argv[]) {
             "\t\t-d or --destdir     destination directory, followed by the path\n"
             "\t\t-n or --name        name of the destination file, defaults to " COMMON_DATA_NAME "\n"
             "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n"
-            "\t\t-S or --source      write a .c source file with the table of contents\n",
+            "\t\t-S or --source      write a .c source file with the table of contents\n"
             "\t\t-e or --entrypoint  override the c entrypoint name (default: <name>_<type> )",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
@@ -202,9 +201,11 @@ main(int argc, char* argv[]) {
     qsort(files, fileCount, sizeof(File), compareFiles);
 
     if(!sourceTOC) {
+        UNewDataMemory *out;
+
         /* determine the offsets of all basenames and files in this common one */
         basenameOffset=4+8*fileCount;
-        fileOffset=basenameOffset+(basenameTotal+15)&~0xf;
+        fileOffset=(basenameOffset+(basenameTotal+15))&~0xf;
         for(i=0; i<fileCount; ++i) {
             files[i].fileOffset=fileOffset;
             fileOffset+=(files[i].fileSize+15)&~0xf;
@@ -270,8 +271,7 @@ main(int argc, char* argv[]) {
         }
     } else {
         /* write a .c source file with the table of contents */
-        char buffer[1000];
-        char *filename, *s;
+        char *filename;
         FileStream *out;
 
         /* create the output filename */
