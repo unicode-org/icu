@@ -248,18 +248,35 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
     // test quick checks
     if(UNORM_NO == Normalizer::quickCheck(field[1], UNORM_NFC, status)) {
         errln("Normalizer error: quickCheck(NFC(s), UNORM_NFC) is UNORM_NO");
-        pass = UNORM_NO;
+        pass = FALSE;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[2], UNORM_NFD, status)) {
         errln("Normalizer error: quickCheck(NFD(s), UNORM_NFD) is UNORM_NO");
-        pass = UNORM_NO;
+        pass = FALSE;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[3], UNORM_NFKC, status)) {
         errln("Normalizer error: quickCheck(NFKC(s), UNORM_NFKC) is UNORM_NO");
-        pass = UNORM_NO;
+        pass = FALSE;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[4], UNORM_NFKD, status)) {
         errln("Normalizer error: quickCheck(NFKD(s), UNORM_NFKD) is UNORM_NO");
+        pass = FALSE;
+    }
+
+    if(!Normalizer::isNormalized(field[1], UNORM_NFC, status)) {
+        errln("Normalizer error: isNormalized(NFC(s), UNORM_NFC) is FALSE");
+        pass = FALSE;
+    }
+    if(field[0]!=field[1] && Normalizer::isNormalized(field[0], UNORM_NFC, status)) {
+        errln("Normalizer error: isNormalized(s, UNORM_NFC) is TRUE");
+        pass = FALSE;
+    }
+    if(!Normalizer::isNormalized(field[3], UNORM_NFKC, status)) {
+        errln("Normalizer error: isNormalized(NFKC(s), UNORM_NFKC) is FALSE");
+        pass = FALSE;
+    }
+    if(field[0]!=field[3] && Normalizer::isNormalized(field[0], UNORM_NFKC, status)) {
+        errln("Normalizer error: isNormalized(s, UNORM_NFKC) is TRUE");
         pass = FALSE;
     }
 
