@@ -236,18 +236,127 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     };
 }
 
-UBool u_isUAlphabetic(UChar32 c) {
+U_CAPI UBool U_EXPORT2
+u_isUAlphabetic(UChar32 c) {
     return u_hasBinaryProperty(c, UCHAR_ALPHABETIC);
 }
 
-UBool u_isULowercase(UChar32 c) {
+U_CAPI UBool U_EXPORT2
+u_isULowercase(UChar32 c) {
     return u_hasBinaryProperty(c, UCHAR_LOWERCASE);
 }
 
-UBool u_isUUppercase(UChar32 c) {
+U_CAPI UBool U_EXPORT2
+u_isUUppercase(UChar32 c) {
     return u_hasBinaryProperty(c, UCHAR_UPPERCASE);
 }
 
-UBool u_isUWhiteSpace(UChar32 c) {
+U_CAPI UBool U_EXPORT2
+u_isUWhiteSpace(UChar32 c) {
     return u_hasBinaryProperty(c, UCHAR_WHITE_SPACE);
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyValue(UChar32 c, UProperty which) {
+    UErrorCode errorCode;
+
+    if(which<UCHAR_BINARY_START) {
+        return 0; /* undefined */
+    } else if(which<UCHAR_BINARY_LIMIT) {
+        return (int32_t)u_hasBinaryProperty(c, which);
+    } else if(which<UCHAR_INT_START) {
+        return 0; /* undefined */
+    } else if(which<UCHAR_INT_LIMIT) {
+        switch(which) {
+        case UCHAR_BIDI_CLASS:
+            return (int32_t)u_charDirection(c);
+        case UCHAR_BLOCK:
+            return (int32_t)ublock_getCode(c);
+        case UCHAR_CANONICAL_COMBINING_CLASS:
+            return u_getCombiningClass(c);
+#if 0 /* ### */
+        case UCHAR_DECOMPOSITION_TYPE:
+            return ;
+#endif
+        case UCHAR_EAST_ASIAN_WIDTH:
+            return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_EA_WIDTH_MASK)>>UPROPS_EA_WIDTH_SHIFT;
+        case UCHAR_GENERAL_CATEGORY:
+            return (int32_t)u_charType(c);
+#if 0 /* ### */
+        case UCHAR_JOINING_GROUP:
+            return ;
+        case UCHAR_JOINING_TYPE:
+            return ;
+        case UCHAR_LINE_BREAK:
+            return ;
+#endif
+        case UCHAR_NUMERIC_TYPE:
+            return (int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
+        case UCHAR_SCRIPT:
+            errorCode=U_ZERO_ERROR;
+            return (int32_t)uscript_getScript(c, &errorCode);
+        default:
+            return 0; /* undefined */
+        }
+    } else {
+        return 0; /* undefined */
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyMinValue(UProperty which) {
+    switch(which) {
+    case UCHAR_BLOCK:
+        return UBLOCK_INVALID_CODE;
+    case UCHAR_SCRIPT:
+        return USCRIPT_INVALID_CODE;
+    default:
+        return 0; /* undefined; and: all other properties have a minimum value of 0 */
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyMaxValue(UProperty which) {
+    if(which<UCHAR_BINARY_START) {
+        return 0; /* undefined */
+    } else if(which<UCHAR_BINARY_LIMIT) {
+        return 1; /* maximum TRUE for all binary properties */
+    } else if(which<UCHAR_INT_START) {
+        return 0; /* undefined */
+    } else if(which<UCHAR_INT_LIMIT) {
+        switch(which) {
+        case UCHAR_BIDI_CLASS:
+            return (int32_t)U_CHAR_DIRECTION_COUNT-1;
+        case UCHAR_BLOCK:
+            /* ### TODO This should be data-driven from uprops.dat */
+            return (int32_t)UBLOCK_COUNT-1;
+        case UCHAR_CANONICAL_COMBINING_CLASS:
+            return 0xff; /* TODO do we need to be more precise, getting the actual maximum? */
+#if 0 /* ### */
+        case UCHAR_DECOMPOSITION_TYPE:
+            return ;
+#endif
+        case UCHAR_EAST_ASIAN_WIDTH:
+            return (int32_t)U_EA_COUNT-1;
+        case UCHAR_GENERAL_CATEGORY:
+            return (int32_t)U_CHAR_CATEGORY_COUNT-1;
+#if 0 /* ### */
+        case UCHAR_JOINING_GROUP:
+            return ;
+        case UCHAR_JOINING_TYPE:
+            return ;
+        case UCHAR_LINE_BREAK:
+            return ;
+#endif
+        case UCHAR_NUMERIC_TYPE:
+            return (int32_t)U_NT_COUNT-1;
+        case UCHAR_SCRIPT:
+            /* ### TODO This should be data-driven from uprops.dat */
+            return (int32_t)USCRIPT_CODE_LIMIT-1;
+        default:
+            return 0; /* undefined */
+        }
+    } else {
+        return 0; /* undefined */
+    }
 }
