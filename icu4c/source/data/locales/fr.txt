@@ -18,14 +18,14 @@ fr {
     Countries {
         Fallback{ "en"}
         AD { "Andorre" }
-        AE { "\u00c9mirats Arabes Unis" }
+        AE { "\u00c9mirats arabes unis" }
         AG { "Antigua et Barbuda" }
         AQ { "Antarctique" }
         AL { "Albanie" }
         AM { "Arm\u00E9nie" }
-        AN { "Antilles N\u00E9erlandaises" }
+        AN { "Antilles n\u00E9erlandaises" }
         AR { "Argentine" }
-        AS { "Samoa Am\u00E9ricaines" }
+        AS { "Samoa am\u00E9ricaines" }
         AT { "Autriche" }
         AU { "Australie" }
         AZ { "Azerba\u00EFdjan" }
@@ -44,8 +44,8 @@ fr {
         //BZ { "Belize" }
 
         CC { "\u00CEles Cocos" }
-        CD { "R\u00E9publique D\u00E9mocratique du Congo" }
-        CF { "R\u00E9publique  Centrafricaine" }
+        CD { "R\u00E9publique d\u00E9mocratique du Congo" }
+        CF { "R\u00E9publique centrafricaine" }
         CH { "Suisse" }
         CK { "\u00CEles Sandwich du Sud" }
         CL { "Chili" }
@@ -55,18 +55,18 @@ fr {
         CV { "Cap Vert" }
         CX { "\u00CEle Christmas" }
         CY { "Chypre" }
-        CZ { "R\u00E9publique Tch\u00E8que" }
+        CZ { "R\u00E9publique tch\u00E8que" }
 
         DE { "Allemagne" }
         DK { "Danemark" }
         DM { "Dominique" }
-        DO { "R\u00E9publique Dominicaine" }
+        DO { "R\u00E9publique dominicaine" }
         DZ { "Alg\u00E9rie" }
 
         EC { "\u00C9quateur" }
         EE { "Estonie" }
         EG { "\u00C9gypte" }
-        EH { "Sahara Occidental" }
+        EH { "Sahara occidental" }
         ER { "\u00C9rythr\u00e9e" }
         ES { "Espagne" }
         ET { "\u00C9thiopie" }
@@ -80,11 +80,11 @@ fr {
         GB { "Royaume-Uni" }
         GD { "Grenade" }
         GE { "G\u00E9orgie" }
-        GF { "Guyane Fran\u00e7aise" }
+        GF { "Guyane fran\u00e7aise" }
         GL { "Groenland" }
         GM { "Gambie" }
         GN { "Guin\u00E9e" }
-        GQ { "Guin\u00E9e \u00C9quatoriale" }
+        GQ { "Guin\u00E9e \u00E9quatoriale" }
         GR { "Gr\u00E8ce" }
         GS { "G\u00E9orgie du Sud, \u00CEles Sandwich du Sud" }
         GW { "Guin\u00E9e-Bissau" }
@@ -101,7 +101,7 @@ fr {
         //IQ { "Iraq" }
         IL { "Isra\u00EBl" }
         IN { "Inde" }
-        IO { "Territoire Britannique de l'Oc\u00E9an Indien" }
+        IO { "Territoire britannique de l'oc\u00E9an indien" }
         IS { "Islande" }
         IT { "Italie" }
 
@@ -149,18 +149,18 @@ fr {
         NZ { "Nouvelle-Z\u00E9lande" }
 
         PE { "P\u00E9rou" }
-        PF { "Polyn\u00E9sie Fran\u00E7aise" }
+        PF { "Polyn\u00E9sie fran\u00E7aise" }
         PG { "Papouasie-Nouvelle-Guin\u00E9e" }
         PL { "Pologne" }
         PM { "Saint-Pierre-et-Miquelon" }
         PR { "Porto Rico" }
-        PS { "Territoire Palestinien" }
+        PS { "Territoire palestinien" }
         PW { "Palaos" }
 
         RO { "Roumanie" }
         RU { "Russie" }
 
-        SA { "Arabie Saoudite" }
+        SA { "Arabie saoudite" }
         SB { "\u00CEles Salomon" }
         SD { "Soudan" }
         SE { "Su\u00E8de" }
@@ -178,7 +178,7 @@ fr {
 
         TC { "\u00CEles Turks et Ca\u00EFques" }
         TD { "Tchad" }
-        TF { "Terres Australes Fran\u00E7aises" }
+        TF { "Terres australes fran\u00E7aises" }
         TH { "Tha\u00EFlande" }
         TJ { "Tadjikistan" }
         //TL { "Timor" }
@@ -211,7 +211,7 @@ fr {
 
     // Currency display names
     Currencies {
-        AED { "AED", "dirham des \u00c9mirats Arabes Unis" } // UAE Dirham
+        AED { "AED", "dirham des \u00c9mirats arabes unis" } // UAE Dirham
         AFA { "AFA", "afghani" } // Afghani
         ALL { "ALL", "lek" } // Leck
         ANG { "ANG", "florin des Antilles n\u00E9erl." } // Netherlands Antillan Guilder
@@ -439,6 +439,7 @@ fr {
         bo { "tib\u00E9tain" }
         br { "breton" }
         bs { "bosniaque" }
+        byn { "blin" }
         ca { "catalan" }
         ce { "tch\u00E9tch\u00E8ne" }
         ch { "chamorro" }
@@ -467,6 +468,7 @@ fr {
         fy { "frison" }
         ga { "irlandais" }
         gd { "ga\u00E9lique \u00E9cossais" }
+        gez { "gu\u00E8ze" }
         gl { "galicien" }
         gn { "guarani" }
         gu { "goudjrati" }
@@ -563,6 +565,7 @@ fr {
         sg { "sango" }
         sh { "serbo-croate" }
         si { "singhalais" }
+        sid { "sidamo" }
         sk { "slovaque" }
         sl { "slov\u00E8ne" }
         sm { "samoan" }
@@ -575,11 +578,13 @@ fr {
         su { "soundanais" }
         sv { "su\u00E9dois" }
         sw { "swahili" }
+        syr { "syriaque" }
         ta { "tamoul" }
         te { "t\u00E9lougou" }
         tg { "tadjik" }
         th { "tha\u00EF" }
         ti { "tigrigna" }
+        tig { "tigr\u00E9" }
         tk { "turkm\u00E8ne" }
         tl { "tagalog" }
         tn { "setswana" }
