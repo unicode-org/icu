@@ -6,9 +6,12 @@
 $Hiragana = [[:L:] & [:Hira:]];
 $Katakana = [[:L:] & [:Kana:]];
 
+####################################################################################
 #
-#  Definition of $Ideographic is from TR14, Line Breaking.
+#  Definitions imported from LineBreak.
+#    LineBreak gets them from the Unicode Line Break Properties data file.
 #
+####################################################################################
 $Ideographic = 
       [ \u1100-\u1159 \u115F \u2E80-\u2E99 \u2E9B-\u2EF3 \u2F00-\u2FD5 \u2FF0-\u2FFB
         \u3000 \u3003-\u3004 \u3006-\u3007 \u3012-\u3013 \u3020-\u3029
@@ -24,10 +27,23 @@ $Ideographic =
         \uFF06-\uFF07 \uFF0A-\uFF0B \uFF0D \uFF0F-\uFF19 \uFF1C-\uFF1E
         \uFF20-\uFF3A \uFF3C \uFF3E-\uFF5A \uFF5C \uFF5E \uFFE2-\uFFE4
         \U00020000-\U0002A6D6 \U0002F800-\U0002FA1D];
+        
+$Hyphen = [ \u002D];
+	
+$Numeric = [ \u0030-\u0039 \u0660-\u0669 \u06F0-\u06F9 \u0966-\u096F \u09E6-\u09EF
+        \u0A66-\u0A6F \u0AE6-\u0AEF \u0B66-\u0B6F \u0BE7-\u0BEF \u0C66-\u0C6F
+        \u0CE6-\u0CEF \u0D66-\u0D6F \u0E50-\u0E59 \u0ED0-\u0ED9 \u0F20-\u0F29
+        \u1040-\u1049 \u1369-\u1371 \u17E0-\u17E9 \u1810-\u1819 \U0001D7CE-\U0001D7FF];
 
+
+
+
+
+####################################################################################
 #
-# These definitions are from the character break rules.
+#  Definitions imported from Character Break Rules.
 #
+####################################################################################
 $CGJ = [\u034f];   #Combining Grapheme Joiner
 $Link       = [\u094D \u09CD \u0A4D \u0ACD \u0B4D \u0BCD \u0C4D \u0CCD \u0D4D \u0DCA \u0E3A \u1039 \u17D2]; 
 $NotControl = [^[:Zl:] [:Zp:] [:Cc:]];  #Line Separator,
@@ -62,9 +78,6 @@ $Extend     =   # From UNIDATA/DerivedCoreProperties.txt
 	\U0001D17B-\U0001D182 \U0001D185-\U0001D18B \U0001D1AA-\U0001D1AD];
 
 #
-#  Korean, also taken from character break rules.
-#
-#
 # Korean Syllable Sequences
 #
 $L  = [\u1100-\u115f];
@@ -98,15 +111,24 @@ $LV = [ \uac00 \uac1c \uac38 \uac54 \uac70 \uac8c \uaca8 \uacc4 \uace0 \uacfc \u
 $LVT = [[\uac00-\ud7a3] - $LV];
 $Hangul_Sequence = ((($L+ $LV?) | ($L* $LV)) $V* $T* ) | ($L* $LVT $T*);
 
+#
+# End of Imported Definitions
+#
 
-
+####################################################################################
+#
+#  Word Break Rules.    Definitions and Rules specific to word break begin
+#                       Here.  Preceding stuff is copied from line or char break rules.
+#
+####################################################################################
 $LineBreak  = [$Ideographic $Hiragana $Katakana];
 $Letter     = [[[:L:] [:Sk:]] & [^$LineBreak]];
-#$MidLetter  = [\u0027 \u2019 \u0029 \u00ad \u05f3 \u05f4];
 $MidLetter  = [\u0027 \u2019 \u003a \u0029 \u00ad \u05f3 \u05f4];
 
 
-
+#
+#  LetterEx - extended letter, includes combining chars, CGJ sequences, Hangul sequences.
+#
 $Base            = [^[:Cc:] [:Cf:] [:Cs:] [:Co:] [:Cn:] [:Zl:] [:Zp:] $Extend $Link $CGJ];
 $LetterBase      = [:L:];
 $CGJSequence     = $CGJ+ ($Base | $Hangul_Sequence);
@@ -118,29 +140,37 @@ $LetterEx        = ($Letter | $Hangul_Sequence) $Extend*  ((($LinkSequence | $CG
 
 #
 #  Numeric Definitions
-#  TODO:  More complete handling of $Extend combining chars.
 #
-$Numeric         = [:Nd:];    #TODO  remove FULL WIDTH
 $NumericEx       = $Numeric $Extend*;
 $InfixNumeric    = [\u002c \u002e \u003a \u003b \u0589];
 $PostfixNumeric  = [\%     \u00a2 \u00b0 \u2030 \u2031 \u2032-\u2037 \u20a7
                     \u2103 \u2109 \u2126 \ufe6a \uff05 \uffe0];
 $PrefixNumeric   = [[[:Sc:] \u002b \u005c \u00b1 \u2116 \u2212 \u2213 \-] - [$PostfixNumeric]]; 
               
-$NumericPrefix   = $PrefixNumeric $NumericEx ($InfixNumeric $NumericEx)?;
-$NumericInterior = $NumericEx ($InfixNumeric? $NumericEx)*;
+$PrefixNumeric? $Hyphen? $InfixNumeric? $NumericEx ($InfixNumeric? $NumericEx)* $InfixNumeric? $PostfixNumeric? {100};
 
 
 #
-#  The Big Rule.  Gloms everything together.
+#  Words.  Alpha-numerics,
+#     - must include at least one letter. 
+#     - may include both letters and numbers.
+#     - may inclue certain punctuation, but only between letters, not numbers.
 #
-$NumericPrefix? (($LetterEx ($MidLetter $LetterEx)*)? $NumericInterior?)* ($NumericInterior $PostfixNumeric)?;
+$MidLetterSequence = ($LetterEx $MidLetter $LetterEx);
+$MidLetNum = $MidLetterSequence | $LetterEx | $NumericEx;
+
+$MidLetNum* ($LetterEx | $MidLetterSequence) $MidLetNum* {200};
+
 
 #
-#  Lesser rules
+#  Hiragana and KataKana
 #
-($Hiragana $Extend*)*;
-($Katakana $Extend*)*;
+($Hiragana $Extend*)+ {300};
+($Katakana $Extend*)+ {300};
+
+#
+#  Everything Else.
+#
 $NotControl $Extend*;
 \r\n;
 .;

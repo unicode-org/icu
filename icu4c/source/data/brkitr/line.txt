@@ -360,4 +360,4 @@ $Openings $GluedWord  $Closings $Endings;
 #     TODO:  make smarter reverse rules for better efficiency
 #
 ! . . [^$BK | $CR | $LF]*   (. | $LF $CR);
-! .*;
+#! .*;

@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1999-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -19,105 +19,166 @@
 #include "rbbitst.h"
 #include <string.h>
 #include "unicode/schriter.h"
+#include "uvector.h"
 
-//--------------------------------------------------------------------------------------
-/**
- * "Vector" class for holding test tables
- * (this class is actually a linked list, but we use the name and API of the
- * java.util.Vector class to keep as much of our test code as possible the same.)
- */
-class Enumeration { // text enumeration
+
+
+//---------------------------------------------------------------------------
+//
+//   class BITestData   Holds a set of Break iterator test data and results
+//                      Includes
+//                         - the string data to be broken
+//                         - a vector of the expected break positions.
+//                         - a vector of source line numbers for the data,
+//                               (to help see where errors occured.)
+//                         - The expected break tag values.
+//                         - Vectors of actual break positions and tag values.
+//                         - Functions for comparing actual with expected and
+//                            reporting errors.
+//
+//----------------------------------------------------------------------------
+class BITestData {
 public:
-  virtual UBool hasMoreElements() = 0;
-  virtual UnicodeString nextElement() = 0;
+    UnicodeString    fDataToBreak;
+    UVector          fExpectedBreakPositions;
+    UVector          fExpectedTags;
+    UVector          fLineNum;
+    UVector          fActualBreakPositions;   // Test Results.
+    UVector          fActualTags;
+
+    BITestData(UErrorCode &status);
+    void             addDataChunk(char *data, int32_t tag, int32_t lineNum, UErrorCode status);
+    void             checkResults(char *heading, RBBITest *test);
+    void             err(char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx);
+    void             clearResults();
 };
 
-class Vector { // text vector
-public:
+//
+// Constructor.
+//
+BITestData::BITestData(UErrorCode &status)
+: fExpectedBreakPositions(status), fExpectedTags(status),  fLineNum(status), fActualBreakPositions(status),
+  fActualTags(status)
+{
+};
 
-  class TextLink {
-  public:
-    TextLink() : fLink(0), fText() {}
-    TextLink(TextLink* link, UnicodeString text) : fLink(link), fText(text) {}
+//
+// addDataChunk.   Add a section (non-breaking) piece if data to the test data.
+//                 The macro form collects the line number, which is helpful
+//                 when tracking down failures.
+//
+//                 A null data item is inserted at the start of each test's data
+//                  to put the starting zero into the data list.  The position saved for
+//                  each non-null item is its ending position.
+//
+#define ADD_DATACHUNK(td, data, tag, status)   td.addDataChunk(data, tag, __LINE__, status);
+void BITestData::addDataChunk(char *data, int32_t tag, int32_t lineNum, UErrorCode status) {
+    if (U_FAILURE(status)) {return;}
+    if (data != NULL) {
+        fDataToBreak.append(CharsToUnicodeString(data));
+    } 
+    fExpectedBreakPositions.addElement(fDataToBreak.length(), status);
+    fExpectedTags.addElement(tag, status);
+    fLineNum.addElement(lineNum, status);
+};
 
-    TextLink* fLink;
-    UnicodeString fText;
-  };
 
-public:
-  TextLink fBase;
-  TextLink* fEnd;
-  int32_t fSize;
+//
+//  checkResults.   Compare the actual and expected break positions, report any differences.
+//
+void BITestData::checkResults(char *heading, RBBITest *test) {
+    int32_t   expectedIndex = 0;
+    int32_t   actualIndex = 0;
 
-public:
-  class VectorEnumeration : public Enumeration {
-  public:
-    VectorEnumeration(Vector* vector) : fVector(vector), fPos(&vector->fBase) {}
-    
-    UBool hasMoreElements() { return fPos->fLink != &fVector->fBase; }
-    UnicodeString nextElement() { fPos = fPos->fLink; return fPos->fText; }
-
-    Vector* fVector;
-    TextLink* fPos;
-  };
-
-  Vector() : fBase(), fEnd(&fBase), fSize(0) { fBase.fLink = &fBase; }
-
-  ~Vector() { 
-    while (fBase.fLink != &fBase) { 
-        TextLink* link = fBase.fLink;
-        fBase.fLink = link->fLink;
-        delete link;
+    for (;;) {
+        // If we've run through both the expected and actual results vectors, we're done.
+        //   break out of the loop.
+        if (expectedIndex >= fExpectedBreakPositions.size() &&
+            actualIndex   >= fActualBreakPositions.size()) {
+            break;
         }
-  }
 
-  void addElement(UnicodeString text) { fEnd->fLink = new TextLink(&fBase, text); fEnd = fEnd->fLink; ++fSize; }
-  void insertElementAt(UnicodeString text, int pos) { 
-      if(pos >= fSize || pos < 0)
-          ;
-      else if(pos == 0){
-          TextLink* insert = new TextLink(&fBase, text);
-          insert->fLink=fBase.fLink;
-          ++fSize;
-          fBase.fLink=insert;
-      }
-      else{
-          TextLink* link = fBase.fLink; 
-          while(--pos > 0)
-             link=link->fLink;
-          TextLink* insert = new TextLink(&fBase, text);
-          insert->fLink =link->fLink;
-          link->fLink=insert;
-          ++fSize;
 
-      }
+        if (expectedIndex >= fExpectedBreakPositions.size()) {
+            err(heading, test, expectedIndex-1, actualIndex);
+            actualIndex++;
+            continue;
+        }
 
-  }
-    UnicodeString elementAt(int32_t pos) {
-        if (pos >= fSize)
-          return UnicodeString();
+        if (actualIndex >= fActualBreakPositions.size()) {
+            err(heading, test, expectedIndex, actualIndex-1);
+            expectedIndex++;
+            continue;
+        }
 
-    TextLink* link = fBase.fLink; 
-    while (pos-- > 0) link = link->fLink; 
-    return link->fText;
-  }
-  UnicodeString lastElement() { return fEnd == &fBase ? UnicodeString() : fEnd->fText; }
-  int32_t size() { return fSize; }
+        if (fActualBreakPositions.elementAti(actualIndex) != fExpectedBreakPositions.elementAti(expectedIndex)) {
+            err(heading, test, expectedIndex, actualIndex);
+            // Try to resync the positions of the indices, to avoid a rash of spurious erros.
+            if (fActualBreakPositions.elementAti(actualIndex) < fExpectedBreakPositions.elementAti(expectedIndex)) {
+                actualIndex++;
+            } else {
+                expectedIndex++;
+            }
+            continue;
+        }
 
-  Enumeration* elements() { return new VectorEnumeration(this); }
+        if (fActualTags.elementAti(actualIndex) != fExpectedTags.elementAti(expectedIndex)) {
+            test->errln("%s, tag mismatch.  Test Line = %d, expected tag=%d, got %d", 
+                heading, fLineNum.elementAt(expectedIndex),
+                fExpectedTags.elementAti(expectedIndex), fActualTags.elementAti(actualIndex));
+        }
 
-};
+        actualIndex++;
+        expectedIndex++;
+    }
+}
+
+//
+//  err   -  An error was found.  Report it, along with information about where the
+//                                incorrectly broken test data appeared in the source file.
+//
+void    BITestData::err(char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx) 
+{
+    int32_t   expected = fExpectedBreakPositions.elementAti(expectedIdx);
+    int32_t   actual   = fActualBreakPositions.elementAti(actualIdx);
+    int32_t   o        = 0;
+    int32_t   line     = fLineNum.elementAti(0);
+    if (expectedIdx > 0) {
+        // The line numbers are off by one because a premature break occurs somewhere
+        //    within the previous item, rather than at the start of the current (expected) item.
+        //    Similarly, we want to report the offset of the unexpected break from the start of
+        //      this previous item.
+        line = fLineNum.elementAti(expectedIdx-1);
+        o    = actual - fExpectedBreakPositions.elementAti(expectedIdx-1);
+    }
+    if (actual < expected) {
+        test->errln("%s unexpected break at offset %d in test item from line %d", heading, o, line);
+    } else {
+        test->errln("%s Failed to find break at end of item from line %d", heading, line);
+    }
+}
+
+
+void BITestData::clearResults() {
+    fActualBreakPositions.removeAllElements();
+    fActualTags.removeAllElements();
+}
+
 
 //--------------------------------------------------------------------------------------
-/**
- * RBBITest is medium top level test class RuleBasedBreakIterator
- */
+//
+//    RBBITest 
+//
+//--------------------------------------------------------------------------------------
 
-static const UChar  halfNA[]  = {0x0928, 0x094d, 0x200d, 0};  //halfform NA = devanigiri NA + virama(supresses inherent vowel)+ zero width joiner   
-static const UChar  halfSA[]  = {0x0938, 0x094d, 0x200d, 0};
-static const UChar  halfCHA[] = {0x091a, 0x094d, 0x200d, 0}; 
-static const UChar  halfKA[]  = {0x0915, 0x094d, 0x200d, 0}; 
-static const UChar  deadTA[]  = {0x0924, 0x094d, 0};
+#define  halfNA     "\\u0928\\u094d\\u200d"
+#define  halfSA     "\\u0938\\u094d\\u200d"
+#define  halfCHA    "\\u091a\\u094d\\u200d"
+#define  halfKA     "\\u0915\\u094d\\u200d"
+#define  deadTA     "\\u0924\\u094d"
+
+
+
 //--------------------------------------------------------------------
 //tests default rules based character iteration
 //--------------------------------------------------------------------
@@ -127,7 +188,7 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     logln((UnicodeString)"Testing the RBBI for character iteration by using default rules");
     //fetch the rules used to create the above RuleBasedBreakIterator
     //    UnicodeString defaultRules=rbbi->getRules();
-    //     RuleBasedCharacterIterator charIterDefault = new RuleBasedBreakIterator(defaultRules); 
+    //     RuleBasedCharacterIterator charIterDefault = new RuleBasedBreakIterator(defaultRules);
 
     UErrorCode status=U_ZERO_ERROR;
     RuleBasedBreakIterator* charIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
@@ -136,84 +197,96 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
         return;
     }
 
-    Vector *chardata = new Vector();
-    chardata->addElement("H");
-    chardata->addElement("e");
-    chardata->addElement("l");
-    chardata->addElement("l");
-    chardata->addElement("o");
-    chardata->addElement(CharsToUnicodeString("e\\u0301"));                   //acuteE
-    chardata->addElement("&");
-    chardata->addElement(CharsToUnicodeString("e\\u0303"));                   //tildaE
-    //devanagiri characters for Hindi support
-    chardata->addElement(CharsToUnicodeString("\\u0906"));                    //devanagiri AA
-    //chardata->addElement(CharsToUnicodeString("\\u093e\\u0901"));              //devanagiri vowelsign AA+ chandrabindhu
-    chardata->addElement(CharsToUnicodeString("\\u0906\\u0901"));              // Devanagari AA + chandrabindu
-    chardata->addElement(CharsToUnicodeString("\\u0915\\u093e\\u0901"));       // Devanagari KA + AA vowelsign + chandrabindu
+    BITestData     chardata(status);
 
-    chardata->addElement(CharsToUnicodeString("\\u0916\\u0947"));              //devanagiri KHA+vowelsign E
-    chardata->addElement(CharsToUnicodeString("\\u0938\\u0941\\u0902"));        //devanagiri SA+vowelsign U + anusvara(bindu)
-    chardata->addElement(CharsToUnicodeString("\\u0926"));                    //devanagiri consonant DA
-    chardata->addElement(CharsToUnicodeString("\\u0930"));                    //devanagiri consonant RA
-    chardata->addElement(CharsToUnicodeString("\\u0939\\u094c"));              //devanagiri HA+vowel sign AI
-    chardata->addElement(CharsToUnicodeString("\\u0964"));                    //devanagiri danda
-    //end hindi characters      
-    chardata->addElement(CharsToUnicodeString("A\\u0302"));                   //circumflexA 
-    chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI   
-    // conjoining jamo->.. 
-    chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
-    chardata->addElement("\n");
-    chardata->addElement("\r\n");                      //keep CRLF sequences together  
-    chardata->addElement(CharsToUnicodeString("S\\u0300"));                   //graveS
-    chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI
-    chardata->addElement("!");
+    ADD_DATACHUNK(chardata, NULL, 0, status);                       // Starting break
+    ADD_DATACHUNK(chardata, "H", 0, status);
+    ADD_DATACHUNK(chardata, "e", 0, status);
+    ADD_DATACHUNK(chardata, "l", 0, status);
+    ADD_DATACHUNK(chardata, "l", 0, status);
+    ADD_DATACHUNK(chardata, "o", 0, status);
+    ADD_DATACHUNK(chardata, "e\\u0301", 0, status);                   //acuteE
+    ADD_DATACHUNK(chardata, "&", 0, status);
+    ADD_DATACHUNK(chardata, "e\\u0303", 0, status);                   //tildaE
+    //devanagiri characters for Hindi support
+    ADD_DATACHUNK(chardata, "\\u0906", 0, status);                    //devanagiri AA
+    //ADD_DATACHUNK(chardata, "\\u093e\\u0901", 0);              //devanagiri vowelsign AA+ chandrabindhu
+    ADD_DATACHUNK(chardata, "\\u0906\\u0901", 0, status);              // Devanagari AA + chandrabindu
+    ADD_DATACHUNK(chardata, "\\u0915\\u093e\\u0901", 0, status);       // Devanagari KA + AA vowelsign + chandrabindu
+
+    ADD_DATACHUNK(chardata, "\\u0916\\u0947", 0, status);              //devanagiri KHA+vowelsign E
+    ADD_DATACHUNK(chardata, "\\u0938\\u0941\\u0902", 0, status);        //devanagiri SA+vowelsign U + anusvara(bindu)
+    ADD_DATACHUNK(chardata, "\\u0926", 0, status);                    //devanagiri consonant DA
+    ADD_DATACHUNK(chardata, "\\u0930", 0, status);                    //devanagiri consonant RA
+    ADD_DATACHUNK(chardata, "\\u0939\\u094c", 0, status);              //devanagiri HA+vowel sign AI
+    ADD_DATACHUNK(chardata, "\\u0964", 0, status);                    //devanagiri danda
+    //end hindi characters
+    ADD_DATACHUNK(chardata, "A\\u0302", 0, status);                   //circumflexA
+    ADD_DATACHUNK(chardata, "i\\u0301", 0, status);                   //acuteBelowI
+    // conjoining jamo->..
+    ADD_DATACHUNK(chardata, "\\u1109\\u1161\\u11bc", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1112\\u1161\\u11bc", 0, status);
+    ADD_DATACHUNK(chardata, "\n", 0, status);
+    ADD_DATACHUNK(chardata, "\r\n", 0, status);                      //keep CRLF sequences together
+    ADD_DATACHUNK(chardata, "S\\u0300", 0, status);                   //graveS
+    ADD_DATACHUNK(chardata, "i\\u0301", 0, status);                   //acuteBelowI
+    ADD_DATACHUNK(chardata, "!", 0, status);
 
     // What follows is a string of Korean characters (I found it in the Yellow Pages
     // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    chardata->addElement(CharsToUnicodeString("\\uc0c1"));
-    chardata->addElement(CharsToUnicodeString("\\ud56d"));
-    chardata->addElement(" ");
-    chardata->addElement(CharsToUnicodeString("\\ud55c"));
-    chardata->addElement(CharsToUnicodeString("\\uc778"));
-    chardata->addElement(" ");
-    chardata->addElement(CharsToUnicodeString("\\uc5f0"));
-    chardata->addElement(CharsToUnicodeString("\\ud569"));
-    chardata->addElement(" ");
-    chardata->addElement(CharsToUnicodeString("\\uc7a5"));
-    chardata->addElement(CharsToUnicodeString("\\ub85c"));
-    chardata->addElement(CharsToUnicodeString("\\uad50"));
-    chardata->addElement(CharsToUnicodeString("\\ud68c"));
-    chardata->addElement(" ");
+    ADD_DATACHUNK(chardata, "\\uc0c1", 0, status);
+    ADD_DATACHUNK(chardata, "\\ud56d", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "\\ud55c", 0, status);
+    ADD_DATACHUNK(chardata, "\\uc778", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "\\uc5f0", 0, status);
+    ADD_DATACHUNK(chardata, "\\ud569", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "\\uc7a5", 0, status);
+    ADD_DATACHUNK(chardata, "\\ub85c", 0, status);
+    ADD_DATACHUNK(chardata, "\\uad50", 0, status);
+    ADD_DATACHUNK(chardata, "\\ud68c", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
     // conjoining jamo...
-    chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
-    chardata->addElement(" ");
-    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
-    chardata->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab"));
-    chardata->addElement(" ");
-    chardata->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
-    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8"));
-    chardata->addElement(" ");
-    chardata->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
-    chardata->addElement(CharsToUnicodeString("\\u1105\\u1169"));
-    chardata->addElement(CharsToUnicodeString("\\u1100\\u116d"));
-    chardata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
+    ADD_DATACHUNK(chardata, "\\u1109\\u1161\\u11bc", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1112\\u1161\\u11bc", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1112\\u1161\\u11ab", 0, status);
+    ADD_DATACHUNK(chardata, "\\u110b\\u1175\\u11ab", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "\\u110b\\u1167\\u11ab", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1112\\u1161\\u11b8", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "\\u110c\\u1161\\u11bc", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1105\\u1169", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1100\\u116d", 0, status);
+    ADD_DATACHUNK(chardata, "\\u1112\\u116c", 0, status);
 
     // Surrogate pairs stay together
-    chardata->addElement(CharsToUnicodeString("\\ud800\\udc00"));
-    chardata->addElement(CharsToUnicodeString("\\udbff\\udfff"));
+    ADD_DATACHUNK(chardata, "\\ud800\\udc00", 0, status);
+    ADD_DATACHUNK(chardata, "\\udbff\\udfff", 0, status);
+    ADD_DATACHUNK(chardata, "x", 0, status);
 
+
+    if(U_FAILURE(status)){
+        errln("FAIL : in BITestData construction");
+        return;
+    }
     // Run the test...
     generalIteratorTest(*charIterDefault, chardata);
 
     delete charIterDefault;
-    delete chardata;
 //   delete rbbi;
 }
+
+static const int T_NUMBER = 100;
+static const int T_LETTER = 200;
+static const int T_H_OR_K = 300;
+static const int T_IDEO   = 400;
 
 //--------------------------------------------------------------------
 //tests default rules based word iteration
@@ -221,250 +294,244 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
 void RBBITest::TestDefaultRuleBasedWordIteration()
 {
     logln((UnicodeString)"Testing the RBBI for word iteration using default rules");
-//      RuleBasedBreakIterator *rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
-//      fetch the rules used to create the above RuleBasedBreakIterator
-//      UnicodeString defaultRules=rbbi->getRules();
-//      RuleBasedBreakIterator wordIterDefault = new RuleBasedBreakIterator(defaultRules); 
 
-    UErrorCode status=U_ZERO_ERROR; 
+    UErrorCode status=U_ZERO_ERROR;
     RuleBasedBreakIterator* wordIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
     if(U_FAILURE(status)){
         errln("FAIL : in construction");
         return;
     }
 
-    Vector *worddata = new Vector();
-    worddata->addElement ("Write");
-    worddata->addElement (" ");
-    worddata->addElement ("wordrules");
-    worddata->addElement (".");
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("alpha\\u00adbeta\\u00adgamma"));
-    worddata->addElement(" "); 
-    worddata->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0939\\u0948"));   
-    //worddata->addElement("\\u0964");   //danda followed by a space "\u0964->danda: hindi phrase seperator"
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
-    worddata->addElement("?");
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0967\\u0966\\u0966.\\u0966\\u0966%"));     //postnumeric
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966")); //pre-number India currency symbol Rs->\\u20aD
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0905\\u092e\\u091c"));
-    worddata->addElement("\n");
-    worddata->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
-    worddata->addElement("\r");
-    worddata->addElement("It's");
-    worddata->addElement(" ");
-    worddata->addElement("$30.10");
-    worddata->addElement(" ");  
-    worddata->addElement(CharsToUnicodeString("\\u00A2")); //cent sign
-    worddata->addElement(CharsToUnicodeString("\\u00A3")); //pound sign
-    worddata->addElement(CharsToUnicodeString("\\u00A4")); //currency sign
-    worddata->addElement(CharsToUnicodeString("\\u00A5")); //yen sign
-    worddata->addElement(CharsToUnicodeString("alpha\\u05f3beta\\u05f4gamma"));
-    worddata->addElement(" ");
-    worddata->addElement("Badges");
-    worddata->addElement("?");
-    worddata->addElement(" ");
-    worddata->addElement("BADGES");
-    worddata->addElement("!");
-    worddata->addElement("1000,233,456.000");
-    worddata->addElement(" ");
-    worddata->addElement("1,23.322%");
-    worddata->addElement(" ");
-    worddata->addElement("123.1222");
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u0024123,000.20"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("179.01\\u0025"));
-    worddata->addElement("X");
-    worddata->addElement(" ");
-    worddata->addElement("Now");
-    worddata->addElement("\r");
-    worddata->addElement("is");
-    worddata->addElement("\n");
-    worddata->addElement("the");
-    worddata->addElement("\r\n");
-    worddata->addElement("time");
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\uc5f0\\ud569"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c"));
-    worddata->addElement(" ");
+    BITestData worddata(status);
+    ADD_DATACHUNK(worddata, NULL, 0, status);
+    ADD_DATACHUNK(worddata, "Write", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "wordrules", T_LETTER, status);
+    ADD_DATACHUNK(worddata, ".", 0, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "alpha\\u00adbeta\\u00adgamma", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u092f\\u0939", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0939\\u093f" halfNA "\\u0926\\u0940", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0939\\u0948", T_LETTER, status);
+    //ADD_DATACHUNK(worddata, "\\u0964", 0);   //danda followed by a space "\u0964->danda: hindi phrase seperator"
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0905\\u093e\\u092a", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "?", 0, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0968\\u0966.\\u0969\\u096f", T_NUMBER, status);            //hindi numbers
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0967\\u0966\\u0966.\\u0966\\u0966%", T_NUMBER, status);        //postnumeric
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966", T_NUMBER, status); //pre-number India currency symbol Rs->\\u20aD
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u0905\\u092e\\u091c", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\n", 0, status);
+    ADD_DATACHUNK(worddata, halfSA  "\\u0935\\u0924\\u0902" deadTA "\\u0930", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\r", 0, status);
+    ADD_DATACHUNK(worddata, "It's", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "$30.10", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u00A2", 0, status); //cent sign
+    ADD_DATACHUNK(worddata, "\\u00A3", 0, status); //pound sign
+    ADD_DATACHUNK(worddata, "\\u00A4", 0, status); //currency sign
+    ADD_DATACHUNK(worddata, "\\u00A5", 0, status); //yen sign
+    ADD_DATACHUNK(worddata, "alpha\\u05f3beta\\u05f4gamma", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "Badges", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "?", 0, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "BADGES", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "!", 0, status);
+    ADD_DATACHUNK(worddata, "1000,233,456.000", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "1,23.322%", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "123.1222", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "$123,000.20", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "179.01%", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, "X", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "Now", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\r", 0, status);
+    ADD_DATACHUNK(worddata, "is", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\n", 0, status);
+    ADD_DATACHUNK(worddata, "the", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\r\n", 0, status);
+    ADD_DATACHUNK(worddata, "time", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\uc5f0\\ud569", T_LETTER, status);   // Hangul Syllables
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\uc7a5\\ub85c\\uad50\\ud68c", T_LETTER, status);  // Hangul
+    ADD_DATACHUNK(worddata, " ", 0, status);
     // conjoining jamo...
-    worddata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
-    worddata->addElement(" ");
-    worddata->addElement("Hello");
-    worddata->addElement(",");
-    worddata->addElement(" ");
-    worddata->addElement("how");
-    worddata->addElement(" ");
-    worddata->addElement("are");
-    worddata->addElement(" ");
-    worddata->addElement("you");
-    worddata->addElement(" ");
+    ADD_DATACHUNK(worddata, "\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "Hello", T_LETTER, status);
+    ADD_DATACHUNK(worddata, ",", 0, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "how", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "are", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "you", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
 
-    // Words containing surrogates
-    //    Hi surrogates of d801-d802-d834-d835 are letters.
-    worddata->addElement(CharsToUnicodeString("abc\\U00010300"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("abc\\U0001044D"));
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("abc\\U0001D433"));  //MATHEMATICAL BOLD SMALL Z
-    worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("abc\\U0001D7C9"));  //MATHEMATICAL SANS-SERIF BOLD ITALIC PI
-    worddata->addElement(" ");
+    // Words containing non-BMP letters
+    ADD_DATACHUNK(worddata, "abc\\U00010300", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "abc\\U0001044D", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "abc\\U0001D433", T_LETTER, status);  //MATHEMATICAL BOLD SMALL Z
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "abc\\U0001D7C9", T_LETTER, status);  //MATHEMATICAL SANS-SERIF BOLD ITALIC PI
+    ADD_DATACHUNK(worddata, " ", 0, status);
 
-    worddata->addElement(CharsToUnicodeString("abc"));  // same test outside of letter range.
-    worddata->addElement(CharsToUnicodeString("\\U0001D800"));   
-    worddata->addElement(CharsToUnicodeString("def"));
-    worddata->addElement(CharsToUnicodeString("\\U0001D3FF"));   
-    worddata->addElement(" ");
+    ADD_DATACHUNK(worddata, "abc", T_LETTER, status);  // same test outside of letter range.
+    ADD_DATACHUNK(worddata, "\\U0001D800", 0, status);
+    ADD_DATACHUNK(worddata, "def", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\\U0001D3FF", 0, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
 
     // Hiragana & Katakana stay together, but separates from each other and Latin.
     //   TODO:  Hira and Kata ranges from UnicodeSet differ slightly from
-    //          what's in Unicode Scripts file.   Investigate.  
-    worddata->addElement(CharsToUnicodeString("abc"));
-    worddata->addElement(CharsToUnicodeString("\\u3041\\u3094\\u309d\\u309e"));   // Hiragana
-    worddata->addElement(CharsToUnicodeString("\\u30a1\\u30fd\\uff66\\uff9d"));  // Katakana
-    worddata->addElement(CharsToUnicodeString("def"));
+    //          what's in Unicode Scripts file.   Investigate.
+    ADD_DATACHUNK(worddata, "abc", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "\\u3041\\u3094\\u309d\\u309e", T_H_OR_K, status);   // Hiragana
+    ADD_DATACHUNK(worddata, "\\u30a1\\u30fd\\uff66\\uff9d", T_H_OR_K, status);  // Katakana
+    ADD_DATACHUNK(worddata, "def", T_LETTER, status);
+
+    if (U_FAILURE(status)){
+        errln("FAIL : in BITestData construction");
+        return;
+    }
 
     generalIteratorTest(*wordIterDefault, worddata);
 
     delete wordIterDefault;
-    delete worddata;
-//    delete rbbi;
 }
+
+
+
 //--------------------------------------------------------------------
 //tests default rules based sentence iteration
 //--------------------------------------------------------------------
-static const UChar kParagraphSeparator[] = {0x2029, 0};
-static const UChar kLineSeparator[]      = {0x2028, 0};
-
 void RBBITest::TestDefaultRuleBasedSentenceIteration()
 {
       logln((UnicodeString)"Testing the RBBI for sentence iteration using default rules");
      // RuleBasedBreakIterator *rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance();
       //fetch the rules used to create the above RuleBasedBreakIterator
     //  UnicodeString defaultRules=rbbi->getRules();
-    //  RuleBasedBreakIterator sentIterDefault = new RuleBasedBreakIterator(defaultRules); 
+    //  RuleBasedBreakIterator sentIterDefault = new RuleBasedBreakIterator(defaultRules);
       UErrorCode status=U_ZERO_ERROR;
       RuleBasedBreakIterator* sentIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
       if(U_FAILURE(status)){
           errln("FAIL : in construction");
           return;
       }
-      Vector *sentdata = new Vector();
-      sentdata->addElement("(This is it.) ");
-      sentdata->addElement("Testing the sentence iterator. ");
-      sentdata->addElement("\"This isn\'t it.\" ");
-      sentdata->addElement("Hi! ");
+      BITestData sentdata(status);
+      ADD_DATACHUNK(sentdata, NULL, 0, status);      // Mark start of data
+      ADD_DATACHUNK(sentdata, "(This is it.) ", 0, status);
+      ADD_DATACHUNK(sentdata, "Testing the sentence iterator. ", 0, status);
+      ADD_DATACHUNK(sentdata, "\"This isn\'t it.\" ", 0, status);
+      ADD_DATACHUNK(sentdata, "Hi! ", 0, status);
       //sentdata = new Vector();
-      sentdata->addElement("This is a simple sample sentence. ");
-      sentdata->addElement("(This is it.) ");
-      sentdata->addElement("This is a simple sample sentence. ");
-      sentdata->addElement("\"This isn\'t it.\" ");
-      sentdata->addElement("Hi! ");
-      sentdata->addElement("This is a simple sample sentence. ");
-      sentdata->addElement("It does not have to make any sense as you can see. ");
-      sentdata->addElement("Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. ");
-      sentdata->addElement("Che la dritta via aveo smarrita. ");
-      sentdata->addElement("He said, that I said, that you said!! ");
+      ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
+      ADD_DATACHUNK(sentdata, "(This is it.) ", 0, status);
+      ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
+      ADD_DATACHUNK(sentdata, "\"This isn\'t it.\" ", 0, status);
+      ADD_DATACHUNK(sentdata, "Hi! ", 0, status);
+      ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
+      ADD_DATACHUNK(sentdata, "It does not have to make any sense as you can see. ", 0, status);
+      ADD_DATACHUNK(sentdata, "Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. ", 0, status);
+      ADD_DATACHUNK(sentdata, "Che la dritta via aveo smarrita. ", 0, status);
+      ADD_DATACHUNK(sentdata, "He said, that I said, that you said!! ", 0, status);
 
-      sentdata->addElement((UnicodeString)"Don't rock the boat." + kParagraphSeparator);
+      ADD_DATACHUNK(sentdata, "Don't rock the boat.\\u2029", 0, status);    // Paragraph Separator
 
-      sentdata->addElement("Because I am the daddy, that is why. ");
-      sentdata->addElement("Not on my time (el timo.)! ");
+      ADD_DATACHUNK(sentdata, "Because I am the daddy, that is why. ", 0, status);
+      ADD_DATACHUNK(sentdata, "Not on my time (el timo.)! ", 0, status);
 
-      sentdata->addElement((UnicodeString)"So what!!" + kParagraphSeparator);
+      ADD_DATACHUNK(sentdata, "So what!!\\u2029", 0, status);              // Paragraph Separator
 
-      sentdata->addElement("\"But now,\" he said, \"I know!\" ");
-      sentdata->addElement("Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ");
-      sentdata->addElement("One species, B. anthracis, is highly virulent.\n");
-      sentdata->addElement("Wolf said about Sounder:\"Beautifully thought-out and directed.\" ");
-      sentdata->addElement("Have you ever said, \"This is where\tI shall live\"? ");
-      sentdata->addElement("He answered, \"You may not!\" ");
-      sentdata->addElement("Another popular saying is: \"How do you do?\". ");
-      sentdata->addElement("Yet another popular saying is: \'I\'m fine thanks.\' ");
-      sentdata->addElement("What is the proper use of the abbreviation pp.? ");
-      sentdata->addElement("Yes, I am definatelly 12\" tall!!");
+      ADD_DATACHUNK(sentdata, "\"But now,\" he said, \"I know!\" ", 0, status);
+      ADD_DATACHUNK(sentdata, "Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ", 0, status);
+      ADD_DATACHUNK(sentdata, "One species, B. anthracis, is highly virulent.\n", 0, status);
+      ADD_DATACHUNK(sentdata, "Wolf said about Sounder:\"Beautifully thought-out and directed.\" ", 0, status);
+      ADD_DATACHUNK(sentdata, "Have you ever said, \"This is where\tI shall live\"? ", 0, status);
+      ADD_DATACHUNK(sentdata, "He answered, \"You may not!\" ", 0, status);
+      ADD_DATACHUNK(sentdata, "Another popular saying is: \"How do you do?\". ", 0, status);
+      ADD_DATACHUNK(sentdata, "Yet another popular saying is: \'I\'m fine thanks.\' ", 0, status);
+      ADD_DATACHUNK(sentdata, "What is the proper use of the abbreviation pp.? ", 0, status);
+      ADD_DATACHUNK(sentdata, "Yes, I am definatelly 12\" tall!!", 0, status);
       // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-      sentdata->addElement(CharsToUnicodeString("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u037e"));
+      ADD_DATACHUNK(sentdata, "Now\ris\nthe\r\ntime\n\rfor\r\rall\\u037e", 0, status);
 
     // test that it doesn't break sentences at the boundary between CJK
     // and other letters
-      sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c")
-        + CharsToUnicodeString("\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba")
-        + CharsToUnicodeString("\\u611d\\u57b6\\u2510\\u5d46\".\\u2029"));
-      sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
-        + CharsToUnicodeString("\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3002"));
-      sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4")
-        + CharsToUnicodeString("\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8")
-        + CharsToUnicodeString("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2048"));
-      sentdata->addElement(CharsToUnicodeString("He said, \"I can go there.\"\\u2029"));
+      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c"
+           "\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba"
+           "\\u611d\\u57b6\\u2510\\u5d46\".\\u2029", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8"
+           "\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0"
+           "\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3002", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4"
+           "\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8"
+           "\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2048", 0, status);
+      ADD_DATACHUNK(sentdata, "He said, \"I can go there.\"\\u2029", 0, status);
 
       // Treat fullwidth variants of .!? the same as their
       // normal counterparts
 #if 0   // Not according to TR29.  TODO:  what is the right thing for these chars?
-      sentdata->addElement(CharsToUnicodeString("I know I'm right\\uff0e "));
-      sentdata->addElement(CharsToUnicodeString("Right\\uff1f "));
-      sentdata->addElement(CharsToUnicodeString("Right\\uff01 "));
+      ADD_DATACHUNK(sentdata, "I know I'm right\\uff0e ", 0, status);
+      ADD_DATACHUNK(sentdata, "Right\\uff1f ", 0, status);
+      ADD_DATACHUNK(sentdata, "Right\\uff01 ", 0, status);
 #endif
 
       // Don't break sentences at boundary between CJK and digits
-      sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
-                + CharsToUnicodeString("\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-                + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3001"));
+      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8"
+                   "\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0"
+                   "\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3001", 0, status);
 
       // Break sentence between a sentence terminator and
       // opening punctuation
-      sentdata->addElement("How do you do?");
-      sentdata->addElement("(fine).");
+      ADD_DATACHUNK(sentdata, "How do you do?", 0, status);
+      ADD_DATACHUNK(sentdata, "(fine).", 0, status);
       //sentence breaks for hindi which used Devanagari script
-      //make sure there is sentence break after ?,danda(hindi phrase separator),fullstop followed by space and no break after \n \r 
-      sentdata->addElement(CharsToUnicodeString("\\u0928\\u092e")+halfSA
-                                   + CharsToUnicodeString("\\u0924\\u0947 ")  
-                                   + CharsToUnicodeString("\\u0930\\u092e\\u0947\\u0936, ") 
-                                   + CharsToUnicodeString("\\u0905\\u093e\\u092a")
-                                   + CharsToUnicodeString("\\u0915\\u0948\\u0938\\u0947 ")
-                                   + CharsToUnicodeString("\\u0939\\u0948?"));   
-      sentdata->addElement(CharsToUnicodeString("\\u092e\\u0948 \\u0905")
-                                   + halfCHA
-                                   +CharsToUnicodeString("\\u091b\\u093e \\u0939\\u0942\\u0901\\u0964 "));   
-      sentdata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a\r\n \\u0915\\u0948\\u0938\\u0947 \\u0939\\u0948?"));   
-      sentdata->addElement(CharsToUnicodeString("\\u0935\\u0939 ")
-                                   + halfKA
-                                   +CharsToUnicodeString("\\u092f\\u093e\n \\u0939\\u0948?"));   
-      sentdata->addElement(CharsToUnicodeString("\\u092f\\u0939 \\u0905\\u093e\\u092e \\u0939\\u0948. "));   
-      sentdata->addElement(CharsToUnicodeString("\\u092f\\u0939 means \"this\". ")); 
-      sentdata->addElement(CharsToUnicodeString("\"\\u092a\\u095d\\u093e\\u0908\" meaning \"education\" or \"studies\". "));
-      sentdata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u091c") 
-                                   + CharsToUnicodeString("(")
-                                   + halfSA
-                                   + CharsToUnicodeString("\\u0935\\u0924\\u0902")
-                                   + deadTA+ CharsToUnicodeString("\\u0930 ")
-                                   + CharsToUnicodeString("\\u0926\\u093f\\u0935\\u093e\\u0938) ")
-                                   + CharsToUnicodeString("\\u0939\\u0948\\u0964 "));
-      sentdata->addElement("Let's end here. ");
+      //make sure there is sentence break after ?,danda(hindi phrase separator),fullstop followed by space and no break after \n \r
+      ADD_DATACHUNK(sentdata,  "\\u0928\\u092e" halfSA
+                                    "\\u0924\\u0947 "
+                                    "\\u0930\\u092e\\u0947\\u0936, "
+                                    "\\u0905\\u093e\\u092a"
+                                    "\\u0915\\u0948\\u0938\\u0947 "
+                                    "\\u0939\\u0948?", 0, status);
+      ADD_DATACHUNK(sentdata,
+              "\\u092e\\u0948 \\u0905"  halfCHA "\\u091b\\u093e \\u0939\\u0942\\u0901\\u0964 ", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0905\\u093e\\u092a\r\n \\u0915\\u0948\\u0938\\u0947 \\u0939\\u0948?", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0935\\u0939 " halfKA "\\u092f\\u093e\n \\u0939\\u0948?", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u092f\\u0939 \\u0905\\u093e\\u092e \\u0939\\u0948. ", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u092f\\u0939 means \"this\". ", 0, status);
+      ADD_DATACHUNK(sentdata, "\"\\u092a\\u095d\\u093e\\u0908\" meaning \"education\" or \"studies\". ", 0, status);
+      ADD_DATACHUNK(sentdata, "\\u0905\\u093e\\u091c("  halfSA "\\u0935\\u0924\\u0902"  deadTA "\\u0930 "
+                                   "\\u0926\\u093f\\u0935\\u093e\\u0938) "
+                                   "\\u0939\\u0948\\u0964 ", 0, status);
+      ADD_DATACHUNK(sentdata, "Let's end here. ", 0, status);
+
       generalIteratorTest(*sentIterDefault, sentdata);
 
       delete sentIterDefault;
-      delete sentdata;
-//      delete rbbi;
 }
+
+
 //--------------------------------------------------------------------
 //tests default rules based line iteration
 //--------------------------------------------------------------------
@@ -476,68 +543,69 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
           errln("FAIL : in construction");
           return;
       }
-    Vector *linedata = new Vector();
-      linedata->addElement("Multi-");
-      linedata->addElement("Level ");
-      linedata->addElement("example ");
-      linedata->addElement("of ");
-      linedata->addElement("a ");
-      linedata->addElement("semi-");
-      linedata->addElement("idiotic ");
-      linedata->addElement("non-");
-      linedata->addElement("sensical ");
-      linedata->addElement("(non-");
-      linedata->addElement("important) ");
-      linedata->addElement("sentence. ");
+      BITestData linedata(status);
+      ADD_DATACHUNK(linedata, NULL, 0, status);           // Break at start of data
+      ADD_DATACHUNK(linedata, "Multi-", 0, status);
+      ADD_DATACHUNK(linedata, "Level ", 0, status);
+      ADD_DATACHUNK(linedata, "example ", 0, status);
+      ADD_DATACHUNK(linedata, "of ", 0, status);
+      ADD_DATACHUNK(linedata, "a ", 0, status);
+      ADD_DATACHUNK(linedata, "semi-", 0, status);
+      ADD_DATACHUNK(linedata, "idiotic ", 0, status);
+      ADD_DATACHUNK(linedata, "non-", 0, status);
+      ADD_DATACHUNK(linedata, "sensical ", 0, status);
+      ADD_DATACHUNK(linedata, "(non-", 0, status);
+      ADD_DATACHUNK(linedata, "important) ", 0, status);
+      ADD_DATACHUNK(linedata, "sentence. ", 0, status);
 
-      linedata->addElement("Hi  ");
-      linedata->addElement("Hello ");
-      linedata->addElement("How\n");
-      linedata->addElement("are\r");
-      linedata->addElement((UnicodeString)"you" + kLineSeparator);
-      linedata->addElement("fine.\t");
-      linedata->addElement("good.  ");
+      ADD_DATACHUNK(linedata, "Hi  ", 0, status);
+      ADD_DATACHUNK(linedata, "Hello ", 0, status);
+      ADD_DATACHUNK(linedata, "How\n", 0, status);
+      ADD_DATACHUNK(linedata, "are\r", 0, status);
+      ADD_DATACHUNK(linedata, "you\\u2028", 0, status);    // Line Separator
+      ADD_DATACHUNK(linedata, "fine.\t", 0, status);
+      ADD_DATACHUNK(linedata, "good.  ", 0, status);
 
-      linedata->addElement("Now\r");
-      linedata->addElement("is\n");
-      linedata->addElement("the\r\n");
-      linedata->addElement("time\n");
-      linedata->addElement("\r");
-      linedata->addElement("for\r");
-      linedata->addElement("\r");
-      linedata->addElement("all");
+      ADD_DATACHUNK(linedata, "Now\r", 0, status);
+      ADD_DATACHUNK(linedata, "is\n", 0, status);
+      ADD_DATACHUNK(linedata, "the\r\n", 0, status);
+      ADD_DATACHUNK(linedata, "time\n", 0, status);
+      ADD_DATACHUNK(linedata, "\r", 0, status);
+      ADD_DATACHUNK(linedata, "for\r", 0, status);
+      ADD_DATACHUNK(linedata, "\r", 0, status);
+      ADD_DATACHUNK(linedata, "all", 0, status);
 
     // to test for bug #4068133
-      linedata->addElement(CharsToUnicodeString("\\u96f6"));
-      linedata->addElement(CharsToUnicodeString("\\u4e00\\u3002"));
-      linedata->addElement(CharsToUnicodeString("\\u4e8c\\u3001"));
-      linedata->addElement(CharsToUnicodeString("\\u4e09\\u3002\\u3001"));
-      linedata->addElement(CharsToUnicodeString("\\u56db\\u3001\\u3002\\u3001"));
-      linedata->addElement(CharsToUnicodeString("\\u4e94,"));
-      linedata->addElement(CharsToUnicodeString("\\u516d."));
-      linedata->addElement(CharsToUnicodeString("\\u4e03.\\u3001,\\u3002"));
-      linedata->addElement(CharsToUnicodeString("\\u516b"));
+      ADD_DATACHUNK(linedata, "\\u96f6", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e00\\u3002", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e8c\\u3001", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e09\\u3002\\u3001", 0, status);
+      ADD_DATACHUNK(linedata, "\\u56db\\u3001\\u3002\\u3001", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e94,", 0, status);
+      ADD_DATACHUNK(linedata, "\\u516d.", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e03.\\u3001,\\u3002", 0, status);
+      ADD_DATACHUNK(linedata, "\\u516b", 0, status);
 
     // to test for bug #4086052
-      linedata->addElement(CharsToUnicodeString("foo\\u00a0bar "));
-//          linedata->addElement("foo\\ufeffbar");
+      ADD_DATACHUNK(linedata, "foo\\u00a0bar ", 0, status);
+//          ADD_DATACHUNK(linedata, "foo\\ufeffbar", 0);
 
     // to test for bug #4097920
-      linedata->addElement("dog,");
-      linedata->addElement("cat,");
-      linedata->addElement("mouse ");
-      linedata->addElement("(one)");
-      linedata->addElement("(two)\n");
+      ADD_DATACHUNK(linedata, "dog,", 0, status);
+      ADD_DATACHUNK(linedata, "cat,", 0, status);
+      ADD_DATACHUNK(linedata, "mouse ", 0, status);
+      ADD_DATACHUNK(linedata, "(one)", 0, status);
+      ADD_DATACHUNK(linedata, "(two)\n", 0, status);
 
     // to test for bug #4035266
-      linedata->addElement("The ");
-      linedata->addElement("balance ");
-      linedata->addElement("is ");
-      linedata->addElement("$-23,456.78, ");
-      linedata->addElement("not ");
-      // linedata->addElement("-$32,456.78!\n");    // Doesn't break this way according to TR29
-      linedata->addElement("-");
-      linedata->addElement("$32,456.78!\n");
+      ADD_DATACHUNK(linedata, "The ", 0, status);
+      ADD_DATACHUNK(linedata, "balance ", 0, status);
+      ADD_DATACHUNK(linedata, "is ", 0, status);
+      ADD_DATACHUNK(linedata, "$-23,456.78, ", 0, status);
+      ADD_DATACHUNK(linedata, "not ", 0, status);
+      // ADD_DATACHUNK(linedata, "-$32,456.78!\n", 0);    // Doesn't break this way according to TR29
+      ADD_DATACHUNK(linedata, "-", 0, status);
+      ADD_DATACHUNK(linedata, "$32,456.78!\n", 0, status);
 
     // to test for bug #4098467
     // What follows is a string of Korean characters (I found it in the Yellow Pages
@@ -548,121 +616,123 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
 
       // By TR14, precomposed Hangul syllables should not be grouped together.
 #if 0
-      linedata->addElement(CharsToUnicodeString("\\uc0c1\\ud56d "));
-      linedata->addElement(CharsToUnicodeString("\\ud55c\\uc778 "));
-      linedata->addElement(CharsToUnicodeString("\\uc5f0\\ud569 "));
-      linedata->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c "));
+      ADD_DATACHUNK(linedata, "\\uc0c1\\ud56d ", 0, status);
+      ADD_DATACHUNK(linedata, "\\ud55c\\uc778 ", 0, status);
+      ADD_DATACHUNK(linedata, "\\uc5f0\\ud569 ", 0, status);
+      ADD_DATACHUNK(linedata, "\\uc7a5\\ub85c\\uad50\\ud68c ", 0, status);
 #endif
-      linedata->addElement(CharsToUnicodeString("\\uc0c1"));
-      linedata->addElement(CharsToUnicodeString("\\ud56d "));
-      linedata->addElement(CharsToUnicodeString("\\ud55c"));
-      linedata->addElement(CharsToUnicodeString("\\uc778 "));
-      linedata->addElement(CharsToUnicodeString("\\uc5f0"));
-      linedata->addElement(CharsToUnicodeString("\\ud569 "));
-      linedata->addElement(CharsToUnicodeString("\\uc7a5"));
-      linedata->addElement(CharsToUnicodeString("\\ub85c"));
-      linedata->addElement(CharsToUnicodeString("\\uad50"));
-      linedata->addElement(CharsToUnicodeString("\\ud68c "));
+      ADD_DATACHUNK(linedata, "\\uc0c1", 0, status);
+      ADD_DATACHUNK(linedata, "\\ud56d ", 0, status);
+      ADD_DATACHUNK(linedata, "\\ud55c", 0, status);
+      ADD_DATACHUNK(linedata, "\\uc778 ", 0, status);
+      ADD_DATACHUNK(linedata, "\\uc5f0", 0, status);
+      ADD_DATACHUNK(linedata, "\\ud569 ", 0, status);
+      ADD_DATACHUNK(linedata, "\\uc7a5", 0, status);
+      ADD_DATACHUNK(linedata, "\\ub85c", 0, status);
+      ADD_DATACHUNK(linedata, "\\uad50", 0, status);
+      ADD_DATACHUNK(linedata, "\\ud68c ", 0, status);
 
     // conjoining jamo...
-      linedata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc "));
-      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
-      linedata->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab "));
-      linedata->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
-      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8 "));
-      linedata->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
-      linedata->addElement(CharsToUnicodeString("\\u1105\\u1169"));
-      linedata->addElement(CharsToUnicodeString("\\u1100\\u116d"));
-      linedata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
+      ADD_DATACHUNK(linedata, "\\u1109\\u1161\\u11bc", 0, status);
+      ADD_DATACHUNK(linedata, "\\u1112\\u1161\\u11bc ", 0, status);
+      ADD_DATACHUNK(linedata, "\\u1112\\u1161\\u11ab", 0, status);
+      ADD_DATACHUNK(linedata, "\\u110b\\u1175\\u11ab ", 0, status);
+      ADD_DATACHUNK(linedata, "\\u110b\\u1167\\u11ab", 0, status);
+      ADD_DATACHUNK(linedata, "\\u1112\\u1161\\u11b8 ", 0, status);
+      ADD_DATACHUNK(linedata, "\\u110c\\u1161\\u11bc", 0, status);
+      ADD_DATACHUNK(linedata, "\\u1105\\u1169", 0, status);
+      ADD_DATACHUNK(linedata, "\\u1100\\u116d", 0, status);
+      ADD_DATACHUNK(linedata, "\\u1112\\u116c", 0, status);
 
     // to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
-      linedata->addElement(CharsToUnicodeString("\\u4e01\\uff0e"));
-      linedata->addElement(CharsToUnicodeString("\\u4e02\\uff01"));
-      linedata->addElement(CharsToUnicodeString("\\u4e03\\uff1f"));
+      ADD_DATACHUNK(linedata, "\\u4e01\\uff0e", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e02\\uff01", 0, status);
+      ADD_DATACHUNK(linedata, "\\u4e03\\uff1f", 0, status);
 
-    // Surrogate line break tests.  
-      linedata->addElement(CharsToUnicodeString("\\u4e01"));          // BMP ideograph
-      linedata->addElement(CharsToUnicodeString("\\ud840\\udc01"));   // Extended ideograph
-      linedata->addElement(CharsToUnicodeString("\\u4e02"));          // BMP Ideograph
-      linedata->addElement(CharsToUnicodeString("abc"));              // latin
-      linedata->addElement(CharsToUnicodeString("\\ue000"));          // PUA
-      linedata->addElement(CharsToUnicodeString("\\udb80\\udc01"));   // Extended PUA.  Treated as ideograph.
+    // Surrogate line break tests.
+      ADD_DATACHUNK(linedata, "\\u4e01", 0, status);          // BMP ideograph
+      ADD_DATACHUNK(linedata, "\\ud840\\udc01", 0, status);   // Extended ideograph
+      ADD_DATACHUNK(linedata, "\\u4e02", 0, status);          // BMP Ideograph
+      ADD_DATACHUNK(linedata, "abc", 0, status);              // latin
+      ADD_DATACHUNK(linedata, "\\ue000", 0, status);          // PUA
+      ADD_DATACHUNK(linedata, "\\udb80\\udc01", 0, status);   // Extended PUA.  Treated as ideograph.
+
 
     generalIteratorTest(*lineIterDefault, linedata);
 
     delete lineIterDefault;
-    delete linedata;
-
 }
+
+
 //--------------------------------------------------------------------
 //Testing the BreakIterator for devanagari script
 //--------------------------------------------------------------------
- 
-static const UChar deadRA[]  = {0x0930, 0x094d, 0};         /*deadform RA = devanagari RA + virama*/
-static const UChar deadPHA[] = {0x092b, 0x094d, 0};         /*deadform PHA = devanagari PHA + virama*/
-static const UChar deadTTHA[]= {0x0920, 0x094d, 0};
-static const UChar deadPA[]  = {0x092a, 0x094d, 0};
-static const UChar deadSA[]  = {0x0938, 0x094d, 0};
-static const UChar visarga[] = {0x0903, 0};              /*devanagari visarga looks like a english colon*/
+
+#define deadRA   "\\u0930\\u094d"         /*deadform RA = devanagari RA + virama*/
+#define deadPHA  "\\u092b\\u094d"         /*deadform PHA = devanagari PHA + virama*/
+#define deadTTHA "\\u0920\\u094d"
+#define deadPA   "\\u092a\\u094d"
+#define deadSA   "\\u0938\\u094d"
+#define visarga  "\\u0903"                /*devanagari visarga looks like a english colon*/
 
 void RBBITest::TestHindiCharacterBreak()
 {
-    Vector *hindicharData = new Vector();
+    UErrorCode status= U_ZERO_ERROR;
+    BITestData hindicharData(status);
+    ADD_DATACHUNK(hindicharData, NULL, 0, status);           // Break at start of data
     //devanagari characters for Hindi support
-    hindicharData->addElement(CharsToUnicodeString("\\u0906"));                    //devanagari AA
+    ADD_DATACHUNK(hindicharData, "\\u0906", 0, status);                    //devanagari AA
 
-    //hindi character break should make sure that it 
+    //hindi character break should make sure that it
     // doesn't break in-between a vowelsign and a chandrabindu
     // TODO:  Rules need some fixing.  As currently written, they'll correctly recognize this combination
-    //        as part of a legit character, but not standalone.  
+    //        as part of a legit character, but not standalone.
 
-    // hindicharData->addElement(CharsToUnicodeString("\\u093e\\u0901"));         //devanagari vowelsign AA+ chandrabindu
-    hindicharData->addElement(CharsToUnicodeString("\\u0906\\u0901"));            // Devanagari AA + chandrabindu
-    hindicharData->addElement(CharsToUnicodeString("\\u0915\\u093e\\u0901"));     // Devanagari KA + AA vowelsign + chandrabindu
+    // ADD_DATACHUNK(hindicharData, "\\u093e\\u0901", 0);         //devanagari vowelsign AA+ chandrabindu
+    ADD_DATACHUNK(hindicharData, "\\u0906\\u0901", 0, status);            // Devanagari AA + chandrabindu
+    ADD_DATACHUNK(hindicharData, "\\u0915\\u093e\\u0901", 0, status);     // Devanagari KA + AA vowelsign + chandrabindu
 
 
-    hindicharData->addElement(CharsToUnicodeString("\\u0916\\u0947"));              //devanagari KHA+vowelsign E
-    hindicharData->addElement(CharsToUnicodeString("\\u0938\\u0941\\u0902"));        //devanagari SA+vowelsign U + anusvara(bindu)
-    hindicharData->addElement(CharsToUnicodeString("\\u0926"));                    //devanagari consonant DA
-    hindicharData->addElement(CharsToUnicodeString("\\u0930"));                    //devanagari consonant RA
-    hindicharData->addElement(CharsToUnicodeString("\\u0939\\u094c"));              //devanagari consonant HA+dependent vowel sign AI
-    hindicharData->addElement(CharsToUnicodeString("\\u0964"));                    //devanagari danda
-    hindicharData->addElement(CharsToUnicodeString("\\u0950"));                    //devanagari OM 
-    hindicharData->addElement(CharsToUnicodeString("\\u0915\\u0943"));              //devanagari KA+dependent vowel RI->KRI
+    ADD_DATACHUNK(hindicharData, "\\u0916\\u0947", 0, status);              //devanagari KHA+vowelsign E
+    ADD_DATACHUNK(hindicharData, "\\u0938\\u0941\\u0902", 0, status);        //devanagari SA+vowelsign U + anusvara(bindu)
+    ADD_DATACHUNK(hindicharData, "\\u0926", 0, status);                    //devanagari consonant DA
+    ADD_DATACHUNK(hindicharData, "\\u0930", 0, status);                    //devanagari consonant RA
+    ADD_DATACHUNK(hindicharData, "\\u0939\\u094c", 0, status);              //devanagari consonant HA+dependent vowel sign AI
+    ADD_DATACHUNK(hindicharData, "\\u0964", 0, status);                    //devanagari danda
+    ADD_DATACHUNK(hindicharData, "\\u0950", 0, status);                    //devanagari OM
+    ADD_DATACHUNK(hindicharData, "\\u0915\\u0943", 0, status);              //devanagari KA+dependent vowel RI->KRI
 
     //dependent half-forms
-    hindicharData->addElement(halfSA+CharsToUnicodeString("\\u0924"));             //halfSA+base consonant TA->STA
-    hindicharData->addElement(halfSA+CharsToUnicodeString("\\u0925"));             //halfSA+base consonant THA->STHA
-    hindicharData->addElement(halfSA+CharsToUnicodeString("\\u092e"));             //halfSA+base consonant MA->SMA
-    hindicharData->addElement(halfCHA+CharsToUnicodeString("\\u091b"));            //halfCHA+base consonant CHHA->CHHHA
-    hindicharData->addElement(halfNA+CharsToUnicodeString("\\u0917"));             //halfNA+base consonant GA->NGA
-    hindicharData->addElement(CharsToUnicodeString("\\u092a\\u094d\\u200d\\u092f"));   //halfPA(PA+virama+zerowidthjoiner+base consonant YA->PYA
+    ADD_DATACHUNK(hindicharData, halfSA "\\u0924", 0, status);             //halfSA+base consonant TA->STA
+    ADD_DATACHUNK(hindicharData, halfSA "\\u0925", 0, status);             //halfSA+base consonant THA->STHA
+    ADD_DATACHUNK(hindicharData, halfSA "\\u092e", 0, status);             //halfSA+base consonant MA->SMA
+    ADD_DATACHUNK(hindicharData, halfCHA "\\u091b", 0, status);            //halfCHA+base consonant CHHA->CHHHA
+    ADD_DATACHUNK(hindicharData, halfNA "\\u0917", 0, status);             //halfNA+base consonant GA->NGA
+    ADD_DATACHUNK(hindicharData, "\\u092a\\u094d\\u200d\\u092f", 0, status);   //halfPA(PA+virama+zerowidthjoiner+base consonant YA->PYA
 
 
     //consonant RA rules ----------
     //if the dead consonant RA precedes either a consonant or an independent vowel,
     //then it is replaced by its superscript non-spacing mark
-    hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0915"));             //deadRA+devanagari consonant KA->KA+superRA 
-    hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0923"));             //deadRA+devanagari consonant NNA->NNA+superRA
-    hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0917"));             //deadRA+devanagari consonant GA->GA+superRA
-    //  hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0960"));           //deadRA+devanagari cosonant RRI->RRI+superRA
+    ADD_DATACHUNK(hindicharData, deadRA  "\\u0915", 0, status);             //deadRA+devanagari consonant KA->KA+superRA
+    ADD_DATACHUNK(hindicharData, deadRA  "\\u0923", 0, status);             //deadRA+devanagari consonant NNA->NNA+superRA
+    ADD_DATACHUNK(hindicharData, deadRA  "\\u0917", 0, status);             //deadRA+devanagari consonant GA->GA+superRA
+    //  ADD_DATACHUNK(hindicharData, deadRA+ "\\u0960", 0);           //deadRA+devanagari cosonant RRI->RRI+superRA
 
     //if any dead consonant(other than dead RA)precedes the consonant RA, then
     //it is replaced with its nominal forma nd RA is replaced by the subscript non-spacing mark.
-    hindicharData->addElement(deadPHA+ CharsToUnicodeString("\\u0930"));            //deadPHA+devanagari consonant RA->PHA+subRA
-    hindicharData->addElement(deadPA+ CharsToUnicodeString("\\u0930"));             //deadPA+devanagari consonant RA->PA+subRA
-    hindicharData->addElement(deadTTHA+ CharsToUnicodeString("\\u0930"));           //deadTTHA+devanagari consonant RA->TTHA+subRA
-    hindicharData->addElement(deadTA+ CharsToUnicodeString("\\u0930"));             //deadTA+RA->TRA 
-    hindicharData->addElement(CharsToUnicodeString("\\u0936\\u094d\\u0930"));         //deadSHA(SHA+virama)+RA->SHRA 
+    ADD_DATACHUNK(hindicharData, deadPHA  "\\u0930", 0, status);            //deadPHA+devanagari consonant RA->PHA+subRA
+    ADD_DATACHUNK(hindicharData, deadPA  "\\u0930", 0, status);             //deadPA+devanagari consonant RA->PA+subRA
+    ADD_DATACHUNK(hindicharData, deadTTHA  "\\u0930", 0, status);           //deadTTHA+devanagari consonant RA->TTHA+subRA
+    ADD_DATACHUNK(hindicharData, deadTA  "\\u0930", 0, status);             //deadTA+RA->TRA
+    ADD_DATACHUNK(hindicharData, "\\u0936\\u094d\\u0930", 0, status);         //deadSHA(SHA+virama)+RA->SHRA
 
     //conjuct ligatures
-    hindicharData->addElement(CharsToUnicodeString("\\u0915\\u094d\\u0937"));         //deadKA(KA+virama) followed by SSHA wraps up into a single character KSSHA
-    hindicharData->addElement(deadTA+CharsToUnicodeString("\\u0924"));              //deadTA+TA wraps up into glyph TTHA
-    hindicharData->addElement(CharsToUnicodeString("\\u0926\\u094d\\u0935"));         //deadDA(DA+virama)+VA wraps up into DVA
-    hindicharData->addElement(CharsToUnicodeString("\\u091c\\u094d\\u091e"));         //deadJA(JA+virama)+NYA wraps up into JNYA
+    ADD_DATACHUNK(hindicharData, "\\u0915\\u094d\\u0937", 0, status);         //deadKA(KA+virama) followed by SSHA wraps up into a single character KSSHA
+    ADD_DATACHUNK(hindicharData, deadTA "\\u0924", 0, status);              //deadTA+TA wraps up into glyph TTHA
+    ADD_DATACHUNK(hindicharData, "\\u0926\\u094d\\u0935", 0, status);         //deadDA(DA+virama)+VA wraps up into DVA
+    ADD_DATACHUNK(hindicharData, "\\u091c\\u094d\\u091e", 0, status);         //deadJA(JA+virama)+NYA wraps up into JNYA
 
-    UErrorCode status= U_ZERO_ERROR;
     RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
     if(U_FAILURE(status)){
         errln("FAIL : in construction");
@@ -670,66 +740,63 @@ void RBBITest::TestHindiCharacterBreak()
     }
     generalIteratorTest(*e, hindicharData);
     delete e;
-    delete hindicharData;
 }
 
 void RBBITest::TestHindiWordBreak()
 {
-    Vector *hindiWordData = new Vector();
+    UErrorCode status= U_ZERO_ERROR;
+    BITestData hindiWordData(status);
 
-#if 0
     //hindi
-    hindiWordData->addElement(CharsToUnicodeString("\\u0917\\u092a\\u00ad\\u0936\\u092a"));
-    hindiWordData->addElement("!");
-    hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u0948"));
+    ADD_DATACHUNK(hindiWordData, NULL, 0, status);           // Break at start of data
+    ADD_DATACHUNK(hindiWordData, "\\u0917\\u092a\\u00ad\\u0936\\u092a", 200, status);
+    ADD_DATACHUNK(hindiWordData, "!", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u092f\\u0939", 200, status);
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0939\\u093f" halfNA "\\u0926\\u0940", 200, status);
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0939\\u0948", 200, status);
     //danda is similar to full stop. danda is a hindi phrase seperator
     //Make sure it breaks before danda and after danda when it is followed by a space
-    //hindiWordData->addElement(CharsToUnicodeString("\\u0964"));   //fails here doesn't break at danda
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
-    hindiWordData->addElement("?");
-#endif
-    hindiWordData->addElement("\n"); 
-    hindiWordData->addElement(CharsToUnicodeString(":"));
-    hindiWordData->addElement(deadPA+CharsToUnicodeString("\\u0930\\u093e\\u092f")+visarga);    //no break before visarga
-    hindiWordData->addElement(" ");
-#if 0
-    hindiWordData->addElement(CharsToUnicodeString("\\u0935") + deadRA+ CharsToUnicodeString("\\u0937\\u093e"));
-    hindiWordData->addElement("\r\n");
-    hindiWordData->addElement(deadPA+ CharsToUnicodeString("\\u0930\\u0915\\u093e\\u0936"));     //deadPA+RA+KA+vowel AA+SHA -> prakash
-    hindiWordData->addElement(","); 
-    hindiWordData->addElement(CharsToUnicodeString("\\u0924\\u0941\\u092e\\u093e\\u0930\\u094b")); 
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u092e\\u093f")+ deadTA+ CharsToUnicodeString("\\u0930"));       //MA+vowel I+ deadTA + RA 
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0915\\u093e"));
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u092a")+ deadTA + CharsToUnicodeString("\\u0930"));            //PA + deadTA + RA
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u092a\\u095d\\u094b"));
-    // hindiWordData->addElement(CharsToUnicodeString("\\u0964")); //fails here doesn't break at danda
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement((UnicodeString)deadSA + deadTA + CharsToUnicodeString("\\u0930\\u093f"));       //deadSA+deadTA+RA+vowel I->sthri
-    hindiWordData->addElement(".");
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0967\\u0966\\u0966.\\u0966\\u0966%"));     //postnumeric
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966")); //pre-number India currency symbol Rs.\\u20aD
-    hindiWordData->addElement(" ");
-    hindiWordData->addElement(CharsToUnicodeString("\\u0905\\u092e\\u091c"));
-    hindiWordData->addElement("\n");
-    hindiWordData->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
-    hindiWordData->addElement("\r");
-#endif
-    UErrorCode status=U_ZERO_ERROR;
+    //ADD_DATACHUNK(hindiWordData, "\\u0964", 0);   //fails here doesn't break at danda
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0905\\u093e\\u092a", 200, status);
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947", 200, status);
+    ADD_DATACHUNK(hindiWordData, "?", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\n", 0, status);
+    ADD_DATACHUNK(hindiWordData, ":", 0, status);
+    ADD_DATACHUNK(hindiWordData, deadPA "\\u0930\\u093e\\u092f" visarga, 200, status);    //no break before visarga
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0935" deadRA "\\u0937\\u093e", 200, status);
+    ADD_DATACHUNK(hindiWordData, "\r\n", 0, status);
+    ADD_DATACHUNK(hindiWordData, deadPA  "\\u0930\\u0915\\u093e\\u0936", 200, status);     //deadPA+RA+KA+vowel AA+SHA -> prakash
+    ADD_DATACHUNK(hindiWordData, ",", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0924\\u0941\\u092e\\u093e\\u0930\\u094b", 200, status);
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u092e\\u093f" deadTA "\\u0930", 200, status);       //MA+vowel I+ deadTA + RA
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0915\\u093e", 200, status);
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u092a" deadTA "\\u0930", 200, status);            //PA + deadTA + RA
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u092a\\u095d\\u094b", 200, status);
+    // ADD_DATACHUNK(hindiWordData, "\\u0964", 0); //fails here doesn't break at danda
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, deadSA deadTA "\\u0930\\u093f", 200, status);       //deadSA+deadTA+RA+vowel I->sthri
+    ADD_DATACHUNK(hindiWordData, ".", 0, status);
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0968\\u0966.\\u0969\\u096f", 100, status);            //hindi numbers
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0967\\u0966\\u0966.\\u0966\\u0966%", 100, status);     //postnumeric
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966", 100, status); //pre-number India currency symbol Rs.\\u20aD
+    ADD_DATACHUNK(hindiWordData, " ", 0, status);
+    ADD_DATACHUNK(hindiWordData, "\\u0905\\u092e\\u091c", 200, status);
+    ADD_DATACHUNK(hindiWordData, "\n", 0, status);
+    ADD_DATACHUNK(hindiWordData, halfSA "\\u0935\\u0924\\u0902" deadTA "\\u0930", 200, status);
+    ADD_DATACHUNK(hindiWordData, "\r", 0, status);
+
     RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
     if(U_FAILURE(status)){
         errln("FAIL : in construction");
@@ -737,7 +804,6 @@ void RBBITest::TestHindiWordBreak()
     }
     generalIteratorTest(*e, hindiWordData);
     delete e;
-    delete hindiWordData;
 }
 
 
@@ -749,21 +815,20 @@ void RBBITest::TestTitleBreak()
           errln("FAIL : in construction");
           return;
     }
-    // titleI->debugDumpTables();
 
-    Vector *titleData = new Vector();
-    titleData->addElement("   ");
-    titleData->addElement("This ");
-    titleData->addElement("is ");
-    titleData->addElement("a ");
-    titleData->addElement("simple ");
-    titleData->addElement("sample ");
-    titleData->addElement("sentence. ");
-    titleData->addElement("This ");
+    BITestData titleData(status);
+    ADD_DATACHUNK(titleData, NULL, 0, status);           // Break at start of data
+    ADD_DATACHUNK(titleData, "   ", 0, status);
+    ADD_DATACHUNK(titleData, "This ", 0, status);
+    ADD_DATACHUNK(titleData, "is ", 0, status);
+    ADD_DATACHUNK(titleData, "a ", 0, status);
+    ADD_DATACHUNK(titleData, "simple ", 0, status);
+    ADD_DATACHUNK(titleData, "sample ", 0, status);
+    ADD_DATACHUNK(titleData, "sentence. ", 0, status);
+    ADD_DATACHUNK(titleData, "This ", 0, status);
 
     generalIteratorTest(*titleI, titleData);
     delete titleI;
-    delete titleData;
 }
 
 
@@ -788,7 +853,7 @@ void RBBITest::TestStatusReturn() {
 
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
-     
+
      RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
      if(U_FAILURE(status)) {
          errln("FAIL : in construction");
@@ -819,17 +884,17 @@ void RBBITest::TestDanda()
 {
       Vector *hindiWordData = new Vector();
       //hindi
-      hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-      hindiWordData->addElement(" ");
+      ADD_DATACHUNK(hindiWordData, CharsToUnicodeString("\\u092f\\u0939"), 0, status);
+      ADD_DATACHUNK(hindiWordData, " ", 0, status);
       //Danda is similar to full stop, danda is a hindi phrase seperator.
       //Make sure there is a word break before and after danda when it is followed by a space
      //following fail----
-      hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u0948"));
-    //  hindiWordData->addElement(CharsToUnicodeString("\\u0964"));         // devanagari danda
-      hindiWordData->addElement(" ");
-      hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-  //    hindiWordData->addElement(CharsToUnicodeString("\\u0965"));         //devanagari double danda
-      hindiWordData->addElement(" ");
+      ADD_DATACHUNK(hindiWordData, CharsToUnicodeString("\\u0939\\u0948"), 0, status);
+    //  ADD_DATACHUNK(hindiWordData, CharsToUnicodeString("\\u0964"), 0);         // devanagari danda
+      ADD_DATACHUNK(hindiWordData, " ", 0, status);
+      ADD_DATACHUNK(hindiWordData, CharsToUnicodeString("\\u092f\\u0939"), 0, status);
+  //    ADD_DATACHUNK(hindiWordData, CharsToUnicodeString("\\u0965"), 0);         //devanagari double danda
+      ADD_DATACHUNK(hindiWordData, " ", 0, status);
 
       RuleBasedBreakIterator* e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
       generalIteratorTest(*e, hindiWordData);
@@ -843,9 +908,9 @@ void RBBITest::TestHindiCharacterWrapping()
       Vector *hindicharData = new Vector();
       //if the dead consonant RA precedes either a consonant or an independent vowel,
       //then it is replaced by its superscript non-spacing mark
-      hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0917")); //deadRA+devanagari consonant GA->GA+superRA
+      ADD_DATACHUNK(hindicharData, deadRA+ CharsToUnicodeString("\\u0917"), 0, status); //deadRA+devanagari consonant GA->GA+superRA
       //following fail----
-     // hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0960"));   //deadRA+devanagari RRI->RRI+superRA
+     // ADD_DATACHUNK(hindicharData, deadRA+ CharsToUnicodeString("\\u0960"), 0);   //deadRA+devanagari RRI->RRI+superRA
 
       RuleBasedBreakIterator* e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
       generalIteratorTest(*e, hindicharData);
@@ -858,7 +923,7 @@ void RBBITest::TestHindiCharacterWrapping()
 
 
 //----------------------------------------------------------------------------------
-//adds rules for telugu support and tests the behaviour of chracterIterator of RBBI 
+//adds rules for telugu support and tests the behaviour of chracterIterator of RBBI
 //----------------------------------------------------------------------------------
 /*void RBBITest::TestTeluguRuleBasedCharacterIteration()
 {
@@ -874,27 +939,27 @@ void RBBITest::TestHindiCharacterWrapping()
                       "<telConjunct>=({<telConsonant><telvirama>{<zwj>}}<telConsonant>);"   +
                       "<telConjunct>{<telVowelSign>}{<telCharEnd>};";
       RuleBasedBreakIterator charIter=null;
-      charIter   = new RuleBasedBreakIterator(crules1); 
+      charIter   = new RuleBasedBreakIterator(crules1);
 
       Vector *chardata = new Vector();
       //behaviour of telugu characters from specified rules
-      chardata->addElement(CharsToUnicodeString("\\u0c15"));                    //telugu consonant KA
-      chardata->addElement(CharsToUnicodeString("\\u0c30\\u0c47"));              //telugu consonant RA+telugu dependent vowel EE
-      chardata->addElement(CharsToUnicodeString("\\u0c1b\\u0c3e"));              //telugu consonant CHA+telegu depenednt vowel AA
-      chardata->addElement(CharsToUnicodeString("\\u0c17\\u0c48"));              //telegu consonant GA+teleugu dependent vowel AI
-      chardata->addElement(CharsToUnicodeString("\\u0c17\\u0c46\\u0c56"));        //telugu consonant GA+telugu dependent vowel sign E+telugu AI length mark
-      chardata->addElement(CharsToUnicodeString("\\u0c28\\u0c4d\\u200d\\u0c28"));  //telugu consonant NA+telugu virama+zwj=>halfNA+NA->NNA(dependent half-form)
-      chardata->addElement(CharsToUnicodeString("\\u0c17\\u0c4d\\u0c30"));        //GA+deadRA(RA+telvirama)->GA+subRA->GRA
-      chardata->addElement(CharsToUnicodeString("\\u0c66"));                    //telugu digit
-      chardata->addElement(CharsToUnicodeString("\\u0c37\\u0c4d\\u0c15"));        //deadSSA(SSA+telvirama)+KA+subSSA->KSHA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c15"), 0, status);                    //telugu consonant KA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c30\\u0c47"), 0, status);              //telugu consonant RA+telugu dependent vowel EE
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c1b\\u0c3e"), 0, status);              //telugu consonant CHA+telegu depenednt vowel AA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c17\\u0c48"), 0, status);              //telegu consonant GA+teleugu dependent vowel AI
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c17\\u0c46\\u0c56"), 0, status);        //telugu consonant GA+telugu dependent vowel sign E+telugu AI length mark
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c28\\u0c4d\\u200d\\u0c28"), 0, status);  //telugu consonant NA+telugu virama+zwj=>halfNA+NA->NNA(dependent half-form)
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c17\\u0c4d\\u0c30"), 0, status);        //GA+deadRA(RA+telvirama)->GA+subRA->GRA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c66"), 0, status);                    //telugu digit
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0c37\\u0c4d\\u0c15"), 0, status);        //deadSSA(SSA+telvirama)+KA+subSSA->KSHA
       //behaviour of other characters from default rules
-      chardata->addElement("h");
-      chardata->addElement(CharsToUnicodeString("A\\u0302"));                   // circumflexA 
-      chardata->addElement(CharsToUnicodeString("i\\u0301"));                   // acuteBelowI 
-      chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-      chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
-      chardata->addElement("\n");
-      chardata->addElement("\r\n");    
+      ADD_DATACHUNK(chardata, "h", 0, status);
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("A\\u0302"), 0, status);                   // circumflexA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("i\\u0301"), 0, status);                   // acuteBelowI
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u1109\\u1161\\u11bc"), 0, status);
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u1112\\u1161\\u11bc"), 0, status);
+      ADD_DATACHUNK(chardata, "\n", 0, status);
+      ADD_DATACHUNK(chardata, "\r\n", 0, status);
 
       generalIteratorTest(charIter, chardata);
 
@@ -906,57 +971,57 @@ void RBBITest::TestHindiCharacterWrapping()
 //--------------------------------------------------------------------
 //tests the behaviour of character iteration of RBBI with custom rules
 //--------------------------------------------------------------------
- 
+
 void RBBITest::TestCustomRuleBasedCharacterIteration()
 {
       logln((UnicodeString)"Testing the RBBI by using custom rules for character iteration");
 
       UnicodeString crules2="<ignore>=[e];"                         + //ignore the character "e"
-                     ".;"                                           + 
+                     ".;"                                           +
                      "<devVowelSign>=[\\u093e-\\u094c\\u0962\\u0963];"  +  //devanagiri vowel = \\u093e tp \\u094c and \\u0962.\\u0963
                      "<devConsonant>=[\\u0915-\\u0939];"              +  //devanagiri consonant = \\u0915 to \\u0939
-                     "<devConsonant>{<devVowelSign>};" ;               //break at all places except the  following 
+                     "<devConsonant>{<devVowelSign>};" ;               //break at all places except the  following
                                                                        //devanagiri consonants+ devanagiri vowelsign
 
       RuleBasedCharacterIterator charIterCustom   = new RuleBasedBreakIterator(crules2);
       Vector *chardata = new Vector();
-      chardata->addElement("He");              //ignores 'e'
-      chardata->addElement("l");                
-      chardata->addElement("l");
-      chardata->addElement("oe");              //ignores 'e' hence wraps it into 'o' instead of wrapping with
-      chardata->addElement(CharsToUnicodeString("\\u0301"));          //'\\u0301' to form 'acuteE '
-      chardata->addElement("&e");              //ignores 'e' hence wraps it into '&' instead of wrapping with
-      chardata->addElement(CharsToUnicodeString("\\u0303"));          //'\\u0303 to form 'tildaE'
-      //devanagiri characters 
-      chardata->addElement(CharsToUnicodeString("\\u0906"));          //devanagiri AA
-      chardata->addElement(CharsToUnicodeString("\\u093e"));          //devanagiri vowelsign AA:--breaks at \\u0901 which is devanagiri 
-      chardata->addElement(CharsToUnicodeString("\\u0901"));          //chandra bindhu since it is not mentioned in the rules
-      chardata->addElement(CharsToUnicodeString("\\u0916\\u0947"));    //devanagiri KHA+vowelsign E
-      chardata->addElement(CharsToUnicodeString("\\u0938\\u0941"));    //devanagiri SA+vowelsign U : - breaks at
-      chardata->addElement(CharsToUnicodeString("\\u0902"));          //\\u0902 devanagiri anusvara since it is not mentioned in the rules
-      chardata->addElement(CharsToUnicodeString("\\u0926"));          //devanagiri consonant DA
-      chardata->addElement(CharsToUnicodeString("\\u0930"));          //devanagiri consonant RA
-      chardata->addElement(CharsToUnicodeString("\\u0939\\u094c"));    //devanagiri HA+vowel sign AI
-      chardata->addElement(CharsToUnicodeString("\\u0964"));          //devanagiri danda
+      ADD_DATACHUNK(chardata, "He", 0, status);              //ignores 'e'
+      ADD_DATACHUNK(chardata, "l", 0, status);
+      ADD_DATACHUNK(chardata, "l", 0, status);
+      ADD_DATACHUNK(chardata, "oe", 0, status);              //ignores 'e' hence wraps it into 'o' instead of wrapping with
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0301"), 0, status);          //'\\u0301' to form 'acuteE '
+      ADD_DATACHUNK(chardata, "&e", 0, status);              //ignores 'e' hence wraps it into '&' instead of wrapping with
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0303"), 0, status);          //'\\u0303 to form 'tildaE'
+      //devanagiri characters
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0906"), 0, status);          //devanagiri AA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u093e"), 0, status);          //devanagiri vowelsign AA:--breaks at \\u0901 which is devanagiri
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0901"), 0, status);          //chandra bindhu since it is not mentioned in the rules
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0916\\u0947"), 0, status);    //devanagiri KHA+vowelsign E
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0938\\u0941"), 0, status);    //devanagiri SA+vowelsign U : - breaks at
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0902"), 0, status);          //\\u0902 devanagiri anusvara since it is not mentioned in the rules
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0926"), 0, status);          //devanagiri consonant DA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0930"), 0, status);          //devanagiri consonant RA
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0939\\u094c"), 0, status);    //devanagiri HA+vowel sign AI
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0964"), 0, status);          //devanagiri danda
       // devanagiri chracters end
-      chardata->addElement("A");               //breaks in between since it is not mentioned in the rules
-      chardata->addElement(CharsToUnicodeString("\\u0302"));          // circumflexA    
-      chardata->addElement("i");               //breaks in between since not mentioned in the rules
-      chardata->addElement(CharsToUnicodeString("\\u0301"));          // acuteBelowI   
+      ADD_DATACHUNK(chardata, "A", 0, status);               //breaks in between since it is not mentioned in the rules
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0302"), 0, status);          // circumflexA
+      ADD_DATACHUNK(chardata, "i", 0, status);               //breaks in between since not mentioned in the rules
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0301"), 0, status);          // acuteBelowI
       //Rules don't support conjoining jamo->->..
-      chardata->addElement(CharsToUnicodeString("\\u1109"));          //break at every character since rules
-      chardata->addElement(CharsToUnicodeString("\\u1161"));          //don't support conjoining jamo
-      chardata->addElement(CharsToUnicodeString("\\u11bc"));
-      chardata->addElement(CharsToUnicodeString("\\u1112"));
-      chardata->addElement(CharsToUnicodeString("\\u1161"));
-      chardata->addElement(CharsToUnicodeString("\\u11bc"));
-      chardata->addElement("\n");
-      chardata->addElement("\r");             //doesn't keep CRLGF together since rules do not mention it
-      chardata->addElement("\n");
-      chardata->addElement("S");              //graveS
-      chardata->addElement(CharsToUnicodeString("\\u0300"));         //breaks in between since it is not mentioned in the rules
-      chardata->addElement("i");              //acuteBelowI
-      chardata->addElement(CharsToUnicodeString("\\u0301"));         //breaks in between since it is not mentioned in the rules
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u1109"), 0, status);          //break at every character since rules
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u1161"), 0, status);          //don't support conjoining jamo
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u11bc"), 0, status);
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u1112"), 0, status);
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u1161"), 0, status);
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u11bc"), 0, status);
+      ADD_DATACHUNK(chardata, "\n", 0, status);
+      ADD_DATACHUNK(chardata, "\r", 0, status);             //doesn't keep CRLGF together since rules do not mention it
+      ADD_DATACHUNK(chardata, "\n", 0, status);
+      ADD_DATACHUNK(chardata, "S", 0, status);              //graveS
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0300"), 0, status);         //breaks in between since it is not mentioned in the rules
+      ADD_DATACHUNK(chardata, "i", 0, status);              //acuteBelowI
+      ADD_DATACHUNK(chardata, CharsToUnicodeString("\\u0301"), 0, status);         //breaks in between since it is not mentioned in the rules
       generalIteratorTest(charIterCustom, chardata);
 
       delete charIterCustom;
@@ -973,42 +1038,42 @@ void RBBITest::TestCustomRuleBasedWordIteration(){
                       "<mid-word>=[:Pd:\\\"\\\'\\.];"                   + //dashes, quotation, apostraphes, period
                       "<ls>=[\\n\\u000c\\u2028\\u2029];"                + //line separators:  LF, FF, PS, and LS
                       "<ws>=[:Zs:\\t];"                                 + //all space separators and the tab character
-                      "<word>=((<let><let>*(<mid-word><let><let>*)*));" +  
+                      "<word>=((<let><let>*(<mid-word><let><let>*)*));" +
                       ".;"                                              + //break after every character, with the following exceptions
-                      "{<word>};"                                       + 
+                      "{<word>};"                                       +
                       "<ws>*{\\r}{<ls>}{<danda>};" ;
 
-      RuleBasedBreakIterator wordIterCustom   = new RuleBasedBreakIterator(wrules1); 
+      RuleBasedBreakIterator wordIterCustom   = new RuleBasedBreakIterator(wrules1);
       Vector *worddata = new Vector();
-      worddata->addElement("Write");
-      worddata->addElement(" ");
-      worddata->addElement("wordrules");
-      worddata->addElement(".");
-      worddata->addElement(" ");
+      ADD_DATACHUNK(worddata, "Write", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "wordrules", 0, status);
+      ADD_DATACHUNK(worddata, ".", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
       //play with hindi
-      worddata->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0939\\u0948"));
-      worddata->addElement(CharsToUnicodeString("\\u0964"));   //Danda is similar to full stop-> Danda followed by a space
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
-      worddata->addElement("?");
-      worddata->addElement(" ");
-      worddata->addElement("It's");
-      worddata->addElement(" ");
-      worddata->addElement("$");
-      worddata->addElement("3");
-      worddata->addElement("0");
-      worddata->addElement(".");
-      worddata->addElement("1");
-      worddata->addElement("0");
-      worddata->addElement(" ");
-      // worddata->addElement(" ");
-      generalIteratorTest(wordIterCustom, worddata); 
+      ADD_DATACHUNK(worddata, CharsToUnicodeString("\\u092f\\u0939"), 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"), 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, CharsToUnicodeString("\\u0939\\u0948"), 0, status);
+      ADD_DATACHUNK(worddata, CharsToUnicodeString("\\u0964"), 0, status);   //Danda is similar to full stop-> Danda followed by a space
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, CharsToUnicodeString("\\u0905\\u093e\\u092a"), 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"), 0, status);
+      ADD_DATACHUNK(worddata, "?", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "It's", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "$", 0, status);
+      ADD_DATACHUNK(worddata, "3", 0, status);
+      ADD_DATACHUNK(worddata, "0", 0, status);
+      ADD_DATACHUNK(worddata, ".", 0, status);
+      ADD_DATACHUNK(worddata, "1", 0, status);
+      ADD_DATACHUNK(worddata, "0", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      // ADD_DATACHUNK(worddata, " ", 0);
+      generalIteratorTest(wordIterCustom, worddata);
 
       delete wordIterCustom;
       delete worddata;
@@ -1020,48 +1085,48 @@ void RBBITest::TestAbbrRuleBasedWordIteration()
 {
       logln((UnicodeString)"Testing the RBBI for word iteration by adding rules to support abbreviation");
       RuleBasedBreakIterator *rb =(RuleBasedBreakIterator*)BreakIterator::createWordInstance();
-      
-      UnicodeString wrules2="<abbr>=((Mr.)|(Mrs.)|(Ms.)|(Dr.)|(U.S.));" + // abbreviations. 
+
+      UnicodeString wrules2="<abbr>=((Mr.)|(Mrs.)|(Ms.)|(Dr.)|(U.S.));" + // abbreviations.
                      rb->getRules()                               +
                      "{(<abbr><ws>)*<word>};";
       RuleBasedBreakIterator wordIter=null;
       //try{
-      wordIter   = new RuleBasedBreakIterator(wrules2); 
+      wordIter   = new RuleBasedBreakIterator(wrules2);
     //  }catch(IllegalArgumentException iae){
    //       errln("ERROR: failed construction illegal rules");
    //   }
       Vector *worddata = new Vector();
-      worddata->addElement("Mr. George");
-      worddata->addElement(" ");
-      worddata->addElement("is");
-      worddata->addElement(" ");
-      worddata->addElement("from");
-      worddata->addElement(" ");
-      worddata->addElement("U.S. Navy");
-      worddata->addElement(".");
-      worddata->addElement(" ");
-      worddata->addElement("His");
-      worddata->addElement("\n");
-      worddata->addElement("friend");
-      worddata->addElement("\t");
-      worddata->addElement("Dr. Steven");
-      worddata->addElement(" ");
-      worddata->addElement("married");
-      worddata->addElement(" ");
-      worddata->addElement("Ms. Benneth");
-      worddata->addElement("!");
-      worddata->addElement(" ");
-      worddata->addElement("Mrs. Johnson");
-      worddata->addElement("\r\n");
-      worddata->addElement("paid");
-      worddata->addElement(" ");
-      worddata->addElement("$2,400.00");
+      ADD_DATACHUNK(worddata, "Mr. George", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "is", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "from", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "U.S. Navy", 0, status);
+      ADD_DATACHUNK(worddata, ".", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "His", 0, status);
+      ADD_DATACHUNK(worddata, "\n", 0, status);
+      ADD_DATACHUNK(worddata, "friend", 0, status);
+      ADD_DATACHUNK(worddata, "\t", 0, status);
+      ADD_DATACHUNK(worddata, "Dr. Steven", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "married", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "Ms. Benneth", 0, status);
+      ADD_DATACHUNK(worddata, "!", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "Mrs. Johnson", 0, status);
+      ADD_DATACHUNK(worddata, "\r\n", 0, status);
+      ADD_DATACHUNK(worddata, "paid", 0, status);
+      ADD_DATACHUNK(worddata, " ", 0, status);
+      ADD_DATACHUNK(worddata, "$2,400.00", 0, status);
       generalIteratorTest(wordIter, worddata);
 
       delete wordIter;
       delete worddata;
       delete rb;
-} */  
+} */
 
 //---------------------------------------------
 // runIndexedTest
@@ -1071,7 +1136,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {
-    
+
         case 0: name = "TestDefaultRuleBasedCharacterIteration";
             if(exec) TestDefaultRuleBasedCharacterIteration(); break;
         case 1: name = "TestDefaultRuleBasedWordIteration";
@@ -1107,246 +1172,209 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     }
 }
 
-//---------------------------------------------
-// Test implementation routines
-//---------------------------------------------
-UnicodeString RBBITest::createTestData(Enumeration* e)
-{
-    UnicodeString result = "";
 
-    while (e->hasMoreElements()) {
-        result += e->nextElement();
-    }
-    return result;
+//----------------------------------------------------------------------------
+//
+// generalIteratorTest      Given a break iterator and a set of test data,
+//                          Run the tests and report the results.
+//
+//----------------------------------------------------------------------------
+void RBBITest::generalIteratorTest(RuleBasedBreakIterator& bi, BITestData &td)
+{
+
+    bi.setText(td.fDataToBreak);
+
+    testFirstAndNext(bi, td);
+
+    testLastAndPrevious(bi, td);
+
+    testFollowing(bi, td);
+    testPreceding(bi, td);
+    testIsBoundary(bi, td);
+    doMultipleSelectionTest(bi, td);
 }
 
-// general test Implementation subroutines
-void RBBITest::generalIteratorTest(RuleBasedBreakIterator& bi, Vector* expectedResult) 
+
+//
+//   testFirstAndNext.   Run the iterator forwards in the obvious first(), next()
+//                       kind of loop.
+//
+void RBBITest::testFirstAndNext(RuleBasedBreakIterator& bi, BITestData &td)
 {
-    Enumeration *elems = expectedResult->elements();
-    UnicodeString text = createTestData(elems);
-    delete elems;
+    UErrorCode  status = U_ZERO_ERROR;
+    int32_t     p;
+    int32_t     lastP = -1;
+    int32_t     tag;
 
-    bi.setText(text);
+    logln("Test first and next");
+    bi.setText(td.fDataToBreak);
+    td.clearResults();
 
-    Vector *nextResults = testFirstAndNext(bi, text);
-    Vector *previousResults = testLastAndPrevious(bi, text);
-
-    logln("comparing forward and backward...");
-    int errs = getErrors();
-    UnicodeString str1="forward iteration";
-    UnicodeString str2="backward iteration";
-    compareFragmentLists(str1, str2, nextResults,
-                    previousResults);
-    if (getErrors() == errs) {
-        logln("comparing expected and actual...");
-        str1="expected result";
-        str2="actual result";
-        compareFragmentLists(str1, str2, expectedResult,
-                        nextResults);
-    }
-
-    int32_t *boundaries = new int32_t[expectedResult->size() + 3];
-    boundaries[0] = RuleBasedBreakIterator::DONE;
-    boundaries[1] = 0;
-    for (int i = 0; i < expectedResult->size(); i++)
-        boundaries[i + 2] = boundaries[i + 1] + ((UnicodeString)expectedResult->elementAt(i)).
-                        length();
-
-    int len = expectedResult->size() + 3 -1;
-    boundaries[len] = RuleBasedBreakIterator::DONE;
-
-    testFollowing(bi, text, boundaries);
-    testPreceding(bi, text, boundaries);
-    testIsBoundary(bi, text, boundaries);
-
-    doMultipleSelectionTest(bi, text);
-
-    delete[] boundaries;
-    delete nextResults;
-    delete previousResults;
-}
-
-Vector* RBBITest::testFirstAndNext(RuleBasedBreakIterator& bi, UnicodeString& text) 
-{
-    int32_t p = bi.first();
-    int32_t lastP = p;
-    Vector *result = new Vector();
-    UnicodeString selection;
-
-    if (p != 0)
-        errln((UnicodeString)"first() returned " + p + (UnicodeString)" instead of 0");
-    while (p != RuleBasedBreakIterator::DONE) {
-        p = bi.next();
-        if (p != RuleBasedBreakIterator::DONE) {
-            if (p <= lastP) {
-                errln((UnicodeString)"next() failed to move forward: next() on position "
-                                + lastP + (UnicodeString)" yielded " + p);
-                break;
-            }
-
-            text.extractBetween(lastP, p, selection);  
-            result->addElement(selection);
-        }
-        else {
-            if (lastP != text.length())
-                errln((UnicodeString)"next() returned DONE prematurely: offset was "
-                                + lastP + (UnicodeString)" instead of " + text.length());
+    for (p=bi.first(); p!=RuleBasedBreakIterator::DONE; p=bi.next()) {
+        td.fActualBreakPositions.addElement(p, status);  // Save result.
+        tag = bi.getRuleStatus();
+        td.fActualTags.addElement(tag, status);
+        if (p <= lastP) {
+            // If the iterator is not making forward progress, stop.
+            //  No need to raise an error here, it'll be detected in the normal check of results.
+            break;
         }
         lastP = p;
     }
-    return result;
+    td.checkResults("testFirstAndNext", this);
 }
-Vector* RBBITest::testLastAndPrevious(RuleBasedBreakIterator& bi, UnicodeString& text) 
-{
-    int32_t p = bi.last();
-    int32_t lastP = p;
-    Vector *result = new Vector();
-    UnicodeString selection;
 
-    if (p != text.length())
-        errln((UnicodeString)"last() returned " + p + (UnicodeString)" instead of " + text.length());
-    while (p != RuleBasedBreakIterator::DONE) {
-        p = bi.previous();
-        if (p != RuleBasedBreakIterator::DONE) {
-            if (p >= lastP) {
-                errln((UnicodeString)"previous() failed to move backward: previous() on position "
-                                + lastP + (UnicodeString)" yielded " + p);
-                break;
-            }
-            text.extractBetween(p, lastP, selection);
-            result->insertElementAt(selection, 0);
-        }
-        else {
-            if (lastP != 0) {
-                errln((UnicodeString)"previous() returned DONE prematurely: offset was "
-                                + lastP + (UnicodeString)" instead of 0");
-                break;
-            }
+
+//
+//  TestLastAndPrevious.   Run the iterator backwards, starting with last().
+//
+void  RBBITest::testLastAndPrevious(RuleBasedBreakIterator& bi,  BITestData &td)
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    int32_t     p;
+    int32_t     lastP  = 0x7ffffffe;
+    int32_t     tag;
+
+    logln("Test first and next");
+    bi.setText(td.fDataToBreak);
+    td.clearResults();
+
+    for (p=bi.last(); p!=RuleBasedBreakIterator::DONE; p=bi.previous()) {
+        // Save break position.  Insert it at start of vector of results, shoving
+        //    already-saved results further towards the end.
+        td.fActualBreakPositions.insertElementAt(p, 0, status);  
+        // bi.previous();   // TODO:  Why does this fix things up????
+        // bi.next();
+        tag = bi.getRuleStatus();
+        td.fActualTags.insertElementAt(tag, 0, status);
+        if (p >= lastP) {
+            // If the iterator is not making progress, stop.
+            //  No need to raise an error here, it'll be detected in the normal check of results.
+            break;
         }
         lastP = p;
     }
-    return result;
+    td.checkResults("testLastAndPrevious", this);
 }
 
-void RBBITest::compareFragmentLists(UnicodeString& f1Name, UnicodeString& f2Name, Vector* f1, Vector* f2) 
+
+void RBBITest::testFollowing(RuleBasedBreakIterator& bi, BITestData &td)
 {
-    int32_t p1 = 0;
-    int32_t p2 = 0;
-    UnicodeString s1;
-    UnicodeString s2;
-    int32_t t1 = 0;
-    int32_t t2 = 0;
+    UErrorCode  status = U_ZERO_ERROR;
+    int32_t     p;
+    int32_t     tag;
+    int32_t     lastP  = -1;
+    int         i;
 
-
-    while (p1 < f1->size() && p2 < f2->size()) {
-        s1 = (UnicodeString)f1->elementAt(p1);
-        s2 = (UnicodeString)f2->elementAt(p2);
-        t1 += s1.length();
-        t2 += s2.length();
-
-        if (s1.compare(s2) == 0) {
-            logln(prettify((UnicodeString)"   >" + s1 + (UnicodeString)"<"));
-            ++p1;
-            ++p2;
-        }
-        else {
-            int32_t tempT1 = t1;
-            int32_t tempT2 = t2;
-            int32_t tempP1 = p1;
-            int32_t tempP2 = p2;
-
-            while (tempT1 != tempT2 && tempP1 < f1->size() && tempP2 < f2->size()) {
-                while (tempT1 < tempT2 && tempP1 < f1->size()) {
-                    tempT1 += ((UnicodeString)f1->elementAt(tempP1)).length();
-                    ++tempP1;
-                }
-                while (tempT2 < tempT1 && tempP2 < f2->size()) {
-                    tempT2 += ((UnicodeString)f2->elementAt(tempP2)).length();
-                    ++tempP2;
-                }
-            }
-            logln((UnicodeString)"*** " + f1Name + (UnicodeString)" has:");
-            while (p1 <= tempP1 && p1 < f1->size()) {
-                s1 = (UnicodeString)f1->elementAt(p1);
-                t1 += s1.length();
-                logln(prettify((UnicodeString)" *** >" + s1 + (UnicodeString)"<"));
-                ++p1;
-            }
-            logln("***** " + f2Name + " has:");
-            while (p2 <= tempP2 && p2 < f2->size()) {
-                s2 = (UnicodeString)f2->elementAt(p2);
-                t2 += s2.length();
-                logln(prettify(" ***** >" + s2 + "<"));
-                ++p2;
-            }
-            errln((UnicodeString)"Discrepancy between " + f1Name + (UnicodeString)" and " + f2Name);
-        }
-    }
-}
-
-void RBBITest::testFollowing(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) 
-{
     logln("testFollowing():");
-    int p = 2;
-    for (int i = 0; i <= text.length(); i++) {
-        if (i == boundaries[p])
-            ++p;
+    bi.setText(td.fDataToBreak);
+    td.clearResults();
 
-        int32_t b = bi.following(i);
-        logln((UnicodeString)"bi.following(" + i + ") -> " + b);
-        if (b != boundaries[p])
-            errln((UnicodeString)"Wrong result from following() for " + i + (UnicodeString)": expected " + boundaries[p]
-                            + (UnicodeString)", got " + b);
+    // Save the starting point, since we won't get that out of following.
+    p = bi.first();         
+    td.fActualBreakPositions.addElement(p, status);  // Save result.
+    tag = bi.getRuleStatus();
+    td.fActualTags.addElement(tag, status);
+
+    for (i = 0; i <= td.fDataToBreak.length()+1; i++) {
+        p = bi.following(i);
+        if (p != lastP) {
+            if (p == RuleBasedBreakIterator::DONE) {
+                break;
+            }
+            // We've reached a new break position.  Save it.
+            td.fActualBreakPositions.addElement(p, status);  // Save result.
+            tag = bi.getRuleStatus();
+            td.fActualTags.addElement(tag, status);
+            lastP = p;
+        }
     }
+    // The loop normally exits by means of the break in the middle.
+    // Make sure that the index was at the correct position for the break iterator to have
+    //   returned DONE.
+    if (i != td.fDataToBreak.length()) {
+        errln("testFollowing():  iterator returned DONE prematurely.");
+    }
+
+    // Full check of all results.
+    td.checkResults("testFollowing", this);
 }
 
-void RBBITest::testPreceding(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
+
+
+void RBBITest::testPreceding(RuleBasedBreakIterator& bi,  BITestData &td) {
+    UErrorCode  status = U_ZERO_ERROR;
+    int32_t     p;
+    int32_t     tag;
+    int32_t     lastP  = 0x7ffffffe;
+    int         i;
+
     logln("testPreceding():");
-    int p = 0;
-    for (int i = 0; i <= text.length(); i++) {
-        int32_t b = bi.preceding(i);
-        logln((UnicodeString)"bi.preceding(" + i + ") -> " + b);
-        if (b != boundaries[p])
-            errln((UnicodeString)"Wrong result from preceding() for " + i + (UnicodeString)": expected " + boundaries[p]
-                            + (UnicodeString)", got " + b);
+    bi.setText(td.fDataToBreak);
+    td.clearResults();
 
-        if (i == boundaries[p + 1])
-            ++p;
+    p = bi.last();
+    td.fActualBreakPositions.addElement(p, status);   
+    tag = bi.getRuleStatus();
+    td.fActualTags.addElement(tag, status);  
+
+    for (i = td.fDataToBreak.length(); i>=-1; i--) {
+        p = bi.preceding(i);
+        if (p != lastP) {
+            if (p == RuleBasedBreakIterator::DONE) {
+                break;
+            }
+            // We've reached a new break position.  Save it.
+            td.fActualBreakPositions.insertElementAt(p, 0, status);  
+            lastP = p;
+            tag = bi.getRuleStatus();
+            td.fActualTags.insertElementAt(tag, 0, status);
+        }
     }
+    // The loop normally exits by means of the break in the middle.
+    // Make sure that the index was at the correct position for the break iterator to have
+    //   returned DONE.
+    if (i != 0) {
+        errln("testPreceding():  iterator returned DONE prematurely.");
+    }
+
+    // Full check of all results.
+    td.checkResults("testPreceding", this);
 }
 
-void RBBITest::testIsBoundary(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
+
+
+void RBBITest::testIsBoundary(RuleBasedBreakIterator& bi,  BITestData &td) {
+    UErrorCode  status = U_ZERO_ERROR;
+    int         i;
+    int32_t     tag;
+
     logln("testIsBoundary():");
-    int p = 1;
-    UBool isB;
-    for (int i = 0; i < text.length(); i++) {
-        isB = bi.isBoundary(i);
-        logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
+    bi.setText(td.fDataToBreak);
+    td.clearResults();
 
-        if (i == boundaries[p]) {
-            if (!isB)
-                errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected true, got false");
-            p++;
-        }
-        else {
-            if (isB)
-                errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected false, got true");
+    for (i = 0; i <= td.fDataToBreak.length(); i++) {
+        if (bi.isBoundary(i)) {
+            td.fActualBreakPositions.addElement(i, status);  // Save result.
+            tag = bi.getRuleStatus();
+            td.fActualTags.addElement(tag, status);
         }
     }
+    td.checkResults("testIsBoundary: ", this);
 }
 
-void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
-                                                  UnicodeString& testText)
+
+
+void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestData &td)
 {
-    iterator.setText(testText);
+    iterator.setText(td.fDataToBreak);
 
     RuleBasedBreakIterator* testIterator =(RuleBasedBreakIterator*)iterator.clone();
     int32_t offset = iterator.first();
     int32_t testOffset;
     int32_t count = 0;
 
-    logln("doMultipleSelectionTest text of length: %d", testText.length());
+    logln("doMultipleSelectionTest text of length: %d", td.fDataToBreak.length());
 
     if (*testIterator != iterator)
         errln("clone() or operator!= failed: two clones compared unequal");
@@ -1372,7 +1400,7 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
 
     do {
         testOffset = testIterator->last();
-        testOffset = testIterator->next(count);
+        testOffset = testIterator->next(count);   // next() with a negative arg is same as previous
         if (offset != testOffset)
             errln(UnicodeString("next(n) and next() not returning consistent results: for step ") + count + ", next(n) returned " + testOffset + " and next() had " + offset);
 

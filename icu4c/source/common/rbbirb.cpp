@@ -27,6 +27,7 @@
 #include "rbbiscan.h"
 #include "rbbisetb.h"
 #include "rbbitblb.h"
+#include "rbbidata.h"
 
 #include <stdio.h>     // TODO - getrid of this.
 #include <stdlib.h>

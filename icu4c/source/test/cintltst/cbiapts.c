@@ -465,7 +465,6 @@ static UBreakIterator * testOpenRules(char *rules) {
 
 }
 
-
 /*
  *  TestBreakIteratorRules - Verify that a break iterator can be created from
  *                           a set of source rules.
@@ -515,10 +514,9 @@ static void TestBreakIteratorRules() {
             pos = ubrk_next(bi);
         }
     }
+
     freeToUCharStrings(&freeHook);
 }
-
-
 
 static void TestBreakIteratorRuleError() {
 /*

@@ -16,6 +16,8 @@
 #include "uvector.h"
 #include "uhash.h"
 
+struct  UNewTrie;
+
 U_NAMESPACE_BEGIN
 
 //
@@ -126,7 +128,7 @@ private:
 
     RangeDescriptor       *fRangeList;      // Head of the linked list of RangeDescriptors
 
-    UNewTrie              *fTrie;           // The mapping TRIE that is the end result of processin
+    UNewTrie              *fTrie;           // The mapping TRIE that is the end result of processing
     uint32_t              fTrieSize;        //  the Unicode Sets.
 
     // Groups correspond to character categories -

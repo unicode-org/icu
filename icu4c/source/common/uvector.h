@@ -149,6 +149,8 @@ public:
 
     void insertElementAt(void* obj, int32_t index, UErrorCode &status);
 
+    void insertElementAt(int32_t elem, int32_t index, UErrorCode &status);
+    
     void* elementAt(int32_t index) const;
 
     int32_t elementAti(int32_t index) const;
