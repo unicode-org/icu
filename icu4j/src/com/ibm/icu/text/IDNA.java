@@ -318,11 +318,10 @@ public final class IDNA {
             char ch=processOut.charAt(j);
             if(ch > 0x7F){
                 srcIsASCII = false;
-            }
-            // here we do not assemble surrogates
-            // since we know that LDH code points
-            // are in the ASCII range only
-            if(isLDHChar(ch)==false){
+            }else if(isLDHChar(ch)==false){
+                // here we do not assemble surrogates
+                // since we know that LDH code points
+                // are in the ASCII range only
                 srcIsLDH = false;
                 failPos = j;
             }
@@ -614,8 +613,7 @@ public final class IDNA {
         while((ch=src.next())!= UCharacterIterator.DONE){
             if(ch>0x7F){
                 srcIsASCII = false;
-            }
-            if((srcIsLDH = isLDHChar(ch))==false){
+            }else if((srcIsLDH = isLDHChar(ch))==false){
                 failPos = src.getIndex();
             }
         }

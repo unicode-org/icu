@@ -31,8 +31,8 @@ public class TestIDNA extends TestFmwk {
             // test StringBuffer toUnicode
             doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.DEFAULT, null);
             doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.ALLOW_UNASSIGNED, null);
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES, null); 
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES|IDNA.ALLOW_UNASSIGNED, null); 
+            doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES, null); 
+            doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES|IDNA.ALLOW_UNASSIGNED, null); 
     
         }
     }
@@ -42,8 +42,8 @@ public class TestIDNA extends TestFmwk {
             // test StringBuffer toUnicode
             doTestToASCII(new String(TestData.unicodeIn[i]),TestData.asciiIn[i],IDNA.DEFAULT, null);
             doTestToASCII(new String(TestData.unicodeIn[i]),TestData.asciiIn[i],IDNA.ALLOW_UNASSIGNED, null);
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES, null); 
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES|IDNA.ALLOW_UNASSIGNED, null); 
+            doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES, null); 
+            doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNA.USE_STD3_RULES|IDNA.ALLOW_UNASSIGNED, null); 
     
         }
     }
