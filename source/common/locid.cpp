@@ -554,7 +554,7 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
     }
 
     length=uloc_getDisplayLanguage(fullName, displayLocale.fullName,
-                                   buffer, ULOC_FULLNAME_CAPACITY,
+                                   buffer, result.getCapacity(),
                                    &errorCode);
     result.releaseBuffer(length);
 
@@ -566,7 +566,7 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
         }
         errorCode=U_ZERO_ERROR;
         length=uloc_getDisplayLanguage(fullName, displayLocale.fullName,
-                                       buffer, length,
+                                       buffer, result.getCapacity(),
                                        &errorCode);
         result.releaseBuffer(length);
     }
@@ -598,7 +598,7 @@ Locale::getDisplayCountry(const Locale &displayLocale,
     }
 
     length=uloc_getDisplayCountry(fullName, displayLocale.fullName,
-                                  buffer, ULOC_FULLNAME_CAPACITY,
+                                  buffer, result.getCapacity(),
                                   &errorCode);
     result.releaseBuffer(length);
 
@@ -610,7 +610,7 @@ Locale::getDisplayCountry(const Locale &displayLocale,
         }
         errorCode=U_ZERO_ERROR;
         length=uloc_getDisplayCountry(fullName, displayLocale.fullName,
-                                      buffer, length,
+                                      buffer, result.getCapacity(),
                                       &errorCode);
         result.releaseBuffer(length);
     }
@@ -642,7 +642,7 @@ Locale::getDisplayVariant(const Locale &displayLocale,
     }
 
     length=uloc_getDisplayVariant(fullName, displayLocale.fullName,
-                                  buffer, ULOC_FULLNAME_CAPACITY,
+                                  buffer, result.getCapacity(),
                                   &errorCode);
     result.releaseBuffer(length);
 
@@ -654,7 +654,7 @@ Locale::getDisplayVariant(const Locale &displayLocale,
         }
         errorCode=U_ZERO_ERROR;
         length=uloc_getDisplayVariant(fullName, displayLocale.fullName,
-                                      buffer, length,
+                                      buffer, result.getCapacity(),
                                       &errorCode);
         result.releaseBuffer(length);
     }
@@ -686,7 +686,7 @@ Locale::getDisplayName(const Locale &displayLocale,
     }
 
     length=uloc_getDisplayName(fullName, displayLocale.fullName,
-                               buffer, ULOC_FULLNAME_CAPACITY,
+                               buffer, result.getCapacity(),
                                &errorCode);
     result.releaseBuffer(length);
 
@@ -698,7 +698,7 @@ Locale::getDisplayName(const Locale &displayLocale,
         }
         errorCode=U_ZERO_ERROR;
         length=uloc_getDisplayName(fullName, displayLocale.fullName,
-                                   buffer, length,
+                                   buffer, result.getCapacity(),
                                    &errorCode);
         result.releaseBuffer(length);
     }
