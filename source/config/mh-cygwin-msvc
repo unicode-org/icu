@@ -2,6 +2,11 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
+# We install sbin tools into the same bin directory because
+# pkgdata needs some of the tools in sbin, and we can't always depend on
+# icu-config working on Windows.
+sbindir := $(bindir)
+
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
 GEN_DEPS.cc=	:
