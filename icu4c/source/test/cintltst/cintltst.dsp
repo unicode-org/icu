@@ -209,6 +209,10 @@ SOURCE=.\ccolltst.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\cctest.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ccurrtst.c
 # End Source File
 # Begin Source File
@@ -282,6 +286,10 @@ SOURCE=.\cjaptst.h
 # Begin Source File
 
 SOURCE=.\cmsccoll.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\colutil.c
 # End Source File
 # Begin Source File
 
@@ -540,6 +548,10 @@ SOURCE=.\cnormtst.h
 # Begin Group "properties & sets"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\cucdapi.c
+# End Source File
 # Begin Source File
 
 SOURCE=.\cucdtst.c
