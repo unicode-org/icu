@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbbi/Attic/RBBIAPITest.java,v $ 
- * $Date: 2001/11/06 11:19:43 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/11/06 11:42:23 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -125,11 +125,11 @@ public class RBBIAPITest extends com.ibm.test.TestFmwk {
         logln("Testing getText setText ");
         String str1 = "first string.";
         String str2 = "Second string.";
-        RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) RuleBasedBreakIterator.getCharacterInstance(Locale.getDefault()); 
+        //RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) RuleBasedBreakIterator.getCharacterInstance(Locale.getDefault()); 
         RuleBasedBreakIterator wordIter1 = (RuleBasedBreakIterator) RuleBasedBreakIterator.getWordInstance(Locale.getDefault()); 
         CharacterIterator text1 = new StringCharacterIterator(str1);
-        CharacterIterator text1Clone = (CharacterIterator) text1.clone();
-        CharacterIterator text2 = new StringCharacterIterator(str2);
+        //CharacterIterator text1Clone = (CharacterIterator) text1.clone();
+        //CharacterIterator text2 = new StringCharacterIterator(str2);
         wordIter1.setText(str1);
         if (!wordIter1.getText().equals(text1))
             errln("ERROR:1 error in setText or getText ");
