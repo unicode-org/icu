@@ -1,3 +1,4 @@
+#
 # Case Folding Properties
 #
 # This file is a supplement to the UnicodeData file.

@@ -1,3 +1,4 @@
+#
 # This file contains aliases for properties used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
 # property tests, and other programmatic textual descriptions of Unicode data.

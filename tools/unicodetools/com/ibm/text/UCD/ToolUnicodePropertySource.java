@@ -264,7 +264,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         		unicodeMap.putAll(lineBreak.getSet("Infix_Numeric")
         				.remove(0x003A), "MidNum");
         		unicodeMap.putAll(lineBreak.getSet("Numeric"), "Numeric");
-        		unicodeMap.putAll(cat.getSet("Connector_Punctuation").remove(0x30FB).remove(0xFF65), "Numeric");
+        		unicodeMap.putAll(cat.getSet("Connector_Punctuation").remove(0x30FB).remove(0xFF65), "ExtendNumLet");
         		unicodeMap.putAll(graphemeExtend, "Other"); // to verify that none of the above touch it.
         		unicodeMap.setMissing("Other");
         	}
@@ -479,9 +479,10 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         public List _getValueAliases(String valueAlias, List result) {
             if (result == null) result = new ArrayList();
             int type = getType() & CORE_MASK;
-            if (type == STRING || type == MISC) return result;
-            else if (type == NUMERIC) return result;
-            else if (type == BINARY) {
+            if (type == STRING || type == MISC || type == NUMERIC) {
+            	UnicodeProperty.addUnique(valueAlias, result);
+            	return result;
+            } else if (type == BINARY) {
                 UnicodeProperty.addUnique(valueAlias, result);
                 return lookup(valueAlias, UCD_Names.YN_TABLE_LONG, UCD_Names.YN_TABLE, null, result);
             } else if (type == ENUMERATED || type == CATALOG) {
