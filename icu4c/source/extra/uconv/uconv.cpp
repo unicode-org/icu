@@ -571,7 +571,7 @@ public:
                       const char *infilestr,
                       FILE * outfile, int verbose);
 private:
-    friend extern int main(int argc, char **argv);
+    friend int main(int argc, char **argv);
 
     char *buf;
     int32_t *fromoffsets;
