@@ -331,8 +331,7 @@ public class Currency extends MeasureUnit implements Serializable {
 
         // Multi-level resource inheritance fallback loop
         while (locale != null) {
-            ICUResourceBundle rb = ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             // We can't cast this to String[][]; the cast has to happen later
             try {
                 ICUResourceBundle currencies = rb.get("Currencies");
