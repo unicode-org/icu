@@ -17,8 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <signal.h>
-#include <string.h>
 
 #include "unicode/scsu.h"
 #include "unicode/ustring.h"
@@ -821,6 +819,8 @@ TestSCSU(void)
     i++;
   }
 }
+
+void addSCSUTest(TestNode** root);
 
 void
 addSCSUTest(TestNode** root)
