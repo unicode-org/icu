@@ -387,6 +387,7 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
         return NULL;
     }
     
+    u_init(&status);
     if (hasService()) {
         return (BreakIterator*)gService->get(loc, kind, status);
     } else {

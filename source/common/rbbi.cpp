@@ -17,6 +17,7 @@
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
 #include "unicode/udata.h"
+#include "unicode/uclean.h"
 #include "rbbidata.h"
 #include "rbbirb.h"
 #include "cmemory.h"
@@ -84,6 +85,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
 {
+    u_init(&status);      // Just in case ICU is not yet initialized
     init();
     if (U_FAILURE(status)) {return;}
     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
