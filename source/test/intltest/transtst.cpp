@@ -134,6 +134,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(52,TestLocaleInstantiation);
         TESTCASE(53,TestTitleAccents);
         TESTCASE(54,TestLocaleResource);
+        TESTCASE(55,TestParseError);
         default: name = ""; break;
     }
 }
@@ -2598,6 +2599,30 @@ void TransliteratorTest::TestLocaleResource() {
                CharsToUnicodeString(DATA[i+2]));
         delete t;
     }
+}
+
+/**
+ * Make sure parse errors reference the right line.
+ */
+void TransliteratorTest::TestParseError() {
+    const char* rule =
+        "a > b;\n"
+        "# more stuff\n"
+        "d << b;";
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+    Transliterator *t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        UnicodeString err(pe.preContext);
+        err.append((UChar)124/*|*/).append(pe.postContext);
+        if (err.indexOf("d << b") >= 0) {
+            logln("Ok: " + err);
+        } else {
+            errln("FAIL: " + err);
+        }
+        return;
+    }
+    errln("FAIL: no syntax error");
 }
 
 //======================================================================
