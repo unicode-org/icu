@@ -178,6 +178,12 @@ SOURCE=.\unicode\ustdio.h
 
 !IF  "$(CFG)" == "ustdio - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\ustdio.h
+
+"..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                   unicode\ustdio.h                   ..\..\..\include\unicode
+
 !ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
 
 # Begin Custom Build
