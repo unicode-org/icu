@@ -13,6 +13,7 @@
 
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
+#include "layout/LayoutEngine.h"
 #include "unicode/ubidi.h"
 #include "unicode/brkiter.h"
 
