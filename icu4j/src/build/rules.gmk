@@ -23,8 +23,8 @@ endif
 
 classes: delete.classlist $(FILES_class) $(FILES_dics)
 	echo Compiling {
-	if exist $(CLASSLIST) cat $(CLASSLIST)
-	if exist $(CLASSLIST) $(JAVAC) @$(CLASSLIST)
+	cat $(CLASSLIST)
+	$(JAVAC) @$(CLASSLIST)
 	rm -f $(CLASSLIST)
 ifdef FILES_dict
 	cp $(SRC_FILES_dict) $(TARGDIR)
