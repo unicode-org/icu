@@ -82,7 +82,8 @@ typedef struct UCollationElements UCollationElements;
 *       CollationElementIterator* c =
 *           rbc->createCollationElementIterator( str );
 *       int32_t order = c->next(success);
-*       int32_t primaryOrder = CollationElementIterator::primaryOrder( order );
+*       c->reset();
+*       order = c->previous(success);
 *       delete c;
 *       delete rbc;
 *   }
@@ -90,12 +91,29 @@ typedef struct UCollationElements UCollationElements;
 * </pre>
 * <p>
 * CollationElementIterator::next returns the collation order of the next
-* character based on the comparison level of the collator. A collation order 
-* consists of primary order, secondary order and tertiary order. The data type 
-* of the collation order is <strong>int32_t</strong>.  The first 16 bits of a 
-* collation order is its primary order; the next 8 bits is the secondary order 
-* and the last 8 bits is the tertiary order.<br>
-* 
+* character based on the comparison level of the collator. 
+* CollationElementIterator::previous returns the collation order of the 
+* previous character based on the comparison level of the collator. 
+* The Collation Element Iterator moves only in one direction between calls to
+* CollationElementIterator::reset. That is, CollationElementIterator::next() 
+* and CollationElementIterator::previous can not be inter-used. Whenever 
+* CollationElementIterator::previous is to be called after 
+* CollationElementIterator::next() or vice versa, 
+* CollationElementIterator::reset has to be called first to reset the status, 
+* shifting pointers to either the end or the start of the string. Hence at the 
+* next call of CollationElementIterator::previous or 
+* CollationElementIterator::next(), the first or last collation order will be 
+* returned. 
+* If a change of direction is done without a CollationElementIterator::reset(), 
+* the result is undefined.
+* The result of a forward iterate (CollationElementIterator::next) and 
+* reversed result of the backward iterate (CollationElementIterator::previous) 
+* on the same string are equivalent, if collation orders with the value 
+* UCOL_IGNORABLE are ignored.
+* Character based on the comparison level of the collator.  A collation order 
+* consists of primary order, secondary order and tertiary order.  The data 
+* type of the collation order is <strong>t_int32</strong>. 
+*
 * Note, CollationElementIterator should not be subclassed.
 * @see     Collator
 * @see     RuleBasedCollator
