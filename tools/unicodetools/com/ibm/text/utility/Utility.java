@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/04/23 20:18:41 $
-* $Revision: 1.32 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -158,6 +158,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 c = '_';
                 haveFirstCased = true;
             }
+            if (c == '=') haveFirstCased = true;
             int cat = Character.getType(c);
             if (lastCat == Character.LOWERCASE_LETTER && cat == Character.UPPERCASE_LETTER) {
                 result.append('_');
