@@ -149,6 +149,10 @@ SOURCE=.\uscanset.c
 
 SOURCE=.\ustdio.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\ustream.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -231,6 +235,10 @@ InputPath=.\unicode\ustdio.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ustream.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
