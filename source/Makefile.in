@@ -103,7 +103,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 
 all-local: $(srcdir)/configure builddata
 
-install-local:
+install-local: $(top_builddir)/config/Makefile.inc
 	@for file in $(EXTRA_DATA); do \
 	  echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 	  $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
@@ -143,6 +143,10 @@ check-local:
 #	cd $(srcdir) && $(AUTOCONF)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
