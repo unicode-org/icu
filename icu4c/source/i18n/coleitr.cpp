@@ -43,7 +43,7 @@ int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
 
 CollationElementIterator::CollationElementIterator(
                                          const CollationElementIterator& other) 
-                                         : isDataOwned_(TRUE)
+                                         : UObject(other), isDataOwned_(TRUE)
 {
   UErrorCode status = U_ZERO_ERROR;
   m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, 

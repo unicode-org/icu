@@ -505,7 +505,7 @@ private:
      * They are provided to make the compiler happy. Do not call.
      */
     BreakIterator& operator=(const BreakIterator&) { return *this; }
-    BreakIterator (const BreakIterator&) {}
+    BreakIterator (const BreakIterator &other) : UObject(other) {}
 };
 
 inline UBool BreakIterator::isBufferClone()

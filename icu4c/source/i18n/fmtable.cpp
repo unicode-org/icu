@@ -28,7 +28,7 @@ const char Formattable::fgClassID=0;
 // Creates a formattable object with a long value 0.
 
 Formattable::Formattable()
-    :   fType(kLong)
+    :   UObject(), fType(kLong)
 {
     fValue.fLong = 0;
 }
@@ -37,7 +37,7 @@ Formattable::Formattable()
 // Creates a formattable object with a Date instance.
 
 Formattable::Formattable(UDate date, ISDATE /*isDate*/)
-    :   fType(kDate)
+    :   UObject(), fType(kDate)
 {
     fValue.fDate = date;
 }
@@ -46,7 +46,7 @@ Formattable::Formattable(UDate date, ISDATE /*isDate*/)
 // Creates a formattable object with a double value.
 
 Formattable::Formattable(double value)
-    :   fType(kDouble)
+    :   UObject(), fType(kDouble)
 {
     fValue.fDouble = value;
 }
@@ -55,7 +55,7 @@ Formattable::Formattable(double value)
 // Creates a formattable object with a long value.
 
 Formattable::Formattable(int32_t value)
-    :   fType(kLong)
+    :   UObject(), fType(kLong)
 {
     fValue.fLong = value;
 }
@@ -64,7 +64,7 @@ Formattable::Formattable(int32_t value)
 // Creates a formattable object with a char* string.
 
 Formattable::Formattable(const char* stringToCopy)
-    :   fType(kString)
+    :   UObject(), fType(kString)
 {
     fValue.fString = new UnicodeString(stringToCopy);
 }
@@ -73,7 +73,7 @@ Formattable::Formattable(const char* stringToCopy)
 // Creates a formattable object with a UnicodeString instance.
 
 Formattable::Formattable(const UnicodeString& stringToCopy)
-    :   fType(kString)
+    :   UObject(), fType(kString)
 {
     fValue.fString = new UnicodeString(stringToCopy);
 }
@@ -83,7 +83,7 @@ Formattable::Formattable(const UnicodeString& stringToCopy)
 // (adopting symantics)
 
 Formattable::Formattable(UnicodeString* stringToAdopt)
-    :   fType(kString)
+    :   UObject(), fType(kString)
 {
     fValue.fString = stringToAdopt;
 }
@@ -91,7 +91,7 @@ Formattable::Formattable(UnicodeString* stringToAdopt)
 // -------------------------------------
 
 Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
-    :   fType(kArray)
+    :   UObject(), fType(kArray)
 {
     fValue.fArrayAndCount.fArray = createArrayCopy(arrayToCopy, count);
     fValue.fArrayAndCount.fCount = count;
@@ -101,7 +101,7 @@ Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
 // copy constructor
 
 Formattable::Formattable(const Formattable &source)
-:   fType(kLong)
+    :   UObject(source), fType(kLong)
 {
     *this = source;
 }

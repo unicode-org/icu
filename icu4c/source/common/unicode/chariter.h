@@ -154,8 +154,8 @@ public:
   virtual UBool        hasNext() = 0;
 
 protected:
-  ForwardCharacterIterator() {}
-  ForwardCharacterIterator(const ForwardCharacterIterator&) {}
+  ForwardCharacterIterator() : UObject() {}
+  ForwardCharacterIterator(const ForwardCharacterIterator &other) : UObject(other) {}
   ForwardCharacterIterator &operator=(const ForwardCharacterIterator&) { return *this; }
 };
 
