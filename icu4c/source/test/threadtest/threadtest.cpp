@@ -1,3 +1,11 @@
+//
+//********************************************************************
+//   Copyright (C) 2002, International Business Machines
+//   Corporation and others.  All Rights Reserved.
+//********************************************************************
+//
+// File threadtest.cpp
+//
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -5,166 +13,17 @@
 
 #include "unicode/utypes.h"
 #include "umutex.h"
-#include "unicode/unistr.h"
+#include "threadtest.h"
+
 
 //------------------------------------------------------------------------------
 //
-//   class AbstractTest    Base class for threading tests.
-//                         Use of this abstract base isolates the part of the
-//                         program that nows how to spin up and control threads
-//                         from the specific stuff being tested, and (hopefully)
-//                         simplifies adding new threading tests for different parts
-//                         of ICU.
-//
-//     Derived classes:    A running test will have exactly one instance of the
-//                         derived class, which will persist for the duration of the
-//                         test and be shared among all of the threads involved in
-//                         the test.
-//
-//                         The constructor will be called in a single-threaded environment,
-//                         and should set up any data that will need to persist for the
-//                         duration.
-//
-//                         runOnce() will be called repeatedly by the working threads of
-//                         the test in the full multi-threaded environment.
-//
-//                         check() will be called periodically in a single threaded
-//                         environment, with the worker threads temporarily suspended between
-//                         between calls to runOnce().  Do consistency checks here.
+//   Factory functions for creating different test types.
 //
 //------------------------------------------------------------------------------
-class AbstractTest {
-public:
-                     AbstractTest() {};
-    virtual         ~AbstractTest() {};
-    virtual void     check()   = 0;
-    virtual void     runOnce() = 0;
-};
+extern  AbstractThreadTest *createStringTest();
+extern  AbstractThreadTest *createConvertTest();
 
-
-
-class StringTest: public AbstractTest {
-public:
-                    StringTest();
-    virtual        ~StringTest();
-    virtual void    check();
-    virtual void    runOnce();
-            void    makeStringCopies(int recursionCount);
-
-private:
-    UnicodeString   *fCleanStrings;
-    UnicodeString   *fSourceStrings;
-};
-
-StringTest::StringTest() {
-    // cleanStrings and sourceStrings are separately initialized to the same values.
-    // cleanStrings are never touched after in any remotely unsafe way.
-    // sourceStrings are copied during the test, which will run their buffer's reference
-    //    counts all over the place.
-    fCleanStrings     = new UnicodeString[5];
-    fSourceStrings    = new UnicodeString[5];
-
-    fCleanStrings[0]  = "When sorrows come, they come not single spies, but in batallions.";
-    fSourceStrings[0] = "When sorrows come, they come not single spies, but in batallions.";
-    fCleanStrings[1]  = "Away, you scullion! You rampallion! You fustilarion! I'll tickle your catastrophe!";
-    fSourceStrings[1] = "Away, you scullion! You rampallion! You fustilarion! I'll tickle your catastrophe!"; 
-    fCleanStrings[2]  = "hot";
-    fSourceStrings[2] = "hot"; 
-    fCleanStrings[3]  = "";
-    fSourceStrings[3] = ""; 
-    fCleanStrings[4]  = "Tomorrow, and tomorrow, and tomorrow,\n"
-                        "Creeps in this petty pace from day to day\n"
-                        "To the last syllable of recorded time;\n"
-                        "And all our yesterdays have lighted fools \n"
-                        "The way to dusty death. Out, out brief candle!\n"
-                        "Life's but a walking shadow, a poor player\n"
-                        "That struts and frets his hour upon the stage\n"
-                        "And then is heard no more. It is a tale\n"
-                        "Told by and idiot, full of sound and fury,\n"
-                        "Signifying nothing.\n";
-    fSourceStrings[4] = "Tomorrow, and tomorrow, and tomorrow,\n"
-                        "Creeps in this petty pace from day to day\n"
-                        "To the last syllable of recorded time;\n"
-                        "And all our yesterdays have lighted fools \n"
-                        "The way to dusty death. Out, out brief candle!\n"
-                        "Life's but a walking shadow, a poor player\n"
-                        "That struts and frets his hour upon the stage\n"
-                        "And then is heard no more. It is a tale\n"
-                        "Told by and idiot, full of sound and fury,\n"
-                        "Signifying nothing.\n";
-};
-
-
-StringTest::~StringTest() {
-    delete [] fCleanStrings;
-    delete [] fSourceStrings;
-}
-
-
-void   StringTest::runOnce() {
-    makeStringCopies(25);
-}
-
-void   StringTest::makeStringCopies(int recursionCount) {
-    UnicodeString firstGeneration[5];
-    UnicodeString secondGeneration[5];
-    UnicodeString thirdGeneration[5];
-    UnicodeString fourthGeneration[5];
-
-    // Make four generations of copies of the source strings, in slightly variant ways.
-    //
-    int i;
-    for (i=0; i<5; i++) {
-         firstGeneration[i]   = fSourceStrings[i];
-         secondGeneration[i]  = firstGeneration[i];
-         thirdGeneration[i]   = UnicodeString(secondGeneration[i]);
- //        fourthGeneration[i]  = UnicodeString("Lay on, MacDuff, And damn'd be him that first cries, \"Hold, enough!\"");
-         fourthGeneration[i]  = UnicodeString();
-         fourthGeneration[i]  = thirdGeneration[i];
-    }
-
-
-    // Recurse to make even more copies of the strings/
-    //
-    if (recursionCount > 0) {
-        makeStringCopies(recursionCount-1);
-    }
-
-
-    // Verify that all four generations are equal.
-    for (i=0; i<5; i++) {
-        if (firstGeneration[i] !=  fSourceStrings[i]   ||
-            firstGeneration[i] !=  secondGeneration[i] ||
-            firstGeneration[i] !=  thirdGeneration[i]  ||
-            firstGeneration[i] !=  fourthGeneration[i])
-        {
-            fprintf(stderr, "Error, strings don't compare equal.\n");
-        }
-    }
-
-};
-  
-
-void   StringTest::check() {
-    //
-    //  Check that the reference counts on the buffers for all of the source strings
-    //     are one.   The ref counts will have run way up while the test threads
-    //     make numerous copies of the strings, but at the top of the loop all
-    //     of the copies should be gone.
-    //
-    int i;
-
-    for (i=0; i<5; i++) {
-        if (fSourceStrings[i].fFlags & UnicodeString::kRefCounted) {
-            const UChar *buf = fSourceStrings[i].getBuffer();
-            uint32_t refCount = fSourceStrings[i].refCount();
-            if (refCount != 1) {
-                fprintf(stderr, "\nFailure.  SourceString Ref Count was %d, should be 1.\n", refCount);
-            }
-        }
-    }
-};
-  
 
 
 //------------------------------------------------------------------------------
@@ -293,14 +152,14 @@ unsigned long ThreadFuncs::getCurrentMillis() {
 const int MAXINFILES = 25;
 struct RunInfo
 {
-    bool           quiet;
-    bool           verbose;
-    int            numThreads;
-    int            totalTime;
-    int            checkTime;
-    AbstractTest   *fTest;
-    volatile bool           stopFlag;
-    int32_t        runningThreads;
+    bool                quiet;
+    bool                verbose;
+    int                 numThreads;
+    int                 totalTime;
+    int                 checkTime;
+    AbstractThreadTest *fTest;
+    bool                stopFlag;
+    int32_t             runningThreads;
 };
 
 
@@ -396,6 +255,14 @@ void parseCommandLine(int argc, char **argv)
                 if (gRunInfo.checkTime < 1)
                     throw 1;
             }
+            else if (strcmp(argv[argnum], "string") == 0)
+            {
+                gRunInfo.fTest = createStringTest();
+            }
+            else if (strcmp(argv[argnum], "convert") == 0)
+            {
+                gRunInfo.fTest = createConvertTest();
+            }
            else  
             {
                 fprintf(stderr, "Unrecognized command line option.  Scanning \"%s\"\n",
@@ -404,16 +271,23 @@ void parseCommandLine(int argc, char **argv)
             }
             argnum++;
         }
+        // We've reached the end of the command line parameters.
+        // Fail if no test name was specified.
+        if (gRunInfo.fTest == NULL) {
+            fprintf(stderr, "No test specified.\n");
+            throw 1;
+        }
 
     }
     catch (int)
     {
-        fprintf(stderr, "usage:  threadtest [-threads nnn] [-time nnn] [-quiet] [-verbose] \n"
+        fprintf(stderr, "usage:  threadtest [-threads nnn] [-time nnn] [-quiet] [-verbose] test-name\n"
             "     -quiet         Suppress periodic status display. \n"
             "     -verbose       Display extra messages. \n"
             "     -threads nnn   Number of threads.  Default is 2. \n"
             "     -time nnn      Total time to run, in seconds.  Default is forever.\n"
             "     -ctime nnn     Time between extra consistency checks, in seconds.  Default 10\n"
+            "     testname       string | convert\n"
             );
         exit(1);
     }
@@ -496,12 +370,11 @@ void threadMain (void *param)
 
 int main (int argc, char **argv)
 {
+    //
+    //  Parse the command line options, and create the specified kind of test.
+    //
     parseCommandLine(argc, argv);
 
-    //
-    // While we are still single threaded, inialize the test.
-    //
-    gRunInfo.fTest = new StringTest;
 
     //
     //  Fire off the requested number of parallel threads
