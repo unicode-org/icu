@@ -43,7 +43,10 @@
 *                          Normalizer::EMode
 * 06/14/99     stephen     Removed kResourceBundleSuffix
 * 06/22/99     stephen     Fixed logic in constructFromFile() since .ctx
-*                           files are no longer used.
+*                          files are no longer used.
+* 11/02/99     helena      Collator performance enhancements.  Special case
+*                          for NO_OP situations. 
+* 11/17/99     srl         More performance enhancements. Inlined some internal functions.
 *******************************************************************************
 */
 
@@ -68,6 +71,8 @@
 #include "compitr.h"
 
 #include <string.h>
+
+#include <ustring.h>
 
 
 class RuleBasedCollatorStreamer
@@ -129,14 +134,124 @@ const int16_t RuleBasedCollator::FILEID = 0x5443;                    // unique f
 const char* RuleBasedCollator::kFilenameSuffix = ".col";             // binary collation file extension
 char  RuleBasedCollator::fgClassID = 0; // Value is irrelevant       // class id
 
+//================ Some inline definitions of implementation functions........ ========
+
+// Get the character order in the mapping table
+inline int32_t
+RuleBasedCollator::getUnicodeOrder(UChar ch) const
+{
+    return ucmp32_get(data->mapping, ch);
+}
+
+inline int32_t
+RuleBasedCollator::strengthOrder(int32_t value) const
+{
+    if (getStrength() == PRIMARY)
+    {
+        return (value & PRIMARYDIFFERENCEONLY);
+    } else if (getStrength() == SECONDARY)
+    {
+        return (value & SECONDARYDIFFERENCEONLY);
+    }
+    return value;
+}
+
+
+inline int32_t
+RuleBasedCollator::getStrengthOrder(NormalizerIterator* cursor, 
+                                    UErrorCode status) const
+{
+    if (U_FAILURE(status))
+    {
+        return CollationElementIterator::NULLORDER;
+    }
+
+    if (cursor->bufferAlias != NULL)
+    {
+        // bufferAlias needs a bit of an explanation.
+        // When we hit an expanding character in the text, we call the order's
+        // getExpandValues method to retrieve an array of the orderings for all
+        // of the characters in the expansion (see the end of this method).
+        // The first ordering is returned, and an alias to the orderings array
+        // is saved so that the remaining orderings can be returned on subsequent
+        // calls to next.  So, if the expanding buffer is not exhausted, 
+        // all we have to do here is return the next ordering in the buffer.  
+        if (cursor->expIndex < cursor->bufferAlias->size())
+        {
+	  //_L((stderr, "next from [%08X] from bufferAlias\n", this));
+            return strengthOrder(cursor->bufferAlias->at(cursor->expIndex++));
+        }
+        else
+        {
+            cursor->bufferAlias = NULL;
+            cursor->expIndex = 0;
+        }
+    }
+    else if (cursor->swapOrder != 0)
+    {
+        // If we find a character with no order, we return the marking
+        // flag, UNMAPPEDCHARVALUE, 0x7fff0000, and then the character 
+        // itself shifted left 16 bits as orders.  At this point, the
+        // UNMAPPEDCHARVALUE flag has already been returned by the code
+        // below, so just return the shifted character here.
+        int32_t order = cursor->swapOrder << 16;
+
+	  //_L((stderr, "next from [%08X] swaporder..\n", this));
+        cursor->swapOrder = 0;
+
+        return order;
+    }
+
+    UChar ch = cursor->current();
+    cursor->next();
+
+    //_L((stderr, "Next from [%08X] = [%04X], [%c]\n", cursor, (int)ch & 0xFFFF, (char)(ch & 0xFF)));
+    
+    if (ch == Normalizer::DONE) {
+        return CollationElementIterator::NULLORDER;
+    }
+    // Ask the collator for this character's ordering.
+    int32_t value = getUnicodeOrder(ch);
+
+    if (value == UNMAPPED)
+    {
+        // Returned an "unmapped" flag and save the character so it can be 
+        // returned next time this method is called.
+        if (ch == 0x0000) return ch;
+        cursor->swapOrder = ch;  // \u0000 is not valid in C++'s UnicodeString
+        return CollationElementIterator::UNMAPPEDCHARVALUE;
+    }
+    
+    if (value >= CONTRACTCHARINDEX)
+    {
+        value = nextContractChar(cursor, ch, status);
+    }
+
+    if (value >= EXPANDCHARINDEX)
+    {
+        cursor->bufferAlias = getExpandValueList(value);
+        cursor->expIndex = 0;
+        value = cursor->bufferAlias->at(cursor->expIndex++);
+    }
+
+    int32_t str = strengthOrder(value);   
+    
+    return strengthOrder(value);
+}
+
+// ==================== End inlines ============================================
+
+
 //===============================================================================
 
 RuleBasedCollator::RuleBasedCollator()
     : Collator(),
       isOverIgnore(FALSE),
       mPattern(0),
-      sourceCursor(0),
-      targetCursor(0),
+      //      sourceCursor(0),
+      //targetCursor(0),
+      cursor1(0),
+      cursor2(0),
       data(0),
       dataIsOwned(FALSE)
 {
@@ -146,8 +261,10 @@ RuleBasedCollator::RuleBasedCollator(const  RuleBasedCollator&  that)
     : Collator(that),
       isOverIgnore(that.isOverIgnore),
       mPattern(0),
-      sourceCursor(0),
-      targetCursor(0),
+      //      sourceCursor(0),
+      //targetCursor(0),
+      cursor1(0),
+      cursor2(0),
       dataIsOwned(FALSE),
       data(that.data) // Alias the data pointer
 {
@@ -214,8 +331,10 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     : Collator(),
       isOverIgnore(FALSE),
       mPattern(0),
-      sourceCursor(0),
-      targetCursor(0),
+      //      sourceCursor(0),
+      ///      targetCursor(0),
+      cursor1(0),
+      cursor2(0),
       data(0),
       dataIsOwned(FALSE)
 {
@@ -233,8 +352,10 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
   : Collator(collationStrength, Normalizer::NO_OP),
     isOverIgnore(FALSE),
     mPattern(0),
-    sourceCursor(0),
-    targetCursor(0),
+    //    sourceCursor(0),
+    //    targetCursor(0),
+      cursor1(0),
+      cursor2(0),
     data(0),
     dataIsOwned(FALSE)
 {
@@ -242,7 +363,6 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     {
         return;
     }
-
     constructFromRules(rules, status);
 }
 
@@ -252,8 +372,10 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
   : Collator(TERTIARY, decompositionMode),
     isOverIgnore(FALSE),
     mPattern(0),
-    sourceCursor(0),
-    targetCursor(0),
+    //    sourceCursor(0),
+    //    targetCursor(0),
+      cursor1(0),
+      cursor2(0),
     data(0),
     dataIsOwned(FALSE)
 {
@@ -272,8 +394,10 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
   : Collator(collationStrength, decompositionMode),
       isOverIgnore(FALSE),
       mPattern(0),
-      sourceCursor(0),
-      targetCursor(0),
+    //      sourceCursor(0),
+    //targetCursor(0),
+      cursor1(0),
+      cursor2(0),
       data(0),
       dataIsOwned(FALSE)
 {
@@ -392,10 +516,14 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
       isOverIgnore(FALSE),
       dataIsOwned(FALSE),
       data(0),
-      sourceCursor(0),
-      targetCursor(0),
+      //      sourceCursor(0),
+      //targetCursor(0),
+      cursor1(0),
+      cursor2(0),
       mPattern(0)
 {
+
+
   if (U_FAILURE(status))
     {
       return;
@@ -446,6 +574,18 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
         {
           return;
         }
+
+	  // srl write out default.col
+	  {
+	    UnicodeString defLocaleName = ResourceBundle::kDefaultFilename; 
+	    char *binaryFilePath = createPathName(Locale::getDataDirectory(), 
+						  defLocaleName, kFilenameSuffix);
+	    bool_t ok = writeToFile(binaryFilePath);
+	    delete [] binaryFilePath;
+#ifdef COLLDEBUG
+	    cerr << defLocaleName << " [default] binary write " << (ok? "OK" : "Failed") << endl;
+#endif
+	  }
 
           data->desiredLocale = desiredLocale;
           desiredLocale.getName(localeName);
@@ -567,7 +707,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     // Try to load up the collation from a binary file first
     constructFromFile(binaryFilePath, status);
 #ifdef COLLDEBUG
-    cerr << localeFileName << " binary load " << errorName(status) << endl;
+    cerr << localeFileName  << kFilenameSuffix << " binary load " << errorName(status) << endl;
 #endif
     if(U_SUCCESS(status) || status == U_MEMORY_ALLOCATION_ERROR) 
       return;
@@ -629,7 +769,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   } 
   
 #ifdef COLLDEBUG
-  cerr << localeFileName << " ascii load " << (U_SUCCESS(status) ? "OK" : "Failed") << endl;
+  cerr << localeFileName << " ascii load " << (U_SUCCESS(status) ? "OK" : "Failed") << " - try= " << (tryBinaryFile?"true":"false") << endl;
 #endif
   
   if(U_SUCCESS(status) && tryBinaryFile) {
@@ -655,11 +795,20 @@ RuleBasedCollator::~RuleBasedCollator()
 
     data = 0;
 
-    delete sourceCursor;
-    sourceCursor = 0;
+    //    delete sourceCursor;
+    //    sourceCursor = 0;
 
-    delete targetCursor;
-    targetCursor = 0;
+    //    delete targetCursor;
+    //    targetCursor = 0;
+
+    if (cursor1 != NULL) {
+        delete cursor1;
+        cursor1 = 0;
+    }
+    if (cursor2 != NULL) {
+        delete cursor2;
+        cursor2 = 0;
+    }
 
     delete mPattern;
     mPattern = 0;
@@ -742,13 +891,13 @@ RuleBasedCollator::getRules() const
             data->isRuleTableLoaded = TRUE;
 #ifdef _DEBUG
             // the following is useful for specific debugging purposes
-            // UnicodeString name;
-            // cerr << "Table collation rules loaded dynamically for "
-            //     << data->desiredLocale.getName(name)
-            //     << " at "
-            //     << data->realLocaleName
-            //     << ", " << dec << data->ruleTable.size() << " characters"
-            //     << endl;
+             UnicodeString name;
+             cerr << "Table collation rules loaded dynamically for "
+                 << data->desiredLocale.getName(name)
+                 << " at "
+                 << data->realLocaleName
+                 << ", " << dec << data->ruleTable.size() << " characters"
+                 << endl;
 #endif
         }
         else
@@ -762,6 +911,16 @@ RuleBasedCollator::getRules() const
                 << endl;
             cerr << "Status " << errorName(status) << ", mPattern " << temp.mPattern << endl;
 #endif
+	    /* SRL have to add this because we now have the situation where
+	       DEFAULT is loaded from a binary file w/ no rules. */
+	    UErrorCode intStatus = U_ZERO_ERROR;
+	    temp.constructFromRules(RuleBasedCollator::DEFAULTRULES, intStatus);
+	    
+	    if(U_SUCCESS(intStatus) && (temp.mPattern != 0))
+	      {
+		data->ruleTable = temp.getRules();
+		data->isRuleTableLoaded = TRUE;
+	      }
         }
     }
 
@@ -783,14 +942,15 @@ RuleBasedCollator::compare( const UnicodeString& source,
     return (RuleBasedCollator::compare(source_togo, target_togo));
 }
 
-
-// Compare two strings using this collator
-Collator::EComparisonResult
-RuleBasedCollator::compare(const UnicodeString& source,
-                        const UnicodeString& target) const
+Collator::EComparisonResult   
+RuleBasedCollator::compare(const   UChar* source, 
+                      int32_t sourceLength,
+                      const   UChar*  target,
+                      int32_t targetLength) const
 {
     // check if source and target are valid strings
-    if (source.isBogus() || target.isBogus())
+    if (((source == 0) && (target == 0)) ||
+        ((sourceLength == 0) && (targetLength == 0)))
     {
         return Collator::EQUAL;
     }
@@ -798,55 +958,36 @@ RuleBasedCollator::compare(const UnicodeString& source,
     Collator::EComparisonResult result = Collator::EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
-    // The basic algorithm here is that we use CollationElementIterators
-    // to step through both the source and target strings.  We compare each
-    // collation element in the source string against the corresponding one
-    // in the target, checking for differences.
-    //
-    // If a difference is found, we set <result> to LESS or GREATER to
-    // indicate whether the source string is less or greater than the target.
-    //
-    // However, it's not that simple.  If we find a tertiary difference
-    // (e.g. 'A' vs. 'a') near the beginning of a string, it can be
-    // overridden by a primary difference (e.g. "A" vs. "B") later in 
-    // the string.  For example, "AA" < "aB", even though 'A' > 'a'.
-    //
-    // To keep track of this, we use checkSecTer and checkTertiary to keep
-    // track of the strength of the most significant difference that has been
-    // found so far.  When we find a difference whose strength is greater than
-    // the previous ones, it overrides the last difference (if any) that
-    // was found.
-    //
-
-    if (sourceCursor == NULL)
+    if (cursor1 == NULL)
     {
-        ((RuleBasedCollator *)this)->sourceCursor = createCollationElementIterator(source);
+        ((RuleBasedCollator *)this)->cursor1 = new NormalizerIterator(source, sourceLength, getDecomposition());
     }
     else
     {
-        sourceCursor->setText(source, status);
+        cursor1->setModeAndText(getDecomposition(), source, sourceLength, status);
     }
 
-    if (sourceCursor == NULL || U_FAILURE(status))
+    if ( /*cursor1->cursor == NULL ||*/ U_FAILURE(status))
     {
         return Collator::EQUAL;
     }
 
-    if (targetCursor == NULL)
+    if (cursor2 == NULL)
     {
-        ((RuleBasedCollator *)this)->targetCursor = createCollationElementIterator(target);
+        ((RuleBasedCollator *)this)->cursor2 = new NormalizerIterator(target, targetLength, getDecomposition());
     }
     else
     {
-        targetCursor->setText(target, status);
+        cursor2->setModeAndText(getDecomposition(), target, targetLength, status);
     }
 
-    if (targetCursor == NULL || U_FAILURE(status))
+    if (/*cursor2 == NULL ||*/ U_FAILURE(status))
     {
         return Collator::EQUAL;
     }
 
     int32_t sOrder, tOrder;
+    //    int32_t sOrder = CollationElementIterator::NULLORDER, tOrder = CollationElementIterator::NULLORDER;
     bool_t gets = TRUE, gett = TRUE;
     bool_t initialCheckSecTer = getStrength() >= Collator::SECONDARY;
     bool_t checkSecTer = initialCheckSecTer;
@@ -860,7 +1001,7 @@ RuleBasedCollator::compare(const UnicodeString& source,
         // we've been requested to skip it.
         if (gets)
         {
-            sOrder = sourceCursor->next(status);
+            sOrder = getStrengthOrder((NormalizerIterator*)cursor1, status);
 
             if (U_FAILURE(status))
             {
@@ -872,7 +1013,7 @@ RuleBasedCollator::compare(const UnicodeString& source,
 
         if (gett)
         {
-            tOrder = targetCursor->next(status);
+            tOrder = getStrengthOrder((NormalizerIterator*)cursor2, status);
 
             if (U_FAILURE(status))
             {
@@ -1036,7 +1177,7 @@ RuleBasedCollator::compare(const UnicodeString& source,
                 }
             } 
         }
-        while ((sOrder = sourceCursor->next(status)) != CollationElementIterator::NULLORDER);
+        while ((sOrder = getStrengthOrder(cursor1, status)) != CollationElementIterator::NULLORDER);
     }
     else if (tOrder != CollationElementIterator::NULLORDER)
     {
@@ -1060,7 +1201,7 @@ RuleBasedCollator::compare(const UnicodeString& source,
                 }
             } 
         }
-        while ((tOrder = targetCursor->next(status)) != CollationElementIterator::NULLORDER);
+        while ((tOrder = getStrengthOrder(cursor2, status)) != CollationElementIterator::NULLORDER);
     }
 
 
@@ -1070,15 +1211,46 @@ RuleBasedCollator::compare(const UnicodeString& source,
     // puts the result of the string comparison directly into result
     if (result == Collator::EQUAL && getStrength() == IDENTICAL)
     {
-        UnicodeString sourceDecomp, targetDecomp;
+#if 0
+      // ******** for the  UChar normalization interface.
+      // It doesn't work much faster, and the code was broken
+      // so it's commented out. --srl
+//          UChar sourceDecomp[1024], targetDecomp[1024];
+//  	int32_t sourceDecompLength = 1024;
+//  	int32_t targetDecompLength = 1024;
+	
+//          int8_t comparison;
+//  	Normalizer::EMode decompMode = getDecomposition();
+        
+//  	if (decompMode != Normalizer::NO_OP)
+//  	  {
+//  	    Normalizer::normalize(source, sourceLength, decompMode,
+//  				  0, sourceDecomp, sourceDecompLength, status);
+	    
+//  	    Normalizer::normalize(target, targetLength, decompMode,
+//  				  0, targetDecomp, targetDecompLength, status);
+	    
+//  	    comparison = u_strcmp(sourceDecomp,targetDecomp);
+//  	  }
+//  	else
+//  	  {
+//  	    comparison = u_strcmp(source, target); /* ! */
+//  	  }
+
+#else
+
+	UnicodeString sourceDecomp, targetDecomp;
+
         int8_t comparison;
         
         Normalizer::normalize(source, getDecomposition(), 
-                      0, sourceDecomp, status);
+                      0, sourceDecomp,  status);
+
         Normalizer::normalize(target, getDecomposition(), 
-                      0, targetDecomp, status);
+                      0, targetDecomp,  status);
         
         comparison = sourceDecomp.compare(targetDecomp);
+#endif
 
         if (comparison < 0)
         {
@@ -1095,6 +1267,49 @@ RuleBasedCollator::compare(const UnicodeString& source,
     }
 
     return result;
+}
+
+
+int32_t
+RuleBasedCollator::nextContractChar(NormalizerIterator *cursor, 
+                                    UChar ch,
+                                    UErrorCode& status) const
+{
+    // First get the ordering of this single character
+    VectorOfPToContractElement *list = getContractValues(ch);
+    EntryPair *pair = (EntryPair *)list->at(0);
+    int32_t order = pair->value;
+
+    // Now iterate through the chars following it and
+    // look for the longest match
+    ((UnicodeString&)key).remove();
+    ((UnicodeString&)key) += ch;
+
+    while ((ch = cursor->current()) != Normalizer::DONE)
+    {
+        ((UnicodeString&)key) += ch;
+
+        int32_t n = getEntry(list, key, TRUE);
+
+        if (n == UNMAPPED)
+        {
+            break;
+        }
+        cursor->next();
+
+        pair = (EntryPair *)list->at(n);
+        order = pair->value;
+    }
+
+    return order;
+}
+
+// Compare two strings using this collator
+Collator::EComparisonResult
+RuleBasedCollator::compare(const UnicodeString& source,
+                        const UnicodeString& target) const
+{
+    return compare(source.getUChars(), source.length(), target.getUChars(), target.length());
 }
 
 // Retrieve a collation key for the specified string
@@ -1135,33 +1350,36 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
                                     CollationKey&   sortkey,
                                     UErrorCode&      status) const
 {
+    return RuleBasedCollator::getCollationKey(source.getUChars(), source.size(), sortkey, status);
+}
+
+CollationKey&
+RuleBasedCollator::getCollationKey( const   UChar*  source,
+                                    int32_t sourceLen,
+                                    CollationKey&   sortkey,
+                                    UErrorCode&      status) const
+{
     if (U_FAILURE(status))
     {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return sortkey.setToBogus();
     }
     
-    if (source.isBogus())
-    {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return sortkey.setToBogus();
-    }
-
-    if (source.size() == 0)
+    if ((!source) || (sourceLen == 0))
     {
         return sortkey.reset();
     }
 
-    if (sourceCursor == NULL)
+    if (cursor1 == NULL)
     {
-        ((RuleBasedCollator *)this)->sourceCursor = createCollationElementIterator(source);
+      ((RuleBasedCollator *)this)->cursor1 = new NormalizerIterator(source, sourceLen, getDecomposition());
     }
     else
     {
-        sourceCursor->setText(source, status);
+      cursor1->setModeAndText(getDecomposition(), source,sourceLen, status);
     }
 
-    if (sourceCursor == NULL || U_FAILURE(status))
+    if (U_FAILURE(status))
     {
         return sortkey.setToBogus();
     }
@@ -1177,7 +1395,8 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
     UnicodeString decomp;
 
     // iterate over the source, counting primary, secondary, and tertiary entries
-    while((order = sourceCursor->next(status)) != CollationElementIterator::NULLORDER)
+    while((order = getStrengthOrder((NormalizerIterator*)cursor1, status)) !=
+	                                      CollationElementIterator::NULLORDER)
     {
         int32_t secOrder = CollationElementIterator::secondaryOrder(order);
         int32_t terOrder = CollationElementIterator::tertiaryOrder(order);
@@ -1230,7 +1449,7 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
 
     if (compareIdent)
     {
-      Normalizer::normalize(source, getDecomposition(),
+      Normalizer::normalize(source, getDecomposition(), // SRL: ??
                 0, decomp, status);
 
         if (U_SUCCESS(status))
@@ -1259,10 +1478,10 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
     int32_t identCursor      = terCursor + (2 * totalTer);
 
     // reset source to the beginning
-    sourceCursor->reset();
+    cursor1->reset();
 
     // now iterate over the source computing the actual entries
-    while((order = sourceCursor->next(status)) != CollationElementIterator::NULLORDER)
+    while((order = getStrengthOrder((NormalizerIterator*)cursor1, status)) != CollationElementIterator::NULLORDER)
     {
         if (U_FAILURE(status))
         {
@@ -1335,6 +1554,14 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
     {
         sortkey.storeUnicodeString(identCursor, decomp);
     }
+
+    //    Debugging - print out the sortkey [--srl]
+//      {
+//        const uint8_t *bytes;
+//        int32_t xcount;
+//        bytes = sortkey.getByteArray(xcount);
+//        //      fprintf(stderr, "\n\n-  [%02X] [%02X]\n\n", (int)(bytes[0]&0xFF), (int)(bytes[1]&0xFF) );
+//      }
 
     return sortkey;
 }
@@ -1615,6 +1842,8 @@ RuleBasedCollator::increment(Collator::ECollationStrength aStrength, int32_t las
             data->maxTerOrder += 1;
         }
         break;
+
+  // case IDENTICAL?  
     }
 
     return lastValue;
@@ -2017,12 +2246,6 @@ VectorOfInt *RuleBasedCollator::getExpandValueList(int32_t order) const
     return data->expandTable->at(order - EXPANDCHARINDEX);
 }
 
-// Get the character order in the mapping table
-int32_t
-RuleBasedCollator::getUnicodeOrder(UChar ch) const
-{
-    return ucmp32_get(data->mapping, ch);
-}
 
 
 void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, FileStream* is)
@@ -2117,7 +2340,7 @@ bool_t RuleBasedCollator::writeToFile(const char* fileName) const
 
 #ifdef COLLDEBUG
     fprintf(stderr, "binary write %s size %d %s\n", fileName, T_FileStream_size(ofs),
-        (!T_FileStream_error(ofs) ? ", OK" : ", FAIL");
+        (!T_FileStream_error(ofs) ? ", OK" : ", FAIL"));
 #endif
 
     bool_t err = T_FileStream_error(ofs) == 0;
