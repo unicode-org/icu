@@ -697,7 +697,7 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
   UBool seenFallback = FALSE;
-  uint16_t i = 0;
+  uint32_t i = 0;
   CompactShortArray *myFromUnicode = NULL, *myFromUnicodeFallback = NULL;
   CompactShortArray *myToUnicode = NULL, *myToUnicodeFallback = NULL;
 
@@ -826,7 +826,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   int32_t mbcsCodepageValue = '\0';
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
-  uint8_t i = 0;
+  uint32_t i = 0;
   UBool seenFallback = FALSE;
   CompactShortArray* myFromUnicode = NULL;
   CompactShortArray* myToUnicode = NULL;
@@ -939,7 +939,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   int32_t dbcsCodepageValue = '\0';
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
-  uint8_t i = 0;
+  uint32_t i = 0;
   UBool seenFallback = FALSE;
   CompactShortArray* myFromUnicode = NULL;
   CompactShortArray* myToUnicode = NULL;
