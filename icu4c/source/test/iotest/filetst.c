@@ -42,7 +42,7 @@ static void TestFileFromICU(UFILE *myFile) {
     memset(testBuf, 0x2a, sizeof(testBuf)/sizeof(*testBuf));
 
     if (myFile == NULL) {
-        log_err("Can't write test file.");
+        log_err("Can't write test file.\n");
         return;
     }
 
@@ -317,6 +317,10 @@ static void TestFile(void) {
 
 static void TestCodepageAndLocale(void) {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    if (myFile == NULL) {
+        log_err("Can't write test file.\n");
+        return;
+    }
     if (u_fgetcodepage(myFile) == NULL
         || strcmp(u_fgetcodepage(myFile), ucnv_getDefaultName()) != 0)
     {
@@ -386,6 +390,11 @@ static void TestfgetsBuffers(void) {
     int32_t expectedSize = strlen(testStr);
     int32_t readSize;
     int32_t repetitions;
+
+    if (myFile == NULL) {
+        log_err("Can't write test file.\n");
+        return;
+    }
 
     u_fputc(0x3BC, myFile);
     u_fputc(0xFF41, myFile);
@@ -515,6 +524,10 @@ static void TestfgetsLineCount(void) {
     int32_t repetitions;
     int32_t nlRepetitions;
 
+    if (myFile == NULL) {
+        log_err("Can't write test file.\n");
+        return;
+    }
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
 
     for (repetitions = 0; repetitions < 16; repetitions++) {
@@ -598,6 +611,10 @@ static void TestfgetsNewLineHandling(void) {
     int32_t lineIdx;
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
+    if (myFile == NULL) {
+        log_err("Can't write test file.\n");
+        return;
+    }
     for (lineIdx = 0; lineIdx < (int32_t)(sizeof(testUStr)/sizeof(testUStr[0])); lineIdx++) {
         u_file_write(testUStr[lineIdx], u_strlen(testUStr[lineIdx]), myFile);
     }
@@ -649,6 +666,10 @@ static void TestCodepage(void) {
     }
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "ISO-8859-1");
+    if (myFile == NULL) {
+        log_err("Can't write test file for iso-8859-1.\n");
+        return;
+    }
     if (strcmp("ISO-8859-1", u_fgetcodepage(myFile)) != 0) {
         log_err("Couldn't get ISO-8859-1 back as opened codepage\n");
     }
@@ -722,7 +743,7 @@ static void TestFilePrintCompatibility(void) {
     char testBuf[512] = "";
 
     if (myFile == NULL) {
-        log_err("Can't read test file.");
+        log_err("Can't write test file.\n");
         return;
     }
 
@@ -847,6 +868,10 @@ static void TestFilePrintCompatibility(void) {
 
 #define TestFPrintFormat(uFormat, uValue, cFormat, cValue) \
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);\
+    if (myFile == NULL) {\
+        log_err("Can't write test file for %s.\n", uFormat);\
+        return;\
+    }\
     /* Reinitialize the buffer to verify null termination works. */\
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
@@ -1018,6 +1043,10 @@ static void TestFScanSetFormat(const char *format, const UChar *uValue, const ch
     int32_t cNumScanned;
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    if (myFile == NULL) {
+        log_err("Can't write test file for %s.\n", format);
+        return;
+    }
     /* Reinitialize the buffer to verify null termination works. */
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
     uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
@@ -1095,6 +1124,10 @@ static void TestBadFScanfFormat(const char *format, const UChar *uValue, const c
     int32_t uNumScanned;
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    if (myFile == NULL) {
+        log_err("Can't write test file for %s.\n", format);
+        return;
+    }
     /* Reinitialize the buffer to verify null termination works. */
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
     uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
@@ -1191,7 +1224,7 @@ static void TestTranslitOps(void)
     f = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);
     if(f == NULL)
     {
-        log_err("Couldn't open test file for writing");
+        log_err("Couldn't open test file for writing\n");
         return;
     }
 
@@ -1291,7 +1324,7 @@ static void TestTranslitOut(void)
     f = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", "utf-16");
     if(f == NULL)
     {
-        log_err("Couldn't open test file for writing");
+        log_err("Couldn't open test file for writing\n");
         return;
     }
 
