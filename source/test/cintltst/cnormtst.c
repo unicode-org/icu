@@ -91,7 +91,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestCompatDecomp, "tscoll/cnormtst/TestCompatDecomp");
     addTest(root, &TestCanonDecompCompose, "tscoll/cnormtst/TestCanonDecompCompose");
     addTest(root, &TestCompatDecompCompose, "tscoll/cnormtst/CompatDecompCompose");
-
+    addTest(root, &TestNull, "tscoll/cnormtst/TestNull");
 }
 
 void TestDecomp() 
@@ -228,3 +228,84 @@ void assertEqual(const UChar* result, const UChar* expected, int32_t index)
             austrdup(result) );
     }
 }
+
+void TestNull_check(UChar *src, int32_t srcLen, 
+                    UChar *exp, int32_t expLen,
+                    UNormalizationMode mode,
+                    const char *name)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t len, i;
+
+    UChar   result[50];
+
+
+    status = U_ZERO_ERROR;
+
+    for(i=0;i<50;i++)
+      {
+        result[i] = 0xFFFD;
+      }
+
+    len = u_normalize(src, srcLen, mode, 0, result, 50, &status); 
+
+    if(U_FAILURE(status)) {
+      log_err("u_normalize(%s) with 0x0000 failed: %s\n", name, u_errorName(status));
+    } else if (len != expLen) {
+      log_err("u_normalize(%s) with 0x0000 failed: Expected len %d, got %d\n", name, expLen, len);
+    } 
+
+    {
+      for(i=0;i<len;i++){
+        if(exp[i] != result[i]) {
+          log_err("u_normalize(%s): @%d, expected \\u%04X got \\u%04X\n",
+                  name,
+                  i,
+                  exp[i],
+                  result[i]);
+          return;
+        }
+        log_verbose("     %d: \\u%04X\n", i, result[i]);
+      }
+    }
+    
+    log_verbose("u_normalize(%s) with 0x0000: OK\n", name);
+}
+
+void TestNull() 
+{
+
+    UChar   source_comp[] = { 0x0061, 0x0000, 0x0044, 0x0307 };
+    int32_t source_comp_len = 4;
+    UChar   expect_comp[] = { 0x0061, 0x0000, 0x1e0a };
+    int32_t expect_comp_len = 3;
+
+    UChar   source_dcmp[] = { 0x1e0A, 0x0000, 0x0929 };
+    int32_t source_dcmp_len = 3;
+    UChar   expect_dcmp[] = { 0x0044, 0x0307, 0x0000, 0x0928, 0x093C };
+    int32_t expect_dcmp_len = 5;
+    
+    TestNull_check(source_comp,
+                   source_comp_len,
+                   expect_comp,
+                   expect_comp_len,
+                   UCOL_DECOMP_CAN_COMP_COMPAT,
+                   "UCOL_DECOMP_CAN_COMP_COMPAT");
+
+    TestNull_check(source_dcmp,
+                   source_dcmp_len,
+                   expect_dcmp,
+                   expect_dcmp_len,
+                   UCOL_DECOMP_CAN,
+                   "UCOL_DECOMP_CAN");
+
+    TestNull_check(source_comp,
+                   source_comp_len,
+                   expect_comp,
+                   expect_comp_len,
+                   UCOL_DECOMP_COMPAT_COMP_CAN,
+                   "UCOL_DECOMP_COMPAT_COMP_CAN");
+
+
+}
+
