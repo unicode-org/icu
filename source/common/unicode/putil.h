@@ -313,18 +313,24 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  */
 #ifdef XP_MAC
 #   define U_FILE_SEP_CHAR ':'
+#   define U_FILE_ALT_SEP_CHAR ':'
 #   define U_PATH_SEP_CHAR ';'
 #   define U_FILE_SEP_STRING ":"
+#   define U_FILE_ALT_SEP_STRING ":"
 #   define U_PATH_SEP_STRING ";"
 #elif defined(WIN32) || defined(OS2)
 #   define U_FILE_SEP_CHAR '\\'
+#   define U_FILE_ALT_SEP_CHAR '/'
 #   define U_PATH_SEP_CHAR ';'
 #   define U_FILE_SEP_STRING "\\"
+#   define U_FILE_ALT_SEP_STRING "/"
 #   define U_PATH_SEP_STRING ";"
 #else
 #   define U_FILE_SEP_CHAR '/'
+#   define U_FILE_ALT_SEP_CHAR '/'
 #   define U_PATH_SEP_CHAR ':'
 #   define U_FILE_SEP_STRING "/"
+#   define U_FILE_ALT_SEP_STRING "/"
 #   define U_PATH_SEP_STRING ":"
 #endif
 
