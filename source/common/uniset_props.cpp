@@ -31,6 +31,8 @@
 #include "uvector.h"
 #include "uprops.h"
 #include "propname.h"
+#include "unormimp.h"
+#include "ucase.h"
 #include "charstr.h"
 #include "ustrfmt.h"
 #include "mutex.h"
@@ -149,7 +151,7 @@ static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
 U_NAMESPACE_BEGIN
 
-static UnicodeSet* INCLUSIONS = NULL; // cached uprv_getInclusions()
+static UnicodeSet *INCLUSIONS[UPROPS_SRC_COUNT] = { NULL }; // cached getInclusions()
 
 static Hashtable* CASE_EQUIV_HASH = NULL; // for closeOver(USET_CASE)
 
@@ -1016,6 +1018,7 @@ static UBool intPropertyFilter(UChar32 ch, void* context) {
  */
 void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
                              void* context,
+                             int32_t src,
                              UErrorCode &status) {
     // Walk through all Unicode characters, noting the start
     // and end of each range for which filter.contain(c) is
@@ -1031,7 +1034,7 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
     // those properties.  Scanning code points is slow.
     if (U_FAILURE(status)) return;
 
-    const UnicodeSet* inclusions = getInclusions(status);
+    const UnicodeSet* inclusions = getInclusions(src, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -1101,38 +1104,10 @@ UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec)
     if (U_FAILURE(ec)) return *this;
 
     if (prop == UCHAR_GENERAL_CATEGORY_MASK) {
-        applyFilter(generalCategoryMaskFilter, &value, ec);
-#if UCONFIG_NO_NORMALIZATION
-    } else if(prop == UCHAR_HANGUL_SYLLABLE_TYPE) {
-        /*
-         * Special code for when normalization is off.
-         * HST is still available because it is hardcoded in uprops.c, but
-         * the inclusions set does not have the necessary code points
-         * for normalization properties.
-         * I am hardcoding HST in this case because it is the only property
-         * that prevents genbrk from compiling char.txt when normalization is off.
-         * This saves me from turning off break iteration or making more
-         * complicated changes in genbrk.
-         *
-         * This code is not efficient. For efficiency turn on normalization.
-         *
-         * markus 20030505
-         */
-        UChar32 c;
-
-        clear();
-        for(c=0x1100; c<=0xd7a3; ++c) {
-            if(c==0x1200) {
-                c=0xac00;
-            }
-            if(value == u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE)) {
-                add(c);
-            }
-        }
-#endif
+        applyFilter(generalCategoryMaskFilter, &value, UPROPS_SRC_CHAR, ec);
     } else {
         IntPropertyContext c = {prop, value};
-        applyFilter(intPropertyFilter, &c, ec);
+        applyFilter(intPropertyFilter, &c, uprops_getSource(prop), ec);
     }
     return *this;
 }
@@ -1205,7 +1180,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     if (*end != 0) {
                         FAIL(ec);
                     }
-                    applyFilter(numericValueFilter, &value, ec);
+                    applyFilter(numericValueFilter, &value, UPROPS_SRC_CHAR, ec);
                     return *this;
                 }
                 break;
@@ -1236,7 +1211,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     if (!mungeCharName(buf, vname, sizeof(buf))) FAIL(ec);
                     UVersionInfo version;
                     u_versionFromString(version, buf);
-                    applyFilter(versionFilter, &version, ec);
+                    applyFilter(versionFilter, &version, UPROPS_SRC_CHAR, ec);
                     return *this;
                 }
                 break;
@@ -1274,7 +1249,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     for (int32_t i=0; i<C99_COUNT; ++i) {
                         int32_t c = uprv_comparePropertyNames(pname, C99_DISPATCH[i].name);
                         if (c == 0) {
-                            applyFilter(c99Filter, (void*) &C99_DISPATCH[i], ec);
+                            applyFilter(c99Filter, (void*) &C99_DISPATCH[i], UPROPS_SRC_CHAR, ec);
                             return *this;
                         } else if (c < 0) {
                             // Further entries will not match; bail out
@@ -1490,9 +1465,9 @@ _set_addString(USet *set, const UChar *str, int32_t length) {
 
 U_CDECL_END
 
-const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &status) {
+const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
     umtx_lock(NULL);
-    UBool f = (INCLUSIONS == NULL);
+    UBool f = (INCLUSIONS[src] == NULL);
     umtx_unlock(NULL);
     if (f) {
         UnicodeSet* incl = new UnicodeSet();
@@ -1504,11 +1479,29 @@ const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &status) {
         };
 
         if (incl != NULL) {
-            uprv_getInclusions(&sa, &status);
+            switch(src) {
+            case UPROPS_SRC_CHAR:
+                uchar_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_HST:
+                uhst_addPropertyStarts(&sa, &status);
+                break;
+#if !UCONFIG_NO_NORMALIZATION
+            case UPROPS_SRC_NORM:
+                unorm_addPropertyStarts(&sa, &status);
+                break;
+#endif
+            case UPROPS_SRC_CASE:
+                ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
+                break;
+            default:
+                status = U_INTERNAL_PROGRAM_ERROR;
+                break;
+            }
             if (U_SUCCESS(status)) {
                 umtx_lock(NULL);
-                if (INCLUSIONS == NULL) {
-                    INCLUSIONS = incl;
+                if (INCLUSIONS[src] == NULL) {
+                    INCLUSIONS[src] = incl;
                     incl = NULL;        
                 } 
                 umtx_unlock(NULL);
@@ -1518,16 +1511,20 @@ const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &status) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
     }
-    return INCLUSIONS;
+    return INCLUSIONS[src];
 }
 
 /**
  * Cleanup function for UnicodeSet
  */
 U_CFUNC UBool uset_cleanup(void) {
-    if (INCLUSIONS != NULL) {
-        delete INCLUSIONS;
-        INCLUSIONS = NULL;
+    int32_t i;
+
+    for(i = UPROPS_SRC_NONE; i < UPROPS_SRC_COUNT; ++i) {
+        if (INCLUSIONS[i] != NULL) {
+            delete INCLUSIONS[i];
+            INCLUSIONS[i] = NULL;
+        }
     }
 
     if (CASE_EQUIV_HASH != NULL) {
