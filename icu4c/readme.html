@@ -631,6 +631,8 @@ important that you understand a few details:</p>
         <p>Examples for configuring ICU:<br>
         Debug build: <code>IEEE390=1 ./configure</code><br>
         Release build: <code>CFLAGS=-2 IEEE390=1 ./configure</code></p></li>
+    <li>Since the default make on OS/390 is not gmake, pkgdata tool requires that the environment
+        variable MAKE be set to path to gmake.</li> 
     <li>The makedep executable that is used with the OS/390 ICU build
         process is not shipped with ICU. It is available at the
         <a href="http://www.s390.ibm.com/products/oe/bpxa1ty2.html">OS/390 UNIX - Tools and Toys</a>

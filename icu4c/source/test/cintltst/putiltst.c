@@ -106,8 +106,11 @@ void TestPUtilAPI(){
 
     log_verbose("Testing the API uprv_log10()\n");
     doAssert(uprv_log10(3456), 3, "uprv_log10(3456) failed.");
+#ifdef OS390
+    doAssert(uprv_log10(1.0e55), 55, "uprv_log10(1.0e55) failed.");
+#else
     doAssert(uprv_log10(1.0e300), 300, "uprv_log10(1.0e300) failed.");
-          
+#endif          
     log_verbose("Testing the API uprv_isNegativeInfinity()\n");
     isTrue=uprv_isNegativeInfinity(uprv_getInfinity() * -1);
     if(isTrue != TRUE){
@@ -256,7 +259,11 @@ void TestPUtilAPI(){
     log_verbose("Testing uprv_nextDouble() where the value is NaN ...\n");
     expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
     doAssert(expn1, uprv_getNaN(), "uprv_nextDouble(uprv_getNaN(), TRUE) failed.");
+#ifdef OS390
+    y1=4.9406564584125e-78;
+#else
     y1=4.9406564584125e-324;
+#endif
     doAssert(uprv_nextDouble(0, TRUE),   y1, "uprv_nextDouble(0, TRUE) failed.");
     doAssert(uprv_nextDouble(0, FALSE), -y1, "uprv_nextDouble(0, FALSE) failed.");
        
