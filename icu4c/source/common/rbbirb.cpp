@@ -143,7 +143,7 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     }
 
     // Remove comments and whitespace from the rules to make it smaller.
-    UnicodeString strippedRules(RBBIRuleScanner::stripRules(fRules));
+    UnicodeString strippedRules((const UnicodeString&)RBBIRuleScanner::stripRules(fRules));
 
     // Calculate the size of each section in the data.
     //   Sizes here are padded up to a multiple of 8 for better memory alignment.

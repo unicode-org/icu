@@ -520,10 +520,12 @@ NameToEnum::swap(const UDataSwapper *ds,
          * which makes testing harder
          */
         cmp.chars=(const char *)outBytes;
-        cmp.propCompare=
-            ds->outCharset==U_ASCII_FAMILY ?
-                uprv_compareASCIIPropertyNames :
-                uprv_compareEBCDICPropertyNames;
+        if (ds->outCharset==U_ASCII_FAMILY) {
+            cmp.propCompare=uprv_compareASCIIPropertyNames;
+        }
+        else {
+            cmp.propCompare=uprv_compareEBCDICPropertyNames;
+        }
         uprv_sortArray(sortArray, tempMap->count, sizeof(NameAndIndex),
                        upname_compareRows, &cmp,
                        TRUE, pErrorCode);
