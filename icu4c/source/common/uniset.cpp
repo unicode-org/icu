@@ -917,10 +917,11 @@ UBool UnicodeSet::containsAll(const UnicodeString& s) const {
  * @return true if the test condition is met
  */
 UBool UnicodeSet::containsNone(UChar32 start, UChar32 end) const {
-    int32_t i = -1;
-    for (;;) {
-        if (start < list[++i]) break;
-    }
+    //int32_t i = -1;
+    //for (;;) {
+    //    if (start < list[++i]) break;
+    //}
+    int32_t i = findCodePoint(start);
     return ((i & 1) == 0 && end < list[i]);
 }
 
