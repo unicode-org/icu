@@ -64,26 +64,27 @@ typedef union UConverterTable UConverterTable;
 struct UConverterImpl;
 typedef struct UConverterImpl UConverterImpl;
 
-typedef struct UConverterStaticData {
-    uint32_t structSize;            /* Size of this structure */
+typedef struct UConverterStaticData {   /* +offset: size */
+    uint32_t structSize;                /* +0: 4 Size of this structure */
     
-    char name [UCNV_MAX_CONVERTER_NAME_LENGTH];               /* internal name of the converter- invariant chars */
+    char name 
+      [UCNV_MAX_CONVERTER_NAME_LENGTH]; /* +4: 60  internal name of the converter- invariant chars */
 
-    int32_t codepage;               /* codepage # (now IBM-$codepage) */
+    int32_t codepage;               /* +64: 4 codepage # (now IBM-$codepage) */
 
-    int8_t platform;                /* platform of the converter (only IBM now) */
-    int8_t conversionType;          /* conversion type */
+    int8_t platform;                /* +68: 1 platform of the converter (only IBM now) */
+    int8_t conversionType;          /* +69: 1 conversion type */
 
-    int8_t minBytesPerChar;         /* Minimum # bytes per char in this codepage */
-    int8_t maxBytesPerChar;         /* Maximum # bytes per char in this codepage */
+    int8_t minBytesPerChar;         /* +70: 1 Minimum # bytes per char in this codepage */
+    int8_t maxBytesPerChar;         /* +71: 1 Maximum # bytes per char in this codepage */
 
-    int8_t subCharLen;
-  
-    uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; 
-    uint8_t hasToUnicodeFallback;              /* UBool needs to be changed to UBool to be consistent across platform */
-    uint8_t hasFromUnicodeFallback;
-    uint8_t reserved[19];  /* to round out the structure */
-
+    uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; /* +72: 4  [note:  4 and 8 byte boundary] */
+    int8_t subCharLen;              /* +76: 1 */
+    
+    uint8_t hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
+    uint8_t hasFromUnicodeFallback; /* +78: 1 */
+    uint8_t reserved[21];           /* +79: 21 to round out the structure */
+                                    /* total size: 100 */
 } UConverterStaticData;
 
 /*

@@ -197,7 +197,7 @@ const UConverterStaticData _Latin1StaticData={
   sizeof(UConverterStaticData),
   "LATIN_1",
     819, UCNV_IBM, UCNV_LATIN_1, 1, 1,
-  1, { 0x1a, 0, 0, 0 }
+  { 0x1a, 0, 0, 0 },1,FALSE, FALSE,{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 
