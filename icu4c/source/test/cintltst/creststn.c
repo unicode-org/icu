@@ -177,12 +177,36 @@ void addNEWResourceBundleTest(TestNode** root)
 
 
 /***************************************************************************************/
+static const char* norwayNames[] = {
+    "no_NO_NY",
+    "no_NO",
+    "no",
+    "nn_NO",
+    "nn",
+    "nb_NO",
+    "nb"
+};
+
+static const char* norwayLocales[] = {
+    "nn_NO",
+    "nb_NO",
+    "nb",
+    "nn_NO",
+    "nn",
+    "nb_NO",
+    "nb"
+};
+
 static void TestAliasConflict(void) {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *he = NULL;
     UResourceBundle *iw = NULL;
+    UResourceBundle *norway = NULL;
     const UChar *result = NULL;
     int32_t resultLen;
+    uint32_t size = 0;
+    uint32_t i = 0;
+    const char *realName = NULL;
 
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
@@ -195,6 +219,17 @@ static void TestAliasConflict(void) {
         log_err("Failed to get resource with %s", myErrorName(status));
     }
     ures_close(he);
+
+    size = sizeof(norwayNames)/sizeof(norwayNames[0]);
+    for(i = 0; i < size; i++) {
+      norway = ures_open(NULL, norwayNames[i], &status);
+      realName = ures_getLocale(norway, &status);
+      log_verbose("ures_getLocale(\"%s\")=%s\n", norwayNames[i], realName);
+      if(strcmp(norwayLocales[i], realName) != 0) {
+        log_err("Wrong locale name for %s, expected %s, got %s\n", norwayNames[i], norwayLocales[i], realName);
+      }
+      ures_close(norway);
+    }
 }
 
 static void TestNewTypes() {
@@ -666,7 +701,7 @@ static void TestResourceBundles()
 
 static void TestConstruction1()
 {
-    UResourceBundle *test1 = 0, *test2 = 0;
+    UResourceBundle *test1 = 0, *test2 = 0,*empty = 0;
     const UChar *result1, *result2;
     UErrorCode status= U_ZERO_ERROR;
     UErrorCode   err = U_ZERO_ERROR;
@@ -684,11 +719,16 @@ static void TestConstruction1()
     U_STRING_INIT(rootVal, "ROOT", 4);
     U_STRING_INIT(te_inVal, "TE_IN", 5);
 
-
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
     log_verbose("Testing ures_open()......\n");
+
+    empty = ures_open(testdatapath, "empty", &status);
+    if(empty == NULL || U_FAILURE(status)) {
+      log_err("opening empty failed!\n");
+    }
+    ures_close(empty);
 
     test1=ures_open(testdatapath, NULL, &err);
     test2=ures_open(testdatapath, locale, &err);
@@ -728,6 +768,7 @@ static void TestConstruction1()
 
     ures_close(test1);
     ures_close(test2);
+
 }
 
 static void TestConstruction2()

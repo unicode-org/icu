@@ -173,6 +173,10 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     int32_t hashValue;
     char name[96];
     const char *myPath = NULL;
+    char aliasName[100] = { 0 };
+    int32_t aliasLen = 0;
+    UBool isAlias = FALSE;
+
 
     if(U_FAILURE(*status)) {
         return NULL;
@@ -245,13 +249,12 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
             r->fBogus = U_USING_FALLBACK_ERROR;
         } else { /* if we have a regular entry */
             /* handle the alias by trying to get out the %%Alias tag.*/
-            char aliasName[100];
-            int32_t aliasLen;
             /* We'll try to get alias string from the bundle */
             Resource aliasres = res_getResource(&(r->fData), "%%ALIAS");
             const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
             if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
                 u_UCharsToChars(alias, aliasName, u_strlen(alias)+1);
+                isAlias = TRUE;
                 res_unload(&(r->fData));
                 result = res_load(&(r->fData), r->fPath, aliasName, status);
                 if (result == FALSE || U_FAILURE(*status)) { 
@@ -279,6 +282,11 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 r->fCountExisting++;
             }
         }
+
+        if(isAlias == TRUE) {
+          setEntryName(r, aliasName, status);
+        }
+
     }
     return r;
 }
