@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Hebrew.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/26 23:25:53 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -84,6 +84,8 @@ public class TransliterationRule_Latin_Hebrew extends ListResourceBundle {
 
                 + "$vowellike=[$ALEF$AYIN$YOD$VAV];"
 
+              + "$hebrew=[\u0590-\u05FF];" // the whole block -liu
+              
                 //?>{POINT_SHEVA}
                 //?>{POINT_HATAF_SEGOL}
                 //?>{POINT_HATAF_PATAH}
@@ -103,6 +105,33 @@ public class TransliterationRule_Latin_Hebrew extends ListResourceBundle {
                 //?>{POINT_SHIN_DOT}
                 //?>{POINT_SIN_DOT}
                 //?>{PUNCTUATION_SOF_PASUQ}
+
+              // why is this a special case? -liu
+              + "k''h <> $KAF $HE ;"
+
+              // mark non-final forms in final position as x~ -liu
+              + "k    <  $KAF   } $hebrew ;"
+              + "m    <  $MEM   } $hebrew ;"
+              + "n    <  $NUN   } $hebrew ;"
+              + "p    <  $PE    } $hebrew ;"
+              + "ts   <  $TSADI } $hebrew ;"
+              + "k'~' <> $KAF   ;"
+              + "m'~' <> $MEM   ;"
+              + "n'~' <> $NUN   ;"
+              + "p'~' <> $PE    ;"
+              + "ts'~'<> $TSADI ;"
+
+              // mark final forms in non-final position as x^ -liu
+              + "k'^' <> $FINAL_KAF   } $hebrew ;"
+              + "m'^' <> $FINAL_MEM   } $hebrew ;"
+              + "n'^' <> $FINAL_NUN   } $hebrew ;"
+              + "p'^' <> $FINAL_PE    } $hebrew ;"
+              + "ts'^'<> $FINAL_TSADI } $hebrew ;"
+              + "k    <  $FINAL_KAF;"
+              + "m    <  $FINAL_MEM;"
+              + "n    <  $FINAL_NUN;"
+              + "p    <  $FINAL_PE;"
+              + "ts   <  $FINAL_TSADI;"
 
                 + "a>$ALEF;"
                 + "A>$ALEF;"
@@ -248,20 +277,20 @@ public class TransliterationRule_Latin_Hebrew extends ListResourceBundle {
                 + "e<$AYIN;"
                 + "b<$BET;"
                 + "d<$DALET;"
-                + "k<$FINAL_KAF;"
-                + "m<$FINAL_MEM;"
-                + "n<$FINAL_NUN;"
-                + "p<$FINAL_PE;"
-                + "ts<$FINAL_TSADI;"
+              //+ "k<$FINAL_KAF;"
+              //+ "m<$FINAL_MEM;"
+              //+ "n<$FINAL_NUN;"
+              //+ "p<$FINAL_PE;"
+              //+ "ts<$FINAL_TSADI;"
                 + "g<$GIMEL;"
                 + "kh<$HET;"
                 + "h<$HE;"
-                + "k''<$KAF}$HE;"
-                + "k<$KAF;"
+              //+ "k''<$KAF}$HE;"
+              //+ "k<$KAF;"
                 + "l<$LAMED;"
-                + "m<$MEM;"
-                + "n<$NUN;"
-                + "p<$PE;"
+              //+ "m<$MEM;"
+              //+ "n<$NUN;"
+              //+ "p<$PE;"
                 + "q<$QOF;"
                 + "r<$RESH;"
                 + "s''<$SAMEKH}$HE;"
@@ -272,7 +301,7 @@ public class TransliterationRule_Latin_Hebrew extends ListResourceBundle {
                 + "t''<$TET}$SAMEKH;"
                 + "t''<$TET}$SHIN;"
                 + "t<$TET;"
-                + "ts<$TSADI;"
+              //+ "ts<$TSADI;"
                 + "v<$VAV}$vowellike;"
                 + "u<$VAV;"
                 + "y<$YOD;"
