@@ -35,6 +35,7 @@ using namespace std;
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 
 U_CDECL_BEGIN
 #ifdef WIN32
