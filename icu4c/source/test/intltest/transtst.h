@@ -246,6 +246,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestLocaleInstantiation(void);        
     
+    /**
+     * Test title case handling of accent (should ignore accents)
+     */
+    void TestTitleAccents(void);
+
     //======================================================================
     // Support methods
     //======================================================================
