@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
