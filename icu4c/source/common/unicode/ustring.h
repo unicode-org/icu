@@ -95,6 +95,35 @@ U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c);
 
 /**
+<<<<<<< ustring.h
+ * Locates the first occurrence in the string str of any of the characters
+ * in the string accept.
+ * Works just like C's strpbrk but with Unicode.
+ * @return A pointer to the  character in str that matches one of the
+ *         characters in accept, or NULL if no such character is found.
+ */
+U_CAPI UChar * U_EXPORT2
+u_strpbrk(const UChar *string, const UChar *matchSet);
+
+/**
+ * Returns the number of consecutive characters in string1,
+ * beginning with the first, that do not occur somewhere in string2.
+ * Works just like C's strcspn but with Unicode.
+ * @see u_strspn
+ */
+U_CAPI int32_t U_EXPORT2
+u_strcspn(const UChar *string, const UChar *matchSet);
+
+/**
+ * Returns the number of consecutive characters in string1,
+ * beginning with the first, that occur somewhere in string2.
+ * Works just like C's strspn but with Unicode.
+ * @see u_strcspn
+ */
+U_CAPI int32_t U_EXPORT2
+u_strspn(const UChar *string, const UChar *matchSet);
+
+/**
  * Compare two Unicode strings for bitwise equality (code unit order).
  *
  * @param s1 A string to compare.
