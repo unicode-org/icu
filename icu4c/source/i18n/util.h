@@ -14,13 +14,13 @@
 #include "unicode/unistr.h"
 
 //--------------------------------------------------------------------
-// class Utility
-// i18n utility functions, scoped into the class Utility.
+// class ICU_Utility
+// i18n utility functions, scoped into the class ICU_Utility.
 //--------------------------------------------------------------------
 
 U_NAMESPACE_BEGIN
 
-class Utility {
+class ICU_Utility {
  public:
 
     /**

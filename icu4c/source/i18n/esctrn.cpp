@@ -137,7 +137,7 @@ void EscapeTransliterator::handleTransliterate(Replaceable& text, UTransPosition
         if ((c & 0xFFFF0000) != 0 && supplementalHandler != NULL) {
             buf.truncate(0);
             buf.append(supplementalHandler->prefix);
-            Utility::appendNumber(buf, c, supplementalHandler->radix,
+            ICU_Utility::appendNumber(buf, c, supplementalHandler->radix,
                                   supplementalHandler->minDigits);
             buf.append(supplementalHandler->suffix);
             redoPrefix = TRUE;
@@ -149,7 +149,7 @@ void EscapeTransliterator::handleTransliterate(Replaceable& text, UTransPosition
             } else {
                 buf.truncate(prefixLen);
             }
-            Utility::appendNumber(buf, c, radix, minDigits);
+            ICU_Utility::appendNumber(buf, c, radix, minDigits);
             buf.append(suffix);
         }
 
