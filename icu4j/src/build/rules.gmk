@@ -1,6 +1,7 @@
 default: classes
 
-JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
+# JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
+JAVAC=      javac -classpath $(CLASSPATH) -d $(CLASSDIR) $(JAVACFLAGS)
 
 .SUFFIXES: .java .class 
 
@@ -10,38 +11,50 @@ FILES_java=  $(FILES_java:/=\)
 endif
 FILES_class= $(FILES_java:.java=.class)
 
+
 CLASSLIST= classes.list
+CLASS_DEST_DIR= $(CLASSDIR)/$(PKGPATH)
 
 # {$(SRCDIR)/$(PKGPATH)}.java{$(CLASSDIR)/$(PKGPATH)}.class:
 #	@echo $(?) >> $(CLASSLIST)
 
-$(SRCDIR)/$(PKGPATH)%.class : $(CLASSDIR)/$(PKGPATH)%.java:
+$(CLASS_DEST_DIR) :
+	@mkdir -p $@
+
+$(FILES_class) : $(CLASS_DEST_DIR)%.class: $(SRCDIR)/$(PKGPATH)%.java
 	@echo $? >> $(CLASSLIST)
 
+.compile.classlist:
+	@if [ -s $(CLASSLIST) ] ; then echo Compiling { ; fi 
+	@if [ -s $(CLASSLIST) ] ; then cat $(CLASSLIST) ; fi 
+	if [ -s $(CLASSLIST) ] ; then $(JAVAC) $(shell cat $(CLASSLIST)) ; fi 
+	@if [ -s $(CLASSLIST) ] ; then echo } ; fi 
+	@rm -f $(CLASSLIST)
 
 ifdef FILES_dict
-FILES_dict= $(FILES_dict:/=\)
-SRC_FILES_dict= $(FILES_dict:classes=src)
-
+# FILES_dict= $(FILES_dict:/=\)
+SRC_FILES_dict= $(subst classes,src,$(FILES_dict))
+# SRC_FILES_dict= $(FILES_dict:classes=src)
 endif
 
-classes: delete.classlist $(FILES_class) $(FILES_dics)
-	if [ -s $(CLASSLIST) ] ; echo Compiling { ; fi
-	if [ -s $(CLASSLIST) ] ; cat $(CLASSLIST) ; fi
-	if [ -s $(CLASSLIST) ] ; $(JAVAC) @$(CLASSLIST) ; fi
-	rm -f $(CLASSLIST)
+classes: $(CLASS_DEST_DIR) delete.classlist $(FILES_class) $(FILES_dics) .compile.classlist
+#classes: delete.classlist $(FILES_class) $(FILES_dics) $(CLASSDIR)/$(PKGPATH)
+#	@if [ -s $(CLASSLIST) ] ; then echo Compiling { ; fi 
+#	@if [ -s $(CLASSLIST) ] ; then cat $(CLASSLIST) ; fi 
+#	@if [ -s $(CLASSLIST) ] ; then $(JAVAC) @$(CLASSLIST) ; fi 
+#	@rm -f $(CLASSLIST)
 ifdef FILES_dict
-	cp $(SRC_FILES_dict) $(TARGDIR)
+	cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/$(notdir $(SRC_FILES_dict))
 endif
 ifdef SUBDIRS
-	for D in $(SUBDIRS) ; do cd $$D ; gmake -f makefile.gmk classes ; cd .. ; done
+	@for D in $(SUBDIRS) ; do cd $$D ; gmake -f makefile.gmk classes ; cd .. ; done
 #	@for %%d in ( $(SUBDIRS) ) do cd %d && gmake -f makefile.gmk classes && cd ..
 endif
 
-dict: $(SRC_FILES_dict)
+dict: $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)
 	echo $(FILES_dict)
 	echo $(SRC_FILES_dict)
-	cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/
+	cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/$(notdir $(SRC_FILES_dict))
 
 delete.classlist:
 	@rm -f $(CLASSLIST)
