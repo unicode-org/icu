@@ -165,7 +165,9 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fSymbols(NULL)
 {
     construct(timeStyle, dateStyle, fLocale, status);
-    initializeDefaultCentury();
+    if(U_SUCCESS(status)) {
+      initializeDefaultCentury();
+    }
 }
 
 //----------------------------------------------------------------------
@@ -197,7 +199,9 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     }
 
     initialize(fLocale, status);
-    initializeDefaultCentury();
+    if(U_SUCCESS(status)) {
+      initializeDefaultCentury();
+    }
 }
 
 //----------------------------------------------------------------------
@@ -407,13 +411,15 @@ SimpleDateFormat::initialize(const Locale& locale,
  */
 void SimpleDateFormat::initializeDefaultCentury() 
 {
-  fHaveDefaultCentury = fCalendar->haveDefaultCentury();
-  if(fHaveDefaultCentury) {
-    fDefaultCenturyStart = fCalendar->defaultCenturyStart();
-    fDefaultCenturyStartYear = fCalendar->defaultCenturyStartYear();
-  } else {
-    fDefaultCenturyStart = DBL_MIN;
-    fDefaultCenturyStartYear = -1;
+  if(fCalendar) {
+    fHaveDefaultCentury = fCalendar->haveDefaultCentury();
+    if(fHaveDefaultCentury) {
+      fDefaultCenturyStart = fCalendar->defaultCenturyStart();
+      fDefaultCenturyStartYear = fCalendar->defaultCenturyStartYear();
+    } else {
+      fDefaultCenturyStart = DBL_MIN;
+      fDefaultCenturyStartYear = -1;
+    }
   }
 }
 

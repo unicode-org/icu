@@ -55,7 +55,11 @@ DateFormat& DateFormat::operator=(const DateFormat& other)
     {
         delete fCalendar;
         delete fNumberFormat;
-        fCalendar = other.fCalendar->clone();
+        if(other.fCalendar) {
+          fCalendar = other.fCalendar->clone();
+        } else {
+          fCalendar = NULL;
+        }
         fNumberFormat = (NumberFormat*)other.fNumberFormat->clone();
     }
     return *this;
