@@ -1255,7 +1255,11 @@ uprv_getDefaultLocaleID()
   const char* posixID = getenv("LC_ALL");
   if (posixID == 0) posixID = getenv("LANG");
   if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
-  if (uprv_strcmp("C", posixID) == 0) posixID = "en_US";
+
+  if ( (uprv_strcmp("C", posixID) == 0) ||
+       (uprv_strncmp("C ", posixID, 2) == 0) ) {  /* HPUX returns 'C C C C C C C' */
+    posixID = "en_US";
+  }
   return posixID;
 #endif
 
