@@ -82,6 +82,11 @@ utmscale_getTimeScaleData(UDateTimeScale timeScale, UTimeScaleData *data, UError
 U_CAPI int64_t U_EXPORT2
 utmscale_fromDouble(double otherTime, UDateTimeScale timeScale, UErrorCode *status)
 {
+    /*
+     * NOTE: fromMin and fromMax are marked "volatile" because the
+     * with the gcc compiler, the code which compares otherTime to
+     * fromMin and fromMax seems to fail if data->fromMax is U_INT64_MAX.
+     */
     const InternalTimeScaleData *data;
     volatile double fromMin, fromMax;
 
