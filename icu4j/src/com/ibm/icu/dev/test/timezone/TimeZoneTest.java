@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2003/06/03 18:49:31 $
- * $Revision: 1.13 $
+ * $Date: 2003/06/11 21:04:51 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -418,6 +418,29 @@ public class TimeZoneTest extends TestFmwk
         TimeZone.setDefault(saveDefault);
         // delete defaultzone;
         // delete zoneclone;
+        
+        // ICU 2.6 Coverage
+        logln(zone.toString());
+        logln(zone.getDisplayName());
+        SimpleTimeZoneAdapter stza = new SimpleTimeZoneAdapter((SimpleTimeZone) TimeZone.getTimeZone("GMT"));
+        stza.setID("Foo");
+        if (stza.hasSameRules(java.util.TimeZone.getTimeZone("GMT"))) {
+            errln("FAIL: SimpleTimeZoneAdapter.hasSameRules");
+        }
+        stza.setRawOffset(3000);
+        offset = stza.getOffset(GregorianCalendar.BC, 2001, Calendar.DECEMBER,
+                                25, Calendar.TUESDAY, 12*60*60*1000);
+        if (offset != 3000) {
+            errln("FAIL: SimpleTimeZoneAdapter.getOffset");
+        }
+        SimpleTimeZoneAdapter dup = (SimpleTimeZoneAdapter) stza.clone();
+        if (stza.hashCode() != dup.hashCode()) {
+            errln("FAIL: SimpleTimeZoneAdapter.hashCode");
+        }
+        if (!stza.equals(dup)) {
+            errln("FAIL: SimpleTimeZoneAdapter.equals");
+        }
+        logln(stza.toString());
     }
 
     public void TestRuleAPI()

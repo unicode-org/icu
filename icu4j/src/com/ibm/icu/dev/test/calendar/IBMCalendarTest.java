@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/06/03 18:49:28 $ 
- * $Revision: 1.20 $
+ * $Date: 2003/06/11 21:04:51 $ 
+ * $Revision: 1.21 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -634,5 +634,28 @@ public class IBMCalendarTest extends CalendarTest {
         ccal.roll(Calendar.MONTH, 1);
         ccal.roll(Calendar.YEAR, 1);
         ccal.getTime();
+
+        // ICU 2.6
+        Calendar cal = Calendar.getInstance(Locale.US);
+        logln(cal.toString());
+        logln(cal.getDisplayName(Locale.US));
+        int weekendOnset=-1;
+        int weekendCease=-1;
+        for (int i=Calendar.SUNDAY; i<=Calendar.SATURDAY; ++i) {
+            if (cal.getDayOfWeekType(i) == Calendar.WEEKEND_ONSET) {
+                weekendOnset = i;
+            }
+            if (cal.getDayOfWeekType(i) == Calendar.WEEKEND_CEASE) {
+                weekendCease = i;
+            }
+        }
+        // can't call this unless we get a transition day (unusual),
+        // but make the call anyway for coverage reasons
+        try {
+            /*int x=*/ cal.getWeekendTransition(weekendOnset);
+            /*int x=*/ cal.getWeekendTransition(weekendCease);
+        } catch (IllegalArgumentException e) {}
+        /*int x=*/ cal.isWeekend(new Date());
+
     }
 }
