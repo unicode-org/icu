@@ -39,34 +39,34 @@ void addNumForTest(TestNode** root)
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
 static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_t dstLength) {
-	static const char hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    static const char hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-	char *p = dst;
-	const char *e = p + dstLength;
-	if (srcLength < 0) {
-		const UChar* s = src;
-		while (*s) ++s;
-		srcLength = s - src;
-	}
-	while (p < e && --srcLength >= 0) {
-		UChar c = *src++;
-		if (c == 0xd || c == 0xa || c == 0x9 || (c>= 0x20 && c <= 0x7e)) {
-			*p++ = (char) c & 0x7f;
-		} else if (e - p >= 6) {
-			*p++ = '\\';
-			*p++ = 'u';
-			*p++ = hex[(c >> 12) & 0xf];
-			*p++ = hex[(c >> 8) & 0xf];
-			*p++ = hex[(c >> 4) & 0xf];
-			*p++ = hex[c & 0xf];
-		} else {
-			break;
-		}
-	}
-	if (p < e) {
-		*p = 0;
-	}
-	return p - dst;
+    char *p = dst;
+    const char *e = p + dstLength;
+    if (srcLength < 0) {
+        const UChar* s = src;
+        while (*s) ++s;
+        srcLength = s - src;
+    }
+    while (p < e && --srcLength >= 0) {
+        UChar c = *src++;
+        if (c == 0xd || c == 0xa || c == 0x9 || (c>= 0x20 && c <= 0x7e)) {
+            *p++ = (char) c & 0x7f;
+        } else if (e - p >= 6) {
+            *p++ = '\\';
+            *p++ = 'u';
+            *p++ = hex[(c >> 12) & 0xf];
+            *p++ = hex[(c >> 8) & 0xf];
+            *p++ = hex[(c >> 4) & 0xf];
+            *p++ = hex[c & 0xf];
+        } else {
+            break;
+        }
+    }
+    if (p < e) {
+        *p = 0;
+    }
+    return p - dst;
 }
 
 /* test Number Format API */
@@ -623,34 +623,34 @@ uprv_free(result);
             log_verbose("Pass: attributes set and retrieved successfully\n");
     }
 
-	/*testing spellout format to make sure we can use it successfully.*/
-	log_verbose("\nTesting spellout format\n");
-	{
-	int32_t values[] = { 0, -5, 105, 1005, 105050 };
-	for (i = 0; i < LENGTH(values); ++i) {
-		UChar buffer[128];
-		int32_t len;
-		int32_t value = values[i];
-		status = U_ZERO_ERROR;
-		len = unum_format(spellout_def, value, buffer, LENGTH(buffer), NULL, &status);
-		if(U_FAILURE(status)) {
-			log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
-		} else {
-			int32_t pp = 0;
-			int32_t parseResult;
-			char logbuf[256];
-			ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
-			log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
+    /*testing spellout format to make sure we can use it successfully.*/
+    log_verbose("\nTesting spellout format\n");
+    {
+    static const int32_t values[] = { 0, -5, 105, 1005, 105050 };
+    for (i = 0; i < LENGTH(values); ++i) {
+        UChar buffer[128];
+        int32_t len;
+        int32_t value = values[i];
+        status = U_ZERO_ERROR;
+        len = unum_format(spellout_def, value, buffer, LENGTH(buffer), NULL, &status);
+        if(U_FAILURE(status)) {
+            log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
+        } else {
+            int32_t pp = 0;
+            int32_t parseResult;
+            char logbuf[256];
+            ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
+            log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
 
-			parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
-			if (U_FAILURE(status)) {
-				log_err("Error in parsing using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
-			} else if (parseResult != value) {
-				log_err("unum_format result %d != value %d\n", parseResult, value);
-			}
-		}
-	}
-	}
+            parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
+            if (U_FAILURE(status)) {
+                log_err("Error in parsing using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
+            } else if (parseResult != value) {
+                log_err("unum_format result %d != value %d\n", parseResult, value);
+            }
+        }
+    }
+    }
 
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/
     unum_close(def);

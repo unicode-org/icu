@@ -29,69 +29,69 @@
 class CMAPMapper
 {
 public:
-	virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const = 0;
+    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const = 0;
 
-	virtual ~CMAPMapper();
+    virtual ~CMAPMapper();
 
-	static CMAPMapper *createUnicodeMapper(const CMAPTable *cmap);
+    static CMAPMapper *createUnicodeMapper(const CMAPTable *cmap);
 
 protected:
-	CMAPMapper(const CMAPTable *cmap);
+    CMAPMapper(const CMAPTable *cmap);
 
-	CMAPMapper() {};
+    CMAPMapper() {};
 
 private:
-	const CMAPTable *fcmap;
+    const CMAPTable *fcmap;
 };
 
 class CMAPFormat4Mapper : public CMAPMapper
 {
 public:
-	CMAPFormat4Mapper(const CMAPTable *cmap, const CMAPFormat4Encoding *header);
+    CMAPFormat4Mapper(const CMAPTable *cmap, const CMAPFormat4Encoding *header);
 
-	virtual ~CMAPFormat4Mapper();
+    virtual ~CMAPFormat4Mapper();
 
-	virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
+    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
 
 protected:
-	CMAPFormat4Mapper() {};
+    CMAPFormat4Mapper() {};
 
 private:
-	le_uint16		fEntrySelector;
-	le_uint16		fRangeShift;
-	const le_uint16 *fEndCodes;
-	const le_uint16 *fStartCodes;
-	const le_uint16 *fIdDelta;
-	const le_uint16 *fIdRangeOffset;
+    le_uint16       fEntrySelector;
+    le_uint16       fRangeShift;
+    const le_uint16 *fEndCodes;
+    const le_uint16 *fStartCodes;
+    const le_uint16 *fIdDelta;
+    const le_uint16 *fIdRangeOffset;
 };
 
 class CMAPGroupMapper : public CMAPMapper
 {
 public:
-	CMAPGroupMapper(const CMAPTable *cmap, const CMAPGroup *groups, le_uint32 nGroups);
+    CMAPGroupMapper(const CMAPTable *cmap, const CMAPGroup *groups, le_uint32 nGroups);
 
-	virtual ~CMAPGroupMapper();
+    virtual ~CMAPGroupMapper();
 
-	virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
+    virtual LEGlyphID unicodeToGlyph(LEUnicode32 unicode32) const;
 
 protected:
-	CMAPGroupMapper() {};
+    CMAPGroupMapper() {};
 
 private:
-	le_int32 fPower;
-	le_int32 fRangeOffset;
-	const CMAPGroup *fGroups;
+    le_int32 fPower;
+    le_int32 fRangeOffset;
+    const CMAPGroup *fGroups;
 };
 
 inline CMAPMapper::CMAPMapper(const CMAPTable *cmap)
-	: fcmap(cmap)
+    : fcmap(cmap)
 {
-	// nothing else to do
+    // nothing else to do
 }
 
 inline CMAPMapper::~CMAPMapper()
 {
-	delete[] (char *) fcmap;
+    delete[] (char *) fcmap;
 }
 
 #endif

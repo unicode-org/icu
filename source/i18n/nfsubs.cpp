@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfsubs.cpp
@@ -47,84 +47,84 @@ NFSubstitution::makeSubstitution(int32_t pos,
                                  const UnicodeString& description,
                                  UErrorCode& status)
 {
-  // if the description is empty, return a NullSubstitution
-  if (description.length() == 0) {
-    return new NullSubstitution(pos, ruleSet, formatter, description, status);
-  }
-
-  switch (description.charAt(0)) {
-    // if the description begins with '<'...
-  case gLessThan:
-    // throw an exception if the rule is a negative number
-    // rule
-    if (rule->getBaseValue() == NFRule::kNegativeNumberRule) {
-      // throw new IllegalArgumentException("<< not allowed in negative-number rule");
-      status = U_PARSE_ERROR;
-      return NULL;
+    // if the description is empty, return a NullSubstitution
+    if (description.length() == 0) {
+        return new NullSubstitution(pos, ruleSet, formatter, description, status);
     }
 
-    // if the rule is a fraction rule, return an
-    // IntegralPartSubstitution
-    else if (rule->getBaseValue() == NFRule::kImproperFractionRule
-	     || rule->getBaseValue() == NFRule::kProperFractionRule
-	     || rule->getBaseValue() == NFRule::kMasterRule) {
-      return new IntegralPartSubstitution(pos, ruleSet, formatter, description, status);
+    switch (description.charAt(0)) {
+        // if the description begins with '<'...
+    case gLessThan:
+        // throw an exception if the rule is a negative number
+        // rule
+        if (rule->getBaseValue() == NFRule::kNegativeNumberRule) {
+            // throw new IllegalArgumentException("<< not allowed in negative-number rule");
+            status = U_PARSE_ERROR;
+            return NULL;
+        }
+
+        // if the rule is a fraction rule, return an
+        // IntegralPartSubstitution
+        else if (rule->getBaseValue() == NFRule::kImproperFractionRule
+            || rule->getBaseValue() == NFRule::kProperFractionRule
+            || rule->getBaseValue() == NFRule::kMasterRule) {
+            return new IntegralPartSubstitution(pos, ruleSet, formatter, description, status);
+        }
+
+        // if the rule set containing the rule is a fraction
+        // rule set, return a NumeratorSubstitution
+        else if (ruleSet->isFractionRuleSet()) {
+            return new NumeratorSubstitution(pos, (double)rule->getBaseValue(),
+                formatter->getDefaultRuleSet(), formatter, description, status);
+        }
+
+        // otherwise, return a MultiplierSubstitution
+        else {
+            return new MultiplierSubstitution(pos, rule->getDivisor(), ruleSet,
+                formatter, description, status);
+        }
+
+        // if the description begins with '>'...
+    case gGreaterThan:
+        // if the rule is a negative-number rule, return
+        // an AbsoluteValueSubstitution
+        if (rule->getBaseValue() == NFRule::kNegativeNumberRule) {
+            return new AbsoluteValueSubstitution(pos, ruleSet, formatter, description, status);
+        }
+
+        // if the rule is a fraction rule, return a
+        // FractionalPartSubstitution
+        else if (rule->getBaseValue() == NFRule::kImproperFractionRule
+            || rule->getBaseValue() == NFRule::kProperFractionRule
+            || rule->getBaseValue() == NFRule::kMasterRule) {
+            return new FractionalPartSubstitution(pos, ruleSet, formatter, description, status);
+        }
+
+        // if the rule set owning the rule is a fraction rule set,
+        // throw an exception
+        else if (ruleSet->isFractionRuleSet()) {
+            // throw new IllegalArgumentException(">> not allowed in fraction rule set");
+            status = U_PARSE_ERROR;
+            return NULL;
+        }
+
+        // otherwise, return a ModulusSubstitution
+        else {
+            return new ModulusSubstitution(pos, rule->getDivisor(), predecessor,
+                ruleSet, formatter, description, status);
+        }
+
+        // if the description begins with '=', always return a
+        // SameValueSubstitution
+    case gEquals:
+        return new SameValueSubstitution(pos, ruleSet, formatter, description, status);
+
+        // and if it's anything else, throw an exception
+    default:
+        // throw new IllegalArgumentException("Illegal substitution character");
+        status = U_PARSE_ERROR;
     }
-
-    // if the rule set containing the rule is a fraction
-    // rule set, return a NumeratorSubstitution
-    else if (ruleSet->isFractionRuleSet()) {
-      return new NumeratorSubstitution(pos, (double)rule->getBaseValue(),
-				       formatter->getDefaultRuleSet(), formatter, description, status);
-    }
-
-    // otherwise, return a MultiplierSubstitution
-    else {
-      return new MultiplierSubstitution(pos, rule->getDivisor(), ruleSet,
-					formatter, description, status);
-    }
-
-    // if the description begins with '>'...
-  case gGreaterThan:
-    // if the rule is a negative-number rule, return
-    // an AbsoluteValueSubstitution
-    if (rule->getBaseValue() == NFRule::kNegativeNumberRule) {
-      return new AbsoluteValueSubstitution(pos, ruleSet, formatter, description, status);
-    }
-
-    // if the rule is a fraction rule, return a
-    // FractionalPartSubstitution
-    else if (rule->getBaseValue() == NFRule::kImproperFractionRule
-	     || rule->getBaseValue() == NFRule::kProperFractionRule
-	     || rule->getBaseValue() == NFRule::kMasterRule) {
-      return new FractionalPartSubstitution(pos, ruleSet, formatter, description, status);
-    }
-
-    // if the rule set owning the rule is a fraction rule set,
-    // throw an exception
-    else if (ruleSet->isFractionRuleSet()) {
-      // throw new IllegalArgumentException(">> not allowed in fraction rule set");
-      status = U_PARSE_ERROR;
-      return NULL;
-    }
-
-    // otherwise, return a ModulusSubstitution
-    else {
-      return new ModulusSubstitution(pos, rule->getDivisor(), predecessor,
-				     ruleSet, formatter, description, status);
-    }
-
-    // if the description begins with '=', always return a
-    // SameValueSubstitution
-  case gEquals:
-    return new SameValueSubstitution(pos, ruleSet, formatter, description, status);
-
-    // and if it's anything else, throw an exception
-  default:
-    // throw new IllegalArgumentException("Illegal substitution character");
-    status = U_PARSE_ERROR;
-  }
-  return NULL;
+    return NULL;
 }
 
 NFSubstitution::NFSubstitution(int32_t _pos,
@@ -134,58 +134,59 @@ NFSubstitution::NFSubstitution(int32_t _pos,
                                UErrorCode& status)
                                : pos(_pos), ruleSet(NULL), numberFormat(NULL)
 {
-  // the description should begin and end with the same character.
-  // If it doesn't that's a syntax error.  Otherwise,
-  // makeSubstitution() was the only thing that needed to know
-  // about these characters, so strip them off
-  UnicodeString workingDescription(description);
-  if (description.length() >= 2 && description.charAt(0) == description.charAt(
-									       description.length() - 1)) {
-    workingDescription.remove(description.length() - 1, 1);
-    workingDescription.remove(0, 1);
-  }
-  else if (description.length() != 0) {
-    // throw new IllegalArgumentException("Illegal substitution syntax");
-    status = U_PARSE_ERROR;
-    return;
-  }
+    // the description should begin and end with the same character.
+    // If it doesn't that's a syntax error.  Otherwise,
+    // makeSubstitution() was the only thing that needed to know
+    // about these characters, so strip them off
+    UnicodeString workingDescription(description);
+    if (description.length() >= 2
+        && description.charAt(0) == description.charAt(description.length() - 1))
+    {
+        workingDescription.remove(description.length() - 1, 1);
+        workingDescription.remove(0, 1);
+    }
+    else if (description.length() != 0) {
+        // throw new IllegalArgumentException("Illegal substitution syntax");
+        status = U_PARSE_ERROR;
+        return;
+    }
 
-  // if the description was just two paired token characters
-  // (i.e., "<<" or ">>"), it uses the rule set it belongs to to
-  // format its result
-  if (workingDescription.length() == 0) {
-    this->ruleSet = _ruleSet;
-  }
-  // if the description contains a rule set name, that's the rule
-  // set we use to format the result: get a reference to the
-  // names rule set
-  else if (workingDescription.charAt(0) == gPercent) {
-    this->ruleSet = formatter->findRuleSet(workingDescription, status);
-  }
-  // if the description begins with 0 or #, treat it as a
-  // DecimalFormat pattern, and initialize a DecimalFormat with
-  // that pattern (then set it to use the DecimalFormatSymbols
-  // belonging to our formatter)
-  else if (workingDescription.charAt(0) == gPound || workingDescription.charAt(0) ==gZero) {
-    this->numberFormat = new DecimalFormat(workingDescription, *(formatter->getDecimalFormatSymbols()), status);
-    // this->numberFormat->setDecimalFormatSymbols(formatter->getDecimalFormatSymbols());
-  }
-  // if the description is ">>>", this substitution bypasses the
-  // usual rule-search process and always uses the rule that precedes
-  // it in its own rule set's rule list (this is used for place-value
-  // notations: formats where you want to see a particular part of
-  // a number even when it's 0)
-  else if (workingDescription.charAt(0) == gGreaterThan) {
-    // this causes problems when >>> is used in a frationalPartSubstitution
-    // this->ruleSet = NULL;
-    this->ruleSet = _ruleSet;
-    this->numberFormat = NULL;
-  }
-  // and of the description is none of these things, it's a syntax error
-  else {
-    // throw new IllegalArgumentException("Illegal substitution syntax");
-    status = U_PARSE_ERROR;
-  }
+    // if the description was just two paired token characters
+    // (i.e., "<<" or ">>"), it uses the rule set it belongs to to
+    // format its result
+    if (workingDescription.length() == 0) {
+        this->ruleSet = _ruleSet;
+    }
+    // if the description contains a rule set name, that's the rule
+    // set we use to format the result: get a reference to the
+    // names rule set
+    else if (workingDescription.charAt(0) == gPercent) {
+        this->ruleSet = formatter->findRuleSet(workingDescription, status);
+    }
+    // if the description begins with 0 or #, treat it as a
+    // DecimalFormat pattern, and initialize a DecimalFormat with
+    // that pattern (then set it to use the DecimalFormatSymbols
+    // belonging to our formatter)
+    else if (workingDescription.charAt(0) == gPound || workingDescription.charAt(0) ==gZero) {
+        this->numberFormat = new DecimalFormat(workingDescription, *(formatter->getDecimalFormatSymbols()), status);
+        // this->numberFormat->setDecimalFormatSymbols(formatter->getDecimalFormatSymbols());
+    }
+    // if the description is ">>>", this substitution bypasses the
+    // usual rule-search process and always uses the rule that precedes
+    // it in its own rule set's rule list (this is used for place-value
+    // notations: formats where you want to see a particular part of
+    // a number even when it's 0)
+    else if (workingDescription.charAt(0) == gGreaterThan) {
+        // this causes problems when >>> is used in a frationalPartSubstitution
+        // this->ruleSet = NULL;
+        this->ruleSet = _ruleSet;
+        this->numberFormat = NULL;
+    }
+    // and of the description is none of these things, it's a syntax error
+    else {
+        // throw new IllegalArgumentException("Illegal substitution syntax");
+        status = U_PARSE_ERROR;
+    }
 }
 
 NFSubstitution::~NFSubstitution()
@@ -207,9 +208,9 @@ NFSubstitution::setDivisor(int32_t /*radix*/, int32_t /*exponent*/) {
 }
 
 
-    //-----------------------------------------------------------------------
-    // boilerplate
-    //-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+// boilerplate
+//-----------------------------------------------------------------------
 
 const char NFSubstitution::fgClassID = 0;
 
@@ -281,25 +282,25 @@ NFSubstitution::toString(UnicodeString& text) const
 void
 NFSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto, int32_t _pos) const
 {
-  if (ruleSet != NULL) {
-    // perform a transformation on the number that is dependent
-    // on the type of substitution this is, then just call its
-    // rule set's format() method to format the result
-    ruleSet->format(transformNumber(number), toInsertInto, _pos + this->pos);
-  } else {
-    // or perform the transformation on the number (preserving
-    // the result's fractional part if the formatter it set
-    // to show it), then use that formatter's format() method
-    // to format the result
-    double numberToFormat = transformNumber((double)number);
-    if (numberFormat->getMaximumFractionDigits() == 0) {
-      numberToFormat = uprv_floor(numberToFormat);
-    }
+    if (ruleSet != NULL) {
+        // perform a transformation on the number that is dependent
+        // on the type of substitution this is, then just call its
+        // rule set's format() method to format the result
+        ruleSet->format(transformNumber(number), toInsertInto, _pos + this->pos);
+    } else {
+        // or perform the transformation on the number (preserving
+        // the result's fractional part if the formatter it set
+        // to show it), then use that formatter's format() method
+        // to format the result
+        double numberToFormat = transformNumber((double)number);
+        if (numberFormat->getMaximumFractionDigits() == 0) {
+            numberToFormat = uprv_floor(numberToFormat);
+        }
 
-    UnicodeString temp;
-    numberFormat->format(numberToFormat, temp);
-    toInsertInto.insert(_pos + this->pos, temp);
-  }
+        UnicodeString temp;
+        numberFormat->format(numberToFormat, temp);
+        toInsertInto.insert(_pos + this->pos, temp);
+    }
 }
 
 /**
@@ -314,27 +315,27 @@ NFSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto, int3
  */
 void
 NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const {
-  // perform a transformation on the number being formatted that
-  // is dependent on the type of substitution this is
-  double numberToFormat = transformNumber(number);
+    // perform a transformation on the number being formatted that
+    // is dependent on the type of substitution this is
+    double numberToFormat = transformNumber(number);
 
-  // if the result is an integer, from here on out we work in integer
-  // space (saving time and memory and preserving accuracy)
-  if (numberToFormat == uprv_floor(numberToFormat) && ruleSet != NULL) {
-    ruleSet->format(util64_fromDouble(numberToFormat), toInsertInto, _pos + this->pos);
+    // if the result is an integer, from here on out we work in integer
+    // space (saving time and memory and preserving accuracy)
+    if (numberToFormat == uprv_floor(numberToFormat) && ruleSet != NULL) {
+        ruleSet->format(util64_fromDouble(numberToFormat), toInsertInto, _pos + this->pos);
 
-    // if the result isn't an integer, then call either our rule set's
-    // format() method or our DecimalFormat's format() method to
-    // format the result
-  } else {
-    if (ruleSet != NULL) {
-      ruleSet->format(numberToFormat, toInsertInto, _pos + this->pos);
+        // if the result isn't an integer, then call either our rule set's
+        // format() method or our DecimalFormat's format() method to
+        // format the result
     } else {
-      UnicodeString temp;
-      numberFormat->format(numberToFormat, temp);
-      toInsertInto.insert(_pos + this->pos, temp);
+        if (ruleSet != NULL) {
+            ruleSet->format(numberToFormat, toInsertInto, _pos + this->pos);
+        } else {
+            UnicodeString temp;
+            numberFormat->format(numberToFormat, temp);
+            toInsertInto.insert(_pos + this->pos, temp);
+        }
     }
-  }
 }
 
 
@@ -384,77 +385,77 @@ NFSubstitution::doParse(const UnicodeString& text,
                         Formattable& result) const
 {
 #ifdef RBNF_DEBUG
-  fprintf(stderr, "<nfsubs> %x bv: %g ub: %g\n", this, baseValue, upperBound);
+    fprintf(stderr, "<nfsubs> %x bv: %g ub: %g\n", this, baseValue, upperBound);
 #endif
-  // figure out the highest base value a rule can have and match
-  // the text being parsed (this varies according to the type of
-  // substitutions: multiplier, modulus, and numerator substitutions
-  // restrict the search to rules with base values lower than their
-  // own; same-value substitutions leave the upper bound wherever
-  // it was, and the others allow any rule to match
-  upperBound = calcUpperBound(upperBound);
+    // figure out the highest base value a rule can have and match
+    // the text being parsed (this varies according to the type of
+    // substitutions: multiplier, modulus, and numerator substitutions
+    // restrict the search to rules with base values lower than their
+    // own; same-value substitutions leave the upper bound wherever
+    // it was, and the others allow any rule to match
+    upperBound = calcUpperBound(upperBound);
 
-  // use our rule set to parse the text.  If that fails and
-  // lenient parsing is enabled (this is always false if the
-  // formatter's lenient-parsing mode is off, but it may also
-  // be false even when the formatter's lenient-parse mode is
-  // on), then also try parsing the text using a default-
-  // constructed NumberFormat
-  if (ruleSet != NULL) {
-    ruleSet->parse(text, parsePosition, upperBound, result);
-    if (lenientParse && !ruleSet->isFractionRuleSet() && parsePosition.getIndex() == 0) {
-      UErrorCode status = U_ZERO_ERROR;
-      NumberFormat* fmt = NumberFormat::createInstance(status);
-      if (U_SUCCESS(status)) {
-	fmt->parse(text, result, parsePosition);
-      }
-      delete fmt;
+    // use our rule set to parse the text.  If that fails and
+    // lenient parsing is enabled (this is always false if the
+    // formatter's lenient-parsing mode is off, but it may also
+    // be false even when the formatter's lenient-parse mode is
+    // on), then also try parsing the text using a default-
+    // constructed NumberFormat
+    if (ruleSet != NULL) {
+        ruleSet->parse(text, parsePosition, upperBound, result);
+        if (lenientParse && !ruleSet->isFractionRuleSet() && parsePosition.getIndex() == 0) {
+            UErrorCode status = U_ZERO_ERROR;
+            NumberFormat* fmt = NumberFormat::createInstance(status);
+            if (U_SUCCESS(status)) {
+                fmt->parse(text, result, parsePosition);
+            }
+            delete fmt;
+        }
+
+        // ...or use our DecimalFormat to parse the text
+    } else {
+        numberFormat->parse(text, result, parsePosition);
     }
 
-    // ...or use our DecimalFormat to parse the text
-  } else {
-    numberFormat->parse(text, result, parsePosition);
-  }
+    // if the parse was successful, we've already advanced the caller's
+    // parse position (this is the one function that doesn't have one
+    // of its own).  Derive a parse result and return it as a Long,
+    // if possible, or a Double
+    if (parsePosition.getIndex() != 0) {
+        double tempResult = (result.getType() == Formattable::kLong) ?
+            (double)result.getLong() :
+        result.getDouble();
 
-  // if the parse was successful, we've already advanced the caller's
-  // parse position (this is the one function that doesn't have one
-  // of its own).  Derive a parse result and return it as a Long,
-  // if possible, or a Double
-  if (parsePosition.getIndex() != 0) {
-    double tempResult = (result.getType() == Formattable::kLong) ?
-      (double)result.getLong() :
-      result.getDouble();
-
-    // composeRuleValue() produces a full parse result from
-    // the partial parse result passed to this function from
-    // the caller (this is either the owning rule's base value
-    // or the partial result obtained from composing the
-    // owning rule's base value with its other substitution's
-    // parse result) and the partial parse result obtained by
-    // matching the substitution (which will be the same value
-    // the caller would get by parsing just this part of the
-    // text with RuleBasedNumberFormat.parse() ).  How the two
-    // values are used to derive the full parse result depends
-    // on the types of substitutions: For a regular rule, the
-    // ultimate result is its multiplier substitution's result
-    // times the rule's divisor (or the rule's base value) plus
-    // the modulus substitution's result (which will actually
-    // supersede part of the rule's base value).  For a negative-
-    // number rule, the result is the negative of its substitution's
-    // result.  For a fraction rule, it's the sum of its two
-    // substitution results.  For a rule in a fraction rule set,
-    // it's the numerator substitution's result divided by
-    // the rule's base value.  Results from same-value substitutions
-    // propagate back upard, and null substitutions don't affect
-    // the result.
-    tempResult = composeRuleValue(tempResult, baseValue);
-    result.setDouble(tempResult);
-    return TRUE;
-    // if the parse was UNsuccessful, return 0
-  } else {
-    result.setLong(0);
-    return FALSE;
-  }
+        // composeRuleValue() produces a full parse result from
+        // the partial parse result passed to this function from
+        // the caller (this is either the owning rule's base value
+        // or the partial result obtained from composing the
+        // owning rule's base value with its other substitution's
+        // parse result) and the partial parse result obtained by
+        // matching the substitution (which will be the same value
+        // the caller would get by parsing just this part of the
+        // text with RuleBasedNumberFormat.parse() ).  How the two
+        // values are used to derive the full parse result depends
+        // on the types of substitutions: For a regular rule, the
+        // ultimate result is its multiplier substitution's result
+        // times the rule's divisor (or the rule's base value) plus
+        // the modulus substitution's result (which will actually
+        // supersede part of the rule's base value).  For a negative-
+        // number rule, the result is the negative of its substitution's
+        // result.  For a fraction rule, it's the sum of its two
+        // substitution results.  For a rule in a fraction rule set,
+        // it's the numerator substitution's result divided by
+        // the rule's base value.  Results from same-value substitutions
+        // propagate back upard, and null substitutions don't affect
+        // the result.
+        tempResult = composeRuleValue(tempResult, baseValue);
+        result.setDouble(tempResult);
+        return TRUE;
+        // if the parse was UNsuccessful, return 0
+    } else {
+        result.setLong(0);
+        return FALSE;
+    }
 }
 
 UBool
@@ -586,18 +587,18 @@ UBool ModulusSubstitution::operator==(const NFSubstitution& rhs) const
 void
 ModulusSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto, int32_t _pos) const
 {
-  // if this isn't a >>> substitution, just use the inherited version
-  // of this function (which uses either a rule set or a DecimalFormat
-  // to format its substitution value)
-  if (ruleToUse == NULL) {
-    NFSubstitution::doSubstitution(number, toInsertInto, _pos);
+    // if this isn't a >>> substitution, just use the inherited version
+    // of this function (which uses either a rule set or a DecimalFormat
+    // to format its substitution value)
+    if (ruleToUse == NULL) {
+        NFSubstitution::doSubstitution(number, toInsertInto, _pos);
 
-    // a >>> substitution goes straight to a particular rule to
-    // format the substitution value
-  } else {
-    int64_t numberToFormat = transformNumber(number);
-    ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos());
-  }
+        // a >>> substitution goes straight to a particular rule to
+        // format the substitution value
+    } else {
+        int64_t numberToFormat = transformNumber(number);
+        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos());
+    }
 }
 
 /**
@@ -611,19 +612,19 @@ ModulusSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto,
 void
 ModulusSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const
 {
-  // if this isn't a >>> substitution, just use the inherited version
-  // of this function (which uses either a rule set or a DecimalFormat
-  // to format its substitution value)
-  if (ruleToUse == NULL) {
-    NFSubstitution::doSubstitution(number, toInsertInto, _pos);
+    // if this isn't a >>> substitution, just use the inherited version
+    // of this function (which uses either a rule set or a DecimalFormat
+    // to format its substitution value)
+    if (ruleToUse == NULL) {
+        NFSubstitution::doSubstitution(number, toInsertInto, _pos);
 
-    // a >>> substitution goes straight to a particular rule to
-    // format the substitution value
-  } else {
-    double numberToFormat = transformNumber(number);
+        // a >>> substitution goes straight to a particular rule to
+        // format the substitution value
+    } else {
+        double numberToFormat = transformNumber(number);
 
-    ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos());
-  }
+        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos());
+    }
 }
 
 //-----------------------------------------------------------------------
@@ -647,25 +648,25 @@ ModulusSubstitution::doParse(const UnicodeString& text,
                              UBool lenientParse,
                              Formattable& result) const
 {
-  // if this isn't a >>> substitution, we can just use the
-  // inherited parse() routine to do the parsing
-  if (ruleToUse == NULL) {
-    return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, lenientParse, result);
+    // if this isn't a >>> substitution, we can just use the
+    // inherited parse() routine to do the parsing
+    if (ruleToUse == NULL) {
+        return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, lenientParse, result);
 
-    // but if it IS a >>> substitution, we have to do it here: we
-    // use the specific rule's doParse() method, and then we have to
-    // do some of the other work of NFRuleSet.parse()
-  } else {
-    ruleToUse->doParse(text, parsePosition, FALSE, upperBound, result);
+        // but if it IS a >>> substitution, we have to do it here: we
+        // use the specific rule's doParse() method, and then we have to
+        // do some of the other work of NFRuleSet.parse()
+    } else {
+        ruleToUse->doParse(text, parsePosition, FALSE, upperBound, result);
 
-    if (parsePosition.getIndex() != 0) {
-      double tempResult = result.getDouble();
-      tempResult = composeRuleValue(tempResult, baseValue);
-      result.setDouble(tempResult);
+        if (parsePosition.getIndex() != 0) {
+            double tempResult = result.getDouble();
+            tempResult = composeRuleValue(tempResult, baseValue);
+            result.setDouble(tempResult);
+        }
+
+        return TRUE;
     }
-
-    return TRUE;
-  }
 }
 
 
@@ -677,7 +678,7 @@ const char IntegralPartSubstitution::fgClassID = 0;
 
 UClassID
 IntegralPartSubstitution::getDynamicClassID() const {
-  return getStaticClassID();
+    return getStaticClassID();
 }
 
 
@@ -732,35 +733,35 @@ FractionalPartSubstitution::FractionalPartSubstitution(int32_t _pos,
 void
 FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const
 {
-  // if we're not in "byDigits" mode, just use the inherited
-  // doSubstitution() routine
-  if (!byDigits) {
-    NFSubstitution::doSubstitution(number, toInsertInto, _pos);
+    // if we're not in "byDigits" mode, just use the inherited
+    // doSubstitution() routine
+    if (!byDigits) {
+        NFSubstitution::doSubstitution(number, toInsertInto, _pos);
 
-    // if we're in "byDigits" mode, transform the value into an integer
-    // by moving the decimal point eight places to the right and
-    // pulling digits off the right one at a time, formatting each digit
-    // as an integer using this substitution's owning rule set
-    // (this is slower, but more accurate, than doing it from the
-    // other end)
-  } else {
-    int32_t numberToFormat = (int32_t)uprv_round(transformNumber(number) * uprv_pow(10, kMaxDecimalDigits));
-    // this flag keeps us from formatting trailing zeros.  It starts
-    // out false because we're pulling from the right, and switches
-    // to true the first time we encounter a non-zero digit
-    UBool doZeros = FALSE;
-    for (int32_t i = 0; i < kMaxDecimalDigits; i++) {
-      int64_t digit = numberToFormat % 10;
-      if (digit != 0 || doZeros) {
-	if (doZeros && useSpaces) {
-	  toInsertInto.insert(_pos + getPos(), gSpace);
-	}
-	doZeros = TRUE;
-	getRuleSet()->format(digit, toInsertInto, _pos + getPos());
-      }
-      numberToFormat /= 10;
+        // if we're in "byDigits" mode, transform the value into an integer
+        // by moving the decimal point eight places to the right and
+        // pulling digits off the right one at a time, formatting each digit
+        // as an integer using this substitution's owning rule set
+        // (this is slower, but more accurate, than doing it from the
+        // other end)
+    } else {
+        int32_t numberToFormat = (int32_t)uprv_round(transformNumber(number) * uprv_pow(10, kMaxDecimalDigits));
+        // this flag keeps us from formatting trailing zeros.  It starts
+        // out false because we're pulling from the right, and switches
+        // to true the first time we encounter a non-zero digit
+        UBool doZeros = FALSE;
+        for (int32_t i = 0; i < kMaxDecimalDigits; i++) {
+            int64_t digit = numberToFormat % 10;
+            if (digit != 0 || doZeros) {
+                if (doZeros && useSpaces) {
+                    toInsertInto.insert(_pos + getPos(), gSpace);
+                }
+                doZeros = TRUE;
+                getRuleSet()->format(digit, toInsertInto, _pos + getPos());
+            }
+            numberToFormat /= 10;
+        }
     }
-  }
 }
 
 //-----------------------------------------------------------------------
@@ -792,63 +793,63 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
                 UBool lenientParse,
                 Formattable& resVal) const
 {
-  // if we're not in byDigits mode, we can just use the inherited
-  // doParse()
-  if (!byDigits) {
-    return NFSubstitution::doParse(text, parsePosition, baseValue, 0, lenientParse, resVal);
+    // if we're not in byDigits mode, we can just use the inherited
+    // doParse()
+    if (!byDigits) {
+        return NFSubstitution::doParse(text, parsePosition, baseValue, 0, lenientParse, resVal);
 
-    // if we ARE in byDigits mode, parse the text one digit at a time
-    // using this substitution's owning rule set (we do this by setting
-    // upperBound to 10 when calling doParse() ) until we reach
-    // nonmatching text
-  } else {
-    UnicodeString workText(text);
-    ParsePosition workPos(1);
-    double result = 0;
-    int32_t digit;
-    double p10 = 0.1;
+        // if we ARE in byDigits mode, parse the text one digit at a time
+        // using this substitution's owning rule set (we do this by setting
+        // upperBound to 10 when calling doParse() ) until we reach
+        // nonmatching text
+    } else {
+        UnicodeString workText(text);
+        ParsePosition workPos(1);
+        double result = 0;
+        int32_t digit;
+        double p10 = 0.1;
 
-    NumberFormat* fmt = NULL;
-    while (workText.length() > 0 && workPos.getIndex() != 0) {
-      workPos.setIndex(0);
-      Formattable temp;
-      getRuleSet()->parse(workText, workPos, 10, temp);
-      digit = temp.getType() == Formattable::kLong ?
-	temp.getLong() :
-	(int32_t)temp.getDouble();
+        NumberFormat* fmt = NULL;
+        while (workText.length() > 0 && workPos.getIndex() != 0) {
+            workPos.setIndex(0);
+            Formattable temp;
+            getRuleSet()->parse(workText, workPos, 10, temp);
+            digit = temp.getType() == Formattable::kLong ?
+                temp.getLong() :
+            (int32_t)temp.getDouble();
 
-      if (lenientParse && workPos.getIndex() == 0) {
-	if (!fmt) {
-	  UErrorCode status = U_ZERO_ERROR;
-	  fmt = NumberFormat::createInstance(status);
-	  if (U_FAILURE(status)) {
-	    delete fmt;
-	    fmt = NULL;
-	  }
-	}
-	if (fmt) {
-	  fmt->parse(workText, temp, workPos);
-	  digit = temp.getLong();
-	}
-      }
+            if (lenientParse && workPos.getIndex() == 0) {
+                if (!fmt) {
+                    UErrorCode status = U_ZERO_ERROR;
+                    fmt = NumberFormat::createInstance(status);
+                    if (U_FAILURE(status)) {
+                        delete fmt;
+                        fmt = NULL;
+                    }
+                }
+                if (fmt) {
+                    fmt->parse(workText, temp, workPos);
+                    digit = temp.getLong();
+                }
+            }
 
-      if (workPos.getIndex() != 0) {
-	result += digit * p10;
-	p10 /= 10;
-	parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
-	workText.removeBetween(0, workPos.getIndex());
-	while (workText.length() > 0 && workText.charAt(0) == gSpace) {
-	  workText.removeBetween(0, 1);
-	  parsePosition.setIndex(parsePosition.getIndex() + 1);
-	}
-      }
+            if (workPos.getIndex() != 0) {
+                result += digit * p10;
+                p10 /= 10;
+                parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
+                workText.removeBetween(0, workPos.getIndex());
+                while (workText.length() > 0 && workText.charAt(0) == gSpace) {
+                    workText.removeBetween(0, 1);
+                    parsePosition.setIndex(parsePosition.getIndex() + 1);
+                }
+            }
+        }
+        delete fmt;
+
+        result = composeRuleValue(result, baseValue);
+        resVal.setDouble(result);
+        return TRUE;
     }
-    delete fmt;
-
-    result = composeRuleValue(result, baseValue);
-    resVal.setDouble(result);
-    return TRUE;
-  }
 }
 
 UBool

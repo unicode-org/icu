@@ -1029,7 +1029,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
       uprv_uca_finalizeAddition(t, element, status);
     }
 #else
-	CE = element->mapCE;
+    CE = element->mapCE;
 #endif
   } else {
       CE = uprv_uca_finalizeAddition(t, element, status);  

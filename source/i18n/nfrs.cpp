@@ -625,8 +625,8 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
         {
             char ubstr[64];
             util64_toa(ub, ubstr, 64);
-			char ubstrhex[64];
-			util64_toa(ub, ubstrhex, 64, 16);
+            char ubstrhex[64];
+            util64_toa(ub, ubstrhex, 64, 16);
             fprintf(stderr, "ub: %g, i64: %s (%s)\n", upperBound, ubstr, ubstrhex);
         }
 #endif
@@ -690,7 +690,7 @@ NFRuleSet::appendRules(UnicodeString& result) const
 // utility functions
 
 int64_t util64_fromDouble(double d) {
-	int64_t result = 0;
+    int64_t result = 0;
     if (!uprv_isNaN(d)) {
         double mant = uprv_maxMantissa();
         if (d < -mant) {
@@ -707,7 +707,7 @@ int64_t util64_fromDouble(double d) {
             result = -result;
         }
     }
-	return result;
+    return result;
 }
 
 int64_t util64_pow(int32_t r, uint32_t e)  { 
@@ -716,7 +716,7 @@ int64_t util64_pow(int32_t r, uint32_t e)  {
     } else if (e == 0) {
         return 1;
     } else {
-		int64_t n = r;
+        int64_t n = r;
         while (--e > 0) {
             n *= r;
         }
@@ -826,8 +826,8 @@ uint32_t util64_toa(int64_t w, char* buf, uint32_t len, uint32_t radix, UBool ra
         *p++ = kMinus;
         --len;
     } else if (len && (w == 0)) {
-		*p++ = (char)raw ? 0 : asciiDigits[0];
-		--len;
+        *p++ = (char)raw ? 0 : asciiDigits[0];
+        --len;
     }
 
     while (len && w != 0) {
@@ -872,18 +872,18 @@ uint32_t util64_tou(int64_t w, UChar* buf, uint32_t len, uint32_t radix, UBool r
         *p++ = kUMinus;
         --len;
     } else if (len && (w == 0)) {
-		*p++ = (UChar)raw ? 0 : asciiDigits[0];
-		--len;
-	}
+        *p++ = (UChar)raw ? 0 : asciiDigits[0];
+        --len;
+    }
 
-	while (len && (w != 0)) {
-		int64_t n = w / base;
-		int64_t m = n * base;
-		int32_t d = (int32_t)(w-m);
-		*p++ = (UChar)(raw ? d : asciiDigits[d]);
-		w = n;
-		--len;
-	}
+    while (len && (w != 0)) {
+        int64_t n = w / base;
+        int64_t m = n * base;
+        int32_t d = (int32_t)(w-m);
+        *p++ = (UChar)(raw ? d : asciiDigits[d]);
+        w = n;
+        --len;
+    }
     if (len) {
         *p = 0; // null terminate if room for caller convenience
     }

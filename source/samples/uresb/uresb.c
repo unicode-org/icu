@@ -61,9 +61,9 @@ static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     { "locale", NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0 },
-	UOPTION_ENCODING,
-	{ "path", NULL, NULL, NULL, 'p', UOPT_OPTIONAL_ARG, 0 },
-	{ "truncate", NULL, NULL, NULL, 't', UOPT_OPTIONAL_ARG, 0 },
+    UOPTION_ENCODING,
+    { "path", NULL, NULL, NULL, 'p', UOPT_OPTIONAL_ARG, 0 },
+    { "truncate", NULL, NULL, NULL, 't', UOPT_OPTIONAL_ARG, 0 },
     UOPTION_VERBOSE
 };
 
@@ -73,7 +73,7 @@ extern int
 main(int argc, char* argv[]) {
 
     UResourceBundle *bundle = NULL;
-	UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UFILE *out = NULL;
     int32_t i = 0;
     const char* arg;
@@ -104,43 +104,43 @@ main(int argc, char* argv[]) {
         locale = 0;
     }
 
-	if(options[3].doesOccur) {
-		encoding = options[3].value;
-	} else {
-		encoding = NULL;
-	}
+    if(options[3].doesOccur) {
+        encoding = options[3].value;
+    } else {
+        encoding = NULL;
+    }
 
-	if(options[4].doesOccur) {
-		if(options[4].value != NULL) {
-			resPath = options[4].value; /* we'll use users resources */
-		} else {
-			resPath = NULL; /* we'll use ICU system resources for dumping */
-		}
-	} else {
-		resPath = currdir; /* we'll just dump uresb samples resources */
-	}
+    if(options[4].doesOccur) {
+        if(options[4].value != NULL) {
+            resPath = options[4].value; /* we'll use users resources */
+        } else {
+            resPath = NULL; /* we'll use ICU system resources for dumping */
+        }
+    } else {
+        resPath = currdir; /* we'll just dump uresb samples resources */
+    }
 
-	if(options[5].doesOccur) {
-		trunc = TRUE;
-		if(options[5].value != NULL) {
-			truncsize = atoi(options[5].value); /* user defined printable size */
-		} else {
-			truncsize = URESB_DEFAULTTRUNC; /* we'll use default omitting size */
-		}
-	} else {
-		trunc = FALSE;
-	}
+    if(options[5].doesOccur) {
+        trunc = TRUE;
+        if(options[5].value != NULL) {
+            truncsize = atoi(options[5].value); /* user defined printable size */
+        } else {
+            truncsize = URESB_DEFAULTTRUNC; /* we'll use default omitting size */
+        }
+    } else {
+        trunc = FALSE;
+    }
 
     if(options[6].doesOccur) {
       VERBOSE = TRUE;
     }
 
     outerr = u_finit(stderr, locale, encoding);
-	out = u_finit(stdout, locale, encoding); 
+    out = u_finit(stdout, locale, encoding); 
 
 /*
     for(i = 0; i<20; i++) {
-		reportError(&i);
+        reportError(&i);
     }
 */
 
@@ -149,15 +149,15 @@ main(int argc, char* argv[]) {
         arg = getLongPathname(argv[i]);
 
         printf("uresb: processing file \"%s\"\n", arg);
-	    bundle = ures_open(resPath, arg, &status);
-	    if(U_SUCCESS(status)) {
-		    u_fprintf(out, "%s\n", arg);
-		    printOutBundle(out, bundle, 0, &status);
-	    } else {
-		    reportError(&status);
-	    }
+        bundle = ures_open(resPath, arg, &status);
+        if(U_SUCCESS(status)) {
+            u_fprintf(out, "%s\n", arg);
+            printOutBundle(out, bundle, 0, &status);
+        } else {
+            reportError(&status);
+        }
 
-	    ures_close(bundle);
+        ures_close(bundle);
     }
 
 
@@ -168,13 +168,13 @@ main(int argc, char* argv[]) {
 }
 
 void printIndent(UFILE *out, int32_t indent) {
-	char inchar[256];
-	int32_t i = 0;
-	for(i = 0; i<indent; i++) {
-		inchar[i] = ' ';
-	}
-	inchar[indent] = '\0';
-	u_fprintf(out, "%s", inchar);
+    char inchar[256];
+    int32_t i = 0;
+    for(i = 0; i<indent; i++) {
+        inchar[i] = ' ';
+    }
+    inchar[indent] = '\0';
+    u_fprintf(out, "%s", inchar);
 }
 
 void printHex(UFILE *out, const uint8_t *what) {
@@ -218,143 +218,143 @@ static UChar *quotedString(const UChar *string) {
 }
 
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status) {
-	int32_t noOfElements = ures_getSize(resource);
-	int32_t i = 0;
-	const char *key = ures_getKey(resource);
+    int32_t noOfElements = ures_getSize(resource);
+    int32_t i = 0;
+    const char *key = ures_getKey(resource);
 
-	switch(ures_getType(resource)) {
-	case RES_STRING :
-		{
-			int32_t len=0;
-			const UChar*thestr = ures_getString(resource, &len, status);
-                        UChar *string = quotedString(thestr);
-			
-			/* TODO: String truncation */
-			/*
-			if(trunc && len > truncsize) {
-				printIndent(out, indent);
-				u_fprintf(out, "// WARNING: this string, size %d is truncated to %d\n", len, truncsize/2);
-				len = truncsize/2;
-			}
-			*/
-			printIndent(out, indent);
-			if(key != NULL) {
-				u_fprintf(out, "%s { \"%U\" } ", key, string);
-			} else {
-				u_fprintf(out, "\"%U\",", string);
-			}
-            if(VERBOSE) {
-              u_fprintf(out, " // STRING");
+    switch(ures_getType(resource)) {
+    case RES_STRING :
+        {
+            int32_t len=0;
+            const UChar*thestr = ures_getString(resource, &len, status);
+            UChar *string = quotedString(thestr);
+
+            /* TODO: String truncation */
+            /*
+            if(trunc && len > truncsize) {
+                printIndent(out, indent);
+                u_fprintf(out, "// WARNING: this string, size %d is truncated to %d\n", len, truncsize/2);
+                len = truncsize/2;
             }
-			u_fprintf(out, "\n");
-                        free(string);
-		}
-		break;
-	case RES_INT :
-		printIndent(out, indent);
-		if(key != NULL) {
-			u_fprintf(out, "%s", key);
+            */
+            printIndent(out, indent);
+            if(key != NULL) {
+                u_fprintf(out, "%s { \"%U\" } ", key, string);
+            } else {
+                u_fprintf(out, "\"%U\",", string);
+            }
+            if(VERBOSE) {
+                u_fprintf(out, " // STRING");
+            }
+            u_fprintf(out, "\n");
+            free(string);
+        }
+        break;
+    case RES_INT :
+        printIndent(out, indent);
+        if(key != NULL) {
+            u_fprintf(out, "%s", key);
         }
         u_fprintf(out, ":int { %li } ", ures_getInt(resource, status));
-
+        
         if(VERBOSE) {
-          u_fprintf(out, " // INT");
+            u_fprintf(out, " // INT");
         }
-		u_fprintf(out, "\n");
-		break;
-	case RES_BINARY :
-		{
-			int32_t len = 0;
-			const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
-			if(trunc && len > truncsize) {
-				printIndent(out, indent);
-				u_fprintf(out, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
-				len = truncsize/2;
-			}
-			if(U_SUCCESS(*status)) {
-				printIndent(out, indent);
-				if(key != NULL) {
-		  		  u_fprintf(out, "%s", key);
-				} 
-                u_fprintf(out, ":binary { ");
-				for(i = 0; i<len; i++) {
-					printHex(out, data++);
-				}
-				u_fprintf(out, " }");
-                if(VERBOSE) {
-                  u_fprintf(out, " // BINARY");
+        u_fprintf(out, "\n");
+        break;
+    case RES_BINARY :
+        {
+            int32_t len = 0;
+            const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
+            if(trunc && len > truncsize) {
+                printIndent(out, indent);
+                u_fprintf(out, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
+                len = truncsize/2;
+            }
+            if(U_SUCCESS(*status)) {
+                printIndent(out, indent);
+                if(key != NULL) {
+                    u_fprintf(out, "%s", key);
                 }
-				u_fprintf(out, "\n");
-
-			} else {
-				reportError(status);
-			}
-		}
-		break;
+                u_fprintf(out, ":binary { ");
+                for(i = 0; i<len; i++) {
+                    printHex(out, data++);
+                }
+                u_fprintf(out, " }");
+                if(VERBOSE) {
+                    u_fprintf(out, " // BINARY");
+                }
+                u_fprintf(out, "\n");
+                
+            } else {
+                reportError(status);
+            }
+        }
+        break;
     case RES_INT_VECTOR :
       {
-		int32_t len = 0;
-		const int32_t *data = ures_getIntVector(resource, &len, status);
-	    if(U_SUCCESS(*status)) {
-		    printIndent(out, indent);
-		    if(key != NULL) {
-		  	  u_fprintf(out, "%s", key);
-		    } 
-            u_fprintf(out, ":intvector { ");
-			for(i = 0; i<len-1; i++) {
-              u_fprintf(out, "%d, ", data[i]);
-			}
-            if(len > 0) {
-		      u_fprintf(out, "%d ", data[len-1]);
-            }
-		    u_fprintf(out, "}");
-            if(VERBOSE) {
-              u_fprintf(out, " // INTVECTOR");
-            }
-		    u_fprintf(out, "\n");
-
-	    } else {
-		    reportError(status);
-	    }
+          int32_t len = 0;
+          const int32_t *data = ures_getIntVector(resource, &len, status);
+          if(U_SUCCESS(*status)) {
+              printIndent(out, indent);
+              if(key != NULL) {
+                  u_fprintf(out, "%s", key);
+              } 
+              u_fprintf(out, ":intvector { ");
+              for(i = 0; i<len-1; i++) {
+                  u_fprintf(out, "%d, ", data[i]);
+              }
+              if(len > 0) {
+                  u_fprintf(out, "%d ", data[len-1]);
+              }
+              u_fprintf(out, "}");
+              if(VERBOSE) {
+                  u_fprintf(out, " // INTVECTOR");
+              }
+              u_fprintf(out, "\n");
+              
+          } else {
+              reportError(status);
+          }
       }
       break;
-	case RES_TABLE :
-	case RES_ARRAY :
-		{
-			UResourceBundle *t = NULL;
-			ures_resetIterator(resource);
-			printIndent(out, indent);
-			if(key != NULL) {
-				u_fprintf(out, "%s ", key);
-			}
-			u_fprintf(out, "{");
-            if(VERBOSE) {
-              if(ures_getType(resource) == RES_TABLE) {
-                u_fprintf(out, " // TABLE");
-              } else {
-                u_fprintf(out, " // ARRAY");
-              }
+    case RES_TABLE :
+    case RES_ARRAY :
+        {
+            UResourceBundle *t = NULL;
+            ures_resetIterator(resource);
+            printIndent(out, indent);
+            if(key != NULL) {
+                u_fprintf(out, "%s ", key);
             }
-			u_fprintf(out, "\n");
+            u_fprintf(out, "{");
+            if(VERBOSE) {
+                if(ures_getType(resource) == RES_TABLE) {
+                    u_fprintf(out, " // TABLE");
+                } else {
+                    u_fprintf(out, " // ARRAY");
+                }
+            }
+            u_fprintf(out, "\n");
 
-			while(ures_hasNext(resource)) {
-				t = ures_getNextResource(resource, t, status);
-				printOutBundle(out, t, indent+indentsize, status);
-			}
+            while(ures_hasNext(resource)) {
+                t = ures_getNextResource(resource, t, status);
+                printOutBundle(out, t, indent+indentsize, status);
+            }
 
-			printIndent(out, indent);
-			u_fprintf(out, "}\n");
-			ures_close(t);
-		}
-		break;
-	default:
-		break;
-	}
+            printIndent(out, indent);
+            u_fprintf(out, "}\n");
+            ures_close(t);
+        }
+        break;
+    default:
+        break;
+    }
 
 }
 
 void reportError(UErrorCode *status) {
-	u_fprintf(outerr, "Error %d : %U happened!\n", *status, getErrorName(*status));
+    u_fprintf(outerr, "Error %d : %U happened!\n", *status, getErrorName(*status));
 }
 
 

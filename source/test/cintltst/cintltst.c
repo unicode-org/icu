@@ -212,13 +212,13 @@ void ctest_setICU_DATA() {
     }
 
     /* U_TOPBUILDDIR is set by the makefiles on UNIXes when building cintltst and intltst
-	 //              to point to the top of the build hierarchy, which may or
-	 //              may not be the same as the source directory, depending on
-	 //              the configure options used.  At any rate,
-	 //              set the data path to the built data from this directory.
-	 //              The value is complete with quotes, so it can be used
-	 //              as-is as a string constant.
-     */
+    //              to point to the top of the build hierarchy, which may or
+    //              may not be the same as the source directory, depending on
+    //              the configure options used.  At any rate,
+    //              set the data path to the built data from this directory.
+    //              The value is complete with quotes, so it can be used
+    //              as-is as a string constant.
+    */
 #if defined (U_TOPBUILDDIR)
     {
         static char env_string[] = U_TOPBUILDDIR  U_FILE_SEP_STRING "data"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;

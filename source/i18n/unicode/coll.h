@@ -622,7 +622,7 @@ public:
   * strcmp().
   * @param source string to be processed.
   * @param sourceLength length of string to be processed. 
-  *			   If -1, the string is 0 terminated and length will be decided by the 
+  *        If -1, the string is 0 terminated and length will be decided by the 
   *        function.
   * @param result buffer to store result in. If NULL, number of bytes needed 
   *        will be returned.

@@ -323,7 +323,7 @@ indent(int32_t count,
 
     if(count <= 0)
     {
-	return;
+        return;
     }
     
     if(count < BUF_SIZE) {

@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -8,7 +8,7 @@
 * File CJAPTST.C
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description 
 *     Madhu Katragadda            Ported for C API
 * synwee                          Added TestBase, TestPlainDakutenHandakuten,
 *                                 TestSmallLarge, TestKatakanaHiragana,
@@ -101,24 +101,22 @@ const static UChar testChooonKigooCases[][MAX_TOKEN_LEN] = {
 
 void addKannaCollTest(TestNode** root)
 {
-  addTest(root, &TestTertiary, "tscoll/cjacoll/TestTertiary");
-  addTest(root, &TestBase, "tscoll/cjacoll/TestBase");
-  addTest(root, &TestPlainDakutenHandakuten, 
-                                 "tscoll/cjacoll/TestPlainDakutenHandakuten");
-  addTest(root, &TestSmallLarge, "tscoll/cjacoll/TestSmallLarge"); 
-  addTest(root, &TestKatakanaHiragana, "tscoll/cjacoll/TestKatakanaHiragana");
-  addTest(root, &TestChooonKigoo, "tscoll/cjacoll/TestChooonKigoo");
+    addTest(root, &TestTertiary, "tscoll/cjacoll/TestTertiary");
+    addTest(root, &TestBase, "tscoll/cjacoll/TestBase");
+    addTest(root, &TestPlainDakutenHandakuten, "tscoll/cjacoll/TestPlainDakutenHandakuten");
+    addTest(root, &TestSmallLarge, "tscoll/cjacoll/TestSmallLarge");
+    addTest(root, &TestKatakanaHiragana, "tscoll/cjacoll/TestKatakanaHiragana");
+    addTest(root, &TestChooonKigoo, "tscoll/cjacoll/TestChooonKigoo");
 }
 
 static void TestTertiary( )
 {
-    
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("ja_JP", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing Kanna(Japan) Collation with Tertiary strength\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
@@ -133,69 +131,69 @@ static void TestTertiary( )
 /* Testing base letters */
 static void TestBase()
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation = ucol_open("ja_JP", &status);
-  if (U_FAILURE(status))
-  {
-    log_err("ERROR: in creation of rule based collator: %s\n", 
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation = ucol_open("ja_JP", &status);
+    if (U_FAILURE(status))
+    {
+        log_err("ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
-	  return;
-  }
-  
-  log_verbose("Testing Japanese Base Characters Collation\n");
-  ucol_setStrength(myCollation, UCOL_PRIMARY);
-  for (i = 0; i < 3 ; i++)
-    doTest(myCollation, testBaseCases[i], testBaseCases[i + 1], UCOL_LESS);
+        return;
+    }
 
-  ucol_close(myCollation);
+    log_verbose("Testing Japanese Base Characters Collation\n");
+    ucol_setStrength(myCollation, UCOL_PRIMARY);
+    for (i = 0; i < 3 ; i++)
+        doTest(myCollation, testBaseCases[i], testBaseCases[i + 1], UCOL_LESS);
+
+    ucol_close(myCollation);
 }
 
 /* Testing plain, Daku-ten, Handaku-ten letters */
 static void TestPlainDakutenHandakuten(void)
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation = ucol_open("ja_JP", &status);
-  if (U_FAILURE(status))
-  {
-    log_err("ERROR: in creation of rule based collator: %s\n", 
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation = ucol_open("ja_JP", &status);
+    if (U_FAILURE(status))
+    {
+        log_err("ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
-	   return;
-  }
-  
-  log_verbose("Testing plain, Daku-ten, Handaku-ten letters Japanese Characters Collation\n");
-  ucol_setStrength(myCollation, UCOL_SECONDARY);
-  for (i = 0; i < 3 ; i++)
-    doTest(myCollation, testPlainDakutenHandakutenCases[i], 
-           testPlainDakutenHandakutenCases[i + 1], UCOL_LESS);
+        return;
+    }
 
-  ucol_close(myCollation);
+    log_verbose("Testing plain, Daku-ten, Handaku-ten letters Japanese Characters Collation\n");
+    ucol_setStrength(myCollation, UCOL_SECONDARY);
+    for (i = 0; i < 3 ; i++)
+        doTest(myCollation, testPlainDakutenHandakutenCases[i],
+        testPlainDakutenHandakutenCases[i + 1], UCOL_LESS);
+
+    ucol_close(myCollation);
 }
 
-/* 
+/*
 * Test Small, Large letters
 */
 static void TestSmallLarge(void)
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation = ucol_open("ja_JP", &status);
-  if (U_FAILURE(status))
-  {
-    log_err("ERROR: in creation of rule based collator: %s\n", 
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation = ucol_open("ja_JP", &status);
+    if (U_FAILURE(status))
+    {
+        log_err("ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
-	   return;
-  }
-  
-  log_verbose("Testing Japanese Small and Large Characters Collation\n");
-  ucol_setStrength(myCollation, UCOL_TERTIARY);
-  ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
-  for (i = 0; i < 3 ; i++)
-    doTest(myCollation, testSmallLargeCases[i], testSmallLargeCases[i + 1], 
-           UCOL_LESS);
+        return;
+    }
 
-  ucol_close(myCollation); 
+    log_verbose("Testing Japanese Small and Large Characters Collation\n");
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
+    for (i = 0; i < 3 ; i++)
+        doTest(myCollation, testSmallLargeCases[i], testSmallLargeCases[i + 1],
+        UCOL_LESS);
+
+    ucol_close(myCollation);
 }
 
 /*
@@ -203,25 +201,25 @@ static void TestSmallLarge(void)
 */
 static void TestKatakanaHiragana(void)
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation = ucol_open("ja_JP", &status);
-  if (U_FAILURE(status))
-  {
-    log_err("ERROR: in creation of rule based collator: %s\n", 
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation = ucol_open("ja_JP", &status);
+    if (U_FAILURE(status))
+    {
+        log_err("ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
-	   return;
-  }
-  
-  log_verbose("Testing Japanese Katakana, Hiragana Characters Collation\n");
-  ucol_setStrength(myCollation, UCOL_QUATERNARY);
-  ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
-  for (i = 0; i < 3 ; i++) {
-    doTest(myCollation, testKatakanaHiraganaCases[i], 
-           testKatakanaHiraganaCases[i + 1], UCOL_LESS);
-  }
+        return;
+    }
 
-  ucol_close(myCollation);
+    log_verbose("Testing Japanese Katakana, Hiragana Characters Collation\n");
+    ucol_setStrength(myCollation, UCOL_QUATERNARY);
+    ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
+    for (i = 0; i < 3 ; i++) {
+        doTest(myCollation, testKatakanaHiraganaCases[i],
+            testKatakanaHiraganaCases[i + 1], UCOL_LESS);
+    }
+
+    ucol_close(myCollation);
 }
 
 /*
@@ -229,22 +227,22 @@ static void TestKatakanaHiragana(void)
 */
 static void TestChooonKigoo(void)
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation = ucol_open("ja_JP", &status);
-  if (U_FAILURE(status))
-  {
-    log_err("ERROR: in creation of rule based collator: %s\n", 
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation = ucol_open("ja_JP", &status);
+    if (U_FAILURE(status))
+    {
+        log_err("ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
-	   return;
-  }
-  
-  log_verbose("Testing Japanese Choo-on Kigoo Characters Collation\n");
-  ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
-  for (i = 0; i < 7 ; i++) {
-    doTest(myCollation, testChooonKigooCases[i], testChooonKigooCases[i + 1], 
-           UCOL_LESS);
-  }
+        return;
+    }
 
-  ucol_close(myCollation);
+    log_verbose("Testing Japanese Choo-on Kigoo Characters Collation\n");
+    ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
+    for (i = 0; i < 7 ; i++) {
+        doTest(myCollation, testChooonKigooCases[i], testChooonKigooCases[i + 1],
+            UCOL_LESS);
+    }
+
+    ucol_close(myCollation);
 }
