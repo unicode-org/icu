@@ -167,6 +167,17 @@ ucol_strcoll(    const    UCollator    *coll,
         return (UCollationResult) ((Collator*)coll)->compare(source,sourceLength,target,targetLength);
 }
 
+U_CAPI UCollationResult
+ucol_strcollEx(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
+{
+	return UCOL_EQUAL;
+}
+
+
 U_CAPI UBool
 ucol_greater(    const    UCollator        *coll,
         const    UChar            *source,
@@ -734,4 +745,29 @@ U_CAPI uint8_t *
 ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 {
   return ((RuleBasedCollator*)coll)->cloneRuleData(*length,*status);
+}
+
+U_CAPI void ucol_setAttribute(const UCollator *coll, const UColAttribute attr, const UColAttributeValue value, UErrorCode *status) {
+	*status = U_UNSUPPORTED_ERROR;
+	return;
+}
+
+U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, const UColAttribute attr, UErrorCode *status) {
+	*status = U_UNSUPPORTED_ERROR;
+	return UCOL_ATTR_DEFAULT;
+}
+
+U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
+	*status = U_UNSUPPORTED_ERROR;
+	return NULL;
+}
+
+U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
+								 UCharForwardIterator *source, void *sourceContext,
+								 UCharForwardIterator *target, void *targetContext) {
+	return UCOL_EQUAL;
+}
+
+U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
+	return 0;
 }

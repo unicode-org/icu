@@ -2815,5 +2815,36 @@ RuleBasedCollator::cloneRuleData(int32_t &length, UErrorCode &status)
     }
 }
 
+void RuleBasedCollator::setAttribute(const UColAttribute attr, const UColAttributeValue value, UErrorCode &status) {
+	status = U_UNSUPPORTED_ERROR;
+}
+
+UColAttributeValue RuleBasedCollator::getAttribute(const UColAttribute attr, UErrorCode &status) {
+	status = U_UNSUPPORTED_ERROR;
+	return UCOL_ATTR_DEFAULT;
+}
+
+Collator* RuleBasedCollator::safeClone(void) {
+	return 0;
+}
+
+
+Collator::EComparisonResult RuleBasedCollator::compare(ForwardCharacterIterator &source,
+											 ForwardCharacterIterator &target) {
+	return EQUAL;
+}
+
+int32_t       RuleBasedCollator::getSortKey(const   UnicodeString&  source,
+						  uint8_t *result,
+						  int32_t resultLength) const {
+	return 0;
+}
+
+int32_t       RuleBasedCollator::getSortKey(const   UChar *source,
+						  int32_t sourceLength,
+						  uint8_t *result,
+						  int32_t resultLength) const {
+	return 0;
+}
 
 //eof
