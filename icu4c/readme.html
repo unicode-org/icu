@@ -1271,8 +1271,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       <li>Run <tt>'./configure --host=as400-os400'</tt></li>
 
       <li>
-        If you do not want to do the 'gmake install' step, like in the Unix
-        instructions for ICU, or you did not specify
+        If specified
         <tt>--with-data-packaging=archive</tt> to configure, you can skip this
         step. In a future release of ICU, we hope to eliminate this complicated
         step. Any suggestions to improve the ICU installation are greatly
@@ -1291,8 +1290,9 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 <pre>
 <samp>cd data
 mv Makefile.hide Makefile
+system CRTLIB "LIB(datalibraryname)"
 gmake OUTPUTDIR=<i>datalibraryname</i>
-system CRTSRVPGM "SRVPGM(<i>datalibraryname</i>/LIBICUDATA)" "MODULE(<i>datalibraryname</i>/*ALL)"
+system CRTSRVPGM "SRVPGM(<i>libraryname</i>/LIBICUDATA)" "MODULE(<i>datalibraryname</i>/*ALL)"
                  "EXPORT(*ALL)" "TEXT('ICU 2.4 DATA')" "OPTION(*DUPPROC *DUPVAR)"
 ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm out/libicudata.o
 cd ..
