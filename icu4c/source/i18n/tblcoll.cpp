@@ -326,18 +326,12 @@ Collator* RuleBasedCollator::clone() const
   return new RuleBasedCollator(*this);
 }
 
-/**
-* Create a CollationElementIterator object that will iterator over the
-* elements in a string, using the collation rules defined in this
-* RuleBasedCollator
-*/
 CollationElementIterator* RuleBasedCollator::createCollationElementIterator
                                            (const UnicodeString& source) const
 {
   UErrorCode status = U_ZERO_ERROR;
   CollationElementIterator *result = new CollationElementIterator(source, this,
                                                                   status);
-
   if (U_FAILURE(status))
     return NULL;
 
