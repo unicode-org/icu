@@ -269,25 +269,79 @@ UBool RegexMatcher::find() {
     // Start at the position of the last match end.  (Will be zero if the
     //   matcher has been reset.
     //
-    // TODO:  Needs optimization
     UErrorCode status = U_ZERO_ERROR;
+
+    if (fPattern->fBadState) {
+        return FALSE;
+    }
 
     int32_t startPos = fMatchEnd;
     int32_t inputLen = fInput->length();
+    const UChar *inputBuf = fInput->getBuffer();
+    UChar32  c;
     U_ASSERT(startPos >= 0);
-    for (;;) {
+
+    switch (fPattern->fStartType) {
+    case START_LINE:
+    case START_STRING:
+    case START_CHAR:
+    case START_NO_INFO:
+    case START_SET:
+        // No optimization was found. 
+        //  Try a match at each input position.
+        for (;;) {
+            MatchAt(startPos, status);
+            if (U_FAILURE(status)) {
+                return FALSE;
+            }
+            if (fMatch) {
+                return TRUE;
+            }
+            if (startPos >= inputLen) {
+                return FALSE;
+            }
+            U16_FWD_1(inputBuf, startPos, inputLen);
+            // Note that it's perfectly OK for a pattern to have a zero-length
+            //   match at the end of a string, so we must make sure that the loop
+            //   runs with startPos == inputLen the last time through.
+        }
+        U_ASSERT(FALSE);
+
+    case START_START:
+        // Matches are only possible at the start of the input string
+        //   (pattern begins with ^ or \A)
+        if (startPos > 0) {
+            return FALSE;
+        }
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
             return FALSE;
         }
-        if (fMatch) {
-            return TRUE;
+        return fMatch;
+
+
+    //case START_SET:
+        // Match may start on any char from a pre-computed set.
+        U16_GET(inputBuf, 0, startPos, inputLen, c);
+        for (;;) {
+            if (fPattern->fInitialChars->contains(c)) {
+                MatchAt(startPos, status);
+                if (U_FAILURE(status)) {
+                    return FALSE;
+                }
+                if (fMatch) {
+                    return TRUE;
+                }
+            }
+            if (startPos >= inputLen) {
+                return FALSE;
+            }
+            U16_NEXT(inputBuf, startPos, inputLen, c);
         }
-        if (startPos >= inputLen) {
-            break;
-        }
-        startPos = fInput->moveIndex32(startPos, 1);
+        U_ASSERT(FALSE);
     }
+
+    U_ASSERT(FALSE);
     return FALSE;
 }
 

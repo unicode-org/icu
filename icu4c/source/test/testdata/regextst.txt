@@ -272,6 +272,7 @@
 
 "\N{FULL STOP}*"                 "<0>...</0>abc"
 
+"$"                              "abc<0></0>"
 
 #
 #  Random debugging, Temporary
@@ -281,7 +282,7 @@
 
 "This is a string with (?:one |two |three )endings"   "<0>This is a string with two endings</0>"
 "((?:a|b|c)whoop-dee-do) | [jkl]|zed"             "x"
-"astring|another[bcd]|alpha|a|[a]"  d "x"
+"astring|another[bcd]|alpha|a|[a]"    "x"
 
 #
 #  Regexps from http://www.regexlib.com
