@@ -178,6 +178,11 @@ UnicodeString toString(const Formattable& f) {
 
 #endif
 
+// useful when operator+ won't cooperate
+UnicodeString toString(int32_t n) {
+    return UnicodeString() + (long)n;
+}
+
 // stephen - cleaned up 05/05/99
 UnicodeString operator+(const UnicodeString& left, char num)
 { return left + (long)num; }
