@@ -905,7 +905,19 @@ UnicodeString::toUpper(const Locale& locale)
   UChar *oldArray = fArray;
   int32_t oldLength = fLength;
   int32_t *bufferToDelete = 0;
-  if(!cloneArrayIfNeeded(fLength + 2, fLength + 2, FALSE, &bufferToDelete, TRUE)) {
+
+  // Make sure that if the string is in fStackBuffer we do not overwrite it!
+  int32_t capacity;
+  if(fLength <= US_STACKBUF_SIZE) {
+    if(fArray == fStackBuffer) {
+      capacity = 2 * US_STACKBUF_SIZE; // make sure that cloneArrayIfNeeded() allocates a new buffer
+    } else {
+      capacity = US_STACKBUF_SIZE;
+    }
+  } else {
+    capacity = fLength + 2;
+  }
+  if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
     return *this;
   }
 
@@ -937,7 +949,19 @@ UnicodeString::toLower(const Locale& locale)
   UChar *oldArray = fArray;
   int32_t oldLength = fLength;
   int32_t *bufferToDelete = 0;
-  if(!cloneArrayIfNeeded(fLength + 2, fLength + 2, FALSE, &bufferToDelete, TRUE)) {
+
+  // Make sure that if the string is in fStackBuffer we do not overwrite it!
+  int32_t capacity;
+  if(fLength <= US_STACKBUF_SIZE) {
+    if(fArray == fStackBuffer) {
+      capacity = 2 * US_STACKBUF_SIZE; // make sure that cloneArrayIfNeeded() allocates a new buffer
+    } else {
+      capacity = US_STACKBUF_SIZE;
+    }
+  } else {
+    capacity = fLength + 2;
+  }
+  if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
     return *this;
   }
 
