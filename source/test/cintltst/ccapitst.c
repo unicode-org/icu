@@ -23,6 +23,8 @@
 #include "cstring.h"
 #include "cmemory.h"
 
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 512
@@ -36,6 +38,7 @@ static void TestCCSID(void);
 static void TestJ932(void);
 static void TestJ1968(void);
 static void TestConvertSafeCloneCallback(void);
+static void TestEBCDICSwapLFNL(void);
 
 void addTestConvert(TestNode** root);
 
@@ -49,6 +52,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
     addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932");
     addTest(root, &TestJ1968,   "tsconv/ccapitst/TestJ1968");
+    addTest(root, &TestEBCDICSwapLFNL,   "tsconv/ccapitst/TestEBCDICSwapLFNL");
 }
 
 static void TestConvert() 
@@ -1934,4 +1938,156 @@ static void TestJ1968(void) {
 
 }
 
+static void
+testSwap(const char *name, UBool swap) {
+    /*
+     * Test Unicode text.
+     * Contains characters that are the highest for some of the
+     * tested conversions, to make sure that the ucnvmbcs.c code that modifies the
+     * tables copies the entire tables.
+     */
+    static const UChar text[]={
+        0x61, 0xd, 0x62, 0xa, 0x4e00, 0x3000, 0xfffd, 0xa, 0x20, 0x85, 0xff5e, 0x7a
+    };
 
+    UChar uNormal[32], uSwapped[32];
+    char normal[32], swapped[32];
+    const UChar *pcu;
+    UChar *pu;
+    char *pc;
+    int32_t i, normalLength, swappedLength;
+    UChar u;
+    char c;
+
+    const char *swappedName;
+    UConverter *cnv, *swapCnv;
+    UErrorCode errorCode;
+
+    /* if the swap flag is FALSE, then the test encoding is not EBCDIC and must not swap */
+
+    /* open both the normal and the LF/NL-swapping converters */
+    strcpy(swapped, name);
+    strcat(swapped, UCNV_SWAP_LFNL_OPTION_STRING);
+
+    errorCode=U_ZERO_ERROR;
+    swapCnv=ucnv_open(swapped, &errorCode);
+    cnv=ucnv_open(name, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("TestEBCDICSwapLFNL error: unable to open %s or %s (%s)\n", name, swapped, u_errorName(errorCode));
+        goto cleanup;
+    }
+
+    /* the name must contain the swap option if and only if we expect the converter to swap */
+    swappedName=ucnv_getName(swapCnv, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("TestEBCDICSwapLFNL error: ucnv_getName(%s,swaplfnl) failed (%s)\n", name, u_errorName(errorCode));
+        goto cleanup;
+    }
+
+    pc=strstr(swappedName, UCNV_SWAP_LFNL_OPTION_STRING);
+    if(swap != (pc!=NULL)) {
+        log_err("TestEBCDICSwapLFNL error: ucnv_getName(%s,swaplfnl)=%s should (%d) contain 'swaplfnl'\n", name, swappedName, swap);
+        goto cleanup;
+    }
+
+    /* convert to EBCDIC */
+    pcu=text;
+    pc=normal;
+    ucnv_fromUnicode(cnv, &pc, normal+LENGTHOF(normal), &pcu, text+LENGTHOF(text), NULL, TRUE, &errorCode);
+    normalLength=(int32_t)(pc-normal);
+
+    pcu=text;
+    pc=swapped;
+    ucnv_fromUnicode(swapCnv, &pc, swapped+LENGTHOF(swapped), &pcu, text+LENGTHOF(text), NULL, TRUE, &errorCode);
+    swappedLength=(int32_t)(pc-swapped);
+
+    if(U_FAILURE(errorCode)) {
+        log_err("TestEBCDICSwapLFNL error converting to %s - (%s)\n", name, u_errorName(errorCode));
+        goto cleanup;
+    }
+
+    /* compare EBCDIC output */
+    if(normalLength!=swappedLength) {
+        log_err("TestEBCDICSwapLFNL error converting to %s - output lengths %d vs. %d\n", name, normalLength, swappedLength);
+        goto cleanup;
+    }
+    for(i=0; i<normalLength; ++i) {
+        /* swap EBCDIC LF/NL for comparison */
+        c=normal[i];
+        if(swap) {
+            if(c==0x15) {
+                c=0x25;
+            } else if(c==0x25) {
+                c=0x15;
+            }
+        }
+
+        if(c!=swapped[i]) {
+            log_err("TestEBCDICSwapLFNL error converting to %s - did not swap properly, output[%d]=0x%02x\n", name, i, (uint8_t)swapped[i]);
+            goto cleanup;
+        }
+    }
+
+    /* convert back to Unicode (may not roundtrip) */
+    pc=normal;
+    pu=uNormal;
+    ucnv_toUnicode(cnv, &pu, uNormal+LENGTHOF(uNormal), &pc, normal+normalLength, NULL, TRUE, &errorCode);
+    normalLength=(int32_t)(pu-uNormal);
+
+    pc=normal;
+    pu=uSwapped;
+    ucnv_toUnicode(swapCnv, &pu, uSwapped+LENGTHOF(uSwapped), &pc, normal+swappedLength, NULL, TRUE, &errorCode);
+    swappedLength=(int32_t)(pu-uSwapped);
+
+    if(U_FAILURE(errorCode)) {
+        log_err("TestEBCDICSwapLFNL error converting from %s - (%s)\n", name, u_errorName(errorCode));
+        goto cleanup;
+    }
+
+    /* compare EBCDIC output */
+    if(normalLength!=swappedLength) {
+        log_err("TestEBCDICSwapLFNL error converting from %s - output lengths %d vs. %d\n", name, normalLength, swappedLength);
+        goto cleanup;
+    }
+    for(i=0; i<normalLength; ++i) {
+        /* swap EBCDIC LF/NL for comparison */
+        u=uNormal[i];
+        if(swap) {
+            if(u==0xa) {
+                u=0x85;
+            } else if(u==0x85) {
+                u=0xa;
+            }
+        }
+
+        if(u!=uSwapped[i]) {
+            log_err("TestEBCDICSwapLFNL error converting from %s - did not swap properly, output[%d]=U+%04x\n", name, i, uSwapped[i]);
+            goto cleanup;
+        }
+    }
+
+    /* clean up */
+cleanup:
+    ucnv_close(cnv);
+    ucnv_close(swapCnv);
+}
+
+static void
+TestEBCDICSwapLFNL() {
+    static const struct {
+        const char *name;
+        UBool swap;
+    } tests[]={
+        { "ibm-37", TRUE },
+        { "ibm-1047", TRUE },
+        { "ibm-1140", TRUE },
+        { "ibm-930", TRUE },
+        { "iso-8859-3", FALSE }
+    };
+
+    int i;
+
+    for(i=0; i<LENGTHOF(tests); ++i) {
+        testSwap(tests[i].name, tests[i].swap);
+    }
+}
