@@ -612,6 +612,17 @@ TestChoiceFormat::testValue( double val )
         return;
     }
 
+#ifdef OS400
+    /* The AS/400 will signal an underflow exception when
+     * attempting the rest of the test.  No can do.
+     * Generating values less that DBL_MIN are not allowed on AS/400
+     */
+    if (valprev == 0.0 || val == 0.0 || valnext == 0.0 ) {
+        logln("Skipping the rest of testValue(%lf) valprev=%lf valnext=%lf", val, valprev, valnext);
+        return;
+    }
+#endif
+
     /* volatile so the compiler doesn't get confused.. --srl */
     volatile double middle;  
     middle = (val + valnext) / 2.0;
