@@ -249,7 +249,7 @@ public:
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const = 0;
     /**
-     * @deprecated 
+     * @deprecated Remove after 2000-dec-31. Use the other getOffset().
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis) const = 0;
@@ -391,7 +391,7 @@ public:
      * @param date the given UDate.
      * @return true if the given date is in daylight savings time,
      * false, otherwise.
-     * @deprecated
+     * @deprecated Remove after 2000-dec-31. Use useDaylightTime() instead.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& status) const = 0;
 
