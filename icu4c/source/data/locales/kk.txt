@@ -99,4 +99,8 @@ kk {
         ",",
         "+",
     }
+    DateTimeElements:intvector {
+        2, // monday is the first day of the week
+        1,
+    }
 }
