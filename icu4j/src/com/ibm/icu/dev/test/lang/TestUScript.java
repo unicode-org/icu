@@ -63,15 +63,23 @@ public class TestUScript extends TestFmwk {
                 numErrors++;
             }
         }
-        if(numErrors >0 ){
-            if(noData()){
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
-            }else{
-                warnln("Could not find locale data");
+        reportDataErrors(numErrors);
+    }
+
+    private void reportDataErrors(int numErrors) {
+        if (numErrors >0) {
+            if (isModularBuild()) {
+                // assume missing locale data, so not an error, just a warning
+                if (!noData()) {
+                    // if nodata is set don't even warn
+                    warnln("Could not find locale data");
+                }
+            } else {
+                errln("encountered " + numErrors + " errors.");
             }
         }
-
     }
+
     public void TestMultipleCode(){
         final String[] testNames = { "ja" ,"ko_KR","zh","zh_TW"};
         final int[][] expected = {
@@ -96,15 +104,9 @@ public class TestUScript extends TestFmwk {
                 numErrors++;
             }
         }
-        if(numErrors >0 ){
-            if(noData()){
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
-            }else{
-                warnln("Could not find locale data");
-            }
-        }
-
+        reportDataErrors(numErrors);
     }
+
     public void TestGetCode(){
 
         final String[] testNames={
@@ -168,16 +170,9 @@ public class TestUScript extends TestFmwk {
                 numErrors++;
             }
         }
-        if(numErrors >0 ){
-            if (!noData()) {
-                warnln("Could not find locale data");
-            }else{
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
-            }
-        }
-
-
+        reportDataErrors(numErrors);
     }
+
     public void TestGetName(){
 
         final int[] testCodes={
