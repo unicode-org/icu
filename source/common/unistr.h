@@ -580,7 +580,7 @@ public:
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
    */
-  inline UTextOffset lastIndexOf(const UChar *srcChars,
+  UTextOffset lastIndexOf(const UChar *srcChars,
               UTextOffset srcStart,
               int32_t srcLength,
               UTextOffset start,
