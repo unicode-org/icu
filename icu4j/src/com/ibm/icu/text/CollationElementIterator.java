@@ -2308,7 +2308,7 @@ public final class CollationElementIterator
             m_FCDStart_ = m_FCDLimit_ - 1;
             // Indicate where to continue in main input string after
             // exhausting the buffer
-            return IGNORABLE;
+            return next();
         }
     }
 
@@ -2906,7 +2906,7 @@ public final class CollationElementIterator
 
             m_FCDStart_ = m_source_.getIndex();
             m_FCDLimit_ = m_FCDStart_ + 1;
-            return IGNORABLE;
+            return previous();
         }
     }
 
