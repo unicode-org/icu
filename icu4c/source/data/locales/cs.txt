@@ -1561,22 +1561,6 @@ cs{
             "Halifax",
         }
         {
-            "America/St_Johns",
-            "Newfoundlandský standardní čas",
-            "CNT",
-            "Newfoundlandský letní čas",
-            "CDT",
-            "St. Johns",
-        }
-        {
-            "Asia/Shanghai",
-            "Čínský standardní čas",
-            "CTT",
-            "Čínský standardní čas",
-            "CDT",
-            "Šanghaj",
-        }
-        {
             "Europe/Paris",
             "Středoevropský standardní čas",
             "CET",
