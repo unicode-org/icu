@@ -364,6 +364,16 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
                 setMatchNotFound();
                 return USEARCH_DONE;
             }
+            if (m_search_->matchedLength <= 0) {
+                // the flipping direction issue has already been handled 
+                // in next()
+                // for boundary check purposes. this will ensure that the
+                // next match will not preceed the current offset
+                // note search->matchedIndex will always be set to something
+                // in the code
+                m_search_->matchedIndex = position - 1;
+            }
+
 			ucol_setOffset(m_strsrch_->textIter, position, &status);
             while (TRUE) {
                 if (m_search_->isCanonicalMatch) {
