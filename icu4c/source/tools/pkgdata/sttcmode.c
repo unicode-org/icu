@@ -141,7 +141,9 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
         parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
         /* make up commands.. */
-        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n %s -d $(TEMP_DIR) $<", o->shortName);
+        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n %s -d $(TEMP_DIR) %s%s $<", o->shortName,
+                (o->version)?"-r ":"",
+                o->version?o->version:"");
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
         sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
@@ -207,11 +209,10 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     sprintf(tmp, "# File to make:\nTARGET=%s\n\n", o->outFiles->str);
     T_FileStream_writeLine(makefile, tmp);
-    T_FileStream_writeLine(makefile, "LIB_TARGET=$(TARGET)\n"
-                            "HEADER=$(TARGETDIR)/$(NAME).h\n");
+    T_FileStream_writeLine(makefile, "LIB_TARGET=$(TARGET)\n");
 
 
-    uprv_strcpy(tmp, "all: $(TARGETDIR)/$(LIB_TARGET) $(HEADER)");
+    uprv_strcpy(tmp, "all: $(TARGETDIR)/$(LIB_TARGET)");
     uprv_strcat(tmp, "\n\n");
     T_FileStream_writeLine(makefile, tmp);
 
@@ -246,14 +247,17 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
     sprintf(tmp, "$(TEMP_DIR)/%s_dat.c: $(CMNLIST)\n"
-                "\t$(INVOKE) $(GENCMN) -e %s -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->entryName, o->shortName);
+            "\t$(INVOKE) $(GENCMN) -e %s -n %s -S -d $(TEMP_DIR) %s%s 0 $(CMNLIST)\n\n", o->shortName, o->entryName, o->shortName,
+            (o->version)?"-r ":"",
+            o->version?o->version:"");
+
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCSYM= %s_dat \n\n", o->entryName); /* entrypoint not always shortname! */
     T_FileStream_writeLine(makefile, tmp);
 
-    T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) $(NAME).$(STATIC_O) ");
+    T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
     pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
     T_FileStream_writeLine(makefile, "\n\n");
@@ -270,27 +274,11 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     T_FileStream_writeLine(makefile, "# static mode shouldn't need to be installed, but we will install the header and static library for them.\n");
 
-    T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(LIB_TARGET) $(HEADER)\n"
-                            "\t$(INSTALL-L) $(TARGETDIR)/$(LIB_TARGET) $(INSTALLTO)/$(LIB_TARGET)\n"
-                            "\t$(INSTALL_DATA) $(HEADER) $(INSTALLTO)/$(includedir)/unicode\n");
+    T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(LIB_TARGET)\n"
+                "\t$(INSTALL-L) $(TARGETDIR)/$(LIB_TARGET) $(INSTALLTO)/$(LIB_TARGET)\n");
     if (o->version) {
         T_FileStream_writeLine(makefile, "\tcd $(INSTALLTO) && $(RM) $(MIDDLE_STATIC_LIB_TARGET) && ln -s $(LIB_TARGET) $(MIDDLE_STATIC_LIB_TARGET)\n\tcd $(INSTALLTO) && $(RM) $(STATIC_LIB_TARGET) && ln -s $(LIB_TARGET) $(STATIC_LIB_TARGET)\n");
     }
-    T_FileStream_writeLine(makefile, "\n");
-    T_FileStream_writeLine(makefile, "# We generate the following files from the Makefile, so that they don't get needlessly recompiled.\n");
-    T_FileStream_writeLine(makefile, "\n");
-
-    T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(NAME).h:\n"
-                            "\t@echo '#include \"unicode/utypes.h\"' > $@\n"
-                            "\t@echo  >> $@\n"
-                            "\t@echo '/* Call this function to install Application data */' >> $@\n"
-                            "\t@echo \"U_CAPI void udata_install_$(NAME)(UErrorCode* err);\" >> $@\n\n");
-
-    T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(NAME).c:\n"
-                            "\t@echo '#include \"unicode/udata.h\"' > $@\n"
-                            "\t@echo \"extern char $(NAME)_dat[];\" >> $@\n"
-                            "\t@echo \"extern void udata_install_$(NAME)(UErrorCode* err){udata_setAppData(\"'\"'\"$(NAME)\"'\"'\", (const void*) $(NAME)_dat, err);}\" >> $@\n"
-                            "\n");
 
     *status = U_ZERO_ERROR;
 

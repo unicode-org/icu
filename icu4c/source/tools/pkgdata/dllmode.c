@@ -66,7 +66,10 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
     parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
     /* make up commands.. */
-    sprintf(stanza, "$(INVOKE) $(GENCCODE) -n %s -d $(TEMP_DIR) $<", o->shortName);
+    sprintf(stanza, "$(INVOKE) $(GENCCODE) -n %s -d $(TEMP_DIR) %s%s $<", o->shortName,
+            (o->version)?"-r ":"",
+            o->version?o->version:"");
+
     commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
     sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
@@ -127,10 +130,10 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   if (o->version) {
       sprintf(tmp, ".%s", o->version);
       if (!uprv_strchr(o->version, '.')) {
-	  uprv_strcat(tmp, ".0");
+           uprv_strcat(tmp, ".0");
       }
       T_FileStream_writeLine(makefile, tmp);
-      T_FileStream_writeLine(makefile, "\nDLL_LDFLAGS=$(LD_SONAME) $(RPATH_LDFLAGS)\n");
+      T_FileStream_writeLine(makefile, "\nDLL_LDFLAGS=$(LD_SONAME) $(RPATH_LDFLAGS) $(BIR_LDFLAGS)\nDLL_DEPS=$(BIR_DEPS)\n");
   } else {
       T_FileStream_writeLine(makefile, "\nDLL_LDFLAGS=$(BIR_LDFLAGS)\nDLL_DEPS=$(BIR_DEPS)\n");
   }
@@ -147,7 +150,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
       T_FileStream_writeLine(makefile, tmp);
       uprv_strcpy(tmp, "SO_TARGET_VERSION_MAJOR=");
       for (p = tmp + uprv_strlen(tmp), v = o->version; *v && *v != '.'; ++v) {
-	  *p++ = *v;
+         *p++ = *v;
       }
       *p++ = '\n';
       *p++ = '\n';
@@ -195,7 +198,10 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
   sprintf(tmp, "$(TEMP_DIR)/%s_dat.c: $(CMNLIST)\n"
-                         "\t$(INVOKE) $(GENCMN) -e %s -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->entryName, o->shortName);
+                         "\t$(INVOKE) $(GENCMN) -e %s -n %s -S -d $(TEMP_DIR) %s%s 0 $(CMNLIST)\n\n", o->shortName, o->entryName, o->shortName,
+         (o->version)?"-r ":"",
+          o->version?o->version:"");
+
   T_FileStream_writeLine(makefile, tmp);
   sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
   T_FileStream_writeLine(makefile, tmp);
