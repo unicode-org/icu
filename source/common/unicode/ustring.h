@@ -930,6 +930,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * \uhhhh       4 hex digits; h in [0-9A-Fa-f]
  * \Uhhhhhhhh   8 hex digits
  * \xhh         1-2 hex digits
+ * \x{h...}     1-8 hex digits
  * \ooo         1-3 octal digits; o in [0-7]
  * \cX          control-X; X is masked with 0x1F
  *
