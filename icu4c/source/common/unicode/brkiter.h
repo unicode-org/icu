@@ -567,7 +567,7 @@ public:
      * actual locale. 
      * @draft ICU 2.8
      */
-    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+    Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
     /** Get the locale for this break iterator object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual) 
@@ -575,7 +575,8 @@ public:
      *  @return the locale
      *  @internal
      */
-    virtual const char *getLocaleInternal(ULocDataLocaleType type, UErrorCode& status) const;
+    const char *getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
+
  private:
     static BreakIterator* makeCharacterInstance(const Locale& loc, UErrorCode& status);
     static BreakIterator* makeWordInstance(const Locale& loc, UErrorCode& status);
@@ -597,10 +598,12 @@ protected:
     /** @internal */
     BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
 
+private:
+
     /** @internal */
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     char validLocale[ULOC_FULLNAME_CAPACITY];
-private:
+
     /**
      * The assignment operator has no real implementation.
      * It's provided to make the compiler happy. Do not call.

@@ -34,6 +34,9 @@
 #include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
+
+class ResourceBundle;
+
 /**
  * Base class for all formats.  This is an abstract base class which
  * specifies the protocol for classes which convert other objects or
@@ -239,7 +242,7 @@ public:
      *  @return the locale
      *  @draft ICU 2.8
      */
-    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const = 0;
+    Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
     /** Get the locale for this format object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual) 
@@ -247,7 +250,13 @@ public:
      *  @return the locale
      *  @internal
      */
-    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const = 0;
+    const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
+
+ protected:
+    
+    void setLocales(const ResourceBundle& res);
+
+    void setLocaleIDs(const char* valid, const char* actual);
 
 protected:
     /**
@@ -278,6 +287,10 @@ protected:
     static void syntaxError(const UnicodeString& pattern,
                             int32_t pos,
                             UParseError& parseError);
+
+ private:
+    char actualLocale[ULOC_FULLNAME_CAPACITY];
+    char validLocale[ULOC_FULLNAME_CAPACITY];
 };
 
 U_NAMESPACE_END

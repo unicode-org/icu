@@ -292,6 +292,8 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         return;
     }
 
+    setLocales(dateTimePatterns);
+
     // create a symbols object from the locale
     initializeSymbols(locale,fCalendar, status);
     if (U_FAILURE(status)) return;
@@ -1561,40 +1563,6 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
   initializeDefaultCentury();  // we need a new century (possibly)
 }
-
-Locale 
-SimpleDateFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
-{
-  switch(type) {
-  case ULOC_VALID_LOCALE:
-    return Locale(fSymbols->validLocale);
-    break;
-  case ULOC_ACTUAL_LOCALE:
-    return Locale(fSymbols->actualLocale);
-    break;
-  default:
-    status = U_UNSUPPORTED_ERROR;
-    return Locale("");
-  }
-}
-
-const char* 
-SimpleDateFormat::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
-{
-  switch(type) {
-  case ULOC_VALID_LOCALE:
-    return fSymbols->validLocale;
-    break;
-  case ULOC_ACTUAL_LOCALE:
-    return fSymbols->actualLocale;
-    break;
-  default:
-    status = U_UNSUPPORTED_ERROR;
-    return NULL;
-    break;
-  }
-}
-
 
 U_NAMESPACE_END
 

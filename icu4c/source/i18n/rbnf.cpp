@@ -89,9 +89,9 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     //    UResourceBundle* yuck = ures_getByKey(nfrb, fmt_tag, NULL, &status);
     //    const UChar* description = ures_getString(yuck, &len, &status);
     if (U_SUCCESS(status)) {
-      uprv_strcpy(validLocale, ures_getLocaleByType(nfrb, ULOC_VALID_LOCALE, &status));
-      uprv_strcpy(actualLocale, ures_getLocaleByType(nfrb, ULOC_ACTUAL_LOCALE, &status));
-      const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
+        setLocaleIDs(ures_getLocaleByType(nfrb, ULOC_VALID_LOCALE, &status),
+                     ures_getLocaleByType(nfrb, ULOC_ACTUAL_LOCALE, &status));
+        const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
         UnicodeString desc(description, len);
         UParseError perror;
         init (desc, perror, status);
@@ -453,9 +453,6 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& /* pErr */,
     if (U_FAILURE(status)) {
         return;
     }
-
-    validLocale[0] = 0;
-    actualLocale[0] = 0;
 
     UnicodeString description(rules);
     if (!description.length()) {
