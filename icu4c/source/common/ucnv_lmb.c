@@ -282,12 +282,12 @@ ambiguous mappings: */
 /* The table & some code to use it: */
 
 
-struct _UniLMBCSGrpMap  
+static const struct _UniLMBCSGrpMap  
 {
    const UChar uniStartRange;
    const UChar uniEndRange;
    const ulmbcs_byte_t  GrpType;
-} const UniLMBCSGrpMap[]
+} UniLMBCSGrpMap[]
 =
 {
 
@@ -411,11 +411,11 @@ do the lookup: */
   search to go quickly.
  *************************************************/
 
-struct _LocaleLMBCSGrpMap
+static const struct _LocaleLMBCSGrpMap
 {
    const char    *LocaleID;
    const ulmbcs_byte_t OptGroup;
-} const LocaleLMBCSGrpMap[] =
+} LocaleLMBCSGrpMap[] =
 {
     {"ar", ULMBCS_GRP_AR},
     {"be", ULMBCS_GRP_RU},
@@ -505,7 +505,7 @@ FindLMBCSLocale(const char *LocaleID)
 
 
 #define DECLARE_LMBCS_DATA(n) \
- static const UConverterImpl _LMBCSImpl##n={\
+static const UConverterImpl _LMBCSImpl##n={\
     UCNV_LMBCS_##n,\
     NULL,NULL,\
     _LMBCSOpen##n,\
@@ -518,7 +518,7 @@ FindLMBCSLocale(const char *LocaleID)
     _LMBCSGetNextUChar,\
     NULL\
 };\
-const UConverterStaticData _LMBCSStaticData##n={\
+static const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
  "LMBCS-"  #n,\
     0, UCNV_IBM, UCNV_LMBCS_##n, 1, 1,\
@@ -539,23 +539,6 @@ static void \
    _LMBCSOpen##n(UConverter*  _this,const char* name,const char* locale,uint32_t options,UErrorCode*  err) \
 { _LMBCSOpenWorker(_this, name,locale,options, err, n);} 
 
-
-
-/* Here's the prototypes for the functions we will put into the ICU structures:
-*/
-
-void 
-_LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *args,
-                           UErrorCode*    err);         /* Std ICU err code */
-
-
-void 
-_LMBCSFromUnicode(UConverterFromUnicodeArgs *args,
-                  UErrorCode*     err);
-
-UChar32 
-_LMBCSGetNextUChar(UConverterToUnicodeArgs *args,
-                   UErrorCode*   err);
 
 
 /* Here's the open worker & the common close function */
@@ -607,34 +590,6 @@ _LMBCSClose(UConverter *   _this)
         uprv_free (_this->extraInfo);
     }
 }
-
-/* And now, the macroized declarations of data & functions: */
-DEFINE_LMBCS_OPEN(1)
-DEFINE_LMBCS_OPEN(2)
-DEFINE_LMBCS_OPEN(3)
-DEFINE_LMBCS_OPEN(4)
-DEFINE_LMBCS_OPEN(5)
-DEFINE_LMBCS_OPEN(6)
-DEFINE_LMBCS_OPEN(8)
-DEFINE_LMBCS_OPEN(11)
-DEFINE_LMBCS_OPEN(16)
-DEFINE_LMBCS_OPEN(17)
-DEFINE_LMBCS_OPEN(18)
-DEFINE_LMBCS_OPEN(19)
-
-
-DECLARE_LMBCS_DATA(1)
-DECLARE_LMBCS_DATA(2)
-DECLARE_LMBCS_DATA(3)
-DECLARE_LMBCS_DATA(4)
-DECLARE_LMBCS_DATA(5)
-DECLARE_LMBCS_DATA(6)
-DECLARE_LMBCS_DATA(8)
-DECLARE_LMBCS_DATA(11)
-DECLARE_LMBCS_DATA(16)
-DECLARE_LMBCS_DATA(17)
-DECLARE_LMBCS_DATA(18)
-DECLARE_LMBCS_DATA(19)
 
 /* 
 Here's an all-crash stop for debugging, since ICU does not have asserts.
@@ -767,7 +722,7 @@ LMBCSConvertUni(ulmbcs_byte_t * pLMBCS, UChar uniChar)
 
 
 /* The main Unicode to LMBCS conversion function */
-void 
+static void 
 _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                   UErrorCode*     err)
 {
@@ -1211,7 +1166,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
 
 /* The exported function that gets one UTF32 character from a LMBCS stream
 */
-UChar32 
+static UChar32 
 _LMBCSGetNextUChar(UConverterToUnicodeArgs*   args,
                    UErrorCode*   err)
 {
@@ -1230,7 +1185,7 @@ _LMBCSGetNextUChar(UConverterToUnicodeArgs*   args,
 /* The exported function that converts lmbcs to one or more
    UChars - currently UTF-16
 */
-void 
+static void 
 _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                      UErrorCode*    err)
 {
@@ -1360,6 +1315,34 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
          }
    }
 }
+
+/* And now, the macroized declarations of data & functions: */
+DEFINE_LMBCS_OPEN(1)
+DEFINE_LMBCS_OPEN(2)
+DEFINE_LMBCS_OPEN(3)
+DEFINE_LMBCS_OPEN(4)
+DEFINE_LMBCS_OPEN(5)
+DEFINE_LMBCS_OPEN(6)
+DEFINE_LMBCS_OPEN(8)
+DEFINE_LMBCS_OPEN(11)
+DEFINE_LMBCS_OPEN(16)
+DEFINE_LMBCS_OPEN(17)
+DEFINE_LMBCS_OPEN(18)
+DEFINE_LMBCS_OPEN(19)
+
+
+DECLARE_LMBCS_DATA(1)
+DECLARE_LMBCS_DATA(2)
+DECLARE_LMBCS_DATA(3)
+DECLARE_LMBCS_DATA(4)
+DECLARE_LMBCS_DATA(5)
+DECLARE_LMBCS_DATA(6)
+DECLARE_LMBCS_DATA(8)
+DECLARE_LMBCS_DATA(11)
+DECLARE_LMBCS_DATA(16)
+DECLARE_LMBCS_DATA(17)
+DECLARE_LMBCS_DATA(18)
+DECLARE_LMBCS_DATA(19)
 
 
 
