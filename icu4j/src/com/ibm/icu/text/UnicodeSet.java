@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/07/29 19:36:07 $
- * $Revision: 1.71 $
+ * $Date: 2002/09/19 22:37:09 $
+ * $Revision: 1.72 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.71 $ $Date: 2002/07/29 19:36:07 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.72 $ $Date: 2002/09/19 22:37:09 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -873,11 +873,32 @@ public class UnicodeSet extends UnicodeFilter {
         if (end < MIN_VALUE || end > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
         }
-        if (start <= end) {
+        if (start < end) {
             add(range(start, end), 2, 0);
+        } else if (start == end) {
+            add(start);
         }
         return this;
     }
+
+//|    /**
+//|     * Format out the inversion list as a string, for debugging.  Uncomment when
+//|     * needed.
+//|     */
+//|    private String dump() {
+//|        StringBuffer buf = new StringBuffer("[");
+//|        for (int i=0; i<len; ++i) {
+//|            if (i != 0) buf.append(", ");
+//|            int c = list[i];
+//|            if (c <= 0xFF) {
+//|                buf.append((char) c);
+//|            } else {
+//|                buf.append("U+").append(Utility.hex(c, (c<0x10000)?4:6));
+//|            }
+//|        }
+//|        buf.append("]");
+//|        return buf.toString();
+//|    }
 
     /**
      * Adds the specified character to this set if it is not already
@@ -885,7 +906,86 @@ public class UnicodeSet extends UnicodeFilter {
      * the call leaves this set unchanged.
      */
     public final UnicodeSet add(int c) {
-        add(c, c);
+        if (c < MIN_VALUE || c > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
+        }
+
+        // find smallest i such that c < list[i]
+        // if odd, then it is IN the set
+        // if even, then it is OUT of the set
+        int i = findCodePoint(c);
+
+        // already in set?
+        if ((i & 1) != 0) return this;
+
+        // HIGH is 0x110000
+        // assert(list[len-1] == HIGH);
+        
+        // empty = [HIGH]
+        // [start_0, limit_0, start_1, limit_1, HIGH]
+
+        // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+        //                             ^
+        //                             list[i]
+
+        // i == 0 means c is before the first range
+
+        if (c == list[i]-1) {
+            // c is before start of next range
+            list[i] = c;
+            // if we touched the HIGH mark, then add a new one
+            if (c == MAX_VALUE) {
+                ensureCapacity(len+1);
+                list[len++] = HIGH;
+            }
+            if (i > 0 && c == list[i-1]) {
+                // collapse adjacent ranges
+
+                // [..., start_i-1, c, c, limit_i, ..., HIGH]
+                //                     ^
+                //                     list[i]
+                System.arraycopy(list, i+1, list, i-1, len-i-1);
+                len -= 2;
+            }
+        }
+
+        else if (i > 0 && c == list[i-1]) {
+            // c is after end of prior range
+            list[i-1]++;
+            // no need to chcek for collapse here
+        }
+
+        else {
+            // At this point we know the new char is not adjacent to
+            // any existing ranges, and it is not 10FFFF.
+
+
+            // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+            //                             ^
+            //                             list[i]
+
+            // [..., start_i-1, limit_i-1, c, c+1, start_i, limit_i, ..., HIGH]
+            //                             ^
+            //                             list[i]
+
+            // Don't use ensureCapacity() to save on copying.
+            // NOTE: This has no measurable impact on performance,
+            // but it might help in some usage patterns.
+            if (len+2 > list.length) {
+                int[] temp = new int[len + 2 + GROW_EXTRA];
+                if (i != 0) System.arraycopy(list, 0, temp, 0, i);
+                System.arraycopy(list, i, temp, i+2, len-i);
+                list = temp;
+            } else {
+                System.arraycopy(list, i, list, i+2, len-i);
+            }
+
+            list[i] = c;
+            list[i+1] = c+1;
+            len += 2;
+        }
+        
+        pat = null;
         return this;
     }
 
@@ -1208,12 +1308,15 @@ public class UnicodeSet extends UnicodeFilter {
         // Return the smallest i such that c < list[i].  Assume
         // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
         if (c < list[0]) return 0;
+        // High runner test.  c is often after the last range, so an
+        // initial check for this condition pays off. 
+        if (len >= 2 && c >= list[len-2]) return len-1;
         int lo = 0;
         int hi = len - 1;
         // invariant: c >= list[lo]
         // invariant: c < list[hi]
         for (;;) {
-            int i = (lo + hi) / 2;
+            int i = (lo + hi) >>> 1;
             if (i == lo) return hi;
             if (c < list[i]) {
                 hi = i;
@@ -1222,6 +1325,93 @@ public class UnicodeSet extends UnicodeFilter {
             }
         }
     }
+
+    // Beginnings of an unrolled binary search implementation.  Problems
+    // to be solved:
+
+    // 1. Initial search in the POW2 array is slow.  To make this a
+    // win, do the POW2 search ONLY when len changes.  Find all
+    // locations where len changes and update POW2 there.
+
+    // 2. Array must be of size at least 2^n, where this is the
+    // smallest 2^n >= actual length.  This allows array indexing in
+    // the case statement.  Entries from len..2^n-1 must be HIGH so as
+    // to not trigger the if statements.  Modify all operations that
+    // manipulate the list so that they ensure these conditions.
+    // Alternatively, use exception handling and catch an array index
+    // out of bounds, and then decrement 'power' and restart the case
+    // statement.
+
+    // These two problems can be solved, but they are non-local
+    // changes throughout the file, so it will take some work to test
+    // them.  I would _guess_ that the overall class performance will
+    // be slower -- although it's possible that calls to contains() on
+    // an unchanging set object will end up being faster.  The only
+    // way to tell is to complete the implementation and measure it.
+
+//    // The maximum possible length is HIGH/2, e.g., [ace...], = 557056
+//    static final int POW2[] = {
+//        0x000001, // 2^0 = 1
+//        0x000002, // 2^1 = 2
+//        0x000004, // 2^2 = 4
+//        0x000008, // 2^3 = 8
+//        0x000010, // 2^4 = 16
+//        0x000020, // 2^5 = 32
+//        0x000040, // 2^6 = 64
+//        0x000080, // 2^7 = 128
+//        0x000100, // 2^8 = 256
+//        0x000200, // 2^9 = 512
+//        0x000400, // 2^10 = 1024
+//        0x000800, // 2^11 = 2048
+//        0x001000, // 2^12 = 4096
+//        0x002000, // 2^13 = 8192
+//        0x004000, // 2^14 = 16384
+//        0x008000, // 2^15 = 32768
+//        0x010000, // 2^16 = 65536
+//        0x020000, // 2^17 = 131072
+//        0x040000, // 2^18 = 262144
+//        0x080000, // 2^19 = 524288
+//        0x100000, // 2^20 = 1048576
+//    };
+//
+//    private final int findCodePoint(int c) {
+//        // Return the smallest i such that c < list[i].  Assume
+//        // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
+//        if (c < list[0]) return 0;
+//        // High runner test.  c is often after the last range, so an
+//        // initial check for this condition pays off. 
+//        if (len >= 2 && c >= list[len-2]) return len-1;
+//
+//        // Find the least power of 2 greater than len
+//        // TODO: Check this logic...is this what we want?
+//        int power;
+//        for (power=POW2.length-1; power>0 && len<POW2[power]; --power) {}
+//
+//        switch (power) {
+//        case 19: if (c >= list[index+0x40000]) index += 0x40000;
+//        case 18: if (c >= list[index+0x20000]) index += 0x20000;
+//        case 17: if (c >= list[index+0x10000]) index += 0x10000;
+//        case 16: if (c >= list[index+0x08000]) index += 0x08000;
+//        case 15: if (c >= list[index+0x04000]) index += 0x04000;
+//        case 14: if (c >= list[index+0x02000]) index += 0x02000;
+//        case 13: if (c >= list[index+0x01000]) index += 0x01000;
+//        case 12: if (c >= list[index+0x00800]) index += 0x00800;
+//        case 11: if (c >= list[index+0x00400]) index += 0x00400;
+//        case 10: if (c >= list[index+0x00200]) index += 0x00200;
+//        case  9: if (c >= list[index+0x00100]) index += 0x00100;
+//        case  8: if (c >= list[index+0x00080]) index += 0x00080;
+//        case  7: if (c >= list[index+0x00040]) index += 0x00040;
+//        case  6: if (c >= list[index+0x00020]) index += 0x00020;
+//        case  5: if (c >= list[index+0x00010]) index += 0x00010;
+//        case  4: if (c >= list[index+0x00008]) index += 0x00008;
+//        case  3: if (c >= list[index+0x00004]) index += 0x00004;
+//        case  2: if (c >= list[index+0x00002]) index += 0x00002;
+//        case  1: if (c >= list[index+0x00001]) index++;
+//        case  0: if (c >= list[index])         index++;
+//        }
+//
+//        // TODO: double check and finish
+//    }
     
     /**
      * Returns true if this set contains every character
