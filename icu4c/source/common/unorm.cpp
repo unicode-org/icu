@@ -214,6 +214,13 @@ isAcceptable(void * /* context */,
     }
 }
 
+static UBool U_CALLCONV
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+    /* add the start code point to the USet */
+    uset_add((USet *)context, start);
+    return TRUE;
+}
+
 U_CDECL_END
 
 static int8_t
@@ -834,13 +841,6 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
     return (aux&_NORM_AUX_NFC_SKIP_F_MASK)==0; /* TRUE=skippable if the (f) flag is not set */
 
     /* } else { FCC, test fcd<=1 instead of the above } */
-}
-
-static UBool U_CALLCONV
-_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
-    /* add the start code point to the USet */
-    uset_add((USet *)context, start);
-    return TRUE;
 }
 
 U_CAPI void U_EXPORT2
