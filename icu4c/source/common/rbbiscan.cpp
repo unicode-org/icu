@@ -306,7 +306,9 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action,
     case doEndOfRule:
         {
         fixOpStack(RBBINode::precStart);      // Terminate expression, leaves expression
-                                              //   parse tree rooted in TOS node.
+        if (U_FAILURE(*fRB->fStatus)) {       //   parse tree rooted in TOS node.
+            break;
+        }
         if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "rtree")) {printNodeStack("end of rule");}
         assert(fNodeStackPtr == 1);
 
@@ -573,23 +575,25 @@ void RBBIRuleScanner::fixOpStack(RBBINode::OpPrecedence p) {
             error(U_BRK_INTERNAL_ERROR);
             return;
         }
-        if (n->fPrecedence < p) {
+        
+        if (n->fPrecedence < p || n->fPrecedence <= RBBINode::precLParen) {
             // The most recent operand goes with the current operator,
             //   not with the previously stacked one.
             break;
         }
-
-        if (n->fPrecedence > RBBINode::precLParen) {
             // Stack operator is a binary op  ( '|' or concatenation)
             //   TOS operand becomes right child of this operator.
             //   Resulting subexpression becomes the TOS operand.
             n->fRightChild = fNodeStack[fNodeStackPtr];
             fNodeStack[fNodeStackPtr]->fParent = n;
             fNodeStackPtr--;
-        } else {
-            // The stacked operator is a right paren or end of expression.
-            //  The current scanned item must match, or else there was an error.
-            //  discard the left paren (or start expr) node from the stack,
+        // printNodeStack("looping in fixOpStack()   ");
+    }
+
+    if (p <= RBBINode::precLParen) {
+        // Scan is at a right paren or end of expression.
+        //  The scanned item must match the stack, or else there was an error.
+        //  Discard the left paren (or start expr) node from the stack,
             //  leaving the completed (sub)expression as TOS.
             if (n->fPrecedence != p) {
                 // Right paren encountered matched start of expression node, or
@@ -600,9 +604,6 @@ void RBBIRuleScanner::fixOpStack(RBBINode::OpPrecedence p) {
             fNodeStackPtr--;
             // Delete the now-discarded LParen or Start node.
             delete n;
-            break;
-        }
-        // printNodeStack("looping in fixOpStack()   ");
     }
     // printNodeStack("leaving fixOpStack()");
 }

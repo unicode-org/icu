@@ -21,10 +21,15 @@
 #include "unicode/ubrk.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/ucnv.h"
+#include "ustr_imp.h"
+#include "cmemory.h"
 #include "cintltst.h"
 #include "cbiapts.h"
 
 static void TestBreakIteratorSafeClone(void);
+static void TestBreakIteratorRules(void);
+static void TestBreakIteratorRuleError(void);
 
 void addBrkIterAPITest(TestNode** root);
 
@@ -32,10 +37,82 @@ void addBrkIterAPITest(TestNode** root)
 {
     addTest(root, &TestBreakIteratorCAPI, "tstxtbd/cbiapts/TestBreakIteratorCAPI");
     addTest(root, &TestBreakIteratorSafeClone, "tstxtbd/cbiapts/TestBreakIteratorSafeClone");
-
+    addTest(root, &TestBreakIteratorRules, "tstxtbd/cbiapts/TestBreakIteratorRules");
+    addTest(root, &TestBreakIteratorRuleError, "tstxtbd/cbiapts/TestBreakIteratorRuleError");
 }
 
 #define CLONETEST_ITERATOR_COUNT 2
+
+/*
+ *   Utility function for converting char * to UChar * strings, to
+ *     simplify the test code.   Converted strings are put in heap allocated
+ *     storage.   A hook (probably a local in the caller's code) allows all
+ *     strings converted with that hook to be freed with a single call.
+ */
+typedef struct StringStruct {
+        struct StringStruct   *link;
+        UChar                 str[1];
+    } StringStruct;
+
+
+static UChar* toUChar(const char *src, void **freeHook) {
+    /* Structure of the memory that we allocate on the heap */
+
+    int32_t    numUChars;
+    int32_t    destSize;
+    UChar      stackBuf[2000 + sizeof(void *)/sizeof(UChar)];
+    StringStruct  *dest;
+    UConverter *cnv;
+
+    UErrorCode status = U_ZERO_ERROR;
+    if (src == NULL) {
+        return NULL;
+    };
+
+    cnv = u_getDefaultConverter(&status);
+    if(U_FAILURE(status) || cnv == NULL) {
+        return NULL;
+    }
+    ucnv_reset(cnv);
+    numUChars = ucnv_toUChars(cnv,
+                  stackBuf,
+                  2000,
+                  src, -1,
+                  &status);
+
+    destSize = (numUChars+1) * sizeof(UChar) + sizeof(struct StringStruct);
+    dest = (StringStruct *)uprv_malloc(destSize);
+    if (dest != NULL) {
+        if (status == U_BUFFER_OVERFLOW_ERROR || status == U_STRING_NOT_TERMINATED_WARNING) {
+            ucnv_toUChars(cnv, dest->str, numUChars+1, src, -1, &status);
+        } else if (status == U_ZERO_ERROR) {
+            u_strcpy(dest->str, stackBuf);
+        } else {
+            uprv_free(dest);
+            dest = NULL;
+        }
+    }
+
+    ucnv_reset(cnv); /* be good citizens */
+    u_releaseDefaultConverter(cnv);
+    if (dest == NULL) {
+        return NULL;
+    }
+    
+    dest->link = (StringStruct*)(*freeHook);
+    *freeHook = dest;
+    return dest->str;
+}
+
+static void freeToUCharStrings(void **hook) {
+    StringStruct  *s = *(StringStruct **)hook;
+    while (s != NULL) {
+        StringStruct *next = s->link;
+        uprv_free(s);
+        s = next;
+    }
+};
+
 
 static void TestBreakIteratorCAPI()
 {
@@ -359,3 +436,119 @@ static void TestBreakIteratorSafeClone(void)
         ubrk_close(someIterators[i]);
     }
 }
+
+
+/*
+//  Open a break iterator from char * rules.  Take care of conversion
+//     of the rules and error checking.
+*/
+static UBreakIterator * testOpenRules(char *rules) {
+    UConverter*     conv         = NULL;
+    UErrorCode      status       = U_ZERO_ERROR;
+    UChar          *ruleSourceU  = NULL;
+    void           *strCleanUp   = NULL;
+    UParseError     parseErr;
+    UBreakIterator *bi;
+
+    ruleSourceU = toUChar(rules, &strCleanUp);
+
+    bi = ubrk_openRules(ruleSourceU,  -1,     /*  The rules  */
+                        NULL,  -1,            /*  The text to be iterated over. */
+                        &parseErr, &status);
+    
+    if (U_FAILURE(status)) {
+        log_err("FAIL: ubrk_openRules: ICU Error \"%s\"\n", u_errorName(status));
+        bi = 0;
+    };
+    freeToUCharStrings(&strCleanUp);
+    return bi;
+
+};
+
+
+/*
+ *  TestBreakIteratorRules - Verify that a break iterator can be created from
+ *                           a set of source rules.
+ */
+void TestBreakIteratorRules() {
+    /*  Rules will keep together any run of letters not including 'a', OR
+     *             keep together 'abc', but only when followed by 'def', OTHERWISE
+     *             just return one char at a time.
+     */
+    char         rules[]  = "abc{666}/def;\n   [\\p{L} - [a]]* {2};  . {1};";
+    /*                        0123456789012345678 */
+    char         data[]   =  "abcdex abcdefgh-def";     /* the test data string                     */
+    char         breaks[] =  "**    **  *    **  *";    /*  * the expected break positions          */
+    char         tags[]   =  "01    21  6    21  2";    /*  expected tag values at break positions  */
+    int32_t      tagMap[] = {0, 1, 2, 3, 4, 5, 666};
+
+    UChar       *uData;
+    void        *freeHook = NULL;
+    UErrorCode   status   = U_ZERO_ERROR;
+    int32_t      pos;
+    int          i;
+
+    UBreakIterator *bi = testOpenRules(rules);
+    if (bi == NULL) {return;}
+    uData = toUChar(data, &freeHook);
+    ubrk_setText(bi,  uData, -1, &status);
+
+    pos = ubrk_first(bi);
+    for (i=0; i<sizeof(breaks); i++) {
+        if (pos == i && breaks[i] != '*') {
+            log_err("FAIL: unexpected break at position %d found\n", pos);
+            break;
+        }
+        if (pos != i && breaks[i] == '*') {
+            log_err("FAIL: expected break at position %d not found.\n", i);
+            break;
+        }
+        if (pos == i) {
+            int32_t tag, expectedTag;
+            tag = ubrk_getRuleStatus(bi);
+            expectedTag = tagMap[tags[i]&0xf];
+            if (tag != expectedTag) {
+                log_err("FAIL: incorrect tag value.  Position = %d;  expected tag %d, got %d",
+                    pos, expectedTag, tag);
+                break;
+            }
+            pos = ubrk_next(bi);
+        }
+    }
+    freeToUCharStrings(&freeHook);
+}
+
+
+
+void TestBreakIteratorRuleError() {
+/*
+ *  TestBreakIteratorRuleError -   Try to create a BI from rules with syntax errors,
+ *                                 check that the error is reported correctly.
+ */
+    char            rules[]  = "           #  This is a rule comment on line 1\n"
+                               "[:L:];     # this rule is OK.\n"
+                               "abcdefg);  # Error, mismatched parens\n";
+    UChar          *uRules;
+    void           *freeHook = NULL;
+    UErrorCode      status   = U_ZERO_ERROR;
+    UParseError     parseErr;
+    UBreakIterator *bi;
+
+    uRules = toUChar(rules, &freeHook);
+    bi = ubrk_openRules(uRules,  -1,          /*  The rules  */
+                        NULL,  -1,            /*  The text to be iterated over. */
+                        &parseErr, &status);
+    if (U_SUCCESS(status)) {
+        log_err("FAIL: construction of break iterator succeeded when it should have failed.\n");
+        ubrk_close(bi);
+    } else {
+        if (parseErr.line != 3 || parseErr.offset != 8) {
+            log_err("FAIL: incorrect error position reported. Got line %d, char %d, expected line 3, char 7",
+                parseErr.line, parseErr.offset);
+        }
+    }
+    freeToUCharStrings(&freeHook);
+}
+
+
+
