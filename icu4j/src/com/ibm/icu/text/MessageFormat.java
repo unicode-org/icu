@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 
 /**
  * <code>MessageFormat</code> provides a means to produce concatenated
@@ -850,7 +851,7 @@ public class MessageFormat extends UFormat {
         return subformat((Object[]) arguments, result, pos);
     }
 
-// TODO Remove?
+// TODO Do not remove, this is API in JDK that we need to implement
 //    /**
 //     * Formats an array of objects and inserts them into the
 //     * <code>MessageFormat</code>'s pattern, producing an
@@ -1111,7 +1112,7 @@ public class MessageFormat extends UFormat {
         return pattern.hashCode(); // enough for reasonable distribution
     }
 
-// TODO Remove?    
+// TODO Do not remove, this is API in JDK that we need to implement
 //    /**
 //     * Defines constants that are used as attribute keys in the
 //     * <code>AttributedCharacterIterator</code> returned
@@ -1273,7 +1274,7 @@ public class MessageFormat extends UFormat {
                 // is non-null indicating we should format obj using it,
                 // or arg is non-null and we should use it as the value.
 
-// TODO Remove?
+// TODO Do not remove, this is API in JDK that we need to implement
 //                if (characterIterators != null) {
 //                    // If characterIterators is non-null, it indicates we need
 //                    // to get the CharacterIterator from the child formatter.
@@ -1313,7 +1314,7 @@ public class MessageFormat extends UFormat {
                     }
 //                    last = result.length(); // Useless? [alan]
                     result.append(arg);
-// TODO Remove?
+// TODO Do not remove, this is JDK API we need to implement.
 //                    if (i == 0 && fp != null && Field.ARGUMENT.equals(
 //                                  fp.getFieldAttribute())) {
 //                        fp.setBeginIndex(last);
@@ -1324,7 +1325,7 @@ public class MessageFormat extends UFormat {
             }
         }
         result.append(pattern.substring(lastOffset, pattern.length()));
-// TODO Remove?
+// TODO Do not remove, this is JDK API we need to implement.
 //        if (characterIterators != null && last != result.length()) {
 //            characterIterators.add(createAttributedCharacterIterator(
 //                                   result.substring(last)));
@@ -1332,7 +1333,7 @@ public class MessageFormat extends UFormat {
         return result;
     }
 
-// TODO Remove?
+// TODO Do not remove, this is JDK API we need to implement.
 //    /**
 //     * Convenience method to append all the characters in
 //     * <code>iterator</code> to the StringBuffer <code>result</code>.
@@ -1349,11 +1350,33 @@ public class MessageFormat extends UFormat {
 //    }
 
     private static final String[] typeList =
-    {"", "", "number", "", "date", "", "time", "", "choice"};
+        {"", "number", "date", "time", "choice", "spellout", "ordinal", "duration"};
+    private static final int 
+        TYPE_EMPTY = 0,
+        TYPE_NUMBER = 1,
+        TYPE_DATE = 2,
+        TYPE_TIME = 3,
+        TYPE_CHOICE = 4,
+        TYPE_SPELLOUT = 5,
+        TYPE_ORDINAL = 6,
+        TYPE_DURATION = 7;
+
     private static final String[] modifierList =
-    {"", "", "currency", "", "percent", "", "integer"};
+        {"", "currency", "percent", "integer"};
+    private static final int
+        MODIFIER_EMPTY = 0,
+        MODIFIER_CURRENCY = 1,
+        MODIFIER_PERCENT = 2,
+        MODIFIER_INTEGER = 3;
+
     private static final String[] dateModifierList =
-    {"", "", "short", "", "medium", "", "long", "", "full"};
+        {"", "short", "medium", "long", "full"};
+    private static final int
+        DATE_MODIFIER_EMPTY = 0,
+        DATE_MODIFIER_SHORT = 1,
+        DATE_MODIFIER_MEDIUM = 2,
+        DATE_MODIFIER_LONG = 3,
+        DATE_MODIFIER_FULL = 4;
 
     private void makeFormat(int position, int offsetNumber,
                             StringBuffer[] segments)
@@ -1390,20 +1413,20 @@ public class MessageFormat extends UFormat {
         // now get the format
         Format newFormat = null;
         switch (findKeyword(segments[2].toString(), typeList)) {
-        case 0:
+        case TYPE_EMPTY:
             break;
-        case 1: case 2:// number
+        case TYPE_NUMBER:
             switch (findKeyword(segments[3].toString(), modifierList)) {
-            case 0: // default;
+            case MODIFIER_EMPTY:
                 newFormat = NumberFormat.getInstance(locale);
                 break;
-            case 1: case 2:// currency
+            case MODIFIER_CURRENCY:
                 newFormat = NumberFormat.getCurrencyInstance(locale);
                 break;
-            case 3: case 4:// percent
+            case MODIFIER_PERCENT:
                 newFormat = NumberFormat.getPercentInstance(locale);
                 break;
-            case 5: case 6:// integer
+            case MODIFIER_INTEGER:
                 newFormat = NumberFormat.getIntegerInstance(locale);
                 break;
             default: // pattern
@@ -1411,21 +1434,21 @@ public class MessageFormat extends UFormat {
                 break;
             }
             break;
-        case 3: case 4: // date
+        case TYPE_DATE:
             switch (findKeyword(segments[3].toString(), dateModifierList)) {
-            case 0: // default
+            case DATE_MODIFIER_EMPTY:
                 newFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
                 break;
-            case 1: case 2: // short
+            case DATE_MODIFIER_SHORT:
                 newFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
                 break;
-            case 3: case 4: // medium
+            case DATE_MODIFIER_MEDIUM:
                 newFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
                 break;
-            case 5: case 6: // long
+            case DATE_MODIFIER_LONG:
                 newFormat = DateFormat.getDateInstance(DateFormat.LONG, locale);
                 break;
-            case 7: case 8: // full
+            case DATE_MODIFIER_FULL:
                 newFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
                 break;
             default:
@@ -1433,21 +1456,21 @@ public class MessageFormat extends UFormat {
                 break;
             }
             break;
-        case 5: case 6:// time
+        case TYPE_TIME:
             switch (findKeyword(segments[3].toString(), dateModifierList)) {
-            case 0: // default
+            case DATE_MODIFIER_EMPTY:
                 newFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
                 break;
-            case 1: case 2: // short
+            case DATE_MODIFIER_SHORT:
                 newFormat = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
                 break;
-            case 3: case 4: // medium
+            case DATE_MODIFIER_MEDIUM:
                 newFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
                 break;
-            case 5: case 6: // long
+            case DATE_MODIFIER_LONG:
                 newFormat = DateFormat.getTimeInstance(DateFormat.LONG, locale);
                 break;
-            case 7: case 8: // full
+            case DATE_MODIFIER_FULL:
                 newFormat = DateFormat.getTimeInstance(DateFormat.FULL, locale);
                 break;
             default:
@@ -1455,7 +1478,7 @@ public class MessageFormat extends UFormat {
                 break;
             }
             break;
-        case 7: case 8:// choice
+        case TYPE_CHOICE:
             try {
                 newFormat = new ChoiceFormat(segments[3].toString());
             } catch (Exception e) {
@@ -1463,6 +1486,51 @@ public class MessageFormat extends UFormat {
                 throw new IllegalArgumentException(
                                          "Choice Pattern incorrect");
             }
+            break;
+        case TYPE_SPELLOUT: 
+            {
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
+                String ruleset = segments[3].toString().trim();
+                if (ruleset.length() != 0) {
+                    try {
+                        rbnf.setDefaultRuleSet(ruleset);
+                    }
+                    catch (Exception e) {
+                        // warn invalid ruleset
+                    }
+                }
+                newFormat = rbnf;
+            } 
+            break;
+        case TYPE_ORDINAL:
+            {
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.ORDINAL);
+                String ruleset = segments[3].toString().trim();
+                if (ruleset.length() != 0) {
+                    try {
+                        rbnf.setDefaultRuleSet(ruleset);
+                    }
+                    catch (Exception e) {
+                        // warn invalid ruleset
+                    }
+                }
+                newFormat = rbnf;
+            } 
+            break;
+        case TYPE_DURATION:
+            {
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.DURATION);
+                String ruleset = segments[3].toString().trim();
+                if (ruleset.length() != 0) {
+                    try {
+                        rbnf.setDefaultRuleSet(ruleset);
+                    }
+                    catch (Exception e) {
+                        // warn invalid ruleset
+                    }
+                }
+                newFormat = rbnf;
+            } 
             break;
         default:
             maxOffset = oldMaxOffset;
