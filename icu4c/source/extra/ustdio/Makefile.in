@@ -59,8 +59,9 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUUC) $(LIBICUI18N) @LIBS@
 
-OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o	\
-uscanf.o uscanf_p.o uscanset.o ustdio.o
+OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o \
+uscanf.o uscanf_p.o uscanset.o ustdio.o sprintf.o sprntf_p.o \
+sscanf.o sscanf_p.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
