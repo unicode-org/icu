@@ -16,28 +16,29 @@ static void U_CALLCONV _deleteRule(void *rule) {
     delete (TransliterationRule *)rule;
 }
 
-static void syntaxError(const UnicodeString& r1,
-                        const UnicodeString& r2,
-                        UParseError& parseError) {
-   parseError.line =0 ;
-   parseError.offset =0;
-   int32_t len1 = r1.length();
-   int32_t len2 = r2.length();
-   // for pre-context
-   int32_t start = (len1<U_PARSE_CONTEXT_LEN) ? 0: (len1 - (U_PARSE_CONTEXT_LEN-1));
-   int32_t stop  = len1;
+// Fill the precontext and postcontext with the patterns of the rules
+// that are masking one another.
+static void maskingError(const TransliterationRule& rule1,
+                         const TransliterationRule& rule2,
+                         UParseError& parseError) {
+    UnicodeString r;
+    int32_t len;
 
-   r1.extract(start,stop-start,parseError.preContext);
-   //null terminate the buffer
-   parseError.preContext[stop-start] = 0;
-   //for post-context
-   start = 0;
-   stop  = (len2<U_PARSE_CONTEXT_LEN)? len2 : (U_PARSE_CONTEXT_LEN-1);
-
-   r2.extract(start,stop-start,parseError.postContext);
-   //null terminate the buffer
-   parseError.postContext[stop-start]= 0;   
-
+    parseError.line = 0;
+    parseError.offset = 0;
+    
+    // for pre-context
+    rule1.toRule(r, FALSE);
+    len = uprv_min(r.length(), U_PARSE_CONTEXT_LEN-1);
+    r.extract(0, len, parseError.preContext);
+    parseError.preContext[len] = 0;   
+    
+    //for post-context
+    r.truncate(0);
+    rule2.toRule(r, FALSE);
+    len = uprv_min(r.length(), U_PARSE_CONTEXT_LEN-1);
+    r.extract(0, len, parseError.postContext);
+    parseError.postContext[len] = 0;   
 }
 
 /**
@@ -206,8 +207,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
 //|                 }
 //|                 errors.append("Rule " + r1 + " masks " + r2);
                     status = U_RULE_MASK_ERROR;
-                    UnicodeString rp1,rp2;
-                    syntaxError(r1->getPattern(rp1),r2->getPattern(rp2),parseError);
+                    maskingError(*r1, *r2, parseError);
                     return;
                 }
             }
