@@ -431,6 +431,7 @@ ibm-943_P15A-2003 { UTR22* }
                         cp932 { WINDOWS }
                         windows-932 { WINDOWS* }
                         cp943c { JAVA* }    # This is slightly different, but the backslash mapping is the same.
+                        IBM-943C #{ AIX* } # Add this tag once AIX aliases becomes available
                         ms932
                         pck     # Probably SOLARIS
                         sjis    # This might be for ibm-1351
