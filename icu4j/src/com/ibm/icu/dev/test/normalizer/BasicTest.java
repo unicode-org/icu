@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/06/11 17:51:25 $
- * $Revision: 1.33 $
+ * $Date: 2003/11/14 00:07:07 $
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -291,8 +291,8 @@ public class BasicTest extends TestFmwk {
 //              (!uinfo.hasCanonicalDecomposition((char)i) &&
 //               !uinfo.hasCompatibilityDecomposition((char)i))) continue;
 //          String a = String.valueOf((char)i);
-//          String b = NewNormalizer.normalize(a,NewNormalizer.DECOMP_COMPAT,0);
-//          String c = NewNormalizer.normalize(b,NewNormalizer.COMPOSE,0);
+//          String b = Normalizer.normalize(a,Normalizer.DECOMP_COMPAT,0);
+//          String c = Normalizer.normalize(b,Normalizer.COMPOSE,0);
 //          if (c.equals(a)) {
 //              errln("FAIL: " + hex(a) + " x DECOMP_COMPAT => " +
 //                    hex(b) + " x COMPOSE => " +
@@ -793,32 +793,38 @@ public class BasicTest extends TestFmwk {
             }
         }
         output = new char[1];
-           for (int i = 0; i < tests.length; i++)
-           {
-               char[] input = Utility.unescape(tests[i][0]).toCharArray();
-               String expect = Utility.unescape(tests[i][outCol]);
-
-               logln("Normalizing '" + new String(input) + "' (" +
-                           hex(new String(input)) + ")" );
-               int reqLength=0;
-               while(true){
-                   try{
-                       reqLength=Normalizer.decompose(input,0,input.length,output,0,output.length, mode==Normalizer.NFKD,0);
-                       if(reqLength<=output.length ){
-                           break;
-                       }
-                   }catch(IndexOutOfBoundsException e){
-                       output= new char[Integer.parseInt(e.getMessage())];
-                       continue;
+        for (int i = 0; i < tests.length; i++)
+        {
+           char[] input = Utility.unescape(tests[i][0]).toCharArray();
+           String expect = Utility.unescape(tests[i][outCol]);
+    
+           logln("Normalizing '" + new String(input) + "' (" +
+                       hex(new String(input)) + ")" );
+           int reqLength=0;
+           while(true){
+               try{
+                   reqLength=Normalizer.decompose(input,0,input.length,output,0,output.length, mode==Normalizer.NFKD,0);
+                   if(reqLength<=output.length ){
+                       break;
                    }
-               }
-               if (!expect.equals(new String(output,0,reqLength))) {
-                   errln("FAIL: case " + i
-                       + " expected '" + expect + "' (" + hex(expect) + ")"
-                       + " but got '" + new String(output)
-                       + "' ("  + hex(new String(output)) + ")" );
+               }catch(IndexOutOfBoundsException e){
+                   output= new char[Integer.parseInt(e.getMessage())];
+                   continue;
                }
            }
+           if (!expect.equals(new String(output,0,reqLength))) {
+               errln("FAIL: case " + i
+                   + " expected '" + expect + "' (" + hex(expect) + ")"
+                   + " but got '" + new String(output)
+                   + "' ("  + hex(new String(output)) + ")" );
+           }
+           char[] output2 = new char[reqLength * 2];
+           System.arraycopy(output, 0, output2, 0, reqLength);
+           int retLength = Normalizer.decompose(input,0,input.length, output2, reqLength, output2.length, mode==Normalizer.NFKC,0);
+           if(retLength != reqLength){
+               logln("FAIL: Normalizer.compose did not return the expected length. Expected: " +reqLength + " Got: " + retLength);
+           }
+        }
     }
 
     private void composeTest(Normalizer.Mode mode,
@@ -890,6 +896,13 @@ public class BasicTest extends TestFmwk {
                     + " expected '" + expect + "' (" + hex(expect) + ")"
                     + " but got '" + new String(output)
                     + "' ("  + hex(new String(output)) + ")" );
+            }
+            
+            char[] output2 = new char[reqLength * 2];
+            System.arraycopy(output, 0, output2, 0, reqLength);
+            int retLength = Normalizer.compose(input,0,input.length, output2, reqLength, output2.length, mode==Normalizer.NFKC,0);
+            if(retLength != reqLength){
+                logln("FAIL: Normalizer.compose did not return the expected length. Expected: " +reqLength + " Got: " + retLength);
             }
         }
     }
@@ -1557,18 +1570,18 @@ public class BasicTest extends TestFmwk {
 	  int count = 0;
 
 	  if (Normalizer.quickCheck(FAST,0,FAST.length, Normalizer.FCD,0) != Normalizer.YES)
-	    errln("NewNormalizer.quickCheck(FCD) failed: expected value for fast NewNormalizer.quickCheck is NewNormalizer.YES\n");
+	    errln("Normalizer.quickCheck(FCD) failed: expected value for fast Normalizer.quickCheck is Normalizer.YES\n");
 	  if (Normalizer.quickCheck(FALSE,0, FALSE.length,Normalizer.FCD,0) != Normalizer.NO)
-	    errln("NewNormalizer.quickCheck(FCD) failed: expected value for error NewNormalizer.quickCheck is NewNormalizer.NO\n");
+	    errln("Normalizer.quickCheck(FCD) failed: expected value for error Normalizer.quickCheck is Normalizer.NO\n");
 	  if (Normalizer.quickCheck(TRUE,0,TRUE.length,Normalizer.FCD,0) != Normalizer.YES)
-	    errln("NewNormalizer.quickCheck(FCD) failed: expected value for correct NewNormalizer.quickCheck is NewNormalizer.YES\n");
+	    errln("Normalizer.quickCheck(FCD) failed: expected value for correct Normalizer.quickCheck is Normalizer.YES\n");
 
 
 	  while (count < 4)
 	  {
 	    Normalizer.QuickCheckResult fcdresult = Normalizer.quickCheck(datastr[count],0,datastr[count].length, Normalizer.FCD,0);
         if (result[count] != fcdresult) {
-	        errln("NewNormalizer.quickCheck(FCD) failed: Data set "+ count
+	        errln("Normalizer.quickCheck(FCD) failed: Data set "+ count
                     + " expected value "+ result[count]);
 	    }
 	    count ++;
@@ -1590,7 +1603,7 @@ public class BasicTest extends TestFmwk {
 	    while (size != 19) {
 	      data[size] = datachar[rand.nextInt(RAND_MAX)*50/RAND_MAX];
 	      logln("0x"+data[size]);
-	      normStart = Normalizer.normalize(data,size,size+1,
+	      normStart += Normalizer.normalize(data,size,size+1,
                                               norm,normStart,100,
                                               Normalizer.NFD,0);
 	      size ++;
@@ -1604,14 +1617,14 @@ public class BasicTest extends TestFmwk {
 	      testresult = Normalizer.NO;
 	    }
 	    if (testresult == Normalizer.YES) {
-	      logln("result NewNormalizer.YES\n");
+	      logln("result Normalizer.YES\n");
 	    }
 	    else {
-	      logln("result NewNormalizer.NO\n");
+	      logln("result Normalizer.NO\n");
 	    }
 
 	    if (Normalizer.quickCheck(data,0,data.length, Normalizer.FCD,0) != testresult) {
-	      errln("NewNormalizer.quickCheck(FCD) failed: expected "+ testresult+" for random data\n" );
+	      errln("Normalizer.quickCheck(FCD) failed: expected "+ testresult +" for random data: "+hex(new String(data)) );
 	    }
 	  }
 	}
@@ -2772,6 +2785,16 @@ public class BasicTest extends TestFmwk {
                     errln("USerializedSet.contains failed for "+Utility.hex(start,8));
                 }
             }
+        }
+    }
+    
+    public void TestReturnFailure(){
+        char[] term = {'r','\u00e9','s','u','m','\u00e9' };
+        char[] decomposed_term = new char[10 + term.length + 2];
+        int rc = Normalizer.decompose(term,0,term.length, decomposed_term,0,decomposed_term.length,true, 0);
+        int rc1 = Normalizer.decompose(term,0,term.length, decomposed_term,10,decomposed_term.length,true, 0); 
+        if(rc!=rc1){
+            errln("Normalizer decompose did not return correct length");
         }
     }
 }

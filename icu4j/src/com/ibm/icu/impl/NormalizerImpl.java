@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/06/09 23:31:09 $
- * $Revision: 1.22 $
+ * $Date: 2003/11/14 00:06:08 $
+ * $Revision: 1.23 $
  *******************************************************************************
  */
  
@@ -1131,8 +1131,8 @@ public final class NormalizerImpl {
 	}
 
 	
-	public static int decompose(char[] src,int srcIndex,int srcLimit,
-								char[] dest,int destIndex,int destLimit,
+	public static int decompose(char[] src,int srcStart,int srcLimit,
+								char[] dest,int destStart,int destLimit,
 						 		boolean compat,int[] outTrailCC,
 						 		UnicodeSet nx) {
 	           			 	
@@ -1145,6 +1145,8 @@ public final class NormalizerImpl {
 	    int/*unsigned byte*/ cc, prevCC, trailCC;
 		char[] p;
 		int pStart;
+        int destIndex = destStart;
+        int srcIndex = srcStart;
 	    if(!compat) {
 	        minNoMaybe=(char)indexes[INDEX_MIN_NFD_NO_MAYBE];
 	        qcMask=QC_NFD;
@@ -1337,7 +1339,7 @@ public final class NormalizerImpl {
 	
 	    outTrailCC[0]=prevCC;
 
-	    return destIndex;
+	    return destIndex - destStart;
 	}
 	
 	/* make NFC & NFKC ------------------------------------------------------ */
@@ -1913,8 +1915,8 @@ public final class NormalizerImpl {
     }
     */
     
-    public static int compose(char[] src, int srcIndex, int srcLimit,
-                              char[] dest,int destIndex,int destLimit,
+    public static int compose(char[] src, int srcStart, int srcLimit,
+                              char[] dest,int destStart,int destLimit,
                               boolean compat,UnicodeSet nx) {
         
         int prevSrc, prevStarter;
@@ -1924,6 +1926,8 @@ public final class NormalizerImpl {
         char c, c2, minNoMaybe;
         int/*unsigned byte*/ cc, prevCC;
         int[] ioIndex = new int[1];
+        int destIndex = destStart;
+        int srcIndex = srcStart;
         
         if(!compat) {
             minNoMaybe=(char)indexes[INDEX_MIN_NFC_NO_MAYBE];
@@ -2182,7 +2186,7 @@ public final class NormalizerImpl {
             }
         }
 
-        return destIndex;
+        return destIndex - destStart;
     }
 	/* make FCD --------------------------------------------------------------*/
 	
@@ -2529,7 +2533,7 @@ public final class NormalizerImpl {
 	        }
 	    }
         
-        return destIndex;
+        return destIndex - destStart;
 	
 	}
 

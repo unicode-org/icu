@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/ConformanceTest.java,v $ 
- * $Date: 2003/06/03 18:49:30 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/11/14 00:07:08 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -47,7 +47,7 @@ public class ConformanceTest extends TestFmwk {
 	};
 
     /**
-     * Test the conformance of NewNormalizer to
+     * Test the conformance of Normalizer to
      * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.* http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
      * This file must be located at the path specified as TEST_SUITE_FILE.
      */
@@ -229,65 +229,74 @@ public class ConformanceTest extends TestFmwk {
         compare(field[0],field[2]);
          // test quick checks
 	    if(Normalizer.NO == Normalizer.quickCheck(field[1], Normalizer.NFC,options)) {
-	        errln("Normalizer error: quickCheck(NFC(s), NewNormalizer.NFC) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(NFC(s), Normalizer.NFC) is Normalizer.NO");
 	        pass = false;
 	    }
 	    if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.NFD,options)) {
-	        errln("Normalizer error: quickCheck(NFD(s), NewNormalizer.NFD) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(NFD(s), Normalizer.NFD) is Normalizer.NO");
 	        pass = false;
 	    }
 	    if(Normalizer.NO == Normalizer.quickCheck(field[3], Normalizer.NFKC,options)) {
-	        errln("Normalizer error: quickCheck(NFKC(s), NewNormalizer.NFKC) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(NFKC(s), Normalizer.NFKC) is Normalizer.NO");
 	        pass = false;
 	    }
 	    if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.NFKD,options)) {
-	        errln("Normalizer error: quickCheck(NFKD(s), NewNormalizer.NFKD) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(NFKD(s), Normalizer.NFKD) is Normalizer.NO");
 	        pass = false;
 	    }
 	
         if(!Normalizer.isNormalized(field[1], Normalizer.NFC, options)) {
-            errln("Normalizer error: isNormalized(NFC(s), NewNormalizer.NFC) is false");
+            errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
         }
         if(!field[0].equals(field[1]) && Normalizer.isNormalized(field[0], Normalizer.NFC, options)) {
-            errln("Normalizer error: isNormalized(s, NewNormalizer.NFC) is TRUE");
+            errln("Normalizer error: isNormalized(s, Normalizer.NFC) is TRUE");
             pass = false;
         }
         if(!Normalizer.isNormalized(field[3], Normalizer.NFKC, options)) {
-            errln("Normalizer error: isNormalized(NFKC(s), NewNormalizer.NFKC) is false");
+            errln("Normalizer error: isNormalized(NFKC(s), Normalizer.NFKC) is false");
             pass = false;
         }
         if(!field[0].equals(field[3]) && Normalizer.isNormalized(field[0], Normalizer.NFKC, options)) {
-            errln("Normalizer error: isNormalized(s, NewNormalizer.NFKC) is TRUE");
+            errln("Normalizer error: isNormalized(s, Normalizer.NFKC) is TRUE");
             pass = false;
         }
 	    // test api that takes a char[]
         if(!Normalizer.isNormalized(field[1].toCharArray(),0,field[1].length(), Normalizer.NFC,options)) {
-            errln("Normalizer error: isNormalized(NFC(s), NewNormalizer.NFC) is false");
+            errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
         }
         // test api that takes a codepoint
         if(!Normalizer.isNormalized(UTF16.charAt(field[1],0), Normalizer.NFC,options)) {
-            errln("Normalizer error: isNormalized(NFC(s), NewNormalizer.NFC) is false");
+            errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
         }
 	    // test FCD quick check and "makeFCD"
         fcd=Normalizer.normalize(field[0], Normalizer.FCD);
 	    if(Normalizer.NO == Normalizer.quickCheck(fcd, Normalizer.FCD,options)) {
-	        errln("Normalizer error: quickCheck(FCD(s), NewNormalizer.FCD) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(FCD(s), Normalizer.FCD) is Normalizer.NO");
 	        pass = false;
 	    }
+        // check FCD return length
+        {
+            char[] fcd2 = new char[ fcd.length() * 2 ];
+            char[] src = field[0].toCharArray();
+            int fcdLen = Normalizer.normalize(src, 0, src.length, fcd2, fcd.length(), fcd2.length,Normalizer.FCD, 0);
+            if(fcdLen != fcd.length()){
+                errln("makeFCD did not return the correct length");
+            }
+        }
         if(Normalizer.NO == Normalizer.quickCheck(fcd, Normalizer.FCD, options)) {
-            errln("Normalizer error: quickCheck(FCD(s), NewNormalizer.FCD) is NewNormalizer.NO");
+            errln("Normalizer error: quickCheck(FCD(s), Normalizer.FCD) is Normalizer.NO");
             pass = false;
         }
 	    if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.FCD, options)) {
-	        errln("Normalizer error: quickCheck(NFD(s), NewNormalizer.FCD) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(NFD(s), Normalizer.FCD) is Normalizer.NO");
 	        pass = false;
 	    }
 
 	    if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.FCD, options)) {
-	        errln("Normalizer error: quickCheck(NFKD(s), NewNormalizer.FCD) is NewNormalizer.NO");
+	        errln("Normalizer error: quickCheck(NFKD(s), Normalizer.FCD) is Normalizer.NO");
 	        pass = false;
 	    }
         
