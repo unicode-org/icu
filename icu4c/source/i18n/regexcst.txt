@@ -55,50 +55,27 @@
 #  start state, scan position is at the beginning of the pattern.
 #
 start:
-   default                 term                 ^finish             doPatStart
+   default                 term                                     doPatStart
     
-#
-#  finish  -  We've scanned off the end of the pattern string.
-#             The "doPatFinish" action will stop the pattern scanning state machine.
-#
-finish:
-    default                finish                                   doPatFinish
-     
 
     
     
 #
-#  term.  Eat through a single rule character, or a composite thing, which
-#         could be a parenthesized expression  or a Unicode Set.
+#  term.  At a position where we can accept the start most items in a pattern.
 #
 term:
-    quoted               n string                                   doStartString
-    rule_char            n string                                   doStartString
-    '['                  n expr-quant     		            doScanUnicodeSet
-    '('                  n open-paren            ^expr-quant          
+    quoted               n expr-quant     		                    doLiteralChar
+    rule_char            n expr-quant     		                    doLiteralChar
+    '['                  n expr-quant                               doScanUnicodeSet
+    '('                  n open-paren                     
     '.'                  n expr-quant                               doDotAny
     '^'                  n term                                     doCaret
     '$'                  n term                                     doDollar
     '\'                  n backslash
-    eof		           finish
+    eof		               term                                     doPatFinish
     default                errorDeath                               doRuleError
     
 
-#
-#   string        We've encountered a literal character, or an escaped character.
-#                 Continue with any additional literal chars, building the sequence
-#                 into a string.
-#
-string:
-    quoted                n string                                  doStringChar
-    rule_char             n string                                  doStringChar
-    # If the string ends in a quatinfier, we need to split off the last character so that
-    #   the quantifier effects only it, and not the entire string.  (e.g.  "ABC*")
-    '?'                     expr-quant                              doSplitString
-    '+'                     expr-quant                              doSplitString
-    '*'                     expr-quant                              doSplitString
-    '{'                     expr-quant                              doSplitString
-    default                 expr-quant                              doEndString
 
 #
 #   expr-quant    We've just finished scanning a term, now look for the optional
@@ -223,12 +200,12 @@ backslash:
    'A'                   n  term                                    doBackslashA
    'B'                   n  term                                    doBackslashB
    'b'                   n  term                                    doBackslashb
-   'd'			 n  expr-quant				    doBackslashd
+   'd'                   n  expr-quant                              doBackslashd
    'D'                   n  expr-quant                              doBackslashD
    'G'                   n  term                                    doBackslashG
-   'N'			 n  expr-quant                              doNamedChar      #   \N{NAME}  named char
-   'p'			    expr-quant                              doProperty       #   \p{Lu}  style property
-   'P'			    expr-quant                              doProperty
+   'N'                   n  expr-quant                              doNamedChar      #   \N{NAME}  named char
+   'p'                      expr-quant                              doProperty       #   \p{Lu}  style property
+   'P'                      expr-quant                              doProperty
    'Q'                   n  term                                    doEnterQuoteMode
    'S'                   n  expr-quant                              doBackslashS
    's'                   n  expr-quant                              doBackslashs
@@ -238,9 +215,8 @@ backslash:
    'x'                   n  expr-quant                              doBackslashx
    'Z'                   n  term                                    doBackslashZ
    'z'                   n  term                                    doBackslashz
-   digit_char	         n  expr-quant			            doBackRef
-   
-   default               n  string				    doStartString   
+   digit_char	         n  expr-quant                              doBackRef
+   default               n  expr-quant		                        doLiteralChar     #  Escaped literal char.		       
 
     
     

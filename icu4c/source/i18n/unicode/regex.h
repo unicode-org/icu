@@ -4,9 +4,34 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
+//
+//   file:   regex.h
+//
+//           ICU Regular Expressions, API for C++
+//
 
 #ifndef REGEX_H
 #define REGEX_H
+
+
+/**
+  * \file
+  * \brief  C++ API:  Regular Expressions
+  *
+  * <h2>Regular Expression API</h2>
+  *
+  * <p>The ICU API for processing regular expressions consists of two classes,
+  *    <code>RegexPattern</code> and <code>RegexMatcher</code>. 
+  *    <code>RegexPattern</code> objects represent a pre-processed, or compiled
+  *    regular expression.  They are created from a regular expression pattern string,
+  *    and can be used to create <RegexMatcher> objects for the pattern. </p>
+  *
+  * <p> Class <code>RegexMatcher</code> bundles together a regular expression pattern
+  *     and a target string to which the search pattern will be applied. 
+  *     <code>RegexMatcher</code> includes API for doing plain find or search
+  *     operations, for search and replace operations, and for obtaining detailed
+  *     information about bounds of a match. </p>
+  */
 
 #include "unicode/utypes.h"
 
@@ -25,56 +50,120 @@ class UStack;
 class UnicodeSet;
 
 
-//---------------------------------------------------------------------------------
-//
-//  Flags for Regular Expression Modes.
-//   TODO:  Move to C header once one exists.
-//   All flags default to off or false
-//   All are as defined by Java Regexps.
-//
-//---------------------------------------------------------------------------------
+/**
+ * Constants for Regular Expression Match Modes.
+ * <p>Note that non-default match modes will not be supported until ICU 2.6</p>
+ * @draft ICU 2.4 
+ */
 enum {
-        UREGEX_CANON_EQ         = 128,    // Forces normalization of pattern and strings.
-        UREGEX_CASE_INSENSITIVE = 2,      // Enable case insensitive matching.
-        UREGEX_COMMENTS         = 4,      // Allow white space and comments within patterns
-        UREGEX_DOTALL           = 32,     // If set, "." matches line terminators.
-                                          //   otherwise . matching stops at line end.
-        UREGEX_MULTILINE        = 8,      // Control behavior of "$" and "^". 
-                                          //   If set, recognize line terminators within string
-                                          //   otherwise, match only at start and end of
-                                          //   input string
-        UREGEX_UNICODE_CASE     = 64,     // If set, use full Unicode case folding for case
-                                          //   insensitive matches.  Otherwise, case insensitive
-                                          //   matching only affects chars in the ASCII range.
-                                          //   TODO:  do we want to support this option at all?
-        UREGEX_UNIX_LINES       = 1       // If set, only \n is recognized as a line terminator.
-                                          //   otherwise recognize all Unicode line endings.
+        /** Forces normalization of pattern and strings.  @draft ICU 2.4 */
+        UREGEX_CANON_EQ         = 128, 
+        /**  Enable case insensitive matching.  @draft ICU 2.4 */
+        UREGEX_CASE_INSENSITIVE = 2,  
+        /**  Allow white space and comments within patterns  @draft ICU 2.4 */
+        UREGEX_COMMENTS         = 4,  
+        /**  If set, '.' matches line terminators,  otherwise '.' matching stops at line end.
+          *  @draft ICU 2.4 */
+        UREGEX_DOTALL           = 32,  
+        /**   Control behavior of "$" and "^"
+          *    If set, recognize line terminators within string,
+          *    otherwise, match only at start and end of input string.
+          *   @draft ICU 2.4 */
+        UREGEX_MULTILINE        = 8  
 };
 
 
 
-//---------------------------------------------------------------------------------
-//
-//    class  RegexPattern
-//
-//---------------------------------------------------------------------------------
+/**
+  * Class <code>RegexPattern</code> represents a compiled regular expression.  It includes
+  * factory methods for creating a RegexPattern object from the source (string) form
+  * of a regular expression, methods for creating RegexMatchers that allow the pattern
+  * to be applied to input text, and a few convenience methods for simple common
+  * uses of regular expressions.
+  *
+  * @draft ICU 2.4
+  */
 class U_I18N_API RegexPattern: public UObject {
 public:
     
-    
+    /**
+      * default constructor.  Create a RegexPattern object that refers to no actual
+      *   pattern.  Not normally needed; RegexPattern objects are usually
+      *   created using the factory method <code>compile()</code.  
+      *
+      * @draft ICU 2.4
+      */
     RegexPattern();
-    RegexPattern(const RegexPattern &other);
+
+
+    /**
+      * Copy Constructor.  Create a new RegexPattern object that is equivalent
+      *                    to the source object. 
+      * @draft ICU 2.4
+      */
+    RegexPattern(const RegexPattern &source);
+
+    /**
+      * Destructor.  Note that a RegexPattern object must persist so long as any
+      *  RegexMatcher objects that were created from the RegexPattern are active.
+      * @draft ICU 2.4
+      */
     virtual ~RegexPattern();
     
+    /**
+      * Comparison operator.  Two RegexPattern objects are considered equal if they
+      * were constructed from identical source patterns using the same match flag
+      * settings.
+      * @param that a RegexPattern object to compare with "this".
+      * @return TRUE if the objects are equavelent.
+      * @draft ICU 2.4
+      */
     UBool                  operator==(const RegexPattern& that) const;
+
+    /**
+      * Comparison operator.  Two RegexPattern objects are considered equal if they
+      * were constructed from identical source patterns using the same match flag
+      * settings.
+      * @param that a RegexPattern object to compare with "this".
+      * @return TRUE if the objects are different.
+      * @draft ICU 2.4
+      */
     inline UBool           operator!=(const RegexPattern& that) const {return ! operator ==(that);};
     
-    RegexPattern  &operator =(const RegexPattern &other);
+    /*
+     * Assignment operator.  After assignment, this RegexPattern will behave identically
+     *     to the source object.
+     * @draft ICU 2.4
+     */
+    RegexPattern  &operator =(const RegexPattern &source);
+
+    /*
+     * Create an exact copy of this RegexPattern object.  Since RegexPattern is not
+     * intended to be subclasses, <code>clone()</code> and the copy construction are
+     * equivalent operations.
+     */
     virtual RegexPattern  *clone() const;
 
     
    /**
-    *     Compiles the given regular expression into a pattern 
+    *     <p>Compiles the given regular expression in string form into a RegexPattern
+    *     object.  The compile methods, rather than the constructors, are the usual
+    *     way that RegexPattern objects are created.</p>
+    *
+    *     <p>Note that RegexPattern objects must not be deleted while RegexMatcher
+    *     objects created from the pattern are active.  RegexMatchers keep a pointer
+    *     back to their pattern, so premature deletion of the pattern is a
+    *     catastrophic error.</p>
+    *
+    *     <p>All pattern match mode flags are set to their default values.</p>
+    *
+    *    @param regex The regular expression to be compiles.
+    *    @param pe    Receives the position (line and column nubers) of any error
+    *                 within the regular expression.)
+    *    @param err A reference to a UErrorCode to receive any errors.
+    *    @return      A regexPattern object for the compiled pattern.
+    *
+    *    @draft ICU 2.4
     */
     static RegexPattern *compile( const UnicodeString &regex,
         UParseError          &pe,
@@ -83,6 +172,26 @@ public:
    /**
     *     Compiles the given regular expression into a pattern with the given flags 
     */
+   /**
+    *     <p>Compiles the given regular expression in string form into a RegexPattern
+    *     object using the specified match mode flags.  The compile methods,
+    *     rather than the constructors, are the usual way that RegexPattern objects
+    *     are created.</p>
+    *
+    *     <p>Note that RegexPattern objects must not be deleted while RegexMatcher
+    *     objects created from the pattern are active.  RegexMatchers keep a pointer
+    *     back to their pattern, so premature deletion of the pattern is a
+    *     catastrophic error.</p>
+    *
+    *    @param regex The regular expression to be compiles.
+    *    @param flags The match mode flags to be used.
+    *    @param pe    Receives the position (line and column nubers) of any error
+    *                 within the regular expression.)
+    *    @param err   A reference to a UErrorCode to receive any errors.
+    *    @return      A regexPattern object for the compiled pattern.
+    *
+    *    @draft ICU 2.4
+    */
     static RegexPattern *compile( const UnicodeString &regex,
         int32_t              flags,
         UParseError          &pe,
@@ -90,19 +199,41 @@ public:
 
 
    /**
-    *     Return the flags for this pattern
+    *     Get the match mode flags that were used when compiling this pattern.
+    *     @return  the match mode flags
+    *     @draft ICU 2.4
     */
     virtual int32_t flags() const;
     
    /*
-    *  Creates a matcher that will match the given input against this pattern.
+    *  Creates a RegexMatcher that will match the given input against this pattern.  The
+    *   RegexMatcher can then be used to perform match, find or replace operations
+    *   on on the input.  Note that a RegexPattern object must not be deleted while
+    *   any RegexMatchers created from it still exist and might possibly be used again.
+    *
+    *   @param input The input string to which the regular expression will be applied.
+    *   @param err   A reference to a UErrorCode to receive any errors.
+    *   @return      A RegexMatcher object for this pattern and input.
+    *
+    *   @draft ICU 2.4
     */
     virtual RegexMatcher *matcher(const UnicodeString &input,
         UErrorCode          &err) const;
     
     
-   /*
-    *  Compiles the given regular expression and attempts to match the given input against it.
+   /**
+    *  Test whether a string matches a regular expression.  This convenience function
+    *   both compiles the reguluar expression and applies it in a single operation.  
+    *   Note that if the same pattern needs to be applied repeatedly, this method will be
+    *   less efficient than creating and reusing RegexPattern object.
+    *
+    *  @param regex The regular expression
+    *  @param input The string data to be matched
+    *  @param pe Receives the position of any syntax errors within the regular expression
+    *  @param err A reference to a UErrorCode to receive any errors.
+    *  @return True if the regular expression exactly matches the full input string.
+    *
+    *  @draft ICU 2.4
     */
     static UBool matches(const UnicodeString   &regex,
         const UnicodeString   &input,
@@ -112,12 +243,13 @@ public:
     
    /*
     *    Returns the regular expression from which this pattern was compiled. 
+    *    @draft ICU 2.4
     */
     virtual UnicodeString pattern() const;
     
     
     /*
-    *    Split a string around matches of the pattern.  Somewhat like split() form Perl.
+    *    Split a string around matches of the pattern.  Somewhat like split() from Perl.
     *    @param input   The string to be split into fields.  The field delimiters
     *                   match the pattern (in the "this" object)
     *    @param dest    An array of UnicodeStrings to receive the results of the split.
@@ -131,6 +263,7 @@ public:
     *                   of fields, the trailing part of the input string, including any
     *                   field delimiters, is placed in the last destination string.
     *    @return        The number of fields into which the input string was split.
+    *    @draft ICU 2.4
     */
     virtual int32_t  split(const UnicodeString &input,
         UnicodeString    dest[],
@@ -147,14 +280,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.4
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
     
     /**
     * ICU "poor man's RTTI", returns a UClassID for this class.
     *
-    * @draft ICU 2.2
+    * @draft ICU 2.4
     */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
     
@@ -167,12 +300,12 @@ private:
     UnicodeString   fPattern;      // The original pattern string.
     int32_t         fFlags;        // The flags used when compiling the pattern.
                                    //   
-    UVector         *fCompiledPat; // The compiled, tokenized pattern.
+    UVector         *fCompiledPat; // The compiled pattern.
     UnicodeString   fLiteralText;  // Any literal string data from the pattern, 
                                    //   after un-escaping, for use during the match.
     UVector         *fSets;        // Any UnicodeSets referenced from the pattern.
-    UBool           fBadState;     // True if any prior error has left this
-                                   //  RegexPattern unusable.
+    UBool           fBadState;     // True if some prior error has left this
+                                   //  RegexPattern in an unusable state.
 
     RegexMatcher    *fMatcher;     // A cached matcher for this pattern, used for
                                    //  split(), to avoid having to
@@ -205,61 +338,77 @@ private:
 
 
 
-//--------------------------------------------------------------------------------
-//
-//    class RegexMatcher 
-//
-//--------------------------------------------------------------------------------
-class U_I18N_API RegexMatcher: public UObject {
+/**
+  *  class RegexMatcher bundles together a reular expression pattern and
+  *  input text to which the expression can be applied.  It includes methods
+  *  for testing for matches, and for find and replace operations.
+  *
+  * @draft ICU 2.4
+  */
+  class U_I18N_API RegexMatcher: public UObject {
 public:
-    
-   /*   Destructor.  Note that there are no public constructors; creation is
+   /**
+    *   Destructor.  Note that there are no public constructors; creation is
     *   done with RegexPattern::matcher().
+    *
+    *  @draft ICU 2.4
     */
     virtual ~RegexMatcher();
 
-   /*
+   /**
     *   Implements a replace operation intended to be used as part of an
     *   incremental find-and-replace.
     *
-    *   The input sequence, starting from the append position and ending at
-    *   the start of the current match is appended to the destination string.
+    *   The input string, starting from the end of the previous match and ending at
+    *   the start of the current match, is appended to the destination string.
     *
     *   Then the replacement string is appended to the output string,
     *   including handling any substitutions of captured text.
     *
-    *   The append position is set to the position of the first
-    *   character following the match in the input string.
-    *
-    *   For complete, prepackaged, non-incremental find-and-replace
+    *   For simple, prepackaged, non-incremental find-and-replace
     *   operations, see replaceFirst() or replaceAll().
     *
-    *   Returns:  This Matcher
+    *   @param   dest        A UnicodeString to which the results of the find-and-replace are appended.
+    *   @param   replacement A UnicodeString that provides the text to be substitured for
+    *                        the input text that matched the regexp pattern.  The replacement
+    *                        text may contain references to captured text from the
+    *                        input.
+    *   @param   status      A reference to a UErrorCode to receive any errors.  Possible 
+    *                        errors are  U_REGEX_INVALID_STATE if no match has been
+    *                        attempted or the last match failed, and U_INDEX_OUTOFBOUNDS_ERROR
+    *                        if the replacement text specifies a capture group that
+    *                        does not exist in the pattern.
+    *                        
+    *   @return  this  RegexMatcher
+    *   @draft ICU 2.4
     *
-    *    error:  Illegal state - no match yet attemtped, or last match failed.
-    *            IndexOutOfBounds - caputure string number from replacement string.
     */
     virtual RegexMatcher &appendReplacement(UnicodeString &dest,
         const UnicodeString &replacement, UErrorCode &status);
     
     
-   /*
-    * This method reads characters from the input sequence,
-    * starting at the append position, and appends them to the
-    * destination string. It is intended to be invoked after one
-    * or more invocations of the appendReplacement method in order
-    * to copy the remainder of the input sequence. 
+   /**
+    * As the final step in a find-and-replace operation, append the remainder
+    * of the input string, starting at the position following the last match,
+    * to the destination string. It is intended to be invoked after one
+    * or more invocations of the <code>RegexMatcher::appendReplacement()</code>. 
     *
+    *  @param dest A UnicodeString to which the results of the find-and-replace are appended.
     *  @return  the destination string.
+    *  @draft ICU 2.4
     */
     virtual UnicodeString &appendTail(UnicodeString &dest); 
     
     
-    /*
-    *    Returns the index of the last character matched, plus one.
-    *    error:  Illegal state - no match yet attemtped, or last match failed.
+   /**
+    *    Find the ending position of the most recent match.
+    *   @param   status      A reference to a UErrorCode to receive any errors.  Possible 
+    *                        errors are  U_REGEX_INVALID_STATE if no match has been
+    *                        attempted or the last match failed.
+    *    @return the index of the last character matched, plus one.
+    *   @draft ICU 2.4
     */
-    virtual int32_t end(UErrorCode &err) const;
+    virtual int32_t end(UErrorCode &status) const;
     
     
     /*
