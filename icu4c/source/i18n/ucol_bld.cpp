@@ -1067,7 +1067,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
           /* the table, even if it results in more false closure elements */
           || ((isContraction(CE)) &&
-          (uprv_cnttab_getCE(t->contractions, CE, 0, TRUE, status) == UCOL_NOT_FOUND))
+          (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
           ) {
           decomp[0] = (UChar)u;
           el.uchars[0] = (UChar)u;
