@@ -581,6 +581,35 @@ U_CAPI
  */
 U_CAPI int32_t U_EXPORT2 ucnv_countAvailable (void);
 
+
+/**
+ * Gives the number of aliases for given converter or alias name
+ * @param alias alias name
+ * @param pErrorCode result of operation
+ * @return number of names on alias list
+ */
+U_CAPI uint16_t
+ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
+
+/**
+ * Gives the name of the alias at given index of alias list
+ * @param alias alias name
+ * @param index indes in alias list
+ * @param pErrorCode result of operation
+ * @return returns the name of the alias at given index
+ */
+U_CAPI const char *
+ucnv_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode);
+
+/**
+ * Fill-up the list of alias names for the given alias
+ * @param alias alias name
+ * @param aliases fill-in list
+ * @param pErrorCode result of operation
+ */
+U_CAPI void
+ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode);
+
 /**
  * returns the current default converter name.
  *
