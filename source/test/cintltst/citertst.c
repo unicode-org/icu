@@ -105,6 +105,8 @@ static void TestBug672() {
         }
         result[i][2] = ucol_getOffset(titer);
         log_verbose("Current offset in text = %d\n", result[i][2]);
+        ucol_closeElements(pitr);
+        ucol_closeElements(titer);
         ucol_close(coll);
     }
 
@@ -179,6 +181,8 @@ static void TestBug672Normalize() {
         }
         result[i][2] = ucol_getOffset(titer);
         log_verbose("Current offset in text = %d\n", result[i][2]);
+        ucol_closeElements(pitr);
+        ucol_closeElements(titer);
         ucol_close(coll);
     }
 
@@ -341,6 +345,24 @@ static void TestNormalization()
                         "A\\u0316\\u0300\\u0315B", "A\\u0315\\u0300\\u0316B",
                         "\\u0316\\u0315\\u0300", "A\\u0316\\u0315\\u0300B"};
 
+    coll = ucol_open("fr", &status);
+    if (U_SUCCESS(status)) {
+        UChar source[2];
+        UChar target[1];
+        UCollationElements *iter;
+        source[0] = 0x00E6;
+        source[1] = 'E';
+        iter = ucol_openElements(coll, source, 2, &status);
+        backAndForth(iter);
+        ucol_closeElements(iter);
+        target[0] = 0x00C6;
+        iter = ucol_openElements(coll, source, 1, &status);
+        backAndForth(iter);
+        ucol_closeElements(iter);
+        ucol_strcoll(coll, source, 2, target, 1);
+        ucol_close(coll);
+    }
+
     coll = ucol_openRules(rule, rulelen, UNORM_NFD, UCOL_TERTIARY, &status);
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     if (U_FAILURE(status)){
@@ -372,12 +394,6 @@ static void TestNormalization()
                   myErrorName(status));
             return;
         }
-        if (count == 6) {
-            log_verbose("count %x\n", count);
-        }
-        else {
-            log_verbose("count %x\n", count);
-        }
         backAndForth(iter);
         ucol_closeElements(iter);
         count ++;
@@ -407,6 +423,7 @@ static void TestPrevious()
     coll = ucol_open("en_US", &status);
 
     iter=ucol_openElements(coll, test1, u_strlen(test1), &status);
+    log_verbose("English locale testing back and forth\n");
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
@@ -422,9 +439,8 @@ static void TestPrevious()
     u_uastrcpy(rule, "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
     c1 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
 
-    /* synwee : temporarily changed
-       c1 = ucol_open("es_ES", &status); */
-
+    log_verbose("Contraction rule testing back and forth with no normalization\n");
+    
     if (c1 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n",
@@ -446,6 +462,7 @@ static void TestPrevious()
     /* Test with an expanding character sequence */
     u_uastrcpy(rule, "&a < b < c/abd < d");
     c2 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,  &status);
+    log_verbose("Expansion rule testing back and forth with no normalization\n");
     if (c2 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n",
@@ -465,6 +482,8 @@ static void TestPrevious()
     /* Now try both */
     u_uastrcpy(rule, "&a < b < c/aba < d < z < ch");
     c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  UCOL_DEFAULT_STRENGTH, &status);
+    log_verbose("Expansion/contraction rule testing back and forth with no normalization\n");
+
     if (c3 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n",
@@ -492,7 +511,7 @@ static void TestPrevious()
     source[8] = 0;
 
     coll = ucol_open("th_TH", &status);
-
+    log_verbose("Thai locale testing back and forth with normalization\n");
     iter=ucol_openElements(coll, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
@@ -511,7 +530,7 @@ static void TestPrevious()
     source[4] = 0;
 
     coll = ucol_open("ja_JP", &status);
-
+    log_verbose("Japanese locale testing back and forth with normalization\n");
     iter=ucol_openElements(coll, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
