@@ -37,19 +37,20 @@ u_formatMessage(const char  *locale,
                 UErrorCode  *status,
                 ...)
 {
-  va_list    ap;
-  int32_t actLen;
-  if(U_FAILURE(*status)) return -1;
+    va_list    ap;
+    int32_t actLen;
+    
+    //argument checking defered to subsequent method calls
 
-  // start vararg processing
-  va_start(ap, status);
+    // start vararg processing
+    va_start(ap, status);
 
-  actLen = u_vformatMessage(locale,pattern,patternLength,result,resultLength,ap,status);
+    actLen = u_vformatMessage(locale,pattern,patternLength,result,resultLength,ap,status);
 
-  // end vararg processing
-  va_end(ap);
+    // end vararg processing
+    va_end(ap);
 
-  return actLen;
+    return actLen;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -62,6 +63,8 @@ u_vformatMessage(   const char  *locale,
                     UErrorCode  *status)
 
 {
+    //argument checking defered to subsequent method calls
+
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
     int32_t retVal = umsg_vformat(fmt,result,resultLength,ap,status);
     umsg_close(fmt);
@@ -78,19 +81,19 @@ u_formatMessageWithError(const char *locale,
                         UErrorCode  *status,
                         ...)
 {
-  va_list    ap;
-  int32_t actLen;
-  if(U_FAILURE(*status)) return -1;
+    va_list    ap;
+    int32_t actLen;
+    //argument checking defered to subsequent method calls
 
-  // start vararg processing
-  va_start(ap, status);
+    // start vararg processing
+    va_start(ap, status);
 
-  actLen = u_vformatMessageWithError(locale,pattern,patternLength,result,resultLength,parseError,ap,status);
+    actLen = u_vformatMessageWithError(locale,pattern,patternLength,result,resultLength,parseError,ap,status);
 
-  // end vararg processing
-  va_end(ap);
+    // end vararg processing
+    va_end(ap);
 
-  return actLen;
+    return actLen;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -104,6 +107,8 @@ u_vformatMessageWithError(  const char  *locale,
                             UErrorCode  *status)
 
 {
+    //argument checking defered to subsequent method calls
+
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,parseError,status);
     int32_t retVal = umsg_vformat(fmt,result,resultLength,ap,status);
     umsg_close(fmt);
@@ -126,7 +131,7 @@ u_parseMessage( const char   *locale,
 {
     va_list    ap;
 
-    if(U_FAILURE(*status)) return;
+    //argument checking defered to subsequent method calls
 
     // start vararg processing
     va_start(ap, status);
@@ -146,13 +151,11 @@ u_vparseMessage(const char  *locale,
                 va_list     ap,
                 UErrorCode  *status)
 {
+    //argument checking defered to subsequent method calls
+
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
     int32_t count = 0;
-
-    if (U_SUCCESS(*status)) {
-        umsg_vparse(fmt,source,sourceLength,&count,ap,status);
-    }
-
+    umsg_vparse(fmt,source,sourceLength,&count,ap,status);
     umsg_close(fmt);
 }
 
@@ -168,7 +171,7 @@ u_parseMessageWithError(const char  *locale,
 {
     va_list    ap;
 
-    if(U_FAILURE(*status)) return;
+    //argument checking defered to subsequent method calls
 
     // start vararg processing
     va_start(ap, status);
@@ -188,6 +191,8 @@ u_vparseMessageWithError(const char  *locale,
                          UParseError *error,
                          UErrorCode* status)
 {
+    //argument checking defered to subsequent method calls
+
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,error,status);
     int32_t count = 0;
     umsg_vparse(fmt,source,sourceLength,&count,ap,status);
@@ -207,13 +212,19 @@ umsg_open(  const UChar     *pattern,
             UParseError     *parseError,
             UErrorCode      *status)
 {
-    if(U_FAILURE(*status))
+    //check arguments
+    if(status==NULL || U_FAILURE(*status))
     {
       return 0;
     }
+    if(pattern==NULL||patternLength<-1){
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
     UParseError tErr;
-    
-    if(!parseError)
+   
+    if(parseError==NULL)
     {
         parseError = &tErr;
     }
@@ -236,6 +247,10 @@ umsg_open(  const UChar     *pattern,
 U_CAPI void U_EXPORT2
 umsg_close(UMessageFormat* format)
 {
+    //check arguments
+    if(format==NULL){
+        return;
+    }
     delete (MessageFormat*) format;
 }
 
@@ -243,6 +258,14 @@ U_CAPI UMessageFormat U_EXPORT2
 umsg_clone(const UMessageFormat *fmt,
            UErrorCode *status)
 {
+    //check arguments
+    if(status==NULL || U_FAILURE(*status)){
+        return NULL;
+    }
+    if(fmt==NULL){
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
     UMessageFormat retVal = (UMessageFormat)((MessageFormat*)fmt)->clone();
     if(retVal == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -254,12 +277,20 @@ umsg_clone(const UMessageFormat *fmt,
 U_CAPI void  U_EXPORT2
 umsg_setLocale(UMessageFormat *fmt, const char* locale)
 {
+    //check arguments
+    if(fmt==NULL){
+        return;
+    }
     ((MessageFormat*)fmt)->setLocale(Locale(locale));   
 }
 
 U_CAPI const char*  U_EXPORT2
 umsg_getLocale(UMessageFormat *fmt)
 {
+    //check arguments
+    if(fmt==NULL){
+        return "";
+    }
     return ((MessageFormat*)fmt)->getLocale().getName();
 }
 
@@ -270,13 +301,24 @@ umsg_applyPattern(UMessageFormat *fmt,
                            UParseError* parseError,
                            UErrorCode* status)
 {
-  UParseError tErr;
-  if(!parseError)
-  {
+    //check arguments
+    UParseError tErr;
+    if(status ==NULL||U_FAILURE(*status)){
+        return ;
+    }
+    if(fmt==NULL||pattern==NULL||patternLength<-1){
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return ;
+    }
+
+    if(parseError==NULL){
       parseError = &tErr;
-  }
-  
-  ((MessageFormat*)fmt)->applyPattern(UnicodeString(pattern,patternLength),*parseError,*status);  
+    }
+    if(patternLength<-1){
+        patternLength=u_strlen(pattern);
+    }
+
+    ((MessageFormat*)fmt)->applyPattern(UnicodeString(pattern,patternLength),*parseError,*status);  
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -285,6 +327,14 @@ umsg_toPattern(UMessageFormat *fmt,
                int32_t resultLength,
                UErrorCode* status)
 {
+    //check arguments
+    if(status ==NULL||U_FAILURE(*status)){
+        return -1;
+    }
+    if(fmt==NULL||resultLength<0 || (resultLength>0 && result==0)){
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
 
     UnicodeString res(result, 0, resultLength);
@@ -302,11 +352,11 @@ umsg_format(    UMessageFormat *fmt,
     va_list    ap;
     int32_t actLen;
     
-    if(U_FAILURE(*status))
-    {
-        return -1;
-    }
+    //argument checking defered to last method call umsg_vformat which
+    //saves time when arguments are valid and we dont care when arguments are not
+    //since we return an error anyway
 
+    
     // start vararg processing
     va_start(ap, status);
 
@@ -325,12 +375,12 @@ umsg_vformat(   UMessageFormat *fmt,
                 va_list        ap,
                 UErrorCode     *status)
 {
-
+    //check arguments
     if(status==0 || U_FAILURE(*status))
     {
         return -1;
     }
-    if(resultLength<0 || (resultLength>0 && result==0)) {
+    if(fmt==NULL||resultLength<0 || (resultLength>0 && result==0)) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -405,10 +455,10 @@ umsg_parse( UMessageFormat *fmt,
 {
     va_list    ap;
 
-    if(U_FAILURE(*status))
-    {
-        return;
-    }
+    //argument checking defered to last method call umsg_vparse which
+    //saves time when arguments are valid and we dont care when arguments are not
+    //since we return an error anyway
+
     // start vararg processing
     va_start(ap, status);
 
@@ -426,13 +476,21 @@ umsg_vparse(UMessageFormat *fmt,
             va_list        ap,
             UErrorCode     *status)
 {
-    UnicodeString srcString(source,sourceLength);
-    Formattable *args = ((MessageFormat*)fmt)->parse(source,*count,*status);
-    if(U_FAILURE(*status))
+    //check arguments
+    if(status==NULL||U_FAILURE(*status))
     {
         return;
     }
+    if(fmt==NULL||source==NULL || sourceLength<-1 || count==NULL){
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if(sourceLength==-1){
+        sourceLength=u_strlen(source);
+    }
 
+    UnicodeString srcString(source,sourceLength);
+    Formattable *args = ((MessageFormat*)fmt)->parse(source,*count,*status);
     UDate *aDate;
     double *aDouble;
     UChar *aString;
