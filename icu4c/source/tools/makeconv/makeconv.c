@@ -398,7 +398,8 @@ int main(int argc, char* argv[])
               puts(outFileName);
           }
         }
-      
+      fflush(stdout);
+      fflush(stderr);
     }
 
   return err;
