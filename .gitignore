@@ -27,6 +27,7 @@ icu4c/debian/control
 icu4c/debian/docs
 icu4c/debian/icu
 icu4c/debian/icu-data
+icu4c/debian/icu-doc
 icu4c/debian/icu-i18ndata
 icu4c/debian/icu-locales
 icu4c/debian/icu.postinst
