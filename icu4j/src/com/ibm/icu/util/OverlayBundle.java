@@ -1,4 +1,17 @@
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/OverlayBundle.java,v $
+ * $Date: 2002/08/13 23:43:27 $
+ * $Revision: 1.5 $
+ *
+ *******************************************************************************
+ */
 package com.ibm.icu.util;
+
 import java.util.*;
 
 /**

@@ -1,5 +1,18 @@
 /**
- * A hacked list resource bundle that does redirection 
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
+ * $Date: 2002/08/13 23:40:52 $
+ * $Revision: 1.9 $
+ *
+ *******************************************************************************
+ */
+
+/**
+ * A list resource bundle that does redirection 
  * because otherwise some of our resource class files
  * are too big for the java runtime to handle.
  */
