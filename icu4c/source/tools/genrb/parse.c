@@ -179,7 +179,7 @@ static UBool compareUString(const void* ustr1, const void* ustr2) {
                                ((struct UString*)ustr2)->fChars);
 }
 
-char *getModificationData(struct UFILE *file, UErrorCode *status) {
+static char *getModificationData(struct UFILE *file, UErrorCode *status) {
     enum ETokenType modType;
     struct UString modToken;
     char *retValue = NULL;
