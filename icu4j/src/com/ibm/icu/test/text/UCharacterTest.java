@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/09/08 01:14:10 $ 
-* $Revision: 1.14 $
+* $Date: 2001/10/19 22:16:23 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -652,21 +652,22 @@ public final class UCharacterTest extends TestFmwk
     }
 
     // test full string case folding with default option and separate buffers
-    String mixed                 = "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff",
+    String mixed                 = "\u0061\u0042\u0131\u03d0\u00df\ufb03\ud93f\udfff",
            // not used foldedExcludeSpecialI = "\u0061\u0062\u0131\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
-           foldedDefault         = "\u0061\u0062\u0069\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
+           foldedDefault         = "\u0061\u0062\u0069\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
+           // foldedExcludeSpecialI = "\u0061\u0062\u0131\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
     String foldedstr = UCharacter.foldCase(mixed, true);
     if (!foldedDefault.equals(foldedstr)) {
         errln("FAIL: foldCase(\\uabcd, true) should be " + foldedDefault);
     }
 
-    /* ### TODO: add the following tests similar to TestCaseMapping, follow icu's test cases  */
+    // ### TODO: add the following tests similar to TestCaseMapping, follow icu's test cases 
 
-    /* test full string case folding with default option and in the same buffer */
+    // test full string case folding with default option and in the same buffer
 
-    /* test preflighting */
+    // test preflighting 
 
-    /* test error handling */
+    // test error handling
   }
 
   /**
@@ -707,6 +708,18 @@ public final class UCharacterTest extends TestFmwk
     if (!lowerRoot.equals(result)) 
       errln("Fail " + beforeLower + " after lower case should be " + 
             lowerRoot);
+            
+    // testing titlecase, since toTitleCase is a simple API that makes use of  
+    // the transliterator, which has its own test, the test here will be 
+    // simple
+    /*
+    String beforeTitle = "the chinese name for a very happy cat is \u5f00\u5fc3\u732b";
+    String afterTitle = "The Chinese Name For A Very Happy Cat Is \u5f00\u5fc3\u732b";
+    if (!afterTitle.equals(UCharacter.toTitleCase(beforeTitle))) {
+        errln("Fail " + beforeTitle + " after titlecase " + "should be " + 
+              afterTitle);
+    }
+    */
   }
 
  
