@@ -130,7 +130,11 @@
 
 /* We return QNAN rather than SNAN*/
 #define SIGN 0x80000000U
-#if defined(__GNUC__) && __GNUC__ == 3
+#if defined(__GNUC__)
+/*
+    This is an optimization for when u_topNBytesOfDouble
+    and u_bottomNBytesOfDouble can't be properly optimized by the compiler.
+*/
 #define USE_64BIT_DOUBLE_OPTIMIZATION 1
 #else
 #define USE_64BIT_DOUBLE_OPTIMIZATION 0
