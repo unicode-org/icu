@@ -6,6 +6,7 @@
 // *******************************************************************************
 
 mk {
+     Version { "1.0.1"}
 // Macedonian sorting order is completely in accordance with the UCA, so there is no need for separate set of collation elements
 //    CollationElements { 
 //	    Version { "1.0" }

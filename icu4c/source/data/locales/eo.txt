@@ -10,7 +10,7 @@
 // Feedback to : schererm@us.ibm.com
 
 eo {
-    Version { "1.1" } 
+    Version { "1.1.1" } 
     Countries { 
         AT { "A\u016dstrujo" }
         BE { "Belgujo" }

@@ -10,7 +10,7 @@ zh {
             "\u4E0A\u5348",
             "\u4E0B\u5348",
     }
-     Version{ "1.1" }
+     Version{ "1.1.1" }
     CollationElements { 
        Version { "1.0" }
        Override { "FALSE" }

@@ -6,7 +6,7 @@
 // *******************************************************************************
 
 vi {
-    Version{ "1.0" }
+    Version{ "1.0.1" }
     CollationElements { 
         Version { "2.0" }
 		Sequence { "[normalization on]&\u0300;\u0309;\u0303;\u0301;"
