@@ -676,8 +676,8 @@ static void TestSmallBuffer()
     UCollator          *coll;
     UCollationElements *testiter,
                        *iter;
-    int                 count = 0;
-    uint32_t           *testorders,
+    int32_t             count = 0;
+    int32_t            *testorders,
                        *orders;
 
     UChar teststr[500];
