@@ -7,7 +7,7 @@ package com.ibm.icu.dev.test.rbbi;
 
 // Monkey testing of RuleBasedBreakIterator
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator_New;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
@@ -141,6 +141,10 @@ public class RBBITestMonkey extends TestFmwk {
      * @internal
      */
     static int  nextCP(String s, int i) {
+        if (i == -1) {
+            // End of Input indication.  Continue to return end value.
+            return -1;
+        }
         int  retVal = i + 1;
         if (retVal > s.length()) {
             return -1;
@@ -155,7 +159,7 @@ public class RBBITestMonkey extends TestFmwk {
 
  
     private static UnicodeSet GC_Control =
-         new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]]");
+         new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]-[:Grapheme_Extend:]]");
     
     private static UnicodeSet GC_Extend = 
         new UnicodeSet("[[:Grapheme_Extend:]]");
@@ -185,23 +189,27 @@ public class RBBITestMonkey extends TestFmwk {
      * @internal
      */
     private static int nextGC(String s, int i) {
-        if (i >= s.length() ) {
+        if (i >= s.length() || i == -1 ) {
             return -1;
         }
 
-    	int    c = UTF16.charAt(s, i);
-        int    pos = i;
+    	int  c = UTF16.charAt(s, i);
+        int  pos = i;
     	
     	if (c == 0x0d) {
     	    pos = nextCP(s, i);
+            if (pos >= s.length()) {
+                return pos;
+            }
             c = UTF16.charAt(s, pos);
     		if (c == 0x0a) {
-    		    pos = nextCP(s, i);
+    		    pos = nextCP(s, pos);
             }
             return pos;
     	}
         
-    	if (GC_Control.contains(c)) {
+    	if (GC_Control.contains(c) || c == 0x0a) {
+            pos = nextCP(s, pos);
     		return pos;   
     	}
     	
@@ -268,17 +276,17 @@ public class RBBITestMonkey extends TestFmwk {
     			case 5:
     				if (GC_Extend.contains(c)) {
     				    hangulState = 5;
-    				    break;
+    				    break; 
     				}
     				break state_loop;
     		}
     		// We have exited the switch statement, but are still in the loop.
     		// Still in a Hangul Syllable, advance to the next code point.
-    		if (pos >= s.length()) {
-    		    break;
-    		}
+            pos = nextCP(s, pos); 
+            if (pos >= s.length()) {
+                break;
+            }
     		c = UTF16.charAt(s, pos);    
-    		pos = nextCP(s, pos); 
     	}  // end of loop
     	
     	if (hangulState != 1) {
@@ -286,14 +294,14 @@ public class RBBITestMonkey extends TestFmwk {
     		return pos;
     	}
     	
-    	// Ordinary characters.  Consume any following Extends.
+    	// Ordinary characters.  Consume one codepoint unconditionally, then any following Extends.
     	for (;;) {
-            c = UTF16.charAt(s, pos);    
-     		if (GC_Extend.contains(c) == false) {
-    			break;
-    		}
             pos = nextCP(s, pos); 
             if (pos >= s.length()) {
+                break;
+            }
+            c = UTF16.charAt(s, pos);    
+            if (GC_Extend.contains(c) == false) {
                 break;
             }
     	}
@@ -337,7 +345,9 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
     boolean[]        reverseBreaks    = new boolean[TESTSTRINGLEN*2 + 1];
     boolean[]        isBoundaryBreaks = new boolean[TESTSTRINGLEN*2 + 1];
     int              i;
-    int              loopCount = 0;
+    int              loopCount        = 0;
+    boolean          printTestData    = false;
+    boolean          printBreaksFromBI = false;
 
     m_seed = seed;
 
@@ -353,11 +363,35 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
         }
     }
 
+    //--------------------------------------------------------------------------------------------
+    //
+    //  Debugging settings.  Comment out everything in the following block for normal operation
+    //
+    //--------------------------------------------------------------------------------------------
+    // numIterations = -1;  
+    //RuleBasedBreakIterator_New.fTrace = true;
+    //m_seed = -1324359431;
+    // TESTSTRINGLEN = 50;
+    // printTestData = true;
+    // printBreaksFromBI = true;
+    // ((RuleBasedBreakIterator_New)bi).dump();
+    
+    //--------------------------------------------------------------------------------------------
+    //
+    //  End of Debugging settings.  
+    //
+    //--------------------------------------------------------------------------------------------
+    
+    int  dotsOnLine = 0;
     while (loopCount < numIterations || numIterations == -1) {
         if (numIterations == -1 && loopCount % 10 == 0) {
             // If test is running in an infinite loop, display a periodic tic so
             //   we can tell that it is making progress.
             System.out.print(".");
+            if (dotsOnLine++ >= 80){
+                System.out.println();
+                dotsOnLine = 0;
+            }
         }
         // Save current random number seed, so that we can recreate the random numbers
         //   for this loop iteration in event of an error.
@@ -365,6 +399,9 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
 
         testText.setLength(0);
         // Populate a test string with data.
+        if (printTestData) {
+            System.out.println("Test Data string ..."); 
+        }
         for (i=0; i<TESTSTRINGLEN; i++) {
             int        aClassNum = m_rand() % numCharClasses;
             UnicodeSet classSet  = (UnicodeSet)chClasses.get(aClassNum);
@@ -374,6 +411,12 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 errln("c < 0");
             }
             UTF16.appendCodePoint(testText, c);
+            if (printTestData) {
+            	System.out.print(Integer.toHexString(c) + " ");
+            }
+        }
+        if (printTestData) {
+        	System.out.println(); 
         }
 
         Arrays.fill(expected, 0);
@@ -384,9 +427,10 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
  
         // Calculate the expected results for this test string.
         mk.setText(testText.toString());
-        expectedBreaks[0] = true;
-        int breakPos = 0;
         expectedCount = 0;
+        expectedBreaks[0] = true;
+        expected[expectedCount ++] = 0;
+        int breakPos = 0;
         for (;;) {
             breakPos = mk.next(breakPos);
             if (breakPos == -1) {
@@ -400,13 +444,22 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
         }
 
         // Find the break positions using forward iteration
+        if (printBreaksFromBI) {
+        	System.out.println("Breaks from BI...");  
+        }
         bi.setText(testText.toString());
         for (i=bi.first(); i != BreakIterator.DONE; i=bi.next()) {
             if (i < 0 || i > testText.length()) {
                 errln(name + " break monkey test: Out of range value returned by breakIterator::next()");
                 break;
             }
+            if (printBreaksFromBI) {
+                System.out.print(Integer.toHexString(i) + " ");
+            }
             forwardBreaks[i] = true;
+        }
+        if (printBreaksFromBI) {
+        	System.out.println();
         }
 
         // Find the break positions using reverse iteration
@@ -471,18 +524,11 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 StringBuffer errorText = new StringBuffer();
                 errorText.append("<data>");
 
-                StringUCharacterIterator sci = new StringUCharacterIterator();
-                sci.setText(errorText.toString());
-                sci.setIndex(startContext);
                 String hexChars = "0123456789abcdef";
-                int      c;
+                int      c;    // Char from test data
                 int      bn;
-                while (true) {
-                    ci = sci.getIndex();
-                    c = sci.nextCodePoint();
-                    if (ci >= endContext) {
-                    	break;   
-                    }
+                String   testData = testText.toString();
+                for (ci = startContext;  ci <= endContext && ci != -1;  ci = nextCP(testData, ci)) {
                     if (ci == i) {
                         // This is the location of the error.
                         errorText.append("<?>");
@@ -490,25 +536,30 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                         // This a non-error expected break position.
                         errorText.append("<>");
                     }
-                    if (c < 0x10000) {
-                        errorText.append("\\u");
-                        for (bn=12; bn>=0; bn-=4) {
-                            errorText.append(hexChars.charAt((((int)c)>>bn)&0xf));
-                        }
-                    } else {
-                        errorText.append("\\U");
-                        for (bn=28; bn>=0; bn-=4) {
-                            errorText.append(hexChars.charAt((((int)c)>>bn)&0xf));
-                        }
+                    if (ci < testData.length()) {
+                    	c = UTF16.charAt(testData, ci);
+                    	if (c < 0x10000) {
+                    		errorText.append("\\u");
+                    		for (bn=12; bn>=0; bn-=4) {
+                    			errorText.append(hexChars.charAt((((int)c)>>bn)&0xf));
+                    		}
+                    	} else {
+                    		errorText.append("\\U");
+                    		for (bn=28; bn>=0; bn-=4) {
+                    			errorText.append(hexChars.charAt((((int)c)>>bn)&0xf));
+                    		}
+                    	}
                     }
                 }
-                errorText.append("<>");
+                if (ci == testData.length() && ci != -1) {
+                	errorText.append("<>");
+                }
                 errorText.append("</data>\n");
 
                 // Output the error
                 errln(name + " break monkey test error.  " + 
-                     (expectedBreaks[i]? "break expected but not found" : "break found but not expected") +
-                      "Operation = " + errorType + "; Random seed = " + seed + ";  buf Idx = " + i + "\n" +
+                     (expectedBreaks[i]? "Break expected but not found." : "Break found but not expected.") +
+                      "\nOperation = " + errorType + "; random seed = " + seed + ";  buf Idx = " + i + "\n" +
                       errorText);
                 break;
             }
@@ -530,7 +581,7 @@ public void TestCharMonkey() {
     
     RBBICharMonkey  m = new RBBICharMonkey();
     BreakIterator   bi = BreakIterator.getCharacterInstance(Locale.US);
-    // RunMonkey(bi, m, "char", seed, loopCount);
+    RunMonkey(bi, m, "char", seed, loopCount);
 }
 
 public void TestWordMonkey() {
