@@ -351,8 +351,17 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
             length = (int8_t)mappingData[index];
             index++;
         }
+        int32_t realLength =0;
+        /* figure out the real length */ 
+        for(int32_t i=0; i<mapLength; i++){
+            if(mapping[i] > 0xFFFF){
+                realLength +=2;
+            }else{
+                realLength++;
+            }      
+        }
 
-        if(mapLength != length){
+        if(realLength != length){
             pTestIDNA->errln( "Did not get the expected length. Expected: %i Got: %i\n", mapLength, length);
         }
         

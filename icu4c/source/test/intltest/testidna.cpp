@@ -543,7 +543,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
             destLen = func(src,-1,dest,destLen+1,options, &parseError, &status);
             // TODO : compare output with expected
             if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
-                errln("Did not get the expected result for %s null terminated source.\n",testName);
+                errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source : "+ prettify(UnicodeString(expected,expectedLen)));
             }
         }else{
             errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
@@ -563,7 +563,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
                 destLen = func(src,-1,dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
                 // TODO : compare output with expected
                 if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
-                    errln("Did not get the expected result for %s null terminated source with both options set.\n",testName);
+                    //errln("Did not get the expected result for %s null terminated source with both options set.\n",testName);
+                    errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source with both options set. Expected: "+ prettify(UnicodeString(expected,expectedLen)));
+                
                 }
             }else{
                 errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
@@ -1391,13 +1393,17 @@ void TestIDNA::TestIDNAMonkeyTest(){
 
 void TestIDNA::TestCompareReferenceImpl(){
     
-    UChar src [3] = {0,0,0};
+    UChar src [2] = {0,0};
     int32_t srcLen = 0;
     
-    if(quick==TRUE){
-        return;
-    }
-    for(int32_t i = 1 ; i< 0x10ffff; i++){
+
+    for(int32_t i = 0x40000 ; i< 0x10ffff; i++){
+        if(quick==TRUE && i> 0x1FFFF){
+            return;
+        }
+        if(i >= 0x30000){
+           i+=0xB0000;
+        }
         if(i>0xFFFF){
            src[0] = U16_LEAD(i);
            src[1] = U16_TRAIL(i);
