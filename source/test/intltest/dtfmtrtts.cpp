@@ -14,6 +14,7 @@
 #include "dtfmtrtts.h"
 
 #include <stdio.h>
+#include <string.h>
 
 // *****************************************************************************
 // class DateFormatRoundTripTest
@@ -22,7 +23,12 @@
 // Useful for turning up subtle bugs: Change the following to TRUE, recompile,
 // and run while at lunch.
 // Warning -- makes test run infinite loop!!!
+#ifndef INFINITE
 #define INFINITE 0
+#endif
+
+// Define this to test just a single locale
+//#define TEST_ONE_LOC  "ja_JP_TRADITIONAL"
 
 // If SPARSENESS is > 0, we don't run each exhaustive possibility.
 // There are 24 total possible tests per each locale.  A SPARSENESS
@@ -56,6 +62,19 @@ DateFormatRoundTripTest::failure(UErrorCode status, const char* msg)
     return FALSE;
 }
 
+UBool 
+DateFormatRoundTripTest::failure(UErrorCode status, const char* msg, const UnicodeString& str)
+{
+    if(U_FAILURE(status)) {
+        UnicodeString escaped;
+        escape(str,escaped);
+        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status) + ", str=" + escaped);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 // ==
 
 void DateFormatRoundTripTest::TestDateFormatRoundTrip() 
@@ -80,18 +99,29 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     logln("Default TimeZone:             " + tz->getID(temp));
     delete tz;
 
+#ifdef TEST_ONE_LOC // define this to just test ONE locale.
+    Locale loc(TEST_ONE_LOC);
+    test(loc);
 #if INFINITE
+    for(;;) {
+      test(loc);
+    }
+#endif
+
+#else
+# if INFINITE
     // Special infinite loop test mode for finding hard to reproduce errors
     Locale loc = Locale::getDefault();
     logln("ENTERING INFINITE TEST LOOP FOR Locale: " + loc.getDisplayName(temp));
     for(;;) 
         test(loc);
-#else
+# else
     test(Locale::getDefault());
 
     for (int i=0; i < locCount; ++i) {
         test(avail[i]);
     }
+# endif
 #endif
 
     delete dateFormat;
@@ -230,10 +260,15 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             for(loop = 0; loop < DEPTH; ++loop) {
                 if (loop > 0)  {
                     d[loop] = fmt->parse(s[loop-1], status);
-                    failure(status, "fmt->parse");
+                    failure(status, "fmt->parse", s[loop-1]);
+                    status = U_ZERO_ERROR; /* any error would have been reported */
                 }
 
                 s[loop] = fmt->format(d[loop], s[loop]);
+                
+                if(s[loop].length() == 0) {
+                  errln("FAIL: fmt->format gave 0-length string in " + pat + " with number " + d[loop] + " in locale " + origLocale.getName());
+                }
 
                 if(loop > 0) {
                     if(smatch == 0) {
@@ -282,7 +317,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 if( ! hasEra && getField(d[0], UCAL_ERA) == GregorianCalendar::BC)
                     maxSmatch = 2;
                 // Starts in DST, no year in pattern
-                else if(fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "foo") &&
+                else if(fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "gettingDaylightTime") &&
                          pat.indexOf(UnicodeString("yyyy")) == -1)
                     maxSmatch = 2;
                 // Two digit year with no time zone change,
@@ -291,7 +326,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                         && pat.indexOf(UnicodeString("yyyy")) == -1
                         && getField(d[0], UCAL_YEAR)
                             != getField(d[dmatch], UCAL_YEAR)
-                        && !failure(status, "foo")
+                        && !failure(status, "error status [smatch>maxSmatch]")
                         && ((hasZone
                          && (fmt->getTimeZone().inDaylightTime(d[0], status)
                                 == fmt->getTimeZone().inDaylightTime(d[dmatch], status)
@@ -301,7 +336,13 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                          )
                 {
                     maxSmatch = 2;
-                }
+                }                
+            }
+
+            if((dmatch > maxDmatch || smatch > maxSmatch) && // Special case for Japanese (could have large negative years)
+               !strcmp(fmt->getCalendar()->getType(),"japanese")) {
+                    maxSmatch = 4;
+                    maxDmatch = 4;
             }
             
             if(dmatch > maxDmatch || smatch > maxSmatch) {

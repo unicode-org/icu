@@ -357,7 +357,8 @@ void IntlCalendarTest::TestBuddhistFormat() {
   status = U_ZERO_ERROR;
   // Now, try in Thai
   {
-    UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C, \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 8, 44 \\u0e1e.\\u0e28.");
+    UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
+                                                " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e1e.\\u0e28. 2544");
     UDate         expectDate = 999932400000.0;
     Locale        loc("th_TH_TRADITIONAL");
 
@@ -421,8 +422,26 @@ void IntlCalendarTest::TestJapaneseFormat() {
     simpleTest(loc, expect, expectDate, status);
   }
   {
-    UnicodeString expect = CharsToUnicodeString("\\u5b89\\u6c3805\\u5e747\\u67084\\u65e5");
+    UnicodeString expect = CharsToUnicodeString("\\u5b89\\u6c385\\u5e747\\u67084\\u65e5");
     UDate         expectDate = -6106035600000.0;
+    Locale        loc("ja_JP_TRADITIONAL");
+
+    status = U_ZERO_ERROR;
+    simpleTest(loc, expect, expectDate, status);    
+
+  }
+  {   // Jitterbug 1869 - this is an ambiguous era. (Showa 64 = Jan 6 1989
+    UnicodeString expect = CharsToUnicodeString("\\u662d\\u548c64\\u5e741\\u67086\\u65e5");
+    UDate         expectDate = 600076800000.0;
+    Locale        loc("ja_JP_TRADITIONAL");
+
+    status = U_ZERO_ERROR;
+    simpleTest(loc, expect, expectDate, status);    
+
+  }
+  {   // another nice bug - 
+    UnicodeString expect = CharsToUnicodeString("\\u5EB7\\u6B632\\u5e742\\u670829\\u65e5");
+    UDate         expectDate =  -16214400000000.0;  // courtesy of date format round trip test
     Locale        loc("ja_JP_TRADITIONAL");
 
     status = U_ZERO_ERROR;
@@ -451,7 +470,7 @@ void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect
     if(d != expectDate) {
       fmt2->format(d,tmp);
       errln(UnicodeString("Failed to parse " ) + escape(expect) + ", " + loc.getName() + " expect " + (double)expectDate + " got " + (double)d  + " " + escape(tmp));
-      logln( "wanted " + escape(fmt0->format(expectDate,tmp)) + " but got " + escape(fmt0->format(d,tmp)));
+      logln( "wanted " + escape(fmt0->format(expectDate,tmp.remove())) + " but got " + escape(fmt0->format(d,tmp.remove())));
     }
     delete fmt2;
   } else {
