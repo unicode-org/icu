@@ -52,4 +52,8 @@ ar_SY {
     }
 //    ShortCountry { "SYR" }
     LocaleID:int { 0x2801 }
+    DateTimeElements:intvector {
+        5,
+        1
+    }
 }
