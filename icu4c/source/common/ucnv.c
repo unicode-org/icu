@@ -38,6 +38,9 @@
 
 #define CHUNK_SIZE 5*1024
 
+/* Internal function : begin */
+static int32_t ucnv_getAmbiguousCCSID (const UConverter* cnv);
+/* Internal function : end */
 
 typedef void (*T_ToUnicodeFunction) (UConverter *,
 				     UChar **,
@@ -129,7 +132,6 @@ static T_GetNextUCharFunction GET_NEXT_UChar_FUNCTIONS[UCNV_NUMBER_OF_SUPPORTED_
   T_UConverter_getNextUChar_EBCDIC_STATEFUL,
   T_UConverter_getNextUChar_ISO_2022
 };
-
 
 void flushInternalUnicodeBuffer (UConverter * _this,
 				 UChar * myTarget,
@@ -512,7 +514,6 @@ UConverterFromUCallback   ucnv_setFromUCallBack (UConverter * converter,
 
   return myReturn;
 }
-#include <stdio.h>
 void   ucnv_fromUnicode (UConverter * _this,
 			 char **target,
 			 const char *targetLimit,
@@ -1153,4 +1154,54 @@ void ucnv_getStarters(const UConverter* converter,
   /*fill's in the starters boolean array*/
   uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
   return;
+}
+
+int32_t ucnv_getAmbiguousCCSID(const UConverter *cnv)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i = 0;
+    int32_t ccsid = 0;
+    if (cnv == NULL) 
+    {
+        return -1;
+    }
+    ccsid = ucnv_getCCSID(cnv, &status);
+    if (U_FAILURE(status)) 
+    {
+        return -1;
+    }
+    for (i = 0; i < UCNV_MAX_AMBIGUOUSCCSIDS; i++) {
+        if (ccsid == UCNV_AMBIGUOUSCONVERTERS[i].ccsid) 
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void ucnv_fixFileSeparator(const UConverter *cnv, 
+                           UChar* source, 
+                           int32_t sourceLength)
+{
+    int32_t i = 0;
+    int32_t index = 0;
+    if ((source == NULL) || (cnv == NULL))
+    {
+        return;
+    }
+    if ((index = ucnv_getAmbiguousCCSID(cnv)) != -1)
+    {
+        for (i = 0; i < sourceLength; i++) 
+        {
+            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[index].mismapped)
+            {
+                source[i] = UCNV_AMBIGUOUSCONVERTERS[index].replacement;
+            }
+        }
+    }
+}
+
+bool_t ucnv_isAmbiguous(const UConverter *cnv)
+{
+    return (ucnv_getAmbiguousCCSID(cnv) == -1 ? FALSE : TRUE);
 }

@@ -321,5 +321,24 @@ static  const char* const* getAvailableNames(int32_t&   num,
  * @return the number of cached converters successfully deleted
  */
 static   int32_t flushCache(void);
+/**
+ * Fixes the backslash character mismapping.  For example, in SJIS, the backslash 
+ * character in the ASCII portion is also used to represent the yen currency sign.  
+ * When mapping from Unicode character 0x005C, it's unclear whether to map the 
+ * character back to yen or backslash in SJIS.  This function will take the input
+ * buffer and replace all the yen sign characters with backslash.  This is necessary
+ * when the user tries to open a file with the input buffer on Windows.
+ * @param source the input buffer to be fixed
+ */
+void fixFileSeparator(UnicodeString& source) const;
+
+/**
+ * Determines if the converter contains ambiguous mappings of the same
+ * character or not.
+ * @return TRUE if the converter contains ambiguous mapping of the same 
+ * character, FALSE otherwise.
+ */
+bool_t isAmbiguous(void) const;
+
 };
 #endif

@@ -24,6 +24,7 @@
 
 #define UCNV_MAX_SUBCHAR_LEN 4
 #define UCNV_ERROR_BUFFER_LENGTH 20
+#define UCNV_MAX_AMBIGUOUSCCSIDS 5
 
 #ifndef UCMP16_H
 typedef struct _CompactShortArray CompactShortArray;
@@ -65,6 +66,22 @@ typedef enum {
     UCNV_EUC = 10,
     UCNV_GB = 11
 } UConverterType;
+
+typedef struct
+{
+    int32_t ccsid;
+    UChar mismapped;
+    UChar replacement;
+} UAmbiguousConverter;
+
+static const UAmbiguousConverter UCNV_AMBIGUOUSCONVERTERS[UCNV_MAX_AMBIGUOUSCCSIDS] =
+{
+     943, 0x00A5, 0x005C, 
+     949, 0x20A9, 0x005C,
+     1361, 0x20A9, 0x005C,
+     942, 0x00A5, 0x005C, 
+     1363, 0x20A9, 0x005C 
+};
 
 typedef enum {
     UCNV_UNKNOWN = -1,

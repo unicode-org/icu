@@ -433,3 +433,44 @@ int32_t  UnicodeConverterCPP::flushCache()
 {
   return ucnv_flushCache();
 }
+
+/* HSYS: To be cleaned up.  The usage of UChar* and UnicodeString in
+the C++ APIs need to be revisited. */
+void UnicodeConverterCPP::fixFileSeparator(UnicodeString& source) const
+{
+    int32_t i = 0;
+    int32_t index = 0;
+    int32_t ccsid = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    if (source.length() == 0)
+    {
+        return;
+    }
+    ccsid = getCodepage(status);
+    if (U_FAILURE(status)) 
+    {
+        return;
+    }
+    for (i = 0; i < UCNV_MAX_AMBIGUOUSCCSIDS; i++) {
+        if (ccsid == UCNV_AMBIGUOUSCONVERTERS[i].ccsid) 
+        {
+            index = i;
+            break;
+        }
+    }   
+    if (index != -1)
+    {
+        for (i = 0; i < source.length(); i++) 
+        {
+            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[index].mismapped)
+            {
+                source[i] = UCNV_AMBIGUOUSCONVERTERS[index].replacement;
+            }
+        }
+    }
+}
+
+bool_t UnicodeConverterCPP::isAmbiguous(void) const
+{
+    return ucnv_isAmbiguous(myUnicodeConverter);
+}
