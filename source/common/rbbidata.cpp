@@ -145,8 +145,7 @@ UBool RBBIDataWrapper::operator ==(const RBBIDataWrapper &other) const {
 
 int32_t  RBBIDataWrapper::hashCode() {
     return fHeader->fFTableLen;
-;
-};
+}
 
 
 
@@ -161,13 +160,13 @@ void RBBIDataWrapper::removeReference() {
     if (umtx_atomic_dec(&fRefCount) == 0) {
         delete this;
     }
-};
+}
 
 
 RBBIDataWrapper *RBBIDataWrapper::addReference() {
    umtx_atomic_inc(&fRefCount);
    return this;
-};
+}
 
 
 
@@ -196,7 +195,7 @@ void  RBBIDataWrapper::printData() {
 
     RBBIDebugPrintf("   Forward State Transition Table\n");
     RBBIDebugPrintf("State |  Acc  LA   Tag");
-    for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);};
+    for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);}
     RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {RBBIDebugPrintf("----");}
     RBBIDebugPrintf("\n");
 
@@ -206,7 +205,7 @@ void  RBBIDataWrapper::printData() {
         RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTag);
         for (c=0; c<fHeader->fCatCount; c++)  {
             RBBIDebugPrintf("%3d ", row->fNextState[c]);
-        };
+        }
         RBBIDebugPrintf("\n");
     }
 

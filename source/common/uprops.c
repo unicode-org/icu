@@ -229,7 +229,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     default:
         /* not a known binary property */
         return FALSE;
-    };
+    }
 }
 
 U_CAPI UBool U_EXPORT2

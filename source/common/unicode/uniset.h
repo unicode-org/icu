@@ -1012,7 +1012,7 @@ public:
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
+    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
 private:
 

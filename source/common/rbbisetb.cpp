@@ -382,7 +382,7 @@ void RBBISetBuilder::printRangeGroups() {
             lastPrintedGroupNum = groupNum;
             RBBIDebugPrintf("%2i  ", groupNum);
 
-            if (rlRange->fNum & 0x4000) { RBBIDebugPrintf(" <DICT> ");};
+            if (rlRange->fNum & 0x4000) { RBBIDebugPrintf(" <DICT> ");}
 
             for (i=0; i<rlRange->fIncludesSets->size(); i++) {
                 RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);

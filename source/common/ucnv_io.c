@@ -275,7 +275,7 @@ haveAliasData(UErrorCode *pErrorCode) {
     return TRUE;
 }
 
-U_INLINE static UBool
+static U_INLINE UBool
 isAlias(const char *alias, UErrorCode *pErrorCode) {
     if(alias==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;

@@ -78,7 +78,7 @@ static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
     // Note:  px->val is owned by the linked list "fSetsListHead" in scanner.
     //        Don't delete the value nodes here.
     uprv_free(px);
-};
+}
 U_CDECL_END
 
 
@@ -462,7 +462,9 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
 
     case doStartVariableName:
         n = pushNewNode(RBBINode::varRef);
-        if (U_FAILURE(*fRB->fStatus)) {break;};
+        if (U_FAILURE(*fRB->fStatus)) {
+            break;
+        }
         n->fFirstPos = fScanIndex;
         break;
 
@@ -511,7 +513,7 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
         break;
     }
     return returnVal;
-};
+}
 
 
 
@@ -988,7 +990,7 @@ void RBBIRuleScanner::parse() {
 void RBBIRuleScanner::printNodeStack(const char *title) {
     int i;
     RBBIDebugPrintf("%s.  Dumping node stack...\n", title);
-    for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree();};
+    for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree();}
 }
 
 
@@ -1013,7 +1015,7 @@ RBBINode  *RBBIRuleScanner::pushNewNode(RBBINode::NodeType  t) {
         *fRB->fStatus = U_MEMORY_ALLOCATION_ERROR;
     }
     return fNodeStack[fNodeStackPtr];
-};
+}
 
 
 
@@ -1082,7 +1084,7 @@ void RBBIRuleScanner::scanSet() {
         findSetFor(n->fText, n, uset);
     }
 
-};
+}
 
 
 U_NAMESPACE_END
