@@ -18,6 +18,134 @@ static void U_CALLCONV _deleteRule(void *rule) {
 }
 U_CDECL_END
 
+//----------------------------------------------------------------------
+// BEGIN Debugging support
+//----------------------------------------------------------------------
+
+// #define DEBUG_RBT
+
+#ifdef DEBUG_RBT
+#include <stdio.h>
+/**
+ * @param appendTo result is appended to this param.
+ * @param input the string being transliterated
+ * @param pos the index struct
+ */
+static UnicodeString& _formatInput(UnicodeString &appendTo,
+                                   const UnicodeString& input,
+                                   const UTransPosition& pos) {
+    // Output a string of the form aaa{bbb|ccc|ddd}eee, where
+    // the {} indicate the context start and limit, and the ||
+    // indicate the start and limit.
+    if (0 <= pos.contextStart &&
+        pos.contextStart <= pos.start &&
+        pos.start <= pos.limit &&
+        pos.limit <= pos.contextLimit &&
+        pos.contextLimit <= input.length()) {
+
+        UnicodeString a, b, c, d, e;
+        input.extractBetween(0, pos.contextStart, a);
+        input.extractBetween(pos.contextStart, pos.start, b);
+        input.extractBetween(pos.start, pos.limit, c);
+        input.extractBetween(pos.limit, pos.contextLimit, d);
+        input.extractBetween(pos.contextLimit, input.length(), e);
+        appendTo.append(a).append((UChar)123/*{*/).append(b).
+            append((UChar)124/*|*/).append(c).append((UChar)124/*|*/).append(d).
+            append((UChar)125/*}*/).append(e);
+    } else {
+        appendTo.append("INVALID UTransPosition");
+        //appendTo.append((UnicodeString)"INVALID UTransPosition {cs=" +
+        //                pos.contextStart + ", s=" + pos.start + ", l=" +
+        //                pos.limit + ", cl=" + pos.contextLimit + "} on " +
+        //                input);
+    }
+    return appendTo;
+}
+
+class CharString {
+ public:
+    CharString(const UnicodeString& str);
+    ~CharString();
+    operator char*() { return ptr; }
+ private:
+    char buf[128];
+    char* ptr;
+};
+
+CharString::CharString(const UnicodeString& str) {
+    if (str.length() >= (int32_t)sizeof(buf)) {
+        ptr = new char[str.length() + 8];
+    } else {
+        ptr = buf;
+    }
+    str.extract(0, 0x7FFFFFFF, ptr, "");
+}
+
+CharString::~CharString() {
+    if (ptr != buf) {
+        delete[] ptr;
+    }
+}
+
+// Append a hex string to the target
+UnicodeString& _appendHex(uint32_t number,
+                          int32_t digits,
+                          UnicodeString& target) {
+    static const UChar digitString[] = {
+        0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+        0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0
+    };
+    while (digits--) {
+        target += digitString[(number >> (digits*4)) & 0xF];        
+    }
+    return target;
+}
+
+// Replace nonprintable characters with unicode escapes
+UnicodeString& _escape(const UnicodeString &source,
+                       UnicodeString &target) {
+    for (int32_t i = 0; i < source.length(); ) {
+        UChar32 ch = source.char32At(i);
+        i += UTF_CHAR_LENGTH(ch);
+        if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E) {
+            if (ch <= 0xFFFF) {
+                target += "\\u";
+                _appendHex(ch, 4, target);
+            } else {
+                target += "\\U";
+                _appendHex(ch, 8, target);
+            }
+        } else {
+            target += ch;
+        }
+    }
+    return target;
+}
+#endif
+
+inline void _debugOut(const char* msg, TransliterationRule* rule,
+                      const Replaceable& theText, UTransPosition& pos) {
+#ifdef DEBUG_RBT
+    UnicodeString buf(msg, "");
+    if (rule) {
+        UnicodeString r;
+        rule->toRule(r, TRUE);
+        buf.append((UChar)32).append(r);
+    }
+    buf.append(UnicodeString(" => ", ""));
+    UnicodeString* text = (UnicodeString*)&theText;
+    _formatInput(buf, *text, pos);
+    UnicodeString esc;
+    _escape(buf, esc);
+    CharString cbuf(esc);
+    printf("%s\n", (char*) cbuf);
+#endif
+}
+
+//----------------------------------------------------------------------
+// END Debugging support
+//----------------------------------------------------------------------
+
 // Fill the precontext and postcontext with the patterns of the rules
 // that are masking one another.
 static void maskingError(const U_NAMESPACE_QUALIFIER TransliterationRule& rule1,
@@ -265,8 +393,10 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
         UMatchDegree m = rules[i]->matchAndReplace(text, pos, incremental);
         switch (m) {
         case U_MATCH:
+            _debugOut("match", rules[i], text, pos);
             return TRUE;
         case U_PARTIAL_MATCH:
+            _debugOut("partial match", rules[i], text, pos);
             return FALSE;
         default: /* Ram: added default to make GCC happy */
             break;
@@ -274,6 +404,7 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
     }
     // No match or partial match from any rule
     pos.start += UTF_CHAR_LENGTH(text.char32At(pos.start));
+    _debugOut("no match", NULL, text, pos);
     return TRUE;
 }
 
