@@ -537,8 +537,8 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
     break;
 
   case UNUM_PADDING_CHARACTER:
-    *result = ((DecimalFormat*)fmt)->getPadCharacter();
-    return 1;
+    res = ((DecimalFormat*)fmt)->getPadCharacterString();
+    break;
 
   case UNUM_CURRENCY_CODE:
     res = UnicodeString(((DecimalFormat*)fmt)->getCurrency());

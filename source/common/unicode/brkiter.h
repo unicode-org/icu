@@ -225,21 +225,6 @@ public:
      */
     virtual const CharacterIterator& getText(void) const = 0;
 
-#ifdef ICU_ENABLE_DEPRECATED_BREAKITERATOR
-    /**
-     * Get the text for which this object is finding the boundaries.
-     * @deprecated This will be removed after 2000-Dec-31. Use getText() instead.
-     */
-    virtual CharacterIterator* createText(void) const = 0;
-
-    /**
-     * Change the text over which this operates. The text boundary is
-     * reset to the start.
-     * @deprecated Use setText(const UnicodeString&) instead.
-     */
-    virtual void  setText(const UnicodeString* it) = 0;
-#endif
-
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.

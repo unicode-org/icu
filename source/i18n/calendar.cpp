@@ -335,20 +335,6 @@ Calendar::after(const Calendar& when, UErrorCode& status) const
             getTimeInMillis(status) > when.getTimeInMillis(status));
 }
 
-// {sfb} not in Java API, but looks similar to operator==
-UBool 
-Calendar::equivalentTo(const Calendar& other) const
-{
-    // Return true if another Calendar object is equivalent to this one.  An equivalent
-    // Calendar will behave exactly as this one does (i.e., it will have be the same subclass
-    // of Calendar, and have the same time zone, week-count values, and leniency level), 
-    // but may be set to a different time.
-    return getDynamicClassID() == other.getDynamicClassID() &&
-        fLenient                == other.fLenient &&
-        fFirstDayOfWeek         == other.fFirstDayOfWeek &&
-        fMinimalDaysInFirstWeek == other.fMinimalDaysInFirstWeek &&
-        *fZone                  == *other.fZone;
-}
 
 // -------------------------------------
 

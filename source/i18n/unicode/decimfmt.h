@@ -655,18 +655,6 @@ public:
     virtual void setFormatWidth(int32_t width);
 
     /**
-     * Get the first code unit of the string used to pad to the format width.  The default is ' '.
-     * @return the first code unit of the pad string
-     * @see #setFormatWidth
-     * @see #getFormatWidth
-     * @see #setPadCharacter
-     * @see #getPadPosition
-     * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31. See getPadCharacterString().
-     */
-    inline UChar getPadCharacter(void);
-
-    /**
      * Get the grapheme string (a character, possibly with modifier letters)
      * used to pad to the format width.  The default is " ".
      * Note: The current implementation only stores the first code unit of the
@@ -680,19 +668,6 @@ public:
      * @stable
      */
     virtual UnicodeString getPadCharacterString();
-
-    /**
-     * Set a one-code unit string used to pad to the format width.  This has no effect
-     * unless padding is enabled.
-     * @param padChar the pad character that is used to construct the pad string
-     * @see #setFormatWidth
-     * @see #getFormatWidth
-     * @see #getPadCharacter
-     * @see #getPadPosition
-     * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31. See setPadCharacter(UnicodeString).
-     */
-    inline void setPadCharacter(UChar padChar);
 
     /**
      * Set the grapheme string (a character, possibly with modifier letters)
@@ -1317,15 +1292,6 @@ DecimalFormat::format(int32_t number,
     return format(number, output, pos);
 }
 
-inline UChar
-DecimalFormat::getPadCharacter() {
-    return getPadCharacterString().charAt(0);
-}
-
-inline void
-DecimalFormat::setPadCharacter(UChar padChar) {
-    setPadCharacter(UnicodeString(padChar));
-}
 
 U_NAMESPACE_END
 
