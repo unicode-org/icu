@@ -64,9 +64,11 @@ uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar 
 /* this is for adding non contractions */
 uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErrorCode *status);
 
-uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status);
+int32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status);
 
 uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status);
 uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UErrorCode *status);
+uint32_t uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status);
+UBool uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status);
 
 #endif

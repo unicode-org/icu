@@ -361,52 +361,98 @@ uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t 
     return(constructContractCE(element));
 }
 
-uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
-
+ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t element) {
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
 
-    if(U_FAILURE(*status)) {
-        return 0;
-    }
-
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
-      return 0;
+      return NULL;
+    } else {
+      return tbl;
     }
+}
 
+int32_t _cnttab_findCP(ContractionTable *tbl, UChar codePoint) {
     uint32_t position = 0;
+    if(tbl == NULL) {
+      return -1;
+    }
 
     while(codePoint > tbl->codePoints[position]) {
       position++;
       if(position > tbl->position) {
-        return 0;
+        return -1;
       }
     }
     if (codePoint == tbl->codePoints[position]) {
       return position;
     } else {
-      return 0;
+      return -1;
     }
 }
 
+uint32_t _cnttab_getCE(ContractionTable *tbl, int32_t position) {
+  if(tbl == NULL) {
+    return UCOL_NOT_FOUND;
+  }
+  if((uint32_t)position > tbl->position || position == -1) {
+    return UCOL_NOT_FOUND;
+  } else {
+    return tbl->CEs[position];
+  }
+}
+
+int32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
+
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+
+    /*int32_t pos =*/ return _cnttab_findCP(_cnttab_getContractionTable(table, element), codePoint);
+/*    
+    if(pos < 0) {
+      return 0;
+    } else {
+      return pos;
+    }
+*/
+}
+
 uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status) {
-
-    element &= 0xFFFFFF;
-    ContractionTable *tbl = NULL;
-
     if(U_FAILURE(*status)) {
         return UCOL_NOT_FOUND;
     }
 
-    if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
+    return(_cnttab_getCE(_cnttab_getContractionTable(table, element), position));
+}
+
+uint32_t uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
+    if(U_FAILURE(*status)) {
         return UCOL_NOT_FOUND;
     }
+    ContractionTable *tbl = _cnttab_getContractionTable(table, element);
+    return _cnttab_getCE(tbl, _cnttab_findCP(tbl, codePoint));
+}
 
+UBool uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status) {
+    if(U_FAILURE(*status)) {
+        return FALSE;
+    }
 
-    if(position > tbl->position) {
-      return UCOL_NOT_FOUND;
+    while(*(ztString)!=0) {
+      element = uprv_cnttab_findCE(table, element, *(ztString), status);
+      if(element == UCOL_NOT_FOUND) {
+        return FALSE;
+      }
+      if(!isContraction(element)) {
+        return TRUE;
+      }
+      ztString++;
+    }
+    if(uprv_cnttab_getCE(table, element, 0, status) != UCOL_NOT_FOUND) {
+      return TRUE;
     } else {
-      return tbl->CEs[position];
+      return FALSE; 
     }
 }
 
@@ -438,3 +484,4 @@ uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar 
       return UCOL_NOT_FOUND;
     }
 }
+
