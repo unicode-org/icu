@@ -67,7 +67,7 @@ id.txt id_ID.txt\
 is.txt is_IS.txt\
 it.txt it_CH.txt it_IT.txt it_IT_EURO.txt\
 iw.txt iw_IL.txt\
-ja.txt ja_JP.txt\
+ja.txt ja_JP.txt ja_JP_JIS.txt\
 kl.txt kl_GL.txt\
 ko.txt ko_KR.txt\
 kok.txt kok_IN.txt\
