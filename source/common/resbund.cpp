@@ -442,7 +442,7 @@ ResourceBundle::getHashtableForLocale(const UnicodeString& desiredLocale,
     if(parseIfUnparsed(fPath, iterator.getLocale(), 
 		       fgCache, fgVisitedFiles, error)) {
       if(U_FAILURE(error)) 
-	return 0;
+          return 0;
       
       error = U_ZERO_ERROR;
       h = getFromCacheWithFallback(fPath, desiredLocale, 
@@ -1076,7 +1076,7 @@ ResourceBundle::parse(const PathInfo& path,
 		      UErrorCode& status)
 {
   FileStream *f;
-  UnicodeString localeName;
+  UnicodeString localeName, realLocale;
   UHashtable *data;
   
   if (U_FAILURE(status)) return;
@@ -1087,6 +1087,7 @@ ResourceBundle::parse(const PathInfo& path,
     return;
   }
   
+  realLocale = locale;
   /* Get the data from the compiled resource bundle file */
   data = rb_parse(f, localeName, status);
 
@@ -1095,6 +1096,21 @@ ResourceBundle::parse(const PathInfo& path,
 
   if(U_FAILURE(status)) {
     return;
+  }
+  /* If an alias file is encountered, parse the new locale file. */
+  if (data == 0) {
+      f = path.openFile(localeName);
+      if(f == 0) {
+        status = U_FILE_ACCESS_ERROR;
+        return;
+      }
+      data = rb_parse(f, localeName, status);
+      T_FileStream_close(f);
+
+      if(U_FAILURE(status)) {
+        return;
+      }
+      localeName = realLocale;
   }
 
   /* Invoke the handler function */

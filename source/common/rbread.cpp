@@ -301,6 +301,11 @@ rb_parse(FileStream *f,
     switch(itemtype) {
     case sSTRINGLIST:
       strlist = read_strlist(f, listname, status);
+      if (listname == "%%ALIAS") {
+          localename = strlist->fStrings[0];
+          uhash_close(retval);
+          return 0;
+      }
       uhash_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
 		   strlist, &status);
       if(U_FAILURE(status)) {
