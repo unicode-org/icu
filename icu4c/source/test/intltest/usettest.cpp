@@ -610,16 +610,63 @@ void UnicodeSetTest::TestScriptSet() {
  * Test the [:Latin:] syntax.
  */
 void UnicodeSetTest::TestPropertySet() {
-    UErrorCode status = U_ZERO_ERROR;
-    UnicodeSet set("[:Latin:]", status);
-    if (U_FAILURE(status)) { errln("FAIL"); return; }
-    expectContainment(set, "aA", CharsToUnicodeString("\\u0391\\u03B1"));
-    set.applyPattern("[\\p{Greek}]", status);
-    if (U_FAILURE(status)) { errln("FAIL"); return; }
-    expectContainment(set, CharsToUnicodeString("\\u0391\\u03B1"), "aA");
-    set.applyPattern("\\P{ GENERAL Category = upper case letter }", status);
-    if (U_FAILURE(status)) { errln("FAIL"); return; }
-    expectContainment(set, "abc", "ABC");
+    static const char* DATA[] = {
+        // Pattern, Chars IN, Chars NOT in
+
+        "[:Latin:]",
+        "aA",
+        "\\u0391\\u03B1",
+
+        "[\\p{Greek}]",
+        "\\u0391\\u03B1",
+        "aA",
+
+        "\\P{ GENERAL Category = upper case letter }",
+        "abc",
+        "ABC",
+
+        // Combining class: @since ICU 2.2
+        // Check both symbolic and numeric
+        "\\p{cc=Nuktas}",
+        "\\u0ABC",
+        "abc",
+
+        "\\p{Combining Class = 11}",
+        "\\u05B1",
+        "\\u05B2",
+
+        "[:c c = iota subscript :]",
+        "\\u0345",
+        "xyz",
+
+        // Bidi class: @since ICU 2.2
+        "\\p{bidiclass=lefttoright}",
+        "abc",
+        "\\u0671\\u0672",
+
+        // Binary properties: @since ICU 2.2
+        "\\p{ideographic}",
+        "\\u4E0A",
+        "x",
+
+        "[:^math:]",
+        "q",
+        "(*+)",
+    };
+
+    static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
+
+    for (int32_t i=0; i<DATA_LEN; i+=3) {
+        UErrorCode ec = U_ZERO_ERROR;
+        UnicodeSet set(DATA[i], ec);
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: pattern \"" +
+                  DATA[i] + "\" => " + u_errorName(ec));
+            continue;
+        }
+        expectContainment(set, CharsToUnicodeString(DATA[i+1]),
+                          CharsToUnicodeString(DATA[i+2]));
+    }
 }
 
 /**
@@ -933,7 +980,7 @@ UnicodeSetTest::expectContainment(const UnicodeSet& set,
         errln((UnicodeString)"Fail: set " + setName + " does not contain " + prettify(bad) +
               ", expected containment of " + prettify(charsIn));
     } else {
-        logln((UnicodeString)"Ok: set " + setName + " contains " + charsIn);
+        logln((UnicodeString)"Ok: set " + setName + " contains " + prettify(charsIn));
     }
 
     bad.truncate(0);
@@ -944,10 +991,10 @@ UnicodeSetTest::expectContainment(const UnicodeSet& set,
         }
     }
     if (bad.length() > 0) {
-        logln((UnicodeString)"Fail: set " + setName + " contains " + bad +
-              ", expected non-containment of " + charsOut);
+        logln((UnicodeString)"Fail: set " + setName + " contains " + prettify(bad) +
+              ", expected non-containment of " + prettify(charsOut));
     } else {
-        logln((UnicodeString)"Ok: set " + setName + " does not contain " + charsOut);
+        logln((UnicodeString)"Ok: set " + setName + " does not contain " + prettify(charsOut));
     }
 }
 
