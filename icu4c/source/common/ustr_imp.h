@@ -33,14 +33,14 @@ uprv_haveProperties(void);
  * @internal
  */
 typedef UBool U_CALLCONV
-GrowBuffer(void *context,       /* opaque pointer for this function */
-           UChar **pBuffer,     /* in/out destination buffer pointer */
-           int32_t *pCapacity,  /* in/out buffer capacity in numbers of UChars */
-           int32_t reqCapacity, /* requested capacity */
-           int32_t length);     /* number of UChars to be copied to new buffer */
+UGrowBuffer(void *context,      /* opaque pointer for this function */
+            UChar **pBuffer,    /* in/out destination buffer pointer */
+            int32_t *pCapacity, /* in/out buffer capacity in numbers of UChars */
+            int32_t reqCapacity,/* requested capacity */
+            int32_t length);    /* number of UChars to be copied to new buffer */
 
 /**
- * Default implementation of GrowBuffer.
+ * Default implementation of UGrowBuffer.
  * Takes a static buffer as context, allocates a new buffer,
  * and releases the old one if it is not the same as the one passed as context.
  * @internal
@@ -59,7 +59,7 @@ U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      const char *locale,
-                     GrowBuffer *growBuffer, void *context,
+                     UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode);
 
 /**
@@ -69,7 +69,7 @@ U_CFUNC int32_t
 u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      const char *locale,
-                     GrowBuffer *growBuffer, void *context,
+                     UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode);
 
 /**
@@ -80,7 +80,7 @@ U_CFUNC int32_t
 u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
                       uint32_t options,
-                      GrowBuffer *growBuffer, void *context,
+                      UGrowBuffer *growBuffer, void *context,
                       UErrorCode *pErrorCode);
 
 /**
