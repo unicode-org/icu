@@ -28,7 +28,7 @@
 #include <float.h>
 
 // Decimal digits in a 32-bit int
-#define LONG_DIGITS 19 
+//#define LONG_DIGITS 19 
 
 /**
  * Digit List. Private to DecimalFormat.  Handles the transcoding
@@ -81,7 +81,7 @@ public:
      * Appends digits to the list. Ignores all digits beyond the first DBL_DIG,
      * since they are not significant for either longs or doubles.
      */
-    void append(char digit);
+    inline void append(char digit);
 
     /**
      * Utility routine to get the value of the digit list
@@ -93,7 +93,7 @@ public:
      * Utility routine to get the value of the digit list
      * Returns 0 if zero length.
      */
-    int32_t getLong(void) const;
+    int32_t getLong(void);
 
     /**
      * Return true if the number represented by this object can fit into
@@ -160,7 +160,7 @@ public:
 private:
     enum      { MAX_DIGITS = DBL_DIG };
 public:
-    char        fDigits[MAX_DIGITS];
+    char        fDigits[MAX_DIGITS + 1];
 
 private:
 
@@ -174,14 +174,27 @@ private:
     /**
      * Initializes the buffer that records the mimimum long value.
      */
-    static void initializeLONG_MIN_REP(void);
+    /*static void initializeLONG_MIN_REP(void);*/
 
     UBool shouldRoundUp(int32_t maximumDigits);
 
-    static char LONG_MIN_REP[LONG_DIGITS];
-    static int32_t  LONG_MIN_REP_LENGTH;
+//    static char LONG_MIN_REP[LONG_DIGITS];
+    static const char LONG_MIN_REP[];
+    static int32_t    LONG_MIN_REP_LENGTH;
 };
  
+// -------------------------------------
+// Appends the digit to the digit list if it's not out of scope.
+// Ignores the digit, otherwise.
+
+inline void
+DigitList::append(char digit)
+{
+    // Ignore digits which exceed the precision we can represent
+    if (fCount < MAX_DIGITS)
+        fDigits[fCount++] = digit;
+}
+
 #endif // _DIGITLST
 //eof
 

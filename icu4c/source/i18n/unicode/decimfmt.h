@@ -476,9 +476,22 @@ public:
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     * @stable
+     * @deprecated Use the other setMultiplier, remove after Apr. 12, 2001
      */
     virtual void setMultiplier(int32_t newValue);
+
+    /**
+     * Set the multiplier for use in percent, permill, etc.
+     * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
+     * (For Arabic, use arabic percent symbol).
+     * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
+     *
+     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @param err Will return U_ILLEGAL_ARGUMENT_ERROR when newValue is 0 or
+     *            some other invalid number.
+     * @draft
+     */
+    virtual void setMultiplier(int32_t newValue, UErrorCode *err);
 
     /**
      * Get the rounding increment.
@@ -996,8 +1009,7 @@ private:
      * whether the value was infinite and whether it was positive.
      */
     UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
-                    DigitList& digits, UBool isExponent,
-                    UBool* status) const;
+                    DigitList& digits, UBool* status) const;
 
     /**
      * Append an affix to the given StringBuffer, using quotes if

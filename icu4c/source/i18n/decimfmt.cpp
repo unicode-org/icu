@@ -139,7 +139,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    if (symbolsToAdopt == NULL) status = U_ILLEGAL_ARGUMENT_ERROR;
+    if (symbolsToAdopt == NULL)
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     construct(status, &pattern, symbolsToAdopt);
 }
  
@@ -179,7 +180,8 @@ DecimalFormat::construct(UErrorCode&             status,
     fRoundingMode = kRoundHalfEven;
     fPad = kPatternPadEscape;
     fPadPosition = kPadBeforePrefix;
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status))
+        return;
 
     fPosPrefixPattern = fPosSuffixPattern = NULL;
     fNegPrefixPattern = fNegSuffixPattern = NULL;
@@ -191,7 +193,8 @@ DecimalFormat::construct(UErrorCode&             status,
     fUseExponentialNotation = FALSE;
     fMinExponentDigits = 0;
 
-    if (fSymbols == NULL) fSymbols = new DecimalFormatSymbols(locale, status);
+    if (fSymbols == NULL)
+        fSymbols = new DecimalFormatSymbols(locale, status);
 
     UnicodeString str;
     // Uses the default locale's number format pattern if there isn't
@@ -204,7 +207,8 @@ DecimalFormat::construct(UErrorCode&             status,
         pattern = &str;
     }
 
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status))
+        return;
 
     applyPattern(*pattern, FALSE /*not localized*/, status);
 }
@@ -283,15 +287,16 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
     fGroupingSize2 = rhs.fGroupingSize2;
     fDecimalSeparatorAlwaysShown = rhs.fDecimalSeparatorAlwaysShown;
     if(fSymbols == NULL) 
-    fSymbols = new DecimalFormatSymbols(*rhs.fSymbols);
+        fSymbols = new DecimalFormatSymbols(*rhs.fSymbols);
     else 
-    *fSymbols = *rhs.fSymbols;
+        *fSymbols = *rhs.fSymbols;
     fUseExponentialNotation = rhs.fUseExponentialNotation;
     /*Bertrand A. D. Update 98.03.17*/
     fIsCurrencyFormat = rhs.fIsCurrencyFormat;
     /*end of Update*/
     fMinExponentDigits = rhs.fMinExponentDigits;
-    if (fDigitList == NULL) fDigitList = new DigitList();
+    if (fDigitList == NULL)
+        fDigitList = new DigitList();
     
     /* sfb 990629 */
     fFormatWidth = rhs.fFormatWidth;
@@ -315,7 +320,7 @@ DecimalFormat::operator==(const Format& that) const
 
     const DecimalFormat* other = (DecimalFormat*)&that;
 
-#if 0
+#if DEBUG
     // This code makes it easy to determine why two format objects that should
     // be equal aren't.
     UBool first = TRUE;
@@ -477,7 +482,8 @@ DecimalFormat::format(int32_t number,
     }
 
     UBool isNegative = (number < 0);
-    if (isNegative) number = -number; // NOTE: number will still be negative if it is LONG_MIN
+    if (isNegative)
+        number = -number; // NOTE: number will still be negative if it is LONG_MIN
 
     // In general, long values always represent real finite numbers, so
     // we don't have to check for +/- Infinity or NaN.  However, there
@@ -508,6 +514,7 @@ DecimalFormat::format(int32_t number,
         }
     }
 
+    /* AHH! Why are we doing a const conversion to non-const! grhoten */
     number *= fMultiplier;
     DecimalFormat *non_const = (DecimalFormat*)this;
     non_const->fDigitList->set(number, fUseExponentialNotation ?
@@ -555,14 +562,16 @@ DecimalFormat::format(  double number,
      * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
      */
     UBool isNegative = uprv_isNegative(number);
-    if (isNegative) number = -number;
+    if (isNegative)
+        number = -number;
 
     // Do this BEFORE checking to see if value is infinite! Sets the
     // begin and end index to be length of the string composed of
     // localized name of Infinite and the positive/negative localized
     // signs.
 
-    if (fMultiplier != 1) number *= fMultiplier;
+    if (fMultiplier != 1)
+        number *= fMultiplier;
 
     // Apply rounding after multiplier
     if (fRoundingIncrement != NULL) {
@@ -590,8 +599,8 @@ DecimalFormat::format(  double number,
         return result;
     }
 
-    // At this point we are guaranteed a nonnegative finite
-    // number.
+    /* AHH! Why are we doing a const conversion to non-const! grhoten */
+    // At this point we are guaranteed a nonnegative finite number.
     DecimalFormat* non_const = (DecimalFormat*)this;
     // Sets up the digit list buffer with the number.
     // Please see digitlst.cpp for the details regarding DigitList.
@@ -752,8 +761,10 @@ DecimalFormat::subformat(UnicodeString& result,
         int32_t integerDigits = fDigitList->isZero() ? minIntDig :
             fDigitList->fDecimalAt - exponent;
         int32_t totalDigits = fDigitList->fCount;
-        if (minimumDigits > totalDigits) totalDigits = minimumDigits;
-        if (integerDigits > totalDigits) totalDigits = integerDigits;
+        if (minimumDigits > totalDigits)
+            totalDigits = minimumDigits;
+        if (integerDigits > totalDigits)
+            totalDigits = integerDigits;
 
         // totalDigits records total number of digits needs to be processed
         int32_t i;
@@ -800,7 +811,8 @@ DecimalFormat::subformat(UnicodeString& result,
         // For zero values, we force the exponent to zero.  We
         // must do this here, and not earlier, because the value
         // is used to determine integer digit count above.
-        if (fDigitList->isZero()) exponent = 0;
+        if (fDigitList->isZero())
+            exponent = 0;
 
         UBool negativeExponent = exponent < 0;
         if (negativeExponent) {
@@ -1024,7 +1036,7 @@ DecimalFormat::parse(const UnicodeString& text,
     // infinite or positive.
     UBool status[fgStatusLength];
 
-    if (!subparse(text, parsePosition, *fDigitList, FALSE, status)) {
+    if (!subparse(text, parsePosition, *fDigitList, status)) {
         parsePosition.setIndex(backup);
         return;
     } else if (fFormatWidth < 0) {
@@ -1065,13 +1077,12 @@ DecimalFormat::parse(const UnicodeString& text,
             result.setLong((status[fgStatusPositive] == n>=0) ? n : -n);
             return;
         }
+        // else handle the remainder
     }
 
-    // Handle non-integral values
-    double a = fDigitList->getDouble();
-    if (mult != 1) {
-        a /= mult;
-    }
+    // Handle non-integral or very large values
+    // Dividing by one is okay and not that costly.
+    double a = fDigitList->getDouble() / mult;
     result.setDouble(status[fgStatusPositive] ? a : -a);
 }
 
@@ -1083,17 +1094,15 @@ DecimalFormat::parse(const UnicodeString& text,
  * return, the first unparseable character.
  * @param digits The DigitList to set to the parsed value.
  * @param isExponent If true, parse an exponent.  This means no
- * infinite values and integer only.
+ * infinite values and integer only. By default it's really false.
  * @param status Upon return contains boolean status flags indicating
  * whether the value was infinite and whether it was positive.
  */
 UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePosition,
-                               DigitList& digits, UBool isExponent,
-                               UBool* status) const
+                               DigitList& digits, UBool* status) const
 {
     int32_t position = parsePosition.getIndex();
     int32_t oldStart = parsePosition.getIndex();
-    int32_t backup;
 
     // check for positivePrefix; take longest
     UBool gotPositive = text.compare(position,fPositivePrefix.length(),fPositivePrefix,0,
@@ -1117,15 +1126,13 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         parsePosition.setErrorIndex(position);
         return FALSE;
     }
+
     // process digits or Inf, find decimal position
-    status[fgStatusInfinite] = FALSE;
     int32_t infLen = fSymbols->compareInfinity(text, position);
-    if (!isExponent && infLen)
+    position += infLen; // infLen is non-zero when it does equal to infinity
+    status[fgStatusInfinite] = (UBool)infLen;
+    if (!infLen)
     {
-        // Found a infinite number.
-        position += infLen;
-        status[fgStatusInfinite] = TRUE;
-    } else {
         // We now have a string of digits, possibly with grouping symbols,
         // and decimal points.  We want to process these into a DigitList.
         // We don't want to put a bunch of leading zeros into the DigitList
@@ -1140,9 +1147,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         UChar grouping = fSymbols->getGroupingSeparator();
         UChar exponentChar = fSymbols->getExponentialSymbol();
         UBool sawDecimal = FALSE;
-        UBool sawExponent = FALSE;
         UBool sawDigit = FALSE;
         int32_t exponent = 0; // Set to the exponent value, if any
+        int32_t backup = -1;
         UChar ch;
         int32_t digit;
 
@@ -1150,7 +1157,6 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         // pin when the maximum allowable digits is reached.
         int32_t digitCount = 0;
 
-        backup = -1;
         for (; position < text.length(); ++position)
         {
             ch = text[(UTextOffset)position];
@@ -1188,46 +1194,45 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 backup = -1; // Do this BEFORE continue statement below!!!
                 sawDigit = TRUE;
 
-                // Handle leading zeros
-                if (digits.fCount == 0)
-                {
-                    if (sawDecimal)
-                    {
-                        // If we have seen the decimal, but no significant digits yet,
-                        // then we account for leading zeros by decrementing the
-                        // digits.fDecimalAt into negative values.
-                        --digits.fDecimalAt;
-                    }
-                    // else ignore leading zeros in integer part of number.
-                }
-                else
+                // Check for leading zeros
+                if (digits.fCount != 0)
                 {
                     // output a regular zero digit.
                     ++digitCount;
                     digits.append((char)(digit + '0'));
                 }
+                else if (sawDecimal)
+                {
+                    // If we have seen the decimal, but no significant digits yet,
+                    // then we account for leading zeros by decrementing the
+                    // digits.fDecimalAt into negative values.
+                    --digits.fDecimalAt;
+                }
+                // else ignore leading zeros in integer part of number.
             }
-            else if (!isExponent && ch == decimal)
-            {
-                // If we're only parsing integers, or if we ALREADY saw the
-                // decimal, then don't parse this one.
-                if (isParseIntegerOnly() || sawDecimal)
-                    break;
-                digits.fDecimalAt = digitCount; // Not digits.fCount!
-                sawDecimal = TRUE;
-            }
-            else if (!isExponent && ch == grouping && isGroupingUsed())
+            else if (ch == grouping && isGroupingUsed())
             {
                 // Ignore grouping characters, if we are using them, but require
                 // that they be followed by a digit.  Otherwise we backup and
                 // reprocess them.
                 backup = position;
             }
-            else if (!isExponent && ch == exponentChar && !sawExponent)
+            else if (ch == decimal && !isParseIntegerOnly() && !sawDecimal)
+            {
+                // If we're only parsing integers, or if we ALREADY saw the
+                // decimal, then don't parse this one.
+                //if (isParseIntegerOnly() || sawDecimal)
+                //    break;
+                digits.fDecimalAt = digitCount; // Not digits.fCount!
+                sawDecimal = TRUE;
+            }
+            else if (ch == exponentChar /* && sawDigit correct? */)
             {
                 // Parse sign, if present
                 UBool negExp = FALSE;
                 int32_t pos = position + 1; // position + exponentSep.length();
+                DigitList exponentDigits;
+
                 if (pos < text.length())
                 {
                     ch = text[(UTextOffset) pos];
@@ -1242,8 +1247,6 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                     }
                 }
 
-                DigitList exponentDigits;
-                exponentDigits.fCount = 0;
                 while (pos < text.length()) {
                     ch = text[(UTextOffset)pos];
                     digit = ch - zero;
@@ -1266,7 +1269,6 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                         exponent = -exponent;
                     }
                     position = pos; // Advance past the exponent
-                    sawExponent = TRUE;
                 }
 
                 break; // Whether we fail or succeed, we exit this loop
@@ -1471,12 +1473,25 @@ int32_t DecimalFormat::getMultiplier() const
 
 //------------------------------------------------------------------------------
 // Sets the multiplier of the number pattern.
-
+// Deprecated!! use the other one
 void
 DecimalFormat::setMultiplier(int32_t newValue)
 {
-    // We should really take a UErrorCode and disallow values <= 0 - liu
     fMultiplier = newValue;
+}
+
+//------------------------------------------------------------------------------
+// Sets the multiplier of the number pattern.
+
+void
+DecimalFormat::setMultiplier(int32_t newValue, UErrorCode *err)
+{
+    if (newValue != 0) {
+        fMultiplier = newValue;
+    }
+    else {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
 }
 
 /**
@@ -1992,10 +2007,12 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
         for (int32_t j = 0; j < affix.length(); ++j) {
             UChar c = affix[j];
             buffer += c;
-            if (c == 0x0027 /*'\''*/) buffer += c;
+            if (c == 0x0027 /*'\''*/)
+                buffer += c;
         }
     }
-    if (needQuote) buffer += (UChar)0x0027 /*'\''*/;
+    if (needQuote)
+        buffer += (UChar)0x0027 /*'\''*/;
 }
 
 //------------------------------------------------------------------------------
@@ -2020,11 +2037,11 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     UnicodeString roundingDigits;
     int32_t padPos = (fFormatWidth > 0) ? fPadPosition : -1;
     UnicodeString padSpec;
-    if(fFormatWidth > 0) {
+    if (fFormatWidth > 0) {
       padSpec.append((UChar)(localized ? fSymbols->getPadEscape() : kPatternPadEscape)).
         append(fPad);
     }
-    if(fRoundingIncrement != NULL) {
+    if (fRoundingIncrement != NULL) {
       for(i=0; i<fRoundingIncrement->fCount; ++i) {
         roundingDigits.append((UChar)fRoundingIncrement->fDigits[i]);
       }
@@ -2174,7 +2191,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             UBool localized,
                             UErrorCode& status)
 {
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status))
+        return;
     // Set the significant pattern symbols
     UChar zeroDigit         = kPatternZeroDigit;
     UChar groupingSeparator = kPatternGroupingSeparator;
@@ -2483,7 +2501,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         if (zeroDigitCount == 0 && digitLeftCount > 0 && decimalPos >= 0) {
             // Handle "###.###" and "###." and ".###"
             int n = decimalPos;
-            if (n == 0) ++n; // Handle ".###"
+            if (n == 0)
+                ++n; // Handle ".###"
             digitRightCount = digitLeftCount - n;
             digitLeftCount = n - 1;
             zeroDigitCount = 1;
