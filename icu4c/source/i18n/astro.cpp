@@ -1425,24 +1425,36 @@ UDate CalendarAstronomer::local(UDate localMillis) {
 // Debugging functions
 UnicodeString CalendarAstronomer::Ecliptic::toString() const 
 {
+#ifdef U_DEBUG_ASTRO
   char tmp[800];
   sprintf(tmp, "[%.5f,%.5f]", longitude*RAD_DEG, latitude*RAD_DEG);
   return UnicodeString(tmp, "");
+#else
+  return UnicodeString();
+#endif
 }
 
 UnicodeString CalendarAstronomer::Equatorial::toString() const 
 {
+#ifdef U_DEBUG_ASTRO
   char tmp[400];
   sprintf(tmp, "%f,%f", 
           (ascension*RAD_DEG), (declination*RAD_DEG));
   return UnicodeString(tmp, "");
+#else
+  return UnicodeString();
+#endif
 }
 
 UnicodeString CalendarAstronomer::Horizon::toString() const 
 {
+#ifdef U_DEBUG_ASTRO
   char tmp[800];
   sprintf(tmp, "[%.5f,%.5f]", altitude*RAD_DEG, azimuth*RAD_DEG);
   return UnicodeString(tmp, "");
+#else
+  return UnicodeString();
+#endif
 }
 
 
