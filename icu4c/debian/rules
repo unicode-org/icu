@@ -190,8 +190,7 @@ binary-arch: build install
 	dh_installcron
 	dh_installmanpages -picu
 	dh_installinfo
-	dh_undocumented -picu genccode.8 gennorm.8 \
-	    genprops.8 gentz.8 pkgdata.8
+	dh_undocumented -picu gennorm.8 genprops.8 gentz.8 pkgdata.8
 	dh_installchangelogs 
 	dh_link
 	dh_strip
