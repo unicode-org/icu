@@ -894,19 +894,19 @@ inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start,
     UErrorCode status = U_ZERO_ERROR;
     int decomplength = unorm_decompose(NULL, -1, 
                                        strsrch->search->text + start, length, 
-                                       FALSE, FALSE, &status);
+                                       FALSE, 0, &status);
     if (decomplength != unorm_decompose(NULL, -1, strsrch->pattern.text, 
-                                        strsrch->pattern.textLength, FALSE, 
-                                        FALSE, &status)) {
+                                        strsrch->pattern.textLength,
+                                        FALSE, 0, &status)) {
         return FALSE;
     }
     decomplength ++;
     UChar *text    = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
     UChar *pattern = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
     unorm_decompose(text, decomplength, strsrch->search->text + start, 
-                    length, FALSE, FALSE, &status);
+                    length, FALSE, 0, &status);
     unorm_decompose(pattern, decomplength, strsrch->pattern.text, 
-                    strsrch->pattern.textLength, FALSE, FALSE, &status);
+                    strsrch->pattern.textLength, FALSE, 0, &status);
     UBool result = (uprv_memcmp(pattern, text, decomplength * sizeof(UChar)) 
                     == 0);
     uprv_free(text);
