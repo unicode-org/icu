@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2004/01/12 23:54:16 $
-* $Revision: 1.86 $
+* $Date: 2004/01/30 19:17:51 $
+* $Revision: 1.87 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -248,7 +248,7 @@
 
     <target name="jarSrc" depends="init">
         <!--Create a jar archive of just the source for distribution.  The
-        zip file will be created in the directory above the root ICU4J
+        jar file will be created in the directory above the root ICU4J
         directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
         and ${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt
         eliminates old archive copies like SpecialCasing-2.txt and
