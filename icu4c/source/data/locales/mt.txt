@@ -89,17 +89,25 @@ mt {
     Countries {
 
         AE { "Emirati Għarab Maqgħuda" } // in/rz
+        AF { "Afganistan" } // [Aq]
         AL { Albanija }
         AR { Arġentina }
         AT { Awstrija }
         AU { Awstralja }
         BA { "Bożnija/Ħerzegovina"  }
+        BB { "Barbados" } // [Aq] or Barbuda? (where is Antigwa?)
+        BD { "Bangladexx" }
         BE { Belġju }
         BG { Bulgarija }
+        BH { "Baħrajn" } // [Aq] 
+        BN { "Brunej" } // [Aq]
         BO { "Bolivja" } // [rc]
         BR { Brażil }
+        BS { "Il-Baħamas" } // [Aq]
+        BZ { "Beliże" } // [Aq] 
         CA { Kanada }
         CH { Svizzera } // rz [S not dotted Z]
+        CL { "Ċili" } // [Aq]
         CN { Ċina }
         CO { "Kolumbja" } // bu
         CU { "Kuba" }
@@ -108,7 +116,7 @@ mt {
         DE { Ġermanja }
         DK { Danimarka  }
         DO { "Republikka Domenikana" } // bu
-        DZ { Alġerija }
+        DZ { Alġerija } // ** Stopped at D's for Aquilina's
         EC { "Ekwador" } // bu
         EE { Estonja }
         EG { Eġittu }
@@ -155,6 +163,7 @@ mt {
         SI { Slovenja }
         SK { "Slovakkja" } // rz
         SY { "Sirja" }
+        TD { "Ċad" } // [Aq] 
         TH { "Tajlandja" }
         TN { "Tuneż" }
         TR { Turkija }
