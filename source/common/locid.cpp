@@ -131,7 +131,8 @@ const Locale::LocaleProxy Locale::CANADA   = {eCANADA};
 const Locale::LocaleProxy Locale::CANADA_FRENCH={eCANADA_FRENCH};
 
 /* Use void * to make it properly aligned */
-static void *gByteLocaleCache[eMAX_LOCALES * sizeof(Locale) / sizeof(void*)];
+/* Add 1 for rounding */
+static void *gByteLocaleCache[(eMAX_LOCALES + 1) * sizeof(Locale) / sizeof(void*)];
 
 static Locale *gLocaleCache = NULL;
 
@@ -161,21 +162,21 @@ Locale::Locale( const   char * newLanguage,
                 const   char * newCountry, 
                 const   char * newVariant) 
 {
-    char togo_stack[ULOC_FULLNAME_CAPACITY];
-    char *togo;
-    char *togo_heap = NULL;
-    int32_t size = 0;
-    int32_t lsize = 0;
-    int32_t csize = 0;
-    int32_t vsize = 0;
-    char    *p;
-
     if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
     {
         init(NULL); /* shortcut */
     }
     else
     {
+        char togo_stack[ULOC_FULLNAME_CAPACITY];
+        char *togo;
+        char *togo_heap = NULL;
+        int32_t size = 0;
+        int32_t lsize = 0;
+        int32_t csize = 0;
+        int32_t vsize = 0;
+        char    *p;
+
         // Calculate the size of the resulting string.
 
         // Language
@@ -298,26 +299,50 @@ Locale::Locale(const    Locale& other)
     variantBegin = other.variantBegin;
 }
 
+Locale& Locale::operator=(const Locale& other)
+{
+    uprv_strcpy(language, other.language);
+    uprv_strcpy(country, other.country);
+    if (other.fullName == other.fullNameBuffer)
+    {
+        fullName = fullNameBuffer;
+    }
+    else 
+    {
+        /*In case the assigner has some of its data on the heap
+        * we need to do the same*/
+        if (fullName != fullNameBuffer)
+        {
+            delete []fullName;
+        }
+        fullName = new char[(uprv_strlen(other.fullName)+1)];
+    }
+    uprv_strcpy(fullName, other.fullName);
+    /*Make the variant point to the same offset as the assigner*/
+    variantBegin = other.variantBegin;
+
+    return *this;
+}
+
 UBool
 Locale::operator==( const   Locale& other) const
 {
-    if (uprv_strcmp(other.fullName, fullName) == 0)
-    {
-        return TRUE;
-    }
-
-    return FALSE;
+    return (uprv_strcmp(other.fullName, fullName) == 0);
 }
 
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID)
 {
-    int k,l;
-    UErrorCode err = U_ZERO_ERROR;
+    int j, k,l;
+    UErrorCode err;
 
+    this->fullName = this->fullNameBuffer;
     if (localeID == NULL)
-        localeID = uloc_getDefault();
+    {
+        return *this = getLocale(eDEFAULT);
+    }
 
+    err = U_ZERO_ERROR;
     l = uloc_getLanguage(localeID, 
         this->language,
         ULOC_LANG_CAPACITY,
@@ -331,13 +356,9 @@ Locale& Locale::init(const char* localeID)
     l--; //adjust for the 2 zero terminators
 
     /*Go to heap for the fullName if necessary*/
-    int j;
     if ((j=(int)uprv_strlen(localeID)) > ULOC_FULLNAME_CAPACITY)
     {
         this->fullName = new char[j+1];
-    }
-    else {
-        this->fullName = this->fullNameBuffer;
     }
 
     uprv_strcpy(this->fullName, localeID);
@@ -371,29 +392,6 @@ Locale& Locale::init(const char* localeID)
     }
     else
         this->variantBegin = l - 1;
-
-    return *this;
-}
-
-Locale& Locale::operator=(const Locale& other)
-{
-    uprv_strcpy(language, other.language);
-    uprv_strcpy(country, other.country);
-    if (other.fullName == other.fullNameBuffer)
-    {
-        fullName = fullNameBuffer;
-    }
-    else 
-    {
-    /*In case the assigner has some of its data on the heap
-        * we need to do the same*/
-        if (fullName != fullNameBuffer)
-            delete []fullName;
-        fullName = new char[(uprv_strlen(other.fullName)+1)];
-    }
-    uprv_strcpy(fullName, other.fullName);
-    /*Make the variant point to the same offset as the assigner*/
-    variantBegin = other.variantBegin;
 
     return *this;
 }
@@ -900,6 +898,7 @@ void
 Locale::initLocaleCache(void)
 {
     const char *defaultLocale = uprv_getDefaultLocaleID();
+    // Can't use empty parameters, or we'll call this function again.
     Locale newLocales[] = {
         Locale("en"),
         Locale("fr"),
