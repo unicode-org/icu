@@ -18,6 +18,79 @@ DataDrivenCollationTest {
                      }
     }
     TestData {
+        TestLithuanian {
+            Info {
+                Description { "Lithuanian sort order." }
+            }
+            Settings {
+                {
+                    TestLocale { "lt" }
+                }
+            }
+            Cases { "cz<č<d<y<h<sz<š<t<zz<ž" } // cz<č<d<iz<y<h<sz<š<t<zz<ž
+        }
+        TestLatvian {
+            Info {
+                Description { "Latvian sort order." }
+            }
+            Settings {
+                {
+                    TestLocale { "lv" }
+                }
+            }
+            Cases { "cz<č<d<gz<ģ<h<iz<y<j<kz<ķ<l<lz<ļ<m<nz<ņ<o<rz<ŗ<s<sz<š<t<zz<ž" }
+        }
+        TestEstonian {
+            Info {
+                Description { "Estonian sort order." }
+            }
+            Settings {
+                {
+                    TestLocale { "et" }
+                }
+            }
+            Cases { "sy<š<šy<z<zy<ž<v<w<va<õ<õy<ä<äy<ö<öy<ü<üy<x" }
+        }
+        TestAlbanian {
+            Info {
+                Description { "Albanian sort order." }
+            }
+            Settings {
+                {
+                    TestLocale { "sq" }
+                }
+            }
+            Cases { "cz<ç<d<dz<dh<e<ez<ë<f<gz<gj<h<lz<ll<m<nz<nj<o<rz<rr<s<sz<sh<t<tz<th<u<xz<xh<y<zz<zh" }
+         }
+         
+         TestSimplifiedChineseOrder {
+            Info {
+                Description { "Sorted file has different order." }
+            }
+            Settings {
+                {
+                    TestLocale { "root" }
+		    Arguments { "[normalization on]" }
+                }
+            }
+
+            Cases { "\u5F20<\u5F20\u4E00\u8E3F"  }
+        }
+        
+        TestTibetanNormalizedIterativeCrash {
+            Info {
+                Description { "This pretty much crashes." }
+            }
+            Settings {
+                {
+                    TestLocale { "root" }
+                }
+            }
+
+            Cases { "\u0f71\u0f72\u0f80\u0f71\u0f72"
+                    "<\u0f80"
+            }
+        }
         TestThaiPartialSortKeyProblems {
             Info {
                 Description { "These are examples of strings that caused trouble in partial sort key testing." }
@@ -32,12 +105,12 @@ DataDrivenCollationTest {
                     "<\u0E01\u0E01\u0E38\u0E2A\u0E31\u0E19\u0E42\u0E18",
                     "\u0E01\u0E07\u0E01\u0E32\u0E23"
                     "<\u0E01\u0E07\u0E42\u0E01\u0E49",
-                    //"\u0E01\u0E23\u0E19\u0E17\u0E32"
-                    //"<\u0E01\u0E23\u0E19\u0E19\u0E40\u0E0A\u0E49\u0E32",
+                    "\u0E01\u0E23\u0E19\u0E17\u0E32"
+                    "<\u0E01\u0E23\u0E19\u0E19\u0E40\u0E0A\u0E49\u0E32",
                     "\u0E01\u0E23\u0E30\u0E40\u0E08\u0E35\u0E22\u0E27"
                     "<\u0E01\u0E23\u0E30\u0E40\u0E08\u0E35\u0E4A\u0E22\u0E27",
-                    //"\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E2D"
-                    //"<\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E49\u0E32"
+                    "\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E2D"
+                    "<\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E49\u0E32"
           }
         }
         TestJavaStyleRule {
@@ -186,152 +259,6 @@ DataDrivenCollationTest {
                "= \u30A1\u0000\u059a\u30FC"
                "= \u30A1\u30FC"
             }
-        }
-  
-        da_TestPrimary {
-            Info {
-                Description { "This test goes through primary strength cases" }
-            }
-            Settings {
-                {
-                    TestLocale { "da" }
-                    Arguments { "[strength 1]" }
-                }
-            }
-            Cases {
-                "Lvi=Lwi",
-                "L\u00e4vi<L\u00f6wi",
-                "L\u00fcbeck=Lybeck",
-            }
-        }
-        da_TestTertiary {
-            Info {
-                Description { "This test goes through tertiary strength cases" }
-            }
-            Settings {
-                {
-                    TestLocale { "da" }
-                    Arguments { "[strength 3]" }
-                }
-            }
-            Cases {
-                "Luc<luck",
-                "luck<L\u00fcbeck",
-                "L\u00fcbeck>lybeck",
-                "L\u00e4vi<L\u00f6we",
-                "L\u00f6ww<mast",
-                // constUCharCollationDanishTest::testBugs[][CollationDanishTest::MAX_TOKEN_LEN]="
-                "A/S<"
-                "ANDRE<"
-                "ANDR\u00c9<"
-                "ANDREAS<"
-                "AS<"
-                "CA<"
-                "\u00c7A<"
-                "CB<"
-                "\u00c7C<"
-                "D.S.B.<"
-                "DA<"
-                "DB<"
-                "DSB<"
-                "DSC<"
-                "\u00d0A<"
-                "\u00d0C<"
-                "EKSTRA_ARBEJDE<"
-                "EKSTRABUD0<"
-                "H\u00d8ST<"
-                "HAAG<"
-                "H\u00c5NDBOG<"
-                "HAANDV\u00c6RKSBANKEN<"
-                "karl<"
-                "Karl<"
-                "'NIELS J\u00d8RGEN'<"
-                "NIELS-J\u00d8RGEN<"
-                "NIELSEN<"
-                "'R\u00c9E, A'<"
-                "'REE, B'<"
-                "'R\u00c9E, L'<"
-                "'REE, V'<"
-                "'SCHYTT, B'<"
-                "'SCHYTT, H'<"
-                "'SCH\u00dcTT, H'<"
-                "'SCHYTT, L'<"
-                "'SCH\u00dcTT, M'<"
-                "SS<"
-                "\u00df<"
-                "SSA<"
-                "'STORE VILDMOSE'<"
-                "STOREK\u00c6R0<"
-                "'STORM PETERSEN'<"
-                "STORMLY<"
-                "THORVALD<"
-                "THORVARDUR<"
-                "THYGESEN<"
-                "\u00feORVAR\u00d0UR<"
-                "'VESTERG\u00c5RD, A'<"
-                "'VESTERGAARD, A'<"
-                "'VESTERG\u00c5RD, B'<"
-                "\u00c6BLE<"
-                "\u00c4BLE<"
-                "\u00d8BERG<"
-                "\u00d6BERG",
-
-                // constUCharCollationDanishTest::testNTList[][CollationDanishTest::MAX_TOKEN_LEN]="
-                "andere<"
-                "chaque<"
-                "chemin<"
-                "cote<"
-                "cot\u00e9<"
-                "c\u00f4te<"
-                "c\u00f4t\u00e9<"
-                "\u010du\u010d\u0113t<"
-                "Czech<"
-                "hi\u0161a<"
-                "irdisch<"
-                "lie<"
-                "lire<"
-                "llama<"
-                "l\u00f5ug<"
-                "l\u00f2za<"
-                "lu\u010d<"
-                "luck<"
-                "L\u00fcbeck<"
-                "lye<"
-                "l\u00e4vi<"
-                "L\u00f6wen<"
-                "m\u00e0\u0161ta<"
-                "m\u00eer<"
-                "myndig<"
-                "M\u00e4nner<"
-                "m\u00f6chten<"
-                "pi\u00f1a<"
-                "pint<"
-                "pylon<"
-                "\u0161\u00e0ran<"
-                "savoir<"
-                "\u0160erb\u016bra<"
-                "Sietla<"
-                "\u015blub<"
-                "subtle<"
-                "symbol<"
-                "s\u00e4mtlich<"
-                "waffle<"
-                "verkehrt<"
-                "wood<"
-                "vox<"
-                "v\u00e4ga<"
-                "yen<"
-                "yuan<"
-                "yucca<"
-                "\u017eal<"
-                "\u017eena<"
-                "\u017den\u0113va<"
-                "zoo0<"
-                "Zviedrija<"
-                "Z\u00fcrich<"
-                "zysk0<"
-                "\u00e4ndere"
-            }
-        }
+        }  
     }
 }
