@@ -9,7 +9,7 @@
 #ifndef __LETYPES_H
 #define __LETYPES_H
 
-#if !defined(LE_USE_CMEMORY) && (defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION))
+#if !defined(LE_USE_CMEMORY) && (defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_STATIC_IMPLEMENTATION) || defined(U_COMBINED_IMPLEMENTATION))
 #define LE_USE_CMEMORY
 #endif
 
