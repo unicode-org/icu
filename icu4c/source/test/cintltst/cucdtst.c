@@ -657,10 +657,10 @@ static void TestUnicodeData()
     }
 
     errorCode=U_ZERO_ERROR;
-    u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
+    u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
     if(errorCode==U_FILE_ACCESS_ERROR) {
         errorCode=U_ZERO_ERROR;
-        u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
+        u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         log_err("error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));

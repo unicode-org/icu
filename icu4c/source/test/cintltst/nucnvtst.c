@@ -66,6 +66,8 @@ static void TestConv(const uint16_t in[],
                      char byteArr[],
                      int byteArrLen);
 
+static void TestCoverageMBCS();
+
 void addTestNewConvert(TestNode** root);
 
 
@@ -219,6 +221,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestISCII, "tsconv/nucnvtst/TestISCII");
    addTest(root, &TestJitterbug981, "tsconv/nucnvtst/TestJitterbug981");
    addTest(root, &TestJitterbug1293, "tsconv/nucnvtst/TestJitterbug1293");
+   addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
 
 }
 
@@ -842,82 +845,6 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
                LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs,FALSE))
       log_err("LMBCS-1 -> u  did not match.\n");
 
-
-    /*some more test to increase the code coverage in MBCS.  Create an test converter from test1.ucm
-      which is test file for MBCS conversion with single-byte codepage data.*/
-    {
-
-        /* MBCS with single byte codepage data test1.ucm*/
-        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0xdbc4, 0xde34, 0x0003};
-        const uint8_t expectedtest1[] = { 0x00, 0x05, 0xff, 0x07, 0xff,};
-        int32_t  totest1Offs[]        = { 0, 1, 2, 3, 5, };
-
-        const uint8_t test1input[]    = { 0x00, 0x05, 0x06, 0x07, 0x08, 0x09};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0xdbc4, 0xde34, 0xfffd, 0xfffd};
-        int32_t fromtest1Offs[]       = { 0, 1, 2, 3, 3, 4, 5};
-
-        /*from Unicode*/
-        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest1, sizeof(expectedtest1), "test1", totest1Offs,FALSE ))
-            log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
-
-        /*to Unicode*/
-        if(!testConvertToU(test1input, sizeof(test1input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", fromtest1Offs ,FALSE))
-            log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
-
-    }
-
-    /*some more test to increase the code coverage in MBCS.  Create an test converter from test3.ucm
-      which is test file for MBCS conversion with three-byte codepage data.*/
-    {
-
-        /* MBCS with three byte codepage data test3.ucm*/
-        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
-        const uint8_t expectedtest3[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a,  0xff,};
-        int32_t  totest3Offs[]        = { 0, 1, 2, 3, 3, 3, 4, 6, 6, 6, 8};
-
-        const uint8_t test3input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a, 0x01, 0x02, 0x0c,};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
-        int32_t fromtest3Offs[]       = { 0, 1, 2, 3, 6, 6, 7, 7, 10 };
-
-        /*from Unicode*/
-        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest3, sizeof(expectedtest3), "test3", totest3Offs,FALSE ))
-            log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
-
-        /*to Unicode*/
-        if(!testConvertToU(test3input, sizeof(test3input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", fromtest3Offs ,FALSE))
-            log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n");
-
-    }
-
-    /*some more test to increase the code coverage in MBCS.  Create an test converter from test4.ucm
-      which is test file for MBCS conversion with four-byte codepage data.*/
-    {
-
-        /* MBCS with three byte codepage data test4.ucm*/
-        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
-        const uint8_t expectedtest4[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a,  0xff,};
-        int32_t  totest4Offs[]        = { 0, 1, 2, 3, 3, 3, 3, 4, 6, 6, 6, 6, 8,};
-
-        const uint8_t test4input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a, 0x01, 0x02, 0x03, 0x0c,};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
-        int32_t fromtest4Offs[]       = { 0, 1, 2, 3, 7, 7, 8, 8, 12,};
-
-        /*from Unicode*/
-        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest4, sizeof(expectedtest4), "test4", totest4Offs,FALSE ))
-            log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
-
-        /*to Unicode*/
-        if(!testConvertToU(test4input, sizeof(test4input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", fromtest4Offs,FALSE ))
-            log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n");
-
-    }
-
     /* UTF-7 examples are mostly from http://www.imc.org/rfc2152 */
     {
         /* encode directly set D and set O */
@@ -1101,6 +1028,99 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             log_err("u-> utf-32le did not match.\n");
 
     }
+}
+
+static void TestCoverageMBCS(){
+    char testdatapath[256];
+    char saveDirectory[256];
+    const char *directory= u_getDataDirectory();
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    
+    /*save the data directory */
+    strcpy(saveDirectory, directory);
+
+    strcpy(testdatapath, directory);
+    strcat(testdatapath,tdrelativepath);
+    u_setDataDirectory(testdatapath);
+
+    /*some more test to increase the code coverage in MBCS.  Create an test converter from test1.ucm
+      which is test file for MBCS conversion with single-byte codepage data.*/
+    {
+
+        /* MBCS with single byte codepage data test1.ucm*/
+        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0xdbc4, 0xde34, 0x0003};
+        const uint8_t expectedtest1[] = { 0x00, 0x05, 0xff, 0x07, 0xff,};
+        int32_t  totest1Offs[]        = { 0, 1, 2, 3, 5, };
+
+        const uint8_t test1input[]    = { 0x00, 0x05, 0x06, 0x07, 0x08, 0x09};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0xdbc4, 0xde34, 0xfffd, 0xfffd};
+        int32_t fromtest1Offs[]       = { 0, 1, 2, 3, 3, 4, 5};
+
+        /*from Unicode*/
+        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest1, sizeof(expectedtest1), "test1", totest1Offs,FALSE ))
+            log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
+
+        /*to Unicode*/
+        if(!testConvertToU(test1input, sizeof(test1input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", fromtest1Offs ,FALSE))
+            log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
+
+    }
+
+    /*some more test to increase the code coverage in MBCS.  Create an test converter from test3.ucm
+      which is test file for MBCS conversion with three-byte codepage data.*/
+    {
+
+        /* MBCS with three byte codepage data test3.ucm*/
+        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
+        const uint8_t expectedtest3[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a,  0xff,};
+        int32_t  totest3Offs[]        = { 0, 1, 2, 3, 3, 3, 4, 6, 6, 6, 8};
+
+        const uint8_t test3input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a, 0x01, 0x02, 0x0c,};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        int32_t fromtest3Offs[]       = { 0, 1, 2, 3, 6, 6, 7, 7, 10 };
+
+        /*from Unicode*/
+        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest3, sizeof(expectedtest3), "test3", totest3Offs,FALSE ))
+            log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
+
+        /*to Unicode*/
+        if(!testConvertToU(test3input, sizeof(test3input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", fromtest3Offs ,FALSE))
+            log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n");
+
+    }
+
+    /*some more test to increase the code coverage in MBCS.  Create an test converter from test4.ucm
+      which is test file for MBCS conversion with four-byte codepage data.*/
+    {
+
+        /* MBCS with three byte codepage data test4.ucm*/
+        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
+        const uint8_t expectedtest4[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a,  0xff,};
+        int32_t  totest4Offs[]        = { 0, 1, 2, 3, 3, 3, 3, 4, 6, 6, 6, 6, 8,};
+
+        const uint8_t test4input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a, 0x01, 0x02, 0x03, 0x0c,};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        int32_t fromtest4Offs[]       = { 0, 1, 2, 3, 7, 7, 8, 8, 12,};
+
+        /*from Unicode*/
+        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest4, sizeof(expectedtest4), "test4", totest4Offs,FALSE ))
+            log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
+
+        /*to Unicode*/
+        if(!testConvertToU(test4input, sizeof(test4input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", fromtest4Offs,FALSE ))
+            log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n");
+
+    }
+
+    /* restore the original data directory */
+    u_setDataDirectory(saveDirectory);
+
 }
 
 
