@@ -237,20 +237,18 @@ ubrk_openRules(const UChar *rules,
  * Thread safe cloning operation
  * @param bi iterator to be cloned
  * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated.
-	If buffer is not large enough, new memory will be allocated.
-	Clients can use the U_BRK_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
+ *  If buffer is not large enough, new memory will be allocated.
+ *  Clients can use the U_BRK_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
  * @param pBufferSize pointer to size of allocated space.
-	If *pBufferSize == 0, a sufficient size for use in cloning will
-	be returned ('pre-flighting')
-	If *pBufferSize is not enough for a stack-based safe clone,
-	new memory will be allocated.
+ *  If *pBufferSize == 0, a sufficient size for use in cloning will
+ *  be returned ('pre-flighting')
+ *  If *pBufferSize is not enough for a stack-based safe clone,
+ *  new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
-    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
+ *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
  * @draft ICU 1.8
  */
-
-
 U_CAPI UBreakIterator * U_EXPORT2 
 ubrk_safeClone(
           const UBreakIterator *bi,

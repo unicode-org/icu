@@ -482,14 +482,9 @@ u_file_read(UChar        *chars,
  * on the result of this function.
  * @draft
  */
-
 U_CAPI UTransliterator* U_EXPORT2
 u_fsettransliterator(UFILE *file, UFileDirection direction,
-		     UTransliterator *adopt, UErrorCode *status); 
-
-
-
-
+                     UTransliterator *adopt, UErrorCode *status);
 
 
 
