@@ -39,7 +39,7 @@
  */
 
 #ifndef U_IOSTREAM_SOURCE
-#define U_IOSTREAM_SOURCE 198506
+#define U_IOSTREAM_SOURCE 199711
 #endif
 
 /* Determines whether specific types are available */
