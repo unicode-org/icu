@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -27,7 +27,8 @@ struct AttachmentPositioningSubtable : GlyphPositioningSubtable
     Offset    markArrayOffset;
     Offset    baseArrayOffset;
 
-    le_int32  getBaseCoverage(LEGlyphID baseGlyphId) const;
+    inline le_int32  getBaseCoverage(LEGlyphID baseGlyphId) const;
+
     le_uint32 process(GlyphIterator *glyphIterator) const;
 };
 

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -94,38 +94,39 @@ struct IndicClassTable
     const CharClass *classTable;
     const SplitMatra *splitMatraTable;
 
-    le_int32 getWorstCaseExpansion() const;
+    inline le_int32 getWorstCaseExpansion() const;
 
     CharClass getCharClass(LEUnicode ch) const;
-    const SplitMatra *getSplitMatra(CharClass charClass) const;
 
-    le_bool isVowelModifier(LEUnicode ch) const;
-    le_bool isStressMark(LEUnicode ch) const;
-    le_bool isConsonant(LEUnicode ch) const;
-    le_bool isReph(LEUnicode ch) const;
-    le_bool isVirama(LEUnicode ch) const;
-    le_bool isNukta(LEUnicode ch) const;
-    le_bool isVattu(LEUnicode ch) const;
-    le_bool isMatra(LEUnicode ch) const;
-    le_bool isSplitMatra(LEUnicode ch) const;
-    le_bool isLengthMark(LEUnicode ch) const;
-    le_bool hasPostOrBelowBaseForm(LEUnicode ch) const;
-    le_bool hasPostBaseForm(LEUnicode ch) const;
-    le_bool hasBelowBaseForm(LEUnicode ch) const;
+    inline const SplitMatra *getSplitMatra(CharClass charClass) const;
 
-    static le_bool isVowelModifier(CharClass charClass);
-    static le_bool isStressMark(CharClass charClass);
-    static le_bool isConsonant(CharClass charClass);
-    static le_bool isReph(CharClass charClass);
-    static le_bool isVirama(CharClass charClass);
-    static le_bool isNukta(CharClass charClass);
-    static le_bool isVattu(CharClass charClass);
-    static le_bool isMatra(CharClass charClass);
-    static le_bool isSplitMatra(CharClass charClass);
-    static le_bool isLengthMark(CharClass charClass);
-    static le_bool hasPostOrBelowBaseForm(CharClass charClass);
-    static le_bool hasPostBaseForm(CharClass charClass);
-    static le_bool hasBelowBaseForm(CharClass charClass);
+    inline le_bool isVowelModifier(LEUnicode ch) const;
+    inline le_bool isStressMark(LEUnicode ch) const;
+    inline le_bool isConsonant(LEUnicode ch) const;
+    inline le_bool isReph(LEUnicode ch) const;
+    inline le_bool isVirama(LEUnicode ch) const;
+    inline le_bool isNukta(LEUnicode ch) const;
+    inline le_bool isVattu(LEUnicode ch) const;
+    inline le_bool isMatra(LEUnicode ch) const;
+    inline le_bool isSplitMatra(LEUnicode ch) const;
+    inline le_bool isLengthMark(LEUnicode ch) const;
+    inline le_bool hasPostOrBelowBaseForm(LEUnicode ch) const;
+    inline le_bool hasPostBaseForm(LEUnicode ch) const;
+    inline le_bool hasBelowBaseForm(LEUnicode ch) const;
+
+    inline static le_bool isVowelModifier(CharClass charClass);
+    inline static le_bool isStressMark(CharClass charClass);
+    inline static le_bool isConsonant(CharClass charClass);
+    inline static le_bool isReph(CharClass charClass);
+    inline static le_bool isVirama(CharClass charClass);
+    inline static le_bool isNukta(CharClass charClass);
+    inline static le_bool isVattu(CharClass charClass);
+    inline static le_bool isMatra(CharClass charClass);
+    inline static le_bool isSplitMatra(CharClass charClass);
+    inline static le_bool isLengthMark(CharClass charClass);
+    inline static le_bool hasPostOrBelowBaseForm(CharClass charClass);
+    inline static le_bool hasPostBaseForm(CharClass charClass);
+    inline static le_bool hasBelowBaseForm(CharClass charClass);
 
     static const IndicClassTable *getScriptClassTable(le_int32 scriptCode);
 };
