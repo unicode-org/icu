@@ -86,6 +86,8 @@ public:
 
     TransliterationRuleData(UErrorCode& status);
 
+    TransliterationRuleData(const TransliterationRuleData&);
+
     ~TransliterationRuleData();
     
 	const UnicodeSet* lookupSet(UChar standIn) const;

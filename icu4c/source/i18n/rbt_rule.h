@@ -178,6 +178,12 @@ public:
                         UErrorCode& status);
 
     /**
+     * Copy constructor.
+     */
+    TransliterationRule(TransliterationRule& other,
+                        const TransliterationRuleData& data);
+
+    /**
      * Destructor.
      */
     virtual ~TransliterationRule();
@@ -346,6 +352,9 @@ private:
               int32_t cursorPos, int32_t cursorOffset,
               int32_t* adoptedSegs,
               UErrorCode& status);
+
+    int32_t getSegmentsLength(const TransliterationRuleData& data) const;
+
 };
 
 #endif

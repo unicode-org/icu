@@ -44,12 +44,14 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& ID,
  */
 RuleBasedTransliterator::RuleBasedTransliterator(
         const RuleBasedTransliterator& other) :
-    Transliterator(other), data(other.data) {
-    // TODO: Finish this -- implement with correct data ownership handling
-    if (other.isDataOwned) {
-        // TODO: At this point we need to make our own copy of the data.
-    } else {
-        isDataOwned = FALSE;
+    Transliterator(other), data(other.data),
+    isDataOwned(other.isDataOwned) {
+
+    // Only do a deep copy if this is non-owned data, that is,
+    // data that will be later deleted.  System transliterators
+    // contain owned data.
+    if (isDataOwned) {
+        data = new TransliterationRuleData(*other.data);
     }
 }
 
