@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ucol_tok.cpp
+*   file name:  ucol_cnt.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -26,12 +26,14 @@ U_NAMESPACE_BEGIN
 
 void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     if(tbl->position == tbl->size) {
-        uint32_t *newData = (uint32_t *)realloc(tbl->CEs, 2*tbl->size*sizeof(uint32_t));
-        UChar *newCPs = (UChar *)realloc(tbl->codePoints, 2*tbl->size*sizeof(UChar));
-        if(newData == NULL || newCPs == NULL) {
-#ifdef UCOL_DEBUG
-            fprintf(stderr, "out of memory for contractions\n");
-#endif
+        uint32_t *newData = (uint32_t *)uprv_realloc(tbl->CEs, 2*tbl->size*sizeof(uint32_t));
+        if(newData == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        UChar *newCPs = (UChar *)uprv_realloc(tbl->codePoints, 2*tbl->size*sizeof(UChar));
+        if(newCPs == NULL) {
+            uprv_free(newData);
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -48,8 +50,17 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
         return 0;
     }
     CntTable *tbl = (CntTable *)uprv_malloc(sizeof(CntTable));
+    if(tbl == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
     tbl->mapping = mapping;
     tbl->elements = (ContractionTable **)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
+    if(tbl->elements == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_free(tbl);
+      return NULL;
+    }
     tbl->capacity = INIT_EXP_TABLE_SIZE;
     uprv_memset(tbl->elements, 0, INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
     tbl->size = 0;
@@ -63,8 +74,25 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
 
 ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
     ContractionTable *el = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
+    if(el == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
     el->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+    if(el->CEs == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_free(el);
+      return NULL;
+    }
+
     el->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
+    if(el->codePoints == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_free(el->CEs);
+      uprv_free(el);
+      return NULL;
+    }
+
     el->position = 0;
     el->size = INIT_EXP_TABLE_SIZE;
     uprv_memset(el->CEs, 0, INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
@@ -81,10 +109,11 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
         // do realloc
 /*        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));*/
         if(newElements == NULL) {
-#ifdef UCOL_DEBUG
-          fprintf(stderr, "out of memory for contraction parts\n");
-#endif
           *status = U_MEMORY_ALLOCATION_ERROR;
+          uprv_free(el->codePoints);
+          uprv_free(el->CEs);
+          uprv_free(el);
+          return NULL;
         } else {
           ContractionTable **oldElements = table->elements;
           uprv_memcpy(newElements, oldElements, table->capacity*sizeof(ContractionTable *));
@@ -111,6 +140,10 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
         free(table->offsets);
     }
     table->offsets = (int32_t *)uprv_malloc(table->size*sizeof(int32_t));
+    if(table->offsets == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return 0;
+    }
 
 
     /* See how much memory we need */
@@ -121,14 +154,29 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
 
     /* Allocate it */
     if(table->CEs != NULL) {
-        free(table->CEs);
+        uprv_free(table->CEs);
     }
     table->CEs = (uint32_t *)uprv_malloc(table->position*sizeof(uint32_t));
+    if(table->CEs == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_free(table->offsets);
+      table->offsets = NULL;
+      return 0;
+    }
     uprv_memset(table->CEs, '?', table->position*sizeof(uint32_t));
+
     if(table->codePoints != NULL) {
-        free(table->codePoints);
+        uprv_free(table->codePoints);
     }
     table->codePoints = (UChar *)uprv_malloc(table->position*sizeof(UChar));
+    if(table->codePoints == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_free(table->offsets);
+      table->offsets = NULL;
+      uprv_free(table->CEs);
+      table->CEs = NULL;
+      return 0;
+    }
     uprv_memset(table->codePoints, '?', table->position*sizeof(UChar));
 
     /* Now stuff the things in*/
@@ -176,8 +224,12 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
     return table->position;
 }
 
-ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t) {
+ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *status) {
   ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
+  if(r == NULL) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
 
   r->position = t->position;
   r->size = t->size;
@@ -193,7 +245,10 @@ ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t) {
 }
 
 U_CAPI CntTable* U_EXPORT2
-uprv_cnttab_clone(CntTable *t) {
+uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
+  if(U_FAILURE(*status)) {
+    return NULL;
+  }
   int32_t i = 0;
   CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
   r->position = t->position;
@@ -206,7 +261,7 @@ uprv_cnttab_clone(CntTable *t) {
   //uprv_memcpy(r->elements, t->elements, t->capacity*sizeof(ContractionTable *));
 
   for(i = 0; i<t->size; i++) {
-    r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i]);
+    r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i], status);
   }
 
   if(t->CEs != NULL) {
