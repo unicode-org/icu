@@ -4063,6 +4063,13 @@ static void TestNumericCollation(void)
       "\\u0663\\u0663"
     };
 
+    const static char *evenZeroes[] = {
+      /*"2000",*/ /* fix backward iteration before enabling '2000' */
+      "2001",
+        "2002",
+        "2003"
+    };
+
     UColAttribute att = UCOL_NUMERIC_COLLATION;
     UColAttributeValue val = UCOL_ON;
 
@@ -4077,6 +4084,7 @@ static void TestNumericCollation(void)
     genericLocaleStarterWithOptions("root", thirtyTwoBitNumericStrings, sizeof(thirtyTwoBitNumericStrings)/sizeof(thirtyTwoBitNumericStrings[0]), &att, &val, 1);
     genericLocaleStarterWithOptions("root", foreignDigits, sizeof(foreignDigits)/sizeof(foreignDigits[0]), &att, &val, 1);
     genericLocaleStarterWithOptions("root", supplementaryDigits, sizeof(supplementaryDigits)/sizeof(supplementaryDigits[0]), &att, &val, 1);	
+    genericLocaleStarterWithOptions("root", evenZeroes, sizeof(evenZeroes)/sizeof(evenZeroes[0]), &att, &val, 1);	
 
 	/* Setting up our collator to do digits. */
 	ucol_setAttribute(coll, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
