@@ -350,14 +350,11 @@ tr {
         id { "Endonezya Dili" }
         ie { "Interlingue" }
         ik { "Inupiak" }
-        in { "Endonezya Dili" }
         is { "\u0130zlandaca" }
         it { "\u0130talyanca" }
         iu { "Inuktitut" }
-        iw { "\u0130branice" }
         ja { "Japonca" }
-        ji { "Yiddi\u015F" }
-        jw { "Java Dili" }
+        jv { "Java Dili" }
         ka { "G\u00FCrc\u00FCce" }
         kk { "Kazak Dili" }
         kl { "Gr\u00F6nland Dili" }
