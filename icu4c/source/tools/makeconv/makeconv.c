@@ -571,7 +571,7 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   CompactByteArray* myFromUnicode = NULL;
 
   
-  if (U_FAILURE(*err)) return;
+  if (U_FAILURE(*err)) return NULL;
   replacementChar = myConverter->subChar[0];
   myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterSBCSTable));
 
@@ -888,7 +888,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
       T_FileStream_close(convFile);
-      return;
+      return NULL;
     }
 
   uprv_memset(mySharedData, 0, sizeof(UConverterSharedData));
