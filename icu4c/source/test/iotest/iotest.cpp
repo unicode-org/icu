@@ -236,6 +236,7 @@ static void DataDrivenPrintf(void) {
                 if (!testFile) {
                     log_err("Can't open test file - %s\n",
                             STANDARD_TEST_FILE);
+                    continue;
                 }
                 u_memset(uBuffer, 0x2A, sizeof(uBuffer)/sizeof(uBuffer[0]));
                 uBuffer[sizeof(uBuffer)/sizeof(uBuffer[0])-1] = 0;
