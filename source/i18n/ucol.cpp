@@ -2967,9 +2967,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             /*   scanned through what ultimately proved to not be a contraction.       */
           loadState(source, &state, TRUE);
           CE = firstCE;
-          if(source->origFlags & UCOL_USE_ITERATOR) {
-            source->flags = source->origFlags;
-          }
           break;
         }
         
