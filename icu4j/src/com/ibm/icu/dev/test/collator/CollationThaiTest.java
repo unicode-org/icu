@@ -159,7 +159,7 @@ public class CollationThaiTest extends TestFmwk {
         }
      
         // Read in a dictionary of Thai words
-               DataInputStream in = null;
+        DataInputStream in = null;
         String fileName = "th18057.txt";
         try {
             in = new DataInputStream(new FileInputStream(TestUtil.getDataFile(
@@ -201,6 +201,12 @@ public class CollationThaiTest extends TestFmwk {
             if (lastWord.length() > 0) {
                 int result = 0;
                 try {
+                    CollationIteratorTest.backAndForth(this, 
+                        ((RuleBasedCollator)coll).getCollationElementIterator(
+                                                                    lastWord));
+                    CollationIteratorTest.backAndForth(this, 
+                        ((RuleBasedCollator)coll).getCollationElementIterator(
+                                                                        word));
                     result = coll.compare(lastWord, word);
                 } catch (Exception e) {
                     logln("line" + line + ":" + word);

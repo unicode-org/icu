@@ -216,7 +216,7 @@ public class CollationIteratorTest extends TestFmwk {
      * Return an integer array containing all of the collation orders
      * returned by calls to next on the specified iterator
      */
-    int[] getOrders(CollationElementIterator iter) {
+    static int[] getOrders(CollationElementIterator iter) {
         int maxSize = 100;
         int size = 0;
         int[] orders = new int[maxSize];
@@ -252,8 +252,8 @@ public class CollationIteratorTest extends TestFmwk {
             }
             count += 1;
         } while (c1 != CollationElementIterator.NULLORDER);
-        backAndForth(i1);
-        backAndForth(i2);
+        backAndForth(this, i1);
+        backAndForth(this, i2);
     }
     
     /**
@@ -267,7 +267,7 @@ public class CollationIteratorTest extends TestFmwk {
         CollationElementIterator iter = en_us.getCollationElementIterator(test1);
     
         // A basic test to see if it's working at all
-        backAndForth(iter);
+        backAndForth(this, iter);
     
         // Test with a contracting character sequence
         String source;
@@ -281,7 +281,7 @@ public class CollationIteratorTest extends TestFmwk {
     
         source = "abchdcba";
         iter = c1.getCollationElementIterator(source);
-        backAndForth(iter);
+        backAndForth(this, iter);
     
         // Test with an expanding character sequence
         RuleBasedCollator c2 = null;
@@ -294,7 +294,7 @@ public class CollationIteratorTest extends TestFmwk {
     
         source = "abcd";
         iter = c2.getCollationElementIterator(source);
-        backAndForth(iter);
+        backAndForth(this, iter);
     
         // Now try both
         RuleBasedCollator c3 = null;
@@ -307,7 +307,7 @@ public class CollationIteratorTest extends TestFmwk {
         
         source = "abcdbchdc";
         iter = c3.getCollationElementIterator(source);
-        backAndForth(iter);
+        backAndForth(this, iter);
     
         source= "\u0e41\u0e02\u0e41\u0e02\u0e27abc";
         Collator c4 = null;
@@ -319,7 +319,7 @@ public class CollationIteratorTest extends TestFmwk {
         }
         
         iter = ((RuleBasedCollator)c4).getCollationElementIterator(source);
-        backAndForth(iter);
+        backAndForth(this, iter);
        
         source= "\u0061\u30CF\u3099\u30FC";
         Collator c5 = null;
@@ -330,10 +330,10 @@ public class CollationIteratorTest extends TestFmwk {
         }
         iter = ((RuleBasedCollator)c5).getCollationElementIterator(source);
         
-        backAndForth(iter);
+        backAndForth(this, iter);
     }
     
-    void backAndForth(CollationElementIterator iter) {
+    static void backAndForth(TestFmwk test, CollationElementIterator iter) {
         // Run through the iterator forwards and stick it into an array
         iter.reset();
         int[] orders = getOrders(iter);
@@ -354,7 +354,7 @@ public class CollationIteratorTest extends TestFmwk {
                         index --;
                     } 
                     if (o != orders[index]) {
-                        errln("Mismatch at index " + index + ": 0x" 
+                        test.errln("Mismatch at index " + index + ": 0x" 
                             + Integer.toHexString(orders[index]) + " vs 0x" + Integer.toHexString(o));
                         break;
                     }
@@ -368,21 +368,21 @@ public class CollationIteratorTest extends TestFmwk {
     
         if (index != 0) {
             String msg = "Didn't get back to beginning - index is ";
-            errln(msg + index);
+            test.errln(msg + index);
     
             iter.reset();
-            err("next: ");
+            test.err("next: ");
             while ((o = iter.next()) != CollationElementIterator.NULLORDER) {
                 String hexString = "0x" + Integer.toHexString(o) + " ";
-                err(hexString);
+                test.err(hexString);
             }
-            errln("");
-            err("prev: ");
+            test.errln("");
+            test.err("prev: ");
             while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
                 String hexString = "0x" + Integer.toHexString(o) + " ";
-                 err(hexString);
+                 test.err(hexString);
             }
-            errln("");
+            test.errln("");
         }
     }
     
@@ -444,7 +444,7 @@ public class CollationIteratorTest extends TestFmwk {
         }
         iter = en_us.getCollationElementIterator(source.toString());
         // A basic test to see if it's working at all 
-        backAndForth(iter);
+        backAndForth(this, iter);
         for (codepoint = 1; codepoint < 0xFFFE;) {
             source.delete(0, source.length());
             while (codepoint % 0xFF != 0) {
@@ -463,7 +463,7 @@ public class CollationIteratorTest extends TestFmwk {
             }
             iter = en_us.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all 
-            backAndForth(iter);
+            backAndForth(this, iter);
         }
     }
     
@@ -490,7 +490,7 @@ public class CollationIteratorTest extends TestFmwk {
         CollationElementIterator temp 
                         = th_th.getCollationElementIterator(source.toString());
         // A basic test to see if it's working at all 
-        backAndForth(temp);
+        backAndForth(this, temp);
         for (char codepoint = 0x1; codepoint < 0xfffe;) {
             source.delete(0, source.length());
             while (codepoint % 0xFF != 0) {
@@ -510,7 +510,7 @@ public class CollationIteratorTest extends TestFmwk {
             CollationElementIterator iter 
                         = th_th.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all 
-            backAndForth(iter);
+            backAndForth(this, iter);
         }
     }
     
@@ -580,7 +580,7 @@ public class CollationIteratorTest extends TestFmwk {
                     s = e + 1;
                 }
                 iter.reset();
-                backAndForth(iter);
+                backAndForth(this, iter);
                 count ++;
             }
         }
@@ -614,7 +614,7 @@ public class CollationIteratorTest extends TestFmwk {
         CollationElementIterator iter = coll.getCollationElementIterator("testing");
         for (int count = 0; count < testdata.length; count ++) {
             iter.setText(testdata[count]);
-            backAndForth(iter);
+            backAndForth(this, iter);
         }
     }
 }
