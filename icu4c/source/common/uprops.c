@@ -24,12 +24,6 @@
 #include "unormimp.h"
 #include "uprops.h"
 
-/* helper definitions ------------------------------------------------------- */
-
-#define CGJ     0x034f
-#define ZWNJ    0x200C
-#define ZWJ     0x200D
-
 /**
  * Unicode property names and property value names are compared
  * "loosely". Property[Value]Aliases.txt say:
@@ -403,48 +397,25 @@ u_getIntPropertyMaxValue(UProperty which) {
  * Inclusions list
  *----------------------------------------------------------------/
 
-/* >From UnicodeData:
- * 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
- * 4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
- * 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
- * 9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
- * AC00;<Hangul Syllable, First>;Lo;0;L;;;;;N;;;;;
- * D7A3;<Hangul Syllable, Last>;Lo;0;L;;;;;N;;;;;
- * D800;<Non Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
- * DB7F;<Non Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
- * DB80;<Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
- * DBFF;<Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
- * DC00;<Low Surrogate, First>;Cs;0;L;;;;;N;;;;;
- * DFFF;<Low Surrogate, Last>;Cs;0;L;;;;;N;;;;;
- * E000;<Private Use, First>;Co;0;L;;;;;N;;;;;
- * F8FF;<Private Use, Last>;Co;0;L;;;;;N;;;;;
- * 20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
- * 2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
- * F0000;<Plane 15 Private Use, First>;Co;0;L;;;;;N;;;;;
- * FFFFD;<Plane 15 Private Use, Last>;Co;0;L;;;;;N;;;;;
- * 100000;<Plane 16 Private Use, First>;Co;0;L;;;;;N;;;;;
- * 10FFFD;<Plane 16 Private Use, Last>;Co;0;L;;;;;N;;;;;
+/*
+ * Return a set of characters for property enumeration.
+ * For each two consecutive characters (start, limit) in the set,
+ * all of the properties for start..limit-1 are all the same,
+ * except for character names.
  *
- * >Large Blocks of Unassigned: (from DerivedGeneralCategory)
- * 1044E..1CFFF  ; Cn # [52146]
- * 1D800..1FFFF  ; Cn # [10240]
- * 2A6D7..2F7FF  ; Cn # [20777]
- * 2FA1E..E0000  ; Cn # [722403]
- * E0080..EFFFF  ; Cn # [65408]
+ * The Inclusion List is generated from the UCD. It is generated
+ * by enumerating the data tries, and code points for hardcoded properties
+ * are added as well.
  *
- * ---
- *
- * TODO: The Inclusion List should be generated from the UCD for each
- * version.  Currently it is static.
- *
- * ---
- *
- * ### TODO ICU 2.4 markus Ideas for getting properties-unique code point ranges:
+ * The following are ideas for getting properties-unique code point ranges,
+ * with possible optimizations beyond the current implementation.
+ * These optimizations would require more code and be more fragile.
+ * The current implementation generates one single list (set) for all properties.
  *
  * To enumerate properties efficiently, one needs to know ranges of
  * repetitive values, so that the value of only each start code point
  * can be applied to the whole range.
- * This information is in principle available in the uprops.icu data.
+ * This information is in principle available in the uprops.icu/unorm.icu data.
  *
  * There are two obstacles:
  *
@@ -496,34 +467,10 @@ u_getIntPropertyMaxValue(UProperty which) {
  * Do not use a UnicodeSet pattern because that causes infinite recursion;
  * UnicodeSet depends on the inclusions set.
  */
-
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USet* set) {
-    /* Build a UnicodeSet for all of Unicode,
-     * then remove known ranges with all-same properties.
-     */
-    uset_addRange(set, 0, 0x10FFFF);
+    uset_removeRange(set, 0, 0x10ffff);
 
-    /* Effectively, build a UnicodeSet according to the following pattern:
-     * "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F
-     *    \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF
-     *    \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF
-     *    \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD
-     *    \\U00100001-\\U0010FFFD]"
-     */
-    uset_removeRange(set, 0x3401, 0x4DB5);
-    uset_removeRange(set, 0x4E01, 0x9FA5);
-    uset_removeRange(set, 0xAC01, 0xD7A3);
-    uset_removeRange(set, 0xD801, 0xDB7F);
-    uset_removeRange(set, 0xDB81, 0xDBFF);
-    uset_removeRange(set, 0xDC01, 0xDFFF);
-    uset_removeRange(set, 0xE001, 0xF8FF);
-    uset_removeRange(set, 0x1044F, 0x1CFFF);
-    uset_removeRange(set, 0x1D801, 0x1FFFF);
-    uset_removeRange(set, 0x20001, 0x2A6D6);
-    uset_removeRange(set, 0x2A6D8, 0x2F7FF);
-    uset_removeRange(set, 0x2FA1F, 0xE0000);
-    uset_removeRange(set, 0xE0081, 0xEFFFF);
-    uset_removeRange(set, 0xF0001, 0xFFFFD);
-    uset_removeRange(set, 0x100001, 0x10FFFD);
+    unorm_addPropertyStarts(set);
+    uchar_addPropertyStarts(set);
 }

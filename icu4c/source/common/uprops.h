@@ -233,6 +233,29 @@ uprv_comparePropertyNames(const char *name1, const char *name2);
 #define _Pi     FLAG(U_INITIAL_PUNCTUATION)
 #define _Pf     FLAG(U_FINAL_PUNCTUATION)
 
+/** Some code points. @internal */
+#define TAB     0x0009
+#define LF      0x000a
+#define FF      0x000c
+#define CR      0x000d
+#define _A      0x0041
+#define _Z      0x005a
+#define _a      0x0061
+#define _z      0x007a
+#define DEL     0x007f
+#define NL      0x0085
+#define NBSP    0x00a0
+#define CGJ     0x034f
+#define HAIRSP  0x200a
+#define ZWNJ    0x200c
+#define ZWJ     0x200d
+#define RLM     0x200f
+#define NNBSP   0x202f
+#define WJ      0x2060
+#define INHSWAP 0x206a
+#define NOMDIG  0x206f
+#define ZWNBSP  0xfeff
+
 /**
  * Is this character a "white space" in the sense of ICU rule parsers?
  * @internal
@@ -272,11 +295,20 @@ U_CAPI void U_EXPORT2
 uprv_getISOCommentCharacters(USet* set);
 
 /**
- * Return a set of all characters _except_ the second through last
- * characters of certain ranges.  These ranges are ranges of
- * characters whose properties are all exactly alike, e.g. CJK
- * Ideographs from U+4E00 to U+9FA5.
- * @param set USet to receive result.  Existing contents are lost.
+ * Enumerate each core properties data trie and add the
+ * start of each range of same properties to the set.
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+uchar_addPropertyStarts(USet *set);
+
+/**
+ * Return a set of characters for property enumeration.
+ * For each two consecutive characters (start, limit) in the set,
+ * all of the properties for start..limit-1 are all the same.
+ *
+ * @param set USet to receive result. Existing contents are lost.
+ * @internal
  */
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USet* set);
