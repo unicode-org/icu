@@ -715,8 +715,8 @@ static void TestConvert()
         disnamelen = ucnv_getDisplayName(myConverter, locale, displayname, len, &err); 
         if(err==U_BUFFER_OVERFLOW_ERROR) {    
             err=U_ZERO_ERROR;
-            displayname=(UChar*)malloc(disnamelen+1 * sizeof(UChar));
-            //ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
+            displayname=(UChar*)malloc((disnamelen+1) * sizeof(UChar));
+            ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
             if(U_FAILURE(err)) {
                 log_err("getDisplayName failed. The error is  %s\n", myErrorName(err));
             }
