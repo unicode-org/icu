@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/07 19:58:40 $
-* $Revision: 1.4 $
+* $Date: 2001/11/13 22:35:03 $
+* $Revision: 1.5 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -16,6 +16,7 @@
 #include "unicode/parsepos.h"
 #include "hash.h"
 #include "mutex.h"
+#include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
 
@@ -525,6 +526,8 @@ void UnicodePropertySet::init() {
     CATEGORY_CACHE = new UnicodeSet[U_CHAR_CATEGORY_COUNT];
     SCRIPT_CACHE = new UnicodeSet[USCRIPT_CODE_LIMIT];
 
+    ucln_i18n_registerCleanup(); // Call this when allocating statics
+
     // NOTE:  We munge all search keys to have no whitespace
     // and upper case.  As such, all stored keys should have
     // this format.
@@ -670,6 +673,7 @@ void UnicodePropertySet::cleanup() {
         delete CATEGORY_MAP; CATEGORY_MAP = NULL;
         delete[] CATEGORY_CACHE; CATEGORY_CACHE = NULL;
         delete[] SCRIPT_CACHE; SCRIPT_CACHE = NULL;
+        delete INCLUSIONS; INCLUSIONS = NULL;
     }
 }
 
