@@ -210,6 +210,22 @@ VectorOfInt::atInsert(  int32_t         index,
     fElements[index] = value;
 }
 
+void
+VectorOfInt::setSize(int32_t newSize) {
+    if (newSize < 0) {
+        newSize = 0;
+    }
+    if (newSize > fCapacity) {
+        resize(newSize);
+        // Although resize zeros out elements past fCapacity, the API
+        // doc specifies that we zero out elements past fSize.
+        for (int32_t i=fSize; i<newSize; ++i) {
+            fElements[i] = 0;
+        }
+    }
+    fSize = newSize;
+}
+
 // Resize the element array.  Create a new array and copy the elements over 
 // then discard the old array.
 void
