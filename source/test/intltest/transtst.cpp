@@ -597,6 +597,15 @@ class TestFilter : public UnicodeFilter {
     virtual UBool contains(UChar32 c) const {
         return c != (UChar)0x0063 /*c*/;
     }
+    // Stubs
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+        return result;
+    }
+    virtual UBool matchesIndexValue(uint8_t v) const {
+        return FALSE;
+    }
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
 
 /**

@@ -64,6 +64,15 @@ class TestHexFilter : public UnicodeFilter {
        else
           return TRUE;
     }
+    // Stubs
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+        return result;
+    }
+    virtual UBool matchesIndexValue(uint8_t v) const {
+        return FALSE;
+    }
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
 void HexToUniTransliteratorTest::TestConstruction(){
     UErrorCode status=U_ZERO_ERROR;
