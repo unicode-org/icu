@@ -541,36 +541,17 @@ static void \
 */
 
 void 
-_LMBCSToUnicodeWithOffsets(
-    UConverter*  _this,          /* the converter*/
-    UChar**        target,       /* updated ptr to target */
-    const UChar*   targetLimit,  /* exclusive target limit */
-    const char**   source,       /* updated ptr to source */
-    const char*    sourceLimit,  /* exclusive source limit*/
-    int32_t*       offsets,      /* pointer to array to be filled in with 
-                                    source offsets */
-    UBool          flush,        /* boolean: true means client won't call 
-                                   back with more data from same source */
-    UErrorCode*    err);         /* Std ICU err code */
+_LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *args,
+                           UErrorCode*    err);         /* Std ICU err code */
 
 
 void 
-_LMBCSFromUnicode(
-   UConverter*     _this,           /* same  as above, but other direction */
-   char**          target,
-   const char*     targetLimit,
-   const UChar**   source,
-   const UChar*    sourceLimit,
-   int32_t *       offsets,
-   UBool          flush,
-   UErrorCode*     err);
+_LMBCSFromUnicode(UConverterFromUnicodeArgs *args,
+                  UErrorCode*     err);
 
 UChar32 
-_LMBCSGetNextUChar(
-   UConverter*   _this,           /* also from Unicode, but 1 char */
-   const char**  source,
-   const char*   sourceLimit,
-   UErrorCode*   err);
+_LMBCSGetNextUChar(UConverterToUnicodeArgs *args,
+                   UErrorCode*   err);
 
 
 /* Here's the open worker & the common close function */
@@ -761,14 +742,8 @@ LMBCSConvertUni(ulmbcs_byte_t * pLMBCS, UChar uniChar)
 
 /* The main Unicode to LMBCS conversion function */
 void 
-_LMBCSFromUnicode(UConverter*     _this,
-                       char**          target,
-                       const char*     targetLimit,
-                       const UChar**   source,
-                       const UChar*    sourceLimit,
-                       int32_t *       offsets,
-                       UBool          flush,
-                       UErrorCode*     err)
+_LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
+                  UErrorCode*     err)
 {
    ulmbcs_byte_t lastConverterIndex = 0;
    UChar uniChar;
@@ -776,7 +751,7 @@ _LMBCSFromUnicode(UConverter*     _this,
    ulmbcs_byte_t  * pLMBCS;
    int bytes_written;
    UBool groups_tried[ULMBCS_GRP_LAST];
-   UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
+   UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
    int sourceIndex = 0; 
 
 
@@ -803,9 +778,9 @@ _LMBCSFromUnicode(UConverter*     _this,
       4. And as a grand fallback: Unicode
    */
 
-   while (*source < sourceLimit && !U_FAILURE(*err))
+   while (args->source < args->sourceLimit && !U_FAILURE(*err))
    {
-      uniChar = **source;
+      uniChar = *(args->source);
       bytes_written = 0;
       pLMBCS = LMBCS;
 
@@ -930,14 +905,14 @@ _LMBCSFromUnicode(UConverter*     _this,
       }
   
       /* we have a translation. increment source and write as much as posible to target */
-      (*source)++;
+      args->source++;
       pLMBCS = LMBCS;
-      while (*target < targetLimit && bytes_written--)
+      while (args->target < args->targetLimit && bytes_written--)
       {
-         *(*target)++ = *pLMBCS++;
-         if (offsets)
+         *(args->target)++ = *pLMBCS++;
+         if (args->offsets)
          {
-            *offsets++ = sourceIndex;
+            *(args->offsets)++ = sourceIndex;
          }
       }
       sourceIndex++;
@@ -947,9 +922,9 @@ _LMBCSFromUnicode(UConverter*     _this,
             common code will move this to target if we get called back with
             enough target room
          */
-         uint8_t * pErrorBuffer = _this->charErrorBuffer;
+         uint8_t * pErrorBuffer = args->converter->charErrorBuffer;
          *err = U_INDEX_OUTOFBOUNDS_ERROR;
-         _this->charErrorBufferLength = bytes_written;
+         args->converter->charErrorBufferLength = bytes_written;
          while (bytes_written--)
          {
             *pErrorBuffer++ = *pLMBCS++;
@@ -964,9 +939,9 @@ _LMBCSFromUnicode(UConverter*     _this,
 
 /* A function to call when we are looking at the Unicode group byte in LMBCS */
 UChar
-GetUniFromLMBCSUni(char const * * ppLMBCSin)  /* Called with LMBCS-style Unicode byte stream */
+GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode byte stream */
 {
-   uint8_t  HighCh = *(*ppLMBCSin)++; /* Big-endian Unicode in LMBCS compatibility group*/
+   uint8_t  HighCh = *(*ppLMBCSin)++;  /* Big-endian Unicode in LMBCS compatibility group*/
    uint8_t  LowCh  = *(*ppLMBCSin)++;
 
    if (HighCh == ULMBCS_UNICOMPATZERO ) 
@@ -984,9 +959,9 @@ GetUniFromLMBCSUni(char const * * ppLMBCSin)  /* Called with LMBCS-style Unicode
 */
 
 #define CHECK_SOURCE_LIMIT(index) \
-     if ((*source)+index > sourceLimit){\
+     if (args->source+index > args->sourceLimit){\
          *err = U_TRUNCATED_CHAR_FOUND;\
-         *source = saveSource;\
+         args->source = saveSource;\
          return missingUCharMarker;}
 
 
@@ -998,25 +973,22 @@ GetUniFromLMBCSUni(char const * * ppLMBCSin)  /* Called with LMBCS-style Unicode
 */
 
 UChar32 
-_LMBCSGetNextUCharWorker(UConverter*   _this,
-                         const char**  source,
-                         const char*   sourceLimit,
+_LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                          UErrorCode*   err,
                          UBool         returnUTF32)
 {
    ulmbcs_byte_t   CurByte; /* A byte from the input stream */
    UChar32 uniChar;    /* an output UNICODE char */
    const char * saveSource;
-   UConverterToUnicodeArgs args;
   
    /* error check */
-   if (*source >= sourceLimit)
+   if (args->source >= args->sourceLimit)
    {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return missingUCharMarker;
    }
    /* Grab first byte & save address for error recovery */
-   CurByte = *((ulmbcs_byte_t  *) (saveSource = (*source)++));
+   CurByte = *((ulmbcs_byte_t  *) (saveSource = args->source++));
    
    /*
     * at entry of each if clause:
@@ -1049,7 +1021,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       {
          ulmbcs_byte_t  C0C1byte;
          CHECK_SOURCE_LIMIT(1);
-         C0C1byte = *(*source)++;
+         C0C1byte = *(args->source)++;
          uniChar = (C0C1byte < ULMBCS_C1START) ? C0C1byte - ULMBCS_CTRLOFFSET : C0C1byte;
       }
       else 
@@ -1058,14 +1030,14 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
          UChar second;
          CHECK_SOURCE_LIMIT(2);
          
-         uniChar = GetUniFromLMBCSUni(source);
+         uniChar = GetUniFromLMBCSUni(&(args->source));
             
          /* at this point we are usually done, but we need to make sure we are not in 
          a situation where we can successfully put together a surrogate pair */
-         
-         if(returnUTF32 && UTF_IS_FIRST_SURROGATE(uniChar) && (*source+3 <= sourceLimit)
-            && *(*source)++ == ULMBCS_GRP_UNICODE
-            && UTF_IS_SECOND_SURROGATE(second = GetUniFromLMBCSUni(source)))
+
+         if(returnUTF32 && UTF_IS_FIRST_SURROGATE(uniChar) && (args->source+3 <= args->sourceLimit)
+            && *(args->source)++ == ULMBCS_GRP_UNICODE
+            && UTF_IS_SECOND_SURROGATE(second = GetUniFromLMBCSUni(&(args->source))))
          {
                uniChar = UTF16_GET_PAIR_VALUE(uniChar, second);
          }
@@ -1073,7 +1045,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       else if (CurByte <= ULMBCS_CTRLOFFSET)  
       {
          group = CurByte;                   /* group byte is in the source */
-         extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
+         extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
          cnv = extraInfo->OptGrpConverter[group];
       
          if (!cnv)
@@ -1087,8 +1059,8 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
             ulmbcs_byte_t  HighCh, LowCh;
 
             CHECK_SOURCE_LIMIT(2);
-            HighCh = *(*source)++; 
-            LowCh = *(*source)++;
+            HighCh = *(args->source)++; 
+            LowCh = *(args->source)++;
           /* check for LMBCS doubled-group-byte case */
             mbChar = (HighCh == group) ? LowCh : (HighCh<<8) | LowCh;
             MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
@@ -1096,7 +1068,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
          }
          else {                                  /* single byte conversion */
             CHECK_SOURCE_LIMIT(1);
-            CurByte = *(*source)++;
+            CurByte = *(args->source)++;
             
             if (CurByte >= ULMBCS_C1START)
             {
@@ -1107,7 +1079,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
             /* The non-optimizable oddballs where there is an explicit byte 
              * AND the second byte is not in the upper ascii range
             */
-               extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
+               extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
                cnv = extraInfo->OptGrpConverter [ULMBCS_GRP_EXCEPT];  
             
             /* Lookup value must include opt group */
@@ -1119,7 +1091,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       }
       else if (CurByte >= ULMBCS_C1START) /* group byte is implicit */
       {
-         extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
+         extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
          group = extraInfo->OptGroup;
          cnv = extraInfo->OptGrpConverter[group];
          if (group >= ULMBCS_DOUBLEOPTGROUP_START)    /* double byte conversion */
@@ -1135,7 +1107,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
             {
                CHECK_SOURCE_LIMIT(1);
                HighCh = CurByte;
-               LowCh = *(*source)++;
+               LowCh = *(args->source)++;
                mbChar = (HighCh<<8) | LowCh;
             }
             MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
@@ -1155,21 +1127,19 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       /* This code needs updating when new error callbacks are installed */
 
       UChar * pUniChar = (UChar *)&uniChar;
-      args.converter = _this;
-      args.target = pUniChar;
-      args.targetLimit = pUniChar + 1;
-      args.source = saveSource;
-      args.sourceLimit = sourceLimit;
-      args.flush = TRUE;
-      args.offsets = NULL;  
-      args.size = sizeof(args);
-      _this->fromCharErrorBehaviour(_this->toUContext,
-                                    &args,
+      args->target = pUniChar;
+      args->targetLimit = pUniChar + 1;
+      args->source = saveSource;
+      args->flush = TRUE;
+      args->offsets = NULL;  
+      args->size = sizeof(args);
+      args->converter->fromCharErrorBehaviour(args->converter->toUContext,
+                                    args,
                                     saveSource,
-                                    sourceLimit - saveSource,
+                                    args->sourceLimit - saveSource,
                                     UCNV_UNASSIGNED,
                                     err);
-      *source = saveSource;
+      args->source = saveSource;
    }
    return uniChar;
 }
@@ -1178,88 +1148,86 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
 /* The exported function that gets one UTF32 character from a LMBCS stream
 */
 UChar32 
-_LMBCSGetNextUChar(UConverter*   _this,
-                   const char**  source,
-                   const char*   sourceLimit,
+_LMBCSGetNextUChar(UConverterToUnicodeArgs*   args,
                    UErrorCode*   err)
 {
-   return _LMBCSGetNextUCharWorker(_this, source, sourceLimit, err, TRUE);
+   return _LMBCSGetNextUCharWorker(args, err, TRUE);
 }
 
 /* The exported function that converts lmbcs to one or more
    UChars - currently UTF-16
 */
 void 
-_LMBCSToUnicodeWithOffsets(UConverter*    _this,
-                     UChar**        target,
-                     const UChar*   targetLimit,
-                     const char**   source,
-                     const char*    sourceLimit,
-                     int32_t*       offsets,
-                     UBool         flush,
+_LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                      UErrorCode*    err)
 {
    UChar uniChar;    /* one output UNICODE char */
    const char * saveSource;
-   const char * pStartLMBCS = *source;  /* beginning of whole string */
+   const char * pStartLMBCS = args->source;  /* beginning of whole string */
 
-   if (targetLimit == *target)         /* error check may belong in common code */
+   if (args->targetLimit == args->target)         /* error check may belong in common code */
    {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return;
    }
    
    /* Process from source to limit, or until error */
-   while (!*err && sourceLimit > *source && targetLimit > *target)
+   while (!*err && args->sourceLimit > args->source && args->targetLimit > args->target)
    {
-      saveSource = *source; /* beginning of current code point */
+      saveSource = args->source; /* beginning of current code point */
 
-      if (_this->invalidCharLength) /* reassemble char from previous call */
+      if (args->converter->invalidCharLength) /* reassemble char from previous call */
       {
          char LMBCS [ULMBCS_CHARSIZE_MAX];
-         char *pLMBCS = LMBCS; 
-         size_t size_old = _this->invalidCharLength;
+         char *pLMBCS = LMBCS, *saveSource, *saveSourceLimit; 
+         size_t size_old = args->converter->invalidCharLength;
 
          /* limit from source is either reminder of temp buffer, or user limit on source */
          size_t size_new_maybe_1 = sizeof(LMBCS) - size_old;
-         size_t size_new_maybe_2 = sourceLimit - *source;
+         size_t size_new_maybe_2 = args->sourceLimit - args->source;
          size_t size_new = (size_new_maybe_1 < size_new_maybe_2) ? size_new_maybe_1 : size_new_maybe_2;
          
       
-         uprv_memcpy(LMBCS, _this->invalidCharBuffer, size_old);
-         uprv_memcpy(LMBCS + size_old, *source, size_new);
+         uprv_memcpy(LMBCS, args->converter->invalidCharBuffer, size_old);
+         uprv_memcpy(LMBCS + size_old, args->source, size_new);
+         saveSource = (char*)args->source;
+         saveSourceLimit = (char*)args->sourceLimit;
+         args->source = pLMBCS;
+         args->sourceLimit = pLMBCS+size_old+size_new;
+         uniChar = (UChar) _LMBCSGetNextUCharWorker(args, err, FALSE);
+         pLMBCS = (char*)args->source;
+         args->source =saveSource;
+         args->sourceLimit = saveSourceLimit;
+         args->source += (pLMBCS - LMBCS - size_old);
 
-         uniChar = (UChar) _LMBCSGetNextUCharWorker(_this, &pLMBCS, pLMBCS+size_old+size_new, err, FALSE);
-         (*source) += (pLMBCS - LMBCS - size_old);
-
-         if (*err == U_TRUNCATED_CHAR_FOUND && !flush)
+         if (*err == U_TRUNCATED_CHAR_FOUND && !args->flush)
          {
             /* evil special case: source buffers so small a char spans more than 2 buffers */
             size_t savebytes = size_old+size_new;
-            _this->invalidCharLength = savebytes;
-            uprv_memcpy(_this->invalidCharBuffer, LMBCS, savebytes);
-            (*source) = sourceLimit;
-            *err = 0;
+            args->converter->invalidCharLength = savebytes;
+            uprv_memcpy(args->converter->invalidCharBuffer, LMBCS, savebytes);
+            args->source = args->sourceLimit;
+            *err = U_ZERO_ERROR;
             return;
          }
          else
          {
             /* clear the partial-char marker */
-            _this->invalidCharLength = 0;
+            args->converter->invalidCharLength = 0;
          }
       }
       else
       {
-         uniChar = (UChar) _LMBCSGetNextUCharWorker(_this, source, sourceLimit, err, FALSE);
+         uniChar = (UChar) _LMBCSGetNextUCharWorker(args, err, FALSE);
       }
       if (U_SUCCESS(*err))
       {
          if (uniChar != missingUCharMarker)
          {
-            *(*target)++ = uniChar;
-            if(offsets)
+            *(args->target)++ = uniChar;
+            if(args->offsets)
             {
-               *offsets++ = saveSource - pStartLMBCS;
+               *(args->offsets)++ = saveSource - pStartLMBCS;
             }
          }
          else
@@ -1269,18 +1237,18 @@ _LMBCSToUnicodeWithOffsets(UConverter*    _this,
       }
    }
    /* if target ran out before source, return U_INDEX_OUTOFBOUNDS_ERROR */
-   if (U_SUCCESS(*err) && sourceLimit > *source && targetLimit <= *target)
+   if (U_SUCCESS(*err) && args->sourceLimit > args->source && args->targetLimit <= args->target)
    {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
    }
 
    /* If character incomplete, store away partial char if more to come */
-   if ((*err == U_TRUNCATED_CHAR_FOUND) && !flush )
+   if ((*err == U_TRUNCATED_CHAR_FOUND) && !args->flush )
          {
-      size_t savebytes = sourceLimit - saveSource;
-      _this->invalidCharLength = savebytes;
-      uprv_memcpy(_this->invalidCharBuffer, saveSource, savebytes);
-      (*source) = sourceLimit;
+      size_t savebytes = args->sourceLimit - saveSource;
+      args->converter->invalidCharLength = savebytes;
+      uprv_memcpy(args->converter->invalidCharBuffer, saveSource, savebytes);
+      args->source = args->sourceLimit;
       *err = 0;
    }
 }
