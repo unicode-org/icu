@@ -390,8 +390,6 @@ public class TransliteratorInputMethod implements InputMethod {
     //         cc     start    ctxLim
 
     private void traceBuffer(String msg, int cc, int off) {
-	System.out.println("cc: " + cc + " st: " + index.start + " cl: " + index.contextLimit + " len: " + buffer.length() + " off: " + off);
-	
 	if (TRACE_BUFFER) System.out.println(Utility.escape(msg + ": '" + buffer.substring(0, cc) + '}' +
 			   buffer.substring(cc, index.start) + '-' +
 			   buffer.substring(index.start, index.contextLimit) + '|' +
