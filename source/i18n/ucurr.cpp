@@ -104,7 +104,7 @@ _findMetaData(const UChar* currency) {
     UErrorCode ec = U_ZERO_ERROR;
     ResourceBundle currencyMeta =
         ResourceBundle((char*)0, Locale(""), ec).get(CURRENCY_META, ec);
-    
+
     if (U_FAILURE(ec)) {
         // Config/build error; return hard-coded defaults
         return LAST_RESORT_DATA;
@@ -150,7 +150,7 @@ struct CReg : public UMemory {
     CReg *next;
     UChar iso[ISO_COUNTRY_CODE_LENGTH+1];
     char  id[ULOC_FULLNAME_CAPACITY];
-    
+
     CReg(const UChar* _iso, const char* _id)
         : next(0)
     {
@@ -163,7 +163,7 @@ struct CReg : public UMemory {
         uprv_memcpy(iso, _iso, ISO_COUNTRY_CODE_LENGTH * sizeof(const UChar));
         iso[ISO_COUNTRY_CODE_LENGTH] = 0;
     }
-    
+
     static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
     {
         if (status && U_SUCCESS(*status) && _iso && _id) {
@@ -172,6 +172,7 @@ struct CReg : public UMemory {
                 umtx_init(&gCRegLock);
                 Mutex mutex(&gCRegLock);
                 if (!gCRegHead) {
+                    /* register for the first time */
                     ucln_i18n_registerCleanup();
                 }
                 n->next = gCRegHead;
@@ -182,7 +183,7 @@ struct CReg : public UMemory {
         }
         return 0;
     }
-    
+
     static UBool unreg(UCurrRegistryKey key) {
         umtx_init(&gCRegLock);
         Mutex mutex(&gCRegLock);
@@ -191,24 +192,26 @@ struct CReg : public UMemory {
             delete (CReg*)key;
             return TRUE;
         }
-        
+
         CReg* p = gCRegHead;
         while (p) {
             if (p->next == key) {
                 p->next = ((CReg*)key)->next;
-                delete (CReg*)key;	
+                delete (CReg*)key;
                 return TRUE;
             }
             p = p->next;
         }
-        
+
         return FALSE;
     }
-    
+
     static const UChar* get(const char* id) {
         umtx_init(&gCRegLock);
         Mutex mutex(&gCRegLock);
         CReg* p = gCRegHead;
+
+        ucln_i18n_registerCleanup(); /* register cleanup of the mutex */
         while (p) {
             if (uprv_strcmp(id, p->id) == 0) {
                 return p->iso;
@@ -260,7 +263,7 @@ idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec)
 // -------------------------------------
 
 U_CAPI UCurrRegistryKey U_EXPORT2
-ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status) 
+ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status)
 {
     if (status && U_SUCCESS(*status)) {
         char id[ULOC_FULLNAME_CAPACITY];
@@ -273,7 +276,7 @@ ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status)
 // -------------------------------------
 
 U_CAPI UBool U_EXPORT2
-ucurr_unregister(UCurrRegistryKey key, UErrorCode* status) 
+ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
 {
     if (status && U_SUCCESS(*status)) {
         return CReg::unreg(key);
@@ -284,7 +287,7 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
 // -------------------------------------
 
 U_CAPI int32_t U_EXPORT2
-ucurr_forLocale(const char* locale,                 
+ucurr_forLocale(const char* locale,
                 UChar* buff,
                 int32_t buffCapacity,
                 UErrorCode* ec)
@@ -302,11 +305,11 @@ ucurr_forLocale(const char* locale,
                 }
             } else {
                 uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
-                
+
                 if (U_FAILURE(*ec)) {
                     return 0;
                 }
-                
+
                 const UChar* result = CReg::get(id);
                 if (result) {
                     if(buffCapacity > u_strlen(result)) {
@@ -314,12 +317,12 @@ ucurr_forLocale(const char* locale,
                     }
                     return u_strlen(result);
                 }
-                
+
                 // Look up the CurrencyMap element in the root bundle.
                 UResourceBundle *rb = ures_open(NULL, "", &localStatus);
                 UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
                 s = ures_getStringByKey(cm, id, &resLen, &localStatus);
-                
+
                 if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
                     && (id[0] != 0))
                 {
@@ -390,7 +393,7 @@ ucurr_getName(const UChar* currency,
     // Look up the Currencies resource for the given locale.  The
     // Currencies locale data looks like this:
     //|en {
-    //|  Currencies { 
+    //|  Currencies {
     //|    USD { "US$", "US Dollar" }
     //|    CHF { "Sw F", "Swiss Franc" }
     //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
@@ -407,7 +410,7 @@ ucurr_getName(const UChar* currency,
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    
+
     // In the future, resource bundles may implement multi-level
     // fallback.  That is, if a currency is not found in the en_US
     // Currencies data, then the en Currencies data will be searched.
