@@ -209,10 +209,12 @@ UObject *UObjectTest::testClass(UObject *obj,
 
 // END includes =============================================================
 
+#define UOBJTEST_TEST_INTERNALS 0   /* do NOT test Internal things - their functions aren't exported on Win32 */
 
 void UObjectTest::testIDs()
 {
     ids_count = 0;
+
 #if !UCONFIG_NO_TRANSLITERATION
     UParseError parseError;
 #endif
@@ -237,7 +239,9 @@ void UObjectTest::testIDs()
     TESTCLASSID_ABSTRACT(NumberFormat);
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));
+#if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL) ); /* don't care */
+#endif
     TESTCLASSID_DEFAULT(FieldPosition);
     TESTCLASSID_DEFAULT(Formattable);
     TESTCLASSID_CTOR(GregorianCalendar, (status));
@@ -266,7 +270,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(NormalizationTransliterator, "NFD");
     TESTCLASSID_TRANSLIT(NullTransliterator, "Null");
     TESTCLASSID_TRANSLIT(RemoveTransliterator, "Remove");
-	TESTCLASSID_CTOR(RuleBasedTransliterator, (UnicodeString("abcd"), UnicodeString("a>b;"), status));
+    TESTCLASSID_CTOR(RuleBasedTransliterator, (UnicodeString("abcd"), UnicodeString("a>b;"), status));
     TESTCLASSID_TRANSLIT(TitlecaseTransliterator, "Title");
     TESTCLASSID_TRANSLIT(UnescapeTransliterator, "Hex-Any");
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
@@ -308,31 +312,34 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_FACTORY(TitlecaseTransliterator,  Transliterator::createInstance(UnicodeString("Any-Title"), UTRANS_FORWARD, parseError, status));
     TESTCLASSID_ABSTRACT(Transliterator);
+
+#if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_CTOR(StringMatcher, (UnicodeString("x"), 0,0,0,TransliterationRuleData(status)));
     TESTCLASSID_CTOR(StringReplacer,(UnicodeString(),new TransliterationRuleData(status)));
-
+#endif
 #endif
     
     TESTCLASSID_DEFAULT(UnicodeString);
-     TESTCLASSID_CTOR(UnicodeSet, (0, 1));
+    TESTCLASSID_CTOR(UnicodeSet, (0, 1));
     TESTCLASSID_ABSTRACT(UnicodeFilter);
     TESTCLASSID_ABSTRACT(UnicodeFunctor);
-     TESTCLASSID_CTOR(UnicodeSetIterator,(UnicodeSet(0,1)));
+    TESTCLASSID_CTOR(UnicodeSetIterator,(UnicodeSet(0,1)));
     TESTCLASSID_CTOR(UStack, (status));
     TESTCLASSID_CTOR(UVector, (status));
-
 
 #if !UCONFIG_NO_SERVICE
     TESTCLASSID_CTOR(SimpleFactory, (NULL, UnicodeString("foo")));
     TESTCLASSID_DEFAULT(EventListener);
+#if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_DEFAULT(ICUResourceBundleFactory);
     //TESTCLASSID_DEFAULT(Key); // does ont exist?
     TESTCLASSID_CTOR(LocaleKey, (UnicodeString("baz"), UnicodeString("bat"), NULL, 92));
     TESTCLASSID_CTOR(LocaleKeyFactory, (42));
     TESTCLASSID_CTOR(SimpleLocaleKeyFactory, (NULL, UnicodeString("bar"), 8, 12) );
 #endif
-    
-#if 0
+#endif
+
+#if UOBJTEST_DUMP_IDS
     int i;
     for(i=0;i<ids_count;i++) {
         char junk[800];
