@@ -305,6 +305,7 @@ struct NameAndIndex {
     Offset name, index;
 };
 
+U_CDECL_BEGIN
 typedef int32_t U_CALLCONV PropNameCompareFn(const char *name1, const char *name2);
 
 struct CompareContext {
@@ -318,6 +319,7 @@ upname_compareRows(const void *context, const void *left, const void *right) {
     return cmp->propCompare(cmp->chars+((const NameAndIndex *)left)->name,
                             cmp->chars+((const NameAndIndex *)right)->name);
 }
+U_CDECL_END
 
 int32_t
 NameToEnum::swap(const UDataSwapper *ds,
