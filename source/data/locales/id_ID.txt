@@ -3,14 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:55
-// * Source File: \work\locale\common\main\\id_ID.xml
+// * Source File: ../../../locale/common/main\id_ID.xml
 // *
 // ***************************************************************************
 id_ID{
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "H:mm:ss",

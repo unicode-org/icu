@@ -3,8 +3,7 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:22
-// * Source File: \work\locale\common\main\\es_CL.xml
+// * Source File: ../../../locale/common/main\es_CL.xml
 // *
 // ***************************************************************************
 es_CL{
@@ -40,7 +39,6 @@ es_CL{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",

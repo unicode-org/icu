@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:32
-// * Source File: \work\locale\common\main\\sv.xml
+// * Source File: ../../../locale/common/main\sv.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\sv.xml
+ */
 sv{
     Countries{
         AD{"Andorra"}
@@ -1716,11 +1718,11 @@ sv{
             "Zimbabwisk dollar",
         }
     }
-    ExemplarCharacters{"[a-zäöåáéëü]"}
+    ExemplarCharacters{"[a-zäöåàéëü]"}
     Keys{
-        calendar{"Kalendar"}
-        collation{"Sortera"}
-        currency{"Valuta"}
+        calendar{"kalender"}
+        collation{"sorteringsordning"}
+        currency{"valuta"}
     }
     Languages{
         aa{"afar"}
@@ -2203,58 +2205,31 @@ sv{
         "+",
     }
     Scripts{
-        Arab{"arabiskt"}
-        Armn{"armeniskt"}
-        Beng{"bengaliskt"}
         Bopo{"bopomofo"}
-        Brai{"braille"}
         Buhd{"buhid"}
+        Cans{"kanadensiska stavelsetecken"}
         Cher{"cherokee"}
-        Cprt{"cypriotiskt"}
-        Cyrl{"kyrilliskt"}
         Deva{"devanagari"}
         Dsrt{"deseret"}
-        Ethi{"etiopiskt"}
-        Geor{"georgiskt"}
-        Goth{"gotiskt"}
-        Grek{"grekiskt"}
         Gujr{"gujarati"}
         Guru{"gurmukhi"}
         Hang{"hangul"}
         Hani{"han"}
-        Hano{"hanunoo"}
         Hans{"förenklad han"}
         Hant{"traditionell han"}
-        Hebr{"hebreiskt"}
         Hira{"hiragana"}
-        Ital{"fornitaliskt"}
+        Hrkt{"katakana/hiragana"}
         Kana{"katakana"}
         Khmr{"khmer"}
-        Knda{"kannada"}
-        Laoo{"laotiskt"}
-        Latn{"latinskt"}
         Limb{"limbu"}
-        Linb{"linear B"}
         Mlym{"malayalam"}
-        Mong{"mongoliskt"}
-        Mymr{"myanmar"}
         Ogam{"ogham"}
         Orya{"oriya"}
-        Osma{"osmanskt"}
-        Qaac{"koptiskt"}
-        Runr{"runskrift"}
-        Shaw{"shavian"}
-        Sinh{"sinhala"}
-        Syrc{"syriskt"}
+        Qaai{"ärvd"}
         Tagb{"tagbanwa"}
         Tale{"tai le"}
-        Taml{"tamilskt"}
         Telu{"telugu"}
         Tglg{"tagalog"}
-        Thaa{"thaana"}
-        Thai{"thailändskt"}
-        Tibt{"tibetanskt"}
-        Ugar{"ugaritiskt"}
         Yiii{"yi"}
         Zyyy{"vanligt"}
     }
@@ -2281,11 +2256,10 @@ sv{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
-                "fm",
-                "em",
+                "f.m.",
+                "e.m.",
             }
             DateTimeElements:intvector{
                 2,

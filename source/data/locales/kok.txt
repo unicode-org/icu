@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:7
-// * Source File: \work\locale\common\main\\kok.xml
+// * Source File: ../../../locale/common/main\kok.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\kok.xml
+ */
 kok{
     Countries{
         IN{"भारत"}
@@ -165,7 +167,6 @@ kok{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "म.पू.",

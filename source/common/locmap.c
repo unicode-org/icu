@@ -268,10 +268,11 @@ static const ILcidPosixElement hr[] = {
     {0x141a, "bs_BA"},  /* Bosnian, Bosnia and Herzegovina */
     {0x141a, "bs"},     /* Bosnian */
     {0x041a, "hr_HR"},  /* Croatian*/
-    {0x081a, "sh_YU"},  /* Serbo-Croatian*/
-    {0x081a, "sh"},     /* It's 0x1a or 0x081a, pick one to make the test program happy. */
-    {0x0c1a, "sr_YU"},  /* Serbian*/
-    {0x0c1a, "sr"},     /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
+    {0x081a, "sr_Latn_YU"}, /* Serbo-Croatian*/
+    {0x081a, "sr_Latn"},    /* It's 0x1a or 0x081a, pick one to make the test program happy. */
+    {0x0c1a, "sr_Cyrl_YU"}, /* Serbian*/
+    {0x0c1a, "sr_Cyrl"},    /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
+    {0x0c1a, "sr"},         /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
@@ -451,21 +452,19 @@ ILCID_POSIX_ELEMENT_ARRAY(0x046a, yo, yo_NG)    /* TODO: Verify the country */
 /* TODO: Make the locales with the script the primary locale once the names are implemented in the resources. */
 static const ILcidPosixElement zh[] = {
     {0x04,   "zh"},
-    {0x0804, "zh_CN"},
     {0x0804, "zh_Hans_CN"},
-    {0x0c04, "zh_HK"},
+    {0x0804, "zh_CN"},
     {0x0c04, "zh_Hant_HK"},
-    {0x1404, "zh_MO"},
+    {0x0c04, "zh_HK"},
     {0x1404, "zh_Hant_MO"},
-    {0x1004, "zh_SG"},
+    {0x1404, "zh_MO"},
     {0x1004, "zh_Hans_SG"},
-    {0x0404, "zh_TW"},
+    {0x1004, "zh_SG"},
     {0x0404, "zh_Hant_TW"},
-    {0x30404,"zh_TW"},          /* Bopomofo order */
+    {0x0404, "zh_TW"},
     {0x30404,"zh_Hant_TW"},
-    {0x20404,"zh_TW@collation=STROKE"},
-    {0x20404,"zh_TW_STROKE"},   /* remove? */
-    {0x20404,"zh_Hant_TW_STROKE"}
+    {0x30404,"zh_TW"},          /* Bopomofo order */
+    {0x20404,"zh_TW@collation=STROKE"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)    /* TODO: Verify the country */

@@ -30,7 +30,7 @@ typedef enum UScriptCode {
       USCRIPT_BENGALI      =  4,  /* Beng */
       USCRIPT_BOPOMOFO     =  5,  /* Bopo */
       USCRIPT_CHEROKEE     =  6,  /* Cher */
-      USCRIPT_COPTIC       =  7,  /* Qaac */
+      USCRIPT_COPTIC       =  7,  /* Copt */
       USCRIPT_CYRILLIC     =  8,  /* Cyrl (Cyrs) */
       USCRIPT_DESERET      =  9,  /* Dsrt */
       USCRIPT_DEVANAGARI   = 10,  /* Deva */

@@ -3,8 +3,7 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:44
-// * Source File: \work\locale\common\main\\ar_JO.xml
+// * Source File: ../../../locale/common/main\ar_JO.xml
 // *
 // ***************************************************************************
 ar_JO{
@@ -16,7 +15,6 @@ ar_JO{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             dayNames{
                 format{
@@ -62,12 +60,6 @@ ar_JO{
                         "كانون الأول",
                     }
                 }
-            }
-            weekend:intvector{
-                5,
-                0,
-                7,
-                0,
             }
         }
     }

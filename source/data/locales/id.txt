@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:54
-// * Source File: \work\locale\common\main\\id.xml
+// * Source File: ../../../locale/common/main\id.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\id.xml
+ */
 id{
     Countries{
         AD{"Andora"}
@@ -506,8 +508,11 @@ id{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -561,6 +566,12 @@ id{
                         "Desember",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

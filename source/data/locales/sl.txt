@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:28
-// * Source File: \work\locale\common\main\\sl.xml
+// * Source File: ../../../locale/common/main\sl.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\sl.xml
+ */
 sl{
     Countries{
         AD{"Andora"}
@@ -253,7 +255,7 @@ sl{
     Currencies{
         SIT{
             "SIT",
-            "SIT",
+            "Slovenski tolar",
         }
     }
     ExemplarCharacters{"[a-pr-vzčšž]"}
@@ -308,7 +310,6 @@ sl{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimeElements:intvector{
                 2,

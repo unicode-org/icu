@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:59
-// * Source File: \work\locale\common\main\\el.xml
+// * Source File: ../../../locale/common/main\el.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\el.xml
+ */
 el{
     Countries{
         AD{"Ανδόρα"}
@@ -355,7 +357,6 @@ el{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "ΠΜ",

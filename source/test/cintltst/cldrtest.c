@@ -524,7 +524,7 @@ compareArrays(const char *keyName,
 static void
 compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    UResourceBundle *fromDateTimeElements, *toDateTimeElements, *fromWeekendData, *toWeekendData;
+    UResourceBundle *fromDateTimeElements, *toDateTimeElements, *fromWeekendData = NULL, *toWeekendData = NULL;
     UResourceBundle *fromArray, *toArray;
     UResourceBundle *fromLocaleBund = ures_open(NULL, fromLocale, &errorCode);
     UResourceBundle *toLocaleBund = ures_open(NULL, toLocale, &errorCode);
@@ -548,9 +548,13 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     }
 
     fromWeekendData = ures_getByKeyWithFallback(fromGregorian, "weekend", NULL, &errorCode); 
+    if(U_FAILURE(errorCode)){
+        log_err("Did not get weekend data from the bundle %s to compare against %s\n", fromLocale, toLocale);
+        goto cleanup;
+    }
     toWeekendData = ures_getByKeyWithFallback(toGregorian, "weekend", NULL, &errorCode);
     if(U_FAILURE(errorCode)){
-        log_err("Did not get weekend data from the bundle %s or %s\n", fromLocale, toLocale);
+        log_err("Did not get weekend data from the bundle %s to compare against %s\n", toLocale, fromLocale);
         goto cleanup;
     }
 

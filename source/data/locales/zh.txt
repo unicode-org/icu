@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:41
-// * Source File: \work\locale\common\main\\zh.xml
+// * Source File: ../../../locale/common/main\zh.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\zh.xml
+ */
 zh{
     Countries{
         AD{"安道尔"}
@@ -2223,6 +2225,7 @@ zh{
         Buhd{"布希德语"}
         Cans{"加拿大土著统一符号语"}
         Cher{"切罗基语"}
+        Copt{"克普特语"}
         Cprt{"塞浦路斯语"}
         Cyrl{"西里尔语"}
         Deva{"梵文"}
@@ -2253,7 +2256,6 @@ zh{
         Ogam{"欧甘语"}
         Orya{"奥里亚语"}
         Osma{"奥斯曼亚语"}
-        Qaac{"克普特语"}
         Runr{"北欧语"}
         Shaw{"萧伯纳式语"}
         Sinh{"辛哈拉语"}
@@ -2292,7 +2294,6 @@ zh{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "上午",

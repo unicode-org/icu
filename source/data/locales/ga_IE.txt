@@ -3,8 +3,7 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:50
-// * Source File: \work\locale\common\main\\ga_IE.xml
+// * Source File: ../../../locale/common/main\ga_IE.xml
 // *
 // ***************************************************************************
 ga_IE{
@@ -22,7 +21,6 @@ ga_IE{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",

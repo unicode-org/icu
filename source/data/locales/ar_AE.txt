@@ -3,21 +3,9 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:42
-// * Source File: \work\locale\common\main\\ar_AE.xml
+// * Source File: ../../../locale/common/main\ar_AE.xml
 // *
 // ***************************************************************************
 ar_AE{
     Version{"1.2"}
-    calendar{
-        
-        gregorian{
-            weekend:intvector{
-                5,
-                0,
-                7,
-                0,
-            }
-        }
-    }
 }

@@ -3,8 +3,7 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:21
-// * Source File: \work\locale\common\main\\no_NO.xml
+// * Source File: deprecatedList.xml
 // *
 // ***************************************************************************
 no_NO{

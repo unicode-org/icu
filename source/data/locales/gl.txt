@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:50
-// * Source File: \work\locale\common\main\\gl.xml
+// * Source File: ../../../locale/common/main\gl.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\gl.xml
+ */
 gl{
     Countries{
         ES{"España"}
@@ -45,7 +47,6 @@ gl{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             dayNames{
                 format{
