@@ -74,6 +74,16 @@ UTF32_LittleEndian       utf-32le { MIME }
 UTF32_PlatformEndian     ISO-10646-UCS-4 { IANA } csUCS4 utf-32 { MIME } ucs-4
 UTF32_OppositeEndian
 UTF-7 { IANA MIME }
+# On UTF-7:
+# RFC 2152 (http://www.imc.org/rfc2152) allows to encode some US-ASCII
+# characters directly or in base64. Especially, the characters in set O
+# as defined in the RFC (!"#$%&*;<=>@[]^_`{|}) may be encoded directly but are not
+# allowed in, e.g., email headers.
+# By default, the ICU UTF-7 converter encodes set O directly.
+# By choosing the option "version=1", set O will be escaped instead.
+# For example:
+#     utf7Converter=ucnv_open("UTF-7,version=1");
+
 SCSU { IANA }
 LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
 US-ASCII { MIME }        ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
