@@ -31,6 +31,7 @@
 
 U_NAMESPACE_BEGIN
 
+#if !UCONFIG_NO_SERVICE
 class NumberFormatFactory;
 class StringEnumeration;
 
@@ -38,6 +39,7 @@ class StringEnumeration;
  * @internal
  */
 typedef const void* URegistryKey;
+#endif
 
 /**
  * Abstract base class for all number formats.  Provides interface for

@@ -31,7 +31,8 @@ void CollationServiceTest::runIndexedTest(int32_t index, UBool exec, const char*
 
 void CollationServiceTest::TestRegister() 
 {
-  // register a singleton
+#if !UCONFIG_NO_SERVICE
+    // register a singleton
     const Locale& FR = Locale::getFrance();
     const Locale& FRENCH = Locale::getFrench();
     const Locale& US = Locale::getUS();
@@ -200,10 +201,12 @@ void CollationServiceTest::TestRegister()
         delete ncol; ncol = NULL;
         delete fucol; fucol = NULL;
     }
+#endif
 }
 
 // ------------------
 
+#if !UCONFIG_NO_SERVICE
 struct CollatorInfo {
   Locale locale;
   Collator* collator;
@@ -329,9 +332,11 @@ private:
 };
 
 char TestFactory::gClassID = 0;
+#endif
 
 void CollationServiceTest::TestRegisterFactory(void) 
 {
+#if !UCONFIG_NO_SERVICE
     int32_t n1, n2, n3;
     Locale fu_FU("fu", "FU", "");
     Locale fu_FU_FOO("fu", "FU", "FOO");
@@ -456,6 +461,7 @@ void CollationServiceTest::TestRegisterFactory(void)
     
     delete fucol;
     delete uscol;
+#endif
 }
 
 /**
@@ -512,6 +518,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
  * Check the integrity of the results of Collator::getAvailableLocales().
  * Return the number of items returned.
  */
+#if !UCONFIG_NO_SERVICE
 int32_t CollationServiceTest::checkAvailable(const char* msg) {
     StringEnumeration *iter = Collator::getAvailableLocales();
     if (!assertTrue("getAvailableLocales != NULL", iter!=NULL)) return -1;
@@ -519,6 +526,7 @@ int32_t CollationServiceTest::checkAvailable(const char* msg) {
     delete iter;
     return n;
 }
+#endif
 
 static const char* KW[] = {
     "collation"

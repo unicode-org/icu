@@ -4337,12 +4337,14 @@ static void TestSeparateTrees(void) {
 
     static const char* KWVAL[] = { "phonebook", "stroke" };
 
+#if !UCONFIG_NO_SERVICE
     e = ucol_openAvailableLocales(&ec);
     assertSuccess("ucol_openAvailableLocales", &ec);
     assertTrue("ucol_openAvailableLocales!=0", e!=0);
     n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, LEN(AVAIL));
     /* Don't need to check n because we check list */
     uenum_close(e);
+#endif
 
     e = ucol_getKeywords(&ec);
     assertSuccess("ucol_getKeywords", &ec);

@@ -799,6 +799,7 @@ void RBBIAPITest::TestBug2190() {
 
 
 void RBBIAPITest::TestRegistration() {
+#if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
     BreakIterator* thai_word = BreakIterator::createWordInstance("th_TH", status);
     
@@ -923,6 +924,7 @@ void RBBIAPITest::TestRegistration() {
     delete thai_char;
     delete root_word;
     delete root_char;
+#endif
 }
 
 void RBBIAPITest::RoundtripRule(const char *dataFile) {
