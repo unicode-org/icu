@@ -16,34 +16,36 @@
 
     <target name="with.clover">
         <clover-setup initString="tmp/icu4j.db">
-             <files>
+            <files>
                 <exclude name="**/dev/**/*.java"/>
-             </files>
+            </files>
         </clover-setup>
     </target>
+
     <target name="clover.html" depends="with.clover">
         <clover-report >
             <current outfile="icu4j_html" >
-                 <format type="html" />
+                <format type="html" />
             </current>
-    </clover-report>
+        </clover-report>
     </target>
+
     <target name="clover.log" depends="with.clover">
         <clover-log level="method">
-             <package name="com.ibm.icu.text"/>
-    </clover-log>
+            <package name="com.ibm.icu.text"/>
+        </clover-log>
         <clover-log level="method">
-             <package name="com.ibm.icu.lang"/>
-    </clover-log>
+            <package name="com.ibm.icu.lang"/>
+        </clover-log>
         <clover-log level="method">
-             <package name="com.ibm.icu.math"/>
-    </clover-log>
+            <package name="com.ibm.icu.math"/>
+        </clover-log>
         <clover-log level="method">
-             <package name="com.ibm.icu.util"/>
-    </clover-log>
+            <package name="com.ibm.icu.util"/>
+        </clover-log>
         <clover-log level="method">
-             <package name="com.ibm.icu.impl"/>
-    </clover-log>
+            <package name="com.ibm.icu.impl"/>
+        </clover-log>
     </target>
 
     <!-- ### End Clover 1.2 setup ### -->
@@ -89,12 +91,12 @@
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
         <!-- fix the data folder every time there is a version update-->
-                <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
+        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
 
-            <path id="build.classpath">
-                <pathelement path="${build.dir}"/>
-            </path>
+        <path id="build.classpath">
+            <pathelement path="${build.dir}"/>
+        </path>
 
         <property name="richedit.dir" value="richedit"/>
         <property name="richedit.doc.dir" value="${richedit.dir}/doc"/>
@@ -109,15 +111,14 @@
         <echo message="clover initstring = '${clover.initstring}'"/>
 
         <uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
-                <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-                <srcfiles dir="${build.dir}" includes="${icu4j.data.path}/res_index.res"/>
+            <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+            <srcfiles dir="${build.dir}" includes="${icu4j.data.path}/res_index.res"/>
         </uptodate>
 
         <uptodate property="icu4j.testdata.resources" targetfile="${src.dir}/com/ibm/icu/dev/data">
-                <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-                <srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
+            <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+            <srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
         </uptodate>
-
     </target>
 
     <!-- build everything but dist-related stuff -->
@@ -143,15 +144,15 @@
     </target>
 
 <!--
+    use this target to conditionally build resources only if icu4j.resources is set
     <target name="icu" depends="init" if="icu4j.resources">
-         use this target to conditionally build resources only if icu4j.resources is set
         <unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
     </target>
  -->
 
     <!-- core does not build richedit or tests -->
-    <target name="core" depends="init,coreData,icudata,icudata">
+    <target name="core" depends="init,coreData,icudata">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -159,10 +160,10 @@
             classpathref="build.classpath"
             source="1.4"
             debug="on" deprecation="off"
-        encoding="ascii"/>
+            encoding="ascii"/>
     </target>
 
-    <target name="tests" depends="core,testData,testdata">
+    <target name="tests" depends="core,testData">
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -216,35 +217,34 @@
             bottom="&lt;font size=-1>Copyright (c) 2004 IBM Corporation and others.&lt;/font>"
             additionalparam="${doc.params}"
             link="http://java.sun.com/j2se/1.4/docs/api"
-            source="1.4"
-        />
+            source="1.4"/>
     </target>
 
     <target name ="coreData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                 includes="Transliterator_*.txt,*.icu,*.spp,*.brk"
-                 excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
+            <fileset dir="${src.dir}/com/ibm/icu/impl/data"
+                includes="Transliterator_*.txt,*.icu,*.spp,*.brk"
+                excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
 
     <target name ="testData" depends="init">
         <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
-              todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
+            todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
-              todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+            todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
-                    excludes="**/CVS/**/*"
-                    srcdir="${src.dir}"
-                    destdir="${build.dir}"
-                    classpathref="build.classpath"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
             debug="on" deprecation="off"/>
-         <copy todir="${build.dir}/com/ibm/icu/dev/data">
-              <fileset dir="${src.dir}/com/ibm/icu/dev/data"
-                 includes="*.spp"/>
+        <copy todir="${build.dir}/com/ibm/icu/dev/data">
+            <fileset dir="${src.dir}/com/ibm/icu/dev/data"
+                includes="*.spp"/>
         </copy>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
-              todir="${build.dir}/com/ibm/icu/dev/test/format"/>
+            todir="${build.dir}/com/ibm/icu/dev/test/format"/>
     </target>
 
     <!-- builds richedit and richedit tests -->
@@ -290,7 +290,7 @@
             compress="true"
             basedir="."
             excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"
-          manifest="${icu4j.manifest}"/>
+            manifest="${icu4j.manifest}"/>
     </target>
 
     <target name="jarDocs" depends="docs">
@@ -308,13 +308,12 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/translit/Transliterator.properties"
-              todir="${build.dir}/com/ibm/icu/dev/tool/ime/translit"/>
+            todir="${build.dir}/com/ibm/icu/dev/tool/ime/translit"/>
         <jar jarfile="${ime.translit.jar.file}"
             compress="true"
             basedir="${build.dir}"
             includes="com/ibm/icu/dev/tool/ime/translit/**/*"
             manifest="${ime.translit.manifest}">
-
             <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
         </jar>
     </target>
@@ -327,13 +326,12 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/indic/DisplayNames.properties"
-              todir="${build.dir}/com/ibm/icu/dev/tool/ime/indic"/>
+            todir="${build.dir}/com/ibm/icu/dev/tool/ime/indic"/>
         <jar jarfile="${ime.indic.jar.file}"
             compress="true"
             basedir="${build.dir}"
             includes="com/ibm/icu/dev/tool/ime/indic/**/*"
             manifest="${ime.indic.manifest}">
-
             <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/indic" includes="services/*"/>
         </jar>
     </target>
@@ -347,14 +345,13 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
         <copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
-              <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
+            <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
         </copy>
         <jar jarfile="${ime.jar.file}"
             compress="true"
             basedir="${build.dir}"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/dev/tool/ime/translit/**/*"
             manifest="${ime.translit.manifest}">
-
             <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
         </jar>
     </target>
@@ -388,14 +385,13 @@
             doctitle="RichEdit Control"
             encoding="iso-8859-1"
             docencoding="iso-8859-1"
-            bottom="&lt;font size=-1>Copyright (c) 1998-2002 IBM Corporation and others.&lt;/font>"
-                />
+            bottom="&lt;font size=-1>Copyright (c) 1998-2002 IBM Corporation and others.&lt;/font>"/>
     </target>
 
     <!-- richedit alphaworks distribution - jar and docs, but no source -->
     <target name="richeditZip" depends="richeditJar,richeditDocs">
         <!--Create a zip archive of the richedit jar and readme -->
-    <copy file="license.html" todir="${richedit.dir}"/>
+        <copy file="license.html" todir="${richedit.dir}"/>
         <zip zipfile="${richedit.zip.file}"
             basedir="${richedit.dir}"
             includes="doc/**/*,richedit.jar,license.html"/>
@@ -407,9 +403,9 @@
         <arg value="-w"/>
         <arg value="-n"/>
         <classpath>
-                <pathelement path="${java.class.path}/"/>
-                <pathelement location="clover.jar"/>
-                <pathelement path="${build.dir}"/>
+            <pathelement path="${java.class.path}/"/>
+            <pathelement location="clover.jar"/>
+            <pathelement path="${build.dir}"/>
         </classpath>
     </java>
     </target>
@@ -434,13 +430,13 @@
     <target name="_checktags" depends="anthack1,anthack2,tools" if="version.1.4">
         <echo message="doc params: ${doc.params}"/>
         <javadoc sourcepath="${src.dir}"
-                 packagenames="com.ibm.icu.*"
-                 excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
-                 classpath="${build.dir}"
-                 source="1.4">
+            packagenames="com.ibm.icu.*"
+            excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
+            classpath="${build.dir}"
+            source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
-                    path="${build.dir}">
-                    <param name="-short"/>
+                path="${build.dir}">
+                <param name="-short"/>
             </doclet>
         </javadoc>
     </target>
@@ -449,14 +445,14 @@
 
     <target name="gatherapi" depends="tools" if="version.1.4">
         <javadoc classpath="${build.dir}"
-                 sourcepath="${src.dir}"
-                 packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util"
-                 source="1.4">
+            sourcepath="${src.dir}"
+            packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util"
+            source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
-                    path="${build.dir}">
-                    <param name="-name" value="ICU4J 3.0"/>
-                    <param name="-output" value="${api.dir}/icu4j30.api"/>
-                    <!-- <param name="-gzip"/> -->
+                path="${build.dir}">
+                <param name="-name" value="ICU4J 3.0"/>
+                <param name="-output" value="${api.dir}/icu4j30.api"/>
+                <!-- <param name="-gzip"/> -->
             </doclet>
         </javadoc>
     </target>
@@ -477,7 +473,7 @@
         <delete dir="${build.dir}"/>
         <delete dir="${doc.dir}"/>
         <delete file="${jar.file}"/>
-    <delete dir="${richedit.dir}"/>
+        <delete dir="${richedit.dir}"/>
     </target>
 
     <!--
@@ -485,7 +481,6 @@
      -->
     <target name="copyICUData" depends="init">
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-            
             <patternset>
                 <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
                 <include name="**/unorm.icu"/>
@@ -510,12 +505,13 @@
 
     <target name="copyAllICUData" depends="init">
          <copy todir="${build.dir}/com/ibm/icu/impl/data">
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                          includes="*.icu"/>
+             <fileset dir="${src.dir}/com/ibm/icu/impl/data"
+                 includes="*.icu"/>
          </copy>
          <!-- For basic support names data is not needed -->
          <delete file="${build.dir}/com/ibm/icu/impl/data/unames.icu"/>
     </target>
+
     <target name="moduleJar" depends="init">
         <jar jarfile="${jar.file}"
             compress="true"
@@ -527,21 +523,23 @@
     <!--
          Targets to build only Normalization API and Normalization tests
      -->
+
     <target name="normalizer" depends="init,copyICUData">
         <javac includes="com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/CanonicalIterator.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/UCharacterIterator.java,com/ibm/icu/text/UForwardCharacterIterator.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/lang/**/*"
             excludes="**/CVS/**/*,com/ibm/icu/lang/UScriptRun.java, com/ibm/icu/impl/ICUListResourceBundle.java, com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-        	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
+
     <target name="normalizerTests" depends="normalizer">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/normalizer/**/*.java"
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/normalizer/TestDeprecatedNormalizerAPI.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-        	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -549,16 +547,17 @@
     <!--
             Targets to build only Collation API and Collation tests
      -->
-    <target name="collator" depends="init,icudata,copyAllICUData">
 
+    <target name="collator" depends="init,icudata,copyAllICUData">
          <javac includes="com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/*Collation*.java,com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java, com/ibm/icu/impl/data/*Break*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-         	source="1.4"
+            source="1.4"
             debug="on" deprecation="off"/>
     </target>
+
     <target name="collatorTests" depends="collator">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/collator/**/*.java,com/ibm/icu/dev/test/search/**/*.java"
             excludes="**/CVS/**/*, com/ibm/icu/dev/test/collator/RandomCollator.java"
@@ -571,32 +570,35 @@
     <!--
             Targets to build only Character properties API and tests
      -->
-    <target name="propertiesBasic" depends="init, copyICUPropsData">
 
-         <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java"
+    <target name="propertiesBasic" depends="init, copyICUPropsData">
+        <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-    <target name="propertiesFull" depends="init,icudata, copyICUPropsData">
 
+    <target name="propertiesFull" depends="init, icudata, copyICUData">
          <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
+<!--
             <copy file="${src.dir}/com/ibm/icu/impl/data/unames.icu"
-                  todir="${build.dir}/com/ibm/icu/impl/data/"/>
+                todir="${build.dir}/com/ibm/icu/impl/data/"/>
+-->
             <!-- UScript does not require Collation data, BreakIterator data -->
             <delete>
                 <fileset DIR="${build.dir}/com/ibm/icu/impl/data/" includes="LocaleElements_*__*.class,LocaleElements_*_*_STROKE.class,*.col,*.brk,*.utf8"/>
             </delete>
     </target>
+
     <target name="propertiesTests" depends="propertiesBasic">
         <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/unicode/"/>
@@ -607,19 +609,21 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
+
     <!--
             Targets to build only Compression API API and tests
      -->
-    <target name="compression" depends="init">
 
+    <target name="compression" depends="init">
          <javac includes="com/ibm/icu/text/SCSU.java, com/ibm/icu/text/UnicodeCompressor.java, com/ibm/icu/text/UnicodeDecompressor.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
+
     <target name="compressionTests" depends="compression">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/compression/**/*.java"
             excludes="**/CVS/**/*"
@@ -633,12 +637,11 @@
             Targets to build only Calendar API and Calendar tests
      -->
     <target name="calendar" depends="init,icudata,copyICUData">
-
-         <javac includes="com/ibm/icu/util/*Calendar*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/data/*Calendar*.java,com/ibm/icu/impl/data/*Holiday*.java"
+        <javac includes="com/ibm/icu/util/*Calendar*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/data/*Calendar*.java,com/ibm/icu/impl/data/*Holiday*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
             <!-- Calendar does not require Collation data, BreakIterator data -->
@@ -646,6 +649,7 @@
                 <fileset dir="${build.dir}/com/ibm/icu/impl/data/" includes="LocaleElements_*__*.class,LocaleElements_*_*_STROKE.class,*.col,*.brk,*.utf8"/>
             </delete>
     </target>
+
     <target name="calendarTests" depends="calendar">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/calendar/**/*"
             excludes="**/CVS/**/*"
@@ -658,25 +662,27 @@
     <!--
             Targets to build only Transliterator API and  tests
      -->
+
     <target name="transliterator" depends="init,icudata,propertiesBasic">
-         <javac includes="com/ibm/icu/text/*Transliterator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/text/RuleBasedBreakIterator.java,com/ibm/icu/text/DictionaryBasedBreakIterator.java,com/ibm/icu/impl/LocaleUtility.java,com/ibm/icu/impl/data/BreakIterator*.java,com/ibm/icu/impl/*Property*.java,com/ibm/icu/impl/*Iterator*.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/impl/data/ResourceReader.java,com/ibm/icu/impl/UtilityExtensions.java"
+        <javac includes="com/ibm/icu/text/*Transliterator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/text/RuleBasedBreakIterator.java,com/ibm/icu/text/DictionaryBasedBreakIterator.java,com/ibm/icu/impl/LocaleUtility.java,com/ibm/icu/impl/data/BreakIterator*.java,com/ibm/icu/impl/*Property*.java,com/ibm/icu/impl/*Iterator*.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/impl/data/ResourceReader.java,com/ibm/icu/impl/UtilityExtensions.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/text/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-         <copy todir="${build.dir}/com/ibm/icu/impl/data">
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_*.txt"
-                                excludes="Transliterator_Han_Latin_*.txt"/>
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data/" includes="unames.icu,unorm.icu"/>
-         </copy>
+        <copy todir="${build.dir}/com/ibm/icu/impl/data">
+            <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_*.txt"
+                excludes="Transliterator_Han_Latin_*.txt"/>
+            <fileset dir="${src.dir}/com/ibm/icu/impl/data/" includes="unames.icu,unorm.icu"/>
+        </copy>
 
         <!-- Transliterator does not require Collation data, BreakIterator data -->
         <delete>
             <fileset dir="${build.dir}/com/ibm/icu/impl/data/" includes="*.col,*.brk,*.utf8"/>
         </delete>
     </target>
+
     <target name="transliteratorTests" depends="transliterator">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/translit/**/*"
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/translit/UnicodeFilterLogic*.java"
@@ -689,16 +695,17 @@
     <!--
             Targets to build only Format API
      -->
-    <target name="format" depends="init,icudata,copyAllICUData">
 
-         <javac includes="com/ibm/icu/text/*Format*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/impl/data/CalendarData*.java"
+    <target name="format" depends="init,icudata,copyAllICUData">
+        <javac includes="com/ibm/icu/text/*Format*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/impl/data/CalendarData*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
+
     <target name="formatTests" depends="format">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/format/**/*"
             excludes="**/CVS/**/*"
@@ -711,13 +718,13 @@
     <!--
             Targets to build only BreakIterator API
      -->
-    <target name="breakIterator" depends="init,icudata,copyICUPropsData">
 
+    <target name="breakIterator" depends="init,icudata,copyICUPropsData">
          <javac includes="com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/lang/**/*,com/ibm/icu/impl/UCharacterName.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/text/UnicodeSetIterator.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-         	source="1.4"
+            source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
             <!-- BreakIterator does not require collation data so delete it -->
@@ -725,6 +732,7 @@
                 <fileset dir="${build.dir}/com/ibm/icu/impl/data/" includes="*.col,*.utf8"/>
             </delete>
     </target>
+
     <target name="breakIteratorTests" depends="breakIterator">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/rbbi/**/*"
             excludes="**/CVS/**/*"
@@ -732,8 +740,8 @@
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-        <copy file="${src.dir}/com/ibm/icu/dev/data/th18057.txt"
-            todir="${build.dir}/com/ibm/icu/dev/data/"/>
+            <copy file="${src.dir}/com/ibm/icu/dev/data/th18057.txt"
+                todir="${build.dir}/com/ibm/icu/dev/data/"/>
     </target>
 
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
@@ -742,14 +750,16 @@
               <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
+
     <!-- Target for builing XLIFF2ICUConverter Jar -->
+
     <target name="xliff" depends="init">
         <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-         <jar jarfile="xliff.jar"
+        <jar jarfile="xliff.jar"
             compress="true"
             includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator*.class"
             basedir="${build.dir}"
