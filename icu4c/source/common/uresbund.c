@@ -1736,6 +1736,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
 U_CAPI UResourceBundle*  U_EXPORT2
 ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     UResourceBundle *r;
+    UErrorCode subStatus = U_ZERO_ERROR;
 
     if(status == NULL || U_FAILURE(*status)) {
         return NULL;
@@ -1751,12 +1752,13 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     r->fIsTopLevel = TRUE;
     ures_setIsStackObject(r, FALSE);
     r->fIndex = -1;
-    r->fData = entryOpen(path, localeID, status);
-    if(U_FAILURE(*status)) {
+    r->fData = entryOpen(path, localeID, &subStatus);
+    if(U_FAILURE(subStatus)) {
+        *status = subStatus;
         uprv_free(r);
         return NULL;
     }
-    if(*status != U_ZERO_ERROR /*r->fData->fBogus != U_ZERO_ERROR*/) {
+    if(subStatus != U_ZERO_ERROR /*r->fData->fBogus != U_ZERO_ERROR*/) {
       /* we didn't find one we were looking for - so openDirect */
       /* should fail */
         entryClose(r->fData);
@@ -2256,8 +2258,8 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 U_CAPI UEnumeration* U_EXPORT2
 ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
 {
-#define VALUES_BUF_SIZE 1024
-#define VALUES_LIST_SIZE 256
+#define VALUES_BUF_SIZE 2048
+#define VALUES_LIST_SIZE 512
     
     char       valuesBuf[VALUES_BUF_SIZE];
     int32_t    valuesIndex = 0;
