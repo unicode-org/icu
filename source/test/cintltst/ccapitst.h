@@ -19,5 +19,6 @@
 #include "unicode/utypes.h"
 
 static void TestConvert(void);
+static void TestAlias(void);
 
 #endif
