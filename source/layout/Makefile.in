@@ -50,6 +50,7 @@ ThaiShaping.o \
 ThaiStateTables.o \
 ArabicLayoutEngine.o \
 GXLayoutEngine.o \
+HanLayoutEngine.o \
 IndicLayoutEngine.o \
 LayoutEngine.o \
 ContextualGlyphSubstProc.o \
