@@ -256,6 +256,10 @@ SOURCE=.\uhash.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\uhash_us.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uloc.c
 # End Source File
 # Begin Source File

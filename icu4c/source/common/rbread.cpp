@@ -262,7 +262,8 @@ rb_parse(FileStream *f,
   if(U_FAILURE(status)) return 0;
 
   /* Open the hashtable for saving data */
-  retval = uhash_open((UHashFunction)uhash_hashUString, &status);
+  retval = uhash_open((UHashFunction)uhash_OLD_hashUString,
+                      uhash_OLD_pointerComparator, &status);
   if(retval == 0 || U_FAILURE(status)) {
     status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -306,7 +307,7 @@ rb_parse(FileStream *f,
           uhash_close(retval);
           return 0;
       }
-      uhash_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
+      uhash_OLD_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
 		   strlist, &status);
       if(U_FAILURE(status)) {
 	uhash_close(retval);
@@ -316,7 +317,7 @@ rb_parse(FileStream *f,
 
     case sSTRINGLIST2D:
       strlist2d = read_strlist2d(f, listname, status);
-      uhash_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
+      uhash_OLD_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
 		   strlist2d, &status);
       if(U_FAILURE(status)) {
 	uhash_close(retval);
@@ -326,7 +327,7 @@ rb_parse(FileStream *f,
 
     case sTAGGEDLIST:
       taglist = read_taglist(f, listname, status);
-      uhash_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
+      uhash_OLD_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
 		   taglist, &status);
       if(U_FAILURE(status)) {
 	uhash_close(retval);
