@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/11/08 01:20:24 $ 
- * $Revision: 1.35 $
+ * $Date: 2002/11/26 18:31:56 $ 
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -447,6 +447,61 @@ public class UnicodeSetTest extends TestFmwk {
         } else {
             errln("FAIL: bitsToSet(setToBits(c)) = " + c + ", expect " + exp);
         } 
+
+        // Additional tests for coverage JB#2118
+        //UnicodeSet::complement(class UnicodeString const &)
+        //UnicodeSet::complementAll(class UnicodeString const &)
+        //UnicodeSet::containsNone(class UnicodeSet const &)
+        //UnicodeSet::containsNone(long,long)
+        //UnicodeSet::containsSome(class UnicodeSet const &)
+        //UnicodeSet::containsSome(long,long)
+        //UnicodeSet::removeAll(class UnicodeString const &)
+        //UnicodeSet::retain(long)
+        //UnicodeSet::retainAll(class UnicodeString const &)
+        //UnicodeSet::serialize(unsigned short *,long,enum UErrorCode &)
+        //UnicodeSetIterator::getString(void)
+        set.clear();
+        set.complement("ab");
+        exp.applyPattern("[{ab}]");
+        if (!set.equals(exp)) { errln("FAIL: complement(\"ab\")"); return; }
+
+        UnicodeSetIterator iset = new UnicodeSetIterator(set);
+        if (!iset.next() || iset.codepoint != UnicodeSetIterator.IS_STRING) {
+            errln("FAIL: UnicodeSetIterator.next/IS_STRING");
+        } else if (!iset.string.equals("ab")) {
+            errln("FAIL: UnicodeSetIterator.string");
+        }
+
+        set.add((char)0x61, (char)0x7A);
+        set.complementAll("alan");
+        exp.applyPattern("[{ab}b-kmo-z]");
+        if (!set.equals(exp)) { errln("FAIL: complementAll(\"alan\")"); return; }
+
+        exp.applyPattern("[a-z]");
+        if (set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+        exp.applyPattern("[aln]");
+        if (!set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+
+        if (set.containsNone((char)0x61, (char)0x7A)) {
+            errln("FAIL: containsNone(char, char)");
+            return;
+        }
+        if (!set.containsNone((char)0x41, (char)0x5A)) {
+            errln("FAIL: containsNone(char, char)");
+            return;
+        }
+
+        set.removeAll("liu");
+        exp.applyPattern("[{ab}b-hj-kmo-tv-z]");
+        if (!set.equals(exp)) { errln("FAIL: removeAll(\"liu\")"); return; }
+
+        set.retainAll("star");
+        exp.applyPattern("[rst]");
+        if (!set.equals(exp)) { errln("FAIL: retainAll(\"star\")"); return; }
+
+        set.retain((char)0x73);
+        exp.applyPattern("[s]");
+        if (!set.equals(exp)) { errln("FAIL: retain('s')"); return; }
     }
     
     public void TestStrings() {
