@@ -1605,7 +1605,6 @@ static void TestComposeDecompose(void) {
     ucol_close(coll);
 
     log_verbose("Testing locales, number of cases = %i\n", noCases);
-    iter = ucol_openElements(coll, t[u]->NFD, u_strlen(t[u]->NFD), &status);
     for(i = 0; i<noOfLoc; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
@@ -1622,6 +1621,7 @@ static void TestComposeDecompose(void) {
 
             coll = ucol_open(locName, &status);
             ucol_setStrength(coll, UCOL_IDENTICAL);
+            iter = ucol_openElements(coll, t[u]->NFD, u_strlen(t[u]->NFD), &status);
 
             for(u=0; u<(UChar32)noCases; u++) {
               if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
@@ -1635,6 +1635,7 @@ static void TestComposeDecompose(void) {
                   backAndForth(iter);
               }
             }
+            ucol_closeElements(iter);
             ucol_close(coll);
         }
     }
@@ -1642,7 +1643,6 @@ static void TestComposeDecompose(void) {
         free(t[u]);
     }
     free(t);
-    ucol_closeElements(iter);
 }
 
 static void TestEmptyRule(void) {
