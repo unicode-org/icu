@@ -297,13 +297,15 @@ private:
             RULES_REVERSE,
             PROTOTYPE,
             RBT_DATA,
+            COMPOUND_RBT,
             ALIAS,
             FACTORY,
             NONE // Only used for uninitialized entries
         } entryType;
         // NOTE: stringArg cannot go inside the union because
         // it has a copy constructor
-        UnicodeString stringArg; // For RULES_*, ALIAS
+        UnicodeString stringArg; // For RULES_*, ALIAS, COMPOUND_RBT
+        int32_t intArg; // For COMPOUND_RBT
         union {
             Transliterator* prototype; // For PROTOTYPE
             TransliterationRuleData* data; // For RBT_DATA
@@ -371,6 +373,39 @@ protected:
      * Assignment operator.
      */
     Transliterator& operator=(const Transliterator&);
+    
+    /**
+     * Internal factory method.
+     */
+    static Transliterator* createInstance(const UnicodeString& ID,
+                                          UTransDirection dir,
+                                          int32_t idSplitPoint,
+                                          Transliterator *adoptedSplitTrans,
+                                          UParseError* parseError,
+                                          UErrorCode& status);
+    
+    /**
+     * Internal parsing method.
+     */
+    static void parseCompoundID(const UnicodeString& ID,
+                                UTransDirection dir,
+                                int32_t idSplitPoint,
+                                Transliterator *adoptedSplitTrans,
+                                UVector& result,
+                                int32_t& splitTransIndex,
+                                UParseError* parseError,
+                                UErrorCode& status);
+    /**
+     * Internal parsing method for subclasses.
+     */
+    static Transliterator* parseID(const UnicodeString& ID,
+                                   int32_t& pos,
+                                   UBool& sawDelimiter,
+                                   UTransDirection dir,
+                                   UParseError* parseError,
+                                   UBool create);
+
+    friend class TransliteratorParser; // for parseID()
 
 public:
 
@@ -721,6 +756,32 @@ public:
     static Transliterator* createInstance(const UnicodeString& ID,
                                           UTransDirection dir = UTRANS_FORWARD,
                                           UParseError* parseError = 0);
+
+    /**
+     * Returns a <code>Transliterator</code> object constructed from
+     * the given rule string.  This will be a RuleBasedTransliterator,
+     * if the rule string contains only rules, or a
+     * CompoundTransliterator, if it contains ID blocks, or a
+     * NullTransliterator, if it contains ID blocks which parse as
+     * empty for the given direction.
+     */
+    static Transliterator* createFromRules(const UnicodeString& ID,
+                                           const UnicodeString& rules,
+                                           UTransDirection dir = UTRANS_FORWARD,
+                                           UParseError* parseError = 0);
+
+    /**
+     * Create a rule string that can be passed to createFromRules()
+     * to recreate this transliterator.
+     * @param result the string to receive the rules.  Previous
+     * contents will be deleted.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \uxxxx or
+     * \Uxxxxxxxx.  Unprintable characters are those other than
+     * U+000A, U+0020..U+007E.
+     */
+    virtual UnicodeString& toRules(UnicodeString& result,
+                                   UBool escapeUnprintable) const;
 
 private:
 
