@@ -327,7 +327,7 @@ class RuleBasedTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      * @internal
      */
-    protected void handleTransliterate(Replaceable text,
+    protected synchronized void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
         /* We keep start and limit fixed the entire time,
          * relative to the text -- limit may move numerically if text is
