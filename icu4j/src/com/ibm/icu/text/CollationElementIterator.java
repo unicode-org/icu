@@ -6,53 +6,77 @@ import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 
 /**
- * <p>The <code>CollationElementIterator</code> class is used as an iterator
- * to walk through each character of an international string. Use the iterator
- * to return the ordering priority of the positioned character. The ordering
- * priority of a character, which we refer to as a key, defines how a 
- * character is collated in the given collation object.</p>
- * <p>For example, consider the following in Spanish:
+ * <p>
+ * The <code>CollationElementIterator</code> object is an iterator created
+ * by a RuleBasedCollator to walk through an international string. The return
+ * result of each iteration is a 32 bit collation element that defines the 
+ * ordering priority of the next sequence of characters in the source string. 
+ * </p>
+ * <p>For better illustration, consider the following in Spanish:
  * <blockquote>
  * <pre>
- * "ca" -> the first key is key('c') and second key is key('a').
- * "cha" -> the first key is key('ch') and second key is key('a').
+ * "ca" -> the first collation element is collation_element('c') and second 
+ *         collation element is collation_element('a').
+ * 
+ * Since "ch" in Spanish sorts as one entity, the below example returns one
+ * collation element for the 2 characters 'c' and 'h'
+ * 
+ * "cha" -> the first collation element is collation_element('ch') and second 
+ *          collation element is collation_element('a').
  * </pre>
  * </blockquote>
  * And in German,
  * <blockquote>
  * <pre>
- * "\u00e4b"-> the first key is key('a'), the second key is key('e'), and
- * the third key is key('b').
+ * Since the character '&#230;' is a composed character of 'a' and 'e', the
+ * below example returns 2 collation elements for the single character 
+ * '&#230;'
+ * 
+ * "&#230;b" -> the first collation element is collation_element('a'), the 
+ *              second collation element is collation_element('e'), and the 
+ *              third collation element is collation_element('b').
  * </pre>
  * </blockquote>
  * </p>
- * <p>The key of a character is an integer composed of primary order(short),
- * secondary order(byte), and tertiary order(byte). Java strictly defines
- * the size and signedness of its primitive data types. Therefore, the static
- * functions <code>primaryOrder</code>, <code>secondaryOrder</code>, and
- * <code>tertiaryOrder</code> return <code>int</code>, <code>short</code>,
- * and <code>short</code> respectively to ensure the correctness of the key
- * value.</p>
  * <p>
- * Example of the iterator usage,
+ * For collation ordering comparison, the collation element results can not be 
+ * compared simply by using basic arithmetric operators, e.g. &lt;, == or &gt;, 
+ * further processing has to be done. Details can be found in the ICU
+ * <a href=http://oss.software.ibm.com/icu/userguide/Collate_ServiceArchitecture.html>
+ * user guide</a>. An example of using the CollationElementIterator for
+ * collation ordering comparison is the class <a href=StringSearch.html>
+ * com.ibm.icu.text.StringSearch</a>.
+ * </p>
+ * <p>
+ * To construct a CollationElementIterator object, users would have to call the 
+ * factory method getCollationElementIterator() in a RuleBasedCollator object
+ * that defines the sorting order that is desired.
+ * </p>
+ * <p>
+ * Example:
  * <blockquote>
  * <pre>
  *  String testString = "This is a test";
- *  RuleBasedCollator ruleBasedCollator = (RuleBasedCollator)Collator.getInstance();
- *  CollationElementIterator collationElementIterator = ruleBasedCollator.getCollationElementIterator(testString);
- *  int primaryOrder = CollationElementIterator.primaryOrder(collationElementIterator.next());
+ *  RuleBasedCollator rbc = new RuleBasedCollator("&amp;a&lt;b");
+ *  CollationElementIterator collationElementIterator = rbc.getCollationElementIterator(testString);
+ *  int primaryOrder = CollationElementIterator.IGNORABLE;
+ *  while (primaryOrder != CollationElementIterator.NULLORDER) {
+ *      int order = collationElementIterator.next();
+ *      if (order != CollationElementIterator.IGNORABLE &&
+ *          order != CollationElementIterator.NULLORDER) {
+ *          // order is valid, not ignorable and we have not passed the end
+ *          // of the iteration, we do something
+ *          primaryOrder = CollationElementIterator.primaryOrder(order);
+ *          System.out.println("Next primary order 0x" + Integer.toHexString(primaryOrder));
+ *      }
+ *  }
  * </pre>
  * </blockquote>
  * </p>
  * <p>
- * <code>CollationElementIterator.next</code> returns the collation order
- * of the next character. A collation order consists of primary order,
- * secondary order and tertiary order. The data type of the collation
- * order is <strong>int</strong>. The first 16 bits of a collation order
- * is its primary order; the next 8 bits is the secondary order and the
- * last 8 bits is the tertiary order.</p>
- * @see                Collator
- * @see                RuleBasedCollator
+ * @see Collator
+ * @see RuleBasedCollator
+ * @see StringSearch
  * @author Syn Wee Quek
  * @since release 2.2, April 18 2002
  * @draft 2.2
@@ -62,12 +86,22 @@ public final class CollationElementIterator
 	// public data members --------------------------------------------------
 	
     /**
-     * Null order which indicates the end of string is reached
+     * <p>This constant is returned by the iterator in the methods next() and
+     * previous() when the end or the beginning of the source string has been
+     * reached, and there are no more valid collation elements to return.</p>
+     * <p>See class documentation for an example of use.</p>
      * @draft 2.2
+     * @see #next
+     * @see #previous
      */
     public final static int NULLORDER = 0xffffffff;
     /**
-     * Ignorable collation element order.
+     * <p>This constant is returned by the iterator in the methods next() and
+     * previous() when a collation element result is to be ignored.</p>
+     * <p>See class documentation for an example of use.</p>
+     * @draft 2.2
+     * @see #next
+     * @see #previous
      */
     public static final int IGNORABLE = 0;
 
@@ -76,24 +110,25 @@ public final class CollationElementIterator
 	// public getters -------------------------------------------------------
 	
 	/**
-     * <p>Returns the character offset in the original text corresponding to 
-     * the next collation element. (That is, getOffset() returns the position 
-     * in the text corresponding to the collation element that will be 
-     * returned by the next call to next().) This value could be either
+     * <p>Returns the character offset in the source string corresponding to 
+     * the next collation element. i.e. getOffset() returns the position 
+     * in source string corresponding to the collation element that will be 
+     * returned by the next call to next(). This value could be either
      * <ul>
-     * <li>index of the <b>first</b> character corresponding to the next
+     * <li> Index of the <b>first</b> character corresponding to the next
      * collation element. This means that if <code>setOffset(offset)</code> 
      * sets the index in the middle of a contraction, <code>getOffset()</code>
      * returns the index of the first character in the contraction, which
-     * may not be equals to offset.
-     * <li>if normalization is on, <code>getOffset()</code> may return the 
+     * may not be equals to the original offset that was set. Hence calling
+     * getOffset() immediately after setOffset(offset) does not guarantee that
+     * the original offset set will be returned.
+     * <li> If normalization is on, <code>getOffset()</code> may return the 
      * index of the <b>immediate</b> subsequent character, or composite 
      * character with the first character, having a combining class of 0.
+     * <li> the length of the source string if iteration has reached the end.
      * </ul>
      * </p>
-     * <p>Note calling getOffset() immediately after setOffset(offset) may not
-     * return the value offset.</p>
-     * @return The character offset in the original text corresponding to the 
+     * @return The character offset in the source string corresponding to the 
      *         collation element that will be returned by the next call to 
      *         next().
      * @draft 2.2
@@ -111,8 +146,11 @@ public final class CollationElementIterator
 
 
     /**
-     * Return the maximum length of any expansion sequences that end with the 
-     * specified collation element.
+     * <p>
+     * Returns the maximum length of any expansion sequence that ends with 
+     * the argument collation element ce. If there is no expansion with the 
+     * argument ce as the last element, 1 is returned.
+     * </p>
      * @param ce a collation element returned by previous() or next().
      * @return the maximum length of any expansion sequences ending
      *         with the specified collation element.
@@ -122,9 +160,11 @@ public final class CollationElementIterator
     {
         int start = 0;                                  
   		int limit = m_collator_.m_expansionEndCE_.length;
+  		long unsignedce = ce & 0xFFFFFFFFl;
   		while (start < limit - 1) {
     		int mid = start + ((limit - start) >> 1);              
-    		if (ce <= m_collator_.m_expansionEndCE_[mid]) {              
+    		long midce = m_collator_.m_expansionEndCE_[mid] & 0xFFFFFFFFl;
+    		if (unsignedce <= midce) {              
       			limit = mid;                                              
     		}                                                             
     		else {                                                        
@@ -135,7 +175,8 @@ public final class CollationElementIterator
   		if (m_collator_.m_expansionEndCE_[start] == ce) {
     		result = m_collator_.m_expansionEndCEMaxSize_[start];
   		}                                                                
-  		else if (m_collator_.m_expansionEndCE_[limit] == ce) {           
+  		else if (limit < m_collator_.m_expansionEndCE_.length &&
+  		         m_collator_.m_expansionEndCE_[limit] == ce) {           
          	result = m_collator_.m_expansionEndCEMaxSize_[limit]; 
        	}                                  
        	else if ((ce & 0xFFFF) == 0x00C0) {
@@ -147,34 +188,49 @@ public final class CollationElementIterator
 	// public other methods -------------------------------------------------
 	
 	/**
-     * <p>Resets the cursor to the beginning of the string. The next call
-     * to next() will return the first collation element in the string.</p>
+     * <p>
+     * Resets the cursor to the beginning of the string. The next call
+     * to next() and previous will return the first and last collation element 
+     * in the string respectively. 
+     * </p>
+     * <p> 
+     * If the RuleBasedCollator used in this iterator has its attributes 
+     * changed, calling reset() will reinitialize the iterator to use the new
+     * RuleBasedCollator attributes.
+     * </p>
      * @draft 2.2
      */
-    public synchronized void reset()
+    public void reset()
     {
-    	m_source_.setIndex(0);
+    	m_source_.setIndex(m_source_.getBeginIndex());
     	updateInternalState();
     }
 
     /**
-     * <p>Get the next collation element in the string.</p>  
-     * <p>This iterator iterates over a sequence of collation elements that 
-     * were built from the string. Because there isn't necessarily a 
-     * one-to-one mapping from characters to collation elements, this doesn't 
-     * mean the same thing as "return the collation element [or ordering 
-     * priority] of the next character in the string".</p>
-     * <p>This function returns the collation element that the iterator is 
+     * <p>
+     * Get the next collation element in the source string.
+     * </p>  
+     * <p>
+     * This iterator iterates over a sequence of collation elements that were 
+     * built from the string. Because there isn't necessarily a one-to-one 
+     * mapping from characters to collation elements, this doesn't mean the 
+     * same thing as "return the collation element [or ordering priority] of 
+     * the next character in the string".
+     * </p>
+     * <p>
+     * This function returns the collation element that the iterator is 
      * currently pointing to and then updates the internal pointer to point to 
      * the next element. previous() updates the pointer first and then 
      * returns the element. This means that when you change direction while 
      * iterating (i.e., call next() and then call previous(), or call 
      * previous() and then call next()), you'll get back the same element 
-     * twice.</p>
-     * @return the next collation element 
+     * twice.
+     * </p>
+     * @return the next collation element or NULLORDER if the end of the 
+     *         iteration has been reached.
      * @draft 2.2
      */
-    public synchronized int next()
+    public int next()
     {
     	m_isForwards_ = true;
         if (m_CEBufferSize_ > 0) { 
@@ -230,24 +286,30 @@ public final class CollationElementIterator
     }
 
     /**
-     * <p>Get the previous collation element in the string.</p>  
-     * <p>This iterator iterates over a sequence of collation elements that 
+     * <p>
+     * Get the previous collation element in the source string.
+     * </p>  
+     * <p>
+     * This iterator iterates over a sequence of collation elements that 
      * were built from the string. Because there isn't necessarily a 
      * one-to-one mapping from characters to collation elements, this doesn't 
      * mean the same thing as "return the collation element [or ordering 
-     * priority] of the previous character in the string".</p>
-     * <p>This function updates the iterator's internal pointer to point to 
+     * priority] of the previous character in the string".
+     * </p>
+     * <p>
+     * This function updates the iterator's internal pointer to point to 
      * the collation element preceding the one it's currently pointing to and 
      * then returns that element, while next() returns the current element and 
      * then updates the pointer. This means that when you change direction 
      * while iterating (i.e., call next() and then call previous(), or call 
      * previous() and then call next()), you'll get back the same element 
-     * twice.</p>
+     * twice.
+     * </p>
      * @return the previous collation element, or NULLORDER when the start of 
-     * 			the iteration has been reached.
+     * 		   the iteration has been reached.
      * @draft 2.2
      */
-    public synchronized int previous()
+    public int previous()
     {
     	if (m_source_.getIndex() <= 0 && m_isForwards_) {
     		// if iterator is new or reset, we can immediate perform  backwards
@@ -317,50 +379,66 @@ public final class CollationElementIterator
     }
 
     /**
-     * Return the primary strength of a collation element.
+     * Return the primary order of a collation element ce.
+     * i.e. the first 16 bits of the argument ce.
      * @param ce the collation element
-     * @return the element's primary strength
+     * @return the element's 16 bits primary order.
      * @draft 2.2
      */
     public final static int primaryOrder(int ce)
     {
-        return (ce & RuleBasedCollator.CE_PRIMARY_MASK_) >> CE_PRIMARY_SHIFT_;
+        return (ce & RuleBasedCollator.CE_PRIMARY_MASK_) 
+                >>> RuleBasedCollator.CE_PRIMARY_SHIFT_;
     }
     /**
-     * Return the secondary strength of a collation element.
+     * Return the secondary order of a collation element ce.
+     * i.e. the 16th to 27th inclusive set of bits in the argument ce.
      * @param ce the collation element
-     * @return the element's secondary strength
+     * @return the element's 8 bits secondary order
      * @draft 2.2
      */
-    public final static short secondaryOrder(int ce)
+    public final static int secondaryOrder(int ce)
     {
-        return (short)((ce & RuleBasedCollator.CE_SECONDARY_MASK_) 
-        											>> CE_SECONDARY_SHIFT_);
+        return (ce & RuleBasedCollator.CE_SECONDARY_MASK_) 
+               >> RuleBasedCollator.CE_SECONDARY_SHIFT_;
     }
     
     /**
-     * Return the tertiary strength of a collation element.
-     * @param colelem the collation element
-     * @return the element's tertiary strength
+     * Return the tertiary order of a collation element ce. i.e. the last
+     * 8 bits in the argument ce.
+     * @param ce the collation element
+     * @return the element's 8 bits tertiary order
      * @draft 2.2
      */
-    public final static short tertiaryOrder(int ce)
+    public final static int tertiaryOrder(int ce)
     {
-        return (short)(ce & RuleBasedCollator.CE_TERTIARY_MASK_);
+        return ce & RuleBasedCollator.CE_TERTIARY_MASK_;
     }
 
     /**
-     * <p>Sets the iterator to point to the collation element corresponding to
-     * the specified character (the parameter is a CHARACTER offset in the
-     * original string, not an offset into its corresponding sequence of
-     * collation elements). The value returned by the next call to next()
-     * will be the collation element corresponding to the specified position
-     * in the text. If that position is in the middle of a contracting
-     * character sequence, the result of the next call to next() is the
-     * collation element for that sequence. This means that getOffset()
-     * is not guaranteed to return the same value as was passed to a preceding
-     * call to setOffset().</p>
-     * @param offset new character offset into the original text to set. 
+     * <p>
+     * Sets the iterator to point to the collation element corresponding to
+     * the specified character argument offset. The value returned by the next 
+     * call to next() will be the collation element corresponding to the 
+     * characters at argument offset. 
+     * </p>
+     * <p>
+     * If argument offset is in the middle of a contracting character sequence, 
+     * the iterator is adjusted to the start of the contracting sequence. This 
+     * means that getOffset() is not guaranteed to return the same value as 
+     * the argument offset.
+     * </p>
+     * <p>
+     * If the decomposition mode is on and argument offset is in the middle of 
+     * a decomposible range of source text, the iterator may not render a 
+     * correct result for 
+     * the next forwards or backwards iteration. User has to ensure that the
+     * argument offset does not violate the mid of a decomposible range in
+     * source text.
+     * </p>
+     * @param offset character offset into the original source string to 
+     *        set. Note this argument is not an offset into the corresponding 
+     *        sequence of collation elements
      * @draft 2.2
      */
     public void setOffset(int offset)
@@ -388,7 +466,7 @@ public final class CollationElementIterator
     			}
     			updateInternalState();
     			int prevoffset = 0;
-    			while (m_source_.getIndex() < offset) {
+    			while (m_source_.getIndex() <= offset) {
     				prevoffset = m_source_.getIndex();
     				next();
     			}	
@@ -399,59 +477,36 @@ public final class CollationElementIterator
     }
 
     /**
-     * <p>Set a new string over which to iterate.</p>
-     * <p>Iteration will start from the start of source.</p>
-     * @param source the new source text.
+     * <p>
+     * Sets a new source string for iteration and restart the iteration to
+     * start from the beginning of the argument source.
+     * </p>
+     * @param source the new source string for iteration.
      * @draft 2.2
      */
-    public synchronized void setText(String source)
+    public void setText(String source)
     {
     	m_source_ = new StringCharacterIterator(source);
     	updateInternalState();
     }
 
     /**
-     * <p>Set a new string iterator over which to iterate.</p>
-     * <p>Iteration will start from the start of source.</p>
-     * @param source the new source text.
+     * <p>
+     * Sets a new source string iterator for iteration and restart the 
+     * iteration to start from the beginning of the argument source.
+     * </p>
+     * @param source the new source string iterator for iteration.
      * @draft 2.2
      */
-    public synchronized void setText(CharacterIterator source)
+    public void setText(CharacterIterator source)
     {
 		m_source_ = source;    	
-		m_source_.setIndex(0);
+		m_source_.setIndex(m_source_.getBeginIndex());
 		updateInternalState();
     }
     
     // public miscellaneous methods -----------------------------------------
     
-	// protected data members -----------------------------------------------
-	
-	/**
-  	 * true if current codepoint was Hiragana
-  	 */
-  	protected boolean m_isCodePointHiragana_;
-  	/**
-  	 * Position in the original string that starts with a non-FCD sequence
-  	 */
-  	protected int m_FCDStart_;
-  	/** 
-	 * This is the CE from CEs buffer that should be returned. 
-	 * Initial value is 0.
-	 * Forwards iteration will end with m_CEBufferOffset_ == m_CEBufferSize_,
-	 * backwards will end with m_CEBufferOffset_ == 0.
-	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
-	 * will cause this value to be reset to 0.
-	 */
-  	protected int m_CEBufferOffset_;
-  	/** 
-  	 * This is the position to which we have stored processed CEs.
-  	 * Initial value is 0.
-  	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
-	 * will cause this value to be reset to 0.
-  	 */
-  	protected int m_CEBufferSize_; 
-  	
 	// protected constructors -----------------------------------------------
 	
 	/**
@@ -493,29 +548,95 @@ public final class CollationElementIterator
     	updateInternalState();
     }
     
-    // protected methods ----------------------------------------------------
+    // package private data members -----------------------------------------
+	
+	/**
+  	 * true if current codepoint was Hiragana
+  	 */
+  	boolean m_isCodePointHiragana_;
+  	/**
+  	 * Position in the original string that starts with a non-FCD sequence
+  	 */
+  	int m_FCDStart_;
+  	/** 
+	 * This is the CE from CEs buffer that should be returned. 
+	 * Initial value is 0.
+	 * Forwards iteration will end with m_CEBufferOffset_ == m_CEBufferSize_,
+	 * backwards will end with m_CEBufferOffset_ == 0.
+	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
+	 * will cause this value to be reset to 0.
+	 */
+  	int m_CEBufferOffset_;
+  	/** 
+  	 * This is the position to which we have stored processed CEs.
+  	 * Initial value is 0.
+  	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
+	 * will cause this value to be reset to 0.
+  	 */
+  	int m_CEBufferSize_; 
     
-    /**
-     * Checks if iterator is in the buffer zone
-     * @return true if iterator is in buffer zone, false otherwise
-     */
-    protected boolean isInBuffer()
-    {
-    	return m_bufferOffset_ != -1;
-    }
+    // package private methods ----------------------------------------------
     
     /**
      * Sets the collator used.
      * Internal use, all data members will be reset to the default values
      * @param collator to set
      */
-    protected void setCollator(RuleBasedCollator collator) 
+    void setCollator(RuleBasedCollator collator) 
     {
     	m_collator_ = collator;
     	updateInternalState();
     }
     
-    // private data members -------------------------------------------------
+    /**
+     * <p>Sets the iterator to point to the collation element corresponding to
+     * the specified character (the parameter is a CHARACTER offset in the
+     * original string, not an offset into its corresponding sequence of
+     * collation elements). The value returned by the next call to next()
+     * will be the collation element corresponding to the specified position
+     * in the text. Unlike the public method setOffset(int), this method does 
+     * not try to readjust the offset to the start of a contracting sequence.
+     * getOffset() is guaranteed to return the same value as was passed to a 
+     * preceding call to setOffset().</p>
+     * @param offset new character offset into the original text to set. 
+     * @draft 2.2
+     */
+    void setExactOffset(int offset)
+    {  
+	    m_source_.setIndex(offset);
+	    updateInternalState();
+    }
+    
+    /**
+     * Checks if iterator is in the buffer zone
+     * @return true if iterator is in buffer zone, false otherwise
+     */
+    boolean isInBuffer()
+    {
+    	return m_bufferOffset_ != -1;
+    }
+    
+    /**
+ 	 * Determine if a character is a Thai vowel, which sorts after its base 
+ 	 * consonant.
+ 	 * @param ch character to test
+ 	 * @return true if ch is a Thai prevowel, false otherwise
+ 	 */
+	static final boolean isThaiPreVowel(char ch)
+	{ 
+		return (ch >= 0xe40 && ch <= 0xe44) || (ch >= 0xec0 && ch <= 0xec4);
+	}
+
+	/**
+ 	 * Determine if a character is a Thai base consonant, which sorts before 
+ 	 * its prevowel
+ 	 * @param ch character to test
+ 	 * @return true if ch is a Thai base consonant, false otherwise
+ 	 */
+	static final boolean isThaiBaseConsonant(char ch)
+	{
+		return ch >= 0xe01 && ch <= 0xe2e;
+	}
     
     // private inner class --------------------------------------------------
     
@@ -675,8 +796,6 @@ public final class CollationElementIterator
     private static final int CE_LONG_PRIMARY_TAG_ = 12; 
     private static final int CE_CE_TAGS_COUNT = 13;
    	private static final int CE_BYTE_COMMON_ = 0x05;
-   	private static final int CE_PRIMARY_SHIFT_ = 16;
-   	private static final int CE_SECONDARY_SHIFT_ = 8;
    	
 	// end special ce values and tags ---------------------------------------
 	
@@ -773,21 +892,19 @@ public final class CollationElementIterator
 	 * Source offsets points to the current processing character.
 	 * </p>
 	 */
-	private void normalize()
+	private void normalize() 
 	{
-		/* synwee todo normalize to 1 before fcd
-		try {
-			decompose(m_buffer_, m_source_, m_FCDStart_, m_FCDLimit_,
-    	          	  m_collator_.m_decomposition_);
-		} 
-		catch (ArrayOutOfBoundsException e) {
-			// increase the size of the buffer
-			m_buffer_ = new char[m_buffer_.length << 1];
-        	decompose(m_buffer_, m_source_, m_FCDStart_, m_FCDLimit_,
-    	          	  m_collator_.m_decomposition_);
-    	}
-		*/
-    	m_bufferOffset_ = 0;
+		int size = m_FCDLimit_ - m_FCDStart_;
+		m_buffer_.delete(0, m_buffer_.length());
+		m_source_.setIndex(m_FCDStart_);
+		for (int i = 0; i < size; i ++) {
+			m_buffer_.append(m_source_.current());
+			m_source_.next();
+		}
+		String decomp = Normalizer.decompose(m_buffer_.toString(), false);
+		m_buffer_.delete(0, m_buffer_.length());
+		m_buffer_.append(decomp);
+		m_bufferOffset_ = 0;
 	}
 	
 	/** 
@@ -811,24 +928,22 @@ public final class CollationElementIterator
 	{
     	boolean result = true;
 
-    	// srcP = collationSource->pos-1;
-    	
-		// Get the trailing combining class of the current character.  
+    	// Get the trailing combining class of the current character.  
 		// If it's zero, we are OK.
     	m_FCDStart_ = offset;
     	m_source_.setIndex(offset);
     	// trie access
-    	char fcd = 0; // synwee todo: unorm_getFCD16(ch);
+    	char fcd = NormalizerImpl.getFCD16(ch);
     	if (fcd != 0 && UTF16.isLeadSurrogate(ch)) {
     		ch = m_source_.next(); // CharacterIterator.DONE has 0 fcd
             if (UTF16.isTrailSurrogate(ch)) {
-               	fcd = 0xFFFF; // unorm_getFCD16FromSurrogatePair(fcd, ch);
+               	fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, ch);
             } else {
                	fcd = 0;
             }
         }
 
-        byte prevTrailCC = (byte)(fcd & LAST_BYTE_MASK_);
+        int prevTrailCC = fcd & LAST_BYTE_MASK_;
 
         if (prevTrailCC != 0) {
         	// The current char has a non-zero trailing CC. Scan forward until 
@@ -839,16 +954,16 @@ public final class CollationElementIterator
             		break;
             	}
                 // trie access
-                fcd = 0; // unorm_getFCD16(ch);
+                fcd = NormalizerImpl.getFCD16(ch);
                 if (fcd != 0 && UTF16.isLeadSurrogate(ch)) {
                 	ch = m_source_.next();
                     if (UTF16.isTrailSurrogate(ch)) {
-                        fcd = 0xFFFF; // unorm_getFCD16FromSurrogatePair(fcd, ch);
+                        fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, ch);
                     } else {
                         fcd = 0;
                     }
                 }
-                byte leadCC = (byte)(fcd >> SECOND_LAST_BYTE_SHIFT_);
+                int leadCC = fcd >>> SECOND_LAST_BYTE_SHIFT_;
                 if (leadCC == 0) {
                 	// this is a base character, we stop the FCD checks
                     break;
@@ -858,12 +973,12 @@ public final class CollationElementIterator
                     result = false;
                 }
 
-                prevTrailCC = (byte)(fcd & LAST_BYTE_MASK_);
+                prevTrailCC = fcd & LAST_BYTE_MASK_;
             }
         }
+        m_FCDLimit_ = m_source_.getIndex();
         m_source_.setIndex(m_FCDStart_);
         m_source_.next();
-        m_FCDLimit_ = m_source_.getIndex();
     	return result;
 	}
 	
@@ -885,8 +1000,7 @@ public final class CollationElementIterator
 	    }
 		else {
 	        // we are in the buffer, buffer offset will never be 0 here
-	        result = m_buffer_.charAt(m_bufferOffset_ ++);
-	        if (result == 0) {
+	        if (m_bufferOffset_ >= m_buffer_.length()) {
 	            // Null marked end of buffer, revert to the source string and
 	            // loop back to top to try again to get a character.
 	            m_source_.setIndex(m_FCDLimit_);
@@ -894,10 +1008,10 @@ public final class CollationElementIterator
 	            m_buffer_.delete(0, m_buffer_.length());
 	            return nextChar();
 	        }
-	        return result;
+	        return m_buffer_.charAt(m_bufferOffset_ ++);
 		}
 	
-	    if (m_collator_.m_decomposition_ == Collator.NO_DECOMPOSITION 
+	    if (m_collator_.getDecomposition() == Collator.NO_DECOMPOSITION 
 	        || m_bufferOffset_ != -1 || m_FCDLimit_ > startoffset
 	        // skip the fcd checks
 	  		|| result < FULL_ZERO_COMBINING_CLASS_FAST_LIMIT_  
@@ -934,20 +1048,10 @@ public final class CollationElementIterator
 	* the buffer.
 	* Source offsets points to the current processing character.</p>
 	*/
-	public void normalizeBackwards()
+	private void normalizeBackwards()
 	{
-	    int start = m_FCDStart_;
-		int size = 0;
-	    /* synwee todo normalize including fcd
-	    try {
-	    	size = decompose(m_buffer_, m_source_, start, m_FCDLimit_);
-		}
-		catch (ArrayOutOfBoundsException .) {
-	    	m_buffer_ = new char[m_buffer_.length << 1];
-	    	size = decompose(m_buffer_, m_source_, start, m_FCDLimit);
-	    }
-	    */
-	    m_bufferOffset_ = size - 1;
+	    normalize();
+	    m_bufferOffset_ = m_buffer_.length();
 	}
 
 	/**
@@ -972,18 +1076,20 @@ public final class CollationElementIterator
 	{
 	    boolean result = true;    
 	    char fcd = 0; 
-	    m_FCDLimit_ = offset;
+	    m_FCDLimit_ = offset + 1;
 	    m_source_.setIndex(offset);
 	    if (!UTF16.isSurrogate(ch)) {
-	        fcd = 0; // synwee todo unorm_getFCD16(fcdTrieIndex, c);
+	        fcd = NormalizerImpl.getFCD16(ch);
 	    } 
 	    else if (UTF16.isTrailSurrogate(ch) && m_FCDLimit_ > 0) { 
 	    	// note trail surrogate characters gets 0 fcd
+	    	char trailch = ch;
 	    	ch = m_source_.previous();  
 	       	if (UTF16.isLeadSurrogate(ch)) {
-	        	fcd = 0; // unorm_getFCD16(fcdTrieIndex, c2);
+	        	fcd = NormalizerImpl.getFCD16(ch);
 	        	if (fcd != 0) {
-	            	fcd = 0; // unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c);
+	            	fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, 
+	            													trailch);
 	        	}
 	    	} 
 	    	else {
@@ -991,44 +1097,47 @@ public final class CollationElementIterator
 	    	}
 	    }
 	
-	    byte leadCC = (byte)(fcd >> SECOND_LAST_BYTE_SHIFT_);
-	    if (leadCC != 0) {
-	        // The current char has a non-zero leading combining class.
-	        // Scan backward until we find a char with a trailing cc of zero.
-	        while (true) {
-	            if (m_source_.getIndex() == 0) {
-	                break;
-	            }
+	    int leadCC = fcd >>> SECOND_LAST_BYTE_SHIFT_;
+	    // The current char has a non-zero leading combining class.
+	    // Scan backward until we find a char with a trailing cc of zero.
+        
+	    while (leadCC != 0) {
+            offset = m_source_.getIndex();
+            if (offset == 0) {
+	            break;
+	        }
+	        ch = m_source_.previous();
+	        if (!UTF16.isSurrogate(ch)) {
+	            fcd = NormalizerImpl.getFCD16(ch);
+	        } 
+	        else if (UTF16.isTrailSurrogate(ch) && m_source_.getIndex() > 0) {
+	            char trail = ch;
 	            ch = m_source_.previous();
-	            if (!UTF16.isSurrogate(ch)) {
-	                fcd = 0; //unorm_getFCD16(fcdTrieIndex, c);
-	            } 
-	            else {
-	            	if (UTF16.isTrailSurrogate(ch) && m_source_.getIndex() > 0) 
-	            	{
-	            		ch = m_source_.previous();
-	            	    if (UTF16.isLeadSurrogate(ch)) {
-	                		fcd = 0; // unorm_getFCD16(fcdTrieIndex, c2);
-	            	    }
-	            		if (fcd != 0) {
-	                   		fcd = 0; // unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c);
-	                	}
-	            	} else {
-	                	fcd = 0; // unpaired surrogate
-	            	}
-	            	byte prevTrailCC = (byte)(fcd & LAST_BYTE_MASK_);
-	            	if (prevTrailCC == 0) {
-	                	break;
-	            	}
-	
-	            	if (leadCC < prevTrailCC) {
-	                	result = false;
-	            	}
-	            	leadCC = (byte)(fcd >> SECOND_LAST_BYTE_SHIFT_);
-	        	}
-	    	}
+	            if (UTF16.isLeadSurrogate(ch)) {
+	                fcd = NormalizerImpl.getFCD16(ch);
+	            }
+	            if (fcd != 0) {
+	                fcd = NormalizerImpl.getFCD16FromSurrogatePair(fcd, trail);
+	            }
+            }
+            else {
+	            fcd = 0; // unpaired surrogate
+	        }
+	        int prevTrailCC = fcd & LAST_BYTE_MASK_;
+	        if (leadCC < prevTrailCC) {
+	            result = false;
+	        }
+	        leadCC = fcd >>> SECOND_LAST_BYTE_SHIFT_;
 	    }
-	    m_FCDStart_ = m_source_.getIndex(); // character with 0 lead/trail fcd
+	
+        // storing character with 0 lead fcd or the 1st accent with a base 
+        // character before it   
+        if (fcd == 0) {
+            m_FCDStart_ = offset;
+        }
+        else {
+            m_FCDStart_ = m_source_.getIndex();
+        } 
 	    m_source_.setIndex(m_FCDLimit_);
 	    return result;
 	}
@@ -1062,7 +1171,7 @@ public final class CollationElementIterator
 		char result = m_source_.previous();
 		int startoffset = m_source_.getIndex();
 	    if (result < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_ 
-	        || m_collator_.m_decomposition_ == Collator.NO_DECOMPOSITION 
+	        || m_collator_.getDecomposition() == Collator.NO_DECOMPOSITION 
 	        || m_FCDStart_ <= startoffset || m_source_.getIndex() == 0) {
 	        return result;
 	    }
@@ -1073,7 +1182,7 @@ public final class CollationElementIterator
 	        return result;
 	    }
 	    // Need a more complete FCD check and possible normalization.
-	    if (!FCDCheckBackwards(ch, startoffset)) {
+	    if (!FCDCheckBackwards(result, startoffset)) {
 	        normalizeBackwards();
 	        m_bufferOffset_ --;
 	        result = m_buffer_.charAt(m_bufferOffset_);
@@ -1085,52 +1194,17 @@ public final class CollationElementIterator
 	 * Determines if it is at the start of source iteration
 	 * @return true if iterator at the start, false otherwise
 	 */
-	private boolean isBackwardsStart() 
+	private final boolean isBackwardsStart() 
 	{
     	return (m_bufferOffset_ < 0 && m_source_.getIndex() == 0)
     	        || (m_bufferOffset_ == 0 && m_FCDStart_ <= 0);
 	}
 	
 	/**
- 	 * Determine if a character is a Thai vowel, which sorts after its base 
- 	 * consonant.
- 	 * @param ch character to test
- 	 * @return true if ch is a Thai prevowel, false otherwise
- 	 */
-	private boolean isThaiPreVowel(char ch)
-	{ 
-		return (ch >= 0xe40 && ch <= 0xe44) || (ch >= 0xec0 && ch <= 0xec4);
-	}
-
-	/**
- 	 * Determine if a character is a Thai base consonant, which sorts before 
- 	 * its prevowel
- 	 * @param ch character to test
- 	 * @return true if ch is a Thai base consonant, false otherwise
- 	 */
-	private boolean isThaiBaseConsonant(char ch)
-	{
-		return ch >= 0xe01 && ch <= 0xe2e;
-	}
-	
-	
-	/**
- 	 * Determine if a character is a Jamo
- 	 * @param ch character to test
- 	 * @return true if ch is a Jamo, false otherwise
- 	 */
-	private boolean isJamo(char ch)
-	{ 
-		return (ch - 0x1100 <= 0x1112 - 0x1100) 
-		       || (ch - 0x1161 <= 0x1175 - 0x1161) 
-		       || (ch - 0x11A8 <= 0x11C2 - 0x11A8);
-	}
-	
-	/**
 	 * Checks if iterator is at the end of its source string.
 	 * @return true if it is at the end, false otherwise
 	 */
-	private boolean isEnd() 
+	private final boolean isEnd() 
 	{
     	if (m_bufferOffset_ >= 0) {
     		if (m_bufferOffset_ != m_buffer_.length()) {
@@ -1155,7 +1229,8 @@ public final class CollationElementIterator
 	 * @param trail character
 	 * @return next CE for the surrogate characters
 	 */
-	private int nextSurrogate(RuleBasedCollator collator, int ce, char trail)
+	private final int nextSurrogate(RuleBasedCollator collator, int ce, 
+	                                char trail)
 	{
 		if (!UTF16.isTrailSurrogate(trail)) {
 	        updateInternalState(m_backup_);
@@ -1188,7 +1263,7 @@ public final class CollationElementIterator
 	 * @param ch current character
 	 * @return next CE for Thai characters
 	 */
-	private int nextThai(RuleBasedCollator collator, int ce, char ch) 
+	private int nextThai(RuleBasedCollator collator, int ce, char ch)
 	{
 		if (m_bufferOffset_ != -1 // already swapped
 		    || isEnd() || !isThaiBaseConsonant(m_source_.current())) {
@@ -1430,6 +1505,7 @@ public final class CollationElementIterator
 	 * @param collator collator to use
 	 * @param ce current ce
 	 * @param entrybackup entry backup iterator status
+	 * @return ce of the next contraction
 	 */
 	private int nextContraction(RuleBasedCollator collator, int ce)
 	{
@@ -1895,7 +1971,7 @@ public final class CollationElementIterator
 	        return collator.m_contractionCE_[entryoffset];
 	    }
 	    StringBuffer buffer = new StringBuffer();
-	    while (collator.isUnsafe(ch)) {
+	    while (collator.isUnsafe(ch) || isThaiBaseConsonant(ch)) {
 	        buffer.insert(0, ch);
 	        ch = previousChar();
 	        if (isBackwardsStart()) {
