@@ -8,6 +8,11 @@
 #ifndef __SINGLETABLEPROCESSOR_H
 #define __SINGLETABLEPROCESSOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"

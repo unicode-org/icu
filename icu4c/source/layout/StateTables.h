@@ -8,6 +8,11 @@
 #ifndef __STATETABLES_H
 #define __STATETABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LayoutTables.h"
 

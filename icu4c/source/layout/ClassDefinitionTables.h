@@ -8,6 +8,11 @@
 #ifndef __CLASSDEFINITIONTABLES_H
 #define __CLASSDEFINITIONTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 

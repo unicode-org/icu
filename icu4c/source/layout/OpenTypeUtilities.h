@@ -8,6 +8,11 @@
 #ifndef __OPENTYPEUTILITIES_H
 #define __OPENTYPEUTILITIES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 

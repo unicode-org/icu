@@ -8,6 +8,11 @@
 #ifndef __SCRIPTANDLANGUAGE_H
 #define __SCRIPTANDLANGUAGE_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 

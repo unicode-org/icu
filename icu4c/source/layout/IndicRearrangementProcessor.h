@@ -8,6 +8,11 @@
 #ifndef __INDICREARRANGEMENTPROCESSOR_H
 #define __INDICREARRANGEMENTPROCESSOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"

@@ -2,13 +2,18 @@
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.h,v $
- * $Date: 2003/01/04 02:52:23 $
- * $Revision: 1.6 $
+ * $Date: 2003/01/13 23:15:10 $
+ * $Revision: 1.7 $
  *
  */
 
 #ifndef __INDICREORDERING_H
 #define __INDICREORDERING_H
+
+/**
+ * \file
+ * \internal
+ */
 
 #include "LETypes.h"
 #include "OpenTypeTables.h"
