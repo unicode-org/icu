@@ -214,7 +214,7 @@ public class UnicodeSetIterator {
      * @internal
      */
     public String getString() {
-        if (codepoint == IS_STRING) {
+        if (codepoint != IS_STRING) {
             return UTF16.valueOf(codepoint);
         }
         return string;
