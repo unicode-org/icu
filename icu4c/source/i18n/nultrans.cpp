@@ -20,7 +20,7 @@ int32_t NullTransliterator::transliterate(Replaceable&, int32_t,
     return limit;
 }
 
-void NullTransliterator::handleTransliterate(Replaceable&,
-                                             int32_t offsets[3]) const {
-    offsets[CURSOR] = offsets[LIMIT];
+void NullTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+                                             bool_t isIncremental) const {
+    offsets.cursor = offsets.limit;
 }

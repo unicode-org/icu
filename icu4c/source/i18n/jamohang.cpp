@@ -51,19 +51,16 @@ Transliterator* JamoHangulTransliterator::clone(void) const {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void JamoHangulTransliterator::handleTransliterate(Replaceable& text,
-                                                   int32_t offsets[3]) const {
+void JamoHangulTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+                                                   bool_t isIncremental) const {
     /**
      * Performs transliteration changing Jamo to Hangul 
      */
-    int32_t cursor = offsets[CURSOR];
-    int32_t limit = offsets[LIMIT];
+    int32_t cursor = offsets.cursor;
+    int32_t limit = offsets.limit;
     if (cursor >= limit) return;
 
     int32_t count;
-    if (limit - cursor > 1) {
-        count = 5; // debugging spot
-    }
 
     UChar last = filteredCharAt(text, cursor++);
     UnicodeString str("a", 1);
@@ -84,8 +81,8 @@ void JamoHangulTransliterator::handleTransliterate(Replaceable& text,
         }
     }
 
-    offsets[LIMIT] = limit + 1;
-    offsets[CURSOR] = cursor;
+    offsets.limit = limit + 1;
+    offsets.cursor = cursor;
 }
 
 // These constants are from the Unicode book's algorithm.

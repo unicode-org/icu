@@ -302,7 +302,7 @@ void TransliteratorTest::TestKeyboard3(void) {
 void TransliteratorTest::keyboardAux(const Transliterator& t,
                                      const char* DATA[], int32_t DATA_length) {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t index[3] = {0, 0, 0};
+    Transliterator::Position index = {0, 0, 0};
     UnicodeString s;
     for (int32_t i=0; i<DATA_length; i+=2) {
         UnicodeString log;
@@ -317,11 +317,9 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
         }
         // Show the start index '{' and the cursor '|'
         UnicodeString a, b, c;
-        s.extractBetween(0, index[Transliterator::START], a);
-        s.extractBetween(index[Transliterator::START],
-                           index[Transliterator::CURSOR], b);
-        s.extractBetween(index[Transliterator::CURSOR],
-                           s.length(), c);
+        s.extractBetween(0, index.start, a);
+        s.extractBetween(index.start, index.cursor, b);
+        s.extractBetween(index.cursor, s.length(), c);
         log.append(a).
             append('{').
             append(b).
@@ -436,13 +434,12 @@ void TransliteratorTest::TestFiltering(void) {
     }
     hex->adoptFilter(new TestFilter());
     UnicodeString s("abcde");
-    UnicodeString out;
-    hex->transliterate(s, out);
+    hex->transliterate(s);
     UnicodeString exp("\\u0061\\u0062c\\u0064\\u0065");
-    if (out == exp) {
+    if (s == exp) {
         logln(UnicodeString("Ok:   \"") + exp + "\"");
     } else {
-        logln(UnicodeString("FAIL: \"") + out + "\", wanted \"" + exp + "\"");
+        logln(UnicodeString("FAIL: \"") + s + "\", wanted \"" + exp + "\"");
     }
     delete hex;
 }
@@ -498,8 +495,8 @@ void TransliteratorTest::expect(const Transliterator& t,
 void TransliteratorTest::expect(const Transliterator& t,
                                 const UnicodeString& source,
                                 const UnicodeString& expectedResult) {
-    UnicodeString result;
-    t.transliterate(source, result);
+    UnicodeString result(source);
+    t.transliterate(result);
     expectAux(t.getID() + ":String", source, result, expectedResult);
 
     UnicodeString rsource(source);
@@ -509,7 +506,7 @@ void TransliteratorTest::expect(const Transliterator& t,
     // Test keyboard (incremental) transliteration -- this result
     // must be the same after we finalize (see below).
     rsource.remove();
-    int32_t index[3] = { 0, 0, 0 };
+    Transliterator::Position index = { 0, 0, 0 };
     UnicodeString log;
 
     for (int32_t i=0; i<source.length(); ++i) {
@@ -522,8 +519,8 @@ void TransliteratorTest::expect(const Transliterator& t,
         // Append the string buffer with a vertical bar '|' where
         // the committed index is.
         UnicodeString left, right;
-        rsource.extractBetween(0, index[Transliterator::CURSOR], left);
-        rsource.extractBetween(index[Transliterator::CURSOR], rsource.length(), right);
+        rsource.extractBetween(0, index.cursor, left);
+        rsource.extractBetween(index.cursor, rsource.length(), right);
         log.append(left).append((UChar)'|').append(right);
     }
     

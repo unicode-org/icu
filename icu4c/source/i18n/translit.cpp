@@ -154,44 +154,9 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
  */
 int32_t Transliterator::transliterate(Replaceable& text,
                                       int32_t start, int32_t limit) const {
-    int32_t offsets[3] = { start, limit, start };
-    handleTransliterate(text, offsets);
-    return offsets[LIMIT];
-}
-
-/**
- * Transliterates the segment of a string that begins at the character
- * at offset <code>start</code> and extends to the character at offset
- * <code>limit - 1</code>.  A default implementation is provided here;
- * subclasses should provide a more efficient implementation if
- * possible.
- * @param text the string to be transliterated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param result buffer to receive the transliterated text; previous
- * contents are discarded
- */
-void Transliterator::transliterate(const UnicodeString& text,
-                                   int32_t start, int32_t limit,
-                                   UnicodeString& result) const {
-    /* This is a default implementation that should be replaced by
-     * a more efficient subclass implementation if possible.
-     */
-    text.extractBetween(start, limit, result);
-    transliterate(result);
-}
-
-/**
- * Transliterates an entire string. Convenience method.
- * @param text the string to be transliterated
- * @param result buffer to receive the transliterated text; previous
- * contents are discarded
- */
-void Transliterator::transliterate(const UnicodeString& text,
-                                   UnicodeString& result) const {
-    transliterate(text, 0, text.length(), result);
+    Position offsets = { start, limit, start };
+    handleTransliterate(text, offsets, FALSE);
+    return offsets.limit;
 }
 
 /**
@@ -207,25 +172,25 @@ void Transliterator::transliterate(Replaceable& text) const {
  * transliterated unambiguosly after new text has been inserted,
  * typically as a result of a keyboard event.  The new text in
  * <code>insertion</code> will be inserted into <code>text</code>
- * at <code>index[LIMIT]</code>, advancing
- * <code>index[LIMIT]</code> by <code>insertion.length()</code>.
+ * at <code>index.limit</code>, advancing
+ * <code>index.limit</code> by <code>insertion.length()</code>.
  * Then the transliterator will try to transliterate characters of
- * <code>text</code> between <code>index[CURSOR]</code> and
- * <code>index[LIMIT]</code>.  Characters before
- * <code>index[CURSOR]</code> will not be changed.
+ * <code>text</code> between <code>index.cursor</code> and
+ * <code>index.limit</code>.  Characters before
+ * <code>index.cursor</code> will not be changed.
  *
- * <p>Upon return, values in <code>index[]</code> will be updated.
- * <code>index[START]</code> will be advanced to the first
+ * <p>Upon return, values in <code>index</code> will be updated.
+ * <code>index.start</code> will be advanced to the first
  * character that future calls to this method will read.
- * <code>index[CURSOR]</code> and <code>index[LIMIT]</code> will
+ * <code>index.cursor</code> and <code>index.limit</code> will
  * be adjusted to delimit the range of text that future calls to
  * this method may change.
  *
  * <p>Typical usage of this method begins with an initial call
- * with <code>index[START]</code> and <code>index[LIMIT]</code>
+ * with <code>index.start</code> and <code>index.limit</code>
  * set to indicate the portion of <code>text</code> to be
- * transliterated, and <code>index[CURSOR] == index[START]</code>.
- * Thereafter, <code>index[]</code> can be used without
+ * transliterated, and <code>index.cursor == index.start</code>.
+ * Thereafter, <code>index</code> can be used without
  * modification in future calls, provided that all changes to
  * <code>text</code> are made via this method.
  *
@@ -241,33 +206,33 @@ void Transliterator::transliterate(Replaceable& text) const {
  * @param text the buffer holding transliterated and untransliterated text
  * @param index an array of three integers.
  *
- * <ul><li><code>index[START]</code>: the beginning index,
- * inclusive; <code>0 <= index[START] <= index[LIMIT]</code>.
+ * <ul><li><code>index.start</code>: the beginning index,
+ * inclusive; <code>0 <= index.start <= index.limit</code>.
  *
- * <li><code>index[LIMIT]</code>: the ending index, exclusive;
- * <code>index[START] <= index[LIMIT] <= text.length()</code>.
+ * <li><code>index.limit</code>: the ending index, exclusive;
+ * <code>index.start <= index.limit <= text.length()</code>.
  * <code>insertion</code> is inserted at
- * <code>index[LIMIT]</code>.
+ * <code>index.limit</code>.
  *
- * <li><code>index[CURSOR]</code>: the next character to be
- * considered for transliteration; <code>index[START] <=
- * index[CURSOR] <= index[LIMIT]</code>.  Characters before
- * <code>index[CURSOR]</code> will not be changed by future calls
+ * <li><code>index.cursor</code>: the next character to be
+ * considered for transliteration; <code>index.start <=
+ * index.cursor <= index.limit</code>.  Characters before
+ * <code>index.cursor</code> will not be changed by future calls
  * to this method.</ul>
  *
  * @param insertion text to be inserted and possibly
  * transliterated into the translation buffer at
- * <code>index[LIMIT]</code>.  If <code>null</code> then no text
+ * <code>index.limit</code>.  If <code>null</code> then no text
  * is inserted.
  * @see #START
  * @see #LIMIT
  * @see #CURSOR
  * @see #handleTransliterate
- * @exception IllegalArgumentException if <code>index[]</code>
+ * @exception IllegalArgumentException if <code>index</code>
  * is invalid
  */
 void Transliterator::transliterate(Replaceable& text,
-                                   int32_t index[3],
+                                   Position& index,
                                    const UnicodeString& insertion,
                                    UErrorCode &status) const {
     _transliterate(text, index, &insertion, status);
@@ -285,11 +250,11 @@ void Transliterator::transliterate(Replaceable& text,
  * #transliterate(Replaceable, int[], String)}.
  * @param insertion text to be inserted and possibly
  * transliterated into the translation buffer at
- * <code>index[LIMIT]</code>.
+ * <code>index.limit</code>.
  * @see #transliterate(Replaceable, int[], String)
  */
 void Transliterator::transliterate(Replaceable& text,
-                                   int32_t index[3],
+                                   Position& index,
                                    UChar insertion,
                                    UErrorCode& status) const {
     UnicodeString str(insertion);
@@ -308,7 +273,7 @@ void Transliterator::transliterate(Replaceable& text,
  * @see #transliterate(Replaceable, int[], String)
  */
 void Transliterator::transliterate(Replaceable& text,
-                                   int32_t index[3],
+                                   Position& index,
                                    UErrorCode& status) const {
     _transliterate(text, index, 0, status);
 }
@@ -324,8 +289,8 @@ void Transliterator::transliterate(Replaceable& text,
  * #transliterate}
  */
 void Transliterator::finishTransliteration(Replaceable& text,
-                                           int32_t index[3]) const {
-    transliterate(text, index[START], index[LIMIT]);
+                                           Position& index) const {
+    transliterate(text, index.start, index.limit);
 }
 
 /**
@@ -336,30 +301,30 @@ void Transliterator::finishTransliteration(Replaceable& text,
  * work.
  */
 void Transliterator::_transliterate(Replaceable& text,
-                                    int32_t index[3],
+                                    Position& index,
                                     const UnicodeString* insertion,
                                     UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return;
     }
 
-    if (index[START] < 0 ||
-        index[LIMIT] > text.length() ||
-        index[CURSOR] < index[START] ||
-        index[CURSOR] > index[LIMIT]) {
+    if (index.start < 0 ||
+        index.limit > text.length() ||
+        index.cursor < index.start ||
+        index.cursor > index.limit) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    int32_t originalStart = index[START];
+    int32_t originalStart = index.start;
     if (insertion != 0) {
-        text.handleReplaceBetween(index[LIMIT], index[LIMIT], *insertion);
-        index[LIMIT] += insertion->length();
+        text.handleReplaceBetween(index.limit, index.limit, *insertion);
+        index.limit += insertion->length();
     }
 
-    handleTransliterate(text, index);
+    handleTransliterate(text, index, TRUE);
 
-    index[START] = uprv_max(index[CURSOR] - getMaximumContextLength(),
+    index.start = uprv_max(index.cursor - getMaximumContextLength(),
                            originalStart);
 }
 

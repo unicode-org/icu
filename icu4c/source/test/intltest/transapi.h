@@ -17,6 +17,7 @@
 #define TRANSAPI_H
 
 #include "unicode/utypes.h"
+#include "unicode/translit.h"
 #include "intltest.h"
 
 class Transliterator;
@@ -59,7 +60,8 @@ public:
 
 	void keyboardAux(Transliterator*, UnicodeString[] , UnicodeString&, int32_t, int32_t);
      
-    void displayOutput(const UnicodeString&, const UnicodeString&, UnicodeString&, int32_t[]);
+    void displayOutput(const UnicodeString&, const UnicodeString&, UnicodeString&,
+                       Transliterator::Position&);
 
 };
 

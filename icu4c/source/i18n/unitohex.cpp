@@ -115,15 +115,15 @@ void UnicodeToHexTransliterator::setUppercase(bool_t outputUppercase) {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text,
-                                                     int32_t offsets[3]) const {
+void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+                                                     bool_t isIncremental) const {
     /**
      * Performs transliteration changing all characters to
      * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
      * assuming the prefix is "U+". 
      */
-    int32_t cursor = offsets[CURSOR];
-    int32_t limit = offsets[LIMIT];
+    int32_t cursor = offsets.cursor;
+    int32_t limit = offsets.limit;
 
     const UnicodeFilter* filter = getFilter();
     UnicodeString hex;
@@ -142,8 +142,8 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text,
         limit += len;
     }
 
-    offsets[LIMIT] = limit;
-    offsets[CURSOR] = cursor;
+    offsets.limit = limit;
+    offsets.cursor = cursor;
 }
 
 UChar UnicodeToHexTransliterator::HEX_DIGITS[32] = {

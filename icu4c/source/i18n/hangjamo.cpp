@@ -62,10 +62,10 @@ Transliterator* HangulJamoTransliterator::clone(void) const {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void HangulJamoTransliterator::handleTransliterate(Replaceable& text,
-                                                   int32_t offsets[3]) const {
-    int32_t cursor = offsets[CURSOR];
-    int32_t limit = offsets[LIMIT];
+void HangulJamoTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+                                                   bool_t isIncremental) const {
+    int32_t cursor = offsets.cursor;
+    int32_t limit = offsets.limit;
 
     UnicodeString replacement;
     while (cursor < limit) {
@@ -79,8 +79,8 @@ void HangulJamoTransliterator::handleTransliterate(Replaceable& text,
         }
     }
 
-    offsets[LIMIT] = limit;
-    offsets[CURSOR] = cursor;
+    offsets.limit = limit;
+    offsets.cursor = cursor;
 }
 
 bool_t HangulJamoTransliterator::decomposeHangul(UChar s, UnicodeString& result) {

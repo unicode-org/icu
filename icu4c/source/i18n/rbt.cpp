@@ -73,84 +73,6 @@ RuleBasedTransliterator::clone(void) const {
  * <= limit</code>.
  * @param limit the ending index, exclusive; <code>start <= limit
  * <= text.length()</code>.
- * @param result buffer to receive the transliterated text; previous
- * contents are discarded
- */
-void RuleBasedTransliterator::transliterate(const UnicodeString& text,
-                                            int32_t start, int32_t limit,
-                                            UnicodeString& result) const {
-    /* In the following loop there is a virtual buffer consisting of the
-     * text transliterated so far followed by the untransliterated text.  There is
-     * also a cursor, which may be in the already transliterated buffer or just
-     * before the untransliterated text.
-     *
-     * Example: rules 1. ab>x|y
-     *                2. yc>z
-     *
-     * []|eabcd  start - no match, copy e to tranlated buffer
-     * [e]|abcd  match rule 1 - copy output & adjust cursor
-     * [ex|y]cd  match rule 2 - copy output & adjust cursor
-     * [exz]|d   no match, copy d to transliterated buffer
-     * [exzd]|   done
-     *
-     * cursor: an index into the virtual buffer, 0..result.length()-1.
-     * Matches take place at the cursor.  If there is no match, the cursor
-     * is advanced, and one character is moved from the source text to the
-     * result buffer.
-     *         
-     * start, limit: these designate the substring of the source text which
-     * has not been processed yet.  The range of offsets is start..limit-1.
-     * At any moment the virtual buffer consists of result +
-     * text.substring(start, limit).
-     */
-    int32_t cursor = 0;
-    result.remove();
-    while (start < limit || cursor < result.length()) {
-        TransliterationRule* r = data->ruleSet.findMatch(text, start, limit,
-                                                         result,
-                                                         cursor,
-                                                         *data,
-                                                         getFilter());
-        if (r == 0) {
-            if (cursor == result.length()) {
-                result.append(text.charAt(start++));
-            }
-            ++cursor;
-        } else {
-            // At this point we have a match of one or more
-            // characters.  The characters cover the range [cursor,
-            // cursor + r->getKeyLength()) - a half-open interval.
-            // The index values refer to a virtual buffer with result
-            // holding [0, result.length()) and text holding
-            // [result.length(),...).
-
-            // First, figure out the range of result being replaced.
-            int32_t rfirst = cursor;
-            int32_t rlimit = uprv_min(result.length(),
-                                     cursor + r->getKeyLength());
-
-            // resultPad is length of result to right of cursor; >= 0
-            int32_t resultPad = result.length() - cursor;
-
-            if (r->getKeyLength() > resultPad) {
-                start += r->getKeyLength() - resultPad;
-            }
-            
-            result.replaceBetween(rfirst, rlimit,
-                                  r->getOutput());
-
-            cursor += r->getCursorPos();
-        }
-    }
-}
-
-/**
- * Transliterates a segment of a string.  <code>Transliterator</code> API.
- * @param text the string to be transliterated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
  * @return The new limit index
  */
 int32_t RuleBasedTransliterator::transliterate(Replaceable& text,
@@ -193,11 +115,11 @@ int32_t RuleBasedTransliterator::transliterate(Replaceable& text,
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void
-RuleBasedTransliterator::handleTransliterate(Replaceable& text,
-                                             int32_t index[3]) const {
-    int32_t start = index[START];
-    int32_t limit = index[LIMIT];
-    int32_t cursor = index[CURSOR];
+RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
+                                             bool_t isIncremental) const {
+    int32_t start = index.start;
+    int32_t limit = index.limit;
+    int32_t cursor = index.cursor;
 
     bool_t isPartial;
 
@@ -228,6 +150,6 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text,
         }
     }
 
-    index[LIMIT] = limit;
-    index[CURSOR] = cursor;
+    index.limit = limit;
+    index.cursor = cursor;
 }

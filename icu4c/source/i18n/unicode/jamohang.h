@@ -16,7 +16,7 @@
  * A transliterator that converts Jamo to Hangul.
  *
  * @author Mark Davis
- * @version $RCSfile: jamohang.h,v $ $Revision: 1.3 $ $Date: 2000/01/18 18:43:00 $
+ * @version $RCSfile: jamohang.h,v $ $Revision: 1.4 $ $Date: 2000/01/19 19:02:10 $
  */
 class U_I18N_API JamoHangulTransliterator : public Transliterator {
 
@@ -55,8 +55,8 @@ public:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleTransliterate(Replaceable& text,
-                                     int32_t offsets[3]) const;
+    virtual void handleTransliterate(Replaceable& text, Position& offsets,
+                                     bool_t isIncremental) const;
 
 private:
 
