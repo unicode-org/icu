@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFSubstitution.java,v $ 
- * $Date: 2002/07/31 00:55:02 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/07/31 17:37:08 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.7 $ $Date: 2002/07/31 00:55:02 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.8 $ $Date: 2002/07/31 17:37:08 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -1532,7 +1532,6 @@ class NumeratorSubstitution extends NFSubstitution {
     public boolean equals(Object that) {
         if (super.equals(that)) {
             NumeratorSubstitution that2 = (NumeratorSubstitution)that;
-
             return denominator == that2.denominator;
         } else {
             return false;
@@ -1683,16 +1682,20 @@ class NullSubstitution extends NFSubstitution {
     /**
      * Never called.
      */
+    ///CLOVER:OFF
     public long transformNumber(long number) {
         return 0;
     }
+    ///CLOVER:ON
 
     /**
      * Never called.
      */
+    ///CLOVER:OFF
     public double transformNumber(double number) {
         return 0;
     }
+    ///CLOVER:ON
 
     //-----------------------------------------------------------------------
     // parsing
@@ -1713,23 +1716,27 @@ class NullSubstitution extends NFSubstitution {
     /**
      * Never called.
      */
+    ///CLOVER:OFF
     public double composeRuleValue(double newRuleValue, double oldRuleValue) {
         return 0;
     }
+    ///CLOVER:ON
 
     /**
      * Never called.
      */
+    ///CLOVER:OFF
     public double calcUpperBound(double oldUpperBound) {
         return 0;
     }
+    ///CLOVER:ON
 
     //-----------------------------------------------------------------------
     // simple accessors
     //-----------------------------------------------------------------------
 
     /**
-     * Returns true (this _is_ a NillSubstitution).
+     * Returns true (this _is_ a NullSubstitution).
      * @return true
      */
     public boolean isNullSubstitution() {
@@ -1739,8 +1746,10 @@ class NullSubstitution extends NFSubstitution {
     /**
      * Never called.
      */
+    ///CLOVER:OFF
     char tokenChar() {
         return ' ';
     }
+    ///CLOVER:ON
 }
 
