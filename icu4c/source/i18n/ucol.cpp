@@ -3099,14 +3099,20 @@ U_CAPI int32_t
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
   int32_t len = 0;
   int32_t UCAlen = 0;
+  const UChar* ucaRules;
   const UChar *rules = ucol_getRules(coll, &len);
   *buffer=0;
   if(delta == UCOL_FULL_RULES) {
+    UErrorCode status = U_ZERO_ERROR;
     /* take the UCA rules and append real rules at the end */
-    /* UCA rules will be probably coming from the root RB */
+    /* UCA rules will be probably coming from the root RB */\
+    ucaRules = ures_getStringByKey(coll->rb,"%%UCARules",&UCAlen,&status);
+
   }
   if(bufferLen >= len + UCAlen) {
     u_strcat(buffer, rules);
+    if(UCAlen >0)
+        u_strcat(buffer,ucaRules);
   } else {
     u_strncat(buffer, rules, (bufferLen-UCAlen)*sizeof(UChar));
   }
