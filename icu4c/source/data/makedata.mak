@@ -281,7 +281,7 @@ GODATA :
 	@cd "$(ICUDBLD)"
 
 # This is to remove all the data files
-CLEAN :
+CLEAN : GODATA
 	@echo Cleaning up the data files.
 	@cd "$(ICUDBLD)"
 	-@erase "*.cnv"
