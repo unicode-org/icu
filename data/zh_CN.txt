@@ -18,4 +18,9 @@ zh_CN {
             "#,##0%",
     }
     ShortCountry { "CHN" }
+    Countries {
+        CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
+        TW { "\u53F0\u6E7E" }
+        HK { "\u9999\u6E2F" }
+    }
 }

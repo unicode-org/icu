@@ -835,7 +835,7 @@ zh {
         " < \u9EEF < \u9F22 < \u9F2C < \u9F2F < \u9F39< \u9F37 < \u9F3D < \u9F3E < \u9F44"
         "" }
     Countries {
-        CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
+        CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
         TW { "\u53F0\u6E7E" }
         HK { "\u9999\u6E2F" }
     }
