@@ -638,6 +638,10 @@ BasicNormalizerTest::TestPreviousNext() {
 
     // iterators
     Normalizer iter(src, sizeof(src)/U_SIZEOF_UCHAR, UNORM_NFD);
+	// test getStaticClassID and getDynamicClassID
+	if(iter.getDynamicClassID() != Normalizer::getStaticClassID()){
+		errln("getStaticClassID != getDynamicClassID for Normalizer.");
+	}
     UChar32Iterator iter32(expect, sizeof(expect)/4, EXPECT_MIDDLE);
 
     UChar32 c1, c2;

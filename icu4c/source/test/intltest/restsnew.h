@@ -32,6 +32,8 @@ public:
 
     void TestOtherAPI(void);
 
+	void TestNewTypes(void);
+
 private:
     /**
      * The assignment operator has no real implementation.

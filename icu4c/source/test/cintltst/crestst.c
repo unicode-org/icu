@@ -19,6 +19,8 @@
 #include "cintltst.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
+#include "filestrm.h"
+#include "cmemory.h"
 
 #define RESTEST_HEAP_CHECK 0
 
@@ -28,7 +30,7 @@
 
 static void TestOpenDirect(void);
 static void TestFallback(void);
-
+static void TestFileStream(void);
 /*****************************************************************************/
 
 const UChar kERROR[] = { 0x0045 /*E*/, 0x0052 /*'R'*/, 0x0052 /*'R'*/,
@@ -91,7 +93,7 @@ void addResourceBundleTest(TestNode** root)
     addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
-
+    addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
 #ifdef ICU_URES_USE_DEPRECATES
     addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
 #endif
@@ -574,3 +576,100 @@ TestOpenDirect(void) {
     ures_close(translit_index);
 }
 
+static void TestFileStream(void){
+	int32_t c = 0;
+	int32_t c1=0;
+	UErrorCode status = U_ZERO_ERROR;
+	const char* testdatapath = loadTestData(&status);
+	char* fileName = (char*) uprv_malloc(uprv_strlen(testdatapath) +10);
+	FileStream* stream = NULL;
+		/* these should not be closed */
+	FileStream* pStdin  = T_FileStream_stdin();
+	FileStream* pStdout = T_FileStream_stdout();
+	FileStream* pStderr = T_FileStream_stderr();
+
+	const char* testline = "This is a test line";
+	int32_t bufLen =uprv_strlen(testline)+10;
+	char* buf = (char*) uprv_malloc(bufLen);
+	int32_t retLen = 0;
+
+	uprv_strcpy(fileName,testdatapath);
+	uprv_strcat(fileName,".dat");
+	stream = T_FileStream_open(fileName, "r");
+	if(stream==NULL){
+		log_data_err("T_FileStream_open failed to open %s\n",fileName);
+	}
+	if(!T_FileStream_file_exists(fileName)){
+		log_data_err("T_FileStream_file_exists failed to verify existence of %s \n",fileName);
+	}
+
+	T_FileStream_read(stream,&c,1);
+	if(c==0){
+		log_data_err("T_FileStream_read failed to read from %s \n",fileName);
+	}
+
+	T_FileStream_rewind(stream);
+	T_FileStream_read(stream,&c1,1);
+	if(c!=c1){
+		log_data_err("T_FileStream_rewind failed to rewind %s \n",fileName);
+	}
+	T_FileStream_rewind(stream);
+	c1 = T_FileStream_peek(stream);
+	if(c!=c1){
+		log_data_err("T_FileStream_peek failed to peekd %s \n",fileName);
+	}
+	c = T_FileStream_getc(stream);
+	T_FileStream_ungetc(c,stream);
+	if(c!= T_FileStream_getc(stream)){
+		log_data_err("T_FileStream_ungetc failed to d %s \n",fileName);
+	}
+	
+	if(T_FileStream_size(stream)<=0){
+		log_data_err("T_FileStream_size failed to d %s \n",fileName);
+	}
+
+	T_FileStream_close(stream);
+	/* test writing function */
+	stream=NULL;
+	uprv_strcpy(fileName,testdatapath);
+	uprv_strcat(fileName,".tmp");
+	stream = T_FileStream_open(fileName,"w+r");
+	
+	if(stream == NULL){
+		log_data_err("Could not open %s for writing\n",fileName);
+	}
+	c= '$';
+	T_FileStream_putc(stream,c);
+	T_FileStream_rewind(stream);
+	if(c != T_FileStream_getc(stream)){
+		log_data_err("T_FileStream_putc failed %s\n",fileName);
+	}
+	
+	T_FileStream_rewind(stream);
+	T_FileStream_writeLine(stream,testline);
+	T_FileStream_rewind(stream);
+	T_FileStream_readLine(stream,buf,bufLen);
+	if(uprv_strncmp(testline, buf,uprv_strlen(buf))!=0){
+		log_data_err("T_FileStream_writeLine failed %s\n",fileName);
+	}
+	
+	T_FileStream_rewind(stream);
+	T_FileStream_write(stream,testline,uprv_strlen(testline));
+	T_FileStream_rewind(stream);
+	retLen = T_FileStream_read(stream, buf, bufLen);
+	if(uprv_strncmp(testline, buf,retLen)!=0){
+		log_data_err("T_FileStream_write failed %s\n",fileName);
+	}
+
+	T_FileStream_close(stream);
+	
+	T_FileStream_setError(stream);
+	if(!T_FileStream_remove(fileName)){
+		log_data_err("T_FileStream_remove failed to delete %s\n",fileName);
+	}
+	
+	
+	uprv_free(fileName);
+	uprv_free(buf);
+
+}
