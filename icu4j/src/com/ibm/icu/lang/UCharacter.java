@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2004/03/10 02:21:38 $ 
-* $Revision: 1.87 $
+* $Date: 2004/03/11 07:02:15 $ 
+* $Revision: 1.88 $
 *
 *******************************************************************************
 */
@@ -1320,6 +1320,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                     UnicodeBlock b = BLOCKS_[i];
                     String name = getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG);
                     m.put(name.toUpperCase(), b);
+		    m.put(name.replace('_',' ').toUpperCase(), b);
                     m.put(b.toString().toUpperCase(), b);
                 }
                 mref = new SoftReference(m);
@@ -4522,7 +4523,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.0
      */
     public static boolean isHighSurrogate(char ch) {
-        return ch >= MIN_HIGH_SURROGATE && ch <= MIN_LOW_SURROGATE;
+        return ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE;
     }
 
     /**
@@ -4532,7 +4533,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.0
      */
     public static boolean isLowSurrogate(char ch) {
-        return ch >= MIN_LOW_SURROGATE && ch <= MIN_HIGH_SURROGATE;
+        return ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE;
     }
 
     /**
@@ -4580,8 +4581,34 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index of the first or only char forming the code point
      * @return the code point at the index
      * @draft ICU 3.0
-     */
     public static final int codePointAt(CharSequence seq, int index) {
+        char c1 = seq.charAt(index++);
+        if (isHighSurrogate(c1)) {
+            if (index < seq.length()) {
+                char c2 = seq.charAt(index);
+                if (isLowSurrogate(c2)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c1;
+    }
+     */
+
+    public static final int codePointAt(String seq, int index) {
+        char c1 = seq.charAt(index++);
+        if (isHighSurrogate(c1)) {
+            if (index < seq.length()) {
+                char c2 = seq.charAt(index);
+                if (isLowSurrogate(c2)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c1;
+    }
+
+    public static final int codePointAt(StringBuffer seq, int index) {
         char c1 = seq.charAt(index++);
         if (isHighSurrogate(c1)) {
             if (index < seq.length()) {
@@ -4624,8 +4651,34 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index after the last or only char forming the code point
      * @return the code point before the index
      * @draft ICU 3.0
-     */
     public static final int codePointBefore(CharSequence seq, int index) {
+        char c2 = seq.charAt(--index);
+        if (isLowSurrogate(c2)) {
+            if (index > 0) {
+                char c1 = seq.charAt(--index);
+                if (isHighSurrogate(c1)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c2;
+    }
+     */
+
+    public static final int codePointBefore(String seq, int index) {
+        char c2 = seq.charAt(--index);
+        if (isLowSurrogate(c2)) {
+            if (index > 0) {
+                char c1 = seq.charAt(--index);
+                if (isHighSurrogate(c1)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c2;
+    }
+
+    public static final int codePointBefore(StringBuffer seq, int index) {
         char c2 = seq.charAt(--index);
         if (isLowSurrogate(c2)) {
             if (index > 0) {
