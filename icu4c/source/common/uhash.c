@@ -38,15 +38,15 @@
  * The central function is _uhash_find().  This function looks for a
  * slot matching the given key and hashcode.  If one is found, it
  * returns a pointer to that slot.  If the table is full, and no match
- * is found, it returns NULL.  This makes the code more complicated,
- * since all callers of _uhash_find() must then check for a NULL
- * result.  To keep this from happening, we don't allow the table to
- * fill.  When there is only one empty/deleted slot left, uhash_put()
- * will refuse to increase the count.  This simplifies the code.  In
- * practice, we will only run up against this if memory is exhausted
- * and rehashing is not working.  In normal operation, the table is
- * always about half full (or less) and this is maintained by
- * rehashing.
+ * is found, it returns NULL -- in theory.  This would make the code
+ * more complicated, since all callers of _uhash_find() would then
+ * have to check for a NULL result.  To keep this from happening, we
+ * don't allow the table to fill.  When there is only one
+ * empty/deleted slot left, uhash_put() will refuse to increase the
+ * count, and fail.  This simplifies the code.  In practice, one will
+ * seldom encounter this using default UHashtables.  However, if a
+ * hashtable is set to a U_FIXED resize policy, or if memory is
+ * exhausted, then the table may fill.
  *
  * High and low water ratios control rehashing.  They establish levels
  * of fullness (from 0 to 1) outside of which the data array is

@@ -18,43 +18,53 @@
  * based on keys.  It provides a good tradeoff between access time and
  * storage space.  As elements are added to it, it grows to accomodate
  * them.  In its current implementation, the table never shrinks, even
- * if all elements are removed from it.  Keys and values are stored as
- * void* pointers.  Hashing of keys and comparison of keys are
- * accomplished by user-supplied functions.  Several prebuilt
- * functions exist for common key types.
+ * if all elements are removed from it.
  *
- * User-supplied functions also control ownership of keys and values.
- * If a void* key is actually a pointer to a deletable object, then
- * UHashtable can be made to delete that object by setting the key
- * deleter function pointer to a non-NULL value.  If this is done,
+ * Keys and values are stored as void* pointers.  These void* pointers
+ * may be actual pointers to strings, objects, or any other structure
+ * in memory, or they may simply be integral values cast to void*.
+ * UHashtable doesn't care and manipulates them via user-supplied
+ * functions.  These functions hash keys, compare keys, delete keys,
+ * and delete values.  Some function pointers are optional (may be
+ * NULL); others must be supplied.  Several prebuilt functions exist
+ * to handle common key types.
+ *
+ * UHashtable ownership of keys and values is flexible, and controlled
+ * by whether or not the key deleter and value deleter functions are
+ * set.  If a void* key is actually a pointer to a deletable object,
+ * then UHashtable can be made to delete that object by setting the
+ * key deleter function pointer to a non-NULL value.  If this is done,
  * then keys passed to uhash_put() are owned by the hashtable and will
  * be deleted by it at some point, either as keys are replaced, or
  * when uhash_close() is finally called.  The same is true of values
  * and the value deleter function pointer.  Keys passed to methods
  * other than uhash_put() are never owned by the hashtable.
  *
- * NULL values are not allowed, since uhash_get() returns NULL to
- * indicate a key that is not in the table.  If a key and a NULL value
- * is passed to uhash_put(), this has the effect of doing a
+ * NULL values are not allowed.  uhash_get() returns NULL to indicate
+ * a key that is not in the table, and having a NULL value in the
+ * table would generate an ambiguous result.  If a key and a NULL
+ * value is passed to uhash_put(), this has the effect of doing a
  * uhash_remove() on that key.  This keeps uhash_get(), uhash_count(),
  * and uhash_nextElement() consistent with one another.
  *
- * To see what's in a hashtable, use uhash_nextElement() to iterate
- * through its contents.  Each call to this function returns a
+ * To see everything in a hashtable, use uhash_nextElement() to
+ * iterate through its contents.  Each call to this function returns a
  * UHashElement pointer.  A hash element contains a key, value, and
  * hashcode.  During iteration an element may be deleted by calling
  * uhash_removeElement(); iteration may safely continue thereafter.
- * However, if uhash_put() is called during iteration then the
- * iteration will be out of sync.  Under no circumstances should the
- * hash element be modified directly.
+ * The uhash_remove() function may also be safely called in
+ * mid-iteration.  However, if uhash_put() is called during iteration
+ * then the iteration will be out of sync.  Under no circumstances
+ * should the UHashElement returned by uhash_nextElement be modified
+ * directly.
  *
  * By default, the hashtable grows when necessary, but never shrinks,
  * even if all items are removed.  For most applications this is
- * optimal.  However, in a highly dynamic use where memory is at a
+ * optimal.  However, in a highly dynamic usage where memory is at a
  * premium, the table can be set to both grow and shrink by calling
  * uhash_setResizePolicy() with the policy U_GROW_AND_SHRINK.  In a
- * situation where memory the client wants a table that does not grow
- * at all, the constant U_FIXED can be used.
+ * situation where memory is critical and the client wants a table
+ * that does not grow at all, the constant U_FIXED can be used.
  */
 
 /********************************************************************
@@ -240,6 +250,7 @@ uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn);
 
 /**
  * Specify whether or not, and how, the hastable resizes itself.
+ * By default, tables grow but do not shrink (policy U_GROW).
  * See enum UHashResizePolicy.
  */
 U_CAPI void
