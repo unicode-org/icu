@@ -456,17 +456,20 @@ ibm-33722_P120-1999 { UTR22* }  # Japan EUC with \ <-> Yen mapping
                         cp33722 { JAVA* }
                         33722 { JAVA }
                         ibm-33722_VASCII_VPUA
-                        # ibm-954 seems to be a superset of ibm-33722
+# ibm-954 seems to be almost a superset of ibm-33722
+ibm-954_P101-2000 { UTR22* }
+                        ibm-954 { IBM* }
+                        EUC-JP # This is Solaris EUC-JP.
+                        # eucJP # A closer Solaris alias
+
 ibm-1373_P100-2002 { UTR22* }               # Taiwan Big-5 (w/ euro update)
                         ibm-1373 { IBM* }
                         windows-950 # Alternate mapping. Leave untagged. This is the IBM interpretation of a Windows codepage.
-
 windows-950-2000 { UTR22* }
                         Big5 { IANA* MIME* JAVA* WINDOWS }
                         csBig5 { IANA WINDOWS }
                         windows-950 { WINDOWS* }
                         x-big5
-
 ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
