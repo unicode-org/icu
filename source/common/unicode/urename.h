@@ -95,6 +95,8 @@
 #define _MBCSFromUChar32 _MBCSFromUChar32_2_8
 #define _MBCSFromUnicodeWithOffsets _MBCSFromUnicodeWithOffsets_2_8
 #define _MBCSGetType _MBCSGetType_2_8
+#define _MBCSGetUnicodeSetForBytes _MBCSGetUnicodeSetForBytes_2_8
+#define _MBCSGetUnicodeSetForUnicode _MBCSGetUnicodeSetForUnicode_2_8
 #define _MBCSIsLeadByte _MBCSIsLeadByte_2_8
 #define _MBCSSimpleGetNextUChar _MBCSSimpleGetNextUChar_2_8
 #define _MBCSToUnicodeWithOffsets _MBCSToUnicodeWithOffsets_2_8
@@ -108,13 +110,14 @@
 #define _UTF7Data _UTF7Data_2_8
 #define _UTF8Data _UTF8Data_2_8
 #define breakiterator_cleanup breakiterator_cleanup_2_8
+#define calendar_astro_cleanup calendar_astro_cleanup_2_8
 #define calendar_cleanup calendar_cleanup_2_8
+#define calendar_hebrew_cleanup calendar_hebrew_cleanup_2_8
+#define calendar_islamic_cleanup calendar_islamic_cleanup_2_8
 #define cmemory_cleanup cmemory_cleanup_2_8
-#define cmemory_clearInUse cmemory_clearInUse_2_8
 #define cmemory_inUse cmemory_inUse_2_8
 #define collator_cleanup collator_cleanup_2_8
 #define currency_cleanup currency_cleanup_2_8
-#define deleteStringPair deleteStringPair_2_8
 #define locale_cleanup locale_cleanup_2_8
 #define locale_getKeywords locale_getKeywords_2_8
 #define locale_get_default locale_get_default_2_8
@@ -223,7 +226,6 @@
 #define u_isJavaSpaceChar u_isJavaSpaceChar_2_8
 #define u_isMirrored u_isMirrored_2_8
 #define u_isUAlphabetic u_isUAlphabetic_2_8
-#define u_isUInit u_isUInit_2_8
 #define u_isULowercase u_isULowercase_2_8
 #define u_isUUppercase u_isUUppercase_2_8
 #define u_isUWhiteSpace u_isUWhiteSpace_2_8
@@ -518,6 +520,7 @@
 #define ucnv_io_stripEBCDICForCompare ucnv_io_stripEBCDICForCompare_2_8
 #define ucnv_isAmbiguous ucnv_isAmbiguous_2_8
 #define ucnv_load ucnv_load_2_8
+#define ucnv_loadSharedData ucnv_loadSharedData_2_8
 #define ucnv_open ucnv_open_2_8
 #define ucnv_openAllNames ucnv_openAllNames_2_8
 #define ucnv_openCCSID ucnv_openCCSID_2_8
@@ -717,7 +720,9 @@
 #define uhash_hashUCharsN uhash_hashUCharsN_2_8
 #define uhash_hashUnicodeString uhash_hashUnicodeString_2_8
 #define uhash_iget uhash_iget_2_8
+#define uhash_igeti uhash_igeti_2_8
 #define uhash_iput uhash_iput_2_8
+#define uhash_iputi uhash_iputi_2_8
 #define uhash_iremove uhash_iremove_2_8
 #define uhash_nextElement uhash_nextElement_2_8
 #define uhash_open uhash_open_2_8
@@ -1037,6 +1042,7 @@
 #define usearch_setOffset usearch_setOffset_2_8
 #define usearch_setPattern usearch_setPattern_2_8
 #define usearch_setText usearch_setText_2_8
+#define userv_deleteStringPair userv_deleteStringPair_2_8
 #define uset_add uset_add_2_8
 #define uset_addAll uset_addAll_2_8
 #define uset_addRange uset_addRange_2_8
@@ -1136,6 +1142,8 @@
 #define BuddhistCalendar BuddhistCalendar_2_8
 #define CFactory CFactory_2_8
 #define Calendar Calendar_2_8
+#define CalendarAstronomer CalendarAstronomer_2_8
+#define CalendarCache CalendarCache_2_8
 #define CalendarService CalendarService_2_8
 #define CanonicalIterator CanonicalIterator_2_8
 #define ChainingContextualSubstitutionFormat1Subtable ChainingContextualSubstitutionFormat1Subtable_2_8
@@ -1202,6 +1210,7 @@
 #define Grego Grego_2_8
 #define GregorianCalendar GregorianCalendar_2_8
 #define HanOpenTypeLayoutEngine HanOpenTypeLayoutEngine_2_8
+#define HebrewCalendar HebrewCalendar_2_8
 #define HebrewShaping HebrewShaping_2_8
 #define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_8
 #define ICUBreakIteratorFactory ICUBreakIteratorFactory_2_8
@@ -1225,6 +1234,7 @@
 #define InsertionCallback InsertionCallback_2_8
 #define InsertionList InsertionList_2_8
 #define IntegralPartSubstitution IntegralPartSubstitution_2_8
+#define IslamicCalendar IslamicCalendar_2_8
 #define JapaneseCalendar JapaneseCalendar_2_8
 #define KeywordEnumeration KeywordEnumeration_2_8
 #define LECharMapper LECharMapper_2_8
@@ -1253,6 +1263,8 @@
 #define MessageFormat MessageFormat_2_8
 #define MessageFormatAdapter MessageFormatAdapter_2_8
 #define ModulusSubstitution ModulusSubstitution_2_8
+#define MoonRiseSetCoordFunc MoonRiseSetCoordFunc_2_8
+#define MoonTimeAngleFunc MoonTimeAngleFunc_2_8
 #define MorphSubtableHeader MorphSubtableHeader_2_8
 #define MorphTableHeader MorphTableHeader_2_8
 #define MultipleSubstitutionSubtable MultipleSubstitutionSubtable_2_8
@@ -1300,6 +1312,7 @@
 #define Replaceable Replaceable_2_8
 #define ReplaceableGlue ReplaceableGlue_2_8
 #define ResourceBundle ResourceBundle_2_8
+#define RiseSetCoordFunc RiseSetCoordFunc_2_8
 #define RuleBasedBreakIterator RuleBasedBreakIterator_2_8
 #define RuleBasedCollator RuleBasedCollator_2_8
 #define RuleBasedNumberFormat RuleBasedNumberFormat_2_8
@@ -1340,6 +1353,7 @@
 #define StyleRuns StyleRuns_2_8
 #define SubstitutionLookup SubstitutionLookup_2_8
 #define SubtableProcessor SubtableProcessor_2_8
+#define SunTimeAngleFunc SunTimeAngleFunc_2_8
 #define SymbolTable SymbolTable_2_8
 #define TZEnumeration TZEnumeration_2_8
 #define ThaiLayoutEngine ThaiLayoutEngine_2_8
@@ -1376,18 +1390,10 @@
 #define ValueRecord ValueRecord_2_8
 #define ValueRuns ValueRuns_2_8
 #define locale_set_default_internal locale_set_default_internal_2_8
-#define uprv_cnttab_cloneContraction uprv_cnttab_cloneContraction_2_8
-#define uprv_growTable uprv_growTable_2_8
-#define uprv_uca_addContraction uprv_uca_addContraction_2_8
-#define uprv_uca_addPrefix uprv_uca_addPrefix_2_8
-#define uprv_uca_getMaxExpansionJamo uprv_uca_getMaxExpansionJamo_2_8
-#define uprv_uca_setMaxExpansion uprv_uca_setMaxExpansion_2_8
-#define uprv_uca_setMaxJamoExpansion uprv_uca_setMaxJamoExpansion_2_8
 #define util64_fromDouble util64_fromDouble_2_8
 #define util64_pow util64_pow_2_8
 #define util64_tou util64_tou_2_8
 #define util64_utoi util64_utoi_2_8
-#define util_equalRules util_equalRules_2_8
 
 #endif
 #endif
