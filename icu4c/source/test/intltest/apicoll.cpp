@@ -1675,11 +1675,11 @@ void CollationAPITest::TestGetTailoredSet()
     { "& S < \\u0161 <<< \\u0160", { "\\u0161", "s\\u030C", "\\u0160", "S\\u030C" }, 4}
   };
 
-  int32_t i = 0, j = 0;
+  uint32_t i = 0, j = 0;
   UErrorCode status = U_ZERO_ERROR;
 
   RuleBasedCollator *coll = NULL;
-  UnicodeString buff;
+  UnicodeString buff; 
   UnicodeSet *set = NULL;
 
   for(i = 0; i < sizeof(setTest)/sizeof(setTest[0]); i++) {
@@ -1690,7 +1690,7 @@ void CollationAPITest::TestGetTailoredSet()
       if(set->size() != setTest[i].testsize) {
         errln("Tailored set size different (%d) than expected (%d)", set->size(), setTest[i].testsize);
       }
-      for(j = 0; j < setTest[i].testsize; j++) {
+      for(j = 0; j < (uint32_t)setTest[i].testsize; j++) {
         buff = UnicodeString(setTest[i].tests[j], "").unescape();
         if(!set->contains(buff)) {
           errln("Tailored set doesn't contain %s... It should", setTest[i].tests[j]);
@@ -1873,7 +1873,11 @@ int32_t TestCollator::hashCode() const
 const Locale TestCollator::getLocale(ULocDataLocaleType type, 
 		                             UErrorCode& status) const
 {
-	return NULL;
+    // api not used, this is to make the compiler happy
+    if (U_FAILURE(status)) {
+        type = ULOC_DATA_LOCALE_TYPE_LIMIT;
+    }
+    return NULL;
 }
 
 Collator::ECollationStrength TestCollator::getStrength() const
@@ -1883,6 +1887,8 @@ Collator::ECollationStrength TestCollator::getStrength() const
 
 void TestCollator::setStrength(Collator::ECollationStrength newStrength)
 {
+    // api not used, this is to make the compiler happy
+    newStrength = TERTIARY;
 }
 
 UClassID TestCollator::getDynamicClassID(void) const
@@ -1892,38 +1898,66 @@ UClassID TestCollator::getDynamicClassID(void) const
 
 void TestCollator::getVersion(UVersionInfo info) const
 {
+    // api not used, this is to make the compiler happy
+    memset(info, 0, U_MAX_VERSION_LENGTH);
 }
 
 void TestCollator::setAttribute(UColAttribute attr, UColAttributeValue value, 
-                            UErrorCode &status)
+                                UErrorCode &status)
 {
+    // api not used, this is to make the compiler happy
+    if (U_FAILURE(status)) {
+        attr = UCOL_ATTRIBUTE_COUNT;
+        value = UCOL_OFF;
+    }
 }
 
 UColAttributeValue TestCollator::getAttribute(UColAttribute attr, 
                                               UErrorCode &status)
 {
+    // api not used, this is to make the compiler happy
+    if (U_FAILURE(status) || attr == UCOL_ATTRIBUTE_COUNT) {
+        return UCOL_OFF;
+    }
 	return UCOL_DEFAULT;
 }
 
 uint32_t TestCollator::setVariableTop(const UChar *varTop, int32_t len, 
 		                          UErrorCode &status)
 {
+    // api not used, this is to make the compiler happy
+    if (U_SUCCESS(status) && (varTop == 0 || len < -1)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
 	return 0;
 }
 
 uint32_t TestCollator::setVariableTop(const UnicodeString varTop, 
                                   UErrorCode &status)
 {
+	// api not used, this is to make the compiler happy
+    if (U_SUCCESS(status) && varTop.length() == 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
 	return 0;
 }
 
 void TestCollator::setVariableTop(const uint32_t varTop, UErrorCode &status)
 {
+    // api not used, this is to make the compiler happy
+    if (U_SUCCESS(status) && varTop == 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
 }
 
 uint32_t TestCollator::getVariableTop(UErrorCode &status) const
 {
-	return 0;
+
+    // api not used, this is to make the compiler happy
+    if (U_SUCCESS(status)) {
+        return 0;
+    }
+	return -1;
 }
 
 Collator* TestCollator::safeClone(void)
