@@ -198,7 +198,6 @@ RBBIRuleScanner::~RBBIRuleScanner() {
 UBool RBBIRuleScanner::doParseActions(EParseAction action,
                                 RBBIRuleScanner::RBBIRuleChar &c)
 {
-    int      i        = 0;
     RBBINode *n       = NULL;
 
     UBool   returnVal = TRUE;
@@ -1054,7 +1053,6 @@ RBBINode  *RBBIRuleScanner::pushNewNode(RBBINode::NodeType  t) {
 void RBBIRuleScanner::scanSet() {
     UnicodeSet    *uset;
     ParsePosition  pos;
-    int            errorPos = -1;
     int            startPos;
     int            i;
 

@@ -36,7 +36,7 @@ U_CDECL_END
 
 
 RBBISymbolTable::RBBISymbolTable(RBBIRuleScanner *rs, const UnicodeString &rules, UErrorCode &status)
-    :fRuleScanner(rs), fRules(rules), ffffString(UChar(0xffff))
+    :fRules(rules), fRuleScanner(rs), ffffString(UChar(0xffff))
 {
     fHashTable       = NULL;
     fCachedSetLookup = NULL;
@@ -246,7 +246,7 @@ void RBBISymbolTable::print() const {
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
 
         RBBINode::printUnicodeString(s->key, 15);
-        printf("   %8x   ", s->val);
+        printf("   %8p   ", s->val);
         RBBINode::printUnicodeString(s->val->fLeftChild->fText);
         printf("\n");
     }
