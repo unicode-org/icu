@@ -6,15 +6,15 @@
 // ***************************************************************************
 
 ms{
-    Version{ "1.0" }
+    Version{ "1.1" }
     Countries {
         Fallback{ "en" }
     }
     Currencies {
-        MYR { "R", "MYR" }
+        MYR { "RM", "Ringgit Malaysia" }
     }
     DayAbbreviations { 
-        "Aha",
+        "Ahd",
         "Isn",
         "Sel",
         "Rab",
@@ -36,7 +36,7 @@ ms{
         "Latn",  // ISO 15924 Name 
     }
     Languages {
-        ms { "bahasa Melayu" }
+        ms { "Bahasa Melayu" }
     }
     MonthAbbreviations { 
         "Jan",
@@ -47,7 +47,7 @@ ms{
         "Jun",
         "Jul",
         "Ogos",
-        "Sept",
+        "Sep",
         "Okt",
         "Nov",
         "Dis",
