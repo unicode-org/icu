@@ -32,7 +32,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
   }
 
   if(index < count)
-    retVal = tzs[index]->getUChars();
+    retVal = tzs[index]->getBuffer();
   else
     *status = U_INDEX_OUTOFBOUNDS_ERROR;
   
