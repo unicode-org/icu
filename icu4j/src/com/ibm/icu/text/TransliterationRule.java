@@ -1,6 +1,5 @@
 package com.ibm.text;
 
-import java.util.Dictionary;
 import com.ibm.Utility;
 
 /**
@@ -22,9 +21,12 @@ import com.ibm.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.11 $ $Date: 2000/01/27 18:59:19 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.12 $ $Date: 2000/02/03 18:11:19 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.12  2000/02/03 18:11:19  Alan
+ * Use array rather than hashtable for char-to-set map
+ *
  * Revision 1.11  2000/01/27 18:59:19  Alan
  * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
  *
@@ -211,14 +213,14 @@ class TransliterationRule {
      * unless the first character of the key is a set.  If it's a
      * set, or otherwise can match multiple keys, the index value is -1.
      */
-    final int getIndexValue(Dictionary variables) {
+    final int getIndexValue(RuleBasedTransliterator.Data variables) {
         if (anteContextLength == pattern.length()) {
             // A pattern with just ante context {such as foo)>bar} can
             // match any key.
             return -1;
         }
         char c = pattern.charAt(anteContextLength);
-        return variables.get(new Character(c)) == null ? (c & 0xFF) : -1;
+        return variables.lookup(c) == null ? (c & 0xFF) : -1;
     }
 
     /**
@@ -231,14 +233,14 @@ class TransliterationRule {
      * value.  If the rule contains only ante context, as in foo)>bar,
      * then it will match any key.
      */
-    final boolean matchesIndexValue(int v, Dictionary variables) {
+    final boolean matchesIndexValue(int v, RuleBasedTransliterator.Data variables) {
         if (anteContextLength == pattern.length()) {
             // A pattern with just ante context {such as foo)>bar} can
             // match any key.
             return true;
         }
         char c = pattern.charAt(anteContextLength);
-        UnicodeSet set = (UnicodeSet) variables.get(new Character(c));
+        UnicodeSet set = variables.lookup(c);
         return set == null ? (c & 0xFF) == v : set.containsIndexValue(v);
     }
 
@@ -313,7 +315,7 @@ class TransliterationRule {
      * <tt>null</tt> then no filtering is applied.
      */
     public final boolean matches(Replaceable text, int start, int limit,
-                                 int cursor, Dictionary variables,
+                                 int cursor, RuleBasedTransliterator.Data variables,
                                  UnicodeFilter filter) {
         // Match anteContext, key, and postContext
         cursor -= anteContextLength;
@@ -356,7 +358,7 @@ class TransliterationRule {
      * @see #FULL_MATCH
      */
     public int getMatchDegree(Replaceable text, int start, int limit,
-                              int cursor, Dictionary variables,
+                              int cursor, RuleBasedTransliterator.Data variables,
                               UnicodeFilter filter) {
         int len = getRegionMatchLength(text, start, limit, cursor - anteContextLength,
                                        pattern, variables, filter);
@@ -390,7 +392,7 @@ class TransliterationRule {
     protected static int getRegionMatchLength(Replaceable text, int start,
                                               int limit, int cursor,
                                               String template,
-                                              Dictionary variables,
+                                              RuleBasedTransliterator.Data variables,
                                               UnicodeFilter filter) {
         if (cursor < start) {
             return -1;
@@ -420,11 +422,11 @@ class TransliterationRule {
      * <tt>null</tt> then no filtering is applied.
      */
     protected static final boolean charMatches(char keyChar, char textChar,
-                                               Dictionary variables, UnicodeFilter filter) {
+                                               RuleBasedTransliterator.Data variables,
+                                               UnicodeFilter filter) {
         UnicodeSet set = null;
         return (filter == null || filter.contains(textChar)) &&
-            (((set = (UnicodeSet) variables.get(new Character(keyChar)))
-             == null) ?
+            (((set = variables.lookup(keyChar)) == null) ?
              keyChar == textChar : set.contains(textChar));
     }
 }

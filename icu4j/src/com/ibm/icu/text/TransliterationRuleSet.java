@@ -15,9 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.7 $ $Date: 2000/01/27 18:59:19 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.8 $ $Date: 2000/02/03 18:11:19 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.8  2000/02/03 18:11:19  Alan
+ * Use array rather than hashtable for char-to-set map
+ *
  * Revision 1.7  2000/01/27 18:59:19  Alan
  * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
  *
@@ -104,7 +107,7 @@ class TransliterationRuleSet {
      * addRule() can no longer be called.
      * @exception IllegalArgumentException if some rules are masked
      */
-    public void freeze(Dictionary variables) {
+    public void freeze(RuleBasedTransliterator.Data variables) {
         /* Construct the rule array and index table.  We reorder the
          * rules by sorting them into 256 bins.  Each bin contains all
          * rules matching the index value for that bin.  A rule
@@ -210,7 +213,7 @@ class TransliterationRuleSet {
      */
     public TransliterationRule findMatch(Replaceable text, int start, int limit,
                                          int cursor,
-                                         Dictionary variables,
+                                         RuleBasedTransliterator.Data variables,
                                          UnicodeFilter filter) {
         /* We only need to check our indexed bin of the rule table,
          * based on the low byte of the first key character.
@@ -253,7 +256,7 @@ class TransliterationRuleSet {
      */
     public TransliterationRule findIncrementalMatch(Replaceable text, int start,
                                                     int limit, int cursor,
-                                                    Dictionary variables,
+                                                    RuleBasedTransliterator.Data variables,
                                                     boolean partial[],
                                                     UnicodeFilter filter) {
         /* We only need to check our indexed bin of the rule table,
