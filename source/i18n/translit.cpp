@@ -1102,6 +1102,10 @@ void Transliterator::registerInstance(Transliterator* adoptedPrototype) {
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
+    _registerInstance(adoptedPrototype);
+}
+
+void Transliterator::_registerInstance(Transliterator* adoptedPrototype) {
     registry->put(adoptedPrototype, TRUE);
 }
 
