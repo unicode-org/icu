@@ -24,7 +24,7 @@ ICUDT=$(ICUDATA_PLATFORM_NAME)_
 
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 CURDIR=$(shell pwd)
-PKGDATA = $(top_builddir)/tools/pkgdata/pkgdata -O $(top_builddir)/data/icupkg.inc -d $(CURDIR)/out
+PKGDATA = $(top_builddir)/tools/pkgdata/pkgdata -O $(top_builddir)/data/icupkg.inc -c -d $(CURDIR)/out
 PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
@@ -245,12 +245,12 @@ thaidict.brk: $(SRCDATADIR)/thaidict.brk
 	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
 $(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT) $(DAT_FILES)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genbrk/genbrk -r $< -o $@
+	$(INVOKE) $(TOOLDIR)/genbrk/genbrk -i $(BUILDDIR) -r $< -o $@
 
 ####################################################    CNV
 # CNV FILES
 $(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(ICUDATA_PLATFORM_NAME) -c -d $(BUILDDIR) $(UCMSRCDIR)/$(<F)
+	$(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(ICUDATA_PLATFORM_NAME) -c -d $(BUILDDIR) $(UCMSRCDIR)/$(<F)
 
 ####################################################    RES
 # RES FILES
@@ -258,13 +258,13 @@ $(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEE
 all-RES:  $(RES_FILES)
 
 $(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/$(ICUDT)%.res: $(MISCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 	@echo "generating $@ (list of installed locales)"; \
@@ -279,7 +279,7 @@ $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 $(BUILDDIR)/$(ICUDT)%.res: $(INDEX_FILES) $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -d $(BUILDDIR) $(INDEX_FILES)
+	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILES)
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
