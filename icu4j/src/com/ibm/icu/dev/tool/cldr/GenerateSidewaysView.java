@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -415,6 +417,7 @@ import com.ibm.icu.util.UResourceBundle;
                         && value.equals("standard")) continue;
 
                     contents.add(new SimpleAttribute(name, value));
+                    tripleData.recordData(elementName, name, value);
                 }
             }
         }
@@ -465,7 +468,7 @@ import com.ibm.icu.util.UResourceBundle;
          * @param attribute
          * @param value
          */
-        public SimpleAttributes set(String attribute, String value) {
+        public SimpleAttributes set(String element, String attribute, String value) {
             for (Iterator it = contents.iterator(); it.hasNext();) {
                 SimpleAttribute sa = (SimpleAttribute) it.next();
                 if (sa.name.equals(attribute)) {
@@ -474,6 +477,7 @@ import com.ibm.icu.util.UResourceBundle;
                 }
             }
             contents.add(new SimpleAttribute(attribute, value));
+            tripleData.recordData(element, attribute, value);
             return this;
         }
 
@@ -492,6 +496,282 @@ import com.ibm.icu.util.UResourceBundle;
 		}
     }
     
+    static class TripleData {
+        
+        RuleBasedCollator col = (RuleBasedCollator)Collator.getInstance(ULocale.ENGLISH);
+        { col.setStrength(Collator.IDENTICAL);
+          col.setNumericCollation(true);
+        }
+        
+        Map elementToAttributeToValues = new TreeMap(col);
+        Map bigguys = null;
+        Set IGNORELIST = new HashSet(Arrays.asList(new String[] {"draft", "alt", "standard", "references",
+                "validSubLocales"}));
+        static final String ANYSTRING = "[any]";
+        
+        private void recordData(String element, String attribute, String value) {
+            if (!element.equals(ANYSTRING) && IGNORELIST.contains(attribute)) return;
+            if (bigguys == null) init();
+            // record for posterity
+            Map elementToAttribute = (Map) elementToAttributeToValues.get(element);
+            if (elementToAttribute == null) {
+                elementToAttribute = new TreeMap(col);
+                elementToAttributeToValues.put(element, elementToAttribute);
+            }
+            Set valueSet = (Set) elementToAttribute.get(attribute);
+            if (valueSet == null) {
+                valueSet = new TreeSet(col);
+                elementToAttribute.put(attribute, valueSet);
+            }
+            if (value != null) valueSet.add(value);
+        }
+        
+        /**
+         * @throws IOException
+         * 
+         */
+        private void writeData() throws IOException {
+            String fileName = "attributeList.html";
+            PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
+            out.println("<html><head>");
+            out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+            out.println("<title>Element/Attribute/Value</title>");
+            out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
+            out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
+            out.println("</head><body>");
+            out.println("<table>");
+            for (int i = 0; i < fixList.length; ++i) {
+                Object[] row = fixList[i];
+                String elementItem = (String)row[0];
+                if (elementItem.equals("*")) continue;
+                String attributeItem = (String)row[1];
+                if (attributeItem.equals("*")) continue;
+                recordData(elementItem, attributeItem, null);
+            }
+            for (Iterator it = elementToAttributeToValues.keySet().iterator(); it.hasNext();) {
+                String element = (String) it.next();
+                boolean newElement = true;
+                Map elementToAttribute = (Map) elementToAttributeToValues.get(element);
+                Set attributeKeys = elementToAttribute.keySet();
+                for (Iterator it2 = attributeKeys.iterator(); it2.hasNext();) {
+                    String attribute = (String) it2.next();
+                    boolean newAttribute = true;
+                    Collection valueSet = getValues(element, elementToAttribute, attribute);
+                    out.println("<tr>");
+                    if (newElement) {
+                        out.print("<td rowSpan='" 
+                                + attributeKeys.size()
+                                + "'>" + element + "</td>");
+                        out.println("<!-- " + valueSet.size() + ", "  + attributeKeys.size() + "-->");
+                        newElement = false;
+                    }
+                    if (newAttribute) {
+                        out.print("<td>" + attribute + "</td>");
+                        out.println("<!-- " + valueSet.size() + "-->");
+                        newAttribute = false;
+                    }
+                    out.print("<td>");
+                    boolean newSet = true;
+                    for (Iterator it3 = valueSet.iterator(); it3.hasNext();) {
+                        String value = (String) it3.next();
+                        if (newSet) newSet = false;
+                        else out.print(", ");
+                        out.print(BagFormatter.toHTML.transliterate("\"" + value + "\""));
+                    }
+                    out.println("</td></tr>");
+                    /*
+                    for (Iterator it3 = valueSet.iterator(); it3.hasNext();) {
+                        String value = (String) it3.next();
+                        out.println("<tr>");
+                        if (newElement) {
+                            out.print("<td rowSpan='" 
+                                    + getValueCount(elementToAttribute)
+                                    + "'>" + element + "</td>");
+                            out.println("<!-- " + valueSet.size() + ", "  + attributeKeys.size() + "-->");
+                            newElement = false;
+                        }
+                        if (newAttribute) {
+                        	out.print("<td rowSpan='" + valueSet.size() + "'>" + attribute + "</td>");
+                            out.println("<!-- " + valueSet.size() + "-->");
+                            newAttribute = false;
+                        }
+                        out.println("<td>" + BagFormatter.toHTML.transliterate("\"" + value + "\"") + "</td></tr>");
+                    }
+                    */
+                }
+            }
+            out.println("</table>");
+            out.println("</body>");
+            out.println("</html>");
+            out.close();
+        }
+        
+        Object[][] fixList = {
+                {"alias", "path", "<valid XPath within locale tree>"},
+                {"alias", "source", "<valid locale ID>"},
+                {"day", "type", new String[] {"sun", "mon", "tue", "wed", "thu", "fri", "sat"}},
+                {"era", "type", "<non-negative number>"},
+                {"*", "day", new String[] {"sun", "mon", "tue", "wed", "thu", "fri", "sat"}},
+                {"generation", "date", "<yyyy-MM-dd format>"},
+                {"version", "number", "<n.m format>"},
+                {"*", "time", "<HH:mm (00:00..24:00)>"},
+                {"orientation", "*", new String[] {"left-to-right", "right-to-left", "top-to-bottom", "bottom-to-top"}},
+                {"minDays", "count", new String[] {"1", "2", "3", "4", "5", "6", "7"}},
+                {"language", "type", "%%%language"},
+                {"script", "type", "%%%script"},
+                {"territory", "type", "%%%region"},
+                {"variant", "type", "%%%variant"},
+                {"zone", "type", "%%%tzid"},
+                {"currency", "type", "%%%currency"},
+                {"calendar", "type", new String[] {
+                        "buddhist", "chinese", "gregorian", "hebrew", "islamic", "islamic-civil", "japanese"
+                        ,"arabic[alias]", "civil-arabic[alias]", "thai-buddhist[alias]"
+                }},
+                {"measurementSystem", "type", new String[] {"metric", "US", "UK"}}, 
+                {"type", "type", "<any type value--with appropriate key>"},
+                {"type", "key", "<any element name having 'type' attribute>"},
+                {"key", "type", "<any element name having 'type' attribute>"},
+                
+                {ANYSTRING, "draft", new String[] {"true", "false*"}},
+                {ANYSTRING, "alt", new String[] {"proposed", "variant"}},
+                {ANYSTRING, "references", "<list of references>"},
+                {ANYSTRING, "standard", "<list of standards>"},
+                {ANYSTRING, "validSubLocales", "<list of sub-locales>"},
+                
+                {"collation", "type", new String[] {"phonebook", "traditional", "direct", "pinyin", "stroke", "posix", "big5han", "gb2312han"}},
+                {"settings", "strength", new String[] {"primary", "secondary", "tertiary", "quaternary", "identical"}},
+                {"settings", "alternate", new String[] {"non-ignorable", "shifted"}},
+                {"settings", "backwards", new String[] {"on", "off"}},
+                {"settings", "normalization", new String[] {"on", "off"}},
+                {"settings", "caseLevel", new String[] {"on", "off"}},
+                {"settings", "caseFirst", new String[] {"upper", "lower", "off"}},
+                {"settings", "hiraganaQuarternary", new String[] {"on", "off"}},
+                {"settings", "numeric", new String[] {"on", "off"}},
+                {"reset", "before", new String[] {"primary", "secondary", "tertiary"}},
+                
+                {"default", "type", "<any type value legal for one of the peer elements>"},
+                {"mapping", "registry", "<any charset registry, iana preferred>"},
+                {"mapping", "type", "<any valid charset from the given registry>"},
+                
+                {"abbreviationFallback", "type", new String[] {"standard", "GMT"}},
+                {"preferenceOrdering", "type", "<space-delimited list of timezone IDs>"},
+                {"exemplarCharacters", "type", new String[] {"standard", "auxiliary"}},
+
+                {"decimalFormatLength", "type", new String[] {"full", "long", "medium", "short"}},
+                {"scientificFormatLength", "type", new String[] {"full", "long", "medium", "short"}},
+                {"currencyFormatLength", "type", new String[] {"full", "long", "medium", "short"}},
+                {"percentFormatLength", "type", new String[] {"full", "long", "medium", "short"}},
+
+                {"field", "type", new String[] {"era", "year", "month", "week", "day", "weekday", "dayperiod", "hour", "minute", "second", "zone"}},
+                {"relative", "type", "<integer>"},
+
+                {"pattern", "type", "<valid pattern for format>"},
+
+                {"dateFormat", "type", new String[] {"standard", "<special-key>"}},
+                {"timeFormat", "type", new String[] {"standard", "<special-key>"}},
+                {"dateTimeFormat", "type", new String[] {"standard", "<special-key>"}},
+                {"decimalFormat", "type", new String[] {"standard", "<special-key>"}},
+                {"scientificFormat", "type", new String[] {"standard", "<special-key>"}},
+                {"percentFormat", "type", new String[] {"standard", "<special-key>"}},
+                {"currencyFormat", "type", new String[] {"standard", "<special-key>"}},
+        };
+        
+        String[] pieces = new String[50];
+        
+        private void init() {
+            try {
+                bigguys = new HashMap();
+                BufferedReader br = BagFormatter.openUTF8Reader(timeZoneAliasDir, "idList.txt");
+                while (true) {
+                    String line = br.readLine();
+                    if (line == null) break;
+                    line = line.trim();
+                    if (line.startsWith("#")) continue;
+                    Utility.split(line,';', pieces);
+                    String tag = pieces[0].trim();
+                    String id = pieces[1].trim();
+                    addTagValue(tag, id);
+                }
+                br.close();
+                // hack some extras
+                addTagValue("language", "root");
+                addTagValue("script", "Qaai");
+                addTagValue("variant", "POSIX");
+                addTagValue("variant", "REVISED");
+                addTagValue("variant", "bokmal");
+                addTagValue("variant", "nynorsk");
+                addTagValue("variant", "aaland");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        
+        /**
+		 * @param tag
+		 * @param id
+		 */
+		private void addTagValue(String tag, String id) {
+			Collection c = (Collection) bigguys.get(tag);
+			if (c == null) {
+				c = new TreeSet();
+			    bigguys.put(tag, c);
+			}
+			Utility.split(id, ',', pieces);
+			for (int i = 0; i < pieces.length; ++i) {
+			    if (pieces[i].length() == 0) continue;
+				c.add(pieces[i].trim());
+			}
+		}
+
+		/**
+		 * @param elementToAttribute
+		 * @param attribute
+		 * @return
+		 */
+		private Collection getValues(String element, Map elementToAttribute, String attribute) {
+            for (int i = 0; i < fixList.length; ++i) {
+                Object[] row = fixList[i];
+                String elementItem = (String)row[0];
+                String attributeItem = (String)row[1];
+            	if ((attribute.equals(attributeItem) || "*".equals(attributeItem))
+                        && (element.equals(elementItem) || "*".equals(elementItem))) {
+            		if (row[2] instanceof String) {
+                        String valueItem = (String)row[2];
+                        if (valueItem.startsWith("%%%")) {
+                            //System.out.println("Substituting Values: " + element + ", " + attribute);
+                        	Collection result = (Collection) bigguys.get(valueItem.substring(3));
+                            Set s = new TreeSet((Collection)elementToAttribute.get(attribute));
+                            s.removeAll(result);
+                            if (s.size() != 0) {
+                            	System.out.println("Warning: Missing values for " + element + ", " + attribute);
+                                for (Iterator it = s.iterator(); it.hasNext(); ) {
+                                	System.out.println(it.next());
+                                }
+                            }
+                            return result;
+                        }
+            			List result = new ArrayList();
+                        result.add(valueItem);
+                        return result;
+                    }
+                    return Arrays.asList((Object[])row[2]);
+                }
+            }
+			return (Collection) elementToAttribute.get(attribute);
+		}
+		int getValueCount(Map elementToAttribute) {
+            int result = 0;
+            for (Iterator it2 = elementToAttribute.keySet().iterator(); it2.hasNext();) {
+                String attribute = (String) it2.next();
+                Set valueSet = (Set) elementToAttribute.get(attribute);
+                result += valueSet.size();
+            }
+            return result;
+        }
+    }
+    
+    static TripleData tripleData = new TripleData();
+    
     class Element implements Comparable {
         String elementName;
         SimpleAttributes attributes;
@@ -508,7 +788,7 @@ import com.ibm.icu.util.UResourceBundle;
 		 * @param fixed
 		 */
 		public void setAttribute(String attribute, String value) {
-			attributes.set(attribute, value);			
+			attributes.set(elementName, attribute, value);			
 		}
 		/**
 		 * @param string
@@ -605,7 +885,7 @@ import com.ibm.icu.util.UResourceBundle;
                 Element context = (Element)contexts.get(i);
                 if (context.elementName.equals(element)) {
                     context = new Element(context); // clone for safety
-                    context.attributes.set(attribute, value);
+                    context.attributes.set(element, attribute, value);
                     contexts.set(i, context);
                     break;
                 }
@@ -988,7 +1268,7 @@ import com.ibm.icu.util.UResourceBundle;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
                         else out.print(" ");
-                        out.print("\u0387" + it3.next() + "\u0387");
+                        out.print("\u00B7" + it3.next() + "\u00B7");
                     }
                     out.println("</td></tr>");
                 }
@@ -1000,6 +1280,7 @@ import com.ibm.icu.util.UResourceBundle;
                 out.close();
             }
             writeIndex();
+            tripleData.writeData();
         }
 
 		/**
