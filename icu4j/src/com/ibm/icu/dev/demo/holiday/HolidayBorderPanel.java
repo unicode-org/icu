@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayBorderPanel.java,v $ 
- * $Date: 2000/03/10 03:47:43 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/09/08 01:39:20 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -180,6 +180,7 @@ public class HolidayBorderPanel extends Panel {
                 catch (Exception e) {
                     // nothing: just in case there is no graphics context
                     //   at the beginning.
+                    System.out.print("");
                     }
                 }
             }
