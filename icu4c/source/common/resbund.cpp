@@ -249,13 +249,18 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
 ResourceBundle::ResourceBundle(const ResourceBundle &other) {
     UErrorCode status = U_ZERO_ERROR;
 
-    if(other.resource->fIsTopLevel == TRUE) {
-        constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
-    } else {
+    if (other.resource) {
+        if(other.resource->fIsTopLevel == TRUE) {
+            constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
+        } else {
 #ifdef ICU_RESBUND_USE_DEPRECATES
-        fItemCache = 0;
+            fItemCache = 0;
 #endif
-        resource = copyResb(0, other.resource, &status);
+            resource = copyResb(0, other.resource, &status);
+        }
+    } else {
+        /* Copying a bad resource bundle */
+        resource = NULL;
     }
 }
 
