@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $ 
- * $Date: 2000/10/06 23:12:54 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/04/02 19:21:06 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@ package com.ibm.test.normalizer;
 
 import com.ibm.test.*;
 import com.ibm.text.*;
-
+import com.ibm.util.Utility;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
@@ -339,6 +339,39 @@ public class BasicTest extends TestFmwk {
             } else {
                 errln("FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
                       ", expect " + hex(exp));
+            }
+        }
+    }
+
+    /**
+     * Test for a problem found by Verisign.  Problem is that
+     * characters at the start of a string are not put in canonical
+     * order correctly by compose() if there is no starter.
+     */
+    public void TestVerisign() {
+        String[] inputs = {
+            "\u05b8\u05b9\u05b1\u0591\u05c3\u05b0\u05ac\u059f",
+            "\u0592\u05b7\u05bc\u05a5\u05b0\u05c0\u05c4\u05ad"
+        };
+        String[] outputs = {
+            "\u05b1\u05b8\u05b9\u0591\u05c3\u05b0\u05ac\u059f",
+            "\u05b0\u05b7\u05bc\u05a5\u0592\u05c0\u05ad\u05c4"
+        };
+
+        for (int i = 0; i < inputs.length; ++i) {
+            String input = inputs[i];
+            String output = outputs[i];
+            String result = Normalizer.decompose(input, false, 0);
+            if (!result.equals(output)) {
+                errln("FAIL input: " + Utility.escape(input));
+                errln(" decompose: " + Utility.escape(result));
+                errln("  expected: " + Utility.escape(output));
+            }
+            result = Normalizer.compose(input, false, 0);
+            if (!result.equals(output)) {
+                errln("FAIL input: " + Utility.escape(input));
+                errln("   compose: " + Utility.escape(result));
+                errln("  expected: " + Utility.escape(output));
             }
         }
     }

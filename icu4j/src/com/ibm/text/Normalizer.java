@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Normalizer.java,v $ 
- * $Date: 2000/09/21 22:37:41 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/04/02 19:21:21 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -847,7 +847,7 @@ public final class Normalizer {
         if (DEBUG) System.out.println(" bubbleAppend(" + Utility.hex(target) + ", " + Utility.hex(ch) + ", " + cclass + ")" );
         if (DEBUG) System.out.println("  getComposeClass(" + Utility.hex(ch) + ")=" + getComposeClass(ch));
         int i;
-        for (i = target.length() - 1; i > 0; --i) {
+        for (i = target.length() - 1; i >= 0; --i) {
             int iClass = getComposeClass(target.charAt(i));
             if (DEBUG) System.out.println(" bubbleAppend: target[" + i + "]=" + Utility.hex(target.charAt(i)) + " is class " + iClass);
 
