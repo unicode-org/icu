@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 1997-2004, International Business Machines
+ *   Copyright (C) 1997-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   Date        Name        Description
@@ -186,7 +186,7 @@ utrans_open(const char* id,
             int32_t rulesLength,        /* -1 if null-terminated */ 
             UParseError* parseError,    /* may be Null */
             UErrorCode* status) {
-    UnicodeString ID(id, ""); // use invariant converter
+    UnicodeString ID(id, -1, US_INV); // use invariant converter
     return utrans_openU(ID.getBuffer(), ID.length(), dir,
                         rules, rulesLength,
                         parseError, status);
@@ -242,7 +242,7 @@ U_CAPI int32_t U_EXPORT2
 utrans_getID(const UTransliterator* trans,
              char* buf,
              int32_t bufCapacity) {
-    return ((Transliterator*) trans)->getID().extract(0, 0x7fffffff, buf, bufCapacity, "");
+    return ((Transliterator*) trans)->getID().extract(0, 0x7fffffff, buf, bufCapacity, US_INV);
 }
 
 U_CAPI void U_EXPORT2
@@ -261,7 +261,7 @@ utrans_unregisterID(const UChar* id, int32_t idLength) {
 
 U_CAPI void U_EXPORT2
 utrans_unregister(const char* id) {
-    UnicodeString ID(id, ""); // use invariant converter
+    UnicodeString ID(id, -1, US_INV); // use invariant converter
     Transliterator::unregister(ID);
 }
 
@@ -299,7 +299,7 @@ U_CAPI int32_t U_EXPORT2
 utrans_getAvailableID(int32_t index,
                       char* buf, // may be NULL
                       int32_t bufCapacity) {
-    return Transliterator::getAvailableID(index).extract(0, 0x7fffffff, buf, bufCapacity, "");
+    return Transliterator::getAvailableID(index).extract(0, 0x7fffffff, buf, bufCapacity, US_INV);
 }
 
 /* Transliterator UEnumeration ---------------------------------------------- */
