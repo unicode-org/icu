@@ -275,31 +275,18 @@ UConverter *
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
   UErrorCode internalErrorCode = U_ZERO_ERROR;
-  bool_t isDefaultConverter;
 
   if (U_FAILURE (*err))
     return NULL;
 
   /* In case "name" is NULL we want to open the default converter. */
   if (converterName == NULL) {
-    converterName = ucnv_io_getDefaultConverterName();
-    if (converterName == NULL) {
+    realName = ucnv_io_getDefaultConverterName();
+    if (realName == NULL) {
       *err = U_MISSING_RESOURCE_ERROR;
       return NULL;
-    } else {
-      isDefaultConverter = TRUE;
     }
-  } else {
-    isDefaultConverter = FALSE;
-  }
-
-  /* resolve aliases */
-  if (*converterName == 0) {
-    /* Use the PlatformInvariant algorithmic converter. */
-    realName = "PlatformInvariant";
-  } else if(isDefaultConverter) {
     /* the default converter name is already canonical */
-    realName = converterName;
   } else {
     /* get the canonical converter name */
     realName = ucnv_io_getConverterName(converterName, &internalErrorCode);
