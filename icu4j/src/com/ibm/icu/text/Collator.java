@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/07/12 21:59:22 $ 
-* $Revision: 1.9 $
+* $Date: 2002/08/01 21:09:16 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -196,7 +196,7 @@ public abstract class Collator
 
     /**
      * <p>Decomposition mode value. With CANONICAL_DECOMPOSITION set,
-     * characters that are canonical variants according to Unicode 2.0
+     * characters that are canonical variants according to the Unicode standard
      * will be decomposed for collation.</p>
      *
      * <p>CANONICAL_DECOMPOSITION corresponds to Normalization Form D as
