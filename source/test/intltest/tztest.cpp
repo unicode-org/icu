@@ -877,11 +877,11 @@ TimeZoneTest::TestDisplayName()
     zone2->setStartRule(Calendar::JANUARY, 1, 0, 0, status);
     zone2->setEndRule(Calendar::DECEMBER, 31, 0, 0, status);
 
-    UnicodeString inDaylight = (zone2->inDaylightTime(UDate(), status)? UnicodeString("TRUE"):UnicodeString("FALSE"));
+    UnicodeString inDaylight = (zone2->inDaylightTime(UDate(0), status)? UnicodeString("TRUE"):UnicodeString("FALSE"));
     logln(UnicodeString("Modified PST inDaylightTime->") + inDaylight );
     if(U_FAILURE(status))
     {
-        errln("Some sort of error..."); // REVISIT
+        errln("Some sort of error..." + UnicodeString(u_errorName(status))); // REVISIT
     }
     name.remove();
     name = zone2->getDisplayName(Locale::ENGLISH,name);
