@@ -2617,7 +2617,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 if(allocatePrimary == TRUE) {
                   primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
                   *result = primStart;
-                  primarySafeEnd = primaries + resultLength - 2;
+                  primarySafeEnd = primaries + resultLength - 4;
                 } else {
                   *status = U_MEMORY_ALLOCATION_ERROR;
                 }
