@@ -242,6 +242,19 @@ public:
     void setLocalPatternChars(const UnicodeString& newLocalPatternChars);
 
 private:
+    /**
+     * Resource bundle file suffix and tag names used by this class.
+     */
+    static const char *fgErasTag;   // resource bundle tag for era names
+    static const char *fgMonthNamesTag; // resource bundle tag for month names
+    static const char *fgMonthAbbreviationsTag; // resource bundle tag for month abbreviations
+    static const char *fgDayNamesTag;   // resource bundle tag for day names
+    static const char *fgDayAbbreviationsTag;   // resource bundle tag for day abbreviations
+    static const char *fgAmPmMarkersTag;    // resource bundle tag for AM/PM strings
+
+    static const char *fgZoneStringsTag;    // resource bundle tag for time zone names
+    static const char *fgLocalPatternCharsTag;  // resource bundle tag for localized pattern characters
+
     friend class SimpleDateFormat;
 
     /**

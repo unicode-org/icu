@@ -457,25 +457,6 @@ public:
      */
     virtual void setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols);
 
-
-public:
-    /**
-     * Resource bundle file suffix and tag names used by this class.
-     */
-    static const char *fgErasTag;   // resource bundle tag for era names
-    static const char *fgMonthNamesTag; // resource bundle tag for month names
-    static const char *fgMonthAbbreviationsTag; // resource bundle tag for month abbreviations
-    static const char *fgDayNamesTag;   // resource bundle tag for day names
-    static const char *fgDayAbbreviationsTag;   // resource bundle tag for day abbreviations
-    static const char *fgAmPmMarkersTag;    // resource bundle tag for AM/PM strings
-    static const char *fgDateTimePatternsTag;   // resource bundle tag for default date and time patterns
-
-    static const char *fgZoneStringsTag;    // resource bundle tag for time zone names
-    static const char *fgLocalPatternCharsTag;  // resource bundle tag for localized pattern characters
-
-    static const UnicodeString      fgDefaultPattern;    // date/time pattern of last resort
-
-public:
     /**
      * Return the class ID for this class. This is useful only for comparing to
      * a return value from getDynamicClassID(). For example:
@@ -504,6 +485,10 @@ public:
 
 private:
     static char fgClassID;
+
+    static const char *fgDateTimePatternsTag;   // resource bundle tag for default date and time patterns
+
+    static const UChar fgDefaultPattern[];    // date/time pattern of last resort
 
     friend class DateFormat;
 

@@ -50,26 +50,16 @@ const UChar SimpleDateFormat::fgGmtMinus[] = {0x0047, 0x004D, 0x0054, 0x002D, 0x
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
 // of a resource.
-const UnicodeString SimpleDateFormat::fgDefaultPattern = UNICODE_STRING("yyMMdd hh:mm a", 14);
+const UChar SimpleDateFormat::fgDefaultPattern[] =
+{
+    0x79, 0x79, 0x79, 0x79, 0x4D, 0x4D, 0x64, 0x64, 0x20, 0x68, 0x68, 0x3A, 0x6D, 0x6D, 0x20, 0x61, 0
+};  /* "yyyyMMdd hh:mm a" */
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const char *SimpleDateFormat::fgErasTag="Eras";
-const char *SimpleDateFormat::fgMonthNamesTag="MonthNames";
-const char *SimpleDateFormat::fgMonthAbbreviationsTag="MonthAbbreviations";
-const char *SimpleDateFormat::fgDayNamesTag="DayNames";
-const char *SimpleDateFormat::fgDayAbbreviationsTag="DayAbbreviations";
-const char *SimpleDateFormat::fgAmPmMarkersTag="AmPmMarkers";
 const char *SimpleDateFormat::fgDateTimePatternsTag="DateTimePatterns";
-
-/**
- * These are the tags we expect to see in time zone data resource bundle files
- * associated with a locale.
- */
-const char *SimpleDateFormat::fgZoneStringsTag="zoneStrings";
-const char *SimpleDateFormat::fgLocalPatternCharsTag="localPatternChars";
 
 char            SimpleDateFormat::fgClassID = 0; // Value is irrelevant
 
