@@ -588,7 +588,7 @@ public:
 protected:
     ThreadWithStatus() : fDone(FALSE), fErrors(0) {}
     void done() { fDone = TRUE; }
-    void error(const UnicodeString &error) { fErrors++; fErrorString = error; done(); }
+    void error(const UnicodeString &error) { fErrors++; fErrorString = error; }
     void error() { error("An error occured."); }
 private:
     UBool fDone;
@@ -673,143 +673,137 @@ public:
 
     virtual void run()
     {
-        // Keep this data here to avoid static initialization.
-        FormatThreadTestData kNumberFormatTestData[] = 
+        NumberFormat *formatter        = NULL;
+        NumberFormat *percentFormatter = NULL;
+
         {
-            FormatThreadTestData((double)5.0, UnicodeString("5", "")),
-            FormatThreadTestData( 6.0, UnicodeString("6", "")),
-            FormatThreadTestData( 20.0, UnicodeString("20", "")),
-            FormatThreadTestData( 8.0, UnicodeString("8", "")),
-            FormatThreadTestData( 8.3, UnicodeString("8.3", "")),
-            FormatThreadTestData( 12345, UnicodeString("12,345", "")),
-            FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
-        };
-        int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]));
-
-        // Keep this data here to avoid static initialization.
-        FormatThreadTestData kPercentFormatTestData[] = 
-        {
-            FormatThreadTestData((double)5.0, UnicodeString("500%", "")),
-            FormatThreadTestData( 1.0, UnicodeString("100%", "")),
-            FormatThreadTestData( 0.26, UnicodeString("26%", "")),
-            FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
-            FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
-        };
-        int32_t kPercentFormatTestDataLength = (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
-        int32_t iteration;
-
-        UErrorCode status = U_ZERO_ERROR;
-        NumberFormat *formatter = NumberFormat::createInstance(Locale::getEnglish(),status);
-
-        if(U_FAILURE(status))
-        {
-            Mutex m(&ftMutex);
-            error("Error on NumberFormat::createInstance()");
-            return;
-        }
-
-        NumberFormat *percentFormatter = NumberFormat::createPercentInstance(Locale::getFrench(),status);
-
-        if(U_FAILURE(status))
-        {
+            // Keep this data here to avoid static initialization.
+            FormatThreadTestData kNumberFormatTestData[] = 
             {
-                Mutex m(&ftMutex);
-                error("Error on NumberFormat::createPercentInstance()");
-            }
-            delete formatter;
-            return;
-        }
-
-        for(iteration = 0;!getError() && iteration<kFormatThreadIterations;iteration++)
-        {
-
-            int32_t whichLine = (iteration + fOffset)%kNumberFormatTestDataLength;
-
-            UnicodeString  output;
-
-            formatter->format(kNumberFormatTestData[whichLine].number, output);
-
-            if(0 != output.compare(kNumberFormatTestData[whichLine].string))
+                FormatThreadTestData((double)5.0, UnicodeString("5", "")),
+                    FormatThreadTestData( 6.0, UnicodeString("6", "")),
+                    FormatThreadTestData( 20.0, UnicodeString("20", "")),
+                    FormatThreadTestData( 8.0, UnicodeString("8", "")),
+                    FormatThreadTestData( 8.3, UnicodeString("8.3", "")),
+                    FormatThreadTestData( 12345, UnicodeString("12,345", "")),
+                    FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
+            };
+            int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]));
+            
+            // Keep this data here to avoid static initialization.
+            FormatThreadTestData kPercentFormatTestData[] = 
             {
-                Mutex m(&ftMutex);
-                error("format().. expected " + kNumberFormatTestData[whichLine].string + " got " + output);
-                continue; // will break
-            }
-
-            // Now check percent.
-            output.remove();
-            whichLine = (iteration + fOffset)%kPercentFormatTestDataLength;
-
-            percentFormatter->format(kPercentFormatTestData[whichLine].number, output);
-
-            if(0 != output.compare(kPercentFormatTestData[whichLine].string))
-            {
-                Mutex m(&ftMutex);
-                error("percent format().. \n" + showDifference(kPercentFormatTestData[whichLine].string,output));
-                continue;
-            }
-
-            // Test message error 
-#define kNumberOfMessageTests 3
-            UErrorCode      statusToCheck;
-            UnicodeString   patternToCheck;
-            Locale          messageLocale;
-            Locale          countryToCheck;
-            double          currencyToCheck;
-
-            UnicodeString   expected;
-
-            // load the cases.
-            switch((iteration+fOffset) % kNumberOfMessageTests)
-            {
-            default:
-            case 0:
-                statusToCheck=                      U_FILE_ACCESS_ERROR;
-                patternToCheck=                     "0:Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
-                messageLocale=                      Locale("en","US");
-                countryToCheck=                     Locale("","HR");
-                currencyToCheck=                    8192.77;
-                expected=                           "0:Someone from Croatia is receiving a #4 error - U_FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
-                break;
-            case 1:
-                statusToCheck=                      U_INDEX_OUTOFBOUNDS_ERROR;
-                patternToCheck=                     "1:A customer in {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
-                messageLocale=                      Locale("de","DE_PREEURO");
-                countryToCheck=                     Locale("","BF");
-                currencyToCheck=                    2.32;
-                expected=                           "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing $2.32.";
-            case 2:
-                statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
-                patternToCheck=                     "2:user in {2} is receiving a #{0} error - {1}. They insist they just spent {3,number,currency} on memory."; // number,currency
-                messageLocale=                      Locale("de","AT_PREEURO"); // Austrian German
-                countryToCheck=                     Locale("","US"); // hmm
-                currencyToCheck=                    40193.12;
-                expected=                           CharsToUnicodeString("2:user in Vereinigte Staaten is receiving a #7 error - U_MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
-                break;
-            }
-
-            UnicodeString result;
+                FormatThreadTestData((double)5.0, UnicodeString("500%", "")),
+                    FormatThreadTestData( 1.0, UnicodeString("100%", "")),
+                    FormatThreadTestData( 0.26, UnicodeString("26%", "")),
+                    FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
+                    FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
+            };
+            int32_t kPercentFormatTestDataLength = (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
+            int32_t iteration;
+            
             UErrorCode status = U_ZERO_ERROR;
-            formatErrorMessage(status,patternToCheck,messageLocale,statusToCheck,countryToCheck,currencyToCheck,result);
-            if(U_FAILURE(status))
-            {
-               UnicodeString tmp;
-               errorToString(status,tmp);
-               Mutex m(&ftMutex);
-               error("Failure on message format, pattern=" + patternToCheck +", error = " + tmp);
-               continue;
+            formatter = NumberFormat::createInstance(Locale::getEnglish(),status);
+            if(U_FAILURE(status)) {
+                error("Error on NumberFormat::createInstance()");
+                goto cleanupAndReturn;
             }
-
-            if(result != expected)
-            {
-                Mutex m(&ftMutex);
-                error("PatternFormat: \n" + showDifference(expected,result));
-                continue;
+            
+            percentFormatter = NumberFormat::createPercentInstance(Locale::getFrench(),status);
+            if(U_FAILURE(status))             {
+                error("Error on NumberFormat::createPercentInstance()");
+                goto cleanupAndReturn;
             }
-        }
+            
+            for(iteration = 0;!getError() && iteration<kFormatThreadIterations;iteration++)
+            {
+                
+                int32_t whichLine = (iteration + fOffset)%kNumberFormatTestDataLength;
+                
+                UnicodeString  output;
+                
+                formatter->format(kNumberFormatTestData[whichLine].number, output);
+                
+                if(0 != output.compare(kNumberFormatTestData[whichLine].string)) {
+                    error("format().. expected " + kNumberFormatTestData[whichLine].string + " got " + output);
+                    goto cleanupAndReturn;
+                }
+                
+                // Now check percent.
+                output.remove();
+                whichLine = (iteration + fOffset)%kPercentFormatTestDataLength;
+                
+                percentFormatter->format(kPercentFormatTestData[whichLine].number, output);
+                
+                if(0 != output.compare(kPercentFormatTestData[whichLine].string))
+                {
+                    error("percent format().. \n" + showDifference(kPercentFormatTestData[whichLine].string,output));
+                    goto cleanupAndReturn;
+                }
+                
+                // Test message error 
+#define kNumberOfMessageTests 3
+                UErrorCode      statusToCheck;
+                UnicodeString   patternToCheck;
+                Locale          messageLocale;
+                Locale          countryToCheck;
+                double          currencyToCheck;
+                
+                UnicodeString   expected;
+                
+                // load the cases.
+                switch((iteration+fOffset) % kNumberOfMessageTests)
+                {
+                default:
+                case 0:
+                    statusToCheck=                      U_FILE_ACCESS_ERROR;
+                    patternToCheck=                     "0:Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
+                    messageLocale=                      Locale("en","US");
+                    countryToCheck=                     Locale("","HR");
+                    currencyToCheck=                    8192.77;
+                    expected=                           "0:Someone from Croatia is receiving a #4 error - U_FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
+                    break;
+                case 1:
+                    statusToCheck=                      U_INDEX_OUTOFBOUNDS_ERROR;
+                    patternToCheck=                     "1:A customer in {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
+                    messageLocale=                      Locale("de","DE_PREEURO");
+                    countryToCheck=                     Locale("","BF");
+                    currencyToCheck=                    2.32;
+                    expected=                           "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing $2.32.";
+                case 2:
+                    statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
+                    patternToCheck=                     "2:user in {2} is receiving a #{0} error - {1}. They insist they just spent {3,number,currency} on memory."; // number,currency
+                    messageLocale=                      Locale("de","AT_PREEURO"); // Austrian German
+                    countryToCheck=                     Locale("","US"); // hmm
+                    currencyToCheck=                    40193.12;
+                    expected=                           CharsToUnicodeString("2:user in Vereinigte Staaten is receiving a #7 error - U_MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
+                    break;
+                }
+                
+                UnicodeString result;
+                UErrorCode status = U_ZERO_ERROR;
+                formatErrorMessage(status,patternToCheck,messageLocale,statusToCheck,countryToCheck,currencyToCheck,result);
+                if(U_FAILURE(status))
+                {
+                    UnicodeString tmp;
+                    errorToString(status,tmp);
+                    error("Failure on message format, pattern=" + patternToCheck +", error = " + tmp);
+                    goto cleanupAndReturn;
+                }
+                
+                if(result != expected)
+                {
+                    error("PatternFormat: \n" + showDifference(expected,result));
+                    goto cleanupAndReturn;
+                }
+            }   /*  end of for loop */
 
-        delete formatter;
-        delete percentFormatter;
+cleanupAndReturn:
+            delete formatter;
+            delete percentFormatter;
+
+        } /* End of local block - force destruction of local objects before saying we are done */
+
         Mutex m(&ftMutex);
         done();
     }
@@ -941,10 +935,12 @@ public:
 
       if(cmpres != -cmpres2) {
         error("Compare result not symmetrical on line "+ line);
+        break;
       }
 
       if(((res&0x80000000) != (cmpres&0x80000000)) || (res == 0 && cmpres != 0) || (res != 0 && cmpres == 0)) {
         error(UnicodeString("Difference between ucol_strcoll and sortkey compare on line ")+ UnicodeString(line));
+        break;
       }
 
       if(res > 0) {
@@ -957,6 +953,7 @@ public:
           break;
         } else if (res > 0) {
           error(UnicodeString("Sortkeys are identical, but code point comapare gives >0 on line ")+ UnicodeString(i));
+          break;
         }
       }
     }
