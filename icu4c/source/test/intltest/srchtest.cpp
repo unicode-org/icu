@@ -2064,13 +2064,16 @@ void StringSearchTest::TestUClassID()
 class TestSearch : public SearchIterator
 {
 public:
+    TestSearch(const TestSearch &obj);
     TestSearch(const UnicodeString &text, 
                BreakIterator *breakiter,
                const UnicodeString &pattern);
     ~TestSearch();
+
     void        setOffset(int32_t position, UErrorCode &status);
     int32_t     getOffset() const;
     SearchIterator* safeClone() const;
+
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -2086,11 +2089,14 @@ public:
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
+    UBool operator!=(const TestSearch &that) const;
+
     UnicodeString m_pattern_;
 
 protected:
-    int32_t     handleNext(int32_t position, UErrorCode &status);
-    int32_t     handlePrev(int32_t position, UErrorCode &status);
+    int32_t      handleNext(int32_t position, UErrorCode &status);
+    int32_t      handlePrev(int32_t position, UErrorCode &status);
+    TestSearch & operator=(const TestSearch &that);
 
 private:
 
@@ -2104,10 +2110,19 @@ private:
 
 const char TestSearch::fgClassID=0;
 
+TestSearch::TestSearch(const TestSearch &obj) : SearchIterator(obj)
+{
+    m_offset_ = obj.m_offset_;
+    m_pattern_ = obj.m_pattern_;
+}
+
 TestSearch::TestSearch(const UnicodeString &text, 
                        BreakIterator *breakiter,
-                       const UnicodeString &pattern) : SearchIterator(text, breakiter)
+                       const UnicodeString &pattern) : SearchIterator()
 {
+    m_breakiterator_ = breakiter;
+    m_pattern_ = pattern;
+    m_text_ = text;
     m_offset_ = 0;
     m_pattern_ = pattern;
 }
@@ -2115,6 +2130,7 @@ TestSearch::TestSearch(const UnicodeString &text,
 TestSearch::~TestSearch()
 {
 }
+
 
 void TestSearch::setOffset(int32_t position, UErrorCode &status)
 {
@@ -2134,6 +2150,14 @@ int32_t TestSearch::getOffset() const
 SearchIterator * TestSearch::safeClone() const 
 {
     return new TestSearch(m_text_, m_breakiterator_, m_pattern_);
+}
+
+UBool TestSearch::operator!=(const TestSearch &that) const
+{
+    if (SearchIterator::operator !=(that)) {
+        return false;
+    }
+    return m_offset_ != that.m_offset_ || m_pattern_ != that.m_pattern_;
 }
 
 int32_t TestSearch::handleNext(int32_t start, UErrorCode &status)
@@ -2166,14 +2190,38 @@ int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
     return match;
 }
 
+TestSearch & TestSearch::operator=(const TestSearch &that)
+{
+    this->operator =(that);
+    m_offset_ = that.m_offset_;
+    m_pattern_ = that.m_pattern_;
+    return *this;
+}
+
 void StringSearchTest::TestSubclass()
 {
     UnicodeString text("abc abcd abc");
     UnicodeString pattern("abc");
     TestSearch search(text, NULL, pattern);
+    TestSearch search2(search);
     int expected[] = {0, 4, 9};
     UErrorCode status = U_ZERO_ERROR;
     int i;
+    StringCharacterIterator chariter(text);
+
+    search.setText(text, status);
+    if (search.getText() != search2.getText()) {
+        errln("Error setting text");
+    }
+
+    search.setText(chariter, status);
+    if (search.getText() != search2.getText()) {
+        errln("Error setting text");
+    }
+
+    search.reset();
+    // comparing constructors
+ 
     for (i = 0; i < sizeof(expected) / sizeof(int); i ++) {
         if (search.next(status) != expected[i]) {
             errln("Error getting next match");
