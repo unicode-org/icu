@@ -12,20 +12,6 @@ rem toolversion: Debug or Release
 set toolversion=Release
 if not "%2"=="" set toolversion=%2
 
-echo create conversion tables
-cd makeconv
-call mkcnvfle %toolversion% %1
-
-echo create locale resource bundles
-cd ..\genrb
-call genrb %toolversion% %1
-
-echo create binary collation tables
-cd ..\gencol
-%toolversion%\gencol
-
-cd ..
-
 echo create unames.dat and unames_dat.c from UnicodeData.txt
 gennames\%toolversion%\gennames -v- -c- "%ICU_DATA%UnicodeData-3.0.0.txt"
 genccode\%toolversion%\genccode "%ICU_DATA%unames.dat"
@@ -47,6 +33,20 @@ del "%ICU_DATA%icudata.dat"
 echo %ICU_DATA%unames.dat>mkmap.tmp
 echo %ICU_DATA%cnvalias.dat>>mkmap.tmp
 gencmn\%toolversion%\gencmn 1000000 mkmap.tmp
+
+echo create conversion tables
+cd makeconv
+call mkcnvfle %toolversion% %1
+
+echo create locale resource bundles
+cd ..\genrb
+call genrb %toolversion% %1
+
+echo create binary collation tables
+cd ..\gencol
+%toolversion%\gencol
+
+cd ..
 
 goto :end
 
