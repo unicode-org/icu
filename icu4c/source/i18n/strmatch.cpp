@@ -1,5 +1,7 @@
 /*
-* Copyright (C) 2001-2004, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+*   Copyright (c) 2001-2004, International Business Machines Corporation
+*   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   07/23/01    aliu        Creation.
@@ -17,7 +19,7 @@
 
 U_NAMESPACE_BEGIN
 
-const UChar EMPTY[] = { 0 }; // empty string: ""
+static const UChar EMPTY[] = { 0 }; // empty string: ""
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringMatcher)
 
