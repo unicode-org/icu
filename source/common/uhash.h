@@ -410,10 +410,24 @@ U_CAPI int32_t
 uhash_hashUnicodeString(const void *key);
 
 /**
+ * Hash function for UnicodeString* keys (case insensitive).
+ * Make sure to use together with uhash_compareCaselessUnicodeString.
+ */
+U_CAPI int32_t
+uhash_hashCaselessUnicodeString(const void *key);
+
+/**
  * Comparator function for UnicodeString* keys.
  */
 U_CAPI UBool
 uhash_compareUnicodeString(const void *key1, const void *key2);
+
+/**
+ * Comparator function for UnicodeString* keys (case insensitive).
+ * Make sure to use together with uhash_hashCaselessUnicodeString.
+ */
+U_CAPI UBool
+uhash_compareCaselessUnicodeString(const void *key1, const void *key2);
 
 /**
  * Deleter function for UnicodeString* keys or values.
