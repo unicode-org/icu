@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.18 $
+ * $Date: 2004/03/16 15:44:58 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Locale;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class RbnfTest extends TestFmwk {
@@ -774,10 +775,50 @@ public class RbnfTest extends TestFmwk {
         doTest(formatter, testData, true);
     }
 
+    public void TestSmallValues() {
+	String[][] testData = {
+	    { "0.001", "zero point zero zero one" },
+	    { "0.0001", "zero point zero zero zero one" },
+	    { "0.00001", "zero point zero zero zero zero one" },
+	    { "0.000001", "zero point zero zero zero zero zero one" },
+	    { "0.0000001", "zero point zero zero zero zero zero zero one" },
+	    { "0.00000001", "zero point zero zero zero zero zero zero zero one" },
+	    { "0.000000001", "zero point zero zero zero zero zero zero zero zero one" },
+	    { "0.0000000001", "zero point zero zero zero zero zero zero zero zero zero one" },
+	    { "0.00000000001", "zero point zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.0000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.00000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.000000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "10,000,000.001", "ten million point zero zero one" },
+	    { "10,000,000.0001", "ten million point zero zero zero one" },
+	    { "10,000,000.00001", "ten million point zero zero zero zero one" },
+	    { "10,000,000.000001", "ten million point zero zero zero zero zero one" },
+	    { "10,000,000.0000001", "ten million point zero zero zero zero zero zero one" },
+	    { "10,000,000.00000001", "ten million point zero zero zero zero zero zero zero one" },
+	    { "10,000,000.000000002", "ten million point zero zero zero zero zero zero zero zero two" },
+	    { "10,000,000", "ten million" },
+	    { "1,234,567,890.0987654", "one billion, two hundred and thirty-four million, five hundred and sixty-seven thousand, eight hundred and ninety point zero nine eight seven six five four" },
+	    { "123,456,789.9876543", "one hundred and twenty-three million, four hundred and fifty-six thousand, seven hundred and eighty-nine point nine eight seven six five four three" },
+	    { "12,345,678.87654321", "twelve million, three hundred and forty-five thousand, six hundred and seventy-eight point eight seven six five four three two one" },
+	    { "1,234,567.7654321", "one million, two hundred and thirty-four thousand, five hundred and sixty-seven point seven six five four three two one" },
+	    { "123,456.654321", "one hundred and twenty-three thousand, four hundred and fifty-six point six five four three two one" },
+	    { "12,345.54321", "twelve thousand three hundred and forty-five point five four three two one" },
+	    { "1,234.4321", "one thousand two hundred and thirty-four point four three two one" },
+	    { "123.321", "one hundred and twenty-three point three two one" },
+	    { "0.0000000011754944", "zero point zero zero zero zero zero zero zero zero one one seven five four nine four four" },
+	    { "0.000001175494351", "zero point zero zero zero zero zero one one seven five four nine four three five one" },
+	};
+
+	RuleBasedNumberFormat formatter
+	    = new RuleBasedNumberFormat(Locale.US, RuleBasedNumberFormat.SPELLOUT);
+	doTest(formatter, testData, true);
+    }
+
     void doTest(RuleBasedNumberFormat formatter, String[][] testData,
                 boolean testParsing) {
-        NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
-
+	//        NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
+	NumberFormat decFmt = new DecimalFormat("#,###.################");
         try {
             for (int i = 0; i < testData.length; i++) {
                 String number = testData[i][0];
@@ -787,7 +828,7 @@ public class RbnfTest extends TestFmwk {
                 String actualWords = formatter.format(num);
 
                 if (!actualWords.equals(expectedWords)) {
-                    errln("Spot check failed: for " + number + ", expected\n    "
+                    errln("Spot check format failed: for " + number + ", expected\n    "
                           + expectedWords + ", but got\n    " +
                           actualWords);
                 }
@@ -796,7 +837,7 @@ public class RbnfTest extends TestFmwk {
                                                         .parse(actualWords));
 
                     if (!actualNumber.equals(number)) {
-                        errln("Spot check failed: for " + actualWords +
+                        errln("Spot check parse failed: for " + actualWords +
                               ", expected " + number + ", but got " +
                               actualNumber);
                     }

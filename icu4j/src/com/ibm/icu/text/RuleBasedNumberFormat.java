@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2004/03/12 20:15:13 $ 
- * $Revision: 1.21 $
+ * $Date: 2004/03/16 15:44:57 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -475,7 +475,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.21 $ $Date: 2004/03/12 20:15:13 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.22 $ $Date: 2004/03/16 15:44:57 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
@@ -1042,7 +1042,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Return the name of the current default rule set.
-     * @retrurn the name of the current default rule set, if it is public, else the empty string.
+     * @return the name of the current default rule set, if it is public, else the empty string.
      * @draft ICU 3.0
      */
     public String getDefaultRuleSetName() {
