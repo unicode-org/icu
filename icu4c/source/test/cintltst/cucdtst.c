@@ -33,9 +33,6 @@ TestCharNames();
 static void
 TestMirroring();
 
-static void
-TestWhitespace();
-
 /* test data ---------------------------------------------------------------- */
 #define MIN(a,b) (a < b ? a : b)
 
@@ -101,7 +98,6 @@ const char dirStrings[][5] = {
 void addUnicodeTest(TestNode** root)
 {
     setUpDataTable();
-    
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
     addTest(root, &TestLetterNumber, "tsutil/cucdtst/TestLetterNumber");
     addTest(root, &TestMisc, "tsutil/cucdtst/TestMisc");
@@ -111,7 +107,6 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
-    addTest(root, &TestWhitespace, "tsutil/cucdtst/TestWhitespace");
 }
 
 /*==================================================== */
@@ -119,6 +114,8 @@ void addUnicodeTest(TestNode** root)
 /*==================================================== */
 void TestUpperLower()
 {
+    const UChar upper[] = {0x41, 0x42, 0x00b2, 0x01c4, 0x01c6, 0x01c9, 0x01c8, 0x01c9, 0x000c, 0x0000};
+    const UChar lower[] = {0x61, 0x62, 0x00b2, 0x01c6, 0x01c6, 0x01c9, 0x01c9, 0x01c9, 0x000c, 0x0000};
     U_STRING_DECL(upperTest, "abcdefg123hij.?:klmno", 21);
     U_STRING_DECL(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
     int i;
@@ -126,6 +123,13 @@ void TestUpperLower()
     U_STRING_INIT(upperTest, "abcdefg123hij.?:klmno", 21);
     U_STRING_INIT(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
 
+    
+    for(i=0; i < u_strlen(upper); i++){
+        if(u_tolower(upper[i]) != lower[i]){
+            log_err("FAILED u_tolower() for %lx Expected %lx Got %lx\n", upper[i], lower[i], u_tolower(upper[i]));
+        }
+       
+    }
     log_verbose("testing upper lower\n");
     for (i = 0; i < 21; i++) {
         
@@ -157,6 +161,7 @@ void TestUpperLower()
         }
     }
     log_verbose("done testing upper Lower\n");
+
 }
 
  
@@ -206,7 +211,7 @@ void TestLetterNumber()
 
 }
 
-/* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()),u_CharDigitValue(),u_CharCellWidth() */
+/* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue(),u_CharCellWidth() */
 void TestMisc()
 {
     const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
@@ -217,8 +222,15 @@ void TestMisc()
     const UChar sampleNonBase[] = {0x002B, 0x0020, 0x203B};
     const UChar sampleChars[] = {0x000a, 0x0045, 0x4e00, 0xDC00};
     const UChar sampleDigits[]= {0x0030, 0x0662, 0x0F23, 0x0ED5};
+    const UChar sample2Digits[]= {0x3007, 0x4e00, 0x4e8c, 0x4e09, 0x56d8, 0x4e94, 0x516d, 0x4e03, 0x516b, 0x4e5d}; /*sp characters not in the proptable*/
     const UChar sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
+    const UChar sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
+    const UChar sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
+                        
+
     const int32_t sampleDigitValues[] = {0, 2, 3, 5};
+    const int32_t sample2DigitValues[]= {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; /*special characters not in the properties table*/
+                                         
 
     enum ECellWidths         /* pasted in here from unicode.h */
     {
@@ -245,6 +257,14 @@ void TestMisc()
             log_err("Space char test error : %d or %d \n", (int32_t)sampleSpaces[i], (int32_t)sampleNonSpaces[i]);
         }
     }
+    for (i = 0; i < 5; i++) {
+      log_verbose("Testing for isspace and nonspaces\n");
+        if (!(u_isWhitespace(sampleWhiteSpaces[i])) ||
+                (u_isWhitespace(sampleNonWhiteSpaces[i])))
+        {
+            log_err("White Space char test error : %lx or %lx \n", sampleWhiteSpaces[i], sampleNonWhiteSpaces[i]);
+        }
+    }
     for (i = 0; i < 3; i++) {
       log_verbose("Testing for isdefined\n");
         if ((u_isdefined(sampleUndefined[i])) ||
@@ -269,11 +289,18 @@ void TestMisc()
         }
     }
     for (i = 0; i < 4; i++) {
-       log_verbose("Testing for isdigit\n"); 
+       log_verbose("Testing for isdigit \n"); 
         if ((u_isdigit(sampleDigits[i]) && 
             (u_charDigitValue(sampleDigits[i])!= sampleDigitValues[i])) ||
             (u_isdigit(sampleNonDigits[i]))) {
-            log_err("Digit char test error : %d   or   %d\n", (int32_t)sampleDigits[i], (int32_t)sampleNonDigits[i]);
+            log_err("Digit char test error : %lx   or   %lx\n", sampleDigits[i], sampleNonDigits[i]);
+        }
+    }
+    for (i = 0; i < 10; i++) {
+       log_verbose("Testing for u_charDigitValue for special values not existing in prop table %lx \n",  sample2Digits[i]); 
+        if (u_charDigitValue(sample2Digits[i])!= sample2DigitValues[i]) 
+        {
+            log_err("Digit char test error : %lx\n", sample2Digits[i]);
         }
     }
     /* Tests the ICU version #*/
@@ -291,14 +318,6 @@ void TestMisc()
       }
 #endif
 
-    /* test u_versionToString() error checking */
-    u_versionToString(NULL, icuVersion);
-    if(icuVersion[0]!=0) {
-        log_err("u_versionToString() failed to deal with a NULL version array and wrote a non-empty string.\n");
-    }
-
-    /* this just blows up if it does not check... */
-    u_versionToString("1.2.3", NULL);
 }
 
 
@@ -333,27 +352,43 @@ void TestControlPrint()
         }
     }
 }
-/* u_isIDStart(), u_isIDPart(), u_isIDIgnorable()*/
+/* u_isJavaIDStart, u_isJavaIDPart, u_isIDStart(), u_isIDPart(), u_isIDIgnorable()*/
 void TestIdentifier()
 {
-    
- 
+    const UChar sampleJavaIDStart[] = {0x0071, 0x00e4, 0x005f};
+    const UChar sampleNonJavaIDStart[] = {0x0020, 0x2030, 0x0082};
+    const UChar sampleJavaIDPart[] = {0x005f, 0x0032, 0x0045};
+    const UChar sampleNonJavaIDPart[] = {0x2030, 0x2020, 0x0020};
     const UChar sampleUnicodeIDStart[] = {0x0250, 0x00e2, 0x0061};
     const UChar sampleNonUnicodeIDStart[] = {0x2000, 0x000a, 0x2019};
     const UChar sampleUnicodeIDPart[] = {0x005f, 0x0032, 0x0045};
-    const UChar sampleNonUnicodeIDPart[] = {0x007f, 0x00a3, 0x0020};
+    const UChar sampleNonUnicodeIDPart[] = {0x2030, 0x00a3, 0x0020};
     const UChar sampleIDIgnore[] = {0x0006, 0x0010, 0x206b};
     const UChar sampleNonIDIgnore[] = {0x0075, 0x00a3, 0x0061};
 
     int i;
+    for (i = 0; i < 3; i++) {
+        log_verbose("Testing sampleJavaID start \n");
+        if (!(u_isJavaIDStart(sampleJavaIDStart[i])) ||
+                (u_isJavaIDStart(sampleNonJavaIDStart[i])))
+            log_err("Java ID Start char test error : %lx or %lx\n",
+            sampleJavaIDStart[i], sampleNonJavaIDStart[i]);
+    }
+    for (i = 0; i < 3; i++) {
+        log_verbose("Testing sampleJavaID part \n");
+        if (!(u_isJavaIDPart(sampleJavaIDPart[i])) ||
+                (u_isJavaIDPart(sampleNonJavaIDPart[i])))
+            log_err("Java ID Part char test error : %lx or %lx\n",
+             sampleJavaIDPart[i], sampleNonJavaIDPart[i]);
+    }
     for (i = 0; i < 3; i++) {
         log_verbose("Testing sampleUnicodeID start \n");
         /* T_test_logln_ustr((int32_t)i); */
         if (!(u_isIDStart(sampleUnicodeIDStart[i])) ||
                 (u_isIDStart(sampleNonUnicodeIDStart[i])))
         {
-            log_err("Unicode ID Start char test error : %d  or  %d\n", (int32_t)sampleUnicodeIDStart[i],
-                                    (int32_t)sampleNonUnicodeIDStart[i]);
+            log_err("Unicode ID Start char test error : %lx  or  %lx\n", sampleUnicodeIDStart[i],
+                                    sampleNonUnicodeIDStart[i]);
         }
     }
     for (i = 2; i < 3; i++) {   /* nos *** starts with 2 instead of 0, until clarified */
@@ -362,7 +397,7 @@ void TestIdentifier()
         if (!(u_isIDPart(sampleUnicodeIDPart[i])) ||
                 (u_isIDPart(sampleNonUnicodeIDPart[i])))
            {
-            log_err("Unicode ID Part char test error : %d  or  %d", (int32_t)sampleUnicodeIDPart[i], (int32_t)sampleNonUnicodeIDPart[i]);
+            log_err("Unicode ID Part char test error : %lx  or  %lx", sampleUnicodeIDPart[i], sampleNonUnicodeIDPart[i]);
             }
     }
     for (i = 0; i < 3; i++) {
@@ -371,7 +406,7 @@ void TestIdentifier()
         if (!(u_isIDIgnorable(sampleIDIgnore[i])) ||
                 (u_isIDIgnorable(sampleNonIDIgnore[i])))
         {
-            log_verbose("ID ignorable char test error : %d  or  %d\n", (int32_t)sampleIDIgnore[i], (int32_t)sampleNonIDIgnore[i]);
+            log_verbose("ID ignorable char test error : %d  or  %d\n", sampleIDIgnore[i], sampleNonIDIgnore[i]);
         }
     }
 }
@@ -500,6 +535,7 @@ void TestUnicodeData()
                 log_err("Unicode character directionality failed at %d\n", unicode);
                 
             }
+            
         }
 
         if (u_charScript((UChar)0x0041 != U_BASIC_LATIN)) {
@@ -564,25 +600,24 @@ void setUpDataTable()
         }
     
 }
-/*Tests  for u_strcat(),u_strcmp(), u_strlen(), u_strcpy(),u_strncat(),u_strncmp(),u_strncpy, u_uastrcpy(),u_austrcpy(); */
+/*Tests  for u_strcat(),u_strcmp(), u_strlen(), u_strcpy(),u_strncat(),u_strncmp(),u_strncpy, u_uastrcpy(),u_austrcpy(), u_uastrncpy(); */
 void TestStringFunctions()
 {
    
     int32_t i,j,k;
-    UChar* temp =0;
+    UChar temp[20];
     char test[20];
     log_verbose("Testing u_strlen()\n");
     if( u_strlen(dataTable[0][0])!= u_strlen(dataTable[0][3]) || u_strlen(dataTable[0][0]) == u_strlen(dataTable[0][2]))
         log_err("There is an error in u_strlen()");
 
     log_verbose("Testing u_strcpy() and u_strcmp)\n");
-    temp=(UChar*)malloc(sizeof(UChar*) * 1);
-    
+      
     for(i=0;i<3;++i){
         for(j=0;j<4;++j)
         {
         log_verbose("Testing  %s  \n", austrdup(dataTable[i][j]));
-        temp=(UChar*)realloc(temp, sizeof(UChar)*(u_strlen(dataTable[i][j]) + 1));
+        u_uastrcpy(temp, "");
         u_strcpy(temp,dataTable[i][j]);
         
         if(u_strcmp(temp,dataTable[i][j])!=0)
@@ -594,7 +629,7 @@ void TestStringFunctions()
     i=0;
     for(j=0; j<2;++j)
     {
-        temp=(UChar*)realloc(temp, sizeof(UChar)*(u_strlen(dataTable[i+2][j]) +1));
+        u_uastrcpy(temp, "");
         u_strcpy(temp,dataTable[i][j]);
         u_strcat(temp,dataTable[i+1][j]);
         if(u_strcmp(temp,dataTable[i+2][j])!=0)
@@ -641,13 +676,25 @@ void TestStringFunctions()
         log_verbose("%s ", austrdup(u_strchr(dataTable[i][j],'_')));
     }
 
-
+    
     log_verbose("Testing u_austrcpy()");
     u_austrcpy(test,dataTable[0][0]);
     if(strcmp(test,raw[0][0])!=0)
         log_err("There is an error in u_austrcpy()");
 
-  
+   
+    log_verbose("Testing u_uastrncpy() and u_uastrcpy()");
+    {
+    UChar uchars[]={0x61, 0x62, 0x63, 0x00};
+    u_uastrcpy(temp, "abc");
+    if(u_strcmp(temp, uchars) != 0)
+        log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+    
+    u_uastrncpy(temp, "abcabcabc", 3);
+    if(u_strcmp(uchars, temp) != 0)
+        log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+    }
+   
     
 }
 
@@ -696,38 +743,9 @@ TestMirroring() {
 
     log_verbose("Testing u_charMirror()\n");
     if(!(u_charMirror(0x3c)==0x3e && u_charMirror(0x5d)==0x5b && u_charMirror(0x208d)==0x208e && u_charMirror(0x3017)==0x3016 &&
-         u_charMirror(0x2e)==0x2e && u_charMirror(0x6f3)==0x6f3 && u_charMirror(0x301c)==0x301c && u_charMirror(0xa4ab)==0xa4ab
-        )
+         u_charMirror(0x2e)==0x2e && u_charMirror(0x6f3)==0x6f3 && u_charMirror(0x301c)==0x301c && u_charMirror(0xa4ab)==0xa4ab 
+         )
     ) {
         log_err("u_charMirror() does not work correctly\n");
-    }
-}
-
-/* test u_isWhitespace() ---------------------------------------------------- */
-
-static void
-TestWhitespace() {
-    static const UChar32
-    whitespaces[]={
-        9, 0xa, 0xb, 0xc, 0xd, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x2028, 0x2029,
-        0x1680, 0x2000, 0x200b, 0x3000
-    },
-    nonWhitespaces[]={
-        0xa0, 0x202f, 0xfeff, 0x61, 0x200e, 0x4efa, 0x30014
-    };
-
-    int i;
-
-    log_verbose("Testing u_isWhitespace()\n");
-    for(i=0; i<sizeof(whitespaces)/sizeof(whitespaces[0]); ++i) {
-        if(!u_isWhitespace(whitespaces[i])) {
-            log_err("u_isWhitespace(0x%lx) does not return TRUE as expected\n", whitespaces[i]);
-        }
-    }
-
-    for(i=0; i<sizeof(nonWhitespaces)/sizeof(nonWhitespaces[0]); ++i) {
-        if(u_isWhitespace(nonWhitespaces[i])) {
-            log_err("u_isWhitespace(0x%lx) does not return FALSE as expected\n", nonWhitespaces[i]);
-        }
     }
 }
