@@ -600,10 +600,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // New blocks in Unicode 3.2
     
         /** 
+         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 2.4 
          */
         public static final UnicodeBlock CYRILLIC_SUPPLEMENTARY 
                             = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", 97);
+        /** 
+         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
+         * @draft ICU 3.0
+         */
+        public static final UnicodeBlock CYRILLIC_SUPPLEMENT 
+                            = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
         /** 
          * @draft ICU 2.4 
          */
@@ -1166,9 +1173,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // New blocks in Unicode 3.2
     
         /** 
+         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 2.4 
          */
         public static final int CYRILLIC_SUPPLEMENTARY_ID = 97;
+        /** 
+         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
+         * @draft ICU 3.0
+         */
+        public static final int CYRILLIC_SUPPLEMENT_ID = 97;
         /** 
          * @draft ICU 2.4 
          */
@@ -1393,7 +1406,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 MUSICAL_SYMBOLS, MATHEMATICAL_ALPHANUMERIC_SYMBOLS,
                 CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, 
                 CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 
-                TAGS, CYRILLIC_SUPPLEMENTARY,
+                TAGS, CYRILLIC_SUPPLEMENT,
                 TAGALOG, HANUNOO, 
                 BUHID, TAGBANWA, 
                 MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A, SUPPLEMENTAL_ARROWS_A,
@@ -1880,9 +1893,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int IDEOGRAPHIC = 14;
         /**
+         * @see INSEPARABLE
          * @draft ICU 2.4
          */
         public static final int INSEPERABLE = 15;
+        /**
+         * Renamed from the misspelled "inseperable" in Unicode 4.0.1.
+         * @draft ICU 3.0
+         */
+        public static final int INSEPARABLE = 15;
         /**
          * @draft ICU 2.4
          */

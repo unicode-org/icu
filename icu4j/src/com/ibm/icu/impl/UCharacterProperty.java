@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -536,7 +536,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
        new BinaryProperties(  1, (  1 << WHITE_SPACE_PROPERTY_) ), 
        new BinaryProperties(  1, (  1 << XID_CONTINUE_PROPERTY_) ), 
        new BinaryProperties(  1, (  1 << XID_START_PROPERTY_) ), 
-       new BinaryProperties( -1, (  1 << CASE_SENSITIVE_SHIFT_) ) 
+       new BinaryProperties( -1, (  1 << CASE_SENSITIVE_SHIFT_) ), 
+       new BinaryProperties(  2, (  1 << V2_S_TERM_PROPERTY_) ),
+       new BinaryProperties(  2, (  1 << V2_VARIATION_SELECTOR_PROPERTY_) )
    }; 
 
 
@@ -1577,6 +1579,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * Age value shift
      */
     private static final int AGE_SHIFT_ = 24;
+
+    // boolean properties in vector word 2    
+    private static final int V2_S_TERM_PROPERTY_ = 24;
+    private static final int V2_VARIATION_SELECTOR_PROPERTY_ = 25;
     
     // private constructors --------------------------------------------------
     

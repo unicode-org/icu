@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, international Business Machines Corporation and    *
+* Copyright (C) 1996-2004, international Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -277,11 +277,27 @@ public interface UProperty
      * @draft ICU 2.6
      */
     public static final int CASE_SENSITIVE = 34;
+    /**
+     * Binary property STerm (new in Unicode 4.0.1).
+     * Sentence Terminal. Used in UAX #29: Text Boundaries
+     * (http://www.unicode.org/reports/tr29/)
+     * @draft ICU 3.0
+     */
+    public static final int S_TERM = 35;
+    /**
+     * Binary property Variation_Selector (new in Unicode 4.0.1).
+     * Indicates all those characters that qualify as Variation Selectors.
+     * For details on the behavior of these characters,
+     * see StandardizedVariants.html and 15.6 Variation Selectors.
+     * @draft ICU 3.0
+     */
+    public static final int VARIATION_SELECTOR = 36;
     /** 
      * <p>One more than the last constant for binary Unicode properties.</p> 
      * @stable ICU 2.6
      */ 
-    public static final int BINARY_LIMIT = 35;
+    public static final int BINARY_LIMIT = 37;
+    
     /** 
      * Enumerated property Bidi_Class.
      * Same as UCharacter.getDirection(int), returns UCharacterDirection values. 
