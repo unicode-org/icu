@@ -455,6 +455,22 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     }
 }
 
+Locale 
+BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return validLocale;
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return actualLocale;
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return Locale("");
+  }
+}
+
 U_NAMESPACE_END
 
 // defined in ucln_cmn.h
