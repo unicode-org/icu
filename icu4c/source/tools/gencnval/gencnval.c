@@ -15,6 +15,11 @@
 *
 *   This program reads convrtrs.txt and writes a memory-mappable
 *   converter name alias table to cnvalias.dat .
+*
+*   This program currently writes version 2.1 of the data format. See
+*   ucnv_io.c for more details on the format. Note that version 2.1
+*   is written in such a way that a 2.0 reader will be able to use it,
+*   and a 2.1 reader will be able to read 2.0.
 */
 
 #include <stdio.h>
@@ -31,6 +36,9 @@
 #define STRING_STORE_SIZE 100000
 #define MAX_ALIAS_COUNT 2000
 
+#define TAG_STORE_SIZE 20000
+#define MAX_TAG_COUNT 200
+
 #define DATA_NAME "cnvalias"
 #define DATA_TYPE "dat"
 
@@ -45,13 +53,19 @@ static const UDataInfo dataInfo={
     0,
 
     0x43, 0x76, 0x41, 0x6c,     /* dataFormat="CvAl" */
-    2, 0, 0, 0,                 /* formatVersion */
+    2, 1, 0, 0,                 /* formatVersion */
     1, 4, 2, 0                  /* dataVersion */
 };
 
-static char stringStore[STRING_STORE_SIZE];
-static uint32_t stringTop=0;
+typedef struct {
+    char *store;
+    uint32_t top;
+    uint32_t max;
+} StringBlock;
 
+static char stringStore[STRING_STORE_SIZE];
+static StringBlock stringBlock = { stringStore, 0, STRING_STORE_SIZE };
+ 
 typedef struct {
     const char *alias;
     uint16_t converter;
@@ -68,25 +82,42 @@ typedef struct {
 static Converter converters[MAX_ALIAS_COUNT];
 static uint16_t converterCount=0;
 
+static char tagStore[TAG_STORE_SIZE];
+static StringBlock tagBlock = { tagStore, 0, TAG_STORE_SIZE };
+
+typedef struct {
+    const char *tag;
+    const char *aliases[MAX_ALIAS_COUNT];
+} Tag;
+
+static Tag tags[MAX_TAG_COUNT];
+static uint16_t tagCount = 0;
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
 parseLine(const char *line);
 
-static void
+static uint16_t
 addAlias(const char *alias, uint16_t converter);
 
 static uint16_t
 addConverter(const char *converter);
 
 static char *
-allocString(uint32_t length);
+allocString(StringBlock *block, uint32_t length);
 
 static int
-compareAliases(const void *file1, const void *file2);
+compareAliases(const void *alias1, const void *alias2);
 
 static int
 compareConverters(const void *converter1, const void *converter2);
+
+static uint16_t
+getTagNumber(const char *tag, uint16_t tagLen);
+
+static void
+addTaggedAlias(uint16_t tag, const char *alias, uint16_t converter);
 
 /* -------------------------------------------------------------------------- */
 
@@ -107,7 +138,7 @@ main(int argc, const char *argv[]) {
     char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
     int i;
-    uint16_t stringOffset;
+    uint16_t tagOffset, stringOffset;
 
     /* preset then read command line options */
     options[3].value=options[4].value=u_getDataDirectory();
@@ -184,12 +215,13 @@ main(int argc, const char *argv[]) {
     }
 
     /* determine the length of tables for the data offset of the strings */
-    stringOffset=2+4*aliasCount+2+4*converterCount;
+    tagOffset = 2 + 4 * aliasCount + 2 + 4 * converterCount;
+    stringOffset = tagOffset + 2 + (2 * tagCount) * converterCount + tagBlock.top;
 
     /* write the table of aliases */
     udata_write16(out, aliasCount);
     for(i=0; i<aliasCount; ++i) {
-        udata_write16(out, (uint16_t)(stringOffset+(aliases[i].alias-stringStore)));
+        udata_write16(out, (uint16_t)(stringOffset+(aliases[i].alias-stringBlock.store)));
     }
     for(i=0; i<aliasCount; ++i) {
         udata_write16(out, aliases[i].converter);
@@ -198,12 +230,31 @@ main(int argc, const char *argv[]) {
     /* write the table of converters */
     udata_write16(out, converterCount);
     for(i=0; i<converterCount; ++i) {
-        udata_write16(out, (uint16_t)(stringOffset+(converters[i].converter-stringStore)));
+        udata_write16(out, (uint16_t)(stringOffset+(converters[i].converter-stringBlock.store)));
         udata_write16(out, converters[i].aliasCount);
     }
 
-    /* write the strings */
-    udata_writeString(out, stringStore, stringTop);
+    /* write the table of tags */
+    udata_write16(out, tagCount);
+
+    for (i = 0; i < tagCount; ++i) {
+        int j;
+
+        /* write the aliases offsets */
+        for (j = 0; j < converterCount; ++j) {
+            if (tags[i].aliases[j]) {
+                udata_write16(out, (uint16_t) (stringOffset + tags[i].aliases[j] - stringBlock.store));
+            } else {
+                udata_write16(out, 0);
+            }
+        }
+    }
+
+    /* write the tags strings */
+    udata_writeString(out, tagBlock.store, tagBlock.top);
+
+    /* write the aliases strings */
+    udata_writeString(out, stringBlock.store, stringBlock.top);
 
     /* finish */
     udata_finish(out, &errorCode);
@@ -232,14 +283,14 @@ parseLine(const char *line) {
 
     /* get the converter name */
     start=pos;
-    while(line[pos]!=0 && line[pos]!='{' && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
+    while(line[pos]!=0 && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
         ++pos;
     }
     limit=pos;
 
     /* store the converter name */
     length=limit-start;
-    converter=allocString(length+1);
+    converter=allocString(&stringBlock, length+1);
     uprv_memcpy(converter, line+start, length);
     converter[length]=0;
 
@@ -249,22 +300,6 @@ parseLine(const char *line) {
     /* add the converter as its own alias to the alias table */
     addAlias(converter, cnv);
 
-    /* skip white space */
-    while(line[pos]!=0 && isspace((unsigned char)line[pos])) {
-        ++pos;
-    }
-    if (line[pos] == '{') {   /* skip over tags */
-        ++pos;
-        while (line[pos] && line[pos] != '}' && line[pos] != '#') {
-            ++pos;
-        }
-        if (line[pos] == '}') {
-            ++pos;
-        } else {
-            fprintf(stderr, "unterminated tag list: %s\n", line);
-            exit(U_PARSE_ERROR);
-        }
-    }
     /* get all the real aliases */
     for(;;) {
         /* skip white space */
@@ -286,7 +321,7 @@ parseLine(const char *line) {
 
         /* store the alias name */
         length=limit-start;
-        alias=allocString(length+1);
+        alias=allocString(&stringBlock, length+1);
         uprv_memcpy(alias, line+start, length);
         alias[length]=0;
 
@@ -294,25 +329,85 @@ parseLine(const char *line) {
         addAlias(alias, cnv);
 
         /* skip whitespace */
-        while(line[pos]!=0 && isspace((unsigned char)line[pos])) {
+        while (line[pos] && isspace((unsigned char)line[pos])) {
             ++pos;
         }
-        if (line[pos] == '{') {   /* skip over tags */
-            start = ++pos;
-            while (line[pos] && line[pos] != '}' && line[pos] != '#') {
-                ++pos;
-            }
+
+        /* handle tags if they are present */
+        if (line[pos] == '{') {
+            ++pos;
+            do {
+                start = pos;
+                while (line[pos] && line[pos] != '}' && line[pos] != '#' && !isspace((unsigned char) line[pos])) {
+                    ++pos;
+                }
+                limit = pos;
+
+                if (start != limit) {
+                    uint16_t tag;
+
+                    /* add the tag to the tag table */
+                    tag = getTagNumber(line + start, limit - start);
+                    addTaggedAlias(tag, alias, cnv);
+                }
+
+                while (line[pos] && isspace((unsigned char)line[pos])) {
+                    ++pos;
+                }
+            } while (line[pos] && line[pos] != '}' && line[pos] != '#');
+
             if (line[pos] == '}') {
                 ++pos;
             } else {
-                fprintf(stderr, "unterminated tag list: %s\n", line);
+                fprintf(stderr, "unterminated tag list in: %s\n", line);
                 exit(U_PARSE_ERROR);
             }
         }
     }
 }
 
+static uint16_t
+getTagNumber(const char *tag, uint16_t tagLen) {
+    char *atag;
+    uint16_t t;
+
+    if (tagCount == MAX_TAG_COUNT) {
+        fprintf(stderr, "gencnval: too many tags\n");
+        exit(U_BUFFER_OVERFLOW_ERROR);
+    }
+
+    for (t = 0; t < tagCount; ++t) {
+        if (uprv_strlen(tags[t].tag) == tagLen && !uprv_strnicmp(tags[t].tag, tag, tagLen)) {
+            return t;
+        }
+    }
+
+    /* we need to add this tag */
+
+    if (tagCount == MAX_TAG_COUNT) {
+        fprintf(stderr, "gencnval: too many tags\n");
+        exit(U_BUFFER_OVERFLOW_ERROR);
+    }
+
+    /* allocate a new entry in the tag table */
+
+    atag = allocString(&tagBlock, tagLen + 1);
+    uprv_memcpy(atag, tag, tagLen);
+    atag[tagLen] = 0;
+
+    /* add the tag to the tag table */
+    tags[tagCount].tag = atag;
+    uprv_memset(&tags[tagCount].aliases, 0, sizeof(tags[tagCount].aliases));
+
+    return tagCount++;
+}
+
 static void
+addTaggedAlias(uint16_t tag, const char *alias, uint16_t converter) {
+    tags[tag].aliases[converter] = alias;
+}
+
+static uint16_t
 addAlias(const char *alias, uint16_t converter) {
     if(aliasCount==MAX_ALIAS_COUNT) {
         fprintf(stderr, "gencnval: too many aliases\n");
@@ -322,9 +417,9 @@ addAlias(const char *alias, uint16_t converter) {
     aliases[aliasCount].alias=alias;
     aliases[aliasCount].converter=converter;
 
-    ++aliasCount;
-
     ++converters[converter].aliasCount;
+
+    return aliasCount++;
 }
 
 static uint16_t
@@ -341,16 +436,16 @@ addConverter(const char *converter) {
 }
 
 static char *
-allocString(uint32_t length) {
-    uint32_t top=stringTop+length;
+allocString(StringBlock *block, uint32_t length) {
+    uint32_t top=block->top+length;
     char *p;
 
-    if(top>STRING_STORE_SIZE) {
+    if(top>block->max) {
         fprintf(stderr, "gencnval: out of memory\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
-    p=stringStore+stringTop;
-    stringTop=top;
+    p=block->store+block->top;
+    block->top=top;
     return p;
 }
 
@@ -367,3 +462,4 @@ compareAliases(const void *alias1, const void *alias2) {
  * End:
  *
  */
+
