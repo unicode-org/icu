@@ -809,6 +809,7 @@ write_uca_table(const char *filename,
     opts->caseLevel = UCOL_OFF;         /* do we have an extra case level */
     opts->normalizationMode = UCOL_OFF; /* attribute for normalization */
     opts->hiraganaQ = UCOL_OFF; /* attribute for JIS X 4061, used only in Japanese */
+    opts->numericCollation = UCOL_OFF;
     myD->jamoSpecial = FALSE;
 
     tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, IMPLICIT_TAG, LEAD_SURROGATE_TAG, status);
