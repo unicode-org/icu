@@ -523,7 +523,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     };
     break;
 
-    default: ; // semicolon makes MSVC happy
+    default: ; /* semicolon makes MSVC happy */
     };
 
     if(deadSharedData->dataMemory != NULL)
