@@ -275,28 +275,24 @@ int32_t  ucnv_flushCache ()
   return tableDeletedNum;
 }
 
-/*returns a single Name from the static list, will return NULL if out of bounds
+/*returns a single Name from the list, will return NULL if out of bounds
  */
 const char*  ucnv_getAvailableName (int32_t index)
 {
-  UErrorCode err = U_ZERO_ERROR;
-  /*lazy evaluates the list of Available converters */
-  if (AVAILABLE_CONVERTERS_NAMES == NULL)
-    setupAliasTableAndAvailableConverters (&err);
-  if (index > AVAILABLE_CONVERTERS)
-    return NULL;
-  else
-    return AVAILABLE_CONVERTERS_NAMES[index];
+  if (0 <= index && index <= 0xffff) {
+    UErrorCode err = U_ZERO_ERROR;
+    const char *name = ucnv_io_getAvailableAlias((uint16_t)index, &err);
+    if (U_SUCCESS(err)) {
+      return name;
+    }
+  }
+  return NULL;
 }
 
 int32_t  ucnv_countAvailable ()
 {
   UErrorCode err = U_ZERO_ERROR;
-  /*lazy evaluates the list of Available converters */
-  if (AVAILABLE_CONVERTERS_NAMES == NULL)
-    setupAliasTableAndAvailableConverters (&err);
-
-  return AVAILABLE_CONVERTERS;
+  return ucnv_io_countAvailableAliases(&err);
 }
 
 void   ucnv_getSubstChars (const UConverter * converter,

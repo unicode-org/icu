@@ -1,273 +1,291 @@
 /*
-   ********************************************************************************
-   *                                                                              *
-   * COPYRIGHT:                                                                   *
-   *   (C) Copyright International Business Machines Corporation, 1998            *
-   *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
-   *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
-   *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
-   *                                                                              *
-   ********************************************************************************
-   *
-   *
-   *  uconv_io.c:
-   *  initializes global variables and defines functions pertaining to file access,
-   *  and name resolution aspect of the library.
-   ********************************************************************************
- */
+********************************************************************************
+*                                                                              *
+* COPYRIGHT:                                                                   *
+*   (C) Copyright International Business Machines Corporation, 1998, 1999      *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure    *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
+*                                                                              *
+********************************************************************************
+*
+*
+*  ucnv_io.c:
+*  initializes global variables and defines functions pertaining to file access,
+*  and name resolution aspect of the library.
+*
+*   new implementation:
+*
+*   created on: 1999nov22
+*   created by: Markus W. Scherer
+*
+*   Use the binary cnvalias.dat (created from convrtrs.txt) to work
+*   with aliases for converter names.
+********************************************************************************
+*/
+
 #include "utypes.h"
 #include "umutex.h"
-#include "filestrm.h"
 #include "cstring.h"
-#include "cmemory.h"
-#include "uhash.h"
-#include "ucmp8.h"
-#include "ucmp16.h"
-#include "ucnv_bld.h"
 #include "ucnv_io.h"
-#include "uloc.h"
+#include "udata.h"
 
-static void doSetupAliasTableAndAvailableConverters (FileStream * converterFile,
-						     UErrorCode * err);
-
-static char *_convertDataDirectory = NULL;
-
-/*Initializes Global Variables */
-static UHashtable *ALIASNAMES_HASHTABLE = NULL;
-char **AVAILABLE_CONVERTERS_NAMES = NULL;
-int32_t AVAILABLE_CONVERTERS = 0;
-
-/* Remove all characters followed by '#'
+/* Format of cnvalias.dat ------------------------------------------------------
+ *
+ * cnvalias.dat is a binary, memory-mappable form of convrtrs.txt .
+ * It contains two sorted tables and a block of zero-terminated strings.
+ * Each table is preceded by the number of table entries.
+ *
+ * The first table maps from aliases to converter indexes.
+ * The converter names themselves are listed as aliases in this table.
+ * Each entry in this table has an offset to the alias and
+ * an index of the converter in the converter table.
+ *
+ * The second table lists only the converters themselves.
+ * Each entry in this table has an offset to the converter name and
+ * the number of aliases, including the converter itself.
+ * A count of 1 means that there is no alias, only the converter name.
+ *
+ * In the block of strings after the tables, each converter name is directly
+ * followed by its aliases. All offsets to strings are offsets from the
+ * beginning of the data.
+ *
+ * More formal file data structure (data format 1.0):
+ *
+ * uint16_t aliasCount;
+ * struct {
+ *     uint16_t aliasOffset;
+ *     uint16_t converterIndex;
+ * } aliases[aliasCount];
+ *
+ * uint16_t converterCount;
+ * struct {
+ *     uint16_t converterOffset;
+ *     uint16_t aliasCount;
+ * } converters[converterCount];
+ *
+ * char strings[]={
+ *     "Converter0\0Alias1\0Alias2\0...Converter1\0Converter2\0Alias0\Alias1\0..."
+ * };
  */
-char *
-  removeComments (char *line)
-{
-  char *pound = icu_strchr (line, '#');
 
-  if (pound != NULL)
-    *pound = '\0';
-  return line;
+#define DATA_NAME "cnvalias"
+#define DATA_TYPE "dat"
+
+static UDataMemory *aliasData=NULL;
+static const uint16_t *aliasTable=NULL;
+
+static bool_t
+isAcceptable(void *context,
+             const char *type, const char *name,
+             UDataInfo *pInfo) {
+    return
+        pInfo->size>=20 &&
+        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
+        pInfo->charsetFamily==U_CHARSET_FAMILY &&
+        pInfo->dataFormat[0]==0x43 &&   /* dataFormat="CvAl" */
+        pInfo->dataFormat[1]==0x76 &&
+        pInfo->dataFormat[2]==0x41 &&
+        pInfo->dataFormat[3]==0x6c &&
+        pInfo->formatVersion[0]==1;
 }
 
-/*Returns uppercased string */
-char *
-  strtoupper (char *name)
-{
-  int32_t i = 0;
+static bool_t
+haveAliasData(UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return FALSE;
+    }
 
-  while (name[i] = icu_toupper (name[i]))
-    i++;
+    /* load converter alias data from file if necessary */
+    if(aliasData==NULL) {
+        UDataMemory *data;
+        const uint16_t *table=NULL;
 
-  return name;
+        /* open the data outside the mutex block */
+        data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return FALSE;
+        }
+
+        table=(const uint16_t *)udata_getMemory(data);
+
+        /* in the mutex block, set the data for this process */
+        umtx_lock(NULL);
+        if(aliasData==NULL) {
+            aliasData=data;
+            data=NULL;
+            aliasTable=table;
+            table=NULL;
+        }
+        umtx_unlock(NULL);
+
+        /* if a different thread set it first, then close the extra data */
+        if(data!=NULL) {
+            udata_close(data); /* NULL if it was set correctly */
+        }
+    }
+
+    return TRUE;
 }
 
-/* Returns true in c is a in set 'setOfChars', false otherwise
- */
-bool_t 
-  isInSet (char c, const char *setOfChars)
-{
-  uint8_t i = 0;
-
-  while (setOfChars[i] != '\0')
-    {
-      if (c == setOfChars[i++])
-	return TRUE;
+static bool_t
+isAlias(const char *alias, UErrorCode *pErrorCode) {
+    if(alias==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    } else if(*alias==0) {
+        return FALSE;
+    } else {
+        return TRUE;
     }
-
-  return FALSE;
 }
 
-/* Returns pointer to the next non-whitespace (or non-separator)
- */
-int32_t 
-  nextTokenOffset (const char *line, const char *separators)
-{
-  int32_t i = 0;
+/* compare lowercase str1 with mixed-case str2, ignoring case */
+static int
+strHalfCaseCmp(const char *str1, const char *str2) {
+    /* compare non-NULL strings lexically with lowercase */
+    int rc;
+    unsigned char c1, c2;
 
-  while (line[i] && isInSet (line[i], separators))
-    i++;
-
-  return i;
+    for(;;) {
+        c1=(unsigned char)*str1;
+        c2=(unsigned char)*str2;
+        if(c1==0) {
+            if(c2==0) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else if(c2==0) {
+            return 1;
+        } else {
+            /* compare non-zero characters with lowercase */
+            rc=(int)c1-(int)(unsigned char)icu_tolower(c2);
+            if(rc!=0) {
+                return rc;
+            }
+        }
+        ++str1;
+        ++str2;
+    }
 }
 
-/* Returns pointer to the next token based on the set of separators
+/*
+ * search for an alias
+ * return NULL or a pointer to the converter table entry
  */
-char *
-  getToken (char *token, char *line, const char *separators)
-{
-  int32_t i = nextTokenOffset (line, separators);
-  int8_t j = 0;
+static const uint16_t *
+findAlias(const char *alias) {
+    char name[100];
+    const uint16_t *p=aliasTable;
+    uint16_t i, start, limit;
 
-  while (line[i] && (!isInSet (line[i], separators)))
-    token[j++] = line[i++];
-  token[j] = '\0';
+    limit=*p++;
+    if(limit==0) {
+        /* there are no aliases */
+        return NULL;
+    }
 
-  return line + i;
+    /* convert the alias name to lowercase to do case-insensitive comparisons */
+    for(i=0; i<sizeof(name)-1 && *alias!=0; ++i) {
+        name[i]=icu_tolower(*alias++);
+    }
+    name[i]=0;
+
+    /* do a binary search for the alias */
+    start=0;
+    while(start<limit-1) {
+        i=(start+limit)/2;
+        if(strHalfCaseCmp(name, (const char *)aliasTable+p[2*i])<0) {
+            limit=i;
+        } else {
+            start=i;
+        }
+    }
+
+    /* did we really find it? */
+    if(icu_strcmp(name, (const char *)aliasTable+p[2*start])==0) {
+        /*
+         * turn p back to aliasTable and
+         * skip the entire alias table, both table counts,
+         * and point into the converter table
+         */
+        i=p[2*start+1]; /* converter index */
+        --p;
+        return p+2*(*p+1+i);
+    } else {
+        return NULL;
+    }
 }
 
-/* this function is called only   if ((ALIASNAMES_HASHTABLE == NULL) ||
- * (AVAILABLE_CONVERTERS_NAMES == NULL)) it builds a hashtable containing
- * all the "real" table names (filenames), keyed-off of the aliases and
- * the real-names themselves.
- * Also builds an array of char **, that point to the allocated memory
- * for each actual names in the Hashtable.
- * That array is used in T_UnicodeConverter_getAvailableNames.
- */
-void 
-  setupAliasTableAndAvailableConverters (UErrorCode * err)
-{
-  char fullFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  FileStream *converterFile = NULL;
-
-  if (U_FAILURE (*err))
-    return;
-
-  icu_strcpy (fullFileName, uloc_getDataDirectory ());
-  icu_strcat (fullFileName, CONVERTER_FILE_NAME);
-
-  converterFile = T_FileStream_open (fullFileName, "r");
-  if (converterFile == NULL)
-    {
-      *err = U_FILE_ACCESS_ERROR;
+U_CFUNC const char *
+ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
+        const uint16_t *p=findAlias(alias);
+        if(p!=NULL) {
+            return (const char *)aliasTable+*p;
+        }
     }
-  else
-    {
-      doSetupAliasTableAndAvailableConverters (converterFile, err);
-      T_FileStream_close (converterFile);
-    }
-
-  return;
+    return NULL;
 }
 
-/* this function is only to be called by setupAliasTableAndAvailableConverters
- */
-void 
-  doSetupAliasTableAndAvailableConverters (FileStream * converterFile, UErrorCode * err)
-{
-  char myLine[UCNV_MAX_LINE_TEXT];
-  char *line = myLine;
-  char actualNameToken[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  char aliasNameToken[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  char *toBeHashed = NULL;
-  UHashtable *myALIASNAMES_HASHTABLE = NULL;
-  char **myAVAILABLE_CONVERTERS_NAMES = NULL;
-  int32_t myAVAILABLE_CONVERTERS = 0;
-
-  /*We need to do the initial work of setting everything */
-  myALIASNAMES_HASHTABLE = uhash_open ((UHashFunction)uhash_hashIString, err);
-  if (U_FAILURE (*err))
-    return;
-
-  if (myALIASNAMES_HASHTABLE == NULL)
-    return;
-
-  while (T_FileStream_readLine (converterFile, line, UCNV_MAX_LINE_TEXT))
-    {
-      removeComments (line);
-      if (line[nextTokenOffset (line, SPACE_SEPARATORS)] != '\0')	/*Skips Blank lines */
-	{
-	  line = getToken (actualNameToken, line, SPACE_SEPARATORS);
-	  toBeHashed = (char *) icu_malloc ((icu_strlen (actualNameToken) + 1) * sizeof (char));
-	  if (toBeHashed == NULL)
-	    {
-	      *err = U_MEMORY_ALLOCATION_ERROR;
-	      return;
-	    }
-	  icu_strcpy (toBeHashed, actualNameToken);
-	  myAVAILABLE_CONVERTERS_NAMES = (char **) icu_realloc (myAVAILABLE_CONVERTERS_NAMES,
-			    (myAVAILABLE_CONVERTERS + 1) * sizeof (char *));
-	  if (myAVAILABLE_CONVERTERS_NAMES == NULL)
-	    {
-	      *err = U_MEMORY_ALLOCATION_ERROR;
-	      return;
-	    }
-	  myAVAILABLE_CONVERTERS_NAMES[myAVAILABLE_CONVERTERS++] = toBeHashed;
-
-	  uhash_put (myALIASNAMES_HASHTABLE, toBeHashed, err);
-	  while (line[nextTokenOffset (line, SPACE_SEPARATORS)] != '\0')
-	    {
-	      line = getToken (aliasNameToken, line, SPACE_SEPARATORS);
-	      uhash_putKey (myALIASNAMES_HASHTABLE,
-			    uhash_hashIString (aliasNameToken),
-			    toBeHashed,
-			    err);
-	    }
-	  if (U_FAILURE (*err))
-	    return;
-	}
-
+U_CFUNC uint16_t
+ucnv_io_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
+        const uint16_t *p=findAlias(alias);
+        if(p!=NULL) {
+            *aliases=(const char *)aliasTable+*p;
+            return *(p+1);
+        }
     }
-
-  /*If another thread has already created the hashtable and array, we need to free */
-  if ((ALIASNAMES_HASHTABLE != NULL) || (AVAILABLE_CONVERTERS_NAMES != NULL))
-    {
-      while (myAVAILABLE_CONVERTERS > 0)
-	{
-	  icu_free (myAVAILABLE_CONVERTERS_NAMES[--myAVAILABLE_CONVERTERS]);
-	}
-      icu_free (myAVAILABLE_CONVERTERS_NAMES);
-      uhash_close (myALIASNAMES_HASHTABLE);
-    }
-  else
-    {
-      umtx_lock (NULL);
-      ALIASNAMES_HASHTABLE = myALIASNAMES_HASHTABLE;
-      AVAILABLE_CONVERTERS_NAMES = myAVAILABLE_CONVERTERS_NAMES;
-      AVAILABLE_CONVERTERS = myAVAILABLE_CONVERTERS;
-      umtx_unlock (NULL);
-    }
-
-  return;
+    return 0;
 }
 
-/* resolveName takes a table alias name and fills in the actual name used internally.
- * it returns a TRUE if the name was found (table supported) returns FALSE otherwise
- */
-bool_t 
-  resolveName (char *realName, const char *alias)
-{
-  int32_t i = 0;
-  bool_t found = FALSE;
-  char *actualName = NULL;
-  UErrorCode err = U_ZERO_ERROR;
-
-  /*Lazy evaluates the Alias hashtable */
-  if (ALIASNAMES_HASHTABLE == NULL)
-    setupAliasTableAndAvailableConverters (&err);
-  if (U_FAILURE (err))
-    return FALSE;
-
-
-  actualName = (char *) uhash_get (ALIASNAMES_HASHTABLE, uhash_hashIString (alias));
-
-  if (actualName != NULL)
-    {
-      icu_strcpy (realName, actualName);
-      found = TRUE;
+U_CFUNC const char *
+ucnv_io_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
+        const uint16_t *p=findAlias(alias);
+        if(p!=NULL) {
+            uint16_t count=*(p+1);
+            if(index<count) {
+                const char *aliases=(const char *)aliasTable+*p;
+                while(index>0) {
+                    /* skip a name, first the canonical converter name */
+                    aliases+=icu_strlen(aliases)+1;
+                    --index;
+                }
+                return aliases;
+            }
+        }
     }
-
-  return found;
+    return NULL;
 }
 
-/*Higher level function, takes in an alias name
- *and returns a file pointer of the table file
- *Will return NULL if the file isn't found for
- *any given reason (file not there, name not in
- *"convrtrs.txt"
- */
-FileStream *
-  openConverterFile (const char *name)
-{
-  char actualFullFilenameName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  FileStream *tableFile = NULL;
-
-  icu_strcpy (actualFullFilenameName, uloc_getDataDirectory ());
-
-  if (resolveName (actualFullFilenameName + icu_strlen (actualFullFilenameName), name))
-    {
-      icu_strcat (actualFullFilenameName, CONVERTER_FILE_EXTENSION);
-      tableFile = T_FileStream_open (actualFullFilenameName, "rb");
+U_CFUNC uint16_t
+ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode)) {
+        return *aliasTable;
     }
+    return 0;
+}
 
-  return tableFile;
+U_CFUNC const char *
+ucnv_io_getAvailableAlias(uint16_t index, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode) && index<*aliasTable) {
+        return (const char *)aliasTable+*(aliasTable+1+2*index);
+    }
+    return NULL;
+}
+
+U_CFUNC void
+ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode)) {
+        const uint16_t *p=aliasTable;
+        uint16_t count=*p++;
+        while(count>0) {
+            *aliases++=(const char *)aliasTable+*p;
+            p+=2;
+            --count;
+        }
+    }
 }

@@ -216,5 +216,9 @@ typedef struct
   }
 UConverterDataISO2022;
 
+#define CONVERTER_FILE_EXTENSION ".cnv"
+
+/*case insensitive hash key*/
+U_CAPI int32_t U_EXPORT2 uhash_hashIString(const void* name);
 
 #endif /* _UCNV_BLD */

@@ -92,6 +92,70 @@ UHashtable *SHARED_DATA_HASHTABLE = NULL;
 UHashtable *ALGORITHMIC_CONVERTERS_HASHTABLE = NULL;
 
 
+/*Returns uppercased string */
+char *
+  strtoupper (char *name)
+{
+  int32_t i = 0;
+
+  while (name[i] = icu_toupper (name[i]))
+    i++;
+
+  return name;
+}
+
+/* Returns true in c is a in set 'setOfChars', false otherwise
+ */
+bool_t 
+  isInSet (char c, const char *setOfChars)
+{
+  uint8_t i = 0;
+
+  while (setOfChars[i] != '\0')
+    {
+      if (c == setOfChars[i++])
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* Returns pointer to the next non-whitespace (or non-separator)
+ */
+int32_t 
+  nextTokenOffset (const char *line, const char *separators)
+{
+  int32_t i = 0;
+
+  while (line[i] && isInSet (line[i], separators))
+    i++;
+
+  return i;
+}
+
+/* Returns pointer to the next token based on the set of separators
+ */
+char *
+  getToken (char *token, char *line, const char *separators)
+{
+  int32_t i = nextTokenOffset (line, separators);
+  int8_t j = 0;
+
+  while (line[i] && (!isInSet (line[i], separators)))
+    token[j++] = line[i++];
+  token[j] = '\0';
+
+  return line + i;
+}
+
+int32_t uhash_hashIString(const void* name)
+{
+  char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+  icu_strcpy(myName, (char*)name);
+  strtoupper(myName);
+
+  return uhash_hashString(myName);
+}
 
 CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UErrorCode * err)
 {
@@ -212,10 +276,17 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   FileStream *infile = NULL;
   int8_t errorLevel = 0;
   char throwAway[UCNV_COPYRIGHT_STRING_LENGTH];
-  if (U_FAILURE (*err))
-    return NULL;
+  char actualFullFilenameName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
 
-  infile = openConverterFile (fileName);
+  if (err == NULL || U_FAILURE (*err)) {
+    return NULL;
+  }
+
+  icu_strcpy (actualFullFilenameName, u_getDataDirectory ());
+  icu_strcat (actualFullFilenameName, fileName);
+  icu_strcat (actualFullFilenameName, CONVERTER_FILE_EXTENSION);
+
+  infile = T_FileStream_open (actualFullFilenameName, "rb");
   if (infile == NULL)
     {
       *err = U_FILE_ACCESS_ERROR;
@@ -433,7 +504,7 @@ void   shareConverterData (UConverterSharedData * data)
   if (SHARED_DATA_HASHTABLE == NULL)
     {
       UHashtable* myHT = uhash_openSize ((UHashFunction) uhash_hashSharedData, 
-					 AVAILABLE_CONVERTERS,
+					 ucnv_io_countAvailableAliases(&err),
 					 &err);
       if (U_FAILURE (err)) return;
       umtx_lock (NULL);
@@ -508,14 +579,6 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
   return TRUE;
 }
 
-int32_t uhash_hashIString(const void* name)
-{
-  char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  icu_strcpy(myName, (char*)name);
-  strtoupper(myName);
-
-  return uhash_hashString(myName);
-}
 bool_t   isDataBasedConverter (const char *name)
 {
   int32_t i = 0;
@@ -575,18 +638,22 @@ bool_t   isDataBasedConverter (const char *name)
 UConverter *
   createConverter (const char *converterName, UErrorCode * err)
 {
-  char realName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+  const char *realName;
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
 
   if (U_FAILURE (*err))
     return NULL;
 
-  if (resolveName (realName, converterName) == FALSE)
-    {
-      *err = U_INVALID_TABLE_FILE;
-      return NULL;
-    }
+  realName = ucnv_io_getConverterName(converterName, err);
+  if (U_FAILURE(*err)) {
+    return NULL;
+  }
+
+  if (realName == NULL) {
+    /* set the input name in case the converter was added without updating the alias table */
+    realName = converterName;
+  }
 
 
   if (isDataBasedConverter (realName))
@@ -596,7 +663,7 @@ UConverter *
       if (mySharedConverterData == NULL)
 	{
 	  /*Not cached, we need to stream it in from file */
-	  myUConverter = createConverterFromFile (converterName, err);
+	  myUConverter = createConverterFromFile (realName, err);
 
 	  if (U_FAILURE (*err) || (myUConverter == NULL))
 	    {
