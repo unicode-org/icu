@@ -37,6 +37,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
+#include "locmap.h"
 
 /****************************************************************************
   Global variable and type definitions
