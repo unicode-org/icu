@@ -563,18 +563,23 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }  
     }
     
-    public void TestKeywordsAndTrees(){
+    private static final String COLLATION_RESNAME = "collations";
+    private static final String COLLATION_KEYWORD = "collation";
+    private static final String DEFAULT_NAME = "default";
+    private static final String STANDARD_NAME = "standard";
+    
+    public void TestKeywordValues(){
         String kwVals[];
         boolean foundStandard = false;
         int n;
         
         logln("Testing getting collation values:");
-        kwVals = ICUResourceBundle.getKeywordValues(UResourceBundle.ICU_COLLATION_BASE_NAME,"collations");
+        kwVals = ICUResourceBundle.getKeywordValues(UResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
         for(n=0;n<kwVals.length;n++) {
             logln(new Integer(n).toString() + ": " + kwVals[n]);
-            if(("default").equals(kwVals[n])) {
+            if(DEFAULT_NAME.equals(kwVals[n])) {
                 errln("getKeywordValues for collation returned 'default' in the list.");
-            } else if(("standard").equals(kwVals[n])) {
+            } else if(STANDARD_NAME.equals(kwVals[n])) {
             	if(foundStandard == false) {
             		foundStandard = true;
             		logln("found 'standard'");
@@ -589,6 +594,55 @@ public final class ICUResourceBundleTest extends TestFmwk {
         } else {
         	logln("'standard' was found as a collation keyword.");
         }
+    }
+    
+    
+    public void TestFunctionalEquivalent(){ 
+       String[] testCases = {
+        //              avail   locale          equiv  
+        "f",    "de_US_CALIFORNIA",            "de",
+        "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
+        "f",    "de_CN@collation=pinyin",      "de",
+        "f",    "de_CN@calendar=japanese",     "de",
+        "t",    "de@calendar=japanese",        "de",
+        "t",    "zh_TW@collation=standard",    "zh@collation=standard",
+        "t",    "zh_TW@collation=traditional", "zh@collation=traditional",
+        "f",    "zh_CN@collation=standard",    "zh",
+        "f",    "zh_CN@collation=traditional", "zh@collation=traditional",
+        "t",    "zh@collation=standard",       "zh",
+        "t",    "zh@collation=traditional",    "zh@collation=traditional",
+        "f",    "hi_IN@collation=direct",      "hi@collation=direct",
+        "t",    "hi@collation=standard",      "hi",
+        "t",    "hi@collation=direct",      "hi@collation=direct",
+        "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
+        "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",   "hi"
+           };
+    
+       String F_STR = "f";
+       String T_STR = "t";
+       boolean isAvail[] = new boolean[1];
+       int i;
+       
+       logln("Testing functional equivalents...");
+       for(i=0;i<testCases.length;i+=3) {
+           boolean expectAvail = T_STR.equals(testCases[i+0]);
+           ULocale inLocale = new ULocale(testCases[i+1]);
+           ULocale expectLocale = new ULocale(testCases[i+2]);
+ 
+           logln(new Integer(i/3).toString() + ": " + new Boolean(expectAvail).toString() + "\t\t" + 
+                   inLocale.toString() + "\t\t" + expectLocale.toString());
+
+           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(UResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME,
+                   COLLATION_KEYWORD, inLocale, isAvail);
+           boolean gotAvail = isAvail[0];
+           
+           if((gotAvail!=expectAvail) || !equivLocale.equals(expectLocale)) {
+               errln(new Integer(i/3).toString() + ":  Error, expected  Equiv=" + new Boolean(expectAvail).toString() + "\t\t" + 
+                       inLocale.toString() + "\t\t--> " + expectLocale.toString() + ",  but got " + new Boolean(gotAvail).toString() + " " +
+                       equivLocale.toString());
+           } else {
+           }
+       }      
     }
 }
 
