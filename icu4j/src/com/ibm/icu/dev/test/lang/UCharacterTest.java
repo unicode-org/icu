@@ -1641,7 +1641,7 @@ public final class UCharacterTest extends TestFmwk
             /* enum/integer type properties */
             /* test default Bidi classes for unassigned code points */
             { 0x0590, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
-            { 0x05c7, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x05cf, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x05ed, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
