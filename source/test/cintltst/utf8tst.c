@@ -123,7 +123,7 @@ static void TestGetChar()
         0x65,
         0x31,
         0x9a,
-        0xc9,
+        0xc9
     };
     static uint32_t result[]={
      /*codepoint-unsafe,  codepoint-safe(not strict)  codepoint-safe(strict)*/
@@ -139,8 +139,8 @@ static void TestGetChar()
         0x25,             UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
         0x65,             0x65,                       0x65,  
         0x31,             0x31,                       0x31,  
-        0x31,             0x9a,                       0x9a,
-        0x240,            UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
+        0x31,             UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
+        0x240,            UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1
     };
     uint16_t i=0;
     UChar32 c;
@@ -165,31 +165,28 @@ static void TestGetChar()
          
          i=(uint16_t)(i+3);
     }
-
 }
 
 static void TestNextPrevChar(){
-
-    static uint8_t input[]={0x61, 0xf0, 0x90, 0x90, 0x81, 0xc0, 0x80, 0xfd, 0xbe, 0xc0, 0x61, 0x81, 0x90, 0x90, 0xf0, 0x00};
+    static uint8_t input[]={0x61, 0xf0, 0x90, 0x90, 0x81, 0xc0, 0x80, 0xfd, 0xbe, 0xc2, 0x61, 0x81, 0x90, 0x90, 0xf0, 0x00};
     static uint32_t result[]={
     /*next_unsafe    next_safe_ns        next_safe_s          prev_unsafe   prev_safe_ns         prev_safe_s*/
         0x0061,        0x0061,             0x0061,              0x0000,       0x0000,             0x0000,
-        0x10401,       0x10401,            0x10401,             0xf0,         0xf0,               0xf0, 
-        0x90,          0x90,               0x90,                0x841410,     UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x90,          0x90,               0x90,                0x21050,      UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x81,          0x81,               0x81,                0x841,        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x00,          0x00,               UTF8_ERROR_VALUE_2,  0x61,         0x61,               0x61,
-        0x80,          0x80,               0x80,                0xc0,         0xc0,               0xc0,
+        0x10401,       0x10401,            0x10401,             0xf0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x2841410,    UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xa1050,      UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x81,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x2841,       UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x00,          UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,  0x61,         0x61,               0x61,
+        0x80,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xc2,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
         0xfd,          UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,  0x77e,        UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
-        0xbe,          0xbe,               0xbe,                0xfd,         0xfd,               0xfd,
-        0x21,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x00,         0x00,               UTF8_ERROR_VALUE_2, 
-        0x61,          0x61,               0x61,                0xc0,         0xc0,               0xc0, 
-        0x81,          0x81,               0x81,                0x10401,      0x10401,            0x10401, 
-        0x90,          0x90,               0x90,                0x410,        UTF_ERROR_VALUE,    UTF_ERROR_VALUE,
-        0x90,          0x90,               0x90,                0x410,        UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2, 
-        0x0840,        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xf0,         0xf0,               0xf0, 
-        0x0000,        0x0000,             0x0000,              0x0061,       0x0061,             0x0061,
-
+        0xbe,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xfd,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0xa1,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x00,         UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
+        0x61,          0x61,               0x61,                0xc0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x81,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x10401,      0x10401,            0x10401,
+        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x410,        UTF_ERROR_VALUE,    UTF_ERROR_VALUE,
+        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x410,        UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
+        0x0840,        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xf0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x0000,        0x0000,             0x0000,              0x0061,       0x0061,             0x0061
     };
     static UTextOffset movedOffset[]={
    /*next_unsafe    next_safe_ns  next_safe_s       prev_unsafe   prev_safe_ns     prev_safe_s*/
@@ -248,21 +245,6 @@ static void TestNextPrevChar(){
          if(c != result[i+2]){
              log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
          }
-         /*call the API instead of MACRO
-         setOffset=offset;
-         (c)=(input)[(setOffset)++]; 
-         if(UTF8_IS_LEAD(c)) { 
-             (c)=utf8_nextCharSafeBody(input, &(setOffset), sizeof(input), c, TRUE); 
-         } 
-         if(setOffset != movedOffset[i+1]){
-             log_err("ERROR: utf8_nextCharSafeBody(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+2], setOffset);
-         }
-         if(c != result[i+2]){
-             log_err("ERROR: utf8_nextCharSafeBody(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
-         }
-         */
-
          i=i+6;
     }
     i=0;
@@ -294,20 +276,6 @@ static void TestNextPrevChar(){
          if(c != result[i+5]){
              log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+5], c);
          }
-         /*call the API instead of MACRO
-         setOffset=offset;
-         (c)=(input)[--(setOffset)]; 
-         if(UTF8_IS_TRAIL((c))) { 
-             (c)=utf8_prevCharSafeBody(input, 0, &(setOffset), c, TRUE); 
-         } 
-         if(setOffset != movedOffset[i+5]){
-             log_err("ERROR: utf8_prevCharSafeBody(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+5], setOffset);
-         } 
-         if(c != result[i+5]){
-             log_err("ERROR: utf8_prevCharSafeBody(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+5], c);
-         }
-         */
          i=i+6;
     }
 
@@ -394,11 +362,11 @@ static void TestFwdBack(){
 }
 
 static void TestSetChar(){
-    static uint8_t input[]={0x61, 0xe4, 0xba, 0x8c, 0x7f, 0xfe, 0x62, 0xc5, 0x7f, 0x61, 0x80, 0x80, 0xe0, 0x00};
-    static uint16_t start_unsafe[]={0, 1, 1, 1, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13};
-    static uint16_t start_safe[]  ={0, 1, 1, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
-    static uint16_t limit_unsafe[]={0, 1, 4, 4, 4, 5, 6, 7, 9, 9, 10, 10, 10, 15};
-    static uint16_t limit_safe[]  ={0, 1, 4, 4, 4, 5, 6, 7, 9, 9, 10, 11, 12, 14};
+    static uint8_t input[]={         0x61, 0xe4, 0xba, 0x8c, 0x7f, 0xfe, 0x62, 0xc5, 0x7f, 0x61, 0x80, 0x80, 0xe0, 0x00 };
+    static uint16_t start_unsafe[]={ 0,    1,    1,    1,    4,    5,    6,    7,    8,    9,    9,    9,    12,   13 };
+    static uint16_t start_safe[]  ={ 0,    1,    1,    1,    4,    5,    6,    7,    8,    9,    10,   11,   12,   13 };
+    static uint16_t limit_unsafe[]={ 0,    1,    4,    4,    4,    5,    6,    7,    9,    9,    10,   10,   10,   15 };
+    static uint16_t limit_safe[]  ={ 0,    1,    4,    4,    4,    5,    6,    7,    8,    9,    10,   11,   12,   13 };
     
     uint32_t i=0;
     uint32_t offset=0, setOffset=0;
@@ -406,32 +374,24 @@ static void TestSetChar(){
          setOffset=offset;
          UTF8_SET_CHAR_START_UNSAFE(input, setOffset);
          if(setOffset != start_unsafe[i]){
-             log_err("ERROR: UTF8_SET_CHAR_START_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_unsafe[i], setOffset);
+             log_err("ERROR: UTF8_SET_CHAR_START_UNSAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, start_unsafe[i], setOffset);
          }
          setOffset=offset;
          UTF8_SET_CHAR_START_SAFE(input, 0, setOffset);
          if(setOffset != start_safe[i]){
-             log_err("ERROR: UTF8_SET_CHAR_START_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_safe[i], setOffset);
+             log_err("ERROR: UTF8_SET_CHAR_START_SAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, start_safe[i], setOffset);
          }
-         /*call the API instead of MACRO
-         if(UTF8_IS_TRAIL((input)[(setOffset)])) { 
-              (setOffset)=utf8_back1SafeBody(input, 0, (UTextOffset)(setOffset)); 
-         } 
-         if(setOffset != start_safe[i]){
-             log_err("ERROR: utf8_back1SafeBody failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_safe[i], setOffset);
-         }
-         */
          if (offset != 0) { /* Can't have it go off the end of the array */
              setOffset=offset; 
              UTF8_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
              if(setOffset != limit_unsafe[i]){
-                 log_err("ERROR: UTF8_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_unsafe[i], setOffset);
+                 log_err("ERROR: UTF8_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, limit_unsafe[i], setOffset);
              }
          }
          setOffset=offset; 
          UTF8_SET_CHAR_LIMIT_SAFE(input,0, setOffset, sizeof(input));
          if(setOffset != limit_safe[i]){
-             log_err("ERROR: UTF8_SET_CHAR_LIMIT_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_safe[i], setOffset);
+             log_err("ERROR: UTF8_SET_CHAR_LIMIT_SAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, limit_safe[i], setOffset);
          }
          i++;
     }
@@ -612,5 +572,3 @@ static void printUChars(uint8_t *uchars, int16_t len){
         printf("0x%02x ", *(uchars+i));
     }
 }
-
-

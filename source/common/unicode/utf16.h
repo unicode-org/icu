@@ -108,7 +108,7 @@
         if(UTF_IS_SURROGATE_FIRST(c)) { \
             if((i)+1<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)+1])) { \
                 (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
-                /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
+                /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
             } else if(strict) {\
                 /* unmatched first surrogate */ \
                 (c)=UTF_ERROR_VALUE; \
@@ -116,13 +116,14 @@
         } else { \
             if((i)-1>=(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
                 (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
-                /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
+                /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
             } else if(strict) {\
                 /* unmatched second surrogate */ \
                 (c)=UTF_ERROR_VALUE; \
             } \
         } \
-    /* else strict: (c)==0xfffe is caught by UTF_IS_ERROR() */ \
+    } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) { \
+        (c)=UTF_ERROR_VALUE; \
     } \
 }
 
@@ -195,15 +196,14 @@
         if((i)<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)])) { \
             ++(i); \
             (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
-            /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
+            /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
         } else if(strict) {\
             /* unmatched first surrogate */ \
             (c)=UTF_ERROR_VALUE; \
         } \
-    } else if(strict && UTF_IS_SECOND_SURROGATE(c)) { \
-        /* unmatched second surrogate */ \
+    } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) { \
+        /* unmatched second surrogate or other non-character */ \
         (c)=UTF_ERROR_VALUE; \
-    /* else strict: (c)==0xfffe is caught by UTF_IS_ERROR() */ \
     } \
 }
 
@@ -303,15 +303,14 @@
         if((i)>(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
             --(i); \
             (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
-            /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
+            /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() and UTF_IS_UNICODE_CHAR() */ \
         } else if(strict) {\
             /* unmatched second surrogate */ \
             (c)=UTF_ERROR_VALUE; \
         } \
-    } else if(strict && UTF_IS_FIRST_SURROGATE(c)) { \
-        /* unmatched first surrogate */ \
+    } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) { \
+        /* unmatched first surrogate or other non-character */ \
         (c)=UTF_ERROR_VALUE; \
-    /* else strict: (c)==0xfffe is caught by UTF_IS_ERROR() */ \
     } \
 }
 
