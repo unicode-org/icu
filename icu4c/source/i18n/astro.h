@@ -74,7 +74,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  class Ecliptic {
+  class U_I18N_API Ecliptic {
   public:
     /**
      * Constructs an Ecliptic coordinate object.
@@ -141,7 +141,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  class Equatorial {
+  class U_I18N_API Equatorial {
   public:
     /**
      * Constructs an Equatorial coordinate object.
@@ -215,7 +215,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  class Horizon {
+  class U_I18N_API Horizon {
   public:
     /**
      * Constructs a Horizon coordinate object.
@@ -681,7 +681,7 @@ public:
   Equatorial* getSunPosition();
     
 public:
-  class SolarLongitude {
+  class U_I18N_API SolarLongitude {
   public: 
     SolarLongitude(double l)
       :  value(l) { }
@@ -1080,7 +1080,7 @@ public:
    */
   double getMoonPhase();
     
-  class MoonAge {
+  class U_I18N_API MoonAge {
   public: 
     MoonAge(double l)
       :  value(l) { }
@@ -1145,7 +1145,7 @@ public:
   //-------------------------------------------------------------------------
 
   // private
-  class AngleFunc {
+  class U_I18N_API AngleFunc {
   public:
     virtual double eval(CalendarAstronomer&) = 0;
   };
@@ -1154,7 +1154,7 @@ public:
   UDate timeOfAngle(AngleFunc& func, double desired,
                     double periodDays, double epsilon, UBool next);
     
-  class CoordFunc {
+  class U_I18N_API CoordFunc {
   public:
     virtual Equatorial* eval(CalendarAstronomer&) = 0;
   };

@@ -247,7 +247,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * @param year  The hijri year
    * @param year  The hijri month, 0-based
    */
-  int32_t monthStart(int year, int month) const;
+  int32_t monthStart(int32_t year, int32_t month) const;
     
   /**
    * Find the day number on which a particular month of the true/lunar
