@@ -17,7 +17,7 @@
 #*  Run on UNIX platforms (linux) in order to catch all the exports
 
 $headername = 'urename.h';
-$U_ICU_VERSION_SUFFIX = "_1_8";
+$U_ICU_VERSION_SUFFIX = "_1_9";
 
 
 while($ARGV[0] =~ /^-/) { # detects whether there are any arguments
@@ -71,23 +71,30 @@ print HEADER <<"EndOfHeaderComment";
 EndOfHeaderComment
 
 for(;@ARGV; shift(@ARGV)) {
-    @NMRESULT = `nm -Cg -f p $ARGV[0]`;
+    @NMRESULT = `nm -Cg -f s $ARGV[0]`;
     if($?) {
         warn "Couldn't do 'nm' for $ARGV[0], continuing...\n";
         next; # Couldn't do nm for the file
     }
+    splice @NMRESULT, 0, 6;
     
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
-        if(/@@/ or /\./ or /\(/ ) { # These would be imports
-            &verbose( "Import: $_");
-        } elsif (/::/) { # C++ methods, stuff class name in associative array
-            &verbose( "C++ method: $_");
-            @CppName = split(/::/);
-            $CppClasses{$CppName[0]}++;
-        } else { # This is regular C function 
-            &verbose( "C func: $_");
-            @funcname = split(/\s+/);
-            $CFuncs{$funcname[0]}++;
+        ($_, $address, $type) = split(/\|/);
+
+        if(!($type =~ /[UA]/)) {
+            if(/@@/) { # These would be imports
+                &verbose( "Import: $_ \"$type\"\n");
+            } elsif (/::/) { # C++ methods, stuff class name in associative array
+                &verbose( "C++ method: $_\n");
+                @CppName = split(/::/);
+                $CppClasses{$CppName[0]}++;
+            } else { # This is regular C function 
+                &verbose( "C func: $_\n");
+                @funcname = split(/[\(\s+]/);
+                $CFuncs{$funcname[0]}++;
+            }
+        } else {
+            &verbose( "Skipped: $_ $1\n");
         }
     }
 }
