@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/09/25 06:40:14 $ 
-* $Revision: 1.27 $
+* $Date: 2002/10/05 02:16:17 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -141,7 +141,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
  
     static public void writeCaseFolding() throws IOException {
         System.err.println("Writing Javascript data");
-        BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true, false);
+        BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true, Utility.LATIN1);
         // new BufferedReader(new FileReader(DIR31 + "CaseFolding-3.d3.alpha.txt"), 64*1024);
         // log = new PrintWriter(new FileOutputStream("CaseFolding_data.js"));
         log = Utility.openPrintWriter("CaseFolding_data.js", Utility.UTF8_WINDOWS);

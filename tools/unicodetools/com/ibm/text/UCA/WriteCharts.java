@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2002/10/05 01:28:56 $
-* $Revision: 1.14 $
+* $Date: 2002/10/05 02:16:17 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -84,12 +84,12 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Collation Charts"};
         String folder = "charts\\uca\\";
 
-        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", false, folder + "charts.css");
-        Utility.copyTextFile("help.html", true, folder + "help.html");
+        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
 
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -244,12 +244,12 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Normalization Charts"};
         String folder = "charts\\normalization\\";
 
-        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", false, folder + "charts.css");
-        Utility.copyTextFile("norm_help.html", true, folder + "help.html");
+        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("norm_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
 
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -353,12 +353,12 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Case Charts"};
         String folder = "charts\\case\\";
 
-        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", false, folder + "charts.css");
-        Utility.copyTextFile("case_help.html", true, folder + "help.html");
+        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("case_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
 
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -507,12 +507,12 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Name Charts"};
         String folder = "charts\\name\\";
 
-        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", false, folder + "charts.css");
-        Utility.copyTextFile("name_help.html", true, folder + "help.html");
+        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("name_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
 
         int columnCount = 0;
         char lastInitial = 0;
@@ -950,41 +950,6 @@ public class WriteCharts implements UCD_Types {
         }
         
         /*
-        BufferedReader in = Utility.openUnicodeFile("Blocks", "", true, false);
-        try {
-            while (true) {
-                // 0000..007F; Basic Latin
-                String line = Utility.readDataLine(in);
-                if (line == null) break;
-                if (line.length() == 0) continue;
-                int pos1 = line.indexOf('.');
-                int pos2 = line.indexOf(';', pos1);
-                int start = Integer.parseInt(line.substring(0, pos1), 16);
-                int end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
-                String name = line.substring(pos2+1).trim(); // .replace(' ', '_');
-                names[counter] = name;
-                values[counter] = new UnicodeSet(start, end);
-                starts[counter] = start;
-                ends[counter] = end;
-                //System.out.println(names[counter] + ", " + values[counter]);
-                ++counter;
-                
-                // HACK
-                if (name.equals("Tags")) {
-                    names[counter] = "<i>reserved default ignorable</i>";
-                    values[counter] = new UnicodeSet(0xE0080, 0xE0FFF);
-                    starts[counter] = 0xE0080;
-                    ends[counter] = 0xE0FFF;
-                    ++counter;
-                }                   
-            }
-        } finally {
-            in.close();
-        }
-        */
-            
-            
-        /*
             Graphic
             Format
             Control
@@ -995,7 +960,7 @@ public class WriteCharts implements UCD_Types {
             Reserved (other)
         */
             
-        PrintWriter out = Utility.openPrintWriter("allocation.html", Utility.LATIN1_WINDOWS);
+        PrintWriter out = Utility.openPrintWriter("allocation.html", Utility.UTF8_WINDOWS);
         try {
             out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
             out.println("<title>Unicode Allocation</title></head>");
@@ -1005,8 +970,10 @@ public class WriteCharts implements UCD_Types {
             for (int textOnly = 0; textOnly < 2; ++textOnly) {
                 out.println("<table border='1' cellspacing='0'>"); // width='100%' 
                 if (textOnly == 0) {
+                    out.println("<caption><b>Graphic Version</b></caption>");
                     out.println("<tr><th>Start</th><th align='left'>Block Name</th><th align='left'>Size</th></tr>");
                 } else {
+                    out.println("<caption><b>Textual Version (decimal)</b></caption>");
                     out.println("<tr><th>Block Name</th><th>Start</th><th>Total</th><th>Assigned</th></tr>");
                 }
                 int lastEnd = -1;
