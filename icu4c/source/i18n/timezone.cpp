@@ -70,9 +70,9 @@ int32_t TimeZone::fgAvailableIDsCount = 0;
 
 const int32_t TimeZone::millisPerHour = U_MILLIS_PER_HOUR;
 
-const UnicodeString     TimeZone::GMT_ID        = "GMT";
+const UnicodeString     TimeZone::GMT_ID        = UnicodeString("GMT", "");
 const int32_t             TimeZone::GMT_ID_LENGTH = 3;
-const UnicodeString     TimeZone::CUSTOM_ID     = "Custom";
+const UnicodeString     TimeZone::CUSTOM_ID     = UnicodeString("Custom", "");
 
 const TimeZone*            TimeZone::GMT = new SimpleTimeZone(0, GMT_ID);
 

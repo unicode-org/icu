@@ -668,17 +668,23 @@ MessageFormat::format(const Formattable* arguments,
  
 // MessageFormat Type List  Number, Date, Time or Choice
 const UnicodeString MessageFormat::fgTypeList[] = {
-    "", "", "number", "", "date", "", "time", "", "choice"
+    UnicodeString(), UnicodeString(), UnicodeString("number", ""), UnicodeString(),
+    UnicodeString("date", ""), UnicodeString(), UnicodeString("time", ""), UnicodeString(),
+    UnicodeString("choice", "")
 };
  
 // NumberFormat modifier list, default, currency, percent or integer
 const UnicodeString MessageFormat::fgModifierList[] = {
-    "", "", "currency", "", "percent", "", "integer", "", ""
+    UnicodeString(), UnicodeString(), UnicodeString("currency", ""), UnicodeString(),
+    UnicodeString("percent", ""), UnicodeString(), UnicodeString("integer", ""), UnicodeString(),
+    UnicodeString()
 };
  
 // DateFormat modifier list, default, short, medium, long or full
 const UnicodeString MessageFormat::fgDateModifierList[] = {
-    "", "", "short", "", "medium", "", "long", "", "full"
+    UnicodeString(), UnicodeString(), UnicodeString("short", ""), UnicodeString(),
+    UnicodeString("medium", ""), UnicodeString(), UnicodeString("long", ""), UnicodeString(),
+    UnicodeString("full", "")
 };
  
 const int32_t MessageFormat::fgListLength= 9;
