@@ -45,7 +45,8 @@ class TransliteratorAlias {
      * Construct a compound RBT alias.
      */
     TransliteratorAlias(const UnicodeString& ID, const UnicodeString& idBlock,
-                        Transliterator* adopted, int32_t idSplitPoint);
+                        Transliterator* adopted, int32_t idSplitPoint,
+                        const UnicodeSet* compoundFilter);
 
     ~TransliteratorAlias();
     
@@ -64,10 +65,12 @@ class TransliteratorAlias {
     // 2. CompoundRBT
     //    Here ID is the ID, aliasID is the idBlock, trans is the
     //    contained RBT, and idSplitPoint is the offet in aliasID
-    //    where the contained RBT goes.
+    //    where the contained RBT goes.  compoundFilter is the
+    //    compound filter, and it is _not_ owned.
     UnicodeString ID;
     UnicodeString aliasID;
     Transliterator* trans; // owned
+    const UnicodeSet* compoundFilter; // alias
     int32_t idSplitPoint;
 };
 

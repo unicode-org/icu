@@ -10,6 +10,7 @@
 #include "unicode/cpdtrans.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
+#include "unicode/uniset.h"
 #include "uvector.h"
 
 // keep in sync with Transliterator
@@ -129,13 +130,18 @@ void CompoundTransliterator::init(const UnicodeString& id,
     }
 
     UVector list(status);
+    UnicodeSet* compoundFilter = NULL;
     UnicodeString regenID;
     Transliterator::parseCompoundID(id, regenID, direction,
                                     idSplitPoint, adoptedSplitTrans,
-                                    list, compoundRBTIndex,
+                                    list, compoundRBTIndex, compoundFilter,
                                     parseError, status);
 
     init(list, direction, fixReverseID, status);
+
+    if (compoundFilter != NULL) {
+        adoptFilter(compoundFilter);
+    }
 }
 
 /**

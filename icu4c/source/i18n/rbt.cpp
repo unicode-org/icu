@@ -23,12 +23,24 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UErrorCode& status) {
     data = 0;
     isDataOwned = TRUE;
-    if (U_SUCCESS(status)) {
-        data = TransliteratorParser::parse(rules, direction, parseError,status);
-        if (U_SUCCESS(status)) {
-            setMaximumContextLength(data->ruleSet.getMaximumContextLength());
-        }
+    if (U_FAILURE(status)) {
+        return;
     }
+
+    TransliteratorParser parser;
+    parser.parse(rules, direction, parseError, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (parser.idBlock.length() != 0 ||
+        parser.compoundFilter != NULL) {
+        status = U_INVALID_RBT_SYNTAX; // ::ID blocks disallowed in RBT
+        return;
+    }
+
+    data = parser.orphanData();
+    setMaximumContextLength(data->ruleSet.getMaximumContextLength());
 }
 
 RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
