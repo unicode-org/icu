@@ -22,10 +22,14 @@
 #include "unicode/usetiter.h"
 #include "unicode/putil.h"
 #include "unicode/uversion.h"
+#include "unicode/locid.h"
+#include "unicode/ulocdata.h"
+#include "unicode/utf8.h"
 #include "cmemory.h"
 #include "transrt.h"
 #include "testutil.h"
 #include <string.h>
+#include <stdio.h>
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
@@ -68,6 +72,7 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(9,TestInterIndic);
         CASE(10, TestHebrew);
         CASE(11, TestArabic);
+        CASE(12, TestHan);
         default: name = ""; break;
     }
 }
@@ -1026,6 +1031,110 @@ void TransliteratorRoundTripTest::TestHangul() {
            NULL, this, quick, legal, 1);
     delete legal;
 }
+
+
+#define ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
+     errln("error at file %s, line %d, status = %s", __FILE__, __LINE__, \
+         u_errorName(status)); \
+         return;}}
+    
+
+static void writeStringInU8(FILE *out, const UnicodeString &s) {
+    int i;
+    for (i=0; i<s.length(); i=s.moveIndex32(i, 1)) {
+        UChar32  c = s.char32At(i);
+        uint8_t  bufForOneChar[10];
+        UBool    isError = FALSE;
+        int32_t  destIdx = 0;
+        U8_APPEND(bufForOneChar, destIdx, sizeof(bufForOneChar), c, isError);
+        fwrite(bufForOneChar, 1, destIdx, out);
+    }
+}
+        
+
+
+
+void TransliteratorRoundTripTest::TestHan() {
+    UErrorCode  status = U_ZERO_ERROR;
+
+    // TODO:  getExemplars() exists only as a C API, taking a USet.
+    //        The set API we need to use exists only on UnicodeSet, not on USet.
+    //        Do a hacky cast, knowing that a USet is really a UnicodeSet in
+    //        the implementation.  Once USet gets the missing API, switch back
+    //        to using that.
+    USet       *USetExemplars = NULL;
+    USetExemplars = uset_open(0, 0);
+    USetExemplars = ulocdata_getExemplarSet(USetExemplars, "zh", 0, &status);
+    ASSERT_SUCCESS(status);
+    UnicodeSet *exemplars = (UnicodeSet *)USetExemplars;
+
+    UnicodeString source;
+    UChar32       c;
+    int           i;
+    for (i=0; ;i++) {
+        // Add all of the Chinese exemplar chars to the string "source".
+        c = exemplars->charAt(i);
+        if (c == (UChar32)-1) {
+            break;
+        }
+        source.append(c);
+    }
+
+    // transform with Han translit
+    Transliterator *hanTL = Transliterator::createInstance("Han-Latin", UTRANS_FORWARD, status);
+    ASSERT_SUCCESS(status);
+    UnicodeString target=source;
+    hanTL->transliterate(target);
+    // now verify that there are no Han characters left
+    UnicodeSet allHan("[:han:]", status);
+    ASSERT_SUCCESS(status);
+    if (allHan.containsSome(target)) {
+        errln("file %s, line %d, No Han must be left after Han-Latin transliteration",
+            __FILE__, __LINE__);
+    }
+
+    // check the pinyin translit
+    Transliterator *pn = Transliterator::createInstance("Latin-NumericPinyin", UTRANS_FORWARD, status);
+    ASSERT_SUCCESS(status);
+    UnicodeString target2 = target;
+    pn->transliterate(target2);
+
+    // verify that there are no marks
+    Transliterator *nfc = Transliterator::createInstance("nfc", UTRANS_FORWARD, status);
+    ASSERT_SUCCESS(status);
+
+    UnicodeString nfced = target2;
+    nfc->transliterate(nfced);
+    UnicodeSet allMarks("[:mark:]", status);
+    ASSERT_SUCCESS(status);
+    assertFalse("NumericPinyin must contain no marks", allMarks.containsSome(nfced));
+
+    // verify roundtrip
+    Transliterator *np = pn->createInverse(status);
+    ASSERT_SUCCESS(status);
+    UnicodeString target3 = target;
+    np->transliterate(target3);
+    UBool roundtripOK = (target3.compare(target) == 0);
+    assertTrue("NumericPinyin must roundtrip", roundtripOK);
+    if (!roundtripOK) {
+        const char *filename = "numeric-pinyin.log.txt";
+        FILE *out = fopen(filename, "w");
+        errln("Creating log file %s\n", filename);
+        fprintf(out, "Pinyin:                ");
+        writeStringInU8(out, target);
+        fprintf(out, "\nPinyin-Numeric-Pinyin: ");
+        writeStringInU8(out, target2);
+        fprintf(out, "\n");
+        fclose(out);
+    }
+
+    delete hanTL;
+    delete pn;
+    delete nfc;
+    delete np;
+    uset_close(USetExemplars);
+}
+
 
 void TransliteratorRoundTripTest::TestGreek() {
     // weiv removed the test and the fiter
