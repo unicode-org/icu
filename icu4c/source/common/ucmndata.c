@@ -103,7 +103,8 @@ offsetTOCLookupFn(const UDataMemory *pData,
         if(uprv_strcmp(tocEntryName, &base[toc->entry[start].nameOffset])==0) {
             /* found it */
 #ifdef UDATA_DEBUG
-      fprintf(stderr, "Found: %p\n",(base+toc[2*start+1]));
+/*      fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])) */
+            fprintf(stderr, "Found it\n");
 #endif
             return (const DataHeader *)&base[toc->entry[start].dataOffset];
         } else {
