@@ -280,7 +280,7 @@ isCnvAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x76 &&
         pInfo->dataFormat[3]==0x74 &&
-        pInfo->formatVersion[0]==1;
+        pInfo->formatVersion[0]==2;
 }
 
 #define DATA_TYPE "cnv"
@@ -960,7 +960,7 @@ UConverter *
 
 UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *source, UErrorCode *status)
 {
-    const uint8_t *raw;
+    const uint8_t *raw, *oldraw;
     UConverterSharedData *data = NULL;
     
     if(U_FAILURE(*status))
@@ -994,8 +994,14 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *sourc
     case UCNV_EBCDIC_STATEFUL:
     case UCNV_DBCS:
       data->table = icu_malloc(sizeof(UConverterDBCSTable));
-      data->table->dbcs.
-toUnicode=ucmp16_cloneFromData(&raw, status);
+
+      oldraw = raw;
+
+      data->table->dbcs.toUnicode=ucmp16_cloneFromData(&raw, status);
+
+      while((raw-oldraw)%4) /* pad to 4 */
+          raw++;
+
       data->table->dbcs.fromUnicode =ucmp16_cloneFromData(&raw, status);
 
       break;
@@ -1006,7 +1012,13 @@ toUnicode=ucmp16_cloneFromData(&raw, status);
       data->table->mbcs.starters = (bool_t*)raw;
       raw += sizeof(bool_t)*256;
       
+      oldraw = raw;
+
       data->table->mbcs.toUnicode   = ucmp16_cloneFromData(&raw, status);
+
+      while((raw-oldraw)%4) /* pad to 4 */
+          raw++;
+
       data->table->mbcs.fromUnicode = ucmp16_cloneFromData(&raw, status);
 
       break;
