@@ -17,8 +17,6 @@
 *   shared with Win32.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/uloc.h"
 #include "cmemory.h"
@@ -30,11 +28,13 @@
 #include "pkgtypes.h"
 #include "filestrm.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 
 /** set if AR is NOT to be called implicitly by gnumake 
  ** (i.e. if  the form   libblah.a($(OBJECTS) doesnt work) 
  **/
-#if defined(OS400)
+#if defined(OS400) || defined(OS390)
 #    define NO_IMPLICIT_AR  1
 #else
 #    define NO_IMPLICIT_AR  0
