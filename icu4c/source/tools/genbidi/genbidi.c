@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -122,7 +122,7 @@ static const SingleEnum jtSingleEnum={
 static const SingleEnum jgSingleEnum={
     "DerivedJoiningGroup", "joining group",
     UCHAR_JOINING_GROUP,
-    0, UBIDI_JG_SHIFT, UBIDI_JG_MASK
+    1, 0, 0xff                  /* column 1 bits 7..0 */
 };
 
 static void U_CALLCONV
@@ -393,7 +393,7 @@ main(int argc, char* argv[]) {
     }
 
     /* initialize */
-    pv=upvec_open(1, 10000);
+    pv=upvec_open(2, 10000);
 
     /* process BidiMirroring.txt */
     writeUCDFilename(basename, "BidiMirroring", suffix);

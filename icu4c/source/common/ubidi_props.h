@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -97,29 +97,34 @@ enum {
     UBIDI_IX_TRIE_SIZE,
     UBIDI_IX_MIRROR_LENGTH,
 
+    UBIDI_IX_JG_START,
+    UBIDI_IX_JG_LIMIT,
+
     UBIDI_MAX_VALUES_INDEX=15,
     UBIDI_IX_TOP=16
 };
 
-/* definitions for 32-bit bidi/shaping properties word ---------------------- */
+/* definitions for 16-bit bidi/shaping properties word ---------------------- */
 
 enum {
  /* UBIDI_CLASS_SHIFT=0, */     /* bidi class: 5 bits (4..0) */
     UBIDI_JT_SHIFT=5,           /* joining type: 3 bits (7..5) */
-    UBIDI_JG_SHIFT=8,           /* joining group: 6 bits (13..8) */
 
-    /* UBIDI__SHIFT=14, reserved: 12 bits (25..14) */
+    /* UBIDI__SHIFT=8, reserved: 2 bits (9..8) */
 
-    UBIDI_JOIN_CONTROL_SHIFT=26,
-    UBIDI_BIDI_CONTROL_SHIFT=27,
+    UBIDI_JOIN_CONTROL_SHIFT=10,
+    UBIDI_BIDI_CONTROL_SHIFT=11,
 
-    UBIDI_IS_MIRRORED_SHIFT=28,         /* 'is mirrored' */
-    UBIDI_MIRROR_DELTA_SHIFT=29         /* bidi mirroring delta: 3 bits (31..29) */
+    UBIDI_IS_MIRRORED_SHIFT=12,         /* 'is mirrored' */
+    UBIDI_MIRROR_DELTA_SHIFT=13,        /* bidi mirroring delta: 3 bits (15..13) */
+
+    UBIDI_MAX_JG_SHIFT=16,              /* max JG value in indexes[UBIDI_MAX_VALUES_INDEX] bits 23..16 */
 };
 
 #define UBIDI_CLASS_MASK        0x0000001f
 #define UBIDI_JT_MASK           0x000000e0
-#define UBIDI_JG_MASK           0x00003f00
+
+#define UBIDI_MAX_JG_MASK       0x00ff0000
 
 #define UBIDI_GET_CLASS(props) ((props)&UBIDI_CLASS_MASK)
 #define UBIDI_GET_FLAG(props, shift) (((props)>>(shift))&1)
