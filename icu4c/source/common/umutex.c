@@ -250,7 +250,9 @@ umtx_unlock(UMTX* mutex)
     }
 
     if(*mutex == NULL)    {
+#if (ICU_USE_THREADS == 1)
         U_ASSERT(FALSE);  /* This mutex is not initialized.     */
+#endif
         return; 
     }
 
