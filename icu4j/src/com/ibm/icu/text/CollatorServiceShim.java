@@ -22,17 +22,16 @@ import com.ibm.icu.util.UResourceBundle;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
 
-    Collator getInstance(Locale locale) {
+    Collator getInstance(ULocale locale) {
         if (service.isDefault()) {
             return new RuleBasedCollator(locale);
         }
 
         try {
-            Locale[] actualLoc = new Locale[1];
+            ULocale[] actualLoc = new ULocale[1];
             Collator coll = (Collator)service.get(locale, actualLoc);
-            ULocale uloc = new ULocale(actualLoc[0]);
             coll = (Collator) coll.clone();
-            coll.setLocale(uloc, uloc); // services make no distinction between actual & valid
+            coll.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
             return coll;
         }
         catch (CloneNotSupportedException e) {
@@ -105,7 +104,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             super("Collator");
 
             class CollatorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
+                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
                     return new RuleBasedCollator(loc);
                 }
 
@@ -122,7 +121,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             if (actualIDReturn != null) {
                 actualIDReturn[0] = "root";
             }
-            return new RuleBasedCollator(new Locale("", "", ""));
+            return new RuleBasedCollator(new ULocale("", "", ""));
         }
     }
     private static ICULocaleService service = new CService();
