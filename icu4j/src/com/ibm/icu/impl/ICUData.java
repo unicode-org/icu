@@ -35,17 +35,17 @@ public final class ICUData {
 		return i != null;
 	}
 	
-	private static InputStream getStream(final String resourceName, boolean required) {
+	private static InputStream getStream(final Class root, final String resourceName, boolean required) {
 		InputStream i = null;
 		if (System.getSecurityManager() != null) {
 			i = (InputStream)AccessController.doPrivileged(
 			new PrivilegedAction() {
 				public Object run() {
-					return ICUData.class.getResourceAsStream(resourceName);
+					return root.getResourceAsStream(resourceName);
 				}
 			});
 		} else {
-			i = ICUData.class.getResourceAsStream(resourceName);
+			i = root.getResourceAsStream(resourceName);
 		}
 		if (i == null && required) {
 			throw new InternalError("could not locate data " + resourceName);
@@ -54,16 +54,30 @@ public final class ICUData {
 	}
 	
 	/*
-	 * Convenience override that calls get(resourceName, false);
+	 * Convenience override that calls getStream(ICUData.class, resourceName, false);
 	 */
 	public static InputStream getStream(String resourceName) {
-		return getStream(resourceName, false);
+		return getStream(ICUData.class, resourceName, false);
 	}
 	
 	/*
-	 * Convenience method that calls get(resourceName, true).
+	 * Convenience method that calls getStream(ICUData.class, resourceName, true).
 	 */
 	public static InputStream getRequiredStream(String resourceName) {
-		return getStream(resourceName, true);
+		return getStream(ICUData.class, resourceName, true);
+	}
+
+	/*
+	 * Convenience override that calls getStream(root, resourceName, false);
+	 */
+	public static InputStream getStream(Class root, String resourceName) {
+		return getStream(root, resourceName, false);
+	}
+	
+	/*
+	 * Convenience method that calls getStream(root, resourceName, true).
+	 */
+	public static InputStream getRequiredStream(Class root, String resourceName) {
+		return getStream(root, resourceName, true);
 	}
 }
