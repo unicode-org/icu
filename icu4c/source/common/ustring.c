@@ -249,7 +249,7 @@ UChar* u_uastrcpy(UChar *ucs1,
 /*
  returns the minimum of (the length of the null-terminated string) and n.
 */
-int32_t u_astrnlen(const char *ucs1, int32_t n)
+static int32_t u_astrnlen(const char *ucs1, int32_t n)
 {
     int32_t len = 0;
 
