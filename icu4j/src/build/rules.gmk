@@ -12,8 +12,12 @@ FILES_class= $(FILES_java:.java=.class)
 
 CLASSLIST= classes.list
 
-{$(SRCDIR)/$(PKGPATH)}.java{$(CLASSDIR)/$(PKGPATH)}.class:
+# {$(SRCDIR)/$(PKGPATH)}.java{$(CLASSDIR)/$(PKGPATH)}.class:
+#	@echo $(?) >> $(CLASSLIST)
+
+{$(SRCDIR)/$(PKGPATH)}.class : {$(CLASSDIR)/$(PKGPATH)}.java:
 	@echo $(?) >> $(CLASSLIST)
+
 
 ifdef FILES_dict
 FILES_dict= $(FILES_dict:/=\)
