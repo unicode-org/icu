@@ -1,12 +1,9 @@
 /*
 *******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   (C) Copyright International Business Machines Corporation, 1999           *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
+*
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
 *******************************************************************************
 *   file name:  genprops.c
 *   encoding:   US-ASCII
@@ -32,66 +29,14 @@
 #include "filestrm.h"
 #include "udata.h"
 #include "unewdata.h"
+#include "genprops.h"
 
-#define DATA_NAME "uprops"
-#define DATA_TYPE "dat"
-
-/* UDataInfo cf. udata.h */
-static const UDataInfo dataInfo={
-    sizeof(UDataInfo),
-    0,
-
-    U_IS_BIG_ENDIAN,
-    U_CHARSET_FAMILY,
-    U_SIZEOF_UCHAR,
-    0,
-
-    0x55, 0x50, 0x72, 0x6f,     /* dataFormat="UPro" */
-    1, 0, 0, 0,                 /* formatVersion */
-    3, 0, 0, 0                  /* dataVersion */
-};
-
-static bool_t beVerbose=FALSE, haveCopyright=TRUE;
-
-/*
- * Definitions and arrays for the 3-stage lookup.
- */
-enum {
-    STAGE_1_BITS=11, STAGE_2_BITS=6, STAGE_3_BITS=4,
-
-    STAGE_1_COUNT=0x110000>>(STAGE_2_BITS+STAGE_3_BITS),
-    STAGE_2_COUNT=1<<STAGE_2_BITS,
-    STAGE_3_COUNT=1<<STAGE_3_BITS,
-
-    MAX_PROPS_COUNT=20000,
-    MAX_UCHAR_COUNT=10000,
-    MAX_STAGE_2_COUNT=MAX_PROPS_COUNT/10,
-    MAX_STAGES_1_2_COUNT=STAGE_1_COUNT+MAX_STAGE_2_COUNT
-};
-
-static uint16_t stages1_2[MAX_STAGES_1_2_COUNT];
-
-static uint16_t stage2Top=STAGE_1_COUNT;
-
-/* character properties */
-typedef struct {
-    uint32_t code, lowerCase, upperCase, titleCase;
-    uint32_t numericValue, denominator;
-    /* special casing? */
-    /* decomposition mappping? */
-    uint8_t generalCategory, canonicalCombining, bidi, isMirrored;
-} Props;
-
-static Props props[MAX_PROPS_COUNT];
-
-/* Unicode characters, e.g., for special casing or decomposition */
-
-static UChar uchars[MAX_UCHAR_COUNT];
-static uint16_t ucharsTop=0;
+extern bool_t beVerbose=FALSE, haveCopyright=TRUE;
 
 /* general categories */
 
-static const char *const genCategoryNames[U_CHAR_CATEGORY_COUNT]={
+extern const char *const
+genCategoryNames[U_CHAR_CATEGORY_COUNT]={
 	NULL,
     "Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Me",
     "Mc", "Nd", "Nl", "No",
@@ -103,7 +48,8 @@ static const char *const genCategoryNames[U_CHAR_CATEGORY_COUNT]={
     "Cn"
 };
 
-static const char *const bidiNames[U_CHAR_DIRECTION_COUNT]={
+extern const char *const
+bidiNames[U_CHAR_DIRECTION_COUNT]={
 	"L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
     "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
@@ -121,18 +67,6 @@ getField(char *line, int16_t start, int16_t limit);
 
 static void
 checkLineIndex(uint32_t code, int16_t limit, int16_t length);
-
-static void
-addProps(Props *p);
-
-static void
-compress();
-
-static void
-generateData();
-
-static uint16_t
-addUChars(const UChar *s, uint16_t length);
 
 /* -------------------------------------------------------------------------- */
 
@@ -185,7 +119,8 @@ main(int argc, char *argv[]) {
 
     init();
     parseDB(in);
-    compress();
+    compactStage3();
+    compactProps();
     generateData();
 
     if(in!=T_FileStream_stdin()) {
@@ -426,161 +361,4 @@ checkLineIndex(uint32_t code, int16_t index, int16_t length) {
         fprintf(stderr, "genprops: too few fields at code 0x%lx\n", code);
         exit(U_PARSE_ERROR);
     }
-}
-
-/* store a character's properties ------------------------------------------- */
-
-static void
-addProps(Props *p) {
-    uint16_t count;
-
-    /*
-     * Simple ideas for reducing the number of bits for one character's
-     * properties:
-     *
-     * Some fields are only used for characters of certain
-     * general categories:
-     * - casing fields for letters and others, not for
-     *     numbers & Mn
-     *   + uppercase not for uppercase letters
-     *   + lowercase not for lowercase letters
-     *   + titlecase not for titlecase letters
-     *
-     *   * most of the time, uppercase=titlecase
-     * - numeric fields for various digit & other types
-     * - canonical combining classes for non-spacing marks (Mn)
-     * * the above is not always true, for all three cases
-     *
-     * Using the same bits for alternate fields saves some space.
-     *
-     * For the canonical categories, there are only few actually used.
-     * They can be stored using 5 bits.
-     *
-     * In the BiDi categories, the 5 explicit codes are only ever
-     * assigned 1:1 to 5 well-known code points. Storing only one
-     * value for all "explicit codes" gets this down to 4 bits.
-     * Client code then needs to check for this special value
-     * and replace it by the real one using a 5-element table.
-     *
-     * The general categories Mn & Me, non-spacing & enclosing marks,
-     * are always NSM, and NSM are always of those categories.
-     *
-     * Digit values can often be derived from the code point value
-     * itself in a simple way.
-     *
-     */
-
-    /* count the case mappings */
-    count=0;
-    if(p->upperCase!=0) {
-        ++count;
-    }
-    if(p->lowerCase!=0) {
-        ++count;
-    }
-    if(p->upperCase!=p->titleCase) {
-        ++count;
-    }
-
-    /* verify that only Mn has a canonical combining class */
-    if(p->generalCategory!=U_NON_SPACING_MARK && p->canonicalCombining>0) {
-        printf("*** code 0x%06x: canonical combining class does not fit expected range ***\n", p->code);
-    }
-
-    /* verify that only numeric categories have numeric values */
-    if(genCategoryNames[p->generalCategory][0]!='N' && p->numericValue!=0) {
-        printf("*** code 0x%06x: non-numeric category but numeric value\n", p->code);
-    }
-
-    /* verify that no numbers and no Mn have case mappings */
-    /* this is not 100% true either (see 0345;COMBINING GREEK YPOGEGRAMMENI) */
-    if( (genCategoryNames[p->generalCategory][0]=='N' ||
-         p->generalCategory==U_NON_SPACING_MARK) &&
-        count>0
-    ) {
-        printf("*** code 0x%06x: number category or Mn but case mapping\n", p->code);
-    } else if(count>1) {
-        /* see for which characters there are two case mappings */
-        /* there are some, but few (12) */
-        printf("*** code 0x%06x: more than one case mapping\n", p->code);
-    }
-
-    /* verify that { Mn, Me } if and only if NSM */
-    if( (p->generalCategory==U_NON_SPACING_MARK ||
-         p->generalCategory==U_ENCLOSING_MARK)
-        ^
-        (p->bidi==U_DIR_NON_SPACING_MARK)) {
-        printf("*** code 0x%06x: bidi class does not fit expected range ***\n", p->code);
-    }
-
-    /*
-     * "Higher-hanging fruit":
-     * For some sets of fields, there are fewer sets of values
-     * than the product of the numbers of values per field.
-     * This means that storing one single value for more than
-     * one field and later looking up both field values in a table
-     * saves space.
-     * Examples:
-     * - general category & BiDi
-     *
-     * There are only few common displacements between a code point
-     * and its case mappings. Store deltas. Store codes for few
-     * occuring deltas.
-     */
-}
-
-/* compressing -------------------------------------------------------------- */
-
-static void
-compress() {
-}
-
-/* generate output data ----------------------------------------------------- */
-
-static void
-generateData() {
-    UNewDataMemory *pData;
-    UErrorCode errorCode=U_ZERO_ERROR;
-    uint32_t size;
-    long dataLength;
-
-    pData=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops: unable to create data memory, error %d\n", errorCode);
-        exit(errorCode);
-    }
-
-    /* ### */
-    size=0;
-
-    /* finish up */
-    dataLength=udata_finish(pData, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops: error %d writing the output file\n", errorCode);
-        exit(errorCode);
-    }
-
-    if(dataLength!=(long)size) {
-        fprintf(stderr, "genprops: data length %ld != calculated size %lu\n", dataLength, size);
-        exit(U_INTERNAL_PROGRAM_ERROR);
-    }
-}
-
-/* helpers ------------------------------------------------------------------ */
-
-static uint16_t
-addUChars(const UChar *s, uint16_t length) {
-    uint16_t top=ucharsTop+length+1;
-    UChar *p;
-
-    if(top>=MAX_UCHAR_COUNT) {
-        fprintf(stderr, "genprops: out of memory\n");
-        exit(U_MEMORY_ALLOCATION_ERROR);
-    }
-    p=uchars+ucharsTop;
-    icu_memcpy(p, s, length);
-    p[length]=0;
-    ucharsTop=top;
-    return (uint16_t)(p-uchars);
 }
