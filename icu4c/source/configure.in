@@ -323,18 +323,24 @@ AC_SUBST(U_HAVE_WCHAR_H)
 AC_SUBST(U_HAVE_WCSCPY)
 
 dnl Do various POSIX related checks
+U_NL_LANGINFO_CODESET=0
 AC_CHECK_FUNC(nl_langinfo,[U_HAVE_NL_LANGINFO=1],[U_HAVE_NL_LANGINFO=0])
 AC_SUBST(U_HAVE_NL_LANGINFO)
-U_HAVE_CODESET=0
 if test $U_HAVE_NL_LANGINFO -eq 1; then
-  AC_CACHE_CHECK([if nl_langinfo(CODESET) works],ac_cv_have_codeset,
-    [AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo(CODESET);],[ac_cv_have_codeset=yes],[ac_cv_have_codeset=no])])
-  if test x$ac_cv_have_codeset = xyes
+  AC_CACHE_CHECK([what to pass nl_langinfo to obtain the codeset],
+  ac_cv_nl_langinfo_codeset,
+  [ac_cv_nl_langinfo_codeset="not found"
+  for a in CODESET _NL_CTYPE_CODESET_NAME; do
+  AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo($a);],[ac_cv_nl_langinfo_codeset="$a"; break])]
+  done)
+  if test x$ac_cv_nl_langinfo_codeset != x"not found"
   then
-      U_HAVE_CODESET=1
+      U_HAVE_NL_LANGINFO_CODESET=1
+      U_NL_LANGINFO_CODESET=$ac_cv_nl_langinfo_codeset
   fi
 fi
-AC_SUBST(U_HAVE_CODESET)
+AC_SUBST(U_HAVE_NL_LANGINFO_CODESET)
+AC_SUBST(U_NL_LANGINFO_CODESET)
 AC_CHECK_FUNC(tzset)
 if test x$ac_cv_func_tzset = xyes
 then
