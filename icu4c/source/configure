@@ -2555,7 +2555,7 @@ case "${host}" in
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
-	*-*-os390*)	ld_rpath_suf=" " ;;
+	*-*-os390*)	ld_rpath_suf="" ;;
 	*) 		ld_rpath_suf="" ;;
 esac
 
