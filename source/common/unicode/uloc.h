@@ -226,11 +226,22 @@
 #define ULOC_US             "en_US"
 
 /**
- * Useful constants for the size of locale IDs.
- * @draft
+ * Useful constant for the maximum size of the language part of a locale ID.
+ * (including the terminating NULL).
+ * @stable
  */
 #define ULOC_LANG_CAPACITY 12
+/**
+ * Useful constant for the maximum size of the country part of a locale ID
+ * (including the terminating NULL).
+ * @stable
+ */
 #define ULOC_COUNTRY_CAPACITY 4
+/**
+ * Useful constant for the maximum size of the whole locale ID
+ * (including the terminating NULL).
+ * @stable
+ */
 #define ULOC_FULLNAME_CAPACITY 50
 
 
