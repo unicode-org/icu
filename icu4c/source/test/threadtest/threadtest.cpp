@@ -49,6 +49,7 @@ public:
     virtual        ~StringTest();
     virtual void    check();
     virtual void    runOnce();
+            void    makeStringCopies(int recursionCount);
 
 private:
     UnicodeString   *fCleanStrings;
@@ -101,15 +102,18 @@ StringTest::~StringTest() {
 
 
 void   StringTest::runOnce() {
+    makeStringCopies(25);
+}
+
+void   StringTest::makeStringCopies(int recursionCount) {
     UnicodeString firstGeneration[5];
     UnicodeString secondGeneration[5];
     UnicodeString thirdGeneration[5];
     UnicodeString fourthGeneration[5];
 
-    int i;
-
     // Make four generations of copies of the source strings, in slightly variant ways.
     //
+    int i;
     for (i=0; i<5; i++) {
          firstGeneration[i]   = fSourceStrings[i];
          secondGeneration[i]  = firstGeneration[i];
@@ -118,6 +122,14 @@ void   StringTest::runOnce() {
          fourthGeneration[i]  = UnicodeString();
          fourthGeneration[i]  = thirdGeneration[i];
     }
+
+
+    // Recurse to make even more copies of the strings/
+    //
+    if (recursionCount > 0) {
+        makeStringCopies(recursionCount-1);
+    }
+
 
     // Verify that all four generations are equal.
     for (i=0; i<5; i++) {
@@ -130,11 +142,27 @@ void   StringTest::runOnce() {
         }
     }
 
-
 };
   
 
 void   StringTest::check() {
+    //
+    //  Check that the reference counts on the buffers for all of the source strings
+    //     are one.   The ref counts will have run way up while the test threads
+    //     make numerous copies of the strings, but at the top of the loop all
+    //     of the copies should be gone.
+    //
+    int i;
+
+    for (i=0; i<5; i++) {
+        if (fSourceStrings[i].fFlags & UnicodeString::kRefCounted) {
+            const UChar *buf = fSourceStrings[i].getBuffer();
+            uint32_t refCount = fSourceStrings[i].refCount();
+            if (refCount != 1) {
+                fprintf(stderr, "\nFailure.  SourceString Ref Count was %d, should be 1.\n", refCount);
+            }
+        }
+    }
 };
   
 
@@ -269,8 +297,9 @@ struct RunInfo
     bool           verbose;
     int            numThreads;
     int            totalTime;
+    int            checkTime;
     AbstractTest   *fTest;
-    bool           stopFlag;
+    volatile bool           stopFlag;
     int32_t        runningThreads;
 };
 
@@ -305,7 +334,7 @@ struct ThreadInfo
 //------------------------------------------------------------------------------
 RunInfo         gRunInfo;
 ThreadInfo      *gThreadInfo;
-UMTX            *gMutex;
+UMTX            gMutex;
 
 
 //----------------------------------------------------------------------
@@ -326,6 +355,7 @@ void parseCommandLine(int argc, char **argv)
     gRunInfo.verbose = false;
     gRunInfo.numThreads = 2;
     gRunInfo.totalTime = 0;
+    gRunInfo.checkTime = 10;
 
     try             // Use exceptions for command line syntax errors.
     {
@@ -357,7 +387,16 @@ void parseCommandLine(int argc, char **argv)
                 if (gRunInfo.totalTime < 1)
                     throw 1;
             }
-            else  
+            else if (strcmp(argv[argnum], "-ctime") == 0)
+            {
+                ++argnum;
+                if (argnum >= argc)
+                    throw 1;
+                gRunInfo.checkTime = atoi(argv[argnum]);
+                if (gRunInfo.checkTime < 1)
+                    throw 1;
+            }
+           else  
             {
                 fprintf(stderr, "Unrecognized command line option.  Scanning \"%s\"\n",
                     argv[argnum]);
@@ -370,11 +409,11 @@ void parseCommandLine(int argc, char **argv)
     catch (int)
     {
         fprintf(stderr, "usage:  threadtest [-threads nnn] [-time nnn] [-quiet] [-verbose] \n"
-            "     -v             Use validating parser.  Non-validating is default. \n"
             "     -quiet         Suppress periodic status display. \n"
             "     -verbose       Display extra messages. \n"
             "     -threads nnn   Number of threads.  Default is 2. \n"
             "     -time nnn      Total time to run, in seconds.  Default is forever.\n"
+            "     -ctime nnn     Time between extra consistency checks, in seconds.  Default 10\n"
             );
         exit(1);
     }
@@ -406,27 +445,33 @@ void threadMain (void *param)
 
     if (gRunInfo.verbose)
         printf("Thread #%d: starting\n", thInfo->fThreadNum);
-
+    umtx_atomic_inc(&gRunInfo.runningThreads);
 
     //
     //
     while (true)
     {
+        if (gRunInfo.verbose )
+            printf("Thread #%d: starting loop\n", thInfo->fThreadNum);
+
         //
         //  If the main thread is asking us to wait, do so by locking gMutex
         //     which will block us, since the main thread will be holding it already.
         // 
         if (gRunInfo.stopFlag) {
+            if (gRunInfo.verbose) {
+                fprintf(stderr, "Thread #%d: suspending\n", thInfo->fThreadNum);
+            }
             umtx_atomic_dec(&gRunInfo.runningThreads);
             while (gRunInfo.stopFlag) {
-                umtx_lock(gMutex);
-                umtx_unlock(gMutex);
+                umtx_lock(&gMutex);
+                umtx_unlock(&gMutex);
             }
             umtx_atomic_inc(&gRunInfo.runningThreads);
+            if (gRunInfo.verbose) {
+                fprintf(stderr, "Thread #%d: restarting\n", thInfo->fThreadNum);
+            }
         }
-
-        if (gRunInfo.verbose )
-            printf("Thread #%d: starting loop\n", thInfo->fThreadNum);
 
         //
         // The real work of the test happens here.
@@ -451,9 +496,6 @@ void threadMain (void *param)
 
 int main (int argc, char **argv)
 {
-
-    int             totalCyclesCompleted = 0;
-
     parseCommandLine(argc, argv);
 
     //
@@ -469,7 +511,7 @@ int main (int argc, char **argv)
         exit(0);
 
     gRunInfo.stopFlag = TRUE;      // Will cause the new threads to block 
-    umtx_lock(gMutex);
+    umtx_lock(&gMutex);
 
     gThreadInfo = new ThreadInfo[gRunInfo.numThreads];
     int threadNum;
@@ -479,29 +521,30 @@ int main (int argc, char **argv)
         ThreadFuncs::startThread(threadMain, &gThreadInfo[threadNum]);
     }
 
-    //
-    //  Loop, watching the heartbeat of the worker threads.
-    //    Each second,
-    //            Stop all the worker threads at the top of their loop, then check
-    //                 the reference counts of the shared Strings.
-    //            display "+" if all threads have completed at least one loop
-    //            display "." if some thread hasn't since previous "+"
-    //
 
     unsigned long startTime = ThreadFuncs::getCurrentMillis();
     int elapsedSeconds = 0;
+    int timeSinceCheck = 0;
+
+    //
+    // Unblock the threads.
+    //
+    gRunInfo.stopFlag = FALSE;       // Unblocks the worker threads.
+    umtx_unlock(&gMutex);      
+
+    //
+    //  Loop, watching the heartbeat of the worker threads.
+    //    Each second,
+    //            display "+" if all threads have completed at least one loop
+    //            display "." if some thread hasn't since previous "+"
+    //    Each "ctime" seconds,
+    //            Stop all the worker threads at the top of their loop, then
+    //            call the test's check function.
+    //
     while (gRunInfo.totalTime == 0 || gRunInfo.totalTime > elapsedSeconds)
     {
-        gRunInfo.stopFlag = FALSE;       // Unblocks the worker threads.
-        umtx_unlock(gMutex);      
+        ThreadFuncs::Sleep(1000);      // We sleep while threads do their work ...
 
-        ThreadFuncs::Sleep(1000);        // Worker threads do their work now...
-
-        umtx_lock(gMutex);               // Block the worker threads at the top of their loop
-        gRunInfo.stopFlag = TRUE;
-        while (gRunInfo.runningThreads > 0) { ThreadFuncs::yield(); }
-        
-                
         if (gRunInfo.quiet == false && gRunInfo.verbose == false)
         {
             char c = '+';
@@ -521,22 +564,45 @@ int main (int argc, char **argv)
                     gThreadInfo[threadNum].fHeartBeat = false;
         }
 
-        //  Call back to the test to let it check its internal validity
-        //    while we've got all of the threads paused.
-        gRunInfo.fTest->check();
-
+        //
+        // Update running times.
+        //
+        timeSinceCheck -= elapsedSeconds;
         elapsedSeconds = (ThreadFuncs::getCurrentMillis() - startTime) / 1000;
+        timeSinceCheck += elapsedSeconds;
+
+        //
+        //  Call back to the test to let it check its internal validity
+        //
+        if (timeSinceCheck >= gRunInfo.checkTime) {
+            if (gRunInfo.verbose) {
+                fprintf(stderr, "Main: suspending all threads\n");
+            }
+            umtx_lock(&gMutex);               // Block the worker threads at the top of their loop
+            gRunInfo.stopFlag = TRUE;
+            while (gRunInfo.runningThreads > 0) { ThreadFuncs::yield(); }
+            
+            gRunInfo.fTest->check();
+            if (gRunInfo.quiet == false && gRunInfo.verbose == false) {
+                fputc('C', stdout);
+            }
+
+            if (gRunInfo.verbose) {
+                fprintf(stderr, "Main: starting all threads.\n");
+            }
+            gRunInfo.stopFlag = FALSE;       // Unblock the worker threads.
+            umtx_unlock(&gMutex);      
+            timeSinceCheck = 0;
+        }
     };
 
     //
     //  Time's up, we are done.  (We only get here if this was a timed run)
     //  Tally up the total number of cycles completed by each of the threads.
     //
-    double totalParsesCompleted = 0;
-    for (threadNum=0; threadNum < gRunInfo.numThreads; threadNum++)
-    {
+    double totalCyclesCompleted = 0;
+    for (threadNum=0; threadNum < gRunInfo.numThreads; threadNum++) {
         totalCyclesCompleted += gThreadInfo[threadNum].fCycles;
-        // printf("%f   ", totalParsesCompleted);
     }
 
     double cyclesPerMinute = totalCyclesCompleted / (double(gRunInfo.totalTime) / double(60));
