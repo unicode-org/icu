@@ -193,7 +193,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
 {
     if (U_FAILURE(status)) return;
-    fSymbols = new DateFormatSymbols(fLocale, status);
+    initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
     if (U_FAILURE(status))
     {
         status = U_ZERO_ERROR;
@@ -206,6 +206,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
             return;
         }
     }
+
     initialize(fLocale, status);
 }
 
@@ -388,7 +389,6 @@ SimpleDateFormat::initialize(const Locale& locale,
 
     // We don't need to check that the row count is >= 1, since all 2d arrays have at
     // least one row
-    fCalendar = Calendar::createInstance(TimeZone::createDefault(), locale, status);
     fNumberFormat = NumberFormat::createInstance(locale, status);
     if (fNumberFormat != NULL && U_SUCCESS(status))
     {

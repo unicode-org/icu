@@ -204,6 +204,7 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
             dayOfMonth +  " (" + UnicodeString(cal.getType()));
     }
   }
+  delete grego;
   CHECK(status, "err during quasiGregorianTest()");
 }
 
