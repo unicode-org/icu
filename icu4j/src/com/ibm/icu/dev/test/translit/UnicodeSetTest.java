@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2000/05/24 22:03:39 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/05/26 20:57:44 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -228,13 +228,13 @@ public class UnicodeSetTest extends TestFmwk {
         } else {
             errln("FAIL: c.complement() = " + c + ", expect " + exp);
         }
-        c.set(a); c.xorAll(b);
+        c.set(a); c.complementAll(b);
         exp.set((char)3,(char)6);
         exp.add((char)11,(char) 15);
         if (c.equals(exp)) {
-            logln("c.set(a).xor(b): " + c);
+            logln("c.set(a).complement(b): " + c);
         } else {
-            errln("FAIL: c.set(a).xor(b) = " + c + ", expect " + exp);
+            errln("FAIL: c.set(a).complement(b) = " + c + ", expect " + exp);
         }
 
         exp.set(c);
@@ -319,13 +319,13 @@ public class UnicodeSetTest extends TestFmwk {
         UnicodeSet x = bitsToSet(a);
         UnicodeSet y = bitsToSet(b);
         UnicodeSet z = bitsToSet(a);
-        z.xorAll(y);
+        z.complementAll(y);
         int c = setToBits(z);
         if (c != (a ^ b)) {
-            errln("FAILED: xor: " + x + " ^ " + y + " != " + z);
-            errln("FAILED: xor: " + a + " ^ " + b + " != " + c);
+            errln("FAILED: complement: " + x + " ^ " + y + " != " + z);
+            errln("FAILED: complement: " + a + " ^ " + b + " != " + c);
         }
-        checkCanonicalRep(z, "xor " + a + "," + b);
+        checkCanonicalRep(z, "complement " + a + "," + b);
     }
     
     /**
