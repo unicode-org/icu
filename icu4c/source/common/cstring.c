@@ -34,7 +34,7 @@ T_CString_toLowerCase(char* str)
 {
     uint32_t i=0;
     while(str[i]) 
-        str[i++] = tolower(str[i]);
+        str[i++] = (char)tolower(str[i]);
     return str;
 }
 
@@ -43,7 +43,7 @@ T_CString_toUpperCase(char* str)
 {
     uint32_t i=0;
     while(str[i]) 
-        str[i++] = toupper(str[i]);
+        str[i++] = (char)toupper(str[i]);
     return str;
 }
 
@@ -55,26 +55,26 @@ void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
   int32_t num = 0;
   int8_t digit;
   char temp;
-  
+
   while (i>=radix)
     {
       num = i/radix;
       digit = (int8_t)(i - num*radix);
-      buffer[length++] = (T_CString_itosOffset(digit));
+      buffer[length++] = (char)(T_CString_itosOffset(digit));
       i = num;
     }
-  
-  buffer[length] = (T_CString_itosOffset(i));
+
+  buffer[length] = (char)(T_CString_itosOffset(i));
   buffer[length+1] = '\0';
-  
-  
+
+
   /*Reverses the string*/
   for (i = 0; i < length; ++i, --length) {
     temp = buffer[length];
     buffer[length] = buffer[i];
     buffer[i] = temp;
   }
-  
+
   return;
 }
 
@@ -173,7 +173,7 @@ U_CAPI char *uprv_strdup(const char *src) {
     char *dup = (char *) malloc(len);
 
     if (dup) {
-	uprv_memcpy(dup, src, len);
+        uprv_memcpy(dup, src, len);
     }
 
     return dup;

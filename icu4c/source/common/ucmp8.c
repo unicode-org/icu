@@ -289,7 +289,7 @@ void ucmp8_expand(CompactByteArray* this_obj)
  * inputHash:   an index of hashes for tempIndex, where
  *      inputHash[i] = XOR of values from i-count+1 to i
  */
-int32_t
+static int32_t
 findOverlappingPosition(CompactByteArray* this_obj, 
             uint32_t start,
             const UChar* tempIndex,

@@ -92,8 +92,8 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingDate(UDate d, const char* startMo
     UDate maxdelta = max - expectedBoundary;
     if (mindelta >= 0 &&
         mindelta <= INTERVAL &&
-        mindelta >= 0 &&
-        mindelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
+        maxdelta >= 0 &&
+        maxdelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
     else errln(UnicodeString("FAIL: Expected boundary at ") + expectedBoundary);
 }
  
@@ -143,8 +143,8 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, UBool startsInD
     UDate maxdelta = max - expectedBoundary;
     if (mindelta >= 0 &&
         mindelta <= INTERVAL &&
-        mindelta >= 0 &&
-        mindelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
+        maxdelta >= 0 &&
+        maxdelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
     else errln(UnicodeString("FAIL: Expected boundary at ") + expectedBoundary);
 }
  
@@ -215,7 +215,8 @@ TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylig
 void
 TimeZoneBoundaryTest::TestBoundaries()
 {
-    if (TRUE) {
+#if 1
+    {
         logln("--- Test a ---");
         UDate d = date(97, Calendar::APRIL, 6);
         TimeZone *z = TimeZone::createTimeZone("PST");
@@ -226,7 +227,9 @@ TimeZoneBoundaryTest::TestBoundaries()
         }
         delete z;
     }
-    if (TRUE) {
+#endif
+#if 1
+    {
         logln("--- Test b ---");
         TimeZone *tz;
         TimeZone::setDefault(*(tz = TimeZone::createTimeZone("PST")));
@@ -236,7 +239,9 @@ TimeZoneBoundaryTest::TestBoundaries()
         logln("========================================");
         findDaylightBoundaryUsingDate(date(97, 6, 1), "PDT", PST_1997_END);
     }
-    if (TRUE) {
+#endif
+#if 1
+    {
         logln("--- Test c ---");
         logln("========================================");
         TimeZone* z = TimeZone::createTimeZone("Australia/Adelaide");
@@ -245,14 +250,18 @@ TimeZoneBoundaryTest::TestBoundaries()
         findDaylightBoundaryUsingTimeZone(date(97, 6, 1), FALSE, 877797000000.0, z);
         delete z;
     }
-    if (TRUE) {
+#endif
+#if 1
+    {
         logln("--- Test d ---");
         logln("========================================");
         findDaylightBoundaryUsingTimeZone(date(97, 0, 1), FALSE, PST_1997_BEG);
         logln("========================================");
         findDaylightBoundaryUsingTimeZone(date(97, 6, 1), TRUE, PST_1997_END);
     }
-    if (FALSE) {
+#endif
+#if 0
+    {
         logln("--- Test e ---");
         TimeZone *z = TimeZone::createDefault();
         logln(UnicodeString("") + z->getOffset(1, 97, 3, 4, 6, 0) + " " + date(97, 3, 4));
@@ -261,6 +270,7 @@ TimeZoneBoundaryTest::TestBoundaries()
         logln(UnicodeString("") + z->getOffset(1, 97, 3, 7, 2, 0) + " " + date(97, 3, 7));
         delete z;
     }
+#endif
 }
  
 // -------------------------------------
@@ -293,8 +303,8 @@ TimeZoneBoundaryTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate d, UDate e
     UDate maxdelta = max - expectedBoundary;
     if (mindelta >= 0 &&
         mindelta <= INTERVAL &&
-        mindelta >= 0 &&
-        mindelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
+        maxdelta >= 0 &&
+        maxdelta <= INTERVAL) logln(UnicodeString("PASS: Expected boundary at ") + expectedBoundary);
     else errln(UnicodeString("FAIL: Expected boundary at ") + expectedBoundary);
 }
  
@@ -306,8 +316,9 @@ TimeZoneBoundaryTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate d, UDate e
 void
 TimeZoneBoundaryTest::TestNewRules()
 {
-    UErrorCode status = U_ZERO_ERROR;
-    if (TRUE) {
+#if 1
+    {
+        UErrorCode status = U_ZERO_ERROR;
         SimpleTimeZone *tz;
         logln("-----------------------------------------------------------------");
         logln("Aug 2ndTues .. Mar 15");
@@ -326,6 +337,7 @@ TimeZoneBoundaryTest::TestNewRules()
         testUsingBinarySearch(tz, date(97, 6, 1), 874227600000.0);
         delete tz;
     }
+#endif
 }
  
 // -------------------------------------

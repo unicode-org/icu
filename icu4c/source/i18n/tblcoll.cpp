@@ -305,7 +305,7 @@ UChar
 NormalizerIterator::next(void)
 {
     if (text != 0) {
-        return ((currentOffset < textLen) ? text[++currentOffset] : Normalizer::DONE);
+        return (UChar)((currentOffset < textLen) ? text[++currentOffset] : Normalizer::DONE);
     }
     return (UChar)cursor->next();
 }
@@ -791,45 +791,45 @@ RuleBasedCollator::constructFromBundle(const Locale & name,
       ResourceBundle binary = rb.get("%%Collation", status); //This is the bundle that actually contains the collation data
       realName = binary.getName();
       if(U_SUCCESS(status)) {
-	UErrorCode intStatus = U_ZERO_ERROR;
-	constructFromCache(realName, intStatus); // check whether we already have this data in cache
-	if(U_SUCCESS(intStatus)) {
-	  return realName;
-	}
-	int32_t inDataLen = 0;
-	const uint8_t *inData = binary.getBinary(inDataLen, status); //This got us the real binary data
-	
-	UMemoryStream *ifs = uprv_mstrm_openBuffer(inData, inDataLen);
-	
-	if (ifs == 0) {
-	  status = U_FILE_ACCESS_ERROR;
-	  return 0;
-	}
+        UErrorCode intStatus = U_ZERO_ERROR;
+        constructFromCache(realName, intStatus); // check whether we already have this data in cache
+        if(U_SUCCESS(intStatus)) {
+          return realName;
+        }
+        int32_t inDataLen = 0;
+        const uint8_t *inData = binary.getBinary(inDataLen, status); //This got us the real binary data
 
-	// The streamIn function does the actual work here...
-	RuleBasedCollatorStreamer::streamIn(this, ifs);
+        UMemoryStream *ifs = uprv_mstrm_openBuffer(inData, inDataLen);
 
-	if (!uprv_mstrm_error(ifs)) {
-	}
-	else if (data && data->isBogus()) {
-	  status = U_MEMORY_ALLOCATION_ERROR;
-	  delete data;
-	  data = 0;
-	} else {
-	  status = U_MISSING_RESOURCE_ERROR;
-	  delete data;
-	  data = 0;
-	}
+        if (ifs == 0) {
+          status = U_FILE_ACCESS_ERROR;
+          return 0;
+        }
 
-	// We constructed the data when streaming it in, so we own it
-	dataIsOwned = TRUE;
+        // The streamIn function does the actual work here...
+        RuleBasedCollatorStreamer::streamIn(this, ifs);
 
-	uprv_mstrm_close(ifs);
-	addToCache(realName); // add the newly constructed data to cache
-	return realName;
+        if (!uprv_mstrm_error(ifs)) {
+        }
+        else if (data && data->isBogus()) {
+          status = U_MEMORY_ALLOCATION_ERROR;
+          delete data;
+          data = 0;
+        } else {
+          status = U_MISSING_RESOURCE_ERROR;
+          delete data;
+          data = 0;
+        }
+
+        // We constructed the data when streaming it in, so we own it
+        dataIsOwned = TRUE;
+
+        uprv_mstrm_close(ifs);
+        addToCache(realName); // add the newly constructed data to cache
+        return realName;
       } else {
-	status = U_MISSING_RESOURCE_ERROR;
-	return 0;
+        status = U_MISSING_RESOURCE_ERROR;
+        return 0;
       }
     } else {
         return 0;
@@ -890,13 +890,13 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
       intStatus = U_ZERO_ERROR;
       constructFromRules(RuleBasedCollator::DEFAULTRULES, intStatus);
       if (intStatus == U_ZERO_ERROR) {
-	status = U_USING_DEFAULT_ERROR;
+        status = U_USING_DEFAULT_ERROR;
       } else {
-	status = intStatus;     // bubble back
+        status = intStatus;     // bubble back
       }
-    
+
       if (status == U_MEMORY_ALLOCATION_ERROR) {
-	return;
+        return;
       }
     }
     data->realLocaleName = ResourceBundle::kDefaultFilename;
@@ -933,11 +933,12 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     delete data;
     data = 0;
   }
-  
+
     if(tryBinaryFile) {
-      char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
-					    localeFileName, UnicodeString(kFilenameSuffix,""));
-  
+      char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""),
+                                            localeFileName,
+                                            UnicodeString(kFilenameSuffix,""));
+
         // Try to load up the collation from a binary file first
         constructFromFile(binaryFilePath, status);
         #ifdef COLLDEBUG
@@ -1156,16 +1157,16 @@ RuleBasedCollator::getRules() const
 //                  << endl;
 //              cerr << "Status " << u_errorName(status) << ", mPattern " << temp.mPattern << endl;
 #endif
-	    /* SRL have to add this because we now have the situation where
-	       DEFAULT is loaded from a binary file w/ no rules. */
-	    UErrorCode intStatus = U_ZERO_ERROR;
-	    temp.constructFromRules(RuleBasedCollator::DEFAULTRULES, intStatus);
-	    
-	    if(U_SUCCESS(intStatus) && (temp.mPattern != 0))
-	      {
-		data->ruleTable = temp.getRules();
-		data->isRuleTableLoaded = TRUE;
-	      }
+            /* SRL have to add this because we now have the situation where
+               DEFAULT is loaded from a binary file w/ no rules. */
+            UErrorCode intStatus = U_ZERO_ERROR;
+            temp.constructFromRules(RuleBasedCollator::DEFAULTRULES, intStatus);
+
+            if(U_SUCCESS(intStatus) && (temp.mPattern != 0))
+              {
+                data->ruleTable = temp.getRules();
+                data->isRuleTableLoaded = TRUE;
+              }
         }
     }
 
@@ -1240,7 +1241,7 @@ RuleBasedCollator::compare(const   UChar* source,
     UBool isFrenchSec = data->isFrenchSec;
     uint32_t pSOrder, pTOrder;
 
-    while(TRUE)
+    for(;;)
     {
         // Get the next collation element in each of the strings, unless
         // we've been requested to skip it.
@@ -1461,30 +1462,30 @@ RuleBasedCollator::compare(const   UChar* source,
       // It doesn't work much faster, and the code was broken
       // so it's commented out. --srl
 //          UChar sourceDecomp[1024], targetDecomp[1024];
-//  	int32_t sourceDecompLength = 1024;
-//  	int32_t targetDecompLength = 1024;
-	
+//          int32_t sourceDecompLength = 1024;
+//          int32_t targetDecompLength = 1024;
+
 //          int8_t comparison;
-//  	Normalizer::EMode decompMode = getDecomposition();
-        
-//  	if (decompMode != Normalizer::NO_OP)
-//  	  {
-//  	    Normalizer::normalize(source, sourceLength, decompMode,
-//  				  0, sourceDecomp, sourceDecompLength, status);
-	    
-//  	    Normalizer::normalize(target, targetLength, decompMode,
-//  				  0, targetDecomp, targetDecompLength, status);
-	    
-//  	    comparison = u_strcmp(sourceDecomp,targetDecomp);
-//  	  }
-//  	else
-//  	  {
-//  	    comparison = u_strcmp(source, target); /* ! */
-//  	  }
+//          Normalizer::EMode decompMode = getDecomposition();
+
+//          if (decompMode != Normalizer::NO_OP)
+//            {
+//              Normalizer::normalize(source, sourceLength, decompMode,
+//                        0, sourceDecomp, sourceDecompLength, status);
+
+//              Normalizer::normalize(target, targetLength, decompMode,
+//                        0, targetDecomp, targetDecompLength, status);
+
+//              comparison = u_strcmp(sourceDecomp,targetDecomp);
+//            }
+//          else
+//            {
+//              comparison = u_strcmp(source, target); /* ! */
+//            }
 
 #else
 
-	UnicodeString sourceDecomp, targetDecomp;
+        UnicodeString sourceDecomp, targetDecomp;
 
         int8_t comparison;
         
@@ -1641,7 +1642,7 @@ RuleBasedCollator::getCollationKey( const   UChar*  source,
 
     // iterate over the source, counting primary, secondary, and tertiary entries
     while((order = getStrengthOrder((NormalizerIterator*)cursor1, status)) !=
-	                                      CollationElementIterator::NULLORDER)
+                                      CollationElementIterator::NULLORDER)
     {
         int32_t secOrder = CollationElementIterator::secondaryOrder(order);
         int32_t terOrder = CollationElementIterator::tertiaryOrder(order);
@@ -2782,33 +2783,33 @@ RuleBasedCollator::chopLocale(UnicodeString& localeName)
 uint8_t *
 RuleBasedCollator::cloneRuleData(int32_t &length, UErrorCode &status)
 {
-  UMemoryStream *memdata = 0;
-  uint8_t *data = 0;
+    UMemoryStream *memdata = 0;
+    uint8_t *data = 0;
 
-  if(U_FAILURE(status)) {
-    return NULL;
-  }
+    if(U_FAILURE(status)) {
+        return NULL;
+    }
 
-      memdata = uprv_mstrm_openNew(0);
+    memdata = uprv_mstrm_openNew(0);
 
-      if (memdata != 0) {
+    if (memdata != 0) {
         RuleBasedCollatorStreamer::streamOut(this, memdata);
-      }
+    }
 
-      UBool err = uprv_mstrm_error(memdata) == 0;
+    UBool err = uprv_mstrm_error(memdata) == 0;
 
 
     data = (uint8_t *)uprv_malloc(memdata->fPos);
     if(data == 0) {
-      status = U_MEMORY_ALLOCATION_ERROR;
-      uprv_mstrm_close(memdata);
-      length = 0;
-      return 0;
+        status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_mstrm_close(memdata);
+        length = 0;
+        return 0;
     } else {
-      uprv_memcpy(data, memdata->fStart, memdata->fPos);
-      length = memdata->fPos;
-      uprv_mstrm_close(memdata);
-      return data;
+        uprv_memcpy(data, memdata->fStart, memdata->fPos);
+        length = memdata->fPos;
+        uprv_mstrm_close(memdata);
+        return data;
     }
 }
 
