@@ -119,6 +119,13 @@ public class ICUResourceBundle extends UResourceBundle{
     }
     
     /**
+     * @internal ICU 3.0
+     */ 
+    public String[] getStringArray(){
+        throw new UResourceTypeMismatchException("");
+    }
+    
+    /**
      * Returns a string from a string resource type
      * @param key The key whose values needs to be fetched
      * @return a string
