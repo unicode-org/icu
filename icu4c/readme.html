@@ -28,8 +28,7 @@ ADP Schedule Contract with IBM Corp. <br>
 <hr>
 
 <p><br>
-&nbsp; <br>
-&nbsp; </p>
+&nbsp; &nbsp; </p>
 
 <h3><u>Contents</u></h3>
 
@@ -67,22 +66,12 @@ independent applications:
     format to create messages</li>
   <li>Text collation supporting language sensitive comparison of strings</li>
   <li>Text boundary analysis for finding characters, word and sentence boundaries</li>
+  <li>Changing simple data files rather than modifying program code easily localizes
+    applications written using these tools</li>
+  <li>Over 150 locales supported. Visit <a
+    href="http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplorer</a>
+    site for a demonstration and a full list of supported locales</li>
 </ul>
-
-<p>Changing simple data files rather than modifying program code easily localizes
-applications written using these tools. The following locales are supported: <font
-face="Courier New">ar, ar_AE, ar_BH, ar_DZ, ar_EG, ar_IQ, ar_JO, ar_KW, ar_LB, ar_LY,
-ar_MA, ar_OM, ar_QA, ar_SA, ar_SD, ar_SY, ar_TN, ar_YE, be, be_BY, bg, bg_BG, ca, ca_ES,
-ca_ES_EURO, cs, cs_CZ, da, da_DK, de, de_AT, de_AT_EURO, de_CH, de_DE, de_DE_EURO, de_LU,
-de_LU_EURO, el, el_GR, en, en_AU, en_CA, en_GB, en_IE, en_IE_EURO, en_NZ, en_US, en_ZA,
-es, es_AR, es_BO, es_CL, es_CO, es_CR, es_DO, es_EC, es_ES, es_ES_EURO, es_GT, es_HN,
-es_MX, es_NI, es_PA, es_PE, es_PR, es_PY, es_SV, es_UY, es_VE, et, et_EE, fi, fi_FI,
-fi_FI_EURO, fr, fr_BE, fr_BE_EURO, fr_CA, fr_CH, fr_FR, fr_FR_EURO, fr_LU, fr_LU_EURO, hr,
-hr_HR, hu, hu_HU, index, is, is_IS, it, it_CH, it_IT, it_IT_EURO, iw, iw_IL, ja, ja_JP,
-ko, ko_KR, lt, lt_LT, lv, lv_LV, mk, mk_MK, nl, nl_BE, nl_BE_EURO, nl_NL, nl_NL_EURO, no,
-no_NO, no_NO_NY, pl, pl_PL, pt, pt_BR, pt_PT, pt_PT_EURO, ro, ro_RO, ru, ru_RU, sh, sh_YU,
-sk, sk_SK, sl, sl_SI, sq, sq_AL, sr, sr_YU, sv, sv_SE, th, th_TH, tr, tr_TR, uk, uk_UA,
-vi, vi_VN, zh, zh_CN, zh_HK, zh_TW.</font></p>
 
 <p>It is possible to support additional locales by adding more locale data files, with no
 code changes. </p>
@@ -105,15 +94,13 @@ to fixing any bugs, and will also use your feedback to help plan future releases
 
 <p>All files are contained in <b>icu-XXXXXX.zip.</b> <br>
 Please unzip this file.&nbsp; It will re-construct the source directory. Please be sure to
-do &quot;<strong>unzip -a icu-XXXXXX.zip -d drive:\directory</strong>&quot; on Win32 platforms.
-&nbsp; This will convert the line feed/carriage return characters correctly on windows.
-&nbsp; Before running the test programs or samples, please set the environment variable <strong>ICU_DATA</strong>,
-the full pathname of the data directory, to indicate where the locale data files and
-conversion mapping tables are.&nbsp; If this variable is not set, the default user data
-directory will be used.</p>
+do &quot;<strong>unzip -a icu-XXXXXX.zip -d drive:\directory</strong>&quot; or use WinZip
+on Win32 platforms. &nbsp; This will convert the line feed/carriage return characters
+correctly on windows. &nbsp; </p>
 
-<p>Below, <b>$Root</b> is the placement of the icu directory in your file system, like &quot;drive:\...\icu&quot; in your environment.
-&quot;drive:\...&quot; stands for any drive and any directory on that drive that you chose to install icu into.</p>
+<p>Below, <b>$Root</b> is the placement of the icu directory in your file system, like
+&quot;drive:\...\icu&quot; in your environment. &quot;drive:\...&quot; stands for any
+drive and any directory on that drive that you chose to install icu into.</p>
 
 <p><b>The following files describe the code drop:</b> <br>
 &nbsp; <br>
@@ -178,39 +165,17 @@ directory will be used.</p>
   <tr>
     <td WIDTH="20%">$Root\source\tools\genrb</td>
     <td WIDTH="80%">This tool converts the portable locale data files in text format to
-    machine-specific binary format for resource bundle performance efficiency.&nbsp; To run
-    this tool on all the locale data files, please type the following commands on the
-    supported platforms:<ul>
-      <li>Win32: <strong>genrb Debug</strong> (or &quot;genrb Release&quot; for release build)</li>
-      <li>UNIX: type <strong>make</strong> under the command prompt.&nbsp; All the binary format
-        resource files will be created automatically.</li>
-    </ul>
-    </td>
+    machine-specific binary format for resource bundle performance efficiency.</td>
   </tr>
   <tr>
     <td WIDTH="20%">$Root\source\tools\gencol</td>
-    <td WIDTH="80%">&nbsp;<p>This tool converts the collation rules in the portable locale data
-    files in text format to machine-specific binary collation data.&nbsp; To run this tool for
-    all the supported collators, please type the following under the command prompt on the
-    supported platforms:<ul>
-      <li>Win32: <strong>gencol</strong> </li>
-      <li>UNIX: type <strong>make</strong> under the command prompt.&nbsp; All the binary format
-        collation files will be created automatically.</li>
-    </ul>
-    </td>
+    <td WIDTH="80%">This tool converts the collation rules in the portable locale data files
+    in text format to machine-specific binary collation data.</td>
   </tr>
   <tr>
     <td WIDTH="20%">$Root\source\tools\makeconv</td>
-    <td WIDTH="80%">&nbsp;<p>This tool converts the native encoding to/from UCS-2 mapping table in
-    text format to machine-specific binary format.&nbsp; To run this tool for all the
-    supported converters, please type the following under the command prompt on the supported
-    platforms:<ul>
-      <li>Win32: <strong>makeconv Debug </strong>(or &quot;makeconv Release&quot; for release
-        build) </li>
-      <li>UNIX: type <strong>make</strong> under the command prompt.&nbsp; All the binary format
-        conversion tables will be created automatically.</li>
-    </ul>
-    </td>
+    <td WIDTH="80%">This tool converts the native encoding to/from UCS-2 mapping table in text
+    format to machine-specific binary format.</td>
   </tr>
 </table>
 
@@ -237,8 +202,8 @@ Classes for Unicode:</b> </p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    icu
 &nbsp;&nbsp;&nbsp;&nbsp; _____|_____       ______________|______________________________
 &nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;  | &nbsp;   &nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |          |
- libraries   programs &nbsp;include&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |          |
- (built)    (built)   (built)&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; readme.html license.html
+ libraries   programs &nbsp;include&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |          |
+ (built)    (built)   (built)&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readme.html license.html
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |                         
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                  _________________|__________________________
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                   |       |   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |         |        |
@@ -341,8 +306,8 @@ the wrong one. </p>
 
 <p><u>To change your PATH:</u>&nbsp; Do this under NT by using the System control panel.
 Pick the &quot;Environment&quot; tab, select the variable PATH in the lower box.&nbsp; In
-the &quot;value&quot; box, append the string &quot;;drive:\...\icu\bin\Debug&quot; at the end of
-the path string.&nbsp; If there is nothing there, just type in
+the &quot;value&quot; box, append the string &quot;;drive:\...\icu\bin\Debug&quot; at the
+end of the path string.&nbsp; If there is nothing there, just type in
 &quot;drive:\...\icu\bin\Debug&quot;. Click the Set button, then the Ok button. </p>
 
 <p><u>Link with Runtime libraries:</u> All the DLLs link with the C runtime library
@@ -367,12 +332,13 @@ this, you will seemingly get memory errors when you run the executable. <br>
 <p>The steps are: 
 
 <ol>
-  <li>Unzip the icu-XXXX.zip file, type &quot;unzip -a icu-XXXX.zip -d drive:\directory&quot; under
-    command prompt.&nbsp; drive:\directory\icu is the root ($Root) directory
-    (you may but don't need to place &quot;icu&quot; into another directory).
-    If you change the root, you will
-    change the project settings accordingly in EACH makefile in the project, updating the
-    include and library paths.</li>
+  <li>Unzip the icu-XXXX.zip file, type &quot;unzip -a icu-XXXX.zip -d drive:\directory&quot;
+    under command prompt or use WinZip.&nbsp; drive:\directory\icu is the root ($Root)
+    directory (you may but don't need to place &quot;icu&quot; into another directory). If you
+    change the root, you will change the project settings accordingly in EACH makefile in the
+    project, updating the include and library paths.</li>
+  <li>Set the environment variable <strong>ICU_DATA</strong>, the full pathname of the data
+    directory, to indicate where the locale data files and conversion mapping tables are.</li>
   <li>Start Microsoft Visual C++ 6.0.</li>
   <li>Choose &quot;File&quot; menu and select &quot;Open WorkSpace&quot;.</li>
   <li>In the file chooser, choose icu\source\allinone\allinone.dsw. Open this workspace.</li>
@@ -387,19 +353,23 @@ this, you will seemingly get memory errors when you run the executable. <br>
     the Debug and Release configurations at the same time, choose &quot;Build&quot; menu and
     select &quot;Batch Build...&quot; instead (and mark all configurations as checked), then
     click the button named &quot;Rebuild All&quot;.</li>
-  <li>Repeat step6-8 and set &quot;makeconv&quot; project to be active and build the makeconv
-    tool.</li>
-  <li>Repeat step9 to build both genrb and gencol tools.</li>
-  <li>Run the mkcnvfle.bat script to create the converter data files in binary format.</li>
-  <li>Run the genrb.bat script to create the locale data files in binary format.</li>
+  <li>Repeat steps 7-9 for makeconv (set active project to &quot;makeconv&quot;), genrb
+    (&quot;genrb&quot;) and gencol (&quot;gencol&quot;) tools.</li>
+  <li>Run the mkcnvfle.bat script to create the converter data files in binary format. The
+    script requires two arguments, where first is either &quot;Release&quot; or
+    &quot;Debug&quot; reflecting the type of build and the second is path to the icu
+    directory.</li>
+  <li>Run the genrb.bat script to create the locale data files in binary format. The script
+    requires two arguments, where first is either &quot;Release&quot; or &quot;Debug&quot;
+    reflecting the type of build and the second is path to the icu directory</li>
   <li>Run the gencol.exe program to pre-load the collation data and create the collation data
     in binary format.</li>
-  <li>Save the value of the &quot;TZ&quot; environment variable and then set it to
-    &quot;PST8PDT&quot;.&nbsp; </li>
+  <li>Save the value of the <strong>TZ</strong> environment variable and then set it to <strong>PST8PDT</strong>.&nbsp;
+  </li>
   <li>Reopen the &quot;allinone&quot; project file and run the &quot;intltest&quot; test.
-    &nbsp; Reset the &quot;TZ&quot; value.</li>
-  <li>To run the C test suite, set &quot;cintltst&quot; as the active project and repeat step
-    7, 8 and then run the &quot;cintltst&quot; test..</li>
+    &nbsp; Reset the <strong>TZ</strong> value.</li>
+  <li>To run the C test suite, set &quot;cintltst&quot; as the active project, repeat steps 8,
+    9 and then run the &quot;cintltst&quot; test..</li>
   <li>Build and run as outlined above.</li>
 </ol>
 <b>
@@ -418,7 +388,7 @@ this, you will seemingly get memory errors when you run the executable. <br>
     them on the menu bar for later selection.</li>
 </ul>
 
-<p>It is also possible to build each library individually, using the Makefiles in each
+<p>It is also possible to build each library individually, using the workspaces in each
 respective directory. They have to be built in the following order: <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. common <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. i18n <br>
@@ -445,7 +415,13 @@ version of GNU make (3.7+). </p>
 
 <ol>
   <li>Unzip the icu-XXXX.zip file with the &quot;-a&quot; option.</li>
+  <li>Before running the test programs or samples, please set the environment variable <strong>ICU_DATA</strong>,
+    the full pathname of the data directory, to indicate where the locale data files and
+    conversion mapping tables are.&nbsp; If this variable is not set, the default user data
+    directory will be used.</li>
   <li>Change directory to the &quot;icu/source&quot;.</li>
+  <li>If it is not already set, please set the executable flag for the following files (by
+    executing 'chmod +x' command): configure, install.sh and config.*, </li>
   <li>Type &quot;./configure&quot; or type &quot;./configure --help&quot; to print the
     avialable options.</li>
   <li>Type &quot;make&quot; to compile the libraries and all the data files.</li>
