@@ -2146,15 +2146,11 @@ TimeZone::getDisplayName(bool_t daylight, EDisplayType style, const Locale& loca
     // We don't cache these because they're small and cheap to create.
     UnicodeString tempID;
     SimpleTimeZone *tz =  daylight ?
-        // For the pure-DST zone, we use the month before JANUARY and
-        // the month after DECEMBER; if this fails to work at some future
-        // date because of increased error checking in SimpleTimeZone,
-        // change these parameters to JANUARY and DECEMBER, which will
-        // work equally well, but will be slower.
+        // For the pure-DST zone, we use JANUARY and DECEMBER
 
         new SimpleTimeZone(getRawOffset(), getID(tempID),
-                           Calendar::JANUARY - 1, 1, 0, 0,
-                           Calendar::DECEMBER + 1, 31, 0, U_MILLIS_PER_DAY, status) :
+                           Calendar::JANUARY , 1, 0, 0,
+                           Calendar::DECEMBER , 31, 0, U_MILLIS_PER_DAY, status) :
         new SimpleTimeZone(getRawOffset(), getID(tempID));
 
     format.applyPattern(style == LONG ? "zzzz" : "z");
@@ -2164,7 +2160,7 @@ TimeZone::getDisplayName(bool_t daylight, EDisplayType style, const Locale& loca
     delete tz;
 
     FieldPosition pos(FieldPosition::DONT_CARE);
-    return format.format(UDate(), result, pos); // Doesn't matter what date we use
+    return format.format(UDate(196262345678.), result, pos); // Must use a valid date here.
 }
 
 
