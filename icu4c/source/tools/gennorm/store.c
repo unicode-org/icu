@@ -1225,6 +1225,11 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
 
+    /* make sure that the FCD trie is 4-aligned */
+    if((extraMem->index+combiningTableTop)&1) {
+        combiningTable[combiningTableTop++]=0x1234; /* add one 16-bit word for an even number */
+    }
+
     size=
         _NORM_INDEX_TOP*4+
         normTrieSize+
