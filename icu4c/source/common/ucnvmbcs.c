@@ -324,11 +324,14 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
           UBool useFallback, UBool flush,
           UErrorCode *pErrorCode);
 
-static void
-toUCallback(UConverter *cnv,
-            const void *context, UConverterToUnicodeArgs *pArgs,
-            const char *codeUnits, int32_t length,
-            UConverterCallbackReason reason, UErrorCode *pErrorCode);
+static int8_t
+_extToU(UConverter *cnv, const UConverterSharedData *sharedData,
+        int8_t length,
+        const char **source, const char *sourceLimit,
+        UChar **target, const UChar *targetLimit,
+        int32_t **offsets, int32_t sourceIndex,
+        UBool useFallback, UBool flush,
+        UErrorCode *pErrorCode);
 
 /* GB 18030 data ------------------------------------------------------------ */
 
@@ -888,7 +891,6 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t entry;
     UChar c;
     uint8_t action;
-    UConverterCallbackReason reason;
 
     /* use optimized function if possible */
     cnv=pArgs->converter;
@@ -935,221 +937,277 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
          * Therefore, those situations also test for overflows and will
          * then break the loop, too.
          */
-        if(target<targetLimit) {
-            ++nextSourceIndex;
-            entry=stateTable[state][bytes[byteIndex++]=*source++];
-            if(MBCS_ENTRY_IS_TRANSITION(entry)) {
-                state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
-                offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
-            } else {
-                /* set the next state early so that we can reuse the entry variable */
-                state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
-
-                /*
-                 * An if-else-if chain provides more reliable performance for
-                 * the most common cases compared to a switch.
-                 */
-                action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
-                if(action==MBCS_STATE_VALID_16) {
-                    offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
-                    c=unicodeCodeUnits[offset];
-                    if(c<0xfffe) {
-                        /* output BMP code point */
-                        *target++=c;
-                        if(offsets!=NULL) {
-                            *offsets++=sourceIndex;
-                        }
-                    } else if(c==0xfffe) {
-                        if(UCNV_TO_U_USE_FALLBACK(cnv) && (entry=(int32_t)_MBCSGetFallback(&cnv->sharedData->table->mbcs, offset))!=0xfffe) {
-                            /* output fallback BMP code point */
-                            *target++=(UChar)entry;
-                            if(offsets!=NULL) {
-                                *offsets++=sourceIndex;
-                            }
-                        } else {
-                            /* callback(unassigned) */
-                            goto unassigned;
-                        }
-                    } else {
-                        /* callback(illegal) */
-                        goto illegal;
-                    }
-                } else if(action==MBCS_STATE_VALID_DIRECT_16) {
-                    /* output BMP code point */
-                    *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-                    if(offsets!=NULL) {
-                        *offsets++=sourceIndex;
-                    }
-                } else if(action==MBCS_STATE_VALID_16_PAIR) {
-                    offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
-                    c=unicodeCodeUnits[offset++];
-                    if(c<0xd800) {
-                        /* output BMP code point below 0xd800 */
-                        *target++=c;
-                        if(offsets!=NULL) {
-                            *offsets++=sourceIndex;
-                        }
-                    } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? c<=0xdfff : c<=0xdbff) {
-                        /* output roundtrip or fallback surrogate pair */
-                        *target++=(UChar)(c&0xdbff);
-                        if(offsets!=NULL) {
-                            *offsets++=sourceIndex;
-                        }
-                        if(target<targetLimit) {
-                            *target++=unicodeCodeUnits[offset];
-                            if(offsets!=NULL) {
-                                *offsets++=sourceIndex;
-                            }
-                        } else {
-                            /* target overflow */
-                            cnv->UCharErrorBuffer[0]=unicodeCodeUnits[offset];
-                            cnv->UCharErrorBufferLength=1;
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-
-                            offset=0;
-                            byteIndex=0;
-                            break;
-                        }
-                    } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? (c&0xfffe)==0xe000 : c==0xe000) {
-                        /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
-                        *target++=unicodeCodeUnits[offset];
-                        if(offsets!=NULL) {
-                            *offsets++=sourceIndex;
-                        }
-                    } else if(c==0xffff) {
-                        /* callback(illegal) */
-                        goto illegal;
-                    } else {
-                        /* callback(unassigned) */
-                        goto unassigned;
-                    }
-                } else if(action==MBCS_STATE_VALID_DIRECT_20) {
-valid20:
-                    entry=MBCS_ENTRY_FINAL_VALUE(entry);
-                    /* output surrogate pair */
-                    *target++=(UChar)(0xd800|(UChar)(entry>>10));
-                    if(offsets!=NULL) {
-                        *offsets++=sourceIndex;
-                    }
-                    c=(UChar)(0xdc00|(UChar)(entry&0x3ff));
-                    if(target<targetLimit) {
-                        *target++=c;
-                        if(offsets!=NULL) {
-                            *offsets++=sourceIndex;
-                        }
-                    } else {
-                        /* target overflow */
-                        cnv->UCharErrorBuffer[0]=c;
-                        cnv->UCharErrorBufferLength=1;
-                        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-
-                        offset=0;
-                        byteIndex=0;
-                        break;
-                    }
-                } else if(action==MBCS_STATE_CHANGE_ONLY) {
-                    /*
-                     * This serves as a state change without any output.
-                     * It is useful for reading simple stateful encodings,
-                     * for example using just Shift-In/Shift-Out codes.
-                     * The 21 unused bits may later be used for more sophisticated
-                     * state transitions.
-                     */
-                } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-                    if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                        /* callback(unassigned) */
-                        goto unassigned;
-                    }
-                    /* output BMP code point */
-                    *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-                    if(offsets!=NULL) {
-                        *offsets++=sourceIndex;
-                    }
-                } else if(action==MBCS_STATE_FALLBACK_DIRECT_20) {
-                    if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                        /* callback(unassigned) */
-                        goto unassigned;
-                    }
-                    goto valid20;
-                } else if(action==MBCS_STATE_UNASSIGNED) {
-                    /* callback(unassigned) */
-                    goto unassigned;
-                } else if(action==MBCS_STATE_ILLEGAL) {
-                    /* callback(illegal) */
-                    goto illegal;
-                } else {
-                    /* reserved, must never occur */
-                }
-
-                /* normal end of action codes: prepare for a new character */
-                offset=0;
-                byteIndex=0;
-                sourceIndex=nextSourceIndex;
-                continue;
-
-illegal:
-                reason=UCNV_ILLEGAL;
-                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                goto callback;
-unassigned:
-                reason=UCNV_UNASSIGNED;
-                *pErrorCode=U_INVALID_CHAR_FOUND;
-callback:
-                /* call the callback function with all the preparations and post-processing */
-                /* update the arguments structure */
-                pArgs->source=(const char *)source;
-                pArgs->target=target;
-                pArgs->offsets=offsets;
-
-                /* set the converter state in UConverter to deal with the next character */
-                cnv->toUnicodeStatus=0;
-                cnv->mode=state;
-                cnv->toULength=0;
-
-                /* call the callback function */
-                toUCallback(cnv, cnv->toUContext, pArgs, (const char *)bytes, byteIndex, reason, pErrorCode);
-
-                /* get the converter state from UConverter */
-                offset=cnv->toUnicodeStatus;
-                state=(uint8_t)cnv->mode;
-                byteIndex=cnv->toULength;
-
-                /* update target and deal with offsets if necessary */
-                offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
-                target=pArgs->target;
-
-                /* update the source pointer and index */
-                sourceIndex=nextSourceIndex+((const uint8_t *)pArgs->source-source);
-                source=(const uint8_t *)pArgs->source;
-
-                /*
-                 * If the callback overflowed the target, then we need to
-                 * stop here with an overflow indication.
-                 */
-                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                    break;
-                } else if(U_FAILURE(*pErrorCode)) {
-                    /* break on error */
-                    offset=0;
-                    state=0;
-                    byteIndex=0;
-                    break;
-                } else if(cnv->UCharErrorBufferLength>0) {
-                    /* target is full */
-                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                    break;
-                }
-
-                /*
-                 * We do not need to repeat the statements from the normal
-                 * end of the action codes because we already updated all the
-                 * necessary variables.
-                 */
-            }
-        } else {
+        if(target>=targetLimit) {
             /* target is full */
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             break;
+        }
+
+        if(byteIndex==0) {
+            /* optimized loop for 1/2-byte input and BMP output */
+            if(offsets==NULL) {
+                do {
+                    entry=stateTable[state][*source];
+                    if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+                        state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
+                        offset=MBCS_ENTRY_TRANSITION_OFFSET(entry);
+
+                        ++source;
+                        if( source<sourceLimit &&
+                            MBCS_ENTRY_IS_FINAL(entry=stateTable[state][*source]) &&
+                            MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_VALID_16 &&
+                            (c=unicodeCodeUnits[offset+MBCS_ENTRY_FINAL_VALUE_16(entry)])<0xfffe
+                        ) {
+                            ++source;
+                            *target++=c;
+                            state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
+                            offset=0;
+                        } else {
+                            /* set the state and leave the optimized loop */
+                            bytes[0]=*(source-1);
+                            byteIndex=1;
+                            break;
+                        }
+                    } else {
+                        if(MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
+                            /* output BMP code point */
+                            ++source;
+                            *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                            state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
+                        } else {
+                            /* leave the optimized loop */
+                            break;
+                        }
+                    }
+                } while(source<sourceLimit && target<targetLimit);
+            } else /* offsets!=NULL */ {
+                do {
+                    entry=stateTable[state][*source];
+                    if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+                        state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
+                        offset=MBCS_ENTRY_TRANSITION_OFFSET(entry);
+
+                        ++source;
+                        if( source<sourceLimit &&
+                            MBCS_ENTRY_IS_FINAL(entry=stateTable[state][*source]) &&
+                            MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_VALID_16 &&
+                            (c=unicodeCodeUnits[offset+MBCS_ENTRY_FINAL_VALUE_16(entry)])<0xfffe
+                        ) {
+                            ++source;
+                            *target++=c;
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex;
+                                sourceIndex=(nextSourceIndex+=2);
+                            }
+                            state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
+                            offset=0;
+                        } else {
+                            /* set the state and leave the optimized loop */
+                            ++nextSourceIndex;
+                            bytes[0]=*(source-1);
+                            byteIndex=1;
+                            break;
+                        }
+                    } else {
+                        if(MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
+                            /* output BMP code point */
+                            ++source;
+                            *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex;
+                                sourceIndex=++nextSourceIndex;
+                            }
+                            state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
+                        } else {
+                            /* leave the optimized loop */
+                            break;
+                        }
+                    }
+                } while(source<sourceLimit && target<targetLimit);
+            }
+
+            /*
+             * these tests and break statements could be put inside the loop
+             * if C had "break outerLoop" like Java
+             */
+            if(source>=sourceLimit) {
+                break;
+            }
+            if(target>=targetLimit) {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            }
+
+            ++nextSourceIndex;
+            bytes[byteIndex++]=*source++;
+        } else /* byteIndex>0 */ {
+            ++nextSourceIndex;
+            entry=stateTable[state][bytes[byteIndex++]=*source++];
+        }
+
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+            state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
+            offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
+            continue;
+        }
+
+        /* set the next state early so that we can reuse the entry variable */
+        state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
+
+        /*
+         * An if-else-if chain provides more reliable performance for
+         * the most common cases compared to a switch.
+         */
+        action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
+        if(action==MBCS_STATE_VALID_16) {
+            offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
+            c=unicodeCodeUnits[offset];
+            if(c<0xfffe) {
+                /* output BMP code point */
+                *target++=c;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+                byteIndex=0;
+            } else if(c==0xfffe) {
+                if(UCNV_TO_U_USE_FALLBACK(cnv) && (entry=(int32_t)_MBCSGetFallback(&cnv->sharedData->table->mbcs, offset))!=0xfffe) {
+                    /* output fallback BMP code point */
+                    *target++=(UChar)entry;
+                    if(offsets!=NULL) {
+                        *offsets++=sourceIndex;
+                    }
+                    byteIndex=0;
+                }
+            } else {
+                /* callback(illegal) */
+                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+            }
+        } else if(action==MBCS_STATE_VALID_DIRECT_16) {
+            /* output BMP code point */
+            *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+            if(offsets!=NULL) {
+                *offsets++=sourceIndex;
+            }
+            byteIndex=0;
+        } else if(action==MBCS_STATE_VALID_16_PAIR) {
+            offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
+            c=unicodeCodeUnits[offset++];
+            if(c<0xd800) {
+                /* output BMP code point below 0xd800 */
+                *target++=c;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+                byteIndex=0;
+            } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? c<=0xdfff : c<=0xdbff) {
+                /* output roundtrip or fallback surrogate pair */
+                *target++=(UChar)(c&0xdbff);
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+                byteIndex=0;
+                if(target<targetLimit) {
+                    *target++=unicodeCodeUnits[offset];
+                    if(offsets!=NULL) {
+                        *offsets++=sourceIndex;
+                    }
+                } else {
+                    /* target overflow */
+                    cnv->UCharErrorBuffer[0]=unicodeCodeUnits[offset];
+                    cnv->UCharErrorBufferLength=1;
+                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+
+                    offset=0;
+                    break;
+                }
+            } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? (c&0xfffe)==0xe000 : c==0xe000) {
+                /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
+                *target++=unicodeCodeUnits[offset];
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+                byteIndex=0;
+            } else if(c==0xffff) {
+                /* callback(illegal) */
+                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+            }
+        } else if(action==MBCS_STATE_VALID_DIRECT_20 ||
+                  (action==MBCS_STATE_FALLBACK_DIRECT_20 && UCNV_TO_U_USE_FALLBACK(cnv))
+        ) {
+            entry=MBCS_ENTRY_FINAL_VALUE(entry);
+            /* output surrogate pair */
+            *target++=(UChar)(0xd800|(UChar)(entry>>10));
+            if(offsets!=NULL) {
+                *offsets++=sourceIndex;
+            }
+            byteIndex=0;
+            c=(UChar)(0xdc00|(UChar)(entry&0x3ff));
+            if(target<targetLimit) {
+                *target++=c;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+            } else {
+                /* target overflow */
+                cnv->UCharErrorBuffer[0]=c;
+                cnv->UCharErrorBufferLength=1;
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+
+                offset=0;
+                break;
+            }
+        } else if(action==MBCS_STATE_CHANGE_ONLY) {
+            /*
+             * This serves as a state change without any output.
+             * It is useful for reading simple stateful encodings,
+             * for example using just Shift-In/Shift-Out codes.
+             * The 21 unused bits may later be used for more sophisticated
+             * state transitions.
+             */
+            byteIndex=0;
+        } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
+            if(UCNV_TO_U_USE_FALLBACK(cnv)) {
+                /* output BMP code point */
+                *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+                byteIndex=0;
+            }
+        } else if(action==MBCS_STATE_UNASSIGNED) {
+            /* just fall through */
+        } else if(action==MBCS_STATE_ILLEGAL) {
+            /* callback(illegal) */
+            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+        } else {
+            /* reserved, must never occur */
+            byteIndex=0;
+        }
+
+        /* end of action codes: prepare for a new character */
+        offset=0;
+
+        if(byteIndex==0) {
+            sourceIndex=nextSourceIndex;
+        } else if(U_FAILURE(*pErrorCode)) {
+            /* callback(illegal) */
+            break;
+        } else /* unassigned sequences indicated with byteIndex>0 */ {
+            /* try an extension mapping */
+            pArgs->source=(const char *)source;
+            byteIndex=_extToU(cnv, cnv->sharedData,
+                              byteIndex, (const char **)&source, (const char *)sourceLimit,
+                              &target, targetLimit,
+                              &offsets, sourceIndex,
+                              (UBool)UCNV_TO_U_USE_FALLBACK(cnv), pArgs->flush,
+                              pErrorCode);
+            sourceIndex=nextSourceIndex+(int32_t)(source-(const uint8_t *)pArgs->source);
+
+            if(U_FAILURE(*pErrorCode)) {
+                /* not mappable or buffer overflow */
+                break;
+            }
         }
     }
 
@@ -1176,12 +1234,11 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     const int32_t (*stateTable)[256];
 
-    int32_t sourceIndex, nextSourceIndex;
+    int32_t sourceIndex;
 
     int32_t entry;
     UChar c;
     uint8_t action;
-    UConverterCallbackReason reason;
 
     /* set up the local pointers */
     cnv=pArgs->converter;
@@ -1199,7 +1256,6 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex=0;
-    nextSourceIndex=0;
 
     /* conversion loop */
     while(source<sourceLimit) {
@@ -1211,127 +1267,99 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
          * Therefore, those situations also test for overflows and will
          * then break the loop, too.
          */
-        if(target<targetLimit) {
-            ++nextSourceIndex;
-            entry=stateTable[0][*source++];
-            /* MBCS_ENTRY_IS_FINAL(entry) */
+        if(target>=targetLimit) {
+            /* target is full */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            break;
+        }
 
-            /* test the most common case first */
-            if(MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
-                /* output BMP code point */
-                *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-                if(offsets!=NULL) {
-                    *offsets++=sourceIndex;
-                }
+        entry=stateTable[0][*source++];
+        /* MBCS_ENTRY_IS_FINAL(entry) */
 
-                /* normal end of action codes: prepare for a new character */
-                sourceIndex=nextSourceIndex;
-                continue;
-            }
-
-            /*
-             * An if-else-if chain provides more reliable performance for
-             * the most common cases compared to a switch.
-             */
-            action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
-            if(action==MBCS_STATE_VALID_DIRECT_20) {
-valid20:
-                entry=MBCS_ENTRY_FINAL_VALUE(entry);
-                /* output surrogate pair */
-                *target++=(UChar)(0xd800|(UChar)(entry>>10));
-                if(offsets!=NULL) {
-                    *offsets++=sourceIndex;
-                }
-                c=(UChar)(0xdc00|(UChar)(entry&0x3ff));
-                if(target<targetLimit) {
-                    *target++=c;
-                    if(offsets!=NULL) {
-                        *offsets++=sourceIndex;
-                    }
-                } else {
-                    /* target overflow */
-                    cnv->UCharErrorBuffer[0]=c;
-                    cnv->UCharErrorBufferLength=1;
-                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                    break;
-                }
-            } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-                if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                    /* callback(unassigned) */
-                    goto unassigned;
-                }
-                /* output BMP code point */
-                *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-                if(offsets!=NULL) {
-                    *offsets++=sourceIndex;
-                }
-            } else if(action==MBCS_STATE_FALLBACK_DIRECT_20) {
-                if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                    /* callback(unassigned) */
-                    goto unassigned;
-                }
-                goto valid20;
-            } else if(action==MBCS_STATE_UNASSIGNED) {
-                /* callback(unassigned) */
-                goto unassigned;
-            } else if(action==MBCS_STATE_ILLEGAL) {
-                /* callback(illegal) */
-                reason=UCNV_ILLEGAL;
-                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                goto callback;
-            } else {
-                /* reserved, must never occur */
+        /* test the most common case first */
+        if(MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
+            /* output BMP code point */
+            *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+            if(offsets!=NULL) {
+                *offsets++=sourceIndex;
             }
 
             /* normal end of action codes: prepare for a new character */
-            sourceIndex=nextSourceIndex;
+            ++sourceIndex;
             continue;
+        }
 
-unassigned:
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
-callback:
-            /* call the callback function with all the preparations and post-processing */
-            /* update the arguments structure */
-            pArgs->source=(const char *)source;
-            pArgs->target=target;
-            pArgs->offsets=offsets;
-
-            /* call the callback function */
-            toUCallback(cnv, cnv->toUContext, pArgs, (const char *)(source-1), 1, reason, pErrorCode);
-
-            /* update target and deal with offsets if necessary */
-            offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
-            target=pArgs->target;
-
-            /* update the source pointer and index */
-            sourceIndex=nextSourceIndex+((const uint8_t *)pArgs->source-source);
-            source=(const uint8_t *)pArgs->source;
-
-            /*
-             * If the callback overflowed the target, then we need to
-             * stop here with an overflow indication.
-             */
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                break;
-            } else if(U_FAILURE(*pErrorCode)) {
-                /* break on error */
-                break;
-            } else if(cnv->UCharErrorBufferLength>0) {
-                /* target is full */
+        /*
+         * An if-else-if chain provides more reliable performance for
+         * the most common cases compared to a switch.
+         */
+        action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
+        if(action==MBCS_STATE_VALID_DIRECT_20 ||
+           (action==MBCS_STATE_FALLBACK_DIRECT_20 && UCNV_TO_U_USE_FALLBACK(cnv))
+        ) {
+            entry=MBCS_ENTRY_FINAL_VALUE(entry);
+            /* output surrogate pair */
+            *target++=(UChar)(0xd800|(UChar)(entry>>10));
+            if(offsets!=NULL) {
+                *offsets++=sourceIndex;
+            }
+            c=(UChar)(0xdc00|(UChar)(entry&0x3ff));
+            if(target<targetLimit) {
+                *target++=c;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+            } else {
+                /* target overflow */
+                cnv->UCharErrorBuffer[0]=c;
+                cnv->UCharErrorBufferLength=1;
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
             }
 
-            /*
-             * We do not need to repeat the statements from the normal
-             * end of the action codes because we already updated all the
-             * necessary variables.
-             */
+            ++sourceIndex;
+            continue;
+        } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
+            if(UCNV_TO_U_USE_FALLBACK(cnv)) {
+                /* output BMP code point */
+                *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+
+                ++sourceIndex;
+                continue;
+            }
+        } else if(action==MBCS_STATE_UNASSIGNED) {
+            /* just fall through */
+        } else if(action==MBCS_STATE_ILLEGAL) {
+            /* callback(illegal) */
+            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
         } else {
-            /* target is full */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            /* reserved, must never occur */
+            ++sourceIndex;
+            continue;
+        }
+
+        if(U_FAILURE(*pErrorCode)) {
+            /* callback(illegal) */
             break;
+        } else /* unassigned sequences indicated with byteIndex>0 */ {
+            /* try an extension mapping */
+            pArgs->source=(const char *)source;
+            cnv->toUBytes[0]=*(source-1);
+            cnv->toULength=_extToU(cnv, cnv->sharedData,
+                                    1, (const char **)&source, (const char *)sourceLimit,
+                                    &target, targetLimit,
+                                    &offsets, sourceIndex,
+                                    (UBool)UCNV_TO_U_USE_FALLBACK(cnv), pArgs->flush,
+                                    pErrorCode);
+            sourceIndex+=1+(int32_t)(source-(const uint8_t *)pArgs->source);
+
+            if(U_FAILURE(*pErrorCode)) {
+                /* not mappable or buffer overflow */
+                break;
+            }
         }
     }
 
@@ -1362,7 +1390,6 @@ _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     int32_t entry;
     uint8_t action;
-    UConverterCallbackReason reason;
 
     /* set up the local pointers */
     cnv=pArgs->converter;
@@ -1488,30 +1515,23 @@ unrolled:
          */
         action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
         if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-            if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                /* callback(unassigned) */
-                reason=UCNV_UNASSIGNED;
-                *pErrorCode=U_INVALID_CHAR_FOUND;
+            if(UCNV_TO_U_USE_FALLBACK(cnv)) {
+                /* output BMP code point */
+                *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                --targetCapacity;
+                continue;
             }
-            /* output BMP code point */
-            *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-            --targetCapacity;
-            continue;
         } else if(action==MBCS_STATE_UNASSIGNED) {
-            /* callback(unassigned) */
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
+            /* just fall through */
         } else if(action==MBCS_STATE_ILLEGAL) {
             /* callback(illegal) */
-            reason=UCNV_ILLEGAL;
             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
         } else {
             /* reserved, must never occur */
             continue;
         }
 
-        /* call the callback function with all the preparations and post-processing */
-        /* set offsets since the start or the last callback */
+        /* set offsets since the start or the last extension */
         if(offsets!=NULL) {
             int32_t count=(int32_t)(source-lastSource);
 
@@ -1522,40 +1542,25 @@ unrolled:
             /* offset and sourceIndex are now set for the current character */
         }
 
-        /* update the arguments structure */
-        pArgs->source=(const char *)source;
-        pArgs->target=target;
-        pArgs->offsets=offsets;
-
-        /* call the callback function */
-        toUCallback(cnv, cnv->toUContext, pArgs, (const char *)(source-1), 1, reason, pErrorCode);
-
-        /* update target and deal with offsets if necessary */
-        offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
-        target=pArgs->target;
-
-        /* update the source pointer and index */
-        sourceIndex+=1+((const uint8_t *)pArgs->source-source);
-        source=lastSource=(const uint8_t *)pArgs->source;
-        targetCapacity=pArgs->targetLimit-target;
-        length=sourceLimit-source;
-        if(length<targetCapacity) {
-            targetCapacity=length;
-        }
-
-        /*
-         * If the callback overflowed the target, then we need to
-         * stop here with an overflow indication.
-         */
-        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        if(U_FAILURE(*pErrorCode)) {
+            /* callback(illegal) */
             break;
-        } else if(U_FAILURE(*pErrorCode)) {
-            /* break on error */
-            break;
-        } else if(cnv->UCharErrorBufferLength>0) {
-            /* target is full */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            break;
+        } else /* unassigned sequences indicated with byteIndex>0 */ {
+            /* try an extension mapping */
+            lastSource=source;
+            cnv->toUBytes[0]=*(source-1);
+            cnv->toULength=_extToU(cnv, cnv->sharedData,
+                                    1, (const char **)&source, (const char *)sourceLimit,
+                                    &target, target+targetCapacity,
+                                    &offsets, sourceIndex,
+                                    (UBool)UCNV_TO_U_USE_FALLBACK(cnv), pArgs->flush,
+                                    pErrorCode);
+            sourceIndex+=1+(int32_t)(source-lastSource);
+
+            if(U_FAILURE(*pErrorCode)) {
+                /* not mappable or buffer overflow */
+                break;
+            }
         }
 
 #if MBCS_UNROLL_SINGLE_TO_BMP
@@ -1587,29 +1592,24 @@ unrolled:
 static UChar32
 _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-
     UConverter *cnv;
-    const uint8_t *source, *sourceLimit;
+    const uint8_t *source, *sourceLimit, *lastSource;
 
     const int32_t (*stateTable)[256];
     const uint16_t *unicodeCodeUnits;
 
     uint32_t offset;
     uint8_t state;
-    int8_t byteIndex;
-    uint8_t *bytes;
 
     int32_t entry;
     UChar32 c;
     uint8_t action;
-    UConverterCallbackReason reason;
 
     /* use optimized function if possible */
     cnv=pArgs->converter;
     if(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SURROGATES) {
         /*
-         * Calling the inefficient, generic getNextUChar() lets us deal correctly
+         * Using the generic ucnv_getNextUChar() code lets us deal correctly
          * with the rare case of a codepage that maps single surrogates
          * without adding the complexity to this already complicated function here.
          */
@@ -1619,7 +1619,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     }
 
     /* set up the local pointers */
-    source=(const uint8_t *)pArgs->source;
+    source=lastSource=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
 
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
@@ -1632,15 +1632,26 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     /* get the converter state from UConverter */
     offset=cnv->toUnicodeStatus;
     state=(uint8_t)(cnv->mode);
-    byteIndex=cnv->toULength;
-    bytes=cnv->toUBytes;
 
     /* conversion loop */
+    c=U_SENTINEL;
     while(source<sourceLimit) {
-        entry=stateTable[state][bytes[byteIndex++]=*source++];
+        entry=stateTable[state][*source++];
         if(MBCS_ENTRY_IS_TRANSITION(entry)) {
             state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
             offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
+
+            /* optimization for 1/2-byte input and BMP output */
+            if( source<sourceLimit &&
+                MBCS_ENTRY_IS_FINAL(entry=stateTable[state][*source]) &&
+                MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_VALID_16 &&
+                (c=unicodeCodeUnits[offset+MBCS_ENTRY_FINAL_VALUE_16(entry)])<0xfffe
+            ) {
+                ++source;
+                state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
+                /* output BMP code point */
+                break;
+            }
         } else {
             /* set the next state early so that we can reuse the entry variable */
             state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
@@ -1650,51 +1661,48 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
              * the most common cases compared to a switch.
              */
             action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
-            if(action==MBCS_STATE_VALID_16) {
+            if(action==MBCS_STATE_VALID_DIRECT_16) {
+                /* output BMP code point */
+                c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                break;
+            } else if(action==MBCS_STATE_VALID_16) {
                 offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                 c=unicodeCodeUnits[offset];
                 if(c<0xfffe) {
                     /* output BMP code point */
-                    goto finish;
+                    break;
                 } else if(c==0xfffe) {
                     if(UCNV_TO_U_USE_FALLBACK(cnv) && (c=_MBCSGetFallback(&cnv->sharedData->table->mbcs, offset))!=0xfffe) {
-                        goto finish;
+                        break;
                     }
-                    /* callback(unassigned) */
-                    goto unassigned;
                 } else {
                     /* callback(illegal) */
-                    goto illegal;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                 }
-            } else if(action==MBCS_STATE_VALID_DIRECT_16) {
-                /* output BMP code point */
-                c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-                goto finish;
             } else if(action==MBCS_STATE_VALID_16_PAIR) {
                 offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                 c=unicodeCodeUnits[offset++];
                 if(c<0xd800) {
                     /* output BMP code point below 0xd800 */
-                    goto finish;
+                    break;
                 } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? c<=0xdfff : c<=0xdbff) {
                     /* output roundtrip or fallback supplementary code point */
                     c=((c&0x3ff)<<10)+unicodeCodeUnits[offset]+(0x10000-0xdc00);
-                    goto finish;
+                    break;
                 } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? (c&0xfffe)==0xe000 : c==0xe000) {
                     /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
                     c=unicodeCodeUnits[offset];
-                    goto finish;
+                    break;
                 } else if(c==0xffff) {
                     /* callback(illegal) */
-                    goto illegal;
-                } else {
-                    /* callback(unassigned) */
-                    goto unassigned;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                 }
-            } else if(action==MBCS_STATE_VALID_DIRECT_20) {
+            } else if(action==MBCS_STATE_VALID_DIRECT_20 ||
+                      (action==MBCS_STATE_FALLBACK_DIRECT_20 && UCNV_TO_U_USE_FALLBACK(cnv))
+            ) {
                 /* output supplementary code point */
                 c=(UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
-                goto finish;
+                break;
             } else if(action==MBCS_STATE_CHANGE_ONLY) {
                 /*
                  * This serves as a state change without any output.
@@ -1704,110 +1712,60 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                  * state transitions.
                  */
             } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-                if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                    /* callback(unassigned) */
-                    goto unassigned;
+                if(UCNV_TO_U_USE_FALLBACK(cnv)) {
+                    /* output BMP code point */
+                    c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    break;
                 }
-                /* output BMP code point */
-                c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
-                goto finish;
-            } else if(action==MBCS_STATE_FALLBACK_DIRECT_20) {
-                if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                    /* callback(unassigned) */
-                    goto unassigned;
-                }
-                /* output supplementary code point */
-                c=(UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
-                goto finish;
             } else if(action==MBCS_STATE_UNASSIGNED) {
-                /* callback(unassigned) */
-                goto unassigned;
+                /* just fall through */
             } else if(action==MBCS_STATE_ILLEGAL) {
                 /* callback(illegal) */
-                goto illegal;
+                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
             } else {
-                /* reserved, must never occur */
+                /* reserved (must never occur), or only state change */
+                offset=0;
+                lastSource=source;
+                continue;
             }
 
-            /* normal end of action codes: prepare for a new character */
+            /* end of action codes: prepare for a new character */
             offset=0;
-            byteIndex=0;
-            continue;
 
-illegal:
-            reason=UCNV_ILLEGAL;
-            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-            goto callback;
-unassigned:
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
-callback:
-            /* call the callback function with all the preparations and post-processing */
-            /* update the arguments structure */
-            pArgs->source=(const char *)source;
-            pArgs->target=buffer;
-            pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-
-            /* set the converter state in UConverter to deal with the next character */
-            cnv->toUnicodeStatus=0;
-            cnv->mode=state;
-            cnv->toULength=0;
-
-            /* call the callback function */
-            toUCallback(cnv, cnv->toUContext, pArgs, (const char *)bytes, byteIndex, reason, pErrorCode);
-
-            /* get the converter state from UConverter */
-            offset=cnv->toUnicodeStatus;
-            state=(uint8_t)cnv->mode;
-            byteIndex=cnv->toULength;
-
-            /* update the source pointer */
-            source=(const uint8_t *)pArgs->source;
-
-            /*
-             * return the first character if the callback wrote some
-             * we do not need to goto finish because the converter state is already set
-             */
-            if(U_SUCCESS(*pErrorCode)) {
-                entry=pArgs->target-buffer;
-                if(entry>0) {
-                    return ucnv_getUChar32KeepOverflow(cnv, buffer, entry);
-                }
-                /* else (callback did not write anything) continue */
-            } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-                return ucnv_getUChar32KeepOverflow(cnv, buffer, UTF_MAX_CHAR_LENGTH);
-            } else {
-                /* break on error */
-                /* ### what if a callback set an error but _also_ generated output?! */
-                state=0;
-                c=0xffff;
-                goto finish;
+            if(U_FAILURE(*pErrorCode)) {
+                /* callback(illegal) */
+                break;
+            } else /* unassigned sequence */ {
+                /* defer to the generic implementation */
+                cnv->toUnicodeStatus=0;
+                cnv->mode=state;
+                pArgs->source=(const char *)lastSource;
+                return UCNV_GET_NEXT_UCHAR_USE_TO_U;
             }
-
-            /*
-             * We do not need to repeat the statements from the normal
-             * end of the action codes because we already updated all the
-             * necessary variables.
-             */
         }
     }
 
-    if(byteIndex>0) {
-        /* incomplete character byte sequence */
-        *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        state=0;
-    } else {
-        /* no output because of empty input or only state changes and skipping callbacks */
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+    if(c<0) {
+        if(U_SUCCESS(*pErrorCode) && source==sourceLimit && lastSource<source) {
+            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+        }
+        if(U_FAILURE(*pErrorCode)) {
+            /* incomplete character byte sequence */
+            uint8_t *bytes=cnv->toUBytes;
+            cnv->toULength=(int8_t)(source-lastSource);
+            do {
+                *bytes++=*lastSource++;
+            } while(lastSource<source);
+        } else {
+            /* no output because of empty input or only state changes */
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        }
+        c=0xffff;
     }
-    c=0xffff;
 
-finish:
     /* set the converter state back into UConverter, ready for a new character */
     cnv->toUnicodeStatus=0;
     cnv->mode=state;
-    cnv->toULength=0;
 
     /* write back the updated pointer */
     pArgs->source=(const char *)source;
@@ -1816,20 +1774,17 @@ finish:
 
 /*
  * This version of _MBCSGetNextUChar() is optimized for single-byte, single-state codepages.
- * We still need a conversion loop in case a skipping callback is called.
+ * We still need a conversion loop in case we find reserved action codes, which are to be ignored.
  */
 static UChar32
 _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
                         UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-
     UConverter *cnv;
     const int32_t (*stateTable)[256];
     const uint8_t *source, *sourceLimit;
 
     int32_t entry;
     uint8_t action;
-    UConverterCallbackReason reason;
 
     /* set up the local pointers */
     cnv=pArgs->converter;
@@ -1859,73 +1814,37 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
          * the most common cases compared to a switch.
          */
         action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
-        if(action==MBCS_STATE_VALID_DIRECT_20) {
+        if( action==MBCS_STATE_VALID_DIRECT_20 ||
+            (action==MBCS_STATE_FALLBACK_DIRECT_20 && UCNV_TO_U_USE_FALLBACK(cnv))
+        ) {
             /* output supplementary code point */
             return (UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
         } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-            if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                /* callback(unassigned) */
-                reason=UCNV_UNASSIGNED;
-                *pErrorCode=U_INVALID_CHAR_FOUND;
-            } else {
+            if(UCNV_TO_U_USE_FALLBACK(cnv)) {
                 /* output BMP code point */
                 return (UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
             }
-        } else if(action==MBCS_STATE_FALLBACK_DIRECT_20) {
-            if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
-                /* callback(unassigned) */
-                reason=UCNV_UNASSIGNED;
-                *pErrorCode=U_INVALID_CHAR_FOUND;
-            } else {
-                /* output supplementary code point */
-                return (UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
-            }
         } else if(action==MBCS_STATE_UNASSIGNED) {
-            /* callback(unassigned) */
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
+            /* just fall through */
         } else if(action==MBCS_STATE_ILLEGAL) {
             /* callback(illegal) */
-            reason=UCNV_ILLEGAL;
             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
         } else {
             /* reserved, must never occur */
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0xffff;
+            continue;
         }
 
-        /* call the callback function with all the preparations and post-processing */
-        /* update the arguments structure */
-        pArgs->target=buffer;
-        pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-
-        /* call the callback function */
-        toUCallback(cnv, cnv->toUContext, pArgs, (const char *)(source-1), 1, reason, pErrorCode);
-
-        /* update the source pointer */
-        source=(const uint8_t *)pArgs->source;
-
-        /*
-         * return the first character if the callback wrote some
-         * we do not need to goto finish because the converter state is already set
-         */
-        if(U_SUCCESS(*pErrorCode)) {
-            entry=pArgs->target-buffer;
-            if(entry>0) {
-                return ucnv_getUChar32KeepOverflow(cnv, buffer, entry);
-            }
-            /* else (callback did not write anything) continue */
-        } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-            *pErrorCode=U_ZERO_ERROR;
-            return ucnv_getUChar32KeepOverflow(cnv, buffer, UTF_MAX_CHAR_LENGTH);
-        } else {
-            /* break on error */
-            /* ### what if a callback set an error but _also_ generated output?! */
-            return 0xffff;
+        if(U_FAILURE(*pErrorCode)) {
+            /* callback(illegal) */
+            break;
+        } else /* unassigned sequence */ {
+            /* defer to the generic implementation */
+            pArgs->source=(const char *)source-1;
+            return UCNV_GET_NEXT_UCHAR_USE_TO_U;
         }
     }
 
-    /* no output because of empty input or only state changes and skipping callbacks */
+    /* no output because of empty input or only state changes */
     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
     return 0xffff;
 }
@@ -1935,6 +1854,7 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
  * by other converter implementations.
  * It does not use state from the converter, nor error codes.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It does not handle conversion extensions (_extToU()).
  *
  * Return value:
  * U+fffe   unassigned
@@ -2079,6 +1999,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
 /**
  * This version of _MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It does not handle conversion extensions (_extToU()).
  */
 U_CFUNC UChar32
 _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
@@ -3216,6 +3137,7 @@ getTrail:
  * conversion implementations.
  * It does not use the converter state nor call callbacks.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It does not handle conversion extensions (_extToU()).
  *
  * It converts one single Unicode code point into codepage bytes, encoded
  * as one 32-bit value. The function returns the number of bytes in *pValue:
@@ -3347,18 +3269,15 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
 
 
 #if 0
-/** 
- * ################################################################
- * # 
- * # This function has been moved to ucnv2022.c for inlining.
- * # This implementation is here only for documentation purposes
- * #
- * ################################################################
+/*
+ * This function has been moved to ucnv2022.c for inlining.
+ * This implementation is here only for documentation purposes
  */
 
 /**
  * This version of _MBCSFromUChar32() is optimized for single-byte codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It does not handle conversion extensions (_extToU()).
  *
  * It returns the codepage byte for the code point, or -1 if it is unassigned.
  */
@@ -3586,48 +3505,46 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
     return cp;
 }
 
-/* GB 18030 special handling ------------------------------------------------ */
-
-static void
-toUCallback(UConverter *cnv,
-            const void *context, UConverterToUnicodeArgs *pArgs,
-            const char *codeUnits, int32_t length,
-            UConverterCallbackReason reason, UErrorCode *pErrorCode) {
-    int32_t i;
-
-    if((cnv->options&_MBCS_OPTION_GB18030)!=0 && reason==UCNV_UNASSIGNED && length==4) {
+/*
+ * Input sequence: cnv->toUBytes[0..length[
+ * @return if(U_FAILURE) return the length (toULength, byteIndex) for the input
+ *         else return 0 after output has been written to the target
+ */
+static int8_t
+_extToU(UConverter *cnv, const UConverterSharedData *sharedData,
+        int8_t length,
+        const char **source, const char *sourceLimit,
+        UChar **target, const UChar *targetLimit,
+        int32_t **offsets, int32_t sourceIndex,
+        UBool useFallback, UBool flush,
+        UErrorCode *pErrorCode) {
+    /* GB 18030 */
+    if(length==4 && cnv!=NULL && (cnv->options&_MBCS_OPTION_GB18030)!=0) {
         const uint32_t *range;
         uint32_t linear;
+        int32_t i;
 
-        linear=LINEAR_18030((uint8_t)codeUnits[0], (uint8_t)codeUnits[1], (uint8_t)codeUnits[2], (uint8_t)codeUnits[3]);
+        linear=LINEAR_18030(cnv->toUBytes[0], cnv->toUBytes[1], cnv->toUBytes[2], cnv->toUBytes[3]);
         range=gb18030Ranges[0];
         for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); range+=4, ++i) {
             if(range[2]<=linear && linear<=range[3]) {
-                UChar u[UTF_MAX_CHAR_LENGTH];
-
                 /* found the sequence, output the Unicode code point for it */
                 *pErrorCode=U_ZERO_ERROR;
 
                 /* add the linear difference between the input and start sequences to the start code point */
                 linear=range[0]+(linear-range[2]);
 
-                /* write the result as UChars and output */
-                i=0;
-                UTF_APPEND_CHAR_UNSAFE(u, i, linear);
-                ucnv_cbToUWriteUChars(pArgs, u, i, 0, pErrorCode);
-                return;
+                /* output this code point */
+                ucnv_toUWriteCodePoint(cnv, linear, target, targetLimit, offsets, sourceIndex, pErrorCode);
+
+                return 0;
             }
         }
     }
 
-    /* copy the current bytes to invalidCharBuffer */
-    for(i=0; i<length; ++i) {
-        cnv->invalidCharBuffer[i]=codeUnits[i];
-    }
-    cnv->invalidCharLength=(int8_t)length;
-
-    /* call the normal callback function */
-    cnv->fromCharErrorBehaviour(context, pArgs, codeUnits, length, reason, pErrorCode);
+    /* no mapping */
+    *pErrorCode=U_INVALID_CHAR_FOUND;
+    return length;
 }
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
