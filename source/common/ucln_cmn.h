@@ -36,7 +36,7 @@ U_CFUNC UBool ustring_cleanup(void);
 /* @deprecated this functionality is going away */
 U_CFUNC UBool UnicodeConverter_cleanup(void);
 
-U_CFUNC UBool ucnv_cleanup(void);
+U_CAPI UBool U_EXPORT2 ucnv_cleanup(void);
 
 U_CFUNC UBool ucnv_io_cleanup(void);
 
