@@ -671,7 +671,7 @@ static void TestStringFunctions()
     if( u_strlen(dataTable[0][0])!= u_strlen(dataTable[0][3]) || u_strlen(dataTable[0][0]) == u_strlen(dataTable[0][2]))
         log_err("There is an error in u_strlen()");
 
-    log_verbose("Testing u_strcpy() and u_strcmp)\n");
+    log_verbose("Testing u_strcpy() and u_strcmp()\n");
 
     for(i=0;i<3;++i)
     {
@@ -1013,6 +1013,8 @@ static void TestStringCopy()
     UChar *result=0;
     UChar subString[5];
     UChar uchars[]={0x61, 0x62, 0x63, 0x00};
+    char  charOut[40];
+    char  chars[]="abc";    /* needs default codepage */
 
     log_verbose("Testing u_uastrncpy() and u_uastrcpy()");
 
@@ -1031,8 +1033,30 @@ static void TestStringCopy()
         log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
     }
     if(temp[3] != 0xFB) {
+        log_err("u_uastrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
+    }
+
+    charOut[0] = (char)0xFB; /* load garbage into it */
+    charOut[1] = (char)0xFB;
+    charOut[2] = (char)0xFB;
+    charOut[3] = (char)0xFB;
+
+    temp[0] = 'a'; /* load codepage specific string into it */
+    temp[1] = 'b';
+    temp[2] = 'c';
+    temp[3] = 'a';
+    temp[4] = 'b';
+    temp[5] = 'c';
+    temp[6] = '\0';
+
+    u_austrncpy(charOut, temp, 3);
+    if(strncmp(chars, charOut, 3) != 0){
+        log_err("There is an error in u_austrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+    }
+    if(charOut[3] != (char)0xFB) {
         log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
     }
+
     /*Testing u_strchr()*/
     log_verbose("Testing u_strchr\n");
     temp[0]=0x42;

@@ -229,41 +229,60 @@ u_strncpy(UChar     *dst,
 /**
  * Copy a byte string encoded in the default codepage to a ustring.
  * Adds a null terminator.
- * performs a host byte to UChar conversion
+ * Performs a host byte to UChar conversion
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
  * @stable
  */
-U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *ucs1,
-               const char *s2 );
+U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
+               const char *src );
 
 /**
  * Copy a byte string encoded in the default codepage to a ustring.
  * Copies at most <TT>n</TT> characters.  The result will be null terminated
  * if the length of <TT>src</TT> is less than <TT>n</TT>.
- * performs a host byte to UChar conversion
+ * Performs a host byte to UChar conversion
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to copy.
  * @return A pointer to <TT>dst</TT>.
  * @stable
  */
-U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *ucs1,
-            const char *s2,
+U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
+            const char *src,
             int32_t n);
 
 /**
  * Copy ustring to a byte string encoded in the default codepage.
  * Adds a null terminator.
- * performs a UChar to host byte conversion
+ * Performs a UChar to host byte conversion
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
  * @stable
  */
-U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
-            const UChar *us2 );
+U_CAPI char* U_EXPORT2 u_austrcpy(char *dst,
+            const UChar *src );
+
+/**
+ * Copy ustring to a byte string encoded in the default codepage.
+ * Copies at most <TT>n</TT> characters.  The result will be null terminated
+ * if the length of <TT>src</TT> is less than <TT>n</TT>.
+ * Performs a UChar to host byte conversion
+ *
+ * @param dst The destination string.
+ * @param src The source string.
+ * @param n The maximum number of characters to copy.
+ * @return A pointer to <TT>dst</TT>.
+ * @stable
+ */
+U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
+            const UChar *src,
+            int32_t n );
 
 /**
  * Unicode String literals in C.
