@@ -23,6 +23,8 @@
 #include "jacoll.h"
 #endif
 
+#include "sfwdchit.h"
+
 CollationKanaTest::CollationKanaTest()
 : myCollation(0)
 {
@@ -81,6 +83,7 @@ const Collator::EComparisonResult CollationKanaTest::results[] = {
 void CollationKanaTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
+    Collator::EComparisonResult incResult = myCollation->compare(SimpleFwdCharIterator(source), SimpleFwdCharIterator(target));
     CollationKey sortKey1, sortKey2;
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
@@ -90,7 +93,7 @@ void CollationKanaTest::doTest( UnicodeString source, UnicodeString target, Coll
         return;
     }
     Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
+    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
 }
 
 void CollationKanaTest::TestTertiary(/* char* par */)

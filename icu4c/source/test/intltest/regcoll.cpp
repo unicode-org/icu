@@ -24,6 +24,8 @@
 #include "regcoll.h"
 #endif
 
+#include "sfwdchit.h"
+
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 static UErrorCode status = U_ZERO_ERROR;
@@ -1117,6 +1119,7 @@ void CollationRegressionTest::compareArray(Collator &c,
         }
 
         Collator::EComparisonResult compareResult = c.compare(source, target);
+        Collator::EComparisonResult incResult = c.compare(SimpleFwdCharIterator(source), SimpleFwdCharIterator(target));
 
         CollationKey sourceKey, targetKey;
         UErrorCode status = U_ZERO_ERROR;
@@ -1139,8 +1142,7 @@ void CollationRegressionTest::compareArray(Collator &c,
 
         Collator::EComparisonResult keyResult = sourceKey.compareTo(targetKey);
 
-        reportCResult(source, target, sourceKey, targetKey,
-                      compareResult, keyResult, expectedResult);
+        reportCResult( source, target, sourceKey, targetKey, compareResult, keyResult, incResult, expectedResult );
 
     }
 }

@@ -50,6 +50,8 @@
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
 
+#include "sfwdchit.h"
+
 void
 CollationAPITest::doAssert(UBool condition, const char *message)
 {

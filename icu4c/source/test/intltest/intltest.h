@@ -124,6 +124,7 @@ protected:
                                 CollationKey &sourceKey, CollationKey &targetKey,
                                 Collator::EComparisonResult compareResult,
                                 Collator::EComparisonResult keyResult,
+                                Collator::EComparisonResult incResult,
                                 Collator::EComparisonResult expectedResult );
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);

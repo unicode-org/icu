@@ -171,6 +171,7 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
              CollationKey &sourceKey, CollationKey &targetKey,
              Collator::EComparisonResult compareResult,
              Collator::EComparisonResult keyResult,
+                                Collator::EComparisonResult incResult,
                          Collator::EComparisonResult expectedResult )
 {
     if (expectedResult < -1 || expectedResult > 1)
@@ -181,8 +182,10 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
   
     UBool ok1 = (compareResult == expectedResult);
     UBool ok2 = (keyResult == expectedResult);
+    UBool ok3 = (incResult == expectedResult);
 
-    if (ok1 && ok2 && !verbose) {
+
+    if (ok1 && ok2 && ok3 && !verbose) {
         // Keep non-verbose, passing tests fast
         return;
     } else {
@@ -219,6 +222,17 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
             prettify(targetKey, prettyTarget);
       
             errln(msg1 + prettySource + msg2 + prettyTarget);
+        }
+        msg1 = UnicodeString (ok3 ? "Ok: incCompare(" : "FAIL: incCompare(");
+        msg2 = ", ";
+        msg3 = ") returned ";
+
+        appendCompareResult(incResult, sResult);
+
+        if (ok3) {
+            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
+        } else {
+            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
         }
     }
 }
