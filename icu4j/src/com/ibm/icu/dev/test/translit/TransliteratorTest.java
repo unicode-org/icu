@@ -326,7 +326,7 @@ public class TransliteratorTest extends IntlTest {
     public void TestFiltering() {
         Transliterator hex = Transliterator.getInstance("Unicode-Hex");
         hex.setFilter(new UnicodeFilter() {
-            public boolean isIn(char c) {
+            public boolean contains(char c) {
                 return c != 'c';
             }
         });

@@ -16,8 +16,8 @@ public final class UnicodeFilterLogic {
      */
     public static UnicodeFilter not(final UnicodeFilter f) {
         return new UnicodeFilter() {
-            public boolean isIn(char c) {
-                return !f.isIn(c);
+            public boolean contains(char c) {
+                return !f.contains(c);
             }
         };
     }
@@ -25,8 +25,8 @@ public final class UnicodeFilterLogic {
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements a short
      * circuit AND of the result of the two given filters.  That is,
-     * if <tt>f.isIn()</tt> is <tt>false</tt>, then <tt>g.isIn()</tt>
-     * is not called, and <tt>isIn()</tt> returns <tt>false</tt>.
+     * if <tt>f.contains()</tt> is <tt>false</tt>, then <tt>g.contains()</tt>
+     * is not called, and <tt>contains()</tt> returns <tt>false</tt>.
      *
      * <p>Either <tt>f</tt> or <tt>g</tt> must be non-null.
      */
@@ -39,8 +39,8 @@ public final class UnicodeFilterLogic {
             return f;
         }
         return new UnicodeFilter() {
-            public boolean isIn(char c) {
-                return f.isIn(c) && g.isIn(c);
+            public boolean contains(char c) {
+                return f.contains(c) && g.contains(c);
             }
         };
     }
@@ -48,15 +48,15 @@ public final class UnicodeFilterLogic {
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements a short
      * circuit AND of the result of the given filters.  That is, if
-     * <tt>f[i].isIn()</tt> is <tt>false</tt>, then
-     * <tt>f[j].isIn()</tt> is not called, where <tt>j > i</tt>, and
-     * <tt>isIn()</tt> returns <tt>false</tt>.
+     * <tt>f[i].contains()</tt> is <tt>false</tt>, then
+     * <tt>f[j].contains()</tt> is not called, where <tt>j > i</tt>, and
+     * <tt>contains()</tt> returns <tt>false</tt>.
      */
     public static UnicodeFilter and(final UnicodeFilter[] f) {
         return new UnicodeFilter() {
-            public boolean isIn(char c) {
+            public boolean contains(char c) {
                 for (int i=0; i<f.length; ++i) {
-                    if (!f[i].isIn(c)) {
+                    if (!f[i].contains(c)) {
                         return false;
                     }
                 }
@@ -68,8 +68,8 @@ public final class UnicodeFilterLogic {
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements a short
      * circuit OR of the result of the two given filters.  That is, if
-     * <tt>f.isIn()</tt> is <tt>true</tt>, then <tt>g.isIn()</tt> is
-     * not called, and <tt>isIn()</tt> returns <tt>true</tt>.
+     * <tt>f.contains()</tt> is <tt>true</tt>, then <tt>g.contains()</tt> is
+     * not called, and <tt>contains()</tt> returns <tt>true</tt>.
      *
      * <p>Either <tt>f</tt> or <tt>g</tt> must be non-null.
      */
@@ -82,8 +82,8 @@ public final class UnicodeFilterLogic {
             return f;
         }
         return new UnicodeFilter() {
-            public boolean isIn(char c) {
-                return f.isIn(c) || g.isIn(c);
+            public boolean contains(char c) {
+                return f.contains(c) || g.contains(c);
             }
         };
     }
@@ -91,15 +91,15 @@ public final class UnicodeFilterLogic {
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements a short
      * circuit OR of the result of the given filters.  That is, if
-     * <tt>f[i].isIn()</tt> is <tt>false</tt>, then
-     * <tt>f[j].isIn()</tt> is not called, where <tt>j > i</tt>, and
-     * <tt>isIn()</tt> returns <tt>true</tt>.
+     * <tt>f[i].contains()</tt> is <tt>false</tt>, then
+     * <tt>f[j].contains()</tt> is not called, where <tt>j > i</tt>, and
+     * <tt>contains()</tt> returns <tt>true</tt>.
      */
     public static UnicodeFilter or(final UnicodeFilter[] f) {
         return new UnicodeFilter() {
-            public boolean isIn(char c) {
+            public boolean contains(char c) {
                 for (int i=0; i<f.length; ++i) {
-                    if (f[i].isIn(c)) {
+                    if (f[i].contains(c)) {
                         return true;
                     }
                 }

@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.8 $ $Date: 2000/01/18 17:51:09 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.9 $ $Date: 2000/01/18 20:36:17 $
  */
 public abstract class Transliterator {
     /**
@@ -250,7 +250,7 @@ public abstract class Transliterator {
 
     /** 
      * This transliterator's filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
@@ -364,7 +364,7 @@ public abstract class Transliterator {
      * Default constructor.
      * @param ID the string identifier for this transliterator
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
@@ -414,7 +414,7 @@ public abstract class Transliterator {
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return The new limit index.  The text previously occupying <code>[start,
@@ -927,13 +927,14 @@ public abstract class Transliterator {
 
     /**
      * Method for subclasses to use to obtain a character in the given
-     * string, with filtering.
+     * string, with filtering.  If the character at the given offset
+     * is excluded by this transliterator's filter, then U+FFFF is returned.
      */
     protected char filteredCharAt(Replaceable text, int i) {
         char c;
         UnicodeFilter filter = getFilter();
         return (filter == null) ? text.charAt(i) :
-            (filter.isIn(c = text.charAt(i)) ? c : '\uFFFF');
+            (filter.contains(c = text.charAt(i)) ? c : '\uFFFF');
     }
 
     static {

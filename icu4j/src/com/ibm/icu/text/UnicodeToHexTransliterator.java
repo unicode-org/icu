@@ -10,7 +10,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.2 $ $Date: 2000/01/18 17:51:09 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.3 $ $Date: 2000/01/18 20:36:17 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -108,7 +108,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
     loop:
         while (cursor < limit) {
             char c = text.charAt(cursor);
-            if (filter != null && !filter.isIn(c)) {
+            if (filter != null && !filter.contains(c)) {
                 ++cursor;
                 continue;
             }

@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.9 $ $Date: 2000/01/18 02:38:55 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.10 $ $Date: 2000/01/18 20:36:17 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.10  2000/01/18 20:36:17  Alan
+ * Make UnicodeSet inherit from UnicodeFilter
+ *
  * Revision 1.9  2000/01/18 02:38:55  Alan
  * Fix filtering bug.
  *
@@ -309,7 +312,7 @@ class TransliterationRule {
      * If greater than or equal to result.length(), represents offset start +
      * cursor - result.length() into text.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
@@ -334,7 +337,7 @@ class TransliterationRule {
      * into text.  This value must be between <code>start</code> and
      * <code>limit</code>.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
@@ -363,7 +366,7 @@ class TransliterationRule {
      * into text.  This value must be between <code>start</code> and
      * <code>limit</code>.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
@@ -400,7 +403,7 @@ class TransliterationRule {
      * @param variables a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return true if there is a match
@@ -441,7 +444,7 @@ class TransliterationRule {
      * @param variables a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return true if there is a match
@@ -479,7 +482,7 @@ class TransliterationRule {
      * @param variables a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return -1 if there is a mismatch, 0 if the text is not long enough to
@@ -514,14 +517,14 @@ class TransliterationRule {
      * @param variables a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
     protected static final boolean charMatches(char keyChar, char textChar,
                                                Dictionary variables, UnicodeFilter filter) {
         UnicodeSet set = null;
-        return (filter == null || filter.isIn(textChar)) &&
+        return (filter == null || filter.contains(textChar)) &&
             (((set = (UnicodeSet) variables.get(new Character(keyChar)))
              == null) ?
              keyChar == textChar : set.contains(textChar));
