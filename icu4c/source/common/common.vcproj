@@ -465,9 +465,6 @@
 				RelativePath=".\locmap.h">
 			</File>
 			<File
-				RelativePath=".\mutex.cpp">
-			</File>
-			<File
 				RelativePath=".\mutex.h">
 			</File>
 			<File
