@@ -322,7 +322,7 @@ public:
 // -------------------------------------
 
 static ICULocaleService* 
-getService(void)
+getCalendarService(void)
 {
   UBool needInit;
   {
@@ -379,11 +379,11 @@ getService(void)
 
 URegistryKey Calendar::registerFactory(ICUServiceFactory* toAdopt, UErrorCode& status)
 {
-  return getService()->registerFactory(toAdopt, status);
+  return getCalendarService()->registerFactory(toAdopt, status);
 }
 
 UBool Calendar::unregister(URegistryKey key, UErrorCode& status) {
-  return getService()->unregister(key, status);
+  return getCalendarService()->unregister(key, status);
 }
 
 // -------------------------------------
@@ -605,7 +605,7 @@ Calendar*
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
   Locale actualLoc;
-  UObject* u = getService()->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
+  UObject* u = getCalendarService()->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
   Calendar* c = NULL;
 
   if(U_FAILURE(success) || !u) {
@@ -642,7 +642,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     // Don't overwrite actualLoc, since the actual loc from this call
     // may be something like "@calendar=gregorian" -- TODO investigate
     // further...
-    c = (Calendar*)getService()->get(l, LocaleKey::KIND_ANY, &actualLoc2, success);
+    c = (Calendar*)getCalendarService()->get(l, LocaleKey::KIND_ANY, &actualLoc2, success);
 
     if(U_FAILURE(success) || !c) {
       delete zone;
