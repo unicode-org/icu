@@ -12,6 +12,8 @@
 #include "unicode/unifltlg.h"
 #include "uvector.h"
 
+static const UChar NEWLINE = 10;
+
 /**
  * Constructs a new compound transliterator given an array of
  * transliterators.  The array of transliterators may be of any
@@ -314,12 +316,12 @@ UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
         } else {
             trans[i]->Transliterator::toRules(rule, escapeUnprintable);
         }
-        if (rulesSource.length() &&
-            rulesSource.charAt(rulesSource.length() - 1) != 10) {
-            rulesSource.append((UChar)10);
+        if (rulesSource.length() != 0 &&
+            rulesSource.charAt(rulesSource.length() - 1) != NEWLINE) {
+            rulesSource.append(NEWLINE);
         }
         rulesSource.append(rule);
-        if (rulesSource.length() &&
+        if (rulesSource.length() != 0 &&
             rulesSource.charAt(rulesSource.length() - 1) != ID_DELIM) {
             rulesSource.append(ID_DELIM);
         }
