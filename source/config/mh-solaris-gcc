@@ -3,6 +3,11 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
+## Flags for position independent code
+SHAREDLIBCFLAGS = -fPIC
+SHAREDLIBCXXFLAGS = -fPIC
+SHAREDLIBCPPFLAGS = -DPIC
+
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
@@ -42,6 +47,8 @@ MIDDLE_SO_TARGET = $(SO_TARGET)
 LIBICU = libicu-
 ## Shared object suffix
 SO=		so
+## Non-shared intermediate object suffix
+STATIC_O = static.o
 
 ## Force removal [for make clean]
 RMV = rm -rf
@@ -57,14 +64,18 @@ LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Compilation rules
-%.o : $(srcdir)/%.c
-	$(COMPILE.c) -o $@ $<
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
-%.o : $(srcdir)/%.cpp
-	$(COMPILE.cc) -o $@ $<
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o : ../data/%.c
-	$(COMPILE.c) -o $@ $<
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 %.d : $(srcdir)/%.c
