@@ -61,7 +61,7 @@ class LEGlyphFilter;
  * @see LEFontInstance
  * @see ScriptAndLanguageTags.h
  *
- * @draft ICU 2.2
+ * @stable ICU 2.8
  */
 class U_LAYOUT_API LayoutEngine : public UObject {
 protected:
@@ -287,7 +287,7 @@ public:
      * method. It is declared virtual so that it will be invoked by the
      * subclass destructors.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual ~LayoutEngine();
 
@@ -310,7 +310,7 @@ public:
      * Note; the glyph, character index and position array can be accessed
      * using the getter method below.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
 
@@ -321,7 +321,7 @@ public:
      *
      * @return the number of glyphs in the glyph array
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     le_int32 getGlyphCount() const
     {
@@ -336,7 +336,7 @@ public:
      * @param glyphs - the destiniation glyph array
      * @param success - set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const;
 
@@ -350,7 +350,7 @@ public:
      * @param extraBits - this value will be ORed with each glyph index
      * @param success - set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
@@ -362,7 +362,7 @@ public:
      * @param charIndices - the destiniation character index array
      * @param success - set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const;
 
@@ -375,7 +375,7 @@ public:
      * @param indexBase - an offset which will be added to each index
      * @param success - set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     void getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const;
 
@@ -388,7 +388,7 @@ public:
      * @param glyphs - the destiniation position array
      * @param success - set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     void getGlyphPositions(float positions[], LEErrorCode &success) const;
 
@@ -404,7 +404,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const;
 
@@ -413,7 +413,7 @@ public:
      * so that the LayoutEngine can be reused to layout a different
      * characer array. (This method is also called by the destructor)
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual void reset();
 
@@ -431,21 +431,21 @@ public:
      *
      * @see LEFontInstance
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
