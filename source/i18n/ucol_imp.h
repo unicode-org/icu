@@ -394,18 +394,30 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_FLAG_BIT_MASK 0x80
 #define INVC_DATA_TYPE "dat"
 #define INVC_DATA_NAME "invuca"
-#define UCOL_COMMON_TOP2 0x79
-#define UCOL_COMMON_BOT2 0x03
-#define UCOL_TOP_COUNT2  0x40
-#define UCOL_BOT_COUNT2  0x3D
 
-#define UCOL_COMMON_TOP3 0x84
-#define UCOL_COMMON_BOT3 0x03
-#define UCOL_TOP_COUNT3  0x40
-#define UCOL_BOT_COUNT3  0x40
+/* These constants can be changed - sortkey size is affected by them */
+#define UCOL_PROPORTION2 0.5
+#define UCOL_PROPORTION3 0.666
 
-#define UCOL_COMMON2 0x03
-#define UCOL_COMMON3 0x03
+/* These values come from the UCA */
+#define UCOL_COMMON_TOP2 0x7F
+#define UCOL_COMMON_BOT2 0x05
+#define UCOL_TOTAL2 (UCOL_COMMON_TOP2-UCOL_COMMON_BOT2-1) 
+
+/* These values come from the UCA */
+#define UCOL_COMMON_TOP3 0x86
+#define UCOL_COMMON_BOT3 0x05
+#define UCOL_TOTAL3 (UCOL_COMMON_TOP3-UCOL_COMMON_BOT3-1) 
+
+#define UCOL_TOP_COUNT2  (UCOL_PROPORTION2*UCOL_TOTAL2)
+#define UCOL_BOT_COUNT2  (UCOL_TOTAL2-UCOL_TOP_COUNT2)
+
+#define UCOL_TOP_COUNT3  (UCOL_PROPORTION3*UCOL_TOTAL3)
+#define UCOL_BOT_COUNT3  (UCOL_TOTAL3-UCOL_TOP_COUNT3)
+
+#define UCOL_COMMON2 UCOL_COMMON_BOT2
+#define UCOL_COMMON3 UCOL_COMMON_BOT3
+
 #define UCOL_COMMON4 0xFF
 
 /* constants for case level/case first handling */
