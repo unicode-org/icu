@@ -635,22 +635,75 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHash
   }
 }
 
-uint8_t ucol_uprv_getCaseBits(const UChar *s, uint32_t len, UErrorCode *status) {
+uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t len, UErrorCode *status) {
   UChar n[128];
-  UChar nu[128];
+  //UChar nu[128];
+  uint32_t i = 0;
 
   uint32_t nLen = 0;
   uint32_t nuLen = 0;
 
-  nLen = unorm_normalize(s, len, UNORM_NFKD, 0, n, 128, status);
+  collIterate s;
+  uint32_t order = 0;
 
-  nuLen = u_strToUpper(nu, 128, n, nLen, "", status);
-  if(nuLen == nLen) {
-    if(u_strncmp(n, nu, nuLen) == 0) {
-      return UCOL_UPPER_CASE;
+  uint8_t caseBits;
+  UBool isMixed = FALSE;
+  
+  if(U_FAILURE(*status)) {
+    return UCOL_LOWER_CASE;
+  }
+
+  nLen = unorm_normalize(src, len, UNORM_NFKD, 0, n, 128, status);
+
+  init_collIterate(UCA, n, nLen, &s);
+
+  order = ucol_getNextCE(UCA, &s, status);
+  if(isContinuation(order)) {
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return UCOL_LOWER_CASE;
+  }
+
+  caseBits = order & UCOL_CASE_BIT_MASK;
+  for(;;) {
+    order = ucol_getNextCE(UCA, &s, status);
+    if(order == UCOL_NO_MORE_CES) {
+        break;
+    }
+    if(isContinuation(order)) { 
+      continue;
+    }
+    if(caseBits != (order & UCOL_CASE_BIT_MASK)) {
+      isMixed = TRUE;
+      break;
     }
   }
 
+  if(isMixed == TRUE) {
+    uint32_t noUpper = 0;
+    uint32_t noLower = 0;
+
+    // Let's analyze again, letter by letter
+    for(i = 0; i < nLen; i++) {
+      if(u_isupper(n[i]) == TRUE) {
+        noUpper++;
+      }
+      if(u_islower(n[i]) == TRUE) {
+        noLower++;
+      }
+      if(u_istitle(n[i]) == TRUE) {
+        return UCOL_MIXED_CASE;
+      }
+    }
+
+    if(noUpper > 0 && noLower > 0 && noUpper + noLower <= nLen) {
+      return UCOL_MIXED_CASE;
+    }
+  }
+
+  return caseBits;
+
+
+#if 0
   nuLen = u_strToLower(nu, 128, n, nLen, "", status);
   if(nuLen == nLen) {
     if(u_strncmp(n, nu, nuLen) == 0) {
@@ -658,7 +711,14 @@ uint8_t ucol_uprv_getCaseBits(const UChar *s, uint32_t len, UErrorCode *status) 
     }
   }
 
+  nuLen = u_strToUpper(nu, 128, n, nLen, "", status);
+  if(nuLen == nLen) {
+    if(u_strncmp(n, nu, nuLen) == 0) {
+      return UCOL_UPPER_CASE;
+    }
+  }
   return UCOL_MIXED_CASE;
+#endif
 
 }
 
@@ -699,13 +759,14 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           /* will have to get one from UCA */
           /* first, get the UChars from the rules */
           /* then pick CEs out until there is no more and stuff them into expansion */
-          UChar source[256],buff[256];
+          //UChar source[256],buff[256];
           collIterate s;
           uint32_t order = 0;
-          uint32_t normSize = 0;
-          uprv_memcpy(buff, expOffset + src->source, 1*sizeof(UChar));
-          normSize = unorm_normalize(buff, 1, UNORM_NFD, 0, source, 256, status);
-          init_collIterate(src->UCA, source, normSize, &s);
+          //uint32_t normSize = 0;
+          //uprv_memcpy(buff, expOffset + src->source, 1*sizeof(UChar));
+          //normSize = unorm_normalize(buff, 1, UNORM_NFD, 0, source, 256, status);
+          //init_collIterate(src->UCA, source, normSize, &s);
+          init_collIterate(src->UCA, expOffset + src->source, 1, &s);
 
           for(;;) {
             order = ucol_getNextCE(src->UCA, &s, status);
@@ -735,11 +796,13 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
 
     /* copy UChars */
 
-    UChar buff[128];
-    uint32_t decompSize;
-    uprv_memcpy(buff, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
-    decompSize = unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
-    el.cSize = decompSize; /*(tok->source >> 24); *//* + (tok->expansion >> 24);*/
+    //UChar buff[128];
+    //uint32_t decompSize;
+    //uprv_memcpy(buff, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
+    //decompSize = unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
+    //el.cSize = decompSize; /*(tok->source >> 24); *//* + (tok->expansion >> 24);*/
+    el.cSize = (tok->source >> 24); 
+    uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, el.cSize*sizeof(UChar));
     el.cPoints = el.uchars;
 
     if(UCOL_ISTHAIPREVOWEL(el.cPoints[0])) {
@@ -760,7 +823,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     el.CEs[0] &= 0xFFFFFF3F; // Clean the case bits field
     if(el.cSize > 1) {
       // Do it manually
-      el.CEs[0] |= ucol_uprv_getCaseBits(el.cPoints, el.cSize, status);
+      el.CEs[0] |= ucol_uprv_getCaseBits(src->UCA, el.cPoints, el.cSize, status);
     } else {
       // Copy it from the UCA
       uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);

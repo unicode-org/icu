@@ -316,7 +316,7 @@ ucol_openRules(    const    UChar                  *rules,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
-  uint32_t listLen = 0;
+  uint32_t listLen = 0, nSize = 0;
   UColTokenParser src;
   UColAttributeValue norm;
 
@@ -342,9 +342,11 @@ ucol_openRules(    const    UChar                  *rules,
 
   /*src.source = rules;*/
   src.source = (UChar *)uprv_malloc((rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-  uprv_memcpy(src.source, rules, rulesLength*sizeof(UChar));
+  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
+  //uprv_memcpy(src.source, rules, rulesLength*sizeof(UChar));
   src.current = src.source;
-  src.end = src.source+rulesLength;
+  src.end = src.source+nSize;
+  //src.end = src.source+rulesLength;
   src.sourceCurrent = src.source;
   src.extraCurrent = src.end;
   src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -4615,7 +4617,7 @@ ucol_strcoll( const UCollator    *coll,
     }
 
 
-
+    // setting up the collator parameters
     UColAttributeValue strength = coll->strength;
     UBool initialCheckSecTer = (strength  >= UCOL_SECONDARY);
 
@@ -4628,63 +4630,69 @@ ucol_strcoll( const UCollator    *coll,
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool qShifted = shifted && checkQuad;
 
+    uint8_t caseSwitch = coll->caseSwitch;
+    uint8_t tertiaryMask = coll->tertiaryMask;
+
+    // This is the lowest primary value that will not be ignored if shifted
+    uint32_t LVT = (shifted)?((coll->variableMax1)<<24 | (coll->variableMax2)<<16):0;
+
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
+    // Preparing the context objects for iterating over strings
     collIterate sColl, tColl;
-
 
     IInit_collIterate(coll, source, sourceLength, &sColl);
     IInit_collIterate(coll, target, targetLength, &tColl);
 
+    // Preparing the CE buffers. They will be filled during the primary phase
     ucol_CEBuf   sCEs;
     ucol_CEBuf   tCEs;
     UCOL_INIT_CEBUF(&sCEs);
     UCOL_INIT_CEBUF(&tCEs);
 
-    uint8_t caseSwitch = coll->caseSwitch;
-    uint8_t tertiaryMask = coll->tertiaryMask;
-
-    uint32_t LVT = (shifted)?((coll->variableMax1)<<24 | (coll->variableMax2)<<16):0;
-
     uint32_t secS = 0, secT = 0;
-
     uint32_t sOrder=0, tOrder=0;
+
+    // Non shifted primary processing is quite simple
     if(!shifted) {
       for(;;) {
-        /* Get the next collation element in each of the strings, unless */
-        /* we've been requested to skip it. */
-        while(sOrder == 0) {
-          sOrder = ucol_IGetNextCE(coll, &sColl, &status);
-          UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
-          sOrder &= UCOL_PRIMARYMASK;
-        }
 
-        while(tOrder == 0) {
+        // We fetch CEs until we hit a non ignorable primary or end.
+        do {
+          // We get the next CE
+          sOrder = ucol_IGetNextCE(coll, &sColl, &status);
+          // Stuff it in the buffer
+          UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
+          // And keep just the primary part.
+          sOrder &= UCOL_PRIMARYMASK;
+        } while(sOrder == 0);
+
+        // see the comments on the above block
+        do {
           tOrder = ucol_IGetNextCE(coll, &tColl, &status);
           UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
           tOrder &= UCOL_PRIMARYMASK;
-        }
+        } while(tOrder == 0);
 
+        // if both primaries are the same
         if(sOrder == tOrder) {
+            // and there are no more CEs, we advance to the next level
             if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
-
               break;
-            } else {
-              sOrder = 0; tOrder = 0;
-              continue;
-            }
+            } 
         } else {
+            // if two primaries are different, we are done
             result = (sOrder < tOrder) ?  UCOL_LESS: UCOL_GREATER;
             goto commonReturn;
         }
-      } /* no primary difference... do the rest from the buffers */
-    } else { /* shifted - do a slightly more complicated processing */
+      } // no primary difference... do the rest from the buffers
+    } else { // shifted - do a slightly more complicated processing :)
       for(;;) {
         UBool sInShifted = FALSE;
         UBool tInShifted = FALSE;
-
-/* This is where abridged version for shifted should go */
+        // This version of code can be refactored. However, it seems easier to understand this way.
+        // Source loop. Sam as the target loop. 
         for(;;) {
           sOrder = ucol_IGetNextCE(coll, &sColl, &status);
           if(sOrder == UCOL_NO_MORE_CES) {
