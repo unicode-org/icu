@@ -94,7 +94,7 @@ class TransliteratorParser;
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>hex :=&nbsp; </code></td>
  *       <td valign="top"><em>any character for which
- *       </em><code>Character.digit(c, 16)</code><em>
+ *       </em><code>u_digit(c, 16)</code><em>
  *       returns a non-negative result</em></td>
  *     </tr>
  *     <tr>

@@ -384,10 +384,15 @@ public:
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
+     * @param filter the filter.  Any character for which
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
+     * altered by this transliterator.  If <tt>filter</tt> is
+     * <tt>null</tt> then no filtering is applied.
      * @return The new limit index.  The text previously occupying <code>[start,
      * limit)</code> has been transliterated, possibly to a string of a different
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
-     * <em>new-limit</em> is the return value.
+     * <em>new-limit</em> is the return value. If the input offsets are out of bounds,
+     * the returned value will be 0 and the input string remains unchanged.
      * @stable
      */
     virtual int32_t transliterate(Replaceable& text,
@@ -460,6 +465,7 @@ public:
      * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index</code>
      * is invalid
+     * @see UTransPosition
      * @stable
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,
@@ -857,6 +863,8 @@ public:
     /**
      * Unregisters a transliterator or class.  This may be either
      * a system transliterator or a user transliterator or class.
+     * Any attempt to construct an unregistered transliterator based
+     * on its ID will fail.
      *
      * @param ID the ID of the transliterator or class
      * @return the <code>Object</code> that was registered with

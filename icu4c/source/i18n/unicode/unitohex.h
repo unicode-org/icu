@@ -35,6 +35,7 @@ class UnicodeFilter;
  * default is uppercase.
  *
  * @author Alan Liu
+ * @deprecated To be removed after 2002-sep-30.
  */
 class U_I18N_API UnicodeToHexTransliterator : public Transliterator {
 
@@ -93,7 +94,7 @@ public:
      * NULL if none.  Adopted by this transliterator.
      * @param status Error code indicating success or failure
      * to parse pattern.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30; use Transliterator::createInstance factory method.
      */
     UnicodeToHexTransliterator(const UnicodeString& pattern,
                                UBool isUppercase,
@@ -106,6 +107,7 @@ public:
      * applyPattern() for pattern syntax.
      * @param status Error code indicating success or failure
      * to parse pattern.
+     * @deprecated To be removed after 2002-sep-30; use Transliterator::createInstance factory method.
      */
     UnicodeToHexTransliterator(const UnicodeString& pattern,
                                UErrorCode& status);
@@ -113,19 +115,19 @@ public:
     /**
      * Constructs a transliterator with the default prefix "\u"
      * that outputs uppercase hex digits.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30; use Transliterator::createInstance factory method.
      */
     UnicodeToHexTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Destructor.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual ~UnicodeToHexTransliterator();
 
     /**
      * Copy constructor.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30; use Transliterator::createInstance factory method.
      */
     UnicodeToHexTransliterator(const UnicodeToHexTransliterator&);
 
@@ -137,7 +139,7 @@ public:
 
     /**
      * Transliterator API.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual Transliterator* clone(void) const;
 
@@ -166,31 +168,31 @@ public:
      * <p>Limitations: There is no way to set the uppercase attribute
      * in the pattern.  (applyPattern() does not alter the uppercase
      * attribute.)
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     void applyPattern(const UnicodeString& thePattern, UErrorCode& status);
 
     /**
      * Return this transliterator's pattern.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     const UnicodeString& toPattern(void) const;
 
     /**
      * Returns true if this transliterator outputs uppercase hex digits.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual UBool isUppercase(void) const;
 
     /**
      * Sets if this transliterator outputs uppercase hex digits.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual void setUppercase(UBool outputUppercase);
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;
