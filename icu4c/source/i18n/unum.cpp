@@ -687,12 +687,7 @@ unum_getSymbol(UNumberFormat *fmt,
   }
 
   UnicodeString s=((DecimalFormat *)fmt)->getDecimalFormatSymbols()->getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbol);
-  int32_t length=s.length();
-  if(buffer!=NULL && length<size-1) {
-    s.extract(0, length, buffer);
-    buffer[length]=0;
-  }
-  return length;
+  return s.extract(buffer, size, *status);
 }
 
 U_CAPI void U_EXPORT2
