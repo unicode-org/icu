@@ -47,20 +47,23 @@ U_CAPI void locale_set_default(const char *id);
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
-static const char* _kLocaleString   = "LocaleString";
-static const char* _kShortLanguage  = "ShortLanguage";
-static const char* _kShortCountry   = "ShortCountry";
 static const char* _kLocaleID       = "LocaleID";
 static const char* _kLanguages      = "Languages";
 static const char* _kCountries      = "Countries";
 
+#if 0
+/* We don't use these resources currently */
+static const char* _kLocaleString   = "LocaleString";
+static const char* _kShortLanguage  = "ShortLanguage";
+static const char* _kShortCountry   = "ShortCountry";
+#endif
 
 #define TEMPBUFSIZE 8
 
 /*Some static strings needed in the getDisplay* functions*/
 static const UChar openParen[] = { (UChar)0x0020 /* space */, (UChar)0x0028 /* ( */, (UChar)0x0000};
-static const UChar comma[] = { (UChar)0x002C /* space */, (UChar)0x0020 /* , */, (UChar)0x0000};
-static const UChar closeParen[] = { (UChar)0x0029 /* ( */, (UChar)0x0000};
+static const UChar comma[] = { (UChar)0x002C /* , */, (UChar)0x0020 /* space */, (UChar)0x0000};
+static const UChar closeParen[] = { (UChar)0x0029 /* ) */, (UChar)0x0000};
 
 
 static char _defaultLocale[ULOC_FULLNAME_CAPACITY] = "en_US";
