@@ -14,22 +14,14 @@
 *   created by: Markus W. Scherer
 */
 
-/* set import/export definitions */
-#ifndef U_COMMON_IMPLEMENTATION
-#   define U_COMMON_IMPLEMENTATION
-#endif
-
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
-#include "unicode/uset.h"
-#include "uset_imp.h"
 #include "ustr_imp.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "ucln_cmn.h"
-#include "uprops.h"
 #include "udataswp.h"
 
 /* prototypes ------------------------------------------------------------- */
