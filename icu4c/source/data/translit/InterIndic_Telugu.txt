@@ -133,8 +133,10 @@
 \uE07E>;       # IRI
 \uE07F>;       # URA
 \uE080>;       # EK ONKAR
-\uE081>\u0c35;  # FALLBACK FOR ORIYA LETTER WA 
-0 > \u0c66;       # FALLBACK FOR TAMIL
+\uE081>\u0c35; # FALLBACK FOR ORIYA LETTER WA 
+\uE082>;       # Devanagari Glottal Stop
+\uE083>\u0c24\u0c4d;  # Bengali Khanda-ta
+0 > \u0c66;    # FALLBACK FOR TAMIL
 1 > \u0c67;
 
 #    :: NFC (NFD) ;

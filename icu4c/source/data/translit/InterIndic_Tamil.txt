@@ -61,7 +61,7 @@
 \ue033>\u0bb3; # LETTER LLA
 \ue034>\u0bb4; # LETTER LLLA
 \ue035>\u0bb5; # LETTER VA
-\ue036>\u0bb7; # REMAP (indicExceptions.txt): \u0bb6>\u0bb7 = LETTER SHA>LETTER SSA
+\ue036>\u0bb6; # REMAP (indicExceptions.txt): \u0bb6>\u0bb7 = LETTER SHA>LETTER SSA
 \ue037>\u0bb7; # LETTER SSA
 \ue038>\u0bb8; # LETTER SA
 \ue039>\u0bb9; # LETTER HA
@@ -141,7 +141,9 @@
 \uE07E>;       # IRI
 \uE07F>;       # URA
 \uE080>;       # EK ONKAR
-\uE081>\u0bb5;  # FALLBACK FOR ORIYA LETTER WA 
+\uE081>\u0bb5; # FALLBACK FOR ORIYA LETTER WA 
+\uE082>;       # Devanagari Glottal Stop
+\uE083>\u0ba4\u0bcd;  # Bengali Khanda-ta
 
 1000  >\u0BF2; # NUMBER ONE THOUSAND
 100   >\u0BF1; # NUMBER ONE HUNDRED
