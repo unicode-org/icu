@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/03/19 17:30:56 $
-* $Revision: 1.19 $
+* $Date: 2003/04/23 20:18:42 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -60,11 +60,11 @@ final class UCD_Names implements UCD_Types {
         "Line Break (listing LineBreak.txt, field 1)\r\n"
             + "#\tAll code points not explicitly listed in this file have the property\r\n"
             + "#\tvalue:   XX.",
-        "Joining Type (listing ArabicShaping.txt, field 1).\r\n"
+        "Joining Type (listing ArabicShaping.txt, field 2).\r\n"
             + "#\tType T is derived, as described in ArabicShaping.txt\r\n"
             + "#\tAll code points not explicitly listed in this file have the property\r\n"
             + "#\tvalue:   U.",
-        "Joining Group (listing ArabicShaping.txt, field 2)\r\n"
+        "Joining Group (listing ArabicShaping.txt, field 3)\r\n"
             + "#\tAll code points not explicitly listed in this file have the property\r\n"
             + "#\tvalue:   NO_JOINING_GROUP.",
         "BidiMirrored (listing UnicodeData.txt, field 9: see UCD.html)\r\n"

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2003/04/03 02:29:31 $
-* $Revision: 1.6 $
+* $Date: 2003/04/23 20:18:43 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -32,6 +32,47 @@ abstract public class GenerateBreakTest implements UCD_Types {
     public static void main(String[] args) throws IOException {
         System.out.println("Remember to add length marks (half & full) and other punctuation for sentence, with FF61");
         //Default.setUCD();
+        
+        if (false) {
+            
+            PrintWriter log = Utility.openPrintWriter("Diff.txt", Utility.UTF8_WINDOWS);
+            UnicodeSet Term = new UnicodeSet(
+                "[\\u0021\\u003F\\u0589\\u061F\\u06D4\\u0700\\u0701\\u0702\\u0964\\u1362\\u1367"
+                + "\\u1368\\u104A\\u104B\\u166E\\u1803\\u1809\\u203C\\u203D\\u2047\\u2048\\u2049"
+                + "\\u3002\\uFE52\\uFE57\\uFF01\\uFF0E\\uFF1F\\uFF61]");
+            UnicodeSet terminal_punctuation = getSet(BINARY_PROPERTIES, Terminal_Punctuation);
+            UnicodeMap names = new UnicodeMap();
+            names.add("Pd", getSet(CATEGORY, Pd));
+            names.add("Ps", getSet(CATEGORY, Ps));
+            names.add("Pe", getSet(CATEGORY, Pe));
+            names.add("Pc", getSet(CATEGORY, Pc));
+            names.add("Po", getSet(CATEGORY, Po));
+            names.add("Pi", getSet(CATEGORY, Pi));
+            names.add("Pf", getSet(CATEGORY, Pf));
+            
+            Utility.showSetDifferences(log, "Term", Term, "Terminal_Punctuation", terminal_punctuation, true, true, names, Default.ucd);
+            Utility.showSetDifferences(log, "Po", getSet(CATEGORY, Po), "Terminal_Punctuation", terminal_punctuation, true, true, names, Default.ucd);
+            log.close();
+            
+            if (true) return;
+                
+            UnicodeSet whitespace = getSet(BINARY_PROPERTIES, White_space);
+            UnicodeSet space = getSet(CATEGORY, Zs).addAll(getSet(CATEGORY, Zp)).addAll(getSet(CATEGORY, Zl));
+            Utility.showSetDifferences("White_Space", whitespace, "Z", space, true, Default.ucd);
+            
+            UnicodeSet isSpace = new UnicodeSet();
+            UnicodeSet isSpaceChar = new UnicodeSet();
+            UnicodeSet isWhitespace = new UnicodeSet();
+            for (int i = 0; i <= 0xFFFF; ++i) {
+                if (Character.isSpace((char)i)) isSpace.add(i);
+                if (Character.isSpaceChar((char)i)) isSpaceChar.add(i);
+                if (Character.isWhitespace((char)i)) isWhitespace.add(i);
+            }
+            Utility.showSetDifferences("White_Space", whitespace, "isSpace", isSpace, true, Default.ucd);
+            Utility.showSetDifferences("White_Space", whitespace, "isSpaceChar", isSpaceChar, true, Default.ucd);
+            Utility.showSetDifferences("White_Space", whitespace, "isWhitespace", isWhitespace, true, Default.ucd);
+            return;
+        }
         
         if (DEBUG) {
             checkDecomps();
@@ -560,7 +601,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
             out.println("<p><b>Suppressed:</b> ");
             for (int i = 0; i < skippedSamples.length; ++i) {
                 if (skippedSamples[i] > 0) {
-                    out.println(getTypeID(UTF16.valueOf(skippedSamples[i]), true));
+                    String tmp = UTF16.valueOf(skippedSamples[i]);
+                    out.println("<span title='" + getInfo(tmp) + "'>" + getTypeID(tmp, true) + "</span>");
                 }
             }
             out.println("</p>");
@@ -790,8 +832,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         static final UnicodeMap map = new UnicodeMap();
         static final int
-            CR =    map.add("CR",    new UnicodeSet(0xA, 0xA)),
-            LF =    map.add("LF",    new UnicodeSet(0xD, 0xD)),
+            CR =    map.add("CR",    new UnicodeSet(0xD, 0xD)),
+            LF =    map.add("LF",    new UnicodeSet(0xA, 0xA)),
             Control = map.add("Control", 
                         getSet(CATEGORY, Cc)
                 .addAll(getSet(CATEGORY, Cf))
@@ -1324,12 +1366,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (before == LB_ZW) return true;
 
             // LB 6  Don’t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
-            setRule("6: GC -> FC");
+            setRule("6: DGC -> FC");
             if (!grapheme.isBreak( source,  offset,  recommended)) return false;
-            
-            setRule("6a: X CM* -> X");
-            if (after == LB_CM) return false;
-
             
             /*
             if (before == LB_L && (after == LB_L || after == LB_V || after == LB_LV || after == LB_LVT)) return false;
@@ -1337,14 +1375,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if ((before == LB_LVT || before == LB_T) && (after == LB_T)) return false;
             */
             
+            byte backBase = -1;
             boolean setBase = false;
             if (before == LB_CM) {
                 setBase = true;
                 int backOffset = findLastNon(source, offset, LB_CM, recommended);
-                if (backOffset < 0) {
-                    before = LB_ID;
-                } else {
-                    before = getResolvedType(UTF16.charAt(source, backOffset), recommended);
+                if (backOffset >= 0) {
+                    backBase = getResolvedType(UTF16.charAt(source, backOffset), recommended);
                 }
             }
             
@@ -1353,9 +1390,17 @@ abstract public class GenerateBreakTest implements UCD_Types {
             // the space is changed to type ID. In other words, break before SP CM* in the same cases as
             // one would break before an ID.
             setRule("7: SP CM* -> ID");
-            if (setBase && before == LB_SP) before = LB_ID;
+            if (setBase && backBase == LB_SP) before = LB_ID;
             if (after == LB_SP && after2 == LB_CM) after = LB_ID;
 
+            setRule("7a: X CM* -> X");
+            if (after == LB_CM) return false;
+            if (setBase && backBase != -1) before = LB_ID;
+
+            setRule("7b: CM -> AL");
+            if (setBase && backBase == -1) before = LB_AL;
+
+            
             // LB 8  Don’t break before ‘]’ or ‘!’ or ‘;’ or ‘/’,  even after spaces.
             // × CL, × EX, × IS, × SY
             setRule("8: × ( CL | EX | IS | SY )");
