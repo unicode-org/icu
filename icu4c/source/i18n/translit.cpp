@@ -855,35 +855,42 @@ void Transliterator::initializeCache(void) {
 
     ResourceBundle bundle((char *)0,
                           indexLoc, status);
+    ResourceBundle transIDs(bundle.get(RB_RULE_BASED_IDS, status));
 
-    int32_t rows, cols;
-    const UnicodeString** index =
-        bundle.get2dArray(RB_RULE_BASED_IDS, rows, cols, status);
-        
-    if (U_SUCCESS(status) && (cols == 4)) {
-        for (int32_t i=0; i<rows; ++i) {
-            const UnicodeString* row = index[i];
-            UChar type = row[1].charAt(0);
-            CacheEntry* entry = new CacheEntry();
-            if (type == 0x0066 || type == 0x0069) { // 'f', 'i'
-                // 'file' or 'internal'; row[2]=resource, row[3]=direction
-                UBool isReverse = (row[3].charAt(0) == 0x0052); // 'R'
-                entry->entryType = isReverse ?
-                    CacheEntry::RULES_REVERSE :
-                    CacheEntry::RULES_FORWARD;
-            } else { // assert(type == 0x0061 /*a*/)
-                // 'alias'; row[2]=createInstance argument
-                entry->entryType = CacheEntry::ALIAS;
+    int32_t row, maxRows;
+    if (U_SUCCESS(status)) {
+        maxRows = transIDs.getSize();
+        for (row = 0; row < maxRows; row++) {
+            ResourceBundle colBund(transIDs.get(row, status));
+
+            if (U_SUCCESS(status) && colBund.getSize() == 4) {
+                UnicodeString id(colBund.getStringEx((int32_t)0, status));
+                UChar type = colBund.getStringEx(1, status).charAt(0);
+                UnicodeString resource(colBund.getStringEx(2, status));
+
+                if (U_SUCCESS(status)) {
+                    CacheEntry* entry = new CacheEntry();
+                    if (type == 0x0066 || type == 0x0069) { // 'f', 'i'
+                        // 'file' or 'internal'; row[2]=resource, row[3]=direction
+                        if ((colBund.getStringEx(3, status).charAt(0)) == 0x0052) {// 'R'
+                            entry->entryType = CacheEntry::RULES_REVERSE;
+                        } else {
+                            entry->entryType = CacheEntry::RULES_FORWARD;
+                        }
+                    } else { // assert(type == 0x0061 /*a*/)
+                        // 'alias'; row[2]=createInstance argument
+                        entry->entryType = CacheEntry::ALIAS;
+                    }
+                    entry->stringArg = resource;
+                    // Use internalCache for 'internal' entries
+                    Hashtable* c = (type == 0x0069/*i*/) ? internalCache : cache;
+                    c->put(id, entry, status);
+                    // cacheIDs owns & should delete the following string
+                    cacheIDs.addElement((void*) new UnicodeString(id));
+                }
             }
-            entry->stringArg = UnicodeString(row[2]);
-            // Use internalCache for 'internal' entries
-            Hashtable* c = (type == 0x0069/*i*/) ? internalCache : cache;
-            c->put(row[0], entry, status);
-            // cacheIDs owns & should delete the following string
-            cacheIDs.addElement((void*) new UnicodeString(row[0]));
         }
     }
-
     // Manually add prototypes that the system knows about to the
     // cache.  This is how new non-rule-based transliterators are
     // added to the system.
