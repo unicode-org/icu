@@ -2,8 +2,6 @@
 ## Cygwin-specific setup
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-cygwin,v 1.20 2004/04/01 00:21:57 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)

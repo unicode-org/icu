@@ -2,8 +2,6 @@
 ## IRIX-specific setup (for CC)
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-irix,v 1.25 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -shared
