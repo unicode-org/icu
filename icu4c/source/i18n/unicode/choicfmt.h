@@ -628,7 +628,7 @@ public:
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
-    /*
+    /**
      * Finds the least double greater than d (if positive == true),
      * or the greatest double less than d (if positive == false).
      * If NaN, returns same value.

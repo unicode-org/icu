@@ -167,18 +167,15 @@ public:
   virtual UBool        hasNext() = 0;
 
 protected:
-  /*Constructor*/
+  /** Default constructor to be overridden in the implementing class. */
   ForwardCharacterIterator() : UObject() {}
   
-  /* copy constructor
-  * @return the newly created Unicode Converter.
-  * */
+  /** Copy constructor to be overridden in the implementing class. */
   ForwardCharacterIterator(const ForwardCharacterIterator &other) : UObject(other) {}
   
   /**
-    * Assignment operator.  
-    * @return the newly created ForwardCharacterIterator.
-    */
+   * Assignment operator to be overridden in the implementing class.
+   */
   ForwardCharacterIterator &operator=(const ForwardCharacterIterator&) { return *this; }
 };
 
