@@ -1198,6 +1198,25 @@ public:
   inline int32_t getChar32Start(int32_t offset) const;
 
   /**
+   * Adjust a random-access offset so that
+   * it points behind a Unicode character.
+   * The offset that is passed in points behind
+   * any code unit of a code point,
+   * while the returned offset will point behind the last code unit
+   * of the same code point.
+   * In UTF-16, if the input offset points behind the first surrogate
+   * (i.e., to the second surrogate)
+   * of a surrogate pair, then the returned offset will point
+   * behind the second surrogate (i.e., to the first surrogate).
+   * @param offset a valid offset after any code unit of a code point of the text
+   * @return offset of the first code unit after the same code point
+   * @see U16_SET_CP_LIMIT
+   * @draft ICU 2.0
+   */
+  inline int32_t getChar32Limit(int32_t offset) const;
+
+#ifdef ICU_UNICODESTRING_USE_DEPRECATES
+  /**
    * Same as getChar32Start().
    * This original function name (without "32")
    * was meant to look like UTF_SET_CHAR_START,
@@ -1219,24 +1238,6 @@ public:
    * @deprecated To be removed after 2002-sep-30. Use getChar32Start().
    */
   inline int32_t getCharStart(int32_t offset) const;
-
-  /**
-   * Adjust a random-access offset so that
-   * it points behind a Unicode character.
-   * The offset that is passed in points behind
-   * any code unit of a code point,
-   * while the returned offset will point behind the last code unit
-   * of the same code point.
-   * In UTF-16, if the input offset points behind the first surrogate
-   * (i.e., to the second surrogate)
-   * of a surrogate pair, then the returned offset will point
-   * behind the second surrogate (i.e., to the first surrogate).
-   * @param offset a valid offset after any code unit of a code point of the text
-   * @return offset of the first code unit after the same code point
-   * @see U16_SET_CP_LIMIT
-   * @draft ICU 2.0
-   */
-  inline int32_t getChar32Limit(int32_t offset) const;
 
   /**
    * Same as getChar32Limit().
@@ -1261,6 +1262,18 @@ public:
    * @deprecated To be removed after 2002-sep-30. Use getChar32Limit().
    */
   inline int32_t getCharLimit(int32_t offset) const;
+
+  /**
+   * Determine if this string is empty.
+   * This function was renamed to isEmtpy() because it caused confusion.
+   * If you need to determine if a string is empty, then use isEmpty().
+   * If you want to remove a string's contents, then call truncate(0).
+   *
+   * @return TRUE if this string contains 0 characters, FALSE otherwise.
+   * @deprecated To be removed after 2002-sep-30. Use isEmtpy() or truncate(0).
+   */
+  inline UBool empty(void) const;
+#endif
 
   /**
    * Move the code unit index along the string by delta code points.
@@ -1537,17 +1550,6 @@ public:
    * @draft ICU 2.0
    */
   inline UBool isEmpty(void) const;
-
-  /**
-   * Determine if this string is empty.
-   * This function was renamed to isEmtpy() because it caused confusion.
-   * If you need to determine if a string is empty, then use isEmpty().
-   * If you want to remove a string's contents, then call truncate(0).
-   *
-   * @return TRUE if this string contains 0 characters, FALSE otherwise.
-   * @deprecated To be removed after 2002-sep-30. Use isEmtpy() or truncate(0).
-   */
-  inline UBool empty(void) const;
 
   /**
    * Return the capacity of the internal buffer of the UnicodeString object.
@@ -3719,6 +3721,12 @@ UnicodeString::getChar32Limit(int32_t offset) const {
   }
 }
 
+inline UBool
+UnicodeString::isEmpty() const {
+  return fLength == 0;
+}
+
+#ifdef ICU_UNICODESTRING_USE_DEPRECATES
 inline int32_t
 UnicodeString::getCharStart(int32_t offset) const {
   return getChar32Start(offset);
@@ -3730,14 +3738,10 @@ UnicodeString::getCharLimit(int32_t offset) const {
 }
 
 inline UBool
-UnicodeString::isEmpty() const {
-  return fLength == 0;
-}
-
-inline UBool
 UnicodeString::empty() const {
   return isEmpty();
 }
+#endif
 
 //========================================
 // Read-only implementation methods
