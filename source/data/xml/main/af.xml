@@ -8,11 +8,19 @@
 <ldml>
 	<identity>
 		<version number="4.0"/>
-		<generation date="2003-12-17" />
+		<generation date="2003-12-18" />
 		<language type="af" /> 
 	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">Afrikaanse</language>
+		</languages>
+		<territories>
+			<territory type="ZA">Suid-Afrika</territory>
+		</territories>
+	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z á é è â ê î ô û ë ï ö ŉ]</exemplarCharacters>
+		<exemplarCharacters>[a-záéèâêîôûëïöŉ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
 				<icu:script type="1">Latn</icu:script>

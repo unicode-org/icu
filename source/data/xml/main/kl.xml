@@ -8,11 +8,19 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-17" />
+		<generation date="2003-12-18" />
 		<language type="kl" /> 
 	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="kl">kalaallisut</language>
+		</languages>
+		<territories>
+			<territory type="GL">Kalaallit Nunaat</territory>
+		</territories>
+	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z á é í ú â ê î ô û æ å ø ã ĩ ũ ĸ]</exemplarCharacters>
+		<exemplarCharacters>[a-záéíúâêîôûæåøãĩũĸ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
 				<icu:script type="1">Latn</icu:script>

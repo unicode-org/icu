@@ -8,9 +8,17 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-17" />
+		<generation date="2003-12-18" />
 		<language type="kw" /> 
 	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="kw">kernewek</language>
+		</languages>
+		<territories>
+			<territory type="GB">Rywvaneth Unys</territory>
+		</territories>
+	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
