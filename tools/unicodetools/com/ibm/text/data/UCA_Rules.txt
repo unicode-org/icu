@@ -1,7 +1,10 @@
-﻿#	NOTE: Since UCA handles canonical equivalents, no composites are necessary
+﻿#	UCA Rules
+#	This file contains the UCA tables for the given version, but transformed into rule syntax.
+#	Generated:   2002-06-27,15:51:27 GMT [MD]
+#	NOTE: Since UCA handles canonical equivalents, no composites are necessary
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
-# VERSION: UCA=3.1.1d2, UCD=3.2.0
+# VERSION: UCA=3.1.1d3, UCD=3.2.0
 & [last tertiary ignorable]
 
     =	 '\u0001'
@@ -4189,6 +4192,7 @@
  <	 s
    <<<	 ｓ
   <<	 ſ
+  <<	 ẛ / ̇
   <<	 ß / s
     =	 ﬆ / t
   <<	 ﬅ / t
@@ -5322,9 +5326,11 @@
  <	 ט
  <	 י
    <<<	 ײ / י
+   <<<	 ײַ / יַ
  <	 כ
    <<<	 ﬤ
    <<<	 ך
+   <<<	 ךּ / ּ
  <	 ל
    <<<	 ﬥ
  <	 מ
@@ -5337,6 +5343,7 @@
    <<<	 ﬠ
  <	 פ
    <<<	 ף
+   <<<	 ףּ / ּ
  <	 צ
    <<<	 ץ
  <	 ק
@@ -5410,11 +5417,11 @@
  <	 ا
    <<<	 ٵ / ٴ
    <<<	 ﺎ
+   <<<	 ﴼ / ً
    <<<	 ﺍ
+   <<<	 ﴽ / ً
    <<<	 ﷳ / كبر
     =	 ﷲ / لله
-  <<	 ﴼ
-   <<<	 ﴽ
  <	 ب
    <<<	 ﺑ
    <<<	 ﲜ / ج
@@ -6105,8 +6112,8 @@
    <<<	 ﮦ
  <	 ۃ
  <	 ە
-  <<	 ﮥ
-   <<<	 ﮤ
+   <<<	 ﮥ / ٔ
+   <<<	 ﮤ / ٔ
  <	 و
     =	 ۥ
    <<<	 ٶ / ٴ
@@ -6189,9 +6196,9 @@
  <	 ۑ
  <	 ے
    <<<	 ﮯ
+   <<<	 ﮱ / ٔ
    <<<	 ﮮ
-  <<	 ﮱ
-   <<<	 ﮰ
+   <<<	 ﮰ / ٔ
  <	 ܐ
  <	 ܒ
  <	 ܓ
@@ -7081,7 +7088,8 @@
  <	 ೈ
  <	 ೊ
     =	 ೊ
-   <<<	 ೋ / ೕ
+ <	 ೋ
+    =	 ೋ
  <	 ೌ
  <	 ್
  <	 ೕ
@@ -7225,7 +7233,8 @@
  <	 ෛ
  <	 ො
     =	 ො
-   <<<	 ෝ / ්
+ <	 ෝ
+    =	 ෝ
  <	 ෞ
  <	 ෟ
  <	 ෲ
@@ -10436,15 +10445,15 @@
 & 甲		# U+7532 CJK UNIFIED IDEOGRAPH-7532
    <<<	 ㆙
 & 大		# U+5927 CJK UNIFIED IDEOGRAPH-5927
-  <<	 ㍽ / 正
+   <<<	 ㍽ / 正
 & 平		# U+5E73 CJK UNIFIED IDEOGRAPH-5E73
-  <<	 ㍻ / 成
+   <<<	 ㍻ / 成
 & 明		# U+660E CJK UNIFIED IDEOGRAPH-660E
-  <<	 ㍾ / 治
+   <<<	 ㍾ / 治
 & 昭		# U+662D CJK UNIFIED IDEOGRAPH-662D
-  <<	 ㍼ / 和
+   <<<	 ㍼ / 和
 & 株		# U+682A CJK UNIFIED IDEOGRAPH-682A
-  <<	 ㍿ / 式会社
+   <<<	 ㍿ / 式会社
 & 耂		# U+8002 CJK UNIFIED IDEOGRAPH-8002
     =	 ⺹
 & 者		# U+8005 CJK UNIFIED IDEOGRAPH-8005
