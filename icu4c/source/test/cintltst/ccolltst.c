@@ -35,6 +35,8 @@ void addAllCollTest(TestNode**);
 void addRuleBasedCollTest(TestNode**);
 void addCollIterTest(TestNode**);
 
+void addMiscCollTest(TestNode**);
+
 void addCollTest(TestNode** root)
 {
     addCollAPITest(root);
@@ -52,6 +54,7 @@ void addCollTest(TestNode** root)
     addRuleBasedCollTest(root);
     addCollIterTest(root);
     addAllCollTest(root);
+    addMiscCollTest(root);
 }
 
 
