@@ -298,7 +298,6 @@ pl {
         "n.e.",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "arabski" }
         bg { "bu\u0142garski" }
         cs { "czeski" }

@@ -291,7 +291,6 @@ sk {
         "n.l.",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "arabsk\u00FD" }
         bg { "bulharsk\u00FD" }
         cs { "\u010Desk\u00FD" }

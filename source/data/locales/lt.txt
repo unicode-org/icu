@@ -293,7 +293,6 @@ lt {
         "po.Kr.",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "Arab\u0173" }
         bg { "Bulgar\u0173" }
         cs { "\u010Cekijos" }

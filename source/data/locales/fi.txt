@@ -155,7 +155,6 @@ fi {
         ZM { "Sambia" }
     }
     Languages { 
-        Fallback{ "en"}
         af { "afrikanhollanti" }
         am { "amharan kieli" }
         ar { "arabia" }

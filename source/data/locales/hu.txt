@@ -258,7 +258,6 @@ hu {
         //ZW { "Zimbabwe" }
     }
     Languages { 
-        Fallback{ "en"}
         ar { "arab" }
         bg { "bolg\u00E1r" }
         cs { "cseh" }
