@@ -706,13 +706,16 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       uint32_t len = tok->expansion >> 24;
       uint32_t currentSequenceLen = len;
       uint32_t expOffset = tok->expansion & 0x00FFFFFF;
-      uint32_t exp = currentSequenceLen | expOffset;
+      //uint32_t exp = currentSequenceLen | expOffset;
+      UColToken exp;
+      exp.source = currentSequenceLen | expOffset;
+      exp.rulesToParse = src->source;
 
       while(len > 0) {
         currentSequenceLen = len;
         while(currentSequenceLen > 0) {
-          exp = (currentSequenceLen << 24) | expOffset;
-          if((expt = (UColToken *)uhash_get(src->tailored, (void *)exp)) != NULL && expt->strength != UCOL_TOK_RESET) { /* expansion is tailored */
+          exp.source = (currentSequenceLen << 24) | expOffset;
+          if((expt = (UColToken *)uhash_get(src->tailored, &exp)) != NULL && expt->strength != UCOL_TOK_RESET) { /* expansion is tailored */
             uint32_t noOfCEsToCopy = expt->noOfCEs;
             for(j = 0; j<noOfCEsToCopy; j++) {
               tok->expCEs[tok->noOfExpCEs + j] = expt->CEs[j];
