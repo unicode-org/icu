@@ -577,9 +577,9 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
 
 	  // srl write out default.col
 	  {
-	    UnicodeString defLocaleName = ResourceBundle::kDefaultFilename; 
-	    char *binaryFilePath = createPathName(Locale::getDataDirectory(), 
-						  defLocaleName, kFilenameSuffix);
+	    UnicodeString defLocaleName = UnicodeString(ResourceBundle::kDefaultFilename,""); 
+	    char *binaryFilePath = createPathName(UnicodeString(Locale::getDataDirectory(),""), 
+						  defLocaleName, UnicodeString(kFilenameSuffix,""));
 	    bool_t ok = writeToFile(binaryFilePath);
 	    delete [] binaryFilePath;
 #ifdef COLLDEBUG
@@ -700,8 +700,8 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     data = 0;
   }
   
-  char *binaryFilePath = createPathName(Locale::getDataDirectory(), 
-					localeFileName, kFilenameSuffix);
+  char *binaryFilePath = createPathName(UnicodeString(Locale::getDataDirectory(),""), 
+					localeFileName, UnicodeString(kFilenameSuffix,""));
   
   if(tryBinaryFile) {
     // Try to load up the collation from a binary file first
@@ -714,7 +714,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     }
 
   // Now try to load it up from a resource bundle text source file
-  ResourceBundle bundle(Locale::getDataDirectory(), localeFileName, status);
+  ResourceBundle bundle(UnicodeString(Locale::getDataDirectory(),""), localeFileName, status);
 
   // if there is no resource bundle file for the give locale, break out
   if(U_FAILURE(status))
@@ -2400,7 +2400,7 @@ RuleBasedCollator::createPathName(  const UnicodeString&    prefix,
 
     size = workingName.size();
     returnVal = new char[size + 1];
-    workingName.extract(0, size, returnVal);
+    workingName.extract(0, size, returnVal, "");
     returnVal[size] = 0;
 
     return returnVal;

@@ -406,7 +406,7 @@ Locale::getVariant(UnicodeString& var) const
 UnicodeString& 
 Locale::getName(UnicodeString& name) const
 {
-  name = fullName;
+    name = UnicodeString(fullName,"");
   return name;
 }
 
