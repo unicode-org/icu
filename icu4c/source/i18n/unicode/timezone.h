@@ -10,15 +10,16 @@
 *   04/21/97    aliu        Overhauled header.
 *   07/09/97    helena      Changed createInstance to createDefault.
 *   08/06/97    aliu        Removed dependency on internal header for Hashtable.
-*    08/10/98    stephen        Changed getDisplayName() API conventions to match
-*    08/19/98    stephen        Changed createTimeZone() to never return 0
-*    09/02/98    stephen        Sync to JDK 1.2 8/31
-*                             - Added getOffset(... monthlen ...)
-*                             - Added hasSameRules()
-*    09/15/98    stephen        Added getStaticClassID
-*  12/03/99     aliu        Moved data out of static table into icudata.dll.
+*   08/10/98    stephen        Changed getDisplayName() API conventions to match
+*   08/19/98    stephen        Changed createTimeZone() to never return 0
+*   09/02/98    stephen        Sync to JDK 1.2 8/31
+*                            - Added getOffset(... monthlen ...)
+*                            - Added hasSameRules()
+*   09/15/98    stephen        Added getStaticClassID
+*   12/03/99    aliu        Moved data out of static table into icudata.dll.
 *                           Hashtable replaced by new static data structures.
-*  12/14/99     aliu        Made GMT public.
+*   12/14/99    aliu        Made GMT public.
+*   08/15/01    grhoten     Made GMT private and added the getGMT() function
 ********************************************************************************
 */
 
@@ -65,8 +66,6 @@
  * when you specify a custom time zone ID does not include
  * daylight savings time.
  *
-
-
  * TimeZone is an abstract class representing a time zone.  A TimeZone is needed for
  * Calendar to produce local time for a particular time zone.  A TimeZone comprises
  * three basic pieces of information:<ul>
@@ -108,11 +107,21 @@ public:
      */
     virtual ~TimeZone();
 
+#ifdef ICU_TIMEZONE_USE_DEPRECATES
     /**
      * The GMT zone has a raw offset of zero and does not use daylight
      * savings time.
+     * @deprecated This variable can be improperly intialized when used during
+     * the static initialization process.  Use getGMT() instead.
      */
     static const TimeZone* GMT;
+#endif
+
+    /**
+     * The GMT time zone has a raw offset of zero and does not use daylight
+     * savings time. This is a commonly used time zone.
+     */
+    static const TimeZone* getGMT(void);
 
     /**
      * Creates a <code>TimeZone</code> for the given ID.
@@ -504,6 +513,12 @@ protected:
     TimeZone();
 
     /**
+     * Construct a timezone with a given ID.
+     * @stable
+     */
+    TimeZone(const UnicodeString &id);
+
+    /**
      * Copy constructor.
      * @stable
      */
@@ -528,11 +543,6 @@ private:
      * that, uses the platform-specific default time zone.  Failing that, uses GMT.
      */
     static void             initDefault(void);
-
-    /**
-     * Get the the GMT TimeZone.
-     */
-    static const TimeZone  *getGMT(void);
 
     // See source file for documentation
     static TimeZone* createSystemTimeZone(const UnicodeString& name);
