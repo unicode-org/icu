@@ -354,20 +354,20 @@ typedef enum UErrorCode {
      */
 
     U_USING_FALLBACK_WARNING  = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
-    /** @deprecated use the enum that ends in _WARNING */
+    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
     U_USING_FALLBACK_ERROR    = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
 
     U_ERROR_WARNING_START     = -128,   /**< Start of information results (semantically successful) */
 
-    /** @deprecated use the enum that ends in _WARNING */
+    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
     U_ERROR_INFO_START        = U_ERROR_WARNING_START,   /**< Start of information results (semantically successful) */
 
     U_USING_DEFAULT_WARNING   = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
-    /** @deprecated use the enum that ends in _WARNING */
+    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
     U_USING_DEFAULT_ERROR     = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
 
     U_SAFECLONE_ALLOCATED_WARNING = -126, /**< A SafeClone operation required allocating memory (informational only) */
-    /** @deprecated use the enum that ends in _WARNING */
+    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
     U_SAFECLONE_ALLOCATED_ERROR = -126, /**< A SafeClone operation required allocating memory (informational only) */
     
     U_STATE_OLD_WARNING       = -125,   /**< ICU has to use compatibility layer to construct the service. Expect performance/memory usage degradation. Consider upgrading */
@@ -380,7 +380,7 @@ typedef enum UErrorCode {
 
     U_ERROR_WARNING_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
     
-    /** @deprecated use the enum that ends in _WARNING */
+    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
     U_ERROR_INFO_LIMIT        = U_ERROR_WARNING_LIMIT,  /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */        
 
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
