@@ -12,18 +12,26 @@
                      }
     TestData {
         da_TestPrimary {
-            TestLocale { "da" }
-            Arguments { "[strength 1]" }
-            TestData {
+            Settings {
+                {
+                    Locale { "da_DK" }
+                    Attributes { "[strength 1]" }
+                }
+            }
+            TestCases {
                 "Lvi=Lwi",
                 "Lävi<Löwi",
                 "Lübeck=Lybeck",
             }
         }
         da_TestTertiary {
-            TestLocale { "da" }
-            Arguments { "[strength 3]" }
-            TestData {
+            Settings {
+                {
+                    Locale { "da_DK" }
+                    Attributes { "[strength 3]" }
+                }
+            }
+            TestCases {
                 "Luc<luck",
                 "luck<Lübeck",
                 "Lübeck>lybeck",
