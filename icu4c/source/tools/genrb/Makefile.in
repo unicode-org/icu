@@ -120,7 +120,7 @@ $(top_builddir)/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
 	ICU_DATA=$(top_builddir)/data $(INVOKE) ./$(TARGET) -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
 
-$(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
+$(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt $(TARGET)
 	@echo "Creating compiled resource file for $<"
 	@ICU_DATA=$(top_builddir)/data $(INVOKE) ./$(TARGET) -s $(top_srcdir)/../data/ -d $(top_builddir)/data/ $(<F)
 
