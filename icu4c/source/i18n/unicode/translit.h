@@ -466,16 +466,17 @@ public:
      * transliterated unambiguosly after a new character has been
      * inserted, typically as a result of a keyboard event.  This is a
      * convenience method; see {@link
-     * #transliterate(Replaceable, UTransPosition, UnicodeString)} for details.
+     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const}
+     * for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, UTransPosition, UnicodeString)}.
+     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
      * <code>index.limit</code>.
      * @param status    Output param to filled in with a success or an error.
-     * @see #transliterate(Replaceable, UTransPosition, UnicodeString)
+     * @see #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const
      * @stable ICU 2.0
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,
@@ -485,12 +486,13 @@ public:
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
-     * {@link #transliterate(Replaceable, UTransPosition, UnicodeString)} for
-     * details.
+     * {@link
+     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }
+     * for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, UTransPosition, UnicodeString)}.
+     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }.
      * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, int[], String)
      * @stable ICU 2.0
