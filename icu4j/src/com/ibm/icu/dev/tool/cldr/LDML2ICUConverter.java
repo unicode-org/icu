@@ -1665,6 +1665,7 @@ public class LDML2ICUConverter {
                 continue;
             }
             String name = node.getNodeName();
+	//System.out.println(root.getNodeName() + " _ " + name);
             ICUResourceWriter.Resource res = null;
             
             if(name.equals(LDMLConstants.ALIAS)){
@@ -3853,7 +3854,13 @@ public class LDML2ICUConverter {
                     str.name = "\"%%ALIAS\"";
                     str.val = toLocale.toString();
                     table.first = str;
-                } 
+                } else {
+			ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
+		   str.name = "___";
+		   str.val = "";
+		   str.comment =  "so genrb doesn't issue warnings";
+		   table.first = str;
+		}
                 set = table;
 				if( comment != null ) {
 					set.comment = comment;
