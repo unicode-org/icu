@@ -1255,14 +1255,18 @@ ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *f
   }
 
   /* here we do looping and circular alias checking */
-
-  res = res_findResource(&(resB->fResData), resB->fRes, &path, &key); 
-
-  if(res != RES_BOGUS) {
-    result = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
-  } else {
-    *status = U_MISSING_RESOURCE_ERROR;
-  }
+  /* this loop is here because aliasing is resolved on this level, not on res level */
+  /* so, when we encounter an alias, it is not an aggregate resource, so we return */
+  do {
+    res = res_findResource(&(resB->fResData), resB->fRes, &path, &key); 
+    if(res != RES_BOGUS) {
+        result = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
+        resB = result;
+    } else {
+        *status = U_MISSING_RESOURCE_ERROR;
+        break;
+    }
+  } while(uprv_strlen(path)); /* there is more stuff in the path */
 
   return result;
 }
