@@ -80,8 +80,12 @@ writeCCode(const char *filename) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    T_FileStream_writeLine(out, "#include \"utypes.h\"\nU_CAPI const uint8_t U_EXPORT2 ");
+    T_FileStream_writeLine(out, "#include \"utypes.h\"\nU_CAPI const struct U_EXPORT2 {\n    double bogus;\n    uint8_t bytes ");
 
+    T_FileStream_writeLine(out, "[");
+    sprintf(buffer, "%d",  T_FileStream_size(in) );
+    T_FileStream_writeLine(out, buffer);
+    T_FileStream_writeLine(out, "]; \n} ");
     for(i=0;i<strlen(entry);i++)
       {
 	if(entry[i]=='-')
@@ -90,8 +94,8 @@ writeCCode(const char *filename) {
         }
       }
 
-    T_FileStream_writeLine(out, entry);
-    T_FileStream_writeLine(out, "[]={\n");
+    T_FileStream_writeLine(out, entry); 
+    T_FileStream_writeLine(out,"={ 0, {\n");
 
     for(;;) {
         length=T_FileStream_read(in, buffer, sizeof(buffer));
@@ -103,7 +107,7 @@ writeCCode(const char *filename) {
         }
     }
 
-    T_FileStream_writeLine(out, "\n};\n");
+    T_FileStream_writeLine(out, "\n}\n};\n");
 
     if(T_FileStream_error(in)) {
         fprintf(stderr, "genccode: file read error while generating from file %s\n", filename);

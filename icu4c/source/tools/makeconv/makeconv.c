@@ -153,7 +153,7 @@ static const UDataInfo dataInfo={
     0,
 
     0x63, 0x6e, 0x76, 0x74,     /* dataFormat="cnvt" */
-    1, 0, 0, 0,                 /* formatVersion */
+    2, 0, 0, 0,                 /* formatVersion */
     1, 3, 1, 0                  /* dataVersion */
 };
 
@@ -238,121 +238,6 @@ int main(int argc, char** argv)
 
   return err;
       
-}
-
-
-/*Streams out to a file a compact short array*/
-void writeCompactShortArrayToFile(FileStream* outfile, const CompactShortArray* myArray)
-{
-  int32_t i = 0;
-  const int16_t* myShortArray = NULL;
-  const uint16_t* myIndexArray = NULL;
-  int32_t myValuesCount = 0;
-  int32_t myIndexCount = ucmp16_getkUnicodeCount() / ucmp16_getkBlockCount();
-  int32_t myBlockShift = myArray->kBlockShift;
-  
-  /*streams out the length of the arrays to come*/
-  myValuesCount = myArray->fCount;
-  T_FileStream_write(outfile, &myValuesCount, sizeof(int32_t));
-  T_FileStream_write(outfile, &myIndexCount, sizeof(int32_t));
-  T_FileStream_write(outfile, &myBlockShift, sizeof(int32_t));
-
-  /*Gets pointers to the internal arrays*/
-  myShortArray = myArray->fArray;
-  myIndexArray = myArray->fIndex;
-
-  /*streams out the 2 arrays*/
-  T_FileStream_write(outfile, myShortArray, myValuesCount*sizeof(int16_t));
-  T_FileStream_write(outfile, myIndexArray, myIndexCount*sizeof(uint16_t));
-  
-  
-  return ;
-}
-
-void writeCompactByteArrayToFile(FileStream* outfile, const CompactByteArray* myArray)
-{
-  int32_t i = 0;
-  const int8_t* myByteArray = NULL;
-  const uint16_t* myIndexArray = NULL;
-  int32_t myValuesCount = 0;
-  int32_t myIndexCount = ucmp8_getkUnicodeCount() / ucmp8_getkBlockCount();
-  
-  /*streams out the length of the arrays to come*/
-  myValuesCount = ucmp8_getCount(myArray);
-  T_FileStream_write(outfile, &myValuesCount, sizeof(int32_t));
-  T_FileStream_write(outfile, &myIndexCount, sizeof(int32_t));
-
-  /*Gets pointers to the internal arrays*/
-  myByteArray =  myArray->fArray;
-  myIndexArray =  myArray->fIndex;
-
-  /*streams out the 2 arrays*/
-  T_FileStream_write(outfile, myByteArray, myValuesCount*sizeof(int8_t));
-  T_FileStream_write(outfile, myIndexArray, myIndexCount*sizeof(uint16_t));
-  
-  return ;
-}
-
-void writeUConverterSharedDataToFile(const char* filename,
-				     UConverterSharedData* mySharedData,
-				     UErrorCode* err)
-{
-  int32_t i = 0;
-  const int8_t* myByteArray = NULL;
-  const uint16_t* myIndexArray = NULL;
-  int32_t myValuesCount = 0;
-  int32_t myIndexCount = 0;
-  int32_t myCheck = UCNV_FILE_CHECK_MARKER;
-  FileStream* outfile = NULL;
-  UConverterTable* myTableAlias = NULL;
-  
-  if (U_FAILURE(*err)) return;
-  
-  outfile = T_FileStream_open(filename, "wb");
-  if (outfile == NULL) 
-    {
-      *err = U_FILE_ACCESS_ERROR;
-      return;
-    }
-
-  /*Writes a Sentinel value*/
-  T_FileStream_write(outfile, &myCheck, sizeof(int32_t));
-  T_FileStream_write(outfile, U_COPYRIGHT_STRING, U_COPYRIGHT_STRING_LENGTH);
-  
-  /*Writes NULL in places where there is a pointer in order
-   *to enable bitwise equivalence of binary files
-   */
-  myTableAlias = mySharedData->table;
-  mySharedData->table = NULL;
-  T_FileStream_write(outfile, mySharedData, sizeof(UConverterSharedData));
-  mySharedData->table = myTableAlias;
-  
-  switch (mySharedData->conversionType)
-    {
-    case UCNV_SBCS :
-      {
-	T_FileStream_write(outfile, mySharedData->table->sbcs.toUnicode, 256*sizeof(UChar));
-	writeCompactByteArrayToFile(outfile, mySharedData->table->sbcs.fromUnicode);
-      }break;
-    case UCNV_DBCS : case UCNV_EBCDIC_STATEFUL:
-      {
-	writeCompactShortArrayToFile(outfile, mySharedData->table->dbcs.toUnicode);
-	writeCompactShortArrayToFile(outfile, mySharedData->table->dbcs.fromUnicode);
-      }break;
-    case UCNV_MBCS : 
-      {
-	T_FileStream_write(outfile, mySharedData->table->mbcs.starters, 256*sizeof(bool_t));
-	writeCompactShortArrayToFile(outfile, mySharedData->table->mbcs.toUnicode);
-	writeCompactShortArrayToFile(outfile, mySharedData->table->mbcs.fromUnicode);
-      }break;
-      
-    };
-
-  if (T_FileStream_error(outfile)) 
-    {
-      *err = U_FILE_ACCESS_ERROR;
-    }
-  T_FileStream_close(outfile);
 }
 
 
@@ -892,30 +777,47 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
 
 static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData* data)
 {
-  udata_writeBlock(pData, data, sizeof(UConverterSharedData));
+    uint32_t size = 0;
+    
+    udata_writeBlock(pData, data, sizeof(UConverterSharedData));
 
-  switch (data->conversionType)
+    size += sizeof(UConverterSharedData); /* Is 4-aligned- it ends with a pointer */
+
+    switch (data->conversionType)
     {
     case UCNV_SBCS:
-      {
+    {
 	udata_writeBlock(pData, (void*)data->table->sbcs.toUnicode, sizeof(UChar)*256);
-	udata_write_ucmp8(pData, data->table->sbcs.fromUnicode);
+        size += udata_write_ucmp8(pData, data->table->sbcs.fromUnicode);
+        size += sizeof(UChar)*256;
+        /* don't care aboutalignment */
       }
-      break;
-
+    break;
+    
     case UCNV_DBCS:
     case UCNV_EBCDIC_STATEFUL:
       {
-	udata_write_ucmp16(pData,data->table->dbcs.toUnicode);
-	udata_write_ucmp16(pData,data->table->dbcs.fromUnicode);
+        size += udata_write_ucmp16(pData,data->table->dbcs.toUnicode);
+        if(size%4)
+        {
+            udata_writePadding(pData, 4-(size%4) );
+            size+= 4-(size%4);
+        }
+	size += udata_write_ucmp16(pData,data->table->dbcs.fromUnicode);
       }
       break;
 
     case UCNV_MBCS:
       {
 	udata_writeBlock(pData, data->table->mbcs.starters, 256*sizeof(bool_t));
-	udata_write_ucmp16(pData,data->table->mbcs.toUnicode);
-	udata_write_ucmp16(pData,data->table->mbcs.fromUnicode);
+        size += 256*sizeof(bool_t);
+	size += udata_write_ucmp16(pData,data->table->mbcs.toUnicode);
+        if(size%4)
+        {
+            udata_writePadding(pData, 4-(size%4) );
+            size+= 4-(size%4);
+        }
+	size += udata_write_ucmp16(pData,data->table->mbcs.fromUnicode);
       }
       break;
 

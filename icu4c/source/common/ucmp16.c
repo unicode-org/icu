@@ -465,6 +465,10 @@ U_CAPI  CompactShortArray * U_EXPORT2 ucmp16_cloneFromData(const uint8_t **sourc
   
   array->fAlias = TRUE;
   
+  /* eat up padding */
+  while((*source-((uint8_t*)oldArray))%4)
+      (*source)++;
+
   return array;
 
 }
