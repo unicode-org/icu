@@ -1,7 +1,6 @@
 package com.ibm.text;
 
 import java.text.*;
-import java.util.Dictionary;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
@@ -230,7 +229,7 @@ import java.util.Dictionary;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.7 $ $Date: 2000/01/18 21:39:27 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.8 $ $Date: 2000/02/03 18:10:05 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -322,9 +321,8 @@ public class UnicodeSet implements UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
-    public UnicodeSet(String pattern, ParsePosition pos,
-                      Dictionary varNameToChar, Dictionary varCharToSet) {
-        applyPattern(pattern, pos, varNameToChar, varCharToSet);
+    public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols) {
+        applyPattern(pattern, pos, symbols);
     }
 
     /**
@@ -351,7 +349,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void applyPattern(String pattern) {
         ParsePosition pos = new ParsePosition(0);
-        pairs = parse(pattern, pos, null, null);
+        pairs = parse(pattern, pos, null);
 
         // Skip over trailing whitespace
         int i = pos.getIndex();
@@ -382,9 +380,8 @@ public class UnicodeSet implements UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
-    private void applyPattern(String pattern, ParsePosition pos,
-                              Dictionary varNameToChar, Dictionary varCharToSet) {
-        pairs = parse(pattern, pos, varNameToChar, varCharToSet);
+    private void applyPattern(String pattern, ParsePosition pos, SymbolTable symbols) {
+        pairs = parse(pattern, pos, symbols);
     }
 
     /**
@@ -678,7 +675,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
     private static StringBuffer parse(String pattern, ParsePosition pos,
-                                      Dictionary varNameToChar, Dictionary varCharToSet) {
+                                      SymbolTable symbols) {
 
         StringBuffer pairsBuf = new StringBuffer();
         boolean invert = false;
@@ -797,7 +794,7 @@ public class UnicodeSet implements UnicodeFilter {
              * Variable names are only parsed if varNameToChar is not null.
              * Set variables are only looked up if varCharToSet is not null.
              */
-            else if (varNameToChar != null && !isLiteral && c == VARIABLE_REF_OPEN) {
+            else if (symbols != null && !isLiteral && c == VARIABLE_REF_OPEN) {
                 ++i;
                 int j = pattern.indexOf(VARIABLE_REF_CLOSE, i);
                 if (i == j || j < 0) { // empty or unterminated
@@ -805,19 +802,16 @@ public class UnicodeSet implements UnicodeFilter {
                 }
                 String name = pattern.substring(i, j);
                 ++j;
-                Character ch = (Character) varNameToChar.get(name);
-                if (ch == null) {
+                Object obj = symbols.lookup(name);
+                if (obj == null) {
                     throw new IllegalArgumentException("Undefined variable: "
                                                        + name);
                 }
-                c = ch.charValue();
                 isLiteral = true;
-
-                if (varCharToSet != null) {
-                    UnicodeSet set = (UnicodeSet) varCharToSet.get(ch);
-                    if (set != null) {
-                        nestedPairs = set.pairs.toString();
-                    }
+                if (obj instanceof Character) {
+                    c = ((Character) obj).charValue();
+                } else {
+                    nestedPairs = ((UnicodeSet) obj).pairs.toString();
                 }
             }
 
@@ -844,7 +838,7 @@ public class UnicodeSet implements UnicodeFilter {
                 } else {
                     // Recurse to get the pairs for this nested set.
                     pos.setIndex(i); // Add 2 to point AFTER op
-                    nestedPairs = parse(pattern, pos, varNameToChar, varCharToSet).toString();
+                    nestedPairs = parse(pattern, pos, symbols).toString();
                     i = pos.getIndex() - 1; // - 1 to point at ']'
                 }
             }
