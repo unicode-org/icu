@@ -28,6 +28,8 @@
 #include "uhash.h"
 #include "ucaelems.h"
 
+#define UPRV_CNTTAB_NEWELEMENT 0xFFFFFF
+
 typedef struct ContractionTable ContractionTable;
 struct ContractionTable {
     UChar *codePoints;

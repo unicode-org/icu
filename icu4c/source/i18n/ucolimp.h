@@ -297,7 +297,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        **result,
-        int32_t        resultLength,
+        uint32_t        resultLength,
         UBool allocatePrimary,
         UErrorCode *status);
 
