@@ -354,4 +354,17 @@ uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USet* set, UErrorCode *pErrorCode);
 
+/* forward declaration */
+struct UDataSwapper;
+typedef struct UDataSwapper UDataSwapper;
+
+/**
+ * Swap the ICU Unicode properties file. See uchar.c.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+uprops_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode);
+
 #endif
