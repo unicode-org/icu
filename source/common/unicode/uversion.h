@@ -190,14 +190,15 @@ u_getVersion(UVersionInfo versionArray);
  */
 #define UCOL_BUILDER_VERSION 5
 
-/** This is the version of FractionalUCA.txt tailoring rules
+/** *** Removed *** Instead we use the data we read from FractionalUCA.txt
+ * This is the version of FractionalUCA.txt tailoring rules
  * Version 1 was in ICU 1.8.1. Version two contains canonical closure for
  * supplementary code points 
  * Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 
  * This value may change in the subsequent releases of ICU
  * @draft ICU 2.4
  */
-#define UCOL_FRACTIONAL_UCA_VERSION 4
+/*#define UCOL_FRACTIONAL_UCA_VERSION 4*/
 
 /** This is the version of the tailorings 
  *  This value may change in the subsequent releases of ICU
