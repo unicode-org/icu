@@ -2014,47 +2014,27 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
           // What needs to be done is to replace the Hangul by 
           // 2 or 3 Jamos and move the rest of the normalization
           // buffer accordingly. 
-          if(!((source->flags) & UCOL_ITER_INNORMBUF)) {
-            // Move Jamos into normalization buffer
-            source->writableBuffer[0] = (UChar)L;
-            source->writableBuffer[1] = (UChar)V;
-            if (T != TBase) {
-              source->writableBuffer[2] = (UChar)T;
-              source->writableBuffer[3] = 0;
-            } else {
-              source->writableBuffer[2] = 0;
-            }
-
-            source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
-                                                           //   after exhausting the writableBuffer
-            source->pos   = source->writableBuffer;
-            source->origFlags         = source->flags;
-            source->flags            |= UCOL_ITER_INNORMBUF;
-            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
-
-            return(UCOL_IGNORABLE);
+          // But Markus says it is guaranteed that we won't be in
+          // the normalization buffer if something like this happens,
+          // so I will remove the bail out case
+          // Move Jamos into normalization buffer
+          source->writableBuffer[0] = (UChar)L;
+          source->writableBuffer[1] = (UChar)V;
+          if (T != TBase) {
+            source->writableBuffer[2] = (UChar)T;
+            source->writableBuffer[3] = 0;
           } else {
-            collIterate jamos;
-            UChar jamoString[3];
-            uint32_t CE = UCOL_NOT_FOUND;
-            const UCollator *collator = source->coll;
-            jamoString[0] = (UChar)L;
-            jamoString[1] = (UChar)V;
-            if (T != TBase) {
-              jamoString[2] = (UChar)T;
-              IInit_collIterate(collator, jamoString, 3, &jamos);
-            } else {
-              IInit_collIterate(collator, jamoString, 2, &jamos);
-            }
-
-            CE = ucol_IGetNextCE(collator, &jamos, status);
-
-            while(CE != UCOL_NO_MORE_CES) {
-              *(source->CEpos++) = CE;
-              CE = ucol_IGetNextCE(collator, &jamos, status);
-            }
-            return *(source->toReturn++);
+            source->writableBuffer[2] = 0;
           }
+
+          source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
+                                                         //   after exhausting the writableBuffer
+          source->pos   = source->writableBuffer;
+          source->origFlags         = source->flags;
+          source->flags            |= UCOL_ITER_INNORMBUF;
+          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+
+          return(UCOL_IGNORABLE);
         }
       }
     case CHARSET_TAG:
@@ -2480,9 +2460,6 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       }
       source->toReturn = source->CEpos - 1;
       return *(source->toReturn);
-    /* TODO: */
-    /* various implicits optimization */
-    /* need to fill out the collation table for them to work */
     case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
       {
         uint32_t
@@ -2526,64 +2503,44 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           // What needs to be done is to replace the Hangul by 
           // 2 or 3 Jamos and move the rest of the normalization
           // buffer accordingly. 
-          if(!((source->flags) & UCOL_ITER_INNORMBUF)) {
-            /*
-            Move the Jamos into the
-            normalization buffer 
-            */
-            UChar *tempbuffer = source->writableBuffer +
-                                (source->writableBufSize - 1);
-            *(tempbuffer) = 0;
-            if (T != TBase) {
-              *(tempbuffer - 1) = (UChar)T;
-              *(tempbuffer - 2) = (UChar)V;
-              *(tempbuffer - 3) = (UChar)L;
-              *(tempbuffer - 4) = 0;
-            } else {
-              *(tempbuffer - 1) = (UChar)V;
-              *(tempbuffer - 2) = (UChar)L;
-              *(tempbuffer - 3) = 0;
-            }
-
-            /*
-            Indicate where to continue in main input string after exhausting
-            the writableBuffer
-            */
-            if (source->pos  == source->string) {
-              source->fcdPosition = NULL;
-            } else {
-              source->fcdPosition       = source->pos-1;
-            }
-
-            source->pos               = tempbuffer;
-            source->origFlags         = source->flags;
-            source->flags            |= UCOL_ITER_INNORMBUF;
-            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
-
-            return(UCOL_IGNORABLE);
+          // But Markus says it is guaranteed that we won't be in
+          // the normalization buffer if something like this happens,
+          // so I will remove the bail out case
+          // Move Jamos into normalization buffer
+          /*
+          Move the Jamos into the
+          normalization buffer 
+          */
+          UChar *tempbuffer = source->writableBuffer +
+                              (source->writableBufSize - 1);
+          *(tempbuffer) = 0;
+          if (T != TBase) {
+            *(tempbuffer - 1) = (UChar)T;
+            *(tempbuffer - 2) = (UChar)V;
+            *(tempbuffer - 3) = (UChar)L;
+            *(tempbuffer - 4) = 0;
           } else {
-            collIterate jamos;
-            UChar jamoString[3];
-            uint32_t CE = UCOL_NOT_FOUND;
-            const UCollator *collator = source->coll;
-            jamoString[0] = (UChar)L;
-            jamoString[1] = (UChar)V;
-            if (T != TBase) {
-              jamoString[2] = (UChar)T;
-              IInit_collIterate(collator, jamoString, 3, &jamos);
-            } else {
-              IInit_collIterate(collator, jamoString, 2, &jamos);
-            }
-
-            CE = ucol_IGetNextCE(collator, &jamos, status);
-
-            while(CE != UCOL_NO_MORE_CES) {
-              *(source->CEpos++) = CE;
-              CE = ucol_IGetNextCE(collator, &jamos, status);
-            }
-            source->toReturn = source->CEpos - 1;
-            return *(source->toReturn);
+            *(tempbuffer - 1) = (UChar)V;
+            *(tempbuffer - 2) = (UChar)L;
+            *(tempbuffer - 3) = 0;
           }
+
+          /*
+          Indicate where to continue in main input string after exhausting
+          the writableBuffer
+          */
+          if (source->pos  == source->string) {
+            source->fcdPosition = NULL;
+          } else {
+            source->fcdPosition       = source->pos-1;
+          }
+
+          source->pos               = tempbuffer;
+          source->origFlags         = source->flags;
+          source->flags            |= UCOL_ITER_INNORMBUF;
+          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+
+          return(UCOL_IGNORABLE);
         }
       }
     case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
