@@ -238,6 +238,8 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     delete per_fr;
 }
 
+#if !UCONFIG_NO_SERVICE
+
 #define SRC_LOC Locale::getFrance()
 #define SWAP_LOC Locale::getUS()
 
@@ -280,6 +282,7 @@ private:
 };
 
 char NFTestFactory::gID = 0;
+#endif
 
 void
 IntlTestNumberFormatAPI::testRegistration() 
