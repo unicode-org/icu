@@ -1047,14 +1047,14 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
     }
 
     int32_t *boundaries = new int32_t[expectedResult->size() + 3];
-    boundaries[0] = BreakIterator.DONE;
+    boundaries[0] = BreakIterator::DONE;
     boundaries[1] = 0;
     for (int i = 0; i < expectedResult->size(); i++)
         boundaries[i + 2] = boundaries[i + 1] + ((UnicodeString)expectedResult->elementAt(i)).
                         length();
 	
     int len = expectedResult->size() + 3 -1;
-	boundaries[len] = BreakIterator.DONE;
+	boundaries[len] = BreakIterator::DONE;
   
     testFollowing(bi, text, boundaries);
     testPreceding(bi, text, boundaries);
@@ -1072,9 +1072,9 @@ Vector* IntlTestTextBoundary::testFirstAndNext(BreakIterator& bi, UnicodeString&
 
     if (p != 0)
         errln((UnicodeString)"first() returned " + p + (UnicodeString)" instead of 0");
-    while (p != BreakIterator.DONE) {
+    while (p != BreakIterator::DONE) {
         p = bi.next();
-        if (p != BreakIterator.DONE) {
+        if (p != BreakIterator::DONE) {
             if (p <= lastP)
                 errln((UnicodeString)"next() failed to move forward: next() on position "
                                 + lastP + (UnicodeString)" yielded " + p);
@@ -1101,9 +1101,9 @@ Vector* IntlTestTextBoundary::testLastAndPrevious(BreakIterator& bi, UnicodeStri
 
     if (p != text.length())
         errln((UnicodeString)"last() returned " + p + (UnicodeString)" instead of " + text.length());
-    while (p != BreakIterator.DONE) {
+    while (p != BreakIterator::DONE) {
         p = bi.previous();
-        if (p != BreakIterator.DONE) {
+        if (p != BreakIterator::DONE) {
             if (p >= lastP)
                 errln((UnicodeString)"previous() failed to move backward: previous() on position "
                                 + lastP + (UnicodeString)" yielded " + p);
