@@ -17,7 +17,6 @@ import com.ibm.icu.dev.demo.impl.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.8 $ $Date: 2004/03/26 20:01:58 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 

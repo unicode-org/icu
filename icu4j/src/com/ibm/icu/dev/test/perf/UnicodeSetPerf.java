@@ -3,8 +3,6 @@
 * Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/perf/UnicodeSetPerf.java,v $ 
-**********************************************************************
 */
 package com.ibm.icu.dev.test.perf;
 import com.ibm.icu.text.*;

@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/TransliterationChart.java,v $
- * $Date: 2003/11/15 01:42:43 $
- * $Revision: 1.1 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
 import com.ibm.icu.lang.UScript;

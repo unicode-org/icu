@@ -3,12 +3,6 @@
  * Copyright (C) 2000-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2004/03/12 20:56:34 $
- * $Revision: 1.20 $
- *
- *******************************************************************************
  */
 
 /**

@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2004/03/11 21:42:41 $ 
-* $Revision: 1.22 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.dev.test.lang;
