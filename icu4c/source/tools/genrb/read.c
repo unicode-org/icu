@@ -168,7 +168,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     break;
                 }
 
-                if (c == ESCAPE) {
+                if (c == ESCAPE  && !isFollowingCharEscaped) {
                     pTarget = target;
                     c       = unescape(buf, status);
 
