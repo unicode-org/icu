@@ -279,6 +279,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UnescapeTransliterator, "Hex-Any");
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
+    TESTCLASSID_CTOR(CaseMapTransliterator, (UnicodeString(), NULL));
 #if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL) ); /* don't care */
 #endif
