@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/06/18 00:58:21 $
-* $Revision: 1.41 $
+* $Date: 2003/07/29 23:08:09 $
+* $Revision: 1.42 $
 *
 *******************************************************************************
 */
@@ -2804,7 +2804,8 @@ public final class RuleBasedCollator extends Collator
             minlength = tlength;
         }
         while (result < minlength
-                && source.charAt(result) == target.charAt(result)) {
+                && source.charAt(result) == target.charAt(result)
+                && !CollationElementIterator.isThaiPreVowel(source.charAt(result))) {
             result ++;
         }
         if (result > 0) {

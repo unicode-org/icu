@@ -5,17 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/06/03 18:49:29 $
- * $Revision: 1.12 $
+ * $Date: 2003/07/29 23:08:06 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.ModuleTest;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Utility;
@@ -45,6 +47,111 @@ public class CollationTest extends ModuleTest
     public void processModules() {
         while (nextSettings()) {
             processTest();
+        }
+    }
+    
+    // package private methods ----------------------------------------------
+    
+    static void doTest(TestFmwk test, RuleBasedCollator col, String source, 
+                       String target, int result)
+    {
+        doTestVariant(test, col, source, target, result);
+        if (result == -1) {
+            doTestVariant(test, col, target, source, 1);
+        } 
+        else if (result == 1) {
+            doTestVariant(test, col, target, source, -1);
+        }
+        else {
+            doTestVariant(test, col, target, source, 0);
+        }
+
+        CollationElementIterator iter = col.getCollationElementIterator(source);
+        backAndForth(test, iter);
+        iter.setText(target);
+        backAndForth(test, iter);
+    }
+    
+    /**
+     * Return an integer array containing all of the collation orders
+     * returned by calls to next on the specified iterator
+     */
+    static int[] getOrders(CollationElementIterator iter) 
+    {
+        int maxSize = 100;
+        int size = 0;
+        int[] orders = new int[maxSize];
+        
+        int order;
+        while ((order = iter.next()) != CollationElementIterator.NULLORDER) {
+            if (size == maxSize) {
+                maxSize *= 2;
+                int[] temp = new int[maxSize];
+                System.arraycopy(orders, 0, temp,  0, size);
+                orders = temp;
+            }
+            orders[size++] = order;
+        }
+        
+        if (maxSize > size) {
+            int[] temp = new int[size];
+            System.arraycopy(orders, 0, temp,  0, size);
+            orders = temp;
+        }
+        return orders;
+    }
+    
+    static void backAndForth(TestFmwk test, CollationElementIterator iter) 
+    {
+        // Run through the iterator forwards and stick it into an array
+        iter.reset();
+        int[] orders = getOrders(iter);
+    
+        // Now go through it backwards and make sure we get the same values
+        int index = orders.length;
+        int o;
+    
+        // reset the iterator
+        iter.reset();
+    
+        while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
+            if (o != orders[--index]) {
+                if (o == 0) {
+                    index ++;
+                } else {
+                    while (index > 0 && orders[index] == 0) {
+                        index --;
+                    } 
+                    if (o != orders[index]) {
+                        test.errln("Mismatch at index " + index + ": 0x" 
+                            + Integer.toHexString(orders[index]) + " vs 0x" + Integer.toHexString(o));
+                        break;
+                    }
+                }
+            }
+        }
+    
+        while (index != 0 && orders[index - 1] == 0) {
+          index --;
+        }
+    
+        if (index != 0) {
+            String msg = "Didn't get back to beginning - index is ";
+            test.errln(msg + index);
+    
+            iter.reset();
+            test.err("next: ");
+            while ((o = iter.next()) != CollationElementIterator.NULLORDER) {
+                String hexString = "0x" + Integer.toHexString(o) + " ";
+                test.err(hexString);
+            }
+            test.errln("");
+            test.err("prev: ");
+            while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
+                String hexString = "0x" + Integer.toHexString(o) + " ";
+                 test.err(hexString);
+            }
+            test.errln("");
         }
     }
     
@@ -200,15 +307,15 @@ public class CollationTest extends ModuleTest
         int lastsmallerthanindex = 0;
         while (getNextInSequence()) {
             String target = m_target_.toString();
-            doTest(col, m_source_, target, m_relation_);
+            doTest(this, col, m_source_, target, m_relation_);
             int vsize = vector.size();
             for (int i = vsize - 1; i >= 0; i --) {
                 String source = (String)vector.elementAt(i);
                 if (i > lastsmallerthanindex) {
-                    doTest(col, source, target, m_relation_);
+                    doTest(this, col, source, target, m_relation_);
                 }
                 else {
-                    doTest(col, source, target, -1);
+                    doTest(this, col, source, target, -1);
                 }
             }
             vector.addElement(target);
@@ -305,8 +412,9 @@ public class CollationTest extends ModuleTest
           return true;
     }
 
-    private void doTestVariant(RuleBasedCollator myCollation,
-                               String source, String target, int result)
+    private static void doTestVariant(TestFmwk test, 
+                                      RuleBasedCollator myCollation,
+                                      String source, String target, int result)
     {
         boolean printInfo = false;
         int compareResult  = myCollation.compare(source, target);
@@ -318,10 +426,10 @@ public class CollationTest extends ModuleTest
             // would it work to have the 'verbose' flag let you 
             // suppress warnings?  Are there ever some warnings you
             // want to suppress, and others you don't?
-            if(!isModularBuild()){
-                errln("Comparing \"" + Utility.hex(source) + "\" with \""
-                      + Utility.hex(target) + "\" expected " + result
-                      + " but got " + compareResult);
+            if(!test.isModularBuild()){
+                test.errln("Comparing \"" + Utility.hex(source) + "\" with \""
+                           + Utility.hex(target) + "\" expected " + result
+                           + " but got " + compareResult);
             }
         }
         CollationKey ssk = myCollation.getCollationKey(source);
@@ -329,10 +437,11 @@ public class CollationTest extends ModuleTest
         compareResult = ssk.compareTo(tsk);
         if (compareResult != result) {
             printInfo = true;
-            if(!isModularBuild()){
-                errln("Comparing sortkeys of \"" + Utility.hex(source) + "\" with \""
-                      + Utility.hex(target) + "\" expected " + result
-                      + " but got " + compareResult);
+            if(!test.isModularBuild()){
+                test.errln("Comparing sortkeys of \"" + Utility.hex(source) 
+                           + "\" with \"" + Utility.hex(target) 
+                           + "\" expected " + result + " but got " 
+                           + compareResult);
            }
         }
         // hmmm, but here we issue a warning
@@ -342,23 +451,7 @@ public class CollationTest extends ModuleTest
         // also know they may be due to missing resource data.  basically this code is asserting
         // that the errors are due to missing resource data, which may or may not be true.
         if (printInfo) {
-            warnln("Could not load locale data skipping.");
-        }
-    }
-    
-    private
-     void doTest(RuleBasedCollator myCollation,
-                              String source, String target, int result)
-    {
-        doTestVariant(myCollation, source, target, result);
-        if (result == 0) {
-            doTestVariant(myCollation, target, source, result);
-        }
-        else if (result < 0) {
-            doTestVariant(myCollation, target, source, 1);
-        }
-        else {
-            doTestVariant(myCollation, target, source, -1);
+            test.warnln("Could not load locale data skipping.");
         }
     }
 }
