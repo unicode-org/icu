@@ -50,15 +50,6 @@
  * @see         UCollationElements
  */
 
-/** A collation element iterator.
-*  For usage in C programs.
-*/
-struct collIterate;
-/** structure representing collation element iterator instance 
- * @stable ICU 2.0
- */
-typedef struct collIterate collIterate;
-
 /** A collator.
 *  For usage in C programs.
 */

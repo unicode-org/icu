@@ -261,7 +261,7 @@ minimum number for special Jamo
 
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
 
-struct collIterate {
+typedef struct collIterate {
   UChar *string; /* Original string */
   /* UChar *start;  Pointer to the start of the source string. Either points to string
                     or to writableBuffer */
@@ -280,7 +280,7 @@ struct collIterate {
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UCharIterator *iterator;
   /*int32_t iteratorIndex;*/
-};
+} collIterate;
 
 /* 
 struct used internally in getSpecial*CE.
