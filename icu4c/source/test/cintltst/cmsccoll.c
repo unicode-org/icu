@@ -2774,9 +2774,34 @@ static void TestVariableTopSetting() {
   }
 }
 
+static void TestSurrogates() {
+  UErrorCode status = U_ZERO_ERROR;
+
+  static const char *test[] = {
+    "z","\\ud900\\udc25",  "\\ud805\\udc50",
+       "\\ud800\\udc00y",  "\\ud800\\udc00r",
+       "\\ud800\\udc00f",  "\\ud800\\udc00",
+       "\\ud800\\udc00c", "\\ud800\\udc00b",
+       "\\ud800\\udc00fa", "\\ud800\\udc00fb",
+       "\\ud800\\udc00a",  
+       "c", "b"
+  };
+
+  static const char *rule = 
+    "&z < \\ud900\\udc25   < \\ud805\\udc50"
+       "< \\ud800\\udc00y  < \\ud800\\udc00r"
+       "< \\ud800\\udc00f  << \\ud800\\udc00"
+       "< \\ud800\\udc00fa << \\ud800\\udc00fb"
+       "< \\ud800\\udc00a  < c < b" ;
+
+  genericRulesStarter(rule, test, 14);
+}
+
 void addMiscCollTest(TestNode** root)
 {
     /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
+    
+    addTest(root, &TestSurrogates, "tscoll/cmsccoll/TestSurrogates");   
     addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");
     addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
