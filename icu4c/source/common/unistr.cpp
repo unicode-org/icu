@@ -478,12 +478,14 @@ UnicodeString UnicodeString::unescape() const {
 }
 
 // u_unescapeAt() callback to get a UChar from a UnicodeString
-U_CFUNC UChar _charAt(int32_t offset, void *context) {
+U_CDECL_BEGIN
+static UChar UnicodeString_charAt(int32_t offset, void *context) {
     return ((UnicodeString*) context)->charAt(offset);
 }
+U_CDECL_END
 
 UChar32 UnicodeString::unescapeAt(int32_t &offset) const {
-    return u_unescapeAt(_charAt, &offset, length(), (void*)this);
+    return u_unescapeAt(UnicodeString_charAt, &offset, length(), (void*)this);
 }
 
 //========================================
