@@ -460,6 +460,39 @@ void IntlCalendarTest::TestJapaneseFormat() {
         }
         delete fmt;
     }
+
+    // Test parse with incomplete information
+    fmt = new SimpleDateFormat(UnicodeString("G y"), Locale("en_US"), status);
+    aDate = -3197120400000.;
+    CHECK(status, "creating date format instance");
+    if(!fmt) { 
+        errln("Coudln't create en_US instance");
+    } else {
+        UnicodeString str;
+        fmt->format(aDate, str);
+        logln(UnicodeString() + "Test Date: " + str);
+        str.remove();
+        fmt->adoptCalendar(cal2->clone());
+        fmt->format(aDate, str);
+        logln(UnicodeString() + "as Japanese Calendar: " + str);
+        UnicodeString expected("Meiji 1");
+        if(str != expected) {
+            errln("Expected " + expected + " but got " + str);
+        }
+        UDate otherDate = fmt->parse(expected, status);
+        if(otherDate != aDate) { 
+            UnicodeString str3;
+            ParsePosition pp;
+            fmt->parse(expected, *cal2, pp);
+            fmt->format(otherDate, str3);
+            errln("Parse incorrect of " + expected + " - wanted " + aDate + " but got " +  " = " +
+                otherDate + ", " + str3 + " = " + calToStr(*cal2) );
+        } else {
+            logln("Parsed OK: " + expected);
+        }
+        delete fmt;
+    }
+
     delete cal;
     delete cal2;
     CHECK(status, "Error occured");
