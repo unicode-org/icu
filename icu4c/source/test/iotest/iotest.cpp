@@ -471,7 +471,7 @@ static void DataDrivenScanf(void) {
                     break;
                 }
                 if (uBufferLenReturned != 1) {
-                    log_err("error scanf converted %d arguments. Test case = %d\n", uBufferLenReturned);
+                    log_err("error scanf converted %d arguments. Test case = %d\n", uBufferLenReturned, i);
                 }
 /*                if (u_strcmp(uBuffer, expectedResult) != 0) {
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
