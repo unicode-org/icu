@@ -252,6 +252,7 @@ static void TestMisc()
     const int32_t sampleDigitValues[] = {0, 2, 3, 5};
     const int32_t sample2DigitValues[]= {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; /*special characters not in the properties table*/
 
+    uint32_t mask;
 
     enum ECellWidths         /* pasted in here from unicode.h */
     {
@@ -341,6 +342,74 @@ static void TestMisc()
       }
 #endif
 
+    /* test U_GC_... */
+    if(
+        U_GET_GC_MASK(0x41)!=U_GC_LU_MASK ||
+        U_GET_GC_MASK(0x662)!=U_GC_ND_MASK ||
+        U_GET_GC_MASK(0xa0)!=U_GC_ZS_MASK ||
+        U_GET_GC_MASK(0x28)!=U_GC_PS_MASK ||
+        U_GET_GC_MASK(0x2044)!=U_GC_SM_MASK ||
+        U_GET_GC_MASK(0xe0063)!=U_GC_CF_MASK
+    ) {
+        log_err("error: U_GET_GC_MASK does not work properly\n");
+    }
+
+    mask=0;
+    mask=(mask&~U_GC_CN_MASK)|U_GC_CN_MASK;
+
+    mask=(mask&~U_GC_LU_MASK)|U_GC_LU_MASK;
+    mask=(mask&~U_GC_LL_MASK)|U_GC_LL_MASK;
+    mask=(mask&~U_GC_LT_MASK)|U_GC_LT_MASK;
+    mask=(mask&~U_GC_LM_MASK)|U_GC_LM_MASK;
+    mask=(mask&~U_GC_LO_MASK)|U_GC_LO_MASK;
+
+    mask=(mask&~U_GC_MN_MASK)|U_GC_MN_MASK;
+    mask=(mask&~U_GC_ME_MASK)|U_GC_ME_MASK;
+    mask=(mask&~U_GC_MC_MASK)|U_GC_MC_MASK;
+
+    mask=(mask&~U_GC_ND_MASK)|U_GC_ND_MASK;
+    mask=(mask&~U_GC_NL_MASK)|U_GC_NL_MASK;
+    mask=(mask&~U_GC_NO_MASK)|U_GC_NO_MASK;
+
+    mask=(mask&~U_GC_ZS_MASK)|U_GC_ZS_MASK;
+    mask=(mask&~U_GC_ZL_MASK)|U_GC_ZL_MASK;
+    mask=(mask&~U_GC_ZP_MASK)|U_GC_ZP_MASK;
+
+    mask=(mask&~U_GC_CC_MASK)|U_GC_CC_MASK;
+    mask=(mask&~U_GC_CF_MASK)|U_GC_CF_MASK;
+    mask=(mask&~U_GC_CO_MASK)|U_GC_CO_MASK;
+    mask=(mask&~U_GC_CS_MASK)|U_GC_CS_MASK;
+
+    mask=(mask&~U_GC_PD_MASK)|U_GC_PD_MASK;
+    mask=(mask&~U_GC_PS_MASK)|U_GC_PS_MASK;
+    mask=(mask&~U_GC_PE_MASK)|U_GC_PE_MASK;
+    mask=(mask&~U_GC_PC_MASK)|U_GC_PC_MASK;
+    mask=(mask&~U_GC_PO_MASK)|U_GC_PO_MASK;
+
+    mask=(mask&~U_GC_SM_MASK)|U_GC_SM_MASK;
+    mask=(mask&~U_GC_SC_MASK)|U_GC_SC_MASK;
+    mask=(mask&~U_GC_SK_MASK)|U_GC_SK_MASK;
+    mask=(mask&~U_GC_SO_MASK)|U_GC_SO_MASK;
+
+    mask=(mask&~U_GC_PI_MASK)|U_GC_PI_MASK;
+    mask=(mask&~U_GC_PF_MASK)|U_GC_PF_MASK;
+
+    if(mask!=(U_CHAR_CATEGORY_COUNT<32 ? U_MASK(U_CHAR_CATEGORY_COUNT)-1: 0xffffffff)) {
+        log_err("error: problems with U_GC_XX_MASK constants\n");
+    }
+
+    mask=0;
+    mask=(mask&~U_GC_C_MASK)|U_GC_C_MASK;
+    mask=(mask&~U_GC_L_MASK)|U_GC_L_MASK;
+    mask=(mask&~U_GC_M_MASK)|U_GC_M_MASK;
+    mask=(mask&~U_GC_N_MASK)|U_GC_N_MASK;
+    mask=(mask&~U_GC_Z_MASK)|U_GC_Z_MASK;
+    mask=(mask&~U_GC_P_MASK)|U_GC_P_MASK;
+    mask=(mask&~U_GC_S_MASK)|U_GC_S_MASK;
+
+    if(mask!=(U_CHAR_CATEGORY_COUNT<32 ? U_MASK(U_CHAR_CATEGORY_COUNT)-1: 0xffffffff)) {
+        log_err("error: problems with U_GC_Y_MASK constants\n");
+    }
 }
 
 
