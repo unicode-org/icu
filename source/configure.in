@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.163 2002/03/21 01:26:39 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.164 2002/03/22 22:46:44 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -76,72 +76,8 @@ AC_CANONICAL_HOST
 AC_EXEEXT
 
 dnl Check if we can build and use 64-bit libraries
-AC_ARG_ENABLE(64bit-libs,
-    [  --enable-64bit-libs     build 64-bit libraries [default=yes]],
-    [ENABLE_64BIT_LIBS=${enableval}],
-    [ENABLE_64BIT_LIBS=yes]
-)
-AC_CACHE_CHECK([for 64-bit executable support], ac_cv_64bit_ok,
-    [ if test "$ENABLE_64BIT_LIBS" = no; then
-        case "${host}" in
-        *-*-hpux*)
-            case "${CXX}" in
-            *CC)
-                CPPFLAGS="${CPPFLAGS} +DAportable"
-                ;;
-            esac;;
-        esac
-    else
-        case "${host}" in
-        *-*-solaris*)
-            if test "$ac_cv_prog_gcc" = no; then
-                SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
-                SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
-                if test -z "$SOL64" && test -n "$SPARCV9"; then
-                    CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
-                    CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
-                    LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
-                    ENABLE_64BIT_LIBS=yes
-                else
-                    ENABLE_64BIT_LIBS=no
-                fi
-            else
-                ENABLE_64BIT_LIBS=no
-            fi
-            ;;
-        *-*-aix*)
-            OLD_CFLAGS="${CFLAGS}"
-            OLD_CXXFLAGS="${CXXFLAGS}"
-            OLD_LDFLAGS="${LDFLAGS}"
-            CFLAGS="${CFLAGS} -q64"
-            CXXFLAGS="${CXXFLAGS} -q64"
-            LDFLAGS="${LDFLAGS} -q64"
-            AC_TRY_RUN(int main(void) {return 0;},
-                ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
-            if test "$ENABLE_64BIT_LIBS" = no; then
-                CFLAGS="${OLD_CFLAGS}"
-                CXXFLAGS="${OLD_CXXFLAGS}"
-                LDFLAGS="${OLD_LDFLAGS}"
-            else
-                ARFLAGS="${ARFLAGS} -X64"
-            fi
-            ;;
-        *-*-hpux*)
-            ENABLE_64BIT_LIBS=unknown
-            ;;
-        *)  
-            ENABLE_64BIT_LIBS=no
-            ;;
-        esac
-    fi
-    ac_cv_64bit_ok="${ENABLE_64BIT_LIBS}"
-    ]
-)
-# Don't reset the CPPFLAGS here because of HP/UX
-# Individual tests that fail should reset it to OLD_CPPFLAGS.
-ENABLE_64BIT_LIBS="${ac_cv_64bit_ok}"
+AC_CHECK_64BIT_LIBS
 AC_SUBST(ARFLAGS)
-AC_SUBST(ENABLE_64BIT_LIBS)
 
 ICU_CHECK_MH_FRAG
 

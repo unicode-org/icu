@@ -137,9 +137,8 @@ case $platform in
         THE_COMP="xlC_r"
         CC=/usr/vacpp/bin/xlc_r; export CC
         CXX=/usr/vacpp/bin/xlC_r; export CXX
-        #RELEASE_CFLAGS=-O2
-        #RELEASE_CXXFLAGS=-O2
-        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
         ;;
     AIX4.3VA_nothreads)
@@ -148,9 +147,8 @@ case $platform in
         CC=/usr/vacpp/bin/xlc; export CC
         CXX=/usr/vacpp/bin/xlC; export CXX
         OPTS="$OPTS --enable-threads=no"
-        #RELEASE_CFLAGS=-O2
-        #RELEASE_CXXFLAGS=-O2
-        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
         ;;
     SOLARISX86)
