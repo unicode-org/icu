@@ -11,7 +11,7 @@
 #include "regcoll.h"
 #include "sfwdchit.h"
 
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
+#define ARRAY_LENGTH(array) ((int32_t)(sizeof array / sizeof array[0]))
 
 CollationRegressionTest::CollationRegressionTest()
 {
