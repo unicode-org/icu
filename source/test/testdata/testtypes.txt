@@ -1,0 +1,23 @@
+//*******************************************************************************
+//*
+//*   Copyright (C) 1998-2000, International Business Machines
+//*   Corporation and others.  All Rights Reserved.
+//*
+//*******************************************************************************
+
+
+// This is a test resource to check new types of resources
+
+testtypes
+{
+    zerotest { "abc\u0000def" } // The length of this string should be 7, not 3
+    binarytest:bin { 000102030405060708090a0b0c0d0e } // Binary 15 bytes long 
+    onehundredtwentythree:int { 123 } //
+    one:int { 1 } // number one
+    importtest:import { "importtest.txt" }
+    // integerarray:intarray { 1, 2, 3, 4, 5, 6, 7 } // This will be done in the future
+}
+
+//eof
+
+
