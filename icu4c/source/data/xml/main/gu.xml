@@ -7,117 +7,15 @@
 >
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-06-04" />
+		<version number="2.0"/>
+		<generation date="2004-08-11" />
 		<language type="gu" /> 
 	</identity>
-	<localeDisplayNames>
-		<languages>
-			<language type="gu">ગુજરાતી</language>
-		</languages>
-		<territories>
-			<territory type="CN">ચીન</territory>
-			<territory type="DE">જમિની</territory>
-			<territory type="EG">મિસર</territory>
-			<territory type="GE">જ્યોર્જીયા</territory>
-			<territory type="IN">ભારત</territory>
-			<territory type="NP">નેપાળ</territory>
-			<territory type="PK">કરાંચી</territory>
-			<territory type="TM">તુર્ક્મનિસ્તાન</territory>
-			<territory type="TR">તુર્કસ્તાન</territory>
-			<territory type="US">સંયુકત રાજ્ય અમેરિકા</territory>
-		</territories>
-	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[[:Gujr:]‌‍]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
 				<icu:script type="1">Gujr</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>
-	<dates>
-		<calendars>
-			<calendar type="gregorian">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">જાન્યુ</month>
-							<month type="2">ફેબ્રુ</month>
-							<month type="3">માર્ચ</month>
-							<month type="4">એપ્રિલ</month>
-							<month type="5">મે</month>
-							<month type="6">જૂન</month>
-							<month type="7">જુલાઈ</month>
-							<month type="8">ઑગસ્ટ</month>
-							<month type="9">સપ્ટે</month>
-							<month type="10">ઑક્ટો</month>
-							<month type="11">નવે</month>
-							<month type="12">ડિસે</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">જાન્યુઆરી</month>
-							<month type="2">ફેબ્રુઆરી</month>
-							<month type="3">માર્ચ</month>
-							<month type="4">એપ્રિલ</month>
-							<month type="5">મે</month>
-							<month type="6">જૂન</month>
-							<month type="7">જુલાઈ</month>
-							<month type="8">ઑગસ્ટ</month>
-							<month type="9">સપ્ટેમ્બર</month>
-							<month type="10">ઑક્ટ્બર</month>
-							<month type="11">નવેમ્બર</month>
-							<month type="12">ડિસેમ્બર</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-				<days>
-					<dayContext type="format">
-						<dayWidth type="abbreviated">
-							<day type="sun">રવિ</day>
-							<day type="mon">સોમ</day>
-							<day type="tue">મંગળ</day>
-							<day type="wed">બુધ</day>
-							<day type="thu">ગુરુ</day>
-							<day type="fri">શુક્ર</day>
-							<day type="sat">શનિ</day>
-						</dayWidth>
-						<dayWidth type="wide">
-							<day type="sun">રવિવાર</day>
-							<day type="mon">સોમવાર</day>
-							<day type="tue">મંગળવાર</day>
-							<day type="wed">બુધવાર</day>
-							<day type="thu">ગુરુવાર</day>
-							<day type="fri">શુક્રવાર</day>
-							<day type="sat">શનિવાર</day>
-						</dayWidth>
-					</dayContext>
-				</days>
-				<am>પૂર્વ મધ્યાહ્ન</am>
-				<pm>ઉત્તર મધ્યાહ્ન</pm>
-			</calendar>
-		</calendars>
-	</dates>
-	<numbers>
-		<symbols>
-			<decimal>.</decimal>
-			<group>,</group>
-			<list>;</list>
-			<percentSign>%</percentSign>
-			<nativeZeroDigit>૦</nativeZeroDigit>
-			<patternDigit>#</patternDigit>
-			<plusSign>+</plusSign>
-			<minusSign>-</minusSign>
-			<exponential>E</exponential>
-			<perMille>‰</perMille>
-			<infinity>∞</infinity>
-			<nan>�</nan>
-		</symbols>
-		<currencies>
-			<currency type="INR">
-				<displayName>INR</displayName>
-				<symbol>રુ</symbol>
-			</currency>
-		</currencies>
-	</numbers>
 </ldml>
