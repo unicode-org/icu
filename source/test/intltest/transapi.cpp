@@ -378,11 +378,11 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
     Transliterator* t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0) {
         errln((UnicodeString)"FAIL: can't create Any-Hex, " +
-              u_errorName(status) +
+              (UnicodeString)u_errorName(status) +
               (parseError.preContext[0] ?
                ((UnicodeString)" at " + parseError.preContext +
                 (parseError.postContext[0] ?
-                 ((UnicodeString)" | " + parseError.postContext) : "")) : ""));
+                 ((UnicodeString)" | " + parseError.postContext) : (UnicodeString)"")) : (UnicodeString)""));
         return;
     }
     UTransPosition index={19,20,20,20};
