@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/11/20 19:31:07 $
- * $Revision: 1.16 $
+ * $Date: 2003/11/21 00:23:35 $
+ * $Revision: 1.17 $
  *
  *******************************************************************************
  */
@@ -479,43 +479,48 @@ public class ICUListResourceBundle extends ListResourceBundle {
         Object result = null;      
         ICUListResourceBundle actualBundle = this;
         
-        // get the top level resource 
-        // getObject is a method on the ResourceBundle class that
-        // performs the normal fallback
-        result = getObject(keys[0], actualBundle);
-        
-        // now find the bundle from the actual bundle 
-        // if this bundle does not contain the top level resource,
-        // then we can be sure that it does not contain the sub elements
-        result = findResourceWithFallback(result, keys, 1, 0, actualBundle);
         
         // now recuse to pick up sub levels of the items
+        result = findResourceWithFallback(keys, actualBundle);
                     
         if(result == null){
             throw new MissingResourceException("Could not find the resource in ",this.getClass().getName(),path);
         }
         return result;
     }
-    private Object findResourceWithFallback(Object[][] contents, String key){
-        Object obj = null;
+    
 
-        for (int i = 0; i < contents.length; ++i) {
-            // key must be non-null String
-            String tempKey = (String) contents[i][0];
-            obj = contents[i][1];
-            if(tempKey != null && tempKey.equals(key)){
-                return obj;
+    private Object findResourceWithFallback(String[] keys,
+                                            ICUListResourceBundle actualBundle){
+
+        Object obj = null; 
+        
+        while(actualBundle != null){
+            // get the top level resource 
+            // getObject is a method on the ResourceBundle class that
+            // performs the normal fallback
+            obj = actualBundle.getObject(keys[0], actualBundle);
+            
+            // now find the bundle from the actual bundle 
+            // if this bundle does not contain the top level resource,
+            // then we can be sure that it does not contain the sub elements
+            obj = findResourceWithFallback(obj, keys, 1, 0);
+            // did we get the contents? the break
+            if(obj != null){
+                break;
             }
+            // if not try the parent bundle
+            actualBundle = (ICUListResourceBundle) actualBundle.parent;
+        
         }
-
+        
         return obj;
     }
     private Object findResourceWithFallback(Object o , String[] keys, int start, 
-                                            int index,
-                                            ICUListResourceBundle actualBundle){
+                                            int index){
         Object obj = o;
         
-        while(actualBundle != null){
+        
             if( start < keys.length && keys[start] !=null){
                 if(obj instanceof Object[][]){
                     obj = findResourceWithFallback((Object[][])obj,keys[start]);
@@ -523,8 +528,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     obj = ((Object[])obj)[getIndex(keys[start])];
                 }
                 if(start+1 < keys.length && keys[start+1] !=null){
-                    obj = findResourceWithFallback(obj,keys,start+1, index, 
-                                                   actualBundle);
+                    obj = findResourceWithFallback(obj,keys,start+1, index);
                 }
             }else{
                 //try to find the corresponding index resource
@@ -537,15 +541,25 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     }
                 }
             }
-            // did we get the contents? the break
-            if(obj != null){
-                break;
-            }
-            // if not try the parent bundle
-            actualBundle = (ICUListResourceBundle) actualBundle.parent;
-        }
+
         return obj;
     }
+    
+    private Object findResourceWithFallback(Object[][] contents, String key){
+        Object obj = null;
+
+        for (int i = 0; i < contents.length; ++i) {
+            // key must be non-null String
+            String tempKey = (String) contents[i][0];
+            obj = contents[i][1];
+            if(tempKey != null && tempKey.equals(key)){
+                return obj;
+            }
+        }
+
+        return null;
+    }
+    
     private final Object getObject(String key, 
                                    ICUListResourceBundle actualBundle) {
         Object obj = handleGetObject(key);
