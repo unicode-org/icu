@@ -723,7 +723,27 @@ static void TestCollator()
           UChar          text[128];
           UStringSearch *strsrch; 
           
+    text[0] = 0x41;
+    text[1] = 0x42;
+    text[2] = 0x43;
+    text[3] = 0x44;
+    text[4] = 0x45;
+    pattern[0] = 0x62;
+    pattern[1] = 0x63;
+    strsrch  = usearch_open(pattern, 2, text, 5, "en_US",  NULL,  &status);
+    tailored = usearch_getCollator(strsrch);
+    if (usearch_next(strsrch, &status) != -1) {
+        log_err("Error: Found case insensitive match, when we shouldn't\n");
+    }
+    ucol_setStrength(tailored, UCOL_PRIMARY);
+    usearch_reset(strsrch);
+    if (usearch_next(strsrch, &status) != 1) {
+        log_err("Error: Found case insensitive match not found\n");
+    }
+    usearch_close(strsrch);
+
     open();
+
     if (usearch_getCollator(NULL) != NULL) {
         log_err("Expected NULL collator from NULL string search\n");
     }
