@@ -299,7 +299,7 @@ get_months(const UChar *months [],
         return;
     monthBundle = ures_getByKey(bundle, key, NULL, status);
     count = ures_countArrayItems(bundle, key, status);
-    if(count != MONTH_COUNT)
+    if(count < (MONTH_COUNT-1)) /* Some locales have 13 months, no idea why */
         goto finish;   /* sanity check */
     for(i = 0; i < count; ++i) {
         months[i] = ures_getStringByIndex(monthBundle, i, &monthLen, status);
@@ -316,6 +316,11 @@ indent(int32_t count,
        FILE *f)
 {
     char c [BUF_SIZE];
+
+    if(count <= 0)
+    {
+	return;
+    }
     
     if(count < BUF_SIZE) {
         memset(c, (int)' ', count);
@@ -413,6 +418,10 @@ print_month(UCalendar *c,
     
     /* Indent the correct number of spaces for the first week */
     current = firstday;
+    if(current < 0)
+    {
+       current += 7;
+    }
     for(i = 0; i < current; ++i)
         indent(lens[i] + 1, stdout);
     
