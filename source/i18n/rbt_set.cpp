@@ -317,6 +317,12 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
     /* Freeze things into an array.
      */
     uprv_free(rules); // Contains alias pointers
+
+    /* You can't do malloc(0)! */
+    if (v.size() == 0) {
+        rules = NULL;
+        return;
+    }
     rules = (TransliterationRule **)uprv_malloc(v.size() * sizeof(TransliterationRule *));
     /* test for NULL */
     if (rules == 0) {
