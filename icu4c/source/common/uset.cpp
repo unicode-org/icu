@@ -26,37 +26,86 @@
 #include "unicode/uset.h"
 #include "unicode/uniset.h"
 
-#define USET_STATIC_CAPACITY 12
-#define USET_GROW_DELTA 20
+U_NAMESPACE_BEGIN
 
-U_CAPI USet * U_EXPORT2
+U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end) {
     return (USet*) new UnicodeSet(start, end);
 }
 
-U_CAPI void U_EXPORT2
-uset_close(USet *set) {
-    delete (UnicodeSet*) set;
+U_CAPI USet* U_EXPORT2
+uset_openPattern(const UChar* pattern, int32_t patternLength,
+                 UErrorCode* ec) {
+    UnicodeString pat(patternLength==-1, pattern, patternLength);
+    UnicodeSet* set = new UnicodeSet(pat, *ec);
+    if (U_FAILURE(*ec)) {
+        delete set;
+        set = NULL;
+    }
+    return (USet*) set;
 }
 
 U_CAPI void U_EXPORT2
-uset_add(USet *set, UChar32 c) {
+uset_close(USet* set) {
+    delete (UnicodeSet*) set;
+}
+
+U_CAPI int32_t U_EXPORT2
+uset_toPattern(const USet* set,
+               UChar* result, int32_t resultCapacity,
+               UBool escapeUnprintable,
+               UErrorCode* ec) {
+    UnicodeString pat;
+    ((const UnicodeSet*) set)->toPattern(pat, escapeUnprintable);
+    return pat.extract(result, resultCapacity, *ec);
+}
+
+U_CAPI void U_EXPORT2
+uset_add(USet* set, UChar32 c) {
     ((UnicodeSet*) set)->add(c);
 }
 
 U_CAPI void U_EXPORT2
-uset_remove(USet *set, UChar32 c) {
+uset_addString(USet* set, const UChar* str, int32_t strLen) {
+    UnicodeString s(strLen==-1, str, strLen);
+    ((UnicodeSet*) set)->add(s);
+}
+
+U_CAPI void U_EXPORT2
+uset_remove(USet* set, UChar32 c) {
     ((UnicodeSet*) set)->remove(c);
 }
 
+U_CAPI void U_EXPORT2
+uset_removeString(USet* set, const UChar* str, int32_t strLen) {
+    UnicodeString s(strLen==-1, str, strLen);
+    ((UnicodeSet*) set)->remove(s);
+}
+
+U_CAPI void U_EXPORT2
+uset_complement(USet* set) {
+    ((UnicodeSet*) set)->complement();
+}
+
+U_CAPI void U_EXPORT2
+uset_clear(USet* set) {
+    ((UnicodeSet*) set)->clear();
+}
+
 U_CAPI UBool U_EXPORT2
-uset_isEmpty(const USet *set) {
+uset_isEmpty(const USet* set) {
     return ((const UnicodeSet*) set)->isEmpty();
 }
 
 U_CAPI UBool U_EXPORT2
-uset_contains(const USet *set, UChar32 c) {
+uset_contains(const USet* set, UChar32 c) {
     return ((const UnicodeSet*) set)->contains(c);
+}
+
+U_CAPI UBool U_EXPORT2
+uset_containsString(const USet* set, const UChar* str, int32_t strLen) {
+    UnicodeString s(strLen==-1, str, strLen);
+    return ((const UnicodeSet*) set)->contains(s);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -64,22 +113,67 @@ uset_size(const USet* set) {
     return ((const UnicodeSet*) set)->size();
 }
 
+/**
+ * This class only exists to provide access to the UnicodeSet private
+ * USet support API.  Declaring a class a friend is more portable than
+ * trying to declare extern "C" functions as friends.
+ */
+class USetAccess {
+public:
+    // Try to have the compiler inline these
+    inline static int32_t getStringCount(const UnicodeSet& set) {
+        return set.getStringCount();
+    }
+    inline static const UnicodeString* getString(const UnicodeSet& set,
+                                                 int32_t i) {
+        return set.getString(i);
+    }
+};
+
 U_CAPI int32_t U_EXPORT2
-uset_getRangeCount(const USet *set) {
-    return ((const UnicodeSet*) set)->getRangeCount();
+uset_getItemCount(const USet* uset) {
+    const UnicodeSet& set = *(const UnicodeSet*)uset;
+    return set.getRangeCount() + USetAccess::getStringCount(set);
 }
 
-U_CAPI UBool U_EXPORT2
-uset_getRange(const USet *set, int32_t rangeIndex,
-              UChar32 *pStart, UChar32 *pEnd) {
-    if ((uint32_t) rangeIndex >= (uint32_t) uset_getRangeCount(set)) {
-        return FALSE;
+U_CAPI int32_t U_EXPORT2
+uset_getItem(const USet* uset, int32_t itemIndex,
+             UChar32* start, UChar32* end,
+             UChar* str, int32_t strCapacity,
+             UErrorCode* ec) {
+    if (U_FAILURE(*ec)) return 0;
+    const UnicodeSet& set = *(const UnicodeSet*)uset;
+    if ((uint32_t) itemIndex < (uint32_t) set.getRangeCount()) {
+        *start = set.getRangeStart(itemIndex);
+        *end = set.getRangeEnd(itemIndex);
+        return 0;
+    } else {
+        itemIndex -= set.getRangeCount();
+        if ((uint32_t) itemIndex < (uint32_t) USetAccess::getStringCount(set)) {
+            const UnicodeString* s = USetAccess::getString(set, itemIndex);
+            return s->extract(str, strCapacity, *ec);
+        }
     }
-    const UnicodeSet* us = (const UnicodeSet*) set;
-    *pStart = us->getRangeStart(rangeIndex);
-    *pEnd = us->getRangeEnd(rangeIndex);
-    return TRUE;
+    *ec = U_ILLEGAL_ARGUMENT_ERROR;
+    return -1;
 }
+
+//U_CAPI int32_t U_EXPORT2
+//uset_getRangeCount(const USet* set) {
+//    return ((const UnicodeSet*) set)->getRangeCount();
+//}
+//
+//U_CAPI UBool U_EXPORT2
+//uset_getRange(const USet* set, int32_t rangeIndex,
+//              UChar32* pStart, UChar32* pEnd) {
+//    if ((uint32_t) rangeIndex >= (uint32_t) uset_getRangeCount(set)) {
+//        return FALSE;
+//    }
+//    const UnicodeSet* us = (const UnicodeSet*) set;
+//    *pStart = us->getRangeStart(rangeIndex);
+//    *pEnd = us->getRangeEnd(rangeIndex);
+//    return TRUE;
+//}
 
 /*
  * Serialize a USet into 16-bit units.
@@ -100,16 +194,16 @@ uset_getRange(const USet *set, int32_t rangeIndex,
  * - some supplementary: (length|0x8000) (bmpLength<length) BMP, .., BMP, supp-high, supp-low, ..
  */
 U_CAPI int32_t U_EXPORT2
-uset_serialize(const USet *set, uint16_t *dest, int32_t destCapacity, UErrorCode *ec) {
+uset_serialize(const USet* set, uint16_t* dest, int32_t destCapacity, UErrorCode* ec) {
     if (ec==NULL || U_FAILURE(*ec)) {
         return 0;
     }
 
-    return ((const UnicodeSet*) set)->serialize(dest, destCapacity, *ec);
+    return ((const UnicodeSet*) set)->serialize(dest, destCapacity,* ec);
 }
 
 U_CAPI UBool U_EXPORT2
-uset_getSerializedSet(USerializedSet *fillSet, const uint16_t *src, int32_t srcLength) {
+uset_getSerializedSet(USerializedSet* fillSet, const uint16_t* src, int32_t srcLength) {
     int32_t length;
 
     if(fillSet==NULL) {
@@ -143,7 +237,7 @@ uset_getSerializedSet(USerializedSet *fillSet, const uint16_t *src, int32_t srcL
 }
 
 U_CAPI void U_EXPORT2
-uset_setSerializedToOne(USerializedSet *fillSet, UChar32 c) {
+uset_setSerializedToOne(USerializedSet* fillSet, UChar32 c) {
     if(fillSet==NULL || (uint32_t)c>0x10ffff) {
         return;
     }
@@ -176,8 +270,8 @@ uset_setSerializedToOne(USerializedSet *fillSet, UChar32 c) {
 }
 
 U_CAPI UBool U_EXPORT2
-uset_serializedContains(const USerializedSet *set, UChar32 c) {
-    const uint16_t *array;
+uset_serializedContains(const USerializedSet* set, UChar32 c) {
+    const uint16_t* array;
 
     if(set==NULL || (uint32_t)c>0x10ffff) {
         return FALSE;
@@ -203,7 +297,7 @@ uset_serializedContains(const USerializedSet *set, UChar32 c) {
 }
 
 U_CAPI int32_t U_EXPORT2
-uset_countSerializedRanges(const USerializedSet *set) {
+uset_getSerializedRangeCount(const USerializedSet* set) {
     if(set==NULL) {
         return 0;
     }
@@ -212,9 +306,9 @@ uset_countSerializedRanges(const USerializedSet *set) {
 }
 
 U_CAPI UBool U_EXPORT2
-uset_getSerializedRange(const USerializedSet *set, int32_t rangeIndex,
-                        UChar32 *pStart, UChar32 *pEnd) {
-    const uint16_t *array;
+uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
+                        UChar32* pStart, UChar32* pEnd) {
+    const uint16_t* array;
     int32_t bmpLength, length;
 
     if(set==NULL || rangeIndex<0 || pStart==NULL || pEnd==NULL) {
@@ -258,11 +352,15 @@ uset_getSerializedRange(const USerializedSet *set, int32_t rangeIndex,
     }
 }
 
+U_NAMESPACE_END
+
 // TODO Investigate incorporating this code into UnicodeSet to improve
 // efficiency.
 // ---
+// #define USET_GROW_DELTA 20
+// 
 // static U_INLINE int32_t
-// findChar(const UChar32 *array, int32_t length, UChar32 c) {
+// findChar(const UChar32* array, int32_t length, UChar32 c) {
 //     int32_t i;
 // 
 //     /* check the last range limit first for more efficient appending */
@@ -280,7 +378,7 @@ uset_getSerializedRange(const USerializedSet *set, int32_t rangeIndex,
 // }
 // 
 // static UBool
-// addRemove(USet *set, UChar32 c, int32_t doRemove) {
+// addRemove(USet* set, UChar32 c, int32_t doRemove) {
 //     int32_t i, length, more;
 // 
 //     if(set==NULL || (uint32_t)c>0x10ffff) {
@@ -338,7 +436,7 @@ uset_getSerializedRange(const USerializedSet *set, int32_t rangeIndex,
 //     if(length+more>set->capacity) {
 //         /* reallocate */
 //         int32_t newCapacity=set->capacity+set->capacity/2+USET_GROW_DELTA;
-//         UChar32 *newArray=(UChar32 *)uprv_malloc(newCapacity*4);
+//         UChar32* newArray=(UChar32* )uprv_malloc(newCapacity*4);
 //         if(newArray==NULL) {
 //             return FALSE;
 //         }
@@ -364,11 +462,11 @@ uset_getSerializedRange(const USerializedSet *set, int32_t rangeIndex,
 // }
 // 
 // U_CAPI UBool U_EXPORT2
-// uset_add(USet *set, UChar32 c) {
+// uset_add(USet* set, UChar32 c) {
 //     return addRemove(set, c, 0);
 // }
 // 
 // U_CAPI void U_EXPORT2
-// uset_remove(USet *set, UChar32 c) {
+// uset_remove(USet* set, UChar32 c) {
 //     addRemove(set, c, 1);
 // }

@@ -822,8 +822,12 @@ public:
     virtual UChar32 getRangeEnd(int32_t index) const;
 
     /**
-     * Serializes this set into an array of 16-bit integers.  The array
-     * has following format (each line is one 16-bit integer):
+     * Serializes this set into an array of 16-bit integers.  Serialization
+     * (currently) only records the characters in the set; multicharacter
+     * strings are ignored.
+     *
+     * The array has following format (each line is one 16-bit
+     * integer):
      *
      *  length     = (n+2*m) | (m!=0?0x8000:0)
      *  bmpLength  = n; present if m!=0
@@ -896,9 +900,17 @@ public:
 
 private:
 
-    static const char fgClassID;
+    // Private API for the USet API
+
+    friend class USetAccess;
+
+    int32_t getStringCount() const;
+
+    const UnicodeString* getString(int32_t index) const;
 
 private:
+
+    static const char fgClassID;
 
     //----------------------------------------------------------------
     // RuleBasedTransliterator support
