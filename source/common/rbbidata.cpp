@@ -23,8 +23,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char RBBIDataWrapper::fgClassID=0;
-
 //-----------------------------------------------------------------------------
 //
 //    Constructors.

@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
  * transitions.  Indexes are used to compress this array, taking
  * advantage of the fact that this array will always be very sparse.
  */
-class BreakDictionary : public UObject {
+class BreakDictionary : public UMemory {
     //=================================================================================
     // data members
     //=================================================================================
@@ -146,20 +146,6 @@ public:
      */
     int16_t at(int32_t row, int32_t col) const;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
     /**
      * Given (logical) row and column numbers, returns true if the
@@ -182,12 +168,6 @@ private:
     // (if you don't declare them, you get default implementations)
     BreakDictionary(const BreakDictionary& that);
     BreakDictionary& operator=(const BreakDictionary& that);
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
 
 U_NAMESPACE_END

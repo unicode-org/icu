@@ -23,8 +23,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char RBBITableBuilder::fgClassID=0;
-
 RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode) :
  fTree(*rootNode) {
     fRB             = rb;
@@ -719,8 +717,6 @@ void RBBITableBuilder::printStates() {
 //                           Most access is directly to the fields.
 //
 //-----------------------------------------------------------------------------
-
-const char RBBIStateDescriptor::fgClassID=0;
 
 RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatus) {
     fMarked    = FALSE;

@@ -38,8 +38,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char RBBIRuleScanner::fgClassID=0;
-
 //----------------------------------------------------------------------------------------
 //
 // Unicode Set init strings for each of the character classes needed for parsing a rule file.
