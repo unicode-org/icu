@@ -588,7 +588,7 @@ fi {
         ca  { "katalaani" }
         ce  { "t\u0161et\u0161eeni" }
         co  { "korsika" }
-        cs  { "tsekki" }
+        cs  { "t\u0161ekki" }
         cu  { "kirkkoslaavi" }
         cv  { "t\u0161uvassi" }
         cy  { "kymri" }
