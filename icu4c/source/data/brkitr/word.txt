@@ -52,7 +52,7 @@ $ExtendNumLetEx = $ExtendNumLet $Extend*;
 #          see character breaks.
 
 $CR $LF;
-[^$Control] $Extend+;
+[^$Control $CR $LF] $Extend+;
 $NumericEx $Extend* {100};
 $ALetterEx $Extend* {200};
 
@@ -114,7 +114,7 @@ $LF $CR;
 
 # see character breaks
 
-$Extend* [^$Control];
+$Extend* [^$Control $CR $LF];
 
 # rule 5
 
