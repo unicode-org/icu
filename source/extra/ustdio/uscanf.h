@@ -22,7 +22,7 @@
 #ifndef USCANF_H
 #define USCANF_H
 
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
 
 /**
