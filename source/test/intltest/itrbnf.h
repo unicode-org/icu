@@ -73,6 +73,11 @@ class IntlTestRBNF : public IntlTest {
   virtual void TestSwissFrenchSpellout();
 
   /**
+   * Check that Belgian French matches Swiss French spellout rules
+   */
+  virtual void TestBelgianFrenchSpellout();
+
+  /**
    * Perform a simple spot check on the Italian spellout rules
    */
   virtual void TestItalianSpellout();
