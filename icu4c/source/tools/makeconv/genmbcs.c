@@ -164,7 +164,7 @@ skipWhitespace(const char *s) {
  * state table row grammar (ebnf-style):
  * (whitespace is allowed between all tokens)
  *
- * row=[firstentry ','] entry (',' entry)*
+ * row=[[firstentry ','] entry (',' entry)*]
  * firstentry="initial" | "surrogates"
  *            (initial state (default for state 0), output is all surrogate pairs)
  * entry=range [':' nextstate] ['.' action]
@@ -189,10 +189,10 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
     /* skip leading white space */
     s=skipWhitespace(s);
 
-    /* is there a "direct" or "surrogates" directive? */
-    if(uprv_strncmp("direct", s, 6)==0) {
+    /* is there an "initial" or "surrogates" directive? */
+    if(uprv_strncmp("initial", s, 7)==0) {
         *pFlags=MBCS_STATE_FLAG_DIRECT;
-        s=skipWhitespace(s+6);
+        s=skipWhitespace(s+7);
         if(*s++!=',') {
             return s-1;
         }
@@ -471,10 +471,10 @@ MBCSProcessStates(NewConverter *cnvData) {
             return FALSE;
         }
         /* are the SI/SO all in the right places? */
-        if( mbcsData->stateTable[0][0xe]==(0x80000001|(MBCS_STATE_CHANGE_ONLY<<27UL)) &&
-            mbcsData->stateTable[0][0xf]==(0x80000000|(MBCS_STATE_CHANGE_ONLY<<27UL)) &&
-            mbcsData->stateTable[1][0xe]==(0x80000001|(MBCS_STATE_CHANGE_ONLY<<27UL)) &&
-            mbcsData->stateTable[1][0xf]==(0x80000000|(MBCS_STATE_CHANGE_ONLY<<27UL))
+        if( mbcsData->stateTable[0][0xe]==(int32_t)(0x80000001|(MBCS_STATE_CHANGE_ONLY<<27L)) &&
+            mbcsData->stateTable[0][0xf]==(int32_t)(0x80000000|(MBCS_STATE_CHANGE_ONLY<<27L)) &&
+            mbcsData->stateTable[1][0xe]==(int32_t)(0x80000001|(MBCS_STATE_CHANGE_ONLY<<27L)) &&
+            mbcsData->stateTable[1][0xf]==(int32_t)(0x80000000|(MBCS_STATE_CHANGE_ONLY<<27L))
         ) {
             mbcsData->header.flags=MBCS_OUTPUT_2_SISO;
         } else {
@@ -1353,8 +1353,8 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
              * and the code point is "unassigned" (0xfffe), then change it to
              * the "unassigned" action code with bits 26..23 set to zero and U+fffe.
              */
-            if((entry&0xffffff80)==(0x807fff00|(MBCS_STATE_VALID_DIRECT_16<<27))) {
-                mbcsData->stateTable[state][cell]=(entry&0x87ffffff)|(MBCS_STATE_UNASSIGNED<<27UL);
+            if((entry&0xffffff80)==(int32_t)(0x807fff00|(MBCS_STATE_VALID_DIRECT_16<<27L))) {
+                mbcsData->stateTable[state][cell]=(entry&0x87ffffff)|(MBCS_STATE_UNASSIGNED<<27L);
             }
         }
     }
