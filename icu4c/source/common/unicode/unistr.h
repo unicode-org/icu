@@ -2774,7 +2774,7 @@ UnicodeString::insert(UTextOffset start,
 inline UnicodeString& 
 UnicodeString::remove(UTextOffset start, 
              int32_t length)
-{ return doReplace(start, length, 0, 0, 0); }
+{ return doReplace(start, length, NULL, 0, 0); }
 
 inline UnicodeString& 
 UnicodeString::remove()
@@ -2783,7 +2783,7 @@ UnicodeString::remove()
 inline UnicodeString& 
 UnicodeString::removeBetween(UTextOffset start,
                 UTextOffset limit)
-{ return doReplace(start, limit - start, 0, 0, 0); }
+{ return doReplace(start, limit - start, NULL, 0, 0); }
 
 inline UBool 
 UnicodeString::truncate(int32_t targetLength)
