@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/12/05 02:38:55 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/12/05 22:27:43 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -425,6 +425,15 @@ public abstract class SearchIterator
         if (start == DONE) {
             start = targetText.getBeginIndex();
         }
+        if (matchLength > 0) {
+            // if match length is 0 we are at the start of the iteration
+            if (m_isOverlap_) {
+                start ++;
+            }
+            else {
+                start += matchLength;
+            }
+        }
 	    m_lastMatchStart_ = handleNext(start);
         return m_lastMatchStart_;
     }
@@ -461,7 +470,7 @@ public abstract class SearchIterator
     	if (m_reset_) {
             m_isForwardSearching_ = false;
             m_reset_ = false;
-            start = targetText.getEndIndex();;
+            start = targetText.getEndIndex();
         }
         
         if (m_isForwardSearching_ == true) {

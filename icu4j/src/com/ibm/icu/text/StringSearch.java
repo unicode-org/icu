@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/12/05 02:37:28 $ 
- * $Revision: 1.17 $
+ * $Date: 2002/12/05 22:27:43 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -566,10 +566,7 @@ public final class StringSearch extends SearchIterator
 	        }
 	    }
 	    else {
-	    	if (matchLength != 0) {
-		    	start += matchLength;
-		    }
-            else {
+	    	if (matchLength <= 0) {
                 // we must have reversed direction after we reached the start
                 // of the target text
                 // see SearchIterator next(), it checks the bounds and returns
@@ -1167,28 +1164,18 @@ public final class StringSearch extends SearchIterator
 	private int shiftForward(int textoffset, int ce, int patternceindex)
 									
 	{
-	    if (isOverlapping()) {
-	        if (textoffset > m_textBeginOffset_) {
-	            textoffset ++;
+	    if (ce != CollationElementIterator.NULLORDER) {
+	        int shift = m_pattern_.m_shift_[hash(ce)];
+	        // this is to adjust for characters in the middle of the 
+	        // substring for matching that failed.
+	        int adjust = m_pattern_.m_CELength_ - patternceindex;
+	        if (adjust > 1 && shift >= adjust) {
+	            shift -= adjust - 1;
 	        }
-	        else {
-	            textoffset = m_pattern_.m_defaultShiftSize_;
-	        }
+	        textoffset += shift;
 	    }
 	    else {
-	        if (ce != CollationElementIterator.NULLORDER) {
-	            int shift = m_pattern_.m_shift_[hash(ce)];
-	            // this is to adjust for characters in the middle of the 
-	            // substring for matching that failed.
-	            int adjust = m_pattern_.m_CELength_ - patternceindex;
-	            if (adjust > 1 && shift >= adjust) {
-	                shift -= adjust - 1;
-	            }
-	            textoffset += shift;
-	        }
-	        else {
-	            textoffset += m_pattern_.m_defaultShiftSize_;
-	        }
+	        textoffset += m_pattern_.m_defaultShiftSize_;
 	    }
 	     
         textoffset = getNextBaseOffset(textoffset);

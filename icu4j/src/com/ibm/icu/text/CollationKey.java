@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2002/12/03 20:45:19 $ 
-* $Revision: 1.11 $
+* $Date: 2002/12/05 22:27:43 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -32,8 +32,8 @@ package com.ibm.icu.text;
  *
  * <p>During the construction of a <code>CollationKey</code>, the
  * entire source string is examined and processed into a series of
- * bits that are stored in the <code>CollationKey</code>. When
- * <code>CollationKey.compareTo(CollationKey)</code> executes, it
+ * bits terminated by a null, that are stored in the <code>CollationKey</code>. 
+ * When <code>CollationKey.compareTo(CollationKey)</code> executes, it
  * performs bitwise comparison on the bit sequences.  This can incurs
  * startup cost when creating the <code>CollationKey</code>, but once
  * the key is created, binary comparisons are fast.  This approach is
@@ -97,7 +97,7 @@ public final class CollationKey implements Comparable
      * {@link Collator#getCollationKey(String)}. 
      * @param source string this CollationKey is to represent
      * @param key array of bytes that represent the collation order of argument
-     *            source
+     *            source terminated by a null
      * @see Collator
      * @draft ICU 2.2
      */
@@ -288,7 +288,7 @@ public final class CollationKey implements Comparable
     public boolean equals(CollationKey target) 
     {
         if (this == target) {
-	    return true;
+	        return true;
         }
         if (target == null) {
             return false;
@@ -296,13 +296,13 @@ public final class CollationKey implements Comparable
         CollationKey other = (CollationKey)target;
         int i = 0;
         while (true) {
-	    if (m_key_[i] != other.m_key_[i]) {
-		return false;
-	    }
-	    if (m_key_[i] == 0) {
-		break;
-	    }
-	    i ++;
+    	    if (m_key_[i] != other.m_key_[i]) {
+        		return false;
+    	    }
+    	    if (m_key_[i] == 0) {
+    		  break;
+    	    }
+    	    i ++;
         }
         return true;
     }
@@ -320,17 +320,17 @@ public final class CollationKey implements Comparable
     public int hashCode() 
     {
     	if (m_hashCode_ == 0) {
-	    int size = m_key_.length >> 1;
-	    StringBuffer key = new StringBuffer(size);
-	    int i = 0;
-	    while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
-		key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
-		i += 2;
-	    }
-	    if (m_key_[i] != 0) {
-		key.append((char)(m_key_[i] << 8));
-	    }
-	    m_hashCode_ = key.toString().hashCode();
+    	    int size = m_key_.length >> 1;
+    	    StringBuffer key = new StringBuffer(size);
+    	    int i = 0;
+    	    while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
+        		key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
+        		i += 2;
+    	    }
+    	    if (m_key_[i] != 0) {
+        		key.append((char)(m_key_[i] << 8));
+    	    }
+    	    m_hashCode_ = key.toString().hashCode();
     	}
         return m_hashCode_;
     }
