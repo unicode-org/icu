@@ -137,7 +137,7 @@ U_CDECL_BEGIN
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
 
-typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t* options, UErrorCode *pErrorCode);
+typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *pErrorCode);
 typedef void (*UConverterClose) (UConverter *cnv);
 
 typedef void (*UConverterReset) (UConverter *cnv);

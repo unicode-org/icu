@@ -44,7 +44,7 @@
 }
 
 /*********** HZ Converter Protos ***********/
-static void _HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t *options,UErrorCode *errorCode);
+static void _HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t options,UErrorCode *errorCode);
 static void _HZClose(UConverter *converter);
 static void _HZReset(UConverter *converter);
 
@@ -109,7 +109,7 @@ typedef struct{
 
 
 
-static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t *options, UErrorCode *errorCode){
+static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, UErrorCode *errorCode){
     cnv->toUnicodeStatus = 0;
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
@@ -651,7 +651,7 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
     int32_t length=0;
-    UChar32 targetUniChar = 0x0000;
+    uint32_t targetUniChar = 0x0000;
     UChar32 mySourceChar = 0x0000,c=0x0000;
     UConverterDataHZ *myConverterData=(UConverterDataHZ*)args->converter->extraInfo;
     UBool isTargetUCharDBCS = (UBool) myConverterData->isTargetUCharDBCS;
@@ -829,7 +829,7 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
     int32_t length=0;
-    UChar32 targetUniChar = 0x0000;
+    uint32_t targetUniChar = 0x0000;
     UChar32 mySourceChar = 0x0000,c=0x0000;
     UConverterDataHZ *myConverterData=(UConverterDataHZ*)args->converter->extraInfo;
     UBool isTargetUCharDBCS = (UBool) myConverterData->isTargetUCharDBCS;
