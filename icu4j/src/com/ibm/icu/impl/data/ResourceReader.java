@@ -60,7 +60,16 @@ public class ResourceReader {
      * if the end of the file has been reached.
      */
     public String readLine() throws IOException {
-        isReset = false;
+        if (isReset) {
+            // Remove BOMs
+            isReset = false;
+            String line = reader.readLine();
+            if (line.charAt(0) == '\uFFEF' ||
+                line.charAt(0) == '\uFEFF') {
+                return line.substring(1);
+            }
+            return line;
+        }
         return reader.readLine();
     }
 
