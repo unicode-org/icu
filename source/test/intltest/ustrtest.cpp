@@ -975,6 +975,11 @@ UnicodeStringTest::TestMiscellaneous()
     if(!test3.isBogus() || test3.getBuffer()!=0) {
         errln("setToBogus() failed to make a string bogus");
     }
+    // make sure that bogus.setCharAt() does not crash because of fArray==0
+    // setCharAt() "revives" the string but leaves the string empty because it has length()==0
+    if(test3.setCharAt(0, 0x62).isBogus() || !test3.isEmpty()) {
+        errln("bogus.setCharAt(0, 'b') failed");
+    }
 
     // test getBuffer(minCapacity) and releaseBuffer()
     test1=UnicodeString(); // make sure that it starts with its stackBuffer
