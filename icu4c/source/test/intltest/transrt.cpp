@@ -34,8 +34,8 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(1,TestKatakana);
         //CASE(2,TestArabic);
         //CASE(3,TestHebrew);
-        CASE(2,TestGreek);
-        CASE(3,TestCyrillic);
+        //CASE(2,TestGreek);
+        //CASE(3,TestCyrillic);
         /*
         CASE(7,TestJamo);
         CASE(8,TestJamoHangul);

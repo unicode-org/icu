@@ -156,28 +156,28 @@ void ConvertTest::TestConvert()
 
     someConverters[0] = new UnicodeConverter("ibm-1123",err);
     if (U_FAILURE(err)) {
-        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        errln ((UnicodeString)"FAILURE a! " + myErrorName(err));
         return;
     }
     someConverters[1] = new UnicodeConverter("ibm-1123",err);
     if (U_FAILURE(err)) {
-        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        errln ((UnicodeString)"FAILURE b! " + myErrorName(err));
         return;
     }
     someConverters[2] = new UnicodeConverter("ibm-1123",err);
     if (U_FAILURE(err)) {
-        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        errln ((UnicodeString)"FAILURE c! " + myErrorName(err));
         return;
     }
 
     someConverters[3] = new UnicodeConverter("ibm-834", err);
     if (U_FAILURE(err)) {
-        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        errln ((UnicodeString)"FAILURE d! " + myErrorName(err));
         return;
     }
-    someConverters[4] = new UnicodeConverter("ibm-941", err);
+    someConverters[4] = new UnicodeConverter("ibm-949", err);
     if (U_FAILURE(err)) {
-        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        errln ((UnicodeString)"FAILURE e! " + myErrorName(err));
         return;
     }
    

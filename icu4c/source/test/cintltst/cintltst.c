@@ -220,14 +220,17 @@ void ctest_setICU_DATA() {
         return;
     }
 
-    /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst
-     *              to point to "wherever/icu/data"
-	 *              We can make a path from there to "wherever/icu/source/data"
-     *   The value is complete with quotes, so it can be used as-is as a string constant.
+    /* U_TOPBUILDDIR is set by the makefiles on UNIXes when building cintltst and intltst
+	 //              to point to the top of the build hierarchy, which may or
+	 //              may not be the same as the source directory, depending on
+	 //              the configure options used.  At any rate,
+	 //              set the data path to the built data from this directory.
+	 //              The value is complete with quotes, so it can be used
+	 //              as-is as a string constant.
      */
-#if defined (U_SRCDATADIR)
+#if defined (U_TOPBUILDDIR)
     {
-        static char env_string[] = U_SRCDATADIR "/../source/data/";
+        static char env_string[] = U_TOPBUILDDIR  "/data/";
         u_setDataDirectory(env_string);
         return;
     }
@@ -238,7 +241,7 @@ void ctest_setICU_DATA() {
      *             Change to    "wherever\icu\source\data"
      */
     {
-        char p[sizeof(__FILE__) + 1];
+        char p[sizeof(__FILE__) + 10];
         char *pBackSlash;
         int i;
 
