@@ -273,10 +273,10 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         }
         break;
 
-		case 18: //all
-		name = "LotusCollationTest";
+        case 18: //all
+        name = "LotusCollationTest";
 
-		name = "LotusCollationKoreanTest"; 
+        name = "LotusCollationKoreanTest"; 
         if (exec) {
             logln("LotusCollationKoreanTest---"); logln("");
             LotusCollationKoreanTest test;
