@@ -1991,10 +1991,10 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             }
             {
                 UChar iso_2022_jptoUnicodeHex[]={ 0x0041, 
-                                                  0x0026, 0x0023, 0x0078, 0x0030, 0x0030, 0x0032, 0x0041, 0x003b, 
-                                                  0x0026, 0x0023, 0x0078, 0x0030, 0x0030, 0x0034, 0x0034, 0x003b, 
+                                                  0x0026, 0x0023, 0x0078, 0x0032, 0x0041, 0x003b, 
+                                                  0x0026, 0x0023, 0x0078, 0x0034, 0x0034, 0x003b, 
                                                   0x0042 };
-                int32_t from_iso_2022_jpOffsHex [] ={  3,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,12   };
+                int32_t from_iso_2022_jpOffsHex [] ={  3,7,7,7,7,7,7,7,7,7,7,7,7,12   };
                 if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
                      iso_2022_jptoUnicodeHex, sizeof(iso_2022_jptoUnicodeHex)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
                     UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffsHex, NULL, 0,UCNV_ESCAPE_XML_HEX,U_ZERO_ERROR ))
@@ -2002,10 +2002,10 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             }
             {
                 UChar iso_2022_jptoUnicodeC[]={ 0x0041, 
-                                                0x005C, 0x0078, 0x0030, 0x0030, 0x0032, 0x0041,
-                                                0x005C, 0x0078, 0x0030, 0x0030, 0x0034, 0x0034, 
+                                                0x005C, 0x0078, 0x0032, 0x0041,
+                                                0x005C, 0x0078, 0x0034, 0x0034, 
                                                 0x0042 };
-                int32_t from_iso_2022_jpOffsC [] ={  3,7,7,7,7,7,7,7,7,7,7,7,7,12   };
+                int32_t from_iso_2022_jpOffsC [] ={  3,7,7,7,7,7,7,7,7,12   };
                 if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
                      iso_2022_jptoUnicodeC, sizeof(iso_2022_jptoUnicodeC)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
                     UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffsC, NULL, 0,UCNV_ESCAPE_C,U_ZERO_ERROR ))
