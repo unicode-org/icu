@@ -1817,14 +1817,20 @@ zh {
         "\u9F39\u9F3B\u9F3D-\u9F3E\u9F44\u9F50-\u9F51\u9F7F-\u9F80"
         "\u9F83-\u9F8C\u9F99-\u9F9B\u9F9F-\u9FA0]"
     }
+
     Types{
-        PINYIN { "\u62FC\u97F3\u987a\u5e8f" }
-        STROKE { "\u7b14\u5212\u987a\u5e8f" }   // Simplified Chinese name.
-        TRADITIONAL { "\u4f20\u7edf\u5386\u6cd5" }  // Spanish traditional sorting
+        collation{
+            pinyin 	{ "\u62FC\u97F3\u987a\u5e8f" }
+            stroke 	{ "\u7b14\u5212\u987a\u5e8f" }   // Simplified Chinese name.
+            traditional { "\u4f20\u7edf\u5386\u6cd5" }  // Spanish traditional sorting
+        }
+        calendar{
+            traditional { "\u4f20\u7edf\u5386\u6cd5" }
+        }
     }
     Variants{
         EURO    { "\u6b27\u5143" }
-        PREEURO { "\u65e7\u5e01" }
+        // PREEURO { "\u65e7\u5e01" }
         REVISED { "\u5df2\u4fee\u8ba2" }
     }
     zoneStrings { 

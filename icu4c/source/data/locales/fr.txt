@@ -11,18 +11,23 @@ fr {
         Version { "1.0" }
         Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
     }
-
-    Types {
-        TRADITIONAL { "Traditionnel" }
-    }
     Variants {
         REVISED { "R\u00e9vis\u00e9" }
     }
     Keys{
-        Collation{ "Ordonnancement" }
-        Calendar { "Calendrier" }
-    } 
-    Countries { 
+        collation{ "Ordonnancement" }
+        calendar { "Calendrier" }
+	//currency { "" }
+    }
+    Types {
+        collation{
+            traditional{ "Traditionnel Ordonnancement" }
+        }
+        calendar{
+            traditional{ "Traditionnel Calendrier" }
+        }
+    }
+    Countries {
         Fallback{ "en"}
         AD { "Andorre" }
         AE { "\u00c9mirats Arabes Unis" }
@@ -213,7 +218,7 @@ fr {
     }
 
     Languages { 
-        Fallback { "en" }
+        //Fallback { "en" }
         root { "racine" }
 
         aa { "afar" }
@@ -280,7 +285,7 @@ fr {
         hz { "herero" }
         ia { "interlingua" }
         id { "indon\u00E9sien" }
-        ie { "interlingue" }
+        ie { "interlingu\u00EB" }
         ig { "igbo" }
         ii { "yi de Sichuan" }
         ik { "inupiaq" }

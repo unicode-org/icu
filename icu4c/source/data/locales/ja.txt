@@ -11,13 +11,21 @@ ja {
         "\u5348\u524D",
         "\u5348\u5F8C",
     }
-
+   // Keys{
+   //      collation{""}
+   //      calendar {""}
+   // }
     Types{
-        TRADITIONAL { "\u5E74\u53F7" }
+        collation{
+            traditional { "\u5E74\u53F7" }
+        }
+        calendar{
+            traditional { "\u5E74\u53F7" }
+        }
     }
     Variants{
         EURO  { "\u30e6\u30fc\u30ed" }
-        PREEURO { "\u65e7\u901a\u8ca8" }
+        //PREEURO { "\u65e7\u901a\u8ca8" }
         REVISED { "\u6539\u8a02\u7248" }
     }
 

@@ -21,9 +21,7 @@ mt {
     Version { "1.0" } // 2002-01-15 
 //    ShortLanguage { mlt }
 
-    Variants{
-        PREEURO { "Qabel il-Euro" }
-    } 
+
     // Duplicate data has been commented out.
     Languages {
         Fallback{ "en"}

@@ -9,11 +9,16 @@ ko {
     Version { "2.0" }
 
     Types{
-        TRADITIONAL { "\uc804\ud1b5 \uc5ed\ubc95" }
+        collation{
+             traditional { "\uc804\ud1b5 \uc5ed\ubc95" }
+        }
+        calendar{
+             traditional { "\uc804\ud1b5 \uc5ed\ubc95" }
+        }
     }
     Variants{
         EURO    { "\uc720\ub85c" }
-        PREEURO { "\uc720\ub85c \uc774\uc804" }
+        // PREEURO { "\uc720\ub85c \uc774\uc804" }
         REVISED { "\uac1c\uc815" }
     }
 

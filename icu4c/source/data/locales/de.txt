@@ -20,12 +20,27 @@ de {
     Version{ "3.0" }
     Variants{
         Fallback{"en"}
-        PREEURO { "Vor-Euro" }
         REVISED { "Revidiert" }
     }
+    Keys{
+        collation{ "Sortierung"}
+        calendar { "Kalender" }
+        currency { "W\u00e4hrung" }
+    }
     Types{
-        PHONEBOOK { "Telefonbuch-Sortierregeln" }
-        TRADITIONAL { "Traditionell" }
+        collation{
+            phonebook  { "Telefonbuch-Sortierregeln" }
+            traditional{ "Traditionelle Sortierregeln" }
+	    direct     { "Direkt Sortierregeln" }
+        }
+        calendar{
+            japanese  { "Japanischer Kalender" }
+	    buddhist  { "Buddhistischer Kalender"  }
+	    islamic   { "Islamischer Kalender"   }
+	    hebrew    { "Hebr\u00e4ischer Kalender"    }
+	    chinese   { "Chinesischer Kalender"   }
+	    gregorian { "Gregorianischer Kalender" }
+        }
     }
     // This shouldn't be used, but valid data should be here.
     // vorm. -> vormittags -> in the morning
@@ -346,10 +361,10 @@ de {
     // further checking.
     //   Markus Scherer, 2000jun01
     Languages {
-        Fallback{ "en"}
+        //Fallback{ "en"}
         // ? aa { "Afar" }
         ab { "Abchasisch" }
-        // af { "Afrikaans" }
+        af { "Afrikaans" }
         am { "Amharisch" } // ?
         ar { "Arabisch" }
         as { "Assamesisch" }
@@ -631,7 +646,7 @@ de {
         BAM { "BAM", "Konvertierbare Mark" }
         BBD { "BBD", "Barbados-Dollar" }
         BDT { "BDT", "Taka" }
-        BEF { "BEF", "Belgischer Franc" }
+        BEF { "BEF", "Belgischer Franken" }
         BGL { "BGL", "Lew" }
         BGN { "BGN", "Bulgarian Lev" }
         BHD { "BHD", "Bahrain-Dinar" }
