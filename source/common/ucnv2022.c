@@ -1392,6 +1392,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                  */
                     reason = UCNV_UNASSIGNED;
                     *err = U_INVALID_CHAR_FOUND;
+                    args->converter->invalidUCharBuffer[0]=(UChar)mySourceChar;
+                    args->converter->invalidCharLength++;
                     
 CALLBACK:
                     saveSource = args->source;
@@ -2811,6 +2813,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                  */
                     reason = UCNV_UNASSIGNED;
                     *err = U_INVALID_CHAR_FOUND;
+                    args->converter->invalidUCharBuffer[0]= (UChar)mySourceChar;
+                    args->converter->invalidCharLength++;
                     
 CALLBACK:
                     saveSource = args->source;
