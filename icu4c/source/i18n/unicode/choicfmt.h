@@ -667,6 +667,9 @@ private:
 
     static const UChar fgPositiveInfinity[];
     static const UChar fgNegativeInfinity[];
+
+    ChoiceFormat(); // default constructor not implemented
+
     /**
      * Construct a new ChoiceFormat with the limits and the corresponding formats
      * based on the pattern.

@@ -1105,6 +1105,9 @@ public:
 
 private:
     static const char fgClassID;
+
+    DecimalFormat(); // default constructor not implemented
+
     /**
      * Do real work of constructing a new DecimalFormat.
      */

@@ -583,6 +583,8 @@ private:
 
     void initializeDefaultCentury(void);
 
+    SimpleDateFormat(); // default constructor not implemented
+
     /**
      * Used by the DateFormat factory methods to construct a SimpleDateFormat.
      * @param timeStyle the time style.

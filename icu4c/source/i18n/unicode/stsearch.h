@@ -467,6 +467,7 @@ protected:
     virtual int32_t handlePrev(int32_t position, UErrorCode &status);
     
 private :
+    StringSearch(); // default constructor not implemented
 
     // private data members ----------------------------------------------
 

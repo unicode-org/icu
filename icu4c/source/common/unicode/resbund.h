@@ -426,6 +426,8 @@ public:
     static inline UClassID getStaticClassID();
 
 private:
+    ResourceBundle(); // default constructor not implemented
+
     UResourceBundle *resource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
     Locale *locName;

@@ -779,6 +779,8 @@ public:
   virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
 
 private:
+  RuleBasedNumberFormat(); // default constructor not implemented
+
   void init(const UnicodeString& rules, UParseError& perror, UErrorCode& status);
   void dispose();
   void stripWhitespace(UnicodeString& src);
