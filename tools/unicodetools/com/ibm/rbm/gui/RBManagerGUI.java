@@ -261,6 +261,7 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 	
 	public void createBundleItem() {
 		new BundleItemCreationDialog(rbm, this, Resources.getTranslation("dialog_title_new_item"), true);
+		updateDisplayPanels();
 	}
 	
 	/**
@@ -675,6 +676,7 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 															 this, Resources.getTranslation("dialog_title_edit_item"), true);
 				model.update();
 			}
+			updateDisplayPanels();
 		}
 	}
 	

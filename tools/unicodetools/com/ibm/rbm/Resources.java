@@ -77,7 +77,7 @@ public class Resources {
 	
     public static String[] getAvailableLocales() {
         //Locale loc[] = null;
-        String list[] = null;
+        String list[] = new String[0];
         Vector locVect = new Vector();
         try {
             URL resURL = ClassLoader.getSystemResource("com/ibm/rbm/resources/RBManager.properties");
@@ -115,9 +115,14 @@ public class Resources {
             for (int i=0; i < listSize; i++) {
                 list[i] = (String)locVect.get(i);
             }
-        } catch (IOException ioe) {
+        }
+        catch (IOException ioe) {
             System.err.println("Can't get resources");
             ioe.printStackTrace(System.err);
+        }
+        catch (ClassCastException cce) {
+            System.err.println("Can't get resources");
+            cce.printStackTrace(System.err);
         }
         return list;
     }
