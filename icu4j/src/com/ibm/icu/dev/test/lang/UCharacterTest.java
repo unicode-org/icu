@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/02/05 05:45:16 $
-* $Revision: 1.49 $
+* $Date: 2003/02/11 00:47:00 $
+* $Revision: 1.50 $
 *
 *******************************************************************************
 */
@@ -207,7 +207,7 @@ public final class UCharacterTest extends TestFmwk
         int digitvalues2[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
         int size  = digits.length;
-        for (int i = 0; i < size; i ++)
+        for (int i = 0; i < size; i ++) {
             if (UCharacter.isDigit(digits[i]) &&
                 UCharacter.digit(digits[i]) != digitvalues[i])
             {
@@ -215,7 +215,7 @@ public final class UCharacterTest extends TestFmwk
                         " expected digit with value " + digitvalues[i]);
                 break;
             }
-
+        } 
         size = nondigits.length;
         for (int i = 0; i < size; i ++)
             if (UCharacter.isDigit(nondigits[i]))
@@ -225,7 +225,7 @@ public final class UCharacterTest extends TestFmwk
             }
 
         size = digits2.length;
-        for (int i = 0; i < 10; i ++)
+        for (int i = 0; i < 10; i ++) {
             if (UCharacter.isDigit(digits2[i]) &&
                 UCharacter.digit(digits2[i]) != digitvalues2[i])
             {
@@ -233,6 +233,7 @@ public final class UCharacterTest extends TestFmwk
                     " expected digit with value " + digitvalues2[i]);
                 break;
             }
+        }
     }
 
     /**

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2002/09/06 19:04:07 $
-* $Revision: 1.8 $
+* $Date: 2003/02/11 00:48:59 $
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -63,10 +63,7 @@ public class IntTrie extends Trie
     public final int getCodePointValue(int ch)
     {
         int offset = getCodePointOffset(ch);
-        if (offset > 0) {
-            return m_data_[offset];
-        }
-        return m_initialValue_;
+        return (offset >= 0) ? m_data_[offset] : m_initialValue_;
     }
 
     /**

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CharTrie.java,v $
-* $Date: 2002/10/31 01:10:19 $
-* $Revision: 1.9 $
+* $Date: 2003/02/11 00:48:59 $
+* $Revision: 1.10 $
 *
 ******************************************************************************
 */
@@ -50,9 +50,51 @@ public class CharTrie extends Trie
             throw new IllegalArgumentException(
                                "Data given does not belong to a char trie.");
         }
+        m_friendAgent_ = new FriendAgent();
     }
-
+    
+    /**
+     * Java friend implementation
+     */
+    public class FriendAgent
+    {
+        /**
+         * Gives out the index array of the trie
+         * @return index array of trie
+         */ 
+        public char[] getPrivateIndex() 
+        {
+            return m_index_;
+        }
+        /**
+         * Gives out the data array of the trie
+         * @return data array of trie
+         */ 
+        public char[] getPrivateData() 
+        {
+            return m_data_;
+        }
+        /**
+         * Gives out the data offset in the trie
+         * @return data offset in the trie
+         */ 
+        public int getPrivateInitialValue() 
+        {
+            return m_initialValue_;
+        }
+    }
+    
     // public methods --------------------------------------------------
+    
+    /**
+     * Java friend implementation
+     * To store the index and data array into the argument.
+     * @param friend java friend UCharacterProperty object to store the array
+     */
+    public void putIndexData(UCharacterProperty friend) 
+    {
+        friend.setIndexData(m_friendAgent_);
+    }
 
     /**
     * Gets the value associated with the codepoint.
@@ -65,10 +107,10 @@ public class CharTrie extends Trie
     public final char getCodePointValue(int ch)
     {
         int offset = getCodePointOffset(ch);
-        if (offset > 0) {
-            return m_data_[offset];
-        }
-        return m_initialValue_;
+        
+        // return -1 if there is an error, in this case we return the default
+        // value: m_initialValue_
+        return (offset >= 0) ? m_data_[offset] : m_initialValue_;
     }
 
     /**
@@ -133,8 +175,8 @@ public class CharTrie extends Trie
         }
         int offset = m_dataManipulate_.getFoldingOffset(leadvalue);
         if (offset > 0) {
-	        return m_data_[getRawOffset(offset,
- 		                                (char)(trail & SURROGATE_MASK_))];
+	        return m_data_[getRawOffset(offset, 
+                                        (char)(trail & SURROGATE_MASK_))];
         }
         return m_initialValue_;
     }
@@ -247,5 +289,9 @@ public class CharTrie extends Trie
     /**
     * Array of char data
     */
-    protected char m_data_[];
+    private char m_data_[];
+    /**
+     * Agent for friends
+     */
+    private FriendAgent m_friendAgent_;
 }

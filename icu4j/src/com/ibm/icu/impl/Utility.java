@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/02/07 21:07:37 $
- * $Revision: 1.36 $
+ * $Date: 2003/02/11 00:49:09 $
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -1610,19 +1610,16 @@ public final class Utility {
      */
     public static final int compareUnsigned(int source, int target)
     {
-        if (source == target) {
-            return 0;
-        }
-        if (source >= 0) {
-            if (source < target || target < 0) {
-                return -1;
-            }
-        }
-        else if (source < target && target < 0) {
-            // source < 0, so
+        int MAGIC = 0x80000000;
+        source += MAGIC;
+        target += MAGIC;
+        if (source < target) {
             return -1;
+        } 
+        else if (source > target) {
+            return 1;
         }
-        return 1;
+        return 0;
     }
 
     /**
