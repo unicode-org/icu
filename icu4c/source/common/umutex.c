@@ -229,14 +229,15 @@ umtx_destroy(UMTX *mutex) {
 #if (ICU_USE_THREADS == 1) 
 
 
-//
-//   umtx_atomic_inc
-//   umtx_atomic_dec
-//
+/*
+ *  umtx_atomic_inc
+ *  umtx_atomic_dec
+ */
+
 #if defined (WIN32)
-//
-//  Win32 - use the Windows API functions for atomic increment and decrement.
-//
+/*
+ * Win32 - use the Windows API functions for atomic increment and decrement.
+ */
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_inc(int32_t *p)
 {
@@ -250,12 +251,12 @@ umtx_atomic_dec(int32_t *p)
 }
 
 #elif defined (POSIX)
-//
-//  POSIX platforms without specific atomic operations.  Use a posix mutex
-//     to protect the increment and decrement.
-//     Put the mutex in static storage so we don't have to come back and delete it
-//     when the process exits.
-//
+/*
+ * POSIX platforms without specific atomic operations.  Use a posix mutex
+ *   to protect the increment and decrement.
+ *   Put the mutex in static storage so we don't have to come back and delete it
+ *   when the process exits.
+ */
 static pthread_mutex_t gIncDecMutex;
 static UBool           gIncDecMutexInitialized = FALSE;
 
@@ -296,11 +297,11 @@ umtx_atomic_dec(int32_t *p)
     return retVal;
 }
 
-// TODO:  pthread_mutex_destroy() when the time comes.
+/* TODO:  pthread_mutex_destroy() when the time comes. */
 
 #else 
    
-// No recognized platform. 
+/* No recognized platform.  */
 #warning  No atomic increment and decrement defined for this platform.
 
 U_CAPI int32_t U_EXPORT2
@@ -313,10 +314,10 @@ umtx_atomic_dec(int32_t *p) {
     return --(*p);
 }
 
-#endif   // Platform selection for atomic_inc and dec.
+#endif   /* Platform selection for atomic_inc and dec. */
 
 
-#elif  // (ICU_USE_THREADS == 1)
+#elif  /* (ICU_USE_THREADS == 1) */
 
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_inc(int32_t *p) {
@@ -328,7 +329,7 @@ umtx_atomic_dec(int32_t *p) {
     return --(*p);
 }
 
-#endif // (ICU_USE_THREADS == 1)
+#endif /* (ICU_USE_THREADS == 1) */
 
 
 
