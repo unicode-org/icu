@@ -1746,9 +1746,25 @@ u_toupper(UChar32 c);
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c);
 
-/** Option value for case folding: use all mappings defined in CaseFolding.txt. @draft ICU 1.8 */
+/** Option value for case folding: use default mappings defined in CaseFolding.txt. @stable */
 #define U_FOLD_CASE_DEFAULT 0
-/** Option value for case folding: exclude the mappings for dotted I and dotless i marked with 'I' in CaseFolding.txt. @draft ICU 1.8 */
+
+/**
+ * Option value for case folding:
+ *
+ * Use the modified set of mappings provided in CaseFolding.txt to handle dotted I
+ * and dotless i appropriately for Turkic languages (tr, az).
+ *
+ * Before Unicode 3.2, CaseFolding.txt contains mappings marked with 'I' that
+ * are to be included for default mappings and
+ * excluded for the Turkic-specific mappings.
+ *
+ * Unicode 3.2 CaseFolding.txt instead contains mappings marked with 'T' that
+ * are to be excluded for default mappings and
+ * included for the Turkic-specific mappings.
+ *
+ * @stable
+ */
 #define U_FOLD_CASE_EXCLUDE_SPECIAL_I 1
 
 /**

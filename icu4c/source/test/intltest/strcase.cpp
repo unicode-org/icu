@@ -290,8 +290,9 @@ StringCaseTest::TestCaseConversion()
     // test case folding
     {
         UnicodeString
-            s=UNICODE_STRING("A\\u00df\\u00b5\\ufb03\\U0001040c\\u0131", 35).unescape(),
-            f=UNICODE_STRING("ass\\u03bcffi\\U00010434i", 23).unescape(),
+            s=UnicodeString("A\\u00df\\u00b5\\ufb03\\U0001040c\\u0130\\u0131", "").unescape(),
+            f=UnicodeString("ass\\u03bcffi\\U00010434i\\u0307\\u0131", "").unescape(),
+            g=UnicodeString("ass\\u03bcffi\\U00010434i\\u0131", "").unescape(),
             t;
 
         (t=s).foldCase();
@@ -300,10 +301,9 @@ StringCaseTest::TestCaseConversion()
         }
 
         // alternate handling for dotted I/dotless i (U+0130, U+0131)
-        f.setCharAt(f.length()-1, 0x131);
         (t=s).foldCase(U_FOLD_CASE_EXCLUDE_SPECIAL_I);
-        if(f!=t) {
-            errln("error in foldCase(\"" + s + "\", U_FOLD_CASE_EXCLUDE_SPECIAL_I)=\"" + t + "\" but expected \"" + f + "\"");
+        if(g!=t) {
+            errln("error in foldCase(\"" + s + "\", U_FOLD_CASE_EXCLUDE_SPECIAL_I)=\"" + t + "\" but expected \"" + g + "\"");
         }
     }
 }
