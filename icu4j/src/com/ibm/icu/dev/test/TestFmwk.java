@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/11/16 21:36:48 $ 
- * $Revision: 1.20 $
+ * $Date: 2001/11/28 17:41:09 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -174,33 +174,62 @@ public class TestFmwk implements TestLog {
      * Adds given string to the log if we are in verbose mode.
      */
     public void log( String message ) {
-        if( params.verbose ) {
+        log(message, true, false);
+    }
+
+    public void logln( String message ) {
+        log(message + System.getProperty("line.separator"), true, false);
+    }
+
+    /**
+     * Add a given string to the log.
+     * @param message text to add
+     * @param pass if true and if in verbose mode, or if false, then add
+     * the text; otherwise suppress it
+     * @param incrementCount if pass if false and incrementCount is true,
+     * then increment the failure count; if pass is true, then this param
+     * is ignored
+     */
+    public void log( String message, boolean pass, boolean incrementCount ) {
+        if (!pass && incrementCount) {
+            params.errorCount++;
+        }
+
+        if (!pass || params.verbose) {
             indent(params.indentLevel + 1);
             params.log.print( message );
             params.log.flush();
         }
+
+        if (!pass && !params.nothrow) {
+            throw new RuntimeException(message);
+        }
     }
 
-    public void logln( String message ) {
-        log(message + System.getProperty("line.separator"));
+    public void logln( String message, boolean pass, boolean incrementCount ) {
+        log(message + System.getProperty("line.separator"), pass, incrementCount);
+    }
+
+    /**
+     * Convenience overloads
+     */
+    public void log( String message, boolean pass ) {
+        log(message, pass, true);
+    }
+
+    public void logln( String message, boolean pass ) {
+        logln(message, pass, true);
     }
 
     /**
      * Report an error
      */
     public void err( String message ) {
-        params.errorCount++;
-        indent(params.indentLevel + 1);
-        params.log.print( message );
-        params.log.flush();
-
-        if (!params.nothrow) {
-            throw new RuntimeException(message);
-        }
+        log(message, false, true);
     }
 
     public void errln( String message ) {
-        err(message + System.getProperty("line.separator"));
+        logln(message, false, true);
     }
 
     protected int getErrorCount() {
