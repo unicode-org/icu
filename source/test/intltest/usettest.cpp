@@ -56,7 +56,7 @@ UnicodeSetTest::TestPatterns(void) {
     // Throw in a test of complement
     set.complement();
     UnicodeString exp;
-    exp.append((UChar)0x0000).append("aeeoouu").append((UChar)('z'+1)).append((UChar)0xFFFF);
+    exp.append((UChar)0x0000).append("aeeoouu").append((UChar)(0x007a+1)).append((UChar)0xFFFF);
     expectPairs(set, exp);
 }
 
@@ -162,41 +162,41 @@ UnicodeSetTest::TestAddRemove(void) {
     UnicodeSet set; // Construct empty set
 	doAssert(set.isEmpty() == TRUE, "set should be empty");
 	doAssert(set.size() == 0, "size should be 0");
-    set.add('a', 'z');
+    set.add(0x0061, 0x007a);
     expectPairs(set, "az");
 	doAssert(set.isEmpty() == FALSE, "set should not be empty");
     doAssert(set.size() != 0, "size should not be equal to 0");
 	doAssert(set.size() == 26, "size should be equal to 26");
-    set.remove('m', 'p');
+    set.remove(0x006d, 0x0070);
 	expectPairs(set, "alqz");
 	doAssert(set.size() == 22, "size should be equal to 22");
-    set.remove('e', 'g');
+    set.remove(0x0065, 0x0067);
     expectPairs(set, "adhlqz");
 	doAssert(set.size() == 19, "size should be equal to 19");
-    set.remove('d', 'i');
+    set.remove(0x0064, 0x0069);
     expectPairs(set, "acjlqz");
 	doAssert(set.size() == 16, "size should be equal to 16");
-    set.remove('c', 'r');
+    set.remove(0x0063, 0x0072);
     expectPairs(set, "absz");
 	doAssert(set.size() == 10, "size should be equal to 10");
-    set.add('f', 'q');
+    set.add(0x0066, 0x0071);
     expectPairs(set, "abfqsz");
 	doAssert(set.size() == 22, "size should be equal to 22");
-    set.remove('a', 'g');
+    set.remove(0x0061, 0x0067);
     expectPairs(set, "hqsz");
-    set.remove('a', 'z');
+    set.remove(0x0061, 0x007a);
     expectPairs(set, "");
 	doAssert(set.isEmpty() == TRUE, "set should be empty");
 	doAssert(set.size() == 0, "size should be 0");
-	set.add('a');
+	set.add(0x0061);
 	doAssert(set.isEmpty() == FALSE, "set should not be empty");
     doAssert(set.size() == 1, "size should not be equal to 1");
-	set.add('b');
-	set.add('c');
+	set.add(0x0062);
+	set.add(0x0063);
 	expectPairs(set, "ac");
 	doAssert(set.size() == 3, "size should not be equal to 3");
-	set.add('p');
-	set.add('q');
+	set.add(0x0070);
+	set.add(0x0071);
 	expectPairs(set, "acpq");
 	doAssert(set.size() == 5, "size should not be equal to 5");
 	set.clear();
@@ -222,7 +222,7 @@ UnicodeSetTest::TestAddRemove(void) {
 	UnicodeSet set3;
 	expectPattern(set3, "[a-c]", "ac");
 	doAssert(set.containsAll(set3) == FALSE, "set doesn't contain all the elements in set3");
-	set3.remove('b');
+	set3.remove(0x0062);
 	expectPairs(set3, "aacc");
 	doAssert(set.containsAll(set3) == TRUE, "set should contain all the elements in set3");
 	set.retainAll(set3);
@@ -293,7 +293,7 @@ void UnicodeSetTest::TestAPI() {
     }
 
     // clear(), isEmpty()
-    set.add('a');
+    set.add(0x0061);
     if (set.isEmpty()) {
         errln((UnicodeString)"FAIL, set shouldn't be empty but is: " +
               set);
@@ -310,12 +310,12 @@ void UnicodeSetTest::TestAPI() {
         errln((UnicodeString)"FAIL, size should be 0, but is " + set.size() +
               ": " + set);
     }
-    set.add('a');
+    set.add(0x0061);
     if (set.size() != 1) {
         errln((UnicodeString)"FAIL, size should be 1, but is " + set.size() +
               ": " + set);
     }
-    set.add('1', '9');
+    set.add(0x0031, 0x0039);
     if (set.size() != 10) {
         errln((UnicodeString)"FAIL, size should be 10, but is " + set.size() +
               ": " + set);
@@ -656,7 +656,7 @@ UnicodeSetTest::escape(const UnicodeString& s) {
     for (int32_t i=0; i<s.length(); ++i)
     {
         UChar c = s[(UTextOffset)i];
-        if (' ' <= c && c <= (UChar)0x7F) {
+        if (0x0020 <= c && c <= 0x007F) {
             buf += c;
         } else {
             buf += (UChar)0x5c; buf += (UChar)0x55;
