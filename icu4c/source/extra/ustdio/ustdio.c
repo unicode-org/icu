@@ -190,7 +190,7 @@ u_fgets(UFILE        *f,
     count = 0;
     while( ! IS_STRING_DELIMITER(*alias) && count < n) {
       ++count;
-      *alias++;
+      alias++;
     }
 
     /* copy the characters into the target*/
@@ -207,7 +207,7 @@ u_fgets(UFILE        *f,
     
     /* skip over any remaining delimiters */
     while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
-      *(f->fUCPos)++;
+      (f->fUCPos)++;
     
     /* return s */
     return s;
@@ -225,7 +225,7 @@ u_fgets(UFILE        *f,
     count = 0;
     while( ! IS_STRING_DELIMITER(*alias) && alias < f->fUCLimit && count < n) {
       ++count;
-      *alias++;
+      alias++;
     }
     
     /* copy the current data in the buffer */
@@ -245,7 +245,7 @@ u_fgets(UFILE        *f,
       
       /* skip over any remaining delimiters */
       while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
-	*(f->fUCPos)++;
+	    (f->fUCPos)++;
       
       /* break out */
       break;

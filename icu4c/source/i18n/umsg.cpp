@@ -300,15 +300,15 @@ u_vformatMessage(    const    char        *locale,
   while(pat < patLimit) {
     if(part == 0) {
       if(*pat == 0x0027 /*'\''*/) {
-    // handle double quotes
-    if( (pat + 1) < patLimit && *(pat + 1) == 0x0027 /*'\''*/)
-      *pat++;
-    else
-      inQuote = ! inQuote;
+        // handle double quotes
+        if( (pat + 1) < patLimit && *(pat + 1) == 0x0027 /*'\''*/)
+          pat++;
+        else
+          inQuote = ! inQuote;
       }  
       else if(*pat == 0x007B /*'{'*/ && ! inQuote) {
-    part = 1;
-    bracePos = (pat - pattern);
+        part = 1;
+        bracePos = (pat - pattern);
       }
     }
     else if(inQuote) {              // just copy quotes in parts
@@ -319,51 +319,51 @@ u_vformatMessage(    const    char        *locale,
       switch (*pat) {
     
       case 0x002C /*','*/:
-    if(part < 3)
-      part += 1;
-    break;
+        if(part < 3)
+          part += 1;
+        break;
 
       case 0x007B /*'{'*/:
-    ++braceStack;
-    break;
+        ++braceStack;
+        break;
 
       case 0x007D /*'}'*/:
-    if(braceStack == 0) {
-      part = 0;
-      // found a close brace, determine the argument type enclosed
-      // and the numeric ID of the argument
-      Formattable::Type type = 
-        matchType(pattern, bracePos, (pat - pattern));
+        if(braceStack == 0) {
+          part = 0;
+          // found a close brace, determine the argument type enclosed
+          // and the numeric ID of the argument
+          Formattable::Type type = 
+            matchType(pattern, bracePos, (pat - pattern));
 
-      // the numeric ID is important, because if the pattern has a 
-      // section like "{0} {0} {0}" we only want to get one argument
-      // from the variable argument list, despite the fact that
-      // it is in the pattern three times
-      int32_t argNum = umsg_stoi(pattern + bracePos + 1, *status);
+          // the numeric ID is important, because if the pattern has a 
+          // section like "{0} {0} {0}" we only want to get one argument
+          // from the variable argument list, despite the fact that
+          // it is in the pattern three times
+          int32_t argNum = umsg_stoi(pattern + bracePos + 1, *status);
 
-      if(argNum >= MAX_ARGS) {
-        *status = U_INTERNAL_PROGRAM_ERROR;
-        return -1;
-      }
+          if(argNum >= MAX_ARGS) {
+            *status = U_INTERNAL_PROGRAM_ERROR;
+            return -1;
+          }
       
-      // register the type of this argument in our list
-      argTypes[argNum] = type;
+          // register the type of this argument in our list
+          argTypes[argNum] = type;
       
-      // adjust argument count
-      count = ( (argNum + 1) > count ? (argNum + 1) : count);
-    }
-    else
-      --braceStack;
-    break;
+          // adjust argument count
+          count = ( (argNum + 1) > count ? (argNum + 1) : count);
+        }
+        else
+          --braceStack;
+        break;
     
       case 0x0027 /*'\''*/:
-    inQuote = TRUE;
-    break;
+        inQuote = TRUE;
+        break;
       }
     }
     
     // increment position in pattern
-    *pat++;
+    pat++;
   } 
 
   // detect any unmatched braces in the pattern
