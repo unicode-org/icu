@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2001/02/26 23:49:20 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/27 17:33:46 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -44,136 +44,136 @@ public class UCharacterCategory
   /**
   * Character type Lu
   */
-  public static final int UPPERCASE_LETTER        = UNASSIGNED + 1;
+  public static final int UPPERCASE_LETTER        = 1;
   /**
   * Character type Ll
   */
-	public static final int LOWERCASE_LETTER        = UPPERCASE_LETTER + 1;
+	public static final int LOWERCASE_LETTER        = 2;
 	/**
   * Character type Lt
   */
-	public static final int TITLECASE_LETTER        = LOWERCASE_LETTER + 1;
+	public static final int TITLECASE_LETTER        = 3;
 	/**
   * Character type Lm
   */
-	public static final int MODIFIER_LETTER         = TITLECASE_LETTER + 1;
+	public static final int MODIFIER_LETTER         = 4;
 	/**
   * Character type Lo
   */
-	public static final int OTHER_LETTER            = MODIFIER_LETTER + 1;
+	public static final int OTHER_LETTER            = 5;
 	/**
   * Character type Lu
   */
-	public static final int NON_SPACING_MARK        = OTHER_LETTER + 1;
+	public static final int NON_SPACING_MARK        = 6;
 	/**
   * Character type Me
   */
-	public static final int ENCLOSING_MARK          = NON_SPACING_MARK + 1;
+	public static final int ENCLOSING_MARK          = 7;
 	/**
   * Character type Mc
   */
-	public static final int COMBINING_SPACING_MARK  = ENCLOSING_MARK + 1;
+	public static final int COMBINING_SPACING_MARK  = 8;
 	/**
   * Character type Nd
   */
-	public static final int DECIMAL_DIGIT_NUMBER    = COMBINING_SPACING_MARK + 1;
+	public static final int DECIMAL_DIGIT_NUMBER    = 9;
 	/**
   * Character type Nl
   */
-	public static final int LETTER_NUMBER           = DECIMAL_DIGIT_NUMBER + 1;
+	public static final int LETTER_NUMBER           = 10;
 	
 	// start of 11------------
 	
 	/**
   * Character type No
   */
-	public static final int OTHER_NUMBER            = LETTER_NUMBER + 1;
+	public static final int OTHER_NUMBER            = 11;
 	/**
   * Character type Zs
   */
-	public static final int SPACE_SEPARATOR         = OTHER_NUMBER + 1;
+	public static final int SPACE_SEPARATOR         = 12;
 	/**
   * Character type Zl
   */
-	public static final int LINE_SEPARATOR          = SPACE_SEPARATOR + 1;
+	public static final int LINE_SEPARATOR          = 13;
 	/**
   * Character type Zp
   */
-	public static final int PARAGRAPH_SEPARATOR     = LINE_SEPARATOR + 1;
+	public static final int PARAGRAPH_SEPARATOR     = 14;
 	/**
   * Character type Cc
   */
-	public static final int CONTROL                 = PARAGRAPH_SEPARATOR + 1;
+	public static final int CONTROL                 = 15;
 	/**
   * Character type Cf
   */
-	public static final int FORMAT                  = CONTROL + 1;
+	public static final int FORMAT                  = 16;
 	/**
   * Character type Co
   */
-	public static final int PRIVATE_USE             = FORMAT + 1;
+	public static final int PRIVATE_USE             = 17;
 	/**
   * Character type Cs
   */
-	public static final int SURROGATE               = PRIVATE_USE + 1;
+	public static final int SURROGATE               = 18;
 	/**
   * Character type Pd
   */
-	public static final int DASH_PUNCTUATION        = SURROGATE + 1;
+	public static final int DASH_PUNCTUATION        = 19;
 	/**
   * Character type Ps
   */
-	public static final int START_PUNCTUATION       = DASH_PUNCTUATION + 1;
+	public static final int START_PUNCTUATION       = 20;
 	
 	// start of 21 ------------
 
 	/**
   * Character type Pe
   */
-	public static final int END_PUNCTUATION         = START_PUNCTUATION + 1;
+	public static final int END_PUNCTUATION         = 21;
 	/**
   * Character type Pc
   */
-	public static final int CONNECTOR_PUNCTUATION   = END_PUNCTUATION + 1;
+	public static final int CONNECTOR_PUNCTUATION   = 22;
 	/**
   * Character type Po
   */
-	public static final int OTHER_PUNCTUATION       = CONNECTOR_PUNCTUATION + 1;
+	public static final int OTHER_PUNCTUATION       = 23;
 	/**
   * Character type Sm
   */
-	public static final int MATH_SYMBOL             = OTHER_PUNCTUATION + 1;
+	public static final int MATH_SYMBOL             = 24;
 	/**
   * Character type Sc
   */
-	public static final int CURRENCY_SYMBOL         = MATH_SYMBOL + 1;
+	public static final int CURRENCY_SYMBOL         = 25;
 	/**
   * Character type Sk
   */
-	public static final int MODIFIER_SYMBOL         = CURRENCY_SYMBOL + 1;
+	public static final int MODIFIER_SYMBOL         = 26;
 	/**
   * Character type So
   */
-	public static final int OTHER_SYMBOL            = MODIFIER_SYMBOL + 1;
+	public static final int OTHER_SYMBOL            = 27;
 	/**
   * Character type Pi
   */
-	public static final int INITIAL_PUNCTUATION     = OTHER_SYMBOL + 1;
+	public static final int INITIAL_PUNCTUATION     = 28;
 	/**
   * Character type Pf
   */
-	public static final int FINAL_PUNCTUATION       = INITIAL_PUNCTUATION + 1;
+	public static final int FINAL_PUNCTUATION       = 29;
 	/**
   * Character type Cn
   */
-	public static final int GENERAL_OTHER_TYPES     = FINAL_PUNCTUATION + 1;
+	public static final int GENERAL_OTHER_TYPES     = 30;
 	
 	// start of 31 ------------
 
 	/**
   * Character type count
   */
-	public static final int CHAR_CATEGORY_COUNT     = GENERAL_OTHER_TYPES + 1;
+	public static final int CHAR_CATEGORY_COUNT     = 31;
 	
 	/**
 	* Gets the name of the argument category
