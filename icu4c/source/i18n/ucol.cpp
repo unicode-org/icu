@@ -352,7 +352,7 @@ ucol_close(UCollator *coll)
 U_CAPI UCollator*
 ucol_openRules( const UChar        *rules,
                 int32_t            rulesLength,
-                UNormalizationMode mode,
+                UColAttributeValue normalizationMode,
                 UCollationStrength strength,
                 UParseError        *parseError,
                 UErrorCode         *status)
@@ -362,18 +362,33 @@ ucol_openRules( const UChar        *rules,
   UColAttributeValue norm;
   UParseError tErr;
   
+  if(status == NULL || U_FAILURE(*status)){
+    return 0;
+  }
+
+  if(rulesLength < -1 || (rules == NULL && rulesLength != 0)) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+
+  if(rulesLength == -1) {
+    rulesLength = u_strlen(rules);
+  }
+
   if(parseError == NULL){
-      parseError = &tErr;
+    parseError = &tErr;
   }
   
-  switch(mode) {
-  case UNORM_NONE:
+  switch((int)normalizationMode) { // TODO friendly deprecation helper, remove the (int) cast >2002-sep-30
+  case UCOL_OFF:
+  case UNORM_NONE:      // TODO friendly deprecation helper, remove >2002-sep-30
     norm = UCOL_OFF;
     break;
-  case UNORM_NFD:
+  case UCOL_ON:
+  case UNORM_NFD:       // TODO friendly deprecation helper, remove >2002-sep-30
     norm = UCOL_ON;
     break;
-  case UCOL_DEFAULT_NORMALIZATION:
+  case UCOL_DEFAULT_NORMALIZATION: // TODO friendly deprecation helper, remove >2002-sep-30
   case UCOL_DEFAULT:
     norm = UCOL_DEFAULT;
     break;
@@ -385,7 +400,7 @@ ucol_openRules( const UChar        *rules,
   ucol_initUCA(status);
 
   if(U_FAILURE(*status)){
-      return 0;
+    return 0;
   }
 
   ucol_tok_initTokenList(&src, rules, rulesLength, UCA, status);
@@ -427,9 +442,15 @@ ucol_openRules( const UChar        *rules,
   }
 
   if(U_SUCCESS(*status)) {
+    UChar *newRules;
     result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
-    result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
-    u_strcpy((UChar *)result->rules, rules);
+    newRules = (UChar *)uprv_malloc((rulesLength+1)*U_SIZEOF_UCHAR);
+    if(rulesLength > 0) {
+      uprv_memcpy(newRules, rules, rulesLength*U_SIZEOF_UCHAR);
+    }
+    newRules[rulesLength]=0;
+    result->rules = newRules;
+    // ### TODO: should store rulesLength in result in case there are embedded NULs, right?!
     result->freeRulesOnClose = TRUE;
     result->rb = 0;
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
@@ -448,18 +469,7 @@ ucol_openRules( const UChar        *rules,
 
   return result;
 }
-/*
-U_CAPI UCollator*
-ucol_openRules( const UChar             *rules,
-                int32_t                 rulesLength,
-                UNormalizationMode      mode,
-                UCollationStrength      strength,
-                UErrorCode              *status)
-{
-    UParseError parseError;
-    return ucol_openRulesWithError(rules,rulesLength,mode,strength,&parseError,status);
-}
-*/
+
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
 /* you should be able to get the binary chunk to write out...  Doesn't look very full now */
 U_CAPI uint8_t *
@@ -4069,27 +4079,28 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
     return UCOL_DEFAULT;
 }
 
+// deprecated
 U_CAPI void
 ucol_setNormalization(  UCollator            *coll,
             UNormalizationMode    mode)
 {
   UErrorCode status = U_ZERO_ERROR;
   switch(mode) {
-  case UCOL_NO_NORMALIZATION:
+  case UNORM_NONE:
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
     break;
-  case UCOL_DECOMP_CAN:
+  case UNORM_NFD:
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     break;
   default:
     /* Shouldn't get here. */
     /* This is quite a bad API */
-    /* deprecate */
     /* *status = U_ILLEGAL_ARGUMENT_ERROR; */
     return;
   }
 }
 
+// deprecated
 U_CAPI UNormalizationMode
 ucol_getNormalization(const UCollator* coll)
 {
@@ -4145,7 +4156,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
 
         localCollator = ucol_openRules(rules,
                                        length,
-                                       ucol_getNormalization(coll),
+                                       ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status),
                                        ucol_getStrength(coll),
                                        NULL,
                                        status);
