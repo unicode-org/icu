@@ -43,6 +43,7 @@ delete.classlist:
 
 clean:
 	rm -rf ..\classes\com
+	rm -rf ..\docs
 #!ifdef FILES_java
 #	rm -f $(FILES_class)
 #!endif

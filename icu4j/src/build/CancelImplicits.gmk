@@ -1,0 +1,20 @@
+ifndef ENABLE_IMPLICITS
+%: %.o
+%: %.C
+%: %.c
+%: %.p
+%: %.f
+%: %.s
+%: %.cc
+%: %.cpp
+%: %.mod
+%: %.sh
+%: %.F
+%: %.r
+%: %.S
+endif
+
+ifndef ENABLE_RCS
+%:: %,v
+%:: RCS/%,v
+endif
