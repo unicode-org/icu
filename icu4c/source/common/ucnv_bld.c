@@ -108,7 +108,7 @@ static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realN
 /**
  * Un flatten shared data from a UDATA..
  */
-U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status);
+static UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status);
 
 /*initializes some global variables */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
@@ -486,7 +486,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
     return myUConverter;
 }
 
-U_CAPI UConverterSharedData* U_EXPORT2
+static UConverterSharedData*
 ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
     /* UDataInfo info; -- necessary only if some converters have different formatVersion */
