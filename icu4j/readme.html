@@ -9,7 +9,7 @@
 
 *******************************************************************************
 
-* Copyright (C) 2000-2003, International Business Machines Corporation and    *
+* Copyright (C) 2000-2004, International Business Machines Corporation and    *
 
 * others. All Rights Reserved.                                                *
 
@@ -23,14 +23,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.2 (alpha)<!-- - <font color="red">Draft</font> -->
-</h3>
+<h3>Read Me for ICU4J 3.2</h3>
 <hr size="2" width="100%">
-<p><b>Release Date (alpha)</b><br>
-Nov 09, 2004<br>
-</p>
-<p style="font-style: italic;">Note: this file has not been completely
-updated yet.&nbsp; It will be updated for the final 3.2 release.<br>
+<p><b>Release Date</b><br>
+Nov 22, 2004<br>
 </p>
 <p>For the most recent release, see the <a
  href="http://oss.software.ibm.com/icu4j/download/index.html"> ICU4J
@@ -284,8 +280,8 @@ at your own risk.</p>
 platforms:
 </p>
 <ul>
-<li> Win98, WinNT, WinXP / IBM JDK 1.4.1, Sun JDK  1.4, 1.4.1, 1.4.2</li>
-<li> Win2000 / IBM JDK 1.4.1, Sun JDK 1.4, 1.4.1, 1.4.2</li>
+<li> Win98, WinNT, Win2K / IBM JDK 1.4.1, Sun JDK  1.4, 1.4.1, 1.4.2</li>
+<li> WinXP / Sun JDK 1.4, 1.4.1, 1.4.2, 1.5.0</li>
 <li> Solaris 2.6 , Solaris 2.8 / Sun JDK 1.4, 1.4.1, 1.4.2</li>
 <li> Solaris 2.7 / Sun JDK 1.4, 1.4.1</li>
 <li> AIX 5.1, IBM JDK 1.4.1, 1.4.0</li>
@@ -489,7 +485,7 @@ complex text support (provided to Sun by the ICU4J team).</td>
   </tbody>
 </table>
 <p><b>Building ICU4J creates and populates the following directories:</b></p>
-<table bgcolor="#ccccff" cellpadding="3" frame="void">
+<table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
   <tbody>
     <tr>
       <th align="right" bgcolor="#ffffff" valign="baseline">$Root/classes</th>
@@ -573,19 +569,18 @@ Java CLASSPATH.&nbsp; No other files are needed.</p>
  href="http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.html">
 how to configure Eclipse</a> to build ICU4J.</p>
 <p>To build ICU4J, you will need a Java2 JDK and the Ant build system.
-We strongly recommend using the Ant build system to build ICU4J:</p>
-<ul>
-  <li>It's recommended to install both the JDK and Ant somewhere <em>outside</em>
+We strongly recommend using the Ant build system to build ICU4J.
+It's recommended to install both the JDK and Ant somewhere <em>outside</em>
 the ICU4J directory. For example, on Linux you might install these in
-/usr/local.</li>
+/usr/local.</p>
+<ul>
   <li>Install a recent JDK, version 1.4.x will work.</li>
-  <li>
-    <p>Next install the <a href="http://ant.apache.org/"><strong>Ant</strong></a>
+  <li>Install the <a href="http://ant.apache.org/"><strong>Ant</strong></a>
 build system. Ant is a portable, Java-based build system similar to
 make. ICU4J uses Ant because it introduces no other dependencies, it's
 portable, and it's easier to manage than a collection of makefiles. We
 currently build ICU4J using a single makefile on both Windows 9x and
-Linux using Ant. The build system requires Ant 1.5 or later.</p>
+Linux using Ant. The build system requires Ant 1.5 or later.
     <p>Installing Ant is straightforward. Download it (see <a
  href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>),
 extract it onto your system, set some environment variables, and add
@@ -605,8 +600,7 @@ properly. For example:</p>
   <pre>F:\icu4j&gt;ant tests<br>Buildfile: build.xml<br>Project base dir set to: F:\icu4j<br>Executing Target: core<br>Compiling 71 source files to F:\icu4j\classes<br>Executing Target: tests<br>Compiling 24 source files to F:\icu4j\classes<br>Completed in 19 seconds</pre>
 </blockquote>
 <p>The following are some targets that you can provide to <b>ant</b>.
-For more
-targets, see the build.xml file:</p>
+For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p>
 <table bgcolor="#ccccff" border="0" cellpadding="3" frame="void"
  width="623">
   <tbody>
@@ -682,10 +676,10 @@ leaving the source.</td>
 <p>For more information, read the Ant documentation and the <strong>build.xml</strong>
 file.</p>
 <p>After doing a build it is a good idea to run all the icu4j tests by
-typing <br>
+typing<br>
+<tt>"ant check"</tt> or
 "java
 -classpath $Root/classes
--DUnicodeData=$Root/src/com/ibm/icu/dev/data/unicode
 com.ibm.icu.dev.test.TestAll -nothrow".</p>
 <p>(If you are allergic to build systems, as an alternative to using
 Ant you can build by running javac and javadoc directly. This
@@ -755,7 +749,7 @@ listed.
 fully supported.
 <br>
 &#8225; Sizes are of the compressed jar file containing only this module.
-Full size is 2,727&nbsp;K.
+Full size is 3,047&nbsp;K.
 </font></b></p>
 <p><b>Modules:</b><br>
 <table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
@@ -764,7 +758,7 @@ Full size is 2,727&nbsp;K.
       <th align="left" valign="baseline">Normalizer</th>
       <td align="left" valign="baseline">normalizer, normalizerTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.normalizer</td>
-      <td align="right" valign="baseline">434&nbsp;KB</td>
+      <td align="right" valign="baseline">444&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -794,7 +788,7 @@ UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16</td>
       <th align="left" valign="baseline">Collator</th>
       <td align="left" valign="baseline">collator, collatorTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.collator</td>
-      <td align="right" valign="baseline">1,473&nbsp;KB</td>
+      <td align="right" valign="baseline">1,507&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -829,7 +823,7 @@ UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
       <th align="left" valign="baseline">Calendar</th>
       <td align="left" valign="baseline">calendar, calendarTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.calendar</td>
-      <td align="right" valign="baseline">1,490&nbsp;KB</td>
+      <td align="right" valign="baseline">1,704&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -875,7 +869,7 @@ ValueIterator, VersionInfo </td>
       <td align="left" valign="baseline">breakIterator,
 breakIteratorTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.breakiterator</td>
-      <td align="right" valign="baseline">1,448&nbsp;KB</td>
+      <td align="right" valign="baseline">1,661&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -909,7 +903,7 @@ VersionInfo </td>
       <td align="left" valign="baseline">propertiesBasic,
 propertiesBasicTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-      <td align="right" valign="baseline">506&nbsp;KB</td>
+      <td align="right" valign="baseline">518&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -944,7 +938,7 @@ ValueIterator, VersionInfo </td>
       <td align="left" valign="baseline">propertiesFull,
 propertiesFullTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-      <td align="right" valign="baseline">1,399&nbsp;KB</td>
+      <td align="right" valign="baseline">1,610&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -979,7 +973,7 @@ RuleBasedBreakIterator, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator<
       <th align="left" valign="baseline">Formatting</th>
       <td align="left" valign="baseline">format, formatTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.format</td>
-      <td align="right" valign="baseline">2,426&nbsp;KB</td>
+      <td align="right" valign="baseline">2,645&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -1023,7 +1017,7 @@ UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
       <th align="left" valign="baseline">StringPrep, IDNA</th>
       <td align="left" valign="baseline">stringPrep, stringPrepTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.stringprep</td>
-      <td align="right" valign="baseline">456&nbsp;KB</td>
+      <td align="right" valign="baseline">466&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -1055,7 +1049,7 @@ ULocale, UResourceBundle ValueIterator,VersionInfo </td>
       <td align="left" valign="baseline">transliterator,
 transliteratorTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.translit</td>
-      <td align="right" valign="baseline">1,482&nbsp;KB</td>
+      <td align="right" valign="baseline">836&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -1145,7 +1139,7 @@ creates a jar of all class files under
 $icu4j_root/classes/com/ibm/icu/, excluding the classs files in
 $icu4j_root/classes/com/ibm/icu/dev folder</li>
   <li>The list of module build targets can be obtained by running the
-command : <code> ant -projecthelp </code> </li>
+command: <code>ant -projecthelp</code></li>
 </ul>
 <h3 class="doc"><a name="tryingout"></a>Trying Out ICU4J</h3>
 <p><strong>Note:</strong> the demos provided with ICU4J are for the
@@ -1223,34 +1217,30 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt30b</tt>,
-as a set of <tt>".res"</tt> files whose names
-are
-the locale identifiers. Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
-class, and the use of these
-names in searching for resources is documented in <code>java.util.ResourceBundle</code>.
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt32b</tt>,
+as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
+Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
+class, and the use of these names in searching for resources is documented 
+in <code>java.util.ResourceBundle</code>.
   </li>
-  <li>The <b>collation data</b> is under the directory <tt>icudt30b/coll</tt>,
-also as a set of <tt>".res"</tt> files
-named
-by locale identifiers. </li>
-  <li>The <b>rule-based transliterator data</b> is directly under the <tt>data</tt>
-directory, as a set of <tt>".txt"</tt> files whose
-names
-start with the string <tt>"Transliterator_"</tt> followed by the
-source and target transliterator IDs. </li>
-  <li>The <b>break iterator data</b> is also directly under the data
-directory, as a set of <tt>".brk"</tt> files, variously named. The
-default break iterator class resource bundles are also here. </li>
+  <li>The <b>collation data</b> is under the directory <tt>icudt32b/coll</tt>,
+as a set of <tt>".res"</tt> files.</li>
+  <li>The <b>rule-based transliterator data</b> is under the directory
+<tt>icudt32b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
+Han transliterator test data is no longer included in the core icu4j.jar 
+file by default.)</li>
+  <li>The <b>rule-based number format data</b> is under the directory
+<tt>icudt32b/rbnf</tt> as a set of <tt>".res"</tt> files.
+  <li>The <b>break iterator data</b> is directly under the data
+directory, as a set of <tt>".brk"</tt> files, named according to the
+type of break and the locale where there are locale-specific versions.</li>
   <li>The <b>holiday data</b> is under the <tt>data</tt> directory,
-as a
-set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
-followed by the locale ID. </li>
+as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
+followed by the locale ID.</li>
   <li>The <b>character property data</b> as well as assorted <b>normalization
-data</b> and default <b>unicode collation
-algorithm
-(UCA) data</b> is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
-files, variously named. </li>
+data</b> and default <b>unicode collation algorithm (UCA) data</b>
+is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
+files. </li>
 </ul>
 <p>
 Some of the data files alias or otherwise reference data from other
