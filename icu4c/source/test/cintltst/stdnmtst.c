@@ -101,7 +101,7 @@ static UBool doTestNames(const char *name, const char *standard, const char **ex
     UErrorCode err = U_ZERO_ERROR;
     UEnumeration *myEnum = ucnv_openStandardNames(name, standard, &err);
     int32_t enumCount = uenum_count(myEnum, &err);
-    int32_t idx;
+    int32_t idx, repeatTimes = 3;
     if (size != enumCount) {
         log_err("FAIL: different size arrays. Got %d. Expected %d\n", enumCount, size);
         return 0;
@@ -111,15 +111,23 @@ static UBool doTestNames(const char *name, const char *standard, const char **ex
         return 0;
     }
     log_verbose("\n%s %s\n", name, standard);
-    for (idx = 0; idx < enumCount; idx++) {
-        const char *enumName = uenum_next(myEnum, NULL, &err);
-        const char *testName = expected[idx];
-        if (uprv_strcmp(enumName, testName) != 0 || U_FAILURE(err)) {
-            log_err("FAIL: uenum_next(%d) == \"%s\". expected \"%s\", error=%s\n",
-                idx, enumName, testName, u_errorName(err));
+    while (repeatTimes-- > 0) {
+        for (idx = 0; idx < enumCount; idx++) {
+            const char *enumName = uenum_next(myEnum, NULL, &err);
+            const char *testName = expected[idx];
+            if (uprv_strcmp(enumName, testName) != 0 || U_FAILURE(err)) {
+                log_err("FAIL: uenum_next(%d) == \"%s\". expected \"%s\", error=%s\n",
+                    idx, enumName, testName, u_errorName(err));
+            }
+            log_verbose("%s\n", enumName);
+            err = U_ZERO_ERROR;
         }
-        log_verbose("%s\n", enumName);
-        err = U_ZERO_ERROR;
+        uenum_reset(myEnum, &err);
+        if (U_FAILURE(err)) {
+            log_err("FAIL: uenum_reset() for %s{%s} failed with %s\n",
+                name, standard, u_errorName(err));
+            err = U_ZERO_ERROR;
+        }
     }
     uenum_close(myEnum);
     return 1;
