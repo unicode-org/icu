@@ -1,0 +1,34 @@
+.\" Hey, Emacs! This is -*-nroff-*- you know...
+.\"
+.\" decmn.8: manual page for the decmn utility
+.\"
+.\" Copyright (C) 2001 IBM, Inc. and others.
+.\"
+.\" Manual page by Yves Arrouye <yves@realnames.com>.
+.\"
+.TH DECMN 8 "5 November 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.SH NAME
+.B decmn
+\- explodes an ICU memory-mappable data file
+.SH SYNOPSIS
+.B decmn
+.I commonfile
+.SH DESCRIPTION
+.B decmn
+reads the ICU memory-mappable data file
+.I commonfile
+and writes each of the
+packaged files that it contains as a separate file in the current
+directory.
+.PP
+.B decmn
+also writes a list of these files on its standard output. This list of
+files can later be used, along with the individual files that have
+been generated, to produce a new common data file using
+.BR gencmn (8).
+.SH VERSION
+@VERSION@
+.SH COPYRIGHT
+Copyright (C) 2001 IBM, Inc. and others.
+.SH SEE ALSO
+.BR gencmn (8)
