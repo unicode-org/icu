@@ -19,6 +19,9 @@ case "$1" in
     remove|upgrade|deconfigure)
 	# Adjust the current ICU link in /usr/lib/icu
 
+	if [ -d /usr/lib/icu ]
+	then
+
 	icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/@VERSION@\//d' -e 's,.*/\([^/]*\)/$,\1,p' | head -1`
 	cd /usr/lib/icu
 	rm -f current
@@ -26,6 +29,9 @@ case "$1" in
 	then
 	    ln -s "$icucurrent" current
 	fi
+
+	fi
+
 #       install-info --quiet --remove /usr/info/foo.info.gz
         ;;
 
