@@ -15,6 +15,7 @@
 
 #include "unicode/ustdio.h"
 #include "unicode/ustream.h"
+#include "unicode/uclean.h"
 
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
@@ -193,17 +194,17 @@ static void TestFileFromICU(UFILE *myFile) {
     *newDoubleValuePtr = -1.0;
     u_fscanf(myFile, "Percent %%P (non-ANSI): %P\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
-        log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
+        log_err("%%P Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
     u_fscanf(myFile, "Currency %%M (non-ANSI): %M\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
-        log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
+        log_err("%%P Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
     u_fscanf(myFile, "Spell Out %%V (non-ANSI): %V\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
-        log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
+        log_err("%%P Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 /*
     *n = 1;
@@ -290,7 +291,7 @@ static void TestFilePrintCompatibility() {
 
     u_fclose(myFile);
     myCFile = fopen(STANDARD_TEST_FILE, "rb");
-    if (myFile == NULL) {
+    if (myCFile == NULL) {
         log_err("Can't read test file.");
         return;
     }
@@ -783,5 +784,7 @@ int main(int argc, char* argv[])
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);
 
+    cleanUpTestTree(root);
+    u_cleanup();
     return nerrors;
 }
