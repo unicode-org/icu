@@ -101,7 +101,7 @@ const char options_help[][160]={
 
 int
 main(int argc, const char *argv[]) {
-  FileStream  *in, *out;
+  FileStream  *out;
   UPKGOptions  o;
   CharList    *tail;
   const char  *progname;
@@ -302,7 +302,7 @@ main(int argc, const char *argv[]) {
   /* POSIX - execute makefile */
   {
     char cmd[1024];
-    char pwd[1024];
+    /*char pwd[1024];*/
     char *make;
     int rc;
     
@@ -312,7 +312,7 @@ main(int argc, const char *argv[]) {
       make = U_MAKE;
     }
 
-    getcwd(pwd, 1024);
+    /*getcwd(pwd, 1024);*/
     sprintf(cmd, "%s %s%s -f %s %s %s %s",
             make,
             o.install ? "INSTALLTO=" : "",
