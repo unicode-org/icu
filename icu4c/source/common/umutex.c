@@ -84,11 +84,15 @@ static pthread_mutex_t gPlatformMutex;
 U_CAPI UBool U_EXPORT2
 umtx_isInitialized(UMTX *mutex)
 {
+#if (ICU_USE_THREADS == 1)
     if (mutex == NULL)
     {
         mutex = &gGlobalMutex;
     }
     return (UBool)(*mutex != NULL);
+#else
+    return TRUE;    /* Since we don't use threads, it's considered initialized. */
+#endif /* ICU_USE_THREADS==1 */
 }
 
 U_CAPI void  U_EXPORT2
