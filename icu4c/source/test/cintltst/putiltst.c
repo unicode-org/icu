@@ -39,7 +39,6 @@ addPUtilTest(TestNode** root)
 static void TestPUtilAPI(){
 
     double  n1=0.0, y1=0.0, expn1, expy1;
-    int     result=0;
     double  value1 = 0.021;
     int32_t hi=0;
     uint32_t lo=0;
@@ -129,17 +128,17 @@ static void TestPUtilAPI(){
     }
 
     log_verbose("Testing the API uprv_digitsAfterDecimal()....\n");
-    result=uprv_digitsAfterDecimal(value1);
-    doAssert(result, 3, "uprv_digitsAfterDecimal() failed.");
+    doAssert(uprv_digitsAfterDecimal(value1), 3, "uprv_digitsAfterDecimal() failed.");
     doAssert(uprv_digitsAfterDecimal(1.2345E2), 2, "uprv_digitsAfterDecimal(1.2345E2) failed.");
     doAssert(uprv_digitsAfterDecimal(1.2345E-2), 6, "uprv_digitsAfterDecimal(1.2345E-2) failed.");
     doAssert(uprv_digitsAfterDecimal(1.2345E2), 2, "uprv_digitsAfterDecimal(1.2345E2) failed.");
+    doAssert(uprv_digitsAfterDecimal(-1.2345E-20), 24, "uprv_digitsAfterDecimal(1.2345E-20) failed.");
+    doAssert(uprv_digitsAfterDecimal(1.2345E20), 0, "uprv_digitsAfterDecimal(1.2345E20) failed.");
     doAssert(uprv_digitsAfterDecimal(-0.021), 3, "uprv_digitsAfterDecimal(-0.021) failed.");
     doAssert(uprv_digitsAfterDecimal(23.0), 0, "uprv_digitsAfterDecimal(23.0) failed.");
     doAssert(uprv_digitsAfterDecimal(0.022223333321), 9, "uprv_digitsAfterDecimal(0.022223333321) failed.");
-    
-   
-    
+
+
     log_verbose("Testing the API u_versionToString().....\n");
     u_versionToString(versionArray, versionString);
     if(strcmp(versionString, "1.0.2.2") != 0){
