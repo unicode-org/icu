@@ -50,7 +50,7 @@ class TimeZone;
  * @see      Calendar
  * @see      GregorianCalendar
  * @see      TimeZone
- * @author   David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
+ * @author   D. Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
  */
 class U_I18N_API SimpleTimeZone: public TimeZone {
 public:
