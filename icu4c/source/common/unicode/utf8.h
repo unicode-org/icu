@@ -66,9 +66,9 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 /* single-code point definitions -------------------------------------------- */
 
 /* classes of code unit values */
-#define UTF8_IS_SINGLE(uchar) ((uchar)&0x80==0)
+#define UTF8_IS_SINGLE(uchar) (((uchar)&0x80)==0)
 #define UTF8_IS_LEAD(uchar) ((uint8_t)((uchar)-0xc0)<0x3e)
-#define UTF8_IS_TRAIL(uchar) ((uchar)&0xc0==0x80)
+#define UTF8_IS_TRAIL(uchar) (((uchar)&0xc0)==0x80)
 
 /* number of code units per code point */
 #define UTF8_NEED_MULTIPLE_UCHAR(c) ((uint32_t)(c)>0x7f)
