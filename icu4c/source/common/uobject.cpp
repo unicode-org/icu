@@ -16,7 +16,7 @@
 
 #include "unicode/uobject.h"
 
-#ifdef U_OVERRIDE_CXX_ALLOCATION
+#if U_OVERRIDE_CXX_ALLOCATION
 
 #include "cmemory.h"
 
