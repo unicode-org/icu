@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 
+U_CDECL_BEGIN
 /**
  * Function type for comparing two items as part of sorting an array or similar.
  * Callback function for uprv_sortArray().
@@ -37,6 +38,7 @@
  */
 typedef int32_t U_CALLCONV
 UComparator(const void *context, const void *left, const void *right);
+U_CDECL_END
 
 /**
  * Array sorting function.
