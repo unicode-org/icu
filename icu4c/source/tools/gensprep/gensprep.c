@@ -19,6 +19,8 @@
 *   in various StringPrep conversion processes.
 */
 
+#define USPREP_TYPE_NAMES_ARRAY 1
+
 #include <stdio.h>
 #include <stdlib.h>
 

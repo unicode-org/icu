@@ -25,6 +25,8 @@
 
 #if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
 
+#define USPREP_TYPE_NAMES_ARRAY
+
 #include "unicode/uchar.h"
 #include "unicode/putil.h"
 #include "cmemory.h"

@@ -39,6 +39,7 @@ enum UStringPrepType{
 
 typedef enum UStringPrepType UStringPrepType;
 
+#ifdef USPREP_TYPE_NAMES_ARRAY
 static const char* usprepTypeNames[] ={
     "UNASSIGNED" ,          
     "MAP" , 
@@ -47,6 +48,8 @@ static const char* usprepTypeNames[] ={
     "DELETE",
     "TYPE_LIMIT" 
 };
+#endif
+
 enum{
     _SPREP_NORMALIZATION_ON = 0x0001,
     _SPREP_CHECK_BIDI_ON    = 0x0002

@@ -15,6 +15,8 @@
  */
 #if !UCONFIG_NO_IDNA
 
+#define USPREP_TYPE_NAMES_ARRAY
+
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
