@@ -503,6 +503,20 @@ static void TestNewTypes() {
             log_err("Did not get the expected string for test_underscores.\n");
         }
     }
+	/* test for jitterbug#2626 */
+	{
+		UResourceBundle* resB = NULL;
+		const UChar* str  = NULL;
+		int32_t strLength = 0;
+		const UChar my[] = {0x0026,0x0027,0x0075,0x0027,0x0020,0x003d,0x0020,0x0027,0xff55,0x0027,0x0000}; /* &'\u0075' = '\uFF55' */
+		status = U_ZERO_ERROR;
+		resB = ures_getByKey(theBundle,"CollationElements", resB,&status);
+		str  = ures_getStringByKey(resB,"Sequence",&strLength,&status);
+		if(u_strcmp(my,str) != 0){
+			log_err("Did not get te expeted string for escaped \\u0075\n");
+		}
+		ures_close(resB);
+	}
     ures_close(res);
     ures_close(theBundle);
 

@@ -30,6 +30,15 @@ testtypes
     {
     }
     testescape{ "tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''" }
+    
+    // Genrb failed parsing \u0075 sequence this tests it 
+    CollationElements{
+	Version{"x01"}
+	Sequence{ 
+		       "&'\u0075' = '\uFF55'" // LATIN SMALL LETTER U
+		}
+    }
+    
     string{ }
     stringTable{{}}
     //nested table
