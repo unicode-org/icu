@@ -215,7 +215,7 @@ void TestCalendar()
             log_err("FAIL: set/getFirstDayOfWeek failed\n");
     }
     /*get bogus Attribute*/
-    count=ucal_getAttribute(calit, 99);//BOGUS_ATTRIBUTE
+    count=ucal_getAttribute(calit, 99); /* BOGUS_ATTRIBUTE */
     if(count != -1){
         log_err("FAIL: get/bogus attribute should return -1\n");
     }
