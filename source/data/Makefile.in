@@ -219,7 +219,7 @@ $(BUILDDIR)/uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Bidi
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # unorm.dat
-$(BUILDDIR)/unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
+$(BUILDDIR)/unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.dat
