@@ -226,7 +226,7 @@ main(int argc, char* argv[]) {
     if(argc<0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
         fprintf(stderr,
             "usage: %s [-options] [convrtrs.txt]\n"
-            "\tread convrtrs.txt and create " DATA_NAME "." DATA_TYPE "\n"
+            "\tread convrtrs.txt and create " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE "\n"
             "options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     prints out extra information about the alias table\n"
@@ -275,7 +275,7 @@ main(int argc, char* argv[]) {
     T_FileStream_close(in);
 
     /* create the output file */
-    out=udata_create(options[3].value, DATA_TYPE, DATA_NAME, &dataInfo,
+    out=udata_create(options[3].value, DATA_TYPE, U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
                      options[2].doesOccur ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencnval: unable to open output file - error %s\n", u_errorName(errorCode));

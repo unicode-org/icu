@@ -27,12 +27,14 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 {
     int32_t ln = 0;
     char buffer[1024];
+	const CharList *ol = NULL;
     while(l != NULL)
     {
         if(l->str)
         {
-            uprv_strcpy(buffer, l->str);
-            
+            uprv_strncpy(buffer, l->str, 1020);
+            buffer[1019]=0;
+
             if(quote < 0) { /* remove quotes */
                 if(buffer[uprv_strlen(buffer)-1] == '"') {
                     buffer[uprv_strlen(buffer)-1] = '\0';
@@ -43,7 +45,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
             } else if(quote > 0) { /* add quotes */
                 if(l->str[0] != '"') {
                     uprv_strcpy(buffer, "\"");
-                    uprv_strcat(buffer, l->str);
+                    uprv_strncat(buffer, l->str,1020);
                 }
                 if(l->str[uprv_strlen(l->str)-1] != '"') {
                     uprv_strcat(buffer, "\"");
@@ -54,6 +56,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 
         ln  += uprv_strlen(l->str);
 
+		ol = l;
 
         if(l->next && delim)
         {

@@ -280,8 +280,11 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     T_FileStream_writeLine(makefile, "install: $(TARG_PATH)$(LIB_TARGET)\n"
                 "\t$(INSTALL-L) $(TARG_PATH)$(LIB_TARGET) $(INSTALLTO)/$(LIB_TARGET)\n");
+    T_FileStream_writeLine(makefile, "\t$(RANLIB) $(INSTALLTO)/$(LIB_TARGET)\n");
     if (o->version) {
         T_FileStream_writeLine(makefile, "\tcd $(INSTALLTO) && $(RM) $(MIDDLE_STATIC_LIB_TARGET) && ln -s $(LIB_TARGET) $(MIDDLE_STATIC_LIB_TARGET)\n\tcd $(INSTALLTO) && $(RM) $(STATIC_LIB_TARGET) && ln -s $(LIB_TARGET) $(STATIC_LIB_TARGET)\n");
+    T_FileStream_writeLine(makefile, "\t$(RANLIB) $(INSTALLTO)/$(STATIC_LIB_TARGET)\n\n");
+
     }
 
     *status = U_ZERO_ERROR;

@@ -274,11 +274,12 @@ uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
     return 0;
 }
 
-void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFilename, int writtenFilenameLen, UErrorCode *status) {
+void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *outputPkg, char *writtenFilename, int writtenFilenameLen, UErrorCode *status) {
     UNewDataMemory *mem        = NULL;
     uint8_t         pad        = 0;
     uint32_t        root       = 0;
     uint32_t        usedOffset = 0;
+    char            dataName[1024];
 
     if (writtenFilename && writtenFilenameLen) {
         *writtenFilename = 0;
@@ -302,6 +303,14 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFi
            writtenFilename[off] = U_FILE_SEP_CHAR;
            if (--writtenFilenameLen) {
                ++off;
+               if(outputPkg != NULL)
+               {
+                   uprv_strcpy(writtenFilename+off, outputPkg);
+                   off += uprv_strlen(outputPkg);
+                   writtenFilename[off] = '_';
+                   ++off;
+               }
+
                len = (int32_t)uprv_strlen(bundle->fLocale);
                if (len > writtenFilenameLen) {
                    len = writtenFilenameLen;
@@ -319,7 +328,18 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFi
        }
     }
 
-    mem = udata_create(outputDir, "res", bundle->fLocale, &dataInfo, (gIncludeCopyright==TRUE)? U_COPYRIGHT_STRING:NULL, status);
+    if(outputPkg)
+    {
+        uprv_strcpy(dataName, outputPkg);
+        uprv_strcat(dataName, "_");
+        uprv_strcat(dataName, bundle->fLocale);
+    }
+    else
+    {
+        uprv_strcpy(dataName, bundle->fLocale);
+    }
+
+    mem = udata_create(outputDir, "res", dataName, &dataInfo, (gIncludeCopyright==TRUE)? U_COPYRIGHT_STRING:NULL, status);
 
     pad = calcPadding(bundle->fKeyPoint);
 

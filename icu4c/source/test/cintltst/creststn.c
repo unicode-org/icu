@@ -262,10 +262,7 @@ static void TestDecodedBundle(){
     
     /* pre-flight */
     int32_t num =0;
-    char testdatapath[256];
-    const char *directory= u_getDataDirectory();
-    strcpy(testdatapath, directory);
-    strcat(testdatapath, "testdata");
+    const char *testdatapath = loadTestData(&error);
       
     resB = ures_open(testdatapath, "ja_data", &error);
     srcFromRes=ures_getStringByKey(resB,"str",&len,&error);
@@ -299,6 +296,7 @@ static void TestNewTypes() {
     UChar uExpect[200];
 
     testdatapath=loadTestData(&status);
+
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
@@ -448,7 +446,6 @@ static void TestEmptyTypes() {
     const int32_t *zeroIntVect;
 
     strcpy(action, "Construction of testtypes bundle");
-    
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
@@ -1147,13 +1144,11 @@ static void TestConstruction2()
     const char*     directory;
     const char*    locale="te_IN";
     wchar_t widedirectory[256];
-    char testdatapath[256];
+    const char *testdatapath;
     int32_t len=0;
     char verboseOutput[256];
 
-    directory= u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    testdatapath= loadTestData(&err);
     mbstowcs(widedirectory, testdatapath, 256);
 
     log_verbose("Testing ures_openW().......\n");

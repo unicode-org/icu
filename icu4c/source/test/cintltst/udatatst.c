@@ -62,6 +62,19 @@ addUDataTest(TestNode** root)
 
 }
 
+#if 0
+static void lots_of_mallocs()
+{
+    int q;
+    for(q=1;q<100;q++)
+    {
+        free(malloc(q));
+        malloc(q*2);
+    }
+
+}
+#endif
+
 static void TestUDataOpen(){
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -75,7 +88,7 @@ static void TestUDataOpen(){
     const char* type           = "dat";
     const char  dirSepString[] = {U_FILE_SEP_CHAR, 0};
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory())
+    char* path=(char*)malloc(sizeof(char) * (strlen(ctest_dataOutDir())
                                            + strlen(U_ICUDATA_NAME)
                                            + strlen("/build")+1 ) );
 
@@ -84,7 +97,9 @@ static void TestUDataOpen(){
     
     const char* testPath=loadTestData(&status);
 
-    strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
+    /* lots_of_mallocs(); */
+
+    strcat(strcpy(path, ctest_dataOutDir()), U_ICUDATA_NAME);
 
     log_verbose("Testing udata_open()\n");
     result=udata_open(testPath, type, name, &status);
@@ -103,11 +118,13 @@ static void TestUDataOpen(){
     icuDataFilePath = (char *)malloc(strlen(path) + 10);
     strcpy(icuDataFilePath, path);
     strcat(icuDataFilePath, ".dat");
+    /* lots_of_mallocs(); */
     if (stat(icuDataFilePath, &stat_buf) == 0)
     {
         int i;
         log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
         for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+    /* lots_of_mallocs(); */
             status=U_ZERO_ERROR;
             result=udata_open(path, memMap[i][1], memMap[i][0], &status);
             if(U_FAILURE(status)) {
@@ -120,11 +137,13 @@ static void TestUDataOpen(){
     }
     else
     {
+    /* lots_of_mallocs(); */
          log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
              icuDataFilePath);
     }
     free(icuDataFilePath);
     icuDataFilePath = NULL;
+    /* lots_of_mallocs(); */
 
     /* If the ICU individual files used to build the ICU system common data are
      *   present in this configuration,   
@@ -134,18 +153,24 @@ static void TestUDataOpen(){
      *    back into this directory structure, but this is not required.  Soooo, if
      *    the files are missing, skip this test without error.
      */
-    icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
-    strcpy(icuDataFilePath, u_getDataDirectory());
+    /* lots_of_mallocs(); */
+    icuDataFilePath = (char *)malloc(strlen(ctest_dataOutDir()) + 50);
+    strcpy(icuDataFilePath, ctest_dataOutDir());
     strcat(icuDataFilePath, "build");
     strcat(icuDataFilePath, dirSepString);
+    strcat(icuDataFilePath, U_ICUDATA_NAME);
+    strcat(icuDataFilePath, "_");
     strcat(icuDataFilePath, "tz.dat");
+
+    /* lots_of_mallocs(); */
     if (stat(icuDataFilePath, &stat_buf) == 0)
     {
         int i;
-        strcpy(icuDataFilePath, u_getDataDirectory());
+        log_verbose("%s exists, so..\n", icuDataFilePath);
+        strcpy(icuDataFilePath, ctest_dataOutDir());
         strcat(icuDataFilePath, "build");
         strcat(icuDataFilePath, dirSepString);
-        strcat(icuDataFilePath, "dummyLibraryName");
+        strcat(icuDataFilePath, U_ICUDATA_NAME);
         log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
         for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
             status=U_ZERO_ERROR;
@@ -163,13 +188,14 @@ static void TestUDataOpen(){
          log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
              icuDataFilePath);
     }
+
     free(icuDataFilePath);
     icuDataFilePath = NULL;
 
     /*
      * Test fallback file names for open of separate data files.
      *    With these params to udata_open:
-     *       path = wherever/testudata
+     *       path = wherever/testdata
      *       type = typ
      *       name = nam
      *     these files will be tried first:
@@ -178,43 +204,42 @@ static void TestUDataOpen(){
      *  A test data file named testudata_nam.typ exists for the purpose of testing this.
      */
     log_verbose("Testing udata_open, with base_name.type style fallback to individual file.\n");
-    icuDataFilePath = (char *)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + 50));
-    strcpy(icuDataFilePath, testPath);
-    strrchr(icuDataFilePath, U_FILE_SEP_CHAR)[1] = 0; /* Trncate after the '\' */
-    strcat(icuDataFilePath, "testudata");
+
     status = U_ZERO_ERROR;
-    result = udata_open( icuDataFilePath, "typ", "nam", &status);
+    result = udata_open( testPath, "typ", "nam", &status);
     if (status != U_ZERO_ERROR) {
-        log_err("FAIL: udata_open( \"%s\", \"typ\", \"nam\") returned status %s\n", icuDataFilePath, u_errorName(status));
+        log_err("FAIL: udata_open( \"%s\", \"typ\", \"nam\") returned status %s\n", testPath, u_errorName(status));
     }
     udata_close(result);
     free(icuDataFilePath);
 
+    
+    /* This type of path is deprecated */
     /*
      * Another fallback test.   Paths ending with a trailing directory separator
      *    take a slightly different code path, with the "base name" from the path
      *    being empty in the internal udata_open logic.
      */
-    log_verbose("Testing udata_open, with path containing a trailing directory separator.\n");
-    icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
-    strcpy(icuDataFilePath, testPath);
-    status = U_ZERO_ERROR;
-    result = udata_open( icuDataFilePath, "cnv", "test1", &status);
-    if (status != U_ZERO_ERROR) {
-        log_err("FAIL: udata_open( \"%s\", \"cnv\", \"test1\") returned status %s\n", icuDataFilePath, u_errorName(status));
-    }
-    udata_close(result);
-    free(icuDataFilePath);
 
+/*      log_verbose("Testing udata_open, with path containing a trailing directory separator.\n"); */
+/*      icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50); */
+/*      strcpy(icuDataFilePath, testPath); */
+/*      status = U_ZERO_ERROR; */
+/*      result = udata_open( icuDataFilePath, "cnv", "test1", &status); */
+/*      if (status != U_ZERO_ERROR) { */
+/*          log_err("FAIL: udata_open( \"%s\", \"cnv\", \"test1\") returned status %s\n", icuDataFilePath, u_errorName(status)); */
+/*      } */
+/*      udata_close(result); */
+/*      free(icuDataFilePath); */
 
 
     log_verbose("Testing udata_open() with a non existing binary file\n");
-    result=udata_open(path, "tst", "nonexist", &status);
+    result=udata_open("testdata", "tst", "nonexist", &status);
     if(status==U_FILE_ACCESS_ERROR){
         log_verbose("Opening udata_open with non-existing file handled correctly.\n");
         status=U_ZERO_ERROR;
     } else {
-        log_err("calling udata_open with non-existing file not handled correctly\n.  Expected: U_FILE_ACCESS_ERROR, Got: %s\n", myErrorName(status));
+        log_err("calling udata_open with non-existing file  [testdata | nonexist.tst] not handled correctly\n.  Expected: U_FILE_ACCESS_ERROR, Got: %s\n", myErrorName(status));
         if(U_SUCCESS(status)) {
             udata_close(result);
         }
@@ -242,14 +267,16 @@ static void TestUDataSetAppData(){
 
     size_t            i;
        
+
+    /** srl REVISIT **/
     /* Open the testdata.dat file, using normal   */
     const char* tdrelativepath = loadTestData(&status);
-    char* filePath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata.dat") +1 +strlen(tdrelativepath)) );
+    char* filePath=(char*)malloc(sizeof(char) * (strlen(tdrelativepath) + strlen(".dat") +1 +strlen(tdrelativepath)) );
 
     strcpy(filePath, tdrelativepath);
     strcat(filePath, ".dat");
 
-    log_verbose("Testing udata_setAppData()\n");
+    log_verbose("Testing udata_setAppData() with %s\n", filePath);
 
 #ifdef WIN32
     fileHandle = open( filePath, O_RDONLY | O_BINARY );
@@ -312,57 +339,11 @@ static void TestUDataSetAppData(){
                 " returned status of %s, expected U_USING_DEFAULT_WARNING.\n", u_errorName(status));
     }
 
-    /*
-     * Verify that we can access data using the names we supplied to setAppData
-     *   testData should hold these items:  root.res te.res te_IN.res testtypes.res testempty.res test.dat
-     */
-    status = U_ZERO_ERROR;
-    dataItem = udata_open("appData1", "res", "te_IN", &status);
-    if (status != U_ZERO_ERROR) {
-        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData1\", \"res\", \"te_IN\"... "
-                " returned status of %s, expected U_ZERO_ERROR.\n", u_errorName(status));
-    }
-    udata_close(dataItem);
 
-    status = U_ZERO_ERROR;
-    dataItem = udata_open("appData2", "dat", "test", &status);
-    if (status != U_ZERO_ERROR) {
-        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData2\", \"dat\", \"test\"... "
-                " returned status of %s, expected U_ZERO_ERROR.\n", u_errorName(status));
-    }
-    udata_close(dataItem);
-
-    
-    /*
-     * Try data that should not exist, check for returned error.
-     */
-    status = U_ZERO_ERROR;
-    dataItem = udata_open("appData3", "res", "bum_IN", &status);
-    if (status != U_FILE_ACCESS_ERROR) {
-        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData3\", \"res\", \"te_IN\"... "
-                " returned status of %s, expected U_FILE_ACCESS_ERROR.\n", u_errorName(status));
-    }
-    udata_close(dataItem);
-
-    status = U_ZERO_ERROR;
-    dataItem = udata_open("appData2", "dat", "no_such_name", &status);
-    if (status != U_FILE_ACCESS_ERROR) {
-        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData2\", \"dat\", \"no_such_name\"... "
-                " returned status of %s, expected U_FILE_ACCESS_ERROR.\n", u_errorName(status));
-    }
-    udata_close(dataItem);
-
-    /*
-     * Try udata_setAppData on memory conatining bogus data - data that does not
-     *   have the header of an ICU common data format file.
-     */
-    status = U_ZERO_ERROR;
-    udata_setAppData("appData4", "This string is memory that doesn't look like ICU Common Data", &status);
-    if (status != U_INVALID_FORMAT_ERROR) {
-        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData2\", \"dat\", \"no_such_name\"... "
-                " returned status of %s, expected U_INVALID_FORMAT_ERROR.\n", u_errorName(status));
-    }
-    
+    /** It is no longer  correct to use udata_setAppData to change the 
+        package of a contained item.
+        
+        dataItem = udata_open("appData1", "res", "te_IN", &status); **/
 
 cleanupAndReturn:
     /*  Note:  fileBuf is not deleted because ICU retains a pointer to it
@@ -458,7 +439,6 @@ isAcceptable3(void *context,
 }
 
 static void TestUDataOpenChoiceDemo1() {
-   
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
  
@@ -468,10 +448,7 @@ static void TestUDataOpenChoiceDemo1() {
         "test"
     };
     const char* type="dat";
-
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
-
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
+    const char* testPath="testdata";
 
     result=udata_openChoice(NULL, "icu", name[0], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
@@ -506,9 +483,6 @@ static void TestUDataOpenChoiceDemo1() {
     if(U_SUCCESS(status)){
         udata_close(result);
     }
-
-    free(testPath);
-
 }
 
 static UBool
@@ -534,6 +508,9 @@ isAcceptable(void *context,
     }
 }
 
+
+/* This test checks to see if the isAcceptable function is being called correctly. */
+
 static void TestUDataOpenChoiceDemo2() {
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -543,14 +520,9 @@ static void TestUDataOpenChoiceDemo2() {
     const char* name="test";
     const char* type="dat";
 
-    const char* base[]={  /* these are the common base names to use for the test */
-        "testdata",   /* corresponds to something like 'base.dat', 'base.dll', 'libbase.so', etc.. */
-        "testdata"  /* libbase_test.so, libbase_test.a, etc... */
-    };
+    int n;
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[0]) + 1) );
-    strcpy(path, u_getDataDirectory());
-    strcat(path, base[0]);
+    const char* path = loadTestData(&status);
 
     result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
     if(U_FAILURE(status)){
@@ -559,12 +531,9 @@ static void TestUDataOpenChoiceDemo2() {
     if(U_SUCCESS(status) ) {
         udata_close(result);
     }
-    strcpy(path, "");
 
     p=0;
-    for(i=0;i<sizeof(base)/sizeof(base[0]); i++){
-        path=(char*)realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[i]) +1 ) );
-        strcat(strcpy(path, u_getDataDirectory()), base[i]);
+    for(i=0;i<2; i++){
         result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
         if(p<2) {
             if(U_FAILURE(status) && status==U_INVALID_FORMAT_ERROR){
@@ -573,24 +542,19 @@ static void TestUDataOpenChoiceDemo2() {
                 p++;
             }
             else {
-                log_err("ERROR: failed to either load the data or to reject the loaded data. ERROR=%s\n", myErrorName(status) );
+                log_err("FAIL: failed to either load the data or to reject the loaded data. ERROR=%s\n", myErrorName(status) );
             }
         }
         else if(p == 2) {
             if(U_FAILURE(status)) {
-                log_err("ERROR: failed to load the data and accept it.  ERROR=%s\n", myErrorName(status) );
+                log_err("FAIL: failed to load the data and accept it.  ERROR=%s\n", myErrorName(status) );
             }
             else {
                 log_verbose("Loads the data and accepts it for p==2 as expected\n");
                 udata_close(result);
             }
         }
-        strcpy(path, "");
-
     }
-
-   free(path);
-
 }
 
 
@@ -616,17 +580,12 @@ static void TestUDataGetInfo() {
     const char* name2="test";
     const char* type="dat";
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
-
-    strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
-
+    const char* testPath=loadTestData(&status);
 
     log_verbose("Testing udata_getInfo() for cnvalias.dat\n");
     result=udata_open(NULL, "icu", name, &status);
     if(U_FAILURE(status)){
-        log_err("FAIL: udata_open() failed for path = NULL, name=%s, type=%s, \n errorcode=%s\n", path, name, type, myErrorName(status));
+        log_err("FAIL: udata_open() failed for path = NULL, name=%s, type=%s, \n errorcode=%s\n",  name, type, myErrorName(status));
         return;
     }
     udata_getInfo(result, &dataInfo);
@@ -670,8 +629,6 @@ static void TestUDataGetInfo() {
         log_err("FAIL: udata_getInfo() filled in the wrong values\n");
     }
     udata_close(result);
-    free(path);
-    free(testPath);
 }
 
 static void TestUDataGetMemory() {
@@ -685,9 +642,7 @@ static void TestUDataGetMemory() {
 
     const char* name2="test";
 
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
-
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
+    const char* testPath = loadTestData(&status);
 
     type="icu";
     log_verbose("Testing udata_getMemory for \"cnvalias.dat()\"\n");
@@ -718,7 +673,6 @@ static void TestUDataGetMemory() {
 
     udata_close(result);
 
-    free(testPath);
 }
 
 static void TestErrorConditions(){
@@ -743,11 +697,7 @@ static void TestErrorConditions(){
     const char* name = "test";
     const char* type="dat";
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
-
-    strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
+    const char *testPath = loadTestData(&status);
 
     status = U_ILLEGAL_ARGUMENT_ERROR;
     /*Try udata_open with status != U_ZERO_ERROR*/
@@ -835,9 +785,6 @@ static void TestErrorConditions(){
     } else {
         log_verbose("calling udat_open with non-existing file returned null as expected\n");
     }
-    free(path);
-    free(testPath);
-
 }
 
 /* Test whether apps and ICU can each have their own root.res */
@@ -855,9 +802,7 @@ static void TestAppData()
   UErrorCode status = U_ZERO_ERROR;
   char testMsgBuf[256];
 
-  char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
-
-  strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
+  const char* testPath=loadTestData(&status);
 
   icu = ures_open(NULL, "root", &status);
   if(U_FAILURE(status))
@@ -924,8 +869,6 @@ static void TestAppData()
   ures_close(tmp2);
   ures_close(icu);
   ures_close(app);
-
-  free(testPath);
 }
 
 static void TestICUDataName()

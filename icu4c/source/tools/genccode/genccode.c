@@ -98,20 +98,7 @@ main(int argc, char* argv[]) {
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
     
-    if( options[3].doesOccur ) /* be consistent with gencmn! */
-    {
-      uprv_strcpy(symPrefix, options[3].value);
-    }
-    else
-    {
-      symPrefix[0] = 0;
-    }
-
-    /* add an underscore to the prefix if non empty */
-    if(symPrefix[0] != 0)
-    {
-      uprv_strcat(symPrefix, "_");
-    }
+    symPrefix[0] = 0;
 
     /* error handling, printing usage message */
     if(argc<0) {

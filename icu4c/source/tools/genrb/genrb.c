@@ -19,8 +19,9 @@
 #include "genrb.h"
 
 /* Protos */
-static void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, UErrorCode *status);
-static char *make_res_filename(const char *filename, const char *outputDir, UErrorCode *status);
+static void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status);
+static char *make_res_filename(const char *filename, const char *outputDir, 
+							   const char *packageName, UErrorCode *status);
 
 /* File suffixes */
 #define RES_SUFFIX ".res"
@@ -44,9 +45,10 @@ enum
     ENCODING,
     ICUDATADIR,
     WRITE_JAVA,
+    COPYRIGHT,
     PACKAGE_NAME,
     BUNDLE_NAME,
-    COPYRIGHT
+	TOUCHFILE
 };
 
 UOption options[]={
@@ -60,13 +62,15 @@ UOption options[]={
                       UOPTION_ENCODING,
                       UOPTION_ICUDATADIR,
                       UOPTION_WRITE_JAVA,
+                      UOPTION_COPYRIGHT,
                       UOPTION_PACKAGE_NAME,
                       UOPTION_BUNDLE_NAME,
-                      UOPTION_COPYRIGHT
+                      UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 12 */
                   };
 
 static     UBool       verbose = FALSE;
 static     UBool       write_java = FALSE;
+static	   UBool	   touchfile = FALSE;
 static     const char* outputEnc ="";
 static     const char* packageName=NULL;
 static     const char* bundleName=NULL;
@@ -156,6 +160,26 @@ main(int argc,
     if(options[DESTDIR].doesOccur) {
         outputDir = options[DESTDIR].value;
     }
+    if(options[PACKAGE_NAME].doesOccur) {
+        packageName = options[PACKAGE_NAME].value;
+        if(!strcmp(packageName, "ICUDATA"))
+        {
+            packageName = U_ICUDATA_NAME;
+        }
+        if(packageName[0] == 0)
+        {
+            packageName = NULL;
+        }
+    }
+
+	if(options[TOUCHFILE].doesOccur) {
+		if(packageName == NULL) {
+			fprintf(stderr, "%s: Don't use touchfile (-t) option with no package.\n", 
+					argv[0]);
+			return -1;
+		}
+		touchfile = TRUE;
+	}
 
     if(options[ENCODING].doesOccur) {
         encoding = options[ENCODING].value;
@@ -168,9 +192,7 @@ main(int argc,
         write_java = TRUE;
         outputEnc = options[WRITE_JAVA].value;
     }
-    if(options[PACKAGE_NAME].doesOccur) {
-        packageName = options[PACKAGE_NAME].value;
-    }
+
     if(options[BUNDLE_NAME].doesOccur) {
         bundleName = options[BUNDLE_NAME].value;
     }
@@ -194,7 +216,7 @@ main(int argc,
         if (verbose) {
             printf("processing file \"%s\"\n", theCurrentFileName);
         }
-        processFile(arg, encoding, inputDir, outputDir, &status);
+        processFile(arg, encoding, inputDir, outputDir, packageName, &status);
     }
 
     return status;
@@ -202,7 +224,7 @@ main(int argc,
 
 /* Process a file */
 static void
-processFile(const char *filename, const char *cp, const char *inputDir, const char *outputDir, UErrorCode *status) {
+processFile(const char *filename, const char *cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status) {
     FileStream     *in           = NULL;
     struct SRBRoot *data         = NULL;
     UCHARBUF       *ucbuf        = NULL;
@@ -314,13 +336,44 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     }
 
     /* Determine the target rb filename */
-    rbname = make_res_filename(filename, outputDir, status);
+    rbname = make_res_filename(filename, outputDir, packageName, status);
+	if(touchfile == TRUE) {
+	    FileStream *q;
+		char msg[1024];
+		char *tfname = NULL;
+
+		tfname = make_res_filename(filename, outputDir, NULL, status);
+			  
+		if(U_FAILURE(*status))
+		{
+			fprintf(stderr, "Error writing touchfile for \"%s\"\n", filename);
+			*status = U_FILE_ACCESS_ERROR;
+		} else {
+			uprv_strcat(tfname, ".res");
+			sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
+				filename, packageName);
+	
+			q = T_FileStream_open(tfname, "w");
+			if(q == NULL)
+			{		
+				fprintf(stderr, "Error writing touchfile \"%s\"\n", tfname);
+				*status = U_FILE_ACCESS_ERROR;
+			}
+			else
+			{
+				  T_FileStream_write(q, msg, uprv_strlen(msg));
+				  T_FileStream_close(q);
+			}
+			uprv_free(tfname);
+		}
+	
+	}
     if(U_FAILURE(*status)) {
         goto finish;
     }
     if(write_java== FALSE){
         /* Write the data to the file */
-        bundle_write(data, outputDir, outputFileName, sizeof(outputFileName), status);
+        bundle_write(data, outputDir, packageName, outputFileName, sizeof(outputFileName), status);
     }else{
         bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),packageName,bundleName,status);
     }
@@ -357,13 +410,21 @@ finish:
 static char*
 make_res_filename(const char *filename,
                   const char *outputDir,
+                  const char *packageName,
                   UErrorCode *status) {
     char *basename;
     char *dirname;
     char *resName;
 
+    int32_t pkgLen = 0; /* length of package prefix */
+
     if (U_FAILURE(*status)) {
         return 0;
+    }
+
+    if(packageName != NULL)
+    {
+        pkgLen = 1 + uprv_strlen(packageName);
     }
 
     /* setup */
@@ -389,20 +450,29 @@ make_res_filename(const char *filename,
     if (outputDir == NULL) {
         /* output in same dir as .txt */
         resName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
+                                      + pkgLen
                                       + uprv_strlen(basename)
-                                      + uprv_strlen(RES_SUFFIX) + 1));
+                                      + uprv_strlen(RES_SUFFIX) + 8));
         if(resName == 0) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto finish;
         }
 
         uprv_strcpy(resName, dirname);
+
+        if(packageName != NULL)
+        {
+            uprv_strcat(resName, packageName);
+            uprv_strcat(resName, "_");
+        }
+
         uprv_strcat(resName, basename);
+
     } else {
         int32_t dirlen      = (int32_t)uprv_strlen(outputDir);
         int32_t basenamelen = (int32_t)uprv_strlen(basename);
 
-        resName = (char*) uprv_malloc(sizeof(char) * (dirlen + basenamelen + 2));
+        resName = (char*) uprv_malloc(sizeof(char) * (dirlen + pkgLen + basenamelen + 8));
 
         if (resName == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
@@ -414,6 +484,12 @@ make_res_filename(const char *filename,
         if(outputDir[dirlen] != U_FILE_SEP_CHAR) {
             resName[dirlen]     = U_FILE_SEP_CHAR;
             resName[dirlen + 1] = '\0';
+        }
+
+        if(packageName != NULL)
+        {
+            uprv_strcat(resName, packageName);
+            uprv_strcat(resName, "_");
         }
 
         uprv_strcat(resName, basename);
