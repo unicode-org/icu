@@ -367,7 +367,7 @@ UnicodeString::operator= (const UnicodeString& src)
   // delete the current contents
   releaseArray();
 
-  // we always copy the length and the hash code
+  // we always copy the length
   fLength = src.fLength;
   if(fLength == 0) {
     // empty string - use the stack buffer
@@ -970,7 +970,7 @@ UnicodeString&
 UnicodeString::setCharAt(UTextOffset offset,
              UChar c)
 {
-  if(cloneArrayIfNeeded()) {
+  if(cloneArrayIfNeeded() && fLength > 0) {
     if(offset < 0) {
       offset = 0;
     } else if(offset >= fLength) {
@@ -1205,8 +1205,7 @@ UnicodeString&
 UnicodeString::doReverse(UTextOffset start,
              int32_t length)
 {
-  // if we're bogus, do nothing
-  if(isBogus() || !cloneArrayIfNeeded() || length <= 1) {
+  if(fLength <= 1 || !cloneArrayIfNeeded()) {
     return *this;
   }
 
@@ -1247,7 +1246,7 @@ UBool
 UnicodeString::padLeading(int32_t targetLength,
                           UChar padChar)
 {
-  if(isBogus() || fLength >= targetLength || !cloneArrayIfNeeded(targetLength)) {
+  if(fLength >= targetLength || !cloneArrayIfNeeded(targetLength)) {
     return FALSE;
   } else {
     // move contents up by padding width
@@ -1267,7 +1266,7 @@ UBool
 UnicodeString::padTrailing(int32_t targetLength,
                            UChar padChar)
 {
-  if(isBogus() || fLength >= targetLength || !cloneArrayIfNeeded(targetLength)) {
+  if(fLength >= targetLength || !cloneArrayIfNeeded(targetLength)) {
     return FALSE;
   } else {
     // fill in padding character
@@ -1651,6 +1650,14 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   // prevent any modifications of the string by returning FALSE here
   if(fFlags & kOpenGetBuffer) {
     return FALSE;
+  }
+
+  // if we're bogus, set us to empty first
+  if(fFlags & kIsBogus) {
+    fArray = fStackBuffer;
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fFlags = kShortString;
   }
 
   /*
