@@ -18,17 +18,17 @@
 
 // MessageFormat Type List  Number, Date, Time or Choice
 const UnicodeString fgTypeList[] = {
-  "", "", "number", "", "date", "", "time", "", "choice"
+  UnicodeString(), UnicodeString(), UNICODE_STRING("number", 6), UnicodeString(), UNICODE_STRING("date", 4), UnicodeString(), UNICODE_STRING("time", 4), UnicodeString(), UNICODE_STRING("choice", 6)
 };
 
 // NumberFormat modifier list, default, currency, percent or integer
 const UnicodeString fgModifierList[] = {
-  "", "", "currency", "", "percent", "", "integer", "", ""
+  UnicodeString(), UnicodeString(), UNICODE_STRING("currency", 9), UnicodeString(), UNICODE_STRING("percent", 7), UnicodeString(), UNICODE_STRING("integer", 7), UnicodeString(), UnicodeString()
 };
 
 // DateFormat modifier list, default, short, medium, long or full
 const UnicodeString fgDateModifierList[] = {
-  "", "", "short", "", "medium", "", "long", "", "full"
+  UnicodeString(), UnicodeString(), UNICODE_STRING("short", 5), UnicodeString(), UNICODE_STRING("medium", 6), UnicodeString(), UNICODE_STRING("long", 4), UnicodeString(), UNICODE_STRING("full", 4)
 };
 
 // Number of items in the lists
