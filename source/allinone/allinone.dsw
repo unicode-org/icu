@@ -579,6 +579,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "thaitest"=..\test\thaitest\thaitest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "toolutil"=..\tools\toolutil\toolutil.dsp - Package Owner=<4>
 
 Package=<5>
