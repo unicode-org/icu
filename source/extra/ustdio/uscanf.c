@@ -98,7 +98,7 @@
  * @return The number of arguments converted and assigned, or -1 if an
  * error occurred.
  */
-typedef int32_t (*u_scanf_handler) (UFILE            *stream,
+typedef int32_t (*u_scanf_handler) (UFILE  *stream,
                    const u_scanf_spec_info     *info,
                    ufmt_args  *args,
                    const UChar            *fmt,
