@@ -889,7 +889,7 @@ static void TestFilePrintCompatibility(void) {
     if (cNumPrinted != uNumPrinted) {\
         log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
     }\
-    if (buffer[uNumPrinted+1] != 0x2a) {\
+    if (buffer[uNumPrinted+1] != '*') {\
         log_err("%" uFormat " too much stored\n");\
     }\
 
@@ -1027,7 +1027,7 @@ static void TestFprintfFormat(void) {
     if (cNumPrinted != uNumPrinted) {
         log_err("%%d %% d %%d number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);
     }
-    if (buffer[uNumPrinted+1] != 0x2a) {
+    if (buffer[uNumPrinted+1] != '*') {
         log_err("%%d %% d %%d too much stored\n");
     }
 }
