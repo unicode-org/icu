@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/uclean.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -1040,9 +1041,15 @@ EnumToNameGroupEntry* genpname::createEnumIndex(const AliasList& list) {
     return enumIndex;
 }
 
-int genpname::MMain(int argc, char* argv[]) {
-
+int genpname::MMain(int argc, char* argv[])
+{
     int32_t i, j;
+    UErrorCode status = U_ZERO_ERROR;
+
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "Error: u_init returned %s\n", u_errorName(status));
+    }
 
     /* preset then read command line options */
     options[3].value=u_getDataDirectory();
