@@ -320,9 +320,13 @@ icu4j/src/com/ibm/icu/impl/data/invuca.dat -text
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/ucadata.dat -text
+icu4j/src/com/ibm/icu/impl/data/ucadata.icu -text
 icu4j/src/com/ibm/icu/impl/data/unames.dat -text
+icu4j/src/com/ibm/icu/impl/data/unames.icu -text
 icu4j/src/com/ibm/icu/impl/data/unorm.dat -text
+icu4j/src/com/ibm/icu/impl/data/unorm.icu -text
 icu4j/src/com/ibm/icu/impl/data/uprops.dat -text
+icu4j/src/com/ibm/icu/impl/data/uprops.icu -text
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
