@@ -905,187 +905,199 @@ main(int argc, char* argv[])
     argc = ccommand( &argv );
 #endif
 
-    UBool syntax = FALSE;
-    UBool all = TRUE;
-    UBool verbose = FALSE;
-    UBool no_err_msg = FALSE;
-    UBool quick = TRUE;
-    UBool name = FALSE;
-    UBool leaks = FALSE;
+    UBool repeatTestsInit = FALSE; /* Was REPEAT_TESTS initialized? */
+    int32_t repeatTests = 1; /* Number of times to run the test */
+    int32_t errorCount = 0;
 
-    // If user didn't set ICU_DATA, attempt to generate one.
-    IntlTest::setICU_DATA();
+    while (repeatTests > 0) {
+        UBool syntax = FALSE;
+        UBool all = TRUE;
+        UBool verbose = FALSE;
+        UBool no_err_msg = FALSE;
+        UBool quick = TRUE;
+        UBool name = FALSE;
+        UBool leaks = FALSE;
 
-    for (int i = 1; i < argc; ++i) {
-        if (argv[i][0] == '-') {
-            const char* str = argv[i] + 1;
-            if (strcmp("verbose", str) == 0)
-                verbose = TRUE;
-            else if (strcmp("v", str) == 0)
-                verbose = TRUE;
-            else if (strcmp("noerrormsg", str) == 0)
-                no_err_msg = TRUE;
-            else if (strcmp("n", str) == 0)
-                no_err_msg = TRUE;
-            else if (strcmp("exhaustive", str) == 0)
-                quick = FALSE;
-            else if (strcmp("e", str) == 0)
-                quick = FALSE;
-            else if (strcmp("all", str) == 0)
-                all = TRUE;
-            else if (strcmp("a", str) == 0)
-                all = TRUE;
-            else if (strcmp("leaks", str) == 0)
-                leaks = TRUE;
-            else if (strcmp("l", str) == 0)
-                leaks = TRUE;
-            else {
-                syntax = TRUE;
+        // If user didn't set ICU_DATA, attempt to generate one.
+        IntlTest::setICU_DATA();
+
+        for (int i = 1; i < argc; ++i) {
+            if (argv[i][0] == '-') {
+                const char* str = argv[i] + 1;
+                if (strcmp("verbose", str) == 0         || strcmp("v", str) == 0) {
+                    verbose = TRUE;
+                }
+                else if (strcmp("noerrormsg", str) == 0 || strcmp("n", str) == 0) {
+                    no_err_msg = TRUE;
+                }
+                else if (strcmp("exhaustive", str) == 0 || strcmp("e", str) == 0) {
+                    quick = FALSE;
+                }
+                else if (strcmp("all", str) == 0        || strcmp("a", str) == 0) {
+                    all = TRUE;
+                }
+                else if (strcmp("leaks", str) == 0      || strcmp("l", str) == 0) {
+                    leaks = TRUE;
+                }
+                else if (strcmp("repeat", str) == 0     || strcmp("r", str) == 0) {
+                    if (!repeatTestsInit) {
+                        repeatTests++;
+                        repeatTestsInit = TRUE;
+                    }
+                }
+                else {
+                    syntax = TRUE;
+                }
+            }
+            else{
+                name = TRUE;
+                all = FALSE;
+            }
+        }
+
+        if (all && name || !all && !name)
+            syntax = TRUE;
+
+        if (syntax) {
+            fprintf(stdout,
+                    "### Syntax:\n"
+                    "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
+                    "### where options are: verbose (v), all (a), noerrormsg (n), \n"
+                    "### exhaustive (e), repeat (r) and leaks (l). \n"
+                    "### (Specify either -all (shortcut -a) or a test name). \n"
+                    "### -all will run all of the tests.\n"
+                    "### \n"
+                    "### To get a list of the test names type: intltest LIST \n"
+                    "### To run just the utility tests type: intltest utility \n"
+                    "### \n"
+                    "### Test names can be nested using slashes (\"testA/subtest1\") \n"
+                    "### For example to list the utility tests type: intltest utility/LIST \n"
+                    "### To run just the Locale test type: intltest utility/LocaleTest \n"
+                    "### \n"
+                    "### A parameter can be specified for a test by appending '@' and the value \n"
+                    "### to the testname. \n\n");
+            return 1;
+        }
+
+        UBool all_tests_exist = TRUE;
+        MajorTestLevel major;
+        major.setVerbose( verbose );
+        major.setNoErrMsg( no_err_msg );
+        major.setQuick( quick );
+        major.setLeaks( leaks );
+        fprintf(stdout, "-----------------------------------------------\n");
+        fprintf(stdout, " IntlTest (C++) Test Suite for                 \n");
+        fprintf(stdout, "   International Components for Unicode %s\n", U_ICU_VERSION);
+        fprintf(stdout, "-----------------------------------------------\n");
+        fprintf(stdout, " Options:                                       \n");
+        fprintf(stdout, "   all (a)               : %s\n", (all?        "On" : "Off"));
+        fprintf(stdout, "   Verbose (v)           : %s\n", (verbose?    "On" : "Off"));
+        fprintf(stdout, "   No error messages (n) : %s\n", (no_err_msg? "On" : "Off"));
+        fprintf(stdout, "   Exhaustive (e)        : %s\n", (!quick?     "On" : "Off"));
+        fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
+        fprintf(stdout, "   Repeat (r)            : %s\n", (repeatTests>1? "On" : "Off"));
+        fprintf(stdout, "-----------------------------------------------\n");
+
+        // initial check for the default converter
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = ucnv_open(0, &errorCode);
+        if(cnv != 0) {
+            // ok
+            ucnv_close(cnv);
+        } else {
+            fprintf(stdout,
+                    "*** Failure! The default converter [%s] cannot be opened.\n"
+                    "*** Check the ICU_DATA environment variable and\n"
+                    "*** check that the data files are present.\n",
+                    ucnv_getDefaultName());
+            return 1;
+        }
+
+        // try more data
+        cnv = ucnv_open("iso-8859-7", &errorCode);
+        if(cnv != 0) {
+            // ok
+            ucnv_close(cnv);
+        } else {
+            fprintf(stdout,
+                    "*** Failure! The converter for iso-8859-7 cannot be opened.\n"
+                    "*** Check the ICU_DATA environment variable and \n"
+                    "*** check that the data files are present.\n");
+            return 1;
+        }
+
+        UResourceBundle *rb = ures_open(0, "en", &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            // ok
+            ures_close(rb);
+        } else {
+            fprintf(stdout,
+                    "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
+                    "*** Check the ICU_DATA environment variable and \n"
+                    "*** check that the data files are present.\n");
+            return 1;
+        }
+
+        if (all) {
+            major.runTest();
+            if (leaks) {
+                major.run_phase2( NULL, NULL );
             }
         }else{
-            name = TRUE;
-            all = FALSE;
-        }
-    }
-
-    if (all && name) syntax = TRUE;
-    if (!all && !name) syntax = TRUE;
-
-    if (syntax) {
-        fprintf(stdout,
-                "### Syntax:\n"
-                "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
-                "### where options are: verbose (v), all (a), noerrormsg (n), \n"
-                "### exhaustive (e) and leaks (l). \n"
-                "### (Specify either -all (shortcut -a) or a test name). \n"
-                "### -all will run all of the tests.\n"
-                "### \n"
-                "### To get a list of the test names type: intltest LIST \n"
-                "### To run just the utility tests type: intltest utility \n"
-                "### \n"
-                "### Test names can be nested using slashes (\"testA/subtest1\") \n"
-                "### For example to list the utility tests type: intltest utility/LIST \n"
-                "### To run just the Locale test type: intltest utility/LocaleTest \n"
-                "### \n"
-                "### A parameter can be specified for a test by appending '@' and the value \n"
-                "### to the testname. \n\n");
-        return 1;
-    }
-
-    UBool all_tests_exist = TRUE;
-    MajorTestLevel major;
-    major.setVerbose( verbose );
-    major.setNoErrMsg( no_err_msg );
-    major.setQuick( quick );
-    major.setLeaks( leaks );
-    fprintf(stdout, "-----------------------------------------------\n");
-    fprintf(stdout, " IntlTest (C++) Test Suite for                 \n");
-    fprintf(stdout, "   International Components for Unicode %s\n", U_ICU_VERSION);
-    fprintf(stdout, "-----------------------------------------------\n");
-    fprintf(stdout, " Options:                                       \n");
-    fprintf(stdout, "   all (a)               : %s\n", (all?        "On" : "Off"));
-    fprintf(stdout, "   Verbose (v)           : %s\n", (verbose?    "On" : "Off"));
-    fprintf(stdout, "   No error messages (n) : %s\n", (no_err_msg? "On" : "Off"));
-    fprintf(stdout, "   Exhaustive (e)        : %s\n", (!quick?     "On" : "Off"));
-    fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
-    fprintf(stdout, "-----------------------------------------------\n");
-
-    // initial check for the default converter
-    UErrorCode errorCode = U_ZERO_ERROR;
-    UConverter *cnv = ucnv_open(0, &errorCode);
-    if(cnv != 0) {
-        // ok
-        ucnv_close(cnv);
-    } else {
-        fprintf(stdout,
-                "*** Failure! The default converter [%s] cannot be opened.\n"
-                "*** Check the ICU_DATA environment variable and\n"
-                "*** check that the data files are present.\n",
-                ucnv_getDefaultName());
-        return 1;
-    }
-
-    // try more data
-    cnv = ucnv_open("iso-8859-7", &errorCode);
-    if(cnv != 0) {
-        // ok
-        ucnv_close(cnv);
-    } else {
-        fprintf(stdout,
-                "*** Failure! The converter for iso-8859-7 cannot be opened.\n"
-                "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n");
-        return 1;
-    }
-
-    UResourceBundle *rb = ures_open(0, "en", &errorCode);
-    if(U_SUCCESS(errorCode)) {
-        // ok
-        ures_close(rb);
-    } else {
-        fprintf(stdout,
-                "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
-                "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n");
-        return 1;
-    }
-
-    /* TODO: Add option to call u_cleanup and rerun tests. */
-    if (all) {
-        major.runTest();
-        if (leaks) {
-            major.run_phase2( NULL, NULL );
-        }
-    }else{
-        for (int i = 1; i < argc; ++i) {
-            if (argv[i][0] != '-') {
-                char* name = argv[i];
-                fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
-                char* parameter = strchr( name, '@' );
-                if (parameter) {
-                    *parameter = 0;
-                    parameter += 1;
-                }
-                execCount = 0;
-                UBool res = major.runTest( name, parameter );
-                if (leaks && res) {
-                    major.run_phase2( name, parameter );
-                }
-                if (!res || (execCount <= 0)) {
-                    fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
-                    all_tests_exist = FALSE;
+            for (int i = 1; i < argc; ++i) {
+                if (argv[i][0] != '-') {
+                    char* name = argv[i];
+                    fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
+                    char* parameter = strchr( name, '@' );
+                    if (parameter) {
+                        *parameter = 0;
+                        parameter += 1;
+                    }
+                    execCount = 0;
+                    UBool res = major.runTest( name, parameter );
+                    if (leaks && res) {
+                        major.run_phase2( name, parameter );
+                    }
+                    if (!res || (execCount <= 0)) {
+                        fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
+                        all_tests_exist = FALSE;
+                    }
                 }
             }
         }
+
+        CalendarTimeZoneTest::cleanup();
+        delete _testDirectory;
+        _testDirectory = 0;
+
+        fprintf(stdout, "\n--------------------------------------\n");
+        if (major.getErrors() == 0) {
+            /* Call it twice to make sure that the defaults were reset. */
+            /* Call it before the OK message to verify proper cleanup. */
+            u_cleanup();
+            u_cleanup();
+
+            fprintf(stdout, "OK: All tests passed without error.\n");
+        }else{
+            fprintf(stdout, "Errors in total: %ld.\n", (long)major.getErrors());
+            major.printErrors();
+
+            /* Call afterwards to display errors. */
+            u_cleanup();
+        }
+
+        fprintf(stdout, "--------------------------------------\n");
+
+        if (execCount <= 0) {
+            fprintf(stdout, "***** Not all called tests actually exist! *****\n");
+        }
+        errorCount = major.getErrors();
+        errorList.remove();
+        repeatTests--;
     }
-
-    CalendarTimeZoneTest::cleanup();
-    delete _testDirectory;
-    _testDirectory = 0;
-
-    fprintf(stdout, "\n--------------------------------------\n");
-    if (major.getErrors() == 0) {
-        /* Call it twice to make sure that the defaults were reset. */
-        /* Call it before the OK message to verify proper cleanup. */
-        u_cleanup();
-        u_cleanup();
-
-        fprintf(stdout, "OK: All tests passed without error.\n");
-    }else{
-        fprintf(stdout, "Errors in total: %ld.\n", (long)major.getErrors());
-        major.printErrors();
-
-        /* Call afterwards to display errors. */
-        u_cleanup();
-    }
-
-    fprintf(stdout, "--------------------------------------\n");
-
-    if (execCount <= 0) {
-        fprintf(stdout, "***** Not all called tests actually exist! *****\n");
-    }
-    return major.getErrors();
+    return errorCount;
 }
+
 void IntlTest::loadTestData(char* testdatapath,int32_t len, UErrorCode& err ){
     const char*      directory=NULL;
     UResourceBundle* test =NULL;
