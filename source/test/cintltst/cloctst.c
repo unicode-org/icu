@@ -34,11 +34,13 @@
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
 #include "unicode/uversion.h"
+#include "unicode/ulocdata.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestNullDefault(void);
 static void VerifyTranslation(void);
+static void TestExemplarSet(void);
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -188,34 +190,37 @@ enum {
     DNAME_EL = 27
 };
 
+#define TESTCASE(name) addTest(root, &name, "tsutil/cloctst/" #name)
+
 void addLocaleTest(TestNode** root);
 
 void addLocaleTest(TestNode** root)
 {
-    addTest(root, &TestObsoleteNames,        "tsutil/cloctst/TestObsoleteNames"); /* srl- move */
-    addTest(root, &TestBasicGetters,         "tsutil/cloctst/TestBasicGetters");
-    addTest(root, &TestNullDefault,          "tsutil/cloctst/TestNullDefault");
-    addTest(root, &TestPrefixes,             "tsutil/cloctst/TestPrefixes");
-    addTest(root, &TestSimpleResourceInfo,   "tsutil/cloctst/TestSimpleResourceInfo");
-    addTest(root, &TestDisplayNames,         "tsutil/cloctst/TestDisplayNames");
-    addTest(root, &TestGetAvailableLocales,  "tsutil/cloctst/TestGetAvailableLocales");
-    addTest(root, &TestDataDirectory,        "tsutil/cloctst/TestDataDirectory");
-    addTest(root, &TestISOFunctions,         "tsutil/cloctst/TestISOFunctions");
-    addTest(root, &TestISO3Fallback,         "tsutil/cloctst/TestISO3Fallback");
-    addTest(root, &TestUninstalledISO3Names, "tsutil/cloctst/TestUninstalledISO3Names");
-    addTest(root, &TestSimpleDisplayNames,   "tsutil/cloctst/TestSimpleDisplayNames");
-    addTest(root, &TestVariantParsing,       "tsutil/cloctst/TestVariantParsing");
-    addTest(root, &TestLocaleStructure,      "tsutil/cloctst/TestLocaleStructure");
-    addTest(root, &TestConsistentCountryInfo,"tsutil/cloctst/TestConsistentCountryInfo");
-    addTest(root, &VerifyTranslation,        "tsutil/cloctst/VerifyTranslation");
-    /*addTest(root, &MoreVariants,             "tsutil/cloctst/MoreVariants");*/
-    addTest(root, &TestKeywordVariants,      "tsutil/cloctst/TestKeywordVariants");
-    addTest(root, &TestKeywordVariantParsing,"tsutil/cloctst/TestKeywordVariantParsing");
-    addTest(root, &TestCanonicalization,     "tsutil/cloctst/TestCanonicalization");
-    addTest(root, &TestDisplayKeywords,      "tsutil/cloctst/TestDisplayKeywords");
-    addTest(root, &TestDisplayKeywordValues, "tsutil/cloctst/TestDisplayKeywordValues");
-    addTest(root, &TestGetBaseName,          "tsutil/cloctst/TestGetBaseName");
-    addTest(root, &TestGetLocale,            "tsutil/cloctst/TestGetLocale");
+    TESTCASE(TestObsoleteNames); /* srl- move */
+    TESTCASE(TestBasicGetters);
+    TESTCASE(TestNullDefault);
+    TESTCASE(TestPrefixes);
+    TESTCASE(TestSimpleResourceInfo);
+    TESTCASE(TestDisplayNames);
+    TESTCASE(TestGetAvailableLocales);
+    TESTCASE(TestDataDirectory);
+    TESTCASE(TestISOFunctions);
+    TESTCASE(TestISO3Fallback);
+    TESTCASE(TestUninstalledISO3Names);
+    TESTCASE(TestSimpleDisplayNames);
+    TESTCASE(TestVariantParsing);
+    TESTCASE(TestLocaleStructure);
+    TESTCASE(TestConsistentCountryInfo);
+    TESTCASE(VerifyTranslation);
+    /*TESTCASE(MoreVariants);*/
+    TESTCASE(TestKeywordVariants);
+    TESTCASE(TestKeywordVariantParsing);
+    TESTCASE(TestCanonicalization);
+    TESTCASE(TestDisplayKeywords);
+    TESTCASE(TestDisplayKeywordValues);
+    TESTCASE(TestGetBaseName);
+    TESTCASE(TestGetLocale);
+    TESTCASE(TestExemplarSet);
 }
 
 
@@ -2224,7 +2229,7 @@ static void VerifyTranslation(void) {
 
             /* test that the scripts are a superset of exemplar characters. */
            {
-                USet *exemplarSet =  ulocdata_getExemplarSet(NULL,currLoc, &errorCode);
+                USet *exemplarSet =  ulocdata_getExemplarSet(NULL,currLoc, 0, &errorCode);
                 /* test if exemplar characters are part of script code */
                 findSetMatch(scripts, numScripts, exemplarSet, currLoc);
                 uset_close(exemplarSet);
@@ -2948,4 +2953,108 @@ static void TestGetLocale(void) {
         ucol_close(obj);
     }
 #endif
+}
+
+/* adjust this limit as appropriate */
+#define MAX_SCRIPTS_PER_LOCALE 8
+
+static void TestExemplarSet(void){
+    int32_t i, j, k, m, n;
+    int32_t equalCount = 0;
+    UErrorCode ec = U_ZERO_ERROR;
+    UEnumeration* avail;
+    USet* exemplarSets[2];
+    UScriptCode code[MAX_SCRIPTS_PER_LOCALE];
+    USet* codeSets[MAX_SCRIPTS_PER_LOCALE];
+    int32_t codeLen;
+    char cbuf[32]; /* 9 should be enough */
+    UChar ubuf[64]; /* adjust as needed */
+    UBool existsInScript;
+    int32_t itemCount;
+    int32_t strLen;
+    UChar32 start, end;
+    
+    exemplarSets[0] = exemplarSets[1] = NULL;
+    for (i=0; i<MAX_SCRIPTS_PER_LOCALE; ++i) {
+        codeSets[i] = NULL;
+    }
+
+    avail = ures_openAvailableLocales(NULL, &ec);
+    if (!assertSuccess("ures_openAvailableLocales", &ec)) goto END;
+    n = uenum_count(avail, &ec);
+    if (!assertSuccess("uenum_count", &ec)) goto END;
+
+    for(i=0; i<n; i++){
+        const char* locale = uenum_next(avail, NULL, &ec);
+        if (!assertSuccess("uenum_next", &ec)) goto END;
+        log_verbose("%s\n", locale);
+        for (k=0; k<2; ++k) {
+            uint32_t option = (k==0) ? 0 : USET_CASE_INSENSITIVE;
+            USet* exemplarSet = ulocdata_getExemplarSet(NULL, locale, option, &ec);
+            uset_close(exemplarSets[k]);
+            exemplarSets[k] = exemplarSet;
+            if (!assertSuccess("ulocaledata_getExemplarSet", &ec)) goto END;
+
+            codeLen = uscript_getCode(locale, code, 8, &ec);
+            if (!assertSuccess("uscript_getCode", &ec)) goto END;
+
+            for (j=0; j<MAX_SCRIPTS_PER_LOCALE; ++j) {
+                uset_close(codeSets[j]);
+                codeSets[j] = NULL;
+            }
+            for (j=0; j<codeLen; ++j) {
+                uprv_strcpy(cbuf, "[:");
+                uprv_strcat(cbuf, uscript_getShortName(code[j]));
+                uprv_strcat(cbuf, ":]");
+                u_uastrcpy(ubuf, cbuf);
+                codeSets[j] = uset_openPattern(ubuf, -1, &ec);
+            }
+            if (!assertSuccess("uset_openPattern", &ec)) goto END;
+
+            existsInScript = FALSE;
+            itemCount = uset_getItemCount(exemplarSet);
+            for (m=0; m<itemCount && !existsInScript; ++m) {
+                strLen = uset_getItem(exemplarSet, m, &start, &end, ubuf,
+                                      sizeof(ubuf)/sizeof(ubuf[0]), &ec);
+                /* failure here might mean str[] needs to be larger */
+                if (!assertSuccess("uset_getItem", &ec)) goto END;
+                if (strLen == 0) {
+                    for (j=0; j<codeLen; ++j) {
+                        if (uset_containsRange(codeSets[j], start, end)) {
+                            existsInScript = TRUE;
+                            break;
+                        }
+                    }
+                } else {
+                    for (j=0; j<codeLen; ++j) {
+                        if (uset_containsString(codeSets[j], ubuf, strLen)) {
+                            existsInScript = TRUE;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (existsInScript == FALSE){
+                log_err("ExemplarSet containment failed for locale : %s", locale);
+            }
+        }
+        assertTrue("case-folded is a superset",
+                   uset_containsAll(exemplarSets[1], exemplarSets[0]));
+        if (uset_equals(exemplarSets[1], exemplarSets[0])) {
+            ++equalCount;
+        }
+    }
+    /* Note: The case-folded set should sometimes be a strict superset
+       and sometimes be equal. */
+    assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
+               equalCount > 0 && equalCount < n);
+    
+ END:
+    uenum_close(avail);
+    uset_close(exemplarSets[0]);
+    uset_close(exemplarSets[1]);
+    for (i=0; i<MAX_SCRIPTS_PER_LOCALE; ++i) {
+        uset_close(codeSets[i]);
+    }
 }
