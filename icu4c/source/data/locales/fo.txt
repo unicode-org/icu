@@ -1,0 +1,71 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+fo {
+    DayAbbreviations { 
+            "sun",
+            "mán",
+            "týs",
+            "mik",
+            "hós",
+            "frí",
+            "ley",
+    }
+    DayNames { 
+            "sunnudagur",
+            "mánadagur",
+            "týsdagur",
+            "mikudagur",
+            "hósdagur",
+            "fríggjadagur",
+            "leygardagur",
+    }
+    MonthAbbreviations { 
+            "jan",
+            "feb",
+            "mar",
+            "apr",
+            "mai",
+            "jun",
+            "jul",
+            "aug",
+            "sep",
+            "okt",
+            "nov",
+            "des",
+            "",
+    }
+    MonthNames { 
+            "januar",
+            "februar",
+            "mars",
+            "apríl",
+            "mai",
+            "juni",
+            "juli",
+            "august",
+            "september",
+            "oktober",
+            "november",
+            "desember",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "‰",
+            "∞",
+            "�",
+    }
+}

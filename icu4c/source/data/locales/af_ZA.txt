@@ -1,0 +1,23 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+af_ZA {
+    CurrencyElements { 
+            "R",
+            "ZAR ",
+            ",",
+    }
+
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "¤#,##0.00;-¤#,##0.00",
+            "#,##0%",
+    }
+            LocaleID {"0436"}
+            LocaleString { "af_ZA" }
+}

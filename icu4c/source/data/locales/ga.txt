@@ -1,0 +1,71 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+ga{
+    DayAbbreviations { 
+            "Domh",
+            "Luan",
+            "Máirt",
+            "Céad",
+            "Déar",
+            "Aoine",
+            "Sath",
+    }
+    DayNames { 
+            "Dé Domhnaigh",
+            "Dé Luain",
+            "Dé Máirt",
+            "Dé Céadaoin",
+            "Déardaoin",
+            "Dé hAoine",
+            "Dé Sathairn",
+    }
+    MonthAbbreviations { 
+            "Ean",
+            "Feabh",
+            "Márta",
+            "Aib",
+            "Beal",
+            "Meith",
+            "Iúil",
+            "Lún",
+            "MFómh",
+            "DFómh",
+            "Samh",
+            "Noll",
+            "",
+    }
+    MonthNames { 
+            "Eanáir",
+            "Feabhra",
+            "Márta",
+            "Aibreán",
+            "Mí na Bealtaine",
+            "Meith",
+            "Iúil",
+            "Lúnasa",
+            "Meán Fómhair",
+            "Deireadh Fómhair",
+            "Mí na Samhna",
+            "Mí na Nollag",
+            "",
+    }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "‰",
+            "∞",
+            "�",
+    }
+}
