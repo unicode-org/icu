@@ -48,6 +48,12 @@ ibm-277.ucm ibm-278.ucm ibm-280.ucm ibm-284.ucm ibm-285.ucm\
 ibm-297.ucm ibm-37.ucm ibm-500.ucm ibm-871.ucm ibm-937.ucm\
 ibm-930.ucm ibm-1257.ucm ibm-1256.ucm ibm-1255.ucm ibm-1254.ucm ibm-1253.ucm ibm-1251.ucm\
 ibm-1250.ucm ibm-862.ucm ibm-850.ucm ibm-950.ucm\
+ibm-1004.ucm ibm-1006.ucm ibm-1008.ucm\
+ibm-1041.ucm ibm-1043.ucm ibm-1051.ucm ibm-1088.ucm ibm-1098.ucm\
+ibm-1112.ucm ibm-1114.ucm ibm-1115.ucm ibm-1116.ucm ibm-1117.ucm ibm-1118.ucm ibm-1119.ucm\
+ibm-833.ucm ibm-835.ucm ibm-891.ucm ibm-897.ucm ibm-903.ucm ibm-904.ucm ibm-907.ucm ibm-909.ucm\
+ibm-910.ucm ibm-939.ucm ibm-941.ucm ibm-944.ucm ibm-946.ucm ibm-947.ucm ibm-948.ucm\
+ibm-953.ucm ibm-955.ucm\
 ibm-37-s390.ucm\
 ibm-1140-s390.ucm ibm-1142-s390.ucm ibm-1143-s390.ucm ibm-1144-s390.ucm\
 ibm-1145-s390.ucm ibm-1146-s390.ucm ibm-1147-s390.ucm ibm-1148-s390.ucm\
