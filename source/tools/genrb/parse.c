@@ -381,7 +381,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
           UChar *target       = pTarget;
           UChar *targetLimit = pTarget + size;
 
-          ucbuf = ucbuf_open(file, status);
+          ucbuf = ucbuf_open(file, NULL, status);
 
           if (U_FAILURE(*status)) {
               error(line, "couldn't open input file %s\n", filename);

@@ -49,7 +49,7 @@ U_CAPI void U_EXPORT2
 ucbuf_rewind(UCHARBUF* buf);
 
 U_CAPI UCHARBUF* U_EXPORT2
-ucbuf_open(FileStream* in,UErrorCode* err);
+ucbuf_open(FileStream* in,const char* codepage, UErrorCode* err);
 
 U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf);

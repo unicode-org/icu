@@ -215,12 +215,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         goto finish;
     } else {
         /* auto detect popular encodings */
-        if (ucbuf_autodetect(in, &cp)) {
+        if (*cp=='\0' &&ucbuf_autodetect(in, &cp)) {
             printf("Autodetected encoding %s\n", cp);
         }
     }
 
-    ucbuf = ucbuf_open(in, status);
+    ucbuf = ucbuf_open(in, cp, status);
 
     if (ucbuf == NULL || U_FAILURE(*status)) {
         goto finish;
@@ -245,6 +245,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     bundle_close(data, status);
 
 finish:
+
     if (openFileName != NULL) {
         uprv_free(openFileName);
     }
