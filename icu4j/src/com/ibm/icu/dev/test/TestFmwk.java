@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2002/02/25 22:43:59 $ 
- * $Revision: 1.28 $
+ * $Date: 2002/03/10 19:40:12 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -50,13 +50,13 @@ public class TestFmwk implements TestLog {
     // to add a new test by simply adding a function to an existing class
     //------------------------------------------------------------------------
 
-	protected TestFmwk() {
+    protected TestFmwk() {
         // Create a hashtable containing all the test methods.
         testMethods = new Hashtable();
         Method[] methods = getClass().getDeclaredMethods();
         for( int i=0; i<methods.length; i++ ) {
             if( methods[i].getName().startsWith("Test") 
-					|| methods[i].getName().startsWith("test")) {
+                || methods[i].getName().startsWith("test")) {
                 testMethods.put( methods[i].getName(), methods[i] );
             }
         }
@@ -65,51 +65,60 @@ public class TestFmwk implements TestLog {
     private void _run() throws Exception {
         writeTestName(getClass().getName());
         params.indentLevel++;
-		Enumeration methodsToRun;
-		
-		if (testsToRun != null && testsToRun.size() >= 1) {
-			methodsToRun = testsToRun.elements();
-		} else {
-			methodsToRun = testMethods.elements();
-		}
-
-        methodsToRun = new SortedEnumeration(methodsToRun,
-            new Comparator() {
-                public int compare(Object a, Object b) {
-                    return ((Method)a).getName().compareToIgnoreCase(
-                           ((Method)b).getName());
-                }
-                public boolean equals(Object o) {
-                    return false;
-                }
-            });
-
         int oldClassCount = params.errorCount;
+        int oldClassInvalidCount = params.invalidCount;
 
-        // Run the list of tests given in the test arguments
-        while (methodsToRun.hasMoreElements()) {
-            int oldCount = params.errorCount;
-
-           	Method testMethod = (Method)methodsToRun.nextElement();
-            writeTestName(testMethod.getName());
-
-            try {
-                testMethod.invoke(this, new Object[0]);
-            } catch( IllegalAccessException e ) {
-                errln("Can't access test method " + testMethod.getName());
-            } catch( InvocationTargetException e ) {
-                errln("Uncaught exception \""+e+"\" thrown in test method "
-                        + testMethod.getName());
-                e.getTargetException().printStackTrace(this.params.log);
+        if (validate()) {
+                        
+            Enumeration methodsToRun;
+                
+            if (testsToRun != null && testsToRun.size() >= 1) {
+                methodsToRun = testsToRun.elements();
+            } else {
+                methodsToRun = testMethods.elements();
             }
-            writeTestResult(params.errorCount - oldCount);
+
+            methodsToRun = new SortedEnumeration(methodsToRun,
+                                                 new Comparator() {
+                                                     public int compare(Object a, Object b) {
+                                                         return ((Method)a).getName().compareToIgnoreCase(
+                                                                                                          ((Method)b).getName());
+                                                     }
+                                                     public boolean equals(Object o) {
+                                                         return false;
+                                                     }
+                                                 });
+
+            // Run the list of tests given in the test arguments
+            while (methodsToRun.hasMoreElements()) {
+                int oldCount = params.errorCount;
+                int oldInvalidCount = params.invalidCount;
+
+                Method testMethod = (Method)methodsToRun.nextElement();
+                writeTestName(testMethod.getName());
+
+                try {
+                    testMethod.invoke(this, new Object[0]);
+                } catch( IllegalAccessException e ) {
+                    errln("Can't access test method " + testMethod.getName());
+                } catch( InvocationTargetException e ) {
+                    errln("Uncaught exception \""+e+"\" thrown in test method "
+                          + testMethod.getName());
+                    e.getTargetException().printStackTrace(this.params.log);
+                }
+                writeTestResult(params.errorCount - oldCount, params.invalidCount - oldInvalidCount);
+            }
+        } else {
+            params.invalidCount++;
         }
         params.indentLevel--;
-        writeTestResult(params.errorCount - oldClassCount);
+
+        writeTestResult(params.errorCount - oldClassCount, params.invalidCount - oldClassInvalidCount);
     }
     
     public void run(String[] args) throws Exception {
-    	if (params == null) params = new TestParams();
+        if (params == null) params = new TestParams();
+
         // Parse the test arguments.  They can be either the flag
         // "-verbose" or names of test methods. Create a list of
         // tests to be run.
@@ -137,7 +146,6 @@ public class TestFmwk implements TestLog {
             }
         }
 
-    	if (params == null) params = new TestParams();
         _run();
 
         if (params.prompt) {
@@ -153,18 +161,25 @@ public class TestFmwk implements TestLog {
         }
     }
 
-	protected void run(TestFmwk childTest) throws Exception {
-        run(new TestFmwk[] { childTest });
-	}
+    /**
+     * Return true if we can run this test (allows test to inspect jvm, environment, params before running)
+     */
+    protected boolean validate() {
+        return true;
+    }
 
-	protected void run(TestFmwk[] tests) throws Exception {
+    protected void run(TestFmwk childTest) throws Exception {
+        run(new TestFmwk[] { childTest });
+    }
+
+    protected void run(TestFmwk[] tests) throws Exception {
         for (int i=0; i<tests.length; ++i) {
             tests[i].params = this.params;
             params.indentLevel++;
             tests[i]._run();
             params.indentLevel--;
         }
-	}
+    }
 
     protected boolean isVerbose() {
         return params.verbose;
@@ -258,15 +273,20 @@ public class TestFmwk implements TestLog {
         params.needLineFeed = true;
     }
 
-    protected void writeTestResult(int count) {
+    protected void writeTestResult(int failCount, int invalidCount) {
         if (!params.needLineFeed) {
             indent(params.indentLevel);
             params.log.print("}");
         }
         params.needLineFeed = false;
 
-        if (count != 0) {
-            params.log.println(" FAILED (" + count + " failures)");
+        if (failCount != 0) {
+            params.log.println(" FAILED (" + failCount + " failures" +
+                               ((invalidCount != 0) ?
+                                ", " + invalidCount + " tests skipped)" :
+                                ")"));
+        } else if (invalidCount != 0) {
+            params.log.println(" Qualified (" + invalidCount + " tests skipped)");
         } else {
             params.log.println(" Passed");
         }
@@ -285,19 +305,19 @@ public class TestFmwk implements TestLog {
      */
     void usage() {
         System.out.println(getClass().getName() +
-                ": [-verbose] [-nothrow] [-prompt] [test names]");
+                           ": [-verbose] [-nothrow] [-prompt] [test names]");
 
         System.out.println("test names:");
         Enumeration methodNames = new SortedEnumeration(testMethods.keys(),
-            new Comparator() {
-                public int compare(Object a, Object b) {
-                    return ((String)a).compareToIgnoreCase(
-                           ((String)b));
-                }
-                public boolean equals(Object o) {
-                    return false;
-                }
-            });
+                                                        new Comparator() {
+                                                            public int compare(Object a, Object b) {
+                                                                return ((String)a).compareToIgnoreCase(
+                                                                                                       ((String)b));
+                                                            }
+                                                            public boolean equals(Object o) {
+                                                                return false;
+                                                            }
+                                                        });
         while( methodNames.hasMoreElements() ) {
             System.out.println("\t" + methodNames.nextElement() );
         }
@@ -384,17 +404,18 @@ public class TestFmwk implements TestLog {
         }
     }
 
-	private static class TestParams {
-    	public boolean   prompt = false;
-    	public boolean   nothrow = false;
-    	public boolean   verbose = false;
-    	public int      inclusion = 0;
-    	public String    filter = null;
+    private static class TestParams {
+        public boolean   prompt = false;
+        public boolean   nothrow = false;
+        public boolean   verbose = false;
+        public int      inclusion = 0;
+        public String    filter = null;
 
-    	public PrintWriter log = new ASCIIWriter(System.out, true);
-    	public int         indentLevel = 0;
-    	public boolean     needLineFeed = false;
-    	public int         errorCount = 0;
+        public PrintWriter log = new ASCIIWriter(System.out, true);
+        public int         indentLevel = 0;
+        public boolean     needLineFeed = false;
+        public int         errorCount = 0;
+        public int         invalidCount = 0;
     }
 
     private static class SortedEnumeration implements Enumeration {
@@ -421,8 +442,8 @@ public class TestFmwk implements TestLog {
         }
     }
 
-	private TestParams params = null;
+    private TestParams params = null;
     private Hashtable testMethods;
-	private Vector testsToRun;
+    private Vector testsToRun;
     private final String spaces = "                                          ";
 }

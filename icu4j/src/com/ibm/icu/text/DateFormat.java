@@ -29,18 +29,20 @@
  */
 
 package com.ibm.icu.text;
-import java.text.Format;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-import com.ibm.icu.util.TimeZone;
+
+import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Date;
-import java.text.resources.*;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * DateFormat is an abstract class for date/time formatting subclasses which
@@ -597,7 +599,7 @@ public abstract class DateFormat extends Format {
      */
     public static Locale[] getAvailableLocales()
     {
-        return LocaleData.getAvailableLocales("DateTimePatterns");
+        return ICULocaleData.getAvailableLocales("DateTimePatterns");
     }
 
     /**

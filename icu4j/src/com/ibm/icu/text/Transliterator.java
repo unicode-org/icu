@@ -5,20 +5,28 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/02/25 22:43:58 $
- * $Revision: 1.75 $
+ * $Date: 2002/03/10 19:40:16 $
+ * $Revision: 1.76 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import java.util.*;
+import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.data.ResourceReader;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.util.CaseInsensitiveString;
+
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
-import java.io.UnsupportedEncodingException;
-import com.ibm.icu.impl.data.ResourceReader;
-import com.ibm.icu.util.CaseInsensitiveString;
-import com.ibm.icu.impl.Utility;
+import java.text.RuleBasedCollator;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.MissingResourceException;
+import java.util.Vector;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -242,7 +250,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.75 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.76 $ $Date: 2002/03/10 19:40:16 $
  */
 public abstract class Transliterator {
     /**
@@ -402,16 +410,6 @@ public abstract class Transliterator {
      * "{0,choice,0#|1#{1} Transliterator|2#{1} to {2} Transliterator}".
      */
     private static final String RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
-
-    /**
-     * Resource bundle containing display name keys and the
-     * RB_RULE_BASED_IDS array.
-     *
-     * <p>If we ever integrate this with the Sun JDK, the resource bundle
-     * root will change to java.text.resources.LocaleElements
-     */
-    private static final String RB_LOCALE_ELEMENTS =
-        "com.ibm.icu.impl.data.LocaleElements";
 
     protected static final char ID_DELIM = ';';
 
@@ -1089,8 +1087,14 @@ public abstract class Transliterator {
      * @see java.text.MessageFormat
      */
     public static String getDisplayName(String id, Locale inLocale) {
-        ResourceBundle bundle = ResourceBundle.getBundle(
-            RB_LOCALE_ELEMENTS, inLocale);
+
+		// Resource bundle containing display name keys and the
+		// RB_RULE_BASED_IDS array.
+		//
+		//If we ever integrate this with the Sun JDK, the resource bundle
+        // root will change to sun.text.resources.LocaleElements
+
+        ResourceBundle bundle = ICULocaleData.getLocaleElements(inLocale);
 
         // Normalize the ID
         String stv[] = TransliteratorIDParser.IDtoSTV(id);

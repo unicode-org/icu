@@ -673,7 +673,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     // system by a pair (String id, Locale locale).  The id is the unique string
     // identifier for the rule for the given TimeZone (as passed to
     // TimeZone.getTimeZone()).  String names are stored as localized resource
-    // data of the class java.text.resources.DateFormatZoneData???  where ??? is
+    // data (in jdk 1.2 and 1.3) of the class LocaleData???  where ??? is
     // the Locale specifier (e.g., DateFormatZoneData_en_US).  This data is a
     // two-dimensional array of strings with N rows and 6 columns.  The columns
     // are id, short standard name, long standard name, short daylight name,

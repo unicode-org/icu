@@ -10,8 +10,8 @@ public class CalendarData_ms_MY extends ListResourceBundle {
         return new Object[][] {
             { "Weekend",
                 new String[] { // Saturday - half day in some offices:Sunday
-                    "", "0", // onset dow, millis in day
-                    "", "0"  // cease dow, millis in day
+                    "0", "0", // onset dow, millis in day
+                    "0", "0"  // cease dow, millis in day
                 }
             },
         };

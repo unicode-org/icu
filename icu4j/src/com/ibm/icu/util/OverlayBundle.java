@@ -3,10 +3,11 @@ import java.util.*;
 
 /**
  * A ResourceBundle that overlays one hierarchy atop another.  This is
- * best explained by example.  Suppose one wants to use the standard
- * resource hiararchy at "java.text.resources.LocaleElements", but one
- * wants to use a modified version of the "NumberPatterns" resource in
- * the fr_FR locale.  One way to do this is to add special case code
+ * best explained by example.  Suppose one wants to use the
+ * resource hiararchy (in JDK 1.2 and 1.3, but not 1.4) at 
+ * "java.text.resources.LocaleElements", but one wants to use
+ * a modified version of the "NumberPatterns" resource in the
+ * fr_FR locale.  One way to do this is to add special case code
  * to the lookup operation to check for fr_FR and the key
  * "NumberPatterns", and in that case, load up custom data.  However,
  * this becomes unwieldy and places some information about the
@@ -36,7 +37,7 @@ import java.util.*;
  * base names.  The base names are searched from 0 to n-1.  Base name
  * n-1 is special; it is the base hierarchy.  This should be a
  * well-populated hierarchy with most of the default data, typically,
- * "java.text.resources.LocaleElements".  The base hierarchy is
+ * the icu or sun core hierarchies.  The base hierarchy is
  * treated differently from the overlays above it.  It does not get
  * wildcard resolution, and the getKeys() framework method is
  * delegated to the base hierarchy bundle.
@@ -53,7 +54,7 @@ public class OverlayBundle extends ResourceBundle {
 
     /**
      * The array of base names, with the length-1 entry being the base
-     * hierarchy, typically "java.text.resources.LocaleElements".
+     * hierarchy, typically "sun.text.resources.LocaleElements".
      */
     private String[] baseNames;
 

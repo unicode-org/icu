@@ -5,31 +5,31 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/03/02 00:07:28 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.text.DateFormat;
-import java.text.MessageFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-
-import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.lang.ClassNotFoundException;
+import java.lang.StringIndexOutOfBoundsException;
+import java.text.FieldPosition;
+import java.text.MessageFormat;
+import java.text.ParsePosition;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import com.ibm.icu.util.SimpleTimeZone;
-import com.ibm.icu.util.GregorianCalendar;
-import java.io.ObjectInputStream;
-import java.io.IOException;
-import java.lang.ClassNotFoundException;
-import java.util.Hashtable;
-import java.lang.StringIndexOutOfBoundsException;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and
@@ -300,29 +300,28 @@ public class SimpleDateFormat extends DateFormat {
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
-            ResourceBundle r = ResourceBundle.getBundle
-            ("java.text.resources.LocaleElements", loc);
+            ResourceBundle r = ICULocaleData.getLocaleElements(loc);
             dateTimePatterns = r.getStringArray("DateTimePatterns");
             /* update cache */
             cachedLocaleData.put(loc, dateTimePatterns);
         }
-	formatData = new DateFormatSymbols(loc);
-	if ((timeStyle >= 0) && (dateStyle >= 0)) {
-	  Object[] dateTimeArgs = {dateTimePatterns[timeStyle],
-			       dateTimePatterns[dateStyle + 4]};
-	  pattern = MessageFormat.format(dateTimePatterns[8], dateTimeArgs);
-	}
-	else if (timeStyle >= 0) {
-	  pattern = dateTimePatterns[timeStyle];
-	}
-	else if (dateStyle >= 0) {
+        formatData = new DateFormatSymbols(loc);
+        if ((timeStyle >= 0) && (dateStyle >= 0)) {
+            Object[] dateTimeArgs = {dateTimePatterns[timeStyle],
+                                     dateTimePatterns[dateStyle + 4]};
+            pattern = MessageFormat.format(dateTimePatterns[8], dateTimeArgs);
+        }
+        else if (timeStyle >= 0) {
+            pattern = dateTimePatterns[timeStyle];
+        }
+        else if (dateStyle >= 0) {
             pattern = dateTimePatterns[dateStyle + 4];
-	}
-	else {
-	    throw new IllegalArgumentException("No date or time style specified");
-	}
+        }
+        else {
+            throw new IllegalArgumentException("No date or time style specified");
+        }
 
-	initialize(loc);
+        initialize(loc);
     }
 
     /* Initialize calendar and numberFormat fields */
@@ -897,60 +896,60 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     private int matchZoneString(String text, int start, int zoneIndex) {
-	int j;
-	for (j = 1; j <= 4; ++j) {
-	    // Checking long and short zones [1 & 2],
-	    // and long and short daylight [3 & 4].
-	    if (text.regionMatches(true, start,
-				   formatData.zoneStrings[zoneIndex][j], 0,
-				   formatData.zoneStrings[zoneIndex][j].length())) {
-		break;
-	    }
-	}
-	return (j > 4) ? -1 : j;
-    }	
+    int j;
+    for (j = 1; j <= 4; ++j) {
+        // Checking long and short zones [1 & 2],
+        // and long and short daylight [3 & 4].
+        if (text.regionMatches(true, start,
+                   formatData.zoneStrings[zoneIndex][j], 0,
+                   formatData.zoneStrings[zoneIndex][j].length())) {
+        break;
+        }
+    }
+    return (j > 4) ? -1 : j;
+    }   
 
     /**
      * find time zone 'text' matched zoneStrings and set cal
      */
     private int subParseZoneString(String text, int start, Calendar cal) {
-	// At this point, check for named time zones by looking through
-	// the locale data from the DateFormatZoneData strings.
-	// Want to be able to parse both short and long forms.
-	int zoneIndex = 
-	    formatData.getZoneIndex (getTimeZone().getID());
-	TimeZone tz = null;
-	int j = 0, i = 0;
-	if ((zoneIndex != -1) && ((j = matchZoneString(text, start, zoneIndex)) > 0)) {
-	    tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
-	    i = zoneIndex;
-	}
-	if (tz == null) {
-	    zoneIndex = 
-		formatData.getZoneIndex (TimeZone.getDefault().getID());
-	    if ((zoneIndex != -1) && ((j = matchZoneString(text, start, zoneIndex)) > 0)) {
-		tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
-		i = zoneIndex;
-	    }
-	}	    
+    // At this point, check for named time zones by looking through
+    // the locale data from the DateFormatZoneData strings.
+    // Want to be able to parse both short and long forms.
+    int zoneIndex = 
+        formatData.getZoneIndex (getTimeZone().getID());
+    TimeZone tz = null;
+    int j = 0, i = 0;
+    if ((zoneIndex != -1) && ((j = matchZoneString(text, start, zoneIndex)) > 0)) {
+        tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
+        i = zoneIndex;
+    }
+    if (tz == null) {
+        zoneIndex = 
+        formatData.getZoneIndex (TimeZone.getDefault().getID());
+        if ((zoneIndex != -1) && ((j = matchZoneString(text, start, zoneIndex)) > 0)) {
+        tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
+        i = zoneIndex;
+        }
+    }       
 
-	if (tz == null) {
-	    for (i = 0; i < formatData.zoneStrings.length; i++) {
-		if ((j = matchZoneString(text, start, i)) > 0) {
-		    tz = TimeZone.getTimeZone(formatData.zoneStrings[i][0]);
-		    break;
-		}
-	    }
-	}
-	if (tz != null) { // Matched any ?
-	    cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
-	    // The code below time zone is assumed to be instance of
-	    // SimpleTimeZone.
-	    cal.set(Calendar.DST_OFFSET, 
-			 j >= 3 ? ((SimpleTimeZone)tz).getDSTSavings() : 0);
-	    return (start + formatData.zoneStrings[i][j].length());
-	}
-	return 0;
+    if (tz == null) {
+        for (i = 0; i < formatData.zoneStrings.length; i++) {
+        if ((j = matchZoneString(text, start, i)) > 0) {
+            tz = TimeZone.getTimeZone(formatData.zoneStrings[i][0]);
+            break;
+        }
+        }
+    }
+    if (tz != null) { // Matched any ?
+        cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
+        // The code below time zone is assumed to be instance of
+        // SimpleTimeZone.
+        cal.set(Calendar.DST_OFFSET, 
+             j >= 3 ? ((SimpleTimeZone)tz).getDSTSavings() : 0);
+        return (start + formatData.zoneStrings[i][j].length());
+    }
+    return 0;
     }
 
     /**
@@ -1140,18 +1139,18 @@ public class SimpleDateFormat extends DateFormat {
 
                     pos.setIndex(start + GMT.length());
 
-		    try { // try-catch for "GMT" only time zone string
-			if( text.charAt(pos.getIndex()) == '+' ) {
-			    sign = 1;
-			} else if( text.charAt(pos.getIndex()) == '-' ) {
-			    sign = -1;
-			} 
-		    } catch(StringIndexOutOfBoundsException e) {
+            try { // try-catch for "GMT" only time zone string
+            if( text.charAt(pos.getIndex()) == '+' ) {
+                sign = 1;
+            } else if( text.charAt(pos.getIndex()) == '-' ) {
+                sign = -1;
+            } 
+            } catch(StringIndexOutOfBoundsException e) {
                     }
-		    if (sign == 0) {
-			cal.set(Calendar.ZONE_OFFSET, 0 );
-			return pos.getIndex();
-		    }
+            if (sign == 0) {
+            cal.set(Calendar.ZONE_OFFSET, 0 );
+            return pos.getIndex();
+            }
 
                     // Look for hours:minutes or hhmm.
                     pos.setIndex(pos.getIndex() + 1);
@@ -1184,9 +1183,9 @@ public class SimpleDateFormat extends DateFormat {
                     // At this point, check for named time zones by looking through
                     // the locale data from the DateFormatZoneData strings.
                     // Want to be able to parse both short and long forms.
-		    i = subParseZoneString(text, start, cal);
-		    if (i != 0)
-			return i;
+            i = subParseZoneString(text, start, cal);
+            if (i != 0)
+            return i;
 
                     // As a last resort, look for numeric timezones of the form
                     // [+-]hhmm as specified by RFC 822.  This code is actually

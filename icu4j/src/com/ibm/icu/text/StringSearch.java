@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/02/16 03:06:15 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -287,7 +287,7 @@ public final class StringSearch extends SearchIterator
             iter.setOffset(index);
             matchEnd = index;
             
-            if (DEBUG) debug(" outer loop: patIndex=" + patIndex + ", index=" + index);
+            if (DEBUG) debug(" outer loop: patIndex=" + patIndex + ", index=" + index + ", iter offset= " + iter.getOffset());
             
             while ((patIndex > 0 || getP == false) && iter.getOffset() > start)
             {
@@ -323,8 +323,10 @@ public final class StringSearch extends SearchIterator
                     return start;
                 }
             }
-            if (DEBUG) debug(" end of inner loop: patIndex=" + patIndex + " iter=" + iter.getOffset());
-            if (DEBUG) debug("   getP=" + getP);
+            if (DEBUG) {
+				debug(" end of inner loop: patIndex=" + patIndex + " iter=" + iter.getOffset());
+				debug("   getP=" + getP);
+			}
             
             if (index == matchEnd) {
                 // We hit the beginning of the text being searched, which is
@@ -374,6 +376,7 @@ public final class StringSearch extends SearchIterator
             
             debug("target.begin=" + getTarget().getBeginIndex());
             debug("target.end=" + getTarget().getEndIndex());
+            debug("start = " + start);
         }
         
         while (index >= 0) {
@@ -389,6 +392,7 @@ public final class StringSearch extends SearchIterator
             {
                 if (DEBUG) {
                     debug("  inner loop: patIndex=" + patIndex + " iter=" + iter.getOffset());
+                    debug("   getP=" + getP);
                 }
                 tval = iter.next() & mask;
                 if (getP) pval = valueList[patIndex++];
@@ -416,9 +420,14 @@ public final class StringSearch extends SearchIterator
                     // The elements matched and we're at the end of the pattern,
                     // which means we matched the whole thing.
                     setMatchLength(iter.getOffset() - index);
+                    if (DEBUG) debug("Found match at index "+ start );
                     return index;
                 }
             }
+            if (DEBUG) {
+				debug(" end of inner loop: patIndex=" + patIndex + " iter=" + iter.getOffset());
+				debug("   getP=" + getP);
+			}
             if (iter.getOffset() >= start) {
                 // We hit the end of the text being searched, which is
                 // possible if it contains lots of ignorable characters.
@@ -427,6 +436,7 @@ public final class StringSearch extends SearchIterator
                 index--;
             }
         }
+        if (DEBUG) debug("Fell off end of outer loop; returning DONE");
         return DONE;
     }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2002/02/16 03:06:06 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -2089,7 +2089,7 @@ public class DecimalFormat extends NumberFormat {
             if (padPos == PAD_BEFORE_PREFIX) {
                 result.append(padSpec);
             }
-            /* Use original symbols read from java.text.resources in pattern
+            /* Use original symbols read from resources in pattern
              * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
              */
             appendAffix(result,
@@ -2168,7 +2168,7 @@ public class DecimalFormat extends NumberFormat {
                 result.append(padSpec);
             }
             if (part == 0) {
-                /* Use original symbols read from java.text.resources in pattern
+                /* Use original symbols read from resources in pattern
                  * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
                  */
                 appendAffix(result, posSuffixPattern, localized);
@@ -2811,7 +2811,7 @@ public class DecimalFormat extends NumberFormat {
             getMaximumFractionDigits() > DOUBLE_FRACTION_DIGITS) {
             throw new InvalidObjectException("Digit count out of range");
         }*/
-        /* Truncte the maximumIntegerDigits to DOUBLE_INTEGER_DIGITS and maximumFractionDigits
+        /* Truncate the maximumIntegerDigits to DOUBLE_INTEGER_DIGITS and maximumFractionDigits
          * to DOUBLE_FRACTION_DIGITS
          */
         if (getMaximumIntegerDigits() > DOUBLE_INTEGER_DIGITS) {

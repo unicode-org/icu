@@ -5,29 +5,28 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/03/08 02:03:16 $ 
-* $Revision: 1.31 $
+* $Date: 2002/03/10 19:40:14 $ 
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.test.lang;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-import java.util.Locale;
-import java.io.File;
-import java.util.Vector;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.BreakIterator;
+
+import java.io.BufferedReader;
+import java.util.Locale;
+import java.util.Vector;
 
 /**
 * Testing class for UCharacter
@@ -61,8 +60,8 @@ public final class UCharacterTest extends TestFmwk
     {
       UCharacterTest test = new UCharacterTest();
       UCharacter.getName1_0(0x1d18b);
-      test.TestNameIteration();
-      //test.run(arg);
+      // {dlf} need to fix test fmwk so have params even without calling run(String[])
+      test.run(arg);
     }
     catch (Exception e)
     {
@@ -454,26 +453,6 @@ public final class UCharacterTest extends TestFmwk
     final String DIR = 
       "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
       
-    // default unicode data file name
-    String UNICODE_DATA_FILE = "/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt";
-	UNICODE_DATA_FILE.replace('/', File.pathSeparatorChar);    
-    // unicode data file path system name
-    final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
-    String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
-    if (s == null) {
-    // assuming runtime directory is on the same level as the source
-      s = System.getProperty("user.dir") + UNICODE_DATA_FILE;
-    }
-    else {
-      StringBuffer tempfilename = new StringBuffer(s);
-      if (tempfilename.charAt(tempfilename.length() - 1) != 
-          File.pathSeparatorChar) {
-        tempfilename.append(File.separatorChar);
-      }
-      tempfilename.append("UnicodeData.txt");
-      s = tempfilename.toString();
-    }
-    
     final int LASTUNICODECHAR = 0xFFFD;
     int ch = 0,
         index = 0,
@@ -482,13 +461,11 @@ public final class UCharacterTest extends TestFmwk
 	
 	try
 	{
-	    // reading in the UnicodeData file
-	  FileReader fr = new FileReader(s);
-	  BufferedReader input = new BufferedReader(fr);
+	  BufferedReader input = TestUtil.getDataReader("unicode/UnicodeData.txt");
 	    
       while (ch != LASTUNICODECHAR)
       {
-        s= input.readLine();
+        String s = input.readLine();
         
         // geting the unicode character, its type and its direction
         ch = Integer.parseInt(s.substring(0, 4), 16);
@@ -534,13 +511,6 @@ public final class UCharacterTest extends TestFmwk
         }
       }
       input.close();
-    }
-    catch (FileNotFoundException e)
-    {
-      errln("FAIL UnicodeData.txt not found. File name with path: " + s +
-            "\nConfigure the system setting UnicodeData to the right path\n" +
-            "e.g. java -DUnicodeData=\"data_dir_path\" " +
-            "com.ibm.icu.dev.test.lang.UCharacterTest");
     }
     catch (Exception e)
     {
@@ -752,8 +722,8 @@ public final class UCharacterTest extends TestFmwk
 	iterator = UCharacter.getName1_0Iterator();
     old.integer = 0;
     while (iterator.next(element)) {
-    	System.out.println(Integer.toHexString(element.integer) + " " +
-    	                   (String)element.value);
+    	logln(Integer.toHexString(element.integer) + " " +
+	      (String)element.value);
     	if (element.integer != 0 && element.integer <= old.integer) {
          	errln("FAIL next returned a less codepoint \\u" + 
          	      Integer.toHexString(element.integer) + " than \\u" + 
@@ -951,35 +921,14 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestSpecialCasing()
   {
-    // default unicode data file name
-    String SPECIALCASING_FILE = "/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt";
-    SPECIALCASING_FILE.replace('/',File.pathSeparatorChar);
-    // unicode data file path system name
-    final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
-    String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
-    if (s == null) {
-    // assuming runtime directory is on the same level as the source
-      s = System.getProperty("user.dir") + SPECIALCASING_FILE;
-    }
-    else {
-      StringBuffer tempfilename = new StringBuffer(s);
-      if (tempfilename.charAt(tempfilename.length() - 1) != 
-          File.pathSeparatorChar) {
-        tempfilename.append(File.separatorChar);
-      }
-      tempfilename.append("SpecialCasing.txt");
-      s = tempfilename.toString();
-    }
-    
     try
 	{
 	  // reading in the SpecialCasing file
-	  FileReader fr = new FileReader(s);
-	  BufferedReader input = new BufferedReader(fr);
+	  BufferedReader input = TestUtil.getDataReader("unicode/SpecialCasing.txt");
 	    
       while (true)
       {
-        s = input.readLine();
+        String s = input.readLine();
         if (s == null) {
             break;
         }
@@ -1079,13 +1028,6 @@ public final class UCharacterTest extends TestFmwk
         }
       }
       input.close();
-    }
-    catch (FileNotFoundException e)
-    {
-      errln("FAIL SpecialCasing.txt not found in \n" + s +
-            ". Configure the system setting UnicodeData to the right path\n" +
-            "e.g. java -DUnicodeData=\"data_dir_path\" " +
-            "com.ibm.icu.dev.test.lang.UCharacterTest");
     }
     catch (Exception e)
     {

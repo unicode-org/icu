@@ -5,18 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Holiday.java,v $ 
- * $Date: 2002/02/16 03:06:28 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/10 19:40:17 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.util;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import com.ibm.icu.impl.ICULocaleData;
+
 import java.util.Date;
+import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * An abstract class representing a holiday.  This class simply adds
@@ -36,9 +38,7 @@ public abstract class Holiday implements DateRule
         Holiday[] result = noHolidays;
 
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(
-                                    "com.ibm.icu.impl.data.HolidayBundle",
-                                    locale);
+            ResourceBundle bundle = ICULocaleData.getResourceBundle("HolidayBundle", locale);
 
             result = (Holiday[]) bundle.getObject("holidays");
         }
@@ -139,9 +139,7 @@ public abstract class Holiday implements DateRule
         String name = this.name;
 
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(
-                                    "com.ibm.icu.impl.data.HolidayBundle",
-                                    locale);
+            ResourceBundle bundle = ICULocaleData.getResourceBundle("HolidayBundle", locale);
             name = bundle.getString(name);
         }
         catch (MissingResourceException e) {
