@@ -136,7 +136,8 @@ BasicNormalizerTest::BasicNormalizerTest()
 
   /* Hangul Compatible */
   // Input            Decomposed                                    Composed
-  hangulCompat[0][0] = str("\\ud4db"); hangulCompat[0][1] = str("\\u1111\\u116e\\u1175\\u11af\\u11c2"); hangulCompat[0][2] = str("\\ud478\\u1175\\u11af\\u11c2");
+  // THIS IS NO LONGER TRUE IN UNICODE v2.1.8, SO THIS TEST IS OBSOLETE
+//-obsolete-  hangulCompat[0][0] = str("\\ud4db"); hangulCompat[0][1] = str("\\u1111\\u116e\\u1175\\u11af\\u11c2"); hangulCompat[0][2] = str("\\ud478\\u1175\\u11af\\u11c2");
 }
 
 BasicNormalizerTest::~BasicNormalizerTest()
@@ -206,7 +207,7 @@ void BasicNormalizerTest::TestCompatCompose()
 
 UnicodeString BasicNormalizerTest::hangulCanon[2][3];
 
-UnicodeString BasicNormalizerTest::hangulCompat[1][3];
+//-obsolete-UnicodeString BasicNormalizerTest::hangulCompat[1][3];
 
 void BasicNormalizerTest::TestHangulCompose() 
 {
@@ -214,14 +215,14 @@ void BasicNormalizerTest::TestHangulCompose()
   logln("Canonical composition...");
   staticTest(Normalizer::COMPOSE, 0,                    hangulCanon,  ARRAY_LENGTH(hangulCanon),  2);
   logln("Compatibility composition...");
-  staticTest(Normalizer::COMPOSE_COMPAT, 0,         hangulCompat, ARRAY_LENGTH(hangulCompat), 2);
+//-obsolete-  staticTest(Normalizer::COMPOSE_COMPAT, 0,         hangulCompat, ARRAY_LENGTH(hangulCompat), 2);
   
   // Now try iterative composition....
   logln("Static composition...");
   Normalizer* norm = new Normalizer("", Normalizer::COMPOSE, 0);
   iterateTest(norm, hangulCanon, ARRAY_LENGTH(hangulCanon), 2);
   norm->setMode(Normalizer::COMPOSE_COMPAT);
-  iterateTest(norm, hangulCompat, ARRAY_LENGTH(hangulCompat), 2);
+//-obsolete-  iterateTest(norm, hangulCompat, ARRAY_LENGTH(hangulCompat), 2);
   
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
@@ -238,14 +239,14 @@ void BasicNormalizerTest::TestHangulDecomp()
   logln("Canonical decomposition...");
   staticTest(Normalizer::DECOMP, 0,                     hangulCanon,  ARRAY_LENGTH(hangulCanon),  1);
   logln("Compatibility decomposition...");
-  staticTest(Normalizer::DECOMP_COMPAT, 0,         hangulCompat, ARRAY_LENGTH(hangulCompat), 1);
+//-obsolete-  staticTest(Normalizer::DECOMP_COMPAT, 0,         hangulCompat, ARRAY_LENGTH(hangulCompat), 1);
   
   // Now the iterative decomposition methods...
   logln("Iterative decomposition...");
   Normalizer* norm = new Normalizer("", Normalizer::DECOMP, 0);
   iterateTest(norm, hangulCanon, ARRAY_LENGTH(hangulCanon), 1);
   norm->setMode(Normalizer::DECOMP_COMPAT);
-  iterateTest(norm, hangulCompat, ARRAY_LENGTH(hangulCompat), 1);
+//-obsolete-  iterateTest(norm, hangulCompat, ARRAY_LENGTH(hangulCompat), 1);
   
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
