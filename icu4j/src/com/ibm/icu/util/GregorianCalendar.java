@@ -498,7 +498,7 @@ public class GregorianCalendar extends Calendar {
      * one.  Calendar override.
      *
      * @param other the Calendar to be compared with this Calendar   
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public boolean isEquivalentTo(Calendar other) {
         return super.isEquivalentTo(other) &&
