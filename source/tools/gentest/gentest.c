@@ -47,7 +47,7 @@ static const UDataInfo dataInfo={
 };
 
 static void createData(const char*);
-extern int genres32(const char *prog, const char *path);
+U_CAPI int genres32(const char *prog, const char *path);
 
 static UOption options[]={
   /*0*/ UOPTION_HELP_H,
