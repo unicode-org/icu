@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-gcc,v 1.32 2004/03/10 17:57:37 grhoten-oss Exp $
+## $Id: mh-solaris-gcc,v 1.33 2004/03/10 21:47:02 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -fPIC
@@ -22,7 +22,7 @@ LD_RPATH_PRE=
 LD_SONAME = -h $(MIDDLE_SO_TARGET)
 
 ## The type of assembly needed when pkgdata is used for generating shared libraries.
-GENCCODE_ASSEMBLY=-a gcc-darwin
+GENCCODE_ASSEMBLY=-a sun
 
 ## Shared object suffix
 SO=		so
