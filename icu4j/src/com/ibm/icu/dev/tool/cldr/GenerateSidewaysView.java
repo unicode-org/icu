@@ -293,11 +293,6 @@ import com.ibm.icu.util.UResourceBundle;
         buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"
         + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/alpha/ldml.dtd\">\r\n");
         
-        if (startComment != null) {
-            buffer.append("\r\n<!-- ");
-            buffer.append(startComment);
-            buffer.append("\r\n-->");
-        }
         ElementChain empty = new ElementChain();
         ElementChain old = empty;
         for (Iterator it = data.iterator(); it.hasNext();) {
@@ -432,7 +427,6 @@ import com.ibm.icu.util.UResourceBundle;
     static class Element implements Comparable {
         String elementName;
         SimpleAttributes attributes;
-        String comment;
 
         Element(String elementName, Attributes attributes) {
             //elementOrdering.add(elementName);
@@ -458,11 +452,8 @@ import com.ibm.icu.util.UResourceBundle;
                 result = elementName + a;
             } else {
                 if (type == NO_VALUE) result = "<" + elementName + a + "/>";
-                if (type == END_VALUE) result = "</" + elementName + ">";
+                else if (type == END_VALUE) result = "</" + elementName + ">";
                 else result = "<" + elementName + a + ">";
-                if (comment != null) {
-                    result += "\r\n<!-- " + comment + "-->";
-                }
             }
             return result;
         }
@@ -476,11 +467,12 @@ import com.ibm.icu.util.UResourceBundle;
         public boolean equals(Object o) {
         	return compareTo(o) == 0;
         }
-        public void addComment(String in_comment) {
+        /* public void addComment(String in_comment) {
             if (comment == null) comment = in_comment;
             else comment += "\r\n" + in_comment;
             return;
         }
+        */
     }
     
     static class ElementChain implements Comparable {
@@ -609,6 +601,7 @@ import com.ibm.icu.util.UResourceBundle;
 		/**
 		 * @param comment
 		 */
+        /*
         public void addComment(String comment) {
         	int count = contexts.size();
         	if (count == 0) {
@@ -620,6 +613,7 @@ import com.ibm.icu.util.UResourceBundle;
         	Element ec = (Element) contexts.get(count-1);
         	ec.addComment(comment);
         }
+        */
     }
     
     static int compareInt(int a, int b) {
@@ -790,7 +784,7 @@ import com.ibm.icu.util.UResourceBundle;
         return result;
     }
     
-    String startComment;
+    //String startComment;
     
     static SidewaysView sidewaysView = new SidewaysView();
     
