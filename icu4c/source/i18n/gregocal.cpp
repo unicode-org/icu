@@ -297,15 +297,6 @@ GregorianCalendar::operator==(const Calendar& that) const
          fGregorianCutover == other->fGregorianCutover);
 }
 
-// {sfb} API change?
-UBool GregorianCalendar::equivalentTo(const Calendar& other) const
-{
-    // Calendar override.
-    // Return true if another Calendar object is equivalent to this one.  An equivalent
-    // Calendar will behave exactly as this one does, but may be set to a different time.
-    return Calendar::equivalentTo(other) &&
-        fGregorianCutover == ((GregorianCalendar*)&other)->fGregorianCutover;
-}
 
 // -------------------------------------
 

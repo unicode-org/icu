@@ -339,16 +339,6 @@ public:
     virtual UBool operator==(const Calendar& that) const;
 
     /**
-     * Calendar override.
-     * Return true if another Calendar object is equivalent to this one.  An equivalent
-     * Calendar will behave exactly as this one does, but may be set to a different time.
-     * @param other    the object to be compared with.
-     * @return         true if 'other' Calendar object is equivalent to this.
-     * @stable
-     */
-    virtual UBool equivalentTo(const Calendar& other) const;
-
-    /**
      * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
      * of time to the given time field, based on the calendar's rules.  For more
      * information, see the documentation for Calendar::add().

@@ -432,15 +432,6 @@ public:
     UBool after(const Calendar& when, UErrorCode& status) const;
 
     /**
-     * Return true if another Calendar object is equivalent to this one.  An equivalent
-     * Calendar will behave exactly as this one does, but may be set to a different time.
-     *
-     * @param other    The Calendar to be compared with this Calendar   
-     * @deprecated not in Java API!
-     */
-    virtual UBool equivalentTo(const Calendar& other) const;
-
-    /**
      * UDate Arithmetic function. Adds the specified (signed) amount of time to the given
      * time field, based on the calendar's rules. For example, to subtract 5 days from
      * the current time of the calendar, call add(Calendar::DATE, -5). When adding on

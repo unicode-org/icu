@@ -426,13 +426,6 @@ public:
      */
     void setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status);
 
-#ifdef ICU_SIMPLETIMEZONE_USE_DEPRECATES
-    /**
-     * @deprecated This will be removed after 2000-Dec-31. Use the other setDSTSavings().
-     */
-    void setDSTSavings(int32_t millisSavedDuringDST);
-#endif
-
     /**
      * Returns the amount of time in ms that the clock is advanced during DST.
      * @return the number of milliseconds the time is
