@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2003, International Business Machines Corporation and
+ * Copyright (c) 2002-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -29,19 +29,12 @@ status(U_ZERO_ERROR)
     errln("ERROR - UCAConformanceTest: Unable to open UCA collator!");
   }
 
-  uprv_strcpy(testDataPath, IntlTest::loadTestData(status));
+  const char *srcDir = IntlTest::getSourceTestData(status);
   if (U_FAILURE(status)) {
     errln("ERROR: could not open test data %s", u_errorName(status));
     return;
   }
-  char* index = 0;
- 
-  index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);
-
-  if((unsigned int)(index-testDataPath) != (strlen(testDataPath)-1)){
-          *(index+1)=0;
-  }
-  uprv_strcat(testDataPath,".."U_FILE_SEP_STRING);
+  uprv_strcpy(testDataPath, srcDir);
   uprv_strcat(testDataPath, "CollationTest_");
 }
 
