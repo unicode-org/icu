@@ -1265,7 +1265,6 @@ mac_lc_rec mac_lc_recs[] = {
 static const char *uprv_getPOSIXID()
 {
   const char* posixID = getenv("LC_ALL");
-  char *p;
   if (posixID == 0) posixID = getenv("LANG");
   if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
 
