@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2001/10/17 19:17:06 $
-* $Revision: 1.4 $
+* $Date: 2001/10/17 20:09:17 $
+* $Revision: 1.5 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -918,6 +918,12 @@ class TransliteratorParser {
                 if (str == null) {
                     break;
                 }
+                // TODO This is getting too expensive -- not only
+                // do we need to create all these line strings twice,
+                // now we need to unescape them as well.  Stop doing
+                // scans; instead, use a 'use' pragma like this:
+                //   use variable range E400 EFFF;
+                str = Utility.unescapeLeniently(str);
                 int n = str.length();
                 for (int i=0; i<n; ++i) {
                     char c = str.charAt(i);
