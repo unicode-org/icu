@@ -121,7 +121,7 @@ import java.lang.IllegalArgumentException;
  *
  *  <tr>
  *    <td>1 sec</td>
- *    <td align="right">5.84542×10¹¹</td>
+ *    <td align="right">5.84542&#xD7;10&#xB9;&#xB9;</td>
  *    <td align="right">285,420,920.94</td>
  *    <td align="right">136.10</td>
  *  </tr>

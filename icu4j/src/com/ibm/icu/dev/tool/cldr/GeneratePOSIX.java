@@ -207,7 +207,7 @@ public class GeneratePOSIX {
                 { "print", "[[:Whitespace:]-[[:Control:][:Format:][:Surrogate:][:Unassigned:]]]" },
                 { "punct", "[:Punctuation:]" },
                 { "digit", "[:Decimal_Number:]" },
-                { "xdigit", "[[:Decimal_Number:]a-f, A-F, �?-ｆ, Ａ-Ｆ]" },
+                { "xdigit", "[[:Decimal_Number:]a-f, A-F, \uff21-\uff26, \uff41-\uff46]" },
                 { "blank", "[[:Whitespace:]-[\\u000A-\\u000D \\u0085 [:Line_Separator:][:Paragraph_Separator:]]]" } };
         // print character types, restricted to the charset
         int item, last;

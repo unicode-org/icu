@@ -66,9 +66,9 @@ public class LDMLUtilities {
     public static Document getFullyResolvedLDML(String sourceDir, String locale, 
                                                 boolean ignoreRoot, boolean ignoreUnavailable, 
                                                 boolean ignoreIfNoneAvailable){
-    	Document full =null;
+        Document full =null;
         try{
-        	full = parse(sourceDir+File.separator+ "root.xml", ignoreRoot);
+            full = parse(sourceDir+File.separator+ "root.xml", ignoreRoot);
             if(full!=null){
                 full = resolveAliases(full, sourceDir, "root");
             }
@@ -81,8 +81,8 @@ public class LDMLUtilities {
             }*/
             
         }catch(RuntimeException ex){
-        	if(!ignoreRoot){
-        		throw ex;
+            if(!ignoreRoot){
+                throw ex;
             }
         }
         int index = locale.indexOf(".xml");
@@ -100,7 +100,7 @@ public class LDMLUtilities {
             if(loc==null){
                 loc = constituents[i];
             }else{
-            	loc = loc +"_"+ constituents[i];
+                loc = loc +"_"+ constituents[i];
             }
             Document doc = null;
             
@@ -419,11 +419,11 @@ public class LDMLUtilities {
      */
     private static Node mergeLDMLDocuments(Document source, Node override, StringBuffer xpath, 
                                           String thisName, String sourceDir){
-    	if(source==null){
-    		return override;
+        if(source==null){
+            return override;
         }
         if(xpath.length()==0){
-        	xpath.append("/");
+            xpath.append("/");
         }
         
 //        boolean gotcha = false;
@@ -464,8 +464,8 @@ public class LDMLUtilities {
             
             Node parentNodeInSource = null;
             if(nodeInSource==null){
-            	// the child xml has a new node
-            	// that should be added to parent
+                // the child xml has a new node
+                // that should be added to parent
                 String parentXpath = xpath.substring(0, savedLength);
 
                 if(childName.indexOf(":")>-1){ 
@@ -474,7 +474,7 @@ public class LDMLUtilities {
                     parentNodeInSource =  getNode(source,parentXpath);
                 }
                 if(parentNodeInSource==null){
-                	throw new RuntimeException("Internal Error");
+                    throw new RuntimeException("Internal Error");
                 }
                 
                 Node childToImport = source.importNode(child,true);
@@ -495,7 +495,7 @@ public class LDMLUtilities {
                     //recurse to pickup any children!
                     mergeLDMLDocuments(source, child, xpath, thisName, sourceDir);
                 }else{
-                	// we have reached a leaf node now get the 
+                    // we have reached a leaf node now get the 
                     // replace to the source doc
                     parentNodeInSource = nodeInSource.getParentNode();
                     Node childToImport = source.importNode(child,true);
@@ -732,7 +732,7 @@ public class LDMLUtilities {
     }
     public static void appendXPathAttribute(Node node, StringBuffer xpath,boolean ignoreAlt){
         boolean terminate = false;
-    	String val = getAttributeValue(node, LDMLConstants.TYPE);
+        String val = getAttributeValue(node, LDMLConstants.TYPE);
         String and =  "and";
         boolean isStart = true;
         String name = node.getNodeName();
@@ -741,7 +741,7 @@ public class LDMLUtilities {
                 xpath.append("[");
                 isStart=false;
             }
-        	xpath.append("@type='");
+            xpath.append("@type='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
@@ -788,7 +788,7 @@ public class LDMLUtilities {
             terminate = true;
         }
         if(terminate){
-        	xpath.append("]");
+            xpath.append("]");
         }
     }
     /**
@@ -1449,7 +1449,7 @@ System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") 
         return str;
     } 
 
-	// This should be in ULocale!
+    // This should be in ULocale!
     public static String getParent(String locale) {
         int pos = locale.lastIndexOf('_');
         if (pos >= 0) {

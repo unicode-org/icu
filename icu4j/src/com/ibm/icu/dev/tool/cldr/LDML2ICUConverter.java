@@ -3569,7 +3569,7 @@ public class LDML2ICUConverter {
 
                     String treeName  = LDMLUtilities.getAttributeValue(node, "type");
                     // System.out.println("TreeName = " + treeName);
-                    boolean parseDraft = !writeDraft; // parse for draft status?
+                    boolean parseDraft = !writeDraft; // parse for draft status?
                     boolean parseSubLocale = treeName.equals("collation");
                     boolean parseThem = (parseDraft||parseSubLocale); // parse a bunch of locales?
                     if(treeName.equals(myTreeName)) {
