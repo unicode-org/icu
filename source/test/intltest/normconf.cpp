@@ -128,6 +128,13 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     if(input!=NULL) {
         return input;
     }
+
+    strcpy(path, U_TOPSRCDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING);
+    strcat(path, filename);
+    input=T_FileStream_open(path, "rb");
+    if(input!=NULL) {
+        return input;
+    }
 #endif
 
     errln("Failed to open %s", filename);
