@@ -13,7 +13,20 @@
 #if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
 #define HAVE_IMP
 
+#if defined(__hpux) && defined(HPUX_CMA)
+# ifndef _INCLUDE_POSIX_SOURCE
+#  define _INCLUDE_POSIX_SOURCE
+# endif
+#endif
+
 #include <pthread.h>
+
+#if defined(__hpux) && defined(HPUX_CMA)
+# if defined(read)  // read being defined as cma_read causes trouble with iostream::read
+#  undef read
+# endif
+#endif
+
 #include <signal.h>
 
 /* Define _XPG4_2 for Solaris and friends. */
@@ -23,7 +36,7 @@
 
 /* Define __USE_XOPEN_EXTENDED for Linux and glibc. */
 #ifndef __USE_XOPEN_EXTENDED
-#define __USE_XOPEN_EXTENDED
+#define __USE_XOPEN_EXTENDED 
 #endif
 
 #include <unistd.h>
