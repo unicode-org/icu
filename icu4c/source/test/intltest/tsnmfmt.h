@@ -61,7 +61,7 @@ public:
     /*
      * Return a random double that isn't too large.
      */
-    static double IntlTestNumberFormat::getSafeDouble(double smallerThanMax);
+    static double getSafeDouble(double smallerThanMax);
 
     /*
      * Return a random double
