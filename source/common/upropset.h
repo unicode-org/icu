@@ -97,6 +97,12 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
 
     typedef UnicodeSet* (*SetFactory)(const UnicodeString& valueName);
 
+    /**
+     * "white space" in the sense of ICU rule parsers
+     * @internal
+     */
+    static UnicodeSet getRuleWhiteSpaceSet();
+
  private:
 
     //----------------------------------------------------------------

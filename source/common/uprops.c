@@ -258,6 +258,14 @@ u_isUWhiteSpace(UChar32 c) {
     return u_hasBinaryProperty(c, UCHAR_WHITE_SPACE);
 }
 
+U_CAPI UBool U_EXPORT2
+uprv_isRuleWhiteSpace(UChar32 c) {
+    /* "white space" in the sense of ICU rule parsers: Cf+White_Space */
+    return
+        u_charType(c)==U_FORMAT_CHAR ||
+        u_hasBinaryProperty(c, UCHAR_WHITE_SPACE);
+}
+
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;
