@@ -651,10 +651,10 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
 
 
     //
-    // Link the new uset node into the list of all uset nodes.
+    // Add the new uset node to the list of all uset nodes.
     //
-    usetNode->fRightChild  = fRB->fSetsListHead;
-    fRB->fSetsListHead     = usetNode;
+    fRB->fUSetNodes->addElement(usetNode, *fRB->fStatus);
+
 
     //
     // Add the new set to the set hash table.

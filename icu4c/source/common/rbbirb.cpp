@@ -53,17 +53,17 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
     fDebugEnv   = getenv("U_RBBIDEBUG");
 #endif
 
-    fScanner            = new RBBIRuleScanner(this);
-    fSetBuilder         = new RBBISetBuilder(this);
-    if(fSetBuilder == 0 || fScanner == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
 
-    fSetsListHead       = NULL;
     fForwardTree        = NULL;
     fReverseTree        = NULL;
     fForwardTables      = NULL;
     fReverseTables      = NULL;
+    fUSetNodes          = new UVector(status);
+    fScanner            = new RBBIRuleScanner(this);
+    fSetBuilder         = new RBBISetBuilder(this);
+    if(fSetBuilder == 0 || fScanner == 0 || fUSetNodes == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 
@@ -75,17 +75,16 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
 //----------------------------------------------------------------------------------------
 RBBIRuleBuilder::~RBBIRuleBuilder() {
 
-    // Delete the linked lest of USet nodes and the corresponding UnicodeSets.
-    //    (Deleting a node deletes its children, so deleting the head node of
-    //     this list will take out the whole list.)
-    RBBINode *n, *nextN;
-    for (n=fSetsListHead; n!=NULL; n=nextN) {
-        nextN = n->fRightChild;
+    int        i;
+    for (i=0; ; i++) {
+        RBBINode *n = (RBBINode *)fUSetNodes->elementAt(i);
+        if (n==NULL) {
+            break;
+        }
         delete n;
     }
-    fSetsListHead = NULL;
 
-
+    delete fUSetNodes;
     delete fSetBuilder;
     delete fForwardTables;
     delete fReverseTables;

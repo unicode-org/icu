@@ -141,7 +141,13 @@ void RBBISetBuilder::build() {
     //
     //  Find the set of non-overlapping ranges of characters
     //
-    for (usetNode=fRB->fSetsListHead; usetNode!=NULL; usetNode=usetNode->fRightChild) {
+    int  ni;
+    for (ni=0; ; ni++) {
+        usetNode = (RBBINode *)this->fRB->fUSetNodes->elementAt(ni);
+        if (usetNode==NULL) {
+            break;
+        }
+
         UnicodeSet      *inputSet             = usetNode->fInputSet;
         int32_t          inputSetRangeCount   = inputSet->getRangeCount();
         int              inputSetRangeIndex   = 0;
@@ -413,18 +419,20 @@ void RBBISetBuilder::printRangeGroups() {
 //
 //------------------------------------------------------------------------
 void RBBISetBuilder::printSets() {
-    RBBINode             *usetNode;
     int                   i;
-    UnicodeSet            inputSet;
 
     RBBIDebugPrintf("\n\nUnicode Sets List\n------------------\n");
-    i = 0;
-    for (usetNode=fRB->fSetsListHead; usetNode!=NULL; usetNode=usetNode->fRightChild) {
-        RBBINode       *setRef;
-        RBBINode       *varRef;
-        UnicodeString   setName;
+    for (i=0; ; i++) {
+        RBBINode        *usetNode;
+        RBBINode        *setRef;
+        RBBINode        *varRef;
+        UnicodeString    setName;
 
-        i++;
+        usetNode = (RBBINode *)fRB->fUSetNodes->elementAt(i);
+        if (usetNode == NULL) {
+            break;
+        }
+
         RBBIDebugPrintf("%3d    ", i);
         setName = "anonymous";
         setRef = usetNode->fParent;
