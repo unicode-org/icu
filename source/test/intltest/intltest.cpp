@@ -561,36 +561,36 @@ UBool IntlTest::callTest( IntlTest& testToBeCalled, char* par )
     return testToBeCalled.runTest( path, par );
 }
 
-void IntlTest::setPath( char* path )
+void IntlTest::setPath( char* pathVal )
 {
-    this->path = path;
+    this->path = pathVal;
 }
 
-UBool IntlTest::setVerbose( UBool verbose )
+UBool IntlTest::setVerbose( UBool verboseVal )
 {
     UBool rval = this->verbose;
-    this->verbose = verbose;
+    this->verbose = verboseVal;
     return rval;
 }
 
-UBool IntlTest::setNoErrMsg( UBool no_err_msg )
+UBool IntlTest::setNoErrMsg( UBool no_err_msgVal )
 {
     UBool rval = this->no_err_msg;
-    this->no_err_msg = no_err_msg;
+    this->no_err_msg = no_err_msgVal;
     return rval;
 }
 
-UBool IntlTest::setQuick( UBool quick )
+UBool IntlTest::setQuick( UBool quickVal )
 {
     UBool rval = this->quick;
-    this->quick = quick;
+    this->quick = quickVal;
     return rval;
 }
 
-UBool IntlTest::setLeaks( UBool leaks )
+UBool IntlTest::setLeaks( UBool leaksVal )
 {
     UBool rval = this->leaks;
-    this->leaks = leaks;
+    this->leaks = leaksVal;
     return rval;
 }
 
