@@ -827,7 +827,9 @@ umsg_vformat(   UMessageFormat *fmt,
     }else{
         /* copy the resultStr to target buffer */
         //u_strcpy(result, resultStr.getUChars());
-        resultStr.extract(0,resultStr.length(),result,0);
+        int len = resultStr.length();
+        resultStr.extract(0,len,result);
+        result[len]=0;/* null terminate the string */
     }
     return resultStr.length();
 }
@@ -874,7 +876,7 @@ umsg_vparse(UMessageFormat *fmt,
     double *aDouble;
     UChar *aString;
     UnicodeString temp;
-
+    int len =0;
     // assign formattables to varargs
     for(int32_t i = 0; i < *count; i++) {
         switch(args[i].getType()) {
@@ -899,7 +901,9 @@ umsg_vparse(UMessageFormat *fmt,
             aString = va_arg(ap, UChar*);
             args[i].getString(temp);
             //u_strcpy(aString, temp.getUChars());
-            temp.extract(0,temp.length(),aString);
+            len = temp.length();
+            temp.extract(0,len,aString);
+            aString[len]=0;
             break;
 
         // better not happen!
