@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.6 $
+* $Date: 2001/11/13 02:31:55 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -141,43 +141,109 @@ public class VerifyUCD implements UCD_Types {
         log.close();
     }
 
-    public static void checkCase2() throws IOException {
+    public static void checkCase2(boolean longForm) throws IOException {
         Utility.fixDot();
         System.out.println("checkCase");
         ucd = UCD.make(Main.ucdVersion);
         initNormalizers();
-        System.out.println(ucd.getCase("ABC,DE'F G\u0308H", FULL, TITLE));
+        
+        /*String tx1 = "\u0391\u0342\u0345";
+        String ux1 = "\u0391\u0342\u0399";
+        String ctx1 = nfc.normalize(tx1);
+        String ctx2 = nfc.normalize(ux1); // wrong??
+
+        //System.out.println(ucd.getCase("ABC,DE'F G\u0308H", FULL, TITLE));
+        */
+        
+        
         String fileName = "CaseNormalizationDifferences.txt";
         PrintWriter log = Utility.openPrintWriter(fileName);
 
         log.println("Differences between case(normalize(cp)) and normalize(case(cp))");
         log.println("u, l, t - upper, lower, title");
         log.println("c, d - nfc, nfd");
+        
+        //Utility.DOTMASK = 0x7F;
 
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
             if (!ucd.isRepresented(cp) || ucd.isPUA(cp)) continue;
-            if (cp == '\u3371') {
+            if (cp == '\u0130') {
                System.out.println("debug");
             }
 
             String x = UTF32.valueOf32(cp);
+            String dx = nfd.normalize(cp);
+            String cx = nfc.normalize(cp);
 
             String ux = ucd.getCase(x, FULL, UPPER);
             String lx = ucd.getCase(x, FULL, LOWER);
             String tx = ucd.getCase(x, FULL, TITLE);
-
-            String dux = nfd.normalize(ux);
-            String dlx = nfd.normalize(lx);
-            String dtx = nfd.normalize(tx);
+            
+            if (x.equals(dx) && dx.equals(cx) && cx.equals(ux) && ux.equals(lx) && lx.equals(tx)) continue;
 
             String cux = nfc.normalize(ux);
             String clx = nfc.normalize(lx);
             String ctx = nfc.normalize(tx);
+            
+            if (x.equals(cx)) {
+                boolean needBreak = false;
+                if (!clx.equals(lx)) needBreak = true;
+                if (!ctx.equals(tx)) needBreak = true;
+                if (!cux.equals(ux)) needBreak = true;
+                
+                if (needBreak) {
+                    log.println("# Was not NFC:");
+                    log.println(
+                        "## " + Utility.hex(x) + "; "
+                        + Utility.hex(lx) + "; "
+                        + Utility.hex(tx) + "; "
+                        + Utility.hex(ux) + "; # "
+                        + ucd.getName(x));
+                    log.println("#   should be:");
+                    log.println(
+                        Utility.hex(x) + "; "
+                        + Utility.hex(clx) + "; "
+                        + Utility.hex(ctx) + "; "
+                        + Utility.hex(cux) + "; # "
+                        + ucd.getName(x));
+                    log.println();
+                }
+            }
+                       
+            String dux = nfd.normalize(ux);
+            String dlx = nfd.normalize(lx);
+            String dtx = nfd.normalize(tx);
+            
+            
+            
+            String startdx = getMarks(dx, false);
+            String enddx = getMarks(dx, true);
 
-            String dx = nfd.normalize(cp);
-            String cx = nfc.normalize(cp);
+            String startdux = getMarks(dux, false);
+            String enddux = getMarks(dux, true);
 
+            String startdtx = getMarks(dtx, false);
+            String enddtx = getMarks(dtx, true);
+
+            String startdlx = getMarks(dlx, false);
+            String enddlx = getMarks(dlx, true);
+            
+            // If the new marks don't occur in the old decomposition, we got a problem!
+            
+            if (!startdx.startsWith(startdux) || !startdx.startsWith(startdtx) || !startdx.startsWith(startdlx)
+              || !enddx.endsWith(enddux) || !enddx.endsWith(enddtx) || !enddx.endsWith(enddlx)) {
+                log.println("Combining Class Difference for " + ucd.getCodeAndName(x));
+                log.println("x:  " + ucd.getCodeAndName(dx) + ", " + Utility.hex(startdx) + ", " + Utility.hex(enddx));
+                log.println("ux: " + ucd.getCodeAndName(dux) + ", " + Utility.hex(startdux) + ", " + Utility.hex(enddux));
+                log.println("tx: " + ucd.getCodeAndName(dtx) + ", " + Utility.hex(startdtx) + ", " + Utility.hex(enddtx));
+                log.println("lx: " + ucd.getCodeAndName(dlx) + ", " + Utility.hex(startdlx) + ", " + Utility.hex(enddlx));
+                log.println();
+            }
+            
+
+            if (!longForm) continue;
+                        
             String udx = ucd.getCase(dx, FULL, UPPER);
             String ldx = ucd.getCase(dx, FULL, LOWER);
             String tdx = ucd.getCase(dx, FULL, TITLE);
@@ -285,6 +351,28 @@ public class VerifyUCD implements UCD_Types {
         }
 
         log.close();
+    }
+    
+    public static String getMarks(String s, boolean doEnd) {
+        int cp;
+        if (!doEnd) {
+            for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+                cp = UTF16.charAt(s, i);
+                int cc = ucd.getCombiningClass(cp);
+                if (cc == 0) {
+                    return s.substring(0, i);
+                }
+            }
+        } else {
+            for (int i = s.length(); i > 0; i -= UTF16.getCharCount(cp)) {
+                cp = UTF16.charAt(s, i-1); // will go 2 before if necessary
+                int cc = ucd.getCombiningClass(cp);
+                if (cc == 0) {
+                    return s.substring(i);
+                }
+            }
+        }
+        return s;
     }
 
     static final String names[] = {"LOWER", "TITLE", "UPPER", "(UNC)", "MIXED"};

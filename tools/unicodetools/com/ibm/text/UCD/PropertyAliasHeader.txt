@@ -1,46 +1,30 @@
 # DRAFT
 # PropertyAliases-3.2.0.txt
 #
-# This file contains aliases for properties and property values used in the UCD.
+# This file contains aliases for properties used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
 # property tests, and other programmatic textual descriptions of Unicode data.
-# The names are not normative, except where they correspond to normative values
-# in the UCD.
+# The names are not normative, except where they correspond to normative
+# properties in the UCD. For information on which properties are normative,
+# see UnicodeCharacterDatabase.html.
 #
 # The names may be translated in appropriate environments, and additional
 # aliases may be useful.
 #
 # FORMAT
 #
-# Each line has three fields, separated by semicolons.
+# Each line has two fields, separated by semicolons.
 #
-# First Field: Where the first field is AA, BB, or ZZ, then the line describes a property name:
+# First Field: The first field is an abbreviated name for the property
 #
-# AA - non-enumerated properties
-# BB - enumerated, non-binary properties
-# ZZ - binary properties and quick-check properties
-#
-# (The values AA, BB, and ZZ are arbitrary -- they were simply chosen to distinguish
-# the different types.)
-#
-# Where the first field is not one of the above, the line describes a
-# property value name. The first field describes the property for which that
-# property value name is used. There are two special properties:
-#
-# xx stands for any binary property
-# qc stands for any quick-check property
-#
-# Second Field: The second field is an abbreviated name.
-# If there is no abbreviated name available, the field is marked with "n/a".
-#
-# Third Field: The third field is a long name.
+# Second Field: The second field is a long name
 #
 # With loose matching of property names, the case distinctions, whitespace,
 # and '_' are ignored.
 #
 # NOTE: Currently there is at most one abbreviated name and one long name for
-# each property and property value. However, in the future additional aliases
-# may be added. In such a case, the first line for the property or property value
+# each property. However, in the future additional aliases
+# may be added. In such a case, the first line for the property
 # would have the preferred alias for output.
 #
 # NOTE: The property value names are NOT unique across properties, especially
@@ -52,8 +36,6 @@
 # In addition, some property names may be the same as some property value names:
 # cc means Combining_Class property, and
 # cc means the General_Category property value Control (cc)
-#
-# Comments at the end of the file show cases of non-unique names.
 #
 # The combination of property value and property name is, however, unique.
 # For more information, see UTR #24: Regular Expression Guidelines
