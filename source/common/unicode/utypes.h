@@ -382,7 +382,7 @@ enum UErrorCode {
 
     U_SORT_KEY_TOO_SHORT_WARNING = -123,
 
-    U_AMBIGUOUS_ALIAS_WARNING = -122,
+    U_AMBIGUOUS_ALIAS_WARNING = -122,   /** This converter alias can go to different converter implementations */
 
     U_ERROR_WARNING_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
     
