@@ -21,6 +21,7 @@
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "unicode/ctest.h"
+#include "unicode/utrans.h"
 #include "ustr_imp.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
@@ -708,15 +709,16 @@ static void TestString() {
 
     u_sprintf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", L"My-String");
     u_sscanf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", myUString);
-    if (u_strcmp(myUString, L"My-String")) {
-        log_err("%%S Got: %S, Expected: My String\n", myUString);
+    u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
+    if (strcmp(myString, "My-String")) {
+        log_err("%%U Got: %s, Expected: My String\n", myString);
     }
 
     u_sprintf(uStringBuf, NULL, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", NULL);
     u_sscanf(uStringBuf, NULL, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", myUString);
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
     if (strcmp(myString, "(null)")) {
-        log_err("%%S Got: %s, Expected: My String\n", myString);
+        log_err("%%U Got: %s, Expected: (null)\n", myString);
     }
 
     u_sprintf(uStringBuf, NULL, "Date %%D (non-ANSI): %D", myDate);
@@ -1020,8 +1022,8 @@ static void TestStringCompatibility() {
     }
 
     for (num = 0; num < 0x80; num++) {
-        testBuf[0] = -1;
-        uStringBuf[0] = -1;
+        testBuf[0] = 0xFF;
+        uStringBuf[0] = 0xfffe;
         sprintf(testBuf, "%c", num);
         u_sprintf(uStringBuf, NULL, "%c", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
@@ -1095,6 +1097,156 @@ static void TestStream() {
 #endif
 }
 
+static void TestTranslitOps()
+{
+  UFILE *f;
+  UErrorCode err = U_ZERO_ERROR;
+  UTransliterator *a = NULL, *b = NULL, *c = NULL;
+
+  log_verbose("opening a transliterator and UFILE for testing\n");
+
+  f = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);
+  if(f == NULL)
+  {
+    log_err("Couldn't open test file for writing");
+    return;
+  }
+
+  a = utrans_open("Latin-Greek", UTRANS_FORWARD, NULL, -1, NULL, &err);
+  if(U_FAILURE(err))
+   {
+     log_err("Err opening transliterator %s\n", u_errorName(err));
+     u_fclose(f);
+     return;
+   }
+
+
+  log_verbose("setting a transliterator\n");
+  b = u_fsettransliterator(f, U_WRITE, a, &err);
+  if(U_FAILURE(err)) 
+  {
+     log_err("Err setting transliterator %s\n", u_errorName(err));
+     u_fclose(f);
+     return;
+  }
+
+  if(b != NULL)
+  {
+    log_err("Err, a transliterator was already set!\n");
+  }
+
+  log_verbose("un-setting transliterator (setting to null)\n");
+  c = u_fsettransliterator(f, U_WRITE, NULL, &err);
+  if(U_FAILURE(err)) 
+  {
+     log_err("Err setting transliterator %s\n", u_errorName(err));
+     u_fclose(f);
+     return;
+  }
+
+  if(c != a)
+  {
+    log_err("Err, transliterator that came back was not the original one.\n");
+  }
+
+  log_verbose("Trying to set read transliterator (should fail)\n");
+  b = u_fsettransliterator(f, U_READ, NULL, &err);
+  if(err != U_UNSUPPORTED_ERROR)
+  {
+     log_err("Should have U_UNSUPPORTED_ERROR setting  Read transliterator but got %s - REVISIT AND UPDATE TEST\n", u_errorName(err));
+     u_fclose(f);
+     return;
+  }
+  else
+  {
+    log_verbose("Got %s error (expected) setting READ transliterator.\n", u_errorName(err));
+    err = U_ZERO_ERROR;
+  }
+  
+  
+  utrans_close(c);
+  u_fclose(f);
+}
+
+static void TestTranslitOut()
+{
+  UFILE *f;
+  UErrorCode err = U_ZERO_ERROR;
+  UTransliterator *a = NULL, *b = NULL, *c = NULL;
+  FILE *infile;
+  UChar compare[] = { 0xfeff, 0x03a3, 0x03c4, 0x03b5, 0x03c6, 0x1f00, 0x03bd, 0x03bf, 0x03c2, 0x0000 };
+  UChar ubuf[256];
+  int len;
+
+  log_verbose("opening a transliterator and UFILE for testing\n");
+
+  f = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", "utf-16");
+  if(f == NULL)
+  {
+    log_err("Couldn't open test file for writing");
+    return;
+  }
+
+  a = utrans_open("Latin-Greek", UTRANS_FORWARD, NULL, -1, NULL, &err);
+  if(U_FAILURE(err))
+   {
+     log_err("Err opening transliterator %s\n", u_errorName(err));
+     u_fclose(f);
+     return;
+   }
+
+  log_verbose("setting a transliterator\n");
+  b = u_fsettransliterator(f, U_WRITE, a, &err);
+  if(U_FAILURE(err)) 
+  {
+     log_err("Err setting transliterator %s\n", u_errorName(err));
+     u_fclose(f);
+     return;
+  }
+
+  if(b != NULL)
+  {
+    log_err("Err, a transliterator was already set!\n");
+  }
+
+  u_fprintf(f, "%KStephanos", 0xFEFF);
+
+  u_fclose(f);
+
+  log_verbose("Re reading test file to verify transliteration\n");
+  infile = fopen(STANDARD_TEST_FILE, "rb");
+  if(infile == NULL)
+  {
+    log_err("Couldn't reopen test file\n");
+    return;
+  }
+  
+  len=fread(ubuf, sizeof(UChar), u_strlen(compare), infile);
+  log_verbose("Read %d UChars\n", len);
+  if(len != u_strlen(compare))
+  {
+    log_err("Wanted %d UChars from file, got %d\n", u_strlen(compare), len);
+  }
+  ubuf[len]=0;
+
+  if(u_strlen(compare) != u_strlen(ubuf))
+  {
+    log_err("Wanted %d UChars from file, but u_strlen() returns %d\n", u_strlen(compare), len);
+  }
+
+  if(u_strcmp(compare, ubuf))
+  {
+    log_err("Read string doesn't match expected.\n");
+  }
+  else
+  {
+    log_verbose("Read string matches expected.\n");
+  }
+  
+  fclose(infile);
+
+}
+
 static void addAllTests(TestNode** root) {
     addTest(root, &TestFile, "file/TestFile");
     addTest(root, &TestCodepage, "file/TestCodepage");
@@ -1105,6 +1257,9 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestSnprintf, "string/TestSnprintf");
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
     addTest(root, &TestStream, "stream/TestStream");
+
+    addTest(root, &TestTranslitOps, "translit/ops");
+    addTest(root, &TestTranslitOut, "translit/out");
 }
 
 int main(int argc, char* argv[])
