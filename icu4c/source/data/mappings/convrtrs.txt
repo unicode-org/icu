@@ -63,17 +63,20 @@
 # be changed - or else code and/or file names must also be changed.
 
 # Algorithmic
-UTF8			utf-8 {	MIME } ibm-1208 cp1208
-UTF16_BigEndian	        utf-16be { MIME }
+UTF8			 utf-8 {	 MIME } ibm-1208 cp1208
+UTF16_BigEndian		 utf-16be {	MIME }
 UTF16_LittleEndian { MIME }	 utf-16le {	MIME }
 UTF16_PlatformEndian { MIME }	 ISO-10646-UCS-2 { IANA	} csUnicode utf-16 { MIME } ibm-1200 cp1200 ucs-2
 UTF16_OppositeEndian
-LATIN_1			iso-8859-1 { MIME } ibm-819 cp819 latin1 8859-1	csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
-ISO_2022		iso-2022 { MIME	} 2022 cp2022
-ISO_2022,locale=ja      ISO_2022_JP, csISO2022JP, iso-2022-jp { MIME }
-ISO_2022,locale=ko      ISO_2022_KR, csISO2022KR, iso-2022-kr { MIME }
-ISO_2022,locale=zh      ISO_2022_CN, csISO2022CN, iso-2022-cn { MIME }
-LMBCS-1			lmbcs
+LATIN_1			 iso-8859-1	{ MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
+ISO_2022			 iso-2022 {	MIME	 } 2022 cp2022
+ISO_2022,locale=ja,version=0	 ISO_2022_JP, ISO-2022-JP, csISO2022JP, iso-2022-jp { MIME }
+ISO_2022,locale=ja,version=1	 ISO_2022_JP_1, ISO-2022-JP-1
+ISO_2022,locale=ja,version=2	 ISO_2022_JP_2, ISO-2022-JP-2,csISO2022JP2, iso-2022-jp-2 {	MIME }
+ISO_2022,locale=ko		 ISO_2022_KR, csISO2022KR, iso-2022-kr { MIME }
+ISO_2022,locale=zh,version=0	 ISO_2022_CN, csISO2022CN, iso-2022-cn { MIME }
+ISO_2022,locale=zh,version=1	 ISO_2022_CN_EXT, ISO-2022-CN-EXT, iso-2022-cn-ext
+LMBCS-1			 lmbcs
 LMBCS-2
 LMBCS-3	        
 LMBCS-4
