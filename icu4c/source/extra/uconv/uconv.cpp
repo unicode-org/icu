@@ -94,7 +94,8 @@ static struct callback_ent {
     { "escape-c", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C },
     { "escape-xml", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC },
     { "escape-xml-dec", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC },
-    { "escape-xml-hex", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_HEX, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_HEX }
+    { "escape-xml-hex", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_HEX, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_HEX },
+    { "escape-codepoint", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_CODEPOINT, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_CODEPOINT }
 };
 
 static const struct callback_ent *findCallback(const char *name) {
@@ -324,6 +325,8 @@ static UBool convertFile(const char* fromcpage,
     const size_t readsize = buffsize-1;
     char* buff = 0;
 
+    uint32_t foffset = 0;        /* Where we are in the file, for error reporting. */
+
     UConverterFromUCallback oldfromucallback;
     UConverterToUCallback oldtoucallback;
     const void *oldcontext;
@@ -351,7 +354,9 @@ static UBool convertFile(const char* fromcpage,
       }
 
     // Create codepage converter. If the codepage or its aliases weren't
-    // available, it returns NULL and a failure code
+    // available, it returns NULL and a failure code. We also set the
+    // callbacks, and return errors in the same way.
+
     convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err))
     {
@@ -385,10 +390,13 @@ static UBool convertFile(const char* fromcpage,
     // To ensure that the buffer always is of enough size, we
     // must take the worst case scenario, that is the character in the codepage
     // that uses the most bytes and multiply it against the buffsize
+
     totbuffsize = buffsize * ucnv_getMaxCharSize(convto);
     buff = new char[totbuffsize];
     unibuff = new UChar[buffsize];
-        
+
+    // OK, we can convert now.
+
     do  
     {
         rd = fread(buff, 1, readsize, infile);
@@ -412,7 +420,9 @@ static UBool convertFile(const char* fromcpage,
         cbuffiter = buff;
         flush = rd!=readsize;
         ucnv_toUnicode(convfrom, &uniiter, uniiter + buffsize, &cbuffiter, cbuffiter + rd, 0, flush, &err);
-            
+          
+        foffset += uniiter - unibuff;
+
         if (U_FAILURE(err))
         {
             u_wmsg("problemCvtToU", u_wmsg_errorName(err));
@@ -517,29 +527,35 @@ static void usage(const char *pname, int ecode)
 
 int main(int argc, char** argv)
 {
-    FILE* file = 0;
-    FILE* infile;
+    FILE* infile, *outfile;
     int   ret = 0;
 
     const char* fromcpage = 0;
     const char* tocpage = 0;
     const char *translit = 0;
     const char* infilestr = 0;
+    const char* outfilestr = 0;
 
-    UConverterFromUCallback fromucallback = UCNV_FROM_U_CALLBACK_SUBSTITUTE;
+    UConverterFromUCallback fromucallback = UCNV_FROM_U_CALLBACK_STOP;
     const void *fromuctxt = 0;
-    UConverterToUCallback toucallback = UCNV_TO_U_CALLBACK_SUBSTITUTE;
+    UConverterToUCallback toucallback = UCNV_TO_U_CALLBACK_STOP;
     const void *touctxt = 0;
 
     char** iter = argv+1;
     char** end = argv+argc;    
 
-    const char *pname = *argv;
+    const char *pname;
 
     int printConvs = 0, printCanon = 0;
     const char *printName = 0;
     int printTranslits = 0;
 
+    int silent = 0, verbose = 0;
+
+    // Prettify pname.
+    for (pname = *argv + strlen(*argv) - 1; pname != *argv && *pname != U_FILE_SEP_CHAR; --pname);
+    if (*pname == U_FILE_SEP_CHAR) ++pname;
+    
     // First, get the arguments from command-line
     // to know the codepages to convert between
     for (; iter!=end; iter++)
@@ -651,7 +667,40 @@ int main(int argc, char** argv)
         else if (!strcmp("-i", *iter)) {
             toucallback = UCNV_TO_U_CALLBACK_SKIP;
         }
-        else if (**iter == '-' && (*iter)[1]) {
+        else if (!strcmp("--callback", *iter)) {
+            iter++;
+            if (iter!=end) {
+                const struct callback_ent *cbe = findCallback(*iter);
+                if (cbe) {
+                    fromucallback = cbe->fromu;
+                    fromuctxt = cbe->fromuctxt;
+                    toucallback = cbe->tou;
+                    touctxt = cbe->touctxt;
+                } else {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("unknownCallback", str.getBuffer());
+                    return 4;
+                }
+            } else {
+                usage(pname, 1);
+            }
+        }
+        else if (!strcmp("-s", *iter) || !strcmp("--silent", *iter)) {
+            silent = 1;
+        } else if (!strcmp("-v", *iter) || !strcmp("--verbose", *iter)) {
+            verbose = 1;
+        } else if (!strcmp("-V", *iter) || !strcmp("--version", *iter)) {
+            printf("%s v2.0\n", pname);
+            return 0;
+        } else if (!strcmp("-o", *iter) || !strcmp("--output", *iter)) {
+            ++iter;
+            if (iter != end && !outfilestr) {
+                outfilestr = *iter;
+            } else {
+                usage(pname, 1);
+            }
+        } else if (**iter == '-' && (*iter)[1]) {
             usage(pname, 1);
         } else if (!infilestr) {
             infilestr = *iter;
@@ -689,8 +738,8 @@ int main(int argc, char** argv)
     // Open the correct input file or connect to stdin for reading input
     if (infilestr!=0 && strcmp(infilestr, "-"))
     {
-        file = fopen(infilestr, "rb");
-        if (file==0)
+        infile = fopen(infilestr, "rb");
+        if (infile==0)
         {
           UnicodeString str1(infilestr,"");
           UnicodeString str2(strerror(errno),"");
@@ -700,9 +749,9 @@ int main(int argc, char** argv)
                  str2.getBuffer());
           return 1;
         }
-        infile = file;
     }
     else {
+        infilestr = "-";
         infile = stdin;
 #ifdef WIN32
         if( setmode( fileno ( stdin ), O_BINARY ) == -1 ) {
@@ -711,15 +760,38 @@ int main(int argc, char** argv)
         }
 #endif
     }
+
+    // Open the correct output file or connect to stdout for reading input
+    if (outfilestr!=0 && strcmp(outfilestr, "-"))
+    {
+        outfile = fopen(outfilestr, "wb");
+        if (outfile==0)
+        {
+          UnicodeString str1(outfilestr,"");
+          UnicodeString str2(strerror(errno),"");
+          initMsg(pname);
+          u_wmsg("cantCreateOutputF", 
+                 str1.getBuffer(),
+                 str2.getBuffer());
+          return 1;
+        }
+    } else {
+        outfilestr = "-";
+        outfile = stdout;
 #ifdef WIN32
-  if( setmode( fileno ( stdout ), O_BINARY ) == -1 ) {
-          perror ( "Cannot set stdout to binary mode" );
-          exit(-1);
-  }
+        if( setmode( fileno ( outfile ), O_BINARY ) == -1 ) {
+            perror ( "Cannot set output file to binary mode" );
+            exit(-1);
+        }
 #endif
+    }
 
   initMsg(pname);
-    if (!convertFile(fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, translit, infile, stdout))
+  
+  if (verbose) {
+      fprintf(stderr, "%s:\n", infilestr);
+  }
+    if (!convertFile(fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, translit, infile, outfile))
         goto error_exit;
 
     goto normal_exit;
@@ -727,8 +799,10 @@ int main(int argc, char** argv)
     ret = 1;
   normal_exit:
 
-    if (file!=0)
-        fclose(file);
+    if (infile!=stdin)
+        fclose(infile);
+    if (outfile != stdout) fclose(outfile);
+
     return ret;
 }
 
