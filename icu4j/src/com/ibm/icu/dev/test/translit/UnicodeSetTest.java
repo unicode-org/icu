@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/07 01:22:43 $ 
- * $Revision: 1.41 $
+ * $Date: 2003/02/07 21:08:07 $ 
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -937,18 +937,31 @@ public class UnicodeSetTest extends TestFmwk {
      * Test closure API.
      */
     public void TestCloseOver() {
+        String CASE = "1";
         String[] DATA = {
-            // input       selector      output
+            // selector, input, output
+            CASE,
             "[aq\u00DF{Bc}{bC}{Fi}]",
-            "1",
             "[aAqQ\u00DF\uFB01{ss}{bc}{fi}]",
+
+            CASE,
+            "[\u01F1]", // 'DZ'
+            "[\u01F1\u01F2\u01F3]",
+
+            CASE,
+            "[\u1FB4]",
+            "[\u1FB4{\u03AC\u03B9}]",
+
+            CASE,
+            "[{F\uFB01}]",
+            "[\uFB03{ffi}]",            
         };
 
         UnicodeSet s = new UnicodeSet();
         UnicodeSet t = new UnicodeSet();
         for (int i=0; i<DATA.length; i+=3) {
-            String pat = DATA[i];
-            int selector = Integer.parseInt(DATA[i+1]);
+            int selector = Integer.parseInt(DATA[i]);
+            String pat = DATA[i+1];
             String exp = DATA[i+2];
             s.applyPattern(pat);
             s.closeOver(selector);
