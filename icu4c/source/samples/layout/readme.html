@@ -27,8 +27,14 @@ select the layout project in the project toolbar and build it. </p>
 you invoke the runConfigureICU script. When you've done that, layout should 
 build when you do "make all install" </p>
 <p>To build the demo on Windows, just open the layout project in &lt;icu&gt;\source\samples\layout 
-and build it. On Linux systems, connect to &lt;top-build-dir&gt;/samples/layout 
-and do "make all" <br>
+and build it.</p>
+<p>On Linux systems, connect to &lt;top-build-dir&gt;/samples/layout and
+do "make all" &nbsp;The layout demo uses FreeType 1. The make files assume
+that the FreeType header files are in /usr/include/freetype1, and that the
+freetype library is /usr/lib/libttf.so. This is how RedHat Linux 7.2 installs
+FreeType 1. If your system is different, you may need to add sym links to
+where the files are stored on your system, or&nbsp; modify &lt;top-src-dir&gt;/samples/layout/Makefile.in
+ to reference the files correctly for your system.<br>
 &nbsp; </p>
 <h2> How do I run the demo?</h2>
  Before you can run the demo, you'll need to get the fonts it uses. For legal
