@@ -352,8 +352,10 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
 static UConverter * 
 _ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
 static void 
 T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, UErrorCode* err);
+#endif
 
 /*const UConverterSharedData _ISO2022Data;*/
 static const UConverterSharedData _ISO2022JPData;
@@ -1974,7 +1976,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
             args->converter = saveThis;
         }
 
-        /*-Done with buffer with entire buffer
+        /*-Done with entire buffer
         -Error while converting
         */
         if (U_FAILURE(*err) || (args->source == args->sourceLimit)) 
