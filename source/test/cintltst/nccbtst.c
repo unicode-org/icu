@@ -223,14 +223,15 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
         UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
         const uint8_t to_iso_2022_kr[]={  
             0x1b,   0x24,   0x29,   0x43,   
-            0x41,   
+            0x0f,   0x41,   
             0x0e,   0x25,   0x50,   
             0x0e,   0x25,   0x50, 
             0x0f,   0x42, 
         };
         int32_t from_iso_2022_krOffs [] ={ 
             -1,-1,-1,-1,
-            0,1,1,1,
+            0,0,
+            1,1,1,
             3,3,3,
             4,4
         };
@@ -535,12 +536,13 @@ void TestStop(int32_t inputsize, int32_t outputsize)
         UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
         const uint8_t to_iso_2022_kr[]={  
             0x1b,   0x24,   0x29,   0x43,   
-            0x41,   
+            0x0f,   0x41,   
             0x0e,   0x25,   0x50,   
         };
         int32_t from_iso_2022_krOffs [] ={ 
             -1,-1,-1,-1,
-            0,1,1,1,
+            0, 0,
+            1,1,1,
         };
 
         /* HZ encoding */       
@@ -986,7 +988,7 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
         const uint8_t to_iso_2022_kr[]={  
             0x1b,   0x24,   0x29,   0x43,   
-            0x41,   
+            0x0f,   0x41,   
             0x0e,   0x25,   0x50,   
             0x0f,   0x25,   0x55,   0x33,   0x37,   0x31,   0x32,  /*unassigned*/ 
             0x0e,   0x25,   0x50, 
@@ -994,7 +996,8 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         };
         int32_t from_iso_2022_krOffs [] ={ 
             -1,-1,-1,-1,
-            0,1,1,1,
+            0, 0,
+            1,1,1,
             2,2,2,2,2,2,2,
             3,3,3,
             4,4
