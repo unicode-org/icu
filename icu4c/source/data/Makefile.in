@@ -27,11 +27,13 @@ ICUDT=$(ICUDATA_PLATFORM_NAME)_
 ifeq ($(PKGDATA_OPTS),)
 PKGDATA_OPTS = -O $(top_builddir)/data/icupkg.inc
 endif
+ifeq ($(PKGDATA_VERSIONING),)
+PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
+endif
 
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
-CURDIR=$(shell pwd)
+CURDIR:=$(CURR_FULL_DIR)
 PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -c -d $(CURDIR)/out
-PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 

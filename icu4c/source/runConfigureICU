@@ -37,6 +37,7 @@ The following names can be supplied as the argument for platform:
     ALPHA/LINUXCCC          Use Compaq C compiler on Alpha/Linux systems
     BeOS                    Use the GNU C++ compiler on BeOS
     CygWin                  Use the GNU C++ compiler on CygWin
+    CygWin/MSVC             Use the Microsoft Visual C++ compiler on CygWin
     FreeBSD                 Use the GNU C++ compiler on Free BSD
     HP-UX11ACC              Use the Advanced C++ compiler on HP-UX 11
     HP-UX11CC               Use HP's C++ compiler on HP-UX 11
@@ -151,24 +152,13 @@ case $platform in
         RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
         ;;
+# For no threads use --enable-threads=no. Visual Age makes no distinction between xlC and xlC_r or any other _r programs.
     AIXGCC)
         THE_OS=AIX
         THE_COMP="gcc"
         CC=`which gcc`; export CC
         CXX=`which g++`; export CXX
         ;;
-# Just use --enable-threads=no. Visual Age makes no distinction between xlC and xlC_r or any other _r programs.
-#    AIX4.3VA_nothreads)
-#        THE_OS=AIX
-#        THE_COMP="xlC"
-#        # Only in Visual Age, there is no different between xlc and xlc_r.
-#        CC=`which xlc`; export CC
-#        CXX=`which xlC`; export CXX
-#        OPTS="$OPTS --enable-threads=no"
-#        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
-#        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
-#        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-#        ;;
     SOLARISX86)
         THE_OS="SOLARIS X86"
         THE_COMP="Sun's CC"
@@ -268,18 +258,17 @@ case $platform in
         RELEASE_CFLAGS='-O3'
         RELEASE_CXXFLAGS='-O3'
         ;;
-# This doesn't work yet.
-#    CygWin/MSVC)
-#        THE_OS="CygWin"
-#        THE_COMP="Microsoft Visual C++"
-#        CC=cl; export CC
-#        CXX=cl; export CXX
-#        RELEASE_CFLAGS='/O2 /Ob2'
-#        RELEASE_CXXFLAGS='/O2 /Ob2'
-#        DEBUG_CFLAGS='/Zi'
-#        DEBUG_CXXFLAGS='/Zi'
-#        DEBUG_LDFLAGS='/DEBUG'
-#        ;;
+    CygWin/MSVC)
+        THE_OS="CygWin"
+        THE_COMP="Microsoft Visual C++"
+        CC=cl; export CC
+        CXX=cl; export CXX
+        RELEASE_CFLAGS='/O2 /Ob2'
+        RELEASE_CXXFLAGS='/O2 /Ob2'
+        DEBUG_CFLAGS='/Zi'
+        DEBUG_CXXFLAGS='/Zi'
+        DEBUG_LDFLAGS='/DEBUG'
+        ;;
     MacOSX)
         THE_OS="MacOS X (Darwin)"
         THE_COMP="the GNU C++"
