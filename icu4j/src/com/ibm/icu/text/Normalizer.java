@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/11/21 22:43:40 $ 
- * $Revision: 1.36 $
+ * $Date: 2003/11/24 22:16:56 $ 
+ * $Revision: 1.37 $
  *
  *******************************************************************************
  */
@@ -1867,13 +1867,12 @@ public final class Normalizer implements Cloneable{
      * Retrieve the index of the end of the input text.  This is the end index
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
-     * @deprecated ICU 2.2. To be removed after 2003-aug-31. Use endIndex() instead.
+     * @obsolete ICU 2.2. To be removed after 2003-aug-31. Use endIndex() instead.
      * @return The codepoint as an int
      * @see #endIndex
-     * @draft ICU 2.2
      */
     public int getEndIndex() {
-        return text.getLength()-1;
+        return endIndex();
     }
     /**
      * Return the first character in the normalized text->  This resets
