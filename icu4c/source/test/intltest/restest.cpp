@@ -25,7 +25,6 @@
 
 //***************************************************************************************
 
-static const UnicodeString kERROR = UNICODE_STRING("ERROR", 5);
 static const UChar kErrorUChars[] = { 0x45, 0x52, 0x52, 0x4f, 0x52, 0 };
 static const int32_t kErrorLength = 5;
 static const int32_t kERROR_COUNT = -1234567;
@@ -439,7 +438,10 @@ ResourceBundleTest::testTag(const char* frag,
 
         CONFIRM_UErrorCode(status, expected_resource_status, action);
 
-        UnicodeString expected_string = U_SUCCESS(status) ? base : kERROR;
+        UnicodeString expected_string(kErrorUChars);
+        if (U_SUCCESS(status)) {
+            expected_string = base;
+        }
 
         CONFIRM_EQ(string, expected_string, action);
 
@@ -481,7 +483,7 @@ ResourceBundleTest::testTag(const char* frag,
             {
                 index = count ? (randi(count * 3) - count) : (randi(200) - 100);
                 status = U_ZERO_ERROR;
-                string = kERROR;
+                string = kErrorUChars;
                 UnicodeString t(arrayBundle.getStringEx(index, status));
                 expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
                 CONFIRM_UErrorCode(status, expected_status, action);
@@ -494,7 +496,7 @@ ResourceBundleTest::testTag(const char* frag,
                 }
                 else
                 {
-                    expected_string = kERROR;
+                    expected_string = kErrorUChars;
                 }
                 CONFIRM_EQ(string, expected_string, action);
             }

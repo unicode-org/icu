@@ -17,10 +17,9 @@
 
 static UErrorCode status = U_ZERO_ERROR;
 
-const UnicodeString CollationIteratorTest::test1("What subset of all possible test cases?", "");
-const UnicodeString CollationIteratorTest::test2("has the highest probability of detecting", "");
-
 CollationIteratorTest::CollationIteratorTest()
+ : test1("What subset of all possible test cases?", ""),
+   test2("has the highest probability of detecting", "")
 {
     en_us = (RuleBasedCollator *)Collator::createInstance(Locale::US, status);
 }
