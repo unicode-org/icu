@@ -60,7 +60,8 @@ public:
 
 protected:
     SimpleFwdCharIterator() {}
-    SimpleFwdCharIterator(const SimpleFwdCharIterator&) {}
+    SimpleFwdCharIterator(const SimpleFwdCharIterator &other)
+        : ForwardCharacterIterator(other) {}
     SimpleFwdCharIterator &operator=(const SimpleFwdCharIterator&) { return *this; }
 private:
     static const int32_t            kInvalidHashCode;
