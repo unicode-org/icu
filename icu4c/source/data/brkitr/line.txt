@@ -364,8 +364,12 @@ $Openings $GluedWord  $Closings $Endings;
 #
 #  Reverse Rules.
 #
-#     Back up to a hard break.
-#     TODO:  make smarter reverse rules for better efficiency
+#     Back up to a hard break or a space that will cause a boundary.
+#     Not all spaces cause line breaks.  $SpaceGlue represents a sequence
+#     containing a space that may inhibit a break from occuring.
 #
-! . . [^$BK | $CR | $LF]*   (. | $LF $CR);
-#! .*;
+
+$SpaceGlue  = ([$ZW $CL $IS $NS $OP]  ($Extend* $SP)) | (($Extend* $SP)+ $OP);
+$ClumpingChars = [^$SP $BK $CR $LF];
+
+!. . $ClumpingChars*  ($SpaceGlue $ClumpingChars*)* (. | $LF $CR);
