@@ -309,7 +309,10 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     /* check if u_unescapeAt unescaped and converted
      * to c32 or not
      */
-    if(c32!=c2){
+    if(c32==0xFFFFFFFF){
+        *err= U_INVALID_CHAR_FOUND;
+        return c1;
+    }else if(c32!=c2){
         /* Update the current buffer position */
         buf->currentPos += offset;
     }else{
