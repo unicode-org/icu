@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/10/08 21:51:44 $ 
- * $Revision: 1.26 $
+ * $Date: 2003/11/18 17:53:53 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -259,23 +259,6 @@ public final class StringSearch extends SearchIterator
     // public getters -----------------------------------------------------
     
     /**
-     * Returns the strength property of the RuleBasedCollator used in searching. 
-     * See the RuleBasedCollator class documentation for a description of the
-     * strength property.
-     * @return the strength property of the RuleBasedCollator used in searching
-     * @see RuleBasedCollator
-     * @see #setStrength
-     * @see #getCollator
-     * @obsolete ICU 2.2. Use this.getCollator().getStrength() instead since it
-     *           will be removed in that release.
-     */
-    ///CLOVER:OFF
-    public int getStrength() {
-        return m_collator_.getStrength();
-    }
-    ///CLOVER:ON
-    
-    /**
 	 * <p>
      * Gets the RuleBasedCollator used for the language rules.
      * </p>
@@ -313,7 +296,7 @@ public final class StringSearch extends SearchIterator
      * the beginning for a backwards search, {@link #DONE} is returned.
      * @return index in the target text where the iterator is currently 
      *         positioned at
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public int getIndex() 
     {
@@ -330,7 +313,7 @@ public final class StringSearch extends SearchIterator
      * See setCanonical(boolean) for more information.
      * @see #setCanonical
      * @return true if canonical matches is set, false otherwise
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean isCanonical() 
     {
@@ -338,39 +321,6 @@ public final class StringSearch extends SearchIterator
     }
     
     // public setters -----------------------------------------------------
-    
-    /**
-     * <p>
-     * Sets the strength property of the RuleBasedCollator used for searching.
-     * See the Collator documentation for a description of the strengths.
-     * </p>
-     * @obsolete ICU 2.2. Use this.getCollator().setStrength(int) instead since
-     *           it will be removed in that release.
-     *             After which StringSearch.reset() 
-     *             or StringSearch.setCollator(this.getCollator()) should be
-     *             called to update StringSearch.]
-     * @see Collator
-     * @see Collator#PRIMARY
-     * @see Collator#SECONDARY
-     * @see Collator#TERTIARY
-     * @see Collator#QUATERNARY
-     * @see Collator#IDENTICAL
-     * @see #setCollator
-     * @see #getCollator
-     */
-    ///CLOVER:OFF
-    public void setStrength(int newStrength) 
-    {
-        // Due to a bug (?) in CollationElementIterator, we must set the
-        // collator's strength as well, since the iterator is going to
-        // mask out the portions of the collation element that are not
-        // relevant for the collator's current strength setting
-        // Note that this makes it impossible to share a Collator among
-        // multiple StringSearch objects if you adjust Strength settings.
-        m_collator_.setStrength(newStrength);
-        initialize();
-    }
-    ///CLOVER:ON
     
     /**
      * <p>
@@ -430,7 +380,7 @@ public final class StringSearch extends SearchIterator
      * @exception IllegalArgumentException thrown when text is null or has
      *            0 length
      * @see #getTarget
-	 * @draft ICU 2.2
+	 * @stable ICU 2.8
 	 */
 	public void setTarget(CharacterIterator text)
 	{
@@ -458,7 +408,7 @@ public final class StringSearch extends SearchIterator
      * @exception IndexOutOfBoundsException thrown if argument position is out
      *            of the target text range.
      * @see #getIndex
-     * @draft ICU 2.2
+     * @stable ICU 2.8
 	 */
 	public void setIndex(int position)
 	{
@@ -474,7 +424,7 @@ public final class StringSearch extends SearchIterator
      * </p>
 	 * @param allowCanonical flag indicator if canonical matches are allowed
      * @see #isCanonical
-	 * @draft ICU 2.2
+	 * @stable ICU 2.8
 	 */
 	public void setCanonical(boolean allowCanonical)
 	{
@@ -513,7 +463,7 @@ public final class StringSearch extends SearchIterator
      * <p>
      * Canonical match option will be reset to false, ie an exact match.
      * </p>
-	 * @draft ICU 2.2
+	 * @stable ICU 2.8
 	 */
 	public void reset()
 	{
@@ -544,7 +494,7 @@ public final class StringSearch extends SearchIterator
      *         otherwise
      * @see #handlePrevious(int)
      * @see #DONE
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     protected int handleNext(int start)
     {
@@ -619,7 +569,7 @@ public final class StringSearch extends SearchIterator
      *         otherwise
      * @see #handleNext(int)
      * @see #DONE
-     * @draft ICU 2.2
+     * @stable ICU 2.8
 	 */
     protected int handlePrevious(int start)
     {
