@@ -19,13 +19,13 @@ public class RoundTripTest extends TestFmwk {
     public void TestHiragana() throws IOException, ParseException {
         new Test("Latin-Hiragana", 
           TestUtility.LATIN_SCRIPT, TestUtility.HIRAGANA_SCRIPT)
-          .test("[a-z]", "[\u3040-\u3094]", this);
+          .test("[a-z]", "[\u3040-\u3094]", this, new Legal());
     }
 
     public void TestKatakana() throws IOException, ParseException {
         new Test("Latin-Katakana", 
           TestUtility.LATIN_SCRIPT, TestUtility.KATAKANA_SCRIPT)
-          .test("[a-z]", "[\u30A1-\u30FA\u30FC]", this);
+          .test("[a-z]", "[\u30A1-\u30FA\u30FC]", this, new Legal());
     }
 
 // Some transliterators removed for 2.0
@@ -53,28 +53,79 @@ public class RoundTripTest extends TestFmwk {
           TestUtility.LATIN_SCRIPT, TestUtility.JAMO_SCRIPT);
         t.setErrorLimit(200); // Don't run full test -- too long
         //t.test("[[a-z]-[fqvxz]]", null, this);
-        t.test("[a-z]", null, this);
+        t.test("[a-z]", null, this, new Legal());
     }
 
     public void TestJamoHangul() throws IOException, ParseException {
         Test t = new Test("Latin-Hangul", 
           TestUtility.LATIN_SCRIPT, TestUtility.HANGUL_SCRIPT);
         t.setErrorLimit(50); // Don't run full test -- too long
-        t.test("[a-z]", null, this);
+        t.test("[a-z]", null, this, new Legal());
     }
 
     public void TestGreek() throws IOException, ParseException {
         new Test("Latin-Greek", 
           TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this);
+          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this, new LegalGreek());
     }
 
     public void TestCyrillic() throws IOException, ParseException {
         new Test("Latin-Cyrillic", 
           TestUtility.LATIN_SCRIPT, TestUtility.CYRILLIC_SCRIPT)
-          .test(null, "[\u0400-\u045F]", this);
+          .test(null, "[\u0400-\u045F]", this, new Legal());
     }
-
+    
+    public static class Legal {
+        public boolean is(String sourceString) {return true;}
+    }
+    
+    public static class LegalGreek extends Legal {
+        
+        public static boolean isVowel(char c) {
+            return "\u03B1\u03B5\u03B7\u03B9\u03BF\u03C5\u03C9\u0391\u0395\u0397\u0399\u039F\u03A5\u03A9".indexOf(c) >= 0;
+        }
+        
+        public static boolean isRho(char c) {
+            return "\u03C1\u03A1".indexOf(c) >= 0;
+        }
+        
+        public boolean is(String sourceString) { 
+            try {
+                // Legal greek has breathing marks IFF there is a vowel or RHO at the start
+                // IF it has them, it has exactly one.
+                // IF it starts with a RHO, then the breathing mark must come before the second letter.
+                // Since there are no surrogates in greek, don't worry about them
+                String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
+                boolean firstIsVowel = false;
+                boolean firstIsRho = false;
+                boolean noLetterYet = true;
+                int breathingCount = 0;
+                int letterCount = 0;
+                for (int i = 0; i < decomp.length(); ++i) {
+                    char c = decomp.charAt(i);
+                    if (UCharacter.isLetter(c)) {
+                        ++letterCount;
+                        if (noLetterYet) {
+                            noLetterYet = false;
+                            firstIsVowel = isVowel(c);
+                            firstIsRho = isRho(c);
+                        }
+                        if (firstIsRho && letterCount == 2 && breathingCount == 0) return false;
+                    }
+                    if (c == '\u0313' || c == '\u0314') {
+                        ++breathingCount;
+                    }
+                }
+                
+                if (firstIsVowel || firstIsRho) return breathingCount == 1;
+                return breathingCount == 0;
+            } catch (Throwable t) {
+                System.out.println(t.getClass().getName() + " " + t.getMessage());
+                return true;
+            }
+        }
+    }
+    
     static class Test {
     
         PrintWriter out;
@@ -88,6 +139,7 @@ public class RoundTripTest extends TestFmwk {
         UnicodeSet sourceRange;
         UnicodeSet targetRange;
         TestLog log;
+        Legal legalSource;
     
         /*
          * create a test for the given script transliterator.
@@ -107,8 +159,10 @@ public class RoundTripTest extends TestFmwk {
             pairLimit = limit;
         }
       
-        public void test(String sourceRange, String targetRange, TestLog log) 
-            throws java.io.IOException, java.text.ParseException {
+        public void test(String sourceRange, String targetRange, TestLog log, Legal legalSource) 
+          throws java.io.IOException, java.text.ParseException {
+            
+            this.legalSource = legalSource;
       
             if (sourceRange != null && sourceRange.length() > 0) {
                 this.sourceRange = new UnicodeSet(sourceRange);
@@ -131,7 +185,8 @@ public class RoundTripTest extends TestFmwk {
             String logFileName = "test_" + transliteratorID + "_"
                 + sourceScript + "_" + targetScript + ".html";
 
-            log.logln("Creating log file " + logFileName);
+            File lf = new File(logFileName); 
+            log.logln("Creating log file " + lf.getAbsoluteFile());
 
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
                       new FileOutputStream(logFileName), "UTF8"), 4*1024));
@@ -149,7 +204,7 @@ public class RoundTripTest extends TestFmwk {
             out.close();
 
             if (errorCount > 0) {
-                log.errln(transliteratorID + " errors: " + errorCount + ", see " + logFileName);
+                log.errln(transliteratorID + " errors: " + errorCount + ", see " + lf.getAbsoluteFile());
             } else {
                 log.logln(transliteratorID + " ok");
                 new File(logFileName).delete();
@@ -252,10 +307,13 @@ public class RoundTripTest extends TestFmwk {
                         from + " (" +
                         TestUtility.hex(from) + ") => " +
                         to + " (" +
-                        TestUtility.hex(to) + ")" );
+                        TestUtility.hex(to) + ")"
+                        );
         }
 
         final void logRoundTripFailure(String from, String to, String back) {
+            if (!legalSource.is(from)) return; // skip illegals
+            
             if (++errorCount >= errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
@@ -265,7 +323,8 @@ public class RoundTripTest extends TestFmwk {
                         to + " (" +
                         TestUtility.hex(to) + ") => " +
                         back + " (" +
-                        TestUtility.hex(back) + ")" );
+                        TestUtility.hex(back) + ")" 
+                        );
         }
 
         /*
