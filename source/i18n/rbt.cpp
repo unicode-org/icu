@@ -22,7 +22,7 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
     data = 0;
     isDataOwned = TRUE;
     if (U_SUCCESS(status)) {
-        data = TransliterationRuleParser::parse(rules, direction, parseError);
+        data = TransliteratorParser::parse(rules, direction, parseError);
         if (data == 0) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
@@ -37,6 +37,18 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
     Transliterator(id, adoptedFilter),
     data((TransliterationRuleData*)theData), // cast away const
     isDataOwned(FALSE) {
+    setMaximumContextLength(data->ruleSet.getMaximumContextLength());
+}
+
+/**
+ * Internal constructor.
+ */
+RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
+                                                 TransliterationRuleData* theData,
+                                                 UBool isDataAdopted) :
+    Transliterator(id, 0),
+    data(theData),
+    isDataOwned(isDataAdopted) {
     setMaximumContextLength(data->ruleSet.getMaximumContextLength());
 }
 
