@@ -546,7 +546,7 @@ DateFormatSymbols::getData(ResourceBundle &rb, const char *tag, const char *type
     }
     
     int32_t len = uprv_strlen(tag) + 1 + uprv_strlen(type);  // tag + _ + type  (i.e. Eras_Japanese )
-    if(len > sizeof(tmp)) {
+    if(len >= sizeof(tmp)) {
         fullTag = (char*)uprv_malloc(len+1);
     }
     
