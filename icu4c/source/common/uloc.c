@@ -1056,7 +1056,7 @@ static void _lazyEvaluate_installedLocales()
     int32_t localeCount;
     
     ures_setIsStackObject(&installed, TRUE);
-    index = ures_open(NULL, _kIndexLocaleName, &status);
+    index = ures_openDirect(NULL, _kIndexLocaleName, &status);
     ures_getByKey(index, _kIndexTag, &installed, &status);
     
     if(U_SUCCESS(status)) {
