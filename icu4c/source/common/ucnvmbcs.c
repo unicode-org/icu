@@ -937,22 +937,64 @@ _MBCSLoad(UConverterSharedData *sharedData,
 
         /*
          * Set a special, runtime-only outputType if the extension converter
-         * is a DBCS version of an SI/SO-stateful base converter.
+         * is a DBCS version of a base converter that also maps single bytes.
          */
-        if( baseSharedData->mbcs.outputType==MBCS_OUTPUT_2_SISO &&
-            (sharedData->staticData->conversionType==UCNV_DBCS ||
+        if( sharedData->staticData->conversionType==UCNV_DBCS ||
                 (sharedData->staticData->conversionType==UCNV_MBCS &&
-                 sharedData->staticData->minBytesPerChar>=2))
+                 sharedData->staticData->minBytesPerChar>=2)
         ) {
-            int32_t entry;
+            if(baseSharedData->mbcs.outputType==MBCS_OUTPUT_2_SISO) {
+                /* the base converter is SI/SO-stateful */
+                int32_t entry;
 
-            /* get the dbcs state from the state table entry for SO=0x0e */
-            entry=mbcsTable->stateTable[0][0xe];
-            if( MBCS_ENTRY_IS_FINAL(entry) &&
-                MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_CHANGE_ONLY &&
-                MBCS_ENTRY_FINAL_STATE(entry)!=0
+                /* get the dbcs state from the state table entry for SO=0x0e */
+                entry=mbcsTable->stateTable[0][0xe];
+                if( MBCS_ENTRY_IS_FINAL(entry) &&
+                    MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_CHANGE_ONLY &&
+                    MBCS_ENTRY_FINAL_STATE(entry)!=0
+                ) {
+                    mbcsTable->dbcsOnlyState=MBCS_ENTRY_FINAL_STATE(entry);
+
+                    mbcsTable->outputType=MBCS_OUTPUT_DBCS_ONLY;
+                }
+            } else if(
+                baseSharedData->staticData->conversionType==UCNV_MBCS &&
+                baseSharedData->staticData->minBytesPerChar==1 &&
+                baseSharedData->staticData->maxBytesPerChar==2 &&
+                mbcsTable->countStates<=127
             ) {
-                mbcsTable->dbcsOnlyState=MBCS_ENTRY_FINAL_STATE(entry);
+                /* non-stateful base converter, need to modify the state table */
+                int32_t (*newStateTable)[256];
+                int32_t *state;
+                int32_t i, count;
+
+                /* allocate a new state table and copy the base state table contents */
+                count=mbcsTable->countStates;
+                newStateTable=(int32_t (*)[256])uprv_malloc((count+1)*1024);
+                if(newStateTable==NULL) {
+                    ucnv_unload(baseSharedData);
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                    return;
+                }
+
+                uprv_memcpy(newStateTable, mbcsTable->stateTable, count*1024);
+
+                /* change all final single-byte entries to go to a new all-illegal state */
+                state=newStateTable[0];
+                for(i=0; i<256; ++i) {
+                    if(MBCS_ENTRY_IS_FINAL(state[i])) {
+                        state[i]=MBCS_ENTRY_TRANSITION(count, 0);
+                    }
+                }
+
+                /* build the new all-illegal state */
+                state=newStateTable[count];
+                for(i=0; i<256; ++i) {
+                    state[i]=MBCS_ENTRY_FINAL(0, MBCS_STATE_ILLEGAL, 0);
+                }
+                mbcsTable->stateTable=newStateTable;
+                mbcsTable->countStates=(uint8_t)(count+1);
+                mbcsTable->stateTableOwned=TRUE;
 
                 mbcsTable->outputType=MBCS_OUTPUT_DBCS_ONLY;
             }
@@ -1006,6 +1048,12 @@ _MBCSUnload(UConverterSharedData *sharedData) {
 
     if(mbcsTable->swapLFNLStateTable!=NULL) {
         uprv_free(mbcsTable->swapLFNLStateTable);
+    }
+    if(mbcsTable->stateTableOwned) {
+        uprv_free((void *)mbcsTable->stateTable);
+    }
+    if(mbcsTable->baseSharedData!=NULL) {
+        ucnv_unload(mbcsTable->baseSharedData);
     }
 }
 
@@ -2235,11 +2283,12 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
 #endif
 
 /*
- * This is a simple version of getNextUChar() that is used
+ * This is a simple version of _MBCSGetNextUChar() that is used
  * by other converter implementations.
+ * It only returns an "assigned" result if it consumes the entire input.
  * It does not use state from the converter, nor error codes.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
- * It does not handle conversion extensions (_extToU()).
+ * It handles conversion extensions but not GB 18030.
  *
  * Return value:
  * U+fffe   unassigned
@@ -2248,26 +2297,21 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
  */
 U_CFUNC UChar32
 _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
-                        const char **pSource, const char *sourceLimit,
+                        const char *source, int32_t length,
                         UBool useFallback) {
-    const uint8_t *source;
-
     const int32_t (*stateTable)[256];
     const uint16_t *unicodeCodeUnits;
 
     uint32_t offset;
     uint8_t state, action;
 
-    int32_t entry;
+    UChar32 c;
+    int32_t i, entry;
 
-    /* set up the local pointers */
-    source=(const uint8_t *)*pSource;
-    if(source>=(const uint8_t *)sourceLimit) {
+    if(length<=0) {
         /* no input at all: "illegal" */
         return 0xffff;
     }
-
-    /* ### TODO extension */
 
 #if 0
 /*
@@ -2278,10 +2322,15 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
  */
     /* use optimized function if possible */
     if(sharedData->mbcs.countStates==1) {
-        return _MBCSSingleSimpleGetNextUChar(sharedData, (uint8_t)(*(*pSource)++), useFallback);
+        if(length==1) {
+            return _MBCSSingleSimpleGetNextUChar(sharedData, (uint8_t)*source, useFallback);
+        } else {
+            return 0xffff; /* illegal: more than a single byte for an SBCS converter */
+        }
     }
 #endif
 
+    /* set up the local pointers */
     stateTable=sharedData->mbcs.stateTable;
     unicodeCodeUnits=sharedData->mbcs.unicodeCodeUnits;
 
@@ -2290,14 +2339,16 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
     state=sharedData->mbcs.dbcsOnlyState;
 
     /* conversion loop */
-    do {
-        entry=stateTable[state][*source++];
+    for(i=0;;) {
+        entry=stateTable[state][(uint8_t)source[i++]];
         if(MBCS_ENTRY_IS_TRANSITION(entry)) {
             state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
             offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
-        } else {
-            *pSource=(const char *)source;
 
+            if(i==length) {
+                return 0xffff; /* truncated character */
+            }
+        } else {
             /*
              * An if-else-if chain provides more reliable performance for
              * the most common cases compared to a switch.
@@ -2305,81 +2356,82 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
             action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
             if(action==MBCS_STATE_VALID_16) {
                 offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
-                entry=unicodeCodeUnits[offset];
-                if(entry!=0xfffe) {
-                    return (UChar32)entry;
+                c=unicodeCodeUnits[offset];
+                if(c!=0xfffe) {
+                    /* done */
                 } else if(UCNV_TO_U_USE_FALLBACK(cnv)) {
-                    return _MBCSGetFallback(&sharedData->mbcs, offset);
-                } else {
-                    return 0xfffe;
+                    c=_MBCSGetFallback(&sharedData->mbcs, offset);
+                /* else done with 0xfffe */
                 }
+                break;
             } else if(action==MBCS_STATE_VALID_DIRECT_16) {
                 /* output BMP code point */
-                return (UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                break;
             } else if(action==MBCS_STATE_VALID_16_PAIR) {
                 offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
-                entry=unicodeCodeUnits[offset++];
-                if(entry<0xd800) {
+                c=unicodeCodeUnits[offset++];
+                if(c<0xd800) {
                     /* output BMP code point below 0xd800 */
-                    return (UChar32)entry;
-                } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? entry<=0xdfff : entry<=0xdbff) {
+                } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? c<=0xdfff : c<=0xdbff) {
                     /* output roundtrip or fallback supplementary code point */
-                    return (UChar32)(((entry&0x3ff)<<10)+unicodeCodeUnits[offset]+(0x10000-0xdc00));
-                } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? (entry&0xfffe)==0xe000 : entry==0xe000) {
+                    c=(UChar32)(((c&0x3ff)<<10)+unicodeCodeUnits[offset]+(0x10000-0xdc00));
+                } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? (c&0xfffe)==0xe000 : c==0xe000) {
                     /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
-                    return unicodeCodeUnits[offset];
-                } else if(entry==0xffff) {
+                    c=unicodeCodeUnits[offset];
+                } else if(c==0xffff) {
                     return 0xffff;
                 } else {
-                    return 0xfffe;
+                    c=0xfffe;
                 }
+                break;
             } else if(action==MBCS_STATE_VALID_DIRECT_20) {
                 /* output supplementary code point */
-                return 0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
+                c=0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
+                break;
             } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
                 if(!TO_U_USE_FALLBACK(useFallback)) {
-                    return 0xfffe;
+                    c=0xfffe;
+                    break;
                 }
                 /* output BMP code point */
-                return (UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+                break;
             } else if(action==MBCS_STATE_FALLBACK_DIRECT_20) {
                 if(!TO_U_USE_FALLBACK(useFallback)) {
-                    return 0xfffe;
+                    c=0xfffe;
+                    break;
                 }
                 /* output supplementary code point */
-                return 0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
-            } else if(action==MBCS_STATE_CHANGE_ONLY) {
-                /*
-                 * This serves as a state change without any output.
-                 * It is useful for reading simple stateful encodings,
-                 * for example using just Shift-In/Shift-Out codes.
-                 * The 21 unused bits may later be used for more sophisticated
-                 * state transitions.
-                 */
-                if(sharedData->mbcs.dbcsOnlyState!=0) {
-                    /* SI/SO are illegal for DBCS-only conversion */
-                    return 0xffff;
-                }
-                if(source==(const uint8_t *)sourceLimit) {
-                    /* if there are only state changes, then return "unassigned" */
-                    return 0xfffe;
-                }
+                c=0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
+                break;
             } else if(action==MBCS_STATE_UNASSIGNED) {
-                return 0xfffe;
-            } else if(action==MBCS_STATE_ILLEGAL) {
-                return 0xffff;
-            } else {
-                /* reserved, must never occur */
+                c=0xfffe;
+                break;
             }
 
-            /* state change only - prepare for a new character */
-            state=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry); /* typically 0 */
-            offset=0;
+            /*
+             * forbid MBCS_STATE_CHANGE_ONLY for this function,
+             * and MBCS_STATE_ILLEGAL and reserved action codes
+             */
+            return 0xffff;
         }
-    } while(source<(const uint8_t *)sourceLimit);
+    }
 
-    *pSource=(const char *)source;
-    return 0xffff;
+    if(i!=length) {
+        /* illegal for this function: not all input consumed */
+        return 0xffff;
+    }
+
+    if(c==0xfffe) {
+        /* try an extension mapping */
+        const int32_t *cx=sharedData->mbcs.extIndexes;
+        if(cx!=NULL) {
+            return ucnv_extSimpleMatchToU(cx, source, length, useFallback);
+        }
+    }
+
+    return c;
 }
 
 /* MBCS-from-Unicode conversion functions ----------------------------------- */
@@ -3248,7 +3300,7 @@ getTrail:
                 }
                 break;
             case MBCS_OUTPUT_DBCS_ONLY:
-                /* 1/2-byte stateful table but only DBCS mappings used */
+                /* table with single-byte results, but only DBCS mappings used */
                 value=MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c);
                 if(value<=0xff) {
                     /* no mapping or SBCS result, not taken for DBCS-only */
@@ -3524,7 +3576,7 @@ unassigned:
  * conversion implementations.
  * It does not use the converter state nor call callbacks.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
- * It does not handle conversion extensions (_extFromU()).
+ * It handles conversion extensions but not GB 18030.
  *
  * It converts one single Unicode code point into codepage bytes, encoded
  * as one 32-bit value. The function returns the number of bytes in *pValue:
@@ -3545,8 +3597,6 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
     uint32_t stage2Entry;
     uint32_t value;
     int32_t length;
-
-    /* ### TODO extension mapping */
 
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
     if(c>=0x10000 && !(sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
@@ -3578,7 +3628,7 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
         }
         break;
     case MBCS_OUTPUT_DBCS_ONLY:
-        /* 1/2-byte stateful table but only DBCS mappings used */
+        /* table with single-byte results, but only DBCS mappings used */
         value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
         if(value<=0xff) {
             /* no mapping or SBCS result, not taken for DBCS-only */
@@ -3663,6 +3713,12 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
         *pValue=value;
         return length;
     } else {
+        const int32_t *cx=sharedData->mbcs.extIndexes;
+        if(cx!=NULL) {
+            return ucnv_extSimpleMatchFromU(cx, c, pValue, useFallback);
+        }
+
+        /* unassigned */
         return 0;
     }
 }

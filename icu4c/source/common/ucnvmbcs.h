@@ -221,7 +221,7 @@ typedef struct {
  */
 typedef struct UConverterMBCSTable {
     /* toUnicode */
-    uint8_t countStates, dbcsOnlyState;
+    uint8_t countStates, dbcsOnlyState, stateTableOwned;
     uint32_t countToUFallbacks;
 
     const int32_t (*stateTable)/*[countStates]*/[256];
@@ -258,12 +258,13 @@ typedef struct {
              fromUBytesLength;
 } _MBCSHeader;
 
-/**
+/*
  * This is a simple version of _MBCSGetNextUChar() that is used
  * by other converter implementations.
+ * It only returns an "assigned" result if it consumes the entire input.
  * It does not use state from the converter, nor error codes.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
- * It does not handle conversion extensions (_extToU()).
+ * It handles conversion extensions but not GB 18030.
  *
  * Return value:
  * U+fffe   unassigned
@@ -272,7 +273,7 @@ typedef struct {
  */
 U_CFUNC UChar32
 _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
-                        const char **pSource, const char *sourceLimit,
+                        const char *source, int32_t length,
                         UBool useFallback);
 
 /**
@@ -304,11 +305,12 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
 #define _MBCS_IS_LEAD_BYTE(sharedData, byte) \
     (UBool)MBCS_ENTRY_IS_TRANSITION((sharedData)->mbcs.stateTable[0][(uint8_t)(byte)])
 
-/**
+/*
  * This is another simple conversion function for internal use by other
  * conversion implementations.
  * It does not use the converter state nor call callbacks.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It handles conversion extensions but not GB 18030.
  *
  * It converts one single Unicode code point into codepage bytes, encoded
  * as one 32-bit value. The function returns the number of bytes in *pValue:
