@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/Attic/UCharacterIteratorTest.java,v $ 
-* $Date: 2003/05/24 01:39:09 $ 
-* $Revision: 1.3 $
+* $Date: 2003/05/24 01:47:30 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,6 @@ package com.ibm.icu.dev.test.lang;
 
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.UTF16;
 
 /**
 * Testing class for UCharacterIterator

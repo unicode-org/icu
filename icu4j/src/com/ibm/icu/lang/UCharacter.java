@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/05/24 00:48:08 $ 
-* $Revision: 1.74 $
+* $Date: 2003/05/24 01:47:30 $ 
+* $Revision: 1.75 $
 *
 *******************************************************************************
 */
@@ -2472,7 +2472,7 @@ public final class UCharacter
      */
     public static boolean isUnicodeIdentifierStart(int ch)
     {
-        /*int cat = */getType(ch);
+        /*int cat = getType(ch);*/
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) 
                  & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
