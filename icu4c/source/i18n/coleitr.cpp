@@ -24,24 +24,15 @@
 *                        private constructor and no calls are made to it
 */
 
-// #include "unicode/sortkey.h"
 #include "unicode/coleitr.h"
 #include "ucol_imp.h"
 #include "cmemory.h"
 
-// #include "unicode/chariter.h"
-// #include "tables.h"
-// #include "unicode/normlzr.h"
-// #include "unicode/unicode.h"
-// #include "tcoldata.h"
-// #include "ucmp32.h"
 
 /* Constants --------------------------------------------------------------- */
 
 /* synwee : public can't remove */
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
-// int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
-// int32_t const CollationElementIterator::NO_MORE_CES = 0x00010101;
 
 /* CollationElementIterator public constructor/destructor ------------------ */
 
@@ -49,13 +40,16 @@ CollationElementIterator::CollationElementIterator(
                                          const CollationElementIterator& other) 
                                          : isDataOwned_(TRUE)
 {
+  UErrorCode status = U_ZERO_ERROR;
+  m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, &status);
   *this = other;
 }
 
 CollationElementIterator::~CollationElementIterator()
 {
-  if (isDataOwned_)
+  if (isDataOwned_) {
     ucol_closeElements(m_data_);
+  }
 }
 
 /* CollationElementIterator public methods --------------------------------- */
@@ -72,84 +66,6 @@ UTextOffset CollationElementIterator::getOffset() const
 */
 int32_t CollationElementIterator::next(UErrorCode& status)
 {
-  /*
-  if (text == NULL || U_FAILURE(status))
-    return NULLORDER;
-    
-  // Update the decomposition mode if necessary.
-  text->setMode(orderAlias->getDecomposition());
-    
-  if (bufferAlias != NULL)
-  {
-    // bufferAlias needs a bit of an explanation.
-    // When we hit an expanding character in the text, we call the order's
-    // getExpandValues method to retrieve an array of the orderings for all of 
-    // the characters in the expansion (see the end of this method).
-    // The first ordering is returned, and an alias to the orderings array is 
-    // saved so that the remaining orderings can be returned on subsequent calls 
-    // to next. So, if the expanding buffer is not exhausted, all we have to do 
-    // here is return the next ordering in the buffer.  
-    if (expIndex < bufferAlias->size())
-      return strengthOrder(bufferAlias->at(expIndex++));
-    else
-      bufferAlias = NULL;
-  }
-
-  // Gets the next character from the string using decomposition iterator.
-  UChar32 ch = text->current();
-  text->next();
-
-  if (U_FAILURE(status))
-    return NULLORDER;
-    
-
-  if (ch == Normalizer::DONE)
-    return NULLORDER;
-    
-  // Ask the collator for this character's ordering.
-  // Used to be RuleBasedCollator.getUnicodeOrder(). 
-  // It can't be inlined in tblcoll.h file unfortunately.
-  
-    int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
-
-  if (value == RuleBasedCollator::UNMAPPED)
-  {
-    // Returned an "unmapped" flag and save the character so it can be 
-    // returned next time this method is called.
-    if (ch == 0x0000) 
-      return ch;
-    // \u0000 is not valid in C++'s UnicodeString
-    ownBuffer->at(0) = UNMAPPEDCHARVALUE;
-    ownBuffer->at(1) = ch << 16;
-    bufferAlias = ownBuffer;
-  }
-  else 
-  {
-    if (value >= RuleBasedCollator::CONTRACTCHARINDEX)
-      value = nextContractChar(ch, status);
-    if (value >= RuleBasedCollator::EXPANDCHARINDEX)
-      bufferAlias = orderAlias->getExpandValueList(value);
-      
-    if (isThaiPreVowel(ch))
-    {
-      UChar32 consonant = text->current();
-      text->next();
-      if (isThaiBaseConsonant(consonant))
-        bufferAlias = makeReorderedBuffer((UChar)consonant, value, bufferAlias,
-                                          TRUE, status);
-      else
-        text->previous();
-    }
-  }
-
-  if (bufferAlias != NULL) 
-  {
-    expIndex = 1;
-    value = bufferAlias->at(0);
-  }
-
-  return strengthOrder(value);
-  */
   return ucol_next(m_data_, &status);
 }
 
@@ -165,24 +81,18 @@ UBool CollationElementIterator::operator==(
   if (this == &that)
     return TRUE;
   
-  /*
-  if (*text != *(that.text))
-    return FALSE;
-    
-  if (((bufferAlias == NULL) != (that.bufferAlias == NULL)) ||
-      (bufferAlias != NULL && *bufferAlias != *(that.bufferAlias)))
-    return FALSE;
-    
-  if (expIndex != that.expIndex)
-    return FALSE;
-    
-  if (orderAlias != that.orderAlias)
-    return FALSE;
-    
-  return TRUE;
-  */
+  if (m_data_ == that.m_data_)
+    return TRUE;
   
-  return m_data_ == that.m_data_;
+  return (this->m_data_->normalization_ == that.m_data_->normalization_ &&
+    this->m_data_->length_ == that.m_data_->length_ &&
+    this->m_data_->reset_  == that.m_data_->reset_ &&
+    uprv_memcmp(this->m_data_->iteratordata_.string, 
+                that.m_data_->iteratordata_.string,
+                this->m_data_->length_) == 0 &&
+    this->getOffset() == that.getOffset() &&  
+    this->m_data_->iteratordata_.isThai == that.m_data_->iteratordata_.isThai &&
+    this->m_data_->iteratordata_.coll == that.m_data_->iteratordata_.coll);
 }
 
 /**
@@ -193,66 +103,6 @@ UBool CollationElementIterator::operator==(
 */
 int32_t CollationElementIterator::previous(UErrorCode& status)
 {
-  /*
-  if (text == NULL || U_FAILURE(status))
-    return NULLORDER;
-    
-  text->setMode(orderAlias->getDecomposition());
-
-  if (bufferAlias != NULL)
-  {
-    if (expIndex > 0)
-      return strengthOrder(bufferAlias->at(--expIndex));
-      
-    bufferAlias = NULL;
-  }
-
-  UChar32 ch = text->previous();
-
-  if (ch == Normalizer::DONE)
-    return NULLORDER;
-    
-  // Used to be RuleBasedCollator.getUnicodeOrder(). It can't be inlined in 
-  // tblcoll.h file unfortunately.
-  
-  int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
-
-  if (value == RuleBasedCollator::UNMAPPED)
-  {
-    if (ch == 0x0000) 
-      return ch;
-    
-    ownBuffer->at(0) = UNMAPPEDCHARVALUE;
-    ownBuffer->at(1) = ch << 16;
-    bufferAlias = ownBuffer;
-  }
-  else 
-  {
-    if (value >= RuleBasedCollator::CONTRACTCHARINDEX)
-      value = prevContractChar(ch, status);
-      
-    if (value >= RuleBasedCollator::EXPANDCHARINDEX)
-      bufferAlias = orderAlias->getExpandValueList(value);
-      
-    if (isThaiBaseConsonant(ch)) 
-    {
-      UChar32 vowel = text->previous();
-      if (isThaiPreVowel(vowel))
-        bufferAlias = makeReorderedBuffer((UChar)vowel, value, bufferAlias,
-                                          FALSE, status);
-      else
-        text->next();
-    }
-  }
-
-  if (bufferAlias != NULL) 
-  {
-    expIndex = bufferAlias->size()-1;
-    value = bufferAlias->at(expIndex);
-  }
-
-  return strengthOrder(value);
-  */
   return ucol_previous(m_data_, &status);
 }
 
@@ -261,31 +111,12 @@ int32_t CollationElementIterator::previous(UErrorCode& status)
 */
 void CollationElementIterator::reset()
 {
-  /*
-  if (text != NULL)
-  {
-    text->reset();
-    text->setMode(orderAlias->getDecomposition());
-  }
-
-  bufferAlias = NULL;
-  expIndex = 0;
-  */
   ucol_reset(m_data_);
 }
 
 void CollationElementIterator::setOffset(UTextOffset newOffset, 
                                          UErrorCode& status)
 {
-  /*
-  if (U_FAILURE(status))
-    return;
-    
-  if (text != NULL)
-    text->setIndex(newOffset);
-    
-  bufferAlias = NULL;
-  */
   ucol_setOffset(m_data_, newOffset, &status);
 }
 
@@ -297,17 +128,6 @@ void CollationElementIterator::setText(const UnicodeString& source,
 {
   if (U_FAILURE(status))
     return;
-  /*
-  bufferAlias = 0;
-
-  if (text == NULL)
-    text = new Normalizer(source, orderAlias->getDecomposition());
-  else
-  {
-    text->setText(source, status);
-    text->setMode(orderAlias->getDecomposition());
-  }
-  */
   int32_t length = source.length();
   UChar *string = new UChar[length];
   source.extract(0, length, string);
@@ -317,7 +137,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
   if (m_data_->iteratordata_.isWritable && 
       m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
-  init_collIterate(m_data_->collator_, string, length, &m_data_->iteratordata_, TRUE);
+  init_collIterate(m_data_->iteratordata_.coll, string, length, &m_data_->iteratordata_, TRUE);
 }
 
 // Sets the source to the new character iterator.
@@ -327,17 +147,6 @@ void CollationElementIterator::setText(CharacterIterator& source,
   if (U_FAILURE(status)) 
     return;
     
-  /*
-  bufferAlias = 0;
-
-  if (text == NULL)
-    text = new Normalizer(source, orderAlias->getDecomposition());
-  else
-  {
-    text->setMode(orderAlias->getDecomposition());
-    text->setText(source, status);
-  }
-  */
   int32_t length = source.getLength();
   UChar *buffer = new UChar[length];
   /* 
@@ -352,12 +161,12 @@ void CollationElementIterator::setText(CharacterIterator& source,
   if (m_data_->iteratordata_.isWritable && 
       m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
-  init_collIterate(m_data_->collator_, buffer, length, &m_data_->iteratordata_, TRUE);
+  init_collIterate(m_data_->iteratordata_.coll, buffer, length, &m_data_->iteratordata_, TRUE);
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const
 {
-  UCollationStrength s = ucol_getStrength(m_data_->collator_);
+  UCollationStrength s = ucol_getStrength(m_data_->iteratordata_.coll);
   // Mask off the unwanted differences.
   if (s == UCOL_PRIMARY)
     order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
@@ -398,24 +207,6 @@ CollationElementIterator::CollationElementIterator(
   if (U_FAILURE(status))
     return;
  
-  /*
-  if ( sourceText.length() != 0 ) 
-  {
-    // A CollationElementIterator is really a two-layered beast.
-    // Internally it uses a Normalizer to munge the source text into a form 
-    // where all "composed" Unicode characters (such as ü) are split into a 
-    // normal character and a combining accent character.  
-    // Afterward, CollationElementIterator does its own processing to handle
-    // expanding and contracting collation sequences, ignorables, and so on.
-    
-    Normalizer::EMode decomp = (order->getStrength() == Collator::IDENTICAL)
-                               ? Normalizer::NO_OP : order->getDecomposition();
-      
-    text = new Normalizer(sourceText, decomp);
-    if (text == NULL)
-      status = U_MEMORY_ALLOCATION_ERROR;
-  }
-  */
   int32_t length = sourceText.length();
   UChar *string = new UChar[length];
   /* 
@@ -481,220 +272,33 @@ const CollationElementIterator& CollationElementIterator::operator=(
 {
   if (this != &other)
   {
-    /*
-    expIndex = other.expIndex;
-    delete text;
-    text = (Normalizer*)other.text->clone();
+    this->m_data_->normalization_ = other.m_data_->normalization_;
+    this->m_data_->length_        = other.m_data_->length_;
+    this->m_data_->reset_         = other.m_data_->reset_;
+    
 
-    if (other.bufferAlias == other.ownBuffer) 
-    {
-      *ownBuffer = *other.ownBuffer;
-      bufferAlias = ownBuffer;
-    } 
-    else 
-      if (other.bufferAlias != NULL && other.bufferAlias == other.reorderBuffer) 
-      {
-        if (reorderBuffer == NULL)
-          reorderBuffer = new VectorOfInt(*other.reorderBuffer);
-        else 
-          *reorderBuffer = *other.reorderBuffer;
-          
-        bufferAlias = reorderBuffer;
-      } 
-      else 
-        bufferAlias = other.bufferAlias;
-        
-      orderAlias = other.orderAlias;
-    */
-    this->m_data_      = other.m_data_;
+    this->m_data_->iteratordata_.string   = other.m_data_->iteratordata_.string;
+    this->m_data_->iteratordata_.start    = other.m_data_->iteratordata_.start;
+    this->m_data_->iteratordata_.len      = other.m_data_->iteratordata_.len;
+    this->m_data_->iteratordata_.pos      = other.m_data_->iteratordata_.pos;
+    this->m_data_->iteratordata_.toReturn = other.m_data_->iteratordata_.CEs + 
+          (other.m_data_->iteratordata_.toReturn - other.m_data_->iteratordata_.CEs);
+    this->m_data_->iteratordata_.CEpos    = other.m_data_->iteratordata_.CEs + 
+          (other.m_data_->iteratordata_.CEpos - other.m_data_->iteratordata_.CEs);
+    uprv_memcpy(this->m_data_->iteratordata_.CEs, other.m_data_->iteratordata_.CEs, 
+                UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
+    this->m_data_->iteratordata_.isThai   = other.m_data_->iteratordata_.isThai;
+    this->m_data_->iteratordata_.isWritable = other.m_data_->iteratordata_.isWritable;
+
+    uprv_memcpy(this->m_data_->iteratordata_.stackWritableBuffer, 
+                other.m_data_->iteratordata_.stackWritableBuffer, 
+                UCOL_WRITABLE_BUFFER_SIZE * sizeof(UChar));
+    /* writablebuffer is not used at the moment, not used */
+    this->m_data_->iteratordata_.coll = other.m_data_->iteratordata_.coll;
     this->isDataOwned_ = FALSE;
   }
 
   return *this;
 }
 
-/**
- * Get the ordering priority of the next contracting character in the
- * string.
- * @param ch the starting character of a contracting character token
- * @return the next contracting character's ordering.  Returns NULLORDER
- * if the end of string is reached.
- */
-/*
-synwee : removed 
-int32_t
-CollationElementIterator::nextContractChar(UChar32 ch,
-                                           UErrorCode& status)
-{
-    // First get the ordering of this single character
-    VectorOfPToContractElement *list = orderAlias->getContractValues((UChar)ch);
-    EntryPair *pair = (EntryPair *)list->at(0);
-    int32_t order = pair->value;
 
-    // Now iterate through the chars following it and
-    // look for the longest match
-    key.remove();
-    key += ch;
-
-    while ((ch = text->current()) != Normalizer::DONE)
-    {
-        if (U_FAILURE(status))
-        {
-            return NULLORDER;
-        }
-
-        key += ch;
-
-        int32_t n = RuleBasedCollator::getEntry(list, key, TRUE);
-
-        if (n == RuleBasedCollator::UNMAPPED)
-        {
-            break;
-        }
-        text->next();
-
-        pair = (EntryPair *)list->at(n);
-        order = pair->value;
-    }
-
-    return order;
-}
-*/
-
-/**
- * Get the ordering priority of the previous contracting character in the
- * string.
- * @param ch the starting character of a contracting character token
- * @return the next contracting character's ordering.  Returns NULLORDER
- * if the end of string is reached.
- */
-/* synwee : removed
-int32_t CollationElementIterator::prevContractChar(UChar32 ch,
-                                                   UErrorCode &status)
-{
-    // First get the ordering of this single character
-    VectorOfPToContractElement *list = orderAlias->getContractValues((UChar)ch);
-    EntryPair *pair = (EntryPair *)list->at(0);
-    int32_t order = pair->value;
-
-    // Now iterate through the chars following it and
-    // look for the longest match
-    key.remove();
-    key += ch;
-
-    while ((ch = text->previous()) != Normalizer::DONE)
-    {
-        key += ch;
-
-        int32_t n = RuleBasedCollator::getEntry(list, key, FALSE);
-
-        if (n == RuleBasedCollator::UNMAPPED)
-        {
-            ch = text->next();
-
-            if (U_FAILURE(status))
-            {
-                return NULLORDER;
-            }
-
-            break;
-        }
-
-        pair = (EntryPair *)list->at(n);
-        order = pair->value;
-    }
-
-    return order;
-}
-*/
-
-/**
- * This method produces a buffer which contains the collation
- * elements for the two characters, with colFirst's values preceding
- * another character's.  Presumably, the other character precedes colFirst
- * in logical
- * order (otherwise you wouldn't need this method would you?).
- * The assumption is that the other char's value(s) have already been
- * computed.  If this char has a single element it is passed to this
- * method as lastValue, and lastExpasion is null.  If it has an
- * expasion it is passed in lastExpansion, and colLastValue is ignored.
- * This method may return the ownBuffer array as its value so ownBuffer
- * had better not be in use anywhere else.
- */
-/*
-VectorOfInt* CollationElementIterator::makeReorderedBuffer(UChar colFirst,
-                                                           int32_t lastValue,
-                                                           VectorOfInt* lastExpansion,
-                                                           UBool forward,
-                                                           UErrorCode& status) {
-
-    VectorOfInt* result;
-
-    int32_t firstValue = ucmp32_get(orderAlias->data->mapping, colFirst);
-    if (firstValue >= RuleBasedCollator::CONTRACTCHARINDEX) {
-        firstValue = forward ? nextContractChar(colFirst, status)
-                             : prevContractChar(colFirst, status);
-    }
-
-    VectorOfInt* firstExpansion = NULL;
-    if (firstValue >= RuleBasedCollator::EXPANDCHARINDEX) {
-        firstExpansion = orderAlias->getExpandValueList(firstValue);
-    }
-
-    if (!forward) {
-        int32_t temp1 = firstValue;
-        firstValue = lastValue;
-        lastValue = temp1;
-        VectorOfInt* temp2 = firstExpansion;
-        firstExpansion = lastExpansion;
-        lastExpansion = temp2;
-    }
-
-    if (firstExpansion == NULL && lastExpansion == NULL) {
-        ownBuffer->at(0) = firstValue;
-        ownBuffer->at(1) = lastValue;
-        result = ownBuffer;
-    }
-    else {
-        int32_t firstLength = firstExpansion==NULL? 1 : firstExpansion->size();
-        int32_t lastLength = lastExpansion==NULL? 1 : lastExpansion->size();
-        if (reorderBuffer == NULL) {
-            reorderBuffer = new VectorOfInt(firstLength+lastLength);
-        }
-        // reorderdBuffer gets reused for the life of this object.
-        // Since its internal buffer only grows, there is a danger
-        // that it will get really, really big, and never shrink.  If
-        // this is actually happening, insert code here to check for
-        // the condition.  Something along the lines of:
-        //! else if (reorderBuffer->size() >= 256 &&
-        //!          (firstLength+lastLength) < 16) {
-        //!     delete reorderBuffer;
-        //!     reorderBuffer = new VectorOfInt(firstLength+lastLength);
-        //! }
-        // The specific numeric values need to be determined
-        // empirically. [aliu]
-        result = reorderBuffer;
-
-        if (firstExpansion == NULL) {
-            result->atPut(0, firstValue);
-        }
-        else {
-            // System.arraycopy(firstExpansion, 0, result, 0, firstLength);
-            *result = *firstExpansion;
-        }
-
-        if (lastExpansion == NULL) {
-            result->atPut(firstLength, lastValue);
-        }
-        else {
-            // System.arraycopy(lastExpansion, 0, result, firstLength, lastLength);
-            for (int32_t i=0; i<lastLength; ++i) {
-                result->atPut(firstLength + i, lastExpansion->at(i));
-            }
-        }
-        result->setSize(firstLength+lastLength);
-    }
-
-    return result;
-}
-*/

@@ -52,8 +52,6 @@ ucol_openElements(const UCollator  *coll,
 
   result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
 
-  result->collator_ = coll;
-  
   /* gets the correct length of the null-terminated string */
   if (textLength == -1) {
     textLength = u_strlen(text);
@@ -61,6 +59,8 @@ ucol_openElements(const UCollator  *coll,
 
   result->length_ = textLength;
   result->reset_   = TRUE;
+  result->normalization_ = UNORM_DEFAULT;
+
   init_collIterate(coll, text, textLength, &result->iteratordata_, FALSE);
 
   return result;
@@ -121,13 +121,13 @@ ucol_next(UCollationElements *elems,
       {                        
         UChar ch = *(elems->iteratordata_).pos++;     
         if (ch <= 0xFF)
-          (result) = (elems->collator_)->latinOneMapping[ch];                                          
+          (result) = (elems->iteratordata_.coll)->latinOneMapping[ch];                                          
         else
-          (result) = ucmp32_get((elems->collator_)->mapping, ch);                                      
+          (result) = ucmp32_get((elems->iteratordata_.coll)->mapping, ch);                                      
                                                                                     
         if((result) >= UCOL_NOT_FOUND) 
         {
-          (result) = getSpecialCE((elems->collator_), (result), 
+          (result) = getSpecialCE((elems->iteratordata_.coll), (result), 
                                   &(elems->iteratordata_), (status));        
           if ((result) == UCOL_NOT_FOUND)
             (result) = ucol_getNextUCA(ch, &(elems->iteratordata_), (status));                                                                            
@@ -136,7 +136,7 @@ ucol_next(UCollationElements *elems,
       else
         (result) = UCOL_NO_MORE_CES;
 #else
-      UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
+      UCOL_GETNEXTCE(result, elems->iteratordata_.coll, elems->iteratordata_, status);
 #endif
   
   if (result == UCOL_NO_MORE_CES) {
@@ -163,7 +163,7 @@ ucol_previous(UCollationElements *elems,
     elems->reset_ = FALSE;
 
 #ifdef _DEBUG
-    const UCollator   *coll  = elems->collator_;
+    const UCollator   *coll  = elems->iteratordata_.coll;
           collIterate *data  = &(elems->iteratordata_);
           int32_t     length = elems->length_;
 
@@ -208,7 +208,7 @@ ucol_previous(UCollationElements *elems,
       }                                                                        
     } 
 #else
-    UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
+    UCOL_GETPREVCE(result, elems->iteratordata_.coll, elems->iteratordata_, 
                    elems->length_, status);
 #endif
     
@@ -225,7 +225,7 @@ ucol_getMaxExpansion(const UCollationElements *elems,
                            int32_t            order)
 {
   uint8_t result;
-  UCOL_GETMAXEXPANSION(elems->collator_, order, result);
+  UCOL_GETMAXEXPANSION(elems->iteratordata_.coll, order, result);
   return result;
 }
  
@@ -251,7 +251,7 @@ ucol_setText(      UCollationElements *elems,
     uprv_free(elems->iteratordata_.string);
   }
  
-  init_collIterate(elems->collator_, text, textLength, &elems->iteratordata_, FALSE);
+  init_collIterate(elems->iteratordata_.coll, text, textLength, &elems->iteratordata_, FALSE);
 
   elems->reset_   = TRUE;
 }
