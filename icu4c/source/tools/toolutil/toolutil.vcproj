@@ -39,11 +39,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu26.dll"
+				OutputFile="..\..\..\bin\icutu28.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\..\..\..\lib/icutu26.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib/icutu28.pdb"
 				ImportLibrary="..\..\..\lib/icutu.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -96,12 +96,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu26d.dll"
+				OutputFile="..\..\..\bin\icutu28d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/icutu26d.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib/icutu28d.pdb"
 				ImportLibrary="..\..\..\lib/icutud.lib"/>
 			<Tool
 				Name="VCMIDLTool"
