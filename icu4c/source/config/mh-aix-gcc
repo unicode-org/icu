@@ -1,5 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for gcc)
+##  
 ## Copyright (c) IBM, Ken Foskey, and others. All rights reserved.
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
