@@ -37,15 +37,22 @@ main(int argc, char *argv[]) {
   int printUsage = 0;
   int option = 1;
   char *arg;
+  char *outputDir = NULL; /* NULL = no output directory, use the default one(data) */
   
-  
-  /* parse the options */
+  if(argc > 3)
+	  printUsage=1;
+   
+   /* parse the options */
    for(option = 1; option < argc; ++option) {
     arg = argv[option];
     
     /* usage info */
     if(uprv_strcmp(arg, "-h") == 0 || uprv_strcmp(arg, "--help") == 0) {
       printUsage = 1;
+    }
+
+	else if(uprv_strcmp(arg, "-D") == 0 || uprv_strcmp(arg, "--dir") == 0) {
+        outputDir = argv[++option];
     }
 
     /* all arguments after -- are not options */
@@ -70,28 +77,26 @@ main(int argc, char *argv[]) {
     usage();
     return 0;
   }
-
-  printf("Generating the test memory mapped file");
-  createData();
+  printf("Generating the test memory mapped file"); 
+  createData(outputDir);
   return 0;
 }
 /* Usage information */
 static void
 usage()
 {  
-  /*("Usage: gentest [OPTIONS] [PATH]");*/
-  fprintf(stderr, "Usage: gentest [OPTIONS]\n"
+  /*("Usage: gentest [OPTIONS] [DIR]");*/
+  fprintf(stderr, "Usage: gentest [OPTIONS] [DIR]\n"
 	              "\tCreates the memory mapped file \"" DATA_NAME "." DATA_TYPE "\" for testing purpose\n"
 				  "Options: \n"
-				  "\t-h, --help        Print this message and exit.");
-  
-  /*puts -d, --directory         Create the memory mapped file in the specified directory path");*/
+				  "\t-h, --help        Print this message and exit.\n"
+  				  "\t-D, --dir         Store the created memory mapped file under 'dir'.\n");
 
 }
 
 /* Create data file ----------------------------------------------------- */
 static void
-createData() {
+createData(const char* outputDirectory) {
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
 	char stringValue[]={'Y', 'E', 'A', 'R', '\0'};
@@ -100,7 +105,7 @@ createData() {
     long dataLength;
 	uint32_t size;
 
-    pData=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
+    pData=udata_create(DATA_TYPE, DATA_NAME, outputDirectory, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gentest: unable to create data memory, error %d\n", errorCode);
