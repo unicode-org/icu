@@ -578,11 +578,11 @@ callback:
     byteOne=scsu->toUByteOne;
 
     /* update target and deal with offsets if necessary */
-    offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
+    offsets=ucnv_updateCallbackOffsets(offsets, (int32_t)(pArgs->target-target), sourceIndex);
     target=pArgs->target;
 
     /* update the source pointer and index */
-    sourceIndex=nextSourceIndex+((const uint8_t *)pArgs->source-source);
+    sourceIndex=(int32_t)(nextSourceIndex+((const uint8_t *)pArgs->source-source));
     source=(const uint8_t *)pArgs->source;
 
     /*
@@ -1112,7 +1112,7 @@ _SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     /* get the state machine state */
@@ -1594,13 +1594,13 @@ callback:
     c=cnv->fromUSurrogateLead;
 
     /* update target and deal with offsets if necessary */
-    offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
+    offsets=ucnv_updateCallbackOffsets(offsets, (int32_t)(((uint8_t *)pArgs->target)-target), sourceIndex);
     target=(uint8_t *)pArgs->target;
 
     /* update the source pointer and index */
-    sourceIndex=nextSourceIndex+(pArgs->source-source);
+    sourceIndex=(int32_t)(nextSourceIndex+(pArgs->source-source));
     source=pArgs->source;
-    targetCapacity=(uint8_t *)pArgs->targetLimit-target;
+    targetCapacity=(int32_t)((uint8_t *)pArgs->targetLimit-target);
 
     /*
      * If the callback overflowed the target, then we need to
@@ -1660,7 +1660,7 @@ _SCSUFromUnicode(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
 
     /* get the state machine state */
     isSingleByteMode=scsu->fromUIsSingleByteMode;
@@ -2081,7 +2081,7 @@ callback:
     target=(uint8_t *)pArgs->target;
 
     source=pArgs->source;
-    targetCapacity=(uint8_t *)pArgs->targetLimit-target;
+    targetCapacity=(int32_t)((uint8_t *)pArgs->targetLimit-target);
 
     /*
      * If the callback overflowed the target, then we need to

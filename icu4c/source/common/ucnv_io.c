@@ -577,7 +577,7 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
             defaultConverterName=name;
         } else {
             /* do not set the name if the alias lookup failed and it is too long */
-            int32_t length=uprv_strlen(converterName);
+            int32_t length=(int32_t)(uprv_strlen(converterName));
             if(length<sizeof(defaultConverterNameBuffer)) {
                 /* it was not found as an alias, so copy it - accept an empty name */
                 UBool didLock;
