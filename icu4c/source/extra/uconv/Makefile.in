@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2000, International Business Machines
+## *   Copyright (C) 1999-2003, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -42,6 +42,10 @@ TARGET = uconv
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+
+ifeq ($(PKGDATA_OPTS),)
+PKGDATA_OPTS = -O $(top_builddir)/data/icupkg.inc
+endif
 
 ## generic settings for data - common.
 PKGMODE=common
@@ -117,7 +121,7 @@ pkgdata.inc: $(srcdir)/pkgdata.inc.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)  $(UCONVMSG_LIB)
-	$(LINK.cc) -o $@ $(OBJECTS) $(LIBS)
+	$(LINK.cc) $(OUTOPT)$@ $(OBJECTS) $(LIBS)
 
 resfiles: $(RESFILES) package-resfiles
 
@@ -127,7 +131,7 @@ endif
 
 
 package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) $(PKGDATA_OPTS) -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
@@ -158,8 +162,5 @@ install-man: $(ALL_MAN_FILES)
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-# Don't do this.  This is a problem when changing platforms.
-#ifneq ($(MAKECMDGOALS),distclean)
-#-include $(DEPS)
-#endif
+
 
