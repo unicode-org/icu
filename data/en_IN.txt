@@ -1,0 +1,42 @@
+en_IN {
+    AmPmMarkers { 
+            "AM",
+            "PM",
+    }
+    CurrencyElements { 
+            "\u20a8",
+            "INR ",
+            ".",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss 'o''clock' z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "dd-MMM-yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+   
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+            "#,##0%",
+    }
+
+}

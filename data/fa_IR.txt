@@ -1,0 +1,38 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+fa_IR {
+   Version { "x0.0" }
+
+    AmPmMarkers { 
+            "صبح",
+            "عصر",
+    }
+    CurrencyElements { 
+            "¤",  //U00A4
+            "IRR ",
+            "٫",
+    }
+    DateTimePatterns { 
+            "ss:mm:h a",
+            "ss:mm:HH",
+            "ss:mm:HH",
+            "ss:mm:HH",
+            "dd⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
+            "{1} {0}",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.#¤;#,##0.#- ¤",
+            "#,##0%",
+    }
+            LocaleID{ "0429"}
+}
