@@ -78,6 +78,20 @@ void CompoundTransliterator::init(const UnicodeString& id,
         }
     }
     delete[] list;
+
+    // If the direction is UTRANS_REVERSE then we need to fix
+    // the ID.
+    if (direction == UTRANS_REVERSE) {
+        UnicodeString newID;
+        for (int32_t i=0; i<count; ++i) {
+            if (i > 0) {
+                newID.append(ID_DELIM);
+            }
+            newID.append(trans[i]->getID());
+        }
+        setID(newID);
+    }
+
     computeMaximumContextLength();
     adoptFilter(adoptedFilter);
 }
