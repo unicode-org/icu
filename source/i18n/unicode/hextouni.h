@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+#ifdef ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -182,5 +184,6 @@ public:
 inline HexToUnicodeTransliterator::~HexToUnicodeTransliterator() {}
 
 U_NAMESPACE_END
+#endif /* ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES */
 
 #endif
