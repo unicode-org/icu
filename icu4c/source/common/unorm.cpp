@@ -839,9 +839,8 @@ _decompose(UChar *&dest, int32_t &destCapacity,
            UErrorCode *pErrorCode) {
     UChar buffer[3];
     const UChar *limit, *prevSrc, *p;
-    UChar *reorderStart;
     uint32_t norm32, ccOrQCMask, qcMask;
-    int32_t destIndex, length;
+    int32_t destIndex, reorderStartIndex, length;
     UChar c, c2, minNoMaybe;
     uint8_t cc, prevCC, trailCC;
     UBool canGrow;
@@ -855,9 +854,8 @@ _decompose(UChar *&dest, int32_t &destCapacity,
     }
 
     /* initialize */
-    reorderStart=dest;
     ccOrQCMask=_NORM_CC_MASK|qcMask;
-    destIndex=0;
+    destIndex=reorderStartIndex=0;
     prevCC=0;
 
     /* avoid compiler warnings */
@@ -906,7 +904,7 @@ _decompose(UChar *&dest, int32_t &destCapacity,
                 uprv_memcpy(dest+destIndex, prevSrc, length*U_SIZEOF_UCHAR);
             }
             destIndex+=length;
-            reorderStart=dest+destIndex; /* not valid if dest==NULL */
+            reorderStartIndex=destIndex;
         }
 
         /* end of source reached? */
@@ -1004,7 +1002,7 @@ _decompose(UChar *&dest, int32_t &destCapacity,
                 if(cc!=0 && cc<prevCC) {
                     /* (c, c2) is out of order with respect to the preceding text */
                     destIndex+=length;
-                    trailCC=_insertOrdered(reorderStart, reorderSplit, dest+destIndex, c, c2, cc);
+                    trailCC=_insertOrdered(dest+reorderStartIndex, reorderSplit, dest+destIndex, c, c2, cc);
                 } else {
                     /* just append (c, c2) */
                     dest[destIndex++]=c;
@@ -1017,7 +1015,7 @@ _decompose(UChar *&dest, int32_t &destCapacity,
                 if(cc!=0 && cc<prevCC) {
                     /* the decomposition is out of order with respect to the preceding text */
                     destIndex+=length;
-                    trailCC=_mergeOrdered(reorderStart, reorderSplit, p, p+length);
+                    trailCC=_mergeOrdered(dest+reorderStartIndex, reorderSplit, p, p+length);
                 } else {
                     /* just append the decomposition */
                     do {
@@ -1033,7 +1031,7 @@ _decompose(UChar *&dest, int32_t &destCapacity,
 
         prevCC=trailCC;
         if(prevCC==0) {
-            reorderStart=dest+destIndex;
+            reorderStartIndex=destIndex;
         }
     }
 
@@ -1041,8 +1039,8 @@ _decompose(UChar *&dest, int32_t &destCapacity,
     return destIndex;
 }
 
-U_CFUNC int32_t
-unorm_decompose(UChar *dest, int32_t destCapacity,
+U_CAPI int32_t U_EXPORT2
+unorm_decompose(UChar **pDest, int32_t *pDestCapacity,
                 const UChar *src, int32_t srcLength,
                 UBool compat, UBool ignoreHangul,
                 UGrowBuffer *growBuffer, void *context,
@@ -1054,14 +1052,14 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
         return 0;
     }
 
-    destIndex=_decompose(dest, destCapacity,
+    destIndex=_decompose(*pDest, *pDestCapacity,
                          src, srcLength,
                          compat, ignoreHangul,
                          growBuffer, context,
                          trailCC,
                          pErrorCode);
 
-    return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
+    return u_terminateUChars(*pDest, *pDestCapacity, destIndex, pErrorCode);
 }
 
 /* make FCD ----------------------------------------------------------------- */
@@ -1120,12 +1118,11 @@ _findSafeFCD(const UChar *src, const UChar *limit, uint16_t fcd16) {
 
 static uint8_t
 _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
-              UChar *dest, int32_t &destIndex, int32_t &destCapacity,
+              UChar *&dest, int32_t &destIndex, int32_t &destCapacity,
               UBool canGrow, UGrowBuffer *growBuffer, void *context) {
-    UChar *reorderStart;
     const UChar *p;
     uint32_t norm32;
-    int32_t length;
+    int32_t reorderStartIndex, length;
     UChar c, c2;
     uint8_t cc, prevCC, trailCC;
 
@@ -1140,7 +1137,7 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
      *
      * we also do not need to check for c==0 because we have an established decompLimit
      */
-    reorderStart=dest+destIndex;
+    reorderStartIndex=destIndex;
     prevCC=0;
 
     while(src<decompLimit) {
@@ -1198,7 +1195,7 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
                 if(cc!=0 && cc<prevCC) {
                     /* (c, c2) is out of order with respect to the preceding text */
                     destIndex+=length;
-                    trailCC=_insertOrdered(reorderStart, reorderSplit, dest+destIndex, c, c2, cc);
+                    trailCC=_insertOrdered(dest+reorderStartIndex, reorderSplit, dest+destIndex, c, c2, cc);
                 } else {
                     /* just append (c, c2) */
                     dest[destIndex++]=c;
@@ -1211,7 +1208,7 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
                 if(cc!=0 && cc<prevCC) {
                     /* the decomposition is out of order with respect to the preceding text */
                     destIndex+=length;
-                    trailCC=_mergeOrdered(reorderStart, reorderSplit, p, p+length);
+                    trailCC=_mergeOrdered(dest+reorderStartIndex, reorderSplit, p, p+length);
                 } else {
                     /* just append the decomposition */
                     do {
@@ -1227,7 +1224,7 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
 
         prevCC=trailCC;
         if(prevCC==0) {
-            reorderStart=dest+destIndex;
+            reorderStartIndex=destIndex;
         }
     }
 
@@ -1240,7 +1237,7 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
  */
 
 static int32_t
-unorm_makeFCD(UChar *dest, int32_t destCapacity,
+unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
               const UChar *src, int32_t srcLength,
               UGrowBuffer *growBuffer, void *context,
               UErrorCode *pErrorCode) {
@@ -1836,19 +1833,19 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     return buffer;
 }
 
-U_CFUNC int32_t
-unorm_compose(UChar *dest, int32_t destCapacity,
-              const UChar *src, int32_t srcLength,
-              UBool compat, UBool /* ### TODO: need to do this? -- ignoreHangul -- ### */,
-              UGrowBuffer *growBuffer, void *context,
-              UErrorCode *pErrorCode) {
+static int32_t
+_compose(UChar *&dest, int32_t &destCapacity,
+         const UChar *src, int32_t srcLength,
+         UBool compat, UBool /* ### TODO: need to do this? -- ignoreHangul -- ### */,
+         UGrowBuffer *growBuffer, void *context,
+         UErrorCode *pErrorCode) {
     UChar stackBuffer[_STACK_BUFFER_CAPACITY];
     UChar *buffer;
     int32_t bufferCapacity;
 
-    const UChar *limit, *prevSrc, *reorderStart, *prevStarter;
+    const UChar *limit, *prevSrc, *prevStarter;
     uint32_t norm32, ccOrQCMask, qcMask;
-    int32_t destIndex, length;
+    int32_t destIndex, reorderStartIndex, length;
     UChar c, c2, minNoMaybe;
     uint8_t cc, prevCC;
     UBool canGrow;
@@ -1883,9 +1880,8 @@ unorm_compose(UChar *dest, int32_t destCapacity,
      */
     prevStarter=src;
 
-    reorderStart=dest;
     ccOrQCMask=_NORM_CC_MASK|qcMask;
-    destIndex=0;
+    destIndex=reorderStartIndex=0;
     prevCC=0;
 
     /* avoid compiler warnings */
@@ -1934,7 +1930,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
                 uprv_memcpy(dest+destIndex, prevSrc, length*U_SIZEOF_UCHAR);
             }
             destIndex+=length;
-            reorderStart=dest+destIndex; /* not valid if dest==NULL */
+            reorderStartIndex=destIndex;
 
             /* set prevStarter to the last character in the quick check loop */
             prevStarter=src-1;
@@ -1972,7 +1968,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
          *                reordering
          * [-------------[-------------[-------------[
          * |             |             |             |
-         * dest          reorderStart  destIndex     destCapacity
+         * dest      reorderStartIndex destIndex     destCapacity
          */
 
         /* check one above-minimum, relevant code unit */
@@ -1990,7 +1986,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
             length=1;
             prevCC=cc=0;
             prevStarter=prevSrc;
-            reorderStart=dest+destIndex;
+            reorderStartIndex=destIndex;
 
             if(/* ### TODO: do we need to do this? !ignoreHangul && ### */ destIndex>0) {
                 /* c is a Jamo V/T, see if we can compose it with the previous character */
@@ -2108,7 +2104,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
                 /* (c, c2) is out of order with respect to the preceding text */
                 UChar *reorderSplit=dest+destIndex;
                 destIndex+=length;
-                prevCC=_insertOrdered(reorderStart, reorderSplit, dest+destIndex, c, c2, cc);
+                prevCC=_insertOrdered(dest+reorderStartIndex, reorderSplit, dest+destIndex, c, c2, cc);
             } else {
                 /* just append (c, c2) */
                 dest[destIndex++]=c;
@@ -2130,7 +2126,28 @@ unorm_compose(UChar *dest, int32_t destCapacity,
         uprv_free(buffer);
     }
 
-    return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
+    return destIndex;
+}
+
+U_CAPI int32_t U_EXPORT2
+unorm_compose(UChar **pDest, int32_t *pDestCapacity,
+              const UChar *src, int32_t srcLength,
+              UBool compat, UBool ignoreHangul,
+              UGrowBuffer *growBuffer, void *context,
+              UErrorCode *pErrorCode) {
+    int32_t destIndex;
+
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
+
+    destIndex=_compose(*pDest, *pDestCapacity,
+                       src, srcLength,
+                       compat, ignoreHangul,
+                       growBuffer, context,
+                       pErrorCode);
+
+    return u_terminateUChars(*pDest, *pDestCapacity, destIndex, pErrorCode);
 }
 
 /*
@@ -2147,39 +2164,39 @@ unorm_compose(UChar *dest, int32_t destCapacity,
  * Does not check for bad input and uses growBuffer.
  * @internal
  */
-U_CFUNC int32_t
-unorm_internalNormalize(UChar *dest, int32_t destCapacity,
+U_CAPI int32_t U_EXPORT2
+unorm_internalNormalize(UChar **pDest, int32_t *pDestCapacity,
                         const UChar *src, int32_t srcLength,
                         UNormalizationMode mode, UBool ignoreHangul,
                         UGrowBuffer *growBuffer, void *context,
                         UErrorCode *pErrorCode) {
     switch(mode) {
     case UNORM_NFD:
-        return unorm_decompose(dest, destCapacity,
+        return unorm_decompose(pDest, pDestCapacity,
                                src, srcLength,
                                FALSE, ignoreHangul,
                                growBuffer, context,
                                pErrorCode);
     case UNORM_NFKD:
-        return unorm_decompose(dest, destCapacity,
+        return unorm_decompose(pDest, pDestCapacity,
                                src, srcLength,
                                TRUE, ignoreHangul,
                                growBuffer, context,
                                pErrorCode);
     case UNORM_NFC:
-        return unorm_compose(dest, destCapacity,
+        return unorm_compose(pDest, pDestCapacity,
                              src, srcLength,
                              FALSE, ignoreHangul,
                              growBuffer, context,
                              pErrorCode);
     case UNORM_NFKC:
-        return unorm_compose(dest, destCapacity,
+        return unorm_compose(pDest, pDestCapacity,
                              src, srcLength,
                              TRUE, ignoreHangul,
                              growBuffer, context,
                              pErrorCode);
     case UNORM_FCD:
-        return unorm_makeFCD(dest, destCapacity,
+        return unorm_makeFCD(*pDest, *pDestCapacity,
                              src, srcLength,
                              growBuffer, context,
                              pErrorCode);
@@ -2188,13 +2205,13 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
         if(srcLength==-1) {
             srcLength=u_strlen(src);
         }
-        if( srcLength<=destCapacity ||
+        if( srcLength<=*pDestCapacity ||
             /* attempt to grow the buffer */
-            (growBuffer!=NULL && growBuffer(context, &dest, &destCapacity, srcLength+1, 0))
+            (growBuffer!=NULL && growBuffer(context, pDest, pDestCapacity, srcLength+1, 0))
         ) {
-            uprv_memcpy(dest, src, srcLength*U_SIZEOF_UCHAR);
+            uprv_memcpy(*pDest, src, srcLength*U_SIZEOF_UCHAR);
         }
-        return u_terminateUChars(dest, destCapacity, srcLength, pErrorCode);
+        return u_terminateUChars(*pDest, *pDestCapacity, srcLength, pErrorCode);
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -2228,7 +2245,7 @@ unorm_normalize(const UChar *src, int32_t srcLength,
         return 0;
     }
 
-    return unorm_internalNormalize(dest, destCapacity,
+    return unorm_internalNormalize(&dest, &destCapacity,
                                    src, srcLength,
                                    mode, (UBool)((option&UNORM_IGNORE_HANGUL)!=0),
                                    NULL, NULL,
@@ -2318,7 +2335,7 @@ _isPrevTrueStarter(CharacterIterator &src, uint32_t minC, uint32_t ccOrQCMask, U
 static int32_t
 _findPreviousIterationBoundary(CharacterIterator &src,
                                IsPrevBoundaryFn *isPrevBoundary, uint32_t minC, uint32_t mask,
-                               UChar *&buffer, int32_t bufferCapacity,
+                               UChar *&buffer, int32_t &bufferCapacity,
                                int32_t &startIndex,
                                UErrorCode *pErrorCode) {
     UChar *stackBuffer;
@@ -2364,7 +2381,7 @@ _findPreviousIterationBoundary(CharacterIterator &src,
 }
 
 U_CFUNC int32_t
-unorm_previousNormalize(UChar *dest, int32_t destCapacity,
+unorm_previousNormalize(UChar *&dest, int32_t &destCapacity,
                         CharacterIterator &src,
                         UNormalizationMode mode, UBool ignoreHangul,
                         UGrowBuffer *growBuffer, void *context,
@@ -2373,7 +2390,7 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
     UChar *buffer;
     IsPrevBoundaryFn *isPreviousBoundary;
     uint32_t mask;
-    int32_t startIndex, bufferLength, destLength;
+    int32_t startIndex, bufferLength, bufferCapacity, destLength;
     UChar minC;
 
     switch(mode) {
@@ -2410,13 +2427,14 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
     }
 
     buffer=stackBuffer;
+    bufferCapacity=sizeof(stackBuffer)/U_SIZEOF_UCHAR;
     bufferLength=_findPreviousIterationBoundary(src,
                                                 isPreviousBoundary, minC, mask,
-                                                buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
+                                                buffer, bufferCapacity,
                                                 startIndex,
                                                 pErrorCode);
     if(bufferLength>0) {
-        destLength=unorm_internalNormalize(dest, destCapacity,
+        destLength=unorm_internalNormalize(&dest, &destCapacity,
                                            buffer+startIndex, bufferLength,
                                            mode, ignoreHangul,
                                            growBuffer, context, pErrorCode);
@@ -2499,7 +2517,7 @@ _isNextTrueStarter(CharacterIterator &src, uint32_t minC, uint32_t ccOrQCMask, U
 static int32_t
 _findNextIterationBoundary(CharacterIterator &src,
                            IsNextBoundaryFn *isNextBoundary, uint32_t minC, uint32_t mask,
-                           UChar *&buffer, int32_t bufferCapacity,
+                           UChar *&buffer, int32_t &bufferCapacity,
                            UErrorCode *pErrorCode) {
     UChar *stackBuffer;
     int32_t bufferIndex;
@@ -2552,7 +2570,7 @@ _findNextIterationBoundary(CharacterIterator &src,
 }
 
 U_CFUNC int32_t
-unorm_nextNormalize(UChar *dest, int32_t destCapacity,
+unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
                     CharacterIterator &src,
                     UNormalizationMode mode, UBool ignoreHangul,
                     UGrowBuffer *growBuffer, void *context,
@@ -2561,7 +2579,7 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
     UChar *buffer;
     IsNextBoundaryFn *isNextBoundary;
     uint32_t mask;
-    int32_t bufferLength, destLength;
+    int32_t bufferLength, bufferCapacity, destLength;
     UChar minC;
 
     switch(mode) {
@@ -2598,12 +2616,13 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
     }
 
     buffer=stackBuffer;
+    bufferCapacity=sizeof(stackBuffer)/U_SIZEOF_UCHAR;
     bufferLength=_findNextIterationBoundary(src,
                                             isNextBoundary, minC, mask,
-                                            buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
+                                            buffer, bufferCapacity,
                                             pErrorCode);
     if(bufferLength>0) {
-        destLength=unorm_internalNormalize(dest, destCapacity,
+        destLength=unorm_internalNormalize(&dest, &destCapacity,
                                            buffer, bufferLength,
                                            mode, ignoreHangul,
                                            growBuffer, context, pErrorCode);
