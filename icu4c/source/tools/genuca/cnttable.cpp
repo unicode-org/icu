@@ -88,7 +88,7 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         table->offsets[i] = table->position+mainOffset;
         table->position += table->elements[i]->position;
         if(table->elements[i]->reversed->position > 0) {
-            table->elements[i]->codePoints[0] = table->elements[i]->position; /* set offset for backwards table */
+            table->elements[i]->codePoints[0] = (UChar)(table->elements[i]->position); /* set offset for backwards table */
             table->position += table->elements[i]->reversed->position-1;
         }
     }
@@ -140,7 +140,7 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         CE = ucmp32_get(table->mapping, i);
         if(isContraction(CE)) {
             CE = constructContractCE(table->offsets[getContractOffset(CE)]);
-            ucmp32_set(table->mapping, i, CE);
+            ucmp32_set(table->mapping, (UChar)i, CE);
         }
     }
 
@@ -304,7 +304,7 @@ uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, 
         tbl = tbl->reversed;
     }
 
-    uint32_t position = 0;
+    int32_t position = 0;
 
     while(codePoint > tbl->codePoints[position]) {
       position++;
@@ -319,7 +319,7 @@ uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, 
     }
 }
 
-uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, int32_t position, UBool forward, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
