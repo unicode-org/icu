@@ -153,6 +153,7 @@
 #define U_DRAFT  U_CAPI
 #define U_DEPRECATED U_CAPI
 #define U_OBSOLETE U_CAPI
+#define U_INTERNAL U_CAPI
 
 /*==========================================================================*/
 /* limits for int32_t etc., like in POSIX inttypes.h                        */

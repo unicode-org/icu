@@ -49,7 +49,7 @@
  * @internal
  */
 #ifdef U_UTF8_IMPL
-U_STABLE const uint8_t 
+U_INTERNAL const uint8_t 
 #elif defined(U_STATIC_IMPLEMENTATION)
 U_CFUNC const uint8_t
 #else
@@ -73,28 +73,28 @@ utf8_countTrailBytes[256];
  * Function for handling "next code point" with error-checking.
  * @internal
  */
-U_STABLE UChar32 U_EXPORT2
+U_INTERNAL UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict);
 
 /**
  * Function for handling "append code point" with error-checking.
  * @internal
  */
-U_STABLE int32_t U_EXPORT2
+U_INTERNAL int32_t U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError);
 
 /**
  * Function for handling "previous code point" with error-checking.
  * @internal
  */
-U_STABLE UChar32 U_EXPORT2
+U_INTERNAL UChar32 U_EXPORT2
 utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict);
 
 /**
  * Function for handling "skip backward one code point" with error-checking.
  * @internal
  */
-U_STABLE int32_t U_EXPORT2
+U_INTERNAL int32_t U_EXPORT2
 utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /* single-code point definitions -------------------------------------------- */
