@@ -776,8 +776,10 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
               tok->expCEs[tok->noOfExpCEs + j] = expt->CEs[j];
             }
             tok->noOfExpCEs += noOfCEsToCopy;
-            expOffset += noOfCEsToCopy;
-            len -= noOfCEsToCopy;
+            // Smart people never try to add codepoints and CEs.
+            // For some odd reason, it won't work.
+            expOffset += currentSequenceLen; //noOfCEsToCopy;
+            len -= currentSequenceLen; //noOfCEsToCopy;
             break;
           } else {
             currentSequenceLen--;
