@@ -25,6 +25,7 @@
 #include "unicode/rep.h"
 
 struct UConverter;          // unicode/ucnv.h
+class  StringTest;
 
 U_NAMESPACE_BEGIN
 
@@ -2924,6 +2925,7 @@ private:
   friend class StringCharacterIterator;
   friend class SearchIterator;
   friend class StringSearch;
+  friend class StringTest;
 
   /*
    * The following are all the class fields that are stored
