@@ -672,7 +672,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     int32_t tempLen = inputLen + bufLen;
 
     UChar trial[bufSize];
-    unorm_decompose(trial, bufSize, temp, tempLen, FALSE, FALSE, &status);
+    unorm_decompose(trial, bufSize, temp, tempLen, FALSE, 0, &status);
 
     /* Test for buffer overflows */
     if(U_FAILURE(status)) {
