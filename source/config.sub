@@ -163,6 +163,10 @@ case $os in
 		os=-os390
 		basic_machine=s390-ibm
 		;;
+        -as400*)
+		os=
+                basic_machine=as400 
+				;;
 esac
 
 # Decode aliases for certain CPU-COMPANY combinations.
@@ -180,7 +184,7 @@ case $basic_machine in
 		| mips64vr4300 | mips64vr4300el | mips64vr4100 | mips64vr4100el \
 		| mips64vr5000 | miprs64vr5000el \
 		| sparc | sparclet | sparclite | sparc64 | sparcv9 | v850 | c4x \
-		| thumb | d10v)
+		| thumb | d10v | as400)
 		basic_machine=$basic_machine-unknown
 		;;
 	m88110 | m680[12346]0 | m683?2 | m68360 | m5200 | z8k | v70 | h8500 | w65)
@@ -214,7 +218,7 @@ case $basic_machine in
 	      | mipstx39-* | mipstx39el-* \
 	      | f301-* | armv*-* | t3e-* \
 	      | m88110-* | m680[01234]0-* | m683?2-* | m68360-* | z8k-* | d10v-* \
-	      | thumb-* | v850-* | d30v-* | tic30-* | c30-* | s390-* )
+	      | thumb-* | v850-* | d30v-* | tic30-* | c30-* | s390-*| os400-* )
 		;;
 	# Recognize the various machine names and aliases which stand
 	# for a CPU type and a company and sometimes even an OS.
@@ -796,6 +800,10 @@ case $basic_machine in
 		basic_machine=z8k-unknown
 		os=-sim
 		;;
+	as400)
+		basic_machine=as400
+		os=-os400
+		;;
 	none)
 		basic_machine=none-none
 		os=-none
@@ -855,6 +863,10 @@ case $basic_machine in
 	c4x*)
 		basic_machine=c4x-none
 		os=-coff
+		;;
+        as400*)
+		basic_machine=as400
+		os=-os400
 		;;
 	*)
 		echo Invalid configuration \`$1\': machine \`$basic_machine\' not recognized 1>&2
@@ -941,6 +953,9 @@ case $os in
 		;;
 	-os390)
 		os=-os390
+		;;
+        -os400*)
+		os=-os400
 		;;
 	-utek*)
 		os=-bsd

@@ -997,7 +997,7 @@ u_getDataDirectory(void) {
         char *path;
         int length;
 
-#       if !defined(OS400) && !defined(XP_MAC)
+#       if !defined(XP_MAC)
             /* first try to get the environment variable */
             path=getenv("ICU_DATA");
 /* 	    fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
