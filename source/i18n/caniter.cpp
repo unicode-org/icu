@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/12 17:55:21 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/12 20:19:34 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -172,7 +172,10 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
     int32_t list_length = 0;
     UChar32 cp = 0;
     int32_t start = 0;
-    int32_t i = 1;
+    // i should initialy be the number of code units at the 
+    // start of the string
+    int32_t i = UTF16_CHAR_LENGTH(source.char32At(0));
+    //int32_t i = 1;
     // find the segments
     // This code iterates through the source string and 
     // extracts segments that end up on a codepoint that
@@ -181,13 +184,13 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
     for (; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = source.char32At(i);
         if (unorm_isCanonSafeStart(cp)) {
-            source.extract(start, i, list[list_length++]); // add up to i
+            source.extract(start, i-start, list[list_length++]); // add up to i
             start = i;
         } else {
           cp++; /* ### TODO remove, this is just a breakpoint place */
         }
     }
-    source.extract(start, i, list[list_length++]); // add last one
+    source.extract(start, i-start, list[list_length++]); // add last one
 
     
     // allocate the arrays, and find the strings that are CE to each segment
