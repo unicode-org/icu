@@ -96,10 +96,13 @@ public:
      * @param dstStart the start offset in the destination array.  
      * @draft
      */
-    virtual void extractBetween(UTextOffset srcStart,
+    /* THIS API IS NOT NEEDED, BUT KEPT HERE AS A COMMENT IN
+       CASE OF FUTURE NEED.  CURRENTLY INDIVIDUAL CHARACTER
+       ACCESS SUFFICES. */
+    /* virtual void extractBetween(UTextOffset srcStart,
                                 UTextOffset srcLimit,
                                 UChar* dst,
-                                UTextOffset dstStart = 0) const = 0;
+                                UTextOffset dstStart = 0) const = 0; */
 
     /**
      * Replace a substring of this object with the given text.  If the
