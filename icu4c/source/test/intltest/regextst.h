@@ -30,12 +30,14 @@ public:
     virtual void Basic();
     virtual void Extended();
     virtual void Errors();
+    virtual void PerlTests();
 
     // The following functions are internal to the regexp tests.
     virtual UBool doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int line);
     virtual void regex_find(const char *pat, const char *input, UErrorCode expectedStatus, int line);
     virtual void regex_err(const char *pat, int32_t errline, int32_t errcol,
                             UErrorCode expectedStatus, int line);
+    virtual UChar *ReadAndConvertFile(const char *fileName, int &len, UErrorCode &status);
 };
 
 #endif   // !UCONFIG_NO_REGULAR_EXPRESSIONS

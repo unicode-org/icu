@@ -56,6 +56,7 @@ enum Regex_PatternParseAction {
     doPatFinish,
     doBackslashD,
     doPossesiveOpt,
+    doEscapeError,
     doBackslashG,
     doOpt,
     doInterval,
@@ -72,7 +73,9 @@ enum Regex_PatternParseAction {
     doBackslashX,
     doScanUnicodeSet,
     doBackslashZ,
+    doPerlInline,
     doNOP,
+    doConditionalExpr,
     doExit,
     doNGInterval,
     doPatStart,
@@ -107,13 +110,13 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doDotAny, 46 /* . */, 12,0,  TRUE}     //  6 
     , {doCaret, 94 /* ^ */, 2,0,  TRUE}     //  7 
     , {doDollar, 36 /* $ */, 2,0,  TRUE}     //  8 
-    , {doNOP, 92 /* \ */, 70,0,  TRUE}     //  9 
+    , {doNOP, 92 /* \ */, 72,0,  TRUE}     //  9 
     , {doPatFinish, 253, 2,0,  FALSE}     //  10 
-    , {doRuleError, 255, 91,0,  FALSE}     //  11 
-    , {doNOP, 42 /* * */, 48,0,  TRUE}     //  12      expr-quant
-    , {doNOP, 43 /* + */, 51,0,  TRUE}     //  13 
-    , {doNOP, 63 /* ? */, 54,0,  TRUE}     //  14 
-    , {doIntervalInit, 123 /* { */, 57,0,  TRUE}     //  15 
+    , {doRuleError, 255, 94,0,  FALSE}     //  11 
+    , {doNOP, 42 /* * */, 50,0,  TRUE}     //  12      expr-quant
+    , {doNOP, 43 /* + */, 53,0,  TRUE}     //  13 
+    , {doNOP, 63 /* ? */, 56,0,  TRUE}     //  14 
+    , {doIntervalInit, 123 /* { */, 59,0,  TRUE}     //  15 
     , {doNOP, 255, 17,0,  FALSE}     //  16 
     , {doOrOperator, 124 /* | */, 2,0,  TRUE}     //  17      expr-cont
     , {doCloseParen, 41 /* ) */, 255,0,  TRUE}     //  18 
@@ -124,72 +127,75 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doOpenAtomicParen, 62 /* > */, 2, 12, TRUE}     //  23 
     , {doOpenLookAhead, 61 /* = */, 2, 17, TRUE}     //  24 
     , {doOpenLookAheadNeg, 33 /* ! */, 2, 17, TRUE}     //  25 
-    , {doNOP, 60 /* < */, 34,0,  TRUE}     //  26 
-    , {doNOP, 35 /* # */, 37,0,  TRUE}     //  27 
-    , {doMatchMode, 105 /* i */, 40,0,  TRUE}     //  28 
-    , {doMatchMode, 120 /* x */, 40,0,  TRUE}     //  29 
-    , {doMatchMode, 115 /* s */, 40,0,  TRUE}     //  30 
-    , {doMatchMode, 109 /* m */, 40,0,  TRUE}     //  31 
-    , {doMatchMode, 45 /* - */, 40,0,  TRUE}     //  32 
-    , {doBadOpenParenType, 255, 91,0,  FALSE}     //  33 
-    , {doOpenLookBehind, 61 /* = */, 2, 17, TRUE}     //  34      open-paren-lookbehind
-    , {doOpenLookBehindNeg, 33 /* ! */, 2, 17, TRUE}     //  35 
-    , {doBadOpenParenType, 255, 91,0,  FALSE}     //  36 
-    , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  37      paren-comment
-    , {doMismatchedParenErr, 253, 91,0,  FALSE}     //  38 
-    , {doNOP, 255, 37,0,  TRUE}     //  39 
-    , {doMatchMode, 105 /* i */, 40,0,  TRUE}     //  40      paren-flag
-    , {doMatchMode, 115 /* s */, 40,0,  TRUE}     //  41 
-    , {doMatchMode, 109 /* m */, 40,0,  TRUE}     //  42 
-    , {doMatchMode, 120 /* x */, 40,0,  TRUE}     //  43 
-    , {doMatchMode, 45 /* - */, 40,0,  TRUE}     //  44 
-    , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  45 
-    , {doOpenNonCaptureParen, 58 /* : */, 2, 12, TRUE}     //  46 
-    , {doNOP, 255, 91,0,  FALSE}     //  47 
-    , {doNGStar, 63 /* ? */, 17,0,  TRUE}     //  48      quant-star
-    , {doPossesiveStar, 43 /* + */, 17,0,  TRUE}     //  49 
-    , {doStar, 255, 17,0,  FALSE}     //  50 
-    , {doNGPlus, 63 /* ? */, 17,0,  TRUE}     //  51      quant-plus
-    , {doPossesivePlus, 43 /* + */, 17,0,  TRUE}     //  52 
-    , {doPlus, 255, 17,0,  FALSE}     //  53 
-    , {doNGOpt, 63 /* ? */, 17,0,  TRUE}     //  54      quant-opt
-    , {doPossesiveOpt, 43 /* + */, 17,0,  TRUE}     //  55 
-    , {doOpt, 255, 17,0,  FALSE}     //  56 
-    , {doNOP, 129, 57,0,  TRUE}     //  57      interval-open
-    , {doNOP, 128, 60,0,  FALSE}     //  58 
-    , {doIntervalError, 255, 91,0,  FALSE}     //  59 
-    , {doIntevalLowerDigit, 128, 60,0,  TRUE}     //  60      interval-lower
-    , {doNOP, 44 /* , */, 64,0,  TRUE}     //  61 
-    , {doIntervalSame, 125 /* } */, 67,0,  TRUE}     //  62 
-    , {doIntervalError, 255, 91,0,  FALSE}     //  63 
-    , {doIntervalUpperDigit, 128, 64,0,  TRUE}     //  64      interval-upper
-    , {doNOP, 125 /* } */, 67,0,  TRUE}     //  65 
-    , {doIntervalError, 255, 91,0,  FALSE}     //  66 
-    , {doNGInterval, 63 /* ? */, 17,0,  TRUE}     //  67      interval-type
-    , {doPossesiveInterval, 43 /* + */, 17,0,  TRUE}     //  68 
-    , {doInterval, 255, 17,0,  FALSE}     //  69 
-    , {doBackslashA, 65 /* A */, 2,0,  TRUE}     //  70      backslash
-    , {doBackslashB, 66 /* B */, 2,0,  TRUE}     //  71 
-    , {doBackslashb, 98 /* b */, 2,0,  TRUE}     //  72 
-    , {doBackslashd, 100 /* d */, 12,0,  TRUE}     //  73 
-    , {doBackslashD, 68 /* D */, 12,0,  TRUE}     //  74 
-    , {doBackslashG, 71 /* G */, 2,0,  TRUE}     //  75 
-    , {doNamedChar, 78 /* N */, 12,0,  TRUE}     //  76 
-    , {doProperty, 112 /* p */, 12,0,  FALSE}     //  77 
-    , {doProperty, 80 /* P */, 12,0,  FALSE}     //  78 
-    , {doEnterQuoteMode, 81 /* Q */, 2,0,  TRUE}     //  79 
-    , {doBackslashS, 83 /* S */, 12,0,  TRUE}     //  80 
-    , {doBackslashs, 115 /* s */, 12,0,  TRUE}     //  81 
-    , {doBackslashW, 87 /* W */, 12,0,  TRUE}     //  82 
-    , {doBackslashw, 119 /* w */, 12,0,  TRUE}     //  83 
-    , {doBackslashX, 88 /* X */, 12,0,  TRUE}     //  84 
-    , {doBackslashx, 120 /* x */, 12,0,  TRUE}     //  85 
-    , {doBackslashZ, 90 /* Z */, 2,0,  TRUE}     //  86 
-    , {doBackslashz, 122 /* z */, 2,0,  TRUE}     //  87 
-    , {doOctal, 48 /* 0 */, 12,0,  TRUE}     //  88 
-    , {doBackRef, 128, 12,0,  TRUE}     //  89 
-    , {doLiteralChar, 255, 12,0,  TRUE}     //  90 
-    , {doExit, 255, 91,0,  TRUE}     //  91      errorDeath
+    , {doNOP, 60 /* < */, 36,0,  TRUE}     //  26 
+    , {doNOP, 35 /* # */, 39,0,  TRUE}     //  27 
+    , {doMatchMode, 105 /* i */, 42,0,  TRUE}     //  28 
+    , {doMatchMode, 120 /* x */, 42,0,  TRUE}     //  29 
+    , {doMatchMode, 115 /* s */, 42,0,  TRUE}     //  30 
+    , {doMatchMode, 109 /* m */, 42,0,  TRUE}     //  31 
+    , {doMatchMode, 45 /* - */, 42,0,  TRUE}     //  32 
+    , {doConditionalExpr, 40 /* ( */, 94,0,  TRUE}     //  33 
+    , {doPerlInline, 123 /* { */, 94,0,  TRUE}     //  34 
+    , {doBadOpenParenType, 255, 94,0,  FALSE}     //  35 
+    , {doOpenLookBehind, 61 /* = */, 2, 17, TRUE}     //  36      open-paren-lookbehind
+    , {doOpenLookBehindNeg, 33 /* ! */, 2, 17, TRUE}     //  37 
+    , {doBadOpenParenType, 255, 94,0,  FALSE}     //  38 
+    , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  39      paren-comment
+    , {doMismatchedParenErr, 253, 94,0,  FALSE}     //  40 
+    , {doNOP, 255, 39,0,  TRUE}     //  41 
+    , {doMatchMode, 105 /* i */, 42,0,  TRUE}     //  42      paren-flag
+    , {doMatchMode, 115 /* s */, 42,0,  TRUE}     //  43 
+    , {doMatchMode, 109 /* m */, 42,0,  TRUE}     //  44 
+    , {doMatchMode, 120 /* x */, 42,0,  TRUE}     //  45 
+    , {doMatchMode, 45 /* - */, 42,0,  TRUE}     //  46 
+    , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  47 
+    , {doOpenNonCaptureParen, 58 /* : */, 2, 12, TRUE}     //  48 
+    , {doNOP, 255, 94,0,  FALSE}     //  49 
+    , {doNGStar, 63 /* ? */, 17,0,  TRUE}     //  50      quant-star
+    , {doPossesiveStar, 43 /* + */, 17,0,  TRUE}     //  51 
+    , {doStar, 255, 17,0,  FALSE}     //  52 
+    , {doNGPlus, 63 /* ? */, 17,0,  TRUE}     //  53      quant-plus
+    , {doPossesivePlus, 43 /* + */, 17,0,  TRUE}     //  54 
+    , {doPlus, 255, 17,0,  FALSE}     //  55 
+    , {doNGOpt, 63 /* ? */, 17,0,  TRUE}     //  56      quant-opt
+    , {doPossesiveOpt, 43 /* + */, 17,0,  TRUE}     //  57 
+    , {doOpt, 255, 17,0,  FALSE}     //  58 
+    , {doNOP, 129, 59,0,  TRUE}     //  59      interval-open
+    , {doNOP, 128, 62,0,  FALSE}     //  60 
+    , {doIntervalError, 255, 94,0,  FALSE}     //  61 
+    , {doIntevalLowerDigit, 128, 62,0,  TRUE}     //  62      interval-lower
+    , {doNOP, 44 /* , */, 66,0,  TRUE}     //  63 
+    , {doIntervalSame, 125 /* } */, 69,0,  TRUE}     //  64 
+    , {doIntervalError, 255, 94,0,  FALSE}     //  65 
+    , {doIntervalUpperDigit, 128, 66,0,  TRUE}     //  66      interval-upper
+    , {doNOP, 125 /* } */, 69,0,  TRUE}     //  67 
+    , {doIntervalError, 255, 94,0,  FALSE}     //  68 
+    , {doNGInterval, 63 /* ? */, 17,0,  TRUE}     //  69      interval-type
+    , {doPossesiveInterval, 43 /* + */, 17,0,  TRUE}     //  70 
+    , {doInterval, 255, 17,0,  FALSE}     //  71 
+    , {doBackslashA, 65 /* A */, 2,0,  TRUE}     //  72      backslash
+    , {doBackslashB, 66 /* B */, 2,0,  TRUE}     //  73 
+    , {doBackslashb, 98 /* b */, 2,0,  TRUE}     //  74 
+    , {doBackslashd, 100 /* d */, 12,0,  TRUE}     //  75 
+    , {doBackslashD, 68 /* D */, 12,0,  TRUE}     //  76 
+    , {doBackslashG, 71 /* G */, 2,0,  TRUE}     //  77 
+    , {doNamedChar, 78 /* N */, 12,0,  TRUE}     //  78 
+    , {doProperty, 112 /* p */, 12,0,  FALSE}     //  79 
+    , {doProperty, 80 /* P */, 12,0,  FALSE}     //  80 
+    , {doEnterQuoteMode, 81 /* Q */, 2,0,  TRUE}     //  81 
+    , {doBackslashS, 83 /* S */, 12,0,  TRUE}     //  82 
+    , {doBackslashs, 115 /* s */, 12,0,  TRUE}     //  83 
+    , {doBackslashW, 87 /* W */, 12,0,  TRUE}     //  84 
+    , {doBackslashw, 119 /* w */, 12,0,  TRUE}     //  85 
+    , {doBackslashX, 88 /* X */, 12,0,  TRUE}     //  86 
+    , {doBackslashx, 120 /* x */, 12,0,  TRUE}     //  87 
+    , {doBackslashZ, 90 /* Z */, 2,0,  TRUE}     //  88 
+    , {doBackslashz, 122 /* z */, 2,0,  TRUE}     //  89 
+    , {doOctal, 48 /* 0 */, 12,0,  TRUE}     //  90 
+    , {doBackRef, 128, 12,0,  TRUE}     //  91 
+    , {doEscapeError, 253, 94,0,  FALSE}     //  92 
+    , {doLiteralChar, 255, 12,0,  TRUE}     //  93 
+    , {doExit, 255, 94,0,  TRUE}     //  94      errorDeath
  };
 static const char * const RegexStateNames[] = {    0,
      "start",
@@ -214,6 +220,8 @@ static const char * const RegexStateNames[] = {    0,
      "open-paren",
     0,
      "open-paren-extended",
+    0,
+    0,
     0,
     0,
     0,
@@ -262,6 +270,7 @@ static const char * const RegexStateNames[] = {    0,
     0,
     0,
      "backslash",
+    0,
     0,
     0,
     0,

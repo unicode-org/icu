@@ -154,6 +154,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     fQuoteMode      = FALSE;
     fFreeForm       = FALSE;
     fMatcherDataEnd = 0;
+    fBackRefMax     = 0;
 
     fMatchOpenParen  = -1;
     fMatchCloseParen = -1;
@@ -370,6 +371,24 @@ void    RegexCompile::compile(
     //
     // The pattern has now been read and processed, and the compiled code generated.
     //
+
+    // Back-reference fixup
+    //
+    int32_t loc;
+    for (loc=0; loc<fRXPat->fCompiledPat->size(); loc++) {
+        int32_t op = fRXPat->fCompiledPat->elementAti(loc);
+        if (URX_TYPE(op) == URX_BACKREF) {
+            int32_t where = URX_VAL(op);
+            if (where > fRXPat->fGroupMap->size()) {
+                error(U_REGEX_INVALID_BACK_REF);
+                break;
+            }
+            where = fRXPat->fGroupMap->elementAti(where-1);
+            op    = URX_BUILD(URX_BACKREF, where);
+            fRXPat->fCompiledPat->setElementAt(op, loc);
+        }
+    }
+
 
     //
     // Compute the number of digits requried for the largest capture group number.
@@ -607,6 +626,14 @@ UBool RegexCompile::doParseActions(EParseAction action)
         // Open Paren.
         error(U_REGEX_UNIMPLEMENTED);
         break;
+
+    case doConditionalExpr:
+        // Conditionals such as (?(1)a:b)
+    case doPerlInline:
+        // Perl inline-condtionals.  (?{perl code}a|b) We're not perl, no way to do them.
+        error(U_REGEX_UNIMPLEMENTED);
+        break;
+
 
     case doCloseParen:
         handleCloseParen();
@@ -896,6 +923,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_Z, 0), *fStatus);
         break;
 
+    case doEscapeError:
+        error(U_REGEX_BAD_ESCAPE_SEQUENCE);
+        break;
+
     case doExit:
         returnVal = FALSE;
         break;
@@ -929,9 +960,8 @@ UBool RegexCompile::doParseActions(EParseAction action)
             int32_t  numCaptureGroups = fRXPat->fGroupMap->size();
             int32_t  groupNum = 0;
             UChar32  c        = fC.fChar;
-            int32_t  t;
 
-            for (t=numCaptureGroups; t>0; t=t/10) {
+            for (;;) {
                 // Loop once per digit, for max allowed number of digits in a back reference.
                 groupNum = groupNum * 10 + u_charDigitValue(c);
                 if (groupNum >= numCaptureGroups) {
@@ -943,16 +973,15 @@ UBool RegexCompile::doParseActions(EParseAction action)
                 }
                 nextCharLL();
             }
-            if (groupNum > numCaptureGroups) {
-                error(U_REGEX_INVALID_BACK_REF);
-                break;
-            }
 
             // Scan of the back reference in the source regexp is complete.  Now generate
-            //  the compiled code for it.
+            //  the compiled code for it. 
+            // Because capture groups can be forward-referenced by back-references,
+            //  we fill the operand with the capture group number.  At the end
+            //  of compilation, it will be changed to the variables location.
             U_ASSERT(groupNum > 0);
-            int32_t  varsLoc = fRXPat->fGroupMap->elementAti(groupNum-1);
-            int32_t  op = URX_BUILD(URX_BACKREF, varsLoc);
+            // int32_t  varsLoc = fRXPat->fGroupMap->elementAti(groupNum-1);
+            int32_t  op = URX_BUILD(URX_BACKREF, groupNum);
             fRXPat->fCompiledPat->addElement(op, *fStatus);
         }
         break;
