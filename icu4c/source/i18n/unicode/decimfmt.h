@@ -38,42 +38,33 @@ class DigitList;
 class ChoiceFormat;
 
 /**
- * Concrete class for formatting decimal numbers, allowing a variety
- * of parameters, and localization to Western, Arabic, or Indic numbers.
- * <P>
- * Normally, you get the proper NumberFormat for a specific locale
- * (including the default locale) using the NumberFormat factory methods,
- * rather than constructing a DecimalNumberFormat directly.
- * <P>
- * Either the prefixes or the suffixes must be different for the parse
- * to distinguish positive from negative.  Parsing will be unreliable
- * if the digits, thousands or decimal separators are the same, or if
- * any of them occur in the prefixes or suffixes.
- * <P>
- * [Special cases:] 
- * <P>
- * NaN is formatted as a single character, typically \\uFFFD.
- * <P>
- * +/-Infinity is formatted as a single character, typically \\u221E,
- * plus the positive and negative pre/suffixes.
- * <P>
- * Note: this class is designed for common users; for very large or small
- * numbers, use a format that can express exponential values.
- * <P>
- * [Example:] 
- * <pre>
+ * DecimalFormat is a concrete subclass of NumberFormat that formats decimal
+ * numbers. It has a variety of features designed to make it possible to parse
+ * and format numbers in any locale, including support for Western, Arabic, or
+ * Indic digits.  It also supports different flavors of numbers, including
+ * integers ("123"), fixed-point numbers ("123.4"), scientific notation
+ * ("1.23E4"), percentages ("12%"), and currency amounts ("$123").  All of these
+ * flavors can be easily localized.
+ *
+ * <p>To obtain a NumberFormat for a specific locale (including the default
+ * locale) call one of NumberFormat's factory methods such as
+ * createInstance(). Do not call the DecimalFormat constructors directly, unless
+ * you know what you are doing, since the NumberFormat factory methods may
+ * return subclasses other than DecimalFormat.
+ *
+ * <p><strong>Example Usage</strong>
+ *
  * \code
- *     // normally we would have a GUI with a menu for this
+ *     // Normally we would have a GUI with a menu for this
  *     int32_t locCount;
  *     const Locale* locales = NumberFormat::getAvailableLocales(locCount);
- *     if (locCount > 12) locCount = 12;  //limit output
  * 
  *     double myNumber = -1234.56;
  *     UErrorCode success = U_ZERO_ERROR;
- *     NumberFormat* form; //= NumberFormat::createInstance(success);
+ *     NumberFormat* form;
  * 
- *     // just for fun, we print out a number with the locale number, currency
- *     // and percent format for each locale we can.
+ *     // Print out a number with the localized number, currency and percent
+ *     // format for each locale.
  *     UnicodeString countryName;
  *     UnicodeString displayName;
  *     UnicodeString str;
@@ -87,11 +78,11 @@ class ChoiceFormat;
  *                 continue;
  *             }
  *             switch (j) {
- *             default:
+ *             case 0:
  *                 form = NumberFormat::createInstance(locales[i], success ); break;
  *             case 1:
  *                 form = NumberFormat::createCurrencyInstance(locales[i], success ); break;
- *             case 0:
+ *             default:
  *                 form = NumberFormat::createPercentInstance(locales[i], success ); break;
  *             }
  *             if (form) {
@@ -100,106 +91,374 @@ class ChoiceFormat;
  *                 cout << locales[i].getDisplayName(displayName) << ": " << pattern;
  *                 cout << "  ->  " << form->format(myNumber,str) << endl;
  *                 form->parse(form->format(myNumber,str), fmtable, success);
- *                 //cout << "   parsed: " << fmtable << endl;
  *                 delete form;  
  *             }
  *         }
  *     }
  * \endcode
- * </pre>
- * [The following shows the structure of the pattern.] 
+ *
+ * <p><strong>Patterns</strong>
+ *
+ * <p>A DecimalFormat consists of a <em>pattern</em> and a set of
+ * <em>symbols</em>.  The pattern may be set directly using
+ * applyPattern(), or indirectly using other API methods which
+ * manipulate aspects of the pattern, such as the minimum number of integer
+ * digits.  The symbols are stored in a DecimalFormatSymbols
+ * object.  When using the NumberFormat factory methods, the
+ * pattern and symbols are read from ICU's locale data.
+ * 
+ * <p><strong>Special Pattern Characters</strong>
+ *
+ * <p>Many characters in a pattern are taken literally; they are matched during
+ * parsing and output unchanged during formatting.  Special characters, on the
+ * other hand, stand for other characters, strings, or classes of characters.
+ * For example, the '#' character is replaced by a localized digit.  Often the
+ * replacement character is the same as the pattern character; in the U.S. locale,
+ * the ',' grouping character is replaced by ','.  However, the replacement is
+ * still happening, and if the symbols are modified, the grouping character
+ * changes.  Some special characters affect the behavior of the formatter by
+ * their presence; for example, if the percent character is seen, then the
+ * value is multiplied by 100 before being displayed.
+ *
+ * <p>To insert a special character in a pattern as a literal, that is, without
+ * any special meaning, the character must be quoted.  There are some exceptions to
+ * this which are noted below.
+ *
+ * <p>The characters listed here are used in non-localized patterns.  Localized
+ * patterns use the corresponding characters taken from this formatter's
+ * DecimalFormatSymbols object instead, and these characters lose
+ * their special status.  Two exceptions are the currency sign and quote, which
+ * are not localized.
+ *
+ * <table border=0 cellspacing=3 cellpadding=0>
+ *   <tr bgcolor="#ccccff">
+ *     <td align=left><strong>Symbol</strong>
+ *     <td align=left><strong>Location</strong>
+ *     <td align=left><strong>Localized?</strong>
+ *     <td align=left><strong>Meaning</strong>
+ *   <tr valign=top>
+ *     <td><code>0</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Digit
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>1-9</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>'1' through '9' indicate rounding.
+ *   <tr valign=top>
+ *     <td><code>#</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Digit, zero shows as absent
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>.</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Decimal separator or monetary decimal separator
+ *   <tr valign=top>
+ *     <td><code>-</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Minus sign
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>,</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Grouping separator
+ *   <tr valign=top>
+ *     <td><code>E</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Separates mantissa and exponent in scientific notation.
+ *         <em>Need not be quoted in prefix or suffix.</em>
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>+</code>
+ *     <td>Exponent
+ *     <td>Yes
+ *     <td>Prefix positive exponents with localized plus sign.
+ *         <em>Need not be quoted in prefix or suffix.</em>
+ *   <tr valign=top>
+ *     <td><code>;</code>
+ *     <td>Subpattern boundary
+ *     <td>Yes
+ *     <td>Separates positive and negative subpatterns
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>%</code>
+ *     <td>Prefix or suffix
+ *     <td>Yes
+ *     <td>Multiply by 100 and show as percentage
+ *   <tr valign=top>
+ *     <td><code>\u2030</code>
+ *     <td>Prefix or suffix
+ *     <td>Yes
+ *     <td>Multiply by 1000 and show as per mille
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>&#164;</code> (<code>\u00A4</code>)
+ *     <td>Prefix or suffix
+ *     <td>No
+ *     <td>Currency sign, replaced by currency symbol.  If
+ *         doubled, replaced by international currency symbol.
+ *         If present in a pattern, the monetary decimal separator
+ *         is used instead of the decimal separator.
+ *   <tr valign=top>
+ *     <td><code>'</code>
+ *     <td>Prefix or suffix
+ *     <td>No
+ *     <td>Used to quote special characters in a prefix or suffix,
+ *         for example, <code>"'#'#"</code> formats 123 to
+ *         <code>"#123"</code>.  To create a single quote
+ *         itself, use two in a row: <code>"# o''clock"</code>.
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>*</code>
+ *     <td>Prefix or suffix boundary
+ *     <td>Yes
+ *     <td>Pad escape, precedes pad character
+ * </table>
+ *
+ * <p>A DecimalFormat pattern contains a postive and negative
+ * subpattern, for example, "#,##0.00;(#,##0.00)".  Each subpattern has a
+ * prefix, a numeric part, and a suffix.  If there is no explicit negative
+ * subpattern, the negative subpattern is the localized minus sign prefixed to the
+ * positive subpattern. That is, "0.00" alone is equivalent to "0.00;-0.00".  If there
+ * is an explicit negative subpattern, it serves only to specify the negative
+ * prefix and suffix; the number of digits, minimal digits, and other
+ * characteristics are ignored in the negative subpattern. That means that
+ * "#,##0.0#;(#)" has precisely the same result as "#,##0.0#;(#,##0.0#)".
+ *
+ * <p>The prefixes, suffixes, and various symbols used for infinity, digits,
+ * thousands separators, decimal separators, etc. may be set to arbitrary
+ * values, and they will appear properly during formatting.  However, care must
+ * be taken that the symbols and strings do not conflict, or parsing will be
+ * unreliable.  For example, either the positive and negative prefixes or the
+ * suffixes must be distinct for parse() to be able
+ * to distinguish positive from negative values.  Another example is that the
+ * decimal separator and thousands separator should be distinct characters, or
+ * parsing will be impossible.
+ *
+ * <p>The <em>grouping separator</em> is a character that separates clusters of
+ * integer digits to make large numbers more legible.  It commonly used for
+ * thousands, but in some locales it separates ten-thousands.  The <em>grouping
+ * size</em> is the number of digits between the grouping separators, such as 3
+ * for "100,000,000" or 4 for "1 0000 0000". There are actually two different
+ * grouping sizes: One used for the least significant integer digits, the
+ * <em>primary grouping size</em>, and one used for all others, the
+ * <em>secondary grouping size</em>.  In most locales these are the same, but
+ * sometimes they are different. For example, if the primary grouping interval
+ * is 3, and the secondary is 2, then this corresponds to the pattern
+ * "#,##,##0", and the number 123456789 is formatted as "12,34,56,789".  If a
+ * pattern contains multiple grouping separators, the interval between the last
+ * one and the end of the integer defines the primary grouping size, and the
+ * interval between the last two defines the secondary grouping size. All others
+ * are ignored, so "#,##,###,####" == "###,###,####" == "##,#,###,####".
+ *
+ * <p>Illegal patterns, such as "#.#.#" or "#.###,###", will cause
+ * DecimalFormat to set a failing UErrorCode.
+ *
+ * <p><strong>Pattern BNF</strong>
+ *
  * <pre>
- * \code
- *     pattern    := subpattern{;subpattern}
- *     subpattern := {prefix}integer{.fraction}{suffix}
- *     
- *     prefix     := '\\u0000'..'\\uFFFD' - specialCharacters
- *     suffix     := '\\u0000'..'\\uFFFD' - specialCharacters
- *     integer    := '#'* '0'* '0'
- *     fraction   := '0'* '#'*
- *   
- *  Notation:
- *     X*       0 or more instances of X
- *     (X | Y)  either X or Y.
- *     X..Y     any character from X up to Y, inclusive.
- *     S - T    characters in S, except those in T
- * \code
- * /pre>
+ * pattern    := subpattern (';' subpattern)?
+ * subpattern := prefix? number suffix?
+ * number     := integer ('.' fraction)? exponent?
+ * prefix     := '\u0000'..'\uFFFD' - specialCharacters
+ * suffix     := '\u0000'..'\uFFFD' - specialCharacters
+ * integer    := '#'* '0'* '0'
+ * fraction   := '0'* '#'*
+ * exponent   := 'E' '+'? '0'* '0'
+ * padSpec    := '*' padChar
+ * padChar    := '\u0000'..'\uFFFD' - quote
+ * &#32;
+ * Notation:
+ *   X*       0 or more instances of X
+ *   X?       0 or 1 instances of X
+ *   X..Y     any character from X up to Y, inclusive
+ *   S - T    characters in S, except those in T
+ * </pre>
  * The first subpattern is for positive numbers. The second (optional)
- * subpattern is used for negative numbers. (In both cases, ',' can
- * occur inside the integer portion--it is just too messy to indicate
- * in BNF.)  For the second subpattern, only the PREFIX and SUFFIX are
- * noted; other attributes are taken only from the first subpattern.
- * <P>
- * Here are the special characters used in the parts of the
- * subpattern, with notes on their usage.
- * <pre>
- * \code
- *     Symbol   Meaning
- *       0      a digit, showing up a zero if it is zero
- *       #      a digit, supressed if zero
- *       .      placeholder for decimal separator
- *       ,      placeholder for grouping separator.
- *       E      separates mantissa and exponent for exponential formats.
- *       ;      separates formats.
- *       -      default negative prefix.
- *       %      multiply by 100 and show as percentage
- *       \u2030 multiply by 1000 and show as per mille
- *       \u00A4 currency sign; replaced by currency symbol; if
- *              doubled, replaced by international currency symbol.
- *              If present in a pattern, the monetary decimal separator
- *              is used instead of the decimal separator.
- *       X      any other characters can be used in the prefix or suffix
- *       '      used to quote special characters in a prefix or suffix.
- * \endcode
- * </pre>
- * [Notes] 
- * <P>
- * If there is no explicit negative subpattern, - is prefixed to the
- * positive form. That is, "0.00" alone is equivalent to "0.00;-0.00".
- * <P>
- * Illegal formats, such as "#.#.#" in the same format, will cause a
- * failing UErrorCode to be returned. 
- * <P>
- * The grouping separator is commonly used for thousands, but in some
- * countries for ten-thousands. The interval is a constant number of
- * digits between the grouping characters, such as 100,000,000 or 1,0000,0000.
- * If you supply a pattern with multiple grouping characters, the interval
- * between the last one and the end of the integer determines the primary
- * grouping size, and the interval between the last two determines
- * the secondary grouping size (see below); all others are ignored.
- * So "#,##,###,####" == "###,###,####" == "##,#,###,####".
- * <P>
- * Some locales have two different grouping intervals:  One used for the
- * least significant integer digits (the primary grouping size), and
- * one used for all others (the secondary grouping size).  For example,
- * if the primary grouping interval is 3, and the secondary is 2, then
- * this corresponds to the pattern "#,##,##0", and the number 123456789
- * is formatted as "12,34,56,789".
- * <P>
- * This class only handles localized digits where the 10 digits are
- * contiguous in Unicode, from 0 to 9. Other digits sets (such as
- * superscripts) would need a different subclass.
+ * subpattern is for negative numbers.
+ * 
+ * <p>Not indicated in the BNF syntax above:
+ * <ul><li>The grouping separator ',' can occur inside the integer portion between the
+ * most significant digit and the least significant digit.
+ *
+ * <li>Two grouping intervals are recognized: That between the
+ *     decimal point and the first grouping symbol, and that
+ *     between the first and second grouping symbols. These
+ *     intervals are identical in most locales, but in some
+ *     locales they differ. For example, the pattern
+ *     &quot;#,##,###&quot; formats the number 123456789 as
+ *     &quot;12,34,56,789&quot;.</li>
+ * 
+ * <li>The pad specifier <code>padSpec</code> may appear before the prefix,
+ * after the prefix, before the suffix, after the suffix, or not at all.
+ *
+ * <li>In place of '0', the digits '1' through '9' may be used to
+ * indicate a rounding increment.
+ * </ul>
+ *
+ * <p><strong>Parsing</strong>
+ *
+ * <p>DecimalFormat parses all Unicode characters that represent
+ * decimal digits, as defined by u_charDigitValue().  In addition,
+ * DecimalFormat also recognizes as digits the ten consecutive
+ * characters starting with the localized zero digit defined in the
+ * DecimalFormatSymbols object.  During formatting, the
+ * DecimalFormatSymbols-based digits are output.
+ *
+ * <p>If parse(UnicodeString&,Formattable&,ParsePosition&)
+ * fails to parse a string, it leaves the parse position unchanged.
+ * The convenience method parse(UnicodeString&,Formattable&,UErrorCode&)
+ * indicates parse failure by setting a failing
+ * UErrorCode.
+ *
+ * <p><strong>Special Values</strong>
+ *
+ * <p><code>NaN</code> is represented as a single character, typically
+ * <code>\uFFFD</code>.  This character is determined by the
+ * DecimalFormatSymbols object.  This is the only value for which
+ * the prefixes and suffixes are not used.
+ *
+ * <p>Infinity is represented as a single character, typically
+ * <code>\u221E</code>, with the positive or negative prefixes and suffixes
+ * applied.  The infinity character is determined by the
+ * DecimalFormatSymbols object.
+ *
+ * <p><strong>Scientific Notation</strong>
+ *
+ * <p>Numbers in scientific notation are expressed as the product of a mantissa
+ * and a power of ten, for example, 1234 can be expressed as 1.234 x 10<sup>3</sup>. The
+ * mantissa is typically in the half-open interval [1.0, 10.0) or sometimes [0.0, 1.0),
+ * but it need not be.  DecimalFormat supports arbitrary mantissas.
+ * DecimalFormat can be instructed to use scientific
+ * notation through the API or through the pattern.  In a pattern, the exponent
+ * character immediately followed by one or more digit characters indicates
+ * scientific notation.  Example: "0.###E0" formats the number 1234 as
+ * "1.234E3".
+ *
+ * <ul>
+ * <li>The number of digit characters after the exponent character gives the
+ * minimum exponent digit count.  There is no maximum.  Negative exponents are
+ * formatted using the localized minus sign, <em>not</em> the prefix and suffix
+ * from the pattern.  This allows patterns such as "0.###E0 m/s".  To prefix
+ * positive exponents with a localized plus sign, specify '+' between the
+ * exponent and the digits: "0.###E+0" will produce formats "1E+1", "1E+0",
+ * "1E-1", etc.  (In localized patterns, use the localized plus sign rather than
+ * '+'.)
+ *
+ * <li>The minimum number of integer digits is achieved by adjusting the
+ * exponent.  Example: 0.00123 formatted with "00.###E0" yields "12.3E-4".  This
+ * only happens if there is no maximum number of integer digits.  If there is a
+ * maximum, then the minimum number of integer digits is fixed at one.
+ *
+ * <li>The maximum number of integer digits, if present, specifies the exponent
+ * grouping.  The most common use of this is to generate <em>engineering
+ * notation</em>, in which the exponent is a multiple of three, e.g.,
+ * "##0.###E0".  The number 12345 is formatted using "##0.####E0" as "12.345E3".
+ *
+ * <li>The number of significant digits is the sum of the <em>minimum
+ * integer</em> and <em>maximum fraction</em> digits, and is unaffected by the
+ * maximum integer digits.  If this sum is zero, then all significant digits are
+ * shown.  The number of significant digits limits the total number of integer
+ * and fraction digits that will be shown in the mantissa; it does not affect
+ * parsing.  For example, 12345 formatted with "##0.##E0" is "12.3E3".
+ *
+ * <li>Exponential patterns may not contain grouping separators.
+ * </ul>
+ *
+ * <p><strong>Padding</strong>
+ *
+ * <p>DecimalFormat supports padding the result of
+ * format() to a specific width.  Padding may be specified either
+ * through the API or through the pattern syntax.  In a pattern the pad escape
+ * character, followed by a single pad character, causes padding to be parsed
+ * and formatted.  The pad escape character is '*' in unlocalized patterns, and
+ * can be localized using DecimalFormatSymbols::setSymbol() with a
+ * DecimalFormatSymbols::kPadEscapeSymbol
+ * selector.  For example, <code>"$*x#,##0.00"</code> formats 123 to
+ * <code>"$xx123.00"</code>, and 1234 to <code>"$1,234.00"</code>.
+ *
+ * <ul>
+ * <li>When padding is in effect, the width of the positive subpattern,
+ * including prefix and suffix, determines the format width.  For example, in
+ * the pattern <code>"* #0 o''clock"</code>, the format width is 10.
+ *
+ * <li>The width is counted in 16-bit code units (UChars).
+ *
+ * <li>Some parameters which usually do not matter have meaning when padding is
+ * used, because the pattern width is significant with padding.  In the pattern
+ * "* ##,##,#,##0.##", the format width is 14.  The initial characters "##,##,"
+ * do not affect the grouping size or maximum integer digits, but they do affect
+ * the format width.
+ *
+ * <li>Padding may be inserted at one of four locations: before the prefix,
+ * after the prefix, before the suffix, or after the suffix.  If padding is
+ * specified in any other location, applyPattern()
+ * sets a failing UErrorCode.  If there is no prefix,
+ * before the prefix and after the prefix are equivalent, likewise for the
+ * suffix.
+ *
+ * <li>When specified in a pattern, the 32-bit code point immediately
+ * following the pad escape is the pad character. This may be any character,
+ * including a special pattern character. That is, the pad escape
+ * <em>escapes</em> the following character. If there is no character after
+ * the pad escape, then the pattern is illegal.
+ *
+ * </ul>
+ *
+ * <p><strong>Rounding</strong>
+ *
+ * <p>DecimalFormat supports rounding to a specific increment.  For
+ * example, 1230 rounded to the nearest 50 is 1250.  1.234 rounded to the
+ * nearest 0.65 is 1.3.  The rounding increment may be specified through the API
+ * or in a pattern.  To specify a rounding increment in a pattern, include the
+ * increment in the pattern itself.  "#,#50" specifies a rounding increment of
+ * 50.  "#,##0.05" specifies a rounding increment of 0.05.
+ *
+ * <ul>
+ * <li>Rounding only affects the string produced by formatting.  It does
+ * not affect parsing or change any numerical values.
+ *
+ * <li>A <em>rounding mode</em> determines how values are rounded; see
+ * DecimalFormat::ERoundingMode.  Rounding increments specified in
+ * patterns use the default mode, DecimalFormat::kRoundHalfEven.
+ *
+ * <li>Some locales use rounding in their currency formats to reflect the
+ * smallest currency denomination.
+ *
+ * <li>In a pattern, digits '1' through '9' specify rounding, but otherwise
+ * behave identically to digit '0'.
+ * </ul>
+ *
+ * <p><strong>Synchronization</strong>
+ *
+ * <p>DecimalFormat objects are not synchronized.  Multiple
+ * threads should not access one formatter concurrently.
  */
 class U_I18N_API DecimalFormat: public NumberFormat {
 public:
-  /** Rounding mode 
-   *  @draft ICU 2.4
-   */
+    /**
+     * Rounding mode.
+     * @draft ICU 2.4
+     */
     enum ERoundingMode {
-        kRoundCeiling,
-        kRoundFloor,
-        kRoundDown,
-        kRoundUp,
-        kRoundHalfEven,
-        kRoundHalfDown,
-        kRoundHalfUp
+        kRoundCeiling,  /**< Round towards positive infinity */
+        kRoundFloor,    /**< Round towards negative infinity */
+        kRoundDown,     /**< Round towards zero */
+        kRoundUp,       /**< Round away from zero */
+        kRoundHalfEven, /**< Round towards the nearest integer, or
+                             towards the nearest even integer if equidistant */
+        kRoundHalfDown, /**< Round towards the nearest integer, or
+                             towards zero if equidistant */
+        kRoundHalfUp    /**< Round towards the nearest integer, or
+                             away from zero if equidistant */
         // We don't support ROUND_UNNECESSARY
     };
 
-  /** Pad position
-   *  @draft ICU 2.4
-   */
+    /**
+     * Pad position.
+     * @draft ICU 2.4
+     */
     enum EPadPosition {
         kPadBeforePrefix,
         kPadAfterPrefix,
@@ -466,7 +725,7 @@ public:
     * does string comparisons to try to find an optimal match.
     * If no object can be parsed, index is unchanged, and NULL is
     * returned.  The result is returned as the most parsimonious
-    * type of <code>Formattable</code> that will accomodate all of the
+    * type of Formattable that will accomodate all of the
     * necessary precision.  For example, if the result is exactly 12,
     * it will be returned as a long.  However, if it is 1.5, it will
     * be returned as a double.
@@ -668,7 +927,7 @@ public:
     virtual void setRoundingMode(ERoundingMode roundingMode);
 
     /**
-     * Get the width to which the output of <code>format()</code> is padded.
+     * Get the width to which the output of format() is padded.
      * The width is counted in 16-bit code units.
      * @return the format width, or zero if no padding is in effect
      * @see #setFormatWidth
@@ -681,11 +940,11 @@ public:
     virtual int32_t getFormatWidth(void);
 
     /**
-     * Set the width to which the output of <code>format()</code> is padded.
+     * Set the width to which the output of format() is padded.
      * The width is counted in 16-bit code units.
      * This method also controls whether padding is enabled.
      * @param width the width to which to pad the result of
-     * <code>format()</code>, or zero to disable padding.  A negative
+     * format(), or zero to disable padding.  A negative
      * width is equivalent to 0.
      * @see #getFormatWidth
      * @see #getPadCharacter
@@ -698,9 +957,9 @@ public:
 
     /**
      * Get the pad character used to pad to the format width.  The
-     * default is ' '.  Note: The result string will have a length of
-     * one 32-bit code point.
-     * @return a string containing the pad character
+     * default is ' '.
+     * @return a string containing the pad character. This will always
+     * have a length of one 32-bit code point.
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -711,12 +970,12 @@ public:
     virtual UnicodeString getPadCharacterString();
 
     /**
-     * Set the character used to pad to the format width.  This has no
-     * effect unless padding is enabled.  Note: The current
-     * implementation only reads the first 32-bit code point of the
-     * given string.
-     * @param padChar a string containing the pad charcter. If the
-     * string has length 0, then the pad characer is set to ' '.
+     * Set the character used to pad to the format width.  If padding
+     * is not enabled, then this will take effect if padding is later
+     * enabled.
+     * @param padChar a string containing the pad charcter. If the string
+     * has length 0, then the pad characer is set to ' '.  Otherwise
+     * padChar.char32At(0) will be used as the pad character.
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #getPadCharacter
@@ -728,11 +987,11 @@ public:
 
     /**
      * Get the position at which padding will take place.  This is the location
-     * at which padding will be inserted if the result of <code>format()</code>
+     * at which padding will be inserted if the result of format()
      * is shorter than the format width.
-     * @return the pad position, one of <code>kPadBeforePrefix</code>,
-     * <code>kPadAfterPrefix</code>, <code>kPadBeforeSuffix</code>, or
-     * <code>kPadAfterSuffix</code>.
+     * @return the pad position, one of kPadBeforePrefix,
+     * kPadAfterPrefix, kPadBeforeSuffix, or
+     * kPadAfterSuffix.
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -747,14 +1006,13 @@ public:
     virtual EPadPosition getPadPosition(void);
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the position at which padding will take place.  This is the location
-     * at which padding will be inserted if the result of <code>format()</code>
+     * at which padding will be inserted if the result of format()
      * is shorter than the format width.  This has no effect unless padding is
      * enabled.
-     * @param padPos the pad position, one of <code>kPadBeforePrefix</code>,
-     * <code>kPadAfterPrefix</code>, <code>kPadBeforeSuffix</code>, or
-     * <code>kPadAfterSuffix</code>.
+     * @param padPos the pad position, one of kPadBeforePrefix,
+     * kPadAfterPrefix, kPadBeforeSuffix, or
+     * kPadAfterSuffix.
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -885,7 +1143,7 @@ public:
      * others (the secondary grouping size).  A formatter supporting a
      * secondary grouping size will return a positive integer unequal
      * to the primary grouping size returned by
-     * <code>getGroupingSize()</code>.  For example, if the primary
+     * getGroupingSize().  For example, if the primary
      * grouping size is 4, and the secondary grouping size is 2, then
      * the number 123456789 formats as "1,23,45,6789", and the pattern
      * appears as "#,##,###0".
