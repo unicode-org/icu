@@ -959,8 +959,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * stored here (if possible).
  * @param destCapacity the number of UChars that may be written at
  * dest.  Ignored if dest == NULL.
- * @return the capacity required to fully convert all of the source
- * text, including the zero terminator, or 0 on error.
+ * @return the length of unescaped string.
  * @see u_unescapeAt
  * @see UnicodeString#unescape()
  * @see UnicodeString#unescapeAt()
