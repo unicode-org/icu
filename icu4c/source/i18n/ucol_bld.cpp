@@ -28,7 +28,7 @@
 #include "umutex.h"
 #include "unicode/uniset.h"
 
-static const InverseUCATableHeader* invUCA = NULL;
+static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
 
 U_CDECL_BEGIN
@@ -68,11 +68,11 @@ isAcceptableInvUCA(void * /*context*/,
 U_CDECL_END
 
 static
-int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
-  uint32_t bottom = 0, top = invUCA->tableSize;
+int32_t ucol_inv_findCE(const UColTokenParser *src, uint32_t CE, uint32_t SecondCE) {
+  uint32_t bottom = 0, top = src->invUCA->tableSize;
   uint32_t i = 0;
   uint32_t first = 0, second = 0;
-  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
 
   while(bottom < top-1) {
     i = (top+bottom)/2;
@@ -116,13 +116,14 @@ static const uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
   0xFFFFFFFF
 };
 
-U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE, 
+U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(const UColTokenParser *src,
+                                            uint32_t CE, uint32_t contCE, 
                                             uint32_t *nextCE, uint32_t *nextContCE, 
                                             uint32_t strength) {
-  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
   int32_t iCE;
 
-  iCE = ucol_inv_findCE(CE, contCE);
+  iCE = ucol_inv_findCE(src, CE, contCE);
 
   if(iCE<0) {
     *nextCE = UCOL_NOT_FOUND;
@@ -144,13 +145,14 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
   return iCE;
 }
 
-U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE, 
+U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src, 
+                                            uint32_t CE, uint32_t contCE, 
                                             uint32_t *prevCE, uint32_t *prevContCE, 
                                             uint32_t strength) {
-  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
   int32_t iCE;
 
-  iCE = ucol_inv_findCE(CE, contCE);
+  iCE = ucol_inv_findCE(src, CE, contCE);
 
   if(iCE<0) {
     *prevCE = UCOL_NOT_FOUND;
@@ -175,16 +177,16 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
 }
 
 static
-inline int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
+inline int32_t ucol_inv_getPrevious(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {
 
   uint32_t CE = lh->baseCE;
   uint32_t SecondCE = lh->baseContCE; 
 
-  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
   uint32_t previousCE, previousContCE;
   int32_t iCE;
 
-  iCE = ucol_inv_findCE(CE, SecondCE);
+  iCE = ucol_inv_findCE(src, CE, SecondCE);
 
   if(iCE<0) {
     return -1;
@@ -207,15 +209,15 @@ inline int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
 }
 
 static
-inline int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
+inline int32_t ucol_inv_getNext(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {
   uint32_t CE = lh->baseCE;
   uint32_t SecondCE = lh->baseContCE; 
 
-  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
   uint32_t nextCE, nextContCE;
   int32_t iCE;
 
-  iCE = ucol_inv_findCE(CE, SecondCE);
+  iCE = ucol_inv_findCE(src, CE, SecondCE);
 
   if(iCE<0) {
     return -1;
@@ -242,7 +244,7 @@ inline int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
 U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
   /* reset all the gaps */
   int32_t i = 0;
-  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
   uint32_t st = 0;
   uint32_t t1, t2;
   int32_t pos;
@@ -302,7 +304,7 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
   } else {
     for(;;) {
       if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
-        if((lh->pos[tokStrength] = ucol_inv_getNext(lh, tokStrength)) >= 0) {
+        if((lh->pos[tokStrength] = ucol_inv_getNext(src, lh, tokStrength)) >= 0) {
           lh->fStrToken[tokStrength] = tok;
         } else { /* The CE must be implicit, since it's not in the table */
           /* Error */
@@ -1191,7 +1193,7 @@ ucol_bld_cleanup(void)
 {
     udata_close(invUCA_DATA_MEM);
     invUCA_DATA_MEM = NULL;
-    invUCA = NULL;
+    _staticInvUCA = NULL;
     return TRUE;
 }
 
@@ -1201,7 +1203,7 @@ ucol_initInverseUCA(UErrorCode *status)
     if(U_FAILURE(*status)) return NULL;
 
     umtx_lock(NULL);
-    UBool f = (invUCA == NULL);
+    UBool f = (_staticInvUCA == NULL);
     umtx_unlock(NULL);
     
     if(f) {
@@ -1228,8 +1230,8 @@ ucol_initInverseUCA(UErrorCode *status)
             }
             
             umtx_lock(NULL);
-            if(invUCA == NULL) {
-                invUCA = newInvUCA;
+            if(_staticInvUCA == NULL) {
+                _staticInvUCA = newInvUCA;
                 invUCA_DATA_MEM = result;
                 result = NULL;
                 newInvUCA = NULL;
@@ -1247,7 +1249,7 @@ ucol_initInverseUCA(UErrorCode *status)
             }
         }
     }
-    return invUCA;
+    return _staticInvUCA;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
