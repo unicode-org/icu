@@ -62,9 +62,9 @@
 #define UFMT_SPELLOUT       {ufmt_double, u_printf_spellout_handler}
 /* P */
 #define UFMT_PERCENT        {ufmt_double, u_printf_percent_handler}
-/* K */
+/* C  K is old format */
 #define UFMT_UCHAR          {ufmt_uchar, u_printf_uchar_handler}
-/* U */
+/* S  U is old format */
 #define UFMT_USTRING        {ufmt_ustring, u_printf_ustring_handler}
 
 
@@ -897,14 +897,14 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
 /* 0x40 */
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
+    UFMT_EMPTY,         UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR/*deprecated*/,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
 /* 0x50 */
-    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_USTRING,
+    UFMT_EMPTY,         UFMT_USTRING/*deprecated*/,UFMT_SPELLOUT,      UFMT_EMPTY,
     UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
@@ -1250,38 +1250,25 @@ u_printf_print_spec(const u_printf_stream_handler *streamHandler,
         argType = g_u_printf_infos[ handlerNum ].info;
         if(argType > ufmt_simple_percent) {
             switch(argType) {
-            case ufmt_char:
-            case ufmt_uchar:
-            case ufmt_int:
-                args.intValue = va_arg(*ap, int);
-                break;
-            case ufmt_wchar:
-                args.wcharValue = va_arg(*ap, wchar_t);
-                break;
-            case ufmt_string:
-                args.ptrValue = va_arg(*ap, char*);
-                break;
-            case ufmt_wstring:
-                args.ptrValue = va_arg(*ap, wchar_t*);
-                break;
-            case ufmt_ustring:
-                args.ptrValue = va_arg(*ap, UChar*);
-                break;
             case ufmt_count:
                 /* set the spec's width to the # of chars written */
                 info->fWidth = *written;
                 /* fall through to set the pointer */
+            case ufmt_string:
+            case ufmt_ustring:
             case ufmt_pointer:
                 args.ptrValue = va_arg(*ap, void*);
+                break;
+            case ufmt_char:
+            case ufmt_uchar:
+            case ufmt_int:
+                args.intValue = va_arg(*ap, int);
                 break;
             case ufmt_float:
                 args.floatValue = (float) va_arg(*ap, double);
                 break;
             case ufmt_double:
                 args.doubleValue = va_arg(*ap, double);
-                break;
-            case ufmt_date:
-                args.dateValue = va_arg(*ap, UDate);
                 break;
             default:
                 break;  /* Should never get here */

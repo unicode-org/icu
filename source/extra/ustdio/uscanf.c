@@ -75,9 +75,9 @@
 #define UFMT_SPELLOUT       {ufmt_double, u_scanf_spellout_handler}
 /* P */
 #define UFMT_PERCENT        {ufmt_double, u_scanf_percent_handler}
-/* K */
+/* C  K is old format */
 #define UFMT_UCHAR          {ufmt_uchar, u_scanf_uchar_handler}
-/* U */
+/* S  U is old format */
 #define UFMT_USTRING        {ufmt_ustring, u_scanf_ustring_handler}
 
 
@@ -916,14 +916,14 @@ static const u_scanf_info g_u_scanf_infos[USCANF_NUM_FMT_HANDLERS] = {
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
 /* 0x40 */
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
+    UFMT_EMPTY,         UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR/*deprecated*/,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
 /* 0x50 */
-    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_USTRING,
+    UFMT_EMPTY,         UFMT_USTRING/*deprecated*/,UFMT_SPELLOUT,      UFMT_EMPTY,
     UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_SCANSET,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
@@ -989,48 +989,21 @@ u_vfscanf_u(UFILE       *f,
             if(info > ufmt_simple_percent) {
                 switch(info) {
 
+                case ufmt_char:
+                case ufmt_uchar:
+                case ufmt_int:
+                case ufmt_string:
+                case ufmt_ustring:
+                case ufmt_pointer:
+                case ufmt_float:
+                case ufmt_double:
+                    args.ptrValue = va_arg(ap, void*);
+                    break;
+
                 case ufmt_count:
                     args.intValue = va_arg(ap, int);
                     /* set the spec's width to the # of items converted */
                     spec.fInfo.fWidth = converted;
-                    break;
-
-                case ufmt_char:
-                case ufmt_uchar:
-                case ufmt_int:
-                    args.ptrValue = va_arg(ap, int*);
-                    break;
-
-                case ufmt_wchar:
-                    args.ptrValue = va_arg(ap, wchar_t*);
-                    break;
-
-                case ufmt_string:
-                    args.ptrValue = va_arg(ap, char*);
-                    break;
-
-                case ufmt_wstring:
-                    args.ptrValue = va_arg(ap, wchar_t*);
-                    break;
-
-                case ufmt_pointer:
-                    args.ptrValue = va_arg(ap, void*);
-                    break;
-
-                case ufmt_float:
-                    args.ptrValue = va_arg(ap, float*);
-                    break;
-
-                case ufmt_double:
-                    args.ptrValue = va_arg(ap, double*);
-                    break;
-
-                case ufmt_date:
-                    args.ptrValue = va_arg(ap, UDate*);
-                    break;
-
-                case ufmt_ustring:
-                    args.ptrValue = va_arg(ap, UChar*);
                     break;
 
                 default:
@@ -1069,3 +1042,4 @@ u_vfscanf_u(UFILE       *f,
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
