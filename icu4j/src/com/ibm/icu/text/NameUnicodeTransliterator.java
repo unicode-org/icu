@@ -3,14 +3,15 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2002/09/09 16:11:07 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/09/19 23:17:02 $ 
+ * $Revision: 1.13 $
  */
 package com.ibm.icu.text;
 import java.util.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.UCharacterName;
 
 /**
  * A transliterator that performs name to character mapping.
@@ -40,16 +41,6 @@ class NameUnicodeTransliterator extends Transliterator {
         });
     }
 
-    // TEMPORARY AND FAKE
-    // TODO Remove and replace calls to these with calls to the real
-    //      fns.
-    int FAKE_getMaxCharNameLength() {
-        return 83;
-    }
-    UnicodeSet FAKE_getCharNameCharacters() {
-        return new UnicodeSet("[\\ (-)\\-0-9<>A-Za-z]");
-    }
-
     /**
      * Constructs a transliterator.
      */
@@ -63,12 +54,13 @@ class NameUnicodeTransliterator extends Transliterator {
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
 
-        int maxLen = FAKE_getMaxCharNameLength() + 1; // allow for temporary trailing space
+        int maxLen = UCharacterName.getInstance().getMaxCharNameLength() + 1; // allow for temporary trailing space
 
         StringBuffer name = new StringBuffer(maxLen);
 
         // Get the legal character set
-        UnicodeSet legal = FAKE_getCharNameCharacters();
+        UnicodeSet legal = new UnicodeSet();
+        UCharacterName.getInstance().getCharNameCharacters(legal);
 
         int cursor = offsets.start;
         int limit = offsets.limit;
