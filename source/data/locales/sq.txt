@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/sq.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/sq.xml
+ *  ICU <specials> source: ./xml/main/sq.xml
  */
 sq{
     Countries{
@@ -140,7 +140,6 @@ sq{
         SK{"Sllovaki"}
         SL{"Siera Leone"}
         SO{"Somali"}
-        SP{"Serbië"}
         ST{"Sao Tome e Prinsipe"}
         SY{"Siri"}
         SZ{"Svazilandë"}
@@ -160,6 +159,7 @@ sq{
         VC{"Saint Vincent e Grenadinet"}
         VE{"Venezuelë"}
         YE{"Jemen"}
+        YU{"Serbië"}
         ZA{"Afrika e Jugut"}
         ZM{"Zambi"}
         ZW{"Zimbabve"}
@@ -168,6 +168,26 @@ sq{
         ALL{
             "Lek",
             "ALL",
+        }
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
+        USD{
+            "$",
+            "USD",
         }
     }
     ExemplarCharacters{"[a-zçë{dh}{gj}{ll}{nj}{rr}{sh}{th}{xh}{zh}]"}
@@ -191,7 +211,7 @@ sq{
         "�",
         "+",
     }
-    Version{"1.2"}
+    Version{"1.34"}
     calendar{
         gregorian{
             AmPmMarkers{

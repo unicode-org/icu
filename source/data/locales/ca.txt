@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/ca.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/ca.xml
+ *  ICU <specials> source: ./xml/main/ca.xml
  */
 ca{
     Countries{
@@ -171,7 +171,6 @@ ca{
         SL{"Sierra Leone"}
         SN{"Senegal"}
         SO{"Somàlia"}
-        SP{"Sèrbia"}
         SR{"Surinam"}
         SV{"El Salvador"}
         SY{"Síria"}
@@ -217,6 +216,26 @@ ca{
                 ",",
                 ".",
             }
+        }
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
+        USD{
+            "$",
+            "USD",
         }
     }
     ExemplarCharacters{"[a-z é í ó ú à è ò ï ü ŀ ç ñ]"}
@@ -378,7 +397,7 @@ ca{
         "�",
         "+",
     }
-    Version{"1.2"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

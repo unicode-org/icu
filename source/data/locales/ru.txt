@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/ru.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/ru.xml
+ *  ICU <specials> source: ./xml/main/ru.xml
  */
 ru{
     Countries{
@@ -208,7 +208,6 @@ ru{
         SM{"Сан-Марино"}
         SN{"Сенегал"}
         SO{"Сомали"}
-        SP{"Сербия"}
         SR{"Суринам"}
         ST{"Сан-Томе и Принсипи"}
         SV{"Сальвадор"}
@@ -348,10 +347,6 @@ ru{
         BYB{
             "BYB",
             "Белорусский рубль (1994-1999)",
-        }
-        BYL{
-            "BYL",
-            "Белорусский рубль (1992-1994)",
         }
         BYR{
             "Rbl",
@@ -1246,7 +1241,7 @@ ru{
             japanese{"Японский календарь"}
         }
     }
-    Version{"1.2"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

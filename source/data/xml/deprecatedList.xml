@@ -4,8 +4,6 @@
   <!-- list of locales which ICU will take anyway, regardless of draft status. Equivalent of '-f' on that locale. -->
 <!--  <overrideDraft locale="as"/>
   <overrideDraft locale="as_IN"/> -->
-  <overrideDraft locale="cy"/>
-  <overrideDraft locale="cy_GB"/>
   <overrideDraft locale="en_PK"/>
   <overrideDraft locale="ml"/>
   <overrideDraft locale="ml_IN"/>

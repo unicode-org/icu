@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/ta.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/ta.xml
+ *  ICU <specials> source: ./xml/main/ta.xml
  */
 ta{
     Countries{
@@ -331,12 +331,12 @@ ta{
         "Taml",
     }
     NumberPatterns{
-        "#,##,##0.###;-#,##,##0.###",
-        "¤ #,##,##0.00;-¤ #,##,##0.00",
+        "#,##,##0.###",
+        "¤ #,##,##0.00",
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.2"}
+    Version{"1.32"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -412,6 +412,7 @@ ta{
             "IST",
             "இந்திய நேரப்படி",
             "IST",
+            "Calcutta",
         }
     }
 }

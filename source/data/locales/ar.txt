@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/ar.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/ar.xml
+ *  ICU <specials> source: ./xml/main/ar.xml
  */
 ar{
     Countries{
@@ -219,6 +219,14 @@ ar{
             "ج.م.‏",
             "EGP",
         }
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
         IQD{
             "د.ع.‏",
             "IQD",
@@ -226,6 +234,10 @@ ar{
         JOD{
             "د.أ.‏",
             "JOD",
+        }
+        JPY{
+            "¥",
+            "JPY",
         }
         KWD{
             "د.ك.‏",
@@ -266,6 +278,10 @@ ar{
         TND{
             "د.ت.‏",
             "TND",
+        }
+        USD{
+            "$",
+            "USD",
         }
         YER{
             "ر.ي.‏",
@@ -419,7 +435,7 @@ ar{
             traditional{"تقليدي"}
         }
     }
-    Version{"1.2"}
+    Version{"1.40"}
     calendar{
         buddhist{
             eras{

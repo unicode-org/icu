@@ -1,22 +1,38 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/te.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/te.xml
+ *  ICU <specials> source: ./xml/main/te.xml
  */
 te{
     Countries{
-        IN{"భారత దేళ౦"}
+        IN{"భారత దేళం"}
     }
     Currencies{
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
         INR{
             "రూ.",
             "INR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
+        USD{
+            "$",
+            "USD",
         }
     }
     ExemplarCharacters{"[[:Telu:]‌‍]"}
@@ -40,7 +56,7 @@ te{
         "�",
         "+",
     }
-    Version{"1.2"}
+    Version{"1.32"}
     calendar{
         gregorian{
             AmPmMarkers{

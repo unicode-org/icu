@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/cs.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/cs.xml
+ *  ICU <specials> source: ./xml/main/cs.xml
  */
 cs{
     Countries{
@@ -208,7 +208,6 @@ cs{
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somálsko"}
-        SP{"Serbia"}
         SR{"Surinam"}
         ST{"Svatý Tomáš"}
         SV{"El Salvador"}
@@ -253,10 +252,6 @@ cs{
         ZW{"Zimbabwe"}
     }
     Currencies{
-        ADD{
-            "ADD",
-            "Diner andorrský",
-        }
         ADP{
             "ADP",
             "Peseta andorrská",
@@ -273,10 +268,6 @@ cs{
             "Af",
             "Afghán",
         }
-        AIF{
-            "AIF",
-            "Affars and Issas Franc",
-        }
         ALK{
             "ALK",
             "Lek (1946-1961)",
@@ -284,10 +275,6 @@ cs{
         ALL{
             "lek",
             "Lek",
-        }
-        ALV{
-            "ALV",
-            "Albanian Lek Valute",
         }
         AMD{
             "dram",
@@ -313,17 +300,9 @@ cs{
             "AOR",
             "Kwanza reajustado (1995-1999)",
         }
-        AOS{
-            "AOS",
-            "Escudo angolské",
-        }
         ARA{
             "ARA",
             "Austral",
-        }
-        ARM{
-            "ARM",
-            "Peso argentinské Moneda Nacional",
         }
         ARP{
             "ARP",
@@ -341,10 +320,6 @@ cs{
             "$A",
             "Dolar australský",
         }
-        AUP{
-            "AUP",
-            "Libra australská",
-        }
         AWG{
             "AWG",
             "Zlatý arubský",
@@ -360,10 +335,6 @@ cs{
         BAM{
             "KM",
             "Marka konvertibilní",
-        }
-        BAN{
-            "BAN",
-            "Nový Dinár Bosny a Hercegoviny",
         }
         BBD{
             "BDS$",
@@ -389,17 +360,9 @@ cs{
             "lev",
             "Lev",
         }
-        BGM{
-            "BGM",
-            "Lev Bulharský socialistický",
-        }
         BGN{
             "BGN",
             "Lev Bulharský",
-        }
-        BGO{
-            "BGO",
-            "Lev Bulharský (1879-1952)",
         }
         BHD{
             "BD",
@@ -413,10 +376,6 @@ cs{
             "Ber$",
             "Dolar bermudský",
         }
-        BMP{
-            "BMP",
-            "Libra bermudská",
-        }
         BND{
             "BND",
             "Dolar brunejský",
@@ -424,10 +383,6 @@ cs{
         BOB{
             "Bs",
             "Boliviano",
-        }
-        BOL{
-            "BOL",
-            "Boliviano (1863-1962)",
         }
         BOP{
             "BOP",
@@ -461,33 +416,17 @@ cs{
             "BRR",
             "Cruzeiro real",
         }
-        BRZ{
-            "BRZ",
-            "Cruzeiro (1942-1967)",
-        }
         BSD{
             "BSD",
             "Dolar bahamský",
-        }
-        BSP{
-            "BSP",
-            "Libra bahamská",
         }
         BTN{
             "Nu",
             "Ngultrum",
         }
-        BTR{
-            "BTR",
-            "Rupie bhútánská",
-        }
         BUK{
             "BUK",
             "Kyat barmský",
-        }
-        BUR{
-            "BUR",
-            "Rupie barmská",
         }
         BWP{
             "BWP",
@@ -497,10 +436,6 @@ cs{
             "BYB",
             "Rubl nový běloruský (1994-1999)",
         }
-        BYL{
-            "BYL",
-            "Rubl běloruský (1992-1994)",
-        }
         BYR{
             "Rbl",
             "Rubl běloruský",
@@ -508,10 +443,6 @@ cs{
         BZD{
             "BZ$",
             "Dolar belizský",
-        }
-        BZH{
-            "BZH",
-            "Dolar Britského Hondurasu",
         }
         CAD{
             "Can$",
@@ -521,33 +452,9 @@ cs{
             "CDF",
             "Frank konžský",
         }
-        CDG{
-            "CDG",
-            "Frank Konžské republiky",
-        }
-        CDL{
-            "CDL",
-            "Zaire konžský",
-        }
-        CFF{
-            "CFF",
-            "Frank Středoafrické republiky CFA",
-        }
         CHF{
             "SwF",
             "Frank švýcarský",
-        }
-        CKD{
-            "CKD",
-            "Dolar Cookových ostrovů",
-        }
-        CLC{
-            "CLC",
-            "Condor chilský",
-        }
-        CLE{
-            "CLE",
-            "Escudo chilské",
         }
         CLF{
             "CLF",
@@ -557,14 +464,6 @@ cs{
             "Ch$",
             "Peso chilské",
         }
-        CMF{
-            "CMF",
-            "Frank kamerunský CFA",
-        }
-        CNP{
-            "CNP",
-            "Juan jen min piao",
-        }
         CNX{
             "CNX",
             "Dolar lidové banky",
@@ -573,14 +472,6 @@ cs{
             "Y",
             "Juan renminbi",
         }
-        COB{
-            "COB",
-            "Peso kolumbijské",
-        }
-        COF{
-            "COF",
-            "Krank konžský CFA",
-        }
         COP{
             "Col$",
             "Peso kolumbijské",
@@ -588,10 +479,6 @@ cs{
         CRC{
             "C",
             "Colón kostarický",
-        }
-        CSC{
-            "CSC",
-            "Koruna československá",
         }
         CSK{
             "CSK",
@@ -604,10 +491,6 @@ cs{
         CVE{
             "CVEsc",
             "Escudo kapverdské",
-        }
-        CWG{
-            "CWG",
-            "Zlatý Curacao",
         }
         CYP{
             "£",
@@ -625,10 +508,6 @@ cs{
             "DEM",
             "Marka německá",
         }
-        DES{
-            "DES",
-            "Sperrmark německá",
-        }
         DJF{
             "DF",
             "Frank džibutský",
@@ -644,14 +523,6 @@ cs{
         DZD{
             "DA",
             "Dinár alžírský",
-        }
-        DZF{
-            "DZF",
-            "Frank nový alžírský",
-        }
-        DZG{
-            "DZG",
-            "Frank alžírský germinal",
         }
         ECS{
             "ECS",
@@ -681,10 +552,6 @@ cs{
             "Br",
             "Birr etiopský",
         }
-        ETD{
-            "ETD",
-            "Dolar etiopský",
-        }
         EUR{
             "€",
             "Euro",
@@ -693,37 +560,17 @@ cs{
             "FIM",
             "Markka",
         }
-        FIN{
-            "FIN",
-            "Markka (1860-1962)",
-        }
         FJD{
             "F$",
             "Dolar fidžijský",
-        }
-        FJP{
-            "FJP",
-            "Libra fidžijská",
         }
         FKP{
             "FKP",
             "Libra falklandská",
         }
-        FOK{
-            "FOK",
-            "Koruna Faerských ostrovů",
-        }
         FRF{
             "FRF",
             "Frank francouzský",
-        }
-        FRG{
-            "FRG",
-            "Frank francouzský germinal/Frank poincare",
-        }
-        GAF{
-            "GAF",
-            "Frank gabonský CFA",
         }
         GBP{
             "£",
@@ -741,85 +588,37 @@ cs{
             "GHC",
             "Cedi",
         }
-        GHO{
-            "GHO",
-            "Ghana Old Cedi",
-        }
-        GHP{
-            "GHP",
-            "Libra ghanská",
-        }
-        GHR{
-            "GHR",
-            "Ghana Revalued Cedi",
-        }
         GIP{
             "GIP",
             "Libra gibraltarská",
-        }
-        GLK{
-            "GLK",
-            "Greenland Krone",
         }
         GMD{
             "GMD",
             "Dalasi",
         }
-        GMP{
-            "GMP",
-            "Libra gambijská",
-        }
         GNF{
             "GF",
             "Frank guinejský",
-        }
-        GNI{
-            "GNI",
-            "Frank guinejský (1960-1972)",
         }
         GNS{
             "GNS",
             "Guinea Syli",
         }
-        GPF{
-            "GPF",
-            "Frank guadeloupský",
-        }
         GQE{
             "GQE",
             "Equatorial Guinea Ekwele Guineana",
-        }
-        GQF{
-            "GQF",
-            "Equatorial Guinea Franco",
-        }
-        GQP{
-            "GQP",
-            "Equatorial Guinea Peseta Guineana",
         }
         GRD{
             "GRD",
             "Drachma",
         }
-        GRN{
-            "GRN",
-            "Drachma nová řecká",
-        }
         GTQ{
             "Q",
             "Quetzal",
         }
-        GUF{
-            "GUF",
-            "French Guyana Franc Guiana",
-        }
         GWE{
             "GWE",
             "Escudo guinejské",
-        }
-        GWM{
-            "GWM",
-            "Portuguese Guinea Mil Reis",
         }
         GWP{
             "GWP",
@@ -853,22 +652,6 @@ cs{
             "Ft",
             "Forint",
         }
-        IBP{
-            "IBP",
-            "Libra severoirská",
-        }
-        IDG{
-            "IDG",
-            "Indonesian Nica Guilder",
-        }
-        IDJ{
-            "IDJ",
-            "Indonesian Java Rupiah",
-        }
-        IDN{
-            "IDN",
-            "Indonesian New Rupiah",
-        }
         IDR{
             "Rp",
             "Rupie indonézská",
@@ -877,10 +660,6 @@ cs{
             "IR£",
             "Libra irská",
         }
-        ILL{
-            "ILL",
-            "Šekel izraelský",
-        }
         ILP{
             "ILP",
             "Libra izraelská",
@@ -888,10 +667,6 @@ cs{
         ILS{
             "ILS",
             "Šekel nový izraelský",
-        }
-        IMP{
-            "IMP",
-            "Libra šterlinků Ostrov Man",
         }
         INR{
             "INR",
@@ -913,17 +688,9 @@ cs{
             "₤",
             "Lira italská",
         }
-        JEP{
-            "JEP",
-            "Libra šterlinků Jersey",
-        }
         JMD{
             "J$",
             "Dolar jamajský",
-        }
-        JMP{
-            "JMP",
-            "Libra jamajská",
         }
         JOD{
             "JD",
@@ -941,17 +708,9 @@ cs{
             "som",
             "Som",
         }
-        KHO{
-            "KHO",
-            "Riel starý",
-        }
         KHR{
             "CR",
             "Riel",
-        }
-        KID{
-            "KID",
-            "Dolar kiribatský",
         }
         KMF{
             "CF",
@@ -960,14 +719,6 @@ cs{
         KPW{
             "KPW",
             "Won severokorejský",
-        }
-        KRH{
-            "KRH",
-            "Hwan jihokorejský",
-        }
-        KRO{
-            "KRO",
-            "Won starý jihokorejský",
         }
         KRW{
             "KRW",
@@ -981,10 +732,6 @@ cs{
             "KYD",
             "Dolar Kajmanských ostrovů",
         }
-        KZR{
-            "KZR",
-            "Rubl kazašský",
-        }
         KZT{
             "T",
             "Tenge",
@@ -997,17 +744,9 @@ cs{
             "LL",
             "Libra libanonská",
         }
-        LIF{
-            "LIF",
-            "Frank lichtenštejnský",
-        }
         LKR{
             "SL Re",
             "Rupie srílanská",
-        }
-        LNR{
-            "LNR",
-            "Rupie cejlonská",
         }
         LRD{
             "LRD",
@@ -1041,10 +780,6 @@ cs{
             "LD",
             "Dinár lybijský",
         }
-        LYP{
-            "LYP",
-            "Libra lybijská",
-        }
         MAD{
             "MAD",
             "Dirham marocký",
@@ -1053,25 +788,9 @@ cs{
             "MAF",
             "Frank marocký",
         }
-        MCF{
-            "MCF",
-            "Frank nouveau monacký",
-        }
-        MCG{
-            "MCG",
-            "Frank monacký germinal",
-        }
-        MDC{
-            "MDC",
-            "Moldovan Leu Cupon",
-        }
         MDL{
             "MDL",
             "Leu moldavský",
-        }
-        MDR{
-            "MDR",
-            "Moldovan Ruble Cupon",
         }
         MGA{
             "MGA",
@@ -1081,17 +800,9 @@ cs{
             "MGF",
             "Frank madagaskarský",
         }
-        MHD{
-            "MHD",
-            "Dolar Marshallových ostrovů",
-        }
         MKD{
             "MDen",
             "Denár",
-        }
-        MKN{
-            "MKN",
-            "Denár (1992-1993)",
         }
         MLF{
             "MLF",
@@ -1109,10 +820,6 @@ cs{
             "MOP",
             "Pataca",
         }
-        MQF{
-            "MQF",
-            "Frank martinikský",
-        }
         MRO{
             "UM",
             "Ouguiya",
@@ -1129,10 +836,6 @@ cs{
             "MUR",
             "Rupie mauricijská",
         }
-        MVP{
-            "MVP",
-            "Rupie maledivská",
-        }
         MVR{
             "MVR",
             "Rufiyaa",
@@ -1140,10 +843,6 @@ cs{
         MWK{
             "MK",
             "Kwacha",
-        }
-        MWP{
-            "MWP",
-            "Libra malawijská",
         }
         MXN{
             "MEX$",
@@ -1173,29 +872,13 @@ cs{
             "N$",
             "Dolar namibijský",
         }
-        NCF{
-            "NCF",
-            "Frank Nové Kaledonie germinal",
-        }
         NGN{
             "NGN",
             "Naira",
         }
-        NGP{
-            "NGP",
-            "Libra nigerijská",
-        }
-        NHF{
-            "NHF",
-            "Frank Nových Hebrid CFP",
-        }
         NIC{
             "NIC",
             "Cordoba",
-        }
-        NIG{
-            "NIG",
-            "Cordoba zlatá",
         }
         NIO{
             "NIO",
@@ -1217,33 +900,13 @@ cs{
             "$NZ",
             "Dolar novozélandský",
         }
-        NZP{
-            "NZP",
-            "Libra novozélandská",
-        }
         OMR{
             "RO",
             "Rijál ománský",
         }
-        OMS{
-            "OMS",
-            "Rijál ománský saidi",
-        }
         PAB{
             "PAB",
             "Balboa",
-        }
-        PDK{
-            "PDK",
-            "Transdniestria Ruble Kupon",
-        }
-        PDN{
-            "PDN",
-            "Transdniestria New Ruble",
-        }
-        PDR{
-            "PDR",
-            "Transdniestria Ruble",
         }
         PEI{
             "PEI",
@@ -1277,14 +940,6 @@ cs{
             "PLZ",
             "Zlotý (1950-1995)",
         }
-        PSP{
-            "PSP",
-            "Libra palestinská",
-        }
-        PTC{
-            "PTC",
-            "Conto portugalské",
-        }
         PTE{
             "PTE",
             "Escudo portugalské",
@@ -1297,17 +952,9 @@ cs{
             "QR",
             "Rijál katarský",
         }
-        REF{
-            "REF",
-            "Frank Reunion",
-        }
         ROL{
             "leu",
             "Lei",
-        }
-        RON{
-            "RON",
-            "Lei nový",
         }
         RUB{
             "RUB",
@@ -1324,10 +971,6 @@ cs{
         SAR{
             "SRl",
             "Rijál saudský",
-        }
-        SAS{
-            "SAS",
-            "Rijál saudský sovereign",
         }
         SBD{
             "SI$",
@@ -1357,10 +1000,6 @@ cs{
             "SHP",
             "Libra Svaté Heleny",
         }
-        SIB{
-            "SIB",
-            "Slovenia Tolar Bons",
-        }
         SIT{
             "SIT",
             "Tolar",
@@ -1369,37 +1008,17 @@ cs{
             "Sk",
             "Koruna slovenská",
         }
-        SML{
-            "SML",
-            "Lira San Marino",
-        }
         SOS{
             "So. Sh.",
             "Šilink somálský",
-        }
-        SQS{
-            "SQS",
-            "Somaliland Shilling",
         }
         SRG{
             "Sf",
             "Zlatý surinamský",
         }
-        SSP{
-            "SSP",
-            "Libra skotská",
-        }
         STD{
             "Db",
             "Dobra",
-        }
-        STE{
-            "STE",
-            "Escudo Svatého Tomáše",
-        }
-        SUN{
-            "SUN",
-            "Rubl nový",
         }
         SUR{
             "SUR",
@@ -1416,14 +1035,6 @@ cs{
         SZL{
             "E",
             "Lilangeni",
-        }
-        TCC{
-            "TCC",
-            "Koruna Turks a Caicos",
-        }
-        TDF{
-            "TDF",
-            "Frank čadský CFA",
         }
         THB{
             "THB",
@@ -1445,17 +1056,9 @@ cs{
             "TND",
             "Dinár tuniský",
         }
-        TOS{
-            "TOS",
-            "Libra šterlinků tonžská",
-        }
         TPE{
             "TPE",
             "Escudo timorské",
-        }
-        TPP{
-            "TPP",
-            "Pataca timorská",
         }
         TRL{
             "TL",
@@ -1464,14 +1067,6 @@ cs{
         TTD{
             "TT$",
             "Dolar Trinidad a Tobago",
-        }
-        TTO{
-            "TTO",
-            "Dolar starý Trinidad a Tobago",
-        }
-        TVD{
-            "TVD",
-            "Dolar tuvalský",
         }
         TWD{
             "NT$",
@@ -1509,10 +1104,6 @@ cs{
             "USS",
             "Dolar americký (týž den)",
         }
-        UYF{
-            "UYF",
-            "Peso uruguayské fuerte",
-        }
         UYP{
             "UYP",
             "Peso uruguayské (1975-1993)",
@@ -1521,33 +1112,17 @@ cs{
             "Ur$",
             "Peso uruguayské",
         }
-        UZC{
-            "UZC",
-            "Uzbekistan Coupon Som",
-        }
         UZS{
             "UZS",
             "Sum uzbecký",
-        }
-        VAL{
-            "VAL",
-            "Lira Vatikánu",
         }
         VEB{
             "Be",
             "Bolivar",
         }
-        VGD{
-            "VGD",
-            "Dolar Britských Panenských ostrovů",
-        }
         VUV{
             "VT",
             "Vatu",
-        }
-        WSP{
-            "WSP",
-            "Libra Západní Samoa",
         }
         WST{
             "WST",
@@ -1556,10 +1131,6 @@ cs{
         XAF{
             "XAF",
             "Frank BEAC/CFA",
-        }
-        XAM{
-            "XAM",
-            "Asijská peněžní jednotka",
         }
         XAU{
             "XAU",
@@ -1585,17 +1156,9 @@ cs{
             "EC$",
             "Dolar východokaribský",
         }
-        XCF{
-            "XCF",
-            "Frank Nouveau CFA",
-        }
         XDR{
             "XDR",
             "SDR",
-        }
-        XEF{
-            "XEF",
-            "Frank BCEAEC/CFA",
         }
         XEU{
             "XEU",
@@ -1609,14 +1172,6 @@ cs{
             "XFU",
             "Frank UIC",
         }
-        XID{
-            "XID",
-            "Dinár islámský",
-        }
-        XNF{
-            "XNF",
-            "Frank Francouzských Antil CFA",
-        }
         XOF{
             "XOF",
             "Frank BCEAO/CFA",
@@ -1629,10 +1184,6 @@ cs{
             "YDD",
             "Dinár jemenský",
         }
-        YEI{
-            "YEI",
-            "Rijál jemenský imadi",
-        }
         YER{
             "YRl",
             "Rijál jemenský",
@@ -1640,14 +1191,6 @@ cs{
         YUD{
             "YUD",
             "Dinár jugoslávský nový",
-        }
-        YUF{
-            "YUF",
-            "Dinár jugoslávský federativní",
-        }
-        YUG{
-            "YUG",
-            "Dinár jugoslávský 1994",
         }
         YUM{
             "YUM",
@@ -1657,17 +1200,9 @@ cs{
             "YUN",
             "Dinár jugoslávský",
         }
-        YUR{
-            "YUR",
-            "Dinár jugoslávský reformovaný",
-        }
         ZAL{
             "ZAL",
             "Rand finanční",
-        }
-        ZAP{
-            "ZAP",
-            "Libra jihoafrická",
         }
         ZAR{
             "R",
@@ -1676,10 +1211,6 @@ cs{
         ZMK{
             "ZMK",
             "Kwacha",
-        }
-        ZMP{
-            "ZMP",
-            "Libra zambijská",
         }
         ZRN{
             "ZRN",
@@ -1869,7 +1400,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.2"}
+    Version{"1.43"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2014,68 +1545,12 @@ cs{
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
     zoneStrings{
         {
-            "America/Los_Angeles",
-            "Pacifický standardní čas",
-            "PST",
-            "Pacifický letní čas",
-            "PDT",
-            "Los Angeles",
-        }
-        {
-            "America/Denver",
-            "Horský standardní čas",
-            "MST",
-            "Horský letní čas",
-            "MDT",
-            "Denver",
-        }
-        {
-            "America/Phoenix",
-            "Horský standardní čas",
-            "MST",
-            "Horský standardní čas",
-            "MST",
-            "Phoenix",
-        }
-        {
-            "America/Chicago",
-            "Centrální standardní čas",
-            "CST",
-            "Centrální letní čas",
-            "CDT",
-            "Chicago",
-        }
-        {
-            "America/New_York",
-            "Východní standardní čas",
-            "EST",
-            "Východní letní čas",
-            "EDT",
-            "New York",
-        }
-        {
-            "America/Indianapolis",
-            "Východní standardní čas",
-            "EST",
-            "Východní standardní čas",
-            "EST",
-            "Indianapolis",
-        }
-        {
-            "Pacific/Honolulu",
-            "Havajský standardní čas",
-            "HST",
-            "Havajský standardní čas",
-            "HST",
-            "Honolulu",
-        }
-        {
-            "America/Anchorage",
-            "Aljašský standardní čas",
-            "AST",
-            "Aljašský letní čas",
-            "ADT",
-            "Anchorage",
+            "Etc/GMT",
+            "Greenwichský střední čas",
+            "GMT",
+            "Greenwichský střední čas",
+            "GMT",
+            "Londýn",
         }
         {
             "America/Halifax",
@@ -2094,28 +1569,20 @@ cs{
             "St. Johns",
         }
         {
+            "Asia/Shanghai",
+            "Čínský standardní čas",
+            "CTT",
+            "Čínský standardní čas",
+            "CDT",
+            "Šanghaj",
+        }
+        {
             "Europe/Paris",
             "Středoevropský standardní čas",
             "CET",
             "Středoevropský letní čas",
             "CEST",
             "Paříž",
-        }
-        {
-            "Etc/GMT",
-            "Greenwichský střední čas",
-            "GMT",
-            "Greenwichský střední čas",
-            "GMT",
-            "Londýn",
-        }
-        {
-            "Africa/Casablanca",
-            "Greenwichský střední čas",
-            "GMT",
-            "Greenwichský střední čas",
-            "GMT",
-            "Casablanca",
         }
         {
             "Asia/Jerusalem",
@@ -2134,6 +1601,14 @@ cs{
             "Tokio",
         }
         {
+            "Africa/Casablanca",
+            "Greenwichský střední čas",
+            "GMT",
+            "Greenwichský střední čas",
+            "GMT",
+            "Casablanca",
+        }
+        {
             "Europe/Bucharest",
             "Východoevropský standardní čas",
             "EET",
@@ -2142,12 +1617,68 @@ cs{
             "Bukurešť",
         }
         {
-            "Asia/Shanghai",
-            "Čínský standardní čas",
-            "CTT",
-            "Čínský standardní čas",
+            "Pacific/Honolulu",
+            "Havajský standardní čas",
+            "HST",
+            "Havajský standardní čas",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "America/Anchorage",
+            "Aljašský standardní čas",
+            "AST",
+            "Aljašský letní čas",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacifický standardní čas",
+            "PST",
+            "Pacifický letní čas",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Phoenix",
+            "Horský standardní čas",
+            "MST",
+            "Horský standardní čas",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Denver",
+            "Horský standardní čas",
+            "MST",
+            "Horský letní čas",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Chicago",
+            "Centrální standardní čas",
+            "CST",
+            "Centrální letní čas",
             "CDT",
-            "Šanghaj",
+            "Chicago",
+        }
+        {
+            "America/Indianapolis",
+            "Východní standardní čas",
+            "EST",
+            "Východní standardní čas",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/New_York",
+            "Východní standardní čas",
+            "EST",
+            "Východní letní čas",
+            "EDT",
+            "New York",
         }
     }
 }

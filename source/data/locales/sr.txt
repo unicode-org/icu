@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/sr.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/sr.xml
+ *  ICU <specials> source: ./xml/main/sr.xml
  */
 sr{
     Countries{
@@ -290,10 +290,6 @@ sr{
             "FIM",
             "Финска марка",
         }
-        FIN{
-            "FIN",
-            "Финска марка (1860-1962)",
-        }
         FRF{
             "FRF",
             "Француски франак",
@@ -494,7 +490,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.2"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -605,6 +601,7 @@ sr{
             "CET",
             "Централно Европско Време",
             "CET",
+            "Belgrade",
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/he.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/he.xml
+ *  ICU <specials> source: ./xml/main/he.xml
  */
 he{
     Countries{
@@ -252,9 +252,29 @@ he{
         ZW{"זימבבווה"}
     }
     Currencies{
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
         ILS{
             "₪",
             "ש\"ח",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
+        USD{
+            "$",
+            "USD",
         }
     }
     ExemplarCharacters{"[ְ-ֹֻ-ֽֿׁ-ׂׄא-ת]"}
@@ -350,7 +370,7 @@ he{
             hebrew{"לוח שנה עברי"}
         }
     }
-    Version{"1.2"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimePatterns{
