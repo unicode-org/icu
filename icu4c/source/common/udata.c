@@ -471,7 +471,8 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
         /* check for .dat files */
         pathBasename = findBasename(iter->pathBuffer);
 
-        if(iter->checkLastFour == TRUE &&
+        if(iter->checkLastFour == TRUE && 
+           (pathLen>=4) &&
            uprv_strncmp(iter->pathBuffer +(pathLen-4),iter->suffix,4)==0 && /* suffix matches */
            uprv_strncmp(findBasename(iter->pathBuffer),iter->basename,iter->basenameLen)==0  && /* base matches */
            uprv_strlen(pathBasename)==(iter->basenameLen+4)) { /* base+suffix = full len */
@@ -485,8 +486,17 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
         {       /* regular dir path */
             if(iter->pathBuffer[pathLen-1] != U_FILE_SEP_CHAR)  /* trailing sep */
             {
+                if((pathLen>=4) &&
+                   uprv_strncmp(iter->pathBuffer+(pathLen-4), ".dat", 4) == 0)
+                {
+#ifdef UDATA_DEBUG
+                    fprintf(stderr, "skipping non-directory .dat file %s\n", iter->pathBuffer);
+                    continue;
+#endif
+                }
+                     
                 iter->pathBuffer[pathLen++] = U_FILE_SEP_CHAR;
-            }
+            } 
             
             uprv_strncpy(iter->pathBuffer + pathLen,  /* + basename */
                          iter->basename,
