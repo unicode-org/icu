@@ -42,14 +42,6 @@
   Global variable and type definitions
 *****************************************************************************/
 
-/* UnicodeString stuff */
-typedef struct UnicodeString UnicodeString;
-
-U_CFUNC int32_t T_UnicodeString_length(const UnicodeString *s);
-
-U_CAPI int32_t
-T_UnicodeString_extract(const UnicodeString *s, char *dst);
-
 /* Locale stuff from locid.cpp */
 U_CAPI void locale_set_default(const char *id);
 
