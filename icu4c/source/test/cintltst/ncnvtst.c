@@ -1945,4 +1945,6 @@ TestUnicodeSet() {
 
         ucnv_close(cnv);
     }
+
+    uset_close(set);
 }

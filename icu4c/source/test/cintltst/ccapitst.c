@@ -2184,6 +2184,9 @@ static void TestConvertEx() {
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_convertEx(*source==NULL) sets %s\n", u_errorName(errorCode));
     }
+
+    ucnv_close(cnv1);
+    ucnv_close(cnv2);
 }
 
 static void
