@@ -293,7 +293,12 @@ Locale::Locale(const Locale &other)
 
 Locale &Locale::operator=(const Locale &other)
 {
-    if (*this == other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    if (&other == NULL) {
+        this->setToBogus();
         return *this;
     }
 
@@ -462,15 +467,17 @@ Locale::getDefault()
     umtx_unlock(NULL);
     if (needInit) {
         Locale *tLocale = new Locale(Locale::eBOGUS);
-        const char *cLocale = uprv_getDefaultLocaleID();
-        tLocale->init(cLocale);  
-        umtx_lock(NULL);
-        if (gDefaultLocale == NULL) {
-            gDefaultLocale = tLocale;
-            tLocale = NULL;
+        if (tLocale != NULL) {
+            const char *cLocale = uprv_getDefaultLocaleID();
+            tLocale->init(cLocale);  
+            umtx_lock(NULL);
+            if (gDefaultLocale == NULL) {
+                gDefaultLocale = tLocale;
+                tLocale = NULL;
+            }
+            umtx_unlock(NULL);
+            delete tLocale;
         }
-        umtx_unlock(NULL);
-        delete tLocale;
     }
     return *gDefaultLocale;
 }
@@ -721,6 +728,9 @@ Locale::getAvailableLocales(int32_t& count)
     if (needInit) {
         int32_t locCount = uloc_countAvailable();
         Locale *newLocaleList = new Locale[locCount];
+        if (newLocaleList == NULL) {
+            return NULL;
+        }
         
         count = locCount;
         
@@ -889,6 +899,11 @@ Locale::getLocale(int locid)
 {
     Locale *localeCache = getLocaleCache();
     U_ASSERT(locid < eMAX_LOCALES);
+    if (localeCache == NULL) {
+        // Failure allocating the locale cache.
+        //   The best we can do is return a NULL reference.
+        locid = 0;
+    }
     return localeCache[locid];
 }
 
@@ -905,6 +920,9 @@ Locale::getLocaleCache(void)
     
     if (needInit) {
         Locale *tLocaleCache = new Locale[eMAX_LOCALES];
+        if (tLocaleCache == NULL) {
+            return NULL;
+        }
         tLocaleCache[eENGLISH]       = Locale("en");
         tLocaleCache[eFRENCH]        = Locale("fr");
         tLocaleCache[eGERMAN]        = Locale("de");
