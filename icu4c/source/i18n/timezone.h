@@ -16,6 +16,8 @@
 *                             - Added getOffset(... monthlen ...)
 *                             - Added hasSameRules()
 *    09/15/98    stephen        Added getStaticClassID
+*  12/03/99     aliu        Moved data out of static table into icudata.dll.
+*                           Hashtable replaced by new static data structures.
 ********************************************************************************
 */
 
@@ -25,10 +27,12 @@
 
 #include "unistr.h"
 #include "locid.h"
-
-
+#include "umutex.h"
+#include "udata.h"
 
 class SimpleTimeZone;
+struct TZHeader;
+struct OffsetIndex;
   
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
@@ -114,7 +118,9 @@ public:
      * "PST", a full name such as "America/Los_Angeles", or a custom ID
      * such as "GMT-8:00".
      * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
-     * cannot be understood.
+     * cannot be understood.  Return result guaranteed to be non-null.  If you
+     * require that the specific zone asked for be returned, check the ID of the
+     * return result.
      */
     static TimeZone* createTimeZone(const UnicodeString& ID);
 
@@ -425,59 +431,83 @@ private:
 
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 
-    /**
-     * Convert a non-localized string to an integer using a system function. Return a
-     * failing UErrorCode status if all characters are not parsed.
-     */
-//  static int32_t          stringToInteger(const UnicodeString& string, UErrorCode& status);
-
-    /**
-     * Delete function for fgHashtable.
-     */
-    static void U_CALLCONV  deleteTimeZone(void*);
-
-    static int32_t          fTimezoneCount;
-    static UHashtable*       fgHashtable; // hash table of objects in kSystemTimeZones,
-                                         // maps zone ID to TimeZone object (lazy evaluated)
     static TimeZone*        fgDefaultZone; // default time zone (lazy evaluated)
-    static UnicodeString*   fgAvailableIDs; // array containing all the IDs in kSystemTimeZones
-    static int32_t          fgAvailableIDsCount; // number of IDs in fgAvailableIDs
-    static UnicodeString    kLastResortID; // ID of time zone to use as default if we can't
-                                           // get a default from the system
-
-
 
     static const UnicodeString      GMT_ID;
     static const int32_t            GMT_ID_LENGTH;
-    static const UnicodeString        CUSTOM_ID;
+    static const UnicodeString      CUSTOM_ID;
 
-    static const TimeZone             *GMT;
+    static const TimeZone          *GMT;
 
-   /**
-     * Return a reference to the static Hashtable of registered TimeZone
-     * objects.  Performs initialization if necessary.
-     * <P>
-     * This method is also responsible for initializing the array
-     * fgAvailableIDs and fgAvailableIDsCount.
+    ////////////////////////////////////////////////////////////////
+    // Pointers into memory-mapped icudata.  Writing to this memory
+    // will segfault!  See tzdat.h for more details.
+    ////////////////////////////////////////////////////////////////
+
+    /**
+     * DATA is the start of the memory-mapped zone data, and
+     * specifically points to the header object located there.
+     * May be zero if loading failed for some reason.
      */
-    static const UHashtable& getHashtable(void);
+    static const TZHeader *    DATA;
+
+    /**
+     * INDEX_BY_ID is an index table in lexicographic order of ID.
+     * Each entry is an offset from DATA to the zone object, which
+     * will either be a StandardZone or a DSTZone object.
+     */
+    static const uint32_t*     INDEX_BY_ID;
+
+    /**
+     * INDEX_BY_OFFSET is an OffsetIndex table.  This table can only
+     * be walked through sequentially because the entries are of
+     * variable size.
+     */
+    static const OffsetIndex*  INDEX_BY_OFFSET;
+
+    ////////////////////////////////////////////////////////////////
+    // Other system zone data structures
+    ////////////////////////////////////////////////////////////////
+    /**
+     * ZONE_IDS is an array of all the system zone ID strings, in
+     * lexicographic order.  The createAvailableIDs() methods return
+     * arrays of pointers into this array.
+     */
+    static UnicodeString*      ZONE_IDS;
+
+    /**
+     * If DATA_LOADED is true, then an attempt has already been made
+     * to load the system zone data, and further attempts will not be
+     * made.  If DATA_LOADED is true, DATA itself will be zero if
+     * loading failed, or non-zero if it succeeded.
+     */
+    static bool_t              DATA_LOADED;
+
+    /**
+     * The mutex object used to control write access to DATA,
+     * INDEX_BY_ID, INDEX_BY_OFFSET, and ZONE_IDS.  Also used to
+     * control read/write access to fgDefaultZone.
+     */
+    static UMTX                LOCK;    
 
     /**
      * Responsible for setting up fgDefaultZone.  Uses routines in TPlatformUtilities
      * (i.e., platform-specific calls) to get the current system time zone.  Failing
-     * that, uses the platform-specific default time zone.  Failing that, uses the time
-     * zone specified by kLastResortID.
+     * that, uses the platform-specific default time zone.  Failing that, uses GMT.
      */
     static void             initDefault(void);
-    static void             initSystemTimeZones(void); 
 
-    static UErrorCode fgStatus;
-    static bool_t           kSystemInited;
-    static SimpleTimeZone*  kSystemTimeZones[]; // an array of TimeZone objects for
-                                                // all possible time zones in
-                                                // use around the world as of 1997.
-    static const int32_t    millisPerHour; // number of milliseconds in an hour
- 
+    // See source file for documentation
+    static void   loadZoneData(void);
+
+    // See source file for documentation
+    static bool_t isDataAcceptable(void *context,
+                                   const char *type, const char *name,
+                                   UDataInfo *pInfo);
+
+    // See source file for documentation
+    static TimeZone* createSystemTimeZone(const UnicodeString& name);
+
     UnicodeString           fID;    // this time zone's ID
 };
 
