@@ -91,6 +91,8 @@ icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/text/unames.dat -text
+icu4j/src/com/ibm/icu/text/uprops.dat -text
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
