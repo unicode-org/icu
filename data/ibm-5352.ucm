@@ -10,6 +10,8 @@
 # File created by dtcocm version 3.00
 # from source files 44B014E8.RPMAP100 and 14E844B0.TPMAP100
 #
+# Patched for jitterbug 792
+#
 # Table Version : 1.01
 #
 <code_set_name>               "IBM-5352"
@@ -152,11 +154,6 @@ CHARMAP
 <U007D> \x7D |0
 <U007E> \x7E |0
 <U007F> \x7F |0
-<U008A> \x8A |0
-<U008F> \x8F |0
-<U0098> \x98 |0
-<U009A> \x9A |0
-<U009F> \x9F |0
 <U00A0> \xA0 |0
 <U00A2> \xA2 |0
 <U00A3> \xA3 |0
@@ -264,10 +261,18 @@ CHARMAP
 <U0669> \x39 |1
 <U066B> \x2C |1
 <U066C> \x2E |1
+<U0679> \x8A |0
 <U067E> \x81 |0
 <U0686> \x8D |0
+<U0688> \x8F |0
+<U0691> \x9A |0
 <U0698> \x8E |0
+<U06A9> \x98 |0
 <U06AF> \x90 |0
+<U06BA> \x9F |0
+<U06BE> \xAA |0
+<U06C1> \xC0 |0
+<U06D2> \xFF |0
 <U06F0> \x30 |1
 <U06F1> \x31 |1
 <U06F2> \x32 |1
@@ -301,11 +306,23 @@ CHARMAP
 <U2122> \x99 |0
 <UFB56> \x81 |1
 <UFB58> \x81 |1
+<UFB66> \x8A |1
+<UFB68> \x8A |1
 <UFB7A> \x8D |1
 <UFB7C> \x8D |1
+<UFB88> \x8F |1
 <UFB8A> \x8E |1
+<UFB8C> \x9A |1
+<UFB8E> \x98 |1
+<UFB90> \x98 |1
 <UFB92> \x90 |1
 <UFB94> \x90 |1
+<UFB9E> \x9F |1
+<UFBA6> \xC0 |1
+<UFBA8> \xC0 |1
+<UFBAA> \xAA |1
+<UFBAC> \xAA |1
+<UFBAE> \xFF |1
 <UFE70> \xF0 |1
 <UFE71> \xF0 |1
 <UFE72> \xF1 |1
