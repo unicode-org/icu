@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/06/09 23:15:00 $
-* $Revision: 1.40 $
+* $Date: 2003/06/18 00:58:21 $
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -472,7 +472,7 @@ public final class RuleBasedCollator extends Collator
      * Sets the alternate handling for QUATERNARY strength to be either
      * shifted or non-ignorable.
      * See the UCA definition on
-     * <a href="http://www.unicode.org/unicode/reports/tr10/#§3.2.2 Variable Collation Elements">
+     * <a href="http://www.unicode.org/unicode/reports/tr10/#Variable_Weighting">
      * Alternate Weighting</a>.
      * This attribute will only be effective when QUATERNARY strength is set.
      * The default value for this mode is false, corresponding to the
