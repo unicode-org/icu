@@ -39,8 +39,25 @@ typedef uint32_t Resource;
 #define RES_GET_INT(res) (((int32_t)((res)<<4L))>>4L)
 #define RES_GET_UINT(res) ((res)&0x0fffffff)
 
+/* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
+enum {
+    URES_INDEX_LENGTH,          /* [0] contains URES_INDEX_TOP==the length of indexes[] */
+    URES_INDEX_STRINGS_TOP,     /* [1] contains the top of the strings, */
+                                /*     same as the bottom of resources, rounded up */
+    URES_INDEX_RESOURCES_TOP,   /* [2] contains the top of all resources */
+    URES_INDEX_BUNDLE_TOP,      /* [3] contains the top of the bundle, */
+                                /*     in case it were ever different from [2] */
+    URES_INDEX_MAX_TABLE_LENGTH,/* [4] max. length of any table */
+    URES_INDEX_TOP
+};
+
+/* number of bytes at the beginning of the bundle before the strings start */
+enum {
+    URES_STRINGS_BOTTOM=(1+URES_INDEX_TOP)*4
+};
+
 /*
- * File format for .res resource bundle files (formatVersion=1)
+ * File format for .res resource bundle files (formatVersion=1.1)
  *
  * An ICU4C resource bundle file (.res) is a binary, memory-mappable file
  * with nested, hierarchical data structures.
@@ -48,7 +65,11 @@ typedef uint32_t Resource;
  *
  *   Resource root; -- 32-bit Resource item, root item for this bundle's tree;
  *                     currently, the root item must be a table resource item
- *   char keys[]; -- up to 65k of characters for key strings,
+ *   int32_t indexes[indexes[0]]; -- array of indexes for friendly
+ *                                   reading and swapping; see URES_INDEX_* above
+ *                                   new in formatVersion 1.1
+ *   char keys[]; -- up to 65k of characters for key strings
+ *                   (minus the space for root and indexes[]),
  *                   which consist of invariant characters (ASCII/EBCDIC) and are NUL-terminated;
  *                   padded to multiple of 4 bytes for 4-alignment of the following data
  *   data; -- data directly and indirectly indexed by the root item;

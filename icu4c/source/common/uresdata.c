@@ -821,7 +821,7 @@ ures_swap(const UDataSwapper *ds,
     TempTable tempTable;
 
     /* the following integers count Resource item offsets (4 bytes each), not bytes */
-    int32_t bundleLength, bottom, top;
+    int32_t bundleLength, stringsBottom, bottom, top;
 
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
@@ -851,7 +851,11 @@ ures_swap(const UDataSwapper *ds,
         bundleLength=-1;
     } else {
         bundleLength=(length-headerSize)/4;
-        if(bundleLength<1) {
+
+        /* formatVersion 1.1 must have a root item and at least 5 indexes */
+        if( bundleLength<
+                (pInfo->formatVersion[1]==0 ? 1 : 1+5)
+        ) {
             udata_printError(ds, "ures_swap(): too few bytes (%d after header) for a resource bundle\n",
                              length-headerSize);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -859,18 +863,32 @@ ures_swap(const UDataSwapper *ds,
         }
     }
 
-    /* preflight to get the bottom, top and maxTableLength values */
     inBundle=(const Resource *)((const char *)inData+headerSize);
-    bottom=0x7fffffff;
-    top=maxTableLength=0;
-    rootRes=udata_readInt32(ds, *inBundle);
-    ures_preflightResource(ds, inBundle, bundleLength, rootRes,
-                           &bottom, &top, &maxTableLength,
-                           pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        udata_printError(ds, "ures_preflightResource(root res=%08x) failed - %s\n",
-                         rootRes, u_errorName(*pErrorCode));
-        return 0;
+    rootRes=ds->readUInt32(*inBundle);
+
+    if(pInfo->formatVersion[1]==0) {
+        /* preflight to get the bottom, top and maxTableLength values */
+        stringsBottom=1; /* just past root */
+        bottom=0x7fffffff;
+        top=maxTableLength=0;
+        ures_preflightResource(ds, inBundle, bundleLength, rootRes,
+                               &bottom, &top, &maxTableLength,
+                               pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "ures_preflightResource(root res=%08x) failed - %s\n",
+                             rootRes, u_errorName(*pErrorCode));
+            return 0;
+        }
+    } else {
+        /* formatVersion 1.1 adds the indexes[] array */
+        const int32_t *inIndexes;
+
+        inIndexes=(const int32_t *)(inBundle+1);
+
+        stringsBottom=1+udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH]);
+        bottom=udata_readInt32(ds, inIndexes[URES_INDEX_STRINGS_TOP]);
+        top=udata_readInt32(ds, inIndexes[URES_INDEX_BUNDLE_TOP]);
+        maxTableLength=udata_readInt32(ds, inIndexes[URES_INDEX_MAX_TABLE_LENGTH]);
     }
 
     if(length>=0) {
@@ -882,7 +900,8 @@ ures_swap(const UDataSwapper *ds,
         }
 
         /* swap the key strings, but not the padding bytes (0xaa) after the last string and its NUL */
-        udata_swapInvStringBlock(ds, inBundle+1, 4*(bottom-1), outBundle+1, pErrorCode);
+        udata_swapInvStringBlock(ds, inBundle+stringsBottom, 4*(bottom-stringsBottom),
+                                    outBundle+stringsBottom, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed - %s\n", 4*(bottom-1),
                              u_errorName(*pErrorCode));
