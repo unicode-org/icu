@@ -33,68 +33,6 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
     if (exec) logln("TestSuite Utilities: ");
     switch (index) {
         case 0:
-            name = "StringTest"; 
-            if (exec) {
-                logln("StringTest---"); logln("");
-                StringTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 1:
-            name = "UnicodeStringTest"; 
-            if (exec) {
-                logln("UnicodeStringTest---"); logln("");
-                UnicodeStringTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 2:
-            name = "LocaleTest"; 
-            if (exec) {
-                logln("LocaleTest---"); logln("");
-                LocaleTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 3:
-            name = "CharIterTest"; 
-            if (exec) {
-                logln("CharIterTest---"); logln("");
-                CharIterTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 4:
-            name = "UnicodeTest"; 
-            if (exec) {
-                logln("UnicodeTest---"); logln("");
-                UnicodeTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 5:
-            name = "ResourceBundleTest"; 
-            if (exec) {
-                logln("ResourceBundleTest---"); logln("");
-                ResourceBundleTest test;
-                callTest( test, par );
-            }
-            break;
-       case 6:
-            name = "NewResourceBundleTest"; 
-            if (exec) {
-                logln("NewResourceBundleTest---"); logln("");
-                NewResourceBundleTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 7:
             name = "MutexTest"; 
             if (exec) {
                 logln("MutexTest---"); logln("");
@@ -103,11 +41,73 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 8:
+        case 1:
             name = "MultithreadTest"; 
             if (exec) {
                 logln("MultithreadTest---"); logln("");
                 MultithreadTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 2:
+            name = "StringTest"; 
+            if (exec) {
+                logln("StringTest---"); logln("");
+                StringTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 3:
+            name = "UnicodeStringTest"; 
+            if (exec) {
+                logln("UnicodeStringTest---"); logln("");
+                UnicodeStringTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 4:
+            name = "LocaleTest"; 
+            if (exec) {
+                logln("LocaleTest---"); logln("");
+                LocaleTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 5:
+            name = "CharIterTest"; 
+            if (exec) {
+                logln("CharIterTest---"); logln("");
+                CharIterTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 6:
+            name = "UnicodeTest"; 
+            if (exec) {
+                logln("UnicodeTest---"); logln("");
+                UnicodeTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 7:
+            name = "ResourceBundleTest"; 
+            if (exec) {
+                logln("ResourceBundleTest---"); logln("");
+                ResourceBundleTest test;
+                callTest( test, par );
+            }
+            break;
+        case 8:
+            name = "NewResourceBundleTest"; 
+            if (exec) {
+                logln("NewResourceBundleTest---"); logln("");
+                NewResourceBundleTest test;
                 callTest( test, par );
             }
             break;

@@ -47,10 +47,10 @@ static char* _testDataPath=NULL;
  */
 void ctest_setICU_DATA(void);
 
-static UBool gMutexInitialized = TRUE;
+static UBool gMutexInitialized = FALSE;
 
 static TestMutex(void) {
-    if (gMutexInitialized) {
+    if (!gMutexInitialized) {
         log_err("*** Failure! The global mutex was not initialized.\n"
                 "*** Make sure the right linker was used.\n");
     }
@@ -72,9 +72,7 @@ int main(int argc, const char* const argv[])
     UConverter *cnv;
 
     /* This must be tested before using anything! */
-    if (umtx_isInitialized(NULL)) {
-        gMutexInitialized = FALSE;
-    }
+    gMutexInitialized = umtx_isInitialized(NULL);
 
     while (REPEAT_TESTS > 0) {
 
