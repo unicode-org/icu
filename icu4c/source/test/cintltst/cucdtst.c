@@ -766,6 +766,37 @@ static void TestStringFunctions()
         log_err("There is an error in u_austrcpy()");
 
 
+    log_verbose("Testing u_strtok_r()");
+    {
+        const char *string   = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
+        const char *tokens[] = {",", "1", "2", "3", "AHHHHH!", "5.5", "6", "7", "8\n"};
+        const char *delim1 = " ";
+        const char *delim2 = " ,";
+        UChar delimBuf[32];
+        UChar currTokenBuf[32];
+        UChar *state;
+        uint32_t currToken = 0;
+        UChar *ptr;
+
+        u_uastrcpy(temp, string);
+        u_uastrcpy(delimBuf, delim1);
+
+        ptr = u_strtok_r(temp, delimBuf, &state);
+        u_uastrcpy(delimBuf, delim2);
+        while (ptr != NULL) {
+            u_uastrcpy(currTokenBuf, tokens[currToken]);
+            if (u_strcmp(ptr, currTokenBuf) != 0) {
+                log_err("u_strtok_r mismatch at %d. Got: %s, Expected: %s\n", currToken, ptr, tokens[currToken]);
+            }
+            ptr = u_strtok_r(NULL, delimBuf, &state);
+            currToken++;
+        }
+
+        if (currToken != sizeof(tokens)/sizeof(tokens[0])) {
+            log_err("Didn't get correct number of tokens!\n");
+        }
+    }
+
 cleanUpDataTable();
 }
 
@@ -804,6 +835,9 @@ static void TestStringSearching()
     }
     if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "gf")) != NULL) {
         log_err("u_strpbrk didn't return NULL for \"gf\".\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"\".\n");
     }
 
     log_verbose("Testing u_strpbrk() with surrogates");
