@@ -33,6 +33,7 @@ public:
  protected:
     // Test a Gregorian-Like calendar
     void quasiGregorianTest(Calendar& cal, const Locale& gregoLocale, const int32_t *data);
+    void simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status);
  
 public: // package
     // internal routine for checking date
