@@ -155,6 +155,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(65,TestIncrementalProgress);
         TESTCASE(66,TestSurrogateCasing);
         TESTCASE(67,TestFunction);
+        TESTCASE(68,TestInvalidBackRef);
 
         default: name = ""; break;
     }
@@ -3360,6 +3361,24 @@ void TransliteratorTest::TestFunction() {
            "T(t=\\u0074)he Q(q=\\u0071)uick B(b=\\u0062)rown F(f=\\u0066)ox");
 
     delete t;
+}
+
+void TransliteratorTest::TestInvalidBackRef(void) {
+    UnicodeString rule =  ". > $1;";
+    
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createFromRules("Test", rule, UTRANS_FORWARD, pe, ec);
+    if (t != NULL) {
+        errln("FAIL: createFromRules should have returned NULL");
+        delete t;
+    }
+
+    if (U_SUCCESS(ec)) {
+        errln("FAIL: Ok: . > $1; => no error");
+    } else {
+        logln((UnicodeString)"Ok: . > $1; => " + u_errorName(ec));
+    }
 }
 
 //======================================================================
