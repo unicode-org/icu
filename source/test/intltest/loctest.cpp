@@ -1218,31 +1218,6 @@ LocaleTest::TestAtypicalLocales()
     }
 }
 
-/**
- * @bug 4126371
- */
-// not applicable in C++, setDefault() takes a reference
-void 
-LocaleTest::TestNullDefault() 
-{
-/*
-    // why on earth anyone would ever try to do this is beyond me, but we should
-    // definitely make sure we don't let them
-    UBool gotException = FALSE;
-    try {
-        Locale.setDefault(null);
-    }
-    catch (NullPointerException e) {
-        // all other exception types propagate through here back to the test harness
-        gotException = TRUE;
-    }
-    if (Locale.getDefault() == null)
-        errln("Locale.getDefault() allowed us to set default to NULL!");
-    if (!gotException)
-        errln("Trying to set default locale to NULL didn't throw exception!");
-*/
-}
-
 #if !UCONFIG_NO_FORMATTING
 
 /**

@@ -868,6 +868,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
         case 10: name = "TestBug2190"; if (exec) TestBug2190(); break;
         case 11: name = "TestRegistration"; if (exec) TestRegistration(); break;
+        case 12: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
 
         default: name = ""; break; /*needed to end loop*/
     }
