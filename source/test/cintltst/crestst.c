@@ -491,7 +491,7 @@ static void TestFallback()
     junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
             u_errorName(status));
     }
     
@@ -501,7 +501,7 @@ static void TestFallback()
     junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
     {
-        log_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %s\n", 
             u_errorName(status));
     }
     

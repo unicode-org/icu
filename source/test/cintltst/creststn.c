@@ -246,7 +246,7 @@ static void TestAliasConflict(void) {
         realName = ures_getLocale(norway, &status);
         log_verbose("ures_getLocale(\"%s\")=%s\n", norwayNames[i], realName);
         if(realName == NULL || strcmp(norwayLocales[i], realName) != 0) {
-            log_err("Wrong locale name for %s, expected %s, got %s\n", norwayNames[i], norwayLocales[i], realName);
+            log_data_err("Wrong locale name for %s, expected %s, got %s\n", norwayNames[i], norwayLocales[i], realName);
         }
         ures_close(norway);
     }
@@ -768,10 +768,10 @@ static void TestAPI() {
     status=U_ZERO_ERROR;
     teRes=ures_open(NULL, "dE_At_NOWHERE_TO_BE_FOUND", &status);
     if(U_FAILURE(status)) {
-        log_err("unable to open a locale resource bundle from \"dE_At_NOWHERE_TO_BE_FOUND\"(%s)\n", u_errorName(status));
+        log_data_err("unable to open a locale resource bundle from \"dE_At_NOWHERE_TO_BE_FOUND\"(%s)\n", u_errorName(status));
     } else {
         if(0!=strcmp("de_AT", ures_getLocale(teRes, &status))) {
-            log_err("ures_getLocale(\"dE_At_NOWHERE_TO_BE_FOUND\")=%s but must be de_AT\n", ures_getLocale(teRes, &status));
+            log_data_err("ures_getLocale(\"dE_At_NOWHERE_TO_BE_FOUND\")=%s but must be de_AT\n", ures_getLocale(teRes, &status));
         }
         ures_close(teRes);
     }
@@ -780,10 +780,10 @@ static void TestAPI() {
     status=U_ZERO_ERROR;
     teRes=ures_open(NULL, "iW_Il_depRecaTed_HebreW", &status);
     if(U_FAILURE(status)) {
-        log_err("unable to open a locale resource bundle from \"iW_Il_depRecaTed_HebreW\"(%s)\n", u_errorName(status));
+        log_data_err("unable to open a locale resource bundle from \"iW_Il_depRecaTed_HebreW\"(%s)\n", u_errorName(status));
     } else {
         if(0!=strcmp("he_IL", ures_getLocale(teRes, &status))) {
-            log_err("ures_getLocale(\"iW_Il_depRecaTed_HebreW\")=%s but must be he_IL\n", ures_getLocale(teRes, &status));
+            log_data_err("ures_getLocale(\"iW_Il_depRecaTed_HebreW\")=%s but must be he_IL\n", ures_getLocale(teRes, &status));
         }
         ures_close(teRes);
     }
@@ -1664,7 +1664,7 @@ static void TestFallback()
     junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
             u_errorName(status));
     }
 
@@ -1674,7 +1674,7 @@ static void TestFallback()
     junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
     {
-        log_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %d\n", 
+        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %d\n", 
             status);
     }
     
@@ -1689,11 +1689,11 @@ static void TestFallback()
         UResourceBundle* resLocID = ures_getByKey(myResB, "LocaleID", NULL, &err);
         UResourceBundle* tResB;
         if(err != U_ZERO_ERROR){
-            log_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for LocaleID err=%s\n",u_errorName(err));
+            log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for LocaleID err=%s\n",u_errorName(err));
             return;
         }
         if(ures_getInt(resLocID, &err) != 0x814){
-            log_err("Expected LocaleID=814, but got 0x%X\n", ures_getInt(resLocID, &err));
+            log_data_err("Expected LocaleID=814, but got 0x%X\n", ures_getInt(resLocID, &err));
         }
         tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
@@ -1744,69 +1744,78 @@ static void TestResourceLevelAliasing(void) {
   } else {
     status = U_ZERO_ERROR;
   }
+  if((tb == NULL) || U_FAILURE(status) ) {
+    log_data_err("err loading tb resource\n");
+  }  else {
+    /* testing aliasing to a non existing resource */
+    tb = ures_getByKey(aliasB, "nonexisting", tb, &status);
+    if(status != U_MISSING_RESOURCE_ERROR) {
+      log_err("Managed to find an alias to non-existing resource\n");
+    } else {
+      status = U_ZERO_ERROR;
+    }
+    
 
-  /* testing aliasing to a non existing resource */
-  tb = ures_getByKey(aliasB, "nonexisting", tb, &status);
-  if(status != U_MISSING_RESOURCE_ERROR) {
-    log_err("Managed to find an alias to non-existing resource\n");
-  } else {
-    status = U_ZERO_ERROR;
-  }
+    /* testing referencing/composed alias */
+    uk = ures_findResource("uk/CollationElements/Sequence", uk, &status);
+    if((uk == NULL) || U_FAILURE(status)) {
+      log_err("Couldn't findResource('uk/collationelements/sequence') err %s\n", u_errorName(status));
+      return;
+    } 
 
-  /* testing referencing/composed alias */
-  uk = ures_findResource("uk/CollationElements/Sequence", uk, &status);
-  sequence = ures_getString(uk, &seqLen, &status);
+    sequence = ures_getString(uk, &seqLen, &status);
+    
+    tb = ures_getByKey(aliasB, "referencingalias", tb, &status);
+    string = ures_getString(tb, &strLen, &status);
+    
+    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+      log_err("Referencing alias didn't get the right string\n");
+    }
 
-  tb = ures_getByKey(aliasB, "referencingalias", tb, &status);
-  string = ures_getString(tb, &strLen, &status);
+    tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
+    tb = ures_getByKey(tb, "Sequence", tb, &status);
+    string = ures_getString(tb, &strLen, &status);
+    
+    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+      log_err("Referencing alias didn't get the right string\n");
+    }
 
-  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-    log_err("Referencing alias didn't get the right string\n");
-  }
+    /* check whether the binary collation data is properly referenced by an alias */
+    uk = ures_findResource("uk/CollationElements/%%CollationBin", uk, &status);
+    binSequence = ures_getBinary(uk, &binSeqLen, &status);
 
-  tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
-  tb = ures_getByKey(tb, "Sequence", tb, &status);
-  string = ures_getString(tb, &strLen, &status);
+    tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
+    tb = ures_getByKey(tb, "%%CollationBin", tb, &status);
+    binary = ures_getBinary(tb, &binLen, &status);
 
-  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-    log_err("Referencing alias didn't get the right string\n");
-  }
+    if(binSeqLen != binLen || uprv_memcmp(binSequence, binary, binSeqLen) != 0) {
+      log_err("Referencing alias didn't get the right string\n");
+    }
 
-  /* check whether the binary collation data is properly referenced by an alias */
-  uk = ures_findResource("uk/CollationElements/%%CollationBin", uk, &status);
-  binSequence = ures_getBinary(uk, &binSeqLen, &status);
+    /* simple alias */
+    testtypes = ures_open(testdatapath, "testtypes", &status);
+    uk = ures_findSubResource(testtypes, "menu/file/open", uk, &status);
+    sequence = ures_getString(uk, &seqLen, &status);
 
-  tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
-  tb = ures_getByKey(tb, "%%CollationBin", tb, &status);
-  binary = ures_getBinary(tb, &binLen, &status);
+    tb = ures_getByKey(aliasB, "simplealias", tb, &status);
+    string = ures_getString(tb, &strLen, &status);
 
-  if(binSeqLen != binLen || uprv_memcmp(binSequence, binary, binSeqLen) != 0) {
-    log_err("Referencing alias didn't get the right string\n");
-  }
+    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+      log_err("Referencing alias didn't get the right string\n");
+    }
 
-  /* simple alias */
-  testtypes = ures_open(testdatapath, "testtypes", &status);
-  uk = ures_findSubResource(testtypes, "menu/file/open", uk, &status);
-  sequence = ures_getString(uk, &seqLen, &status);
+    /* test indexed aliasing */
 
-  tb = ures_getByKey(aliasB, "simplealias", tb, &status);
-  string = ures_getString(tb, &strLen, &status);
+    tb = ures_getByKey(aliasB, "zoneTests", tb, &status);
+    tb = ures_getByKey(tb, "zoneAlias2", tb, &status);
+    string = ures_getString(tb, &strLen, &status);
 
-  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-    log_err("Referencing alias didn't get the right string\n");
-  }
+    en = ures_findResource("en/zoneStrings/3/0", en, &status);
+    sequence = ures_getString(en, &seqLen, &status);
 
-  /* test indexed aliasing */
-
-  tb = ures_getByKey(aliasB, "zoneTests", tb, &status);
-  tb = ures_getByKey(tb, "zoneAlias2", tb, &status);
-  string = ures_getString(tb, &strLen, &status);
-
-  en = ures_findResource("en/zoneStrings/3/0", en, &status);
-  sequence = ures_getString(en, &seqLen, &status);
-
-  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-    log_err("Referencing alias didn't get the right string\n");
+    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+      log_err("Referencing alias didn't get the right string\n");
+    }
   }
 
   ures_close(aliasB);
