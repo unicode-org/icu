@@ -1,0 +1,313 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2003, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  utracimp.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2003aug06
+*   created by: Markus W. Scherer
+*
+*   Internal header for ICU tracing/logging.
+*
+*   This is currently a design document.
+*   Latest Version: http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/utrace.h
+*   CVS: http://oss.software.ibm.com/cvs/icu/icuhtml/design/utrace.h
+*
+*   Various notes:
+*   - using a trace level variable to only call trace functions
+*     when the level is sufficient
+*   - using the same variable for tracing on/off to never make a function
+*     call when off
+*   - the function number is put into a local variable by the entry macro
+*     and used implicitly to avoid copy&paste/typing mistakes by the developer
+*   - the application must call utrace_setFunctions() and pass in
+*     implementations for the trace functions
+*   - ICU trace macros call ICU functions that route through the function
+*     pointers if they have been set;
+*     this avoids an indirection at the call site
+*     (which would cost more code for another check and for the indirection)
+*
+*   ### TODO Issues:
+*   - Verify that va_list is portable among compilers for the same platform.
+*     va_list should be portable because printf() would fail otherwise!
+*   - Should enum values like UTraceLevel be passed into int32_t-type arguments,
+*     or should enum types be used?
+*     We use enum types in all public APIs, so they should be safe and more
+*     descriptive/type-safe. (Search case-insensitive for "level".)
+*/
+
+#ifndef __UTRACIMP_H__
+#define __UTRACIMP_H__
+
+#include <stdarg.h>
+#include "unicode/utrace.h"
+#include "unicode/utypes.h"
+
+U_CDECL_BEGIN
+
+
+/**
+ * \var utrace_level
+ * Trace level variable. Negative for "off".
+ * Use only via UTRACE_ macros.
+ * @internal
+ */
+#ifdef UTRACE_IMPL
+U_EXPORT int32_t
+#elif U_COMMON_IMPLEMENTATION
+U_CFUNC int32_t
+#else
+U_CFUNC U_IMPORT int32_t 
+#endif
+utrace_level;
+
+/**
+ * Boolean expression to see if ICU tracing is turned on.
+ * @draft ICU 2.8
+ */
+#define UTRACE_IS_ON (utrace_level>=UTRACE_ERROR)
+
+/**
+ * Boolean expression to see if ICU tracing is turned on
+ * to at least the specified level.
+ * @draft ICU 2.8
+ */
+#define UTRACE_LEVEL(level) (utrace_level>=(level))
+
+
+/**
+ * Trace statement for the entry point of a function.
+ * Stores the function number in a local variable.
+ * In C code, must be placed immediately after the last variable declaration.
+ * Must be matched with UTRACE_EXIT() at all function exit points.
+ *
+ * Tracing should start with UTRACE_ENTRY after checking for
+ * U_FAILURE at function entry, so that if a function returns immediately
+ * because of a pre-existing error condition, it does not show up in the trace,
+ * consistent with ICU's error handling model.
+ *
+ * @param fnNumber The UTraceFunctionNumber for the current function.
+ * @draft ICU 2.8
+ */
+#define UTRACE_ENTRY(fnNumber) \
+    int32_t utraceFnNumber=(fnNumber); \
+    if(UTRACE_IS_ON) { \
+        utrace_entry(fnNumber); \
+    }
+
+
+/**
+ * Trace statement for each exit point of a function that has a UTRACE_ENTRY()
+ * statement.
+ *
+ * @param errorCode The function's ICU UErrorCode value at function exit,
+ *                  or U_ZERO_ERROR if the function does not use a UErrorCode.
+ *                  0==U_ZERO_ERROR indicates success,
+ *                  positive values an error (see u_errorName()),
+ *                  negative values an informational status.
+ *
+ * @draft ICU 2.8
+ */
+#define UTRACE_EXIT() \
+    {if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, UTRACE_EXITV_NONE); \
+    }}
+
+/**
+ * Trace statement for each exit point of a function that has a UTRACE_ENTRY()
+ * statement, and that returns a value.
+ *
+ * @param val       The function's return value, int32_t or comatible type.
+ *
+ * @draft ICU 2.8
+ */
+#define UTRACE_EXIT_D(val) \
+    {if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, UTRACE_EXITV_I32, val); \
+    }}
+
+#define UTRACE_EXIT_S(status) \
+    {if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, UTRACE_EXITV_STATUS, status); \
+    }}
+
+#define UTRACE_EXIT_DS(val, status) \
+    {if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, (UTRACE_EXITV_I32 | UTRACE_EXITV_STATUS), val, status); \
+    }}
+
+
+/**
+ * Trace function for the entry point of a function.
+ * Do not use directly, use UTRACE_ENTRY instead.
+ * @param fnNumber The UTraceFunctionNumber for the current function.
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+utrace_entry(int32_t fnNumber);
+
+/**
+ * Trace function for each exit point of a function.
+ * Do not use directly, use UTRACE_EXIT* instead.
+ * @param fnNumber The UTraceFunctionNumber for the current function.
+ * @param returnType The type of the value returned by the function.
+ * @param errorCode The UErrorCode value at function exit. See UTRACE_EXIT.
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+utrace_exit(int32_t fnNumber, int32_t returnType, ...);
+
+
+/**
+ * Trace function used inside functions that have a UTRACE_ENTRY() statement.
+ * Do not use directly, use UTRACE_DATAX() macros instead.
+ *
+ * @param utraceFnNumber The number of the current function, from the local
+ *        variable of the same name.
+ * @param level The trace level for this message.
+ * @param fmt The trace format string.
+ *
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+utrace_data(int32_t utraceFnNumber, int32_t level, const char *fmt, ...);
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes no data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA0(level, fmt) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes one data argument.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA1(level, fmt, a) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes two data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA2(level, fmt, a, b) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes three data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA3(level, fmt, a, b, c) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes four data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA4(level, fmt, a, b, c, d) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes five data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA5(level, fmt, a, b, c, d, e) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes six data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA6(level, fmt, a, b, c, d, e, f) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes seven data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA7(level, fmt, a, b, c, d, e, f, g) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f), (g)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes eight data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA8(level, fmt, a, b, c, d, e, f, g, h) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f), (g), (h)); \
+    }
+
+/**
+ * Trace statement used inside functions that have a UTRACE_ENTRY() statement.
+ * Takes nine data arguments.
+ * The number of arguments for this macro must match the number of inserts
+ * in the format string. Vector inserts count as two arguments.
+ * Calls utrace_data() if the level is high enough.
+ * @internal
+ */
+#define UTRACE_DATA9(level, fmt, a, b, c, d, e, f, g, h, i) \
+    if(UTRACE_LEVEL(level)) { \
+        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f), (g), (h), (i)); \
+    }
+
+U_CDECL_END
+
+#endif

@@ -29,7 +29,6 @@
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/caniter.h"
-#include "unicode/utrace.h"
 
 #include "ucol_bld.h"
 #include "ucol_imp.h"
@@ -44,6 +43,7 @@
 #include "uhash.h"
 #include "ucln_in.h" 
 #include "cstring.h"
+#include "utracimp.h"
 
 #ifdef UCOL_DEBUG
 #include <stdio.h>
