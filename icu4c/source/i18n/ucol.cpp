@@ -8203,12 +8203,14 @@ ucol_equals(const UCollator *source, const UCollator *target) {
             targetResetString = targetParser.source+(targetReset->source & 0xFFFFFF);
             targetStringLen = targetReset->source >> 24;
             if(sourceStringLen != targetStringLen || (u_strncmp(sourceResetString, targetResetString, sourceStringLen) != 0)) {
-              return FALSE;
+              result = FALSE;
+              goto returnResult;
             }
             // probably also need to check the expansions
             if(sourceReset->expansion) {
               if(!targetReset->expansion) {
-                return FALSE;
+                result = FALSE;
+                goto returnResult;
               } else {
                 // compare expansions
                 sourceResetString = sourceParser.source+(sourceReset->expansion& 0xFFFFFF);
@@ -8216,12 +8218,14 @@ ucol_equals(const UCollator *source, const UCollator *target) {
                 targetResetString = targetParser.source+(targetReset->expansion & 0xFFFFFF);
                 targetStringLen = targetReset->expansion >> 24;
                 if(sourceStringLen != targetStringLen || (u_strncmp(sourceResetString, targetResetString, sourceStringLen) != 0)) {
-                  return FALSE;
+                  result = FALSE;
+                  goto returnResult;
                 }
               }
             } else {
               if(targetReset->expansion) {
-                return FALSE;
+                result = FALSE;
+                goto returnResult;
               }
             }
             sourceReset = sourceReset->next;
@@ -8229,7 +8233,8 @@ ucol_equals(const UCollator *source, const UCollator *target) {
           }
           if(sourceReset != targetReset) { // at least one is not NULL
             // there are more tailored elements in one list
-            return FALSE;
+            result = FALSE;
+            goto returnResult;
           }
 
 
@@ -8238,11 +8243,13 @@ ucol_equals(const UCollator *source, const UCollator *target) {
       }
       // couldn't find the reset anchor, so the collators are not equal
       if(j == sourceListLen) {
-        return FALSE;
+        result = FALSE;
+        goto returnResult;
       }
     }
   }
 
+returnResult:
   ucol_tok_closeTokenList(&sourceParser);
   ucol_tok_closeTokenList(&targetParser);
   return result;
