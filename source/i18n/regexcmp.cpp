@@ -185,7 +185,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
     fCharNum        = 0;
     fQuoteMode      = FALSE;
     fFreeForm       = FALSE;
-    fCaseI          = (fRXPat->fFlags & UREGEX_CASE_INSENSITIVE) != 0;
+    fModeFlags      = fRXPat->fFlags;
 
     fMatchOpenParen  = -1;
     fMatchCloseParen = -1;
@@ -579,9 +579,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
             //   of the two NOPs.  Depending on what follows in the pattern, the
             //   NOPs may be changed to SAVE_STATE or JMP ops, with a target
             //   address of the end of the parenthesized group.
-            fParenStack.push(-2, *fStatus);           // Begin a new frame.
-            fParenStack.push(fRXPat->fCompiledPat->size()-3, *fStatus);   // The first NOP
-            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push(capturing, *fStatus);                        // Frame type.
+            fParenStack.push(fRXPat->fCompiledPat->size()-3, *fStatus);   // The first  NOP location
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP loc
 
             // Save the mapping from group number to stack frame variable position.
             fRXPat->fGroupMap->addElement(varsLoc, *fStatus);
@@ -601,9 +602,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
             // On the Parentheses stack, start a new frame and add the postions
             //   of the two NOPs.
-            fParenStack.push(-1, *fStatus);                               // Begin a new frame.
-            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
-            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push(plain,      *fStatus);                       // Begin a new frame.
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first  NOP location
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP loc
         }
          break;
 
@@ -628,7 +630,8 @@ UBool RegexCompile::doParseActions(EParseAction action)
             //   of the two NOPs.  Depending on what follows in the pattern, the
             //   NOPs may be changed to SAVE_STATE or JMP ops, with a target
             //   address of the end of the parenthesized group.
-            fParenStack.push(-3, *fStatus);           // Begin a new frame.
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push(atomic, *fStatus);                           // Frame type.
             fParenStack.push(fRXPat->fCompiledPat->size()-3, *fStatus);   // The first NOP
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
         }
@@ -659,9 +662,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
             // On the Parentheses stack, start a new frame and add the postions
             //   of the NOPs.  
-            fParenStack.push(lookAhead, *fStatus);                        // Begin a new frame.
-            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
-            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push(lookAhead, *fStatus);                        // Frame type.
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first  NOP location
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP location
         }
         break;
 
@@ -690,9 +694,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
             // On the Parentheses stack, start a new frame and add the postions
             //   of the StateSave and NOP.  
-            fParenStack.push( negLookAhead, *fStatus);                    // Begin a new frame.
-            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The STATE_SAVE
-            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push( negLookAhead, *fStatus);                    // Frame type
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The STATE_SAVE location
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP location
             
             // Instructions #5 and #6 will be added when the ')' is encountered.
         }
@@ -957,16 +962,30 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doDotAny:
         // scanned a ".",  match any single character.
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOTANY, 0), *fStatus);
+        {
+            int32_t   op;
+            if (fModeFlags & UREGEX_DOTALL) {
+                op = URX_BUILD(URX_DOTANY_ALL, 0);
+            } else {
+                op = URX_BUILD(URX_DOTANY, 0);
+            }
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
         break;
 
-    case doCaret:       // TODO:  multi-line mode flag.
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_CARET, 0), *fStatus);
+    case doCaret: 
+        {
+            int32_t op = (fModeFlags & UREGEX_MULTILINE)? URX_CARET_M : URX_CARET;
+            fRXPat->fCompiledPat->addElement(URX_BUILD(op, 0), *fStatus);
+        }
         break;
 
 
-    case doDollar:       // TODO:  multi-line mode flag.
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOLLAR, 0), *fStatus);
+    case doDollar:  
+        {
+            int32_t op = (fModeFlags & UREGEX_MULTILINE)? URX_DOLLAR_M : URX_DOLLAR;
+            fRXPat->fCompiledPat->addElement(URX_BUILD(op, 0), *fStatus);
+        }
         break;
 
     case doBackslashA:
@@ -1051,8 +1070,9 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doScanUnicodeSet:
         {
             UnicodeSet *theSet = scanSet();
-            if (fCaseI && theSet != NULL) {
+            if ((fModeFlags & UREGEX_CASE_INSENSITIVE) && theSet != NULL) {
                 caseClose(theSet);   // TODO:  replace with the real function.
+                // theSet->closeOver(USET_CASE);
             }
             compileSet(theSet);
         }
@@ -1094,7 +1114,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             //  of compilation, it will be changed to the variables location.
             U_ASSERT(groupNum > 0);
             int32_t  op;
-            if (fCaseI) {
+            if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
                 op = URX_BUILD(URX_BACKREF_I, groupNum);
             } else {
                 op = URX_BUILD(URX_BACKREF, groupNum);
@@ -1217,10 +1237,69 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
 
-    case doMatchMode:   //  (?i)    and similar
-        // TODO:  implement
-        error(U_REGEX_UNIMPLEMENTED);
+    case doBeginMatchMode:
+        fNewModeFlags = fModeFlags;
+        fSetModeFlag  = TRUE;
         break;
+
+    case doMatchMode:   //  (?i)    and similar
+        {
+            int32_t  bit = 0;
+            switch (fC.fChar) {
+            case 0x69: /* 'i' */   bit = UREGEX_CASE_INSENSITIVE; break;
+            case 0x6d: /* 'm' */   bit = UREGEX_MULTILINE;        break;
+            case 0x73: /* 's' */   bit = UREGEX_DOTALL;           break;
+            case 0x78: /* 'x' */   bit = UREGEX_COMMENTS;         break;
+            case 0x2d: /* '-' */   fSetModeFlag = FALSE;          break;
+            default:
+                U_ASSERT(FALSE);   // Should never happen.  Other chars are filtered out
+                                   // by the scanner.
+            }
+            if (fSetModeFlag) {
+                fNewModeFlags |= bit;
+            } else {
+                fNewModeFlags &= ~bit;
+            }
+        }
+        break;
+
+    case doSetMatchMode:
+        // We've got a (?i) or similar.  The match mode is being changed, but
+        //   the change is not scoped to a parenthesized block.
+        fModeFlags = fNewModeFlags;
+
+        // Prevent any string from spanning across the change of match mode.
+        //   Otherwise the pattern "abc(?i)def" would make a single string of "abcdef" 
+        fixLiterals();     
+        break;
+
+
+    case doMatchModeParen:
+        // We've got a (?i: or similar.  Begin a parenthesized block, save old
+        //   mode flags so they can be restored at the close of the block.
+        //
+        //   Compile to a
+        //      - NOP, which later may be replaced by a save-state if the
+        //         parenthesized group gets a * quantifier, followed by
+        //      - NOP, which may later be replaced by a save-state if there
+        //             is an '|' alternation within the parens.
+        {
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
+
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the two NOPs (a normal non-capturing () frame, except for the
+            //   saving of the orignal mode flags.)
+            fParenStack.push(fModeFlags, *fStatus);
+            fParenStack.push(flags, *fStatus);                            // Frame Marker
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+
+            // Set the current mode flags to the new values.
+            fModeFlags = fNewModeFlags;
+        }
+        break;
+
 
 
     default:
@@ -1278,7 +1357,7 @@ void RegexCompile::literalChar()  {
     opType = URX_TYPE(op);
     U_ASSERT(opType == URX_ONECHAR || opType == URX_ONECHAR_I || opType == URX_STRING_LEN);
     if (opType == URX_ONECHAR || opType == URX_ONECHAR_I) {
-        if (fCaseI) {
+        if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
             op     = URX_BUILD(URX_STRING_I, fStringOpStart);
         } else {
             op     = URX_BUILD(URX_STRING, fStringOpStart);
@@ -1308,7 +1387,7 @@ void RegexCompile::literalChar()  {
 //------------------------------------------------------------------------------
 void RegexCompile::emitONE_CHAR(UChar32  c) {
     int32_t op;
-    if (fCaseI && (u_tolower(c) != u_toupper(c))) {
+    if ((fModeFlags & UREGEX_CASE_INSENSITIVE) && (u_tolower(c) != u_toupper(c))) {
         // We have a cased character, and are in case insensitive matching mode.
         // TODO: replace with a better test.  See Alan L.'s mail of 2/6
         c  = u_foldCase(c, U_FOLD_CASE_DEFAULT);
@@ -1540,11 +1619,17 @@ void  RegexCompile::handleCloseParen() {
         fMatchOpenParen     = patIdx;
     }
 
+    //  At the close of any parenthesized block, restore the match mode flags  to
+    //  the value they had at the open paren.  Saved value is
+    //  at the top of the paren stack.  
+    fModeFlags = fParenStack.popi();
+    
     // DO any additional fixups, depending on the specific kind of
     // parentesized grouping this is
 
     switch (patIdx) {
     case plain:
+    case flags:
         // No additional fixups required.
         //   (Grouping-only parentheses)
         break;

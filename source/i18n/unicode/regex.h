@@ -64,13 +64,17 @@ struct REStackFrame;
 enum {
     /** Forces normalization of pattern and strings.  @draft ICU 2.4 */
     UREGEX_CANON_EQ         = 128,
+
     /**  Enable case insensitive matching.  @draft ICU 2.4 */
     UREGEX_CASE_INSENSITIVE = 2,
+
     /**  Allow white space and comments within patterns  @draft ICU 2.4 */
     UREGEX_COMMENTS         = 4,
+
     /**  If set, '.' matches line terminators,  otherwise '.' matching stops at line end.
       *  @draft ICU 2.4 */
     UREGEX_DOTALL           = 32,
+
     /**   Control behavior of "$" and "^"
       *    If set, recognize line terminators within string,
       *    otherwise, match only at start and end of input string.

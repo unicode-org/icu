@@ -132,11 +132,11 @@ open-paren-extended:
     '!'                  n  term            ^expr-cont              doOpenLookAheadNeg     #  (?!
     '<'                  n  open-paren-lookbehind
     '#'                  n  paren-comment   ^term
-    'i'                  n  paren-flag                              doMatchMode
-    'x'                  n  paren-flag                              doMatchMode
-    's'                  n  paren-flag                              doMatchMode
-    'm'                  n  paren-flag                              doMatchMode
-    '-'                  n  paren-flag                              doMatchMode
+    'i'                     paren-flag                              doBeginMatchMode
+    'm'                     paren-flag                              doBeginMatchMode
+    's'                     paren-flag                              doBeginMatchMode
+    'x'                     paren-flag                              doBeginMatchMode
+    '-'                     paren-flag                              doBeginMatchMode
     '('                  n  errorDeath                              doConditionalExpr
     '{'                  n  errorDeath                              doPerlInline
     default                 errorDeath                              doBadOpenParenType
@@ -157,16 +157,16 @@ paren-comment:
     default              n  paren-comment
 
 #
-#  paren-flag    Scanned a (?ismx-ismx  flag setting thing
-#                TODO:  this is not fully implemented yet.
+#  paren-flag    Scanned a (?ismx-ismx  flag setting 
+#                 
 paren-flag:
     'i'                  n  paren-flag                              doMatchMode
-    's'                  n  paren-flag                              doMatchMode
     'm'                  n  paren-flag                              doMatchMode
+    's'                  n  paren-flag                              doMatchMode
     'x'                  n  paren-flag                              doMatchMode
     '-'                  n  paren-flag                              doMatchMode
-    ')'                  n  term
-    ':'                  n  term              ^expr-quant           doOpenNonCaptureParen
+    ')'                  n  term                                    doSetMatchMode
+    ':'                  n  term              ^expr-quant           doMatchModeParen
     default                 errorDeath
     
     
