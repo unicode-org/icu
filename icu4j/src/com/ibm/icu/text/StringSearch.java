@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/12/05 22:27:43 $ 
- * $Revision: 1.18 $
+ * $Date: 2002/12/18 01:28:05 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -268,9 +268,11 @@ public final class StringSearch extends SearchIterator
      * @obsolete ICU 2.2. Use this.getCollator().getStrength() instead since it
      *           will be removed in that release.
      */
+    ///CLOVER:OFF
     public int getStrength() {
         return m_collator_.getStrength();
     }
+    ///CLOVER:ON
     
     /**
 	 * <p>
@@ -355,6 +357,7 @@ public final class StringSearch extends SearchIterator
      * @see #setCollator
      * @see #getCollator
      */
+    ///CLOVER:OFF
     public void setStrength(int newStrength) 
     {
         // Due to a bug (?) in CollationElementIterator, we must set the
@@ -366,6 +369,7 @@ public final class StringSearch extends SearchIterator
         m_collator_.setStrength(newStrength);
         initialize();
     }
+    ///CLOVER:ON
     
     /**
      * <p>
