@@ -338,7 +338,7 @@ u_errorName(UErrorCode code);
 #define T_INT32(i) ((int32_t)i)
 
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 1999, International Business Machines Corporation and others.  All Rights Reserved. "
+  " Copyright (C) 2000, International Business Machines Corporation and others.  All Rights Reserved. "
 
 #define U_COPYRIGHT_STRING_LENGTH  160
 
