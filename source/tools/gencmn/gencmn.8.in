@@ -79,7 +79,7 @@ The default destination directory is specified by the environment variable
 .BR ICU_DATA .
 .TP
 .BI "\-n\fP, \fB\-\-name" " name"
-Sets the data name to
+Set the data name to
 .I name
 instead of the default. This name is also used as the base name of the
 output. The default name is made of the
@@ -103,7 +103,7 @@ the generated data file. The default type ie
 Write a C source file with the table of contents of the data.
 .TP
 .BI "\-e\fP, \fB\-\-entrypoint" " name"
-Sets the data entry point (used for linking against the data in a
+Set the data entry point (used for linking against the data in a
 shared library form) to
 .IR name .
 The default entry point name is made of the data (set by the

@@ -20,6 +20,7 @@
 ]
 [
 .BI "\-C\fP, \fB\-\-comment"
+]
 [
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 ]
