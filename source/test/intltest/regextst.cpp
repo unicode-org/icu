@@ -18,9 +18,9 @@
 #include "unicode/ucnv.h"
 #include "regextst.h"
 #include "uvector.h"
-#include "charstr.h"
 #include "util.h"
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 
@@ -362,9 +362,8 @@ void RegexTest::regex_find(const UnicodeString &pattern,
 
 cleanupAndReturn:
     if (failed) {
-        errln("\"%s\"  %s  \"%s\"", (const char *)CharString(pattern, 0),
-                                    (const char *)CharString(flags, 0),
-                                    (const char *)CharString(inputString, 0));
+        errln((UnicodeString)"\""+pattern+(UnicodeString)"\"  "
+            +flags+(UnicodeString)"  \""+inputString+(UnicodeString)"\"");
         // callerPattern->dump();
     }
     delete parseMatcher;
@@ -2080,9 +2079,8 @@ void RegexTest::PerlTests() {
 
 
         if (expectedS.compare(resultString) != 0) {
-            errln("Line %d: Incorrect perl expression results.  Expected \"%s\"; got \"%s\"",
-                lineNum, (const char *)CharString(expectedS, 0),
-                (const char *)CharString(resultString, 0));
+            err("Line %d: Incorrect perl expression results.", lineNum);
+            errln((UnicodeString)"Expected \""+expectedS+(UnicodeString)"\"; got \""+resultString+(UnicodeString)"\"");
         }
 
         delete testMat;
