@@ -744,8 +744,8 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   mySource_limit = mySource + mySourceLength;
   myTarget_limit = target + targetSize;
 
-  if(myTarget_limit < target)
-    myTarget_limit = U_MAX_PTR; /* ptr wrapped */
+  if(myTarget_limit < target)       /*if targetsize is such that the limit*/
+    myTarget_limit = U_MAX_PTR;     /* would wrap around, truncate it.    */
 
   if (targetSize > 0)
     {
@@ -775,10 +775,6 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
       char target2[CHUNK_SIZE];
       char *target2_alias = target2;
       const char *target2_limit = target2 + CHUNK_SIZE;
-
-
-      if(target2_limit < target2)
-	target2_limit = U_MAX_PTR; /* wrapped around */
 
       /*We use a stack allocated buffer around which we loop
        *(in case the output is greater than CHUNK_SIZE)
@@ -856,8 +852,8 @@ int32_t ucnv_toUChars (const UConverter * converter,
 
   myTarget_limit = target + targetSize - 1;
 
-  if(myTarget_limit < target) /* wrapped */
-    myTarget_limit = U_MAX_PTR;
+  if(myTarget_limit < target)       /*if targetsize is such that the limit*/
+    myTarget_limit = U_MAX_PTR - 1; /* would wrap around, truncate it.    */
 
 
   /*Not in pure pre-flight mode */
