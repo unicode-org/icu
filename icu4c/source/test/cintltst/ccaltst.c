@@ -57,17 +57,18 @@ void TestCalendar()
     UChar *result = 0;
     int32_t resultlength, resultlengthneeded;
 
-    
+    int expect = 30;
+
     /*Testing countAvailableTimeZones*/
     offset=0;
     log_verbose("\nTesting countAvialableTimeZoneIds\n");
     count=ucal_countAvailableTZIDs(offset);
     log_verbose("The number of timezone id's present with offset 0 are %d:\n", count);
-    if(count!=23)
-        log_err("FAIL: error in the countAvialabelTZIDs\n");
+    if(count!=expect)
+        log_err("FAIL: error in the countAvailableTZIDs - got %d expected %d total\n", count, expect);
 
     /*Testing getAvialableTZIDs*/
-    log_verbose("\nTesting getAvialableTimezoneids");
+    log_verbose("\nTesting getAvailableTimezoneids");
     for(i=0;i<count;i++){
         ucal_getAvailableTZIDs(offset, i, &status);
         if(U_FAILURE(status)){
@@ -157,13 +158,16 @@ void TestCalendar()
         log_verbose("PASS: getting the time zone display name successful : \n");
     }
     
+
+#define expectPDT "Pacific Daylight Time"
+
     tzdname=(UChar*)malloc(sizeof(UChar) * (resultlengthneeded+1));
-    u_uastrcpy(tzdname, "Pacific Daylight Time");
+    u_uastrcpy(tzdname, expectPDT);
     if(u_strcmp(tzdname, result)==0){
         log_verbose("PASS: got the correct time zone display name %s\n", austrdup(result) );
     }
     else{
-        log_err("FAIL: got the wrong time zone display name %s\n", austrdup(result) );
+        log_err("FAIL: got the wrong time zone display name %s, wanted %s\n", austrdup(result) , expectPDT);
     }
 
 
