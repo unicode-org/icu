@@ -97,7 +97,7 @@ public:
     /**
       * default constructor.  Create a RegexPattern object that refers to no actual
       *   pattern.  Not normally needed; RegexPattern objects are usually
-      *   created using the factory method <code>compile()</code.
+      *   created using the factory method <code>compile()</code>.
       *
       * @draft ICU 2.4
       */

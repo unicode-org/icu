@@ -66,7 +66,7 @@
  * codes as defined by ISO-639.
  * You can find a full list of these codes at a number of sites, such as:
  * <BR><a href ="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">
- * <code>http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</code></a>
+ * http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
  *
  * <P>
  * The second argument to the constructors is a valid <STRONG>ISO Country
@@ -74,7 +74,7 @@
  * as defined by ISO-3166.
  * You can find a full list of these codes at a number of sites, such as:
  * <BR><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">
- * <code>http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</code></a>
+ * http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
  *
  * <P>
  * The third constructor requires a third argument--the <STRONG>Variant.</STRONG>
@@ -95,7 +95,7 @@
  * <BR><STRONG>Note:</STRONG> When you ask for a resource for a particular
  * locale, you get back the best available match, not necessarily
  * precisely what you asked for. For more information, look at
- * <a href="java.util.ResourceBundle.html"><code>ResourceBundle</code></a>.
+ * <code>ResourceBundle</code>.
  *
  * <P>
  * The <code>Locale</code> class provides a number of convenient constants
@@ -174,6 +174,7 @@
  * </blockquote>
  *
  * @stable ICU 2.0
+ * @see ResourceBundle
  */
 U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
