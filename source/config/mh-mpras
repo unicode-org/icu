@@ -3,7 +3,7 @@
 ## Copyright (c) 2003-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-mpras,v 1.3 2004/03/26 18:07:36 grhoten-oss Exp $
+## $Id: mh-mpras,v 1.4 2004/03/26 22:33:12 grhoten-oss Exp $
 ## Original contributer: Jason Gordon from NCR
 
 ## Flags for position independent code
@@ -59,7 +59,7 @@ STATIC_O = o
 ## Versioned libraries rules
 
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && ln -s ${<F} $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-irix,v 1.24 2004/03/26 18:07:36 grhoten-oss Exp $
+## $Id: mh-irix,v 1.25 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -shared
@@ -65,8 +65,8 @@ STATIC_O = ao
 ## Versioned libraries rules
 
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && ln -s ${<F} $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End IRIX-specific setup
