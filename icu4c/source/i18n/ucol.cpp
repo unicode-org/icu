@@ -1740,7 +1740,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
 U_CAPI uint32_t  U_EXPORT2
 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     return ucol_IGetNextCE(coll, collationSource, status);
-    }
+}
 
 
 /**
@@ -1959,7 +1959,7 @@ static
 inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                                UErrorCode *status)
 {
-    uint32_t result = UCOL_NULLORDER;
+    uint32_t result = (uint32_t)UCOL_NULLORDER;
     if (data->toReturn > data->CEs) {
         data->toReturn --;
         result = *(data->toReturn);
@@ -3905,7 +3905,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 if (strbuffer != buffer) {
                     uprv_free(strbuffer);
                 }
-                return UCOL_NULLORDER;
+                return (uint32_t)UCOL_NULLORDER;
             }
             CE = ucol_IGetNextCE(coll, &temp, status);
         }
