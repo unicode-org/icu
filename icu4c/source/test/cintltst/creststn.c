@@ -1744,7 +1744,7 @@ static void TestResourceLevelAliasing(void) {
   } else {
     status = U_ZERO_ERROR;
   }
-  if((tb == NULL) || U_FAILURE(status) ) {
+  if(U_FAILURE(status) ) {
     log_data_err("err loading tb resource\n");
   }  else {
     /* testing aliasing to a non existing resource */
