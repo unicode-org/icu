@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2002 IBM, Inc. and others
+# Copyright (c) 2000-2003 IBM, Inc. and others
 # sample code makefile
 
 # Usage:

@@ -1,9 +1,9 @@
 /*
- * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2003/05/20 23:37:02 $
- * $Revision: 1.12 $
+ * $Date: 2003/06/03 20:58:21 $
+ * $Revision: 1.13 $
  *
  */
 

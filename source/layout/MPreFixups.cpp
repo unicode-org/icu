@@ -1,9 +1,9 @@
 /*
- * (C) Copyright IBM Corp. 2002, 2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/MPreFixups.cpp,v $
- * $Date: 2003/01/07 22:47:18 $
- * $Revision: 1.2 $
+ * $Date: 2003/06/03 20:58:22 $
+ * $Revision: 1.3 $
  *
  */
 
