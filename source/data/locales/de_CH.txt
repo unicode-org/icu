@@ -5,7 +5,28 @@
 // *
 // *******************************************************************************
 
+// Country names in de, de_AT, and de_CH are short names from the
+// list of names maintained by the German
+// Federal Permanent Committee for Geographic Names,
+// Sta"ndiger Ausschuss fu"r Geographische Namen (StAGN),
+// as published at its web site at
+// http://www.ifag.de/kartographie/Stagn/Staatennamen.htm
+// Date there: 1999-apr-19
+
 de_CH {
+    Countries {
+        BD { "Bangladesh" }
+        BW { "Botswana" }
+        BN { "Brunei" }
+        DJ { "Djibouti" }
+        CV { "Kapverden" }
+        MH { "Marshall-Inseln" }
+        RW { "Rwanda" }
+        SB { "Salomon-Inseln" }
+        ST { "Sao Tom\u00e9 und Principe" }
+        ZW { "Zimbabwe" }
+        GB { "Grossbritannien" }
+    }
     CurrencyElements { 
             "SFr.",
             "CHF",
