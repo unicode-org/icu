@@ -41,11 +41,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule30d.dll"
+				OutputFile="..\..\bin\icule31d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icule30d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule31d.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\iculed.lib"/>
 			<Tool
@@ -54,7 +54,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\lib/layout.tlb"/>
+				TypeLibraryName=".\..\..\lib\iculed.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -106,10 +106,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule30.dll"
+				OutputFile="..\..\bin\icule31.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icule30.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule31.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\icule.lib"/>
 			<Tool
@@ -118,7 +118,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\lib/layout.tlb"/>
+				TypeLibraryName=".\..\..\lib\icule.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
