@@ -1015,7 +1015,6 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return missingUCharMarker;
    }
-   args.sourceStart = *source;
    /* Grab first byte & save address for error recovery */
    CurByte = *((ulmbcs_byte_t  *) (saveSource = (*source)++));
    
@@ -1157,9 +1156,9 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
 
       UChar * pUniChar = (UChar *)&uniChar;
       args.converter = _this;
-      args.pTarget = &pUniChar;
+      args.target = pUniChar;
       args.targetLimit = pUniChar + 1;
-      args.pSource = &saveSource;
+      args.source = saveSource;
       args.sourceLimit = sourceLimit;
       args.flush = TRUE;
       args.offsets = NULL;  
@@ -1167,7 +1166,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       _this->fromCharErrorBehaviour(_this->toUContext,
                                     &args,
                                     saveSource,
-                                    1,
+                                    sourceLimit - saveSource,
                                     UCNV_UNASSIGNED,
                                     err);
       *source = saveSource;
