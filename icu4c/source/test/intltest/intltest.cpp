@@ -625,7 +625,7 @@ UBool IntlTest::runTest( char* name, char* par )
     }
 
     if (!name || (name[0] == 0) || (strcmp(name, "*") == 0)) {
-        rval = runTestLoop( NULL, NULL );
+        rval = runTestLoop( NULL, par );
 
     }else if (strcmp( name, "LIST" ) == 0) {
         this->usage();
@@ -668,7 +668,7 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
     IntlTest* saveTest = gTest;
     gTest = this;
     do {
-        this->runIndexedTest( index, FALSE, name );
+        this->runIndexedTest( index, FALSE, name, par );
         if (!name || (name[0] == 0))
             break;
         if (!testname) {
