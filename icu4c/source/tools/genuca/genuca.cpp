@@ -974,7 +974,7 @@ int main(int argc, char* argv[]) {
 
     /* Initialize ICU */
     u_init(&status);
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) && status != U_FILE_ACCESS_ERROR) {
         fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
             argv[0], u_errorName(status));
         exit(1);
