@@ -199,10 +199,14 @@ U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
     if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_STRING) {
         int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-        *pLength=*p++;
-        return (UChar *)p;
+        if (pLength) {
+            *pLength=*p;
+        }
+        return (UChar *)++p;
     } else {
-        *pLength=0;
+        if (pLength) {
+            *pLength=0;
+        }
         return NULL;
     }
 }
