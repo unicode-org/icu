@@ -1359,7 +1359,9 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                     (e=*err)==U_BUFFER_OVERFLOW_ERROR ||
                     (e!=U_INVALID_CHAR_FOUND &&
                      e!=U_ILLEGAL_CHAR_FOUND &&
-                     e!=U_TRUNCATED_CHAR_FOUND)
+                     e!=U_TRUNCATED_CHAR_FOUND &&
+                     e!=U_ILLEGAL_ESCAPE_SEQUENCE &&
+                     e!=U_UNSUPPORTED_ESCAPE_SEQUENCE)
                 ) {
                     /*
                      * the callback did not or cannot resolve the error:
@@ -1405,7 +1407,8 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
             /* call the callback function */
             cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs,
                 cnv->invalidCharBuffer, errorInputLength,
-                *err==U_INVALID_CHAR_FOUND ? UCNV_UNASSIGNED : UCNV_ILLEGAL,
+                (*err==U_INVALID_CHAR_FOUND || *err==U_UNSUPPORTED_ESCAPE_SEQUENCE) ?
+                    UCNV_UNASSIGNED : UCNV_ILLEGAL,
                 err);
 
             /*
