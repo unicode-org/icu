@@ -44,7 +44,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->end = src->source+nSize;
   src->sourceCurrent = src->source;
   src->extraCurrent = src->end;
-  src->extraEnd = src->end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+  src->extraEnd = src->source+estimatedSize; //src->end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
   src->UCA = UCA;
   src->invUCA = ucol_initInverseUCA(status);
   src->resultLen = 0;
@@ -594,7 +594,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
       if(ch != 0x27) {
         *src->extraCurrent++ = ch;
       }
-      if(src->extraCurrent == src->extraEnd) {
+      if(src->extraCurrent > src->extraEnd) {
         /* reallocate */
         UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
         if(newSrc != NULL) {
