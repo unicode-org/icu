@@ -54,77 +54,77 @@ public class ULocaleTest extends TestFmwk {
         // };
 
         checkService("en_US_BROOKLYN", new ServiceFacade() {
-            public Object create(Locale req) {
-                return Calendar.getInstance(req);
-            }
-        // }, null, new Registrar() {
-        //     public Object register(Locale loc, Object prototype) {
-        //         CFactory f = new CFactory(loc, (Calendar) prototype);
-        //         return Calendar.register(f, loc);
-        //     }
-        //     public boolean unregister(Object key) {
-        //         return Calendar.unregister(key);
-        //     }
-        });
+                public Object create(Locale req) {
+                    return Calendar.getInstance(req);
+                }
+                // }, null, new Registrar() {
+                //     public Object register(Locale loc, Object prototype) {
+                //         CFactory f = new CFactory(loc, (Calendar) prototype);
+                //         return Calendar.register(f, loc);
+                //     }
+                //     public boolean unregister(Object key) {
+                //         return Calendar.unregister(key);
+                //     }
+            });
     }
 
     public void TestCurrency() {
         checkService("zh_TW_TAIPEI", new ServiceFacade() {
-            public Object create(Locale req) {
-                return Currency.getInstance(req);
-            }
-        }, null, new Registrar() {
-            public Object register(Locale loc, Object prototype) {
-                return Currency.registerInstance((Currency) prototype, loc);
-            }
-            public boolean unregister(Object key) {
-                return Currency.unregister(key);
-            }
-        });
+                public Object create(Locale req) {
+                    return Currency.getInstance(req);
+                }
+            }, null, new Registrar() {
+                    public Object register(Locale loc, Object prototype) {
+                        return Currency.registerInstance((Currency) prototype, loc);
+                    }
+                    public boolean unregister(Object key) {
+                        return Currency.unregister(key);
+                    }
+                });
     }
 
     public void TestBreakIterator() {
         checkService("hi_IN_BHOPAL", new ServiceFacade() {
-            public Object create(Locale req) {
-                return BreakIterator.getWordInstance(req);
-            }
-        }, null, new Registrar() {
-            public Object register(Locale loc, Object prototype) {
-                return BreakIterator.registerInstance(
-                            (BreakIterator) prototype,
-                            loc, BreakIterator.KIND_WORD);
-            }
-            public boolean unregister(Object key) {
-                return BreakIterator.unregister(key);
-            }            
-        });
+                public Object create(Locale req) {
+                    return BreakIterator.getWordInstance(req);
+                }
+            }, null, new Registrar() {
+                    public Object register(Locale loc, Object prototype) {
+                        return BreakIterator.registerInstance(
+                                                              (BreakIterator) prototype,
+                                                              loc, BreakIterator.KIND_WORD);
+                    }
+                    public boolean unregister(Object key) {
+                        return BreakIterator.unregister(key);
+                    }            
+                });
     }
 
     public void TestCollator() {
         checkService("ja_JP_YOKOHAMA", new ServiceFacade() {
-            public Object create(Locale req) {
-                return Collator.getInstance(req);
-            }
-        }, null, new Registrar() {
-            public Object register(Locale loc, Object prototype) {
-                return Collator.registerInstance((Collator) prototype, loc);
-            }
-            public boolean unregister(Object key) {
-                return Collator.unregister(key);
-            }            
-        });
+                public Object create(Locale req) {
+                    return Collator.getInstance(req);
+                }
+            }, null, new Registrar() {
+                    public Object register(Locale loc, Object prototype) {
+                        return Collator.registerInstance((Collator) prototype, loc);
+                    }
+                    public boolean unregister(Object key) {
+                        return Collator.unregister(key);
+                    }            
+                });
     }
 
     public void TestDateFormat() {
         checkService("de_CH_ZURICH", new ServiceFacade() {
-            public Object create(Locale req) {
-                return DateFormat.getDateInstance(DateFormat.DEFAULT, req);
-            }
-        }, new Subobject() {
-            public Object get(Object parent) {
-                return ((SimpleDateFormat) parent).getDateFormatSymbols();
-            }
-        }, null);
+                public Object create(Locale req) {
+                    return DateFormat.getDateInstance(DateFormat.DEFAULT, req);
+                }
+            }, new Subobject() {
+                    public Object get(Object parent) {
+                        return ((SimpleDateFormat) parent).getDateFormatSymbols();
+                    }
+                }, null);
     }
 
     public void TestNumberFormat() {
@@ -143,22 +143,46 @@ public class ULocaleTest extends TestFmwk {
         };
 
         checkService("fr_FR_NICE", new ServiceFacade() {
-            public Object create(Locale req) {
-                return NumberFormat.getInstance(req);
-            }
-        }, new Subobject() {
-            public Object get(Object parent) {
-                return ((DecimalFormat) parent).getDecimalFormatSymbols();
-            }
-        }, new Registrar() {
-            public Object register(Locale loc, Object prototype) {
-                NFactory f = new NFactory(loc, (NumberFormat) prototype);
-                return NumberFormat.registerFactory(f);
-            }
-            public boolean unregister(Object key) {
-                return NumberFormat.unregister(key);
-            }
-        });
+                public Object create(Locale req) {
+                    return NumberFormat.getInstance(req);
+                }
+            }, new Subobject() {
+                    public Object get(Object parent) {
+                        return ((DecimalFormat) parent).getDecimalFormatSymbols();
+                    }
+                }, new Registrar() {
+                        public Object register(Locale loc, Object prototype) {
+                            NFactory f = new NFactory(loc, (NumberFormat) prototype);
+                            return NumberFormat.registerFactory(f);
+                        }
+                        public boolean unregister(Object key) {
+                            return NumberFormat.unregister(key);
+                        }
+                    });
+    }
+
+    public void TestSetULocaleKeywords() {
+        ULocale uloc = new ULocale("en_Latn_US");
+        uloc = uloc.setKeywordValue("Foo", "FooValue");
+        if (!"en_Latn_US@foo=FooValue".equals(uloc.getName())) {
+            errln("failed to add foo keyword, got: " + uloc.getName());
+        }
+        uloc = uloc.setKeywordValue("Bar", "BarValue");
+        if (!"en_Latn_US@bar=BarValue;foo=FooValue".equals(uloc.getName())) {
+            errln("failed to add bar keyword, got: " + uloc.getName());
+        }
+        uloc = uloc.setKeywordValue("BAR", "NewBarValue");
+        if (!"en_Latn_US@bar=NewBarValue;foo=FooValue".equals(uloc.getName())) {
+            errln("failed to change bar keyword, got: " + uloc.getName());
+        }
+        uloc = uloc.setKeywordValue("BaR", null);
+        if (!"en_Latn_US@foo=FooValue".equals(uloc.getName())) {
+            errln("failed to delete bar keyword, got: " + uloc.getName());
+        }
+        uloc = uloc.setKeywordValue(null, null);
+        if (!"en_Latn_US".equals(uloc.getName())) {
+            errln("failed to delete all keywords, got: " + uloc.getName());
+        }
     }
 
     // ================= Infrastructure =================
@@ -170,7 +194,7 @@ public class ULocaleTest extends TestFmwk {
      */
     static int loccmp(String string, String prefix) {
         int slen = string.length(),
-                plen = prefix.length();
+            plen = prefix.length();
         /* 'root' is "less than" everything */
         if (prefix.equals("root")) {
             return string.equals("root") ? 0 : 1;
@@ -338,105 +362,105 @@ public class ULocaleTest extends TestFmwk {
     }
     private static final int LOCALE_SIZE = 9;
     private static final String[][] rawData2 = new String[][]{
-            /* language code */
-            {   "en",   "fr",   "ca",   "el",   "no",   "zh",   "de",   "es",  "ja"    },
-            /* script code */
-            {   "",     "",     "",     "",     "",     "Hans", "", "", ""  },
-            /* country code */
-            {   "US",   "FR",   "ES",   "GR",   "NO",   "CN", "DE", "", "JP"    },
-            /* variant code */
-            {   "",     "",     "",     "",     "NY",   "", "", "", ""      },
-            /* full name */
-            {   "en_US",    "fr_FR",    "ca_ES",    
-                "el_GR",    "no_NO_NY", "zh_Hans_CN", 
-                "de_DE@collation=phonebook", "es@collation=traditional",  "ja_JP@calendar=japanese" },
-            /* ISO-3 language */
-            {   "eng",  "fra",  "cat",  "ell",  "nor",  "zho", "deu", "spa", "jpn"   },
-            /* ISO-3 country */
-            {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "CHN", "DEU", "", "JPN"   },
-            /* LCID */
-            {   "409", "40c", "403", "408", "814",  "804", "407", "a", "411"     },
+        /* language code */
+        {   "en",   "fr",   "ca",   "el",   "no",   "zh",   "de",   "es",  "ja"    },
+        /* script code */
+        {   "",     "",     "",     "",     "",     "Hans", "", "", ""  },
+        /* country code */
+        {   "US",   "FR",   "ES",   "GR",   "NO",   "CN", "DE", "", "JP"    },
+        /* variant code */
+        {   "",     "",     "",     "",     "NY",   "", "", "", ""      },
+        /* full name */
+        {   "en_US",    "fr_FR",    "ca_ES",    
+            "el_GR",    "no_NO_NY", "zh_Hans_CN", 
+            "de_DE@collation=phonebook", "es@collation=traditional",  "ja_JP@calendar=japanese" },
+        /* ISO-3 language */
+        {   "eng",  "fra",  "cat",  "ell",  "nor",  "zho", "deu", "spa", "jpn"   },
+        /* ISO-3 country */
+        {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "CHN", "DEU", "", "JPN"   },
+        /* LCID */
+        {   "409", "40c", "403", "408", "814",  "804", "407", "a", "411"     },
 
-            /* display language (English) */
-            {   "English",  "French",   "Catalan", "Greek",    "Norwegian", "Chinese", "German", "Spanish", "Japanese"    },
-            /* display script code (English) */
-            {   "",     "",     "",     "",     "",     "Simplified Han", "", "", ""       },
-            /* display country (English) */
-            {   "United States",    "France",   "Spain",  "Greece",   "Norway", "China", "Germany", "", "Japan"       },
-            /* display variant (English) */
-            {   "",     "",     "",     "",     "NY",  "", "", "", ""       },
-            /* display name (English) */
-            {   "English (United States)", "French (France)", "Catalan (Spain)", 
-                "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)", 
-                "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=Japanese Calendar)" },
+        /* display language (English) */
+        {   "English",  "French",   "Catalan", "Greek",    "Norwegian", "Chinese", "German", "Spanish", "Japanese"    },
+        /* display script code (English) */
+        {   "",     "",     "",     "",     "",     "Simplified Han", "", "", ""       },
+        /* display country (English) */
+        {   "United States",    "France",   "Spain",  "Greece",   "Norway", "China", "Germany", "", "Japan"       },
+        /* display variant (English) */
+        {   "",     "",     "",     "",     "NY",  "", "", "", ""       },
+        /* display name (English) */
+        {   "English (United States)", "French (France)", "Catalan (Spain)", 
+            "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)", 
+            "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=Japanese Calendar)" },
 
-            /* display language (French) */
-            {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois", "allemand", "espagnol", "japonais"     },
-            /* display script code (French) */
-            {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
-            /* display country (French) */
-            {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge",    "Chine", "Allemagne", "", "Japon"       },
-            /* display variant (French) */
-            {   "",     "",     "",     "",     "NY",   "", "", "", ""       },
-            /* display name (French) */
-            {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", 
-                "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (Hans, Chine)", 
-                "allemand (Allemagne, Ordonnancement=Ordre de l'annuaire)", "espagnol (Ordonnancement=Ordre traditionnel)", "japonais (Japon, Calendrier=Calendrier japonais)" },
+        /* display language (French) */
+        {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois", "allemand", "espagnol", "japonais"     },
+        /* display script code (French) */
+        {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
+        /* display country (French) */
+        {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge",    "Chine", "Allemagne", "", "Japon"       },
+        /* display variant (French) */
+        {   "",     "",     "",     "",     "NY",   "", "", "", ""       },
+        /* display name (French) */
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", 
+            "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (Hans, Chine)", 
+            "allemand (Allemagne, Ordonnancement=Ordre de l'annuaire)", "espagnol (Ordonnancement=Ordre traditionnel)", "japonais (Japon, Calendrier=Calendrier japonais)" },
 
-            /* display language (Catalan) */
-            {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E9s", "alemany", "espanyol", "japon\\u00E8s"    },
-            /* display script code (Catalan) */
-            {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
-            /* display country (Catalan) */
-            {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega",  "Xina", "Alemanya", "", "Jap\\u00F3"    },
-            /* display variant (Catalan) */
-            {   "", "", "",                    "", "NY",    "", "", "", ""    },
-            /* display name (Catalan) */
-            {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", 
+        /* display language (Catalan) */
+        {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E9s", "alemany", "espanyol", "japon\\u00E8s"    },
+        /* display script code (Catalan) */
+        {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
+        /* display country (Catalan) */
+        {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega",  "Xina", "Alemanya", "", "Jap\\u00F3"    },
+        /* display variant (Catalan) */
+        {   "", "", "",                    "", "NY",    "", "", "", ""    },
+        /* display name (Catalan) */
+        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", 
             "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E9s (Hans, Xina)", 
             "alemany (Alemanya, COLLATION=PHONEBOOK)", "espanyol (COLLATION=TRADITIONAL)", "japon\\u00E8s (Jap\\u00F3, CALENDAR=JAPANESE)" },
 
-            /* display language (Greek) */
-            {
-                "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
-                "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac",
-                "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
-                "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
-                "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac",
-                "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC", 
-                "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC", 
-                "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC", 
-                "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC"   
-            },
-            /* display script code (Greek) */
-            {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
-            /* display country (Greek) */
-            {
-                "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2",
-                "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1",
-                "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1",
-                "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
-                "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1",
-                "\\u039A\\u03AF\\u03BD\\u03B1", 
-                "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1", 
-                "", 
-                "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1"   
-            },
-            /* display variant (Greek) */
-            {   "", "", "", "", "NY", "", "", "", ""    }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
-            /* display name (Greek) */
-            {
-                "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2)",
-                "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
-                "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
-                "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
-                "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
-                "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)", 
-                "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1, COLLATION=PHONEBOOK)", 
-                "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (COLLATION=TRADITIONAL)", 
-                "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC (\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1, CALENDAR=JAPANESE)"
-            }
-        };
+        /* display language (Greek) */
+        {
+            "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
+            "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac",
+            "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
+            "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
+            "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac",
+            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC", 
+            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC", 
+            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC", 
+            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC"   
+        },
+        /* display script code (Greek) */
+        {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
+        /* display country (Greek) */
+        {
+            "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2",
+            "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1",
+            "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1",
+            "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
+            "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1",
+            "\\u039A\\u03AF\\u03BD\\u03B1", 
+            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1", 
+            "", 
+            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1"   
+        },
+        /* display variant (Greek) */
+        {   "", "", "", "", "NY", "", "", "", ""    }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
+        /* display name (Greek) */
+        {
+            "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2)",
+            "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
+            "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
+            "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
+            "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
+            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)", 
+            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1, COLLATION=PHONEBOOK)", 
+            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (COLLATION=TRADITIONAL)", 
+            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC (\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1, CALENDAR=JAPANESE)"
+        }
+    };
     private static final int ENGLISH = 0;
     private static final int FRENCH = 1;
     private static final int CATALAN = 2;
@@ -501,147 +525,147 @@ public class ULocaleTest extends TestFmwk {
         }
     }
 
-  public void TestPrefixes() {
-    // POSIX ids are no longer handled by getName, so POSIX failures are ignored
-    final String [][] testData = new String[][]{
-        /* null canonicalize() column means "expect same as getName()" */
-        {"sv", "", "FI", "AL", "sv-fi-al", "sv_FI_AL", null},
-        {"en", "", "GB", "", "en-gb", "en_GB", null},
-        {"i-hakka", "", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA", null},
-        {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN", null},
-        {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", null},
-        {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", null},
+    public void TestPrefixes() {
+        // POSIX ids are no longer handled by getName, so POSIX failures are ignored
+        final String [][] testData = new String[][]{
+            /* null canonicalize() column means "expect same as getName()" */
+            {"sv", "", "FI", "AL", "sv-fi-al", "sv_FI_AL", null},
+            {"en", "", "GB", "", "en-gb", "en_GB", null},
+            {"i-hakka", "", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA", null},
+            {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN", null},
+            {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", null},
+            {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", null},
         
-        {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
-        {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
-        {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
-        {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US"},
-        {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
-        {"no", "", "NO", "NY_B", "no-no-ny.utf32@B", "no_NO_NY.utf32@B", "no_NO_NY_B"},
-        {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B"},
-        {"no", "", "",   "NY", "no__ny", "no__NY", null},
-        {"no", "", "",   "NY", "no@ny", "no@ny", "no__NY"},
-        {"el", "Latn", "", "", "el-latn", "el_Latn", null},
-        {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU", null},
-        {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", null},
-        {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
-        {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
-        {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
+            {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
+            {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
+            {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
+            {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US"},
+            {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
+            {"no", "", "NO", "NY_B", "no-no-ny.utf32@B", "no_NO_NY.utf32@B", "no_NO_NY_B"},
+            {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B"},
+            {"no", "", "",   "NY", "no__ny", "no__NY", null},
+            {"no", "", "",   "NY", "no@ny", "no@ny", "no__NY"},
+            {"el", "Latn", "", "", "el-latn", "el_Latn", null},
+            {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU", null},
+            {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", null},
+            {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
+            {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
+            {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
     
-    // odd cases
-    {"", "", "", "", "@FOO=bar", "@foo=bar", null},
-    {"", "", "", "", "_@FOO=bar", "@foo=bar", null},
-    {"", "", "", "", "__@FOO=bar", "@foo=bar", null},
-    {"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
-    };
+            // odd cases
+            {"", "", "", "", "@FOO=bar", "@foo=bar", null},
+            {"", "", "", "", "_@FOO=bar", "@foo=bar", null},
+            {"", "", "", "", "__@FOO=bar", "@foo=bar", null},
+            {"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
+        };
         
-    String loc, buf,buf1;
-    final String [] testTitles = { 
-      "ULocale.getLanguage()", 
-      "ULocale.getScript()", 
-      "ULocale.getCountry()", 
-      "ULocale.getVariant()", 
-      "name", 
-      "ULocale.getName()", 
-      "canonicalize()",
-    };
-    ULocale uloc;
+        String loc, buf,buf1;
+        final String [] testTitles = { 
+            "ULocale.getLanguage()", 
+            "ULocale.getScript()", 
+            "ULocale.getCountry()", 
+            "ULocale.getVariant()", 
+            "name", 
+            "ULocale.getName()", 
+            "canonicalize()",
+        };
+        ULocale uloc;
         
-    for(int row=0;row<testData.length;row++) {
-      loc = testData[row][NAME];
-      logln("Test #"+row+": "+loc);
+        for(int row=0;row<testData.length;row++) {
+            loc = testData[row][NAME];
+            logln("Test #"+row+": "+loc);
 
-      uloc = new ULocale(loc);    
+            uloc = new ULocale(loc);    
             
-      for(int n=0;n<=(NAME+2);n++) {
-    if(n==NAME) continue;
+            for(int n=0;n<=(NAME+2);n++) {
+                if(n==NAME) continue;
 
-    switch(n) {
-    case LANG:
-      buf  = ULocale.getLanguage(loc);
-      buf1 = uloc.getLanguage();
-      break;
+                switch(n) {
+                case LANG:
+                    buf  = ULocale.getLanguage(loc);
+                    buf1 = uloc.getLanguage();
+                    break;
                     
-    case SCRIPT:
-      buf  = ULocale.getScript(loc);
-      buf1 = uloc.getScript();
-      break;
+                case SCRIPT:
+                    buf  = ULocale.getScript(loc);
+                    buf1 = uloc.getScript();
+                    break;
                     
-    case CTRY:
-      buf  = ULocale.getCountry(loc);
-      buf1 = uloc.getCountry();
-      break;
+                case CTRY:
+                    buf  = ULocale.getCountry(loc);
+                    buf1 = uloc.getCountry();
+                    break;
                     
-    case VAR:
-      buf  = ULocale.getVariant(loc);
-      buf1 = buf;
-      break;
+                case VAR:
+                    buf  = ULocale.getVariant(loc);
+                    buf1 = buf;
+                    break;
                     
-    case NAME+1:
-      buf  = ULocale.getName(loc);
-      buf1 = uloc.getName();
-      break;
+                case NAME+1:
+                    buf  = ULocale.getName(loc);
+                    buf1 = uloc.getName();
+                    break;
 
-    case NAME+2:
-        buf = ULocale.canonicalize(loc);
-        buf1 = ULocale.createCanonical(loc).getName();
-        break;
+                case NAME+2:
+                    buf = ULocale.canonicalize(loc);
+                    buf1 = ULocale.createCanonical(loc).getName();
+                    break;
 
-    default:
-      buf = "**??";
-      buf1 = buf;
-    }
+                default:
+                    buf = "**??";
+                    buf1 = buf;
+                }
                 
-    logln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"]");
+                logln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"]");
                 
-    String expected = testData[row][n];
-    if (expected == null && n == (NAME+2)) {
-        expected = testData[row][NAME+1];
-    }
+                String expected = testData[row][n];
+                if (expected == null && n == (NAME+2)) {
+                    expected = testData[row][NAME+1];
+                }
 
-    // ignore POSIX failures in getName, we don't spec behavior in this case
-    if (n == NAME+1 && 
-        (expected.indexOf('.') != -1 || 
-         expected.indexOf('@') != -1)) {
-        continue;
-    }
+                // ignore POSIX failures in getName, we don't spec behavior in this case
+                if (n == NAME+1 && 
+                    (expected.indexOf('.') != -1 || 
+                     expected.indexOf('@') != -1)) {
+                    continue;
+                }
 
-    if(buf.compareTo(expected)!=0) {
-      errln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"] (expected '"+expected+"'!)");
+                if(buf.compareTo(expected)!=0) {
+                    errln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"] (expected '"+expected+"'!)");
+                }
+                if(buf1.compareTo(expected)!=0) {
+                    errln("#"+row+": "+testTitles[n]+" on ULocale object "+loc+": -> ["+buf1+"] (expected '"+expected+"'!)");
+                }
+            }
+        }
     }
-    if(buf1.compareTo(expected)!=0) {
-      errln("#"+row+": "+testTitles[n]+" on ULocale object "+loc+": -> ["+buf1+"] (expected '"+expected+"'!)");
-    }
-      }
-    }
-  }
 
     public void TestObsoleteNames(){
-      final String[][] tests = new String[][]{
-          /* locale, language3, language2, Country3, country2 */  
-        { "eng_USA", "eng", "en", "USA", "US" },
-        { "kok",  "kok", "kok", "", "" },
-        { "in",  "ind", "in", "", "" },
-        { "id",  "ind", "id", "", "" }, /* NO aliasing */
-        { "sh",  "srp", "sh", "", "" },
-        { "zz_FX",  "", "zz", "FXX", "FX" },
-        { "zz_RO",  "", "zz", "ROU", "RO" },
-        { "zz_TP",  "", "zz", "TMP", "TP" },
-        { "zz_TL",  "", "zz", "TLS", "TL" },
-        { "zz_ZR",  "", "zz", "ZAR", "ZR" },
-        { "zz_FXX",  "", "zz", "FXX", "FX" }, /* no aliasing. Doesn't go to PS(PSE). */
-        { "zz_ROM",  "", "zz", "ROU", "RO" },
-        { "zz_ROU",  "", "zz", "ROU", "RO" },
-        { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
-        { "zz_TMP",  "", "zz", "TMP", "TP" },
-        { "zz_TLS",  "", "zz", "TLS", "TL" },
-        { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
-        { "iw", "heb", "iw", "", "" },
-        { "ji", "yid", "ji", "", "" },
-        { "jw", "jaw", "jw", "", "" },
-        { "sh", "srp", "sh", "", "" },
-        { "", "", "", "", "" }
-    };
+        final String[][] tests = new String[][]{
+            /* locale, language3, language2, Country3, country2 */  
+            { "eng_USA", "eng", "en", "USA", "US" },
+            { "kok",  "kok", "kok", "", "" },
+            { "in",  "ind", "in", "", "" },
+            { "id",  "ind", "id", "", "" }, /* NO aliasing */
+            { "sh",  "srp", "sh", "", "" },
+            { "zz_FX",  "", "zz", "FXX", "FX" },
+            { "zz_RO",  "", "zz", "ROU", "RO" },
+            { "zz_TP",  "", "zz", "TMP", "TP" },
+            { "zz_TL",  "", "zz", "TLS", "TL" },
+            { "zz_ZR",  "", "zz", "ZAR", "ZR" },
+            { "zz_FXX",  "", "zz", "FXX", "FX" }, /* no aliasing. Doesn't go to PS(PSE). */
+            { "zz_ROM",  "", "zz", "ROU", "RO" },
+            { "zz_ROU",  "", "zz", "ROU", "RO" },
+            { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
+            { "zz_TMP",  "", "zz", "TMP", "TP" },
+            { "zz_TLS",  "", "zz", "TLS", "TL" },
+            { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
+            { "iw", "heb", "iw", "", "" },
+            { "ji", "yid", "ji", "", "" },
+            { "jw", "jaw", "jw", "", "" },
+            { "sh", "srp", "sh", "", "" },
+            { "", "", "", "", "" }
+        };
         
         for(int i=0;i<tests.length;i++){
             String locale = tests[i][0];
@@ -652,7 +676,7 @@ public class ULocaleTest extends TestFmwk {
             buff = ULocale.getISO3Language(locale);
             if(buff.compareTo(tests[i][1])!=0){
                 errln("FAIL: ULocale.getISO3Language("+locale+")=="+
-                        buff+",\t expected "+tests[i][1]);
+                      buff+",\t expected "+tests[i][1]);
             }else{
                 logln("   ULocale.getISO3Language("+locale+")=="+buff);
             }
@@ -660,15 +684,15 @@ public class ULocaleTest extends TestFmwk {
             buff1 = uloc.getISO3Language();
             if(buff1.compareTo(tests[i][1])!=0){
                 errln("FAIL: ULocale.getISO3Language("+locale+")=="+
-                        buff+",\t expected "+tests[i][1]);
+                      buff+",\t expected "+tests[i][1]);
             }else{
                 logln("   ULocale.getISO3Language("+locale+")=="+buff);
             }
             
             buff = ULocale.getLanguage(locale);
             if(buff.compareTo(tests[i][2])!=0){
-                   errln("FAIL: ULocale.getLanguage("+locale+")=="+
-                        buff+",\t expected "+tests[i][2]);
+                errln("FAIL: ULocale.getLanguage("+locale+")=="+
+                      buff+",\t expected "+tests[i][2]);
             }else{
                 logln("   ULocale.getLanguage("+locale+")=="+buff);
             }
@@ -676,7 +700,7 @@ public class ULocaleTest extends TestFmwk {
             buff = ULocale.getISO3Country(locale);
             if(buff.compareTo(tests[i][3])!=0){
                 errln("FAIL: ULocale.getISO3Country("+locale+")=="+
-                        buff+",\t expected "+tests[i][3]);
+                      buff+",\t expected "+tests[i][3]);
             }else{
                 logln("   ULocale.getISO3Country("+locale+")=="+buff);
             }
@@ -684,7 +708,7 @@ public class ULocaleTest extends TestFmwk {
             buff1 = uloc.getISO3Country();
             if(buff1.compareTo(tests[i][3])!=0){
                 errln("FAIL: ULocale.getISO3Country("+locale+")=="+
-                        buff+",\t expected "+tests[i][3]);
+                      buff+",\t expected "+tests[i][3]);
             }else{
                 logln("   ULocale.getISO3Country("+locale+")=="+buff);
             }
@@ -692,7 +716,7 @@ public class ULocaleTest extends TestFmwk {
             buff = ULocale.getCountry(locale);
             if(buff.compareTo(tests[i][4])!=0){
                 errln("FAIL: ULocale.getCountry("+locale+")=="+
-                        buff+",\t expected "+tests[i][4]);
+                      buff+",\t expected "+tests[i][4]);
             }else{
                 logln("   ULocale.getCountry("+locale+")=="+buff);
             }
@@ -708,117 +732,117 @@ public class ULocaleTest extends TestFmwk {
         }
     }
     public void TestCanonicalization(){      
-      final String[][]testCases = new String[][]{
-        { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
-        { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
-        { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
-        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=EUR" },
-        { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
-        { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
-        { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },
-        { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES@currency=ESP" },
-        { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES@currency=ESP" },
-        { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI@currency=FIM" },
-        { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE@currency=BEF" },
-        { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR@currency=FRF" },
-        { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU@currency=LUF" },
-        { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE@currency=IEP" },
-        { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES@currency=ESP" },
-        { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT@currency=ITL" },
-        { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE@currency=BEF" },
-        { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL@currency=NLG" },
-        { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT@currency=PTE" },
-        { "de__PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
-        { "en_GB_EURO", "en_GB_EURO", "en_GB@currency=EUR" },
-        { "en_GB@EURO", null, "en_GB@currency=EUR" }, /* POSIX ID */
-        { "es__TRADITIONAL", "es__TRADITIONAL", "es@collation=traditional" },
-        { "hi__DIRECT", "hi__DIRECT", "hi@collation=direct" },
-        { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
-        { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
-        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW@collation=stroke" },
-        { "zh__PINYIN", "zh__PINYIN", "zh@collation=pinyin" },
-        { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
-        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
-        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
-        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
-        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
-        { "no@ny", null, "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
-        { "no-no.utf32@B", null, "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
-        { "qz-qz@Euro", null, "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
-        { "en-BOONT", "en_BOONT", "en__BOONT" }, /* registered name */
-        { "de-1901", "de_1901", "de__1901" }, /* registered name */
-        { "de-1906", "de_1906", "de__1906" }, /* registered name */
-        { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_SP" }, /* .NET name */
-        { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_SP" }, /* .NET name */
-        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
-        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
-        { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
-        { "zh-CHT", "zh_CHT", "zh_TW" }, /* .NET name This may change back to zh_Hant */
+        final String[][]testCases = new String[][]{
+            { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
+            { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
+            { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
+            { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=EUR" },
+            { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
+            { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
+            { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },
+            { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES@currency=ESP" },
+            { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES@currency=ESP" },
+            { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI@currency=FIM" },
+            { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE@currency=BEF" },
+            { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR@currency=FRF" },
+            { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU@currency=LUF" },
+            { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE@currency=IEP" },
+            { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES@currency=ESP" },
+            { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT@currency=ITL" },
+            { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE@currency=BEF" },
+            { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL@currency=NLG" },
+            { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT@currency=PTE" },
+            { "de__PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
+            { "en_GB_EURO", "en_GB_EURO", "en_GB@currency=EUR" },
+            { "en_GB@EURO", null, "en_GB@currency=EUR" }, /* POSIX ID */
+            { "es__TRADITIONAL", "es__TRADITIONAL", "es@collation=traditional" },
+            { "hi__DIRECT", "hi__DIRECT", "hi@collation=direct" },
+            { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
+            { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
+            { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW@collation=stroke" },
+            { "zh__PINYIN", "zh__PINYIN", "zh@collation=pinyin" },
+            { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
+            { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
+            { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
+            { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
+            { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
+            { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
+            { "no@ny", null, "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
+            { "no-no.utf32@B", null, "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
+            { "qz-qz@Euro", null, "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
+            { "en-BOONT", "en_BOONT", "en__BOONT" }, /* registered name */
+            { "de-1901", "de_1901", "de__1901" }, /* registered name */
+            { "de-1906", "de_1906", "de__1906" }, /* registered name */
+            { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_SP" }, /* .NET name */
+            { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_SP" }, /* .NET name */
+            { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
+            { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
+            { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
+            { "zh-CHT", "zh_CHT", "zh_TW" }, /* .NET name This may change back to zh_Hant */
 
-        /* posix behavior that used to be performed by getName */
-        { "mr.utf8", null, "mr" },
-        { "de-tv.koi8r", null, "de_TV" },
-        { "x-piglatin_ML.MBE", null, "x-piglatin_ML" },
-        { "i-cherokee_US.utf7", null, "i-cherokee_US" },
-        { "x-filfli_MT_FILFLA.gb-18030", null, "x-filfli_MT_FILFLA" },
-        { "no-no-ny.utf8@B", null, "no_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
+            /* posix behavior that used to be performed by getName */
+            { "mr.utf8", null, "mr" },
+            { "de-tv.koi8r", null, "de_TV" },
+            { "x-piglatin_ML.MBE", null, "x-piglatin_ML" },
+            { "i-cherokee_US.utf7", null, "i-cherokee_US" },
+            { "x-filfli_MT_FILFLA.gb-18030", null, "x-filfli_MT_FILFLA" },
+            { "no-no-ny.utf8@B", null, "no_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
 
-        /* fleshing out canonicalization */
-        /* sort keywords, ';' is separator so not present at end in canonical form */
-        { "en_Hant_IL_VALLEY_GIRL@currency=EUR;calendar=Japanese;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
-        /* already-canonical ids are not changed */
-        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
-        /* PRE_EURO and EURO conversions don't affect other keywords */
-    /* not in spec
-        { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
-        { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah", "es_ES@currency=EUR;shout=zipeedeedoodah" },
-    */
-        /* currency keyword overrides PRE_EURO and EURO currency */
-    /* not in spec
-        { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
-        { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
-    */
-        /* norwegian is just too weird, if we handle things in their full generality */
-    /* this is a negative test to show that we DO NOT handle 'lang=no,var=NY' specially. */
-        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+            /* fleshing out canonicalization */
+            /* sort keywords, ';' is separator so not present at end in canonical form */
+            { "en_Hant_IL_VALLEY_GIRL@currency=EUR;calendar=Japanese;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+            /* already-canonical ids are not changed */
+            { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+            /* PRE_EURO and EURO conversions don't affect other keywords */
+            /* not in spec
+               { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
+               { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah", "es_ES@currency=EUR;shout=zipeedeedoodah" },
+            */
+            /* currency keyword overrides PRE_EURO and EURO currency */
+            /* not in spec
+               { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
+               { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
+            */
+            /* norwegian is just too weird, if we handle things in their full generality */
+            /* this is a negative test to show that we DO NOT handle 'lang=no,var=NY' specially. */
+            { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
-        /* test cases reflecting internal resource bundle usage */
-    /* root is just a language */
-        { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
-    /* level 2 canonicalization should not touch basename when there are keywords and it is null */
-        { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
-      };
+            /* test cases reflecting internal resource bundle usage */
+            /* root is just a language */
+            { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
+            /* level 2 canonicalization should not touch basename when there are keywords and it is null */
+            { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
+        };
 
         for(int i = 0; i< testCases.length;i++){
-      String[] testCase = testCases[i];
-      String source = testCase[0];
-      String level1Expected = testCase[1];
-      String level2Expected = testCase[2];
+            String[] testCase = testCases[i];
+            String source = testCase[0];
+            String level1Expected = testCase[1];
+            String level2Expected = testCase[2];
 
-      if (level1Expected != null) { // null means we have no expectations for how this case is handled
-        String level1 = ULocale.getName(source);
-        if (!level1.equals(level1Expected)) {
-          errln("ULocale.getName error for: '" + source + 
-            "' expected: '" + level1Expected + "' but got: '" + level1 + "'");
-        } else {
-          logln("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
-        }
-      } else {
-        logln("ULocale.getName skipped: '" + source + "'");
-      }
+            if (level1Expected != null) { // null means we have no expectations for how this case is handled
+                String level1 = ULocale.getName(source);
+                if (!level1.equals(level1Expected)) {
+                    errln("ULocale.getName error for: '" + source + 
+                          "' expected: '" + level1Expected + "' but got: '" + level1 + "'");
+                } else {
+                    logln("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
+                }
+            } else {
+                logln("ULocale.getName skipped: '" + source + "'");
+            }
 
-      if (level2Expected != null) {
-            String level2 = ULocale.canonicalize(source);
-            if(!level2.equals(level2Expected)){
-          errln("ULocale.getName error for: '" + source + 
-            "' expected: '" + level2Expected + "' but got: '" + level2 + "'");
-        } else {
-          logln("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
-        }
-      } else {
-        logln("ULocale.canonicalize skipped: '" + source + "'");
-      }
+            if (level2Expected != null) {
+                String level2 = ULocale.canonicalize(source);
+                if(!level2.equals(level2Expected)){
+                    errln("ULocale.getName error for: '" + source + 
+                          "' expected: '" + level2Expected + "' but got: '" + level2 + "'");
+                } else {
+                    logln("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
+                }
+            } else {
+                logln("ULocale.canonicalize skipped: '" + source + "'");
+            }
         }
     }
 
@@ -833,74 +857,74 @@ public class ULocaleTest extends TestFmwk {
     }
 
     public void TestDisplayNames() {
-    // consistency check, also check that all data is available
-    {
-        ULocale[] locales = ULocale.getAvailableLocales();
-        for (int i = 0; i < locales.length; ++i) {
-        ULocale l = locales[i];
-        String name = l.getDisplayName();
+        // consistency check, also check that all data is available
+        {
+            ULocale[] locales = ULocale.getAvailableLocales();
+            for (int i = 0; i < locales.length; ++i) {
+                ULocale l = locales[i];
+                String name = l.getDisplayName();
 
-        logln(l + " --> " + name + 
-              ", " + l.getDisplayName(ULocale.GERMAN) + 
-              ", " + l.getDisplayName(ULocale.FRANCE));
+                logln(l + " --> " + name + 
+                      ", " + l.getDisplayName(ULocale.GERMAN) + 
+                      ", " + l.getDisplayName(ULocale.FRANCE));
 
-        String language = l.getDisplayLanguage();
-        String script = l.getDisplayScript();
-        String country = l.getDisplayCountry();
-        String variant = l.getDisplayVariant();
+                String language = l.getDisplayLanguage();
+                String script = l.getDisplayScript();
+                String country = l.getDisplayCountry();
+                String variant = l.getDisplayVariant();
 
-        checkName(name, language, script, country, variant);
+                checkName(name, language, script, country, variant);
 
-        for (int j = 0; j < locales.length; ++j) {
-            ULocale dl = locales[j];
+                for (int j = 0; j < locales.length; ++j) {
+                    ULocale dl = locales[j];
 
-            name = l.getDisplayName(dl);
-            language = l.getDisplayLanguage(dl);
-            script = l.getDisplayScript(dl);
-            country = l.getDisplayCountry(dl);
-            variant = l.getDisplayVariant(dl);
+                    name = l.getDisplayName(dl);
+                    language = l.getDisplayLanguage(dl);
+                    script = l.getDisplayScript(dl);
+                    country = l.getDisplayCountry(dl);
+                    variant = l.getDisplayVariant(dl);
 
-            if (!checkName(name, language, script, country, variant)) {
-            break;
+                    if (!checkName(name, language, script, country, variant)) {
+                        break;
+                    }
+                }
             }
         }
+        // spot check
+        {
+            ULocale[] locales = {
+                ULocale.US, ULocale.GERMANY, ULocale.FRANCE
+            };
+            String[] names = {
+                "Chinese (China)", "Chinesisch (China)", "chinois (Chine)"
+            };
+            ULocale locale = new ULocale("zh_CN");
+            for (int i = 0; i < locales.length; ++i) {
+                String name = locale.getDisplayName(locales[i]);
+                if (!names[i].equals(name)) {
+                    errln("expected '" + names[i] + "' but got '" + name + "'");
+                }
+            }
         }
-    }
-    // spot check
-    {
-        ULocale[] locales = {
-        ULocale.US, ULocale.GERMANY, ULocale.FRANCE
-        };
-        String[] names = {
-        "Chinese (China)", "Chinesisch (China)", "chinois (Chine)"
-        };
-        ULocale locale = new ULocale("zh_CN");
-        for (int i = 0; i < locales.length; ++i) {
-        String name = locale.getDisplayName(locales[i]);
-        if (!names[i].equals(name)) {
-            errln("expected '" + names[i] + "' but got '" + name + "'");
-        }
-        }
-    }
     }
 
     private boolean checkName(String name, String language, String script, String country, String variant) {
-    if (language.length() > 0 && name.indexOf(language) == -1) {
-        errln("name '" + name + "' does not contain language '" + language + "'");
-        return false;
-    }
-    if (script.length() > 0 && name.indexOf(script) == -1) {
-        errln("name '" + name + "' does not contain script '" + script + "'");
-        return false;
-    }
-    if (country.length() > 0 && name.indexOf(country) == -1) {
-        errln("name '" + name + "' does not contain country '" + country + "'");
-        return false;
-    }
-    if (variant.length() > 0 && name.indexOf(variant) == -1) {
-        errln("name '" + name + "' does not contain variant '" + variant + "'");
-        return false;
-    }
-    return true;
+        if (language.length() > 0 && name.indexOf(language) == -1) {
+            errln("name '" + name + "' does not contain language '" + language + "'");
+            return false;
+        }
+        if (script.length() > 0 && name.indexOf(script) == -1) {
+            errln("name '" + name + "' does not contain script '" + script + "'");
+            return false;
+        }
+        if (country.length() > 0 && name.indexOf(country) == -1) {
+            errln("name '" + name + "' does not contain country '" + country + "'");
+            return false;
+        }
+        if (variant.length() > 0 && name.indexOf(variant) == -1) {
+            errln("name '" + name + "' does not contain variant '" + variant + "'");
+            return false;
+        }
+        return true;
     }
 }
