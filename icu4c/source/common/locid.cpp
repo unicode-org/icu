@@ -39,10 +39,6 @@
 #include "uhash.h"
 #include "ucln_cmn.h"
 
-U_NAMESPACE_BEGIN
-
-const char Locale::fgClassID=0;
-
 static Locale*  availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
 typedef enum ELocalePos {
@@ -78,8 +74,6 @@ typedef enum ELocalePos {
 static Locale *gLocaleCache   = NULL;
 static Locale *gDefaultLocale = NULL;
 
-U_NAMESPACE_END
-
 UBool
 locale_cleanup(void)
 {
@@ -91,12 +85,20 @@ locale_cleanup(void)
     }
     availableLocaleListCount = 0;
 
-    delete [] gLocaleCache;
-    delete    gDefaultLocale;
+    if (gLocaleCache) {
+        delete [] gLocaleCache;
+        gLocaleCache = NULL;
+    }
+    if (gDefaultLocale) {
+        delete gDefaultLocale;
+        gDefaultLocale = NULL;
+    }
     return TRUE;
 }
 
 U_NAMESPACE_BEGIN
+const char Locale::fgClassID=0;
+
 void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
@@ -928,7 +930,9 @@ Locale::getLocaleCache(void)
             tLocaleCache = NULL;
         }
         umtx_unlock(NULL);
-        delete [] tLocaleCache;  // Fancy array delete will destruct each member.
+        if (tLocaleCache) {
+            delete [] tLocaleCache;  // Fancy array delete will destruct each member.
+        }
     }
     return gLocaleCache;
 }
