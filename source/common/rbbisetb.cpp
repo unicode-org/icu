@@ -2,10 +2,10 @@
 //  rbbisetb.cpp
 //
 /*
-**********************************************************************
-*   Copyright (C) 2002 International Business Machines Corporation   *
-*   and others. All rights reserved.                                 *
-**********************************************************************
+***************************************************************************
+*   Copyright (C) 2002-2003 International Business Machines Corporation   *
+*   and others. All rights reserved.                                      *
+***************************************************************************
 */
 //
 //  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules

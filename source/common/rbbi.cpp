@@ -4,10 +4,10 @@
 //                   class RuleBasedBreakIterator
 //
 /*
-**********************************************************************
-*   Copyright (C) 1999-2002 International Business Machines Corporation   *
-*   and others. All rights reserved.                                 *
-**********************************************************************
+***************************************************************************
+*   Copyright (C) 1999-2003 International Business Machines Corporation   *
+*   and others. All rights reserved.                                      *
+***************************************************************************
 */
 
 #include "unicode/utypes.h"
