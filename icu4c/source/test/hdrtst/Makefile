@@ -44,7 +44,7 @@ genfiles:
 	  incfile=`basename $$file .h` ; \
 	  echo -n "  unicode/$$incfile.h 	- " ; \
 	  echo '#include "'unicode/$$incfile'.h"' > ht_$$incfile.cpp ; \
-	  echo 'junk(){}' >> ht_$$incfile.cpp ; \
+	  echo 'void junk(){}' >> ht_$$incfile.cpp ; \
           $(COMPILE.cc) -c -I. ht_$$incfile.cpp ; \
 	  RES=$$? ; \
 	  echo $$RES ; \
