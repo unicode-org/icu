@@ -223,6 +223,16 @@ class TransliteratorIDParser {
                         UBool& isSourcePresent);
 
     /**
+     * Given source, target, and variant strings, concatenate them into a
+     * full ID.  If the source is empty, then "Any" will be used for the
+     * source, so the ID will always be of the form s-t/v or s-t.
+     */
+    static void STVtoID(const UnicodeString& source,
+                        const UnicodeString& target,
+                        const UnicodeString& variant,
+                        UnicodeString& id);
+
+    /**
      * Register two targets as being inverses of one another.  For
      * example, calling registerSpecialInverse("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
