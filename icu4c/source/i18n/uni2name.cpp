@@ -10,6 +10,7 @@
 
 #include "uni2name.h"
 #include "unicode/unifilt.h"
+#include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
 

@@ -12,6 +12,7 @@
 #include "itercoll.h"
 #include "unicode/schriter.h"
 #include "unicode/chariter.h"
+#include "unicode/uchar.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
@@ -21,7 +22,7 @@ CollationIteratorTest::CollationIteratorTest()
  : test1("What subset of all possible test cases?", ""),
    test2("has the highest probability of detecting", "")
 {
-    en_us = (RuleBasedCollator *)Collator::createInstance(Locale::US, status);
+    en_us = (RuleBasedCollator *)Collator::createInstance(Locale::getUS(), status);
 }
 
 CollationIteratorTest::~CollationIteratorTest()

@@ -26,6 +26,7 @@
 #include "unicode/choicfmt.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/uchar.h"
 #include "ustrfmt.h"
 
 // *****************************************************************************

@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/21 21:46:28 $
-* $Revision: 1.10 $
+* $Date: 2001/11/30 00:06:11 $
+* $Revision: 1.11 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -14,6 +14,7 @@
 #include "unicode/uscript.h"
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
+#include "unicode/uchar.h"
 #include "hash.h"
 #include "mutex.h"
 #include "ucln_in.h"

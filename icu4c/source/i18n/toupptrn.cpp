@@ -9,6 +9,7 @@
 */
 
 #include "toupptrn.h"
+#include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
 
