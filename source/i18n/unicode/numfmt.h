@@ -698,12 +698,14 @@ public:
      * Return true if this factory will be visible.  Default is true.
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
+     * @draft ICU 2.6
      */
     virtual UBool visible(void) const = 0;
 
     /**
      * Return the locale names directly supported by this factory.  The number of names
      * is returned in count;
+     * @draft ICU 2.6
      */
     virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
 
@@ -712,6 +714,7 @@ public:
      * is not supported, return null.  If the locale is supported, but
      * the type is not provided by this service, return null.  Otherwise
      * return an appropriate instance of NumberFormat.
+     * @draft ICU 2.6
      */
     virtual NumberFormat* createFormat(const Locale& loc, UNumberFormatStyle formatType) = 0;
 };
@@ -726,16 +729,25 @@ protected:
     UnicodeString _id;
 
 public:
+    /**
+     * @draft ICU 2.6
+     */
     SimpleNumberFormatFactory(const Locale& locale, UBool visible = TRUE)
       : _visible(visible)
       , _id(locale.getName())
     {
     }
 
+    /**
+     * @draft ICU 2.6
+     */
     virtual UBool visible(void) const {
         return _visible;
     }
 
+    /**
+     * @draft ICU 2.6
+     */
     virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const 
       {
         if (U_SUCCESS(status)) {

@@ -1462,23 +1462,38 @@ private:
      */
     static UBool unregister(URegistryKey key, UErrorCode& status);
     
+    /**
+     * Multiple Calendar Implementation
+     * @internal 
+     */
     friend class CalendarFactory;
+
+    /**
+     * Multiple Calendar Implementation
+     * @internal 
+     */
     friend class CalendarService;
+
+    /**
+     * Multiple Calendar Implementation
+     * @internal 
+     */
     friend class DefaultCalendarFactory;
 
     /**
      * @internal 
-     * @return TRUE if this calendar has the notion of a default century
+     * @return TRUE if this calendar has a default century (i.e. 03 -> 2003)
      */
     virtual UBool haveDefaultCentury() const = 0;
+
     /**
      * @internal
-     * @return the start of the default century
+     * @return the start of the default century, as a UDate
      */
     virtual UDate defaultCenturyStart() const = 0;
     /**
      * @internal 
-     * @return the beginning year of the default century
+     * @return the beginning year of the default century, as a year
      */
     virtual int32_t defaultCenturyStartYear() const = 0;
     
