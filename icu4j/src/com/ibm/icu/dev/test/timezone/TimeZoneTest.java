@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2002/08/13 22:04:39 $
- * $Revision: 1.10 $
+ * $Date: 2002/12/03 23:15:05 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -124,7 +124,7 @@ public class TimeZoneTest extends TestFmwk
             // new ZoneDescriptor("NET", 240, false);
             // As of bug 4191164, fix NET
             new ZoneDescriptor("NET", 240, true),
-            new ZoneDescriptor("PLT", 300, false),
+            new ZoneDescriptor("PLT", 300, true), // Liu 3Dec02, Pakistan uses DST as of 2002
             new ZoneDescriptor("IST", 330, false),
             new ZoneDescriptor("BST", 360, false),
             new ZoneDescriptor("VST", 420, false),
