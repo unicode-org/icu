@@ -1091,7 +1091,7 @@ public class CollationMiscTest extends TestFmwk{
         }
     }
     
-    public void TestJ831() {
+    public void DontTestJ831() { // Latvian does not use upper first
         String[] data = {
             "I",
             "i",

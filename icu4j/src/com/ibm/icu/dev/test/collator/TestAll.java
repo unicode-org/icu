@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/TestAll.java,v $
- * $Date: 2003/11/21 04:22:59 $
- * $Revision: 1.6 $
+ * $Date: 2004/01/06 22:20:44 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ public class TestAll extends TestGroup {
                   "CollationTest",
                   "CollationAPITest",
                   "CollationCurrencyTest",
-                  "CollationDanishTest",
+                  //"CollationDanishTest", //Danish is already tested through data driven tests
                   "CollationDummyTest",
                   "CollationEnglishTest",
                   "CollationFinnishTest",
