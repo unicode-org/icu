@@ -80,14 +80,18 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     default: status = U_ILLEGAL_ARGUMENT_ERROR; return;
     }
 
-    UResourceBundle* nfrb = ures_open(NULL, locale.getName(), &status);
+	// the following doesn't work for aliased resources
+    // const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
     int32_t len = 0;
-    const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
+    UResourceBundle* nfrb = ures_open(NULL, locale.getName(), &status);
+	UResourceBundle* yuck = ures_getByKey(nfrb, fmt_tag, NULL, &status);
+	const UChar* description = ures_getString(yuck, &len, &status);
     if (U_SUCCESS(status)) {
         UnicodeString desc(description, len);
         UParseError perror;
         init (desc, perror, status);
     }
+	ures_close(yuck);
     ures_close(nfrb);
 }
 
