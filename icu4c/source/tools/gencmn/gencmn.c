@@ -299,7 +299,7 @@ main(int argc, const char *argv[]) {
 
         sprintf(
             buffer,
-            "U_CAPI const struct {\n"
+            "U_EXPORT const struct {\n"
             "    uint16_t headerSize;\n"
             "    uint8_t magic1, magic2;\n"
             "    UDataInfo info;\n"
