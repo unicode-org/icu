@@ -684,6 +684,34 @@ static void TestBadScanfFormat(void) {
     TestBadSScanfFormat("%[]  ", abcUChars, abcChars);
 }
 
+static void Test_u_vfprintf(const char *expectedResult, const char *format, ...) {
+    UChar uBuffer[256];
+    UChar uBuffer2[256];
+    va_list ap;
+    int32_t count;
+
+    va_start(ap, format);
+    count = u_vsprintf(uBuffer, format, ap);
+    va_end(ap);
+    u_uastrcpy(uBuffer2, expectedResult);
+    if (u_strcmp(uBuffer, uBuffer2) != 0) {
+        log_err("Got two different results for \"%s\" expected \"%s\"\n", format, expectedResult);
+    }
+
+    u_uastrcpy(uBuffer2, format);
+    va_start(ap, format);
+    count = u_vsprintf_u(uBuffer, uBuffer2, ap);
+    va_end(ap);
+    u_uastrcpy(uBuffer2, expectedResult);
+    if (u_strcmp(uBuffer, uBuffer2) != 0) {
+        log_err("Got two different results for \"%s\" expected \"%s\"\n", format, expectedResult);
+    }
+}
+
+static void TestVargs(void) {
+    Test_u_vfprintf("8 9 a B 8.9", "%d %u %x %X %.1f", 8, 9, 10, 11, 8.9);
+}
+
 U_CFUNC void
 addStringTest(TestNode** root) {
     addTest(root, &TestString, "string/TestString");
@@ -694,6 +722,7 @@ addStringTest(TestNode** root) {
     addTest(root, &TestArgumentSkipping, "string/TestArgumentSkipping");
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
     addTest(root, &TestBadScanfFormat, "string/TestBadScanfFormat");
+    addTest(root, &TestVargs, "string/TestVargs");
 }
 
 
