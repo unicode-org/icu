@@ -98,10 +98,14 @@ class MyNumberFormatTest : public NumberFormat
 {
 public:
 
-    //public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) 
-  //{ return new StringBuffer(""); }
-  //public StringBuffer format(long number,StringBuffer toAppendTo, FieldPosition pos) 
-  //{ return new StringBuffer(""); }
+  
+  virtual UnicodeString& format(    double            number, 
+                    UnicodeString&        toAppendTo, 
+                    FieldPosition&        pos,
+                    UErrorCode& status) const
+    {
+      return NumberFormat::format(number, toAppendTo, pos, status);
+    }
   
   virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
@@ -110,7 +114,6 @@ public:
       toAppendTo = "";
       return toAppendTo;
     }
-  
   
   //public Number parse(String text, ParsePosition parsePosition) 
   //{ return new Integer(0); }
@@ -122,6 +125,12 @@ public:
       result.setLong(0L);
     }
   
+  virtual void parse(    const UnicodeString&    text, 
+            Formattable&            result, 
+            UErrorCode&            status) const 
+  {
+      NumberFormat::parse(text, result, status);
+  }
   virtual Format* clone() const 
     { return NULL; }
   

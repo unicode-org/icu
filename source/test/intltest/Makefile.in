@@ -56,7 +56,7 @@ $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(t
 LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@
 
 OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
-caltztst.o citrtest.o cppcnvt.o cpputils.o currcoll.o dacoll.o		\
+caltztst.o citrtest.o cppcnvt.o cputilst.o currcoll.o dacoll.o		\
 dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o isocoll.o	\
 itconv.o itercoll.o itformat.o itmajor.o ittxtbd.o itutil.o jacoll.o	\
