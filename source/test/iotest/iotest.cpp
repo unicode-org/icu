@@ -18,6 +18,7 @@
 #include "unicode/uclean.h"
 
 #include "unicode/ucnv.h"
+#include "unicode/uloc.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "unicode/ctest.h"
@@ -298,7 +299,7 @@ static void TestFile() {
 */
 }
 
-static void TestCodepage() {
+static void TestCodepageAndLocale() {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
     if (u_fgetcodepage(myFile) == NULL
         || strcmp(u_fgetcodepage(myFile), ucnv_getDefaultName()) != 0)
@@ -306,14 +307,56 @@ static void TestCodepage() {
         log_err("Didn't get the proper default codepage. Got %s expected: %s\n",
             u_fgetcodepage(myFile), ucnv_getDefaultName());
     }
+    if (u_fgetlocale(myFile) == NULL
+        || strcmp(u_fgetlocale(myFile), uloc_getDefault()) != 0)
+    {
+        log_err("Didn't get the proper default locale. Got %s expected: %s\n",
+            u_fgetlocale(myFile), uloc_getDefault());
+    }
     u_fclose(myFile);
 
-    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en", NULL);
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "es", NULL);
     if (u_fgetcodepage(myFile) == NULL
         || strcmp(u_fgetcodepage(myFile), "ISO-8859-1") != 0)
     {
         log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
             u_fgetcodepage(myFile));
+    }
+    if (u_fgetlocale(myFile) == NULL
+        || strcmp(u_fgetlocale(myFile), "es") != 0)
+    {
+        log_err("Didn't get the proper default locale. Got %s expected: %s\n",
+            u_fgetlocale(myFile), "es");
+    }
+    u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-16");
+    if (u_fgetcodepage(myFile) == NULL
+        || strcmp(u_fgetcodepage(myFile), "UTF-16") != 0)
+    {
+        log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
+            u_fgetcodepage(myFile));
+    }
+    if (u_fgetlocale(myFile) == NULL
+        || strcmp(u_fgetlocale(myFile), uloc_getDefault()) != 0)
+    {
+        log_err("Didn't get the proper default locale. Got %s expected: %s\n",
+            u_fgetlocale(myFile), uloc_getDefault());
+    }
+    u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "zh", "UTF-16");
+    if (u_fgetcodepage(myFile) == NULL
+        || strcmp(u_fgetcodepage(myFile), "UTF-16") != 0)
+    {
+        log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
+            u_fgetcodepage(myFile));
+    }
+    if (u_fgetlocale(myFile) == NULL
+        || strcmp(u_fgetlocale(myFile), "zh") != 0)
+    {
+        log_err("Didn't get the proper default locale. Got %s expected: %s\n",
+            u_fgetlocale(myFile), "zh");
     }
     u_fclose(myFile);
 }
@@ -361,6 +404,9 @@ static void TestfgetsBuffers() {
     if (u_strcmp(buffer, expectedBuffer) != 0) {
         log_err("Did get expected string back\n");
     }
+    if (strcmp(u_fgetcodepage(myFile), "UTF-16") != 0) {
+        log_err("Got %s instead of UTF-16\n", u_fgetcodepage(myFile));
+    }
     u_fclose(myFile);
 
 
@@ -381,6 +427,9 @@ static void TestfgetsBuffers() {
 
     u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
+    if (strcmp(u_fgetcodepage(myFile), "UTF-8") != 0) {
+        log_err("Got %s instead of UTF-8\n", u_fgetcodepage(myFile));
+    }
     if (u_fgetc(myFile) != 0x3BC) {
         log_err("The first character is wrong\n");
     }
@@ -506,6 +555,10 @@ static void TestFilePrintCompatibility() {
     if (myFile == NULL) {
         log_err("Can't read test file.");
         return;
+    }
+
+    if (strcmp(u_fgetlocale(myFile), "en_US_POSIX") != 0) {
+        log_err("Got %s instead of en_US_POSIX for locale\n", u_fgetlocale(myFile));
     }
 
     /* Compare against C API compatibility */
@@ -643,6 +696,25 @@ static void TestFilePrintCompatibility() {
         log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
     }\
 
+#define TestFPrintFormat2(format, precision, value) \
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);\
+    /* Reinitialize the buffer to verify null termination works. */\
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    \
+    uNumPrinted = u_fprintf(myFile, format, precision, value);\
+    u_fclose(myFile);\
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);\
+    u_fgets(myFile, sizeof(uBuffer)/sizeof(*uBuffer), uBuffer);\
+    u_fclose(myFile);\
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));\
+    cNumPrinted = sprintf(buffer, format, precision, value);\
+    if (strcmp(buffer, compBuffer) != 0) {\
+        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
+    }\
+    if (cNumPrinted != uNumPrinted) {\
+        log_err("%" format " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
+    }\
 
 static void TestFprintfFormat() {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
@@ -754,6 +826,9 @@ static void TestFprintfFormat() {
     TestFPrintFormat("%.2f", -1.234,     "%.2f", -1.234);
     TestFPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestFPrintFormat("%3f", -1.234,      "%3f", -1.234);
+
+    TestFPrintFormat2("%+1.*e", 4, 1.2345678);
+    TestFPrintFormat2("%+2.*e", 6, 1.2345678);
 }
 
 #undef TestFPrintFormat
@@ -998,6 +1073,20 @@ static void TestSnprintf() {
         log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
     }\
 
+#define TestSPrintFormat2(format, precision, value) \
+    /* Reinitialize the buffer to verify null termination works. */\
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    \
+    uNumPrinted = u_sprintf(uBuffer, "en_US_POSIX", format, precision, value);\
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
+    cNumPrinted = sprintf(buffer, format, precision, value);\
+    if (strcmp(buffer, compBuffer) != 0) {\
+        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
+    }\
+    if (cNumPrinted != uNumPrinted) {\
+        log_err("%" format " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
+    }\
 
 static void TestSprintfFormat() {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
@@ -1108,6 +1197,9 @@ static void TestSprintfFormat() {
     TestSPrintFormat("%.2f", -1.234,     "%.2f", -1.234);
     TestSPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestSPrintFormat("%3f", -1.234,      "%3f", -1.234);
+
+    TestSPrintFormat2("%+1.*e", 4, 1.2345678);
+    TestSPrintFormat2("%+2.*e", 6, 1.2345678);
 }
 
 #undef TestSPrintFormat
@@ -1424,7 +1516,7 @@ static void TestTranslitOut()
 
 static void addAllTests(TestNode** root) {
     addTest(root, &TestFile, "file/TestFile");
-    addTest(root, &TestCodepage, "file/TestCodepage");
+    addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
