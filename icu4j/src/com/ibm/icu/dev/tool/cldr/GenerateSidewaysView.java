@@ -12,9 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -47,7 +50,8 @@ import com.ibm.icu.util.UResourceBundle;
  * are redundancies with inheritance. It generates new files in the target directory.
  * Second, it gathers together all the items from all the locales that share the
  * same element chain, and thus presents a "sideways" view of the data, in files called
- * sideways_X.html, where X is a type.
+ * by_type/X.html, where X is a type. X may be the concatenation of more than more than
+ * one element, where the file would otherwise be too large.
  * @author medavis
  */public class GenerateSidewaysView {
 
@@ -224,7 +228,9 @@ import com.ibm.icu.util.UResourceBundle;
         return buffer.toString();
     }
     
-    
+
+    public static final Set IGNOREABLE = new HashSet(Arrays.asList(new String[] {"draft", "sources"}));
+
     static class SimpleAttribute implements Comparable {
         String name;
         String value;
@@ -284,7 +290,7 @@ import com.ibm.icu.util.UResourceBundle;
             StringBuffer buffer = new StringBuffer();
             for (Iterator it = contents.iterator(); it.hasNext();) {
                 SimpleAttribute a = (SimpleAttribute)it.next();
-                if (path && a.name.equals("draft")) continue;
+                if (path && IGNOREABLE.contains(a.name)) continue;
                 buffer.append(a.toString(path));
             }
             return buffer.toString();
@@ -312,7 +318,7 @@ import com.ibm.icu.util.UResourceBundle;
         private SimpleAttribute getSkipping(Iterator it) {
             while (it.hasNext()) {
             	SimpleAttribute a = (SimpleAttribute)it.next();
-                if (!a.name.equals("draft")) return a;
+                if (!IGNOREABLE.contains(a.name)) return a;
             }
             return null;
         }
@@ -661,6 +667,8 @@ import com.ibm.icu.util.UResourceBundle;
     static SidewaysView sidewaysView = new SidewaysView();
     
     static class SidewaysView {
+        Collator col = Collator.getInstance(ULocale.ENGLISH);
+        { col.setStrength(Collator.IDENTICAL); }
         Map contextCache = new TreeMap();
         Set fileNames = new TreeSet();
 
@@ -670,7 +678,7 @@ import com.ibm.icu.util.UResourceBundle;
                 String associatedData = (String) data.get(copy);
                 Map dataToFile = (Map)contextCache.get(copy);
                 if (dataToFile == null) {
-                    dataToFile = new TreeMap();
+                    dataToFile = new TreeMap(col);
                     contextCache.put(copy, dataToFile);
                  }
                 Set files = (Set) dataToFile.get(associatedData);
@@ -693,7 +701,20 @@ import com.ibm.icu.util.UResourceBundle;
             }
             return result;
         }
+        /*
+        String getLastElementsType(ElementChain ec) {
+            //TODO make SimpleAttributes a map instead of a set.
+            Element e = (Element)ec.contexts.get(ec.contexts.size()-1);
+            SimpleAttributes sa = e.attributes;
+            for (Iterator it = sa.contents.iterator(); it.hasNext();) {
+            	SimpleAttribute sa1 = (SimpleAttribute)it.next();
+                if (sa1.name.equals("type")) return sa1.value;
+            }
+            return "*NOT_FOUND*";
+        }
+        */
         void showCacheData() throws IOException {
+            writeStyleSheet();
             PrintWriter out = null;
             String lastChainName = "";
             for (Iterator it = contextCache.keySet().iterator(); it.hasNext();) {
@@ -720,9 +741,13 @@ import com.ibm.icu.util.UResourceBundle;
                 // now display
                 for (Iterator it2 = dataToFile.keySet().iterator(); it2.hasNext();) {
                     String data = (String) it2.next();
-                    out.print("<tr><th>\"" + BagFormatter.toHTML.transliterate(data) + "\"</th><td>");
+                    String dataStyle = "";
                     Set files = (Set) dataToFile.get(data);
-                    if (files.contains("root")) files.addAll(remainingFiles);
+                    if (files.contains("root")) {
+                        files.addAll(remainingFiles);
+                        dataStyle = " class='nodata'";
+                    }
+                    out.print("<tr><th" + dataStyle + ">\"" + BagFormatter.toHTML.transliterate(data) + "\"</th><td>");
                     boolean first = true;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
@@ -742,23 +767,25 @@ import com.ibm.icu.util.UResourceBundle;
 		 * @throws IOException
 		 */
 		private PrintWriter openAndDoHeader(String type) throws IOException {
-			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "sideways_" + type + ".html");
+			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type\\" + type + ".html");
             out.println("<html><head>");
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-			out.println("<title>Sideways Locale Data: " + type + "</title>");
-			out.println("<style>");
-			out.println("<!--");
-            out.println(".head { font-weight:bold; background-color:#DDDDFF }");
-            out.println("td, th { border: 1px solid #0000FF; text-align }");
-            out.println("th { width:10% }");
-			out.println("table {margin-top: 1em}");
-			out.println("-->");
-			out.println("</style>");
-			out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
+			out.println("<title>Comparison By Type: " + type + "</title>");
+            out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
+            out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
 			out.println("</head>");
             out.println("<body><table>");
 			return out;
 		}
+        private void writeStyleSheet() throws IOException {
+            PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type\\by_type.css");
+            out.println(".head { font-weight:bold; background-color:#DDDDFF }");
+            out.println("td, th { border: 1px solid #0000FF; text-align }");
+            out.println("th { width:10% }");
+            out.println(".nodata { background-color:#FF0000 }");
+            out.println("table {margin-top: 1em}");
+            out.close();
+        }
     }
     
 
