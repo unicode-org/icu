@@ -188,9 +188,12 @@ free(result);
 
 
     /* Testing unum_parse() and unum_parseDouble() */
-    parsepos=0;
     log_verbose("\nTesting unum_parseDouble()\n");
-    d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    for (i = 0; i < 100000; i++)
+    {
+        parsepos=0;
+        d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    }
     if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
@@ -203,7 +206,17 @@ free(result);
 
 free(result);
 
-    log_verbose("\nTesting unum_parse()\n");
+    u_uastrcpy(temp1, "($10,456.3E1])");
+    parsepos=0;
+    d1=unum_parseDouble(cur_def, temp1, u_strlen(temp1), &parsepos, &status);
+    if(U_SUCCESS(status))
+    {
+        log_err("Error in unum_parseDouble(..., %s, ...): %s\n", temp1, myErrorName(status));
+    }
+
+
+    log_verbose("\nTesting unum_format()\n");
+    status=U_ZERO_ERROR;
     resultlength=0;
     parsepos=0;
     resultlengthneeded=unum_format(per_fr, l, NULL, resultlength, &pos1, &status);
@@ -220,7 +233,12 @@ free(result);
     }
     
     
-    l1=unum_parse(per_fr, result, u_strlen(result), &parsepos, &status);
+    log_verbose("\nTesting unum_parse()\n");
+    for (i = 0; i < 100000; i++)
+    {
+        parsepos=0;
+        l1=unum_parse(per_fr, result, u_strlen(result), &parsepos, &status);
+    }
     if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
@@ -365,7 +383,7 @@ free(result);
      * Then, remove the uprv_strcmp("1.5", ...) and this comment, and the include "cstring.h" at the beginning of this file.
      */
     if(u_strcmp(result, temp1) != 0) {
-        log_err("Formatting failed after setting symbols - got different result\n");
+        log_err("Formatting failed after setting symbols. result=%s temp1=%s\n", result, temp1);
     }
 
     
