@@ -43,18 +43,20 @@ U_CDECL_BEGIN
 
 /**
  * \file
- * \brief   C API: Unicode Char 
+ * \brief C API: Unicode Properties
  *
- * <h2> Unicode C API </h2>
- * The Unicode C API allows you to query the properties associated with individual 
- * Unicode character values.  
- * <p>
- * The Unicode character information, provided implicitly by the 
- * Unicode character encoding standard, includes information about the script 
- * (for example, symbols or control characters) to which the character belongs,
- * as well as semantic information such as whether a character is a digit or 
- * uppercase, lowercase, or uncased.
- * <P>
+ * This C API provides low-level access to the Unicode Character Database.
+ * In addition to raw property values, some convenience functions calculate
+ * derived properties, for example for Java-style programming.
+ *
+ * Unicode assigns each code point (not just assigned character) values for
+ * many properties.
+ * Most of them are simple boolean flags, or constants from a small enumerated list.
+ * For some properties, values are strings or other relatively more complex types.
+ *
+ * For more information see
+ * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
+ * and the ICU User Guide chapter on Properties (http://oss.software.ibm.com/icu/userguide/properties.html).
  *
  * Many functions are designed to match java.lang.Character functions.
  * See the individual function documentation,
@@ -73,17 +75,19 @@ U_CDECL_BEGIN
  * The highest Unicode code point value (scalar value) according to
  * The Unicode Standard. This is a 21-bit value (20.1 bits, rounded up).
  * For a single character, UChar32 is a simple type that can hold any code point value.
+ *
+ * @see UChar32
  * @stable ICU 2.0
  */
 #define UCHAR_MAX_VALUE 0x10ffff
 
 /**
  * Get a single-bit bit set (a flag) from a bit number 0..31.
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 #define U_MASK(x) ((uint32_t)1<<(x))
 
-/**
+/*
  * !! Note: Several comments in this file are machine-read by the
  * genpname tool.  These comments describe the correspondence between
  * icu enum constants and UCD entities.  Do not delete them.  Update
@@ -103,150 +107,151 @@ U_CDECL_BEGIN
  *
  * The properties APIs are intended to reflect Unicode properties as defined
  * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
- * For details about the properties see http://www.unicode.org/ .
+ * For details about the properties see http://www.unicode.org/ucd/ .
  * For names of Unicode properties see the UCD file PropertyAliases.txt.
  *
- * Important: If ICU is built with UCD files from Unicode versions below 3.2,
+ * Important: If ICU is built with UCD files from Unicode versions below, e.g., 3.2,
  * then properties marked with "new in Unicode 3.2" are not or not fully available.
  * Check u_getUnicodeVersion to be sure.
  *
  * @see u_hasBinaryProperty
  * @see u_getIntPropertyValue
  * @see u_getUnicodeVersion
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef enum UProperty {
-    /** See note !!.  Comments of the form "Binary property Dash",
+    /*  See note !!.  Comments of the form "Binary property Dash",
         "Enumerated property Script", "Double property Numeric_Value",
         and "String property Age" are read by genpname. */
 
-    /** Note: Place UCHAR_ALPHABETIC before UCHAR_BINARY_START so that
+    /*  Note: Place UCHAR_ALPHABETIC before UCHAR_BINARY_START so that
 	debuggers display UCHAR_ALPHABETIC as the symbolic name for 0,
 	rather than UCHAR_BINARY_START.  Likewise for other *_START
 	identifiers. */
     
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
-        Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @draft ICU 2.1 */
+        Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @stable ICU 2.1 */
     UCHAR_ALPHABETIC=0,
-    /** First constant for binary Unicode properties. @draft ICU 2.1 */
+    /** First constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_START=UCHAR_ALPHABETIC,
-    /** Binary property ASCII_Hex_Digit. 0-9 A-F a-f @draft ICU 2.1 */
+    /** Binary property ASCII_Hex_Digit. 0-9 A-F a-f @stable ICU 2.1 */
     UCHAR_ASCII_HEX_DIGIT,
     /** Binary property Bidi_Control.
         Format controls which have specific functions
-        in the Bidi Algorithm. @draft ICU 2.1 */
+        in the Bidi Algorithm. @stable ICU 2.1 */
     UCHAR_BIDI_CONTROL,
     /** Binary property Bidi_Mirrored.
         Characters that may change display in RTL text.
         Same as u_isMirrored.
-        See Bidi Algorithm, UTR 9. @draft ICU 2.1 */
+        See Bidi Algorithm, UTR 9. @stable ICU 2.1 */
     UCHAR_BIDI_MIRRORED,
-    /** Binary property Dash. Variations of dashes. @draft ICU 2.1 */
+    /** Binary property Dash. Variations of dashes. @stable ICU 2.1 */
     UCHAR_DASH,
     /** Binary property Default_Ignorable_Code_Point (new in Unicode 3.2).
         Ignorable in most processing.
-        <2060..206F, FFF0..FFFB, E0000..E0FFF>+Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) @draft ICU 2.1 */
+        <2060..206F, FFF0..FFFB, E0000..E0FFF>+Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) @stable ICU 2.1 */
     UCHAR_DEFAULT_IGNORABLE_CODE_POINT,
     /** Binary property Deprecated (new in Unicode 3.2).
-        The usage of deprecated characters is strongly discouraged. @draft ICU 2.1 */
+        The usage of deprecated characters is strongly discouraged. @stable ICU 2.1 */
     UCHAR_DEPRECATED,
     /** Binary property Diacritic. Characters that linguistically modify
-        the meaning of another character to which they apply. @draft ICU 2.1 */
+        the meaning of another character to which they apply. @stable ICU 2.1 */
     UCHAR_DIACRITIC,
     /** Binary property Extender.
         Extend the value or shape of a preceding alphabetic character,
-        e.g., length and iteration marks. @draft ICU 2.1 */
+        e.g., length and iteration marks. @stable ICU 2.1 */
     UCHAR_EXTENDER,
     /** Binary property Full_Composition_Exclusion.
         CompositionExclusions.txt+Singleton Decompositions+
-        Non-Starter Decompositions. @draft ICU 2.1 */
+        Non-Starter Decompositions. @stable ICU 2.1 */
     UCHAR_FULL_COMPOSITION_EXCLUSION,
     /** Binary property Grapheme_Base (new in Unicode 3.2).
         For programmatic determination of grapheme cluster boundaries.
-        [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ @draft ICU 2.1 */
+        [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ @stable ICU 2.1 */
     UCHAR_GRAPHEME_BASE,
     /** Binary property Grapheme_Extend (new in Unicode 3.2).
         For programmatic determination of grapheme cluster boundaries.
-        Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ @draft ICU 2.1 */
+        Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ @stable ICU 2.1 */
     UCHAR_GRAPHEME_EXTEND,
     /** Binary property Grapheme_Link (new in Unicode 3.2).
-        For programmatic determination of grapheme cluster boundaries. @draft ICU 2.1 */
+        For programmatic determination of grapheme cluster boundaries. @stable ICU 2.1 */
     UCHAR_GRAPHEME_LINK,
     /** Binary property Hex_Digit.
-        Characters commonly used for hexadecimal numbers. @draft ICU 2.1 */
+        Characters commonly used for hexadecimal numbers. @stable ICU 2.1 */
     UCHAR_HEX_DIGIT,
     /** Binary property Hyphen. Dashes used to mark connections
-        between pieces of words, plus the Katakana middle dot. @draft ICU 2.1 */
+        between pieces of words, plus the Katakana middle dot. @stable ICU 2.1 */
     UCHAR_HYPHEN,
     /** Binary property ID_Continue.
         Characters that can continue an identifier.
-        ID_Start+Mn+Mc+Nd+Pc @draft ICU 2.1 */
+        DerivedCoreProperties.txt also says "NOTE: Cf characters should be filtered out."
+        ID_Start+Mn+Mc+Nd+Pc @stable ICU 2.1 */
     UCHAR_ID_CONTINUE,
     /** Binary property ID_Start.
         Characters that can start an identifier.
-        Lu+Ll+Lt+Lm+Lo+Nl @draft ICU 2.1 */
+        Lu+Ll+Lt+Lm+Lo+Nl @stable ICU 2.1 */
     UCHAR_ID_START,
     /** Binary property Ideographic.
-        CJKV ideographs. @draft ICU 2.1 */
+        CJKV ideographs. @stable ICU 2.1 */
     UCHAR_IDEOGRAPHIC,
     /** Binary property IDS_Binary_Operator (new in Unicode 3.2).
         For programmatic determination of
-        Ideographic Description Sequences. @draft ICU 2.1 */
+        Ideographic Description Sequences. @stable ICU 2.1 */
     UCHAR_IDS_BINARY_OPERATOR,
     /** Binary property IDS_Trinary_Operator (new in Unicode 3.2).
         For programmatic determination of
-        Ideographic Description Sequences. @draft ICU 2.1 */
+        Ideographic Description Sequences. @stable ICU 2.1 */
     UCHAR_IDS_TRINARY_OPERATOR,
     /** Binary property Join_Control.
-        Format controls for cursive joining and ligation. @draft ICU 2.1 */
+        Format controls for cursive joining and ligation. @stable ICU 2.1 */
     UCHAR_JOIN_CONTROL,
     /** Binary property Logical_Order_Exception (new in Unicode 3.2).
         Characters that do not use logical order and
-        require special handling in most processing. @draft ICU 2.1 */
+        require special handling in most processing. @stable ICU 2.1 */
     UCHAR_LOGICAL_ORDER_EXCEPTION,
     /** Binary property Lowercase. Same as u_isULowercase, different from u_islower.
-        Ll+Other_Lowercase @draft ICU 2.1 */
+        Ll+Other_Lowercase @stable ICU 2.1 */
     UCHAR_LOWERCASE,
-    /** Binary property Math. Sm+Other_Math @draft ICU 2.1 */
+    /** Binary property Math. Sm+Other_Math @stable ICU 2.1 */
     UCHAR_MATH,
     /** Binary property Noncharacter_Code_Point.
         Code points that are explicitly defined as illegal
-        for the encoding of characters. @draft ICU 2.1 */
+        for the encoding of characters. @stable ICU 2.1 */
     UCHAR_NONCHARACTER_CODE_POINT,
-    /** Binary property Quotation_Mark. @draft ICU 2.1 */
+    /** Binary property Quotation_Mark. @stable ICU 2.1 */
     UCHAR_QUOTATION_MARK,
     /** Binary property Radical (new in Unicode 3.2).
         For programmatic determination of
-        Ideographic Description Sequences. @draft ICU 2.1 */
+        Ideographic Description Sequences. @stable ICU 2.1 */
     UCHAR_RADICAL,
     /** Binary property Soft_Dotted (new in Unicode 3.2).
         Characters with a "soft dot", like i or j.
         An accent placed on these characters causes
-        the dot to disappear. @draft ICU 2.1 */
+        the dot to disappear. @stable ICU 2.1 */
     UCHAR_SOFT_DOTTED,
     /** Binary property Terminal_Punctuation.
         Punctuation characters that generally mark
-        the end of textual units. @draft ICU 2.1 */
+        the end of textual units. @stable ICU 2.1 */
     UCHAR_TERMINAL_PUNCTUATION,
     /** Binary property Unified_Ideograph (new in Unicode 3.2).
         For programmatic determination of
-        Ideographic Description Sequences. @draft ICU 2.1 */
+        Ideographic Description Sequences. @stable ICU 2.1 */
     UCHAR_UNIFIED_IDEOGRAPH,
     /** Binary property Uppercase. Same as u_isUUppercase, different from u_isupper.
-        Lu+Other_Uppercase @draft ICU 2.1 */
+        Lu+Other_Uppercase @stable ICU 2.1 */
     UCHAR_UPPERCASE,
     /** Binary property White_Space.
         Same as u_isUWhiteSpace, different from u_isspace and u_isWhitespace.
-        Space characters+TAB+CR+LF-ZWSP-ZWNBSP @draft ICU 2.1 */
+        Space characters+TAB+CR+LF-ZWSP-ZWNBSP @stable ICU 2.1 */
     UCHAR_WHITE_SPACE,
     /** Binary property XID_Continue.
         ID_Continue modified to allow closure under
-        normalization forms NFKC and NFKD. @draft ICU 2.1 */
+        normalization forms NFKC and NFKD. @stable ICU 2.1 */
     UCHAR_XID_CONTINUE,
     /** Binary property XID_Start. ID_Start modified to allow
-        closure under normalization forms NFKC and NFKD. @draft ICU 2.1 */
+        closure under normalization forms NFKC and NFKD. @stable ICU 2.1 */
     UCHAR_XID_START,
-    /** One more than the last constant for binary Unicode properties. @draft ICU 2.1 */
+    /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
     /** Enumerated property Bidi_Class.
@@ -445,104 +450,104 @@ typedef enum UCharCategory
  * @see u_charType
  * @see U_GET_GC_MASK
  * @see UCharCategory
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 #define U_GC_CN_MASK    U_MASK(U_GENERAL_OTHER_TYPES)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_LU_MASK    U_MASK(U_UPPERCASE_LETTER)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_LL_MASK    U_MASK(U_LOWERCASE_LETTER)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_LT_MASK    U_MASK(U_TITLECASE_LETTER)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_LM_MASK    U_MASK(U_MODIFIER_LETTER)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_LO_MASK    U_MASK(U_OTHER_LETTER)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_MN_MASK    U_MASK(U_NON_SPACING_MARK)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_ME_MASK    U_MASK(U_ENCLOSING_MARK)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_MC_MASK    U_MASK(U_COMBINING_SPACING_MARK)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_ND_MASK    U_MASK(U_DECIMAL_DIGIT_NUMBER)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_NL_MASK    U_MASK(U_LETTER_NUMBER)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_NO_MASK    U_MASK(U_OTHER_NUMBER)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_ZS_MASK    U_MASK(U_SPACE_SEPARATOR)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_ZL_MASK    U_MASK(U_LINE_SEPARATOR)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_ZP_MASK    U_MASK(U_PARAGRAPH_SEPARATOR)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_CC_MASK    U_MASK(U_CONTROL_CHAR)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_CF_MASK    U_MASK(U_FORMAT_CHAR)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_CO_MASK    U_MASK(U_PRIVATE_USE_CHAR)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_CS_MASK    U_MASK(U_SURROGATE)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PD_MASK    U_MASK(U_DASH_PUNCTUATION)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PS_MASK    U_MASK(U_START_PUNCTUATION)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PE_MASK    U_MASK(U_END_PUNCTUATION)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PC_MASK    U_MASK(U_CONNECTOR_PUNCTUATION)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PO_MASK    U_MASK(U_OTHER_PUNCTUATION)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_SM_MASK    U_MASK(U_MATH_SYMBOL)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_SC_MASK    U_MASK(U_CURRENCY_SYMBOL)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_SK_MASK    U_MASK(U_MODIFIER_SYMBOL)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_SO_MASK    U_MASK(U_OTHER_SYMBOL)
 
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PI_MASK    U_MASK(U_INITIAL_PUNCTUATION)
-/** Mask constant for a UCharCategory. @draft ICU 2.1 */
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PF_MASK    U_MASK(U_FINAL_PUNCTUATION)
 
 
-/** Mask constant for multiple UCharCategory bits (L Letters). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (L Letters). @stable ICU 2.1 */
 #define U_GC_L_MASK \
             (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK|U_GC_LM_MASK|U_GC_LO_MASK)
 
-/** Mask constant for multiple UCharCategory bits (LC Cased Letters). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (LC Cased Letters). @stable ICU 2.1 */
 #define U_GC_LC_MASK \
             (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK)
 
-/** Mask constant for multiple UCharCategory bits (M Marks). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (M Marks). @stable ICU 2.1 */
 #define U_GC_M_MASK (U_GC_MN_MASK|U_GC_ME_MASK|U_GC_MC_MASK)
 
-/** Mask constant for multiple UCharCategory bits (N Numbers). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (N Numbers). @stable ICU 2.1 */
 #define U_GC_N_MASK (U_GC_ND_MASK|U_GC_NL_MASK|U_GC_NO_MASK)
 
-/** Mask constant for multiple UCharCategory bits (Z Separators). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (Z Separators). @stable ICU 2.1 */
 #define U_GC_Z_MASK (U_GC_ZS_MASK|U_GC_ZL_MASK|U_GC_ZP_MASK)
 
-/** Mask constant for multiple UCharCategory bits (C Others). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (C Others). @stable ICU 2.1 */
 #define U_GC_C_MASK \
             (U_GC_CN_MASK|U_GC_CC_MASK|U_GC_CF_MASK|U_GC_CO_MASK|U_GC_CS_MASK)
 
-/** Mask constant for multiple UCharCategory bits (P Punctuation). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (P Punctuation). @stable ICU 2.1 */
 #define U_GC_P_MASK \
             (U_GC_PD_MASK|U_GC_PS_MASK|U_GC_PE_MASK|U_GC_PC_MASK|U_GC_PO_MASK| \
              U_GC_PI_MASK|U_GC_PF_MASK)
 
-/** Mask constant for multiple UCharCategory bits (S Symbols). @draft ICU 2.1 */
+/** Mask constant for multiple UCharCategory bits (S Symbols). @stable ICU 2.1 */
 #define U_GC_S_MASK (U_GC_SM_MASK|U_GC_SC_MASK|U_GC_SK_MASK|U_GC_SO_MASK)
 
 /**
@@ -595,8 +600,7 @@ typedef enum UCharDirection {
 } UCharDirection;
 
 /**
- * Constants for Unicode blocks, generated from Unicode Data file Blocks.txt
- * These are the same values as Unicode::EUnicodeScript
+ * Constants for Unicode blocks, see the Unicode Data file Blocks.txt
  * @stable ICU 2.0
  */
 enum UBlockCode {
@@ -1374,7 +1378,7 @@ typedef enum UNumericType {
  *
  * The properties APIs are intended to reflect Unicode properties as defined
  * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
- * For details about the properties see http://www.unicode.org/ .
+ * For details about the properties see http://www.unicode.org/ucd/ .
  * For names of Unicode properties see the UCD file PropertyAliases.txt.
  *
  * Important: If ICU is built with UCD files from Unicode versions below 3.2,
@@ -1390,7 +1394,7 @@ typedef enum UNumericType {
  * @see UProperty
  * @see u_getIntPropertyValue
  * @see u_getUnicodeVersion
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UBool U_EXPORT2
 u_hasBinaryProperty(UChar32 c, UProperty which);
@@ -1405,7 +1409,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which);
  * @see UCHAR_ALPHABETIC
  * @see u_isalpha
  * @see u_hasBinaryProperty
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UBool U_EXPORT2
 u_isUAlphabetic(UChar32 c);
@@ -1420,7 +1424,7 @@ u_isUAlphabetic(UChar32 c);
  * @see UCHAR_LOWERCASE
  * @see u_islower
  * @see u_hasBinaryProperty
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UBool U_EXPORT2
 u_isULowercase(UChar32 c);
@@ -1435,7 +1439,7 @@ u_isULowercase(UChar32 c);
  * @see UCHAR_UPPERCASE
  * @see u_isupper
  * @see u_hasBinaryProperty
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UBool U_EXPORT2
 u_isUUppercase(UChar32 c);
@@ -1444,6 +1448,15 @@ u_isUUppercase(UChar32 c);
  * Check if a code point has the White_Space Unicode property.
  * Same as u_hasBinaryProperty(c, UCHAR_WHITE_SPACE).
  * This is different from both u_isspace and u_isWhitespace!
+ *
+ * Comparison:
+ * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       general categories "Z" (separators) + whitespace ISO controls
+ *       (including no-break spaces)
+ * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ *
  * @param c Code point to test
  * @return true if the code point has the White_Space Unicode property, false otherwise.
  *
@@ -1452,15 +1465,10 @@ u_isUUppercase(UChar32 c);
  * @see u_isspace
  * @see u_isJavaSpaceChar
  * @see u_hasBinaryProperty
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UBool U_EXPORT2
 u_isUWhiteSpace(UChar32 c);
-
-/*
- * ### TODO Document all properties more precisely, how they are based (or not) on UCD files.
- * Especially u_isdigit, u_isspace, u_isWhitespace.
- */
 
 /**
  * Get the property value for an enumerated or integer Unicode property for a code point.
@@ -1581,12 +1589,19 @@ u_getNumericValue(UChar32 c);
 #define U_NO_NUMERIC_VALUE ((double)-123456789.)
 
 /**
- * Determines whether the specified UChar is a lowercase character
- * according to UnicodeData.txt.
+ * Determines whether the specified code point has the general category "Ll"
+ * (lowercase letter).
  *
- * @param c    the character to be tested
- * @return  true if the character is lowercase; false otherwise.
- * @see UNICODE_VERSION
+ * Same as java.lang.Character.isLowerCase().
+ *
+ * This misses some characters that are also lowercase but
+ * have a different general category value.
+ * In order to include those, use UCHAR_LOWERCASE.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is an Ll lowercase letter
+ *
+ * @see UCHAR_LOWERCASE
  * @see u_isupper
  * @see u_istitle
  * @see u_islower
@@ -1596,11 +1611,19 @@ U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c);
 
 /**
- * Determines whether the specified character is an uppercase character
- * according to UnicodeData.txt.
+ * Determines whether the specified code point has the general category "Lu"
+ * (uppercase letter).
  *
- * @param c    the character to be tested
- * @return  true if the character is uppercase; false otherwise.
+ * Same as java.lang.Character.isUpperCase().
+ *
+ * This misses some characters that are also uppercase but
+ * have a different general category value.
+ * In order to include those, use UCHAR_UPPERCASE.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is an Lu uppercase letter
+ *
+ * @see UCHAR_UPPERCASE
  * @see u_islower
  * @see u_istitle
  * @see u_tolower
@@ -1610,11 +1633,14 @@ U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c);
 
 /**
- * Determines whether the specified character is a titlecase character
- * according to UnicodeData.txt.
+ * Determines whether the specified code point is a titlecase letter.
+ * True for general category "Lt" (titlecase letter).
  *
- * @param c    the character to be tested
- * @return  true if the character is titlecase; false otherwise.
+ * Same as java.lang.Character.isTitleCase().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is an Lt titlecase letter
+ *
  * @see u_isupper
  * @see u_islower
  * @see u_totitle
@@ -1638,6 +1664,22 @@ U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c);
 
 /**
+ * Determines whether the specified code point is a letter character.
+ * True for general categories "L" (letters).
+ *
+ * Same as java.lang.Character.isLetter().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a letter character
+ *
+ * @see u_isdigit
+ * @see u_isalnum
+ * @stable ICU 2.0
+ */
+U_CAPI UBool U_EXPORT2
+u_isalpha(UChar32 c);
+
+/**
  * Determines whether the specified code point is an alphanumeric character
  * (letter or digit) according to Java.
  * True for characters with general categories
@@ -1654,11 +1696,18 @@ U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c);
 
 /**
- * Determines whether the specified numeric value is actually a defined character
- * according to UnicodeData.txt.
+ * Determines whether the specified code point is "defined",
+ * which usually means that it is assigned a character.
+ * True for general categories other than "Cn" (other, not assigned),
+ * i.e., true for all code points mentioned in UnicodeData.txt.
  *
- * @param c    the character to be tested
- * @return  true if the character has a defined Unicode meaning; false otherwise.
+ * Note that it is true for non-character code points (e.g., U+FDD0)
+ * but not for surrogate code points (Cs).
+ *
+ * Same as java.lang.Character.isDefined().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is assigned a character
  *
  * @see u_isdigit
  * @see u_isalpha
@@ -1672,22 +1721,15 @@ U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c);
 
 /**
- * Determines whether the specified character is a letter
- * according to UnicodeData.txt.
- *
- * @param c    the character to be tested
- * @return  true if the character is a letter; false otherwise.
- *
- * @see u_isdigit
- * @see u_isalnum
- * @stable ICU 2.0
- */
-U_CAPI UBool U_EXPORT2
-u_isalpha(UChar32 c);
-
-/**
  * Determines if the specified character is a space character or not.
- * ### same as u_isJavaSpaceChar except... (ISO control codes)
+ *
+ * Comparison:
+ * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       general categories "Z" (separators) + whitespace ISO controls
+ *       (including no-break spaces)
+ * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
  *
  * @param c    the character to be tested
  * @return  true if the character is a space character; false otherwise.
@@ -1706,6 +1748,14 @@ u_isspace(UChar32 c);
  * which does not include control codes (e.g., TAB or Line Feed).
  *
  * Same as java.lang.Character.isSpaceChar().
+ *
+ * Comparison:
+ * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       general categories "Z" (separators) + whitespace ISO controls
+ *       (including no-break spaces)
+ * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a space character according to Character.isSpaceChar()
@@ -1738,6 +1788,14 @@ u_isJavaSpaceChar(UChar32 c);
  *
  * Same as java.lang.Character.isWhitespace() except that Java omits U+0085.
  *
+ * Comparison:
+ * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       general categories "Z" (separators) + whitespace ISO controls
+ *       (including no-break spaces)
+ * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ *
  * @param c the code point to be tested
  * @return TRUE if the code point is a whitespace character according to Java/ICU
  *
@@ -1750,7 +1808,8 @@ U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c);
 
 /**
- * Determines whether the specified character is a control character or not.
+ * Determines whether the specified code point is a control character
+ * (as defined by this function).
  * A control character is one of the following:
  * - ISO 8-bit control character (U+0000..U+001f and U+007f..U+009f)
  * - U_CONTROL_CHAR (Cc)
@@ -1758,9 +1817,10 @@ u_isWhitespace(UChar32 c);
  * - U_LINE_SEPARATOR (Zl)
  * - U_PARAGRAPH_SEPARATOR (Zp)
  *
- * @param c   the character to be tested
- * @return  true if the Unicode character is a control character; false otherwise.
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a control character
  *
+ * @see UCHAR_DEFAULT_IGNORABLE_CODE_POINT
  * @see u_isprint
  * @stable ICU 2.0
  */
@@ -1769,7 +1829,7 @@ u_iscntrl(UChar32 c);
 
 /**
  * Determines whether the specified code point is an ISO control code.
- * True for U+0000..U+001f and U+007f..U+009f.
+ * True for U+0000..U+001f and U+007f..U+009f (general category "Cc").
  *
  * Same as java.lang.Character.isISOControl().
  *
@@ -1783,12 +1843,13 @@ U_CAPI UBool U_EXPORT2
 u_isISOControl(UChar32 c);
 
 /**
- * Determines whether the specified character is a printable character according 
- * to UnicodeData.txt.
+ * Determines whether the specified code point is a printable character.
+ * True for general categories <em>other</em> than "C" (controls).
  *
- * @param c   the character to be tested
- * @return  true if the Unicode character is a printable character; false otherwise.
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a printable character
  *
+ * @see UCHAR_DEFAULT_IGNORABLE_CODE_POINT
  * @see u_iscntrl
  * @stable ICU 2.0
  */
@@ -1796,11 +1857,18 @@ U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c);
 
 /**
- * Determines whether the specified character is of the base form according 
- * to UnicodeData.txt.
+ * Determines whether the specified code point is a base character.
+ * True for general categories "L" (letters), "N" (numbers),
+ * "Mc" (spacing combining marks), and "Me" (enclosing marks).
  *
- * @param c   the character to be tested
- * @return  true if the Unicode character is of the base form; false otherwise.
+ * Note that this is different from the Unicode definition in
+ * chapter 3.5, conformance clause D13,
+ * which defines base characters to be all characters (not Cn)
+ * that do not graphically combine with preceding characters (M)
+ * and that are neither control (Cc) or format (Cf) characters.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a base character according to this function
  *
  * @see u_isalpha
  * @see u_isdigit
@@ -1810,14 +1878,18 @@ U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c);
 
 /**
- * Returns the linguistic direction property of a character.
- * <P>
- * Returns the linguistic direction property of a character.
- * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
- * property.
- * @param c The character to be tested
- * @return the linguistic direction property of a character.
- * @see UCharDirection
+ * Returns the bidirectional category value for the code point,
+ * which is used in the Unicode bidirectional algorithm
+ * (UAX #9 http://www.unicode.org/reports/tr9/).
+ * Note that some <em>unassigned</em> code points have bidi values
+ * of R or AL because they are in blocks that are reserved
+ * for Right-To-Left scripts.
+ *
+ * Same as java.lang.Character.getDirectionality()
+ *
+ * @param c the code point to be tested
+ * @return the bidirectional category (UCharDirection) value
+ *
  * @see UCharDirection
  * @stable ICU 2.0
  */
@@ -1825,13 +1897,18 @@ U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c);
 
 /**
- * Determines whether the character has the "mirrored" property.
+ * Determines whether the code point has the Bidi_Mirrored property.
  * This property is set for characters that are commonly used in
  * Right-To-Left contexts and need to be displayed with a "mirrored"
  * glyph.
  *
- * @param c the character (code point, Unicode scalar value) to be tested
- * @return TRUE if the character has the "mirrored" property
+ * Same as java.lang.Character.isMirrored().
+ * Same as UCHAR_BIDI_MIRRORED
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the character has the Bidi_Mirrored property
+ *
+ * @see UCHAR_BIDI_MIRRORED
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
@@ -1839,7 +1916,7 @@ u_isMirrored(UChar32 c);
 
 /**
  * Maps the specified character to a "mirror-image" character.
- * For characters with the "mirrored" property, implementations
+ * For characters with the Bidi_Mirrored property, implementations
  * sometimes need a "poor man's" mapping to another Unicode
  * character (code point) such that the default glyph may serve
  * as the mirror-image of the default glyph of the specified
@@ -1847,10 +1924,13 @@ u_isMirrored(UChar32 c);
  * codepages with visual order, and for displays without glyph
  * selecetion capabilities.
  *
- * @param c the character (code point, Unicode scalar value) to be mapped
+ * @param c the code point to be mapped
  * @return another Unicode code point that may serve as a mirror-image
  *         substitute, or c itself if there is no such mapping or c
- *         does not have the "mirrored" property
+ *         does not have the Bidi_Mirrored property
+ *
+ * @see UCHAR_BIDI_MIRRORED
+ * @see u_isMirrored
  * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
@@ -1918,12 +1998,13 @@ U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 c);
 
 /**
- * Returns a value indicating a character category.
- * The categories are taken from the Unicode Character Database (UCD) in
- * UnicodeData.txt.
+ * Returns the general category value for the code point.
  *
- * @param c            the character to be tested
- * @return a value of type int, the character category.
+ * Same as java.lang.Character.getType().
+ *
+ * @param c the code point to be tested
+ * @return the general category (UCharCategory) value
+ *
  * @see UCharCategory
  * @stable ICU 2.0
  */
@@ -1935,10 +2016,13 @@ u_charType(UChar32 c);
  * This bit set can be compared bitwise with U_GC_SM_MASK, U_GC_L_MASK, etc.
  * Same as U_MASK(u_charType(c)).
  *
+ * @param c the code point to be tested
+ * @return a single-bit mask corresponding to the general category (UCharCategory) value
+ *
  * @see u_charType
  * @see UCharCategory
  * @see U_GC_CN_MASK
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 #define U_GET_GC_MASK(c) U_MASK(u_charType(c))
 
@@ -1955,7 +2039,7 @@ u_charType(UChar32 c);
  * @param type the general category for all code points in [start..limit[
  * @return FALSE to stop the enumeration
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  * @see UCharCategory
  * @see u_enumCharTypes
  */
@@ -1977,7 +2061,7 @@ UCharEnumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCateg
  *                  of code points with the same general category
  * @param context an opaque pointer that is passed on to the callback function
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  * @see UCharCategory
  * @see UCharEnumTypeRange
  */
@@ -1996,10 +2080,13 @@ u_getCombiningClass(UChar32 c);
 
 /**
  * Returns the decimal numeric value of a digit character.
+ * Also returns decimal values for primary numeric Han characters.
  *
- * @param c the decimal digit character for which to get the numeric value
- * @return the numeric value of c in decimal radix.  This method returns
- * -1 if c is not a valid digit character.
+ * @param c the code point for which to get the decimal numeric value
+ * @return the decimal numeric value of c in decimal radix,
+ *         or -1 if c is not a decimal digit character
+ *
+ * @see u_getNumericValue
  * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
@@ -2008,13 +2095,14 @@ u_charDigitValue(UChar32 c);
 /**
  * Returns the Unicode allocation block that contains the character.
  *
- * @param ch The character to be tested
- * @return the Unicode allocation block that contains the character
- * @see #UBlockCode
+ * @param c the code point to be tested
+ * @return the block value (UBlockCode) for c
+ *
+ * @see UBlockCode
  * @stable ICU 2.0
  */
 U_CAPI UBlockCode U_EXPORT2
-ublock_getCode(UChar32    ch);
+ublock_getCode(UChar32 c);
 
 /**
  * Retrieve the name of a Unicode character.
@@ -2302,15 +2390,17 @@ u_getPropertyValueEnum(UProperty property,
 
 /**
  * Determines if the specified character is permissible as the
- * first character in a Unicode identifier according to Java.
- * ### according to Unicode as well?!
+ * first character in an identifier according to Unicode
+ * (The Unicode Standard, Version 3.0, chapter 5.16 Identifiers).
  * True for characters with general categories "L" (letters) and "Nl" (letter numbers).
  *
  * Same as java.lang.Character.isUnicodeIdentifierStart().
+ * Same as UCHAR_ID_START
  *
  * @param c the code point to be tested
- * @return TRUE if the code point may start an identifier according to Java
+ * @return TRUE if the code point may start an identifier
  *
+ * @see UCHAR_ID_START
  * @see u_isalpha
  * @see u_isIDPart
  * @stable ICU 2.0
@@ -2319,28 +2409,24 @@ U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c);
 
 /**
- * A convenience method for determining if a Unicode character
- * may be part of a Unicode identifier other than the starting
- * character.
- * <P>
- * A character may be part of a Unicode identifier if and only if
- * it is one of the following:
- * <ul>
- * <li>  a letter
- * <li>  a connecting punctuation character (such as "_").
- * <li>  a digit
- * <li>  a numeric letter (such as a Roman numeral character)
- * <li>  a combining mark
- * <li>  a non-spacing mark
- * <li>  an ignorable control character
- * </ul>
- * 
- * @param   c  the Unicode character.
- * @return  TRUE if the character may be part of a Unicode identifier;
- *          FALSE otherwise.
+ * Determines if the specified character is permissible
+ * in an identifier according to Java.
+ * True for characters with general categories "L" (letters),
+ * "Nl" (letter numbers), "Nd" (decimal digits),
+ * "Mc" and "Mn" (combining marks), "Pc" (connecting punctuation), and
+ * u_isIDIgnorable(c).
  *
- * @see     u_isIDStart
- * @see     u_isIDIgnorable
+ * Same as java.lang.Character.isUnicodeIdentifierPart().
+ * Almost the same as Unicode's ID_Continue (UCHAR_ID_CONTINUE)
+ * except that Unicode recommends to ignore Cf which is less than
+ * u_isIDIgnorable(c).
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point may occur in an identifier according to Java
+ *
+ * @see UCHAR_ID_CONTINUE
+ * @see u_isIDStart
+ * @see u_isIDIgnorable
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
@@ -2358,6 +2444,8 @@ u_isIDPart(UChar32 c);
  * except that Java also returns TRUE for U+0085 Next Line
  * (it omits U+0085 from whitespace ISO controls).
  *
+ * Note that Unicode just recommends to ignore Cf (format controls).
+ *
  * @param c the code point to be tested
  * @return TRUE if the code point is ignorable in identifiers according to Java
  *
@@ -2370,20 +2458,16 @@ U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c);
 
 /**
- * A convenience method for determining if a Unicode character
- * is allowed as the first character in a Java identifier.
- * <P>
- * A character may start a Java identifier if and only if
- * it is one of the following:
- * <ul>
- * <li>  a letter
- * <li>  a currency symbol (such as "$")
- * <li>  a connecting punctuation symbol (such as "_").
- * </ul>
+ * Determines if the specified character is permissible as the
+ * first character in a Java identifier.
+ * In addition to u_isIDStart(c), true for characters with
+ * general categories "Sc" (currency symbols) and "Pc" (connecting punctuation).
  *
- * @param   c  the Unicode character.
- * @return  TRUE if the character may start a Java identifier;
- *          FALSE otherwise.
+ * Same as java.lang.Character.isJavaIdentifierStart().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point may start a Java identifier
+ *
  * @see     u_isJavaIDPart
  * @see     u_isalpha
  * @see     u_isIDStart
@@ -2393,26 +2477,16 @@ U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c);
 
 /**
- * A convenience method for determining if a Unicode character 
- * may be part of a Java identifier other than the starting
- * character.
- * <P>
- * A character may be part of a Java identifier if and only if
- * it is one of the following:
- * <ul>
- * <li>  a letter
- * <li>  a currency symbol (such as "$")
- * <li>  a connecting punctuation character (such as "_").
- * <li>  a digit
- * <li>  a numeric letter (such as a Roman numeral character)
- * <li>  a combining mark
- * <li>  a non-spacing mark
- * <li>  an ignorable control character
- * </ul>
- * 
- * @param   c the Unicode character.
- * @return  TRUE if the character may be part of a Unicode identifier; 
- *          FALSE otherwise.
+ * Determines if the specified character is permissible
+ * in a Java identifier.
+ * In addition to u_isIDPart(c), true for characters with
+ * general category "Sc" (currency symbols).
+ *
+ * Same as java.lang.Character.isJavaIdentifierPart().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point may occur in a Java identifier
+ *
  * @see     u_isIDIgnorable
  * @see     u_isJavaIDStart
  * @see     u_isalpha
@@ -2423,9 +2497,7 @@ u_isJavaIDStart(UChar32 c);
 U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c);
 
-/**
- * Functions to change character case.
- */
+/* ### ### TODO continue here */
 
 /**
  * The given character is mapped to its lowercase equivalent according to
@@ -2599,7 +2671,7 @@ u_forDigit(int32_t digit, int8_t radix);
  * @param c The code point.
  * @param versionArray The Unicode version number array, to be filled in.
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI void U_EXPORT2
 u_charAge(UChar32 c, UVersionInfo versionArray);
