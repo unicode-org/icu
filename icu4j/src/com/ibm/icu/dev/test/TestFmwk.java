@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/05 22:14:56 $
- * $Revision: 1.38 $
+ * $Date: 2003/02/05 22:30:55 $
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -382,8 +382,6 @@ public class TestFmwk extends AbstractTestLog {
         int exitCode = 0;
         boolean usageError = false;
 
-        params.seed = System.currentTimeMillis(); // same as Random uses
-
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.charAt(0) == '-') {
@@ -410,15 +408,24 @@ public class TestFmwk extends AbstractTestLog {
                     params.nothrow = true;
                 } else if (arg.equals("-describe") || arg.equals("-d")) {
                     params.describe = true;
-                } else if (arg.startsWith("-s")) {
+                } else if (arg.startsWith("-r")) {
+                    String s = null;
                     int n = arg.indexOf(':');
-                    if (n == -1) {
+                    if (n != -1) {
+                        s = arg.substring(n+1);
+                        arg = arg.substring(0, n);
+                    }
+
+                    if (arg.equals("-r") || arg.equals("-random")) {
+                        if (s == null) {
+                            params.seed = System.currentTimeMillis();
+                        } else {
+                            params.seed = Long.parseLong(s);
+                        }
+                    } else {
                         System.out.println("*** Error: unrecognized argument: " + arg);
                         exitCode = 1;
                         usageError = true;
-                    } else {
-                        arg = arg.substring(n+1);
-                        params.seed = Long.parseLong(arg);
                     }
                 } else if (arg.startsWith("-e")) {
                     // see above
@@ -466,8 +473,10 @@ public class TestFmwk extends AbstractTestLog {
             System.out.println("encountered exception, exiting");
         }
 
-        System.out.println("-seed:"+params.seed);
-        System.out.flush();
+        if (params.seed != 0) {
+            System.out.println("-random:" + params.seed);
+            System.out.flush();
+        }
 
         if (prompt) {
             System.out.println("Hit RETURN to exit...");
@@ -694,7 +703,7 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -n[othrow] Message on test failure rather than exception");
         System.out.println(" -prompt Prompt before exiting");
         System.out.println(" -q[uiet] Do not show warnings");
-        System.out.println(" -s[eed]:<n> Force random seed, if n is 0, uses execution order.");
+        System.out.println(" -r[andom][:<n>] If present, randomize targets.  If n is present, use it as the seed.");
         System.out.println(" -v[erbose] Show log messages");
         System.out.println(" -w[arning] Report warnings (default treats them like errors)");
         System.out.println();
