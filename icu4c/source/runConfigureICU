@@ -43,7 +43,7 @@ The following names can be supplied as the argument for platform:
     MacOSX              Use the GNU gcc/g++ compilers on MacOS X (Darwin)
     QNX                 Use the QNX QCC compiler on QNX/Neutrino
     Solaris             Use the Sun cc/CC compilers on Solaris
-    Solaris/CCW4.2      Use the Sun Workshop 4.2 CC (old) compiler on Solaris
+    Solaris/W4.2        Use the Sun Workshop 4.2 CC (old) compiler on Solaris
     Solaris/GCC         Use the GNU gcc/g++ compilers on Solaris
     SolarisX86          Use the Sun cc/CC compilers on Solaris x86
     TRU64V5.1/CXX       Use the Compaq cxx compiler on Tru64 (OSF)
