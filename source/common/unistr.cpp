@@ -194,7 +194,7 @@ UnicodeString::UnicodeString(UChar32 ch)
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
-  UTextOffset i = 0;
+  int32_t i = 0;
   UTF_APPEND_CHAR(fStackBuffer, i, US_STACKBUF_SIZE, ch);
   fLength = i;
 }
@@ -438,7 +438,7 @@ UnicodeString::operator= (const UnicodeString& src)
 // Miscellaneous operations
 //========================================
 int32_t
-UnicodeString::numDisplayCells( UTextOffset start,
+UnicodeString::numDisplayCells( int32_t start,
                 int32_t length,
                 UBool asian) const
 {
@@ -447,7 +447,7 @@ UnicodeString::numDisplayCells( UTextOffset start,
 
   UChar32 c;
   int32_t result = 0;
-  UTextOffset limit = start + length;
+  int32_t limit = start + length;
 
   while(start < limit) {
     UTF_NEXT_CHAR(fArray, start, limit, c);
@@ -473,7 +473,7 @@ UnicodeString::numDisplayCells( UTextOffset start,
 }
 
 UCharReference
-UnicodeString::operator[] (UTextOffset pos)
+UnicodeString::operator[] (int32_t pos)
 {
   return UCharReference(this, pos);
 }
@@ -510,10 +510,10 @@ UChar32 UnicodeString::unescapeAt(int32_t &offset) const {
 // Read-only implementation
 //========================================
 int8_t
-UnicodeString::doCompare( UTextOffset start,
+UnicodeString::doCompare( int32_t start,
               int32_t length,
               const UChar *srcChars,
-              UTextOffset srcStart,
+              int32_t srcStart,
               int32_t srcLength) const
 {
   // compare illegal string values
@@ -536,7 +536,7 @@ UnicodeString::doCompare( UTextOffset start,
   chars += start;
   srcChars += srcStart;
 
-  UTextOffset minLength;
+  int32_t minLength;
   int8_t lengthResult;
 
   // get the srcLength if necessary
@@ -590,10 +590,10 @@ UnicodeString::doCompare( UTextOffset start,
 
 /* String compare in code point order - doCompare() compares in code unit order. */
 int8_t
-UnicodeString::doCompareCodePointOrder(UTextOffset start,
+UnicodeString::doCompareCodePointOrder(int32_t start,
                                        int32_t length,
                                        const UChar *srcChars,
-                                       UTextOffset srcStart,
+                                       int32_t srcStart,
                                        int32_t srcLength) const
 {
   // compare illegal string values
@@ -616,7 +616,7 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
   chars += start;
   srcChars += srcStart;
 
-  UTextOffset minLength;
+  int32_t minLength;
   int8_t lengthResult;
 
   // get the srcLength if necessary
@@ -648,10 +648,10 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
 }
 
 int8_t
-UnicodeString::doCaseCompare(UTextOffset start,
+UnicodeString::doCaseCompare(int32_t start,
                              int32_t length,
                              const UChar *srcChars,
-                             UTextOffset srcStart,
+                             int32_t srcStart,
                              int32_t srcLength,
                              uint32_t options) const
 {
@@ -697,24 +697,24 @@ UnicodeString::getLength() const {
 }
 
 UChar
-UnicodeString::getCharAt(UTextOffset offset) const {
+UnicodeString::getCharAt(int32_t offset) const {
   return charAt(offset);
 }
 
 UChar32
-UnicodeString::getChar32At(UTextOffset offset) const {
+UnicodeString::getChar32At(int32_t offset) const {
   return char32At(offset);
 }
 
 int32_t
-UnicodeString::countChar32(UTextOffset start, int32_t length) const {
+UnicodeString::countChar32(int32_t start, int32_t length) const {
   pinIndices(start, length);
   // if(isBogus()) then fArray==0 and start==0 - u_countChar32() checks for NULL
   return u_countChar32(fArray+start, length);
 }
 
-UTextOffset
-UnicodeString::moveIndex32(UTextOffset index, int32_t delta) const {
+int32_t
+UnicodeString::moveIndex32(int32_t index, int32_t delta) const {
   // pin index
   if(index<0) {
     index=0;
@@ -732,10 +732,10 @@ UnicodeString::moveIndex32(UTextOffset index, int32_t delta) const {
 }
 
 void
-UnicodeString::doExtract(UTextOffset start,
+UnicodeString::doExtract(int32_t start,
              int32_t length,
              UChar *dst,
-             UTextOffset dstStart) const
+             int32_t dstStart) const
 {
   // pin indices to legal values
   pinIndices(start, length);
@@ -763,11 +763,11 @@ UnicodeString::extract(UChar *dest, int32_t destCapacity,
   return fLength;
 }
 
-UTextOffset 
+int32_t 
 UnicodeString::indexOf(const UChar *srcChars,
-               UTextOffset srcStart,
+               int32_t srcStart,
                int32_t srcLength,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 {
   if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength == 0) {
@@ -797,7 +797,7 @@ UnicodeString::indexOf(const UChar *srcChars,
   }
 
   const UChar *array = getArrayStart();
-  UTextOffset limit = start + length;
+  int32_t limit = start + length;
 
   // search for the first char, then compare the rest of the string
   // increment srcStart here for that, matching the --srcLength above
@@ -812,9 +812,9 @@ UnicodeString::indexOf(const UChar *srcChars,
   return -1;
 }
 
-UTextOffset
+int32_t
 UnicodeString::doIndexOf(UChar c,
-             UTextOffset start,
+             int32_t start,
              int32_t length) const
 {
   // pin indices
@@ -836,9 +836,9 @@ UnicodeString::doIndexOf(UChar c,
   return -1;
 }
 
-UTextOffset
+int32_t
 UnicodeString::doIndexOf(UChar32 c,
-                         UTextOffset start,
+                         int32_t start,
                          int32_t length) const {
   // pin indices
   pinIndices(start, length);
@@ -879,11 +879,11 @@ UnicodeString::doIndexOf(UChar32 c,
   }
 }
 
-UTextOffset 
+int32_t 
 UnicodeString::lastIndexOf(const UChar *srcChars,
-               UTextOffset srcStart,
+               int32_t srcStart,
                int32_t srcLength,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 {
   if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength == 0) {
@@ -913,7 +913,7 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
   }
 
   const UChar *array = getArrayStart();
-  UTextOffset pos;
+  int32_t pos;
 
   // search for the first char, then compare the rest of the string
   // increment srcStart here for that, matching the --srcLength above
@@ -929,9 +929,9 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
   return -1;
 }
 
-UTextOffset
+int32_t
 UnicodeString::doLastIndexOf(UChar c,
-                 UTextOffset start,
+                 int32_t start,
                  int32_t length) const
 {
   if(isBogus()) {
@@ -956,9 +956,9 @@ UnicodeString::doLastIndexOf(UChar c,
   return -1;
 }
 
-UTextOffset
+int32_t
 UnicodeString::doLastIndexOf(UChar32 c,
-                             UTextOffset start,
+                             int32_t start,
                              int32_t length) const {
   // pin indices
   pinIndices(start, length);
@@ -999,13 +999,13 @@ UnicodeString::doLastIndexOf(UChar32 c,
 }
 
 UnicodeString& 
-UnicodeString::findAndReplace(UTextOffset start,
+UnicodeString::findAndReplace(int32_t start,
                   int32_t length,
                   const UnicodeString& oldText,
-                  UTextOffset oldStart,
+                  int32_t oldStart,
                   int32_t oldLength,
                   const UnicodeString& newText,
-                  UTextOffset newStart,
+                  int32_t newStart,
                   int32_t newLength)
 {
   if(isBogus() || oldText.isBogus() || newText.isBogus()) {
@@ -1021,7 +1021,7 @@ UnicodeString::findAndReplace(UTextOffset start,
   }
 
   while(length > 0 && length >= oldLength) {
-    UTextOffset pos = indexOf(oldText, oldStart, oldLength, start, length);
+    int32_t pos = indexOf(oldText, oldStart, oldLength, start, length);
     if(pos < 0) {
       // no more oldText's here: done
       break;
@@ -1108,7 +1108,7 @@ UnicodeString::setTo(UChar *buffer,
 }
 
 UnicodeString&
-UnicodeString::setCharAt(UTextOffset offset,
+UnicodeString::setCharAt(int32_t offset,
              UChar c)
 {
   if(cloneArrayIfNeeded() && fLength > 0) {
@@ -1262,10 +1262,10 @@ UnicodeString::caseMap(BreakIterator *titleIter,
 }
 
 UnicodeString&
-UnicodeString::doReplace( UTextOffset start,
+UnicodeString::doReplace( int32_t start,
               int32_t length,
               const UnicodeString& src,
-              UTextOffset srcStart,
+              int32_t srcStart,
               int32_t srcLength)
 {
   if(!src.isBogus()) {
@@ -1282,10 +1282,10 @@ UnicodeString::doReplace( UTextOffset start,
 }
 
 UnicodeString&
-UnicodeString::doReplace(UTextOffset start,
+UnicodeString::doReplace(int32_t start,
              int32_t length,
              const UChar *srcChars,
-             UTextOffset srcStart,
+             int32_t srcStart,
              int32_t srcLength)
 {
   // if we're bogus, set us to empty first
@@ -1354,8 +1354,8 @@ UnicodeString::doReplace(UTextOffset start,
  * Replaceable API
  */
 void
-UnicodeString::handleReplaceBetween(UTextOffset start,
-                                    UTextOffset limit,
+UnicodeString::handleReplaceBetween(int32_t start,
+                                    int32_t limit,
                                     const UnicodeString& text) {
     replaceBetween(start, limit, text);
 }
@@ -1372,7 +1372,7 @@ UnicodeString::copy(int32_t start, int32_t limit, int32_t dest) {
 }
 
 UnicodeString&
-UnicodeString::doReverse(UTextOffset start,
+UnicodeString::doReverse(int32_t start,
              int32_t length)
 {
   if(fLength <= 1 || !cloneArrayIfNeeded()) {
@@ -1457,7 +1457,7 @@ UnicodeString::trim()
   }
 
   UChar32 c;
-  UTextOffset i = fLength, length;
+  int32_t i = fLength, length;
 
   // first cut off trailing white space
   for(;;) {
@@ -1475,7 +1475,7 @@ UnicodeString::trim()
   }
 
   // find leading white space
-  UTextOffset start;
+  int32_t start;
   i = 0;
   for(;;) {
     start = i;
@@ -1515,7 +1515,7 @@ UnicodeString::doHashCode() const
 // Codeset conversion
 //========================================
 int32_t
-UnicodeString::extract(UTextOffset start,
+UnicodeString::extract(int32_t start,
                        int32_t length,
                        char *target,
                        uint32_t dstSize,
@@ -1616,13 +1616,13 @@ UnicodeString::extract(char *dest, int32_t destCapacity,
 }
 
 void 
-UnicodeString::extractBetween(UTextOffset start,
-                  UTextOffset limit,
+UnicodeString::extractBetween(int32_t start,
+                  int32_t limit,
                   UnicodeString& target) const
 { doExtract(start, limit - start, target); }
 
 int32_t
-UnicodeString::doExtract(UTextOffset start, int32_t length,
+UnicodeString::doExtract(int32_t start, int32_t length,
                          char *dest, int32_t destCapacity,
                          UConverter *cnv,
                          UErrorCode &errorCode) const {

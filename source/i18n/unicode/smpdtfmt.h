@@ -623,7 +623,7 @@ private:
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
-    int32_t matchString(const UnicodeString& text, UTextOffset start, Calendar::EDateFields field,
+    int32_t matchString(const UnicodeString& text, int32_t start, Calendar::EDateFields field,
                         const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
 
     /**

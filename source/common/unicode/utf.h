@@ -159,7 +159,10 @@
 
 /**
  * Unicode string and array offset and index type.
- * ICU always counts Unicode code units (UChars) for string offsets, indexes, and lengths, not Unicode code points.
+ * ICU always counts Unicode code units (UChars) for
+ * string offsets, indexes, and lengths, not Unicode code points.
+ *
+ * @deprecated Use int32_t directly. UTextOffset to be removed after 2003-mar.
  */
 typedef int32_t UTextOffset;
 

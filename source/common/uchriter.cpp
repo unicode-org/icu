@@ -29,7 +29,7 @@ UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
                                                int32_t length,
-                                               UTextOffset position)
+                                               int32_t position)
   : CharacterIterator(textPtr != 0 ? (length>=0 ? length : u_strlen(textPtr)) : 0, position),
   text(textPtr)
 {
@@ -37,9 +37,9 @@ UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
                                                int32_t length,
-                                               UTextOffset textBegin,
-                                               UTextOffset textEnd,
-                                               UTextOffset position)
+                                               int32_t textBegin,
+                                               int32_t textEnd,
+                                               int32_t position)
   : CharacterIterator(textPtr != 0 ? (length>=0 ? length : u_strlen(textPtr)) : 0, textBegin, textEnd, position),
   text(textPtr)
 {
@@ -121,7 +121,7 @@ UCharCharacterIterator::last() {
 }
 
 UChar
-UCharCharacterIterator::setIndex(UTextOffset position) {
+UCharCharacterIterator::setIndex(int32_t position) {
     if(position < begin) {
         pos = begin;
     } else if(position > end) {
@@ -188,7 +188,7 @@ UChar32
 UCharCharacterIterator::first32() {
     pos = begin;
     if(pos < end) {
-        UTextOffset i = pos;
+        int32_t i = pos;
         UChar32 c;
         UTF_NEXT_CHAR(text, i, end, c);
         return c;
@@ -222,7 +222,7 @@ UCharCharacterIterator::last32() {
 }
 
 UChar32
-UCharCharacterIterator::setIndex32(UTextOffset position) {
+UCharCharacterIterator::setIndex32(int32_t position) {
     if(position < begin) {
         position = begin;
     } else if(position > end) {
@@ -230,7 +230,7 @@ UCharCharacterIterator::setIndex32(UTextOffset position) {
     }
     if(position < end) {
         UTF_SET_CHAR_START(text, begin, position);
-        UTextOffset i = this->pos = position;
+        int32_t i = this->pos = position;
         UChar32 c;
         UTF_NEXT_CHAR(text, i, end, c);
         return c;
@@ -256,7 +256,7 @@ UCharCharacterIterator::next32() {
     if (pos < end) {
         UTF_FWD_1(text, pos, end);
         if(pos < end) {
-            UTextOffset i = pos;
+            int32_t i = pos;
             UChar32 c;
             UTF_NEXT_CHAR(text, i, end, c);
             return c;
@@ -289,7 +289,7 @@ UCharCharacterIterator::previous32() {
     }
 }
 
-UTextOffset
+int32_t
 UCharCharacterIterator::move(int32_t delta, CharacterIterator::EOrigin origin) {
     switch(origin) {
     case kStart:
@@ -314,7 +314,7 @@ UCharCharacterIterator::move(int32_t delta, CharacterIterator::EOrigin origin) {
     return pos;
 }
 
-UTextOffset
+int32_t
 UCharCharacterIterator::move32(int32_t delta, CharacterIterator::EOrigin origin) {
     // this implementation relies on the "safe" version of the UTF macros
     // (or the trustworthiness of the caller)

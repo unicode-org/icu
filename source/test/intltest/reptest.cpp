@@ -66,7 +66,7 @@ public:
         return s;
     }
 
-    void extractBetween(UTextOffset start, UTextOffset limit, UnicodeString& result) const {
+    void extractBetween(int32_t start, int32_t limit, UnicodeString& result) const {
         chars.extractBetween(start, limit, result);
     }
 
@@ -75,15 +75,15 @@ protected:
         return chars.length();
     }
 
-    virtual UChar getCharAt(UTextOffset offset) const{
+    virtual UChar getCharAt(int32_t offset) const{
         return chars.charAt(offset);
     }
 
-    virtual UChar32 getChar32At(UTextOffset offset) const{
+    virtual UChar32 getChar32At(int32_t offset) const{
         return chars.char32At(offset);
     }
 
-    virtual void handleReplaceBetween(UTextOffset start, UTextOffset limit, const UnicodeString& text) {
+    virtual void handleReplaceBetween(int32_t start, int32_t limit, const UnicodeString& text) {
         UnicodeString s;
         this->extractBetween(start, limit, s);
         if (s == text) return; // NO ACTION!
@@ -92,7 +92,7 @@ protected:
     }
     
 
-    void fixStyles(UTextOffset start, UTextOffset limit, int32_t newLen) {
+    void fixStyles(int32_t start, int32_t limit, int32_t newLen) {
         UChar newStyle = defaultStyle;
         if (start != limit) {
             newStyle = styles.charAt(start);

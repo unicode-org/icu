@@ -215,7 +215,7 @@ void CharIterTest::TestIteration() {
     UnicodeString text("Now is the time for all good men to come to the aid of their country.");
 
     UChar c;
-    UTextOffset i;
+    int32_t i;
     {
         StringCharacterIterator   iter(text, 5);
 
@@ -224,7 +224,7 @@ void CharIterTest::TestIteration() {
         if (iterText != text)
           errln("iter.getText() failed");
 
-        if (iter.current() != text[(UTextOffset)5])
+        if (iter.current() != text[(int32_t)5])
             errln("Iterator didn't start out in the right place.");
 
         c = iter.first();
@@ -329,7 +329,7 @@ void CharIterTest::TestIteration() {
         if (iter.startIndex() != 5 || iter.endIndex() != 15)
             errln("creation of a restricted-range iterator failed");
 
-        if (iter.getIndex() != 10 || iter.current() != text[(UTextOffset)10])
+        if (iter.getIndex() != 10 || iter.current() != text[(int32_t)10])
             errln("starting the iterator in the middle didn't work");
 
         c = iter.first();
@@ -389,7 +389,7 @@ void CharIterTest::TestIterationUChar32() {
     UChar textChars[]={ 0x0061, 0x0062, 0xd841, 0xdc02, 0x20ac, 0xd7ff, 0xd842, 0xdc06, 0xd801, 0xdc00, 0x0061, 0x0000};
     UnicodeString text(textChars);
     UChar32 c;
-    UTextOffset i;
+    int32_t i;
     {
         StringCharacterIterator   iter(text, 1);
 
@@ -398,7 +398,7 @@ void CharIterTest::TestIterationUChar32() {
         if (iterText != text)
           errln("iter.getText() failed");
 
-        if (iter.current32() != text[(UTextOffset)1])
+        if (iter.current32() != text[(int32_t)1])
             errln("Iterator didn't start out in the right place.");
  
         c=iter.setToStart();

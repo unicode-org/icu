@@ -88,7 +88,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
     UnicodeString str(openDelimiter);
     UErrorCode status;
-    UTextOffset len;
+    int32_t len;
 
     while (cursor < limit) {
         UChar32 c = text.char32At(cursor);

@@ -1601,7 +1601,7 @@ static const uint8_t ebcdicFromAscii[256]={
 #endif
 
 U_CAPI void U_EXPORT2
-u_charsToUChars(const char *cs, UChar *us, UTextOffset length) {
+u_charsToUChars(const char *cs, UChar *us, int32_t length) {
     while(length>0) {
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
         *us++=(UChar)(uint8_t)(*cs++);
@@ -1615,7 +1615,7 @@ u_charsToUChars(const char *cs, UChar *us, UTextOffset length) {
 }
 
 U_CAPI void U_EXPORT2
-u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
+u_UCharsToChars(const UChar *us, char *cs, int32_t length) {
     while(length>0) {
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
         *cs++=(char)(*us++);

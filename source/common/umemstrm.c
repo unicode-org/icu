@@ -194,7 +194,7 @@ uprv_mstrm_write32(UMemoryStream *MS, uint32_t wyde) {
 }
 
 U_CAPI void U_EXPORT2
-uprv_mstrm_writeBlock(UMemoryStream *MS, const void *s, UTextOffset length) {
+uprv_mstrm_writeBlock(UMemoryStream *MS, const void *s, int32_t length) {
     if(MS!=NULL) {
         if(length>0) {
             uprv_mstrm_write(MS, s, length);
@@ -203,7 +203,7 @@ uprv_mstrm_writeBlock(UMemoryStream *MS, const void *s, UTextOffset length) {
 }
 
 U_CAPI void U_EXPORT2
-uprv_mstrm_writePadding(UMemoryStream *MS, UTextOffset length) {
+uprv_mstrm_writePadding(UMemoryStream *MS, int32_t length) {
     static const uint8_t padding[16]={
         0xaa, 0xaa, 0xaa, 0xaa,
         0xaa, 0xaa, 0xaa, 0xaa,
@@ -222,7 +222,7 @@ uprv_mstrm_writePadding(UMemoryStream *MS, UTextOffset length) {
 }
 
 U_CAPI void U_EXPORT2
-uprv_mstrm_writeString(UMemoryStream *MS, const char *s, UTextOffset length) {
+uprv_mstrm_writeString(UMemoryStream *MS, const char *s, int32_t length) {
     if(MS!=NULL) {
         if(length==-1) {
             length=uprv_strlen(s);
@@ -234,7 +234,7 @@ uprv_mstrm_writeString(UMemoryStream *MS, const char *s, UTextOffset length) {
 }
 
 U_CAPI void U_EXPORT2
-uprv_mstrm_writeUString(UMemoryStream *MS, const UChar *s, UTextOffset length) {
+uprv_mstrm_writeUString(UMemoryStream *MS, const UChar *s, int32_t length) {
     if(MS!=NULL) {
         if(length==-1) {
             length=u_strlen(s);

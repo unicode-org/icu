@@ -209,7 +209,7 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
 {
     int           count       = 0;
     UErrorCode    status      = U_ZERO_ERROR;
-    UTextOffset   matchindex  = search->offset[count];
+    int32_t   matchindex  = search->offset[count];
     UnicodeString matchtext;
     
     if (strsrch->getMatchedStart() != USEARCH_DONE ||
@@ -1104,7 +1104,7 @@ void StringSearchTest::TestGetSetOffset()
         strsrch->setPattern(pattern, status);
 
         int count = 0;
-        UTextOffset matchindex  = search.offset[count];
+        int32_t matchindex  = search.offset[count];
         while (U_SUCCESS(status) && matchindex >= 0) {
             int32_t matchlength = search.size[count];
             strsrch->next(status);
@@ -1231,7 +1231,7 @@ void StringSearchTest::TestGetMatch()
     }
     
     int           count      = 0;
-    UTextOffset   matchindex = search.offset[count];
+    int32_t   matchindex = search.offset[count];
     UnicodeString matchtext;
     while (U_SUCCESS(status) && matchindex >= 0) {
         int32_t matchlength = search.size[count];
@@ -1883,7 +1883,7 @@ void StringSearchTest::TestGetSetOffsetCanonical()
         strsrch->setPattern(pattern, status);
 
         int         count       = 0;
-        UTextOffset matchindex  = search.offset[count];
+        int32_t matchindex  = search.offset[count];
         while (U_SUCCESS(status) && matchindex >= 0) {
             int32_t matchlength = search.size[count];
             strsrch->next(status);
@@ -1982,12 +1982,12 @@ public:
     TempSearch();
     TempSearch(TempSearch &search);
     ~TempSearch();
-    void            setOffset(UTextOffset position, UErrorCode &status);
-    UTextOffset     getOffset() const;
+    void            setOffset(int32_t position, UErrorCode &status);
+    int32_t     getOffset() const;
     SearchIterator* safeClone() const;
 protected:
-    UTextOffset     handleNext(UTextOffset position, UErrorCode &status);
-    UTextOffset     handlePrev(UTextOffset position, UErrorCode &status);
+    int32_t     handleNext(int32_t position, UErrorCode &status);
+    int32_t     handlePrev(int32_t position, UErrorCode &status);
 };
 
 TempSearch::TempSearch() : SearchIterator()
@@ -2002,11 +2002,11 @@ TempSearch::~TempSearch()
 {
 }
 
-void TempSearch::setOffset(UTextOffset /*position*/, UErrorCode &/*status*/)
+void TempSearch::setOffset(int32_t /*position*/, UErrorCode &/*status*/)
 {
 }
 
-UTextOffset TempSearch::getOffset() const
+int32_t TempSearch::getOffset() const
 {
     return USEARCH_DONE;
 }
@@ -2016,12 +2016,12 @@ SearchIterator * TempSearch::safeClone() const
     return NULL;
 }
 
-UTextOffset TempSearch::handleNext(UTextOffset /*position*/, UErrorCode &/*status*/)
+int32_t TempSearch::handleNext(int32_t /*position*/, UErrorCode &/*status*/)
 {
     return USEARCH_DONE;
 }
 
-UTextOffset TempSearch::handlePrev(UTextOffset /*position*/, UErrorCode &/*status*/)
+int32_t TempSearch::handlePrev(int32_t /*position*/, UErrorCode &/*status*/)
 {
     return USEARCH_DONE;
 }

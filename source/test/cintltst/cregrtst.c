@@ -113,7 +113,7 @@ UChar* UCharToUCharArray(const UChar uchar)
 }
 
 
-UChar* extractBetween(UTextOffset start, UTextOffset end, UChar* text)
+UChar* extractBetween(int32_t start, int32_t end, UChar* text)
 {
     UChar* result;
     UChar* temp;
@@ -1052,7 +1052,7 @@ void TestBackwardLineIndexSelection()
 void TestLineInvariants()
 {
     int errorCount,l;
-    UTextOffset i, j, k;
+    int32_t i, j, k;
     UChar c;
     UBreakIterator *e;
     UErrorCode status = U_ZERO_ERROR;
@@ -1302,7 +1302,7 @@ FreeTextBoundary();
 
 void TestPreceding()
 {
-    UTextOffset p1, p2, p3, p4, f, p;
+    int32_t p1, p2, p3, p4, f, p;
     UBreakIterator *e;
     UChar words3[15];
     UErrorCode status = U_ZERO_ERROR;
@@ -1520,7 +1520,7 @@ void doForwardIndexSelectionTest(UBreakIterator* iterator, UChar* testText, Vect
 {
     int32_t arrayCount, textLength;
     int32_t selBegin, selEnd, current, entry, pos;
-    UTextOffset offset;
+    int32_t offset;
     
     log_verbose("doForwardIndexSelectionTest text of length: %d\n", u_strlen(testText));
     arrayCount = Count(result);
@@ -1563,7 +1563,7 @@ void doBackwardIndexSelectionTest(UBreakIterator* iterator, UChar* testText, Vec
 {
     int32_t arrayCount, textLength;
     int32_t selBegin, selEnd, current, entry, pos;
-    UTextOffset offset;
+    int32_t offset;
     
     log_verbose("doBackwardIndexSelectionTest text of length: %d\n", u_strlen(testText));
     arrayCount = Count(result);
@@ -1605,7 +1605,7 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
 {
     int l,k;
     UBreakIterator *tb;
-    UTextOffset i, j;
+    int32_t i, j;
     UErrorCode status = U_ZERO_ERROR;
     UChar work[4]; 
     UChar breaks[10];
@@ -1666,7 +1666,7 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
 {
     int32_t k;
     UBreakIterator *tb;
-    UTextOffset i, j;
+    int32_t i, j;
     UErrorCode status = U_ZERO_ERROR;
     UChar work[5]; 
     UChar c;

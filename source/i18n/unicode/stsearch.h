@@ -284,7 +284,7 @@ public:
      * @param status for errors if it occurs
      * @draft ICU 2.0
      */
-    virtual void setOffset(UTextOffset position, UErrorCode &status);
+    virtual void setOffset(int32_t position, UErrorCode &status);
 
     /**
      * Return the current index in the text being searched.
@@ -294,7 +294,7 @@ public:
      * @return current index in the text being searched.
      * @draft ICU 2.0
      */
-    virtual UTextOffset getOffset(void) const;
+    virtual int32_t getOffset(void) const;
 
     /**
      * Set the target text to be searched.
@@ -413,7 +413,7 @@ protected:
      * @return The index at which the matched text in the target starts, or 
      *         USEARCH_DONE if no match was found.
      */
-    virtual UTextOffset handleNext(UTextOffset position, UErrorCode &status);
+    virtual int32_t handleNext(int32_t position, UErrorCode &status);
 
     /**
      * Search backward for matching text, starting at a given location.
@@ -436,7 +436,7 @@ protected:
      * @return The index at which the matched text in the target starts, or 
      *         USEARCH_DONE if no match was found.
      */
-    virtual UTextOffset handlePrev(UTextOffset position, UErrorCode &status);
+    virtual int32_t handlePrev(int32_t position, UErrorCode &status);
     
 private :
 

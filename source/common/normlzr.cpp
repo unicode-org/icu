@@ -311,7 +311,7 @@ void Normalizer::reset() {
 }
 
 void
-Normalizer::setIndexOnly(UTextOffset index) {
+Normalizer::setIndexOnly(int32_t index) {
     currentIndex=nextIndex=text->move(text, index, UITER_START); // validates index
     clearBuffer();
 }
@@ -335,7 +335,7 @@ Normalizer::setIndexOnly(UTextOffset index) {
  * @throws IllegalArgumentException if the given index is less than
  *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
  */
-UChar32 Normalizer::setIndex(UTextOffset index) {
+UChar32 Normalizer::setIndex(int32_t index) {
     setIndexOnly(index);
     return current();
 }
@@ -374,7 +374,7 @@ UChar32 Normalizer::last() {
  * <tt>setIndex</tt> and {@link #getIndex}.
  *
  */
-UTextOffset Normalizer::getIndex() const {
+int32_t Normalizer::getIndex() const {
     if(bufferPos<buffer.length()) {
         return currentIndex;
     } else {
@@ -387,7 +387,7 @@ UTextOffset Normalizer::getIndex() const {
  * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
  * over which this <tt>Normalizer</tt> is iterating
  */
-UTextOffset Normalizer::startIndex() const {
+int32_t Normalizer::startIndex() const {
     return text->move(text, 0, UITER_START);
 }
 
@@ -396,7 +396,7 @@ UTextOffset Normalizer::startIndex() const {
  * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
  * over which this <tt>Normalizer</tt> is iterating
  */
-UTextOffset Normalizer::endIndex() const {
+int32_t Normalizer::endIndex() const {
     return text->move(text, 0, UITER_LIMIT);
 }
 

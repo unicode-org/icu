@@ -64,7 +64,7 @@ U_NAMESPACE_BEGIN
  * Helper function to output text
  * <pre>
  * \code 
- *    void printTextRange( BreakIterator& iterator, UTextOffset start, UTextOffset end )
+ *    void printTextRange( BreakIterator& iterator, int32_t start, int32_t end )
  *    {
  *        UnicodeString textBuffer, temp;
  *        CharacterIterator *strIter = iterator.createText();
@@ -81,8 +81,8 @@ U_NAMESPACE_BEGIN
  * \code
  *    void printEachForward( BreakIterator& boundary)
  *    {
- *       UTextOffset start = boundary.first();
- *       for (UTextOffset end = boundary.next();
+ *       int32_t start = boundary.first();
+ *       for (int32_t end = boundary.next();
  *         end != BreakIterator::DONE;
  *         start = end, end = boundary.next())
  *         {
@@ -96,8 +96,8 @@ U_NAMESPACE_BEGIN
  * \code
  *    void printEachBackward( BreakIterator& boundary)
  *    {
- *       UTextOffset end = boundary.last();
- *       for (UTextOffset start = boundary.previous();
+ *       int32_t end = boundary.last();
+ *       for (int32_t start = boundary.previous();
  *         start != BreakIterator::DONE;
  *         end = start, start = boundary.previous())
  *         {
@@ -111,8 +111,8 @@ U_NAMESPACE_BEGIN
  * \code
  *    void printFirst(BreakIterator& boundary)
  *    {
- *        UTextOffset start = boundary.first();
- *        UTextOffset end = boundary.next();
+ *        int32_t start = boundary.first();
+ *        int32_t end = boundary.next();
  *        printTextRange( boundary, start, end );
  *    }
  * \endcode
@@ -122,8 +122,8 @@ U_NAMESPACE_BEGIN
  *  \code
  *    void printLast(BreakIterator& boundary)
  *    {
- *        UTextOffset end = boundary.last();
- *        UTextOffset start = boundary.previous();
+ *        int32_t end = boundary.last();
+ *        int32_t start = boundary.previous();
  *        printTextRange( boundary, start, end );
  *    }
  * \endcode
@@ -131,10 +131,10 @@ U_NAMESPACE_BEGIN
  * Print the element at a specified position
  * <pre>
  * \code
- *    void printAt(BreakIterator &boundary, UTextOffset pos )
+ *    void printAt(BreakIterator &boundary, int32_t pos )
  *    {
- *        UTextOffset end = boundary.following(pos);
- *        UTextOffset start = boundary.previous();
+ *        int32_t end = boundary.following(pos);
+ *        int32_t start = boundary.previous();
  *        printTextRange( boundary, start, end );
  *    }
  * \endcode
@@ -256,19 +256,19 @@ public:
      * boundaries have been returned.
      * @stable
      */
-    static const UTextOffset DONE;
+    static const int32_t DONE;
 
     /**
      * Return the index of the first character in the text being scanned.
      * @stable
      */
-    virtual UTextOffset first(void) = 0;
+    virtual int32_t first(void) = 0;
 
     /**
      * Return the index immediately BEYOND the last character in the text being scanned.
      * @stable
      */
-    virtual UTextOffset last(void) = 0;
+    virtual int32_t last(void) = 0;
 
     /**
      * Return the boundary preceding the current boundary.
@@ -276,7 +276,7 @@ public:
      * boundaries have been returned.
      * @stable
      */
-    virtual UTextOffset previous(void) = 0;
+    virtual int32_t previous(void) = 0;
 
     /**
      * Return the boundary following the current boundary.
@@ -284,7 +284,7 @@ public:
      * boundaries have been returned.
      * @stable
      */
-    virtual UTextOffset next(void) = 0;
+    virtual int32_t next(void) = 0;
 
     /**
      * Return character index of the text boundary that was most recently
@@ -292,7 +292,7 @@ public:
      * @return The boundary most recently returned.
      * @stable
      */
-    virtual UTextOffset current(void) const = 0;
+    virtual int32_t current(void) const = 0;
 
     /**
      * Return the first boundary following the specified offset.
@@ -302,7 +302,7 @@ public:
      * @return The first boundary after the specified offset.
      * @stable
      */
-    virtual UTextOffset following(UTextOffset offset) = 0;
+    virtual int32_t following(int32_t offset) = 0;
 
     /**
      * Return the first boundary preceding the specified offset.
@@ -312,7 +312,7 @@ public:
      * @return The first boundary before the specified offset.
      * @stable
      */
-    virtual UTextOffset preceding(UTextOffset offset) = 0;
+    virtual int32_t preceding(int32_t offset) = 0;
  
     /**
      * Return true if the specfied position is a boundary position.
@@ -320,7 +320,7 @@ public:
      * @return True if "offset" is a boundary position.
      * @stable
      */
-    virtual UBool isBoundary(UTextOffset offset) = 0;
+    virtual UBool isBoundary(int32_t offset) = 0;
 
     /**
      * Return the nth boundary from the current boundary
@@ -331,7 +331,7 @@ public:
      * DONE if there are fewer than |n| boundaries in the specfied direction.
      * @stable
      */
-    virtual UTextOffset next(int32_t n) = 0;
+    virtual int32_t next(int32_t n) = 0;
 
     /**
      * Create BreakIterator for word-breaks using the given locale.

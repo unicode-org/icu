@@ -85,7 +85,7 @@ demoStorage() {
     // * UnicodeString using readonly-alias to a const UChar array
     // construct a string that aliases a readonly buffer
     UnicodeString three(FALSE, readonly, LENGTHOF(readonly));
-    UTextOffset i;
+    int32_t i;
     for(i=0; i<three.length(); ++i) {
         printf("readonly-alias string[%d]=0x%lx\n", i, three.charAt(i));
     }

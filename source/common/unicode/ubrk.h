@@ -53,7 +53,7 @@
  * Helper function to output text
  * <pre>
  * \code
- *    void printTextRange(UChar* str, UTextOffset start, UTextOffset end ) {
+ *    void printTextRange(UChar* str, int32_t start, int32_t end ) {
  *         UChar* result;
  *         UChar* temp;
  *         const char* res;
@@ -71,8 +71,8 @@
  * <pre>
  * \code
  *    void printEachForward( UBreakIterator* boundary, UChar* str) {
- *       UTextOffset end;
- *       UTextOffset start = ubrk_first(boundary);
+ *       int32_t end;
+ *       int32_t start = ubrk_first(boundary);
  *       for (end = ubrk_next(boundary)); end != UBRK_DONE; start = end, end = ubrk_next(boundary)) {
  *             printTextRange(str, start, end );
  *         }
@@ -83,8 +83,8 @@
  * <pre>
  * \code
  *    void printEachBackward( UBreakIterator* boundary, UChar* str) {
- *       UTextOffset start;
- *       UTextOffset end = ubrk_last(boundary);
+ *       int32_t start;
+ *       int32_t end = ubrk_last(boundary);
  *       for (start = ubrk_previous(boundary); start != UBRK_DONE;  end = start, start =ubrk_previous(boundary)) {
  *             printTextRange( str, start, end );
  *         }
@@ -95,8 +95,8 @@
  * <pre>
  * \code
  *    void printFirst(UBreakIterator* boundary, UChar* str) {
- *        UTextOffset end;
- *        UTextOffset start = ubrk_first(boundary);
+ *        int32_t end;
+ *        int32_t start = ubrk_first(boundary);
  *        end = ubrk_next(boundary);
  *        printTextRange( str, start, end );
  *    }
@@ -106,8 +106,8 @@
  * <pre>
  * \code
  *    void printLast(UBreakIterator* boundary, UChar* str) {
- *        UTextOffset start;
- *        UTextOffset end = ubrk_last(boundary);
+ *        int32_t start;
+ *        int32_t end = ubrk_last(boundary);
  *        start = ubrk_previous(boundary);
  *        printTextRange(str, start, end );
  *    }
@@ -116,9 +116,9 @@
  * Print the element at a specified position
  * <pre>
  * \code
- *    void printAt(UBreakIterator* boundary, UTextOffset pos , UChar* str) {
- *        UTextOffset start;
- *        UTextOffset end = ubrk_following(boundary, pos);
+ *    void printAt(UBreakIterator* boundary, int32_t pos , UChar* str) {
+ *        int32_t start;
+ *        int32_t end = ubrk_following(boundary, pos);
  *        start = ubrk_previous(boundary);
  *        printTextRange(str, start, end );
  *    }
@@ -191,7 +191,7 @@ typedef enum UBreakIteratorType UBreakIteratorType;
 /** Value indicating all text boundaries have been returned.
  *
  */
-#define UBRK_DONE ((UTextOffset) -1)
+#define UBRK_DONE ((int32_t) -1)
 
 /**
  * Open a new UBreakIterator for locating text boundaries for a specified locale.
@@ -287,7 +287,7 @@ ubrk_setText(UBreakIterator* bi,
  * \Ref{ubrk_first}, or \Ref{ubrk_last}.
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_current(const UBreakIterator *bi);
 
 /**
@@ -299,7 +299,7 @@ ubrk_current(const UBreakIterator *bi);
  * @see ubrk_previous
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_next(UBreakIterator *bi);
 
 /**
@@ -311,7 +311,7 @@ ubrk_next(UBreakIterator *bi);
  * @see ubrk_next
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_previous(UBreakIterator *bi);
 
 /**
@@ -322,7 +322,7 @@ ubrk_previous(UBreakIterator *bi);
  * @see ubrk_last
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_first(UBreakIterator *bi);
 
 /**
@@ -335,7 +335,7 @@ ubrk_first(UBreakIterator *bi);
  * @see ubrk_first
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_last(UBreakIterator *bi);
 
 /**
@@ -347,9 +347,9 @@ ubrk_last(UBreakIterator *bi);
  * @see ubrk_following
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_preceding(UBreakIterator *bi,
-           UTextOffset offset);
+           int32_t offset);
 
 /**
  * Determine the text boundary following the specified offset.
@@ -360,9 +360,9 @@ ubrk_preceding(UBreakIterator *bi,
  * @see ubrk_preceding
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ubrk_following(UBreakIterator *bi,
-           UTextOffset offset);
+           int32_t offset);
 
 /**
 * Get a locale for which text breaking information is available.

@@ -844,7 +844,7 @@ void TestHashCode()
  */ 
 void TestElemIter()
 {
-    UTextOffset offset;
+    int32_t offset;
     int32_t order1, order2, order3;
     UChar *testString1, *testString2;
     UCollator *col;

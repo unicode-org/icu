@@ -287,7 +287,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
     int         count       = 0;
     int         matchlimit  = 0;
     UErrorCode  status      = U_ZERO_ERROR;
-    UTextOffset matchindex  = search.offset[count];
+    int32_t matchindex  = search.offset[count];
     int32_t     textlength;
     UChar       matchtext[128];
 
@@ -1001,7 +1001,7 @@ static void TestGetSetOffset()
     while (BASIC[index].text != NULL) {
         int         count       = 0;
         SearchData  search      = BASIC[index ++];
-        UTextOffset matchindex  = search.offset[count];
+        int32_t matchindex  = search.offset[count];
         int32_t     textlength;
     
         u_unescape(search.text, text, 128);
@@ -1154,7 +1154,7 @@ static void TestGetMatch()
     UChar          text[128];
     UChar          pattern[32];
     SearchData     search      = MATCH[0];
-    UTextOffset    matchindex  = search.offset[count];
+    int32_t    matchindex  = search.offset[count];
     UStringSearch *strsrch;
     int32_t        textlength;
     UChar          matchtext[128];
@@ -1878,7 +1878,7 @@ static void TestGetSetOffsetCanonical()
     while (BASICCANONICAL[index].text != NULL) {
         int         count       = 0;
         SearchData  search      = BASICCANONICAL[index ++];
-        UTextOffset matchindex  = search.offset[count];
+        int32_t matchindex  = search.offset[count];
         int32_t     textlength;
 
         if (BASICCANONICAL[index].text == NULL) {

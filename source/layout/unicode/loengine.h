@@ -104,9 +104,9 @@ public:
 	 * using the getter method below.
 	 */
     int32_t layoutChars(const UChar chars[],
-						UTextOffset startOffset,
-						UTextOffset endOffset,
-						UTextOffset maxOffset,
+						int32_t startOffset,
+						int32_t endOffset,
+						int32_t maxOffset,
 						UBool rightToLeft,
 						float x, float y,
 						UErrorCode &success);
@@ -130,8 +130,8 @@ public:
 	 * using the getter method below.
 	 */
 	int32_t layoutString(const UnicodeString &str,
-						 UTextOffset startOffset,
-						 UTextOffset endOffset,
+						 int32_t startOffset,
+						 int32_t endOffset,
 						 UBool rightToLeft,
 						 float x, float y,
 						 UErrorCode &success);
@@ -240,9 +240,9 @@ inline ICULayoutEngine::~ICULayoutEngine()
 }
 
 inline int32_t ICULayoutEngine::layoutChars(const UChar chars[],
-											UTextOffset startOffset,
-											UTextOffset endOffset,
-											UTextOffset maxOffset,
+											int32_t startOffset,
+											int32_t endOffset,
+											int32_t maxOffset,
 											UBool rightToLeft,
 											float x, float y,
 											UErrorCode &success)
@@ -259,8 +259,8 @@ inline int32_t ICULayoutEngine::layoutChars(const UChar chars[],
 }
 
 inline int32_t ICULayoutEngine::layoutString(const UnicodeString &str,
-											UTextOffset startOffset,
-											UTextOffset endOffset,
+											int32_t startOffset,
+											int32_t endOffset,
 											UBool rightToLeft,
 											float x, float y,
 											UErrorCode &success)

@@ -38,12 +38,12 @@ void test_ParsePosition( void )
 
 
     {
-        UTextOffset to = 5;
+        int32_t to = 5;
         ParsePosition pp2( to );
         if (pp2.getIndex() == 5) {
-            it_out << "PP getIndex and constructor(UTextOffset) tested." << endl;
+            it_out << "PP getIndex and constructor(int32_t) tested." << endl;
         }else{
-            it_errln("*** PP getIndex or constructor(UTextOffset) result");
+            it_errln("*** PP getIndex or constructor(int32_t) result");
         }
         pp2.setIndex( 3 );
         if (pp2.getIndex() == 3) {
@@ -98,7 +98,7 @@ void test_FieldPosition_example( void )
         //ToCharString(fmt->format(doubleNum[i], buf, pos), fmtText);
         UnicodeString res = fmt->format(doubleNum[i], buf, pos);
         for (int32_t j=0; j<tempLen; j++) temp[j] = '='; // clear with spaces
-        UTextOffset tempOffset = (tempLen <= (tempLen - pos.getEndIndex())) ? 
+        int32_t tempOffset = (tempLen <= (tempLen - pos.getEndIndex())) ? 
             tempLen : (tempLen - pos.getEndIndex());
         temp[tempOffset] = '\0';
         it_out << "FP " << temp << res << endl;

@@ -96,15 +96,15 @@
  *     styleSuper=8, styleSub=16
  *} Style;
  *
- *typedef struct { UTextOffset limit; Style style; } StyleRun;
+ *typedef struct { int32_t limit; Style style; } StyleRun;
  *
- *int getTextWidth(const UChar *text, UTextOffset start, UTextOffset limit,
+ *int getTextWidth(const UChar *text, int32_t start, int32_t limit,
  *                  const StyleRun *styleRuns, int styleRunCount);
  *
  * // set *pLimit and *pStyleRunLimit for a line
  * // from text[start] and from styleRuns[styleRunStart]
  * // using ubidi_getLogicalRun(para, ...)
- *void getLineBreak(const UChar *text, UTextOffset start, UTextOffset *pLimit,
+ *void getLineBreak(const UChar *text, int32_t start, int32_t *pLimit,
  *                  UBiDi *para,
  *                  const StyleRun *styleRuns, int styleRunStart, int *pStyleRunLimit,
  *                  int *pLineWidth);
@@ -116,7 +116,7 @@
  *
  * // render a run of text and advance to the right by the run width
  * // the text[start..limit-1] is always in logical order
- *void renderRun(const UChar *text, UTextOffset start, UTextOffset limit,
+ *void renderRun(const UChar *text, int32_t start, int32_t limit,
  *               UBiDiDirection textDirection, Style style);
  *
  * // We could compute a cross-product
@@ -130,7 +130,7 @@
  * // render a directional run with
  * // (possibly) multiple style runs intersecting with it
  *void renderDirectionalRun(const UChar *text,
- *                           UTextOffset start, UTextOffset limit,
+ *                           int32_t start, int32_t limit,
  *                           UBiDiDirection direction,
  *                           const StyleRun *styleRuns, int styleRunCount) {
  *     int i;
@@ -171,7 +171,7 @@
  *
  * // the line object represents text[start..limit-1]
  * void renderLine(UBiDi *line, const UChar *text,
- *                 UTextOffset start, UTextOffset limit,
+ *                 int32_t start, int32_t limit,
  *                 const StyleRun *styleRuns, int styleRunCount) {
  *     UBiDiDirection direction=ubidi_getDirection(line);
  *     if(direction!=UBIDI_MIXED) {
@@ -184,7 +184,7 @@
  *         }
  *     } else {
  *         // mixed-directional
- *         UTextOffset count, i, length;
+ *         int32_t count, i, length;
  *         UBiDiLevel level;
  *
  *         count=ubidi_countRuns(para, pErrorCode);
@@ -198,7 +198,7 @@
  *                     renderRun(text, start, start+length, direction, style);
  *                }
  *             } else {
- *                 UTextOffset j;
+ *                 int32_t j;
  *
  *                 // iterate over both directional and style runs
  *                 for(i=0; i<count; ++i) {
@@ -211,7 +211,7 @@
  *     }
  * }
  *
- *void renderParagraph(const UChar *text, UTextOffset length,
+ *void renderParagraph(const UChar *text, int32_t length,
  *                     UBiDiDirection textDirection,
  *                      const StyleRun *styleRuns, int styleRunCount,
  *                      int lineWidth,
@@ -255,7 +255,7 @@
  *             // we need to render several lines
  *             line=ubidi_openSized(length, 0, pErrorCode);
  *             if(line!=NULL) {
- *                 UTextOffset start=0, limit;
+ *                 int32_t start=0, limit;
  *                 int styleRunStart=0, styleRunLimit;
  *
  *                 for(;;) {
@@ -446,7 +446,7 @@ ubidi_open(void);
  * @stable
  */
 U_CAPI UBiDi * U_EXPORT2
-ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErrorCode);
+ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode);
 
 /**
  * <code>ubidi_close()</code> must be called to free the memory
@@ -591,7 +591,7 @@ ubidi_isInverse(UBiDi *pBiDi);
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
+ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
               UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
               UErrorCode *pErrorCode);
 
@@ -640,7 +640,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
  */
 U_CAPI void U_EXPORT2
 ubidi_setLine(const UBiDi *pParaBiDi,
-              UTextOffset start, UTextOffset limit,
+              int32_t start, int32_t limit,
               UBiDi *pLineBiDi,
               UErrorCode *pErrorCode);
 
@@ -681,7 +681,7 @@ ubidi_getText(const UBiDi *pBiDi);
  * @return The length of the text that the UBiDi object was created for.
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_getLength(const UBiDi *pBiDi);
 
 /**
@@ -710,7 +710,7 @@ ubidi_getParaLevel(const UBiDi *pBiDi);
  * @stable
  */
 U_CAPI UBiDiLevel U_EXPORT2
-ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex);
+ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex);
 
 /**
  * Get an array of levels for each character.<p>
@@ -755,8 +755,8 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_getLogicalRun(const UBiDi *pBiDi, UTextOffset logicalStart,
-                    UTextOffset *pLogicalLimit, UBiDiLevel *pLevel);
+ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
+                    int32_t *pLogicalLimit, UBiDiLevel *pLevel);
 
 /**
  * Get the number of runs.
@@ -774,7 +774,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, UTextOffset logicalStart,
  * @return The number of runs.
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
 
 /**
@@ -806,7 +806,7 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * Example:
  * <pre>
  * \code
- * UTextOffset i, count=ubidi_countRuns(pBiDi),
+ * int32_t i, count=ubidi_countRuns(pBiDi),
  *         logicalStart, visualIndex=0, length;
  * for(i=0; i<count; ++i) {
  *    if(UBIDI_LTR==ubidi_getVisualRun(pBiDi, i, &logicalStart, &length)) {
@@ -829,8 +829,8 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * @stable
  */
 U_CAPI UBiDiDirection U_EXPORT2
-ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
-                   UTextOffset *pLogicalStart, UTextOffset *pLength);
+ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
+                   int32_t *pLogicalStart, int32_t *pLength);
 
 /**
  * Get the visual position from a logical text position.
@@ -855,8 +855,8 @@ ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
  * @see ubidi_getLogicalIndex
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
-ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorCode);
+U_CAPI int32_t U_EXPORT2
+ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode);
 
 /**
  * Get the logical text position from a visual position.
@@ -879,8 +879,8 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
  * @see ubidi_getVisualIndex
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
-ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorCode);
+U_CAPI int32_t U_EXPORT2
+ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode);
 
 /**
  * Get a logical-to-visual index map (array) for the characters in the UBiDi
@@ -901,7 +901,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
+ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
 
 /**
  * Get a visual-to-logical index map (array) for the characters in the UBiDi
@@ -922,7 +922,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode)
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
+ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
 
 /**
  * This is a convenience function that does not use a UBiDi object.
@@ -945,7 +945,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap);
+ubidi_reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
 
 /**
  * This is a convenience function that does not use a UBiDi object.
@@ -968,7 +968,7 @@ ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap);
+ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
 
 /**
  * Invert an index map.
@@ -985,7 +985,7 @@ ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *i
  * @stable
  */
 U_CAPI void U_EXPORT2
-ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length);
+ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
 
 /** option flags for ubidi_writeReordered() */
 
@@ -1102,7 +1102,7 @@ ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset len
  * @return The length of the output string.
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_writeReordered(UBiDi *pBiDi,
                      UChar *dest, int32_t destSize,
                      uint16_t options,
@@ -1155,7 +1155,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
  * @return The length of the output string.
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_writeReverse(const UChar *src, int32_t srcLength,
                    UChar *dest, int32_t destSize,
                    uint16_t options,

@@ -256,7 +256,7 @@ U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
  * @stable
  */
 U_CAPI void U_EXPORT2
-u_charsToUChars(const char *cs, UChar *us, UTextOffset length);
+u_charsToUChars(const char *cs, UChar *us, int32_t length);
 
 /**
  * Convert UChar characters to char characters.
@@ -276,7 +276,7 @@ u_charsToUChars(const char *cs, UChar *us, UTextOffset length);
  * @stable
  */
 U_CAPI void U_EXPORT2
-u_UCharsToChars(const UChar *us, char *cs, UTextOffset length);
+u_UCharsToChars(const UChar *us, char *cs, int32_t length);
 
 /* Define U_UPPER_ORDINAL */
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
