@@ -1514,10 +1514,18 @@ void MultithreadTest::TestString()
     }
 
 cleanupAndReturn:
-    for(j = 0; j < kStringThreadThreads; j++) {
-        delete tests[j];
+    if (terrs == 0) {
+        /*
+        Don't clean up if there are errors. This prevents crashes if the
+        threads are still running and using this data. This will only happen
+        if there is an error with the test, ICU, or the machine is too slow.
+        It's better to leak than crash.
+        */
+        for(j = 0; j < kStringThreadThreads; j++) {
+            delete tests[j];
+        }
+        delete testString;
     }
-    return;
 }
 
 
