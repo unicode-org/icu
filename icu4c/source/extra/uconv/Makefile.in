@@ -106,7 +106,7 @@ install-resfiles: $(RESFILES)
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
 	@$(MKINSTALLDIRS) $(RESDIR)
-	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eutf-8 -d $(RESDIR) -s . $^
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eutf-8 -d $(RESDIR) -s $(srcdir) $(notdir $^)
 
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)
