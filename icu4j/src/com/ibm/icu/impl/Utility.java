@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $ 
- * $Date: 2001/01/09 20:07:16 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/07/03 16:35:12 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -668,6 +668,21 @@ public final class Utility {
     public static StringBuffer hex(char ch, StringBuffer output) {
         String foo = Integer.toString(ch,16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
+            output.append('0');
+        }
+        output.append(foo);
+        return output;
+    }
+    
+    /**
+     * Convert a integer to size width hex uppercase digits. 
+     * E.g., hex('a', 4, str) => "0041".  
+     * Append the output to the given StringBuffer.
+     * If width is too small to fit, nothing will be appended to output.
+     */
+    public static StringBuffer hex(int ch, int width, StringBuffer output) {
+        String foo = Integer.toString(ch, 16).toUpperCase();
+        for (int i = foo.length(); i < width; ++i) {
             output.append('0');
         }
         output.append(foo);
