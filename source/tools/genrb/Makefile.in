@@ -92,7 +92,7 @@ install-man: $(MAN_FILES)
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 # This line is needed to serialize builds when the gmake -j option is used.
-$(DERB:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
+$(TARGET_STUB_NAME).$(SECTION): $(DERB_STUB_NAME).$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
