@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/RuleBasedBreakIterator/Attic/BuildDictionaryFile.java,v $ 
- * $Date: 2000/05/09 22:38:37 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/24 19:54:15 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.tools.RuleBasedBreakIterator;
 
 import com.ibm.util.CompactByteArray;
-import com.ibm.text.CharSet;
+import com.ibm.text.UnicodeSet;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -78,13 +78,13 @@ public class BuildDictionaryFile {
 
     public void buildColumnMap(InputStreamReader in) throws IOException {
 System.out.println("Building column map...");
-        CharSet charsInFile = new CharSet();
+        UnicodeSet charsInFile = new UnicodeSet();
         int c = in.read();
 int totalChars = 0;
         while (c >= 0) {
 ++totalChars; if (totalChars > 0 && totalChars % 5000 == 0) System.out.println("Read " + totalChars + " characters...");
             if (c > ' ')
-                charsInFile = charsInFile.union(new CharSet((char)c));
+                charsInFile.add((char)c);
             c = in.read();
         }
 //        Test.debugPrintln(charsInFile.toString());
@@ -93,11 +93,12 @@ int totalChars = 0;
         tempReverseMap.append(' ');
 
         columnMap = new CompactByteArray();
-        Enumeration e = charsInFile.getChars();
+        int n = charsInFile.getRangeCount();
         byte p = 1;
-        while (e.hasMoreElements()) {
-            char[] range = (char[])e.nextElement();
-            for (char ch = range[0]; ch <= range[1]; ch++) {
+        for (int i=0; i<n; ++i) {
+            char start = (char) charsInFile.getRangeStart(i);
+            char end = (char) charsInFile.getRangeEnd(i);
+            for (char ch = start; ch <= end; ch++) {
                 if (columnMap.elementAt(Character.toLowerCase(ch)) == 0) {
                     columnMap.setElementAt(Character.toUpperCase(ch), Character.toUpperCase(ch),
                                         p);
