@@ -118,7 +118,7 @@ enum {
     UBIDI_IS_MIRRORED_SHIFT=12,         /* 'is mirrored' */
     UBIDI_MIRROR_DELTA_SHIFT=13,        /* bidi mirroring delta: 3 bits (15..13) */
 
-    UBIDI_MAX_JG_SHIFT=16,              /* max JG value in indexes[UBIDI_MAX_VALUES_INDEX] bits 23..16 */
+    UBIDI_MAX_JG_SHIFT=16               /* max JG value in indexes[UBIDI_MAX_VALUES_INDEX] bits 23..16 */
 };
 
 #define UBIDI_CLASS_MASK        0x0000001f
