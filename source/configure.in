@@ -981,6 +981,7 @@ AC_OUTPUT([icudefs.mk \
 		tools/toolutil/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile \
+		test/hdrtst/Makefile \
 		test/intltest/Makefile \
 		test/cintltst/Makefile \
 		test/iotest/Makefile \
