@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $ 
- * $Date: 2002/10/04 19:41:02 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/11/15 23:44:10 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -530,7 +530,18 @@ public abstract class BreakIterator implements Cloneable
         return getBreakInstance(where, KIND_TITLE);
     }
 
-    public static Object register(BreakIterator iter, Locale locale, int kind) {
+    /**
+     * Register a new break iterator of the indicated kind, to use in the given locale.
+     * Clones of the iterator will be returned
+     * if a request for a break iterator of the given kind matches or falls back to
+     * this locale.
+     * @param iter the BreakIterator instance to adopt.
+     * @param locale the Locale for which this instance is to be registered
+     * @param kind the type of iterator for which this instance is to be registered
+     * @return a registry key that can be used to unregister this instance
+     * @draft ICU 2.4
+     */
+    public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
         try {
             return getService().registerObject(iter, locale, kind);
         }
@@ -539,6 +550,13 @@ public abstract class BreakIterator implements Cloneable
         }
     }
 
+    /**
+     * Unregister a previously-registered BreakIterator using the key returned from the
+     * register call.  Key becomes invalid after this call and should not be used again.
+     * @param key the registry key returned by a previous call to registerInstance
+     * @return true if the iterator for the key was successfully unregistered
+     * @draft ICU 2.4
+     */
     public static boolean unregister(Object key) {
         if (service != null) {
             return service.unregisterFactory((Factory)key);
