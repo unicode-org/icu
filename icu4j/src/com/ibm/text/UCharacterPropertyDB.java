@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.3 $
+* $Date: 2001/06/21 23:20:53 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -52,8 +52,11 @@ final class  UCharacterPropertyDB extends UCharacterDB
   protected static final int EXC_DENOMINATOR_VALUE_ = EXC_NUMERIC_VALUE_ + 1;
   protected static final int EXC_MIRROR_MAPPING_ = EXC_DENOMINATOR_VALUE_ + 1;
   protected static final int EXC_SPECIAL_CASING_ = EXC_MIRROR_MAPPING_ + 1;
+  protected static final int EXC_CASE_FOLDING_ = EXC_SPECIAL_CASING_ + 1;
   // EXC_COMBINING_CLASS_ is not found in ICU
-  protected static final int EXC_COMBINING_CLASS_ = EXC_SPECIAL_CASING_ + 1;
+  // Used to retrieve the combining class of the character in the exception
+  // value
+  protected static final int EXC_COMBINING_CLASS_ = EXC_CASE_FOLDING_ + 1;
 
 
   // private variables ==================================================
@@ -366,6 +369,54 @@ final class  UCharacterPropertyDB extends UCharacterDB
   }
   
   /**
+  * Gets the folded case value at the index
+  * @param index of the case value to be retrieved
+  * @return folded case value at index
+  */
+  protected int getFoldCase(int index)
+  {
+    char single = m_case_[index];
+    if (UTF16.isSurrogate(single)) {
+      // Convert the UTF-16 surrogate pair if necessary.
+      // For simplicity in usage, and because the frequency of pairs is low,
+      // look both directions.
+              
+	    if (UTF16.isLeadSurrogate(single)) 
+	    {
+	      char trail = m_case_[index + 1];
+	      if (UTF16.isTrailSurrogate(trail)) {
+	        return UCharacter.getRawSupplementary(single, trail);
+	      }
+	    } 
+	    else 
+	    { 
+	      char lead = m_case_[index - 1];
+	      if (UTF16.isLeadSurrogate(lead)) {
+	        return UCharacter.getRawSupplementary(lead, single);
+	      }
+	    }
+	  }
+	  return single;
+  }
+  
+  /**
+  * Gets the folded case value at the index
+  * @param index of the case value to be retrieved
+  * @param count number of characters to retrieve
+  * @param buffer string buffer to add result to
+  */
+  protected void getFoldCase(int index, int count, StringBuffer str) 
+  {
+    // first 2 chars are for the simple mappings
+    index += 2;
+    while (count > 0) {
+      str.append(m_case_[index]);
+      index ++;
+      count --;
+    }
+  }
+  
+  /**
   * Determines if the exception value passed in has the kind of information
   * which the indicator wants, e.g if the exception value contains the digit
   * value of the character
@@ -495,15 +546,12 @@ final class  UCharacterPropertyDB extends UCharacterDB
   { 
     int result = address;
     if (indicator >= EXC_GROUP_) {
-      result += (FLAGS_OFFSET_[evalue & EXC_GROUP_MASK_] << 1); 
+      result += FLAGS_OFFSET_[evalue & EXC_GROUP_MASK_]; 
+      evalue >>= EXC_GROUP_; 
+      indicator -= EXC_GROUP_; 
     }
-      // evalue >>= EXC_GROUP_; 
-      // indicator -= EXC_GROUP_; 
-    else 
-    {
-      int mask = (1 << indicator) - 1;
-      result += FLAGS_OFFSET_[evalue & mask]; 
-    }
+    int mask = (1 << indicator) - 1;
+    result += FLAGS_OFFSET_[evalue & mask]; 
     return result;
   }
 }
