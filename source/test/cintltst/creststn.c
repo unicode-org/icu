@@ -592,8 +592,8 @@ static void TestNewTypes() {
         {
             int32_t strLen =0;
             const UChar* str = ures_getStringByKey(theBundle, "testincludeUTF",&strLen,&status);
-            strcpy(path, "th18057.txt");
-            path[strlen("th18057.txt")]=0;
+            strcpy(path, "riwords.txt");
+            path[strlen("riwords.txt")]=0;
             if(U_FAILURE(status)){
                 log_err("Could not get testincludeUTF resource from testtypes bundle. Error: %s\n",u_errorName(status));
             }else{
@@ -606,10 +606,10 @@ static void TestNewTypes() {
                     if(U_SUCCESS(status)){
                         /* verify the contents */
                         if(strLen != len ){
-                            log_err("Did not get the expected len for th18057. Expected: %i , Got: %i\n", len ,strLen);
+                            log_err("Did not get the expected len for riwords. Expected: %i , Got: %i\n", len ,strLen);
                         }
                         if(u_strncmp(str, buffer,strLen)!=0){
-                            log_err("Did not get the expected string from th18057. Include functionality failed for genrb.\n");
+                            log_err("Did not get the expected string from riwords. Include functionality failed for genrb.\n");
                         }
                     }else{
                         log_err("ucbuf failed to open %s. Error: %s\n", testDataFileName, u_errorName(status));
@@ -617,7 +617,7 @@ static void TestNewTypes() {
 
                     ucbuf_close(ucbuf);
                 }else{
-                    log_err("Could not get th18057.txt (path : %s). Error: %s\n",testDataFileName,u_errorName(status));
+                    log_err("Could not get riwords.txt (path : %s). Error: %s\n",testDataFileName,u_errorName(status));
                 }
             }
         }
