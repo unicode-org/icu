@@ -15,6 +15,14 @@ U_NAMESPACE_BEGIN
 
 #define DEFUALT_CAPACITY 8
 
+/*
+ * Constants for hinting whether a key is an integer
+ * or a pointer.  If a hint bit is zero, then the associated
+ * token is assumed to be an integer. This is needed for iSeries
+ */
+#define HINT_KEY_POINTER   (1)
+#define HINT_KEY_INTEGER   (2)
+ 
 const char UVector::fgClassID=0;
 
 UVector::UVector(UErrorCode &status) :
@@ -261,17 +269,17 @@ UBool   UVector::equals(const UVector &other) const {
 int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
     UHashTok key;
     key.pointer = obj;
-    return indexOf(key, startIndex);
+    return indexOf(key, startIndex, HINT_KEY_POINTER);
 }
 
 int32_t UVector::indexOf(int32_t obj, int32_t startIndex) const {
     UHashTok key;
     key.integer = obj;
-    return indexOf(key, startIndex);
+    return indexOf(key, startIndex, HINT_KEY_INTEGER);
 }
 
 // This only works if this object has a non-null comparer
-int32_t UVector::indexOf(UHashTok key, int32_t startIndex) const {
+int32_t UVector::indexOf(UHashTok key, int32_t startIndex, int8_t hint) const {
     int32_t i;
     if (comparer != 0) {
         for (i=startIndex; i<count; ++i) {
@@ -281,8 +289,13 @@ int32_t UVector::indexOf(UHashTok key, int32_t startIndex) const {
         }
     } else {
         for (i=startIndex; i<count; ++i) {
-            if (key.pointer == elements[i].pointer) {
-                return i;
+            /* Pointers are not always the same size as ints so to perform
+             * a valid comparision we need to know whether we are being
+             * provided an int or a pointer. */
+            if (((hint & HINT_KEY_POINTER) && (key.pointer == elements[i].pointer))
+                || (key.integer == elements[i].integer))
+            {
+                    return i;
             }
         }
     }
