@@ -1184,6 +1184,14 @@ InputPath=.\unicode\gregocal.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\gregoimp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\gregoimp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\japancal.cpp
 # End Source File
 # Begin Source File
