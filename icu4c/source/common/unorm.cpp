@@ -140,7 +140,7 @@ static const uint16_t *extraData=NULL,
                       *canonStartSets=NULL;
 
 static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
-static UBool formatVersion_2_1=FALSE;
+static UBool formatVersion_2_1=FALSE, formatVersion_2_2=FALSE;
 
 /* the Unicode version of the normalization data */
 static UVersionInfo dataVersion={ 3, 1, 0, 0 };
@@ -170,6 +170,12 @@ getFoldingNormOffset(uint32_t norm32) {
     } else {
         return 0;
     }
+}
+
+/* fcdTrie: the folding offset is the lead FCD value itself */
+static int32_t U_CALLCONV
+getFoldingFCDOffset(uint32_t data) {
+    return (int32_t)data;
 }
 
 /* auxTrie: the folding offset is in bits 9..0 of the 16-bit trie result */
@@ -231,6 +237,7 @@ loadNormData(UErrorCode &errorCode) {
 
         pb+=p[_NORM_INDEX_TRIE_SIZE]+p[_NORM_INDEX_UCHAR_COUNT]*2+p[_NORM_INDEX_COMBINE_DATA_COUNT]*2;
         utrie_unserialize(&_fcdTrie, pb, p[_NORM_INDEX_FCD_TRIE_SIZE], &errorCode);
+        _fcdTrie.getFoldingOffset=getFoldingFCDOffset;
 
         if(p[_NORM_INDEX_FCD_TRIE_SIZE]!=0) {
             pb+=p[_NORM_INDEX_FCD_TRIE_SIZE];
@@ -263,6 +270,7 @@ loadNormData(UErrorCode &errorCode) {
         extraData=(uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+indexes[_NORM_INDEX_TRIE_SIZE]);
         combiningTable=extraData+indexes[_NORM_INDEX_UCHAR_COUNT];
         formatVersion_2_1=formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=1);
+        formatVersion_2_2=formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=2);
         if(formatVersion_2_1) {
             canonStartSets=combiningTable+
                 indexes[_NORM_INDEX_COMBINE_DATA_COUNT]+
@@ -750,6 +758,108 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
     } else {
         return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
+}
+
+/* Is c an NF<mode>-skippable code point? See unormimp.h. */
+U_CAPI UBool U_EXPORT2
+unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
+    UErrorCode errorCode;
+    uint32_t norm32, mask;
+    uint16_t aux, fcd;
+
+    errorCode=U_ZERO_ERROR;
+    if(!_haveData(errorCode)) {
+        return FALSE;
+    }
+
+    /* handle trivial cases; set the comparison mask for the normal ones */
+    switch(mode) {
+    case UNORM_NONE:
+        return TRUE;
+    case UNORM_NFD:
+        mask=_NORM_CC_MASK|_NORM_QC_NFD;
+        break;
+    case UNORM_NFKD:
+        mask=_NORM_CC_MASK|_NORM_QC_NFKD;
+        break;
+    case UNORM_NFC:
+    /* case UNORM_FCC: */
+        mask=_NORM_CC_MASK|_NORM_COMBINES_ANY|(_NORM_QC_NFC&_NORM_QC_ANY_NO);
+        break;
+    case UNORM_NFKC:
+        mask=_NORM_CC_MASK|_NORM_COMBINES_ANY|(_NORM_QC_NFKC&_NORM_QC_ANY_NO);
+        break;
+    case UNORM_FCD:
+        /* FCD: skippable if lead cc==0 and trail cc<=1 */
+        UTRIE_GET16(&fcdTrie, c, fcd);
+        return fcd<=1;
+    default:
+        return FALSE;
+    }
+
+    /* check conditions (a)..(e), see unormimp.h */
+    UTRIE_GET32(&normTrie, c, norm32);
+    if((norm32&mask)!=0) {
+        return FALSE; /* fails (a)..(e), not skippable */
+    }
+
+    if(mode<UNORM_NFC) {
+        return TRUE; /* NF*D, passed (a)..(c), is skippable */
+    }
+
+    /* NF*C/FCC, passed (a)..(e) */
+    if((norm32&_NORM_QC_NFD)==0) {
+        return TRUE; /* no canonical decomposition, is skippable */
+    }
+
+    /* check Hangul syllables algorithmically */
+    if(isNorm32HangulOrJamo(norm32)) {
+        /* Jamo passed (a)..(e) above, must be Hangul */
+        return !isHangulWithoutJamoT((UChar)c); /* LVT are skippable, LV are not */
+    }
+
+    /* if(mode<=UNORM_NFKC) { -- enable when implementing FCC */
+    /* NF*C, test (f) flag */
+    if(!formatVersion_2_2) {
+        return FALSE; /* no (f) data, say not skippable to be safe */
+    }
+
+    UTRIE_GET16(&auxTrie, c, aux);
+    return (aux&_NORM_AUX_NFC_SKIP_F_MASK)==0; /* TRUE=skippable if the (f) flag is not set */
+
+    /* } else { FCC, test fcd<=1 instead of the above } */
+}
+
+static UBool U_CALLCONV
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+    /* add the start code point to the USet */
+    uset_add((USet *)context, start);
+    return TRUE;
+}
+
+U_CAPI void U_EXPORT2
+unorm_addPropertyStarts(USet *set) {
+    UErrorCode errorCode;
+    UChar c;
+
+    errorCode=U_ZERO_ERROR;
+    if(!_haveData(errorCode)) {
+        return;
+    }
+
+    /* add the start code point of each same-value range of each trie */
+    utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
+    utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
+    if(formatVersion_2_1) {
+        utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, set);
+    }
+
+    /* add Hangul LV syllables and LV+1 because of skippables */
+    for(c=HANGUL_BASE; c<HANGUL_BASE+HANGUL_COUNT; c+=JAMO_T_COUNT) {
+        uset_add(set, c);
+        uset_add(set, c+1);
+    }
+    uset_add(set, HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
 }
 
 /* reorder UTF-16 in-place -------------------------------------------------- */
