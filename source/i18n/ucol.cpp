@@ -206,6 +206,41 @@ ucol_close(UCollator *coll)
 }
 
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, int32_t resLen, UErrorCode *status) {
+/*
+2.	Eliminate the negative lists by doing the following for each non-null negative list: 
+    o	if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
+    create new ListHeader X 
+    o	reverse the list, add to the end of X's positive list. Reset the strength of the 
+    first item you add, based on the stronger strength levels of the two lists. 
+*/
+/*
+3.	For each ListHeader with a non-null positive list: 
+*/
+/*
+    o	Find all character strings with CEs between the baseCE and the 
+    next/previous CE, at the strength of the first token. Add these to the 
+    tailoring. 
+      ?	That is, if UCA has ...  x <<< X << x' <<< X' < y ..., and the 
+      tailoring has & x < z... 
+      ?	Then we change the tailoring to & x  <<< X << x' <<< X' < z ... 
+*/
+/*
+    o	Allocate CEs for each token in the list, based on the total number N of the 
+    largest level difference, and the gap G between baseCE and nextCE at that 
+    level. The relation * between the last item and nextCE is the same as the 
+    strongest strength. 
+    o	Example: baseCE < a << b <<< q << c < d < e * nextCE(X,1) 
+      ?	There are 3 primary items: a, d, e. Fit them into the primary gap. 
+      Then fit b and c into the secondary gap between a and d, then fit q 
+      into the tertiary gap between b and c. 
+
+    o	Example: baseCE << b <<< q << c * nextCE(X,2) 
+      ?	There are 2 secondary items: b, c. Fit them into the secondary gap. 
+      Then fit q into the tertiary gap between b and c. 
+    o	When incrementing primary values, we will not cross high byte 
+    boundaries except where there is only a single-byte primary. That is to 
+    ensure that the script reordering will continue to work. 
+*/
   *status = U_UNSUPPORTED_ERROR;
   return NULL;
 }
