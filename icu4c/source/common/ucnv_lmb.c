@@ -222,23 +222,23 @@ static const char * const OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
    /* 0x0000 */ "lmb-excp", /* internal home for the LOTUS exceptions list */
    /* 0x0001 */ "ibm-850",
    /* 0x0002 */ "ibm-851",
-   /* 0x0003 */ "ibm-1255",
-   /* 0x0004 */ "ibm-1256",
-   /* 0x0005 */ "ibm-1251",
+   /* 0x0003 */ "windows-1255",
+   /* 0x0004 */ "windows-1256",
+   /* 0x0005 */ "windows-1251",
    /* 0x0006 */ "ibm-852",
    /* 0x0007 */ NULL,      /* Unused */
-   /* 0x0008 */ "ibm-1254",
+   /* 0x0008 */ "windows-1254",
    /* 0x0009 */ NULL,      /* Control char HT */
    /* 0x000A */ NULL,      /* Control char LF */
-   /* 0x000B */ "ibm-874",
+   /* 0x000B */ "windows-874",
    /* 0x000C */ NULL,      /* Unused */
    /* 0x000D */ NULL,      /* Control char CR */
    /* 0x000E */ NULL,      /* Unused */
    /* 0x000F */ NULL,      /* Control chars: 0x0F20 + C0/C1 character: algorithmic */
-   /* 0x0010 */ "ibm-943",
-   /* 0x0011 */ "ibm-1363",
-   /* 0x0012 */ "ibm-950",
-   /* 0x0013 */ "ibm-1386"
+   /* 0x0010 */ "MS_Kanji", /* windows-932 */
+   /* 0x0011 */ "ibm-1363", /* windows-949 */
+   /* 0x0012 */ "ibm-1373", /* windows-950 */
+   /* 0x0013 */ "windows-936"
 
    /* The rest are null, including the 0x0014 Unicode compatibility region
    and 0x0019, the 1-2-3 system range control char */      
@@ -524,7 +524,7 @@ static const UConverterImpl _LMBCSImpl##n={\
 static const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
  "LMBCS-"  #n,\
-    0, UCNV_IBM, UCNV_LMBCS_##n, 1, 1,\
+    0, UCNV_IBM, UCNV_LMBCS_##n, 1, 2,\
     { 0x3f, 0, 0, 0 },1,FALSE,FALSE,0,0,{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} \
 };\
 const UConverterSharedData _LMBCSData##n={\
