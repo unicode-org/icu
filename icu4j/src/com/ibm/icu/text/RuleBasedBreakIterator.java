@@ -113,7 +113,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     
         /** Tag value for "words" that do not fit into any of other categories. 
-         *  Includes spaces and most punctuation. */
+         *  Includes spaces and most punctuation. 
+         *  @draft ICU 3.0 */
         public static final int WORD_NONE           = 0;
         /** Upper bound for tags for uncategorized words. 
          *  @draft ICU 3.0 */

@@ -10,6 +10,8 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -17,10 +19,10 @@ import java.util.Locale;
 
 
 /**
- * @author andy
+ * Monkey tests for RBBI.  These tests have independent implementations of
+ * the Unicode TR boundary rules, and compare results between these and ICU's
+ * implementation, using random data.
  *
- * TODO To change the template for this generated type comment go to 
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class RBBITestMonkey extends TestFmwk {
     
@@ -305,20 +307,751 @@ public class RBBITestMonkey extends TestFmwk {
 
  
     static class RBBILineMonkey extends RBBIMonkeyKind {
-        List  charClasses() {
-         return null;   // TODO:   
+    	
+    	List        fSets;
+    	
+    	UnicodeSet  fBK;
+    	UnicodeSet  fCR;
+    	UnicodeSet  fLF;
+    	UnicodeSet  fCM;
+    	UnicodeSet  fNL;
+    	UnicodeSet  fSG;
+    	UnicodeSet  fWJ;
+    	UnicodeSet  fZW;
+    	UnicodeSet  fGL;
+    	UnicodeSet  fCB;
+    	UnicodeSet  fSP;
+    	UnicodeSet  fB2;
+    	UnicodeSet  fBA;
+    	UnicodeSet  fBB;
+    	UnicodeSet  fHY;
+    	UnicodeSet  fCL;
+    	UnicodeSet  fEX;
+    	UnicodeSet  fIN;
+    	UnicodeSet  fNS;
+    	UnicodeSet  fOP;
+    	UnicodeSet  fQU;
+    	UnicodeSet  fIS;
+    	UnicodeSet  fNU;
+    	UnicodeSet  fPO;
+    	UnicodeSet  fPR;
+    	UnicodeSet  fSY;
+    	UnicodeSet  fAI;
+    	UnicodeSet  fAL;
+    	UnicodeSet  fID;
+    	UnicodeSet  fSA;
+    	UnicodeSet  fXX;
+    	
+    	BreakIterator  fCharBI;
+    	
+    	StringBuffer  fText;
+    	int           fOrigPositions;
+    	
+    	
+    	
+    	RBBILineMonkey()
+		{
+    		fSets          = new ArrayList();
+    		
+    		fBK    = new UnicodeSet("[\\p{Line_Break=BK}]");
+    		fCR    = new UnicodeSet("[\\p{Line_break=CR}]");
+    		fLF    = new UnicodeSet("[\\p{Line_break=LF}]");
+    		fCM    = new UnicodeSet("[\\p{Line_break=CM}]");
+    		fNL    = new UnicodeSet("[\\p{Line_break=NL}]");
+    		fWJ    = new UnicodeSet("[\\p{Line_break=WJ}]");
+    		fZW    = new UnicodeSet("[\\p{Line_break=ZW}]");
+    		fGL    = new UnicodeSet("[\\p{Line_break=GL}]");
+    		fCB    = new UnicodeSet("[\\p{Line_break=CB}]");
+    		fSP    = new UnicodeSet("[\\p{Line_break=SP}]");
+    		fB2    = new UnicodeSet("[\\p{Line_break=B2}]");
+    		fBA    = new UnicodeSet("[\\p{Line_break=BA}]");
+    		fBB    = new UnicodeSet("[\\p{Line_break=BB}]");
+    		fHY    = new UnicodeSet("[\\p{Line_break=HY}]");
+    		fCL    = new UnicodeSet("[\\p{Line_break=CL}]");
+    		fEX    = new UnicodeSet("[\\p{Line_break=EX}]");
+    		fIN    = new UnicodeSet("[\\p{Line_break=IN}]");
+    		fNS    = new UnicodeSet("[\\p{Line_break=NS}]");
+    		fOP    = new UnicodeSet("[\\p{Line_break=OP}]");
+    		fQU    = new UnicodeSet("[\\p{Line_break=QU}]");
+    		fIS    = new UnicodeSet("[\\p{Line_break=IS}]");
+    		fNU    = new UnicodeSet("[\\p{Line_break=NU}]");
+    		fPO    = new UnicodeSet("[\\p{Line_break=PO}]");
+    		fPR    = new UnicodeSet("[\\p{Line_break=PR}]");
+    		fSY    = new UnicodeSet("[\\p{Line_break=SY}]");
+    		fAI    = new UnicodeSet("[\\p{Line_break=AI}]");
+    		fAL    = new UnicodeSet("[\\p{Line_break=AL}]");
+    		fID    = new UnicodeSet("[\\p{Line_break=ID}]");
+    		fSA    = new UnicodeSet("[\\p{Line_break=SA}]");
+    		fXX    = new UnicodeSet("[\\p{Line_break=XX}]");
+    		
+    		fAL.addAll(fXX);     // Default behavior for XX is identical to AL
+    		fAL.addAll(fAI);     // Default behavior for AI is identical to AL
+    		fAL.addAll(fSA);     // Default behavior for SA is XX, which defaults to AL
+    		
+    		
+    		
+    		fSets.add(fBK);
+    		fSets.add(fCR);
+    		fSets.add(fLF);
+    		fSets.add(fCM);
+    		fSets.add(fNL);
+    		fSets.add(fWJ);
+    		fSets.add(fZW);
+    		fSets.add(fGL);
+    		fSets.add(fCB);
+    		fSets.add(fSP);
+    		fSets.add(fB2);
+    		fSets.add(fBA);
+    		fSets.add(fBB);
+    		fSets.add(fHY);
+    		fSets.add(fCL);
+    		fSets.add(fEX);
+    		fSets.add(fIN);
+    		fSets.add(fNS);
+    		fSets.add(fOP);
+    		fSets.add(fQU);
+    		fSets.add(fIS);
+    		fSets.add(fNU);
+    		fSets.add(fPO);
+    		fSets.add(fPR);
+    		fSets.add(fSY);
+    		fSets.add(fAI);
+    		fSets.add(fAL);
+    		fSets.add(fID);
+    		fSets.add(fWJ);
+    		fSets.add(fSA);
+    		
+    		fCharBI = BreakIterator.getCharacterInstance(Locale.ENGLISH);
+		}
+    	
+    	void setText(StringBuffer s) {
+    		fText       = s;
+            fCharBI.setText(s.toString());
+    	}
+    	
+    	//
+//  	rule67Adjust
+//  	Line Break TR rules 6 and 7 implementation.
+//  	This deals with combining marks, Hangul Syllables, and other sequences that
+//  	that must be treated as if they were something other than what they actually are.
+    	//
+//  	This is factored out into a separate function because it must be applied twice for
+//  	each potential break, once to the chars before the position being checked, then
+//  	again to the text following the possible break.
+    	//
+    	int[] rule67Adjust(int pos, int posChar, int nextPos, int nextChar, int[] retVals) {
+            if (retVals == null) {
+                retVals = new int[3];   
+            }
+            retVals[0] = posChar;
+            retVals[1] = nextPos;
+            retVals[2] = nextChar;
+    		if (pos == -1) {
+    			// Invalid initial position.  Happens during the warmup iteration of the
+    			//   main loop in next().
+    			return retVals;
+    		}
+    		
+    		int  nPos = nextPos;
+    		
+    		// LB 6  Treat Korean Syllables as a single unit
+    		int  hangultype = UCharacter.getIntPropertyValue(posChar, UProperty.HANGUL_SYLLABLE_TYPE);
+    		if (hangultype != UCharacter.HangulSyllableType.NOT_APPLICABLE) {
+    			nPos = fCharBI.following(pos);   // Advance by grapheme cluster, which
+    			// contains the logic to locate Hangul syllables.
+    			// Grapheme Cluster Ugliness: some Grapheme_Extend chars, which are absorbed
+    			//   into a grapheme cluster, are NOT Line Break CM. (Some are GL, for example.)
+    			//   We don't want consume any of these.  The Approach is
+    			//      1.  Back nPos up, undoing the consumption of any
+    			//          Grapheme_Extend chars by the char break iterator.
+    			//      2.  Let the LB 7b logic below reconsume any Line Break CM chars.
+    			for (;;) {
+                    nPos = moveIndex32(fText, nPos, -1);
+    				int possiblyExtendChar = UTF16.charAt(fText, nPos);
+    				if (fID.contains(possiblyExtendChar)) {
+    					// We hit into the Hangul Syllable itself, class is ID.
+    					nPos = moveIndex32(fText, nPos, +1);
+    					break;
+    				}
+                    if (nPos == 0) {
+                        break;   
+                    }
+    			}
+    		}
+    		
+    		// LB 7b  Keep combining sequences together.
+    		//  advance over any CM class chars.  (Line Break CM class is different from
+    		//    grapheme cluster CM, so we need to do this even for HangulSyllables.
+    		//    Line Break may eat additional stuff as combining, beyond what graphem cluster did.
+    		if (!(fBK.contains(posChar) || fZW.contains(posChar) || posChar==0x0a
+    				|| posChar==0x0d || posChar==0x85)) {
+    			for (;;) {
+                    if (nPos == fText.length()) {
+                        break;   
+                    }
+    				nextChar = UTF16.charAt(fText, nPos);
+    				if (!fCM.contains(nextChar)) {
+    					break;
+    				}
+                    nPos = moveIndex32(fText, nPos, 1);
+    			}
+    		}
+    		
+    		
+    		// LB 7a In a SP CM* sequence, treat the SP as an ID
+    		if (nPos != nextPos && fSP.contains(posChar)) {
+    			posChar = 0x4e00;   // 0x4e00 is a CJK Ideograph, linebreak type is ID.
+    		}
+    		
+    		// LB 7b Treat X CM* as if it were x.
+    		//       No explicit action required.
+    		
+    		// LB 7c  Treat any remaining combining mark as AL
+    		if (fCM.contains(posChar)) {
+    			posChar = 'A';   
+    		}
+    		
+    		// Push the updated nextPos and nextChar back to our caller.
+    		// This only makes a difference if posChar got bigger, by slurping up a
+    		// combining sequence or Hangul syllable.
+    		nextPos  = nPos;
+            nextChar = 0;
+            if (nPos < fText.length()) {
+            	nextChar = UTF16.charAt(fText, nPos);
+            }
+            retVals[0] = posChar;
+            retVals[1] = nextPos;
+            retVals[2] = nextChar;
+            return retVals;
+    	}
+    	
+    	
+
+    	int next(int startPos) {
+     		int    pos;       //  Index of the char following a potential break position
+    		int    thisChar;  //  Character at above position "pos"
+    		
+    		int    prevPos;   //  Index of the char preceding a potential break position
+    		int    prevChar;  //  Character at above position.  Note that prevChar
+    		//   and thisChar may not be adjacent because combining
+    		//   characters between them will be ignored.
+    		
+    		int    nextPos;   //  Index of the next character following pos.
+    		//     Usually skips over combining marks.
+    		int    nextCPPos; //  Index of the code point following "pos."
+    		//     May point to a combining mark.
+    		int    tPos;      //  temp value.
+    		int    c;
+            int     LB10match[] =   null;     // Regular expr match results for LB10.
+            int    matchVals[]  = null;             // Regular Expression Match Results
+            int    rule67vals[] = null;       //  Return values from Rule 6 & 7 adjust function.
+
+    		
+    		if (startPos >= fText.length()) {
+    			return -1;
+    		}
+    		
+    		
+    		// Initial values for loop.  Loop will run the first time without finding breaks,
+    		//                           while the invalid values shift out and the "this" and
+    		//                           "prev" positions are filled in with good values.
+    		pos      = prevPos   = -1;    // Invalid value, serves as flag for initial loop iteration.
+    		thisChar = prevChar  = 0;
+    		nextPos  = nextCPPos = startPos;
+    		
+    		
+    		// Loop runs once per position in the test text, until a break position
+    		//  is found.
+    		for (;;) {
+    			prevPos   = pos;
+    			prevChar  = thisChar;
+    			
+    			pos       = nextPos;
+                // Break at end of text.
+                if (pos >= fText.length()) {
+                    break;
+                }
+                
+    			thisChar  = UTF16.charAt(fText, pos);
+    			
+    			nextCPPos = moveIndex32(fText, pos, 1);
+    			nextPos   = nextCPPos;
+    			
+    			// LB 3a  Always break after hard line breaks,
+    			if (fBK.contains(prevChar)) {
+    				break;
+    			}
+    			
+    			// LB 3b  Break after CR, LF, NL, but not inside CR LF
+    			if (prevChar == 0x0d && thisChar == 0x0a) {
+    				continue;
+    			}
+    			if (prevChar == 0x0d ||
+    					prevChar == 0x0a ||
+						prevChar == 0x85)  {
+    				break;
+    			}
+    			
+    			// LB 3c  Don't break before hard line breaks
+    			if (thisChar == 0x0d || thisChar == 0x0a || thisChar == 0x85 ||
+    					fBK.contains(thisChar)) {
+    				continue;
+    			}
+    			
+    			// LB 10    QU SP* x OP
+    			if (prevPos >= 0) {
+                    matchVals = LB10Check(fText, prevPos, LB10match);   //   Test for match of  
+                    if (matchVals[0] != -1) {                              //     /QU CM* SP* (OP) CM*/
+    					pos      = matchVals[0];
+    					nextPos  = matchVals[1];
+    					thisChar = UTF16.charAt(fText, pos);
+    					continue;
+    				}
+    			}
+    			
+    			// LB 11   CL SP* x NS
+    			if (prevPos >= 0) {
+                    matchVals = LB11Check(fText, prevPos, matchVals);
+    				if (matchVals[0] != -1) {  //   /QU CM* SP* (OP) CM*/;
+    					pos      = matchVals[0];
+    					nextPos  = matchVals[1];
+    					thisChar = UTF16.charAt(fText, pos);
+    					continue;
+    				}
+    			}
+    			
+    			// LB 4  Don't break before spaces or zero-width space.
+    			if (fSP.contains(thisChar)) {
+    				continue;
+    			}
+    			
+    			if (fZW.contains(thisChar)) {
+    				continue;
+    			}
+    			
+    			// LB 5  Break after zero width space
+    			if (fZW.contains(prevChar)) {
+    				break;
+    			}
+    			
+    			// LB 6, LB 7
+    			/*int oldpos = pos;*/
+                int  retVals[] = null;
+    			retVals = rule67Adjust(prevPos, prevChar, pos, thisChar, retVals);
+                prevChar = retVals[0];
+                pos      = retVals[1];
+                thisChar = retVals[2];
+    			
+    			nextCPPos = moveIndex32(fText, pos, 1);
+    			nextPos   = nextCPPos;
+                c = 0;
+                if (nextPos < fText.length()) {
+                	c = UTF16.charAt(fText, nextPos);
+                }
+    			// another peculiarity of LB 4 - Dont break before space
+    			if (fSP.contains(thisChar)) {
+    				continue;
+    			}
+                rule67vals = rule67Adjust(pos,  thisChar, nextPos, c, rule67vals);
+                thisChar = rule67vals[0];
+                nextPos  = rule67vals[1];
+                c        = rule67vals[2];
+                
+    			// If the loop is still warming up - if we haven't shifted the initial
+    			//   -1 positions out of prevPos yet - loop back to advance the
+    			//    position in the input without any further looking for breaks.
+    			if (prevPos == -1) {
+    				continue;
+    			}
+    			
+    			// Re-apply rules 3c, 4 because these could be affected by having
+    			//                      a new thisChar from doing rule 6 or 7.
+    			if (thisChar == 0x0d || thisChar == 0x0a || thisChar == 0x85 ||   // 3c
+    					fBK.contains(thisChar)) {
+    				continue;
+    			}
+    			if (fSP.contains(thisChar)) {    // LB 4
+    				continue;
+    			}
+    			if (fZW.contains(thisChar)) {    // LB 4
+    				continue;
+    			}
+    			
+    			
+    			// LB 8  Don't break before closings.
+    			//       NU x CL  and NU x IS are not matched here so that they will
+    			//       fall into LB 17 and the more general number regular expression.
+    			//
+    			if (!fNU.contains(prevChar) && fCL.contains(thisChar) ||
+    					fEX.contains(thisChar) ||
+						!fNU.contains(prevChar) && fIS.contains(thisChar) ||
+						fSY.contains(thisChar))    {
+    				continue;
+    			}
+    			
+    			// LB 9  Don't break after OP SP*
+    			//       Scan backwards, checking for this sequence.
+    			//       The OP char could include combining marks, so we acually check for
+    			//           OP CM* SP*
+    			//       Another Twist: The Rule 67 fixes may have changed a CP CM
+    			//       sequence into a ID char, so before scanning back through spaces,
+    			//       verify that prevChar is indeed a space.  The prevChar variable
+    			//       may differ from fText[prevPos]
+    			tPos = prevPos;
+    			if (fSP.contains(prevChar)) {
+    				while (tPos > 0 && fSP.contains(UTF16.charAt(fText, tPos))) {
+    					tPos=moveIndex32(fText, tPos, -1);
+    				}
+    			}
+    			while (tPos > 0 && fCM.contains(UTF16.charAt(fText, tPos))) {
+    				tPos=moveIndex32(fText, tPos, -1);
+    			}
+    			if (fOP.contains(UTF16.charAt(fText, tPos))) {
+    				continue;
+    			}
+    			
+    			
+    			// LB 11a        B2 x B2
+    			if (fB2.contains(thisChar) && fB2.contains(prevChar)) {
+    				continue;
+    			}
+    			
+    			// LB 11b
+    			//    x  GL
+    			//    GL  x
+    			if (fGL.contains(thisChar) || fGL.contains(prevChar)) {
+    				continue;
+    			}
+    			if (fWJ.contains(thisChar) || fWJ.contains(prevChar)) {
+    				continue;
+    			}
+    			
+    			// LB 12    break after space
+    			if (fSP.contains(prevChar)) {
+    				break;
+    			}
+    			
+    			// LB 14
+    			//    x   QU
+    			//    QU  x
+    			if (fQU.contains(thisChar) || fQU.contains(prevChar)) {
+    				continue;
+    			}
+    			
+    			// LB 14a  Break around a CB
+    			if (fCB.contains(thisChar) || fCB.contains(prevChar)) {
+    				break;
+    			}
+    			
+    			// LB 15
+    			if (fBA.contains(thisChar) ||
+    					fHY.contains(thisChar) ||
+						fNS.contains(thisChar) ||
+						fBB.contains(prevChar) )   {
+    				continue;
+    			}
+    			
+    			// LB 16
+    			if (fAL.contains(prevChar) && fIN.contains(thisChar) ||
+    					fID.contains(prevChar) && fIN.contains(thisChar) ||
+						fIN.contains(prevChar) && fIN.contains(thisChar) ||
+						fNU.contains(prevChar) && fIN.contains(thisChar) )   {
+    				continue;
+    			}
+    			
+    			
+    			// LB 17    ID x PO    (Note:  Leading CM behaves like ID)
+    			//          AL x NU
+    			//          NU x AL
+    			if (fID.contains(prevChar) && fPO.contains(thisChar) ||
+    					fCM.contains(prevChar) && fPO.contains(thisChar) ||
+						fAL.contains(prevChar) && fNU.contains(thisChar) ||
+						fNU.contains(prevChar) && fAL.contains(thisChar) )   {
+    				continue;
+    			}
+    			
+    			// LB 18    Numbers
+                matchVals = LBNumberCheck(fText, prevPos, matchVals);
+    			if (matchVals[0] != -1) {
+    				// Matched a number.  But could have been just a single digit, which would
+    				//    not represent a "no break here" between prevChar and thisChar
+    				int numEndIdx = matchVals[1];  // idx of first char following num
+    				if (numEndIdx > pos) {
+    					// Number match includes at least the two chars being checked
+    					if (numEndIdx > nextPos) {
+    						// Number match includes additional chars.  Update pos and nextPos
+    						//   so that next loop iteration will continue at the end of the number,
+    						//   checking for breaks between last char in number & whatever follows.
+    						nextPos = numEndIdx;
+    						pos = fCharBI.preceding(numEndIdx);
+                            thisChar = UTF16.charAt(fText, pos);
+    						while (fCM.contains(thisChar)) {
+    							pos = fCharBI.preceding(pos);
+    							thisChar = UTF16.charAt(fText, pos);
+    						}
+    					}
+    					continue;
+    				}
+    			}
+    			
+    			// LB 18b
+    			if (fHY.contains(prevChar) || fBB.contains(thisChar)) {
+    				break;
+    			}
+    			
+    			// LB 19
+    			if (fAL.contains(prevChar) && fAL.contains(thisChar)) {
+    				continue;
+    			}
+    			
+    			// LB 20    Break everywhere else
+    			break;
+    			
+    		}
+    		
+    		return pos;
+    	}
+        
+        // Match the following regular expression in the input text.
+        //     QU CM* SP* (OP) CM*
+        //      0  1   2   3    4   (match states)
+        //  Can't use Java regexp because supplementary chars must be handled,
+        //                        because line break properties are needed, and
+        //                        because Unicode Version must match ICU.
+        //  retVals array  [0]  index of the OP in the match, or -1 if no match
+        //                 [1]  index of first char following the match.
+        private int[] LB10Check(StringBuffer s, int startIdx, int[] retVals) {
+            if (retVals == null) {
+                retVals = new int[2];
+             }
+            retVals[0]     = -1;  // Indicates no match.
+            int matchState = 0;
+            int idx        = startIdx;
+            
+            matchLoop: for (idx = startIdx; idx<s.length(); idx = moveIndex32(s, idx, 1)){
+                int c = UTF16.charAt(s, idx);
+                int cLBType = UCharacter.getIntPropertyValue(c, UProperty.LINE_BREAK);
+                switch (matchState) {
+                	case 0:   
+                		if (cLBType == UCharacter.LineBreak.QUOTATION) {
+                			matchState = 1;  
+                			break;
+                		}
+                		break matchLoop;   /* No Match  */
+                	case 1:
+                		if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                			break;
+                		}
+                	case 2:
+                		if (cLBType == UCharacter.LineBreak.SPACE) {
+                			matchState = 2;
+                			break;
+                		}
+                		if (cLBType == UCharacter.LineBreak.OPEN_PUNCTUATION) {
+                			matchState = 4;
+                			retVals[0] = idx;
+                            retVals[1] = idx;
+                			break;
+                		}
+                		break matchLoop;   /*  No Match */
+                	case 4:
+                		if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            retVals[1] = idx;
+                			break;                           
+                		}
+                		break matchLoop;   //  Successful match.
+                }
+            }
+            if (retVals[0] >= 0) {
+                retVals[1] = moveIndex32(fText, retVals[1], 1);
+            }
+            return retVals;
+        }
+    	
+    	
+        // Match the following regular expression in the input text.
+        //     CL CM* SP* (NS) CM*
+        //      0  1   2        4   (match states)
+        //  Can't use Java regexp because supplementary chars must be handled,
+        //                        because line break properties are needed, and
+        //                        because Unicode Version must match ICU.
+        //  retVals array  [0]  index of the OP in the match, or -1 if no match
+        //                 [1]  index of first char following the match.
+        private int[] LB11Check(StringBuffer s, int startIdx, int[] retVals) {
+            if (retVals == null) {
+                retVals = new int[2];
+             }
+            retVals[0]     = -1;  // Indicates no match.
+            int matchState = 0;
+            int idx        = startIdx;
+            
+            matchLoop: for (idx = startIdx; idx<s.length(); idx = moveIndex32(s, idx, 1)){
+                int c = UTF16.charAt(s, idx);
+                int cLBType = UCharacter.getIntPropertyValue(c, UProperty.LINE_BREAK);
+                switch (matchState) {
+                    case 0:   
+                        if (cLBType == UCharacter.LineBreak.CLOSE_PUNCTUATION) {
+                            matchState = 1;  
+                            break;
+                        }
+                        break matchLoop;   /* No Match  */
+                    case 1:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            break;
+                        }
+                    case 2:
+                        if (cLBType == UCharacter.LineBreak.SPACE) {
+                            matchState = 2;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.NONSTARTER) {
+                            matchState = 4;
+                            retVals[0] = idx;
+                            retVals[1] = idx;
+                            break;
+                        }
+                        break matchLoop;   /*  No Match */
+                    case 4:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            retVals[1] = idx;
+                            break;                           
+                        }
+                        break matchLoop;   //  Successful match.
+                }
+                if (retVals[0] >= 0) {
+                	retVals[1] = moveIndex32(fText, retVals[1], 1);
+                }
+            }
+            return retVals;
         }
         
-        void   setText(StringBuffer text) {  // TODO:
-        }   
+        
+        // Match the following regular expression in the input text.
+        //     (PR CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS) CM*) * (CL CM*)?  (PO CM*)?
+        //      0  1       3    3    3        7     7    7    7      9   9     11 11    (match states)
+        //  retVals array  [0]  index of the start of the match, or -1 if no match
+        //                 [1]  index of first char following the match.
+        private int[] LBNumberCheck(StringBuffer s, int startIdx, int[] retVals) {
+            if (retVals == null) {
+                retVals = new int[2];
+             }
+            retVals[0]     = -1;  // Indicates no match.
+            int matchState = 0;
+            int idx        = startIdx;
+            
+            matchLoop: for (idx = startIdx; idx<s.length(); idx = moveIndex32(s, idx, 1)){
+                int c = UTF16.charAt(s, idx);
+                int cLBType = UCharacter.getIntPropertyValue(c, UProperty.LINE_BREAK);
+                switch (matchState) {
+                    case 0:   
+                        if (cLBType == UCharacter.LineBreak.PREFIX_NUMERIC) {
+                            matchState = 1;  
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.OPEN_PUNCTUATION) {
+                            matchState = 4;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.HYPHEN) {
+                            matchState = 4;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.NUMERIC) {
+                            matchState = 7;
+                            break;
+                        }
+                        break matchLoop;   /* No Match  */
+                        
+                    case 1:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            matchState = 1;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.OPEN_PUNCTUATION) {
+                            matchState = 4;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.HYPHEN) {
+                            matchState = 4;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.NUMERIC) {
+                            matchState = 7;
+                            break;
+                        }
+                        break matchLoop;   /* No Match  */
+                        
+                        
+                    case 4:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            matchState = 4;
+                            break;
+                        }
+                        if (cLBType == UCharacter.LineBreak.NUMERIC) {
+                            matchState = 7;
+                            break;
+                        }
+                        break matchLoop;   /* No Match  */
+                        //     (PR CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS) CM*) * (CL CM*)?  (PO CM*)?
+                        //      0  1       3    3    4    7   7     7    7    7      9   9     11 11    (match states)
 
-        int   next(int i) {      // TODO:    
-            return 0;
+                    case 7:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            matchState = 7;
+                            break;                           
+                        }
+                        if (cLBType == UCharacter.LineBreak.NUMERIC) {
+                            matchState = 7;
+                            break;                           
+                        }
+                        if (cLBType == UCharacter.LineBreak.INFIX_NUMERIC) {
+                            matchState = 7;
+                            break;                           
+                        }
+                        if (cLBType == UCharacter.LineBreak.CLOSE_PUNCTUATION) {
+                            matchState = 9;
+                            break;                           
+                        }
+                        if (cLBType == UCharacter.LineBreak.POSTFIX_NUMERIC) {
+                            matchState = 11;
+                            break;                           
+                        }
+                        break matchLoop;    // Match Complete.
+                    case 9:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            matchState = 9;
+                            break;                           
+                        }
+                        if (cLBType == UCharacter.LineBreak.POSTFIX_NUMERIC) {
+                            matchState = 11;
+                            break;                           
+                        }
+                        break matchLoop;    // Match Complete.
+                    case 11:
+                        if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
+                            matchState = 11;
+                            break;                           
+                        }
+                        break matchLoop;    // Match Complete.
+                }
+            }
+            if (matchState > 4) {
+            	retVals[0] = startIdx;   
+             	retVals[1] = idx;   
+            }
+            return retVals;
         }
+        
+        
+    	List  charClasses() {
+    		return fSets;
+    	}
+    	
+    	
     
     }
 
-    
+     
     /**
      * Move an index into a string by n code points.
      *   Similar to UTF16.moveCodePointOffset, but without the exceptions, which were
@@ -329,12 +1062,39 @@ public class RBBITestMonkey extends TestFmwk {
      * @return    The adjusted code unit index, pinned to the string's length, or
      *            unchanged if input index was outside of the string.
      */
-    static int moveIndex32(StringBuffer s, int i, int amt) {
-    	if (i < 0 || i >= s.length()) {
-    		return i; 
-    	}
-        int retVal = UTF16.moveCodePointOffset(s, i, amt);
-        return retVal;
+    static int moveIndex32(StringBuffer s, int pos, int amt) {
+        int i;
+        char  c;
+        if (amt>0) {
+            for (i=0; i<amt; i++) {
+                if (pos >= s.length()) {
+                    return s.length();                   
+                }
+                c = s.charAt(pos);
+                pos++;
+                if (UTF16.isLeadSurrogate(c) && pos < s.length()) {
+                    c = s.charAt(pos);
+                    if (UTF16.isTrailSurrogate(c)) {
+                        pos++;   
+                    }
+                }
+            }
+        } else {
+        	for (i=0; i>amt; i--) {
+        		if (pos <= 0) {
+        			return 0;   
+        		}
+                pos--;
+        		c = s.charAt(pos);
+        		if (UTF16.isTrailSurrogate(c) && pos >= 0) {
+        			c = s.charAt(pos);
+        			if (UTF16.isLeadSurrogate(c)) {
+        				pos--;   
+        			}
+        		}
+        	}
+        }
+        return pos;
     }
     
     
@@ -635,13 +1395,19 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
         expectedBreaks[0] = true;
         expected[expectedCount ++] = 0;
         int breakPos = 0;
+        int lastBreakPos = -1;
         for (;;) {
+            lastBreakPos = breakPos;
             breakPos = mk.next(breakPos);
             if (breakPos == -1) {
                 break;
             }
             if (breakPos > testText.length()) {
                 errln("breakPos > testText.length()");
+            }
+            if (lastBreakPos >= breakPos) {
+                errln("Next() not increasing.");
+                // break;
             }
             expectedBreaks[breakPos] = true;
             expected[expectedCount ++] = breakPos;
@@ -805,7 +1571,6 @@ public void TestLineMonkey() {
     
     int        loopCount = 500;
     int        seed      = 1;
-    String     breakType = "all";
     
     if (params.inclusion >= 9) {
         loopCount = 10000;
@@ -817,7 +1582,7 @@ public void TestLineMonkey() {
     if (params == null) {
         loopCount = 50;
     }
-    // RunMonkey(bi, m, "line", seed, loopCount);
+    RunMonkey(bi, m, "line", seed, loopCount);
 }
 
 }
