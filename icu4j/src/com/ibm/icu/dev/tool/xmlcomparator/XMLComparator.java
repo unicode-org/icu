@@ -774,6 +774,8 @@ public class XMLComparator {
         Node spaces = destDoc.createTextNode("\n       ");
         
         for (childOfSource = source.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
+            String dNodeVal = dest.getFirstChild().getNodeValue();
+            String sNodeVal = childOfSource.getNodeValue();
             if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
@@ -784,6 +786,8 @@ public class XMLComparator {
             }
             boolean didMerge = false;
             for (childOfDest = dest.getFirstChild(); childOfDest != null; childOfDest = childOfDest.getNextSibling()) {
+                String childNodeName = childOfDest.getNodeName();
+                String childNodeVal = childOfDest.getNodeValue();
                 if (childOfDest.getNodeType() == Node.ELEMENT_NODE  &&
                        childOfDest.getNodeName().equals(childOfSource.getNodeName())) {
                     // The destination document already has an element of this type at this level.
