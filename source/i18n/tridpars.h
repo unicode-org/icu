@@ -59,7 +59,7 @@ class TransliteratorIDParser {
      * 'filter' is the parsed filter pattern, or null if there was no
      * filter.
      */
-    static class Specs {
+    class Specs {
     public:
         UnicodeString source; // not null
         UnicodeString target; // not null
@@ -86,7 +86,7 @@ class TransliteratorIDParser {
      * 'filter' may be null, if there is none, or non-null and
      * non-empty.
      */
-    static class SingleID {
+    class SingleID {
     public:
         UnicodeString canonID;
         UnicodeString basicID;
