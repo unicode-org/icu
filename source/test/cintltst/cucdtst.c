@@ -1852,6 +1852,10 @@ static void TestUScriptCodeAPI(){
         i=0;
         while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
             const char* name = uscript_getName(testAbbr[i]);
+            if(name == NULL) {
+              log_data_err("Couldn't get script name\n");
+              return;
+            }
             numErrors=0;
             if(strcmp(expectedNames[i],name)!=0){
                 log_err("Error getting abbreviations Got: %s Expected: %s\n",name,expectedNames[i]);

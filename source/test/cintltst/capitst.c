@@ -604,6 +604,10 @@ void TestSafeClone() {
     someCollators[0] = ucol_open("en_US", &err);
     someCollators[1] = ucol_open("ko", &err);
     someCollators[2] = ucol_open("ja_JP", &err);
+    if(U_FAILURE(err)) {
+      log_data_err("Couldn't open one or more collators\n");
+      return;
+    }
 
     /* Check the various error & informational states: */
 
