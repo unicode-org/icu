@@ -22,52 +22,53 @@
 const UDate CalendarRegressionTest::EARLIEST_SUPPORTED_MILLIS = - 4503599627370495.0;
 const UDate CalendarRegressionTest::LATEST_SUPPORTED_MILLIS    =   4503599627370495.0;
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
+#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 void 
 CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
-        CASE(0,test4100311)
-        CASE(1,test4074758)
-        CASE(2,test4028518)
-        CASE(3,test4031502)
-        CASE(4,test4035301) 
-        CASE(5,test4040996) 
-        CASE(6,test4051765) 
-        CASE(7,test4061476) 
-        CASE(8,test4070502) 
-        CASE(9,test4071197) 
-        CASE(10,test4071385) 
-        CASE(11,test4073929) 
-        CASE(12,test4083167) 
-        CASE(13,test4086724) 
-        CASE(14,test4095407) 
-        CASE(15,test4096231) 
-        CASE(16,test4096539) 
-        CASE(17,test41003112) 
-        CASE(18,test4103271) 
-        CASE(19,test4106136) 
-        CASE(20,test4108764) 
-        CASE(21,test4114578) 
-        CASE(22,test4118384) 
-        CASE(23,test4125881) 
-        CASE(24,test4125892) 
-        CASE(25,test4141665) 
-        CASE(26,test4142933) 
-        CASE(27,test4145158) 
-        CASE(28,test4145983) 
-        CASE(29,test4147269) 
+        CASE(0,test4100311);
+        CASE(1,test4074758);
+        CASE(2,test4028518);
+        CASE(3,test4031502);
+        CASE(4,test4035301);
+        CASE(5,test4040996);
+        CASE(6,test4051765);
+        CASE(7,test4061476);
+        CASE(8,test4070502);
+        CASE(9,test4071197);
+        CASE(10,test4071385);
+        CASE(11,test4073929);
+        CASE(12,test4083167);
+        CASE(13,test4086724);
+        CASE(14,test4095407);
+        CASE(15,test4096231);
+        CASE(16,test4096539);
+        CASE(17,test41003112);
+        CASE(18,test4103271);
+        CASE(19,test4106136);
+        CASE(20,test4108764);
+        CASE(21,test4114578);
+        CASE(22,test4118384);
+        CASE(23,test4125881);
+        CASE(24,test4125892);
+        CASE(25,test4141665);
+        CASE(26,test4142933);
+        CASE(27,test4145158);
+        CASE(28,test4145983);
+        CASE(29,test4147269);
         
-        CASE(30,Test4149677) 
-        CASE(31,Test4162587) 
-        CASE(32,Test4165343) 
-        CASE(33,Test4166109) 
-        CASE(34,Test4167060) 
-        CASE(35,Test4197699)
-        CASE(36,TestJ81)
-
+        CASE(30,Test4149677);
+        CASE(31,Test4162587);
+        CASE(32,Test4165343);
+        CASE(33,Test4166109);
+        CASE(34,Test4167060);
+        CASE(35,Test4197699);
+        CASE(36,TestJ81);
+        CASE(37,TestJ438);
+        
     default: name = ""; break;
     }
 }
@@ -1895,6 +1896,78 @@ void CalendarRegressionTest::TestJ81() {
     }
 }
         
+/**
+ * Test fieldDifference().
+ */
+void CalendarRegressionTest::TestJ438(void) {
+    UErrorCode ec = U_ZERO_ERROR;
+    int32_t DATA[] = {
+        2000, Calendar::JANUARY, 20,   2010, Calendar::JUNE, 15,
+        2010, Calendar::JUNE, 15,      2000, Calendar::JANUARY, 20,
+        1964, Calendar::SEPTEMBER, 7,  1999, Calendar::JUNE, 4,
+        1999, Calendar::JUNE, 4,       1964, Calendar::SEPTEMBER, 7,
+    };
+    int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
+    Calendar* pcal = Calendar::createInstance(Locale::US, ec);
+    Calendar& cal = *pcal;
+    int32_t i;
+    SimpleDateFormat fmt(UnicodeString("MMM dd yyyy",""), ec);
+    fmt.setCalendar(cal);
+    UnicodeString s, t, u;
+    if (failure(ec, "setup")) goto err;
+    for (i=0; i<DATA_length; i+=6) {
+        int32_t y1 = DATA[i];
+        int32_t m1 = DATA[i+1];
+        int32_t d1 = DATA[i+2];
+        int32_t y2 = DATA[i+3];
+        int32_t m2 = DATA[i+4];
+        int32_t d2 = DATA[i+5];
+
+        cal.clear();
+        cal.set(y1, m1, d1);
+        UDate date1 = cal.getTime(ec);
+        if (failure(ec, "getTime")) goto err;
+        cal.set(y2, m2, d2);
+        UDate date2 = cal.getTime(ec);
+        if (failure(ec, "getTime")) goto err;
+
+        cal.setTime(date1, ec);
+        if (failure(ec, "setTime")) goto err;
+        int32_t dy = cal.fieldDifference(date2, Calendar::YEAR, ec);
+        int32_t dm = cal.fieldDifference(date2, Calendar::MONTH, ec);
+        int32_t dd = cal.fieldDifference(date2, Calendar::DATE, ec);
+        if (failure(ec, "fieldDifference")) goto err;
+
+        logln(UnicodeString("") +
+              fmt.format(date2, s.remove()) + " - " +
+              fmt.format(date1, t.remove()) + " = " +
+              dy + "y " + dm + "m " + dd + "d");
+
+        cal.setTime(date1, ec);
+        if (failure(ec, "setTime")) goto err;
+        cal.add(Calendar::YEAR, dy, ec);
+        cal.add(Calendar::MONTH, dm, ec);
+        cal.add(Calendar::DATE, dd, ec);
+        if (failure(ec, "add")) goto err;
+        UDate date22 = cal.getTime(ec);
+        if (failure(ec, "getTime")) goto err;
+        if (date2 != date22) {
+            errln(UnicodeString("FAIL: ") +
+                  fmt.format(date1, s.remove()) + " + " +
+                  dy + "y " + dm + "m " + dd + "d = " +
+                  fmt.format(date22, t.remove()) + ", exp " +
+                  fmt.format(date2, u.remove()));
+        } else {
+            logln(UnicodeString("Ok: ") +
+                  fmt.format(date1, s.remove()) + " + " +
+                  dy + "y " + dm + "m " + dd + "d = " +
+                  fmt.format(date22, t.remove()));
+        }
+    }
+ err:
+    delete pcal;
+}
+
 UDate
 CalendarRegressionTest::makeDate(int32_t y, int32_t m, int32_t d,
                                     int32_t hr, int32_t min, int32_t sec)
