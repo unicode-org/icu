@@ -423,7 +423,7 @@ public final class UniversalTimeScale
      * This class holds the data that describes a particular
      * time scale.
      *
-     * @draft ICU 3.2
+     * @internal
      */
     private static final class TimeScaleData
     {
@@ -453,52 +453,12 @@ public final class UniversalTimeScale
             fromMax = theFromMax;
         }
         
-        /**
-         * The units of the time scale, expressed in ticks.
-         * 
-         * @draft ICU 3.2
-         */
-        public long units;
-        
-        /**
-         * The distance from the Universal Time Scale's epoch to the
-         * time scale's epoch expressed in the time scale's units.
-         * 
-         * @draft ICU 3.2
-         */
-        public long epochOffset;
-        
-        /**
-         * The minimum time scale value that can be conveted
-         * to the Universal Time Scale without underflowing.
-         * 
-         * @draft ICU 3.2
-         */
-        public long fromMin;
-        
-        /**
-         * The maximum time scale value that can be conveted
-         * to the Universal Time Scale without overflowing.
-         * 
-         * @draft ICU 3.2
-         */
-        public long fromMax;
-        
-        /**
-         * The minimum Universal Time Scale value that can
-         * be converted to the time scale without underflowing.
-         * 
-         * @draft ICU 3.2
-         */
-        public long toMin;
-        
-        /**
-         * The maximum Universal Time Scale value that can
-         * be converted to the time scale without overflowing.
-         * 
-         * @draft ICU 3.2
-         */
-        public long toMax;
+        long units;
+        long epochOffset;
+        long fromMin;
+        long fromMax;
+        long toMin;
+        long toMax;
         
         long epochOffsetP1;
         long epochOffsetM1;
