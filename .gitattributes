@@ -142,6 +142,7 @@ icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
 icu4j/readme.html svneol=native#text/html
 icu4j/src/com/ibm/data/misc/english.dict -text svneol=native#application/octet-stream
+icu4j/src/com/ibm/data/misc/words.txt svneol=native#unset
 icu4j/src/com/ibm/demo/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/package.html svneol=native#text/html
@@ -152,6 +153,7 @@ icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/demo/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
+icu4j/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#unset
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
