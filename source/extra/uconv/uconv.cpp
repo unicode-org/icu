@@ -584,7 +584,7 @@ static UBool convertFile(const char *pname,
 	// At the last conversion flush should be set to true to ensure that 
 	// all characters left get converted
 
-        unibufbp = u.getBuffer();
+        const UChar *unibufu = unibufbp = u.getBuffer();
 
         do {
             int32_t len = ulen > bufsz ? bufsz : ulen;
@@ -603,7 +603,7 @@ static UBool convertFile(const char *pname,
                 uint32_t erroffset =
                     dataOffset(fromoffsets, bufp - buf, tooffsets);
                 
-                sprintf(pos, "%u", foffset - (unibufp - unibuf) + erroffset);
+                sprintf(pos, "%u", foffset - (unibufp - unibufu) + erroffset);
                 UnicodeString str(pos, strlen(pos) + 1);
                 initMsg(pname);
                 u_wmsg("problemCvtFromU", str.getBuffer(),
@@ -613,7 +613,7 @@ static UBool convertFile(const char *pname,
 
             // At the last conversion, the converted characters should be equal to number
             // of consumed characters.
-            if (flush && unibufbp != (unibuf + (size_t) (unibufp - unibuf))) {
+            if (flush && unibufbp != (unibufu + (size_t) (unibufp - unibufu))) {
                 char pos[32];
                 sprintf(pos, "%u", foffset);
                 UnicodeString str(pos, strlen(pos) + 1);
