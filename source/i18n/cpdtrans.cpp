@@ -13,7 +13,6 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/unifilt.h"
-#include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
 #include "cpdtrans.h"
 #include "uvector.h"
