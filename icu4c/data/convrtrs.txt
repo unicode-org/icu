@@ -75,7 +75,7 @@ UTF32_PlatformEndian	 ISO-10646-UCS-4 { IANA	} csUCS4 utf-32 { MIME } ucs-4
 UTF32_OppositeEndian
 LATIN_1			 iso-8859-1	{ MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
 ISO_2022			 ISO-2022 { MIME } 2022 cp2022
-ISO_2022,locale=ja,version=0	 ISO-2022-JP { IANA } csISO2022JP
+ISO_2022,locale=ja,version=0	 ISO-2022-JP { IANA MIME } csISO2022JP
 ISO_2022,locale=ja,version=1	 ISO-2022-JP-1
 ISO_2022,locale=ja,version=2	 ISO-2022-JP-2 { IANA MIME } csISO2022JP2
 ISO_2022,locale=ko		 ISO-2022-KR { IANA MIME } csISO2022KR
@@ -114,11 +114,11 @@ ibm-916			iso-8859-8 { MIME } hebrew cp916 8859-8	csisolatinhebrew iso-ir-138 IS
 ibm-920			iso-8859-9 { MIME } ECMA-128 latin5	cp920 8859-9 csisolatin5 iso-ir-148 ISO_8859-9:1989 { IANA } l5 # Turkish
 ibm-923			iso-8859-15	{ MIME } latin9 cp923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
 ibm-1252		windows-1252  {	MIME } cp1252 ibm-1004 cp1004	     # Windows Latin 1 We don't	have an ibm-5348, so this is a best	possible match
-ibm-943			Shift_JIS {	MIME } csWindows31J     sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
+ibm-943			Shift_JIS { MIME } csWindows31J     sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
 ibm-949			KS_C_5601-1987 { IANA }	iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 { MIME } johab ks_x_1001:1992	     # KSC-5601-1992, korean
-ibm-1370		big5 { MIME	} csBig5 x-big5 cp950 # Taiwan Big-5 (w/ euro update)
+ibm-1370		Big5 { MIME	} csBig5 x-big5 cp950 # Taiwan Big-5 (w/ euro update)
 ibm-950			# Taiwan Big-5 (w/o euro update)
-ibm-1386		GB_2312-80 { IANA } iso-ir-58 csISO58GB231280 gbk chinese gb { MIME } gb2312 gb2312-1980 cp936 zh_cn # Chinese GBK removed
+ibm-1386		GB_2312-80 { IANA } iso-ir-58 csISO58GB231280 gbk chinese gb  GB2312 { MIME } gb2312-1980 cp936 zh_cn # Chinese GBK removed
 ibm-33722		EUC-JP { MIME }	ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese X-EUC-JP  # Japan EUC
 ibm-970			EUC-KR { IANA MIME } ibm-eucKR csEUCKR			     # Korean EUC
 ibm-964			EUC-TW { MIME }	ibm-eucTW cns11643		# Taiwan EUC
