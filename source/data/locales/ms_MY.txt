@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
+// *   Copyright (C) 2001-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *   Generated from Universal Locales for Linux Project
 // ***************************************************************************
@@ -18,9 +18,9 @@ ms_MY {
         "hh:mm:ss  z",
         "hh:mm:ss  z",
         "EEEE dd MMM yyyy",
-        "EEEE dd MMM yyyy",
-        "EEEE dd MMM yyyy",
-        "EEEE dd MMM yyyy",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd/MM/yyyy",
         "{1} {0}",
     }
 

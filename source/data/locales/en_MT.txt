@@ -26,13 +26,13 @@ en_MT {
     }
 
     DateTimePatterns {
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
         "dd MMMM yyyy",
         "dd MMMM yyyy",
-        "dd-MMM-yy",
+        "dd-MMM-yyyy",
         "dd/MM/yy",
         "{1} {0}",
     }

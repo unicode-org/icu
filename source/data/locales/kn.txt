@@ -6,8 +6,14 @@
 // ***************************************************************************
 
 kn {
-    Version{ "x0.2" }
+    Version{ "x0.3" }
     LocaleID:int { 0x4B }
+    Countries {
+        IN { "\u0cad\u0cbe\u0cb0\u0ca4" }
+    }
+    Languages {
+        kn { "\u0c95\u0ca8\u0ccd\u0ca8\u0ca1" }
+    }
     AmPmMarkers{
         "\u0CAA\u0CC2\u0CB0\u0CCD\u0CB5\u0CBE\u0CB9\u0CCD\u0CA8",
         "\u0C85\u0CAA\u0CB0\u0CBE\u0CB9\u0CCD\u0CA8"

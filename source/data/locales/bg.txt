@@ -48,7 +48,7 @@ bg {
         "HH:mm:ss z",
         "HH:mm:ss z",
         "HH:mm:ss",
-        "H:mm",
+        "HH:mm",
         "dd MMMM yyyy, EEEE",
         "dd MMMM yyyy",
         "dd.MM.yy",

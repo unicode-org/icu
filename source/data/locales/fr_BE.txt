@@ -14,9 +14,9 @@ fr_BE {
     }
     DateTimePatterns { 
         "H' h 'mm' min 'ss' s 'z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
         "EEEE d MMMM yyyy",
         "d MMMM yyyy",
         "dd-MMM-yy",

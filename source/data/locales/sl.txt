@@ -23,10 +23,10 @@ sl {
         "H:mm:ss z",
         "H:mm:ss",
         "H:mm",
-        "EEEE, yyyy, MMMM d",
-        "EEEE, yyyy, MMMM d",
+        "EEEE, dd. MMMM yyyy",
+        "dd. MMMM yyyy",
         "yyyy.M.d",
-        "y.M.d",
+        "yy.M.d",
         "{1} {0}",
     }
     DayAbbreviations { 

@@ -26,7 +26,7 @@ en_IE {
         1,
     }
     DateTimePatterns { 
-        "HH:mm:ss 'o''clock' z",
+        "HH:mm:ss z",
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",

@@ -753,8 +753,8 @@ mt {
         "h:mm:ss a",
         "h:mm a",
         "EEEE, d 'ta''' MMMM, yyyy",
-        "d 'ta''' MMMM",
-        "dd/MM/yy",
+        "d 'ta''' MMMM yyyy",
+        "dd-MMM-yyyy",
         "dd/MM/yy",
         "{1} {0}"
     }
