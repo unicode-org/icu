@@ -26,7 +26,7 @@
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
 #include "unicode/parsepos.h"
-
+#include "unicode/parseerr.h" 
 /**
  * Base class for all formats.  This is an abstract base class which
  * specifies the protocol for classes which convert other objects or
@@ -236,6 +236,12 @@ protected:
      * @stable
      */
     Format& operator=(const Format&); // Does nothing; for subclasses
+
+       
+    inline void syntaxError(const UnicodeString& pattern,
+                            int32_t pos,
+                            UParseError& parseError,
+                            UErrorCode& status);
 };
 
 #endif // _FORMAT

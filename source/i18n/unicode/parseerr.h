@@ -47,7 +47,7 @@ typedef struct _UParseError {
      * Parse engines should define the enum PARSE_ERROR_BASE
      * to be 0xNNNN0000.
      */
-    int32_t        code;
+    //int32_t        code;
 
     /**
      * The line on which the error occured.  If the parse engine

@@ -28,7 +28,6 @@
 #include "unicode/numfmt.h"
 #include "unicode/fieldpos.h"
 #include "unicode/format.h"
-
 /**
  * <p><code>ChoiceFormat</code> converts between ranges of numeric values
  * and string names for those ranges. A <code>ChoiceFormat</code> splits
@@ -330,6 +329,19 @@ public:
                               UErrorCode& status);
 
     /**
+     * Sets the pattern.
+     * @param pattern    The pattern to be applied.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param status     Output param set to success/failure code on
+     *                   exit. If the pattern is invalid, this will be
+     *                   set to a failure result.
+     * @draft
+     */
+    virtual void applyPattern(const UnicodeString& pattern,
+                             UParseError& parseError,
+                             UErrorCode& status);
+    /**
      * Gets the pattern.
      * @stable
      */
@@ -564,8 +576,8 @@ public:
 
 private:
     // static cache management (thread-safe)
-    static NumberFormat* getNumberFormat(UErrorCode &status); // call this function to 'check out' a numberformat from the cache.
-    static void          releaseNumberFormat(NumberFormat *adopt); // call this function to 'return' the number format to the cache.
+  //  static NumberFormat* getNumberFormat(UErrorCode &status); // call this function to 'check out' a numberformat from the cache.
+  //  static void          releaseNumberFormat(NumberFormat *adopt); // call this function to 'return' the number format to the cache.
     
     /**
      * Converts a string to a double value using a default NumberFormat object
@@ -586,13 +598,26 @@ private:
      */
     static UnicodeString& dtos(double value, UnicodeString& string, UErrorCode& status);
 
-    static UMTX fgMutex;
-    static NumberFormat* fgNumberFormat;
+    //static UMTX fgMutex;
+    //static NumberFormat* fgNumberFormat;
     static char fgClassID;
 
     static const UChar fgPositiveInfinity[];
     static const UChar fgNegativeInfinity[];
+    /**
+     * Construct a new ChoiceFormat with the limits and the corresponding formats
+     * based on the pattern.
+     *
+     * @param pattern   Pattern used to construct object.
+     * @param status    Output param to receive success code.  If the
+     *                  pattern cannot be parsed, set to failure code.
+     * @stable
+     */
+    ChoiceFormat(const UnicodeString& newPattern,
+                 UParseError& parseError,
+                 UErrorCode& status);
 
+    friend class MessageFormat;
     /**
      * Each ChoiceFormat divides the range -Inf..+Inf into fCount
      * intervals.  The intervals are:
