@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Jun-11<br>
+    <p>Version: 2002-Jul-22<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -60,7 +60,7 @@
 
           <li><a href="#HowToBuildUnix">Unix</a></li>
 
-          <li><a href="#HowToBuildOS390">OS/390 (zSeries)</a></li>
+          <li><a href="#HowToBuildZOS">z/OS (os/390)</a></li>
 
           <li><a href="#HowToBuildOS400">OS/400 (iSeries)</a></li>
         </ul>
@@ -855,8 +855,8 @@
 
       <li>A recent version of GNU make (3.7+).</li>
 
-      <li>For a list of OS/390 tools please view the <a href=
-      "#HowToBuildOS390">OS/390 build section</a> of this document for further
+      <li>For a list of z/OS tools please view the <a href=
+      "#HowToBuildZOS">z/OS build section</a> of this document for further
       details.</li>
     </ul>
 
@@ -926,20 +926,24 @@
     the packaging scripts or related files are not up to date with the contents
     of ICU at this time, so use them with caution).</p>
 
-    <h3><a name="HowToBuildOS390" href="#HowToBuildOS390">OS/390 (zSeries)
+    <h3><a name="HowToBuildZOS" href="#HowToBuildZOS">z/OS (os/390)
     Platform</a></h3>
 
-    <p>If you are building on the OS/390 UNIX System Services platform, it is
+    <p>If you are building on the z/OS UNIX System Services platform, it is
     important that you understand a few details:</p>
 
     <ul>
+      <li>Older versions of os/390 may require APAR PQ58391 in order to get
+      some ICU number formatting functions to work properly. This APAR (patch)
+      is not needed for z/OS 1.2 or later.</li>
+
       <li>The gnu utilities gmake and gzip/gunzip are needed and can be
-      obtained for OS/390 from <a href=
+      obtained for z/OS from <a href=
       "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
       z/OS Unix - Tools and Toys</a>. Documentation on these tools can be found
       at the <a href=
       "http://publib-b.boulder.ibm.com/Redbooks.nsf/RedbookAbstracts/sg245944.html">
-      Open Source Software for OS/390 UNIX</a> Red Book.</li>
+      Open Source Software for z/OS UNIX</a> Red Book.</li>
 
       <li>Encoding considerations: The source code assumes that it is compiled
       with codepage ibm-1047 (to be exact, the UNIX System Services variant of
@@ -951,11 +955,11 @@
       and convert all the necessary files for you automatically.</li>
 
       <li>
-        <p>OS/390 supports both native S/390 hexadecimal floating point and,
+        <p>z/OS supports both native S/390 hexadecimal floating point and,
         (with Version 2.6 and later) IEEE binary floating point. This is a
         compile time option. Applications built with IEEE should use ICU dlls
         that are built with IEEE (and vice versa). The environment variable
-        IEEE390=1 will cause the OS/390 version of ICU to be built with IEEE
+        IEEE390=1 will cause the z/OS version of ICU to be built with IEEE
         floating point. The default is native hexadecimal floating point.<br>
          <em>Important:</em> Currently (ICU 1.4.2), native floating point
         support is sufficient for codepage conversion, resource bundle and
@@ -968,49 +972,29 @@
          Release build: <code>IEEE390=1 ./runConfigureICU zOS/cxx</code></p>
       </li>
 
-      <li>Since the default make on OS/390 is not gmake, the pkgdata tool
+      <li>Since the default make on z/OS is not gmake, the pkgdata tool
       requires that the "make" command is aliased to your installed version of
       gmake.</li>
 
-      <li>The makedep executable that is used with the OS/390 ICU build process
+      <li>The makedep executable that is used with the z/OS ICU build process
       is not shipped with ICU. It is available at the <a href=
       "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
       z/OS Unix - Tools and Toys</a> site. The PATH environment variable should
       be updated to contain the location of this executable prior to build.
       Alternatively, makedep may be moved into an existing PATH directory.</li>
 
-      <li>
-        To run all of the tests for ICU, use "gmake check". When running
-        individual tests of the test suite, the TZ environment variable should
-        be set to export TZ="PST8PDT" so that time zone comparisons are
-        correct. Building and testing ICU without using gmake requires that the
-        ICU libraries in the LIBPATH. In other words, the LIBPATH should
-        contain (each path prepended with the root directory that contains the
-        icu directory): 
-
-        <ul>
-          <li>icu/source/common</li>
-
-          <li>icu/source/data</li>
-
-          <li>icu/source/i18n</li>
-
-          <li>icu/source/tools/ctestfw</li>
-
-          <li>icu/source/tools/toolutil</li>
-
-          <li>icu/source/extra/ustdio</li>
-        </ul>
-      </li>
+      <li>The rest of the instructions for building and testing ICU on z/OS
+      with Unix System Services are the same as the <a href=
+      "#HowToBuildUnix">How To Build And Install On Unix</a> section.</li>
     </ul>
 
-    <h4>OS/390 Batch (PDS) support</h4>
+    <h4>z/OS Batch (PDS) support</h4>
 
     <p>By default, ICU builds its libraries into the HFS. However, there is a
-    390-specific switch to build some libraries into PDS files. The switch is
+    z/OS specific switch to build some libraries into PDS files. The switch is
     the environmental variable OS390BATCH, and if set, the following libraries
     are built into PDS files: libicuuc<i>XX</i>.dll, libicudt<i>XX</i>e.dll,
-    libicudt<i>XX</i>e_390.dll, and libtestdata.dll. Turning on OS390BATCH does
+    libicudt<i>XX</i>e_stub.dll, and libtestdata.dll. Turning on OS390BATCH does
     not turn off the normal HFS build, thus the HFS dlls will always be
     created.</p>
 
@@ -1024,7 +1008,7 @@
 <pre>
 <samp>IXMI<i>XX</i>UC --&gt; libicuuc<i>XX</i>.dll
 IXMI<i>XX</i>DA --&gt; libicudt<i>XX</i>e.dll
-IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_390.dll</samp>
+IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_stub.dll <i>(When OS390_STUBDATA = 1)</i></samp>
 </pre>
 
     <p>Example PDS attributes are as follows:</p>
@@ -1300,7 +1284,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
     <p>Starting in ICU 2.0, when a converter for the default codepage cannot be
     opened, a fallback default codepage name and converter will be used. On
-    most platforms, this will be US-ASCII. For OS/390 (z/OS), ibm-1047-s390 is
+    most platforms, this will be US-ASCII. For z/OS (OS/390), ibm-1047-s390 is
     the default fallback codepage. For AS/400 (iSeries), ibm-37 is the default
     fallback codepage. This default fallback codepage is used when the
     operating system is using a non-standard name for a default codepage, or
@@ -1453,15 +1437,17 @@ int main(){
 
       <li>gencnval</li>
 
+      <li>gennames</li>
+
+      <li>gennorm</li>
+
       <li>genrb</li>
+
+      <li>genbrk</li>
 
       <li>gentz</li>
 
-      <li>gennames</li>
-
       <li>genuca</li>
-
-      <li>gennorm</li>
 
       <li>genccode</li>
 
@@ -1473,6 +1459,8 @@ int main(){
 
       <li>ctestfw, intltest and cintltst, if you want to run the test
       suite.</li>
+
+      <li>uconv and ustdio can also be optionally built.</li>
     </ol>
     <hr>
 
