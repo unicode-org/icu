@@ -23,31 +23,10 @@
 #define LATIN1_UNROLL_FROM_UNICODE 1
 #define ASCII_UNROLL_TO_UNICODE 1
 
-/* Prototypes --------------------------------------------------------------- */
-
-/* Keep these here to make finicky compilers happy */
-
-U_CFUNC void
-_Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                            UErrorCode *pErrorCode);
-U_CFUNC UChar32
-_Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
-                    UErrorCode *pErrorCode);
-U_CFUNC void
-_Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                              UErrorCode *pErrorCode);
-U_CFUNC void
-_ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                           UErrorCode *pErrorCode);
-U_CFUNC UChar32
-_ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
-                   UErrorCode *pErrorCode);
-
-
 /* ISO 8859-1 --------------------------------------------------------------- */
 
 /* This is a table-less and callback-less version of _MBCSSingleToBMPWithOffsets(). */
-U_CFUNC void
+static void
 _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     const uint8_t *source;
@@ -147,7 +126,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 }
 
 /* This is a table-less and callback-less version of _MBCSSingleGetNextUChar(). */
-U_CFUNC UChar32
+static UChar32
 _Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
                     UErrorCode *pErrorCode) {
     const uint8_t *source=(const uint8_t *)pArgs->source;
@@ -162,7 +141,7 @@ _Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
 }
 
 /* This is a table-less version of _MBCSSingleFromBMPWithOffsets(). */
-U_CFUNC void
+static void
 _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -485,7 +464,7 @@ const UConverterSharedData _Latin1Data={
 /* US-ASCII ----------------------------------------------------------------- */
 
 /* This is a table-less version of _MBCSSingleToBMPWithOffsets(). */
-U_CFUNC void
+static void
 _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                            UErrorCode *pErrorCode) {
     const uint8_t *source, *sourceLimit, *lastSource;
@@ -671,7 +650,7 @@ unrolled:
 }
 
 /* This is a table-less version of _MBCSSingleGetNextUChar(). */
-U_CFUNC UChar32
+static UChar32
 _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
