@@ -21,8 +21,10 @@
 #include "unicode/ures.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/ucnv.h"
+#include "unicode/uclean.h"
 
 #include "intltest.h"
+#include "caltztst.h"
 #include "itmajor.h"
 
 #ifdef XP_MAC_CONSOLE
@@ -1060,6 +1062,14 @@ main(int argc, char* argv[])
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
+    /* Call it twice to make sure that the defaults were reset */
+    u_cleanup();
+    u_cleanup();
+
+    /* delete these just to see how delete reacts to u_cleanup().
+       This is done in the wrong order on purpose.
+       Normally this should happen first */
+    CalendarTimeZoneTest::cleanup();
 
     return major.getErrors();
 }
