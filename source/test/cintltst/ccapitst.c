@@ -1084,13 +1084,19 @@ static void TestAlias() {
 
 static void TestConvertSafeClone()
 {
-#define CLONETEST_CONVERTER_COUNT 6
+#define CLONETEST_CONVERTER_COUNT 8
 
-    char charBuffer [10];
+    char charBuffer [20];
     char *pCharBuffer;
     const char *pConstCharBuffer;
     const char *charBufferLimit = charBuffer + sizeof(charBuffer)/sizeof(*charBuffer);
     UChar uniBuffer [] = {0x0058, 0x0059, 0x005A}; /* "XYZ" */
+    UChar uniCharBuffer [20];
+    char  charSourceBuffer [] = { 0x1b, 0x24, 0x42 };
+    char  *pCharSource = charSourceBuffer;
+    char  *pCharSourceLimit  = charSourceBuffer + sizeof(charSourceBuffer);
+    UChar *pUCharTarget = uniCharBuffer;
+    UChar *pUCharTargetLimit = uniCharBuffer + sizeof(uniCharBuffer);
     const UChar * pUniBuffer;
     const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
     int index;
@@ -1109,7 +1115,9 @@ static void TestConvertSafeClone()
     someConverters[3] = ucnv_open("HZ", &err);
     someConverters[4] = ucnv_open("lmbcs", &err);
     someConverters[5] = ucnv_open("ISCII,version=0",&err);
-
+    someConverters[6] = ucnv_open("ISO_2022,locale=kr,version=1",&err);
+    someConverters[7] = ucnv_open("ISO_2022,locale=jp,version=1",&err);
+    
     /* Check the various error & informational states: */
 
     /* Null status - just returns NULL */
@@ -1195,11 +1203,27 @@ static void TestConvertSafeClone()
                         NULL,
                         TRUE,
                         &err);
+        if(U_FAILURE(err)){
+            log_err("FAIL: cloned converter failed to do fromU conversion. Error: %s\n",u_errorName(err));
+        }
+        ucnv_toUnicode(someClonedConverters[index],
+                       &pUCharTarget,
+                       pUCharTargetLimit,
+                       &pCharSource,
+                       pCharSourceLimit,
+                       NULL,
+                       TRUE,
+                       &err
+                       );
+
+        if(U_FAILURE(err)){
+            log_err("FAIL: cloned converter failed to do toU conversion. Error: %s\n",u_errorName(err));
+        }
 
         pConstCharBuffer = charBuffer;
         if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pConstCharBuffer, pCharBuffer, &err))
         {
-            log_err("FAIL: Cloned converter failed to do conversion\n");
+            log_err("FAIL: Cloned converter failed to do conversion. Error: %s\n",u_errorName(err));
         }
         ucnv_close(someClonedConverters[index]);
         ucnv_close(someConverters[index]);
