@@ -33,9 +33,14 @@ const char gUsageString[] =
     "-unix                      Run test using Unix strxfrm, strcoll services.\n"
     "-uselen                    Use API with string lengths.  Default is null-terminated strings\n"
     "-usekeys                   Run tests using sortkeys rather than strcoll\n"
+    "-strcmp                    Run tests using u_strcmp rather than strcoll\n"
+    "-strcmpCPO                 Run tests using u_strcmpCodePointOrder rather than strcoll\n"
     "-loop nnnn                 Loopcount for test.  Adjust for reasonable total running time.\n"
+    "-iloop n                   Inner Loop Count.  Default = 1.  Number of calls to function\n"
+    "                               under test at each call point.  For measuring test overhead.\n"
     "-terse                     Terse numbers-only output.  Intended for use by scripts.\n"
     "-french                    French accent ordering\n"
+    "-frenchoff                 No French accent ordering (for use with French locales.)\n"
     "-norm                      Normalizing mode on\n"
     "-shifted                   Shifted mode\n"
     "-lower                     Lower case first\n"
@@ -102,6 +107,7 @@ int    opt_langid     = 0;         // Defaults to value corresponding to opt_loc
 char * opt_rules      = 0;
 UBool  opt_help       = FALSE;
 int    opt_loopCount  = 1;
+int    opt_iLoopCount = 1;
 UBool  opt_terse      = FALSE;
 UBool  opt_qsort      = FALSE;
 UBool  opt_binsearch  = FALSE;
@@ -110,9 +116,12 @@ UBool  opt_win        = FALSE;      // Run with Windows native functions.
 UBool  opt_unix       = FALSE;      // Run with UNIX strcoll, strxfrm functions.
 UBool  opt_uselen     = FALSE;
 UBool  opt_usekeys    = FALSE;
+UBool  opt_strcmp     = FALSE;
+UBool  opt_strcmpCPO  = FALSE;
 UBool  opt_norm       = FALSE;
 UBool  opt_keygen     = FALSE;
 UBool  opt_french     = FALSE;
+UBool  opt_frenchoff  = FALSE;
 UBool  opt_shifted    = FALSE;
 UBool  opt_lower      = FALSE;
 UBool  opt_upper      = FALSE;
@@ -145,8 +154,11 @@ OptSpec opts[] = {
     {"-unix",        OptSpec::FLAG,   &opt_unix},
     {"-uselen",      OptSpec::FLAG,   &opt_uselen},
     {"-usekeys",     OptSpec::FLAG,   &opt_usekeys},
+    {"-strcmp",      OptSpec::FLAG,   &opt_strcmp},
+    {"-strcmpCPO",   OptSpec::FLAG,   &opt_strcmpCPO},
     {"-norm",        OptSpec::FLAG,   &opt_norm},
     {"-french",      OptSpec::FLAG,   &opt_french},
+    {"-frenchoff",   OptSpec::FLAG,   &opt_frenchoff},
     {"-shifted",     OptSpec::FLAG,   &opt_shifted},
     {"-lower",       OptSpec::FLAG,   &opt_lower},
     {"-upper",       OptSpec::FLAG,   &opt_upper},
@@ -155,6 +167,7 @@ OptSpec opts[] = {
     {"-keyhist",     OptSpec::FLAG,   &opt_keyhist},
     {"-keygen",      OptSpec::FLAG,   &opt_keygen},
     {"-loop",        OptSpec::NUM,    &opt_loopCount},
+    {"-iloop",       OptSpec::NUM,    &opt_iLoopCount},
     {"-terse",       OptSpec::FLAG,   &opt_terse},
     {"-dump",        OptSpec::FLAG,   &opt_dump},
     {"-help",        OptSpec::FLAG,   &opt_help},
@@ -355,6 +368,7 @@ void doKeyGen()
 {
     int  line;
     int  loops;
+    int  iLoop;
     int  t;
     int  len=-1;
 
@@ -372,9 +386,11 @@ void doKeyGen()
                 if (opt_uselen) {
                     len = gFileLines[line].len;
                 }
-                t=LCMapStringW(gWinLCID, LCMAP_SORTKEY,
-                    gFileLines[line].name, len,
-                    (unsigned short *)gFileLines[line].winSortKey, 5000);    // TODO  something with length.
+                for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                    t=LCMapStringW(gWinLCID, LCMAP_SORTKEY,
+                        gFileLines[line].name, len,
+                        (unsigned short *)gFileLines[line].winSortKey, 5000);    // TODO  something with length.
+                }
             }
         }
     }
@@ -385,7 +401,9 @@ void doKeyGen()
                 if (opt_uselen) {
                     len = gFileLines[line].len;
                 }
-                t = ucol_getSortKey(gCol, gFileLines[line].name, len, (unsigned char *)gFileLines[line].icuSortKey, 5000);
+                for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                    t = ucol_getSortKey(gCol, gFileLines[line].name, len, (unsigned char *)gFileLines[line].icuSortKey, 5000);
+                }
             }
         }
     }
@@ -393,7 +411,9 @@ void doKeyGen()
     {
         for (loops=0; loops<adj_loopCount; loops++) {
             for (line=0; line < gNumFileLines; line++) {
+                for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
                 t = strxfrm(gFileLines[line].unixSortKey, gFileLines[line].unixName, 5000);
+                }
             }
         }
     }
@@ -445,6 +465,8 @@ void doBinarySearch()
     gCount = 0;
     int  line;
     int  loops;
+    int  iLoop;
+    unsigned long elapsedTime;
 
     // Adjust loop count to compensate for file size.   Should be order n (lookups) * log n  (compares/lookup)
     // Accurate timings do not depend on this being perfect.  The correction is just to try to
@@ -455,140 +477,203 @@ void doBinarySearch()
     int adj_loopCount = int(dLoopCount);
     if (adj_loopCount < 1) adj_loopCount = 1;
 
-    unsigned long startTime = timeGetTime();
 
-    if (opt_icu )
-    {
-        UCollationResult  r;
-        for (loops=0; loops<adj_loopCount; loops++) {
-
-            for (line=0; line < gNumFileLines; line++) {
-                int lineLen  = -1;
-                int guessLen = -1;
-                if (opt_uselen) {
-                    lineLen = (gSortedLines[line])->len;
-                }
-                int hi      = gNumFileLines-1;
-                int lo      = 0;
-                int  guess = -1;
-                for (;;) {
-                    int newGuess = (hi + lo) / 2;
-                    if (newGuess == guess)
-                        break;
-                    guess = newGuess;
-                    if (opt_usekeys) {
-                        int ri = strcmp((gSortedLines[line])->icuSortKey, (gSortedLines[guess])->icuSortKey);
-                        gCount++;
-                        r=UCOL_GREATER; if(ri<0) {r=UCOL_LESS;} else if (ri==0) {r=UCOL_EQUAL;}
-                    }
-                    else
-                    {
-                        if (opt_uselen) {
-                            guessLen = (gSortedLines[guess])->len;
+    for (;;) {  // not really a loop, just allows "break" to work, to simplify
+                //   inadvertantly running more than one test through here.
+        if (opt_strcmp || opt_strcmpCPO) 
+        {
+            unsigned long startTime = timeGetTime();
+            typedef int32_t (*PF)(const UChar *, const UChar *);
+            PF pf = u_strcmp;
+            if (opt_strcmpCPO) {pf = u_strcmpCodePointOrder;}
+            if (opt_strcmp && opt_win) {pf = (PF)wcscmp;}   // Damn the difference between int32_t and int
+                                                            //   which forces the use of a cast here.
+            
+            int r;
+            for (loops=0; loops<adj_loopCount; loops++) {
+                
+                for (line=0; line < gNumFileLines; line++) {
+                    int hi      = gNumFileLines-1;
+                    int lo      = 0;
+                    int  guess = -1;
+                    for (;;) {
+                        int newGuess = (hi + lo) / 2;
+                        if (newGuess == guess)
+                            break;
+                        guess = newGuess;
+                        for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                            r = (*pf)((gSortedLines[line])->name, (gSortedLines[guess])->name);
                         }
-                        r = ucol_strcoll(gCol, (gSortedLines[line])->name, lineLen, (gSortedLines[guess])->name, guessLen);
                         gCount++;
+                        if (r== 0)
+                            break;
+                        if (r < 0)
+                            hi = guess;
+                        else
+                            lo   = guess;
                     }
-                    if (r== UCOL_EQUAL)
-                        break;
-                    if (r == UCOL_LESS)
-                        hi = guess;
-                    else
-                        lo   = guess;
                 }
             }
+            elapsedTime = timeGetTime() - startTime;
+            break;
         }
-    }
-
-    if (opt_win)
-    {
-        int r;
-        for (loops=0; loops<adj_loopCount; loops++) {
-
-            for (line=0; line < gNumFileLines; line++) {
-                int lineLen  = -1;
-                int guessLen = -1;
-                if (opt_uselen) {
-                    lineLen = (gSortedLines[line])->len;
-                }
-                int hi   = gNumFileLines-1;
-                int lo   = 0;
-                int  guess = -1;
-                for (;;) {
-                    int newGuess = (hi + lo) / 2;
-                    if (newGuess == guess)
-                        break;
-                    guess = newGuess;
-                    if (opt_usekeys) {
-                        r = strcmp((gSortedLines[line])->winSortKey, (gSortedLines[guess])->winSortKey);
-                        gCount++;
-                        r+=2;
+        
+        
+        if (opt_icu)
+        {
+            unsigned long startTime = timeGetTime();
+            UCollationResult  r;
+            for (loops=0; loops<adj_loopCount; loops++) {
+                
+                for (line=0; line < gNumFileLines; line++) {
+                    int lineLen  = -1;
+                    int guessLen = -1;
+                    if (opt_uselen) {
+                        lineLen = (gSortedLines[line])->len;
                     }
-                    else
-                    {
-                        if (opt_uselen) {
-                            guessLen = (gSortedLines[guess])->len;
-                        }
-                        r = CompareStringW(gWinLCID, 0, (gSortedLines[line])->name, lineLen, (gSortedLines[guess])->name, guessLen);
-                        if (r == 0) {
-                            if (opt_terse == FALSE) {
-                                fprintf(stderr, "Error returned from Windows CompareStringW.\n");
+                    int hi      = gNumFileLines-1;
+                    int lo      = 0;
+                    int  guess = -1;
+                    for (;;) {
+                        int newGuess = (hi + lo) / 2;
+                        if (newGuess == guess)
+                            break;
+                        guess = newGuess;
+                        int ri;
+                        if (opt_usekeys) {
+                            for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                                ri = strcmp((gSortedLines[line])->icuSortKey, (gSortedLines[guess])->icuSortKey);
                             }
-                            exit(-1);
+                            gCount++;
+                            r=UCOL_GREATER; if(ri<0) {r=UCOL_LESS;} else if (ri==0) {r=UCOL_EQUAL;}
                         }
-                        gCount++;
+                        else
+                        {
+                            if (opt_uselen) {
+                                guessLen = (gSortedLines[guess])->len;
+                            }
+                            for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                                r = ucol_strcoll(gCol, (gSortedLines[line])->name, lineLen, (gSortedLines[guess])->name, guessLen);
+                            }
+                            gCount++;
+                        }
+                        if (r== UCOL_EQUAL)
+                            break;
+                        if (r == UCOL_LESS)
+                            hi = guess;
+                        else
+                            lo   = guess;
                     }
-                    if (r== 2)   //  strings ==
-                        break;
-                    if (r == 1)  //  line < guess
-                        hi = guess;
-                    else         //  line > guess
-                        lo   = guess;
                 }
             }
+            elapsedTime = timeGetTime() - startTime;
+            break;
         }
-    }
-
-    if (opt_unix)
-    {
-        int r;
-        for (loops=0; loops<adj_loopCount; loops++) {
-
-            for (line=0; line < gNumFileLines; line++) {
-                int hi   = gNumFileLines-1;
-                int lo   = 0;
-                int  guess = -1;
-                for (;;) {
-                    int newGuess = (hi + lo) / 2;
-                    if (newGuess == guess)
-                        break;
-                    guess = newGuess;
-                    if (opt_usekeys) {
-                        r = strcmp((gSortedLines[line])->unixSortKey, (gSortedLines[guess])->unixSortKey);
-                        gCount++;
+        
+        if (opt_win)
+        {
+            unsigned long startTime = timeGetTime();
+            int r;
+            for (loops=0; loops<adj_loopCount; loops++) {
+                
+                for (line=0; line < gNumFileLines; line++) {
+                    int lineLen  = -1;
+                    int guessLen = -1;
+                    if (opt_uselen) {
+                        lineLen = (gSortedLines[line])->len;
                     }
-                    else
-                    {
-                        r = strcoll((gSortedLines[line])->unixName, (gSortedLines[guess])->unixName);
-                        errno = 0;
-                        if (errno != 0) {
-                            fprintf(stderr, "Error %d returned from strcoll.\n", errno);
-                            exit(-1);
+                    int hi   = gNumFileLines-1;
+                    int lo   = 0;
+                    int  guess = -1;
+                    for (;;) {
+                        int newGuess = (hi + lo) / 2;
+                        if (newGuess == guess)
+                            break;
+                        guess = newGuess;
+                        if (opt_usekeys) {
+                            for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                                r = strcmp((gSortedLines[line])->winSortKey, (gSortedLines[guess])->winSortKey);
+                            }
+                            gCount++;
+                            r+=2;
                         }
-                        gCount++;
+                        else
+                        {
+                            if (opt_uselen) {
+                                guessLen = (gSortedLines[guess])->len;
+                            }
+                            for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                                r = CompareStringW(gWinLCID, 0, (gSortedLines[line])->name, lineLen, (gSortedLines[guess])->name, guessLen);
+                            }
+                            if (r == 0) {
+                                if (opt_terse == FALSE) {
+                                    fprintf(stderr, "Error returned from Windows CompareStringW.\n");
+                                }
+                                exit(-1);
+                            }
+                            gCount++;
+                        }
+                        if (r== 2)   //  strings ==
+                            break;
+                        if (r == 1)  //  line < guess
+                            hi = guess;
+                        else         //  line > guess
+                            lo   = guess;
                     }
-                    if (r == 0)   //  strings ==
-                        break;
-                    if (r < 0)  //  line < guess
-                        hi = guess;
-                    else         //  line > guess
-                        lo   = guess;
                 }
             }
+            elapsedTime = timeGetTime() - startTime;
+            break;
         }
+        
+        if (opt_unix)
+        {
+            unsigned long startTime = timeGetTime();
+            int r;
+            for (loops=0; loops<adj_loopCount; loops++) {
+                
+                for (line=0; line < gNumFileLines; line++) {
+                    int hi   = gNumFileLines-1;
+                    int lo   = 0;
+                    int  guess = -1;
+                    for (;;) {
+                        int newGuess = (hi + lo) / 2;
+                        if (newGuess == guess)
+                            break;
+                        guess = newGuess;
+                        if (opt_usekeys) {
+                            for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                                 r = strcmp((gSortedLines[line])->unixSortKey, (gSortedLines[guess])->unixSortKey);
+                            }
+                            gCount++;
+                        }
+                        else
+                        {
+                            for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
+                                r = strcoll((gSortedLines[line])->unixName, (gSortedLines[guess])->unixName);
+                            }
+                            errno = 0;
+                            if (errno != 0) {
+                                fprintf(stderr, "Error %d returned from strcoll.\n", errno);
+                                exit(-1);
+                            }
+                            gCount++;
+                        }
+                        if (r == 0)   //  strings ==
+                            break;
+                        if (r < 0)  //  line < guess
+                            hi = guess;
+                        else         //  line > guess
+                            lo   = guess;
+                    }
+                }
+            }
+            elapsedTime = timeGetTime() - startTime;
+            break;
+        }
+        break;
     }
 
-    unsigned long elapsedTime = timeGetTime() - startTime;
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
     if (opt_terse == FALSE) {
         printf("binary search:  total # of string compares = %d\n", gCount);
@@ -1360,8 +1445,15 @@ int main(int argc, const char** argv) {
     if (opt_norm) {
         ucol_setAttribute(gCol, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     }
+    if (opt_french && opt_frenchoff) {
+        fprintf(stderr, "collperf:  Error, specified both -french and -frenchoff options.");
+        exit(-1);
+    }
     if (opt_french) {
         ucol_setAttribute(gCol, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
+    }
+    if (opt_frenchoff) {
+        ucol_setAttribute(gCol, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
     }
     if (opt_lower) {
         ucol_setAttribute(gCol, UCOL_CASE_FIRST, UCOL_LOWER_FIRST, &status);
