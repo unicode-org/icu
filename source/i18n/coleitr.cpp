@@ -4,495 +4,448 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
-//=============================================================================
-//
-// File coleitr.cpp
-//
-// 
-//
-// Created by: Helena Shih
-//
-// Modification History:
-//
-//  Date         Name          Description
-//
-//  6/23/97     helena      Adding comments to make code more readable.
-// 08/03/98     erm         Synched with 1.2 version of CollationElementIterator.java
-// 12/10/99      aliu          Ported Thai collation support from Java.
-//=============================================================================
 
-#include "unicode/sortkey.h"
+/*
+* Created by: Syn Wee Quek
+*/
+
+// #include "unicode/sortkey.h"
 #include "unicode/coleitr.h"
 
-#include "unicode/chariter.h"
+// #include "unicode/chariter.h"
 #include "tables.h"
-#include "unicode/normlzr.h"
-#include "unicode/unicode.h"
-#include "tcoldata.h"
-#include "ucmp32.h"
+// #include "unicode/normlzr.h"
+// #include "unicode/unicode.h"
+// #include "tcoldata.h"
+// #include "ucmp32.h"
 
+// Constants ------------------------------------------------------------------
 
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
 int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
 
+// CollationElementIterator public constructor/destructor ---------------------
 
-// This private method will never be called, but it makes the linker happy
-
-CollationElementIterator::CollationElementIterator()
-: text(0),
-  bufferAlias(0),
-  ownBuffer(new VectorOfInt(2)),
-  reorderBuffer(0),
-  expIndex(0),
-  orderAlias(0)
+CollationElementIterator::CollationElementIterator(
+                                          const CollationElementIterator& other)
+                                          : text(0), 
+                                          ownBuffer(new VectorOfInt(2)),
+                                          reorderBuffer(0), 
+                                          expIndex(other.expIndex)
 {
-}
-
-// This private method will never be called, but it makes the linker happy
-
-CollationElementIterator::CollationElementIterator(const RuleBasedCollator* order)
-: text(0),
-  bufferAlias(0),
-  ownBuffer(new VectorOfInt(2)),
-  reorderBuffer(0),
-  expIndex(0),
-  orderAlias(order)
-{
-}
-
-// This is the "real" constructor for this class; it constructs an iterator
-// over the source text using the specified collator
-CollationElementIterator::CollationElementIterator( const UnicodeString& sourceText,
-                                                    const RuleBasedCollator* order,
-                                                    UErrorCode& status) 
-: text(NULL),
-  bufferAlias(NULL),
-  ownBuffer(new VectorOfInt(2)),
-  reorderBuffer(0),
-  expIndex(0), 
-  orderAlias(order)
-{
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    if ( sourceText.length() != 0 ) {
-        //
-        // A CollationElementIterator is really a two-layered beast.
-        // Internally it uses a Normalizer to munge the source text
-        // into a form where all "composed" Unicode characters (such as ü) are
-        // split into a normal character and a combining accent character.  
-        // Afterward, CollationElementIterator does its own processing to handle
-        // expanding and contracting collation sequences, ignorables, and so on.
-        //
-      Normalizer::EMode decomp = (order->getStrength() == Collator::IDENTICAL)
-    ? Normalizer::NO_OP
-    : order->getDecomposition();
-      
-      text = new Normalizer(sourceText, decomp);
-      if (text == NULL) {
-    status = U_MEMORY_ALLOCATION_ERROR;
-      }
-    }
-}
-
-
-// This is the "real" constructor for this class; it constructs an iterator
-// over the source text using the specified collator
-CollationElementIterator::CollationElementIterator( const CharacterIterator& sourceText,
-                                                    const RuleBasedCollator* order,
-                                                    UErrorCode& status) 
-: text(NULL),
-  bufferAlias(NULL),
-  ownBuffer(new VectorOfInt(2)),
-  reorderBuffer(0),
-  expIndex(0), 
-  orderAlias(order)
-{
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    // **** should I just drop this test? ****
-    if ( sourceText.endIndex() != 0 )
-    {
-        //
-        // A CollationElementIterator is really a two-layered beast.
-        // Internally it uses a Normalizer to munge the source text
-        // into a form where all "composed" Unicode characters (such as ü) are
-        // split into a normal character and a combining accent character.  
-        // Afterward, CollationElementIterator does its own processing to handle
-        // expanding and contracting collation sequences, ignorables, and so on.
-        //
-      Normalizer::EMode decomp = order->getStrength() == Collator::IDENTICAL
-        ? Normalizer::NO_OP
-        : order->getDecomposition();
-      
-      text = new Normalizer(sourceText, decomp);
-      if (text == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-      }
-    }
-}
-
-CollationElementIterator::CollationElementIterator(const    CollationElementIterator& other)
-    : text(0),
-      ownBuffer(new VectorOfInt(2)),
-      reorderBuffer(0),
-      expIndex(other.expIndex)
-{
-    *this = other;
-}
-
-const   CollationElementIterator&
-CollationElementIterator::operator=(const   CollationElementIterator& other)
-{
-    if (this != &other)
-    {
-        expIndex = other.expIndex;
-
-        delete text;
-        text = (Normalizer*)other.text->clone();
-
-        if (other.bufferAlias == other.ownBuffer) {
-            *ownBuffer = *other.ownBuffer;
-            bufferAlias = ownBuffer;
-        } else if (other.bufferAlias != NULL &&
-                   other.bufferAlias == other.reorderBuffer) {
-            if (reorderBuffer == NULL) {
-                reorderBuffer = new VectorOfInt(*other.reorderBuffer);
-            } else {
-                *reorderBuffer = *other.reorderBuffer;
-            }
-            bufferAlias = reorderBuffer;
-        } else {
-            bufferAlias = other.bufferAlias;
-        }
-        orderAlias = other.orderAlias;
-    }
-
-    return *this;
+  *this = other;
 }
 
 CollationElementIterator::~CollationElementIterator()
 {
-    delete text;
-    text = NULL;
-    bufferAlias = NULL;
-    orderAlias = NULL;
-    delete ownBuffer;
-    delete reorderBuffer;
+  delete text;
+  text = NULL;
+  bufferAlias = NULL;
+  orderAlias = NULL;
+  delete ownBuffer;
+  delete reorderBuffer;
 }
 
-UBool
-CollationElementIterator::operator==(const CollationElementIterator& that) const
+// CollationElementIterator public methods ------------------------------------
+
+UTextOffset CollationElementIterator::getOffset() const
 {
-    if (this == &that)
-    {
-        return TRUE;
-    }
-
-    if (*text != *(that.text))
-    {
-        return FALSE;
-    }
-
-    if (((bufferAlias == NULL) != (that.bufferAlias == NULL)) ||
-        (bufferAlias != NULL && *bufferAlias != *(that.bufferAlias)))
-    {
-        return FALSE;
-    }
-
-    if (expIndex != that.expIndex)
-    {
-        return FALSE;
-    }
-
-    if (orderAlias != that.orderAlias)
-    {
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-UBool
-CollationElementIterator::operator!=(const CollationElementIterator& other) const
-{
-    return !(*this == other);
+  // Since the DecompositionIterator is doing the work of iterating through
+  // the text string, we can just ask it what its offset is.
+  return (text != NULL) ? text->getIndex() : 0;
 }
 
 /**
- * Resets the cursor to the beginning of the string.
- */
-void 
-CollationElementIterator::reset()
+* Get the ordering priority of the next character in the string.
+* @return the next character's ordering. Returns NULLORDER if the end of string 
+*         is reached.
+*/
+int32_t CollationElementIterator::next(UErrorCode& status)
+{
+  if (text == NULL || U_FAILURE(status))
+    return NULLORDER;
+    
+  // Update the decomposition mode if necessary.
+  text->setMode(orderAlias->getDecomposition());
+    
+  if (bufferAlias != NULL)
+  {
+    // bufferAlias needs a bit of an explanation.
+    // When we hit an expanding character in the text, we call the order's
+    // getExpandValues method to retrieve an array of the orderings for all of 
+    // the characters in the expansion (see the end of this method).
+    // The first ordering is returned, and an alias to the orderings array is 
+    // saved so that the remaining orderings can be returned on subsequent calls 
+    // to next. So, if the expanding buffer is not exhausted, all we have to do 
+    // here is return the next ordering in the buffer.  
+    if (expIndex < bufferAlias->size())
+      return strengthOrder(bufferAlias->at(expIndex++));
+    else
+      bufferAlias = NULL;
+  }
+
+  // Gets the next character from the string using decomposition iterator.
+  UChar32 ch = text->current();
+  text->next();
+
+  if (U_FAILURE(status))
+    return NULLORDER;
+    
+
+  if (ch == Normalizer::DONE)
+    return NULLORDER;
+    
+  // Ask the collator for this character's ordering.
+  // Used to be RuleBasedCollator.getUnicodeOrder(). 
+  // It can't be inlined in tblcoll.h file unfortunately.
+  /*
+  synwee : have to modify this part
+  int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
+
+  if (value == RuleBasedCollator::UNMAPPED)
+  {
+    // Returned an "unmapped" flag and save the character so it can be 
+    // returned next time this method is called.
+    if (ch == 0x0000) 
+      return ch;
+    // \u0000 is not valid in C++'s UnicodeString
+    ownBuffer->at(0) = UNMAPPEDCHARVALUE;
+    ownBuffer->at(1) = ch << 16;
+    bufferAlias = ownBuffer;
+  }
+  else 
+  {
+    if (value >= RuleBasedCollator::CONTRACTCHARINDEX)
+      value = nextContractChar(ch, status);
+    if (value >= RuleBasedCollator::EXPANDCHARINDEX)
+      bufferAlias = orderAlias->getExpandValueList(value);
+      
+    if (isThaiPreVowel(ch))
+    {
+      UChar32 consonant = text->current();
+      text->next();
+      if (isThaiBaseConsonant(consonant))
+        bufferAlias = makeReorderedBuffer((UChar)consonant, value, bufferAlias,
+                                          TRUE, status);
+      else
+        text->previous();
+    }
+  }
+
+  if (bufferAlias != NULL) 
+  {
+    expIndex = 1;
+    value = bufferAlias->at(0);
+  }
+
+  return strengthOrder(value);
+  */
+  return 0;
+}
+
+UBool CollationElementIterator::operator!=(
+                                   const CollationElementIterator& other) const
+{
+  return !(*this == other);
+}
+
+UBool CollationElementIterator::operator==(const CollationElementIterator& that) 
+                                                                           const
+{
+  if (this == &that)
+    return TRUE;
+    
+  if (*text != *(that.text))
+    return FALSE;
+    
+  if (((bufferAlias == NULL) != (that.bufferAlias == NULL)) ||
+      (bufferAlias != NULL && *bufferAlias != *(that.bufferAlias)))
+    return FALSE;
+    
+  if (expIndex != that.expIndex)
+    return FALSE;
+    
+  if (orderAlias != that.orderAlias)
+    return FALSE;
+    
+  return TRUE;
+}
+
+/**
+* Get the ordering priority of the previous collation element in the string.
+* @param status the error code status.
+* @return the previous element's ordering. Returns NULLORDER if the beginning of 
+*         string is reached.
+*/
+int32_t CollationElementIterator::previous(UErrorCode& status)
+{
+  if (text == NULL || U_FAILURE(status))
+    return NULLORDER;
+    
+  text->setMode(orderAlias->getDecomposition());
+
+  if (bufferAlias != NULL)
+  {
+    if (expIndex > 0)
+      return strengthOrder(bufferAlias->at(--expIndex));
+      
+    bufferAlias = NULL;
+  }
+
+  UChar32 ch = text->previous();
+
+  if (ch == Normalizer::DONE)
+    return NULLORDER;
+    
+  // Used to be RuleBasedCollator.getUnicodeOrder(). It can't be inlined in 
+  // tblcoll.h file unfortunately.
+  /*
+
+  int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
+
+  if (value == RuleBasedCollator::UNMAPPED)
+  {
+    if (ch == 0x0000) 
+      return ch;
+    
+    ownBuffer->at(0) = UNMAPPEDCHARVALUE;
+    ownBuffer->at(1) = ch << 16;
+    bufferAlias = ownBuffer;
+  }
+  else 
+  {
+    if (value >= RuleBasedCollator::CONTRACTCHARINDEX)
+      value = prevContractChar(ch, status);
+      
+    if (value >= RuleBasedCollator::EXPANDCHARINDEX)
+      bufferAlias = orderAlias->getExpandValueList(value);
+      
+    if (isThaiBaseConsonant(ch)) 
+    {
+      UChar32 vowel = text->previous();
+      if (isThaiPreVowel(vowel))
+        bufferAlias = makeReorderedBuffer((UChar)vowel, value, bufferAlias,
+                                          FALSE, status);
+      else
+        text->next();
+    }
+  }
+
+  if (bufferAlias != NULL) 
+  {
+    expIndex = bufferAlias->size()-1;
+    value = bufferAlias->at(expIndex);
+  }
+
+  return strengthOrder(value);
+  */
+  return 0;
+}
+
+/**
+* Resets the cursor to the beginning of the string.
+*/
+void CollationElementIterator::reset()
 {
   if (text != NULL)
-    {
-      text->reset();
-      text->setMode(orderAlias->getDecomposition());
-    }
+  {
+    text->reset();
+    text->setMode(orderAlias->getDecomposition());
+  }
 
   bufferAlias = NULL;
   expIndex = 0;
 }
 
-// Sets the source to the new source string.
-void
-CollationElementIterator::setText(const UnicodeString&  source,
-                                        UErrorCode&      status)
+void CollationElementIterator::setOffset(UTextOffset newOffset, 
+                                         UErrorCode& status)
 {
-    if (U_FAILURE(status))
-    {
-        return;
-    }
-
-    bufferAlias = 0;
-
-    if (text == NULL)
-    {
-        text = new Normalizer(source, orderAlias->getDecomposition());
-    }
-    else
-    {
-        text->setText(source, status);
-        text->setMode(orderAlias->getDecomposition());
-    }
-}
-
-// Sets the source to the new character iterator.
-void
-CollationElementIterator::setText(CharacterIterator&  source,
-                                        UErrorCode&      status)
-{
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    bufferAlias = 0;
-
-    if (text == NULL) {
-        text = new Normalizer(source, orderAlias->getDecomposition());
-    }
-    else
-    {
-        text->setMode(orderAlias->getDecomposition());
-        text->setText(source, status);
-    }
+  if (U_FAILURE(status))
+    return;
+    
+  if (text != NULL)
+    text->setIndex(newOffset);
+    
+  bufferAlias = NULL;
 }
 
 /**
- * Get the ordering priority of the next character in the string.
- * @return the next character's ordering.  Returns NULLORDER if
- * the end of string is reached.
- */
-int32_t
-CollationElementIterator::next(UErrorCode& status)
+* Sets the source to the new source string.
+*/
+void CollationElementIterator::setText(const UnicodeString& source,
+                                       UErrorCode& status)
 {
-    if (text == NULL || U_FAILURE(status))
-    {
-        return NULLORDER;
-    }
+  if (U_FAILURE(status))
+    return;
+    
+  bufferAlias = 0;
 
-    // Update the decomposition mode if necessary.
+  if (text == NULL)
+    text = new Normalizer(source, orderAlias->getDecomposition());
+  else
+  {
+    text->setText(source, status);
     text->setMode(orderAlias->getDecomposition());
+  }
+}
+
+// Sets the source to the new character iterator.
+void CollationElementIterator::setText(CharacterIterator& source, 
+                                       UErrorCode& status)
+{
+  if (U_FAILURE(status)) 
+    return;
     
-    if (bufferAlias != NULL)
-    {
-        // bufferAlias needs a bit of an explanation.
-        // When we hit an expanding character in the text, we call the order's
-        // getExpandValues method to retrieve an array of the orderings for all
-        // of the characters in the expansion (see the end of this method).
-        // The first ordering is returned, and an alias to the orderings array
-        // is saved so that the remaining orderings can be returned on subsequent
-        // calls to next.  So, if the expanding buffer is not exhausted, 
-        // all we have to do here is return the next ordering in the buffer.  
-        if (expIndex < bufferAlias->size())
-        {
-            return strengthOrder(bufferAlias->at(expIndex++));
-        }
-        else
-        {
-            bufferAlias = NULL;
-        }
-    }
+  bufferAlias = 0;
 
-    // Gets the next character from the string using decomposition iterator.
-    UChar32 ch = text->current();
-    text->next();
+  if (text == NULL)
+    text = new Normalizer(source, orderAlias->getDecomposition());
+  else
+  {
+    text->setMode(orderAlias->getDecomposition());
+    text->setText(source, status);
+  }
+}
 
-    if (U_FAILURE(status))
-    {
-        return NULLORDER;
-    }
-
-    if (ch == Normalizer::DONE)
-    {
-        return NULLORDER;
-    }
+int32_t CollationElementIterator::strengthOrder(int32_t order) const
+{
+  Collator::ECollationStrength s = orderAlias->getStrength();
+  // Mask off the unwanted differences.
+  if (s == Collator::PRIMARY)
+    order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
+  else 
+    if (s == Collator::SECONDARY)
+      order &= RuleBasedCollator::SECONDARYDIFFERENCEONLY;
     
-    // Ask the collator for this character's ordering.
-    /* Used to be RuleBasedCollator.getUnicodeOrder().  It 
-       can't be inlined in tblcoll.h file unfortunately. */
-    int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
+  return order;
+}
 
-    if (value == RuleBasedCollator::UNMAPPED)
+// CollationElementIterator private constructors/destructors ------------------
+
+// This private method will never be called, but it makes the linker happy
+CollationElementIterator::CollationElementIterator() : text(0), bufferAlias(0),
+                                                  ownBuffer(new VectorOfInt(2)), 
+                                                  reorderBuffer(0), expIndex(0),
+                                                  orderAlias(0)
+{
+}
+
+CollationElementIterator::CollationElementIterator(
+                                                 const RuleBasedCollator* order)
+                                               : text(0), bufferAlias(0),
+                                                 ownBuffer(new VectorOfInt(2)),
+                                                 reorderBuffer(0), expIndex(0),
+                                                 orderAlias(order)
+{
+}
+
+/** 
+* This is the "real" constructor for this class; it constructs an iterator
+* over the source text using the specified collator
+*/
+CollationElementIterator::CollationElementIterator(
+                                                const UnicodeString& sourceText,
+                                                const RuleBasedCollator* order,
+                                                UErrorCode& status) 
+                                                : text(NULL),
+                                                  bufferAlias(NULL),
+                                                  ownBuffer(new VectorOfInt(2)),
+                                                  reorderBuffer(0),
+                                                  expIndex(0), 
+                                                  orderAlias(order)
+{
+  if (U_FAILURE(status))
+    return;
+    
+  if ( sourceText.length() != 0 ) 
+  {
+    // A CollationElementIterator is really a two-layered beast.
+    // Internally it uses a Normalizer to munge the source text into a form 
+    // where all "composed" Unicode characters (such as ü) are split into a 
+    // normal character and a combining accent character.  
+    // Afterward, CollationElementIterator does its own processing to handle
+    // expanding and contracting collation sequences, ignorables, and so on.
+    
+    Normalizer::EMode decomp = (order->getStrength() == Collator::IDENTICAL)
+                               ? Normalizer::NO_OP : order->getDecomposition();
+      
+    text = new Normalizer(sourceText, decomp);
+    if (text == NULL)
+      status = U_MEMORY_ALLOCATION_ERROR;
+  }
+}
+
+/** 
+* This is the "real" constructor for this class; it constructs an iterator over 
+* the source text using the specified collator
+*/
+CollationElementIterator::CollationElementIterator(
+                                            const CharacterIterator& sourceText,
+                                            const RuleBasedCollator* order,
+                                            UErrorCode& status) 
+                                            : text(NULL),
+                                              bufferAlias(NULL),
+                                              ownBuffer(new VectorOfInt(2)),
+                                              reorderBuffer(0),
+                                              expIndex(0), 
+                                              orderAlias(order)
+{
+  if (U_FAILURE(status))
+    return;
+    
+  // **** should I just drop this test? ****
+  if ( sourceText.endIndex() != 0 )
+  {
+    // A CollationElementIterator is really a two-layered beast.
+    // Internally it uses a Normalizer to munge the source text into a form 
+    // where all "composed" Unicode characters (such as ü) are split into a 
+    // normal character and a combining accent character.  
+    // Afterward, CollationElementIterator does its own processing to handle
+    // expanding and contracting collation sequences, ignorables, and so on.
+    
+    Normalizer::EMode decomp = order->getStrength() == Collator::IDENTICAL
+                               ? Normalizer::NO_OP : order->getDecomposition();
+      
+    text = new Normalizer(sourceText, decomp);
+    if (text == NULL)
+      status = U_MEMORY_ALLOCATION_ERROR;    
+  }
+}
+
+// CollationElementIterator private methods -----------------------------------
+
+const CollationElementIterator& CollationElementIterator::operator=(
+                                          const CollationElementIterator& other)
+{
+  if (this != &other)
+  {
+    expIndex = other.expIndex;
+    delete text;
+    text = (Normalizer*)other.text->clone();
+
+    if (other.bufferAlias == other.ownBuffer) 
     {
-        // Returned an "unmapped" flag and save the character so it can be 
-        // returned next time this method is called.
-        if (ch == 0x0000) return ch;
-        // \u0000 is not valid in C++'s UnicodeString
-        ownBuffer->at(0) = UNMAPPEDCHARVALUE;
-        ownBuffer->at(1) = ch << 16;
-        bufferAlias = ownBuffer;
-    }
-    else {
-        if (value >= RuleBasedCollator::CONTRACTCHARINDEX) {
-            value = nextContractChar(ch, status);
-        }
-        if (value >= RuleBasedCollator::EXPANDCHARINDEX) {
-            bufferAlias = orderAlias->getExpandValueList(value);
-        }
+      *ownBuffer = *other.ownBuffer;
+      bufferAlias = ownBuffer;
+    } 
+    else 
+      if (other.bufferAlias != NULL && other.bufferAlias == other.reorderBuffer) 
+      {
+        if (reorderBuffer == NULL)
+          reorderBuffer = new VectorOfInt(*other.reorderBuffer);
+        else 
+          *reorderBuffer = *other.reorderBuffer;
+          
+        bufferAlias = reorderBuffer;
+      } 
+      else 
+        bufferAlias = other.bufferAlias;
         
-        if (isThaiPreVowel(ch)) {
-            UChar32 consonant = text->current();
-            text->next();
-            if (isThaiBaseConsonant(consonant)) {
-                
-                bufferAlias = makeReorderedBuffer((UChar)consonant, value, bufferAlias,
-                                                  TRUE, status);
-                
-            }
-            else {
-                text->previous();
-            }
-        }
-    }
+      orderAlias = other.orderAlias;
+  }
 
-    if (bufferAlias != NULL) {
-        expIndex = 1;
-        value = bufferAlias->at(0);
-    }
-
-    return strengthOrder(value);
+  return *this;
 }
-
- /**
-  * Get the ordering priority of the previous collation element in the string.
-  * @param status the error code status.
-  * @return the previous element's ordering.  Returns NULLORDER if
-  * the beginning of string is reached.
-  */
-int32_t
-CollationElementIterator::previous(UErrorCode& status)
-{
-    if (text == NULL || U_FAILURE(status))
-    {
-        return NULLORDER;
-    }
-
-    text->setMode(orderAlias->getDecomposition());
-
-    if (bufferAlias != NULL)
-    {
-        if (expIndex > 0)
-        {
-            return strengthOrder(bufferAlias->at(--expIndex));
-        }
-
-        bufferAlias = NULL;
-    }
-
-    UChar32 ch = text->previous();
-
-    if (ch == Normalizer::DONE)
-    {
-        return NULLORDER;
-    }
-    /* Used to be RuleBasedCollator.getUnicodeOrder().  It 
-       can't be inlined in tblcoll.h file unfortunately. */
-    int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
-
-    if (value == RuleBasedCollator::UNMAPPED)
-    {
-        if (ch == 0x0000) return ch;
-        ownBuffer->at(0) = UNMAPPEDCHARVALUE;
-        ownBuffer->at(1) = ch << 16;
-        bufferAlias = ownBuffer;
-    }
-    else {
-        if (value >= RuleBasedCollator::CONTRACTCHARINDEX) {
-            value = prevContractChar(ch, status);
-        }
-        if (value >= RuleBasedCollator::EXPANDCHARINDEX) {
-            bufferAlias = orderAlias->getExpandValueList(value);
-        }
-
-        if (isThaiBaseConsonant(ch)) {
-
-            UChar32 vowel = text->previous();
-            if (isThaiPreVowel(vowel)) {
-                bufferAlias = makeReorderedBuffer((UChar)vowel, value, bufferAlias,
-                                                  FALSE, status);
-            }
-            else {
-                text->next();
-            }
-        }
-    }
-
-    if (bufferAlias != NULL) {
-        expIndex = bufferAlias->size()-1;
-        value = bufferAlias->at(expIndex);
-    }
-
-    return strengthOrder(value);
-}
-
-int32_t
-CollationElementIterator::strengthOrder(int32_t order) const
-{
-    Collator::ECollationStrength s = orderAlias->getStrength();
-    // Mask off the unwanted differences.
-    if (s == Collator::PRIMARY)
-    {
-        order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
-    } else if (s == Collator::SECONDARY)
-    {
-        order &= RuleBasedCollator::SECONDARYDIFFERENCEONLY;
-    }
-    return order;
-}
-
-UTextOffset
-CollationElementIterator::getOffset() const
-{
-    // Since the DecompositionIterator is doing the work of iterating through
-    // the text string, we can just ask it what its offset is.
-    return (text != NULL) ? text->getIndex() : 0;
-}
-
-void 
-CollationElementIterator::setOffset(UTextOffset newOffset, 
-                                    UErrorCode& status)
-{
-    if (U_FAILURE(status))
-    {
-        return;
-    }
-
-    if (text != NULL)
-    {
-        text->setIndex(newOffset);
-    }
-
-    bufferAlias = NULL;
-}
-
-//============================================================
-// privates
-//============================================================
 
 /**
  * Get the ordering priority of the next contracting character in the
@@ -501,6 +454,8 @@ CollationElementIterator::setOffset(UTextOffset newOffset,
  * @return the next contracting character's ordering.  Returns NULLORDER
  * if the end of string is reached.
  */
+/*
+synwee : removed 
 int32_t
 CollationElementIterator::nextContractChar(UChar32 ch,
                                            UErrorCode& status)
@@ -538,6 +493,7 @@ CollationElementIterator::nextContractChar(UChar32 ch,
 
     return order;
 }
+*/
 
 /**
  * Get the ordering priority of the previous contracting character in the
@@ -546,6 +502,7 @@ CollationElementIterator::nextContractChar(UChar32 ch,
  * @return the next contracting character's ordering.  Returns NULLORDER
  * if the end of string is reached.
  */
+/* synwee : removed
 int32_t CollationElementIterator::prevContractChar(UChar32 ch,
                                                    UErrorCode &status)
 {
@@ -583,6 +540,7 @@ int32_t CollationElementIterator::prevContractChar(UChar32 ch,
 
     return order;
 }
+*/
 
 /**
  * This method produces a buffer which contains the collation
@@ -597,6 +555,7 @@ int32_t CollationElementIterator::prevContractChar(UChar32 ch,
  * This method may return the ownBuffer array as its value so ownBuffer
  * had better not be in use anywhere else.
  */
+/*
 VectorOfInt* CollationElementIterator::makeReorderedBuffer(UChar colFirst,
                                                            int32_t lastValue,
                                                            VectorOfInt* lastExpansion,
@@ -672,3 +631,4 @@ VectorOfInt* CollationElementIterator::makeReorderedBuffer(UChar colFirst,
 
     return result;
 }
+*/
