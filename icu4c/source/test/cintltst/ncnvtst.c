@@ -1732,7 +1732,10 @@ TestUnicodeSet() {
         "BOCU-1",
         "CESU-8",
         "gb18030",
-        "IMAP-mailbox-name",
+        "IMAP-mailbox-name"
+    };
+
+    static const char *const lmbcsNames[]={
         "LMBCS-1",
         "LMBCS-2",
         "LMBCS-3",
@@ -1801,6 +1804,29 @@ TestUnicodeSet() {
                     name, u_errorName(errorCode));
         } else if(!uset_containsRange(set, 0, 0xd7ff) || !uset_containsRange(set, 0xe000, 0x10ffff)) {
             log_err("error: ucnv_getUnicodeSet(%s) does not return an all-Unicode set\n", name);
+        }
+
+        ucnv_close(cnv);
+    }
+
+    /* test LMBCS variants which convert all of Unicode except for U+F6xx */
+    for(i=0; i<LENGTHOF(lmbcsNames); ++i) {
+        errorCode=U_ZERO_ERROR;
+        name=lmbcsNames[i];
+        cnv=ucnv_open(name, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: unable to open converter %s - %s\n",
+                    name, u_errorName(errorCode));
+            continue;
+        }
+
+        uset_clear(set);
+        ucnv_getUnicodeSet(cnv, set, UCNV_ROUNDTRIP_SET, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: ucnv_getUnicodeSet(%s) failed - %s\n",
+                    name, u_errorName(errorCode));
+        } else if(!uset_containsRange(set, 0, 0xf5ff) || !uset_containsRange(set, 0xf700, 0x10ffff)) {
+            log_err("error: ucnv_getUnicodeSet(%s) does not return an all-Unicode set (minus U+F6xx)\n", name);
         }
 
         ucnv_close(cnv);

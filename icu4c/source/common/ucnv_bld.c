@@ -554,32 +554,26 @@ ucnv_unload(UConverterSharedData *sharedData) {
 void
 ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
 {
-    umtx_lock(&cnvCacheMutex);
     /*
-    Double checking doesn't work on some platforms.
-    Don't check referenceCounter outside of a mutex block.
-
-    TODO We should be able to check for ~0 outside of the mutex,
-    improving performance for opening and closing of algorithmic converters.
+    Checking whether it's an algorithic converter is okay
+    in multithreaded applications because the value never changes.
+    Don't check referenceCounter for any other value.
     */
-    if (sharedData->referenceCounter != ~0) {
+    if(sharedData != NULL && sharedData->referenceCounter != ~0) {
+        umtx_lock(&cnvCacheMutex);
         ucnv_unload(sharedData);
+        umtx_unlock(&cnvCacheMutex);
     }
-    umtx_unlock(&cnvCacheMutex);
 }
 
 void
 ucnv_incrementRefCount(UConverterSharedData *sharedData)
 {
-    umtx_lock(&cnvCacheMutex);
-    /*
-    Double checking doesn't work on some platforms.
-    Don't check referenceCounter outside of a mutex block.
-    */
-    if (sharedData->referenceCounter != ~0) {
+    if(sharedData != NULL && sharedData->referenceCounter != ~0) {
+        umtx_lock(&cnvCacheMutex);
         sharedData->referenceCounter++;
+        umtx_unlock(&cnvCacheMutex);
     }
-    umtx_unlock(&cnvCacheMutex);
 }
 
 static void
@@ -663,60 +657,58 @@ parseConverterOptions(const char *inName,
  * -Call dataConverter initializer (Data=TRUE, Cached=TRUE)
  * -Call AlgorithmicConverter initializer (Data=FALSE, Cached=TRUE)
  */
-UConverter *
-ucnv_createConverter(UConverter *myUConverter, const char *converterName, UErrorCode * err)
-{
-    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
-    const char *realName;
+UConverterSharedData *
+ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UErrorCode * err) {
+    UConverterLookupData stackLookup;
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
-    uint32_t options = 0;
-
-    UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
 
     if (U_FAILURE (*err)) {
-        goto exitError;
+        return NULL;
     }
 
-    UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open converter %s", converterName);
+    if(lookup == NULL) {
+        lookup = &stackLookup;
+    }
 
-    locale[0] = 0;
+    lookup->locale[0] = 0;
+    lookup->options = 0;
 
     /* In case "name" is NULL we want to open the default converter. */
     if (converterName == NULL) {
-        realName = ucnv_io_getDefaultConverterName();
-        if (realName == NULL) {
+        lookup->realName = ucnv_io_getDefaultConverterName();
+        if (lookup->realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
-            goto exitError;
+            return NULL;
         }
         /* the default converter name is already canonical */
     } else {
         /* separate the converter name from the options */
-        parseConverterOptions(converterName, cnvName, locale, &options, err);
+        parseConverterOptions(converterName, lookup->cnvName, lookup->locale, &lookup->options, err);
         if (U_FAILURE(*err)) {
             /* Very bad name used. */
-            goto exitError;
+            return NULL;
         }
 
         /* get the canonical converter name */
-        realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
-        if (U_FAILURE(internalErrorCode) || realName == NULL) {
+        lookup->realName = ucnv_io_getConverterName(lookup->cnvName, &internalErrorCode);
+        if (U_FAILURE(internalErrorCode) || lookup->realName == NULL) {
             /*
             * set the input name in case the converter was added
             * without updating the alias table, or when there is no alias table
             */
-            realName = cnvName;
+            lookup->realName = lookup->cnvName;
         }
     }
 
     /* separate the converter name from the options */
-    if(realName != cnvName) {
-        parseConverterOptions(realName, cnvName, locale, &options, err);
-        realName = cnvName;
+    if(lookup->realName != lookup->cnvName) {
+        parseConverterOptions(lookup->realName, lookup->cnvName, lookup->locale, &lookup->options, err);
+        lookup->realName = lookup->cnvName;
     }
     
     /* get the shared data for an algorithmic converter, if it is one */
-    mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(realName);
+    mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(lookup->realName);
     if (mySharedConverterData == NULL)
     {
         /* it is a data-based converter, get its shared data.               */
@@ -728,40 +720,51 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
 
         args.size=sizeof(UConverterLoadArgs);
         args.nestedLoads=1;
-        args.options=options;
+        args.options=lookup->options;
         args.pkg=NULL;
-        args.name=realName;
+        args.name=lookup->realName;
 
         umtx_lock(&cnvCacheMutex);
         mySharedConverterData = ucnv_load(&args, err);
         umtx_unlock(&cnvCacheMutex);
         if (U_FAILURE (*err) || (mySharedConverterData == NULL))
         {
-            goto exitError;
+            return NULL;
         }
     }
 
-    myUConverter = ucnv_createConverterFromSharedData(myUConverter, mySharedConverterData, realName, locale, options, err);
+    return mySharedConverterData;
+}
 
-    if (U_FAILURE(*err))
-    {
-        /*
-        Checking whether it's an algorithic converter is okay
-        in multithreaded applications because the value never changes.
-        Don't check referenceCounter for any other value.
-        */
-        if (mySharedConverterData->referenceCounter != ~0) {
-            umtx_lock(&cnvCacheMutex);
-            --mySharedConverterData->referenceCounter;
-            umtx_unlock(&cnvCacheMutex);
+UConverter *
+ucnv_createConverter(UConverter *myUConverter, const char *converterName, UErrorCode * err)
+{
+    UConverterLookupData stackLookup;
+    UConverterSharedData *mySharedConverterData;
+
+    UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
+
+    if(U_SUCCESS(*err)) {
+        UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open converter %s", converterName);
+
+        mySharedConverterData = ucnv_loadSharedData(converterName, &stackLookup, err);
+
+        if(U_SUCCESS(*err)) {
+            myUConverter = ucnv_createConverterFromSharedData(
+                myUConverter, mySharedConverterData,
+                stackLookup.realName, stackLookup.locale, stackLookup.options,
+                err);
+
+            if(U_SUCCESS(*err)) {
+                UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
+                return myUConverter;
+            } else {
+                ucnv_unloadSharedDataIfReady(mySharedConverterData);
+            }
         }
-        goto exitError;
     }
 
-    UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
-    return myUConverter;
-
-exitError:
+    /* exit with error */
     UTRACE_EXIT_STATUS(*err);
     return NULL;
 }
