@@ -67,11 +67,17 @@ void addLocaleTest(TestNode** root)
 {
     setUpDataTable();
     
-    addTest(root, &TestBasicGetters, "tsutil/cloctst/TestBasicGetters");
-    addTest(root, &TestDisplayNames, "tsutil/cloctst/TestDisplayNames");
-    addTest(root, &TestGetAvailableLocales, "tsutil/cloctst/TestGetAvailableLocales");
-    addTest(root, &TestDataDirectory, "tsutil/cloctst/TestDataDirectory");
-    addTest(root, &TestISOFunctions, "tsutil/cloctst/TestISOFunctions");
+    addTest(root, &TestBasicGetters,         "tsutil/cloctst/TestBasicGetters");
+    addTest(root, &TestSimpleResourceInfo,   "tsutil/cloctst/TestSimpleResourceInfo");
+    addTest(root, &TestDisplayNames,         "tsutil/cloctst/TestDisplayNames");
+    addTest(root, &TestGetAvailableLocales,  "tsutil/cloctst/TestGetAvailableLocales");
+    addTest(root, &TestDataDirectory,        "tsutil/cloctst/TestDataDirectory");
+    addTest(root, &TestISOFunctions,         "tsutil/cloctst/TestISOFunctions");
+    addTest(root, &TestISO3Fallback,         "tsutil/cloctst/TestISO3Fallback");
+    addTest(root, &TestUninstalledISO3Names, "tsutil/cloctst/TestUninstalledISO3Names");
+    addTest(root, &TestSimpleDisplayNames,   "tsutil/cloctst/TestSimpleDisplayNames");
+    addTest(root, &TestVariantParsing,       "tsutil/cloctst/TestVariantParsing");
+       
 }
         
 
@@ -162,6 +168,7 @@ void TestSimpleResourceInfo() {
     UChar* expected = 0;
     
     const char* temp;
+    char            temp2[20];
     testLocale=(char*)malloc(sizeof(char) * 1);
     expected=(UChar*)malloc(sizeof(UChar) * 1);
     
@@ -188,7 +195,11 @@ void TestSimpleResourceInfo() {
             log_err("  ISO-3 Country code mismatch:  %s versus  %s\n",  austrdup(expected),
                                                             austrdup(dataTable[CTRY3][i]));
         } 
-          
+        sprintf(temp2, "%x", uloc_getLCID(testLocale));
+        if (strcmp(temp2, rawData2[LCID][i]) != 0) {
+            log_err("LCID mismatch: %ld versus %s\n", (int32_t)uloc_getLCID(testLocale) , rawData2[LCID][i]);
+        }
+  
     }
     
  free(expected);
@@ -680,4 +691,182 @@ void setUpDataTable()
         dataTable[DNAME_EL][GREEKS]=(UChar*)realloc(dataTable[DNAME_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayName)+1));        
     u_strncpy(dataTable[DNAME_EL][GREEKS],greekDisplayName,17);
     
+}
+/**
+ * @bug 4011756 4011380
+ */
+void TestISO3Fallback() 
+{
+    const char* test="xx_YY";
+
+    const char * result;
+
+    result = uloc_getISO3Language(test);
+
+    // Conform to C API usage 
+
+    if (!result || (result[0] != 0))
+       log_err("getISO3Language() on xx_YY returned %s instead of \"\"");
+
+    result = uloc_getISO3Country(test);
+
+    if (!result || (result[0] != 0))
+        log_err("getISO3Country() on xx_YY returned %s instead of \"\"");
+}
+
+/**
+ * @bug 4118587
+ */
+void TestSimpleDisplayNames() 
+{
+    // This test is different from TestDisplayNames because TestDisplayNames checks
+    // fallback behavior, combination of language and country names to form locale
+    // names, and other stuff like that.  This test just checks specific language
+    // and country codes to make sure we have the correct names for them.
+    char languageCodes[] [4] = { "he", "id", "iu", "ug", "yi", "za" };
+    const char* languageNames [] = { "Hebrew", "Indonesian", "Inukitut", "Uighur", "Yiddish",
+                               "Zhuang" };
+    UErrorCode status=U_ZERO_ERROR;
+    
+    int32_t i;
+    for (i = 0; i < 6; i++) {
+        UChar *testLang=0;
+        UChar *expectedLang=0;
+        int size=0;
+        size=uloc_getDisplayLanguage(languageCodes[i], "en_US", NULL, size, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR) {
+            status=U_ZERO_ERROR;
+            testLang=(UChar*)malloc(sizeof(UChar) * (size + 1));
+            uloc_getDisplayLanguage(languageCodes[i], "en_US", testLang, size, &status);
+        }
+        expectedLang=(UChar*)malloc(sizeof(UChar) * (strlen(languageNames[i])+1));
+        u_uastrcpy(expectedLang, languageNames[i]);
+        if (u_strcmp(testLang, expectedLang) != 0)
+            log_err("Got wrong display name for %s : Expected \"%s\", got \"%s\".\n", 
+                    languageCodes[i], languageNames[i], austrdup(testLang));
+        free(testLang);
+        free(expectedLang);
+    }
+    
+}
+
+/**
+ * @bug 4118595
+ */
+void TestUninstalledISO3Names() 
+{
+    // This test checks to make sure getISO3Language and getISO3Country work right
+    // even for locales that are not installed.
+    const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn", 
+                                        "ss", "tw", "zu" };
+    const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run", 
+                                        "ssw", "twi", "zul" };
+    char iso2Countries [][6] = {     "am_AF", "ba_BW", "fy_KZ", "mr_MO", "rn_MN", 
+                                        "ss_SB", "tw_TC", "zu_ZW" };
+    char iso3Countries [][4] = {     "AFG", "BWA", "KAZ", "MAC", "MNG", 
+                                        "SLB", "TCA", "ZWE" };
+    int32_t i;
+
+    for (i = 0; i < 8; i++) {
+      UErrorCode err = U_ZERO_ERROR;
+      const char *test;
+      test = uloc_getISO3Language(iso2Languages[i]);
+      if(strcmp(test, iso3Languages[i]) !=0 || U_FAILURE(err))
+         log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n", 
+                     iso2Languages[i], iso3Languages[i], test, myErrorName(err));
+    }
+    for (i = 0; i < 8; i++) {
+      UErrorCode err = U_ZERO_ERROR;
+      const char *test;
+      test = uloc_getISO3Country(iso2Countries[i]);
+      if(strcmp(test, iso3Countries[i]) !=0 || U_FAILURE(err))
+         log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n", 
+                     iso2Countries[i], iso3Countries[i], test, myErrorName(err));
+    }
+}
+
+
+void TestVariantParsing()
+{
+    const char* en_US_custom="en_US_De Anza_Cupertino_California_United States_Earth";
+    const char* dispName="English (United States, DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH)";
+    const char* dispVar="DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH";
+    const char* shortVariant="fr_FR_foo";
+    const char* bogusVariant="fr_FR__foo";
+    const char* bogusVariant2="fr_FR_foo_";
+    const char* bogusVariant3="fr_FR__foo_";
+
+
+    UChar displayVar[100];
+    UChar displayName[100];
+    UErrorCode status=U_ZERO_ERROR;
+    UChar* got=0;
+    int32_t size=0;
+    size=uloc_getDisplayVariant(en_US_custom, "en_US", NULL, size, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        got=(UChar*)malloc(sizeof(UChar) * (size+1));
+        uloc_getDisplayVariant(en_US_custom, "en_US", got, size, &status);
+    }
+    u_uastrcpy(displayVar, dispVar);
+    if(u_strcmp(got,displayVar)!=0) {
+        log_err("FAIL: getDisplayVariant() Wanted %s, got %s\n", dispVar, austrdup(got));
+    }
+    size=0;
+    size=uloc_getDisplayName(en_US_custom, "en_US", NULL, size, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
+        uloc_getDisplayName(en_US_custom, "en_US", got, size, &status);
+    }
+    u_uastrcpy(displayName, dispName);
+    if(u_strcmp(got,displayName)!=0) {
+        log_err("FAIL: getDisplayName() Wanted %s, got %s\n", dispName, austrdup(got));
+    }
+
+    size=0;
+    status=U_ZERO_ERROR;
+    size=uloc_getDisplayVariant(shortVariant, NULL, NULL, size, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
+        uloc_getDisplayVariant(shortVariant, NULL, got, size, &status);
+    }
+    if(strcmp(austrdup(got),"FOO")!=0) {
+        log_err("FAIL: getDisplayVariant()  Wanted: foo  Got: %s\n", austrdup(got));
+    }
+    size=0;
+    status=U_ZERO_ERROR;
+    size=uloc_getDisplayVariant(bogusVariant, NULL, NULL, size, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
+        uloc_getDisplayVariant(bogusVariant, NULL, got, size, &status);
+    }
+    if(strcmp(austrdup(got),"_FOO")!=0) {
+        log_err("FAIL: getDisplayVariant()  Wanted: _FOO  Got: %s\n", austrdup(got));
+    }
+    size=0;
+    status=U_ZERO_ERROR;
+    size=uloc_getDisplayVariant(bogusVariant2, NULL, NULL, size, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
+        uloc_getDisplayVariant(bogusVariant2, NULL, got, size, &status);
+    }
+    if(strcmp(austrdup(got),"FOO_")!=0) {
+        log_err("FAIL: getDisplayVariant()  Wanted: FOO_  Got: %s\n", austrdup(got));
+    }
+    size=0;
+    status=U_ZERO_ERROR;
+    size=uloc_getDisplayVariant(bogusVariant3, NULL, NULL, size, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status=U_ZERO_ERROR;
+        got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
+        uloc_getDisplayVariant(bogusVariant3, NULL, got, size, &status);
+    }
+    if(strcmp(austrdup(got),"_FOO_")!=0) {
+        log_err("FAIL: getDisplayVariant()  Wanted: _FOO_  Got: %s\n", austrdup(got));
+    }
+  
 }

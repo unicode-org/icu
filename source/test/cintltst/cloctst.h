@@ -37,7 +37,7 @@ static  void TestDisplayNames(void);
  **/
 static  void TestSimpleObjectStuff(void);
 /**
- * Test Locale::getAvailableLocales
+ * Test getAvailableLocales
  **/
  static  void TestGetAvailableLocales(void);
 /**
@@ -45,9 +45,26 @@ static  void TestSimpleObjectStuff(void);
  **/
  static void TestDataDirectory(void);
 /**
-* Test functions to test get ISO countries and Languages
+ * Test functions to test get ISO countries and Languages
  **/
  static void TestISOFunctions(void);
+/**
+ * Test functions to test get ISO3 countries and Languages Fallback
+ **/
+ static void TestISO3Fallback(void);
+/**
+ * Test functions to test get ISO3 countries and Languages for Uninstalled locales
+ **/
+ static void TestUninstalledISO3Names(void);
+/**
+ * Test functions uloc_getDisplaynames()
+ **/
+ static void TestSimpleDisplayNames(void);
+/**
+ * Test functions uloc_getDisplaynames()
+ **/
+ static void TestVariantParsing(void);
+
  /*
  * routine to perform subtests, used by TestDisplayNames
  **/
