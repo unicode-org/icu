@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2002/05/08 23:36:37 $ 
- * $Revision: 1.16 $
+ * $Date: 2002/05/09 16:59:20 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -446,7 +446,8 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat (String pattern, DecimalFormatSymbols symbols) {
         // Always applyPattern after the symbols are set
-        _setDecimalFormatSymbols(symbols);
+        this.symbols = (DecimalFormatSymbols) symbols.clone();
+        setCurrencyForSymbols();
         applyPattern( pattern, false );
     }
 
@@ -1389,13 +1390,17 @@ public class DecimalFormat extends NumberFormat {
      * @see DecimalFormatSymbols
      */
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
-        _setDecimalFormatSymbols(newSymbols);
+        symbols = (DecimalFormatSymbols) newSymbols.clone();
+        setCurrencyForSymbols();
         expandAffixes();
     }
 
-    private void _setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
-        // don't allow multiple references
-        symbols = (DecimalFormatSymbols) newSymbols.clone();
+    /**
+     * Update the currency object to match the symbols.  This method
+     * is used only when the caller has passed in a symbols object
+     * that may not be the default object for its locale.
+     */
+    private void setCurrencyForSymbols() {
         /*Bug 4212072
           Update the affix strings accroding to symbols in order to keep
           the affix strings up to date.
@@ -1407,7 +1412,7 @@ public class DecimalFormat extends NumberFormat {
         // compatibility, we check any explicitly set DFS object.  If it
         // is a default symbols object for its locale, we change the
         // currency object to one for that locale.  If it is custom,
-        // we create a CompatibilityCurrency object and use that.
+        // we set the currency to null.
         DecimalFormatSymbols def =
             new DecimalFormatSymbols(symbols.getLocale());
         
@@ -1417,7 +1422,7 @@ public class DecimalFormat extends NumberFormat {
                 def.getInternationalCurrencySymbol())) {
             currency = Currency.getInstance(symbols.getLocale());
         } else {
-            currency = Currency.getCompatibilityInstance(symbols);
+            currency = null;
         }
     }
 
@@ -2020,14 +2025,24 @@ public class DecimalFormat extends NumberFormat {
                 switch (c) {
                 case CURRENCY_SIGN:
                     // As of ICU 2.2 we use the currency object, and
-                    // ignore the currency symbols in the DFS.
-                    if (i<pattern.length() &&
-                        pattern.charAt(i) == CURRENCY_SIGN) {
+                    // ignore the currency symbols in the DFS, unless
+                    // we have a null currency object.  This occurs if
+                    // resurrecting a pre-2.2 object or if the user
+                    // sets a custom DFS.
+                    boolean intl = i<pattern.length() &&
+                        pattern.charAt(i) == CURRENCY_SIGN;
+                    if (intl) {
                         ++i;
-                        buffer.append(currency.getCurrencyCode());
-                    } else {
-                        buffer.append(currency.getSymbol(symbols.getLocale()));
                     }
+                    String s;
+                    if (currency != null) {
+                        s = intl ? currency.getCurrencyCode()
+                            : currency.getSymbol(symbols.getLocale());
+                    } else {
+                        s = intl ? symbols.getInternationalCurrencySymbol()
+                            : symbols.getCurrencySymbol();
+                    }
+                    buffer.append(s);
                     continue;
                 case PATTERN_PERCENT:
                     c = symbols.getPercent();
@@ -2800,6 +2815,8 @@ public class DecimalFormat extends NumberFormat {
      * currency format.  If this format is not a currency format, then
      * the currency object is used if and when this object becomes a
      * currency format through the application of a new pattern.
+     * @param theCurrency new currency object to use.  Must not be
+     * null.
      * @since ICU 2.2
      */
     public void setCurrency(Currency theCurrency) {
@@ -2823,7 +2840,11 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Gets the <tt>Currency</tt> object used to display currency
-     * amounts.
+     * amounts.  This will be null if a object is resurrected with a
+     * custom DecimalFormatSymbols object, or if the user sets a
+     * custom DecimalFormatSymbols object.  A custom
+     * DecimalFormatSymbols object has currency symbols that are not
+     * the standard ones for its locale.
      * @since ICU 2.2
      */
     public Currency getCurrency() {
@@ -2892,6 +2913,11 @@ public class DecimalFormat extends NumberFormat {
                 // Didn't have exponential fields
                 useExponentialNotation = false;
             }
+        }
+        if (serialVersionOnStream < 3) {
+            // Versions prior to 3 do not store a currency object.
+            // Create one to match the DecimalFormatSymbols object.
+            setCurrencyForSymbols();
         }
         serialVersionOnStream = currentSerialVersion;
         digitList = new DigitList();
@@ -3140,14 +3166,18 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Currency object used to format currencies.  Only used if
-     * <tt>isCurrencyFormat</tt> is true.
+     * <tt>isCurrencyFormat</tt> is true.  In some cases this will be
+     * null: If a pre-2.2 object is resurrected with a custom
+     * DecimalFormatSymbols object, or if the user sets a custom DFS
+     * object.  A custom DFS object has currency symbols that are not
+     * the standard ones for its locale.
      * @since ICU 2.2
      */
     private Currency currency;
 
     //----------------------------------------------------------------------
 
-    static final int currentSerialVersion = 2;
+    static final int currentSerialVersion = 3;
 
     /**
      * The internal serial version which says which version was written
@@ -3158,6 +3188,7 @@ public class DecimalFormat extends NumberFormat {
      *      <code>useExponentialNotation</code> and <code>minExponentDigits</code>.
      * <li><b>2</b>: version on AlphaWorks, which adds roundingMode, formatWidth,
      *      pad, padPosition, exponentSignAlwaysShown, roundingIncrement.
+     * <li><b>3</b>: ICU 2.2.  Adds currency object.
      * </ul>
      * @serial */
     private int serialVersionOnStream = currentSerialVersion;

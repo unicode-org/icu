@@ -62,39 +62,6 @@ public class Currency implements Serializable {
     }
 
     /**
-     * A <tt>Currency</tt> subclass that emulates legacy (pre ICU 2.2)
-     * behavior.  For internal use only.
-     * @internal
-     */
-    private static class CompatibilityCurrency extends Currency {
-        
-        private String symbol;
-
-        public CompatibilityCurrency(DecimalFormatSymbols sym) {
-            super(sym.getInternationalCurrencySymbol());
-            this.symbol = sym.getCurrencySymbol();
-        }
-
-        public String getSymbol(Locale locale) {
-            return symbol;
-        }
-    }
-
-    /**
-     * Returns a compatibility object that mimics legacy behavior of
-     * the given symbols.  This is used internally for consistency
-     * with ICU versions prior to 2.2.  To obtain modern behavior, do
-     * not modify the currency symbol or international currency symbol
-     * of the <tt>DecimalFormatSymbols</tt> object used by a
-     * <tt>DecimalFormat</tt>.  Doing so will cause those symbols to
-     * be used instead of a "smart" <tt>Currency</tt> object.
-     * @internal
-     */
-    public static Currency getCompatibilityInstance(DecimalFormatSymbols sym) {
-        return new CompatibilityCurrency(sym);
-    }
-
-    /**
      * Returns the display string for this currency object in the
      * given locale.  For example, the display string for the USD
      * currency object in the en_US locale is "$".
