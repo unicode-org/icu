@@ -12,14 +12,15 @@
 *
 *   Date        Name        Description
 *   05/09/00    helena      Added implementation to handle fallback mappings.
+*   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
 #ifndef UCNV_CNV_H
 #define UCNV_CNV_H
 
 #include "unicode/utypes.h"
-#include "unicode/ucnv_bld.h"
-
+#include "unicode/ucnv_err.h"
+#include "ucnv_bld.h"
 #include "ucmp8.h"
 #include "ucmp16.h"
 
@@ -65,90 +66,35 @@ U_CDECL_BEGIN
 #define missingCharMarker 0xFFFF
 #define missingUCharMarker 0xFFFD
 
-#define FromU_CALLBACK_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-              if (_this->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
+#define FromU_CALLBACK_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
+              if (args.converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
               else \
                 { \
-                  char *myTargetCopy = myTarget + myTargetIndex; \
-                  const UChar *mySourceCopy = mySource + mySourceIndex; \
                   /*copies current values for the ErrorFunctor to update */ \
                   /*Calls the ErrorFunctor */ \
-                  _this->fromUCharErrorBehaviour (_this, \
-                                                  (char **) &myTargetCopy, \
-                                                  targetLimit, \
-                                                  (const UChar **) &mySourceCopy, \
-                                                  sourceLimit, \
-                                                  offsets, \
-                                                  flush, \
+                  args.converter->fromUCharErrorBehaviour ( context, \
+                                                  &args, \
+                                                  codeUnits, \
+                                                  length, \
+                                                  codePoint, \
+                                                  reason, \
                                                   err); \
-                  /*Update the local Indexes so that the conversion can restart at the right points */ \
-                  mySourceIndex = (mySourceCopy - mySource) ; \
-                  myTargetIndex = (char*)myTargetCopy - (char*)myTarget ; \
                 }
 
-#define ToU_CALLBACK_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-              if (_this->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
+#define ToU_CALLBACK_MACRO(context, args, codePoints, length, reason, err) \
+              if (args.converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
               else \
                 { \
-                  UChar *myTargetCopy = myTarget + myTargetIndex; \
-                  const char *mySourceCopy = mySource + mySourceIndex; \
                   /*Calls the ErrorFunctor */ \
-                  _this->fromCharErrorBehaviour (_this, \
-                                                 &myTargetCopy, \
-                                                 targetLimit, \
-                                              (const char **) &mySourceCopy, \
-                                                 sourceLimit, \
-                                                 offsets, \
-                                                 flush, \
+                  args.converter->fromCharErrorBehaviour ( \
+                                                 context, \
+                                                 &args, \
+                                                 codePoints, \
+                                                 length, \
+                                                 reason, \
                                                  err); \
-                  /*Update the local Indexes so that the conversion can restart at the right points */ \
-                  mySourceIndex = ((char*)mySourceCopy - (char*)mySource); \
-                  myTargetIndex = (myTargetCopy - myTarget); \
                 }
 
-#define FromU_CALLBACK_OFFSETS_LOGIC_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-              if (_this->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
-              else \
-                { \
-                  char *myTargetCopy = myTarget + myTargetIndex; \
-                  const UChar *mySourceCopy = mySource + mySourceIndex; \
-                 int32_t My_i = myTargetIndex; \
-                  /*copies current values for the ErrorFunctor to update */ \
-                  /*Calls the ErrorFunctor */ \
-                  _this->fromUCharErrorBehaviour (_this, \
-                                                  (char **) &myTargetCopy, \
-                                                  targetLimit, \
-                                                  (const UChar **) &mySourceCopy, \
-                                                  sourceLimit, \
-                                                  offsets + myTargetIndex, \
-                                                  flush, \
-                                                  err); \
-                  /*Update the local Indexes so that the conversion can restart at the right points */ \
-                  mySourceIndex = mySourceCopy - mySource ; \
-                  myTargetIndex = (char*)myTargetCopy - (char*)myTarget ; \
-                  for (;My_i < myTargetIndex;My_i++) offsets[My_i] += currentOffset  ;    \
-                }
-
-#define ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-              if (_this->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
-              else \
-                { \
-                  UChar *myTargetCopy = myTarget + myTargetIndex; \
-                  const char *mySourceCopy = mySource + mySourceIndex; \
-                                  int32_t My_i = myTargetIndex; \
-                              _this->fromCharErrorBehaviour (_this, \
-                                                 &myTargetCopy, \
-                                                 targetLimit, \
-                                              (const char **) &mySourceCopy, \
-                                                 sourceLimit, \
-                                                 offsets + myTargetIndex, \
-                                                 flush, \
-                                                 err); \
-                  /*Update the local Indexes so that the conversion can restart at the right points */ \
-                  mySourceIndex = (char *)mySourceCopy - (char*)mySource; \
-                  myTargetIndex = ((UChar*)myTargetCopy - (UChar*)myTarget);  \
-                  for (;My_i < myTargetIndex;My_i++) {offsets[My_i] += currentOffset  ;   } \
-                }
 
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);

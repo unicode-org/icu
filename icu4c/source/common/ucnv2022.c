@@ -10,13 +10,18 @@
 *
 *   created on: 2000feb03
 *   created by: Markus W. Scherer
+*
+*   Change history:
+*
+*   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
+#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -719,8 +724,8 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
                                              UBool flush,
                                              UErrorCode * err)
 {
-  const char *mySource = *source;
-  UChar *myTarget = *target;
+  const char *mySource = *source, *srcTemp;
+  UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -729,10 +734,11 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
   int32_t myMode = _this->mode;
+  UConverterToUnicodeArgs args;
 
 
   myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
-
+  args.sourceStart = *source;
     while (mySourceIndex < sourceLength)
     {
       if (myTargetIndex < targetLength)
@@ -783,19 +789,28 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
                       _this->invalidCharBuffer[0] = (char) mySourceChar;
                     }
                   _this->mode = myMode;
-                  ToU_CALLBACK_MACRO(_this,
-                                     myTarget,
-                                     myTargetIndex, 
-                                     targetLimit,
-                                     mySource, 
-                                     mySourceIndex,
-                                     sourceLimit,
-                                     offsets,
-                                     flush,
+                  args.converter = _this;
+                  srcTemp = mySource + mySourceIndex;
+                  tgtTemp = myTarget + myTargetIndex;
+                  args.pTarget = &tgtTemp;
+                  args.targetLimit = targetLimit;
+                  args.pSource = &srcTemp;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets+myTargetIndex;
+                  args.size = sizeof(args);
+
+                  ToU_CALLBACK_MACRO(_this->toUContext,
+                                     args,
+                                     srcTemp,
+                                     1, 
+                                     UCNV_UNASSIGNED,
                                      err);
 
                   if (U_FAILURE (*err))  break;
                   _this->invalidCharLength = 0;
+                  myTargetIndex = *(args.pTarget) - myTarget;
+                  mySourceIndex = *(args.pSource) - mySource;
                 }
             }
         }
@@ -836,8 +851,8 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                                                            UBool flush,
                                                            UErrorCode * err)
 {
-  const char *mySource = *source;
-  UChar *myTarget = *target;
+  const char *mySource = *source, *srcTemp;
+  UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -847,9 +862,10 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   UChar mySourceChar = 0x0000;
   int32_t myMode = _this->mode;
   int32_t* originalOffsets = offsets;
-
+  UConverterToUnicodeArgs args;
 
   myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
+  args.sourceStart = *source;
 
     while (mySourceIndex < sourceLength)
     {
@@ -909,20 +925,29 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                       _this->invalidCharBuffer[0] = (char) mySourceChar;
                     }
                   _this->mode = myMode;
-                  ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this,
-                                                   myTarget,
-                                                   myTargetIndex, 
-                                                   targetLimit,
-                                                   mySource, 
-                                                   mySourceIndex,
-                                                   sourceLimit,
-                                                   offsets,
-                                                   flush,
-                                                   err);
-                  
+
+                  args.converter = _this;
+                  srcTemp = mySource + mySourceIndex;
+                  tgtTemp = myTarget + myTargetIndex;
+                  args.pTarget = &tgtTemp;
+                  args.targetLimit = targetLimit;
+                  args.pSource = &srcTemp;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets+myTargetIndex;
+                  args.size = sizeof(args);
+                  /* call back handles the offset array */
+                  ToU_CALLBACK_MACRO(_this->toUContext,
+                                     args,
+                                     srcTemp,
+                                     1, 
+                                     UCNV_UNASSIGNED,
+                                     err);                  
                   
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
+                  myTargetIndex = *(args.pTarget) - myTarget;
+                  mySourceIndex = *(args.pSource) - mySource;
                 }
             }
         }
@@ -964,8 +989,8 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
                                                UErrorCode * err)
 
 {
-  const UChar *mySource = *source;
-  char *myTarget = *target;
+  const UChar *mySource = *source, *srcTemp;
+  char *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -976,8 +1001,10 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
   UChar mySourceChar = 0x0000;
   UBool isTargetUCharDBCS = (UBool)_this->fromUnicodeStatus;
   UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
+  UConverterFromUnicodeArgs args;
+
   myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
-  
+  args.sourceStart = *source;
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
@@ -1042,19 +1069,28 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
               _this->invalidUCharLength = 1;
 
               _this->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-              FromU_CALLBACK_MACRO(_this,
-                                   myTarget, 
-                                   myTargetIndex,
-                                   targetLimit, 
-                                   mySource,
-                                   mySourceIndex, 
-                                   sourceLimit,
-                                   offsets, 
-                                   flush, 
-                                   err);
-
+              srcTemp = mySource + mySourceIndex;
+              tgtTemp = myTarget + myTargetIndex;
+              args.converter = _this;
+              args.pTarget = &tgtTemp;
+              args.targetLimit = targetLimit;
+              args.pSource = &srcTemp;
+              args.sourceLimit = sourceLimit;
+              args.flush = flush;
+              args.offsets = offsets+myTargetIndex;
+              args.size = sizeof(args);
+              /* HSYS: to do: more smarts */
+              FromU_CALLBACK_MACRO(args.converter->fromUContext,
+                                 args,
+                                 srcTemp,
+                                 1,
+                                 (UChar32) (*srcTemp),
+                                 UCNV_UNASSIGNED,
+                                 err);
               if (U_FAILURE (*err)) break;
               _this->invalidUCharLength = 0;
+              myTargetIndex = *(args.pTarget) - myTarget;
+              mySourceIndex = *(args.pSource) - mySource;
             }
         }
       else
@@ -1084,8 +1120,8 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                                                              UErrorCode * err)
 
 {
-  const UChar *mySource = *source;
-  char *myTarget = *target;
+  const UChar *mySource = *source, *srcTemp;
+  char *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -1097,9 +1133,10 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   UBool isTargetUCharDBCS = (UBool)_this->fromUnicodeStatus;
   UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
   int32_t* originalOffsets = offsets;
+  UConverterFromUnicodeArgs args;
   
   myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
-  
+  args.sourceStart = *source;
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
@@ -1168,19 +1205,29 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 
               /* Breaks out of the loop since behaviour was set to stop */
               _this->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-              FromU_CALLBACK_OFFSETS_LOGIC_MACRO(_this,
-                                                 myTarget, 
-                                                 myTargetIndex,
-                                                 targetLimit, 
-                                                 mySource,
-                                                 mySourceIndex, 
-                                                 sourceLimit,
-                                                 offsets, 
-                                                 flush, 
-                                                 err);
+              srcTemp = mySource + mySourceIndex;
+              tgtTemp = myTarget + myTargetIndex;
+              args.converter = _this;
+              args.pTarget = &tgtTemp;
+              args.targetLimit = targetLimit;
+              args.pSource = &srcTemp;
+              args.sourceLimit = sourceLimit;
+              args.flush = flush;
+              args.offsets = offsets+myTargetIndex;
+              args.size = sizeof(args);
+              /* HSYS: to do: more smarts, including offsets */
+              FromU_CALLBACK_MACRO(args.converter->fromUContext,
+                                     args,
+                                     srcTemp,
+                                     1,
+                                     (UChar32) (*srcTemp),
+                                     UCNV_UNASSIGNED,
+                                     err);
               
               if (U_FAILURE (*err))     break;
               _this->invalidUCharLength = 0;
+              myTargetIndex = *(args.pTarget) - myTarget;
+              mySourceIndex = *(args.pSource) - mySource;
             }
         }
       else
@@ -1207,6 +1254,7 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
 {
   UChar myUChar;
   char const *sourceInitial = *source;
+  UConverterToUnicodeArgs args;
   /*safe keeps a ptr to the beginning in case we need to step back*/
   
   /*Input boundary check*/
@@ -1216,6 +1264,7 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
       return 0xFFFD;
     }
   
+  args.sourceStart = *source;
   /*Checks to see if with have SI/SO shifters
    if we do we change the mode appropriately and we consume the byte*/
   if ((**source == UCNV_SI) || (**source == UCNV_SO)) 
@@ -1266,14 +1315,21 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
       
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
-      converter->fromCharErrorBehaviour(converter,
-                                        &myUCharPtr,
-                                        myUCharPtr + 1,
-                                        &sourceFinal,
-                                        sourceLimit,
-                                        NULL,
-                                        TRUE,
-                                        err);
+      args.converter = converter;
+      args.pTarget = &myUCharPtr;
+      args.targetLimit = myUCharPtr + 1;
+      args.pSource = &sourceFinal;
+      args.sourceLimit = sourceLimit;
+      args.flush = TRUE;
+      args.offsets = NULL;  
+      args.size = sizeof(args);
+
+      converter->fromCharErrorBehaviour(converter->toUContext,
+                                    &args,
+                                    sourceFinal,
+                                    1,
+                                    UCNV_UNASSIGNED,
+                                    err);
       
       /*makes the internal caching transparent to the user*/
       if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;

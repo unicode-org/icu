@@ -12,6 +12,7 @@
  *   Date        Name        Description
  *   04/04/99    helena      Fixed internal header inclusion.
  *   05/11/00    helena      Added setFallback and usesFallback APIs.
+ *   06/29/2000  helena      Major rewrite of the callback APIs.
  */
 
 /**
@@ -25,27 +26,81 @@
 #define UCNV_H
 
 #include "unicode/utypes.h"
-#include "unicode/ucnv_bld.h"
 #include "unicode/ucnv_err.h"
 
 U_CDECL_BEGIN
 
-typedef void (*UConverterToUCallback) (UConverter *,
-				  UChar **,
-				  const UChar *,
-				  const char **,
-				  const char *,
-				  int32_t* offsets,
-				  UBool,
+
+#define UCNV_MAX_SUBCHAR_LEN 4
+#define UCNV_ERROR_BUFFER_LENGTH 20
+#define UCNV_MAX_AMBIGUOUSCCSIDS 5
+
+#define UCNV_IMPLEMENTED_CONVERSION_TYPES 9
+/*Sentinel Value used to check the integrity of the binary data files */
+
+#define UCNV_FILE_CHECK_MARKER 0xBEDA
+
+/*maximum length of the converter names */
+#define UCNV_MAX_CONVERTER_NAME_LENGTH 60
+#define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
+
+/*Pointer to the aforementioned file */
+#define UCNV_MAX_LINE_TEXT (UCNV_MAX_CONVERTER_NAME_LENGTH*400)
+
+#define  UCNV_SI 0x0F           /*Shift in for EBDCDIC_STATEFUL and iso2022 states */
+#define  UCNV_SO 0x0E           /*Shift out for EBDCDIC_STATEFUL and iso2022 states */
+
+typedef enum {
+    UCNV_UNSUPPORTED_CONVERTER = -1,
+    UCNV_SBCS = 0,
+    UCNV_DBCS = 1,
+    UCNV_MBCS = 2,
+    UCNV_LATIN_1 = 3,
+    UCNV_UTF8 = 4,
+    UCNV_UTF16_BigEndian = 5,
+    UCNV_UTF16_LittleEndian = 6,
+    UCNV_EBCDIC_STATEFUL = 7,
+    UCNV_ISO_2022 = 8,
+    
+    UCNV_LMBCS_1 = 9,
+    UCNV_LMBCS_2, 
+    UCNV_LMBCS_3,		
+    UCNV_LMBCS_4,
+    UCNV_LMBCS_5,
+    UCNV_LMBCS_6,
+    UCNV_LMBCS_8,
+    UCNV_LMBCS_11,
+    UCNV_LMBCS_16,
+    UCNV_LMBCS_17,
+    UCNV_LMBCS_18,
+    UCNV_LMBCS_19,
+    UCNV_LMBCS_LAST = UCNV_LMBCS_19,
+
+    /* Number of converter types for which we have conversion routines. */
+    UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES = UCNV_LMBCS_LAST+1
+   
+} UConverterType;
+
+typedef enum {
+    UCNV_UNKNOWN = -1,
+    UCNV_IBM = 0
+} UConverterPlatform;
+
+typedef void (*UConverterToUCallback) (
+                  void* context,
+                  UConverterToUnicodeArgs *args,
+                  const char *codePoints,
+                  int32_t length,
+                  UConverterCallbackReason reason,
 				  UErrorCode *);
 
-typedef void (*UConverterFromUCallback) (UConverter *,
-				    char **,
-				    const char *,
-				    const UChar **,
-				    const UChar *,
-				    int32_t* offsets,
-				    UBool,
+typedef void (*UConverterFromUCallback) (
+                    void* context,
+                    UConverterFromUnicodeArgs *args,
+                    const UChar* codeUnits,
+                    int32_t length,
+                    UChar32 codePoint, /* HSYS: why can't just use the macros on the code units? */
+                    UConverterCallbackReason reason,
 				    UErrorCode *);
 
 U_CDECL_END
@@ -384,30 +439,40 @@ U_CAPI UConverterFromUCallback U_EXPORT2
  * Gets the current callback function used by the converter when illegal or invalid sequence found.
  *
  * @param converter the unicode converter
- * @param action the callback function we want to set.
+ * @param newAction the callback function we want to set.
+ * @param newContext the new toUnicode callback function state
+ * @param oldAction the previously assigned callback function pointer
+ * @param oldContext the new toUnicode callback function state
  * @param err The error code status
- * @return the previously assigned callback function pointer
  * @see ucnv_getToUCallBack
  * @stable
  */
-U_CAPI UConverterToUCallback U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_setToUCallBack (UConverter * converter,
-			 UConverterToUCallback action,
+			 UConverterToUCallback newAction,
+			 void* newContext,
+             UConverterToUCallback oldAction,
+			 void** oldContext,
 			 UErrorCode * err);
 
 /**
  * Gets the current callback function used by the converter when illegal or invalid sequence found.
  *
  * @param converter the unicode converter
- * @param action the callback function we want to set.
+ * @param newAction the callback function we want to set.
+ * @param newContext the new fromUnicode callback function state
+ * @param oldAction the previously assigned callback function pointer
+ * @param oldContext the new fromUnicode callback function state
  * @param err The error code status
- * @return the previously assigned callback function pointer
  * @see ucnv_getFromUCallBack
  * @stable
  */
-U_CAPI UConverterFromUCallback U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_setFromUCallBack (UConverter * converter,
-			   UConverterFromUCallback action,
+			   UConverterFromUCallback newAction,
+			   void *newContext,
+			   UConverterFromUCallback oldAction,
+               void **oldContext,
 			   UErrorCode * err);
 
 

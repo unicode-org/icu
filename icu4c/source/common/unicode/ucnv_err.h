@@ -34,52 +34,102 @@
 #ifndef UCNV_ERR_H
 #define UCNV_ERR_H
 
-#include "unicode/ucnv.h"
 #include "unicode/utypes.h"
 
+/** 
+ * The process condition code to be used with the callbacks.  
+ * UCNV_UNASSIGNED : the code point is unassigned.
+ * UCNV_ILLEGAL : The code point is illegal.  For example,\x81\x2E is illegal 
+ * because \x2E is not a valid trail byte for the \x81 lead byte in SJIS.
+ * UCNV_IRREGULAR : The code point is not a regular sequence in the encoding.
+ * For example,\xC0\E1 is irregular because the same character can be represented
+ * as \x61.
+ * UCNV_RESET : Whether the conversion operation has been reset.
+ * UCNV_CLOSE : Whether the conversion operation has ended.
+ */
+typedef enum {
+    UCNV_UNASSIGNED = 0,
+    UCNV_ILLEGAL = 1,
+    UCNV_IRREGULAR = 2,
+    UCNV_RESET = 3,
+    UCNV_CLOSE = 4,   
+} UConverterCallbackReason;
+
+/* Forward declaring the UConverter structure */
+struct UConverter;
+typedef struct UConverter UConverter;
+
+/**
+ * The structure for the fromUnicode callback function parameter.
+ */
+typedef struct {
+	uint16_t size;
+	UBool flush;
+	UConverter *converter;
+    const UChar *sourceStart;
+	const UChar **pSource;
+	const UChar *sourceLimit;
+	char **pTarget;
+	const char *targetLimit;
+	int32_t *offsets;  /* *offset = blah ; offset++; */
+} UConverterFromUnicodeArgs;
+
+
+/**
+ * The structure for the toUnicode callback function parameter.
+ */
+typedef struct {
+	uint16_t size;
+	UBool flush;
+	UConverter *converter;
+    const char *sourceStart;
+	const char **pSource;
+	const char *sourceLimit;
+	UChar **pTarget;
+	const UChar *targetLimit;
+	int32_t *offsets;
+} UConverterToUnicodeArgs;
+
 
 /**
  * Functor STOPS at the ILLEGAL_SEQUENCE 
  * @stable
  */
-U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (UConverter * _this,
-				     char **target,
-				     const char *targetLimit,
-				     const UChar ** source,
-				     const UChar * sourceLimit,
-				     int32_t* offsets,
-				     UBool flush,
-				     UErrorCode * err);
-
-
-/**
- * Functor STOPS at the ILLEGAL_SEQUENCE 
- * @stable
- */
-U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (UConverter * _this,
-				  UChar ** target,
-				  const UChar * targetLimit,
-				  const char **source,
-				  const char *sourceLimit,
-				  int32_t* offsets,
-				  UBool flush,
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
+                  void *context,
+                  UConverterFromUnicodeArgs *fromUArgs,
+                  const UChar* codeUnits,
+                  int32_t length,
+                  UChar32 codePoint,
+                  UConverterCallbackReason reason,
 				  UErrorCode * err);
 
 
 
+/**
+ * Functor STOPS at the ILLEGAL_SEQUENCE 
+ * @stable
+ */
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
+                  void *context,
+                  UConverterToUnicodeArgs *fromUArgs,
+                  const char* codeUnits,
+                  int32_t length,
+                  UConverterCallbackReason reason,
+				  UErrorCode * err);
 
 /**
  * Functor SKIPs the ILLEGAL_SEQUENCE 
  * @stable
  */
-U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (UConverter * _this,
-				     char **target,
-				     const char *targetLimit,
-				     const UChar ** source,
-				     const UChar * sourceLimit,
-				     int32_t* offsets,
-				     UBool flush,
-				     UErrorCode * err);
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
+                  void *context,
+                  UConverterFromUnicodeArgs *fromUArgs,
+                  const UChar* codeUnits,
+                  int32_t length,
+                  UChar32 codePoint,
+                  UConverterCallbackReason reason,
+				  UErrorCode * err);
 
 /**
  * Functor Substitute the ILLEGAL SEQUENCE with the current substitution string assiciated with _this,
@@ -89,14 +139,14 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (UConverter * _this,
  * @stable
  */
 
-U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
-					   char **target,
-					   const char *targetLimit,
-					   const UChar ** source,
-					   const UChar * sourceLimit,
-					   int32_t* offsets,
-					   UBool flush,
-					   UErrorCode * err);
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
+                  void *context,
+                  UConverterFromUnicodeArgs *fromUArgs,
+                  const UChar* codeUnits,
+                  int32_t length,
+                  UChar32 codePoint,
+                  UConverterCallbackReason reason,
+				  UErrorCode * err);
 
 /**
  * Functor Substitute the ILLEGAL SEQUENCE with a sequence escaped codepoints corresponding to the ILLEGAL
@@ -109,29 +159,27 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
  * @stable
  */
 
-U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
-						    char **target,
-						    const char *targetLimit,
-						    const UChar ** source,
-						  const UChar * sourceLimit,
-						    int32_t* offsets,
-						    UBool flush,
-						    UErrorCode * err);
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
+                  void *context,
+                  UConverterFromUnicodeArgs *fromUArgs,
+                  const UChar* codeUnits,
+                  int32_t length,
+                  UChar32 codePoint,
+                  UConverterCallbackReason reason,
+				  UErrorCode * err);
 
 
 /**
  * Functor SKIPs the ILLEGAL_SEQUENCE 
  * @stable
  */
-U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (UConverter * _this,
-				  UChar ** target,
-				  const UChar * targetLimit,
-				  const char **source,
-				  const char *sourceLimit,
-				  int32_t* offsets,
-				  UBool flush,
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
+                  void *context,
+                  UConverterToUnicodeArgs *fromUArgs,
+                  const char* codeUnits,
+                  int32_t length,
+                  UConverterCallbackReason reason,
 				  UErrorCode * err);
-
 
 /**
  * Functor Substitute the ILLEGAL SEQUENCE with the current substitution string assiciated with _this,
@@ -140,14 +188,13 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (UConverter * _this,
  * store the left over data in target, before transcoding the "source Stream"
  * @stable
  */
-U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (UConverter * _this,
-					UChar ** target,
-					const UChar * targetLimit,
-					const char **source,
-					const char *sourceLimit,
-					int32_t* offsets,
-					UBool flush,
-					UErrorCode * err);
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
+                  void *context,
+                  UConverterToUnicodeArgs *fromUArgs,
+                  const char* codeUnits,
+                  int32_t length,
+                  UConverterCallbackReason reason,
+				  UErrorCode * err);
 
 /**
  * Functor Substitute the ILLEGAL SEQUENCE with a sequence escaped codepoints corresponding to the
@@ -158,14 +205,12 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (UConverter * _this,
  * @stable
  */
 
-U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
-						 UChar ** target,
-						 const UChar * targetLimit,
-						 const char **source,
-						 const char *sourceLimit,
-						 int32_t* offsets,
-						 UBool flush,
-						 UErrorCode * err);
-
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
+                  void *context,
+                  UConverterToUnicodeArgs *fromUArgs,
+                  const char* codeUnits,
+                  int32_t length,
+                  UConverterCallbackReason reason,
+				  UErrorCode * err);
 
 #endif/*UCNV_ERR_H*/ 

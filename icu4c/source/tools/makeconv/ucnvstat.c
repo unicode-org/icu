@@ -13,7 +13,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
-#include "unicode/ucnv_bld.h"
+#include "ucnv_bld.h"
 
 static const UConverterStaticData _SBCSStaticData={
   sizeof(UConverterStaticData),

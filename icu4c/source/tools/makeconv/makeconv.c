@@ -12,14 +12,15 @@
  *  table (IBM NLTC ucmap format).
  *
  *  05/04/2000    helena     Added fallback mapping into the picture...
+ *  06/29/2000  helena      Major rewrite of the callback APIs.
  */
    
 #include <stdio.h>
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "ucnv_io.h"
-#include "unicode/ucnv_bld.h"
 #include "unicode/ucnv_err.h"
+#include "ucnv_bld.h"
 #include "ucnv_imp.h"
 #include "ucnv_cnv.h"
 #include "cstring.h"
