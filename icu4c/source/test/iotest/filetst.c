@@ -337,9 +337,9 @@ static void TestCodepageAndLocale(void) {
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "es", NULL);
     if (u_fgetcodepage(myFile) == NULL
-        || strcmp(u_fgetcodepage(myFile), "ISO-8859-1") != 0)
+        || strcmp(u_fgetcodepage(myFile), ucnv_getDefaultName()) != 0)
     {
-        log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
+        log_err("Didn't get the proper default codepage for \"es\". Got %s expected: iso-8859-1\n",
             u_fgetcodepage(myFile));
     }
     if (u_fgetlocale(myFile) == NULL

@@ -64,15 +64,8 @@ u_finit(FILE        *f,
         }
 #endif
 
-    /* if the codepage is NULL, use the default for the locale */
-    if(codepage == NULL) {
-        if(!useSysCP) { /* if both locale and codepage are NULL, use the system default codepage */
-            codepage = uprv_defaultCodePageForLocale(locale);
-        }
-
-        /* if the codepage is still NULL, the default codepage will be used */
-        result->fConverter = ucnv_open(codepage, &status);
-    } else if (*codepage != '\0') {
+    /* If the codepage is not "" use the ucnv_open default behavior */
+    if(codepage == NULL || *codepage != '\0') {
         result->fConverter = ucnv_open(codepage, &status);
     }
 
