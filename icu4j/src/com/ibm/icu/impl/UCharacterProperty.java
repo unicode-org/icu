@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/07/19 00:53:02 $ 
-* $Revision: 1.12 $
+* $Date: 2002/07/22 20:41:10 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -1354,6 +1354,20 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 }
             }
         }
+    }
+    
+    /**
+     * Checks if the argument c is to be treated as a white space in ICU
+     * rules. Usually ICU rule white spaces are ignored unless quoted.
+     * @param c codepoint to check
+     * @return true if c is a ICU white space
+     */
+    public static boolean isRuleWhiteSpace(int c) 
+    {
+        // "white space" in the sense of ICU rule parsers: Cf+White_Space
+        UCharacterProperty property = UCharacterProperty.getInstance();
+        return property.getType(c) == UCharacterCategory.FORMAT ||
+               property.hasBinaryProperty(c, UProperty.WHITE_SPACE);
     }
 
     // protected variables -----------------------------------------------
