@@ -36,120 +36,12 @@
 #include "uparse.h"
 
 #define MAX_TOKEN_LEN 16
-#define RULE_BUFFER_LEN 8192
-
-void genericLocaleStarter(const char *locale, const char *s[], uint32_t size); /* keep gcc happy */
 
 typedef int tst_strcoll(void *collator, const int object,
                         const UChar *source, const int sLen,
                         const UChar *target, const int tLen);
 
 
-/**
- * Return an integer array containing all of the collation orders
- * returned by calls to next on the specified iterator
- */
-static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
-{
-    UErrorCode status;
-    int32_t order;
-    int32_t maxSize = 100;
-    int32_t size = 0;
-    int32_t *temp;
-    int32_t *orders =(int32_t*)malloc(sizeof(int32_t) * maxSize);
-    status= U_ZERO_ERROR;
-
-
-    while ((order=ucol_next(iter, &status)) != UCOL_NULLORDER)
-    {
-        if (size == maxSize)
-        {
-            maxSize *= 2;
-            temp = (int32_t*)malloc(sizeof(int32_t) * maxSize);
-
-            memcpy(temp, orders, size * sizeof(int32_t));
-            free(orders);
-            orders = temp;
-
-        }
-
-        orders[size++] = order;
-    }
-
-    if (maxSize > size && size > 0)
-    {
-        temp = (int32_t*)malloc(sizeof(int32_t) * size);
-
-        memcpy(temp, orders, size * sizeof(int32_t));
-        free(orders);
-        orders = temp;
-
-
-    }
-
-    *orderLength = size;
-    return orders;
-}
-
-static void backAndForth(UCollationElements *iter)
-{
-    /* Run through the iterator forwards and stick it into an array */
-    int32_t index, o;
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t orderLength = 0;
-    int32_t *orders;
-    orders= getOrders(iter, &orderLength);
-
-
-    /* Now go through it backwards and make sure we get the same values */
-    index = orderLength;
-    ucol_reset(iter);
-
-    /* synwee : changed */
-    while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
-    {
-      if (o != orders[-- index])
-      {
-        if (o == 0)
-          index ++;
-        else
-        {
-          while (index > 0 && orders[-- index] == 0)
-          {
-          }
-          if (o != orders[index])
-          {
-            log_err("Mismatch at index : %d\n", index);
-            break;
-          }
-        }
-      }
-    }
-
-    while (index != 0 && orders[index - 1] == 0) {
-      index --;
-    }
-
-    if (index != 0)
-    {
-        log_err("Didn't get back to beginning - index is %d\n", index);
-
-        ucol_reset(iter);
-        log_err("\nnext: ");
-        while ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
-        {
-            log_err("Error at %d\n", o);
-        }
-        log_err("\nprev: ");
-        while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
-        {
-            log_err("Error at %d\n", o);
-        }
-        log_verbose("\n");
-    }
-
-    free(orders);
-}
 
 const static char cnt1[][10] = {
 
@@ -1429,128 +1321,6 @@ static void IsTailoredTest(void) {
   }
 }
 
-static void genericOrderingTestWithResult(UCollator *coll, const char *s[], uint32_t size, UCollationResult result) {
-  UChar t1[2048] = {0};
-  UChar t2[2048] = {0};
-  UCollationElements *iter;
-  UErrorCode status = U_ZERO_ERROR;
-
-  uint32_t i = 0, j = 0;
-  log_verbose("testing sequence:\n");
-  for(i = 0; i < size; i++) {
-    log_verbose("%s\n", s[i]);
-  }
-
-  iter = ucol_openElements(coll, t1, u_strlen(t1), &status);
-  if (U_FAILURE(status)) {
-    log_err("Creation of iterator failed\n");
-  }
-  for(i = 0; i < size-1; i++) {
-    for(j = i+1; j < size; j++) {
-      u_unescape(s[i], t1, 2048);
-      u_unescape(s[j], t2, 2048);
-      doTest(coll, t1, t2, result);
-      /* synwee : added collation element iterator test */
-      ucol_setText(iter, t1, u_strlen(t1), &status);
-      backAndForth(iter);
-      ucol_setText(iter, t2, u_strlen(t2), &status);
-      backAndForth(iter);
-    }
-  }
-  ucol_closeElements(iter);
-}
-
-static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size) {
-  genericOrderingTestWithResult(coll, s, size, UCOL_LESS);
-}
-
-void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
-  UErrorCode status = U_ZERO_ERROR;
-  UCollator *coll = ucol_open(locale, &status);
-
-  log_verbose("Locale starter for %s\n", locale);
-
-  if(U_SUCCESS(status)) {
-    genericOrderingTest(coll, s, size);
-  } else if(status == U_FILE_ACCESS_ERROR) {
-    log_data_err("Is your data around?\n");
-    return;
-  } else {
-    log_err("Unable to open collator for locale %s\n", locale);
-  }
-  ucol_close(coll);
-}
-
-#if 0
-/* currently not used with options */
-static void genericRulesStarterWithOptions(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
-  UErrorCode status = U_ZERO_ERROR;
-  UChar rlz[RULE_BUFFER_LEN] = { 0 };
-  uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
-  uint32_t i;
-
-  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
-
-  log_verbose("Rules starter for %s\n", rules);
-
-  if(U_SUCCESS(status)) {
-    log_verbose("Setting attributes\n");
-    for(i = 0; i < attsize; i++) {
-      ucol_setAttribute(coll, attrs[i], values[i], &status);
-    }
-
-    genericOrderingTest(coll, s, size);
-  } else {
-    log_err("Unable to open collator with rules %s\n", rules);
-  }
-  ucol_close(coll);
-}
-#endif
-
-static void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
-  UErrorCode status = U_ZERO_ERROR;
-  uint32_t i;
-
-  UCollator *coll = ucol_open(locale, &status);
-
-  log_verbose("Locale starter for %s\n", locale);
-
-  if(U_SUCCESS(status)) {
-
-    log_verbose("Setting attributes\n");
-    for(i = 0; i < attsize; i++) {
-      ucol_setAttribute(coll, attrs[i], values[i], &status);
-    }
-
-    genericOrderingTest(coll, s, size);
-  } else {
-    log_err("Unable to open collator for locale %s\n", locale);
-  }
-  ucol_close(coll);
-}
-
-static void genericRulesTestWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result) {
-  UErrorCode status = U_ZERO_ERROR;
-  UChar rlz[RULE_BUFFER_LEN] = { 0 };
-  uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
-
-  UCollator *coll = NULL;
-  coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
-  log_verbose("Rules starter for %s\n", rules);
-
-  if(U_SUCCESS(status)) {
-    genericOrderingTestWithResult(coll, s, size, result);
-    ucol_close(coll);
-  } else if(status == U_FILE_ACCESS_ERROR) {
-    log_data_err("Is your data around?\n");
-  } else {
-    log_err("Unable to open collator with rules %s\n", rules);
-  }
-}
-
-static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
-  genericRulesTestWithResult(rules, s, size, UCOL_LESS);
-}
 
 const static char chTest[][20] = {
   "c",
@@ -2929,11 +2699,11 @@ static void TestBocsuCoverage(void) {
 
   UCollator *coll = ucol_open("", &status);
   if(U_SUCCESS(status)) {
-    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
 
-    klen = ucol_getSortKey(coll, test, tlen, key, 256);
+  klen = ucol_getSortKey(coll, test, tlen, key, 256);
 
-    ucol_close(coll);
+  ucol_close(coll);
   } else {
     log_data_err("Couldn't open UCA\n");
   }
@@ -2946,207 +2716,207 @@ static void TestVariableTopSetting(void) {
   UCollator *coll = ucol_open("", &status);
   if(U_SUCCESS(status)) {
 
-    uint32_t strength = 0;
-    uint16_t specs = 0;
-    uint32_t chOffset = 0;
-    uint32_t chLen = 0;
-    uint32_t exOffset = 0;
-    uint32_t exLen = 0;
-    uint32_t oldChOffset = 0;
-    uint32_t oldChLen = 0;
-    uint32_t oldExOffset = 0;
-    uint32_t oldExLen = 0;
-    uint32_t prefixOffset = 0;
-    uint32_t prefixLen = 0;
+  uint32_t strength = 0;
+  uint16_t specs = 0;
+  uint32_t chOffset = 0;
+  uint32_t chLen = 0;
+  uint32_t exOffset = 0;
+  uint32_t exLen = 0;
+  uint32_t oldChOffset = 0;
+  uint32_t oldChLen = 0;
+  uint32_t oldExOffset = 0;
+  uint32_t oldExLen = 0;
+  uint32_t prefixOffset = 0;
+  uint32_t prefixLen = 0;
 
-    UBool startOfRules = TRUE;
-    UColTokenParser src;
-    UColOptionSet opts;
+  UBool startOfRules = TRUE;
+  UColTokenParser src;
+  UColOptionSet opts;
 
-    UChar *rulesCopy = NULL;
-    uint32_t rulesLen;
+  UChar *rulesCopy = NULL;
+  uint32_t rulesLen;
 
-    UCollationResult result;
+  UCollationResult result;
 
-    UChar first[256] = { 0 };
-    UChar second[256] = { 0 };
-    UParseError parseError;
-    int32_t myQ = QUICK;
+  UChar first[256] = { 0 };
+  UChar second[256] = { 0 };
+  UParseError parseError;
+  int32_t myQ = QUICK;
 
-    src.opts = &opts;
+  src.opts = &opts;
 
-    if(QUICK <= 0) {
-      QUICK = 1;
-    }
+  if(QUICK <= 0) {
+    QUICK = 1;
+  }
 
-    /* this test will fail when normalization is turned on */
-    /* therefore we always turn off exhaustive mode for it */
-    if(1) { /* QUICK > 0*/ 
-      log_verbose("Slide variable top over UCARules\n");
-      rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
-      rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-      rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
+  /* this test will fail when normalization is turned on */
+  /* therefore we always turn off exhaustive mode for it */
+  if(1) { /* QUICK > 0*/ 
+    log_verbose("Slide variable top over UCARules\n");
+    rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
+    rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
 
-      if(U_SUCCESS(status) && rulesLen > 0) {
-        ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
-        src.current = src.source = rulesCopy;
-        src.end = rulesCopy+rulesLen;
-        src.extraCurrent = src.end;
-        src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE; 
+    if(U_SUCCESS(status) && rulesLen > 0) {
+      ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+      src.current = src.source = rulesCopy;
+      src.end = rulesCopy+rulesLen;
+      src.extraCurrent = src.end;
+      src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE; 
 
-        while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
-          strength = src.parsedToken.strength;
-          chOffset = src.parsedToken.charsOffset;
-          chLen = src.parsedToken.charsLen;
-          exOffset = src.parsedToken.extensionOffset;
-          exLen = src.parsedToken.extensionLen;
-          prefixOffset = src.parsedToken.prefixOffset;
-          prefixLen = src.parsedToken.prefixLen;
-          specs = src.parsedToken.flags;
+      while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
+        strength = src.parsedToken.strength;
+        chOffset = src.parsedToken.charsOffset;
+        chLen = src.parsedToken.charsLen;
+        exOffset = src.parsedToken.extensionOffset;
+        exLen = src.parsedToken.extensionLen;
+        prefixOffset = src.parsedToken.prefixOffset;
+        prefixLen = src.parsedToken.prefixLen;
+        specs = src.parsedToken.flags;
 
-          startOfRules = FALSE;
-          if(0) {
-            log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);
-          }
-          if(strength == UCOL_PRIMARY) {
-            status = U_ZERO_ERROR;
-            varTopOriginal = ucol_getVariableTop(coll, &status);
-            varTop1 = ucol_setVariableTop(coll, rulesCopy+oldChOffset, oldChLen, &status);
-            if(U_FAILURE(status)) {
-              char buffer[256];
-              char *buf = buffer;
-              uint32_t i = 0, j;
-              uint32_t CE = UCOL_NO_MORE_CES;
+        startOfRules = FALSE;
+        if(0) {
+          log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);
+        }
+        if(strength == UCOL_PRIMARY) {
+          status = U_ZERO_ERROR;
+          varTopOriginal = ucol_getVariableTop(coll, &status);
+          varTop1 = ucol_setVariableTop(coll, rulesCopy+oldChOffset, oldChLen, &status);
+          if(U_FAILURE(status)) {
+            char buffer[256];
+            char *buf = buffer;
+            uint32_t i = 0, j;
+            uint32_t CE = UCOL_NO_MORE_CES;
 
-              /* before we start screaming, let's see if there is a problem with the rules */
-              collIterate s;
-              uprv_init_collIterate(coll, rulesCopy+oldChOffset, oldChLen, &s);
+            /* before we start screaming, let's see if there is a problem with the rules */
+            collIterate s;
+            uprv_init_collIterate(coll, rulesCopy+oldChOffset, oldChLen, &s);
 
-              CE = ucol_getNextCE(coll, &s, &status);
+            CE = ucol_getNextCE(coll, &s, &status);
 
-              for(i = 0; i < oldChLen; i++) {
-                j = sprintf(buf, "%04X ", *(rulesCopy+oldChOffset+i));
-                buf += j;
-              }
-              if(status == U_PRIMARY_TOO_LONG_ERROR) {
-                log_verbose("= Expected failure for %s =", buffer);
-              } else {
-                if(s.pos == s.endp) {
-                  log_err("Unexpected failure setting variable top at offset %d. Error %s. Codepoints: %s\n", 
-                    oldChOffset, u_errorName(status), buffer);
-                } else {
-                  log_verbose("There is a goofy contraction in UCA rules that does not appear in the fractional UCA. Codepoints: %s\n", 
-                    buffer);
-                }
-              }
+            for(i = 0; i < oldChLen; i++) {
+              j = sprintf(buf, "%04X ", *(rulesCopy+oldChOffset+i));
+              buf += j;
             }
-            varTop2 = ucol_getVariableTop(coll, &status);
-            if((varTop1 & 0xFFFF0000) != (varTop2 & 0xFFFF0000)) {
-              log_err("cannot retrieve set varTop value!\n");
-              continue;
-            }
-
-            if((varTop1 & 0xFFFF0000) > 0 && oldExLen == 0) {
-
-              u_strncpy(first, rulesCopy+oldChOffset, oldChLen);
-              u_strncpy(first+oldChLen, rulesCopy+chOffset, chLen);
-              u_strncpy(first+oldChLen+chLen, rulesCopy+oldChOffset, oldChLen);
-              first[2*oldChLen+chLen] = 0;
-
-              if(oldExLen == 0) {
-                u_strncpy(second, rulesCopy+chOffset, chLen);
-                second[chLen] = 0;
-              } else { /* This is skipped momentarily, but should work once UCARules are fully UCA conformant */
-                u_strncpy(second, rulesCopy+oldExOffset, oldExLen);
-                u_strncpy(second+oldChLen, rulesCopy+chOffset, chLen);
-                u_strncpy(second+oldChLen+chLen, rulesCopy+oldExOffset, oldExLen);
-                second[2*oldExLen+chLen] = 0;
-              }
-              result = ucol_strcoll(coll, first, -1, second, -1);
-              if(result == UCOL_EQUAL) {
-                doTest(coll, first, second, UCOL_EQUAL);
+            if(status == U_PRIMARY_TOO_LONG_ERROR) {
+              log_verbose("= Expected failure for %s =", buffer);
+            } else {
+              if(s.pos == s.endp) {
+                log_err("Unexpected failure setting variable top at offset %d. Error %s. Codepoints: %s\n", 
+                  oldChOffset, u_errorName(status), buffer);
               } else {
-                log_verbose("Suspicious strcoll result for %04X and %04X\n", *(rulesCopy+oldChOffset), *(rulesCopy+chOffset));
+                log_verbose("There is a goofy contraction in UCA rules that does not appear in the fractional UCA. Codepoints: %s\n", 
+                  buffer);
               }
             }
           }
-          if(strength != UCOL_TOK_RESET) {
-            oldChOffset = chOffset;
-            oldChLen = chLen;
-            oldExOffset = exOffset;
-            oldExLen = exLen;
+          varTop2 = ucol_getVariableTop(coll, &status);
+          if((varTop1 & 0xFFFF0000) != (varTop2 & 0xFFFF0000)) {
+            log_err("cannot retrieve set varTop value!\n");
+            continue;
+          }
+
+          if((varTop1 & 0xFFFF0000) > 0 && oldExLen == 0) {
+
+            u_strncpy(first, rulesCopy+oldChOffset, oldChLen);
+            u_strncpy(first+oldChLen, rulesCopy+chOffset, chLen);
+            u_strncpy(first+oldChLen+chLen, rulesCopy+oldChOffset, oldChLen);
+            first[2*oldChLen+chLen] = 0;
+
+            if(oldExLen == 0) {
+              u_strncpy(second, rulesCopy+chOffset, chLen);
+              second[chLen] = 0;
+            } else { /* This is skipped momentarily, but should work once UCARules are fully UCA conformant */
+              u_strncpy(second, rulesCopy+oldExOffset, oldExLen);
+              u_strncpy(second+oldChLen, rulesCopy+chOffset, chLen);
+              u_strncpy(second+oldChLen+chLen, rulesCopy+oldExOffset, oldExLen);
+              second[2*oldExLen+chLen] = 0;
+            }
+            result = ucol_strcoll(coll, first, -1, second, -1);
+            if(result == UCOL_EQUAL) {
+              doTest(coll, first, second, UCOL_EQUAL);
+            } else {
+              log_verbose("Suspicious strcoll result for %04X and %04X\n", *(rulesCopy+oldChOffset), *(rulesCopy+chOffset));
+            }
           }
         }
+        if(strength != UCOL_TOK_RESET) {
+          oldChOffset = chOffset;
+          oldChLen = chLen;
+          oldExOffset = exOffset;
+          oldExLen = exLen;
+        }
+      }
+      status = U_ZERO_ERROR;
+    }
+    else {
+      log_err("Unexpected failure getting rules %s\n", u_errorName(status));
+      return;
+    }
+    if (U_FAILURE(status)) {
+        log_err("Error parsing rules %s\n", u_errorName(status));
+        return;
+    }
+    status = U_ZERO_ERROR;
+  }
+
+  QUICK = myQ;
+
+  log_verbose("Testing setting variable top to contractions\n");
+  {
+    /* uint32_t tailoredCE = UCOL_NOT_FOUND; */
+    /*UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->UCAConsts+sizeof(UCAConstants));*/
+    UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);
+    while(*conts != 0) {
+      if(*(conts+2) == 0) {
+        varTop1 = ucol_setVariableTop(coll, conts, -1, &status);
+      } else {
+        varTop1 = ucol_setVariableTop(coll, conts, 3, &status);
+      }
+      if(U_FAILURE(status)) {
+        log_err("Couldn't set variable top to a contraction %04X %04X %04X\n",
+          *conts, *(conts+1), *(conts+2));
         status = U_ZERO_ERROR;
       }
-      else {
-        log_err("Unexpected failure getting rules %s\n", u_errorName(status));
-        return;
-      }
-      if (U_FAILURE(status)) {
-          log_err("Error parsing rules %s\n", u_errorName(status));
-          return;
-      }
-      status = U_ZERO_ERROR;
+      conts+=3;
     }
-
-    QUICK = myQ;
-
-    log_verbose("Testing setting variable top to contractions\n");
-    {
-      /* uint32_t tailoredCE = UCOL_NOT_FOUND; */
-      /*UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->UCAConsts+sizeof(UCAConstants));*/
-      UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);
-      while(*conts != 0) {
-        if(*(conts+2) == 0) {
-          varTop1 = ucol_setVariableTop(coll, conts, -1, &status);
-        } else {
-          varTop1 = ucol_setVariableTop(coll, conts, 3, &status);
-        }
-        if(U_FAILURE(status)) {
-          log_err("Couldn't set variable top to a contraction %04X %04X %04X\n",
-            *conts, *(conts+1), *(conts+2));
-          status = U_ZERO_ERROR;
-        }
-        conts+=3;
-      }
-
-      status = U_ZERO_ERROR;
-
-      first[0] = 0x0040;
-      first[1] = 0x0050;
-      first[2] = 0x0000;
-
-      ucol_setVariableTop(coll, first, -1, &status);
-
-      if(U_SUCCESS(status)) {
-        log_err("Invalid contraction succeded in setting variable top!\n");
-      }
-
-    }
-
-    log_verbose("Test restoring variable top\n");
 
     status = U_ZERO_ERROR;
-    ucol_restoreVariableTop(coll, varTopOriginal, &status);
-    if(varTopOriginal != ucol_getVariableTop(coll, &status)) {
-      log_err("Couldn't restore old variable top\n");
+
+    first[0] = 0x0040;
+    first[1] = 0x0050;
+    first[2] = 0x0000;
+
+    ucol_setVariableTop(coll, first, -1, &status);
+
+    if(U_SUCCESS(status)) {
+      log_err("Invalid contraction succeded in setting variable top!\n");
     }
 
-    log_verbose("Testing calling with error set\n");
+  }
 
-    status = U_INTERNAL_PROGRAM_ERROR;
-    varTop1 = ucol_setVariableTop(coll, first, 1, &status);
-    varTop2 = ucol_getVariableTop(coll, &status);
-    ucol_restoreVariableTop(coll, varTop2, &status);
-    varTop1 = ucol_setVariableTop(NULL, first, 1, &status);
-    varTop2 = ucol_getVariableTop(NULL, &status);
-    ucol_restoreVariableTop(NULL, varTop2, &status);
-    if(status != U_INTERNAL_PROGRAM_ERROR) {
-      log_err("Bad reaction to passed error!\n");
-    }
-    free(rulesCopy);
-    ucol_close(coll);
+  log_verbose("Test restoring variable top\n");
+
+  status = U_ZERO_ERROR;
+  ucol_restoreVariableTop(coll, varTopOriginal, &status);
+  if(varTopOriginal != ucol_getVariableTop(coll, &status)) {
+    log_err("Couldn't restore old variable top\n");
+  }
+
+  log_verbose("Testing calling with error set\n");
+
+  status = U_INTERNAL_PROGRAM_ERROR;
+  varTop1 = ucol_setVariableTop(coll, first, 1, &status);
+  varTop2 = ucol_getVariableTop(coll, &status);
+  ucol_restoreVariableTop(coll, varTop2, &status);
+  varTop1 = ucol_setVariableTop(NULL, first, 1, &status);
+  varTop2 = ucol_getVariableTop(NULL, &status);
+  ucol_restoreVariableTop(NULL, varTop2, &status);
+  if(status != U_INTERNAL_PROGRAM_ERROR) {
+    log_err("Bad reaction to passed error!\n");
+  }
+  free(rulesCopy);
+  ucol_close(coll);
   } else {
     log_data_err("Couldn't open UCA collator\n");
   }
@@ -4107,7 +3877,6 @@ static void TestJ2726(void) {
   ucol_close(coll);
 }
 
-
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4164,3 +3933,4 @@ void addMiscCollTest(TestNode** root)
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
+

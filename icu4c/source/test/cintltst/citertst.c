@@ -25,6 +25,7 @@
 #include "unicode/uloc.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "callcoll.h"
 #include "cmemory.h"
 #include "cintltst.h"
 #include "citertst.h"
@@ -772,69 +773,6 @@ static void TestSetText()
     free(test2);
 }
 
-
-
-static void backAndForth(UCollationElements *iter)
-{
-    /* Run through the iterator forwards and stick it into an array */
-    int32_t index, o;
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t orderLength = 0;
-    int32_t *orders;
-    orders= getOrders(iter, &orderLength);
-
-
-    /* Now go through it backwards and make sure we get the same values */
-    index = orderLength;
-    ucol_reset(iter);
-
-    /* synwee : changed */
-    while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
-    {
-      if (o != orders[-- index])
-      {
-        if (o == 0)
-          index ++;
-        else
-        {
-          while (index > 0 && orders[-- index] == 0)
-          {
-          }
-          if (o != orders[index])
-          {
-            log_err("Mismatch at index : 0x%x\n", index);
-            return;
-          }
-
-        }
-      }
-    }
-
-    while (index != 0 && orders[index - 1] == 0) {
-      index --;
-    }
-
-    if (index != 0)
-    {
-        log_err("Didn't get back to beginning - index is %d\n", index);
-
-        ucol_reset(iter);
-        log_err("\nnext: ");
-        if ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
-        {
-            log_err("Error at %x\n", o);
-        }
-        log_err("\nprev: ");
-        if ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
-        {
-            log_err("Error at %x\n", o);
-        }
-        log_verbose("\n");
-    }
-
-    free(orders);
-}
-
 /** @bug 4108762
  * Test for getMaxExpansion()
  */
@@ -963,57 +901,6 @@ static void TestMaxExpansion()
       log_data_err("Couldn't open collator\n");
     }
 
-}
-
-/**
- * Return an integer array containing all of the collation orders
- * returned by calls to next on the specified iterator
- */
-static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
-{
-    UErrorCode status;
-    int32_t order;
-    int32_t maxSize = 100;
-    int32_t size = 0;
-    int32_t *temp;
-    int32_t *orders =(int32_t*)malloc(sizeof(int32_t) * maxSize);
-    status= U_ZERO_ERROR;
-
-
-    while ((order=ucol_next(iter, &status)) != UCOL_NULLORDER)
-    {
-        if (size == maxSize)
-        {
-            maxSize *= 2;
-            temp = (int32_t*)malloc(sizeof(int32_t) * maxSize);
-
-            memcpy(temp, orders, size * sizeof(int32_t));
-            free(orders);
-            orders = temp;
-
-        }
-
-        orders[size++] = order;
-    }
-
-    if (maxSize > size)
-    {
-        if (size == 0) {
-            size = 1;
-            temp = (int32_t*)malloc(sizeof(int32_t) * size);
-            temp[0] = 0;
-        }
-        else {
-            temp = (int32_t*)malloc(sizeof(int32_t) * size);
-            memcpy(temp, orders, size * sizeof(int32_t));
-        }
-
-        free(orders);
-        orders = temp;
-    }
-
-    *orderLength = size;
-    return orders;
 }
 
 
