@@ -16,8 +16,6 @@
 
 #include "unicode/translit.h"
 
-#ifdef ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES
-
 U_NAMESPACE_BEGIN
 
 class U_I18N_API UVector;
@@ -175,12 +173,7 @@ public:
      */
     virtual UnicodeSet& getTargetSet(UnicodeSet& result) const;
 
-// handleTransliterate should be protected, but was declared public before ICU 2.2.
-// We do not have a separate deprecation date for this method since the entire class
-// will become internal after 2002-sep-30.
-#ifndef U_USE_DEPRECATED_TRANSLITERATOR_API
- protected:
-#endif
+protected:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
@@ -188,9 +181,7 @@ public:
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
 
-#ifndef U_USE_DEPRECATED_TRANSLITERATOR_API
- public:
-#endif
+public:
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -258,35 +249,6 @@ private:
      * for ICU "poor man's RTTI".
      */
     static const char fgClassID;
-
-#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
-
-public:
-
-    /**
-     * Constructs a new compound transliterator.
-     * Use Transliterator::createInstance factory method.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
-     */
-    CompoundTransliterator(const UnicodeString& id,
-                           UTransDirection dir,
-                           UnicodeFilter* adoptedFilter,
-                           UErrorCode& status);
-
-    /**
-     * Constructs a new compound transliterator in the FORWARD
-     * direction with a NULL filter.
-     * Use Transliterator::createInstance factory method.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
-     */
-    CompoundTransliterator(const UnicodeString& id,
-                           UErrorCode& status);
-
-#endif
 };
 
 inline UClassID
@@ -297,35 +259,7 @@ inline UClassID
 CompoundTransliterator::getDynamicClassID() const
 { return CompoundTransliterator::getStaticClassID(); }
 
-/**
- * Definitions for obsolete API
- * TODO: Remove after Aug 2002
- */
-
-#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
-
-inline CompoundTransliterator::CompoundTransliterator( const UnicodeString& id,
-                                                       UTransDirection dir,
-                                                       UnicodeFilter* adoptedFilter,
-                                                       UErrorCode& status):
-                                            Transliterator(id, adoptedFilter),
-                                            trans(0), compoundRBTIndex(-1) {
-    UParseError parseError;
-    init(id, dir, -1, 0, TRUE,parseError,status);
-}
-
-inline CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
-                                                      UErrorCode& status) :
-                                            Transliterator(id, 0), // set filter to 0 here!
-                                            trans(0), compoundRBTIndex(-1) {
-    UParseError parseError;
-    init(id, UTRANS_FORWARD, -1, 0, TRUE,parseError,status);       
-}
-
-#endif
-
 U_NAMESPACE_END
-#endif /* ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES */
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
 

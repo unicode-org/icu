@@ -262,42 +262,8 @@ NewResourceBundleTest::TestConstruction()
         delete[] versionID1;
         delete[] versionID2;
     }
-#ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
-    {
-        UErrorCode   err = U_ZERO_ERROR;
-        const char* testdatapath;
-        Locale       locale("te", "IN");
-
-        testdatapath=loadTestData(err);
-        if(U_FAILURE(err))
-        {
-            errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
-            return;
-        }
-
-
-        wchar_t* wideDirectory = new wchar_t[256];
-        mbstowcs(wideDirectory, testdatapath, 256);
-    
-        ResourceBundle  test2(wideDirectory, locale, err);
-
-        UnicodeString   result2;
-
-        result2 = test2.getStringEx("string_in_Root_te_te_IN", err);
-        if (U_FAILURE(err)) {
-            errln("Something threw an error in TestConstruction()");
-            return;
-        }
-
-        logln("for string_in_Root_te_te_IN, te_IN.txt had " + result2);
-
-        if (result2 != "TE_IN")
-            errln("Construction test failed; run verbose for more information");
-
-        delete[] wideDirectory;
-    }
-#endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */
 }
+
 void
 NewResourceBundleTest::TestIteration()
 {

@@ -637,35 +637,6 @@ public:
      */
     static inline UClassID getStaticClassID(void);
 
-#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
-    /**
-     * Finds the least double greater than d (if positive == true),
-     * or the greatest double less than d (if positive == false).
-     * If NaN, returns same value.
-     * <P>
-     * Does not affect floating-point flags,
-     * @obsolete ICU 2.4. Use closures instead since this API will be removed in that release.
-     */
-    static double nextDouble(double d, UBool positive);
-
-    /**
-     * Finds the least double greater than d.
-     * If NaN, returns same value.
-     * Used to make half-open intervals.
-     * @see ChoiceFormat::previousDouble
-     * @obsolete ICU 2.4. Use closures instead since this API will be removed in that release.
-     */
-    static double nextDouble(double d );
-
-    /**
-     * Finds the greatest double less than d.
-     * If NaN, returns same value.
-     * @see ChoiceFormat::nextDouble
-     * @obsolete ICU 2.4. Use closures instead since this API will be removed in that release.
-     */
-    static double previousDouble(double d );
-#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
-
 private:
     // static cache management (thread-safe)
   //  static NumberFormat* getNumberFormat(UErrorCode &status); // call this function to 'check out' a numberformat from the cache.
@@ -764,18 +735,6 @@ ChoiceFormat::getDynamicClassID() const
 { 
     return ChoiceFormat::getStaticClassID(); 
 }
-
-#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
-inline double ChoiceFormat::nextDouble( double d )
-{
-    return ChoiceFormat::nextDouble( d, TRUE );
-}
-    
-inline double ChoiceFormat::previousDouble( double d )
-{
-    return ChoiceFormat::nextDouble( d, FALSE );
-}
-#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
 
 inline UnicodeString&
 ChoiceFormat::format(const Formattable& obj,

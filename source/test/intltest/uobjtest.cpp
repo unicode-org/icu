@@ -124,17 +124,13 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "iculserv.h"
 #undef protected
 
-// Deprecated Things
-#define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
-
-#include "unicode/hextouni.h"
-
-#define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
-#include "unicode/unitohex.h"
-
-
 // Internal Things (woo)
+#include "cpdtrans.h"
+#include "rbt.h"
+#include "rbt_data.h"
+#include "hextouni.h"
+#include "unitohex.h"
+#include "nultrans.h"
 #include "anytrans.h"
 #include "digitlst.h"
 #include "esctrn.h"
@@ -156,10 +152,6 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "uvector.h"
 
 // External Things
-#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
-
-
 #include "unicode/brkiter.h"
 #include "unicode/calendar.h"
 #include "unicode/caniter.h"
@@ -167,7 +159,6 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/choicfmt.h"
 #include "unicode/coleitr.h"
 #include "unicode/coll.h"
-#include "unicode/cpdtrans.h"
 #include "unicode/datefmt.h"
 #include "unicode/dbbi.h"
 #include "unicode/dcfmtsym.h"
@@ -180,13 +171,10 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
 #include "unicode/normlzr.h"
-#include "unicode/nultrans.h"
 #include "unicode/numfmt.h"
 #include "unicode/parsepos.h"
 #include "unicode/rbbi.h"
 #include "unicode/rbnf.h"
-#include "unicode/rbt.h"
-#include "rbt_data.h"
 #include "unicode/regex.h"
 #include "unicode/resbund.h"
 #include "unicode/schriter.h"

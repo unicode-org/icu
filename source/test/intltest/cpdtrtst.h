@@ -18,7 +18,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/translit.h"
-#include "unicode/cpdtrans.h"
+#include "cpdtrans.h"
 #include "intltest.h"
 
 /**

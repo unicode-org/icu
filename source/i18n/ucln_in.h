@@ -34,8 +34,4 @@ U_CFUNC UBool ucol_bld_cleanup(void);
 
 U_CFUNC UBool regex_cleanup(void);
 
-#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
-U_CFUNC UBool dateFormatSymbols_cleanup(void);
-#endif
-
 #endif

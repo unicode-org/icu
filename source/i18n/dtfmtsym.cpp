@@ -108,17 +108,6 @@ static const UChar gLastResortZoneStrings[5][4] =
     {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
 
-#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
-static UnicodeString *gPatternCharsStr = NULL;
-
-U_CFUNC UBool dateFormatSymbols_cleanup() {
-    if (gPatternCharsStr != NULL) {
-        delete gPatternCharsStr;
-    }
-    return TRUE;
-}
-#endif
-
 U_NAMESPACE_BEGIN
 
 const char DateFormatSymbols::fgClassID=0;
@@ -465,21 +454,6 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
     fZoneStringsColCount = columnCount;
     createZoneStrings((const UnicodeString**)strings);
 }
-
-//------------------------------------------------------
-
-#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
-const UnicodeString&
-DateFormatSymbols::getPatternChars(void)
-{
-    Mutex lock;     // We don't care if this is slow because this is deprecated API.
-    if (gPatternCharsStr == NULL) {
-        gPatternCharsStr = new UnicodeString(gPatternChars);
-        ucln_i18n_registerCleanup();
-    }
-    return *gPatternCharsStr;
-}
-#endif
 
 //------------------------------------------------------
 

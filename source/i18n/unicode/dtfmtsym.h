@@ -245,14 +245,6 @@ public:
      */
     void setZoneStrings(const UnicodeString* const* strings, int32_t rowCount, int32_t columnCount);
 
-#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
-    /**
-     * Get the non-localized date-time pattern characters.
-     * @obsolete ICU 2.4. Use getPatternUChars instead since this API will be removed in that release.
-     */
-    static const UnicodeString& getPatternChars(void);
-#endif /* ICU_DATEFORMATSYMBOLS_USE_DEPRECATES */
-
     /**
      * Get the non-localized date-time pattern characters.
      * @return    the non-localized date-time pattern characters

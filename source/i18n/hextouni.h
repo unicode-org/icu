@@ -16,8 +16,6 @@
 
 #include "unicode/translit.h"
 
-#ifdef ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES
-
 U_NAMESPACE_BEGIN
 
 /**
@@ -194,7 +192,6 @@ HexToUnicodeTransliterator::getDynamicClassID() const
 { return HexToUnicodeTransliterator::getStaticClassID(); }
 
 U_NAMESPACE_END
-#endif /* ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES */
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
