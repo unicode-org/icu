@@ -845,7 +845,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
     got = data;
     t->transliterate(got);
     doTest("transliteration using (o,w) filter", got, exp);
-    delete t->orphanFilter();   // for coverage
+
     delete t;
 
 }
