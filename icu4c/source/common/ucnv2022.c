@@ -27,15 +27,14 @@
 */
 
 #include "unicode/utypes.h"
-#include "cmemory.h"
-#include "unicode/ucnv_err.h"
-#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
-#include "ucnv_cnv.h"
-#include "unicode/ustring.h"
+#include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
+#include "ucnv_bld.h"
+#include "ucnv_cnv.h"
 #include "ucnvmbcs.h"
 #include "cstring.h"
+#include "cmemory.h"
 
 static const char UCNV_SS2[] = "\x1B\x4E";
 static const char UCNV_SS3[] = "\x1B\x4F";

@@ -21,7 +21,6 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
-#include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"

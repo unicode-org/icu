@@ -73,7 +73,6 @@
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "filestrm.h"
 #include "locmap.h"
 #include "ucln_cmn.h"
 
@@ -137,7 +136,7 @@ static double fgInf;
 /* protos */
 static char* u_topNBytesOfDouble(double* d, int n);
 static char* u_bottomNBytesOfDouble(double* d, int n);
-static void  uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
+/*static void  uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);*/
 
 
 /*---------------------------------------------------------------------------
@@ -495,12 +494,14 @@ uprv_trunc(double d)
 #endif
 }
 
+/*
 static void
 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 {
     *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
     *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
 }
+*/
 
 /**
  * Return the largest positive number that can be represented by an integer
