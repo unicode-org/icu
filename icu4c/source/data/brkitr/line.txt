@@ -46,6 +46,18 @@ $XX = [:LineBreak =  Unknown:];
 $ZW = [:LineBreak =  ZWSpace:];
 
 
+#
+# Korean Syllable Definitions
+#
+$L   = [:Hangul_Syllable_Type = L:];
+$V   = [:Hangul_Syllable_Type = V:];
+$T   = [:Hangul_Syllable_Type = T:];
+
+$LV  = [:Hangul_Syllable_Type = LV:];
+$LVT = [:Hangul_Syllable_Type = LVT:];
+
+$HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
+
 
 #
 #  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width),
@@ -66,7 +78,7 @@ $CLcm = $CL $CM*;
 $EXcm = $EX $CM*;
 $GLcm = $GL $CM*;
 $HYcm = $HY $CM*;
-$IDcm = $ID $CM*;
+$IDcm = ($ID | HangulSyllable) $CM*;
 $INcm = $IN $CM*;
 $IScm = $IS $CM*;
 $NScm = $NS $CM*;
@@ -199,10 +211,10 @@ $CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
 
 #
 #  Reverse Rules.
-#
-#     Back up to a hard break or a space that will cause a boundary.
-#     Not all spaces cause line breaks.  $SpaceGlue represents a sequence
-#     containing a space that may inhibit a break from occuring.
+#     TODO:  Something more efficient.  These rules just back up to hard breaks
+#            Note that the initial .. is to back over both halves of a CR/LF sequence
+#            at the current position.
 #
 
-!.*;
+!. . [^$LF $CR $NL $BK]* [$BK $CR $LF $NL];
+#!.*;
