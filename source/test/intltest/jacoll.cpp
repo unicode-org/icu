@@ -66,11 +66,11 @@ const UChar CollationKanaTest::testTargetCases[][CollationKanaTest::MAX_TOKEN_LE
 
 const Collator::EComparisonResult CollationKanaTest::results[] = {
     Collator::LESS,
+    Collator::EQUAL,   //Collator::LESS, /* Katakanas and Hiraganas are equal on tertiary level(ICU 2.0)*/
     Collator::LESS,
+    Collator::GREATER, // Collator::LESS, /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*/
     Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::GREATER 
+    Collator::LESS,    //Collator::GREATER /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*//*  6 */
 };
 
 const UChar CollationKanaTest::testBaseCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
@@ -106,10 +106,10 @@ const UChar CollationKanaTest::testChooonKigooCases[][CollationKanaTest::MAX_TOK
   /*1*/ {0x30AB, 0x30FC, 0x30A2, 0x0000},
   /*2*/ {0x30AB, 0x30A4, 0x3042, 0x0000},
   /*3*/ {0x30AB, 0x30A4, 0x30A2, 0x0000},
+  /*6*/ {0x30AD, 0x30FC, 0x3042, 0x0000}, /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*/
+  /*7*/ {0x30AD, 0x30FC, 0x30A2, 0x0000}, /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*/
   /*4*/ {0x30AD, 0x30A4, 0x3042, 0x0000},
   /*5*/ {0x30AD, 0x30A4, 0x30A2, 0x0000},
-  /*6*/ {0x30AD, 0x30FC, 0x3042, 0x0000},
-  /*7*/ {0x30AD, 0x30FC, 0x30A2, 0x0000}
 };
 
 void CollationKanaTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
