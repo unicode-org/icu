@@ -45,7 +45,7 @@ bool_t
 DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
+        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         return TRUE;
     }
 
@@ -53,7 +53,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.4 $ $Date: 1999/10/18 22:48:31 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.5 $ $Date: 1999/12/08 23:29:02 $
  *
  * @bug 4097450
  */
@@ -145,7 +145,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.4 $ $Date: 1999/10/18 22:48:31 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.5 $ $Date: 1999/12/08 23:29:02 $
  *
  * @bug 4099975
  */

@@ -161,7 +161,7 @@ int main(int argc, char** argv)
         {
             fprintf(stderr, "Could not create converter to: %s\n", encName);
 #if defined(_DEBUG) && defined(XP_CPLUSPLUS)
-	    	fprintf (stderr,"FAILURE! (%s) (%d)\n", errorName(err), err);
+	    	fprintf (stderr,"FAILURE! (%s) (%d)\n", u_errorName(err), err);
 #endif
         }
         ucnv_close(conv);
@@ -385,7 +385,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
         if ((err != U_BUFFER_OVERFLOW_ERROR) && U_FAILURE(err) )
         {
 #if defined(_DEBUG)
-            fprintf (stderr, "Error transcoding rest of the file: (%s) %d\n", errorName(err), err);
+            fprintf (stderr, "Error transcoding rest of the file: (%s) %d\n", u_errorName(err), err);
 #endif
             fclose(inFile);
             fclose(outFile);
@@ -523,7 +523,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 	else if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
-		printf ("Error transcoding first line of input file: (%s) %d\n", errorName(err), err);
+		printf ("Error transcoding first line of input file: (%s) %d\n", u_errorName(err), err);
 #endif
         fclose(inF);
     	fclose(outF);
@@ -541,7 +541,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 	if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
-		printf ("Error transcoding2 first line of input file: (%s) %d\n", errorName(err), err);
+		printf ("Error transcoding2 first line of input file: (%s) %d\n", u_errorName(err), err);
 #endif
         fclose(inF);
     	fclose(outF);
@@ -786,7 +786,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 	        else if (U_FAILURE(err))
 	        {
 #if defined(_DEBUG)
-		        fprintf (stderr, "Error transcoding char-by-char: (%s) %d\n", errorName(err), err);
+		        fprintf (stderr, "Error transcoding char-by-char: (%s) %d\n", u_errorName(err), err);
 #endif
                 fclose(inF);
     	        fclose(outF);
@@ -803,7 +803,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 	        if (U_FAILURE(err))
 	        {
 #if defined(_DEBUG)
-		        fprintf (stderr, "Error transcoding2 char-by-char: (%s) %d\n", errorName(err), err);
+		        fprintf (stderr, "Error transcoding2 char-by-char: (%s) %d\n", u_errorName(err), err);
 #endif
                 fclose(inF);
     	        fclose(outF);
@@ -859,7 +859,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 	else if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
-		fprintf (stderr, "Error transcoding from ascii to input encoding: (%s) %d\n", errorName(err), err);
+		fprintf (stderr, "Error transcoding from ascii to input encoding: (%s) %d\n", u_errorName(err), err);
 #endif
         fclose(inF);
     	fclose(outF);
@@ -875,7 +875,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 	if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
-		fprintf (stderr, "Error transcoding2 from ascii to input encoding: (%s) %d\n", errorName(err), err);
+		fprintf (stderr, "Error transcoding2 from ascii to input encoding: (%s) %d\n", u_errorName(err), err);
 #endif
         delete newInEncName;
         fclose(inF);

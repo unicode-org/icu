@@ -242,7 +242,7 @@ ResourceBundle::LocaleFallbackIterator::nextLocale(UErrorCode& status)
     }
   }
   
-  //  cerr << "* " << fLocale << " " << errorName(status) << endl;
+  //  cerr << "* " << fLocale << " " << u_errorName(status) << endl;
   return TRUE;
 }
 
