@@ -312,12 +312,6 @@ void GlyphIterator::setCursiveFirstExitPoint()
     cursiveFirstPosition = position;
 }
 
-#if 0
-void GlyphIterator::resetCursiveLastExitPoint()
-{
-    cursiveLastPosition = -1;
-}
-#else
 void GlyphIterator::resetCursiveLastExitPoint()
 {
     if ((lookupFlags & lfBaselineIsLogicalEnd) != 0 && cursiveFirstPosition >= 0 && cursiveLastPosition >= 0) {
@@ -338,7 +332,6 @@ void GlyphIterator::resetCursiveLastExitPoint()
     cursiveFirstPosition      = -1;
     cursiveBaselineAdjustment =  0;
 }
-#endif
 
 void GlyphIterator::setCursiveLastExitPoint(LEPoint &exitPoint)
 {
@@ -386,7 +379,6 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
     LEGlyphID glyphID = glyphs[index];
     le_int32 glyphClass = gcdNoGlyphClass;
 
-    // FIXME: is this test really safe?
     if (LE_GET_GLYPH(glyphID) >= 0xFFFE) {
         return true;
     }
@@ -508,24 +500,9 @@ le_bool GlyphIterator::prev(le_uint32 delta)
     return prevInternal(delta) && hasFeatureTag();
 }
 
-// FIXME: Why in the world did I write the code that's #if 0'd out?
 le_int32 GlyphIterator::getMarkComponent(le_int32 markPosition) const
 {
     le_int32 component = 0;
-#if 0
-    le_int32 posn, start = position, end = markPosition;
-
-    if (markPosition < position) {
-        start = markPosition;
-        end = position;
-    }
-
-    for (posn = start; posn <= end; posn += 1) {
-        if (glyphs[posn] == 0xFFFE) {
-            component += 1;
-		}
-    }
-#else
     le_int32 posn;
 
     for (posn = position; posn != markPosition; posn += direction) {
@@ -533,7 +510,6 @@ le_int32 GlyphIterator::getMarkComponent(le_int32 markPosition) const
             component += 1;
         }
     }
-#endif
 
     return component;
 }
