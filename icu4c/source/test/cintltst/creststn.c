@@ -1315,7 +1315,7 @@ static void TestFallback()
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         const UChar*  myLocID = ures_getStringByKey(myResB, "LocaleID", &resultLen, &err);
         UResourceBundle* tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
-        if(err!= U_ZERO_ERROR){
+        if(err!= U_USING_FALLBACK_ERROR){
             log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY  %s\n",u_errorName(err));
         }
         ures_close(myResB);
