@@ -72,6 +72,7 @@ public:
     void TestCountChar32(void);
     void TestBogus();
     void TestStringEnumeration();
+    void TestCharString(void);
 };
 
 class StringCaseTest: public IntlTest {
