@@ -16,6 +16,9 @@
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
+.BI "\-v\fP, \fB\-\-verbose"
+]
+[
 .BR "\-c\fP, \fB\-\-copyright"
 |
 .BI "\-C\fP, \fB\-\-comment" " comment"
@@ -25,18 +28,6 @@
 ]
 .BI "\-p\fP, \fB\-\-name" " name"
 .BI "\-O\fP, \fB\-\-bldopt" " options"
-[
-.BI "\-s\fP, \fB\-\-sourcedir" " source"
-]
-[
-.BI "\-d\fP, \fB\-\-destdir" " destination"
-]
-[
-.BI "\-T\fP, \fB\-\-tempdir" " directory"
-]
-[
-.BI "\-v\fP, \fB\-\-verbose"
-]
 [
 .BI "\-p\fP, \fB\-\-name" " name"
 ]
@@ -57,6 +48,15 @@
 ]
 [
 .BI "\-n\fP, \fB\-\-nooutput"
+]
+[
+.BI "\-s\fP, \fB\-\-sourcedir" " source"
+]
+[
+.BI "\-d\fP, \fB\-\-destdir" " destination"
+]
+[
+.BI "\-T\fP, \fB\-\-tempdir" " directory"
 ]
 [
 .IR file " .\|.\|."
@@ -113,6 +113,9 @@ mode.
 .BR \-h\fP, \fB\-?\fP, \fB\-\-help
 Print help about usage and exit.
 .TP
+.BR \-v\fP, \fB\-\-verbose
+Display extra informative messages during execution.
+.TP
 .BR \-c\fP, \fB\-\-copyright
 Include a copyright notice in the binary data.
 .TP
@@ -151,6 +154,36 @@ The default entry point name is the name set by the
 .BI "\-n\fP, \fB\-\-name"
 option.
 .TP
+.BI "\-V\fP, \fB\-\-version" " version"
+Enable versioning of the shared library produced in
+.I dll
+mode. The version number has the format
+.I major\fP.\fIminor\fP.\fIpatchlevel
+and all parts except for
+.I major
+are optional. If only
+.I major
+is supplied then the version is
+assumed to be
+.IR major .0
+for versioning purposes.
+.TP
+.BI "\-F\fP, \fB\-\-rebuild"
+Force the rebuilding of all data and their repackaging.
+.TP
+.BI "\-k\fP, \fB\-\-clean"
+Clean temporary files and other build residues.
+.TP
+.BI "\-I\fP, \fB\-\-install"
+Install the packaged file (or all the files in the
+.I files
+mode). If the variable
+.B DESTDIR
+is set it will be used for installation.
+.TP
+.BI "\-n\fP, \fB\-\-nooutput"
+Do not produce any output but simply a list of affected files.
+.TP
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
 Set the source directory to
 .IR source .
@@ -169,6 +202,7 @@ directory
 as set by the
 .BI "\-d\fP, \fB\-\-destdir"
 option.
+
 .SH ENVIRONMENT
 .TP 10
 .B ICU_DATA
