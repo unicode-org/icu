@@ -16,17 +16,19 @@ testaliases
     aab:alias { "testaliases/aaa" }
 
     // aliasing nonexist position
-    nonexisting:alias { "/ICUDATA/uk" }
+    nonexisting:alias { "/ICUDATA/ja" }
 
     // aliasing to another resource
     simplealias:alias { "testtypes/menu/file/open" } // simple referencing
 
     // alias that uses another alias and references parts of the end structure
-    referencingalias:alias { "testaliases/anotheralias/Sequence" } // Referencing through another alias
-    anotheralias:alias { "/ICUDATA/uk/collations/standard" }
+    referencingalias:alias { "testaliases/anotheralias/2" } // Referencing through another alias
+    anotheralias:alias { "/ICUDATA/ja/LocaleScript" }
+
+    LocaleScript:alias { "/ICUDATA/ja/LocaleScript" }
 
     // aliasing using position
-    collations:alias { "/ICUDATA/uk" } // Referencing corresponding resource in another bundle
+    BreakDictionaryData:alias { "/ICUDATA/th" } // Referencing corresponding resource in another bundle
 
     // aliasing arrays
     zoneTests {
