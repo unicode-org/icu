@@ -546,12 +546,12 @@ $(?<=^(a))	a	y	$1	a
 ^(?=(a+?))\1ab	aaab	n	-	-
 ([\w:]+::)?(\w+)$	abcd:	n	-	-
 ([\w:]+::)?(\w+)$	abcd	y	$1-$2	-abcd
-([\w:]+::)?(\w+)$	xy:z:::abcd	y	$1-$2	xy:z:::-abcd
+([\w:]+::)?(\w+)$	xy:z:::abcd	iy	$1-$2	xy:z:::-abcd
 ^[^bcd]*(c+)	aexycd	y	$1	c
 (a*)b+	caab	y	$1	aa
 ([\w:]+::)?(\w+)$	abcd:	n	-	-
 ([\w:]+::)?(\w+)$	abcd	y	$1-$2	-abcd
-([\w:]+::)?(\w+)$	xy:z:::abcd	y	$1-$2	xy:z:::-abcd
+([\w:]+::)?(\w+)$	xy:z:::abcd	iy	$1-$2	xy:z:::-abcd
 ^[^bcd]*(c+)	aexycd	y	$1	c
 (?{$a=2})a*aa(?{local$a=$a+1})k*c(?{$b=$a})	yaaxxaaaacd	y	$b	3
 (?{$a=2})(a(?{local$a=$a+1}))*aak*c(?{$b=$a})	yaaxxaaaacd	y	$b	4
