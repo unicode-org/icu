@@ -417,11 +417,10 @@ PUtilTest::NaNGT(void)
 void 
 PUtilTest::NaNLT(void)
 {
-    double        pinf            = uprv_getInfinity();
-    double        ninf            = -uprv_getInfinity();
-    double        nan                     = uprv_getNaN();
-    double        ten                     = 10.0;
-    int numErrors = 0;
+    double  pinf    = uprv_getInfinity();
+    double  ninf    = -uprv_getInfinity();
+    double  nan     = uprv_getNaN();
+    double  ten     = 10.0;
 
     if(nan < nan != FALSE) {
         logln("WARNING: NaN < NaN returned TRUE, should be FALSE");

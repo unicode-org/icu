@@ -3359,9 +3359,9 @@ void TransliteratorTest::TestSpecialCases(void) {
 
 char* Char32ToEscapedChars(UChar32 ch, char* buffer) {
     if (ch <= 0xFFFF) {
-        sprintf(buffer, "\\u%04x", ch);
+        sprintf(buffer, "\\u%04x", (int)ch);
     } else {
-        sprintf(buffer, "\\u%08x", ch);
+        sprintf(buffer, "\\U%08x", (int)ch);
     }
     return buffer;
 }
