@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2002/03/10 19:40:13 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/04/09 23:33:13 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -764,5 +764,76 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("Date Formated with US Locale " + out);
         if (!out.equals(expectedUS))
             errln("FAIL: Expected " + expectedUS);
+    }
+
+    /**
+     * Test DateFormat(Calendar) API
+     */
+    public void TestDateFormatCalendar() {
+        DateFormat date=null, time=null, full=null;
+        Calendar cal=null;
+        ParsePosition pos = new ParsePosition(0);
+        String str;
+        Date when;
+
+        /* Create a formatter for date fields. */
+        date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+        if (date == null) {
+            errln("FAIL: getDateInstance failed");
+            return;
+        }
+
+        /* Create a formatter for time fields. */
+        time = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US);
+        if (time == null) {
+            errln("FAIL: getTimeInstance failed");
+            return;
+        }
+
+        /* Create a full format for output */
+        full = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL,
+                                              Locale.US);
+        if (full == null) {
+            errln("FAIL: getInstance failed");
+            return;
+        }
+
+        /* Create a calendar */
+        cal = Calendar.getInstance(Locale.US);
+        if (cal == null) {
+            errln("FAIL: Calendar.getInstance failed");
+            return;
+        }
+
+        /* Parse the date */
+        cal.clear();
+        str = "4/5/2001";
+        pos.setIndex(0);
+        date.parse(str, cal, pos);
+        if (pos.getIndex() != str.length()) {
+            errln("FAIL: DateFormat.parse(4/5/2001) failed at " +
+                  pos.getIndex());
+            return;
+        }
+
+        /* Parse the time */
+        str = "5:45 PM";
+        pos.setIndex(0);
+        time.parse(str, cal, pos);
+        if (pos.getIndex() != str.length()) {
+            errln("FAIL: DateFormat.parse(17:45) failed at " +
+                  pos.getIndex());
+            return;
+        }
+    
+        /* Check result */
+        when = cal.getTime();
+        str = full.format(when);
+        // Thursday, April 5, 2001 5:45:00 PM PDT 986517900000
+        if (when.getTime() == 986517900000.0) {
+            logln("Ok: Parsed result: " + str);
+        } else {
+            errln("FAIL: Parsed result: " + str + ", exp 4/5/2001 5:45 PM");
+        }
     }
 }
