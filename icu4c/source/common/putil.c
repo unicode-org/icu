@@ -413,18 +413,18 @@ uprv_IEEEremainder(double x, double p)
   int32_t hx, hp;
   uint32_t sx, lx, lp;
   double p_half;
-  
+
   hx = *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t));
   lx = *(uint32_t*)u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
-  
+
   hp = *(int32_t*)u_topNBytesOfDouble(&p, sizeof(int32_t));
   lp = *(uint32_t*)u_bottomNBytesOfDouble(&p, sizeof(uint32_t));
-  
+
   sx = hx & SIGN;
-  
+
   hp &= 0x7fffffff;
   hx &= 0x7fffffff;
-  
+
   /* purge off exception values */
   if((hp|lp) == 0) 
     return (x*p) / (x*p);     /* p = 0 */
@@ -432,8 +432,8 @@ uprv_IEEEremainder(double x, double p)
      ((hp>=0x7ff00000) &&    /* p is NaN */
       (((hp-0x7ff00000)|lp) != 0)))
     return (x*p) / (x*p);
-  
-  
+
+
   if(hp <= 0x7fdfffff) 
     x = uprv_fmod(x, p + p);    /* now x < 2p */
   if(((hx-hp)|(lx-lp)) == 0) 
@@ -455,9 +455,9 @@ uprv_IEEEremainder(double x, double p)
     x -= p;
     }
   }
-  
+
   *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t)) ^= sx;
-  
+
   return x;
 #else
     /* INACCURATE but portable implementation of IEEEremainder.  This
@@ -490,16 +490,16 @@ uprv_fmax(double x, double y)
 {
 #if IEEE_754
   int32_t lowBits;
-  
+
   /* first handle NaN*/
   if(uprv_isNaN(x) || uprv_isNaN(y))
     return uprv_getNaN();
-  
+
   /* check for -0 and 0*/
   lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
   if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
     return y; 
-  
+
   return (x > y ? x : y);
 #else
   /* {sfb} fix this*/
@@ -527,12 +527,12 @@ uprv_fmin(double x, double y)
   /* first handle NaN*/
   if(uprv_isNaN(x) || uprv_isNaN(y))
     return uprv_getNaN();
-  
+
   /* check for -0 and 0*/
   lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&y, sizeof(uint32_t));
   if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
     return y; 
-  
+
   return (x > y ? y : x);
 #else
   /* {sfb} fix this*/
@@ -580,13 +580,13 @@ uprv_trunc(double d)
 #endif
 }
 
-void        
+void 
 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 {
   *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
   *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
 }
-    
+
 
 /**
  * Return the floor of the log base 10 of a given double.
@@ -604,15 +604,15 @@ uprv_log10(double d)
   /* of 1.0e300 taken this way is 299, rather than 300.*/
   double alog10 = log(d) / log(10.0);
   int16_t ailog10 = (int16_t) floor(alog10);
-  
+
   /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
   if (alog10 > 0 && d >= pow(10.0, ailog10 + 1))
     ++ailog10;
-  
+
   /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
   else if (alog10 < 0 && d < pow(10.0, ailog10))
     --ailog10;
-  
+
   return ailog10;
 }
 
@@ -626,7 +626,7 @@ uprv_digitsAfterDecimal(double x)
 
   /* negative numbers throw off the calculations*/
   x = fabs(x);
-  
+
   /* cheat and use the string-format routine to get a string representation*/
   /* (it handles mathematical inaccuracy better than we can), then find out */
   /* many characters are to the right of the decimal point */
@@ -634,10 +634,10 @@ uprv_digitsAfterDecimal(double x)
   p = uprv_strchr(buffer, '.');
   if (p == 0)
     return 0;
-  
+
   ptPos = (int16_t)(p - buffer);
   numDigits = (int16_t)(strlen(buffer) - ptPos - 1);
-  
+
   /* if the number's string representation is in scientific notation, find */
   /* the exponent and take it into account*/
   exponent = 0;
@@ -647,7 +647,7 @@ uprv_digitsAfterDecimal(double x)
     numDigits -= strlen(buffer) - expPos;
     exponent = (int16_t)(atoi(p + 1));
   }
-  
+
   /* the string representation may still have spurious decimal digits in it, */
   /* so we cut off at the ninth digit to the right of the decimal, and have */
   /* to search backward from there to the first non-zero digit*/
@@ -699,7 +699,7 @@ uprv_timezone()
   struct tm tmrec;
   UBool dst_checked;
   int32_t tdiff = 0;
-  
+
   time(&t);
   memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
   dst_checked = (tmrec.tm_isdst != 0); /* daylight savings time is checked*/
@@ -870,7 +870,7 @@ getLibraryPath(char *path, int size) {
             if(rc>=0) {
                 /* search for the list item for the library itself */
                 while(p!=NULL) {
-       	           s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
+                    s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
                     if(s!=NULL) {
                         if(s>p->l_name) {
                             /* copy the path, without the basename and the last separator */
@@ -1076,14 +1076,14 @@ u_getDataDirectory(void) {
 #       if !defined(XP_MAC)
             /* first try to get the environment variable */
             path=getenv("ICU_DATA");
-/* 	    fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
-/* 	    { */
-/* 	      int i; */
-/* 	      fprintf(stderr, "E=%08X\n", __environ); */
-/* 	      if(__environ) */
-/* 	      for(i=0;__environ[i] && __environ[i][0];i++) */
-/* 		puts(__environ[i]); */
-/* 	    } */
+/*        fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
+/*        { */
+/*            int i; */
+/*            fprintf(stderr, "E=%08X\n", __environ); */
+/*            if(__environ) */
+/*            for(i=0;__environ[i] && __environ[i][0];i++) */
+/*                puts(__environ[i]); */
+/*        } */
 #       endif
 #       ifdef WIN32
             /* next, try to read the path from the registry */
@@ -1093,7 +1093,7 @@ u_getDataDirectory(void) {
                 if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\ICU\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
                     DWORD type=REG_EXPAND_SZ, size=sizeof(pathBuffer);
 
-                    if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, pathBuffer, &size) && size>1) {
+                    if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, (unsigned char *)pathBuffer, &size) && size>1) {
                         if(type==REG_EXPAND_SZ) {
                             /* replace environment variable references by their values */
                             char temporaryPath[1024];
@@ -1975,7 +1975,7 @@ uprv_defaultCodePageForLocale(const char *locale)
                     * make sure that 'c' doesn't match catalan, etc.
                     **/
     }
-  
+
   for(i=0; _localeToDefaultCharmapTable[i].loc[0]; i++)
   {
     if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc, 
