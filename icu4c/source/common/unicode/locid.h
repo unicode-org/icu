@@ -437,12 +437,13 @@ public:
      * 
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
      * @param status Returns any error information while performing this operation.
-     * @return pointer to the keyword value owned by the Locale object or NULL if there is 
-     *         no such a keyword.
+     * @param buffer The buffer to receive the keyword value.
+     * @param bufferCapacity The capacity of receiving buffer
+     * @return the length of keyword value
      *
      * @draft ICU 2.8
      */
-     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, UErrorCode &status) const;
+     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
     /**
      * returns the locale's three-letter language code, as specified
