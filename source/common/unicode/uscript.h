@@ -78,6 +78,10 @@ typedef enum UScriptCode {
  * Fills in USCRIPT_LATIN given "en" OR "en_US" 
  * If required capacity is greater than capacity of the destination buffer then the error code
  * is set to U_BUFFER_OVERFLOW_ERROR and the required capacity is returned
+ *
+ * <p>Note: To search by short or long script alias only, use
+ * u_getPropertyValueEnum(UCHAR_SCRIPT, alias) instead.  This does
+ * a fast lookup with no access of the locale data.
  * @param nameOrAbbrOrLocale name of the script, as given in
  * PropertyValueAliases.txt, or ISO 15924 code or locale
  * @param fillIn the UScriptCode buffer to fill in the script code
