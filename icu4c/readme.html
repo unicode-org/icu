@@ -18,9 +18,7 @@
       h3 {margin-top: 2em; text-decoration: underline}
       h4 {text-decoration: underline}
       h5 {text-decoration: underline}
-      pre {margin: 2em}
       caption {font-weight: bold; text-align: left}
-      dt {font-style: italic}
       div.indent {margin-left: 2em}
       ul.TOC {list-style-type: none}
 </style>
@@ -30,7 +28,7 @@
     <h1>International Components for Unicode<br>
      ReadMe</h1>
 
-    <p>Version: 2001-Aug-01<br>
+    <p>Version: 2001-Aug-02<br>
      Copyright &copy; 1995-2001 International Business Machines Corporation
     and others. All Rights Reserved.</p>
     <hr>
@@ -59,7 +57,7 @@
       <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
 
       <li>
-        <a href="#HowToBuild">How to Build And Install ICU</a> 
+        <a href="#HowToBuild">How to Build And Install ICU</a>
 
         <ul class="TOC">
           <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
@@ -75,7 +73,7 @@
       </li>
 
       <li>
-        <a href="#ImportantNotes">Important Notes About Using ICU</a> 
+        <a href="#ImportantNotes">Important Notes About Using ICU</a>
 
         <ul class="TOC">
           <li><a href="#ImportantNotesWin32">Windows Platform</a></li>
@@ -84,7 +82,8 @@
         </ul>
       </li>
 
-      <li><a href="#UsageInformation">Getting More Information About ICU</a></li>
+      <li><a href="#UsageInformation">Getting More Information About
+      ICU</a></li>
 
       <li><a href="#SubmittingComments">Submitting Comments, Requesting
       Features and Reporting Bugs</a></li>
@@ -124,9 +123,8 @@
 
       <li>Over 160 locales supported. Visit the <a href=
       "http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">
-      LocaleExplorer
-      (http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer)</a>
-      site for a demonstration and a full list of supported locales or see
+      LocaleExplorer</a>
+      on the ICU website for a demonstration and a full list of supported locales or see
       the <a href=
       "http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/index.txt">index
       file</a> with the supported locales.</li>
@@ -680,16 +678,15 @@
     <p><strong>Key to testing frequency</strong></p>
 
     <dl>
-      <dt>Reference platform</dt>
+      <dt><i>Reference platform</i></dt>
 
-      <dd>ICU is guaranteed to work on these platforms with these
-      compilers</dd>
+      <dd>ICU will work on these platforms with these compilers</dd>
 
-      <dt>Regularly tested</dt>
+      <dt><i>Regularly tested</i></dt>
 
       <dd>ICU should work on these platforms with these compilers</dd>
 
-      <dt>Rarely tested</dt>
+      <dt><i>Rarely tested</i></dt>
 
       <dd>ICU may not work on these platforms</dd>
     </dl>
@@ -1001,14 +998,19 @@
     target dataset.</p>
 
     <p>The PDS member names are as follows:</p>
+
+    <div class="indent">
 <pre>
 IXMICUUC --&gt; libicuuc<i>XX</i>.dll
 IXMICUDA --&gt; libicudt<i>XX</i>e.dll
 IXMICUD1 --&gt; libicudt<i>XX</i>e_390.dll
 IXMICUTE --&gt; libtestdata.dll
 </pre>
+    </div>
 
     <p>Example PDS attributes are as follows:</p>
+
+    <div class="indent">
 <pre>
 Data Set Name . . . : <i>USER</i>.ICU.LOAD
 General Data
@@ -1040,6 +1042,7 @@ Block size  . . . . : 3200
 Secondary cylinders : 3
 Data set name type  : PDS
 </pre>
+    </div>
 
     <h3><a name="HowToBuildOS400">OS/400 (iSeries) Platform</a></h3>
 
@@ -1216,7 +1219,8 @@ Data set name type  : PDS
     libicudata.sl) by a process, it cannot be unloaded and replaced without
     stopping and restarting the process.</p>
 
-    <h2><a name="UsageInformation">Getting More Information About ICU</a></h2>
+    <h2><a name="UsageInformation">Getting More Information About
+    ICU</a></h2>
 
     <table border="1" cellpadding="3" width="100%" summary="">
       <caption>
