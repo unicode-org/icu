@@ -3353,14 +3353,15 @@ static void TestMergeSortKeys() {
       ucol_mergeSortkeys(sortkeys[i], sortKeysLen[i], suffixKey, suffixKeyLen, mergedSuffixkeys[i], 256);
       if(i>0) {
         if(uprv_strcmp((char *)mergedPrefixkeys[i-1], (char *)mergedPrefixkeys[i]) != -1) {
-          log_err("Error while comparing prefixed keys:\n");
-          log_verbose("%s\n%s\n", 
+          log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
+          log_err("%s\n%s\n", 
                       ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff, &l),
                       ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff, &l));
         }
         if(uprv_strcmp((char *)mergedSuffixkeys[i-1], (char *)mergedSuffixkeys[i]) != -1) {
-          log_err("Error while comparing suffixed keys\n");
-          log_verbose("%s\n%s\n", ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff, &l),
+          log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
+          log_err("%s\n%s\n", 
+                      ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff, &l),
                       ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff, &l));
         }
       }
