@@ -264,9 +264,9 @@ CLEAN :
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Inference rule for creating converters
-{$(ICUDATA_RELATIVE_PATH)}.txt.res:
+{$(ICUDATA_RELATIVE_PATH)}.txt.res::
 	@echo Making Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(ICUDATA)" -d"$(@D)" $(?F)
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -d"$(ICUDBLD)" $<
 
 # DLL version information
 icudata.res: "$(ICUDATA)\icudata.rc"
