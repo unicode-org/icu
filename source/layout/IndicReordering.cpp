@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2004/02/26 17:43:27 $
- * $Revision: 1.16 $
+ * $Date: 2004/03/25 19:27:43 $
+ * $Revision: 1.17 $
  *
  */
 
@@ -423,7 +423,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                 }
             }
 
-            while (lastConsonant > baseLimit && !classTable->isConsonantOrNukta(chars[lastConsonant])) {
+            while (lastConsonant > baseLimit && !classTable->isConsonant(chars[lastConsonant])) {
                 lastConsonant -= 1;
             }
 
@@ -432,6 +432,10 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             le_int32 postBaseLimit = classTable->scriptFlags & IndicClassTable::SF_POST_BASE_LIMIT_MASK;
             le_bool  seenVattu = FALSE;
             le_bool  seenBelowBaseForm = FALSE;
+
+            if (classTable->isNukta(chars[postBase])) {
+                postBase += 1;
+            }
 
             while (baseConsonant > baseLimit) {
                 IndicClassTable::CharClass charClass = classTable->getCharClass(chars[baseConsonant]);
