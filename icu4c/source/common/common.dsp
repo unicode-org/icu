@@ -203,6 +203,22 @@ SOURCE=.\filestrm.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\iculserv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\icunotif.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\icurwlck.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\icuserv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\locid.cpp
 # End Source File
 # Begin Source File
@@ -842,6 +858,26 @@ SOURCE=.\filestrm.h
 # Begin Source File
 
 SOURCE=.\hash.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\iculdata.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\iculserv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\icunotif.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\icurwlck.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\icuserv.h
 # End Source File
 # Begin Source File
 
