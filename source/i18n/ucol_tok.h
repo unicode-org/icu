@@ -22,6 +22,7 @@
 #define UCOL_TOKENS_H
 
 #include "ucol_imp.h"
+#include "uhash.h"
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
@@ -40,14 +41,8 @@
 typedef struct UColToken UColToken;
 
 typedef struct  {
-  UColToken* first[2];
-  UColToken* last[2];
-/*
-  UColToken* firstPositive;
-  UColToken* lastPositive;
-  UColToken* firstNegative;
-  UColToken* lastNegative;
-*/
+  UColToken* first;
+  UColToken* last;
   UColToken* reset;
   uint32_t baseCE;
   uint32_t baseContCE;
@@ -89,6 +84,7 @@ typedef struct {
   UChar *extraEnd;
   const InverseTableHeader *invUCA;
   const UCollator *UCA;
+  UHashtable *tailored;
   UColOptionSet *opts;
   uint32_t resultLen;
   UColTokListHeader *lh;
@@ -126,7 +122,7 @@ UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, co
 
 int32_t uhash_hashTokens(const void *k);
 UBool uhash_compareTokens(const void *key1, const void *key2);
-void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status);
+void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status);
 uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
 U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src, 
                         uint32_t *strength, 
