@@ -739,13 +739,7 @@ UnicodeString::toUpper(const Locale& locale)
     return *this;
   }
 
-  UnicodeString lang;
-  char langChars[16];
-
-  // get char * locale language
-  locale.getLanguage(lang);
-  lang.extract(0, lang.length(), langChars, "");
-  langChars[lang.length()] = 0;
+  const char *langChars = locale.getLanguage();
 
   UTextOffset start = 0, next = 0;
   UTextOffset limit = fLength;
@@ -814,13 +808,7 @@ UnicodeString::toLower(const Locale& locale)
     return *this;
   }
 
-  UnicodeString lang;
-  char langChars[16];
-
-  // get char * locale language
-  locale.getLanguage(lang);
-  lang.extract(0, lang.length(), langChars, "");
-  langChars[lang.length()] = 0;
+  const char *langChars = locale.getLanguage();
 
   UTextOffset start = 0, next = 0;
   UTextOffset limit = fLength;

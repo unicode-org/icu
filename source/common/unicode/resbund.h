@@ -509,7 +509,7 @@ private:
      * mechanism.
      */
                             ResourceBundle( const UnicodeString&    path,
-                                            const UnicodeString&    localeName,
+                                            const char *localeName,
                                             UErrorCode&              status);
 
     /**

@@ -30,26 +30,23 @@ U_CAPI UResourceBundle* ures_open(    const char* myPath,
                     UErrorCode* status)
 {
   UnicodeString uPath;
-  Locale myLocale;
+  Locale myLocale(localeID); // Handles NULL properly.
 
 
   if (myPath != 0) uPath = myPath;
   else uPath = u_getDataDirectory();
 
-  if (localeID == 0) localeID = uloc_getDefault();
-
-
-  return (UResourceBundle*) new ResourceBundle(uPath, myLocale.init(localeID), *status);
+  return (UResourceBundle*) new ResourceBundle(uPath, myLocale, *status);
 }
 
 U_CAPI UResourceBundle* ures_openW(    const wchar_t* myPath,
                     const char* localeID,
                     UErrorCode* status)
 {
-  Locale myLocale;
+  Locale myLocale(localeID);
   if (localeID == 0) localeID = uloc_getDefault();
 
-  return (UResourceBundle*) new ResourceBundle(myPath, myLocale.init(localeID), *status);
+  return (UResourceBundle*) new ResourceBundle(myPath, myLocale, *status);
 }
 
 
