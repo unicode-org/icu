@@ -49,8 +49,9 @@ private:
 
 LineRun::LineRun(ParagraphLayout *paragraphLayout, le_int32 runIndex)
 {
-    float   *positions;
-    le_int32 i;
+    LEGlyphID *glyphs;
+    float     *positions;
+    le_int32   i;
 
     fGlyphCount = paragraphLayout->getVisualRun(runIndex, NULL, NULL, NULL, NULL, NULL);
 
@@ -63,12 +64,14 @@ LineRun::LineRun(ParagraphLayout *paragraphLayout, le_int32 runIndex)
     fDY       = new le_int32[fGlyphCount];
     positions = new float[fGlyphCount * 2 + 2];
 
-    paragraphLayout->getVisualRun(runIndex, (LEGlyphID *) fGlyphs, (float *) positions, NULL, (const LEFontInstance **) &fFont, &fDirection);
+    glyphs = (LEGlyphID *) fGlyphs;
+
+    paragraphLayout->getVisualRun(runIndex, glyphs, (float *) positions, NULL, (const LEFontInstance **) &fFont, &fDirection);
 
     for (i = 0; i < fGlyphCount; i += 1) {
         // filter out deleted glyphs
-        if (fGlyphs[i] == 0xFFFE || fGlyphs[i] == 0xFFFF) {
-            ((LEGlyphID *) fGlyphs)[i] = 0x0002;
+        if (glyphs[i] == 0xFFFE || glyphs[i] == 0xFFFF) {
+            glyphs[i] = 0x0002;
         }
 
         fDX[i] = (le_int32) (positions[i * 2 + 2] - positions[i * 2]);
