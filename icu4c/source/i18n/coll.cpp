@@ -43,9 +43,11 @@
 
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
+#include "ucol_imp.h"
 #include "cmemory.h"
 #include "mutex.h"
 #include "iculserv.h"
+#include "ustrenum.h"
 #include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
@@ -79,6 +81,9 @@ CollatorFactory::getDisplayName(const Locale& objectLocale,
 // -------------------------------------
 
 class ICUCollatorFactory : public ICUResourceBundleFactory {
+ public:
+    ICUCollatorFactory():  ICUResourceBundleFactory(UnicodeString(U_ICUDATA_COLL, (char*)NULL)) { } 
+ protected:
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 };
 
@@ -595,6 +600,41 @@ StringEnumeration*
 Collator::getAvailableLocales(void)
 {
     return getService()->getAvailableLocales();
+}
+
+StringEnumeration*
+Collator::getKeywords(UErrorCode& status) {
+    // This is a wrapper over ucol_getKeywords
+    UEnumeration* uenum = ucol_getKeywords(&status);
+    if (U_FAILURE(status)) {
+        uenum_close(uenum);
+        return NULL;
+    }
+    return new UStringEnumeration(uenum);
+}
+
+StringEnumeration*
+Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
+    // This is a wrapper over ucol_getKeywordValues
+    UEnumeration* uenum = ucol_getKeywordValues(keyword, &status);
+    if (U_FAILURE(status)) {
+        uenum_close(uenum);
+        return NULL;
+    }
+    return new UStringEnumeration(uenum);
+}
+
+Locale
+Collator::getFunctionalEquivalent(const Locale& locale, UBool& isAvailable,
+                                  UErrorCode& status) {
+    // This is a wrapper over ucol_getFunctionalEquivalent
+    char loc[ULOC_FULLNAME_CAPACITY];
+    int32_t len = ucol_getFunctionalEquivalent(loc, sizeof(loc),
+                           locale.getName(), &isAvailable, &status);
+    if (U_FAILURE(status)) {
+        *loc = 0; // root
+    }
+    return Locale::createFromName(loc);
 }
 
 // UCollator private data members ----------------------------------------
