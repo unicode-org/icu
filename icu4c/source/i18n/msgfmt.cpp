@@ -118,13 +118,13 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   fArgumentNumbers(NULL)
 {
     fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
-    //test for NULL
+    /* test for NULL */
     if (fOffsets == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
-    //test for NULL
+    /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         delete fOffsets;
@@ -147,13 +147,13 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   fArgumentNumbers(NULL)
 {
     fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
-    //test for NULL
+    /* test for NULL */
     if (fOffsets == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
-    //test for NULL
+    /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         delete fOffsets;
@@ -177,13 +177,13 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   fArgumentNumbers(NULL)
 {
     fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
-    //test for NULL
+    /* test for NULL */
     if (fOffsets == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
-    //test for NULL
+    /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         delete fOffsets;
@@ -779,7 +779,7 @@ MessageFormat::format(  const UnicodeString& pattern,
 {
     // {sfb} why does this use a local when so many other places use a static?
     MessageFormat *temp = new MessageFormat(pattern, success);
-    //test for NULL
+    /* test for NULL */
     if (temp == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return result;
@@ -900,7 +900,7 @@ MessageFormat::format(const Formattable* arguments,
         if (tryRecursion && arg.indexOf(LEFT_CURLY_BRACE) >= 0) {
             MessageFormat *temp = NULL;
             temp = new MessageFormat(arg, fLocale, success);
-            //test for NULL
+            /* test for NULL */
             if (temp == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return result;
@@ -1322,7 +1322,7 @@ MessageFormat::makeFormat(/*int32_t position, */
         fFormatTypeList[argumentNumber] = Formattable::kDouble;
 
         newFormat = new ChoiceFormat(segments[3], parseError, success);
-        //test for NULL
+        /* test for NULL */
         if (newFormat == 0) {
             success = U_MEMORY_ALLOCATION_ERROR;
             fMaxOffset = oldMaxOffset;

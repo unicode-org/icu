@@ -81,7 +81,7 @@ Collator* Collator::createInstance(const Locale&  desiredLocale,
 
   RuleBasedCollator* collation = new RuleBasedCollator(desiredLocale, 
                                                              status);
-  //test for NULL
+  /* test for NULL */
   if (collation == 0) {
       status = U_MEMORY_ALLOCATION_ERROR;
       return 0;
@@ -102,7 +102,7 @@ Collator::createInstance(const Locale &loc,
   UVersionInfo info;
 
   collator=new RuleBasedCollator(loc, status);
-  //test for NULL
+  /* test for NULL */
   if (collator == 0) {
       status = U_MEMORY_ALLOCATION_ERROR;
       return 0;

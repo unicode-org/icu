@@ -542,7 +542,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             initField(&fAmPms, fAmPmsCount, (const UChar *)gLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
 
             fZoneStrings = new UnicodeString*[1];
-            //test for NULL
+            /* test for NULL */
             if (fZoneStrings == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
@@ -578,14 +578,14 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
     fZoneStringsColCount = zoneRow.getSize();
     fZoneStrings = new UnicodeString * [fZoneStringsRowCount];
-    //test for NULL
+    /* test for NULL */
     if (fZoneStrings == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     for(i = 0; i<fZoneStringsRowCount; i++) {
         *(fZoneStrings+i) = new UnicodeString[fZoneStringsColCount];
-        //test for NULL
+        /* test for NULL */
         if ((*(fZoneStrings+i)) == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -600,7 +600,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle weekdaysData = resource.get(fgDayNamesTag, status);
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
-    //test for NULL
+    /* test for NULL */
     if (fWeekdays == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -613,7 +613,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle lsweekdaysData = resource.get(fgDayAbbreviationsTag, status);
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
-    //test for NULL
+    /* test for NULL */
     if (fShortWeekdays == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

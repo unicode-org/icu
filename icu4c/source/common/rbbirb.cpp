@@ -61,14 +61,14 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
     fDebugEnv   = getenv("U_RBBIDEBUG");      // TODO:  make conditional on some compile time setting
 
     fScanner            = new RBBIRuleScanner(this);
-    //test for NULL
+    /*test for NULL*/
     if(fScanner == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     
     fSetBuilder         = new RBBISetBuilder(this);
-    //test for NULL
+    /*test for NULL*/
     if(fSetBuilder == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(fScanner);
@@ -215,18 +215,18 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     //   Generate the DFA state transition table.
     //
     builder.fForwardTables = new RBBITableBuilder(&builder, &builder.fForwardTree);
-    //test for NULL
+    /* test for NULL */
     if(builder.fForwardTables == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;    
+        return 0;    
     }
     
     builder.fReverseTables = new RBBITableBuilder(&builder, &builder.fReverseTree);
-    //test for NULL
+    /* test for NULL */
     if(builder.fReverseTables == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(builder.fForwardTables);
-        return NULL;    
+        return 0;    
     }
     builder.fForwardTables->build();
     builder.fReverseTables->build();
@@ -253,7 +253,7 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     //     (Identical to creation from stored pre-compiled rules)
     //
     RuleBasedBreakIterator *This = new RuleBasedBreakIterator(data, status);
-    //test for NULL
+    /* test for NULL */
     if(This == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;

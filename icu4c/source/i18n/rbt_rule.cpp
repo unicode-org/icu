@@ -112,7 +112,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     if (anteContextLength > 0) {
         anteContext = new StringMatcher(pattern, 0, anteContextLength,
                                         FALSE, *data);
-        //test for NULL
+        /* test for NULL */
         if (anteContext == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -123,7 +123,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     if (keyLength > 0) {
         key = new StringMatcher(pattern, anteContextLength, anteContextLength + keyLength,
                                 FALSE, *data);
-        //test for NULL
+        /* test for NULL */
         if (key == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -135,7 +135,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     if (postContextLength > 0) {
         postContext = new StringMatcher(pattern, anteContextLength + keyLength, pattern.length(),
                                         FALSE, *data);
-        //test for NULL
+        /* test for NULL */
         if (postContext == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -143,7 +143,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     }
 
     this->output = new StringReplacer(outputStr, cursorPosition + cursorOffset, data);
-    //test for NULL
+    /* test for NULL */
     if (this->output == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

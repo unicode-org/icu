@@ -179,7 +179,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
         delete fSymbols;
         // This constructor doesn't fail; it uses last resort data
         fSymbols = new DateFormatSymbols(status);
-        //test for NULL
+        /* test for NULL */
         if (fSymbols == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -272,7 +272,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     // create a symbols object from the locale
     fSymbols = new DateFormatSymbols(locale, status);
-    //test for NULL
+    /* test for NULL */
     if (fSymbols == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -296,7 +296,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         //  pattern = MessageFormat.format(dateTimePatterns[8], dateTimeArgs);
 
         Formattable *timeDateArray = new Formattable[2];
-        //test for NULL
+        /* test for NULL */
         if (timeDateArray == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
