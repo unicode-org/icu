@@ -33,7 +33,7 @@ void addDateForTest(TestNode** root)
 {
     addTest(root, &TestDateFormat, "tsformat/cdattst/TestDateFormat");
     addTest(root, &TestSymbols, "tsformat/cdattst/TestSymbols");
-    addTest(root, &TestDateFormatCalendar, "tsformat/cdattst/TestCalendar");
+    addTest(root, &TestDateFormatCalendar, "tsformat/cdattst/TestDateFormatCalendar");
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -609,7 +609,12 @@ static void TestDateFormatCalendar() {
         goto FAIL;
     }
     u_austrcpy(cbuf, buf);
-    log_verbose("Parsed result: %s\n", cbuf);
+    // Thursday, April 5, 2001 5:45:00 PM PDT 986517900000
+    if (when == 986517900000) {
+        log_verbose("Ok: Parsed result: %s\n", cbuf);
+    } else {
+        log_err("FAIL: Parsed result: %s, exp 4/5/2001 5:45 PM", cbuf);
+    }
 
  FAIL:    
     udat_close(date);
