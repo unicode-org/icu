@@ -5,6 +5,12 @@
  **********************************************************************
  */
 
+/*
+ * paragraphLayout doesn't make much sense without
+ * BreakIterator...
+ */
+#if ! UCONFIG_NO_BREAK_ITERATION
+
 #include "layout/LETypes.h"
 #include "layout/LELanguages.h"
 #include "layout/LayoutEngine.h"
@@ -996,3 +1002,5 @@ void ParagraphLayout::Line::computeMetrics()
 const char ParagraphLayout::VisualRun::fgClassID = 0;
 
 U_NAMESPACE_END
+
+#endif
