@@ -35,13 +35,15 @@ static const uint32_t     URX_FAIL          = 14;   // Stop match operation;  No
 
 static const uint32_t     URX_BACKSLASH_A   = 15;   
 static const uint32_t     URX_BACKSLASH_B   = 16;   // Value field:  0:  \b    1:  \B
-static const uint32_t     URX_BACKSLASH_D   = 22;   // Value field:  0:  \d    1:  \D
 static const uint32_t     URX_BACKSLASH_G   = 17; 
 static const uint32_t     URX_BACKSLASH_W   = 18;   // Value field:  0:  \w    1:  \W
 static const uint32_t     URX_BACKSLASH_X   = 19;
-static const uint32_t     URX_BACKSLASH_Z   = 20;   // Value field:  0:  \z    1:  \Z
+static const uint32_t     URX_BACKSLASH_Z   = 20;   // \z   Unconditional end of line.
 
 static const uint32_t     URX_DOTANY_ALL    = 21;   // ., in the . matches any mode.
+static const uint32_t     URX_BACKSLASH_D   = 22;   // Value field:  0:  \d    1:  \D
+static const uint32_t     URX_CARET         = 23;   // Value field:  1:  multi-line mode.
+static const uint32_t     URX_DOLLAR        = 24;   // Also for \Z
 
 
 //

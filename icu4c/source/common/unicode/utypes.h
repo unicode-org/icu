@@ -505,6 +505,7 @@ typedef enum UErrorCode {
      U_REGEX_INVALID_STATE,
      U_REGEX_BAD_ESCAPE_SEQUENCE,
      U_REGEX_PROPERTY_SYNTAX,
+     U_REGEX_UNIMPLEMENTED,
      U_REGEX_ERROR_LIMIT,
 
     U_ERROR_LIMIT=U_BRK_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */

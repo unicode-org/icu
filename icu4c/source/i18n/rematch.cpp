@@ -560,9 +560,10 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     //  Cache frequently referenced items from the compiled pattern
     //  in local variables.
     //
-    UVector             *pat     = fPattern->fCompiledPat;
-    const UnicodeString *litText = &fPattern->fLiteralText;
-    UVector             *sets    = fPattern->fSets;
+    UVector             *pat      = fPattern->fCompiledPat;
+    const UnicodeString *litText  = &fPattern->fLiteralText;
+    UVector             *sets     = fPattern->fSets;
+    int32_t              inputLen = fInput->length();
     
 
     //
@@ -658,6 +659,46 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             fCaptureEnds->setElementAt(inputIdx, opValue);
             break;
 
+
+        case URX_DOLLAR:                   //  $, test for End of line
+                                           //     or for position before new line at end of input
+            if (inputIdx < inputLen-2) {
+                // We are no where near the end of input.  Fail.
+                backTrack(inputIdx, patIdx);
+                break;
+            }
+            if (inputIdx >= inputLen) {
+                // We really are at the end of input.  Success.
+                break;
+            }
+            // If we are positioned just before a new-line that is located at the
+            //   end of input, succeed.
+            if (inputIdx == inputLen-1) {
+                UChar32 c = fInput->char32At(inputIdx);
+                if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                    break;                         // At new-line at end of input. Success
+                }
+            }
+
+            if (inputIdx == inputLen-2) {
+                if (fInput->char32At(inputIdx) == 0x0d && fInput->char32At(inputIdx+1) == 0x0a) {
+                    break;                         // At CR/LF at end of input.  Success
+                }
+            }
+
+            backTrack(inputIdx, patIdx);
+
+            // TODO:  support for multi-line mode.
+            break;
+
+
+        case URX_CARET:                    //  ^, test for start of line
+            if (inputIdx != 0) {
+                backTrack(inputIdx, patIdx);
+            }                              // TODO:  support for multi-line mode.
+            break;
+
+
         case URX_BACKSLASH_A:          // Test for start of input
             if (inputIdx != 0) {
                 backTrack(inputIdx, patIdx);
@@ -731,18 +772,24 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                     for(;;) {   
                         c = fInput->char32At(inputIdx);   
                         ctype = u_charType(c);
-                        // TODO:  make a set and add the "othe grapheme extend" chars
+                        // TODO:  make a set and add the "other grapheme extend" chars
                         //        to the list of stuff to be skipped over.
                         if (!(ctype == U_NON_SPACING_MARK || ctype == U_ENCLOSING_MARK)) {
                             break;
+                        }
+                        inputIdx = fInput->moveIndex32(inputIdx, 1);
+                        if (inputIdx >= fInputLength) {
+                            break; 
                         }
                     }
                 }
             }
             break;
 
+
+
         case URX_BACKSLASH_Z:          // Test for end of line
-            if (FALSE) {
+            if (inputIdx < inputLen) {
                 backTrack(inputIdx, patIdx);
             }
             break;
