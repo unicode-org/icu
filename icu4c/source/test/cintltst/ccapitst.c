@@ -2031,12 +2031,12 @@ testSwap(const char *name, UBool swap) {
     /* convert back to Unicode (may not roundtrip) */
     pc=normal;
     pu=uNormal;
-    ucnv_toUnicode(cnv, &pu, uNormal+LENGTHOF(uNormal), &pc, normal+normalLength, NULL, TRUE, &errorCode);
+    ucnv_toUnicode(cnv, &pu, uNormal+LENGTHOF(uNormal), (const char **)&pc, normal+normalLength, NULL, TRUE, &errorCode);
     normalLength=(int32_t)(pu-uNormal);
 
     pc=normal;
     pu=uSwapped;
-    ucnv_toUnicode(swapCnv, &pu, uSwapped+LENGTHOF(uSwapped), &pc, normal+swappedLength, NULL, TRUE, &errorCode);
+    ucnv_toUnicode(swapCnv, &pu, uSwapped+LENGTHOF(uSwapped), (const char **)&pc, normal+swappedLength, NULL, TRUE, &errorCode);
     swappedLength=(int32_t)(pu-uSwapped);
 
     if(U_FAILURE(errorCode)) {
