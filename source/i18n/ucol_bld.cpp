@@ -80,11 +80,21 @@ int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
     }
   }
 
+  /* weiv:                                                  */
+  /* in searching for elements, I have removed the failure  */
+  /* The reason for this is that the builder does not rely  */
+  /* on search mechanism telling it that it didn't find an  */
+  /* element. However, indirect positioning relies on being */
+  /* able to find the elements around any CE, even if it is */
+  /* not defined in the UCA. */
+  return i;
+/*
   if((first == CE && second == SecondCE)) {
     return i;
   } else {
     return -1;
   }
+*/
 }
 
 static uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
@@ -141,7 +151,9 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
   *prevContCE = contCE;
 
   while((*prevCE  & strengthMask[strength]) == CE 
-    && (*prevContCE  & strengthMask[strength])== contCE) {
+    && (*prevContCE  & strengthMask[strength])== contCE
+    && iCE > 0) { /* this condition should prevent falling off the edge of the world */
+    /* here, we end up in a singularity - zero */
     *prevCE = (*(CETable+3*(--iCE)));
     *prevContCE = (*(CETable+3*(iCE)+1));
   }

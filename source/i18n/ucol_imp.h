@@ -43,7 +43,7 @@ static const UDataInfo ucaDataInfo={
     0,
 
     {0x55, 0x43, 0x6f, 0x6c},     /* dataFormat="UCol"            */
-    {1, 1, 0, 0},                 /* formatVersion                */
+    {2, 0, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
@@ -58,7 +58,7 @@ static const UDataInfo invUcaDataInfo={
     0,
 
     {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
-    {1, 1, 0, 0},                 /* formatVersion                */
+    {2, 0, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
@@ -423,23 +423,26 @@ enum {
 }; 
 
 #define UCOL_RESET_TOP_VALUE                0x9F000303
-#define UCOL_NEXT_TOP_VALUE                 0xE8960303
 #define UCOL_FIRST_PRIMARY_IGNORABLE        0x00008705
-#define UCOL_NEXT_FIRST_PRIMARY_IGNORABLE   0x00008905
 #define UCOL_LAST_PRIMARY_IGNORABLE         0x0000DD05
-#define UCOL_LAST_PRIMARY_IGNORABLE_CONT    0x0000C1C5
-#define UCOL_NEXT_LAST_PRIMARY_IGNORABLE    0x03000303
+#define UCOL_LAST_PRIMARY_IGNORABLE_CONT    0x0000C1C0
 #define UCOL_FIRST_SECONDARY_IGNORABLE      0x00000000
-#define UCOL_NEXT_FIRST_SECONDARY_IGNORABLE 0x00008705
-#define UCOL_LAST_SECONDARY_IGNORABLE       0x00000000
-#define UCOL_NEXT_LAST_SECONDARY_IGNORABLE  0x00000000
+#define UCOL_LAST_SECONDARY_IGNORABLE       0x00000500
 #define UCOL_FIRST_TERTIARY_IGNORABLE       0x00000000
-#define UCOL_NEXT_FIRST_TERTIARY_IGNORABLE  0x00008705
 #define UCOL_LAST_TERTIARY_IGNORABLE        0x00000000
-#define UCOL_NEXT_LAST_TERTIARY_IGNORABLE   0x00008705
 #define UCOL_FIRST_VARIABLE                 0x05070505
-#define UCOL_NEXT_FIRST_VARIABLE            0x05090505
 #define UCOL_LAST_VARIABLE                  0x13CF0505
+#define UCOL_FIRST_NON_VARIABLE             0x16200505
+#define UCOL_LAST_NON_VARIABLE              0x767C0505
+
+#define UCOL_NEXT_TOP_VALUE                 0xE8960303
+#define UCOL_NEXT_FIRST_PRIMARY_IGNORABLE   0x00008905
+#define UCOL_NEXT_LAST_PRIMARY_IGNORABLE    0x03000303
+#define UCOL_NEXT_FIRST_SECONDARY_IGNORABLE 0x00008705
+#define UCOL_NEXT_LAST_SECONDARY_IGNORABLE  0x00000500
+#define UCOL_NEXT_FIRST_TERTIARY_IGNORABLE  0x00000000
+#define UCOL_NEXT_LAST_TERTIARY_IGNORABLE   0x00000000
+#define UCOL_NEXT_FIRST_VARIABLE            0x05090505
 #define UCOL_NEXT_LAST_VARIABLE             0x16200505
 
 #define PRIMARY_IMPLICIT_MIN 0xE8000000
