@@ -199,6 +199,12 @@ struct UDataMemory {
                                                  *  it is closed.
                                                  */
 
+#define TOC_HAS_CONTENTS_FLAG      0x40000000   /* Flag set if UDataMemory is for a
+                                                 * something with a non-empty TOC.
+                                                 * An empty TOC means this is the stub
+                                                 *  library.
+                                                 */
+
 #define IS_DATA_MEMORY_LOADED(pData) ((pData)->pHeader!=NULL)
 
 
@@ -220,6 +226,10 @@ static void UDatamemory_assign(UDataMemory *dest, UDataMemory *source) {
 
 static UDataMemory *UDataMemory_createNewInstance(UErrorCode *pErr) {
     UDataMemory *This;
+
+    if (U_FAILURE(*pErr)) {
+        return NULL;
+    }
     This = uprv_malloc(sizeof(UDataMemory));
     if (This == NULL) {
         *pErr = U_MEMORY_ALLOCATION_ERROR; }
@@ -546,21 +556,44 @@ pointerTOCLookupFn(const UDataMemory *pData,
 
 /* common library functions ------------------------------------------------- */
 
-static UDataMemory commonICUData={ 0 };
+static UDataMemory *commonICUData = NULL;
 
-static UBool
-setCommonICUData(UDataMemory *pData) {
-    UBool setThisLib=FALSE;
+/*
+ * setCommonICUData.   Set a UDataMemory to be the global ICU Data
+ */
+static void
+setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to caller, we copy it. */
+                 UDataMemory *oldData,   /*  Old ICUData ptr.  Overwrite of this value is ok,     */
+                                         /*     of any others is not.                             */
+                 UBool       warn,       /*  If true, set USING_DEFAULT warning if ICUData was    */
+                                         /*    changed by another thread before we got to it.     */
+                 UErrorCode *pErr)
+{
+    UDataMemory  *newCommonData = UDataMemory_createNewInstance(pErr);
+    if (U_FAILURE(*pErr)) {
+        return;
+    }
 
-    /* in the mutex block, set the common library for this process */
+    /*  For the assignment, other threads must cleanly see either the old            */
+    /*    or the new, not some partially initialized new.  The old can not be        */
+    /*    deleted - someone may still have a pointer to it lying around in           */
+    /*    their locals.                                                              */
+    UDatamemory_assign(newCommonData, pData);
     umtx_lock(NULL);
-    if(!IS_DATA_MEMORY_LOADED(&commonICUData)) {
-        UDatamemory_assign(&commonICUData, pData);
-        setThisLib=TRUE;
+    if (commonICUData==oldData) {
+        commonICUData = newCommonData;
+    }
+    else {
+        if  (warn==TRUE) {
+            *pErr = U_USING_DEFAULT_WARNING;
+        }
+        uprv_free(newCommonData);
     }
     umtx_unlock(NULL);
-    return setThisLib;
+    return;
 }
+
+
 
 static char *
 strcpy_returnEnd(char *dest, const char *src) {
@@ -790,6 +823,9 @@ static void checkCommonData(UDataMemory *udm, UErrorCode *err) {
         /* dataFormat="CmnD" */
         udm->lookupFn=offsetTOCLookupFn;
         udm->toc=(const char *)udm->pHeader+udm->pHeader->dataHeader.headerSize;
+        if (*(const uint32_t *)udm->toc > 0) {
+            udm->flags |= TOC_HAS_CONTENTS_FLAG;
+        }
     }
     else if(udm->pHeader->info.dataFormat[0]==0x54 &&
         udm->pHeader->info.dataFormat[1]==0x6f &&
@@ -800,6 +836,9 @@ static void checkCommonData(UDataMemory *udm, UErrorCode *err) {
         /* dataFormat="ToCP" */
         udm->lookupFn=pointerTOCLookupFn;
         udm->toc=(const char *)udm->pHeader+udm->pHeader->dataHeader.headerSize;
+        if (*(const uint32_t *)udm->toc > 0) {
+            udm->flags |= TOC_HAS_CONTENTS_FLAG;
+        }
     }
     else {
         /* dataFormat not recognized */
@@ -824,7 +863,8 @@ udata_cleanup()
         gHashTable = 0;            /*   Cleanup is not thread safe.                */
     }
 
-    udata_close(&commonICUData);   /* Clean up common ICU Data             */
+    udata_close(commonICUData);    /* Clean up common ICU Data             */
+    commonICUData = NULL;
 
     return TRUE;                   /* Everything was cleaned up */
 }
@@ -869,19 +909,14 @@ openCommonData(
 
     if (isICUData) {
         /* "mini-cache" for common ICU data */
-        if(IS_DATA_MEMORY_LOADED(&commonICUData)) {
-            return &commonICUData;
+        if(commonICUData != NULL) {
+            return commonICUData;
         }
 
         tData.pHeader = &U_ICUDATA_ENTRY_POINT;
         checkCommonData(&tData, pErrorCode);
-        if (U_SUCCESS(*pErrorCode)) {
-            setCommonICUData(&tData);
-            return &commonICUData;
-        }
-        else {
-            return NULL;
-        }
+        setCommonICUData(&tData, NULL, FALSE, pErrorCode);
+        return commonICUData;
     }
 
 
@@ -946,15 +981,45 @@ openCommonData(
  *                   be called when the lookup of an ICU data item in   *
  *                   the common ICU data fails.                         *
  *                                                                      *
+ *                   The parameter is the UDataMemory in which the      *
+ *                   search for a requested item failed.                *
+ *                                                                      *
  *                   return true if new data is loaded, false otherwise.*
  *                                                                      *
  *----------------------------------------------------------------------*/
-static UBool extendICUData()
+static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
 {
 #ifndef OS390
-    return FALSE;
+    /*  For most platforms (all except 390), if the data library that
+     *   we are running with turned out to be the stub library, we will try to
+     *   load a .dat file instead.  The stub library has no entries in its
+     *   TOC, which is how we identify it here.
+     */
+    UDataMemory   *pData;
+
+    if (failedData->flags & TOC_HAS_CONTENTS_FLAG) {
+        /*  Not the stub.  We can't extend.  */
+        return FALSE;
+    }
+
+    /* See if we can explicitly open a .dat file for the ICUData. */
+    pData = openCommonData(
+               U_ICUDATA_NAME,            /*  "icudt20l" , for example.          */
+               FALSE,                     /*  Pretend we're not opening ICUData  */
+               pErr);
+
+
+    setCommonICUData(pData,         /*  The new common data.                              */
+                 failedData,        /*  Old ICUData ptr.  Overwrite of this value is ok,  */
+                 FALSE,             /*  No warnings if write didn't happen                */
+                 pErr);             /*  setCommonICUData honors errors; NOP if error set  */
+
+    return commonICUData != failedData;   /* Return true if ICUData pointer was updated.   */
+                                    /*   (Could potentialy have been done by another thread racing */
+                                    /*   us through here, but that's fine, we still return true    */
+                                    /*   so that current thread will also examine extended data.   */
 #else
-    
+
     /*  390 specific Library Loading.
      *  This is the only platform left that dynamically loads an ICU Data Library.
      *  All other platforms use .data files when dynamic loading is required, but
@@ -974,19 +1039,19 @@ static UBool extendICUData()
      */
     umtx_lock(NULL);
     if (isLibLoaded) {
-        return FALSE;
+        return FALSE;  /* Watch that unlock  */
     }
 
     /* TODO:  the following code is just a mish-mash of pieces from the
      *        previous data library loading code that might be useful
      *        in putting together something that works.
      */
-    
+
     Library lib;
-    inBasename=U_ICUDATA_NAME"_390"; 
+    inBasename=U_ICUDATA_NAME"_390";
     suffix=strcpy_returnEnd(basename, inBasename);
     uprv_strcpy(suffix, LIB_SUFFIX);
-    
+
     if (uprv_isOS390BatchMode()) {
     /* ### hack: we still need to get u_getDataDirectory() fixed
     for OS/390 (batch mode - always return "//"? )
@@ -1004,20 +1069,20 @@ static UBool extendICUData()
             lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
         }
     }
-    
+
     lib=LOAD_LIBRARY(pathBuffer, basename);
     if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
         /* try basename only next */
         lib=LOAD_LIBRARY(basename, basename);
     }
-    
+
     if(IS_LIBRARY(lib)) {
         /* we have a data DLL - what kind of lookup do we need here? */
         char entryName[100];
         const DataHeader *pHeader;
         *basename=0;
     }
-    
+
     checkCommonData(&tData, pErrorCode);
     if (U_SUCCESS(*pErrorCode)) {
         /* Don't close the old data - someone might be using it
@@ -1025,9 +1090,9 @@ static UBool extendICUData()
          * to get a clean switch-over.
          */
         setCommonICUData(&tData);
-        
+
     }
-    
+
     umtx_unlock(NULL);
     return TRUE;  /* SUCCESS? */
 #endif  /* OS390 */
@@ -1050,7 +1115,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
     }
 
     /* do we already have common ICU data set? */
-    if(IS_DATA_MEMORY_LOADED(&commonICUData)) {
+    if(commonICUData != NULL) {
         *pErrorCode=U_USING_DEFAULT_ERROR;
         return;
     }
@@ -1061,11 +1126,9 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
     checkCommonData(&dataMemory, pErrorCode);
     if (U_FAILURE(*pErrorCode)) {return;}
 
-    /* we have common data */
-    if (setCommonICUData(&dataMemory) == FALSE) {
-        /* some thread passed us */
-        *pErrorCode=U_USING_DEFAULT_ERROR;
-    }
+    /* we have good data */
+    /* Set it up as the ICU Common Data.  */
+    setCommonICUData(&dataMemory, NULL, TRUE, pErrorCode);
 }
 
 
@@ -1245,7 +1308,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         fprintf(stderr, "commonData;%p\n", pCommonData);
         fflush(stderr);
 #endif
-        
+
         if(U_SUCCESS(errorCode)) {
             /* look up the data piece in the common data */
             pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
@@ -1262,10 +1325,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 }
             }
         }
-        /* Data wasn't found.  If we were looking for an ICUData item and there is 
+        /* Data wasn't found.  If we were looking for an ICUData item and there is
          * more data available, load it and try again,
          * otherwise break out of this loop. */
-        if (!(isICUData && extendICUData())) {
+        if (!(isICUData && extendICUData(pCommonData, &errorCode))) {
             break;
         }
     };
