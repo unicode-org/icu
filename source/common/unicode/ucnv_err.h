@@ -62,21 +62,49 @@
 
 
 /**
- * FROM_U, TO_U options for sub and skip callbacks
+ * FROM_U, TO_U options for sub callback
  * @stable ICU 2.0
  */
 #define UCNV_SUB_STOP_ON_ILLEGAL "i"
+
+/**
+ * FROM_U, TO_U options for skip callback
+ * @stable ICU 2.0
+ */
 #define UCNV_SKIP_STOP_ON_ILLEGAL "i"
 
 /**
- * FROM_U_CALLBACK_ESCAPE options
+ * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to ICU (%UXXXX) 
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_ICU       NULL
+/**
+ * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to JAVA (\uXXXX)
+ * @stable ICU 2.0
+ */
 #define UCNV_ESCAPE_JAVA      "J"
+/**
+ * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to C (\uXXXX \UXXXXXXXX)
+ * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to C (\xXXXX)
+ * @stable ICU 2.0
+ */
 #define UCNV_ESCAPE_C         "C"
+/**
+ * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to XML Decimal escape (&#DDDD)
+ * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to XML Decimal escape (&#DDDD)
+ * @stable ICU 2.0
+ */
 #define UCNV_ESCAPE_XML_DEC   "D"
+/**
+ * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to XML Hex escape (&#xXXXX)
+ * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to XML Hex escape (&#xXXXX)
+ * @stable ICU 2.0
+ */
 #define UCNV_ESCAPE_XML_HEX   "X"
+/**
+ * FROM_U_CALLBACK_ESCAPE option to escape teh code unit according to Unicode (U+XXXXX)
+ * @stable ICU 2.0
+ */
 #define UCNV_ESCAPE_UNICODE   "U"
 
 /** 
@@ -123,14 +151,14 @@ typedef enum {
  * @stable ICU 2.0
  */
 typedef struct {
-    uint16_t size;
-    UBool flush;
-    UConverter *converter;
-    const UChar *source;
-    const UChar *sourceLimit;
-    char *target;
-    const char *targetLimit;
-    int32_t *offsets;  /* *offset = blah ; offset++; */
+    uint16_t size;              /**< The size of this struct    */
+    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE   */
+    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument */
+    const UChar *source;        /**< Pointer to the source source buffer   */
+    const UChar *sourceLimit;   /**< Pointer to the limit (end + 1) of source buffer   */
+    char *target;               /**< Pointer to the target buffer   */
+    const char *targetLimit;    /**< Pointer to the limit (end + 1) of target buffer    */
+    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++; */
 } UConverterFromUnicodeArgs;
 
 
@@ -139,14 +167,14 @@ typedef struct {
  * @stable ICU 2.0
  */
 typedef struct {
-    uint16_t size;
-    UBool flush;
-    UConverter *converter;
-    const char *source;
-    const char *sourceLimit;
-    UChar *target;
-    const UChar *targetLimit;
-    int32_t *offsets;
+    uint16_t size;              /**< The size of this struct    */
+    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE   */
+    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument */
+    const char *source;         /**< Pointer to the source source buffer   */
+    const char *sourceLimit;    /**< Pointer to the limit (end + 1) of source buffer   */
+    UChar *target;              /**< Pointer to the target buffer   */
+    const UChar *targetLimit;   /**< Pointer to the limit (end + 1) of target buffer    */
+    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++; */
 } UConverterToUnicodeArgs;
 
 
