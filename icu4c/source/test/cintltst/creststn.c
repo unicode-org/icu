@@ -1863,14 +1863,16 @@ static void TestFallback()
     {
         UErrorCode err =U_ZERO_ERROR;
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
-        UResourceBundle* resLocID = ures_getByKey(myResB, "LocaleID", NULL, &err);
+        UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         UResourceBundle* tResB;
+        static const UChar versionStr[] = { 0x0033, 0x002E, 0x0030, 0};
+
         if(err != U_ZERO_ERROR){
-            log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for LocaleID err=%s\n",u_errorName(err));
+            log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
             return;
         }
-        if(ures_getInt(resLocID, &err) != 0x814){
-            log_data_err("Expected LocaleID=814, but got 0x%X\n", ures_getInt(resLocID, &err));
+        if(u_strcmp(ures_getString(resLocID, &resultLen, &err), versionStr) != 0){
+            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value\n");
         }
         tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
