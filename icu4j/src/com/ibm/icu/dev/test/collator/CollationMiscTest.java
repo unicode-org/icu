@@ -20,7 +20,6 @@ package com.ibm.icu.dev.test.collator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.ICULocaleData;
 import java.util.Locale;
 
 public class CollationMiscTest extends TestFmwk{
@@ -1265,29 +1264,6 @@ public class CollationMiscTest extends TestFmwk{
         // genericLocaleStarter(new Locale("ko__LOTUS", ""), koreanData);
     }
 
-    /* 
-     * rules returned by UCA is "" and will be rejected by the 
-     * RuleBasedCollator constructor
-     public void TestUCARules() {
-        Collator coll =  null;
-        try {
-            coll = Collator.getInstance();
-        } catch (Exception e) {
-            errln("Unable to create a collator");
-            return;
-        }
-        logln("TestUCARules\n");
-        String rules = ((RuleBasedCollator)coll).getRules();
-        try {
-            Collator UCAfromRules = new RuleBasedCollator(rules);
-            logln("rule:" + ((RuleBasedCollator)UCAfromRules));
-        } catch (Exception e) {
-            errln("Unable to create a collator from UCARules!\n");
-            return;
-        }
-    }
-    */
-    
     public void TestIncrementalNormalize() {
         Collator        coll = null;;
         // logln("Test 1 ....");
@@ -1659,6 +1635,141 @@ public class CollationMiscTest extends TestFmwk{
             String strB = "A\u00c0\u0316\uD800\uDC00";
             coll.setStrength(Collator.IDENTICAL);
             doTest(coll, strA, strB, 1);
+        } catch (Exception e) {
+            errln(e.getMessage());
+        }
+    }
+    
+    public void TestMergeSortKeys() 
+    {
+        String cases[] = {"abc", "abcd", "abcde"};
+        String prefix = "foo";
+        String suffix = "egg";
+        CollationKey mergedPrefixKeys[] = new CollationKey[cases.length];
+        CollationKey mergedSuffixKeys[] = new CollationKey[cases.length];
+        
+        Collator coll = Collator.getInstance(Locale.ENGLISH);
+        genericLocaleStarter(Locale.ENGLISH, cases);
+        
+        int strength = Collator.PRIMARY;
+        while (strength <= Collator.IDENTICAL) {
+            coll.setStrength(strength);
+            CollationKey prefixKey = coll.getCollationKey(prefix);
+            CollationKey suffixKey = coll.getCollationKey(suffix);
+            for (int i = 0; i < cases.length; i ++) {
+                CollationKey key = coll.getCollationKey(cases[i]);
+                mergedPrefixKeys[i] = prefixKey.merge(key);
+                mergedSuffixKeys[i] = suffixKey.merge(key);
+                if (mergedPrefixKeys[i].getSourceString() != null
+                    || mergedSuffixKeys[i].getSourceString() != null) {
+                    errln("Merged source string error: expected null");
+                }
+                if (i > 0) {
+                    if (mergedPrefixKeys[i-1].compareTo(mergedPrefixKeys[i])
+                        >= 0) {
+                        errln("Error while comparing prefixed keys @ strength "
+                              + strength);
+                        errln(prettify(mergedPrefixKeys[i-1]));
+                        errln(prettify(mergedPrefixKeys[i]));
+                    }
+                    if (mergedSuffixKeys[i-1].compareTo(mergedSuffixKeys[i]) 
+                        >= 0) {
+                        errln("Error while comparing suffixed keys @ strength "
+                              + strength);
+                        errln(prettify(mergedSuffixKeys[i-1]));
+                        errln(prettify(mergedSuffixKeys[i]));
+                    }
+                }
+            }
+            if (strength == Collator.QUATERNARY) {
+                strength = Collator.IDENTICAL;
+            } 
+            else {
+                strength ++;
+            }
+        }       
+    }
+    
+    public void TestVariableTop() 
+    {
+        // parseNextToken is not released as public so i create my own rules
+        String rules = "& a < b < c < de < fg & hi = j";
+        try {
+            RuleBasedCollator coll = new RuleBasedCollator(rules);
+            String tokens[] = {"a", "b", "c", "de", "fg", "hi", "j", "ab"};
+            coll.setAlternateHandlingShifted(true);
+            for (int i = 0; i < tokens.length; i ++) {
+                int varTopOriginal = coll.getVariableTop();
+                try {
+                    int varTop = coll.setVariableTop(tokens[i]);
+                    if (i > 4) {
+                        errln("Token " + tokens[i] + " expected to fail");
+                    }
+                    if (varTop != coll.getVariableTop()) {
+                        errln("Error setting and getting variable top");
+                    }
+                    CollationKey key1 = coll.getCollationKey(tokens[i]);
+                    for (int j = 0; j < i; j ++) {
+                        CollationKey key2 = coll.getCollationKey(tokens[j]);
+                        if (key2.compareTo(key2) < 0) {
+                            errln("Setting variable top shouldn't change the comparison sequence");
+                        }
+                        byte sortorder[] = key2.toByteArray();
+                        if (sortorder.length > 0 
+                            && (key2.toByteArray())[0] > 1) {
+                            errln("Primary sort order should be 0");
+                        }
+                    }
+                } catch (Exception e) {
+                    CollationElementIterator iter 
+                                 = coll.getCollationElementIterator(tokens[i]);
+                    int ce = iter.next();
+                    int ce2 = iter.next();
+                    if (ce2 == CollationElementIterator.NULLORDER) {
+                        errln("Token " + tokens[i] + " not expected to fail");
+                    }
+                    if (coll.getVariableTop() != varTopOriginal) {
+                        errln("When exception is thrown variable top should "
+                              + "not be changed");
+                    }
+                }
+                coll.setVariableTop(varTopOriginal);
+                if (varTopOriginal != coll.getVariableTop()) {
+                    errln("Couldn't restore old variable top\n");
+                }
+            }
+            
+            // Testing calling with error set
+            try {
+                coll.setVariableTop("");
+                errln("Empty string should throw an IllegalArgumentException");
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                coll.setVariableTop(null);
+                errln("Null string should throw an IllegalArgumentException");
+            } catch (IllegalArgumentException e) {
+            }
+        } catch (Exception e) {
+            errln("Error creating RuleBasedCollator");
+        }
+    }
+    
+    public void TestUCARules() 
+    {
+        try {
+            RuleBasedCollator coll 
+                = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
+            String rule 
+                = coll.getRules(RuleBasedCollator.RuleOption.TAILORING_ONLY);
+            if (!rule.equals("")) {
+                errln("Empty rule string should have empty rules " + rule);
+            }
+            rule = coll.getRules(RuleBasedCollator.RuleOption.FULL_RULES);
+            if (rule.equals("")) {
+                errln("UCA rule string should not be empty");
+            }
+            coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
             errln(e.getMessage());
         }
