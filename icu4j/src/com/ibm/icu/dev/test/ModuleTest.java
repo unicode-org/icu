@@ -5,12 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/ModuleTest.java,v $
- * $Date: 2002/08/13 21:59:54 $
- * $Revision: 1.2 $
+ * $Date: 2002/08/31 04:55:10 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
+
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.ibm.icu.dev.test.TestDataModule.TestData;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
@@ -35,6 +42,20 @@ import com.ibm.icu.dev.test.TestDataModule.DataMap;
 public class ModuleTest extends TestFmwk {
     private TestDataModule m;
     private TestData t;
+    private String methodName;
+
+    protected ModuleTest() {
+        this(null);
+    }
+
+    /**
+     * Pass the name of a public no-arg method in this class if 
+     * you want use that method to run all the tests off the
+     * data, otherwise pass null for the typical test behavior.
+     */
+    protected ModuleTest(String methodName) {
+        this.methodName = methodName;
+    }
 
     /**
      * Subclasses access this after calling nextSettings and getting
@@ -48,6 +69,25 @@ public class ModuleTest extends TestFmwk {
      */
     protected DataMap testcase;
 
+    /*
+     * If we were initialized with the name of a method to run the
+     * data driven tests, drive tests off the data using that method.
+     */
+    protected Map getAvailableTests() {
+        if (methodName != null) {
+            List list = getModuleNames();
+
+            if (list != null) {
+                Map map = new HashMap(list.size());
+                addNamedMethodToMap(list, methodName, map);
+                return map;
+            }
+            return Collections.EMPTY_MAP;
+        } else {
+            return super.getAvailableTests();
+        }
+    }
+
     /**
      * TestFmwk calls this before trying to run a suite of tests.
      * The test suite if valid if a module whose name is the name of
@@ -55,7 +95,7 @@ public class ModuleTest extends TestFmwk {
      * this if there are different or additional data required.  
      */
     protected boolean validate() {
-	return openModule(getClass().getName()+"Data");
+        return openModule(getClass().getName()+"Data");
     }
 
     /**
@@ -114,6 +154,42 @@ public class ModuleTest extends TestFmwk {
 	return t != null;
     }
 
+    /**
+     * Return an unmodifiable List of the names of all the tests in the module.
+     */
+    protected List getModuleNames() {
+        if (validate()) {
+            return m.getTestDataNames();
+        }
+        return null;
+    }
+
+    /**
+     * Utility that associates a public named function in this class
+     * with all the names in the provided Set.  The function should be
+     * public and take no parameters (like a TestXXX method). You can
+     * use this to override getAvailableTests from TestFmwk, which by
+     * default associates the names  TestXXX or testXXX with
+     * the corresponding methods in the class.  ModuleTests may wish
+     * to use a single method to drive all the tests in the module.
+     *
+     * @param names the names to associated with the named method.
+     * @param methodName the name of the method in this class to associate with names
+     * @param dest the map to hold the name->method mapping 
+     */
+    protected void addNamedMethodToMap(List names, String methodName, Map dest) {
+        try {
+            Method method = getClass().getMethod(methodName, null);
+            Iterator i = names.iterator();
+            while (i.hasNext()) {
+                dest.put(i.next(), method);
+            }
+        }
+        catch (Exception e) {
+            throw new InternalError(e.getMessage());
+        }
+    }
+    
     /**
      * Get information on this module.  Returns null if no module
      * open or no info for the module.

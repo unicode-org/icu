@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestDataModule.java,v $
- * $Date: 2002/08/13 22:02:16 $
- * $Revision: 1.3 $
+ * $Date: 2002/08/31 04:55:10 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -40,7 +41,6 @@ public abstract class TestDataModule {
 	this.name = name;
 	this.log = log;
     }
-
     
     /**
      * Return the name of this test module.
@@ -101,6 +101,11 @@ public abstract class TestDataModule {
      * found in this module.  Logs error if name is not found.  
      */
     public abstract TestData createTestData(String name);
+
+    /**
+     * Return an unmodifiable list of the test data names, in index order.
+     */
+    public abstract List getTestDataNames();
 
     /**
      * Represents a single test in the module.
