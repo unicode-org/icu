@@ -354,8 +354,7 @@ ucol_open(const char *loc,
   if (result == NULL) {
     result = ucol_open_internal(loc, status);
   }
-  UTRACE_DATA1(UTRACE_INFO, "Returning %p", result);
-  UTRACE_EXIT_STATUS(*status);
+  UTRACE_EXIT_PTR_STATUS(result, *status);
   return result;
 }
 

@@ -78,6 +78,7 @@ utrace_level;
   *  function's exit to also be traced.  utraceFnNumber is uncoditionally 
   *  set at entry, whether or not the entry is traced, so that it will
   *  always be available for error trace output.
+  *  @internal
   */            
 #define UTRACE_TRACED_ENTRY 0x80000000
 
@@ -152,20 +153,24 @@ utrace_level;
  * @internal 
  */
 #define UTRACE_EXIT_VALUE(val) \
-    {if(utrace_level>=UTRACE_INFO) { \
-        utrace_exit(utraceFnNumber, UTRACE_EXITV_I32, val); \
+    {if(utraceFnNumber & UTRACE_TRACED_ENTRY) { \
+        utrace_exit(utraceFnNumber & ~UTRACE_TRACED_ENTRY, UTRACE_EXITV_I32, val); \
     }}
 
 #define UTRACE_EXIT_STATUS(status) \
-    {if(utrace_level>=UTRACE_INFO) { \
-        utrace_exit(utraceFnNumber, UTRACE_EXITV_STATUS, status); \
+    {if(utraceFnNumber & UTRACE_TRACED_ENTRY) { \
+        utrace_exit(utraceFnNumber & ~UTRACE_TRACED_ENTRY, UTRACE_EXITV_STATUS, status); \
     }}
 
 #define UTRACE_EXIT_VALUE_STATUS(val, status) \
-    {if(utrace_level>=UTRACE_INFO) { \
-        utrace_exit(utraceFnNumber, (UTRACE_EXITV_I32 | UTRACE_EXITV_STATUS), val, status); \
+    {if(utraceFnNumber & UTRACE_TRACED_ENTRY) { \
+        utrace_exit(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (UTRACE_EXITV_I32 | UTRACE_EXITV_STATUS), val, status); \
     }}
 
+#define UTRACE_EXIT_PTR_STATUS(ptr, status) \
+    {if(utraceFnNumber & UTRACE_TRACED_ENTRY) { \
+        utrace_exit(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (UTRACE_EXITV_PTR | UTRACE_EXITV_STATUS), ptr, status); \
+    }}
 
 /**
  * Trace function for the entry point of a function.
