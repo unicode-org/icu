@@ -505,15 +505,14 @@ parseCaseFolding(const char *filename, UErrorCode *pErrorCode) {
 /* general categories */
 const char *const
 genCategoryNames[U_CHAR_CATEGORY_COUNT]={
-    NULL,
+    "Cn",
     "Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Me",
     "Mc", "Nd", "Nl", "No",
     "Zs", "Zl", "Zp",
     "Cc", "Cf", "Co", "Cs",
     "Pd", "Ps", "Pe", "Pc", "Po",
     "Sm", "Sc", "Sk", "So",
-    "Pi", "Pf",
-    "Cn"
+    "Pi", "Pf"
 };
 
 const char *const
@@ -571,7 +570,7 @@ unicodeDataLineFn(void *context,
 
     /* get general category, field 2 */
     *fields[2][1]=0;
-    for(i=1;;) {
+    for(i=0;;) {
         if(uprv_strcmp(fields[2][0], genCategoryNames[i])==0) {
             p.generalCategory=(uint8_t)i;
             break;

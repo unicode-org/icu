@@ -59,14 +59,17 @@
  */
 #define UCHAR_MAX_VALUE 0x10ffff
 
- /**
- * Data for enumerated Unicode general category types
- * @draft
+/**
+ * Data for enumerated Unicode general category types.
+ * See http://www.unicode.org/Public/UNIDATA/UnicodeData.html .
+ * @stable
  */
 enum UCharCategory
 {
     /** Non-category for unassigned and non-character code points. */
     U_UNASSIGNED              = 0,
+    /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) */
+    U_GENERAL_OTHER_TYPES     = 0,
     /** Lu */
     U_UPPERCASE_LETTER        = 1,
     /** Ll */
@@ -125,8 +128,6 @@ enum UCharCategory
     U_INITIAL_PUNCTUATION     = 28,
     /** Pf */
     U_FINAL_PUNCTUATION       = 29,
-    /** Cn */
-    U_GENERAL_OTHER_TYPES     = 30,
     /** One higher than the last enum UCharCategory constant. */
     U_CHAR_CATEGORY_COUNT
 };
