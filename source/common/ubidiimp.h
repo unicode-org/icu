@@ -1,4 +1,4 @@
-/*  
+/*
 ******************************************************************************
 *
 *   Copyright (C) 1999-2004, International Business Machines
@@ -33,7 +33,7 @@ typedef uint32_t Flags;
     is easier with the same names for the BiDi types in the code as there.
     See UCharDirection in uchar.h .
 */
-enum { 
+enum {
     L=  U_LEFT_TO_RIGHT,
     R=  U_RIGHT_TO_LEFT,
     EN= U_EUROPEAN_NUMBER,
@@ -102,13 +102,34 @@ enum {
 /* the dirProp's L and R are defined to 0 and 1 values in UCharDirection */
 #define GET_LR_FROM_LEVEL(level) ((DirProp)((level)&1))
 
-#define IS_DEFAULT_LEVEL(level) (((level)&0xfe)==0xfe)
+#define IS_DEFAULT_LEVEL(level) ((level)>=0xfe)
+
+/*
+ * The following bit is ORed to the property of characters in paragraphs
+ * with contextual RTL direction when paraLevel is contextual.
+ */
+#define CONTEXT_RTL 0x80
+#define NO_CONTEXT_RTL(dir) ((dir)&~CONTEXT_RTL)
+/*
+ * The following is a variant of DIRPROP_FLAG which ignores the CONTEXT_RTL bit.
+ */
+#define DIRPROP_FLAG_NC(dir) (1UL<<(NO_CONTEXT_RTL(dir)))
+
+#define GET_PARALEVEL(ubidi, index) \
+            (UBiDiLevel)((ubidi)->defaultParaLevel ? (ubidi)->dirProps[index]>>7 \
+                                                   : (ubidi)->paraLevel)
+
+/* Paragraph type for multiple paragraph support ---   -------------------- */
+typedef int32_t Para;
+
+#define CR  0x000D
+#define LF  0x000A
 
 /* Run structure for reordering --------------------------------------------- */
 
 typedef struct Run {
     int32_t logicalStart,   /* first character of the run; b31 indicates even/odd level */
-                visualLimit;    /* last visual position of the run +1 */
+            visualLimit;    /* last visual position of the run +1 */
 } Run;
 
 /* in a Run, logicalStart will get this bit set if the run level is odd */
@@ -129,6 +150,12 @@ ubidi_getRuns(UBiDi *pBiDi);
 /* UBiDi structure ----------------------------------------------------------- */
 
 struct UBiDi {
+    /* pointer to parent paragraph object (pointer to self if this object is
+     * a paragraph object); set to NULL in a newly opened object; set to a
+     * real value after a successful execution of ubidi_setPara or ubidi_setLine
+     */
+    const UBiDi * pParaBiDi;
+
     UBiDiProps *bdp;
 
     /* alias pointer to the current text */
@@ -138,11 +165,12 @@ struct UBiDi {
     int32_t length;
 
     /* memory sizes in bytes */
-    int32_t dirPropsSize, levelsSize, runsSize;
+    int32_t dirPropsSize, levelsSize, parasSize, runsSize;
 
     /* allocated memory */
     DirProp *dirPropsMemory;
     UBiDiLevel *levelsMemory;
+    Para *parasMemory;
     Run *runsMemory;
 
     /* indicators for whether memory may be allocated after ubidi_open() */
@@ -154,9 +182,19 @@ struct UBiDi {
 
     /* are we performing an approximation of the "inverse BiDi" algorithm? */
     UBool isInverse;
+    UBool isInverse2;
+
+    /* must block separators receive level 0? */
+    UBool isOrderParagraphsLTR;
 
     /* the paragraph level */
     UBiDiLevel paraLevel;
+    /* original paraLevel when contextual */
+    /* must be one of UBIDI_DEFAULT_xxx or 0 if not contextual */
+    UBiDiLevel defaultParaLevel;
+
+    /* the following is set in ubidi_setPara, used in processPropertySeq */
+    const struct ImpTabPair * pImpTabPair;  /* pointer to levels state table pair */
 
     /* the overall paragraph or line directionality - see UBiDiDirection */
     UBiDiDirection direction;
@@ -168,6 +206,14 @@ struct UBiDi {
     /* implicitly at the paraLevel (rule (L1)) - levels may not reflect that */
     int32_t trailingWSStart;
 
+    /* fields for paragraph handling */
+    int32_t paraCount;                  /* set in getDirProps() */
+    Para *paras;                        /* limits of paragraphs, filled in
+                            ResolveExplicitLevels() or CheckExplicitLevels() */
+
+    /* for single paragraph text, we only need a tiny array of paras (no malloc()) */
+    Para simpleParas[1];
+
     /* fields for line reordering */
     int32_t runCount;     /* ==-1: runs not set up yet */
     Run *runs;
@@ -175,6 +221,10 @@ struct UBiDi {
     /* for non-mixed text, we only need a tiny array of runs (no malloc()) */
     Run simpleRuns[1];
 };
+
+#define IS_VALID_PARA(x) ((x) && ((x)->pParaBiDi==(x)))
+#define IS_VALID_LINE(x) ((x) && ((x)->pParaBiDi) && ((x)->pParaBiDi->pParaBiDi==(x)->pParaBiDi))
+#define IS_VALID_PARA_OR_LINE(x) ((x) && ((x)->pParaBiDi==(x) || (((x)->pParaBiDi) && (x)->pParaBiDi->pParaBiDi==(x)->pParaBiDi)))
 
 /* helper function to (re)allocate memory if allowed */
 U_CFUNC UBool
@@ -201,6 +251,10 @@ ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeN
 #define getInitialLevelsMemory(pBiDi, length) \
         ubidi_getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
                         TRUE, (length))
+
+#define getInitialParasMemory(pBiDi, length) \
+        ubidi_getMemory((void **)&(pBiDi)->parasMemory, &(pBiDi)->parasSize, \
+                        TRUE, (length)*sizeof(Para))
 
 #define getInitialRunsMemory(pBiDi, length) \
         ubidi_getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \

@@ -1,4 +1,4 @@
-/*  
+/*
 ******************************************************************************
 *
 *   Copyright (C) 1999-2004, International Business Machines
@@ -53,7 +53,7 @@
  * that look at immediately surrounding types.
  *
  * As a related topic, this implementation does not remove Boundary Neutral
- * types from the input, but ignores them whereever this is relevant.
+ * types from the input, but ignores them wherever this is relevant.
  * For example, the loop for the resolution of the weak types reads
  * types until it finds a non-BN.
  * Also, explicit embedding codes are neither changed into BN nor removed.
@@ -120,7 +120,7 @@ static const Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 /* UBiDi object management -------------------------------------------------- */
 
 U_CAPI UBiDi * U_EXPORT2
-ubidi_open(void) 
+ubidi_open(void)
 {
     UErrorCode errorCode=U_ZERO_ERROR;
     return ubidi_openSized(0, 0, &errorCode);
@@ -236,6 +236,7 @@ ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeN
 U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
+        pBiDi->pParaBiDi=NULL;          /* in case one tries to reuse this block */
         if(pBiDi->dirPropsMemory!=NULL) {
             uprv_free(pBiDi->dirPropsMemory);
         }
@@ -272,66 +273,109 @@ ubidi_isInverse(UBiDi *pBiDi) {
 /*
  * Get the directional properties for the text,
  * calculate the flags bit-set, and
- * determine the partagraph level if necessary.
+ * determine the paragraph level if necessary.
  */
 static void
-getDirProps(UBiDi *pBiDi, const UChar *text) {
+getDirProps(UBiDi *pBiDi) {
+    const UChar *text=pBiDi->text;
     DirProp *dirProps=pBiDi->dirPropsMemory;    /* pBiDi->dirProps is const */
 
     int32_t i=0, i0, i1, length=pBiDi->length;
     Flags flags=0;      /* collect all directionalities in the text */
     UChar32 uchar;
-    DirProp dirProp;
+    DirProp dirProp, paraDirDefault;
+    UBool isDefaultLevel=IS_DEFAULT_LEVEL(pBiDi->paraLevel);
+    UBool paraLevelStillDefault;        /* flag for real value not set */
 
-    if(IS_DEFAULT_LEVEL(pBiDi->paraLevel)) {
-        /* determine the paragraph level (P2..P3) */
-        for(;;) {
-            i0=i;           /* index of first code unit */
-            UTF_NEXT_CHAR(text, i, length, uchar);
-            i1=i-1;         /* index of last code unit, gets the directional property */
-            flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=ubidi_getClass(pBiDi->bdp, uchar));
-            if(i1>i0) {     /* set previous code units' properties to BN */
-                flags|=DIRPROP_FLAG(BN);
-                do {
-                    dirProps[--i1]=BN;
-                } while(i1>i0);
-            }
+    typedef enum {
+         NOT_CONTEXTUAL,                /* 0: not contextual paraLevel */
+         LOOKING_FOR_STRONG,            /* 1: looking for first strong char */
+         FOUND_STRONG_CHAR              /* 2: found first strong char       */
+    } State;
+    State state;
+    int32_t paraStart;                  /* index of first char in paragraph */
+    DirProp paraDir;                    /* == CONTEXT_RTL within paragraphs
+                                           starting with strong R char      */
 
-            if(dirProp==L) {
-                pBiDi->paraLevel=0;
-                break;
-            } else if(dirProp==R || dirProp==AL) {
-                pBiDi->paraLevel=1;
-                break;
-            } else if(i>=length) {
-                /*
-                 * see comment in ubidi.h:
-                 * the DEFAULT_XXX values are designed so that
-                 * their bit 0 alone yields the intended default
-                 */
-                pBiDi->paraLevel&=1;
-                break;
-            }
-        }
+    if(isDefaultLevel) {
+        paraDirDefault=pBiDi->paraLevel&1 ? CONTEXT_RTL : 0;
+        state=LOOKING_FOR_STRONG;
+        paraStart=0;
+        paraDir=paraDirDefault;
+        pBiDi->paraLevel&=1;            /* set to default */
+        paraLevelStillDefault=TRUE;
     } else {
-        flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
+        state=NOT_CONTEXTUAL;
+        paraDir=0;
     }
-
-    /* get the rest of the directional properties and the flags bits */
-    while(i<length) {
+    /* count paragraphs and determine the paragraph level (P2..P3) */
+    /*
+     * see comment in ubidi.h:
+     * the DEFAULT_XXX values are designed so that
+     * their bit 0 alone yields the intended default
+     */
+    for( /* i=0 above */ ; i<length; /* i is incremented by UTF_NEXT_CHAR */) {
         i0=i;           /* index of first code unit */
         UTF_NEXT_CHAR(text, i, length, uchar);
         i1=i-1;         /* index of last code unit, gets the directional property */
-        flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=ubidi_getClass(pBiDi->bdp, uchar));
+        flags|=DIRPROP_FLAG(dirProp=ubidi_getClass(pBiDi->bdp, uchar));
+        dirProps[i1]=dirProp|paraDir;
         if(i1>i0) {     /* set previous code units' properties to BN */
             flags|=DIRPROP_FLAG(BN);
             do {
-                dirProps[--i1]=BN;
+                dirProps[--i1]=BN|paraDir;
             } while(i1>i0);
         }
+        if(state==LOOKING_FOR_STRONG) {
+            if(dirProp==L) {
+                state=FOUND_STRONG_CHAR;
+                if(paraLevelStillDefault) {
+                    paraLevelStillDefault=FALSE;
+                    pBiDi->paraLevel=0;
+                }
+                if(paraDir) {
+                    paraDir=0;
+                    for(i1=paraStart; i1<=i; i1++) {
+                        dirProps[i1]&=~CONTEXT_RTL;
+                    }
+                }
+                continue;
+            }
+            if(dirProp==R || dirProp==AL) {
+                state=FOUND_STRONG_CHAR;
+                if(paraLevelStillDefault) {
+                    paraLevelStillDefault=FALSE;
+                    pBiDi->paraLevel=1;
+                }
+                if(paraDir==0) {
+                    paraDir=CONTEXT_RTL;
+                    for(i1=paraStart; i1<=i; i1++) {
+                        dirProps[i1]|=CONTEXT_RTL;
+                    }
+                }
+                continue;
+            }
+        }
+        if((dirProp==B)&&(i<length)) {  /* B not last char in text */
+            if(!((uchar==CR) && (text[i]==LF))) {
+                pBiDi->paraCount++;
+            }
+            if(isDefaultLevel) {
+                state=LOOKING_FOR_STRONG;
+                paraStart=i;            /* i is index to next character */
+                paraDir=paraDirDefault;
+                /* keep the paraLevel of the first paragraph even if it
+                   defaulted (no strong char was found)                 */
+                paraLevelStillDefault=FALSE;
+            }
+        }
     }
-    if(flags&MASK_EMBEDDING) {
-        flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
+    /* The following line does nothing new for contextual paraLevel, but is
+       needed for absolute paraLevel.                               */
+    flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
+
+    if(pBiDi->isOrderParagraphsLTR && (flags&DIRPROP_FLAG(B))) {
+        flags|=DIRPROP_FLAG(L);
     }
 
     pBiDi->flags=flags;
@@ -408,13 +452,15 @@ static UBiDiDirection
 resolveExplicitLevels(UBiDi *pBiDi) {
     const DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
-    
+    const UChar *text=pBiDi->text;
+
     int32_t i=0, length=pBiDi->length;
     Flags flags=pBiDi->flags;       /* collect all directionalities in the text */
     DirProp dirProp;
-    UBiDiLevel level=pBiDi->paraLevel;
+    UBiDiLevel level=GET_PARALEVEL(pBiDi, 0);
 
     UBiDiDirection direction;
+    int32_t paraIndex=0;
 
     /* determine if the text is mixed-directional or single-directional */
     direction=directionFromFlags(flags);
@@ -422,9 +468,11 @@ resolveExplicitLevels(UBiDi *pBiDi) {
     /* we may not need to resolve any explicit levels */
     if(direction!=UBIDI_MIXED) {
         /* not mixed directionality: levels don't matter - trailingWSStart will be 0 */
-    } else if(!(flags&MASK_EXPLICIT) || pBiDi->isInverse) {
+    } else if((pBiDi->paraCount==1) &&
+              (!(flags&MASK_EXPLICIT) || pBiDi->isInverse)) {
         /* mixed, but all characters are at the same embedding level */
         /* or we are in "inverse BiDi" */
+        /* and we don't have contextual multiple paragraphs with some B char */
         /* set all levels to the paragraph level */
         for(i=0; i<length; ++i) {
             levels[i]=level;
@@ -444,7 +492,7 @@ resolveExplicitLevels(UBiDi *pBiDi) {
 
         /* since we assume that this is a single paragraph, we ignore (X8) */
         for(i=0; i<length; ++i) {
-            dirProp=dirProps[i];
+            dirProp=NO_CONTEXT_RTL(dirProps[i]);
             switch(dirProp) {
             case LRE:
             case LRO:
@@ -456,9 +504,11 @@ resolveExplicitLevels(UBiDi *pBiDi) {
                     embeddingLevel=newLevel;
                     if(dirProp==LRO) {
                         embeddingLevel|=UBIDI_LEVEL_OVERRIDE;
-                    } else {
-                        embeddingLevel&=~UBIDI_LEVEL_OVERRIDE;
                     }
+                    /* we don't need to set UBIDI_LEVEL_OVERRIDE off for LRE
+                       since this has already been done for newLevel which is
+                       the source for embeddingLevel.
+                     */
                 } else if((embeddingLevel&~UBIDI_LEVEL_OVERRIDE)==UBIDI_MAX_EXPLICIT_LEVEL) {
                     ++countOver61;
                 } else /* (embeddingLevel&~UBIDI_LEVEL_OVERRIDE)==UBIDI_MAX_EXPLICIT_LEVEL-1 */ {
@@ -476,9 +526,11 @@ resolveExplicitLevels(UBiDi *pBiDi) {
                     embeddingLevel=newLevel;
                     if(dirProp==RLO) {
                         embeddingLevel|=UBIDI_LEVEL_OVERRIDE;
-                    } else {
-                        embeddingLevel&=~UBIDI_LEVEL_OVERRIDE;
                     }
+                    /* we don't need to set UBIDI_LEVEL_OVERRIDE off for RLE
+                       since this has already been done for newLevel which is
+                       the source for embeddingLevel.
+                     */
                 } else {
                     ++countOver61;
                 }
@@ -501,14 +553,15 @@ resolveExplicitLevels(UBiDi *pBiDi) {
                 flags|=DIRPROP_FLAG(BN);
                 break;
             case B:
-                /*
-                 * We do not really expect to see a paragraph separator (B),
-                 * but we should do something reasonable with it,
-                 * especially at the end of the text.
-                 */
                 stackTop=0;
                 countOver60=countOver61=0;
-                embeddingLevel=level=pBiDi->paraLevel;
+                level=GET_PARALEVEL(pBiDi, i);
+                if((i+1)<length) {
+                    embeddingLevel=GET_PARALEVEL(pBiDi, i+1);
+                    if(!((text[i]==CR) && (text[i+1]==LF))) {
+                        pBiDi->paras[paraIndex++]=i+1;
+                    }
+                }
                 flags|=DIRPROP_FLAG(B);
                 break;
             case BN:
@@ -541,6 +594,9 @@ resolveExplicitLevels(UBiDi *pBiDi) {
         if(flags&MASK_EMBEDDING) {
             flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
         }
+        if(pBiDi->isOrderParagraphsLTR && (flags&DIRPROP_FLAG(B))) {
+            flags|=DIRPROP_FLAG(L);
+        }
 
         /* subsequently, ignore the explicit codes and BN (X9) */
 
@@ -564,26 +620,37 @@ resolveExplicitLevels(UBiDi *pBiDi) {
 static UBiDiDirection
 checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     const DirProp *dirProps=pBiDi->dirProps;
+    DirProp dirProp;
     UBiDiLevel *levels=pBiDi->levels;
-    
+    const UChar *text=pBiDi->text;
+
     int32_t i, length=pBiDi->length;
     Flags flags=0;  /* collect all directionalities in the text */
-    UBiDiLevel level, paraLevel=pBiDi->paraLevel;
+    UBiDiLevel level;
+    uint32_t paraIndex=0;
 
     for(i=0; i<length; ++i) {
         level=levels[i];
+        dirProp=NO_CONTEXT_RTL(dirProps[i]);
         if(level&UBIDI_LEVEL_OVERRIDE) {
             /* keep the override flag in levels[i] but adjust the flags */
             level&=~UBIDI_LEVEL_OVERRIDE;     /* make the range check below simpler */
             flags|=DIRPROP_FLAG_O(level);
         } else {
             /* set the flags */
-            flags|=DIRPROP_FLAG_E(level)|DIRPROP_FLAG(dirProps[i]);
+            flags|=DIRPROP_FLAG_E(level)|DIRPROP_FLAG(dirProp);
         }
-        if(level<paraLevel || UBIDI_MAX_EXPLICIT_LEVEL<level) {
+        if((level<GET_PARALEVEL(pBiDi, i) &&
+            !((0==level)&&(dirProp==B))) ||
+           (UBIDI_MAX_EXPLICIT_LEVEL<level)) {
             /* level out of bounds */
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return UBIDI_LTR;
+        }
+        if((dirProp==B) && ((i+1)<length)) {
+            if(!((text[i]==CR) && (text[i+1]==LF))) {
+                pBiDi->paras[paraIndex++]=i+1;
+            }
         }
     }
     if(flags&MASK_EMBEDDING) {
@@ -642,7 +709,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
     /* initialize: current at sor, next at start (it is start<limit) */
     next=start;
     dirProp=lastStrong=sor;
-    nextDirProp=dirProps[next];
+    nextDirProp=NO_CONTEXT_RTL(dirProps[next]);
     historyOfEN=0;
 
     if(pBiDi->isInverse) {
@@ -669,7 +736,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
      */
     while(DIRPROP_FLAG(nextDirProp)&MASK_BN_EXPLICIT) {
         if(++next<limit) {
-            nextDirProp=dirProps[next];
+            nextDirProp=NO_CONTEXT_RTL(dirProps[next]);
         } else {
             nextDirProp=eor;
             break;
@@ -692,7 +759,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
         i=next;
         do {
             if(++next<limit) {
-                nextDirProp=dirProps[next];
+                nextDirProp=NO_CONTEXT_RTL(dirProps[next]);
             } else {
                 nextDirProp=eor;
                 break;
@@ -772,7 +839,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
             if(next<limit) {
                 while(DIRPROP_FLAG(nextDirProp)&MASK_ET_NSM_BN /* (W1), (X9) */) {
                     if(++next<limit) {
-                        nextDirProp=dirProps[next];
+                        nextDirProp=NO_CONTEXT_RTL(dirProps[next]);
                     } else {
                         nextDirProp=eor;
                         break;
@@ -813,6 +880,10 @@ resolveImplicitLevels(UBiDi *pBiDi,
              * However, whether the next dirProp is NSM or is equal to the current dirProp
              * does not change the outcome of any condition in (W2)..(W7).
              */
+            break;
+        case B:
+            lastStrong=sor;
+            dirProp=GET_LR_FROM_LEVEL(levels[i]);
             break;
         default:
             break;
@@ -910,10 +981,13 @@ resolveImplicitLevels(UBiDi *pBiDi,
                 levels[i++]=level;
             }
         }
+        if(pBiDi->defaultParaLevel&&((i+1)<limit)&&(dirProps[i]==B)) {
+            dirProp=GET_LR_FROM_LEVEL(levels[i+1]);
+        }
     }
 
     /* perform (Nn) - here,
-       the character after the the neutrals is eor, which is either L or R */
+       the character after the neutrals is eor, which is either L or R */
     /* this is one iteration late for the neutrals */
     if(neutralStart>=0) {
         /*
@@ -980,24 +1054,31 @@ adjustWSLevels(UBiDi *pBiDi) {
     int32_t i;
 
     if(pBiDi->flags&MASK_WS) {
-        UBiDiLevel paraLevel=pBiDi->paraLevel;
+        UBool isOrderParagraphsLTR=pBiDi->isOrderParagraphsLTR;
         Flags flag;
 
         i=pBiDi->trailingWSStart;
         while(i>0) {
             /* reset a sequence of WS/BN before eop and B/S to the paragraph paraLevel */
-            while(i>0 && DIRPROP_FLAG(dirProps[--i])&MASK_WS) {
-                levels[i]=paraLevel;
+            while(i>0 && (flag=DIRPROP_FLAG_NC(dirProps[--i]))&MASK_WS) {
+                if(isOrderParagraphsLTR&&(flag&DIRPROP_FLAG(B))) {
+                    levels[i]=0;
+                } else {
+                    levels[i]=GET_PARALEVEL(pBiDi, i);
+                }
             }
 
             /* reset BN to the next character's paraLevel until B/S, which restarts above loop */
             /* here, i+1 is guaranteed to be <length */
             while(i>0) {
-                flag=DIRPROP_FLAG(dirProps[--i]);
+                flag=DIRPROP_FLAG_NC(dirProps[--i]);
                 if(flag&MASK_BN_EXPLICIT) {
                     levels[i]=levels[i+1];
+                } else if(isOrderParagraphsLTR&&(flag&DIRPROP_FLAG(B))) {
+                    levels[i]=0;
+                    break;
                 } else if(flag&MASK_B_S) {
-                    levels[i]=paraLevel;
+                    levels[i]=GET_PARALEVEL(pBiDi, i);
                     break;
                 }
             }
@@ -1029,6 +1110,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     }
 
     /* initialize the UBiDi structure */
+    pBiDi->pParaBiDi=NULL;          /* mark unfinished setPara */
     pBiDi->text=text;
     pBiDi->length=length;
     pBiDi->paraLevel=paraLevel;
@@ -1039,6 +1121,19 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     pBiDi->levels=NULL;
     pBiDi->runs=NULL;
 
+    /* initialize paras for single paragraph */
+    pBiDi->paraCount=1;
+    pBiDi->paras=pBiDi->simpleParas;
+    pBiDi->simpleParas[0]=length;
+    /*
+     * Save the original paraLevel if contextual; otherwise, set to 0.
+     */
+    if(IS_DEFAULT_LEVEL(paraLevel)) {
+        pBiDi->defaultParaLevel=paraLevel;
+    } else {
+        pBiDi->defaultParaLevel=0;
+    }
+
     if(length==0) {
         /*
          * For an empty paragraph, create a UBiDi object with the paraLevel and
@@ -1047,6 +1142,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
          */
         if(IS_DEFAULT_LEVEL(paraLevel)) {
             pBiDi->paraLevel&=1;
+            pBiDi->defaultParaLevel=0;
         }
         if(paraLevel&1) {
             pBiDi->flags=DIRPROP_FLAG(R);
@@ -1057,6 +1153,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
         }
 
         pBiDi->runCount=0;
+        pBiDi->pParaBiDi=pBiDi;         /* mark successful setPara */
         return;
     }
 
@@ -1065,14 +1162,24 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     /*
      * Get the directional properties,
      * the flags bit-set, and
-     * determine the partagraph level if necessary.
+     * determine the paragraph level if necessary.
      */
     if(getDirPropsMemory(pBiDi, length)) {
         pBiDi->dirProps=pBiDi->dirPropsMemory;
-        getDirProps(pBiDi, text);
+        getDirProps(pBiDi);
     } else {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return;
+    }
+    /* allocate paras memory */
+    if(pBiDi->paraCount>1) {
+        if(getInitialParasMemory(pBiDi, pBiDi->paraCount)) {
+            pBiDi->paras=pBiDi->parasMemory;
+            pBiDi->paras[pBiDi->paraCount-1]=length;
+        } else {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 
     /* are explicit levels specified? */
@@ -1086,7 +1193,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             return;
         }
     } else {
-        /* set BN for all explicit codes, check that all levels are paraLevel..UBIDI_MAX_EXPLICIT_LEVEL */
+        /* set BN for all explicit codes, check that all levels are 0 or paraLevel..UBIDI_MAX_EXPLICIT_LEVEL */
         pBiDi->levels=embeddingLevels;
         direction=checkExplicitLevels(pBiDi, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
@@ -1128,8 +1235,8 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
          */
         if(embeddingLevels==NULL && !(pBiDi->flags&DIRPROP_FLAG_MULTI_RUNS)) {
             resolveImplicitLevels(pBiDi, 0, length,
-                                    GET_LR_FROM_LEVEL(pBiDi->paraLevel),
-                                    GET_LR_FROM_LEVEL(pBiDi->paraLevel));
+                                    GET_LR_FROM_LEVEL(GET_PARALEVEL(pBiDi, 0)),
+                                    GET_LR_FROM_LEVEL(GET_PARALEVEL(pBiDi, length-1)));
         } else {
             /* sor, eor: start and end types of same-level-run */
             UBiDiLevel *levels=pBiDi->levels;
@@ -1138,7 +1245,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             DirProp sor, eor;
 
             /* determine the first sor and set eor to it because of the loop body (sor=eor there) */
-            level=pBiDi->paraLevel;
+            level=GET_PARALEVEL(pBiDi, 0);
             nextLevel=levels[0];
             if(level<nextLevel) {
                 eor=GET_LR_FROM_LEVEL(nextLevel);
@@ -1150,9 +1257,14 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
                 /* determine start and limit of the run (end points just behind the run) */
 
                 /* the values for this run's start are the same as for the previous run's end */
-                sor=eor;
                 start=limit;
                 level=nextLevel;
+                if((start>0) && (NO_CONTEXT_RTL(pBiDi->dirProps[start-1])==B)) {
+                    /* except if this is a new paragraph, then set sor = para level */
+                    sor=GET_LR_FROM_LEVEL(GET_PARALEVEL(pBiDi, start));
+                } else {
+                    sor=eor;
+                }
 
                 /* search for the limit of this run */
                 while(++limit<length && levels[limit]==level) {}
@@ -1161,7 +1273,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
                 if(limit<length) {
                     nextLevel=levels[limit];
                 } else {
-                    nextLevel=pBiDi->paraLevel;
+                    nextLevel=GET_PARALEVEL(pBiDi, length-1);
                 }
 
                 /* determine eor from max(level, nextLevel); sor is last run's eor */
@@ -1196,11 +1308,28 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
         }
         break;
     }
+    pBiDi->pParaBiDi=pBiDi;             /* mark successful setPara */
+}
+
+U_CAPI void U_EXPORT2
+ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool isOrderParagraphsLTR) {
+    if(pBiDi!=NULL) {
+        pBiDi->isOrderParagraphsLTR=isOrderParagraphsLTR;
+    }
+}
+
+U_CAPI UBool U_EXPORT2
+ubidi_isOrderParagraphsLTR(UBiDi *pBiDi) {
+    if(pBiDi!=NULL) {
+        return pBiDi->isOrderParagraphsLTR;
+    } else {
+        return FALSE;
+    }
 }
 
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getDirection(const UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
+    if(IS_VALID_PARA_OR_LINE(pBiDi)) {
         return pBiDi->direction;
     } else {
         return UBIDI_LTR;
@@ -1209,7 +1338,7 @@ ubidi_getDirection(const UBiDi *pBiDi) {
 
 U_CAPI const UChar * U_EXPORT2
 ubidi_getText(const UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
+    if(IS_VALID_PARA_OR_LINE(pBiDi)) {
         return pBiDi->text;
     } else {
         return NULL;
@@ -1218,20 +1347,85 @@ ubidi_getText(const UBiDi *pBiDi) {
 
 U_CAPI int32_t U_EXPORT2
 ubidi_getLength(const UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
+    if(IS_VALID_PARA_OR_LINE(pBiDi)) {
         return pBiDi->length;
     } else {
         return 0;
     }
 }
 
+/* paragraphs API functions ------------------------------------------------- */
+
 U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getParaLevel(const UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
+    if(IS_VALID_PARA_OR_LINE(pBiDi)) {
         return pBiDi->paraLevel;
     } else {
         return 0;
     }
+}
+
+U_CAPI int32_t U_EXPORT2
+ubidi_countParagraphs(UBiDi *pBiDi) {
+    if(!IS_VALID_PARA_OR_LINE(pBiDi)) {
+        return 0;
+    } else {
+        return pBiDi->paraCount;
+    }
+}
+
+U_STABLE void U_EXPORT2
+ubidi_getParagraphByIndex(const UBiDi *pBiDi, int32_t paraIndex,
+                          int32_t *pParaStart, int32_t *pParaLimit,
+                          UBiDiLevel *pParaLevel, UErrorCode *pErrorCode) {
+    int32_t paraStart;
+
+    /* check the argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    } else if( !IS_VALID_PARA_OR_LINE(pBiDi) || /* no valid setPara/setLine */
+        paraIndex<0 || paraIndex>=pBiDi->paraCount ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    pBiDi=pBiDi->pParaBiDi;             /* get Para object if Line object */
+    if(paraIndex) {
+        paraStart=pBiDi->paras[paraIndex-1];
+    } else {
+        paraStart=0;
+    }
+    if(pParaStart!=NULL) {
+        *pParaStart=paraStart;
+    }
+    if(pParaLimit!=NULL) {
+        *pParaLimit=pBiDi->paras[paraIndex];
+    }
+    if(pParaLevel!=NULL) {
+        *pParaLevel=GET_PARALEVEL(pBiDi, paraStart);
+    }
+    return;
+}
+
+U_STABLE int32_t U_EXPORT2
+ubidi_getParagraph(const UBiDi *pBiDi, int32_t charIndex,
+                          int32_t *pParaStart, int32_t *pParaLimit,
+                          UBiDiLevel *pParaLevel, UErrorCode *pErrorCode) {
+    uint32_t paraIndex;
+
+    /* check the argument values */
+    /* pErrorCode will be checked by the call to ubidi_getParagraphByIndex */
+    if( !IS_VALID_PARA_OR_LINE(pBiDi)) {/* no valid setPara/setLine */
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+    pBiDi=pBiDi->pParaBiDi;             /* get Para object if Line object */
+    if( charIndex<0 || charIndex>=pBiDi->length ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+    for(paraIndex=0; charIndex>=pBiDi->paras[paraIndex]; paraIndex++);
+    ubidi_getParagraphByIndex(pBiDi, paraIndex, pParaStart, pParaLimit, pParaLevel, pErrorCode);
+    return paraIndex;
 }
 
 /* statetable prototype ----------------------------------------------------- */
@@ -1319,7 +1513,7 @@ resolveImplicitLevels(BiDi *pBiDi,
         i=next;
         do {
             if(++next<limit) {
-                nextDirProp=dirProps[next];
+                nextDirProp=NO_CONTEXT_RTL(dirProps[next]);
             } else {
                 nextDirProp=eor;
                 break;
@@ -1340,7 +1534,7 @@ resolveImplicitLevels(BiDi *pBiDi,
             /* get sequence of ET; advance only next, not current, previous or historyOfEN */
             while(next<limit && FLAG(nextDirProp)&MASK_ET_NSM_BN /* (W1), (X9) */) {
                 if(++next<limit) {
-                    nextDirProp=dirProps[next];
+                    nextDirProp=NO_CONTEXT_RTL(dirProps[next]);
                 } else {
                     nextDirProp=eor;
                     break;
@@ -1370,3 +1564,4 @@ resolveImplicitLevels(BiDi *pBiDi,
     /* perform (Nn) and (In) as usual */
 }
 #endif
+
