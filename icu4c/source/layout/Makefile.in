@@ -50,8 +50,7 @@ CPPFLAGS += -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcd
 DEFS += -DU_LAYOUT_IMPLEMENTATION
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS =  loengine.o \
-LEFontInstance.o \
+OBJECTS =  LEFontInstance.o \
 OpenTypeLayoutEngine.o \
 ThaiLayoutEngine.o \
 ThaiShaping.o \
@@ -121,7 +120,6 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
 HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
-LOHEADERS= $(srcdir)/unicode/loengine.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -173,10 +171,6 @@ install-headers:
 	@for file in $(HEADERS); do \
 	 echo "$(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/layout"; \
 	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/layout || exit; \
-	done
-	@for file in $(LOHEADERS); do \
-	 echo "$(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode"; \
-	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode || exit; \
 	done
 
 dist-local:
