@@ -1131,8 +1131,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     }
                     break;
                 case 8: // fpc:
-                    mloc = tokens.next();
-                    if (!mloc.equals("-")) {
+                    tok = tokens.next();
+                    if (!tok.equals("-")) {
+                        mloc = tok;
                         Locale l = LocaleUtility.getLocaleFromName(mloc);
                         try {
                             mfmt = MeasureFormat.getCurrencyFormat(new ULocale(l));
@@ -1152,10 +1153,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             String currAmt = tokens.next();
                             str = tokens.next();
                             CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
-                            assertEquals(where + mloc + ".format(" + currAmt + ")",
+                            assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
                                          str, mfmt.format(n));
                             n = parseCurrencyAmount(tokens.next(), ref, '/');
-                            assertEquals(where + mloc + ".parse(\"" + str + "\")",
+                            assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
                                          n, (CurrencyAmount) mfmt.parseObject(str));
                         }
                     } catch (ParseException e) {
