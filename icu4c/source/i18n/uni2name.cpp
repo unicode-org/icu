@@ -96,7 +96,6 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
             limit += len-1; // change in length is (len - 1)
         } else {
             ++cursor;
-            continue;
         }
     }
 

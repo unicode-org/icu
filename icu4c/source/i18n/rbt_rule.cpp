@@ -302,7 +302,7 @@ inline int32_t posBefore(const Replaceable& str, int32_t pos) {
 }
 
 inline int32_t posAfter(const Replaceable& str, int32_t pos) {
-    return (pos < str.length()) ?
+    return (pos >= 0 && pos < str.length()) ?
         pos + UTF_CHAR_LENGTH(str.char32At(pos)) :
         pos + 1;
 }
