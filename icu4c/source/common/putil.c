@@ -2218,7 +2218,7 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
     while(count>0) {
         c=*s++;
         if(!CHAR_IS_INVARIANT(c)) {
-            udata_printError(ds, "uprv_ebcdicFromAscii() string[%] contains a variant character in position %d\n",
+            udata_printError(ds, "uprv_ebcdicFromAscii() string[%d] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
             return 0;
@@ -2243,7 +2243,7 @@ uprv_copyAscii(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+    if(ds==NULL || inData==NULL || length<0 || outData==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2254,7 +2254,7 @@ uprv_copyAscii(const UDataSwapper *ds,
     while(count>0) {
         c=*s++;
         if(!CHAR_IS_INVARIANT(c)) {
-            udata_printError(ds, "uprv_copyFromAscii() string[%] contains a variant character in position %d\n",
+            udata_printError(ds, "uprv_copyFromAscii() string[%d] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
             return 0;
@@ -2283,7 +2283,7 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+    if(ds==NULL || inData==NULL || length<0 ||  outData==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2295,7 +2295,7 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
     while(count>0) {
         c=*s++;
         if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !CHAR_IS_INVARIANT(c))) {
-            udata_printError(ds, "uprv_asciiFromEbcdic() string[%] contains a variant character in position %d\n",
+            udata_printError(ds, "uprv_asciiFromEbcdic() string[%d] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
             return 0;
