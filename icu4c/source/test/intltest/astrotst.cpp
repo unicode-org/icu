@@ -86,7 +86,7 @@ void AstroTest::TestSolarLongitude(void) {
   };
   
   logln("");
-  for (int i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+  for (uint32_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
     gc->clear();
     gc->set(tests[i].d[0], tests[i].d[1]-1, tests[i].d[2], tests[i].d[3], tests[i].d[4]);
     
@@ -172,7 +172,7 @@ void AstroTest::TestCoverage(void) {
     myastro, myastro2, myastro3, myastro2 // check cache
   };
   
-  for (int i = 0; i < sizeof(astronomers)/sizeof(astronomers[0]); ++i) {
+  for (uint32_t i = 0; i < sizeof(astronomers)/sizeof(astronomers[0]); ++i) {
     CalendarAstronomer *astro = astronomers[i];
 
     //logln("astro: " + astro);

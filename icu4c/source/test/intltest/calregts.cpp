@@ -213,7 +213,6 @@ CalendarRegressionTest::test4031502()
     // This bug actually occurs on Windows NT as well, and doesn't
     // require the host zone to be set; it can be set in Java.
     UErrorCode status = U_ZERO_ERROR;
-    int32_t count = 0;
     StringEnumeration* ids = TimeZone::createEnumeration();
     UBool bad = FALSE;
     for (int32_t i=0; i<ids->count(status); ++i) {
