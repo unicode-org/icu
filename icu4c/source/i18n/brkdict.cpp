@@ -59,8 +59,8 @@ BreakDictionary::~BreakDictionary()
 #define SWAP32(x)
 #define SWAP16(x)
 #else
-#define SWAP32(x) x = (x >> 24 & 0xff) | (x >> 8 & 0xff00) | (x << 8 & 0xff0000) | (x << 24 & 0xff000000)
-#define SWAP16(x) x = (x << 8 & 0xff00) | (x >> 8 & 0xff)
+#define SWAP32(x) x = (uint32_t)((x >> 24 & 0xff) | (x >> 8 & 0xff00) | (x << 8 & 0xff0000) | (x << 24 & 0xff000000))
+#define SWAP16(x) x = (uint16_t)((x << 8 & 0xff00) | (x >> 8 & 0xff))
 #endif
 
 void
@@ -69,7 +69,7 @@ BreakDictionary::readDictionaryFile(UMemoryStream* in)
     int32_t l;
     int32_t version;
 
-	int i;
+    int i;
 
     // read in the version number (right now we just ignore it)
     uprv_mstrm_read(in, &version, 4);

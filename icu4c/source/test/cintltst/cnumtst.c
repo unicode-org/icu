@@ -79,7 +79,7 @@ void TestNumberFormat()
     log_verbose("\nTesting unum_open(currency,NULL,status)\n");
     style=UNUM_CURRENCY;
     /* Can't hardcode the result to assume the default locale is "en_US". */
-	cur_def=unum_open(style, "en_US", &status);
+    cur_def=unum_open(style, "en_US", &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using \n unum_open(currency, NULL, &status) %s\n",
                         myErrorName(status) );
@@ -115,9 +115,9 @@ void TestNumberFormat()
     if(U_FAILURE(status))
         log_err("Error: could not clone unum_clone(def, &status): %s\n", myErrorName(status));
     else
-	{
+    {
         log_verbose("unum_clone() successful\n");
-	}
+    }
     
     /*Testing unum_getAvailable() and unum_countAvailable()*/ 
     log_verbose("\nTesting getAvailableLocales and countAvailable()\n");
@@ -129,16 +129,15 @@ void TestNumberFormat()
         log_verbose("The no: of locales where number formattting is applicable is %d\n", numlocales);
     }
     for(i=0;i<numlocales;i++)
-	{
+    {
         log_verbose("%s\n", unum_getAvailable(i)); 
-		if (unum_getAvailable(i) == 0)
-			log_err("No locale for which number formatting patterns are applicable\n");
-		else 
-			log_verbose("A locale %s for which number formatting patterns are applicable\n",unum_getAvailable(i));
-	}
-    
+        if (unum_getAvailable(i) == 0)
+            log_err("No locale for which number formatting patterns are applicable\n");
+        else 
+            log_verbose("A locale %s for which number formatting patterns are applicable\n",unum_getAvailable(i));
+    }
 
-    
+
     /*Testing unum_format() and unum_formatdouble()*/
     temp1=(UChar*)malloc(sizeof(UChar) * 25);
     u_uastrcpy(temp1, "$100,000,000.00");
@@ -189,11 +188,11 @@ free(result);
 
     /* Testing unum_parse() and unum_parseDouble() */
     log_verbose("\nTesting unum_parseDouble()\n");
-    for (i = 0; i < 100000; i++)
-    {
+/*    for (i = 0; i < 100000; i++)
+    {*/
         parsepos=0;
         d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
-    }
+/*    }*/
     if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
@@ -234,11 +233,11 @@ free(result);
     
     
     log_verbose("\nTesting unum_parse()\n");
-    for (i = 0; i < 100000; i++)
-    {
+/*    for (i = 0; i < 100000; i++)
+    {*/
         parsepos=0;
         l1=unum_parse(per_fr, result, u_strlen(result), &parsepos, &status);
-    }
+/*    }*/
     if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));

@@ -97,7 +97,7 @@ void TestConvert()
     const char* tmp_mytarget_use;
     const char* tmp_consumed; 
 
-	int flushCount = 0;
+    int flushCount = 0;
     
     /******************************************************************
                                 Checking Unicode -> ksc
@@ -143,7 +143,6 @@ void TestConvert()
     const int16_t        CodePagesSubstitutionChars[NUM_CODEPAGE]    =
     { 
         (int16_t)0xAFFE
-    
     };
 
     const char* CodePagesTestFiles[NUM_CODEPAGE]    =
@@ -327,8 +326,8 @@ void TestConvert()
       /*Testing ucnv_convert()*/
     {
         int32_t targetLimit=0, sourceLimit=0, i=0, targetCapacity=0;
-        const char source[]={ (char)0x00, (char)0x04, (char)0x05, (char)0x06, (char)0xa2, (char)0xb4, (char)0x00};
-        const char expectedTarget[]={ (char)0x00, (char)0x37, (char)0x2d, (char)0x2e, (char)0x0e, (char)0x49, (char)0x62, (char)0x0f, (char)0x00};
+        const uint8_t source[]={ 0x00, 0x04, 0x05, 0x06, 0xa2, 0xb4, 0x00};
+        const uint8_t expectedTarget[]={ 0x00, 0x37, 0x2d, 0x2e, 0x0e, 0x49, 0x62, 0x0f, 0x00};
         char *target;
         sourceLimit=sizeof(source)/sizeof(source[0]);
         err=U_ZERO_ERROR;
@@ -376,46 +375,46 @@ void TestConvert()
     }
 
     /*Testing ucnv_open()*/
-	/* Note: These converters have been chosen because they do NOT
-	   encode the Latin characters (U+0041, ...), and therefore are
-	   highly unlikely to be chosen as system default codepages */
+    /* Note: These converters have been chosen because they do NOT
+       encode the Latin characters (U+0041, ...), and therefore are
+       highly unlikely to be chosen as system default codepages */
 
     someConverters[0] = ucnv_open("ibm-1038", &err);
     if (U_FAILURE(err)) { log_err("FAILURE!  %s\n", myErrorName(err)); }
-    
+
     someConverters[1] = ucnv_open("ibm-1038", &err);
     if (U_FAILURE(err)) { log_err("FAILURE!  %s\n", myErrorName(err)); }
-    
+
     someConverters[2] = ucnv_open("ibm-1038", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
-    
+
     someConverters[3] = ucnv_open("ibm-834", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
-    
+
     someConverters[4] = ucnv_open("ibm-941", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err));}
 
-    
+
     /* Testing ucnv_flushCache() */
     log_verbose("\n---Testing ucnv_flushCache...\n");
         if ((flushCount=ucnv_flushCache())==0)
         log_verbose("Flush cache ok\n");
     else 
         log_err("Flush Cache failed [line %d], expect 0 got %d \n", __LINE__, flushCount);
-    
+
     /*testing ucnv_close() and ucnv_flushCache() */
-     ucnv_close(someConverters[0]);
+    ucnv_close(someConverters[0]);
     ucnv_close(someConverters[1]);
     ucnv_close(someConverters[2]);
     ucnv_close(someConverters[3]);
-    
-        if (j=(flushCount=ucnv_flushCache())==2) 
+
+    if (j=(flushCount=ucnv_flushCache())==2) 
         log_verbose("Flush cache ok\n");  /*because first, second and third are same  */
     else 
         log_err("Flush Cache failed  line %d, got %d expected 2 or there is an error in ucnv_close()\n",
-			__LINE__,
-			flushCount);
-    
+            __LINE__,
+            flushCount);
+
     ucnv_close(someConverters[4]);
     if ( (flushCount=ucnv_flushCache())==1) 
         log_verbose("Flush cache ok\n");
@@ -441,8 +440,8 @@ void TestConvert()
     someConverters[3] = ucnv_openCCSID(949,UCNV_IBM,&err);
     ucnv_close(ucnv_openCCSID(1051, UCNV_IBM, &err)); /* test for j350; ucnv_close(NULL) is safe */
     if (U_FAILURE(err)){ log_err("FAILURE! %s\n", myErrorName(err));}
-    
-     /* Testing ucnv_getName()*/
+
+    /* Testing ucnv_getName()*/
     /*default code page */
     ucnv_getName(someConverters[0], &err);
     if(U_FAILURE(err)) {
@@ -461,7 +460,7 @@ void TestConvert()
     {
         const char* defaultName=ucnv_getDefaultName();
         log_verbose("getDefaultName returned %s\n", defaultName);
-   
+
         /*change the default name by setting it */
         ucnv_setDefaultName("changed");
         if(strcmp(ucnv_getDefaultName(), "changed")==0)
@@ -471,7 +470,7 @@ void TestConvert()
         /*set the default name back*/
         ucnv_setDefaultName(defaultName);
     }
-    
+
         ucnv_close(someConverters[0]);
         ucnv_close(someConverters[1]);
         ucnv_close(someConverters[2]);
@@ -489,7 +488,7 @@ void TestConvert()
         if (!ucs_file_in) 
         {
             log_err("Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
-		return;	
+            return;
         }
 
      /*Creates a converter and testing ucnv_openCCSID(u_int code_page, platform, errstatus*/
@@ -500,10 +499,10 @@ void TestConvert()
         if (!myConverter || U_FAILURE(err))   
         {
             log_err("Error creating the convertor \n");
-            
-		return;
+
+            return;
         }
-    
+
     /*testing for ucnv_getName()  */
     log_verbose("Testing ucnv_getName()...\n");
     ucnv_getName(myConverter, &err);
@@ -529,9 +528,9 @@ void TestConvert()
         err=U_ZERO_ERROR;
     }
 
-    
+
     /*Tests ucnv_getMaxCharSize() and ucnv_getMinCharSize()*/
-    
+
     log_verbose("Testing ucnv_getMaxCharSize()...\n");
         if (ucnv_getMaxCharSize(myConverter)==CodePagesMaxChars[codepage_index])  
             log_verbose("Max byte per character OK\n");
@@ -543,20 +542,20 @@ void TestConvert()
             log_verbose("Min byte per character OK\n");
         else 
             log_err("Min byte per character failed\n");
-      
+
 
     /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars()*/
     log_verbose("\n---Testing ucnv_getSubstChars...\n");
     ii=4;
     ucnv_getSubstChars(myConverter, myptr, &ii, &err);
-    
+
     for(x=0;x<ii;x++) 
         rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
     if (rest==CodePagesSubstitutionChars[codepage_index])  
         log_verbose("Substitution character ok\n");
     else 
         log_err("Substitution character failed.\n");
-    
+
     log_verbose("\n---Testing ucnv_setSubstChars RoundTrip Test ...\n");
     ucnv_setSubstChars(myConverter, myptr, ii, &err);
     if (U_FAILURE(err)) 
@@ -564,12 +563,12 @@ void TestConvert()
     ucnv_getSubstChars(myConverter,save, &ii, &err);
     if (U_FAILURE(err)) 
     { log_err("FAILURE! %s\n", myErrorName(err)); }
-    
+
     if (strncmp(save, myptr, ii)) 
         log_err("Saved substitution character failed\n");
     else 
         log_verbose("Saved substitution character ok\n");
-    
+
     /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars() with error conditions*/ 
     log_verbose("\n---Testing ucnv_getSubstChars.. with len < minBytesPerChar\n");
     ii=1;
@@ -604,7 +603,7 @@ void TestConvert()
     }
     err=U_ZERO_ERROR;
     /*------*/
-    
+
     /*resetState  ucnv_reset()*/
     log_verbose("\n---Testing ucnv_reset()..\n");
     ucnv_reset(myConverter);
@@ -767,7 +766,7 @@ void TestConvert()
         if (BOM!=0xFEFF && BOM!=0xFFFE) 
           {
             log_err("File Missing BOM...Bailing!\n");
-		return;
+            return;
           }
 
         

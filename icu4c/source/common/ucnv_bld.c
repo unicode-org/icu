@@ -111,7 +111,7 @@ isCnvAcceptable(void *context,
 
 #define DATA_TYPE "cnv"
 
-UConverterSharedData *createConverterFromFile (const char *fileName, UErrorCode * err)
+static UConverterSharedData *createConverterFromFile (const char *fileName, UErrorCode * err)
 {
   UDataMemory *data;
   UConverterSharedData *sharedData;
@@ -158,7 +158,7 @@ void
 
 /*returns a converter type from a string
  */
-const UConverterSharedData *
+static const UConverterSharedData *
   getAlgorithmicTypeFromName (const char *realName)
 {
   int i;

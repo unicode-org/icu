@@ -17,9 +17,9 @@
  *  3/4/97      aliu        Tuned performance of CompactIntArray constructor,
  * 05/07/97     helena      Added isBogus()
  *                          based on performance data indicating that this_obj was slow.
- * 07/15/98        erm            Synched with Java 1.2 CompactShortArray.java.
- * 07/30/98        erm            Added changes from 07/29/98 code review.
- * 11/01/99		weiv		Added getArray, getIndex and getCount based on Jitterbug 4
+ * 07/15/98     erm         Synched with Java 1.2 CompactShortArray.java.
+ * 07/30/98     erm         Added changes from 07/29/98 code review.
+ * 11/01/99     weiv        Added getArray, getIndex and getCount based on Jitterbug 4
  *===============================================================================
  */
 #include "ucmp16.h"
@@ -289,7 +289,7 @@ void ucmp16_close(CompactShortArray* this_obj)
   }
 }
 
-CompactShortArray* setToBogus(CompactShortArray* this_obj)
+static CompactShortArray* setToBogus(CompactShortArray* this_obj)
 {
   if(this_obj != NULL) {
     if(!this_obj->fAlias) {
@@ -486,14 +486,14 @@ int16_t ucmp16_getDefaultValue(const CompactShortArray* this_obj)
 }
 
 
-void touchBlock(CompactShortArray* this_obj,
+static void touchBlock(CompactShortArray* this_obj,
         int32_t i,
         int16_t value)
 {
   this_obj->fHashes[i] = (this_obj->fHashes[i] + (value << 1)) | 1;
 }
 
-UBool blockTouched(const CompactShortArray* this_obj, int32_t i)
+static UBool blockTouched(const CompactShortArray* this_obj, int32_t i)
 {
   return (UBool)(this_obj->fHashes[i] != 0);
 }
