@@ -57,14 +57,6 @@ static UOption options[]={
 extern int
 main(int argc, char* argv[]) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    /* Initialize ICU */
-    u_init(&errorCode);
-    if (U_FAILURE(errorCode)) {
-        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
-            argv[0], u_errorName(errorCode));
-        exit(1);
-    }
-    errorCode = U_ZERO_ERROR;
 
     /* preset then read command line options */
     options[2].value=u_getDataDirectory();

@@ -212,15 +212,15 @@ build-dir:
 
 # uprops.icu
 $(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+	$(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # pnames.icu
 $(BUILDDIR)/$(ICUDT)pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLDIR)/genpname/genpname$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genpname/genpname -d $(BUILDDIR)
+	$(INVOKE) $(TOOLDIR)/genpname/genpname -d $(BUILDDIR)
 
 # unorm.icu
 $(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+	$(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
 $(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
@@ -228,15 +228,15 @@ $(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR
 
 # unames.icu
 $(BUILDDIR)/$(ICUDT)unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennames/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
+	$(INVOKE) $(TOOLDIR)/gennames/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
 
 # cnvalias.icu
 $(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
+	$(INVOKE) $(TOOLDIR)/gencnval/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
 # uidna.spp
 $(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unames.icu $(BUILDDIR)/$(ICUDT)pnames.icu
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
+	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
 
 ####################################################    BRK
 # BRK FILES
@@ -345,38 +345,38 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/
 
 # test.icu
 $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
+	$(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
 
-# Targets for nfscsi.icu
+# Targets for nfscsi.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscsi.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
 	@echo Building nfscsi.icu
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
+	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
 
-# Targets for nfscss.icu
+# Targets for nfscss.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscss.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
 	@echo Building nfscss.icu
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
+	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
 
 # Targets for nfscis.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscis.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cis_prep.txt
 	@echo Building nfscis.spp
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
+	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
 
 # Targets for nfsmxs.spp
 $(TESTBUILDDIR)/$(TESTDT)nfsmxs.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_s.txt
 	@echo Building nfsmxs.spp
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
+	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
 
 # Targets for nfsmxp.spp
 $(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_p.txt
 	@echo Building nfsmxp.spp
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
+	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
 
 $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
+	$(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
 
 $(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) $(<F)
+	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
 
 
 $(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
