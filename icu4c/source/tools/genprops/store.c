@@ -926,7 +926,7 @@ generateData(const char *dataDir) {
     }
 
     /* write the data */
-    pData=udata_create(DATA_TYPE, DATA_NAME, dataDir, &dataInfo,
+    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops: unable to create data memory, error %d\n", errorCode);
