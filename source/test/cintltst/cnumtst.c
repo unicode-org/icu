@@ -610,10 +610,6 @@ static void TestNumberFormatPadding()
 
     /* create a number format using unum_openPattern(....)*/
     log_verbose("\nTesting unum_openPattern() with padding\n");
-if (uprv_strcmp(U_ICU_VERSION, "1.7") == 0) {
-    log_verbose("Not testing TestNumberFormatPadding() at this time, fix in a later release");
-}
-else {
     u_uastrcpy(temp1, "*#,##0.0#*;(#,##0.0#)");
     status=U_ZERO_ERROR;
     pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
@@ -623,7 +619,7 @@ else {
     }
 
 /*    u_uastrcpy(temp1, "*x#,###,###,##0.0#;(*x#,###,###,##0.0#)"); */
-    u_uastrcpy(temp1, "*x#,###,###,##0.0#;*x(#,###,###,##0.0#)");
+    u_uastrcpy(temp1, "*x#,###,###,##0.0#;*x(###,###,##0.0#)");
     status=U_ZERO_ERROR;
     pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
     if(U_FAILURE(status))
@@ -657,7 +653,7 @@ else {
 free(result);
         }
 /*        u_uastrcpy(temp1, "(xxxxxxx10,456.37)"); */
-        u_uastrcpy(temp1, "xxxxxxx(10,456.37)");
+        u_uastrcpy(temp1, "xxxxx(10,456.37)");
         resultlength=0;
         resultlengthneeded=unum_formatDouble(pattern, d, NULL, resultlength, &pos2, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR)
@@ -693,6 +689,5 @@ free(result);
     }
 
     unum_close(pattern);
-}
 }
 
