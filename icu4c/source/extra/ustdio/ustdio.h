@@ -28,10 +28,13 @@
 #include <stdarg.h>
 
 #include "utypes.h"
+#include <ucnv.h>
 
 
 /** Forward declaration of a Unicode-aware file */
 typedef struct UFILE UFILE;
+
+
 
 /**
  * Open a UFILE.
@@ -135,6 +138,13 @@ CAPI int32_t
 u_fsetcodepage(const char    *codepage,
            UFILE        *file);
 
+
+/**
+ * Returns an alias to the converter being used for this file.
+ * @param file The UFILE to set.
+ * @return alias to the converter
+ */
+CAPI UConverter *u_fgetConverter(UFILE *f);
 
 /* Output functions */
 
