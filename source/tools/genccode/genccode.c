@@ -36,6 +36,10 @@
 
 static uint16_t column=0xffff;
 
+#ifdef WIN32
+#define CAN_GENERATE_OBJECTS
+#endif
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
@@ -56,9 +60,11 @@ static UOption options[]={
 /*0*/UOPTION_HELP_H,
      UOPTION_HELP_QUESTION_MARK,
      UOPTION_DESTDIR,
-     UOPTION_DEF("object", 'o', UOPT_NO_ARG),
      UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
-/*5*/UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
+     UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
+#ifdef CAN_GENERATE_OBJECTS
+/*5*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG)
+#endif
 
 };
 
@@ -71,9 +77,9 @@ main(int argc, char* argv[]) {
 
 #ifndef U_HAVE_BIND_INTERNAL_REFERENCES
 
-    if( (options[4].doesOccur) && uprv_strcmp(options[4].value, U_ICUDATA_NAME)) /* be consistent with gencmn! */
+    if( (options[3].doesOccur) && uprv_strcmp(options[3].value, U_ICUDATA_NAME)) /* be consistent with gencmn! */
     {
-      uprv_strcpy(symPrefix, options[4].value);
+      uprv_strcpy(symPrefix, options[3].value);
       uprv_strcat(symPrefix, "_");
     }
     else
@@ -98,15 +104,20 @@ main(int argc, char* argv[]) {
             "\toptions:\n"
             "\t\t-h or -? or --help  this usage text\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-o or --object      write a .obj file instead of .c\n",
-            argv[0]);
+#ifdef CAN_GENERATE_OBJECTS
+            "\t\t-o or --object      write a .obj file instead of .c\n"
+#endif
+            , argv[0]);
     } else {
         const char *message, *filename;
         void (*writeCode)(const char *, const char *);
-        if(options[3].doesOccur) {
+#ifdef CAN_GENERATE_OBJECTS
+        if(options[5].doesOccur) {
             message="Generating object code for %s\n";
             writeCode=&writeObjectCode;
-        } else {
+        } else
+#endif
+        {
             message="Generating C code for %s\n";
             writeCode=&writeCCode;
         }
@@ -211,8 +222,8 @@ writeObjectCode(const char *filename, const char *destdir) {
     entry[0]='_';
     getOutFilename(filename, destdir, buffer, entry+1, ".obj");
 
-    if(options[5].doesOccur) {
-        uprv_strcpy(entry+1, options[5].value);
+    if(options[4].doesOccur) {
+        uprv_strcpy(entry+1, options[4].value);
         uprv_strcat(entry, "_dat");
     }
     /* turn dashes in the entry name into underscores */
