@@ -20,8 +20,8 @@ U_NAMESPACE_BEGIN
  * or a pointer.  If a hint bit is zero, then the associated
  * token is assumed to be an integer. This is needed for iSeries
  */
-#define HINT_KEY_POINTER   (1)
-#define HINT_KEY_INTEGER   (2)
+#define HINT_KEY_POINTER   (0)
+#define HINT_KEY_INTEGER   (1)
  
 const char UVector::fgClassID=0;
 
@@ -292,8 +292,8 @@ int32_t UVector::indexOf(UHashTok key, int32_t startIndex, int8_t hint) const {
             /* Pointers are not always the same size as ints so to perform
              * a valid comparision we need to know whether we are being
              * provided an int or a pointer. */
-            if (((hint & HINT_KEY_POINTER) && (key.pointer == elements[i].pointer))
-                || (key.integer == elements[i].integer))
+            if (((hint & HINT_KEY_INTEGER) && (key.integer == elements[i].integer))
+                || (key.pointer == elements[i].pointer))
             {
                     return i;
             }
