@@ -45,7 +45,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"  /* for the public field (!) SimpleDateFormat::fgSystemDefaultCentury */
 #include "mutex.h"
-
+#include "uassert.h"
 
 // *****************************************************************************
 // class GregorianCalendar
@@ -394,13 +394,13 @@ GregorianCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
         // representation.  We use 400-year, 100-year, and 4-year cycles.
         // For example, the 4-year cycle has 4 years + 1 leap day; giving
         // 1461 == 365*4 + 1 days.
-        int32_t rem[1];
+        int32_t rem;
         int32_t n400 = floorDivide(gregorianEpochDay, 146097, rem); // 400-year cycle length
-        int32_t n100 = floorDivide(rem[0], 36524, rem); // 100-year cycle length
-        int32_t n4 = floorDivide(rem[0], 1461, rem); // 4-year cycle length
-        int32_t n1 = floorDivide(rem[0], 365, rem);
+        int32_t n100 = floorDivide(rem, 36524, rem); // 100-year cycle length
+        int32_t n4 = floorDivide(rem, 1461, rem); // 4-year cycle length
+        int32_t n1 = floorDivide(rem, 365, rem);
         rawYear = 400*n400 + 100*n100 + 4*n4 + n1;
-        dayOfYear = rem[0]; // zero-based day of year
+        dayOfYear = rem; // zero-based day of year
         if (n100 == 4 || n1 == 4) 
             dayOfYear = 365; // Dec 31 at end of 4- or 400-yr cycle
         else 
@@ -646,36 +646,35 @@ GregorianCalendar::computeFields(UErrorCode& status)
 
     double days = uprv_floor(localMillis / kOneDay);
     int32_t millisInDay = (int32_t) (localMillis - (days * kOneDay));
-    if (millisInDay < 0) 
-        millisInDay += U_MILLIS_PER_DAY;
+    U_ASSERT(millisInDay >= 0);
 
-    // Call getOffset() to get the TimeZone offset.  The millisInDay value must
-    // be standard local millis.
-    int32_t gregoYear = getGregorianYear(status);
+        // Call getOffset() to get the TimeZone offset.  The millisInDay value must
+        // be standard local millis.
+        int32_t gregoYear = getGregorianYear(status);
     int32_t dstOffset = getTimeZone().getOffset((gregoYear>0?AD:BC), getGregorianYear(status), month, date, dayOfWeek, millisInDay,
                                             monthLength(month), status) - rawOffset;
-    if(U_FAILURE(status))
-        return;
+        if(U_FAILURE(status))
+            return;
 
-    // Adjust our millisInDay for DST, if necessary.
-    millisInDay += dstOffset;
+        // Adjust our millisInDay for DST, if necessary.
+        millisInDay += dstOffset;
 
-    // If DST has pushed us into the next day, we must call timeToFields() again.
-    // This happens in DST between 12:00 am and 1:00 am every day.  The call to
-    // timeToFields() will give the wrong day, since the Standard time is in the
-    // previous day.
-    if (millisInDay >= U_MILLIS_PER_DAY) {
-        UDate dstMillis = localMillis + dstOffset;
-        millisInDay -= U_MILLIS_PER_DAY;
-        // As above, check for and pin extreme values
-        if(localMillis > 0 && dstMillis < 0 && dstOffset > 0) {
-            dstMillis = LATEST_SUPPORTED_MILLIS;
-        } 
-        else if(localMillis < 0 && dstMillis > 0 && dstOffset < 0) {
-            dstMillis = EARLIEST_SUPPORTED_MILLIS;
+        // If DST has pushed us into the next day, we must call timeToFields() again.
+        // This happens in DST between 12:00 am and 1:00 am every day.  The call to
+        // timeToFields() will give the wrong day, since the Standard time is in the
+        // previous day.
+        if (millisInDay >= U_MILLIS_PER_DAY) {
+            UDate dstMillis = localMillis + dstOffset;
+            millisInDay -= U_MILLIS_PER_DAY;
+            // As above, check for and pin extreme values
+            if(localMillis > 0 && dstMillis < 0 && dstOffset > 0) {
+                dstMillis = LATEST_SUPPORTED_MILLIS;
+            } 
+            else if(localMillis < 0 && dstMillis > 0 && dstOffset < 0) {
+                dstMillis = EARLIEST_SUPPORTED_MILLIS;
+            }
+            timeToFields(dstMillis, FALSE, status);
         }
-        timeToFields(dstMillis, FALSE, status);
-    }
 
     // Fill in all time-related fields based on millisInDay.  Call internalSet()
     // so as not to perturb flags.
@@ -889,19 +888,19 @@ GregorianCalendar::computeTime(UErrorCode& status)
     millisInDay *= 1000;
     millisInDay += internalGet(UCAL_MILLISECOND); // now have millis
 
-    // Compute the time zone offset and DST offset.  There are two potential
-    // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
-    // for discussion purposes here.
-    // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
-    //    can be in standard or in DST depending.  However, 2:00 am is an invalid
-    //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
-    //    We assume standard time.
-    // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
-    //    can be in standard or DST.  Both are valid representations (the rep
-    //    jumps from 1:59:59 DST to 1:00:00 Std).
-    //    Again, we assume standard time.
-    // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
-    // or DST_OFFSET fields; then we use those fields.
+        // Compute the time zone offset and DST offset.  There are two potential
+        // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
+        // for discussion purposes here.
+        // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
+        //    can be in standard or in DST depending.  However, 2:00 am is an invalid
+        //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
+        //    We assume standard time.
+        // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
+        //    can be in standard or DST.  Both are valid representations (the rep
+        //    jumps from 1:59:59 DST to 1:00:00 Std).
+        //    Again, we assume standard time.
+        // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
+        // or DST_OFFSET fields; then we use those fields.
     const TimeZone& zone = getTimeZone();
     int32_t zoneOffset = (fStamp[UCAL_ZONE_OFFSET] >= kMinimumUserStamp)
         /*isSet(ZONE_OFFSET) && userSetZoneOffset*/ ?
@@ -919,7 +918,7 @@ GregorianCalendar::computeTime(UErrorCode& status)
         /* Normalize the millisInDay to 0..ONE_DAY-1.  If the millis is out
          * of range, then we must call timeToFields() to recompute our
          * fields. */
-        int32_t normalizedMillisInDay [1];
+        int32_t normalizedMillisInDay;
         floorDivide(millis, (int32_t)kOneDay, normalizedMillisInDay);
 
         // We need to have the month, the day, and the day of the week.
@@ -928,7 +927,7 @@ GregorianCalendar::computeTime(UErrorCode& status)
         // normalize the year, month, and date numbers.
         uint8_t dow;
         if (isLenient() || fStamp[UCAL_MONTH] == kUnset || fStamp[UCAL_DATE] == kUnset
-                || millisInDay != normalizedMillisInDay[0]) {
+                || millisInDay != normalizedMillisInDay) {
             timeToFields(millis, TRUE, status); // Use wall time; true == do quick computation
             dow = (uint8_t) internalGet(UCAL_DAY_OF_WEEK); // DOW is computed by timeToFields
         }
@@ -941,17 +940,12 @@ GregorianCalendar::computeTime(UErrorCode& status)
             dow = julianDayToDayOfWeek(julianDay);
         }
 
-        // It's tempting to try to use DAY_OF_WEEK here, if it
-        // is set, but we CAN'T.  Even if it's set, it might have
-        // been set wrong by the user.  We should rely only on
-        // the Julian day number, which has been computed correctly
-        // using the disambiguation algorithm above. [LIU]
         dstOffset = zone.getOffset((uint8_t)era,
                                    internalGet(UCAL_YEAR),
                                    internalGet(UCAL_MONTH),
                                    internalGet(UCAL_DATE),
                                    dow,
-                                   normalizedMillisInDay[0],
+                                   normalizedMillisInDay, // local wall time
                                    monthLength(internalGet(UCAL_MONTH)),
                                    status) -
             zoneOffset;
@@ -1191,9 +1185,9 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
 
         // If the month is out of range, adjust it into range
         if (month < 0 || month > 11) {
-            int32_t rem[1];
+            int32_t rem;
             year += floorDivide(month, 12, rem);
-            month = rem[0];
+            month = rem;
         }
     }
 
@@ -1339,29 +1333,29 @@ GregorianCalendar::floorDivide(int32_t numerator, int32_t denominator)
 // -------------------------------------
 
 int32_t 
-GregorianCalendar::floorDivide(int32_t numerator, int32_t denominator, int32_t remainder[])
+GregorianCalendar::floorDivide(int32_t numerator, int32_t denominator, int32_t& remainder)
 {
     if (numerator >= 0) {
-        remainder[0] = numerator % denominator;
+        remainder = numerator % denominator;
         return numerator / denominator;
     }
     int32_t quotient = ((numerator + 1) / denominator) - 1;
-    remainder[0] = numerator - (quotient * denominator);
+    remainder = numerator - (quotient * denominator);
     return quotient;
 }
 
 // -------------------------------------
 
 int32_t
-GregorianCalendar::floorDivide(double numerator, int32_t denominator, int32_t remainder[]) 
+GregorianCalendar::floorDivide(double numerator, int32_t denominator, int32_t& remainder) 
 {
     double quotient;
     if (numerator >= 0) {
         quotient = uprv_trunc(numerator / denominator);
-        remainder[0] = (int32_t)uprv_fmod(numerator, denominator);
+        remainder = (int32_t)uprv_fmod(numerator, denominator);
     } else {
         quotient = uprv_trunc((numerator + 1) / denominator) - 1;
-        remainder[0] = (int32_t)(numerator - (quotient * denominator));
+        remainder = (int32_t)(numerator - (quotient * denominator));
     }
     if (quotient < INT32_MIN || quotient > INT32_MAX) {
         // Normalize out of range values.  It doesn't matter what
@@ -2188,4 +2182,3 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
-
