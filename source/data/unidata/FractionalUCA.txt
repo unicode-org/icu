@@ -15456,6 +15456,9 @@ D87E DDF0; [E9 C9 89, 05, 05]
 
 F9C6; [E9 CA 7B, 05, 05]
 
+# Unicode Corrigendum #3: U+F951 Normalization
+F951; [E9 CA B5, 05, 05]
+
 FA09; [E9 CA B9, 05, 05]
 
 F959; [E9 CB 0D, 05, 05]
@@ -15482,8 +15485,6 @@ F9EA; [E9 CB E7, 05, 05]
 F9B2; [E9 CC 13, 05, 05]
 
 F949; [E9 CC 15, 05, 05]
-
-F951; [E9 CC 1D, 05, 05]
 
 D87E DDF5; [E9 CC 6D, 05, 05]
 
