@@ -205,12 +205,14 @@ char *aescstrdup(const UChar* unichars){
     void *p;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter* conv = ucnv_open("US-ASCII",&errorCode);
+
     length = u_strlen( unichars);
     newString = (char*)ctst_malloc ( sizeof(char) * 8 * (length +1));
     target = newString;
     targetLimit = newString+sizeof(char) * 8 * (length +1);
     ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_JAVA, &cb, &p, &errorCode);
     ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,TRUE,&errorCode);
+    ucnv_close(conv);
     *target = '\0';
     return newString;
 }
