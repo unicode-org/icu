@@ -93,7 +93,6 @@ typedef struct{
     uint32_t version;
     char locale[3];
     char name[30];
-
 }UConverterDataISO2022;
 
 /* ISO-2022 ----------------------------------------------------------------- */
@@ -673,19 +672,25 @@ _ISO2022Close(UConverter *converter) {
    UConverter **array = myData->myConverterArray;
 
     if (converter->extraInfo != NULL) {
+        if(!converter->isCopyLocal){
+            /*close the array of converter pointers and free the memory*/
+            while(*array!=NULL){
+                if(*array==myData->currentConverter){
+                   myData->currentConverter=NULL;
+                }
+                ucnv_close(*array++);
 
-        /*close the array of converter pointers and free the memory*/
-        while(*array!=NULL){
-            if(*array==myData->currentConverter){
-               myData->currentConverter=NULL;
             }
-            ucnv_close(*array++);
-
-        }
-        if(myData->currentConverter){
             ucnv_close(myData->currentConverter);
+            uprv_free (converter->extraInfo);
+        }else{
+            /* close the currentConverter if and only if the 
+             * ISO-2022 framework converter
+             */
+            if(!myData->isLocaleSpecified){  
+                ucnv_close(myData->currentConverter);
+            }
         }
-        uprv_free (converter->extraInfo);
     }
 }
 
@@ -699,6 +704,7 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
                 ucnv_close (myConverterData->currentConverter);
                 myConverterData->currentConverter=NULL;
             }
+            converter->mode = UCNV_SI; 
         }
         if(choice!=UCNV_RESET_TO_UNICODE) {
             /* re-append UTF-8 escape sequence */
@@ -949,7 +955,8 @@ T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
 
         mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, TRUE);
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
-        if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/{
+        if (args->converter->mode == UCNV_SO && mySourceLimit!=args->source) 
+            /*Already doing some conversion*/{
 
             return ucnv_getNextUChar(myData->currentConverter,
                 &(args->source),
@@ -3263,8 +3270,8 @@ struct cloneStruct
 {
     UConverter cnv;
     UConverterDataISO2022 mydata;
+    UConverter currentCnv; /**< for ISO_2022 converter if the current converter is open */
 };
-
 
 U_CFUNC UConverter * 
 _ISO_2022_SafeClone(
@@ -3275,6 +3282,7 @@ _ISO_2022_SafeClone(
 {
     struct cloneStruct * localClone;
     int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+    UConverterDataISO2022* cnvData = (UConverterDataISO2022*)cnv->extraInfo;
 
     if (U_FAILURE(*status)){
         return 0;
@@ -3287,9 +3295,25 @@ _ISO_2022_SafeClone(
 
     localClone = (struct cloneStruct *)stackBuffer;
     uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
-    localClone->cnv.isCopyLocal = TRUE;
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
+
+    localClone->cnv.isCopyLocal = TRUE;
+    
+    /* clone the current converter if it is open in ISO-2022 converter and since it 
+     * preserves conversion state in currentConverter object we need to clone it
+     */
+    if((!cnvData->isLocaleSpecified && cnvData->currentConverter!=NULL) ||
+        /* KR version 1 also uses the state in currentConverter for preserving state
+         * so we need to clone it too!
+         */
+        (cnvData->locale[0]=='k' && cnvData->version==1)){
+
+        uprv_memcpy(&localClone->currentCnv, cnvData->currentConverter, sizeof(UConverter));
+        
+        localClone->mydata.currentConverter = &localClone->currentCnv;       
+    }
+        
     localClone->cnv.extraInfo = &localClone->mydata;
 
     return &localClone->cnv;

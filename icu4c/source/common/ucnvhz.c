@@ -156,9 +156,10 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
 }
 static void 
 _HZClose(UConverter *cnv){
-    
-     ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
-     uprv_free(cnv->extraInfo);
+    if((cnv->extraInfo != NULL) && !cnv->isCopyLocal){
+         ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
+         uprv_free(cnv->extraInfo);
+    }
 
 }
 

@@ -210,7 +210,7 @@ void ucnv_close (UConverter * converter)
   };
   UErrorCode errorCode;
 
-  if (converter == NULL || converter->isCopyLocal)
+  if (converter == NULL)
   {
     return;
   }
@@ -224,16 +224,16 @@ void ucnv_close (UConverter * converter)
   if (converter->sharedData->impl->close != NULL) {
     converter->sharedData->impl->close(converter);
   }
-
-  if (converter->sharedData->referenceCounter != ~0) {
-    umtx_lock (NULL);
-    if (converter->sharedData->referenceCounter != 0) {
-      converter->sharedData->referenceCounter--;
-    }
-    umtx_unlock (NULL);
+  if(!converter->isCopyLocal){
+      if (converter->sharedData->referenceCounter != ~0) {
+        umtx_lock (NULL);
+        if (converter->sharedData->referenceCounter != 0) {
+          converter->sharedData->referenceCounter--;
+        }
+        umtx_unlock (NULL);
+      }
+      uprv_free (converter);
   }
-  uprv_free (converter);
-
   return;
 }
 

@@ -242,9 +242,11 @@ _SCSUOpen(UConverter *cnv,
 
 U_CFUNC void
 _SCSUClose(UConverter *cnv) {
-    if(cnv->extraInfo!=NULL) {
-        uprv_free(cnv->extraInfo);
-        cnv->extraInfo=NULL;
+    if(!cnv->isCopyLocal){
+        if(cnv->extraInfo!=NULL) {
+            uprv_free(cnv->extraInfo);
+            cnv->extraInfo=NULL;
+        }
     }
 }
 
