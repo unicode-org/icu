@@ -512,12 +512,14 @@ const char ICUResourceBundleFactory::fgClassID = '\0';
 
 ICULocaleService::ICULocaleService()
   : fallbackLocale(Locale::getDefault()) 
+  , llock(0)
 {
 }
 
 ICULocaleService::ICULocaleService(const UnicodeString& name)
   : ICUService(name)
   , fallbackLocale(Locale::getDefault()) 
+  , llock(0)
 {
 }
 
@@ -637,17 +639,17 @@ public:
   const char* next(UErrorCode& status) {
     const UnicodeString* us = snext(status);
     if (us) {
-      int newlen;
-      for (newlen = us->extract((char*)_bufp, _buflen / sizeof(char), NULL, status);
-           status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
-           resizeBuffer((newlen + 1) * sizeof(char)))
-        {
-          status = U_ZERO_ERROR;
+      while (TRUE) {
+        int32_t newlen = us->extract((char*)_bufp, _buflen / sizeof(char), NULL, status);
+        if (status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR) {
+          resizeBuffer((newlen + 1) * sizeof(char));
+		  status = U_ZERO_ERROR;
+        } else if (U_SUCCESS(status)) {
+          ((char*)_bufp)[newlen] = 0;
+          return (const char*)_bufp;
+        } else {
+          break;
         }
-      
-      if (U_SUCCESS(status)) {
-        ((char*)_bufp)[newlen] = 0;
-        return (const char*)_bufp;
       }
     }
     return NULL;
@@ -656,17 +658,16 @@ public:
   const UChar* unext(UErrorCode& status) {
     const UnicodeString* us = snext(status);
     if (us) {
-      int newlen;
-      for (newlen = us->extract((UChar*)_bufp, _buflen / sizeof(UChar), status);
-           status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
-           resizeBuffer((newlen + 1) * sizeof(UChar)))
-        {
-          status = U_ZERO_ERROR;
+      while (TRUE) {
+        int32_t newlen = us->extract((UChar*)_bufp, _buflen / sizeof(UChar), status);
+        if (status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR) {
+          resizeBuffer((newlen + 1) * sizeof(UChar));
+        } else if (U_SUCCESS(status)) {
+          ((UChar*)_bufp)[newlen] = 0;
+          return (const UChar*)_bufp;
+        } else {
+          break;
         }
-      
-      if (U_SUCCESS(status)) {
-        ((UChar*)_bufp)[newlen] = 0;
-        return (const UChar*)_bufp;
       }
     }
     return NULL;
@@ -685,6 +686,7 @@ public:
     } else {
       _bufp = uprv_malloc(newlen);
     }
+    _buflen = newlen;
   }
 
   UBool upToDate(UErrorCode& status) const {
@@ -718,7 +720,7 @@ ICULocaleService::validateFallbackLocale() const
   const Locale& loc = Locale::getDefault();
   if (loc != fallbackLocale) {
     ICULocaleService* ncThis = (ICULocaleService*)this;
-    Mutex mutex(&ncThis->lock);
+    Mutex mutex(&ncThis->llock);
     if (loc != fallbackLocale) {
       ncThis->fallbackLocale = loc;
       LocaleUtility::initNameFromLocale(loc, ncThis->fallbackLocaleName);
