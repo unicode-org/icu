@@ -1009,7 +1009,7 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
 {
         UChar32  codepoint;
   const UChar   *psource;
-  const UChar   *pend;
+  const UChar   *pend = 0;
         uint8_t  oldfcdtrail = 0;
         uint16_t fcd = 0;
   
@@ -1111,4 +1111,5 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
       psource += count;
     }
   }
+  return TRUE;
 }
