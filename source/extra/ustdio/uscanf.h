@@ -19,6 +19,10 @@
 #ifndef USCANF_H
 #define USCANF_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
 
@@ -60,6 +64,6 @@ typedef int32_t (*u_scanf_handler) (UFILE            *stream,
                    const UChar            *fmt,
                    int32_t            *consumed);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
-

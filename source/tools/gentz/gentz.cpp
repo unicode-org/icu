@@ -28,6 +28,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
+
+#if UCONFIG_NO_FORMATTING
+
+extern int
+main(int argc, const char *argv[]) {
+    fprintf(stderr, "gentz performs no-op because of UCONFIG_NO_FORMATTING, see uconfig.h\n");
+    return 0;
+}
+
+#else
+
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -790,3 +801,5 @@ int32_t gentz::readLine(FileStream* in) {
     // then read the next line.
     return (*buffer == NUL) ? readLine(in) : uprv_strlen(buffer);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

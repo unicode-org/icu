@@ -32,8 +32,9 @@
 
 /* A UFILE */
 
+#if !UCONFIG_NO_TRANSLITERATION
+
 typedef struct {
-  UTransliterator *fTranslit;
   UChar  *buffer;             /* Beginning of buffer */
   int32_t capacity;           /* Capacity of buffer */
   int32_t pos;                /* Beginning of untranslitted data */
@@ -41,12 +42,16 @@ typedef struct {
   UTransliterator *translit;
 } UFILETranslitBuffer;
 
+#endif
+
 struct UFILE {
   FILE            *fFile;        /* the actual fs interface */
   UBool        fOwnFile;    /* TRUE if fFile should be closed */
-  
+
+#if !UCONFIG_NO_FORMATTING
   ULocaleBundle        *fBundle;     /* formatters */
   UBool        fOwnBundle;     /* TRUE if fBundle should be deleted */
+#endif
 
   UConverter        *fConverter;     /* for codeset conversion */
 
@@ -59,7 +64,9 @@ struct UFILE {
   UChar            *fUCLimit;     /* data limit in fUCBuffer */
   UChar         *fUCPos;     /* current pos in fUCBuffer */
 
+#if !UCONFIG_NO_TRANSLITERATION
   UFILETranslitBuffer *fTranslit;
+#endif
 };
 
 /**
