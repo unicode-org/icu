@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/11/13 00:47:48 $
-* $Revision: 1.49 $
+* $Date: 2003/11/13 20:21:13 $
+* $Revision: 1.50 $
 *
 *******************************************************************************
 */
@@ -3322,8 +3322,9 @@ public final class RuleBasedCollator extends Collator
                 int torder = getSecondaryFrenchCE(false);
                 if (sorder == torder) {
                     if ((m_srcUtilOffset_ < 0 && m_tgtUtilOffset_ < 0)
-                        || m_srcUtilCEBuffer_[m_srcUtilOffset_]
-                                    == CollationElementIterator.NULLORDER) {
+                        || (m_srcUtilOffset_ >= 0 
+                            && m_srcUtilCEBuffer_[m_srcUtilOffset_]
+                                    == CollationElementIterator.NULLORDER)) {
                         break;
                     }
                 }

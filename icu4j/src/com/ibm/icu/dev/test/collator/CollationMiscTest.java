@@ -1902,4 +1902,13 @@ public class CollationMiscTest extends TestFmwk{
             errln("Error creating UCA collator");
         }
     }
+    
+    public void TestJ3347()
+    {
+        Collator coll = Collator.getInstance(Locale.FRENCH);
+        ((RuleBasedCollator)coll).setAlternateHandlingShifted(true);
+        if (coll.compare("6", "!6") != 0) {
+            errln("Jitterbug 3347 failed");
+        }
+    }
 }
