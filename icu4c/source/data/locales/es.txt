@@ -9,33 +9,40 @@ es {
     Version { "3.0" }
     // Currency display names
     Currencies {
-        ADP { "ADP", "Peseta Andorrana" }
-        AED { "AED", "Dirham de los Emiratos \u00C1rabes Unidos" }
-        AFA { "AFA", "Afghani" }
-        ALL { "ALL", "Lek Alban\u00E9s" }
-        AMD { "AMD", "Dram Armenio" }
+       	ADD { "ADD", "diner Andorrano"       }
+        ADP { "ADP", "peseta Andorrana" }
+        AED { "AED", "dirham de los Emiratos \u00C1rabes Unidos" }
+        AFA { "AFA", "afgani (1927-2002)"  }
+        AFN { "Af",  "afgani"              }
+        AIF { "AIF", "franco de Affars e Issas" }
+        ALK { "ALK", "lek Alban\u00E9s (1946-1961)" }
+        ALL { "lek", "lek Alban\u00E9s" }
+        ALV { "ALV", "lek valute Alban\u00E9s"  }
+        AMD { "AMD", "dram Armenio" }
         ANG { "ANG", "Guilder de India Occidental" }
         AOK { "AOK", "Kwanza Angol\u00E9s" }
-        ARA { "ARA", "Austral Argentino" }
-        ARS { "ARS", "Peso Argentino" }
-        ATS { "ATS", "Chel\u00EDn Austriaco" }
-        AUD { "AUD", "D\u00F3lar Australiano" }
-        AWG { "AWG", "Guilder de Aruba" }
+        ARA { "ARA", "austral Argentino" }
+        ARM { "ARM", "peso moneda nacional Argentino" }
+        ARP { "ARP", "peso Argentino (1983-1985)" }
+        ARS { "ARS", "peso Argentino" }
+        ATS { "ATS", "chel\u00EDn Austriaco" }
+        AUD { "AUD", "d\u00F3lar Australiano" }
+        AWG { "AWG", "guilder de Aruba" }
         AZM { "AZM", "Manat de Azerbaijan" }
-        BAD { "BAD", "Dinar de Bosnia-Herzogovinia" }
+        BAD { "BAD", "dinar de Bosnia-Herzogovinia" }
         BBD { "BBD", "D\u00F3lar de Barbados" }
-        BDT { "BDT", "Taka de Bangladesh" }
-        BEF { "BEF", "Franco Belga" }
-        BGL { "BGL", "Lev Bulgaro" }
-        BHD { "BHD", "Dinar de Barein" }
-        BIF { "BIF", "Franco de Burundi" }
+        BDT { "Tk", "taka de Bangladesh" }
+        BEF { "BEF", "franco Belga" }
+        BGL { "BGL", "lev Bulgaro" }
+        BHD { "BHD", "dinar de Barein" }
+        BIF { "BIF", "franco de Burundi" }
         BMD { "BMD", "D\u00F3lar de Bermudas" }
         BND { "BND", "D\u00F3lar de Brunei" }
-        BOB { "$b", "Boliviano de Bolivia" }
-        BRL { "BRL", "Real de Brazil" }
+        BOB { "$b", "boliviano de Bolivia" }
+        BRL { "BRL", "real de Brazil" }
         BSD { "BSD", "D\u00F3lar de Bahamas" }
         BWP { "BWP", "Pula de Botswana" }
-        BYR { "BYR", "Rublo de Belorusia" }
+        BYR { "BYR", "rublo de Belorusia" }
         BZD { "BZD", "D\u00F3lar de Belize" }
         CAD { "CAD", "D\u00F3lar Canadiense" }
         CHF { "CHF", "Franco Suizo" }
@@ -58,7 +65,7 @@ es {
         EGP { "EGP", "Libra Egipcia" }
         ESP { "\u20A7", "Peseta Espa\u00F1ola" }
         ETB { "ETB", "Birr de Etiop\u00EDa" }
-        EUR { "\u20AC", "Moneda de los estados miembros de EMU" }
+        EUR { "\u20AC","euro" }
         FIM { "FIM", "Marco Finland\u00E9s" }
         FJD { "FJD", "D\u00F3lar de Fiji" }
         FKP { "FKP", "Libra de Falkland" }
@@ -73,7 +80,7 @@ es {
         GTQ { "Q", "Quedzal de Guatemala" }
         GWP { "GWP", "Peso de Guinea" }
         GYD { "GYD", "D\u00F3lar Guayan\u00E9s" }
-        HKD { "HKD", "D\u00F3lar de Hong Kong" }
+        HKD { "HK$", "d\u00F3lar de Hong Kong"     }
         HNL { "L.", "Lempira de Honduras" }
         HRD { "HRD", "Dinar de Croacia" }
         HTG { "HTG", "Gourde de Haiti" }
@@ -173,8 +180,9 @@ es {
         UAK { "UAK", "karbowanez de Ucrainia" }
         UGS { "UGS", "Chell\u00EDn de Uganda" }
         USD { "$", "D\u00F3lar Americano" }
-        UYP { "UYP", "Nuevo Peso de Uruguay" }
-        UYU { "NU$", "UYU" }
+        UYF { "UYF", "peso fuerte uruguayo"  }
+        UYP { "UYP", "peso uruguayo (1975-1993)" }
+        UYU { "Ur$", "peso uruguayo" }
         VEB { "Bs", "Bolivar de Venezuela" }
         VND { "\u0111", "Dong de Vietn\u00E1m" }
         VUV { "VUV", "Vatu de Vanuatu" }
@@ -643,59 +651,59 @@ es {
         Arab { "\u00E1rabe" }
         Armn { "armenio" }
         Beng { "bengal\u00ED" }
-        // ? Bopo { "Bopomofo" }
-        Brai { "braille" } // Lowercase?
-        // ? Buhd { "Buhid" }
-        // ? Cans { "Unified Canadian Aboriginal Symbols" }
-        // ? Cher { "Cherokee" }
+        Bopo { "bopomofo" }
+        Brai { "braille" }
+        Buhd { "buhid" }
+        Cans { "s\u00EDmbolos abor\u00EDgenes canadienses unificados" }
+        Cher { "cherokee" }
         Cprt { "chipriota" } // grecochipriota?
         Cyrl { "cir\u00EDlico" }
-        // ? Deva { "Devanagari" }
-        // ? Dsrt { "Deseret" }
-        // ? Ethi { "et\u00EDopico" }
+        Deva { "devanagari" }
+        Dsrt { "deseret" }
+        Ethi { "et\u00EDopico" }
         Geor { "georgiano" }
         Goth { "g\u00F3tico" }
         Grek { "griego" }
         Gujr { "goujarat\u00ED" }
-        // ? Guru { "Gurmukhi" }
-        // ? Hang { "Hangul" }
-        // ? Hano { "Hanunoo" }
-        // ? Hani { "han" }
-        // ? Hans { "simplificado han" } // Not a formal part of ISO-15924 yet
-        // ? Hant { "tradicional han" } // Not a formal part of ISO-15924 yet
+        Guru { "gurmuji" }
+        Hang { "hangul" }
+        Hano { "hanunoo" }
+        Hani { "han" }
+        Hans { "han simplificado" } // Not a formal part of ISO-15924 yet
+        Hant { "han tradicional" } // Not a formal part of ISO-15924 yet
         Hebr { "hebreo" }
-        // ? Hira { "Hiragana" }
-        // ? Ital { "antigua bastardilla" } // Probably right.
-        // ? Kana { "Katakana" }
-        Khmr { "kmer" }
+        Hira { "hiragana" }
+        Ital { "antigua bastardilla" }
+        Kana { "katakana" }
+        Khmr { "jemer" }
         Knda { "canara" }
-        // ? Laoo { "Lao" }
+        Laoo { "lao" }
         Latn { "lat\u00EDn" }
-        // ? Limb { "Limbu" }
-        // ? Linb { "Linear B" }
-        // ? Mlym { "Malayalam" }
+        Limb { "limbu" }
+        // ? Linb { "linear B" }
+        Mlym { "malay\u00E1lam" }
         Mong { "mongoliano" }
         Mymr { "myanmar" }
-        // ? Ogam { "Ogham" }
-        // ? Orya { "Oriya" }
-        // ? Osma { "Osmanya" }
-        // ? Qaac { "Coptic" } // Coptic is not a formal part of ISO-15924 yet
-        // ? Qaai { "Inherited" } // PUA  Difficult to translate
-        // ? Runr { "Runic" }
-        // ? Shaw { "Shavian" }
-        // ? Sinh { "Sinhala" }
-        // ? Syrc { "Syriac" }
-        // ? Tagb { "Tagbanwa" }
-        // ? Tale { "Tai Le" }
+        Ogam { "ogham" }
+        Orya { "oriya" }
+        Osma { "osmaniya" }
+        Qaac { "copto" } // Coptic is not a formal part of ISO-15924 yet
+        // ? Qaai { "inherited" } // PUA  Difficult to translate
+        Runr { "r\u00FAnico" }
+        Shaw { "shavian" }
+        Sinh { "binhala" }
+        Syrc { "siriaco" }
+        Tagb { "tagban\u00FAa" }
+        Tale { "tai le" }
         Taml { "tamil" }
         Telu { "telugu" }
         Tglg { "tagalo" }
-        // ? Thaa { "Thaana" }
+        Thaa { "thaana" }
         Thai { "tailand\u00E9s" }
         Tibt { "tibetano" }
-        // ? Ugar { "Ugaritic" }
-        // ? Yiii { "Yi" }
-        // ? Zyyy { "com\u00FAn" } // This may need to become "undetermined script"
+        Ugar { "ugar\u00EDtico" }
+        Yiii { "yi" }
+        Zyyy { "com\u00FAn" } // This may need to become "undetermined script"
     }
 
     //------------------------------------------------------------
@@ -763,26 +771,27 @@ es {
         "1,000,000,000: =#,##0= (incomplete data);" 
     }
     Keys{
-         collation { "Colaci\u00f3n" }
-         calendar  { "Calendario" }
+         collation { "colaci\u00f3n" }
+         calendar  { "calendario" }
+         currency  { "moneda" }
     }
     // The following should probably be all lowercase.
     Types {
         collation{
-            direct      { "Directo Orden" }
-            phonebook   { "Gu\u00FDa Orden" }
-            // PINYIN      { "PINYIN" }
-            stroke      { "Pincelada Orden" }
-            traditional { "Tradicional Orden" }
+            direct      { "orden directo" }
+            phonebook   { "orden gu\u00EDa de telef\u00F3nos" }
+            pinyin      { "orden pinyin" }
+            stroke      { "orden pincelada" }
+            traditional { "orden tradicional" }
         }
         calendar{
-            //traditional { "Tradicional" }
-            japanese    { "Japon\u00E9s" }
-            buddhist    { "Budista" }
-            islamic     { "Isl\u00E1mico" }
-            hebrew      { "Hebreo" }
-            chinese     { "Chino" }
-            gregorian   { "Gregoriano" }
+            japanese    { "calendario japon\u00E9s" }
+            buddhist    { "calendario budista" }
+            islamic     { "calendario isl\u00E1mico" }
+            islamic-civil { "calendario civil isl\u00E1mico" }
+            hebrew      { "calendario hebreo" }
+            chinese     { "calendario chino" }
+            gregorian   { "calendario gregoriano" }
         }
     }
     Variants {
