@@ -44,7 +44,7 @@ byn{
     }
     Eras {
         "\u12ED\u1305", // short for \u12E8\u1231\u1235\u122D\u0020\u1303\u1265
-        "\u12A3U12F5",  // short for \u12A3<U1218<U122B<U0020<U12F0<U12A3<U1292<U12BD<U12CD
+        "\u12A3\u12F5", // short for \u12A3<U1218<U122B<U0020<U12F0<U12A3<U1292<U12BD<U12CD
     }
     Languages:alias { "am" }
     LocaleScript{ "Ethi", }
