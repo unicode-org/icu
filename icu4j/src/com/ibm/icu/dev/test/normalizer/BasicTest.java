@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $ 
- * $Date: 2000/07/13 21:33:57 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/07/18 18:21:27 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -58,6 +58,8 @@ public class BasicTest extends TestFmwk {
         { "\uFF76\uFF9E",       "\uFF76\uFF9E",         "\uFF76\uFF9E"      }, // hw_ka + hw_ten
         { "\u30AB\uFF9E",       "\u30AB\uFF9E",         "\u30AB\uFF9E"      }, // ka + hw_ten
         { "\uFF76\u3099",       "\uFF76\u3099",         "\uFF76\u3099"      }, // hw_ka + ten
+
+        { "A\u0300\u0316", "A\u0316\u0300", "\u00C0\u0316" },
     };
 
     String[][] compatTests = {
@@ -300,6 +302,39 @@ public class BasicTest extends TestFmwk {
 //      }
     }
 
+    public void TestComposeCompat() {
+        String[] DATA = {
+            // Expect col1 x COMPOSE_COMPAT => col2
+            // Expect col2 x DECOMP => col3
+            "A\u0316\u0300", "\u00C0\u0316", "A\u0316\u0300",
+            "A\u0300\u0316", "\u00C0\u0316", "A\u0316\u0300",
+            "\u00C0\u0316",  "\u00C0\u0316", "A\u0316\u0300",
+            "A\u0300",       "\u00C0",       "A\u0300",
+            "A\u0327\u0300", "\u00C0\u0327", "A\u0327\u0300",
+            "c\u0321\u0327", "c\u0321\u0327", "c\u0321\u0327",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            String a = DATA[i];
+            String b = Normalizer.normalize(a, Normalizer.COMPOSE_COMPAT, 0);
+            String exp = DATA[i+1];
+            if (b.equals(exp)) {
+                logln("Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
+            } else {
+                errln("FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
+                      ", expect " + hex(exp));
+            }
+            a = Normalizer.normalize(b, Normalizer.DECOMP, 0);
+            exp = DATA[i+2];
+            if (a.equals(exp)) {
+                logln("Ok: " + hex(b) + " x DECOMP => " + hex(a));
+            } else {
+                errln("FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
+                      ", expect " + hex(exp));
+            }
+        }
+    }
+
     //------------------------------------------------------------------------
     // Internal utilities
     //
@@ -321,7 +356,10 @@ public class BasicTest extends TestFmwk {
         }
 
         if (!forward.toString().equals(reverse.toString())) {
-            errln("Forward/reverse mismatch for input " + hex(input)
+            errln("FAIL: Forward/reverse mismatch for input " + hex(input)
+                  + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
+        } else if (isVerbose()) {
+            logln("Ok: Forward/reverse for input " + hex(input)
                   + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
         }
     }
@@ -345,8 +383,11 @@ public class BasicTest extends TestFmwk {
             }
 
             if (!forward.toString().equals(reverse.toString())) {
-                errln("Forward/reverse mismatch for input " + hex(tests[i][0])
+                errln("FAIL: Forward/reverse mismatch for input " + hex(tests[i][0])
                     + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
+            } else if (isVerbose()) {
+                logln("Ok: Forward/reverse for input " + hex(tests[i][0])
+                      + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
             }
         }
     }
@@ -363,7 +404,7 @@ public class BasicTest extends TestFmwk {
             String output = Normalizer.normalize(input, mode, options);
 
             if (!output.equals(expect)) {
-                errln("ERROR: case " + i
+                errln("FAIL: case " + i
                     + " expected '" + expect + "' (" + hex(expect) + ")"
                     + " but got '" + output + "' (" + hex(output) + ")" );
             }
@@ -380,30 +421,30 @@ public class BasicTest extends TestFmwk {
             logln("Normalizing '" + input + "' (" + hex(input) + ")" );
 
             iter.setText(input);
-            assertEqual(expect, iter, "ERROR: case " + i + " ");
+            assertEqual(expect, iter, "case " + i + " ");
         }
     }
 
-    private void assertEqual(String expected, Normalizer iter, String errPrefix)
+    private void assertEqual(String expected, Normalizer iter, String msg)
     {
         int index = 0;
         for (char ch = iter.first(); ch != iter.DONE; ch = iter.next())
         {
             if (index >= expected.length()) {
-                errln(errPrefix + "Unexpected character '" + ch + "' (" + hex(ch) + ")"
+                errln("FAIL: " + msg + "Unexpected character '" + ch + "' (" + hex(ch) + ")"
                         + " at index " + index);
                 break;
             }
             char want = expected.charAt(index);
             if (ch != want) {
-                errln(errPrefix + "got '" + ch + "' (" + hex(ch) + ")"
+                errln("FAIL: " + msg + "got '" + ch + "' (" + hex(ch) + ")"
                         + " but expected '" + want + "' (" + hex(want) + ")"
                         + " at index " + index);
             }
             index++;
         }
         if (index < expected.length()) {
-            errln(errPrefix + "Only got " + index + " chars, expected " + expected.length());
+            errln("FAIL: " + msg + "Only got " + index + " chars, expected " + expected.length());
         }
     }
 }
