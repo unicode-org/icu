@@ -110,13 +110,6 @@ static uint32_t        inputdirLength;
 
 static struct SResource *parseResource(char *tag, UErrorCode *status);
 
-static char *u2c(UChar *str)
-{
-    static char buffer[1024];
-    u_austrcpy(buffer, str);
-    return buffer;
-}
-
 void initParser(void)
 {
     uint32_t i;
@@ -324,8 +317,11 @@ parseResourceType(UErrorCode *status)
     } else if (u_strcmp(tokenValue->fChars, k_type_reserved) == 0) {
         result = RT_RESERVED;
     } else {
+        char tokenBuffer[1024];
+        u_austrncpy(tokenBuffer, tokenValue->fChars, sizeof(tokenBuffer));
+        tokenBuffer[sizeof(tokenBuffer)] = 0;
         *status = U_INVALID_FORMAT_ERROR;
-        error(line, "unknown resource type '%s'", u2c(tokenValue->fChars));
+        error(line, "unknown resource type '%s'", tokenBuffer);
     }
 
     return result;
