@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/04/23 01:59:16 $
-* $Revision: 1.13 $
+* $Date: 2002/04/23 22:45:41 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -566,12 +566,21 @@ public final class Utility {    // COMMON UTILITIES
     }
     
     public static void appendFile(String filename, boolean utf8, PrintWriter output) throws IOException {
+    	appendFile(filename, utf8, output, null);
+    }
+
+    public static void appendFile(String filename, boolean utf8, PrintWriter output, String[] replacementList) throws IOException {
         FileInputStream fis = new FileInputStream(filename);
         InputStreamReader isr = utf8 ? new InputStreamReader(fis, "UTF8") :  new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr, 32*1024);
         while (true) {
             String line = br.readLine();
             if (line == null) break;
+            if (replacementList != null) {
+            	for (int i = 0; i < replacementList.length; i += 2) {
+            		line = replace(line, replacementList[i], replacementList[i+1]);
+            	}
+            }
             output.println(line);
         }
     }
@@ -652,10 +661,14 @@ public final class Utility {    // COMMON UTILITIES
         return -1;
     }
     
-    public static void copyTextFile(String filename, boolean utf8, String newName) throws IOException {
-        PrintWriter out = Utility.openPrintWriter(newName);
-        appendFile(filename, utf8, out);
+    public static void copyTextFile(String filename, boolean utf8, String newName, String[] replacementList) throws IOException {
+        PrintWriter out = Utility.openPrintWriter(newName, false, false);
+        appendFile(filename, utf8, out, replacementList);
         out.close();
+    }
+
+    public static void copyTextFile(String filename, boolean utf8, String newName) throws IOException {
+        copyTextFile(filename, utf8, newName, null);
     }
 
     public static BufferedReader openUnicodeFile(String filename, String version, boolean show) throws IOException {
@@ -725,10 +738,12 @@ public final class Utility {    // COMMON UTILITIES
      * Replaces all occurances of piece with replacement, and returns new String
      */
     public static String replace(String source, String piece, String replacement) {
+    	int pos = 0;
         while (true) {
-            int pos = source.indexOf(piece);
+            pos = source.indexOf(piece, pos);
             if (pos < 0) return source;
-            source = source.substring(0,pos) + source.substring(pos + piece.length());
+            source = source.substring(0,pos) + replacement + source.substring(pos + piece.length());
+            if (replacement.length() > 0) ++pos;
         }
     }
     

@@ -15,7 +15,7 @@
 <h2 align="center">UCA Chart Help</h2>
 <p>This set of charts shows the Unicode Collation Algorithm values for Unicode 
 characters. The characters are arranged in the following groups:</p>
-<table>
+<table cellspacing="0" cellpadding="4">
   <tr>
     <th align="left"><i>Null</i></th>
     <th class="x">Completely ignoreable (primary, secondary and tertiary levels)<br>
@@ -54,11 +54,11 @@ points, non-characters and other edge cases are also added to the list.</p>
 <p>The characters* within each group are arranged in cells. The color of the 
 cell indicates the strength of the difference between that character and the <i>previous</i> 
 character in the chart, as follows.</p>
-<table>
+<table cellspacing="0" cellpadding="4">
   <tr>
-    <th colspan="2"><font size="3">No Expansion</font>
-    <th rowspan="5" width="20">
-    <th colspan="2"><font size="3">Expansion</font>
+    <th colspan="2"><font size="3"><u>No Expansion</u></font>
+    <th rowspan="5">&nbsp;
+    <th colspan="2"><font size="3"><u>Expansion</u></font>
   </tr>
   <tr>
     <td class="p">a<br>
@@ -93,10 +93,12 @@ character in the chart, as follows.</p>
       or no difference</th>
   </tr>
 </table>
-<p align="left">If tool-tips are enabled in your browser, then if you pause the 
-mouse over any cell, you will see a representation of the sort key. In this 
-representation, the separators between the weight levels are represented with 
-&quot;|&quot;.</p>
+<blockquote>
+  <p align="left"><b>Note: </b>If tool-tips are enabled in your browser, then if 
+  you pause the mouse over any cell, you will see the name of the character and 
+  a representation of the sort key. In this representation, the separators 
+  between the weight levels are represented with &quot;|&quot;.</p>
+</blockquote>
 <table>
   <tr>
     <th>*</th>
