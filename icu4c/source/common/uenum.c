@@ -17,6 +17,41 @@
 #include "uenumimp.h"
 #include "cmemory.h"
 
+/* Layout of the baseContext buffer. */
+typedef struct {
+    int32_t len;  /* number of bytes available starting at 'data' */
+    char    data; /* actual data starts here */
+} _UEnumBuffer;
+
+/* Extra bytes to allocate in the baseContext buffer. */
+static const int32_t PAD = 8;
+
+/* Return a pointer to the baseContext buffer, possibly allocating
+   or reallocating it if at least 'capacity' bytes are not available. */
+static void* _getBuffer(UEnumeration* en, int32_t capacity) {
+
+    if (en->baseContext != NULL) {
+        if (((_UEnumBuffer*) en->baseContext)->len < capacity) {
+            capacity += PAD;
+            en->baseContext = uprv_realloc(en->baseContext,
+                                           sizeof(int32_t) + capacity);
+            if (en->baseContext == NULL) {
+                return NULL;
+            }
+            ((_UEnumBuffer*) en->baseContext)->len = capacity;
+        }
+    } else {
+        capacity += PAD;
+        en->baseContext = uprv_malloc(sizeof(int32_t) + capacity);
+        if (en->baseContext == NULL) {
+            return NULL;
+        }
+        ((_UEnumBuffer*) en->baseContext)->len = capacity;
+    }
+    
+    return (void*) & ((_UEnumBuffer*) en->baseContext)->data;
+}
+
 U_CAPI void U_EXPORT2
 uenum_close(UEnumeration* en)
 {
@@ -53,19 +88,45 @@ uenum_unextDefault(UEnumeration* en,
             UErrorCode* status)
 {
     if (en->next != NULL) {
-        const char *tempCharVal = en->next(en, resultLength, status);
         UChar *tempUCharVal;
-
-        if (en->baseContext) {
-            uprv_free(en->baseContext);
-        }
-        tempUCharVal = uprv_malloc((*resultLength+1) * sizeof(UChar));
+        const char *tempCharVal = en->next(en, resultLength, status);
+		if (tempCharVal == NULL) {
+		    return NULL;
+		}
+        tempUCharVal = (UChar*)
+            _getBuffer(en, (*resultLength+1) * sizeof(UChar));
         if (!tempUCharVal) {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         }
         u_charsToUChars(tempCharVal, tempUCharVal, *resultLength + 1);
-        en->baseContext = tempUCharVal;
         return tempUCharVal;
+    } else {
+        *status = U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
+}
+
+/* Don't call this directly. Only uenum_next should be calling this. */
+U_CAPI const char* U_EXPORT2
+uenum_nextDefault(UEnumeration* en,
+            int32_t* resultLength,
+            UErrorCode* status)
+{
+    if (en->uNext != NULL) {
+        char *tempCharVal;
+        const UChar *tempUCharVal = en->uNext(en, resultLength, status);
+		if (tempUCharVal == NULL) {
+		    return NULL;
+		}
+        tempCharVal = (char*)
+            _getBuffer(en, (*resultLength+1) * sizeof(char));
+        if (!tempCharVal) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        u_UCharsToChars(tempUCharVal, tempCharVal, *resultLength + 1);
+        return tempCharVal;
     } else {
         *status = U_UNSUPPORTED_ERROR;
         return NULL;
