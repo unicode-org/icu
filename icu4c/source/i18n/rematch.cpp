@@ -24,8 +24,8 @@
 #include "uvectr32.h"
 #include "regeximp.h"
 
-#include "stdio.h"
-#include "malloc.h"
+//#include "stdio.h"
+//#include "malloc.h"
 
 U_NAMESPACE_BEGIN
 
