@@ -205,7 +205,7 @@ endif
 $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
-%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat
+%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
 
 
