@@ -39,7 +39,7 @@ enum {
 };
 
 enum {
-    _IDNA_MAPPING_DATA_SIZE = 1700,
+    _IDNA_MAPPING_DATA_SIZE = 2000,
     _IDNA_MAP_TO_NOTHING = 0x7FF
 };
 
