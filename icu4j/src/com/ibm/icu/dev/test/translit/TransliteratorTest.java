@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/06/11 20:00:12 $
- * $Revision: 1.126 $
+ * $Date: 2003/10/07 23:18:09 $
+ * $Revision: 1.127 $
  *
  *****************************************************************************************
  */
@@ -2571,7 +2571,7 @@ public class TransliteratorTest extends TestFmwk {
                     String id = source + "-" + target + "/" + variant;
                     logln("id: " + id);
 
-                    String filter = getFilter();
+                    String filter = getTranslitTestFilter();
                     if (filter != null && id.indexOf(filter) < 0) continue;
 
                     Transliterator t = Transliterator.getInstance(id);
