@@ -26,15 +26,6 @@
 #ifndef UCBUF_H
 #define UCBUF_H 1
 
-struct UCHARBUF {
-    UChar* buffer;
-    UChar* currentPos;
-    UChar* bufLimit;
-    int32_t remaining;
-    FileStream* in;
-    UConverter* conv;
-};
-
 typedef struct UCHARBUF UCHARBUF;
 #define U_EOF 0xFFFFFFFF
 #define U_ERR 0xFFFFFFFE
@@ -49,7 +40,7 @@ U_CAPI void U_EXPORT2
 ucbuf_rewind(UCHARBUF* buf);
 
 U_CAPI UCHARBUF* U_EXPORT2
-ucbuf_open(FileStream* in,const char* codepage, UErrorCode* err);
+ucbuf_open(FileStream* in,const char* codepage,UBool showWarning, UErrorCode* err);
 
 U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf);

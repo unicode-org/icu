@@ -122,6 +122,7 @@ struct SResource {
 };
 
 void res_close(struct SResource *res, UErrorCode *status);
+void setIncludeCopyright(UBool val);
 
 U_CDECL_END
 #endif /* #ifndef RESLIST_H */

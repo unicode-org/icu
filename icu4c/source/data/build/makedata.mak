@@ -260,7 +260,7 @@ $(TESTDATAOUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
 
 {$(ICUDATA)}.txt.res:
 	@echo Making Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(ICUDATA) -d$(@D) $(?F)
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s$(ICUDATA) -d$(@D) $(?F)
 
 # DLL version information
 icudata.res: "$(ICUDATA)\icudata.rc"
@@ -319,5 +319,5 @@ tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe ucadata.dat uprops.dat unorm.dat
+$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe -q ucadata.dat uprops.dat unorm.dat
 
