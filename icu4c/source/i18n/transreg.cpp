@@ -21,6 +21,17 @@
 #include "unicode/uscript.h"
 #include "charstr.h"
 
+// Enable the following symbol to add debugging code that tracks the
+// allocation, deletion, and use of Entry objects.  BoundsChecker has
+// reported dangling pointer errors with these objects, but I have
+// been unable to confirm them.  I suspect BoundsChecker is getting
+// confused with pointers going into and coming out of a UHashtable,
+// despite the hinting code that is designed to help it.
+// #define DEBUG_MEM
+#ifdef DEBUG_MEM
+#include <stdio.h>
+#endif
+
 // UChar constants
 static const UChar LOCALE_SEP  = 95; // '_'
 static const UChar ID_SEP      = 0x002D; /*-*/
@@ -226,6 +237,71 @@ ResourceBundle& Spec::getBundle() const {
 }
 
 //----------------------------------------------------------------------
+
+#ifdef DEBUG_MEM
+
+// Vector of Entry pointers currently in use
+static UVector* DEBUG_entries = NULL;
+
+static void DEBUG_setup() {
+    if (DEBUG_entries == NULL) {
+        UErrorCode ec = U_ZERO_ERROR;
+        DEBUG_entries = new UVector(ec);
+    }
+}
+
+// Caller must call DEBUG_setup first.  Return index of given Entry,
+// if it is in use (not deleted yet), or -1 if not found.
+static int DEBUG_findEntry(Entry* e) {
+    for (int i=0; i<DEBUG_entries->size(); ++i) {
+        if (e == (Entry*) DEBUG_entries->elementAt(i)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Track object creation
+static void DEBUG_newEntry(Entry* e) {
+    DEBUG_setup();
+    if (DEBUG_findEntry(e) >= 0) {
+        // This should really never happen unless the heap is broken
+        printf("ERROR DEBUG_newEntry duplicate new pointer %08X\n", e);
+        return;
+    }
+    UErrorCode ec = U_ZERO_ERROR;
+    DEBUG_entries->addElement(e, ec);
+}
+
+// Track object deletion
+static void DEBUG_delEntry(Entry* e) {
+    DEBUG_setup();
+    int i = DEBUG_findEntry(e);
+    if (i < 0) {
+        printf("ERROR DEBUG_delEntry possible double deletion %08X\n", e);
+        return;
+    }
+    DEBUG_entries->removeElementAt(i);
+}
+
+// Track object usage
+static void DEBUG_useEntry(Entry* e) {
+    if (e == NULL) return;
+    DEBUG_setup();
+    int i = DEBUG_findEntry(e);
+    if (i < 0) {
+        printf("ERROR DEBUG_useEntry possible dangling pointer %08X\n", e);
+    }
+}
+
+#else
+// If we're not debugging then make these macros into NOPs
+#define DEBUG_newEntry(x)
+#define DEBUG_delEntry(x)
+#define DEBUG_useEntry(x)
+#endif
+
+//----------------------------------------------------------------------
 // class Entry
 //----------------------------------------------------------------------
 
@@ -276,9 +352,11 @@ Entry::Entry() {
     u.prototype = 0;
     compoundFilter = NULL;
     entryType = NONE;
+    DEBUG_newEntry(this);
 }
 
 Entry::~Entry() {
+    DEBUG_delEntry(this);
     if (entryType == PROTOTYPE) {
         delete u.prototype;
     } else if (entryType == RBT_DATA || entryType == COMPOUND_RBT) {
@@ -660,7 +738,9 @@ Entry* TransliteratorRegistry::findInDynamicStore(const Spec& src,
                                                   const UnicodeString& variant) {
     UnicodeString ID;
     STVtoID(src, trg, variant, ID);
-    return (Entry*) registry.get(ID);
+    Entry *e = (Entry*) registry.get(ID);
+    DEBUG_useEntry(e);
+    return e;
 }
 
 /**
