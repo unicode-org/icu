@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/07/31 23:49:08 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/08/02 23:13:11 $ 
+ * $Revision: 1.8 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -24,89 +24,85 @@ import java.util.HashMap;
  */
 public final class VersionInfo
 {
-	// public data members -------------------------------------------------
-	
-	/**
-	 * Unicode 1.0 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_1_0;
-	/**
-	 * Unicode 1.0.1 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_1_0_1;
-	/**
-	 * Unicode 1.1.0 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_1_1_0;
-	/**
-	 * Unicode 1.1.5 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_1_1_5;
-	/**
-	 * Unicode 2.0 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_2_0;	
-	/**
-	 * Unicode 2.1.2 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_2_1_2;
-	/**
-	 * Unicode 2.1.5 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_2_1_5;
-	/**
-	 * Unicode 2.1.8 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_2_1_8;
-	/**
-	 * Unicode 2.1.9 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_2_1_9;
-	/**
-	 * Unicode 3.0 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_3_0;
-	/**
-	 * Unicode 3.0.1 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_3_0_1;
-	/**
-	 * Unicode 3.1.0 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_3_1_0;
-	/**
-	 * Unicode 3.1.1 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_3_1_1;
-	/**
-	 * Unicode 3.2 version
-	 * @draft 2.1
-	 */
-	public static final VersionInfo UNICODE_3_2;
-	/**
+    // public data members -------------------------------------------------
+        
+    /**
+     * Unicode 1.0 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_1_0;
+    /**
+     * Unicode 1.0.1 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_1_0_1;
+    /**
+     * Unicode 1.1.0 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_1_1_0;
+    /**
+     * Unicode 1.1.5 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_1_1_5;
+    /**
+     * Unicode 2.0 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_2_0;        
+    /**
+     * Unicode 2.1.2 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_2_1_2;
+    /**
+     * Unicode 2.1.5 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_2_1_5;
+    /**
+     * Unicode 2.1.8 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_2_1_8;
+    /**
+     * Unicode 2.1.9 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_2_1_9;
+    /**
+     * Unicode 3.0 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_3_0;
+    /**
+     * Unicode 3.0.1 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_3_0_1;
+    /**
+     * Unicode 3.1.0 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_3_1_0;
+    /**
+     * Unicode 3.1.1 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_3_1_1;
+    /**
+     * Unicode 3.2 version
+     * @draft 2.1
+     */
+    public static final VersionInfo UNICODE_3_2;
+    /**
      * ICU4J current release version
      */
-    public static final VersionInfo ICU4J_VERSION;
-    /**
-     * Standard Unicode version used in ICU4J
-     */
-    public static final VersionInfo UNICODE_VERSION;
+    public static final VersionInfo ICU_VERSION;
     
-	// public methods ------------------------------------------------------
-	
+    // public methods ------------------------------------------------------
+        
     /**
      * Returns an instance of VersionInfo with the argument version.
      * @param version version String in the format of "major.minor.milli.micro"
@@ -122,37 +118,37 @@ public final class VersionInfo
      */
     public static VersionInfo getInstance(String version)
     {
-    	int length  = version.length();
-    	int array[] = {0, 0, 0, 0};
-    	int count   = 0;
-    	int index   = 0;
-    	
-    	while (count < 4 && index < length) {
-    		char c = version.charAt(index);
-    		if (c == '.') {
-    			count ++;
-    		}
-    		else {
-    			c -= '0';
-    			if (c < 0 || c > 9) {
-    				throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
-    			}
-    			array[count] *= 10;
-    			array[count] += c;
-    		}
-    		index ++;
-    	}
-    	if (index != length) {
-    		throw new IllegalArgumentException(
-    		    "Invalid version number: String '" + version + "' exceeds version format");
-    	}
-    	for (int i = 0; i < 4; i ++) {
-    		if (array[i] < 0 || array[i] > 255) {
-  	    		throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
-    	    }
-    	}
-    	
-    	return getInstance(array[0], array[1], array[2], array[3]);
+        int length  = version.length();
+        int array[] = {0, 0, 0, 0};
+        int count   = 0;
+        int index   = 0;
+        
+        while (count < 4 && index < length) {
+            char c = version.charAt(index);
+            if (c == '.') {
+                count ++;
+            }
+            else {
+                c -= '0';
+                if (c < 0 || c > 9) {
+                    throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
+                }
+                array[count] *= 10;
+                array[count] += c;
+            }
+            index ++;
+        }
+        if (index != length) {
+            throw new IllegalArgumentException(
+                                               "Invalid version number: String '" + version + "' exceeds version format");
+        }
+        for (int i = 0; i < 4; i ++) {
+            if (array[i] < 0 || array[i] > 255) {
+                throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
+            }
+        }
+        
+        return getInstance(array[0], array[1], array[2], array[3]);
     }
  
     /** 
@@ -168,20 +164,20 @@ public final class VersionInfo
     public static VersionInfo getInstance(int major, int minor, int milli, 
                                           int micro)
     {
-   	 	// checks if it is in the hashmap
-   	 	// else
-   	 	if (major < 0 || major > 255 || minor < 0 || minor > 255 || 
-    	    milli < 0 || milli > 255 || micro < 0 || micro > 255) {
-    	    throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
-    	}
-    	int     version = getInt(major, minor, milli, micro);
-    	Integer key     = new Integer(version);
-    	Object  result  = MAP_.get(key);
-    	if (result == null) {
-	   	 	result = new VersionInfo(version);
-	   	 	MAP_.put(key, result);
-    	}
-      	return (VersionInfo)result;
+        // checks if it is in the hashmap
+        // else
+        if (major < 0 || major > 255 || minor < 0 || minor > 255 || 
+            milli < 0 || milli > 255 || micro < 0 || micro > 255) {
+            throw new IllegalArgumentException(INVALID_VERSION_NUMBER_);
+        }
+        int     version = getInt(major, minor, milli, micro);
+        Integer key     = new Integer(version);
+        Object  result  = MAP_.get(key);
+        if (result == null) {
+            result = new VersionInfo(version);
+            MAP_.put(key, result);
+        }
+        return (VersionInfo)result;
     }
     
     /** 
@@ -196,7 +192,7 @@ public final class VersionInfo
      */
     public static VersionInfo getInstance(int major, int minor, int milli)
     {
-   	 	return getInstance(major, minor, milli, 0);
+        return getInstance(major, minor, milli, 0);
     }
     
     /** 
@@ -210,7 +206,7 @@ public final class VersionInfo
      */
     public static VersionInfo getInstance(int major, int minor)
     {
-   	 	return getInstance(major, minor, 0, 0);
+        return getInstance(major, minor, 0, 0);
     }
     
     /** 
@@ -223,7 +219,7 @@ public final class VersionInfo
      */
     public static VersionInfo getInstance(int major)
     {
-   	 	return getInstance(major, 0, 0, 0);
+        return getInstance(major, 0, 0, 0);
     }
  
     /** 
@@ -234,8 +230,8 @@ public final class VersionInfo
      */
     public String toString()
     {
-   	    StringBuffer result = new StringBuffer(7);
-    	result.append(getMajor());
+        StringBuffer result = new StringBuffer(7);
+        result.append(getMajor());
         result.append('.');
         result.append(getMinor());
         result.append('.');
@@ -252,7 +248,7 @@ public final class VersionInfo
      */
     public int getMajor()
     {
-    	return (m_version_ >> 24) & LAST_BYTE_MASK_ ;
+        return (m_version_ >> 24) & LAST_BYTE_MASK_ ;
     }
  
     /** 
@@ -262,7 +258,7 @@ public final class VersionInfo
      */
     public int getMinor()
     {
-    	return (m_version_ >> 16) & LAST_BYTE_MASK_ ;
+        return (m_version_ >> 16) & LAST_BYTE_MASK_ ;
     }
  
     /** 
@@ -272,7 +268,7 @@ public final class VersionInfo
      */
     public int getMilli()
     {
-    	return (m_version_ >> 8) & LAST_BYTE_MASK_ ;
+        return (m_version_ >> 8) & LAST_BYTE_MASK_ ;
     }
  
     /** 
@@ -282,7 +278,7 @@ public final class VersionInfo
      */
     public int getMicro()
     {
-    	return m_version_ & LAST_BYTE_MASK_ ;
+        return m_version_ & LAST_BYTE_MASK_ ;
     }
  
     /**
@@ -293,9 +289,9 @@ public final class VersionInfo
      * @draft 2.1
      */
     public boolean equals(Object other)
-	{
-		return other == this;
-	}
+    {
+        return other == this;
+    }
  
     /**
      * Compares other with this VersionInfo. 
@@ -310,7 +306,7 @@ public final class VersionInfo
      */
     public int compareTo(VersionInfo other)
     {
-    	return m_version_ - other.m_version_;
+        return m_version_ - other.m_version_;
     }
    
     // private data members ----------------------------------------------
@@ -342,22 +338,21 @@ public final class VersionInfo
      * Initialize versions only after MAP_ has been created
      */
     static {
-    	UNICODE_1_0   = getInstance(1, 0, 0, 0);
-		UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
-		UNICODE_1_1_0 = getInstance(1, 1, 0, 0);
-		UNICODE_1_1_5 = getInstance(1, 1, 5, 0);
-		UNICODE_2_0   = getInstance(2, 0, 0, 0);	
-		UNICODE_2_1_2 = getInstance(2, 1, 2, 0);
-		UNICODE_2_1_5 = getInstance(2, 1, 5, 0);
-		UNICODE_2_1_8 = getInstance(2, 1, 8, 0);
-		UNICODE_2_1_9 = getInstance(2, 1, 9, 0);
-		UNICODE_3_0   = getInstance(3, 0, 0, 0);
-		UNICODE_3_0_1 = getInstance(3, 0, 1, 0);
-		UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
-		UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
-		UNICODE_3_2   = getInstance(3, 2, 0, 0);
-        ICU4J_VERSION = getInstance(2, 2, 0, 0);
-        UNICODE_VERSION = UNICODE_3_2;
+        UNICODE_1_0   = getInstance(1, 0, 0, 0);
+        UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
+        UNICODE_1_1_0 = getInstance(1, 1, 0, 0);
+        UNICODE_1_1_5 = getInstance(1, 1, 5, 0);
+        UNICODE_2_0   = getInstance(2, 0, 0, 0);        
+        UNICODE_2_1_2 = getInstance(2, 1, 2, 0);
+        UNICODE_2_1_5 = getInstance(2, 1, 5, 0);
+        UNICODE_2_1_8 = getInstance(2, 1, 8, 0);
+        UNICODE_2_1_9 = getInstance(2, 1, 9, 0);
+        UNICODE_3_0   = getInstance(3, 0, 0, 0);
+        UNICODE_3_0_1 = getInstance(3, 0, 1, 0);
+        UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
+        UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
+        UNICODE_3_2   = getInstance(3, 2, 0, 0);
+        ICU_VERSION = getInstance(2, 2, 0, 0);
     }
     
     // private constructor -----------------------------------------------
@@ -368,7 +363,7 @@ public final class VersionInfo
      */
     private VersionInfo(int compactversion) 
     {
-    	m_version_ = compactversion;   	
+        m_version_ = compactversion;    
     }
     
     /**
@@ -380,6 +375,6 @@ public final class VersionInfo
      */
     private static int getInt(int major, int minor, int milli, int micro) 
     {
-    	return (major << 24) | (minor << 16) | (milli << 8) | micro;
+        return (major << 24) | (minor << 16) | (milli << 8) | micro;
     }
 }
