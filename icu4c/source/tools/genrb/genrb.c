@@ -207,7 +207,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
              * another file, like UCARules.txt or thaidict.brk.
              */
             int32_t filenameSize = filenameBegin - filename + 1;
-            inputDirBuf = uprv_strncpy(uprv_malloc(filenameSize), filename, filenameSize);
+            inputDirBuf = uprv_strncpy((char *)uprv_malloc(filenameSize), filename, filenameSize);
             inputDirBuf[filenameSize - 1] = 0;
             inputDir = inputDirBuf;
         }
