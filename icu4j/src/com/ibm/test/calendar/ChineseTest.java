@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/ChineseTest.java,v $
- * $Date: 2000/11/28 22:15:02 $
- * $Revision: 1.6 $
+ * $Date: 2000/11/29 21:58:01 $
+ * $Revision: 1.7 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
@@ -358,45 +358,6 @@ public class ChineseTest extends CalendarTest {
     }
 
     /**
-     * Test the behavior of ChineseCalendar.roll().  The only real
-     * nastiness with roll is the MONTH field around leap months.
-     *//*
-    public void TestRoll() {
-        int[][] tests = new int[][] {
-            //       input                roll by          output
-            //  year  month     day     field amount    year  month     day
-    
-            {   5759, HESHVAN,   2,     MONTH,   1,     5759, KISLEV,    2 },   // non-leap years
-            {   5759, SHEVAT,    2,     MONTH,   1,     5759, ADAR,      2 },
-            {   5759, SHEVAT,    2,     MONTH,   2,     5759, NISAN,     2 },
-            {   5759, SHEVAT,    2,     MONTH,  12,     5759, SHEVAT,    2 },
-            {   5759, AV,        1,     MONTH,  12,     5759, AV,        1 }, // Alan
-
-            {   5757, HESHVAN,   2,     MONTH,   1,     5757, KISLEV,    2 },   // leap years
-            {   5757, SHEVAT,    2,     MONTH,   1,     5757, ADAR_1,    2 },
-            {   5757, SHEVAT,    2,     MONTH,   2,     5757, ADAR,      2 },
-            {   5757, SHEVAT,    2,     MONTH,   3,     5757, NISAN,     2 },
-            {   5757, SHEVAT,    2,     MONTH,  12,     5757, TEVET,     2 },
-            {   5757, SHEVAT,    2,     MONTH,  13,     5757, SHEVAT,    2 },
-            {   5757, AV,        1,     MONTH,  12,     5757, TAMUZ,     1 }, // Alan
-            
-            {   5757, KISLEV,    1,     DATE,   30,     5757, KISLEV,    2 },   // 29-day month
-            {   5758, KISLEV,    1,     DATE,   31,     5758, KISLEV,    2 },   // 30-day month
-            
-            // Try some other fields too
-            {   5757, TISHRI,    1,     YEAR,    1,     5758, TISHRI,    1 },
-
-            // Try some rolls that require other fields to be adjusted
-            {   5757, TISHRI,   30,     MONTH,   1,     5757, HESHVAN,  29 },
-            {   5758, KISLEV,   30,     YEAR,   -1,     5757, KISLEV,   29 },
-        };
-       
-        ChineseCalendar cal = new ChineseCalendar();
-        doRollAdd(ROLL, cal, tests);
-    }
-       */
-    
-    /**
      * Test the behavior of fields that are out of range.
      */
     public void TestOutOfRange() {
@@ -460,6 +421,37 @@ public class ChineseTest extends CalendarTest {
         doRollAdd(ADD, cal, tests);
     }
 
+    /**
+     * Test the behavior of ChineseCalendar.roll().  The only real
+     * nastiness with roll is the MONTH field around leap months.
+     */
+    public void TestRoll() {
+        int[][] tests = new int[][] {
+            // MONTHS ARE 1-BASED HERE
+            // input               add           output
+            // year  mon    day    field amount  year  mon    day
+            {  4642,   3,0,  15,   MONTH,   3,   4642,   6,0,  15 }, // normal
+            {  4642,   3,0,  15,   MONTH,  11,   4642,   2,0,  15 }, // normal
+            {  4639,  12,0,  15,   MONTH,   1,   4639,   1,0,  15 }, // across year
+            {  4640,   1,0,  15,   MONTH,  -1,   4640,  12,0,  15 }, // across year
+            {  4638,   3,0,  15,   MONTH,   3,   4638,   5,0,  15 }, // 4=leap
+            {  4638,   3,0,  15,   MONTH,  16,   4638,   5,0,  15 }, // 4=leap
+            {  4638,   3,0,  15,   MONTH,   2,   4638,   4,1,  15 }, // 4=leap
+            {  4638,   3,0,  15,   MONTH,  28,   4638,   4,1,  15 }, // 4=leap
+            {  4638,   4,0,  15,   MONTH,   1,   4638,   4,1,  15 }, // 4=leap
+            {  4638,   4,0,  15,   MONTH, -12,   4638,   4,1,  15 }, // 4=leap
+            {  4638,   4,1,  15,   MONTH,   1,   4638,   5,0,  15 }, // 4=leap
+            {  4638,   4,1,  15,   MONTH, -25,   4638,   5,0,  15 }, // 4=leap
+            {  4638,   4,0,  30,   MONTH,   1,   4638,   4,1,  29 }, // dom should pin
+            {  4638,   4,0,  30,   MONTH,  14,   4638,   4,1,  29 }, // dom should pin
+            {  4638,   4,0,  30,   MONTH,  15,   4638,   5,0,  30 }, // no dom pin
+            {  4638,   4,0,  30,   MONTH, -10,   4638,   6,0,  29 }, // dom should pin
+        };
+       
+        ChineseCalendar cal = new ChineseCalendar();
+        doRollAdd(ROLL, cal, tests);
+    }
+    
     void doRollAdd(boolean roll, ChineseCalendar cal, int[][] tests) {
         String name = roll ? "rolling" : "adding";
         
