@@ -37,18 +37,8 @@ TARGET = libicudata.a
 RANLIB = @RANLIB@
 endif
 
-#
-#  note:  the variable $MIDDLE_SO_TARGET is special, in that it also appears
-#         in the definition of LD_SONAME in the config/mh<platform> files, which
-#         ends up defining the actual name of the library to the linker.
-#
-#         Also, data probably wants to have three alias names, in the same
-#         way that the code libraries do.  Doing that would require changing
-#         the stub data and the real data at the same time.
-#
 ifneq ($(ENABLE_SHARED),)
 SO_TARGET = libicudata.$(SO)
-MIDDLE_SO_TARGET = libicudata$(BATCH_STUB_SUFFIX).$(SO).$(SO_TARGET_VERSION_MAJOR)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET) $(BATCH_STUB_TARGET)
 endif
 
