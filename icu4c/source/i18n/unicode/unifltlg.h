@@ -55,6 +55,18 @@ public:
 
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements a short
+     * circuit AND of the result of the two given filters.  That is,
+     * if <tt>f.contains()</tt> is <tt>false</tt>, then <tt>g.contains()</tt>
+     * is not called, and <tt>contains()</tt> returns <tt>false</tt>.
+     * @param f may be NULL; this argument is adopted
+     * @param g may be NULL; this argument is adopted
+     * @result will be NULL if and only if f == g == NULL
+     */
+    static UnicodeFilter* createAdoptingAnd(UnicodeFilter* adoptedF,
+                                            UnicodeFilter* adoptedG);
+
+    /**
+     * Returns a <tt>UnicodeFilter</tt> that implements a short
      * circuit OR of the result of the two given filters.  That is, if
      * <tt>f.contains()</tt> is <tt>true</tt>, then <tt>g.contains()</tt> is
      * not called, and <tt>contains()</tt> returns <tt>true</tt>.

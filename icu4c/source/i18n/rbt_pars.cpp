@@ -955,36 +955,27 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
                 ++pos;
                 c = rules.charAt(pos);
             }
+            int32_t lengthBefore = idBlock.length();
+            if (mode == 1) {
+                mode = 2;
+                idSplitPoint = lengthBefore;
+            }
             int32_t p = pos;
             UBool sawDelim;
-            UnicodeString regenID;
             UnicodeSet* cpdFilter = NULL;
-            Transliterator::parseID(rules, regenID, p, sawDelim, cpdFilter, direction,parseError, FALSE,status);
+            Transliterator::parseID(rules, idBlock, p, sawDelim, cpdFilter, direction,parseError, FALSE,status);
             if (p == pos || !sawDelim) {
                 // Invalid ::id
                 delete cpdFilter;
                 syntaxError(U_ILLEGAL_ARGUMENT_ERROR, rules, pos);
             } else {
-                if (mode == 1) {
-                    mode = 2;
-                    idSplitPoint = idBlock.length();
-                }
                 if (cpdFilter != NULL) {
                     if (compoundFilter != NULL) {
                         syntaxError(U_MULTIPLE_COMPOUND_FILTERS, rules, pos);
                     }
                     compoundFilter = cpdFilter;
-                    if (idBlock.length() == 0) {
-                        compoundFilterOffset = 0;
-                    }
-                }
-                rules.extractBetween(pos, p, str);
-                idBlock.append(str);
-                if (!sawDelim) {
-                    idBlock.append((UChar)0x003B /*;*/);
-                }
-                if (cpdFilter != NULL && compoundFilterOffset < 0) {
-                    compoundFilterOffset = idBlock.length();
+                    compoundFilterOffset = (direction == UTRANS_FORWARD) ?
+                        lengthBefore : idBlock.length();
                 }
                 pos = p;
             }

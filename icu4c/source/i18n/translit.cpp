@@ -33,6 +33,7 @@
 #include "unicode/uni2name.h"
 #include "unicode/unicode.h"
 #include "unicode/unifilt.h"
+#include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
 #include "unicode/unitohex.h"
 #include "unicode/uscript.h"
@@ -131,7 +132,6 @@ Transliterator::Transliterator(const Transliterator& other) :
 Transliterator& Transliterator::operator=(const Transliterator& other) {
     ID = other.ID;
     maximumContextLength = other.maximumContextLength;
-    // MUST go through adoptFilter in case latter is overridden
     adoptFilter((other.filter == 0) ? 0 : (UnicodeFilter*) other.filter->clone());
     return *this;
 }
@@ -326,7 +326,7 @@ void Transliterator::_transliterate(Replaceable& text,
         UTF_IS_LEAD(text.charAt(index.limit - 1))) {
         // Oops, there is a dangling lead surrogate in the buffer.
         // This will break most transliterators, since they will
-        // assume it is part of a pari.  Don't transliterate until
+        // assume it is part of a pair.  Don't transliterate until
         // more text comes in.
         return;
     }
@@ -600,8 +600,7 @@ const UnicodeFilter* Transliterator::getFilter(void) const {
  */
 UnicodeFilter* Transliterator::orphanFilter(void) {
     UnicodeFilter *result = filter;
-    // MUST go through adoptFilter in case latter is overridden
-    adoptFilter(0);
+    filter = NULL;
     return result;
 }
 
@@ -752,8 +751,11 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
         }
     } else {
         if (parser.data == NULL) {
-            // idBlock, no data -- this is an alias
-            t = createInstance(parser.idBlock, dir, parseError, status);
+            // idBlock, no data -- this is an alias.  The ID has
+            // been munged from reverse into forward mode, if
+            // necessary, so instantiate the ID in the forward
+            // direction.
+            t = createInstance(parser.idBlock, UTRANS_FORWARD, parseError, status);
             if (t != NULL) {
                 t->setID(ID);
             }
@@ -1000,15 +1002,6 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
         skipSpaces(ID, ++limit);
    }
 
-    if (!create) {
-        // TODO Improve performance by scanning the UnicodeSet pattern
-        // without actually constructing it, if create is FALSE.  That
-        // is, create a method like this one for UnicodeSet.
-        delete filter;
-        pos = limit;
-        return 0;
-    }
-
     // 'id' is the ID with the filter pattern removed and with
     // whitespace deleted.  In a Foo(Bar) ID, id is Foo for FORWARD
     // and Bar for REVERSE.
@@ -1092,7 +1085,7 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
             delete filter;
         }
 
-        else {
+        else if (create) {
             // Create the actual transliterator from the registry
             if (registry == 0) {
                 initializeRegistry();
@@ -1120,8 +1113,15 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
                 return 0;
             }
 
-            // Set the filter, if any
-            t->adoptFilter(filter);
+            // Set the filter, if any.  The transliterator may
+            // already have a filter on it so we need to AND any
+            // id-based filter together with it.  E.g.,
+            // getInstance("[abc] Latin-Foo"), where Latin-Foo is
+            // an RBT of "::[:Latin:]; a>A;".
+            // getInstance("Latin-Foo") is going to return an RBT
+            // with an a [:Latin:] filter, and we need to AND this
+            // with [abc].
+            t->adoptFilter(UnicodeFilterLogic::createAdoptingAnd(filter, t->orphanFilter()));
         }
     }
     
@@ -1130,6 +1130,16 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     // B-A or Foo(Bar) to Bar(Foo).
     if (dir == UTRANS_FORWARD) {
         ID.extractBetween(pos, preDelimLimit, id);
+    } else if (isCompoundFilter) {
+        // Change [:Foo:] to ([:Foo:]) and vice versa
+        id.truncate(0);
+        if (revStart < 0) {
+            ID.extractBetween(setStart, setLimit, id);
+            id.insert(0, OPEN_PAREN);
+            id.append(CLOSE_PAREN);
+        } else {
+            ID.extractBetween(revStart+1, revLimit, id);
+        }
     } else if (revStart < 0) {
         id.insert(sep, ID, setStart, setLimit-setStart);
     } else {
@@ -1393,6 +1403,8 @@ UnicodeString& Transliterator::getAvailableVariant(int32_t index,
     return registry->getAvailableVariant(index, source, target, result);
 }
 
+#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+
 /**
  * Method for subclasses to use to obtain a character in the given
  * string, with filtering.
@@ -1405,6 +1417,8 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
     return (localFilter == 0) ? text.charAt(i) :
         (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
+
+#endif
 
 void Transliterator::initializeRegistry(void) {
     // Lock first, check registry pointer second
