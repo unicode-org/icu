@@ -21,12 +21,12 @@
 *                     fix the very broken iteration API
 */
 
-#include "unicode/normlzr.h"
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
+#include "unicode/normlzr.h"
 #include "unormimp.h"
 
 //-------------------------------------------------------------------------
@@ -36,7 +36,8 @@
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode) :
     fMode(mode), fOptions(0),
-    text(new StringCharacterIterator(str)), nextIndex(-1),
+    text(new StringCharacterIterator(str)),
+    currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
     checkData();
@@ -46,7 +47,8 @@ Normalizer::Normalizer(const UnicodeString& str,
                        EMode mode, 
                        int32_t options) :
     fMode(mode), fOptions(options),
-    text(new StringCharacterIterator(str)), nextIndex(-1),
+    text(new StringCharacterIterator(str)),
+    currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
     checkData();
@@ -54,7 +56,8 @@ Normalizer::Normalizer(const UnicodeString& str,
 
 Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
     fMode(mode), fOptions(0),
-    text(new UCharCharacterIterator(str, length)), nextIndex(-1),
+    text(new UCharCharacterIterator(str, length)),
+    currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
     checkData();
@@ -63,7 +66,8 @@ Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode) :
     fMode(mode), fOptions(0),
-    text(iter.clone()), nextIndex(-1),
+    text(iter.clone()),
+    currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
     checkData();
@@ -73,7 +77,8 @@ Normalizer::Normalizer(const CharacterIterator& iter,
                        EMode mode, 
                        int32_t options) :
     fMode(mode), fOptions(options),
-    text(iter.clone()), nextIndex(-1),
+    text(iter.clone()),
+    currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
     checkData();
@@ -81,7 +86,8 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 
 Normalizer::Normalizer(const Normalizer &copy) :
     fMode(copy.fMode), fOptions(copy.fOptions),
-    text(copy.text->clone()), nextIndex(copy.nextIndex),
+    text(copy.text->clone()),
+    currentIndex(copy.nextIndex), nextIndex(copy.nextIndex),
     buffer(copy.buffer), bufferPos(copy.bufferPos)
 {
     checkData();
@@ -118,7 +124,7 @@ Normalizer::clone() const
  */
 int32_t Normalizer::hashCode() const
 {
-    return text->hashCode() + fMode + fOptions + buffer.hashCode() + bufferPos + nextIndex;
+    return text->hashCode() + fMode + fOptions + buffer.hashCode() + bufferPos + currentIndex + nextIndex;
 }
     
 UBool Normalizer::operator==(const Normalizer& that) const
@@ -223,27 +229,10 @@ Normalizer::decompose(const UnicodeString& source,
  * Return the current character in the normalized text.
  */
 UChar32 Normalizer::current() {
-    if(bufferPos<buffer.length()) {
+    if(bufferPos<buffer.length() || nextNormalize()) {
         return buffer.char32At(bufferPos);
     } else {
-        /*
-         * Normalize from the current index,
-         * return the first character from there, and
-         * reset the character iterator to the original index.
-         * Set nextIndex to where the iterator stopped so
-         * that next() can later continue from there.
-         */
-        UTextOffset currentIndex=text->getIndex();
-        UChar32 c;
-
-        if(nextNormalize()) {
-            c=buffer.char32At(bufferPos);
-            nextIndex=text->getIndex();
-        } else {
-            c=DONE;
-        }
-        text->setIndex(currentIndex);
-        return c;
+        return DONE;
     }
 }
 
@@ -253,30 +242,12 @@ UChar32 Normalizer::current() {
  * of the text has already been reached, {@link #DONE} is returned.
  */
 UChar32 Normalizer::next() {
-    UChar32 c;
-
-    if(bufferPos<buffer.length()) {
-        c=buffer.char32At(bufferPos);
+    if(bufferPos<buffer.length() ||  nextNormalize()) {
+        UChar32 c=buffer.char32At(bufferPos);
         bufferPos+=UTF_CHAR_LENGTH(c);
         return c;
     } else {
-        /*
-         * If the buffer (which is now exhausted) was normalized
-         * during current() or setIndex() then the character iterator
-         * must be set to behind what was normalized then
-         * in order to continue with the following text.
-         * That "position behind what was normalized" is nextIndex.
-         */
-        if(nextIndex>=0) {
-            text->setIndex(nextIndex);
-        }
-        if(text->hasNext() && nextNormalize()) {
-            c=buffer.char32At(bufferPos);
-            bufferPos+=UTF_CHAR_LENGTH(c);
-            return c;
-        } else {
-            return DONE;
-        }
+        return DONE;
     }
 }
 
@@ -286,10 +257,8 @@ UChar32 Normalizer::next() {
  * of the text has already been reached, {@link #DONE} is returned.
  */
 UChar32 Normalizer::previous() {
-    UChar32 c;
-
-    if(bufferPos>0 || text->hasPrevious() && previousNormalize()) {
-        c=buffer.char32At(bufferPos-1);
+    if(bufferPos>0 || previousNormalize()) {
+        UChar32 c=buffer.char32At(bufferPos-1);
         bufferPos-=UTF_CHAR_LENGTH(c);
         return c;
     } else {
@@ -299,12 +268,14 @@ UChar32 Normalizer::previous() {
 
 void Normalizer::reset() {
     text->setToStart();
+    currentIndex=nextIndex=text->getIndex();
     clearBuffer();
 }
 
 void
 Normalizer::setIndexOnly(UTextOffset index) {
     text->setIndex(index);
+    currentIndex=nextIndex=text->getIndex(); // validates index
     clearBuffer();
 }
 
@@ -337,8 +308,7 @@ UChar32 Normalizer::setIndex(UTextOffset index) {
  * the <tt>Normalizer's</tt> position to the beginning of the text.
  */
 UChar32 Normalizer::first() {
-    text->setToStart();
-    clearBuffer();
+    reset();
     return next();
 }
 
@@ -349,6 +319,7 @@ UChar32 Normalizer::first() {
  */
 UChar32 Normalizer::last() {
     text->setToEnd();
+    currentIndex=nextIndex=text->getIndex();
     clearBuffer();
     return previous();
 }
@@ -368,7 +339,11 @@ UChar32 Normalizer::last() {
  *
  */
 UTextOffset Normalizer::getIndex() const {
-    return text->getIndex();
+    if(bufferPos<buffer.length()) {
+        return currentIndex;
+    } else {
+        return nextIndex;
+    }
 }
 
 /**
@@ -497,7 +472,6 @@ Normalizer::getText(UnicodeString&  result)
 //-------------------------------------------------------------------------
 
 void Normalizer::clearBuffer() {
-    nextIndex=-1;
     buffer.remove();
     bufferPos=0;
 }
@@ -507,11 +481,18 @@ Normalizer::nextNormalize() {
     UErrorCode errorCode=U_ZERO_ERROR;
 
     clearBuffer();
+    currentIndex=nextIndex;
+    text->setIndex(nextIndex);
+    if(!text->hasNext()) {
+        return FALSE;
+    }
+
     buffer.fLength=unorm_nextNormalize(buffer.fArray, buffer.fCapacity, *text,
                                        getUNormalizationMode(fMode, errorCode),
                                        (fOptions&IGNORE_HANGUL)!=0,
                                        UnicodeString::growBuffer, &buffer,
                                        &errorCode);
+    nextIndex=text->getIndex();
     return U_SUCCESS(errorCode) && buffer.length()>0;
 }
 
@@ -520,11 +501,18 @@ Normalizer::previousNormalize() {
     UErrorCode errorCode=U_ZERO_ERROR;
 
     clearBuffer();
+    nextIndex=currentIndex;
+    text->setIndex(currentIndex);
+    if(!text->hasPrevious()) {
+        return FALSE;
+    }
+
     buffer.fLength=unorm_previousNormalize(buffer.fArray, buffer.fCapacity, *text,
                                            getUNormalizationMode(fMode, errorCode),
                                            (fOptions&IGNORE_HANGUL)!=0,
                                            UnicodeString::growBuffer, &buffer,
                                            &errorCode);
     bufferPos=buffer.length();
+    currentIndex=text->getIndex();
     return U_SUCCESS(errorCode) && buffer.length()>0;
 }
