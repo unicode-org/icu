@@ -401,7 +401,7 @@ UColAttributeValue strengths[] = {
     UCOL_IDENTICAL
 };
 
-static const char * strengthsC[] = {
+const char * strengthsC[] = {
     "UCOL_PRIMARY",
     "UCOL_SECONDARY",
     "UCOL_TERTIARY",
@@ -1462,7 +1462,7 @@ static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size)
   genericOrderingTestWithResult(coll, s, size, UCOL_LESS);
 }
 
-static void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
+void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open(locale, &status);
 
@@ -3521,110 +3521,6 @@ static void TestPrefixCompose(void) {
 
 }
 
-static int tMemCmp(const uint8_t *first, const uint8_t *second) {
-  int32_t firstLen = uprv_strlen((const char *)first);
-  int32_t secondLen = uprv_strlen((const char *)second);
-  return uprv_memcmp(first, second, uprv_min(firstLen, secondLen));
-}
-
-
-
-static void TestMergeSortKeys(void) {
-  UErrorCode status = U_ZERO_ERROR;
-
-  const char* cases[] = {
-    "abc",
-      "abcd",
-      "abcde"
-  };
-  uint32_t casesSize = sizeof(cases)/sizeof(cases[0]);
-  const char* prefix = "foo";
-  const char* suffix = "egg";
-  char outBuff1[256], outBuff2[256];
-  
-  uint8_t **sortkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
-  uint8_t **mergedPrefixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
-  uint8_t **mergedSuffixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
-  uint32_t *sortKeysLen = (uint32_t *)malloc(casesSize*sizeof(uint32_t));
-  uint8_t prefixKey[256], suffixKey[256];
-  uint32_t prefixKeyLen = 0, suffixKeyLen = 0, i = 0;
-  UChar buffer[256];
-  uint32_t unescapedLen = 0, l1 = 0, l2 = 0;
-  UColAttributeValue strength;
-
-  UCollator *coll = ucol_open("en", &status);
-  log_verbose("ucol_mergeSortkeys test\n");
-  log_verbose("Testing order of the test cases\n");
-  genericLocaleStarter("en", cases, casesSize);
-
-  for(i = 0; i<casesSize; i++) {
-    sortkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
-    mergedPrefixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
-    mergedSuffixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
-  }
-
-  unescapedLen = u_unescape(prefix, buffer, 256);
-  prefixKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, prefixKey, 256);
-
-  unescapedLen = u_unescape(suffix, buffer, 256);
-  suffixKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, suffixKey, 256);
-
-  log_verbose("Massaging data with prefixes and different strengths\n");
-  strength = UCOL_PRIMARY;
-  while(strength <= UCOL_IDENTICAL) {
-    log_verbose("Strength %s\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
-    ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
-    for(i = 0; i<casesSize; i++) {
-      unescapedLen = u_unescape(cases[i], buffer, 256);
-      sortKeysLen[i] = ucol_getSortKey(coll, buffer, unescapedLen, sortkeys[i], 256);
-      ucol_mergeSortkeys(prefixKey, prefixKeyLen, sortkeys[i], sortKeysLen[i], mergedPrefixkeys[i], 256);
-      ucol_mergeSortkeys(sortkeys[i], sortKeysLen[i], suffixKey, suffixKeyLen, mergedSuffixkeys[i], 256);
-      if(i>0) {
-        if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) >= 0) {
-          log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
-          log_err("%s\n%s\n", 
-                      ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, &l1),
-                      ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, &l2));
-        }
-        if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) >= 0) {
-          log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
-          log_err("%s\n%s\n", 
-                      ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, &l1),
-                      ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff2, &l2));
-        }
-      }
-    }
-    if(strength == UCOL_QUATERNARY) {
-      strength = UCOL_IDENTICAL;
-    } else {
-      strength++;
-    }
-  }
-
-  {
-    uint8_t smallBuf[3];
-    uint32_t reqLen = 0;
-    log_verbose("testing buffer overflow\n");
-    reqLen = ucol_mergeSortkeys(prefixKey, prefixKeyLen, suffixKey, suffixKeyLen, smallBuf, 3);
-    if(reqLen != (prefixKeyLen+suffixKeyLen-1)) {
-      log_err("Wrong preflight size for merged sortkey\n");
-    }
-  }
-
-
-  for(i = 0; i<casesSize; i++) {
-    free(sortkeys[i]);
-    free(mergedPrefixkeys[i]);
-    free(mergedSuffixkeys[i]);
-  }
-  free(sortkeys);
-  free(mergedPrefixkeys);
-  free(mergedSuffixkeys);
-  free(sortKeysLen);
-  ucol_close(coll);
-  /* need to finish this up */
-}
-
 /*
 [last variable] last variable value 
 [last primary ignorable] largest CE for primary ignorable 
@@ -4126,7 +4022,6 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestRuleOptions, "tscoll/cmsccoll/TestRuleOptions");
     addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");
     addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");
-    addTest(root, &TestMergeSortKeys, "tscoll/cmsccoll/TestMergeSortKeys");
     addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
     addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
