@@ -2,25 +2,25 @@
 <!DOCTYPE deprecatedList SYSTEM "deprecatedList.dtd" >
 <deprecatedList>
   <deprecates type="collation"> 
-    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[type='phonebook']"/> 
-    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[type='traditional']"/> 
-    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[type='direct']"/> 
-    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[type='pinyin']"/> 
-    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[type='stroke']"/> 
+    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/> 
+    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/> 
+    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/> 
+    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/> 
+    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/> 
   </deprecates> 
   <deprecates type="main" > 
     <alias from="in" to="id" /> 
     <alias from="in_ID" to="id_ID" /> 
     <alias from="iw" to="he" /> 
     <alias from="iw_IL" to="he_IL" /> 
-    <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[type='japanese']"/> 
+    <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/> 
     <alias from="ji" to="yi" /> 
     <alias from="jw" to="jv"/> 
     <alias from="no_NO" to="nb_NO"/> 
     <alias from="no_NO_NY" to="nn_NO" /> 
     <alias from="sh" to="sr" /> 
     <alias from="sh_YU" to="sr_YU" /> 
-    <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[type='buddhist']" /> 
+    <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 
     <alias from="zh_CN" to="zh_Hans_CN" /> 
     <alias from="zh_HK" to="zh_Hant_HK" /> 
     <alias from="zh_MO" to="zh_Hant_MO" /> 
