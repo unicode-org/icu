@@ -578,6 +578,9 @@ udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status)
 {
-  return NULL;
+  if(fmt==NULL){
+      return NULL;
+  }
+  return ((Format *)fmt)->getLocaleInternal(type, *status);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
