@@ -1,296 +1,11 @@
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html xmlns:v="urn:schemas-microsoft-com:vml"
-xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:w="urn:schemas-microsoft-com:office:word"
-xmlns="http://www.w3.org/TR/REC-html40">
-
+<html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 9">
-<meta name=Originator content="Microsoft Word 9">
-<link rel=File-List href="./readme_files/filelist.xml">
-<link rel=Edit-Time-Data href="./readme_files/editdata.mso">
-<!--[if !mso]>
-<style>
-v\:* {behavior:url(#default#VML);}
-o\:* {behavior:url(#default#VML);}
-w\:* {behavior:url(#default#VML);}
-.shape {behavior:url(#default#VML);}
-</style>
-<![endif]-->
 <title>ReadMe for ICU</title>
-<!--[if gte mso 9]><xml>
- <o:DocumentProperties>
-  <o:Author>Helena Shih</o:Author>
-  <o:Template>Normal</o:Template>
-  <o:LastAuthor>Helena Shih</o:LastAuthor>
-  <o:Revision>4</o:Revision>
-  <o:TotalTime>28</o:TotalTime>
-  <o:Created>2000-02-01T18:26:00Z</o:Created>
-  <o:LastSaved>2000-02-09T20:02:00Z</o:LastSaved>
-  <o:Pages>11</o:Pages>
-  <o:Words>5177</o:Words>
-  <o:Characters>29510</o:Characters>
-  <o:Company>IBM</o:Company>
-  <o:Lines>245</o:Lines>
-  <o:Paragraphs>59</o:Paragraphs>
-  <o:CharactersWithSpaces>36240</o:CharactersWithSpaces>
-  <o:Version>9.2720</o:Version>
- </o:DocumentProperties>
-</xml><![endif]-->
-<style>
-<!--
- /* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{mso-style-parent:"";
-	margin:0in;
-	margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:12.0pt;
-	font-family:"Times New Roman";
-	mso-fareast-font-family:"Times New Roman";}
-a:link, span.MsoHyperlink
-	{color:blue;
-	text-decoration:underline;
-	text-underline:single;}
-a:visited, span.MsoHyperlinkFollowed
-	{color:purple;
-	text-decoration:underline;
-	text-underline:single;}
-p
-	{margin-right:0in;
-	mso-margin-top-alt:auto;
-	mso-margin-bottom-alt:auto;
-	margin-left:0in;
-	mso-pagination:widow-orphan;
-	font-size:12.0pt;
-	font-family:"Times New Roman";
-	mso-fareast-font-family:"Times New Roman";}
-pre
-	{margin:0in;
-	margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	tab-stops:45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt;
-	font-size:10.0pt;
-	font-family:"Courier New";
-	mso-fareast-font-family:"Courier New";}
-@page Section1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.25in 1.0in 1.25in;
-	mso-header-margin:.5in;
-	mso-footer-margin:.5in;
-	mso-paper-source:0;}
-div.Section1
-	{page:Section1;}
- /* List Definitions */
-@list l0
-	{mso-list-id:47188065;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1466486202 116280834 552215838 906805068 1521137622 401357620 -1378838014 -511129794 450771094 1606707228;}
-@list l1
-	{mso-list-id:117913232;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-450314456 413984474 -860879584 458148388 1916146286 1538412862 863017768 -300143966 -55386208 -1462483600;}
-@list l1:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l2
-	{mso-list-id:283392397;
-	mso-list-type:hybrid;
-	mso-list-template-ids:221802328 -258441084 -934746342 1419537734 -1901567532 1981813236 287487774 2029678266 1193441118 -320863984;}
-@list l3
-	{mso-list-id:568229750;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1260177520 158890492 503090804 -1695902632 1465945538 -935272554 -2049028 941654354 -1871965178 -1305592270;}
-@list l3:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l4
-	{mso-list-id:576742058;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-715868556 -132768664 498237874 598241330 -1517910766 -1750947490 714492842 1225816080 -2059080712 393093814;}
-@list l4:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l5
-	{mso-list-id:664672491;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1772678752 2062991906 446980294 -161209628 -100250862 2128757756 2052650808 -538035208 -6270306 291808606;}
-@list l5:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l6
-	{mso-list-id:836961509;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-224895454 -1014200752 826189550 -2031309554 1889069730 -609042030 1875430626 1998766280 1070782366 1076102286;}
-@list l6:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l7
-	{mso-list-id:913508786;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1568069976 -1959095566 -768301796 -931790726 -2143009482 1948575304 -712632468 -697775276 -403279512 968792852;}
-@list l7:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l7:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Times New Roman";}
-@list l8
-	{mso-list-id:991719643;
-	mso-list-type:hybrid;
-	mso-list-template-ids:2129591196 1460462400 -1172699750 1169610458 -437120214 1872653486 -842923700 841514964 2136911810 1364103300;}
-@list l9
-	{mso-list-id:1115171434;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1407672820 -1016529878 1566456998 -99162944 1112470608 1354390290 1532235962 643100262 1447355994 -1094388302;}
-@list l10
-	{mso-list-id:1133790422;
-	mso-list-type:hybrid;
-	mso-list-template-ids:602321612 -1181957080 -1020131346 -1755803318 646190636 122975578 1475804658 -455318736 -1891325090 -1214717408;}
-@list l10:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l10:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Times New Roman";}
-@list l11
-	{mso-list-id:1170366750;
-	mso-list-type:hybrid;
-	mso-list-template-ids:139625938 1784856908 14434230 2135990762 205005018 -1679018944 -78496528 941265532 136326846 -2030939902;}
-@list l12
-	{mso-list-id:1395081028;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1450152516 594060610 -1995156862 -742472460 1399253788 775304844 -332753902 -90000986 -656356064 -1128074476;}
-@list l12:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l13
-	{mso-list-id:1410885180;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1420239212 -2078642128 1381369862 486155864 -1973497194 1050204580 -46207730 -508368526 1735818270 669444066;}
-@list l13:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l14
-	{mso-list-id:1558080398;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-720580774 1417685988 1440894936 -1423303424 -193586832 898255738 -212563752 725117368 1124212432 2069772174;}
-@list l14:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l15
-	{mso-list-id:1927837791;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1363567226 -2132220750 875589078 1199445854 -582346952 944043046 -49528938 -394654148 1636605060 -183584940;}
-@list l15:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l15:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Times New Roman";}
-@list l16
-	{mso-list-id:2067096185;
-	mso-list-type:hybrid;
-	mso-list-template-ids:582122176 -1729593526 -491090842 -1692663546 -1673229800 1254113432 1459242370 292878442 -961933704 -1788173682;}
-@list l16:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
--->
-</style>
-<!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="1027"/>
-</xml><![endif]--><!--[if gte mso 9]><xml>
- <o:shapelayout v:ext="edit">
-  <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout></xml><![endif]-->
-<meta name=Template content="F:\Program Files\Microsoft Office\Office\html.dot">
 </head>
 
-<body bgcolor=white lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+<body lang="en-US">
 
 <div class=Section1>
 
@@ -394,7 +109,7 @@ help you write language independent applications: </p>
  <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l5 level1 lfo6;tab-stops:list .5in'>Over 150 locales supported.
      Visit <a
-     href="http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplore
+     href="http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplorer
      (http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer)</a>
      site for a demonstration and a full list of supported locales or <a
      href="docs/supp_loc.html">click here for a table of supported locales</a>.</li>
@@ -430,7 +145,7 @@ Contain</u></h3>
      code.&nbsp; These versions are tested more thoroughly than day-to-day
      development builds of the system, and they are packaged in zip and tar
      files for convenient download.&nbsp; These packaged files can be found at <a
-     href="http://oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html">http://oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html</a>.<br>
+     href="http://oss.software.ibm.com/icu/download/index.html">http://oss.software.ibm.com/icu/download/index.html</a>.<br>
      If packaged snapshot is named <b>ICUXXXXXX.zip </b>, XXXXXX is the release
      version number.<br>
      Please unzip this file.&nbsp; It will re-construct the source directory. </li>
@@ -484,7 +199,7 @@ Contain</u></h3>
 
 <p>For more details on how to download ICU directly from the web site, please
 also see <a
-href="http://oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html">http:/oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html</a></p>
+href="http://oss.software.ibm.com/icu/download/index.html">http:/oss.software.ibm.com/icu/download/index.html</a></p>
 
 <p>Below, <b>$Root</b> is the placement of the icu directory in your file
 system, like &quot;drive:\...\icu&quot; in your environment.
@@ -655,7 +370,21 @@ framework:</b> <br>
 <p><b>The following diagram shows the main directory structure of the
 International Components for Unicode:</b> </p>
 
-<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; icu-NNNN</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>icu</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp; _____|_____<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>______________|______________________________</pre><pre>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>|&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>| &nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|</pre><pre> libraries<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>programs &nbsp;include&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|</pre><pre> (built)<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>(built)<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>(built)&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readme.html license.html</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>_________________|__________________________</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp; </span><span style="mso-spacerun: yes">&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>common<span style="mso-spacerun: yes">&nbsp; </span>i18n&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>test<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>extra<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>tools<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>samples</pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>&nbsp; &nbsp;<span style="mso-spacerun: yes">&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp; </span></pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ___|___&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>___|_________________</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>| </pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>intltest cintltst makeconv ctestfw genrb<span style="mso-spacerun: yes">&nbsp; </span>....</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; icu-NNNN</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>icu</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp; _____|_____<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>______________|______________________________</pre>
+<pre>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>|&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>| &nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|</pre>
+<pre> libraries<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>programs &nbsp;include&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|</pre>
+<pre> (built)<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>(built)<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>(built)&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;readme.html license.html</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>_________________|__________________________</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp; </span><span style="mso-spacerun: yes">&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>common<span style="mso-spacerun: yes">&nbsp; </span>i18n&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>test<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>extra<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>tools<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>samples</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>&nbsp; &nbsp;<span style="mso-spacerun: yes">&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp; </span></pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ___|___&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="mso-spacerun: yes">&nbsp; </span>___|_________________</pre>
+<pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>|<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>| </pre>
+<pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>intltest cintltst makeconv ctestfw genrb<span style="mso-spacerun: yes">&nbsp; </span>....</pre>
 
 <h3><a name=API></a><u>API Overview</u></h3>
 
@@ -850,38 +579,63 @@ runtime libraries as well. If you do not do this, you will seemingly get memory
 errors when you run the executable. <br>
 &nbsp; </p>
 
-<p><strong>OS/390 Platform</strong></p>
+<p><a name=OS390><strong>OS/390 Platform</strong></p>
 
 <p>If you are building on the OS/390 UNIX System Services platform, it is
-important that you understand a<br>
-few details. <br>
-<br>
-The gnu utilities gmake and gzip/gunzip are needed and can be obtained for
-OS/390 from<br>
-www.mks.com. Search for os/390, register, and follow download directions. <br>
-<br>
-DLL directories and the LIBPATH setting: The ICU dlls libicu-i18n and
-libicu-uc.dll should be added<br>
-to the LIBPATH environment variable concatenation.<br>
-<br>
-OS/390 supports both native S/390 hexadecimal floating point and, with Version
-2.6 and later, IEEE binary<br>
-floating point. This is a compile time option. Applications built with IEEE
-should use ICU dlls that are<br>
-built with IEEE (and vice versa). The environment variable IEEE390=1 will cause
-the OS/390 version<br>
-of ICU to be built with IEEE floating point. The default is native hexadecimal
-floating point. <br>
-<br>
-The makedep executable is shipped with ICU for use with the OS/390 ICU build
-process. The PATH<br>
-environment variable should be updated to contain the location of this
-executable prior to build.<br>
-Alternatively, makedep may be moved into an existing PATH directory.<br>
-<br>
-When running the test suite, the TZ environment variable should be set to
-export TZ=&quot;PST8PDT&quot; so<br>
-that time zone comparisons are correct.</p>
+important that you understand a few details:</p>
+<ul>
+    <li>The gnu utilities gmake and gzip/gunzip are needed and can be obtained for
+        OS/390 from <a href="http://www.mks.com/">http://www.mks.com/</a>.
+        Search for OS/390, register, and follow download directions.</li>
+    <li>Encoding considerations: The source code assumes that it is compiled
+        with codepage 1047 (to be exact, the UNIX System Services variant of it).
+        The pax command converts all of the source code files from ASCII
+        to codepage 1047 (USS) EBCDIC. However, some files are binary files
+        and must not be converted, or must be converted back to their original
+        state.
+        Those files are:<ul>
+        <li>All the .brk files located in the icu/data directory (icu/data/*.brk)</li>
+        <li>icu/source/test/testdata/uni-text.txt</li>
+        <li>icu/source/test/testdata/th18057.txt</li>
+        </ul>
+        Such a conversion can be done using iconv:<br>
+        <code>iconv -f IBM-1047 -t ISO8859-1 uni-text.txt > uni-text.txt</code></li>
+    <li>DLL directories and the LIBPATH setting:
+        Building and testing ICU needs the ICU libraries on the LIBPATH.
+        In other words, the LIBPATH should contain
+        (each path prepended with the root directory that contains the icu directory):
+        <ul>
+            <li>icu/source/common</li>
+            <li>icu/source/i18n</li>
+            <li>icu/source/tools/ctestfw</li>
+            <li>icu/source/tools/toolutil</li>
+            <li>icu/source/extra/ustdio</li>
+        </ul></li>
+    <li><p>OS/390 supports both native S/390 hexadecimal floating point and, with Version
+        2.6 and later, IEEE binary
+        floating point. This is a compile time option. Applications built with IEEE
+        should use ICU dlls that are
+        built with IEEE (and vice versa). The environment variable IEEE390=1 will cause
+        the OS/390 version
+        of ICU to be built with IEEE floating point. The default is native hexadecimal
+        floating point.<br>
+        <em>Important: </em>Currently (ICU 1.4.2), native floating point support
+        is sufficient for codepage conversion, resource bundle and UnicodeString operations,
+        but the Format APIs, especially ChoiceFormat, require IEEE binary floating point.</p>
+        <p>Examples for configuring ICU:<br>
+        Debug build: <code>IEEE390=1 ./configure</code><br>
+        Release build: <code>CFLAGS=-2 IEEE390=1 ./configure</code></p></li>
+    <li>The makedep executable that is used with the OS/390 ICU build
+        process is not shipped with ICU. It is available at the
+        <a href="http://www.s390.ibm.com/products/oe/bpxa1ty2.html">OS/390 UNIX - Tools and Toys</a>
+        site. The PATH
+        environment variable should be updated to contain the location of this
+        executable prior to build.
+        Alternatively, makedep may be moved into an existing PATH directory.</li>
+    <li>When running the test suite, the TZ environment variable should be set to
+        export TZ=&quot;PST8PDT&quot; so
+        that time zone comparisons are correct.</li>
+</ul>
 
 <p><a name=OS400><strong>OS/400 Platform</strong></a></p>
 
@@ -1238,8 +992,8 @@ included in International Components for Unicode agreement. </p>
 
 <p>Click <a href="data/convrtrs.txt">here</a> to view converters implemented in
 ICU. To see converters in action, please visit <a
-href="http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;"><span
-style='color:black'>http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;</span></a></p>
+href="http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;">
+http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;</a></p>
 
 <p>To order the document in the US you can call 1-800-879-2755 and request
 document number SC09-2190-00. The cost of this publication is $75.00 US not
@@ -1477,7 +1231,7 @@ margin-bottom:.0001pt'><span style='font-size:7.5pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nb
 
 <h3><a name=WhereToFindMore></a><u>Where to Find More Information</u></h3>
 
-<p><a href="http://oss.software.ibm.com/icu">http://oss.software.ibm.com/icu</a>
+<p><a href="http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a>
 is a pointer to general information about the International Components for
 Unicode. </p>
 
@@ -1495,7 +1249,7 @@ Collation. </p>
 <p><a href="docs/BreakIterator.html">docs/BreakIterator.html</a> is a diagram
 showing how BreakIterator processes text elements. </p>
 
-<p><a href="http://www.ibm.com/unicode">http://www.ibm.com/unicode</a> is a
+<p><a href="http://www.ibm.com/developer/unicode/">http://www.ibm.com/developer/unicode/</a> is a
 pointer to information on how to make applications global. <br>
 &nbsp; </p>
 
