@@ -2537,8 +2537,8 @@ static void TestLimitations() {
     static const char *tlimit01[] = {"a","\\u0000\\u0302\\u0327"};
     static const char *tlimit02[] = {"\\u0000\\u0302\\u0327","a"};
     static const UColAttribute att[] = { UCOL_DECOMPOSITION_MODE };
-    static const UColAttribute valOn[] = { UCOL_ON };
-    static const UColAttribute valOff[] = { UCOL_OFF };
+    static const UColAttributeValue valOn[] = { UCOL_ON };
+    static const UColAttributeValue valOff[] = { UCOL_OFF };
 
     log_verbose("NULL in contractions\n");
     genericRulesStarterWithOptions(rule, tlimit01, 2, att, valOn, 1);
@@ -2553,8 +2553,8 @@ static void TestLimitations() {
     static const char *tlimit01[] = {"a","\\u0000\\u0302\\u0327"};
     static const char *tlimit02[] = {"\\u0000\\u0302\\u0327","a"};
     static const UColAttribute att[] = { UCOL_DECOMPOSITION_MODE };
-    static const UColAttribute valOn[] = { UCOL_ON };
-    static const UColAttribute valOff[] = { UCOL_OFF };
+    static const UColAttributeValue valOn[] = { UCOL_ON };
+    static const UColAttributeValue valOff[] = { UCOL_OFF };
 
     log_verbose("contractions spanning normalization\n");
     genericRulesStarterWithOptions(rule, tlimit01, 2, att, valOn, 1);
@@ -2572,8 +2572,8 @@ static void TestLimitations() {
     static const char *tlimit02[] = {"-", "-x", "x","xb", "-z", "z", "zb", "-a", "a", "-b", "b", "c"};
     static const char *tlimit03[] = {" ", "xb", "z", "zb", "a", " b", "b", "c" };
     static const UColAttribute att[] = { UCOL_ALTERNATE_HANDLING, UCOL_STRENGTH };
-    static const UColAttribute valOn[] = { UCOL_SHIFTED, UCOL_QUATERNARY };
-    static const UColAttribute valOff[] = { UCOL_NON_IGNORABLE, UCOL_TERTIARY };
+    static const UColAttributeValue valOn[] = { UCOL_SHIFTED, UCOL_QUATERNARY };
+    static const UColAttributeValue valOff[] = { UCOL_NON_IGNORABLE, UCOL_TERTIARY };
 
     log_verbose("variable top\n");
     genericRulesStarterWithOptions(rule, tlimit03, sizeof(tlimit03)/sizeof(tlimit03[0]), att, valOn, sizeof(att)/sizeof(att[0]));
@@ -2589,8 +2589,8 @@ static void TestLimitations() {
     static const char *tlimit01[] = {"c","CH","Ch","cH","ch"};
     static const char *tlimit02[] = {"c","CH","cH","Ch","ch"};
     static const UColAttribute att[] = { UCOL_CASE_FIRST};
-    static const UColAttribute valOn[] = { UCOL_UPPER_FIRST};
-    static const UColAttribute valOff[] = { UCOL_OFF};
+    static const UColAttributeValue valOn[] = { UCOL_UPPER_FIRST};
+    static const UColAttributeValue valOff[] = { UCOL_OFF};
     log_verbose("case level\n");
     genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOn, sizeof(att)/sizeof(att[0]));
     genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOn, sizeof(att)/sizeof(att[0]));
@@ -2602,7 +2602,7 @@ static void TestLimitations() {
 
 static void TestBocsuCoverage() {
   UErrorCode status = U_ZERO_ERROR;
-  char *testString = "\\u0041\\u0441\\u4441\\U00044441\\u4441\\u0441\\u0041";
+  const char *testString = "\\u0041\\u0441\\u4441\\U00044441\\u4441\\u0441\\u0041";
   UChar       test[256] = {0};
   uint32_t    tlen     = u_unescape(testString, test, 32);
   uint8_t key[256]     = {0};
@@ -2619,7 +2619,7 @@ static void TestBocsuCoverage() {
 static void TestVariableTopSetting() {
   UErrorCode status = U_ZERO_ERROR;
   const UChar *current = NULL;
-  uint32_t varTopOriginal, varTop1, varTop2;
+  uint32_t varTopOriginal = -1, varTop1, varTop2;
   UCollator *coll = ucol_open("", &status);
 
   uint32_t strength = 0;
@@ -2644,8 +2644,6 @@ static void TestVariableTopSetting() {
 
   UChar first[256] = { 0 };
   UChar second[256] = { 0 };
-  uint32_t firstLen = 0;
-  uint32_t secondLen = 0;
 
   src.opts = &opts;
 
@@ -2718,11 +2716,15 @@ static void TestVariableTopSetting() {
       }
     }
   }
+  else {
+    log_err("Unexpected failure getting rules %s\n", u_errorName(status));
+    return;
+  }
   status = U_ZERO_ERROR;
 
   log_verbose("Testing setting variable top to contractions\n");
   {
-    uint32_t tailoredCE = UCOL_NOT_FOUND;
+    /* uint32_t tailoredCE = UCOL_NOT_FOUND; */
     UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);
     while(*conts != 0) {
       if(*(conts+2) == 0) {
