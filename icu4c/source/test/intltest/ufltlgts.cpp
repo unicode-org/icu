@@ -60,8 +60,9 @@ class Filter2: public UnicodeFilter{
 
 
 void UnicodeFilterLogicTest::TestAll(){
-
-    Transliterator *t1=Transliterator::createInstance("Any-Hex");
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator *t1=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t1 == 0){
         errln("FAIL: Error in instantiation.");
         return;
