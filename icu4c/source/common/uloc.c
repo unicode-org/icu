@@ -36,7 +36,7 @@
 /* UnicodeString stuff */
 typedef struct UnicodeString UnicodeString;
 
-U_CAPI const UChar* T_UnicodeString_getUChars(const UnicodeString *s);
+U_CFUNC int32_t T_UnicodeString_length(const UnicodeString *s);
 
 U_CAPI int32_t
 T_UnicodeString_extract(const UnicodeString *s, char *dst);
@@ -1051,7 +1051,7 @@ void _lazyEvaluate_installedLocales()
       
       for (i = 0; i < _installedLocalesCount; i++)
     {
-      strSize = u_strlen(T_UnicodeString_getUChars(temp[i]));
+      strSize = T_UnicodeString_length(temp[i]);
 
       temp2[i] = (char*) uprv_malloc(sizeof(char) *
                         (strSize + 1));
