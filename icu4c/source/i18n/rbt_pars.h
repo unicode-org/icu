@@ -180,6 +180,13 @@ private:
     void setVariableRange(int32_t start, int32_t end);
 
     /**
+     * Assert that the given character is NOT within the variable range.
+     * If it is, return FALSE.  This is neccesary to ensure that the
+     * variable range does not overlap characters used in a rule.
+     */
+    UBool checkVariableRange(UChar32 ch) const;
+
+    /**
      * Set the maximum backup to 'backup', in response to a pragma
      * statement.
      */

@@ -136,6 +136,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(54,TestLocaleResource);
         TESTCASE(55,TestParseError);
         TESTCASE(56,TestOutputSet);
+        TESTCASE(57,TestVariableRange);
         default: name = ""; break;
     }
 }
@@ -2644,6 +2645,25 @@ void TransliteratorTest::TestOutputSet() {
     }
     errln("FAIL: No syntax error");
 }        
+
+/**
+ * Test the use variable range pragma, making sure that use of
+ * variable range characters is detected and flagged as an error.
+ */
+void TransliteratorTest::TestVariableRange() {
+    UnicodeString rule = "use variable range 0x70 0x72; a > A; b > B; q > Q;";
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+    Transliterator *t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD, pe, ec);
+    delete t;
+    if (U_FAILURE(ec)) {
+        UnicodeString err(pe.preContext);
+        err.append((UChar)124/*|*/).append(pe.postContext);
+        logln("Ok: " + err);
+        return;
+    }
+    errln("FAIL: No syntax error");
+}
 
 //======================================================================
 // icu4c ONLY

@@ -354,6 +354,9 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
             if (escaped == (UChar32) -1) {
                 return syntaxError(U_MALFORMED_UNICODE_ESCAPE, rule, start);
             }
+            if (!parser.checkVariableRange(escaped)) {
+                return syntaxError(U_VARIABLE_RANGE_OVERLAP, rule, start);
+            }
             buf.append(escaped);
             continue;
         }
@@ -388,9 +391,20 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                     }
                 }
                 quoteLimit = buf.length();
+
+                for (iq=quoteStart; iq<quoteLimit; ++iq) {
+                    if (!parser.checkVariableRange(buf.charAt(iq))) {
+                        return syntaxError(U_VARIABLE_RANGE_OVERLAP, rule, start);
+                    }
+                }
             }
             continue;
         }
+
+        if (!parser.checkVariableRange(c)) {
+            return syntaxError(U_VARIABLE_RANGE_OVERLAP, rule, start);
+        }
+
         switch (c) {
                     
         //------------------------------------------------------
@@ -914,6 +928,15 @@ void TransliteratorParser::setVariableRange(int32_t start, int32_t end) {
 }
 
 /**
+ * Assert that the given character is NOT within the variable range.
+ * If it is, return FALSE.  This is neccesary to ensure that the
+ * variable range does not overlap characters used in a rule.
+ */
+UBool TransliteratorParser::checkVariableRange(UChar32 ch) const {
+    return !(ch >= data->variablesBase && ch < variableLimit);
+}
+
+/**
  * Set the maximum backup to 'backup', in response to a pragma
  * statement.
  */
@@ -929,15 +952,15 @@ void TransliteratorParser::pragmaNormalizeRules(UNormalizationMode mode) {
     //TODO Finish
 }
 
-static const UChar PRAGMA_USE[] = {0x75,0x73,0x65,0x20}; // "use "
+static const UChar PRAGMA_USE[] = {0x75,0x73,0x65,0x20,0}; // "use "
 
-static const UChar PRAGMA_VARIABLE_RANGE[] = {0x7E,0x76,0x61,0x72,0x69,0x61,0x62,0x6C,0x65,0x20,0x72,0x61,0x6E,0x67,0x65,0x20,0x23,0x20,0x23,0x7E,0x3B}; // "~variable range # #~;"
+static const UChar PRAGMA_VARIABLE_RANGE[] = {0x7E,0x76,0x61,0x72,0x69,0x61,0x62,0x6C,0x65,0x20,0x72,0x61,0x6E,0x67,0x65,0x20,0x23,0x20,0x23,0x7E,0x3B,0}; // "~variable range # #~;"
 
-static const UChar PRAGMA_MAXIMUM_BACKUP[] = {0x7E,0x6D,0x61,0x78,0x69,0x6D,0x75,0x6D,0x20,0x62,0x61,0x63,0x6B,0x75,0x70,0x20,0x23,0x7E,0x3B}; // "~maximum backup #~;"
+static const UChar PRAGMA_MAXIMUM_BACKUP[] = {0x7E,0x6D,0x61,0x78,0x69,0x6D,0x75,0x6D,0x20,0x62,0x61,0x63,0x6B,0x75,0x70,0x20,0x23,0x7E,0x3B,0}; // "~maximum backup #~;"
 
-static const UChar PRAGMA_NFD_RULES[] = {0x7E,0x6E,0x66,0x64,0x20,0x72,0x75,0x6C,0x65,0x73,0x7E,0x3B}; // "~nfd rules~;"
+static const UChar PRAGMA_NFD_RULES[] = {0x7E,0x6E,0x66,0x64,0x20,0x72,0x75,0x6C,0x65,0x73,0x7E,0x3B,0}; // "~nfd rules~;"
 
-static const UChar PRAGMA_NFC_RULES[] = {0x7E,0x6E,0x66,0x63,0x20,0x72,0x75,0x6C,0x65,0x73,0x7E,0x3B}; // "~nfc rules~;"
+static const UChar PRAGMA_NFC_RULES[] = {0x7E,0x6E,0x66,0x63,0x20,0x72,0x75,0x6C,0x65,0x73,0x7E,0x3B,0}; // "~nfc rules~;"
 
 /**
  * Return true if the given rule looks like a pragma.
