@@ -282,7 +282,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             // now parsing the rule's radix.  Again, accumulate digits
             // in tempValue, skip punctuation, stop on a > mark, and
             // throw an exception on anything else
-            if (c == '/') {
+            if (c == gSlash) {
                 val = (int32_t)0;
                 ++p;
                 llong ll_10 = (int32_t)10;
