@@ -72,8 +72,6 @@ static UColAttributeValue ATTRIBUTE_[UCOL_ATTRIBUTE_COUNT] = {
     UCOL_DEFAULT, UCOL_DEFAULT
 };
 
-static UNormalizationMode NORMALIZATION_ = UNORM_DEFAULT;
-
 typedef struct {
     int   value;
     char *name;
@@ -103,16 +101,6 @@ static const EnumNameValuePair ATTRIBUTE_VALUE_[] = {
     {UCOL_NON_IGNORABLE, "UCOL_NON_IGNORABLE"},
     {UCOL_LOWER_FIRST, "UCOL_LOWER_FIRST"},
     {UCOL_UPPER_FIRST, "UCOL_UPPER_FIRST"},
-    {UCOL_ON_WITHOUT_HANGUL, "UCOL_ON_WITHOUT_HANGUL"},
-    NULL
-};
-
-static const EnumNameValuePair NORMALIZATION_VALUE_[] = {
-    {UNORM_NONE, "UNORM_NONE"},
-    {UNORM_NFD, "UNORM_NFD"},
-    {UNORM_NFKD, "UNORM_NFKD"},
-    {UNORM_NFC, "UNORM_NFC|UNORM_DEFAULT"},
-    {UNORM_NFKC, "UNORM_NFKC"},
     NULL
 };
 
@@ -266,7 +254,8 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
     
     src.opts = &opts;
       
-    src.source       = src.current = rule;
+    src.source       = rule; 
+	src.current = rule;
     src.end          = rule + rlen;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -328,17 +317,18 @@ void outputAttribute(UCollator *collator, UErrorCode *error)
 */
 void outputNormalization(UCollator *collator) 
 {
-    int normmode = ucol_getNormalization(collator);
+	UErrorCode status = U_ZERO_ERROR;
+    int normmode = ucol_getAttribute(collator, UCOL_NORMALIZATION_MODE, &status);
     int count = 0;
     while (TRUE) {
         // getting attribute name
-        if (NORMALIZATION_VALUE_[count].value == normmode) {
+        if (ATTRIBUTE_VALUE_[count].value == normmode) {
             break;
         }
         count ++;
     }
     fprintf(OUTPUT_, "NORMALIZATION MODE = %s\n", 
-        NORMALIZATION_VALUE_[count].name);
+            ATTRIBUTE_VALUE_[count].name);
 }
 
 /**
@@ -457,17 +447,6 @@ void setAttributes(UCollator *collator, UErrorCode *error)
 }
 
 /**
-* Sets the collator with the normalization mode
-* @param collator
-*/
-void setNormalization(UCollator *collator) 
-{
-    if (NORMALIZATION_ != UCOL_DEFAULT) {
-        ucol_setNormalization(collator, NORMALIZATION_);
-    }
-}
-
-/**
 * Appends directory path with an ending seperator if necessary.
 * @param path with enough space to append one seperator
 * @return new directory path length
@@ -519,7 +498,6 @@ void serialize() {
                 return;
             }
             setAttributes(COLLATOR_, &error);
-            setNormalization(COLLATOR_);
             if (U_FAILURE(error)) {
                 fprintf(stdout, "Collator attribute setting failed:");
                 fprintf(stdout, u_errorName(error));
@@ -549,7 +527,6 @@ CLOSEUCA :
                 return;
             }
             setAttributes(COLLATOR_, &error);
-            setNormalization(COLLATOR_);
             if (U_FAILURE(error)) {
                 fprintf(stdout, "Collator attribute setting failed:");
                 fprintf(stdout, u_errorName(error));
@@ -731,19 +708,6 @@ void parseAttributes() {
         ATTRIBUTE_[name] = (UColAttributeValue)value;
         pname ++;
     }
-}
-
-/**
-* Parser for normalization mode
-*/
-void parseNormalization() {
-    const char *str = options[8].value;
-    int norm = parseEnums(NORMALIZATION_VALUE_, str);
-    if (norm == -1) {
-        fprintf(stdout, "Normalization mode not found: %s\n", str);
-        return;
-    }
-    NORMALIZATION_ = (UNormalizationMode)norm;
 }
 
 /**
@@ -1004,14 +968,14 @@ int getScriptElements(UScriptCode script[], int scriptcount,
         codepoint ++;
     }
 
-    UChar    ucarules[0x10000];
+    UChar    ucarules[0x12000];
     UChar   *rule;
     int32_t  rulelength = 0;
 
     rule      = ucarules;
-    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, ucarules, 
-                                 0x10000);
-    if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x10000) {
+    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
+                                 0x12000);
+    if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x12000) {
         rule = (UChar *)malloc(sizeof(UChar) * 
                                 (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
         rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
@@ -1032,7 +996,8 @@ int getScriptElements(UScriptCode script[], int scriptcount,
           UColOptionSet    opts;
           UParseError      parseError;
         
-    src.source       = src.current = rule;
+    src.source       = rule,
+    src.current      = rule;
     src.end          = rule + rulelength;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -1137,7 +1102,8 @@ void markTailored(UScriptCode script[], int scriptcount,
                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
     memcpy(copy, rule, rulelength * sizeof(UChar));
 
-    src.source       = src.current = copy;
+    src.source       = copy;
+	src.current = copy;
     src.end          = (UChar *)copy + rulelength;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -1441,8 +1407,7 @@ void serializeScripts() {
             error != U_USING_DEFAULT_WARNING) ||
             checkLocaleForLanguage(locale)) {
             fprintf(list, "<a href=%s.html>%s</a> ", locale, locale);
-	    setAttributes(COLLATOR_, &error);
-            setNormalization(COLLATOR_);
+	        setAttributes(COLLATOR_, &error);
             if (U_FAILURE(error)) {
                fprintf(stdout, "Collator attribute setting failed:");
                fprintf(stdout, u_errorName(error));
@@ -1465,7 +1430,14 @@ void serializeScripts() {
                 return;
             }
             outputHTMLHeader(locale, scriptcode, scriptcount);
-            serializeScripts(scriptcode, scriptcount);
+			fprintf(stdout, "%s\n", locale);
+			if (*locale == 'j') {
+				fprintf(stdout, "japanese\n");
+                serializeScripts(scriptcode, scriptcount);
+            }
+            else {
+			    serializeScripts(scriptcode, scriptcount);
+            }
             fclose(OUTPUT_);
         }
         ucol_close(COLLATOR_);
@@ -1530,10 +1502,6 @@ int main(int argc, char *argv[]) {
     if (options[6].doesOccur) {
         fprintf(stdout, "attributes %s\n", options[6].value);
         parseAttributes();
-    }
-    if (options[8].doesOccur) {
-        fprintf(stdout, "normalization mode %s\n", options[8].value);
-        parseNormalization();
     }
     if (options[3].doesOccur) {
         serialize();
