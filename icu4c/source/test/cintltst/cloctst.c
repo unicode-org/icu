@@ -124,6 +124,7 @@ void addLocaleTest(TestNode** root);
 
 void addLocaleTest(TestNode** root)
 {
+    addTest(root, &TestObsoleteNames,        "tsutil/cloctst/TestObsoleteNames"); /* srl- move */
     addTest(root, &TestBasicGetters,         "tsutil/cloctst/TestBasicGetters");
     addTest(root, &TestPrefixes,             "tsutil/cloctst/TestPrefixes");
     addTest(root, &TestSimpleResourceInfo,   "tsutil/cloctst/TestSimpleResourceInfo");
@@ -757,8 +758,10 @@ static void TestISOFunctions()
 {
     const char* const* str=uloc_getISOLanguages();
     const char* const* str1=uloc_getISOCountries();
+    const char* test;
     int32_t count  = 0;
     UBool done = FALSE;
+    int32_t expect;
 
     /*  test getISOLanguages*/
     /*str=uloc_getISOLanguages(); */
@@ -770,10 +773,21 @@ static void TestISOFunctions()
         {
             done = TRUE;
         }
+	else
+	{
+	  test = *(str+count);
+	  if(!strcmp(test,"in")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+	  if(!strcmp(test,"iw")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+	  if(!strcmp(test,"ji")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+	  if(!strcmp(test,"jw")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+	  if(!strcmp(test,"sh")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+	}
     }
     count--;
-    if(count!=142) {
-        log_err("There is an error in getISOLanguages %d\n", count);
+    expect = 437;
+
+    if(count!=expect) {
+        log_err("There is an error in getISOLanguages, got %d, expected %d\n", count, expect);
     }
 
     log_verbose("Testing ISO Countries");
@@ -785,11 +799,18 @@ static void TestISOFunctions()
         {
             done=TRUE;
         }
+	else
+	{
+	  test = *(str1+count);
+	  if(!strcmp(test,"FX")) log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
+	  if(!strcmp(test,"ZR")) log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
+	}
     }
     count--;
-    if(count!=239)
+    expect=239;
+    if(count!=expect)
     {
-        log_err("There is an error in getISOCountries %d \n", count);
+        log_err("There is an error in getISOCountries, got %d, expected %d \n", count, expect);
     }
 }
 
@@ -1018,4 +1039,181 @@ static void TestVariantParsing()
         log_err("FAIL: getDisplayVariant()  Wanted: _FOO_  Got: %s\n", austrdup(got));
     }
     free(got);  
+}
+
+
+static void TestObsoleteNames(void)
+{
+  int32_t i;
+  UErrorCode status = U_ZERO_ERROR;
+  char buff[256];
+  const char *r1_addr;
+  int line = 9;
+
+  struct
+  {
+    char locale[9];
+    char lang3[6];
+    char lang[6];
+    char ctry3[6];
+    char ctry[6];
+  } tests[] = 
+  {
+    { "eng_USA", "eng", "en", "USA", "US" },
+    { "kok",  "kok", "kok", "", "" },
+    { "in",  "ind", "in", "", "" },
+    { "id",  "ind", "id", "", "" }, /* NO aliasing */
+    { "sh",  "srp", "sh", "", "" },
+    { "zz_FX",  "", "zz", "FXX", "FX" },
+    { "zz_ZR",  "", "zz", "ZAR", "ZR" },
+    { "zz_FXX",  "", "zz", "FXX", "FX" }, /* no aliasing. Doesn't go to PS(PSE). */
+    { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
+    { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
+    { "iw", "heb", "iw", "", "" },
+    { "ji", "yid", "ji", "", "" },
+    { "jw", "jaw", "jw", "", "" },
+    { "sh", "srp", "sh", "", "" },
+    { "",0,0,0,0,0 }
+  };
+
+  for(i=0;tests[i].locale[0];i++)
+  {
+    const char *locale;
+
+    locale = tests[i].locale;
+    log_verbose("** %s:\n", locale);
+    
+    status = U_ZERO_ERROR;
+    if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
+    {
+      log_err("FAIL: uloc_getISO3Language(%s)==\t\"%s\",\t expected \"%s\"\n",
+	      locale,  uloc_getISO3Language(locale), tests[i].lang3);
+    }
+    else
+    {
+      log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
+		  uloc_getISO3Language(locale) );
+    }
+
+    status = U_ZERO_ERROR;
+    uloc_getLanguage(locale, buff, 256, &status);
+    if(U_FAILURE(status))
+    {
+      log_err("FAIL: error getting language from %s\n", locale);
+    }
+    else
+    {
+      if(strcmp(buff,tests[i].lang))
+      {
+	log_err("FAIL: uloc_getLanguage(%s)==\t\"%s\"\t expected \"%s\"\n",
+		locale, buff, tests[i].lang);
+      }
+      else
+      {
+	log_verbose("  uloc_getLanguage(%s)==\t%s\n", locale, buff);
+      }
+    }
+    if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
+    {
+      log_err("FAIL: uloc_getISO3Language(%s)==\t\"%s\",\t expected \"%s\"\n",
+	      locale,  uloc_getISO3Language(locale), tests[i].lang3);
+    }
+    else
+    {
+      log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
+		  uloc_getISO3Language(locale) );
+    }
+
+    if(strcmp(tests[i].ctry3,uloc_getISO3Country(locale)))
+    {
+      log_err("FAIL: uloc_getISO3Country(%s)==\t\"%s\",\t expected \"%s\"\n",
+	      locale,  uloc_getISO3Country(locale), tests[i].ctry3);
+    }
+    else
+    {
+      log_verbose("   uloc_getISO3Country()==\t\"%s\"\n",
+		  uloc_getISO3Country(locale) );
+    }
+
+    status = U_ZERO_ERROR;
+    uloc_getCountry(locale, buff, 256, &status);
+    if(U_FAILURE(status))
+    {
+      log_err("FAIL: error getting country from %s\n", locale);
+    }
+    else
+    {
+      if(strcmp(buff,tests[i].ctry))
+      {
+	log_err("FAIL: uloc_getCountry(%s)==\t\"%s\"\t expected \"%s\"\n",
+		locale, buff, tests[i].ctry);
+      }
+      else
+      {
+	log_verbose("  uloc_getCountry(%s)==\t%s\n", locale, buff);
+      }
+    }
+
+
+  }
+
+#if 0
+
+	i = uloc_getLanguage("kok",NULL,0,&icu_err);
+	if(U_FAILURE(icu_err))
+	{
+	  log_err("FAIL: Got %s trying to do uloc_getLanguage(kok)\n", u_errorName(icu_err));
+	}
+
+	icu_err = U_ZERO_ERROR;
+	uloc_getLanguage("kok",r1_buff,12,&icu_err);
+	if(U_FAILURE(icu_err))
+	{
+	  log_err("FAIL: Got %s trying to do uloc_getLanguage(kok, buff)\n", u_errorName(icu_err));
+	}
+
+	r1_addr = (char *)uloc_getISO3Language("kok");
+
+	icu_err = U_ZERO_ERROR;
+	if (strcmp(r1_buff,"kok") != 0)
+	{
+		log_err("FAIL: uloc_getLanguage(kok)==%s not kok\n",r1_buff);
+		line--;
+	}
+	r1_addr = (char *)uloc_getISO3Language("in");
+	i = uloc_getLanguage(r1_addr,r1_buff,12,&icu_err);
+	if (strcmp(r1_buff,"id") != 0)
+	{
+		printf("uloc_getLanguage error (%s)\n",r1_buff);
+		line--;
+	}
+	r1_addr = (char *)uloc_getISO3Language("sh");
+	i = uloc_getLanguage(r1_addr,r1_buff,12,&icu_err);
+	if (strcmp(r1_buff,"sr") != 0)
+	{
+		printf("uloc_getLanguage error (%s)\n",r1_buff);
+		line--;
+	}
+
+	r1_addr = (char *)uloc_getISO3Country("zz_ZR");
+	strcpy(p1_buff,"zz_");
+	strcat(p1_buff,r1_addr);
+	i = uloc_getCountry(p1_buff,r1_buff,12,&icu_err);
+	if (strcmp(r1_buff,"ZR") != 0)
+	{
+		printf("uloc_getCountry error (%s)\n",r1_buff);
+		line--;
+	}
+	r1_addr = (char *)uloc_getISO3Country("zz_FX");
+	strcpy(p1_buff,"zz_");
+	strcat(p1_buff,r1_addr);
+	i = uloc_getCountry(p1_buff,r1_buff,12,&icu_err);
+	if (strcmp(r1_buff,"FX") != 0)
+	{
+		printf("uloc_getCountry error (%s)\n",r1_buff);
+		line--;
+	}
+
+#endif
+
 }

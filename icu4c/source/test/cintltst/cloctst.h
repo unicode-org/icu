@@ -51,6 +51,7 @@ static  void TestDisplayNames(void);
  * Test functions to test get ISO3 countries and Languages for Uninstalled locales
  **/
  static void TestUninstalledISO3Names(void);
+ static void TestObsoleteNames(void);
 /**
  * Test functions uloc_getDisplaynames()
  **/
