@@ -11,6 +11,8 @@
 #include "OpenTypeUtilities.h"
 #include "IndicReordering.h"
 
+U_NAMESPACE_BEGIN
+
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 enum
@@ -314,4 +316,4 @@ le_int32 IndicReordering::getWorstCaseExpansion(le_int32 scriptCode)
     return classTable->getWorstCaseExpansion();
 }
 
-
+U_NAMESPACE_END

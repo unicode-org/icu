@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 class Shaper
 {
 public:
@@ -100,5 +102,5 @@ private:
     static LEUnicode getToIsolateShape(LEUnicode ch);
 };
 
-
+U_NAMESPACE_END
 #endif

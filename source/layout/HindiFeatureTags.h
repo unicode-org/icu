@@ -12,6 +12,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 const LETag oopsFeatureTag = 0x6F6F7073; // 'oops'
 
 const LETag nuktFeatureTag = 0x6E756B74; // 'nukt'
@@ -31,5 +33,6 @@ const LETag blwmFeatureTag = 0x626C776D; // 'blwm'
 const LETag abvmFeatureTag = 0x6162766D; // 'abvm'
 const LETag distFeatureTag = 0x64697374; // 'dist'
 
+U_NAMESPACE_END
 #endif
 

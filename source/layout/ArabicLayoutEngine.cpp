@@ -22,6 +22,8 @@
 #include "ArabicShaping.h"
 #include "HebrewShaping.h"
 
+U_NAMESPACE_BEGIN
+
 class CharSubstitutionFilter : public LEGlyphFilter
 {
 private:
@@ -234,5 +236,5 @@ void UnicodeArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode cha
     adjustMarkGlyphs((const LEGlyphID *) &chars[offset], count, reverse, &filter, positions, success);
 }
 
-
+U_NAMESPACE_END
 

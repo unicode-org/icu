@@ -14,6 +14,8 @@
 #include "NonContextualGlyphSubst.h"
 #include "NonContextualGlyphSubstProc.h"
 
+U_NAMESPACE_BEGIN
+
 class TrimmedArrayProcessor : public NonContextualGlyphSubstitutionProcessor
 {
 public:
@@ -32,5 +34,6 @@ protected:
     const TrimmedArrayLookupTable *trimmedArrayLookupTable;
 };
 
+U_NAMESPACE_END
 #endif
 

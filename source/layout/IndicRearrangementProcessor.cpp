@@ -14,6 +14,8 @@
 #include "IndicRearrangementProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 IndicRearrangementProcessor::IndicRearrangementProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)
 {
@@ -371,3 +373,5 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         break;
     }
 }
+
+U_NAMESPACE_END

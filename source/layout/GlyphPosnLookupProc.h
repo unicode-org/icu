@@ -18,6 +18,8 @@
 #include "GlyphIterator.h"
 #include "LookupProcessor.h"
 
+U_NAMESPACE_BEGIN
+
 class GlyphPositioningLookupProcessor : public LookupProcessor
 {
 public:
@@ -33,4 +35,5 @@ protected:
     GlyphPositioningLookupProcessor();
 };
 
+U_NAMESPACE_END
 #endif

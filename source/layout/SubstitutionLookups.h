@@ -15,6 +15,8 @@
 #include "GlyphIterator.h"
 #include "LookupProcessor.h"
 
+U_NAMESPACE_BEGIN
+
 struct SubstitutionLookupRecord
 {
     le_uint16  sequenceIndex;
@@ -32,5 +34,6 @@ struct SubstitutionLookup
         le_int32 position);
 };
 
+U_NAMESPACE_END
 #endif
 

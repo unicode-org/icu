@@ -15,6 +15,8 @@
 
 #include "ThaiShaping.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This class implements layout for the Thai script, using the ThaiShapingClass.
  * All existing Thai fonts use an encoding which assigns character codes to all
@@ -87,5 +89,6 @@ protected:
         LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 };
 
+U_NAMESPACE_END
 #endif
 

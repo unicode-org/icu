@@ -13,6 +13,8 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 le_uint32 SingleSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     switch(SWAPW(subtableFormat))
@@ -77,3 +79,4 @@ le_uint32 SingleSubstitutionFormat2Subtable::process(GlyphIterator *glyphIterato
     return 0;
 }
 
+U_NAMESPACE_END

@@ -13,6 +13,8 @@
 #include "GlyphIterator.h"
 #include "GlyphPositionAdjustments.h"
 
+U_NAMESPACE_BEGIN
+
 struct DeviceTable
 {
     le_uint16  startSize;
@@ -28,7 +30,7 @@ private:
     static le_uint16 fieldBits[];
 };
 
-
+U_NAMESPACE_END
 #endif
 
 

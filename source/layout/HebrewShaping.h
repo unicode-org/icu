@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 class HebrewShaping
 {
 public:
@@ -21,4 +23,5 @@ public:
     static le_uint8 glyphDefinitionTable[];
 };
 
+U_NAMESPACE_END
 #endif

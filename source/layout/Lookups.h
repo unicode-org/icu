@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 enum LookupFlags
 {
     lfReservedBit           = 0x0001,
@@ -54,6 +56,5 @@ inline le_int32 LookupSubtable::getGlyphCoverage(LEGlyphID glyphID) const
     return getGlyphCoverage(coverageTableOffset, glyphID);
 }
 
-
-
+U_NAMESPACE_END
 #endif

@@ -15,6 +15,8 @@
 #include "AttachmentPosnSubtables.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct MarkToMarkPositioningSubtable : AttachmentPositioningSubtable
 {
     le_int32   process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
@@ -32,5 +34,6 @@ struct Mark2Array
     Mark2Record mark2RecordArray[ANY_NUMBER];
 };
 
+U_NAMESPACE_END
 #endif
 

@@ -10,6 +10,8 @@
 #include "GlyphDefinitionTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 const GlyphClassDefinitionTable *GlyphDefinitionTableHeader::getGlyphClassDefinitionTable() const
 {
     return (const GlyphClassDefinitionTable *) ((char *) this + SWAPW(glyphClassDefOffset));
@@ -30,3 +32,4 @@ const MarkAttachClassDefinitionTable *GlyphDefinitionTableHeader::getMarkAttachC
     return (const MarkAttachClassDefinitionTable *) ((char *) this + SWAPW(MarkAttachClassDefOffset));
 }
 
+U_NAMESPACE_END

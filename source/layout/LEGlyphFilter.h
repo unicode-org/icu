@@ -10,6 +10,8 @@
 
 #include "LETypes.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This is a helper class that is used to
  * recognize a set of glyph indices.
@@ -29,4 +31,5 @@ public:
     virtual le_bool accept(LEGlyphID glyph) const = 0;
 };
 
+U_NAMESPACE_END
 #endif

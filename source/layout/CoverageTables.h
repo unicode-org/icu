@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct CoverageTable
 {
     le_uint16 coverageFormat;
@@ -34,5 +36,5 @@ struct CoverageFormat2Table : CoverageTable
     le_int32 getGlyphCoverage(LEGlyphID glyphID) const;
 };
 
-
+U_NAMESPACE_END
 #endif

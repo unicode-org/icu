@@ -14,6 +14,8 @@
 #include "GlyphSubstitutionTables.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct SingleSubstitutionSubtable : GlyphSubstitutionSubtable
 {
     le_uint32  process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
@@ -34,6 +36,7 @@ struct SingleSubstitutionFormat2Subtable : SingleSubstitutionSubtable
     le_uint32  process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
 };
 
+U_NAMESPACE_END
 #endif
 
 

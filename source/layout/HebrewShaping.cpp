@@ -9,6 +9,8 @@
 #include "OpenTypeTables.h"
 #include "HebrewShaping.h"
 
+U_NAMESPACE_BEGIN
+
 const LETag ligaFeatureTag  = 0x6C696761; // 'liga'
 const LETag emptyTag        = 0x00000000; // ''
 
@@ -32,3 +34,5 @@ void HebrewShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 char
 		tags[out] = hebrewTags;
 	}
 }
+
+U_NAMESPACE_END

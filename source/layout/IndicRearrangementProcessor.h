@@ -14,6 +14,8 @@
 #include "StateTableProcessor.h"
 #include "IndicRearrangement.h"
 
+U_NAMESPACE_BEGIN
+
 class IndicRearrangementProcessor : public StateTableProcessor
 {
 public:
@@ -37,4 +39,5 @@ protected:
     const IndicRearrangementSubtableHeader *indicRearrangementSubtableHeader;
 };
 
+U_NAMESPACE_END
 #endif

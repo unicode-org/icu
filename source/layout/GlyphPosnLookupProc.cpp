@@ -25,6 +25,8 @@
 #include "GlyphPosnLookupProc.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 // Aside from the names, the contextual positioning subtables are
 // the same as the contextual substitution subtables.
 typedef ContextualSubstitutionSubtable ContextualPositioningSubtable;
@@ -135,3 +137,4 @@ GlyphPositioningLookupProcessor::~GlyphPositioningLookupProcessor()
 {
 }
 
+U_NAMESPACE_END

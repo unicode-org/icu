@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 // Characters that get refered to by name...
 enum
 {
@@ -321,4 +323,5 @@ inline le_bool IndicClassTable::hasBelowBaseForm(CharClass charClass)
     return (charClass & CF_BELOW_BASE) != 0;
 }
 
+U_NAMESPACE_END
 #endif

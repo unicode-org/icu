@@ -12,6 +12,8 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct MarkRecord
 {
     le_uint16	markClass;
@@ -27,6 +29,7 @@ struct MarkArray
         LEPoint &anchor) const;
 };
 
+U_NAMESPACE_END
 #endif
 
 

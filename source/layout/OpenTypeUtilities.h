@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 class OpenTypeUtilities
 {
 public:
@@ -21,4 +23,5 @@ public:
     static le_int32 search(le_uint32 value, const le_uint32 array[], le_int32 count);
 };
 
+U_NAMESPACE_END
 #endif

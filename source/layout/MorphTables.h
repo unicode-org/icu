@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "LayoutTables.h"
 
+U_NAMESPACE_BEGIN
+
 typedef le_uint32 FeatureFlags;
 
 typedef le_int16 FeatureType;
@@ -72,5 +74,6 @@ struct MorphSubtableHeader
     void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const;
 };
 
+U_NAMESPACE_END
 #endif
 

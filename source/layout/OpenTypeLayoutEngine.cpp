@@ -17,6 +17,8 @@
 
 #include "GDEFMarkFilter.h"
 
+U_NAMESPACE_BEGIN
+
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable), fSubstitutionFilter(NULL)
@@ -203,3 +205,4 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
     fFeatureTags = NULL;
 }
 
+U_NAMESPACE_END

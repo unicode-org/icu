@@ -12,6 +12,8 @@
 #include "OpenTypeTables.h"
 #include "ClassDefinitionTables.h"
 
+U_NAMESPACE_BEGIN
+
 typedef ClassDefinitionTable GlyphClassDefinitionTable;
 
 enum GlyphClassDefinitions
@@ -86,4 +88,5 @@ struct GlyphDefinitionTableHeader
     const MarkAttachClassDefinitionTable *getMarkAttachClassDefinitionTable() const;
 };
 
+U_NAMESPACE_END
 #endif

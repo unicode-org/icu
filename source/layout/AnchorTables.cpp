@@ -11,6 +11,8 @@
 #include "AnchorTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance,
                             LEPoint &anchor) const
 {
@@ -97,5 +99,5 @@ void Format3AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &
     fontInstance->pixelsToUnits(pixels, anchor);
 }
 
-
+U_NAMESPACE_END
 

@@ -11,6 +11,8 @@
 
 #include "unicode/utypes.h"
 
+U_NAMESPACE_BEGIN
+
 typedef int32_t le_int32;
 typedef uint32_t le_uint32;
 typedef int16_t le_int16;
@@ -74,6 +76,7 @@ typedef enum LEErrorCode LEErrorCode;
 #define LE_SUCCESS(code) (U_SUCCESS((UErrorCode)code))
 #define LE_FAILURE(code) (U_FAILURE((UErrorCode)code))
 
+U_NAMESPACE_END
 #endif
 
 

@@ -14,6 +14,8 @@
 #include "StateTableProcessor.h"
 #include "ContextualGlyphSubstitution.h"
 
+U_NAMESPACE_BEGIN
+
 class ContextualGlyphSubstitutionProcessor : public StateTableProcessor
 {
 public:
@@ -39,4 +41,5 @@ protected:
     const ContextualGlyphSubstitutionHeader *contextualGlyphSubstitutionHeader;
 };
 
+U_NAMESPACE_END
 #endif

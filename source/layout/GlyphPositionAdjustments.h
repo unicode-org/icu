@@ -11,6 +11,7 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
 
 class GlyphPositionAdjustment
 {
@@ -119,4 +120,5 @@ inline void GlyphPositionAdjustment::adjustYAdvance(float yAdjustment)
     yAdvance += yAdjustment;
 }
 
+U_NAMESPACE_END
 #endif

@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "LEFontInstance.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This class is an instance of LECharMapper which
  * implements control character filtering and bidi
@@ -47,4 +49,5 @@ public:
     LEUnicode32 mapChar(LEUnicode32 ch) const;
 };
 
+U_NAMESPACE_END
 #endif

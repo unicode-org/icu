@@ -15,6 +15,8 @@
 #include "GlyphIterator.h"
 #include "LookupProcessor.h"
 
+U_NAMESPACE_BEGIN
+
 struct SubstitutionLookupRecord
 {
     le_uint16  sequenceIndex;
@@ -193,4 +195,5 @@ struct ChainingContextualSubstitutionFormat3Subtable
     le_uint32  process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 };
 
+U_NAMESPACE_END
 #endif

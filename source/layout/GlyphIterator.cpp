@@ -13,6 +13,8 @@
 #include "Lookups.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 GlyphIterator::GlyphIterator(LEGlyphID *theGlyphs, GlyphPositionAdjustment *theGlyphPositionAdjustments, le_int32 theGlyphCount,
     le_bool rightToLeft, le_uint16 theLookupFlags, LETag theFeatureTag, const LETag *theGlyphTags[],
     const GlyphDefinitionTableHeader *theGlyphDefinitionTableHeader)
@@ -336,6 +338,4 @@ le_int32 GlyphIterator::getMarkComponent(le_int32 markPosition) const
     return component;
 }
 
-
-
-
+U_NAMESPACE_END

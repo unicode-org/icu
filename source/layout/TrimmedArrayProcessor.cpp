@@ -13,6 +13,8 @@
 #include "TrimmedArrayProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 TrimmedArrayProcessor::TrimmedArrayProcessor()
 {
 }
@@ -43,3 +45,5 @@ void TrimmedArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le
         }
     }
 } 
+
+U_NAMESPACE_END

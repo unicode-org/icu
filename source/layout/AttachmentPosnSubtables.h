@@ -14,6 +14,8 @@
 #include "ValueRecords.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 struct AttachmentPositioningSubtable : GlyphPositioningSubtable
 {
     Offset    baseCoverageTableOffset;
@@ -30,5 +32,6 @@ inline le_int32 AttachmentPositioningSubtable::getBaseCoverage(LEGlyphID baseGly
     return getGlyphCoverage(baseCoverageTableOffset, baseGlyphID);
 }
 
+U_NAMESPACE_END
 #endif
 

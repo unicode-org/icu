@@ -17,6 +17,8 @@
 //#include "ContextualGlyphInsertionProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const
 {
     const ChainHeader *chainHeader = chains;
@@ -90,3 +92,4 @@ void MorphSubtableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_
     }
 }
 
+U_NAMESPACE_END

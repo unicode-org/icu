@@ -10,6 +10,8 @@
 #include "OpenTypeUtilities.h"
 #include "IndicReordering.h"
 
+U_NAMESPACE_BEGIN
+
 class ReorderingOutput
 {
 private:
@@ -524,3 +526,4 @@ void IndicReordering::adjustMPres(const LEUnicode *chars, le_int32 charCount, LE
     }
 }
 
+U_NAMESPACE_END

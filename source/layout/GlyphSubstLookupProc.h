@@ -19,6 +19,8 @@
 #include "GlyphIterator.h"
 #include "LookupProcessor.h"
 
+U_NAMESPACE_BEGIN
+
 class GlyphSubstitutionLookupProcessor : public LookupProcessor
 {
 public:
@@ -37,4 +39,5 @@ private:
     const LEGlyphFilter *fFilter;
 };
 
+U_NAMESPACE_END
 #endif

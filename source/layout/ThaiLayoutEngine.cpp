@@ -13,6 +13,8 @@
 
 #include "ThaiShaping.h"
 
+U_NAMESPACE_BEGIN
+
 ThaiLayoutEngine::ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : LayoutEngine(fontInstance, scriptCode, languageCode)
 {
@@ -86,3 +88,4 @@ le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offse
     return glyphCount;
 }
 
+U_NAMESPACE_END

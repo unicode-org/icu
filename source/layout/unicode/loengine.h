@@ -15,6 +15,8 @@
 #include "layout/LETypes.h"
 #include "layout/LayoutEngine.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This is a wrapper class designed to allow ICU clients to
  * use LayoutEngine in a way that is consistent with the rest
@@ -326,4 +328,5 @@ inline ICULayoutEngine *ICULayoutEngine::createInstance(const LEFontInstance *fo
 	return new ICULayoutEngine(engine);
 }
 
+U_NAMESPACE_END
 #endif

@@ -10,6 +10,8 @@
 
 #include "LETypes.h"
 
+U_NAMESPACE_BEGIN
+
 #define ANY_NUMBER 1
 
 typedef le_uint16 Offset;
@@ -31,4 +33,5 @@ struct GlyphRangeRecord
     le_int16  rangeValue;
 };
 
+U_NAMESPACE_END
 #endif

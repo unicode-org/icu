@@ -11,6 +11,8 @@
 
 #include "LETypes.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * Instances of this class are used by LEFontInstance::mapCharsToGlyphs and
  * LEFontInstance::mapCharToGlyph to adjust character codes before the character
@@ -258,6 +260,7 @@ public:
     };
 };
 
+U_NAMESPACE_END
 #endif
 
 
