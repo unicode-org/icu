@@ -518,3 +518,5 @@
     $ecpD >;
     $ecpE >;
     $ecpF >;
+    $danda>'.';
+    $doubleDanda>'.';

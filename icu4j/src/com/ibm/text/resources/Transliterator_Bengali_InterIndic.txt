@@ -101,5 +101,7 @@
 \u09F8>;       # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
 \u09F9>;       # UNMAPPED Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
 \u09FA>\uE070; # ISSHAR
+\u0964>\ue064;        # DANDA
+\u0965>\ue065;        # DOUBLE DANDA
 #    :: NFC (NFD) ;
 # eof

@@ -94,5 +94,7 @@
 \u0aed>\ue06d; # DIGIT SEVEN
 \u0aee>\ue06e; # DIGIT EIGHT
 \u0aef>\ue06f; # DIGIT NINE
+\u0964>\ue064;        # DANDA
+\u0965>\ue065;        # DOUBLE DANDA
 #    :: NFC (NFD) ;
 # eof
