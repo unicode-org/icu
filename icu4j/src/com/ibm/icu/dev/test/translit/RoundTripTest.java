@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/06/03 18:49:31 $
- * $Revision: 1.54 $
+ * $Date: 2003/08/08 23:32:54 $
+ * $Revision: 1.55 $
  *
  *******************************************************************************
  */
@@ -28,8 +28,8 @@ import java.util.Locale;
 public class RoundTripTest extends TestFmwk {
 
     // Time bomb code to temporarily modify the behavior of this test
-    // to account for changes in the Unicode properties for ICU 2.6.
-    static VersionInfo ICU26 = VersionInfo.getInstance(2,6,0,0);
+    // to account for changes in the Unicode properties for ICU 2.6.*.
+    static VersionInfo ICU26 = VersionInfo.getInstance(2,6,1,0);
     static boolean isICU26() {
         return ICU26.compareTo(VersionInfo.ICU_VERSION) == 0;
     }
