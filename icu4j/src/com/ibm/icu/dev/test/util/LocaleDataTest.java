@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/LocaleDataTest.java,v $
- * $Date: 2003/11/14 19:15:14 $
- * $Revision: 1.1 $
+ * $Date: 2003/11/21 22:21:49 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -35,7 +35,7 @@ public class LocaleDataTest extends TestFmwk{
     
     private Locale[] availableLocales = null;
     
-    LocaleDataTest(){
+    public LocaleDataTest(){
         availableLocales = ICULocaleData.getAvailableLocales();
     }
     public void TestPaperSize(){
