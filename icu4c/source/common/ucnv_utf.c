@@ -178,7 +178,7 @@ void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                      args,
                                      args->converter->invalidCharBuffer,
                                      args->converter->invalidCharLength,
-                                     UCNV_UNASSIGNED,
+                                     UCNV_ILLEGAL,
                                      err);
                   
                   args->source = saveSource;
@@ -569,7 +569,7 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
   if (args->source >= args->sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
-      return 0xFFFD;
+      return 0xffff;
     }
   
   myByte = (uint8_t)*(args->source++);
@@ -587,7 +587,7 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
   if ((args->source + extraBytesToWrite - 1) > args->sourceLimit)
     {
       *err = U_TRUNCATED_CHAR_FOUND;
-      return 0xFFFD;
+      return 0xffff;
     }
   else
     {
@@ -635,24 +635,20 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
 
  CALL_ERROR_FUNCTION:
   {      
-    /*rewinds source*/
-    const char* sourceFinal = args->source;
     UChar myUChar = (UChar)ch; /* ### TODO: this is a hack until we prepare the callbacks for code points */
     UChar* myUCharPtr = &myUChar;
     
     *err = U_ILLEGAL_CHAR_FOUND;
-    args->source = sourceInitial;
     
     /*It is very likely that the ErrorFunctor will write to the
      *internal buffers */
     args->target = myUCharPtr;
     args->targetLimit = myUCharPtr + 1;
-    args->source = sourceFinal;
     args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                     args,
-                                    sourceFinal,
-                                    args->sourceLimit-sourceFinal,
-                                    UCNV_UNASSIGNED,
+                                    sourceInitial,
+                                    args->source-sourceInitial,
+                                    UCNV_ILLEGAL,
                                     err);
 
     
@@ -820,7 +816,7 @@ UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
           *err = U_TRUNCATED_CHAR_FOUND;
         }
       
-      return 0xFFFD;
+      return 0xffff;
     }
   
   
@@ -834,7 +830,7 @@ UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
 
     if (args->source+2 > args->sourceLimit) {
       *err = U_TRUNCATED_CHAR_FOUND;
-      return 0xFFFD;
+      return 0xffff;
     }
 
     /* get the second surrogate and assemble the code point */
@@ -1009,7 +1005,7 @@ UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
           *err = U_TRUNCATED_CHAR_FOUND;
         }
       
-      return 0xFFFD;
+      return 0xffff;
     }
   
 
@@ -1023,7 +1019,7 @@ UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
 
     if (args->source+2 > args->sourceLimit) {
       *err = U_TRUNCATED_CHAR_FOUND;
-      return 0xFFFD;
+      return 0xffff;
     }
 
     /* get the second surrogate and assemble the code point */
