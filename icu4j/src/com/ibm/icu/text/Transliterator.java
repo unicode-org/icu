@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.12 $ $Date: 2000/02/16 19:04:31 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.13 $ $Date: 2000/02/18 00:29:08 $
  */
 public abstract class Transliterator {
     /**
@@ -374,7 +374,9 @@ public abstract class Transliterator {
      * to this String to obtain the class name.
      */
     private static final String RB_RULE_BASED_PREFIX =
-        "com.ibm.text.resources.TransliterationRule$";
+        "com.ibm.text.resources.TransliterationRule_";
+
+	private static final char RB_RULE_BASED_SEPEATOR = '_';
 
     /**
      * Resource bundle key for the RuleBasedTransliterator rule.
@@ -863,8 +865,8 @@ public abstract class Transliterator {
                 } else {
                     String IDLeft  = ID.substring(0, i);
                     String IDRight = ID.substring(i+1);
-                    resourceName += isReverse ? (IDRight + '$' + IDLeft)
-                                              : (IDLeft + '$' + IDRight);
+                    resourceName += isReverse ? (IDRight + RB_RULE_BASED_SEPEATOR + IDLeft)
+                                              : (IDLeft + RB_RULE_BASED_SEPEATOR + IDRight);
                 }
                 try {
                     ResourceBundle resource = ResourceBundle.getBundle(resourceName);

@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.1 $ $Date: 2000/02/16 23:40:00 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.2 $ $Date: 2000/02/18 00:29:08 $
 #
 
 TOPDIR=		../../../../..
@@ -26,20 +26,20 @@ FILES_java=	$(TARGDIR)/NumberFormatRules.java	    \
 			$(TARGDIR)/BreakIteratorRules.java		\
 			$(TARGDIR)/BreakIteratorRules_th.java   \
 										\
-			$(TARGDIR)/TransliterationRule$$Fullwidth$$Halfwidth.java	\
-			$(TARGDIR)/TransliterationRule$$Han$$Pinyin.java			\
-			$(TARGDIR)/TransliterationRule$$Kanji$$English.java		\
-			$(TARGDIR)/TransliterationRule$$Kanji$$OnRomaji.java		\
-			$(TARGDIR)/TransliterationRule$$KeyboardEscape$$Latin1.java	\
-			$(TARGDIR)/TransliterationRule$$Latin$$Arabic.java		\
-			$(TARGDIR)/TransliterationRule$$Latin$$Cyrillic.java		\
-			$(TARGDIR)/TransliterationRule$$Latin$$Devanagari.java		\
-			$(TARGDIR)/TransliterationRule$$Latin$$Greek.java			\
-			$(TARGDIR)/TransliterationRule$$Latin$$Hebrew.java		\
-			$(TARGDIR)/TransliterationRule$$Latin$$Jamo.java			\
-			$(TARGDIR)/TransliterationRule$$Latin$$Kana.java			\
-			$(TARGDIR)/TransliterationRule$$StraightQuotes$$CurlyQuotes.java	\
-			$(TARGDIR)/TransliterationRule$$UnicodeName$$UnicodeChar.java	\
+			$(TARGDIR)/TransliterationRule_Fullwidth_Halfwidth.java	\
+#			$(TARGDIR)/TransliterationRule_Han_Pinyin.java			\
+			$(TARGDIR)/TransliterationRule_Kanji_English.java		\
+			$(TARGDIR)/TransliterationRule_Kanji_OnRomaji.java		\
+			$(TARGDIR)/TransliterationRule_KeyboardEscape_Latin1.java	\
+			$(TARGDIR)/TransliterationRule_Latin_Arabic.java		\
+			$(TARGDIR)/TransliterationRule_Latin_Cyrillic.java		\
+			$(TARGDIR)/TransliterationRule_Latin_Devanagari.java		\
+			$(TARGDIR)/TransliterationRule_Latin_Greek.java			\
+			$(TARGDIR)/TransliterationRule_Latin_Hebrew.java		\
+			$(TARGDIR)/TransliterationRule_Latin_Jamo.java			\
+			$(TARGDIR)/TransliterationRule_Latin_Kana.java			\
+			$(TARGDIR)/TransliterationRule_StraightQuotes_CurlyQuotes.java	\
+			$(TARGDIR)/TransliterationRule_UnicodeName_UnicodeChar.java	\
 								\
 			$(TARGDIR)/LocaleElements.java		\
 			$(TARGDIR)/LocaleElements_en.java  	\
