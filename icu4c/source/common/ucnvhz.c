@@ -44,7 +44,7 @@
 }
 
 /*********** HZ Converter Protos ***********/
-static void _HZOpen(UConverter *cnv, const char *name, const char *locale, UErrorCode *errorCode);
+static void _HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t *version,UErrorCode *errorCode);
 static void _HZClose(UConverter *converter);
 static void _HZReset(UConverter *converter);
 
@@ -108,7 +108,7 @@ typedef struct{
 
 
 
-static void _HZOpen(UConverter *cnv, const char *name,const char* locale, UErrorCode *errorCode){
+static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t *version, UErrorCode *errorCode){
     cnv->toUnicodeStatus = 0;
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
