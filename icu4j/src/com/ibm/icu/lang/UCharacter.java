@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/10/19 22:16:23 $ 
-* $Revision: 1.13 $
+* $Date: 2001/10/25 00:42:15 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -31,11 +31,15 @@ import java.util.Locale;
 * ints suffice in the meantime.
 * </p>
 * <p>
-* To use this class please add the jar file name ucharacter.jar to your 
+* To use this class please add the jar file name icu4j.jar to the 
 * class path, since it contains data files which supply the information used 
 * by this file.<br>
 * E.g. In Windows <br>
-* <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar</code>.
+* <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar</code>.<br>
+* Otherwise, another method would be to copy the files uprops.dat and 
+* unames.dat from the icu4j source subdirectory 
+* <i>$ICU4J_SRC/src/com/ibm/text/resources</i> to your class directory 
+* <i>$ICU4J_CLASS/com/ibm/text/resources</i>.
 * </p>
 * <p>
 * For more information about the data file format, please refer to 
