@@ -18,8 +18,8 @@
 */
 
 /* set import/export definitions */
-#ifndef U_COMMON_IMPLEMENTATION
-#   define U_COMMON_IMPLEMENTATION
+#ifndef U_UTF8_IMPL
+#   define U_UTF8_IMPL
 #endif
 
 #include "unicode/umachine.h"
