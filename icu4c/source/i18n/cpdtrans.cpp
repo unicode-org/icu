@@ -76,14 +76,15 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
  * transliterator using the given idBlock, with the adoptedTrans
  * inserted at the idSplitPoint.
  */
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& newID,
                                                const UnicodeString& idBlock,
                                                int32_t idSplitPoint,
                                                Transliterator *adoptedTrans,
                                                UParseError& parseError,
                                                UErrorCode& status) :
-    Transliterator(ID, 0),
-    trans(0), compoundRBTIndex(-1) {
+    Transliterator(newID, 0),
+    trans(0), compoundRBTIndex(-1)
+{
     init(idBlock, UTRANS_FORWARD, idSplitPoint, adoptedTrans, FALSE,parseError,status);
 }
 
@@ -97,7 +98,8 @@ CompoundTransliterator::CompoundTransliterator(UTransDirection dir,
                                                UVector& list,
                                                UErrorCode& status) :
     Transliterator(UnicodeString("", ""), 0),
-    trans(0), compoundRBTIndex(-1) {
+    trans(0), compoundRBTIndex(-1)
+{
     init(list, dir, FALSE, status);
     // assume caller will fixup ID
 }
