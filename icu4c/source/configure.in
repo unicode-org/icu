@@ -188,9 +188,6 @@ fi
 
 AC_SUBST(ICU_USE_THREADS)
 
-dnl FreeBSD needs a WCS library.
-AC_CHECK_LIB(wcs, wcscpy)
-
 # check for dlopen()
 
 HAVE_DLOPEN=0
@@ -302,7 +299,12 @@ else
     AC_DEFINE(HAVE_WCHAR_H)
     U_HAVE_WCHAR_H=1
     dnl Some broken systems have wchar.h but not some of its functions...
-    AC_CHECK_FUNC(wcscpy,[U_HAVE_WCSCPY=1],[U_HAVE_WCSCPY=0])
+    AC_SEARCH_LIBS(wcscpy, wcs)
+    if test "$ac_cv_search_wcscpy" != no; then
+      U_HAVE_WCSCPY=1
+    else
+      U_HAVE_WCSCPY=0
+    fi
 fi
 AC_SUBST(U_HAVE_WCHAR_H)
 AC_SUBST(U_HAVE_WCSCPY)
@@ -376,16 +378,27 @@ changequote([, ])dnl
 if test $ac_cv_var_timezone = yes; then
   U_TIMEZONE=timezone
 else
-  AC_CACHE_CHECK(for _timezone,ac_cv_var__timezone,
+  AC_CACHE_CHECK(for __timezone,ac_cv_var___timezone,
   [AC_TRY_LINK(
   changequote(<<, >>)dnl
   <<#include <time.h>
   >>,
   changequote([, ])dnl
-  [_timezone = 1;], ac_cv_var__timezone=yes, ac_cv_var__timezone=no)])
+  [__timezone = 1;], ac_cv_var___timezone=yes, ac_cv_var___timezone=no)])
+  if test $ac_cv_var___timezone = yes; then
+    U_TIMEZONE=__timezone
+  else
+    AC_CACHE_CHECK(for _timezone,ac_cv_var__timezone,
+    [AC_TRY_LINK(
+    changequote(<<, >>)dnl
+    <<#include <time.h>
+    >>,
+    changequote([, ])dnl
+    [_timezone = 1;], ac_cv_var__timezone=yes, ac_cv_var__timezone=no)])
     if test $ac_cv_var__timezone = yes; then
       U_TIMEZONE=_timezone
     fi
+  fi
 fi
 AC_SUBST(U_TIMEZONE)
 
@@ -628,12 +641,6 @@ dnl END special
 dnl Now that we're done using CPPFLAGS etc. for tests, we can change it
 dnl for build.
 
-if test x$ENABLE_SHARED = xYES
-then
-    CPPFLAGS="$CPPFLAGS \$(SHAREDLIBCPPFLAGS)"
-    CFLAGS="$CFLAGS \$(SHAREDLIBCFLAGS)"
-    CXXFLAGS="$CXXFLAGS \$(SHAREDLIBCXXFLAGS)"
-fi
 if test $ICU_USE_THREADS -ne 0
 then
     CFLAGS="$CFLAGS \$(THREADSCPPFLAGS)"
