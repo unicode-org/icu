@@ -41,12 +41,15 @@ the following steps.
    tz.bat.  Also specify one or more ourput files: .txt, .htm|.html,
    and .java.
 
-   For ICU4C specify .txt and .htm; typically
+   For ICU4C specify .txt; typically
 
-     <icu>/data/timezone.txt <icu>/docs/tz.htm
+     <icu>/source/data/misc/timezone.txt
 
-   where icu is the ICU4C root directory.  Double check that these are
-   the correct locations and file names; they change periodically.
+   where icu is the ICU4C root directory.  Double check that this is
+   the correct location and file name; they change periodically.
+
+   It is useful to generate an html file.  After it is generated,
+   review it for correctness.
 
    As the third argument, pass in "tz.java".  This will generate a
    java source file that will be used to update the ICU4J data.
