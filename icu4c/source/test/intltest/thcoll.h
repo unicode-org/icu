@@ -31,13 +31,13 @@ private:
      * sorted order, and confirm that the collator compares each line as
      * preceding the following line.
      */
-    void TestDictionary();
+    void TestDictionary(void);
     
     /**
      * Odd corner conditions taken from "How to Sort Thai Without Rewriting Sort",
      * by Doug Cooper, http://seasrc.th.net/paper/thaisort.zip
      */
-    void TestCornerCases();
+    void TestCornerCases(void);
     
 private:
 

@@ -1739,7 +1739,7 @@ DecimalFormat::toLocalizedPattern(UnicodeString& result) const
  * called any time the symbols or the affix patterns change in order to keep
  * the expanded affix strings up to date.
  */
-void DecimalFormat::expandAffixes() {
+void DecimalFormat::expandAffixes(void) {
     if (fPosPrefixPattern != 0) {
         expandAffix(*fPosPrefixPattern, fPositivePrefix);
     }

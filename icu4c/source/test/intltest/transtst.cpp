@@ -78,7 +78,7 @@ void TransliteratorTest::TestInstantiation() {
     }
 }
 
-void TransliteratorTest::TestSimpleRules() {
+void TransliteratorTest::TestSimpleRules(void) {
     /* Example: rules 1. ab>x|y
      *                2. yc>z
      *
@@ -137,7 +137,7 @@ void TransliteratorTest::TestSimpleRules() {
  * F' != I.  However, if we are careful about the input, we will
  * get the expected results.
  */
-void TransliteratorTest::TestRuleBasedInverse() {
+void TransliteratorTest::TestRuleBasedInverse(void) {
     UnicodeString RULES =
         UnicodeString("abc>zyx\n") +
         "ab>yz\n" +
@@ -185,7 +185,7 @@ void TransliteratorTest::TestRuleBasedInverse() {
 /**
  * Basic test of keyboard.
  */
-void TransliteratorTest::TestKeyboard() {
+void TransliteratorTest::TestKeyboard(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t("<ID>", 
                               UnicodeString("psch>Y\n")
@@ -214,7 +214,7 @@ void TransliteratorTest::TestKeyboard() {
 /**
  * Basic test of keyboard with cursor.
  */
-void TransliteratorTest::TestKeyboard2() {
+void TransliteratorTest::TestKeyboard2(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t("<ID>", 
                               UnicodeString("ych>Y\n")
@@ -246,7 +246,7 @@ void TransliteratorTest::TestKeyboard2() {
 /**
  * Test keyboard transliteration with back-replacement.
  */
-void TransliteratorTest::TestKeyboard3() {
+void TransliteratorTest::TestKeyboard3(void) {
     // We want th>z but t>y.  Furthermore, during keyboard
     // transliteration we want t>y then yh>z if t, then h are
     // typed.
@@ -311,7 +311,7 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
     }
 }
 
-void TransliteratorTest::TestArabic() {
+void TransliteratorTest::TestArabic(void) {
     /*
     const char* DATA[] = {
         "Arabic", "\u062a\u062a\u0645\u062a\u0639\u0020"+
@@ -346,7 +346,7 @@ void TransliteratorTest::TestArabic() {
  * Compose the Kana transliterator forward and reverse and try
  * some strings that should come out unchanged.
  */
-void TransliteratorTest::TestCompoundKana() {
+void TransliteratorTest::TestCompoundKana(void) {
     Transliterator* kana = Transliterator::createInstance("Latin-Kana");
     Transliterator* rkana = Transliterator::createInstance("Kana-Latin");
     Transliterator* trans[] = { kana, rkana };
@@ -367,7 +367,7 @@ void TransliteratorTest::TestCompoundKana() {
 /**
  * Compose the hex transliterators forward and reverse.
  */
-void TransliteratorTest::TestCompoundHex() {
+void TransliteratorTest::TestCompoundHex(void) {
     Transliterator* a = Transliterator::createInstance("Unicode-Hex");
     Transliterator* b = Transliterator::createInstance("Hex-Unicode");
     Transliterator* transab[] = { a, b };
@@ -412,7 +412,7 @@ class TestFilter : public UnicodeFilter {
 /**
  * Do some basic tests of filtering.
  */
-void TransliteratorTest::TestFiltering() {
+void TransliteratorTest::TestFiltering(void) {
     Transliterator* hex = Transliterator::createInstance("Unicode-Hex");
     if (hex == 0) {
         errln("FAIL: createInstance(Unicode-Hex) failed");

@@ -272,7 +272,7 @@ public:
     /**
      * Implement Transliterator API.
      */
-    Transliterator* clone() const;
+    Transliterator* clone(void) const;
 
     /**
      * Transliterates a segment of a string.  <code>Transliterator</code> API.
@@ -312,7 +312,7 @@ public:
      * @return Maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    virtual int32_t getMaximumContextLength() const;
+    virtual int32_t getMaximumContextLength(void) const;
 
 private:
 

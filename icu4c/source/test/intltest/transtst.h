@@ -24,12 +24,12 @@ class TransliteratorTest : public IntlTest {
     void runIndexedTest(int32_t index, bool_t exec, char* &name,
                         char* par=NULL);
 #if 0
-    void TestHashtable();
+    void TestHashtable(void);
 #endif
 
-    void TestInstantiation();
+    void TestInstantiation(void);
     
-    void TestSimpleRules();
+    void TestSimpleRules(void);
 
     /**
      * Create some inverses and confirm that they work.  We have to be
@@ -39,43 +39,43 @@ class TransliteratorTest : public IntlTest {
      * F' != I.  However, if we are careful about the input, we will
      * get the expected results.
      */
-    void TestRuleBasedInverse();
+    void TestRuleBasedInverse(void);
 
     /**
      * Basic test of keyboard.
      */
-    void TestKeyboard();
+    void TestKeyboard(void);
 
     /**
      * Basic test of keyboard with cursor.
      */
-    void TestKeyboard2();
+    void TestKeyboard2(void);
 
     /**
      * Test keyboard transliteration with back-replacement.
      */
-    void TestKeyboard3();
+    void TestKeyboard3(void);
     
     void keyboardAux(const Transliterator& t,
                      const char* DATA[], int32_t DATA_length);
     
-    void TestArabic();
+    void TestArabic(void);
 
     /**
      * Compose the Kana transliterator forward and reverse and try
      * some strings that should come out unchanged.
      */
-    void TestCompoundKana();
+    void TestCompoundKana(void);
 
     /**
      * Compose the hex transliterators forward and reverse.
      */
-    void TestCompoundHex();
+    void TestCompoundHex(void);
 
     /**
      * Do some basic tests of filtering.
      */
-    void TestFiltering();
+    void TestFiltering(void);
 
     //======================================================================
     // Support methods

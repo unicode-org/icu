@@ -115,7 +115,7 @@ public:
      * This is the main function for setting up the BreakIterator's tables.  It
      * just UVectors different parts of the job off to other functions.
      */
-    virtual void buildBreakIterator();
+    virtual void buildBreakIterator(void);
 
 private:
 
@@ -249,7 +249,7 @@ private:
      * This function completes the backfilling process by actually doing the
      * backfilling on the states that are marked for it
      */
-    virtual void backfillLoopingStates();
+    virtual void backfillLoopingStates(void);
 
     /**
      * This function completes the state-table-building process by doing several

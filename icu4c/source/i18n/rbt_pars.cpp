@@ -73,7 +73,7 @@ TransliterationRuleParser::TransliterationRuleParser(
  * @exception IllegalArgumentException if there is a syntax error in the
  * rules
  */
-void TransliterationRuleParser::parseRules() {
+void TransliterationRuleParser::parseRules(void) {
     status = U_ZERO_ERROR;
 
     delete data;
@@ -551,7 +551,7 @@ void TransliterationRuleParser::validateVariableName(const UnicodeString& name) 
  * When done, everything not in the hash is available for use.  In practice,
  * this method may employ some other algorithm for improved speed.
  */
-void TransliterationRuleParser::determineVariableRange() {
+void TransliterationRuleParser::determineVariableRange(void) {
     UnicodeRange privateUse(0xE000, 0x1900); // Private use area
 
     UnicodeRange* r = privateUse.largestUnusedSubrange(rules);

@@ -20,7 +20,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.2 $ $Date: 1999/11/22 21:47:26 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.3 $ $Date: 1999/12/22 22:52:18 $
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
@@ -54,7 +54,7 @@ public:
     /**
      * Transliterator API.
      */
-    Transliterator* clone() const;
+    Transliterator* clone(void) const;
 
     /**
      * Transliterates a segment of a string.  <code>Transliterator</code> API.
@@ -81,7 +81,7 @@ public:
      * @return maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    virtual int32_t getMaximumContextLength() const;
+    virtual int32_t getMaximumContextLength(void) const;
 
 private:
 

@@ -47,7 +47,7 @@ RuleBasedBreakIteratorBuilder::RuleBasedBreakIteratorBuilder() {
  * This is the main function for setting up the BreakIterator's tables.  It
  * just vectors different parts of the job off to other functions.
  */
-void RuleBasedBreakIteratorBuilder::buildBreakIterator() {
+void RuleBasedBreakIteratorBuilder::buildBreakIterator(void) {
     Vector tempRuleList = buildRuleList(description);
     buildCharCategories(tempRuleList);
     buildStateTable(tempRuleList);
@@ -1274,7 +1274,7 @@ void RuleBasedBreakIteratorBuilder::eliminateBackfillStates(int32_t baseState) {
  * This function completes the backfilling process by actually doing the
  * backfilling on the states that are marked for it
  */
-void RuleBasedBreakIteratorBuilder::backfillLoopingStates() {
+void RuleBasedBreakIteratorBuilder::backfillLoopingStates(void) {
     int16_t* state;
     int16_t* loopingState = 0;
     int32_t loopingStateRowNum = 0;

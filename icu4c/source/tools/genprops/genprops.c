@@ -57,7 +57,7 @@ bidiNames[U_CHAR_DIRECTION_COUNT]={
 /* prototypes --------------------------------------------------------------- */
 
 static void
-init();
+init(void);
 
 static void
 parseDB(FileStream *in);
@@ -134,7 +134,7 @@ main(int argc, char *argv[]) {
 }
 
 static void
-init() {
+init(void) {
 }
 
 /* parsing ------------------------------------------------------------------ */

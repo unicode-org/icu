@@ -36,7 +36,7 @@ TransliterationRuleSet::TransliterationRuleSet() {
  * Return the maximum context length.
  * @return the length of the longest preceding context.
  */
-int32_t TransliterationRuleSet::getMaximumContextLength() const {
+int32_t TransliterationRuleSet::getMaximumContextLength(void) const {
     return maxContextLength;
 }
 
@@ -80,7 +80,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
  * Free up space.  Once this method is called, addRule() must NOT
  * be called again.
  */
-void TransliterationRuleSet::freeze() {
+void TransliterationRuleSet::freeze(void) {
     for (int32_t i=0; i<rules.size(); ++i) {
         ((TransliterationRule*) rules.elementAt(i))->freeze();
     }

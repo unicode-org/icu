@@ -882,7 +882,7 @@ private:
     void expandAffix(const UnicodeString& pattern,
                      UnicodeString& affix) const;
 
-    void expandAffixes();
+    void expandAffixes(void);
     
     static double round(double a, ERoundingMode mode, bool_t isNegative);
 

@@ -40,7 +40,7 @@ class IEEETest
   ~IEEETest();
   
   // method returns the number of errors
-  int			run();
+  int			run(void);
   
  private:
   // utility function for running a test function
@@ -48,39 +48,39 @@ class IEEETest
 				int (IEEETest::*testFunc)(void));
   
   // the actual tests; methods return the number of errors
-  int			testNaN();
-  int			testPositiveInfinity();
-  int			testNegativeInfinity();
-  int			testZero();
+  int			testNaN(void);
+  int			testPositiveInfinity(void);
+  int			testNegativeInfinity(void);
+  int			testZero(void);
   
   // subtests of testNaN
-  int			testIsNaN();
-  int			NaNGT();
-  int			NaNLT();
-  int			NaNGTE();
-  int			NaNLTE();
-  int			NaNE();
-  int			NaNNE();
+  int			testIsNaN(void);
+  int			NaNGT(void);
+  int			NaNLT(void);
+  int			NaNGTE(void);
+  int			NaNLTE(void);
+  int			NaNE(void);
+  int			NaNNE(void);
   
   
   // logging utilities
-  int			getTestLevel() 		const;
-  void			increaseTestLevel();
-  void			decreaseTestLevel();
+  int			getTestLevel(void) const;
+  void			increaseTestLevel(void);
+  void			decreaseTestLevel(void);
   
   IEEETest&		log(char c);
   IEEETest&		log(const char *s);
   IEEETest&		log(int i);
   IEEETest&		log(long l);
   IEEETest&		log(double d);
-  IEEETest&		logln();
+  IEEETest&		logln(void);
   
   IEEETest&		err(char c);
   IEEETest&		err(const char *s);
   IEEETest&		err(int i);
   IEEETest&		err(long l);
   IEEETest&		err(double d);
-  IEEETest&		errln();
+  IEEETest&		errln(void);
   
   // data members
   int			mFlags;			// flags - only verbose for now
@@ -91,15 +91,15 @@ class IEEETest
 };
 
 inline int
-IEEETest::getTestLevel() const
+IEEETest::getTestLevel(void) const
 { return mTestLevel; }
 
 inline void
-IEEETest::increaseTestLevel()
+IEEETest::increaseTestLevel(void)
 { mTestLevel++; }
 
 inline void
-IEEETest::decreaseTestLevel()
+IEEETest::decreaseTestLevel(void)
 { mTestLevel--; }
 
 #endif

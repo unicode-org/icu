@@ -634,7 +634,7 @@ public:
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    virtual int32_t getMaximumContextLength() const;
+    virtual int32_t getMaximumContextLength(void) const;
 
     /**
      * Returns a programmatic identifier for this transliterator.
@@ -644,7 +644,7 @@ public:
      * @see #registerClass
      * @see #getAvailableIDs
      */
-    virtual const UnicodeString& getID() const;
+    virtual const UnicodeString& getID(void) const;
 
     /**
      * Returns a name for this transliterator that is appropriate for
@@ -678,7 +678,7 @@ public:
      * Returns the filter used by this transliterator, or <tt>null</tt>
      * if this transliterator uses no filter.
      */
-    virtual const UnicodeFilter* getFilter() const;
+    virtual const UnicodeFilter* getFilter(void) const;
 
     /**
      * Changes the filter used by this transliterator.  If the filter
@@ -710,7 +710,7 @@ public:
      * transliterator is registered.
      * @see #registerInstance
      */
-    virtual Transliterator* createInverse() const;
+    virtual Transliterator* createInverse(void) const;
 
     /**
      * Returns a <code>Transliterator</code> object given its ID.
@@ -747,7 +747,7 @@ private:
      * files are located.  This is a subdirectory, named RESOURCE_SUB_DIR,
      * under Locale::getDataDirectory().  It ends in a path separator.
      */
-    static const char* getDataDirectory();
+    static const char* getDataDirectory(void);
 
     static int32_t hash(const UnicodeString& str);
 
@@ -835,7 +835,7 @@ public:
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
      */
-    static int32_t countAvailableIDs();
+    static int32_t countAvailableIDs(void);
 
     /**
      * Return the index-th available ID.  index must be between 0
@@ -851,7 +851,7 @@ private:
      */
     static bool_t compareIDs(void* a, void* b);
 
-    static void initializeCache();
+    static void initializeCache(void);
 };
 
 #endif

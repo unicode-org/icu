@@ -214,7 +214,7 @@ public:
      * ranges.  Ranges are listed in ascending Unicode order.  For
      * example, the set [a-zA-M3] is represented as "33AMaz".
      */
-    const UnicodeString& getPairs() const;
+    const UnicodeString& getPairs(void) const;
 
     //----------------------------------------------------------------
     // Constructors &c
@@ -300,7 +300,7 @@ public:
      * @return the hash code value for this set.
      * @see Object#hashCode()
      */
-    virtual int32_t hashCode() const;
+    virtual int32_t hashCode(void) const;
 
     //----------------------------------------------------------------
     // Public API
@@ -348,14 +348,14 @@ public:
      *
      * @return the number of elements in this set (its cardinality).
      */
-    virtual int32_t size() const;
+    virtual int32_t size(void) const;
 
     /**
      * Returns <tt>true</tt> if this set contains no elements.
      *
      * @return <tt>true</tt> if this set contains no elements.
      */
-    virtual bool_t isEmpty() const;
+    virtual bool_t isEmpty(void) const;
 
     /**
      * Returns <tt>true</tt> if this set contains the specified range
@@ -462,13 +462,13 @@ public:
      * its value is its complement.  This is equivalent to the pseudo code:
      * <code>this = new CharSet("[\u0000-\uFFFF]").removeAll(this)</code>.
      */
-    virtual void complement();
+    virtual void complement(void);
 
     /**
      * Removes all of the elements from this set.  This set will be
      * empty after this call returns.
      */
-    virtual void clear();
+    virtual void clear(void);
 
     //----------------------------------------------------------------
     // Implementation: Pattern parsing

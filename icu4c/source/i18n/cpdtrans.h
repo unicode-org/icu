@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.1 $ $Date: 1999/11/20 00:36:43 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.2 $ $Date: 1999/12/22 22:52:18 $
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -80,13 +80,13 @@ public:
     /**
      * Transliterator API.
      */
-    Transliterator* clone() const;
+    Transliterator* clone(void) const;
 
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
      */
-    virtual int32_t getCount() const;
+    virtual int32_t getCount(void) const;
 
     /**
      * Returns the transliterator at the given index in this chain.
@@ -124,10 +124,10 @@ public:
      * @return maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    virtual int32_t getMaximumContextLength() const;
+    virtual int32_t getMaximumContextLength(void) const;
 
 private:
 
-    void freeTransliterators();
+    void freeTransliterators(void);
 };
 #endif

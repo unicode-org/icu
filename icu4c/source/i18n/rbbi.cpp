@@ -55,7 +55,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const UnicodeString& description)
  * @return A newly-constructed RuleBasedBreakIterator with the same
  * behavior as this one.
  */
-RuleBasedBreakIterator* RuleBasedBreakIterator::clone() const {
+RuleBasedBreakIterator* RuleBasedBreakIterator::clone(void) const {
     return new RuleBasedBreakIterator(*this);
 }
 
@@ -71,7 +71,7 @@ bool_t RuleBasedBreakIterator::operator==(const RuleBasedBreakIterator& that) {
 /**
  * Returns the description used to create this iterator
  */
-UnicodeString RuleBasedBreakIterator::toString() {
+UnicodeString RuleBasedBreakIterator::toString(void) {
     return description;
 }
 
@@ -79,7 +79,7 @@ UnicodeString RuleBasedBreakIterator::toString() {
  * Compute a hashcode for this BreakIterator
  * @return A hash code
  */
-int32_t RuleBasedBreakIterator::hashCode() {
+int32_t RuleBasedBreakIterator::hashCode(void) {
     return description.hashCode();
 }
 
@@ -91,7 +91,7 @@ int32_t RuleBasedBreakIterator::hashCode() {
  * (i.e., the CharacterIterator's starting offset).
  * @return The offset of the beginning of the text.
  */
-int32_t RuleBasedBreakIterator::first() {
+int32_t RuleBasedBreakIterator::first(void) {
     CharacterIterator t = getText();
 
     t.first();
@@ -103,7 +103,7 @@ int32_t RuleBasedBreakIterator::first() {
  * (i.e., the CharacterIterator's ending offset).
  * @return The text's past-the-end offset.
  */
-int32_t RuleBasedBreakIterator::last() {
+int32_t RuleBasedBreakIterator::last(void) {
     CharacterIterator t = getText();
 
     // I'm not sure why, but t.last() returns the offset of the last character,
@@ -138,7 +138,7 @@ int32_t RuleBasedBreakIterator::next(int32_t n) {
  * Advances the iterator to the next boundary position.
  * @return The position of the first boundary after this one.
  */
-int32_t RuleBasedBreakIterator::next() {
+int32_t RuleBasedBreakIterator::next(void) {
     return handleNext();
 }
 
@@ -146,7 +146,7 @@ int32_t RuleBasedBreakIterator::next() {
  * Advances the iterator backwards, to the last boundary preceding this one.
  * @return The position of the last boundary position preceding this one.
  */
-int32_t RuleBasedBreakIterator::previous() {
+int32_t RuleBasedBreakIterator::previous(void) {
     // if we're already sitting at the beginning of the text, return DONE
     CharacterIterator text = getText();
     if (current() == text.getBeginIndex())
@@ -248,7 +248,7 @@ bool_t RuleBasedBreakIterator::isBoundary(int32_t offset) {
  * Returns the current iteration position.
  * @return The current iteration position.
  */
-int32_t RuleBasedBreakIterator::current() {
+int32_t RuleBasedBreakIterator::current(void) {
     return getText().getIndex();
 }
 
@@ -259,7 +259,7 @@ int32_t RuleBasedBreakIterator::current() {
  * you need to change it, clone it first.
  * @return An iterator over the text being analyzed.
  */
-CharacterIterator RuleBasedBreakIterator::getText() {
+CharacterIterator RuleBasedBreakIterator::getText(void) {
     // The iterator is initialized pointing to no text at all, so if this
     // function is called while we're in that state, we have to fudge an
     // an iterator to return.
@@ -287,7 +287,7 @@ void RuleBasedBreakIterator::setText(CharacterIterator newText) {
  * of the text or the state machine transitions to state 0.  We update our return
  * value every time the state machine passes through a possible end state.
  */
-int32_t RuleBasedBreakIterator::handleNext() {
+int32_t RuleBasedBreakIterator::handleNext(void) {
     // if we're already at the end of the text, return DONE.
     CharacterIterator text = getText();
     if (text.getIndex() == text.getEndIndex())
@@ -331,7 +331,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
  * the appropriate position to return.  (For more information, see the description
  * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
  */
-int32_t RuleBasedBreakIterator::handlePrevious() {
+int32_t RuleBasedBreakIterator::handlePrevious(void) {
     CharacterIterator text = getText();
     int32_t state = START_STATE;
     int32_t category = 0;

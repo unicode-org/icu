@@ -33,7 +33,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, bool_t exec,
 }
 
 void
-UnicodeSetTest::TestPatterns() {
+UnicodeSetTest::TestPatterns(void) {
     UnicodeSet set;
     expectPattern(set, "[[a-m]&[d-z]&[k-y]]",  "km");
     expectPattern(set, "[[a-z]-[m-y]-[d-r]]",  "aczz");
@@ -50,7 +50,7 @@ UnicodeSetTest::TestPatterns() {
 }
 
 void
-UnicodeSetTest::TestAddRemove() {
+UnicodeSetTest::TestAddRemove(void) {
 	UErrorCode status = U_ZERO_ERROR;
 
     UnicodeSet set; // Construct empty set

@@ -53,7 +53,7 @@ RuleBasedTransliterator::~RuleBasedTransliterator() {
 }
 
 Transliterator* // Covariant return NOT ALLOWED (for portability)
-RuleBasedTransliterator::clone() const {
+RuleBasedTransliterator::clone(void) const {
     return new RuleBasedTransliterator(*this);
 }
 
@@ -229,6 +229,6 @@ RuleBasedTransliterator::handleKeyboardTransliterate(Replaceable& text,
  * @return Maximum number of preceding context characters this
  * transliterator needs to examine
  */
-int32_t RuleBasedTransliterator::getMaximumContextLength() const {
+int32_t RuleBasedTransliterator::getMaximumContextLength(void) const {
     return data->ruleSet.getMaximumContextLength();
 }

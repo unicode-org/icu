@@ -1237,7 +1237,7 @@ u_scanf_scanset_handler(UFILE             *stream,
 }
 
 void
-u_scanf_init()
+u_scanf_init(void)
 {
   int32_t i;
   /*Mutex *lock;*/

@@ -29,8 +29,6 @@
 #include "citertst.h"
 #include "ustring.h"
 
-#include <memory.h>
-
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 static UErrorCode status = U_ZERO_ERROR;

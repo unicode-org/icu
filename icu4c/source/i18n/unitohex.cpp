@@ -68,7 +68,7 @@ UnicodeToHexTransliterator::operator=(const UnicodeToHexTransliterator& other) {
 }
 
 Transliterator*
-UnicodeToHexTransliterator::clone() const {
+UnicodeToHexTransliterator::clone(void) const {
     return new UnicodeToHexTransliterator(*this);
 }
 
@@ -76,7 +76,7 @@ UnicodeToHexTransliterator::clone() const {
  * Returns the string that precedes the four hex digits.
  * @return prefix string
  */
-const UnicodeString& UnicodeToHexTransliterator::getPrefix() const {
+const UnicodeString& UnicodeToHexTransliterator::getPrefix(void) const {
     return prefix;
 }
 
@@ -95,7 +95,7 @@ void UnicodeToHexTransliterator::setPrefix(const UnicodeString& hexPrefix) {
 /**
  * Returns true if this transliterator outputs uppercase hex digits.
  */
-bool_t UnicodeToHexTransliterator::isUppercase() const {
+bool_t UnicodeToHexTransliterator::isUppercase(void) const {
     return uppercase;
 }
 
@@ -170,7 +170,7 @@ void UnicodeToHexTransliterator::handleKeyboardTransliterate(Replaceable& text,
  * @return maximum number of preceding context characters this
  * transliterator needs to examine
  */
-int32_t UnicodeToHexTransliterator::getMaximumContextLength() {
+int32_t UnicodeToHexTransliterator::getMaximumContextLength(void) {
     return 0;
 }
 

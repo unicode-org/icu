@@ -169,7 +169,7 @@ typedef struct UBiDi UBiDi;
  * @return An empty <code>UBiDi</code> object.
  */
 U_CAPI UBiDi * U_EXPORT2
-ubidi_open();
+ubidi_open(void);
 
 /**
  * Allocate a <code>UBiDi</code> structure with preallocated memory

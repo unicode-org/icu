@@ -32,7 +32,7 @@
 #include "ccolltst.h"
 #include "ustring.h"
 #include "string.h"
-#include <memory.h>
+
 static UCollator *myCollation;
 const static UChar testSourceCases[][MAX_TOKEN_LEN] = {
     {0x0062/*'a'*/, 0x006c/*'l'*/, 0x0069/*'i'*/, 0x0061/*'a'*/, 0x0073/*'s'*/, 0x0000},
