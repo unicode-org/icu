@@ -56,9 +56,6 @@ ucbuf_close(UCHARBUF* buf);
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 ungetChar,UCHARBUF* buf);
 
-U_CAPI void U_EXPORT2
-ucbuf_closebuf(UCHARBUF* buf);
-
 U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp);
 

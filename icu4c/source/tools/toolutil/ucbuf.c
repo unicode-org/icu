@@ -54,10 +54,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     UChar* target=NULL;
     const char* source=NULL;
     char* cbuf =NULL;
-    int32_t numConverted =0;
-    int32_t limit=0;
     int numRead=0;
-    int numWritten=0;
     int offset=0;
 
     cbuf =(char*)uprv_malloc(sizeof(char) * MAX_BUF);
@@ -228,6 +225,7 @@ ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
 static void 
 ucbuf_closebuf(UCHARBUF* buf){
     uprv_free(buf->buffer);
+    buf->buffer = NULL;
 }
 
 /* close the buf and release resources*/
