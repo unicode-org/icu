@@ -85,9 +85,9 @@ enum E_Where
 typedef enum E_Where E_Where;
 /*****************************************************************************/
 
-#define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); pass=FALSE; }
+#define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); }
 
-#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); pass=FALSE; }
+#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); }
 
 
 /* Array of our test objects */
@@ -283,7 +283,7 @@ UBool testTag(const char* frag,
            UBool in_te,
            UBool in_te_IN)
 {
-    UBool pass=TRUE;
+    int32_t passNum=pass;
 
     /* Make array from input params */
 
@@ -610,7 +610,7 @@ UBool testTag(const char* frag,
         ures_close(theBundle);
     }
     free(base);
-    return pass;
+    return (UBool)(passNum == pass);
 }
 
 void record_pass()
