@@ -864,7 +864,10 @@ class TransliteratorRegistry {
                 }
             } else {
                 if (parser.data == null) {
-                    // idBlock, no data -- this is an alias
+                    // idBlock, no data -- this is an alias.  The ID has
+                    // been munged from reverse into forward mode, if
+                    // necessary, so instantiate the ID in the forward
+                    // direction.
                     entryWrapper[0] = new AliasEntry(parser.idBlock);
                 } else {
                     // idBlock and data -- this is a compound

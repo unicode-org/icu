@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/10/23 23:28:13 $
-* $Revision: 1.6 $
+* $Date: 2001/10/24 00:03:38 $
+* $Revision: 1.7 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -967,11 +967,15 @@ class TransliteratorParser {
                             ++pos;
                             c = rule.charAt(pos);
                         }
+                        int lengthBefore = idBlockResult.length();
+                        if (mode == 1) {
+                            mode = 2;
+                            idSplitPoint = lengthBefore;
+                        }
                         int[] p = new int[] { pos };
                         boolean[] sawDelim = new boolean[1];
-                        StringBuffer regenID = new StringBuffer();
                         UnicodeSet[] cpdFilter = new UnicodeSet[1];
-                        Transliterator.parseID(rule, regenID, p, sawDelim, cpdFilter, direction, false);
+                        Transliterator.parseID(rule, idBlockResult, p, sawDelim, cpdFilter, direction, false);
                         if (p[0] == pos || !sawDelim[0]) {
                             // Invalid ::id
                             int i1 = pos + 2;
@@ -980,10 +984,6 @@ class TransliteratorParser {
                             }
                             throw new IllegalArgumentException("Invalid ::ID " +
                                                                rule.substring(pos, i1));
-                        } else {
-                            if (mode == 1) {
-                                mode = 2;
-                                idSplitPoint = idBlockResult.length();
                         }
                         if (cpdFilter[0] != null) {
                             if (compoundFilter != null) {
@@ -991,18 +991,9 @@ class TransliteratorParser {
                                 throw new IllegalArgumentException("Multiple compound filters");
                             }
                             compoundFilter = cpdFilter[0];
-                                if (idBlockResult.length() == 0) {
-                                    compoundFilterOffset = 0;
-                                }
-                            }
-                            String str = rule.substring(pos, p[0]);
-                            idBlockResult.append(str);
-                            if (!sawDelim[0]) {
-                                idBlockResult.append(';');
+                            compoundFilterOffset = (direction == Transliterator.FORWARD) ?
+                                lengthBefore : idBlockResult.length();
                         }
-                            if (cpdFilter[0] != null && compoundFilterOffset < 0) {
-                                compoundFilterOffset = idBlockResult.length();
-                            }
                         pos = p[0];
                     } else if (resemblesPragma(rule, pos, limit)) {
                         int ppp = parsePragma(rule, pos, limit);
