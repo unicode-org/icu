@@ -108,10 +108,6 @@ SOURCE=.\compdata.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\compitr.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\convert.cpp
 # End Source File
 # Begin Source File
@@ -411,10 +407,6 @@ SOURCE=.\cmemory.h
 # Begin Source File
 
 SOURCE=.\compdata.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\compitr.h
 # End Source File
 # Begin Source File
 

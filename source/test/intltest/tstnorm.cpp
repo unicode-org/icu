@@ -5,7 +5,6 @@
  ********************************************************************/
 
 #include "tstnorm.h"
-#include "compitr.h"
 
 #define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
 
@@ -33,8 +32,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(7,TestTibetan);
         CASE(8,TestCompositionExclusion);
         CASE(9,TestZeroIndex);
-        CASE(10,TestComposedCharIter);
-        CASE(11,TestVerisign);
+        CASE(10,TestVerisign);
         default: name = ""; break;
     }
 }
@@ -355,29 +353,6 @@ void BasicNormalizerTest::TestZeroIndex(void) {
         } else {
             errln((UnicodeString)"FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
                   ", expect " + hex(exp));
-        }
-    }
-}
-
-/**
- * Test ComposedCharIter.
- */
-void BasicNormalizerTest::TestComposedCharIter(void) {
-    ComposedCharIter iter;
-    UnicodeString decompose;
-    UnicodeString temp;
-    UnicodeString buffer;
-    UErrorCode status = U_ZERO_ERROR;
-    while (iter.hasNext()) {
-        UChar c = iter.next();
-        temp.remove(0);
-        temp.append(c);
-        iter.getDecomposition(decompose);
-        Normalizer::decompose(temp, TRUE, 0, buffer, status);
-        if (buffer != decompose) {
-            errln((UnicodeString)"FAIL: " +
-                  hex(c) + " -> ComposedCharIter:" + hex(decompose) +
-                  " vs. Normalizer:" + hex(buffer));
         }
     }
 }
