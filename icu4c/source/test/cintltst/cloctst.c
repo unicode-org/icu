@@ -26,12 +26,9 @@
 #include "cintltst.h"
 #include "cstring.h"
 #include "unicode/ures.h"
+#include "locmap.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
-#ifdef WIN32
-#include "locmap.h"
-#endif
 
 static void TestNullDefault(void);
 static void VerifyTranslation(void);
@@ -408,7 +405,6 @@ setUpDataTable();
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
             log_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
         }
-
     }
 
  free(expected);
@@ -1081,6 +1077,14 @@ static void TestObsoleteNames(void)
         }
     }
 
+    if (uloc_getLCID("iw_IL") != uloc_getLCID("he_IL")) {
+        log_err("he,iw LCID mismatch: %X versus %X\n", uloc_getLCID("iw_IL"), uloc_getLCID("he_IL"));
+    }
+
+    if (uloc_getLCID("iw") != uloc_getLCID("he")) {
+        log_err("he,iw LCID mismatch: %X versus %X\n", uloc_getLCID("iw"), uloc_getLCID("he"));
+    }
+
 #if 0
 
     i = uloc_getLanguage("kok",NULL,0,&icu_err);
@@ -1475,8 +1479,6 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
 }
 
 
-#ifdef WIN32
-
 static void
 testLCID(UResourceBundle *currentBundle,
          const char *localeName)
@@ -1487,17 +1489,8 @@ testLCID(UResourceBundle *currentBundle,
     char lcidStringC[64] = {0};
     int32_t lcidStringLen = 0;
     const UChar *lcidString = NULL;
-    UResourceBundle *localeID = ures_getByKey(currentBundle, "LocaleID", NULL, &status);
 
-    expectedLCID = ures_getInt(localeID, &status);
-    ures_close(localeID);
-
-    if (U_FAILURE(status)) {
-        log_err("ERROR:   %s does not have a LocaleID (%s)\n",
-            localeName, u_errorName(status));
-        return;
-    }
-
+    expectedLCID = uloc_getLCID(localeName);
     lcid = uprv_convertToLCID(localeName, &status);
     if (U_FAILURE(status)) {
         if (expectedLCID == 0) {
@@ -1542,8 +1535,6 @@ testLCID(UResourceBundle *currentBundle,
         }
     }
 }
-
-#endif
 
 static void
 TestLocaleStructure(void) {
@@ -1621,9 +1612,7 @@ TestLocaleStructure(void) {
         subtable = ures_getByKey(currentLocale, "Currencies", NULL, &errorCode);
         TestKeyInRootRecursive(completeSubtable, "en", subtable, currLoc);
 
-#ifdef WIN32
         testLCID(currentLocale, currLoc);
-#endif
 
         ures_close(completeSubtable);
         ures_close(subtable);
