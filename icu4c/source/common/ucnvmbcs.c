@@ -2072,7 +2072,7 @@ getTrail:
                 }
                 targetCapacity-=length;
             } else {
-                uint8_t *p;
+                uint8_t *charErrorBuffer;
 
                 /*
                  * We actually do this backwards here:
@@ -2082,15 +2082,15 @@ getTrail:
                  */
                 /* we know that 1<=targetCapacity<length<=4 */
                 length-=targetCapacity;
-                p=(uint8_t *)cnv->charErrorBuffer;
+                charErrorBuffer=(uint8_t *)cnv->charErrorBuffer;
                 switch(length) {
                     /* each branch falls through to the next one */
                 case 3:
-                    *p++=(uint8_t)(value>>16);
+                    *charErrorBuffer++=(uint8_t)(value>>16);
                 case 2:
-                    *p++=(uint8_t)(value>>8);
+                    *charErrorBuffer++=(uint8_t)(value>>8);
                 case 1:
-                    *p=(uint8_t)value;
+                    *charErrorBuffer=(uint8_t)value;
                 default:
                     /* will never occur */
                     break;
