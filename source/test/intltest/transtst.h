@@ -23,9 +23,6 @@ class TransliteratorTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, char* &name,
                         char* par=NULL);
-#if 0
-    void TestHashtable(void);
-#endif
 
     void TestInstantiation(void);
     
@@ -99,18 +96,18 @@ class TransliteratorTest : public IntlTest {
     /**
      * Test segments and segment references.
      */
-    void TestSegments();
+    void TestSegments(void);
     
     /**
      * Test cursor positioning outside of the key
      */
-    void TestCursorOffset();
+    void TestCursorOffset(void);
     
     /**
      * Test zero length and > 1 char length variable values.  Test
      * use of variable refs in UnicodeSets.
      */
-    void TestArbitraryVariableValues();
+    void TestArbitraryVariableValues(void);
 
     //======================================================================
     // Support methods
