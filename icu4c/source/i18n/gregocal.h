@@ -23,6 +23,8 @@
 *                            Fixed bug in roll() 
 *   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
 *                           Added documentation of WEEK_OF_YEAR computation.
+*   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
+*                           {JDK bug 4210209 4209272}
 ********************************************************************************
 */
          
@@ -459,6 +461,12 @@ private:
      * @see #WEEK_OF_YEAR
      */
     int32_t getISOYear(UErrorCode& status);
+
+    /**
+     * Return the ERA.  We need a special method for this because the
+     * default ERA is AD, but a zero (unset) ERA is BC.
+     */
+    int32_t internalGetEra() const;
 
     // this is 2^52 - 1, the largest allowable mantissa with a 0 exponent in a 64-bit double
     static const UDate EARLIEST_SUPPORTED_MILLIS;

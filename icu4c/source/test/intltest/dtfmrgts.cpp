@@ -54,6 +54,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &nam
         CASE(20,Test4151706)
         CASE(21,Test4162071)
         CASE(22,Test4182066)
+        CASE(23,Test4210209)
 
         default: name = ""; break;
     }
@@ -1086,5 +1087,55 @@ void DateFormatRegressionTest::Test4182066() {
     }
 }
 
+/**
+ * j32 {JDK Bug 4210209 4209272}
+ * DateFormat cannot parse Feb 29 2000 when setLenient(false)
+ */
+void
+DateFormatRegressionTest::Test4210209() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern("MMM d, yyyy");
+    SimpleDateFormat sfmt(pattern, Locale::US, status);
+    SimpleDateFormat sdisp("MMM dd yyyy GG", Locale::US, status);
+    DateFormat& fmt = *(DateFormat*)&sfmt; // Yuck: See j25
+    DateFormat& disp = *(DateFormat*)&sdisp; // Yuck: See j25
+    if (FAILURE(status)) {
+        errln("Couldn't create SimpleDateFormat");
+        return;
+    }
+    Calendar* calx = (Calendar*)fmt.getCalendar(); // cast away const!
+    calx->setLenient(FALSE);
+    UDate d = date(2000-1900, Calendar::FEBRUARY, 29);
+    UnicodeString s, ss;
+    fmt.format(d, s);
+    logln(disp.format(d, ss.remove()) + " f> " + pattern +
+          " => \"" + s + "\"");
+    ParsePosition pos(0);
+    d = fmt.parse(s, pos);
+    logln(UnicodeString("\"") + s + "\" p> " + pattern +
+          " => " + disp.format(d, ss.remove()));
+    logln(UnicodeString("Parse pos = ") + pos.getIndex() +
+          ", error pos = " + pos.getErrorIndex());
+    if (pos.getErrorIndex() != -1) {
+        errln(UnicodeString("FAIL: Error index should be -1"));
+    }
+
+    // The underlying bug is in GregorianCalendar.  If the following lines
+    // succeed, the bug is fixed.  If the bug isn't fixed, they will throw
+    // an exception.
+    GregorianCalendar cal(status);
+    if (FAILURE(status)) {
+        errln("FAIL: Unable to create Calendar");
+        return;
+    }
+    cal.clear();
+    cal.setLenient(FALSE);
+    cal.set(2000, Calendar::FEBRUARY, 29); // This should work!
+    logln(UnicodeString("Attempt to set Calendar to Feb 29 2000: ") +
+                        disp.format(cal.getTime(status), ss.remove()));
+    if (FAILURE(status)) {
+        errln("FAIL: Unable to set Calendar to Feb 29 2000");
+    }
+}
 
 //eof

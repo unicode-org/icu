@@ -34,6 +34,8 @@
 *    09/14/98    stephen        Changed type of kOneDay, kOneWeek to double.
 *                            Fixed bug in roll() 
 *   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
+*   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
+*                           {JDK bug 4210209 4209272}
 ********************************************************************************
 */
 
@@ -540,7 +542,7 @@ int32_t
 GregorianCalendar::monthLength(int32_t month) const
 {
     int32_t year = internalGet(YEAR);
-    if(internalGet(ERA) == BC) {
+    if(internalGetEra() == BC) {
         year = 1 - year;
     }
 
@@ -614,7 +616,7 @@ GregorianCalendar::computeFields(UErrorCode& status)
     // Time to fields takes the wall millis (Standard or DST).
     timeToFields(localMillis, FALSE, status);
 
-    uint8_t era         = (uint8_t) internalGet(ERA);
+    uint8_t era         = (uint8_t) internalGetEra();
     int32_t year         = internalGet(YEAR);
     int32_t month         = internalGet(MONTH);
     int32_t date         = internalGet(DATE);
@@ -1198,7 +1200,7 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
 
     if (field == YEAR) {
         int32_t year = internalGet(YEAR);
-        if (internalGet(ERA) == AD) {
+        if (internalGetEra() == AD) {
             year += amount;
             if (year > 0)
                 set(YEAR, year);
@@ -1793,6 +1795,15 @@ GregorianCalendar::getISOYear(UErrorCode& status)
         }
     }
     return isoYear;
+}
+
+/**
+ * Return the ERA.  We need a special method for this because the
+ * default ERA is AD, but a zero (unset) ERA is BC.
+ */
+int32_t
+GregorianCalendar::internalGetEra() const {
+    return isSet(ERA) ? internalGet(ERA) : AD;
 }
 
 //eof
