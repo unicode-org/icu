@@ -6,7 +6,7 @@
 *
 *****************************************************************************************
 */
-// $Revision: 1.10 $
+// $Revision: 1.11 $
 //===============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -46,6 +46,7 @@ public:
      * @param hostid the Windows LCID number.
      * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the LCID has no
      *               equivalent ICU locale.
+     * @return ICU locale
      */
     static const char*          convertToPosix(uint32_t hostid, UErrorCode* status);
 
@@ -56,6 +57,7 @@ public:
      * @param posixid the Posix style locale id.
      * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the Posix ID has
      *               no equivalent Windows LCID.
+     * @return the LCID
      */
     static uint32_t             convertToLCID(const char* posixID, UErrorCode* status);
 
@@ -66,6 +68,7 @@ public:
      * ID.
      *
      * @param hostid the Windows LCID number.
+     * @return the language part of the LCID
      */
     static inline uint16_t      languageLCID(uint32_t hostID) {return LANGUAGE_LCID(hostID);}
 
@@ -78,7 +81,7 @@ protected:
 
     static void                 initializeMapRegions(void);
 private:
-                                
+
     static uint32_t             LocaleCount;
     static ILcidPosixMap*       PosixIDmap;
 
