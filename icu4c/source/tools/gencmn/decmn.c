@@ -133,7 +133,8 @@ main(int argc, char *argv[]) {
     options[2].value = ".";
 
     argc = u_parseArgs(argc, argv, sizeof(options) / sizeof(*options), options);
-    if ((ishelp = options[0].doesOccur || options[1].doesOccur) || argc != 2) {
+    ishelp = options[0].doesOccur;
+    if ((ishelp || options[1].doesOccur) || argc != 2) {
         fprintf(stderr,
                 "%csage: %s [ -h, -?, --help ] [ -n ] [ -C, --comment ] [ -d, --destdir destination ] archive\n", ishelp ? 'U' : 'u', pname);
         if (ishelp) {
