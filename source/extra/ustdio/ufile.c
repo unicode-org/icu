@@ -232,6 +232,8 @@ u_finit(FILE        *f,
 void
 u_fclose(UFILE *file)
 {
+  fflush(file->fFile);
+
   if(file->fOwnFile)
     fclose(file->fFile);
 
