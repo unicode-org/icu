@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/12/11 21:19:41 $ 
-* $Revision: 1.21 $
+* $Date: 2003/02/11 00:48:59 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -49,6 +49,21 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * Trie data
     */
     public CharTrie m_trie_;    
+    /**
+     * Optimization
+     * CharTrie index array
+     */
+    public char[] m_trieIndex_;
+    /**
+     * Optimization
+     * CharTrie data array
+     */
+    public char[] m_trieData_;
+    /**
+     * Optimization
+     * CharTrie data offset
+     */
+    public int m_trieInitialValue_;
     /**
     * Character property table
     */
@@ -143,6 +158,16 @@ public final class UCharacterProperty implements Trie.DataManipulate
     // public methods ----------------------------------------------------
       
     /**
+     * Java friends implementation
+     */
+    public void setIndexData(CharTrie.FriendAgent friendagent)
+    {
+        m_trieIndex_ = friendagent.getPrivateIndex();
+        m_trieData_ = friendagent.getPrivateData();
+        m_trieInitialValue_ = friendagent.getPrivateInitialValue();
+    }
+    
+    /**
     * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
     * data the index array offset of the indexes for that lead surrogate.
     * @param property data value for a surrogate from the trie, including the
@@ -160,13 +185,52 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
     
     /**
-    * Gets the property value at the index
+    * Gets the property value at the index.
+    * This is optimized.
+    * Note this is alittle different from CharTrie the index m_trieData_
+    * is never negative.
     * @param ch code point whose property value is to be retrieved
     * @return property value of code point
     */
     public int getProperty(int ch)
     {
-        return m_property_[m_trie_.getCodePointValue(ch)];
+        if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE 
+            || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE 
+                && ch < UTF16.SUPPLEMENTARY_MIN_VALUE)) {
+            // BMP codepoint
+            // optimized
+            try {
+                return m_property_[
+                    m_trieData_[
+                    (m_trieIndex_[ch >> Trie.INDEX_STAGE_1_SHIFT_] 
+                          << Trie.INDEX_STAGE_2_SHIFT_)
+                    + (ch & Trie.INDEX_STAGE_3_MASK_)]];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return m_property_[m_trieInitialValue_];
+            }
+        }
+        if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+            return m_property_[
+                    m_trieData_[
+                    (m_trieIndex_[Trie.LEAD_INDEX_OFFSET_ 
+                                  + (ch >> Trie.INDEX_STAGE_1_SHIFT_)] 
+                          << Trie.INDEX_STAGE_2_SHIFT_)
+                    + (ch & Trie.INDEX_STAGE_3_MASK_)]];
+        }
+        // for optimization
+        if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
+            // look at the construction of supplementary characters
+            // trail forms the ends of it.
+            return m_property_[m_trie_.getSurrogateValue(
+                                          UTF16.getLeadSurrogate(ch), 
+                                          (char)(ch & Trie.SURROGATE_MASK_))];
+        }
+        // return m_dataOffset_ if there is an error, in this case we return 
+        // the default value: m_initialValue_
+        // we cannot assume that m_initialValue_ is at offset 0
+        // this is for optimization.
+        return m_property_[m_trieInitialValue_];
+        // return m_property_[m_trie_.getCodePointValue(ch)];
     }
     
     /**
@@ -215,6 +279,31 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
       
     /**
+    * Gets the exception value for the argument properties, assuming that data 
+    * type is available. -1 is returned if data is not available.
+    * Different from getException, this function tests if the type data is 
+    * available.
+    * @param props property value
+    * @param exception data type
+    * @return exception data type value at index
+    */
+    public int getExceptionValue(int props, int etype)
+    {
+        int index = getExceptionIndex(props);
+        if (hasExceptionValue(index, etype)) {
+            // contained in exception data
+            // return getException(index, etype);
+            if (etype == EXC_COMBINING_CLASS_) {
+                return m_exception_[index];
+            }
+            // contained in the exception digit address
+            index = addExceptionOffset(m_exception_[index], etype, ++ index);
+            return m_exception_[index];
+        }
+        return -1;
+    }
+    
+    /**
     * Gets the exception value at the index, assuming that data type is 
     * available. Result is undefined if data is not available. Use 
     * hasExceptionValue() to determine data's availability.
@@ -225,16 +314,11 @@ public final class UCharacterProperty implements Trie.DataManipulate
     public int getException(int index, int etype)
     {
         // contained in exception data
-        int evalue = m_exception_[index];
-        
-        switch (etype) {
-            case EXC_COMBINING_CLASS_ :
-                return evalue;
-            default :
-                index ++;
-                // contained in the exception digit address
-                index = addExceptionOffset(evalue, etype, index);
+        if (etype == EXC_COMBINING_CLASS_) {
+            return m_exception_[index];
         }
+        // contained in the exception digit address
+        index = addExceptionOffset(m_exception_[index], etype, ++ index);
         return m_exception_[index];
     }
     
@@ -1345,7 +1429,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     int m_maxBlockScriptValue_;
     
     // private variables -------------------------------------------------
-  
+    
   	/**
      * UnicodeData.txt property object
      */
@@ -1633,6 +1717,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         reader.read(this);
         b.close();
         i.close();
+        m_trie_.putIndexData(this);
     }
                                      
 	// private methods -------------------------------------------------------

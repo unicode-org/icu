@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/09/06 19:04:07 $
-* $Revision: 1.8 $
+* $Date: 2003/02/11 00:48:59 $
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -74,7 +74,7 @@ public abstract class Trie
         */
         public int getFoldingOffset(int value); 
     }
-    
+
     // public methods --------------------------------------------------
     
     /**
@@ -203,6 +203,7 @@ public abstract class Trie
     * Start index of the data portion of the trie. CharTrie combines 
     * index and data into a char array, so this is used to indicate the 
     * initial offset to the data portion.
+    * Note this index always points to the initial value.
     * @draft 2.1
     */
     protected int m_dataOffset_;
@@ -210,7 +211,7 @@ public abstract class Trie
     * Length of the data array 
     */
     protected int m_dataLength_;
-    
+     
     // protected methods -----------------------------------------------
 
     /**
@@ -254,10 +255,11 @@ public abstract class Trie
     */
     protected final int getRawOffset(int offset, char ch)
     {
-        return (m_index_[offset + (ch >> INDEX_STAGE_1_SHIFT_)] <<
-                INDEX_STAGE_2_SHIFT_) + (ch & INDEX_STAGE_3_MASK_);
+        return (m_index_[offset + (ch >> INDEX_STAGE_1_SHIFT_)] 
+                << INDEX_STAGE_2_SHIFT_) 
+                + (ch & INDEX_STAGE_3_MASK_);
     }
-
+    
     /**
     * Gets the offset to data which the BMP character points to
     * Treats a lead surrogate as a normal code point.
@@ -267,11 +269,11 @@ public abstract class Trie
     */
     protected final int getBMPOffset(char ch)
     {
-        int offset = 0;
-        if (UTF16.isLeadSurrogate(ch)) {
-            offset = LEAD_INDEX_OFFSET_;
-        }
-        return getRawOffset(offset, ch);
+        return (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE 
+                && ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) 
+                ? getRawOffset(LEAD_INDEX_OFFSET_, ch)
+                : getRawOffset(0, ch); 
+                // using a getRawOffset(ch) makes no diff
     }
 
     /**
@@ -299,19 +301,21 @@ public abstract class Trie
     */
     protected final int getCodePointOffset(int ch)
     {
-        if (UCharacter.isBMP(ch)) {
+        // if ((ch >> 16) == 0) slower
+        if (ch >= UTF16.CODEPOINT_MIN_VALUE 
+            && ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
             // BMP codepoint
-            return getBMPOffset((char)ch);
+            return getBMPOffset((char)ch); 
         }
-        if (ch <= UCharacter.MAX_VALUE)
-        {
-            char lead = UTF16.getLeadSurrogate(ch);
+        // for optimization
+        if (ch >= UTF16.CODEPOINT_MIN_VALUE 
+            && ch <= UCharacter.MAX_VALUE) {
             // look at the construction of supplementary characters
             // trail forms the ends of it.
-            return getSurrogateOffset(lead, (char)(ch & SURROGATE_MASK_));
+            return getSurrogateOffset(UTF16.getLeadSurrogate(ch), 
+                                      (char)(ch & SURROGATE_MASK_));
         }
-        // return -1 if there is an error, in this case we return the default
-        // value: m_initialValue_
+        // return -1 if there is an error, in this case we return 
         return -1;
     }
 
@@ -359,8 +363,7 @@ public abstract class Trie
     * 0x10000-0xd800=0x2800
     * 0x2800 >> INDEX_STAGE_1_SHIFT_
     */
-    private static final int LEAD_INDEX_OFFSET_ =
-                                             0x2800 >> 5;
+    private static final int LEAD_INDEX_OFFSET_ = 0x2800 >> 5;
     /**
     * Signature index
     */
@@ -410,7 +413,7 @@ public abstract class Trie
     * 3..0  INDEX_STAGE_2_SHIFT   // 1..9<br>
     */
     private int m_options_;
-  
+    
     // private methods ---------------------------------------------------
     
     /**

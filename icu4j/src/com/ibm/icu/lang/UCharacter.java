@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/01/28 18:55:39 $ 
-* $Revision: 1.62 $
+* $Date: 2003/02/11 00:49:17 $ 
+* $Revision: 1.63 $
 *
 *******************************************************************************
 */
@@ -1880,34 +1880,43 @@ public final class UCharacter
     public static int digit(int ch, int radix)
     {
         // when ch is out of bounds getProperty == 0
-        int props       = PROPERTY_.getProperty(ch);
-        int numericType = getNumericType(props);
-        
-        int result = -1;
-        if (numericType == NumericType.DECIMAL) {
-        	// if props == 0, it will just fall through and return -1
-        	if (isNotExceptionIndicator(props)) {
-            	// not contained in exception data
-            	result = UCharacterProperty.getSignedValue(props);
+        int props = getProperty(ch);        
+        if (getNumericType(props) != NumericType.DECIMAL) {
+            return (radix <= 10) ? -1 : getEuropeanDigit(ch);
+        }
+        // if props == 0, it will just fall through and return -1
+        if (isNotExceptionIndicator(props)) {
+         	// not contained in exception data
+            // getSignedValue is just shifting so we can check for the sign
+            // first
+            // Optimization
+            // int result = UCharacterProperty.getSignedValue(props);
+            // if (result >= 0) {
+            //    return result;
+            // }
+            if (props >= 0) {
+                return UCharacterProperty.getSignedValue(props);
             }
-            else {
-            	int index = UCharacterProperty.getExceptionIndex(props);
-            	if (PROPERTY_.hasExceptionValue(index, 
-                                   UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-                	return PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_NUMERIC_VALUE_); 
-                }
+        }
+        else {
+            int index = UCharacterProperty.getExceptionIndex(props);
+          	if (PROPERTY_.hasExceptionValue(index, 
+                                     UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+                int result = PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_NUMERIC_VALUE_);
+                if (result >= 0) {
+                    return result;
+                }  
             }
         }
-        
-        if (result < 0 && radix > 10) {
-            result = getEuropeanDigit(ch);
+       
+        if (radix > 10) {
+            int result = getEuropeanDigit(ch);
+            if (result >= 0 && result < radix) {
+                return result;
+            }
         }
-        
-        if (result < 0 || result >= radix) {
-            return -1;
-        }
-        return result;
+        return -1;
     }
     
     /**
@@ -1944,38 +1953,31 @@ public final class UCharacter
      */
     public static int getNumericValue(int ch)
     {
-        int props = PROPERTY_.getProperty(ch);
-        int numericType = getNumericType(props);
-        
-        int result = -1;
-        if (numericType == NumericType.DECIMAL) {
-            result = -2;
+        int props = getProperty(ch);   
+        if ((props & NUMERIC_TYPE_MASK_) == NumericType.NONE) {
+            return getEuropeanDigit(ch);
         }
-        if (numericType != NumericType.NONE) {
-            // if props == 0, it will just fall through and return -1
-            if (isNotExceptionIndicator(props)) {
-                // not contained in exception data
-                return UCharacterProperty.getSignedValue(props);
-            }
+        
+        // if props == 0, it will just fall through and return -1
+        if (isNotExceptionIndicator(props)) {
+            // not contained in exception data
+            return props >>> 20;
+        }
             
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (!PROPERTY_.hasExceptionValue(index, 
-                               UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
-                PROPERTY_.hasExceptionValue(index, 
-                                   UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-                return PROPERTY_.getException(index, 
+        int index = UCharacterProperty.getExceptionIndex(props);
+        if (!PROPERTY_.hasExceptionValue(index, 
+                          UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
+            PROPERTY_.hasExceptionValue(index, 
+                               UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+            return PROPERTY_.getException(index, 
                                      UCharacterProperty.EXC_NUMERIC_VALUE_);
-            }
         }
         
-        if (result < 0) {
-            int europeannumeric = getEuropeanDigit(ch);
-            if (europeannumeric >= 0) {
-                return europeannumeric;
-            }
+        int europeannumeric = getEuropeanDigit(ch);
+        if (europeannumeric >= 0) {
+            return europeannumeric;
         }
-        
-        return result;
+        return (getNumericType(props) == NumericType.DECIMAL) ? -2 : -1;
     }
     
     /**
@@ -2064,9 +2066,7 @@ public final class UCharacter
      */
     public static int getType(int ch)
     {
-        // when ch is out of bounds getProperty == 0
-        // return UCharacterProperty.TYPE_MASK & PROPERTY_.getProperty(ch);
-        return PROPERTY_.getProperty(ch) & UCharacterProperty.TYPE_MASK;
+        return getProperty(ch) & UCharacterProperty.TYPE_MASK;
     }
        
     /**
@@ -2127,13 +2127,13 @@ public final class UCharacter
      */
     public static boolean isLetter(int ch)
     {
-        int cat = getType(ch);
         // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.UPPERCASE_LETTER || 
-            cat == UCharacterCategory.LOWERCASE_LETTER || 
-            cat == UCharacterCategory.TITLECASE_LETTER || 
-            cat == UCharacterCategory.MODIFIER_LETTER ||
-            cat == UCharacterCategory.OTHER_LETTER;
+        return ((1 << getType(ch)) 
+               & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+               | (1 << UCharacterCategory.LOWERCASE_LETTER)
+               | (1 << UCharacterCategory.TITLECASE_LETTER)
+               | (1 << UCharacterCategory.MODIFIER_LETTER)
+               | (1 << UCharacterCategory.OTHER_LETTER))) != 0;
     }
                 
     /**
@@ -2146,13 +2146,13 @@ public final class UCharacter
      */
     public static boolean isLetterOrDigit(int ch)
     {
-        int cat = getType(ch);
-        return cat == UCharacterCategory.UPPERCASE_LETTER 
-               || cat == UCharacterCategory.LOWERCASE_LETTER 
-               || cat == UCharacterCategory.TITLECASE_LETTER 
-               || cat == UCharacterCategory.MODIFIER_LETTER 
-               || cat == UCharacterCategory.OTHER_LETTER 
-               || cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER;
+        return ((1 << getType(ch)) 
+               & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+               | (1 << UCharacterCategory.LOWERCASE_LETTER)
+               | (1 << UCharacterCategory.TITLECASE_LETTER)
+               | (1 << UCharacterCategory.MODIFIER_LETTER)
+               | (1 << UCharacterCategory.OTHER_LETTER))
+               | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)) != 0;
     }
         
     /**
@@ -2201,18 +2201,17 @@ public final class UCharacter
      */
     public static boolean isWhitespace(int ch)
     {
-        int cat = getType(ch);
         // exclude no-break spaces
         // if props == 0, it will just fall through and return false
-        return (cat == UCharacterCategory.SPACE_SEPARATOR || 
-                cat == UCharacterCategory.LINE_SEPARATOR ||
-                cat == UCharacterCategory.PARAGRAPH_SEPARATOR) && 
-                (ch != NO_BREAK_SPACE_) && 
-                (ch != NARROW_NO_BREAK_SPACE_) && 
-                (ch != ZERO_WIDTH_NO_BREAK_SPACE_) ||
+        return ((1 << getType(ch)) & 
+                ((1 << UCharacterCategory.SPACE_SEPARATOR)
+                 | (1 << UCharacterCategory.LINE_SEPARATOR)
+                 | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR))) != 0 
+                && (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
+                && (ch != ZERO_WIDTH_NO_BREAK_SPACE_)
                 // TAB VT LF FF CR FS GS RS US NL are all control characters
                 // that are white spaces.
-                (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
+                || (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
     }
        
     /**
@@ -2225,11 +2224,11 @@ public final class UCharacter
      */
     public static boolean isSpaceChar(int ch)
     {
-        int cat = getType(ch);
         // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.SPACE_SEPARATOR || 
-            cat == UCharacterCategory.LINE_SEPARATOR ||
-            cat == UCharacterCategory.PARAGRAPH_SEPARATOR;
+        return ((1 << getType(ch)) & ((1 << UCharacterCategory.SPACE_SEPARATOR) 
+                              | (1 << UCharacterCategory.LINE_SEPARATOR)
+                              | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR)))
+               != 0;
     }
                                     
     /**
@@ -2247,9 +2246,8 @@ public final class UCharacter
      */
     public static boolean isTitleCase(int ch)
     {
-        int cat = getType(ch);
         // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.TITLECASE_LETTER;
+        return getType(ch) == UCharacterCategory.TITLECASE_LETTER;
     }
        
     /**
@@ -2281,20 +2279,20 @@ public final class UCharacter
      */
     public static boolean isUnicodeIdentifierPart(int ch)
     {
-        int cat = getType(ch);
         // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.UPPERCASE_LETTER || 
-            cat == UCharacterCategory.LOWERCASE_LETTER || 
-            cat == UCharacterCategory.TITLECASE_LETTER || 
-            cat == UCharacterCategory.MODIFIER_LETTER ||
-            cat == UCharacterCategory.OTHER_LETTER || 
-            cat == UCharacterCategory.LETTER_NUMBER ||
-            cat == UCharacterCategory.CONNECTOR_PUNCTUATION ||
-            cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER ||
-            cat == UCharacterCategory.COMBINING_SPACING_MARK || 
-            cat == UCharacterCategory.NON_SPACING_MARK || 
-            // cat == UCharacterCategory.FORMAT;
-            isIdentifierIgnorable(ch);
+        // cat == format
+        return ((1 << getType(ch)) 
+                 & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+                    | (1 << UCharacterCategory.LOWERCASE_LETTER)
+                    | (1 << UCharacterCategory.TITLECASE_LETTER)
+                    | (1 << UCharacterCategory.MODIFIER_LETTER)
+                    | (1 << UCharacterCategory.OTHER_LETTER)
+                    | (1 << UCharacterCategory.LETTER_NUMBER) 
+                    | (1 << UCharacterCategory.CONNECTOR_PUNCTUATION)
+                    | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)
+                    | (1 << UCharacterCategory.COMBINING_SPACING_MARK)
+                    | (1 << UCharacterCategory.NON_SPACING_MARK))) != 0
+                || isIdentifierIgnorable(ch);
     }
                        
     /**
@@ -2321,12 +2319,13 @@ public final class UCharacter
     {
         int cat = getType(ch);
         // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.UPPERCASE_LETTER || 
-            cat == UCharacterCategory.LOWERCASE_LETTER || 
-            cat == UCharacterCategory.TITLECASE_LETTER || 
-            cat == UCharacterCategory.MODIFIER_LETTER ||
-            cat == UCharacterCategory.OTHER_LETTER || 
-            cat == UCharacterCategory.LETTER_NUMBER;
+        return ((1 << getType(ch)) 
+                 & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+                    | (1 << UCharacterCategory.LOWERCASE_LETTER)
+                    | (1 << UCharacterCategory.TITLECASE_LETTER)
+                    | (1 << UCharacterCategory.MODIFIER_LETTER)
+                    | (1 << UCharacterCategory.OTHER_LETTER)
+                    | (1 << UCharacterCategory.LETTER_NUMBER))) != 0;
     }
 
     /**
@@ -2371,9 +2370,8 @@ public final class UCharacter
      */
     public static boolean isUpperCase(int ch)
     {
-        int cat = getType(ch);
         // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.UPPERCASE_LETTER;
+        return getType(ch) == UCharacterCategory.UPPERCASE_LETTER;
     }
                        
     /**
@@ -2619,8 +2617,7 @@ public final class UCharacter
     public static int getDirection(int ch)
     {
         // when ch is out of bounds getProperty == 0
-        return (PROPERTY_.getProperty(ch) >> BIDI_SHIFT_) 
-                                                     & BIDI_MASK_AFTER_SHIFT_;
+        return (getProperty(ch) >> BIDI_SHIFT_) & BIDI_MASK_AFTER_SHIFT_;
     }
 
     /**
@@ -3962,6 +3959,13 @@ public final class UCharacter
      * Database storing the sets of character property
      */
     private static final UCharacterProperty PROPERTY_;
+    /**
+     * For optimization
+     */
+    private static final char[] PROPERTY_TRIE_INDEX_;
+    private static final char[] PROPERTY_TRIE_DATA_;
+    private static final int[] PROPERTY_DATA_;
+    private static final int PROPERTY_INITIAL_VALUE_;
                                                     
 	// block to initialise character property database
     static
@@ -3969,13 +3973,18 @@ public final class UCharacter
         try
         {
             PROPERTY_ = UCharacterProperty.getInstance();
+            PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
+            PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
+            PROPERTY_DATA_ = PROPERTY_.m_property_;
+            PROPERTY_INITIAL_VALUE_ 
+                             = PROPERTY_DATA_[PROPERTY_.m_trieInitialValue_];
         }
         catch (Exception e)
         {
             throw new RuntimeException(e.getMessage());
         }
     }                                                    
-   
+    
     /**
      * To get the last character out from a data type
      */
@@ -4091,7 +4100,7 @@ public final class UCharacter
     /**
      * Mask to get numeric type
      */
-    private static final int NUMERIC_TYPE_MASK_ = 0x7;
+    private static final int NUMERIC_TYPE_MASK_ = 0x7 << NUMERIC_TYPE_SHIFT_;
     /**
      * Shift to get bidi bits
      */
@@ -4212,20 +4221,21 @@ public final class UCharacter
     // private methods ---------------------------------------------------
     
     private static int getEuropeanDigit(int ch) {
+        if ((ch > 0x7a && ch < 0xff21)  
+            || ch < 0x41 || (ch > 0x5a && ch < 0x61)
+            || ch > 0xff5a || (ch > 0xff31 && ch < 0xff41)) {
+            return -1;
+        } 
         if (ch <= 0x7a) {
-            if (ch >= 0x41 && ch <= 0x5a) {
-                return ch + 10 - 0x41;
-            } else if (ch >= 0x61) {
-                return ch + 10 - 0x61;
-            }
-        } else if (ch >= 0xff21) {
-            if (ch <= 0xff3a) {
-                return ch + 10 - 0xff21;
-            } else if (ch >= 0xff41 && ch <= 0xff5a) {
-                return ch + 10 - 0xff41;
-            }
+            // ch >= 0x41 or ch < 0x61 
+            return ch + 10 - ((ch <= 0x5a) ? 0x41 : 0x61);
         }
-        return -1;
+        // ch >= 0xff21
+        if (ch <= 0xff3a) {
+            return ch + 10 - 0xff21;
+        } 
+        // ch >= 0xff41 && ch <= 0xff5a
+        return ch + 10 - 0xff41;
     }
     
     /**
@@ -4235,7 +4245,7 @@ public final class UCharacter
      */
     private static int getNumericType(int props)
     {
-        return (props >> NUMERIC_TYPE_SHIFT_) & NUMERIC_TYPE_MASK_;
+        return (props & NUMERIC_TYPE_MASK_) >> NUMERIC_TYPE_SHIFT_;
     }
     
     /**
@@ -4247,6 +4257,51 @@ public final class UCharacter
     private static boolean isNotExceptionIndicator(int props)
     {
          return (props & UCharacterProperty.EXCEPTION_MASK) == 0;
+    }
+         
+    /**
+    * Gets the property value at the index.
+    * This is optimized.
+    * Note this is alittle different from CharTrie the index m_trieData_
+    * is never negative.
+    * @param ch code point whose property value is to be retrieved
+    * @return property value of code point
+    */
+    public static int getProperty(int ch)
+    {
+        if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE 
+            || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE 
+                && ch < UTF16.SUPPLEMENTARY_MIN_VALUE)) {
+            // BMP codepoint
+            try { // using try for < 0 ch is faster than using an if statement
+                return PROPERTY_DATA_[
+                    PROPERTY_TRIE_DATA_[
+                    (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
+                    + (ch & 0x1f)]];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return PROPERTY_INITIAL_VALUE_;
+            }
+        }
+        if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+            // surrogate 
+            return PROPERTY_DATA_[
+                    PROPERTY_TRIE_DATA_[
+                    (PROPERTY_TRIE_INDEX_[(0x2800 >> 5) + (ch >> 5)] << 2) 
+                    + (ch & 0x1f)]];
+        }
+        // for optimization
+        if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
+            // look at the construction of supplementary characters
+            // trail forms the ends of it.
+            return PROPERTY_DATA_[PROPERTY_.m_trie_.getSurrogateValue(
+                                          UTF16.getLeadSurrogate(ch), 
+                                          (char)(ch & 0x3ff))];
+        }
+        // return m_dataOffset_ if there is an error, in this case we return 
+        // the default value: m_initialValue_
+        // we cannot assume that m_initialValue_ is at offset 0
+        // this is for optimization.
+        return PROPERTY_INITIAL_VALUE_;
     }
 }
 
