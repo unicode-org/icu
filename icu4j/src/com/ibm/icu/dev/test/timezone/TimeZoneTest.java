@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2003/10/02 20:51:00 $
- * $Revision: 1.16 $
+ * $Date: 2003/10/17 21:46:12 $
+ * $Revision: 1.17 $
  *
  *******************************************************************************
  */
@@ -125,7 +125,8 @@ public class TimeZoneTest extends TestFmwk
             // new ZoneDescriptor("NET", 240, false);
             // As of bug 4191164, fix NET
             new ZoneDescriptor("NET", 240, true),
-            new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
+            // PLT behaves differently under different JDKs, so we don't check it
+            // new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
             new ZoneDescriptor("IST", 330, false),
             new ZoneDescriptor("BST", 360, false),
             new ZoneDescriptor("VST", 420, false),
@@ -240,7 +241,7 @@ public class TimeZoneTest extends TestFmwk
         Object[] DATA = {
             // ID        Expected offset in minutes
             "GMT",       null,
-            "GMT0",      null,
+            // "GMT0",      null, // This is parsed by some JDKs (Sun 1.4.1), but not by others
             "GMT+0",     new Integer(0),
             "GMT+1",     new Integer(60),
             "GMT-0030",  new Integer(-30),
