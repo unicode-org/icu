@@ -20,11 +20,9 @@
 #include "unicode/uchar.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
-#include "unitohex.h"
 #include "unicode/ustring.h"
 #include "unicode/usetiter.h"
 #include "unicode/uscript.h"
-#include "hextouni.h"
 #include "cpdtrans.h"
 #include "nultrans.h"
 #include "rbt.h"
@@ -802,22 +800,27 @@ void TransliteratorTest::TestJ277(void) {
  * Prefix, suffix support in hex transliterators
  */
 void TransliteratorTest::TestJ243(void) {
-    UErrorCode status = U_ZERO_ERROR;
+    UErrorCode ec = U_ZERO_ERROR;
 
     // Test default Hex-Any, which should handle
     // \u, \U, u+, and U+
-    HexToUnicodeTransliterator hex;
-    expect(hex, UnicodeString("\\u0041+\\U0042,u+0043uu+0044z", ""), "A+B,CuDz");
-    // Try a custom Hex-Unicode
-    // \uXXXX and &#xXXXX;
-    status = U_ZERO_ERROR;
-    HexToUnicodeTransliterator hex2(UnicodeString("\\\\u###0;&\\#x###0\\;", ""), status);
-    expect(hex2, UnicodeString("\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;", ""),
-           "abcd5fx012&#x00033;");
-    // Try custom Any-Hex (default is tested elsewhere)
-    status = U_ZERO_ERROR;
-    UnicodeToHexTransliterator hex3(UnicodeString("&\\#x###0;", ""), status);
-    expect(hex3, "012", "&#x30;&#x31;&#x32;");
+    Transliterator *hex =
+        Transliterator::createInstance("Hex-Any", UTRANS_FORWARD, ec);
+    if (assertSuccess("getInstance", ec)) {
+        expect(*hex, UnicodeString("\\u0041+\\U00000042,U+0043uU+0044z", ""), "A+B,CuDz");
+    }
+    delete hex;
+
+//    // Try a custom Hex-Unicode
+//    // \uXXXX and &#xXXXX;
+//    ec = U_ZERO_ERROR;
+//    HexToUnicodeTransliterator hex2(UnicodeString("\\\\u###0;&\\#x###0\\;", ""), ec);
+//    expect(hex2, UnicodeString("\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;", ""),
+//           "abcd5fx012&#x00033;");
+//    // Try custom Any-Hex (default is tested elsewhere)
+//    ec = U_ZERO_ERROR;
+//    UnicodeToHexTransliterator hex3(UnicodeString("&\\#x###0;", ""), ec);
+//    expect(hex3, "012", "&#x30;&#x31;&#x32;");
 }
 
 /**
@@ -2323,9 +2326,9 @@ void TransliteratorTest::TestNewEngine() {
     // true.  Otherwise, this test will fail, revealing a
     // limitation of global filters in incremental mode.
     Transliterator *a =
-        Transliterator::createFromRules("a", "a > A;", UTRANS_FORWARD, pe, ec);
+        Transliterator::createFromRules("a_to_A", "a > A;", UTRANS_FORWARD, pe, ec);
     Transliterator *A =
-        Transliterator::createFromRules("A", "A > b;", UTRANS_FORWARD, pe, ec);
+        Transliterator::createFromRules("A_to_b", "A > b;", UTRANS_FORWARD, pe, ec);
     if (U_FAILURE(ec)) {
         delete a;
         delete A;
@@ -2355,6 +2358,13 @@ void TransliteratorTest::TestNewEngine() {
     }
 
     expect(*t, "aAaA", "bAbA");
+
+    assertTrue("countElements", t->countElements() == 3);
+    assertEquals("getElement(0)", t->getElement(0, ec).getID(), "a_to_A");
+    assertEquals("getElement(1)", t->getElement(1, ec).getID(), "NFD");
+    assertEquals("getElement(2)", t->getElement(2, ec).getID(), "A_to_b");
+    assertSuccess("getElement", ec);
+
     delete a;
     delete A;
     delete array[1];
