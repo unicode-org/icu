@@ -48,6 +48,8 @@
 #define TELUGU_DELTA        DELTA * TELUGU
 #define DEV_ABBR_SIGN       0x0970
 #define DEV_ANUDATTA        0x0952
+#define EXT_RANGE_BEGIN     0xA1
+#define EXT_RANGE_END       0xEE
 
 /* TODO: 
  * Add getName() function.
@@ -1191,7 +1193,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 continue;
             }else if(data->contextCharToUnicode==EXT){
                 /* check if sourceChar is in 0xA1-0xEE range */
-                if((uint8_t) (0xEE-sourceChar) <= (0xEE-0xA1)){
+                if((uint8_t) (EXT_RANGE_END - sourceChar) <= (EXT_RANGE_END - EXT_RANGE_BEGIN)){
                     /* We currently support only Anudatta and Devanagari abbreviation sign */
                     if(sourceChar==0xBF || sourceChar == 0xB8){
                         targetUniChar = (sourceChar==0xBF) ? DEV_ABBR_SIGN : DEV_ANUDATTA;
