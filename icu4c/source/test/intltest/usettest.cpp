@@ -81,7 +81,7 @@ UnicodeSetTest::TestCategories(void) {
     for (i=0; i<0x200; ++i) {
         UBool l = Unicode::isLetter((UChar)i);
         if (l != set.contains(i)) {
-            errln((UnicodeString)"FAIL: L contains " + (UChar)i + " = " + 
+            errln((UnicodeString)"FAIL: L contains " + (unsigned short)i + " = " + 
                   set.contains(i));
             if (++failures == 10) break;
         }
@@ -92,7 +92,7 @@ UnicodeSetTest::TestCategories(void) {
     for (i=0; i<0x200; ++i) {
         UBool lu = (Unicode::getType((UChar)i) == Unicode::UPPERCASE_LETTER);
         if (lu != set.contains(i)) {
-            errln((UnicodeString)"FAIL: Lu contains " + (UChar)i + " = " + 
+            errln((UnicodeString)"FAIL: Lu contains " + (unsigned short)i + " = " + 
                   set.contains(i));
             if (++failures == 20) break;
         }
@@ -329,17 +329,17 @@ void UnicodeSetTest::TestAPI() {
         UChar32 a = set.getRangeStart(i);
         UChar32 b = set.getRangeEnd(i);
         if (!set.contains(a, b)) {
-            errln((UnicodeString)"FAIL, should contain " + (UChar)a + '-' + (UChar)b +
+            errln((UnicodeString)"FAIL, should contain " + (unsigned short)a + '-' + (unsigned short)b +
                   " but doesn't: " + set);
         }
         if (set.contains((UChar32)(a-1), b)) {
             errln((UnicodeString)"FAIL, shouldn't contain " +
-                  (UChar)(a-1) + '-' + (UChar)b +
+                  (unsigned short)(a-1) + '-' + (unsigned short)b +
                   " but does: " + set);
         }
         if (set.contains(a, (UChar32)(b+1))) {
             errln((UnicodeString)"FAIL, shouldn't contain " +
-                  (UChar)a + '-' + (UChar)(b+1) +
+                  (unsigned short)a + '-' + (unsigned short)(b+1) +
                   " but does: " + set);
         }
     }
