@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/usetiter.cpp,v $ 
-* $Date: 2002/06/28 23:53:51 $ 
-* $Revision: 1.3 $
+* $Date: 2002/08/22 21:01:43 $ 
+* $Revision: 1.4 $
 **********************************************************************
 */
 #include "unicode/usetiter.h"
@@ -58,7 +58,7 @@ UBool UnicodeSetIterator::next() {
     }
 
     if (nextString >= stringCount) return FALSE;
-    codepoint = IS_STRING; // signal that value is actually a string
+    codepoint = (UChar32)IS_STRING; // signal that value is actually a string
     string = (const UnicodeString*) set->strings->elementAt(nextString++);
     return TRUE;
 }
@@ -90,7 +90,7 @@ UBool UnicodeSetIterator::nextRange() {
     }
 
     if (nextString >= stringCount) return FALSE;
-    codepoint = IS_STRING; // signal that value is actually a string
+    codepoint = (UChar32)IS_STRING; // signal that value is actually a string
     string = (const UnicodeString*) set->strings->elementAt(nextString++);
     return TRUE;
 }
