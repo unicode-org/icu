@@ -37,11 +37,8 @@ U_CDECL_END
 U_CAPI void U_EXPORT2 ucnv_orphanAllConverters();
 
 static char* _testDirectory=NULL;
-#if defined(OS400)
-int main (int argc, char* argv[])
-#else
-int main ( int argc, const char *argv[] )
-#endif
+
+int main(int argc, const char* const argv[])
 {
     int nerrors;
     TestNode *root;
@@ -50,9 +47,9 @@ int main ( int argc, const char *argv[] )
     UErrorCode errorCode = U_ZERO_ERROR;
     UResourceBundle *rb;
     UConverter *cnv;
-    
+
 #ifdef XP_MAC_CONSOLE
-	argc = ccommand(&argv);
+    argc = ccommand((char***)&argv);
 #endif
 
     cnv  = ucnv_open(NULL, &errorCode);
@@ -96,10 +93,10 @@ int main ( int argc, const char *argv[] )
 
     root = NULL;
     addAllTests(&root);
-    nerrors = processArgs(root, argc, (const char**)argv);
+    nerrors = processArgs(root, argc, argv);
     cleanUpTestTree(root);
     cleanUpDataTable();
-#if 0
+#ifdef CTST_LEAK_CHECK
     ctst_freeAll();
 
     /* To check for leaks */
@@ -209,7 +206,7 @@ char *austrdup(const UChar* unichars)
 #define CTST_MAX_ALLOC 10000
 static void * ctst_allocated_stuff[CTST_MAX_ALLOC];
 static int ctst_allocated = 0;
-static ctst_free = 0;
+static UBool ctst_free = 0;
 
 void *ctst_malloc(size_t size) {
     ctst_allocated ++;
@@ -224,6 +221,7 @@ void *ctst_malloc(size_t size) {
     return ctst_allocated_stuff[ctst_allocated];
 }
 
+#ifdef CTST_LEAK_CHECK
 void ctst_freeAll() {
     int i;
     if(ctst_free == 0) {
@@ -236,3 +234,4 @@ void ctst_freeAll() {
         }
     }
 }
+#endif
