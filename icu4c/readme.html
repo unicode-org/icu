@@ -301,7 +301,29 @@
     <h3>Collation improvements</h3>
 
     <p>The performance of Japanese Katakana collation is improved, and the
-    Japanese collation is changed for conformance with the JIS X 4061 standard.</p>
+    Japanese collation is changed for conformance with the JIS X 4061 standard.
+    The improvement is in the handling of the length and iteration marks, making
+    the processing of regular letters faster.</p>
+
+    <p>The JIS X 4061 standard specifies a 5-level sorting algorithm. Sorting
+    with all five levels according to JIS is
+    achieved in ICU 2.0 with the &quot;identical&quot; strength. The fifth level
+    distinguishes regular character codes from compatibility variants.</p>
+
+    <p>There is special code to handle the fourth (quarternary) level of the JIS
+    standard, which distinguishes between Hiragana and Katakana letters. In ICU
+    2.0 string comparisons (like ucol_strcoll), when using the
+    &quot;shifted&quot; option, this is slow because it
+    generates complete sort keys for both strings. This is not an issue if the
+    &quot;shifted&quot; option is not used, or if the string comparison is done
+    with fewer levels.</p>
+
+    <p>
+    Quarternary strength, without the &quot;shifted&quot; option, is the default for Japanese collation in ICU 2.0.</p>
+
+    <p>Three-level sorting (tertiary strength) and lower &mdash; if sufficient &mdash; is
+    faster even with &quot;shifted&quot; on (for string comparisons: <em>much</em> 
+    faster in this case).</p>
 
     <h3>License Change (for ICU 1.8.1 and up)</h3>
 
