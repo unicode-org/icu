@@ -4169,14 +4169,14 @@ static void TestPinyinProblem(void) {
     genericLocaleStarter("zh__PINYIN", test, sizeof(test)/sizeof(test[0]));
 }
 
-#define MAX_INPUT 0x220001
+#define TST_UCOL_MAX_INPUT 0x220001
 #define topByte 0xFF000000;
 #define bottomByte 0xFF;
 #define fourBytes 0xFFFFFFFF;
 
 
 static void showImplicit(UChar32 i) {
-    if (i >= 0 && i <= MAX_INPUT) {
+    if (i >= 0 && i <= TST_UCOL_MAX_INPUT) {
         log_verbose("%08X\t%08X\n", i, uprv_uca_getImplicitFromRaw(i));
     } 
 }
@@ -4200,7 +4200,7 @@ static void TestImplicitGeneration(void) {
     
     uprv_uca_getRawFromImplicit(0xE20303E7);
 
-    for (i = 0; i <= MAX_INPUT; ++i) {
+    for (i = 0; i <= TST_UCOL_MAX_INPUT; ++i) {
         current = uprv_uca_getImplicitFromRaw(i) & fourBytes;
     
         /* check that it round-trips AND that all intervening ones are illegal*/
@@ -4234,9 +4234,9 @@ static void TestImplicitGeneration(void) {
         }
         last = current;
     }
-    showImplicit(MAX_INPUT-2);
-    showImplicit(MAX_INPUT-1);
-    showImplicit(MAX_INPUT);    
+    showImplicit(TST_UCOL_MAX_INPUT-2);
+    showImplicit(TST_UCOL_MAX_INPUT-1);
+    showImplicit(TST_UCOL_MAX_INPUT);    
 }
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
