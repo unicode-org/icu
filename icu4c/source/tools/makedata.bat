@@ -35,10 +35,7 @@ gencnval\%toolversion%\gencnval -c-
 genccode\%toolversion%\genccode "%ICU_DATA%cnvalias.dat"
 
 echo create tz.dat from tz.txt
-rem - This currently creates a spurious zero byte  -
-rem - tz.dat file in the gentz dir, as well as the -
-rem - actual tz.dat file in the data directory.    -
-gentz\%toolversion%\gentz -c- gentz\tz.txt gentz\tz.dat
+gentz\%toolversion%\gentz -c- gentz\tz.txt
 genccode\%toolversion%\genccode "%ICU_DATA%tz.dat"
 
 echo create the data DLL
