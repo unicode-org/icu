@@ -86,6 +86,10 @@ typedef struct UConverterMBCSTable {
     uint8_t outputType, unicodeMask;
 } UConverterMBCSTable;
 
+enum {
+    MBCS_STAGE_2_MULTIPLIER=4
+};
+
 /**
  * MBCS data structure as part of a .cnv file:
  *
