@@ -54,7 +54,7 @@ public class RoundTripTest extends TestFmwk {
     }
 
     public void TestJamoHangul() throws IOException, ParseException {
-        Test t = new Test("Latin-Jamo;Jamo-Hangul", 
+        Test t = new Test("Latin-Hangul", 
           TestUtility.LATIN_SCRIPT, TestUtility.HANGUL_SCRIPT);
         t.setErrorLimit(50); // Don't run full test -- too long
         t.test("[a-z]", null, this);
@@ -160,7 +160,7 @@ public class RoundTripTest extends TestFmwk {
             Transliterator sourceToTarget = Transliterator.getInstance(transliteratorID);
             Transliterator targetToSource = sourceToTarget.getInverse();
 
-            log.logln("Checking that all source characters convert to target - Singles");
+            log.logln("Checking that source characters convert to target - Singles");
 
             for (char c = 0; c < 0xFFFF; ++c) {
                 if (TestUtility.isUnassigned(c) ||
@@ -172,13 +172,13 @@ public class RoundTripTest extends TestFmwk {
                 }
             }
 
-            log.logln("Checking that all source characters convert to target - Doubles");
+            log.logln("Checking that source characters convert to target - Doubles");
 
-            for (char c = 0; c < 0xFFFF; ++c) {
+            for (char c = 0; c < 0xFFFF; ++c) { 
                 if (TestUtility.isUnassigned(c) ||
                     !isSource(c)) continue;
                 for (char d = 0; d < 0xFFFF; ++d) {
-                    if (Character.getType(d) == Character.UNASSIGNED ||
+                    if (TestUtility.isUnassigned(d) ||
                         !isSource(d)) continue;
                     String cs = String.valueOf(c) + d;
                     String targ = sourceToTarget.transliterate(cs);
@@ -215,7 +215,7 @@ public class RoundTripTest extends TestFmwk {
                 buf.setCharAt(0, c);
                 log.log(TestUtility.hex(c));
                 for (char d = 0; d < 0xFFFF; ++d) {
-                    if (Character.getType(d) == Character.UNASSIGNED ||
+                    if (TestUtility.isUnassigned(d) ||
                         !isTarget(d)) continue;
                     buf.setCharAt(1, d);
                     String cs = buf.toString();
