@@ -513,7 +513,11 @@ const char*  ucnv_getName (const UConverter * converter, UErrorCode * err)
 {
   if (U_FAILURE (*err))
     return NULL;
-
+  if(converter->sharedData->impl->getName){
+      const char* temp= converter->sharedData->impl->getName(converter);
+      if(temp)
+          return temp;
+  }
   return converter->sharedData->staticData->name;
 }
 

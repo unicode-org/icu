@@ -137,7 +137,7 @@ U_CDECL_BEGIN
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
 
-typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t* version, UErrorCode *pErrorCode);
+typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t* options, UErrorCode *pErrorCode);
 typedef void (*UConverterClose) (UConverter *cnv);
 
 typedef void (*UConverterReset) (UConverter *cnv);
@@ -151,6 +151,11 @@ typedef UChar32 (*T_GetNextUCharFunction) (UConverterToUnicodeArgs *, UErrorCode
 typedef void (*UConverterGetStarters)(const UConverter* converter,
                                       UBool starters[256],
                                       UErrorCode *pErrorCode);
+/* If this function pointer is null or if the function returns null
+ * the name field in static data struct should be returned by 
+ * ucnv_getName() API function
+ */
+typedef const char * (*UConverterGetName) (UConverter *cnv);
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
@@ -201,6 +206,7 @@ struct UConverterImpl {
     T_GetNextUCharFunction getNextUChar;
 
     UConverterGetStarters getStarters;
+    UConverterGetName getName;
 };
 
 extern const UConverterSharedData
