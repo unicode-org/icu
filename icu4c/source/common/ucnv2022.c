@@ -431,7 +431,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale, 
             
             /* open the required converters and cache them */
             myConverterData->myConverterArray[0] = ucnv_open("ASCII",errorCode);
-            myConverterData->myConverterArray[1] = ucnv_open("GB_2312_80-1",errorCode);
+            myConverterData->myConverterArray[1] = ucnv_open("gb_2312_80-1",errorCode);
             myConverterData->myConverterArray[2] = ucnv_open("ISO-IR-165",errorCode);
             myConverterData->myConverterArray[3] = ucnv_open("CNS-11643-1992",errorCode);
             myConverterData->myConverterArray[4] = NULL;
@@ -1322,10 +1322,10 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                         TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
                     }
                 }
-                else{
+                /*else{
                     
                     if(oldIsTargetUCharDBCS != isTargetUCharDBCS  ){
-                        /*Shifting from a double byte to single byte mode*/
+                        /*Shifting from a double byte to single byte mode
                         if(!isTargetUCharDBCS){
                             
                             concatChar(args, &myTargetIndex, 
@@ -1334,7 +1334,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                             
                             TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
                         }
-                        else{ /* Shifting from a single byte to double byte mode*/
+                        else{ /* Shifting from a single byte to double byte mode
                             concatChar(args, &myTargetIndex, 
                                 &myTargetLength, UCNV_SO,err);
                             isShiftAppended =TRUE;
@@ -1343,7 +1343,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                             TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
                         }
                     }
-                }
+                }*/
                 
                 concatString(args, &myTargetIndex, &myTargetLength,
                     &targetUniChar,err, &mySourceIndex);
