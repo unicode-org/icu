@@ -8,7 +8,7 @@
 * Since: ICU 2.6
 **********************************************************************
 */
-package com.ibm.icu.dev.tools.translit;
+package com.ibm.icu.dev.tool.translit;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.*;
