@@ -16,8 +16,6 @@
 
 #include "intltest.h"
 
-U_NAMESPACE_BEGIN
-
 class Integer;
 
 class ICUServiceTest : public IntlTest
@@ -56,7 +54,6 @@ class ICUServiceTest : public IntlTest
   }
 };
 
-U_NAMESPACE_END
 
 /* UCONFIG_NO_SERVICE */
 #endif
