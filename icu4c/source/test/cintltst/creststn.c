@@ -2274,6 +2274,19 @@ static void TestDirectAccess(void) {
             }
         }
     }
+
+    t = ures_findResource("root/calendar/islamic-civil/DateTimePatterns", t, &status);
+    if(U_SUCCESS(status)) {
+        log_err("This resource does not exist. How did it get here?\n");
+    }
+    status = U_ZERO_ERROR;
+
+    /* this one will freeze */
+    t = ures_findResource("root/calendar/islamic-civil/eras/abbreviated/0/mikimaus/pera", t, &status);
+    if(U_SUCCESS(status)) {
+        log_err("Second resource does not exist. How did it get here?\n");
+    }
+    status = U_ZERO_ERROR;
     
     ures_close(t);
     ures_close(t2);
