@@ -1,0 +1,30 @@
+// Copyright (c) 2000 IBM, Inc. and Others.
+// Tamil locale.  Based on Hindi locale
+
+ta_IN {
+    ShortCountry { IND }
+
+    CurrencyElements {
+        "$",
+        RUP,  // Rs. ? No.
+        "."
+    }
+    LocaleString { "ta_IN" }
+    DateTimePatterns {
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd mm yyyy",
+        "d m yy",
+        "{1} {0}"
+    }
+    DateTimeElements {
+        "1",
+        "1"
+    }
+   Version { "0.1" }
+
+}
