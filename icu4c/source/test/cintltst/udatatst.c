@@ -36,6 +36,24 @@
 #include <unistd.h>
 #endif
 
+/* includes for TestSwapData() */
+#include "udataswp.h"
+
+/* swapping implementations in common */
+#include "uresdata.h"
+#include "ucnv_io.h"
+#include "uprops.h"
+#include "ucol_swp.h"
+#include "ucnv_bld.h"
+#include "unormimp.h"
+#include "sprpimpl.h"
+#include "propname.h"
+#include "rbbidata.h"
+
+/* other definitions and prototypes */
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 static void TestUDataOpen(void);
 static void TestUDataOpenChoiceDemo1(void);
 static void TestUDataOpenChoiceDemo2(void);
@@ -45,6 +63,7 @@ static void TestUDataSetAppData(void);
 static void TestErrorConditions(void);
 static void TestAppData(void);
 static void TestICUDataName(void);
+static void TestSwapData(void);
 
 void addUDataTest(TestNode** root);
 
@@ -60,7 +79,7 @@ addUDataTest(TestNode** root)
     addTest(root, &TestErrorConditions, "udatatst/TestErrorConditions");
     addTest(root, &TestAppData, "udatatst/TestAppData" );
     addTest(root, &TestICUDataName, "udatatst/TestICUDataName" );
-
+    addTest(root, &TestSwapData, "udatatst/TestSwapData" );
 }
 
 #if 0
@@ -993,4 +1012,298 @@ static void TestICUDataName()
     }
 #endif
 
+}
+
+/* test data swapping ------------------------------------------------------- */
+
+/* secret exports from udatamem.c */
+U_CAPI int32_t U_EXPORT2
+udata_getLength(UDataMemory *pData);
+
+U_CAPI const void * U_EXPORT2
+udata_getRawMemory(UDataMemory *pData);
+
+/* test cases for maximum data swapping code coverage */
+static const struct {
+    const char *name, *type;
+    UDataSwapFn *swapFn;
+} swapCases[]={
+    /* resource bundles */
+
+    /* resource bundle with many data types */
+    "*testtypes",               "res", ures_swap,
+    /* resource bundle with collation data */
+    "ja",                       "res", ures_swap,
+    /* resource bundle with options-only collation data */
+    "ru",                       "res", ures_swap,
+    "el",                       "res", ures_swap,
+    /* ICU's root */
+    "root",                     "res", ures_swap,
+
+#if !UCONFIG_NO_COLLATION
+    /* standalone collation data files */
+    "ucadata",                  "icu", ucol_swap,
+    "invuca",                   "icu", ucol_swapInverseUCA,
+#endif
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+    /* conversion table files */
+
+    /* SBCS conversion table file without extension */
+    "ibm-913_P100-2000",        "cnv", ucnv_swap,
+    /* EBCDIC_STATEFUL conversion table file with extension */
+    "ibm-1390_P110-2003",       "cnv", ucnv_swap,
+    /* DBCS extension-only conversion table file */
+    "ibm-16684_P110-2003",      "cnv", ucnv_swap,
+    /* EUC-TW (3-byte) conversion table file without extension */
+    "ibm-964_P110-1999",        "cnv", ucnv_swap,
+    /* GB 18030 (4-byte) conversion table file without extension */
+    "gb18030",                  "cnv", ucnv_swap,
+    /* MBCS conversion table file with extension */
+    "*test4x",                  "cnv", ucnv_swap,
+
+    /* alias table */
+    "cnvalias",                 "icu", ucnv_swapAliases,
+#endif
+
+#if !UCONFIG_NO_IDNA
+    "uidna",                    "spp", usprep_swap,
+#endif
+
+#if !UCONFIG_NO_BREAK_ITERATION
+    "char",                     "brk", ubrk_swap,
+#endif
+
+    /* the last item should not be #if'ed so that it can reliably omit the last comma */
+
+    /* Unicode properties */
+    "unames",                   "icu", uchar_swapNames,
+    "pnames",                   "icu", upname_swap,
+#if !UCONFIG_NO_NORMALIZATION
+    "unorm",                    "icu", unorm_swap,
+#endif
+    "uprops",                   "icu", uprops_swap
+};
+
+#define SWAP_BUFFER_SIZE 1000000
+
+static void U_CALLCONV
+printError(void *context, const char *fmt, va_list args) {
+    vlog_info("[swap] ", fmt, args);
+}
+
+static void
+TestSwapCase(UDataMemory *pData, const char *name,
+             UDataSwapFn *swapFn,
+             uint8_t *buffer, uint8_t *buffer2) {
+    UDataSwapper *ds;
+    const void *inData, *inHeader;
+    int32_t length, dataLength, length2, headerLength;
+
+    UErrorCode errorCode;
+
+    inData=udata_getMemory(pData);
+
+    /*
+     * get the data length if possible, to verify that swapping and preflighting
+     * handles the entire data
+     */
+    dataLength=udata_getLength(pData);
+
+    /*
+     * get the header and its length
+     * all of the swap implementation functions require the header to be included
+     */
+    inHeader=udata_getRawMemory(pData);
+    headerLength=(int32_t)((const char *)inData-(const char *)inHeader);
+
+    /* first swap to opposite endianness but same charset family */
+    errorCode=U_ZERO_ERROR;
+    ds=udata_openSwapperForInputData(inHeader, headerLength,
+            !U_IS_BIG_ENDIAN, U_CHARSET_FAMILY, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("udata_openSwapperForInputData(%s->!isBig+same charset) failed - %s\n",
+                name, u_errorName(errorCode));
+        return;
+    }
+    ds->printError=printError;
+
+    /* we assume that the input data has the current platform's endianness and charset family */
+
+    /* preflight the length */
+    length=swapFn(ds, inHeader, -1, NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("swapFn(preflight %s->!isBig+same charset) failed - %s\n",
+                name, u_errorName(errorCode));
+        udata_closeSwapper(ds);
+        return;
+    }
+
+    /* compare the preflighted length against the data length */
+    if(dataLength>=0 && (length+15)<(headerLength+dataLength)) {
+        log_err("swapFn(preflight %s->!isBig+same charset) length too small: %d < data length %d\n",
+                name, length, (headerLength+dataLength));
+        udata_closeSwapper(ds);
+        return;
+    }
+
+    /* swap, not in-place */
+    length2=swapFn(ds, inHeader, length, buffer, &errorCode);
+    udata_closeSwapper(ds);
+    if(U_FAILURE(errorCode)) {
+        log_err("swapFn(%s->!isBig+same charset) failed - %s\n",
+                name, u_errorName(errorCode));
+        return;
+    }
+
+    /* compare the swap length against the preflighted length */
+    if(length2!=length) {
+        log_err("swapFn(%s->!isBig+same charset) length differs from preflighting: %d != preflighted %d\n",
+                name, length2, length);
+        return;
+    }
+
+    /* next swap to opposite charset family */
+    ds=udata_openSwapper(!U_IS_BIG_ENDIAN, U_CHARSET_FAMILY,
+                         !U_IS_BIG_ENDIAN, U_CHARSET_FAMILY==U_ASCII_FAMILY ? U_EBCDIC_FAMILY : U_ASCII_FAMILY,
+                         &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("udata_openSwapper(%s->!isBig+other charset) failed - %s\n",
+                name, u_errorName(errorCode));
+        return;
+    }
+    ds->printError=printError;
+
+    /* swap in-place */
+    length2=swapFn(ds, buffer, length, buffer, &errorCode);
+    udata_closeSwapper(ds);
+    if(U_FAILURE(errorCode)) {
+        log_err("swapFn(%s->!isBig+other charset) failed - %s\n",
+                name, u_errorName(errorCode));
+        return;
+    }
+
+    /* compare the swap length against the original length */
+    if(length2!=length) {
+        log_err("swapFn(%s->!isBig+other charset) length differs from original: %d != original %d\n",
+                name, length2, length);
+        return;
+    }
+
+    /* finally swap to original platform values */
+    ds=udata_openSwapper(!U_IS_BIG_ENDIAN, U_CHARSET_FAMILY==U_ASCII_FAMILY ? U_EBCDIC_FAMILY : U_ASCII_FAMILY,
+                         U_IS_BIG_ENDIAN, U_CHARSET_FAMILY,
+                         &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("udata_openSwapper(%s->back to original) failed - %s\n",
+                name, u_errorName(errorCode));
+        return;
+    }
+    ds->printError=printError;
+
+    /* swap, not in-place */
+    length2=swapFn(ds, buffer, length, buffer2, &errorCode);
+    udata_closeSwapper(ds);
+    if(U_FAILURE(errorCode)) {
+        log_err("swapFn(%s->back to original) failed - %s\n",
+                name, u_errorName(errorCode));
+        return;
+    }
+
+    /* compare the swap length against the original length */
+    if(length2!=length) {
+        log_err("swapFn(%s->back to original) length differs from original: %d != original %d\n",
+                name, length2, length);
+        return;
+    }
+
+    /* compare the final contents with the original */
+    if(0!=uprv_memcmp(inHeader, buffer2, length)) {
+        const uint8_t *original;
+        uint8_t diff[8];
+        int32_t i, j;
+
+        log_err("swapFn(%s->back to original) contents differs from original\n",
+                name);
+
+        /* find the first difference */
+        original=(const uint8_t *)inHeader;
+        for(i=0; i<length && original[i]==buffer2[i]; ++i) {}
+
+        /* find the next byte that is the same */
+        for(j=i+1; j<length && original[j]!=buffer2[j]; ++j) {}
+        log_info("    difference at index %d=0x%x, until index %d=0x%x\n", i, i, j, j);
+
+        /* round down to the last 4-boundary for better result output */
+        i&=~3;
+        log_info("showing bytes from index %d=0x%x (length %d=0x%x):\n", i, i, length, length);
+
+        /* print 8 bytes but limit to the buffer contents */
+        length2=i+sizeof(diff);
+        if(length2>length) {
+            length2=length;
+        }
+
+        /* print the original bytes */
+        uprv_memset(diff, 0, sizeof(diff));
+        for(j=i; j<length2; ++j) {
+            diff[j-i]=original[j];
+        }
+        log_info("    original: %02x %02x %02x %02x %02x %02x %02x %02x\n",
+            diff[0], diff[1], diff[2], diff[3], diff[4], diff[5], diff[6], diff[7]);
+
+        /* print the swapped bytes */
+        uprv_memset(diff, 0, sizeof(diff));
+        for(j=i; j<length2; ++j) {
+            diff[j-i]=buffer2[j];
+        }
+        log_info("    swapped:  %02x %02x %02x %02x %02x %02x %02x %02x\n",
+            diff[0], diff[1], diff[2], diff[3], diff[4], diff[5], diff[6], diff[7]);
+    }
+}
+
+static void
+TestSwapData() {
+    char name[100];
+    UDataMemory *pData;
+    uint8_t *buffer;
+    const char *pkg, *nm;
+
+    UErrorCode errorCode;
+    int32_t i;
+
+    buffer=(uint8_t *)uprv_malloc(2*SWAP_BUFFER_SIZE);
+    if(buffer==NULL) {
+        log_err("unable to allocate %d bytes\n", 2*SWAP_BUFFER_SIZE);
+        return;
+    }
+
+    for(i=0; i<LENGTHOF(swapCases); ++i) {
+        /* build the name for logging */
+        errorCode=U_ZERO_ERROR;
+        if(swapCases[i].name[0]=='*') {
+            pkg=loadTestData(&errorCode);
+            nm=swapCases[i].name+1;
+            uprv_strcpy(name, "testdata");
+        } else {
+            pkg=NULL;
+            nm=swapCases[i].name;
+            uprv_strcpy(name, "NULL");
+        }
+        uprv_strcat(name, "/");
+        uprv_strcat(name, nm);
+        uprv_strcat(name, ".");
+        uprv_strcat(name, swapCases[i].type);
+
+        pData=udata_open(pkg, swapCases[i].type, nm, &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            TestSwapCase(pData, name, swapCases[i].swapFn, buffer, buffer+SWAP_BUFFER_SIZE);
+            udata_close(pData);
+        } else {
+            log_data_err("udata_open(%s) failed - %s\n",
+                name, u_errorName(errorCode));
+        }
+    }
+
+    uprv_free(buffer);
 }
