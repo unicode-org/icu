@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2003/02/11 01:19:01 $
- * $Revision: 1.24 $
+ * $Date: 2003/05/27 17:47:16 $
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -230,7 +230,7 @@ import java.io.*;
  *
  * @author Richard Gillam
  * @stable ICU 2.0
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.24 $ $Date: 2003/02/11 01:19:01 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.25 $ $Date: 2003/05/27 17:47:16 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -391,10 +391,11 @@ public class RuleBasedBreakIterator extends BreakIterator {
         return description.hashCode();
     }
 
-//
-//   Dump out a more-or-less human readable form of the
-//   complete state table and character class definitions
-//
+/**
+ *   Dump out a more-or-less human readable form of the
+ *   complete state table and character class definitions
+ *   @internal
+ */
     ///CLOVER:OFF
 public void debugDumpTables() {
     System.out.println("Character Classes:");
@@ -465,6 +466,12 @@ public void debugDumpTables() {
 
     ///CLOVER:OFF
 // DELETE ME BEFORE RELEASE!!!
+    /**
+     * Write the RBBI runtime engine state transition tables to a file.
+     *  Formerly used to export the tables to the C++ RBBI Implementation.
+     *  Now obsolete, as C++ builds its own tables.
+     * @internal
+     */
 public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {
     // NOTE: The format being written here is designed to be compatible with
     // the ICU udata interfaces and may not be useful for much else
@@ -597,6 +604,9 @@ switch (lookaheadStates.length % 4) {
 }
 }
 
+/**
+ * @internal
+ */
 protected void writeSwappedShort(short x, DataOutputStream out, boolean littleEndian)
 throws IOException{
     if (littleEndian) {
@@ -609,6 +619,9 @@ throws IOException{
     }
 }
 
+/**
+ * @internal
+ */
 protected void writeSwappedInt(int x, DataOutputStream out, boolean littleEndian)
 throws IOException {
     if (littleEndian) {
@@ -1029,6 +1042,7 @@ throws IOException {
     /**
      * Looks up a character's category (i.e., its category for breaking purposes,
      * not its Unicode category)
+     * @internal
      */
     protected int lookupCategory(char c) {
 //++visitedChars;
@@ -1045,6 +1059,7 @@ visitedChars = 0;
     /**
      * Given a current state and a character category, looks up the
      * next state to transition to in the state table.
+     * @internal
      */
     protected int lookupState(int state, int category) {
         return stateTable[state * numCategories + category];
@@ -1053,6 +1068,7 @@ visitedChars = 0;
     /**
      * Given a current state and a character category, looks up the
      * next state to transition to in the backwards state table.
+     * @internal
      */
     protected int lookupBackwardState(int state, int category) {
         return backwardsStateTable[state * numCategories + category];
@@ -3026,6 +3042,9 @@ System.out.println();
         }
 
 	///CLOVER:OFF
+        /**
+         * @internal
+         */
         protected void debugPrintVector(String label, Vector v) {
             System.out.print(label);
             for (int i = 0; i < v.size(); i++)
@@ -3033,12 +3052,18 @@ System.out.println();
             System.out.println();
         }
 
+        /**
+         * @internal
+         */
         protected void debugPrintVectorOfVectors(String label1, String label2, Vector v) {
             System.out.println(label1);
             for (int i = 0; i < v.size(); i++)
                 debugPrintVector(label2, (Vector)v.elementAt(i));
         }
 
+        /**
+         * @internal
+         */
         protected void debugPrintTempStateTable() {
             System.out.println("      tempStateTable:");
             System.out.print("        C:\t");
@@ -3169,6 +3194,9 @@ System.out.println();
     ///CLOVER:ON
 
     ///CLOVER:OFF
+   /**
+     * @internal
+     */
     public static void debugPrintln(String s) {
         final String zeros = "0000";
         String temp;
