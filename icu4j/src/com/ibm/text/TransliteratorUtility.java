@@ -61,6 +61,13 @@ public class TransliteratorUtility {
         }
     }
 
+    /**
+     * Hook to allow tools to access package private method.
+     */
+    public static UnicodeSet getSourceSet(Transliterator t) {
+        return t.getSourceSet();
+    }
+
     static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) throws IOException {
         File f = new File("UnicodeSetClosure.txt");
         String filename = f.getCanonicalFile().toString();
@@ -85,7 +92,7 @@ public class TransliteratorUtility {
         }
         System.out.println(t.getID() + ": " +
                            sourceSet.toPattern(true));
-        out.println("# MINIMAL FILTER GENERATED FOR: " + t.getID() + (forward ? "" : " BACKWARD"));
+        out.println("# MINIMAL FILTER GENERATED FOR: " + t.getID() + (forward ? "" : " REVERSE"));
         out.println(":: " 
             + (forward ? "" : "( ") 
             + sourceSet.toPattern(true) 
