@@ -39,7 +39,9 @@ enum GlyphSubstitutionSubtableTypes
     gsstAlternate       = 3,
     gsstLigature        = 4,
     gsstContext         = 5,
-    gsstChainingContext = 6
+    gsstChainingContext = 6,
+    gsstExtension       = 7,
+    gsstReverseChaining = 8
 };
 
 typedef LookupSubtable GlyphSubstitutionSubtable;

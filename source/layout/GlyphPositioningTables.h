@@ -40,7 +40,8 @@ enum GlyphPositioningSubtableTypes
     gpstMarkToLigature  = 5,
     gpstMarkToMark      = 6,
     gpstContext         = 7,
-    gpstChainedContext  = 8
+    gpstChainedContext  = 8,
+    gpstExtension       = 9
 };
 
 typedef LookupSubtable GlyphPositioningSubtable;

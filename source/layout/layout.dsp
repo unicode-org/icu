@@ -194,6 +194,10 @@ SOURCE=.\DeviceTables.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ExtensionSubtables.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Features.cpp
 # End Source File
 # Begin Source File
@@ -443,6 +447,10 @@ SOURCE=.\DefaultCharMapper.h
 # Begin Source File
 
 SOURCE=.\DeviceTables.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ExtensionSubtables.h
 # End Source File
 # Begin Source File
 
