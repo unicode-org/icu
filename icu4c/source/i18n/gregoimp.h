@@ -16,6 +16,10 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+ * A utility class providing mathematical functions used by time zone
+ * and calendar code.  Do not instantiate.
+ */
 class U_I18N_API Math {
  public:
     /**
@@ -40,17 +44,13 @@ class U_I18N_API Math {
      */
     static inline double floorDivide(double numerator, double denominator);
 
- private:
-    static double floorDivide(double numerator, double denominator,
-                              double& remainder);
-    
- public:
     /**
      * Divide two numbers, returning the floor of the quotient and
      * the modulus remainder.  Unlike the built-in division, this is
      * mathematically well-behaved.  E.g., <code>-1/4</code> => 0 and
      * <code>-1%4</code> => -1, but <code>floorDivide(-1,4)</code> =>
-     * -1 with <code>remainder</code> => 3.
+     * -1 with <code>remainder</code> => 3.  NOTE: If numerator is
+     * too large, the returned quotient may overflow.
      * @param numerator the numerator
      * @param denominator a divisor which must be != 0
      * @param remainder output parameter to receive the
@@ -63,6 +63,13 @@ class U_I18N_API Math {
                                int32_t& remainder);
 };
 
+/**
+ * A utility class providing proleptic Gregorian calendar functions
+ * used by time zone and calendar code.  Do not instantiate.
+ *
+ * Note:  Unlike GregorianCalendar, all computations performed by this
+ * class occur in the pure proleptic GregorianCalendar.
+ */
 class U_I18N_API Grego {
  public:
     /**
@@ -103,8 +110,8 @@ class U_I18N_API Grego {
                             int32_t& dom, int32_t& dow);
 
  private:
-    static const int16_t Grego::DAYS_BEFORE[24];
-    static const int8_t Grego::MONTH_LENGTH[24];
+    static const int16_t DAYS_BEFORE[24];
+    static const int8_t MONTH_LENGTH[24];
 };
 
 inline double Math::floorDivide(double numerator, double denominator) {
