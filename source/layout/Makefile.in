@@ -14,7 +14,7 @@ include $(top_builddir)/icudefs.mk
 subdir = layout
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS)
+CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB)
 
 ## Target information
 
