@@ -33,7 +33,6 @@
 #define CR      0x000D
 #define LF      0x000A
 #define SPACE   0x0020
-#define LINESEP 0x2028
 
 U_STRING_DECL(k_start_string, "string", 6);
 U_STRING_DECL(k_start_binary, "binary", 6);
@@ -544,7 +543,7 @@ parse(UCHARBUF* buf, const char *inputDir,
                         /* ignore spaces carriage returns 
                          * and line feed unless in the form \uXXXX
                          */
-                        else if(c==SPACE || c==CR || c==LF || c==LINESEP){
+                        else if(c==SPACE || c==CR || c==LF){
                             continue;
                         }
                         /* Append UChar* after dissembling if c>0xffff*/
