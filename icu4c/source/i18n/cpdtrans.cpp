@@ -11,12 +11,6 @@
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
-                           UnicodeFilter* adoptedFilter) :
-    Transliterator(ID,adoptedFilter),
-    trans(0), count(0) {
-}
-
 /**
  * Constructs a new compound transliterator given an array of
  * transliterators.  The array of transliterators may be of any
@@ -29,13 +23,80 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+CompoundTransliterator::CompoundTransliterator(
                            Transliterator* const transliterators[],
-                           int32_t transCount,
+                           int32_t count,
                            UnicodeFilter* adoptedFilter) :
-    Transliterator(ID,adoptedFilter),
+    Transliterator(joinIDs(transliterators, count), adoptedFilter),
     trans(0), count(0) {
-    setTransliterators(transliterators, transCount);
+    setTransliterators(transliterators, count);
+}
+
+/**
+ * Splits an ID of the form "ID;ID;..." into a compound using each
+ * of the IDs. 
+ * @param ID of above form
+ * @param forward if false, does the list in reverse order, and
+ * takes the inverse of each ID.
+ */
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+                              Transliterator::Direction direction,
+                              UnicodeFilter* adoptedFilter) :
+    Transliterator(ID, adoptedFilter) {
+    // changed MED
+    // Later, add "rule1[filter];rule2...
+    UnicodeString* list = split(ID, ';', count);
+    trans = new Transliterator*[count];
+    for (int32_t i = 0; i < count; ++i) {
+        trans[i] = createInstance(list[direction==FORWARD ? i : (count-1-i)],
+                                  direction);
+    }
+    delete[] list;
+}
+
+/**
+ * Return the IDs of the given list of transliterators, concatenated
+ * with ';' delimiting them.  Equivalent to the perlish expression
+ * join(';', map($_.getID(), transliterators).
+ */
+UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterators[],
+                                              int32_t count) {
+    UnicodeString id;
+    for (int32_t i=0; i<count; ++i) {
+        if (i > 0) {
+            id.append((UChar)';');
+        }
+        id.append(transliterators[i]->getID());
+    }
+    return id; // Return temporary
+}
+
+/**
+ * Splits a string, as in JavaScript
+ */
+UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
+                                             UChar divider,
+                                             int32_t& count) {
+    // changed MED
+    // see how many there are
+    count = 1;
+    for (int32_t i = 0; i < s.length(); ++i) {
+        if (s.charAt(i) == divider) ++count;
+    }
+    
+    // make an array with them
+    UnicodeString* result = new UnicodeString[count];
+    int32_t last = 0;
+    int32_t current = 0;
+    int32_t i;
+    for (i = 0; i < s.length(); ++i) {
+        if (s.charAt(i) == divider) {
+            s.extractBetween(last, i, result[current++]);
+            last = i+1;
+        }
+    }
+    s.extractBetween(last, i, result[current]);
+    return result;
 }
 
 /**

@@ -222,6 +222,17 @@ class U_I18N_API Transliterator {
 
 public:
 
+    /**
+     * Direction constant indicating the direction in a transliterator, e.g.,
+     * the forward or reverse rules of a RuleBasedTransliterator.  An "A-B"
+     * transliterator transliterates A to B when operating in the forward
+     * direction, and B to A when operating in the reverse direction.
+     */
+    enum Direction {
+        FORWARD,
+        REVERSE
+    };
+
     enum {
         /**
          * In the <code>keyboardTransliterate()</code>
@@ -719,7 +730,7 @@ public:
      * transliterator is registered.
      * @see #registerInstance
      */
-    virtual Transliterator* createInverse(void) const;
+    Transliterator* createInverse(void) const;
 
     /**
      * Returns a <code>Transliterator</code> object given its ID.
@@ -733,7 +744,8 @@ public:
      * @see #getAvailableIDs
      * @see #getID
      */
-    static Transliterator* createInstance(const UnicodeString& ID);
+    static Transliterator* createInstance(const UnicodeString& ID,
+                                          Direction dir = FORWARD);
 
 private:
 
