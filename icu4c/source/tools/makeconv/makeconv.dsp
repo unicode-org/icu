@@ -95,6 +95,10 @@ SOURCE=.\makeconv.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\newconv.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnvstat.c
 # End Source File
 # End Group
