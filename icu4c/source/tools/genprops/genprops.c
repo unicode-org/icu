@@ -177,6 +177,30 @@ writeUCDFilename(char *basename, const char *filename, const char *suffix) {
     uprv_strcpy(basename+length, ".txt");
 }
 
+U_CFUNC UBool
+isToken(const char *token, const char *s) {
+    const char *z;
+    int32_t j;
+
+    s=u_skipWhitespace(s);
+    for(j=0;; ++j) {
+        if(token[j]!=0) {
+            if(s[j]!=token[j]) {
+                break;
+            }
+        } else {
+            z=u_skipWhitespace(s+j);
+            if(*z==';' || *z==0) {
+                return TRUE;
+            } else {
+                break;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 U_CFUNC int32_t
 getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
     const char *t, *z;
