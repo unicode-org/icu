@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Linux-specific setup for Visual Age
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 2003-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -27,6 +27,9 @@ LD_RPATH=	-I
 #LD_RPATH_PRE = -Wl,-rpath,
 
 #LD_SONAME =
+
+## The type of assembly needed when pkgdata is used for generating shared libraries.
+GENCCODE_ASSEMBLY=-a gcc
 
 ## Shared object suffix
 SO = so
