@@ -97,7 +97,7 @@ int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
 */
 }
 
-static uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
+static const uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
   0xFFFF0000,
   0xFFFFFF00,
   0xFFFFFFFF
@@ -877,6 +877,7 @@ struct enumStruct {
   UErrorCode *status;
 };
 
+U_CDECL_BEGIN
 static UBool U_CALLCONV
 _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
 
@@ -937,6 +938,7 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
   }
   return TRUE;
 }
+U_CDECL_END
 
   
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
