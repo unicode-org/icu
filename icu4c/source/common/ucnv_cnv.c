@@ -168,3 +168,28 @@ ucnv_getUChar32KeepOverflow(UConverter *cnv, const UChar *buffer, int32_t length
     }
     return c;
 }
+
+/* update target offsets after a callback call */
+U_CFUNC int32_t *
+ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex) {
+    if(offsets!=NULL) {
+        if(sourceIndex>=0) {
+            /* add the sourceIndex to the relative offsets that the callback wrote */
+            while(length>0) {
+                *offsets+=sourceIndex;
+                ++offsets;
+                --length;
+            }
+        } else {
+            /* sourceIndex==-1, set -1 offsets */
+            while(length>0) {
+                *offsets=-1;
+                ++offsets;
+                --length;
+            }
+        }
+        return offsets;
+    } else {
+        return NULL;
+    }
+}
