@@ -363,7 +363,9 @@ public:
     /**
      * Construct a locale from language, country, variant.
      *
-     * @param language Lowercase two-letter ISO-639 code.
+     * @param language Lowercase two-letter ISO-639 code.  This parameter can
+     *  instead be an ICU style C locale (e.g. "en_US"), but the other
+     *  parameters must not be used.
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
@@ -447,7 +449,8 @@ public:
     /**
      * Creates a locale which has had minimal canonicalization 
      * as per uloc_getName(). 
-     * @param name The name to create from
+     * @param name The name to create from.  If name is null,
+     *  the default Locale is used.
      * @return new locale object
      * @draft
      * @see uloc_getName
