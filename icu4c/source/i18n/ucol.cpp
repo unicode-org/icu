@@ -27,7 +27,6 @@
 #include "umutex.h"
 
 static UCollator* UCA = NULL;
-static CompactIntArray* UCAmapping = NULL;
 
 static UBool
 isAcceptable(void *context, 
@@ -59,7 +58,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     }
 
     if(result == NULL) {
-        result = (UCollator *)uprv_malloc(sizeof(UCollatorNew));
+        result = (UCollator *)uprv_malloc(sizeof(UCollator));
         if(result == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return result;
@@ -198,6 +197,15 @@ ucol_openRules(    const    UChar                  *rules,
 
   return NULL;
 
+}
+
+/* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
+/* you should be able to get the binary chunk to write out...  Doesn't look very full now */
+U_CAPI uint8_t *
+ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
+{
+  *length = 0;
+  return NULL;
 }
 
 U_CAPI void
@@ -1118,12 +1126,6 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
 	return UCOL_DEFAULT;
 }
 
-U_CAPI uint8_t *
-ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
-{
-  *length = 0;
-  return NULL;
-}
 
 U_CAPI void
 ucol_setNormalization(  UCollator            *coll,
@@ -2331,101 +2333,6 @@ UCollationResult alternateIncrementalProcessing(const UCollator *coll, increment
 }
 
 
-U_CAPI int32_t
-ucol_keyHashCode(    const    uint8_t*    key, 
-            int32_t        length)
-{
-  CollationKey newKey(key, length);
-  return newKey.hashCode();
-}
-
-
-UCollationElements*
-ucol_openElements(    const    UCollator            *coll,
-            const    UChar                *text,
-            int32_t              textLength,
-            UErrorCode *status)
-{
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-  const UnicodeString src((UChar*)text, len, len);
-
-  CollationElementIterator *iter = 0;
-  iter = ((RuleBasedCollator*)coll)->createCollationElementIterator(src);
-  if(iter == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
-  }
-
-  return (UCollationElements*) iter;
-}
-
-U_CAPI void
-ucol_closeElements(UCollationElements *elems)
-{
-  delete (CollationElementIterator*)elems;
-}
-
-U_CAPI void
-ucol_reset(UCollationElements *elems)
-{
-  ((CollationElementIterator*)elems)->reset();
-}
-
-U_CAPI int32_t
-ucol_next(    UCollationElements    *elems,
-        UErrorCode            *status)
-{
-  if(U_FAILURE(*status)) return UCOL_NULLORDER;
-
-  return ((CollationElementIterator*)elems)->next(*status);
-}
-
-U_CAPI int32_t
-ucol_previous(    UCollationElements    *elems,
-        UErrorCode            *status)
-{
-  if(U_FAILURE(*status)) return UCOL_NULLORDER;
-
-  return ((CollationElementIterator*)elems)->previous(*status);
-}
-
-U_CAPI int32_t
-ucol_getMaxExpansion(    const    UCollationElements    *elems,
-            int32_t                order)
-{
-  return ((CollationElementIterator*)elems)->getMaxExpansion(order);
-}
-
-U_CAPI void
-ucol_setText(UCollationElements        *elems,
-         const    UChar                    *text,
-         int32_t                    textLength,
-         UErrorCode                *status)
-{
-  if(U_FAILURE(*status)) return;
-
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-  const UnicodeString src((UChar*)text, len, len);
-
-  ((CollationElementIterator*)elems)->setText(src, *status);
-}
-
-U_CAPI UTextOffset
-ucol_getOffset(const UCollationElements *elems)
-{
-  return ((CollationElementIterator*)elems)->getOffset();
-}
-
-U_CAPI void
-ucol_setOffset(    UCollationElements    *elems,
-        UTextOffset            offset,
-        UErrorCode            *status)
-{
-  if(U_FAILURE(*status)) return;
-  
-  ((CollationElementIterator*)elems)->setOffset(offset, *status);
-}
-
 U_CAPI void 
 ucol_getVersion(const UCollator* coll, 
                 UVersionInfo versionInfo) 
@@ -2453,9 +2360,13 @@ U_CAPI const UChar*
 ucol_getRules(    const    UCollator       *coll, 
         int32_t            *length)
 {
+  *length = 0;
+  return NULL;
+/*
   const UnicodeString& rules = ((RuleBasedCollator*)coll)->getRules();
   *length = rules.length();
   return rules.getUChars();
+*/
 }
 
 U_CAPI int32_t
