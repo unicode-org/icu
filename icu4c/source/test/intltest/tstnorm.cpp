@@ -1761,8 +1761,15 @@ BasicNormalizerTest::TestSkippable() {
     UChar32 start, limit, rangeStart, rangeEnd;
     int32_t i, range, count;
 
+    UErrorCode errorCode;
+
     /* build NF*Skippable sets from runtime data */
-    unorm_addPropertyStarts((USet *)&starts);
+    errorCode=U_ZERO_ERROR;
+    unorm_addPropertyStarts((USet *)&starts, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        errln("unable to load normalization data for unorm_addPropertyStarts(() - %s\n", u_errorName(errorCode));
+        return;
+    }
     count=starts.getRangeCount();
 
     start=limit=0;
