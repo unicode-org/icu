@@ -811,6 +811,11 @@ UnicodeStringTest::TestSpacePadding()
     expectedValue = "Hi!  How ya doi";
     if (returnVal == FALSE || test3 != expectedValue)
         errln("truncate() failed: expected \"" + expectedValue + "\", got \"" + test3 + "\".");
+
+    test3.setToBogus();
+    if(!test3.isBogus() || test3.truncate(0) || test3.isBogus() || !test3.isEmpty()) {
+        errln("setToBogus().truncate(0) did not make the string valid/empty");
+    }
 }
 
 void
