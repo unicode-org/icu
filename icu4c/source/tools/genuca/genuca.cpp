@@ -20,6 +20,7 @@
 *   Change history:
 *   02/23/2001  grhoten                 Made it into a tool
 *   02/23/2001  weiv                    Moved element & table handling code to i18n
+*   05/09/2001  weiv                    Case bits are now in the CEs, not in front
 */
 
 #include "genuca.h"
@@ -75,7 +76,7 @@ int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
 }
 
 
-uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UBool caseBit, UErrorCode *status) {
+uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
     }
@@ -109,15 +110,16 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UBool 
         ((secvalue<<UCOL_SECONDARYORDERSHIFT)&UCOL_SECONDARYORDERMASK)|
         (tervalue&UCOL_TERTIARYORDERMASK);
 
-    // This CE is not special at all... a very uninteresting one...
-    value &= 0xFFFFFF7F; 
 
-    // Here's case handling!
+    // Here was case handling!
+    // case bits are already read from the UCA
+#if 0
     if(caseBit == TRUE && tervalue != 0) {
         value |= 0x40; // 0100 0000 set case bit
     } else {
         value &= 0xFFFFFFBF; // ... 1011 1111 (reset case bit)
     }
+#endif
     if(primsave!='\0') {
         *primend = primsave;
     }
@@ -240,6 +242,8 @@ static void addToExistingInverse(UCAElements *element, uint32_t position, UError
 static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   uint32_t comp = 0;
   uint32_t position = inversePos;
+  uint32_t saveElement = element->CEs[0];
+  element->CEs[0] &= 0xFFFFFF3F;
   if(element->noOfCEs == 1) {
     element->CEs[1] = 0;
   }
@@ -282,6 +286,7 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   } else {
     addNewInverse(element, status);
   }
+  element->CEs[0] = saveElement;
   return inversePos;
 }
 
@@ -468,6 +473,10 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     }
 
     startCodePoint = endCodePoint+1;
+
+    /* Case bit is now associated with each collation element */
+    /* Also, there are two case bits, but we don't care about it here */
+#if 0
     endCodePoint = strchr(startCodePoint, ';');
 
     while(*startCodePoint != '0' && *startCodePoint != '1') {
@@ -485,10 +494,10 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     }
 
     startCodePoint = endCodePoint+1;
-
+#endif
     commentStart = strchr(startCodePoint, '#');
     if(commentStart == NULL) {
-        commentStart = strlen(startCodePoint) + startCodePoint;
+        commentStart = strlen(startCodePoint) + startCodePoint - 1;
     }
 
     i = 0;
@@ -508,55 +517,39 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
 
         /* I want to get the CEs entered right here, including continuation */
-#if 0
-        if(element->sizePrim[i]==3 && 
-              strtoul(secondary, 0, 16)== UCOL_UNMARKED && 
-              strtoul(tertiary, 0, 16) < 0x40) {
-              /* This is a test for a long primary - secondary has 6 bits and tertiary must be unmarked */
-              /* fprintf(stderr, "Long primary in expansion for 0x%04X\n", element->codepoint);*/
-              element->CEs[CEindex++] = (uint32_t)strtoul(primary, 0, 16) << 8 | 0xC0 | (strtoul(tertiary, 0, 16) & 0x3F);
-              /* Long primary,                       |          24P        |1|1| 6T |            */
-        } else {     
-#endif /* we will try to go without long primaries */
-          element->CEs[CEindex++] = getSingleCEValue(primary, secondary, tertiary, element->caseBit, status);
+        element->CEs[CEindex++] = getSingleCEValue(primary, secondary, tertiary, status);
 
-          uint32_t CEi = 1;
-          while(2*CEi<element->sizePrim[i] || CEi<element->sizeSec[i] || CEi<element->sizeTer[i]) {
-            uint32_t value = element->caseBit?0xC0:0x80; /* Continuation marker */
-              if(2*CEi<element->sizePrim[i]) {
-                  value |= ((hex2num(*(primary+4*CEi))&0xF)<<28);
-                  value |= ((hex2num(*(primary+4*CEi+1))&0xF)<<24);
-              }
+        uint32_t CEi = 1;
+        while(2*CEi<element->sizePrim[i] || CEi<element->sizeSec[i] || CEi<element->sizeTer[i]) {
+          //uint32_t value = element->caseBit?0xC0:0x80; /* Continuation marker */
+          uint32_t value = UCOL_CONTINUATION_MARKER; /* Continuation marker */
+            if(2*CEi<element->sizePrim[i]) {
+                value |= ((hex2num(*(primary+4*CEi))&0xF)<<28);
+                value |= ((hex2num(*(primary+4*CEi+1))&0xF)<<24);
+            }
 
-              if(2*CEi+1<element->sizePrim[i]) {
-                  value |= ((hex2num(*(primary+4*CEi+2))&0xF)<<20);
-                  value |= ((hex2num(*(primary+4*CEi+3))&0xF)<<16);
-              }
+            if(2*CEi+1<element->sizePrim[i]) {
+                value |= ((hex2num(*(primary+4*CEi+2))&0xF)<<20);
+                value |= ((hex2num(*(primary+4*CEi+3))&0xF)<<16);
+            }
 
-              if(CEi<element->sizeSec[i]) {
-                  value |= ((hex2num(*(secondary+2*CEi))&0xF)<<12);
-                  value |= ((hex2num(*(secondary+2*CEi+1))&0xF)<<8);
-              }
+            if(CEi<element->sizeSec[i]) {
+                value |= ((hex2num(*(secondary+2*CEi))&0xF)<<12);
+                value |= ((hex2num(*(secondary+2*CEi+1))&0xF)<<8);
+            }
 
-              if(CEi<element->sizeTer[i]) {
-                  value |= ((hex2num(*(tertiary+2*CEi))&0x3)<<4);
-                  value |= (hex2num(*(tertiary+2*CEi+1))&0xF);
-              }
+            if(CEi<element->sizeTer[i]) {
+                value |= ((hex2num(*(tertiary+2*CEi))&0x3)<<4);
+                value |= (hex2num(*(tertiary+2*CEi+1))&0xF);
+            }
 
-              CEi++;
+            CEi++;
 
-              element->CEs[CEindex++] = value;
-          }
-#if 0
+            element->CEs[CEindex++] = value;
         }
-#endif /* part for long primaries */
 
-        uint32_t terValue = strtoul(tertiary+strlen(tertiary)-2, NULL, 16);
-        if(terValue > 0x3F) {
-            fprintf(stderr, "Tertiary value %02X too big for %04X\n", terValue, element->cPoints[0]);
-        }
-        startCodePoint = endCodePoint+1;
-        i++;
+      startCodePoint = endCodePoint+1;
+      i++;
     }
     element->noOfCEs = CEindex;
 
@@ -579,7 +572,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         fprintf(stderr, "problem putting stuff in hash table\n");
         *status = U_INTERNAL_PROGRAM_ERROR;
-        free(element);
+        //free(element);
         return NULL;
     }
 
