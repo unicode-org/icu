@@ -141,7 +141,7 @@ class StringReplacer implements UnicodeReplacer {
             isComplex = false;
 
             // The temporary buffer starts at tempStart, and extends
-            // to destLimit.  The start of the buffer has a single
+            // to destLimit + tempExtra.  The start of the buffer has a single
             // character from before the key.  This provides style
             // data when addition characters are filled into the
             // temporary buffer.  If there is nothing to the left, use
@@ -160,6 +160,7 @@ class StringReplacer implements UnicodeReplacer {
                 destStart++;
             }
             int destLimit = destStart;
+            int tempExtra = 0; // temp chars after destLimit
 
             for (oOutput=0; oOutput<output.length(); ) {
                 if (oOutput == cursorPos) {
@@ -167,6 +168,17 @@ class StringReplacer implements UnicodeReplacer {
                     newStart = destLimit - destStart; // relative to start
                 }
                 int c = UTF16.charAt(output, oOutput);
+
+                // When we are at the last position copy the right style
+                // context character into the temporary buffer.  We don't
+                // do this before because it will provide an incorrect
+                // right context for previous replace() operations.
+                int nextIndex = oOutput + UTF16.getCharCount(c);
+                if (nextIndex == output.length()) {
+                    tempExtra = UTF16.getCharCount(text.char32At(limit));
+                    text.copy(limit, limit+tempExtra, destLimit);
+                }
+
                 UnicodeReplacer r = data.lookupReplacer(c);
                 if (r == null) {
                     // Accumulate straight (non-segment) text.
@@ -185,7 +197,7 @@ class StringReplacer implements UnicodeReplacer {
                     int len = r.replace(text, destLimit, destLimit, cursor);
                     destLimit += len;
                 }
-                oOutput += UTF16.getCharCount(c);
+                oOutput = nextIndex;
             }
             // Insert any accumulated straight text.
             if (buf.length() > 0) {
@@ -201,7 +213,7 @@ class StringReplacer implements UnicodeReplacer {
 
             // Copy new text to start, and delete it
             text.copy(destStart, destLimit, start);
-            text.replace(tempStart + outLen, destLimit + outLen, "");
+            text.replace(tempStart + outLen, destLimit + tempExtra + outLen, "");
 
             // Delete the old text (the key)
             text.replace(start + outLen, limit + outLen, "");
