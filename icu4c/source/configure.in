@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.138 2001/11/11 07:22:54 yves-oss Exp $
+dnl $Id: configure.in,v 1.139 2001/11/26 21:47:42 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -747,7 +747,7 @@ dnl set ICUDATA_CHAR to 'e' for any EBCDIC (which should be big endian) platform
 case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
-	*-*-freebsd*) 	platform=U_LINUX ;;
+	*-*-*bsd*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=AIX ;;
 	*-sequent-*)	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
@@ -771,7 +771,7 @@ dnl Handle -rpath options for shared library paths
 case "${host}" in
 	*-*-solaris*) 	ld_rpath_suf=":" ;;
 	*-*-linux*) 	ld_rpath_suf=" " ;;
-	*-*-freebsd*) 	ld_rpath_suf=" " ;;
+	*-*-*bsd*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
