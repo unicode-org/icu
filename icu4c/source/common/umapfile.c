@@ -328,7 +328,7 @@
             /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
             /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
             /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
-            uprv_strcpy(pathBuffer, "//IXMICUDA");
+            uprv_strcpy(pathBuffer, "//IXMI" U_ICU_VERSION_SHORT "DA");
 #       else
             /* set up the library name */
             uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
