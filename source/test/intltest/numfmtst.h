@@ -84,6 +84,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestWhiteSpaceParsing(void);
         
+    void TestComplexCurrency(void);
+        
     void TestPad(void);
     void TestPatterns2(void);
 
