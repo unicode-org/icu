@@ -50,14 +50,5 @@ de_AT {
         "November",
         "Dezember",
     }
-    /* Discarding duplicate data for tag: NumberPatterns */
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 }

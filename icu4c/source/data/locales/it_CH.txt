@@ -39,14 +39,5 @@ it_CH {
         "#,##0%",
         "#E0",
     }
-    zoneStrings { 
-        {
-            "Europe/Zurich",
-            "CET",
-            "CET",
-            "CET",
-            "CET",
-            "Zurich",
-        }
-    }
+
 }

@@ -801,13 +801,5 @@ es {
     Variants {
         REVISED { "Revisado" }
     }
-    zoneStrings {
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 }

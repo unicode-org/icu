@@ -37,16 +37,7 @@ fr_BE {
         ",",
         "+",
     }
-// Fall back to French
-//    zoneStrings { 
-//        {
-//            "Africa/Casablanca",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//        }
-//    }
+
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "#,##0.00 \u00a4;-#,##0.00 \u00a4",

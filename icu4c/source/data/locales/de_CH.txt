@@ -49,13 +49,5 @@ de_CH {
         "#,##0%",
         "#E0",
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 }

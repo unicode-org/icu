@@ -24,7 +24,7 @@ ja {
         }
     }
     Variants{
-        EURO  { "\u30e6\u30fc\u30ed" }
+        //EURO  { "\u30e6\u30fc\u30ed" }
         //PREEURO { "\u65e7\u901a\u8ca8" }
         REVISED { "\u6539\u8a02\u7248" }
     }

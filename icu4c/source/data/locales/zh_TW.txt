@@ -567,18 +567,9 @@ zh_TW {
         }
     }
     Variants{
-        EURO    { "\u6B50\u5143" }
-       // PREEURO { "\u820A\u5E63" }
+        // EURO    { "\u6B50\u5143" }
+        // PREEURO { "\u820A\u5E63" }
         REVISED { "\u5DF2\u4FEE\u8A02" }
     }
-    // Fall back to zh
-//    zoneStrings { 
-//        {
-//            "Africa/Casablanca",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//        }
-//    }
+
 }

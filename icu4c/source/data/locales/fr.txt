@@ -793,15 +793,7 @@ fr {
     Variants {
         REVISED { "R\u00e9vis\u00e9" }
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 
     // International Calendars Data.
     // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  

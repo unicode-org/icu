@@ -409,15 +409,7 @@ pl {
         "2,000,000,000,000: << tryliony[ >>];\n"
         "1,000,000,000,000,000: =#,##0=;" 
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }

@@ -25,17 +25,6 @@ fr_CA {
         "#E0",
     }
 
-// Fall back to French
-//    zoneStrings { 
-//        {
-//            "Africa/Casablanca",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//        }
-//    }
-
     // Currency display names
     Currencies {
         CAD { "$", "dollar canadien" } // Canadian Dollar

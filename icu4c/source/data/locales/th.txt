@@ -471,6 +471,7 @@ th {
         "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    /*
     zoneStrings { 
         {
             "THA",
@@ -481,6 +482,7 @@ th {
             "Bangkok",
         }
     }
+    */
     LocaleScript{ 
         "Thai", // Script Name  
     }

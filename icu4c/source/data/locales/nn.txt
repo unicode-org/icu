@@ -112,14 +112,5 @@ nn{
         ",",
         "+",
     }
-    zoneStrings {
-        {
-            "Europe/Oslo",
-            "Central European Time",
-            "MET",
-            "Central European Time (DST)",
-            "MET",
-            "Oslo"
-        }
-    }
+
 }

@@ -646,13 +646,5 @@ pt {
         //PREEURO { "Pr\u00e9-Euro" }
         REVISED { "Revisado" }
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 }

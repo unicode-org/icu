@@ -1657,7 +1657,7 @@ root {
     Variants{
         Fallback{ "" }
         //NY      { "NY" }        // No longer valid variant. Here for backwards compatibility.
-        EURO    { "EURO" }      // EURO variant display name
+        //EURO    { "EURO" }      // EURO variant display name
         POSIX   { "POSIX" }
         REVISED { "REVISED" }
     }
