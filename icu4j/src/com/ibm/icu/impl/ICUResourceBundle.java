@@ -784,6 +784,11 @@ public abstract class ICUResourceBundle extends UResourceBundle{
 
             HashSet set = new HashSet();
             set.addAll(Arrays.asList(locales));
+            // add the obsolete ids, we really do support them
+            set.add("iw");
+            set.add("iw_IL");
+            set.add("in");
+            set.add("in_ID");
             return Collections.unmodifiableSet(set);
         }
         catch (MissingResourceException e) {

@@ -1457,26 +1457,26 @@ public class DecimalFormat extends NumberFormat {
 
             // Handle integral values
             if (mult == 1 && digitList.isIntegral()) {
-		// hack quick long
+                // hack quick long
 		if (digitList.decimalAt < 12) { // quick check for long
 		    long l = 0;
 		    if (digitList.count > 0) {
 			int nx = 0;
-			while (nx < digitList.count) {
-			    l = l * 10 + (char)digitList.digits[nx++] - '0';
-			}
-			while (nx++ < digitList.decimalAt) {
-			    l *= 10;
-			}
-			if (!status[STATUS_POSITIVE]) {
-			    l = -l;
-			}
-		    }
-		    n = new Long(l);
+                        while (nx < digitList.count) {
+                            l = l * 10 + (char)digitList.digits[nx++] - '0';
+                        }
+                        while (nx++ < digitList.decimalAt) {
+                            l *= 10;
+                        }
+                        if (!status[STATUS_POSITIVE]) {
+                            l = -l;
+                        }
+                    }
+                    n = new Long(l);
 		} else {
-		    BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
-		    n = (big.bitLength() < 64) ?
-			(Number) new Long(big.longValue()) : (Number) big;
+                    BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
+                    n = (big.bitLength() < 64) ?
+                        (Number) new Long(big.longValue()) : (Number) big;
 		}
             }
 
@@ -2654,12 +2654,13 @@ public class DecimalFormat extends NumberFormat {
     {
         if (obj == null) return false;
         if (!super.equals(obj)) return false; // super does class check
+
         DecimalFormat other = (DecimalFormat) obj;
         /* Add the comparison of the four new added fields ,they are
          * posPrefixPattern, posSuffixPattern, negPrefixPattern, negSuffixPattern.
          * [Richard/GCL]
          */
-        return (((posPrefixPattern == other.posPrefixPattern &&
+        return ((posPrefixPattern == other.posPrefixPattern &&
                  positivePrefix.equals(other.positivePrefix))
                 || (posPrefixPattern != null &&
                     posPrefixPattern.equals(other.posPrefixPattern)))
@@ -2686,7 +2687,7 @@ public class DecimalFormat extends NumberFormat {
             && (!useSignificantDigits ||
                 minSignificantDigits == other.minSignificantDigits &&
                 maxSignificantDigits == other.maxSignificantDigits)
-            && symbols.equals(other.symbols));
+            && symbols.equals(other.symbols);
     }
 
 //      protected void handleToString(StringBuffer buf) {
@@ -2695,8 +2696,8 @@ public class DecimalFormat extends NumberFormat {
 //          buf.append("positivePrefix: '" + positivePrefix + "'\n");
 //          buf.append("posSuffixPattern: '" + posSuffixPattern + "'\n");
 //          buf.append("positiveSuffix: '" + positiveSuffix + "'\n");
-//          buf.append("negPrefixPattern: '" + Utility.format1ForSource(negPrefixPattern) + "'\n");
-//          buf.append("negativePrefix: '" + Utility.format1ForSource(negativePrefix) + "'\n");
+//          buf.append("negPrefixPattern: '" + com.ibm.icu.impl.Utility.format1ForSource(negPrefixPattern) + "'\n");
+//          buf.append("negativePrefix: '" + com.ibm.icu.impl.Utility.format1ForSource(negativePrefix) + "'\n");
 //          buf.append("negSuffixPattern: '" + negSuffixPattern + "'\n");
 //          buf.append("negativeSuffix: '" + negativeSuffix + "'\n");
 //          buf.append("multiplier: '" + multiplier + "'\n");
@@ -2705,6 +2706,9 @@ public class DecimalFormat extends NumberFormat {
 //          buf.append("decimalSeparatorAlwaysShown: '" + decimalSeparatorAlwaysShown + "'\n");
 //          buf.append("useExponentialNotation: '" + useExponentialNotation + "'\n");
 //          buf.append("minExponentDigits: '" + minExponentDigits + "'\n");
+//          buf.append("useSignificantDigits: '" + useSignificantDigits + "'\n");
+//          buf.append("minSignificantDigits: '" + minSignificantDigits + "'\n");
+//          buf.append("maxSignificantDigits: '" + maxSignificantDigits + "'\n");           
 //          buf.append("symbols: '" + symbols + "'");
 //      }
 
