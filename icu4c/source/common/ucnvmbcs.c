@@ -21,13 +21,17 @@
 *   - efficient distinction of unassigned vs. illegal byte sequences
 *   - it is possible in fromUnicode() to directly deal with simple
 *     stateful encodings (used for EBCDIC_STATEFUL)
-*   - it is possible to convert Unicode code points other than U+0000
+*   - it is possible to convert Unicode code points
 *     to a single zero byte (but not as a fallback except for SBCS)
 *
 *   Remaining limitations in fromUnicode:
 *   - byte sequences must not have leading zero bytes
 *   - except for SBCS codepages: no fallback mapping from Unicode to a zero byte
 *   - limitation to up to 4 bytes per character
+*
+*   ICU 2.8 (late 2003) adds a secondary data structure which lifts some of these
+*   limitations and adds m:n character mappings and other features.
+*   See ucnv_ext.h for details.
 *
 *   Change history: 
 *
@@ -2572,13 +2576,12 @@ getTrail:
 
             /* is this code point assigned, or do we use fallbacks? */
             if(!(MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c) ||
-                 (UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)))
+                 (UCNV_FROM_U_USE_FALLBACK(cnv, c) && value!=0))
             ) {
                 /*
-                 * We allow a 0 byte output if the Unicode code point is
-                 * U+0000 and also if the "assigned" bit is set for this entry.
+                 * We allow a 0 byte output if the "assigned" bit is set for this entry.
                  * There is no way with this data structure for fallback output
-                 * for other than U+0000 to be a zero byte.
+                 * to be a zero byte.
                  */
 
 unassigned:
@@ -3261,9 +3264,9 @@ getTrail:
              *
              * Other than that, leading zero bytes are removed and the other
              * bytes output. A single zero byte may be output if the "assigned"
-             * bit in stage 2 was on or also if the Unicode code point is U+0000.
-             * The data structure does not support zero byte output as a fallback
-             * for other code points, and also does not allow output of leading zeros.
+             * bit in stage 2 was on.
+             * The data structure does not support zero byte output as a fallback,
+             * and also does not allow output of leading zeros.
              */
             stage2Entry=MBCS_STAGE_2_FROM_U(table, c);
 
@@ -3395,13 +3398,12 @@ getTrail:
 
             /* is this code point assigned, or do we use fallbacks? */
             if(!(MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c)!=0 ||
-                 (UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)))
+                 (UCNV_FROM_U_USE_FALLBACK(cnv, c) && value!=0))
             ) {
                 /*
-                 * We allow a 0 byte output if the Unicode code point is
-                 * U+0000 and also if the "assigned" bit is set for this entry.
+                 * We allow a 0 byte output if the "assigned" bit is set for this entry.
                  * There is no way with this data structure for fallback output
-                 * for other than U+0000 to be a zero byte.
+                 * to be a zero byte.
                  */
 
 unassigned:
@@ -3714,13 +3716,12 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
 
     /* is this code point assigned, or do we use fallbacks? */
     if( MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c) ||
-        (FROM_U_USE_FALLBACK(useFallback, c) && (value!=0 || c==0))
+        (FROM_U_USE_FALLBACK(useFallback, c) && value!=0)
     ) {
         /*
-         * We allow a 0 byte output if the Unicode code point is
-         * U+0000 and also if the "assigned" bit is set for this entry.
+         * We allow a 0 byte output if the "assigned" bit is set for this entry.
          * There is no way with this data structure for fallback output
-         * for other than U+0000 to be a zero byte.
+         * to be a zero byte.
          */
         /* assigned */
         *pValue=value;

@@ -542,8 +542,8 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
         return FALSE;
     }
 
-    if(flag==1 && length==1 && *bytes==0 && c!=*bytes) {
-        fprintf(stderr, "error: unable to encode a |1 fallback from U+%04x to 0x%02x\n",
+    if(flag==1 && length==1 && *bytes==0) {
+        fprintf(stderr, "error: unable to encode a |1 fallback to 0x%02x\n",
             c, *bytes);
         return FALSE;
     }
