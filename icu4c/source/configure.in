@@ -52,6 +52,7 @@ ICU_USE_THREADS=0
 if test $threads = true; then
  dnl special pthread handling 
  dnl AIX uses pthreads instead of pthread, and HP/UX uses cma
+ dnl FreeBSD users -pthread
  AC_CHECK_LIB(pthread, pthread_create)
 
  if test $ac_cv_lib_pthread_pthread_create = yes; then
@@ -69,6 +70,12 @@ if test $threads = true; then
    ICU_USE_THREADS=1
   fi
  fi
+ if test $ac_cv_lib_pthread_pthread_create = no; then
+ AC_PTHREAD_FREEBSD
+ fi
+
+ dnl FreeBSD needs a WCS library.
+ AC_CHECK_LIB(wcs, wcscpy)
  AC_CHECK_FUNC(pthread_mutex_create)
 fi
 
@@ -215,6 +222,7 @@ dnl Platform-specific Makefile setup
 case "${host}" in
 	*-*-solaris*) 	platform=SOLARIS ;;
 	*-*-linux*) 	platform=LINUX ;;
+	*-*-freebsd*) 	platform=LINUX ;;
 	*-*-aix*) 	platform=AIX ;;
 	*-*-hpux*) 	platform=HPUX ;;
 	*-*-os390*)	platform=OS390 ;;
@@ -228,6 +236,7 @@ dnl Handle -rpath options for shared library paths
 case "${host}" in
 	*-*-solaris*) 	ld_rpath_suf=":" ;;
 	*-*-linux*) 	ld_rpath_suf=" " ;;
+	*-*-freebsd*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*-os390*)	ld_rpath_suf=" " ;;
