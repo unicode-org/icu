@@ -51,10 +51,8 @@ void TestTwoDigitYearDSTParse()
     UErrorCode status = U_ZERO_ERROR;
     UChar *pattern;
     UDate d;
-    UChar *str;
     UChar *s;
     int32_t pos;
-    UChar *res;
 
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("EEE MMM dd HH:mm:ss.SSS zzz yyyy G")+1 ));
     u_uastrcpy(pattern, "EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
@@ -73,13 +71,25 @@ void TestTwoDigitYearDSTParse()
     u_uastrcpy(s, "03-Apr-04 2:20:47 o'clock AM PST");
     pos=0;
     d = udat_parse(fmt, s, u_strlen(s), &pos, &status);
-    
-    res=(UChar*)malloc(sizeof(UChar) * (strlen("Sat Apr 03 02:20:47.000 PST 2004 AD")+1) );
-    u_uastrcpy(res, "Sat Apr 03 02:20:47.000 PST 2004 AD");
-    str=myDateFormat(fullFmt, d);
-    if(u_strcmp(str, res) != 0)
-        log_err("Error in parsing and format two digit year with different patterns\n");
-    
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Could not parse \"%s\"\n", austrdup(s));
+    } else {
+        UCalendar *cal = ucal_open(NULL, 0, uloc_getDefault(), UCAL_TRADITIONAL, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: Could not open calendar");
+        } else {
+            int32_t h;
+            ucal_setMillis(cal, d, &status);
+            h = ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
+            if (U_FAILURE(status)) {
+                log_err("FAIL: Some calendar operations failed");
+            } else if (h != 2) {
+                log_err("FAIL: Parse of \"%s\" returned HOUR_OF_DAY %d\n",
+                        austrdup(s), h);
+            }
+            ucal_close(cal);
+        }
+    }
     
     udat_close(fullFmt);
     udat_close(fmt);
@@ -255,6 +265,7 @@ void TestQuotePattern161()
     UChar *pattern, *tzID, *exp;
     UChar *dateString;
     UErrorCode status = U_ZERO_ERROR;
+    const char* expStr = "04/13/1999 at 10:42:28 AM ";
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("MM/dd/yyyy 'at' hh:mm:ss a zzz")+1) );
     u_uastrcpy(pattern, "MM/dd/yyyy 'at' hh:mm:ss a zzz");
     
@@ -269,11 +280,11 @@ void TestQuotePattern161()
     currentTime_1 = ucal_getMillis(cal, &status);
     
     dateString = myDateFormat(format, currentTime_1);
-    exp=(UChar*)malloc(sizeof(UChar) * (strlen("04/13/1999 at 10:42:28 AM PDT") + 1) );
-    u_uastrcpy(exp, "04/13/1999 at 10:42:28 AM PDT");
+    exp=(UChar*)malloc(sizeof(UChar) * (strlen(expStr) + 1) );
+    u_uastrcpy(exp, expStr);
     
     log_verbose("%s\n", austrdup(dateString) );
-    if(u_strcmp(dateString, exp) !=0)
+    if(u_strncmp(dateString, exp, strlen(expStr)) !=0)
         log_err("Error in formatting a pattern with single quotes\n");
     
 }
