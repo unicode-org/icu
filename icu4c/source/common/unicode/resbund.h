@@ -439,7 +439,12 @@ public:
      */
     const Locale 
       getLocale(ULocDataLocaleType type, UErrorCode &status) const;
-
+    /**
+     * This API implements multilevel fallback
+     * @internal
+     */
+    ResourceBundle
+        getWithFallback(const char* key, UErrorCode& status);
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
