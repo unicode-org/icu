@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2004/03/24 18:21:21 $ 
- * $Revision: 1.17 $
+ * $Date: 2004/03/24 18:27:54 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -82,6 +82,24 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         this.zeroDigit = zeroDigit;
     }
 
+    /**
+     * Return the character used to represent a significant digit in a pattern.
+     * @return the significant digit pattern character
+     * @draft ICU 3.0
+     */
+    public char getSignificantDigit() {
+        return sigDigit;
+    }
+
+    /**
+     * Set the character used to represent a significant digit in a pattern.
+     * @param sigDigit the significant digit pattern character
+     * @draft ICU 3.0
+     */
+    public void setSignificantDigit(char sigDigit) {
+        this.sigDigit = sigDigit;
+    }    
+    
     /**
      * Return the character used for thousands separator. Different for French, etc.
      * @return the thousands character
@@ -518,10 +536,11 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 		infinity = numberElements[9];
 		NaN = numberElements[10];
         
-        // [NEW] Temporarily hard code; retrieve from resource later
+        // TODO Temporarily hard code; retrieve from resource later
         plusSign  = DecimalFormat.PATTERN_PLUS_SIGN;
         padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
-
+        sigDigit  = DecimalFormat.PATTERN_SIGNIFICANT_DIGIT;
+        
         // Obtain currency data from the currency API.  This is strictly
         // for backward compatibility; we don't use DecimalFormatSymbols
         // for currency data anymore.
@@ -635,6 +654,14 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see #getDigit
      */
     private  char    digit;
+
+    /**
+     * Character used for a significant digit in a pattern.
+     *
+     * @serial
+     * @see #getSignificantDigit
+     */
+    private  char    sigDigit;
 
     /**
      * Character used to separate positive and negative subpatterns
