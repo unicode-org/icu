@@ -19,6 +19,15 @@ sq_AL {
         "#,##0%",
         "#E0",
     }
+    zoneStrings { 
+        {
+            "Europe/Tirane",
+            "CET", // TODO: Replace with long Albanian name
+            "CET",
+            "CEST", // TODO: Replace with long Albanian name
+            "CEST",
+        }
+    }
 //    ShortCountry { "ALB" }
     LocaleID:int { 0x041c }
 }
