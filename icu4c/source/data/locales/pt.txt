@@ -230,7 +230,187 @@ pt {
 
     // Currency display names
     Currencies {
-        BRL { "R$", "BRL" }
-        PTE { "Esc.", "PTE" }
+        ADP { "ADP", "Peseta de Andorra" }
+        AED { "AED", "Dirham dos Emirados \u00C1rabes Unidos" }
+        AFA { "AFA", "Afgani" }
+        ALL { "ALL", "Lek Alban\u00EAs" }
+        AMD { "AMD", "Dram Arm\u00E9nio" }
+        ANG { "ANG", "Guilda da \u00CDndia Ocidental" }
+        AOK { "AOK", "Kwanza Angolano" }
+        ARA { "ARA", "Austral Argentino" }
+        ARS { "ARS", "Peso Argentino" }
+        ATS { "ATS", "Schilling Austriaco" }
+        AUD { "AUD", "D\u00F3lar Australiano" }
+        AWG { "AWG", "Guilda Aruban" }
+        AZM { "AZM", "Manat do Azerbeij\u00E3o" }
+        BAD { "BAD", "Dinar da B\u00F3snia-Herzgovina" }
+        BBD { "BBD", "D\u00F3lar dos Barbados" }
+        BDT { "BDT", "Taka do Bangladesh" }
+        BEF { "BEF", "Franco B\u00E9lga" }
+        BGL { "BGL", "Lev B\u00FAlgaro" }
+        BHD { "BHD", "Dinar Bahrain" }
+        BIF { "BIF", "Franco do Burundi" }
+        BMD { "BMD", "D\u00F3lar das Bermudas" }
+        BND { "BND", "D\u00F3lar do Brunei" }
+        BOB { "BOB", "Boliviano Boliviano" }
+        BRL { "R$", "Real Brasileiro" }
+        BRR { "BRR", "Brasil Brasileiro" }
+        BSD { "BSD", "D\u00F3lar das Bahamas" }
+        BWP { "BWP", "Pula do Bostwana" }
+        BYR { "BYR", "Rublo Bielorusso" }
+        BZD { "BZD", "D\u00F3lar do Belize" }
+        CAD { "CAD", "D\u00F3lar Canadiano" }
+        CDP { "CDP", "Domiongo Santo" }
+        CHF { "CHF", "Franco Sui\u00E7o" }
+        CLP { "CLP", "Peso Chileno" }
+        COP { "COP", "Peso Colombiano" }
+        CRC { "CRC", "Colon da Costa Rica" }
+        CUP { "CUP", "Peso Cubano" }
+        CVE { "CVE", "Escudo Cabo Verdiano" }
+        CYP { "CYP", "Libra de Chipre" }
+        CZK { "CZK", "C\u00F4roa Checa" }
+        DEM { "DEM", "Marco Alem\u00E3o" }
+        DJF { "DJF", "Franco do Djibouti" }
+        DKK { "DKK", "C\u00F4roa Dinamarquesa" }
+        DOP { "DOP", "Peso Dominicano" }
+        DRP { "DRP", "Peso da Rep\u00FAblica Dominicana" }
+        DZD { "DZD", "Dinar Argelino" }
+        ECS { "ECS", "Sucre Equatorial" }
+        ECU { "ECU", "Unidade de Moeda Europeia" }
+        EEK { "EEK", "C\u00F4roa Est\u00F3nia" }
+        EGP { "EGP", "Libra Eg\u00EDpcia" }
+        ESP { "ESP", "Peseta Espanhola" }
+        ETB { "ETB", "Birr Et\u00EDope" }
+        EUR { "EUR", "Moeda dos Estados Membros da UEM" }
+        FIM { "FIM", "Marco Finland\u00EAs" }
+        FJD { "FJD", "D\u00F3lar das Fiji" }
+        FKP { "FKP", "Libra das Maldivas" }
+        FRF { "FRF", "Franco Franc\u00EAs" }
+        GBP { "GBP", "Libra Brit\u00E2nica" }
+        GEK { "GEK", "Kupon da Ge\u00F3rgia" }
+        GHC { "GHC", "Cedi do Ghana" }
+        GIP { "GIP", "Libra de Gibraltar" }
+        GMD { "GMD", "Dalasi do Gab\u00E3o" }
+        GNF { "GNF", "Franco da Guiana" }
+        GRD { "GRD", "Dracma Grego" }
+        GTQ { "GTQ", "Quedzal da Guatemala" }
+        GWP { "GWP", "Peso da Guiana" }
+        GYD { "GYD", "D\u00F3lar de Guyanese" }
+        HKD { "HKD", "D\u00F3lar de Hong Kong" }
+        HNL { "HNL", "Lempira das Honduras" }
+        HRD { "HRD", "Dinar Croata" }
+        HTG { "HTG", "Gourde do Haiti" }
+        HUF { "HUF", "Forint Hungaro" }
+        IDR { "IDR", "Rupia Indon\u00E9sia" }
+        IEP { "IEP", "Libra Irlandesa" }
+        ILS { "ILS", "Scheckel Israelita" }
+        INR { "INR", "Rupia Indiana" }
+        IQD { "IQD", "Dinar Iraquiano" }
+        IRR { "IRR", "Rial Iraniano" }
+        ISK { "ISK", "Coroa Islandesa" }
+        ITL { "ITL", "Lira Italiana" }
+        JMD { "JMD", "D\u00F3lar Jamaicano" }
+        JOD { "JOD", "Dinar Jordano" }
+        JPY { "JPY", "Yen Japon\u00EAs" }
+        KES { "KES", "Shilling Queniano" }
+        KHR { "KHR", "Riel Cambodjano" }
+        KIS { "KIS", "Som do Kirghizst\u00E3o" }
+        KMF { "KMF", "Franco dos Comoros" }
+        KPW { "KPW", "Won Norte-Coreano" }
+        KRW { "KRW", "Won Sul-Coreano" }
+        KWD { "KWD", "Dinar do Kuwait" }
+        KYD { "KYD", "D\u00F3lar das Caim\u00E3o" }
+        KZT { "KZT", "Tenge do Kasaquist\u00E3o" }
+        LAK { "LAK", "Kip do Lao" }
+        LBP { "LBP", "Libra Libanesa" }
+        LKR { "LKR", "Rupia do Sri Lanka" }
+        LRD { "LRD", "D\u00F3lar Liberiano" }
+        LSL { "LSL", "Loti do Lesoto" }
+        LTL { "LTL", "Lita Lituano" }
+        LUF { "LUF", "Franco Luxemburgu\u00EAs" }
+        LVL { "LVL", "Lat Lituano" }
+        LYD { "LYD", "Dinar L\u00EDbio" }
+        MAD { "MAD", "Dirham Marroquino" }
+        MDL { "MDL", "Lei Moldavo" }
+        MGF { "MGF", "Franco de Madagascar" }
+        MNC { "MNC", "M\u00F3naco" }
+        MNT { "MNT", "Tugrik Mong\u00F3l" }
+        MOP { "MOP", "Pataca Macaense" }
+        MRO { "MRO", "Ouguiya da Maurit\u00E2nia" }
+        MTL { "MTL", "Lira Maltesa" }
+        MUR { "MUR", "Rupia de Mauritius" }
+        MVR { "MVR", "Rufiyaa das Maldivas" }
+        MWK { "MWK", "Kwacha do Malaui" }
+        MXN { "MXN", "Peso Mexicano (novo)" }
+        MXP { "MXP", "Peso Mexicano (antigo)" }
+        MYR { "MYR", "Ringgit da Mal\u00E1sia" }
+        MZM { "MZM", "Metical Mo\u00E7ambicano" }
+        NGN { "NGN", "Naira Nigeriana" }
+        NIC { "NIC", "Nicar\u00E1gua" }
+        NIO { "NIO", "Cordoba de Nicar\u00E1gua" }
+        NIS { "NIS", "Novo Shekel Israelita" }
+        NLG { "NLG", "Guilda Holandesa" }
+        NOK { "NOK", "Coroa Norueguesa" }
+        NPR { "NPR", "Rupia Nepalesa" }
+        NZD { "NZD", "D\u00F3lar da Nova-Zel\u00E2ndia" }
+        OMR { "OMR", "Rial de Om\u00E3o" }
+        PAB { "PAB", "Balboa Panamiano" }
+        PEI { "PEI", "Inti Peruano" }
+        PEN { "PEN", "Sol Peruano - Novo" }
+        PES { "PES", "Sol Peruano" }
+        PGK { "PGK", "Kina da Papua Nova Guin\u00E9" }
+        PHP { "PHP", "Peso Filipino" }
+        PKR { "PKR", "Rupia Paquistanesa" }
+        PLN { "PLN", "Zloty Polaco" }
+        PTE { "Esc.", "Escudo Portugues" }
+        PYG { "PYG", "Guarani Paraguaio" }
+        QAR { "QAR", "Riyal do Quatar" }
+        RMB { "RMB", "Renminbi Yuan Chin\u00EAs" }
+        ROL { "ROL", "Lei Romeno" }
+        RUR { "RUR", "Rublo Russo" }
+        RWF { "RWF", "Franco Ruand\u00EAs" }
+        SAR { "SAR", "Riyal Saudita" }
+        SBD { "SBD", "D\u00F3lar das Ilhas Salom\u00E3o" }
+        SCR { "SCR", "Rupia das Seychelles" }
+        SDP { "SDP", "Libra do Sud\u00E3o" }
+        SEK { "SEK", "Coroa Sueca" }
+        SGD { "SGD", "D\u00F3lar de Singapura" }
+        SHP { "SHP", "Libra de St.Helena" }
+        SIT { "SIT", "Tolar Esloveno" }
+        SKK { "SKK", "Coroa Eslovaca" }
+        SLL { "SLL", "Le\u00E3o" }
+        SOL { "SOL", "Per\u00FA" }
+        SOS { "SOS", "Shilling Somal\u00ED" }
+        SRG { "SRG", "Guilda do Suriname" }
+        STD { "STD", "Dobra de S\u00E3o Tom\u00E9 e Pr\u00EDncepe" }
+        SUR { "SUR", "Rublo Russo (antigo)" }
+        SVC { "SVC", "Colon El Salvadoranho" }
+        SYP { "SYP", "Libra S\u00EDria" }
+        SZL { "SZL", "Lilangeni da Swazil\u00E2ndia" }
+        THB { "THB", "Baht Tailand\u00EAs" }
+        TJR { "TJR", "Rublo do Tadjaquist\u00E3o" }
+        TMM { "TMM", "Manat do Turquist\u00E3o" }
+        TND { "TND", "Dinar Tunisino" }
+        TOP { "TOP", "Pa'anga do Tongo" }
+        TPE { "TPE", "Escudo Timor\u00EAnse" }
+        TRL { "TRL", "Lira Turca" }
+        TTD { "TTD", "D\u00F3lar de Trinidade e Tobago" }
+        TWD { "TWD", "Novo D\u00F3lar de Taiwan" }
+        TZS { "TZS", "Shilling da Tanz\u00E2nia" }
+        UAK { "UAK", "Karbowanez Ucraniano" }
+        UGS { "UGS", "Shilling do Uganda" }
+        USD { "USD", "D\u00F3lar Americano" }
+        UYP { "UYP", "Novo Peso Uruguaio" }
+        VEB { "VEB", "Bolivar Venezuelano" }
+        VND { "VND", "Dong Vietnamita" }
+        VUV { "VUV", "Vatu do Vanuatu" }
+        WST { "WST", "Tala de Samoa" }
+        XAF { "XAF", "Franco do Gab\u00E3o C.f.A" }
+        XCD { "XCD", "D\u00F3lar do Cara\u00EDbe Oriental" }
+        XOF { "XOF", "Franco do Benin C.f.A." }
+        YER { "YER", "Ryal do Yemeni" }
+        ZAR { "ZAR", "Rand Sul-Africano" }
+        ZMK { "ZMK", "Kwacha da Z\u00E2mbia" }
+        ZWD { "ZWD", "D\u00F3lar do Zimbabue" }
     }
 }
