@@ -1443,13 +1443,13 @@ const char* uprv_getDefaultCodepage()
         }
         else
         {
-            /* if the table lookup failed, return latin1. */
-            uprv_strcpy(codesetName, "LATIN_1");
+            /* if the table lookup failed, return US ASCII (ISO 646). */
+            uprv_strcpy(codesetName, "US-ASCII");
         }
     }
     return codesetName;
 #else
-    return "LATIN_1";
+    return "US-ASCII";
 #endif
 }
 

@@ -491,9 +491,32 @@ ucnv_io_getDefaultConverterName() {
             if(U_FAILURE(errorCode) || name==NULL) {
                 name=codepage;
             }
-            defaultConverterName=name;
+        }
+
+        /* if the name is there, test it out */
+
+        if(name != NULL) {
+          UErrorCode errorCode = U_ZERO_ERROR;
+          UConverter *cnv;
+          cnv = ucnv_open(name, &errorCode);
+          if(U_FAILURE(errorCode) || (cnv == NULL)) {
+
+            /* Panic time, let's use a fallback. */
+#if (U_CHARSET_FAMILY == U_ASCII_FAMILY) 
+            name = "US-ASCII";
+#else
+            name = "ibm-37";  /* there is no 'algorithmic' converter for ebcdic.  */
+#endif
+          }
+          ucnv_close(cnv);
+        }
+
+        if(name != NULL) {
+           /* Did find a name. And it works.*/
+          defaultConverterName=name;
         }
     }
+
     return name;
 }
 
