@@ -27,10 +27,10 @@
 
 /* ISO-2022 ----------------------------------------------------------------- */
 
-void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
 				    UErrorCode * err);
 
-void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * converter,
+U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * converter,
 				    UErrorCode * err);
 
 #define ESC_2022 0x1B /*ESC*/
@@ -152,14 +152,14 @@ _ISO2022Reset(UConverter *converter) {
     }
 }
 
-static void T_UConverter_fromUnicode_ISO_2022(UConverterFromUnicodeArgs *args,
+U_CFUNC void T_UConverter_fromUnicode_ISO_2022(UConverterFromUnicodeArgs *args,
                                        UErrorCode* err)
 {
   T_UConverter_fromUnicode_UTF8(args, err);
 }
 
 
-static void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args,
+U_CFUNC void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args,
                                                                     UErrorCode* err)
 {
 
@@ -586,7 +586,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
   return;
 }
 
-static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
                                      UErrorCode* err)
 {
   const char* mySourceLimit;
@@ -932,7 +932,7 @@ U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToU
   return;
 }
 
-void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 
 {
@@ -1051,7 +1051,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs * args,
   return;
 }
 
-void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                              UErrorCode * err)
 
 {
@@ -1177,7 +1177,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterFromUnico
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArgs* args,
                                                 UErrorCode* err)
 {
   UChar myUChar;

@@ -57,7 +57,7 @@ U_CFUNC void  T_UConverter_toUnicode_LATIN_1 (UConverterToUnicodeArgs * args,
   return;
 }
 
-static void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * args,
+U_CFUNC void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * args,
                                          UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -156,7 +156,7 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * args
   return;
 }
 
-static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_LATIN_1(UConverterToUnicodeArgs* args,
                                                 UErrorCode* err)
 {
   
