@@ -24,8 +24,6 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 
-static void printSeq(const unsigned char* a, int len);
-static void printUSeq(const UChar* a, int len);
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
 
@@ -88,7 +86,7 @@ static void printSeqErr(const unsigned char* a, int len)
     fprintf(stderr, "}\n");
 }
 
-void printUSeqErr(const UChar* a, int len)
+static void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "{U+");
@@ -301,14 +299,14 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     {
         char junk[9999];
         char offset_str[9999];
-        uint8_t *p;
+        uint8_t *ptr;
 
         junk[0] = 0;
         offset_str[0] = 0;
-        for(p = junkout;p<targ;p++)
+        for(ptr = junkout;ptr<targ;ptr++)
         {
-            sprintf(junk + strlen(junk), "0x%02x, ", (int)(0xFF & *p));
-            sprintf(offset_str + strlen(offset_str), "0x%02x, ", (int)(0xFF & junokout[p-junkout]));
+            sprintf(junk + strlen(junk), "0x%02x, ", (int)(0xFF & *ptr));
+            sprintf(offset_str + strlen(offset_str), "0x%02x, ", (int)(0xFF & junokout[ptr-junkout]));
         }
 
         log_verbose(junk);
@@ -463,16 +461,15 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     {
         char junk[9999];
         char offset_str[9999];
-    
-        UChar *p;
+        UChar *ptr;
         
         junk[0] = 0;
         offset_str[0] = 0;
 
-        for(p = junkout;p<targ;p++)
+        for(ptr = junkout;ptr<targ;ptr++)
         {
-            sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
-            sprintf(offset_str + strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[p-junkout]);
+            sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*ptr);
+            sprintf(offset_str + strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[ptr-junkout]);
         }
         
         log_verbose(junk);
@@ -680,13 +677,13 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     log_verbose("Test surrogate behaviour for UTF8\n");
     {
         const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01, 0xd801};
-        const uint8_t expectedUTF8[]= { 0xe2, 0x82, 0xac, 
+        const uint8_t expectedUTF8test2[]= { 0xe2, 0x82, 0xac, 
                            0xf0, 0x90, 0x90, 0x81, 
                            0xed, 0xb0, 0x81, 0xed, 0xa0, 0x81 
         };
         int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4 };
         if(!testConvertFromU(testinput, sizeof(testinput)/sizeof(testinput[0]),
-            expectedUTF8, sizeof(expectedUTF8), "UTF8", offsets ))
+            expectedUTF8test2, sizeof(expectedUTF8test2), "UTF8", offsets ))
         log_err("u-> UTF8 did not match.\n");  
 
     }
@@ -1472,7 +1469,7 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
     free(cBuf);
 }
 
-static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
+static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, const char* cnvName){
     const UChar* uSource;
     const UChar* uSourceLimit;
     const char* cSource;
@@ -1631,8 +1628,8 @@ TestHZ() {
   
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "HZ encoding");
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"HZ");
@@ -1712,8 +1709,8 @@ TestISO_2022_JP() {
   
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
 
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
@@ -1797,8 +1794,8 @@ TestISO_2022_JP_1() {
   
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
     /*ucnv_close(cnv);
     cnv=ucnv_open("ISO_2022,locale=jp,version=1", &errorCode);*/
@@ -1882,8 +1879,8 @@ TestISO_2022_JP_2() {
   
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
@@ -1951,8 +1948,8 @@ TestISO_2022_KR() {
         if(*test!=*uSource){
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-KR encoding");
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
@@ -2039,8 +2036,8 @@ TestISO_2022_CN_EXT() {
         else{
             log_verbose("      Got: \\u%04X\n",(int)*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh,version=1");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh,version=1"); 
@@ -2124,8 +2121,8 @@ TestISO_2022_CN() {
         else{
             log_verbose("      Got: \\u%04X\n",(int)*test) ;
         }
-        *uSource++;
-        *test++;
+        uSource++;
+        test++;
     }
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-CN encoding");
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh");
