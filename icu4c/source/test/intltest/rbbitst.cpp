@@ -2509,19 +2509,33 @@ void RBBILineMonkey::setText(const UnicodeString &s) {
     fNumberMatcher->reset(s);
 }
 
-
+//
+//  rule67Adjust
+//     Line Break TR rules 6 and 7 implementation.
+//     This deals with combining marks, Hangul Syllables, and other sequences that
+//     that must be treated as if they were something other than what they actually are.
+//
+//     This is factored out into a separate function because it must be applied twice for
+//     each potential break, once to the chars before the position being checked, then
+//     again to the text following the possible break.
+//
 void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos, UChar32 *nextChar) {
+    if (pos == -1) {
+        // Invalid initial position.  Happens during the warmup iteration of the 
+        //   main loop in next().
+        return;
+    }
+
     int32_t  nPos = *nextPos;
     
     // LB 6  Treat Korean Syllables as a single unit
     int32_t  hangultype = u_getIntPropertyValue(*posChar, UCHAR_HANGUL_SYLLABLE_TYPE);
     if (hangultype != U_HST_NOT_APPLICABLE) {
         nPos = fCharBI->following(pos);   // Advance by grapheme cluster, which
-        //  contains the logic to locate Hangul syllables.
+                                          //  contains the logic to locate Hangul syllables.
     }
     
-    // LB 7b  Keep combining sequences together.  Here we just locate the end of "thisChar".
-    //                                            (except for Hangul, which we did above.
+    // LB 7b  Keep combining sequences together.  
     if (hangultype == U_HST_NOT_APPLICABLE) {
         //  advance over any CM class chars
         for (;;) {
@@ -2536,7 +2550,7 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
     
     // LB 7a In a SP CM* sequence, treat the SP as an ID
     if (nPos != *nextPos && fSP->contains(*posChar)) {
-        *posChar = 0x3400;   // 0x3400 is a CJK Ideograph, linebreak type is ID.
+        *posChar = 0x4e00;   // 0x4e00 is a CJK Ideograph, linebreak type is ID.
     }
     
     // LB 7b Treat X CM* as if it were x.
@@ -2546,6 +2560,12 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
     if (fCM->contains(*posChar)) {
         *posChar = 0x41;   // thisChar = 'A';
     }
+
+    // Push the updated nextPos and nextChar back to our caller.
+    // This only makes a difference if posChar got bigger, by slurping up a
+    // combining sequence or Hangul syllable.
+    *nextPos  = nPos;
+    *nextChar = fText->char32At(nPos);
 }
 
 
@@ -2630,46 +2650,11 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
+        // LB 6, LB 7
         rule67Adjust(prevPos, &prevChar, &pos,     &thisChar);
         UChar32 c = fText->char32At(nextPos);
         rule67Adjust(pos,     &thisChar, &nextPos, &c);
 
-        // TODO:  move this code into rule67Adjust
-        // LB 6  Treat Korean Syllables as a single unit
-        int32_t  hangultype = u_getIntPropertyValue(thisChar, UCHAR_HANGUL_SYLLABLE_TYPE);
-        if (hangultype != U_HST_NOT_APPLICABLE) {
-            nextPos   = fCharBI->following(pos);     // Advance by grapheme cluster, which
-                                                     //  contains the logic to locate Hangul syllables.
-        }
-
-        // LB 7b  Keep combining sequences together.  Here we just locate the end of "thisChar".
-        //                                            (except for Hangul, which we did above.
-        if (hangultype == U_HST_NOT_APPLICABLE) {
-            //  advance over any CM class chars
-            for (;;) {
-                UChar32 c = fText->char32At(nextPos);
-                if (!fCM->contains(c)) {
-                    break;
-                }
-                nextPos = fText->moveIndex32(nextPos, 1);
-            }
-        }
-
-
-        // LB 7a In a SP CM* sequence, treat the SP as an ID
-        if (nextCPPos != nextPos && fSP->contains(thisChar)) {
-            thisChar = 0x3400;   // 0x3400 is a CJK Ideograph, linebreak type is ID.
-        }
-
-        // LB 7b Treat X CM* as if it were x.
-        //       No explicit action required.  
-
-        // LB 7c  Treat any remaining combining mark as AL
-        if (fCM->contains(thisChar)) {
-            thisChar = 0x41;   // thisChar = 'A';
-        }
-
-        // All adjustment of character values and positions is complete.
         // If the loop is still warming up - if we haven't shifted the initial
         //   -1 positions out of prevPos yet - loop back to advance the
         //    position in the input without any further looking for breaks.
@@ -2799,18 +2784,19 @@ fall_through_11:
         fNumberMatcher->reset(subStr);
         if (fNumberMatcher->lookingAt(status)) {
             // TODO:  Check status codes
-            int32_t numEndIdx = prevPos + fNumberMatcher->end(status);
+            // Matched a number.  But could have been just a single digit, which would
+            //    not represent a "no break here" between prevChar and thisChar
+            int32_t numEndIdx = prevPos + fNumberMatcher->end(status);  // idx of first char following num
             if (numEndIdx > pos) {
-                // We got a match on a number of more than one char.
-                // Need to move "pos" and "nextPos" to reflect the end
-                //   of the number before continuing.
-                UChar32   lastCharInNumber;
-                nextPos = numEndIdx;
-                pos     = numEndIdx;
-                do {
-                    pos = fText->moveIndex32(pos, -1);
-                    lastCharInNumber = fText->char32At(pos);
-                } while (fCM->contains(lastCharInNumber));
+                // Number match includes at least our two chars being checked
+                if (numEndIdx > nextPos) {
+                    // Number match includes additional chars.  Update pos and nextPos
+                    //   so that next loop iteration will continue at the end of the number,
+                    //   checking for breaks between last char in number & whatever follows.
+                    nextPos = numEndIdx;
+                    pos = fCharBI->preceding(numEndIdx); 
+                    thisChar = fText->char32At(pos);
+                }
                 continue;
             }
         }
