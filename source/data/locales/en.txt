@@ -536,7 +536,7 @@ en {
         HTG { "HTG", "Gourde" } // HAITI (HT)
         HUF { "Ft", "Forint" } // HUNGARY (HU)
         IDR { "Rp", "Rupiah" } // INDONESIA (ID)
-        IEP { "IR\u00A3", "Irish Pound" } // IRELAND (IE)
+        IEP { "IR\u00A3", "Irish Punt" } // IRELAND (IE)
         ILS { "NIS", "New Israeli Sheqel" } // ISRAEL (IL)
         INR { "Re", "Indian Rupee" } // BHUTAN (BT), INDIA (IN)
         IQD { "ID", "Iraqi Dinar" } // IRAQ (IQ)
