@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/21 21:16:40 $ 
- * $Revision: 1.21 $
+ * $Date: 2000/04/21 22:16:29 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -274,7 +274,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.21 $ $Date: 2000/04/21 21:16:40 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.22 $ $Date: 2000/04/21 22:16:29 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -534,6 +534,31 @@ public class RuleBasedTransliterator extends Transliterator {
                 }
                 return ch;
             }
+
+            /**
+             * Implement SymbolTable API.  Parse out a symbol reference
+             * name.
+             */
+            public String parseReference(String text, ParsePosition pos, int limit) {
+                int start = pos.getIndex();
+                int i = start;
+                if (i < limit) {
+                    char c = text.charAt(i);
+                    if (Character.isUnicodeIdentifierStart(c)) {
+                        ++i;
+                        while (i < limit &&
+                               Character.isUnicodeIdentifierPart(text.charAt(i))) {
+                            ++i;
+                        }
+                    }
+                }
+                if (i == start) { // No valid name chars
+                    throw new IllegalArgumentException("Illegal variable reference " +
+                                                       text.substring(start, limit));
+                }
+                pos.setIndex(i);
+                return text.substring(start, i);
+            }
         }
 
         /**
@@ -587,7 +612,6 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char END_OF_RULE         = ';';
         private static final char RULE_COMMENT_CHAR   = '#';
 
-        private static final char VARIABLE_REF        = '$'; // also segment refs
         private static final char CONTEXT_ANTE        = '{'; // ante{key
         private static final char CONTEXT_POST        = '}'; // key}post
         private static final char SET_OPEN            = '[';
@@ -711,6 +735,7 @@ public class RuleBasedTransliterator extends Transliterator {
                              RuleBasedTransliterator.Parser parser) {
                 int start = pos;
                 StringBuffer buf = new StringBuffer();
+                ParsePosition pp = null;
 
             main:
                 while (pos < limit) {
@@ -781,7 +806,7 @@ public class RuleBasedTransliterator extends Transliterator {
                     case END_OF_RULE:
                         --pos; // Backup to point to END_OF_RULE
                         break main;
-                    case VARIABLE_REF:
+                    case SymbolTable.SYMBOL_REF:
                         // Handle variable references and segment references "$1" .. "$9"
                         {
                             // A variable reference must be followed immediately
@@ -792,28 +817,26 @@ public class RuleBasedTransliterator extends Transliterator {
                                 syntaxError("Trailing " + c, rule, start);
                             }
                             // Parse "$1" "$2" .. "$9"
-                            c = rule.charAt(pos++);
+                            c = rule.charAt(pos);
                             int r = Character.digit(c, 10);
                             if (r >= 1 && r <= 9) {
                                 if (r > maxRef) {
                                     maxRef = r;
                                 }
                                 buf.append((char) (parser.data.segmentBase + r - 1));
-                            } else if (Character.isUnicodeIdentifierStart(c)) {
-                                int j = pos;
-                                while (j < limit &&
-                                       Character.isUnicodeIdentifierPart(rule.charAt(j))) {
-                                    ++j;
+                                ++pos;
+                            } else {
+                                if (pp == null) { // Lazy create
+                                    pp = new ParsePosition(0);
                                 }
-                                String name = rule.substring(pos-1, j);
-                                pos = j;
+                                pp.setIndex(pos);
+                                String name = parser.parseData.
+                                                parseReference(rule, pp, limit);
+                                pos = pp.getIndex();
                                 // If this is a variable definition statement, then the LHS
                                 // variable will be undefined.  In that case getVariableName()
                                 // will return the special placeholder variableLimit-1.
                                 buf.append(parser.getVariableDef(name));
-                            } else {
-                                syntaxError("Illegal char after " + VARIABLE_REF,
-                                            rule, start);
                             }
                         }
                         break;
@@ -830,7 +853,10 @@ public class RuleBasedTransliterator extends Transliterator {
                         post = buf.length();
                         break;
                     case SET_OPEN:
-                        ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
+                        if (pp == null) {
+                            pp = new ParsePosition(0);
+                        }
+                        pp.setIndex(pos-1); // Backup to opening '['
                         buf.append(parser.registerSet(new UnicodeSet(rule, pp, parser.parseData)));
                         pos = pp.getIndex();
                         break;
@@ -1231,6 +1257,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.22  2000/04/21 22:16:29  alan
+ * Delete variable name parsing to SymbolTable interface to consolidate parsing code.
+ *
  * Revision 1.21  2000/04/21 21:16:40  alan
  * Modify rule syntax
  *
