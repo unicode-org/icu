@@ -45,8 +45,21 @@
 U_CAPI char U_EXPORT2
 uprv_toupper(char c);
 
+
 U_CAPI char U_EXPORT2
-uprv_tolower(char c);
+uprv_asciitolower(char c);
+
+U_CAPI char U_EXPORT2
+uprv_ebcdictolower(char c);
+
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define uprv_tolower uprv_asciitolower
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define uprv_tolower uprv_ebcdictolower
+#else
+#   error U_CHARSET_FAMILY is not valid
+#endif
+
 
 #define uprv_strtoul(str, end, base) U_STANDARD_CPP_NAMESPACE strtoul(str, end, base)
 #define uprv_strtol(str, end, base) U_STANDARD_CPP_NAMESPACE strtol(str, end, base)

@@ -65,12 +65,14 @@
 /* include ICU headers */
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/ustring.h"
 #include "uassert.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "locmap.h"
 #include "ucln_cmn.h"
+#include "udataswp.h"
 
 /* Include standard headers. */
 #include <stdio.h>
@@ -1899,6 +1901,8 @@ uprv_getDefaultCodepage()
 #endif
 }
 
+/* invariant-character handling --------------------------------------------- */
+
 /*
  * These maps for ASCII to/from EBCDIC map invariant characters (see utypes.h)
  * appropriately for most EBCDIC codepages.
@@ -2140,7 +2144,174 @@ uprv_isInvariantUString(const UChar *s, int32_t length) {
     return TRUE;
 }
 
-/* end of platform-specific implementation */
+/* UDataSwapFn implementations used in udataswp.c ------- */
+
+U_CFUNC int32_t
+uprv_ebcdicFromAscii(const UDataSwapper *ds,
+                     const void *inData, int32_t length, void *outData,
+                     UErrorCode *pErrorCode) {
+    const uint8_t *s;
+    uint8_t *t;
+    uint8_t c;
+
+    int32_t count;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData!=NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* setup and swapping */
+    s=(const uint8_t *)inData;
+    t=(uint8_t *)outData;
+    count=length;
+    while(count>0) {
+        c=*s++;
+        if(!CHAR_IS_INVARIANT(c)) {
+            *pErrorCode=U_INVALID_CHAR_FOUND;
+            return 0;
+        }
+        *t++=ebcdicFromAscii[c];
+        --count;
+    }
+
+    return length;
+}
+
+U_CFUNC int32_t
+uprv_asciiFromEbcdic(const UDataSwapper *ds,
+                     const void *inData, int32_t length, void *outData,
+                     UErrorCode *pErrorCode) {
+    const uint8_t *s;
+    uint8_t *t;
+    uint8_t c;
+
+    int32_t count;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData!=NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* setup and swapping */
+    s=(const uint8_t *)inData;
+    t=(uint8_t *)outData;
+    count=length;
+    while(count>0) {
+        c=*s++;
+        if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !CHAR_IS_INVARIANT(c))) {
+            *pErrorCode=U_INVALID_CHAR_FOUND;
+            return 0;
+        }
+        *t++=c;
+        --count;
+    }
+
+    return length;
+}
+
+/* compare invariant strings; variant characters compare less than others and unlike each other */
+U_CFUNC int32_t
+uprv_compareInvAscii(const UDataSwapper *ds,
+                     const char *inString, int32_t inLength,
+                     const UChar *localString, int32_t localLength) {
+    int32_t minLength;
+    UChar32 c1, c2;
+    char c;
+
+    if(inString==NULL || inLength<-1 || localString==NULL || localLength<-1) {
+        return 0;
+    }
+
+    if(inLength<0) {
+        inLength=uprv_strlen(inString);
+    }
+    if(localLength<0) {
+        localLength=u_strlen(localString);
+    }
+
+    minLength= inLength<localLength ? inLength : localLength;
+
+    while(minLength>0) {
+        c=*inString++;
+        if(CHAR_IS_INVARIANT(c)) {
+            c1=c;
+        } else {
+            c1=-1;
+        }
+
+        c2=*localString++;
+        if(!CHAR_IS_INVARIANT(c2)) {
+            c1=-2;
+        }
+
+        if((c1-=c2)!=0) {
+            return c1;
+        }
+
+        --minLength;
+    }
+
+    /* strings start with same prefix, compare lengths */
+    return inLength-localLength;
+}
+
+U_CFUNC int32_t
+uprv_compareInvEbcdic(const UDataSwapper *ds,
+                      const char *inString, int32_t inLength,
+                      const UChar *localString, int32_t localLength) {
+    int32_t minLength;
+    UChar32 c1, c2;
+    char c;
+
+    if(inString==NULL || inLength<-1 || localString==NULL || localLength<-1) {
+        return 0;
+    }
+
+    if(inLength<0) {
+        inLength=uprv_strlen(inString);
+    }
+    if(localLength<0) {
+        localLength=u_strlen(localString);
+    }
+
+    minLength= inLength<localLength ? inLength : localLength;
+
+    while(minLength>0) {
+        c=*inString++;
+        if(c==0) {
+            c1=0;
+        } else if((c1=asciiFromEbcdic[(uint8_t)c])!=0 && CHAR_IS_INVARIANT(c1)) {
+            /* c1 is set */
+        } else {
+            c1=-1;
+        }
+
+        c2=*localString++;
+        if(!CHAR_IS_INVARIANT(c2)) {
+            c1=-2;
+        }
+
+        if((c1-=c2)!=0) {
+            return c1;
+        }
+
+        --minLength;
+    }
+
+    /* strings start with same prefix, compare lengths */
+    return inLength-localLength;
+}
+
+/* end of platform-specific implementation -------------- */
+
+/* version handling --------------------------------------------------------- */
 
 U_CAPI void U_EXPORT2
 u_versionFromString(UVersionInfo versionArray, const char *versionString) {

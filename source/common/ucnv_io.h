@@ -21,14 +21,26 @@
 #define UCNV_NUM_HIDDEN_TAGS 1
 
 /**
+ * \var ucnv_io_stripForCompare
  * Remove the underscores, dashes and spaces from the name, and convert
  * the name to lower case.
  * @param dst The destination buffer, which is <= the buffer of name.
  * @param dst The destination buffer, which is <= the buffer of name.
  * @return the destination buffer.
  */
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define ucnv_io_stripForCompare ucnv_io_stripASCIIForCompare
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define ucnv_io_stripForCompare ucnv_io_stripEBCDICForCompare
+#else
+#   error U_CHARSET_FAMILY is not valid
+#endif
+
 U_CFUNC char * U_EXPORT2
-ucnv_io_stripForCompare(char *dst, const char *name);
+ucnv_io_stripASCIIForCompare(char *dst, const char *name);
+
+U_CFUNC char * U_EXPORT2
+ucnv_io_stripEBCDICForCompare(char *dst, const char *name);
 
 /**
  * Map a converter alias name to a canonical converter name.
