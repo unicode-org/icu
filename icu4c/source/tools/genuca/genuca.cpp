@@ -375,7 +375,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
       uint32_t vtLen = uprv_strlen(vt);
       if(uprv_strncmp(buffer, vt, vtLen) == 0) {
         element->variableTop = TRUE;
-        if(sscanf(buffer+vtLen, "%04X", &theValue) != 1) /* read first code point */
+        if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
         {
           fprintf(stderr, " scanf(hex) failed!\n ");
         }
@@ -409,7 +409,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     element->cPoints = element->uchars;
 
     spacePointer = strchr(buffer, ' ');
-    if(sscanf(buffer, "%04X", &theValue) != 1) /* read first code point */
+    if(sscanf(buffer, "%4x", &theValue) != 1) /* read first code point */
     {
       fprintf(stderr, " scanf(hex) failed!\n ");
     }
@@ -422,7 +422,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
         i = 1;
         detectedContraction = TRUE;
         while(spacePointer != NULL) {
-            sscanf(spacePointer+1, "%04X", &theValue);
+            sscanf(spacePointer+1, "%4x", &theValue);
             element->cPoints[i++] = (UChar)theValue;
             spacePointer = strchr(spacePointer+1, ' ');
         }
