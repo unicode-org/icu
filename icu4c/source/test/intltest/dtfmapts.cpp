@@ -295,9 +295,9 @@ IntlTestDateFormatAPI::TestNameHiding() {
         fmt.format(numObj, str, fpos, status);
         // NumberFormat API
         fmt.format(2.71828, str);
-        fmt.format(1234567L, str);
+        fmt.format((int32_t)1234567, str);
         fmt.format(1.41421, str, fpos);
-        fmt.format(9876543L, str, fpos);
+        fmt.format((int32_t)9876543, str, fpos);
         fmt.parse(str, obj, ppos);
         fmt.parse(str, obj, status);
     }
@@ -312,9 +312,9 @@ IntlTestDateFormatAPI::TestNameHiding() {
         fmt.format(numObj, str, fpos, status);
         // NumberFormat API
         fmt.format(2.71828, str);
-        fmt.format(1234567L, str);
+        fmt.format((int32_t)1234567, str);
         fmt.format(1.41421, str, fpos);
-        fmt.format(9876543L, str, fpos);
+        fmt.format((int32_t)9876543, str, fpos);
         fmt.parse(str, obj, ppos);
         fmt.parse(str, obj, status);
     }
