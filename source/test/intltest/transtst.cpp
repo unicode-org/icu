@@ -38,6 +38,16 @@
 #include "unicode/ustring.h"
 #include "unicode/usetiter.h"
 #include "unicode/uscript.h"
+#include "anytrans.h"
+#include "esctrn.h"
+#include "name2uni.h"
+#include "nortrans.h"
+#include "remtrans.h"
+#include "titletrn.h"
+#include "tolowtrn.h"
+#include "toupptrn.h"
+#include "unesctrn.h"
+#include "uni2name.h"
 #include "cstring.h"
 
 /***********************************************************************
@@ -179,6 +189,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(73,TestGurmukhiDevanagari);
         TESTCASE(74,TestRuleWhitespace);
         TESTCASE(75,TestAllCodepoints);
+        TESTCASE(76,TestBoilerplate);
         default: name = ""; break;
     }
 }
@@ -3784,6 +3795,65 @@ void TransliteratorTest::TestAllCodepoints(){
     }
 
 } 
+
+//#define TESTCLASSID_DEFAULT(cls) { \
+//  if (cls().getDynamicClassID() != cls::getStaticClassID()) { \
+//    errln("FAIL: " ## cls ## " dynamic and static class ID mismatch from default constructor"); \
+//  } \
+//}
+//#define TESTCLASSID_FACTORY(cls, fact) { \
+//  cls* x = fact; \
+//  if (x->getDynamicClassID() != cls::getStaticClassID()) { \
+//    errln("FAIL: " ## cls ## " dynamic and static class ID mismatch from " ## fact); \
+//  } \
+//  delete x; \
+//}
+
+#define TEST_TRANSLIT_ID(id, cls) { \
+  UErrorCode ec = U_ZERO_ERROR; \
+  Transliterator* t = Transliterator::createInstance(id, UTRANS_FORWARD, ec); \
+  if (U_FAILURE(ec)) { \
+    errln("FAIL: Couldn't create " id); \
+  } else { \
+    if (t->getDynamicClassID() != cls::getStaticClassID()) { \
+      errln("FAIL: " #cls " dynamic and static class ID mismatch"); \
+    } \
+    t = t; /*coverage test for assignment op*/ \
+  } \
+  delete t; \
+}
+
+#define TEST_TRANSLIT_RULE(rule, cls) { \
+  UErrorCode ec = U_ZERO_ERROR; \
+  UParseError pe; \
+  Transliterator* t = Transliterator::createFromRules("_", rule, UTRANS_FORWARD, pe, ec); \
+  if (U_FAILURE(ec)) { \
+    errln("FAIL: Couldn't create " rule); \
+  } else { \
+    if (t->getDynamicClassID() != cls ::getStaticClassID()) { \
+      errln("FAIL: " #cls " dynamic and static class ID mismatch"); \
+    } \
+    t = t; /*coverage test for assignment op*/ \
+  } \
+  delete t; \
+}
+
+void TransliteratorTest::TestBoilerplate() {
+    TEST_TRANSLIT_ID("Any-Latin", AnyTransliterator);
+    TEST_TRANSLIT_ID("Any-Hex", EscapeTransliterator);
+    TEST_TRANSLIT_ID("Hex-Any", UnescapeTransliterator);
+    TEST_TRANSLIT_ID("Lower", LowercaseTransliterator);
+    TEST_TRANSLIT_ID("Upper", UppercaseTransliterator);
+    TEST_TRANSLIT_ID("Title", TitlecaseTransliterator);
+    TEST_TRANSLIT_ID("Null", NullTransliterator);
+    TEST_TRANSLIT_ID("Remove", RemoveTransliterator);
+    TEST_TRANSLIT_ID("Any-Name", UnicodeNameTransliterator);
+    TEST_TRANSLIT_ID("Name-Any", NameUnicodeTransliterator);
+    TEST_TRANSLIT_ID("NFD", NormalizationTransliterator);
+    TEST_TRANSLIT_ID("Latin-Greek", CompoundTransliterator);
+    TEST_TRANSLIT_RULE("a>b;", RuleBasedTransliterator);
+}
+
 //======================================================================
 // Support methods
 //======================================================================
