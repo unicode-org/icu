@@ -76,16 +76,16 @@ udata_create(const char *dir, const char *type, const char *name,
     }
 
     /* write the header information */
-    headerSize=pInfo->size+4;
+    headerSize=(uint16_t)(pInfo->size+4);
     if(comment!=NULL && *comment!=0) {
-        commentLength=uprv_strlen(comment)+1;
+        commentLength=(uint16_t)(uprv_strlen(comment)+1);
         headerSize+=commentLength;
     } else {
         commentLength=0;
     }
 
     /* write the size of the header, take padding into account */
-    pData->headerSize=(headerSize+15)&~0xf;
+    pData->headerSize=(uint16_t)((headerSize+15)&~0xf);
     pData->magic1=0xda;
     pData->magic2=0x27;
     T_FileStream_write(pData->file, &pData->headerSize, 4);
@@ -101,7 +101,7 @@ udata_create(const char *dir, const char *type, const char *name,
     /* write padding bytes to align the data section to 16 bytes */
     headerSize&=0xf;
     if(headerSize!=0) {
-        headerSize=16-headerSize;
+        headerSize=(uint16_t)(16-headerSize);
         uprv_memset(bytes, 0, headerSize);
         T_FileStream_write(pData->file, bytes, headerSize);
     }
