@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/11/22 00:08:32 $ 
-* $Revision: 1.26 $
+* $Date: 2002/11/22 00:57:14 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -3657,7 +3657,7 @@ public final class RuleBasedCollator extends Collator
             //sCh.delete(0, sCh.length());
             //sCh.append(ch);
             //it.setText(sCh.toString());
-            it.setText(Character.toString(ch));
+            it.setText(UCharacter.toString(ch));
             while((CE = it.next()) != CollationElementIterator.NULLORDER) {
               if(s.primShift < 0 || s.secShift < 0 || s.terShift < 0) {
                 latinOneCEs_[ch] = BAIL_OUT_CE_;
