@@ -906,6 +906,14 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
         /* TODO: do the fallback */
       }
       return res_getString(&(resB->fResData), r, len);
+    case URES_ALIAS:
+      {
+        const UChar* result = 0;
+        UResourceBundle *tempRes = ures_getByIndex(resB, resB->fIndex, NULL, status);
+        result = ures_getString(tempRes, len, status);
+        ures_close(tempRes);
+        return result;
+      }
     case URES_INT_VECTOR:
     default:
       return NULL;
@@ -1036,6 +1044,15 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
                 /* TODO: do the fallback */
             }
             return res_getString(&(resB->fResData), r, len);
+        case URES_ALIAS:
+          {
+            const UChar* result = 0;
+            UResourceBundle *tempRes = ures_getByIndex(resB, indexS, NULL, status);
+            result = ures_getString(tempRes, len, status);
+            ures_close(tempRes);
+            return result;
+          }
+
         /*case URES_INT_VECTOR:*/
         /*default:*/
           /*return;*/
@@ -1206,6 +1223,14 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
                     case URES_TABLE:
                     case URES_ARRAY:
                         return res_getString(rd, res, len);
+                    case URES_ALIAS:
+                      {
+                        const UChar* result = 0;
+                        UResourceBundle *tempRes = ures_getByKey(resB, inKey, NULL, status);
+                        result = ures_getString(tempRes, len, status);
+                        ures_close(tempRes);
+                        return result;
+                      }
                     default:
                         *status = U_RESOURCE_TYPE_MISMATCH;
                     }
@@ -1221,6 +1246,14 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
             case URES_TABLE:
             case URES_ARRAY:
                 return res_getString(&(resB->fResData), res, len);
+            case URES_ALIAS:
+              {
+                const UChar* result = 0;
+                UResourceBundle *tempRes = ures_getByKey(resB, inKey, NULL, status);
+                result = ures_getString(tempRes, len, status);
+                ures_close(tempRes);
+                return result;
+              }
             default:
                 *status = U_RESOURCE_TYPE_MISMATCH;
             }
