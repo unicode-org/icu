@@ -252,6 +252,10 @@ SOURCE=.\ncnvfbts.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ncnvtst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\nucnvtst.c
 # End Source File
 # Begin Source File
