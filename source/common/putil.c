@@ -128,7 +128,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
   ---------------------------------------------------------------------------*/
 
 /* Assume POSIX, and modify as necessary below*/
-#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2) || defined(U_DARWIN)
+#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2) || defined(U_RHAPSODY) || defined(U_DARWIN)
 #   undef POSIX
 #else
 #   define POSIX
