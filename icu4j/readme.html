@@ -11,8 +11,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
-* $Date: 2003/06/11 23:15:13 $
-* $Revision: 1.44 $
+* $Date: 2003/06/11 23:37:43 $
+* $Revision: 1.45 $
 *
 *******************************************************************************
 -->
@@ -483,7 +483,7 @@ is not recommended. You may have to manually create destination
 directories.)</p>
 
 <h3><a name="HowToModularize"></a><u>How to modularize ICU4J</u></h3>
-Some applications and environments do not permit shipping of all of ICU4J bundled as a jar file since size of jar "is too large" for their use.
+Some applications and environments may not wish to ship all of ICU4J bundled as a jar file since the jar file is large and may contain parts of ICU4J which they may not need.
 Some applications use only a particular service from the range of services that ICU4J offers, so would want to ship only that service as a jar file.
 It is possible to build modules from ICU4J source distribution and pick and choose modules.
 Currently ICU4J can be divided into the following modules:
@@ -497,12 +497,12 @@ Currently ICU4J can be divided into the following modules:
     <li>Formatting  </li>
     <li>Transforms </li>
 </ul>
-Building any of these modules is as specifying a build target to the Ant build system,e.g:
+Building any of these modules is as easy as specifying a build target to the Ant build system,e.g:
 <br>To build a module that contains only the Normalizer API:
     <ol>
         <li> Build the module. <br> <code> ant normalizer </code> </li>
         <li> Build the tests for the module. <br> <code> ant normalizerTests </code> </li>
-        <li> Run the tests and verify that te self test pass. <br> <code> java -classpath [icu4j_root]/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
+        <li> Run the tests and verify that the self tests pass. <br> <code> java -classpath [icu4j_root]/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
         <li> Build the jar containing the module. <br> <code>ant moduleJar </code>
      </ol>
 
@@ -510,7 +510,7 @@ If more than one module is required, the module build targets can be concatinate
     <ol>
         <li> Build the modules. <br> <code> ant normalizer collator </code> </li>
         <li> Build the tests for the module. <br> <code> ant normalizerTests collatorTests </code> </li>
-        <li> Run the tests and verify that te self test pass. <br> <code> java -classpath [icu4j_root]/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
+        <li> Run the tests and verify that the self tests pass. <br> <code> java -classpath [icu4j_root]/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
         <li> Build the jar containing the module. <br> <code>ant moduleJar </code>
      </ol>
 
