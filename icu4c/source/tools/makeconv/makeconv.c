@@ -188,6 +188,7 @@ int main(int argc, char* argv[])
     char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     char cnvNameWithPkg[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     UVersionInfo icuVersion;
+    UBool printFilename;
 
     err = U_ZERO_ERROR;
 
@@ -295,6 +296,7 @@ int main(int argc, char* argv[])
 #endif
 
     err = U_ZERO_ERROR;
+    printFilename = (UBool) (argc > 2 || VERBOSE);
     for (++argv; --argc; ++argv)
     {
         arg = getLongPathname(*argv);
@@ -425,7 +427,7 @@ int main(int argc, char* argv[])
                     err = localError;
                 }
             }
-            else
+            else if (printFilename)
             {
                 puts(outFileName);
             }

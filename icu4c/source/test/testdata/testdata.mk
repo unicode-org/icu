@@ -87,43 +87,48 @@ $(TESTDT)nfsmxp.spp
 
 # Targets for nfscsi.spp
 "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_ci.txt"
-	@echo Building nfscsi.spp
+	@echo Building $@
 	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscsi -p "$(TESTPKG)" -u 3.2.0 nfs4_cs_prep_ci.txt
 
 # Targets for nfscss.spp
 "$(TESTDATABLD)\$(TESTDT)nfscss.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_cs.txt"
-	@echo Building nfscss.spp
+	@echo Building $@
 	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscss -p "$(TESTPKG)" -u 3.2.0 nfs4_cs_prep_cs.txt
 
 # Targets for nfscis.spp
 "$(TESTDATABLD)\$(TESTDT)nfscis.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cis_prep.txt"
-	@echo Building nfscis.spp
+	@echo Building $@
 	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscis -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_cis_prep.txt
 
 # Targets for nfsmxs.spp
 "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_s.txt"
-	@echo Building nfsmxs.spp
+	@echo Building $@
 	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxs -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_s.txt
 
 # Targets for nfsmxp.spp
 "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_p.txt"
-	@echo Building nfsmxp.spp
+	@echo Building $@
 	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxp -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_p.txt
 
 
 # Targets for test converter data
 "$(TESTDATABLD)\$(TESTDT)test1.cnv": "$(TESTDATA)\test1.ucm"
+	@echo Building $@
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" -p $(TESTPKG) $**
 
 "$(TESTDATABLD)\$(TESTDT)test3.cnv": "$(TESTDATA)\test3.ucm"
+	@echo Building $@
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" -p $(TESTPKG) $**
 
 "$(TESTDATABLD)\$(TESTDT)test4.cnv": "$(TESTDATA)\test4.ucm"
+	@echo Building $@
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" -p $(TESTPKG) $**
 
 "$(TESTDATABLD)\$(TESTDT)test4x.cnv": "$(TESTDATA)\test4x.ucm"
+	@echo Building $@
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" -p $(TESTPKG) $**
 
 "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv": "$(TESTDATA)\ibm9027.ucm"
+	@echo Building $@
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" -p $(TESTPKG) $**
 
