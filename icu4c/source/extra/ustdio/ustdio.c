@@ -390,6 +390,11 @@ ufile_fill_uchar_buffer(UFILE *f)
     char        charBuffer[UFILE_CHARBUFFER_SIZE];
     u_localized_string *str;
 
+    if (f->fFile == NULL) {
+        /* There is nothing to do. It's a string. */
+        return;
+    }
+
     /* shift the buffer if it isn't empty */
     str = &f->str;
     dataSize = (int32_t)(str->fLimit - str->fPos);

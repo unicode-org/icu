@@ -29,8 +29,7 @@
 /** 
  * Enum representing the possible argument types for uprintf/uscanf
  */
-enum ufmt_type_info
-{
+typedef enum ufmt_type_info {
     ufmt_empty = 0,
     ufmt_simple_percent, /* %% do nothing */
     ufmt_count,      /* special flag for count */
@@ -46,21 +45,19 @@ enum ufmt_type_info
     /*ufmt_wstring,*/    /* wchar_t* */
     /*ufmt_date,*/       /* Date */
     ufmt_last
-};
-typedef enum ufmt_type_info ufmt_type_info;
+} ufmt_type_info;
 
 /**
  * Union representing a uprintf/uscanf argument
  */
-union ufmt_args {
-    int64_t    int64Value;      /* int, UChar */     /* TODO: Should int32_t be used instead of int? */
-    float         floatValue;    /* float */
-    double        doubleValue;   /* double */
-    void          *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
-    /*wchar_t       wcharValue;*/    /* wchar_t */    /* TODO: Should wchar_t be used? */
-    /*UDate         dateValue;*/     /* Date */
-};
-typedef union ufmt_args ufmt_args;
+typedef union ufmt_args {
+    int64_t int64Value;    /* int, UChar */
+    float   floatValue;    /* float */
+    double  doubleValue;   /* double */
+    void    *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
+    /*wchar_t wcharValue;*/    /* wchar_t */    /* TODO: Should wchar_t be used? */
+    /*UDate dateValue;*/     /* Date */
+} ufmt_args;
 
 /**
  * Macro for determining the minimum of two numbers.
@@ -144,17 +141,6 @@ ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
 char*
 ufmt_unicodeToDefaultCP(const UChar *s,
             int32_t len);
-
-/**
- * Get the number of fraction digits based on the requested precision.
- * This is a shortcoming of the formatting API, which doesn't
- * support precision
- * @param num The number to look at
- * @param precision The requested precision
- * @return The fraction digits size to use on the formatting API.
- */
-int32_t
-ufmt_getFractionDigits(double num, int32_t precision);
 
 #endif
 
