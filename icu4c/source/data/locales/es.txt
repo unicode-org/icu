@@ -381,10 +381,10 @@ es {
         DJF { "DJF", "Franco de Djibouti" }
         DKK { "DKK", "Corona Danesa" }
         DOP { "RD$", "Peso Dominicano" }
-        DRP { "DRP", "Peso de la Rep\u00FAblica Dominicana" }
+        // DRP { "DRP", "Peso de la Rep\u00FAblica Dominicana" } -- invalid
         DZD { "DZD", "Dinar de Algeria" }
         ECS { "S/.", "Sucre de Ecuador" }
-        ECU { "ECU", "Moenda \u00DAnica Europea (EURO)" }
+        // ECU { "ECU", "Moenda \u00DAnica Europea (EURO)" } -- invalid
         EEK { "EEK", "Corona de Estonia" }
         EGP { "EGP", "Libra Egipcia" }
         ESP { "Pts", "Peseta Espa\u00F1ola" }
@@ -422,7 +422,7 @@ es {
         JPY { "\uFFE5", "Yen Japon\u00E9s" }
         KES { "KES", "Chel\u00EDn de Kenya" }
         KHR { "KHR", "Riel de Camboya" }
-        KIS { "KIS", "Som de Kirghizstan" }
+        // KIS { "KIS", "Som de Kirghizstan" } -- invalid
         KMF { "KMF", "Franco de Comoros" }
         KPW { "KPW", "Won de Corea del Norte" }
         KRW { "\u20A9", "Won de Corea del Sur" }
@@ -470,7 +470,7 @@ es {
         PTE { "PTE", "Escudo Portugu\u00E9s" }
         PYG { "Gs", "Guarani de Paraguay" }
         QAR { "QAR", "Riyal de Qatar" }
-        RMB { "RMB", "Remnminbi Yuan de China" }
+        // RMB { "RMB", "Remnminbi Yuan de China" } -- invalid
         ROL { "ROL", "Lei de Rumania" }
         RUR { "RUR", "Rublo Ruso" }
         RWF { "RWF", "Franco de Rwanda" }
