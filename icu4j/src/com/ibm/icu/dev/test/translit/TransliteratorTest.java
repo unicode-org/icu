@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/03/30 23:39:18 $ 
- * $Revision: 1.31 $
+ * $Date: 2001/03/31 01:31:03 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -727,12 +727,26 @@ public class TransliteratorTest extends TestFmwk {
      * Test filter syntax in IDs. (J23)
      */
     public void TestFilterIDs() {
-        String ID = "Unicode-Hex[aeiou]";
-        expect(Transliterator.getInstance(ID), "quizzical",
-               "q\\u0075\\u0069zz\\u0069c\\u0061l");
-        ID = "Unicode-Hex[aeiou];Hex-Unicode[^5]";
-        expect(Transliterator.getInstance(ID), "quizzical",
-               "q\\u0075izzical");
+        String[] DATA = {
+            "Unicode-Hex[aeiou]",
+            "quizzical",
+            "q\\u0075\\u0069zz\\u0069c\\u0061l",
+            
+            "Unicode-Hex[aeiou];Hex-Unicode[^5]",
+            "quizzical",
+            "q\\u0075izzical",
+        };
+        
+        for (int i=0; i<DATA.length; i+=3) {
+            String ID = DATA[i];
+            Transliterator t = Transliterator.getInstance(ID);
+            expect(t, DATA[i+1], DATA[i+2]);
+            // Now check the ID
+            if (!ID.equals(t.getID())) {
+                errln("FAIL: getInstance(" + ID + ").getID() => " +
+                      t.getID());
+            }
+        }
     }
 
     //======================================================================
