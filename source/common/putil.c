@@ -125,6 +125,9 @@
 /* floating point implementations ------------------------------------------- */
 
 /* We return QNAN rather than SNAN*/
+#define SIGN 0x80000000U
+
+#if defined(U_INT64_T_UNAVAILABLE)
 #if IEEE_754
 #define NAN_TOP ((int16_t)0x7FF8)
 #define INF_TOP ((int16_t)0x7FF0)
@@ -133,18 +136,22 @@
 #define INF_TOP ((int16_t)0x3F00)
 #endif
 
-#define SIGN 0x80000000U
-
 /* statics */
 static UBool fgNaNInitialized = FALSE;
-static double fgNan;
 static UBool fgInfInitialized = FALSE;
-static double fgInf;
+static double *fgNan;
+static double *fgInf;
+#else
 
-/* protos */
+static const int64_t gNan64 = 0x7FF8000000000000U;
+static const int64_t gInf64 = 0x7FF0000000000000U;
+static const double * const fgNan = (const double *)(&gNan64);
+static const double * const fgInf = (const double *)(&gInf64);
+#endif
+
+/* prototypess */
 static char* u_topNBytesOfDouble(double* d, int n);
 static char* u_bottomNBytesOfDouble(double* d, int n);
-/*static void  uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);*/
 
 
 /*---------------------------------------------------------------------------
@@ -217,6 +224,7 @@ U_CAPI UBool U_EXPORT2
 uprv_isNaN(double number)
 {
 #if IEEE_754
+#if defined(U_INT64_T_UNAVAILABLE)
     /* This should work in theory, but it doesn't, so we resort to the more*/
     /* complicated method below.*/
     /*  return number != number;*/
@@ -240,6 +248,12 @@ uprv_isNaN(double number)
     return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) &&
       (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
 
+#else
+
+    /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
+    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) > gInf64);
+#endif
+
 #elif defined(OS390)
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                         sizeof(uint32_t));
@@ -261,6 +275,7 @@ U_CAPI UBool U_EXPORT2
 uprv_isInfinite(double number)
 {
 #if IEEE_754
+#if defined(U_INT64_T_UNAVAILABLE)
     /* We know the top bit is the sign bit, so we mask that off in a copy of */
     /* the number and compare against infinity. [LIU]*/
     /* The following approach doesn't work for some reason, so we go ahead and */
@@ -280,6 +295,10 @@ uprv_isInfinite(double number)
 
     return (UBool)(((highBits  & ~SIGN) == 0x7FF00000U) &&
       (lowBits == 0x00000000U));
+#else
+
+    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) == gInf64);
+#endif
 
 #elif defined(OS390)
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
@@ -325,19 +344,21 @@ U_CAPI double U_EXPORT2
 uprv_getNaN()
 {
 #if IEEE_754 || defined(OS390)
+#if defined(U_INT64_T_UNAVAILABLE)
     if( !fgNaNInitialized) {
         umtx_lock(NULL);
         if( ! fgNaNInitialized) {
             int i;
-            int8_t* p = (int8_t*)&fgNan;
+            int8_t* p = (int8_t*)fgNan;
             for(i = 0; i < sizeof(double); ++i)
                 *p++ = 0;
-            *(int16_t*)u_topNBytesOfDouble(&fgNan, sizeof(NAN_TOP)) = NAN_TOP;
+            *(int16_t*)u_topNBytesOfDouble(fgNan, sizeof(NAN_TOP)) = NAN_TOP;
             fgNaNInitialized = TRUE;
         }
         umtx_unlock(NULL);
     }
-    return fgNan;
+#endif
+    return *fgNan;
 #else
     /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
     /* you'll need to replace this default implementation with what's correct*/
@@ -350,16 +371,22 @@ U_CAPI double U_EXPORT2
 uprv_getInfinity()
 {
 #if IEEE_754 || defined(OS390)
+#if defined(U_INT64_T_UNAVAILABLE)
     if (!fgInfInitialized)
     {
-        int i;
-        int8_t* p = (int8_t*)&fgInf;
-        for(i = 0; i < sizeof(double); ++i)
-            *p++ = 0;
-        *(int16_t*)u_topNBytesOfDouble(&fgInf, sizeof(INF_TOP)) = INF_TOP;
-        fgInfInitialized = TRUE;
+        umtx_lock(NULL);
+        if (!fgInfInitialized) {
+            int i;
+            int8_t* p = (int8_t*)fgInf;
+            for(i = 0; i < sizeof(double); ++i)
+                *p++ = 0;
+            *(int16_t*)u_topNBytesOfDouble(fgInf, sizeof(INF_TOP)) = INF_TOP;
+            fgInfInitialized = TRUE;
+        }
+        umtx_unlock(NULL);
     }
-    return fgInf;
+#endif
+    return *fgInf;
 #else
     /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
     /* value, you'll need to replace this default implementation with what's*/
@@ -502,15 +529,6 @@ uprv_trunc(double d)
 #endif
 }
 
-/*
-static void
-uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
-{
-    *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
-    *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
-}
-*/
-
 /**
  * Return the largest positive number that can be represented by an integer
  * type of arbitrary bit length.
@@ -603,115 +621,6 @@ uprv_digitsAfterDecimal(double x)
     }
     return numDigits;
 }
-
-#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
-U_CAPI double U_EXPORT2
-uprv_nextDouble(double d, UBool next)
-{
-#if IEEE_754
-  int32_t highBits;
-  uint32_t lowBits;
-  int32_t highMagnitude;
-  uint32_t lowMagnitude;
-  double result;
-  uint32_t *highResult, *lowResult;
-  uint32_t signBit;
-
-  /* filter out NaN's */
-  if (uprv_isNaN(d)) {
-    return d;
-  }
-
-  /* zero's are also a special case */
-  if (d == 0.0) {
-    double smallestPositiveDouble = 0.0;
-    uint32_t *plowBits =
-      (uint32_t *)u_bottomNBytesOfDouble(&smallestPositiveDouble,
-                     sizeof(uint32_t));
-
-    *plowBits = 1;
-#ifdef OS400
-    /* Don't get an underflow exception */
-    *(plowBits-1) = 0x00100000;
-#endif
-
-    if (next) {
-      return smallestPositiveDouble;
-    } else {
-      return -smallestPositiveDouble;
-    }
-  }
-
-  /* if we get here, d is a nonzero value */
-
-  /* hold all bits for later use */
-  highBits = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(uint32_t));
-  lowBits = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
-
-  /* strip off the sign bit */
-  highMagnitude = highBits & ~SIGN;
-  lowMagnitude = lowBits;
-
-  /* if next double away from zero, increase magnitude */
-  if ((highBits >= 0) == next) {
-    if (highMagnitude != 0x7FF00000L || lowMagnitude != 0x00000000L) {
-      lowMagnitude += 1;
-      if (lowMagnitude == 0) {
-        highMagnitude += 1;
-      }
-    }
-  }
-  /* else decrease magnitude */
-  else {
-    lowMagnitude -= 1;
-    if (lowMagnitude > lowBits) {
-      highMagnitude -= 1;
-    }
-#ifdef OS400
-    /* Don't get an underflow exception */
-    if (highMagnitude <  0x00100000 ||
-       (highMagnitude == 0x00100000 && lowMagnitude == 0))
-    {
-        highMagnitude = 0;
-        lowMagnitude = 0;
-    }
-#endif
-  }
-
-  /* construct result and return */
-  signBit = highBits & SIGN;
-  highResult = (uint32_t *)u_topNBytesOfDouble(&result, sizeof(uint32_t));
-  lowResult  = (uint32_t *)u_bottomNBytesOfDouble(&result, sizeof(uint32_t));
-
-  *highResult = signBit | highMagnitude;
-  *lowResult  = lowMagnitude;
-  return result;
-#else
-
-  /* This is the portable implementation...*/
-  /* a small coefficient within the precision of the mantissa*/
-  static const double smallValue = 1e-10;
-  double epsilon = ((d<0)?-d:d) * smallValue; /* first approximation*/
-  double last_eps, sum;
-
-  if (epsilon == 0)
-    epsilon = smallValue; /* for very small d's*/
-  if (!next)
-    epsilon = -epsilon;
-  /* avoid higher precision possibly used for temporay values*/
-
-  last_eps = epsilon * 2.0;
-  sum = d + epsilon;
-
-  while ((sum != d) && (epsilon != last_eps)) {
-    last_eps = epsilon;
-    epsilon /= 2.0;
-    sum = d + epsilon;
-  }
-  return d + last_eps;
-#endif
-}
-#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
 
 static char*
 u_topNBytesOfDouble(double* d, int n)
