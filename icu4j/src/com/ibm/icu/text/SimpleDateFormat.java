@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/03/07 01:05:50 $ 
- * $Revision: 1.18 $
+ * $Date: 2003/03/13 20:28:29 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -159,6 +159,18 @@ import java.util.ResourceBundle;
  * If the year pattern does not have exactly two 'y' characters, the year is
  * interpreted literally, regardless of the number of digits.  So using the
  * pattern "MM/dd/yyyy", "01/11/12" parses to Jan 11, 12 A.D.
+ *
+ * <p>
+ * When numeric fields abut one another directly, with no intervening delimiter
+ * characters, they constitute a run of abutting numeric fields.  Such runs are
+ * parsed specially.  For example, the format "HHmmss" parses the input text
+ * "123456" to 12:34:56, parses the input text "12345" to 1:23:45, and fails to
+ * parse "1234".  In other words, the leftmost field of the run is flexible,
+ * while the others keep a fixed width.  If the parse fails anywhere in the run,
+ * then the leftmost field is shortened by one character, and the entire run is
+ * parsed again. This is repeated until either the parse succeeds or the
+ * leftmost field is one character in length.  If the parse still fails at that
+ * point, the parse of the run fails.
  *
  * <p>
  * For time zones that have no names, use strings GMT+hours:minutes or
@@ -637,6 +649,20 @@ public class SimpleDateFormat extends DateFormat {
         return numberFormat.format(value);
     }
 
+    /**
+     * Format characters that indicate numeric fields.  The character
+     * at index 0 is treated specially.
+     */
+    private static final String NUMERIC_FORMAT_CHARS = "MyudhHmsSDFwWkK";
+
+    /**
+     * Return true if the given format character, occuring count
+     * times, represents a numeric field.
+     */
+    private static final boolean isNumeric(char formatChar, int count) {
+        int i = NUMERIC_FORMAT_CHARS.indexOf(formatChar);
+        return (i > 0 || (i == 0 && count < 3));
+    }
 
     /**
      * Overrides DateFormat
@@ -648,169 +674,165 @@ public class SimpleDateFormat extends DateFormat {
         int start = pos.getIndex();
         int oldStart = start;
         boolean[] ambiguousYear = {false};
-
-        boolean inQuote = false; // inQuote set true when hits 1st single quote
-        char prevCh = 0;
         int count = 0;
-        int interQuoteCount = 1; // Number of chars between quotes
-        boolean allowNegative = true;
 
-        for (int i=0; i<pattern.length(); ++i)
-        {
+        // For parsing abutting numeric fields. 'abutPat' is the
+        // offset into 'pattern' of the first of 2 or more abutting
+        // numeric fields.  'abutStart' is the offset into 'text'
+        // where parsing the fields begins. 'abutPass' starts off as 0
+        // and increments each time we try to parse the fields.
+        int abutPat = -1; // If >=0, we are in a run of abutting numeric fields
+        int abutStart = 0;
+        int abutPass = 0;
+
+        for (int i=0; i<pattern.length(); ++i) {
             char ch = pattern.charAt(i);
 
-            if (inQuote)
-            {
-                if (ch == '\'')
-                {
-                    // ends with 2nd single quote
-                    inQuote = false;
-                    // two consecutive quotes outside a quote means we have
-                    // a quote literal we need to match.
-                    if (count == 0)
-                    {
-                        if (start >= text.length() || ch != text.charAt(start))
-                        {
+            // Handle quoted strings.  Two consecutive quotes is a
+            // quote literal, inside or outside of quotes.
+            if (ch == '\'') {
+                abutPat = -1; // End of any abutting fields
+
+                // Match a quote literal '' outside of quotes
+                if ((i+1)<pattern.length() && pattern.charAt(i+1)==ch) {
+                    if (start==text.length() || text.charAt(start) != ch) {
+                        pos.setIndex(oldStart);
+                        pos.setErrorIndex(start);
+                        return;
+                    }
+                    ++start;
+                    ++i; // Skip over doubled quote
+                    continue;
+                }
+
+                // Match a quoted string, including any embedded ''
+                // quote literals.  Note that we allow an unclosed
+                // quote for backward compatibility.
+                while (++i<pattern.length()) {
+                    ch = pattern.charAt(i);
+                    if (ch == '\'') {
+                        if ((i+1)<pattern.length() && pattern.charAt(i+1)==ch) {
+                            ++i;
+                            // Fall through and match literal quote
+                        } else {
+                            break; // Closing quote seen
+                        }
+                    }
+                    if (start==text.length() || text.charAt(start) != ch) {
+                        pos.setIndex(oldStart);
+                        pos.setErrorIndex(start);
+                        return;
+                    }
+                    ++start;
+                }
+                continue;
+            }
+
+            // Handle alphabetic field characters.
+            if (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z') {
+                int fieldPat = i;
+
+                // Count the length of this field specifier
+                count = 1;
+                while ((i+1)<pattern.length() &&
+                       pattern.charAt(i+1) == ch) {
+                    ++count;
+                    ++i;
+                }
+
+                if (isNumeric(ch, count)) {
+                    if (abutPat < 0) {
+                        // Determine if there is an abutting numeric field.  For
+                        // most fields we can just look at the next characters,
+                        // but the 'm' field is either numeric or text,
+                        // depending on the count, so we have to look ahead for
+                        // that field.
+                        if ((i+1)<pattern.length()) {
+                            boolean abutting;
+                            char nextCh = pattern.charAt(i+1);
+                            int k = NUMERIC_FORMAT_CHARS.indexOf(nextCh);
+                            if (k == 0) {
+                                int j = i+2;
+                                while (j<pattern.length() &&
+                                       pattern.charAt(j) == nextCh) {
+                                    ++j;
+                                }
+                                abutting = (j-i) < 4; // nextCount < 3
+                            } else {
+                                abutting = k > 0;
+                            }
+
+                            // Record the start of a set of abutting numeric
+                            // fields.
+                            if (abutting) {
+                                abutPat = fieldPat;
+                                abutStart = start;
+                                abutPass = 0;
+                            }
+                        }
+                    }
+                } else {
+                    abutPat = -1; // End of any abutting fields
+                }
+
+                // Handle fields within a run of abutting numeric fields.  Take
+                // the pattern "HHmmss" as an example. We will try to parse
+                // 2/2/2 characters of the input text, then if that fails,
+                // 1/2/2.  We only adjust the width of the leftmost field; the
+                // others remain fixed.  This allows "123456" => 12:34:56, but
+                // "12345" => 1:23:45.  Likewise, for the pattern "yyyyMMdd" we
+                // try 4/2/2, 3/2/2, 2/2/2, and finally 1/2/2.
+                if (abutPat >= 0) {
+                    // If we are at the start of a run of abutting fields, then
+                    // shorten this field in each pass.  If we can't shorten
+                    // this field any more, then the parse of this set of
+                    // abutting numeric fields has failed.
+                    if (fieldPat == abutPat) {
+                        count -= abutPass++;
+                        if (count == 0) {
                             pos.setIndex(oldStart);
                             pos.setErrorIndex(start);
                             return;
                         }
-                        ++start;
-                    }
-                    count = 0;
-                    interQuoteCount = 0;
-                }
-                else
-                {
-                    // pattern uses text following from 1st single quote.
-                    if (start >= text.length() || ch != text.charAt(start)) {
-                        // Check for cases like: 'at' in pattern vs "xt"
-                        // in time text, where 'a' doesn't match with 'x'.
-                        // If fail to match, return.
-                        pos.setIndex(oldStart); // left unchanged
-                        pos.setErrorIndex(start);
-                        return;
-                    }
-                    ++count;
-                    ++start;
-                }
-            }
-            else    // !inQuote
-            {
-                if (ch == '\'')
-                {
-                    inQuote = true;
-                    if (count > 0) // handle cases like: e'at'
-                    {
-                        int startOffset = start;
-                        start=subParse(text, start, prevCh, count,
-                                       false, allowNegative, ambiguousYear, cal);
-                        allowNegative = true;
-                        if ( start<0 ) {
-                            pos.setErrorIndex(startOffset);
-                            pos.setIndex(oldStart);
-                            return;
-                        }
-                        count = 0;
                     }
 
-                    if (interQuoteCount == 0)
-                    {
-                        // This indicates two consecutive quotes inside a quote,
-                        // for example, 'o''clock'.  We need to parse this as
-                        // representing a single quote within the quote.
-                        int startOffset = start;
-                        if (start >= text.length() ||  ch != text.charAt(start))
-                        {
-                            pos.setErrorIndex(startOffset);
-                            pos.setIndex(oldStart);
-                            return;
-                        }
-                        ++start;
-                        count = 1; // Make it look like we never left
+                    start = subParse(text, start, ch, count,
+                                     true, false, ambiguousYear, cal);
+
+                    // If the parse fails anywhere in the run, back up to the
+                    // start of the run and retry.
+                    if (start < 0) {
+                        i = abutPat - 1;
+                        start = abutStart;
+                        continue;
                     }
-                }
-                else if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')
-                {
-                    // ch is a date-time pattern
-                    if (ch != prevCh && count > 0) // e.g., yyyyMMdd
-                    {
-                        int startOffset = start;
-                        // This is the only case where we pass in 'true' for
-                        // obeyCount.  That's because the next field directly
-                        // abuts this one, so we have to use the count to know when
-                        // to stop parsing. [LIU]
-                        // Don't allow negatives in this field or in the next.
-                        // This prevents anomalies like HHmmss matching 12-34
-                        // as 12:-3:4, or 11:57:04.
-                        start = subParse(text, start, prevCh, count, true,
-                                         allowNegative, ambiguousYear, cal);
-                        allowNegative = false;
-                        if (start < 0) {
-                            pos.setErrorIndex(startOffset);
-                            pos.setIndex(oldStart);
-                            return;
-                        }
-                        prevCh = ch;
-                        count = 1;
-                    }
-                    else
-                    {
-                        if (ch != prevCh)
-                            prevCh = ch;
-                        count++;
-                    }
-                }
-                else if (count > 0)
-                {
-                    // handle cases like: MM-dd-yy, HH:mm:ss, or yyyy MM dd,
-                    // where ch = '-', ':', or ' ', repectively.
-                    int startOffset = start;
-                    start=subParse(text, start, prevCh, count,
-                                   false, allowNegative, ambiguousYear, cal);
-                    allowNegative = true;
-                    if ( start < 0 ) {
-                        pos.setErrorIndex(startOffset);
-                        pos.setIndex(oldStart);
-                        return;
-                    }
-                    if (start >= text.length() || ch != text.charAt(start)) {
-                        // handle cases like: 'MMMM dd' in pattern vs. "janx20"
-                        // in time text, where ' ' doesn't match with 'x'.
-                        pos.setErrorIndex(start);
-                        pos.setIndex(oldStart);
-                        return;
-                    }
-                    start++;
-                    count = 0;
-                    prevCh = 0;
-                }
-                else // any other unquoted characters
-                {
-                    if (start >= text.length() || ch != text.charAt(start)) {
-                        // handle cases like: 'MMMM   dd' in pattern vs.
-                        // "jan,,,20" in time text, where "   " doesn't
-                        // match with ",,,".
-                        pos.setErrorIndex(start);
-                        pos.setIndex(oldStart);
-                        return;
-                    }
-                    start++;
                 }
 
-                ++interQuoteCount;
+                // Handle non-numeric fields and non-abutting numeric
+                // fields.
+                else {
+                    int k = start;
+                    start=subParse(text, start, ch, count,
+                                   false, true, ambiguousYear, cal);
+
+                    if (start < 0) {
+                        pos.setErrorIndex(k);
+                        pos.setIndex(oldStart);
+                        return;
+                    }
+                }
             }
-        }
-        // Parse the last item in the pattern
-        if (count > 0)
-        {
-            int startOffset = start;
-            start=subParse(text, start, prevCh, count,
-                           false, allowNegative, ambiguousYear, cal);
-            if ( start < 0 ) {
-                pos.setIndex(oldStart);
-                pos.setErrorIndex(startOffset);
-                return;
+
+            // Handle unquoted non-alphabetic characters.  These are
+            // treated as literals.
+            else {
+                abutPat = -1; // End of any abutting fields
+                if (start==text.length() || text.charAt(start) != ch) {
+                    pos.setIndex(oldStart);
+                    pos.setErrorIndex(start);
+                    return;
+                }
+                ++start;
             }
         }
 
@@ -1277,7 +1299,7 @@ public class SimpleDateFormat extends DateFormat {
             } catch (ClassCastException e1) {}
         }
         Number number = numberFormat.parse(text, pos);
-        if (!allowNegative) {
+        if (df != null) {
             df.setNegativePrefix(oldPrefix);
         }
         return number;
