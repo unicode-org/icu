@@ -21,6 +21,8 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/smpdtfmt.h"
+#include "ucln_in.h"
+#include "mutex.h"
  
 // *****************************************************************************
 // class DateFormatSymbols
@@ -425,12 +427,24 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 }
 
 //------------------------------------------------------
+static const UnicodeString *gPatternCharsStr = NULL;
+
+U_CFUNC UBool dateFormatSymbols_cleanup() {
+    if (gPatternCharsStr != NULL) {
+        delete gPatternCharsStr;
+    }
+    return TRUE;
+}
 
 const UnicodeString&
 DateFormatSymbols::getPatternChars(void)
 {
-    static const UnicodeString gPatternCharsStr(gPatternChars);
-    return gPatternCharsStr;
+    Mutex lock;     // We don't care if this is slow because this is deprecated API.
+    if (gPatternCharsStr == NULL) {
+        gPatternCharsStr = new UnicodeString(gPatternChars);
+        ucln_i18n_registerCleanup();
+    }
+    return *gPatternCharsStr;
 }
 
 //------------------------------------------------------
