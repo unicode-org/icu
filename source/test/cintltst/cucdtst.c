@@ -218,7 +218,7 @@ static void TestMisc()
     const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
     const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
     const UChar sampleNonBase[] = {0x002B, 0x0020, 0x203B};
-    const UChar sampleChars[] = {0x000a, 0x0045, 0x4e00, 0xDC00};
+    const UChar sampleChars[] = {0x000a, 0x0045, 0x4e00, 0xDC00, 0xFFE8, 0xFFF0};
     const UChar sampleDigits[]= {0x0030, 0x0662, 0x0F23, 0x0ED5};
     const UChar sample2Digits[]= {0x3007, 0x4e00, 0x4e8c, 0x4e09, 0x56d8, 0x4e94, 0x516d, 0x4e03, 0x516b, 0x4e5d}; /*sp characters not in the proptable*/
     const UChar sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
@@ -241,7 +241,9 @@ static void TestMisc()
     const uint16_t sampleCellWidth[] = { ZERO_WIDTH, 
                                          HALF_WIDTH, 
                                          FULL_WIDTH, 
-                                         NEUTRAL};
+                                         NEUTRAL,
+                                         U_HALF_WIDTH,
+                                         U_ZERO_WIDTH};
     int i;
     char icuVersion[U_MAX_VERSION_STRING_LENGTH];
     UVersionInfo realVersion;
@@ -279,7 +281,7 @@ static void TestMisc()
             log_err("Non-baseform char test error : %d or %d",(int32_t)sampleNonBase[i], (int32_t)sampleBase[i]);
         }
     }
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 5; i++) {
       log_verbose("Testing for charcellwidth\n");
         if (u_charCellWidth(sampleChars[i]) != sampleCellWidth[i])
         {
