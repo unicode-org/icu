@@ -168,10 +168,10 @@ public:
     
 protected:
     /** Default constructor to be overridden in the implementing class. @stable ICU 2.0*/
-    ForwardCharacterIterator() : UObject() {}
+    ForwardCharacterIterator();
     
     /** Copy constructor to be overridden in the implementing class. @stable ICU 2.0*/
-    ForwardCharacterIterator(const ForwardCharacterIterator &other) : UObject(other) {}
+    ForwardCharacterIterator(const ForwardCharacterIterator &other);
     
     /**
      * Assignment operator to be overridden in the implementing class.

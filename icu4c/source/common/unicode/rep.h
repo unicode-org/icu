@@ -232,8 +232,6 @@ protected:
     virtual UChar32 getChar32At(int32_t offset) const = 0;
 };
 
-inline Replaceable::Replaceable() {}
-
 inline int32_t
 Replaceable::length() const {
     return getLength();
