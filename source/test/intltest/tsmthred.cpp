@@ -172,8 +172,7 @@ int32_t SimpleThread::start()
         return -1;
     }
 
-    //    imp->fHandle = _beginthread( SimpleThreadProc, 0 /*stack size*/ , (void *)this );
-    imp->fHandle = -1;
+    imp->fHandle = _beginthread( SimpleThreadProc, 0 /*stack size*/ , (void *)this );
     if (imp->fHandle == -1) {
         // An error occured
         int err = errno;
