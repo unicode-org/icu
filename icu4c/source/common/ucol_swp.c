@@ -17,6 +17,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/udata.h" /* UDataInfo */
 #include "cmemory.h"
 #include "utrie.h"
@@ -312,3 +315,5 @@ ucol_swapInverseUCA(const UDataSwapper *ds,
 
     return headerSize+header.byteSize;
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */
