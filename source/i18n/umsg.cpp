@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,6 +29,7 @@
 #include "unicode/msgfmt.h"
 #include "unicode/unistr.h"
 #include "cpputils.h"
+#include "uassert.h"
 
 U_NAMESPACE_USE
 
@@ -453,6 +454,13 @@ umsg_vformat(   const UMessageFormat *fmt,
             va_arg(ap, int);
             break;
 
+        case Formattable::kObject:
+            // This will never happen because MessageFormat doesn't
+            // support kObject.  When MessageFormat is changed to
+            // understand MeasureFormats, modify this code to do the
+            // right thing. [alan]
+            U_ASSERT(FALSE);
+            break;
         }
     }
     UnicodeString resultStr;
@@ -574,9 +582,17 @@ umsg_vparse(const UMessageFormat *fmt,
             }
             break;
 
+        case Formattable::kObject:
+            // This will never happen because MessageFormat doesn't
+            // support kObject.  When MessageFormat is changed to
+            // understand MeasureFormats, modify this code to do the
+            // right thing. [alan]
+            U_ASSERT(FALSE);
+            break;
+
         // better not happen!
         case Formattable::kArray:
-            // DIE
+            U_ASSERT(FALSE);
             break;
         }
     }
