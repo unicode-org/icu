@@ -29,9 +29,6 @@
 #include "uhash.h"
 #include "umutex.h"
 
-/* this is just for internal purposes. DO NOT USE! */
-static void entryCloseInt(UResourceDataEntry *resB);
-
 
 /*
 Static cache for already opened resource bundles - mostly for keeping fallback info
@@ -139,21 +136,25 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
 
 /** INTERNAL: Initializes the cache for resources */
 static void initCache(UErrorCode *status) {
-    if(cache == NULL) {
-        UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
-        if (U_FAILURE(*status)) {
-            return;
-        }
-        umtx_lock(&resbMutex);
-        if(cache == NULL) {
-            cache = newCache;
-            newCache = NULL;
-        }
-        umtx_unlock(&resbMutex);
-        if(newCache != NULL) {
-            uhash_close(newCache);
-        }
-    }
+  UBool makeCache = FALSE;
+  umtx_lock(&resbMutex);
+  makeCache = (cache ==  NULL);
+  umtx_unlock(&resbMutex);
+  if(makeCache) {
+      UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
+      if (U_FAILURE(*status)) {
+          return;
+      }
+      umtx_lock(&resbMutex);
+      if(cache == NULL) {
+          cache = newCache;
+          newCache = NULL;
+      }
+      umtx_unlock(&resbMutex);
+      if(newCache != NULL) {
+          uhash_close(newCache);
+      }
+  }
 }
 
 /* Works just like ucnv_flushCache() */
@@ -508,8 +509,46 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
 /**
  * Functions to create and destroy resource bundles.
  */
-static void entryClose(UResourceDataEntry *resB);
 /* INTERNAL: */
+static void entryCloseInt(UResourceDataEntry *resB) {
+    UResourceDataEntry *p = resB;
+
+    while(resB != NULL) {
+        p = resB->fParent;
+        resB->fCountExisting--;
+
+        /* Entries are left in the cache. TODO: add ures_cacheFlush() to force a flush
+         of the cache. */
+/*
+        if(resB->fCountExisting <= 0) {
+            uhash_remove(cache, resB);
+            if(resB->fBogus == U_ZERO_ERROR) {
+                res_unload(&(resB->fData));
+            }
+            if(resB->fName != NULL) {
+                uprv_free(resB->fName);
+            }
+            if(resB->fPath != NULL) {
+                uprv_free(resB->fPath);
+            }
+            uprv_free(resB);
+        }
+*/
+
+        resB = p;
+    }
+}
+
+/** 
+ *  API: closes a resource bundle and cleans up.
+ */
+
+static void entryClose(UResourceDataEntry *resB) {
+  umtx_lock(&resbMutex);
+  entryCloseInt(resB);
+  umtx_unlock(&resbMutex);
+}
+
 static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
                                          const char *key, int32_t index, UResourceDataEntry *realData, 
                                          const UResourceBundle *parent, int32_t noAlias,
@@ -1299,44 +1338,6 @@ ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
     }
 }
 
-static void entryCloseInt(UResourceDataEntry *resB) {
-    UResourceDataEntry *p = resB;
-
-    while(resB != NULL) {
-        p = resB->fParent;
-        resB->fCountExisting--;
-
-        /* Entries are left in the cache. TODO: add ures_cacheFlush() to force a flush
-         of the cache. */
-/*
-        if(resB->fCountExisting <= 0) {
-            uhash_remove(cache, resB);
-            if(resB->fBogus == U_ZERO_ERROR) {
-                res_unload(&(resB->fData));
-            }
-            if(resB->fName != NULL) {
-                uprv_free(resB->fName);
-            }
-            if(resB->fPath != NULL) {
-                uprv_free(resB->fPath);
-            }
-            uprv_free(resB);
-        }
-*/
-
-        resB = p;
-    }
-}
-
-/** 
- *  API: closes a resource bundle and cleans up.
- */
-
-static void entryClose(UResourceDataEntry *resB) {
-  umtx_lock(&resbMutex);
-  entryCloseInt(resB);
-  umtx_unlock(&resbMutex);
-}
 /*
 U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd) {
   if(resB->fResPath == NULL) {
