@@ -906,7 +906,7 @@ static void TestInt64Format() {
       }
     }
   }
-  delete fmt;
+  unum_close(fmt);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
