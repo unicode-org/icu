@@ -1,5 +1,8 @@
 /*
- * (C) Copyright IBM Corp. 1998 - All Rights Reserved
+ *
+ *   Copyright (C) 1998-1999, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
  * @version	1.0 06/19/98
  * @author	Helena Shih
  * Based on Taligent international support for C++
