@@ -1988,7 +1988,6 @@ static Locale _canonicalize(int32_t selector, /* 0==createFromName, 1==createCan
     case 2:
         return Locale(localeID);
     default:
-        U_ASSERT(FALSE);
         return Locale("");
     }
 }
