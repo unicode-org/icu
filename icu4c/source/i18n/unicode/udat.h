@@ -33,15 +33,14 @@
  * <pre>
  * \code
  *     UErrorCode status;
- *     UFieldPosition pos;
  *     UChar *myString;
- *     t_int32 myStrlen=0;
+ *     int32_t myStrlen=0;
  *     UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
- *     myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
+ *     myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, NULL, &status);
  *     if(status==U_BUFFER_OVERFLOW_ERROR){
- * 		status=U_ZERO_ERROR;
- * 		myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * 		udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
+ * 		   status=U_ZERO_ERROR;
+ * 		   myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ * 		   udat_format(dfmt, myDate, myString, myStrlen+1, NULL, &status);
  *     }
  * \endcode
  * </pre>
@@ -50,7 +49,7 @@
  * information about the local language and country conventions multiple times.
  * <pre>
  * \code
- *     t_int32 i, myStrlen=0;
+ *     int32_t i, myStrlen=0;
  *     UChar* myString;
  *     UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
  *     UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
@@ -77,7 +76,7 @@
  * <pre>
  * \code
  *        UErrorCode status = U_ZERO_ERROR;
- *        t_int32 parsepos=0;     
+ *        int32_t parsepos=0;     
  *        UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
  * \endcode
  * </pre>

@@ -27,11 +27,12 @@
  * \code
  *     UChar *result, *tzID, *str;
  *     UChar pattern[100];
- *     t_int32 resultLengthOut, resultlength;
+ *     int32_t resultLengthOut, resultlength;
  *     UCalendar *cal;
  *     UDate d1;
  *     UDateFormat *def1;
  *     UErrorCode status = U_ZERO_ERROR;
+ *
  *     str=(UChar*)malloc(sizeof(UChar) * (strlen("disturbance in force") +1));
  *     u_uastrcpy(str, "disturbance in force");
  *     tzID=(UChar*)malloc(sizeof(UChar) * 4);
@@ -62,22 +63,23 @@
  *     UErrorCode status = U_ZERO_ERROR;
  *     UChar *result;
  *     UChar pattern[100];
- *     t_int32 resultlength,resultLengthOut, i;
+ *     int32_t resultlength, resultLengthOut, i;
  *     double testArgs= { 100.0, 1.0, 0.0};
+ *
  *     str=(UChar*)malloc(sizeof(UChar) * 10);
  *     u_uastrcpy(str, "MyDisk");
  *     u_uastrcpy(pattern, "The disk {1} contains {0,choice,0#no files|1#one file|1<{0,number,integer} files}");
  *     for(i=0; i<3; i++){
  *       resultlength=0;
- *     resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), NULL, resultlength, &status, testArgs[i], str);
- *     if(status==U_BUFFER_OVERFLOW_ERROR){
+ *       resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), NULL, resultlength, &status, testArgs[i], str);
+ *       if(status==U_BUFFER_OVERFLOW_ERROR){
  *         status=U_ZERO_ERROR;
  *         resultlength=resultLengthOut+1;
  *         result=(UChar*)malloc(sizeof(UChar) * resultlength);
  *         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, testArgs[i], str);
- *     }
- *     printf("%s\n", austrdup(result) );  //austrdup( a function used to convert UChar* to char*)
- *     free(result);
+ *       }
+ *       printf("%s\n", austrdup(result) );  //austrdup( a function used to convert UChar* to char*)
+ *       free(result);
  *     }
  *     // output, with different testArgs:
  *     // output: The disk "MyDisk" contains 100 files.
