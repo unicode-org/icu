@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2001/09/06 01:30:31 $ 
-* $Revision: 1.3 $
+* $Date: 2001/09/19 23:32:21 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,7 @@ public class GenOverlap implements UCD_Types {
         nfd = new Normalizer(Normalizer.NFD);
         nfkd = new Normalizer(Normalizer.NFKD);
             
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
             
         // store data for faster lookup
             
@@ -307,7 +307,7 @@ public class GenOverlap implements UCD_Types {
         nfd = new Normalizer(Normalizer.NFD);
         nfkd = new Normalizer(Normalizer.NFKD);
             
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
             
         // store data for faster lookup
             
@@ -505,7 +505,7 @@ public class GenOverlap implements UCD_Types {
         //nfd = new Normalizer(Normalizer.NFD);
         //nfkd = new Normalizer(Normalizer.NFKD);
             
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
         nfd = new Normalizer(Normalizer.NFD);
         nfkd = new Normalizer(Normalizer.NFKD);
             

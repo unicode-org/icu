@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -22,7 +22,7 @@ final class MyPropertyLister extends PropertyLister {
 
     private int propMask;
 
-    public MyPropertyLister(UCD ucd, int propMask, PrintStream output) {
+    public MyPropertyLister(UCD ucd, int propMask, PrintWriter output) {
         this.propMask = propMask;
         this.output = output;
         this.ucdData = ucd;
@@ -67,7 +67,7 @@ final class MyPropertyLister extends PropertyLister {
             if (s.length() == 0) s = "Other Combining Class";
             return "# " + s;
         } else if (main == BINARY_PROPERTIES) {
-            return "# Binary Property";
+            return "";
         } else if (main == JOINING_GROUP) {
             return "";
         } else {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/08/31 00:29:50 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -15,8 +15,8 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     public static final String DATA_DIR = "C:\\DATA\\";
-    public static final String BIN_DIR = DATA_DIR + "\\BIN\\";
-    public static final String GEN_DIR = DATA_DIR + "\\GEN\\";
+    public static final String BIN_DIR = DATA_DIR + "BIN\\";
+    public static final String GEN_DIR = DATA_DIR + "GEN\\";
 
 
     static final byte BINARY_FORMAT = 5; // bumped if binary format of UCD changes

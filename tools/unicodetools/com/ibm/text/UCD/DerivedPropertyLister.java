@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2001/09/06 01:29:48 $
-* $Revision: 1.4 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -27,7 +27,7 @@ final class DerivedPropertyLister extends PropertyLister {
     int width;
     boolean varies;
 
-    public DerivedPropertyLister(UCD ucd, int propMask, PrintStream output) {
+    public DerivedPropertyLister(UCD ucd, int propMask, PrintWriter output) {
         this.propMask = propMask;
         this.output = output;
         this.ucdData = ucd;
@@ -87,7 +87,7 @@ final class DerivedPropertyLister extends PropertyLister {
     String last;
 
     public byte status(int cp) {
-        if (!ucdData.isAssigned(cp)) return EXCLUDE;
+        if (!ucdData.isAssigned(cp) && propMask != DerivedProperty.DefaultIgnorable) return EXCLUDE;
         if (!varies) {
             return dprop.hasProperty(cp, propMask) ? INCLUDE : EXCLUDE;
         }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/09/06 01:29:48 $
-* $Revision: 1.3 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -58,8 +58,10 @@ public class DerivedProperty implements UCD_Types {
         DefaultIgnorable = 26,
         GraphemeExtend = 27,
         GraphemeBase = 28,
+        
+        FC_NFC_Closure = 29,
 
-        LIMIT = 29;
+        LIMIT = 30;
     
     
     public DerivedProperty(UCD ucd) {
@@ -156,8 +158,8 @@ public class DerivedProperty implements UCD_Types {
                 compName = "NFD for the character";
             }
             header = "# Derived Property: " + name              
-                + "\r\n#   Normalized form " + NAME[i-GenNFD] + ", where DIFFERENT from " + compName + "."
-                + "\r\n#   HANGUL SYLLABLES are algorithmically decomposed, and not listed explicitly."
+                + "\r\n#   Lists characters in normalized form " + NAME[i-GenNFD] + "."
+                + "\r\n#   Only those characters whith normalized forms are DIFFERENT from " + compName + " are listed!"
                 + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
                 + "\r\n#            It is NOT sufficient to replace characters one-by-one with these results!";
         }
@@ -418,6 +420,25 @@ of characters, the first of which has a non-zero combining class.
                 String c = nfkc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FNC; " + Utility.hex(c);
+            } // default
+            boolean hasProperty(int cp) { return getProperty(cp).length() != 0; }
+        };
+        
+        dprops[FC_NFC_Closure] = new DProp() {
+            {
+                name = "FC_NFC_Closure";
+                header = "# Derived Property: " + name
+                    + "\r\n#  Generated from computing: b = NFC(Fold(a)); c = NFC(Fold(b));"
+                    + "\r\n#  Then if (c != b) add the mapping from a to c to the set of"
+                    + "\r\n#  mappings that constitute the FC_NFC_Closure list";
+            }
+            public boolean propertyVaries() {return true;} // default
+            public String getProperty(int cp) { 
+                if (!ucdData.isRepresented(cp)) return "";
+                String b = nfc.normalize(fold(cp));
+                String c = nfc.normalize(fold(b));
+                if (c.equals(b)) return "";
+                return "FN; " + Utility.hex(c);
             } // default
             boolean hasProperty(int cp) { return getProperty(cp).length() != 0; }
         };

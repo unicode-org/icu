@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -42,6 +42,7 @@ public final class UCD implements UCD_Types {
      */
     public static UCD make(String version) {
         if (version == null || version.length() == 0) version = latestVersion;
+        if (version.indexOf('.') < 0) throw new IllegalArgumentException("Version must be of form 3.1.1");
         UCD result = (UCD)versionCache.get(version);
         if (result == null) {
             result = new UCD();
@@ -74,6 +75,7 @@ public final class UCD implements UCD_Types {
             if (major < 2 && codePoint > 0xFFFF) return false;
             return true;         // Noncharacter
         }
+        if (major >= 2 && codePoint >= 0xF0000 && codePoint <= 0x10FFFD) return true;
         if (codePoint >= 0xFDD0 && codePoint <= 0xFDEF && major >= 3 && minor >= 1) return true;
         return false;
     }
@@ -438,6 +440,21 @@ public final class UCD implements UCD_Types {
     public byte getScript(int codePoint) {
         return get(codePoint, false).script;
     }
+    
+    
+    public byte getScript(String s) {
+        byte result = COMMON_SCRIPT;
+        if (s == null || s.length() == 0) return result;
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
+            cp = UTF32.char32At(s, i);
+            byte script = getScript(cp);
+            if (script == INHERITED_SCRIPT) continue;
+            result = script;
+        }
+        return result;
+    }
+    
 
     public byte getAge(int codePoint) {
         return get(codePoint, false).age;

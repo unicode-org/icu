@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/CEList.java,v $ 
-* $Date: 2001/08/31 00:20:40 $ 
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:32:21 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -102,7 +102,8 @@ public final class CEList implements java.lang.Comparable, UCD_Types {
 
             for (int i = startOffset; i < min; ++i) {
                 if (contents[i] != that.contents[i + delta]) {
-                    if (contents[i] < that.contents[i + delta]) return -1;
+                    if ((contents[i] & 0xFFFFFFFFL) 
+                        < (that.contents[i + delta] & 0xFFFFFFFFL)) return -1;
                     return 1;
                 }
             }
@@ -158,7 +159,9 @@ public final class CEList implements java.lang.Comparable, UCD_Types {
     public static String toString(int ce) {
         return "[" + Utility.hex(UCA.getPrimary(ce)) + "." 
           + Utility.hex(UCA.getSecondary(ce)) + "."
-          + Utility.hex(UCA.getTertiary(ce)) + "](" + NAME3[UCA.getTertiary(ce)] + ")";
+          + Utility.hex(UCA.getTertiary(ce)) + "]"
+         // + "(" + NAME3[UCA.getTertiary(ce)] + ")"
+          ;
     }
     
     static final String[] NAME3 = {

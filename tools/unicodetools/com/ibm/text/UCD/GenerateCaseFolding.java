@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -20,7 +20,7 @@ import com.ibm.text.utility.*;
 
 public class GenerateCaseFolding implements UCD_Types {
     public static boolean DEBUG = false;
-    public static UCD ucd = UCD.make("310");
+    public static UCD ucd = UCD.make("");
 
     public static void main(String[] args) throws java.io.IOException {
         makeCaseFold();
@@ -285,71 +285,4 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return result + "}";
     }
-
-    static final void getAge() throws IOException {
-        PrintStream log = new PrintStream(
-            new BufferedOutputStream (
-            new FileOutputStream("UnicodeAge.txt"),
-            4*1024));
-        try {
-            log.println("# Derived file showing when various code points were allocated in Unicode");
-            log.println("# author: M. Davis");
-            log.println("# generated: " + new Date());
-            log.println("# Notes:");
-            log.println("# - The old Hangul Syllables (removed from 2.0) are not included in the 110 listing.");
-            log.println("# - The supplementary private use code points, although allocated earlier,");
-            log.println("#   were NOT specifically listed in the UCD until 3.0.1, and are not included until then.");
-            new DiffPropertyLister(null, "110", log).print();
-            new DiffPropertyLister("110", "200", log).print();
-            new DiffPropertyLister("200", "210", log).print();
-            new DiffPropertyLister("210", "300", log).print();
-            new DiffPropertyLister("300", "310", log).print();
-            /*
-            printDiff("110", "200");
-	        UnicodeSet u11 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-1.1.txt", false);
-	        UnicodeSet u20 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-2.0.txt", false);
-	        UnicodeSet u21 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-2.1.txt", false);
-	        UnicodeSet u30 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-3.0.txt", false);
-	        UnicodeSet u31 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-3.1.txt", false);
-
-            log.println();
-            log.println("# Code points assigned in Unicode 1.1 (minus Hangul Syllables): "
-                + n.format(u11.count()));
-            log.println();
-            u11.print(log, false, false, "1.1");
-
-            UnicodeSet u20m = new UnicodeSet(u20).remove(u11);
-            log.println();
-            log.println("# Code points assigned in Unicode 2.0 (minus Unicode 1.1): "
-                + n.format(u20m.count()));
-            log.println();
-            u20m.print(log, false, false, "2.0");
-
-            UnicodeSet u21m = new UnicodeSet(u21).remove(u20);
-            log.println();
-            log.println("# Code points assigned in Unicode 2.1 (minus Unicode 2.0): "
-                + n.format(u21m.count()));
-            log.println();
-            u21m.print(log, false, false, "2.1");
-
-            UnicodeSet u30m = new UnicodeSet(u30).remove(u21);
-            log.println();
-            log.println("# Code points assigned in Unicode 3.0 (minus Unicode 2.1): "
-                + n.format(u30m.count()));
-            log.println();
-            u30m.print(log, false, false, "3.0");
-
-            UnicodeSet u31m = new UnicodeSet(u31).remove(u30);
-            log.println();
-            log.println("# Code points assigned in Unicode 3.1 (minus Unicode 3.0): "
-                + n.format(u31m.count()));
-            log.println();
-            u31m.print(log, false, false, "3.1");
-            */
-        } finally {
-            if (log != null) log.close();
-        }
-
-    }
-
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2001/09/06 01:30:30 $ 
-* $Revision: 1.3 $
+* $Date: 2001/09/19 23:32:21 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -34,7 +34,6 @@ public class WriteCollationData implements UCD_Types {
     static final boolean EXCLUDE_UNSUPPORTED = true;    
     static final boolean GENERATED_NFC_MISMATCHES = true;    
     static final boolean DO_CHARTS = true;   
-    static final boolean WRITE_NAME_IN_CONFORMANCE = true;   
     
     
     static UCA collator;
@@ -58,12 +57,13 @@ public class WriteCollationData implements UCD_Types {
         ucd = UCD.make("");
         
         if (args.length == 0) args = new String[] {"?"}; // force the help comment
-        boolean hex = false;
+        boolean shortPrint = false;
         
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
             if      (arg.equalsIgnoreCase("WriteRulesWithNames")) writeRules(WITH_NAMES);
             else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(collator);
+            else if (arg.equalsIgnoreCase("WriteCharts")) WriteCharts.test(collator);
             else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(collator);
             else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(collator);
             
@@ -72,15 +72,15 @@ public class WriteCollationData implements UCD_Types {
             else if (arg.equalsIgnoreCase("checkDisjointIgnorables")) checkDisjointIgnorables();
             else if (arg.equalsIgnoreCase("writeContractions")) writeContractions();
             else if (arg.equalsIgnoreCase("FractionalUCA")) writeFractionalUCA("FractionalUCA");
-            else if (arg.equalsIgnoreCase("writeConformance")) writeConformance("CollationTest_NON_IGNORABLE.txt", UCA.NON_IGNORABLE, hex);
-            else if (arg.equalsIgnoreCase("writeConformanceSHIFTED")) writeConformance("CollationTest_SHIFTED.txt", UCA.SHIFTED, hex);
+            else if (arg.equalsIgnoreCase("writeConformance")) writeConformance("CollationTest_NON_IGNORABLE", UCA.NON_IGNORABLE, shortPrint);
+            else if (arg.equalsIgnoreCase("writeConformanceSHIFTED")) writeConformance("CollationTest_SHIFTED", UCA.SHIFTED, shortPrint);
             else if (arg.equalsIgnoreCase("testCompatibilityCharacters")) testCompatibilityCharacters();
             else if (arg.equalsIgnoreCase("writeCollationValidityLog")) writeCollationValidityLog();
             else if (arg.equalsIgnoreCase("writeCaseExceptions")) writeCaseExceptions();
             else if (arg.equalsIgnoreCase("writeJavascriptInfo")) writeJavascriptInfo();
             else if (arg.equalsIgnoreCase("writeCaseFolding")) writeCaseFolding();
             else if (arg.equalsIgnoreCase("javatest")) javatest();
-            else if (arg.equalsIgnoreCase("hex")) hex = true;
+            else if (arg.equalsIgnoreCase("short")) shortPrint = true;
             else {
                 System.out.println();
                 System.out.println("UNKNOWN OPTION (" + arg + "): must be one of the following (case-insensitive)");
@@ -339,15 +339,17 @@ public class WriteCollationData implements UCD_Types {
     }
     
     
-    static void writeConformance(String filename, byte option, boolean hex)  throws IOException {
-        UCD ucd30 = UCD.make("300");
+    static void writeConformance(String filename, byte option, boolean shortPrint)  throws IOException {
+        UCD ucd30 = UCD.make("3.0.0");
         
-        PrintWriter log = Utility.openPrintWriter(filename);
-        if (!hex) log.write('\uFEFF');
+        PrintWriter log = Utility.openPrintWriter(filename + (shortPrint ? "_SHORT" : "") + ".txt");
+        if (!shortPrint) log.write('\uFEFF');
         
         System.out.println("Sorting");
+        int counter = 0;
         
         for (int i = 0; i <= 0x10FFFF; ++i) {
+            Utility.dot(counter++);
             if (!ucd.isRepresented(i)) continue;
             addStringX(UTF32.valueOf32(i), option);
         }
@@ -355,11 +357,14 @@ public class WriteCollationData implements UCD_Types {
         Hashtable multiTable = collator.getContracting();
         Enumeration enum = multiTable.keys();
         while (enum.hasMoreElements()) {
+            Utility.dot(counter++);
             addStringX((String)enum.nextElement(), option);
         }
         
         for (int i = 0; i < extraConformanceTests.length; ++i) { // put in sample non-characters
+            Utility.dot(counter++);
             String s = UTF32.valueOf32(extraConformanceTests[i]);
+            Utility.fixDot();
             System.out.println("Adding: " + Utility.hex(s));
             addStringX(s, option);
         }
@@ -367,6 +372,7 @@ public class WriteCollationData implements UCD_Types {
         for (int i = 0; ; ++i) { // add first unallocated character
             if (!ucd.isAssigned(i)) {
                 String s = UTF32.valueOf32(i);
+                Utility.fixDot();
                 System.out.println("Adding: " + Utility.hex(s));
                 addStringX(s, option);
                 break;
@@ -375,6 +381,7 @@ public class WriteCollationData implements UCD_Types {
         
         
         for (int i = 0; i < extraConformanceRanges.length; ++i) {
+            Utility.dot(counter++);
             int start = extraConformanceRanges[i][0];
             int end = extraConformanceRanges[i][1];
             int increment = ((end - start + 1) / 303) + 1;
@@ -388,6 +395,7 @@ public class WriteCollationData implements UCD_Types {
             addStringX(end, option);
         }
         
+        Utility.fixDot();
         System.out.println("Total: " + sortedD.size());
         Iterator it;
         
@@ -399,6 +407,7 @@ public class WriteCollationData implements UCD_Types {
         String lastKey = "";
         
         while (it.hasNext()) {
+            Utility.dot(counter);
             String key = (String) it.next();
             String source = (String) sortedD.get(key);
             int fluff = key.charAt(key.length() - 1);
@@ -408,14 +417,12 @@ public class WriteCollationData implements UCD_Types {
             //log.println(source);
             String clipped = source.substring(0, source.length()-1);
             String stren = source.substring(source.length()-1);
-            if (hex) {
+            if (!shortPrint) {
                 log.print(Utility.hex(source));
-            } else {
-                log.print(source + "\t" + Utility.hex(clipped));
-            }
-            if (WRITE_NAME_IN_CONFORMANCE) {
                 log.print(
                     ";\t#" + ucd.getName(clipped)+ "\t" + UCA.toString(key));
+            } else {
+                log.print(source + "\t" + Utility.hex(clipped));
             }
             log.println();
         }
@@ -754,7 +761,7 @@ public class WriteCollationData implements UCD_Types {
         
         int[] ces = new int[50];
         
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
         int[] lenArray = new int[1];
         
         diLog.println("# Contractions");
@@ -819,7 +826,7 @@ public class WriteCollationData implements UCD_Types {
             String s = String.valueOf(ch);
             int len = collator.getCEs(s, true, ces);
             */
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
         int[] lenArray = new int[1];
         
         Set sortedCodes = new TreeSet();
@@ -987,7 +994,7 @@ public class WriteCollationData implements UCD_Types {
             String s = String.valueOf(ch);
             int len = collator.getCEs(s, true, ces);
             */
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
         int[] lenArray = new int[1];
         
         Set sortedCodes = new TreeSet();
@@ -1179,7 +1186,7 @@ public class WriteCollationData implements UCD_Types {
         java.util.Comparator cm = new RuleComparator();
         Map ordered = new TreeMap(cm);
         
-        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, 
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, 
             SKIP_CANONICAL_DECOMPOSIBLES ? nfd : null);
         int[] lenArray = new int[1];
 

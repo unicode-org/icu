@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/09/06 01:29:48 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -49,7 +49,7 @@ public final class Main {
             //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
             else if (arg.equalsIgnoreCase("checkScripts")) VerifyUCD.checkScripts();
             else if (arg.equalsIgnoreCase("IdentifierTest")) VerifyUCD.IdentifierTest();
-            else if (arg.equalsIgnoreCase("GenerateData")) GenerateData.main(Utility.split(args[++i],','));
+            else if (arg.equalsIgnoreCase("GenerateData")) GenerateData.main(ucdVersion, Utility.split(args[++i],','));
             else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
