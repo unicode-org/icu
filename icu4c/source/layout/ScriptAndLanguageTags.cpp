@@ -1,11 +1,11 @@
 /*
- * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998 - 2002. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998 - 2003. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/ScriptAndLanguageTags.cpp,v $ $Date: 2003/04/12 00:37:12 $ $Revision: 1.5 $
  */
 
 #include "LETypes.h"
@@ -60,7 +60,47 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     tglgScriptTag, /* 'tglg' (TAGALOG) */
     hanoScriptTag, /* 'hano' (HANUNOO) */
     buhdScriptTag, /* 'buhd' (BUHID) */
-    tagbScriptTag  /* 'tagb' (TAGBANWA) */
+    tagbScriptTag, /* 'tagb' (TAGBANWA) */
+    braiScriptTag, /* 'brai' (BRAILLE) */
+    cprtScriptTag, /* 'cprt' (CYPRIOT) */
+    limbScriptTag, /* 'limb' (LIMBU) */
+    linbScriptTag, /* 'linb' (LINEAR_B) */
+    osmaScriptTag, /* 'osma' (OSMANYA) */
+    shawScriptTag, /* 'shaw' (SHAVIAN) */
+    taleScriptTag, /* 'tale' (TAI_LE) */
+    ugarScriptTag  /* 'ugar' (UGARITIC) */
+};
+
+const LETag OpenTypeLayoutEngine::languageTags[] = {
+    araLanguageTag, /* 'ARA' (Arabic) */
+    asmLanguageTag, /* 'ASM' (Assamese) */
+    benLanguageTag, /* 'BEN' (Bengali) */
+    farLanguageTag, /* 'FAR' (Farsi) */
+    gujLanguageTag, /* 'GUJ' (Gujarati) */
+    hinLanguageTag, /* 'HIN' (Hindi) */
+    iwrLanguageTag, /* 'IWR' (Hebrew) */
+    jiiLanguageTag, /* 'JII' (Yiddish) */
+    janLanguageTag, /* 'JAN' (Japanese) */
+    kanLanguageTag, /* 'KAN' (Kannada) */
+    kokLanguageTag, /* 'KOK' (Konkani) */
+    korLanguageTag, /* 'KOR' (Korean) */
+    kshLanguageTag, /* 'KSH' (Kashmiri) */
+    malLanguageTag, /* 'MAL' (Malayalam (Traditional)) */
+    marLanguageTag, /* 'MAR' (Marathi) */
+    mlrLanguageTag, /* 'MLR' (Malayalam (Reformed)) */
+    mniLanguageTag, /* 'MNI' (Manipuri) */
+    oriLanguageTag, /* 'ORI' (Oriya) */
+    sanLanguageTag, /* 'SAN' (Sanscrit) */
+    sndLanguageTag, /* 'SND' (Sindhi) */
+    snhLanguageTag, /* 'SNH' (Sinhalese) */
+    syrLanguageTag, /* 'SYR' (Syriac) */
+    tamLanguageTag, /* 'TAM' (Tamil) */
+    telLanguageTag, /* 'TEL' (Telugu) */
+    thaLanguageTag, /* 'THA' (Thai) */
+    urdLanguageTag, /* 'URD' (Urdu) */
+    zhpLanguageTag, /* 'ZHP' (Chinese (Phonetic)) */
+    zhsLanguageTag, /* 'ZHS' (Chinese (Simplified)) */
+    zhtLanguageTag  /* 'ZHT' (Chinese (Traditional)) */
 };
 
 U_NAMESPACE_END

@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2003/01/28 23:30:56 $
- * $Revision: 1.9 $
+ * $Date: 2003/04/12 00:37:11 $
+ * $Revision: 1.10 $
  *
  */
 
@@ -155,22 +155,22 @@ enum
 
 const LETag emptyTag       = 0x00000000; // ''
 
-const LETag nuktFeatureTag = 0x6E756B74; // 'nukt'
-const LETag akhnFeatureTag = 0x616B686E; // 'akhn'
-const LETag rphfFeatureTag = 0x72706866; // 'rphf'
-const LETag blwfFeatureTag = 0x626C7766; // 'blwf'
-const LETag halfFeatureTag = 0x68616C66; // 'half'
-const LETag pstfFeatureTag = 0x70737466; // 'pstf'
-const LETag vatuFeatureTag = 0x76617475; // 'vatu'
-const LETag presFeatureTag = 0x70726573; // 'pres'
-const LETag blwsFeatureTag = 0x626C7773; // 'blws'
-const LETag abvsFeatureTag = 0x61627673; // 'abvs'
-const LETag pstsFeatureTag = 0x70737473; // 'psts'
-const LETag halnFeatureTag = 0x68616C6E; // 'haln'
+const LETag nuktFeatureTag = LE_MAKE_TAG('n', 'u', 'k', 't');
+const LETag akhnFeatureTag = LE_MAKE_TAG('a', 'k', 'h', 'n');
+const LETag rphfFeatureTag = LE_MAKE_TAG('r', 'p', 'h', 'f');
+const LETag blwfFeatureTag = LE_MAKE_TAG('b', 'l', 'w', 'f');
+const LETag halfFeatureTag = LE_MAKE_TAG('h', 'a', 'l', 'f');
+const LETag pstfFeatureTag = LE_MAKE_TAG('p', 's', 't', 'f');
+const LETag vatuFeatureTag = LE_MAKE_TAG('v', 'a', 't', 'u');
+const LETag presFeatureTag = LE_MAKE_TAG('p', 'r', 'e', 's');
+const LETag blwsFeatureTag = LE_MAKE_TAG('b', 'l', 'w', 's');
+const LETag abvsFeatureTag = LE_MAKE_TAG('a', 'b', 'v', 's');
+const LETag pstsFeatureTag = LE_MAKE_TAG('p', 's', 't', 's');
+const LETag halnFeatureTag = LE_MAKE_TAG('h', 'a', 'l', 'n');
 
-const LETag blwmFeatureTag = 0x626C776D; // 'blwm'
-const LETag abvmFeatureTag = 0x6162766D; // 'abvm'
-const LETag distFeatureTag = 0x64697374; // 'dist'
+const LETag blwmFeatureTag = LE_MAKE_TAG('b', 'l', 'w', 'm');
+const LETag abvmFeatureTag = LE_MAKE_TAG('a', 'b', 'v', 'm');
+const LETag distFeatureTag = LE_MAKE_TAG('d', 'i', 's', 't');
 
 // These are in the order in which the features need to be applied
 // for correct processing
