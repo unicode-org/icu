@@ -481,8 +481,10 @@ void TimeZoneRegressionTest:: Test4151406() {
                 max = count;
             logln(hname + ' ' + count +
                   ((count > 0) ? (" e.g. " + *ids->snext(ec)) : UnicodeString("")));
-            // delete [] ids;
-            uprv_free(ids);
+            // weiv 11/27/2002: why uprv_free? This should be a delete
+            delete ids;
+            //delete [] ids;
+            //uprv_free(ids);
         /*} catch (Exception e) {
             errln(hname + ' ' + "Fail: " + e);
         }*/

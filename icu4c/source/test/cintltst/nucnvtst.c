@@ -3932,6 +3932,9 @@ static void TestJitterbug2411(){
         log_err("iso-2022-kr_1 cannot handle multiple escape sequences : %s\n", u_errorName(errorCode));
         return;
     }
+
+    ucnv_close(kr);
+    ucnv_close(kr1);
     
 }
 

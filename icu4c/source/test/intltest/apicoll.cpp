@@ -1738,6 +1738,7 @@ void CollationAPITest::TestUClassID()
 	if (id != 0) {
 		errln("Dynamic class id for CollationElementIterator should be 0");
 	}
+        delete key;
 	delete iter;
 	delete coll;
 }

@@ -1097,6 +1097,7 @@ void ICUServiceTest::testLocale() {
         lkey->fallback();
         logln("lkey descriptor 3: " + lkey->currentDescriptor(result));
         result.remove();
+        delete lkey; // tentatively weiv
     }
 
     {
@@ -1163,6 +1164,13 @@ void ICUServiceTest::testLocale() {
             errln("could not create available locales");
         }
     }
+    delete one;
+    delete two;
+    delete root;
+    delete german;
+    delete germany;
+    delete japanese;
+    delete japan;
 }
 
 class WrapFactory : public ICUServiceFactory {
