@@ -1024,6 +1024,14 @@ uchar_addPropertyStarts(USet *set) {
  *   Any sequence of characters with a combining class that is neither 0 nor 230
  *   may intervene between the current character and the combining dot above.
  *
+ * The erratum from 2002-10-31 adds the condition
+ *
+ * After_I
+ *   The last preceding base character was an uppercase I, and there is no
+ *   intervening combining character class 230 (ABOVE).
+ *
+ *   (See Jitterbug 2344 and the comments on After_I below.)
+ *
  * Helper definitions in Unicode 3.2 UAX 21:
  *
  * D1. A character C is defined to be cased
@@ -1197,33 +1205,43 @@ isPrecededBySoftDotted(UCharIterator *iter, int32_t index) {
     return FALSE; /* not preceded by TYPE_i */
 }
 
-#if 0
 /*
- * ### TODO write a bug doc for the UTC and re-enable this with a newer version
- * of Unicode.
+ * See Jitterbug 2344:
+ * The condition After_I for Turkic-lowercasing of U+0307 combining dot above
+ * is checked in ICU 2.0, 2.1, 2.6 but was not in 2.2 & 2.4 because
+ * we made those releases compatible with Unicode 3.2 which had not fixed
+ * a related but in SpecialCasing.txt.
  *
- * ICU 2.0/2.1 used to check for After_I for the Turkic-conditional removal
- * of U+0307 instead of checking for After_i (now After_Soft_Dotted).
+ * From the Jitterbug 2344 text:
+ * ... this bug is listed as a Unicode erratum
+ * from 2002-10-31 at http://www.unicode.org/uni2errata/UnicodeErrata.html
+ * <quote>
+ * There are two errors in SpecialCasing.txt.
+ * 1. Missing semicolons on two lines. ... [irrelevant for ICU]
+ * 2. An incorrect context definition. Correct as follows:
+ * < 0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
+ * < 0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
+ * ---
+ * > 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
+ * > 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
+ * where the context After_I is defined as:
+ * The last preceding base character was an uppercase I, and there is no
+ * intervening combining character class 230 (ABOVE).
+ * </quote>
  *
- * I believe that After_Soft_Dotted is a mistake because it results in different
- * lowercase mappings for the canonically equivalent I-dot and I+dot
- * (should both map to i).
- * The comment in SpecialCasing.txt appears to agree.
-
-# When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
-# This matches the behavior of the canonically equivalent I-dot_above
-
-0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
-0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
-
- * For ICU 2.2 I am withdrawing this "fix" to make ICU conform to Unicode 3.2.
+ * Note that SpecialCasing.txt even in Unicode 3.2 described the condition as:
  *
- * Markus W. Scherer 2002-jun-07
+ * # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
+ * # This matches the behavior of the canonically equivalent I-dot_above
+ *
+ * See also the description in this place in older versions of uchar.c (revision 1.100).
+ *
+ * Markus W. Scherer 2003-feb-15
  */
 
 /* Is preceded by base character 'I' with no intervening cc=230 ? */
 static UBool
-isAfter_I(UCharIterator *iter, int32_t index) {
+isPrecededBy_I(UCharIterator *iter, int32_t index) {
     int32_t c;
     uint8_t cc;
 
@@ -1249,7 +1267,6 @@ isAfter_I(UCharIterator *iter, int32_t index) {
 
     return FALSE; /* not preceded by I */
 }
-#endif
 
 /* Is followed by one or more cc==230 ? */
 static UBool
@@ -1415,14 +1432,13 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
                      */
                     result=0x69;
                     goto single;
-                } else if(loc==LOC_TURKISH && c==0x307 && isPrecededBySoftDotted(iter, srcIndex-1)) {
-                    /* ### TODO see comment above about isAfter_I() */
+                } else if(loc==LOC_TURKISH && c==0x307 && isPrecededBy_I(iter, srcIndex-1)) {
                     /*
                         # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
                         # This matches the behavior of the canonically equivalent I-dot_above
 
-                        0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
-                        0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
+                        0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
+                        0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
                      */
                     return 0; /* remove the dot (continue without output) */
                 } else if(loc==LOC_TURKISH && c==0x49 && !isFollowedByDotAbove(iter, srcIndex)) {
