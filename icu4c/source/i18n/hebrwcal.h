@@ -468,11 +468,11 @@ public:
     /**
      * @internal 
      */
-    static UBool isLeapYear(int year) ;
+    static UBool isLeapYear(int32_t year) ;
     /**
      * @internal 
      */
-     static int monthsInYear(int year) ;
+    static int32_t monthsInYear(int32_t year) ;
 };
 
 U_NAMESPACE_END

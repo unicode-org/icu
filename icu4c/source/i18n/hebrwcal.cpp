@@ -326,7 +326,7 @@ void HebrewCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode&
 }
 
 void HebrewCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
-  return roll((UCalendarDateFields)field, amount, status);
+  roll((UCalendarDateFields)field, amount, status);
 }
 
 //-------------------------------------------------------------------------

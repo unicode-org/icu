@@ -15,6 +15,8 @@
 #include "gregoimp.h"  // for Math
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <code>CalendarAstronomer</code> is a class that can perform the calculations to
  * determine the positions of the sun and moon, the time of sunrise and
@@ -56,7 +58,7 @@ public:
 public:
   /**
    * Represents the position of an object in the sky relative to the ecliptic,
-   * the plane of the earth's orbit around the Sun. 
+   * the plane of the earth's orbit around the Sun.
    * This is a spherical coordinate system in which the latitude
    * specifies the position north or south of the plane of the ecliptic.
    * The longitude specifies the position along the ecliptic plane
@@ -84,7 +86,7 @@ public:
       latitude = lat;
       longitude = lon;
     }
-    
+
     /**
      * Setter for Ecliptic Coordinate object
      * @param lat The ecliptic latitude, measured in radians.
@@ -95,13 +97,13 @@ public:
       latitude = lat;
       longitude = lon;
     }
-    
+
     /**
      * Return a string representation of this object
      * @internal
      */
     UnicodeString toString() const;
-    
+
     /**
      * The ecliptic latitude, in radians.  This specifies an object's
      * position north or south of the plane of the ecliptic,
@@ -109,7 +111,7 @@ public:
      * @internal
      */
     double latitude;
-        
+
     /**
      * The ecliptic longitude, in radians.
      * This specifies an object's position along the ecliptic plane
@@ -125,8 +127,8 @@ public:
   };
 
   /**
-   * Represents the position of an 
-   * object in the sky relative to the plane of the earth's equator. 
+   * Represents the position of an
+   * object in the sky relative to the plane of the earth's equator.
    * The <i>Right Ascension</i> specifies the position east or west
    * along the equator, relative to the sun's position at the vernal
    * equinox.  The <i>Declination</i> is the position north or south
@@ -153,7 +155,7 @@ public:
       : ascension(asc), declination(dec) { }
 
     /**
-     * Setter 
+     * Setter
      * @param asc The right ascension, measured in radians.
      * @param dec The declination, measured in radians.
      * @internal
@@ -169,7 +171,7 @@ public:
      * @internal
      */
     UnicodeString toString() const;
-      
+
     /**
      * Return a string representation of this object with the right ascension
      * measured in hours, minutes, and seconds.
@@ -178,16 +180,16 @@ public:
     //String toHmsString() {
     //return radToHms(ascension) + "," + radToDms(declination);
     //}
-        
+
     /**
-     * The right ascension, in radians. 
+     * The right ascension, in radians.
      * This is the position east or west along the equator
      * relative to the sun's position at the vernal equinox,
      * with positive angles representing East.
      * @internal
      */
     double ascension;
-        
+
     /**
      * The declination, in radians.
      * This is the position north or south of the equatorial plane,
@@ -198,7 +200,7 @@ public:
   };
 
   /**
-   * Represents the position of an  object in the sky relative to 
+   * Represents the position of an  object in the sky relative to
    * the local horizon.
    * The <i>Altitude</i> represents the object's elevation above the horizon,
    * with objects below the horizon having a negative altitude.
@@ -233,25 +235,25 @@ public:
      * @internal
      */
     void set(double alt, double azim) {
-      altitude = alt; 
+      altitude = alt;
       azimuth = azim;
     }
-      
+
     /**
      * Return a string representation of this object, with the
      * angles measured in degrees.
      * @internal
      */
     UnicodeString toString() const;
-        
-    /** 
-     * The object's altitude above the horizon, in radians. 
+
+    /**
+     * The object's altitude above the horizon, in radians.
      * @internal
      */
     double altitude;
-        
-    /** 
-     * The object's direction, in radians clockwise from north. 
+
+    /**
+     * The object's direction, in radians clockwise from north.
      * @internal
      */
     double azimuth;
@@ -288,14 +290,14 @@ public:
    * @internal
    */
   CalendarAstronomer();
-    
+
   /**
    * Construct a new <code>CalendarAstronomer</code> object that is initialized to
    * the specified date and time.
    * @internal
    */
   CalendarAstronomer(UDate d);
-      
+
   /**
    * Construct a new <code>CalendarAstronomer</code> object with the given
    * latitude and longitude.  The object's time is set to the current
@@ -317,11 +319,11 @@ public:
    * @internal
    */
   ~CalendarAstronomer();
-    
+
   //-------------------------------------------------------------------------
   // Time and date getters and setters
   //-------------------------------------------------------------------------
-    
+
   /**
    * Set the current date and time of this <code>CalendarAstronomer</code> object.  All
    * astronomical calculations are performed based on this time setting.
@@ -334,7 +336,7 @@ public:
    * @internal
    */
   void setTime(UDate aTime);
-  
+
 
   /**
    * Set the current date and time of this <code>CalendarAstronomer</code> object.  All
@@ -347,13 +349,13 @@ public:
    * @internal
    */
   void setDate(UDate aDate) { setTime(aDate); }
-    
+
   /**
    * Set the current date and time of this <code>CalendarAstronomer</code> object.  All
    * astronomical calculations are performed based on this time setting.
    *
    * @param jdn   the desired time, expressed as a "julian day number",
-   *              which is the number of elapsed days since 
+   *              which is the number of elapsed days since
    *              1/1/4713 BC (Julian), 12:00 GMT.  Note that julian day
    *              numbers start at <em>noon</em>.  To get the jdn for
    *              the corresponding midnight, subtract 0.5.
@@ -363,7 +365,7 @@ public:
    * @internal
    */
   void setJulianDay(double jdn);
-    
+
   /**
    * Get the current time of this <code>CalendarAstronomer</code> object,
    * represented as the number of milliseconds since
@@ -374,7 +376,7 @@ public:
    * @internal
    */
   UDate getTime();
-    
+
   /**
    * Get the current time of this <code>CalendarAstronomer</code> object,
    * expressed as a "julian day number", which is the number of elapsed
@@ -401,15 +403,15 @@ public:
    */
   double getGreenwichSidereal();
 
-private:    
+private:
   double getSiderealOffset();
-public:    
+public:
   /**
    * Returns the current local sidereal time, measured in hours
    * @internal
    */
   double getLocalSidereal();
-    
+
   /**
    * Converts local sidereal time to Universal Time.
    *
@@ -417,17 +419,17 @@ public:
    *              on this object's current date.
    *
    * @return      The corresponding Universal Time, in milliseconds since
-   *              1 Jan 1970, GMT.  
+   *              1 Jan 1970, GMT.
    */
   //private:
   double lstToUT(double lst);
-  
+
   /**
    *
    * Convert from ecliptic to equatorial coordinates.
    *
    * @param ecliptic     The ecliptic
-   * @param result       Fillin result 
+   * @param result       Fillin result
    * @return reference to result
    */
   Equatorial& eclipticToEquatorial(Equatorial& result, const Ecliptic& ecliptic);
@@ -474,7 +476,7 @@ public:
    * @internal
    */
   double getSunLongitude();
-  
+
   /**
    * TODO Make this public when the entire class is package-private.
    */
@@ -487,16 +489,16 @@ public:
    * @internal
    */
   Equatorial& getSunPosition(Equatorial& result);
-    
+
 public:
   /**
    * Constant representing the vernal equinox.
-   * For use with {@link #getSunTime getSunTime}. 
+   * For use with {@link #getSunTime getSunTime}.
    * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
    * @internal
    */
   static double VERNAL_EQUINOX();
-    
+
   /**
    * Constant representing the summer solstice.
    * For use with {@link #getSunTime getSunTime}.
@@ -504,7 +506,7 @@ public:
    * @internal
    */
   static double SUMMER_SOLSTICE();
-    
+
   /**
    * Constant representing the autumnal equinox.
    * For use with {@link #getSunTime getSunTime}.
@@ -512,7 +514,7 @@ public:
    * @internal
    */
   static double AUTUMN_EQUINOX();
-    
+
   /**
    * Constant representing the winter solstice.
    * For use with {@link #getSunTime getSunTime}.
@@ -520,14 +522,14 @@ public:
    * @internal
    */
   static double WINTER_SOLSTICE();
-    
+
   /**
    * Find the next time at which the sun's ecliptic longitude will have
-   * the desired value.  
+   * the desired value.
    * @internal
    */
   UDate getSunTime(double desired, UBool next);
-    
+
   /**
    * Returns the time (GMT) of sunrise or sunset on the local date to which
    * this calendar is currently set.
@@ -537,7 +539,7 @@ public:
    * official time zone and the geographic longitude, the
    * computation can flop over into an adjacent day if this object
    * is set to a time near local midnight.
-   * 
+   *
    * @internal
    */
   UDate getSunRiseSet(UBool rise);
@@ -553,7 +555,7 @@ public:
    * @return const reference to internal field of calendar astronomer. Do not use outside of the lifetime of this astronomer.
    */
   const Equatorial& getMoonPosition();
-  
+
   /**
    * The "age" of the moon at the time specified in this object.
    * This is really the angle between the
@@ -564,7 +566,7 @@ public:
    * @internal
    */
   double getMoonAge();
-    
+
   /**
    * Calculate the phase of the moon at the time set in this object.
    * The returned phase is a <code>double</code> in the range
@@ -580,9 +582,9 @@ public:
    * @internal
    */
   double getMoonPhase();
-    
+
   class U_I18N_API MoonAge : public UMemory {
-  public: 
+  public:
     MoonAge(double l)
       :  value(l) { }
     void set(double l) { value = l; }
@@ -602,33 +604,33 @@ public:
    * @internal
    */
   static const MoonAge FIRST_QUARTER();
-    
+
   /**
    * Constant representing a full moon.
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
    */
   static const MoonAge FULL_MOON();
-    
+
   /**
    * Constant representing the moon's last quarter.
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
    */
   static const MoonAge LAST_QUARTER();
-    
+
   /**
    * Find the next or previous time at which the Moon's ecliptic
-   * longitude will have the desired value.  
+   * longitude will have the desired value.
    * <p>
    * @param desired   The desired longitude.
    * @param next      <tt>true</tt> if the next occurrance of the phase
-   *                  is desired, <tt>false</tt> for the previous occurrance. 
+   *                  is desired, <tt>false</tt> for the previous occurrance.
    * @internal
    */
   UDate getMoonTime(double desired, UBool next);
   UDate getMoonTime(const MoonAge& desired, UBool next);
-    
+
   /**
    * Returns the time (GMT) of sunrise or sunset on the local date to which
    * this calendar is currently set.
@@ -646,18 +648,18 @@ public:
     virtual double eval(CalendarAstronomer&) = 0;
   };
   friend class AngleFunc;
-    
+
   UDate timeOfAngle(AngleFunc& func, double desired,
                     double periodDays, double epsilon, UBool next);
-    
+
   class U_I18N_API CoordFunc : public UMemory {
   public:
     virtual void eval(Equatorial& result, CalendarAstronomer&) = 0;
   };
   friend class CoordFunc;
-    
+
   double riseOrSet(CoordFunc& func, UBool rise,
-                   double diameter, double refraction, 
+                   double diameter, double refraction,
                    double epsilon);
 
   //-------------------------------------------------------------------------
@@ -671,7 +673,7 @@ private:
   inline static double normalize(double value, double range)  {
     return value - range * Math::floorDivide(value, range);
   }
-    
+
   /**
    * Normalize an angle so that it's in the range 0 - 2pi.
    * For positive angles this is just (angle % 2pi), but the Java
@@ -680,14 +682,14 @@ private:
   inline static double norm2PI(double angle)  {
     return normalize(angle, CalendarAstronomer::PI * 2.0);
   }
-    
+
   /**
    * Normalize an angle into the range -PI - PI
    */
   inline static  double normPI(double angle)  {
     return normalize(angle + PI, CalendarAstronomer::PI * 2.0) - PI;
   }
-    
+
   /**
    * Find the "true anomaly" (longitude) of an object from
    * its mean anomaly and the eccentricity of its orbit.  This uses
@@ -695,14 +697,14 @@ private:
    *
    * @param meanAnomaly   The object's longitude calculated as if it were in
    *                      a regular, circular orbit, measured in radians
-   *                      from the point of perigee.  
+   *                      from the point of perigee.
    *
    * @param eccentricity  The eccentricity of the orbit
    *
    * @return The true anomaly (longitude) measured in radians
    */
   double trueAnomaly(double meanAnomaly, double eccentricity);
-    
+
   /**
    * Return the obliquity of the ecliptic (the angle between the ecliptic
    * and the earth's equator) at the current time.  This varies due to
@@ -712,24 +714,24 @@ private:
    *          measured in radians.
    */
   double eclipticObliquity();
-     
+
   //-------------------------------------------------------------------------
   // Private data
   //-------------------------------------------------------------------------
-private:    
+private:
   /**
    * Current time in milliseconds since 1/1/1970 AD
    * @see java.util.Date#getTime
    */
   UDate fTime;
-    
+
   /* These aren't used yet, but they'll be needed for sunset calculations
    * and equatorial to horizon coordinate conversions
    */
   double fLongitude;
   double fLatitude;
   double fGmtOffset;
-    
+
   //
   // The following fields are used to cache calculated results for improved
   // performance.  These values all depend on the current time setting
@@ -746,9 +748,9 @@ private:
   double    eclipObliquity  ;
   double    siderealT0      ;
   double    siderealTime    ;
-   
+
   void clearCache();
-  
+
   Equatorial  moonPosition;
   UBool       moonPositionSet;
 
@@ -758,26 +760,32 @@ private:
   UDate local(UDate localMillis);
 };
 
+U_NAMESPACE_END
+
 struct UHashtable;
+
+U_NAMESPACE_BEGIN
 
 /**
  * Cache of month -> julian day
  * @internal
  */
 class U_I18N_API CalendarCache : public UMemory {
- public:
+public:
   static int32_t get(CalendarCache** cache, int32_t key, UErrorCode &status);
   static void put(CalendarCache** cache, int32_t key, int32_t value, UErrorCode &status);
   virtual ~CalendarCache();
- private:
+private:
   CalendarCache(int32_t size, UErrorCode& status);
   static void createCache(CalendarCache** cache, UErrorCode& status);
   /**
-   * not implemented 
+   * not implemented
    */
-  CalendarCache(); 
+  CalendarCache();
   UHashtable *fTable;
 };
+
+U_NAMESPACE_END
 
 #endif
 #endif
