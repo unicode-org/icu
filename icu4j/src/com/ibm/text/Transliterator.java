@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/15 22:19:34 $
- * $Revision: 1.52 $
+ * $Date: 2001/11/15 23:38:01 $
+ * $Revision: 1.53 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.52 $ $Date: 2001/11/15 22:19:34 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.53 $ $Date: 2001/11/15 23:38:01 $
  */
 public abstract class Transliterator {
     /**
@@ -1313,7 +1313,8 @@ public abstract class Transliterator {
                     // Handle special, non-canonical inverse mappings,
                     // e.g. inverse(Any-NFC) = Any-NFD and vice versa.
                     if (source.equals(ANY)) {
-                        String inverseTarget = (String) specialInverses.get(target);
+                        String inverseTarget = (String) specialInverses.get(
+                            new CaseInsensitiveString(target));
                         if (inverseTarget != null) {
                             // If the original ID contained "Any-" then make the
                             // special inverse "Any-Foo"; otherwise make it "Foo".
@@ -1594,13 +1595,16 @@ public abstract class Transliterator {
      * <p>The relevant IDs must still be registered separately as
      * factories or classes.
      *
-     * <p>Only the target is specified.  Special inverses always have
-     * the form Any-Target1 <=> Any-Target2.
+     * <p>Only the targets are specified.  Special inverses always
+     * have the form Any-Target1 <=> Any-Target2.  The target should
+     * have canonical casing (the casing desired to be produced when
+     * an inverse is formed) and should contain no whitespace or other
+     * extraneous characters.
      */
     public static void registerSpecialInverses(String target1, String target2) {
-        specialInverses.put(target1, target2);
+        specialInverses.put(new CaseInsensitiveString(target1), target2);
         if (!target1.equalsIgnoreCase(target2)) {
-            specialInverses.put(target2, target1);
+            specialInverses.put(new CaseInsensitiveString(target2), target1);
         }
     }
 
