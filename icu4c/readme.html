@@ -22,6 +22,8 @@
       caption {font-weight: bold; text-align: left}
       div.indent {margin-left: 2em}
       ul.TOC {list-style-type: none}
+      code {margin-left: 2em; border-width: 1px; border-style: solid; padding: 1em; display: block; background-color: #EEEEEE}
+      samp {margin-left: 2em; border-width: 1px; border-style: solid; padding: 1em; display: block; background-color: #EEEEEE}
 </style>
   </head>
 
@@ -80,6 +82,9 @@
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
           <li><a href="#ImportantNotesUnix">Unix Type Platforms</a></li>
+
+          <li><a href="#ImportantNotesDeprecatedAPI">Methods for enabling
+          deprecated APIs</a></li>
         </ul>
       </li>
 
@@ -1031,21 +1036,17 @@
     target dataset.</p>
 
     <p>The PDS member names are as follows:</p>
-
-    <div class="indent">
 <pre>
-IXMICUUC --&gt; libicuuc<i>XX</i>.dll
+<samp>IXMICUUC --&gt; libicuuc<i>XX</i>.dll
 IXMICUDA --&gt; libicudt<i>XX</i>e.dll
 IXMICUD1 --&gt; libicudt<i>XX</i>e_390.dll
 IXMICUTE --&gt; libtestdata.dll
+</samp>
 </pre>
-    </div>
 
     <p>Example PDS attributes are as follows:</p>
-
-    <div class="indent">
 <pre>
-Data Set Name . . . : <i>USER</i>.ICU.LOAD
+<samp>Data Set Name . . . : <i>USER</i>.ICU.LOAD
 General Data
 Management class. . : **None**
 Storage class . . . : BASE
@@ -1074,8 +1075,8 @@ Block size  . . . . : 3200
 1st extent cylinders: 3
 Secondary cylinders : 3
 Data set name type  : PDS
+</samp>
 </pre>
-    </div>
 
     <h3><a name="HowToBuildOS400">OS/400 (iSeries) Platform</a></h3>
 
@@ -1114,26 +1115,25 @@ Data set name type  : PDS
             specify this library on the OUTPUTDIR environment variable in
             step 2.<br>
              
-
-            <div class="indent">
-              CRTLIB LIB(<i>libraryname</i>)
-            </div>
+<pre>
+<samp>CRTLIB LIB(<i>libraryname</i>)</samp>
+</pre>
             <br>
           </li>
 
           <li>
             Set up the following environment variables in your build process
             (use the <i>libraryname</i> from the previous step) 
-
-            <div class="indent">
-              ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')<br>
-               ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')<br>
-               ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')<br>
-               ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')<br>
-               ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
-              <i>identifies target as400 library for *module, *pgm and
-              *srvpgm objects</i>
-            </div>
+<pre>
+<samp>ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')
+ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
+ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
+ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
+</samp>
+</pre>
+            <i>libraryname</i> identifies target as400 library for *module,
+            *pgm and *srvpgm objects.<br>
             <br>
           </li>
 
@@ -1145,18 +1145,15 @@ Data set name type  : PDS
             to be set to the Pacific Time Zone offset.<br>
             <br>
              To check your QUTCOFFSET: 
-
-            <div class="indent">
-              DSPSYSVAL SYSVAL(QUTCOFFSET)
-            </div>
+<pre>
+<samp>DSPSYSVAL SYSVAL(QUTCOFFSET)</samp>
+</pre>
             <br>
              To change your QUTCOFFSET:<br>
-             
-
-            <div class="indent">
-              CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800') <i>or -0700 for
-              daylight savings.</i>
-            </div>
+<pre>
+<samp>CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800')</samp>
+</pre>
+            You should change -0800 to -0700 for daylight savings.<br>
             <br>
           </li>
 
@@ -1257,45 +1254,54 @@ Data set name type  : PDS
     LD_LIBRARY_PATH environment variable. The ICU libraries may not link or
     load properly without doing this.</p>
 
-    <h3><a name="ImportantNotesDeprecatedAPI">Methods for enabling deprecated APIs</a></h3>
-     <h4>C</h4>
-        <p>Some deprecated C APIs can be enabled without recompiling the ICU libraries.
-           This can be achieved by defining certain symbols before including the ICU header files.
-           For example: To enable deprecated C APIs for formatting </p>
-           <code>
-            <pre style='background:#EEEEEE'>
-               #ifndef U_USE_DEPRECATED_FORMAT_API
-               #  define U_USE_DEPRECATED_FORMAT_API 1
-               #endif
+    <h3><a name="ImportantNotesDeprecatedAPI">Methods for enabling deprecated
+    APIs</a></h3>
 
-               #include "unicode/udat.h"
+    <h4>C</h4>
 
-               int main(){
-                  UDateFormat *def, *fr, *fr_pat ;
-                  UErrorCode status = U_ZERO_ERROR;
-                  UChar temp[30];
+    <p>Some deprecated C APIs can be enabled without recompiling the ICU
+    libraries. This can be achieved by defining certain symbols before
+    including the ICU header files. For example, to enable deprecated C APIs
+    for formatting.</p>
+<pre>
+<code>#ifndef U_USE_DEPRECATED_FORMAT_API
+#  define U_USE_DEPRECATED_FORMAT_API 1
+#endif
 
-                  fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &status);
-                  if(U_FAILURE(status)){
-                      printf("FAIL: error in creating the dateformat using full time style with french locale\n %s\n",
-                          myErrorName(status) );
-                  }
-                  /* this is supposed to open default date format, but later on it treats it like it is "en_US"
-                     - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
-                  def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &status);
-                  if(U_FAILURE(status)){
-                      .... /* handle the error */
-                  }
-              }
-             </pre>
-           </code>
-     <h4>C++</h4>
-         <p> Deprecated C++ APIs cannot be enbaled without recompiling ICU libraries.
-             Every service has a specific symbol that should be defined to enable the
-             deprecated API of that service. For example: To enable deprecated APIs in
-             Transliteration service U_USE_DEPRECATED_TRANSLITERATOR_API symbol should
-             be defined before compiling ICU.
-         </p>
+#include "unicode/udat.h"
+
+int main(){
+    UDateFormat *def, *fr, *fr_pat ;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar temp[30];
+
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &amp;status);
+    if(U_FAILURE(status)){
+        printf("Error creating the french dateformat using full time style\n %s\n",
+            myErrorName(status) );
+    }
+    /* This is supposed to open default date format,
+       but later on it treats it like it is "en_US".
+       This is very bad when you try to run the tests
+       on a machine where the default locale is NOT "en_US"
+    */
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &amp;status);
+    if(U_FAILURE(status)){
+        .... /* handle the error */
+    }
+}
+</code>
+</pre>
+
+    <h4>C++</h4>
+
+    <p>Deprecated C++ APIs cannot be enbaled without recompiling ICU
+    libraries. Every service has a specific symbol that should be defined to
+    enable the deprecated API of that service. For example: To enable
+    deprecated APIs in Transliteration service
+    U_USE_DEPRECATED_TRANSLITERATOR_API symbol should be defined before
+    compiling ICU.</p>
+
     <h2><a name="UsageInformation">Getting More Information About
     ICU</a></h2>
 
