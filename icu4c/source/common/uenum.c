@@ -14,6 +14,7 @@
 *   created by: Vladimir Weinstein
 */
 
+#include "unicode/putil.h"
 #include "uenumimp.h"
 #include "cmemory.h"
 

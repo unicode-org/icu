@@ -24,6 +24,7 @@
 
 #include "unicode/ustdio.h"
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 
 #include "uprintf.h"
 #include "locbund.h"

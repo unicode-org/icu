@@ -15,6 +15,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
 #include "ustr_imp.h"

@@ -18,6 +18,7 @@
 #include "unicode/umsg.h"
 #include "unicode/uwmsg.h"
 #include "unicode/ures.h"
+#include "unicode/putil.h"
 #include "cstring.h"
 
 #include <stdlib.h>

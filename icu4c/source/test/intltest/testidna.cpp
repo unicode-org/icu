@@ -28,6 +28,7 @@
 #include "testidna.h"
 #include "idnaref.h"
 #include "nptrans.h"
+#include "unicode/putil.h"
 
 static UChar unicodeIn[][41] ={
     { 

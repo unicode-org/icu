@@ -124,49 +124,6 @@
 #   define U_CHARSET_FAMILY 0
 #endif
 
-/**
- * Convert char characters to UChar characters.
- * This utility function is useful only for "invariant characters"
- * that are encoded in the platform default encoding.
- * They are a small, constant subset of the encoding and include
- * just the latin letters, digits, and some punctuation.
- * For details, see U_CHARSET_FAMILY.
- *
- * @param cs Input string, points to <code>length</code>
- *           character bytes from a subset of the platform encoding.
- * @param us Output string, points to memory for <code>length</code>
- *           Unicode characters.
- * @param length The number of characters to convert; this may
- *               include the terminating <code>NUL</code>.
- *
- * @see U_CHARSET_FAMILY
- * @stable ICU 2.0
- */
-U_STABLE void U_EXPORT2
-u_charsToUChars(const char *cs, UChar *us, int32_t length);
-
-/**
- * Convert UChar characters to char characters.
- * This utility function is useful only for "invariant characters"
- * that can be encoded in the platform default encoding.
- * They are a small, constant subset of the encoding and include
- * just the latin letters, digits, and some punctuation.
- * For details, see U_CHARSET_FAMILY.
- *
- * @param us Input string, points to <code>length</code>
- *           Unicode characters that can be encoded with the
- *           codepage-invariant subset of the platform encoding.
- * @param cs Output string, points to memory for <code>length</code>
- *           character bytes.
- * @param length The number of characters to convert; this may
- *               include the terminating <code>NUL</code>.
- *
- * @see U_CHARSET_FAMILY
- * @stable ICU 2.0
- */
-U_STABLE void U_EXPORT2
-u_UCharsToChars(const UChar *us, char *cs, int32_t length);
-
 /*===========================================================================*/
 /* ICUDATA naming scheme                                                     */
 /*===========================================================================*/
@@ -704,44 +661,44 @@ typedef enum UErrorCode {
     /*
      * The error codes in the range 0x10300-0x103ff are reserved for regular expression related errrs
      */
-     U_REGEX_ERROR_START=0x10300,          /**< Start of codes indicating Regexp failures          */
-     U_REGEX_INTERNAL_ERROR,               /**< An internal error (bug) was detected.              */
-     U_REGEX_RULE_SYNTAX,                  /**< Syntax error in regexp pattern.                    */
-     U_REGEX_INVALID_STATE,                /**< RegexMatcher in invalid state for requested operation */
-     U_REGEX_BAD_ESCAPE_SEQUENCE,          /**< Unrecognized backslash escape sequence in pattern  */
-     U_REGEX_PROPERTY_SYNTAX,              /**< Incorrect Unicode property                         */
-     U_REGEX_UNIMPLEMENTED,                /**< Use of regexp feature that is not yet implemented. */
-     U_REGEX_MISMATCHED_PAREN,             /**< Incorrectly nested parentheses in regexp pattern.  */
-     U_REGEX_NUMBER_TOO_BIG,               /**< Decimal number is too large.                       */
-     U_REGEX_BAD_INTERVAL,                 /**< Error in {min,max} interval                        */
-     U_REGEX_MAX_LT_MIN,                   /**< In {min,max}, max is less than min.                */
-     U_REGEX_INVALID_BACK_REF,             /**< Back-reference to a non-existent capture group.    */
-     U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
-     U_REGEX_LOOK_BEHIND_LIMIT,            /**< Look-Behind pattern matches must have a bounded maximum length.    */
-     U_REGEX_SET_CONTAINS_STRING,          /**< Regexps cannot have UnicodeSets containing strings.*/
-     U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
+    U_REGEX_ERROR_START=0x10300,          /**< Start of codes indicating Regexp failures          */
+    U_REGEX_INTERNAL_ERROR,               /**< An internal error (bug) was detected.              */
+    U_REGEX_RULE_SYNTAX,                  /**< Syntax error in regexp pattern.                    */
+    U_REGEX_INVALID_STATE,                /**< RegexMatcher in invalid state for requested operation */
+    U_REGEX_BAD_ESCAPE_SEQUENCE,          /**< Unrecognized backslash escape sequence in pattern  */
+    U_REGEX_PROPERTY_SYNTAX,              /**< Incorrect Unicode property                         */
+    U_REGEX_UNIMPLEMENTED,                /**< Use of regexp feature that is not yet implemented. */
+    U_REGEX_MISMATCHED_PAREN,             /**< Incorrectly nested parentheses in regexp pattern.  */
+    U_REGEX_NUMBER_TOO_BIG,               /**< Decimal number is too large.                       */
+    U_REGEX_BAD_INTERVAL,                 /**< Error in {min,max} interval                        */
+    U_REGEX_MAX_LT_MIN,                   /**< In {min,max}, max is less than min.                */
+    U_REGEX_INVALID_BACK_REF,             /**< Back-reference to a non-existent capture group.    */
+    U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
+    U_REGEX_LOOK_BEHIND_LIMIT,            /**< Look-Behind pattern matches must have a bounded maximum length.    */
+    U_REGEX_SET_CONTAINS_STRING,          /**< Regexps cannot have UnicodeSets containing strings.*/
+    U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
 
-     /*
-      * The error code in the range 0x10400-0x104ff are reserved for IDNA related error codes
-      */
-      U_IDNA_ERROR_START=0x10400,
-      U_IDNA_PROHIBITED_ERROR,
-      U_IDNA_UNASSIGNED_ERROR,
-      U_IDNA_CHECK_BIDI_ERROR,
-      U_IDNA_STD3_ASCII_RULES_ERROR,
-      U_IDNA_ACE_PREFIX_ERROR,
-      U_IDNA_VERIFICATION_ERROR,
-      U_IDNA_LABEL_TOO_LONG_ERROR,
-      U_IDNA_ERROR_LIMIT,
-      /*
-       * Aliases for StringPrep
-       */
-      U_STRINGPREP_PROHIBITED_ERROR = U_IDNA_PROHIBITED_ERROR,
-      U_STRINGPREP_UNASSIGNED_ERROR = U_IDNA_UNASSIGNED_ERROR,
-      U_STRINGPREP_CHECK_BIDI_ERROR = U_IDNA_CHECK_BIDI_ERROR,
+    /*
+     * The error code in the range 0x10400-0x104ff are reserved for IDNA related error codes
+     */
+    U_IDNA_ERROR_START=0x10400,
+    U_IDNA_PROHIBITED_ERROR,
+    U_IDNA_UNASSIGNED_ERROR,
+    U_IDNA_CHECK_BIDI_ERROR,
+    U_IDNA_STD3_ASCII_RULES_ERROR,
+    U_IDNA_ACE_PREFIX_ERROR,
+    U_IDNA_VERIFICATION_ERROR,
+    U_IDNA_LABEL_TOO_LONG_ERROR,
+    U_IDNA_ERROR_LIMIT,
+    /*
+     * Aliases for StringPrep
+     */
+    U_STRINGPREP_PROHIBITED_ERROR = U_IDNA_PROHIBITED_ERROR,
+    U_STRINGPREP_UNASSIGNED_ERROR = U_IDNA_UNASSIGNED_ERROR,
+    U_STRINGPREP_CHECK_BIDI_ERROR = U_IDNA_CHECK_BIDI_ERROR,
 
 
-      U_ERROR_LIMIT=U_IDNA_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
+    U_ERROR_LIMIT=U_IDNA_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 } UErrorCode;
 
 /* Use the following to determine if an UErrorCode represents */
