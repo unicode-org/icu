@@ -267,18 +267,18 @@ static void TestPUtilAPI(){
     log_verbose("Testing uprv_nextDouble() where the value is NaN ...\n");
     expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
     doAssert(expn1, uprv_getNaN(), "uprv_nextDouble(uprv_getNaN(), TRUE) failed.");
-#ifdef OS390
+
 #if IEEE_754
+    /* OS390 may define IEEE_754, so check it first */
     y1=4.9406564584125e-324;
-#else
+#elif defined(OS390) || defined(XP_MAC)
     y1=4.9406564584125e-78;
-#endif
+#elif defined(OS400)
+    /* This is oddly enough the same value as DBL_MIN on Windows. */
+    y1=2.2250738585072014e-308;
 #else
-# if defined(XP_MAC)
-    y1=4.9406564584125e-78;
-# else
+    /* This is the default IEEE754 value. The test should fail if it's not correct. */
     y1=4.9406564584125e-324;
-# endif
 #endif
     doAssert(uprv_nextDouble(0, TRUE),   y1, "uprv_nextDouble(0, TRUE) failed.");
     doAssert(uprv_nextDouble(0, FALSE), -y1, "uprv_nextDouble(0, FALSE) failed.");
@@ -305,9 +305,8 @@ static void testIEEEremainder()
     double    ninf        = -uprv_getInfinity();
     double    nan         = uprv_getNaN();
 /*    double    pzero       = 0.0;*/
-    double    nzero       = 0.0;
-
-    nzero *= -1;
+/*    double    nzero       = 0.0;
+    nzero *= -1;*/
 
      /* simple remainder checks*/
     remainderTest(7.0, 2.5, -0.5);
