@@ -493,6 +493,10 @@ static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
     UDataMemory   *pData;
     UDataMemory   copyPData;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErr)) {
+        return FALSE;
+    }
     if (failedData->vFuncs->NumEntries(failedData) > MAX_STUB_ENTRIES) {
         /*  Not the stub.  We can't extend.  */
         return FALSE;
@@ -696,6 +700,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
     UErrorCode          errorCode=U_ZERO_ERROR;
     UBool               isICUData= (UBool)(path==NULL);
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
 
     /* Make up a full mame by appending the type to the supplied
      *  name, assuming that a type was supplied.

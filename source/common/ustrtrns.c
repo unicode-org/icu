@@ -645,6 +645,10 @@ _strFromWCS( UChar   *dest,
     const wchar_t* pSrc = src;
     const wchar_t* pSrcLimit = NULL;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
     if(srcLength ==-1){
         /* if the wchar_t source is null terminated we can safely
          * assume that there are no embedded nulls, this is a fast
@@ -783,7 +787,10 @@ _strFromWCS( UChar   *dest,
         
         /* convert to stack buffer*/
         ucnv_toUnicode(conv,&pTarget,pTargetLimit,(const char**)&pCSrc,pCSrcLimit,NULL,(UBool)(pCSrc==pCSrcLimit),pErrorCode);
-        
+        /* test for buffer overflows */
+        if (U_FAILURE(*pErrorCode)) {
+            goto cleanup;
+        }
         /* increment count to number written to stack */
         count+= pTarget - target;
         

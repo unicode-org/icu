@@ -613,6 +613,11 @@ ChoiceFormat::format(const Formattable* objs,
                      FieldPosition& pos,
                      UErrorCode& status) const
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return toAppendTo;
+    }
+
     if(cnt < 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return toAppendTo;

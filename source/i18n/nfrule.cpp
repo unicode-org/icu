@@ -97,6 +97,10 @@ NFRule::makeRules(UnicodeString& description,
                   NFRuleList& rules,
                   UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     // we know we're making at least one rule, so go ahead and
     // new it up and initialize its basevalue and divisor
     // (this also strips the rule descriptor, if any, off the
@@ -108,6 +112,10 @@ NFRule::makeRules(UnicodeString& description,
         return;
     }
     rule1->parseRuleDescriptor(description, status);
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // check the description to see whether there's text enclosed
     // in brackets
@@ -123,6 +131,10 @@ NFRule::makeRules(UnicodeString& description,
         || rule1->getType() == kNegativeNumberRule) {
         rule1->ruleText = description;
         rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+        /* test for buffer overflows */
+        if (U_FAILURE(status)) {
+            return;
+        }
         rules.add(rule1);
     } else {
         // if the description does contain a matched pair of brackets,
@@ -184,6 +196,10 @@ NFRule::makeRules(UnicodeString& description,
             }
             rule2->ruleText.setTo(sbuf);
             rule2->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+            /* test for buffer overflows */
+            if (U_FAILURE(status)) {
+                return;
+            }
         }
 
         // rule1's text includes the text in the brackets but omits
@@ -196,6 +212,10 @@ NFRule::makeRules(UnicodeString& description,
         }
         rule1->ruleText.setTo(sbuf);
         rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+        /* test for buffer overflows */
+        if (U_FAILURE(status)) {
+            return;
+        }
 
         // if we only have one rule, return it; if we have two, return
         // a two-element array containing them (notice that rule2 goes
@@ -224,6 +244,10 @@ NFRule::makeRules(UnicodeString& description,
 void
 NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     // the description consists of a rule descriptor and a rule body,
     // separated by a colon.  The rule descriptor is optional.  If
     // it's omitted, just set the base value to 0.
@@ -402,6 +426,10 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
                             const RuleBasedNumberFormat* rbnf,
                             UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     NFSubstitution* result = NULL;
 
     // search the rule's rule text for the first two characters of
@@ -1137,6 +1165,12 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         // match collation elements between the strings
         int32_t oStr = strIter->next(err);
         int32_t oPrefix = prefixIter->next(err);
+        /* test for buffer overflows */
+        if (U_FAILURE(err)) {
+            delete prefixIter;
+            delete strIter;
+            return 0;
+        }
 
         while (oPrefix != CollationElementIterator::NULLORDER) {
             // skip over ignorable characters in the target string
@@ -1149,6 +1183,13 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
             while (CollationElementIterator::primaryOrder(oPrefix) == 0
                 && oPrefix != CollationElementIterator::NULLORDER) {
                 oPrefix = prefixIter->next(err);
+            }
+
+            /* test for buffer overflows */
+            if (U_FAILURE(err)) {
+                delete prefixIter;
+                delete strIter;
+                return 0;
             }
 
             // dlf: move this above following test, if we consume the
@@ -1184,6 +1225,12 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
             } else {
                 oStr = strIter->next(err);
                 oPrefix = prefixIter->next(err);
+                /* test for buffer overflows */
+                if (U_FAILURE(err)) {
+                    delete prefixIter;
+                    delete strIter;
+                    return 0;
+                }
             }
         }
 

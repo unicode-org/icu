@@ -180,7 +180,10 @@ RBBINode       *RBBISymbolTable::lookupNode(const UnicodeString &key) const{
 //
 void            RBBISymbolTable::addEntry  (const UnicodeString &key, RBBINode *val, UErrorCode &err) {
     RBBISymbolTableEntry *e;
-
+    /* test for buffer overflows */
+    if (U_FAILURE(err)) {
+        return;
+    }
     e = (RBBISymbolTableEntry *)uhash_get(fHashTable, &key);
     if (e != NULL) {
         err = U_BRK_VARIABLE_REDFINITION;

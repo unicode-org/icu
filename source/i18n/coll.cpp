@@ -98,6 +98,11 @@ Collator *
 Collator::createInstance(const Locale &loc,
                          UVersionInfo version,
                          UErrorCode &status) {
+  /* test for buffer overflows */
+  if (U_FAILURE(status)) {
+      return 0;
+  }
+
   Collator *collator;
   UVersionInfo info;
 

@@ -25,6 +25,10 @@
 U_NAMESPACE_BEGIN
 
 void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     if(tbl->position == tbl->size) {
         uint32_t *newData = (uint32_t *)uprv_realloc(tbl->CEs, 2*tbl->size*sizeof(uint32_t));
         if(newData == NULL) {
@@ -73,6 +77,10 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
 }
 
 ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     ContractionTable *el = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
     if(el == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
@@ -225,6 +233,10 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
 }
 
 ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *status) {
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return NULL;
+  }
   ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
   if(r == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -277,6 +289,10 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
 
   for(i = 0; i<t->size; i++) {
     r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i], status);
+  }
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return NULL;
   }
 
   if(t->CEs != NULL) {
@@ -370,6 +386,10 @@ uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint
 
     uprv_growTable(tbl, status);
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     uint32_t offset = 0;
 
 
@@ -410,6 +430,10 @@ uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, u
 
     uprv_growTable(tbl, status);
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     tbl->CEs[tbl->position] = value;
     tbl->codePoints[tbl->position] = codePoint;
 
@@ -431,6 +455,10 @@ uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, U
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
+    }
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
     }
 
     if(offset >= tbl->size) {

@@ -249,6 +249,10 @@ void RBBINode::flattenSets() {
 //
 //-------------------------------------------------------------------------
 void   RBBINode::findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &status) {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fType == kind) {
         dest->addElement(this, status);
     }

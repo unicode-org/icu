@@ -102,6 +102,10 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
     int32_t indexR = -1;
     int32_t i = 0;
     *res = RES_BOGUS;
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     if(resB != NULL) {
         if(resB->fBogus == U_ZERO_ERROR) { /* if this resource is real, */
             *res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag); /* try to get data from there */
@@ -139,6 +143,10 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
 
 /** INTERNAL: Initializes the cache for resources */
 static void initCache(UErrorCode *status) {
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     if(cache == NULL) {
         UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
         if (U_FAILURE(*status)) {
@@ -223,6 +231,10 @@ UBool ures_cleanup(void)
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
 static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     if(res->fName != NULL) {
         uprv_free(res->fName);
     }
@@ -369,6 +381,10 @@ static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool
   const char *defaultLoc = uloc_getDefault();
   UErrorCode intStatus = U_ZERO_ERROR;
   *hasChopped = TRUE; /* we're starting with a fresh name */
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return NULL;
+  }
 
   while(*hasChopped && !hasRealData) {
     r = init_entry(name, path, &intStatus);
@@ -412,6 +428,10 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
     }
 
     initCache(status);
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
 
     uprv_strcpy(name, localeID);
 
@@ -426,6 +446,10 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         while (hasChopped && !isRoot && t1->fParent == NULL) {
             /* insert regular parents */
             t2 = init_entry(name, r->fPath, status);
+            /* test for buffer overflows */
+            if (U_FAILURE(*status)) {
+                return NULL;
+            }
             t1->fParent = t2;
             t1 = t2;
             hasChopped = chopLocale(name);
@@ -446,6 +470,10 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             while (hasChopped && t1->fParent == NULL) {
                 /* insert chopped defaults */
                 t2 = init_entry(name, r->fPath, status);
+                /* test for buffer overflows */
+                if (U_FAILURE(*status)) {
+                    return NULL;
+                }
                 t1->fParent = t2;
                 t1 = t2;
                 hasChopped = chopLocale(name);
@@ -468,6 +496,10 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
       } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
           /* insert root locale */
           t2 = init_entry(kRootLocaleName, r->fPath, status);
+          /* test for buffer overflows */
+          if (U_FAILURE(*status)) {
+              return NULL;
+          }
           if(!hasRealData) {
             r->fBogus = U_USING_DEFAULT_ERROR;
           }
@@ -548,6 +580,10 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
             /* first, open the bundle with real data */
             UResourceBundle *main = ures_openDirect(path, locale, status); 
             UResourceBundle *result = NULL;
+            /* test for buffer overflows */
+            if (U_FAILURE(*status)) {
+                return NULL;
+            }
 
             if(keyPath == NULL) {
               /* no key path. This means that we are going to 
@@ -580,6 +616,10 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
               }
               if(r != RES_BOGUS) {
                 result = init_resb_result(&(main->fResData), r, key, -1, main->fData, parent, noAlias+1, resB, status);
+                /* test for buffer overflows */
+                if (U_FAILURE(*status)) {
+                    return NULL;
+                }
               } else {
                 *status = U_MISSING_RESOURCE_ERROR;
                 result = resB;
@@ -601,6 +641,10 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   break;
                 }
                 resB = init_resb_result(&(result->fResData), r, key, -1, result->fData, parent, noAlias+1, resB, status);
+                /* test for buffer overflows */
+                if (U_FAILURE(*status)) {
+                    return NULL;
+                }
                 result = resB;
               }
           }

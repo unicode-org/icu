@@ -43,6 +43,11 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
 {
     UErrorCode status = U_ZERO_ERROR;
     variableNames = new Hashtable(status);
+    /* test for NULL*/
+    if (variableNames == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     if (U_SUCCESS(status)) {
         variableNames->setValueDeleter(uhash_deleteUnicodeString);
         int32_t pos = -1;
@@ -50,7 +55,16 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
         while ((e = other.variableNames->nextElement(pos)) != 0) {
             UnicodeString* value =
                 new UnicodeString(*(const UnicodeString*)e->value.pointer);
+            /* test for NULL */
+            if (value == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             variableNames->put(*(UnicodeString*)e->key.pointer, value, status);
+            /* test for buffer overflows */
+            if (U_FAILURE(status)) {
+                return;
+            }
         }
     }
 

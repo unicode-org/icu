@@ -836,6 +836,7 @@ uprv_getMaxValues() {
     }
 }
 
+
 /* string casing ------------------------------------------------------------ */
 
 /*
@@ -1363,6 +1364,10 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
     int32_t srcIndex, destIndex;
     UChar32 c;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
     /* test early, once, if there is a data file */
     if(!HAVE_DATA) {
         *pErrorCode=U_FILE_ACCESS_ERROR;
@@ -1560,6 +1565,10 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
     int32_t srcIndex, destIndex;
     UChar32 c;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
     /* test early, once, if there is a data file */
     if(!HAVE_DATA) {
         *pErrorCode=U_FILE_ACCESS_ERROR;
@@ -1845,6 +1854,10 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
     int32_t srcIndex, destIndex;
     UChar32 c;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
     /* test early, once, if there is a data file */
     if(!HAVE_DATA) {
         *pErrorCode=U_FILE_ACCESS_ERROR;

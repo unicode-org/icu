@@ -156,6 +156,10 @@ const char TransliterationRuleSet::fgClassID=0;
  * Construct a new empty rule set.
  */
 TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) : UObject() {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     ruleVector = new UVector(&_deleteRule, NULL, status);
     rules = NULL;
     maxContextLength = 0;
@@ -233,6 +237,10 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
         return;
     }
     ruleVector->addElement(adoptedRule, status);
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     int32_t len;
     if ((len = adoptedRule->getContextLength()) > maxContextLength) {
@@ -310,6 +318,10 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
                 }
             }
         }
+    }
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
     }
     uprv_free(indexValue);
     index[256] = v.size();

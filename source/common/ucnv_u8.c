@@ -156,7 +156,11 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
     uint32_t ch, ch2 = 0;
     int32_t i, inBytes;
-  
+
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }
     /* Restore size of current sequence */
 start:
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
@@ -307,6 +311,10 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
     uint32_t ch, ch2 = 0;
     int32_t i, inBytes;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }
     /* Restore size of current sequence */
 start:
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
@@ -325,7 +333,10 @@ start:
         if (ch < 0x80)        /* Simple case */
         {
             *(myTarget++) = (UChar) ch;
-            *(myOffsets++) = offsetNum++;
+            /* test for buffer overflows */
+            if (myOffsets != NULL) {
+                *(myOffsets++) = offsetNum++;
+            }
         }
         else
         {
@@ -390,7 +401,10 @@ morebytes:
                 {
                     /* fits in 16 bits */
                     *(myTarget++) = (UChar) ch;
-                    *(myOffsets++) = offsetNum;
+                    /* test for buffer overflows */
+                    if(myOffsets != NULL) {
+                        *(myOffsets++) = offsetNum;
+                    }
                 }
                 else
                 {
@@ -402,7 +416,10 @@ morebytes:
                     if (myTarget < targetLimit)
                     {
                         *(myTarget++) = (UChar)ch;
-                        *(myOffsets++) = offsetNum;
+                        /* test for buffer overflows */
+                        if(myOffsets != NULL) {
+                            *(myOffsets++) = offsetNum;
+                        }
                     }
                     else
                     {
@@ -462,6 +479,10 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
     int16_t indexToWrite;
     char temp[4];
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }
     if (cnv->fromUSurrogateLead && myTarget < targetLimit)
     {
         ch = cnv->fromUSurrogateLead;
@@ -627,6 +648,10 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
     int16_t indexToWrite;
     char temp[4];
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }
     if (cnv->fromUSurrogateLead && myTarget < targetLimit)
     {
         ch = cnv->fromUSurrogateLead;
@@ -644,16 +669,25 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
 
         if (ch < 0x80)        /* Single byte */
         {
-            *(myOffsets++) = offsetNum++;
+            /* test for buffer overflows */
+            if(myOffsets != NULL) {
+                *(myOffsets++) = offsetNum++;
+            }
             *(myTarget++) = (char) ch;
         }
         else if (ch < 0x800)  /* Double byte */
         {
-            *(myOffsets++) = offsetNum;
+            /* test for buffer overflows */
+            if(myOffsets != NULL) {
+                *(myOffsets++) = offsetNum;
+            }
             *(myTarget++) = (char) ((ch >> 6) | 0xc0);
             if (myTarget < targetLimit)
             {
-                *(myOffsets++) = offsetNum++;
+                /* test for buffer overflows */
+                if(myOffsets != NULL) {
+                    *(myOffsets++) = offsetNum++;
+                }
                 *(myTarget++) = (char) ((ch & 0x3f) | 0x80);
             }
             else
@@ -768,7 +802,10 @@ lowsurrogate:
             {
                 if (myTarget < targetLimit)
                 {
-                    *(myOffsets++) = offsetNum;
+                    /* test for buffer overflows */
+                    if(myOffsets != NULL) {
+                        *(myOffsets++) = offsetNum;
+                    }
                     *(myTarget++) = temp[indexToWrite];
                 }
                 else

@@ -101,6 +101,10 @@ void TitlecaseTransliterator::handleTransliterate(
             SKIP = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]"), ec);
             CASED = new UnicodeSet(UNICODE_STRING_SIMPLE("[[:Lu:] [:Ll:] [:Lt:]]"), ec);
             ucln_i18n_registerCleanup();
+            /* test for buffer overflows */
+            if (U_FAILURE(ec)) {
+                return;
+            }
         }
     }
 
