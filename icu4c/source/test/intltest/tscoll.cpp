@@ -357,6 +357,7 @@ IntlTestCollator::doTest(Collator* col, UnicodeString source, UnicodeString targ
   c->setText(target, status);
   logln("Testing iterating target: "+target);
   backAndForth(*c);
+  delete c;
 }
 
 
