@@ -15,11 +15,10 @@
 
 /*! \mainpage
  *
- * \section Usage
- * <h2>API Reference Usage</h2>
+ * \section API Reference Usage
  * 
  * <h3>C++ Programmers:</h3>
- * <p>Use  <a href="hierarchy.html">Class Hierarchy</a> or <a href="classes.html> Alphabetical List </a>
+ * <p>Use  <a href="hierarchy.html">Class Hierarchy</a> or <a href="classes.html"> Alphabetical List </a>
  * or <a href="annotated.html"> Compound List</a>
  * to find the class you are interested in. For example, to find BreakIterator,
  * you can go to the <a href="classes.html"> Alphabetical List</a>, then click on
@@ -59,7 +58,7 @@
  *
  * <hr>
  *
- * <h2><a name="Module">Module List</a></h2>
+ * <h2>Module List</h2>
  * <table border="1" cols="3" align="center">
  *   <tr>
  *     <td><strong>Module Name</strong></td>
@@ -88,7 +87,7 @@
  *   </tr>
  *   <tr>
  *     <td>Unicode Text Compression</td>
- *     <td>ucnv.h<br>(encoding name "SCSU" or "BOCU-1")</td>
+ *     <td>ucnv.h <br> (encoding name "SCSU" or "BOCU-1")</td>
  *     <td>ucnv.h C API</td>
  *   </tr>
  *   <tr>
@@ -127,12 +126,12 @@
  *     <td>NumberFormat</td>
  *   </tr>
  *   <tr>
- *     <td>Number Spellout<br>(Rule Based Number Formatting)</td>
- *     <td>unum.h<br>(use UNUM_SPELLOUT)</td>
+ *     <td>Number Spellout <br> (Rule Based Number Formatting)</td>
+ *     <td>unum.h <br> (use UNUM_SPELLOUT)</td>
  *     <td>RuleBasedNumberFormat</td>
  *   </tr>
  *   <tr>
- *     <td>Text Transformation<br>(Transliteration)</td>
+ *     <td>Text Transformation <br> (Transliteration)</td>
  *     <td>utrans.h</td>
  *     <td>Transliterator</td>
  *   </tr>
@@ -157,7 +156,7 @@
  *     <td>StringSearch</td>
  *   </tr>
  *   <tr>
- *     <td>Text Boundary Analysis<br>(Break Iteration)</td>
+ *     <td>Text Boundary Analysis <br> (Break Iteration)</td>
  *     <td>ubrk.h</td>
  *     <td>BreakIterator</td>
  *   </tr>
@@ -170,6 +169,16 @@
  *     <td>Regular Expressions</td>
  *     <td>N/A</td>
  *     <td>RegexPattern, RegexMatcher</td>
+ *   </tr>
+ *   <tr>
+ *     <td>StringPrep</td>
+ *     <td>usprep.h</td>
+ *     <td>usprep.h C API</td>
+ *   </tr>
+  *   <tr>
+ *     <td>International Domain Names in Applications</td>
+ *     <td>uidna.h</td>
+ *     <td>uidna.h C API</td>
  *   </tr>
  * </table>
  */
