@@ -1267,7 +1267,7 @@ TestJ932(void)
  *
  * Bug report and test code provided by Edward J. Batutis.
  */
-void bug1()
+static void bug1()
 {
    static char char_in[CHUNK_SIZE+32];
    static char char_out[CHUNK_SIZE*2];
@@ -1311,7 +1311,7 @@ void bug1()
 }
 
 /* bug2: pre-flighting loop bug: simple overflow causes bug */
-void bug2()
+static void bug2()
 {
    /* US-ASCII "1234567890" */
    static const char source[]={ 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39 };
@@ -1339,7 +1339,7 @@ void bug2()
  * bug3: when the characters expand going from source to target codepage
  *       you get bug3 in addition to bug2
  */
-void bug3()
+static void bug3()
 {
    static char char_in[CHUNK_SIZE*4];
    static char target[5];
