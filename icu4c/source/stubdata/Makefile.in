@@ -48,11 +48,7 @@ endif
 #
 ifneq ($(ENABLE_SHARED),)
 SO_TARGET = libicudata.$(SO)
-ifeq (@U_IS_BIG_ENDIAN@,1)
-MIDDLE_SO_TARGET = libicudt$(SO_TARGET_VERSION_MAJOR)b.$(SO)
-else
-MIDDLE_SO_TARGET = libicudt$(SO_TARGET_VERSION_MAJOR)l.$(SO)
-endif
+MIDDLE_SO_TARGET = lib$(ICUDATA_NAME).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) 
 endif
 
