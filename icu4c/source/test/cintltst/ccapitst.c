@@ -821,10 +821,12 @@ static void TestConvert()
         uchar1=(UChar*)malloc(sizeof(UChar) * (i+1));
         u_uastrcpy(uchar1,"");
         u_strncpy(uchar1,ucs_file_buffer,i);
+        uchar1[i] = 0;
 
         uchar3=(UChar*)malloc(sizeof(UChar)*(i+1));
         u_uastrcpy(uchar3,"");
         u_strncpy(uchar3,ucs_file_buffer,i);
+        uchar3[i] = 0;
 
         /*Calls the Conversion Routine */
         testLong1 = MAX_FILE_LEN;
@@ -967,6 +969,7 @@ static void TestConvert()
 
 
         u_strncpy(uchar3, my_ucs_file_buffer,i);
+        uchar3[i] = 0;
 
         if(u_strcmp(uchar1,uchar3)==0)
             log_verbose("Equality test o.k.\n");
