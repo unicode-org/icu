@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2002/12/05 01:22:00 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/11/22 01:13:57 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -186,7 +186,7 @@ public interface Replaceable {
      * must be made so as to preserve metadata.  If it does not, calls
      * to the Replaceable API may be optimized to improve performance.
      * @return true if this object contains metadata
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     boolean hasMetaData();
 }
