@@ -669,18 +669,18 @@ _uhash_find(const UHashtable *hash, const void* key,
             int32_t hashcode) {
 
     int32_t firstDeleted = -1;  /* assume invalid index */
-    int32_t idx, startIndex;
+    int32_t theIndex, startIndex;
     int32_t jump = 0; /* lazy evaluate */
     int32_t tableHash;
 
     hashcode &= 0x7FFFFFFF; /* must be positive */
-    startIndex = idx = (hashcode ^ 0x4000000) % hash->length;
+    startIndex = theIndex = (hashcode ^ 0x4000000) % hash->length;
 
     do {
-        tableHash = hash->elements[idx].hashcode;
+        tableHash = hash->elements[theIndex].hashcode;
         if (tableHash == hashcode) {          /* quick check */
-            if ((*hash->keyComparator)(key, hash->elements[idx].key)) {
-                return &(hash->elements[idx]);
+            if ((*hash->keyComparator)(key, hash->elements[theIndex].key)) {
+                return &(hash->elements[theIndex]);
             }
         } else if (!IS_EMPTY_OR_DELETED(tableHash)) {
             /* We have hit a slot which contains a key-value pair,
@@ -690,7 +690,7 @@ _uhash_find(const UHashtable *hash, const void* key,
         } else if (tableHash == HASH_EMPTY) { /* empty, end o' the line */
             break;
         } else if (firstDeleted < 0) { /* remember first deleted */
-            firstDeleted = idx;
+            firstDeleted = theIndex;
         }
         if (jump == 0) { /* lazy compute jump */
             /* The jump value must be relatively prime to the table
@@ -699,11 +699,11 @@ _uhash_find(const UHashtable *hash, const void* key,
              */
             jump = (hashcode % (hash->length - 1)) + 1;
         }
-        idx = (idx + jump) % hash->length;
-    } while (idx != startIndex);
+        theIndex = (theIndex + jump) % hash->length;
+    } while (theIndex != startIndex);
 
     if (firstDeleted >= 0) {
-        idx = firstDeleted; /* reset if had deleted slot */
+        theIndex = firstDeleted; /* reset if had deleted slot */
     } else if (tableHash != HASH_EMPTY) {
         /* We get to this point if the hashtable is full (no empty or
          * deleted slots), and we've failed to find a match.  THIS
@@ -713,7 +713,7 @@ _uhash_find(const UHashtable *hash, const void* key,
         assert(FALSE);
         return NULL; /* Never happens if uhash_put() behaves */
     }
-    return &(hash->elements[idx]);
+    return &(hash->elements[theIndex]);
 }
 
 static void*

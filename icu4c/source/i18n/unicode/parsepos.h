@@ -162,9 +162,9 @@ ParsePosition::getIndex() const
 }
 
 inline void
-ParsePosition::setIndex(UTextOffset idx)
+ParsePosition::setIndex(UTextOffset offset)
 {
-  this->index = idx;
+  this->index = offset;
 }
 
 inline UTextOffset

@@ -599,13 +599,13 @@ U_CAPI int32_t U_EXPORT2 ucnv_flushCache (void);
 /**
  * provides a string containing the internal name (based on the alias file) of the converter.
  * given an index.
- * @param index the number of converters available on the system (<TT>[0..ucnv_countAvaiable()]</TT>)
+ * @param n the number of converters available on the system (<TT>[0..ucnv_countAvaiable()]</TT>)
  * @return a pointer a string (library owned), or <TT>NULL</TT> if the index is out of bounds.
  * @see ucnv_countAvailable
  * @stable
  */
 U_CAPI
-  const char * U_EXPORT2 ucnv_getAvailableName (int32_t idx);
+  const char * U_EXPORT2 ucnv_getAvailableName (int32_t n);
 
 /**
  * returns the number of available converters.
@@ -630,13 +630,13 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
 /**
  * Gives the name of the alias at given index of alias list
  * @param alias alias name
- * @param index indes in alias list
+ * @param n index in alias list
  * @param pErrorCode result of operation
  * @return returns the name of the alias at given index
  * @stable
  */
 U_CAPI const char *
-ucnv_getAlias(const char *alias, uint16_t idx, UErrorCode *pErrorCode);
+ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
  * Fill-up the list of alias names for the given alias

@@ -2496,7 +2496,7 @@ int32_t RuleBasedCollator::getMaxExpansion(int32_t order) const
 /**
  *  Get the entry of hash table of the expanding string in the collation
  *  table.
- *  @param idx the index of the expanding string value list
+ *  @param offset the index of the expanding string value list
  */
 VectorOfInt *RuleBasedCollator::getExpandValueList(int32_t order) const
 {
