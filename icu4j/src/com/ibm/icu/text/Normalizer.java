@@ -1,154 +1,380 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/03/20 22:55:32 $ 
- * $Revision: 1.17 $
+ * $Date: 2002/06/20 01:21:18 $ 
+ * $Revision: 1.18 $
  *
- *****************************************************************************************
+ *******************************************************************************
  */
 package com.ibm.icu.text;
-
-import java.lang.Character;
+import com.ibm.icu.impl.*;
+import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.UCharacterProperty;
 import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import com.ibm.icu.util.CompactByteArray;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.lang.*;
 
 /**
- * <tt>Normalizer</tt> transforms Unicode text into an equivalent composed or
+ * Unicode Normalization 
+ *
+ * <h2>Unicode normalization API</h2>
+ *
+ * <code>normalize</code> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
- * <tt>Normalizer</tt> supports the standard normalization forms described in
+ * <code>normalize</code> supports the standard normalization forms described in
  * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
- * Unicode Technical Report #15</a>.
- * <p>
+ * Unicode Standard Annex #15 &mdash; Unicode Normalization Forms</a>.
+ *
  * Characters with accents or other adornments can be encoded in
- * several different ways in Unicode.  For example, take the character "Â"
- * (A-acute).   In Unicode, this can be encoded as a single character (the
+ * several different ways in Unicode.  For example, take the character A-acute.
+ * In Unicode, this can be encoded as a single character (the
  * "composed" form):
- * <pre>
- *      00C1    LATIN CAPITAL LETTER A WITH ACUTE</pre>
- * or as two separate characters (the "decomposed" form):
- * <pre>
- *      0041    LATIN CAPITAL LETTER A
- *      0301    COMBINING ACUTE ACCENT</pre>
+ *
  * <p>
+ *      00C1    LATIN CAPITAL LETTER A WITH ACUTE
+ * </p>
+ *
+ * or as two separate characters (the "decomposed" form):
+ *
+ * <p>
+ *      0041    LATIN CAPITAL LETTER A
+ *      0301    COMBINING ACUTE ACCENT
+ * </p>
+ *
  * To a user of your program, however, both of these sequences should be
- * treated as the same "user-level" character "Â".  When you are searching or
- * comparing text, you must ensure that these two sequences are treated
+ * treated as the same "user-level" character "A with acute accent".  When you are searching or
+ * comparing text, you must ensure that these two sequences are treated 
  * equivalently.  In addition, you must handle characters with more than one
  * accent.  Sometimes the order of a character's combining accents is
  * significant, while in other cases accent sequences in different orders are
  * really equivalent.
- * <p>
+ *
  * Similarly, the string "ffi" can be encoded as three separate letters:
- * <pre>
- *      0066    LATIN SMALL LETTER F
- *      0066    LATIN SMALL LETTER F
- *      0069    LATIN SMALL LETTER I</pre>
- * or as the single character
- * <pre>
- *      FB03    LATIN SMALL LIGATURE FFI</pre>
+ *
  * <p>
+ *      0066    LATIN SMALL LETTER F
+ *      0066    LATIN SMALL LETTER F
+ *      0069    LATIN SMALL LETTER I
+ * <\p>
+ *
+ * or as the single character
+ *
+ * <p>
+ *      FB03    LATIN SMALL LIGATURE FFI
+ * <\p>
+ *
  * The ffi ligature is not a distinct semantic character, and strictly speaking
  * it shouldn't be in Unicode at all, but it was included for compatibility
  * with existing character sets that already provided it.  The Unicode standard
  * identifies such characters by giving them "compatibility" decompositions
  * into the corresponding semantic characters.  When sorting and searching, you
  * will often want to use these mappings.
- * <p>
- * <tt>Normalizer</tt> helps solve these problems by transforming text into the
- * canonical composed and decomposed forms as shown in the first example above.
- * In addition, you can have it perform compatibility decompositions so that
+ *
+ * <code>normalize</code> helps solve these problems by transforming text into the
+ * canonical composed and decomposed forms as shown in the first example above.  
+ * In addition, you can have it perform compatibility decompositions so that 
  * you can treat compatibility characters the same as their equivalents.
- * Finally, <tt>Normalizer</tt> rearranges accents into the proper canonical
+ * Finally, <code>normalize</code> rearranges accents into the proper canonical
  * order, so that you do not have to worry about accent rearrangement on your
  * own.
- * <p>
- * <tt>Normalizer</tt> adds one optional behavior, {@link #IGNORE_HANGUL},
- * that differs from
- * the standard Unicode Normalization Forms.  This option can be passed
- * to the {@link #Normalizer constructors} and to the static
- * {@link #compose compose} and {@link #decompose decompose} methods.  This
- * option, and any that are added in the future, will be turned off by default.
- * <p>
- * There are three common usage models for <tt>Normalizer</tt>.  In the first,
- * the static {@link #normalize normalize()} method is used to process an
- * entire input string at once.  Second, you can create a <tt>Normalizer</tt>
- * object and use it to iterate through the normalized form of a string by
- * calling {@link #first} and {@link #next}.  Finally, you can use the
- * {@link #setIndex setIndex()} and {@link #getIndex} methods to perform
- * random-access iteration, which is very useful for searching.
- * <p>
- * <b>Note:</b> <tt>Normalizer</tt> objects behave like iterators and have
- * methods such as <tt>setIndex</tt>, <tt>next</tt>, <tt>previous</tt>, etc.
- * You should note that while the <tt>setIndex</tt> and <tt>getIndex</tt> refer
- * to indices in the underlying <em>input</em> text being processed, the
- * <tt>next</tt> and <tt>previous</tt> methods it iterate through characters
- * in the normalized <em>output</em>.  This means that there is not
- * necessarily a one-to-one correspondence between characters returned
- * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
- * returned from <tt>setIndex</tt> and <tt>getIndex</tt>.  It is for this
- * reason that <tt>Normalizer</tt> does not implement the
- * {@link CharacterIterator} interface.
- * <p>
- * <b>Note:</b> <tt>Normalizer</tt> is currently based on version 2.1.8
- * of the <a href="http://www.unicode.org" target="unicode">Unicode Standard</a>.
- * It will be updated as later versions of Unicode are released.  If you are
- * using this class on a JDK that supports an earlier version of Unicode, it
- * is possible that <tt>Normalizer</tt> may generate composed or dedecomposed
- * characters for which your JDK's {@link java.lang.Character} class does not
- * have any data.
- * <p>
- * @author Laura Werner, Mark Davis
+ *
+ * Form FCD, "Fast C or D", is also designed for collation.
+ * It allows to work on strings that are not necessarily normalized
+ * with an algorithm (like in collation) that works under "canonical closure", i.e., it treats precomposed
+ * characters and their decomposed equivalents the same.
+ *
+ * It is not a normalization form because it does not provide for uniqueness of representation. Multiple strings
+ * may be canonically equivalent (their NFDs are identical) and may all conform to FCD without being identical
+ * themselves.
+ *
+ * The form is defined such that the "raw decomposition", the recursive canonical decomposition of each character,
+ * results in a string that is canonically ordered. This means that precomposed characters are allowed for as long
+ * as their decompositions do not need canonical reordering.
+ *
+ * Its advantage for a process like collation is that all NFD and most NFC texts - and many unnormalized texts -
+ * already conform to FCD and do not need to be normalized (NFD) for such a process. The FCD quick check will
+ * return YES for most strings in practice.
+ *
+ * normalize(FCD) may be implemented with NFD.
+ *
+ * For more details on FCD see the collation design document:
+ * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
+ *
+ * ICU collation performs either NFD or FCD normalization automatically if normalization
+ * is turned on for the collator object.
+ * Beyond collation and string search, normalized strings may be useful for string equivalence comparisons,
+ * transliteration/transcription, unique representations, etc.
+ *
+ * The W3C generally recommends to exchange texts in NFC.
+ * Note also that most legacy character encodings use only precomposed forms and often do not
+ * encode any combining marks by themselves. For conversion to such character encodings the
+ * Unicode text needs to be normalized to NFC.
+ * For more usage examples, see the Unicode Standard Annex.
  */
-public final class Normalizer {
 
-    /**
-     * Constant indicating that the end of the iteration has been reached.
-     * This is guaranteed to have the same value as {@link CharacterIterator#DONE}.
-     */
-    public static final char DONE = CharacterIterator.DONE;
-
+public final class Normalizer implements Cloneable{
+    
+    //-------------------------------------------------------------------------
+    // Private data
+    //-------------------------------------------------------------------------  
+    private char[] buffer = new char[100];
+    private int bufferStart = 0;
+    private int bufferPos   = 0;
+    private int bufferLimit = 0;
+    
     // This tells us what the bits in the "mode" object mean.
     private static final int COMPAT_BIT = 1;
     private static final int DECOMP_BIT = 2;
     private static final int COMPOSE_BIT = 4;
+    
+    // The input text and our position in it
+    private UCharacterIterator  text;
+    private Mode                mode = NFC;
+    private int                 options = 0;
+    private int                 currentIndex;
+    private int                 nextIndex;
+    
+    /**
+     * Constant indicating that the end of the iteration has been reached.
+     * This is guaranteed to have the same value as {@link UCharacterIterator#DONE}.
+     * 
+     */
+    public static final int DONE = UCharacterIterator.DONE;
 
     /**
-     * This class represents the mode of a {@link Normalizer}
-     * object, i.e. the Unicode Normalization Form of the
-     * text that the <tt>Normalizer</tt> produces.  <tt>Mode</tt> objects
-     * are used as arguments to the {@link Normalizer#Normalizer constructors}
-     * and {@link Normalizer#setMode setMode} method of <tt>Normalizer</tt>.
-     * <p>
-     * Clients cannot create <tt>Mode</tt> objects directly.
-     * Instead, use the predefined constants {@link Normalizer#NO_OP},
-     * {@link Normalizer#COMPOSE}, {@link Normalizer#COMPOSE_COMPAT},
-     * {@link Normalizer#DECOMP}, and {@link Normalizer#DECOMP_COMPAT}.
-     * <p>
-     * @see Normalizer
+     * Constants for normalization modes.
      */
-    public static final class Mode {
-        Mode(int m) {
-            mode = m;
+    public static class Mode {
+		private int modeValue;
+		private Mode(int value){
+		    modeValue = value;
+		}
+        protected int dispatch(char[] src, int srcStart, int srcLimit,
+                     char[] dest, int destStart, int destLimit){
+            int srcLen = (srcLimit - srcStart);
+            int destLen = (destLimit - destStart);
+            if( srcLen < destLen ){
+                return srcLen;
+            }
+            System.arraycopy(src,srcStart,dest,destStart,srcLen);
+            return srcLen;
         }
-        final boolean compat() {
-            return (mode & COMPAT_BIT) != 0;
+        
+        protected String dispatch(String src){
+            return src;
         }
-        final boolean compose() {
-            return (mode & COMPOSE_BIT) != 0;
+        
+        protected int getMinC(){
+            return -1;
         }
-        final boolean decomp() {
-            return (mode & DECOMP_BIT) != 0;
+        protected int getMask(){
+            return -1;
         }
-        final int mode;
-    };
+        protected IsPrevBoundary getPrevBoundary(){
+            return null;
+        }
+        protected IsNextBoundary getNextBoundary(){
+            return null;
+        }
+        protected QuickCheckResult quickCheck(char[] src,int start, int limit, boolean allowMaybe){
+            if(allowMaybe){
+                return MAYBE;
+            }
+            return NO;
+        }
+        
+    }
+    
+    /** No decomposition/composition.  */
+    public static Mode NONE = new Mode(1);
 
+    /** Canonical decomposition.  */
+    public static Mode NFD = new Mode(2){
+            protected int dispatch( char[] src, int srcStart, int srcLimit,
+                          char[] dest,int destStart,int destLimit){
+              return decompose(src,  srcStart,srcLimit,
+                               dest, destStart,destLimit,
+                               false);
+            }
+            
+            protected String dispatch( String src){
+                return decompose(src,false);
+            }
+            protected int getMinC(){
+                return NormalizerImpl.MIN_WITH_LEAD_CC;
+            }
+            protected IsPrevBoundary getPrevBoundary(){
+                return new IsPrevNFDSafe();
+            }
+            protected IsNextBoundary getNextBoundary(){
+                return new IsNextNFDSafe();
+            }
+            protected int getMask(){
+                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD);
+            }
+            protected QuickCheckResult quickCheck(char[] src,int start, 
+                                                  int limit,boolean allowMaybe){
+                return NormalizerImpl.quickCheck(
+                                      src, start,limit,
+                                      NormalizerImpl.getFromIndexesArr(
+                                           NormalizerImpl.INDEX_MIN_NFD_NO_MAYBE
+                                      ),
+                                      NormalizerImpl.QC_NFD,
+                                      allowMaybe
+                                 );
+            }
+           
+         };
+                                         
+    /** Compatibility decomposition.  */
+    public static Mode NFKD = new Mode(3){
+            protected int dispatch( char[] src, int srcStart, int srcLimit,
+                           char[] dest,int destStart,int destLimit){
+              return decompose(src,  srcStart,srcLimit,
+                               dest, destStart,destLimit,
+                               true);
+            }
+            protected String dispatch( String src){
+                return decompose(src,true);
+            }
+            protected int getMinC(){
+                return NormalizerImpl.MIN_WITH_LEAD_CC;
+            }
+            protected IsPrevBoundary getPrevBoundary(){
+                return new IsPrevNFDSafe();
+            }
+            protected IsNextBoundary getNextBoundary(){
+                return new IsNextNFDSafe();
+            }
+            protected int getMask(){
+                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD);
+            }
+            protected QuickCheckResult quickCheck(char[] src,int start, 
+                                                  int limit,boolean allowMaybe){
+                return NormalizerImpl.quickCheck(
+                                      src,start,limit,
+                                      NormalizerImpl.getFromIndexesArr(
+                                          NormalizerImpl.INDEX_MIN_NFKD_NO_MAYBE
+                                      ),
+                                      NormalizerImpl.QC_NFKD,
+                                      allowMaybe
+                                );
+            }                                        
+         };
+                                         
+    /** Canonical decomposition followed by canonical composition.  */
+    public static Mode NFC = new Mode(4){
+            protected int dispatch( char[] src, int srcStart, int srcLimit,
+                          char[] dest,int destStart,int destLimit){
+              return compose(src,  srcStart,srcLimit,
+                             dest, destStart,destLimit,
+                             false);
+            }
+            
+            protected String dispatch( String src){
+                return compose(src,false);
+            }
+           
+            protected int getMinC(){
+                return NormalizerImpl.getFromIndexesArr(
+                                        NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
+                                    );
+            }
+            protected IsPrevBoundary getPrevBoundary(){
+                return new IsPrevTrueStarter();
+            }
+            protected IsNextBoundary getNextBoundary(){
+                return new IsNextTrueStarter();
+            }
+            protected int getMask(){
+                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFC);
+            }
+            protected QuickCheckResult quickCheck(char[] src,int start, 
+                                                  int limit,boolean allowMaybe){
+                return NormalizerImpl.quickCheck(
+                                       src,start,limit,
+                                       NormalizerImpl.getFromIndexesArr(
+                                           NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
+                                       ),
+                                       NormalizerImpl.QC_NFC,
+                                       allowMaybe
+                                   );
+            }
+         };
+                                         
+    /** Default normalization.  */
+    public static Mode DEFAULT = NFC; 
+    
+    /** Compatibility decomposition followed by canonical composition.  */
+    public static Mode NFKC =new Mode(5){
+            protected int dispatch( char[] src, int srcStart, int srcLimit,
+                          char[] dest,int destStart,int destLimit){
+              return compose(src,  srcStart,srcLimit,
+                             dest, destStart,destLimit,
+                             true);
+            }
+            protected String dispatch( String src){
+                return compose(src,true);
+            }
+            protected int getMinC(){
+                return NormalizerImpl.getFromIndexesArr(
+                                        NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
+                                    );
+            }
+            protected IsPrevBoundary getPrevBoundary(){
+                return new IsPrevTrueStarter();
+            }
+            protected IsNextBoundary getNextBoundary(){
+                return new IsNextTrueStarter();
+            }
+            protected int getMask(){
+                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKC);
+            }
+            protected QuickCheckResult quickCheck(char[] src,int start, 
+                                                  int limit,boolean allowMaybe){
+                return NormalizerImpl.quickCheck(
+                                       src,start,limit,
+                                       NormalizerImpl.getFromIndexesArr(
+                                          NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
+                                       ),
+                                       NormalizerImpl.QC_NFKC,
+                                       allowMaybe
+                                     );
+            }
+         };
+                                        
+    /** "Fast C or D" form. @since ICU 2.1 */
+    public static Mode FCD = new Mode(6){
+            protected int dispatch( char[] src, int srcStart, int srcLimit,
+                          char[] dest,int destStart,int destLimit){
+              return NormalizerImpl.makeFCD(src, srcStart,srcLimit,
+                                            dest, destStart,destLimit);
+            }
+            protected String dispatch( String src){
+                return makeFCD(src);
+            }
+            protected int getMinC(){
+                return NormalizerImpl.MIN_WITH_LEAD_CC;
+            }
+            protected IsPrevBoundary getPrevBoundary(){
+                return new IsPrevNFDSafe();
+            }
+            protected IsNextBoundary getNextBoundary(){
+                return new IsNextNFDSafe();
+            }
+            protected int getMask(){
+                return NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD;
+            }
+            protected QuickCheckResult quickCheck(char[] src,int start, 
+                                                  int limit,boolean allowMaybe){
+                return NormalizerImpl.checkFCD(src,start,limit) ? YES : NO;
+            }  
+         };
+
+    
     /**
      * Null operation for use with the {@link #Normalizer constructors}
      * and the static {@link #normalize normalize} method.  This value tells
@@ -160,8 +386,9 @@ public final class Normalizer {
      * altogether.
      * <p>
      * @see #setMode
+     * @deprecated
      */
-    public static final Mode NO_OP = new Mode(0);
+    public static final Mode NO_OP = NONE;
 
     /**
      * Canonical decomposition followed by canonical composition.  Used with the
@@ -174,6 +401,7 @@ public final class Normalizer {
      * <b>C</b>.
      * <p>
      * @see #setMode
+     * @deprecated
      */
     public static final Mode COMPOSE = new Mode(COMPOSE_BIT);
 
@@ -188,6 +416,7 @@ public final class Normalizer {
      * <b>KC</b>.
      * <p>
      * @see #setMode
+     * @deprecated
      */
     public static final Mode COMPOSE_COMPAT = new Mode(COMPOSE_BIT | COMPAT_BIT);
 
@@ -202,6 +431,7 @@ public final class Normalizer {
      * <b>D</b>.
      * <p>
      * @see #setMode
+     * @deprecated
      */
     public static final Mode DECOMP = new Mode(DECOMP_BIT);
 
@@ -216,6 +446,7 @@ public final class Normalizer {
      * <b>KD</b>.
      * <p>
      * @see #setMode
+     * @deprecated
      */
     public static final Mode DECOMP_COMPAT = new Mode(DECOMP_BIT | COMPAT_BIT);
 
@@ -235,9 +466,64 @@ public final class Normalizer {
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption
+     * @deprecated
      */
     public static final int IGNORE_HANGUL = 0x0001;
+          
+    /**
+     * Result values for quickCheck().
+     * For details see Unicode Technical Report 15.
+     * 
+     */
+    public static final class QuickCheckResult{
+		private int resultValue;
+		private QuickCheckResult(int value){
+		    resultValue=value;
+		}
+    }
+    /** 
+     * Indicates that string is not in the normalized format
+     */
+    public static QuickCheckResult NO = new QuickCheckResult(0);
+	
+    /** 
+     * Indicates that string is in the normalized format
+     */
+    public static QuickCheckResult YES = new QuickCheckResult(1);
 
+    /** 
+     * Indicates it cannot be determined if string is in the normalized 
+     * format without further thorough checks.
+     */
+    public static QuickCheckResult MAYBE = new QuickCheckResult(2);
+    
+    /**
+     * Option bit for compare:
+     * Both input strings are assumed to fulfill FCD conditions.
+     * @since ICU 2.2
+     */
+    public static final int INPUT_IS_FCD    =      0x20000;
+	
+    /**
+     * Option bit for compare:
+     * Perform case-insensitive comparison.
+     * @since ICU 2.2
+     */
+    public static final int COMPARE_IGNORE_CASE  =     0x10000;
+	
+    /**
+     * Option bit for compare:
+     * Compare strings in code point order instead of code unit order.
+     * @since ICU 2.2
+     */
+    public static final int COMPARE_CODE_POINT_ORDER = 0x8000;
+    
+    /** Option value for case folding: exclude the mappings for dotted I 
+     * and dotless i marked with 'I' in CaseFolding.txt. 
+     * @since ICU 2.2
+     */
+    public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0x0001;
+	
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
@@ -252,7 +538,7 @@ public final class Normalizer {
      * @param mode  The normalization mode.
      */
     public Normalizer(String str, Mode mode) {
-        this(new StringCharacterIterator(str), mode, 0);
+        this( UCharacterIterator.getInstance(str), mode);
     }
 
     /**
@@ -262,18 +548,20 @@ public final class Normalizer {
      * The <tt>options</tt> parameter specifies which optional
      * <tt>Normalizer</tt> features are to be enabled for this object.
      * <p>
-     * @param str   The string to be normalized.  The normalization
+     * @param str  The string to be normalized.  The normalization
      *              will start at the beginning of the string.
      *
-     * @param mode  The normalization mode.
+     * @param mode The normalization mode.
      *
-     * @param opt   Any optional features to be enabled.
-     *              Currently the only available option is {@link #IGNORE_HANGUL}.
-     *              If you want the default behavior corresponding to one of the
-     *              standard Unicode Normalization Forms, use 0 for this argument.
+     * @param opt Any optional features to be enabled.
+     *            Currently the only available option is {@link #IGNORE_HANGUL}.
+     *            If you want the default behavior corresponding to one of the
+     *            standard Unicode Normalization Forms, use 0 for this argument.
+     * @deprecated
      */
     public Normalizer(String str, Mode mode, int opt) {
-        this(new StringCharacterIterator(str), mode, opt);
+        this( UCharacterIterator.getInstance(str), mode );
+        this.options=opt;
     }
 
     /**
@@ -287,7 +575,7 @@ public final class Normalizer {
      *
      */
     public Normalizer(CharacterIterator iter, Mode mode) {
-        this(iter, mode, 0);
+        this( UCharacterIterator.getInstance(iter), mode);
     }
 
     /**
@@ -299,18 +587,29 @@ public final class Normalizer {
      *
      * @param mode  The normalization mode.
      *
-     * @param opt   Any optional features to be enabled.
-     *              Currently the only available option is {@link #IGNORE_HANGUL}.
-     *              If you want the default behavior corresponding to one of the
-     *              standard Unicode Normalization Forms, use 0 for this argument.
+     * @param opt Any optional features to be enabled.
+     *            Currently the only available option is {@link #IGNORE_HANGUL}.
+     *            If you want the default behavior corresponding to one of the
+     *            standard Unicode Normalization Forms, use 0 for this argument.
+     * @deprecated
      */
     public Normalizer(CharacterIterator iter, Mode mode, int opt) {
-        text = iter;
-        this.mode = mode;
-        options = opt;
-
-        // Compatibility explosions have lower indices; skip them if necessary
-        minDecomp = mode.compat() ? 0 : DecompData.MAX_COMPAT;
+        this( UCharacterIterator.getInstance(iter), mode);
+        this.options = opt;
+    }
+    
+    /**
+     * Creates a new <tt>Normalizer</tt> object for iterating over the
+     * normalized form of the given text.
+     * <p>
+     * @param iter  The input text to be normalized.  The normalization
+     *              will start at the beginning of the string.
+     *
+     * @param mode  The normalization mode.
+     */
+    public Normalizer(UCharacterIterator iter, Mode mode){
+        this.text     = iter;
+        this.mode     = mode;
     }
 
     /**
@@ -325,17 +624,22 @@ public final class Normalizer {
     public Object clone() {
         try {
             Normalizer copy = (Normalizer) super.clone();
-            copy.text = (CharacterIterator) text.clone();
+            copy.text = (UCharacterIterator) text.clone();
+            //clone the internal buffer
+            if (buffer != null) {
+                copy.buffer = new char[buffer.length];
+                System.arraycopy(buffer,0,copy.buffer,0,buffer.length);
+            }
             return copy;
         }
         catch (CloneNotSupportedException e) {
             throw new InternalError(e.toString());
         }
     }
-
-    //-------------------------------------------------------------------------
-    // Static utility methods
-    //-------------------------------------------------------------------------
+    
+    //--------------------------------------------------------------------------
+    // Static Utility methods
+    //--------------------------------------------------------------------------
 
     /**
      * Normalizes a <tt>String</tt> using the given normalization operation.
@@ -351,914 +655,474 @@ public final class Normalizer {
      * @param aMode     the normalization mode
      *
      * @param options   the optional features to be enabled.
+     * @deprecated
      */
-    public static String normalize(String str, Mode mode, int options) {
-        if (mode.compose()) {
-            // compose() handles decomposition and reordering;
-            // don't call decompose() first.
-            return compose(str, mode.compat(), options);
-        }
-        if (mode.decomp()) {
-            return decompose(str, mode.compat(), options);
-        }
-        return str;
+    public static String normalize(String str, Mode mode, int options){
+        return normalize(str,mode);
     }
-
-    //-------------------------------------------------------------------------
-    // Compose methods
-    //-------------------------------------------------------------------------
-
+    
     /**
-     * Compose a <tt>String</tt>.
-     * <p>
-     * The <tt>options</tt> parameter specifies which optional
-     * <tt>Normalizer</tt> features are to be enabled for this operation.
-     * Currently the only available option is {@link #IGNORE_HANGUL}.
-     * If you want the default behavior corresponding
-     * to Unicode Normalization Form <b>C</b> or <b>KC</b>,
-     * use 0 for this argument.
-     * <p>
-     * @param source    the string to be composed.
-     *
-     * @param compat    Perform compatibility decomposition before composition.
-     *                  If this argument is <tt>false</tt>, only canonical
-     *                  decomposition will be performed.
-     *
-     * @param options   the optional features to be enabled.
-     *
-     * @return          the composed string.
-     */
-    public static String compose(String source, boolean compat, int options)
-    {
-        StringBuffer result = new StringBuffer();
-        StringBuffer explodeBuf = new StringBuffer();
-
-        int     explodePos = EMPTY;         // Position in input buffer
-        int     basePos = 0;                // Position of last base in output string
-        int     baseIndex = 0;              // Index of last base in "actions" array
-        int     classesSeenL = 0;           // Combining classes seen since last base
-        int     classesSeenH = 0;           //  64-bit mask
-        int     action;
-
-        // Compatibility explosions have lower indices; skip them if necessary
-        int minExplode = compat ? 0 : ComposeData.MAX_COMPAT;
-        int minDecomp  = compat ? 0 : DecompData.MAX_COMPAT;
-
-        if (DEBUG) System.out.println("minExplode = " + minExplode);
-
-        int i = 0;
-        while (i < source.length() || explodePos != EMPTY) {
-            // Get the next char from either the buffer or the source
-            char ch;
-            if (explodePos == EMPTY) {
-                ch = source.charAt(i++);
-            } else {
-                ch = explodeBuf.charAt(explodePos++);
-                if (explodePos >= explodeBuf.length()) {
-                    explodePos = EMPTY;
-                    explodeBuf.setLength(0);
-                }
+     * Compose a string.
+     * The string will be composed to according the the specified mode.
+     * @param source     The string to compose.
+     * @param compat     If true the char array will be composed accoding to 
+     *                    NFKC rules and if false will be composed according to 
+     *                    NFC rules.
+     * @return String    The composed string   
+     */            
+    public static String compose(String str, boolean compat){
+        char[] dest = new char[str.length()*MAX_BUF_SIZE];
+        int destSize=0;
+        char[] src = str.toCharArray();
+        for(;;){
+            destSize=NormalizerImpl.compose(src,0,src.length,
+                                            dest,0,dest.length,compat);
+            if(destSize<=dest.length){
+		        return new String(dest,0,destSize);  
+            }else{
+                dest = new char[destSize];
             }
-
-            // Get the basic info for the character
-            int charInfo = composeLookup(ch);
-            int type = charInfo & ComposeData.TYPE_MASK;
-            int index = charInfo >>> ComposeData.INDEX_SHIFT;
-            
-            if (DEBUG) System.out.println("Got char " + Utility.hex(ch) + ", type=" + type + ", index=" + index);
-
-            // Examples of NON_COMPOSING_COMBINING with an index < minExplode:
-            // 00A8 017F 03D2 1FBF 1FFE
-            if (type == ComposeData.BASE || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)) {
-                if (DEBUG) System.out.println("New base " + Utility.hex(ch) + ", type=" + type + ", index=" + index);
-                classesSeenL = classesSeenH = 0;
-                baseIndex = index;
-                basePos = result.length();
-                result.append(ch);
-            }
-            else if (type == ComposeData.COMBINING)
-            {
-                // assert(index > 0);
-                int cclass = ComposeData.typeBit[index];
-                // typeBit is a bit value from 0..63, indicating the class.
-                // We use a bit mask of 2 32-bit ints.
-                boolean seen = 0 != ((cclass < 32) ?
-                    (classesSeenL & (1 << cclass)) :
-                    (classesSeenH & (1 << (cclass & 31))));
-
-                if (DEBUG) System.out.println("Class of " + Utility.hex(ch) + " = " + cclass +
-                    " seen:" + seen +
-                    " baseIndex:" + baseIndex +
-                    " action:" + composeAction(baseIndex, index));
-
-                // We can only combine a character with the base if we haven't
-                // already seen a combining character with the same canonical class.
-                // We only combine characters with an index from
-                // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
-                // also combining characters, but we know that they don't
-                // compose with anything.
-                if (index < ComposeData.COMBINING_COUNT && !seen
-                    && (action = composeAction(baseIndex, index)) > 0)
-                {
-                    if (action > ComposeData.MAX_COMPOSED) {
-                        // Pairwise explosion.  Actions above this value are really
-                        // indices into an array that in turn contains indices
-                        // into the exploding string table
-                        // TODO: What if there are unprocessed chars in the explode buffer?
-                        if (DEBUG) System.out.println("Pairwise exploding");
-                        char newBase = pairExplode(explodeBuf, action);
-                        explodePos = 0;
-                        result.setCharAt(basePos, newBase);
-
-                        baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
-                        if (DEBUG) System.out.println("New base " + Utility.hex(newBase));
-                    } else {
-                        // Normal pairwise combination.  Replace the base char
-                        if (DEBUG) System.out.println("Pairwise combining");
-                        char newBase = (char) action;
-                        result.setCharAt(basePos, newBase);
-
-                        baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
-                        if (DEBUG) System.out.println("New base " + Utility.hex(newBase));
-                    }
-                    //
-                    // Since there are Unicode characters that cannot be combined in arbitrary
-                    // order, we have to re-process any combining marks that go with this
-                    // base character.  There are only four characters in Unicode that have
-                    // this problem.  If they are fixed in Unicode 3.0, this code can go away.
-                    //
-                    int len = result.length();
-                    if (len - basePos > 1) {
-                        for (int j = basePos+1; j < len; j++) {
-                            explodeBuf.append(result.charAt(j));
-                        }
-                        result.setLength(basePos+1);
-                        classesSeenL = classesSeenH = 0;
-                        if (explodePos == EMPTY) explodePos = 0;
-                    }
-                } else {
-                    // No combination with this character
-                    if (DEBUG) System.out.println("No action");
-                    bubbleAppend(result, ch, cclass);
-                    if (cclass < 32) {
-                        classesSeenL |= 1 << cclass;
-                    } else {
-                        classesSeenH |= 1 << (cclass & 31);
-                    }
-                }
-            }
-            else if (index > minExplode) {
-                // Single exploding character
-                explode(explodeBuf, index);
-                explodePos = 0;
-                if (DEBUG) System.out.println("explosion: " + Utility.hex(ch) + " --> " + Utility.hex(explodeBuf));
-            }
-            else if (type == ComposeData.HANGUL && minExplode == 0) {
-                // If we're in compatibility mode we need to decompose Hangul to Jamo,
-                // because some of the Jamo might have compatibility decompositions.
-                hangulToJamo(ch, explodeBuf, minDecomp);
-                if (DEBUG) System.out.println("decomposed hangul " + Utility.hex(ch) + " to jamo " + Utility.hex(explodeBuf));
-                explodePos = 0;
-            }
-            else if (type == ComposeData.INITIAL_JAMO) {
-                classesSeenL = classesSeenH = 0;
-                baseIndex = ComposeData.INITIAL_JAMO_INDEX;
-                basePos = result.length();
-                result.append(ch);
-                if (DEBUG) System.out.println("got initial jamo " + Utility.hex(ch));
-            }
-            else if (type == ComposeData.MEDIAL_JAMO && classesSeenL == 0 && classesSeenH == 0
-                        && baseIndex == ComposeData.INITIAL_JAMO_INDEX) {
-                // If the last character was an initial jamo, we can combine it with this
-                // one to create a Hangul character.
-                int l = result.charAt(basePos) - JAMO_LBASE;
-                int v = ch - JAMO_VBASE;
-                char newCh = (char)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
-                result.setCharAt(basePos, newCh);
-
-                if (DEBUG) System.out.println("got medial jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
-
-                baseIndex = ComposeData.MEDIAL_JAMO_INDEX;
-            }
-            else if (type == ComposeData.FINAL_JAMO && classesSeenL == 0 && classesSeenH == 0
-                        && baseIndex == ComposeData.MEDIAL_JAMO_INDEX) {
-                // If the last character was a medial jamo that we turned into Hangul,
-                // we can add this character too.
-                char newCh = (char)(result.charAt(basePos) + (ch - JAMO_TBASE));
-                result.setCharAt(basePos, newCh);
-
-                if (DEBUG) System.out.println("got final jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
-
-                baseIndex = 0;
-                basePos = -1;
-                classesSeenL = classesSeenH = 0;
-            } else {
-                if (DEBUG) System.out.println("No base as of " + Utility.hex(ch));
-                baseIndex = 0;
-                basePos = -1;
-                classesSeenL = classesSeenH = 0;
-                result.append(ch);
-            }
-        }
-        return result.toString();
+        }                     
     }
-
+    
     /**
-     * Compose starting with current input character and continuing
-     * until just before the next base char.
-     * <p>
-     * <b>Input</b>:
-     * <ul>
-     *  <li>underlying char iter points to first character to compose
-     * </ul>
-     * <p>
-     * <b>Output:</b>
-     * <ul>
-     *  <li>returns first char of composition or DONE if at end
-     *  <li>Underlying char iter is pointing at next base char or past end
-     * </ul>
+     *  Compose a string.
+     * The string will be composed to according the the specified mode.
+     * @param source     The string to compose.
+     * @param compat     If true the char array will be composed accoding to 
+     *                    NFKC rules and if false will be composed according to 
+     *                    NFC rules.
+     * @return String    The composed string   
+     * @deprecated
+     */            
+    public static String compose(String str, boolean compat, int options){
+        return compose(str,compat);                     
+    }
+    
+    /**
+     * Compose a string.
+     * The string will be composed to according the the specified mode.
+     * @param source The char array to compose.
+     * @param result A char buffer to receive the normalized text.
+     * @param compat If true the char array will be composed accoding to 
+     *                NFKC rules and if false will be composed according to 
+     *                NFC rules.
+     * @return int   The total buffer size needed;if greater than length of 
+     *                result, the output was truncated.
+     * @exception IndexOutOfBoundsException if target.length is less than the 
+     *             required length  
+     */         
+    public static int compose(char[] source,char[] target, boolean compat){
+        int length = NormalizerImpl.compose(source,0,source.length,
+                                            target,0,target.length,
+                                            compat);
+		if(length<=target.length){
+		    return length;
+		}else{
+		    throw new IndexOutOfBoundsException(Integer.toString(length));
+		} 
+    }
+    
+    /**
+     * Compose a string.
+     * The string will be composed to according the the specified mode.
+     * @param source The char array to compose.
+     * @param result A char buffer to receive the normalized text.
+     * @param compat If true the char array will be composed accoding to 
+     *                NFKC rules and if false will be composed according to 
+     *                NFC rules.
+     * @return int   The total buffer size needed;if greater than length of 
+     *                result, the output was truncated.
+     * @exception IndexOutOfBoundsException if target.length is less than the 
+     *             required length  
+     */         
+    public static int compose(char[] src,int srcStart, int srcLimit,
+                              char[] dest,int destStart, int destLimit,
+                              boolean compat){
+        int length = NormalizerImpl.compose(src,srcStart,srcLimit,
+                                            dest,destStart,destLimit,
+                                            compat);
+        if(length<=(destLimit-destStart)){
+            return length;
+        }else{
+            throw new IndexOutOfBoundsException(Integer.toString(length));
+        } 
+    }
+    
+    private static final int MAX_BUF_SIZE = 20;
+    
+    /**
+     * Decompose a string.
+     * The string will be decomposed to according the the specified mode.
+     * @param source     The string to decompose.
+     * @param compat     If true the char array will be decomposed accoding to NFKD rules
+     *                   and if false will be decomposed according to NFD rules.
+     * @return String    The decomposed string   
+     */         
+    public static String decompose(String str, boolean compat){
+        char[] dest = new char[str.length()*MAX_BUF_SIZE];
+        int[] trailCC = new int[1];
+        int destSize=0;
+        for(;;){
+            destSize=NormalizerImpl.decompose(str.toCharArray(),0,str.length(),
+                                              dest,0,dest.length,
+                                              compat,trailCC);
+            if(destSize<=dest.length){
+		        return new String(dest,0,destSize); 
+            }else{
+                dest = new char[destSize];
+            }
+        } 
+	                     
+    }
+    
+    /**
+     * Decompose a string.
+     * The string will be decomposed to according the the specified mode.
+     * @param source     The string to decompose.
+     * @param compat     If true the char array will be decomposed accoding to NFKD rules
+     *                   and if false will be decomposed according to NFD rules.
+     * @return String    The decomposed string 
+     * @deprecated  
+     */         
+    public static String decompose(String str, boolean compat, int options){
+        return decompose(str,compat);                 
+    }
+    
+    /**
+     * Decompose a string.
+     * The string will be decomposed to according the the specified mode.
+     * @param source The char array to decompose.
+     * @param result A char buffer to receive the normalized text.
+     * @param compat If true the char array will be decomposed accoding to NFKD 
+     *                rules and if false will be decomposed according to 
+     *                NFD rules.
+     * @return int   The total buffer size needed;if greater than length of 
+     *                result,the output was truncated.
+     * @exception IndexOutOfBoundsException if the target capacity is less than
+     *             the required length   
      */
-    private char nextCompose()
-    {
-        if (DEBUG) System.out.println("--------------- top of nextCompose() ---------------");
-
-        int     explodePos = EMPTY;         // Position in input buffer
-        int     basePos = 0;                // Position of last base in output string
-        int     baseIndex = 0;              // Index of last base in "actions" array
-        int     classesSeenL = 0;           // Combining classes seen since last base
-        int     classesSeenH = 0;           //  64-bit mask
-        int     action;
-        char    lastBase = 0;
-        boolean chFromText = true;
-
-        // Compatibility explosions have lower indices; skip them if necessary
-        int minExplode = mode.compat() ? 0 : ComposeData.MAX_COMPAT;
-        int minDecomp  = mode.compat() ? 0 : DecompData.MAX_COMPAT;
-
-        initBuffer();
-        if (explodeBuf == null) {
-            explodeBuf = new StringBuffer();
-        } else {
-            explodeBuf.setLength(0);
-        }
-
-        char ch = curForward();
-
-        while (ch != DONE) {
-            // Get the basic info for the character
-            int charInfo = composeLookup(ch);
-            int type = charInfo & ComposeData.TYPE_MASK;
-            int index = charInfo >>> ComposeData.INDEX_SHIFT;
-
-            if (type == ComposeData.BASE || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)) {
-                if (buffer.length() > 0 && chFromText && explodePos == EMPTY) {
-                    // When we hit a base char in the source text, we can return the text
-                    // that's been composed so far.  We'll re-process this char next time through.
-                    if (DEBUG) System.out.println("returning early because we hit a new base");
-                    break;
-                }
-                classesSeenL = classesSeenH = 0;
-                baseIndex = index;
-                basePos = buffer.length();
-                buffer.append(ch);
-                if (DEBUG) System.out.println("got BASE char " + Utility.hex(ch) + ", type=" + type + ", index=" + index);
-                lastBase = ch;
-            }
-            else if (type == ComposeData.COMBINING)
-            {
-                // assert(index > 0);
-                int cclass = ComposeData.typeBit[index];
-                boolean seen = 0 != ((cclass < 32) ?
-                    (classesSeenL & (1 << cclass)) :
-                    (classesSeenH & (1 << (cclass & 31))));
-
-                if (DEBUG) System.out.println("got COMBINING char " + Utility.hex(ch) + ", type=" + type + ", index=" + index
-                        + ", class=" + cclass);
-
-                // We can only combine a character with the base if we haven't
-                // already seen a combining character with the same canonical class.
-                if (index < ComposeData.COMBINING_COUNT && !seen
-                    && (action = composeAction(baseIndex, index)) > 0)
-                {
-                    if (action > ComposeData.MAX_COMPOSED) {
-                        // Pairwise explosion.  Actions above this value are really
-                        // indices into an array that in turn contains indices
-                        // into the exploding string table
-                        // TODO: What if there are unprocessed chars in the explode buffer?
-                        char newBase = pairExplode(explodeBuf, action);
-                        explodePos = 0;
-                        buffer.setCharAt(basePos, newBase);
-
-                        baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
-
-                        if (DEBUG) System.out.println("Pairwise explosion: " + Utility.hex(lastBase) + "," + Utility.hex(ch)
-                            + " --> " + Utility.hex(newBase) + "," + Utility.hex(explodeBuf));
-                        lastBase = newBase;
-                    } else {
-                        // Normal pairwise combination.  Replace the base char
-                        char newBase = (char) action;
-                        buffer.setCharAt(basePos, newBase);
-
-                        baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
-
-                        if (DEBUG) System.out.println("Pairwise combination: " + Utility.hex(lastBase) + "," + Utility.hex(ch)
-                            + " --> " + Utility.hex(newBase));
-                        lastBase = newBase;
-                    }
-                    //
-                    // Since there are Unicode characters that cannot be combined in arbitrary
-                    // order, we have to re-process any combining marks that go with this
-                    // base character.  There are only four characters in Unicode that have
-                    // this problem.  If they are fixed in Unicode 3.0, this code can go away.
-                    //
-                    int len = buffer.length();
-                    if (len - basePos > 1) {
-                        if (DEBUG) System.out.println("Reprocessing combining marks");
-                        for (int j = basePos+1; j < len; j++) {
-                            explodeBuf.append(buffer.charAt(j));
-                        }
-                        buffer.setLength(basePos+1);
-                        classesSeenL = classesSeenH = 0;
-                        if (explodePos == EMPTY) explodePos = 0;
-                    }
-                } else {
-                    if (DEBUG) System.out.println("char doesn't combine");
-                    // No combination with this character
-                    bubbleAppend(buffer, ch, cclass);
-                    if (cclass < 32) {
-                        classesSeenL |= 1 << cclass;
-                    } else {
-                        classesSeenH |= 1 << (cclass & 31);
-                    }
-                }
-            }
-            else if (index > minExplode) {
-                // Single exploding character
-                explode(explodeBuf, index);
-                explodePos = 0;
-                if (DEBUG) System.out.println("explosion: " + Utility.hex(ch) + " --> " + Utility.hex(explodeBuf));
-            }
-            else if (type == ComposeData.HANGUL && minExplode == 0) {
-                // If we're in compatibility mode we need to decompose Hangul to Jamo,
-                // because some of the Jamo might have compatibility decompositions.
-                hangulToJamo(ch, explodeBuf, minDecomp);
-                if (DEBUG) System.out.println("decomposed hangul " + Utility.hex(ch) + " to jamo " + Utility.hex(explodeBuf));
-                explodePos = 0;
-            }
-            else if (type == ComposeData.INITIAL_JAMO) {
-                if (buffer.length() > 0 && chFromText && explodePos == EMPTY) {
-                    // When we hit a base char in the source text, we can return the text
-                    // that's been composed so far.  We'll re-process this char next time through.
-                    if (DEBUG) System.out.println("returning early because we hit a new base");
-                    break;
-                }
-                classesSeenL = classesSeenH = 0;
-                baseIndex = ComposeData.INITIAL_JAMO_INDEX;
-                basePos = buffer.length();
-                buffer.append(ch);
-                if (DEBUG) System.out.println("got initial jamo " + Utility.hex(ch));
-            }
-            else if (type == ComposeData.MEDIAL_JAMO && classesSeenL == 0 && classesSeenH == 0
-                        && baseIndex == ComposeData.INITIAL_JAMO_INDEX) {
-                // If the last character was an initial jamo, we can combine it with this
-                // one to create a Hangul character.
-                int l = buffer.charAt(basePos) - JAMO_LBASE;
-                int v = ch - JAMO_VBASE;
-                char newCh = (char)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
-                buffer.setCharAt(basePos, newCh);
-
-                if (DEBUG) System.out.println("got medial jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
-
-                baseIndex = ComposeData.MEDIAL_JAMO_INDEX;
-            }
-            else if (type == ComposeData.FINAL_JAMO && classesSeenL == 0 && classesSeenH == 0
-                        && baseIndex == ComposeData.MEDIAL_JAMO_INDEX) {
-                // If the last character was a medial jamo that we turned into Hangul,
-                // we can add this character too.
-                char newCh = (char)(buffer.charAt(basePos) + (ch - JAMO_TBASE));
-                buffer.setCharAt(basePos, newCh);
-
-                if (DEBUG) System.out.println("got final jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
-
-                baseIndex = 0;
-                basePos = -1;
-                classesSeenL = classesSeenH = 0;
-            } else {
-                // TODO: deal with JAMO character types
-                baseIndex = 0;
-                basePos = -1;
-                classesSeenL = classesSeenH = 0;
-                buffer.append(ch);
-                if (DEBUG) System.out.println("UNKNOWN char " + Utility.hex(ch));
-            }
-
-            if (explodePos == EMPTY) {
-                ch = text.next();
-                chFromText = true;
-            } else {
-                ch = explodeBuf.charAt(explodePos++);
-                if (explodePos >= explodeBuf.length()) {
-                    explodePos = EMPTY;
-                    explodeBuf.setLength(0);
-                }
-                chFromText = false;
+    public static int decompose(char[] source,char[] target, boolean compat){
+        int[] trailCC = new int[1];
+        int length = NormalizerImpl.decompose(source,0,source.length,
+                                              target,0,target.length,
+                                              compat,trailCC);
+		if(length<=target.length){
+		    return length;
+		}else{
+		    throw new IndexOutOfBoundsException(Integer.toString(length));
+		} 
+    }
+    
+    public static int decompose(char[] src,int srcStart, int srcLimit,
+                                char[] dest,int destStart, int destLimit,
+                                boolean compat){
+        int[] trailCC = new int[1];
+        int length = NormalizerImpl.decompose(src,srcStart,srcLimit,
+                                              dest,destStart,destLimit,
+                                              compat,trailCC);
+        if(length<=(destLimit-destStart)){
+            return length;
+        }else{
+            throw new IndexOutOfBoundsException(Integer.toString(length));
+        } 
+    }
+    /**
+     * Normalize a string.
+     * The string will be normalized according the the specified normalization mode
+     * and options.
+     * @param source     The string to normalize.
+     * @param mode       The normalization mode; one of Normalizer.NONE, 
+     *                   Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
+     *                   Normalizer.NFKD, Normalizer.DEFAULT
+     * @return String    The normalized string
+     *   
+     */
+    public static String normalize( String src,Mode mode){
+        return mode.dispatch(src);    
+    }
+    
+    private static String makeFCD(String src){
+        int srcLen = src.length();
+        char[] dest = new char[MAX_BUF_SIZE*srcLen];
+        int length = 0;
+        for(;;){
+            length = NormalizerImpl.makeFCD(src.toCharArray(),0,srcLen,
+                                            dest,0,dest.length);
+            if(length <= dest.length){
+                return new String(dest,0,length);
+            }else{
+                dest = new char[length];
             }
         }
-        if (buffer.length() > 0) {
-            bufferLimit = buffer.length() - 1;
-            ch = buffer.charAt(0);
-        } else {
-            ch = DONE;
-            bufferLimit = 0;
-        }
-        return ch;
+    }
+    
+    /**
+     * Normalize a string.
+     * The string will be normalized according the the specified normalization mode
+     * and options.
+     * @param source The char array to normalize.
+     * @param result A char buffer to receive the normalized text.
+     * @param mode   The normalization mode; one of Normalizer.NONE, 
+     *               Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
+     *               Normalizer.NFKD, Normalizer.DEFAULT
+     * @return int   The total buffer size needed;if greater than length of result,
+     *               the output was truncated.
+     * @exception IndexOutOfBoundsException if the target capacity is less than
+     *             the required length     
+     */
+    public static int normalize(char[] source, 
+                                char[] target, 
+                                Mode  mode){
+		int length = normalize(source,0,source.length,target,0,target.length,mode);
+		if(length<=target.length){
+		    return length;
+		}else{
+		    throw new IndexOutOfBoundsException(Integer.toString(length));
+		} 
+    }
+    
+    /**
+     * Normalize a string.
+     * The string will be normalized according the the specified normalization mode
+     * and options.
+     * @param source The char array to normalize.
+     * @param result A char buffer to receive the normalized text.
+     * @param mode   The normalization mode; one of Normalizer.NONE, 
+     *               Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
+     *               Normalizer.NFKD, Normalizer.DEFAULT
+     * @return int   The total buffer size needed;if greater than length of result,
+     *               the output was truncated.
+     * @exception IndexOutOfBoundsException if the target capacity is less than
+     *             the required length     
+     */       
+    public static int normalize(char[] src,int srcStart, int srcLimit, 
+                                char[] dest,int destStart, int destLimit,
+                                Mode  mode){
+        int[] outTrailCC = new int[2];
+        int length =mode.dispatch(src,srcStart,srcLimit,dest,destStart,destLimit);
+       
+        if(length<=(destLimit-destStart)){
+            return length;
+        }else{
+            throw new IndexOutOfBoundsException(Integer.toString(length));
+        } 
     }
 
     /**
-     * Compose starting with the input char just before the current position
-     * and continuing backward until (and including) the previous base char.
-     * <p>
-     * <b>Input</b>:
-     * <ul>
-     *  <li>underlying char iter points just after last char to decompose
-     * </ul>
-     * <p>
-     * <b>Output:</b>
-     * <ul>
-     *  <li>returns last char of resulting decomposition sequence
-     *  <li>underlying iter points to lowest-index char we decomposed, i.e. the base char
-     * </ul>
+     * Conveinience method.
+     *
+     * @param source       string for determining if it is in a normalized format
+     * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
+     *                     Normalizer.NFKC,Normalizer.NFKD)
+     * @return             Return code to specify if the text is normalized or not 
+     *                     (Normalizer.YES, Normalizer.NO or
+     *                     Normalizer.MAYBE)
      */
-    private char prevCompose() {
-        if (DEBUG) System.out.println("--------------- top of prevCompose() ---------------");
-
-        // Compatibility explosions have lower indices; skip them if necessary
-        int minExplode = mode.compat() ? 0 : ComposeData.MAX_COMPAT;
-
-        initBuffer();
-
-        // Slurp up characters until we hit a base char or an initial Jamo
-        char ch;
-        while ((ch = curBackward()) != DONE) {
-            buffer.insert(0, ch);
-
-            // Get the basic info for the character
-            int charInfo = composeLookup(ch);
-            int type = charInfo & ComposeData.TYPE_MASK;
-            int index = charInfo >>> ComposeData.INDEX_SHIFT;
-
-            if (DEBUG) System.out.println("prevCompose got char " + Utility.hex(ch) +
-                                          ", type=" + type + ", index=" + index +
-                                          ", minExplode=" + minExplode);
-
-            if (type == ComposeData.BASE
-                || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)
-                || type == ComposeData.HANGUL
-                || type == ComposeData.INITIAL_JAMO)
-            {
-                break;
-            }
-        }
-        // If there's more than one character in the buffer, compose it all at once....
-        if (buffer.length() > 0) {
-            // TODO: The performance of this is awful; add a way to compose
-            // a StringBuffer in place.
-            String composed = compose(buffer.toString(), mode.compat(), options);
-            if (DEBUG) System.out.println("prevCompose called compose(" + Utility.hex(buffer) +
-                                          ")->" + Utility.hex(composed));            
-            buffer.setLength(0);
-            buffer.append(composed);
-
-            if (buffer.length() > 1) {
-                bufferLimit = bufferPos = buffer.length() - 1;
-                ch = buffer.charAt(bufferPos);
-            } else {
-                ch = buffer.charAt(0);
-            }
-        }
-        else {
-            ch = DONE;
-        }
-
-        if (DEBUG) System.out.println("prevCompose returning " + Utility.hex(ch));
-        return ch;
+    public static QuickCheckResult quickCheck( String source, Mode mode){
+	    return mode.quickCheck(source.toCharArray(),0,source.length(),true);
     }
-
-    private static void bubbleAppend(StringBuffer target, char ch, int cclass) {
-        if (DEBUG) System.out.println(" bubbleAppend(" + Utility.hex(target) + ", " + Utility.hex(ch) + ", " + cclass + ")" );
-        if (DEBUG) System.out.println(" getComposeClass(" + Utility.hex(ch) + ")=" + getComposeClass(ch) );       
-        if (DEBUG) System.out.println(" target before bubbling is : " + Utility.hex(target));
-        
-        int i = target.length()-1;
-        if (cclass != 1) {      // 1 means combining class 0!!!
-            for (; i >= 0; --i ) {
-                int iClass = getComposeClass(target.charAt(i));
-                if (DEBUG) System.out.println("  getComposeClass(" + Utility.hex(target.charAt(i)) + ")=" + getComposeClass(target.charAt(i)) );   
-                if (DEBUG) System.out.println(" bubbleAppend: target[" + i + "]=" + Utility.hex(target.charAt(i)) + " is iClass=" + iClass + " CC="+ UCharacter.getCombiningClass(target.charAt(i)));
-                if (DEBUG) System.out.println(" bubbleAppend: for ch="+ Utility.hex(ch) + " class="+cclass + " CC=" + UCharacter.getCombiningClass(ch));
-                if (iClass <= cclass) {
-                    // We've hit something we can't bubble this character past, so insert here
-                    break;
-                }
-            }
-        }
-        // We need to insert just after character "i"
-        if (DEBUG) System.out.println(" bubbleAppend inserting "+ Utility.hex(ch)+" at index " + (i+1));
-        
-        target.insert(i+1, ch);
-        
-        if (DEBUG) System.out.println(" target is : " + Utility.hex(target));
+    
+    /**
+     * Conveinience method.
+     *
+     * @param source       string for determining if it is in a normalized format
+     * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
+     *                     Normalizer.NFKC,Normalizer.NFKD)
+     * @return             Return code to specify if the text is normalized or not 
+     *                     (Normalizer.YES, Normalizer.NO or
+     *                     Normalizer.MAYBE)
+     */
+    public static QuickCheckResult quickCheck(char[] source, Mode mode){
+        return mode.quickCheck(source,0,source.length,true);
     }
+    /**
+     * Performing quick check on a string, to quickly determine if the string is 
+     * in a particular normalization format.
+     * Three types of result can be returned Normalizer.YES, Normalizer.NO or
+     * Normalizer.MAYBE. Result Normalizer.YES indicates that the argument
+     * string is in the desired normalized format, Normalizer.NO determines that
+     * argument string is not in the desired normalized format. A Normalizer.MAYBE
+     * result indicates that a more thorough check is required, the user may have to
+     * put the string in its normalized form and compare the results.
+     *
+     * @param source       string for determining if it is in a normalized format
+     * @param start        the start index of the source
+     * @param limit        the limit index of the source it is equal to the length
+     * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
+     *                     Normalizer.NFKC,Normalizer.NFKD)
+     * @return             Return code to specify if the text is normalized or not 
+     *                     (Normalizer.YES, Normalizer.NO or
+     *                     Normalizer.MAYBE)
+     */
 
-    private static int getComposeClass(char ch) {
-        int cclass = 0;
-        int charInfo = composeLookup(ch);
-        int type = charInfo & ComposeData.TYPE_MASK;
-        if(DEBUG) System.out.println(Utility.hex(ch) + " charInfo: " +charInfo + " type : " +type);
-        if (type == ComposeData.COMBINING) {
-            cclass = ComposeData.typeBit[charInfo >>> ComposeData.INDEX_SHIFT];
-        }
-        return cclass;
+    public static QuickCheckResult quickCheck(char[] source,int start, 
+                                              int limit, Mode mode){    	
+	    return mode.quickCheck(source,0,source.length,true);
     }
-
-    static final int composeLookup(char ch) {
-        return ComposeData.lookup.elementAt(ch);
-    }
-
-    static final int composeAction(int baseIndex, int comIndex) {
-        return ComposeData.actions.elementAt((char)(baseIndex
-                                            + ComposeData.MAX_BASES*comIndex));
-    }
-
-    static final void explode(StringBuffer target, int index) {
-        char ch;
-        while ((ch = ComposeData.replace.charAt(index++)) != 0)
-            target.append(ch);
-    }
-
-    static final char pairExplode(StringBuffer target, int action) {
-        int index = ComposeData.actionIndex[action - ComposeData.MAX_COMPOSED];
-        explode(target, index + 1);
-        return ComposeData.replace.charAt(index);   // New base char
-    }
-
-
+    
     //-------------------------------------------------------------------------
-    // Decompose methods
+    // Internal methods (for now)
     //-------------------------------------------------------------------------
 
     /**
-     * Static method to decompose a <tt>String</tt>.
-     * <p>
-     * The <tt>options</tt> parameter specifies which optional
-     * <tt>Normalizer</tt> features are to be enabled for this operation.
-     * Currently the only available option is {@link #IGNORE_HANGUL}.
-     * The desired options should be OR'ed together to determine the value
-     * of this argument.  If you want the default behavior corresponding
-     * to Unicode Normalization Form <b>D</b> or <b>KD</b>,
-     * use 0 for this argument.
-     * <p>
-     * @param str   the string to be decomposed.
+     * Convenience method that can have faster implementation
+     * by simply accessing the data for a single character.
+     * @internal
+     * @param char32    the input string to be normalized.
      *
-     * @param compat    Perform compatibility decomposition.
-     *                  If this argument is <tt>false</tt>, only canonical
-     *                  decomposition will be performed.
+     * @param aMode     the normalization mode
      *
-     *
-     * @return      the decomposed string.
      */
-    public static String decompose(String source, boolean compat, int options)
-    {
-        if (DEBUG) System.out.println("--------------- top of decompose() ---------------");
-
-        boolean hangul = (options & IGNORE_HANGUL) == 0;
-        int minDecomp = compat ? 0 : DecompData.MAX_COMPAT;
- 
-        StringBuffer result = new StringBuffer();
-        StringBuffer buffer = null;
-
-        int i = 0, bufPtr = -1;
-
-        while (i < source.length() || bufPtr >= 0)
-        {
-            char ch;
-
-            if (bufPtr >= 0) {
-                ch = buffer.charAt(bufPtr++);
-                if (bufPtr == buffer.length()) {
-                    bufPtr = -1;
-                }
-            } else {
-                ch = source.charAt(i++);
-            }
-
-            int offset = DecompData.offsets.elementAt(ch);
-            int index = offset & DecompData.DECOMP_MASK;
-
-            if (DEBUG) System.out.println("decompose got " + Utility.hex(ch));
-
-            if (index > minDecomp) {
-                if ((offset & DecompData.DECOMP_RECURSE) != 0) {
-                    if (DEBUG) System.out.println(" " + Utility.hex(ch) + " has RECURSIVE decomposition, index=" + index);
-                    if (buffer == null) {
-                        buffer = new StringBuffer();
-                    } else {
-                        buffer.setLength(0);
-                    }
-                    doAppend(DecompData.contents, index, buffer);
-                    bufPtr = 0;
-                } else {
-                    if (DEBUG) System.out.println(" " + Utility.hex(ch) + " has decomposition, index=" + index);
-                    doAppend(DecompData.contents, index, result);
-                }
-            } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
-                hangulToJamo(ch, result, minDecomp);
-            } else {
-                result.append(ch);
-            }
-        }
-        fixCanonical(result);
-        return result.toString();
+    // TODO: actually do the optimization when the guts of Normalizer are upgraded
+    // --has just dumb implementation for now
+    public static String normalize(int char32, Mode mode) {
+        return normalize(UTF16.valueOf(char32), mode);
     }
-
+    
     /**
-     * Decompose starting with current input character and continuing
-     * until just before the next base char.
-     * <p>
-     * <b>Input</b>:
-     * <ul>
-     *  <li>underlying char iter points to first character to decompose
-     * </ul>
-     * <p>
-     * <b>Output:</b>
-     * <ul>
-     *  <li>returns first char of decomposition or DONE if at end
-     *  <li>Underlying char iter is pointing at next base char or past end
-     * </ul>
+     * Convenience method that can have faster implementation
+     * by not allocating buffers.
+     * @internal
+     * @param str       the input string to be checked to see if it is normalized
+     *
+     * @param aMode     the normalization mode
      */
-    private char nextDecomp()
-    {
-        if (DEBUG) System.out.println("--------------- top of nextDecomp() ---------------");
-
-        boolean hangul = (options & IGNORE_HANGUL) == 0;
-        char ch = curForward();
-
-        int offset = DecompData.offsets.elementAt(ch);
-        int index = offset & DecompData.DECOMP_MASK;
-
-        if (index > minDecomp || DecompData.canonClass.elementAt(ch) != DecompData.BASE)
-        {
-            initBuffer();
-
-            if (index > minDecomp) {
-                if (DEBUG) System.out.println(" " + Utility.hex(ch) + " has decomposition, index=" + index);
-                doAppend(DecompData.contents, index, buffer);
-
-                if ((offset & DecompData.DECOMP_RECURSE) != 0) {
-                    // Need to decompose the output of this decomposition recursively.
-                    for (int i = 0; i < buffer.length(); i++) {
-                        ch = buffer.charAt(i);
-                        index = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
-
-                        if (index > minDecomp) {
-                            i += doReplace(DecompData.contents, index, buffer, i);
-                        }
-                    }
-                }
-            } else {
-                buffer.append(ch);
-            }
-            boolean needToReorder = false;
-
-            // Any other combining chacters that immediately follow the decomposed
-            // character must be included in the buffer too, because they're
-            // conceptually part of the same logical character.
-            while ((ch = text.next()) != DONE
-                && DecompData.canonClass.elementAt(ch) != DecompData.BASE)
-            {
-                needToReorder = true;
-                // Decompose any of these characters that need it - Liu
-                index = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
-                if (index > minDecomp) {
-                    doAppend(DecompData.contents, index, buffer);
-                } else {
-                    buffer.append(ch);
-                }
-            }
-
-            if (buffer.length() > 1 && needToReorder) {
-                // If there is more than one combining character in the buffer,
-                // put them into the canonical order.
-                // But we don't need to sort if only characters are the ones that
-                // resulted from decomosing the base character.
-                fixCanonical(buffer);
-            }
-            bufferLimit = buffer.length() - 1;
-            ch = buffer.charAt(0);
-        } else {
-            // Just use this character, but first advance to the next one
-            text.next();
-
-            // Do Hangul -> Jamo decomposition if necessary
-            if (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) {
-                initBuffer();
-                hangulToJamo(ch, buffer, minDecomp);
-                bufferLimit = buffer.length() - 1;
-                ch = buffer.charAt(0);
-            }
-        }
-        if (DEBUG) System.out.println(" nextDecomp returning " + Utility.hex(ch) + ", text index=" + text.getIndex());
-        return ch;
+    // TODO: actually do the optimization when the guts of Normalizer are upgraded
+    // --has just dumb implementation for now
+    public static boolean isNormalized(char[] src,int start,int limit, Mode mode) {
+        return (mode.quickCheck(src,start,limit,false)==YES);
     }
-
     /**
-     * Decompose starting with the input char just before the current position
-     * and continuing backward until (and including) the previous base char.
-     * <p>
-     * <b>Input</b>:
-     * <ul>
-     *  <li>underlying char iter points just after last char to decompose
-     * </ul>
-     * <p>
-     * <b>Output:</b>
-     * <ul>
-     *  <li>returns last char of resulting decomposition sequence
-     *  <li>underlying iter points to lowest-index char we decomposed, i.e. the base char
-     * </ul>
+     * Convenience method that can have faster implementation
+     * by not allocating buffers.
+     * @internal
+     * @param str       the input string to be checked to see if it is normalized
+     *
+     * @param aMode     the normalization mode
      */
-    private char prevDecomp() {
-        if (DEBUG) System.out.println("--------------- top of prevDecomp() ---------------");
-
-        boolean hangul = (options & IGNORE_HANGUL) == 0;
-
-        char ch = curBackward();
-
-        int offset = DecompData.offsets.elementAt(ch);
-        int index = offset & DecompData.DECOMP_MASK;
-
-        if (DEBUG) System.out.println("prevDecomp got input char " + Utility.hex(ch));
-
-        if (index > minDecomp || DecompData.canonClass.elementAt(ch) != DecompData.BASE)
-        {
-            initBuffer();
-
-            // This method rewritten to pass conformance tests. - Liu
-            // Collect all characters up to the previous base char
-            while (ch != DONE) {
-                buffer.insert(0, ch);
-                if (DecompData.canonClass.elementAt(ch) == DecompData.BASE) break;
-                ch = text.previous();
-            }
-
-            if (DEBUG) System.out.println("prevDecomp buffer: " + Utility.hex(buffer));
-
-            // Decompose the buffer
-            for (int i = 0; i < buffer.length(); i++) {
-                ch = buffer.charAt(i);
-                offset = DecompData.offsets.elementAt(ch);
-                index = offset & DecompData.DECOMP_MASK;                
-
-                if (index > minDecomp) {
-                    int j = doReplace(DecompData.contents, index, buffer, i);
-                    if ((offset & DecompData.DECOMP_RECURSE) != 0) {
-                        // Need to decompose this recursively
-                        for (; i < j; ++i) {
-                            ch = buffer.charAt(i);
-                            index = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
-                            if (index > minDecomp) {
-                                i += doReplace(DecompData.contents, index, buffer, i);
-                            }
-                        }
-                    }
-                    i = j;
-                }
-            }
-            
-            if (DEBUG) System.out.println("prevDecomp buffer after decomp: " + Utility.hex(buffer));
-
-            if (buffer.length() > 1) {
-                // If there is more than one combining character in the buffer,
-                // put them into the canonical order.
-                fixCanonical(buffer);
-            }
-            bufferLimit = bufferPos = buffer.length() - 1;
-            ch = buffer.charAt(bufferPos);
-        }
-        else if (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) {
-            initBuffer();
-            hangulToJamo(ch, buffer, minDecomp);
-            bufferLimit = bufferPos = buffer.length() - 1;
-            ch = buffer.charAt(bufferPos);
-        }
-        if (DEBUG) System.out.println(" prevDecomp returning '" + ch + "' " + Utility.hex(ch) + ", text index=" + text.getIndex());
-        return ch;
+    // TODO: actually do the optimization when the guts of Normalizer are upgraded
+    // --has just dumb implementation for now
+    public static boolean isNormalized(String str, Mode mode) {
+        return (mode.quickCheck(str.toCharArray(),0,str.length(),false)==YES);
     }
-
-    static final int getClass(char ch) {
-        int value = DecompData.canonClass.elementAt(ch);
-        return (value >= 0) ? value : value + 256;
+    
+    /**
+     * Convenience method that can have faster implementation
+     * by not allocating buffers.
+     * @internal
+     * @param char32    the input code point to be checked to see if it is normalized
+     *
+     * @param aMode     the normalization mode
+     */
+    // TODO: actually do the optimization when the guts of Normalizer are upgraded
+    // --has just dumb implementation for now
+    public static boolean isNormalized(int char32, Mode mode) {
+        return isNormalized(UTF16.valueOf(char32), mode);
     }
-
-
+       
+    
+    /**
+     * Convenience method that can have faster implementation
+     * by not allocating buffers.
+     * @internal
+     * @param char32a    the first code point to be checked against the
+     * @param char32b    the second code point
+     *
+     * @param aMode     the normalization mode
+     */
+    // TODO: actually do the optimization when the guts of Normalizer are upgraded
+    // --has just dumb implementation for now
+    public static int compare(int char32a, int char32b,int options) {
+        return compare(UTF16.valueOf(char32a), UTF16.valueOf(char32b), options);
+    }
+    
+    
+    /**
+     * Convenience method that can have faster implementation
+     * by not allocating buffers.
+     * @internal
+     * @param char32a    the first code point to be checked against the
+     * @param str2    the second string
+     *
+     * @param aMode     the normalization mode
+     *
+     */
+    // TODO: actually do the optimization when the guts of Normalizer are upgraded
+    // --has just dumb implementation for now
+    public static int compare(int charA, String str2, int options) {
+        return compare(UTF16.valueOf(charA), str2, options);
+    }
     //-------------------------------------------------------------------------
-    // CharacterIterator overrides
+    // Iteration API
     //-------------------------------------------------------------------------
-
+	
     /**
-     * Return the current character in the normalized text.
+     * Return the current character in the normalized text->
      */
-    public char current() {
-        if (currentChar == DONE) {
-            if (mode.compose()) {
-                currentChar = nextCompose();
-            }
-            else if (mode.decomp()) {
-                currentChar = nextDecomp();
-            }
-            else {
-                currentChar = text.current();
-            }
-        }
-        return currentChar;
+    public int current() {
+		if(bufferPos<bufferLimit || nextNormalize()) {
+		    return getCodePointAt(bufferPos);
+		} else {
+		    return DONE;
+		}
     }
-
-    /**
-     * Return the first character in the normalized text.  This resets
-     * the <tt>Normalizer's</tt> position to the beginning of the text.
-     */
-    public char first() {
-        return setIndex(text.getBeginIndex());
-    }
-
-    /**
-     * Return the last character in the normalized text.  This resets
-     * the <tt>Normalizer's</tt> position to be just before the
-     * the input text corresponding to that normalized character.
-     */
-    public char last() {
-        text.setIndex(text.getEndIndex() - 1);  // Setting to getEndIndex() fails in 1.1
-        atEnd = true;                               // so work around the bug
-
-        currentChar = DONE;                     // The current char hasn't been processed
-        clearBuffer();                          // The buffer is empty too
-        return previous();
-    }
-
+	
     /**
      * Return the next character in the normalized text and advance
      * the iteration position by one.  If the end
      * of the text has already been reached, {@link #DONE} is returned.
      */
-    public char next() {
-        if (bufferPos < bufferLimit) {
-            // There are output characters left in the buffer
-            currentChar = buffer.charAt(++bufferPos);
-        }
-        else {
-            bufferLimit = bufferPos = 0;    // Buffer is now out of date
-            if (mode.compose()) {
-                currentChar = nextCompose();
-            }
-            else if (mode.decomp()) {
-                currentChar = nextDecomp();
-            }
-            else {
-                currentChar = text.next();
-            }
-        }
-        return currentChar;
+    public int next() {
+		if(bufferPos<bufferLimit ||  nextNormalize()) {
+		    int c=getCodePointAt(bufferPos);
+		    bufferPos+=(c>0xFFFF) ? 2 : 1;
+		    return c;
+		} else {
+		    return DONE;
+		}
     }
-
+	
+        
     /**
      * Return the previous character in the normalized text and decrement
      * the iteration position by one.  If the beginning
      * of the text has already been reached, {@link #DONE} is returned.
      */
-    public char previous() {
-        if (bufferPos > 0) {
-            // There are output characters left in the buffer
-            currentChar = buffer.charAt(--bufferPos);
-        }
-        else {
-            bufferLimit = bufferPos = 0;    // Buffer is now out of date
-            if (mode.compose()) {
-                currentChar = prevCompose();
-            }
-            else if (mode.decomp()) {
-                currentChar = prevDecomp();
-            }
-            else {
-                currentChar = text.previous();
-            }
-        }
-        return currentChar;
+    public int previous() {
+		if(bufferPos>0 || previousNormalize()) {
+		    int c=getCodePointAt(bufferPos-1);
+		    bufferPos-=(c>0xFFFF) ? 2 : 1;
+		    return c;
+		} else {
+		    return DONE;
+		}
     }
-
+	
+    public void reset() {
+        text.setIndex(0);
+		currentIndex=nextIndex=0;
+		clearBuffer();
+    }
+	
+    public void setIndexOnly(int index) {
+        text.setIndex(index);
+		currentIndex=nextIndex=index; // validates index
+		clearBuffer();
+    }
+	
     /**
      * Set the iteration position in the input text that is being normalized
      * and return the first normalized character at that position.
      * <p>
-     * @param index the desired index in the input text.
+     * <b>Note:</b> This method sets the position in the <em>input</em> text,
+     * while {@link #next} and {@link #previous} iterate through characters
+     * in the normalized <em>output</em>.  This means that there is not
+     * necessarily a one-to-one correspondence between characters returned
+     * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
+     * returned from <tt>setIndex</tt> and {@link #getIndex}.
+     * <p>
+     * @param index the desired index in the input text->
      *
      * @return      the first normalized character that is the result of iterating
      *              forward starting at the given index.
@@ -1266,47 +1130,95 @@ public final class Normalizer {
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
      */
-    public char setIndex(int index) {
-        text.setIndex(index);   // Checks range
-        currentChar = DONE;     // The current char hasn't been processed
-        clearBuffer();          // The buffer is empty too
-
-        return current();
+    public int setIndex(int index) {
+		setIndexOnly(index);
+		return current();
     }
-
-    /**
-     * Retrieve the current iteration position in the input text that is
-     * being normalized.  This method is useful in applications such as
-     * searching, where you need to be able to determine the position in
-     * the input text that corresponds to a given normalized output character.
-     */
-    public final int getIndex() {
-        return text.getIndex();
-    }
-
+ 
     /**
      * Retrieve the index of the start of the input text.  This is the begin index
      * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
+     * @deprecated
      */
-    public final int getBeginIndex() {
-        return text.getBeginIndex();
+    public int getBeginIndex() {
+        return 0;
     }
 
     /**
      * Retrieve the index of the end of the input text.  This is the end index
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
+     * @deprecated
      */
-    public final int getEndIndex() {
-        return text.getEndIndex();
+    public int getEndIndex() {
+        return text.getLength()-1;
     }
-
+    /**
+     * Return the first character in the normalized text->  This resets
+     * the <tt>Normalizer's</tt> position to the beginning of the text->
+     */
+    public int first() {
+		reset();
+		return next();
+    }
+	
+    /**
+     * Return the last character in the normalized text->  This resets
+     * the <tt>Normalizer's</tt> position to be just before the
+     * the input text corresponding to that normalized character.
+     */
+    public int last() {
+        text.setToLimit();
+		currentIndex=nextIndex=text.getIndex();
+		clearBuffer();
+		return previous();
+    }
+	
+    /**
+     * Retrieve the current iteration position in the input text that is
+     * being normalized.  This method is useful in applications such as
+     * searching, where you need to be able to determine the position in
+     * the input text that corresponds to a given normalized output character.
+     * <p>
+     * <b>Note:</b> This method sets the position in the <em>input</em>, while
+     * {@link #next} and {@link #previous} iterate through characters in the
+     * <em>output</em>.  This means that there is not necessarily a one-to-one
+     * correspondence between characters returned by <tt>next</tt> and
+     * <tt>previous</tt> and the indices passed to and returned from
+     * <tt>setIndex</tt> and {@link #getIndex}.
+     *
+     */
+    public int getIndex(){
+		if(bufferPos<bufferLimit) {
+		    return currentIndex;
+		} else {
+		    return nextIndex;
+		}
+    }
+	
+    /**
+     * Retrieve the index of the start of the input text->  This is the begin index
+     * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
+     * over which this <tt>Normalizer</tt> is iterating
+     */
+    public int startIndex(){
+		return 0;
+    }
+	
+    /**
+     * Retrieve the index of the end of the input text->  This is the end index
+     * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
+     * over which this <tt>Normalizer</tt> is iterating
+     */
+    public int endIndex(){
+		return text.getLength();
+    }
+    
     //-------------------------------------------------------------------------
     // Property access methods
     //-------------------------------------------------------------------------
-
-    /**
+	/**
      * Set the normalization mode for this object.
      * <p>
      * <b>Note:</b>If the normalization mode is changed while iterating
@@ -1331,21 +1243,18 @@ public final class Normalizer {
      *
      * @see #getMode
      */
-    public void setMode(Mode newMode) {
-        mode = newMode;
-        minDecomp = mode.compat() ? 0 : DecompData.MAX_COMPAT;
+    public void setMode(Mode newMode){
+		mode = newMode;
     }
-
-    /**
+	/**
      * Return the basic operation performed by this <tt>Normalizer</tt>
      *
      * @see #setMode
      */
     public Mode getMode() {
-        return mode;
+		return mode;
     }
-
-    /**
+	/**
      * Set options that affect this <tt>Normalizer</tt>'s operation.
      * Options do not change the basic composition or decomposition operation
      * that is being performed , but they control whether
@@ -1365,403 +1274,1005 @@ public final class Normalizer {
      *                  turn the option on and <tt>false</tt> to turn it off.
      *
      * @see #getOption
+     * @deprecated
      */
-    public void setOption(int option, boolean value) {
-        if (option != IGNORE_HANGUL) {
-            throw new IllegalArgumentException("Illegal option");
-        }
-        if (value) {
-            options |= option;
-        } else {
-            options &= (~option);
-        }
+    public void setOption(int option,boolean value) {
+		if (value) {
+		    options |= option;
+		} else {
+		    options &= (~option);
+		}
     }
-
+	
     /**
      * Determine whether an option is turned on or off.
      * <p>
      * @see #setOption
+     * @deprecated
      */
-    public boolean getOption(int option) {
-        return (options & option) != 0;
+    public int getOption(int option){
+	    if((options & option)!=0){
+            return 1 ;
+        }else{
+            return 0;
+        }
     }
-
+    
+    /**
+     * Gets the underlying text storage
+     * @param fillIn the char buffer to fill the UTF-16 units.
+     *         The length of the buffer should be equal to the length of the
+     *         underlying text storage
+     * @throws IndexOutOfBoundsException
+     * @see   #getLength
+     */
+    public int getText(char[] fillIn){
+        return text.getText(fillIn);
+    }
+    
+    /**
+     * Gets the length of underlying text storage
+     * @return the length
+     */ 
+    public int getLength(){
+        return text.getLength();
+    }
+    
+    /**
+     * Returns the text under iteration as a string
+     * @param result a copy of the text under iteration.
+     */
+    public String getText(){
+        return text.getText();
+    }
+    
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
-     * The iteration position will be reset to the beginning.
-     * <p>
+     * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
      */
-    public void setText(String newText) {
-        text = new StringCharacterIterator(newText);
+    public void setText(StringBuffer newText){
+        
+        UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
+        if (newIter == null) {
+                throw new InternalError("Could not create a new UCharacterIterator");
+        }  
+        text = newIter;
         reset();
     }
-
+	
     /**
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
-     * The iteration position will be reset to the beginning.
-     * <p>
-     * @param newText   The new text to be normalized.
+     * The iteration position is set to the beginning of the input text->
+     * @param newText   The new string to be normalized.
      */
-    public void setText(CharacterIterator newText) {
-        text = newText;
+    public void setText(char[] newText){
+        
+        UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
+        if (newIter == null) {
+                throw new InternalError("Could not create a new UCharacterIterator");
+        }  
+        text = newIter;
         reset();
     }
-
-    //-------------------------------------------------------------------------
-    // Internal methods (for now)
-    //-------------------------------------------------------------------------
-
-	/**
-	 * Convenience method that can have faster implementation
-	 * by simply accessing the data for a single character.
-	 * @internal
-     * @param char32	the input string to be normalized.
-     *
-     * @param aMode     the normalization mode
-     *
-     * @param options   the optional features to be enabled.
+    
+    /**
+     * Set the input text over which this <tt>Normalizer</tt> will iterate.
+     * The iteration position is set to the beginning of the input text->
+     * @param newText   The new string to be normalized.
      */
-	// TODO: actually do the optimization when the guts of Normalizer are upgraded
-	// --has just dumb implementation for now
-	public static String normalize(int char32, Mode mode, int options) {
-    	return Normalizer.normalize(UTF16.valueOf(char32), mode, options);
+    public void setText(String newText){
+	    
+		UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
+		if (newIter == null) {
+	            throw new InternalError("Could not create a new UCharacterIterator");
+		}  
+		text = newIter;
+		reset();
     }
     
-	/**
-	 * Convenience method that can have faster implementation
-	 * by not allocating buffers.
-	 * @internal
-     * @param str       the input string to be checked to see if it is normalized
-     *
-     * @param aMode     the normalization mode
-     *
-     * @param options   the optional features to be enabled.
+    /**
+     * Set the input text over which this <tt>Normalizer</tt> will iterate.
+     * The iteration position is set to the beginning of the input text->
+     * @param newText   The new string to be normalized.
      */
-	// TODO: actually do the optimization when the guts of Normalizer are upgraded
-	// --has just dumb implementation for now
-	public static boolean isNormalized(String str, Mode mode, int options) {
-		return str.equals(Normalizer.normalize(str, mode, options));
-	}
+    public void setText(CharacterIterator newText){
+        
+        UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
+        if (newIter == null) {
+            throw new InternalError("Could not create a new UCharacterIterator");
+        }  
+        text = newIter;
+        reset();
+    }
+    
+    /**
+     * Set the input text over which this <tt>Normalizer</tt> will iterate.
+     * The iteration position is set to the beginning of the string.
+     * @param newText   The new string to be normalized.
+     */
+    public void setText(UCharacterIterator newText){ 
+        try{
+	        UCharacterIterator newIter = (UCharacterIterator)newText.clone();
+		    if (newIter == null) {
+			    throw new InternalError("Could not create a new UCharacterIterator");
+		    }
+		    text = newIter;
+		    reset();
+        }catch(CloneNotSupportedException e){
+            throw new InternalError("Could not clone the UCharacterIterator");
+        }
+    }
+    
+    /**
+     * Concatenate normalized strings, making sure that the result is normalized
+     * as well.
+     *
+     * If both the left and the right strings are in
+     * the normalization form according to "mode",
+     * then the result will be
+     *
+     * <code>
+     *     dest=normalize(left+right, mode)
+     * </code>
+     *
+     * For details see unorm_concatenate in unorm.h.
+     *
+     * @param left Left source string.
+     * @param right Right source string.
+     * @param mode The normalization mode.
+     * @return result
+     *
+     * @see #concatenate
+     * @see #normalize
+     * @see #next
+     * @see #previous
+     */
+    public static String concatenate(char[] left, char[] right,Mode mode){
+        char[] result = new char[(left.length+right.length)* MAX_BUF_SIZE];
+        for(;;){
+               
+            int length = concatenate(left,  0, left.length,
+			                         right, 0, right.length,
+			                         result,0, result.length,
+			                         mode);
+            if(length<=result.length){
+                return new String(result,0,length);
+            }else{
+                result = new char[length];
+            }
+        }            
+    }
+    /**
+     * Concatenate normalized strings, making sure that the result is normalized
+     * as well.
+     *
+     * If both the left and the right strings are in
+     * the normalization form according to "mode",
+     * then the result will be
+     *
+     * <code>
+     *     dest=normalize(left+right, mode)
+     * </code>
+     *
+     * For details see unorm_concatenate in unorm.h.
+     *
+     * @param left Left source string.
+     * @param right Right source string.
+     * @param mode The normalization mode.
+     * @return result
+     *
+     * @see #concatenate
+     * @see #normalize
+     * @see #next
+     * @see #previous
+     */
+    public static String concatenate(String left, String right,Mode mode){
+	    char[] result = new char[(left.length()+right.length())* MAX_BUF_SIZE];
+		for(;;){
+	           
+		    int length = concatenate(left.toCharArray(), 0, left.length(),
+					     right.toCharArray(),0, right.length(),
+					     result,             0, result.length,
+					     mode);
+		    if(length<=result.length){
+			    return new String(result,0,length);
+		    }else{
+			    result = new char[length];
+		    }
+		}            
+    }
 	
-	/**
-	 * Convenience method that can have faster implementation
-	 * by not allocating buffers.
-	 * @internal
-     * @param char32	the input code point to be checked to see if it is normalized
+    /**
+     * Concatenate normalized strings, making sure that the result is normalized
+     * as well.
      *
-     * @param aMode     the normalization mode
+     * If both the left and the right strings are in
+     * the normalization form according to "mode",
+     * then the result will be
      *
-     * @param options   the optional features to be enabled.
+     * \code
+     *     dest=normalize(left+right, mode)
+     * \endcode
+     *
+     * With the input strings already being normalized,
+     * this function will use next() and previous()
+     * to find the adjacent end pieces of the input strings.
+     * Only the concatenation of these end pieces will be normalized and
+     * then concatenated with the remaining parts of the input strings.
+     *
+     * It is allowed to have dest==left to avoid copying the entire left string.
+     *
+     * @param left Left source array, may be same as dest.
+     * @param leftStart start index of the left array.
+     * @param leftLimit end index of the left array (==length)
+     * @param right Right source array.
+     * @param rightStart start index of the right array.
+     * @param leftLimit end index of the right array (==length)
+     * @param dest The output buffer; can be null if destStart==destLimit==0 
+     *              for pure preflighting.
+     * @param destStart start index of the destination array
+     * @param mode The normalization mode.
+     * @return Length of output (number of chars) when successful or 
+     *          IndexOutOfBoundsException
+     * @exception IndexOutOfBoundsException whose message has the string 
+     *             representation of destination capacity required. 
+     * @see #normalize
+     * @see #next
+     * @see #previous
+     * @exception IndexOutOfBoundsException if target capacity is less than the
+     *             required length
      */
-	// TODO: actually do the optimization when the guts of Normalizer are upgraded
-	// --has just dumb implementation for now
-	public static boolean isNormalized(int char32, Mode mode, int options) {
-		return isNormalized(UTF16.valueOf(char32), mode, options);
-	}
+     /* Concatenation of normalized strings ---------------------------------- */
     
+    public static int concatenate(char[] left,  int leftStart,  int leftLimit,
+		                          char[] right, int rightStart, int rightLimit, 
+		                          char[] dest,  int destStart,  int destLimit,
+		                          Normalizer.Mode mode) {
+                               
+        char[] buffer=new char[100];
+        int bufferLength;
+    
+        UCharacterIterator iter;
+        
+        int leftBoundary, rightBoundary, destLength;
+    
+        if(dest == null){
+            throw new IllegalArgumentException();
+        }
+    
+        /* check for overlapping right and destination */
+        if (right == dest && rightStart < destLimit && destStart < rightLimit) {
+            throw new IllegalArgumentException("overlapping right and dst ranges");
+        }
+    
+        /* allow left==dest */
+    
+    
+        /*
+         * Input: left[0..leftLength[ + right[0..rightLength[
+         *
+         * Find normalization-safe boundaries leftBoundary and rightBoundary
+         * and copy the end parts together:
+         * buffer=left[leftBoundary..leftLength[ + right[0..rightBoundary[
+         *
+         * dest=left[0..leftBoundary[ +
+         *      normalize(buffer) +
+         *      right[rightBoundary..rightLength[
+         */
+    
+        /*
+         * find a normalization boundary at the end of the left string
+         * and copy the end part into the buffer
+         */
+
+        iter = UCharacterIterator.getInstance(left, leftStart, leftLimit);
+                                             
+        iter.setIndex(iter.getLength()); /* end of left string */
+    
+        bufferLength=previous(iter, buffer,0,buffer.length,mode,false,null);
+        
+        leftBoundary=iter.getIndex();
+        
+        if(bufferLength>buffer.length) {
+            char[] newBuf = new char[buffer.length*2];
+            // TODO: this may need to be commented ???
+            //System.arraycopy(newBuf,0,buffer,0,bufferLength);
+            buffer = newBuf;
+            newBuf = null; // null the reference for GC
+            /* just copy from the left string: we know the boundary already */
+            System.arraycopy(left,leftBoundary,buffer,0,bufferLength);
+        }
+    
+        /*
+         * find a normalization boundary at the beginning of the right string
+         * and concatenate the beginning part to the buffer
+         */
+
+        iter = UCharacterIterator.getInstance(right, rightStart, rightLimit);
+        
+        rightBoundary=next(iter,buffer,bufferLength, buffer.length-bufferLength,
+                           mode, false,null);
+                           
+        if(bufferLength>buffer.length) {
+            char[] newBuf = new char[buffer.length*2];
+            buffer = newBuf;
+            newBuf = null; // null the reference for GC
+            /* just copy from the right string: we know the boundary already */
+            System.arraycopy(right,rightBoundary,buffer,
+                             bufferLength,rightBoundary);
+        }
+
+        bufferLength+=rightBoundary;
+    
+        /* copy left[0..leftBoundary[ to dest */
+        if(left!=dest && leftBoundary>0 && (destLimit)>0) {
+            System.arraycopy(left,0,dest,0, Math.min(leftBoundary,destLimit)); 
+        }
+        destLength=leftBoundary;
+    
+        /* concatenate the normalization of the buffer to dest */
+        if(destLimit>destLength) {
+            destLength+=Normalizer.normalize(buffer,0,bufferLength,dest,
+                                                     destLength,destLimit,mode);
+            
+        } else {
+            destLength+=Normalizer.normalize(buffer, 0, bufferLength,null,0,0,mode);
+        }
+    
+        /* concatenate right[rightBoundary..rightLength[ to dest */
+        rightStart+=rightBoundary;
+        int rightLength=(rightLimit-rightStart);
+        if(rightLength>0 && destLimit>destLength) {
+            System.arraycopy(right,rightStart,dest,destLength,
+                                Math.min(rightLength,destLength)
+                            );
+        }
+        destLength+=rightLength;
+        
+        if(destLength<=(destLimit-destStart)){
+            return destLength;
+        }else{
+            throw new IndexOutOfBoundsException(Integer.toString(destLength));
+        }  
+    }
+
+
 	/**
-	 * Convenience method that can have faster implementation
-	 * by not allocating buffers.
-	 * @internal
-     * @param str1	the first string to be checked against the
-     * @param str2	the second string
+	 * Compare two strings for canonical equivalence.
+	 * Further options include case-insensitive comparison and
+	 * code point order (as opposed to code unit order).
+	 * Conveinience method.
+	 *
+	 * @param s1 First source string.
+	 * @param s2 Second source string.
+	 *
+	 * @param options A bit set of options:
+	 *   - FOLD_CASE_DEFAULT or 0 is used for default options:
+	 *     Case-sensitive comparison in code unit order, and the input strings
+	 *     are quick-checked for FCD.
+	 *
+	 *   - INPUT_IS_FCD
+	 *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
+	 *     If not set, the function will quickCheck for FCD
+	 *     and normalize if necessary.
+	 *
+	 *   - COMPARE_CODE_POINT_ORDER
+	 *     Set to choose code point order instead of code unit order
+	 *     (see u_strCompare for details).
+	 *
+	 *   - COMPARE_IGNORE_CASE
+	 *     Set to compare strings case-insensitively using case folding,
+	 *     instead of case-sensitively.
+	 *     If set, then the following case folding options are used.
+	 *
+	 *
+	 * @return <0 or 0 or >0 as usual for string comparisons
+	 *
+	 * @see #normalize
+	 * @see #FCD
+	 */
+     public static int compare(String s1, String s2, int options){
+         
+         return compare(s1.toCharArray(),0,s1.length(),
+                                       s2.toCharArray(),0,s2.length(),
+                                       options);
+     }
+        /**
+     * Compare two strings for canonical equivalence.
+     * Further options include case-insensitive comparison and
+     * code point order (as opposed to code unit order).
+     * Conveinience method.
      *
-     * @param aMode     the normalization mode
+     * @param s1 First source string.
+     * @param s2 Second source string.
      *
-     * @param options   the optional features to be enabled.
+     * @param options A bit set of options:
+     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
+     *     Case-sensitive comparison in code unit order, and the input strings
+     *     are quick-checked for FCD.
+     *
+     *   - INPUT_IS_FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
+     *     If not set, the function will quickCheck for FCD
+     *     and normalize if necessary.
+     *
+     *   - COMPARE_CODE_POINT_ORDER
+     *     Set to choose code point order instead of code unit order
+     *     (see u_strCompare for details).
+     *
+     *   - COMPARE_IGNORE_CASE
+     *     Set to compare strings case-insensitively using case folding,
+     *     instead of case-sensitively.
+     *     If set, then the following case folding options are used.
+     *
+     *
+     * @return <0 or 0 or >0 as usual for string comparisons
+     *
+     * @see #normalize
+     * @see #FCD
      */
-	// TODO: actually do the optimization when the guts of Normalizer are upgraded
-	// --has just dumb implementation for now
-	public static boolean isEquivalent(String str1, String str2, Mode mode, int options) {
-		return Normalizer.normalize(str1, mode, options)
-			.equals(Normalizer.normalize(str2, mode, options));
-	}
-    
-    
-	/**
-	 * Convenience method that can have faster implementation
-	 * by not allocating buffers.
-	 * @internal
-     * @param char32a	the first code point to be checked against the
-     * @param char32b	the second code point
+     public static int compare(char[] s1, char[] s2, int options){
+         
+         return compare(s1,0,s1.length,s2,0,s2.length,options);
+     } 
+     
+    /**
+     * Compare two strings for canonical equivalence.
+     * Further options include case-insensitive comparison and
+     * code point order (as opposed to code unit order).
      *
-     * @param aMode     the normalization mode
+     * Canonical equivalence between two strings is defined as their normalized
+     * forms (NFD or NFC) being identical.
+     * This function compares strings incrementally instead of normalizing
+     * (and optionally case-folding) both strings entirely,
+     * improving performance significantly.
      *
-     * @param options   the optional features to be enabled.
+     * Bulk normalization is only necessary if the strings do not fulfill the FCD
+     * conditions. Only in this case, and only if the strings are relatively long,
+     * is memory allocated temporarily.
+     * For FCD strings and short non-FCD strings there is no memory allocation.
+     *
+     * Semantically, this is equivalent to
+     *   strcmp[CodePointOrder](foldCase(NFD(s1)), foldCase(NFD(s2)))
+     * where code point order and foldCase are all optional.
+     *
+     * @param s1        First source character array.
+     * @param s1Start   start index of source
+     * @param s1Limit   limit of the source
+     *
+     * @param s2        Second source character array.
+     * @param s2Start   start index of the source
+     * @param s2Limit   limit of the source
+     * 
+     * @param options A bit set of options:
+     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
+     *     Case-sensitive comparison in code unit order, and the input strings
+     *     are quick-checked for FCD.
+     *
+     *   - INPUT_IS_FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
+     *     If not set, the function will quickCheck for FCD
+     *     and normalize if necessary.
+     *
+     *   - COMPARE_CODE_POINT_ORDER
+     *     Set to choose code point order instead of code unit order
+     *     (see u_strCompare for details).
+     *
+     *   - COMPARE_IGNORE_CASE
+     *     Set to compare strings case-insensitively using case folding,
+     *     instead of case-sensitively.
+     *     If set, then the following case folding options are used.
+     *
+     *
+     * @return <0 or 0 or >0 as usual for string comparisons
+     *
+     * @see #normalize
+     * @see #FCD
      */
-	// TODO: actually do the optimization when the guts of Normalizer are upgraded
-	// --has just dumb implementation for now
-	public static boolean isEquivalent(int char32a, int char32b, Mode mode, int options) {
-		return Normalizer.normalize(char32a, mode, options)
-			.equals(Normalizer.normalize(char32b, mode, options));
-	}
-    
-    
-	/**
-	 * Convenience method that can have faster implementation
-	 * by not allocating buffers.
-	 * @internal
-     * @param char32a	the first code point to be checked against the
-     * @param str2	the second string
-     *
-     * @param aMode     the normalization mode
-     *
-     * @param options   the optional features to be enabled.
-     */
-	// TODO: actually do the optimization when the guts of Normalizer are upgraded
-	// --has just dumb implementation for now
-	public static boolean isEquivalent(int char32a, String str2, Mode mode, int options) {
-		return Normalizer.normalize(char32a, mode, options)
-			.equals(Normalizer.normalize(str2, mode, options));
-	}
-    
-    
+     public static int compare(char[] s1, int s1Start, int s1Limit,
+                               char[] s2, int s2Start, int s2Limit,
+                               int options){
+         return NormalizerImpl.compare(s1, s1Start, s1Limit, 
+                                       s2, s2Start, s2Limit, options);
+     } 
     //-------------------------------------------------------------------------
     // Private utility methods
     //-------------------------------------------------------------------------
+    
 
-    private final char curForward() {
-        char ch = text.current();
-        if (DEBUG) System.out.println(" curForward returning " + Utility.hex(ch) + ", text index=" + text.getIndex());
-        return ch;
-    }
-
-    private final char curBackward() {
-        char ch = atEnd ? text.current() : text.previous();
-        atEnd = false;
-        if (DEBUG) System.out.println(" curBackward returning " + Utility.hex(ch) + ", text index=" + text.getIndex());
-        return ch;
-    }
-
-    static final int doAppend(String source, int offset, StringBuffer dest) {
-        int index = offset >>> STR_INDEX_SHIFT;
-        int length = offset & STR_LENGTH_MASK;
-
-        if (length == 0) {
-            char ch;
-            while ((ch = DecompData.contents.charAt(index++)) != 0x0000) {
-                dest.append(ch);
-                length++;
-            }
-        } else {
-            for (int i = 0; i < length; i++) {
-                dest.append(DecompData.contents.charAt(index++));
-            }
-        }
-        return length;
-    }
-
-
-    static final int doInsert(String source, int offset, StringBuffer dest, int pos)
-    {
-        int index = offset >>> STR_INDEX_SHIFT;
-        int length = offset & STR_LENGTH_MASK;
-
-        if (length == 0) {
-            char ch;
-            while ((ch = DecompData.contents.charAt(index++)) != 0x0000) {
-                dest.insert(pos++, ch);
-                length++;
-            }
-        } else {
-            for (int i = 0; i < length; i++) {
-                dest.insert(pos++, DecompData.contents.charAt(index++));
-            }
-        }
-        return length;
-    }
-
-    static final int doReplace(String source, int offset, StringBuffer dest, int pos)
-    {
-        int index = offset >>> STR_INDEX_SHIFT;
-        int length = offset & STR_LENGTH_MASK;
-
-        dest.setCharAt(pos++, DecompData.contents.charAt(index++));
-        if (length == 0) {
-            char ch;
-            while ((ch = DecompData.contents.charAt(index++)) != 0x0000) {
-                dest.insert(pos++, ch);
-                length++;
-            }
-        } else {
-            for (int i = 1; i < length; i++) {
-                dest.insert(pos++, DecompData.contents.charAt(index++));
-            }
-        }
-        return length;
-    }
-
-    private void reset() {
-        text.setIndex(text.getBeginIndex());
-        atEnd = false;
-        bufferPos = 0;
-        bufferLimit = 0;
-    }
-
-    private final void initBuffer() {
-        if (buffer == null) {
-            buffer = new StringBuffer(10);
-        } else {
-            buffer.setLength(0);
-        }
-        clearBuffer();
-    }
-
-    private final void clearBuffer() {
-        bufferLimit = bufferPos = 0;
-    }
-
-
-    /**
-     * Fixes the sorting sequence of non-spacing characters according to
-     * their combining class.  The algorithm is listed on p.3-11 in the
-     * Unicode Standard 2.0.  The table of combining classes is on p.4-2
-     * in the Unicode Standard 2.0.
-     * @param result the string to fix.
+    /* backward iteration ------------------------------------------------------- */
+               
+    /*
+     * read backwards and get norm32
+     * return 0 if the character is <minC
+     * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first 
+     * surrogate but read second!)
      */
-    private static void fixCanonical(StringBuffer result) {
-        if (result.length() == 0) return; // don't bother with empty strings!
-        
-        int i = result.length() - 1;
-        int currentType = getClass(result.charAt(i));
-        int lastType;
 
-        for (--i; i >= 0; --i) {
-            lastType = currentType;
-            currentType = getClass(result.charAt(i));
-
-            //
-            // a swap is presumed to be rare (and a double-swap very rare),
-            // so don't worry about efficiency here.
-            //
-            if (currentType > lastType && lastType != DecompData.BASE) {
-                // swap characters
-                char temp = result.charAt(i);
-                result.setCharAt(i, result.charAt(i+1));
-                result.setCharAt(i+1, temp);
-                // if not at end, backup (one further, to compensate for for-loop)
-                if (i < result.length() - 2) {
-                    i += 2;
-                }
-                // reset type, since we swapped.
-                currentType = getClass(result.charAt(i));
-            }
+    private static  long getPrevNorm32(UCharacterIterator src, 
+                                                  int/*unsigned*/ minC, 
+                                                  int/*unsigned*/ mask, 
+                                                  char[] chars) {
+        long norm32;
+        int ch=0;
+        /* need src.hasPrevious() */
+        if((ch=src.previous()) == UCharacterIterator.DONE){
+            return 0;
         }
-    }
-
-    //-------------------------------------------------------------------------
-    // Hangul / Jamo conversion utilities for internal use
-    // See section 3.10 of The Unicode Standard, v 2.0.
-    //
-
-    // Package-accessible for use by ComposedCharIter
-    static final char HANGUL_BASE   = 0xac00;
-    static final char HANGUL_LIMIT  = 0xd7a4;
-
-    private static final char JAMO_LBASE    = 0x1100;
-    private static final char JAMO_VBASE    = 0x1161;
-    private static final char JAMO_TBASE    = 0x11a7;
-    private static final int  JAMO_LCOUNT   = 19;
-    private static final int  JAMO_VCOUNT   = 21;
-    private static final int  JAMO_TCOUNT   = 28;
-    private static final int  JAMO_NCOUNT   = JAMO_VCOUNT * JAMO_TCOUNT;
-
-    /**
-     * Convert a single Hangul syllable into one or more Jamo characters.
-     *
-     * @param conjoin If true, decompose Jamo into conjoining Jamo.
-     */
-    static int hangulToJamo(char ch, StringBuffer result, int decompLimit) {
-        char sIndex  = (char)(ch - HANGUL_BASE);
-        char leading = (char)(JAMO_LBASE + sIndex / JAMO_NCOUNT);
-        char vowel   = (char)(JAMO_VBASE +
-                              (sIndex % JAMO_NCOUNT) / JAMO_TCOUNT);
-        char trailing= (char)(JAMO_TBASE + (sIndex % JAMO_TCOUNT));
-
-        int length = 0;
-
-        length += jamoAppend(leading, decompLimit, result);
-        length += jamoAppend(vowel, decompLimit, result);
-        if (trailing != JAMO_TBASE) {
-            length += jamoAppend(trailing, decompLimit, result);
-        }
-        return length;
-    }
-    static final int jamoAppend(char ch, int limit, StringBuffer dest) {
-        int offset = DecompData.offsets.elementAt(ch);
-        if (offset > limit) {
-            return doAppend(DecompData.contents, offset, dest);
-        } else {
-            dest.append(ch);
-            return 1;
-        }
-    }
-
-    static private void jamoToHangul(StringBuffer buffer, int start) {
-        int out = 0;
-        int limit = buffer.length() - 1;
-
-        int in, l, v, t;
-
-        for (in = start; in < limit; in++) {
-            char ch = buffer.charAt(in);
-
-            if ((l = ch - JAMO_LBASE) >= 0 && l < JAMO_LCOUNT
-                    && (v = buffer.charAt(in+1) - JAMO_VBASE) >= 0 && v < JAMO_VCOUNT) {
-                //
-                // We've found a pair of Jamo characters to compose.
-                // Snarf the Jamo vowel and see if there's also a trailing char
-                //
-                in++;   // Snarf the Jamo vowel too.
-
-                t = (in < limit) ? buffer.charAt(in+1) : 0;
-                t -= JAMO_TBASE;
-
-                if (t >= 0 && t < JAMO_TCOUNT) {
-                    in++;   // Snarf the trailing consonant too
-                } else {
-                    t = 0;  // No trailing consonant
-                }
-                buffer.setCharAt(out++, (char)((l*JAMO_VCOUNT + v) * JAMO_TCOUNT
-                                               + t + HANGUL_BASE));
+        chars[0]=(char)ch;
+        chars[1]=0;
+    
+        /* check for a surrogate before getting norm32 to see if we need to 
+         * predecrement further */
+        if(chars[0]<minC) {
+            return 0;
+        } else if(!UTF16.isSurrogate(chars[0])) {
+            return NormalizerImpl.getNorm32(chars[0]);
+        } else if(UTF16.isLeadSurrogate(chars[0]) || (src.getIndex()==0)) {
+            /* unpaired surrogate */
+            chars[1]=(char)src.current();
+            return 0;
+        } else if(UTF16.isLeadSurrogate(chars[1]=(char)src.previous())) {
+            norm32=NormalizerImpl.getNorm32(chars[1]);
+            if((norm32&mask)==0) {
+                /* all surrogate pairs with this lead surrogate have irrelevant 
+                 * data */
+                return 0;
             } else {
-                buffer.setCharAt(out++, ch);
+                /* norm32 must be a surrogate special */
+                return NormalizerImpl.getNorm32FromSurrogatePair(norm32, chars[0]);
+            }
+        } else {
+            /* unpaired second surrogate, undo the c2=src.previous() movement */
+            src.moveIndex( 1);
+            return 0;
+        }
+    }
+ 
+     public interface IsPrevBoundary{
+        public boolean isPrevBoundary(UCharacterIterator src,
+                       int/*unsigned*/ minC, 
+                       int/*unsigned*/ mask, 
+                       char[] chars);
+    }
+    private static final class IsPrevNFDSafe implements IsPrevBoundary{
+        /*
+         * for NF*D:
+         * read backwards and check if the lead combining class is 0
+         * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first 
+         * surrogate but read second!)
+         */
+        public boolean isPrevBoundary(UCharacterIterator src,
+                                      int/*unsigned*/ minC, 
+                                      int/*unsigned*/ ccOrQCMask, 
+                                      char[] chars) {
+    
+            return NormalizerImpl.isNFDSafe(getPrevNorm32(src, minC, ccOrQCMask, chars), ccOrQCMask, ccOrQCMask& NormalizerImpl.QC_MASK);
+        }
+    }
+    
+    private static final class IsPrevTrueStarter implements IsPrevBoundary{
+        /*
+         * read backwards and check if the character is (or its decomposition 
+         * begins with) a "true starter" (cc==0 and NF*C_YES)
+         * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first 
+         * surrogate but read second!)
+         */
+        public boolean isPrevBoundary(UCharacterIterator src, 
+                                         int/*unsigned*/ minC,
+                                         int/*unsigned*/ ccOrQCMask,
+                                         char[] chars) {
+            long norm32; 
+            int/*unsigned*/ decompQCMask;
+            
+            decompQCMask=(ccOrQCMask<<2)&0xf; /*decomposition quick check mask*/
+            norm32=getPrevNorm32(src, minC, ccOrQCMask|decompQCMask, chars);
+            return NormalizerImpl.isTrueStarter(norm32, ccOrQCMask, decompQCMask);
+        }
+    }
+    
+    private static int findPreviousIterationBoundary(UCharacterIterator src,
+                                                     IsPrevBoundary obj, 
+                                                     int/*unsigned*/ minC,
+                                                     int/*mask*/ mask,
+                                                     char[] buffer, 
+                                                     int[] startIndex) {
+        char[] chars=new char[2];
+        boolean isBoundary;
+    
+         /* fill the buffer from the end backwards */
+        startIndex[0] = buffer.length;
+        chars[0]=0;
+        while(src.getIndex()>0 && chars[0]!=UCharacterIterator.DONE) {
+            isBoundary=obj.isPrevBoundary(src, minC, mask, chars);
+    
+            /* always write this character to the front of the buffer */
+            /* make sure there is enough space in the buffer */
+            if(startIndex[0] < (chars[1]==0 ? 1 : 2)) {
+
+                // grow the buffer
+                char[] newBuf = new char[buffer.length*2];
+                /* move the current buffer contents up */
+                System.arraycopy(buffer,startIndex[0],newBuf,
+                                 newBuf.length-(buffer.length-startIndex[0]),
+                                 buffer.length-startIndex[0]);
+                //adjust the startIndex
+                startIndex[0]+=newBuf.length-buffer.length;
+                
+                buffer=newBuf;
+                newBuf=null;                
+                
+            }
+    
+            buffer[--startIndex[0]]=chars[0];
+            if(chars[1]!=0) {
+                buffer[--startIndex[0]]=chars[1];
+            }
+    
+            /* stop if this just-copied character is a boundary */
+            if(isBoundary) {
+                break;
             }
         }
-        while (in < buffer.length()) {
-            buffer.setCharAt(out++, buffer.charAt(in++));
-        }
+    
+        /* return the length of the buffer contents */
+        return buffer.length-startIndex[0];
+    }
+    
+    private static int previous(UCharacterIterator src,
+                   char[] dest, int destStart, int destLimit, 
+                   Mode mode, 
+                   /*int options,*/
+                   boolean doNormalize, 
+                   boolean[] pNeededToNormalize) {
 
-        buffer.setLength(out);
+        IsPrevBoundary isPreviousBoundary;
+        int destLength, bufferLength;
+        int/*unsigned*/ mask;
+        int[] startIndex= new int[1];
+        char[] chars= new char[2];
+        //int32_t c, c2;
+        char minC;
+        int destCapacity = destLimit-destStart;
+        destLength=0;
+        char[] buffer = new char[100];
+        
+        if(pNeededToNormalize!=null) {
+            pNeededToNormalize[0]=false;
+        }
+        minC = (char)mode.getMinC();
+        mask = mode.getMask();
+        isPreviousBoundary = mode.getPrevBoundary();
+
+        if(isPreviousBoundary==null){
+            destLength=0;
+            if((chars[0]=(char)src.previous())>=0) {
+                destLength=1;
+                if(UTF16.isTrailSurrogate(chars[0])){
+                    chars[1]=(char)src.previous();
+                    if((int)chars[1]!= UCharacterIterator.DONE){
+                        if(UTF16.isLeadSurrogate(chars[1])) {
+                            if(destCapacity>=2) {
+                                dest[1]=chars[0]; // trail surrogate 
+                                destLength=2;
+                            }
+                            // lead surrogate to be written below 
+                            chars[0]=chars[1]; 
+                        } else {
+                            src.moveIndex(1);
+                        }
+                    }
+                }
+    
+                if(destCapacity>0) {
+                    dest[0]=(char)chars[0];
+                }
+            }
+            return destLength;
+         }
+    
+        bufferLength=findPreviousIterationBoundary(src,
+                                                   isPreviousBoundary, 
+                                                   minC, mask,buffer, 
+                                                   startIndex);
+        if(bufferLength>0) {
+            if(doNormalize) {
+                destLength=Normalizer.normalize(buffer,startIndex[0],
+                                     startIndex[0]+bufferLength,
+                                     dest, destStart,destLimit,mode);
+                
+                if(pNeededToNormalize!=null) {
+                    pNeededToNormalize[0]=(boolean)(destLength!=bufferLength ||
+                                                    Utility.arrayRegionMatches(
+                                                            buffer,0,dest,
+                                                            destStart,destLimit
+                                                            ));
+                }
+            } else {
+                /* just copy the source characters */
+                if(destCapacity>0) {
+                    System.arraycopy(buffer,startIndex[0],dest,0,
+                                        (bufferLength<destCapacity) ? 
+                                                    bufferLength : destCapacity
+                                    );
+                }
+            }
+        } 
+
+    
+        return destLength;
+    }
+
+ 
+    
+    /* forward iteration -------------------------------------------------------- */
+    /*
+     * read forward and check if the character is a next-iteration boundary
+     * if c2!=0 then (c, c2) is a surrogate pair
+     */
+    public interface IsNextBoundary{
+        boolean isNextBoundary(UCharacterIterator src, 
+                               int/*unsigned*/ minC, 
+                               int/*unsigned*/ mask, 
+                               char[] chars);
+    }   
+    /*
+     * read forward and get norm32
+     * return 0 if the character is <minC
+     * if c2!=0 then (c2, c) is a surrogate pair
+     * always reads complete characters
+     */
+    private static long /*unsigned*/ getNextNorm32(UCharacterIterator src, 
+                                                  int/*unsigned*/ minC, 
+                                                  int/*unsigned*/ mask, 
+                                                  char[] chars) {
+        long norm32;
+    
+        /* need src.hasNext() to be true */
+        chars[0]=(char)src.next();
+        chars[1]=0;
+    
+        if(chars[0]<minC) {
+            return 0;
+        }
+    
+        norm32=NormalizerImpl.getNorm32(chars[0]);
+        if(UTF16.isLeadSurrogate(chars[0])) {
+            if(src.current()!=UCharacterIterator.DONE &&
+                        UTF16.isTrailSurrogate(chars[1]=(char)src.current())) {
+                src.moveIndex(1); /* skip the c2 surrogate */
+                if((norm32&mask)==0) {
+                    /* irrelevant data */
+                    return 0;
+                } else {
+                    /* norm32 must be a surrogate special */
+                    return NormalizerImpl.getNorm32FromSurrogatePair(norm32, chars[1]);
+                }
+            } else {
+                /* unmatched surrogate */
+                return 0;
+            }
+        }
+        return norm32;
     }
 
 
-    //-------------------------------------------------------------------------
-    // Private data
-    //-------------------------------------------------------------------------
+    /*
+     * for NF*D:
+     * read forward and check if the lead combining class is 0
+     * if c2!=0 then (c, c2) is a surrogate pair
+     */
+    private static final class IsNextNFDSafe implements IsNextBoundary{
+        public boolean isNextBoundary(UCharacterIterator src, 
+                               int/*unsigned*/ minC, 
+                               int/*unsigned*/ ccOrQCMask, 
+                               char[] chars) {
+            return NormalizerImpl.isNFDSafe(getNextNorm32(src, minC, ccOrQCMask, chars), 
+                             ccOrQCMask, ccOrQCMask&NormalizerImpl.QC_MASK);
+       }
+    }
+    
+    /*
+     * for NF*C:
+     * read forward and check if the character is (or its decomposition begins 
+     * with) a "true starter" (cc==0 and NF*C_YES)
+     * if c2!=0 then (c, c2) is a surrogate pair
+     */
+    private static final class IsNextTrueStarter implements IsNextBoundary{
+        public boolean isNextBoundary(UCharacterIterator src, 
+                               int/*unsigned*/ minC, 
+                               int/*unsigned*/ ccOrQCMask, 
+                               char[] chars) {
+            long norm32;
+            int/*unsigned*/ decompQCMask;
+            
+            decompQCMask=(ccOrQCMask<<2)&0xf; /*decomposition quick check mask*/
+            norm32=getNextNorm32(src, minC, ccOrQCMask|decompQCMask, chars);
+            return NormalizerImpl.isTrueStarter(norm32, ccOrQCMask, decompQCMask);
+        }
+    }
+    
+    private static int findNextIterationBoundary(UCharacterIterator src,
+                                                 IsNextBoundary obj, 
+                                                 int/*unsigned*/ minC, 
+                                                 int/*unsigned*/ mask,
+                                                 char[] buffer, 
+                                                 int[] startIndex) {
+        char[] chars = new char[2];
+        int bufferIndex =0;
+        
+        if(src.current()==UCharacterIterator.DONE){
+            return 0;
+        }
+        /* get one character and ignore its properties */
+        chars[0]=(char)src.next();
+        buffer[0]=chars[0];
+        bufferIndex=1;
+        
+        if(UTF16.isLeadSurrogate(chars[0])&& 
+                                        src.current()!=UCharacterIterator.DONE){
+            if(UTF16.isTrailSurrogate(chars[1]=(char)src.next())) {
+                buffer[bufferIndex++]=chars[1];
+            } else {
+                src.moveIndex(-1); /* back out the non-trail-surrogate */
+            }
+        }
+    
+        /* get all following characters until we see a boundary */
+        /* checking hasNext() instead of c!=DONE on the off-chance that U+ffff 
+         * is part of the string */
+        while( src.current()!=UCharacterIterator.DONE) {
+            if(obj.isNextBoundary(src, minC, mask, chars)) {
+                /* back out the latest movement to stop at the boundary */
+                src.moveIndex(chars[1]==0 ? -1 : -2);
+                break;
+            } else {
+                if(bufferIndex+(chars[1]==0 ? 1 : 2)<=buffer.length) {
+                    buffer[bufferIndex++]=chars[0];
+                    if(chars[1]!=0) {
+                        buffer[bufferIndex++]=chars[1];
+                    }
+                }else{
+                    char[] newBuf = new char[buffer.length    *2];
+                    System.arraycopy(buffer,0,newBuf,0,bufferIndex);
+                    buffer = newBuf;
+                    buffer[bufferIndex++]=chars[0];
+                    if(chars[1]!=0) {
+                        buffer[bufferIndex++]=chars[1];
+                    }
+                }
+            }
+        }
+    
+        /* return the length of the buffer contents */
+        return bufferIndex;
+    }
+    
+    private static int next(UCharacterIterator src,
+                           char[] dest, int destStart, int destLimit,
+                           Normalizer.Mode mode, /*int options,*/
+                           boolean doNormalize, boolean[] pNeededToNormalize){
+        char[] buffer=new char[100];
+        IsNextBoundary isNextBoundary;
+        int /*unsigned*/ mask;
+        int /*unsigned*/ bufferLength, bufferCapacity;
+        char[] chars = new char[2];
+        char minC;
+        int destCapacity = destLimit - destStart;
+        int destLength = 0;
+        int[] startIndex = new int[1];
+        if(pNeededToNormalize!=null) {
+            pNeededToNormalize[0]=false;
+        }
 
-    private static final boolean DEBUG = false;
+        minC = (char)mode.getMinC();
+        mask = mode.getMask();
+        isNextBoundary = mode.getNextBoundary();
+        
+        if(isNextBoundary==null){
+            destLength=0;
+            chars[0]=(char)src.next();
+            if((int)chars[0]!=UCharacterIterator.DONE) {
+                destLength=1;
+                if(UTF16.isLeadSurrogate(chars[0])){
+                    chars[1]= (char)src.next();
+                    if((int)chars[1]!= UCharacterIterator.DONE) {
+                        if(UTF16.isTrailSurrogate(chars[1])) {
+                            if(destCapacity>=2) {
+                                dest[1]=chars[1]; // trail surrogate 
+                                destLength=2;
+                            }
+                            // lead surrogate to be written below 
+                        } else {
+                            src.moveIndex(-1);
+                        }
+                    }
+                }
+    
+                if(destCapacity>0) {
+                    dest[0]=chars[0];
+                }
+            }
+            return destLength;
+        }
+        
+        bufferLength=findNextIterationBoundary(src,isNextBoundary, minC, mask,
+                                               buffer, startIndex);
+        if(bufferLength>0) {
+            if(doNormalize) {
+                destLength=mode.dispatch(buffer,startIndex[0],bufferLength,
+                                                   dest,destStart,destLimit);
+                
+                if(pNeededToNormalize!=null) {
+                    pNeededToNormalize[0]=(boolean)(destLength!=bufferLength ||
+                                Utility.arrayRegionMatches(buffer,startIndex[0],
+                                                           dest,destStart,
+                                                           destLength));
+                }
+            } else {
+                /* just copy the source characters */
+                if(destCapacity>0) {
+                    System.arraycopy(buffer,0,dest,destStart,
+                                        Math.min(bufferLength,destCapacity)
+                                     );
+                }
+                                      
+               
+            }
+        }
+        return destLength;
+    } 
 
-    private Mode                mode = DECOMP;
-    private int                 options = 0;
-    private transient int       minDecomp;
+    private void clearBuffer() {
+        bufferLimit=bufferStart=bufferPos=0;
+    }
+	
+    private boolean nextNormalize() {
+        
+		clearBuffer();
+		currentIndex=nextIndex;
+		text.setIndex(nextIndex);
+	        
+		bufferLimit=next(text,buffer,bufferStart,buffer.length,mode,true,null);
+	                
+		nextIndex=text.getIndex();
+		return (bufferLimit>0);
+    }
+	
+    private boolean	previousNormalize() {
 
-    // The input text and our position in it
-    private CharacterIterator   text;
-    private boolean             atEnd = false;
-
-    // A buffer for holding intermediate results
-    private StringBuffer        buffer = null;
-    private int                 bufferPos = 0;
-    private int                 bufferLimit = 0;
-    private char                currentChar;
-
-    // Another buffer for use during iterative composition
-    private static final int    EMPTY = -1;
-    private StringBuffer        explodeBuf = null;
-
-    // These must agree with the constants used in NormalizerBuilder
-    static final int STR_INDEX_SHIFT = 2;
-    static final int STR_LENGTH_MASK = 0x0003;
-};
+		clearBuffer();
+		nextIndex=currentIndex;
+		text.setIndex(currentIndex);
+		bufferLimit=previous(text,buffer,bufferStart,buffer.length,mode,true,null);
+		
+		currentIndex=text.getIndex();
+	    bufferPos = bufferLimit;
+		return bufferLimit>0;
+    }
+    
+    private int getCodePointAt(int index){
+        if( UTF16.isSurrogate(buffer[index])){
+            if(UTF16.isLeadSurrogate(buffer[index])){
+                if((index+1)<bufferLimit &&
+                                    UTF16.isTrailSurrogate(buffer[index+1])){
+		               return UCharacterProperty.getRawSupplementary(
+				        	          buffer[index], 
+                                      buffer[index+1]
+                                  );
+                }
+            }else if(UTF16.isTrailSurrogate(buffer[index])){
+                if(index>0 && UTF16.isLeadSurrogate(buffer[index-1])){
+                    return UCharacterProperty.getRawSupplementary(
+								     buffer[index-1],
+								     buffer[index]
+								  );
+                }
+            }   
+        }
+        return buffer[index];
+        
+    }
+                  
+}

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/Attic/UCharacterIteratorTest.java,v $ 
-* $Date: 2002/04/03 00:00:00 $ 
-* $Revision: 1.1 $
+* $Date: 2002/06/20 01:16:00 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.icu.dev.test.lang;
 
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.UCharacterIterator;
+import com.ibm.icu.impl.UnicodeCharacterIterator;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -41,10 +41,10 @@ public final class UCharacterIteratorTest extends TestFmwk
   	*/
   	public void TestClone()
   	{
-     	 UCharacterIterator iterator = new UCharacterIterator("testing");
-     	 UCharacterIterator cloned = (UCharacterIterator)iterator.clone();
+     	 UnicodeCharacterIterator iterator = new UnicodeCharacterIterator("testing");
+     	 UnicodeCharacterIterator cloned = (UnicodeCharacterIterator)iterator.clone();
      	 char completed = 0;
-     	 while (completed != UCharacterIterator.DONE) {
+     	 while (completed != UnicodeCharacterIterator.DONE) {
      	 	completed = iterator.next();
      	 	if (completed != cloned.next()) {
      	 		errln("Cloned operation failed");
@@ -57,9 +57,9 @@ public final class UCharacterIteratorTest extends TestFmwk
   	 */
   	public void TestIteration()
   	{
-  		UCharacterIterator iterator  = new UCharacterIterator(
+  		UnicodeCharacterIterator iterator  = new UnicodeCharacterIterator(
   		                                               ITERATION_STRING_);
-  		UCharacterIterator iterator2 = new UCharacterIterator(
+  		UnicodeCharacterIterator iterator2 = new UnicodeCharacterIterator(
   		                                               ITERATION_STRING_);
   		if (iterator.first() != ITERATION_STRING_.charAt(0)) {
   			errln("Iterator failed retrieving first character");
@@ -75,12 +75,12 @@ public final class UCharacterIteratorTest extends TestFmwk
   		iterator2.setIndex(0);
   		iterator.setIndex(0);
   		int ch = 0;
-  		while (ch != UCharacterIterator.DONE_CODEPOINT) {
+  		while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
   			int index = iterator2.getIndex();
   			ch = iterator2.nextCodePoint();
   			if (index != ITERATION_SUPPLEMENTARY_INDEX) {
   				if (ch != (int)iterator.next() && 
-  				    ch != UCharacterIterator.DONE_CODEPOINT) {
+  				    ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
   					errln("Error mismatch in next() and nextCodePoint()"); 
   				}
   			}
@@ -94,12 +94,12 @@ public final class UCharacterIteratorTest extends TestFmwk
   		}
   		iterator.setIndex(ITERATION_STRING_.length());
   		iterator2.setIndex(ITERATION_STRING_.length());
-  		while (ch != UCharacterIterator.DONE_CODEPOINT) {
+  		while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
   			int index = iterator2.getIndex();
   			ch = iterator2.previousCodePoint();
   			if (index != ITERATION_SUPPLEMENTARY_INDEX) {
   				if (ch != (int)iterator.previous() && 
-  				    ch != UCharacterIterator.DONE_CODEPOINT) {
+  				    ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
   					errln("Error mismatch in previous() and " +
   					      "previousCodePoint()"); 
   				}

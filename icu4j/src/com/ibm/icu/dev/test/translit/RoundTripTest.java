@@ -98,14 +98,14 @@ public class RoundTripTest extends TestFmwk {
     public void TestGreekUNGEGN() throws IOException, ParseException {
         new Test("Latin-Greek/UNGEGN")
           .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
-            "[\u00B5\u037A\u03D0-\uFFFF]", /* roundtrip exclusions */
+            "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
     }
 
     public void Testel() throws IOException, ParseException {
         new Test("Latin-el")
           .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
-            "[\u00B5\u037A\u03D0-\uFFFF]", /* roundtrip exclusions */
+            "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
     }
 
@@ -136,7 +136,7 @@ public class RoundTripTest extends TestFmwk {
         String nukta = "\u093c\u09bc\u0a3c\u0abc\u0b3c";
         String virama = "\u094d\u09cd\u0a4d\u0acd\u0b4d\u0bcd\u0c4d\u0ccd\u0d4d";
         String sanskritStressSigns = "\u0951\u0952\u0953\u0954";
-        String chandrabindu = "\u0901\u0981\u0A81\u0b01";
+        String chandrabindu = "\u0901\u0981\u0A81\u0b01\u0c01";
         public boolean is(String sourceString){
             int cp=sourceString.charAt(0);
             
@@ -221,7 +221,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Tamil-DEVANAGARI",
           "[:tamil:]", "[:Devanagari:]", 
-                  "[\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
+                  "[\u0901\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
                   },
         new String [] {  "DEVANAGARI-Tamil",
            "[:Devanagari:]", "[:tamil:]",
@@ -239,7 +239,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-DEVANAGARI",
           "[:KANNADA:]", "[:Devanagari:]", 
-                "[\u0946\u093c\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                "[\u0901\u0946\u093c\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-KANNADA",
            "[:Devanagari:]", "[:KANNADA:]",
@@ -248,7 +248,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-DEVANAGARI",
           "[:MALAYALAM:]", "[:Devanagari:]", 
-                "[\u094a\u094b\u094c\u093c\u0950\u0944\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                "[\u0901\u094a\u094b\u094c\u093c\u0950\u0944\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-MALAYALAM",
            "[:Devanagari:]", "[:MALAYALAM:]",
@@ -284,7 +284,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Tamil-BENGALI",
           "[:tamil:]", "[:BENGALI:]", 
-                  "[\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
+                  "[\u0981\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
                   },
         new String [] {  "BENGALI-Tamil",
            "[:BENGALI:]", "[:tamil:]",
@@ -302,7 +302,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-BENGALI",
           "[:KANNADA:]", "[:BENGALI:]", 
-                "[\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
+                "[\u0981\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-KANNADA",
            "[:BENGALI:]", "[:KANNADA:]",
@@ -311,7 +311,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-BENGALI",
           "[:MALAYALAM:]", "[:BENGALI:]", 
-                "[\u09e2\u09e3\u09bc\u09c4\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
+                "[\u0981\u09e2\u09e3\u09bc\u09c4\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-MALAYALAM",
            "[:BENGALI:]", "[:MALAYALAM:]",
@@ -382,7 +382,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TAMIL-GUJARATI",
           "[:TAMIL:]", "[:GUJARATI:]", 
-                "[\u0abc\u0ac3\u0Ac4\u0Ac5\u0Ac9\u0Ac7\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
+                "[\u0A81\u0abc\u0ac3\u0Ac4\u0Ac5\u0Ac9\u0Ac7\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-TAMIL",
            "[:GUJARATI:]", "[:TAMIL:]",
@@ -400,7 +400,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-GUJARATI",
           "[:KANNADA:]", "[:GUJARATI:]", 
-                "[\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
+                "[\u0A81\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-KANNADA",
            "[:GUJARATI:]", "[:KANNADA:]",
@@ -409,7 +409,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-GUJARATI",
           "[:MALAYALAM:]", "[:GUJARATI:]", 
-                "[\u0ac4\u0acb\u0acc\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
+                "[\u0A81\u0ac4\u0acb\u0acc\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-MALAYALAM",
            "[:GUJARATI:]", "[:MALAYALAM:]",
@@ -418,7 +418,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TAMIL-ORIYA",
           "[:TAMIL:]", "[:ORIYA:]", 
-                "[\u0b3c\u0b43\u0b56\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
+                "[\u0B01\u0b3c\u0b43\u0b56\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-TAMIL",
            "[:ORIYA:]", "[:TAMIL:]",
@@ -436,7 +436,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-ORIYA",
           "[:KANNADA:]", "[:ORIYA:]", 
-                "[\u0b3c\u0b57\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
+                "[\u0B01\u0b3c\u0b57\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-KANNADA",
            "[:ORIYA:]", "[:KANNADA:]",
@@ -445,7 +445,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-ORIYA",
           "[:MALAYALAM:]", "[:ORIYA:]", 
-                "[\u0b3c\u0b56\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
+                "[\u0B01\u0b3c\u0b56\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-MALAYALAM",
            "[:ORIYA:]", "[:MALAYALAM:]",
@@ -458,7 +458,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "TAMIL-TELUGU",
            "[:TAMIL:]", "[:TELUGU:]",
-                  "[\u0c43\u0c44\u0c46\u0c47\u0c55\u0c56\u0c66\u0C0B\u0C0C\u0C16\u0C17\u0C18\u0C1B\u0C1D\u0C20\u0C21\u0C22\u0C25\u0C26\u0C27\u0C2B\u0C2C\u0C2D\u0C36\u0C60\u0C61]", /*roundtrip exclusions*/
+                  "[\u0C01\u0c43\u0c44\u0c46\u0c47\u0c55\u0c56\u0c66\u0C0B\u0C0C\u0C16\u0C17\u0C18\u0C1B\u0C1D\u0C20\u0C21\u0C22\u0C25\u0C26\u0C27\u0C2B\u0C2C\u0C2D\u0C36\u0C60\u0C61]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "KANNADA-TAMIL",
@@ -481,7 +481,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-TELUGU",
           "[:KANNADA:]", "[:TELUGU:]", 
-                "[\u0c3f\u0c46\u0c48\u0c4a]", /*roundtrip exclusions*/
+                "[\u0C01\u0c3f\u0c46\u0c48\u0c4a]", /*roundtrip exclusions*/
                 },
         new String [] {  "TELUGU-KANNADA",
            "[:TELUGU:]", "[:KANNADA:]",
@@ -490,7 +490,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-TELUGU",
           "[:MALAYALAM:]", "[:TELUGU:]", 
-                "[\u0c44\u0c4a\u0c4c\u0c4b\u0c55\u0c56]", /*roundtrip exclusions*/
+                "[\u0C01\u0c44\u0c4a\u0c4c\u0c4b\u0c55\u0c56]", /*roundtrip exclusions*/
                 },
         new String [] {  "TELUGU-MALAYALAM",
            "[:TELUGU:]", "[:MALAYALAM:]",
@@ -566,7 +566,7 @@ public class RoundTripTest extends TestFmwk {
         public boolean is(String sourceString) {
             try {
                 int t;
-                String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
+                String decomp = Normalizer.normalize(sourceString, Normalizer.NFD);
                 for (int i = 0; i < decomp.length(); ++i) { // don't worry about surrogates
                     switch (getType(decomp.charAt(i))) {
                     case 0:
@@ -619,11 +619,11 @@ public class RoundTripTest extends TestFmwk {
         
         public boolean is(String sourceString) { 
             try {
-                String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
+                String decomp = Normalizer.normalize(sourceString, Normalizer.NFD);
                 
                 // modern is simpler: don't care about anything but a grave
                 if (!full) {
-                    if (sourceString.equals("\u039C\u03C0")) return false;
+                    //if (sourceString.equals("\u039C\u03C0")) return false;
                     for (int i = 0; i < decomp.length(); ++i) {
                         char c = decomp.charAt(i);
                         // exclude all the accents
@@ -714,8 +714,8 @@ public class RoundTripTest extends TestFmwk {
         public static boolean isSame(String a, String b) {
             if (a.equals(b)) return true;
             if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
-            a = Normalizer.normalize(a, Normalizer.DECOMP, 0);
-            b = Normalizer.normalize(b, Normalizer.DECOMP, 0);
+            a = Normalizer.normalize(a, Normalizer.NFD);
+            b = Normalizer.normalize(b, Normalizer.NFD);
             if (a.equals(b)) return true;
             if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
             return false;
@@ -925,7 +925,7 @@ public class RoundTripTest extends TestFmwk {
                 String targ = sourceToTarget.transliterate(cs);
                 if (!toTarget.containsAll(targ) 
                         || badCharacters.containsSome(targ)) {
-                    String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                    String targD = Normalizer.normalize(targ, Normalizer.NFD);
                     if (!toTarget.containsAll(targD) 
                             || badCharacters.containsSome(targD)) {
                         logWrongScript("Source-Target", cs, targ);
@@ -934,7 +934,7 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
                 
-                String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
+                String cs2 = Normalizer.normalize(cs, Normalizer.NFD);
                 String targ2 = sourceToTarget.transliterate(cs2);
                 if (!targ.equals(targ2)) {
                     logNotCanonical("Source-Target", cs, targ, cs2, targ2);
@@ -978,14 +978,14 @@ public class RoundTripTest extends TestFmwk {
                     String targ = sourceToTarget.transliterate(cs);
                     if (!toTarget.containsAll(targ) 
                             || badCharacters.containsSome(targ)) {
-                        String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                        String targD = Normalizer.normalize(targ, Normalizer.NFD);
                         if (!toTarget.containsAll(targD) 
                                 || badCharacters.containsSome(targD)) {
                             logWrongScript("Source-Target", cs, targ);
                             continue;
                         }
                     }
-                    String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
+                    String cs2 = Normalizer.normalize(cs, Normalizer.NFD);
                     String targ2 = sourceToTarget.transliterate(cs2);
                     if (!targ.equals(targ2)) {
                         logNotCanonical("Source-Target", cs, targ, cs2, targ2);
@@ -1005,28 +1005,36 @@ public class RoundTripTest extends TestFmwk {
                     
             usi.reset(targetRange);
             while (usi.next()) {
-                int c = usi.codepoint;
+                String cs;
+                int c;
+                if(usi.codepoint == usi.IS_STRING){
+                    cs = usi.string;
+                    c = UTF16.charAt(cs,0);
+                }else{
+                    c = usi.codepoint;
+                    cs =UTF16.valueOf(c);
+                }
                     
-                String cs = UTF16.valueOf(c);
                 String targ = targetToSource.transliterate(cs);
                 String reverse = sourceToTarget.transliterate(targ);
                 
                 if (!toSource.containsAll(targ) 
                         || badCharacters.containsSome(targ)) {
-                    String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                    String targD = Normalizer.normalize(targ, Normalizer.NFD);
                     if (!toSource.containsAll(targD) 
                             || badCharacters.containsSome(targD)) {
                         logWrongScript("Target-Source", cs, targ);
-                        failTargSource.add(c);
+                        failTargSource.add(cs);
                         continue;
                     }
                 }
-                if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)) {
+                if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)
+                    && !roundtripExclusions.contains(cs)) {
                     logRoundTripFailure(cs,targetToSource.getID(), targ,sourceToTarget.getID(), reverse);
                     failRound.add(c);
                     continue;
                 }
-                String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                String targ2 = Normalizer.normalize(targ, Normalizer.NFD);
                 String reverse2 = sourceToTarget.transliterate(targ2);
                 if (!reverse.equals(reverse2)) {
                     logNotCanonical("Target-Source", targ, reverse, targ2, reverse2);
@@ -1076,7 +1084,7 @@ public class RoundTripTest extends TestFmwk {
                     
                     if (!toSource.containsAll(targ) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
                             || badCharacters.containsSome(targ)) {
-                        String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                        String targD = Normalizer.normalize(targ, Normalizer.NFD);
                         if (!toSource.containsAll(targD) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
                                 || badCharacters.containsSome(targD)) {
                             logWrongScript("Target-Source", cs, targ);
@@ -1084,11 +1092,13 @@ public class RoundTripTest extends TestFmwk {
                         }
                     }
                     if (!isSame(cs, reverse) /*&& !failRound.contains(c) && !failRound.contains(d)*/
-                         && !roundtripExclusions.contains(c) && !roundtripExclusions.contains(d)) {
+                         && !roundtripExclusions.contains(c) 
+                         && !roundtripExclusions.contains(d) 
+                         && !roundtripExclusions.contains(cs)) {
                         logRoundTripFailure(cs,targetToSource.getID(), targ,sourceToTarget.getID(), reverse);
                         continue;
                     }
-                    String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                    String targ2 = Normalizer.normalize(targ, Normalizer.NFD);
                     String reverse2 = sourceToTarget.transliterate(targ2);
                     if (!reverse.equals(reverse2)) {
                         logNotCanonical("Target-Source", targ, reverse, targ2, reverse2);

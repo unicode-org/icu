@@ -72,7 +72,6 @@ icu4j/src/com/ibm/icu/dev/data/ThaiWordFreq.xls -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
-icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
 icu4j/src/com/ibm/icu/impl/data/ICULocaleData.jar -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/ucadata.dat -text

@@ -5,22 +5,24 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/06/20 01:16:23 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
+ 
 package com.ibm.icu.dev.test.normalizer;
-
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.impl.*;
 import com.ibm.icu.impl.Utility;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.Random;
 
 public class BasicTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
         new BasicTest().run(args);
     }
 
@@ -46,11 +48,12 @@ public class BasicTest extends TestFmwk {
         { "\u212b",             "A\u030a",              "\u00c5"            }, // angstrom_sign
         { "\u00c5",             "A\u030a",              "\u00c5"            }, // A-ring
 
-//        { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
-        { "\u00fdffin",              "y\u0301ffin",          "\u00fdffin"             },	//updated with 3.0
-//        { "\u00fd\uFB03n",           "A\u0308\uFB03n",       "\u00fd\uFB03n"          },
-        { "\u00fd\uFB03n",           "y\u0301\uFB03n",       "\u00fd\uFB03n"          },	//updated with 3.0
+        { "\u00c4ffin",         "A\u0308ffin",          "\u00c4ffin"        },
+        { "\u00c4\uFB03n",      "A\u0308\uFB03n",       "\u00c4\uFB03n"     },
 
+        { "\u00fdffin",         "y\u0301ffin",          "\u00fdffin"        }, //updated with 3.0
+        { "\u00fd\uFB03n",      "y\u0301\uFB03n",       "\u00fd\uFB03n"     }, //updated with 3.0
+        
         { "Henry IV",           "Henry IV",             "Henry IV"          },
         { "Henry \u2163",       "Henry \u2163",         "Henry \u2163"      },
 
@@ -65,13 +68,15 @@ public class BasicTest extends TestFmwk {
 
     String[][] compatTests = {
             // Input                Decomposed              Composed
+        { "cat",                 "cat",                     "cat"           },
         { "\uFB4f",             "\u05D0\u05DC",         "\u05D0\u05DC",     }, // Alef-Lamed vs. Alef, Lamed
 
-//        { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
-//       { "\u00fd\uFB03n",           "A\u0308ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
-        { "\u00fdffin",              "y\u0301ffin",          "\u00fdffin"             },	//updated for 3.0
-        { "\u00fd\uFB03n",           "y\u0301ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
+        { "\u00C4ffin",         "A\u0308ffin",          "\u00C4ffin"        },
+        { "\u00C4\uFB03n",      "A\u0308ffin",          "\u00C4ffin"        }, // ffi ligature -> f + f + i
 
+        { "\u00fdffin",         "y\u0301ffin",          "\u00fdffin"        },        //updated for 3.0
+        { "\u00fd\uFB03n",      "y\u0301ffin",          "\u00fdffin"        }, // ffi ligature -> f + f + i
+        
         { "Henry IV",           "Henry IV",             "Henry IV"          },
         { "Henry \u2163",       "Henry IV",             "Henry IV"          },
 
@@ -80,10 +85,10 @@ public class BasicTest extends TestFmwk {
 
         { "\uFF76\u3099",       "\u30AB\u3099",         "\u30AC"            }, // hw_ka + ten
 
-        /* These two are broken in Unicode 2.1.2 but fixed in 2.1.5 and later
+        /* These two are broken in Unicode 2.1.2 but fixed in 2.1.5 and later*/
         { "\uFF76\uFF9E",       "\u30AB\u3099",         "\u30AC"            }, // hw_ka + hw_ten
         { "\u30AB\uFF9E",       "\u30AB\u3099",         "\u30AC"            }, // ka + hw_ten
-        */
+        
     };
 
     // With Canonical decomposition, Hangul syllables should get decomposed
@@ -103,96 +108,81 @@ public class BasicTest extends TestFmwk {
         // { "\ud4db",     "\u1111\u116e\u1175\u11af\u11c2",   "\ud478\u1175\u11af\u11c2"  },
     };
 
-    public void TestHangulCompose() {
+    public void TestHangulCompose() 
+                throws Exception{
         // Make sure that the static composition methods work
         logln("Canonical composition...");
-        staticTest(Normalizer.COMPOSE,        0, hangulCanon,  2);
+        staticTest(Normalizer.NFC,        0, hangulCanon,  2);
         logln("Compatibility composition...");
-        staticTest(Normalizer.COMPOSE_COMPAT, 0, hangulCompat, 2);
-
+        staticTest(Normalizer.NFKC, 0, hangulCompat, 2);
         // Now try iterative composition....
-        logln("Static composition...");
-        Normalizer norm = new Normalizer("", Normalizer.COMPOSE, 0);
+        logln("Iterative composition...");
+        Normalizer norm = new Normalizer("", Normalizer.NFC);
         iterateTest(norm, hangulCanon, 2);
 
-        norm.setMode(Normalizer.COMPOSE_COMPAT);
+        norm.setMode(Normalizer.NFKD);
         iterateTest(norm, hangulCompat, 2);
 
         // And finally, make sure you can do it in reverse too
         logln("Reverse iteration...");
-        norm.setMode(Normalizer.COMPOSE);
+        norm.setMode(Normalizer.NFC);
         backAndForth(norm, hangulCanon);
-    }
+     }
 
-    public void TestHangulDecomp() {
+    public void TestHangulDecomp() throws Exception{
         // Make sure that the static decomposition methods work
         logln("Canonical decomposition...");
-        staticTest(Normalizer.DECOMP,        0, hangulCanon,  1);
+        staticTest(Normalizer.NFD,        0, hangulCanon,  1);
         logln("Compatibility decomposition...");
-        staticTest(Normalizer.DECOMP_COMPAT, 0, hangulCompat, 1);
-
-        // Now the iterative decomposition methods...
+        staticTest(Normalizer.NFKD, 0, hangulCompat, 1);
+        
+         // Now the iterative decomposition methods...
         logln("Iterative decomposition...");
-        Normalizer norm = new Normalizer("", Normalizer.DECOMP, 0);
+        Normalizer norm = new Normalizer("", Normalizer.NFD);
         iterateTest(norm, hangulCanon, 1);
 
-        norm.setMode(Normalizer.DECOMP_COMPAT);
+        norm.setMode(Normalizer.NFKD);
         iterateTest(norm, hangulCompat, 1);
 
         // And finally, make sure you can do it in reverse too
         logln("Reverse iteration...");
-        norm.setMode(Normalizer.DECOMP);
+        norm.setMode(Normalizer.NFD);
         backAndForth(norm, hangulCanon);
     }
 
-    public void TestPrevious() {
-        Normalizer norm = new Normalizer("", Normalizer.DECOMP, 0);
-
-        logln("testing decomp...");
-        backAndForth(norm, canonTests);
-
-        logln("testing compose...");
-        norm.setMode(Normalizer.COMPOSE);
-        backAndForth(norm, canonTests);
-    }
-
-    public void TestDecomp() {
-        Normalizer norm = new Normalizer("", Normalizer.DECOMP, 0);
+    public void TestDecomp() throws Exception{
+        Normalizer norm = new Normalizer("", Normalizer.NFD);
         iterateTest(norm, canonTests, 1);
-
-        staticTest(Normalizer.DECOMP, 0, canonTests, 1);
+        staticTest(Normalizer.NFD, 0, canonTests, 1);
     }
 
-    public void TestCompatDecomp() {
-        Normalizer norm = new Normalizer("", Normalizer.DECOMP_COMPAT, 0);
+    public void TestCompatDecomp() throws Exception{
+        Normalizer norm = new Normalizer("", Normalizer.NFKD);
         iterateTest(norm, compatTests, 1);
-
-        staticTest(Normalizer.DECOMP_COMPAT, 0, compatTests, 1);
+        staticTest(Normalizer.NFKD, 0, compatTests, 1);
     }
 
-    public void TestCanonCompose() {
-        Normalizer norm = new Normalizer("", Normalizer.COMPOSE, 0);
+    public void TestCanonCompose() throws Exception{
+        Normalizer norm = new Normalizer("", Normalizer.NFC);
         iterateTest(norm, canonTests, 2);
-
-        staticTest(Normalizer.COMPOSE, 0, canonTests, 2);
+        staticTest(Normalizer.NFC, 0, canonTests, 2);
     }
 
-    public void TestCompatCompose() {
-        Normalizer norm = new Normalizer("", Normalizer.COMPOSE_COMPAT, 0);
+    public void TestCompatCompose() throws Exception{
+        Normalizer norm = new Normalizer("", Normalizer.NFKC);
         iterateTest(norm, compatTests, 2);
-
-        staticTest(Normalizer.COMPOSE_COMPAT, 0, compatTests, 2);
+        staticTest(Normalizer.NFKC, 0, compatTests, 2);
     }
 
-    public void TestExplodingBase() {
+    public void TestExplodingBase() throws Exception{
         // \u017f - Latin small letter long s
         // \u0307 - combining dot above
         // \u1e61 - Latin small letter s with dot above
         // \u1e9b - Latin small letter long s with dot above
         String[][] canon = {
             // Input                Decomposed              Composed
-            { "Tschu\u017f",        "Tschu\u017f",          "Tschu\u017f"       },
-            { "Tschu\u1e9b",        "Tschu\u017f\u0307",    "Tschu\u1e9b"       },
+            { "Tschu\u017f",        "Tschu\u017f",          "Tschu\u017f"    },
+            { "Tschu\u1e9b",        "Tschu\u017f\u0307",    "Tschu\u1e9b"    },
         };
         String[][] compat = {
             // Input                Decomposed              Composed
@@ -200,26 +190,20 @@ public class BasicTest extends TestFmwk {
             { "\u1e9b",        "s\u0307",        "\u1e61"      },
         };
 
-        staticTest(Normalizer.DECOMP,           0, canon,  1);
-        staticTest(Normalizer.COMPOSE,          0, canon,  2);
+        staticTest(Normalizer.NFD,           0, canon,  1);
+        staticTest(Normalizer.NFC,          0, canon,  2);
 
-        staticTest(Normalizer.DECOMP_COMPAT,    0, compat, 1);
-        staticTest(Normalizer.COMPOSE_COMPAT,   0, compat, 2);
+        staticTest(Normalizer.NFKD,    0, compat, 1);
+        staticTest(Normalizer.NFKC,   0, compat, 2);
 
-        Normalizer norm = new Normalizer("", Normalizer.DECOMP_COMPAT);
-        iterateTest(norm, compat, 1);
-        backAndForth(norm, compat);
-
-        norm.setMode(Normalizer.COMPOSE_COMPAT);
-        iterateTest(norm, compat, 2);
-        backAndForth(norm, compat);
     }
 
     /**
-     * The Tibetan vowel sign AA, 0f71, was messed up prior to Unicode version 2.1.9.
+     * The Tibetan vowel sign AA, 0f71, was messed up prior to 
+     * Unicode version 2.1.9.
      * Once 2.1.9 or 3.0 is released, uncomment this test.
      */
-    public void TestTibetan() {
+    public void TestTibetan() throws Exception{
         String[][] decomp = {
             { "\u0f77", "\u0f77", "\u0fb2\u0f71\u0f80" }
         };
@@ -227,17 +211,18 @@ public class BasicTest extends TestFmwk {
             { "\u0fb2\u0f71\u0f80", "\u0fb2\u0f71\u0f80", "\u0fb2\u0f71\u0f80" }
         };
 
-        staticTest(Normalizer.DECOMP,           0, decomp, 1);
-        staticTest(Normalizer.DECOMP_COMPAT,    0, decomp, 2);
-        staticTest(Normalizer.COMPOSE,          0, compose, 1);
-        staticTest(Normalizer.COMPOSE_COMPAT,   0, compose, 2);
+        staticTest(Normalizer.NFD,           0, decomp, 1);
+        staticTest(Normalizer.NFKD,    0, decomp, 2);
+        staticTest(Normalizer.NFC,          0, compose, 1);
+        staticTest(Normalizer.NFKC,   0, compose, 2);
     }
 
     /**
      * Make sure characters in the CompositionExclusion.txt list do not get
      * composed to.
      */
-    public void TestCompositionExclusion() {
+    public void TestCompositionExclusion() 
+                throws Exception{
         // This list is generated from CompositionExclusion.txt.
         // Update whenever the normalizer tables are updated.  Note
         // that we test all characters listed, even those that can be
@@ -260,8 +245,8 @@ public class BasicTest extends TestFmwk {
             "\uFB47\uFB48\uFB49\uFB4A\uFB4B\uFB4C\uFB4D\uFB4E";
         for (int i=0; i<EXCLUDED.length(); ++i) {
             String a = String.valueOf(EXCLUDED.charAt(i));
-            String b = Normalizer.normalize(a, Normalizer.DECOMP_COMPAT, 0);
-            String c = Normalizer.normalize(b, Normalizer.COMPOSE, 0);
+            String b = Normalizer.normalize(a, Normalizer.NFKD);
+            String c = Normalizer.normalize(b, Normalizer.NFC);
             if (c.equals(a)) {
                 errln("FAIL: " + hex(a) + " x DECOMP_COMPAT => " +
                       hex(b) + " x COMPOSE => " +
@@ -289,8 +274,8 @@ public class BasicTest extends TestFmwk {
 //              (!uinfo.hasCanonicalDecomposition((char)i) &&
 //               !uinfo.hasCompatibilityDecomposition((char)i))) continue;
 //          String a = String.valueOf((char)i);
-//          String b = Normalizer.normalize(a, Normalizer.DECOMP_COMPAT, 0);
-//          String c = Normalizer.normalize(b, Normalizer.COMPOSE, 0);
+//          String b = NewNormalizer.normalize(a,NewNormalizer.DECOMP_COMPAT,0);
+//          String c = NewNormalizer.normalize(b,NewNormalizer.COMPOSE,0);
 //          if (c.equals(a)) {
 //              errln("FAIL: " + hex(a) + " x DECOMP_COMPAT => " +
 //                    hex(b) + " x COMPOSE => " +
@@ -312,7 +297,8 @@ public class BasicTest extends TestFmwk {
      * map to the same canonical class, which is not the case, in
      * reality.
      */
-    public void TestZeroIndex() {
+    public void TestZeroIndex() 
+                throws Exception{
         String[] DATA = {
             // Expect col1 x COMPOSE_COMPAT => col2
             // Expect col2 x DECOMP => col3
@@ -325,7 +311,7 @@ public class BasicTest extends TestFmwk {
 
         for (int i=0; i<DATA.length; i+=3) {
             String a = DATA[i];
-            String b = Normalizer.normalize(a, Normalizer.COMPOSE_COMPAT, 0);
+            String b = Normalizer.normalize(a, Normalizer.NFKC);
             String exp = DATA[i+1];
             if (b.equals(exp)) {
                 logln("Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
@@ -333,7 +319,7 @@ public class BasicTest extends TestFmwk {
                 errln("FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
                       ", expect " + hex(exp));
             }
-            a = Normalizer.normalize(b, Normalizer.DECOMP, 0);
+            a = Normalizer.normalize(b, Normalizer.NFD);
             exp = DATA[i+2];
             if (a.equals(exp)) {
                 logln("Ok: " + hex(b) + " x DECOMP => " + hex(a));
@@ -349,7 +335,8 @@ public class BasicTest extends TestFmwk {
      * characters at the start of a string are not put in canonical
      * order correctly by compose() if there is no starter.
      */
-    public void TestVerisign() {
+    public void TestVerisign()
+                throws Exception{
         String[] inputs = {
             "\u05b8\u05b9\u05b1\u0591\u05c3\u05b0\u05ac\u059f",
             "\u0592\u05b7\u05bc\u05a5\u05b0\u05c0\u05c4\u05ad"
@@ -362,22 +349,239 @@ public class BasicTest extends TestFmwk {
         for (int i = 0; i < inputs.length; ++i) {
             String input = inputs[i];
             String output = outputs[i];
-            String result = Normalizer.decompose(input, false, 0);
+            String result = Normalizer.decompose(input, false);
             if (!result.equals(output)) {
-                errln("FAIL input: " + Utility.escape(input));
-                errln(" decompose: " + Utility.escape(result));
-                errln("  expected: " + Utility.escape(output));
+                errln("FAIL input: " + hex(input));
+                errln(" decompose: " + hex(result));
+                errln("  expected: " + hex(output));
             }
-            result = Normalizer.compose(input, false, 0);
+            result = Normalizer.compose(input, false);
             if (!result.equals(output)) {
-                errln("FAIL input: " + Utility.escape(input));
-                errln("   compose: " + Utility.escape(result));
-                errln("  expected: " + Utility.escape(output));
+                errln("FAIL input: " + hex(input));
+                errln("   compose: " + hex(result));
+                errln("  expected: " + hex(output));
+            }
+        }
+        
+    }
+    public void  TestQuickCheckResultNO()
+                 throws Exception{
+        final char CPNFD[] = {0x00C5, 0x0407, 0x1E00, 0x1F57, 0x220C, 
+                                0x30AE, 0xAC00, 0xD7A3, 0xFB36, 0xFB4E};
+        final char CPNFC[] = {0x0340, 0x0F93, 0x1F77, 0x1FBB, 0x1FEB, 
+                                0x2000, 0x232A, 0xF900, 0xFA1E, 0xFB4E};
+        final char CPNFKD[] = {0x00A0, 0x02E4, 0x1FDB, 0x24EA, 0x32FE, 
+                                0xAC00, 0xFB4E, 0xFA10, 0xFF3F, 0xFA2D};
+        final char CPNFKC[] = {0x00A0, 0x017F, 0x2000, 0x24EA, 0x32FE, 
+                                0x33FE, 0xFB4E, 0xFA10, 0xFF3F, 0xFA2D};
+
+
+        final int SIZE = 10;
+
+        int count = 0;
+        for (; count < SIZE; count ++)
+        {
+            if (Normalizer.quickCheck(String.valueOf(CPNFD[count]), 
+                    Normalizer.NFD) != Normalizer.NO)
+            {
+                errln("ERROR in NFD quick check at U+" + 
+                       Integer.toHexString(CPNFD[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFC[count]), 
+                        Normalizer.NFC) !=Normalizer.NO)
+            {
+                errln("ERROR in NFC quick check at U+"+ 
+                       Integer.toHexString(CPNFC[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFKD[count]),
+                                Normalizer.NFKD) != Normalizer.NO)
+            {
+                errln("ERROR in NFKD quick check at U+"+ 
+                       Integer.toHexString(CPNFKD[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFKC[count]), 
+                                         Normalizer.NFKC) !=Normalizer.NO)
+            {
+                errln("ERROR in NFKC quick check at U+"+ 
+                       Integer.toHexString(CPNFKC[count]));
+                return;
             }
         }
     }
 
+ 
+    public void TestQuickCheckResultYES() 
+                throws Exception{
+        final char CPNFD[] = {0x00C6, 0x017F, 0x0F74, 0x1000, 0x1E9A, 
+                                0x2261, 0x3075, 0x4000, 0x5000, 0xF000};
+        final char CPNFC[] = {0x0400, 0x0540, 0x0901, 0x1000, 0x1500, 
+                                0x1E9A, 0x3000, 0x4000, 0x5000, 0xF000};
+        final char CPNFKD[] = {0x00AB, 0x02A0, 0x1000, 0x1027, 0x2FFB, 
+                                0x3FFF, 0x4FFF, 0xA000, 0xF000, 0xFA27};
+        final char CPNFKC[] = {0x00B0, 0x0100, 0x0200, 0x0A02, 0x1000, 
+                                0x2010, 0x3030, 0x4000, 0xA000, 0xFA0E};
+
+        final int SIZE = 10;
+        int count = 0;
+
+        char cp = 0;
+        while (cp < 0xA0)
+        {
+            if (Normalizer.quickCheck(String.valueOf(cp), Normalizer.NFD)
+                                            != Normalizer.YES)
+            {
+                errln("ERROR in NFD quick check at U+"+ 
+                                                      Integer.toHexString(cp));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(cp), Normalizer.NFC) 
+                                             != Normalizer.YES)
+            {
+                errln("ERROR in NFC quick check at U+"+ 
+                                                      Integer.toHexString(cp));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(cp), Normalizer.NFKD)
+                                             != Normalizer.YES)
+            {
+                errln("ERROR in NFKD quick check at U+" + 
+                                                      Integer.toHexString(cp));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(cp), Normalizer.NFKC)
+                                             != Normalizer.YES)
+            {
+                errln("ERROR in NFKC quick check at U+"+ 
+                                                       Integer.toHexString(cp));
+                return;
+            }
+            cp++;
+        }
+
+        for (; count < SIZE; count ++)
+        {
+            if (Normalizer.quickCheck(String.valueOf(CPNFD[count]),  
+                                         Normalizer.NFD)!=Normalizer.YES)
+            {
+                errln("ERROR in NFD quick check at U+"+ 
+                                             Integer.toHexString(CPNFD[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFC[count]),  
+                                         Normalizer.NFC)!=Normalizer.YES)
+            {
+                errln("ERROR in NFC quick check at U+"+ 
+                                             Integer.toHexString(CPNFC[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFKD[count]), 
+                                         Normalizer.NFKD)!=Normalizer.YES)
+            {
+                errln("ERROR in NFKD quick check at U+"+ 
+                                    Integer.toHexString(CPNFKD[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFKC[count]), 
+                                         Normalizer.NFKC)!=Normalizer.YES)
+            {
+                errln("ERROR in NFKC quick check at U+"+ 
+                        Integer.toHexString(CPNFKC[count]));
+                return;
+            }
+        }
+    }
+    public void TestBengali() throws Exception{
+        String input = "\u09bc\u09be\u09cd\u09be";
+        String output=Normalizer.normalize(input,Normalizer.NFC);
+        if(!input.equals(output)){
+             errln("ERROR in NFC of string");
+        }
+        return;
+    }
+    public void TestQuickCheckResultMAYBE() 
+                throws Exception{
+        
+        final char CPNFC[] = {0x0306, 0x0654, 0x0BBE, 0x102E, 0x1161, 
+                                0x116A, 0x1173, 0x1175, 0x3099, 0x309A};
+        final char CPNFKC[] = {0x0300, 0x0654, 0x0655, 0x09D7, 0x0B3E, 
+                                0x0DCF, 0xDDF, 0x102E, 0x11A8, 0x3099};
+
+
+        final int SIZE = 10;
+
+        int count = 0;
+
+        /* NFD and NFKD does not have any MAYBE codepoints */
+        for (; count < SIZE; count ++)
+        {
+            if (Normalizer.quickCheck(String.valueOf(CPNFC[count]), 
+                                        Normalizer.NFC)!=Normalizer.MAYBE)
+            {
+                errln("ERROR in NFC quick check at U+"+ 
+                                            Integer.toHexString(CPNFC[count]));
+                return;
+            }
+            if (Normalizer.quickCheck(String.valueOf(CPNFKC[count]), 
+                                       Normalizer.NFKC)!=Normalizer.MAYBE)
+            {
+                errln("ERROR in NFKC quick check at U+"+ 
+                                            Integer.toHexString(CPNFKC[count]));
+                return;
+            }
+        }
+    }
+    
+    public void TestQuickCheckStringResult() 
+                throws Exception{
+        int count;
+        String d;
+        String c;
+
+        for (count = 0; count < canonTests.length; count ++)
+        {
+            d = canonTests[count][1];
+            c = canonTests[count][2];
+            if (Normalizer.quickCheck(d,Normalizer.NFD)
+                                            != Normalizer.YES)
+            {
+                errln("ERROR in NFD quick check for string at count " + count);
+                return;
+            }
+
+            if (Normalizer.quickCheck(c, Normalizer.NFC) 
+                                            == Normalizer.NO)
+            {
+                errln("ERROR in NFC quick check for string at count " + count);
+                return;
+            }
+        }
+
+        for (count = 0; count < compatTests.length; count ++)
+        {
+            d = compatTests[count][1];
+            c = compatTests[count][2];
+            if (Normalizer.quickCheck(d, Normalizer.NFKD) 
+                                            != Normalizer.YES)
+            {
+                errln("ERROR in NFKD quick check for string at count " + count);
+                return;
+            }
+
+            if (Normalizer.quickCheck(c,  Normalizer.NFKC) 
+                                            != Normalizer.YES)
+            {
+                errln("ERROR in NFKC quick check for string at count " + count);
+                return;
+            }
+        }  
+    }
     //------------------------------------------------------------------------
+    // Internal utilities
+    //
+       //------------------------------------------------------------------------
     // Internal utilities
     //
 
@@ -387,22 +591,22 @@ public class BasicTest extends TestFmwk {
 
         // Run through the iterator forwards and stick it into a StringBuffer
         StringBuffer forward =  new StringBuffer();
-        for (char ch = iter.first(); ch != iter.DONE; ch = iter.next()) {
+        for (int ch = iter.first(); ch != iter.DONE; ch = iter.next()) {
             forward.append(ch);
         }
 
         // Now do it backwards
         StringBuffer reverse = new StringBuffer();
-        for (char ch = iter.last(); ch != iter.DONE; ch = iter.previous()) {
+        for (int ch = iter.last(); ch != iter.DONE; ch = iter.previous()) {
             reverse.insert(0, ch);
         }
 
         if (!forward.toString().equals(reverse.toString())) {
             errln("FAIL: Forward/reverse mismatch for input " + hex(input)
-                  + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
+                  + ", forward: " + hex(forward) + ", backward: "+hex(reverse));
         } else if (isVerbose()) {
             logln("Ok: Forward/reverse for input " + hex(input)
-                  + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
+                  + ", forward: " + hex(forward) + ", backward: "+hex(reverse));
         }
     }
 
@@ -412,30 +616,33 @@ public class BasicTest extends TestFmwk {
         {
             iter.setText(tests[i][0]);
 
-            // Run through the iterator forwards and stick it into a StringBuffer
+            // Run through the iterator forwards and stick it into a 
+            // StringBuffer
             StringBuffer forward =  new StringBuffer();
-            for (char ch = iter.first(); ch != iter.DONE; ch = iter.next()) {
+            for (int ch = iter.first(); ch != iter.DONE; ch = iter.next()) {
                 forward.append(ch);
             }
 
             // Now do it backwards
             StringBuffer reverse = new StringBuffer();
-            for (char ch = iter.last(); ch != iter.DONE; ch = iter.previous()) {
+            for (int ch = iter.last(); ch != iter.DONE; ch = iter.previous()) {
                 reverse.insert(0, ch);
             }
 
             if (!forward.toString().equals(reverse.toString())) {
-                errln("FAIL: Forward/reverse mismatch for input " + hex(tests[i][0])
-                    + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
+                errln("FAIL: Forward/reverse mismatch for input " 
+                    + hex(tests[i][0]) + ", forward: " + hex(forward) 
+                    + ", backward: " + hex(reverse));
             } else if (isVerbose()) {
                 logln("Ok: Forward/reverse for input " + hex(tests[i][0])
-                      + ", forward: " + hex(forward) + ", backward: " + hex(reverse));
+                      + ", forward: " + hex(forward) + ", backward: " 
+                      + hex(reverse));
             }
         }
     }
 
-    private void staticTest(Normalizer.Mode mode, int options, String[][] tests, int outCol)
-    {
+    private void staticTest (Normalizer.Mode mode, int options, 
+                             String[][] tests, int outCol) throws Exception{
         for (int i = 0; i < tests.length; i++)
         {
             String input = tests[i][0];
@@ -443,7 +650,7 @@ public class BasicTest extends TestFmwk {
 
             logln("Normalizing '" + input + "' (" + hex(input) + ")" );
 
-            String output = Normalizer.normalize(input, mode, options);
+            String output = Normalizer.normalize(input, mode);
 
             if (!output.equals(expect)) {
                 errln("FAIL: case " + i
@@ -451,10 +658,36 @@ public class BasicTest extends TestFmwk {
                     + " but got '" + output + "' (" + hex(output) + ")" );
             }
         }
-    }
+        char[] output = new char[1];
+        for (int i = 0; i < tests.length; i++)
+        {
+            char[] input = tests[i][0].toCharArray();
+            String expect = tests[i][outCol];
 
-    private void iterateTest(Normalizer iter, String[][] tests, int outCol)
-    {
+            logln("Normalizing '" + new String(input) + "' (" + 
+                        hex(new String(input)) + ")" );
+            int reqLength=0;
+	        while(true){
+		        try{
+		        	reqLength=Normalizer.normalize(input,output, mode);
+		        	if(reqLength<=output.length	){
+		        		break;
+		        	}
+		        }catch(IndexOutOfBoundsException e){
+		        	output= new char[Integer.parseInt(e.getMessage())];
+		        	continue;
+		        }
+	        }
+            if (!expect.equals(new String(output,0,reqLength))) {
+                errln("FAIL: case " + i
+                    + " expected '" + expect + "' (" + hex(expect) + ")"
+                    + " but got '" + new String(output) 
+                    + "' ("  + hex(new String(output)) + ")" );
+            }
+        }
+    }
+    
+    private void iterateTest(Normalizer iter, String[][] tests, int outCol){
         for (int i = 0; i < tests.length; i++)
         {
             String input = tests[i][0];
@@ -466,27 +699,1032 @@ public class BasicTest extends TestFmwk {
             assertEqual(expect, iter, "case " + i + " ");
         }
     }
-
+    
     private void assertEqual(String expected, Normalizer iter, String msg)
     {
         int index = 0;
-        for (char ch = iter.first(); ch != iter.DONE; ch = iter.next())
+        int ch;
+        for (ch = iter.first();ch!=iter.DONE;ch=iter.next())
         {
             if (index >= expected.length()) {
-                errln("FAIL: " + msg + "Unexpected character '" + ch + "' (" + hex(ch) + ")"
+                errln("FAIL: " + msg + "Unexpected character '" + (char)ch 
+                        + "' (" + hex(ch) + ")"
                         + " at index " + index);
                 break;
             }
             char want = expected.charAt(index);
             if (ch != want) {
-                errln("FAIL: " + msg + "got '" + ch + "' (" + hex(ch) + ")"
-                        + " but expected '" + want + "' (" + hex(want) + ")"
+                errln("FAIL: " + msg + "got '" + (char)ch 
+                        + "' (" + hex(ch) + ")" 
+                        + " but expected '" + want + "' (" + hex(want)+ ")"
                         + " at index " + index);
             }
             index++;
         }
         if (index < expected.length()) {
-            errln("FAIL: " + msg + "Only got " + index + " chars, expected " + expected.length());
+            errln("FAIL: " + msg + "Only got " + index + " chars, expected " 
+            + expected.length());
+        }
+        
+        while((ch=iter.previous())!=iter.DONE){
+            char want = expected.charAt(--index);
+            if (ch != want) {
+                errln("FAIL: " + msg + "got '" + (char)ch 
+                        + "' (" + hex(ch) + ")"
+                        + " but expected '" + want + "' (" + hex(want) + ")"
+                        + " at index " + index);
+            }
         }
     }
+    //--------------------------------------------------------------------------
+    
+    // NOTE: These tests are used for quick debugging so are not ported
+    // to ICU4C tsnorm.cpp in intltest
+    //
+        
+    public void TestDebugStatic(){
+        String in = Utility.unescape("\\U0001D157\\U0001D165");
+        if(!Normalizer.isNormalized(in,Normalizer.NFC)){
+            errln("isNormalized failed");
+        }
+        
+        String input  =  "\uAD8B\uAD8B\uAD8B\uAD8B"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "aaaaaaaaaaaaaaaaaazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"+
+            "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"+
+            "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"+
+            "\uAD8B\uAD8B\uAD8B\uAD8B"+
+            "d\u031B\u0307\u0323";
+        String expect = "\u1100\u116F\u11AA\u1100\u116F\u11AA\u1100\u116F"+
+                        "\u11AA\u1100\u116F\u11AA\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65\uD834\uDD57\uD834\uDD65"+
+                        "\uD834\uDD57\uD834\uDD65aaaaaaaaaaaaaaaaaazzzzzz"+
+                        "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+
+                        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"+
+                        "bbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccccccc"+
+                        "cccccccccccccccccccccccccccccccccccccccccccccccc"+
+                        "ddddddddddddddddddddddddddddddddddddddddddddddddddddd"+
+                        "dddddddddddddddddddddddd"+
+                        "\u1100\u116F\u11AA\u1100\u116F\u11AA\u1100\u116F"+
+                        "\u11AA\u1100\u116F\u11AA\u0064\u031B\u0323\u0307";
+            String output = Normalizer.normalize(Utility.unescape(input),
+                            Normalizer.NFD);
+            if(!expect.equals(output)){
+                errln("FAIL expected: "+hex(expect) + " got: "+hex(output));
+            }
+            
+
+
+    }
+    
+    public void TestDebugIter(){
+        String input = "\\U0001D15E";
+        String expected = "\uD834\uDD57\uD834\uDD65";  
+        String expectedReverse = "\uD834\uDD65\uD834\uDD57";
+        int index = 0;
+        int ch;
+        Normalizer iter = new Normalizer(new StringCharacterIterator(Utility.unescape(input)),
+                                                Normalizer.NFKC);
+        StringBuffer got = new StringBuffer();
+        for (ch = iter.first();ch!=iter.DONE;ch=iter.next())
+        {
+            if (index >= expected.length()) {
+                errln("FAIL: " +  "Unexpected character '" + (char)ch +
+                       "' (" + hex(ch) + ")" + " at index " + index);
+                break;
+            }
+            got.append(UTF16.toString(ch));
+            index++;
+        }
+        if (!expected.equals(got.toString())) {
+                errln("FAIL: " +  "got '" +got+ "' (" + hex(got) + ")"
+                        + " but expected '" + expected + "' (" 
+                        + hex(expected) + ")");
+        }
+        if (got.length() < expected.length()) {
+            errln("FAIL: " +  "Only got " + index + " chars, expected " 
+                           + expected.length());
+        }
+        
+        logln("Reverse Iteration\n");
+        iter.setIndexOnly(iter.endIndex());
+        got.setLength(0);
+        for(ch=iter.previous();ch!=iter.DONE;ch=iter.previous()){
+            if (index >= expected.length()) {
+                errln("FAIL: " +  "Unexpected character '" + (char)ch
+                               + "' (" + hex(ch) + ")" + " at index " + index);
+                break;
+            }
+            got.append(UTF16.toString(ch));
+        }
+        if (!expectedReverse.equals(got.toString())) {
+                errln("FAIL: " +  "got '" +got+ "' (" + hex(got) + ")"
+                               + " but expected '" + expected 
+                               + "' (" + hex(expected) + ")");
+        }
+        if (got.length() < expected.length()) {
+            errln("FAIL: " +  "Only got " + index + " chars, expected " 
+                      + expected.length());
+        }
+
+    }
+    //--------------------------------------------------------------------------          	
+	// helper class for TestPreviousNext()
+	// simple UTF-32 character iterator
+	class UCharIterator {
+	
+	   public UCharIterator(int[] src, int len, int index){
+            
+	        s=src;
+            length=len;
+            i=index;
+       }
+	
+	    public int current() {
+	        if(i<length) {
+	            return s[i];
+	        } else {
+	            return -1;
+	        }
+	    }
+	
+	    public int next() {
+	        if(i<length) {
+	            return s[i++];
+	        } else {
+	            return -1;
+	        }
+	    }
+	
+	    public int previous() {
+	        if(i>0) {
+	            return s[--i];
+	        } else {
+	            return -1;
+	        }
+	    }
+	
+	    public int getIndex() {
+	        return i;
+	    }
+	
+	    private int[] s;
+	    private int length, i;
+	};
+	public void TestPreviousNext() {
+	    // src and expect strings
+	    char src[]={
+	        UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),
+	        UTF16.getLeadSurrogate(0x1d15f), UTF16.getTrailSurrogate(0x1d15f),
+	        0xc4,
+	        0x1ed0
+	    };
+	    int expect[]={
+	        0x831d,
+	        0x1d158, 0x1d165,
+	        0x41, 0x308,
+	        0x4f, 0x302, 0x301
+	    };
+	
+	    // expected src indexes corresponding to expect indexes
+	    int expectIndex[]={
+	        0,
+	        2, 2,
+	        4, 4,
+	        5, 5, 5,
+	        6 // behind last character
+	    };
+	
+	    // initial indexes into the src and expect strings
+	    
+	    final int SRC_MIDDLE=4;
+	    final int EXPECT_MIDDLE=3;
+	    
+	
+	    // movement vector
+	    // - for previous(), 0 for current(), + for next()
+	    // not const so that we can terminate it below for the error message
+	    String moves="0+0+0--0-0-+++0--+++++++0--------";
+	
+	    // iterators
+	    Normalizer iter = new Normalizer(new String(src), 
+                                                Normalizer.NFD);
+	    UCharIterator iter32 = new UCharIterator(expect, expect.length, 
+                                                     EXPECT_MIDDLE);
+	
+	    int c1, c2;
+	    char m;
+	
+	    // initially set the indexes into the middle of the strings
+	    iter.setIndexOnly(SRC_MIDDLE);
+	
+	    // move around and compare the iteration code points with
+	    // the expected ones
+	    int movesIndex =0;
+	    while(movesIndex<moves.length()) {
+            m=moves.charAt(movesIndex++);
+	        if(m=='-') {
+	            c1=iter.previous();
+	            c2=iter32.previous();
+	        } else if(m=='0') {
+	            c1=iter.current();
+	            c2=iter32.current();
+	        } else /* m=='+' */ {
+	            c1=iter.next();
+	            c2=iter32.next();
+	        }
+	
+	        // compare results
+	        if(c1!=c2) {
+	            // copy the moves until the current (m) move, and terminate
+	            String history = moves.substring(0,movesIndex);
+	            errln("error: mismatch in Normalizer iteration at "+history+": "
+	                  +"got c1= " + hex(c1) +" != expected c2= "+ hex(c2));
+	            break;
+	        }
+	
+	        // compare indexes
+	        if(iter.getIndex()!=expectIndex[iter32.getIndex()]) {
+	            // copy the moves until the current (m) move, and terminate
+	            String history = moves.substring(0,movesIndex);
+	            errln("error: index mismatch in Normalizer iteration at "
+                      +history+ " : "+ "Normalizer index " +iter.getIndex()
+                      +" expected "+ expectIndex[iter32.getIndex()]);
+	            break;
+	        }
+	    }
+	}
+    // Only in ICU4j
+    public void TestPreviousNextJCI() {
+        // src and expect strings
+        char src[]={
+            UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),
+            UTF16.getLeadSurrogate(0x1d15f), UTF16.getTrailSurrogate(0x1d15f),
+            0xc4,
+            0x1ed0
+        };
+        int expect[]={
+            0x831d,
+            0x1d158, 0x1d165,
+            0x41, 0x308,
+            0x4f, 0x302, 0x301
+        };
+    
+        // expected src indexes corresponding to expect indexes
+        int expectIndex[]={
+            0,
+            2, 2,
+            4, 4,
+            5, 5, 5,
+            6 // behind last character
+        };
+    
+        // initial indexes into the src and expect strings
+        
+        final int SRC_MIDDLE=4;
+        final int EXPECT_MIDDLE=3;
+        
+    
+        // movement vector
+        // - for previous(), 0 for current(), + for next()
+        // not const so that we can terminate it below for the error message
+        String moves="0+0+0--0-0-+++0--+++++++0--------";
+    
+        // iterators
+        StringCharacterIterator text = new StringCharacterIterator(new String(src));
+        Normalizer iter = new Normalizer(text,Normalizer.NFD);
+        UCharIterator iter32 = new UCharIterator(expect, expect.length, 
+                                                     EXPECT_MIDDLE);
+    
+        int c1, c2;
+        char m;
+    
+        // initially set the indexes into the middle of the strings
+        iter.setIndexOnly(SRC_MIDDLE);
+    
+        // move around and compare the iteration code points with
+        // the expected ones
+        int movesIndex =0;
+        while(movesIndex<moves.length()) {
+            m=moves.charAt(movesIndex++);
+            if(m=='-') {
+                c1=iter.previous();
+                c2=iter32.previous();
+            } else if(m=='0') {
+                c1=iter.current();
+                c2=iter32.current();
+            } else /* m=='+' */ {
+                c1=iter.next();
+                c2=iter32.next();
+            }
+    
+            // compare results
+            if(c1!=c2) {
+                // copy the moves until the current (m) move, and terminate
+                String history = moves.substring(0,movesIndex);
+                errln("error: mismatch in Normalizer iteration at "+history+": "
+                      +"got c1= " + hex(c1) +" != expected c2= "+ hex(c2));
+                break;
+            }
+    
+            // compare indexes
+            if(iter.getIndex()!=expectIndex[iter32.getIndex()]) {
+                // copy the moves until the current (m) move, and terminate
+                String history = moves.substring(0,movesIndex);
+                errln("error: index mismatch in Normalizer iteration at "
+                      +history+ " : "+ "Normalizer index " +iter.getIndex()
+                      +" expected "+ expectIndex[iter32.getIndex()]);
+                break;
+            }
+        }
+    }
+
+	// test APIs that are not otherwise used - improve test coverage
+	public void TestNormalizerAPI() {
+	    // instantiate a Normalizer from a CharacterIterator
+	    String s=Utility.unescape("a\u0308\uac00\\U0002f800");
+	    // make s a bit longer and more interesting
+	    UCharacterIterator iter = UCharacterIterator.getInstance(s+s);
+	    Normalizer norm = new Normalizer(iter, Normalizer.NFC);
+	    if(norm.next()!=0xe4) {
+	        errln("error in Normalizer(CharacterIterator).next()");
+	    }
+	
+	
+	    // test clone(), ==, and hashCode()
+	    Normalizer clone=(Normalizer)norm.clone();
+	    if(clone.equals(norm)) {
+	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone()!=norm");
+	    }
+	    // clone must have the same hashCode()
+	    //if(clone.hashCode()!=norm.hashCode()) {
+	    //    errln("error in Normalizer(Normalizer(CharacterIterator)).clone().hashCode()!=copy.hashCode()");
+	    //}
+        if(clone.next()!=0xac00) {
+            errln("error in Normalizer(Normalizer(CharacterIterator)).next()");
+        }
+        int ch = clone.next();
+	    if(ch!=0x4e3d) {
+	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone().next()");
+	    }
+	    // position changed, must change hashCode()
+	    if(clone.hashCode()==norm.hashCode()) {
+	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone().next().hashCode()==copy.hashCode()");
+	    }
+	
+	    // test compose() and decompose()
+	    StringBuffer tel;
+        String nfkc, nfkd;
+	    tel=new StringBuffer("\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121");
+	    tel.insert(1,(char)0x0301);
+	
+	    nfkc=Normalizer.compose(tel.toString(), true);
+	    nfkd=Normalizer.decompose(tel.toString(), true);
+	    if(
+	        !nfkc.equals(Utility.unescape("TE\u0139TELTELTELTELTELTELTELTELTEL"))|| 
+	        !nfkd.equals(Utility.unescape("TEL\u0301TELTELTELTELTELTELTELTELTEL"))
+	    ) {
+	        errln("error in Normalizer::(de)compose(): wrong result(s)");
+	    }
+	
+	    // test setIndex()
+        ch=norm.setIndex(3);
+	    if(ch!=0x4e3d) {
+	        errln("error in Normalizer(CharacterIterator).setIndex(3)");
+	    }
+	
+	    // test setText(CharacterIterator) and getText()
+	    String out, out2;
+	    clone.setText(iter);
+
+        out = clone.getText();
+        out2 = iter.getText();
+        if( !out.equals(out2) ||
+            clone.startIndex()!=0||
+            clone.endIndex()!=iter.getLength()
+        ) {
+            errln("error in Normalizer::setText() or Normalizer::getText()");
+        }
+
+	
+	    // test setText(UChar *), getUMode() and setMode()
+	    clone.setText(s);
+        clone.setIndexOnly(1);
+	    clone.setMode(Normalizer.NFD);
+	    if(clone.getMode()!=Normalizer.NFD) {
+	        errln("error in Normalizer::setMode() or Normalizer::getMode()");
+	    }
+	    if(clone.next()!=0x308 || clone.next()!=0x1100) {
+	        errln("error in Normalizer::setText() or Normalizer::setMode()");
+	    }
+	
+
+	    // test setOption() and getOption()
+	    //setOption() and getOption() are deprecated
+        //clone.setOption(0xaa0000, true);
+	    //clone.setOption(0x20000, false);
+	    //if(clone.getOption(0x880000) ==0|| clone.getOption(0x20000)==1) {
+	    //   errln("error in Normalizer::setOption() or Normalizer::getOption()");
+	    //}
+	
+	    // test last()/previous() with an internal buffer overflow
+	    StringBuffer buf = new StringBuffer("aaaaaaaaaa");
+        buf.setCharAt(10-1,'\u0308');
+        clone.setText(buf);
+	    if(clone.last()!=0x308) {
+	        errln("error in Normalizer(10*U+0308).last()");
+	    }
+	
+	    // test UNORM_NONE
+	    norm.setMode(Normalizer.NONE);
+	    if(norm.first()!=0x61 || norm.next()!=0x308 || norm.last()!=0x2f800) {
+	        errln("error in Normalizer(UNORM_NONE).first()/next()/last()");
+	    }
+	    out=Normalizer.normalize(s, Normalizer.NONE);
+	    if(!out.equals(s)) {
+	        errln("error in Normalizer::normalize(UNORM_NONE)");
+	    }
+	}
+        
+	public void TestConcatenate() {
+	    
+	    Object[][]cases=new Object[][]{
+	        /* mode, left, right, result */
+	        {
+	            Normalizer.NFC,
+	            "re",
+	            "\u0301sum\u00e9",
+	            "r\u00e9sum\u00e9"
+	        },
+	        {
+	            Normalizer.NFC,
+	            "a\u1100",
+	            "\u1161bcdefghijk",
+	            "a\uac00bcdefghijk"
+	        },
+	        /* ### TODO: add more interesting cases */
+	        {
+	            Normalizer.NFD, 
+	            "\u0340\u0341\u0343\u0344\u0374\u037E\u0387\u0958" +
+	            "\u0959\u095A\u095B\u095C\u095D\u095E\u095F\u09DC" +
+	            "\u09DD\u09DF\u0A33\u0A36\u0A59\u0A5A\u0A5B\u0A5E" +
+	            "\u0B5C\u0B5D\u0F43\u0F4D\u0F52\u0F57\u0F5C\u0F69" +
+	            "\u0F73\u0F75\u0F76\u0F78\u0F81\u0F93\u0F9D\u0FA2" +
+	            "\u0FA7\u0FAC\u0FB9\u1F71\u1F73\u1F75\u1F77\u1F79" +
+	            "\u1F7B\u1F7D\u1FBB\u1FBE\u1FC9\u1FCB\u1FD3\u1FDB",
+	            
+	            "\u1FE3\u1FEB\u1FEE\u1FEF\u1FF9\u1FFB\u1FFD\u2000" +
+	            "\u2001\u2126\u212A\u212B\u2329\u232A\uF900\uFA10" +
+	            "\uFA12\uFA15\uFA20\uFA22\uFA25\uFA26\uFA2A\uFB1F" +
+	            "\uFB2A\uFB2B\uFB2C\uFB2D\uFB2E\uFB2F\uFB30\uFB31" +
+	            "\uFB32\uFB33\uFB34\uFB35\uFB36\uFB38\uFB39\uFB3A" +
+	            "\uFB3B\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46" +
+	            "\uFB47\uFB48\uFB49\uFB4A\uFB4B\uFB4C\uFB4D\uFB4E",
+	           
+	            "\u0340\u0341\u0343\u0344\u0374\u037E\u0387\u0958" +
+	            "\u0959\u095A\u095B\u095C\u095D\u095E\u095F\u09DC" +
+	            "\u09DD\u09DF\u0A33\u0A36\u0A59\u0A5A\u0A5B\u0A5E" +
+	            "\u0B5C\u0B5D\u0F43\u0F4D\u0F52\u0F57\u0F5C\u0F69" +
+	            "\u0F73\u0F75\u0F76\u0F78\u0F81\u0F93\u0F9D\u0FA2" +
+	            "\u0FA7\u0FAC\u0FB9\u1F71\u1F73\u1F75\u1F77\u1F79" +
+	            "\u1F7B\u1F7D\u1FBB\u1FBE\u1FC9\u1FCB\u1FD3\u0399" +
+	            "\u0301\u03C5\u0308\u0301\u1FEB\u1FEE\u1FEF\u1FF9" +
+	            "\u1FFB\u1FFD\u2000\u2001\u2126\u212A\u212B\u2329" +
+	            "\u232A\uF900\uFA10\uFA12\uFA15\uFA20\uFA22\uFA25" +
+	            "\uFA26\uFA2A\uFB1F\uFB2A\uFB2B\uFB2C\uFB2D\uFB2E" +
+	            "\uFB2F\uFB30\uFB31\uFB32\uFB33\uFB34\uFB35\uFB36" +
+	            "\uFB38\uFB39\uFB3A\uFB3B\uFB3C\uFB3E\uFB40\uFB41" +
+	            "\uFB43\uFB44\uFB46\uFB47\uFB48\uFB49\uFB4A\uFB4B" +
+	            "\uFB4C\uFB4D\uFB4E"
+	        }
+	    };
+	
+	    String left, right, expect, result;
+	    Normalizer.Mode mode;
+	    int i;
+	
+	    /* test concatenation */
+	    for(i=0; i<cases.length; ++i) {
+            mode = (Normalizer.Mode)cases[i][0];
+	
+	        left=(String)cases[i][1];
+	        right=(String)cases[i][2];
+	        expect=(String)cases[i][3];
+		        result=Normalizer.concatenate(left, right, mode);
+	        if( result.equals(expect)) {
+	            errln("error in Normalizer.concatenate(), cases[] failed"
+                      +", result==expect: expected: "
+                      + hex(expect)+" =========> got: " + hex(result));
+	        }
+	    }
+	}
+    private final int RAND_MAX = 0x7fff;
+    
+    public void TestCheckFCD() 
+	{
+	  char[] FAST = {0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 
+                     0x0008, 0x0009, 0x000A}; 
+                     
+	  char[] FALSE = {0x0001, 0x0002, 0x02EA, 0x03EB, 0x0300, 0x0301, 
+	                  0x02B9, 0x0314, 0x0315, 0x0316};
+	  
+      char[] TRUE = {0x0030, 0x0040, 0x0440, 0x056D, 0x064F, 0x06E7, 
+	                 0x0050, 0x0730, 0x09EE, 0x1E10};
+	
+	  char[][] datastr= { {0x0061, 0x030A, 0x1E05, 0x0302, 0},
+	                      {0x0061, 0x030A, 0x00E2, 0x0323, 0},
+	                      {0x0061, 0x0323, 0x00E2, 0x0323, 0},
+	                      {0x0061, 0x0323, 0x1E05, 0x0302, 0} 
+                        };
+	  Normalizer.QuickCheckResult result[] = {Normalizer.YES, Normalizer.NO, Normalizer.NO, Normalizer.YES};
+	
+	  char[] datachar= {        0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 
+	                            0x6a,
+	                            0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 
+	                            0xea,
+	                            0x0300, 0x0301, 0x0302, 0x0303, 0x0304, 0x0305, 0x0306, 
+	                            0x0307, 0x0308, 0x0309, 0x030a, 
+	                            0x0320, 0x0321, 0x0322, 0x0323, 0x0324, 0x0325, 0x0326,
+	                            0x0327, 0x0328, 0x0329, 0x032a,
+	                            0x1e00, 0x1e01, 0x1e02, 0x1e03, 0x1e04, 0x1e05, 0x1e06, 
+	                            0x1e07, 0x1e08, 0x1e09, 0x1e0a
+                       };
+	
+	  int count = 0;
+	  
+	  if (Normalizer.quickCheck(FAST,0,FAST.length, Normalizer.FCD) != Normalizer.YES)
+	    errln("NewNormalizer.quickCheck(FCD) failed: expected value for fast NewNormalizer.quickCheck is NewNormalizer.YES\n");
+	  if (Normalizer.quickCheck(FALSE,0, FALSE.length,Normalizer.FCD) != Normalizer.NO)
+	    errln("NewNormalizer.quickCheck(FCD) failed: expected value for error NewNormalizer.quickCheck is NewNormalizer.NO\n");
+	  if (Normalizer.quickCheck(TRUE,0,TRUE.length,Normalizer.FCD) != Normalizer.YES)
+	    errln("NewNormalizer.quickCheck(FCD) failed: expected value for correct NewNormalizer.quickCheck is NewNormalizer.YES\n");
+	
+	
+	  while (count < 4)
+	  {
+	    Normalizer.QuickCheckResult fcdresult = Normalizer.quickCheck(datastr[count],0,datastr[count].length, Normalizer.FCD);
+        if (result[count] != fcdresult) {
+	        errln("NewNormalizer.quickCheck(FCD) failed: Data set "+ count
+                    + " expected value "+ result[count]);
+	    }
+	    count ++;
+	  }
+	
+	  /* random checks of long strings */
+	  //srand((unsigned)time( NULL ));
+      Random rand = new Random();
+      
+	
+	  for (count = 0; count < 50; count ++)
+	  {
+	    int size = 0;
+	    Normalizer.QuickCheckResult testresult = Normalizer.YES;
+	    char[] data= new char[20];
+	    char[] norm= new char[100];
+	    char[] nfd = new char[100];
+	    int normStart = 0;
+	    int nfdsize = 0;
+        int srcStart = 0;
+	    while (size != 19) {
+	      data[size] = datachar[rand.nextInt(RAND_MAX)*50/RAND_MAX];
+	      logln("0x"+data[size]);
+	      normStart = Normalizer.normalize(data,size,size+1,
+                                              norm,normStart,100, 
+                                              Normalizer.NFD);       
+	      size ++;
+	    }
+	    logln("\n");
+	
+	    nfdsize = Normalizer.normalize(data,0,size, nfd,0,nfd.length,Normalizer.NFD);
+        //    nfdsize = unorm_normalize(data, size, UNORM_NFD, UCOL_IGNORE_HANGUL, 
+        //                      nfd, 100, &status);  
+        if (nfdsize != normStart || Utility.arrayRegionMatches(nfd,0, norm,0,nfdsize) ==false) {
+	      testresult = Normalizer.NO;
+	    }
+	    if (testresult == Normalizer.YES) {
+	      logln("result NewNormalizer.YES\n");
+	    }
+	    else {
+	      logln("result NewNormalizer.NO\n");
+	    }
+	
+	    if (Normalizer.quickCheck(data,0,data.length, Normalizer.FCD) != testresult) {
+	      errln("NewNormalizer.quickCheck(FCD) failed: expected "+ testresult+" for random data\n" );
+	    }
+	  }
+	}
+    
+	    
+	// reference implementation of Normalizer::compare
+	private int ref_norm_compare(String s1, String s2, int options) {
+	    String t1, t2,r1,r2;
+        
+        r1=s1;
+        r2=s2;
+	
+	    if((options&Normalizer.COMPARE_IGNORE_CASE)!=0) {
+	        r1 = UCharacter.foldCase(s1,((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
+	        r2 = UCharacter.foldCase(s2,((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
+	    }
+	       
+         t1 = Normalizer.decompose(r1, false);
+         t2 = Normalizer.decompose(r2, false);
+        
+	    if((options&Normalizer.COMPARE_CODE_POINT_ORDER)!=0) {
+            UTF16.StringComparator comp = new UTF16.StringComparator();
+	        return comp.compare(t1,t2);
+	    } else {
+	        return t1.compareTo(t2);
+	    }
+      
+	}
+	
+	// test wrapper for Normalizer::compare, sets UNORM_INPUT_IS_FCD appropriately
+	private int norm_compare(String s1, String s2, int options) {
+	    if( Normalizer.YES==Normalizer.quickCheck(s1,Normalizer.FCD) &&
+	        Normalizer.YES==Normalizer.quickCheck(s2,Normalizer.FCD)) {
+	        options|=Normalizer.INPUT_IS_FCD;
+	    }
+	
+	    return Normalizer.compare(s1, s2, options);
+	}
+	
+	// reference implementation of UnicodeString::caseCompare
+	private int ref_case_compare(String s1, String s2, int options) {
+	    String t1, t2;
+	
+	    t1=s1;
+	    t2=s2;
+	
+	    t1 = UCharacter.foldCase(t1,((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
+	    t2 = UCharacter.foldCase(t2,((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
+	
+        if((options&Normalizer.COMPARE_CODE_POINT_ORDER)!=0) {
+            UTF16.StringComparator comp = new UTF16.StringComparator();
+            return comp.compare(t1,t2);
+        } else {
+            return t1.compareTo(t2);
+        }
+    
+	}
+	
+	// reduce an integer to -1/0/1
+	private static int sign(int value) {
+	    if(value==0) {
+	        return 0;
+	    } else {
+	        return (value>>31)|1;
+	    }
+	}
+            // test Normalizer::compare and unorm_compare (thinly wrapped by the former)
+        // by comparing it with its semantic equivalent
+        // since we trust the pieces, this is sufficient
+    
+        // test each string with itself and each other
+        // each time with all options
+     private  String strings[]=new String[]{
+            // some cases from NormalizationTest.txt
+            // 0..3
+            "D\u031B\u0307\u0323",
+            "\u1E0C\u031B\u0307",
+            "D\u031B\u0323\u0307",
+            "d\u031B\u0323\u0307",
+    
+            // 4..6
+            "\u00E4",
+            "a\u0308",
+            "A\u0308",
+    
+            // Angstrom sign = A ring
+            // 7..10
+            "\u212B",
+            "\u00C5",
+            "A\u030A",
+            "a\u030A",
+    
+            // 11.14
+            "a\u059A\u0316\u302A\u032Fb",
+            "a\u302A\u0316\u032F\u059Ab",
+            "a\u302A\u0316\u032F\u059Ab",
+            "A\u059A\u0316\u302A\u032Fb",
+    
+            // from ICU case folding tests
+            // 15..20
+            "A\u00df\u00b5\ufb03\\U0001040c\u0131",
+            "ass\u03bcffi\\U00010434i",
+            "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff",
+            "\u0041\u0062\u0069\u03c3\u0073\u0053\u0046\u0066\u0049\ud93f\udfff",
+            "\u0041\u0062\u0131\u03c3\u0053\u0073\u0066\u0046\u0069\ud93f\udfff",
+            "\u0041\u0062\u0069\u03c3\u0073\u0053\u0046\u0066\u0049\ud93f\udffd",
+    
+            //     U+d800 U+10001   see implementation comment in unorm_cmpEquivFold
+            // vs. U+10000          at bottom - code point order
+            // 21..22
+            "\ud800\ud800\udc01",
+            "\ud800\udc00",
+    
+            // other code point order tests from ustrtest.cpp
+            // 23..31
+            "\u20ac\ud801",
+            "\u20ac\ud800\udc00",
+            "\ud800",
+            "\ud800\uff61",
+            "\udfff",
+            "\uff61\udfff",
+            "\uff61\ud800\udc02",
+            "\ud800\udc02",
+            "\ud84d\udc56",
+    
+            // long strings, see cnormtst.c/TestNormCoverage()
+            // equivalent if case-insensitive
+            // 32..33
+            "\uAD8B\uAD8B\uAD8B\uAD8B"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "aaaaaaaaaaaaaaaaaazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"+
+            "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"+
+            "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"+
+            "\uAD8B\uAD8B\uAD8B\uAD8B"+
+            "d\u031B\u0307\u0323",
+    
+            "\u1100\u116f\u11aa\uAD8B\uAD8B\u1100\u116f\u11aa"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"+
+            "aaaaaaaaaaAAAAAAAAZZZZZZZZZZZZZZZZzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"+
+            "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"+
+            "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"+
+            "\u1100\u116f\u11aa\uAD8B\uAD8B\u1100\u116f\u11aa"+
+            "\u1E0C\u031B\u0307",
+            "\u00dater\u00fd",
+            "\u00fater\u00fd",
+	        // some strings that may make a difference whether the compare function
+	        // case-folds or decomposes first
+	        // 34..41
+	        "\u0360\u0345\u0334",
+	        "\u0360\u03b9\u0334",
+	
+	        "\u0360\u1f80\u0334",
+	        "\u0360\u03b1\u0313\u03b9\u0334",
+	
+	        "\u0360\u1ffc\u0334",
+	        "\u0360\u03c9\u03b9\u0334",
+	
+	        "\u00cc",
+	        "\u0069\u0300",
+
+        };
+    
+	
+    public void TestCompareDebug(){
+       
+        String[] s = new String[100]; // at least as many items as in strings[] !
+    
+        // all combinations of options
+        // UNORM_INPUT_IS_FCD is set automatically if both input strings fulfill FCD conditions
+        final class Temp {
+            int options;
+            String name;
+            public Temp(int opt,String str){
+                options =opt;
+                name = str;
+            }
+                
+        }
+
+        
+        Temp[] opt = new Temp[]{
+                                new Temp(0,"default"),
+                                new Temp(Normalizer.COMPARE_CODE_POINT_ORDER, "code point order" ),
+                                new Temp(Normalizer.COMPARE_IGNORE_CASE, "ignore case" ),
+                                new Temp(Normalizer.COMPARE_CODE_POINT_ORDER|Normalizer.COMPARE_IGNORE_CASE, "code point order & ignore case" ),
+                                new Temp(Normalizer.COMPARE_IGNORE_CASE|Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I, "ignore case & special i"),
+                                new Temp(Normalizer.COMPARE_CODE_POINT_ORDER|Normalizer.COMPARE_IGNORE_CASE|Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I, "code point order & ignore case & special i")
+                        };
+                                
+                                
+    
+        int i, j, k, count=strings.length;
+        int result, refResult;
+    
+        // create the UnicodeStrings
+        for(i=0; i<count; ++i) {
+            s[i]=Utility.unescape(strings[i]);
+        }
+        UTF16.StringComparator comp = new UTF16.StringComparator();
+        // test them each with each other
+        
+        i = 15;
+        j = 16;
+        k = 4;
+        // test Normalizer::compare
+        result=norm_compare(s[i], s[j], opt[k].options);
+        refResult=ref_norm_compare(s[i], s[j], opt[k].options);
+        if(sign(result)!=sign(refResult)) {
+            errln("Normalizer::compare( " + i +", "+j + ", " +k+"( " +opt[k].name+"))=" + result +" should be same sign as " + refResult);
+        }
+
+        // test UnicodeString::caseCompare - same internal implementation function
+         if(0!=(opt[k].options&Normalizer.COMPARE_IGNORE_CASE)) {
+        //    result=s[i]. (s[j], opt[k].options);                  
+            result=comp.caseCompare(s[i],s[j], opt[k].options);
+            refResult=ref_case_compare(s[i], s[j], opt[k].options);
+            if(sign(result)!=sign(refResult)) {
+                      errln("Normalizer::compare( " + i +", "+j + ", "+k+"( " +opt[k].name+"))=" + result +" should be same sign as " + refResult);
+                            }
+        }
+        String value1 = "\u00dater\u00fd";
+        String value2 = "\u00fater\u00fd";
+        if(Normalizer.compare(value1,value2,0)!=0){
+            if(Normalizer.compare(value1,value2,Normalizer.COMPARE_IGNORE_CASE)==0){
+                
+            }
+        }
+    }
+    
+	public void TestCompare() {
+
+	    String[] s = new String[100]; // at least as many items as in strings[] !
+	
+	    // all combinations of options
+	    // UNORM_INPUT_IS_FCD is set automatically if both input strings fulfill FCD conditions
+	    final class Temp {
+            int options;
+            String name;
+            public Temp(int opt,String str){
+                options =opt;
+                name = str;
+            }
+                
+        }
+
+        
+        Temp[] opt = new Temp[]{
+                                new Temp(0,"default"),
+                                new Temp(Normalizer.COMPARE_CODE_POINT_ORDER, "code point order" ),
+                                new Temp(Normalizer.COMPARE_IGNORE_CASE, "ignore case" ),
+                                new Temp(Normalizer.COMPARE_CODE_POINT_ORDER|Normalizer.COMPARE_IGNORE_CASE, "code point order & ignore case" ),
+                                new Temp(Normalizer.COMPARE_IGNORE_CASE|Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I, "ignore case & special i"),
+                                new Temp(Normalizer.COMPARE_CODE_POINT_ORDER|Normalizer.COMPARE_IGNORE_CASE|Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I, "code point order & ignore case & special i")
+                        };
+                                
+                                
+	
+	    int i, j, k, count=strings.length;
+	    int result, refResult;
+	
+	    // create the UnicodeStrings
+	    for(i=0; i<count; ++i) {
+	        s[i]=Utility.unescape(strings[i]);
+	    }
+	    UTF16.StringComparator comp = new UTF16.StringComparator();
+	    // test them each with each other
+	    for(i=0; i<count; ++i) {
+	        for(j=i; j<count; ++j) {
+	            for(k=0; k<opt.length; ++k) {
+	                // test Normalizer::compare
+	                result=norm_compare(s[i], s[j], opt[k].options);
+	                refResult=ref_norm_compare(s[i], s[j], opt[k].options);
+	                if(sign(result)!=sign(refResult)) {
+	                    errln("Normalizer::compare( " + i +", "+j + ", " +k+"( " +opt[k].name+"))=" + result +" should be same sign as " + refResult);
+	                }
+	
+	                // test UnicodeString::caseCompare - same internal implementation function
+	                 if(0!=(opt[k].options&Normalizer.COMPARE_IGNORE_CASE)) {
+	                //    result=s[i]. (s[j], opt[k].options);                  
+                        result=comp.caseCompare(s[i],s[j], opt[k].options);
+	                    refResult=ref_case_compare(s[i], s[j], opt[k].options);
+	                    if(sign(result)!=sign(refResult)) {
+	                              errln("Normalizer::compare( " + i +", "+j + ", "+k+"( " +opt[k].name+"))=" + result +" should be same sign as " + refResult);
+                 	                    }
+	                }
+	            }
+	        }
+	    }
+	}
+    
+    // verify that case-folding does not un-FCD strings
+	int countFoldFCDExceptions(int foldingOptions) {
+	    String s, fold, d;
+	    int c;
+	    int count;
+	    int/*unsigned*/ cc, trailCC, foldCC, foldTrailCC;
+	    Normalizer.QuickCheckResult qcResult;
+	    int category;
+	    boolean isNFD;
+
+	
+	    logln("Test if case folding may un-FCD a string (folding options 0x)"+hex(foldingOptions));
+	
+	    count=0;
+	    for(c=0; c<=0x10ffff; ++c) {
+	        category=UCharacter.getType(c);
+	        if(category==UCharacterCategory.UNASSIGNED) {
+	            continue; // skip unassigned code points
+	        }
+	        if(c==0xac00) {
+	            c=0xd7a3; // skip Hangul - no case folding there
+	            continue;
+	        }
+	        // skip Han blocks - no case folding there either
+	        if(c==0x3400) {
+	            c=0x4db5;
+	            continue;
+	        }
+	        if(c==0x4e00) {
+	            c=0x9fa5;
+	            continue;
+	        }
+	        if(c==0x20000) {
+	            c=0x2a6d6;
+	            continue;
+	        }
+	
+	        s= UTF16.valueOf(c);
+	
+	        // get leading and trailing cc for c
+	        d= Normalizer.decompose(s,false);
+	        isNFD= s==d;
+	        cc=UCharacter.getCombiningClass(UTF16.charAt(d,0));
+	        trailCC=UCharacter.getCombiningClass(UTF16.charAt(d,d.length()-1));
+	
+	        // get leading and trailing cc for the case-folding of c
+	        UCharacter.foldCase(s,(foldingOptions==0));
+	        d = Normalizer.decompose(s, false);
+	        foldCC=UCharacter.getCombiningClass(UTF16.charAt(d,0));
+	        foldTrailCC=UCharacter.getCombiningClass(UTF16.charAt(d,d.length()-1));
+	
+	        qcResult=Normalizer.quickCheck(s, Normalizer.FCD);
+
+	
+	        // bad:
+	        // - character maps to empty string: adjacent characters may then need reordering
+	        // - folding has different leading/trailing cc's, and they don't become just 0
+	        // - folding itself is not FCD
+	        if( qcResult!=Normalizer.YES ||
+	            s.length()==0 ||
+	            (cc!=foldCC && foldCC!=0) || (trailCC!=foldTrailCC && foldTrailCC!=0)
+	        ) {
+	            ++count;
+	            errln("U+"+hex(c)+": case-folding may un-FCD a string (folding options 0x"+hex(foldingOptions)+")");
+	            //errln("  cc %02x trailCC %02x    foldCC(U+%04lx) %02x foldTrailCC(U+%04lx) %02x   quickCheck(folded)=%d", cc, trailCC, UTF16.charAt(d,0), foldCC, UTF16.charAt(d,d.length()-1), foldTrailCC, qcResult);
+	            continue;
+	        }
+	
+	        // also bad:
+	        // if a code point is in NFD but its case folding is not, then
+	        // unorm_compare will also fail
+	        if(isNFD && Normalizer.YES!=Normalizer.quickCheck(s, Normalizer.NFD)) {
+	            ++count;
+	            errln("U+"+hex(c)+": case-folding may un-FCD a string (folding options 0x"+hex(foldingOptions)+")");
+	        }
+	    }
+	
+	    logln("There are "+hex(count)+" code points for which case-folding may un-FCD a string (folding options"+foldingOptions+"x)" );
+	    return count;
+	}
+
+    public void TestFindFoldFCDExceptions() {
+	    int count;
+	
+	    count=countFoldFCDExceptions(0);
+	    count+=countFoldFCDExceptions(Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I);
+	    if(count>0) {
+	        /*
+	         * If case-folding un-FCDs any strings, then unorm_compare() must be
+	         * re-implemented.
+	         * It currently assumes that one can check for FCD then case-fold
+	         * and then still have FCD strings for raw decomposition without reordering.
+	         */
+	        errln("error: There are "+count+" code points for which case-folding"+
+	              " may un-FCD a string for all folding options.\n See comment"+
+                  " in BasicNormalizerTest::FindFoldFCDExceptions()!");
+	    }
+	}
+   
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/03/20 22:55:33 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/06/20 01:21:18 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,8 @@ import com.ibm.icu.lang.*;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.*;
-
+import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.USerializedSet;
 /**
  * This class allows one to iterate through all the strings that are canonically equivalent to a given
  * string. For example, here are some sample results:
@@ -103,7 +104,7 @@ public class CanonicalIterator {
      * while changing the source string, saving object creation.
      */
     public void setSource(String newSource) {
-        source = Normalizer.normalize(newSource, Normalizer.DECOMP, 0);
+        source = Normalizer.normalize(newSource, Normalizer.NFD);
         done = false;
         
         // catch degenerate case
@@ -122,9 +123,10 @@ public class CanonicalIterator {
 	    // i should be the end of the first code point
 	    
 	    int i = UTF16.findOffsetFromCodePoint(source, 1);
+        
         for (; i < source.length(); i += UTF16.getCharCount(i)) {
             cp = UTF16.charAt(source, i);
-            if (SAFE_START.contains(cp)) {
+            if (NormalizerImpl.isCanonSafeStart(cp)) {
                 list.add(source.substring(start, i)); // add up to i
                 start = i;
             }
@@ -195,21 +197,21 @@ public class CanonicalIterator {
     /**
      *@return the set of "safe starts", characters that are class zero AND are never non-initial in a decomposition.
      *@internal
-     */
+     *
     public static UnicodeSet getSafeStart() {
         return (UnicodeSet) SAFE_START.clone();
     }
-    
+    */
     /**
      *@return the set of characters whose decompositions start with the given character
      *@internal
-     */
+     *
     public static UnicodeSet getStarts(int cp) {
         UnicodeSet result = AT_START.get(cp);
         if (result == null) result = EMPTY;
         return (UnicodeSet) result.clone();
     }
-    
+    */
     
     // ===================== PRIVATES ==============================
     
@@ -253,7 +255,7 @@ public class CanonicalIterator {
 				String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
 				if (attempt.equals(segment)) {
 */
-                if (Normalizer.isEquivalent(possible, segment, Normalizer.DECOMP, 0)) {
+                if (Normalizer.compare(possible, segment,0)==0) {
              	               	
             		if (PROGRESS) System.out.println("Adding Permutation: " + NAME.transliterate(possible));
                 	result.add(possible);
@@ -272,6 +274,54 @@ public class CanonicalIterator {
     
      
     private Set getEquivalents2(String segment) {
+        
+        Set result = new HashSet();
+        
+        if (PROGRESS) System.out.println("Adding: " + NAME.transliterate(segment));
+        
+        result.add(segment);
+        StringBuffer workingBuffer = new StringBuffer();
+        
+        // cycle through all the characters
+        int cp=0,end=0;
+	    int[] range = new int[2];
+        for (int i = 0; i < segment.length(); i += UTF16.getCharCount(cp)) {
+            
+	        // see if any character is at the start of some decomposition
+	        cp = UTF16.charAt(segment, i);;
+	        USerializedSet starts = new USerializedSet();
+           
+            if (!NormalizerImpl.getCanonStartSet(cp, starts)) {
+	          continue;
+	        }
+	        int j=0;
+            // if so, see which decompositions match 
+	        for(j = 0, cp = end+1; cp <= end ||starts.getSerializedRange(j++, range); ++cp) {
+                if(cp>end){
+                    cp=range[0];
+                    end=range[1];
+                }
+                
+	            Set remainder = extract(cp, segment, i,workingBuffer);
+	            if (remainder == null) continue;
+	
+	            // there were some matches, so add all the possibilities to the set.
+	            String prefix= segment.substring(0,i);
+	            prefix += UTF16.valueOf(cp);
+	            int el = -1;
+	            Iterator iter = remainder.iterator();
+	            while (iter.hasNext()) {
+	                String item = (String) iter.next();
+	                String toAdd = new String(prefix);
+	                toAdd += item;
+	                result.add(toAdd);		
+	                //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*toAdd)));
+	            }
+
+            }
+	    }
+	    return result;
+        /*
         Set result = new HashSet();
         if (PROGRESS) System.out.println("Adding: " + NAME.transliterate(segment));
         result.add(segment);
@@ -283,6 +333,7 @@ public class CanonicalIterator {
         for (int i = 0; i < segment.length(); i += UTF16.getCharCount(cp)) {
             // see if any character is at the start of some decomposition
             cp = UTF16.charAt(segment, i);
+            NormalizerImpl.getCanonStartSet(c,fillSet)
             UnicodeSet starts = AT_START.get(cp);
             if (starts == null) continue;
             UnicodeSetIterator usi = new UnicodeSetIterator(starts);
@@ -305,6 +356,7 @@ public class CanonicalIterator {
             }
         }
         return result;
+        */
     }
     
     /**
@@ -317,7 +369,7 @@ public class CanonicalIterator {
             + ", " + NAME.transliterate(segment.substring(segmentPos)));
             
         //String decomp = Normalizer.normalize(UTF16.valueOf(comp), Normalizer.DECOMP, 0);
-        String decomp = Normalizer.normalize(comp, Normalizer.DECOMP, 0);
+        String decomp = Normalizer.normalize(comp, Normalizer.NFD);
         
         // See if it matches the start of segment (at segmentPos)
         boolean ok = false;
@@ -369,7 +421,7 @@ public class CanonicalIterator {
         if (!segment.regionMatches(segmentPos, trial, 0, segment.length() - segmentPos)) return null;
         */
         
-        if (!Normalizer.isEquivalent(UTF16.valueOf(comp) + remainder, segment.substring(segmentPos), Normalizer.DECOMP, 0)) return null;
+        if (0!=Normalizer.compare(UTF16.valueOf(comp) + remainder, segment.substring(segmentPos), 0)) return null;
         
         // get the remaining combinations
         return getEquivalents2(remainder);
@@ -392,16 +444,18 @@ public class CanonicalIterator {
         SET_WITH_NULL_STRING.add("");
     }
     
-    private static UnicodeSet SAFE_START = new UnicodeSet();
-    private static CharMap AT_START = new CharMap();
+  //  private static UnicodeSet SAFE_START = new UnicodeSet();
+  //  private static CharMap AT_START = new CharMap();
     
         // TODO: WARNING, NORMALIZER doesn't have supplementaries yet !!;
         // Change FFFF to 10FFFF in C, and in Java when normalizer is upgraded.
-    private static int LAST_UNICODE = 0x10FFFF;
+  //  private static int LAST_UNICODE = 0x10FFFF;
+    /*
     static {
         buildData();
     }
-    
+    */
+    /*
     private static void buildData() {
 
         if (PROGRESS) System.out.println("Getting Safe Start");
@@ -417,10 +471,10 @@ public class CanonicalIterator {
         for (int cp = 0; cp <= LAST_UNICODE; ++cp) {
             if (PROGRESS & (cp & 0x7FF) == 0) System.out.print('.');
             
-            if (Normalizer.isNormalized(cp, Normalizer.DECOMP, 0)) continue;
+            if (Normalizer.isNormalized(cp, Normalizer.NFD)) continue;
 
             //String istr = UTF16.valueOf(cp);
-            String decomp = Normalizer.normalize(cp, Normalizer.DECOMP, 0);
+            String decomp = Normalizer.normalize(cp, Normalizer.NFD);
             //if (decomp.equals(istr)) continue;
             
             // add each character in the decomposition to canBeIn 
@@ -437,7 +491,7 @@ public class CanonicalIterator {
         }
         if (PROGRESS) System.out.println();
     }
-    
+    */
     // the following is just for a map from characters to a set of characters
     
     private static class CharMap {

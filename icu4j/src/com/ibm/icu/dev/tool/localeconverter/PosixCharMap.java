@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixCharMap.java,v $ 
- * $Date: 2002/02/16 03:05:30 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/06/20 01:17:12 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -62,6 +62,139 @@ public class PosixCharMap {
         encoding =enc;
         load(new BufferedReader(new FileReader(file)));
     }
+    /* This map must be in ASCENDING ORDER OF THE ESCAPE CODE */
+    static private final char[] UNESCAPE_MAP = {
+        /*"   0x22, 0x22 */
+        /*'   0x27, 0x27 */
+        /*?   0x3F, 0x3F */
+        /*\   0x5C, 0x5C */
+        /*a*/ 0x61, 0x07,
+        /*b*/ 0x62, 0x08,
+        /*f*/ 0x66, 0x0c,
+        /*n*/ 0x6E, 0x0a,
+        /*r*/ 0x72, 0x0d,
+        /*t*/ 0x74, 0x09,
+        /*v*/ 0x76, 0x0b
+    };
+        /**
+     * Convert an escape to a 32-bit code point value.  We attempt
+     * to parallel the icu4c unesacpeAt() function.
+     * @param offset16 an array containing offset to the character
+     * <em>after</em> the backslash.  Upon return offset16[0] will
+     * be updated to point after the escape sequence.
+     * @return character value from 0 to 10FFFF, or -1 on error.
+     */
+    public static int unescapeAt(String s, int[] offset16) {
+        int c;
+        int result = 0;
+        int n = 0;
+        int minDig = 0;
+        int maxDig = 0;
+        int bitsPerDigit = 4;
+        int dig;
+        int i;
+
+        /* Check that offset is in range */
+        int offset = offset16[0];
+        int length = s.length();
+        if (offset < 0 || offset >= length) {
+            return -1;
+        }
+
+        /* Fetch first UChar after '\\' */
+        c = UTF16.charAt(s, offset);
+        offset += UTF16.getCharCount(c);
+
+        /* Convert hexadecimal and octal escapes */
+        switch (c) {
+        case 'u':
+            minDig = maxDig = 4;
+            break;
+        case 'U':
+            minDig = maxDig = 8;
+            break;
+        case 'x':
+            minDig = 1;
+            maxDig = 2;
+            break;
+        default:
+            dig = UCharacter.digit(c, 8);
+            if (dig >= 0) {
+                minDig = 1;
+                maxDig = 3;
+                n = 1; /* Already have first octal digit */
+                bitsPerDigit = 3;
+                result = dig;
+            }
+            break;
+        }
+        if (minDig != 0) {
+            while (offset < length && n < maxDig) {
+                // TEMPORARY
+                // TODO: Restore the char32-based code when UCharacter.digit
+                // is working (Bug 66).
+
+                //c = UTF16.charAt(s, offset);
+                //dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
+                c = s.charAt(offset);
+                dig = Character.digit((char)c, (bitsPerDigit == 3) ? 8 : 16);
+                if (dig < 0) {
+                    break;
+                }
+                result = (result << bitsPerDigit) | dig;
+                //offset += UTF16.getCharCount(c);
+                ++offset;
+                ++n;
+            }
+            if (n < minDig) {
+                return -1;
+            }
+            offset16[0] = offset;
+            return result;
+        }
+
+        /* Convert C-style escapes in table */
+        for (i=0; i<UNESCAPE_MAP.length; i+=2) {
+            if (c == UNESCAPE_MAP[i]) {
+                offset16[0] = offset;
+                return UNESCAPE_MAP[i+1];
+            } else if (c < UNESCAPE_MAP[i]) {
+                break;
+            }
+        }
+
+        /* If no special forms are recognized, then consider
+         * the backslash to generically escape the next character. */
+        offset16[0] = offset;
+        return c;
+    }
+
+    /**
+     * Convert all escapes in a given string using unescapeAt().
+     * @exception IllegalArgumentException if an invalid escape is
+     * seen.
+     */
+    public static String unescape(String s) {
+        StringBuffer buf = new StringBuffer();
+        int[] pos = new int[1];
+        for (int i=0; i<s.length(); ) {
+            char c = s.charAt(i++);
+            if (c == '\\') {
+                pos[0] = i;
+                int e = unescapeAt(s, pos);
+                if (e < 0) {
+                    throw new IllegalArgumentException("Invalid escape sequence " +
+                                                       s.substring(i-1, Math.min(i+8, s.length())));
+                }
+                UTF16.append(buf, e);
+                i = pos[0];
+            } else {
+                buf.append(c);
+            }
+        }
+        return buf.toString();
+    }
+
     public void load(Reader inputReader) throws IOException {
         PosixCharMap oldMap = SymbolTransition.getCharMap();
         SymbolTransition.setCharMap(null);
@@ -104,14 +237,21 @@ public class PosixCharMap {
                 state = p.nextToken();
             } while ((state != EOF) && !p.dataEquals("CHARMAP"));
             p.accept(EOL);
-            if (state != EOF) {
+            if (state != EOF ) {
                 p = new Lex(states2, input);
                 state = p.nextToken();
-                while (state != EOF) {
+                while (state != EOF ) {
+
                     String key = p.getData();
+                    if(p.dataEquals("ENDCHARMAP")){
+                        break;
+                    }
                     state = p.nextToken();
                     while (state == EOL) {
-                        String data = p.getData();
+                        if(p.dataEquals("ENDCHARMAP")){
+                            break;
+                        }
+                        String data = unescape(p.getData());
                         data.trim();
                         if (data.startsWith("<U") || data.startsWith("#U")) {
                             String numData = data.substring(2,data.length()-1);
@@ -154,8 +294,7 @@ public class PosixCharMap {
                         
                         state = p.nextToken();
                         key=p.getData();
-                     }
-                        
+                     }                       
                         
                     //state = p.nextToken();
                 }

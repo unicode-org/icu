@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertPOSIXLocale.java,v $ 
- * $Date: 2002/02/16 03:05:27 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/06/20 01:17:11 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -223,11 +223,11 @@ public class ConvertPOSIXLocale {
         process(args);
             //{{INIT_CONTROLS
 		//}}
-}
+    }
     
     public void process(String args[]) {
         short options = identifyOptions(args);
-        String enc="";
+        String enc=null;
         if ((args.length < 2) || ((options & OPT_UNKNOWN) != 0)) {
             printUsage();
         } else {
@@ -248,6 +248,9 @@ public class ConvertPOSIXLocale {
                     mapFiles.addElement(thisArg);
                 }
                 
+            }
+            if(enc==null){
+                enc="Default";
             }
             if ((fileName == null) || (locale == null) || (options == 0)) {
                 printUsage();

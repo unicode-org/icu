@@ -31,13 +31,13 @@ import java.io.*;
 public class genIndexFilters {
 
     public static void main(String[] args) throws IOException {
-        Normalizer.Mode m = Normalizer.NO_OP;
+        Normalizer.Mode m = Normalizer.NONE;
         boolean lowerFirst = false;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("NFD")) {
-                m = Normalizer.DECOMP;
+                m = Normalizer.NFD;
             } else if (args[1].equalsIgnoreCase("NFKD")) {
-                m = Normalizer.DECOMP_COMPAT;
+                m = Normalizer.NFKD;
             } else {
                 usage();
             }
@@ -59,7 +59,7 @@ public class genIndexFilters {
         Transliterator t = Transliterator.getInstance(ID);
         // TransliteratorUtility gives us access to package private API
         UnicodeSet sourceSet = TransliteratorUtility.getSourceSet(t);
-        if (m != Normalizer.NO_OP || lowerFirst) {
+        if (m != Normalizer.NONE || lowerFirst) {
             UnicodeSetClosure.close(sourceSet, m, lowerFirst);
         }
         System.out.println(sourceSet.toPattern(true));

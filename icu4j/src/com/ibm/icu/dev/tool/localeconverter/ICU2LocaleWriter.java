@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ICU2LocaleWriter.java,v $ 
- * $Date: 2002/02/16 03:05:28 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/06/20 01:17:12 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -58,17 +58,20 @@ public class ICU2LocaleWriter extends LocaleWriter {
             super.write(tag, o);
         } else {
             CollationItem[] items = (CollationItem[])o;
-            print("CollationElements");
-            println(" { ");
-            for (int i = 0; i < items.length; i++) {
-                if(items[i]!=null){
-                    printString(items[i].toString());
-                    if (items[i].comment != null) {
-                        tabTo(30);
-                        print("//");
-                        println(items[i].comment);
+            if(items[0]!=null){
+                print("Sequence");
+                println(" { ");
+                for (int i = 0; i < items.length; i++) {
+                    if(items[i]!=null){
+                        printString(items[i].toString());
+                        if (items[i].comment != null) {
+                            tabTo(30);
+                            print("//");
+                            println(items[i].comment);
+                        }
                     }
                 }
+                println("}");
             }
         }
     }

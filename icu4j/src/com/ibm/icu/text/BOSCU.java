@@ -5,14 +5,14 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/BOSCU.java,v $ 
-* $Date: 2002/05/14 16:48:48 $ 
-* $Revision: 1.1 $
+* $Date: 2002/06/20 01:21:18 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.UCharacterIterator;
+import com.ibm.icu.impl.UnicodeCharacterIterator;
 
 /**
  * <p>Binary Ordered Compression Scheme for Unicode</p>
@@ -105,9 +105,9 @@ public class BOSCU
 																int offset) 
 	{
 	    int prev = 0;
-	    UCharacterIterator iterator = new UCharacterIterator(source);
+	    UnicodeCharacterIterator iterator = new UnicodeCharacterIterator(source);
 	    int codepoint = iterator.nextCodePoint();
-	    while (codepoint != UCharacterIterator.DONE_CODEPOINT) {
+	    while (codepoint != UnicodeCharacterIterator.DONE_CODEPOINT) {
 	        if (prev < 0x4e00 || prev >= 0xa000) {
 	            prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
 	        } 
@@ -133,9 +133,9 @@ public class BOSCU
 	{
 	    int prev = 0;
 	    int result = 0;
-	    UCharacterIterator iterator = new UCharacterIterator(source);
+	    UnicodeCharacterIterator iterator = new UnicodeCharacterIterator(source);
 	    int codepoint = iterator.nextCodePoint();
-	    while (codepoint != UCharacterIterator.DONE_CODEPOINT) {
+	    while (codepoint != UnicodeCharacterIterator.DONE_CODEPOINT) {
 	        if (prev < 0x4e00 || prev >= 0xa000) {
 	            prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
 	        } 

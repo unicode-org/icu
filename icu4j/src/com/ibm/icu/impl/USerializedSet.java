@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/USerializedSet.java,v $ 
- * $Date: 2002/03/28 01:50:59 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/06/20 01:18:09 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
 */
@@ -31,6 +31,8 @@ public final class USerializedSet {
         arrayOffset=bmpLength=length=0;
 
         length=src[srcStart++];
+        
+        
         if((length&0x8000) >0) {
             /* there are supplementary values */
             length&=0x7fff;
@@ -47,8 +49,9 @@ public final class USerializedSet {
             }
             bmpLength=length;
         }
-        array=src;
-        arrayOffset=srcStart;
+        array = new char[length];
+        System.arraycopy(src,srcStart,array,0,length);
+        //arrayOffset=srcStart;
         return true;
     }
 
@@ -83,9 +86,7 @@ public final class USerializedSet {
         if(rangeIndex<0) {
             return false;
         }
-		if(array==null){
-			array = new char[8];
-		}
+
 		range=new int[2];
 		
         rangeIndex*=2; /* address start/limit pairs */
@@ -122,7 +123,7 @@ public final class USerializedSet {
 	    if( 0x10ffff<c) {
 	        return;
 	    }
-	
+
 	    if(c<0xffff) {
 	        bmpLength=length=2;
 	        array[0]=(char)c;
@@ -157,7 +158,9 @@ public final class USerializedSet {
 	    if(array==null){
 			array = new char[8];
 		}
-	    range=new int[2];
+        if(range==null || range.length <2){
+            throw new IllegalArgumentException();
+        }
         rangeIndex*=2; /* address start/limit pairs */
 	    if(rangeIndex<bmpLength) {
 	        range[0]=array[rangeIndex++];
@@ -168,6 +171,7 @@ public final class USerializedSet {
 	        } else {
 	            range[1]=0x110000;
 	        }
+            range[1]-=1;
 	        return true;
 	    } else {
 	        rangeIndex-=bmpLength;
@@ -182,7 +186,8 @@ public final class USerializedSet {
 	            } else {
 	                range[1]=0x110000;
 	            }
-	            return false;
+                range[1]-=1;
+	            return true;
 	        } else {
 	            return false;
 	        }
@@ -216,6 +221,6 @@ public final class USerializedSet {
 	    return (bmpLength+(length-bmpLength)/2+1)/2;
 	}
 
-    private char array[];
+    private char array[] = new char[8];
     private int arrayOffset, bmpLength, length;
 }
