@@ -966,7 +966,7 @@ zh {
         EH { "\u897f\u6492\u54c8\u62c9" }
         YE { "\u4e5f\u95e8" }
         YU { "\u5357\u65af\u62c9\u592b" }
-        ZR { "\u624e\u4f0a\u5c14" }
+        //ZR { "\u624e\u4f0a\u5c14" } // It's now called CD { "Democratic Republic of the Congo" }
         ZM { "\u8d5e\u6bd4\u4e9a" }
         ZW { "\u6d25\u5df4\u5e03\u97e6" }
     }

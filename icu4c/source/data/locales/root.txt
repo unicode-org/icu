@@ -343,7 +343,7 @@ root {
         YU { "Yugoslavia" }
 
         ZA { "South Africa" }
-        ZR { "Zaire" }
+//        ZR { "Zaire" }
         ZM { "Zambia" }
         ZW { "Zimbabwe" }
     }

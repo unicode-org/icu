@@ -203,7 +203,7 @@ sh {
         EH { "Zapadna Sahara" }
         YE { "Jemen" }
         YU { "Jugoslavija" }
-        ZR { "Zair" }
+        //ZR { "Zair" } // It's now called CD { "Democratic Republic of the Congo" }
         ZM { "Zambija" }
         ZW { "Zimbabve" }
     }

@@ -1510,7 +1510,7 @@ ja {
         EH { "\u897f\u30b5\u30cf\u30e9" }
         YE { "\u30a4\u30a8\u30e1\u30f3" }
         YU { "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2\u9023\u90a6" }
-        ZR { "\u30b6\u30a4\u30fc\u30eb" }
+        //ZR { "\u30b6\u30a4\u30fc\u30eb" } // It's now called CD { "Democratic Republic of the Congo" }
         ZM { "\u30b6\u30f3\u30d3\u30a2" }
         ZW { "\u30b8\u30f3\u30d0\u30d6\u30a8" }
     }
