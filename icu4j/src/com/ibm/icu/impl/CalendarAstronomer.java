@@ -1,16 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2003/12/02 01:34:31 $ 
- * $Revision: 1.19 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CalendarAstronomer.java,v $ 
+ * $Date: 2004/02/25 00:02:34 $ 
+ * $Revision: 1.1 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.util;
+package com.ibm.icu.impl;
 
 import java.util.*;
 
@@ -47,7 +47,6 @@ import java.util.*;
  * @author Laura Werner
  * @author Alan Liu
  * @internal
- * @deprecated ICU 2.4. This class may be removed or modified.
  */
 public class CalendarAstronomer {
     
@@ -59,7 +58,6 @@ public class CalendarAstronomer {
      * The number of standard hours in one sidereal day.
      * Approximately 24.93.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final double SIDEREAL_DAY = 23.93446960027;
     
@@ -67,7 +65,6 @@ public class CalendarAstronomer {
      * The number of sidereal hours in one mean solar day.
      * Approximately 24.07.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final double SOLAR_DAY =  24.065709816;
     
@@ -80,7 +77,6 @@ public class CalendarAstronomer {
      *
      * @see #SIDEREAL_MONTH
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final double SYNODIC_MONTH = 29.530588853;
     
@@ -94,7 +90,6 @@ public class CalendarAstronomer {
      *
      * @see #SYNODIC_MONTH
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final double SIDEREAL_MONTH = 27.32166;
     
@@ -106,7 +101,6 @@ public class CalendarAstronomer {
      *
      * @see #SIDEREAL_YEAR
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final double TROPICAL_YEAR = 365.242191;
     
@@ -121,7 +115,6 @@ public class CalendarAstronomer {
      *
      * @see #TROPICAL_YEAR
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final double SIDEREAL_YEAR = 365.25636;
 
@@ -132,28 +125,24 @@ public class CalendarAstronomer {
     /** 
      * The number of milliseconds in one second. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final int  SECOND_MS = 1000;
 
     /** 
      * The number of milliseconds in one minute. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final int  MINUTE_MS = 60*SECOND_MS;
 
     /** 
      * The number of milliseconds in one hour. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final int  HOUR_MS   = 60*MINUTE_MS;
 
     /** 
      * The number of milliseconds in one day. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final long DAY_MS    = 24*HOUR_MS;
 
@@ -165,7 +154,6 @@ public class CalendarAstronomer {
      * the Julian calendar are <em>not</em> the same thing.  Also note that
      * julian days start at <em>noon</em>, not midnight.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final long JULIAN_EPOCH_MS = -210866760000000L;
     
@@ -212,7 +200,6 @@ public class CalendarAstronomer {
      * Construct a new <code>CalendarAstronomer</code> object that is initialized to
      * the current date and time.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public CalendarAstronomer() {
         this(System.currentTimeMillis());
@@ -222,7 +209,6 @@ public class CalendarAstronomer {
      * Construct a new <code>CalendarAstronomer</code> object that is initialized to
      * the specified date and time.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public CalendarAstronomer(Date d) {
         this(d.getTime());
@@ -235,7 +221,6 @@ public class CalendarAstronomer {
      *
      * @see java.util.Date#getTime()
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public CalendarAstronomer(long aTime) {
         time = aTime;
@@ -254,7 +239,6 @@ public class CalendarAstronomer {
      *
      * @see java.util.Date#getTime()
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public CalendarAstronomer(double longitude, double latitude) {
         this();
@@ -278,7 +262,6 @@ public class CalendarAstronomer {
      * @see #setDate
      * @see #getTime
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public void setTime(long aTime) {
         time = aTime;
@@ -294,7 +277,6 @@ public class CalendarAstronomer {
      * @see #setTime
      * @see #getDate
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public void setDate(Date date) {
         setTime(date.getTime());
@@ -313,7 +295,6 @@ public class CalendarAstronomer {
      * @see #getJulianDay
      * @see #JULIAN_EPOCH_MS
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public void setJulianDay(double jdn) {
         time = (long)(jdn * DAY_MS) + JULIAN_EPOCH_MS;
@@ -329,7 +310,6 @@ public class CalendarAstronomer {
      * @see #setTime
      * @see #getDate
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getTime() {
         return time;
@@ -342,7 +322,6 @@ public class CalendarAstronomer {
      * @see #setDate
      * @see #getTime
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public Date getDate() {
         return new Date(time);
@@ -356,7 +335,6 @@ public class CalendarAstronomer {
      * @see #setJulianDay
      * @see #JULIAN_EPOCH_MS
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getJulianDay() {
         if (julianDay == INVALID) {
@@ -371,7 +349,6 @@ public class CalendarAstronomer {
      *
      * @see #getJulianDay
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getJulianCentury() {
         if (julianCentury == INVALID) {
@@ -383,7 +360,6 @@ public class CalendarAstronomer {
     /**
      * Returns the current Greenwich sidereal time, measured in hours
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getGreenwichSidereal() {
         if (siderealTime == INVALID) {
@@ -410,7 +386,6 @@ public class CalendarAstronomer {
     /**
      * Returns the current local sidereal time, measured in hours
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getLocalSidereal() {
         return normalize(getGreenwichSidereal() + (double)fGmtOffset/HOUR_MS, 24);
@@ -449,7 +424,6 @@ public class CalendarAstronomer {
      * @param ecliptic  A point in the sky in ecliptic coordinates.
      * @return          The corresponding point in equatorial coordinates.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public final Equatorial eclipticToEquatorial(Ecliptic ecliptic)
     {
@@ -464,7 +438,6 @@ public class CalendarAstronomer {
      *
      * @return              The corresponding point in equatorial coordinates.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public final Equatorial eclipticToEquatorial(double eclipLong, double eclipLat)
     {
@@ -493,7 +466,6 @@ public class CalendarAstronomer {
      *
      * @return              The corresponding point in equatorial coordinates.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public final Equatorial eclipticToEquatorial(double eclipLong)
     {
@@ -502,7 +474,6 @@ public class CalendarAstronomer {
 
     /**
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public Horizon eclipticToHorizon(double eclipLong)
     {
@@ -595,7 +566,6 @@ public class CalendarAstronomer {
      * equation for the earth and the sun.  It does not take into account the
      * perturbations caused by the other planets, the moon, etc.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getSunLongitude()
     {
@@ -642,7 +612,6 @@ public class CalendarAstronomer {
      * The position of the sun at this object's current date and time,
      * in equatorial coordinates.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public Equatorial getSunPosition() {
         return eclipticToEquatorial(getSunLongitude(), 0);
@@ -658,7 +627,6 @@ public class CalendarAstronomer {
      * For use with {@link #getSunTime getSunTime}. 
      * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final SolarLongitude VERNAL_EQUINOX  = new SolarLongitude(0);
     
@@ -667,7 +635,6 @@ public class CalendarAstronomer {
      * For use with {@link #getSunTime getSunTime}.
      * Note: In this case, "summer" refers to the northern hemisphere's seasons.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final SolarLongitude SUMMER_SOLSTICE = new SolarLongitude(PI/2);
     
@@ -676,7 +643,6 @@ public class CalendarAstronomer {
      * For use with {@link #getSunTime getSunTime}.
      * Note: In this case, "autumn" refers to the northern hemisphere's seasons.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final SolarLongitude AUTUMN_EQUINOX  = new SolarLongitude(PI);
     
@@ -685,7 +651,6 @@ public class CalendarAstronomer {
      * For use with {@link #getSunTime getSunTime}.
      * Note: In this case, "winter" refers to the northern hemisphere's seasons.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final SolarLongitude WINTER_SOLSTICE = new SolarLongitude((PI*3)/2);
     
@@ -693,7 +658,6 @@ public class CalendarAstronomer {
      * Find the next time at which the sun's ecliptic longitude will have
      * the desired value.  
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getSunTime(double desired, boolean next)
     {
@@ -708,7 +672,6 @@ public class CalendarAstronomer {
      * Find the next time at which the sun's ecliptic longitude will have
      * the desired value.  
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getSunTime(SolarLongitude desired, boolean next) {
         return getSunTime(desired.value, next);
@@ -725,7 +688,6 @@ public class CalendarAstronomer {
      * is set to a time near local midnight.
      * 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getSunRiseSet(boolean rise)
     {
@@ -1040,7 +1002,6 @@ public class CalendarAstronomer {
      * The position of the moon at the time set on this
      * object, in equatorial coordinates.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public Equatorial getMoonPosition()
     {
@@ -1129,7 +1090,6 @@ public class CalendarAstronomer {
      *
      * @see #getMoonPhase
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getMoonAge() {
         // See page 147 of "Practial Astronomy with your Calculator",
@@ -1156,7 +1116,6 @@ public class CalendarAstronomer {
      *
      * @see #getMoonAge
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public double getMoonPhase() {
         // See page 147 of "Practial Astronomy with your Calculator",
@@ -1173,7 +1132,6 @@ public class CalendarAstronomer {
      * Constant representing a new moon.
      * For use with {@link #getMoonTime getMoonTime}
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final MoonAge NEW_MOON      = new MoonAge(0);
 
@@ -1181,7 +1139,6 @@ public class CalendarAstronomer {
      * Constant representing the moon's first quarter.
      * For use with {@link #getMoonTime getMoonTime}
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final MoonAge FIRST_QUARTER = new MoonAge(PI/2);
     
@@ -1189,7 +1146,6 @@ public class CalendarAstronomer {
      * Constant representing a full moon.
      * For use with {@link #getMoonTime getMoonTime}
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final MoonAge FULL_MOON     = new MoonAge(PI);
     
@@ -1197,7 +1153,6 @@ public class CalendarAstronomer {
      * Constant representing the moon's last quarter.
      * For use with {@link #getMoonTime getMoonTime}
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final MoonAge LAST_QUARTER  = new MoonAge((PI*3)/2);
     
@@ -1209,7 +1164,6 @@ public class CalendarAstronomer {
      * @param next      <tt>true</tt> if the next occurrance of the phase
      *                  is desired, <tt>false</tt> for the previous occurrance. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getMoonTime(double desired, boolean next)
     {
@@ -1229,7 +1183,6 @@ public class CalendarAstronomer {
      * @param next      <tt>true</tt> if the next occurrance of the phase
      *                  is desired, <tt>false</tt> for the previous occurrance. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getMoonTime(MoonAge desired, boolean next) {
         return getMoonTime(desired.value, next);
@@ -1239,7 +1192,6 @@ public class CalendarAstronomer {
      * Returns the time (GMT) of sunrise or sunset on the local date to which
      * this calendar is currently set.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getMoonRiseSet(boolean rise)
     {
@@ -1517,7 +1469,6 @@ public class CalendarAstronomer {
 
     /**
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public String local(long localMillis) {
         return new Date(localMillis - TimeZone.getDefault().getRawOffset()).toString();
@@ -1540,7 +1491,6 @@ public class CalendarAstronomer {
      * @see CalendarAstronomer.Equatorial
      * @see CalendarAstronomer.Horizon
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final class Ecliptic {
         /**
@@ -1549,7 +1499,6 @@ public class CalendarAstronomer {
          * @param lat The ecliptic latitude, measured in radians.
          * @param lon The ecliptic longitude, measured in radians.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public Ecliptic(double lat, double lon) {
             latitude = lat;
@@ -1559,7 +1508,6 @@ public class CalendarAstronomer {
         /**
          * Return a string representation of this object
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public String toString() {
             return Double.toString(longitude*RAD_DEG) + "," + (latitude*RAD_DEG);
@@ -1570,7 +1518,6 @@ public class CalendarAstronomer {
          * position north or south of the plane of the ecliptic,
          * with positive angles representing north.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public final double latitude;
         
@@ -1584,7 +1531,6 @@ public class CalendarAstronomer {
          * A bit of trivia: the first point of Aries is currently in the
          * constellation Pisces, due to the precession of the earth's axis.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public final double longitude;
     };
@@ -1604,7 +1550,6 @@ public class CalendarAstronomer {
      * @see CalendarAstronomer.Ecliptic
      * @see CalendarAstronomer.Horizon
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final class Equatorial {
         /**
@@ -1613,7 +1558,6 @@ public class CalendarAstronomer {
          * @param asc The right ascension, measured in radians.
          * @param dec The declination, measured in radians.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public Equatorial(double asc, double dec) {
             ascension = asc;
@@ -1624,7 +1568,6 @@ public class CalendarAstronomer {
          * Return a string representation of this object, with the
          * angles measured in degrees.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public String toString() {
             return Double.toString(ascension*RAD_DEG) + "," + (declination*RAD_DEG);
@@ -1634,7 +1577,6 @@ public class CalendarAstronomer {
          * Return a string representation of this object with the right ascension
          * measured in hours, minutes, and seconds.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public String toHmsString() {
             return radToHms(ascension) + "," + radToDms(declination);
@@ -1646,7 +1588,6 @@ public class CalendarAstronomer {
          * relative to the sun's position at the vernal equinox,
          * with positive angles representing East.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public final double ascension;
         
@@ -1655,7 +1596,6 @@ public class CalendarAstronomer {
          * This is the position north or south of the equatorial plane,
          * with positive angles representing north.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public final double declination;
     };
@@ -1676,7 +1616,6 @@ public class CalendarAstronomer {
      * @see CalendarAstronomer.Ecliptic
      * @see CalendarAstronomer.Equatorial
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public static final class Horizon {
         /**
@@ -1685,7 +1624,6 @@ public class CalendarAstronomer {
          * @param alt  The altitude, measured in radians above the horizon.
          * @param azim The azimuth, measured in radians clockwise from north.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public Horizon(double alt, double azim) {
             altitude = alt;
@@ -1696,7 +1634,6 @@ public class CalendarAstronomer {
          * Return a string representation of this object, with the
          * angles measured in degrees.
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public String toString() {
             return Double.toString(altitude*RAD_DEG) + "," + (azimuth*RAD_DEG);
@@ -1705,14 +1642,12 @@ public class CalendarAstronomer {
         /** 
          * The object's altitude above the horizon, in radians. 
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public final double altitude;
         
         /** 
          * The object's direction, in radians clockwise from north. 
          * @internal
-         * @deprecated ICU 2.4. This class may be removed or modified.
          */
         public final double azimuth;
     };
