@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/BreakIteratorRules.java,v $ 
- * $Date: 2001/02/06 22:37:45 $ 
- * $Revision: 1.5 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/BreakIteratorRules.java,v $
+ * $Date: 2001/08/24 17:36:24 $
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -81,33 +81,41 @@ public class BreakIteratorRules extends ListResourceBundle {
             + "$devaModifier=[\u0901-\u0903\u0951-\u0954];"
             + "$zwnj=[\u200c];"
             + "$zwj=[\u200d];"
-   
+
             // consonant followed optionally by a nukta
             + "$devaCN=($devaConsonant$devaNukta?);"
-            
+
             // a virama followed by an optional zwj or zwnj
             + "$devaJoin=($devaVirama[$zwj$zwnj]?);"
-            
+
             // a syllable with at least one consonant
             + "($devaCN$devaJoin)*$devaCN($devaJoin|$devaMatra?$devaModifier*);"
-            
+
             // a syllable without consonants
             + "$devaVowel$devaModifier*;"
         },
 
         // default rules for finding word boundaries
         { "WordBreakRules",
+
+            // Surrogates.  Until better support is available, ignore low surrogates
+            //              and classify high surrogates according to the characters within the block.
+              "$surr_lo=[\udc00-\udfff];"
+            + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
+            + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
+            + "$surr_hi_misc=[\udb40-\udbff];"             // Hi Surrogates for Tags, Private Use.
+
             // ignore non-spacing marks, enclosing marks, and format characters,
             // all of which should not influence the algorithm
-            "$_ignore_=[[:Mn:][:Me:][:Cf:]];"
+            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_misc];"
 
             // Hindi phrase separator, kanji, katakana, hiragana, CJK diacriticals,
             // other letters, and digits
             + "$danda=[\u0964\u0965];"
-            + "$kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d];"
+            + "$kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d$surr_hi_ideo];"
             + "$kata=[\u3099-\u309c\u30a1-\u30fe];"
             + "$hira=[\u3041-\u309e\u30fc];"
-            + "$let=[[[:L:][:Mc:]]-[$kanji$kata$hira]];"
+            + "$let=[[[:L:][:Mc:]$surr_hi_let]-[$kanji$kata$hira]];"
             + "$dgt=[:N:];"
 
             // punctuation that can occur in the middle of a word: currently
@@ -175,8 +183,15 @@ public class BreakIteratorRules extends ListResourceBundle {
 
         // default rules for determining legal line-breaking positions
         { "LineBreakRules",
+            // Surrogates.  Until better support is available, ignore low surrogates
+            //              and classify high surrogates according to the characters within the block.
+              "$surr_lo=[\udc00-\udfff];"
+            + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
+            + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
+            + "$surr_hi_misc=[\udb40-\udbff];"             // Hi Surrogates for Tags, Private Use.
+
             // ignore non-spacing marks, enclosing marks, and format characters
-            "$_ignore_=[[:Mn:][:Me:][:Cf:]];"
+            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_misc];"
 
             // Hindi phrase separators
             + "$danda=[\u0964\u0965];"
@@ -211,7 +226,7 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // Kanji: actually includes both Kanji and Kana, except for small Kana and
             // CJK diacritics
-            + "$kanji=[[\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa]-[$post_word$_ignore_]];"
+            + "$kanji=[[\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa$surr_hi_ideo]-[$post_word$_ignore_]];"
 
             // digits
             + "$digit=[[:Nd:][:No:]];"
@@ -252,12 +267,19 @@ public class BreakIteratorRules extends ListResourceBundle {
 
         // default rules for finding sentence boundaries
         { "SentenceBreakRules",
+            // Surrogates.  Until better support is available, ignore low surrogates
+            //              and classify high surrogates according to the characters within the block.
+              "$surr_lo=[\udc00-\udfff];"
+            + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
+            + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
+            + "$surr_hi_misc=[\udb40-\udbff];"             // Hi Surrogates for Tags, Private Use.
+
             // ignore non-spacing marks, enclosing marks, and format characters
-            "$_ignore_=[[:Mn:][:Me:][:Cf:]];"
+            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_misc];"
 
             // lowercase letters
             + "$lc=[:Ll:];"
-            
+
             // uppercase Latin letters
             + "$ucLatin=[A-Z];"
 
@@ -283,7 +305,7 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // characters that may occur at the beginning of a sentence: basically anything
             // not mentioned above (lowercase letters and digits are specifically excluded)
-            + "$sent_start=[^$lc$ucLatin$space$start$end$digit$term$period\u2029$_ignore_];"
+            + "$sent_start=[^$lc$ucLatin$space$start$end$digit$term$period\u2029$surr_hi_let$_ignore_];"
 
             // Hindi phrase separator
             + "$danda=[\u0964\u0965];"
@@ -305,7 +327,7 @@ public class BreakIteratorRules extends ListResourceBundle {
             // (basically, a capital letter), then put the sentence break between the
             // whitespace and the opening punctuation
             + ".*?$period[$period$end]*$space*/($start*$sent_start|$start+$ucLatin);"
-            
+
             // same as above, except that there's a sentence break before a Latin capital
             // letter only if there's at least one space after the period
             + ".*?$period[$period$end]*$space+/$ucLatin;"
