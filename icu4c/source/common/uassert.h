@@ -19,6 +19,8 @@
 
 #ifndef U_ASSERT_H
 #define U_ASSERT_H
+/* utypes.h is included to get the proper define for uint8_t */
+#include "unicode/utypes.h"
 #include <assert.h>
 #define U_ASSERT(exp) assert(exp)
 #endif
