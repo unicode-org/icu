@@ -540,6 +540,21 @@ void CollationServiceTest::TestSeparateTree() {
     if (!assertSuccess("getKeywordValues", ec)) return;
     checkStringEnumeration("getKeywordValues", *iter, KWVAL, KWVAL_COUNT);
     delete iter;
+
+    UBool isAvailable;
+    Locale equiv = Collator::getFunctionalEquivalent(Locale::createFromName("fr"),
+                                                     isAvailable, ec);
+    assertSuccess("getFunctionalEquivalent", ec);
+    assertEquals("getFunctionalEquivalent(fr)", "fr", equiv.getName());
+    assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
+               isAvailable == TRUE);
+    
+    equiv = Collator::getFunctionalEquivalent(Locale::createFromName("fr_FR"),
+                                              isAvailable, ec);
+    assertSuccess("getFunctionalEquivalent", ec);
+    assertEquals("getFunctionalEquivalent(fr_FR)", "fr", equiv.getName());
+    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==FALSE",
+               isAvailable == FALSE);
 }
 
 #endif
