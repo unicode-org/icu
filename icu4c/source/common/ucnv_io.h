@@ -13,7 +13,7 @@
 #ifndef UCNV_IO_H
 #define UCNV_IO_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /**
  * Map a converter alias name to a canonical converter name.

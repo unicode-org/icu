@@ -48,7 +48,7 @@
 #include <locale.h>
 
 /* include ICU headers */
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -132,7 +132,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 
 /* Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.*/
 int32_t
-icu_getUTCtime()
+uprv_getUTCtime()
 {
 #ifdef XP_MAC
   time_t t, t1, t2;
@@ -166,7 +166,7 @@ icu_getUTCtime()
   ---------------------------------------------------------------------------*/
 
 bool_t 
-icu_isNaN(double number)
+uprv_isNaN(double number)
 {
 #ifdef IEEE_754
   /* This should work in theory, but it doesn't, so we resort to the more*/
@@ -209,7 +209,7 @@ icu_isNaN(double number)
 }
 
 bool_t
-icu_isInfinite(double number)
+uprv_isInfinite(double number)
 {
 #ifdef IEEE_754
   /* We know the top bit is the sign bit, so we mask that off in a copy of */
@@ -218,7 +218,7 @@ icu_isInfinite(double number)
   /* scrutinize the pattern itself. */
   /*  double a = number; */
   /*  *(int8_t*)u_topNBytesOfDouble(&a, 1) &= 0x7F;*/
-  /*  return a == icu_getInfinity();*/
+  /*  return a == uprv_getInfinity();*/
   /* Instead, We want to see either:*/
   
   /*   7FF0 0000 0000 0000*/
@@ -239,32 +239,32 @@ icu_isInfinite(double number)
 }
 
 bool_t   
-icu_isPositiveInfinity(double number)
+uprv_isPositiveInfinity(double number)
 {
 #ifdef IEEE_754
-  return (number > 0 && icu_isInfinite(number));
+  return (number > 0 && uprv_isInfinite(number));
 #else
-  return icu_isInfinite(number);
+  return uprv_isInfinite(number);
 #endif
 }
 
 bool_t   
-icu_isNegativeInfinity(double number)
+uprv_isNegativeInfinity(double number)
 {
 #ifdef IEEE_754
-  return (number < 0 && icu_isInfinite(number));
+  return (number < 0 && uprv_isInfinite(number));
 #else
 #ifdef OS390
   uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                             sizeof(uint32_t));
-  return((highBits & SIGN) && icu_isInfinite(number));
+  return((highBits & SIGN) && uprv_isInfinite(number));
 #endif
-  return icu_isInfinite(number);
+  return uprv_isInfinite(number);
 #endif
 }
 
 double 
-icu_getNaN()
+uprv_getNaN()
 {
 #if defined(IEEE_754) || defined(OS390)
   if( ! fgNaNInitialized) {
@@ -289,7 +289,7 @@ icu_getNaN()
 }
 
 double 
-icu_getInfinity()
+uprv_getInfinity()
 {
 #ifdef IEEE_754  
   if (!fgInfInitialized)
@@ -311,37 +311,37 @@ icu_getInfinity()
 }
 
 double 
-icu_floor(double x)
+uprv_floor(double x)
 {
   return floor(x);
 }
 
 double 
-icu_ceil(double x)
+uprv_ceil(double x)
 {
   return ceil(x);
 }
 
 double 
-icu_fabs(double x)
+uprv_fabs(double x)
 {
   return fabs(x);
 }
 
 double 
-icu_modf(double x, double* y)
+uprv_modf(double x, double* y)
 {
   return modf(x, y);
 }
 
 double 
-icu_fmod(double x, double y)
+uprv_fmod(double x, double y)
 {
   return fmod(x, y);
 }
 
 double
-icu_pow10(int32_t x)
+uprv_pow10(int32_t x)
 {
 #ifdef XP_MAC
   return pow(10.0, (double)x);
@@ -351,7 +351,7 @@ icu_pow10(int32_t x)
 }
 
 double 
-icu_IEEEremainder(double x, double p)
+uprv_IEEEremainder(double x, double p)
 {
 #ifdef IEEE_754
   int32_t hx, hp;
@@ -379,11 +379,11 @@ icu_IEEEremainder(double x, double p)
   
   
   if(hp <= 0x7fdfffff) 
-    x = icu_fmod(x, p + p);    /* now x < 2p */
+    x = uprv_fmod(x, p + p);    /* now x < 2p */
   if(((hx-hp)|(lx-lp)) == 0) 
     return 0.0 * x;
-  x  = icu_fabs(x);
-  p  = icu_fabs(p);
+  x  = uprv_fabs(x);
+  p  = uprv_fabs(p);
   if (hp < 0x00200000) {
     if(x + x > p) {
       x -= p;
@@ -405,19 +405,19 @@ icu_IEEEremainder(double x, double p)
   return x;
 #else
   /* {sfb} need to fix this*/
-  return icu_fmod(x, p);
+  return uprv_fmod(x, p);
 #endif
 }
 
 double 
-icu_fmax(double x, double y)
+uprv_fmax(double x, double y)
 {
 #ifdef IEEE_754
   int32_t lowBits;
   
   /* first handle NaN*/
-  if(icu_isNaN(x) || icu_isNaN(y))
-    return icu_getNaN();
+  if(uprv_isNaN(x) || uprv_isNaN(y))
+    return uprv_getNaN();
   
   /* check for -0 and 0*/
   lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
@@ -437,20 +437,20 @@ icu_fmax(double x, double y)
 }
 
 int32_t 
-icu_max(int32_t x, int32_t y)
+uprv_max(int32_t x, int32_t y)
 {
   return (x > y ? x : y);
 }
 
 double 
-icu_fmin(double x, double y)
+uprv_fmin(double x, double y)
 {
 #ifdef IEEE_754
   int32_t lowBits;
 
   /* first handle NaN*/
-  if(icu_isNaN(x) || icu_isNaN(y))
-    return icu_getNaN();
+  if(uprv_isNaN(x) || uprv_isNaN(y))
+    return uprv_getNaN();
   
   /* check for -0 and 0*/
   lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&y, sizeof(uint32_t));
@@ -471,7 +471,7 @@ icu_fmin(double x, double y)
 }
 
 int32_t 
-icu_min(int32_t x, int32_t y)
+uprv_min(int32_t x, int32_t y)
 {
   return (x > y ? y : x);
 }
@@ -484,15 +484,15 @@ icu_min(int32_t x, int32_t y)
  * ceil(3.3) = 4, ceil(-3.3) = -3
  */
 double 
-icu_trunc(double d)
+uprv_trunc(double d)
 {
 #ifdef IEEE_754
 
   int32_t lowBits;
   
   /* handle error cases*/
-  if(icu_isNaN(d))        return icu_getNaN();
-  if(icu_isInfinite(d))        return icu_getInfinity();
+  if(uprv_isNaN(d))        return uprv_getNaN();
+  if(uprv_isInfinite(d))        return uprv_getInfinity();
   
   lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
   if( (d == 0.0 && (lowBits & SIGN)) || d < 0)
@@ -505,7 +505,7 @@ icu_trunc(double d)
 }
 
 void        
-icu_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
+uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 {
   *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
   *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
@@ -520,7 +520,7 @@ icu_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
  * (Thanks to Alan Liu for supplying this function.)
  */
 int16_t 
-icu_log10(double d)
+uprv_log10(double d)
 {
   /* The reason this routine is needed is that simply taking the*/
   /* log and dividing by log10 yields a result which may be off*/
@@ -541,7 +541,7 @@ icu_log10(double d)
 }
 
 int32_t 
-icu_digitsAfterDecimal(double x)
+uprv_digitsAfterDecimal(double x)
 {
   char buffer[20];
   int16_t numDigits;
@@ -555,7 +555,7 @@ icu_digitsAfterDecimal(double x)
   /* (it handles mathematical inaccuracy better than we can), then find out */
   /* many characters are to the right of the decimal point */
   sprintf(buffer, "%.9g", x);
-  p = icu_strchr(buffer, '.');
+  p = uprv_strchr(buffer, '.');
   if (p == 0)
     return 0;
   
@@ -565,7 +565,7 @@ icu_digitsAfterDecimal(double x)
   /* if the number's string representation is in scientific notation, find */
   /* the exponent and take it into account*/
   exponent = 0;
-  p = icu_strchr(buffer, 'e');
+  p = uprv_strchr(buffer, 'e');
   if (p != 0) {
     int16_t expPos = p - buffer;
     numDigits -= strlen(buffer) - expPos;
@@ -592,7 +592,7 @@ icu_digitsAfterDecimal(double x)
 
 /* Time zone utilities */
 void 
-icu_tzset()
+uprv_tzset()
 {
 #ifdef POSIX
   tzset();
@@ -608,7 +608,7 @@ icu_tzset()
 }
 
 int32_t 
-icu_timezone()
+uprv_timezone()
 {
 #ifdef POSIX
 #ifdef OS390
@@ -643,7 +643,7 @@ icu_timezone()
 }
 
 char* 
-icu_tzname(int index)
+uprv_tzname(int index)
 {
 #ifdef POSIX
   return tzname[index];
@@ -675,14 +675,14 @@ gDataDirectory[1024];
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
     if(directory!=NULL) {
-        int length=icu_strlen(directory);
+        int length=uprv_strlen(directory);
 
         if(length<sizeof(gDataDirectory)-1) {
             umtx_lock(NULL);
             if(length==0) {
                 *gDataDirectory=0;
             } else {
-                icu_memcpy(gDataDirectory, directory, length);
+                uprv_memcpy(gDataDirectory, directory, length);
 
                 /* terminate the directory with a separator (/ or \) */
                 if(gDataDirectory[length-1]!=U_FILE_SEP_CHAR) {
@@ -715,7 +715,7 @@ getSystemPath(char *path, int size) {
             int length=(uint8_t)volName[0];
             if(length>0) {
                 /* convert the Pascal string to a C string */
-                icu_memmove(path, path+1, length);
+                uprv_memmove(path, path+1, length);
                 path[length]=0;
             }
             return length;
@@ -754,7 +754,7 @@ getLibraryPath(char *path, int size) {
         if(mod!=NULL) {
             if(GetModuleFileName(mod, path, size)>0) {
                 /* remove the basename and the last file separator */
-                char *lastSep=icu_strrchr(path, U_FILE_SEP_CHAR);
+                char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
                 if(lastSep!=NULL) {
                     *lastSep=0;
                     return lastSep-path;
@@ -768,7 +768,7 @@ getLibraryPath(char *path, int size) {
             rc=DosQueryModuleName(mod, (LONG)size, path);
             if(rc==NO_ERROR) {
                 /* remove the basename and the last file separator */
-                char *lastSep=icu_strrchr(path, U_FILE_SEP_CHAR);
+                char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
                 if(lastSep!=NULL) {
                     *lastSep=0;
                     return lastSep-path;
@@ -790,13 +790,13 @@ getLibraryPath(char *path, int size) {
             if(rc>=0) {
                 /* search for the list item for the library itself */
                 while(p!=NULL) {
-       	           s=icu_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
+       	           s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
                     if(s!=NULL) {
                         if(s>p->l_name) {
                             /* copy the path, without the basename and the last separator */
                             length=(s-p->l_name)-1;
                             if(0<length && length<size) {
-                                icu_memcpy(path, p->l_name, length);
+                                uprv_memcpy(path, p->l_name, length);
                                 path[length]=0;
                             } else {
                                 length=0;
@@ -831,13 +831,13 @@ getLibraryPath(char *path, int size) {
                     }
                     p=(struct ld_info *)((uint8_t *)p+p->ldinfo_next);
 
-                    s=icu_strstr(p->ldinfo_filename, U_COMMON_LIBNAME); /*  "libicuuc.a"    */
+                    s=uprv_strstr(p->ldinfo_filename, U_COMMON_LIBNAME); /*  "libicuuc.a"    */
                     if(s!=NULL) {
                         if(s>p->ldinfo_filename) {
                             /* copy the path, without the basename and the last separator */
                             length=(s-p->ldinfo_filename)-1;
                             if(0<length && length<size) {
-                                icu_memcpy(path, p->ldinfo_filename, length);
+                                uprv_memcpy(path, p->ldinfo_filename, length);
                                 path[length]=0;
                             } else {
                                 length=0;
@@ -865,13 +865,13 @@ getLibraryPath(char *path, int size) {
                 break;
             }
 
-            s=icu_strstr(p->filename, U_COMMON_LIBNAME);
+            s=uprv_strstr(p->filename, U_COMMON_LIBNAME);
             if(s!=NULL) {
                 if(s>p->filename) {
                     /* copy the path, without the basename and the last separator */
                     length=(s-p->filename)-1;
                     if(0<length && length<size) {
-                        icu_memcpy(path, p->filename, length);
+                        uprv_memcpy(path, p->filename, length);
                         path[length]=0;
                     } else {
                         length=0;
@@ -948,8 +948,8 @@ findLibraryPath(char *path, int size) {
                     }
 
                     /* copy the path and add the library filename */
-                    icu_memcpy(path, libPath, length);
-                    icu_strcpy(path+length, U_FILE_SEP_STRING LIB_FILENAME);
+                    uprv_memcpy(path, libPath, length);
+                    uprv_strcpy(path+length, U_FILE_SEP_STRING LIB_FILENAME);
 
                     /* does this file exist in this path? */
                     f=T_FileStream_open(path, "rb");
@@ -1016,7 +1016,7 @@ u_getDataDirectory(void) {
                             char temporaryPath[1024];
 
                             /* copy the path with variables to the temporary one */
-                            icu_memcpy(temporaryPath, pathBuffer, size);
+                            uprv_memcpy(temporaryPath, pathBuffer, size);
 
                             /* do the replacement and store it in the pathBuffer */
                             size=ExpandEnvironmentStrings(temporaryPath, pathBuffer, sizeof(pathBuffer));
@@ -1036,7 +1036,7 @@ u_getDataDirectory(void) {
         if(path==NULL || *path==0) {
             length=getLibraryPath(pathBuffer, sizeof(pathBuffer));
             if(length>0) {
-                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
+                uprv_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
                 path=pathBuffer;
             }
         }
@@ -1045,7 +1045,7 @@ u_getDataDirectory(void) {
         if(path==NULL || *path==0) {
             length=findLibraryPath(pathBuffer, sizeof(pathBuffer));
             if(length>0) {
-                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
+                uprv_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
                 path=pathBuffer;
             }
         }
@@ -1058,7 +1058,7 @@ u_getDataDirectory(void) {
 #           else
                 length=getSystemPath(pathBuffer, sizeof(pathBuffer));
                 if(length>0) {
-                    icu_strcpy(pathBuffer+length, FALLBACK_PATH);
+                    uprv_strcpy(pathBuffer+length, FALLBACK_PATH);
                     path=pathBuffer;
                 } else {
                     path=FALLBACK_PATH;
@@ -1178,13 +1178,13 @@ mac_lc_rec mac_lc_recs[] = {
 #endif
 
 const char* 
-icu_getDefaultLocaleID()
+uprv_getDefaultLocaleID()
 {
 #ifdef POSIX
   char* posixID = getenv("LC_ALL");
   if (posixID == 0) posixID = getenv("LANG");
   if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
-  if (icu_strcmp("C", posixID) == 0) posixID = "en_US";
+  if (uprv_strcmp("C", posixID) == 0) posixID = "en_US";
   return posixID;
 #endif
 
@@ -1251,7 +1251,7 @@ icu_getDefaultLocaleID()
 /* end of platform-specific implementation */
 
 double 
-icu_nextDouble(double d, bool_t next)
+uprv_nextDouble(double d, bool_t next)
 {
 #ifdef IEEE_754
   int32_t highBits;
@@ -1263,7 +1263,7 @@ icu_nextDouble(double d, bool_t next)
   uint32_t signBit;
 
   /* filter out NaN's */
-  if (icu_isNaN(d)) {
+  if (uprv_isNaN(d)) {
     return d;
   }
   
@@ -1356,7 +1356,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
   return U_IS_BIG_ENDIAN ? (char*)(d + 1) - n : (char*)d;
 }
 
-const char* icu_getDefaultCodepage()
+const char* uprv_getDefaultCodepage()
 {
 #if defined(OS400)
   return "ibm-37";
@@ -1366,7 +1366,7 @@ const char* icu_getDefaultCodepage()
   /* TBD */
 #elif defined(WIN32)
   static char codepage[12]={ "cp" };
-  icu_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
+  uprv_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
   return codepage;
 #elif defined(POSIX)
   return "LATIN_1";

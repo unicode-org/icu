@@ -14,7 +14,7 @@
 #ifndef UVECTOR_H
 #define UVECTOR_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /**
  * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector

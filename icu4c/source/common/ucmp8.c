@@ -54,7 +54,7 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
  * to data position number 8, which has elements "bced". In the compressed
  * version, index# 2 points to data position 1, which also has "bced"
  */
-  CompactByteArray* this_obj = (CompactByteArray*) icu_malloc(sizeof(CompactByteArray));
+  CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
   int32_t i;
   
   if (this_obj == NULL) return NULL;
@@ -68,16 +68,16 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
   this_obj->fAlias = FALSE;
 
 
-  this_obj->fArray = (int8_t*) icu_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
+  this_obj->fArray = (int8_t*) uprv_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
   if (!this_obj->fArray) 
     {
       this_obj->fBogus = TRUE;
       return NULL;
     }
-  this_obj->fIndex = (uint16_t*) icu_malloc(sizeof(uint16_t) * UCMP8_kIndexCount);
+  this_obj->fIndex = (uint16_t*) uprv_malloc(sizeof(uint16_t) * UCMP8_kIndexCount);
   if (!this_obj->fIndex) 
     {
-      icu_free(this_obj->fArray);
+      uprv_free(this_obj->fArray);
       this_obj->fArray = NULL;
       this_obj->fBogus = TRUE;
       return NULL;
@@ -98,7 +98,7 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
 {
-  CompactByteArray* this_obj = (CompactByteArray*) icu_malloc(sizeof(CompactByteArray));
+  CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
   if (!this_obj) return NULL;
   
   this_obj->fArray = NULL;
@@ -118,7 +118,7 @@ CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
 {
-  CompactByteArray* this_obj = (CompactByteArray*) icu_malloc(sizeof(CompactByteArray));
+  CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
   if (!this_obj) return NULL;
   
   this_obj->fArray = NULL;
@@ -141,13 +141,13 @@ void ucmp8_close(CompactByteArray* this_obj)
   if(this_obj != NULL) {
     if(!this_obj->fAlias) {
       if(this_obj->fArray != NULL) {
-        icu_free(this_obj->fArray);
+        uprv_free(this_obj->fArray);
       }
       if(this_obj->fIndex != NULL) {
-        icu_free(this_obj->fIndex);
+        uprv_free(this_obj->fIndex);
       }
     }
-    icu_free(this_obj);
+    uprv_free(this_obj);
   }
 }
 
@@ -173,7 +173,7 @@ void ucmp8_expand(CompactByteArray* this_obj)
     if (this_obj->fCompact) 
     {
       int8_t* tempArray;
-      tempArray = (int8_t*) icu_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
+      tempArray = (int8_t*) uprv_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
       if (!tempArray) 
       {
           this_obj->fBogus = TRUE;
@@ -187,7 +187,7 @@ void ucmp8_expand(CompactByteArray* this_obj)
       {
           this_obj->fIndex[i] = (uint16_t)(i<< UCMP8_kBlockShift);
       }
-      icu_free(this_obj->fArray);
+      uprv_free(this_obj->fArray);
       this_obj->fArray = tempArray;
       this_obj->fCompact = FALSE;
       this_obj->fAlias = FALSE;
@@ -321,7 +321,7 @@ ucmp8_compact(CompactByteArray* this_obj,
       else if (cycle > (uint32_t)UCMP8_kBlockCount) cycle = UCMP8_kBlockCount;
       
       /* make temp storage, larger than we need*/
-      tempIndex = (UChar*) icu_malloc(sizeof(UChar)* UCMP8_kUnicodeCount);
+      tempIndex = (UChar*) uprv_malloc(sizeof(UChar)* UCMP8_kUnicodeCount);
       if (!tempIndex) 
     {
       this_obj->fBogus = TRUE;
@@ -364,24 +364,24 @@ ucmp8_compact(CompactByteArray* this_obj,
         } /* endfor (iBlock = 1.....)*/
       
       /* now allocate and copy the items into the array*/
-      tempArray = (int8_t*) icu_malloc(tempIndexCount * sizeof(int8_t));
+      tempArray = (int8_t*) uprv_malloc(tempIndexCount * sizeof(int8_t));
       if (!tempArray) 
     {
       this_obj->fBogus = TRUE;
-      icu_free(tempIndex);
+      uprv_free(tempIndex);
       return;
         }
       for (iIndex = 0; iIndex < tempIndexCount; ++iIndex) 
     {
       tempArray[iIndex] = this_obj->fArray[tempIndex[iIndex]];
         }
-      icu_free(this_obj->fArray);
+      uprv_free(this_obj->fArray);
       this_obj->fArray = tempArray;
       this_obj->fCount = tempIndexCount;
       
       
       /* free up temp storage*/
-      icu_free(tempIndex);
+      uprv_free(tempIndex);
       this_obj->fCompact = TRUE;
     } /* endif (!this_obj->fCompact)*/
 }
@@ -407,7 +407,7 @@ U_CAPI  CompactByteArray * U_EXPORT2 ucmp8_cloneFromData(const uint8_t **source,
     }
     array = (CompactByteArray*)malloc(sizeof(*array));
     
-    icu_memcpy(array,*source, sizeof(*array));
+    uprv_memcpy(array,*source, sizeof(*array));
 
     array->fAlias = TRUE;
     

@@ -23,11 +23,11 @@
 *   11/11/1999  weiv        added u_isalnum(), cleaned comments
 ********************************************************************************************
 */
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "umutex.h"
-#include "uchar.h"
+#include "unicode/uchar.h"
 #include "cmemory.h"
 #include <string.h>
 
@@ -5263,7 +5263,7 @@ createDirTables()
 const char* u_getVersion()
 {
 	int32_t len=strlen(UNICODE_VERSION) + strlen("Unicode Version ");
-	_ucdVersion=(char*)icu_realloc(_ucdVersion, len + 1 );
+	_ucdVersion=(char*)uprv_realloc(_ucdVersion, len + 1 );
 	strcpy(_ucdVersion, "Unicode Version ");
 	strcat(_ucdVersion, UNICODE_VERSION);
 	return _ucdVersion;

@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "utypes.h"
-#include "putil.h"
+#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "cstring.h"
 
 char*
@@ -121,7 +121,7 @@ T_CString_stricmp(const char *str1, const char *str2) {
                 return 1;
             } else {
                 /* compare non-zero characters with lowercase */
-                rc=(int)(unsigned char)icu_tolower(c1)-(int)(unsigned char)icu_tolower(c2);
+                rc=(int)(unsigned char)uprv_tolower(c1)-(int)(unsigned char)uprv_tolower(c2);
                 if(rc!=0) {
                     return rc;
                 }

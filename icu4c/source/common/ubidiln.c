@@ -23,10 +23,10 @@
 #endif
 
 #include "cmemory.h"
-#include "utypes.h"
-#include "ustring.h"
-#include "uchar.h"
-#include "ubidi.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/uchar.h"
+#include "unicode/ubidi.h"
 #include "ubidiimp.h"
 
 /*
@@ -254,9 +254,9 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
         UBiDiLevel *levels=pBiDi->levelsMemory;
 
         if(start>0 && levels!=pBiDi->levels) {
-            icu_memcpy(levels, pBiDi->levels, start);
+            uprv_memcpy(levels, pBiDi->levels, start);
         }
-        icu_memset(levels+start, pBiDi->paraLevel, length-start);
+        uprv_memset(levels+start, pBiDi->paraLevel, length-start);
 
         /* this new levels array is set for the line and reflects the WS run */
         pBiDi->trailingWSStart=length;

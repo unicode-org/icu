@@ -22,11 +22,11 @@
 #   define U_COMMON_IMPLEMENTATION
 #endif
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "umutex.h"
 #include "cmemory.h"
-#include "uchar.h"
-#include "udata.h"
+#include "unicode/uchar.h"
+#include "unicode/udata.h"
 
 /* prototypes --------------------------------------------------------------- */
 

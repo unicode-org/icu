@@ -18,9 +18,9 @@
 #ifndef RBDATA_H
 #define RBDATA_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "uhash.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 /**
  * Abstract base class for data stored in resource bundles.  These

@@ -6,7 +6,7 @@
 *
 *****************************************************************************************
 */
-// $Revision: 1.4 $
+// $Revision: 1.5 $
 //===============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -24,7 +24,7 @@
 #ifndef LOCMAP_H
 #define LOCMAP_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #ifdef XP_CPLUSPLUS
 class Locale;
 /////////////////////////////////////////////////

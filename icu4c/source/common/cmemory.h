@@ -27,12 +27,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define icu_malloc(size) malloc(size)
-#define icu_realloc(buffer, size) realloc(buffer, size)
-#define icu_free(buffer) free(buffer)
-#define icu_memcpy(dst, src, size) memcpy(dst, src, size)
-#define icu_memmove(dst, src, size) memmove(dst, src, size)
-#define icu_memset(buffer, mark, size) memset(buffer, mark, size)
-#define icu_memcmp(buffer1, buffer2, size) memcmp(buffer1, buffer2,size)
+#define uprv_malloc(size) malloc(size)
+#define uprv_realloc(buffer, size) realloc(buffer, size)
+#define uprv_free(buffer) free(buffer)
+#define uprv_memcpy(dst, src, size) memcpy(dst, src, size)
+#define uprv_memmove(dst, src, size) memmove(dst, src, size)
+#define uprv_memset(buffer, mark, size) memset(buffer, mark, size)
+#define uprv_memcmp(buffer1, buffer2, size) memcmp(buffer1, buffer2,size)
 
 #endif

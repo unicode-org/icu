@@ -19,11 +19,11 @@
 #include "uhash.h"
 #include "ucmp8.h"
 #include "ucmp16.h"
-#include "ucnv_bld.h"
-#include "ucnv_err.h"
+#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
 #include "cmemory.h"
-#include "ucnv.h"
+#include "unicode/ucnv.h"
 
 #define VALUE_STRING_LENGTH 32
 /*Magic # 32 = 4(number of char in value string) * 8(max number of bytes per char for any converter) */
@@ -135,7 +135,7 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
   
   /*In case we're dealing with a modal converter a la UCNV_EBCDIC_STATEFUL,
     we need to make sure that the emitting of the substitution charater in the right mode*/
-  icu_memcpy(togo, _this->subChar, togoLen = _this->subCharLen);
+  uprv_memcpy(togo, _this->subChar, togoLen = _this->subCharLen);
   if (ucnv_getType(_this) == UCNV_EBCDIC_STATEFUL)
     {
       if ((_this->fromUnicodeStatus)&&(togoLen != 2))
@@ -159,7 +159,7 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
     the subchar there and update the pointer */  
   if ((targetLimit - *target) >= togoLen)
     {
-      icu_memcpy (*target, togo, togoLen);
+      uprv_memcpy (*target, togo, togoLen);
       *target += togoLen;
       *err = U_ZERO_ERROR;
       if (offsets)
@@ -176,14 +176,14 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
        *copy the rest in the internal buffer, and increase the
        *length marker
        */
-      icu_memcpy (*target, togo, (targetLimit - *target));
+      uprv_memcpy (*target, togo, (targetLimit - *target));
       if (offsets)
 	{
 	  int i=0;
 	  for (i=0;i<(targetLimit - *target);i++) offsets[i]=0;
 	  offsets += (targetLimit - *target);
 	}
-      icu_memcpy (_this->charErrorBuffer + _this->charErrorBufferLength,
+      uprv_memcpy (_this->charErrorBuffer + _this->charErrorBufferLength,
 		  togo + (targetLimit - *target),
 		  togoLen - (targetLimit - *target));
       _this->charErrorBufferLength += togoLen - (targetLimit - *target);
@@ -244,7 +244,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
   while (i < _this->invalidUCharLength)
     {
       itou (codepoint + 2, _this->invalidUCharBuffer[i++], 16, 4);
-      icu_memcpy (valueString + valueStringLength, codepoint, sizeof (UChar) * 6);
+      uprv_memcpy (valueString + valueStringLength, codepoint, sizeof (UChar) * 6);
       valueStringLength += CODEPOINT_STRING_LENGTH - 1;
     }
 
@@ -282,7 +282,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
    */
   if ((targetLimit - *target) >= valueStringLength)
     {
-      icu_memcpy (*target, myTarget, valueStringLength);
+      uprv_memcpy (*target, myTarget, valueStringLength);
       *target += valueStringLength;
       *err = U_ZERO_ERROR;
 
@@ -307,8 +307,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 	  for (i=0;i<(targetLimit - *target);i++) offsets[i]=0;
 	  offsets += (targetLimit - *target);
 	}
-      icu_memcpy (*target, myTarget, (targetLimit - *target));
-      icu_memcpy (_this->charErrorBuffer + _this->charErrorBufferLength,
+      uprv_memcpy (*target, myTarget, (targetLimit - *target));
+      uprv_memcpy (_this->charErrorBuffer + _this->charErrorBufferLength,
 		  myTarget + (targetLimit - *target),
 		  valueStringLength - (targetLimit - *target));
       _this->charErrorBufferLength += valueStringLength - (targetLimit - *target);
@@ -391,7 +391,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
   while (i < _this->invalidCharLength)
     {
       itou (codepoint + 2, _this->invalidCharBuffer[i++], 16, 2);
-      icu_memcpy (uniValueString + valueStringLength, codepoint, sizeof (UChar) * 4);
+      uprv_memcpy (uniValueString + valueStringLength, codepoint, sizeof (UChar) * 4);
       valueStringLength += 4;
     }
   
@@ -400,7 +400,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
       /*if we have enough space on the output buffer we just copy
        * the subchar there and update the pointer
        */
-      icu_memcpy (*target, uniValueString, (sizeof (UChar)) * (valueStringLength));
+      uprv_memcpy (*target, uniValueString, (sizeof (UChar)) * (valueStringLength));
       if (offsets) 
 	{
 	  for (i = 0; i < valueStringLength; i++)  offsets[i] = 0;
@@ -416,14 +416,14 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
        *copy the rest in the internal buffer, and increase the
        *length marker
        */
-      icu_memcpy (*target, uniValueString, (sizeof (UChar)) * (targetLimit - *target));
+      uprv_memcpy (*target, uniValueString, (sizeof (UChar)) * (targetLimit - *target));
       if (offsets) 
 	{
 	  for (i = 0; i < (targetLimit - *target); i++)  offsets[i] = 0;
 	}	    
       
       
-      icu_memcpy (_this->UCharErrorBuffer,
+      uprv_memcpy (_this->UCharErrorBuffer,
 		  uniValueString + (targetLimit - *target),
 		  (sizeof (UChar)) * (valueStringLength - (targetLimit - *target)));
       _this->UCharErrorBufferLength += valueStringLength - (targetLimit - *target);

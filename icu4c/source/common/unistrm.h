@@ -21,7 +21,7 @@
 
 
 #include "filestrm.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 
 class U_COMMON_API UnicodeStringStreamer

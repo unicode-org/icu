@@ -14,9 +14,9 @@
 *   created by: Markus W. Scherer
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cstring.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "uresdata.h"
 
 /*
@@ -110,7 +110,7 @@ _res_findTableItem(Resource *pRoot, Resource res, const char *key) {
     start=0;
     while(start<limit-1) {
         i=(start+limit)/2;
-        if(icu_strcmp(key, RES_GET_KEY(pRoot, p[i]))<0) {
+        if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[i]))<0) {
             limit=i;
         } else {
             start=i;
@@ -118,7 +118,7 @@ _res_findTableItem(Resource *pRoot, Resource res, const char *key) {
     }
 
     /* did we really find it? */
-    if(icu_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
+    if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
         limit=*(p-1);   /* itemCount */
         return ((Resource *)(p+limit+(~limit&1)))[start];
     } else {

@@ -30,11 +30,11 @@
 
 
 #include "uhash.h"
-#include "locid.h"
-#include "uloc.h"
-#include "resbund.h"
+#include "unicode/locid.h"
+#include "unicode/uloc.h"
+#include "unicode/resbund.h"
 #include "mutex.h"
-#include "unicode.h"
+#include "unicode/unicode.h"
 #include "cmemory.h"
 #include "cstring.h"
 
@@ -212,17 +212,17 @@ Locale::Locale(const    Locale& other)
 {
   int j;
     /*Copy the language and country fields*/
-  icu_strcpy(language, other.language);
-  icu_strcpy(country, other.country);
+  uprv_strcpy(language, other.language);
+  uprv_strcpy(country, other.country);
   
   /*make fullName point to the heap if necessary*/
-  if ((j=icu_strlen(other.fullName)) > ULOC_FULLNAME_CAPACITY)
+  if ((j=uprv_strlen(other.fullName)) > ULOC_FULLNAME_CAPACITY)
     {
       fullName = new char[j+1];
     }
   else fullName = fullNameBuffer;
   
-  icu_strcpy(fullName, other.fullName);
+  uprv_strcpy(fullName, other.fullName);
     
     /*Make the variant point to the same offset as the copied*/
   variant = fullName + (other.variant - other.fullName) ;
@@ -232,11 +232,11 @@ Locale::Locale(const    Locale& other)
 bool_t
 Locale::operator==( const   Locale& other) const
 {
-  if (icu_strcmp(other.language, language) == 0)    
+  if (uprv_strcmp(other.language, language) == 0)    
   {
-    if (icu_strcmp(other.country, country) == 0)    
+    if (uprv_strcmp(other.country, country) == 0)    
     {
-      if (icu_strcmp(other.variant, variant) == 0)    return TRUE;
+      if (uprv_strcmp(other.variant, variant) == 0)    return TRUE;
     }
   }
   
@@ -265,13 +265,13 @@ Locale& Locale::init(const char* localeID)
   
   /*Go to heap for the fullName if necessary*/
   int j;
-  if ((j=icu_strlen(localeID)) > ULOC_FULLNAME_CAPACITY)
+  if ((j=uprv_strlen(localeID)) > ULOC_FULLNAME_CAPACITY)
     {
       this->fullName = new char[j+1];
     }
   else this->fullName = this->fullNameBuffer;
   
-  icu_strcpy(this->fullName, localeID);
+  uprv_strcpy(this->fullName, localeID);
       
   /*Setting up the variant:
     -point to the zero terminator of fullName if there is none
@@ -293,17 +293,17 @@ Locale& Locale::init(const char* localeID)
 
 Locale& Locale::operator=(const Locale& other)
 {
-  icu_strcpy(language, other.language);
-  icu_strcpy(country, other.country);
+  uprv_strcpy(language, other.language);
+  uprv_strcpy(country, other.country);
   if (other.fullName == other.fullNameBuffer)    fullName = fullNameBuffer;
   else 
   {
     /*In case the assigner has some of its data on the heap
      * we need to do the same*/
     if (fullName != fullNameBuffer) delete []fullName;
-    fullName = new char[(icu_strlen(other.fullName)+1)];
+    fullName = new char[(uprv_strlen(other.fullName)+1)];
   }
-  icu_strcpy(fullName, other.fullName);
+  uprv_strcpy(fullName, other.fullName);
   /*Make the variant point to the same offset as the assigner*/
   variant = fullName + (other.variant - other.fullName) ;
 

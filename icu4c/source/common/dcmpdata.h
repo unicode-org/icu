@@ -4,7 +4,7 @@
  */
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "ucmp8.h"
 #include "ucmp16.h"
 

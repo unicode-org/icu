@@ -18,14 +18,14 @@
 */
 
 
-#include "utypes.h"
-#include "putil.h"
-#include "locid.h"
+#include "unicode/utypes.h"
+#include "unicode/putil.h"
+#include "unicode/locid.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "mutex.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 #if 0
 //DEBUGGING
@@ -74,7 +74,7 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
          UChar *dst, int32_t dstStart, int32_t count)
 {
   if(count>0) {
-    icu_memmove(dst+dstStart, src+srcStart, (size_t)(count*sizeof(*src)));
+    uprv_memmove(dst+dstStart, src+srcStart, (size_t)(count*sizeof(*src)));
   }
 }
 
@@ -173,7 +173,7 @@ UnicodeString::UnicodeString(const char *codepageData,
     fBogus(FALSE)
 {
   if(codepageData != 0)
-    doCodepageCreate(codepageData, icu_strlen(codepageData), codepage);
+    doCodepageCreate(codepageData, uprv_strlen(codepageData), codepage);
 }
 
 
@@ -335,7 +335,7 @@ UnicodeString::doCompare( UTextOffset start,
   }
 
   /*
-   * note that icu_memcmp() returns an int but we return an int8_t;
+   * note that uprv_memcmp() returns an int but we return an int8_t;
    * we need to take care not to truncate the result -
    * one way to do this is to right-shift the value to
    * move the sign bit into the lower 8 bits and making sure that this
@@ -347,7 +347,7 @@ UnicodeString::doCompare( UTextOffset start,
 
     if(U_IS_BIG_ENDIAN) {
       // big-endian: byte comparison works
-      result = icu_memcmp(chars + start, srcChars + srcStart, minLength * sizeof(UChar));
+      result = uprv_memcmp(chars + start, srcChars + srcStart, minLength * sizeof(UChar));
       if(result != 0) {
         return (int8_t)(result >> 15 | 1);
       }
@@ -1355,31 +1355,31 @@ UnicodeString::releaseDefaultConverter(UConverter *converter)
 
 
 inline uint8_t
-icu_hibyte(uint16_t x)
+uprv_hibyte(uint16_t x)
 { return (uint8_t)(x >> 8); }
 
 inline uint8_t
-icu_lobyte(uint16_t x)
+uprv_lobyte(uint16_t x)
 { return (uint8_t)(x & 0xff); }
 
 inline uint16_t
-icu_hiword(uint32_t x)
+uprv_hiword(uint32_t x)
 { return (uint16_t)(x >> 16); }
 
 inline uint16_t
-icu_loword(uint32_t x)
+uprv_loword(uint32_t x)
 { return (uint16_t)(x & 0xffff); }
 
 inline void
 writeLong(FileStream *os,
       int32_t x)
 {
-  uint16_t word = icu_hiword((uint32_t)x);
-  T_FileStream_putc(os, icu_hibyte(word));
-  T_FileStream_putc(os, icu_lobyte(word));
-  word = icu_loword((uint32_t)x);
-  T_FileStream_putc(os, icu_hibyte(word));
-  T_FileStream_putc(os, icu_lobyte(word));
+  uint16_t word = uprv_hiword((uint32_t)x);
+  T_FileStream_putc(os, uprv_hibyte(word));
+  T_FileStream_putc(os, uprv_lobyte(word));
+  word = uprv_loword((uint32_t)x);
+  T_FileStream_putc(os, uprv_hibyte(word));
+  T_FileStream_putc(os, uprv_lobyte(word));
 }
 
 inline int32_t
@@ -1404,8 +1404,8 @@ inline void
 writeUChar(FileStream *os,
        UChar c)
 {
-  T_FileStream_putc(os, icu_hibyte(c));
-  T_FileStream_putc(os, icu_lobyte(c));
+  T_FileStream_putc(os, uprv_hibyte(c));
+  T_FileStream_putc(os, uprv_lobyte(c));
 }
 
 inline UChar

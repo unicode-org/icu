@@ -23,7 +23,7 @@
 #ifndef UFMT_CMN_H
 #define UFMT_CMN_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /** 
  * Enum representing the possible argument types for uprintf/uscanf

@@ -16,10 +16,10 @@
 *******************************************************************************
 */
 
-#include "resbund.h"
-#include "ures.h"
-#include "locid.h"
-#include "uloc.h"
+#include "unicode/resbund.h"
+#include "unicode/ures.h"
+#include "unicode/locid.h"
+#include "unicode/uloc.h"
 
 /**
  * Functions to create and destroy resource bundles.

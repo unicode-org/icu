@@ -18,7 +18,7 @@
 #ifndef UMUTEX_H
 #define UMUTEX_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 #ifndef XP_CPLUSPLUS
 typedef void * Mutex;

@@ -57,18 +57,18 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 
     /* convert from wchar_t to char */
     fnMbsSize = wcstombs(NULL, filename, ((size_t)-1) >> 1);
-    fn = (char*)icu_malloc(fnMbsSize+2);
+    fn = (char*)uprv_malloc(fnMbsSize+2);
     wcstombs(fn, filename, fnMbsSize);
     fn[fnMbsSize] = 0;
 
     mdMbsSize = wcstombs(NULL, mode, ((size_t)-1) >> 1);
-    md = (char*)icu_malloc(mdMbsSize+2);
+    md = (char*)uprv_malloc(mdMbsSize+2);
     wcstombs(md, mode, mdMbsSize);
     md[mdMbsSize] = 0;
 
     result = fopen(fn, md);
-    icu_free(fn);
-    icu_free(md);
+    uprv_free(fn);
+    uprv_free(md);
     return (FileStream*)result;
 #endif
 }

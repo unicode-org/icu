@@ -10,16 +10,16 @@ class Locale;
 class UnicodeString;
 class Mutex;
 
-#include "utypes.h"
-#include "resbund.h"
+#include "unicode/utypes.h"
+#include "unicode/resbund.h"
 #include "cmemory.h"
 #include "mutex.h"
 extern "C" {
 #include "ucnv_io.h"
-#include "ucnv_bld.h"
-#include "ucnv.h"
+#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv.h"
 }
-#include "convert.h"
+#include "unicode/convert.h"
 
 /* list of converter and alias names */
 const char **UnicodeConverterCPP::availableConverterNames=NULL;
@@ -75,11 +75,11 @@ bool_t UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
       (myUnicodeConverter->fromCharErrorBehaviour == that.myUnicodeConverter->fromCharErrorBehaviour) &&
       (myUnicodeConverter->toUnicodeStatus == that.myUnicodeConverter->toUnicodeStatus) &&
       (myUnicodeConverter->subCharLen == that.myUnicodeConverter->subCharLen) &&
-      (icu_memcmp(myUnicodeConverter->subChar, that.myUnicodeConverter->subChar, myUnicodeConverter->subCharLen) == 0) &&
+      (uprv_memcmp(myUnicodeConverter->subChar, that.myUnicodeConverter->subChar, myUnicodeConverter->subCharLen) == 0) &&
       (myUnicodeConverter->UCharErrorBufferLength == that.myUnicodeConverter->UCharErrorBufferLength) &&
       (myUnicodeConverter->charErrorBufferLength == that.myUnicodeConverter->charErrorBufferLength) &&
-      (icu_memcmp(myUnicodeConverter->UCharErrorBuffer, that.myUnicodeConverter->UCharErrorBuffer, myUnicodeConverter->UCharErrorBufferLength) == 0) &&
-      (icu_memcmp(myUnicodeConverter->charErrorBuffer, that.myUnicodeConverter->charErrorBuffer, myUnicodeConverter->charErrorBufferLength) == 0) &&
+      (uprv_memcmp(myUnicodeConverter->UCharErrorBuffer, that.myUnicodeConverter->UCharErrorBuffer, myUnicodeConverter->UCharErrorBufferLength) == 0) &&
+      (uprv_memcmp(myUnicodeConverter->charErrorBuffer, that.myUnicodeConverter->charErrorBuffer, myUnicodeConverter->charErrorBufferLength) == 0) &&
       (myUnicodeConverter->fromUCharErrorBehaviour == that.myUnicodeConverter->fromUCharErrorBehaviour))
   return TRUE;
   else return FALSE;
@@ -180,7 +180,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
    *on a "normal" call, only one iteration will be necessary.
    */
   myTargetUChars =
-    (UChar*)icu_malloc(sizeof(UChar)*(myTargetUCharsLength = (sourceSize/(int32_t)getMinBytesPerChar())));
+    (UChar*)uprv_malloc(sizeof(UChar)*(myTargetUCharsLength = (sourceSize/(int32_t)getMinBytesPerChar())));
 
   if (myTargetUChars == NULL)
     {
@@ -216,7 +216,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
     } while (err == U_INDEX_OUTOFBOUNDS_ERROR);
 
 
-  icu_free(myTargetUChars);
+  uprv_free(myTargetUChars);
 
   return;
 }

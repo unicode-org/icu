@@ -24,12 +24,12 @@
 ********************************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucnv_io.h"
-#include "udata.h"
+#include "unicode/udata.h"
 
 /* Format of cnvalias.dat ------------------------------------------------------
  *
@@ -159,7 +159,7 @@ strHalfCaseCmp(const char *str1, const char *str2) {
             return 1;
         } else {
             /* compare non-zero characters with lowercase */
-            rc=(int)c1-(int)(unsigned char)icu_tolower(c2);
+            rc=(int)c1-(int)(unsigned char)uprv_tolower(c2);
             if(rc!=0) {
                 return rc;
             }
@@ -187,7 +187,7 @@ findAlias(const char *alias) {
 
     /* convert the alias name to lowercase to do case-insensitive comparisons */
     for(i=0; i<sizeof(name)-1 && *alias!=0; ++i) {
-        name[i]=icu_tolower(*alias++);
+        name[i]=uprv_tolower(*alias++);
     }
     name[i]=0;
 
@@ -249,7 +249,7 @@ ucnv_io_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode) {
                 const char *aliases=(const char *)aliasTable+*p;
                 while(index>0) {
                     /* skip a name, first the canonical converter name */
-                    aliases+=icu_strlen(aliases)+1;
+                    aliases+=uprv_strlen(aliases)+1;
                     --index;
                 }
                 return aliases;
@@ -338,7 +338,7 @@ ucnv_io_getDefaultConverterName() {
     /* local variable to be thread-safe */
     const char *name=defaultConverterName;
     if(name==NULL) {
-        const char *codepage=icu_getDefaultCodepage();
+        const char *codepage=uprv_getDefaultCodepage();
         if(codepage!=NULL) {
             UErrorCode errorCode=U_ZERO_ERROR;
             name=ucnv_io_getConverterName(codepage, &errorCode);
@@ -363,7 +363,7 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
             defaultConverterName=name;
         } else {
             /* do not set the name if the alias lookup failed and it is too long */
-            int32_t length=icu_strlen(converterName);
+            int32_t length=uprv_strlen(converterName);
             if(length<sizeof(defaultConverterNameBuffer)) {
                 /* it was not found as an alias, so copy it - accept an empty name */
                 bool_t didLock;
@@ -373,7 +373,7 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
                 } else {
                     didLock=FALSE;
                 }
-                icu_memcpy(defaultConverterNameBuffer, converterName, length);
+                uprv_memcpy(defaultConverterNameBuffer, converterName, length);
                 defaultConverterNameBuffer[length]=0;
                 defaultConverterName=defaultConverterNameBuffer;
                 if(didLock) {

@@ -17,8 +17,8 @@
 #ifndef __RESDATA_H__
 #define __RESDATA_H__
 
-#include "utypes.h"
-#include "udata.h"
+#include "unicode/utypes.h"
+#include "unicode/udata.h"
 
 /*
  * A Resource is a 32-bit value that has 2 bit fields:
