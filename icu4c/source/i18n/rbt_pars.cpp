@@ -319,6 +319,8 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
     }
     
     while (pos < limit && !done) {
+        // Since all syntax characters are in the BMP, fetching
+        // 16-bit code units suffices here.
         UChar c = rule.charAt(pos++);
         if (u_isWhitespace(c)) {
             // Ignore whitespace.  Note that this is not Unicode
