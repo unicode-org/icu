@@ -715,4 +715,18 @@ void TestICUDataName()
 		log_err("U_ICUDATA_NAME should be %s but is %s\n",
 				expectDataName, U_ICUDATA_NAME);
 	}
+
+        /* ICUDATA_NAME comes from the build system on *nix */
+#ifdef ICUDATA_NAME
+        if(uprv_strcmp(U_ICUDATA_NAME, ICUDATA_NAME))
+        {
+	  log_err("ICUDATA_NAME  and U_ICUDATA_NAME don't match: "
+		  "ICUDATA_NAME=%s, U_ICUDATA_NAME=%s.  Check configure.in, icudefs.mk.in, utypes.h...\n",  ICUDATA_NAME, U_ICUDATA_NAME);
+	}
+	else
+	{
+	  log_verbose("ICUDATA_NAME=%s (from icudefs.mk), U_ICUDATA_NAME=%s (from utypes.h)\n", ICUDATA_NAME, U_ICUDATA_NAME);
+	}
+#endif
+
 }
