@@ -94,6 +94,8 @@ import com.ibm.icu.impl.ICUDebug;
  */
 public final class CollationElementIterator
 {
+  
+    
     // public data members --------------------------------------------------
 
     /**
@@ -452,7 +454,7 @@ public final class CollationElementIterator
     {
         m_source_.setIndex(offset);
         char ch = m_source_.current();
-        if (m_collator_.isUnsafe(ch)) {
+        if (ch != CharacterIterator.DONE && m_collator_.isUnsafe(ch)) {
             // if it is unsafe we need to check if it is part of a contraction
             // or a surrogate character
             if (UTF16.isTrailSurrogate(ch)) {
@@ -481,6 +483,19 @@ public final class CollationElementIterator
             }
         }
         updateInternalState();
+        // direction code to prevent next and previous from returning a 
+        // character if we are already at the ends
+        offset = m_source_.getIndex();
+        if (offset == m_source_.getBeginIndex()) {
+            // preventing previous() from returning characters from the end of 
+            // the string again if we are at the beginning
+            m_isForwards_ = false; 
+        }
+        else if (offset == m_source_.getEndIndex()) {
+            // preventing next() from returning characters from the start of 
+            // the string again if we are at the end
+            m_isForwards_ = true;
+        }
     }
 
     /**

@@ -144,6 +144,17 @@ public class CollationIteratorTest extends TestFmwk {
         }
 
         CollationElementIterator iter = en_us.getCollationElementIterator(test1);
+        // testing boundaries
+        iter.setOffset(0);
+        if (iter.previous() != CollationElementIterator.NULLORDER) {
+            errln("Error: After setting offset to 0, we should be at the end "
+                  + "of the backwards iteration");
+        }
+        iter.setOffset(test1.length());
+        if (iter.next() != CollationElementIterator.NULLORDER) {
+            errln("Error: After setting offset to the end of the string, we " 
+                  + "should be at the end of the forwards iteration");
+        }
     
         // Run all the way through the iterator, then get the offset
         int[] orders = getOrders(iter);
