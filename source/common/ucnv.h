@@ -86,6 +86,7 @@ U_CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
 
 /**
  * Creates a UConverter object using a CCSID number.
+ *
  * @param codepage : codepage # of the uconv table
  * @param platform : codepage's platform (now only <TT>IBM</TT> supported)
  * @param err error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
@@ -102,6 +103,7 @@ U_CAPI UConverter* U_EXPORT2 ucnv_openCCSID (int32_t codepage,
 
 /**
  * Deletes the unicode converter.
+ *
  * @param converter the converter object to be deleted
  * @see ucnv_open
  * @see ucnv_openU
@@ -114,6 +116,7 @@ U_CAPI void  U_EXPORT2 ucnv_close (UConverter * converter);
 /**
  * Fills in the output parameter, subChars, with the substitution characters
  * as multiple bytes.
+ *
  * @param converter: the Unicode converter
  * @param subChars: the subsitution characters
  * @param len: on input the capacity of subChars, on output the number of bytes copied to it
@@ -152,6 +155,7 @@ U_CAPI void U_EXPORT2
 /**
  * Fills in the output parameter, errBytes, with the error characters from the
  * last failing conversion.
+ *
  * @param converter: the Unicode converter
  * @param errBytes: the bytes in error
  * @param len: on input the capacity of errBytes, on output the number of bytes copied to it
@@ -170,6 +174,7 @@ U_CAPI void U_EXPORT2
 /**
  * Fills in the output parameter, errChars, with the error characters from the
  * last failing conversion.
+ *
  * @param converter: the Unicode converter
  * @param errUChars: the bytes in error
  * @param len: on input the capacity of errUChars, on output the number of UChars copied to it
@@ -219,6 +224,7 @@ U_CAPI int8_t U_EXPORT2
  * Returns the display name of the converter passed in based on the Locale passed in,
  * in the case the locale contains no display name, the internal ASCII name will be
  * filled in.
+ *
  * @param converter the Unicode converter.
  * @param displayLocale is the specific Locale we want to localised for
  * @param displayName user provided buffer to be filled in
@@ -302,6 +308,7 @@ U_CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter,
 
 /**
  * Gets the current calback function used by the converter when illegal or invalid sequence found.
+ *
  * @param converter the unicode converter
  * @return a pointer to the callback function
  * @see ucnv_setToUCallBack
@@ -311,6 +318,7 @@ U_CAPI UConverterToUCallback U_EXPORT2
 
 /**
  * Gets the current callback function used by the converter when illegal or invalid sequence found.
+ *
  * @param converter the unicode converter
  * @return a pointer to the callback function
  * @see ucnv_setFromUCallBack
@@ -319,7 +327,8 @@ U_CAPI UConverterFromUCallback U_EXPORT2
     ucnv_getFromUCallBack (const UConverter * converter);
 
 /**
- * Gets the current callback function used by the converter when illegal or invalid sequence found
+ * Gets the current callback function used by the converter when illegal or invalid sequence found.
+ *
  * @param converter the unicode converter
  * @param action the callback function we want to set.
  * @param err The error code status
@@ -332,7 +341,8 @@ U_CAPI UConverterToUCallback U_EXPORT2
 			 UErrorCode * err);
 
 /**
- * Gets the current callback function used by the converter when illegal or invalid sequence found
+ * Gets the current callback function used by the converter when illegal or invalid sequence found.
+ *
  * @param converter the unicode converter
  * @param action the callback function we want to set.
  * @param err The error code status
@@ -546,6 +556,7 @@ U_CAPI
 /**
  * SYSTEM API
  * Iterates through every cached converter and frees all the unused ones.
+ *
  * @return the number of cached converters successfully deleted
  */
 U_CAPI int32_t U_EXPORT2 ucnv_flushCache (void);
@@ -563,6 +574,7 @@ U_CAPI
 
 /**
  * returns the number of available converters.
+ *
  * @return the number of available converters
  * @see ucnv_getAvailableName
  */
@@ -570,6 +582,7 @@ U_CAPI int32_t U_EXPORT2 ucnv_countAvailable (void);
 
 /**
  * returns the current default converter name.
+ *
  * @return returns the current default converter name
  * @see ucnv_setDefaultName
  */

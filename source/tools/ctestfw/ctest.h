@@ -59,28 +59,35 @@ typedef void (*TestFunctionPtr)();
 typedef struct TestNode TestNode;
 
 /**
- * Count of errors from all tests. May be reset.
+ * Count of errors from all tests. 
+ * May be reset.
  */
 T_CTEST_EXPORT_API extern int ERROR_COUNT;
 
 /**
- * Set this to zero to disable log_verbose() messages, otherwise
- * nonzero to see log_verbose() messages.
+ * Set this to zero to disable log_verbose() messages.
+ * Otherwise nonzero to see log_verbose() messages.
+ *
  */
 T_CTEST_EXPORT_API extern int VERBOSITY;  
+
 /**
- * Set this to zero to disable log_verbose() messages, otherwise
- * nonzero to see log_verbose() messages.
+ * Set this to zero to disable log_verbose() messages.
+ * Otherwise nonzero to see log_verbose() messages.
+ *
  */
 T_CTEST_EXPORT_API extern int ERR_MSG; 
+
 /**
  * Show the names of all nodes.
+ * 
  * @param root Subtree of tests.
  */
 T_CTEST_API void showTests ( const TestNode *root);
 
 /**
  * Run a subtree of tests.
+ * 
  * @param root Subtree of tests.
  */
 T_CTEST_API void runTests ( const TestNode* root);
@@ -101,7 +108,8 @@ T_CTEST_API void addTest ( TestNode** root,
            const char *path);
 
 /**
- * Retreive a specific subtest (subtree)
+ * Retreive a specific subtest. (subtree).
+ *
  * @param root Pointer to the root.
  * @param path Path relative to the root, Ex. '/a/b'
  * @return The subtest, or NULL on failure.

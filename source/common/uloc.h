@@ -172,7 +172,7 @@
  * </blockquote>
  */
 
-/**
+/*
  *
  * Useful constants for language.
  */
@@ -186,7 +186,7 @@
 #define ULOC_SIMPLIFIED_CHINESE "zh_CN"
 #define ULOC_TRADITIONAL_CHINESE "zh_TW"
 
-/**
+/*
  *
  * Useful constants for country.
  */
@@ -207,8 +207,8 @@
 
 
 /**
- *
  * Gets the system's default locale.
+ *
  * @return the system default locale
  */
 
@@ -216,8 +216,8 @@ U_CAPI const char* U_EXPORT2
 uloc_getDefault(void);
 
 /**
- *
  * Sets the system's default locale.
+ *
  * @param localeID the new system default locale
  * @param status the error information if the setting of default locale fails
  */
@@ -226,8 +226,8 @@ uloc_setDefault(const char* localeID,
         UErrorCode*       status);
 
 /**
- *
  * Gets the language code for the specified locale.
+ *
  * @param localeID the locale to get the ISO langauge code with
  * @param language the langauge code for localeID
  * @param languageCapacity the size of the language buffer to store the  
@@ -244,8 +244,8 @@ uloc_getLanguage(const char*    localeID,
          UErrorCode* err);
 
 /**
- *
  * Gets the  country code for the specified locale.
+ *
  * @param localeID the locale to get the country code with
  * @param country the country code for localeID
  * @param languageCapacity the size of the coutry buffer to store the  
@@ -262,8 +262,8 @@ uloc_getCountry(const char*    localeID,
         UErrorCode* err);
 
 /**
- *
  * Gets the variant code for the specified locale.
+ *
  * @param localeID the locale to get the variant code with
  * @param variant the variant code for localeID
  * @param variantCapacity the size of the variant buffer to store the 
@@ -279,8 +279,8 @@ uloc_getVariant(const char*    localeID,
         int32_t variantCapacity,
         UErrorCode* err);
 /**
- *
  * Gets the full name for the specified locale.
+ *
  * @param localeID the locale to get the full name with
  * @param name the full name for localeID
  * @param nameCapacity the size of the name buffer to store the 
@@ -297,8 +297,8 @@ uloc_getName(const char*    localeID,
          UErrorCode* err);
 
 /**
- *
  * Gets the ISO language code for the specified locale.
+ *
  * @param localeID the locale to get the ISO langauge code with
  * @return language the ISO langauge code for localeID
  */
@@ -307,8 +307,8 @@ uloc_getISO3Language(const char* localeID);
 
 
 /**
- *
  * Gets the ISO country code for the specified locale.
+ *
  * @param localeID the locale to get the ISO country code with
  * @return country the ISO country code for localeID
  */
@@ -317,8 +317,8 @@ U_CAPI const char* U_EXPORT2
 uloc_getISO3Country(const char* localeID);
 
 /**
- *
  * Gets the Win32 LCID value for the specified locale.
+ *
  * @param localeID the locale to get the Win32 LCID value with
  * @return country the Win32 LCID for localeID
  */
@@ -327,8 +327,8 @@ U_CAPI uint32_t U_EXPORT2
 uloc_getLCID(const char* localeID);
 
 /**
- *
  * Gets the language name suitable for display for the specified locale.
+ *
  * @param localeID the locale to get the ISO langauge code with
  * @param language the displayable langauge code for localeID
  * @param languageCapacity the size of the language buffer to store the  
@@ -345,8 +345,8 @@ uloc_getDisplayLanguage(const char* locale,
             UErrorCode* status);
 
 /**
- *
  * Gets the country name suitable for display for the specified locale.
+ *
  * @param localeID the locale to get the displayable country code with
  * @param country the displayable country code for localeID
  * @param languageCapacity the size of the coutry buffer to store the  
@@ -365,8 +365,8 @@ uloc_getDisplayCountry(const char* locale,
 
 
 /**
- *
  * Gets the variant code suitable for display for the specified locale.
+ *
  * @param localeID the locale to get the displayable variant code with
  * @param variant the displayable variant code for localeID
  * @param variantCapacity the size of the variant buffer to store the 
@@ -384,8 +384,8 @@ uloc_getDisplayVariant(const char* locale,
             UErrorCode* status);    /* NULL may be used to specify the default */
 
 /**
- *
  * Gets the full name suitable for display for the specified locale.
+ *
  * @param localeID the locale to get the displayable name with
  * @param variant the displayable name for localeID
  * @param variantCapacity the size of the name buffer to store the 
@@ -417,8 +417,8 @@ U_CAPI const char* U_EXPORT2
 uloc_getAvailable(int32_t index);
 
 /**
- *
  * Gets the size of the all available locale list.
+ *
  * @return the size of the locale list
  */
 U_CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
@@ -446,16 +446,16 @@ U_CAPI const char* const* U_EXPORT2
 uloc_getISOCountries(void);
 
 /**
- *
  * Gets the directory containing the locale data files.
+ *
  * @return the locale data file directory
  */
 U_CAPI const char* U_EXPORT2
 uloc_getDataDirectory(void);
 
 /**
- *
  * Sets the directory containing the locale data files.
+ *
  * @return the new directory to fetch locale data from
  */
 
