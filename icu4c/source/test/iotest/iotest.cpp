@@ -723,10 +723,124 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestStream, "stream/TestStream");
 }
 
+/* returns the path to icu/source/data/out */
+static const char *ctest_dataOutDir()
+{
+    static const char *dataOutDir = NULL;
+
+    if(dataOutDir) {
+        return dataOutDir;
+    }
+
+    /* U_TOPBUILDDIR is set by the makefiles on UNIXes when building cintltst and intltst
+    //              to point to the top of the build hierarchy, which may or
+    //              may not be the same as the source directory, depending on
+    //              the configure options used.  At any rate,
+    //              set the data path to the built data from this directory.
+    //              The value is complete with quotes, so it can be used
+    //              as-is as a string constant.
+    */
+#if defined (U_TOPBUILDDIR)
+    {
+        dataOutDir = U_TOPBUILDDIR "data"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    }
+#else
+
+    /* On Windows, the file name obtained from __FILE__ includes a full path.
+     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
+     *             Change to    "wherever\icu\source\data"
+     */
+    {
+        static char p[sizeof(__FILE__) + 20];
+        char *pBackSlash;
+        int i;
+
+        strcpy(p, __FILE__);
+        /* We want to back over three '\' chars.                            */
+        /*   Only Windows should end up here, so looking for '\' is safe.   */
+        for (i=1; i<=3; i++) {
+            pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
+            if (pBackSlash != NULL) {
+                *pBackSlash = 0;        /* Truncate the string at the '\'   */
+            }
+        }
+
+        if (pBackSlash != NULL) {
+            /* We found and truncated three names from the path.
+             *  Now append "source\data" and set the environment
+             */
+            strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING);
+            dataOutDir = p;
+        }
+        else {
+            /* __FILE__ on MSVC7 does not contain the directory */
+            FILE *file = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "Makefile.in", "r");
+            if (file) {
+                fclose(file);
+                dataOutDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING;
+            }
+            else {
+                dataOutDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING;
+            }
+        }
+    }
+#endif
+
+    return dataOutDir;
+}
+
+/*  ctest_setICU_DATA  - if the ICU_DATA environment variable is not already
+ *                       set, try to deduce the directory in which ICU was built,
+ *                       and set ICU_DATA to "icu/source/data" in that location.
+ *                       The intent is to allow the tests to have a good chance
+ *                       of running without requiring that the user manually set
+ *                       ICU_DATA.  Common data isn't a problem, since it is
+ *                       picked up via a static (build time) reference, but the
+ *                       tests dynamically load some data.
+ */
+static void ctest_setICU_DATA() {
+
+    /* No location for the data dir was identifiable.
+     *   Add other fallbacks for the test data location here if the need arises
+     */
+    if (getenv("ICU_DATA") == NULL) {
+        /* If ICU_DATA isn't set, set it to the usual location */
+        u_setDataDirectory(ctest_dataOutDir());
+    }
+}
+
 int main(int argc, char* argv[])
 {
     int32_t nerrors = 0;
     TestNode *root = NULL;
+    UErrorCode errorCode = U_ZERO_ERROR;
+
+    /* Check whether ICU will initialize without forcing the build data directory into
+    *  the ICU_DATA path.  Success here means either the data dll contains data, or that
+    *  this test program was run with ICU_DATA set externally.  Failure of this check
+    *  is normal when ICU data is not packaged into a shared library.
+    *
+    *  Whether or not this test succeeds, we want to cleanup and reinitialize
+    *  with a data path so that data loading from individual files can be tested.
+    */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+            "#### Note:  ICU Init without build-specific setDataDirectory() failed.\n");
+    }
+    u_cleanup();
+    errorCode = U_ZERO_ERROR;
+
+    /* Initialize ICU */
+    ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+            "#### ERROR! %s: u_init() failed with status = \"%s\".\n" 
+            "*** Check the ICU_DATA environment variable and \n"
+            "*** check that the data files are present.\n", argv[0], u_errorName(errorCode));
+        return 1;
+    }
 
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);
