@@ -24,11 +24,6 @@
 #include "ubidi.h"
 #include "cbiditst.h"
 
-/*
- * If this is defined, then a failed test terminates.
- */
-#define DO_FAIL
-
 /* prototypes ---------------------------------------------------------------*/
 
 extern void
