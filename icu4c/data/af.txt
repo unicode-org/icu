@@ -1,0 +1,100 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+af{
+            
+            AmPmMarkers { 
+            "VM",
+            "NM",
+    }
+
+    DateTimePatterns { 
+            "HH:mm:ss ",
+            "HH:mm:ss ",
+            "HH:mm:ss ",
+            "HH:mm:ss ",
+            "EEE DD MMM yyyy z",
+            "EEE DD MMM yyyy z",
+            "DD/MM/yy",
+            "DD/MM/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "So",
+            "Ma",
+            "Di",
+            "Wo",
+            "Do",
+            "Vr",
+            "Sa",
+    }
+    DayNames { 
+            "Sondag",
+            "Maandag",
+            "Dinsdag",
+            "Woensdag",
+            "Donderdag",
+            "Vrydag",
+            "Saterdag",
+    }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Mei",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Des",
+            "",
+    }
+    MonthNames { 
+            "Januarie",
+            "Februarie",
+            "Maart",
+            "April",
+            "Mei",
+            "Junie",
+            "Julie",
+            "Augustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
+            "",
+    }
+            
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "‰",
+            "∞",
+            "�",
+    }
+            LocaleID {"0436"}
+            LocaleString{ "af" }
+            
+            // /**************** Info Below is needed ****************/
+            // CollationElements{}
+            // Countries{}
+            // Eras{}
+            // Languages{}
+            // ShortLanguage { }
+            // localPatternChars{}
+            //
+}
