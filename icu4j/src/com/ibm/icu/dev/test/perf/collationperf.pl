@@ -5,8 +5,8 @@
 # *******************************************************************************
 # *
 # * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/perf/collationperf.pl,v $
-# * $Date: 2002/12/18 03:56:40 $
-# * $Revision: 1.2 $
+# * $Date: 2003/02/14 18:55:10 $
+# * $Revision: 1.3 $
 # *
 # *******************************************************************************
 # */
@@ -21,22 +21,26 @@
 #  ICU4J and Java Collator performance test script
 #  2002-09-25 modified by Richard Liang
 
+print "To run this performance test\n";
+print "cd to the ICU4J root directory, one directory below src\n";
+print "run perl src\\com\\ibm\\icu\\dev\\test\\perf\\collationperf.pl\n";
+
 #
 # Map defines the set of data files to run in each locale
 #
 %dataFiles = (
-   "en_US", 		"TestNames_Latin.txt",
-   "da_DK", 		"TestNames_Latin.txt",
-   "de_DE",    		"TestNames_Latin.txt",
-   "de__PHONEBOOK", "TestNames_Latin.txt",
-   "fr_FR",   		"TestNames_Latin.txt",
-   "ja_JP", 		"TestNames_Latin.txt TestNames_Japanese_h.txt TestNames_Japanese_k.txt TestNames_Asian.txt",
-   "zh_CN", 		"TestNames_Latin.txt TestNames_Chinese.txt",
-   "zh_TW", 		"TestNames_Latin.txt TestNames_Chinese.txt",
-   "zh__PINYIN", 	"TestNames_Latin.txt TestNames_Chinese.txt",
-   "ru_RU", 		"TestNames_Latin.txt TestNames_Russian.txt",
-   "th",    		"TestNames_Latin.txt TestNames_Thai.txt",
-   "ko_KR",         "TestNames_Latin.txt TestNames_Korean.txt",
+   "en_US", 		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt",
+   "da_DK", 		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt",
+   "de_DE",    		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt",
+   "de__PHONEBOOK", "src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt",
+   "fr_FR",   		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt",
+   "ja_JP", 		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Japanese_h.txt TestNames_Japanese_k.txt TestNames_Asian.txt",
+   "zh_CN", 		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Chinese.txt",
+   "zh_TW", 		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Chinese.txt",
+   "zh__PINYIN", 	"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Chinese.txt",
+   "ru_RU", 		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Russian.txt",
+   "th",    		"src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Thai.txt",
+   "ko_KR",         "src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt TestNames_Korean.txt",
    );
 
 
@@ -70,9 +74,9 @@
           #
           # Run ICU Test for this (locale, data file) pair.
           #
-          $iStrCol = `java -classpath ../classes com.ibm.icu.dev.test.collator.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -binsearch`;
+          $iStrCol = `java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -binsearch`;
           $iStrCol =~s/[,\s]*//g;  # whack off the leading "  ," in the returned result.
-          doKeyTimes("java -classpath ../classes com.ibm.icu.dev.test.collator.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -keygen",
+          doKeyTimes("java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -keygen",
                      $iKeyGen, $iKeyLen);
 
 
@@ -82,9 +86,9 @@
           #    for the locale.
           #
           $wStrCol = $wKeyGen = $wKeyLen = 0;
-          $wStrCol = `java -classpath ../classes com.ibm.icu.dev.test.collator.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -binsearch -java`;
+          $wStrCol = `java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -binsearch -java`;
           $wStrCol =~s/[,\s]*//g;  # whack off the leading "  ," in the returned result.
-          doKeyTimes("java -classpath ../classes com.ibm.icu.dev.test.collator.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -keygen -java",
+          doKeyTimes("java -classpath classes com.ibm.icu.dev.test.perf.CollationPerformanceTest -terse -file $data -locale $locale -loop 1000 -keygen -java",
                      $wKeyGen, $wKeyLen);
                      
           $collDiff = $keyGenDiff = $keyLenDiff = 0;
