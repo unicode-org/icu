@@ -85,7 +85,7 @@ public:
      * Create a DecimalFormatSymbols object for the default locale.
      * This constructor will not fail.  If the resource file data is
      * not available, it will use hard-coded last-resort data and
-     * set status to USING_FALLBACK_ERROR.
+     * set status to U_USING_FALLBACK_ERROR.
      *
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.

@@ -49,9 +49,9 @@ const UDate CalendarLimitTest::LATEST_SUPPORTED_MILLIS    =   4503599627370495.0
 void
 CalendarLimitTest::test(UDate millis, Calendar* cal, DateFormat* fmt)
 {
-    UErrorCode exception = ZERO_ERROR;
+    UErrorCode exception = U_ZERO_ERROR;
     UnicodeString theDate;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UDate d = millis;
     cal->setTime(millis, exception);
     if (SUCCESS(exception)) {
@@ -92,7 +92,7 @@ CalendarLimitTest::TestCalendarLimit()
 {
     logln("Limit tests");
     logln("--------------------");
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     explore2(EARLIEST_SUPPORTED_MILLIS);
     explore3(LATEST_SUPPORTED_MILLIS);
     Calendar *cal = Calendar::createInstance(status);

@@ -111,7 +111,7 @@ class DateFormatSymbols;
  * </pre>
  * Code Sample:
  * <pre>
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, "PST");
  * .    pdt->setStartRule( Calendar::APRIL, 1, Calendar::SUNDAY, 2*60*60*1000);
  * .    pdt->setEndRule( Calendar::OCTOBER, -1, Calendar::SUNDAY, 2*60*60*1000);
@@ -295,7 +295,7 @@ public:
      * parse() that takes a ParsePosition.
      *
      * @param text  The date/time string to be parsed
-     * @param status Filled in with ZERO_ERROR if the parse was successful, and with
+     * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
      *              an error value if there was a parse error.
      * @return      A valid UDate if the input could be parsed.
      */
@@ -486,7 +486,7 @@ private:
      *                  this function is formatting the field specfied by pos, it
      *                  will fill in pos will the beginning and ending offsets of the
      *                  field.
-     * @param status    Receives a status code, which will be ZERO_ERROR if the operation
+     * @param status    Receives a status code, which will be U_ZERO_ERROR if the operation
      *                  succeeds.
      * @return A reference to "result".
      */

@@ -55,7 +55,7 @@
  *
  * <p>Example of use:
  * <pre>
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    Collator* myCollator = Collator::createInstance(success);
  * .    CollationKey* keys = new CollationKey [3];
  * .    myCollator->getCollationKey("Tom", keys[0], success );
@@ -173,11 +173,11 @@ public :
      * is not the same as String.hashCode.
      * <p>Example of use:
      * <pre>
-     * .    UErrorCode status = ZERO_ERROR;
+     * .    UErrorCode status = U_ZERO_ERROR;
      * .    Collator *myCollation = Collator::createInstance(Locale::US, status);
      * .    if (FAILURE(status)) return;
      * .    CollationKey key1, key2;
-     * .    UErrorCode status1 = ZERO_ERROR, status2 = ZERO_ERROR;
+     * .    UErrorCode status1 = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
      * .    myCollation->getCollationKey("abc", key1, status1);
      * .    if (FAILURE(status1)) { delete myCollation; return; }
      * .    myCollation->getCollationKey("ABC", key2, status2);

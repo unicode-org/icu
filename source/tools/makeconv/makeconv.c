@@ -75,7 +75,7 @@ static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t',
 int main(int argc, char** argv)
 {
   UConverterSharedData* mySharedData = NULL; 
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   char outFileName[MAX_FULL_FILE_NAME_LENGTH];
   char* dot = NULL;
 
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
 	{
 	  /* in an error is found, print out a error msg and keep going*/
 	  printf("Error creating \"%s\" file for \"%s\" (error code %d)\n", outFileName, argv[argc], err);
-	  err = ZERO_ERROR;
+	  err = U_ZERO_ERROR;
 	}
       else
 	{
@@ -187,7 +187,7 @@ void writeUConverterSharedDataToFile(const char* filename,
   outfile = T_FileStream_open(filename, "wb");
   if (outfile == NULL) 
     {
-      *err = FILE_ACCESS_ERROR;
+      *err = U_FILE_ACCESS_ERROR;
       return;
     }
 
@@ -226,7 +226,7 @@ void writeUConverterSharedDataToFile(const char* filename,
 
   if (T_FileStream_error(outfile)) 
     {
-      *err = FILE_ACCESS_ERROR;
+      *err = U_FILE_ACCESS_ERROR;
     }
   T_FileStream_close(outfile);
 }
@@ -338,7 +338,7 @@ void readHeaderFromFile(UConverter* myConverter,
 		}
 	      else 
 		{
-		  *err = INVALID_TABLE_FORMAT;
+		  *err = U_INVALID_TABLE_FORMAT;
 		  return;
 		}
 
@@ -385,7 +385,7 @@ void readHeaderFromFile(UConverter* myConverter,
     }
   
   
-  if (!endOfHeader || !hasConvClass)     *err = INVALID_TABLE_FORMAT;
+  if (!endOfHeader || !hasConvClass)     *err = U_INVALID_TABLE_FORMAT;
   return;
 }
   
@@ -409,7 +409,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   myConverterTable = (ConverterTable*)icu_malloc(sizeof(SBCS_TABLE));
   if (myConverterTable == NULL) 
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
 
@@ -418,7 +418,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   if (myFromUnicode == NULL) 
     {
       icu_free(myConverterTable);
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     } 
   
@@ -476,7 +476,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   myConverterTable = (ConverterTable*)icu_malloc(sizeof(MBCS_TABLE));
   if (myConverterTable == NULL) 
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
 
@@ -549,7 +549,7 @@ void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter* myConver
   myConverterTable = (ConverterTable*)icu_malloc(sizeof(MBCS_TABLE));
   if (myConverterTable == NULL) 
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
   
@@ -616,7 +616,7 @@ void loadDBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   myConverterTable = (ConverterTable*)icu_malloc(sizeof(DBCS_TABLE));
   if (myConverterTable == NULL) 
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
   
@@ -701,7 +701,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   convFile = T_FileStream_open(converterName, "r");
   if (convFile == NULL) 
     {
-      *err = FILE_ACCESS_ERROR;
+      *err = U_FILE_ACCESS_ERROR;
       return NULL;
     }
   
@@ -709,7 +709,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   mySharedData = (UConverterSharedData*) icu_malloc(sizeof(UConverterSharedData));
   if (mySharedData == NULL)
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       T_FileStream_close(convFile);
     }
   
@@ -747,7 +747,3 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   T_FileStream_close(convFile);
   return mySharedData;
 }
-
-
-
-

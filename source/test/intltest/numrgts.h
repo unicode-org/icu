@@ -96,7 +96,6 @@ public:
     void Test4243108();
 
 protected:
-    const char* errorName(UErrorCode code);
     bool_t failure(UErrorCode status, const UnicodeString& msg);
 };
 

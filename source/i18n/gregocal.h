@@ -66,7 +66,7 @@
  * .    
  * .    // create a GregorianCalendar with the Pacific Daylight time zone
  * .    // and the current date and time
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    Calendar* calendar = new GregorianCalendar( pdt, success );
  * .    
  * .    // print out a bunch of interesting things
@@ -132,7 +132,7 @@ public:
      * zone with the default locale.
      *
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(UErrorCode& success);
 
@@ -143,7 +143,7 @@ public:
      *
      * @param zoneToAdopt     The given timezone.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(TimeZone* zoneToAdopt, UErrorCode& success);
 
@@ -153,7 +153,7 @@ public:
      *
      * @param zone     The given timezone.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(const TimeZone& zone, UErrorCode& success);
 
@@ -163,7 +163,7 @@ public:
      *
      * @param aLocale  The given locale.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(const Locale& aLocale, UErrorCode& success);
 
@@ -175,7 +175,7 @@ public:
      * @param zoneToAdopt     The given timezone.
      * @param aLocale  The given locale.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
@@ -186,7 +186,7 @@ public:
      * @param zone     The given timezone.
      * @param aLocale  The given locale.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
 
@@ -199,7 +199,7 @@ public:
      *                 value is 0-based. e.g., 0 for January.
      * @param date     The value used to set the DATE time field in the calendar.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(int32_t year, int32_t month, int32_t date, UErrorCode& success);
 
@@ -214,7 +214,7 @@ public:
      * @param hour     The value used to set the HOUR_OF_DAY time field in the calendar.
      * @param minute   The value used to set the MINUTE time field in the calendar.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute, UErrorCode& success);
 
@@ -230,7 +230,7 @@ public:
      * @param minute   The value used to set the MINUTE time field in the calendar.
      * @param second   The value used to set the SECOND time field in the calendar.
      * @param success  Indicates the status of GregorianCalendar object construction.
-     *                 Returns ZERO_ERROR if constructed successfully.
+     *                 Returns U_ZERO_ERROR if constructed successfully.
      */
     GregorianCalendar(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute, int32_t second, UErrorCode& success);
 

@@ -61,12 +61,12 @@ void TestNumberFormat()
     UNumberFormatAttribute attr;
     UNumberFormatSymbols symbols1, symbols2;
     int32_t newvalue;  
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *pattern;
     UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr, *spellout_def, *cur_frpattern;
     /* Testing unum_open() with various Numberformat styles and locales*/
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
     def=unum_open(style, NULL, &status);
     if(FAILURE(status))
@@ -132,9 +132,9 @@ void TestNumberFormat()
     log_verbose("\nTesting unum_format() \n");
     resultlength=0;
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(cur_def, l, result, resultlength, &pos1, &status);
@@ -156,9 +156,9 @@ free(result);
     u_uastrcpy(temp1, "($10,456.37)");
     resultlength=0;
     resultlengthneeded=unum_formatDouble(cur_def, d, NULL, resultlength, &pos2, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_formatDouble(cur_def, d, result, resultlength, &pos2, &status);
@@ -193,9 +193,9 @@ free(result);
     resultlength=0;
     parsepos=0;
     resultlengthneeded=unum_format(per_fr, l, NULL, resultlength, &pos1, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(per_fr, l, result, resultlength, &pos1, &status);
@@ -234,9 +234,9 @@ free(result);
     log_verbose("\nTesting unum_toPattern()\n");
     resultlength=0;
     resultlengthneeded=unum_toPattern(pattern, FALSE, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_toPattern(pattern, FALSE, result, resultlength, &status);
@@ -260,9 +260,9 @@ free(temp1);
     /*when we try to change the symbols of french to default we need to apply the pattern as well to fetch correct results */
     resultlength=0;
     resultlengthneeded=unum_toPattern(cur_def, FALSE, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_toPattern(cur_def, FALSE, result, resultlength, &status);
@@ -286,9 +286,9 @@ free(result);
     /*format to check the result */
     resultlength=0;
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(cur_def, l, result, resultlength, &pos1, &status);
@@ -330,9 +330,9 @@ free(result);
 
     resultlength=0;
     resultlengthneeded=unum_format(cur_frpattern, l, NULL, resultlength, &pos1, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         temp1=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(cur_frpattern, l, temp1, resultlength, &pos1, &status);
@@ -471,4 +471,3 @@ free(temp1);
     unum_close(cur_frpattern);
     
 }
-

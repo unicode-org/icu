@@ -51,7 +51,7 @@ void TestCalendar()
     int32_t count, count2, offset,i;
     UChar *tzID = 0;
     UChar *tzdname = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UDate now;
     UDateFormat *datdef = 0;
     UChar *result = 0;
@@ -143,9 +143,9 @@ void TestCalendar()
     resultlength=0;
     resultlengthneeded=ucal_getTimeZoneDisplayName(caldef, UCAL_DST, "en_US", NULL, resultlength, &status);
     
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         ucal_getTimeZoneDisplayName(caldef, UCAL_DST, "en_US", result, resultlength, &status);
@@ -246,7 +246,7 @@ void TestGetSetDateAPI()
     UDate d1;
     int32_t hour;
     UDateFormat *datdef = 0;
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     UDate d2= 837039928046.0;
     UChar temp[30];
 
@@ -405,7 +405,7 @@ void TestFieldGetSet()
     UChar *tzID = 0;
     UDateFormat *datdef = 0;
     UDate d1;
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     log_verbose("\nFetching pointer to UCalendar using the ucal_open()\n");
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "GMT");
@@ -457,14 +457,14 @@ void TestFieldGetSet()
     ucal_set(cal, UCAL_DAY_OF_WEEK_IN_MONTH, - 1);
     verify1("1997 last Tuesday in June = ", cal, datdef,1997,   UCAL_JUNE, 24);
     /*give undesirable input    */
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
         ucal_clear(cal);
         ucal_set(cal, UCAL_YEAR, 1997);
         ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
         ucal_set(cal, UCAL_MONTH, UCAL_JUNE);
         ucal_set(cal, UCAL_DAY_OF_WEEK_IN_MONTH, 0);
         d1=ucal_getMillis(cal,&status);
-        if (status != ILLEGAL_ARGUMENT_ERROR){ 
+        if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
             log_err("FAIL: No IllegalArgumentError for :");
             log_err("1997 zero-th Tuesday in June \n");
         }
@@ -483,7 +483,7 @@ void TestFieldGetSet()
     ucal_set(cal, UCAL_MONTH, UCAL_JUNE);
     ucal_set(cal, UCAL_WEEK_OF_MONTH, 5);
     verify1("1997 Tuesday in week 5 of June = ", cal,datdef, 1997, UCAL_JULY, 1);
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     ucal_clear(cal);
     ucal_set(cal, UCAL_YEAR, 1997);
     ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
@@ -506,7 +506,7 @@ void TestFieldGetSet()
     verify1("1999 1st day of the year =", cal, datdef, 1999, UCAL_JANUARY, 1);
     ucal_set(cal, UCAL_MONTH, -3);
     d1=ucal_getMillis(cal,&status);
-        if (status != ILLEGAL_ARGUMENT_ERROR){ 
+        if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
             log_err("FAIL: No IllegalArgumentError for :\"1999 -3th month \" ");
         }
         else 
@@ -551,7 +551,7 @@ void TestAddRollExtensive()
     UCalendarDateFields e;
     int32_t y,m,d,hr,min,sec,ms;
     int32_t maxlimit = 40;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     y = 1997; m = UCAL_FEBRUARY; d = 1; hr = 1; min = 1; sec = 0; ms = 0;
    
     log_verbose("Testing add and roll extensively\n");
@@ -593,12 +593,12 @@ void TestAddRollExtensive()
     ++m;
     checkDate(cal, y, m, d);
     ucal_add(cal, -1, 10, &status);
-    if(status==ILLEGAL_ARGUMENT_ERROR)
+    if(status==U_ILLEGAL_ARGUMENT_ERROR)
         log_verbose("Pass: Illegal argument error as expected\n");
     else{
         log_err("Fail: No, illegal argument error as expected. Got....: %s\n", myErrorName(status));
     }
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
     
 
     /*confirm that applying roll to various fields works fine*/
@@ -627,13 +627,13 @@ void TestAddRollExtensive()
     d = 2;
     checkDate(cal, y, m, d);
     ucal_roll(cal, -1, 10, &status);
-    if(status==ILLEGAL_ARGUMENT_ERROR)
+    if(status==U_ILLEGAL_ARGUMENT_ERROR)
         log_verbose("Pass: illegal arguement error as expected\n");
     else{
         log_err("Fail: no illegal argument error got..: %s\n", myErrorName(status));
         return;
     }
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
     ucal_setDateTime(cal, 1999, UCAL_FEBRUARY, 28, 10, 30, 45,  &status);
     if(FAILURE(status)){
         log_err("error is setting the datetime: %s\n", myErrorName(status));
@@ -645,7 +645,7 @@ void TestAddRollExtensive()
 
     ucal_close(cal);
 /*--------------- */
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
     /* Testing add and roll extensively */
     log_verbose("\nTesting the ucal_add() and ucal_roll() functions extensively\n");
     y = 1997; m = UCAL_FEBRUARY; d = 1; hr = 1; min = 1; sec = 0; ms = 0;
@@ -661,15 +661,15 @@ void TestAddRollExtensive()
     ucal_set(cal, UCAL_MINUTE, min);
     ucal_set(cal, UCAL_SECOND,sec);
     ucal_set(cal, UCAL_MILLISECOND, ms);
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
 
     log_verbose("\nTesting UCalendar add...\n");
     for(e = UCAL_YEAR;e < UCAL_FIELD_COUNT; e=(UCalendarDateFields)((int32_t)e + 1)) {
         limit = maxlimit;
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
             ucal_add(cal, e, 1, &status);
-            if (FAILURE(status)) { limit = i; status = ZERO_ERROR; }
+            if (FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
         }
         for (i = 0; i < limit; i++) {
             ucal_add(cal, e, -1, &status);
@@ -683,10 +683,10 @@ void TestAddRollExtensive()
     log_verbose("\nTesting calendar ucal_roll()...\n");
     for(e = UCAL_YEAR;e < UCAL_FIELD_COUNT; e=(UCalendarDateFields)((int32_t)e + 1)) {
         int32_t limit = maxlimit;
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
             ucal_roll(cal, e, 1, &status);
-            if (FAILURE(status)) { limit = i; status = ZERO_ERROR; }
+            if (FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
         }
         for (i = 0; i < limit; i++) {
             ucal_roll(cal, e, -1, &status);
@@ -709,7 +709,7 @@ void TestGetLimits()
     UCalendar *cal = 0;
     int32_t min, max, gr_min, le_max, ac_min, ac_max, val;
     UChar* tzID = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
@@ -802,7 +802,7 @@ void TestDOWProgression()
     UDateFormat *datfor = 0;
     UDate date1;
     int32_t delta=24;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "GMT");
@@ -877,7 +877,7 @@ void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn, int32
     UDate date1;
     double temp;
     UDateFormat *datfor = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "GMT");
@@ -953,7 +953,7 @@ void checkDateTime(UCalendar* c,
                         int32_t ms, UCalendarDateFields field)
 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (ucal_get(c, UCAL_YEAR, &status) != y ||
         ucal_get(c, UCAL_MONTH, &status) != m ||
         ucal_get(c, UCAL_DATE, &status) != d ||
@@ -986,7 +986,7 @@ void checkDateTime(UCalendar* c,
 void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d)
 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (ucal_get(c,UCAL_YEAR, &status) != y ||
         ucal_get(c, UCAL_MONTH, &status) != m ||
         ucal_get(c, UCAL_DATE, &status) != d) {
@@ -1014,7 +1014,7 @@ void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d)
 void verify1(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day)
 {
     UDate d1;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (ucal_get(c, UCAL_YEAR, &status) == year &&
         ucal_get(c, UCAL_MONTH, &status) == month &&
         ucal_get(c, UCAL_DATE, &status) == day) {
@@ -1050,7 +1050,7 @@ void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int3
 {
     UDate d1;
     char str[3];
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (ucal_get(c, UCAL_YEAR, &status) == year &&
         ucal_get(c, UCAL_MONTH, &status) == month &&
         ucal_get(c, UCAL_DATE, &status) == day &&
@@ -1091,5 +1091,3 @@ void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int3
 }
 
 /*--------------------------------------------- */
-
-

@@ -180,11 +180,11 @@ u_scanf_string_handler(UFILE             *stream,
   int32_t     count;
   const UChar     *source;
   UConverter     *conv;
-  UErrorCode     status     = ZERO_ERROR;
+  UErrorCode     status     = U_ZERO_ERROR;
   char         *arg     = (char*)(args[0].ptrValue);
   char         *alias     = arg;
   char         *limit;
-  
+
   /* skip all ws in the stream */
   u_scanf_skip_leading_ws(stream, info->fPadChar);
   
@@ -343,7 +343,7 @@ u_scanf_integer_handler(UFILE             *stream,
   long            *num         = (long*) (args[0].ptrValue);
   UNumberFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -407,7 +407,7 @@ u_scanf_double_handler(UFILE             *stream,
   double        *num         = (double*) (args[0].ptrValue);
   UNumberFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -469,7 +469,7 @@ u_scanf_scientific_handler(UFILE             *stream,
   double        *num         = (double*) (args[0].ptrValue);
   UNumberFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -532,8 +532,8 @@ u_scanf_scidbl_handler(UFILE             *stream,
   UNumberFormat        *scientificFormat, *genericFormat;
   int32_t        scientificResult, genericResult;
   int32_t        scientificParsePos = 0, genericParsePos = 0;
-  UErrorCode         scientificStatus = ZERO_ERROR;
-  UErrorCode         genericStatus = ZERO_ERROR;
+  UErrorCode         scientificStatus = U_ZERO_ERROR;
+  UErrorCode         genericStatus = U_ZERO_ERROR;
   bool_t        useScientific;
 
 
@@ -614,7 +614,7 @@ u_scanf_currency_handler(UFILE                 *stream,
   double        *num         = (double*) (args[0].ptrValue);
   UNumberFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -676,7 +676,7 @@ u_scanf_percent_handler(UFILE             *stream,
   double        *num         = (double*) (args[0].ptrValue);
   UNumberFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -738,7 +738,7 @@ u_scanf_date_handler(UFILE             *stream,
   UDate            *date         = (UDate*) (args[0].ptrValue);
   UDateFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -796,7 +796,7 @@ u_scanf_time_handler(UFILE             *stream,
   UDate            *time         = (UDate*) (args[0].ptrValue);
   UDateFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -939,7 +939,7 @@ u_scanf_spellout_handler(UFILE                 *stream,
   double        *num         = (double*) (args[0].ptrValue);
   UNumberFormat        *format;
   int32_t        parsePos     = 0;
-  UErrorCode         status         = ZERO_ERROR;
+  UErrorCode         status         = U_ZERO_ERROR;
 
 
   /* skip all ws in the stream */
@@ -1168,7 +1168,7 @@ u_scanf_scanset_handler(UFILE             *stream,
   UChar            c;
   const UChar         *source;
   UConverter         *conv;
-  UErrorCode         status     = ZERO_ERROR;
+  UErrorCode         status     = U_ZERO_ERROR;
   char            *s     = (char*) (args[0].ptrValue);
   char             *alias, *limit;
 

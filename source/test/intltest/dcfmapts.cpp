@@ -28,7 +28,7 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, bool_t exec, char*
         case 0: name = "DecimalFormat API test"; 
                 if (exec) {
                     logln((UnicodeString)"DecimalFormat API test---"); logln((UnicodeString)"");
-                    UErrorCode status = ZERO_ERROR;
+                    UErrorCode status = U_ZERO_ERROR;
                     Locale::setDefault(Locale::ENGLISH, status);
                     if(FAILURE(status)) {
                         errln((UnicodeString)"ERROR: Could not set default locale, test may not give correct results");
@@ -47,7 +47,7 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, bool_t exec, char*
  */
 void IntlTestDecimalFormatAPI::testAPI(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
 // ======= Test constructors
 
@@ -58,26 +58,26 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     const UnicodeString pattern("#,##0.# FF");
     DecimalFormat pat(pattern, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (pattern)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DecimalFormatSymbols *symbols = new DecimalFormatSymbols(Locale::FRENCH, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormatSymbols (French)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DecimalFormat cust1(pattern, symbols, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (pattern, symbols*)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DecimalFormat cust2(pattern, *symbols, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (pattern, symbols)");
@@ -122,14 +122,14 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     res2 = pat.format(l, res2, pos2);
     logln((UnicodeString) "" + (int32_t) l + " formatted to " + res2);
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res3 = cust1.format(fD, res3, pos3, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: format(Formattable [double]) failed");
     }
     logln((UnicodeString) "" + (int32_t) fD.getDouble() + " formatted to " + res3);
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res4 = cust2.format(fL, res4, pos4, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: format(Formattable [long]) failed");
@@ -144,7 +144,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     Formattable result1, result2;
     ParsePosition pos(0);
     UnicodeString patt("#,##0.#");
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     pat.applyPattern(patt, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: applyPattern() failed");
@@ -155,7 +155,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     }
     logln(text + " parsed into " + (int32_t) result1.getDouble());
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     pat.parse(text, result2, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: parse() failed");
@@ -246,7 +246,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
 
     UnicodeString p1("#,##0.0#;(#,##0.0#)");
     logln((UnicodeString)"Applying pattern " + p1);
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     pat.applyPattern(p1, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: applyPattern() failed with " + (int32_t) status);
@@ -260,7 +260,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
 
     UnicodeString p2("#,##0.0# FF;(#,##0.0# FF)");
     logln((UnicodeString)"Applying pattern " + p2);
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     pat.applyLocalizedPattern(p2, status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: applyPattern() failed with " + (int32_t) status);
@@ -276,7 +276,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
 
     logln((UnicodeString)"Testing getStaticClassID()");
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     NumberFormat *test = new DecimalFormat(status);
     if(FAILURE(status)) {
         errln((UnicodeString)"ERROR: Couldn't create a DecimalFormat");

@@ -92,7 +92,7 @@ Format::parseObject(const UnicodeString& source,
     ParsePosition parsePosition(0);
     parseObject(source, result, parsePosition);
     if (parsePosition.getIndex() == 0) {
-        status = INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
     }
 }
  

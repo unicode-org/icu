@@ -93,7 +93,7 @@ main(int argc,
 
   /* print out the files */
   for(i = optind; i < argc; ++i) {
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     processFile(argv[i], &status);
     if(FAILURE(status)) {
       printf("rbdump: %s processing file \"%s\"\n", errorName(status), argv[i]);
@@ -140,7 +140,7 @@ processFile(const char *filename,
   /* Open the input file for reading */
   in = T_FileStream_open(filename, "rb");
   if(in == 0) {
-    *status = FILE_ACCESS_ERROR;
+    *status = U_FILE_ACCESS_ERROR;
     return;
   }
 
@@ -150,35 +150,3 @@ processFile(const char *filename,
   /* Clean up */
   T_FileStream_close(in);
 }
-
-/* Get the error message for an error code */
-static const char* 
-errorName(UErrorCode status)
-{
-  switch(status) {
-  case ZERO_ERROR: return "ZERO_ERROR";
-  case ILLEGAL_ARGUMENT_ERROR: return "ILLEGAL_ARGUMENT_ERROR";
-  case MISSING_RESOURCE_ERROR: return "MISSING_RESOURCE_ERROR";
-  case INVALID_FORMAT_ERROR: return "INVALID_FORMAT_ERROR";
-  case FILE_ACCESS_ERROR: return "FILE_ACCESS_ERROR";
-  case INTERNAL_PROGRAM_ERROR: return "INTERNAL_PROGRAM_ERROR";
-  case MESSAGE_PARSE_ERROR: return "MESSAGE_PARSE_ERROR";
-  case MEMORY_ALLOCATION_ERROR: return "MEMORY_ALLOCATION_ERROR";
-  case INDEX_OUTOFBOUNDS_ERROR: return "INDEX_OUTOFBOUNDS_ERROR";
-  case PARSE_ERROR: return "PARSE_ERROR";
-  case INVALID_CHAR_FOUND: return "INVALID_CHAR_FOUND";
-  case TRUNCATED_CHAR_FOUND: return "TRUNCATED_CHAR_FOUND";
-  case ILLEGAL_CHAR_FOUND: return "ILLEGAL_CHAR_FOUND";
-  case INVALID_TABLE_FORMAT: return "INVALID_TABLE_FORMAT";
-  case INVALID_TABLE_FILE: return "INVALID_TABLE_FILE";
-  case BUFFER_OVERFLOW_ERROR: return "BUFFER_OVERFLOW_ERROR";
-  case UNSUPPORTED_ERROR: return "UNSUPPORTED_ERROR";
-  case USING_FALLBACK_ERROR: return "USING_FALLBACK_ERROR";
-  case USING_DEFAULT_ERROR: return "USING_DEFAULT_ERROR";
-  default: return "[BOGUS UErrorCode]";
-  }
-}
-
-
-
-

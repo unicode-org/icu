@@ -68,7 +68,7 @@ class DigitList;
  * .    if (locCount > 12) locCount = 12;  //limit output
  * .
  * .    double myNumber = -1234.56;
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    NumberFormat* form; //= NumberFormat::createInstance(success);
  * .
  * .    // just for fun, we print out a number with the locale number, currency

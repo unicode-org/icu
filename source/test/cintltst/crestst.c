@@ -108,12 +108,12 @@ param[] =
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "default",             ZERO_ERROR,             e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-  { "te",                  ZERO_ERROR,             e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-  { "te_IN",               ZERO_ERROR,             e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "te_NE",               USING_FALLBACK_ERROR,   e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-  { "te_IN_NE",            USING_FALLBACK_ERROR,   e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "ne",                  USING_DEFAULT_ERROR,    e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "default",             U_ZERO_ERROR,             e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
+  { "te",                  U_ZERO_ERROR,             e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+  { "te_IN",               U_ZERO_ERROR,             e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+  { "te_NE",               U_USING_FALLBACK_ERROR,   e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+  { "te_IN_NE",            U_USING_FALLBACK_ERROR,   e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+  { "ne",                  U_USING_DEFAULT_ERROR,    e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -159,8 +159,8 @@ void TestConstruction1()
 {
   UResourceBundle *test1 = 0, *test2 = 0;
   const UChar *result1, *result2;
-  UErrorCode status= ZERO_ERROR;
-  UErrorCode   err = ZERO_ERROR;
+  UErrorCode status= U_ZERO_ERROR;
+  UErrorCode   err = U_ZERO_ERROR;
   const char*        directory;
   const char*      locale="te_IN";
 
@@ -204,7 +204,7 @@ void TestConstruction2()
   UChar temp[7];
   UResourceBundle *test4 = 0;
   const UChar*   result4;
-  UErrorCode   err = ZERO_ERROR;
+  UErrorCode   err = U_ZERO_ERROR;
   const char*     directory;
   const char*    locale="te_IN";
   wchar_t widedirectory[256];
@@ -274,7 +274,7 @@ bool_t testTag(const char* frag,
   UResourceBundle* theBundle = NULL;
   char tag[99];
   char action[256];
-  UErrorCode expected_status,status = ZERO_ERROR,expected_resource_status = ZERO_ERROR;
+  UErrorCode expected_status,status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
   UChar* base = NULL;
   UChar* expected_string = NULL;
   const UChar* string = NULL;
@@ -300,7 +300,7 @@ bool_t testTag(const char* frag,
       strcat(action, param[i].name);
 
 
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
 
 
       theBundle = ures_open(directory, param[i].name, &status);
@@ -316,18 +316,18 @@ bool_t testTag(const char* frag,
       else
 	actual_bundle = i;
 
-      expected_resource_status = MISSING_RESOURCE_ERROR;
+      expected_resource_status = U_MISSING_RESOURCE_ERROR;
       for (j=e_te_IN; j>=e_Default; --j)
         {
 	  if (is_in[j] && param[i].inherits[j])
             {
 	      
 	      if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
-		expected_resource_status = ZERO_ERROR;
+		expected_resource_status = U_ZERO_ERROR;
 	      else if(j == 0)
-		expected_resource_status = USING_DEFAULT_ERROR;
+		expected_resource_status = U_USING_DEFAULT_ERROR;
 	      else
-		expected_resource_status = USING_FALLBACK_ERROR;
+		expected_resource_status = U_USING_FALLBACK_ERROR;
 
 	      log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
 			  param[i].name, 
@@ -371,12 +371,12 @@ bool_t testTag(const char* frag,
 
       string=    kERROR;
 
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
 
       ures_get(theBundle, tag, &status);
       if(SUCCESS(status))
 	{
-	  status = ZERO_ERROR;
+	  status = U_ZERO_ERROR;
 	  string=ures_get(theBundle, tag, &status);
 	}
 
@@ -421,7 +421,7 @@ bool_t testTag(const char* frag,
       for(j = 0; j < count; j++)
         {
 
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       string = kERROR;
 
       index=j;
@@ -431,7 +431,7 @@ bool_t testTag(const char* frag,
 
 
       /* how could 'index==j' ever be >= count ? */
-      expected_status = (index >= 0 && index < count) ? expected_resource_status : MISSING_RESOURCE_ERROR;
+      expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
 
       log_verbose("Status for %s was %d, expected %d\n", action, status, expected_status);
 
@@ -472,7 +472,7 @@ bool_t testTag(const char* frag,
       for(k=0;k<row_count;k++){
     for (j=0; j<column_count; ++j){
 
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       string = kERROR;
       row=k;
       col=j;
@@ -482,7 +482,7 @@ bool_t testTag(const char* frag,
 
 
       expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
-        expected_resource_status : MISSING_RESOURCE_ERROR;
+        expected_resource_status : U_MISSING_RESOURCE_ERROR;
 
       CONFIRM_ErrorCode(status,expected_status);
 
@@ -524,7 +524,7 @@ bool_t testTag(const char* frag,
       strcpy(item_tag, "tag");
       strcat(item_tag, itoa1(index,buf));
 
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       string = kERROR;
 
 
@@ -535,12 +535,12 @@ bool_t testTag(const char* frag,
 
       if (index < 0)
             {
-	      CONFIRM_ErrorCode(status,MISSING_RESOURCE_ERROR);
+	      CONFIRM_ErrorCode(status,U_MISSING_RESOURCE_ERROR);
             }
       else
 	{
           UChar* element;
-          if (strcmp(myErrorName(status),"MISSING_RESOURCE_ERROR")!=0) {
+          if (strcmp(myErrorName(status),"U_MISSING_RESOURCE_ERROR")!=0) {
 	    count++;
 	    u_strcpy(expected_string,base);
 	    element=(UChar*)malloc(sizeof(UChar) * (strlen(buf)+1));
@@ -571,13 +571,13 @@ void record_fail()
 }
 
 /**
- * Test to make sure that the USING_FALLBACK_ERROR and USING_DEFAULT_ERROR
+ * Test to make sure that the U_USING_FALLBACK_ERROR and U_USING_DEFAULT_ERROR
  * are set correctly
  */
 
 void TestFallback()
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UResourceBundle *fr_FR = NULL;
   const UChar *junk; /* ignored */
   
@@ -589,36 +589,36 @@ void TestFallback()
       return;
     }
 
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
 
 
   /* clear it out..  just do some calls to get the gears turning */
   junk = ures_get(fr_FR, "LocaleID", &status);
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
   junk = ures_get(fr_FR, "LocaleString", &status);
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
   junk = ures_get(fr_FR, "LocaleID", &status);
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
 
   /* OK first one. This should be a Default value. */
   junk = ures_get(fr_FR, "Version", &status);
-  if(status != USING_DEFAULT_ERROR)
+  if(status != U_USING_DEFAULT_ERROR)
     {
-      log_err("Expected USING_DEFAULT_ERROR when trying to get Version from fr_FR, got %d\n", 
+      log_err("Expected U_USING_DEFAULT_ERROR when trying to get Version from fr_FR, got %d\n", 
 	      status);
     }
   
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
 
   /* and this is a Fallback, to fr */
   junk = ures_get(fr_FR, "ShortLanguage", &status);
-  if(status != USING_FALLBACK_ERROR)
+  if(status != U_USING_FALLBACK_ERROR)
     {
-      log_err("Expected USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
+      log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
 	      status);
     }
   
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
   
   ures_close(fr_FR);
 }

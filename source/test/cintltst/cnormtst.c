@@ -102,10 +102,10 @@ void addNormTest(TestNode** root)
 
 void TestDecomp() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
     UChar *source, *result; 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -116,9 +116,9 @@ void TestDecomp()
     {
         source=CharsToUChars(canonTests[x][0]);
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
-        if(status==BUFFER_OVERFLOW_ERROR)
+        if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resLen=neededLen+1;
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
@@ -133,10 +133,10 @@ void TestDecomp()
 }
 void TestCompatDecomp() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
     UChar *source, *result; 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -147,9 +147,9 @@ void TestCompatDecomp()
     {
         source=CharsToUChars(compatTests[x][0]);
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
-        if(status==BUFFER_OVERFLOW_ERROR)
+        if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resLen=neededLen+1;
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT,UCOL_IGNORE_HANGUL, result, resLen, &status); 
@@ -164,10 +164,10 @@ void TestCompatDecomp()
 }
 void TestCanonDecompCompose() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
     UChar *source, *result; 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -178,9 +178,9 @@ void TestCanonDecompCompose()
     {
         source=CharsToUChars(canonTests[x][0]);
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
-        if(status==BUFFER_OVERFLOW_ERROR)
+        if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resLen=neededLen+1;
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, result, resLen, &status); 
@@ -195,10 +195,10 @@ void TestCanonDecompCompose()
 }
 void TestCompatDecompCompose() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
     UChar *source, *result; 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -209,9 +209,9 @@ void TestCompatDecompCompose()
     {
         source=CharsToUChars(compatTests[x][0]);
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
-        if(status==BUFFER_OVERFLOW_ERROR)
+        if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resLen=neededLen+1;
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
@@ -234,4 +234,3 @@ void assertEqual(const UChar* result, const UChar* expected, int32_t index)
             austrdup(result) );
     }
 }
-

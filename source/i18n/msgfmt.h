@@ -42,7 +42,7 @@ class NumberFormat;
  * Here are some examples of usage:
  * Example 1:
  * <pre>
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    GregorianCalendar cal(success);
  * .    Formattable arguments[] = {
  * .        7L,
@@ -64,7 +64,7 @@ class NumberFormat;
  * <P>
  * Example 2:
  * <pre>
- * .    success = ZERO_ERROR;
+ * .    success = U_ZERO_ERROR;
  * .    Formattable testArgs[] = {3L, "MyDisk"};
  * .   
  * .    MessageFormat* form = new MessageFormat(
@@ -138,7 +138,7 @@ class NumberFormat;
  * For more sophisticated patterns, you can use a ChoiceFormat to get
  * output such as:
  * <pre>
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    MessageFormat* form = new MessageFormat("The disk \"{1}\" contains {0}.", success);
  * .    double filelimits[] = {0,1,2};
  * .    UnicodeString filepart[] = {"no files","one file","{0,number} files"};

@@ -62,13 +62,13 @@ unum_open(    UNumberFormatStyle    style,
   case UNUM_SPELLOUT:
     // TBD: Add spellout support
     //retVal = (UNumberFormat*)new NumberSpelloutFormat();
-    *status = UNSUPPORTED_ERROR;
+    *status = U_UNSUPPORTED_ERROR;
     return 0;
     break;
   }
 
   if(retVal == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -94,14 +94,14 @@ unum_openPattern(    const    UChar*            pattern,
                     *status);
   
   if(syms == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
   DecimalFormat *fmt = 0;
   fmt = new DecimalFormat(pat, syms, *status);
   if(fmt == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     delete syms;
     return 0;
   }
@@ -124,7 +124,7 @@ unum_clone(const UNumberFormat *fmt,
   Format *res = ((DecimalFormat*)fmt)->clone();
   
   if(res == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -213,7 +213,7 @@ unum_parse(    const   UNumberFormat*  fmt,
       *parsePos = pp.getIndex();
     else {
       *parsePos = pp.getErrorIndex();
-      *status = PARSE_ERROR;
+      *status = U_PARSE_ERROR;
     }
   }
 
@@ -247,7 +247,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
       *parsePos = pp.getIndex();
     else {
       *parsePos = pp.getErrorIndex();
-      *status = PARSE_ERROR;
+      *status = U_PARSE_ERROR;
     }
   }
   
@@ -471,7 +471,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
     break;
 
   default:
-    *status = UNSUPPORTED_ERROR;
+    *status = U_UNSUPPORTED_ERROR;
     return -1;
     break;
   }
@@ -515,7 +515,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
     break;
 
   default:
-    *status = UNSUPPORTED_ERROR;
+    *status = U_UNSUPPORTED_ERROR;
     break;
   }
 }
@@ -595,7 +595,7 @@ unum_setSymbols(            UNumberFormat*          fmt,
 
   DecimalFormatSymbols *syms = new DecimalFormatSymbols(*status);
   if(syms == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 

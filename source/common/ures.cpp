@@ -69,7 +69,7 @@ CAPI const UChar* ures_get(    const UResourceBundle*    resourceBundle,
   if (FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag)
     {
-      *status = ILLEGAL_ARGUMENT_ERROR;
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
       return NULL;
     }
 
@@ -87,7 +87,7 @@ CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resourceBundle,
   if (FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || (resourceIndex < 0))
     {
-      *status = ILLEGAL_ARGUMENT_ERROR;
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
       return NULL;
     }
 
@@ -108,7 +108,7 @@ CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
   if (FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || (rowIndex < 0) || (columnIndex < 0))
     {
-      *status = ILLEGAL_ARGUMENT_ERROR;
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
       return NULL;
     }
 
@@ -128,7 +128,7 @@ CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resourceBundl
   if (FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || !itemTag)
     {
-      *status = ILLEGAL_ARGUMENT_ERROR;
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
       return NULL;
     }
 
@@ -179,7 +179,4 @@ extern "C" void T_ResourceBundle_getTaggedArrayUChars(const ResourceBundle*   UR
                             int32_t*                numItems,
                             UErrorCode*              err);
 
-
 //eof
-
-

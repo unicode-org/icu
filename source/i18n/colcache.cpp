@@ -49,7 +49,7 @@ static void deleteTCD(void* TCD)
 
 CollationCache::CollationCache()
 {
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   fHashtable = uhash_open((UHashFunction) uhash_hashUString, &err);
   uhash_setValueDeleter(fHashtable, deleteTCD);
 }
@@ -62,7 +62,7 @@ CollationCache::~CollationCache()
 
 void CollationCache::Add(const UnicodeString& key, TableCollationData* value)
 {
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   TableCollationData* previous = (TableCollationData*)uhash_putKey(fHashtable, key.hashCode() & 0x7FFFFFFF , value, &err);
 }
 

@@ -20,7 +20,7 @@
  *   usage example:
  *
  *        ...
- *        UErrorCode err = ZERO_ERROR;
+ *        UErrorCode err = U_ZERO_ERROR;
  *        UConverter* myConverter = T_UConverter_create("ibm-949", &err);
  *
  *        if (SUCCESS(err))
@@ -79,7 +79,7 @@ CAPI void U_EXPORT2 MissingUnicodeAction_SKIP (UConverter * _this,
 
 /* Functor Substitute the ILLEGAL SEQUENCE with the current substitution string assiciated with _this,
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  */
 
@@ -97,7 +97,7 @@ CAPI void U_EXPORT2 MissingUnicodeAction_SUBSTITUTE (UConverter * _this,
  * characters {u,%}[A-F][0-9], it will substitute  the illegal sequence with the substitution characters
  * (it will behave like the above functor).
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  */
 
@@ -124,7 +124,7 @@ CAPI void U_EXPORT2 MissingCharAction_SKIP (UConverter * _this,
 
 /* Functor Substitute the ILLEGAL SEQUENCE with the current substitution string assiciated with _this,
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  */
 CAPI void U_EXPORT2 MissingCharAction_SUBSTITUTE (UConverter * _this,
@@ -139,7 +139,7 @@ CAPI void U_EXPORT2 MissingCharAction_SUBSTITUTE (UConverter * _this,
 /* Functor Substitute the ILLEGAL SEQUENCE with a sequence escaped codepoints corresponding to the
  * ILLEGAL SEQUENCE (format  %XNN, e.g. "%XFF%X0A%XC8%X03").
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  */
 

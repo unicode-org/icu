@@ -111,7 +111,7 @@ void TestTertiary( )
 {
     
     int32_t i;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("ja_JP", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));

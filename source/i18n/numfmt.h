@@ -50,7 +50,7 @@ class Locale;
  * <pre>
  * .   double myNumber = 7.0;
  * .   UnicodeString myString;
- * .   UErrorCode success = ZERO_ERROR;
+ * .   UErrorCode success = U_ZERO_ERROR;
  * .   NumberFormat* nf = NumberFormat::createInstance(success)
  * .   nf->format(myNumber, myString);
  * .   cout &lt;&lt; " Example 1: " &lt;&lt; myString &lt;&lt; endl;
@@ -61,7 +61,7 @@ class Locale;
  * conventions multiple times.
  * <pre>
  * .    UnicodeString myString;
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    nf = NumberFormat::createInstance( success );
  * .    int32_t a[] = { 123, 3333, -1234567 };
  * .    const int32_t a_len = sizeof(a) / sizeof(a[0]);

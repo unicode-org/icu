@@ -141,7 +141,7 @@ NumberFormat::format(const Formattable& obj,
     }
     // can't try to format a non-numeric object
     else {
-        status = INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
         return toAppendTo; 
     }
 }
@@ -165,7 +165,7 @@ UnicodeString&
 NumberFormat::format(double number, UnicodeString& toAppendTo) const
 {
     FieldPosition pos(0);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     return format(Formattable(number), toAppendTo, pos, status);
 }
  
@@ -176,7 +176,7 @@ UnicodeString&
 NumberFormat::format(int32_t number, UnicodeString& toAppendTo) const
 {
     FieldPosition pos(0);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     return format(Formattable(number), toAppendTo, pos, status);
 }
  
@@ -196,7 +196,7 @@ NumberFormat::parse(const UnicodeString& text,
     ParsePosition parsePosition(0);
     parse(text, result, parsePosition);
     if (parsePosition.getIndex() == 0) {
-        status = INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
     }
 }
  
@@ -408,7 +408,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     if (FAILURE(status)) return NULL;
 
     if (style < 0 || style >= kStyleCount) {
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
@@ -416,7 +416,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     if (FAILURE(status))
     {
         // We don't appear to have resource data available -- use the last-resort data
-        status = USING_FALLBACK_ERROR;
+        status = U_USING_FALLBACK_ERROR;
         
         // Use the DecimalFormatSymbols constructor which uses last-resort data
         DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(status);
@@ -433,7 +433,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
                                                                   patternCount, status);
     // If not all the styled patterns exists for the NumberFormat in this locale,
     // sets the status code to failure and returns nil.
-    if (patternCount < fgNumberPatternsCount) status = INVALID_FORMAT_ERROR;
+    if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
     if (FAILURE(status)) return NULL;
 
     // If the requested style doesn't exist, use a last-resort style.

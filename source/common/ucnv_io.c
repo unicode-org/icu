@@ -128,7 +128,7 @@ void
   converterFile = T_FileStream_open (fullFileName, "r");
   if (converterFile == NULL)
     {
-      *err = FILE_ACCESS_ERROR;
+      *err = U_FILE_ACCESS_ERROR;
     }
   else
     {
@@ -171,7 +171,7 @@ void
 	  toBeHashed = (char *) icu_malloc ((icu_strlen (actualNameToken) + 1) * sizeof (char));
 	  if (toBeHashed == NULL)
 	    {
-	      *err = MEMORY_ALLOCATION_ERROR;
+	      *err = U_MEMORY_ALLOCATION_ERROR;
 	      return;
 	    }
 	  icu_strcpy (toBeHashed, actualNameToken);
@@ -179,7 +179,7 @@ void
 			    (myAVAILABLE_CONVERTERS + 1) * sizeof (char *));
 	  if (myAVAILABLE_CONVERTERS_NAMES == NULL)
 	    {
-	      *err = MEMORY_ALLOCATION_ERROR;
+	      *err = U_MEMORY_ALLOCATION_ERROR;
 	      return;
 	    }
 	  myAVAILABLE_CONVERTERS_NAMES[myAVAILABLE_CONVERTERS++] = toBeHashed;
@@ -230,7 +230,7 @@ bool_t
   int32_t i = 0;
   bool_t found = FALSE;
   char *actualName = NULL;
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
 
   /*Lazy evaluates the Alias hashtable */
   if (ALIASNAMES_HASHTABLE == NULL)

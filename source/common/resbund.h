@@ -138,7 +138,7 @@ typedef struct _FileStream FileStream;
  * This is an example for using a possible custom resource:
  * <pre>
  * .    Locale currentLocale;
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    ResourceBundle myResources("MyResources", currentLocale, success );
  * .
  * .    UnicodeString button1Title, button2Title;
@@ -168,9 +168,9 @@ public:
      * The UErrorCode& err parameter is used to return status information to the user. To
      * check whether the construction succeeded or not, you should check the value of
      * SUCCESS(err). If you wish more detailed information, you can check for
-     * informational error results which still indicate success. USING_FALLBACK_ERROR
+     * informational error results which still indicate success. U_USING_FALLBACK_ERROR
      * indicates that a fall back locale was used. For example, 'de_CH' was requested,
-     * but nothing was found there, so 'de' was used. USING_DEFAULT_ERROR indicates that
+     * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that
      * the default locale data was used; neither the requested locale nor any of its
      * fall back locales could be found.
      */
@@ -192,7 +192,7 @@ public:
      *
      * @param resourceTag  The resource tag of the string resource the caller wants
      * @param theString    Receives the actual data in the resource
-     * @param err          Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
      */
     void                getString(  const UnicodeString&    resourceTag,
@@ -205,7 +205,7 @@ public:
      * these will be parsed prior to the data's return.
      *
      * @param resourceTag  The resource tag of the string resource the caller wants
-     * @param err          Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
      * @return A pointer to the string from the resource bundle, or NULL if there was
      *           an error.
@@ -219,13 +219,13 @@ public:
      * objects. The number of elements in the array is returned in numArrayItems.
      * Calling getStringArray on a resource of type string will return an array with one
      * element; calling it on a resource of type tagged-array results in a
-     * MISSING_RESOURCE_ERROR error.
+     * U_MISSING_RESOURCE_ERROR error.
      *
      * @param resourceTag    The resource tag of the string-array resource the caller
      *                       wants
      * @param numArrayItems  Receives the number of items in the array the function
      *                       returns.
-     * @param err            Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err            Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                       specified tag couldn't be found.
      * @return               The resource requested, as a pointer to an array of
      *                       UnicodeStrings. The caller does not own the storage and
@@ -238,7 +238,7 @@ public:
     /**
      * Returns a single item from a string-array resource. This will return the contents
      * of a single item in a resource of string-array (comma-delimited-list) type. If
-     * the resource is not an array, a MISSING_RESOURCE_ERROR will be returned in err.
+     * the resource is not an array, a U_MISSING_RESOURCE_ERROR will be returned in err.
      * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
      *
      * @param resourceTag   The resource tag of the resource the caller wants to extract
@@ -246,7 +246,7 @@ public:
      * @param index         The index (zero-based) of the particular array item the user
      *                      wants to extract from the resource.
      * @param theArrayItem  Receives the actual text of the desired array item.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, or if the index was out of range.
      */
     void                getArrayItem(   const UnicodeString&    resourceTag,
@@ -257,13 +257,13 @@ public:
     /**
      * Returns a single item from a string-array resource. This will return the contents
      * of a single item in a resource of string-array (comma-delimited-list) type. If
-     * the resource is not an array, a MISSING_RESOURCE_ERROR will be returned in err.
+     * the resource is not an array, a U_MISSING_RESOURCE_ERROR will be returned in err.
      *
      * @param resourceTag   The resource tag of the resource the caller wants to extract
      *                      an item from.
      * @param index         The index (zero-based) of the particular array item the user
      *                      wants to extract from the resource.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, or if the index was out of range.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      */
@@ -275,7 +275,7 @@ public:
      * Return the contents of a 2-dimensional array resource. The return value will be a
      * UnicodeString** array. (This is really an array of pointers; each pointer is a
      * ROW of the data.) The number of rows and columns is returned. If the resource is
-     * of the wrong type, or not present, MISSING_RESOURCE_ERROR is placed in err.
+     * of the wrong type, or not present, U_MISSING_RESOURCE_ERROR is placed in err.
      *
      * @param resourceTag  The resource tag of the string-array resource the caller
      *                     wants
@@ -283,7 +283,7 @@ public:
      *                     returns.
      * @param columnCount  Receives the number of columns in the array the function
      *                     returns.
-     * @param err          Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
      * @return             The resource requested, as a UnicodeStrings**. The caller
      *                     does not own the storage and must not delete it.
@@ -296,7 +296,7 @@ public:
     /**
      * Return a single string from a 2-dimensional array resource. If the resource does
      * not exists, or if it is not a 2-d array, or if the row or column indices are out
-     * of bounds, err is set to MISSING_RESOURCE_ERROR.
+     * of bounds, err is set to U_MISSING_RESOURCE_ERROR.
      * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
      *
      * @param resourceTag   The resource tag of the resource the caller wants to extract
@@ -306,7 +306,7 @@ public:
      * @param columnIndex   The column index (zero-based) of the array item the user
      *                      wants to extract from the resource.
      * @param theArrayItem  Receives the actual text of the desired array item.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, if the resource data was in
      *                      the wrong format, or if either index is out of bounds.
      */
@@ -319,7 +319,7 @@ public:
     /**
      * Return a single string from a 2-dimensional array resource. If the resource does
      * not exists, or if it is not a 2-d array, or if the row or column indices are out
-     * of bounds, err is set to MISSING_RESOURCE_ERROR.
+     * of bounds, err is set to U_MISSING_RESOURCE_ERROR.
      *
      * @param resourceTag   The resource tag of the resource the caller wants to extract
      *                      an item from.
@@ -327,7 +327,7 @@ public:
      *                      to extract from the resource.
      * @param columnIndex   The column index (zero-based) of the array item the user
      *                      wants to extract from the resource.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, if the resource data was in
      *                      the wrong format, or if either index is out of bounds.
      * @return A pointer to the text of the array item, or NULL is there was an error.
@@ -348,7 +348,7 @@ public:
      *                      an item from.
      * @param itemTag       The item tag for the item the caller wants to extract.
      * @param theArrayItem  Receives the text of the desired array item.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified resource tag couldn't be found, or if an item
      *                      with the specified item tag couldn't be found in the resource.
      */
@@ -366,7 +366,7 @@ public:
      * @param resourceTag   The resource tag of the resource the caller wants to extract
      *                      an item from.
      * @param itemTag       The item tag for the item the caller wants to extract.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified resource tag couldn't be found, or if an item
      *                      with the specified item tag coldn't be found in the resource.
      * @return A pointer to the text of the array item, or NULL is there was an error.
@@ -394,7 +394,7 @@ public:
      *                      own this array, and must delete it.
      * @param numItems      Receives the number of items in the arrays pointed to by
      *                      items and itemTags.
-     * @param err           Set to MISSING_RESOURCE_ERROR if a resource with the
+     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found.
      */
     void                getTaggedArray( const UnicodeString&    resourceTag,
@@ -627,7 +627,3 @@ private:
 };
 
 #endif
-
-
-
-

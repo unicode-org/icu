@@ -44,7 +44,7 @@ u_loccache_get(const char *loc)
   UHashtable     *tempCache;
   int32_t     locCount;
   int32_t     hashKey;
-  UErrorCode     status = ZERO_ERROR;
+  UErrorCode     status = U_ZERO_ERROR;
 
   /* Create the cache, if needed */
   if(gLocaleCache == 0) {

@@ -34,7 +34,7 @@
  * <blockquote>
  * <pre>
  * // Compare two strings in the default locale
- * UErrorCode success = ZERO_ERROR;
+ * UErrorCode success = U_ZERO_ERROR;
  * UCollator* myCollator = ucol_open(NULL, &success);
  * UChar source[4], target[4];
  * u_uastrcpy(source, "abc");
@@ -62,7 +62,7 @@
  * <blockquote>
  * <pre>
  * //Get the Collator for US English and set its strength to UCOL_PRIMARY
- * UErrorCode success = ZERO_ERROR;
+ * UErrorCode success = U_ZERO_ERROR;
  * UCollator* usCollator = ucol_open("en_US", &success);
  * ucol_setStrength(usCollator, UCOL_PRIMARY);
  * UChar source[4], target[4];
@@ -416,7 +416,7 @@ ucol_getStrength(const UCollator *coll);
  * <pre>
  * .       UCollationResult result;
  * .       UChar *source, *target;
- * .       UErrorCode status = ZERO_ERROR;
+ * .       UErrorCode status = U_ZERO_ERROR;
  * .       UCollator *myCollation = ucol_open("en_US", status);
  * .       if (FAILURE(&status)) return;
  * .       ucol_setStrength(myCollation, UCOL_PRIMARY);
@@ -570,7 +570,7 @@ typedef struct UCollationElements UCollationElements;
  * .      t_int32 order, primaryOrder;
  * .      UCollationElements *c;
  * .      UCollator *coll;
- * .      UErrorCode success = ZERO_ERROR;
+ * .      UErrorCode success = U_ZERO_ERROR;
  * .      s=(UChar*)malloc(sizeof(UChar) * (strlen("This is a test")+1) );
  * .      u_uastrcpy(s, "This is a test");
  * .      coll = ucol_open(NULL, &success);

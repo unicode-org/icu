@@ -36,7 +36,6 @@ static void version();
 static void processFile(const char *filename, UErrorCode *status);
 static char* make_res_filename(const char *filename, UErrorCode *status);
 static char* make_col_filename(const char *filename, UErrorCode *status);
-static const char* errorName(UErrorCode status);
 int main(int argc, char **argv);
 
 /* File suffixes */
@@ -102,7 +101,7 @@ main(int argc,
 
   /* generate the binary files */
   for(i = optind; i < argc; ++i) {
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     processFile(argv[i], &status);
     if(FAILURE(status)) {
       printf("genrb: %s processing file \"%s\"\n", errorName(status), argv[i]);
@@ -154,7 +153,7 @@ processFile(const char *filename,
   /* Open the input file for reading */
   in = T_FileStream_open(filename, "r");
   if(in == 0) {
-    *status = FILE_ACCESS_ERROR;
+    *status = U_FILE_ACCESS_ERROR;
     setErrorText("File not found");
     return;
   }
@@ -171,7 +170,7 @@ processFile(const char *filename,
   /* Open the target file  for writing */
   rb_out = T_FileStream_open(rbname, "wb");
   if(rb_out == 0 || T_FileStream_error(rb_out) != 0) {
-    *status = FILE_ACCESS_ERROR;
+    *status = U_FILE_ACCESS_ERROR;
     setErrorText("Could not open file for writing");
     goto finish;
   }
@@ -206,14 +205,14 @@ make_res_filename(const char *filename,
   /* determine basename, and compiled file names */
   basename = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
   if(basename == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_basename(basename, filename);
   
   dirname = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
   if(dirname == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_dirname(dirname, filename);
@@ -222,7 +221,7 @@ make_res_filename(const char *filename,
 					       + icu_strlen(basename) 
 					       + icu_strlen(RES_SUFFIX) + 1));
   if(resName == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   icu_strcpy(resName, dirname);
@@ -253,14 +252,14 @@ make_col_filename(const char *filename,
   /* determine basename, and compiled file names */
   basename = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
   if(basename == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_basename(basename, filename);
   
   dirname = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
   if(dirname == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_dirname(dirname, filename);
@@ -269,7 +268,7 @@ make_col_filename(const char *filename,
 					       + icu_strlen(basename) 
 					       + icu_strlen(COL_SUFFIX) + 1));
   if(colName == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   icu_strcpy(colName, dirname);
@@ -282,35 +281,3 @@ make_col_filename(const char *filename,
 
   return colName;
 }
-
-/* Get the error message for an error code */
-static const char* 
-errorName(UErrorCode status)
-{
-  switch(status) {
-  case ZERO_ERROR: return "ZERO_ERROR";
-  case ILLEGAL_ARGUMENT_ERROR: return "ILLEGAL_ARGUMENT_ERROR";
-  case MISSING_RESOURCE_ERROR: return "MISSING_RESOURCE_ERROR";
-  case INVALID_FORMAT_ERROR: return "INVALID_FORMAT_ERROR";
-  case FILE_ACCESS_ERROR: return "FILE_ACCESS_ERROR";
-  case INTERNAL_PROGRAM_ERROR: return "INTERNAL_PROGRAM_ERROR";
-  case MESSAGE_PARSE_ERROR: return "MESSAGE_PARSE_ERROR";
-  case MEMORY_ALLOCATION_ERROR: return "MEMORY_ALLOCATION_ERROR";
-  case INDEX_OUTOFBOUNDS_ERROR: return "INDEX_OUTOFBOUNDS_ERROR";
-  case PARSE_ERROR: return "PARSE_ERROR";
-  case INVALID_CHAR_FOUND: return "INVALID_CHAR_FOUND";
-  case TRUNCATED_CHAR_FOUND: return "TRUNCATED_CHAR_FOUND";
-  case ILLEGAL_CHAR_FOUND: return "ILLEGAL_CHAR_FOUND";
-  case INVALID_TABLE_FORMAT: return "INVALID_TABLE_FORMAT";
-  case INVALID_TABLE_FILE: return "INVALID_TABLE_FILE";
-  case BUFFER_OVERFLOW_ERROR: return "BUFFER_OVERFLOW_ERROR";
-  case UNSUPPORTED_ERROR: return "UNSUPPORTED_ERROR";
-  case USING_FALLBACK_ERROR: return "USING_FALLBACK_ERROR";
-  case USING_DEFAULT_ERROR: return "USING_DEFAULT_ERROR";
-  default: return "[BOGUS UErrorCode]";
-  }
-}
-
-
-
-

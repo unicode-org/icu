@@ -128,7 +128,7 @@
  * for creating a default <code>NumberFormat</code> object:
  * <blockquote>
  * <pre>
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    Locale myLocale;
  * .    NumberFormat *nf;
  * .

@@ -38,13 +38,13 @@ make_rbitem(const UChar *tag,
   
   item = (struct SRBItem*) icu_malloc(sizeof(struct SRBItem));
   if(item == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
   s = (UChar*) icu_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
   if(s == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
   u_strcpy(s, tag);
@@ -64,7 +64,7 @@ rblist_open(UErrorCode *status)
   
   list = (struct SRBItemList*) icu_malloc(sizeof(struct SRBItemList));
   if(list == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -122,7 +122,7 @@ void rblist_setlocale(struct SRBItemList *list,
   list->fLocale = (UChar*) icu_realloc(list->fLocale, 
 				       sizeof(UChar) * (u_strlen(locale) + 1));
   if(list->fLocale == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -162,7 +162,7 @@ rblist_grow(struct SRBItemList *list,
   newData = (struct SRBItem**) 
     icu_malloc(sizeof(struct SRBItem*) * newCapacity);
   if(newData == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 

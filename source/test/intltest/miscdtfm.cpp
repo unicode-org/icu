@@ -41,24 +41,6 @@ DateFormatMiscTests::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
     }
 }
 
-const char* 
-DateFormatMiscTests::errorName(UErrorCode code)
-{
-    switch (code) {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
-}
-
 bool_t 
 DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 {
@@ -71,7 +53,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.2 $ $Date: 1999/09/03 22:08:47 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.3 $ $Date: 1999/10/07 00:07:52 $
  *
  * @bug 4097450
  */
@@ -132,7 +114,7 @@ DateFormatMiscTests::test4097450()
         FALSE
     };
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *formatter;
     SimpleDateFormat *resultFormatter = new SimpleDateFormat("yyyy", status);
     failure(status, "new SimpleDateFormat");
@@ -163,7 +145,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.2 $ $Date: 1999/09/03 22:08:47 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.3 $ $Date: 1999/10/07 00:07:52 $
  *
  * @bug 4099975
  */
@@ -171,7 +153,7 @@ DateFormatMiscTests::test4097450()
 void
 DateFormatMiscTests::test4099975()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(status);
     failure(status, "new DateFormatSymbols");
     SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), symbols, status);
@@ -222,7 +204,7 @@ DateFormatMiscTests::test4117335()
     UnicodeString jstShort = "JST";
 
     
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::JAPAN, status);
     failure(status, "new DateFormatSymbols");
     int32_t eraCount = 0;

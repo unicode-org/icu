@@ -33,24 +33,6 @@ void ParsePositionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
     }
 }
 
-const char* 
-ParsePositionTest::errorName(UErrorCode code)
-{
-    switch (code) {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
-}
-
 bool_t 
 ParsePositionTest::failure(UErrorCode status, const char* msg)
 {
@@ -172,7 +154,7 @@ void ParsePositionTest::TestFieldPosition_example()
         1.23456789};
     int dNumSize = 9;
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
     failure(status, "NumberFormat::createInstance");
 

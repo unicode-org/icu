@@ -114,13 +114,13 @@ DateFormat::format(const Formattable& obj,
         format((UDate)obj.getLong(), toAppendTo, fieldPosition);
         break;
     default:
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return toAppendTo;
     }
 
     // Is this right?
     //if (fieldPosition.getBeginIndex() == fieldPosition.getEndIndex())
-    //  status = ILLEGAL_ARGUMENT_ERROR;
+    //  status = U_ILLEGAL_ARGUMENT_ERROR;
 
     return toAppendTo;
 }
@@ -147,7 +147,7 @@ DateFormat::parse(const UnicodeString& text,
 
     ParsePosition pos(0);
     UDate result = parse(text, pos);
-    if (pos.getIndex() == 0) status = ILLEGAL_ARGUMENT_ERROR;
+    if (pos.getIndex() == 0) status = U_ILLEGAL_ARGUMENT_ERROR;
     return result;
 }
 
@@ -205,14 +205,14 @@ DateFormat*
 DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 {
     // Try to create a SimpleDateFormat of the desired style.
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *f = new SimpleDateFormat(timeStyle, dateStyle, locale, status);
     if (SUCCESS(status)) return f;
     delete f;
 
     // If that fails, try to create a format using the default pattern and
     // the DateFormatSymbols for this locale.
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     f = new SimpleDateFormat(locale, status);
     if (SUCCESS(status)) return f;
     delete f;
@@ -247,7 +247,7 @@ DateFormat::getAvailableLocales(int32_t& count)
         int32_t i;
         for (i=0; i<localesCount; ++i)
         {
-            UErrorCode status = ZERO_ERROR;
+            UErrorCode status = U_ZERO_ERROR;
             ResourceBundle resource(Locale::getDataDirectory(), locales[i], status);
             int32_t ignoredCount;
             resource.getStringArray(SimpleDateFormat::fgDateTimePatternsTag, ignoredCount, status);

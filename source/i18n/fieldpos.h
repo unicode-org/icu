@@ -59,7 +59,7 @@
  * .                 12345.6789, -1234.56789, 123.456789, -12.3456789, 1.23456789};
  * .      int dNumSize = (int)(sizeof(doubleNum)/sizeof(double));
  * .      
- * .      UErrorCode status = ZERO_ERROR;
+ * .      UErrorCode status = U_ZERO_ERROR;
  * .      DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
  * .      fmt->setDecimalSeparatorAlwaysShown(true);
  * .      

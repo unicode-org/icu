@@ -95,13 +95,13 @@ CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UError
 
   if (myValuesCount < 0)
     {
-      *err = INVALID_TABLE_FILE;
+      *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
   myShortArray = (int16_t *) icu_malloc (myValuesCount * sizeof (int16_t));
   if (myShortArray == NULL)
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
   /*reads in the first array */
@@ -110,7 +110,7 @@ CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UError
   if (myIndexCount < 0)
     {
       icu_free (myShortArray);
-      *err = INVALID_TABLE_FILE;
+      *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
 
@@ -118,7 +118,7 @@ CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UError
   if (myIndexArray == NULL)
     {
       icu_free (myShortArray);
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
@@ -149,13 +149,13 @@ CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
 
   if (myValuesCount < 0)
     {
-      *err = INVALID_TABLE_FILE;
+      *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
   myByteArray = (int8_t *) icu_malloc (myValuesCount * sizeof (int8_t));
   if (myByteArray == NULL)
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
   /*reads in the first array */
@@ -164,14 +164,14 @@ CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
   if (myIndexCount < 0)
     {
       icu_free (myByteArray);
-      *err = INVALID_TABLE_FILE;
+      *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
   myIndexArray = (uint16_t *) icu_malloc (myIndexCount * sizeof (uint16_t));
   if (myIndexArray == NULL)
     {
       icu_free (myByteArray);
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
   /*reads in the second array */
@@ -201,7 +201,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   infile = openConverterFile (fileName);
   if (infile == NULL)
     {
-      *err = FILE_ACCESS_ERROR;
+      *err = U_FILE_ACCESS_ERROR;
       return NULL;
     }
 
@@ -210,7 +210,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   if (myCheck != FILE_CHECK_MARKER)
     {
       T_FileStream_close (infile);
-      *err = INVALID_TABLE_FILE;
+      *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
 
@@ -221,7 +221,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   if (myConverter == NULL)
     {
       T_FileStream_close (infile);
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
@@ -231,7 +231,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
     {
       T_FileStream_close (infile);
       icu_free (myConverter);
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
@@ -251,7 +251,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
 	  {
 	    icu_free (myConverter->sharedData);
 	    icu_free (myConverter);
-	    *err = MEMORY_ALLOCATION_ERROR;
+	    *err = U_MEMORY_ALLOCATION_ERROR;
 	    break;
 	  }
 	T_FileStream_read (infile, myConverter->sharedData->table->sbcs.toUnicode, 256 * sizeof (UChar));
@@ -267,7 +267,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
 	  {
 	    icu_free (myConverter->sharedData);
 	    icu_free (myConverter);
-	    *err = MEMORY_ALLOCATION_ERROR;
+	    *err = U_MEMORY_ALLOCATION_ERROR;
 	    break;
 	  }
 	myConverter->sharedData->table->dbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
@@ -282,7 +282,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
 	  {
 	    icu_free (myConverter->sharedData);
 	    icu_free (myConverter);
-	    *err = MEMORY_ALLOCATION_ERROR;
+	    *err = U_MEMORY_ALLOCATION_ERROR;
 	    break;
 	  }
 	T_FileStream_read (infile, myConverter->sharedData->table->mbcs.starters, 256 * sizeof (bool_t));
@@ -294,7 +294,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
     default:
       {
 	/*If it isn't any of the above, the file is invalid */
-	*err = INVALID_TABLE_FILE;
+	*err = U_INVALID_TABLE_FILE;
 	icu_free (myConverter->sharedData);
 	icu_free (myConverter);
       }
@@ -399,7 +399,7 @@ int32_t uhash_hashSharedData (void *sharedData)
 void   shareConverterData (UConverterSharedData * data)
 {
   Mutex *sharedData = NULL;
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   /*Lazy evaluates the Hashtable itself */
 
   if (SHARED_DATA_HASHTABLE == NULL)
@@ -493,7 +493,7 @@ bool_t   isDataBasedConverter (const char *name)
   Mutex *createHashTableMutex = NULL;
   int32_t i = 0;
   bool_t result = FALSE;
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
 
   /*Lazy evaluates the hashtable */
   if (ALGORITHMIC_CONVERTERS_HASHTABLE == NULL)
@@ -558,7 +558,7 @@ UConverter *
 
   if (resolveName (realName, converterName) == FALSE)
     {
-      *err = INVALID_TABLE_FILE;
+      *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
 
@@ -591,7 +591,7 @@ UConverter *
 	  myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
 	  if (myUConverter == NULL)
 	    {
-	      *err = MEMORY_ALLOCATION_ERROR;
+	      *err = U_MEMORY_ALLOCATION_ERROR;
 	      return NULL;
 	    }
 
@@ -632,7 +632,7 @@ UConverter *
 	  myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
 	  if (myUConverter == NULL)
 	    {
-	      *err = MEMORY_ALLOCATION_ERROR;
+	      *err = U_MEMORY_ALLOCATION_ERROR;
 	      return NULL;
 	    }
 
@@ -856,7 +856,7 @@ UConverter *
   myConverter = (UConverter *) icu_malloc (sizeof (UConverter));
   if (myConverter == NULL)
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
@@ -864,7 +864,7 @@ UConverter *
   mySharedData = (UConverterSharedData *) icu_malloc (sizeof (UConverterSharedData));
   if (mySharedData == NULL)
     {
-      *err = MEMORY_ALLOCATION_ERROR;
+      *err = U_MEMORY_ALLOCATION_ERROR;
       icu_free (myConverter);
       return NULL;
     }

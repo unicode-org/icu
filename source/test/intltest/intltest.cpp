@@ -112,7 +112,7 @@ UnicodeString toString(const Formattable& f) {
     switch (f.getType()) {
     case Formattable::kDate:
         {
-            UErrorCode status = ZERO_ERROR;
+            UErrorCode status = U_ZERO_ERROR;
             SimpleDateFormat fmt(status);
             if (SUCCESS(status)) {
                 FieldPosition pos;

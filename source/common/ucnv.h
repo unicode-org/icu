@@ -34,7 +34,7 @@
  * if <TT>NULL</TT> is passed for the converter name, it will create one with the
  * getDefaultName return value.
  * @param converterName : name of the uconv table
- * @param err outgoing error status <TT>MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
+ * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
  * @see ucnv_openU
  * @see ucnv_openCCSID
@@ -52,7 +52,7 @@ UConverter* U_EXPORT2 ucnv_open   (const char *converterName,
  * if <TT>NULL</TT> is passed for the converter name, it will create one with the
  * getDefaultName return value.
  * @param converterName : name of the uconv table in a zero terminated Unicode string
- * @param err outgoing error status <TT>MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
+ * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
  * @see ucnv_open
  * @see ucnv_openCCSID
@@ -67,7 +67,7 @@ CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
  * Creates a UConverter object using a CCSID number.
  * @param codepage : codepage # of the uconv table
  * @param platform : codepage's platform (now only <TT>IBM</TT> supported)
- * @param err error status <TT>MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
+ * @param err error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if and error occured
  * @see ucnv_open
  * @see ucnv_openU
@@ -98,7 +98,7 @@ CAPI void  U_EXPORT2 ucnv_close (UConverter * converter);
  * @param len: on input the capacity of subChars, on output the number of bytes copied to it
  * @param  err: the outgoing error status code.
  * If the substitution character array is too small, an
- * <TT>INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
+ * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
  * @see ucnv_setSubstChars
  */
 
@@ -115,7 +115,7 @@ CAPI void U_EXPORT2
  * @param converter the Unicode converter
  * @param subChars the substitution character byte sequence we want set
  * @param len the number of bytes in subChars
- * @param err the error status code.  <TT>INDEX_OUTOFBOUNDS_ERROR </TT> if
+ * @param err the error status code.  <TT>U_INDEX_OUTOFBOUNDS_ERROR </TT> if
  * len is bigger than the maximum number of bytes allowed in subchars
  * @see ucnv_getSubstChars
  */
@@ -136,7 +136,7 @@ CAPI void U_EXPORT2
  * @param len: on input the capacity of errBytes, on output the number of bytes copied to it
  * @param  err: the outgoing error status code.
  * If the substitution character array is too small, an
- * <TT>INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
+ * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
  */
 
 CAPI void U_EXPORT2
@@ -154,7 +154,7 @@ CAPI void U_EXPORT2
  * @param len: on input the capacity of errUChars, on output the number of UChars copied to it
  * @param  err: the outgoing error status code.
  * If the substitution character array is too small, an
- * <TT>INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
+ * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
  */
 
 CAPI void U_EXPORT2
@@ -264,7 +264,7 @@ ucnv_getType (const UConverter * converter);
 
 /**
  *Gets the "starter" bytes for the converters of type MBCS
- *will fill in an <TT>ILLEGAL_ARGUMENT_ERROR</TT> if converter passed in
+ *will fill in an <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> if converter passed in
  *is not MBCS.
  *fills in an array of boolean, with the value of the byte as offset to the array.
  *At return, if TRUE is found in at offset 0x20, it means that the byte 0x20 is a starter byte
@@ -348,7 +348,7 @@ CAPI UCNV_FromUCallBack U_EXPORT2
  * For output data carried across calls -1 will be placed for offsets.
  * @param flush <TT>TRUE</TT> if the buffer is the last buffer of the conversion interation
  * and the conversion will finish with this call, FALSE otherwise.
- * @param err the error status.  <TT>ILLEGAL_ARGUMENT_ERROR</TT> will be returned if the
+ * @param err the error status.  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be returned if the
  * converter is <TT>NULL</TT>.
  * @see ucnv_fromUChars
  * @see ucnv_convert
@@ -387,7 +387,7 @@ CAPI
  * For output data carried across calls -1 will be placed for offsets.
  * @param flush TRUE if the buffer is the last buffer and the conversion will finish
  * in this call, FALSE otherwise. 
- * @param err the error code status  <TT>ILLEGAL_ARGUMENT_ERROR</TT> will be returned if the
+ * @param err the error code status  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be returned if the
  * converter is <TT>NULL</TT>, or if <TT>targetLimit</TT> and <TT>sourceLimit</TT> are misaligned.
  * @see ucnv_toUChars
  * @see ucnv_getNextUChar
@@ -420,10 +420,10 @@ CAPI
  * codepage do not use '\0' as a string terminator
  * @param targetCapacity Input the number of bytes available in the <TT>target</TT> buffer
  * @param err the error status code.
- * <TT>INDEX_OUTOFBOUNDS_ERROR</TT> will be returned if the
+ * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned if the
  * the # of bytes provided are not enough for transcoding.
- * <TT>ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or the source or target string is empty.
- * <TT>BUFFER_OVERFLOW_ERROR</TT> when <TT>targetSize</TT> turns out to be bigger than <TT>targetCapacity</TT>
+ * <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or the source or target string is empty.
+ * <TT>U_BUFFER_OVERFLOW_ERROR</TT> when <TT>targetSize</TT> turns out to be bigger than <TT>targetCapacity</TT>
  * @return number of bytes needed in target, regardless of <TT>targetCapacity</TT>
  * @see ucnv_fromUnicode
  * @see ucnv_convert
@@ -455,11 +455,11 @@ CAPI
  * @param targetCapacity capacity of the target buffer
  * @param sourceSize : Number of bytes in <TT>source</TT> to be transcoded
  * @param err the error status code
- * <TT>MEMORY_ALLOCATION_ERROR</TT> will be returned if the
+ * <TT>U_MEMORY_ALLOCATION_ERROR</TT> will be returned if the
  * the internal process buffer cannot be allocated for transcoding.
- * <TT>ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or
+ * <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or
  * if the source or target string is empty.
- * <TT>BUFFER_OVERFLOW_ERROR</TT> when the input buffer is prematurely exhausted and targetSize non-<TT>NULL</TT>.
+ * <TT>U_BUFFER_OVERFLOW_ERROR</TT> when the input buffer is prematurely exhausted and targetSize non-<TT>NULL</TT>.
  * @return the number of UChar needed in target (including the zero terminator)
  * @see ucnv_getNextUChar
  * @see ucnv_toUnicode

@@ -231,7 +231,7 @@ u_printf_integer_handler(UFILE                 *stream,
   UNumberFormat        *format;
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i, minDigits     = -1;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* mask off any necessary bits */
@@ -471,7 +471,7 @@ u_printf_double_handler(UFILE                 *stream,
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i, minDecimalDigits;
   int32_t        maxDecimalDigits;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
   /* mask off any necessary bits */
   /*  if(! info->fIsLongDouble)
@@ -701,7 +701,7 @@ u_printf_scientific_handler(UFILE             *stream,
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i, minDecimalDigits;
   int32_t        maxDecimalDigits;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
   
 
   /* mask off any necessary bits */
@@ -810,7 +810,7 @@ u_printf_date_handler(UFILE             *stream,
   UDateFormat        *format;
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* get the formatter */
@@ -872,7 +872,7 @@ u_printf_time_handler(UFILE             *stream,
   UDateFormat        *format;
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* get the formatter */
@@ -936,7 +936,7 @@ u_printf_percent_handler(UFILE                 *stream,
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i, minDecimalDigits;
   int32_t        maxDecimalDigits;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* mask off any necessary bits */
@@ -1047,7 +1047,7 @@ u_printf_currency_handler(UFILE             *stream,
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i, minDecimalDigits;
   int32_t        maxDecimalDigits;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* mask off any necessary bits */
@@ -1349,7 +1349,7 @@ u_printf_spellout_handler(UFILE             *stream,
   UChar            result        [UFPRINTF_BUFFER_SIZE];
   int32_t        i, minDecimalDigits;
   int32_t        maxDecimalDigits;
-  UErrorCode        status        = ZERO_ERROR;
+  UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* mask off any necessary bits */

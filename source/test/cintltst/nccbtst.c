@@ -353,7 +353,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 {
 	
 		
-	UErrorCode status = ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
 	UConverter *conv = 0;
 	char	junkout[NEW_MAX_BUFFER]; /* FIX */
 	int32_t	junokout[NEW_MAX_BUFFER]; /* FIX */
@@ -431,7 +431,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	    log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"TRUE":"FALSE");
 	    
 
-	    status = ZERO_ERROR;
+	    status = U_ZERO_ERROR;
  
 	    ucnv_fromUnicode (conv,
 			      &targ,
@@ -442,7 +442,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 			      doFlush, /* flush if we're at the end of the input data */
 			      &status);
 	
-	  } while ( (status == INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
+	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
 	    
 	 if(FAILURE(status))
 	  {
@@ -518,7 +518,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
 		       const char *codepage, UCNV_ToUCallBack callback, int32_t *expectOffsets)
 {
-	UErrorCode status = ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
 	UConverter *conv = 0;
 	UChar	junkout[NEW_MAX_BUFFER]; /* FIX */
 	int32_t	junokout[NEW_MAX_BUFFER]; /* FIX */
@@ -596,7 +596,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 
 	  
 
-	    status = ZERO_ERROR;
+	    status = U_ZERO_ERROR;
 
 	    ucnv_toUnicode (conv,
 			    &targ,
@@ -609,9 +609,9 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 
 	   	   
 
-	  } while ( (status == INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
 	/*check for an INVALID character for testing the call back function STOP*/
-	if(status == INVALID_CHAR_FOUND || status == ILLEGAL_CHAR_FOUND )
+	if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND )
 	{
 		for(p = junkout;p<targ;p++)
 		  sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
@@ -698,4 +698,3 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 		return FALSE;
 	}
 }
-

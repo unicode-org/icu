@@ -78,7 +78,7 @@ u_file_write(const UChar *chars,
   
   /* Perform the conversion in a loop */
   do {
-    *status 	= ZERO_ERROR;
+    *status 	= U_ZERO_ERROR;
     sourceAlias = mySource;
     
     ucnv_fromUnicode(f->fConverter,
@@ -98,7 +98,7 @@ u_file_write(const UChar *chars,
     written 	+= (myTarget - f->fCharBuffer);
     myTarget 	= f->fCharBuffer;
   }
-  while(*status == INDEX_OUTOFBOUNDS_ERROR); 
+  while(*status == U_INDEX_OUTOFBOUNDS_ERROR); 
 
   /* return # of chars written */
   return written;
@@ -241,7 +241,7 @@ u_fungetc(UChar c,
 
   /* if we're at the beginning of the buffer, sorry! */
   if(f->fUCPos == f->fUCBuffer) {
-    *status = BUFFER_OVERFLOW_ERROR;
+    *status = U_BUFFER_OVERFLOW_ERROR;
     return U_EOF;
   }
   /* otherwise, put the character back */
@@ -300,8 +300,3 @@ u_file_read(UChar *chars,
   
   return read;
 }
-
-
-
-
-

@@ -41,11 +41,6 @@ int32_t strCaseIcmp(const char* a1,const char * a2);
 /*returns an action other than the one provided*/
 UCNV_FromUCallBack otherUnicodeAction(UCNV_FromUCallBack MIA);
 UCNV_ToUCallBack otherCharAction(UCNV_ToUCallBack MIA);
-/*Asciifies the ErrorCodes*/
-const char* errorString(UErrorCode err); 
-const char* myErrorName(UErrorCode err);
-
-
 
 
 void addTestConvert(TestNode** root)
@@ -89,7 +84,7 @@ void TestConvert()
     int32_t             k                   =   0;
     uint16_t            codepage_index      =   0;
     int32_t             cp                  =   0;
-    UErrorCode          err                 =   ZERO_ERROR;
+    UErrorCode          err                 =   U_ZERO_ERROR;
     const char*            available_conv;  
     char                ucs_file_name[UCS_FILE_NAME_SIZE];
     UCNV_FromUCallBack          MIA1;
@@ -419,9 +414,9 @@ void TestConvert()
     displayname=(UChar*)malloc(1 * sizeof(UChar));
     len=0;
     disnamelen = ucnv_getDisplayName(myConverter,locale,displayname, len, &err); 
-    if(err==BUFFER_OVERFLOW_ERROR)
+    if(err==U_BUFFER_OVERFLOW_ERROR)
       {    
-         err=ZERO_ERROR;
+         err=U_ZERO_ERROR;
          displayname=(UChar*)realloc(displayname, (disnamelen+1) * sizeof(UChar));
          ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
          if(FAILURE(err))
@@ -568,9 +563,9 @@ void TestConvert()
 				 &err);
       /*if there is an buffer overflow then trap the values and pass them and make the actual call*/
 
-      if(err==BUFFER_OVERFLOW_ERROR)
+      if(err==U_BUFFER_OVERFLOW_ERROR)
       {    
-         err=ZERO_ERROR;
+         err=U_ZERO_ERROR;
          uchar2=(UChar*)malloc((targetsize) * sizeof(UChar));
 	          targetsize = ucnv_toUChars(myConverter, 
                    uchar2,
@@ -691,6 +686,3 @@ UCNV_ToUCallBack otherCharAction(UCNV_ToUCallBack MIA)
 {
     return (MIA==(UCNV_ToUCallBack)MissingCharAction_STOP)?(UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE:(UCNV_ToUCallBack)MissingCharAction_STOP;
 }
-
-
-

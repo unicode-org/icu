@@ -146,7 +146,7 @@ inline BiDi::BiDi(UErrorCode &rErrorCode) {
     if(SUCCESS(rErrorCode)) {
         pBiDi=ubidi_open();
         if(pBiDi==0) {
-            rErrorCode=MEMORY_ALLOCATION_ERROR;
+            rErrorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     } else {
         pBiDi=0;

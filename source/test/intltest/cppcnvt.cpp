@@ -23,8 +23,7 @@ int32_t strCaseIcmp(const char* a1,const char * a2);
 UCNV_FromUCallBack otherUnicodeAction(UCNV_FromUCallBack MIA);
 UCNV_ToUCallBack otherCharAction(UCNV_ToUCallBack MIA);
 /*Asciifies the UErrorCodes*/
-const char* errorString(UErrorCode err); 
-const char* myErrorName(UErrorCode err);
+#define myErrorName(errorCode) errorName(errorCode)
 
 void ConvertTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {
@@ -69,7 +68,7 @@ void ConvertTest::TestConvert()
     int32_t             k                   =   0;
     uint16_t            codepage_index      =   0;
     int32_t             cp                  =   0;
-    UErrorCode           err                 =   ZERO_ERROR;
+    UErrorCode           err                 =   U_ZERO_ERROR;
     const char* const*  available_conv      =   NULL;
     char       ucs_file_name[UCS_FILE_NAME_SIZE];
     UCNV_FromUCallBack          MIA1;
@@ -553,25 +552,4 @@ UCNV_ToUCallBack otherCharAction(UCNV_ToUCallBack MIA)
 
 {
     return (MIA==(UCNV_ToUCallBack)MissingCharAction_STOP)?(UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE:(UCNV_ToUCallBack)MissingCharAction_STOP;
-}
-
-
-const char* myErrorName(UErrorCode err)
-{
-    switch (err)
-    {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        case INDEX_OUTOFBOUNDS_ERROR:   return "INDEX_OUTOFBOUNDS_ERROR";
-        case PARSE_ERROR:               return "PARSE_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
 }

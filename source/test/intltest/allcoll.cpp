@@ -246,7 +246,7 @@ static const UChar DEFAULTRULEARRAY[] =
 CollationDummyTest::CollationDummyTest()
 : myCollation(0)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString rules(DEFAULTRULEARRAY);
     UnicodeString newRules("& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ");
     
@@ -393,7 +393,7 @@ void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Col
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
     CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = ZERO_ERROR, key2status = ZERO_ERROR; //nos
+    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
     myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
     if (FAILURE(key1status) || FAILURE(key2status))

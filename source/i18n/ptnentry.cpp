@@ -61,7 +61,7 @@ PatternEntry::PatternEntry(int32_t newStrength,
   // When there are multiple combining characters attached to a base character,
   // the combining characters must be in their canonical order
   //
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   Normalizer::normalize(newChars, decompMode, 0, chars, status);
   if (FAILURE(status)) {
     chars = newChars;
@@ -361,13 +361,13 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
         default:
           if (newStrength == PatternEntry::UNSET)
         {
-          status = INVALID_FORMAT_ERROR;
+          status = U_INVALID_FORMAT_ERROR;
           return NULL;
         }
 
           if (isSpecialChar(ch) && (inQuote == FALSE))
         {
-          status = INVALID_FORMAT_ERROR;
+          status = U_INVALID_FORMAT_ERROR;
           return NULL;
         }
 
@@ -386,7 +386,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
 
       if (newChars.isBogus() || newExtensions.isBogus())
     {
-      status = MEMORY_ALLOCATION_ERROR;
+      status = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
         }
 
@@ -401,7 +401,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
 
   if (newChars.size() == 0)
     {
-      status = INVALID_FORMAT_ERROR;
+      status = U_INVALID_FORMAT_ERROR;
       return NULL;
     }
 
@@ -418,4 +418,3 @@ bool_t PatternEntry::isSpecialChar(UChar ch)
       ((ch <= 0x0060) && (ch >= 0x005B)) ||
       ((ch <= 0x007E) && (ch >= 0x007B)));
 }
-

@@ -493,7 +493,7 @@ UChar Normalizer::nextCompose()
  */
 UChar Normalizer::prevCompose()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     initBuffer();
     
     // Slurp up characters until we hit a base char or an initial Jamo
@@ -1017,7 +1017,7 @@ Normalizer::setText(const UnicodeString& newText,
   }
   CharacterIterator *newIter = new StringCharacterIterator(newText);
   if (newIter == NULL) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
   delete text;
@@ -1038,7 +1038,7 @@ Normalizer::setText(const CharacterIterator& newText,
   }
   CharacterIterator *newIter = newText.clone();
   if (newIter == NULL) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
   delete text;
@@ -1185,5 +1185,3 @@ void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
 
     buffer.truncate(out);
 }
-
-

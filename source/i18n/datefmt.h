@@ -71,7 +71,7 @@ class TimeZone;
  * </pre>
  * You can use a DateFormat to parse also.
  * <pre>
- * .       UErrorCode status = ZERO_ERROR;
+ * .       UErrorCode status = U_ZERO_ERROR;
  * .       UDate myDate = df->parse(myString, status);
  * </pre>
  * Use createDateInstance() to produce the normal date format for that country.

@@ -82,7 +82,7 @@ const UnicodeString     TimeZone::CUSTOM_ID     = "Custom";
 
 const TimeZone*            TimeZone::GMT = new SimpleTimeZone(0, GMT_ID);
 
-UErrorCode                TimeZone::fgStatus = ZERO_ERROR;
+UErrorCode                TimeZone::fgStatus = U_ZERO_ERROR;
 
 /* Lazy evaluated.  HPUX CC compiler can't handle array initialization 
 with complex objects */
@@ -1848,7 +1848,7 @@ TimeZone::getHashtable()
      
       // build a hashtable that contains all the TimeZone objects in kSystemTimeZones
       // and maps their IDs to the actual TimeZone objects (gives us fast lookup)
-      UErrorCode err = ZERO_ERROR;
+      UErrorCode err = U_ZERO_ERROR;
       newHashtable = uhash_open((UHashFunction) uhash_hashUString, &err);
       uhash_setValueDeleter(newHashtable, TimeZone::deleteTimeZone);
       
@@ -1892,7 +1892,7 @@ TimeZone::stringToInteger(const UnicodeString& string, UErrorCode& status)
 
     int32_t len = string.size();
     char *number = new char[1 + len];
-    if (number == 0) { status = MEMORY_ALLOCATION_ERROR; return 0; }
+    if (number == 0) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
     char *end;
 
     string.extract(0, len, number);
@@ -1902,7 +1902,7 @@ TimeZone::stringToInteger(const UnicodeString& string, UErrorCode& status)
     delete[] number;
 
     if (end-number != len || len == 0)
-        status = INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
 
     return value;
 }*/
@@ -2131,7 +2131,7 @@ TimeZone::getDisplayName(bool_t daylight, EDisplayType style, const Locale& loca
       initSystemTimeZones();
   }
     // SRL TODO: cache the SDF, just like java.
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     SimpleDateFormat format(style == LONG ? "zzzz" : "z",locale,status);
 
@@ -2199,7 +2199,7 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
             return 0;
         pos.setIndex(pos.getIndex() + 1);
 
-        UErrorCode success = ZERO_ERROR;
+        UErrorCode success = U_ZERO_ERROR;
         numberFormat = NumberFormat::createInstance(success);
         numberFormat->setParseIntegerOnly(TRUE);
 

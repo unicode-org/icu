@@ -39,8 +39,8 @@
  * .    t_int32 myStrlen=0;
  * .    UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
  * .    myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
- * .    if(status==BUFFER_OVERFLOW_ERROR){
- * .    status=ZERO_ERROR;
+ * .    if(status==U_BUFFER_OVERFLOW_ERROR){
+ * .    status=U_ZERO_ERROR;
  * .    myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
  * .    udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
  * .    }
@@ -55,8 +55,8 @@
  * .    UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
  * .    for (i = 0; i < 3; ++i) {
  * .    myStrlen = udat_format(df, myDate, NULL, myStrlen, &pos, &status);
- * .    if(status==BUFFER_OVERFLOW_ERROR){
- * .    status=ZERO_ERROR;
+ * .    if(status==U_BUFFER_OVERFLOW_ERROR){
+ * .    status=U_ZERO_ERROR;
  * .    myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
  * .    udat_format(df, myDate, myString, myStrlen+1, &pos, &status);
  * .    }
@@ -71,7 +71,7 @@
  * </pre>
  * You can use a DateFormat API udat_parse() to parse.
  * <pre>
- * .       UErrorCode status = ZERO_ERROR;
+ * .       UErrorCode status = U_ZERO_ERROR;
  * .       t_int32 parsepos=0;     
  * .       UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
  * </pre>

@@ -64,7 +64,7 @@ inline bool_t VisitedFileCache::wasVisited(const UnicodeString& filename) const
 
 inline void VisitedFileCache::markAsVisited(const UnicodeString& filename)
 {
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   uhash_putKey(hashTable, uhash_hashUString(filename.getUChars()), (void*)TRUE, &err);
 }
 

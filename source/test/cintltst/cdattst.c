@@ -44,7 +44,7 @@ void TestDateFormat()
 {
     UDateFormat *def, *fr, *it, *de, *def1, *fr_pat;
     UDateFormat *copy;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar* result;
     const UCalendar *cal;
     const UNumberFormat *numformat1, *numformat2;
@@ -119,9 +119,9 @@ void TestDateFormat()
     /*format using def */
     resultlength=0;
     resultlengthneeded=udat_format(def, d, NULL, resultlength, &pos, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(def, d, result, resultlength, &pos, &status);
@@ -176,7 +176,7 @@ free(result);
         
     
     /*Testing udat_openPattern()  */
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
     log_verbose("\nTesting the udat_openPattern with a specified pattern\n");
     /*for french locale */
     fr_pat=udat_openPattern(temp, u_strlen(temp), "fr_FR", &status);
@@ -196,9 +196,9 @@ free(result);
 
     resultlength=0;
     resultlengthneeded=udat_toPattern(def1, FALSE, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(def1, FALSE, result, resultlength, &status);
@@ -233,7 +233,7 @@ free(result);
     if(FAILURE(status)) {
             log_err("ERROR: udat_get2DigitYearStart failed %s\n", myErrorName(status) );
     }
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     udat_set2DigitYearStart(def1 ,d1, &status);
     if(FAILURE(status)) {
         log_err("ERROR: udat_set2DigitYearStart failed %s\n", myErrorName(status) );
@@ -301,7 +301,7 @@ free(result);
 void TestSymbols()
 {
     UDateFormat *def, *fr;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar *value, *result;
     int32_t resultlength;
     int32_t resultlengthout;
@@ -343,9 +343,9 @@ void TestSymbols()
     u_uastrcpy(pattern, "jeudi");
     resultlength=0;
     resultlengthout=udat_getSymbols(fr, UDAT_WEEKDAYS, 5 , NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(fr, UDAT_WEEKDAYS, 5, result, resultlength, &status);
@@ -386,9 +386,9 @@ free(pattern);
     /*applying the pattern so that setSymbolss works */
     resultlength=0;
     resultlengthout=udat_toPattern(fr, FALSE, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout + 1;
         pattern=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE, pattern, resultlength, &status);
@@ -402,9 +402,9 @@ free(pattern);
     udat_applyPattern(def, FALSE, pattern, u_strlen(pattern));
     resultlength=0;
     resultlengthout=udat_toPattern(def, FALSE, NULL, resultlength,&status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout + 1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE,result, resultlength, &status);
@@ -424,8 +424,8 @@ free(pattern);
     /*testing set symbols */
     resultlength=0;
     resultlengthout=udat_getSymbols(fr, UDAT_MONTHS, 11 , NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR){
-        status=ZERO_ERROR;
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(fr, UDAT_MONTHS, 11, result, resultlength, &status);
@@ -445,8 +445,8 @@ free(pattern);
     
     resultlength=0;
     resultlengthout=udat_getSymbols(def, UDAT_MONTHS, 11, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR){
-        status=ZERO_ERROR;
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         value=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(def, UDAT_MONTHS, 11, value, resultlength, &status);
@@ -495,7 +495,7 @@ free(pattern);
 void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
 {
     UChar *pattern;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar *result;
     int32_t resultlength, resultlengthout;
 
@@ -504,9 +504,9 @@ void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
     u_uastrcpy(pattern, expected);
     resultlength=0;
     resultlengthout=udat_getSymbols(datfor, type, index , NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(datfor, type, index, result, resultlength, &status);
@@ -532,7 +532,7 @@ void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
     UChar *result;
     UChar *value;
     int32_t resultlength, resultlengthout;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     value=(UChar*)malloc(sizeof(UChar) * (strlen(expected) + 1));
     u_uastrcpy(value, expected);
@@ -545,8 +545,8 @@ void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
 
     resultlength=0;
     resultlengthout=udat_getSymbols(datfor, type, index, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR){
-        status=ZERO_ERROR;
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(datfor, type, index, result, resultlength, &status);
@@ -574,12 +574,12 @@ void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolTy
     UChar *result;
     UChar *value;
     int32_t resultlength, resultlengthout;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     resultlength=0;
     resultlengthout=udat_getSymbols(from, type, index , NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR){
-        status=ZERO_ERROR;
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(from, type, index, result, resultlength, &status);
@@ -599,8 +599,8 @@ void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolTy
 
     resultlength=0;
     resultlengthout=udat_getSymbols(to, type, index, NULL, resultlength, &status);
-    if(status==BUFFER_OVERFLOW_ERROR){
-        status=ZERO_ERROR;
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         value=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(to, type, index, value, resultlength, &status);
@@ -629,13 +629,13 @@ UChar* myNumformat(const UNumberFormat* numfor, double d)
     UChar *result2;
     int32_t resultlength, resultlengthneeded;
     UFieldPosition pos;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     resultlength=0;
     resultlengthneeded=unum_formatDouble(numfor, d, NULL, resultlength, &pos, &status);
-    if(status==BUFFER_OVERFLOW_ERROR)
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-        status=ZERO_ERROR;
+        status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result2=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_formatDouble(numfor, d, result2, resultlength, &pos, &status);
