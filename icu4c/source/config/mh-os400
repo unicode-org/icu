@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.10 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-os400,v 1.11 2001/02/20 00:45:39 grhoten Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -54,10 +54,10 @@ INSTALL-S =  cp -fph
 INSTALL-L = $(INSTALL-S)
 
 ## Link commands to link to ICU service programs
-LIBICUUC = $(top_srcdir)/common/libicuuc.o
-LIBICUI18N = $(top_srcdir)/i18n/libicui18n.o
-LIBCTESTFW = $(top_srcdir)/tools/ctestfw/libctestfw.o
-LIBICUTOOLUTIL = $(top_srcdir)/tools/toolutil/libicutoolutil.o
+LIBICUUC = $(top_builddir)/common/libicuuc.o
+LIBICUI18N = $(top_builddir)/i18n/libicui18n.o
+LIBCTESTFW = $(top_builddir)/tools/ctestfw/libctestfw.o
+LIBICUTOOLUTIL = $(top_builddir)/tools/toolutil/libicutoolutil.o
 LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
 
 ## Special OS400 rules
