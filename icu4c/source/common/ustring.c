@@ -20,6 +20,7 @@
 #include "unicode/putil.h"
 #include "unicode/ucnv.h"
 #include "cstring.h"
+#include "cwchar.h"
 #include "cmemory.h"
 #include "umutex.h"
 #include "ustr_imp.h"
