@@ -490,7 +490,7 @@ import com.ibm.text.SimpleDateFormat;
  *   <li>Subclasses should implement {@link #handleGetYearLength}
  *     to return the number of days in the given
  *     extended year. This method is used by
- *     <tt>computeWeekFields()</tt> to compute the
+ *     {@link #computeWeekFields} to compute the
  *     {@link #WEEK_OF_YEAR} and {@link #YEAR_WOY} fields.</li>
  * 
  *   <li>Subclasses should implement {@link #handleGetLimit}
@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.20 $ $Date: 2001/06/29 20:53:42 $
+ * @version      $Revision: 1.21 $ $Date: 2001/10/10 21:15:27 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1189,7 +1189,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * The currently set time for this calendar, expressed in milliseconds after
      * January 1, 1970, 0:00:00 GMT.
-     * @see <tt>isTimeSet</tt>
+     * @see #isTimeSet
      * @serial
      */
     private long          time;
@@ -1412,13 +1412,17 @@ public abstract class Calendar implements Serializable, Cloneable {
         this.zone = zone;
         setWeekCountData(aLocale);
         setWeekendData(aLocale);
+        initInternal();
+    }
 
+    private void initInternal()
+    {
         // Allocate fields through the framework method.  Subclasses
         // may override this to define additional fields.
         fields = handleCreateFields();
         if (fields == null || fields.length < BASE_FIELD_COUNT ||
             fields.length > MAX_FIELD_COUNT) {
-            throw new IllegalArgumentException("Invalid fields[]");
+            throw new InternalError("Invalid fields[]");
         }
         stamp = new int[fields.length];
         int mask = (1 << ERA) |
@@ -3345,8 +3349,9 @@ public abstract class Calendar implements Serializable, Cloneable {
         throws IOException, ClassNotFoundException {
         
         stream.defaultReadObject();
-        fields = handleCreateFields();
-        stamp = new int[fields.length];
+
+        initInternal();
+
         isTimeSet = true;
         areFieldsSet = areAllFieldsSet = false;
         nextStamp = MINIMUM_USER_STAMP;
@@ -4267,6 +4272,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected final void internalSet(int field, int value) {
         if (((1 << field) & internalSetMask) == 0) {
+            Thread.dumpStack();
             throw new IllegalArgumentException("Subclass cannot set " +
                                                fieldName(field));
         }
