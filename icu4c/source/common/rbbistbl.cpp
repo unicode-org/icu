@@ -208,7 +208,7 @@ void            RBBISymbolTable::addEntry  (const UnicodeString &key, RBBINode *
 };
 
 
-const char RBBISymbolTableEntry::fgClassID=0;
+RBBISymbolTableEntry::RBBISymbolTableEntry() : UMemory(), key(), val(NULL) {}
 
 RBBISymbolTableEntry::~RBBISymbolTableEntry() {
     // The "val" of a symbol table entry is a variable reference node.

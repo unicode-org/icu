@@ -45,8 +45,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char RBBISetBuilder::fgClassID=0;
-
 //------------------------------------------------------------------------
 //
 //   Constructor
@@ -464,8 +462,6 @@ void RBBISetBuilder::printSets() {
 //  RangeDescriptor copy constructor
 //
 //-------------------------------------------------------------------------------------
-
-const char RangeDescriptor::fgClassID=0;
 
 RangeDescriptor::RangeDescriptor(const RangeDescriptor &other, UErrorCode &status) {
     int  i;

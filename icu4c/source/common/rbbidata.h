@@ -97,11 +97,10 @@ struct RBBIStateTable {
 //
 //  The reference counting wrapper class
 //
-class RBBIDataWrapper : public UObject {
+class RBBIDataWrapper : public UMemory {
 public:
     RBBIDataWrapper(const RBBIDataHeader *data, UErrorCode &status);
     RBBIDataWrapper(UDataMemory* udm, UErrorCode &status);
-    RBBIDataWrapper(const RBBIDataWrapper &other);
     ~RBBIDataWrapper();
 
     void                  init(const RBBIDataHeader *data, UErrorCode &status);
@@ -122,30 +121,13 @@ public:
 
     UTrie               fTrie;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
     int32_t             fRefCount;
     UDataMemory        *fUDataMem;
     UnicodeString       fRuleString;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    RBBIDataWrapper(const RBBIDataWrapper &other); // forbid copying of this class
+    RBBIDataWrapper &operator=(const RBBIDataWrapper &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END
