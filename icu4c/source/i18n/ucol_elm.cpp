@@ -29,7 +29,7 @@
 #include "unicode/normlzr.h"
 #include "ucol_elm.h"
 #include "unormimp.h"
-#include "caniter.h"
+#include "unicode/caniter.h"
 #include "cmemory.h"
 
 U_NAMESPACE_BEGIN
@@ -1121,7 +1121,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
     UnicodeString source(element->cPoints, element->cSize);
     CanonicalIterator it(source, *status);
     source = it.next();
-    while(source.length() > 0) {
+    while(!source.isBogus()) {
       if(Normalizer::quickCheck(source, UNORM_FCD, *status) != UNORM_NO) {
         element->cSize = source.extract(element->cPoints, 128, *status);
         uprv_uca_finalizeAddition(t, element, status);

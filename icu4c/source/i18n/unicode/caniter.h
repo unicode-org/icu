@@ -57,7 +57,7 @@ public:
      *@param source    string to get results for
      *@param status    Fill-in parameter which receives the status of this operation.
      */
-    CanonicalIterator(UnicodeString source, UErrorCode &status);    
+    CanonicalIterator(const UnicodeString &source, UErrorCode &status);    
 
     /** Destructor
      *  Cleans pieces
