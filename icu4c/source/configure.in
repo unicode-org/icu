@@ -163,7 +163,14 @@ if test $HAVE_DLOPEN = 0; then
         fi
 fi
 
+dnl added for s/390 DLL loading detection
 
+if test $HAVE_DLOPEN = 0; then
+   AC_CHECK_FUNC(dllload)
+   if test $ac_cv_func_dllload = yes; then
+       HAVE_DLOPEN=1
+   fi
+fi
 AC_SUBST(HAVE_DLOPEN)
 
 dnl Checks for header files
@@ -369,6 +376,12 @@ fi
 
 AC_SUBST(DATABUILDDIR)
 AC_SUBST(RELATIVEDATADIR)
+
+dnl added for s/390 DLL loading detection
+
+if test "$ac_cv_func_dllload" = "yes"; then
+    CPPFLAGS="$(CPPFLAGS) -DICU_USE_SHL_LOAD"
+fi
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
