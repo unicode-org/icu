@@ -74,9 +74,12 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 //          if (service.isDefault()) {
 //              return NumberFormat.createInstance(desiredLocale, choice);
 //          }
+
         Locale[] actualLoc = new Locale[1];
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
+	fmt = (NumberFormat)fmt.clone();
+
         ULocale uloc = new ULocale(actualLoc[0]);
         fmt.setLocale(uloc, uloc); // services make no distinction between actual & valid
         return fmt;
