@@ -791,8 +791,8 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
   uint32_t i = 0; /* general counter */
-  uint32_t firstFound = UCOL_NOT_FOUND;
-  UChar *rememberPosition = NULL;
+  uint32_t firstCE = UCOL_NOT_FOUND;
+  UChar *firstUChar = NULL;
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -850,11 +850,11 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         if (source->pos>=source->len) { /* this is the end of string */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
-            if (CE == UCOL_NOT_FOUND && firstFound != UCOL_NOT_FOUND) {
-              CE = firstFound;
-              source->pos = rememberPosition; /* spit all the not found chars, which led us in this contraction */
-              firstFound = UCOL_NOT_FOUND;
-              rememberPosition = NULL;
+            if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
+              CE = firstCE;
+              source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
+              firstCE = UCOL_NOT_FOUND;
+              firstUChar = NULL;
             }
           }
           break;
@@ -883,9 +883,9 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         /* there is a bug here which will make us look bad if we have multiple level contraction */
         /* that fails after level 1 */
         if(CE == UCOL_NOT_FOUND) {
-          if(firstFound != UCOL_NOT_FOUND) {
-            CE = firstFound;
-            firstFound = UCOL_NOT_FOUND;
+          if(firstCE != UCOL_NOT_FOUND) {
+            CE = firstCE;
+            firstCE = UCOL_NOT_FOUND;
             source->pos--; /* spit out yet another char, which led us in this contraction */
             break;
           }
@@ -894,8 +894,8 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         /* th road, which means that we have part of contraction correct */
           uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
           if(tempCE != UCOL_NOT_FOUND) {
-            firstFound = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
-            rememberPosition = source->pos-1;
+            firstCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+            firstUChar = source->pos-1;
           }
         } else {
           break;
@@ -1032,8 +1032,8 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                  (UCharOffset - coll->contractionIndex)); 
           if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
             CE          = firstCE;
-            /* firstCE     = UCOL_NOT_FOUND;
-            source->pos = firstUChar; */
+            /* firstCE     = UCOL_NOT_FOUND; */
+            source->pos = firstUChar;
           }
 
           break;
