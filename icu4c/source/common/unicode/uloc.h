@@ -482,9 +482,9 @@ uloc_getName(const char*    localeID,
  * @param err error information if retrieving the full name failed
  * @return the actual buffer size needed for the full name.  If it's greater 
  * than nameCapacity, the returned full name will be truncated.  
- * @stable ICU 2.0
+ * @draft ICU 2.8
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_canonicalize(const char*    localeID,
          char* name,
          int32_t nameCapacity,
