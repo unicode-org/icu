@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -7,7 +7,7 @@
 //
 // File apitest.cpp
 //
-// 
+//
 //
 // Created by: Helena Shih
 //
@@ -21,7 +21,7 @@
 //                          and streamOut methods use istream and ostream objects
 //                          in binary mode.
 //  6/30/97     helena      Added tests for CollationElementIterator::setText, getOffset
-//                          setOffset and DecompositionIterator::getOffset, setOffset.  
+//                          setOffset and DecompositionIterator::getOffset, setOffset.
 //                          DecompositionIterator is made public so add class scope
 //                          testing.
 //  02/10/98    damiba      Added test for compare(UnicodeString&, UnicodeString&, int32_t)
@@ -85,7 +85,7 @@ CollationAPITest::TestProperty(/* char* par */)
 {
     UErrorCode success = U_ZERO_ERROR;
     Collator *col = 0;
-    /* 
+    /*
       All the collations have the same version in an ICU
       version.
       ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
@@ -109,7 +109,7 @@ CollationAPITest::TestProperty(/* char* par */)
     col->getVersion(versionArray);
     for (i=0; i<4; ++i) {
       if (versionArray[i] != currVersionArray[i]) {
-        errln("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d", 
+        errln("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d",
             versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
         break;
       }
@@ -138,7 +138,7 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->getStrength() == Collator::TERTIARY), "collation object has the wrong strength");
     doAssert((col->getStrength() != Collator::PRIMARY), "collation object's strength is primary difference");
 
-        
+
     logln("testing Collator::setStrength() method ...");
     col->setStrength(Collator::SECONDARY);
     doAssert((col->getStrength() != Collator::TERTIARY), "collation object's strength is secondary difference");
@@ -158,17 +158,17 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((name == UnicodeString("Englisch (Vereinigte Staaten)")), "getDisplayName failed");
 
     logln("Get display name for the US English collation in English : ");
-    logln(Collator::getDisplayName(Locale::getUS(), Locale::getEnglish(), name)); 
+    logln(Collator::getDisplayName(Locale::getUS(), Locale::getEnglish(), name));
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
 #if 0
     // weiv : this test is bogus if we're running on any machine that has different default locale than English.
     // Therefore, it is banned!
     logln("Get display name for the US English in default locale language : ");
-    logln(Collator::getDisplayName(Locale::US, name)); 
+    logln(Collator::getDisplayName(Locale::US, name));
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed if this is an English machine");
 #endif
     delete col; col = 0;
-    RuleBasedCollator *rcol = (RuleBasedCollator *)Collator::createInstance("da_DK", 
+    RuleBasedCollator *rcol = (RuleBasedCollator *)Collator::createInstance("da_DK",
                                                                             success);
     doAssert(rcol->getRules().length() != 0, "da_DK rules does not have length 0");
     delete rcol;
@@ -184,7 +184,7 @@ CollationAPITest::TestProperty(/* char* par */)
     logln("testing Collator::getStrength() method again ...");
     doAssert((col->getStrength() != Collator::TERTIARY), "collation object has the wrong strength");
     doAssert((col->getStrength() == Collator::PRIMARY), "collation object's strength is not primary difference");
-        
+
     logln("testing French Collator::setStrength() method ...");
     col->setStrength(Collator::TERTIARY);
     doAssert((col->getStrength() == Collator::TERTIARY), "collation object's strength is not tertiary difference");
@@ -213,7 +213,7 @@ CollationAPITest::TestProperty(/* char* par */)
         return;
     }
 
-    doAssert(((RuleBasedCollator *)col)->getRules() == ((RuleBasedCollator *)junk)->getRules(), 
+    doAssert(((RuleBasedCollator *)col)->getRules() == ((RuleBasedCollator *)junk)->getRules(),
                "The default collation should be returned.");
     Collator *frCol = Collator::createInstance(Locale::getFrance(), success);
     if (U_FAILURE(success))
@@ -308,7 +308,7 @@ CollationAPITest::TestRuleBasedColl()
     doAssert(rule1 != rule2, "Default collator getRules failed");
     doAssert(rule2 != rule3, "Default collator getRules failed");
     doAssert(rule1 != rule3, "Default collator getRules failed");
-    
+
     col4 = new RuleBasedCollator(rule2, status);
     if (U_FAILURE(status)) {
         errln("RuleBased Collator creation failed.\n");
@@ -341,7 +341,7 @@ CollationAPITest::TestRules()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString rules;
 
-    coll = (RuleBasedCollator *)Collator::createInstance(Locale::getEnglish(), status); 
+    coll = (RuleBasedCollator *)Collator::createInstance(Locale::getEnglish(), status);
     if (U_FAILURE(status)) {
         errln("English Collator creation failed.\n");
         return;
@@ -354,7 +354,7 @@ CollationAPITest::TestRules()
     if (rules.length() != 0) {
         errln("English tailored rules failed");
     }
-    
+
     coll->getRules(UCOL_FULL_RULES, rules);
     if (rules.length() < 0) {
         errln("English full rules failed");
@@ -463,10 +463,10 @@ CollationAPITest::TestHashCode(/* char* par */)
     }
 
     logln("Collator::hashCode() testing ...");
-    
-    doAssert(col1->hashCode() != col2->hashCode(), "Hash test1 result incorrect" );                 
-    doAssert(!(col1->hashCode() == col2->hashCode()), "Hash test2 result incorrect" );              
-    doAssert(col1->hashCode() == col3->hashCode(), "Hash result not equal" );               
+
+    doAssert(col1->hashCode() != col2->hashCode(), "Hash test1 result incorrect" );
+    doAssert(!(col1->hashCode() == col2->hashCode()), "Hash test2 result incorrect" );
+    doAssert(col1->hashCode() == col3->hashCode(), "Hash result not equal" );
 
     logln("hashCode tests end.");
     delete col1;
@@ -474,15 +474,15 @@ CollationAPITest::TestHashCode(/* char* par */)
 
     UnicodeString test1("Abcda");
     UnicodeString test2("abcda");
-    
+
     CollationKey sortk1, sortk2, sortk3;
     UErrorCode status = U_ZERO_ERROR;
-                
+
     col3->getCollationKey(test1, sortk1, status);
-    col3->getCollationKey(test2, sortk2, status); 
-    col3->getCollationKey(test2, sortk3, status); 
-    
-    doAssert(sortk1.hashCode() != sortk2.hashCode(), "Hash test1 result incorrect");               
+    col3->getCollationKey(test2, sortk2, status);
+    col3->getCollationKey(test2, sortk3, status);
+
+    doAssert(sortk1.hashCode() != sortk2.hashCode(), "Hash test1 result incorrect");
     doAssert(sortk2.hashCode() == sortk3.hashCode(), "Hash result not equal" );
 
     delete col3;
@@ -493,7 +493,7 @@ CollationAPITest::TestHashCode(/* char* par */)
 //
 void
 CollationAPITest::TestCollationKey(/* char* par */)
-{       
+{
     logln("testing CollationKey begins...");
     Collator *col = 0;
     UErrorCode success=U_ZERO_ERROR;
@@ -514,25 +514,25 @@ CollationAPITest::TestCollationKey(/* char* par */)
     // key gets reset here
     int32_t length;
     sortk1.getByteArray(length);
-    doAssert(sortk1.isBogus() == FALSE && length == 0, 
+    doAssert(sortk1.isBogus() == FALSE && length == 0,
              "Empty string should return an empty collation key");
     // bogus key returned here
     key1Status = U_ILLEGAL_ARGUMENT_ERROR;
     col->getCollationKey(NULL, 0, sortk1, key1Status);
-    doAssert(sortk1.getByteArray(length) == NULL && length == 0, 
+    doAssert(sortk1.getByteArray(length) == NULL && length == 0,
         "Error code should return bogus collation key");
 
     key1Status = U_ZERO_ERROR;
     logln("Use tertiary comparison level testing ....");
 
     col->getCollationKey(test1, sortk1, key1Status);
-    doAssert((sortk1.compareTo(col->getCollationKey(test2, sortk2, key2Status))) 
-                 == Collator::GREATER, 
+    doAssert((sortk1.compareTo(col->getCollationKey(test2, sortk2, key2Status)))
+                 == Collator::GREATER,
                 "Result should be \"Abcda\" >>> \"abcda\"");
 
     CollationKey sortk3(sortk2), sortkNew, sortkEmpty;
 
-    
+
     sortkNew = sortk1;
     doAssert((sortk1 != sortk2), "The sort keys should be different");
     doAssert((sortk1.hashCode() != sortk2.hashCode()), "sort key hashCode() failed");
@@ -551,13 +551,13 @@ CollationAPITest::TestCollationKey(/* char* par */)
 
     byteArray1 = sortk1.toByteArray(cnt1);
     uint8_t* byteArray2 = 0;
-    
+
     byteArray2 = sortk2.toByteArray(cnt2);
-    /* 
+    /*
     this is a bad test since it is dependent on the version of uca data,
     which changes
     will remove it.
-    const char sortk2_compat[] = { 
+    const char sortk2_compat[] = {
         // this is a 1.8 sortkey
         0x17, 0x19, 0x1B, 0x1D, 0x17, 0x01, 0x08, 0x01, 0x08, 0x00
     };
@@ -573,7 +573,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     CollationKey sortk6(byteArray3, cnt3), sortk7(byteArray4, cnt4);
 
     /*
-    doAssert(memcmp(byteArray2, sortk2_compat, strlen(sortk2_compat)) == 0, 
+    doAssert(memcmp(byteArray2, sortk2_compat, strlen(sortk2_compat)) == 0,
              "Binary format for 'abcda' sortkey different!");
     */
     doAssert(sortk1.compareTo(sortk4) == Collator::EQUAL, "CollationKey::toByteArray(sortk1) Failed.");
@@ -603,8 +603,8 @@ CollationAPITest::TestCollationKey(/* char* par */)
 
     col->setStrength(Collator::SECONDARY);
     doAssert(col->getCollationKey(test1, sortk1, key1Status).compareTo(
-                                  col->getCollationKey(test2, sortk2, key2Status)) 
-                                  == Collator::EQUAL, 
+                                  col->getCollationKey(test2, sortk2, key2Status))
+                                  == Collator::EQUAL,
                                   "Result should be \"Abcda\" == \"abcda\"");
     delete col;
 }
@@ -612,10 +612,10 @@ CollationAPITest::TestCollationKey(/* char* par */)
 //----------------------------------------------------------------------------
 // Tests the CollatorElementIterator class.
 // ctor, RuleBasedCollator::createCollationElementIterator(), operator==, operator!=
-// 
+//
 void
 CollationAPITest::TestElemIter(/* char* par */)
-{       
+{
     logln("testing sortkey begins...");
     Collator *col = 0;
     UErrorCode success = U_ZERO_ERROR;
@@ -625,15 +625,15 @@ CollationAPITest::TestElemIter(/* char* par */)
         errln("Default collation creation failed.");
         return;
     }
-       
+
     UnicodeString testString1("XFILE What subset of all possible test cases has the highest probability of detecting the most errors?");
     UnicodeString testString2("Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
     logln("Constructors and comparison testing....");
     CollationElementIterator *iterator1 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
-    
+
     CharacterIterator *chariter=new StringCharacterIterator(testString1);
     CollationElementIterator *coliter=((RuleBasedCollator*)col)->createCollationElementIterator(*chariter);
-    
+
     // copy ctor
     CollationElementIterator *iterator2 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
     CollationElementIterator *iterator3 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString2);
@@ -650,9 +650,9 @@ CollationAPITest::TestElemIter(/* char* par */)
     }
     iterator1->setOffset(0, success);
     int32_t order1, order2, order3;
-    doAssert((*iterator1 == *iterator2), "The two iterators should be the same"); 
+    doAssert((*iterator1 == *iterator2), "The two iterators should be the same");
     doAssert((*iterator1 != *iterator3), "The two iterators should be different");
-    
+
     doAssert((*coliter == *iterator1), "The two iterators should be the same");
     doAssert((*coliter == *iterator2), "The two iterators should be the same");
     doAssert((*coliter != *iterator3), "The two iterators should be different");
@@ -663,7 +663,7 @@ CollationAPITest::TestElemIter(/* char* par */)
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
     }
-    
+
     doAssert((*iterator1 != *iterator2), "The first iterator advance failed");
     order2 = iterator2->getOffset();
     doAssert((order1 != order2), "The order result should not be the same");
@@ -674,7 +674,7 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
-    doAssert((*iterator1 == *iterator2), "The second iterator advance failed"); 
+    doAssert((*iterator1 == *iterator2), "The second iterator advance failed");
     doAssert((order1 == order2), "The order result should be the same");
     order3 = iterator3->next(success);
     if (U_FAILURE(success))
@@ -683,30 +683,30 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
-    doAssert((CollationElementIterator::primaryOrder(order1) == 
+    doAssert((CollationElementIterator::primaryOrder(order1) ==
         CollationElementIterator::primaryOrder(order3)), "The primary orders should be the same");
-    doAssert((CollationElementIterator::secondaryOrder(order1) == 
+    doAssert((CollationElementIterator::secondaryOrder(order1) ==
         CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be the same");
-    doAssert((CollationElementIterator::tertiaryOrder(order1) == 
+    doAssert((CollationElementIterator::tertiaryOrder(order1) ==
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be the same");
 
     order1 = iterator1->next(success); order3 = iterator3->next(success);
-    if (U_FAILURE(success)) 
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
     }
 
-    doAssert((CollationElementIterator::primaryOrder(order1) == 
+    doAssert((CollationElementIterator::primaryOrder(order1) ==
         CollationElementIterator::primaryOrder(order3)), "The primary orders should be identical");
-    doAssert((CollationElementIterator::tertiaryOrder(order1) != 
+    doAssert((CollationElementIterator::tertiaryOrder(order1) !=
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be different");
 
-    order1 = iterator1->next(success); 
+    order1 = iterator1->next(success);
     order3 = iterator3->next(success);
     /* NO! Secondary orders of two CEs are not related, especially in the case of '_' vs 'I' */
     /*
-    doAssert((CollationElementIterator::secondaryOrder(order1) != 
+    doAssert((CollationElementIterator::secondaryOrder(order1) !=
         CollationElementIterator::secondaryOrder(order3)), "The secondary orders should not be the same");
     */
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
@@ -738,11 +738,11 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
-    doAssert((CollationElementIterator::primaryOrder(order1) == 
+    doAssert((CollationElementIterator::primaryOrder(order1) ==
         CollationElementIterator::primaryOrder(order3)), "The primary orders should be the same");
-    doAssert((CollationElementIterator::secondaryOrder(order1) == 
+    doAssert((CollationElementIterator::secondaryOrder(order1) ==
         CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be the same");
-    doAssert((CollationElementIterator::tertiaryOrder(order1) == 
+    doAssert((CollationElementIterator::tertiaryOrder(order1) ==
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be the same");
 
     order1 = iterator1->next(success); order2 = iterator2->next(success); order3 = iterator3->next(success);
@@ -752,9 +752,9 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
-    doAssert((CollationElementIterator::primaryOrder(order1) == 
+    doAssert((CollationElementIterator::primaryOrder(order1) ==
         CollationElementIterator::primaryOrder(order3)), "The primary orders should be identical");
-    doAssert((CollationElementIterator::tertiaryOrder(order1) != 
+    doAssert((CollationElementIterator::tertiaryOrder(order1) !=
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be different");
 
     order1 = iterator1->next(success); order3 = iterator3->next(success);
@@ -766,13 +766,13 @@ CollationAPITest::TestElemIter(/* char* par */)
 
     /* NO! Secondary orders of two CEs are not related, especially in the case of '_' vs 'I' */
     /*
-    doAssert((CollationElementIterator::secondaryOrder(order1) != 
+    doAssert((CollationElementIterator::secondaryOrder(order1) !=
         CollationElementIterator::secondaryOrder(order3)), "The secondary orders should not be the same");
     */
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
     doAssert((*iterator2 != *iterator3), "The iterators should be different");
 
-    
+
     //test error values
     success=U_UNSUPPORTED_ERROR;
     Collator *colerror=NULL;
@@ -793,7 +793,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     if(!U_FAILURE(success)){
         errln("Expeceted error");
     }
-    
+
     delete chariter;
     delete coliter;
     delete iterator1;
@@ -801,7 +801,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     delete iterator3;
     delete col;
 
-    
+
 
     logln("testing CollationElementIterator ends...");
 }
@@ -829,7 +829,7 @@ CollationAPITest::TestOperators(/* char* par */)
     doAssert((*col1 != *col2), "The two different table collations compared equal");
     *col1 = *col2;
     doAssert((*col1 == *col2), "Collator objects not equal after assignment (operator=)");
-        
+
     success = U_ZERO_ERROR;
     Collator *col3 = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success)) {
@@ -908,7 +908,7 @@ CollationAPITest::TestDuplicate(/* char* par */)
     delete col1;
     delete col2;
     delete col3;
-}   
+}
 
 void
 CollationAPITest::TestCompare(/* char* par */)
@@ -923,24 +923,24 @@ CollationAPITest::TestCompare(/* char* par */)
     }
     UnicodeString test1("Abcda"), test2("abcda");
     logln("Use tertiary comparison level testing ....");
-                
+
     doAssert((!col->equals(test1, test2) ), "Result should be \"Abcda\" != \"abcda\"");
     doAssert((col->greater(test1, test2) ), "Result should be \"Abcda\" >>> \"abcda\"");
-    doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" >>> \"abcda\"");    
+    doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" >>> \"abcda\"");
 
     col->setStrength(Collator::SECONDARY);
     logln("Use secondary comparison level testing ....");
-                
+
     doAssert((col->equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
     doAssert((!col->greater(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
-    doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" == \"abcda\""); 
+    doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
 
     col->setStrength(Collator::PRIMARY);
     logln("Use primary comparison level testing ....");
-    
+
     doAssert((col->equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
     doAssert((!col->greater(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
-    doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" == \"abcda\""); 
+    doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
     logln("The compare tests end.");
     delete col;
 }
@@ -952,7 +952,7 @@ CollationAPITest::TestGetAll(/* char* par */)
     const Locale* list = Collator::getAvailableLocales(count);
     for (int32_t i = 0; i < count; ++i) {
         UnicodeString locName, dispName;
-        log("Locale name: "); 
+        log("Locale name: ");
         log(list[i].getName());
         log(" , the display name is : ");
         logln(list[i].getDisplayName(dispName));
@@ -962,11 +962,11 @@ CollationAPITest::TestGetAll(/* char* par */)
 void CollationAPITest::TestSortKey()
 {
     UErrorCode status = U_ZERO_ERROR;
-    /* 
+    /*
     this is supposed to open default date format, but later on it treats 
-    it like it is "en_US" 
+    it like it is "en_US"
     - very bad if you try to run the tests on machine where default 
-      locale is NOT "en_US" 
+      locale is NOT "en_US"
     */
     Collator *col = Collator::createInstance(Locale::ENGLISH, status);
     if (U_FAILURE(status)) {
@@ -982,31 +982,31 @@ void CollationAPITest::TestSortKey()
     /* Need to use identical strength */
     col->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, status);
 
-    uint8_t key2compat[] = { 
+    uint8_t key2compat[] = {
         /* 2.2 key */
-        0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01, 
-        0x09, 0x01, 0x09, 0x01, 0x1C, 0x01, 
+        0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
+        0x09, 0x01, 0x09, 0x01, 0x1C, 0x01,
         0x92, 0x93, 0x94, 0x95, 0x92, 0x00
 
         /* 2.0 key */
         /*
-        0x19, 0x1B, 0x1D, 0x1F, 0x19, 
+        0x19, 0x1B, 0x1D, 0x1F, 0x19,
         0x01, 0x09, 0x01, 0x09, 0x01,
-        0x18, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 
+        0x18, 0x01,
+        0x92, 0x93, 0x94, 0x95, 0x92,
         0x00
         */
         /* 1.8.1 key.*/
         /*
-        0x19, 0x1B, 0x1D, 0x1F, 0x19, 
-        0x01, 0x0A, 0x01, 0x0A, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 
+        0x19, 0x1B, 0x1D, 0x1F, 0x19,
+        0x01, 0x0A, 0x01, 0x0A, 0x01,
+        0x92, 0x93, 0x94, 0x95, 0x92,
         0x00 
         */
     };
-    
-    UChar test1[6] = {0x41, 0x62, 0x63, 0x64, 0x61, 0}, 
-          test2[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0}, 
+
+    UChar test1[6] = {0x41, 0x62, 0x63, 0x64, 0x61, 0},
+          test2[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0},
           test3[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0};
 
     uint8_t sortkey1[64];
@@ -1024,16 +1024,16 @@ void CollationAPITest::TestSortKey()
     CollationKey key3;
     col->getCollationKey(test3, u_strlen(test3), key3, status);
 
-    doAssert(key1.compareTo(key2) == Collator::GREATER, 
+    doAssert(key1.compareTo(key2) == Collator::GREATER,
         "Result should be \"Abcda\" > \"abcda\"");
-    doAssert(key2.compareTo(key1) == Collator::LESS, 
+    doAssert(key2.compareTo(key1) == Collator::LESS,
         "Result should be \"abcda\" < \"Abcda\"");
-    doAssert(key2.compareTo(key3) == Collator::EQUAL, 
+    doAssert(key2.compareTo(key3) == Collator::EQUAL,
         "Result should be \"abcda\" ==  \"abcda\"");
 
     int32_t keylength = 0;
-    doAssert(strcmp((const char *)(key2.getByteArray(keylength)), 
-                    (const char *)key2compat) == 0, 
+    doAssert(strcmp((const char *)(key2.getByteArray(keylength)),
+                    (const char *)key2compat) == 0,
         "Binary format for 'abcda' sortkey different!");
 
     col->getSortKey(test1, sortkey1, 64);
@@ -1041,13 +1041,13 @@ void CollationAPITest::TestSortKey()
     col->getSortKey(test3, sortkey3, 64);
 
     const uint8_t *tempkey = key1.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0,
         "Test1 string should have the same collation key and sort key");
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0,
         "Test2 string should have the same collation key and sort key");
     tempkey = key3.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
     col->getSortKey(test1, 5, sortkey1, 64);
@@ -1055,13 +1055,13 @@ void CollationAPITest::TestSortKey()
     col->getSortKey(test3, 5, sortkey3, 64);
 
     tempkey = key1.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0,
         "Test1 string should have the same collation key and sort key");
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0,
         "Test2 string should have the same collation key and sort key");
     tempkey = key3.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
     UnicodeString strtest1(test1);
@@ -1072,29 +1072,29 @@ void CollationAPITest::TestSortKey()
     col->getSortKey(strtest3, sortkey3, 64);
 
     tempkey = key1.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0,
         "Test1 string should have the same collation key and sort key");
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0,
         "Test2 string should have the same collation key and sort key");
     tempkey = key3.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
     logln("Use secondary comparision level testing ...\n");
     col->setStrength(Collator::SECONDARY);
-    
+
     col->getCollationKey(test1, u_strlen(test1), key1, status);
     col->getCollationKey(test2, u_strlen(test2), key2, status);
     col->getCollationKey(test3, u_strlen(test3), key3, status);
-    
-    doAssert(key1.compareTo(key2) == Collator::EQUAL, 
+
+    doAssert(key1.compareTo(key2) == Collator::EQUAL,
         "Result should be \"Abcda\" == \"abcda\"");
-    doAssert(key2.compareTo(key3) == Collator::EQUAL, 
+    doAssert(key2.compareTo(key3) == Collator::EQUAL,
         "Result should be \"abcda\" ==  \"abcda\"");
 
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, key2compat, keylength - 1) == 0, 
+    doAssert(memcmp(tempkey, key2compat, keylength - 1) == 0,
              "Binary format for 'abcda' sortkey different!");
 
     col->getSortKey(test1, sortkey1, 64);
@@ -1102,13 +1102,13 @@ void CollationAPITest::TestSortKey()
     col->getSortKey(test3, sortkey3, 64);
 
     tempkey = key1.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0,
         "Test1 string should have the same collation key and sort key");
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0,
         "Test2 string should have the same collation key and sort key");
     tempkey = key3.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
     col->getSortKey(test1, 5, sortkey1, 64);
@@ -1116,13 +1116,13 @@ void CollationAPITest::TestSortKey()
     col->getSortKey(test3, 5, sortkey3, 64);
 
     tempkey = key1.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0,
         "Test1 string should have the same collation key and sort key");
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0,
         "Test2 string should have the same collation key and sort key");
     tempkey = key3.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
     col->getSortKey(strtest1, sortkey1, 64);
@@ -1130,13 +1130,13 @@ void CollationAPITest::TestSortKey()
     col->getSortKey(strtest3, sortkey3, 64);
 
     tempkey = key1.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0,
         "Test1 string should have the same collation key and sort key");
     tempkey = key2.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0,
         "Test2 string should have the same collation key and sort key");
     tempkey = key3.getByteArray(keylength);
-    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0,
         "Test3 string should have the same collation key and sort key");
 
     logln("testing sortkey ends...");
@@ -1154,7 +1154,7 @@ void CollationAPITest::TestMaxExpansion()
     UnicodeString rule("&a < ab < c/aba < d < z < ch");
     RuleBasedCollator coll(rule, status);
     UnicodeString str(ch);
-    CollationElementIterator *iter = 
+    CollationElementIterator *iter =
                                   coll.createCollationElementIterator(str);
 
     while (ch < 0xFFFF && U_SUCCESS(status)) {
@@ -1201,7 +1201,7 @@ void CollationAPITest::TestMaxExpansion()
     }
 
     ch = 0x63;
-    str.setTo(ch); 
+    str.setTo(ch);
     iter->setText(str, status);
     temporder = iter->previous(status);
 
@@ -1211,7 +1211,7 @@ void CollationAPITest::TestMaxExpansion()
     }
 
     ch = 0x64;
-    str.setTo(ch); 
+    str.setTo(ch);
     iter->setText(str, status);
     temporder = iter->previous(status);
 
@@ -1243,7 +1243,7 @@ void CollationAPITest::TestMaxExpansion()
 
     /* testing special jamo &a<\u1160 */
     rule = CharsToUnicodeString("\\u0026\\u0071\\u003c\\u1165\\u002f\\u0071\\u0071\\u0071\\u0071");
-    
+
     RuleBasedCollator jamocoll(rule, status);
     iter = jamocoll.createCollationElementIterator(str);
     temporder = iter->previous(status);
@@ -1283,12 +1283,12 @@ void CollationAPITest::TestAttribute()
 {
     UErrorCode error = U_ZERO_ERROR;
     Collator *coll = Collator::createInstance(error);
-    
+
     if (U_FAILURE(error)) {
         errln("Creation of default collator failed");
         return;
     }
-    
+
     coll->setAttribute(UCOL_FRENCH_COLLATION, UCOL_OFF, error);
     if (coll->getAttribute(UCOL_FRENCH_COLLATION, error) != UCOL_OFF ||
         U_FAILURE(error)) {
@@ -1348,7 +1348,7 @@ void CollationAPITest::TestAttribute()
         U_FAILURE(error)) {
         errln("Setting and retrieving of the normalization on/off attribute failed");
     }
-    
+
     coll->setAttribute(UCOL_STRENGTH, UCOL_PRIMARY, error);
     if (coll->getAttribute(UCOL_STRENGTH, error) != UCOL_PRIMARY ||
         U_FAILURE(error)) {
@@ -1470,7 +1470,7 @@ void CollationAPITest::TestGetLocale() {
       log("Valid locale for nonexisting locale locale collator differs "
         "from valid locale for default collator\n");
     }
-    if(coll->getLocale(ULOC_ACTUAL_LOCALE, status) != 
+    if(coll->getLocale(ULOC_ACTUAL_LOCALE, status) !=
       defaultColl->getLocale(ULOC_ACTUAL_LOCALE, status)) {
       log("Actual locale for nonexisting locale locale collator differs "
         "from actual locale for default collator\n");
@@ -1479,7 +1479,7 @@ void CollationAPITest::TestGetLocale() {
     delete defaultColl;
   }
 
-    
+
 
   /* collator instantiated from rules should have all three locales NULL */
   coll = new RuleBasedCollator(rlz, status);
@@ -1498,10 +1498,10 @@ void CollationAPITest::TestGetLocale() {
   delete coll;
 }
 
-  struct teststruct {
-      const char *original;
-      uint8_t key[256];
-    } ;
+struct teststruct {
+    const char *original;
+    uint8_t key[256];
+} ;
 
 
 static int compare_teststruct(const void *string1, const void *string2) {
@@ -1510,130 +1510,130 @@ static int compare_teststruct(const void *string1, const void *string2) {
 
 
 void CollationAPITest::TestBounds(void) {
-  UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
-  Collator *coll = Collator::createInstance(Locale("sh"), status);
-  
-  uint8_t sortkey[512], lower[512], upper[512];
-  UChar buffer[512];
+    Collator *coll = Collator::createInstance(Locale("sh"), status);
 
-  const char *test[] = {
-    "John Smith",
-      "JOHN SMITH",
-      "john SMITH",
-      "j\\u00F6hn sm\\u00EFth",
-      "J\\u00F6hn Sm\\u00EFth",
-      "J\\u00D6HN SM\\u00CFTH",
-      "john smithsonian",
-      "John Smithsonian",
-  };
+    uint8_t sortkey[512], lower[512], upper[512];
+    UChar buffer[512];
 
-  static struct teststruct tests[] = {  
- {"\\u010CAKI MIHALJ" } ,
- {"\\u010CAKI MIHALJ" } ,
- {"\\u010CAKI PIRO\\u0160KA" },
-{ "\\u010CABAI ANDRIJA" } ,
- {"\\u010CABAI LAJO\\u0160" } ,
- {"\\u010CABAI MARIJA" } ,
- {"\\u010CABAI STEVAN" } ,
- {"\\u010CABAI STEVAN" } ,
- {"\\u010CABARKAPA BRANKO" } ,
- {"\\u010CABARKAPA MILENKO" } ,
- {"\\u010CABARKAPA MIROSLAV" } ,
- {"\\u010CABARKAPA SIMO" } ,
- {"\\u010CABARKAPA STANKO" } ,
- {"\\u010CABARKAPA TAMARA" } ,
- {"\\u010CABARKAPA TOMA\\u0160" } ,
- {"\\u010CABDARI\\u0106 NIKOLA" } ,
- {"\\u010CABDARI\\u0106 ZORICA" } ,
- {"\\u010CABI NANDOR" } ,
- {"\\u010CABOVI\\u0106 MILAN" } ,
- {"\\u010CABRADI AGNEZIJA" } ,
- {"\\u010CABRADI IVAN" } ,
- {"\\u010CABRADI JELENA" } ,
- {"\\u010CABRADI LJUBICA" } ,
- {"\\u010CABRADI STEVAN" } ,
- {"\\u010CABRDA MARTIN" } ,
- {"\\u010CABRILO BOGDAN" } ,
- {"\\u010CABRILO BRANISLAV" } ,
- {"\\u010CABRILO LAZAR" } ,
- {"\\u010CABRILO LJUBICA" } ,
- {"\\u010CABRILO SPASOJA" } ,
- {"\\u010CADE\\u0160 ZDENKA" } ,
- {"\\u010CADESKI BLAGOJE" } ,
- {"\\u010CADOVSKI VLADIMIR" } ,
- {"\\u010CAGLJEVI\\u0106 TOMA" } ,
- {"\\u010CAGOROVI\\u0106 VLADIMIR" } ,
- {"\\u010CAJA VANKA" } ,
- {"\\u010CAJI\\u0106 BOGOLJUB" } ,
- {"\\u010CAJI\\u0106 BORISLAV" } ,
- {"\\u010CAJI\\u0106 RADOSLAV" } ,
- {"\\u010CAK\\u0160IRAN MILADIN" } ,
- {"\\u010CAKAN EUGEN" } ,
- {"\\u010CAKAN EVGENIJE" } ,
- {"\\u010CAKAN IVAN" } ,
- {"\\u010CAKAN JULIJAN" } ,
- {"\\u010CAKAN MIHAJLO" } ,
- {"\\u010CAKAN STEVAN" } ,
- {"\\u010CAKAN VLADIMIR" } ,
- {"\\u010CAKAN VLADIMIR" } ,
- {"\\u010CAKAN VLADIMIR" } ,
- {"\\u010CAKARA ANA" } ,
- {"\\u010CAKAREVI\\u0106 MOMIR" } ,
- {"\\u010CAKAREVI\\u0106 NEDELJKO" } ,
- {"\\u010CAKI \\u0160ANDOR" } ,
- {"\\u010CAKI AMALIJA" } ,
- {"\\u010CAKI ANDRA\\u0160" } ,
- {"\\u010CAKI LADISLAV" } ,
- {"\\u010CAKI LAJO\\u0160" } ,
- {"\\u010CAKI LASLO" } ,
-  };
+    const char *test[] = {
+        "John Smith",
+        "JOHN SMITH",
+        "john SMITH",
+        "j\\u00F6hn sm\\u00EFth",
+        "J\\u00F6hn Sm\\u00EFth",
+        "J\\u00D6HN SM\\u00CFTH",
+        "john smithsonian",
+        "John Smithsonian"
+    };
+
+    static struct teststruct tests[] = {
+        {"\\u010CAKI MIHALJ", 0 },
+        {"\\u010CAKI MIHALJ", 0},
+        {"\\u010CAKI PIRO\\u0160KA", 0},
+        {"\\u010CABAI ANDRIJA", 0},
+        {"\\u010CABAI LAJO\\u0160", 0},
+        {"\\u010CABAI MARIJA", 0},
+        {"\\u010CABAI STEVAN", 0},
+        {"\\u010CABAI STEVAN", 0},
+        {"\\u010CABARKAPA BRANKO", 0},
+        {"\\u010CABARKAPA MILENKO", 0},
+        {"\\u010CABARKAPA MIROSLAV", 0},
+        {"\\u010CABARKAPA SIMO", 0},
+        {"\\u010CABARKAPA STANKO", 0},
+        {"\\u010CABARKAPA TAMARA", 0},
+        {"\\u010CABARKAPA TOMA\\u0160", 0},
+        {"\\u010CABDARI\\u0106 NIKOLA", 0},
+        {"\\u010CABDARI\\u0106 ZORICA", 0},
+        {"\\u010CABI NANDOR", 0},
+        {"\\u010CABOVI\\u0106 MILAN", 0},
+        {"\\u010CABRADI AGNEZIJA", 0},
+        {"\\u010CABRADI IVAN", 0},
+        {"\\u010CABRADI JELENA", 0},
+        {"\\u010CABRADI LJUBICA", 0},
+        {"\\u010CABRADI STEVAN", 0},
+        {"\\u010CABRDA MARTIN", 0},
+        {"\\u010CABRILO BOGDAN", 0},
+        {"\\u010CABRILO BRANISLAV", 0},
+        {"\\u010CABRILO LAZAR", 0},
+        {"\\u010CABRILO LJUBICA", 0},
+        {"\\u010CABRILO SPASOJA", 0},
+        {"\\u010CADE\\u0160 ZDENKA", 0},
+        {"\\u010CADESKI BLAGOJE", 0},
+        {"\\u010CADOVSKI VLADIMIR", 0},
+        {"\\u010CAGLJEVI\\u0106 TOMA", 0},
+        {"\\u010CAGOROVI\\u0106 VLADIMIR", 0},
+        {"\\u010CAJA VANKA", 0},
+        {"\\u010CAJI\\u0106 BOGOLJUB", 0},
+        {"\\u010CAJI\\u0106 BORISLAV", 0},
+        {"\\u010CAJI\\u0106 RADOSLAV", 0},
+        {"\\u010CAK\\u0160IRAN MILADIN", 0},
+        {"\\u010CAKAN EUGEN", 0},
+        {"\\u010CAKAN EVGENIJE", 0},
+        {"\\u010CAKAN IVAN", 0},
+        {"\\u010CAKAN JULIJAN", 0},
+        {"\\u010CAKAN MIHAJLO", 0},
+        {"\\u010CAKAN STEVAN", 0},
+        {"\\u010CAKAN VLADIMIR", 0},
+        {"\\u010CAKAN VLADIMIR", 0},
+        {"\\u010CAKAN VLADIMIR", 0},
+        {"\\u010CAKARA ANA", 0},
+        {"\\u010CAKAREVI\\u0106 MOMIR", 0},
+        {"\\u010CAKAREVI\\u0106 NEDELJKO", 0},
+        {"\\u010CAKI \\u0160ANDOR", 0},
+        {"\\u010CAKI AMALIJA", 0},
+        {"\\u010CAKI ANDRA\\u0160", 0},
+        {"\\u010CAKI LADISLAV", 0},
+        {"\\u010CAKI LAJO\\u0160", 0},
+        {"\\u010CAKI LASLO", 0}
+    };
 
 
 
-  int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
-  int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
+    int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
+    int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
 
-  for(i = 0; i<arraySize; i++) {
-    buffSize = u_unescape(tests[i].original, buffer, 512);
-    skSize = coll->getSortKey(buffer, buffSize, tests[i].key, 512);
-  }
-
-  qsort(tests, arraySize, sizeof(struct teststruct), compare_teststruct);
-
-  for(i = 0; i < arraySize-1; i++) {
-    for(j = i+1; j < arraySize; j++) {
-      lowerSize = coll->getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, status);
-      upperSize = coll->getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, status);
-      for(k = i; k <= j; k++) {
-        if(strcmp((const char *)lower, (const char *)tests[k].key) > 0) {
-          errln("Problem with lower! j = %i (%s vs %s)", k, tests[k].original, tests[i].original);
-        }
-        if(strcmp((const char *)upper, (const char *)tests[k].key) <= 0) {
-          errln("Problem with upper! j = %i (%s vs %s)", k, tests[k].original, tests[j].original);
-        }
-      }
+    for(i = 0; i<arraySize; i++) {
+        buffSize = u_unescape(tests[i].original, buffer, 512);
+        skSize = coll->getSortKey(buffer, buffSize, tests[i].key, 512);
     }
-  }
 
+    qsort(tests, arraySize, sizeof(struct teststruct), compare_teststruct);
 
-  for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
-    buffSize = u_unescape(test[i], buffer, 512);
-    skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
-    lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
-    upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
-    for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
-      buffSize = u_unescape(test[j], buffer, 512);
-      skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
-      if(strcmp((const char *)lower, (const char *)sortkey) > 0) {
-        errln("Problem with lower! i = %i, j = %i (%s vs %s)", i, j, test[i], test[j]);
-      }
-      if(strcmp((const char *)upper, (const char *)sortkey) <= 0) {
-        errln("Problem with upper! i = %i, j = %i (%s vs %s)", i, j, test[i], test[j]);
-      }
+    for(i = 0; i < arraySize-1; i++) {
+        for(j = i+1; j < arraySize; j++) {
+            lowerSize = coll->getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, status);
+            upperSize = coll->getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, status);
+            for(k = i; k <= j; k++) {
+                if(strcmp((const char *)lower, (const char *)tests[k].key) > 0) {
+                    errln("Problem with lower! j = %i (%s vs %s)", k, tests[k].original, tests[i].original);
+                }
+                if(strcmp((const char *)upper, (const char *)tests[k].key) <= 0) {
+                    errln("Problem with upper! j = %i (%s vs %s)", k, tests[k].original, tests[j].original);
+                }
+            }
+        }
     }
-  }
-  delete coll;
+
+
+    for(i = 0; i<(int32_t)(sizeof(test)/sizeof(test[0])); i++) {
+        buffSize = u_unescape(test[i], buffer, 512);
+        skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
+        lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+        upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
+        for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
+            buffSize = u_unescape(test[j], buffer, 512);
+            skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
+            if(strcmp((const char *)lower, (const char *)sortkey) > 0) {
+                errln("Problem with lower! i = %i, j = %i (%s vs %s)", i, j, test[i], test[j]);
+            }
+            if(strcmp((const char *)upper, (const char *)sortkey) <= 0) {
+                errln("Problem with upper! i = %i, j = %i (%s vs %s)", i, j, test[i], test[j]);
+            }
+        }
+    }
+    delete coll;
 }
 
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
