@@ -118,7 +118,7 @@ inline void initializeFCD(UErrorCode *status)
 * @return fcd value
 */
 static
-inline uint16_t getFCD(const UChar   *str, int32_t *offset, 
+uint16_t getFCD(const UChar   *str, int32_t *offset, 
                              int32_t  strlength)
 {
     int32_t temp = *offset;
@@ -432,7 +432,7 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
 * @param end target text end offset
 */
 static
-inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start, 
+UBool isBreakUnit(const UStringSearch *strsrch, int32_t start, 
                                int32_t    end)
 {
 #if !UCONFIG_NO_BREAK_ITERATION
