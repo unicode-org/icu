@@ -108,6 +108,35 @@ static const UChar gIsWordPattern[] = {
 //    [     \     t     \     n     \     f     \     r     \     p     {     Z     }     ]
     0x5b, 0x5c, 0x74, 0x5c, 0x6e, 0x5c, 0x66, 0x5c, 0x72, 0x5c, 0x70, 0x7b, 0x5a, 0x7d, 0x5d,  0};
 
+
+//
+//  UnicodeSets used in implementation of Grapheme Cluster detection, \X
+//
+    static const UChar gGC_ControlPattern[] = {
+//    [     [     :     Z     l     :     ]     [     :     Z     p     :     ]    
+    0x5b, 0x5b, 0x3a, 0x5A, 0x6c, 0x3a, 0x5d, 0x5b, 0x3a, 0x5A, 0x70, 0x3a, 0x5d, 
+//    [     :     C     c     :     ]     [     :     C     f     :     ]     ] 
+    0x5b, 0x3a, 0x43, 0x63, 0x3a, 0x5d, 0x5b, 0x3a, 0x43, 0x66, 0x3a, 0x5d, 0x5d, 0};
+
+    static const UChar gGC_ExtendPattern[] = {
+//    [     [     :     M     n     :     ]     [     :     M     e     :     ]     
+    0x5b, 0x5b, 0x3a, 0x4d, 0x6e, 0x3a, 0x5d, 0x5b, 0x3a, 0x4d, 0x65, 0x3a, 0x5d,
+//    \     u     f     f     9     e     -     \     u     f     f     9     f     ]
+    0x5c, 0x75, 0x66, 0x66, 0x39, 0x65, 0x2d, 0x5c, 0x75, 0x66, 0x66, 0x39, 0x66, 0x5d, 0};
+
+    static const UChar gGC_LPattern[] = {
+//    [     \     u     1     1     0     0     -     \     u     1     1     5     f     ]      
+    0x5b, 0x5c, 0x75, 0x31, 0x31, 0x30, 0x30, 0x2d, 0x5c, 0x75, 0x31, 0x31, 0x35, 0x66, 0x5d, 0}; 
+
+    static const UChar gGC_VPattern[] = {
+//    [     \     u     1     1     6     0     -     \     u     1     1     a     2     ]      
+    0x5b, 0x5c, 0x75, 0x31, 0x31, 0x36, 0x30, 0x2d, 0x5c, 0x75, 0x31, 0x31, 0x61, 0x32, 0x5d, 0}; 
+
+    static const UChar gGC_TPattern[] = {
+//    [     \     u     1     1     a     8     -     \     u     1     1     f     9     ]      
+    0x5b, 0x5c, 0x75, 0x31, 0x31, 0x61, 0x38, 0x2d, 0x5c, 0x75, 0x31, 0x31, 0x66, 0x39, 0x5d, 0}; 
+
+
 static UnicodeSet *gPropSets[URX_LAST_SET];
 
 
@@ -135,6 +164,73 @@ static void ThreadSafeUnicodeSetInit(UnicodeSet **pSet, const UChar *pattern, UE
         }
     }
 }
+
+
+//----------------------------------------------------------------------------------------
+//
+//   InitGraphemeClusterSets   Initialize the constant UnicodeSets needed for the 
+//                             determination of Grapheme Cluster boundaries.
+//
+//----------------------------------------------------------------------------------------
+static void InitGraphemeClusterSets() {
+    UErrorCode status = U_ZERO_ERROR;     // TODO:  some sort of error handling needed.
+    ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_EXTEND],       gGC_ExtendPattern,           status);    
+    ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_CONTROL],      gGC_ControlPattern,          status);    
+    ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_L],            gGC_LPattern,                status);    
+    ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_V],            gGC_VPattern,                status);    
+    ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_T],            gGC_TPattern,                status);   
+    
+    if (gPropSets[URX_GC_NORMAL] == NULL) {
+
+        //
+        // These sets  are dynamically constructed, because their
+        //   intialization strings would be unreasonable.
+        //
+        UnicodeSet *LV     = new UnicodeSet;;
+        UnicodeSet *LVT    = new UnicodeSet;
+        UnicodeSet *Normal = new UnicodeSet;
+
+
+        // The Precomposed Hangul syllables have the range of 0xac00 - 0xd7a3.
+        // Categorize these as LV or LVT, using the decomposition algorithm from
+        // the Unicode Standard 3.0, section 3.11
+        const int32_t TCount = 28;
+        UChar  c;
+        for (c=0xac00; c<0xd7a4; c+=TCount) {
+            LV->add(c);
+        }
+        LVT->add(0xac00, 0xd7a3);
+        LVT->removeAll(*LV);
+        
+            
+        //
+        //  "Normal" is the set of characters that don't need special handling
+        //            when finding grapheme cluster boundaries.
+        //
+        Normal->complement();
+        Normal->remove(0xac00, 0xd7a4);
+        Normal->removeAll(*gPropSets[URX_GC_CONTROL]);
+        Normal->removeAll(*gPropSets[URX_GC_L]);
+        Normal->removeAll(*gPropSets[URX_GC_V]);
+        Normal->removeAll(*gPropSets[URX_GC_T]);
+
+        //
+        //  Thread Safe initialization of the global pointers to these sets.
+        //
+        Mutex  lock;
+        if (gPropSets[URX_GC_NORMAL] == NULL) {
+            gPropSets[URX_GC_NORMAL] = Normal;
+            gPropSets[URX_GC_LV]     = LV;
+            gPropSets[URX_GC_LVT]    = LVT;
+        } else {
+            delete Normal;
+            delete LV;
+            delete LVT;
+        }
+    }
+}
+
+
 
 
 
@@ -213,6 +309,8 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
     ThreadSafeUnicodeSetInit(&gUnescapeCharSet,                    gUnescapeCharPattern,        status);
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISWORD_SET],           gIsWordPattern,              status);
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISSPACE_SET],          gIsSpacePattern,             status);    
+
+    InitGraphemeClusterSets();
 }
 
 
