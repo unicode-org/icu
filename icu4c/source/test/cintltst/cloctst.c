@@ -30,6 +30,7 @@
 #include "locmap.c"
 #endif
 
+static void TestNullDefault(void);
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -133,6 +134,7 @@ void addLocaleTest(TestNode** root)
 {
     addTest(root, &TestObsoleteNames,        "tsutil/cloctst/TestObsoleteNames"); /* srl- move */
     addTest(root, &TestBasicGetters,         "tsutil/cloctst/TestBasicGetters");
+    addTest(root, &TestNullDefault,          "tsutil/cloctst/TestNullDefault");
     addTest(root, &TestPrefixes,             "tsutil/cloctst/TestPrefixes");
     addTest(root, &TestSimpleResourceInfo,   "tsutil/cloctst/TestSimpleResourceInfo");
     addTest(root, &TestDisplayNames,         "tsutil/cloctst/TestDisplayNames");
@@ -225,6 +227,20 @@ static void TestBasicGetters() {
     }
 }
 
+static void TestNullDefault() {
+    UErrorCode status = U_ZERO_ERROR;
+    char original[ULOC_FULLNAME_CAPACITY];
+
+    uprv_strcpy(original, uloc_getDefault());
+    uloc_setDefault("qq_BLAH", &status);
+    if (uprv_strcmp(uloc_getDefault(), "qq_BLAH") != 0) {
+        log_err(" Mismatch in uloc_setDefault:  qq_BLAH  versus   %s\n", uloc_getDefault());
+    }
+    uloc_setDefault(NULL, &status);
+    if (uprv_strcmp(uloc_getDefault(), original) != 0) {
+        log_err(" uloc_setDefault(NULL, &status) didn't get the default locale back!\n");
+    }
+}
 /* Test the i- and x- and @ and . functionality 
 */
 
