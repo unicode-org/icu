@@ -1,7 +1,6 @@
 /*
- * @(#)StateTableProcessor.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -20,15 +19,16 @@
 
 U_NAMESPACE_BEGIN
 
+class LEGlyphStorage;
+
 class StateTableProcessor : public SubtableProcessor
 {
 public:
-    void process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyph);
+    void process(LEGlyphStorage &glyphStorage);
 
     virtual void beginStateTable() = 0;
 
-    virtual ByteOffset processStateEntry(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 &currGlyph,
-        le_int32 glyphCount, EntryTableIndex index) = 0;
+    virtual ByteOffset processStateEntry(LEGlyphStorage &glyphStorage, le_int32 &currGlyph, EntryTableIndex index) = 0;
 
     virtual void endStateTable() = 0;
 

@@ -1,7 +1,6 @@
 /*
- * @(#)GlyphPositioningTables.h	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -23,11 +22,12 @@
 
 U_NAMESPACE_BEGIN
 
+class LEGlyphStorage;
+
 struct GlyphPositioningTableHeader : public GlyphLookupTableHeader
 {
-    void    process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
-                const LETag **glyphTags, le_int32 glyphCount,
-                le_bool rightToLeft, LETag scriptTag, LETag languageTag,
+    void    process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustment *glyphPositionAdjustments,
+		        le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                 const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                 const LEFontInstance *fontInstance, const LETag *featureOrder) const;
 };

@@ -1,8 +1,7 @@
 
 /*
- * @(#)LEFontInstance.h 1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -42,6 +41,8 @@ public:
      */
     virtual LEUnicode32 mapChar(LEUnicode32 ch) const = 0;
 };
+
+class LEGlyphStorage;
 
 /**
  * This is a virtual base class that serves as the interface between a LayoutEngine
@@ -191,13 +192,13 @@ public:
      * @param count - the number of characters
      * @param reverse - if TRUE, store the glyph indices in reverse order.
      * @param mapper - the character mapper.
-     * @param glyphs - the output glyph array
+     * @param glyphStorage - the object which contains the output glyph array
      *
      * @see LECharMapper
      *
      * @draft ICU 2.6
      */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const;
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphStorage &glyphStorage) const;
 
     /**
      * This method maps a single character to a glyph index, using the

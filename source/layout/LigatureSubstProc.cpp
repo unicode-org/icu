@@ -1,7 +1,6 @@
 /*
- * @(#)GlyphSubstLookupProc.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -12,6 +11,7 @@
 #include "SubtableProcessor.h"
 #include "StateTableProcessor.h"
 #include "LigatureSubstProc.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -42,7 +42,7 @@ void LigatureSubstitutionProcessor::beginStateTable()
     m = -1;
 }
 
-ByteOffset LigatureSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 &currGlyph, le_int32 /*glyphCount*/, EntryTableIndex index)
+ByteOffset LigatureSubstitutionProcessor::processStateEntry(LEGlyphStorage &glyphStorage, le_int32 &currGlyph, EntryTableIndex index)
 {
     const LigatureSubstitutionStateEntry *entry = &entryTable[index];
     ByteOffset newState = SWAPW(entry->newStateOffset);
@@ -78,17 +78,17 @@ ByteOffset LigatureSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, l
             if (offset != 0) {
                 const le_int16 *offsetTable = (const le_int16 *)((char *) &ligatureSubstitutionHeader->stHeader + 2 * SignExtend(offset, lafComponentOffsetMask));
 
-                i += SWAPW(offsetTable[LE_GET_GLYPH(glyphs[componentGlyph])]);
+                i += SWAPW(offsetTable[LE_GET_GLYPH(glyphStorage[componentGlyph])]);
 
                 if (action & (lafLast | lafStore))  {
                     const TTGlyphID *ligatureOffset = (const TTGlyphID *) ((char *) &ligatureSubstitutionHeader->stHeader + i);
                     TTGlyphID ligatureGlyph = SWAPW(*ligatureOffset);
 
-                    glyphs[componentGlyph] = LE_SET_GLYPH(glyphs[componentGlyph], ligatureGlyph);
+                    glyphStorage[componentGlyph] = LE_SET_GLYPH(glyphStorage[componentGlyph], ligatureGlyph);
                     stack[++mm] = componentGlyph;
                     i = 0;
                 } else {
-                    glyphs[componentGlyph] = LE_SET_GLYPH(glyphs[componentGlyph], 0xFFFF);
+                    glyphStorage[componentGlyph] = LE_SET_GLYPH(glyphStorage[componentGlyph], 0xFFFF);
                 }
             }
         } while (!(action & lafLast));

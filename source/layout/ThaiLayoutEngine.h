@@ -1,8 +1,7 @@
 
 /*
- * @(#)ThaiLayoutEngine.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -16,6 +15,8 @@
 #include "ThaiShaping.h"
 
 U_NAMESPACE_BEGIN
+
+class LEGlyphStorage;
 
 /**
  * This class implements layout for the Thai script, using the ThaiShapingClass.
@@ -112,7 +113,7 @@ protected:
      * @internal
      */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+        LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
 private:
 

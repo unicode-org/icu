@@ -242,6 +242,12 @@
 				RelativePath=".\LEFontInstance.cpp">
 			</File>
 			<File
+				RelativePath=".\LEGlyphStorage.cpp">
+			</File>
+			<File
+				RelativePath=".\LEInsertionList.cpp">
+			</File>
+			<File
 				RelativePath=".\LigatureSubstProc.cpp">
 			</File>
 			<File
@@ -502,6 +508,12 @@
 "
 						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\LEGlyphStorage.h">
+			</File>
+			<File
+				RelativePath=".\LEInsertionList.h">
 			</File>
 			<File
 				RelativePath=".\LELanguages.h">

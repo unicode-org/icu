@@ -1,7 +1,6 @@
 /*
- * @(#)StateTableProcessor.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -11,6 +10,7 @@
 #include "MorphStateTables.h"
 #include "SubtableProcessor.h"
 #include "StateTableProcessor.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -38,7 +38,7 @@ StateTableProcessor::~StateTableProcessor()
 {
 }
 
-void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount)
+void StateTableProcessor::process(LEGlyphStorage &glyphStorage)
 {
     // Start at state 0
     // XXX: How do we know when to start at state 1?
@@ -46,6 +46,7 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
 
     // XXX: reverse? 
     le_int32 currGlyph = 0;
+	le_int32 glyphCount = glyphStorage.getGlyphCount();
 
     beginStateTable();
 
@@ -55,7 +56,7 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
             // XXX: How do we handle EOT vs. EOL?
             classCode = classCodeEOT;
         } else {
-            TTGlyphID glyphCode = (TTGlyphID) LE_GET_GLYPH(glyphs[currGlyph]);
+            TTGlyphID glyphCode = (TTGlyphID) LE_GET_GLYPH(glyphStorage[currGlyph]);
 
             if (glyphCode == 0xFFFF) {
                 classCode = classCodeDEL;
@@ -67,7 +68,7 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
         const EntryTableIndex *stateArray = (const EntryTableIndex *) ((char *) &stateTableHeader->stHeader + currentState);
         EntryTableIndex entryTableIndex = stateArray[(le_uint8)classCode];
 
-        currentState = processStateEntry(glyphs, charIndices, currGlyph, glyphCount, entryTableIndex);
+        currentState = processStateEntry(glyphStorage, currGlyph, entryTableIndex);
     }
 
     endStateTable();
