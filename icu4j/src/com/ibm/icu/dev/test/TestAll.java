@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/09/17 19:12:42 $ 
- * $Revision: 1.39 $
+ * $Date: 2002/10/10 05:16:14 $ 
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -217,6 +217,11 @@ public class TestAll extends TestFmwk {
     public void TestMath() throws Exception{
         run( new TestFmwk[]{
                 new DiagBigDecimal(),
+              });
+    }
+    public void TestICUBinary() throws Exception{
+        run( new TestFmwk[]{
+                new com.ibm.icu.dev.test.util.ICUBinaryTest(),
               });
     }
 }
