@@ -140,7 +140,7 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
 
 // -------------------------------------
 
-bool_t
+UBool
 DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 {
     if (this == &that) return TRUE;
@@ -168,7 +168,7 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
  
 void
 DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
-                                 bool_t useLastResortData)
+                                 UBool useLastResortData)
 {
     if (U_FAILURE(status)) return;
 

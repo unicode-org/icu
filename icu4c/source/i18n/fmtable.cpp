@@ -151,7 +151,7 @@ Formattable::operator=(const Formattable& source)
 
 // -------------------------------------
 
-bool_t
+UBool
 Formattable::operator==(const Formattable& that) const
 {
     // Checks class ID.

@@ -20,7 +20,7 @@ class GregorianCalendar;
 class CalendarRegressionTest: public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
     void test4100311(void);
     void test4074758(void);
@@ -64,7 +64,7 @@ public:
     void TestJ81(void);
 
     void printdate(GregorianCalendar *cal, char *string);
-    void dowTest(bool_t lenient) ;
+    void dowTest(UBool lenient) ;
 
 
     static UDate getAssociatedDate(UDate d, UErrorCode& status);
@@ -75,7 +75,7 @@ public:
     static const char* FIELD_NAME[];
 
 protected:
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 };
 
  

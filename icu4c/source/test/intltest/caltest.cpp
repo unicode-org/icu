@@ -15,7 +15,7 @@
 // class CalendarTest
 // *****************************************************************************
 
-void CalendarTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CalendarTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite TestCalendar");
     switch (index) {
@@ -191,7 +191,7 @@ CalendarTest::TestGenericAPI()
         cal->after(*cal2, status) ||
         U_FAILURE(status)) errln("FAIL: equals/before/after failed");
 
-    cal->roll(Calendar::SECOND, (bool_t) TRUE, status);
+    cal->roll(Calendar::SECOND, (UBool) TRUE, status);
     if (failure(status, "Calendar::roll")) return;
     if (!cal->equals(*cal2, status) ||
         cal->before(*cal2, status) ||
@@ -214,7 +214,7 @@ CalendarTest::TestGenericAPI()
     int32_t i;
     for (i=0; i<2; ++i)
     {
-        bool_t lenient = ( i > 0 );
+        UBool lenient = ( i > 0 );
         cal->setLenient(lenient);
         if (lenient != cal->isLenient()) errln("FAIL: setLenient/isLenient failed");
         // Later: Check for lenient behavior
@@ -378,7 +378,7 @@ CalendarTest::TestDOW943()
     dowTest(TRUE);
 }
 
-void CalendarTest::dowTest(bool_t lenient)
+void CalendarTest::dowTest(UBool lenient)
 {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* cal = new GregorianCalendar(status);
@@ -431,7 +431,7 @@ CalendarTest::TestClonesUnique908()
 void
 CalendarTest::TestGregorianChange768()
 {
-    bool_t b;
+    UBool b;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     GregorianCalendar* c = new GregorianCalendar(status);
@@ -912,7 +912,7 @@ void
 CalendarTest::TestSerialize337()
 {
     Calendar cal = Calendar::getInstance();
-    bool_t ok = FALSE;
+    UBool ok = FALSE;
     try {
         FileOutputStream f = new FileOutputStream(FILENAME);
         ObjectOutput s = new ObjectOutputStream(f);
@@ -1098,7 +1098,7 @@ CalendarTest::TestEpochStartFields()
     gc->setTimeZone(*z);
     gc->setTime(d, status);
     if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
-    bool_t idt = gc->inDaylightTime(status);
+    UBool idt = gc->inDaylightTime(status);
     if (U_FAILURE(status)) { errln("GregorianCalendar::inDaylightTime failed"); return; }
     if (idt) {
         UnicodeString str;

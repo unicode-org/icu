@@ -28,7 +28,7 @@
  */
 class Enumeration { // text enumeration
 public:
-  virtual bool_t hasMoreElements() = 0;
+  virtual UBool hasMoreElements() = 0;
   virtual UnicodeString nextElement() = 0;
 };
 
@@ -54,7 +54,7 @@ public:
   public:
     VectorEnumeration(Vector* vector) : fVector(vector), fPos(&vector->fBase) {}
     
-    bool_t hasMoreElements() { return fPos->fLink != &fVector->fBase; }
+    UBool hasMoreElements() { return fPos->fLink != &fVector->fBase; }
     UnicodeString nextElement() { fPos = fPos->fLink; return fPos->fText; }
 
     Vector* fVector;
@@ -915,7 +915,7 @@ void RBBITest::TestAbbrRuleBasedWordIteration()
 // runIndexedTest
 //---------------------------------------------
 
-void RBBITest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void RBBITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {
@@ -1154,7 +1154,7 @@ void RBBITest::testPreceding(RuleBasedBreakIterator& bi, UnicodeString& text, in
 void RBBITest::testIsBoundary(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
         logln("testIsBoundary():");
         int p = 1;
-        bool_t isB;
+        UBool isB;
         for (int i = 0; i < text.length(); i++) {
             isB = bi.isBoundary(i);
             logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);

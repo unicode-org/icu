@@ -169,7 +169,7 @@ udat_parse(    const    UDateFormat*        format,
   return res;
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 udat_isLenient(const UDateFormat* fmt)
 {
   return ((DateFormat*)fmt)->isLenient();
@@ -177,7 +177,7 @@ udat_isLenient(const UDateFormat* fmt)
 
 U_CAPI void
 udat_setLenient(    UDateFormat*    fmt,
-            bool_t          isLenient)
+            UBool          isLenient)
 {
   ((DateFormat*)fmt)->setLenient(isLenient);
 }
@@ -239,7 +239,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 
 U_CAPI int32_t
 udat_toPattern(    const   UDateFormat     *fmt,
-        bool_t          localized,
+        UBool          localized,
         UChar           *result,
         int32_t         resultLength,
         UErrorCode      *status)
@@ -262,7 +262,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 // TBD: should this take an UErrorCode?
 U_CAPI void
 udat_applyPattern(            UDateFormat     *format,
-                    bool_t          localized,
+                    UBool          localized,
                     const   UChar           *pattern,
                     int32_t         patternLength)
 {

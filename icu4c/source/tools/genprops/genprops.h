@@ -33,7 +33,7 @@ typedef struct {
 } Props;
 
 /* global flags */
-extern bool_t beVerbose, haveCopyright;
+extern UBool beVerbose, haveCopyright;
 
 /* name tables */
 extern const char *const

@@ -232,7 +232,7 @@ udat_parse(    const    UDateFormat*    format,
 * @see udat_setLenient
 * @stable
 */
-U_CAPI bool_t
+U_CAPI UBool
 udat_isLenient(const UDateFormat* fmt);
 
 /**
@@ -246,7 +246,7 @@ udat_isLenient(const UDateFormat* fmt);
 */
 U_CAPI void
 udat_setLenient(    UDateFormat*    fmt,
-                    bool_t          isLenient);
+                    UBool          isLenient);
 
 /**
 * Get the UCalendar associated with an UDateFormat.
@@ -364,7 +364,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 */
 U_CAPI int32_t
 udat_toPattern(    const   UDateFormat     *fmt,
-                        bool_t          localized,
+                        UBool          localized,
                         UChar           *result,
                         int32_t         resultLength,
                         UErrorCode      *status);
@@ -381,7 +381,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 */
 U_CAPI void
 udat_applyPattern(            UDateFormat     *format,
-                            bool_t          localized,
+                            UBool          localized,
                     const   UChar           *pattern,
                             int32_t         patternLength);
 

@@ -98,7 +98,7 @@ public:
      * before & and <
      * @return the recovered result.
      */
-  UnicodeString& getPattern(UnicodeString& pattern, bool_t withWhiteSpace) const;
+  UnicodeString& getPattern(UnicodeString& pattern, UBool withWhiteSpace) const;
 
   /**
      * Emits the pattern for collation builder.
@@ -116,7 +116,7 @@ public:
      * @return Emits the string in the format understable to the collation
      * builder.
      */
-  UnicodeString& emitPattern(UnicodeString& pattern, bool_t withWhiteSpace) const;
+  UnicodeString& emitPattern(UnicodeString& pattern, UBool withWhiteSpace) const;
 
   /**
      * Sets the pattern.

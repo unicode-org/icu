@@ -19,7 +19,7 @@ const double IntlTestDateFormat::ONEYEAR = 365.25 * ONEDAY; // Approximate
  * DateFormat.
  */
 // par is ignored throughout this file
-void IntlTestDateFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite DateFormat");
     switch (index) {
@@ -141,7 +141,7 @@ void IntlTestDateFormat::tryDate(UDate theDate)
 
     int32_t dateMatch = 0;
     int32_t stringMatch = 0;
-    bool_t dump = FALSE;
+    UBool dump = FALSE;
     int32_t i;
     for (i=0; i<DEPTH; ++i)
     {

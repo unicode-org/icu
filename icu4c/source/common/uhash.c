@@ -429,7 +429,7 @@ uhash_hashIChars(const void *key) {
  * PUBLIC Comparator Functions
  ********************************************************************/
 
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareUChars(const void *key1, const void *key2) {
     const UChar *p1 = (const UChar*) key1;
     const UChar *p2 = (const UChar*) key2;
@@ -446,7 +446,7 @@ uhash_compareUChars(const void *key1, const void *key2) {
     return (*p1 == *p2);
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareChars(const void *key1, const void *key2) {
     const char *p1 = (const char*) key1;
     const char *p2 = (const char*) key2;
@@ -463,7 +463,7 @@ uhash_compareChars(const void *key1, const void *key2) {
     return (*p1 == *p2);
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareIChars(const void *key1, const void *key2) {
     const char *p1 = (const char*) key1;
     const char *p2 = (const char*) key2;
@@ -489,7 +489,7 @@ uhash_hashLong(const void *key) {
     return (int32_t) key;
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareLong(const void *key1, const void *key2) {
     return key1 == key2;
 }

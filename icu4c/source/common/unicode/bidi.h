@@ -67,7 +67,7 @@ public:
      * @draft
      */
     void
-    setInverse(bool_t isInverse);
+    setInverse(UBool isInverse);
 
     /**
      * Is this BiDi object set to perform the inverse BiDi algorithm?
@@ -75,7 +75,7 @@ public:
      * @see setInverse
      * @draft
      */
-    bool_t
+    UBool
     isInverse();
 
     /** @memo Set this object for one paragraph's text. 
@@ -255,11 +255,11 @@ inline BiDi::~BiDi() {
 }
 
 inline void
-BiDi::setInverse(bool_t isInverse) {
+BiDi::setInverse(UBool isInverse) {
     ubidi_setInverse(pBiDi, isInverse);
 }
 
-inline bool_t
+inline UBool
 BiDi::isInverse() {
     return ubidi_isInverse(pBiDi);
 }

@@ -20,7 +20,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-TimeZoneRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+TimeZoneRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -46,7 +46,7 @@ TimeZoneRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
     }
 }
 
-bool_t 
+UBool 
 TimeZoneRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
@@ -82,7 +82,7 @@ void TimeZoneRegressionTest:: Test4073209() {
 
 UDate TimeZoneRegressionTest::findTransitionBinary(const SimpleTimeZone& tz, UDate min, UDate max) {
     UErrorCode status = U_ZERO_ERROR;
-    bool_t startsInDST = tz.inDaylightTime(min, status);
+    UBool startsInDST = tz.inDaylightTime(min, status);
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
     if (tz.inDaylightTime(max, status) == startsInDST) {
         logln((UnicodeString)"Error: inDaylightTime() != " + ((!startsInDST)?"TRUE":"FALSE"));
@@ -103,7 +103,7 @@ UDate TimeZoneRegressionTest::findTransitionBinary(const SimpleTimeZone& tz, UDa
 
 UDate TimeZoneRegressionTest::findTransitionStepwise(const SimpleTimeZone& tz, UDate min, UDate max) {
     UErrorCode status = U_ZERO_ERROR;
-    bool_t startsInDST = tz.inDaylightTime(min, status);
+    UBool startsInDST = tz.inDaylightTime(min, status);
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
     while (min < max) {
         if (tz.inDaylightTime(min, status) != startsInDST) {
@@ -143,7 +143,7 @@ void TimeZoneRegressionTest:: Test4073215()
 
     UDate jan31, mar1, mar31;
 
-    bool_t indt = z->inDaylightTime(jan31=cal.getTime(status), status);
+    UBool indt = z->inDaylightTime(jan31=cal.getTime(status), status);
     failure(status, "inDaylightTime or getTime call on Jan 31");
     if (indt) {
         errln("Fail: Jan 31 inDaylightTime=TRUE, exp FALSE");
@@ -238,7 +238,7 @@ void TimeZoneRegressionTest:: Test4096952() {
     // {sfb} serialization not applicable
 /*
     UnicodeString ZONES [] = { UnicodeString("GMT"), UnicodeString("MET"), UnicodeString("IST") };
-    bool_t pass = TRUE;
+    UBool pass = TRUE;
     //try {
         for (int32_t i=0; i < ZONES.length; ++i) {
             TimeZone *zone = TimeZone::createTimeZone(ZONES[i]);
@@ -296,7 +296,7 @@ void TimeZoneRegressionTest:: Test4109314() {
         CalendarRegressionTest::makeDate(98,Calendar::OCTOBER,24,22,0), 
         CalendarRegressionTest::makeDate(98,Calendar::OCTOBER,25,6,0)
     };
-    bool_t pass = TRUE;
+    UBool pass = TRUE;
     for (int32_t i = 0; i < 4; i+=2) {
         //testCal->setTimeZone((TimeZone) testData[i]);
         testCal->setTimeZone(*PST);
@@ -316,7 +316,7 @@ void TimeZoneRegressionTest:: Test4109314() {
     delete PST;
 } 
 
-bool_t 
+UBool 
 TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ) 
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -364,12 +364,12 @@ TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *t
 
     UDate testDate = testCal->getTime(status); 
 
-    bool_t inDaylightTime = testTZ->inDaylightTime(testDate, status); 
+    UBool inDaylightTime = testTZ->inDaylightTime(testDate, status); 
     SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)"MM/dd/yyyy HH:mm", status); 
     sdf->setCalendar(*testCal); 
     UnicodeString inDaylightTimeString; 
 
-    bool_t passed; 
+    UBool passed; 
 
     if(inDaylightTime) 
     { 
@@ -573,7 +573,7 @@ void TimeZoneRegressionTest:: Test4154542()
     };
     SimpleTimeZone *zone = new SimpleTimeZone(0, "Z");
     for (int32_t i=0; i < 18*5; i+=5) {
-        bool_t shouldBeGood = (DATA[i] == GOOD);
+        UBool shouldBeGood = (DATA[i] == GOOD);
         int32_t month     = DATA[i+1];
         int32_t day       = DATA[i+2];
         int32_t dayOfWeek = DATA[i+3];
@@ -670,7 +670,7 @@ TimeZoneRegressionTest::Test4154525()
     UErrorCode status = U_ZERO_ERROR;
     for(int32_t i = 0; i < 10; i+=2) {
         int32_t savings = DATA[i];
-        bool_t valid = DATA[i+1] == GOOD;
+        UBool valid = DATA[i+1] == GOOD;
         UnicodeString method;
         for(int32_t j=0; j < 2; ++j) {
             SimpleTimeZone *z;
@@ -756,7 +756,7 @@ TimeZoneRegressionTest::Test4154650()
     UErrorCode status = U_ZERO_ERROR;
     TimeZone *tz = TimeZone::createDefault();
     for(int32_t i = 0; i < dataLen; i += 7) {
-        bool_t good = DATA[i] == GOOD;
+        UBool good = DATA[i] == GOOD;
         //IllegalArgumentException e = null;
         //try {
             int32_t offset = tz->getOffset((uint8_t)DATA[i+1], DATA[i+2], DATA[i+3],
@@ -804,7 +804,7 @@ TimeZoneRegressionTest::Test4162593()
         {100, Calendar::FEBRUARY, 29, 22, 0},
      };
 
-    bool_t DATA_BOOL [] = {
+    UBool DATA_BOOL [] = {
         TRUE,
         FALSE,
         TRUE,
@@ -825,7 +825,7 @@ TimeZoneRegressionTest::Test4162593()
         // Must construct the Date object AFTER setting the default zone
         int32_t *p = (int32_t*)DATA_INT[j];
         UDate d = CalendarRegressionTest::makeDate(p[0], p[1], p[2], p[3], p[4]);
-        bool_t transitionExpected = DATA_BOOL[j];
+        UBool transitionExpected = DATA_BOOL[j];
 
         UnicodeString temp;
         logln(tz->getID(temp) + ":");

@@ -103,9 +103,9 @@
 #define SIGN 0x80000000L
 
 /* statics */
-static bool_t fgNaNInitialized = FALSE;
+static UBool fgNaNInitialized = FALSE;
 static double fgNan;
-static bool_t fgInfInitialized = FALSE;
+static UBool fgInfInitialized = FALSE;
 static double fgInf;
 
 /* protos */
@@ -174,7 +174,7 @@ uprv_getUTCtime()
   for getNaN and getInfinity, and false for isNaN and isInfinite.
   ---------------------------------------------------------------------------*/
 
-bool_t 
+UBool 
 uprv_isNaN(double number)
 {
 #if IEEE_754
@@ -217,7 +217,7 @@ uprv_isNaN(double number)
 #endif
 }
 
-bool_t
+UBool
 uprv_isInfinite(double number)
 {
 #if IEEE_754
@@ -255,7 +255,7 @@ return ((highBits  & ~SIGN) == 0x70FF0000L) && (lowBits == 0x00000000L);
 #endif
 }
 
-bool_t   
+UBool   
 uprv_isPositiveInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
@@ -265,7 +265,7 @@ uprv_isPositiveInfinity(double number)
 #endif
 }
 
-bool_t   
+UBool   
 uprv_isNegativeInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
@@ -681,7 +681,7 @@ uprv_timezone()
 #if defined(OS400) || defined(XP_MAC) || defined(RHAPSODY)
   time_t t, t1, t2;
   struct tm tmrec;
-  bool_t dst_checked;
+  UBool dst_checked;
   int32_t tdiff = 0;
   
   time(&t);
@@ -720,7 +720,7 @@ uprv_tzname(int n)
 
 /* Get and set the ICU data directory --------------------------------------- */
 
-static bool_t
+static UBool
 gHaveDataDirectory=FALSE;
 
 static char
@@ -1318,7 +1318,7 @@ uprv_getDefaultLocaleID()
 /* end of platform-specific implementation */
 
 double 
-uprv_nextDouble(double d, bool_t next)
+uprv_nextDouble(double d, UBool next)
 {
 #if IEEE_754
   int32_t highBits;

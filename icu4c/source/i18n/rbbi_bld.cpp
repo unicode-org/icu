@@ -307,10 +307,10 @@ RuleBasedBreakIteratorBuilder::buildRuleList(UnicodeString& description,
     UChar c = 0x0000;
     UChar lastC = 0x0000;
     UChar lastOpen = 0x0000;
-    bool_t haveEquals = FALSE;
-    bool_t haveSlash = FALSE;
-    bool_t sawVarName = FALSE;
-    bool_t sawIllegalChar = FALSE;
+    UBool haveEquals = FALSE;
+    UBool haveSlash = FALSE;
+    UBool sawVarName = FALSE;
+    UBool sawIllegalChar = FALSE;
     int32_t illegalCharPos = 0;
     UChar expectedClose = 0x0000;
 
@@ -886,7 +886,7 @@ RuleBasedBreakIteratorBuilder::buildStateTable(UErrorCode& err)
  */
 void
 RuleBasedBreakIteratorBuilder::parseRule(const UnicodeString& rule,
-                                         bool_t forward)
+                                         UBool forward)
 {
     // algorithm notes:
     //   - The basic idea here is to read successive character-category groups
@@ -958,7 +958,7 @@ RuleBasedBreakIteratorBuilder::parseRule(const UnicodeString& rule,
     UnicodeString temp;
 
     int16_t* state;
-    bool_t sawEarlyBreak = FALSE;
+    UBool sawEarlyBreak = FALSE;
 
     // if we're adding rules to the backward state table, mark the initial state
     // as a looping state
@@ -1438,7 +1438,7 @@ for (int32_t i = 0; i < newValues.length; i++) System.out.print("\t" + newValues
 System.out.println();
 */
 
-    bool_t isLoopingState = loopingStates.contains((void*)rowNum);
+    UBool isLoopingState = loopingStates.contains((void*)rowNum);
 
     // for each of the cells in the rows we're reconciling, do...
     for (int32_t i = 0; i < numCategories; i++) {
@@ -1717,7 +1717,7 @@ RuleBasedBreakIteratorBuilder::backfillLoopingStates(void)
  * @param forward TRUE if we're working on the forward state table
  */
 void
-RuleBasedBreakIteratorBuilder::finishBuildingStateTable(bool_t forward)
+RuleBasedBreakIteratorBuilder::finishBuildingStateTable(UBool forward)
 {
 //debugPrintTempStateTable();
     // start by backfilling the looping states
@@ -1790,7 +1790,7 @@ System.out.println();
     // are created.
     int32_t currentClass;
     int32_t lastClass;
-    bool_t split;
+    UBool split;
 
     do {
 //System.out.println("Making a pass...");
@@ -1875,8 +1875,8 @@ System.out.println();
 
     // this section does that for the forward state table
     if (forward) {
-        tables->endStates = new bool_t[newRowNum];
-        tables->lookaheadStates = new bool_t[newRowNum];
+        tables->endStates = new UBool[newRowNum];
+        tables->lookaheadStates = new UBool[newRowNum];
         tables->stateTable = new int16_t[newRowNum * numCategories];
         int32_t p = 0;
         int32_t p2 = 0;

@@ -106,7 +106,7 @@ void CollationSpanishTest::TestPrimary( char* par )
     }
 }
 
-void CollationSpanishTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CollationSpanishTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationSpanishTest: ");
     switch (index) {

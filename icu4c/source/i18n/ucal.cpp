@@ -158,11 +158,11 @@ ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
   return actLen;
 }
 
-U_CAPI bool_t 
+U_CAPI UBool 
 ucal_inDaylightTime(    const    UCalendar*      cal, 
             UErrorCode*     status )
 {
-  if(U_FAILURE(*status)) return (bool_t) -1;
+  if(U_FAILURE(*status)) return (UBool) -1;
   return ((Calendar*)cal)->inDaylightTime(*status);
 }
 
@@ -193,7 +193,7 @@ ucal_setAttribute(      UCalendar*              cal,
 {
   switch(attr) {
   case UCAL_LENIENT:
-    ((Calendar*)cal)->setLenient((bool_t)newValue);
+    ((Calendar*)cal)->setLenient((UBool)newValue);
     break;
     
   case UCAL_FIRST_DAY_OF_WEEK:
@@ -266,7 +266,7 @@ ucal_setDateTime(    UCalendar*        cal,
   ((Calendar*)cal)->set(year, month, date, hour, minute, second);
 }
 
-U_CAPI bool_t 
+U_CAPI UBool 
 ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2)
 {
@@ -313,7 +313,7 @@ ucal_set(    UCalendar*                cal,
   ((Calendar*)cal)->set((Calendar::EDateFields)field, value);
 }
 
-U_CAPI bool_t 
+U_CAPI UBool 
 ucal_isSet(    const    UCalendar*                cal,
         UCalendarDateFields        field)
 {

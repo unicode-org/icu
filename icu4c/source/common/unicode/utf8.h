@@ -39,13 +39,13 @@ utf8_countTrailBytes[256];
 #define UTF8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UChar32 c, bool_t strict);
+utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UChar32 c, UBool strict);
 
 U_CAPI UTextOffset U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c);
 
 U_CAPI UChar32 U_EXPORT2
-utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, bool_t strict);
+utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, UBool strict);
 
 U_CAPI UTextOffset U_EXPORT2
 utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);

@@ -30,8 +30,8 @@ static void
 _MBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
     const uint8_t *oldraw;
 
-    sharedData->table->mbcs.starters = (bool_t*)raw;
-    oldraw = raw += sizeof(bool_t)*256;
+    sharedData->table->mbcs.starters = (UBool*)raw;
+    oldraw = raw += sizeof(UBool)*256;
 
     ucmp16_initFromData(&sharedData->table->mbcs.toUnicode, &raw, pErrorCode);
     if(((raw-oldraw)&3)!=0) {
@@ -73,7 +73,7 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
                                const char **source,
                                const char *sourceLimit,
                                int32_t *offsets,
-                               bool_t flush,
+                               UBool flush,
                                UErrorCode * err)
 {
   const char *mySource = *source;
@@ -85,7 +85,7 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
   CompactShortArray *myToUnicode = NULL, *myToUnicodeFallback = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
-  bool_t *myStarters = NULL;
+  UBool *myStarters = NULL;
 
 
 
@@ -202,7 +202,7 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                                                 const char **source,
                                                 const char *sourceLimit,
                                                 int32_t *offsets,
-                                                bool_t flush,
+                                                UBool flush,
                                                 UErrorCode * err)
 {
   const char *mySource = *source;
@@ -215,7 +215,7 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
   UChar oldMySourceChar = 0x0000;
-  bool_t *myStarters = NULL;
+  UBool *myStarters = NULL;
 
   myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
   myToUnicodeFallback = &_this->sharedData->table->mbcs.toUnicodeFallback;
@@ -352,7 +352,7 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
                                       const UChar ** source,
                                       const UChar * sourceLimit,
                                       int32_t *offsets,
-                                      bool_t flush,
+                                      UBool flush,
                                       UErrorCode * err)
 
 {
@@ -468,7 +468,7 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                                                     const UChar ** source,
                                                     const UChar * sourceLimit,
                                                     int32_t *offsets,
-                                                    bool_t flush,
+                                                    UBool flush,
                                                     UErrorCode * err)
 
 {
@@ -671,9 +671,9 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
 } 
 
 static void
-_MBCSGetStarters(const UConverter* converter, bool_t starters[256], UErrorCode *pErrorCode) {
+_MBCSGetStarters(const UConverter* converter, UBool starters[256], UErrorCode *pErrorCode) {
     /* fills in the starters boolean array */
-    uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
+    uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(UBool));
 }
 
 static const UConverterImpl _MBCSImpl={

@@ -119,7 +119,7 @@ CollationKey::setToBogus()
     return *this;
 }
 
-bool_t
+UBool
 CollationKey::operator==(const CollationKey& source) const
 {
     return (this->fCount == source.fCount &&

@@ -29,7 +29,7 @@ const UChar UnicodeToHexTransliterator::HEX_DIGITS[32] = {
  */
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 const UnicodeString& thePattern,
-                                bool_t isUppercase,
+                                UBool isUppercase,
                                 UnicodeFilter* adoptedFilter,
                                 UErrorCode& status) :
     Transliterator(_ID, adoptedFilter),
@@ -129,7 +129,7 @@ void UnicodeToHexTransliterator::applyPattern(const UnicodeString& thePattern,
 
     for (int32_t i=0; i<pattern.length(); ++i) {
         UChar c = pattern.charAt(i);
-        bool_t isLiteral = FALSE;
+        UBool isLiteral = FALSE;
         if (c == BACKSLASH) {
             if ((i+1)<pattern.length()) {
                 isLiteral = TRUE;
@@ -199,7 +199,7 @@ const UnicodeString& UnicodeToHexTransliterator::toPattern(void) const {
 /**
  * Returns true if this transliterator outputs uppercase hex digits.
  */
-bool_t UnicodeToHexTransliterator::isUppercase(void) const {
+UBool UnicodeToHexTransliterator::isUppercase(void) const {
     return uppercase;
 }
 
@@ -212,7 +212,7 @@ bool_t UnicodeToHexTransliterator::isUppercase(void) const {
  * @param outputUppercase if true, then this transliterator
  * outputs uppercase hex digits.
  */
-void UnicodeToHexTransliterator::setUppercase(bool_t outputUppercase) {
+void UnicodeToHexTransliterator::setUppercase(UBool outputUppercase) {
     uppercase = outputUppercase;
 }
 
@@ -220,7 +220,7 @@ void UnicodeToHexTransliterator::setUppercase(bool_t outputUppercase) {
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
-                                                     bool_t isIncremental) const {
+                                                     UBool isIncremental) const {
     /**
      * Performs transliteration changing all characters to
      * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
@@ -240,7 +240,7 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, Position
         }
 
         hex = prefix;
-        bool_t showRest = FALSE;
+        UBool showRest = FALSE;
         for (int32_t i=3; i>=0; --i) {
             int32_t d = (c >> (i*4)) & 0xF;
             if (showRest || (d != 0) || minDigits > i) {

@@ -503,7 +503,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
 */
 U_CAPI int32_t
 unum_toPattern(    const    UNumberFormat*          fmt,
-        bool_t                  isPatternLocalized,
+        UBool                  isPatternLocalized,
         UChar*                  result,
         int32_t                 resultLength,
         UErrorCode*             status);

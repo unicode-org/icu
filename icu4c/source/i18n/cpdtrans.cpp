@@ -261,7 +261,7 @@ void CompoundTransliterator::adoptFilter(UnicodeFilter* f) {
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void CompoundTransliterator::handleTransliterate(Replaceable& text, Position& index,
-                                                 bool_t incremental) const {
+                                                 UBool incremental) const {
     /* Call each transliterator with the same start value and
      * initial cursor index, but with the limit index as modified
      * by preceding transliterators.  The cursor index must be

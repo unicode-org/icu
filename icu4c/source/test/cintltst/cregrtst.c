@@ -962,7 +962,7 @@ void TestLineInvariants()
     UBreakIterator *e;
     UErrorCode status = U_ZERO_ERROR;
    UChar noBreak[10], dashes[10];
-   bool_t saw2;
+   UBool saw2;
    UChar work[5];
    UChar *s;
 AllocateTextBoundary();   
@@ -1312,7 +1312,7 @@ void doFirstSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* res
     int32_t selectionStart, selectionEnd;
     UChar* expectedFirstSelection;
     UChar* tempFirst;
-    bool_t success = TRUE;
+    UBool success = TRUE;
     
     log_verbose("doFirstSelectionTest.......\n"); 
     
@@ -1349,7 +1349,7 @@ void doLastSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* resu
     int32_t selectionEnd, selectionStart;
     UChar *expectedLastSelection;
     UChar *tempLast;
-    bool_t success = TRUE;
+    UBool success = TRUE;
   
     log_verbose("doLastSelectionTest.......\n"); 
 
@@ -1478,7 +1478,7 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
     UChar work[3]; 
     UChar breaks[10];
     UChar c;
-    bool_t seen2;
+    UBool seen2;
     int errorCount = 0;
     status=U_ZERO_ERROR;
    

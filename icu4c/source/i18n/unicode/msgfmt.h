@@ -229,7 +229,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @stable
      */
-    virtual bool_t operator==(const Format& other) const;
+    virtual UBool operator==(const Format& other) const;
 
     /**
      * Sets the locale. This locale is used for fetching default number or date

@@ -16,7 +16,7 @@
  **/
 class DateFormatTest: public CalendarTimeZoneTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
     /**
      *  "Test written by Wally Wedel and emailed to me."

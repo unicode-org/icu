@@ -180,13 +180,13 @@ public:
      * object, and styles are not considered.
      * @stable
      */
-    virtual bool_t operator==(const BreakIterator&) const = 0;
+    virtual UBool operator==(const BreakIterator&) const = 0;
 
     /**
      * Returns the complement of the result of operator==
      * @stable
      */
-    bool_t operator!=(const BreakIterator& rhs) const { return !operator==(rhs); }
+    UBool operator!=(const BreakIterator& rhs) const { return !operator==(rhs); }
 
     /**
      * Return a polymorphic copy of this object.  This is an abstract
@@ -297,7 +297,7 @@ public:
      * @return True if "offset" is a boundary position.
      * @stable
      */
-    virtual bool_t isBoundary(UTextOffset offset) = 0;
+    virtual UBool isBoundary(UTextOffset offset) = 0;
 
     /**
      * Return the nth boundary from the current boundary

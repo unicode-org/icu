@@ -56,7 +56,7 @@ public:
      * Implements {@link Transliterator#handleTransliterate}.
      */
     virtual void handleTransliterate(Replaceable& text, Position& offset,
-                                     bool_t isIncremental) const;
+                                     UBool isIncremental) const;
 };
 
 inline NullTransliterator::NullTransliterator() : Transliterator(_ID, 0) {}

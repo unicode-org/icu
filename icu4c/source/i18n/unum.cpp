@@ -327,15 +327,15 @@ unum_setAttribute(    UNumberFormat*          fmt,
 {
   switch(attr) {
   case UNUM_PARSE_INT_ONLY:
-    ((NumberFormat*)fmt)->setParseIntegerOnly((bool_t)newValue);
+    ((NumberFormat*)fmt)->setParseIntegerOnly((UBool)newValue);
     break;
     
   case UNUM_GROUPING_USED:
-    ((NumberFormat*)fmt)->setGroupingUsed((bool_t)newValue);
+    ((NumberFormat*)fmt)->setGroupingUsed((UBool)newValue);
     break;
     
   case UNUM_DECIMAL_ALWAYS_SHOWN:
-    ((DecimalFormat*)fmt)->setDecimalSeparatorAlwaysShown((bool_t)newValue);
+    ((DecimalFormat*)fmt)->setDecimalSeparatorAlwaysShown((UBool)newValue);
     break;
     
   case UNUM_MAX_INTEGER_DIGITS:
@@ -499,7 +499,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
 
 U_CAPI int32_t
 unum_toPattern(    const    UNumberFormat*          fmt,
-        bool_t                  isPatternLocalized,
+        UBool                  isPatternLocalized,
         UChar*                  result,
         int32_t                 resultLength,
         UErrorCode*             status)

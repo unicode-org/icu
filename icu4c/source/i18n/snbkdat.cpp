@@ -225,7 +225,7 @@ SpecialMapping TextBoundaryData::kSentenceExceptionChar[] = {
     SpecialMapping(TextBoundaryData::END_OF_STRING, TextBoundaryData::ksEOS)
 };
 
-const bool_t TextBoundaryData::kSentenceExceptionFlags[] = {
+const UBool TextBoundaryData::kSentenceExceptionFlags[] = {
     FALSE,            // kNonCharacter         = 0,
     FALSE,            // kUppercaseLetter      = 1,
     FALSE,            // kLowercaseLetter      = 2,

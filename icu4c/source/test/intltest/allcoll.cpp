@@ -148,7 +148,7 @@ void CollationDummyTest::TestExtra( char* par )
     }
 }
 
-void CollationDummyTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CollationDummyTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationDummyTest: ");
     switch (index) {

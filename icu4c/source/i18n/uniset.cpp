@@ -138,7 +138,7 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
  * @param o set to be compared for equality with this set.
  * @return <tt>true</tt> if the specified set is equal to this set.
  */
-bool_t UnicodeSet::operator==(const UnicodeSet& o) const {
+UBool UnicodeSet::operator==(const UnicodeSet& o) const {
     return pairs == o.pairs;
 }
 
@@ -241,7 +241,7 @@ int32_t UnicodeSet::size(void) const {
  *
  * @return <tt>true</tt> if this set contains no elements.
  */
-bool_t UnicodeSet::isEmpty(void) const {
+UBool UnicodeSet::isEmpty(void) const {
     return pairs.length() == 0;
 }
 
@@ -252,7 +252,7 @@ bool_t UnicodeSet::isEmpty(void) const {
  * @return <tt>true</tt> if this set contains the specified range
  * of chars.
  */
-bool_t UnicodeSet::contains(UChar first, UChar last) const {
+UBool UnicodeSet::contains(UChar first, UChar last) const {
     // Set i to the end of the smallest range such that its end
     // point >= last, or pairs.length() if no such range exists.
     int32_t i = 1;
@@ -265,7 +265,7 @@ bool_t UnicodeSet::contains(UChar first, UChar last) const {
  *
  * @return <tt>true</tt> if this set contains the specified char.
  */
-bool_t UnicodeSet::contains(UChar c) const {
+UBool UnicodeSet::contains(UChar c) const {
     return contains(c, c);
 }
 
@@ -274,7 +274,7 @@ bool_t UnicodeSet::contains(UChar c) const {
  * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
  * indexing.
  */
-bool_t UnicodeSet::containsIndexValue(uint8_t v) const {
+UBool UnicodeSet::containsIndexValue(uint8_t v) const {
     /* The index value v, in the range [0,255], is contained in this set if
      * it is contained in any pair of this set.  Pairs either have the high
      * bytes equal, or unequal.  If the high bytes are equal, then we have
@@ -357,7 +357,7 @@ void UnicodeSet::remove(UChar c) {
  * @return <tt>true</tt> if this set contains all of the elements of the
  * 	       specified set.
  */
-bool_t UnicodeSet::containsAll(const UnicodeSet& c) const {
+UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
     // The specified set is a subset if all of its pairs are contained
     // in this set.
     int32_t i = 1;
@@ -468,7 +468,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
         return pairsBuf;
     }
 
-    bool_t invert = FALSE;
+    UBool invert = FALSE;
     pairsBuf.remove();
 
     int32_t lastChar = -1; // This is either a char (0..FFFF) or -1
@@ -510,7 +510,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
          */
         UChar c = pattern.charAt(i);
         nestedPairs = NULL;
-        bool_t isLiteral = FALSE;
+        UBool isLiteral = FALSE;
 
         // Ignore whitespace.  This is not Unicode whitespace, but Java
         // whitespace, a subset of Unicode whitespace.
@@ -823,7 +823,7 @@ void UnicodeSet::removePair(UnicodeString& pairs, UChar c, UChar d) {
         // Once we get here, we know c <= b and d >= a.
         // rangeEdited is set to true if we have modified the
         // range a-b (the range at i) in place.
-        bool_t rangeEdited = FALSE;
+        UBool rangeEdited = FALSE;
         if (c > a) {
             // If c is after a and before b, then we have overlap
             // of this sort: a--c==b--d or a--c==d--b, where a-b
@@ -1080,7 +1080,7 @@ UnicodeString& UnicodeSet::getCategoryPairs(UnicodeString& result,
 	// The temporary cat is only really needed if invert is true.
 	// TO DO: Allocate cat on the heap only if needed.
 	UnicodeString cat(catName);
-    bool_t invert = (catName.length() > 1 &&
+    UBool invert = (catName.length() > 1 &&
                      catName.charAt(0) == COMPLEMENT);
     if (invert) {
         cat.remove(0, 1);

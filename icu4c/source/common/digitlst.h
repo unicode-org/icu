@@ -61,12 +61,12 @@ public:
     /**
      * Return true if another object is semantically equal to this one.
      */
-    bool_t operator==(const DigitList& other) const;
+    UBool operator==(const DigitList& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
      */
-    bool_t operator!=(const DigitList& other) const { return !operator==(other); }
+    UBool operator!=(const DigitList& other) const { return !operator==(other); }
 
     /**
      * Clears out the digits.
@@ -99,14 +99,14 @@ public:
      * Return true if the number represented by this object can fit into
      * a long.
      */
-    bool_t fitsIntoLong(bool_t isPositive, bool_t ignoreNegativeZero);
+    UBool fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero);
 
     /**
      * Utility routine to set the value of the digit list from a double
      * Input must be non-negative, and must not be Inf, -Inf, or NaN.
      * The maximum fraction digits helps us round properly.
      */
-    void set(double source, int32_t maximumDigits, bool_t fixedPoint = TRUE);
+    void set(double source, int32_t maximumDigits, UBool fixedPoint = TRUE);
 
     /**
      * Utility routine to set the value of the digit list from a long.
@@ -118,14 +118,14 @@ public:
     /**
      * Return true if this is a representation of zero.
      */
-    bool_t isZero(void) const;
+    UBool isZero(void) const;
 
     /**
      * Return true if this is a representation of LONG_MIN.  You must use
      * this method to determine if this is so; you cannot check directly,
      * because a special format is used to handle this.
      */
-    bool_t isLONG_MIN(void) const;
+    UBool isLONG_MIN(void) const;
 
     /**
      * This is the zero digit.  Array elements fDigits[i] have values from
@@ -176,7 +176,7 @@ private:
      */
     static void initializeLONG_MIN_REP(void);
 
-    bool_t shouldRoundUp(int32_t maximumDigits);
+    UBool shouldRoundUp(int32_t maximumDigits);
 
     static char LONG_MIN_REP[LONG_DIGITS];
     static int32_t  LONG_MIN_REP_LENGTH;

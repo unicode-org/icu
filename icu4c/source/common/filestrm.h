@@ -40,7 +40,7 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode);
 U_CAPI void U_EXPORT2
 T_FileStream_close(FileStream* fileStream);
 
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 T_FileStream_file_exists(const char* filename);
 
 

@@ -29,7 +29,7 @@ class JamoHangulTransliterator;
  */
 class JamoToHangTransliteratorTest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, bool_t exec, char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, char* &name, char* par=NULL);
 
     /*Tests the constructors */
     void TestConstruction(void);
@@ -59,7 +59,7 @@ public:
                 const UnicodeString& expectedResult);
       
     void expectAux(const UnicodeString& tag,
-                   const UnicodeString& summary, bool_t pass,
+                   const UnicodeString& summary, UBool pass,
                    const UnicodeString& expectedResult);
 
 

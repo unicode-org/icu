@@ -87,7 +87,7 @@ void TestCharLength()
 	};
 	
 	int16_t i;
-	bool_t multiple;
+	UBool multiple;
 	for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=i+2){
 		UChar32 c=codepoint[i+1];
 		if(UTF16_CHAR_LENGTH(c) != (uint16_t)codepoint[i]){

@@ -86,13 +86,13 @@ class U_COMMON_API ComposedCharIter
    *                  over the Hangul characters and their corresponding
    *                  Jamo decompositions.
    */
-  ComposedCharIter(bool_t compat, int32_t options);
+  ComposedCharIter(UBool compat, int32_t options);
   
   /**
    * Determines whether there any precomposed Unicode characters not yet returned
    * by {@link #next}.
    */
-  bool_t hasNext(void) const;
+  UBool hasNext(void) const;
   
   /**
    * Returns the next precomposed Unicode character.
@@ -117,7 +117,7 @@ class U_COMMON_API ComposedCharIter
   void    findNextChar(void);
   
   int32_t    minDecomp;
-  bool_t    hangul;
+  UBool    hangul;
   
   UChar    curChar;
   UChar    nextChar;

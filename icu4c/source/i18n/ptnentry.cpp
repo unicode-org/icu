@@ -95,8 +95,8 @@ void PatternEntry::appendQuotedChars(UnicodeString& toAddTo) const {
   appendQuoted(chars,toAddTo);
 }
 
-bool_t PatternEntry::equals(const PatternEntry& other) const {
-  bool_t result = ((strength == other.strength) &&
+UBool PatternEntry::equals(const PatternEntry& other) const {
+  UBool result = ((strength == other.strength) &&
                    (chars == other.chars) &&
                    (extension == other.extension));
   return result;
@@ -136,8 +136,8 @@ PatternEntry::getChars(UnicodeString& result) const
  Add the entry in textual form into the toAddTo buffer.
  */
 void PatternEntry::addToBuffer(UnicodeString& toAddTo,
-                   bool_t showExtension,
-                   bool_t showWhiteSpace,
+                   UBool showExtension,
+                   UBool showWhiteSpace,
                    const PatternEntry* lastEntry) const
 {
   if (showWhiteSpace && toAddTo.length() > 0)
@@ -177,7 +177,7 @@ void PatternEntry::addToBuffer(UnicodeString& toAddTo,
 
 // Append a string to a pattern buffer, adding quotes if necessary
 void PatternEntry::appendQuoted(const UnicodeString& chars, UnicodeString& toAddTo) {
-  bool_t inQuote = FALSE;
+  UBool inQuote = FALSE;
   UChar ch = chars[T_INT32(0)];
   if (Unicode::isSpaceChar(ch)) {
     inQuote = TRUE;
@@ -243,8 +243,8 @@ PatternEntry::Parser &PatternEntry::Parser::operator=(const Parser &that)
 PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
 {
   int32_t newStrength = PatternEntry::UNSET;
-  bool_t inChars = TRUE;
-  bool_t inQuote = FALSE;
+  UBool inChars = TRUE;
+  UBool inQuote = FALSE;
 
   newChars.remove();
   newExtensions.remove();
@@ -406,7 +406,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
 // Check if the character is a special character.  A special character
 // would be meaningful in the rule only if quoted, otherwise it's used
 // as a denotation for strength or merging symbols.
-bool_t PatternEntry::isSpecialChar(UChar ch)
+UBool PatternEntry::isSpecialChar(UChar ch)
 {
   return (((ch <= 0x002F) && (ch >= 0x0020)) ||
       ((ch <= 0x003F) && (ch >= 0x003A)) ||

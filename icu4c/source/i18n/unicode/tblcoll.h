@@ -366,13 +366,13 @@ public:
    * Returns true if "other" is the same as "this".
    * @stable
    */
-  virtual bool_t                  operator==(const Collator& other) const;
+  virtual UBool                  operator==(const Collator& other) const;
 
   /**
    * Returns true if "other" is not the same as "this".
    * @stable
    */
-  virtual bool_t                  operator!=(const Collator& other) const;
+  virtual UBool                  operator!=(const Collator& other) const;
 
   /**
    * Makes a deep copy of the object.  The caller owns the returned object.
@@ -663,7 +663,7 @@ private:
    */
   void                addContractOrder(const  UnicodeString&          groupChars, 
                        int32_t                        anOrder,
-                       bool_t                            fwd,
+                       UBool                            fwd,
                        UErrorCode&                     status);
   /**
    * If the given string has been specified as a contracting string
@@ -715,7 +715,7 @@ private:
    */
   static        int32_t             getEntry(   VectorOfPToContractElement*     list, 
                         const   UnicodeString&          name,
-                        bool_t                    fwd);
+                        UBool                    fwd);
 
   /**
    * Flattens the given object persistently to a file.  The file name
@@ -726,7 +726,7 @@ private:
    * @param fileName the output file name.
    * @return TRUE if writing to the file was successful, FALSE otherwise.
    */
-  bool_t              writeToFile(const char* fileName) const; // True on success
+  UBool              writeToFile(const char* fileName) const; // True on success
 
   /**
    * Add this table collation to the cache.  This involves adding the
@@ -765,7 +765,7 @@ private:
                       UErrorCode& status);
   void                constructFromFile(  const Locale&           locale,
                       const UnicodeString&    localeFileName,
-                      bool_t                  tryBinaryFile,
+                      UBool                  tryBinaryFile,
                       UErrorCode&              status);
   void                constructFromFile(  const char* fileName,
                       UErrorCode& status);
@@ -835,7 +835,7 @@ private:
         //--------------------------------------------------------------------------
         // Data Members
 
-  bool_t              isOverIgnore;
+  UBool              isOverIgnore;
   UChar             lastChar;
   MergeCollation*     mPattern;
   UnicodeString       sbuffer;
@@ -843,11 +843,11 @@ private:
   UnicodeString       key;
   NormalizerIterator  *cursor1;
   NormalizerIterator  *cursor2;
-  bool_t              dataIsOwned;
+  UBool              dataIsOwned;
   TableCollationData* data;
 };
 
-inline bool_t
+inline UBool
 RuleBasedCollator::operator!=(const Collator& other) const
 {
   return !(*this == other);

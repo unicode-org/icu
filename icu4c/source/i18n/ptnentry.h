@@ -56,7 +56,7 @@ class PatternEntry
      * @param other the other pattern entry object.
      * @return TRUE if the pattern entry objects are the same, FALSE otherwise.
      */
-  bool_t equals(const PatternEntry& other) const;
+  UBool equals(const PatternEntry& other) const;
 
   /**
      * Gets the strength of this entry.
@@ -149,8 +149,8 @@ class PatternEntry
      * @param lastEntry the last pattern entry that was referenced.
      */
   void addToBuffer(UnicodeString& toAddTo,
-           bool_t showExtension,
-           bool_t showWhiteSpace,
+           UBool showExtension,
+           UBool showWhiteSpace,
            const PatternEntry* lastEntry) const;
 
   /**
@@ -173,7 +173,7 @@ class PatternEntry
      * @param the Unicode character
      * @return TRUE if the character is a special character, FALSE otherwise.
      */
-  static bool_t isSpecialChar(UChar ch);
+  static UBool isSpecialChar(UChar ch);
 
   int32_t strength;
   UnicodeString chars;

@@ -288,7 +288,7 @@ GregorianCalendar::operator=(const GregorianCalendar &right)
 
 // -------------------------------------
 
-bool_t
+UBool
 GregorianCalendar::operator==(const Calendar& that) const
 {
     GregorianCalendar* other = (GregorianCalendar*)&that;
@@ -300,7 +300,7 @@ GregorianCalendar::operator==(const Calendar& that) const
 }
 
 // {sfb} API change?
-bool_t GregorianCalendar::equivalentTo(const Calendar& other) const
+UBool GregorianCalendar::equivalentTo(const Calendar& other) const
 {
     // Calendar override.
     // Return true if another Calendar object is equivalent to this one.  An equivalent
@@ -362,7 +362,7 @@ GregorianCalendar::getGregorianChange() const
 
 // -------------------------------------
 
-bool_t 
+UBool 
 GregorianCalendar::isLeapYear(int32_t year) const
 {
     return (year >= fGregorianCutoverYear ?
@@ -380,14 +380,14 @@ GregorianCalendar::isLeapYear(int32_t year) const
  * @param theTime the given time as LOCAL milliseconds, not UTC.
  */
 void
-GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
+GregorianCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
 {
     if (U_FAILURE(status)) 
         return;
 
     int32_t rawYear;
     int32_t year, yearOfWeekOfYear, month, date, dayOfWeek, locDayOfWeek, dayOfYear, era;
-    bool_t isLeap;
+    UBool isLeap;
 
     // Compute the year, month, and day of month from the given millis
     if (theTime >= fNormalizedGregorianCutover) {
@@ -722,7 +722,7 @@ GregorianCalendar::pinDayOfMonth()
 
 // -------------------------------------
 
-bool_t
+UBool
 GregorianCalendar::validateFields() const
 {
     for (int32_t field = 0; field < FIELD_COUNT; field++) {
@@ -762,7 +762,7 @@ GregorianCalendar::validateFields() const
 
 // -------------------------------------
 
-bool_t
+UBool
 GregorianCalendar::boundsCheck(int32_t value, EDateFields field) const
 {
     return value >= getMinimum(field) && value <= getMaximum(field);
@@ -826,7 +826,7 @@ GregorianCalendar::computeTime(UErrorCode& status)
     // calendar Oct. 4 (Julian) is followed by Oct. 15 (Gregorian).  This
     // algorithm will interpret such a date using the Julian calendar,
     // yielding Oct. 20, 1582 (Gregorian).
-    bool_t isGregorian = year >= fGregorianCutoverYear;
+    UBool isGregorian = year >= fGregorianCutoverYear;
     double julianDay = computeJulianDay(isGregorian, year);
     double millis = julianDayToMillis(julianDay);
 
@@ -965,8 +965,8 @@ GregorianCalendar::computeTime(UErrorCode& status)
  * specifies (Jan. 1, 1) - 1, in whatever calendar we are using (Julian
  * or Gregorian).
  */
-double GregorianCalendar::computeJulianDayOfYear(bool_t isGregorian,
-                                                 int32_t year, bool_t& isLeap) {
+double GregorianCalendar::computeJulianDayOfYear(UBool isGregorian,
+                                                 int32_t year, UBool& isLeap) {
     isLeap = year%4 == 0;
     int32_t y = year - 1;
     double julianDay = 365.0*y + floorDivide(y, 4) + (kJan1_1JulianDay - 3);
@@ -1034,7 +1034,7 @@ int32_t GregorianCalendar::computeDOYfromWOY(double julianDayOfYear) const {
 }
 
 double 
-GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year) 
+GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year) 
 {
     // Find the most recent set of fields specifying the day within
     // the year.  These may be any of the following combinations:
@@ -1055,7 +1055,7 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
     int32_t doyStamp     = fStamp[DAY_OF_YEAR];
     int32_t woyStamp     = fStamp[WEEK_OF_YEAR];
 
-    bool_t isLeap;
+    UBool isLeap;
     double julianDay;
 
     int32_t bestStamp = (monthStamp > domStamp) ? monthStamp : domStamp;
@@ -1168,7 +1168,7 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
     // The following if() clause checks if the month field
     // predominates.  This set of computations must be done BEFORE
     // using the year, since the year value may be adjusted here.
-    bool_t useMonth = FALSE;
+    UBool useMonth = FALSE;
     int32_t month = 0;
     if (bestStamp != kUnset &&
         (bestStamp == monthStamp ||
@@ -1262,7 +1262,7 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
         // No month, start with January 0 (day before Jan 1), then adjust.
 
         int32_t doy = 0;
-        bool_t doCutoverAdjustment = TRUE;
+        UBool doCutoverAdjustment = TRUE;
 
         if (bestStamp == kUnset) {
             doy = 1; // Advance to January 1
@@ -1430,7 +1430,7 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
         // WEEK_OF_YEAR clause below, if delta was greater than approx.
         // 7.1 we would reach the limit of a int32_t
         double delta = amount;
-        bool_t adjustDST = TRUE;
+        UBool adjustDST = TRUE;
 
         switch (field) {
         case WEEK_OF_YEAR:
@@ -1520,7 +1520,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     /* Some of the fields require special handling to work in the month
      * containing the Gregorian cutover point.  Do shared computations
      * for these fields here.  [j81 - aliu] */
-    bool_t inCutoverMonth = FALSE;
+    UBool inCutoverMonth = FALSE;
     int32_t cMonthLen; // 'c' for cutover; in days
     int32_t cDayOfMonth; // no discontinuity: [0, cMonthLen)
     double cMonthStart; // in ms
@@ -1990,7 +1990,7 @@ GregorianCalendar::getActualMaximum(EDateFields field) const
 
 // -------------------------------------
 
-bool_t
+UBool
 GregorianCalendar::inDaylightTime(UErrorCode& status) const
 {
     if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 

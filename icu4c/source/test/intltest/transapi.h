@@ -23,7 +23,7 @@ class Transliterator;
  */
 class TransliteratorAPITest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, bool_t exec, char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, char* &name, char* par=NULL);
 
     /*Tests the function getDisplayName() */
     void TestGetDisplayName();

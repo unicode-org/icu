@@ -316,7 +316,7 @@ public:
      * @return      True if the given year is a leap year; false otherwise.
      * @stable
      */
-    bool_t isLeapYear(int32_t year) const;
+    UBool isLeapYear(int32_t year) const;
 
     /**
      * Compares the equality of two GregorianCalendar objects. Objects of different
@@ -328,7 +328,7 @@ public:
      *              GregorianCalendar; false otherwise.
      * @stable
      */
-    virtual bool_t operator==(const Calendar& that) const;
+    virtual UBool operator==(const Calendar& that) const;
 
     /**
      * Calendar override.
@@ -336,7 +336,7 @@ public:
      * Calendar will behave exactly as this one does, but may be set to a different time.
      * @stable
      */
-    virtual bool_t equivalentTo(const Calendar& other) const;
+    virtual UBool equivalentTo(const Calendar& other) const;
 
     /**
      * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
@@ -418,7 +418,7 @@ public:
      *           false, otherwise.
      * @stable
      */
-    virtual bool_t inDaylightTime(UErrorCode& status) const;
+    virtual UBool inDaylightTime(UErrorCode& status) const;
 
 public:
 
@@ -499,8 +499,8 @@ private:
      */
     UDate getEpochDay(UErrorCode& status);
 
-    static double computeJulianDayOfYear(bool_t isGregorian, int32_t year,
-                                         bool_t& isLeap);
+    static double computeJulianDayOfYear(UBool isGregorian, int32_t year,
+                                         UBool& isLeap);
 
     int32_t computeRelativeDOW() const;
 
@@ -516,7 +516,7 @@ private:
      * year 1 BC, -1 indicating 2 BC, etc.
      * @return the Julian day number
      */
-    double computeJulianDay(bool_t isGregorian, int32_t year);
+    double computeJulianDay(UBool isGregorian, int32_t year);
 
     /**
      * Compute the date-based fields given the milliseconds since the epoch start. Do
@@ -527,7 +527,7 @@ private:
      * @param quick if true, only compute the ERA, YEAR, MONTH, DATE,
      * DAY_OF_WEEK, and DAY_OF_YEAR.
      */
-    void timeToFields(UDate theTime, bool_t quick, UErrorCode& status);
+    void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
 
 
     /**
@@ -549,12 +549,12 @@ private:
     /**
      * Validates the values of the set time fields.  True if they're all valid.
      */
-    bool_t validateFields(void) const;
+    UBool validateFields(void) const;
 
     /**
      * Validates the value of the given time field.  True if it's valid.
      */
-    bool_t boundsCheck(int32_t value, EDateFields field) const;
+    UBool boundsCheck(int32_t value, EDateFields field) const;
 
     /**
      * Return the pseudo-time-stamp for two fields, given their

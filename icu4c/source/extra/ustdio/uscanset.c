@@ -19,7 +19,7 @@
 #include "uscanset.h"
 
 
-bool_t
+UBool
 u_scanf_scanset_add(u_scanf_scanset     *scanset,
             UChar         c)
 {
@@ -32,7 +32,7 @@ u_scanf_scanset_add(u_scanf_scanset     *scanset,
   return TRUE;
 }
 
-bool_t
+UBool
 u_scanf_scanset_addrange(u_scanf_scanset     *scanset,
              UChar             start, 
              UChar             end)
@@ -48,7 +48,7 @@ u_scanf_scanset_addrange(u_scanf_scanset     *scanset,
   return TRUE;
 }
 
-bool_t
+UBool
 u_scanf_scanset_init(u_scanf_scanset     *scanset,
              const UChar    *s,
              int32_t        *len)
@@ -56,7 +56,7 @@ u_scanf_scanset_init(u_scanf_scanset     *scanset,
   UChar        c;
   const UChar     *limit;
   int32_t     count;
-  bool_t    result;
+  UBool    result;
 
 
   /* set up parameters */
@@ -126,7 +126,7 @@ u_scanf_scanset_init(u_scanf_scanset     *scanset,
   return result;
 }
 
-bool_t
+UBool
 u_scanf_scanset_in(u_scanf_scanset     *scanset,
            UChar         c)
 {

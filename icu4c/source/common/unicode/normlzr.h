@@ -398,7 +398,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   static void compose(const UnicodeString& source, 
-              bool_t compat,
+              UBool compat,
               int32_t options,
               UnicodeString& result, 
               UErrorCode &status);
@@ -430,7 +430,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   static void decompose(const UnicodeString& source, 
-            bool_t compat,
+            UBool compat,
             int32_t options,
             UnicodeString& result, 
             UErrorCode &status);
@@ -544,9 +544,9 @@ class U_COMMON_API Normalizer
    * character-storage object.
    * @stable
    */
-  //  virtual bool_t    operator==(const CharacterIterator& that) const;
-  bool_t        operator==(const Normalizer& that) const;
-  inline bool_t        operator!=(const Normalizer& that) const;
+  //  virtual UBool    operator==(const CharacterIterator& that) const;
+  UBool        operator==(const Normalizer& that) const;
+  inline UBool        operator!=(const Normalizer& that) const;
   
   /**
    * Returns a pointer to a new Normalizer that is a clone of this one.
@@ -625,7 +625,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   void setOption(int32_t option, 
-         bool_t value);
+         UBool value);
   
   /**
    * Determine whether an option is turned on or off.
@@ -633,7 +633,7 @@ class U_COMMON_API Normalizer
    * @see #setOption
    * @stable
    */
-  bool_t getOption(int32_t option) const;
+  UBool getOption(int32_t option) const;
   
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
@@ -765,7 +765,7 @@ private:
   friend class ComposedCharIter;
 };
 
-inline bool_t
+inline UBool
 Normalizer::operator!= (const Normalizer& other) const
 { return ! operator==(other); }
 

@@ -186,7 +186,7 @@ int16_t _findIndex(const char* list, int32_t listLength, const char* key)
 {
   const char* anchor = list;
   const char* listEnd = anchor + listLength;
-  bool_t found = FALSE;
+  UBool found = FALSE;
   int tokenSize = uprv_strlen(list)+1; /*gets the size of the tokens*/
   
   while (!found && list<listEnd)
@@ -530,8 +530,8 @@ int32_t uloc_getDisplayLanguage(const char* locale,
   UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle;
   const UChar* temp = NULL;  
-  bool_t isDefaultLocale = FALSE;
-  bool_t done = FALSE;
+  UBool isDefaultLocale = FALSE;
+  UBool done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
   
@@ -653,8 +653,8 @@ int32_t uloc_getDisplayCountry(const char* locale,
   UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle = NULL;
   char inLocaleBuffer[TEMPBUFSIZE];
-  bool_t isDefaultLocale = FALSE;
-  bool_t done = FALSE;
+  UBool isDefaultLocale = FALSE;
+  UBool done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
   
@@ -773,10 +773,10 @@ int32_t uloc_getDisplayVariant(const char* locale,
   UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle;
   char inLocaleBuffer[TEMPBUFSIZE];
-  bool_t isDefaultLocale = FALSE;
+  UBool isDefaultLocale = FALSE;
   char inVariantTagBuffer[TEMPBUFSIZE+2];
   char* inVariantTag = inVariantTagBuffer;
-  bool_t done = FALSE;
+  UBool done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
   
@@ -915,7 +915,7 @@ int32_t uloc_getDisplayName(const char* locale,
   UErrorCode int_err = U_ZERO_ERROR;
   int i = 0;
   int cntSze, varSze;
-  bool_t has_lang = TRUE;
+  UBool has_lang = TRUE;
   int result_size;
 
   int_err = U_ZERO_ERROR;

@@ -21,7 +21,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-DateFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatRegressionTest");
     switch (index) {
@@ -169,7 +169,7 @@ void DateFormatRegressionTest::Test4052408(void)
         (UnicodeString) "TIMEZONE_FIELD"
     };
 
-    bool_t pass = TRUE;
+    UBool pass = TRUE;
     for(int i = 0; i <= 17; ++i) {
         FieldPosition pos(i);
         UnicodeString buf;
@@ -375,7 +375,7 @@ void DateFormatRegressionTest::Test4061287(void)
         e.printStackTrace();
     }*/
     df->setLenient(FALSE);
-    bool_t ok = FALSE;
+    UBool ok = FALSE;
     //try {
     logln(UnicodeString("") + df->parse("35/01/1971", status));
     if(U_FAILURE(status))
@@ -595,7 +595,7 @@ void DateFormatRegressionTest::Test4100302(void)
         Locale::US
         };
     //try {
-        bool_t pass = TRUE;
+        UBool pass = TRUE;
         for(int i = 0; i < 21; i++) {
 
             Format *format = DateFormat::createDateTimeInstance(DateFormat::FULL,
@@ -1042,7 +1042,7 @@ void DateFormatRegressionTest::Test4182066(void) {
     };
 
     UnicodeString out;
-    bool_t pass = TRUE;
+    UBool pass = TRUE;
     for (int32_t i=0; i<STRINGS_COUNT; ++i) {
         UnicodeString str(STRINGS[i]);
         UDate expected = DATES[i];

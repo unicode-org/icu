@@ -35,7 +35,7 @@ public:
 
     CollationISOTest();
     virtual ~CollationISOTest();
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 
     // test proper comparing for 3774 entries of ISO 14651 characters
     void TestAll( char* par );

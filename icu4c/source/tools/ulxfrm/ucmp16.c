@@ -57,7 +57,7 @@ static CompactShortArray* setToBogus(CompactShortArray* array);
 static void touchBlock(CompactShortArray* this,
                int32_t i,
                int16_t value);
-static bool_t blockTouched(const CompactShortArray* this,
+static UBool blockTouched(const CompactShortArray* this,
                int32_t i);
 
 
@@ -283,7 +283,7 @@ void ucmp16_compact(CompactShortArray* this)
       
       for (i = 0, iBlockStart = 0; i < (1 << (16 - this->kBlockShift)); i += 1, iBlockStart += (1 << this->kBlockShift))
     {
-      bool_t touched = blockTouched(this, i);
+      UBool touched = blockTouched(this, i);
       
       this->fIndex[i] = 0xFFFF;
       
@@ -372,7 +372,7 @@ void touchBlock(CompactShortArray* this,
   this->fHashes[i] = (this->fHashes[i] + (value << 1)) | 1;
 }
 
-bool_t blockTouched(const CompactShortArray* this, int32_t i)
+UBool blockTouched(const CompactShortArray* this, int32_t i)
 {
   return (this->fHashes[i] != 0);
 }

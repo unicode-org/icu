@@ -223,7 +223,7 @@ enum {
 /* access values calculated from indexes */
 static uint16_t stage23Bits, stage2Mask, stage3Mask;
 
-static bool_t
+static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -373,25 +373,25 @@ u_charType(UChar32 c) {
 }
 
 /* Checks if ch is a lower case letter.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c) {
     return GET_CATEGORY(GET_PROPS(c))==U_LOWERCASE_LETTER;
 }
 
 /* Checks if ch is an upper case letter.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c) {
     return GET_CATEGORY(GET_PROPS(c))==U_UPPERCASE_LETTER;
 }
 
 /* Checks if ch is a title case letter; usually upper case letters.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c) {
     return GET_CATEGORY(GET_PROPS(c))==U_TITLECASE_LETTER;
 }
 
 /* Checks if ch is a decimal digit. */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER)
@@ -399,7 +399,7 @@ u_isdigit(UChar32 c) {
 }
 
 /* Checks if the Unicode character is a letter.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
@@ -407,7 +407,7 @@ u_isalpha(UChar32 c) {
 }
 
 /* Checks if ch is a letter or a decimal digit */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
@@ -416,13 +416,13 @@ u_isalnum(UChar32 c) {
 }
 
 /* Checks if ch is a unicode character with assigned character type.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c) {
     return GET_PROPS(c)!=0;
 }
 
 /* Checks if the Unicode character is a base form character that can take a diacritic.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
@@ -432,7 +432,7 @@ u_isbase(UChar32 c) {
 }
 
 /* Checks if the Unicode character is a control character.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
@@ -440,7 +440,7 @@ u_iscntrl(UChar32 c) {
 }
 
 /* Checks if the Unicode character is a space character.*/
-bool_t
+UBool
 u_isspace(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
@@ -448,7 +448,7 @@ u_isspace(UChar32 c) {
 }
 
 /* Checks if the Unicode character is a whitespace character.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
@@ -457,7 +457,7 @@ u_isWhitespace(UChar32 c) {
 }
 
 /* Checks if the Unicode character is printable.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {    
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
@@ -470,7 +470,7 @@ u_isprint(UChar32 c) {
 }
 
 /* Checks if the Unicode character can start a Unicode identifier.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c) {
     /* same as u_isalpha() */
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
@@ -480,7 +480,7 @@ u_isIDStart(UChar32 c) {
 
 /* Checks if the Unicode character can be a Unicode identifier part other than starting the
  identifier.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
@@ -491,7 +491,7 @@ u_isIDPart(UChar32 c) {
 }
 
 /*Checks if the Unicode character can be ignorable in a Java or Unicode identifier.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c) {
     return (uint32_t)c<=8 ||
            (uint32_t)(c-0xe)<=(0x1b-0xe) ||
@@ -502,7 +502,7 @@ u_isIDIgnorable(UChar32 c) {
 }
 
 /*Checks if the Unicode character can start a Java identifier.*/
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
@@ -513,7 +513,7 @@ u_isJavaIDStart(UChar32 c) {
 /*Checks if the Unicode character can be a Java identifier part other than starting the
  * identifier.
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
@@ -643,7 +643,7 @@ u_charDirection(UChar32 c) {
     }
 }
 
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isMirrored(UChar32 c) {
     return GET_PROPS(c)&(1UL<<MIRROR_SHIFT) ? TRUE : FALSE;
 }

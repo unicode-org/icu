@@ -124,7 +124,7 @@ int32_t Normalizer::hashCode() const
   return text->hashCode() + fMode + fOptions + bufferPos + bufferLimit;
 }
     
-bool_t Normalizer::operator==(const Normalizer& that) const
+UBool Normalizer::operator==(const Normalizer& that) const
 {
   return *text == *(that.text)
   && currentChar == that.currentChar
@@ -166,7 +166,7 @@ Normalizer::normalize(const UnicodeString& source,
 
 void
 Normalizer::compose(const UnicodeString& source, 
-            bool_t compat,
+            UBool compat,
             int32_t,
             UnicodeString& result, 
             UErrorCode &status)
@@ -327,7 +327,7 @@ UChar Normalizer::nextCompose()
     uint32_t    classesSeen = 0;            // Combining classes seen since last base
     uint16_t    action;
     UChar        lastBase = 0;
-    bool_t        chFromText = TRUE;
+    UBool        chFromText = TRUE;
     
     // Compatibility explosions have lower indices; skip them if necessary
     uint16_t minExplode = (fMode & COMPAT_BIT) ? 0 : ComposeData::MAX_COMPAT;
@@ -589,7 +589,7 @@ UChar Normalizer::pairExplode(UnicodeString& target, uint16_t action) {
 
 void
 Normalizer::decompose(const UnicodeString& source, 
-              bool_t compat,
+              UBool compat,
               int32_t options,
               UnicodeString& result, 
               UErrorCode &status)
@@ -597,7 +597,7 @@ Normalizer::decompose(const UnicodeString& source,
   if (U_FAILURE(status)) {
     return;
   }
-  bool_t     hangul = (options & IGNORE_HANGUL) == 0;
+  UBool     hangul = (options & IGNORE_HANGUL) == 0;
   uint16_t     limit  = compat ? 0 : DecompData::MAX_COMPAT;
   
   result.truncate(0);
@@ -636,7 +636,7 @@ Normalizer::decompose(const UnicodeString& source,
  */
 UChar Normalizer::nextDecomp()
 {
-  bool_t hangul = ((fOptions & IGNORE_HANGUL) == 0);
+  UBool hangul = ((fOptions & IGNORE_HANGUL) == 0);
   UChar ch = curForward();
   
   uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
@@ -650,7 +650,7 @@ UChar Normalizer::nextDecomp()
       } else {
     buffer += ch;
       }
-      bool_t needToReorder = FALSE;
+      UBool needToReorder = FALSE;
       
       // Any other combining chacters that immediately follow the decomposed
       // character must be included in the buffer too, because they're
@@ -707,7 +707,7 @@ UChar Normalizer::nextDecomp()
  * </ul>
  */
 UChar Normalizer::prevDecomp() {
-    bool_t hangul = (fOptions & IGNORE_HANGUL) == 0;
+    UBool hangul = (fOptions & IGNORE_HANGUL) == 0;
 
     UChar ch = curBackward();
 
@@ -991,7 +991,7 @@ Normalizer::getMode() const
 
 void
 Normalizer::setOption(int32_t option, 
-              bool_t value) 
+              UBool value) 
 {
   if (value) {
     fOptions |= option;
@@ -1000,7 +1000,7 @@ Normalizer::setOption(int32_t option,
   }
 }
 
-bool_t
+UBool
 Normalizer::getOption(int32_t option) const
 {
     return (fOptions & option) != 0;

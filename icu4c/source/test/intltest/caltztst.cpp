@@ -20,7 +20,7 @@
 DateFormat*         CalendarTimeZoneTest::fgDateFormat = 0;
 Calendar*           CalendarTimeZoneTest::fgCalendar   = 0;
 
-bool_t CalendarTimeZoneTest::failure(UErrorCode status, const char* msg)
+UBool CalendarTimeZoneTest::failure(UErrorCode status, const char* msg)
 {
     if (U_FAILURE(status))
     {

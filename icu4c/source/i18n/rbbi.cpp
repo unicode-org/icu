@@ -113,7 +113,7 @@ RuleBasedBreakIterator::clone(void) const {
  * Equality operator.  Returns TRUE if both BreakIterators are of the
  * same class, have the same behavior, and iterate over the same text.
  */
-bool_t
+UBool
 RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
     if (that.getDynamicClassID() != getDynamicClassID())
         return FALSE;
@@ -388,7 +388,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
  * @param offset the offset to check.
  * @return True if "offset" is a boundary position.
  */
-bool_t RuleBasedBreakIterator::isBoundary(int32_t offset) {
+UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // the beginning index of the iterator is always a boundary position by definition
     if (text == NULL || offset == text->startIndex()) {
         return TRUE;

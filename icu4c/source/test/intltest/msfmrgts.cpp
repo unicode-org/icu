@@ -21,7 +21,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-MessageFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite MessageFormatRegressionTest");
     switch (index) {
@@ -51,7 +51,7 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &
     }
 }
 
-bool_t 
+UBool 
 MessageFormatRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {

@@ -23,7 +23,7 @@ class CalendarTimeZoneTest : public IntlTest
 protected:
     // Return true if the given status indicates failure.  Also has the side effect
     // of calling errln().  Msg should be of the form "Class::Method" in general.
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 
     // Utility method for formatting dates for printing; useful for Java->C++ conversion.
     // Tries to mimic the Java Date.toString() format.

@@ -30,8 +30,8 @@
 
 class CollationAPITest: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
-    void doAssert(bool_t condition, const char *message);
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void doAssert(UBool condition, const char *message);
 
     /**
      * This tests the properties of a collator object.

@@ -207,7 +207,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     UTextOffset i, length=ubidi_getLength(pBiDi);
     UTextOffset runCount, visualIndex, logicalStart, runLength;
     int result=0;
-    bool_t odd;
+    UBool odd;
 
     if(length<=0) {
         return;

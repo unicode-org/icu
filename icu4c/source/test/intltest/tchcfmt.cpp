@@ -18,9 +18,9 @@
 
 // tests have obvious memory leaks!
 
-static bool_t chkstatus( UErrorCode &status, char* msg = NULL )
+static UBool chkstatus( UErrorCode &status, char* msg = NULL )
 {
-    bool_t ok = U_SUCCESS(status);
+    UBool ok = U_SUCCESS(status);
     if (!ok) it_errln( msg );
     return ok;
 }
@@ -261,7 +261,7 @@ TestChoiceFormat::TestComplexExample( void )
         }
 
         ChoiceFormat form_Assigned( *form_A );
-        bool_t ok = (form_Assigned == *form_A) && (form_Assigned != *form_B);
+        UBool ok = (form_Assigned == *form_A) && (form_Assigned != *form_B);
         form_Assigned = *form_B;
         ok = ok && (form_Assigned != *form_A) && (form_Assigned == *form_B);
         if (ok) {
@@ -572,7 +572,7 @@ TestChoiceFormat::testValue( double val )
 }
 
 
-void TestChoiceFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void TestChoiceFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     switch (index) {
         case 0: name = "TestSimpleExample"; 

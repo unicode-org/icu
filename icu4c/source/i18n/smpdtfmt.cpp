@@ -231,7 +231,7 @@ SimpleDateFormat::clone() const
 
 //----------------------------------------------------------------------
 
-bool_t
+UBool
 SimpleDateFormat::operator==(const Format& other) const
 {
     if (DateFormat::operator==(other) &&
@@ -404,7 +404,7 @@ SimpleDateFormat::format(UDate date, UnicodeString& toAppendTo, FieldPosition& p
     // into fields)
     fCalendar->setTime(date, status);
 
-    bool_t inQuote = FALSE;
+    UBool inQuote = FALSE;
     UChar prevCh = 0;
     int32_t count = 0;
     UnicodeString str;
@@ -725,14 +725,14 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
 {
     int32_t start = pos.getIndex();
     int32_t oldStart = start;
-    bool_t ambiguousYear[] = { FALSE };
+    UBool ambiguousYear[] = { FALSE };
 
     char s[100];
             s[text.extract(0, text.length(), s)]=0;
 
     fCalendar->clear();
 
-    bool_t inQuote = FALSE;
+    UBool inQuote = FALSE;
     UChar prevCh = 0;
     int32_t count = 0;
     int32_t interQuoteCount = 1; // Number of chars between quotes
@@ -1046,7 +1046,7 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
  */
 // {sfb} removed
 /*
-bool_t
+UBool
 SimpleDateFormat::subParseLong(const UnicodeString& text, ParsePosition& pos, int32_t& value) const
 {
     Formattable parseResult;
@@ -1073,7 +1073,7 @@ SimpleDateFormat::subParseLong(const UnicodeString& text, ParsePosition& pos, in
  * indicating matching failure, otherwise.
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                           bool_t obeyCount, bool_t ambiguousYear[]) const
+                           UBool obeyCount, UBool ambiguousYear[]) const
 {
     UErrorCode status = U_ZERO_ERROR;
     Formattable number;
@@ -1429,7 +1429,7 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
     return;
   
   translatedPattern.remove();
-  bool_t inQuote = FALSE;
+  UBool inQuote = FALSE;
   for (UTextOffset i = 0; i < originalPattern.length(); ++i) {
     UChar c = originalPattern[i];
     if (inQuote) {

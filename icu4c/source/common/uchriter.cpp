@@ -56,7 +56,7 @@ UCharCharacterIterator::operator=(const UCharCharacterIterator& that) {
 UCharCharacterIterator::~UCharCharacterIterator() {
 }
 
-bool_t
+UBool
 UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
     if (this == &that) {
         return TRUE;
@@ -159,7 +159,7 @@ UCharCharacterIterator::nextPostInc() {
     }
 }
 
-bool_t
+UBool
 UCharCharacterIterator::hasNext() {
     return pos < end ? TRUE : FALSE;
 }
@@ -173,7 +173,7 @@ UCharCharacterIterator::previous() {
     }
 }
 
-bool_t
+UBool
 UCharCharacterIterator::hasPrevious() {
     return pos > begin ? TRUE : FALSE;
 }

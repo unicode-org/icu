@@ -203,8 +203,8 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
  * which we know we don't need any more;
  * is this the best way to do this??
  */
-extern bool_t
-getMemory(void **pMemory, UTextOffset *pSize, bool_t mayAllocate, UTextOffset sizeNeeded) {
+extern UBool
+getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded) {
     /* check for existing memory */
     if(*pMemory==NULL) {
         /* we need to allocate memory */
@@ -257,13 +257,13 @@ ubidi_close(UBiDi *pBiDi) {
 /* set to approximate "inverse BiDi" ---------------------------------------- */
 
 U_CAPI void U_EXPORT2
-ubidi_setInverse(UBiDi *pBiDi, bool_t isInverse) {
+ubidi_setInverse(UBiDi *pBiDi, UBool isInverse) {
     if(pBiDi!=NULL) {
         pBiDi->isInverse=isInverse;
     }
 }
 
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 ubidi_isInverse(UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         return pBiDi->isInverse;

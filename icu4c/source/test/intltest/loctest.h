@@ -15,7 +15,7 @@ public:
     LocaleTest();
     ~LocaleTest();
     
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 
     /**
      * Test methods to set and get data fields
@@ -73,7 +73,7 @@ private:
     /**
      * routine to perform subtests, used by TestDisplayNames
      **/
-    void doTestDisplayNames(Locale& inLocale, int32_t compareIndex, bool_t defaultIsFrench);
+    void doTestDisplayNames(Locale& inLocale, int32_t compareIndex, UBool defaultIsFrench);
     /**
      * additional intialization for datatables storing expected values
      **/

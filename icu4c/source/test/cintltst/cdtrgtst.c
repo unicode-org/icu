@@ -298,7 +298,7 @@ void Test4060212()
  */
 void Test4061287() 
 {
-    bool_t ok;
+    UBool ok;
     int32_t pos;
     UDateFormat *df;
     UErrorCode status = U_ZERO_ERROR;

@@ -144,7 +144,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @stable
      */
-    virtual bool_t operator==(const Format& other) const;
+    virtual UBool operator==(const Format& other) const;
 
     /**
      * Format an object to produce a string.  This method handles
@@ -292,14 +292,14 @@ public:
      * dependant and determined by sub-classes of NumberFormat.
      * @stable
      */
-    bool_t isParseIntegerOnly(void) const;
+    UBool isParseIntegerOnly(void) const;
 
     /**
      * Sets whether or not numbers should be parsed as integers only.
      * @see isParseIntegerOnly
      * @stable
      */
-    virtual void setParseIntegerOnly(bool_t value);
+    virtual void setParseIntegerOnly(UBool value);
 
     /**
      * Returns the default number format for the current default
@@ -375,14 +375,14 @@ public:
      * @see setGroupingUsed
      * @stable
      */
-    bool_t isGroupingUsed(void) const;
+    UBool isGroupingUsed(void) const;
 
     /**
      * Set whether or not grouping will be used in this format.
      * @see getGroupingUsed
      * @stable
      */
-    virtual void setGroupingUsed(bool_t newValue);
+    virtual void setGroupingUsed(UBool newValue);
 
     /**
      * Returns the maximum number of digits allowed in the integer portion of a
@@ -530,17 +530,17 @@ private:
     static const int32_t         fgNumberPatternsCount;
     static const UnicodeString     fgLastResortNumberPatterns[];
 
-    bool_t      fGroupingUsed;
+    UBool      fGroupingUsed;
     int32_t     fMaxIntegerDigits;
     int32_t     fMinIntegerDigits;
     int32_t     fMaxFractionDigits;
     int32_t     fMinFractionDigits;
-    bool_t      fParseIntegerOnly;
+    UBool      fParseIntegerOnly;
 };
  
 // -------------------------------------
  
-inline bool_t
+inline UBool
 NumberFormat::isParseIntegerOnly() const
 {
     return fParseIntegerOnly;

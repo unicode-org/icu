@@ -108,8 +108,8 @@ public:
      * Equality comparison.
      * @stable
      */
-    bool_t          operator==(const Formattable&) const;
-    bool_t          operator!=(const Formattable& other) const
+    UBool          operator==(const Formattable&) const;
+    UBool          operator!=(const Formattable& other) const
       { return !operator==(other); }
 
     /** 

@@ -72,7 +72,7 @@ RuleBasedTransliterator::clone(void) const {
  */
 void
 RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
-                                             bool_t isIncremental) const {
+                                             UBool isIncremental) const {
     /* We keep start and limit fixed the entire time,
      * relative to the text -- limit may move numerically if text is
      * inserted or removed.  The cursor moves from start to limit, with
@@ -109,7 +109,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
         loopLimit <<= 4;
     }
 
-    bool_t isPartial = FALSE;
+    UBool isPartial = FALSE;
 
     while (cursor < limit && loopCount <= loopLimit) {
         TransliterationRule* r = isIncremental ?

@@ -27,7 +27,7 @@ void entryClose(UResourceDataEntry *resB);
 
 /* Static cache for already opened resource bundles - mostly for keeping fallback info */
 static UHashtable *cache = NULL;
-static bool_t isMutexInited = FALSE;
+static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
@@ -37,7 +37,7 @@ int32_t hashEntry(const void *parm) {
 }
 
 /* INTERNAL: compares two entries */
-bool_t compareEntries(const void *p1, const void *p2) {
+UBool compareEntries(const void *p1, const void *p2) {
     UResourceDataEntry *b1 = (UResourceDataEntry *)p1;
     UResourceDataEntry *b2 = (UResourceDataEntry *)p2;
 
@@ -50,7 +50,7 @@ bool_t compareEntries(const void *p1, const void *p2) {
  *  Internal function, gets parts of locale name according 
  *  to the position of '_' character
  */
-bool_t chopLocale(char *name) {
+UBool chopLocale(char *name) {
     char *i = uprv_strrchr(name, '_');
 
     if(i != NULL) {
@@ -187,7 +187,7 @@ UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCod
         r->fCountExisting++; /* we just increase it's reference count */
         *status = r->fBogus; /* and set returning status */
     } else { /* otherwise, we'll try to construct a new entry */
-        bool_t result = FALSE;
+        UBool result = FALSE;
 
         r = (UResourceDataEntry *) uprv_malloc(sizeof(UResourceDataEntry));
 
@@ -265,10 +265,10 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
-    bool_t isDefault = FALSE;
-	bool_t isRoot = FALSE;
-    bool_t hasRealData = FALSE;
-    bool_t hasChopped = FALSE;
+    UBool isDefault = FALSE;
+	UBool isRoot = FALSE;
+    UBool hasRealData = FALSE;
+    UBool hasChopped = FALSE;
     char name[96];
 
     if(U_FAILURE(*status)) {
@@ -420,7 +420,7 @@ UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, c
 }
 
 UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original) {
-    bool_t isStackObject;
+    UBool isStackObject;
     if(r == original) {
         return r;
     }
@@ -471,7 +471,7 @@ void copyResbFillIn(UResourceBundle *r, const UResourceBundle *original) {
 U_CFUNC UChar** ures_listInstalledLocales(const char* path, int32_t* count) {
     UChar **result;
     UErrorCode status;
-    bool_t opres = FALSE;
+    UBool opres = FALSE;
     ResourceData *res = (ResourceData *)uprv_malloc(sizeof(ResourceData));
     opres = res_load(res, path, kIndexLocaleName, &status);
 
@@ -587,7 +587,7 @@ U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resB){
     resB->fIndex = -1;
 }
 
-U_CAPI bool_t U_EXPORT2 ures_hasNext(UResourceBundle *resB) {
+U_CAPI UBool U_EXPORT2 ures_hasNext(UResourceBundle *resB) {
 	if(resB == NULL) {
 		return FALSE;
 	}

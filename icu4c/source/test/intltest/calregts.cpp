@@ -25,7 +25,7 @@ const UDate CalendarRegressionTest::LATEST_SUPPORTED_MILLIS    =   4503599627370
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-CalendarRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -94,7 +94,7 @@ const char* CalendarRegressionTest::FIELD_NAME [] = {
     "DOW_LOCAL"
 };
 
-bool_t 
+UBool 
 CalendarRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
@@ -185,7 +185,7 @@ CalendarRegressionTest::test4031502()
     UErrorCode status = U_ZERO_ERROR;
     int32_t count = 0;
     const UnicodeString **ids = TimeZone::createAvailableIDs(count);
-    bool_t bad = FALSE;
+    UBool bad = FALSE;
     for (int32_t i=0; i<count; ++i) {
         TimeZone *zone = TimeZone::createTimeZone(*ids[i]);
         GregorianCalendar *cal = new GregorianCalendar(zone, status);
@@ -451,7 +451,7 @@ CalendarRegressionTest::test4031502()
         dowTest(TRUE);
     }
 
-    void CalendarRegressionTest::dowTest(bool_t lenient) 
+    void CalendarRegressionTest::dowTest(UBool lenient) 
     {
         UErrorCode status = U_ZERO_ERROR;
         GregorianCalendar *cal = new GregorianCalendar(status);
@@ -754,7 +754,7 @@ CalendarRegressionTest::test4031502()
         testCal->clear();
         sdf.adoptCalendar(testCal); 
         sdf.applyPattern("EEE dd MMM yyyy 'WOY'ww'-'YYYY 'DOY'DDD"); 
-        bool_t fail = FALSE;
+        UBool fail = FALSE;
         for (int32_t firstDay=1; firstDay<=2; firstDay++) { 
             for (int32_t minDays=1; minDays<=7; minDays++) { 
                 testCal->setMinimalDaysInFirstWeek((uint8_t)minDays); 
@@ -927,7 +927,7 @@ CalendarRegressionTest::test4031502()
         };
 
 
-        bool_t ADDROLL_bool [] = {
+        UBool ADDROLL_bool [] = {
             TRUE,//ADD,
             TRUE,
             FALSE,
@@ -1069,7 +1069,7 @@ CalendarRegressionTest::test4031502()
         UDate onset = makeDate(1998, Calendar::APRIL, 5, 1, 0) + ONE_HOUR;
         UDate cease = makeDate(1998, Calendar::OCTOBER, 25, 0, 0) + 2*ONE_HOUR;
 
-        bool_t fail = FALSE;
+        UBool fail = FALSE;
         
         const int32_t ADD = 1;
         const int32_t ROLL = 2;
@@ -1378,7 +1378,7 @@ CalendarRegressionTest::Test4149677()
             errln("setGregorianChange failed");
         // to obtain a pure Julian calendar
         
-        bool_t is100Leap = calendar->isLeapYear(100);
+        UBool is100Leap = calendar->isLeapYear(100);
         if (!is100Leap) {
             UnicodeString temp;
             errln("test failed with zone " + zones[i]->getID(temp));
@@ -1502,7 +1502,7 @@ CalendarRegressionTest::Test4166109()
      * 22 23 24 25 26 27 28
      * 29 30 31
      */
-    bool_t passed = TRUE;
+    UBool passed = TRUE;
     UErrorCode status = U_ZERO_ERROR;
     Calendar::EDateFields field = Calendar::WEEK_OF_MONTH;
 
@@ -1598,7 +1598,7 @@ CalendarRegressionTest::Test4167060()
             int32_t years[] = {2000, maxYear-1, maxYear, maxYear+1};
 
             for (int32_t i = 0; i < 4; i++) {
-                bool_t valid = years[i] <= maxYear;
+                UBool valid = years[i] <= maxYear;
                 calendar->set(field, years[i]);
                 UDate dateAfter = calendar->getTime(status);
                 if(U_FAILURE(status))

@@ -214,7 +214,7 @@ public:
      *              otherwise.
      * @stable
      */
-    virtual bool_t operator==(const TimeZone& that) const;
+    virtual UBool operator==(const TimeZone& that) const;
 
     /**
      * Returns true if the two TimeZones are NOT equal; that is, if operator==() returns
@@ -225,7 +225,7 @@ public:
      *              otherwise.
      * @stable
      */
-    bool_t operator!=(const TimeZone& that) const {return !operator==(that);}
+    UBool operator!=(const TimeZone& that) const {return !operator==(that);}
 
     /**
      * Returns the TimeZone's adjusted GMT offset (i.e., the number of milliseconds to add
@@ -360,7 +360,7 @@ public:
      * @return the human-readable name of this time zone in the default locale.
      * @stable
      */
-    UnicodeString& getDisplayName(bool_t daylight, EDisplayType style, UnicodeString& result) const;
+    UnicodeString& getDisplayName(UBool daylight, EDisplayType style, UnicodeString& result) const;
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
@@ -375,7 +375,7 @@ public:
      * or in the default locale if the given locale is not recognized.
      * @stable
      */
-    UnicodeString& getDisplayName(bool_t daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
+    UnicodeString& getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
 
     /**
      * Queries if this time zone uses daylight savings time.
@@ -383,7 +383,7 @@ public:
      * false, otherwise.
      * @stable
      */
-    virtual bool_t useDaylightTime(void) const = 0;
+    virtual UBool useDaylightTime(void) const = 0;
 
     /**
      * Queries if the given date is in daylight savings time in
@@ -393,7 +393,7 @@ public:
      * false, otherwise.
      * @deprecated
      */
-    virtual bool_t inDaylightTime(UDate date, UErrorCode& status) const = 0;
+    virtual UBool inDaylightTime(UDate date, UErrorCode& status) const = 0;
 
     /**
      * Returns true if this zone has the same rule and offset as another zone.
@@ -403,7 +403,7 @@ public:
      * with the possible exception of the ID
      * @stable
      */
-    virtual bool_t hasSameRules(const TimeZone& other) const;
+    virtual UBool hasSameRules(const TimeZone& other) const;
 
     /**
      * Clones TimeZone objects polymorphically. Clients are responsible for deleting
@@ -517,7 +517,7 @@ private:
      * made.  If DATA_LOADED is true, DATA itself will be zero if
      * loading failed, or non-zero if it succeeded.
      */
-    static bool_t              DATA_LOADED;
+    static UBool              DATA_LOADED;
 
     /**
      * The mutex object used to control write access to DATA,
@@ -537,7 +537,7 @@ private:
     static void   loadZoneData(void);
 
     // See source file for documentation
-    static bool_t U_CALLCONV isDataAcceptable(void *context,
+    static UBool U_CALLCONV isDataAcceptable(void *context,
                                    const char *type, const char *name,
                                    const UDataInfo *pInfo);
 

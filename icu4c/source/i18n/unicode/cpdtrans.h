@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.7 $ $Date: 2000/03/22 19:19:33 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.8 $ $Date: 2000/05/18 22:08:27 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -141,7 +141,7 @@ public:
      * @draft
      */
     virtual void handleTransliterate(Replaceable& text, Position& index,
-                                     bool_t incremental) const;
+                                     UBool incremental) const;
 
 private:
 

@@ -204,20 +204,20 @@ ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err)
 int LMBCSConversionWorker (
    UConverterDataLMBCS * extraInfo, ulmbcs_grp_t group, 
    uint8_t * pStartLMBCS, UChar * pUniChar, 
-   ulmbcs_grp_t * lastConverterIndex, bool_t * groups_tried,
+   ulmbcs_grp_t * lastConverterIndex, UBool * groups_tried,
    UErrorCode* err);
 
 int LMBCSConversionWorker (
    UConverterDataLMBCS * extraInfo, ulmbcs_grp_t group, 
    uint8_t * pStartLMBCS, UChar * pUniChar, 
-   ulmbcs_grp_t * lastConverterIndex, bool_t * groups_tried,
+   ulmbcs_grp_t * lastConverterIndex, UBool * groups_tried,
    UErrorCode * err)
 {
    uint8_t * pLMBCS = pStartLMBCS;
    UConverter * xcnv = extraInfo->OptGrpConverter[group];
    uint8_t mbChar [ULMBCS_CHARSIZE_MAX];
    uint8_t * pmbChar = mbChar;
-   bool_t isDoubleByteGroup = (group >= ULMBCS_DOUBLEOPTGROUP) ? TRUE : FALSE;
+   UBool isDoubleByteGroup = (group >= ULMBCS_DOUBLEOPTGROUP) ? TRUE : FALSE;
    UErrorCode localErr = 0;
    int bytesConverted =0;
 
@@ -275,7 +275,7 @@ void _LMBCSFromUnicode(UConverter*     _this,
                        const UChar**   source,
                        const UChar*    sourceLimit,
                        int32_t *       offsets,
-                       bool_t          flush,
+                       UBool          flush,
                        UErrorCode*     err)
 {
    ulmbcs_grp_t lastConverterIndex = 0;
@@ -283,7 +283,7 @@ void _LMBCSFromUnicode(UConverter*     _this,
    uint8_t LMBCS[ULMBCS_CHARSIZE_MAX];
    uint8_t * pLMBCS;
    int bytes_written;
-   bool_t groups_tried[ULMBCS_GRP_LAST];
+   UBool groups_tried[ULMBCS_GRP_LAST];
    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
 
    /* Arguments Check */
@@ -716,7 +716,7 @@ void _LMBCSToUnicodeWithOffsets(UConverter*    _this,
                      const char**   source,
                      const char*    sourceLimit,
                      int32_t*       offsets,
-                     bool_t         flush,
+                     UBool         flush,
                      UErrorCode*    err)
 {
    UChar32 uniChar;    /* an output UNICODE char */
@@ -836,7 +836,7 @@ void _LMBCSToUnicode(UConverter*    _this,
                      const char**   source,
                      const char*    sourceLimit,
                      int32_t*       offsets,
-                     bool_t         flush,
+                     UBool         flush,
                      UErrorCode*    err)
 {
     _LMBCSToUnicodeWithOffsets(_this, target, targetLimit, source, sourceLimit, offsets, flush,err);

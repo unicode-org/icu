@@ -136,7 +136,7 @@ ucol_strcoll(    const    UCollator    *coll,
   return (UCollationResult) ((Collator*)coll)->compare(source,sourceLength,target,targetLength);
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 ucol_greater(    const    UCollator        *coll,
         const    UChar            *source,
         int32_t            sourceLength,
@@ -147,7 +147,7 @@ ucol_greater(    const    UCollator        *coll,
       == UCOL_GREATER);
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 ucol_greaterOrEqual(    const    UCollator    *coll,
             const    UChar        *source,
             int32_t        sourceLength,
@@ -158,7 +158,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
       != UCOL_LESS);
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 ucol_equal(        const    UCollator        *coll,
             const    UChar            *source,
             int32_t            sourceLength,

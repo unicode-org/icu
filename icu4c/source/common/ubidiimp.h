@@ -131,7 +131,7 @@ typedef struct Run {
 #define IS_ODD_RUN(x)  ((x&INDEX_ODD_BIT)!=0)
 #define IS_EVEN_RUN(x) ((x&INDEX_ODD_BIT)==0)
 
-U_CFUNC bool_t
+U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi);
 
 /* UBiDi structure ----------------------------------------------------------- */
@@ -152,14 +152,14 @@ struct UBiDi {
     Run *runsMemory;
 
     /* indicators for whether memory may be allocated after ubidi_open() */
-    bool_t mayAllocateText, mayAllocateRuns;
+    UBool mayAllocateText, mayAllocateRuns;
 
     /* arrays with one value per text-character */
     const DirProp *dirProps;
     UBiDiLevel *levels;
 
     /* are we performing an approximation of the "inverse BiDi" algorithm? */
-    bool_t isInverse;
+    UBool isInverse;
 
     /* the paragraph level */
     UBiDiLevel paraLevel;
@@ -183,8 +183,8 @@ struct UBiDi {
 };
 
 /* helper function to (re)allocate memory if allowed */
-extern bool_t
-getMemory(void **pMemory, UTextOffset *pSize, bool_t mayAllocate, UTextOffset sizeNeeded);
+extern UBool
+getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded);
 
 /* helper macros for each allocated array in UBiDi */
 #define getDirPropsMemory(pBiDi, length) \

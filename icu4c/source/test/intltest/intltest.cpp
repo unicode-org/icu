@@ -564,7 +564,7 @@ void IntlTest::setCaller( IntlTest* callingTest )
     }
 }
 
-bool_t IntlTest::callTest( IntlTest& testToBeCalled, char* par )
+UBool IntlTest::callTest( IntlTest& testToBeCalled, char* par )
 {
     execCount--; // correct a previously assumed test-exec, as this only calls a subtest
     testToBeCalled.setCaller( this );
@@ -576,30 +576,30 @@ void IntlTest::setPath( char* path )
     this->path = path;
 }
 
-bool_t IntlTest::setVerbose( bool_t verbose )
+UBool IntlTest::setVerbose( UBool verbose )
 {
-    bool_t rval = this->verbose;
+    UBool rval = this->verbose;
     this->verbose = verbose;
     return rval;
 }
 
-bool_t IntlTest::setNoErrMsg( bool_t no_err_msg )
+UBool IntlTest::setNoErrMsg( UBool no_err_msg )
 {
-    bool_t rval = this->no_err_msg;
+    UBool rval = this->no_err_msg;
     this->no_err_msg = no_err_msg;
     return rval;
 }
 
-bool_t IntlTest::setQuick( bool_t quick )
+UBool IntlTest::setQuick( UBool quick )
 {
-    bool_t rval = this->quick;
+    UBool rval = this->quick;
     this->quick = quick;
     return rval;
 }
 
-bool_t IntlTest::setLeaks( bool_t leaks )
+UBool IntlTest::setLeaks( UBool leaks )
 {
-    bool_t rval = this->leaks;
+    UBool rval = this->leaks;
     this->leaks = leaks;
     return rval;
 }
@@ -609,9 +609,9 @@ int32_t IntlTest::getErrors( void )
     return errorCount;
 }
 
-bool_t IntlTest::runTest( char* name, char* par )
+UBool IntlTest::runTest( char* name, char* par )
 {
-    bool_t rval;
+    UBool rval;
     char* pos = NULL;
 
     if (name) pos = strchr( name, delim ); // check if name contains path (by looking for '/')
@@ -638,7 +638,7 @@ bool_t IntlTest::runTest( char* name, char* par )
 }
 
 // call individual tests, to be overriden to call implementations
-void IntlTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // to be overriden by a method like:
     /*
@@ -653,13 +653,13 @@ void IntlTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* pa
 }
 
 
-bool_t IntlTest::runTestLoop( char* testname, char* par )
+UBool IntlTest::runTestLoop( char* testname, char* par )
 {
     int32_t    index = 0;
     char*   name;
-    bool_t  run_this_test;
+    UBool  run_this_test;
     int32_t    lastErrorCount;
-    bool_t  rval = FALSE;
+    UBool  rval = FALSE;
     
     IntlTest* saveTest = gTest;
     gTest = this;
@@ -669,7 +669,7 @@ bool_t IntlTest::runTestLoop( char* testname, char* par )
         if (!testname) {
             run_this_test = TRUE;
         }else{
-            run_this_test = (bool_t) (strcmp( name, testname ) == 0);
+            run_this_test = (UBool) (strcmp( name, testname ) == 0);
         }
         if (run_this_test) {
             lastErrorCount = errorCount;
@@ -747,7 +747,7 @@ void IntlTest::errln( const UnicodeString &message )
     if (!no_err_msg) LL_message( message, TRUE );
 }
 
-void IntlTest::LL_message( UnicodeString message, bool_t newline )
+void IntlTest::LL_message( UnicodeString message, UBool newline )
 {
     // string that starts with a LineFeed character and continues
     // with spaces according to the current indentation
@@ -793,7 +793,7 @@ void IntlTest::LL_message( UnicodeString message, bool_t newline )
 */
 void IntlTest::usage( void )
 {
-    bool_t save_verbose = setVerbose( TRUE );
+    UBool save_verbose = setVerbose( TRUE );
     logln("Test names:");
     logln("-----------");
 
@@ -811,7 +811,7 @@ void IntlTest::usage( void )
 
 // memory leak reporting software will be able to take advantage of the testsuite 
 // being run a second time local to a specific method in order to report only actual leaks
-bool_t
+UBool
 IntlTest::run_phase2( char* name, char* par ) // supports reporting memory leaks
 {
     UnicodeString* strLeak = new UnicodeString("forced leak"); // for verifying purify filter
@@ -827,13 +827,13 @@ main(int argc, char* argv[])
     argc = ccommand( &argv );
 #endif
 
-    bool_t syntax = FALSE;
-    bool_t all = TRUE;
-    bool_t verbose = FALSE;
-    bool_t no_err_msg = FALSE;
-    bool_t quick = TRUE;
-    bool_t name = FALSE;
-    bool_t leaks = FALSE;
+    UBool syntax = FALSE;
+    UBool all = TRUE;
+    UBool verbose = FALSE;
+    UBool no_err_msg = FALSE;
+    UBool quick = TRUE;
+    UBool name = FALSE;
+    UBool leaks = FALSE;
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
@@ -891,7 +891,7 @@ main(int argc, char* argv[])
         return 1;
     }
 
-    bool_t all_tests_exist = TRUE;
+    UBool all_tests_exist = TRUE;
     MajorTestLevel major;
     major.setVerbose( verbose );
     major.setNoErrMsg( no_err_msg );
@@ -964,7 +964,7 @@ main(int argc, char* argv[])
                     parameter += 1;
                 }
                 execCount = 0;
-                bool_t res = major.runTest( name, parameter );
+                UBool res = major.runTest( name, parameter );
                 if (leaks && res) {
                     major.run_phase2( name, parameter );
                 }

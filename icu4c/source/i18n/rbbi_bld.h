@@ -123,7 +123,7 @@ protected:
      * A flag that is used to indicate when the list of looping states can
      * be reset.
      */
-    bool_t clearLoopingStates;
+    UBool clearLoopingStates;
 
     /**
      * A place where an error message can be stored if we get a parse error.
@@ -252,7 +252,7 @@ private:
      * to handle the *? token.
      */
     virtual void parseRule(const UnicodeString& rule,
-                           bool_t               forward);
+                           UBool               forward);
 
     /**
      * Update entries in the state table, and merge states when necessary to keep
@@ -331,7 +331,7 @@ private:
      * in the iterator itself
      * @param forward True if we're working on the forward state table
      */
-    virtual void finishBuildingStateTable(bool_t forward);
+    virtual void finishBuildingStateTable(UBool forward);
 
     /**
      * This function builds the backward state table from the forward state

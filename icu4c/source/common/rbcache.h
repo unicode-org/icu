@@ -65,11 +65,11 @@ private:
 public:
     inline VisitedFileCache() {}
     inline ~VisitedFileCache() {}
-    inline bool_t wasVisited(const UnicodeString& filename) const;
+    inline UBool wasVisited(const UnicodeString& filename) const;
     inline void markAsVisited(const UnicodeString& filename);
 };
 
-inline bool_t VisitedFileCache::wasVisited(const UnicodeString& filename) const {
+inline UBool VisitedFileCache::wasVisited(const UnicodeString& filename) const {
     return (hash.get(filename) != 0);
 }
 

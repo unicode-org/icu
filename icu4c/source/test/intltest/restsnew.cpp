@@ -97,8 +97,8 @@ static struct
     Locale *locale;
     UErrorCode expected_constructor_status;
     E_Where where;
-    bool_t like[e_Where_count];
-    bool_t inherits[e_Where_count];
+    UBool like[e_Where_count];
+    UBool inherits[e_Where_count];
 }
 param[] =
 {
@@ -125,7 +125,7 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 static uint32_t
 randul()
 {
-    static bool_t initialized = FALSE;
+    static UBool initialized = FALSE;
     if (!initialized)
     {
         srand((unsigned)time(NULL));
@@ -173,7 +173,7 @@ NewResourceBundleTest::~NewResourceBundleTest()
 {
 }
 
-void NewResourceBundleTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite ResourceBundleTest: ");
     switch (index) {
@@ -439,17 +439,17 @@ NewResourceBundleTest::TestIteration()
 	 
 //***************************************************************************************
 
-bool_t
+UBool
 NewResourceBundleTest::testTag(const char* frag,
-                            bool_t in_Root,
-                            bool_t in_te,
-                            bool_t in_te_IN)
+                            UBool in_Root,
+                            UBool in_te,
+                            UBool in_te_IN)
 {
-    bool_t pass=TRUE;
+    UBool pass=TRUE;
 
     // Make array from input params
 
-    bool_t is_in[] = { in_Root, in_te, in_te_IN };
+    UBool is_in[] = { in_Root, in_te, in_te_IN };
 
     const char* NAME[] = { "ROOT", "TE", "TE_IN" };
 

@@ -22,7 +22,7 @@ class DecimalFormat;
 class NumberFormatRegressionTest: public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
 
     void Test4075713(void);
@@ -91,7 +91,7 @@ public:
     void Test4243108(void);
 
 protected:
-    bool_t failure(UErrorCode status, const UnicodeString& msg);
+    UBool failure(UErrorCode status, const UnicodeString& msg);
 };
 
 class MyNumberFormatTest : public NumberFormat 

@@ -21,7 +21,7 @@ void TestBasic(void);
 
 int32_t hashChars(const void* key);
 
-bool_t isEqualChars(const void* key1, const void* key2);
+UBool isEqualChars(const void* key1, const void* key2);
 
 static void _put(UHashtable* hash,
                  const char* key,
@@ -95,7 +95,7 @@ int32_t hashChars(const void* key) {
     return *(const char*) key;
 }
 
-bool_t isEqualChars(const void* key1, const void* key2) {
+UBool isEqualChars(const void* key1, const void* key2) {
     return (key1 != NULL) &&
         (key2 != NULL) &&
         (uprv_strcmp(key1, key2) == 0);

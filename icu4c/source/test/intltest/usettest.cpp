@@ -22,7 +22,7 @@
                           break;
 
 void
-UnicodeSetTest::runIndexedTest(int32_t index, bool_t exec,
+UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
                                char* &name, char* par) {
     // if (exec) logln((UnicodeString)"TestSuite UnicodeSetTest");
     switch (index) {
@@ -208,7 +208,7 @@ UnicodeSetTest::TestAddRemove(void) {
 
 }
 void
-UnicodeSetTest::doAssert(bool_t condition, const char *message)
+UnicodeSetTest::doAssert(UBool condition, const char *message)
 {
     if (!condition) {
         errln(UnicodeString("ERROR : ") + message);

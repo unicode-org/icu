@@ -21,6 +21,6 @@ int32_t NullTransliterator::transliterate(Replaceable&, int32_t,
 }
 
 void NullTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
-                                             bool_t isIncremental) const {
+                                             UBool isIncremental) const {
     offsets.cursor = offsets.limit;
 }

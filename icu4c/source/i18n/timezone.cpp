@@ -63,7 +63,7 @@ const TZHeader *    TimeZone::DATA = 0;
 const uint32_t*     TimeZone::INDEX_BY_ID = 0;
 const OffsetIndex*  TimeZone::INDEX_BY_OFFSET = 0;
 UnicodeString*      TimeZone::ZONE_IDS = 0;
-bool_t              TimeZone::DATA_LOADED = FALSE;
+UBool              TimeZone::DATA_LOADED = FALSE;
 UMTX                TimeZone::LOCK;
 
 /**
@@ -130,7 +130,7 @@ void TimeZone::loadZoneData() {
 /**
  * udata callback to verify the zone data.
  */
-bool_t U_CALLCONV
+UBool U_CALLCONV
 TimeZone::isDataAcceptable(void *context,
                            const char *type, const char *name,
                            const UDataInfo *pInfo) {
@@ -177,7 +177,7 @@ TimeZone::operator=(const TimeZone &right)
 
 // -------------------------------------
 
-bool_t
+UBool
 TimeZone::operator==(const TimeZone& that) const
 {
     return getDynamicClassID() == that.getDynamicClassID() &&
@@ -489,13 +489,13 @@ TimeZone::getDisplayName(const Locale& locale, UnicodeString& result) const
 }
 
 UnicodeString&
-TimeZone::getDisplayName(bool_t daylight, EDisplayType style, UnicodeString& result)  const
+TimeZone::getDisplayName(UBool daylight, EDisplayType style, UnicodeString& result)  const
 {
     return getDisplayName(daylight,style, Locale::getDefault(), result);
 }
 
 UnicodeString&
-TimeZone::getDisplayName(bool_t daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const
+TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const
 {
     // SRL TODO: cache the SDF, just like java.
     UErrorCode status = U_ZERO_ERROR;
@@ -553,7 +553,7 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         idUppercase.startsWith(GMT_ID))
     {
         ParsePosition pos(GMT_ID_LENGTH);
-        bool_t negative = FALSE;
+        UBool negative = FALSE;
         int32_t offset;
 
         if (id[pos.getIndex()] == 0x002D /*'-'*/)
@@ -612,7 +612,7 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
 }
 
 
-bool_t 
+UBool 
 TimeZone::hasSameRules(const TimeZone& other) const
 {
     return (getRawOffset() == other.getRawOffset() && 

@@ -305,7 +305,7 @@ void TestMessageFormat::PatternTest()
         if (count != 4) {
             errln("MSG count not 4 (as expected)");
         }
-        bool_t failed = FALSE;
+        UBool failed = FALSE;
         for (int32_t j = 0; j < count; ++j) {
              if (values == 0 || testArgs[j] != values[j]) {
                  it_out << "MSG testargs[" << j << "]: " << testArgs[j] << endl;
@@ -625,7 +625,7 @@ void TestMessageFormat::testSetLocale()
     }
 
     msg.setLocale(Locale::ENGLISH);
-    bool_t getLocale_ok = TRUE;
+    UBool getLocale_ok = TRUE;
     if (msg.getLocale() != Locale::ENGLISH) {
         it_errln("*** MSG getLocal err.");
         getLocale_ok = FALSE;
@@ -817,14 +817,14 @@ void TestMessageFormat::testAdopt()
     UnicodeString patAct;
     Format** formatsToAdopt;
 
-    bool_t ok = FALSE;
+    UBool ok = FALSE;
     if (!formats || !formatsCmp || (count <= 0) || (count != countCmp)) {
         goto endtest;
     }
 
     int32_t i;
 
-    bool_t equal;
+    UBool equal;
     equal = TRUE;
     for (i = 0; i < count; i++) {
         a = formats[i];
@@ -844,7 +844,7 @@ void TestMessageFormat::testAdopt()
     formatsChg = msg.getFormats(countChg); // tested function
     if (!formatsChg || (countChg != count)) goto endtest;
 
-    bool_t diff;
+    UBool diff;
     diff = TRUE;
     for (i = 0; i < count; i++) {
         a = formatsChg[i];
@@ -1036,7 +1036,7 @@ static void testCopyConstructor2()
 }
 
 
-void TestMessageFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, char* parm )
+void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* parm )
 {
     if (exec) logln("TestSuite MessageFormat");
 

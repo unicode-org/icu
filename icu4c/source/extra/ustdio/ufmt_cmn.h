@@ -77,7 +77,7 @@ ufmt_digitvalue(UChar c);
  * @param radix The desired radix.
  * @return TRUE if <TT>c</TT> is a digit in <TT>radix</TT>, FALSE otherwise.
  */
-bool_t
+UBool
 ufmt_isdigit(UChar     c,
          int32_t     radix);
 
@@ -97,7 +97,7 @@ ufmt_ltou(UChar     *buffer,
       int32_t     *len,
       long         value, 
       int32_t     radix,
-      bool_t    uselower,
+      UBool    uselower,
       int32_t    minDigits);
 
 /**
@@ -121,7 +121,7 @@ ufmt_utol(const UChar     *buffer,
  * form-feed (U+000C), or any other Unicode-defined space, line, or paragraph
  * separator.
  */
-bool_t
+UBool
 ufmt_isws(UChar c);
 
 /**

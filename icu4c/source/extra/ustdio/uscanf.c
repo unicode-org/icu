@@ -37,7 +37,7 @@
 
 u_scanf_handler g_u_scanf_handlers     [256];
 u_scanf_info       g_u_scanf_infos     [256];
-bool_t        g_u_scanf_inited    = FALSE;
+UBool        g_u_scanf_inited    = FALSE;
 
 int32_t 
 u_fscanf(    UFILE        *f,
@@ -531,7 +531,7 @@ u_scanf_scidbl_handler(UFILE             *stream,
   int32_t       scientificParsePos = 0, genericParsePos = 0;
   UErrorCode    scientificStatus = U_ZERO_ERROR;
   UErrorCode    genericStatus = U_ZERO_ERROR;
-  bool_t        useScientific;
+  UBool        useScientific;
 
 
   /* since we can't determine by scanning the characters whether */
@@ -1161,7 +1161,7 @@ u_scanf_scanset_handler(UFILE             *stream,
 {
   u_scanf_scanset    scanset;
   int32_t        len;
-  bool_t        success;
+  UBool        success;
   UChar            c;
   const UChar         *source;
   UConverter         *conv;

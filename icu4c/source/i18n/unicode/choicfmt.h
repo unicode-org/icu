@@ -177,7 +177,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @stable
      */
-    virtual bool_t operator==(const Format& other) const;
+    virtual UBool operator==(const Format& other) const;
 
     /**
      * Sets the pattern.
@@ -369,7 +369,7 @@ public:
      * Does not affect floating-point flags,
      * @stable
      */
-    static double nextDouble(double d, bool_t positive);
+    static double nextDouble(double d, UBool positive);
 
     /**
      * Finds the least double greater than d.
