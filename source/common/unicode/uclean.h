@@ -98,30 +98,30 @@ u_cleanup(void);
   */
 typedef void *UMTX;
 
-typedef void U_CALLCONV UMtxInit   (void *context, UMTX *mutex, UErrorCode*pError);
-typedef void U_CALLCONV UMtxDestroy(void *context, UMTX *mutex);
-typedef void U_CALLCONV UMtxLock   (void *context, UMTX *mutex);
-typedef void U_CALLCONV UMtxUnlock (void *context, UMTX *mutex);
+typedef void U_CALLCONV UMtxInit   (const void *context, UMTX  *mutex, UErrorCode*pError);
+typedef void U_CALLCONV UMtxDestroy(const void *context, UMTX  *mutex);
+typedef void U_CALLCONV UMtxLock   (const void *context, UMTX  *mutex);
+typedef void U_CALLCONV UMtxUnlock (const void *context, UMTX  *mutex);
 
 U_CAPI void U_EXPORT2 
-u_setMutexFunctions(void *context, UMtxInit *i, UMtxDestroy *d, UMtxLock *l, UMtxUnlock *u,
+u_setMutexFunctions(const void *context, UMtxInit *i, UMtxDestroy *d, UMtxLock *l, UMtxUnlock *u,
                     UErrorCode *status);
 
 
-typedef void U_CALLCONV UMtxAtomicInc (void *context, UMTX *mutex);
-typedef void U_CALLCONV UMtxAtomicDec (void *context, UMTX *mutex);
+typedef void U_CALLCONV UMtxAtomicInc (const void *context, UMTX mutex);
+typedef void U_CALLCONV UMtxAtomicDec (const void *context, UMTX mutex);
 
 U_CAPI void U_EXPORT2 
-u_setAtomicIncDecFunctions(void *context, UMtxAtomicInc *inc, UMtxAtomicDec *dec,
+u_setAtomicIncDecFunctions(const void *context, UMtxAtomicInc *inc, UMtxAtomicDec *dec,
                     UErrorCode *status);
 
 
-typedef void *U_CALLCONV UMemAlloc  (void *context, size_t size);
-typedef void *U_CALLCONV UMemRealloc(void *context, void *mem, size_t size);
-typedef void  U_CALLCONV UMemFree   (void *context, void *mem);
+typedef void *U_CALLCONV UMemAlloc  (const void *context, size_t size);
+typedef void *U_CALLCONV UMemRealloc(const void *context, void *mem, size_t size);
+typedef void  U_CALLCONV UMemFree   (const void *context, void *mem);
 
 U_CAPI void U_EXPORT2 
-u_setMemoryFunctions(void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f, 
+u_setMemoryFunctions(const void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f, 
                     UErrorCode *status);
 
 #endif

@@ -42,39 +42,6 @@ static void _myUnlock(MutexPointer  p) {
   (imp->lockCount)--; 
 }
 #endif
-//////////////////////////
-//
-// The Test Class
-//
-//////////////////////////
-MutexTest::MutexTest() {
-}
 
-MutexTest::~MutexTest() {
-}
-
-void MutexTest::runIndexedTest( int32_t index, UBool exec, 
-                const char* &name, char* /*par*/ ) {
-  if (exec) logln("TestSuite MutexTest: ");
-  switch (index) {
-  case 0: name = "TestMutex"; if (exec) TestMutex(); break;
-    
-  default: name = ""; break; //needed to end loop
-  }
-}
-
-UBool MutexTest::gMutexInitialized = FALSE;
-
-void MutexTest::TestMutex() {
-    /* This is tested in intltest.cpp before anything starts. */
-    if (!gMutexInitialized) {
-        logln("*** Failure! The global mutex was not initialized.\n"
-                "*** Make sure the right linker was used.\n");
-    }
-}
-
-
-void MutexTest::TestLock() {
-}
 
 
