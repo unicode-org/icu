@@ -29,10 +29,6 @@ fr_BE {
         "#,##0%",
         "#E0",
     }
-    
-    // Reuse Swiss French spellout rules.  Also for French in Zaire, 
-    // but we've no locale for it yet.
-    SpelloutRules:alias { "/ICUDATA/fr_CH" }
     calendar{
         gregorian{
             DateTimeElements:intvector {

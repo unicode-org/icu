@@ -17,12 +17,14 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
-
+#include "unicode/udata.h"
 #include "nfrs.h"
 
 #include "cmemory.h"
 #include "cstring.h"
 #include "uprops.h"
+
+#define U_ICUDATA_RBNF U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "rbnf"
 
 static const UChar gPercentPercent[] =
 {
@@ -85,7 +87,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     // the following didn't work for aliased resources, but Vladimir supposedly fixed it...
     // const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
     int32_t len = 0;
-    UResourceBundle* nfrb = ures_open(NULL, locale.getName(), &status);
+    UResourceBundle* nfrb = ures_open(U_ICUDATA_RBNF, locale.getName(), &status);
     //    UResourceBundle* yuck = ures_getByKey(nfrb, fmt_tag, NULL, &status);
     //    const UChar* description = ures_getString(yuck, &len, &status);
     if (U_SUCCESS(status)) {
