@@ -139,7 +139,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
 static UBool
 findNameDummy(void *context,
               UChar32 code, UCharNameChoice nameChoice,
-              const char *name, UTextOffset length);
+              const char *name, int32_t length);
 
 static uint16_t 
 getExtName(uint32_t code, char *buffer, uint16_t bufferLength);
@@ -161,9 +161,9 @@ getCharCatName(UChar32 cp);
  
 /* public API --------------------------------------------------------------- */
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
-           char *buffer, UTextOffset bufferLength,
+           char *buffer, int32_t bufferLength,
            UErrorCode *pErrorCode) {
     AlgorithmicRange *algRange;
     uint32_t *p;
@@ -1364,7 +1364,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
 static UBool
 findNameDummy(void *context,
               UChar32 code, UCharNameChoice nameChoice,
-              const char *name, UTextOffset length) {
+              const char *name, int32_t length) {
     return FALSE;
 }
 

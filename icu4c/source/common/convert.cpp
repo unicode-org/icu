@@ -231,7 +231,7 @@ UnicodeConverter::toUnicodeString(UnicodeString&         target,
                     &err);
 
         /*appends what we got thus far to the UnicodeString*/
-        target.replace((UTextOffset)target.length(),
+        target.replace((int32_t)target.length(),
             myTargetUCharsAlias - myTargetUChars,
             myTargetUChars,
             myTargetUCharsAlias - myTargetUChars);

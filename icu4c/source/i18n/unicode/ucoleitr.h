@@ -207,7 +207,7 @@ ucol_setText(      UCollationElements *elems,
  * @see ucol_setOffset
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getOffset(const UCollationElements *elems);
 
 /**
@@ -224,7 +224,7 @@ ucol_getOffset(const UCollationElements *elems);
  */
 U_CAPI void U_EXPORT2 
 ucol_setOffset(UCollationElements *elems,
-               UTextOffset        offset,
+               int32_t        offset,
                UErrorCode         *status);
 
 #endif

@@ -979,7 +979,7 @@ public:
      * Example:
      * <pre>
      * &#32;   char buffer[100];
-     * &#32;   UTextOffset length=Unicode::getCharName(
+     * &#32;   int32_t length=Unicode::getCharName(
      * &#32;           0x284, buffer, sizeof(buffer));
      * &#32;   
      * &#32;   // use invariant-character conversion to Unicode
@@ -988,9 +988,9 @@ public:
      *
      * @deprecated See the Unicode class description.
      */
-    static inline UTextOffset
+    static inline int32_t
     getCharName(uint32_t code,
-                char *buffer, UTextOffset bufferLength,
+                char *buffer, int32_t bufferLength,
                 UCharNameChoice nameChoice=U_UNICODE_CHAR_NAME);
 
     /**
@@ -1311,12 +1311,12 @@ Unicode::getCellWidth(UChar32 ch) {
     return u_charCellWidth(ch);
 }
 
-inline UTextOffset
+inline int32_t
 Unicode::getCharName(uint32_t code,
-                     char *buffer, UTextOffset bufferLength,
+                     char *buffer, int32_t bufferLength,
                      UCharNameChoice nameChoice) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    UTextOffset length=u_charName(code, nameChoice, buffer, bufferLength, &errorCode);
+    int32_t length=u_charName(code, nameChoice, buffer, bufferLength, &errorCode);
     return U_SUCCESS(errorCode) ? length : 0;
 }
 

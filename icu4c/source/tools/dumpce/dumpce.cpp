@@ -906,7 +906,7 @@ void outputScriptElem(ScriptElement &element, int compare, UBool expansion)
         char    str[128];
         UChar32 codepoint;
         UTF_NEXT_CHAR(element.ch, i, element.count, codepoint);
-        UTextOffset temp = u_charName(codepoint, U_UNICODE_CHAR_NAME, str, 128, 
+        int32_t temp = u_charName(codepoint, U_UNICODE_CHAR_NAME, str, 128, 
                                       &error);
         if (U_FAILURE(error)) {
             fprintf(stdout, "Error getting character name\n");

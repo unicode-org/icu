@@ -1414,7 +1414,7 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
   
   translatedPattern.remove();
   UBool inQuote = FALSE;
-  for (UTextOffset i = 0; i < originalPattern.length(); ++i) {
+  for (int32_t i = 0; i < originalPattern.length(); ++i) {
     UChar c = originalPattern[i];
     if (inQuote) {
       if (c == 0x0027 /*'\''*/) 
@@ -1425,7 +1425,7 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
     inQuote = TRUE;
       else if ((c >= 0x0061 /*'a'*/ && c <= 0x007A) /*'z'*/ 
            || (c >= 0x0041 /*'A'*/ && c <= 0x005A /*'Z'*/)) {
-    UTextOffset ci = from.indexOf(c);
+    int32_t ci = from.indexOf(c);
     if (ci == -1) {
       status = U_INVALID_FORMAT_ERROR;
       return;

@@ -235,7 +235,7 @@ public:
    * in this.
    * @stable
    */
-  inline int8_t compare(UTextOffset start,
+  inline int8_t compare(int32_t start,
          int32_t length,
          const UnicodeString& srcText) const;
 
@@ -256,10 +256,10 @@ public:
    * in this.
    * @stable
    */
-   inline int8_t compare(UTextOffset start,
+   inline int8_t compare(int32_t start,
          int32_t length,
          const UnicodeString& srcText,
-         UTextOffset srcStart,
+         int32_t srcStart,
          int32_t srcLength) const;
 
   /**
@@ -291,7 +291,7 @@ public:
    * in this.
    * @stable
    */
-  inline int8_t compare(UTextOffset start,
+  inline int8_t compare(int32_t start,
          int32_t length,
          const UChar *srcChars) const;
 
@@ -312,10 +312,10 @@ public:
    * in this.
    * @stable
    */
-  inline int8_t compare(UTextOffset start,
+  inline int8_t compare(int32_t start,
          int32_t length,
          const UChar *srcChars,
-         UTextOffset srcStart,
+         int32_t srcStart,
          int32_t srcLength) const;
 
   /**
@@ -335,11 +335,11 @@ public:
    * in this.
    * @stable
    */
-  inline int8_t compareBetween(UTextOffset start,
-            UTextOffset limit,
+  inline int8_t compareBetween(int32_t start,
+            int32_t limit,
             const UnicodeString& srcText,
-            UTextOffset srcStart,
-            UTextOffset srcLimit) const;
+            int32_t srcStart,
+            int32_t srcLimit) const;
 
   /**
    * Compare two Unicode strings in code point order.
@@ -379,7 +379,7 @@ public:
    * in code point order
    * @draft ICU 1.8
    */
-  inline int8_t compareCodePointOrder(UTextOffset start,
+  inline int8_t compareCodePointOrder(int32_t start,
                                       int32_t length,
                                       const UnicodeString& srcText) const;
 
@@ -404,10 +404,10 @@ public:
    * in code point order
    * @draft ICU 1.8
    */
-   inline int8_t compareCodePointOrder(UTextOffset start,
+   inline int8_t compareCodePointOrder(int32_t start,
                                        int32_t length,
                                        const UnicodeString& srcText,
-                                       UTextOffset srcStart,
+                                       int32_t srcStart,
                                        int32_t srcLength) const;
 
   /**
@@ -450,7 +450,7 @@ public:
    * in code point order
    * @draft ICU 1.8
    */
-  inline int8_t compareCodePointOrder(UTextOffset start,
+  inline int8_t compareCodePointOrder(int32_t start,
                                       int32_t length,
                                       const UChar *srcChars) const;
 
@@ -475,10 +475,10 @@ public:
    * in code point order
    * @draft ICU 1.8
    */
-  inline int8_t compareCodePointOrder(UTextOffset start,
+  inline int8_t compareCodePointOrder(int32_t start,
                                       int32_t length,
                                       const UChar *srcChars,
-                                      UTextOffset srcStart,
+                                      int32_t srcStart,
                                       int32_t srcLength) const;
 
   /**
@@ -502,11 +502,11 @@ public:
    * in code point order
    * @draft ICU 1.8
    */
-  inline int8_t compareCodePointOrderBetween(UTextOffset start,
-                                             UTextOffset limit,
+  inline int8_t compareCodePointOrderBetween(int32_t start,
+                                             int32_t limit,
                                              const UnicodeString& srcText,
-                                             UTextOffset srcStart,
-                                             UTextOffset srcLimit) const;
+                                             int32_t srcStart,
+                                             int32_t srcLimit) const;
 
   /**
    * Compare two strings case-insensitively using full case folding.
@@ -530,7 +530,7 @@ public:
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
-  inline int8_t caseCompare(UTextOffset start,
+  inline int8_t caseCompare(int32_t start,
          int32_t length,
          const UnicodeString& srcText,
          uint32_t options) const;
@@ -548,10 +548,10 @@ public:
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
-  inline int8_t caseCompare(UTextOffset start,
+  inline int8_t caseCompare(int32_t start,
          int32_t length,
          const UnicodeString& srcText,
-         UTextOffset srcStart,
+         int32_t srcStart,
          int32_t srcLength,
          uint32_t options) const;
 
@@ -580,7 +580,7 @@ public:
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
-  inline int8_t caseCompare(UTextOffset start,
+  inline int8_t caseCompare(int32_t start,
          int32_t length,
          const UChar *srcChars,
          uint32_t options) const;
@@ -598,10 +598,10 @@ public:
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
-  inline int8_t caseCompare(UTextOffset start,
+  inline int8_t caseCompare(int32_t start,
          int32_t length,
          const UChar *srcChars,
-         UTextOffset srcStart,
+         int32_t srcStart,
          int32_t srcLength,
          uint32_t options) const;
 
@@ -618,11 +618,11 @@ public:
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
-  inline int8_t caseCompareBetween(UTextOffset start,
-            UTextOffset limit,
+  inline int8_t caseCompareBetween(int32_t start,
+            int32_t limit,
             const UnicodeString& srcText,
-            UTextOffset srcStart,
-            UTextOffset srcLimit,
+            int32_t srcStart,
+            int32_t srcLimit,
             uint32_t options) const;
 
   /**
@@ -645,7 +645,7 @@ public:
    * @stable
    */
   inline UBool startsWith(const UnicodeString& srcText,
-            UTextOffset srcStart,
+            int32_t srcStart,
             int32_t srcLength) const;
 
   /**
@@ -669,7 +669,7 @@ public:
    * @stable
    */
   inline UBool startsWith(const UChar *srcChars,
-            UTextOffset srcStart,
+            int32_t srcStart,
             int32_t srcLength) const;
 
   /**
@@ -692,7 +692,7 @@ public:
    * @stable
    */
   inline UBool endsWith(const UnicodeString& srcText,
-          UTextOffset srcStart,
+          int32_t srcStart,
           int32_t srcLength) const;
 
   /**
@@ -717,7 +717,7 @@ public:
    * @stable
    */
   inline UBool endsWith(const UChar *srcChars,
-          UTextOffset srcStart,
+          int32_t srcStart,
           int32_t srcLength) const;
 
 
@@ -731,7 +731,7 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(const UnicodeString& text) const;
+  inline int32_t indexOf(const UnicodeString& text) const;
 
   /**
    * Locate in this the first occurrence of the characters in <TT>text</TT>
@@ -742,8 +742,8 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(const UnicodeString& text,
-              UTextOffset start) const;
+  inline int32_t indexOf(const UnicodeString& text,
+              int32_t start) const;
 
   /**
    * Locate in this the first occurrence in the range
@@ -756,8 +756,8 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(const UnicodeString& text,
-              UTextOffset start,
+  inline int32_t indexOf(const UnicodeString& text,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -776,10 +776,10 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(const UnicodeString& srcText,
-              UTextOffset srcStart,
+  inline int32_t indexOf(const UnicodeString& srcText,
+              int32_t srcStart,
               int32_t srcLength,
-              UTextOffset start,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -793,9 +793,9 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(const UChar *srcChars,
+  inline int32_t indexOf(const UChar *srcChars,
               int32_t srcLength,
-              UTextOffset start) const;
+              int32_t start) const;
 
   /**
    * Locate in this the first occurrence in the range
@@ -809,9 +809,9 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(const UChar *srcChars,
+  inline int32_t indexOf(const UChar *srcChars,
               int32_t srcLength,
-              UTextOffset start,
+              int32_t start,
               int32_t length) const;
  
   /**
@@ -830,10 +830,10 @@ public:
    * or -1 if not found.
    * @stable
    */
-  UTextOffset indexOf(const UChar *srcChars,
-              UTextOffset srcStart,
+  int32_t indexOf(const UChar *srcChars,
+              int32_t srcStart,
               int32_t srcLength,
-              UTextOffset start,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -843,7 +843,7 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(UChar c) const;
+  inline int32_t indexOf(UChar c) const;
 
   /**
    * Locate in this the first occurrence of the code point <TT>c</TT>, 
@@ -866,7 +866,7 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(UChar32 c) const;
+  inline int32_t indexOf(UChar32 c) const;
 
   /**
    * Locate in this the first occurrence of the code unit <TT>c</TT>
@@ -876,8 +876,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(UChar c,
-              UTextOffset start) const;
+  inline int32_t indexOf(UChar c,
+              int32_t start) const;
 
   /**
    * Locate in this the first occurrence of the code point <TT>c</TT>
@@ -901,8 +901,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(UChar32 c,
-              UTextOffset start) const;
+  inline int32_t indexOf(UChar32 c,
+              int32_t start) const;
 
   /**
    * Locate in this the first occurrence of the code unit <TT>c</TT> 
@@ -914,8 +914,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(UChar c,
-              UTextOffset start,
+  inline int32_t indexOf(UChar c,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -942,8 +942,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset indexOf(UChar32 c,
-              UTextOffset start,
+  inline int32_t indexOf(UChar32 c,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -954,7 +954,7 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(const UnicodeString& text) const;
+  inline int32_t lastIndexOf(const UnicodeString& text) const;
 
   /**
    * Locate in this the last occurrence of the characters in <TT>text</TT>
@@ -965,8 +965,8 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(const UnicodeString& text,
-              UTextOffset start) const;
+  inline int32_t lastIndexOf(const UnicodeString& text,
+              int32_t start) const;
 
   /**
    * Locate in this the last occurrence in the range 
@@ -979,8 +979,8 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(const UnicodeString& text,
-              UTextOffset start,
+  inline int32_t lastIndexOf(const UnicodeString& text,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -999,10 +999,10 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(const UnicodeString& srcText,
-              UTextOffset srcStart,
+  inline int32_t lastIndexOf(const UnicodeString& srcText,
+              int32_t srcStart,
               int32_t srcLength,
-              UTextOffset start,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -1015,9 +1015,9 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(const UChar *srcChars,
+  inline int32_t lastIndexOf(const UChar *srcChars,
               int32_t srcLength,
-              UTextOffset start) const;
+              int32_t start) const;
 
   /**
    * Locate in this the last occurrence in the range 
@@ -1031,9 +1031,9 @@ public:
    * or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(const UChar *srcChars,
+  inline int32_t lastIndexOf(const UChar *srcChars,
               int32_t srcLength,
-              UTextOffset start,
+              int32_t start,
               int32_t length) const;
  
   /**
@@ -1052,10 +1052,10 @@ public:
    * or -1 if not found.
    * @stable
    */
-  UTextOffset lastIndexOf(const UChar *srcChars,
-              UTextOffset srcStart,
+  int32_t lastIndexOf(const UChar *srcChars,
+              int32_t srcStart,
               int32_t srcLength,
-              UTextOffset start,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -1065,7 +1065,7 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(UChar c) const;
+  inline int32_t lastIndexOf(UChar c) const;
 
   /**
    * Locate in this the last occurrence of the code point <TT>c</TT>, 
@@ -1088,7 +1088,7 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(UChar32 c) const;
+  inline int32_t lastIndexOf(UChar32 c) const;
 
   /**
    * Locate in this the last occurrence of the code unit <TT>c</TT>
@@ -1098,8 +1098,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(UChar c,
-              UTextOffset start) const;
+  inline int32_t lastIndexOf(UChar c,
+              int32_t start) const;
 
   /**
    * Locate in this the last occurrence of the code point <TT>c</TT>
@@ -1123,8 +1123,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(UChar32 c,
-              UTextOffset start) const;
+  inline int32_t lastIndexOf(UChar32 c,
+              int32_t start) const;
 
   /**
    * Locate in this the last occurrence of the code unit <TT>c</TT> 
@@ -1136,8 +1136,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(UChar c,
-              UTextOffset start,
+  inline int32_t lastIndexOf(UChar c,
+              int32_t start,
               int32_t length) const;
 
   /**
@@ -1164,8 +1164,8 @@ public:
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
    */
-  inline UTextOffset lastIndexOf(UChar32 c,
-              UTextOffset start,
+  inline int32_t lastIndexOf(UChar32 c,
+              int32_t start,
               int32_t length) const;
 
 
@@ -1177,7 +1177,7 @@ public:
    * @returns the code unit at offset <tt>offset</tt>
    * @stable
    */
-  inline UChar charAt(UTextOffset offset) const;
+  inline UChar charAt(int32_t offset) const;
 
   /**
    * Return the code unit at offset <tt>offset</tt>.
@@ -1185,7 +1185,7 @@ public:
    * @returns the code unit at offset <tt>offset</tt>
    * @stable
    */
-  inline UChar operator [] (UTextOffset offset) const;
+  inline UChar operator [] (int32_t offset) const;
 
   /**
    * Return the code point that contains the code unit
@@ -1196,7 +1196,7 @@ public:
    * @returns the code point of text at <tt>offset</tt>
    * @stable
    */
-  inline UChar32 char32At(UTextOffset offset) const;
+  inline UChar32 char32At(int32_t offset) const;
 
   /**
    * Adjust a random-access offset so that
@@ -1212,7 +1212,7 @@ public:
    * @return offset of the first code unit of the same code point
    * @draft ICU 2.0
    */
-  inline UTextOffset getChar32Start(UTextOffset offset) const;
+  inline int32_t getChar32Start(int32_t offset) const;
 
   /**
    * Same as getChar32Start().
@@ -1234,7 +1234,7 @@ public:
    * @return offset of the first code unit of the same code point
    * @deprecated To be removed after 2002-sep-30. Use getChar32Start().
    */
-  inline UTextOffset getCharStart(UTextOffset offset) const;
+  inline int32_t getCharStart(int32_t offset) const;
 
   /**
    * Adjust a random-access offset so that
@@ -1251,7 +1251,7 @@ public:
    * @return offset of the first code unit after the same code point
    * @draft ICU 2.0
    */
-  inline UTextOffset getChar32Limit(UTextOffset offset) const;
+  inline int32_t getChar32Limit(int32_t offset) const;
 
   /**
    * Same as getChar32Limit().
@@ -1274,7 +1274,7 @@ public:
    * @return offset of the first code unit after the same code point
    * @deprecated To be removed after 2002-sep-30. Use getChar32Limit().
    */
-  inline UTextOffset getCharLimit(UTextOffset offset) const;
+  inline int32_t getCharLimit(int32_t offset) const;
 
   /**
    * Move the code unit index along the string by delta code points.
@@ -1297,7 +1297,7 @@ public:
    * UnicodeString s=UNICODE_STRING("a\\U00010000b\\U0010ffff\\u2029", 31).unescape();
    *
    * // initial index: position of U+10000
-   * UTextOffset index=1;
+   * int32_t index=1;
    *
    * // the following examples will all result in index==4, position of U+10ffff
    *
@@ -1317,7 +1317,7 @@ public:
    * @return the resulting code unit index
    * @draft ICU 2.0
    */
-  UTextOffset moveIndex32(UTextOffset index, int32_t delta) const;
+  int32_t moveIndex32(int32_t index, int32_t delta) const;
 
   /* Substring extraction */
 
@@ -1336,10 +1336,10 @@ public:
    * will be extracted
    * @stable
    */
-  inline void extract(UTextOffset start, 
+  inline void extract(int32_t start, 
            int32_t length, 
            UChar *dst, 
-           UTextOffset dstStart = 0) const;
+           int32_t dstStart = 0) const;
 
   /**
    * Copy the contents of the string into dest.
@@ -1376,7 +1376,7 @@ public:
    * @return A reference to <TT>target</TT>
    * @stable
    */
-  inline void extract(UTextOffset start,
+  inline void extract(int32_t start,
            int32_t length,
            UnicodeString& target) const;
 
@@ -1391,10 +1391,10 @@ public:
    * will be extracted
    * @stable
    */
-  inline void extractBetween(UTextOffset start, 
-              UTextOffset limit, 
+  inline void extractBetween(int32_t start, 
+              int32_t limit, 
               UChar *dst, 
-              UTextOffset dstStart = 0) const;
+              int32_t dstStart = 0) const;
 
   /**
    * Copy the characters in the range [<tt>start</tt>, <tt>limit</tt>) 
@@ -1405,8 +1405,8 @@ public:
    * @return A reference to <TT>target</TT>
    * @stable
    */
-  virtual void extractBetween(UTextOffset start,
-              UTextOffset limit,
+  virtual void extractBetween(int32_t start,
+              int32_t limit,
               UnicodeString& target) const;
 
   /**
@@ -1429,7 +1429,7 @@ public:
    * @return the output string length, not including the terminating NUL
    * @stable
    */
-  inline int32_t extract(UTextOffset start,
+  inline int32_t extract(int32_t start,
                  int32_t startLength,
                  char *target,
                  const char *codepage = 0) const;
@@ -1458,7 +1458,7 @@ public:
    * @return the output string length, not including the terminating NUL
    * @stable
    */
-  int32_t extract(UTextOffset start,
+  int32_t extract(int32_t start,
            int32_t startLength,
            char *target,
            uint32_t targetLength,
@@ -1508,7 +1508,7 @@ public:
    * @draft ICU 2.0
    */
   int32_t
-  countChar32(UTextOffset start=0, int32_t length=0x7fffffff) const;
+  countChar32(int32_t start=0, int32_t length=0x7fffffff) const;
 
   /**
    * Determine if this string is empty.
@@ -1604,7 +1604,7 @@ public:
    * @stable
    */
   inline UnicodeString& setTo(const UnicodeString& srcText, 
-               UTextOffset srcStart, 
+               int32_t srcStart, 
                int32_t srcLength);
 
   /**
@@ -1723,7 +1723,7 @@ public:
    * @return A reference to this
    * @stable
    */
-  UnicodeString& setCharAt(UTextOffset offset, 
+  UnicodeString& setCharAt(int32_t offset, 
                UChar ch);
 
 
@@ -1772,7 +1772,7 @@ public:
    * @stable
    */
   inline UnicodeString& append(const UnicodeString& srcText, 
-            UTextOffset srcStart, 
+            int32_t srcStart, 
             int32_t srcLength);
 
   /**
@@ -1798,7 +1798,7 @@ public:
    * @stable
    */
   inline UnicodeString& append(const UChar *srcChars, 
-            UTextOffset srcStart, 
+            int32_t srcStart, 
             int32_t srcLength);
 
   /**
@@ -1844,9 +1844,9 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& insert(UTextOffset start, 
+  inline UnicodeString& insert(int32_t start, 
             const UnicodeString& srcText, 
-            UTextOffset srcStart, 
+            int32_t srcStart, 
             int32_t srcLength);
 
   /**
@@ -1857,7 +1857,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& insert(UTextOffset start, 
+  inline UnicodeString& insert(int32_t start, 
             const UnicodeString& srcText);
 
   /**
@@ -1873,9 +1873,9 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& insert(UTextOffset start, 
+  inline UnicodeString& insert(int32_t start, 
             const UChar *srcChars, 
-            UTextOffset srcStart, 
+            int32_t srcStart, 
             int32_t srcLength);
 
   /**
@@ -1887,7 +1887,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& insert(UTextOffset start, 
+  inline UnicodeString& insert(int32_t start, 
             const UChar *srcChars,
             int32_t srcLength);
 
@@ -1899,7 +1899,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& insert(UTextOffset start, 
+  inline UnicodeString& insert(int32_t start, 
             UChar srcChar);
 
   /**
@@ -1910,7 +1910,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& insert(UTextOffset start, 
+  inline UnicodeString& insert(int32_t start, 
             UChar32 srcChar);
 
 
@@ -1933,10 +1933,10 @@ public:
    * @return a reference to this
    * @stable
    */
-  UnicodeString& replace(UTextOffset start, 
+  UnicodeString& replace(int32_t start, 
              int32_t length, 
              const UnicodeString& srcText, 
-             UTextOffset srcStart, 
+             int32_t srcStart, 
              int32_t srcLength);
 
   /**
@@ -1951,7 +1951,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  UnicodeString& replace(UTextOffset start, 
+  UnicodeString& replace(int32_t start, 
              int32_t length, 
              const UnicodeString& srcText);
 
@@ -1972,10 +1972,10 @@ public:
    * @return a reference to this
    * @stable
    */
-  UnicodeString& replace(UTextOffset start, 
+  UnicodeString& replace(int32_t start, 
              int32_t length, 
              const UChar *srcChars, 
-             UTextOffset srcStart, 
+             int32_t srcStart, 
              int32_t srcLength);
 
   /**
@@ -1990,7 +1990,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& replace(UTextOffset start, 
+  inline UnicodeString& replace(int32_t start, 
              int32_t length, 
              const UChar *srcChars,
              int32_t srcLength);
@@ -2006,7 +2006,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& replace(UTextOffset start, 
+  inline UnicodeString& replace(int32_t start, 
              int32_t length, 
              UChar srcChar);
 
@@ -2021,7 +2021,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& replace(UTextOffset start, 
+  inline UnicodeString& replace(int32_t start, 
              int32_t length, 
              UChar32 srcChar);
 
@@ -2034,8 +2034,8 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& replaceBetween(UTextOffset start, 
-                UTextOffset limit, 
+  inline UnicodeString& replaceBetween(int32_t start, 
+                int32_t limit, 
                 const UnicodeString& srcText);
 
   /**
@@ -2052,11 +2052,11 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& replaceBetween(UTextOffset start, 
-                UTextOffset limit, 
+  inline UnicodeString& replaceBetween(int32_t start, 
+                int32_t limit, 
                 const UnicodeString& srcText, 
-                UTextOffset srcStart, 
-                UTextOffset srcLimit);
+                int32_t srcStart, 
+                int32_t srcLimit);
 
   /**
    * Replace a substring of this object with the given text.
@@ -2068,8 +2068,8 @@ public:
    * to <code>limit - 1</code>
    * @stable
    */
-  virtual void handleReplaceBetween(UTextOffset start,
-                                    UTextOffset limit,
+  virtual void handleReplaceBetween(int32_t start,
+                                    int32_t limit,
                                     const UnicodeString& text);
 
   /**
@@ -2113,7 +2113,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& findAndReplace(UTextOffset start,
+  inline UnicodeString& findAndReplace(int32_t start,
                 int32_t length,
                 const UnicodeString& oldText,
                 const UnicodeString& newText);
@@ -2135,13 +2135,13 @@ public:
    * @return a reference to this
    * @stable
    */
-  UnicodeString& findAndReplace(UTextOffset start,
+  UnicodeString& findAndReplace(int32_t start,
                 int32_t length,
                 const UnicodeString& oldText,
-                UTextOffset oldStart,
+                int32_t oldStart,
                 int32_t oldLength,
                 const UnicodeString& newText,
-                UTextOffset newStart,
+                int32_t newStart,
                 int32_t newLength);
 
 
@@ -2162,7 +2162,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& remove(UTextOffset start, 
+  inline UnicodeString& remove(int32_t start, 
                                int32_t length = (int32_t)INT32_MAX);
 
   /**
@@ -2173,8 +2173,8 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& removeBetween(UTextOffset start,
-                                      UTextOffset limit = (int32_t)INT32_MAX);
+  inline UnicodeString& removeBetween(int32_t start,
+                                      int32_t limit = (int32_t)INT32_MAX);
 
 
   /* Length operations */
@@ -2240,7 +2240,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& reverse(UTextOffset start,
+  inline UnicodeString& reverse(int32_t start,
              int32_t length);
 
   /**
@@ -2633,7 +2633,7 @@ public:
    * @return the number of display cells occupied by the specified substring.
    * @stable
    */
-  int32_t numDisplayCells(UTextOffset start = 0,
+  int32_t numDisplayCells(int32_t start = 0,
               int32_t length = INT32_MAX,
               UBool asian = TRUE) const;
 
@@ -2644,7 +2644,7 @@ public:
    * @return A modifiable UCharReference to that code unit.
    * @stable
    */
-  UCharReference operator[] (UTextOffset pos);
+  UCharReference operator[] (int32_t pos);
 
   /**
    * Unescape a string of characters and return a string containing
@@ -2716,100 +2716,100 @@ protected:
    * The change in Replaceable to use virtual getCharAt() allows
    * UnicodeString::charAt() to be inline again (see jitterbug 709).
    */
-  virtual UChar getCharAt(UTextOffset offset) const;
+  virtual UChar getCharAt(int32_t offset) const;
 
   /**
    * The change in Replaceable to use virtual getChar32At() allows
    * UnicodeString::char32At() to be inline again (see jitterbug 709).
    */
-  virtual UChar32 getChar32At(UTextOffset offset) const;
+  virtual UChar32 getChar32At(int32_t offset) const;
 
 private:
 
   inline int8_t
-  doCompare(UTextOffset start,
+  doCompare(int32_t start,
            int32_t length,
            const UnicodeString& srcText,
-           UTextOffset srcStart,
+           int32_t srcStart,
            int32_t srcLength) const;
 
-  int8_t doCompare(UTextOffset start,
+  int8_t doCompare(int32_t start,
            int32_t length,
            const UChar *srcChars,
-           UTextOffset srcStart,
+           int32_t srcStart,
            int32_t srcLength) const;
 
   inline int8_t
-  doCompareCodePointOrder(UTextOffset start,
+  doCompareCodePointOrder(int32_t start,
                           int32_t length,
                           const UnicodeString& srcText,
-                          UTextOffset srcStart,
+                          int32_t srcStart,
                           int32_t srcLength) const;
 
-  int8_t doCompareCodePointOrder(UTextOffset start,
+  int8_t doCompareCodePointOrder(int32_t start,
                                  int32_t length,
                                  const UChar *srcChars,
-                                 UTextOffset srcStart,
+                                 int32_t srcStart,
                                  int32_t srcLength) const;
 
   inline int8_t
-  doCaseCompare(UTextOffset start,
+  doCaseCompare(int32_t start,
                 int32_t length,
                 const UnicodeString &srcText,
-                UTextOffset srcStart,
+                int32_t srcStart,
                 int32_t srcLength,
                 uint32_t options) const;
 
   int8_t
-  doCaseCompare(UTextOffset start,
+  doCaseCompare(int32_t start,
                 int32_t length,
                 const UChar *srcChars,
-                UTextOffset srcStart,
+                int32_t srcStart,
                 int32_t srcLength,
                 uint32_t options) const;
 
-  UTextOffset doIndexOf(UChar c,
-            UTextOffset start,
+  int32_t doIndexOf(UChar c,
+            int32_t start,
             int32_t length) const;
 
   // only for c>=0xd800
-  UTextOffset doIndexOf(UChar32 c,
-                        UTextOffset start,
+  int32_t doIndexOf(UChar32 c,
+                        int32_t start,
                         int32_t length) const;
 
-  UTextOffset doLastIndexOf(UChar c,
-                UTextOffset start,
+  int32_t doLastIndexOf(UChar c,
+                int32_t start,
                 int32_t length) const;
 
   // only for c>=0xd800
-  UTextOffset doLastIndexOf(UChar32 c,
-                            UTextOffset start,
+  int32_t doLastIndexOf(UChar32 c,
+                            int32_t start,
                             int32_t length) const;
 
-  void doExtract(UTextOffset start, 
+  void doExtract(int32_t start, 
          int32_t length, 
          UChar *dst, 
-         UTextOffset dstStart) const;
+         int32_t dstStart) const;
 
-  inline void doExtract(UTextOffset start,
+  inline void doExtract(int32_t start,
          int32_t length,
          UnicodeString& target) const;
 
-  inline UChar doCharAt(UTextOffset offset)  const;
+  inline UChar doCharAt(int32_t offset)  const;
 
-  UnicodeString& doReplace(UTextOffset start, 
+  UnicodeString& doReplace(int32_t start, 
                int32_t length, 
                const UnicodeString& srcText, 
-               UTextOffset srcStart, 
+               int32_t srcStart, 
                int32_t srcLength);
 
-  UnicodeString& doReplace(UTextOffset start, 
+  UnicodeString& doReplace(int32_t start, 
                int32_t length, 
                const UChar *srcChars, 
-               UTextOffset srcStart, 
+               int32_t srcStart, 
                int32_t srcLength);
 
-  UnicodeString& doReverse(UTextOffset start,
+  UnicodeString& doReverse(int32_t start,
                int32_t length);
 
   // calculate hash code
@@ -2829,11 +2829,11 @@ private:
   void releaseArray(void);
 
   // Pin start and limit to acceptable values.
-  inline void pinIndices(UTextOffset& start,
+  inline void pinIndices(int32_t& start,
                          int32_t& length) const;
 
   /* Internal extract() using UConverter. */
-  int32_t doExtract(UTextOffset start, int32_t length,
+  int32_t doExtract(int32_t start, int32_t length,
                     char *dest, int32_t destCapacity,
                     UConverter *cnv,
                     UErrorCode &errorCode) const;
@@ -3010,7 +3010,7 @@ UnicodeString::compare(const UnicodeString& text) const
 { return doCompare(0, fLength, text, 0, text.fLength); }
 
 inline int8_t 
-UnicodeString::compare(UTextOffset start,
+UnicodeString::compare(int32_t start,
                int32_t length,
                const UnicodeString& srcText) const
 { return doCompare(start, length, srcText, 0, srcText.fLength); }
@@ -3021,41 +3021,41 @@ UnicodeString::compare(const UChar *srcChars,
 { return doCompare(0, fLength, srcChars, 0, srcLength); }
 
 inline int8_t 
-UnicodeString::compare(UTextOffset start,
+UnicodeString::compare(int32_t start,
                int32_t length,
                const UnicodeString& srcText,
-               UTextOffset srcStart,
+               int32_t srcStart,
                int32_t srcLength) const
 { return doCompare(start, length, srcText, srcStart, srcLength); }
 
 inline int8_t
-UnicodeString::compare(UTextOffset start,
+UnicodeString::compare(int32_t start,
                int32_t length,
                const UChar *srcChars) const
 { return doCompare(start, length, srcChars, 0, length); }
 
 inline int8_t 
-UnicodeString::compare(UTextOffset start,
+UnicodeString::compare(int32_t start,
                int32_t length,
                const UChar *srcChars,
-               UTextOffset srcStart,
+               int32_t srcStart,
                int32_t srcLength) const
 { return doCompare(start, length, srcChars, srcStart, srcLength); }
 
 inline int8_t
-UnicodeString::compareBetween(UTextOffset start,
-                  UTextOffset limit,
+UnicodeString::compareBetween(int32_t start,
+                  int32_t limit,
                   const UnicodeString& srcText,
-                  UTextOffset srcStart,
-                  UTextOffset srcLimit) const
+                  int32_t srcStart,
+                  int32_t srcLimit) const
 { return doCompare(start, limit - start, 
            srcText, srcStart, srcLimit - srcStart); }
 
 inline int8_t
-UnicodeString::doCompare(UTextOffset start,
+UnicodeString::doCompare(int32_t start,
               int32_t length,
               const UnicodeString& srcText,
-              UTextOffset srcStart,
+              int32_t srcStart,
               int32_t srcLength) const
 {
   const UChar *srcChars;
@@ -3073,7 +3073,7 @@ UnicodeString::compareCodePointOrder(const UnicodeString& text) const
 { return doCompareCodePointOrder(0, fLength, text, 0, text.fLength); }
 
 inline int8_t 
-UnicodeString::compareCodePointOrder(UTextOffset start,
+UnicodeString::compareCodePointOrder(int32_t start,
                                      int32_t length,
                                      const UnicodeString& srcText) const
 { return doCompareCodePointOrder(start, length, srcText, 0, srcText.fLength); }
@@ -3084,41 +3084,41 @@ UnicodeString::compareCodePointOrder(const UChar *srcChars,
 { return doCompareCodePointOrder(0, fLength, srcChars, 0, srcLength); }
 
 inline int8_t 
-UnicodeString::compareCodePointOrder(UTextOffset start,
+UnicodeString::compareCodePointOrder(int32_t start,
                                      int32_t length,
                                      const UnicodeString& srcText,
-                                     UTextOffset srcStart,
+                                     int32_t srcStart,
                                      int32_t srcLength) const
 { return doCompareCodePointOrder(start, length, srcText, srcStart, srcLength); }
 
 inline int8_t
-UnicodeString::compareCodePointOrder(UTextOffset start,
+UnicodeString::compareCodePointOrder(int32_t start,
                                      int32_t length,
                                      const UChar *srcChars) const
 { return doCompareCodePointOrder(start, length, srcChars, 0, length); }
 
 inline int8_t 
-UnicodeString::compareCodePointOrder(UTextOffset start,
+UnicodeString::compareCodePointOrder(int32_t start,
                                      int32_t length,
                                      const UChar *srcChars,
-                                     UTextOffset srcStart,
+                                     int32_t srcStart,
                                      int32_t srcLength) const
 { return doCompareCodePointOrder(start, length, srcChars, srcStart, srcLength); }
 
 inline int8_t
-UnicodeString::compareCodePointOrderBetween(UTextOffset start,
-                                            UTextOffset limit,
+UnicodeString::compareCodePointOrderBetween(int32_t start,
+                                            int32_t limit,
                                             const UnicodeString& srcText,
-                                            UTextOffset srcStart,
-                                            UTextOffset srcLimit) const
+                                            int32_t srcStart,
+                                            int32_t srcLimit) const
 { return doCompareCodePointOrder(start, limit - start, 
            srcText, srcStart, srcLimit - srcStart); }
 
 inline int8_t
-UnicodeString::doCompareCodePointOrder(UTextOffset start,
+UnicodeString::doCompareCodePointOrder(int32_t start,
                                        int32_t length,
                                        const UnicodeString& srcText,
-                                       UTextOffset srcStart,
+                                       int32_t srcStart,
                                        int32_t srcLength) const
 {
   const UChar *srcChars;
@@ -3137,7 +3137,7 @@ UnicodeString::caseCompare(const UnicodeString &text, uint32_t options) const {
 }
 
 inline int8_t 
-UnicodeString::caseCompare(UTextOffset start,
+UnicodeString::caseCompare(int32_t start,
                            int32_t length,
                            const UnicodeString &srcText,
                            uint32_t options) const {
@@ -3152,17 +3152,17 @@ UnicodeString::caseCompare(const UChar *srcChars,
 }
 
 inline int8_t 
-UnicodeString::caseCompare(UTextOffset start,
+UnicodeString::caseCompare(int32_t start,
                            int32_t length,
                            const UnicodeString &srcText,
-                           UTextOffset srcStart,
+                           int32_t srcStart,
                            int32_t srcLength,
                            uint32_t options) const {
   return doCaseCompare(start, length, srcText, srcStart, srcLength, options);
 }
 
 inline int8_t
-UnicodeString::caseCompare(UTextOffset start,
+UnicodeString::caseCompare(int32_t start,
                            int32_t length,
                            const UChar *srcChars,
                            uint32_t options) const {
@@ -3170,30 +3170,30 @@ UnicodeString::caseCompare(UTextOffset start,
 }
 
 inline int8_t 
-UnicodeString::caseCompare(UTextOffset start,
+UnicodeString::caseCompare(int32_t start,
                            int32_t length,
                            const UChar *srcChars,
-                           UTextOffset srcStart,
+                           int32_t srcStart,
                            int32_t srcLength,
                            uint32_t options) const {
   return doCaseCompare(start, length, srcChars, srcStart, srcLength, options);
 }
 
 inline int8_t
-UnicodeString::caseCompareBetween(UTextOffset start,
-                                  UTextOffset limit,
+UnicodeString::caseCompareBetween(int32_t start,
+                                  int32_t limit,
                                   const UnicodeString &srcText,
-                                  UTextOffset srcStart,
-                                  UTextOffset srcLimit,
+                                  int32_t srcStart,
+                                  int32_t srcLimit,
                                   uint32_t options) const {
   return doCaseCompare(start, limit - start, srcText, srcStart, srcLimit - srcStart, options);
 }
 
 inline int8_t
-UnicodeString::doCaseCompare(UTextOffset start,
+UnicodeString::doCaseCompare(int32_t start,
                              int32_t length,
                              const UnicodeString &srcText,
-                             UTextOffset srcStart,
+                             int32_t srcStart,
                              int32_t srcLength,
                              uint32_t options) const
 {
@@ -3207,26 +3207,26 @@ UnicodeString::doCaseCompare(UTextOffset start,
   return doCaseCompare(start, length, srcChars, srcStart, srcLength, options);
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(const UnicodeString& text) const
 { return indexOf(text, 0, text.fLength, 0, fLength); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(const UnicodeString& text,
-               UTextOffset start) const
+               int32_t start) const
 { return indexOf(text, 0, text.fLength, start, fLength - start); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(const UnicodeString& text,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 { return indexOf(text, 0, text.fLength, start, length); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(const UnicodeString& srcText,
-               UTextOffset srcStart,
+               int32_t srcStart,
                int32_t srcLength,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 {
   if(!srcText.isBogus()) {
@@ -3238,48 +3238,48 @@ UnicodeString::indexOf(const UnicodeString& srcText,
   return -1;
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(const UChar *srcChars,
                int32_t srcLength,
-               UTextOffset start) const
+               int32_t start) const
 { return indexOf(srcChars, 0, srcLength, start, fLength - start); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(const UChar *srcChars,
                int32_t srcLength,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 { return indexOf(srcChars, 0, srcLength, start, length); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(UChar c) const
 { return doIndexOf(c, 0, fLength); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(UChar32 c) const {
   return indexOf(c, 0, fLength);
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(UChar c,
-               UTextOffset start) const
+               int32_t start) const
 { return doIndexOf(c, start, fLength - start); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(UChar32 c,
-               UTextOffset start) const {
+               int32_t start) const {
   return indexOf(c, start, fLength - start);
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(UChar c,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 { return doIndexOf(c, start, length); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::indexOf(UChar32 c,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const {
   if((uint32_t)c<0xd800) {
     return doIndexOf((UChar)c, start, length);
@@ -3288,26 +3288,26 @@ UnicodeString::indexOf(UChar32 c,
   }
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(const UnicodeString& text) const
 { return lastIndexOf(text, 0, text.fLength, 0, fLength); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(const UnicodeString& text,
-               UTextOffset start) const
+               int32_t start) const
 { return lastIndexOf(text, 0, text.fLength, start, fLength - start); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(const UnicodeString& text,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 { return lastIndexOf(text, 0, text.fLength, start, length); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(const UnicodeString& srcText,
-               UTextOffset srcStart,
+               int32_t srcStart,
                int32_t srcLength,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 {
   if(!srcText.isBogus()) {
@@ -3319,48 +3319,48 @@ UnicodeString::lastIndexOf(const UnicodeString& srcText,
   return -1;
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(const UChar *srcChars,
                int32_t srcLength,
-               UTextOffset start) const
+               int32_t start) const
 { return lastIndexOf(srcChars, 0, srcLength, start, fLength - start); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(const UChar *srcChars,
                int32_t srcLength,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 { return lastIndexOf(srcChars, 0, srcLength, start, length); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(UChar c) const
 { return doLastIndexOf(c, 0, fLength); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(UChar32 c) const {
   return lastIndexOf(c, 0, fLength);
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(UChar c,
-               UTextOffset start) const
+               int32_t start) const
 { return doLastIndexOf(c, start, fLength - start); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(UChar32 c,
-               UTextOffset start) const {
+               int32_t start) const {
   return lastIndexOf(c, start, fLength - start);
 }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(UChar c,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const
 { return doLastIndexOf(c, start, length); }
 
-inline UTextOffset 
+inline int32_t 
 UnicodeString::lastIndexOf(UChar32 c,
-               UTextOffset start,
+               int32_t start,
                int32_t length) const {
   if((uint32_t)c<0xd800) {
     return doLastIndexOf((UChar)c, start, length);
@@ -3375,7 +3375,7 @@ UnicodeString::startsWith(const UnicodeString& text) const
 
 inline UBool 
 UnicodeString::startsWith(const UnicodeString& srcText,
-              UTextOffset srcStart,
+              int32_t srcStart,
               int32_t srcLength) const
 { return doCompare(0, srcLength, srcText, srcStart, srcLength) == 0; }
 
@@ -3386,7 +3386,7 @@ UnicodeString::startsWith(const UChar *srcChars,
 
 inline UBool 
 UnicodeString::startsWith(const UChar *srcChars,
-              UTextOffset srcStart,
+              int32_t srcStart,
               int32_t srcLength) const
 { return doCompare(0, srcLength, srcChars, srcStart, srcLength) == 0;}
 
@@ -3397,7 +3397,7 @@ UnicodeString::endsWith(const UnicodeString& text) const
 
 inline UBool 
 UnicodeString::endsWith(const UnicodeString& srcText,
-            UTextOffset srcStart,
+            int32_t srcStart,
             int32_t srcLength) const
 { return doCompare(fLength - srcLength, srcLength, 
            srcText, srcStart, srcLength) == 0; }
@@ -3410,7 +3410,7 @@ UnicodeString::endsWith(const UChar *srcChars,
 
 inline UBool 
 UnicodeString::endsWith(const UChar *srcChars,
-            UTextOffset srcStart,
+            int32_t srcStart,
             int32_t srcLength) const
 { return doCompare(fLength - srcLength, srcLength, 
            srcChars, srcStart, srcLength) == 0;}
@@ -3418,42 +3418,42 @@ UnicodeString::endsWith(const UChar *srcChars,
 // replace
 //========================================
 inline UnicodeString& 
-UnicodeString::replace(UTextOffset start, 
+UnicodeString::replace(int32_t start, 
                int32_t length, 
                const UnicodeString& srcText) 
 { return doReplace(start, length, srcText, 0, srcText.fLength); }
 
 inline UnicodeString& 
-UnicodeString::replace(UTextOffset start, 
+UnicodeString::replace(int32_t start, 
                int32_t length, 
                const UnicodeString& srcText, 
-               UTextOffset srcStart, 
+               int32_t srcStart, 
                int32_t srcLength)
 { return doReplace(start, length, srcText, srcStart, srcLength); }
 
 inline UnicodeString& 
-UnicodeString::replace(UTextOffset start, 
+UnicodeString::replace(int32_t start, 
                int32_t length, 
                const UChar *srcChars,
                int32_t srcLength)
 { return doReplace(start, length, srcChars, 0, srcLength); }
 
 inline UnicodeString& 
-UnicodeString::replace(UTextOffset start, 
+UnicodeString::replace(int32_t start, 
                int32_t length, 
                const UChar *srcChars, 
-               UTextOffset srcStart, 
+               int32_t srcStart, 
                int32_t srcLength)
 { return doReplace(start, length, srcChars, srcStart, srcLength); }
 
 inline UnicodeString& 
-UnicodeString::replace(UTextOffset start, 
+UnicodeString::replace(int32_t start, 
                int32_t length, 
                UChar srcChar)
 { return doReplace(start, length, &srcChar, 0, 1); }
 
 inline UnicodeString&
-UnicodeString::replace(UTextOffset start, 
+UnicodeString::replace(int32_t start, 
                int32_t length, 
                UChar32 srcChar) {
   UChar buffer[UTF_MAX_CHAR_LENGTH];
@@ -3463,17 +3463,17 @@ UnicodeString::replace(UTextOffset start,
 }
 
 inline UnicodeString& 
-UnicodeString::replaceBetween(UTextOffset start, 
-                  UTextOffset limit, 
+UnicodeString::replaceBetween(int32_t start, 
+                  int32_t limit, 
                   const UnicodeString& srcText)
 { return doReplace(start, limit - start, srcText, 0, srcText.fLength); }
 
 inline UnicodeString&
-UnicodeString::replaceBetween(UTextOffset start, 
-                  UTextOffset limit, 
+UnicodeString::replaceBetween(int32_t start, 
+                  int32_t limit, 
                   const UnicodeString& srcText, 
-                  UTextOffset srcStart, 
-                  UTextOffset srcLimit)
+                  int32_t srcStart, 
+                  int32_t srcLimit)
 { return doReplace(start, limit - start, srcText, srcStart, srcLimit - srcStart); }
 
 inline UnicodeString& 
@@ -3483,7 +3483,7 @@ UnicodeString::findAndReplace(const UnicodeString& oldText,
             newText, 0, newText.fLength); }
 
 inline UnicodeString& 
-UnicodeString::findAndReplace(UTextOffset start,
+UnicodeString::findAndReplace(int32_t start,
                   int32_t length,
                   const UnicodeString& oldText,
                   const UnicodeString& newText)
@@ -3494,26 +3494,26 @@ UnicodeString::findAndReplace(UTextOffset start,
 // extract
 // ============================
 inline void
-UnicodeString::doExtract(UTextOffset start,
+UnicodeString::doExtract(int32_t start,
              int32_t length,
              UnicodeString& target) const
 { target.replace(0, target.fLength, *this, start, length); }
 
 inline void  
-UnicodeString::extract(UTextOffset start, 
+UnicodeString::extract(int32_t start, 
                int32_t length, 
                UChar *target, 
-               UTextOffset targetStart) const
+               int32_t targetStart) const
 { doExtract(start, length, target, targetStart); }
 
 inline void 
-UnicodeString::extract(UTextOffset start,
+UnicodeString::extract(int32_t start,
                int32_t length,
                UnicodeString& target) const
 { doExtract(start, length, target); }
 
 inline int32_t
-UnicodeString::extract(UTextOffset start,
+UnicodeString::extract(int32_t start,
                int32_t length,
                char *dst,
                const char *codepage) const
@@ -3524,14 +3524,14 @@ UnicodeString::extract(UTextOffset start,
 }
 
 inline void  
-UnicodeString::extractBetween(UTextOffset start, 
-                  UTextOffset limit, 
+UnicodeString::extractBetween(int32_t start, 
+                  int32_t limit, 
                   UChar *dst, 
-                  UTextOffset dstStart) const
+                  int32_t dstStart) const
 { doExtract(start, limit - start, dst, dstStart); }
 
 inline UChar
-UnicodeString::doCharAt(UTextOffset offset) const
+UnicodeString::doCharAt(int32_t offset) const
 {
   if((uint32_t)offset < (uint32_t)fLength) {
     return fArray[offset];
@@ -3541,15 +3541,15 @@ UnicodeString::doCharAt(UTextOffset offset) const
 }
 
 inline UChar
-UnicodeString::charAt(UTextOffset offset) const
+UnicodeString::charAt(int32_t offset) const
 { return doCharAt(offset); }
 
 inline UChar
-UnicodeString::operator[] (UTextOffset offset) const
+UnicodeString::operator[] (int32_t offset) const
 { return doCharAt(offset); }
 
 inline UChar32
-UnicodeString::char32At(UTextOffset offset) const
+UnicodeString::char32At(int32_t offset) const
 {
   if((uint32_t)offset < (uint32_t)fLength) {
     UChar32 c;
@@ -3560,8 +3560,8 @@ UnicodeString::char32At(UTextOffset offset) const
   }
 }
 
-inline UTextOffset
-UnicodeString::getChar32Start(UTextOffset offset) const {
+inline int32_t
+UnicodeString::getChar32Start(int32_t offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
     UTF_SET_CHAR_START(fArray, 0, offset);
     return offset;
@@ -3570,8 +3570,8 @@ UnicodeString::getChar32Start(UTextOffset offset) const {
   }
 }
 
-inline UTextOffset
-UnicodeString::getChar32Limit(UTextOffset offset) const {
+inline int32_t
+UnicodeString::getChar32Limit(int32_t offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
     UTF_SET_CHAR_LIMIT(fArray, 0, offset, fLength);
     return offset;
@@ -3580,13 +3580,13 @@ UnicodeString::getChar32Limit(UTextOffset offset) const {
   }
 }
 
-inline UTextOffset
-UnicodeString::getCharStart(UTextOffset offset) const {
+inline int32_t
+UnicodeString::getCharStart(int32_t offset) const {
   return getChar32Start(offset);
 }
 
-inline UTextOffset
-UnicodeString::getCharLimit(UTextOffset offset) const {
+inline int32_t
+UnicodeString::getCharLimit(int32_t offset) const {
   return getChar32Limit(offset);
 }
 
@@ -3633,7 +3633,7 @@ UnicodeString::operator= (UChar32 ch)
 
 inline UnicodeString& 
 UnicodeString::setTo(const UnicodeString& srcText, 
-             UTextOffset srcStart, 
+             int32_t srcStart, 
              int32_t srcLength)
 { return doReplace(0, fLength, srcText, srcStart, srcLength); }
 
@@ -3672,7 +3672,7 @@ UnicodeString::operator+= (const UnicodeString& srcText)
 
 inline UnicodeString& 
 UnicodeString::append(const UnicodeString& srcText, 
-              UTextOffset srcStart, 
+              int32_t srcStart, 
               int32_t srcLength)
 { return doReplace(fLength, 0, srcText, srcStart, srcLength); }
 
@@ -3682,7 +3682,7 @@ UnicodeString::append(const UnicodeString& srcText)
 
 inline UnicodeString& 
 UnicodeString::append(const UChar *srcChars, 
-              UTextOffset srcStart, 
+              int32_t srcStart, 
               int32_t srcLength)
 { return doReplace(fLength, 0, srcChars, srcStart, srcLength); }
 
@@ -3704,43 +3704,43 @@ UnicodeString::append(UChar32 srcChar) {
 }
 
 inline UnicodeString& 
-UnicodeString::insert(UTextOffset start, 
+UnicodeString::insert(int32_t start, 
               const UnicodeString& srcText, 
-              UTextOffset srcStart, 
+              int32_t srcStart, 
               int32_t srcLength)
 { return doReplace(start, 0, srcText, srcStart, srcLength); }
 
 inline UnicodeString& 
-UnicodeString::insert(UTextOffset start, 
+UnicodeString::insert(int32_t start, 
               const UnicodeString& srcText)
 { return doReplace(start, 0, srcText, 0, srcText.fLength); }
 
 inline UnicodeString& 
-UnicodeString::insert(UTextOffset start, 
+UnicodeString::insert(int32_t start, 
               const UChar *srcChars, 
-              UTextOffset srcStart, 
+              int32_t srcStart, 
               int32_t srcLength)
 { return doReplace(start, 0, srcChars, srcStart, srcLength); }
 
 inline UnicodeString& 
-UnicodeString::insert(UTextOffset start, 
+UnicodeString::insert(int32_t start, 
               const UChar *srcChars,
               int32_t srcLength)
 { return doReplace(start, 0, srcChars, 0, srcLength); }
 
 inline UnicodeString& 
-UnicodeString::insert(UTextOffset start, 
+UnicodeString::insert(int32_t start, 
               UChar srcChar)
 { return doReplace(start, 0, &srcChar, 0, 1); }
 
 inline UnicodeString& 
-UnicodeString::insert(UTextOffset start, 
+UnicodeString::insert(int32_t start, 
               UChar32 srcChar)
 { return replace(start, 0, srcChar); }
 
 
 inline UnicodeString& 
-UnicodeString::remove(UTextOffset start, 
+UnicodeString::remove(int32_t start, 
              int32_t length)
 { return doReplace(start, length, NULL, 0, 0); }
 
@@ -3749,8 +3749,8 @@ UnicodeString::remove()
 { return doReplace(0, fLength, 0, 0, 0); }
 
 inline UnicodeString& 
-UnicodeString::removeBetween(UTextOffset start,
-                UTextOffset limit)
+UnicodeString::removeBetween(int32_t start,
+                int32_t limit)
 { return doReplace(start, limit - start, NULL, 0, 0); }
 
 inline UBool 
@@ -3769,7 +3769,7 @@ UnicodeString::reverse()
 { return doReverse(0, fLength); }
 
 inline UnicodeString& 
-UnicodeString::reverse(UTextOffset start,
+UnicodeString::reverse(int32_t start,
                int32_t length)
 { return doReverse(start, length); }
 
@@ -3787,7 +3787,7 @@ UnicodeString::isBogus() const
 //========================================
 
 inline void
-UnicodeString::pinIndices(UTextOffset& start,
+UnicodeString::pinIndices(int32_t& start,
                           int32_t& length) const
 {
   // pin indices
@@ -3830,7 +3830,7 @@ class U_COMMON_API UCharReference
 public:
   UCharReference();
   inline UCharReference(UnicodeString *string,
-         UTextOffset pos);
+         int32_t pos);
   inline UCharReference(const UCharReference& that);
   ~UCharReference();
 
@@ -3841,7 +3841,7 @@ public:
 
 private:
   UnicodeString *fString;
-  UTextOffset fPos;
+  int32_t fPos;
 };
 
 
@@ -3850,7 +3850,7 @@ private:
 //========================================
 inline
 UCharReference::UCharReference(UnicodeString *string, 
-                   UTextOffset pos)
+                   int32_t pos)
   : fString(string), fPos(pos)
 {}
 

@@ -58,16 +58,16 @@ utf8_countTrailBytes[256];
 #define UTF8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UChar32 c, UBool strict);
+utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict);
 
-U_CAPI UTextOffset U_EXPORT2
-utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c);
+U_CAPI int32_t U_EXPORT2
+utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c);
 
 U_CAPI UChar32 U_EXPORT2
-utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, UBool strict);
+utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict);
 
-U_CAPI UTextOffset U_EXPORT2
-utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
+U_CAPI int32_t U_EXPORT2
+utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /*
  * For the semantics of all of these macros, see utf16.h.
@@ -124,13 +124,13 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 #define UTF8_ARRAY_SIZE(size) ((5*(size))/2)
 
 #define UTF8_GET_CHAR_UNSAFE(s, i, c) { \
-    UTextOffset __I=(UTextOffset)(i); \
+    int32_t __I=(int32_t)(i); \
     UTF8_SET_CHAR_START_UNSAFE(s, __I); \
     UTF8_NEXT_CHAR_UNSAFE(s, __I, c); \
 }
 
 #define UTF8_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
-    UTextOffset __I=(UTextOffset)(i); \
+    int32_t __I=(int32_t)(i); \
     UTF8_SET_CHAR_START_SAFE(s, start, __I); \
     UTF8_NEXT_CHAR_SAFE(s, __I, length, c, strict); \
 }
@@ -190,7 +190,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 }
 
 #define UTF8_FWD_N_UNSAFE(s, i, n) { \
-    UTextOffset __N=(n); \
+    int32_t __N=(n); \
     while(__N>0) { \
         UTF8_FWD_1_UNSAFE(s, i); \
         --__N; \
@@ -205,7 +205,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
     (c)=(s)[(i)++]; \
     if((c)>=0x80) { \
         if(UTF8_IS_LEAD(c)) { \
-            (c)=utf8_nextCharSafeBody(s, &(i), (UTextOffset)(length), c, strict); \
+            (c)=utf8_nextCharSafeBody(s, &(i), (int32_t)(length), c, strict); \
         } else { \
             (c)=UTF8_ERROR_VALUE_1; \
         } \
@@ -216,7 +216,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
     if((uint32_t)(c)<=0x7f) { \
         (s)[(i)++]=(uint8_t)(c); \
     } else { \
-        (i)=utf8_appendCharSafeBody(s, (UTextOffset)(i), (UTextOffset)(length), c); \
+        (i)=utf8_appendCharSafeBody(s, (int32_t)(i), (int32_t)(length), c); \
     } \
 }
 
@@ -235,7 +235,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 }
 
 #define UTF8_FWD_N_SAFE(s, i, length, n) { \
-    UTextOffset __N=(n); \
+    int32_t __N=(n); \
     while(__N>0 && (i)<(length)) { \
         UTF8_FWD_1_SAFE(s, i, length); \
         --__N; \
@@ -244,7 +244,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 
 #define UTF8_SET_CHAR_START_SAFE(s, start, i) { \
     if(UTF8_IS_TRAIL((s)[(i)])) { \
-        (i)=utf8_back1SafeBody(s, start, (UTextOffset)(i)); \
+        (i)=utf8_back1SafeBody(s, start, (int32_t)(i)); \
     } \
 }
 
@@ -277,7 +277,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 }
 
 #define UTF8_BACK_N_UNSAFE(s, i, n) { \
-    UTextOffset __N=(n); \
+    int32_t __N=(n); \
     while(__N>0) { \
         UTF8_BACK_1_UNSAFE(s, i); \
         --__N; \
@@ -302,12 +302,12 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 
 #define UTF8_BACK_1_SAFE(s, start, i) { \
     if(UTF8_IS_TRAIL((s)[--(i)])) { \
-        (i)=utf8_back1SafeBody(s, start, (UTextOffset)(i)); \
+        (i)=utf8_back1SafeBody(s, start, (int32_t)(i)); \
     } \
 }
 
 #define UTF8_BACK_N_SAFE(s, start, i, n) { \
-    UTextOffset __N=(n); \
+    int32_t __N=(n); \
     while(__N>0 && (i)>(start)) { \
         UTF8_BACK_1_SAFE(s, start, i); \
         --__N; \

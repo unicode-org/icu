@@ -20,7 +20,7 @@ struct SearchData {
     const char               *collator;
           UCollationStrength  strength;
     const char               *breaker;
-          UTextOffset         offset[32];
+          int32_t         offset[32];
           uint32_t            size[32];
 };
 

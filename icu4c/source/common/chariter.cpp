@@ -16,7 +16,7 @@ CharacterIterator::CharacterIterator(int32_t length)
     }
 }
 
-CharacterIterator::CharacterIterator(int32_t length, UTextOffset position)
+CharacterIterator::CharacterIterator(int32_t length, int32_t position)
 : textLength(length), pos(position), begin(0), end(length) {
     if(textLength < 0) {
         textLength = end = 0;
@@ -28,7 +28,7 @@ CharacterIterator::CharacterIterator(int32_t length, UTextOffset position)
     }
 }
 
-CharacterIterator::CharacterIterator(int32_t length, UTextOffset textBegin, UTextOffset textEnd, UTextOffset position)
+CharacterIterator::CharacterIterator(int32_t length, int32_t textBegin, int32_t textEnd, int32_t position)
 : textLength(length), pos(position), begin(textBegin), end(textEnd) {
     if(textLength < 0) {
         textLength = 0;

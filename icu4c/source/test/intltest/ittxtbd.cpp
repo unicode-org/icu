@@ -663,7 +663,7 @@ void IntlTestTextBoundary::TestLineInvariants()
     doOtherInvariantTest(*e, testChars);
 
     int32_t errCount = 0, testCharsLen, noBreakLen, dashesLen;
-    UTextOffset i, j, k;
+    int32_t i, j, k;
 
     // in addition to the other invariants, a line-break iterator should make sure that:
     // it doesn't break around the non-breaking characters
@@ -958,7 +958,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
     UnicodeString followingChars = CharsToUnicodeString(")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc:;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
     BreakIterator *iter = BreakIterator::createLineInstance(Locale::JAPAN, status);
 
-    UTextOffset i;
+    int32_t i;
     if (U_FAILURE(status))
     {
         errln("Failed to create the BreakIterator for Japanese locale in TestJapaneseLineBreak.\n");
@@ -1116,13 +1116,13 @@ void IntlTestTextBoundary::TestPreceding()
 
     e->setText( words3 );
     e->first();
-    UTextOffset p1 = e->next();
-    UTextOffset p2 = e->next();
-    UTextOffset p3 = e->next();
-    UTextOffset p4 = e->next();
+    int32_t p1 = e->next();
+    int32_t p2 = e->next();
+    int32_t p3 = e->next();
+    int32_t p4 = e->next();
 
-    UTextOffset f = e->following(p2+1);
-    UTextOffset p = e->preceding(p2+1);
+    int32_t f = e->following(p2+1);
+    int32_t p = e->preceding(p2+1);
     if (f!=p3)
         errln("IntlTestTextBoundary::TestPreceding: f!=p3");
     if (p!=p2)
@@ -1461,7 +1461,7 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
 
     // a break should always occur after CR (unless followed by LF), LF, PS, and LS
     UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
-    UTextOffset i, j;
+    int32_t i, j;
 
     breaksLen = breaks.length();
     for (i = 0; i < breaksLen; i++) {
@@ -1502,7 +1502,7 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
 {
     UnicodeString work("a\r\na");
     int32_t errCount = 0, testCharsLen = testChars.length();
-    UTextOffset i, j;
+    int32_t i, j;
     int8_t type;
 
     // a break should never occur between CR and LF

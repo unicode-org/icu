@@ -850,7 +850,7 @@ UnicodeSetTest::escape(const UnicodeString& s) {
     UnicodeString buf;
     for (int32_t i=0; i<s.length(); ++i)
     {
-        UChar c = s[(UTextOffset)i];
+        UChar c = s[(int32_t)i];
         if (0x0020 <= c && c <= 0x007F) {
             buf += c;
         } else {

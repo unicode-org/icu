@@ -394,20 +394,20 @@ UnicodeStringTest::TestExtract()
         errln("UnicodeString.extract(-1) failed to stop reading the string.");
     }
 
-    for (UTextOffset i = 0; i < 12; i++) {
-        if (test1[(UTextOffset)(11 + i)] != test2[i]) {
+    for (int32_t i = 0; i < 12; i++) {
+        if (test1[(int32_t)(11 + i)] != test2[i]) {
             errln(UnicodeString("extracting into a UnicodeString failed at position ") + i);
             break;
         }
-        if (test1[(UTextOffset)(11 + i)] != test3[i]) {
+        if (test1[(int32_t)(11 + i)] != test3[i]) {
             errln(UnicodeString("extracting into an array of UChar failed at position ") + i);
             break;
         }
-        if (((char)test1[(UTextOffset)(11 + i)]) != test4b[i]) {
+        if (((char)test1[(int32_t)(11 + i)]) != test4b[i]) {
             errln(UnicodeString("extracting into an array of char failed at position ") + i);
             break;
         }
-        if (test1[(UTextOffset)(11 + i)] != test5[i]) {
+        if (test1[(int32_t)(11 + i)] != test5[i]) {
             errln(UnicodeString("extracting with extractBetween failed at position ") + i);
             break;
         }
@@ -562,7 +562,7 @@ UnicodeStringTest::TestRemoveReplace()
               "  expected \"The SPAM in SPAM SPAM SPAM on the SPAM\",\n"
               "  got \"" + test1 + "\"");
 
-    for (UTextOffset i = 0; i < test1.length(); i++)
+    for (int32_t i = 0; i < test1.length(); i++)
         if (test5[i] != 0x53 && test5[i] != 0x50 && test5[i] != 0x41 && test5[i] != 0x4d && test5[i] != 0x20)
             test1[i] = 0x78;
 
@@ -869,7 +869,7 @@ UnicodeStringTest::TestSearching()
     UnicodeString test4(testChar32);
 
     uint16_t occurrences = 0;
-    UTextOffset startPos = 0;
+    int32_t startPos = 0;
     for ( ;
           startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos)) != -1 ? (++occurrences, startPos += 4) : 0)
@@ -884,7 +884,7 @@ UnicodeStringTest::TestSearching()
     if (occurrences != 4)
         errln("indexOf with starting offset failed: expected to find 4 occurrences, found " + occurrences);
 
-    UTextOffset endPos = 28;
+    int32_t endPos = 28;
     for ( occurrences = 0, startPos = 5;
           startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos, endPos - startPos)) != -1 ? (++occurrences, startPos += 4) : 0)

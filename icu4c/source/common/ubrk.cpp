@@ -137,52 +137,52 @@ ubrk_setText(UBreakIterator* bi,
   }
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_current(const UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->current();
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_next(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->next();
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_previous(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->previous();
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_first(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->first();
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_last(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->last();
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_preceding(UBreakIterator *bi,
-           UTextOffset offset)
+           int32_t offset)
 {
 
   return ((BreakIterator*)bi)->preceding(offset);
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_following(UBreakIterator *bi,
-           UTextOffset offset)
+           int32_t offset)
 {
 
   return ((BreakIterator*)bi)->following(offset);

@@ -32,7 +32,7 @@ static void
 doTests(UBiDi *pBiDi, UBiDi *pLine);
 
 static void
-doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart);
+doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart);
 
 static void
 testReordering(UBiDi *pBiDi, int testNumber);
@@ -66,7 +66,7 @@ doLOGICALArabicDeShapingTest(void);
 static const char *levelString="...............................................................";
 
 static UChar *
-getStringFromDirProps(const uint8_t *dirProps, UTextOffset length);
+getStringFromDirProps(const uint8_t *dirProps, int32_t length);
 
 static void
 printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
@@ -119,7 +119,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
     int i;
     UChar *s;
     UErrorCode errorCode;
-    UTextOffset lineStart;
+    int32_t lineStart;
     UBiDiLevel paraLevel;
 
     for(i=0; i<bidiTestCount; ++i) {
@@ -152,11 +152,11 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
 }
 
 static void
-doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart) {
+doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart) {
     const uint8_t *dirProps=test->text+lineStart;
     const UBiDiLevel *levels=test->levels;
     const uint8_t *visualMap=test->visualMap;
-    UTextOffset i, len=ubidi_getLength(pBiDi), logicalIndex, runCount;
+    int32_t i, len=ubidi_getLength(pBiDi), logicalIndex, runCount;
     UErrorCode errorCode=U_ZERO_ERROR;
     UBiDiLevel level, level2;
 
@@ -240,13 +240,13 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart) 
 
 static void
 testReordering(UBiDi *pBiDi, int testNumber) {
-    UTextOffset
+    int32_t
         logicalMap1[200], logicalMap2[200], logicalMap3[200],
         visualMap1[200], visualMap2[200], visualMap3[200], visualMap4[200];
     UErrorCode errorCode=U_ZERO_ERROR;
     UBiDiLevel levels[200];
-    UTextOffset i, length=ubidi_getLength(pBiDi);
-    UTextOffset runCount, visualIndex, logicalStart, runLength;
+    int32_t i, length=ubidi_getLength(pBiDi);
+    int32_t runCount, visualIndex, logicalStart, runLength;
     UBool odd;
 
     if(length<=0) {
@@ -1057,9 +1057,9 @@ doLOGICALArabicDeShapingTest() {
 
 /* return a string with characters according to the desired directional properties */
 static UChar *
-getStringFromDirProps(const uint8_t *dirProps, UTextOffset length) {
+getStringFromDirProps(const uint8_t *dirProps, int32_t length) {
     static UChar s[MAX_STRING_LENGTH];
-    UTextOffset i;
+    int32_t i;
 
     /* this part would have to be modified for UTF-x */
     for(i=0; i<length; ++i) {

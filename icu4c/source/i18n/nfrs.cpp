@@ -131,7 +131,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
     // of only one rule set), copy it out into our "name" member
     // and delete it from the description
     if (description.charAt(0) == gPercent) {
-        UTextOffset pos = description.indexOf(gColon);
+        int32_t pos = description.indexOf(gColon);
         if (pos == -1) {
             // throw new IllegalArgumentException("Rule set name doesn't end in colon");
             status = U_PARSE_ERROR;
@@ -172,9 +172,9 @@ NFRuleSet::parseRules(UnicodeString& description, const RuleBasedNumberFormat* o
     // so I got rid of it.  The loop was too complex so I simplified it.
 
     UnicodeString currentDescription;
-    UTextOffset oldP = 0;
+    int32_t oldP = 0;
     while (oldP < description.length()) {
-        UTextOffset p = description.indexOf(gSemicolon, oldP);
+        int32_t p = description.indexOf(gSemicolon, oldP);
         if (p == -1) {
             p = description.length();
         }

@@ -914,7 +914,7 @@ ucnv_getNextUChar(UConverter * converter,
     */
     if (converter->UCharErrorBufferLength > 0)
     {
-        UTextOffset i = 0;
+        int32_t i = 0;
         UChar32 myUChar;
         UTF_NEXT_CHAR(converter->UCharErrorBuffer, i, sizeof(converter->UCharErrorBuffer), myUChar);
         /*In this memmove we update the internal buffer by

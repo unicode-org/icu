@@ -46,7 +46,7 @@ static void prettyPrintUChar(UChar c)
   } else if ( c > 0x007F ) {
     char buf[100];
     UErrorCode status = U_ZERO_ERROR;
-    UTextOffset o;
+    int32_t o;
     
     o = u_charName(c, U_UNICODE_CHAR_NAME, buf, 100, &status);
     if(U_SUCCESS(status)) {

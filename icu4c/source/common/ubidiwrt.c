@@ -69,7 +69,7 @@ enum {
  * It looks strange to do mirroring in LTR output, but it is only because
  * we are writing RTL output in reverse.
  */
-static UTextOffset
+static int32_t
 doWriteForward(const UChar *src, int32_t srcLength,
                UChar *dest, int32_t destSize,
                uint16_t options,
@@ -90,7 +90,7 @@ doWriteForward(const UChar *src, int32_t srcLength,
     }
     case UBIDI_DO_MIRRORING: {
         /* do mirroring */
-        UTextOffset i=0, j=0;
+        int32_t i=0, j=0;
         UChar32 c;
 
         if(destSize<srcLength) {
@@ -131,7 +131,7 @@ doWriteForward(const UChar *src, int32_t srcLength,
     default: {
         /* remove BiDi control characters and do mirroring */
         int32_t remaining=destSize;
-        UTextOffset i, j=0;
+        int32_t i, j=0;
         UChar32 c;
         do {
             i=0;
@@ -162,7 +162,7 @@ doWriteForward(const UChar *src, int32_t srcLength,
     } /* end of switch */
 }
 
-static UTextOffset
+static int32_t
 doWriteReverse(const UChar *src, int32_t srcLength,
                UChar *dest, int32_t destSize,
                uint16_t options,
@@ -185,7 +185,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
      * whether characters should be replaced by their mirror-image
      * equivalent Unicode characters.
      */
-    UTextOffset i, j;
+    int32_t i, j;
     UChar32 c;
 
     /* optimize for several combinations of options */
@@ -303,7 +303,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
             j=srcLength;
             if(options&UBIDI_DO_MIRRORING) {
                 /* mirror only the base character */
-                UTextOffset k=0;
+                int32_t k=0;
                 c=u_charMirror(c);
                 UTF_APPEND_CHAR_UNSAFE(dest, k, c);
                 dest+=k;
@@ -319,7 +319,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
     return destSize;
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_writeReverse(const UChar *src, int32_t srcLength,
                    UChar *dest, int32_t destSize,
                    uint16_t options,
@@ -362,14 +362,14 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
 
 #define MASK_R_AL (1UL<<U_RIGHT_TO_LEFT|1UL<<U_RIGHT_TO_LEFT_ARABIC)
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_writeReordered(UBiDi *pBiDi,
                      UChar *dest, int32_t destSize,
                      uint16_t options,
                      UErrorCode *pErrorCode) {
     const UChar *text;
     int32_t length, destCapacity;
-    UTextOffset run, runCount, logicalStart, runLength;
+    int32_t run, runCount, logicalStart, runLength;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;

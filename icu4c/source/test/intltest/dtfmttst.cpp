@@ -191,7 +191,7 @@ DateFormatTest::escape(UnicodeString& s)
     UnicodeString buf;
     for (int32_t i=0; i<s.length(); ++i)
     {
-        UChar c = s[(UTextOffset)i];
+        UChar c = s[(int32_t)i];
         if (c <= (UChar)0x7F) buf += c;
         else {
             buf += (UChar)0x5c; buf += (UChar)0x55;

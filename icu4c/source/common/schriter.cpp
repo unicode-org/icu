@@ -36,7 +36,7 @@ StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr)
 }
 
 StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
-                                                 UTextOffset textPos)
+                                                 int32_t textPos)
   : UCharCharacterIterator(textStr.fArray, textStr.length(), textPos),
     text(textStr)
 {
@@ -45,9 +45,9 @@ StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
 }
 
 StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
-                                                 UTextOffset textBegin,
-                                                 UTextOffset textEnd,
-                                                 UTextOffset textPos)
+                                                 int32_t textBegin,
+                                                 int32_t textEnd,
+                                                 int32_t textPos)
   : UCharCharacterIterator(textStr.fArray, textStr.length(), textBegin, textEnd, textPos),
     text(textStr)
 {

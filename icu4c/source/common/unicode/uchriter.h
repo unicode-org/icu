@@ -47,7 +47,7 @@ public:
    * @stable
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length,
-                         UTextOffset position);
+                         int32_t position);
 
   /**
    * Create an iterator over the UChar array referred to by "textPtr".
@@ -61,9 +61,9 @@ public:
    * @stable
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length,
-                         UTextOffset textBegin,
-                         UTextOffset textEnd,
-                         UTextOffset position);
+                         int32_t textBegin,
+                         int32_t textEnd,
+                         int32_t position);
 
   /**
    * Copy constructor.  The new iterator iterates over the same range
@@ -167,7 +167,7 @@ public:
    * returns that code unit.  
    * @stable
    */
-  virtual UChar         setIndex(UTextOffset position);
+  virtual UChar         setIndex(int32_t position);
 
   /**
    * Sets the iterator to refer to the beginning of the code point
@@ -178,7 +178,7 @@ public:
    * (its first code unit).
    * @stable
    */
-  virtual UChar32       setIndex32(UTextOffset position);
+  virtual UChar32       setIndex32(int32_t position);
 
   /**
    * Returns the code unit the iterator currently refers to.  
@@ -271,7 +271,7 @@ public:
    * @return the new position
    * @stable
    */
-  virtual UTextOffset      move(int32_t delta, EOrigin origin);
+  virtual int32_t      move(int32_t delta, EOrigin origin);
 
   /**
    * Moves the current position relative to the start or end of the
@@ -281,7 +281,7 @@ public:
    * @return the new position
    * @stable
    */
-  virtual UTextOffset      move32(int32_t delta, EOrigin origin);
+  virtual int32_t      move32(int32_t delta, EOrigin origin);
 
   /**
    * Sets the iterator to iterate over a new range of text

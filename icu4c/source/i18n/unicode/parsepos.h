@@ -50,7 +50,7 @@ public:
      * @param newIndex the new text offset.
      * @stable
      */
-    ParsePosition(UTextOffset newIndex)
+    ParsePosition(int32_t newIndex)
       {    this->index = newIndex; this->errorIndex = -1; }
 
     /**
@@ -94,14 +94,14 @@ public:
      * @return the current index.
      * @stable
      */
-    UTextOffset getIndex(void) const;
+    int32_t getIndex(void) const;
 
     /**
      * Set the current parse position.
      * @param index the new index.
      * @stable
      */
-    void setIndex(UTextOffset index);
+    void setIndex(int32_t index);
 
     /**
      * Set the index at which a parse error occurred.  Formatters
@@ -110,14 +110,14 @@ public:
      * set.
      * @stable
      */
-    void setErrorIndex(UTextOffset ei);
+    void setErrorIndex(int32_t ei);
 
     /**
      * Retrieve the index at which an error occurred, or -1 if the
      * error index has not been set.
      * @stable
      */
-    UTextOffset getErrorIndex(void) const;
+    int32_t getErrorIndex(void) const;
 
 private:
     /**
@@ -126,12 +126,12 @@ private:
      * This is designed to be used serially,
      * with each call setting index up for the next one.
      */
-    UTextOffset index;
+    int32_t index;
 
     /**
      * The index at which a parse error occurred.
      */
-    UTextOffset errorIndex;
+    int32_t errorIndex;
 };
 
 inline ParsePosition&
@@ -157,26 +157,26 @@ ParsePosition::operator!=(const ParsePosition& copy) const
   return !operator==(copy);
 }
 
-inline UTextOffset
+inline int32_t
 ParsePosition::getIndex() const
 {
   return index;
 }
 
 inline void
-ParsePosition::setIndex(UTextOffset offset)
+ParsePosition::setIndex(int32_t offset)
 {
   this->index = offset;
 }
 
-inline UTextOffset
+inline int32_t
 ParsePosition::getErrorIndex() const
 {
   return errorIndex;
 }
 
 inline void
-ParsePosition::setErrorIndex(UTextOffset ei)
+ParsePosition::setErrorIndex(int32_t ei)
 {
   this->errorIndex = ei;
 }

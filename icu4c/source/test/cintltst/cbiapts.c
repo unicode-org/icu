@@ -38,7 +38,7 @@ static void TestBreakIteratorCAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *word, *sentence, *line, *character, *b, *bogus;
-    UTextOffset start,pos,end,to;
+    int32_t start,pos,end,to;
     int32_t i;
     int32_t count = 0;
 

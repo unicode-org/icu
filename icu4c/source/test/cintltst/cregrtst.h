@@ -30,7 +30,7 @@ struct Vector1;
     int32_t Count(struct Vector1*);
     UChar* elementAt(struct Vector1*, int32_t);
 /* Internal Functions used */
-    UChar* extractBetween(UTextOffset start, UTextOffset end, UChar* text);
+    UChar* extractBetween(int32_t start, int32_t end, UChar* text);
     UChar* CharsToUCharArray(const char*);
     UChar* UCharToUCharArray(const UChar uchar);
 
