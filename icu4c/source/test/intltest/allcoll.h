@@ -54,6 +54,10 @@ public:
     // perform extra tests
     void TestExtra(/* char* par */);
 
+    void TestIdentical();
+
+    void TestJB581();
+
 private:
     static const Collator::EComparisonResult results[];
 

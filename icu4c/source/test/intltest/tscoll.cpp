@@ -54,12 +54,8 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationEnglishtest---");
             logln("");
-            logln("Temporary removed");
-
-            /*
             CollationEnglishTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -70,12 +66,8 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationFrenchtest---");
             logln("");
-            logln("Temporary removed");
-
-            /*
             CollationFrenchTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -99,12 +91,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationDanishtest---");
             logln("");
-            logln("Temporary removed");
-
-            /*
+            
             CollationDanishTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -127,8 +116,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationFinnishtest---");
-            logln("Temporary removed");
-
+            
             CollationFinnishTest test;
             callTest( test, par ); 
         }
@@ -168,12 +156,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationDummyTest---");
-            logln("Temporary removed");
-
-            /*
+            
             CollationDummyTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -199,8 +184,10 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationMonkeyTest---");
             
+            /*
             CollationMonkeyTest test;
             callTest( test, par );
+            */
         }
         break;
 
@@ -211,12 +198,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationAPITest---");
             logln("");
-            logln("Temporary removed");
-
-            /*
+            
             CollationAPITest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -258,8 +242,10 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationIteratorTest---");
             
+            /*
             CollationIteratorTest test;
             callTest( test, par );
+            */
         }
         break;
 
