@@ -974,8 +974,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // - an anchor (trailing '$', indicating RBT ether)
     UBool rebuildPattern = FALSE;
     UnicodeString newPat(SET_OPEN);
-    int32_t nestedPatStart; // see below for usage
-    UBool nestedPatDone; // see below for usage
+    int32_t nestedPatStart = - 1; // see below for usage
+    UBool nestedPatDone = FALSE; // see below for usage
 
     UBool invert = FALSE;
     clear();
