@@ -85,70 +85,70 @@ abstract class NFSubstitution {
 
         switch (description.charAt(0)) {
             // if the description begins with '<'...
-            case '<':
-                // throw an exception if the rule is a negative number
-                // rule
-                if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
-                    throw new IllegalArgumentException("<< not allowed in negative-number rule");
-                }
+        case '<':
+            // throw an exception if the rule is a negative number
+            // rule
+            if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
+                throw new IllegalArgumentException("<< not allowed in negative-number rule");
+            }
 
-                // if the rule is a fraction rule, return an
-                // IntegralPartSubstitution
-                else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
-                            || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
-                            || rule.getBaseValue() == NFRule.MASTER_RULE) {
-                    return new IntegralPartSubstitution(pos, ruleSet, formatter, description);
-                }
+            // if the rule is a fraction rule, return an
+            // IntegralPartSubstitution
+            else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
+                     || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
+                     || rule.getBaseValue() == NFRule.MASTER_RULE) {
+                return new IntegralPartSubstitution(pos, ruleSet, formatter, description);
+            }
 
-                // if the rule set containing the rule is a fraction
-                // rule set, return a NumeratorSubstitution
-                else if (ruleSet.isFractionSet()) {
-                    return new NumeratorSubstitution(pos, rule.getBaseValue(),
-                                    formatter.getDefaultRuleSet(), formatter, description);
-                }
+            // if the rule set containing the rule is a fraction
+            // rule set, return a NumeratorSubstitution
+            else if (ruleSet.isFractionSet()) {
+                return new NumeratorSubstitution(pos, rule.getBaseValue(),
+                                                 formatter.getDefaultRuleSet(), formatter, description);
+            }
 
-                // otherwise, return a MultiplierSubstitution
-                else {
-                    return new MultiplierSubstitution(pos, rule.getDivisor(), ruleSet,
-                                    formatter, description);
-                }
+            // otherwise, return a MultiplierSubstitution
+            else {
+                return new MultiplierSubstitution(pos, rule.getDivisor(), ruleSet,
+                                                  formatter, description);
+            }
 
             // if the description begins with '>'...
-            case '>':
-                // if the rule is a negative-number rule, return
-                // an AbsoluteValueSubstitution
-                if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
-                    return new AbsoluteValueSubstitution(pos, ruleSet, formatter, description);
-                }
+        case '>':
+            // if the rule is a negative-number rule, return
+            // an AbsoluteValueSubstitution
+            if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
+                return new AbsoluteValueSubstitution(pos, ruleSet, formatter, description);
+            }
 
-                // if the rule is a fraction rule, return a
-                // FractionalPartSubstitution
-                else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
-                            || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
-                            || rule.getBaseValue() == NFRule.MASTER_RULE) {
-                    return new FractionalPartSubstitution(pos, ruleSet, formatter, description);
-                }
+            // if the rule is a fraction rule, return a
+            // FractionalPartSubstitution
+            else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
+                     || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
+                     || rule.getBaseValue() == NFRule.MASTER_RULE) {
+                return new FractionalPartSubstitution(pos, ruleSet, formatter, description);
+            }
 
-                // if the rule set owning the rule is a fraction rule set,
-                // throw an exception
-                else if (ruleSet.isFractionSet()) {
-                    throw new IllegalArgumentException(">> not allowed in fraction rule set");
-                }
+            // if the rule set owning the rule is a fraction rule set,
+            // throw an exception
+            else if (ruleSet.isFractionSet()) {
+                throw new IllegalArgumentException(">> not allowed in fraction rule set");
+            }
 
-                // otherwise, return a ModulusSubstitution
-                else {
-                    return new ModulusSubstitution(pos, rule.getDivisor(), rulePredecessor,
-                                    ruleSet, formatter, description);
-                }
+            // otherwise, return a ModulusSubstitution
+            else {
+                return new ModulusSubstitution(pos, rule.getDivisor(), rulePredecessor,
+                                               ruleSet, formatter, description);
+            }
 
             // if the description begins with '=', always return a
             // SameValueSubstitution
-            case '=':
-                return new SameValueSubstitution(pos, ruleSet, formatter, description);
+        case '=':
+            return new SameValueSubstitution(pos, ruleSet, formatter, description);
 
             // and if it's anything else, throw an exception
-            default:
-                throw new IllegalArgumentException("Illegal substitution character");
+        default:
+            throw new IllegalArgumentException("Illegal substitution character");
         }
     }
 
@@ -174,7 +174,7 @@ abstract class NFSubstitution {
         // makeSubstitution() was the only thing that needed to know
         // about these characters, so strip them off
         if (description.length() >= 2 && description.charAt(0) == description.charAt(
-                        description.length() - 1)) {
+                                                                                     description.length() - 1)) {
             description = description.substring(1, description.length() - 1);
         }
         else if (description.length() != 0) {
@@ -246,11 +246,11 @@ abstract class NFSubstitution {
         if (this.getClass() == that.getClass()) {
             NFSubstitution that2 = (NFSubstitution)that;
 
-             return pos == that2.pos
-         && (ruleSet == null ? that2.ruleSet == null : true) // can't compare tree structure, no .equals or recurse
-         && (numberFormat == null ? (that2.numberFormat == null) : numberFormat.equals(that2.numberFormat));
+            return pos == that2.pos
+                && (ruleSet == null ? that2.ruleSet == null : true) // can't compare tree structure, no .equals or recurse
+                && (numberFormat == null ? (that2.numberFormat == null) : numberFormat.equals(that2.numberFormat));
         }
-    return false;
+        return false;
     }
 
     /**
@@ -287,10 +287,10 @@ abstract class NFSubstitution {
      */
     public void doSubstitution(long number, StringBuffer toInsertInto, int pos) {
         if (ruleSet != null) {
-           // perform a transformation on the number that is dependent
-           // on the type of substitution this is, then just call its
-           // rule set's format() method to format the result
-           long numberToFormat = transformNumber(number);
+            // perform a transformation on the number that is dependent
+            // on the type of substitution this is, then just call its
+            // rule set's format() method to format the result
+            long numberToFormat = transformNumber(number);
 
             ruleSet.format(numberToFormat, toInsertInto, pos + this.pos);
         } else {
@@ -327,9 +327,9 @@ abstract class NFSubstitution {
         if (numberToFormat == Math.floor(numberToFormat) && ruleSet != null) {
             ruleSet.format((long)numberToFormat, toInsertInto, pos + this.pos);
 
-        // if the result isn't an integer, then call either our rule set's
-        // format() method or our DecimalFormat's format() method to
-        // format the result
+            // if the result isn't an integer, then call either our rule set's
+            // format() method or our DecimalFormat's format() method to
+            // format the result
         } else {
             if (ruleSet != null) {
                 ruleSet.format(numberToFormat, toInsertInto, pos + this.pos);
@@ -395,7 +395,7 @@ abstract class NFSubstitution {
      * is left unchanged.
      */
     public Number doParse(String text, ParsePosition parsePosition, double baseValue,
-                    double upperBound, boolean lenientParse) {
+                          double upperBound, boolean lenientParse) {
         Number tempResult;
 
         // figure out the highest base value a rule can have and match
@@ -418,7 +418,7 @@ abstract class NFSubstitution {
                 tempResult = NumberFormat.getInstance().parse(text, parsePosition);
             }
 
-        // ...or use our DecimalFormat to parse the text
+            // ...or use our DecimalFormat to parse the text
         } else {
             tempResult = numberFormat.parse(text, parsePosition);
         }
@@ -459,7 +459,7 @@ abstract class NFSubstitution {
                 return new Double(result);
             }
 
-        // if the parse was UNsuccessful, return 0
+            // if the parse was UNsuccessful, return 0
         } else {
             return tempResult;
         }
