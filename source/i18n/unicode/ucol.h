@@ -217,6 +217,11 @@ typedef enum {
      UCOL_NORMALIZATION_MODE, /* attribute for normalization */
      UCOL_DECOMPOSITION_MODE = UCOL_NORMALIZATION_MODE,
      UCOL_STRENGTH,         /* attribute for strength */
+     UCOL_HIRAGANA_QUATERNARY_MODE, /* when turned on, this attribute */
+                                    /* positions Hiragana before all  */
+                                    /* non-ignorables on quaternary level */
+                                    /* This is a sneaky way to produce JIS */
+                                    /* sort order */
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
 
