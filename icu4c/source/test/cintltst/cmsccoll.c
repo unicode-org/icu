@@ -1529,17 +1529,36 @@ static void TestEmptyRule() {
   ucol_close(coll);
 }
 
-static void TestUCAZero() {
+static void TestUCARules() {
   UErrorCode status = U_ZERO_ERROR;
   char blah[] =  "\\u9fff";
   uint8_t res[256];
   UChar b[256];
+  UChar *rules = b;
+  UCollator *UCAfromRules = NULL;
   UCollator *coll = ucol_open("", &status);
-
+  uint32_t ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, 256);
+  log_verbose("TestUCAZero\n");
+  if(ruleLen > 256) {
+    rules = (UChar *)malloc((ruleLen+1)*sizeof(UChar));
+    ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, ruleLen);
+  }
+  log_verbose("Rules length is %d\n", ruleLen);
+  UCAfromRules = ucol_openRules(rules, ruleLen, UNORM_NONE, UCOL_TERTIARY, &status);
+  if(U_SUCCESS(status)) {
+    ucol_close(UCAfromRules);
+  } else {
+    log_verbose("Unable to create a collator from UCARules!\n");
+  }
+/*
   u_unescape(blah, b, 256);
   ucol_getSortKey(coll, b, 1, res, 256);
-
+*/
   ucol_close(coll);
+  if(rules != b) {  
+    free(rules);
+  }
+
 }
 
 
@@ -2281,7 +2300,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");
     addTest(root, &TestExpansionSyntax, "tscoll/cmsccoll/TestExpansionSyntax");
     addTest(root, &TestHangulTailoring, "tscoll/cmsccoll/TestHangulTailoring");
-    addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");
+    addTest(root, &TestUCARules, "tscoll/cmsccoll/TestUCARules");
     addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
     addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
