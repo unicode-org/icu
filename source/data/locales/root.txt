@@ -668,6 +668,10 @@ root {
                 1,
                 1,
             }
+            weekend:intvector {
+                7, 0,   // onset dow, millis in day  (Saturday 12:00am)
+                2, 0    // cease dow, millis in day  (Monday   12:00am)
+            }
             DateTimePatterns{
                 "HH:mm:ss z",
                 "HH:mm:ss z",
@@ -1121,6 +1125,25 @@ root {
                 "Taish\u014D",                  // 1912
                 "Sh\u014Dwa",                   // 1926
                 "Heisei",                       // 1989
+            }
+        }
+        // Note: Chinese Calendar is not supported in ICU4C 3.0
+        chinese {
+            IsLeapMonth {
+                 "",
+                 "*"
+            }
+            DateTimePatterns:array {
+                "h:mm:ss a z", // full time pattern
+                "h:mm:ss a z", // long time pattern
+                "h:mm:ss a", // medium time pattern
+                "h:mm a", // short time pattern
+                // TODO Fix the following
+                "EEEE y'x'G-Ml-d", // full date pattern
+                "y'x'G-Ml-d", // long date pattern
+                "y'x'G-Ml-d", // medium date pattern
+                "y'x'G-Ml-d", // short date pattern
+                "{1} {0}" // date-time pattern
             }
         }
     }
