@@ -385,15 +385,17 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         * since the actual size needed for storing UChars
         * is not known in UTF-8 byte stream
         */
-        UChar *pTarget      = (UChar *) uprv_malloc(sizeof(UChar) * size);
-        //test for NULL
-		if(pTarget == NULL) {
-			*status = U_MEMORY_ALLOCATION_ERROR;
-			T_FileStream_close(file);
-			return NULL;
-		}
-        UChar *target       = pTarget;
+        UChar *pTarget     = (UChar *) uprv_malloc(sizeof(UChar) * size);
+        UChar *target      = pTarget;
         UChar *targetLimit = pTarget + size;
+
+        /* test for NULL */
+        if(pTarget == NULL)
+        {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            T_FileStream_close(file);
+            return NULL;
+        }
 
         ucbuf = ucbuf_open(file, NULL,getShowWarning(), status);
 
@@ -1090,11 +1092,13 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
         if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
         {
             fullname = (char *) uprv_malloc(inputdirLength + count + 2);
-            //test for NULL
-            if(fullname == NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
-			}
+
+            /* test for NULL */
+            if(fullname == NULL)
+            {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+	    }
 
             uprv_strcpy(fullname, inputdir);
 
@@ -1106,11 +1110,13 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
         else
         {
             fullname = (char *) uprv_malloc(inputdirLength + count + 1);
-            //test for NULL
-			if(fullname == NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
-			}
+
+            /* test for NULL */
+            if(fullname == NULL)
+            {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+            }
             
             uprv_strcpy(fullname, inputdir);
             uprv_strcat(fullname, filename);
@@ -1129,12 +1135,14 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
 
     len  = T_FileStream_size(file);
     data = uprv_malloc(len);
-    //test for NULL
-	if(data == NULL) {
-		*status = U_MEMORY_ALLOCATION_ERROR;
-		T_FileStream_close (file);
-		return NULL;
-	}
+
+    /* test for NULL */
+    if(data == NULL)
+    {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        T_FileStream_close (file);
+        return NULL;
+    }
 
     T_FileStream_read  (file, data, len);
     T_FileStream_close (file);

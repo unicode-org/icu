@@ -176,9 +176,12 @@ ucmp8_openAdopt(uint16_t *indexArray,
                   int32_t count)
 {
     CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
-	//test for NULL
-	if(this_obj == NULL)
-		return NULL;
+
+    /* test for NULL */
+    if(this_obj == NULL) {
+        return NULL;
+    }
+
     ucmp8_initAdopt(this_obj, indexArray, newValues, count);
     this_obj->fIAmOwned = FALSE;
     return this_obj;
@@ -189,11 +192,14 @@ ucmp8_openAlias(uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
 {
-	CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
-	//test for NULL
-	if(this_obj == NULL)
-		return NULL;
-	ucmp8_initAlias(this_obj, indexArray, newValues, count);
+    CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
+
+    /* test for NULL */
+    if(this_obj == NULL) {
+        return NULL;
+    }
+
+    ucmp8_initAlias(this_obj, indexArray, newValues, count);
     this_obj->fIAmOwned = FALSE;
     return this_obj;
 }
