@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.26 2002/01/25 06:28:45 yves-oss Exp $
+## $Id: mh-solaris,v 1.27 2002/03/12 03:51:04 srl Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -38,7 +38,7 @@ LD_SONAME = -h $(MIDDLE_SO_TARGET)
 ## Shared object suffix
 SO=		so
 ## Non-shared intermediate object suffix
-STATIC_O = ao
+STATIC_O = o
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c

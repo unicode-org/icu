@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.157 2002/03/08 00:25:51 srl Exp $
+dnl $Id: configure.in,v 1.158 2002/03/12 03:51:04 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -200,6 +200,7 @@ AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_STATIC)
 
 AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,[echo archiver ar not found re-run configure ; false],$PATH:/bin:/usr/bin:/usr/ccs/bin)
 
 AC_MSG_CHECKING([whether to enable renaming of symbols])
 enabled=yes
