@@ -36,11 +36,6 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
     int32_t options;
 
     /**
-     * Alias to skippables set.  NOT OWNED.
-     */
-    UnicodeSet* skippable;
-
-    /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
      */
@@ -103,11 +98,6 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
      */
     static void registerIDs();
 
-    /**
-     * Static memory cleanup function.
-     */
-    static void cleanup();
-
  private:
 
     // Transliterator::Factory methods
@@ -120,8 +110,6 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
      */
     NormalizationTransliterator(const UnicodeString& id,
                                 UNormalizationMode mode, int32_t opt);
-
-    static void initStatics();
 };
 
 U_NAMESPACE_END
