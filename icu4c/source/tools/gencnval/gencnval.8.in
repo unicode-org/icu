@@ -6,7 +6,7 @@
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH GENCNVAL 8 "29 September 2000" "ICU @VERSION@"
+.TH GENCNVAL 8 "12 October 2000" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B gencnval
 \- compile the converters aliases file
