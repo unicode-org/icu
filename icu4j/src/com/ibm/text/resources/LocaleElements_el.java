@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/11/20 01:13:29 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/21 00:51:58 $ 
+ * $Revision: 1.5 $
  **************************************************************************
  */
 
@@ -59,8 +59,8 @@ public class LocaleElements_el extends ListResourceBundle {
 
 "$caron = \u030C;"+
 
-"$afterLetter = [:^L:] [\\'[:M:]]* ;"+
-"$beforeLetter = [\\'[:M:]]* [:^L:] ;"+
+"$afterLetter = [:L:] [\\'[:M:]]* ;"+
+"$beforeLetter = [\\'[:M:]]* [:L:] ;"+
 
 
 "# Fix punctuation\n"+
@@ -171,15 +171,15 @@ public class LocaleElements_el extends ListResourceBundle {
 "# Caron means exception\n"+
 
 "# before a letter, initial\n"+
-"\u03c2 } $beforeLetter <> s $caron } $beforeLetter;"+
+"\u03c2 } $beforeLetter <> s $under } $beforeLetter;"+
 "\u03c3 } $beforeLetter <> s } $beforeLetter;"+
 
 "# otherwise, after a letter = final\n"+
-"$afterLetter { \u03c3 <> $afterLetter { s $caron;"+
+"$afterLetter { \u03c3 <> $afterLetter { s $under;"+
 "$afterLetter { \u03c2 <> $afterLetter { s ;"+
 
 "# otherwise (isolated) = initial\n"+
-"\u03c2 <> s $caron;"+
+"\u03c2 <> s $under;"+
 "\u03c3 <> s ;"+
 
 "[Pp] { \u03a3 <> \\'S ; "+
