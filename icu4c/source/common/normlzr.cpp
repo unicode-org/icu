@@ -357,7 +357,7 @@ void Normalizer::reset() {
 
 void
 Normalizer::setIndexOnly(int32_t index) {
-    currentIndex=nextIndex=text->move(text, index, UITER_START); // validates index
+    currentIndex=nextIndex=text->move(text, index, UITER_ZERO); // validates index
     clearBuffer();
 }
 
@@ -433,7 +433,7 @@ int32_t Normalizer::getIndex() const {
  * over which this <tt>Normalizer</tt> is iterating
  */
 int32_t Normalizer::startIndex() const {
-    return text->move(text, 0, UITER_START);
+    return text->getIndex(text, UITER_START);
 }
 
 /**
@@ -442,7 +442,7 @@ int32_t Normalizer::startIndex() const {
  * over which this <tt>Normalizer</tt> is iterating
  */
 int32_t Normalizer::endIndex() const {
-    return text->move(text, 0, UITER_LIMIT);
+    return text->getIndex(text, UITER_LIMIT);
 }
 
 //-------------------------------------------------------------------------
@@ -565,7 +565,7 @@ Normalizer::nextNormalize() {
 
     clearBuffer();
     currentIndex=nextIndex;
-    text->move(text, nextIndex, UITER_START);
+    text->move(text, nextIndex, UITER_ZERO);
     if(!text->hasNext(text)) {
         return FALSE;
     }
@@ -579,7 +579,7 @@ Normalizer::nextNormalize() {
     buffer.releaseBuffer(length);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
-        text->move(text, nextIndex, UITER_START);
+        text->move(text, nextIndex, UITER_ZERO);
         p=buffer.getBuffer(length);
         length=unorm_next(text, p, buffer.getCapacity(),
                           fUMode, fOptions!=0,
@@ -588,7 +588,7 @@ Normalizer::nextNormalize() {
         buffer.releaseBuffer(length);
     }
 
-    nextIndex=text->move(text, 0, UITER_CURRENT);
+    nextIndex=text->getIndex(text, UITER_CURRENT);
     return U_SUCCESS(errorCode) && !buffer.isEmpty();
 }
 
@@ -600,7 +600,7 @@ Normalizer::previousNormalize() {
 
     clearBuffer();
     nextIndex=currentIndex;
-    text->move(text, currentIndex, UITER_START);
+    text->move(text, currentIndex, UITER_ZERO);
     if(!text->hasPrevious(text)) {
         return FALSE;
     }
@@ -614,7 +614,7 @@ Normalizer::previousNormalize() {
     buffer.releaseBuffer(length);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
-        text->move(text, currentIndex, UITER_START);
+        text->move(text, currentIndex, UITER_ZERO);
         p=buffer.getBuffer(length);
         length=unorm_previous(text, p, buffer.getCapacity(),
                               fUMode, fOptions,
@@ -624,7 +624,7 @@ Normalizer::previousNormalize() {
     }
 
     bufferPos=buffer.length();
-    currentIndex=text->move(text, 0, UITER_CURRENT);
+    currentIndex=text->getIndex(text, UITER_CURRENT);
     return U_SUCCESS(errorCode) && !buffer.isEmpty();
 }
 
