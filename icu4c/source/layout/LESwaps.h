@@ -17,7 +17,7 @@ U_NAMESPACE_BEGIN
  * A convenience macro which invokes the swapWord member function
  * from a concise call.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.8
  */
 #define SWAPW(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapWord(value))
 
@@ -26,7 +26,7 @@ U_NAMESPACE_BEGIN
  * A convenience macro which invokes the swapLong member function
  * from a concise call.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.8
  */
 #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
 
@@ -39,7 +39,7 @@ U_NAMESPACE_BEGIN
  * All methods are static and inline in an attempt to induce the compiler
  * to do most of the calculations at compile time.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.8
  */
 class U_LAYOUT_API LESwaps /* not : public UObject because all methods are static */ {
 public:
@@ -53,7 +53,7 @@ public:
      *
      * @return true if the platform is big endian
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static le_bool isBigEndian()
     {
@@ -70,7 +70,7 @@ public:
      *
      * @return the byte swapped word
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static le_uint16 swapWord(le_uint16 value)
     {
@@ -85,7 +85,7 @@ public:
      *
      * @return the byte swapped long
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static le_uint32 swapLong(le_uint32 value)
     {

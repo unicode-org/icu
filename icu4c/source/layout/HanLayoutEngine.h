@@ -4,7 +4,7 @@
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/06/10 17:44:58 $ $Revision: 1.3 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/11/26 00:19:39 $ $Revision: 1.4 $
  */
 
 #ifndef __HANLAYOUTENGINE_H
@@ -60,14 +60,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
