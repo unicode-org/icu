@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2003-2003, International Business Machines
+// *   Copyright (C) 2003-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -11,28 +11,28 @@
 haw {
     Version { "x0.2" } 
     collations {
-      standard {
-        Version { "1.1" }
-        Sequence {
-            "&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
-            "&a <<< A"
-            "&e <<< E"
-            "&i <<< I"
-            "&o <<< O"
-            "&u <<< U"
-            "&h <<< H"
-            "&k <<< K"
-            "&l <<< L"
-            "&m <<< M"
-            "&n <<< N"
-            "&p <<< P"
-            "&w <<< W"
-            // This is the real alphabet
-            //"&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
-            // or maybe
-            //"&u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
+        standard {
+            Version { "1.1" }
+            Sequence {
+                "&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
+                "&a <<< A"
+                "&e <<< E"
+                "&i <<< I"
+                "&o <<< O"
+                "&u <<< U"
+                "&h <<< H"
+                "&k <<< K"
+                "&l <<< L"
+                "&m <<< M"
+                "&n <<< N"
+                "&p <<< P"
+                "&w <<< W"
+                // This is the real alphabet
+                //"&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
+                // or maybe
+                //"&u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
+            }
         }
-      }
     }
     Countries {
         AU { "\u02bbAukekulelia" }
@@ -80,18 +80,18 @@ haw {
     }
     LocaleScript:array{ "Latn" }
     MonthAbbreviations {
-        "Ian.",
-        "Pep.",
-        "Mal.",
-        "\u02bbAp.",
-        "Mei.",
-        "Iun.",
-        "Iul.",
-        "\u02bbAu.",
-        "Kep.",
-        "\u02bbOk.",
-        "Now.",
-        "Kek.",
+        "Ian",
+        "Pep",
+        "Mal",
+        "\u02bbAp",
+        "Mei",
+        "Iun",
+        "Iul",
+        "\u02bbAu",
+        "Kep",
+        "\u02bbOk",
+        "Now",
+        "Kek"
     }
     MonthNames {
         "Ianuali",
@@ -105,6 +105,6 @@ haw {
         "Kepakemapa",
         "\u02bbOkakopa",
         "Nowemapa",
-        "Kekemapa",
+        "Kekemapa"
     }
 }
