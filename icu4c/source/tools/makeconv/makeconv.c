@@ -131,7 +131,7 @@ char *
 {
   int32_t i = 0;
 
-  while (name[i] = uprv_toupper (name[i]))
+  while (name[i] = (char)uprv_toupper(name[i]))
     i++;
 
   return name;
@@ -251,12 +251,10 @@ int main(int argc, const char *argv[])
   UConverterSharedData* mySharedData = NULL; 
   UErrorCode err = U_ZERO_ERROR;
   char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  const char *pname = *argv;
   const char* destdir, *arg;
   size_t destdirlen;
   char* dot = NULL, *outBasename;
   char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  int i;
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
@@ -310,7 +308,9 @@ int main(int argc, const char *argv[])
         outBasename = outFileName;
     }
     
-    if(DEBUG) {
+#if DEBUG
+    {
+      int i;
       printf("makeconv: processing %d files...\n", argc - 1);
       for(i=1; i<argc; ++i) {
         printf("%s ", argv[i]);
@@ -318,6 +318,7 @@ int main(int argc, const char *argv[])
       printf("\n");
       fflush(stdout);
     }
+#endif
 
   for (++argv; --argc; ++argv)
     {
@@ -356,10 +357,10 @@ int main(int argc, const char *argv[])
       /*Adds the target extension*/
       uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
 
-      if(DEBUG) {
+#if DEBUG
         printf("makeconv: processing %s  ...\n", arg);
         fflush(stdout);
-      }
+#endif
       mySharedData = createConverterFromTableFile(arg, &err);
 
       if (U_FAILURE(err) || (mySharedData == NULL))
@@ -457,7 +458,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
              Figure out what key was found and fills in myConverter with the appropriate values
              a switch statement for strings...
              */
-          
+
           /*Checks for end of header marker*/
           if (uprv_strcmp(key, "CHARMAP") == 0)
             {
@@ -485,10 +486,10 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
             {
 
               hasConvClass = TRUE;
-              if(DEBUG) {
+#if DEBUG
                 printf("    %s\n", value);
                 fflush(stdout);
-              }
+#endif
               if (uprv_strcmp(value, "DBCS") == 0) 
                 {
                   myConverter->conversionType = UCNV_DBCS;
@@ -741,7 +742,6 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverterSharedData* sharedDat
 {
   char storageLine[200];
   char* line = NULL;
-  UConverterStaticData *myConverter = (UConverterStaticData *)sharedData->staticData;
   MBCSData *mbcsData = (MBCSData *)sharedData->table;
   UChar32 unicodeValue;
   uint8_t mbcsBytes[8];
@@ -791,7 +791,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverterSharedData* sharedDat
                 }
               else
                 {
-                  isFallback = *line == '1';
+                  isFallback = (int8_t)(*line == '1');
                 }
             }
           else
@@ -850,7 +850,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   myFromUnicode = &myUConverterTable->dbcs.fromUnicode;
   ucmp16_init(myFromUnicode, (uint16_t)replacementChar);
   myToUnicode = &myUConverterTable->dbcs.toUnicode;
-  ucmp16_init(myToUnicode, (int16_t)0xfffe);  
+  ucmp16_init(myToUnicode, (uint16_t)0xfffe);  
 
   myFromUnicodeFallback = &myUConverterTable->dbcs.fromUnicodeFallback;
   ucmp16_initBogus(myFromUnicodeFallback);
@@ -964,7 +964,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   myFromUnicode = &(myUConverterTable->dbcs.fromUnicode);
   ucmp16_init(myFromUnicode, (int16_t)replacementChar);
   myToUnicode = &(myUConverterTable->dbcs.toUnicode);
-  ucmp16_init(myToUnicode, (int16_t)0xfffe);
+  ucmp16_init(myToUnicode, (uint16_t)0xfffe);
   
   myFromUnicodeFallback = &(myUConverterTable->dbcs.fromUnicodeFallback);
   ucmp16_initBogus(myFromUnicodeFallback);
@@ -1088,7 +1088,6 @@ UBool makeconv_deleteSharedConverterData(UConverterSharedData* deadSharedData)
 UConverterSharedData* createConverterFromTableFile(const char* converterName, UErrorCode* err)
 {
   FileStream* convFile = NULL;
-  int32_t i = 0;
   UConverterSharedData* mySharedData = NULL;
   UConverterStaticData* myStaticData = NULL;
 
