@@ -101,7 +101,7 @@ UnicodeConverter::UnicodeConverter(const UnicodeConverter&  that)
   /*increments the referenceCounter to let the static table know
    *it has one more client
    */
-    myUnicodeConverter = new UConverter;
+    myUnicodeConverter = (UConverter *)uprv_malloc(sizeof(UConverter)); //new UConverter;
     {
       Mutex updateReferenceCounter;
       if (that.myUnicodeConverter->sharedData->referenceCounter != (uint32_t) ~0) {
