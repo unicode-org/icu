@@ -663,22 +663,19 @@ uprv_digitsAfterDecimal(double x)
 void 
 uprv_tzset()
 {
-#if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
+#ifdef U_TZSET
+    U_TZSET();
+#else
   /* no initialization*/
-
-#elif defined(WIN32) || defined(OS2)
-  _tzset();
-
-#elif U_HAVE_TZSET
-  tzset();
-
 #endif
 }
 
 int32_t 
 uprv_timezone()
 {
-#if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
+#ifdef U_TIMEZONE
+    return U_TIMEZONE;
+#else
   time_t t, t1, t2;
   struct tm tmrec;
   UBool dst_checked;
@@ -696,28 +693,16 @@ uprv_timezone()
   if (dst_checked)
     tdiff += 3600;
   return tdiff;
-
-#elif defined(WIN32) || defined(OS2) || defined(OS390)
-  return _timezone;
-
-#elif U_HAVE_TZSET
-  return timezone;
-
 #endif
 }
 
 char* 
 uprv_tzname(int n)
 {
-#if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
+#ifdef U_TZNAME
+    return U_TZNAME[n];
+#else
   return "";
-
-#elif defined(WIN32) || defined(OS2)
-  return _tzname[n];
-
-#elif U_HAVE_TZSET
-  return tzname[n];
-
 #endif
 }
 
