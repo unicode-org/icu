@@ -67,24 +67,14 @@ public abstract class TestDataModule {
     public static final String LONG_DESCRIPTION = "Long_Description";
 
     /**
-     * For internal use.
+     * The names of the columns of test data.  This can be found in
+     * either the module INFO or the test INFO.  If the test INFO
+     * does not define the headers then they are taken from the
+     * module.  If test cases are used by the test, then the headers
+     * must be defined.  Most clients will not need this information,
+     * since it is handled by the framework.
      */
-    protected static final String HEADERS = "Headers";
-
-    /**
-     * For internal use.
-     */
-    protected static final String INFO = "Info";
-
-    /**
-     * For internal use.
-     */
-    protected static final String SETTINGS = "Settings";
-
-    /**
-     * For internal use.
-     */
-    protected static final String CASES = "Cases";
+    public static final String HEADERS = "Headers";
 
     /**
      * Returns the Test object corresponding to index, or null if
