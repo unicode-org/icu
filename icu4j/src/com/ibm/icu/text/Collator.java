@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/05/15 20:36:10 $
-* $Revision: 1.28 $
+* $Date: 2003/05/15 20:54:40 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -383,8 +383,8 @@ public abstract class Collator implements Comparator, Cloneable
     
     private static ServiceShim shim;
     private static ServiceShim getShim() {
-        // Note: this instantition is safe on loose-memory-model configurations
-        // despite lack of synchronization, since shim instance has no state--
+        // Note: this instantiation is safe on loose-memory-model configurations
+        // despite lack of synchronization, since the shim instance has no state--
         // it's all in the class init.  The worst problem is we might instantiate
         // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {

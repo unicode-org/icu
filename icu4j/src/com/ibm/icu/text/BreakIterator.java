@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/05/14 19:03:31 $
- * $Revision: 1.18 $
+ * $Date: 2003/05/15 20:54:40 $
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -567,7 +567,10 @@ public abstract class BreakIterator implements Cloneable
      * @draft ICU 2.4
      */
     public static boolean unregister(Object key) {
-        if (hasShim()) {
+        if (key == null) {
+            throw new IllegalArgumentException("registry key must not be null");
+        }
+        if (shim != null) {
             return shim.unregister(key);
         }
         return false;
@@ -633,28 +636,19 @@ public abstract class BreakIterator implements Cloneable
     }
 
     private static BreakIteratorServiceShim shim;
-    private static boolean hasShim() {
-        synchronized(BreakIterator.class) {
-            return shim != null;
-        }
-    }
-
     private static BreakIteratorServiceShim getShim() {
-        BreakIteratorServiceShim newshim = null;
+        // Note: this instantiation is safe on loose-memory-model configurations
+        // despite lack of synchronization, since the shim instance has no state--
+        // it's all in the class init.  The worst problem is we might instantiate
+        // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {
             try {
                 Class cls = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
-                newshim = (BreakIteratorServiceShim)cls.newInstance();
+                shim = (BreakIteratorServiceShim)cls.newInstance();
             }
             catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
-            }
-        }
-
-        synchronized(BreakIterator.class) {
-            if (shim == null) {
-                shim = newshim;
             }
         }
         return shim;
