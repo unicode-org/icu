@@ -573,22 +573,22 @@ struct FormatThreadTestData
 // 
 FormatThreadTestData kNumberFormatTestData[] = 
 {
-    FormatThreadTestData((double)5., UnicodeString("5")),
-    FormatThreadTestData( 6., "6" ),
-    FormatThreadTestData( 20., "20" ),
-    FormatThreadTestData( 8., "8" ),
-    FormatThreadTestData( 8.3, "8.3" ),
-    FormatThreadTestData( 12345, "12,345" ),
-    FormatThreadTestData( 81890.23, "81,890.23" ),
+    FormatThreadTestData((double)5.0, UnicodeString("5", "")),
+    FormatThreadTestData( 6.0, UnicodeString("6", "")),
+    FormatThreadTestData( 20.0, UnicodeString("20", "")),
+    FormatThreadTestData( 8.0, UnicodeString("8", "")),
+    FormatThreadTestData( 8.3, UnicodeString("8.3", "")),
+    FormatThreadTestData( 12345, UnicodeString("12,345", "")),
+    FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
 };
 int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]));
 
 // 
 FormatThreadTestData kPercentFormatTestData[] = 
 {
-    FormatThreadTestData((double)5., UnicodeString("500%")),
-    FormatThreadTestData( 1, "100%" ),
-    FormatThreadTestData( 0.26, "26%" ),
+    FormatThreadTestData((double)5.0, UnicodeString("500%", "")),
+    FormatThreadTestData( 1.0, UnicodeString("100%", "")),
+    FormatThreadTestData( 0.26, UnicodeString("26%", "")),
     FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
     FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
 };
