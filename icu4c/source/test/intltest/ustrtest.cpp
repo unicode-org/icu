@@ -293,12 +293,18 @@ UnicodeStringTest::TestCompare()
 
         int8_t result;
 
-        /* ### TODO after ICU 1.8: if u_getUnicodeVersion()>=3.1.0.0 then test exclude-special-i cases as well */
-
         /* test caseCompare() */
         result=mixed.caseCompare(otherDefault, U_FOLD_CASE_DEFAULT);
         if(result!=0) {
             errln("error: mixed.caseCompare(other, default)=%ld instead of 0\n", result);
+        }
+        result=mixed.caseCompare(otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if(result!=0) {
+            errln("error: mixed.caseCompare(otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I)=%ld instead of 0\n", result);
+        }
+        result=mixed.caseCompare(otherDefault, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if(result==0) {
+            errln("error: mixed.caseCompare(other, U_FOLD_CASE_EXCLUDE_SPECIAL_I)=0 instead of !=0\n");
         }
 
         /* test caseCompare() */
@@ -672,6 +678,26 @@ UnicodeStringTest::TestCaseConversion()
             s!=UnicodeString(FALSE, miniUpper, s.length())
         ) {
             errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, miniUpper, (int32_t)(sizeof(miniUpper)/U_SIZEOF_UCHAR)) + "\"");
+        }
+    }
+
+    // test case folding
+    {
+        UnicodeString
+            s=UNICODE_STRING("A\\u00df\\u00b5\\ufb03\\U0001040c\\u0131", 35).unescape(),
+            f=UNICODE_STRING("ass\\u03bcffi\\U00010434i", 23).unescape(),
+            t;
+
+        (t=s).foldCase();
+        if(f!=t) {
+            errln("error in foldCase(\"" + s + "\", default)=\"" + t + "\" but expected \"" + f + "\"");
+        }
+
+        // alternate handling for dotted I/dotless i (U+0130, U+0131)
+        f.setCharAt(f.length()-1, 0x131);
+        (t=s).foldCase(U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if(f!=t) {
+            errln("error in foldCase(\"" + s + "\", U_FOLD_CASE_EXCLUDE_SPECIAL_I)=\"" + t + "\" but expected \"" + f + "\"");
         }
     }
 }
