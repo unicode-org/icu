@@ -345,9 +345,12 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
 void TransliteratorRegistry::remove(const UnicodeString& ID) {
     UnicodeString source, target, variant;
     IDtoSTV(ID, source, target, variant);
-    registry.remove(ID);
+    // Only need to do this if ID.indexOf('-') < 0
+    UnicodeString id;
+    STVtoID(source, target, variant, id);
+    registry.remove(id);
     removeSTV(source, target, variant);
-    availableIDs.removeElement((void*) &ID);
+    availableIDs.removeElement((void*) &id);
 }
 
 //----------------------------------------------------------------------
@@ -433,8 +436,8 @@ int32_t TransliteratorRegistry::countAvailableVariants(const UnicodeString& sour
         return 0;
     }
     UVector *variants = (UVector*) targets->get(target);
-    // assert(variants != 0);
-    return variants->size();
+    // variants may be 0 if the source/target are invalid
+    return (variants == 0) ? 0 : variants->size();
 }
 
 UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
@@ -518,8 +521,12 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& source,
                                            Entry* adopted,
                                            UBool visible) {
     UnicodeString ID;
+    UnicodeString s(source);
+    if (s.length() == 0) {
+        s = "Any";
+    }
     STVtoID(source, target, variant, ID);
-    registerEntry(ID, source, target, variant, adopted, visible);
+    registerEntry(ID, s, target, variant, adopted, visible);
 }
 
 /**
@@ -530,7 +537,10 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
                                            UBool visible) {
     UnicodeString source, target, variant;
     IDtoSTV(ID, source, target, variant);
-    registerEntry(ID, source, target, variant, adopted, visible);
+    // Only need to do this if ID.indexOf('-') < 0
+    UnicodeString id;
+    STVtoID(source, target, variant, id);
+    registerEntry(id, source, target, variant, adopted, visible);
 }
 
 /**
