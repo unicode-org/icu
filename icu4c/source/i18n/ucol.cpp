@@ -450,7 +450,7 @@ ucol_openRules( const UChar        *rules,
     }
     newRules[rulesLength]=0;
     result->rules = newRules;
-    // ### TODO: should store rulesLength in result in case there are embedded NULs, right?!
+    result->rulesLength = rulesLength;
     result->freeRulesOnClose = TRUE;
     result->rb = 0;
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
@@ -632,9 +632,10 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 
     result->scriptOrder = NULL;
 
-    result->zero = 0;
     result->rules = NULL;
-    /* get the version info form UCATableHeader and populate the Collator struct*/
+    result->rulesLength = 0;
+
+    /* get the version info from UCATableHeader and populate the Collator struct*/
     result->dataInfo.dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
     result->dataInfo.dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
 
@@ -745,43 +746,37 @@ void collIterNormalize(collIterate *collationSource)
     UErrorCode  status = U_ZERO_ERROR;
     UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
     UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
-    uint32_t    normLen;
+    int32_t    normLen;
 
-    normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                              collationSource->writableBufSize, &status);
-    if (normLen == collationSource->writableBufSize) {
-        UChar *temp = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
-        uprv_memcpy(temp, collationSource->writableBuffer, normLen * sizeof(UChar));
-        temp[normLen] = 0;
-        freeHeapWritableBuffer(collationSource);
-        collationSource->writableBuffer = temp;
-    }
-    if (U_FAILURE(status)) { /* This would be buffer overflow */
-        if (status == U_BUFFER_OVERFLOW_ERROR) {
-            freeHeapWritableBuffer(collationSource);
-            collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
-            collationSource->flags |= UCOL_ITER_ALLOCATED;
-            /* to enable null termination */
-            collationSource->writableBufSize = normLen + 1;
-            status = U_ZERO_ERROR;
-            unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                collationSource->writableBufSize, &status);
-            if (status != U_ZERO_ERROR) {
+    normLen = unorm_decompose(&collationSource->writableBuffer, (int32_t *)&collationSource->writableBufSize,
+                              srcP, (int32_t)(endP - srcP),
+                              FALSE, FALSE,
+                              u_growBufferFromStatic, collationSource->stackWritableBuffer,
+                              &status);
+    if (U_FAILURE(status)) {
 #ifdef UCOL_DEBUG
-                fprintf(stderr, "collIterNormalize(), normalize #2 failed, status = %d\n", status);
+        fprintf(stderr, "collIterNormalize(), unorm_decompose() failed, status = %s\n", u_errorName(status));
 #endif
-                return;
-            }
-            collationSource->writableBuffer[normLen] = 0;
-        }
-        else {
+        return;
+    }
+    if(status == U_STRING_NOT_TERMINATED_WARNING) {
+        // reallocate and terminate
+        if(!u_growBufferFromStatic(collationSource->stackWritableBuffer,
+                                   &collationSource->writableBuffer,
+                                   (int32_t *)&collationSource->writableBufSize, normLen + 1,
+                                   normLen)
+        ) {
 #ifdef UCOL_DEBUG
-            fprintf(stderr, "collIterNormalize(), normalize #1 failed, status = %d\n", status);
+            fprintf(stderr, "collIterNormalize(), out of memory\n");
 #endif
             return;
         }
+        collationSource->writableBuffer[normLen] = 0;
     }
 
+    if(collationSource->writableBuffer != collationSource->stackWritableBuffer) {
+        collationSource->flags |= UCOL_ITER_ALLOCATED;
+    }
     collationSource->pos        = collationSource->writableBuffer;
     collationSource->origFlags  = collationSource->flags;
     collationSource->flags     |= UCOL_ITER_INNORMBUF;
@@ -1060,6 +1055,7 @@ void collPrevIterNormalize(collIterate *data)
             freeHeapWritableBuffer(data);
             data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) *
                                                         sizeof(UChar));
+            data->flags |= UCOL_ITER_ALLOCATED;
             /* to handle the zero termination */
             data->writableBufSize = normLen + 1;
     }
@@ -1467,6 +1463,7 @@ inline void normalizeNextContraction(collIterate *data)
         freeHeapWritableBuffer(data);
         data->writableBuffer = temp;
         data->writableBufSize = size;
+        data->flags |= UCOL_ITER_ALLOCATED;
     }
 
     status            = U_ZERO_ERROR;
@@ -2801,14 +2798,13 @@ ucol_getSortKey(const    UCollator    *coll,
 }
 
 /* this function is called by the C++ API for sortkey generation */
-U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        int32_t *resultLen) {
-    uint8_t *result = NULL;
-    UErrorCode status = U_ZERO_ERROR;
-    *resultLen = coll->sortKeyGen(coll, source, sourceLength, &result, 0, TRUE, &status);
-    return result;
+U_CFUNC int32_t
+ucol_getSortKeyWithAllocation(const UCollator *coll,
+                              const UChar *source, int32_t sourceLength,
+                              uint8_t **pResult,
+                              UErrorCode *pErrorCode) {
+    *pResult = 0;
+    return coll->sortKeyGen(coll, source, sourceLength, pResult, 0, TRUE, pErrorCode);
 }
 
 #define UCOL_FSEC_BUF_SIZE 256
@@ -3171,37 +3167,32 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (qShifted?1:0)/*(compareQuad?0:1)*/ + (compareIdent?1:0));
 
+    /* If we need to normalize, we'll do it all at once at the beginning! */
+    UNormalizationMode normMode;
+    if(compareIdent) {
+        normMode = UNORM_NFD;
+    } else if(coll->normalizationMode != UCOL_OFF) {
+        normMode = UNORM_FCD;
+    } else {
+        normMode = UNORM_NONE;
+    }
+
+    if(normMode != UNORM_NONE && UNORM_YES != unorm_quickCheck(source, len, normMode, status)) {
+        len = unorm_internalNormalize(&normSource, &normSourceLen,
+                                      source, len,
+                                      normMode, FALSE,
+                                      u_growBufferFromStatic, normBuffer,
+                                      status);
+        if(U_FAILURE(*status)) {
+            return 0;
+        }
+        source = normSource;
+    }
+
     collIterate s;
     IInit_collIterate(coll, (UChar *)source, len, &s);
-
-    /* If we need to normalize, we'll do it all at once at the beggining! */
-    UColAttributeValue normMode = coll->normalizationMode;
-    if(compareIdent) {
-      if(unorm_quickCheck(source, len, UNORM_NFD, status) != UNORM_YES) {
-        normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
-        if(U_FAILURE(*status)) {
-            *status=U_ZERO_ERROR;
-            normSource = (UChar *) uprv_malloc(normSourceLen*sizeof(UChar));
-            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
-        }
-        IInit_collIterate(coll, normSource, normSourceLen, &s);
+    if(source == normSource) {
         s.flags &= ~UCOL_ITER_NORM;
-        len = normSourceLen;
-      }
-    } else if((normMode != UCOL_OFF)
-      /* changed by synwee */
-      && UNORM_YES!=unorm_quickCheck(source, len, UNORM_FCD, status))
-    {
-        normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
-        if(U_FAILURE(*status)) {
-            *status=U_ZERO_ERROR;
-            normSource = (UChar *) uprv_malloc(normSourceLen*sizeof(UChar));
-            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
-        }
-        IInit_collIterate(coll, normSource, normSourceLen, &s);
-        s.flags &= ~UCOL_ITER_NORM;
-        len = normSourceLen;
-
     }
 
     if(resultLength == 0 || primaries == NULL) {
@@ -3666,27 +3657,24 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     int32_t len =  sourceLength;
 
+    /* If we need to normalize, we'll do it all at once at the beginning! */
+    if(coll->normalizationMode != UCOL_OFF && UNORM_YES != unorm_quickCheck(source, len, UNORM_FCD, status)) {
+        len = unorm_internalNormalize(&normSource, &normSourceLen,
+                                      source, len,
+                                      UNORM_FCD, FALSE,
+                                      u_growBufferFromStatic, normBuffer,
+                                      status);
+        if(U_FAILURE(*status)) {
+            return 0;
+        }
+        source = normSource;
+    }
 
     collIterate s;
     IInit_collIterate(coll, (UChar *)source, len, &s);
-
-    /* If we need to normalize, we'll do it all at once at the beggining! */
-    UColAttributeValue normMode = coll->normalizationMode;
-    if(normMode != UCOL_OFF) {
-        if (UNORM_YES!=unorm_quickCheck(source, len, UNORM_FCD, status))
-        {
-            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
-            if(U_FAILURE(*status)) {
-                *status=U_ZERO_ERROR;
-                normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
-                normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
-            }
-            IInit_collIterate(coll, normSource, normSourceLen, &s);
-            s.flags &= ~(UCOL_ITER_NORM);
-            len = normSourceLen;
-        }
+    if(source == normSource) {
+        s.flags &= ~UCOL_ITER_NORM;
     }
-
 
     if(resultLength == 0 || primaries == NULL) {
         int32_t t = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
@@ -4361,12 +4349,14 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
   return len+UCAlen;
 }
 
+static const UChar _NUL = 0;
+
 U_CAPI const UChar*
 ucol_getRules(    const    UCollator       *coll,
         int32_t            *length)
 {
   if(coll->rules != NULL) {
-    *length = u_strlen(coll->rules);
+    *length = coll->rulesLength;
     return coll->rules;
   } else {
     UErrorCode status = U_ZERO_ERROR;
@@ -4375,13 +4365,14 @@ ucol_getRules(    const    UCollator       *coll,
       if(U_SUCCESS(status)) {
         /*Semantic const */
         ((UCollator *)coll)->rules = ures_getStringByKey(collElem, "Sequence", length, &status);
+        ((UCollator *)coll)->rulesLength = *length;
         ((UCollator *)coll)->freeRulesOnClose = FALSE;
         ures_close(collElem);
         return coll->rules;
       }
     }
     *length = 0;
-    return &coll->zero;
+    return &_NUL;
   }
 }
 
@@ -4493,48 +4484,40 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
 
     int32_t          tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? tColl->endp - tColl->string : -1;
     UChar            *tBuf        = tColl->string;
-//    uint32_t          compLen     = 0;
-    uint32_t          normLength;
-    UErrorCode        status      = U_ZERO_ERROR;
-    UCollationResult  result;
-    UBool             sAlloc      = FALSE;
-    UBool             tAlloc      = FALSE;
 
     if (normalize) {
+        UErrorCode status;
+
+        status = U_ZERO_ERROR;
         if (unorm_quickCheck(sColl->string, sLen, UNORM_NFD, &status) != UNORM_YES) {
+            sLen = unorm_decompose(&sColl->writableBuffer, (int32_t *)&sColl->writableBufSize,
+                                   sBuf, sLen,
+                                   FALSE, FALSE,
+                                   u_growBufferFromStatic, sColl->stackWritableBuffer,
+                                   &status);
             sBuf = sColl->writableBuffer;
-            normLength = unorm_normalize(sColl->string, sLen, UNORM_NFD, 0,
-                sBuf, UCOL_WRITABLE_BUFFER_SIZE, &status);
-            if (U_FAILURE(status)) {  /*this would be buffer overflow  */
-                sBuf = (UChar *)uprv_malloc((normLength+1)*sizeof(UChar));
-                sAlloc = TRUE;
-                status = U_ZERO_ERROR;
-                normLength = unorm_normalize(sColl->string, sLen, UNORM_NFD, 0, sBuf, normLength+1, &status);
+            if (sBuf != sColl->stackWritableBuffer) {
+                sColl->flags |= UCOL_ITER_ALLOCATED;
             }
-            sLen = normLength;
         }
 
         status = U_ZERO_ERROR;
         if (unorm_quickCheck(tColl->string, tLen, UNORM_NFD, &status) != UNORM_YES) {
+            tLen = unorm_decompose(&tColl->writableBuffer, (int32_t *)&tColl->writableBufSize,
+                                   tBuf, tLen,
+                                   FALSE, FALSE,
+                                   u_growBufferFromStatic, tColl->stackWritableBuffer,
+                                   &status);
             tBuf = tColl->writableBuffer;
-            normLength = unorm_normalize(tColl->string, tLen, UNORM_NFD, 0,
-                tBuf, UCOL_WRITABLE_BUFFER_SIZE, &status);
-            if (U_FAILURE(status)) {  /*this would be buffer overflow  */
-                tBuf = (UChar *)uprv_malloc((normLength+1)*sizeof(UChar));
-                tAlloc = TRUE;
-                status = U_ZERO_ERROR;
-                normLength = unorm_normalize(tColl->string, tLen, UNORM_NFD, 0, tBuf, normLength+1, &status);
+            if (tBuf != tColl->stackWritableBuffer) {
+                tColl->flags |= UCOL_ITER_ALLOCATED;
             }
-            tLen = normLength;
         }
-
     }
 
     if (sLen == -1 && tLen == -1) {
         comparison = u_strcmpCodePointOrder(sBuf, tBuf);
-    }
-    else
-    {
+    } else {
         if (sLen == -1) {
             sLen = u_strlen(sBuf);
         }
@@ -4542,28 +4525,18 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
             tLen = u_strlen(tBuf);
         }
         comparison = u_memcmpCodePointOrder(sBuf, tBuf, uprv_min(sLen, tLen));
-    }
-
-    result = UCOL_LESS;
-    if (comparison > 0) {
-        result = UCOL_GREATER;
-    }
-    else if (comparison == 0) {
-        if(sLen > tLen) {
-            result = UCOL_GREATER;
-        } else if (sLen == tLen){
-            result = UCOL_EQUAL;
+        if (comparison == 0) {
+            comparison = sLen - tLen;
         }
     }
 
-    if (sAlloc) {
-        uprv_free(sBuf);
+    if (comparison < 0) {
+        return UCOL_LESS;
+    } else if (comparison == 0) {
+        return UCOL_EQUAL;
+    } else /* comparison > 0 */ {
+        return UCOL_GREATER;
     }
-    if (tAlloc) {
-        uprv_free(tBuf);
-    }
-
-    return result;
 }
 
 /*  CEBuf - A struct and some inline functions to handle the saving    */
