@@ -108,9 +108,6 @@ static void
 parseName(char *name, int16_t length);
 
 static int16_t
-getField(char *line, int16_t start, int16_t limit);
-
-static int16_t
 skipNoise(char *line, int16_t start, int16_t limit);
 
 static int16_t
@@ -288,7 +285,7 @@ lineFn(void *context,
     /* get the character name */
     name1Start=fields[1][0];
     if(fields[1][0][0]!='<') {
-        name1Length=fields[1][1]-name1Start;
+        name1Length=(int16_t)(fields[1][1]-name1Start);
     } else {
         /* do not store pseudo-names in <> brackets */
         name1Length=0;
@@ -299,7 +296,7 @@ lineFn(void *context,
     /* do not store pseudo-names in <> brackets */
     name2Start=fields[10][0];
     if(*(UBool *)context && fields[10][0][0]!='<') {
-        name2Length=fields[10][1]-name2Start;
+        name2Length=(int16_t)(fields[10][1]-name2Start);
     } else {
         name2Length=0;
     }
@@ -350,7 +347,7 @@ parseName(char *name, int16_t length) {
 
         /* get a word and add it if it is longer than 1 */
         limit=getWord(name, start, length);
-        wordLength=limit-start;
+        wordLength=(int16_t)(limit-start);
         if(wordLength>1) {
             word=findWord(name+start, wordLength);
             if(word==NULL) {
@@ -380,14 +377,6 @@ parseName(char *name, int16_t length) {
 }
 
 static int16_t
-getField(char *line, int16_t start, int16_t limit) {
-    while(start<limit && line[start]!=';') {
-        ++start;
-    }
-    return start;
-}
-
-static int16_t
 skipNoise(char *line, int16_t start, int16_t limit) {
     char c;
 
@@ -401,7 +390,7 @@ skipNoise(char *line, int16_t start, int16_t limit) {
 
 static int16_t
 getWord(char *line, int16_t start, int16_t limit) {
-    char c;
+    char c=0; /* initialize to avoid a compiler warning although the code was safe */
 
     /* a unicode character name word consists of A-Z0-9 */
     while(start<limit && ('A'<=(c=line[start]) && c<='Z' || '0'<=c && c<='9')) {
@@ -541,7 +530,7 @@ compress() {
 static void
 compressLines() {
     Line *line;
-    uint32_t i=0, inLine, outLine=-1,
+    uint32_t i=0, inLine, outLine=0xffffffff /* (uint32_t)(-1) */,
              groupMSB=0xffff, lineCount2;
     int16_t groupTop=0;
 
@@ -632,7 +621,7 @@ compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop) {
         }
     } while(start<length);
 
-    length=groupTop-*pGroupTop;
+    length=(int16_t)(groupTop-*pGroupTop);
     *pGroupTop=groupTop;
     return length;
 }
@@ -939,7 +928,7 @@ addLine(uint32_t code, char *name1, int16_t name1Length, char *name2, int16_t na
 
     length=name1Length;
     if(name2Length>0) {
-        length+=1+name2Length;
+        length=(int16_t)(length+1+name2Length);
     }
 
     stringStart=allocLine(length);
@@ -1017,7 +1006,7 @@ appendLineLength(int16_t length) {
 static void
 appendLineLengthNibble(uint8_t nibble) {
     if((lineLengthsTop&1)==0) {
-        lineLengths[lineLengthsTop/2]=nibble<<4;
+        lineLengths[lineLengthsTop/2]=(uint8_t)(nibble<<4);
     } else {
         lineLengths[lineLengthsTop/2]|=nibble&0xf;
     }
