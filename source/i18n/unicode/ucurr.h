@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.11 $
+* $Revision: 1.12 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -133,22 +133,27 @@ ucurr_getName(const UChar* currency,
  * Returns the number of the number of fraction digits that should
  * be displayed for the given currency.
  * @param currency null-terminated 3-letter ISO 4217 code
+ * @param ec input-output error code
  * @return a non-negative number of fraction digits to be
- * displayed
- * @draft ICU 2.2 Not stable yet, see Jitterbug 3399.
+ * displayed, or 0 if there is an error
+ * @draft ICU 3.0
  */
 U_CAPI int32_t U_EXPORT2
-ucurr_getDefaultFractionDigits(const UChar* currency);
+ucurr_getDefaultFractionDigits(const UChar* currency,
+                               UErrorCode* ec);
 
 /**
  * Returns the rounding increment for the given currency, or 0.0 if no
  * rounding is done by the currency.
  * @param currency null-terminated 3-letter ISO 4217 code
- * @return the non-negative rounding increment, or 0.0 if none
- * @draft ICU 2.2 Not stable yet, see Jitterbug 3399.
+ * @param ec input-output error code
+ * @return the non-negative rounding increment, or 0.0 if none,
+ * or 0.0 if there is an error
+ * @draft ICU 3.0
  */
 U_CAPI double U_EXPORT2
-ucurr_getRoundingIncrement(const UChar* currency);
+ucurr_getRoundingIncrement(const UChar* currency,
+                           UErrorCode* ec);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
