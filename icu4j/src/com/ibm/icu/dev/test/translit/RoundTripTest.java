@@ -121,15 +121,15 @@ public class RoundTripTest extends TestFmwk {
         UnicodeSet vowelSignSet = new UnicodeSet();
         
         public LegalIndic(){
-            vowelSignSet.addAll(new UnicodeSet("[\u0902\u0903\u093e-\u094c\u0962\u0963]"));/* Devanagari */
-            vowelSignSet.addAll(new UnicodeSet("[\u0982\u0983\u09be-\u09cc\u09e2\u09e3\u09D7]"));/* Bengali */
-            vowelSignSet.addAll(new UnicodeSet("[\u0a02\u0a03\u0a3e-\u0a4c\u0a62\u0a63\u0a70\u0a71]"));/* Gurmukhi */
-            vowelSignSet.addAll(new UnicodeSet("[\u0a82\u0a83\u0abe-\u0acc\u0ae2\u0ae3]"));/* Gujarati */
-            vowelSignSet.addAll(new UnicodeSet("[\u0b02\u0b03\u0b3e-\u0b4c\u0b62\u0b63\u0b56\u0b57]"));/* Oriya */
-            vowelSignSet.addAll(new UnicodeSet("[\u0b82\u0b83\u0bbe-\u0bcc\u0be2\u0be3\u0bd7]"));/* Tamil */
-            vowelSignSet.addAll(new UnicodeSet("[\u0c02\u0c03\u0c3e-\u0c4c\u0c62\u0c63\u0c55\u0c56]"));/* Telugu */
-            vowelSignSet.addAll(new UnicodeSet("[\u0c82\u0c83\u0cbe-\u0ccc\u0ce2\u0ce3\u0cd5\u0cd6]"));/* Kannada */
-            vowelSignSet.addAll(new UnicodeSet("[\u0d02\u0d03\u0d3e-\u0d4c\u0d62\u0d63\u0d57]"));/* Malayalam */
+            vowelSignSet.addAll(new UnicodeSet("[\u0901\u0902\u0903\u093e-\u094c\u0962\u0963]"));				/* Devanagari */
+            vowelSignSet.addAll(new UnicodeSet("[\u0981\u0982\u0983\u09be-\u09cc\u09e2\u09e3\u09D7]"));			/* Bengali */
+            vowelSignSet.addAll(new UnicodeSet("[\u0a01\u0a02\u0a03\u0a3e-\u0a4c\u0a62\u0a63\u0a70\u0a71]"));	/* Gurmukhi */
+            vowelSignSet.addAll(new UnicodeSet("[\u0a81\u0a82\u0a83\u0abe-\u0acc\u0ae2\u0ae3]"));				/* Gujarati */
+            vowelSignSet.addAll(new UnicodeSet("[\u0b01\u0b02\u0b03\u0b3e-\u0b4c\u0b62\u0b63\u0b56\u0b57]"));	/* Oriya */
+            vowelSignSet.addAll(new UnicodeSet("[\u0b81\u0b82\u0b83\u0bbe-\u0bcc\u0be2\u0be3\u0bd7]"));			/* Tamil */
+            vowelSignSet.addAll(new UnicodeSet("[\u0c01\u0c02\u0c03\u0c3e-\u0c4c\u0c62\u0c63\u0c55\u0c56]"));	/* Telugu */
+            vowelSignSet.addAll(new UnicodeSet("[\u0c81\u0c82\u0c83\u0cbe-\u0ccc\u0ce2\u0ce3\u0cd5\u0cd6]"));	/* Kannada */
+            vowelSignSet.addAll(new UnicodeSet("[\u0d01\u0d02\u0d03\u0d3e-\u0d4c\u0d62\u0d63\u0d57]"));			/* Malayalam */
         }
         
         String avagraha = "\u093d\u0abd\u0b3d";
