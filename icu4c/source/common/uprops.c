@@ -241,6 +241,35 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_SCRIPT:
             errorCode=U_ZERO_ERROR;
             return (int32_t)uscript_getScript(c, &errorCode);
+        case UCHAR_HANGUL_SYLLABLE_TYPE:
+            /* purely algorithmic; hardcode known characters, check for assigned new ones */
+            if(c<JAMO_L_BASE) {
+                /* NA */
+            } else if(c<=0x11ff) {
+                /* Jamo range */
+                if(c<=0x115f) {
+                    /* Jamo L range, HANGUL CHOSEONG ... */
+                    if(c==0x115f || c<=0x1159 || u_charType(c)==U_OTHER_LETTER) {
+                        return U_HST_LEADING_JAMO;
+                    }
+                } else if(c<=0x11a7) {
+                    /* Jamo V range, HANGUL JUNGSEONG ... */
+                    if(c<=0x11a2 || u_charType(c)==U_OTHER_LETTER) {
+                        return U_HST_VOWEL_JAMO;
+                    }
+                } else {
+                    /* Jamo T range */
+                    if(c<=0x11f9 || u_charType(c)==U_OTHER_LETTER) {
+                        return U_HST_TRAILING_JAMO;
+                    }
+                }
+            } else if((c-=HANGUL_BASE)<0) {
+                /* NA */
+            } else if(c<HANGUL_COUNT) {
+                /* Hangul syllable */
+                return c%JAMO_T_COUNT==0 ? U_HST_LV_SYLLABLE : U_HST_LVT_SYLLABLE;
+            }
+            return 0; /* NA */
         default:
             return 0; /* undefined */
         }
@@ -297,6 +326,8 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_SCRIPT:
             max=uprv_getMaxValues(0)&UPROPS_SCRIPT_MASK;
             return max!=0 ? max : (int32_t)USCRIPT_CODE_LIMIT-1;
+        case UCHAR_HANGUL_SYLLABLE_TYPE:
+            return (int32_t)U_HST_COUNT-1;
         default:
             return -1; /* undefined */
         }

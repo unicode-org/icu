@@ -918,6 +918,9 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint
 
 U_CAPI void U_EXPORT2
 uchar_addPropertyStarts(USet *set) {
+    UChar32 c;
+    int32_t value, value2;
+
     if(!HAVE_DATA) {
         return;
     }
@@ -979,6 +982,38 @@ uchar_addPropertyStarts(USet *set) {
     /* add for UCHAR_JOINING_TYPE */
     uset_add(set, ZWNJ); /* range ZWNJ..ZWJ */
     uset_add(set, ZWJ+1);
+
+    /* add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE */
+    uset_add(set, 0x1100);
+    value=U_HST_LEADING_JAMO;
+    for(c=0x115a; c<=0x115f; ++c) {
+        value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
+        if(value!=value2) {
+            value=value2;
+            uset_add(set, c);
+        }
+    }
+
+    uset_add(set, 0x1160);
+    value=U_HST_VOWEL_JAMO;
+    for(c=0x11a3; c<=0x11a7; ++c) {
+        value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
+        if(value!=value2) {
+            value=value2;
+            uset_add(set, c);
+        }
+    }
+
+    uset_add(set, 0x11a8);
+    value=U_HST_TRAILING_JAMO;
+    for(c=0x11fa; c<=0x11ff; ++c) {
+        value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
+        if(value!=value2) {
+            value=value2;
+            uset_add(set, c);
+        }
+    }
+
 
     /*
      * Omit code points for u_charCellWidth() because
