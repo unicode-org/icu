@@ -146,12 +146,13 @@ void ConvertTest::TestConvert()
         errln("Error getting Available names!");
         return;
     }
-    logln("Number of available Codepages:\t" + testLong1);
-    while (testLong1--) logln((UnicodeString)"\t\t[" + available_conv[testLong1] + (UnicodeString)"]");
+    logln("Number of available Codepages:%d\t", testLong1);
+    while (testLong1--)
+        logln("\t\t[%s]", available_conv[testLong1]);
 
     ucnv_flushCache();
 
-    /* Do some tests w/ UnicodeConverter, some w/ UnicodeConverterCPP */
+    /* Do some tests w/ UnicodeConverter, some w/ UnicodeConverter */
 
     someConverters[0] = new UnicodeConverter("ibm-1123",err);
     if (U_FAILURE(err)) {
@@ -169,12 +170,12 @@ void ConvertTest::TestConvert()
         return;
     }
 
-    someConverters[3] = new UnicodeConverterCPP("ibm-834", err);
+    someConverters[3] = new UnicodeConverter("ibm-834", err);
     if (U_FAILURE(err)) {
         errln ((UnicodeString)"FAILURE! " + myErrorName(err));
         return;
     }
-    someConverters[4] = new UnicodeConverterCPP("ibm-941", err);
+    someConverters[4] = new UnicodeConverter("ibm-941", err);
     if (U_FAILURE(err)) {
         errln ((UnicodeString)"FAILURE! " + myErrorName(err));
         return;

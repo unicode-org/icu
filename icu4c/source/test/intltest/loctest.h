@@ -79,7 +79,7 @@ private:
      **/
     void setUpDataTable(void);
 
-    static UnicodeString** dataTable;
+    UnicodeString** dataTable;
     
     enum {
         ENGLISH = 0,

@@ -1194,7 +1194,7 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
     int32_t testOffset;
     int32_t count = 0;
 
-    logln("doMultipleSelectionTest text of length: "+testText.length());
+    logln("doMultipleSelectionTest text of length: %d", testText.length());
 
     if (*testIterator != iterator)
         errln("clone() or operator!= failed: two clones compared unequal");

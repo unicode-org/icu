@@ -176,12 +176,12 @@ void DateFormatRegressionTest::Test4052408(void)
         fmt->format(dt, buf, pos);
         //char[] dst = new char[pos.getEndIndex() - pos.getBeginIndex()];
         UnicodeString dst;
-    buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), dst);
+        buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), dst);
         UnicodeString str(dst);
-        log(i + ": " + fieldNames[i] +
-                         ", \"" + str + "\", " +
-                         pos.getBeginIndex() + ", " +
-                         pos.getEndIndex());
+        logln((UnicodeString)"" + i + (UnicodeString)": " + fieldNames[i] +
+                (UnicodeString)", \"" + str + (UnicodeString)"\", " +
+                pos.getBeginIndex() + (UnicodeString)", " +
+                pos.getEndIndex());
         UnicodeString exp = expected[i];
         if((exp.length() == 0 && str.length() == 0) || str == exp)
             logln(" ok");
@@ -189,11 +189,11 @@ void DateFormatRegressionTest::Test4052408(void)
             logln(UnicodeString(" expected ") + exp);
             pass = FALSE;
         }
-    
+        
     }
     if( ! pass) 
         errln("Fail: FieldPosition not set right by DateFormat");
-
+    
     delete fmt;
 }
 

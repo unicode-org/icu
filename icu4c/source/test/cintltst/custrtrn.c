@@ -139,6 +139,9 @@ static void Test_UChar_UTF32_API(void){
         
             u_strToUTF32(u32Target,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
         }
+        else {
+            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
+        }
         failed = FALSE;
         /*for(i=0; i< u32DestLen; i++){
             printf("0x%08X, ",uTarget[i]);
@@ -193,13 +196,16 @@ static void Test_UChar_UTF32_API(void){
         failed = FALSE;
 
        /* preflight */
-        u_strToUTF32(u32Target,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
+        u_strToUTF32(NULL,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
         if(err = U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR; 
             u32Target = (uint32_t*) malloc (sizeof(uint32_t) * (u32DestLen+1));
             u32TargetLength = u32DestLen+1;
         
             u_strToUTF32(u32Target,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
+        }
+        else {
+            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
         }
         failed = FALSE;
 
@@ -214,7 +220,7 @@ static void Test_UChar_UTF32_API(void){
         }
 
         /* preflight */
-        u_strFromUTF32(uTarget,uTargetLength,&uDestLen,u32Src,u32SrcLen,&err);
+        u_strFromUTF32(NULL,uTargetLength,&uDestLen,u32Src,u32SrcLen,&err);
         if(err = U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR; 
             uTarget = (UChar*) malloc( sizeof(UChar) * (uDestLen+1));
@@ -267,6 +273,9 @@ static void Test_UChar_UTF8_API(void){
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
 
         }
+        else {
+            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
+        }
         failed = FALSE;
         /*for(i=0; i< u8DestLen; i++){
             printf("0x%04X, ",u8Target[i]);
@@ -294,6 +303,9 @@ static void Test_UChar_UTF8_API(void){
             uTargetLength =  uDestLen;
 
             u_strFromUTF8(uTarget,uTargetLength,&uDestLen,u8Src,u8SrcLen,&err);
+        }
+        else {
+            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
         }
         /*for(i=0; i< uDestLen; i++){
             printf("0x%04X, ",uTarget[i]);
@@ -322,7 +334,7 @@ static void Test_UChar_UTF8_API(void){
         u8TargetLength=0;
         failed = FALSE;
         /* preflight */
-        u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
+        u_strToUTF8(NULL,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR;       
             u8Target = (uint8_t*) malloc (sizeof(uint8_t) * (u8DestLen+1));
@@ -330,6 +342,9 @@ static void Test_UChar_UTF8_API(void){
         
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
 
+        }
+        else {
+            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
         }
         failed = FALSE;
         /*for(i=0; i< u8DestLen; i++){
@@ -351,13 +366,16 @@ static void Test_UChar_UTF8_API(void){
         u8SrcLen = u8DestLen;
 
         /* preflight */
-        u_strFromUTF8(uTarget,uTargetLength,&uDestLen,u8Src,u8SrcLen,&err);
+        u_strFromUTF8(NULL,uTargetLength,&uDestLen,u8Src,u8SrcLen,&err);
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR;
             uTarget = (UChar*) malloc( sizeof(UChar) * (uDestLen+1));
             uTargetLength =  uDestLen;
 
             u_strFromUTF8(uTarget,uTargetLength,&uDestLen,u8Src,u8SrcLen,&err);
+        }
+        else {
+            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
         }
         /*for(i=0; i< uDestLen; i++){
             printf("0x%04X, ",uTarget[i]);
