@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/07 21:08:07 $ 
- * $Revision: 1.42 $
+ * $Date: 2003/02/14 00:11:30 $ 
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -955,6 +955,13 @@ public class UnicodeSetTest extends TestFmwk {
             CASE,
             "[{F\uFB01}]",
             "[\uFB03{ffi}]",            
+
+            CASE,
+            "[a-z]","[A-Za-z\u017F\u212A]",
+            CASE,
+            "[abc]","[A-Ca-c]",
+            CASE,
+            "[ABC]","[A-Ca-c]",
         };
 
         UnicodeSet s = new UnicodeSet();
