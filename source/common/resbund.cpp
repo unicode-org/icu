@@ -332,7 +332,7 @@ void ResourceBundle::resetIterator(void) {
 ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
     UResourceBundle r;
 
-    ures_setIsStackObject(&r, TRUE);
+    ures_initStackObject(&r);
     ures_getNextResource(resource, &r, &status);
     ResourceBundle res(&r, status);
     if (U_SUCCESS(status)) {
@@ -356,7 +356,7 @@ UnicodeString ResourceBundle::getNextString(const char ** key, UErrorCode& statu
 ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
     UResourceBundle r;
 
-    ures_setIsStackObject(&r, TRUE);
+    ures_initStackObject(&r);
     ures_getByIndex(resource, indexR, &r, &status);
     ResourceBundle res(&r, status);
     if (U_SUCCESS(status)) {
@@ -374,7 +374,7 @@ UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) co
 ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
     UResourceBundle r;
 
-    ures_setIsStackObject(&r, TRUE);
+    ures_initStackObject(&r);
     ures_getByKey(resource, key, &r, &status);
     ResourceBundle res(&r, status);
     if (U_SUCCESS(status)) {
