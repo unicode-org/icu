@@ -17,14 +17,13 @@
  * @author Alan Liu
  */
 class U_I18N_API NullTransliterator : public Transliterator {
-    static const char* _ID;
 
 public:
 
     /**
      * ID for this transliterator.
      */
-    static const UnicodeString ID; // public for Transliterator
+    static const UChar ID[]; // public for Transliterator
 
     /**
      * Constructs a transliterator.
