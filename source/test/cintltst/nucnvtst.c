@@ -47,6 +47,7 @@ static void TestISO_2022_JP_2(void);
 static void TestISO_2022_KR(void);
 static void TestISO_2022_CN(void);
 static void TestISO_2022_CN_EXT(void);
+static void TestJIS(void);
 static void TestHZ(void);
 static void TestISO_2022_JP_Next(void);
 static void TestEBCDIC_STATEFUL(void);
@@ -185,6 +186,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestMBCS, "tsconv/nucnvtst/TestMBCS");
    addTest(root, &TestISO_2022, "tsconv/nucnvtst/TestISO_2022");
    addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
+   addTest(root, &TestJIS, "tsconv/nucnvtst/TestJIS");
    addTest(root, &TestISO_2022_JP_1, "tsconv/nucnvtst/TestISO_2022_JP_1");
    addTest(root, &TestISO_2022_JP_2, "tsconv/nucnvtst/TestISO_2022_JP_2");
    addTest(root, &TestISO_2022_KR, "tsconv/nucnvtst/TestISO_2022_KR");
@@ -217,7 +219,7 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 /* Note: This function uses global variables and it will not do offset
 checking without gOutBufferSize and gInBufferSize set to NEW_MAX_BUFFER */
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, const int32_t *expectOffsets)
+                const char *codepage, const int32_t *expectOffsets , UBool useFallback)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -250,6 +252,9 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     {
         log_err("Couldn't open converter %s\n",codepage);    
         return FALSE;
+    }
+    if(useFallback){
+        ucnv_setFallback(conv,useFallback);
     }
 
     log_verbose("Converter opened..\n");
@@ -379,7 +384,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 /* Note: This function uses global variables and it will not do offset
 checking without gOutBufferSize and gInBufferSize set to NEW_MAX_BUFFER */
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, const int32_t *expectOffsets)
+               const char *codepage, const int32_t *expectOffsets, UBool useFallback)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -415,7 +420,9 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
         log_err("Couldn't open converter %s\n",gNuConvTestName);
         return FALSE;
     }
-
+    if(useFallback){
+        ucnv_setFallback(conv,useFallback);
+    }
     log_verbose("Converter opened..\n");
 
     src = source;
@@ -688,7 +695,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 #if 1
     /*UTF-8*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedUTF8, sizeof(expectedUTF8), "UTF8", toUTF8Offs ))
+            expectedUTF8, sizeof(expectedUTF8), "UTF8", toUTF8Offs,FALSE ))
         log_err("u-> UTF8 did not match.\n");
     
     log_verbose("Test surrogate behaviour for UTF8\n");
@@ -700,59 +707,59 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         };
         int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4 };
         if(!testConvertFromU(testinput, sizeof(testinput)/sizeof(testinput[0]),
-            expectedUTF8test2, sizeof(expectedUTF8test2), "UTF8", offsets ))
+            expectedUTF8test2, sizeof(expectedUTF8test2), "UTF8", offsets,FALSE ))
         log_err("u-> UTF8 did not match.\n");  
 
     }
     /*ISO-2022*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs ))
+            expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs,FALSE ))
         log_err("u-> iso-2022 did not match.\n");
     /*UTF16 LE*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedUTF16LE, sizeof(expectedUTF16LE), "utf-16le", toUTF16LEOffs ))
+            expectedUTF16LE, sizeof(expectedUTF16LE), "utf-16le", toUTF16LEOffs,FALSE ))
         log_err("u-> utf-16le did not match.\n");
     /*UTF16 BE*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedUTF16BE, sizeof(expectedUTF16BE), "utf-16be", toUTF16BEOffs ))
+            expectedUTF16BE, sizeof(expectedUTF16BE), "utf-16be", toUTF16BEOffs,FALSE ))
         log_err("u-> utf-16be did not match.\n");
     /*UTF32 LE*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedUTF32LE, sizeof(expectedUTF32LE), "utf-32le", toUTF32LEOffs ))
+            expectedUTF32LE, sizeof(expectedUTF32LE), "utf-32le", toUTF32LEOffs,FALSE ))
         log_err("u-> utf-32le did not match.\n");
     /*UTF32 BE*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedUTF32BE, sizeof(expectedUTF32BE), "utf-32be", toUTF32BEOffs ))
+            expectedUTF32BE, sizeof(expectedUTF32BE), "utf-32be", toUTF32BEOffs,FALSE ))
         log_err("u-> utf-32be did not match.\n");
     /*LATIN_1*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedLATIN1, sizeof(expectedLATIN1), "LATIN_1", toLATIN1Offs ))
+            expectedLATIN1, sizeof(expectedLATIN1), "LATIN_1", toLATIN1Offs,FALSE ))
         log_err("u-> LATIN_1 did not match.\n");
     /*EBCDIC_STATEFUL*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedIBM930, sizeof(expectedIBM930), "ibm-930", toIBM930Offs ))
+            expectedIBM930, sizeof(expectedIBM930), "ibm-930", toIBM930Offs,FALSE ))
         log_err("u-> ibm-930 did not match.\n");
 
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs ))
+            expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,FALSE ))
         log_err("u-> iso-8859-3 did not match.\n");
 
     /*MBCS*/
 
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedIBM943, sizeof(expectedIBM943), "ibm-943", toIBM943Offs ))
+            expectedIBM943, sizeof(expectedIBM943), "ibm-943", toIBM943Offs,FALSE ))
         log_err("u-> ibm-943 [UCNV_MBCS] not match.\n");
     /*DBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedIBM835, sizeof(expectedIBM835), "ibm-835", toIBM835Offs ))
+            expectedIBM835, sizeof(expectedIBM835), "ibm-835", toIBM835Offs,FALSE ))
         log_err("u-> ibm-835 [UCNV_DBCS] not match.\n");
     /*SBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs ))
+            expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs,FALSE ))
         log_err("u-> ibm-920 [UCNV_SBCS] not match.\n");
     /*SBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs ))
+            expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,FALSE ))
         log_err("u-> iso-8859-3 did not match.\n");
 
  
@@ -762,56 +769,56 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 #if 1
     /*UTF-8*/
     if(!testConvertToU(expectedUTF8, sizeof(expectedUTF8),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs,FALSE ))
       log_err("utf8 -> u did not match\n");
     /*ISO-2022*/
     if(!testConvertToU(expectedISO2022, sizeof(expectedISO2022),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ISO_2022", fmISO2022Offs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ISO_2022", fmISO2022Offs,FALSE ))
       log_err("iso-2022  -> u  did not match.\n");
     /*UTF16 LE*/
     if(!testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs,FALSE ))
       log_err("utf-16le -> u  did not match.\n");
     /*UTF16 BE*/
     if(!testConvertToU(expectedUTF16BE, sizeof(expectedUTF16BE),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16be", fmUTF16BEOffs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16be", fmUTF16BEOffs,FALSE ))
       log_err("utf-16be -> u  did not match.\n");
     /*UTF32 LE*/
     if(!testConvertToU(expectedUTF32LE, sizeof(expectedUTF32LE),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-32le", fmUTF32LEOffs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-32le", fmUTF32LEOffs,FALSE ))
       log_err("utf-32le -> u  did not match.\n");
     /*UTF32 BE*/
     if(!testConvertToU(expectedUTF32BE, sizeof(expectedUTF32BE),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-32be", fmUTF32BEOffs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-32be", fmUTF32BEOffs,FALSE ))
       log_err("utf-32be -> u  did not match.\n");
     /*EBCDIC_STATEFUL*/
     if(!testConvertToU(expectedIBM930, sizeof(expectedIBM930),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-930", fmIBM930Offs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-930", fmIBM930Offs,FALSE ))
       log_err("ibm-930  -> u  did not match.\n");
     /*MBCS*/
     if(!testConvertToU(expectedIBM943, sizeof(expectedIBM943),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-943", fmIBM943Offs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-943", fmIBM943Offs,FALSE ))
       log_err("ibm-943 -> u  did not match.\n");
 
     /* Try it again to make sure it still works */
     if(!testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs ))
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs,FALSE ))
       log_err("utf-16le -> u  did not match.\n");
 
     if(!testConvertToU(expectedMaltese913, sizeof(expectedMaltese913),
-               malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]), "latin3", NULL))
+               malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]), "latin3", NULL,FALSE))
       log_err("latin3[813] -> u did not match\n");
 
     if(!testConvertFromU(malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]),
-            expectedMaltese913, sizeof(expectedMaltese913), "iso-8859-3", NULL ))
+            expectedMaltese913, sizeof(expectedMaltese913), "iso-8859-3", NULL,FALSE ))
         log_err("u-> latin3[813] did not match.\n");  
 
    /*LMBCS*/
     if(!testConvertFromU(LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]),
-            expectedLMBCS, sizeof(expectedLMBCS), "LMBCS-1", toLMBCSOffs ))
+            expectedLMBCS, sizeof(expectedLMBCS), "LMBCS-1", toLMBCSOffs,FALSE ))
         log_err("u-> LMBCS-1 did not match.\n");
     if(!testConvertToU(expectedLMBCS, sizeof(expectedLMBCS),
-               LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs ))
+               LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs,FALSE))
       log_err("LMBCS-1 -> u  did not match.\n");
 
 
@@ -830,12 +837,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest1, sizeof(expectedtest1), "test1", totest1Offs ))
+                expectedtest1, sizeof(expectedtest1), "test1", totest1Offs,FALSE ))
             log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToU(test1input, sizeof(test1input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", fromtest1Offs ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", fromtest1Offs ,FALSE))
             log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
 
     }
@@ -855,12 +862,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest3, sizeof(expectedtest3), "test3", totest3Offs ))
+                expectedtest3, sizeof(expectedtest3), "test3", totest3Offs,FALSE ))
             log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToU(test3input, sizeof(test3input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", fromtest3Offs ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", fromtest3Offs ,FALSE))
             log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n");
 
     }
@@ -880,12 +887,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest4, sizeof(expectedtest4), "test4", totest4Offs ))
+                expectedtest4, sizeof(expectedtest4), "test4", totest4Offs,FALSE ))
             log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToU(test4input, sizeof(test4input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", fromtest4Offs ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", fromtest4Offs,FALSE ))
             log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n");
 
     }
@@ -956,19 +963,19 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             16, 16, 16, 17, 17, 17, 18, 18, 18
         };
 
-        if(!testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets)) {
+        if(!testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE)) {
             log_err("u-> UTF-7 did not match.\n");
         }
 
-        if(!testConvertToU(utf7, sizeof(utf7), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7", toUnicodeOffsets)) {
+        if(!testConvertToU(utf7, sizeof(utf7), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7", toUnicodeOffsets,FALSE)) {
             log_err("UTF-7 -> u  did not match.\n");
         }
 
-        if(!testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR)) {
+        if(!testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,FALSE)) {
             log_err("u-> UTF-7,version=1 did not match.\n");
         }
 
-        if(!testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7,version=1", toUnicodeOffsetsR)) {
+        if(!testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7,version=1", toUnicodeOffsetsR,FALSE)) {
             log_err("UTF-7,version=1 -> u  did not match.\n");
         }
     }
@@ -1007,7 +1014,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             0, 1, 5, 6, 7, 12, 17, 17, 21, 23, 24, 28
         };
         if(!testConvertToU(utf8, sizeof(utf8),
-                utf8Expected, sizeof(utf8Expected)/sizeof(utf8Expected[0]), "utf-8", utf8Offsets ))
+                utf8Expected, sizeof(utf8Expected)/sizeof(utf8Expected[0]), "utf-8", utf8Offsets ,FALSE))
             log_err("u-> utf-8 did not match.\n");
 
     }
@@ -1038,7 +1045,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             0, 4, 8, 12, 16, 20, 24
         };
         if(!testConvertToU(utf32, sizeof(utf32),
-                utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32be", utf32Offsets ))
+                utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32be", utf32Offsets ,FALSE))
             log_err("u-> utf-32be did not match.\n");
 
     }
@@ -1069,7 +1076,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             0, 4, 8, 12, 16, 20, 24
         };
         if(!testConvertToU(utf32, sizeof(utf32),
-                utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32le", utf32Offsets ))
+                utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32le", utf32Offsets,FALSE ))
             log_err("u-> utf-32le did not match.\n");
 
     }
@@ -1752,7 +1759,8 @@ TestISO_2022() {
         0x61,
         0xc0, 0x80,
         0xe0, 0x80, 0x80,
-        0xf0, 0x80, 0x80, 0x80
+        0xf0, 0x80, 0x80, 0x80,
+
       
     };
 
@@ -2093,21 +2101,15 @@ static void
 TestISO_2022_JP() {
     /* test input */
     static const uint16_t in[]={  
-        0x0041,/*0x00E9,*/0x3000, 0x3001, 0x3002, 0x0020, 0xFF0E, 0x30FB, 0xFF1A, 0xFF1B, 0x000D, 0x000A,
+        0x0041,/*0x00E9,*/0x3000, 0x3001, 0x3002, 0x0020, 0x000D, 0x000A,
         0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x000D, 0x000A, 
-        0xFF1F, 0xFF01, 0x309B, 0x309C, 0x00B4, 0xFF40, 0x00A8, 0xFF3E, 0x000D, 0x000A,
         0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 0x0051, 0x0052, 0x000D, 0x000A,
-        0xFFE3, 0xFF3F, 0x30FD, 0x30FE, 0x309D, 0x309E, 0x3003, 0x4EDD, 0x000D, 0x000A, 
         0x3005, 0x3006, 0x3007, 0x30FC, 0x2015, 0x2010, 0xFF0F, 0x005C, 0x000D, 0x000A, 
-        0x301C, 0x2016, 0xFF5C, 0x2026, 0x2025, 0x2018, 0x2019, 0x201C, 0x000D, 0x000A, 
-        0x201D, 0xFF08, 0xFF09, 0x3014, 0xFF75, 0xFF76, 0xFF77, 0xFF78, 0x000D, 0x000A,
-        0xFF79, 0xFF7A, 0xFF7B, 0xFF7C, 0xFF7D, 0xFF7E, 0xFF7F, 0xFF80, 0x000D, 0x000A,
+        0x301C, 0x2016, 0x2026, 0x2025, 0x2018, 0x2019, 0x201C, 0x000D, 0x000A, 
+        0x201D, 0x3014, 0x000D, 0x000A,
         0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
-        0xFF81, 0xFF82, 0xFF83, 0xFF84, 0xFF85, 0xFF86, 0xFF87, 0xFF88, 0x000D, 0x000A,
         0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
-        0xFF89, 0xFF8A, 0xFF8B, 0x0020, 0xFF8D, 0xFF8E, 0xFF8F, 0xFF90, 0x000D, 0x000A,
-        0xFF91, 0xFF92, 0xFF93, 0xFF94, 0xFF95, 0xFF96, 0xFF97, 0xFF98, 0x000D, 0x000A
-      };
+        };
     const UChar* uSource;
     const UChar* uSourceLimit;
     const char* cSource;
@@ -2180,19 +2182,13 @@ TestISO_2022_JP_1() {
         0x3000, 0x3001, 0x3002, 0x0020, 0xFF0E, 0x30FB, 0xFF1A, 0xFF1B, 0x000D, 0x000A,
         0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x000D, 0x000A, 
         0x52C8, 0x52CC, 0x52CF, 0x52D1, 0x52D4, 0x52D6, 0x52DB, 0x52DC, 0x000D, 0x000A,
-        0xFF1F, 0xFF01, 0x309B, 0x309C, 0x00B4, 0xFF40, 0x00A8, 0xFF3E, 0x000D, 0x000A,
         0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 0x0051, 0x0052, 0x000D, 0x000A,
-        0xFFE3, 0xFF3F, 0x30FD, 0x30FE, 0x309D, 0x309E, 0x3003, 0x4EDD, 0x000D, 0x000A, 
         0x3005, 0x3006, 0x3007, 0x30FC, 0x2015, 0x2010, 0xFF0F, 0x005C, 0x000D, 0x000A, 
-        0x301C, 0x2016, 0xFF5C, 0x2026, 0x2025, 0x2018, 0x2019, 0x201C, 0x000D, 0x000A, 
-        0x201D, 0xFF08, 0xFF09, 0x3014, 0xFF75, 0xFF76, 0xFF77, 0xFF78, 0x000D, 0x000A,
-        0xFF79, 0xFF7A, 0xFF7B, 0xFF7C, 0xFF7D, 0xFF7E, 0xFF7F, 0xFF80, 0x000D, 0x000A,
+        0x301C, 0x2016, 0x2026, 0x2025, 0x2018, 0x2019, 0x201C, 0x000D, 0x000A, 
+        0x201D, 0x000D, 0x000A,
         0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
-        0x4F94, 0x4F97, 0x52BA, 0x52BB, 0x52BD, 0x52C0, 0x52C4, 0x52C6, 0x000D, 0x000A,
-        0xFF81, 0xFF82, 0xFF83, 0xFF84, 0xFF85, 0xFF86, 0xFF87, 0xFF88, 0x000D, 0x000A,
-        0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
-        0xFF89, 0xFF8A, 0xFF8B, 0x0020, 0xFF8D, 0xFF8E, 0xFF8F, 0xFF90, 0x000D, 0x000A,
-        0xFF91, 0xFF92, 0xFF93, 0xFF94, 0xFF95, 0xFF96, 0xFF97, 0xFF98, 0x000D, 0x000A,
+        0x4F94, 0x4F97, 0x52BA, 0x52BB, 0x52BD, 0x52C0, 0x52C4, 0x52C6, 0x000D, 0x000A,    
+        0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,        
         0x4F78, 0x4F79, 0x4F7A, 0x4F7D, 0x4F7E, 0x4F81, 0x4F82, 0x4F84, 0x000D, 0x000A,
         0x4F85, 0x4F89, 0x4F8A, 0x4F8C, 0x4F8E, 0x4F90, 0x4F92, 0x4F93, 0x000D, 0x000A,
         0x52E1, 0x52E5, 0x52E8, 0x52E9, 0x000D, 0x000A
@@ -2412,6 +2408,178 @@ TestISO_2022_KR() {
     free(offsets);
 }
 
+static void
+TestJIS(){
+    /* From Unicode */
+    {
+        /* JIS Encoding */
+        UChar sampleTextJIS[] ={
+            0xFF81, 0xFF82,
+            0x30EC, 0x30ED,
+            0x30EE, 0x30EF,
+            0xFF93, 0xFF94,
+            0xFF95, 0xFF96,
+            0xFF97, 0xFF98
+        };
+        const uint8_t expectedISO2022JIS[] ={ 
+                0x1b, 0x24, 0x42, 
+                0x25, 0x41, 0x25, 0x44,
+                0x25, 0x6c, 0x25, 0x6d,
+                0x25, 0x6e, 0x25, 0x6F,
+                0x25, 0x62, 0x25, 0x64,
+                0x25, 0x66, 0x25, 0x68,
+                0x25, 0x69, 0x25, 0x6a
+
+        };
+        int32_t fmISO2022JISOffs[] ={ 
+            0,0,0,
+            0,0,1,1,
+            2,2,3,3,
+            4,4,5,5,
+            6,6,7,7,
+            8,8,9,9,
+            10,10,11,11
+                
+        };
+
+        /* JIS7 Encoding */
+        const uint8_t expectedISO2022JIS7[] ={ 
+                0x1b, 0x28, 0x49, 
+                0x41, 0x42,
+                0x1b, 0x24, 0x42,
+                0x25, 0x6c, 0x25, 0x6d,
+                0x25, 0x6e, 0x25, 0x6F,
+                0x1b, 0x28, 0x49,
+                0x53, 0x54,
+                0x55, 0x56,
+                0x57, 0x58
+
+        };
+        int32_t fmISO2022JIS7Offs[] ={ 
+            0,0,0,
+            0,1,
+            2,2,2,
+            2,2,3,3,
+            4,4,5,5,
+            6,6,6,
+            6,7,
+            8,9,
+            10,11
+                
+        };
+        
+        /* JIS8 Encoding */
+        const uint8_t expectedISO2022JIS8[] ={ 
+                0x1b, 0x28, 0x4A, 
+                0xC1, 0xC2,
+                0x1b, 0x24, 0x42,
+                0x25, 0x6c, 0x25, 0x6d,
+                0x25, 0x6e, 0x25, 0x6F,
+                0x1b, 0x28, 0x4A,
+                0xD3, 0xD4,
+                0xD5, 0xD6,
+                0xD7, 0xD8
+
+        };
+        int32_t fmISO2022JIS8Offs[] ={ 
+            0,0,0,
+            0,1,
+            2,2,2,
+            2,2,3,3,
+            4,4,5,5,
+            6,6,6,
+            6,7,
+            8,9,
+            10,11
+                
+        }; 
+        if(!testConvertFromU(sampleTextJIS, sizeof(sampleTextJIS)/sizeof(sampleTextJIS[0]),
+                expectedISO2022JIS, sizeof(expectedISO2022JIS), "JIS", fmISO2022JISOffs,TRUE ))
+            log_err("u->JIS  did not match.\n");
+        if(!testConvertFromU(sampleTextJIS, sizeof(sampleTextJIS)/sizeof(sampleTextJIS[0]),
+                expectedISO2022JIS7, sizeof(expectedISO2022JIS7), "JIS7", fmISO2022JIS7Offs,FALSE ))
+            log_err("u-> JIS7  did not match.\n");
+
+        if(!testConvertFromU(sampleTextJIS, sizeof(sampleTextJIS)/sizeof(sampleTextJIS[0]),
+                expectedISO2022JIS8, sizeof(expectedISO2022JIS8), "JIS8", fmISO2022JIS8Offs,FALSE ))
+            log_err("u-> JIS8 did not match.\n");
+
+
+    }
+    /*To Unicode*/
+    {
+        const uint8_t sampleTextJIS[] = {
+            0x1b,0x28,0x48,0x41,0x42, /*jis-Roman*/
+            0x1b,0x28,0x49,0x41,0x42, /*Katakana Set*/
+            0x1b,0x26,0x40,0x1b,0x24,0x42,0x21,0x21 /*recognize and ignore <esc>&@*/
+        };
+        const uint16_t expectedISO2022JIS[] = {
+            0x0041, 0x0042,
+            0xFF81, 0xFF82,
+            0x3000
+        };
+        int32_t  toISO2022JISOffs[]={ 
+            3,4,
+            8,9,
+            16
+        };
+        
+        const uint8_t sampleTextJIS7[] = {
+            0x1b,0x28,0x48,0x41,0x42, /*JIS7-Roman*/
+            0x1b,0x28,0x49,0x41,0x42, /*Katakana Set*/
+            0x1b,0x24,0x42,0x21,0x21,
+            0x0e,0x41,0x42,0x0f,      /*Test Katakana set with SI and SO */
+            0x21,0x22,
+            0x1b,0x26,0x40,0x1b,0x24,0x42,0x21,0x21 /*recognize and ignore <esc>&@*/
+        };
+        const uint16_t expectedISO2022JIS7[] = {
+            0x0041, 0x0042,
+            0xFF81, 0xFF82,
+            0x3000,
+            0xFF81, 0xFF82,
+            0x3001,
+            0x3000
+        };
+        int32_t  toISO2022JIS7Offs[]={ 
+            3,4,
+            8,9,
+            13,16,
+            17,
+            19,27
+        };
+        const uint8_t sampleTextJIS8[] = {
+            0x1b,0x28,0x48,0x41,0x42, /*JIS8-Roman*/
+            0xa1,0xc8,0xd9,/*Katakana Set*/
+            0x1b,0x28,0x42,
+            0x41,0x42,
+            0xb1,0xc3, /*Katakana Set*/
+            0x1b,0x24,0x42,0x21,0x21 
+        };
+        const uint16_t expectedISO2022JIS8[] = {
+            0x0041, 0x0042,
+            0xff61, 0xff88, 0xff99, 
+            0x0041, 0x0042,
+            0xff71, 0xff83,
+            0x3000
+        };
+        int32_t  toISO2022JIS8Offs[]={ 
+            3, 4,  5,  6, 
+            7, 11, 12, 13, 
+            14, 18,
+        }; 
+
+      if(!testConvertToU(sampleTextJIS,sizeof(sampleTextJIS),expectedISO2022JIS, 
+            sizeof(expectedISO2022JIS)/sizeof(expectedISO2022JIS[0]),"JIS", toISO2022JISOffs,TRUE))
+            log_err("JIS  -> u  did not match.\n");
+      if(!testConvertToU(sampleTextJIS7,sizeof(sampleTextJIS7),expectedISO2022JIS7, 
+            sizeof(expectedISO2022JIS7)/sizeof(expectedISO2022JIS7[0]),"JIS7", toISO2022JIS7Offs,TRUE))
+            log_err("JIS7  -> u  did not match.\n");
+      if(!testConvertToU(sampleTextJIS8,sizeof(sampleTextJIS8),expectedISO2022JIS8, 
+            sizeof(expectedISO2022JIS8)/sizeof(expectedISO2022JIS8[0]),"JIS8", toISO2022JIS8Offs,TRUE))
+            log_err("JIS8  -> u  did not match.\n");
+    }
+
+}
 static void
 TestISO_2022_CN_EXT() {
     /* test input */
