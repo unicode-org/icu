@@ -622,8 +622,10 @@ typedef struct {
       UBool jamoSpecial;                    /* is jamoSpecial */
       uint8_t padding[3];                   /* for guaranteed alignment */
       UVersionInfo version;
+      UVersionInfo UCAVersion;              /* version of the UCA, read from file */
+      UVersionInfo UCDVersion;              /* UCD version, obtained by u_getUnicodeVersion */
       char charsetName[32];                 /* for charset CEs */
-      uint8_t reserved[64];                 /* for future use */
+      uint8_t reserved[56];                 /* for future use */
 } UCATableHeader;
 
 #define U_UNKNOWN_STATE 0
