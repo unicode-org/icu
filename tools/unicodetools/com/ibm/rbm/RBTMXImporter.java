@@ -9,8 +9,7 @@ package com.ibm.rbm;
 import java.io.*;
 import java.util.*;
 
-import org.apache.xerces.parsers.*;
-import org.apache.xerces.dom.*;
+import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -28,7 +27,7 @@ import com.ibm.rbm.gui.RBManagerGUI;
  */
 public class RBTMXImporter extends RBImporter {
 	
-    DocumentImpl tmx_xml = null;
+    Document tmx_xml = null;
 
     /**
      * Basic constructor for the TMX importer from the parent RBManager data and a Dialog title.
@@ -61,7 +60,7 @@ public class RBTMXImporter extends RBImporter {
             //is.setEncoding("UTF-8");
             DOMParser parser = new DOMParser();
             parser.parse(is);
-            tmx_xml = (DocumentImpl)parser.getDocument();
+            tmx_xml = parser.getDocument();
         } catch (Exception e) {
             RBManagerGUI.debugMsg(e.getMessage());
             e.printStackTrace(System.err);
@@ -72,8 +71,9 @@ public class RBTMXImporter extends RBImporter {
     }
     
     private void importDoc() {
-        if (tmx_xml == null) return;
-        ElementImpl root = (ElementImpl)tmx_xml.getDocumentElement();
+        if (tmx_xml == null)
+        	return;
+        Element root = tmx_xml.getDocumentElement();
         Node node = root.getFirstChild();
         while (node != null && (node.getNodeType() != Node.ELEMENT_NODE || !(node.getNodeName().equalsIgnoreCase("header")))) {
             node = node.getNextSibling();
@@ -83,27 +83,29 @@ public class RBTMXImporter extends RBImporter {
         while (node != null && (node.getNodeType() != Node.ELEMENT_NODE || !(node.getNodeName().equalsIgnoreCase("body")))) {
             node = node.getNextSibling();
         }
-        ElementImpl body = (ElementImpl)node;
+        Element body = (Element)node;
         resolveEncodings(getEncodingsVector(body));
 		
         // Now do the actual import resource by resource
         NodeList tu_list = body.getElementsByTagName("tu");
         for (int i=0; i < tu_list.getLength(); i++) {
-            ElementImpl tu_elem = (ElementImpl)tu_list.item(i);
+            Element tu_elem = (Element)tu_list.item(i);
             // Get the key value
             String name = tu_elem.getAttribute("tuid");
-            if (name == null || name.length() < 1) continue;
+            if (name == null || name.length() < 1)
+            	continue;
             // Get the group if it exists
             String group = null;
             NodeList prop_list = tu_elem.getElementsByTagName("prop");
             for (int j=0; j < prop_list.getLength(); j++) {
-                ElementImpl prop_elem = (ElementImpl)prop_list.item(j);
+                Element prop_elem = (Element)prop_list.item(j);
                 String type = prop_elem.getAttribute("type");
                 if (type != null && type.equals("x-Group")) {
                     prop_elem.normalize();
                     NodeList text_list = prop_elem.getChildNodes();
-                    if (text_list.getLength() < 1) continue;
-                    TextImpl text_elem = (TextImpl)text_list.item(0);
+                    if (text_list.getLength() < 1)
+                    	continue;
+                    Text text_elem = (Text)text_list.item(0);
                     group = text_elem.getNodeValue();
                 }
             }
@@ -112,63 +114,76 @@ public class RBTMXImporter extends RBImporter {
             NodeList tuv_list = tu_elem.getElementsByTagName("tuv");
             // For each tuv element
             for (int j=0; j < tuv_list.getLength(); j++) {
-                ElementImpl tuv_elem = (ElementImpl)tuv_list.item(j);
+                Element tuv_elem = (Element)tuv_list.item(j);
                 String encoding = tuv_elem.getAttribute("lang");
                 // Get the current encoding
                 if (encoding == null) continue;
                 char array[] = encoding.toCharArray();
                 for (int k=0; k < array.length; k++) {
-                    if (array[k] == '-') array[k] = '_';
+                    if (array[k] == '-')
+                    	array[k] = '_';
                 }
                 encoding = String.valueOf(array);
                 // Get the translation value
                 NodeList seg_list = tuv_elem.getElementsByTagName("seg");
-                if (seg_list.getLength() < 1) continue;
-                ElementImpl seg_elem = (ElementImpl)seg_list.item(0);
+                if (seg_list.getLength() < 1)
+                	continue;
+                Element seg_elem = (Element)seg_list.item(0);
                 seg_elem.normalize();
                 NodeList text_list = seg_elem.getChildNodes();
-                if (text_list.getLength() < 1) continue;
-                TextImpl text_elem = (TextImpl)text_list.item(0);
+                if (text_list.getLength() < 1)
+                	continue;
+                Text text_elem = (Text)text_list.item(0);
                 String value = text_elem.getNodeValue();
-                if (value == null || value.length() < 1) continue;
+                if (value == null || value.length() < 1)
+                	continue;
                 // Create the bundle item
                 BundleItem item = new BundleItem(null, name, value);
                 // Get creation, modification values
                 item.setCreatedDate(tuv_elem.getAttribute("creationdate"));
                 item.setModifiedDate(tuv_elem.getAttribute("changedate"));
-                if (tuv_elem.getAttribute("changeid") != null) item.setModifier(tuv_elem.getAttribute("changeid"));
-                if (tuv_elem.getAttribute("creationid") != null) item.setCreator(tuv_elem.getAttribute("creationid"));
+                if (tuv_elem.getAttribute("changeid") != null)
+                	item.setModifier(tuv_elem.getAttribute("changeid"));
+                if (tuv_elem.getAttribute("creationid") != null)
+                	item.setCreator(tuv_elem.getAttribute("creationid"));
                 // Get properties specified
                 prop_list = tuv_elem.getElementsByTagName("prop");
                 Hashtable lookups = null;
                 for (int k=0; k < prop_list.getLength(); k++) {
-                    ElementImpl prop_elem = (ElementImpl)prop_list.item(k);
+                    Element prop_elem = (Element)prop_list.item(k);
                     String type = prop_elem.getAttribute("type");
                     if (type != null && type.equals("x-Comment")) {
                         // Get the comment
                         prop_elem.normalize();
                         text_list = prop_elem.getChildNodes();
                         if (text_list.getLength() < 1) continue;
-                        text_elem = (TextImpl)text_list.item(0);
+                        text_elem = (Text)text_list.item(0);
                         String comment = text_elem.getNodeValue();
-                        if (comment != null && comment.length() > 0) item.setComment(comment);
+                        if (comment != null && comment.length() > 0)
+                        	item.setComment(comment);
                     } else if (type != null && type.equals("x-Translated")) {
                         // Get the translated flag value
                         prop_elem.normalize();
                         text_list = prop_elem.getChildNodes();
                         if (text_list.getLength() < 1) continue;
-                        text_elem = (TextImpl)text_list.item(0);
+                        text_elem = (Text)text_list.item(0);
                         if (text_elem.getNodeValue() != null) {
-                            if (text_elem.getNodeValue().equalsIgnoreCase("true")) item.setTranslated(true);
-                            else if (text_elem.getNodeValue().equalsIgnoreCase("false")) item.setTranslated(false);
-                            else item.setTranslated(getDefaultTranslated());
-                        } else item.setTranslated(getDefaultTranslated());
+                            if (text_elem.getNodeValue().equalsIgnoreCase("true"))
+                            	item.setTranslated(true);
+                            else if (text_elem.getNodeValue().equalsIgnoreCase("false"))
+                            	item.setTranslated(false);
+                            else
+                            	item.setTranslated(getDefaultTranslated());
+                        }
+                        else
+                        	item.setTranslated(getDefaultTranslated());
                     } else if (type != null && type.equals("x-Lookup")) {
                         // Get a lookup value
                         prop_elem.normalize();
                         text_list = prop_elem.getChildNodes();
-                        if (text_list.getLength() < 1) continue;
-                        text_elem = (TextImpl)text_list.item(0);
+                        if (text_list.getLength() < 1)
+                        	continue;
+                        text_elem = (Text)text_list.item(0);
                         if (text_elem.getNodeValue() != null) {
                             String text = text_elem.getNodeValue();
                             if (text.indexOf("=") > 0) {
@@ -179,7 +194,9 @@ public class RBTMXImporter extends RBImporter {
                                     lookups.put(lkey, lvalue);
                                 } catch (Exception ex) { /* String out of bounds - Ignore and go on */ }
                             }
-                        } else item.setTranslated(getDefaultTranslated());
+                        }
+                        else
+                        	item.setTranslated(getDefaultTranslated());
                     }
                 }
                 if (lookups != null) item.setLookups(lookups);
@@ -188,29 +205,35 @@ public class RBTMXImporter extends RBImporter {
         }
     }
 	
-    private Vector getEncodingsVector(ElementImpl body) {
+    private Vector getEncodingsVector(Element body) {
         String empty = "";
-        if (body == null) return null;
+        if (body == null)
+        	return null;
         Hashtable hash = new Hashtable();
         NodeList tu_list = body.getElementsByTagName("tu");
         for (int i=0; i < tu_list.getLength(); i++) {
-            ElementImpl tu_elem = (ElementImpl)tu_list.item(i);
+            Element tu_elem = (Element)tu_list.item(i);
             NodeList tuv_list = tu_elem.getElementsByTagName("tuv");
             for (int j=0; j < tuv_list.getLength(); j++) {
-                ElementImpl tuv_elem = (ElementImpl)tuv_list.item(j);
+                Element tuv_elem = (Element)tuv_list.item(j);
                 String encoding = tuv_elem.getAttribute("lang");
-                if (encoding == null) continue;
+                if (encoding == null)
+                	continue;
                 char array[] = encoding.toCharArray();
                 for (int k=0; k < array.length; k++) {
-                    if (array[k] == '-') array[k] = '_';
+                    if (array[k] == '-')
+                    	array[k] = '_';
                 }
                 encoding = String.valueOf(array);
-                if (!(hash.containsKey(encoding))) hash.put(encoding,empty);
+                if (!(hash.containsKey(encoding)))
+                	hash.put(encoding,empty);
             }
         }
         Vector v = new Vector();
         Enumeration enum = hash.keys();
-        while (enum.hasMoreElements()) { v.addElement(enum.nextElement()); }
+        while (enum.hasMoreElements()) {
+        	v.addElement(enum.nextElement());
+        }
         return v;
     }
 }

@@ -185,24 +185,24 @@ public class RBReporter extends JFrame {
 		}
 		if (htmlCheck.isSelected()) {
 			File htmlFile = new File(directory, htmlField.getText());
-			DocumentImpl htmlReport = getHTMLReportz(htmlCombo.getSelectedIndex() == 0);
+			Document htmlReport = getHTMLReportz(htmlCombo.getSelectedIndex() == 0);
 			if (scanCheck.isSelected()) {
 				// Add file scan information
-				ElementImpl html_elem = (ElementImpl)htmlReport.getDocumentElement();
+				Element html_elem = htmlReport.getDocumentElement();
 				NodeList nl = html_elem.getElementsByTagName("BODY");
-				ElementImpl body_elem = (ElementImpl)nl.item(0);
-				ElementImpl h2_elem = (ElementImpl)htmlReport.createElement("H2");
-				TextImpl    h2_text = (TextImpl)htmlReport.createTextNode("Code Scan Results");
-				ElementImpl block_elem = (ElementImpl)htmlReport.createElement("BLOCKQUOTE");
-				ElementImpl p1_elem = (ElementImpl)htmlReport.createElement("P");
-				ElementImpl p2_elem = (ElementImpl)htmlReport.createElement("P");
-				ElementImpl p3_elem = (ElementImpl)htmlReport.createElement("P");
-				TextImpl    p1_text = (TextImpl)htmlReport.createTextNode("Number of unique resources found: " +
-																		  scanner.getNumberMissingResources());
-				TextImpl    p2_text = (TextImpl)htmlReport.createTextNode("Number of resources missing from bundle: " +
-																		  scanner.getNumberMissingResources());
-				TextImpl    p3_text = (TextImpl)htmlReport.createTextNode("Number of potentially unused resources in bundle: " +
-																		  scanner.getNumberUnusedResources());
+				Element body_elem = (Element)nl.item(0);
+				Element h2_elem = htmlReport.createElement("H2");
+				Text    h2_text = htmlReport.createTextNode("Code Scan Results");
+				Element block_elem = htmlReport.createElement("BLOCKQUOTE");
+				Element p1_elem = htmlReport.createElement("P");
+				Element p2_elem = htmlReport.createElement("P");
+				Element p3_elem = htmlReport.createElement("P");
+				Text    p1_text = htmlReport.createTextNode("Number of unique resources found: " +
+															scanner.getNumberMissingResources());
+				Text    p2_text = htmlReport.createTextNode("Number of resources missing from bundle: " +
+															scanner.getNumberMissingResources());
+				Text    p3_text = htmlReport.createTextNode("Number of potentially unused resources in bundle: " +
+															scanner.getNumberUnusedResources());
 				
 				h2_elem.appendChild(h2_text);
 				p1_elem.appendChild(p1_text);
@@ -215,19 +215,19 @@ public class RBReporter extends JFrame {
 				body_elem.appendChild(block_elem);
 				
 				// Missing resources from the bundle
-				TextImpl   missing_text = null;
+				Text   missing_text = null;
 				Vector v = scanner.getMissingResources();
 				if (htmlCombo.getSelectedIndex() == 0) {
-					ElementImpl ul_elem = (ElementImpl)htmlReport.createElement("UL");
-					missing_text = (TextImpl)htmlReport.createTextNode("Missing Resources:");
+					Element ul_elem = htmlReport.createElement("UL");
+					missing_text = htmlReport.createTextNode("Missing Resources:");
 					ul_elem.appendChild(missing_text);
 					for (int i=0; i < v.size(); i++) {
 						ScanResult result = (ScanResult)v.elementAt(i);
-						ElementImpl li_elem = (ElementImpl)htmlReport.createElement("LI");
-						ElementImpl br_elem = (ElementImpl)htmlReport.createElement("BR");
-						TextImpl    t1_text = (TextImpl)htmlReport.createTextNode(result.getName() + " (" +
+						Element li_elem = htmlReport.createElement("LI");
+						Element br_elem = htmlReport.createElement("BR");
+						Text    t1_text = htmlReport.createTextNode(result.getName() + " (" +
 																				  result.getOccurances().size() + " Occurances)");
-						TextImpl    t2_text = (TextImpl)htmlReport.createTextNode(result.getOccurances().toString());
+						Text    t2_text = htmlReport.createTextNode(result.getOccurances().toString());
 						li_elem.appendChild(t1_text);
 						li_elem.appendChild(br_elem);
 						li_elem.appendChild(t2_text);
@@ -241,22 +241,22 @@ public class RBReporter extends JFrame {
 						ScanResult result = (ScanResult)v.elementAt(i);
 						buffer.append((i==0 ? "" : ", ") + result.getName() + " (" + result.getOccurances().size() + " Occurances)");
 					}
-					missing_text = (TextImpl)htmlReport.createTextNode(buffer.toString());
-					ElementImpl br_elem = (ElementImpl)htmlReport.createElement("BR");
+					missing_text = htmlReport.createTextNode(buffer.toString());
+					Element br_elem = htmlReport.createElement("BR");
 					p2_elem.appendChild(br_elem);
 					p2_elem.appendChild(missing_text);
 				}
 				// Bundle resources not found in the code
-				TextImpl   unused_text = null;
+				Text   unused_text = null;
 				v = scanner.getUnusedResources();
 				if (htmlCombo.getSelectedIndex() == 0) {
-					ElementImpl ul_elem = (ElementImpl)htmlReport.createElement("UL");
-					unused_text = (TextImpl)htmlReport.createTextNode("Unused Resources:");
+					Element ul_elem = htmlReport.createElement("UL");
+					unused_text = htmlReport.createTextNode("Unused Resources:");
 					ul_elem.appendChild(unused_text);
 					for (int i=0; i < v.size(); i++) {
 						ScanResult result = (ScanResult)v.elementAt(i);
-						ElementImpl li_elem = (ElementImpl)htmlReport.createElement("LI");
-						TextImpl    t1_text = (TextImpl)htmlReport.createTextNode(result.getName() + " (Group: " +
+						Element li_elem = htmlReport.createElement("LI");
+						Text    t1_text = htmlReport.createTextNode(result.getName() + " (Group: " +
 																				  result.getGroupName() + ")");
 						li_elem.appendChild(t1_text);
 						ul_elem.appendChild(li_elem);
@@ -269,8 +269,8 @@ public class RBReporter extends JFrame {
 						ScanResult result = (ScanResult)v.elementAt(i);
 						buffer.append((i==0 ? "" : ", ") + result.getName());
 					}
-					unused_text = (TextImpl)htmlReport.createTextNode(buffer.toString());
-					ElementImpl br_elem = (ElementImpl)htmlReport.createElement("BR");
+					unused_text = htmlReport.createTextNode(buffer.toString());
+					Element br_elem = htmlReport.createElement("BR");
 					p3_elem.appendChild(br_elem);
 					p3_elem.appendChild(unused_text);
 				}
@@ -284,20 +284,20 @@ public class RBReporter extends JFrame {
 		}
 		if (xmlCheck.isSelected()) {
 			File xmlFile = new File(directory, xmlField.getText());
-			DocumentImpl xmlReport = getXMLReportz(xmlCombo.getSelectedIndex() == 0);
+			Document xmlReport = getXMLReportz(xmlCombo.getSelectedIndex() == 0);
 			if (scanCheck.isSelected()) {
 				// Add file scan information
-				ElementImpl root = (ElementImpl)xmlReport.getDocumentElement();
-				ElementImpl code_scan_elem = (ElementImpl)xmlReport.createElement("CODE_SCAN");
-				ElementImpl unique_elem = (ElementImpl)xmlReport.createElement("UNIQUE_RESOURCES");
-				ElementImpl missing_elem = (ElementImpl)xmlReport.createElement("MISSING_RESOURCES");
-				ElementImpl unused_elem = (ElementImpl)xmlReport.createElement("UNUSED_RESOURCES");
-				ElementImpl unique_total_elem = (ElementImpl)xmlReport.createElement("TOTAL");
-				ElementImpl missing_total_elem = (ElementImpl)xmlReport.createElement("TOTAL");
-				ElementImpl unused_total_elem = (ElementImpl)xmlReport.createElement("TOTAL");
-				TextImpl    unique_total_text = (TextImpl)xmlReport.createTextNode(String.valueOf(scanner.getNumberMissingResources()));
-				TextImpl    missing_total_text = (TextImpl)xmlReport.createTextNode(String.valueOf(scanner.getNumberMissingResources()));
-				TextImpl    unused_total_text = (TextImpl)xmlReport.createTextNode(String.valueOf(scanner.getNumberUnusedResources()));
+				Element root = xmlReport.getDocumentElement();
+				Element code_scan_elem = xmlReport.createElement("CODE_SCAN");
+				Element unique_elem = xmlReport.createElement("UNIQUE_RESOURCES");
+				Element missing_elem = xmlReport.createElement("MISSING_RESOURCES");
+				Element unused_elem = xmlReport.createElement("UNUSED_RESOURCES");
+				Element unique_total_elem = xmlReport.createElement("TOTAL");
+				Element missing_total_elem = xmlReport.createElement("TOTAL");
+				Element unused_total_elem = xmlReport.createElement("TOTAL");
+				Text    unique_total_text = xmlReport.createTextNode(String.valueOf(scanner.getNumberMissingResources()));
+				Text    missing_total_text = xmlReport.createTextNode(String.valueOf(scanner.getNumberMissingResources()));
+				Text    unused_total_text = xmlReport.createTextNode(String.valueOf(scanner.getNumberUnusedResources()));
 				
 				unique_total_elem.appendChild(unique_total_text);
 				missing_total_elem.appendChild(missing_total_text);
@@ -313,13 +313,13 @@ public class RBReporter extends JFrame {
 				Vector v = scanner.getMissingResources();
 				for (int i=0; i < v.size(); i++) {
 					ScanResult result = (ScanResult)v.elementAt(i);
-					ElementImpl item_elem = (ElementImpl)xmlReport.createElement("RESOURCE");
+					Element item_elem = xmlReport.createElement("RESOURCE");
 					item_elem.setAttribute("NAME",result.getName());
 					if (xmlCombo.getSelectedIndex() == 0) {
 						Vector occ_v = result.getOccurances();
 						for (int j=0; j < occ_v.size(); j++) {
 							Occurance occ = (Occurance)occ_v.elementAt(j);
-							ElementImpl occ_elem = (ElementImpl)xmlReport.createElement("OCCURANCE");
+							Element occ_elem = xmlReport.createElement("OCCURANCE");
 							occ_elem.setAttribute("FILE_NAME", occ.getFileName());
 							occ_elem.setAttribute("FILE_PATH", occ.getFilePath());
 							occ_elem.setAttribute("LINE_NUMBER", String.valueOf(occ.getLineNumber()));
@@ -332,7 +332,7 @@ public class RBReporter extends JFrame {
 				v = scanner.getUnusedResources();
 				for (int i=0; i < v.size(); i++) {
 					ScanResult result = (ScanResult)v.elementAt(i);
-					ElementImpl item_elem = (ElementImpl)xmlReport.createElement("RESOURCE");
+					Element item_elem = xmlReport.createElement("RESOURCE");
 					item_elem.setAttribute("NAME",result.getName());
 					item_elem.setAttribute("GROUP",result.getGroupName());
 					unused_elem.appendChild(item_elem);
@@ -440,20 +440,20 @@ public class RBReporter extends JFrame {
     /**
      * Returns an XHTML formatted report on the status of the currently opened resource bundle
      */
-    public DocumentImpl getHTMLReportz(boolean detailed) {
-        DocumentImpl html = new DocumentImpl();
-        ElementImpl root = (ElementImpl)html.createElement("HTML");
+    public Document getHTMLReportz(boolean detailed) {
+        Document html = new DocumentImpl();
+        Element root = html.createElement("HTML");
         html.appendChild(root);
-        ElementImpl head_elem = (ElementImpl)html.createElement("HEAD");
-        ElementImpl title_elem = (ElementImpl)html.createElement("TITLE");
-        TextImpl    title_text = (TextImpl)html.createTextNode("Resource Bundle Report - " + rbm.getBaseClass());
-        ElementImpl body_elem = (ElementImpl)html.createElement("BODY");
-        ElementImpl center1_elem = (ElementImpl)html.createElement("CENTER");
-        ElementImpl h1_elem = (ElementImpl)html.createElement("H1");
-        ElementImpl center2_elem = (ElementImpl)html.createElement("CENTER");
-        ElementImpl h3_elem = (ElementImpl)html.createElement("H1");
-        TextImpl    title1_text = (TextImpl)html.createTextNode("Resource Bundle Report: " + rbm.getBaseClass());
-        TextImpl    title2_text = (TextImpl)html.createTextNode("Report Generated: " + (new Date()).toString());
+        Element head_elem = html.createElement("HEAD");
+        Element title_elem = html.createElement("TITLE");
+        Text    title_text = html.createTextNode("Resource Bundle Report - " + rbm.getBaseClass());
+        Element body_elem = html.createElement("BODY");
+        Element center1_elem = html.createElement("CENTER");
+        Element h1_elem = html.createElement("H1");
+        Element center2_elem = html.createElement("CENTER");
+        Element h3_elem = html.createElement("H1");
+        Text    title1_text = html.createTextNode("Resource Bundle Report: " + rbm.getBaseClass());
+        Text    title2_text = html.createTextNode("Report Generated: " + (new Date()).toString());
         Vector bundles = rbm.getBundles();
 		
         title_elem.appendChild(title_text);
@@ -492,17 +492,17 @@ public class RBReporter extends JFrame {
         return buffer.toString();
     }
 	
-    private void getHTMLLanguageReportz(DocumentImpl html, ElementImpl body_elem, boolean detailed, Bundle dict) {
-        ElementImpl h2_elem = (ElementImpl)html.createElement("H2");
-        TextImpl    h2_text = (TextImpl)html.createTextNode("Language: " + (dict.language == null ? dict.encoding : dict.language) +
-                              (dict.country == null ? "" : " - Country: " + dict.country) +
-                              (dict.variant == null ? "" : " - Variant: " + dict.variant));
-        ElementImpl block_elem = (ElementImpl)html.createElement("BLOCKQUOTE");
-        ElementImpl p_elem = (ElementImpl)html.createElement("P");
-        TextImpl    p_text = (TextImpl)html.createTextNode("Number of NLS items in the file: " +
-                             String.valueOf(dict.allItems.size()));
-        ElementImpl ul_elem = (ElementImpl)html.createElement("UL");
-        TextImpl    ul_text = (TextImpl)html.createTextNode("Untranslated NLS keys:");
+    private void getHTMLLanguageReportz(Document html, Element body_elem, boolean detailed, Bundle dict) {
+        Element h2_elem = html.createElement("H2");
+        Text    h2_text = html.createTextNode("Language: " + (dict.language == null ? dict.encoding : dict.language) +
+                          (dict.country == null ? "" : " - Country: " + dict.country) +
+                          (dict.variant == null ? "" : " - Variant: " + dict.variant));
+        Element block_elem = html.createElement("BLOCKQUOTE");
+        Element p_elem = html.createElement("P");
+        Text    p_text = html.createTextNode("Number of NLS items in the file: " +
+                         String.valueOf(dict.allItems.size()));
+        Element ul_elem = html.createElement("UL");
+        Text    ul_text = html.createTextNode("Untranslated NLS keys:");
 		
         h2_elem.appendChild(h2_text);
         p_elem.appendChild(p_text);
@@ -518,15 +518,15 @@ public class RBReporter extends JFrame {
             if (tempItem.isTranslated()) continue;
             untranslated++;
             if (detailed) {
-                ElementImpl li_elem = (ElementImpl)html.createElement("LI");
-                TextImpl    li_text = (TextImpl)html.createTextNode(tempItem.getKey());
+                Element li_elem = html.createElement("LI");
+                Text    li_text = html.createTextNode(tempItem.getKey());
                 li_elem.appendChild(li_text);
                 ul_elem.appendChild(li_elem);
             }
         }
-        ElementImpl p2_elem = (ElementImpl)html.createElement("P");
-        TextImpl    p2_text = (TextImpl)html.createTextNode("Number of NLS items not translated: " +
-                              String.valueOf(untranslated));
+        Element p2_elem = html.createElement("P");
+        Text    p2_text = html.createTextNode("Number of NLS items not translated: " +
+                          String.valueOf(untranslated));
         p2_elem.appendChild(p2_text);
         block_elem.appendChild(p2_elem);
         if (detailed) block_elem.appendChild(ul_elem);
@@ -565,7 +565,7 @@ public class RBReporter extends JFrame {
      * Returns an XML formatted report on the status of the currently open resource bundle
      */ 
 	
-    public DocumentImpl getXMLReportz(boolean detailed) {
+    public Document getXMLReportz(boolean detailed) {
         DocumentImpl xml = new DocumentImpl();
         Element root = xml.createElement("REPORT");
         root.setAttribute("BASECLASS", rbm.getBaseClass());
@@ -596,16 +596,16 @@ public class RBReporter extends JFrame {
         return buffer.toString();
     }
 	
-    private ElementImpl getXMLLanguageReportz(DocumentImpl xml, boolean detailed, Bundle dict) {
-        ElementImpl lang_report_elem = (ElementImpl)xml.createElement("LANGUAGE_REPORT");
-        ElementImpl locale_elem = (ElementImpl)xml.createElement("LOCALE");
+    private Element getXMLLanguageReportz(Document xml, boolean detailed, Bundle dict) {
+        Element lang_report_elem = xml.createElement("LANGUAGE_REPORT");
+        Element locale_elem = xml.createElement("LOCALE");
         locale_elem.setAttribute("LANGUAGE", (dict.language == null ? dict.encoding : dict.language));
         locale_elem.setAttribute("COUNTRY", (dict.country == null ? "" : dict.country));
         locale_elem.setAttribute("VARIANT", (dict.variant == null ? "" : dict.variant));
-        ElementImpl nls_total_elem = (ElementImpl)xml.createElement("NLS_TOTAL");
-        TextImpl    nls_total_text = (TextImpl)xml.createTextNode(String.valueOf(dict.allItems.size()));
-        ElementImpl untranslated_total_elem = (ElementImpl)xml.createElement("UNTRANSLATED_TOTAL");
-        ElementImpl untranslated_elem = (ElementImpl)xml.createElement("UNTRANSLATED");
+        Element nls_total_elem = xml.createElement("NLS_TOTAL");
+        Text    nls_total_text = xml.createTextNode(String.valueOf(dict.allItems.size()));
+        Element untranslated_total_elem = xml.createElement("UNTRANSLATED_TOTAL");
+        Element untranslated_elem = xml.createElement("UNTRANSLATED");
         
         nls_total_elem.appendChild(nls_total_text);
         lang_report_elem.appendChild(locale_elem);
@@ -619,12 +619,12 @@ public class RBReporter extends JFrame {
             BundleItem tempItem = (BundleItem)enum.nextElement();
             if (tempItem.isTranslated()) continue;
             untranslated++;
-            ElementImpl resource_elem = (ElementImpl)xml.createElement("RESOURCEKEY");
-            TextImpl    resource_text = (TextImpl)xml.createTextNode(tempItem.getKey());
+            Element resource_elem = xml.createElement("RESOURCEKEY");
+            Text    resource_text = xml.createTextNode(tempItem.getKey());
             resource_elem.appendChild(resource_text);
             untranslated_elem.appendChild(resource_elem);
         }
-        TextImpl untranslated_total_text = (TextImpl)xml.createTextNode(String.valueOf(untranslated));
+        Text untranslated_total_text = xml.createTextNode(String.valueOf(untranslated));
         untranslated_total_elem.appendChild(untranslated_total_text);
 		
         return lang_report_elem;

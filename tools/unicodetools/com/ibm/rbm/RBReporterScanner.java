@@ -10,8 +10,7 @@ package com.ibm.rbm;
 import java.io.*;
 import java.util.*;
 
-import org.apache.xerces.parsers.*;
-import org.apache.xerces.dom.*;
+import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -24,7 +23,7 @@ import org.xml.sax.*;
  */
 public class RBReporterScanner {
 	private Bundle       bundle;
-	private DocumentImpl config;
+	private Document     config;
 	private Hashtable    fileRules;
 	private Hashtable    parseRules;
 	private Hashtable    results;
@@ -39,12 +38,12 @@ public class RBReporterScanner {
 			InputSource is = new InputSource(new FileInputStream(configFile));
 			DOMParser parser = new DOMParser();
 			parser.parse(is);
-			config = (DocumentImpl)parser.getDocument();
+			config = parser.getDocument();
 		} catch (SAXException saxe) {
 			throw new IOException("Illegal XML Document: " + saxe.getMessage());
 		}
 		
-		ElementImpl root = (ElementImpl)config.getDocumentElement();
+		Element root = config.getDocumentElement();
 		fileRules = getFileRules(root);
 		parseRules = getParseRules(root);
 		
@@ -99,29 +98,29 @@ public class RBReporterScanner {
 	protected boolean performScan() throws IOException {
 		resultsFound = false;
 		
-		ElementImpl root = (ElementImpl)config.getDocumentElement();
+		Element root = config.getDocumentElement();
 		NodeList nl = root.getElementsByTagName("Scan");
 		if (nl.getLength() < 1) return resultsFound;
-		ElementImpl scan_elem = (ElementImpl)nl.item(0);
+		Element scan_elem = (Element)nl.item(0);
 		nl = scan_elem.getElementsByTagName("Directory");
 		for (int i=0; i < nl.getLength(); i++) {
-			ElementImpl dir_elem = (ElementImpl)nl.item(i);
+			Element dir_elem = (Element)nl.item(i);
 			File directory = new File(dir_elem.getAttribute("location"));
 			boolean recurse = dir_elem.getAttribute("recurse_directories").equalsIgnoreCase("true");
 			NodeList rules_list = dir_elem.getElementsByTagName("Rules");
 			if (rules_list.getLength() < 1) continue;
-			ElementImpl rules_elem = (ElementImpl)rules_list.item(0);
+			Element rules_elem = (Element)rules_list.item(0);
 			NodeList frules_list = rules_elem.getElementsByTagName("ApplyFileRule");
 			// For each file rule
 			for (int j=0; j < frules_list.getLength(); j++) {
-				ElementImpl frule_elem = (ElementImpl)frules_list.item(j);
+				Element frule_elem = (Element)frules_list.item(j);
 				FileRule frule = (FileRule)fileRules.get(frule_elem.getAttribute("name"));
 				if (frule == null) continue;
 				NodeList prules_list = frule_elem.getElementsByTagName("ApplyParseRule");
 				Vector prules_v = new Vector();
 				// For each parse rule
 				for (int k=0; k < prules_list.getLength(); k++) {
-					ElementImpl prule_elem = (ElementImpl)prules_list.item(k);
+					Element prule_elem = (Element)prules_list.item(k);
 					ParseRule prule = (ParseRule)parseRules.get(prule_elem.getAttribute("name"));
 					if (prule == null) continue;
 					prules_v.addElement(prule);
@@ -192,15 +191,15 @@ public class RBReporterScanner {
 		}
 	}
 	
-	private Hashtable getFileRules(ElementImpl root) {
+	private Hashtable getFileRules(Element root) {
 		Hashtable result = new Hashtable();
 		NodeList frules_list = root.getElementsByTagName("FileRules");
-		ElementImpl frules_elem = null;
-		if (frules_list.getLength() > 0) frules_elem = (ElementImpl)frules_list.item(0);
+		Element frules_elem = null;
+		if (frules_list.getLength() > 0) frules_elem = (Element)frules_list.item(0);
 		if (frules_elem == null) return result;
 		frules_list = frules_elem.getElementsByTagName("FileRule");
 		for (int i=0; i < frules_list.getLength(); i++) {
-			ElementImpl elem = (ElementImpl)frules_list.item(i);
+			Element elem = (Element)frules_list.item(i);
 			FileRule frule = new FileRule(elem.getAttribute("name"), elem.getAttribute("starts_with"),
 										  elem.getAttribute("ends_with"), elem.getAttribute("contains"));
 			result.put(elem.getAttribute("name"), frule);
@@ -208,15 +207,17 @@ public class RBReporterScanner {
 		return result;
 	}
 	
-	private Hashtable getParseRules(ElementImpl root) {
+	private Hashtable getParseRules(Element root) {
 		Hashtable result = new Hashtable();
 		NodeList prules_list = root.getElementsByTagName("ParseRules");
-		ElementImpl prules_elem = null;
-		if (prules_list.getLength() > 0) prules_elem = (ElementImpl)prules_list.item(0);
-		if (prules_elem == null) return result;
+		Element prules_elem = null;
+		if (prules_list.getLength() > 0)
+			prules_elem = (Element)prules_list.item(0);
+		if (prules_elem == null)
+			return result;
 		prules_list = prules_elem.getElementsByTagName("ParseRule");
 		for (int i=0; i < prules_list.getLength(); i++) {
-			ElementImpl elem = (ElementImpl)prules_list.item(i);
+			Element elem = (Element)prules_list.item(i);
 			ParseRule prule = new ParseRule(elem.getAttribute("name"), elem.getAttribute("follows"),
 											elem.getAttribute("precedes"));
 			result.put(elem.getAttribute("name"), prule);
