@@ -122,19 +122,20 @@ ufile_fill_uchar_buffer(UFILE *f)
         dataSize * sizeof(UChar));
   }
   
+
   /* record how much buffer space is available */
   availLength = UFILE_UCHARBUFFER_SIZE - dataSize;
   
   /* Determine the # of codepage bytes needed to fill our UChar buffer */
   /* weiv: if converter is NULL, we use invariant converter with charwidth = 1)*/
-  maxCPBytes = availLength * (f->fConverter!=NULL?ucnv_getMaxCharSize(f->fConverter):1);
-  
+  maxCPBytes = availLength / (f->fConverter!=NULL?(2*ucnv_getMinCharSize(f->fConverter)):1);
+
   /* Read in the data to convert */
   bytesRead = fread(f->fCharBuffer, 
             sizeof(char), 
             ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE), 
             f->fFile);
-  
+
   /* Set up conversion parameters */
   status    = U_ZERO_ERROR;
   mySource       = f->fCharBuffer;
@@ -149,9 +150,10 @@ ufile_fill_uchar_buffer(UFILE *f)
              f->fUCBuffer + bufferSize,
              &mySource,
              mySourceEnd,
-		     NULL,
-             TRUE,
+	     NULL,
+             (feof(f->fFile) != 0),
              &status);
+
   } else { /*weiv: do the invariant conversion */
       u_charsToUChars(mySource, myTarget, bytesRead);
       myTarget += bytesRead;
