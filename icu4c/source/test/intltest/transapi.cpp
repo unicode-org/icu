@@ -71,8 +71,8 @@ void TransliteratorAPITest::TestgetID() {
          if( ID != trans)
             errln("FAIL: getID returned " + ID + " instead of Latin-Greek");
 		 }
-		
-         for (int i=0; i<Transliterator::countAvailableIDs(); i++){
+ 	 int i;		
+         for (i=0; i<Transliterator::countAvailableIDs(); i++){
 			ID = (UnicodeString) Transliterator::getAvailableID(i);
             t = Transliterator::createInstance(ID);
 			if(t == 0){
