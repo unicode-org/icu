@@ -46,7 +46,7 @@ class _UF: public UnicodeFilter {
  * A filter value of 0 (that is, a UnicodeFilter* f, where f == 0)
  * is equivalent to a NullFilter(TRUE).
  */
-static const char gNullFilterClassID;
+static const char gNullFilterClassID = 0;
 class NullFilter : public _UF {
     UBool result;
 public:
@@ -59,7 +59,7 @@ public:
     virtual UnicodeFunctor* clone() const { return new NullFilter(*this); }
 };
 
-static const char gUnicodeNotFilterClassID;
+static const char gUnicodeNotFilterClassID = 0;
 class UnicodeNotFilter : public _UF {
     UnicodeFilter* filt;
 public:
@@ -91,7 +91,7 @@ UnicodeFilter* UnicodeFilterLogic::createNot(const UnicodeFilter* f) {
     }
 }
 
-static const char gUnicodeAndFilterClassID;
+static const char gUnicodeAndFilterClassID = 0;
 class UnicodeAndFilter : public _UF {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
@@ -154,8 +154,7 @@ UnicodeFilter* UnicodeFilterLogic::createAdoptingAnd(UnicodeFilter* f,
     return new UnicodeAndFilter(f, g);
 }
 
-static const char gUnicodeOrFilterClassID;
-
+static const char gUnicodeOrFilterClassID = 0;
 class UnicodeOrFilter : public _UF {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
