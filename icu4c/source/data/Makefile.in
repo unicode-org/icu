@@ -60,6 +60,7 @@ MISCSRCDIR=$(SRCDATADIR)/misc
 UCMSRCDIR=$(SRCDATADIR)/mappings
 COMINCDIR=$(top_srcdir)/common/unicode
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in
+BUILD_DIRS=$(OUTDIR) $(BUILDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(TESTOUTDIR) $(TESTBUILDDIR) $(OUTTMPDIR) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) 
 
 # relative lib links from pkgdata are the same as for tmp
 TOOLDIR=$(top_builddir)/tools
@@ -93,7 +94,7 @@ OS390INSTALL=install390
 OS390LIST=$(OUTTMPDIR)/icudata390.lst
 endif
 
-all-local: icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
+all-local: build-dir icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
 
 dist-local:
 
@@ -257,12 +258,11 @@ $(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS)
 	  echo $$file >> $@; \
 	done;
 
-build-local: build-dir $(SO_VERSION_DATA) build-data
+build-local: build-dir $(SO_VERSION_DATA) $(ALL_FILES) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
 
-build-data: build-dir $(ALL_FILES) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
-
-build-dir:
-	-$(MKINSTALLDIRS) $(OUTDIR) $(BUILDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(TESTOUTDIR) $(TESTBUILDDIR) $(OUTTMPDIR) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) 
+build-dir: $(BUILD_DIRS)
+$(BUILD_DIRS):
+	-$(MKINSTALLDIRS) $(BUILD_DIRS)
 
 
 # Now, sections for building each kind of data.
