@@ -134,7 +134,7 @@ void locale_set_default_internal(const char *id)
     //   already-created locale objects.
     //
     status = U_ZERO_ERROR;
-    char localeNameBuf[1000];
+    char localeNameBuf[512];
 
     uloc_getName(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
     localeNameBuf[sizeof(localeNameBuf)-1] = 0;  // Force null termination in event of
@@ -409,6 +409,7 @@ Locale &Locale::operator=(const Locale &other)
 
     /* Copy the language and country fields */
     uprv_strcpy(language, other.language);
+    uprv_strcpy(script, other.script);
     uprv_strcpy(country, other.country);
 
     /* The variantBegin is an offset into fullName, just copy it */
@@ -437,7 +438,11 @@ Locale& Locale::init(const char* localeID)
     // just an easy way to have a common error-exit
     // without goto and without another function
     do {
-        char *separator, *prev;
+        char *separator;
+        char *field[5] = {0};
+        int32_t fieldLen[5] = {0};
+        int32_t fieldIdx;
+        int32_t variantField;
         int32_t length;
         UErrorCode err;
 
@@ -445,6 +450,9 @@ Locale& Locale::init(const char* localeID)
             // not an error, just set the default locale
             return *this = getDefault();
         }
+
+        /* preset all fields to empty */
+        language[0] = script[0] = country[0] = 0;
 
         // "canonicalize" the locale ID to ICU/Java format
         err = U_ZERO_ERROR;
@@ -464,50 +472,51 @@ Locale& Locale::init(const char* localeID)
             break;
         }
 
-        /* preset all fields to empty */
-        language[0] = country[0] = 0;
-        variantBegin = (int32_t)uprv_strlen(fullName);
+        variantBegin = length;
 
         /* after uloc_getName() we know that only '_' are separators */
-        separator = uprv_strchr(fullName, SEP_CHAR);
-        if(separator != 0) {
-            /* there is a country field */
-            length = (int32_t)(separator - fullName);
-            if(length > 0) {
-                if(length >= (int32_t)sizeof(language)) {
-                    break; // error: language code too long
-                }
-                uprv_memcpy(language, fullName, length);
-            }
-            language[length] = 0;
+        separator = field[0] = fullName;
+        fieldIdx = 1;
+        while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) && fieldIdx < (int32_t)(sizeof(field)/sizeof(field[0]))-1) {
+            field[fieldIdx] = separator + 1;
+            fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
+            fieldIdx++;
+        }
+        fieldLen[fieldIdx-1] = length - (int32_t)(field[fieldIdx-1] - fullName);
 
-            prev = separator + 1;
-            separator = uprv_strchr(prev, SEP_CHAR);
-            if(separator != 0) {
-                /* there is a variant field */
-                length = (int32_t)(separator - prev);
-                if(length > 0) {
-                    if(length >= (int32_t)sizeof(country)) {
-                        break; // error: country code too long
-                    }
-                    uprv_memcpy(country, prev, length);
-                }
-                country[length] = 0;
+        if (fieldLen[0] >= (int32_t)(sizeof(language))
+            || (fieldLen[1] == 4 && fieldLen[2] >= (int32_t)(sizeof(country)))
+            || (fieldLen[1] != 4 && fieldLen[1] >= (int32_t)(sizeof(country))))
+        {
+            break; // error: one of the fields is too long
+        }
 
-                variantBegin = (int32_t)((separator + 1) - fullName);
-            } else {
-                /* variantBegin==strlen(fullName), length==strlen(language)==prev-1-fullName */
-                if((variantBegin - length - 1) >= (int32_t)sizeof(country)) {
-                    break; // error: country code too long
-                }
-                uprv_strcpy(country, prev);
+        variantField = 0;
+        if (fieldLen[0] > 0) {
+            /* We have a language */
+            uprv_memcpy(language, fullName, fieldLen[0]);
+            language[fieldLen[0]] = 0;
+        }
+        if (fieldLen[1] == 4) {
+            /* We have at least a script */
+            uprv_memcpy(script, fullName + fieldLen[0], fieldLen[1]);
+            script[fieldLen[1]] = 0;
+            variantField = 3;
+            if (fieldLen[2] > 0) {
+                /* We have a country */
+                uprv_memcpy(country, fullName + fieldLen[0] + fieldLen[1], fieldLen[2]);
+                country[fieldLen[2]] = 0;
             }
-        } else {
-            /* variantBegin==strlen(fullName) */
-            if(variantBegin >= (int32_t)sizeof(language)) {
-                break; // error: language code too long
-            }
-            uprv_strcpy(language, fullName);
+        }
+        else if (fieldLen[1] > 0) {
+            /* We have a country and no script */
+            uprv_memcpy(country, field[1], fieldLen[1]);
+            country[fieldLen[1]] = 0;
+            variantField = 2;
+        }
+        if (variantField > 0 && fieldLen[variantField] > 0) {
+            /* We have a variant */
+            variantBegin = (int32_t)(field[variantField] - fullName);
         }
 
         // successful end of init()
@@ -537,6 +546,7 @@ Locale::setToBogus() {
   }
   *fullNameBuffer = 0;
   *language = 0;
+  *script = 0;
   *country = 0;
   fIsBogus = TRUE;
 }
@@ -654,6 +664,50 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
         length=uloc_getDisplayLanguage(fullName, displayLocale.fullName,
                                        buffer, result.getCapacity(),
                                        &errorCode);
+        result.releaseBuffer(length);
+    }
+
+    if(U_FAILURE(errorCode)) {
+        result.truncate(0);
+    }
+
+    return result;
+}
+
+UnicodeString& 
+Locale::getDisplayScript(UnicodeString& dispScript) const
+{
+    return this->getDisplayScript(getDefault(), dispScript);
+}
+
+UnicodeString&
+Locale::getDisplayScript(const Locale &displayLocale,
+                          UnicodeString &result) const {
+    UChar *buffer;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    int32_t length;
+
+    buffer=result.getBuffer(ULOC_FULLNAME_CAPACITY);
+    if(buffer==0) {
+        result.truncate(0);
+        return result;
+    }
+
+    length=uloc_getDisplayScript(fullName, displayLocale.fullName,
+                                  buffer, result.getCapacity(),
+                                  &errorCode);
+    result.releaseBuffer(length);
+
+    if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+        buffer=result.getBuffer(length);
+        if(buffer==0) {
+            result.truncate(0);
+            return result;
+        }
+        errorCode=U_ZERO_ERROR;
+        length=uloc_getDisplayScript(fullName, displayLocale.fullName,
+                                      buffer, result.getCapacity(),
+                                      &errorCode);
         result.releaseBuffer(length);
     }
 

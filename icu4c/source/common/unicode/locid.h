@@ -355,6 +355,15 @@ public:
     inline const char *  getLanguage( ) const;
 
     /**
+     * Returns the locale's ISO-15924 abbreviation script code.
+     * @return      An alias to the code
+     * @see uscript_getShortName
+     * @see uscript_getCode
+     * @draft ICU 2.8
+     */
+    inline const char *  getScript( ) const;
+
+    /**
      * Returns the locale's ISO-3166 country code.
      * @return      An alias to the code
      * @stable ICU 2.0
@@ -415,19 +424,47 @@ public:
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for
-     * user display in the locale specified by "inLocale".  For example, if the locale's
-     * language code is "en" and inLocale's language code is "fr", this function would set
+     * user display in the locale specified by "displayLocale".  For example, if the locale's
+     * language code is "en" and displayLocale's language code is "fr", this function would set
      * dispLang to "Anglais".
-     * @param inLocale  Specifies the locale to be used to display the name.  In other words,
+     * @param displayLocale  Specifies the locale to be used to display the name.  In other words,
      *                  if the locale's language code is "en", passing Locale::getFrench() for
-     *                  inLocale would result in "Anglais", while passing Locale::getGerman()
-     *                  for inLocale would result in "Englisch".
+     *                  displayLocale would result in "Anglais", while passing Locale::getGerman()
+     *                  for displayLocale would result in "Englisch".
      * @param dispLang  Receives the language's display name.
      * @return          A reference to "dispLang".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
+    UnicodeString&  getDisplayLanguage( const   Locale&         displayLocale,
                                                 UnicodeString&  dispLang) const;
+
+    /**
+     * Fills in "dispScript" with the name of this locale's script in a format suitable
+     * for user display in the default locale.  For example, if the locale's script code
+     * is "LATN" and the default locale's language code is "en", this function would set
+     * dispScript to "Latin".
+     * @param dispCountry   Receives the country's display name.
+     * @return              A reference to "dispScript".
+     * @draft ICU 2.8
+     */
+    UnicodeString&  getDisplayScript(          UnicodeString& dispScript) const;
+
+    /**
+     * Fills in "dispScript" with the name of this locale's country in a format suitable
+     * for user display in the locale specified by "displayLocale".  For example, if the locale's
+     * script code is "LATN" and displayLocale's language code is "en", this function would set
+     * dispScript to "Latin".
+     * @param displayLocale      Specifies the locale to be used to display the name.  In other
+     *                      words, if the locale's script code is "LATN", passing
+     *                      Locale::getFrench() for displayLocale would result in "", while
+     *                      passing Locale::getGerman() for displayLocale would result in
+     *                      "".
+     * @param dispCountry   Receives the country's display name.
+     * @return              A reference to "dispScript".
+     * @draft ICU 2.8
+     */
+    UnicodeString&  getDisplayScript(  const   Locale&         displayLocale,
+                                               UnicodeString&  dispScript) const;
 
     /**
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
@@ -442,19 +479,19 @@ public:
 
     /**
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
-     * for user display in the locale specified by "inLocale".  For example, if the locale's
-     * country code is "US" and inLocale's language code is "fr", this function would set
+     * for user display in the locale specified by "displayLocale".  For example, if the locale's
+     * country code is "US" and displayLocale's language code is "fr", this function would set
      * dispCountry to "Etats-Unis".
-     * @param inLocale      Specifies the locale to be used to display the name.  In other
+     * @param displayLocale      Specifies the locale to be used to display the name.  In other
      *                      words, if the locale's country code is "US", passing
-     *                      Locale::getFrench() for inLocale would result in "États-Unis", while
-     *                      passing Locale::getGerman() for inLocale would result in
+     *                      Locale::getFrench() for displayLocale would result in "États-Unis", while
+     *                      passing Locale::getGerman() for displayLocale would result in
      *                      "Vereinigte Staaten".
      * @param dispCountry   Receives the country's display name.
      * @return              A reference to "dispCountry".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
+    UnicodeString&  getDisplayCountry(  const   Locale&         displayLocale,
                                                 UnicodeString&  dispCountry) const;
 
     /**
@@ -468,13 +505,13 @@ public:
 
     /**
      * Fills in "dispVar" with the name of this locale's variant code in a format
-     * suitable for user display in the locale specified by "inLocale".
-     * @param inLocale  Specifies the locale to be used to display the name.
+     * suitable for user display in the locale specified by "displayLocale".
+     * @param displayLocale  Specifies the locale to be used to display the name.
      * @param dispVar   Receives the variant's display name.
      * @return          A reference to "dispVar".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
+    UnicodeString&  getDisplayVariant(  const   Locale&         displayLocale,
                                                 UnicodeString&  dispVar) const;
 
     /**
@@ -492,17 +529,17 @@ public:
 
     /**
      * Fills in "name" with the name of this locale in a format suitable for user display 
-     * in the locale specfied by "inLocale".  This function uses getDisplayLanguage(),
+     * in the locale specfied by "displayLocale".  This function uses getDisplayLanguage(),
      * getDisplayCountry(), and getDisplayVariant() to do its work, and outputs the display
-     * name in the format "language (country[,variant])".  For example, if inLocale is
+     * name in the format "language (country[,variant])".  For example, if displayLocale is
      * fr_FR, then en_US's display name would be "Anglais (États-Unis)", and no_NO_NY's
      * display name would be "norvégien (Norvège,NY)".
-     * @param inLocale  Specifies the locale to be used to display the name.
+     * @param displayLocale  Specifies the locale to be used to display the name.
      * @param name      Receives the locale's display name.
      * @return          A reference to "name".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayName( const   Locale&         inLocale,
+    UnicodeString&  getDisplayName( const   Locale&         displayLocale,
                                             UnicodeString&  name) const;
 
     /**
@@ -604,6 +641,7 @@ private:
     static Locale *getLocaleCache(void);
 
     char language[ULOC_LANG_CAPACITY];
+    char script[ULOC_SCRIPT_CAPACITY];
     char country[ULOC_COUNTRY_CAPACITY];
     int32_t variantBegin;
     char* fullName;
@@ -632,6 +670,12 @@ inline const char *
 Locale::getLanguage() const
 {
     return language;
+}
+
+inline const char *
+Locale::getScript() const
+{
+    return script;
 }
 
 inline const char *
