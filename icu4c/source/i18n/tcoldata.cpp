@@ -37,8 +37,8 @@ TableCollationData::TableCollationData()
     : isFrenchSec(FALSE),
       maxSecOrder(0),
       maxTerOrder(0),
-      isRuleTableLoaded(FALSE),
-      fBogus(FALSE)
+      fBogus(FALSE),
+      isRuleTableLoaded(FALSE)
 {
     mapping = 0;
     contractTable = 0;

@@ -842,9 +842,9 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
       isOverIgnore(FALSE),
       //      sourceCursor(0),
       //targetCursor(0),
+      mPattern(0),
       cursor1(0),
       cursor2(0),
-      mPattern(0),
       dataIsOwned(FALSE),
       data(0)
 {
