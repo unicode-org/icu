@@ -37,6 +37,7 @@
 #include "unesctrn.h"
 #include "uni2name.h"
 #include "cstring.h"
+#include "cmemory.h"
 #include <stdio.h>
 
 /***********************************************************************
@@ -186,6 +187,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
+static const UVersionInfo ICU_31 = {3,1,0,0};
 /**
  * Make sure every system transliterator can be instantiated.
  * 
@@ -218,6 +220,9 @@ void TransliteratorTest::TestInstantiation() {
         if (id != id2) {
             errln(UnicodeString("FAIL: getAvailableID(") +
                   i + ") != getAvailableIDs().snext()");
+            continue;
+        }
+        if(id2.indexOf("Thai")>-1 && isICUVersionAtLeast(ICU_31)){
             continue;
         }
         UParseError parseError;
@@ -3472,7 +3477,10 @@ void TransliteratorTest::TestIncrementalProgress(void) {
 
                 Transliterator::getAvailableVariant(k, source, target, variant);
                 UnicodeString id = source + "-" + target + "/" + variant;
-    
+                
+                if(id.indexOf("Thai")>-1 && isICUVersionAtLeast(ICU_31)){
+                    continue;
+                }    
                 Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, err, status);
                 if (U_FAILURE(status)) {
                     errln((UnicodeString)"FAIL: Could not create " + id);

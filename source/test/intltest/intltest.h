@@ -131,6 +131,12 @@ public:
      */
     static float random();
 
+    /**
+     * Ascertain the version of ICU. Useful for 
+     * time bomb testing
+     */
+    UBool isICUVersionAtLeast(const UVersionInfo x);
+
 protected:
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
     UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE);

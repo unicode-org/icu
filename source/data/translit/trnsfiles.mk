@@ -19,44 +19,8 @@
 #  * To REPLACE the default list and only build with a few
 #     transliterators:
 #    _____________________________________________________
-#    |  TRANLIST_SOURCE = translit_index.txt translit_Any_Publishing.txt
+#    |  TRANLIST_SOURCE = el.txt th.txt
 #
 #
 
-TRANSLIT_SOURCE=t_Any_Accents.txt\
-t_Any_Publishing.txt\
-t_Arab_Latn.txt\
-t_Beng_InterIndic.txt\
-t_Cyrl_Latn.txt\
-t_Deva_InterIndic.txt\
-t_FWidth_HWidth.txt\
-t_Grek_Latn.txt\
-t_Grek_Latn_UNGEGN.txt\
-t_Gujr_InterIndic.txt\
-t_Guru_InterIndic.txt\
-t_Hani_Latn.txt\
-t_Hebr_Latn.txt\
-t_Hira_Kana.txt\
-t_Hira_Latn.txt\
-t_InterIndic_Beng.txt\
-t_InterIndic_Deva.txt\
-t_InterIndic_Gujr.txt\
-t_InterIndic_Guru.txt\
-t_InterIndic_Knda.txt\
-t_InterIndic_Latn.txt\
-t_InterIndic_Mlym.txt\
-t_InterIndic_Orya.txt\
-t_InterIndic_Taml.txt\
-t_InterIndic_Telu.txt\
-t_Knda_InterIndic.txt\
-t_Latn_InterIndic.txt\
-t_Latn_Jamo.txt\
-t_Latn_Kana.txt\
-t_Mlym_InterIndic.txt\
-t_Orya_InterIndic.txt\
-t_Taml_InterIndic.txt\
-t_Telu_InterIndic.txt\
-t_Latn_NPinyn.txt\
-t_Tone_Digit.txt\
-t_Hani_SpHan.txt\
-translit_index.txt
+TRANSLIT_SOURCE=el.txt en.txt
