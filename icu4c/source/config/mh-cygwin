@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.16 2004/03/26 01:22:25 grhoten-oss Exp $
+## $Id: mh-cygwin,v 1.17 2004/03/26 17:57:08 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -70,13 +70,13 @@ LIBUSTDIO=	-L$(LIBDIR) -l$(ICUPREFIX)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< >> $@; [ -s $@ ] || rm -f $@'
 
 ## Versioned target for a shared library.
-FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
-MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 
 ## Versioned libraries rules
-%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
 	$(RM) $@ && cp $< $@
-%.$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+%.$(SO): %$(SO_TARGET_VERSION).$(SO)
 	$(RM) $@ && ln -s $< $@
 
 ##  Bind internal references
