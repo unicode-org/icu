@@ -105,12 +105,6 @@ static uint8_t utf16fixup[32] = {
 #define UCOL_TERTIARYORDERINCREMENT 0x00000001 
 /* maximum ignorable char order value */
 #define UCOL_MAXIGNORABLE 0x00010000          
-/* mask off anything but primary order */
-#define UCOL_PRIMARYORDERMASK 0xffff0000      
-/* mask off anything but secondary order */
-#define UCOL_SECONDARYORDERMASK 0x0000ff00    
-/* mask off anything but tertiary order */
-#define UCOL_TERTIARYORDERMASK 0x000000ff     
 /* mask off secondary and tertiary order */
 #define UCOL_SECONDARYRESETMASK 0x0000ffff    
 /* mask off ignorable char order */
@@ -119,8 +113,19 @@ static uint8_t utf16fixup[32] = {
 #define UCOL_PRIMARYDIFFERENCEONLY 0xffff0000 
 /* use only the primary and secondary difference */
 #define UCOL_SECONDARYDIFFERENCEONLY 0xffffff00  
+
+/* mask off anything but primary order */
+#define UCOL_PRIMARYORDERMASK 0xffff0000      
+/* mask off anything but long primary order */
+#define UCOL_LONGPRIMARYORDERMASK 0xffffff00      
+/* mask off anything but secondary order */
+#define UCOL_SECONDARYORDERMASK 0x0000ff00    
+/* mask off anything but tertiary order */
+#define UCOL_TERTIARYORDERMASK 0x0000003f     
 /* primary order shift */
 #define UCOL_PRIMARYORDERSHIFT 16             
+/* long primary order shift */
+#define UCOL_LONGPRIMARYORDERSHIFT 8             
 /* secondary order shift */
 #define UCOL_SECONDARYORDERSHIFT 8            
 /* minimum sort key offset */
@@ -138,14 +143,14 @@ static uint8_t utf16fixup[32] = {
 /* reseting value for tertiaries */
 #define UCOL_RESETTERTIARY 0x00000002         
 
-#define UCOL_IGNORABLE 0x02020202
-#define UCOL_PRIMIGNORABLE 0x0202
-#define UCOL_SECIGNORABLE 0x02
-#define UCOL_TERIGNORABLE 0x02
+#define UCOL_IGNORABLE 0
+#define UCOL_PRIMIGNORABLE 0
+#define UCOL_SECIGNORABLE 0
+#define UCOL_TERIGNORABLE 0
 
 /* get weights from a CE */
-#define UCOL_PRIMARYORDER(order) (((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT)
-#define UCOL_SECONDARYORDER(order) (((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
+#define UCOL_PRIMARYORDER(order) (isLongPrimary((order))?(((order) & UCOL_LONGPRIMARYORDERMASK)>> UCOL_LONGPRIMARYORDERSHIFT):(((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT))
+#define UCOL_SECONDARYORDER(order) (isLongPrimary((order))?UCOL_UNMARKED:((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
 #define UCOL_TERTIARYORDER(order) ((order) & UCOL_TERTIARYORDERMASK)
 
 /**
@@ -172,22 +177,26 @@ static uint8_t utf16fixup[32] = {
 
 /* a macro that gets a simple CE */
 /* for more complicated CEs it resorts to getComplicatedCE (what else) */
-#define UCOL_GETNEXTCE(order, coll, collationSource, status) {                     \
-    if (U_FAILURE(*(status)) || ((collationSource).pos>=(collationSource).len          \
+#define UCOL_GETNEXTCE(order, coll, collationSource, status) {                        \
+    if (U_FAILURE(*(status)) || ((collationSource).pos>=(collationSource).len         \
       && (collationSource).CEpos <= (collationSource).toReturn)) {                    \
       (order) = UCOL_NULLORDER;                                                       \
     } else if ((collationSource).CEpos > (collationSource).toReturn) {                \
       (order) = *((collationSource).toReturn++);                                      \
+      (collationSource).pos--;                                                        \
     } else {                                                                          \
       UChar ch = *(collationSource).pos;                                              \
       (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs;   \
-      if(ch < 0xFF) { (order) = (coll)->latinOneMapping[ch]; }                        \
-      else {   (order) = ucmp32_get((coll)->mapping, ch);   }                         \
+      if(ch < 0xFF) {                                                                 \
+      (order) = (coll)->latinOneMapping[ch];                                          \
+      } else {                                                                        \
+      (order) = ucmp32_get((coll)->mapping, ch);                                      \
+      }                                                                               \
       if((order) >= UCOL_NOT_FOUND) {                                                 \
         *((collationSource).CEpos) = (order);                                         \
-        (order) = getSpecialCENew((coll), &(collationSource), (status));              \
+        (order) = getSpecialCE((coll), &(collationSource), (status));                 \
         if((order) == UCOL_NOT_FOUND) {                                               \
-          (order) = ucol_getNextUCA(ch, &(collationSource), (status));               \
+          (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
         }                                                                             \
       }                                                                               \
     }                                                                                 \
@@ -332,14 +341,20 @@ struct UCollator {
     UBool caseLevelisDefault;         /* do we have an extra case level */
     UBool normalizationModeisDefault; /* attribute for normalization */
     UBool strengthisDefault;          /* attribute for strength */
+    UChar *rules;
+    UChar zero;
 };
 
-
+/* various internal functions */
 void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s);
 int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx);
+void ucol_initUCA(UErrorCode *status);
+UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
+uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
+int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
 
 #endif
 
