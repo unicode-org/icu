@@ -1440,4 +1440,26 @@ void Transliterator::initializeRegistry(void) {
     NormalizationTransliterator::registerIDs();
 }
 
+// Defined in ucln_in.h:
+
+/**
+ * Cleanup function for transliterator component; delegates to
+ * Transliterator::cleanupRegistry().
+ */
+U_CFUNC UBool transliterator_cleanup(void) {
+    Transliterator::cleanupRegistry();
+    return TRUE;
+}
+
+/**
+ * Release all static memory held by transliterator.  This will
+ * necessarily invalidate any rule-based transliterators held by the
+ * user, because RBTs hold pointers to common data objects.
+ */ 
+void Transliterator::cleanupRegistry() {
+    Mutex lock(&registryMutex);
+    delete registry;
+    registry = 0;
+}
+
 //eof
