@@ -1822,6 +1822,10 @@ InputPath=.\unicode\umsg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\umsg_imp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\uni2name.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
