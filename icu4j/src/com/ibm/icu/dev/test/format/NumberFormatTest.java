@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2002/02/16 03:05:12 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/10 19:40:14 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -26,7 +26,8 @@ import java.text.ParseException;
 import java.text.FieldPosition;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
-    
+    private static final char EURO = '\u20ac';
+
     public static void main(String[] args) throws Exception {
         new NumberFormatTest().run(args);
     }
@@ -224,19 +225,19 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("Un pauvre ici a..........." + s);
             
         if (!s.equals("1,50 $"))
-            errln("FAIL: Expected 1,50 $");
+            errln("FAIL: Expected 1,50 $, got " + s);
         s = "";
         currencyFmt = NumberFormat.getCurrencyInstance(Locale.GERMANY);
         s = currencyFmt.format(1.50);
         logln("Un pauvre en Allemagne a.." + s);
-        if (!s.equals("1,50 DM"))
-            errln("FAIL: Expected 1,50 DM");
+        if (!s.equals("1,50 " + EURO))
+            errln("FAIL: Expected 1,50 DM, got " + s);
         s = "";
         currencyFmt = NumberFormat.getCurrencyInstance(Locale.FRANCE);
         s = currencyFmt.format(1.50);
         logln("Un pauvre en France a....." + s);
-        if (!s.equals("1,50 F"))
-            errln("FAIL: Expected 1,50 F");
+        if (!s.equals("1,50 " + EURO))
+            errln("FAIL: Expected 1,50 F, got " + s);
     
     }
     

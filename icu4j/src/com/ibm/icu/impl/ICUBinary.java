@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2002/02/28 23:47:22 $
- * $Revision: 1.4 $
+ * $Date: 2002/03/10 19:40:15 $
+ * $Revision: 1.5 $
  *  *****************************************************************************************
  */
 package com.ibm.icu.impl;
@@ -114,7 +114,7 @@ public final class ICUBinary
         input.readFully(unicodeVersion);
         headersize -= 4;
         input.skipBytes(headersize);
-                
+
         if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_ || 
             charsize != CHAR_SIZE_ || 
             !Arrays.equals(dataFormatIDExpected, dataFormatID) ||

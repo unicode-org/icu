@@ -9,11 +9,20 @@
 */
 
 package com.ibm.icu.text;
-import java.util.*;
-import java.io.UnsupportedEncodingException;
+
+import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
-import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.util.CaseInsensitiveString;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 class TransliteratorRegistry {
 
@@ -107,10 +116,10 @@ class TransliteratorRegistry {
             spec = null;
             scriptName = null;
 
-            Locale toploc = getLocale(top);
-            res = ResourceBundle.getBundle(RB_LOCALE_ELEMENTS, toploc);
+            Locale toploc = LocaleUtility.getLocaleFromName(top);
+            res = ICULocaleData.getLocaleElements(toploc);
             // Make sure we got the bundle we wanted; otherwise, don't use it
-            if (isFallbackOf(res.getLocale().toString(), top)) {
+            if (LocaleUtility.isFallbackOf(res.getLocale().toString(), top)) {
                 isSpecLocale = true;
             } else {
                 isSpecLocale = false;
@@ -158,7 +167,11 @@ class TransliteratorRegistry {
                 }
             } else {
                 // Fallback to the script, which may be null
-                nextSpec = scriptName;
+				if (nextSpec != scriptName) {
+					nextSpec = scriptName;
+				} else {
+					nextSpec = null;
+				}
             }
         }
 
@@ -199,49 +212,13 @@ class TransliteratorRegistry {
         public String getTop() {
             return top;
         }
-
-        // Internal helper function to convert  string of the form
-        // aa_bb_CC to a locale object.  Why isn't this in Locale?
-        private static Locale getLocale(String name) {
-            String language = "";
-            String country = "";
-            String variant = "";
-
-            int i1 = name.indexOf('_');
-            if (i1 < 0) {
-                language = name;
-            } else {
-                language = name.substring(0, i1);
-                ++i1;
-                int i2 = name.indexOf('_', i1);
-                if (i2 < 0) {
-                    country = name.substring(i1);
-                } else {
-                    country = name.substring(i1, i2);
-                    variant = name.substring(i2+1);
-                }
-            }
-            return new Locale(language, country, variant);
-        }
-
-        // Compare two locale strings of the form aa_bb_CC, and
-        // return true if parent is a fallback of child, that is,
-        // if child =~ /^parent(_.+)*/ (roughly).
-        private static boolean isFallbackOf(String parent, String child) {
-            if (!child.startsWith(parent)) {
-                return false;
-            }
-            int i = parent.length();
-            return (i == child.length() ||
-                    child.charAt(i) == '_');
-        }
-    }
+	}
 
     //----------------------------------------------------------------------
     // Entry classes
     //----------------------------------------------------------------------
 
-    static class ResourceEntry {
+	static class ResourceEntry {
         public String resourceName;
         public String encoding;
         public int direction;
@@ -672,6 +649,7 @@ class TransliteratorRegistry {
                                   int direction) {
         // assert(specToOpen.isLocale());
         ResourceBundle res = specToOpen.getBundle();
+
         if (res == null) {
             // This means that the bundle's locale does not match
             // the current level of iteration for the spec.
@@ -691,7 +669,7 @@ class TransliteratorRegistry {
                 tag.append("Transliterate_");
             }
             tag.append(specToFind.get().toUpperCase());
-            
+
             try {
                 // The Transliterate*_xxx resource is an array of
                 // strings of the format { <v0>, <r0>, ... }.  Each
@@ -725,7 +703,9 @@ class TransliteratorRegistry {
                     return new Object[] { new LocaleEntry(subres[i+1], dir) };
                 }
 
-            } catch (MissingResourceException e) {}
+            } catch (MissingResourceException e) { 
+				if (DEBUG) System.out.println("missing resource: " + e); 
+			}
         }
 
         // If we get here we had a missing resource exception or we

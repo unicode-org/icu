@@ -5,27 +5,27 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/02/16 03:06:11 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.text.Format;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.text.ParseException;
-import java.text.resources.*;
-import java.util.Hashtable;
-import java.math.BigInteger;
+import com.ibm.icu.impl.ICULocaleData;
+
+import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import com.ibm.icu.util.OverlayBundle;
-import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
+import java.math.BigInteger;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
@@ -151,7 +151,7 @@ import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.11 $
+ * @version      $Revision: 1.12 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -461,7 +461,7 @@ public abstract class NumberFormat extends Format{
      * @return available locales
      */
     public static Locale[] getAvailableLocales() {
-        return LocaleData.getAvailableLocales("NumberPatterns");
+        return ICULocaleData.getAvailableLocales("NumberPatterns");
     }
 
     /**
@@ -678,6 +678,12 @@ public abstract class NumberFormat extends Format{
         //    forLocale.getCountry().equals("IN")) {
         //    return "#,##,##0.###";
         //}
+
+		// {dlf}
+		ResourceBundle rb = ICULocaleData.getLocaleElements(forLocale);
+		String[] numberPatterns = rb.getStringArray("NumberPatterns");
+
+		/* {dlf}
         // Try the cache first
         String[] numberPatterns = (String[]) cachedLocaleData.get(forLocale);
         if (numberPatterns == null) {
@@ -687,23 +693,14 @@ public abstract class NumberFormat extends Format{
             // Update the cache
             cachedLocaleData.put(forLocale, numberPatterns); 
         }
+		*/
+
         /*Bug 4408066
          Add codes for the new method getIntegerInstance() [Richard/GCL]
         */
         int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE : choice; //[Richard/GCL]
         return numberPatterns[entry]; //[Richard/GCL]
     }
-
-    public static final String RESOURCE_BASE = "java.text.resources.LocaleElements";
-    
-//!    static ResourceBundle baseBundle = null;
-//!    
-//!    public synchronized static final String[] getBaseStringArray(String name) {
-//!        if (baseBundle == null) {
-//!            baseBundle = ResourceBundle.getBundle(RESOURCE_BASE);
-//!        }
-//!        return baseBundle.getStringArray(name);
-//!    }
 
     /**
      * First, read in the default serializable data.

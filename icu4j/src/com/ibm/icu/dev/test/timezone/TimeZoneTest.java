@@ -6,13 +6,16 @@
  */
 
 package com.ibm.icu.dev.test.timezone;
+
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
-import com.ibm.icu.dev.test.*;
+
 import java.util.Date;
-import java.util.Locale;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TimeZoneTest extends TestFmwk
@@ -335,10 +338,11 @@ public class TimeZoneTest extends TestFmwk
 
         // Now be smart -- check to see if zh resource is even present.
         // If not, we expect the en fallback behavior.
-        ResourceBundle enRB = ResourceBundle.getBundle("java.text.resources.DateFormatZoneData",
-                                                       Locale.ENGLISH);
-        ResourceBundle zhRB = ResourceBundle.getBundle("java.text.resources.DateFormatZoneData",
-                                                       zh_CN);
+
+		// in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
+		/*
+        ResourceBundle enRB = ICULocaleData.getResourceBundle("DateFormatZoneData", Locale.ENGLISH);
+        ResourceBundle zhRB = ICULocaleData.getResourceBundle("DateFormatZoneData", zh_CN);
         boolean noZH = enRB == zhRB;
 
         if (noZH) {
@@ -346,11 +350,14 @@ public class TimeZoneTest extends TestFmwk
             if (!name.equals("Pacific Standard Time"))
                 errln("Fail: Expected Pacific Standard Time");
         }
-        else if (!name.equals("Pacific Standard Time") &&
-		 !name.equals("GMT-08:00") &&
-                 !name.equals("GMT-8:00") &&
-                 !name.equals("GMT-0800") &&
-                 !name.equals("GMT-800")) {
+        else 
+		*/
+		if (!name.equals("Pacific Standard Time") &&
+			!name.equals("GMT-08:00") &&
+			!name.equals("GMT-8:00") &&
+			!name.equals("GMT-0800") &&
+			!name.equals("GMT-800")) {
+
             errln("Fail: Expected GMT-08:00 or something similar");
             errln("************************************************************");
             errln("THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED");

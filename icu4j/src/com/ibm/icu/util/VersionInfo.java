@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/03/08 23:38:26 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/10 19:40:17 $ 
+ * $Revision: 1.4 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -132,9 +132,9 @@ public final class VersionInfo
     		}
     		index ++;
     	}
-    	if (index != length || count > 3) {
+    	if (index != length) {
     		throw new IllegalArgumentException(
-    		    "Invalid version number: Insufficient data or string exceeds version format");
+    		    "Invalid version number: String '" + version + "' exceeds version format");
     	}
     	for (int i = 0; i < 4; i ++) {
     		if (array[i] < 0 || array[i] > 255) {

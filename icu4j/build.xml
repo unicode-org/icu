@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/03/01 01:35:44 $ 
-* $Revision: 1.46 $
+* $Date: 2002/03/10 19:40:11 $ 
+* $Revision: 1.47 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -41,6 +41,7 @@
         <mkdir dir="${build.dir}"/>
         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
+		<unjar src="${src.dir}/com/ibm/icu/dev/data/ICULocaleData.jar" dest="${build.dir}"/>
         <javac includes="com/ibm/icu/dev/tool/**/*.java,com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"

@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/03/07 05:13:36 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/10 19:40:14 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  **/
@@ -37,17 +37,19 @@ attribution to Taligent may not be removed.
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
-import java.math.BigDecimal;
+
 import java.io.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParsePosition;
-import java.util.Locale;
 import java.text.FieldPosition;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
@@ -55,6 +57,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
     public static void main(String[] args) throws Exception {
         new NumberRegression().run(args);
     }
+
+	private static final char EURO = '\u20ac';
 
     /**
      * NumberFormat.equals comparing with null should always return false.
@@ -479,7 +483,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String expectedPercent = "-578\u00a0998%";
         */
         String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99 F";
+        String expectedCurrency = "5\u00a0789,99 " + EURO; // euro
         String expectedPercent = "-578\u00a0999%";
 
         formatter = NumberFormat.getNumberInstance(Locale.FRANCE);
@@ -577,7 +581,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String expectedPercent = "-578.998%";
         */
         String expectedDefault = "-5.789,988";
-        String expectedCurrency = "5.789,99 DM";
+        String expectedCurrency = "5.789,99 " + EURO;
         String expectedPercent = "-578.999%";
 
         formatter = NumberFormat.getNumberInstance(Locale.GERMANY);
@@ -616,6 +620,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
     }
     /**
      * Data rounding errors for Italian locale number formats
+	 * Note- with the Euro, there is no need for currency rounding anymore
      */
     public void Test4071859 () {
         NumberFormat formatter;
@@ -626,7 +631,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String expectedPercent = "-578.998%";
         */
         String expectedDefault = "-5.789,988";
-        String expectedCurrency = "-L. 5.790";
+        String expectedCurrency = "-" + EURO + " 5.789,99";
         String expectedPercent = "-578.999%";
 
         formatter = NumberFormat.getNumberInstance(Locale.ITALY);
@@ -962,8 +967,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         Locale[] locales = NumberFormat.getAvailableLocales();
         
         for (int i = 0; i < locales.length; i++) {
-            ResourceBundle rb = ResourceBundle.getBundle(
-                    "java.text.resources.LocaleElements", locales[i]);
+            ResourceBundle rb = ICULocaleData.getResourceBundle("LocaleElements", locales[i]);
+
             //
             // Get the currency pattern for this locale.  We have to fish it
             // out of the ResourceBundle directly, since DecimalFormat.toPattern
@@ -1369,6 +1374,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         
         NumberFormat nf = NumberFormat.getInstance(Locale.US);
+
+	// Set special values we are going to search for in the output byte stream
+	// These are all legal values.
         nf.setMinimumIntegerDigits(0x111); // Keep under 309
         nf.setMaximumIntegerDigits(0x112); // Keep under 309
         nf.setMinimumFractionDigits(0x113); // Keep under 340
@@ -1379,6 +1387,25 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         baos.close();
         
         byte[] bytes = baos.toByteArray();
+
+	// Scan for locations of min/max int/fract values in the byte array.
+	// At the moment (ICU4J 2.1), there is only one instance of each target pair
+        // in the byte stream, so assume first match is it.  Note this is not entirely
+	// failsafe, and needs to be checked if we change the package or structure of
+	// this class.
+	// Current positions are 890, 880, 886, 876
+	int[] offsets = new int[4];
+	for (int i = 0; i < bytes.length - 1; ++i) {
+	    if (bytes[i] == 0x01) { // high byte
+		for (int j = 0; j < offsets.length; ++j) {
+		    if ((offsets[j] == 0) && (bytes[i+1] == (0x11 + j))) { // low byte
+			offsets[j] = i;
+			break;
+		    }
+		}
+	    }
+	}
+
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             Object o = ois.readObject();
@@ -1390,47 +1417,42 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
                 logln("DateFormat serialization/equality is OKAY.");
             }
         }
-        // FIXME 
-        
-        //Make the mins bigger than maxs
-        bytes[891] = (byte) 0x22; //setMinimumIntegerDigits
-        bytes[890] = (byte) 0x01;    
-        bytes[881] = (byte) 0x21; //setMaximumIntegerDigits
-        bytes[880] = (byte) 0x01;
-        bytes[887] = (byte) 0x24; //setMinimumFractionDigits
-        bytes[886] = (byte) 0x01;    
-        bytes[877] = (byte) 0x23; //setMaximumFractionDigits
-        bytes[876] = (byte) 0x01;
-        
+
+	// Change the values in the byte stream so that min > max.
+	// Numberformat should catch this and throw an exception.
+	for (int i = 0; i < offsets.length; ++i) {
+	    bytes[offsets[i]] = (byte)(4 - i);
+	}
+
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             try {
                 NumberFormat format = (NumberFormat) ois.readObject();
                 logln("format: " + format.format(1234.56)); //fix "The variable is never used"
-                errln("FAIL: Deserialized bogus NumberFormat");
+                errln("FAIL: Deserialized bogus NumberFormat with minXDigits > maxXDigits");
             } catch (InvalidObjectException e) {
                 logln("Ok: " + e.getMessage());
             }
         }
-        // FIXME 
-        
-        //the values are too big for a DecimalFormat
-        bytes[891] = (byte) 0x11; //setMinimumIntegerDigits
-        bytes[890] = (byte) 0x03;    
-        bytes[881] = (byte) 0x12; //setMaximumIntegerDigits
-        bytes[880] = (byte) 0x03;
-        bytes[887] = (byte) 0x13; //setMinimumFractionDigits
-        bytes[886] = (byte) 0x03;    
-        bytes[877] = (byte) 0x14; //setMaximumFractionDigits
-        bytes[876] = (byte) 0x03;
-        
+
+	// Set values so they are too high, but min <= max
+	// Format should pass the min<= max test, and DecimalFormat should reset to current maximum
+	// (for compatibility with versions streamed out before the maximums were imposed).
+	for (int i = 0; i < offsets.length; ++i) {
+	    bytes[offsets[i]] = 4;
+	}
+
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             NumberFormat format = (NumberFormat) ois.readObject();
             //For compatibility with previous version
             if ((format.getMaximumIntegerDigits() != 309) 
                 || format.getMaximumFractionDigits() != 340) {
-                errln("FAIL: Deserialized bogus NumberFormat");
+                errln("FAIL: Deserialized bogus NumberFormat with values out of range," +
+					  " intMin: " + format.getMinimumIntegerDigits() +
+					  " intMax: " + format.getMaximumIntegerDigits() +
+					  " fracMin: " + format.getMinimumFractionDigits() +
+					  " fracMax: " + format.getMaximumFractionDigits());
             } else {
                 logln("Ok: Digit count out of range");
             }

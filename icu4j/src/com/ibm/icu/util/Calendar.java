@@ -29,19 +29,22 @@
  */
 
 package com.ibm.icu.util;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-import java.text.MessageFormat;
+
+import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DateFormatSymbols;
-import com.ibm.icu.text.SimpleDateFormat;
+import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * <code>Calendar</code> is an abstract base class for converting between
@@ -641,7 +644,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.23 $ $Date: 2002/02/16 03:06:24 $
+ * @version      $Revision: 1.24 $ $Date: 2002/03/10 19:40:16 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -3203,8 +3206,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private void setWeekendData(Locale loc) {
         ResourceBundle resource =
-            ResourceBundle.getBundle("com.ibm.icu.impl.data.CalendarData",
-                                     loc);
+            ICULocaleData.getResourceBundle("CalendarData", loc);
         String[] data = resource.getStringArray("Weekend");
         weekendOnset       = Integer.parseInt(data[0]);
         weekendOnsetMillis = Integer.parseInt(data[1]);
@@ -3284,9 +3286,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /* try to get the Locale data from the cache */
     int[] data = (int[]) cachedLocaleData.get(desiredLocale);
     if (data == null) {  /* cache miss */
-        ResourceBundle resource
-        = ResourceBundle.getBundle("java.text.resources.LocaleElements",
-                       desiredLocale);
+        ResourceBundle resource = ICULocaleData.getLocaleElements(desiredLocale);
         String[] dateTimePatterns =
         resource.getStringArray("DateTimeElements");
         data = new int[2];

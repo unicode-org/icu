@@ -5,19 +5,21 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2002/02/16 03:06:07 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.ICULocaleData;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.ResourceBundle;
-import java.util.Locale;
 import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * This class represents the set of symbols (such as the decimal separator, the
@@ -365,8 +367,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         String[] currencyElements;
         if (data == null) {  /* cache miss */
             data = new String[2][];
-            ResourceBundle rb = ResourceBundle.getBundle
-                (NumberFormat.RESOURCE_BASE, locale); // [NEW] Temporary
+            ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
             data[0] = rb.getStringArray("NumberElements");
             data[1] = rb.getStringArray("CurrencyElements");
             /* update cache */
@@ -375,6 +376,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         numberElements = data[0];
         currencyElements = data[1];
 
+	// {dlf} clean up below now that we have our own resource data
         decimalSeparator = numberElements[0].charAt(0);
         groupingSeparator = numberElements[1].charAt(0);
         // [NEW] Temporary hack to support old JDK 1.1 resources

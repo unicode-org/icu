@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/02/16 03:06:14 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.text;
 
-import java.text.CharacterIterator;
 import java.text.BreakIterator;
+import java.text.CharacterIterator;
 
 /**
  * <code>SearchIterator</code> is an abstract base class that provides methods

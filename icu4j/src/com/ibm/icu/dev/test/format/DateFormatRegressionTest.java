@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java,v $ 
- * $Date: 2002/02/16 03:05:08 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/10 19:40:13 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -17,17 +17,19 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
+
+import java.io.*;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.Format;
-import java.io.*;
 
 /** 
  * Performs regression test for DateFormat
@@ -320,7 +322,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     
             // Check to see if the resource is present; if not, we can't test
             //ResourceBundle bundle = //The variable is never used
-            //    ResourceBundle.getBundle("java.text.resources.DateFormatZoneData", curLocale); 
+            //    ICULocaleData.getBundle("DateFormatZoneData", curLocale); 
     
             // {sfb} API change to ResourceBundle -- add getLocale()
             /*if (bundle.getLocale().getLanguage().equals("de")) {

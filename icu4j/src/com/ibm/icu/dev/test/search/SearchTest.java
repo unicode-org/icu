@@ -5,18 +5,27 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2002/02/16 03:05:17 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/03/10 19:40:14 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.search;
 
-import java.text.*;
-import java.util.*;
-
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.text.SearchIterator;
 import com.ibm.icu.text.StringSearch;
+import com.ibm.icu.util.VersionInfo;
+
+import java.text.BreakIterator;
+import java.text.CharacterIterator;
+import java.text.Collator;
+import java.text.ParseException;
+import java.text.RuleBasedCollator;
+import java.text.StringCharacterIterator;
+import java.util.Locale;
+import java.util.Vector;
 
 /**
  * Unit and regression tests for the StringSearch and SearchIterator classes.
@@ -24,11 +33,21 @@ import com.ibm.icu.text.StringSearch;
  * and displaying the output.  Basically, any method here that starts with
  * <code>Test</code> is run as a test.
  */
-public class SearchTest extends com.ibm.icu.dev.test.TestFmwk {
+public class SearchTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
-        new SearchTest().run(args);
+		new SearchTest().run(args);
     }
-    
+
+    static private final boolean valid = ICUDebug.javaVersion != VersionInfo.getInstance("1.4");
+	
+	protected boolean validate() {
+		if (valid) {
+			return true;
+		}
+		logln("StringSearch does not work with JDK 1.4");
+		return false;
+	}
+
     //-----------------------------------------------------------
     // Static data: collators and break iterators to use for testing
     //
@@ -131,7 +150,6 @@ public class SearchTest extends com.ibm.icu.dev.test.TestFmwk {
                     new int[] {  }
                     ),
         */
-
     };
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/07 00:39:35 $
- * $Revision: 1.58 $
+ * $Date: 2002/03/10 19:40:16 $
+ * $Revision: 1.59 $
  *
  *****************************************************************************************
  */
@@ -208,7 +208,7 @@ import java.util.Iterator;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.58 $ $Date: 2002/03/07 00:39:35 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.59 $ $Date: 2002/03/10 19:40:16 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -679,7 +679,7 @@ public class UnicodeSet extends UnicodeFilter {
         // Issues: what to do with nullstring
         // whether to change offset
          
-        if (true) throw new IllegalArgumentException();
+		//        if (true) throw new IllegalArgumentException();
             
         // TODO: probably have to change this part too, just in case strings contains ""??
         if (offset[0] == limit) {

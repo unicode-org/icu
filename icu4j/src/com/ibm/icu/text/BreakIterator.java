@@ -5,26 +5,25 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $ 
- * $Date: 2002/03/01 02:37:47 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import java.util.Vector;
+import com.ibm.icu.impl.ICULocaleData;
+
+import java.io.InputStream;
+import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.net.URL;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.Locale;
-import java.util.ResourceBundle;                                    //ibm.597
-import java.util.MissingResourceException;                          //ibm.597
-import java.text.resources.LocaleData;                              //ibm.597
-import java.text.CharacterIterator;                                 //ibm.597
-import java.text.StringCharacterIterator;                           //ibm.597
-
-import java.net.URL;                                                //ibm.597
-import java.io.InputStream;                                         //ibm.597
-import java.io.IOException;                                         //ibm.597
-
-import java.lang.ref.SoftReference;                                 //ibm.597
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 /**
  * A class that locates boundaries in text.  This class defines a protocol for
@@ -398,12 +397,12 @@ public abstract class BreakIterator implements Cloneable
      */
     public abstract void setText(CharacterIterator newText);
 
-    private static final int CHARACTER_INDEX = 0;                   //ibm.597
-    private static final int WORD_INDEX = 1;                        //ibm.597
-    private static final int LINE_INDEX = 2;                        //ibm.597
-    private static final int SENTENCE_INDEX = 3;                    //ibm.597
+    private static final int CHARACTER_INDEX = 0;
+    private static final int WORD_INDEX = 1;
+    private static final int LINE_INDEX = 2;
+    private static final int SENTENCE_INDEX = 3;
     private static final int TITLE_INDEX = 4;
-    private static final SoftReference[] iterCache = new SoftReference[5];  //ibm.597
+    private static final SoftReference[] iterCache = new SoftReference[5];
 
     /**
      * Returns a new instance of BreakIterator that locates word boundaries.
@@ -424,10 +423,10 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getWordInstance(Locale where)
     {
-        return getBreakInstance(where,                              //ibm.597
-                                WORD_INDEX,                         //ibm.597
-                                "WordBreakRules",                   //ibm.597
-                                "WordBreakDictionary");             //ibm.597
+        return getBreakInstance(where,
+                                WORD_INDEX,
+                                "WordBreakRules",
+                                "WordBreakDictionary");
     }
 
     /**
@@ -451,10 +450,10 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getLineInstance(Locale where)
     {
-        return getBreakInstance(where,                              //ibm.597
-                                LINE_INDEX,                         //ibm.597
-                                "LineBreakRules",                   //ibm.597
-                                "LineBreakDictionary");             //ibm.597
+        return getBreakInstance(where,
+                                LINE_INDEX,
+                                "LineBreakRules",
+                                "LineBreakDictionary");
     }
 
     /**
@@ -478,10 +477,10 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getCharacterInstance(Locale where)
     {
-        return getBreakInstance(where,                              //ibm.597
-                                CHARACTER_INDEX,                    //ibm.597
-                                "CharacterBreakRules",              //ibm.597
-                                "CharacterBreakDictionary");        //ibm.597
+        return getBreakInstance(where,
+                                CHARACTER_INDEX,
+                                "CharacterBreakRules",
+                                "CharacterBreakDictionary");
     }
 
     /**
@@ -502,11 +501,11 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getSentenceInstance(Locale where)
     {
-        return getBreakInstance(where,                              //ibm.597
-                                SENTENCE_INDEX,                     //ibm.597
-                                "SentenceBreakRules",               //ibm.597
-                                "SentenceBreakDictionary");         //ibm.597
-    }                                                               //ibm.597
+        return getBreakInstance(where,
+                                SENTENCE_INDEX,
+                                "SentenceBreakRules",
+                                "SentenceBreakDictionary");
+    }
 
     /**
      * Returns a new instance of BreakIterator that locates sentence boundaries.
@@ -532,63 +531,62 @@ public abstract class BreakIterator implements Cloneable
                                 "TitleBreakDictionary");
     }
 
-    private static BreakIterator getBreakInstance(Locale where,     //ibm.597
-                                                  int type,         //ibm.597
-                                                  String rulesName, //ibm.597
-                                                  String dictionaryName) {  //ibm.597
+    private static BreakIterator getBreakInstance(Locale where,
+                                                  int type,
+                                                  String rulesName,
+                                                  String dictionaryName) {
 
-        if (iterCache[type] != null) {                              //ibm.597
-            BreakIteratorCache cache = (BreakIteratorCache) iterCache[type].get();  //ibm.597
-            if (cache != null) {                                    //ibm.597
-                if (cache.getLocale().equals(where)) {              //ibm.597
-                    return cache.createBreakInstance();             //ibm.597
-                }                                                   //ibm.597
-            }                                                       //ibm.597
-        }                                                           //ibm.597
+        if (iterCache[type] != null) {
+            BreakIteratorCache cache = (BreakIteratorCache) iterCache[type].get();
+            if (cache != null) {
+                if (cache.getLocale().equals(where)) {
+                    return cache.createBreakInstance();
+                }
+            }
+        }
 
-        BreakIterator result = createBreakInstance(where,           //ibm.597
-                                                   type,            //ibm.597
-                                                   rulesName,       //ibm.597
-                                                   dictionaryName); //ibm.597
-        BreakIteratorCache cache = new BreakIteratorCache(where, result);   //ibm.597
-        iterCache[type] = new SoftReference(cache);                 //ibm.597
-        return result;                                              //ibm.597
-    }                                                               //ibm.597
+        BreakIterator result = createBreakInstance(where,
+                                                   type,
+                                                   rulesName,
+                                                   dictionaryName);
+        BreakIteratorCache cache = new BreakIteratorCache(where, result);
+        iterCache[type] = new SoftReference(cache);
+        return result;
+    }
 
-    private static BreakIterator createBreakInstance(Locale where,  //ibm.597
-                                                     int type,      //ibm.597
-                                                     String rulesName,  //ibm.597
-                                                     String dictionaryName) {   //ibm.597
+    private static BreakIterator createBreakInstance(Locale where,
+                                                     int type,
+                                                     String rulesName,
+                                                     String dictionaryName) {
 
 //		System.out.println("rulesName: "+rulesName);
 //		System.out.println("dictionaryName: "+dictionaryName);
-        ResourceBundle bundle = ResourceBundle.getBundle(           //ibm.597
-                        "com.ibm.icu.impl.data.BreakIteratorRules", where);   //ibm.597
-        String[] classNames = bundle.getStringArray("BreakIteratorClasses");    //ibm.597
+        ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
+        String[] classNames = bundle.getStringArray("BreakIteratorClasses");
 
-        String rules = bundle.getString(rulesName);                 //ibm.597
+        String rules = bundle.getString(rulesName);
         
-        if (classNames[type].equals("RuleBasedBreakIterator")) {    //ibm.597
-            return new RuleBasedBreakIterator(rules);               //ibm.597
-        }                                                           //ibm.597
-        else if (classNames[type].equals("DictionaryBasedBreakIterator")) { //ibm.597
-            try {                                                   //ibm.597
+        if (classNames[type].equals("RuleBasedBreakIterator")) {
+            return new RuleBasedBreakIterator(rules);
+        }
+        else if (classNames[type].equals("DictionaryBasedBreakIterator")) {
+            try {
 				// System.out.println(dictionaryName);
-                Object t = bundle.getObject(dictionaryName);   //ibm.597
+                Object t = bundle.getObject(dictionaryName);
 				// System.out.println(t);
-                URL url = (URL)t;   //ibm.597
-                InputStream dictionary = url.openStream();          //ibm.597
-                return new DictionaryBasedBreakIterator(rules, dictionary); //ibm.597
-            }                                                       //ibm.597
-            catch(IOException e) {                                  //ibm.597
-            }                                                       //ibm.597
-            catch(MissingResourceException e) {                     //ibm.597
-            }                                                       //ibm.597
-            return new RuleBasedBreakIterator(rules);               //ibm.597
-        }                                                           //ibm.597
-        else                                                        //ibm.597
-            throw new IllegalArgumentException("Invalid break iterator class \"" +  //ibm.597
-                            classNames[type] + "\"");               //ibm.597
+                URL url = (URL)t;
+                InputStream dictionary = url.openStream();
+                return new DictionaryBasedBreakIterator(rules, dictionary);
+            }
+            catch(IOException e) {
+            }
+            catch(MissingResourceException e) {
+            }
+            return new RuleBasedBreakIterator(rules);
+        }
+        else
+            throw new IllegalArgumentException("Invalid break iterator class \"" +
+                            classNames[type] + "\"");
     }
 
     /**
@@ -598,27 +596,26 @@ public abstract class BreakIterator implements Cloneable
      */
     public static synchronized Locale[] getAvailableLocales()
     {
-        //FIX ME - this is a known bug.  It should return
-        //all locales.
-        return LocaleData.getAvailableLocales("NumberPatterns");
+		// returns all locales
+        return ICULocaleData.getAvailableLocales();
     }
 
-    private static final class BreakIteratorCache {                 //ibm.597
+    private static final class BreakIteratorCache {
 
-        private BreakIterator iter;                                 //ibm.597
-        private Locale where;                                       //ibm.597
+        private BreakIterator iter;
+        private Locale where;
 
-        BreakIteratorCache(Locale where, BreakIterator iter) {      //ibm.597
-            this.where = where;                                     //ibm.597
-            this.iter = (BreakIterator) iter.clone();               //ibm.597
-        }                                                           //ibm.597
+        BreakIteratorCache(Locale where, BreakIterator iter) {
+            this.where = where;
+            this.iter = (BreakIterator) iter.clone();
+        }
 
-        Locale getLocale() {                                        //ibm.597
-            return where;                                           //ibm.597
-        }                                                           //ibm.597
+        Locale getLocale() {
+            return where;
+        }
 
-        BreakIterator createBreakInstance() {                       //ibm.597
-            return (BreakIterator) iter.clone();                    //ibm.597
-        }                                                           //ibm.597
-    }                                                               //ibm.597
+        BreakIterator createBreakInstance() {
+            return (BreakIterator) iter.clone();
+        }
+    }
 }

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2002/02/16 03:05:09 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/10 19:40:13 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -233,7 +233,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     // we cannot have latin-1 characters in source code, therefore we fix up the string for "aou^t" 
                     expStr = expStr + "\u0061" + "\u006f" + "\u00fb" + "\u0074";
                 }
-                if (javaVersion.startsWith("1.2") && (exp==31)) {
+                if (/*javaVersion.startsWith("1.2") &&*/ (exp==31)) {
                     expStr = "GMT-07:00";
                 }
                 if (!field.equals(expStr))
@@ -748,6 +748,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);
         //fix the jdk resources differences between jdk 1.2 and jdk 1.3
+		/* our own data only has GMT-xxxx information here
         String javaVersion = System.getProperty("java.version");
         if (javaVersion.startsWith("1.2")) {
             if (!out.equals(expectedFRENCH_JDK12))
@@ -756,6 +757,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             if (!out.equals(expectedFRENCH))
                 errln("FAIL: Expected " + expectedFRENCH);
         }
+		*/
+		if (!out.equals(expectedFRENCH_JDK12))
+			errln("FAIL: Expected " + expectedFRENCH_JDK12);
         out = dfUS.format(testDate);
         logln("Date Formated with US Locale " + out);
         if (!out.equals(expectedUS))

@@ -5,19 +5,24 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2002/02/16 03:06:13 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/10 19:40:16 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.ICULocaleData;
+
 import java.math.BigInteger;
-import java.text.*;
-import java.util.Vector;
+import java.text.Collator;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.RuleBasedCollator;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 /**
  * <p>A class that formats numbers according to a set of rules. This number formatter is
@@ -468,7 +473,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.5 $ $Date: 2002/02/16 03:06:13 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.6 $ $Date: 2002/03/10 19:40:16 $
  * @see NumberFormat
  * @see DecimalFormat
  */
@@ -594,9 +599,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
 
         // load up the resource bundle containing the description
         // from the specified locale
-        ResourceBundle bundle = ResourceBundle.getBundle(
-                        "com.ibm.icu.impl.data.NumberFormatRules",
-                        locale);
+        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
         String description = "";
 
         // pick a description from the resource bundle based on the
