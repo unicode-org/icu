@@ -278,7 +278,7 @@ const char*  ucnv_getAvailableName (int32_t index)
 {
   if (0 <= index && index <= 0xffff) {
     UErrorCode err = U_ZERO_ERROR;
-    const char *name = ucnv_io_getAvailableAlias((uint16_t)index, &err);
+    const char *name = ucnv_io_getAvailableConverter((uint16_t)index, &err);
     if (U_SUCCESS(err)) {
       return name;
     }
@@ -289,7 +289,7 @@ const char*  ucnv_getAvailableName (int32_t index)
 int32_t  ucnv_countAvailable ()
 {
   UErrorCode err = U_ZERO_ERROR;
-  return ucnv_io_countAvailableAliases(&err);
+  return ucnv_io_countAvailableConverters(&err);
 }
 
 void   ucnv_getSubstChars (const UConverter * converter,

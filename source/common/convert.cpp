@@ -399,11 +399,11 @@ UnicodeConverterCPP::getAvailableNames(int32_t& num, UErrorCode& err)
     return NULL;
   }
   if (availableConverterNames==NULL) {
-    int32_t count = ucnv_io_countAvailableAliases(&err);
+    int32_t count = ucnv_io_countAvailableConverters(&err);
     if (count > 0) {
       const char **names = new const char *[count];
       if (names != NULL) {
-        ucnv_io_fillAvailableAliases(names, &err);
+        ucnv_io_fillAvailableConverters(names, &err);
 
         /* in the mutex block, set the data for this process */
         umtx_lock(0);
