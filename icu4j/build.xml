@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/01/11 21:06:07 $ 
-* $Revision: 1.25 $
+* $Date: 2001/02/03 00:57:34 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -39,7 +39,7 @@
 
   <target name="all" depends="core,tests,tools,demos,jar,ucharacterjar,docs"/>
   
-  <target name="core" depends="init,ucharacterData">
+  <target name="core" depends="init,ucharacterData,translitData">
     <mkdir dir="${build.dir}"/>
     <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
            todir="${build.dir}/com/ibm/text/resources/"/>
@@ -108,6 +108,13 @@
     <copy todir="${build.dir}/com/ibm/icu/text">
       <fileset dir="${src.dir}/com/ibm/icu/text"
                includes="unames.dat,uprops.dat"/>
+    </copy>
+  </target>
+
+  <target name ="translitData" depends="init">
+    <copy todir="${build.dir}/com/ibm/text/resources">
+      <fileset dir="${src.dir}/com/ibm/text/resources"
+               includes="Transliterator_*.utf8.txt"/>
     </copy>
   </target>
 
