@@ -830,7 +830,7 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
         if(pos1>=len1) {
             if(length1>0) {
                 c=*s1++;
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s1)) {
+                if(UTF_IS_FIRST_SURROGATE(c) && length1>1 && UTF_IS_SECOND_SURROGATE(uc=*s1)) {
                     c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s1;
                     length1-=2;
@@ -848,7 +848,7 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
         if(pos2>=len2) {
             if(length2>0) {
                 c=*s2++;
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s2)) {
+                if(UTF_IS_FIRST_SURROGATE(c) && length2>1 && UTF_IS_SECOND_SURROGATE(uc=*s2)) {
                     c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s2;
                     length2-=2;
