@@ -46,6 +46,9 @@
 #define U_COPYRIGHT_STRING \
   " Copyright (C) 2002, International Business Machines Corporation and others. All Rights Reserved. "
 
+/** Maximum length of the copyright string.
+ *  @draft ICU 2.4
+ */
 #define U_COPYRIGHT_STRING_LENGTH  128
 
 /** The current ICU major version as an integer. 
@@ -187,7 +190,7 @@ u_getVersion(UVersionInfo versionArray);
  */
 #define UCOL_BUILDER_VERSION 5
 
-/* This is the version of FractionalUCA.txt tailoring rules
+/** This is the version of FractionalUCA.txt tailoring rules
  * Version 1 was in ICU 1.8.1. Version two contains canonical closure for
  * supplementary code points 
  * Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 
