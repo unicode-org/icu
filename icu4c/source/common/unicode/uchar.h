@@ -1420,13 +1420,6 @@ u_getNumericValue(UChar32 c);
 #define U_NO_NUMERIC_VALUE ((double)-123456789.)
 
 /**
- * ### TODO propose...
- * @draft ICU 2.2
- */
-U_CAPI int32_t U_EXPORT2
-u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
-
-/**
  * Determines whether the specified UChar is a lowercase character
  * according to UnicodeData.txt.
  *
@@ -1828,7 +1821,7 @@ ublock_getCode(UChar32    ch);
  * not be called with a command line option to include 1.0 names in unames.dat.
  *
  * @param code The character (code point) for which to get the name.
- *             It must be <code>0<=code<0x10ffff</code>.
+ *             It must be <code>0<=code<=0x10ffff</code>.
  * @param nameChoice Selector for which name to get.
  * @param buffer Destination address for copying the name.
  *               The name will always be zero-terminated.
@@ -1852,6 +1845,33 @@ U_CAPI int32_t U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
            char *buffer, int32_t bufferLength,
            UErrorCode *pErrorCode);
+
+/**
+ * Get the ISO 10646 comment for a character.
+ * The ISO 10646 comment is an informative field in the Unicode Character
+ * Database (UnicodeData.txt field 11) and is from the ISO 10646 names list.
+ *
+ * @param c The character (code point) for which to get the ISO comment.
+ *             It must be <code>0<=c<=0x10ffff</code>.
+ * @param dest Destination address for copying the comment.
+ *             The comment will be zero-terminated if possible.
+ *             If there is no comment, then the buffer will be set to the empty string.
+ * @param destCapacity <code>==sizeof(dest)</code>
+ * @param pErrorCode Pointer to a UErrorCode variable;
+ *        check for <code>U_SUCCESS()</code> after <code>u_getISOComment()</code>
+ *        returns.
+ * @return The length of the comment, or 0 if there is no comment for this character.
+ *         If the destCapacity is less than or equal to the length, then the buffer
+ *         contains the truncated name and the returned length indicates the full
+ *         length of the name.
+ *         The length does not include the zero-termination.
+ *
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_getISOComment(UChar32 c,
+                char *dest, int32_t destCapacity,
+                UErrorCode *pErrorCode);
 
 /**
  * Find a Unicode character by its name and return its code point value.
@@ -2243,6 +2263,30 @@ u_charAge(UChar32 c, UVersionInfo versionArray);
  */
 U_CAPI void U_EXPORT2
 u_getUnicodeVersion(UVersionInfo info);
+
+/**
+ * Get the FC_NFKC_Closure property string for a character.
+ * See Unicode Standard Annex #15 for details, search for "FC_NFKC_Closure"
+ * or for "FNC": http://www.unicode.org/reports/tr15/
+ *
+ * @param c The character (code point) for which to get the FC_NFKC_Closure string.
+ *             It must be <code>0<=c<=0x10ffff</code>.
+ * @param dest Destination address for copying the string.
+ *             The string will be zero-terminated if possible.
+ *             If there is no FC_NFKC_Closure string,
+ *             then the buffer will be set to the empty string.
+ * @param destCapacity <code>==sizeof(dest)</code>
+ * @param pErrorCode Pointer to a UErrorCode variable.
+ * @return The length of the string, or 0 if there is no FC_NFKC_Closure string for this character.
+ *         If the destCapacity is less than or equal to the length, then the buffer
+ *         contains the truncated name and the returned length indicates the full
+ *         length of the name.
+ *         The length does not include the zero-termination.
+ * 
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
 
 
 /**
