@@ -190,14 +190,14 @@ void TestExponential(void)
   char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
   int32_t lval[] = { 0, -1, 1, 123456789 };
 	
-  char* valFormat[] =
+  const char* valFormat[] =
   {
     "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
     "12.340E-03", "12.346E07", "12.300E299", "-31.416E-272",
     "12.34E-003", "123.4568E006", "1.23E300", "-314.1593E-273",
     "1.234E-2", "1.235E8", "1.23E300", "[3.142E-271]"
   };
-  char* lvalFormat[] =
+  const char* lvalFormat[] =
   {
     "0E0", "-1E0", "1E0", "1.2346E8",
     "00.000E00", "-10.000E-01", "10.000E-01", "12.346E07",
@@ -584,7 +584,7 @@ void TestSecondaryGrouping(void) {
             }
             /* Later -- fix this to get the actual grouping */
             /* character from the resource bundle.          */
-            isGroup = (resultBuffer[i] == 0x002C);
+            isGroup = (UBool)(resultBuffer[i] == 0x002C);
             if (isGroup != expectGroup) {
                 ok = FALSE;
                 break;
