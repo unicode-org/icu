@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/10/07 17:22:14 $ 
- * $Revision: 1.54 $
+ * $Date: 2003/10/13 23:47:14 $ 
+ * $Revision: 1.55 $
  *
  *****************************************************************************************
  */
@@ -901,7 +901,23 @@ public class UnicodeSetTest extends TestFmwk {
 
             "[\\s|\\)|:|$|\\>]", // from regex tests
             "s|):$>",
-            "\\abc"
+            "\\abc",
+
+            "[\uDC00cd]", // JB#2906: isolated trail at start
+            "cd\uDC00",
+            "ab\uD800\\U00010000",
+
+            "[ab\uD800]", // JB#2906: isolated trail at start
+            "ab\uD800",
+            "cd\uDC00\\U00010000",
+
+            "[ab\uD800cd]", // JB#2906: isolated lead in middle
+            "abcd\uD800",
+            "ef\uDC00\\U00010000",
+
+            "[ab\uDC00cd]", // JB#2906: isolated trail in middle
+            "abcd\uDC00",
+            "ef\uD800\\U00010000"
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
