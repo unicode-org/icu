@@ -332,17 +332,82 @@ AC_CHECK_FUNC(nl_langinfo,[U_HAVE_NL_LANGINFO=1],[U_HAVE_NL_LANGINFO=0])
 AC_SUBST(U_HAVE_NL_LANGINFO)
 U_HAVE_CODESET=0
 if test $U_HAVE_NL_LANGINFO -eq 1; then
-  AC_MSG_CHECKING([if nl_langinfo(CODESET) works])
-  AC_CACHE_VAL(ac_cv_have_codeset,AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo(CODESET);],[ac_cv_have_codeset=yes],[ac_cv_have_codeset=no]))
-  AC_MSG_RESULT($ac_cv_have_codeset)
+  AC_CACHE_CHECK([if nl_langinfo(CODESET) works],ac_cv_have_codeset,
+    [AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo(CODESET);],[ac_cv_have_codeset=yes],[ac_cv_have_codeset=no])])
   if test x$ac_cv_have_codeset = xyes
   then
       U_HAVE_CODESET=1
   fi
 fi
 AC_SUBST(U_HAVE_CODESET)
-AC_CHECK_FUNC(tzset,[U_HAVE_TZSET=1],[U_HAVE_TZSET=0])
-AC_SUBST(U_HAVE_TZSET)
+AC_CHECK_FUNC(tzset)
+if test x$ac_cv_func_tzset = xyes
+then
+    U_TZSET=tzset
+else
+    AC_CHECK_FUNC(_tzset)
+    if test x$ac_cv_func__tzset = xyes
+    then
+	U_TZSET=_tzset
+    fi
+fi
+AC_SUBST(U_TZSET)
+AC_CACHE_CHECK(for tzname,ac_cv_var_tzname,
+[AC_TRY_LINK(
+changequote(<<, >>)dnl
+<<#ifndef __USE_POSIX
+#define __USE_POSIX
+#endif
+#include <time.h>
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#endif>>,
+changequote([, ])dnl
+[atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
+if test $ac_cv_var_tzname = yes; then
+  U_TZNAME=tzname
+else
+  AC_CACHE_CHECK(for _tzname,ac_cv_var__tzname,
+  [AC_TRY_LINK(
+  changequote(<<, >>)dnl
+  <<#include <time.h>
+  extern char *_tzname[];
+  >>,
+  changequote([, ])dnl
+  [atoi(*_tzname);], ac_cv_var__tzname=yes, ac_cv_var__tzname=no)])
+    if test $ac_cv_var__tzname = yes; then
+      U_TZNAME=_tzname
+    fi
+fi
+AC_SUBST(U_TZNAME)
+AC_CACHE_CHECK(for timezone,ac_cv_var_timezone,
+[AC_TRY_LINK(
+changequote(<<, >>)dnl
+<<#ifndef __USE_POSIX
+#define __USE_POSIX
+#endif
+#ifndef __USE_XOPEN
+#define __USE_XOPEN
+#endif
+#include <time.h>
+>>,
+changequote([, ])dnl
+[timezone = 1;], ac_cv_var_timezone=yes, ac_cv_var_timezone=no)])
+if test $ac_cv_var_timezone = yes; then
+  U_TIMEZONE=timezone
+else
+  AC_CACHE_CHECK(for _timezone,ac_cv_var__timezone,
+  [AC_TRY_LINK(
+  changequote(<<, >>)dnl
+  <<#include <time.h>
+  >>,
+  changequote([, ])dnl
+  [_timezone = 1;], ac_cv_var__timezone=yes, ac_cv_var__timezone=no)])
+    if test $ac_cv_var__timezone = yes; then
+      U_TIMEZONE=_timezone
+    fi
+fi
+AC_SUBST(U_TIMEZONE)
 
 ac_default_sizeof_wchar_t=4
 AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[

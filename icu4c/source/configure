@@ -2923,7 +2923,7 @@ U_HAVE_CODESET=0
 if test $U_HAVE_NL_LANGINFO -eq 1; then
   echo $ac_n "checking if nl_langinfo(CODESET) works""... $ac_c" 1>&6
 echo "configure:2926: checking if nl_langinfo(CODESET) works" >&5
-  if eval "test \"`echo '$''{'ac_cv_have_codeset'+set}'`\" = set"; then
+if eval "test \"`echo '$''{'ac_cv_have_codeset'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
@@ -2946,7 +2946,7 @@ fi
 rm -f conftest*
 fi
 
-  echo "$ac_t""$ac_cv_have_codeset" 1>&6
+echo "$ac_t""$ac_cv_have_codeset" 1>&6
   if test x$ac_cv_have_codeset = xyes
   then
       U_HAVE_CODESET=1
@@ -2996,17 +2996,209 @@ fi
 
 if eval "test \"`echo '$ac_cv_func_'tzset`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  U_HAVE_TZSET=1
+  :
 else
   echo "$ac_t""no" 1>&6
-U_HAVE_TZSET=0
 fi
 
+if test x$ac_cv_func_tzset = xyes
+then
+    U_TZSET=tzset
+else
+    echo $ac_n "checking for _tzset""... $ac_c" 1>&6
+echo "configure:3010: checking for _tzset" >&5
+if eval "test \"`echo '$''{'ac_cv_func__tzset'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 3015 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char _tzset(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char _tzset();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub__tzset) || defined (__stub____tzset)
+choke me
+#else
+_tzset();
+#endif
+
+; return 0; }
+EOF
+if { (eval echo configure:3038: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  eval "ac_cv_func__tzset=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_func__tzset=no"
+fi
+rm -f conftest*
+fi
+
+if eval "test \"`echo '$ac_cv_func_'_tzset`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  :
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+    if test x$ac_cv_func__tzset = xyes
+    then
+	U_TZSET=_tzset
+    fi
+fi
+
+echo $ac_n "checking for tzname""... $ac_c" 1>&6
+echo "configure:3064: checking for tzname" >&5
+if eval "test \"`echo '$''{'ac_cv_var_tzname'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 3069 "configure"
+#include "confdefs.h"
+#ifndef __USE_POSIX
+#define __USE_POSIX
+#endif
+#include <time.h>
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#endif
+int main() {
+atoi(*tzname);
+; return 0; }
+EOF
+if { (eval echo configure:3082: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  ac_cv_var_tzname=yes
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  ac_cv_var_tzname=no
+fi
+rm -f conftest*
+fi
+
+echo "$ac_t""$ac_cv_var_tzname" 1>&6
+if test $ac_cv_var_tzname = yes; then
+  U_TZNAME=tzname
+else
+  echo $ac_n "checking for _tzname""... $ac_c" 1>&6
+echo "configure:3099: checking for _tzname" >&5
+if eval "test \"`echo '$''{'ac_cv_var__tzname'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 3104 "configure"
+#include "confdefs.h"
+  #include <time.h>
+  extern char *_tzname[];
+  
+int main() {
+  atoi(*_tzname);
+; return 0; }
+EOF
+if { (eval echo configure:3113: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  ac_cv_var__tzname=yes
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  ac_cv_var__tzname=no
+fi
+rm -f conftest*
+fi
+
+echo "$ac_t""$ac_cv_var__tzname" 1>&6
+    if test $ac_cv_var__tzname = yes; then
+      U_TZNAME=_tzname
+    fi
+fi
+
+echo $ac_n "checking for timezone""... $ac_c" 1>&6
+echo "configure:3132: checking for timezone" >&5
+if eval "test \"`echo '$''{'ac_cv_var_timezone'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 3137 "configure"
+#include "confdefs.h"
+#ifndef __USE_POSIX
+#define __USE_POSIX
+#endif
+#ifndef __USE_XOPEN
+#define __USE_XOPEN
+#endif
+#include <time.h>
+
+int main() {
+timezone = 1;
+; return 0; }
+EOF
+if { (eval echo configure:3151: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  ac_cv_var_timezone=yes
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  ac_cv_var_timezone=no
+fi
+rm -f conftest*
+fi
+
+echo "$ac_t""$ac_cv_var_timezone" 1>&6
+if test $ac_cv_var_timezone = yes; then
+  U_TIMEZONE=timezone
+else
+  echo $ac_n "checking for _timezone""... $ac_c" 1>&6
+echo "configure:3168: checking for _timezone" >&5
+if eval "test \"`echo '$''{'ac_cv_var__timezone'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 3173 "configure"
+#include "confdefs.h"
+  #include <time.h>
+  
+int main() {
+  _timezone = 1;
+; return 0; }
+EOF
+if { (eval echo configure:3181: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  ac_cv_var__timezone=yes
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  ac_cv_var__timezone=no
+fi
+rm -f conftest*
+fi
+
+echo "$ac_t""$ac_cv_var__timezone" 1>&6
+    if test $ac_cv_var__timezone = yes; then
+      U_TIMEZONE=_timezone
+    fi
+fi
 
 
 ac_default_sizeof_wchar_t=4
 echo $ac_n "checking size of wchar_t""... $ac_c" 1>&6
-echo "configure:3010: checking size of wchar_t" >&5
+echo "configure:3202: checking size of wchar_t" >&5
 if eval "test \"`echo '$''{'ac_cv_sizeof_wchar_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -3014,7 +3206,7 @@ else
   ac_cv_sizeof_wchar_t=$ac_default_sizeof_wchar_t
 else
   cat > conftest.$ac_ext <<EOF
-#line 3018 "configure"
+#line 3210 "configure"
 #include "confdefs.h"
 #if STDC_HEADERS
 #include <stddef.h>
@@ -3031,7 +3223,7 @@ main()
   exit(0);
 }
 EOF
-if { (eval echo configure:3035: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:3227: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   ac_cv_sizeof_wchar_t=`cat conftestval`
 else
@@ -3054,12 +3246,12 @@ U_SIZEOF_WCHAR_T=$ac_cv_sizeof_wchar_t
 
 
 echo $ac_n "checking for ANSI C header files""... $ac_c" 1>&6
-echo "configure:3058: checking for ANSI C header files" >&5
+echo "configure:3250: checking for ANSI C header files" >&5
 if eval "test \"`echo '$''{'ac_cv_header_stdc'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3063 "configure"
+#line 3255 "configure"
 #include "confdefs.h"
 #include <stdlib.h>
 #include <stdarg.h>
@@ -3067,7 +3259,7 @@ else
 #include <float.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3071: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3263: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3084,7 +3276,7 @@ rm -f conftest*
 if test $ac_cv_header_stdc = yes; then
   # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
 cat > conftest.$ac_ext <<EOF
-#line 3088 "configure"
+#line 3280 "configure"
 #include "confdefs.h"
 #include <string.h>
 EOF
@@ -3102,7 +3294,7 @@ fi
 if test $ac_cv_header_stdc = yes; then
   # ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
 cat > conftest.$ac_ext <<EOF
-#line 3106 "configure"
+#line 3298 "configure"
 #include "confdefs.h"
 #include <stdlib.h>
 EOF
@@ -3123,7 +3315,7 @@ if test "$cross_compiling" = yes; then
   :
 else
   cat > conftest.$ac_ext <<EOF
-#line 3127 "configure"
+#line 3319 "configure"
 #include "confdefs.h"
 #include <ctype.h>
 #define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
@@ -3134,7 +3326,7 @@ if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
 exit (0); }
 
 EOF
-if { (eval echo configure:3138: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:3330: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   :
 else
@@ -3158,12 +3350,12 @@ EOF
 fi
 
 echo $ac_n "checking for int8_t""... $ac_c" 1>&6
-echo "configure:3162: checking for int8_t" >&5
+echo "configure:3354: checking for int8_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_int8_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3167 "configure"
+#line 3359 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3191,12 +3383,12 @@ EOF
 fi
 
 echo $ac_n "checking for uint8_t""... $ac_c" 1>&6
-echo "configure:3195: checking for uint8_t" >&5
+echo "configure:3387: checking for uint8_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_uint8_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3200 "configure"
+#line 3392 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3224,12 +3416,12 @@ EOF
 fi
 
 echo $ac_n "checking for int16_t""... $ac_c" 1>&6
-echo "configure:3228: checking for int16_t" >&5
+echo "configure:3420: checking for int16_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_int16_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3233 "configure"
+#line 3425 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3257,12 +3449,12 @@ EOF
 fi
 
 echo $ac_n "checking for uint16_t""... $ac_c" 1>&6
-echo "configure:3261: checking for uint16_t" >&5
+echo "configure:3453: checking for uint16_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_uint16_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3266 "configure"
+#line 3458 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3290,12 +3482,12 @@ EOF
 fi
 
 echo $ac_n "checking for int32_t""... $ac_c" 1>&6
-echo "configure:3294: checking for int32_t" >&5
+echo "configure:3486: checking for int32_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_int32_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3299 "configure"
+#line 3491 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3323,12 +3515,12 @@ EOF
 fi
 
 echo $ac_n "checking for uint32_t""... $ac_c" 1>&6
-echo "configure:3327: checking for uint32_t" >&5
+echo "configure:3519: checking for uint32_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_uint32_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3332 "configure"
+#line 3524 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3356,12 +3548,12 @@ EOF
 fi
 
 echo $ac_n "checking for bool_t""... $ac_c" 1>&6
-echo "configure:3360: checking for bool_t" >&5
+echo "configure:3552: checking for bool_t" >&5
 if eval "test \"`echo '$''{'ac_cv_type_bool_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3365 "configure"
+#line 3557 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #if STDC_HEADERS
@@ -3840,7 +4032,9 @@ s%@U_HAVE_WCHAR_H@%$U_HAVE_WCHAR_H%g
 s%@U_HAVE_WCSCPY@%$U_HAVE_WCSCPY%g
 s%@U_HAVE_NL_LANGINFO@%$U_HAVE_NL_LANGINFO%g
 s%@U_HAVE_CODESET@%$U_HAVE_CODESET%g
-s%@U_HAVE_TZSET@%$U_HAVE_TZSET%g
+s%@U_TZSET@%$U_TZSET%g
+s%@U_TZNAME@%$U_TZNAME%g
+s%@U_TIMEZONE@%$U_TIMEZONE%g
 s%@U_SIZEOF_WCHAR_T@%$U_SIZEOF_WCHAR_T%g
 s%@HAVE_INT8_T@%$HAVE_INT8_T%g
 s%@HAVE_UINT8_T@%$HAVE_UINT8_T%g
