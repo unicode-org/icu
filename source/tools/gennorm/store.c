@@ -55,8 +55,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x4e, 0x6f, 0x72, 0x6d },   /* dataFormat="Norm" */
-    { 2, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 3, 1, 0, 0 }                /* dataVersion (Unicode version) */
+    { 2, 2, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 3, 2, 0, 0 }                /* dataVersion (Unicode version) */
 };
 
 extern void
@@ -155,6 +155,7 @@ typedef void EnumTrieFn(void *context, uint32_t code, Norm *norm);
 
 static UNewTrie
     normTrie={ {0},0,0,0,0,0,0,0,0,{0} },
+    norm32Trie={ {0},0,0,0,0,0,0,0,0,{0} },
     fcdTrie={ {0},0,0,0,0,0,0,0,0,{0} },
     auxTrie={ {0},0,0,0,0,0,0,0,0,{0} };
 
@@ -168,10 +169,29 @@ static Norm *norms;
  */
 static uint32_t haveSeenFlags[256];
 
+/* see addCombiningCP() for details */
 static uint32_t combiningCPs[2000];
+
+/*
+ * after processCombining() this contains for each code point in combiningCPs[]
+ * the runtime combining index
+ */
 static uint16_t combiningIndexes[2000];
+
+/* section limits for combiningCPs[], see addCombiningCP() */
 static uint16_t combineFwdTop=0, combineBothTop=0, combineBackTop=0;
 
+/**
+ * Structure for a triple of code points, stored in combiningTriplesMem.
+ * The lead and trail code points combine into the the combined one,
+ * i.e., there is a canonical decomposition of combined-> <lead, trail>.
+ *
+ * Before processCombining() is called, leadIndex and trailIndex are 0.
+ * After processCombining(), they contain the indexes of the lead and trail
+ * code point in the combiningCPs[] array.
+ * They are then sorted by leadIndex, then trailIndex.
+ * They are not sorted by code points.
+ */
 typedef struct CombiningTriple {
     uint16_t leadIndex, trailIndex;
     uint32_t lead, trail, combined;
@@ -312,6 +332,24 @@ setHaveSeenString(const uint32_t *s, int32_t length) {
 
 /* handle combining data ---------------------------------------------------- */
 
+/*
+ * Insert an entry into combiningCPs[] for the new code point code with its flags.
+ * The flags indicate if code combines forward, backward, or both.
+ *
+ * combiningCPs[] contains three sections:
+ * 1. code points that combine forward
+ * 2. code points that combine forward and backward
+ * 3. code points that combine backward
+ *
+ * Search for code in the entire array.
+ * If it is found and already is in the right section (old flags==new flags)
+ * then we are done.
+ * If it is found but the flags are different, then remove it,
+ * union the old and new flags, and reinsert it into its correct section.
+ * If it is not found, then just insert it.
+ *
+ * Within each section, the code points are not sorted.
+ */
 static void
 addCombiningCP(uint32_t code, uint8_t flags) {
     uint32_t newEntry;
@@ -370,6 +408,12 @@ addCombiningCP(uint32_t code, uint8_t flags) {
     ++combineBackTop;
 }
 
+/**
+ * Find the index in combiningCPs[] where code point code is stored.
+ * @param code code point to look for
+ * @param isLead is code a forward combining code point?
+ * @return index in combiningCPs[] where code is stored
+ */
 static uint16_t
 findCombiningCP(uint32_t code, UBool isLead) {
     uint16_t i, limit;
@@ -1161,7 +1205,7 @@ makeAll32() {
         norms[i].value32=make32BitNorm(norms+i);
     }
 
-    pNormData=utrie_getData(&normTrie, &normLength);
+    pNormData=utrie_getData(&norm32Trie, &normLength);
 
     count=0;
     for(i=0; i<normLength; ++i) {
@@ -1208,7 +1252,7 @@ makeFCD() {
  */
 static int32_t
 usetContainsOne(const USet* set) {
-    if (uset_size(set) == 1) {
+    if (uset_size(set) == 1) { /* ### faster to count ranges and check only range?! */
         UChar32 start, end;
         UErrorCode ec = U_ZERO_ERROR;
         int32_t len = uset_getItem(set, 0, &start, &end, NULL, 0, &ec);
@@ -1225,7 +1269,7 @@ makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
         UErrorCode errorCode=U_ZERO_ERROR;
 
         /* does the set contain exactly one code point? */
-        c=usetContainsOne(norm->canonStart);
+        c=usetContainsOne(norm->canonStart); /* ### why? */
 
         /* add an entry to the BMP or supplementary search table */
         if(code<=0xffff) {
@@ -1251,7 +1295,7 @@ makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
 
             if(c>=0) {
                 /* single-code point result for supplementary code point */
-                table[tableLength-2]|=(uint16_t)(0x8000|((c>>8)&0x1f00));
+                table[tableLength-2]|=(uint16_t)(0x8000|((c>>8)&0x1f00)); /* ### how does this work again? */
                 table[tableLength++]=(uint16_t)c;
             } else {
                 table[tableLength++]=(uint16_t)canonStartSetsTop;
@@ -1281,6 +1325,219 @@ makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
     }
 }
 
+/* for getSkippableFlags ---------------------------------------------------- */
+
+/* combine the lead and trail code points; return <0 if they do not combine */
+static int32_t
+combine(uint32_t lead, uint32_t trail) {
+    CombiningTriple *triples;
+    uint32_t i, count;
+
+    /* search for all triples with c as lead code point */
+    triples=utm_getStart(combiningTriplesMem);
+    count=combiningTriplesMem->index;
+
+    /* triples are not sorted by code point but for each lead CP there is one contiguous block */
+    for(i=0; i<count && lead!=triples[i].lead; ++i) {}
+
+    /* check each triple for this code point */
+    for(; i<count && lead==triples[i].lead; ++i) {
+        if(trail==triples[i].trail) {
+            return (int32_t)triples[i].combined;
+        }
+    }
+
+    return -1;
+}
+
+/*
+ * Starting from the canonical decomposition s[0..length[ of a single code point,
+ * is the code point c consumed in an NFC/FCC recomposition?
+ *
+ * No need to handle discontiguous composition because that would not consume some
+ * intermediate character, so would not compose back to the original character.
+ * See comments in canChangeWithFollowing().
+ *
+ * No need to compose beyond where c canonically orders because if it is consumed
+ * then the result differs from the original anyway.
+ *
+ * Possible optimization:
+ * - Verify that there are no cases of the same combining mark stacking twice.
+ * - return FALSE right away if c inserts after a copy of itself
+ *   without attempting to recompose; will happen because each mark in
+ *   the decomposition will be enumerated and passed in as c.
+ *   More complicated and fragile though than it is already.
+ *
+ * markus 2002nov04
+ */
+static UBool
+doesComposeConsume(const uint32_t *s, int32_t length, uint32_t c, uint8_t cc) {
+    int32_t starter, i;
+
+    /* ignore trailing characters where cc<prevCC */
+    while(length>1 && cc<getCCFromCP(s[length-1])) {
+        --length;
+    }
+
+    /* start consuming/combining from the beginning */
+    starter=(int32_t)s[0];
+    for(i=1; i<length; ++i) {
+        starter=combine((uint32_t)starter, s[i]);
+        if(starter<0) {
+            fprintf(stderr, "error: unable to consume normal decomposition in doesComposeConsume(<%04lx, %04lx, ...>[%ld], U+%04lx, %u)\n",
+                s[0], s[1], length, c, cc);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
+    }
+
+    /* try to combine/consume c, return TRUE if it is consumed */
+    return combine((uint32_t)starter, c)>=0;
+}
+
+/* does the starter s[0] combine forward with another char that is below trailCC? */
+static UBool
+canChangeWithFollowing(const uint32_t *s, int32_t length, uint8_t trailCC) {
+    if(trailCC<=1) {
+        /* no character will combine ahead of the trailing char of the decomposition */
+        return FALSE;
+    }
+
+    /*
+     * We are only checking skippable condition (f).
+     * Therefore, the original character does not have quick check flag NFC_NO (c),
+     * i.e., the decomposition recomposes completely back into the original code point.
+     * So s[0] must be a true starter with cc==0 and
+     * combining with following code points.
+     *
+     * Similarly, length==1 is not possible because that would be a singleton
+     * decomposition which is marked with NFC_NO and does not pass (c).
+     *
+     * Only a character with cc<trailCC can change the composition.
+     * Reason: A char with cc>=trailCC would order after decomposition s[],
+     * composition would consume all of the decomposition, and here we know that
+     * the original char passed check d), i.e., it does not combine forward,
+     * therefore does not combine with anything after the decomposition is consumed.
+     *
+     * Now see if there is a character that
+     * 1. combines backward
+     * 2. has cc<trailCC
+     * 3. is consumed in recomposition
+     *
+     * length==2 is simple:
+     *
+     * Characters that fulfill these conditions are exactly the ones that combine directly
+     * with the starter c==s[0] because there is no intervening character after
+     * reordering.
+     * We can just enumerate all chars with which c combines (they all pass 1. and 3.)
+     * and see if one has cc<trailCC (passes 2.).
+     *
+     * length>2 is a little harder:
+     *
+     * Since we will get different starters during recomposition, we need to
+     * enumerate each backward-combining character (1.)
+     * with cc<trailCC (2.) and
+     * see if it gets consumed in recomposition. (3.)
+     * No need to enumerate both-ways combining characters because they must have cc==0.
+     */
+    if(length==2) {
+        /* enumerate all chars that combine with this one and check their cc */
+        CombiningTriple *triples;
+        uint32_t c, i, count;
+        uint8_t cc;
+
+        /* search for all triples with c as lead code point */
+        triples=utm_getStart(combiningTriplesMem);
+        count=combiningTriplesMem->index;
+        c=s[0];
+
+        /* triples are not sorted by code point but for each lead CP there is one contiguous block */
+        for(i=0; i<count && c!=triples[i].lead; ++i) {}
+
+        /* check each triple for this code point */
+        for(; i<count && c==triples[i].lead; ++i) {
+            cc=getCCFromCP(triples[i].trail);
+            if(cc>0 && cc<trailCC) {
+                /* this trail code point combines with c and has cc<trailCC */
+                return TRUE;
+            }
+        }
+    } else {
+        /* enumerate all chars that combine backward */
+        uint32_t c2;
+        uint16_t i;
+        uint8_t cc;
+
+        for(i=combineBothTop; i<combineBackTop; ++i) {
+            c2=combiningCPs[i]&0xffffff;
+            cc=getCCFromCP(c2);
+            /* pass in length-1 because we already know that c2 will insert before the last character with trailCC */
+            if(cc>0 && cc<trailCC && doesComposeConsume(s, length-1, c2, cc)) {
+                return TRUE;
+            }
+        }
+    }
+
+    /* this decomposition is not modified by any appended character */
+    return FALSE;
+}
+
+/* see unormimp.h for details on NF*C Skippable flags */
+static uint32_t
+getSkippableFlags(const Norm *norm) {
+    /* ignore NF*D skippable properties because they are covered by norm32, test at runtime */
+
+    /* ignore Hangul, test those at runtime (LV Hangul are not skippable) */
+    if(norm->specialTag==_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_HANGUL) {
+        return 0;
+    }
+
+    /* ### check other data generation functions whether they should & do ignore Hangul/Jamo specials */
+
+    /*
+     * Note:
+     * This function returns a non-zero flag only if (a)..(e) indicate skippable but (f) does not.
+     *
+     * This means that (a)..(e) must always be derived from the runtime norm32 value,
+     * and (f) be checked from the auxTrie if the character is skippable per (a)..(e),
+     * the form is NF*C and there is a canonical decomposition (NFD_NO).
+     *
+     * (a) unassigned code points get "not skippable"==false because they
+     * don't have a Norm struct so they won't get here
+     */
+
+    /* (b) not skippable if cc!=0 */
+    if(norm->udataCC!=0) {
+        return 0; /* non-zero flag for (f) only */
+    }
+
+    /*
+     * not NFC_Skippable if
+     * (c) quick check flag == NO  or
+     * (d) combines forward  or
+     * (e) combines back or
+     * (f) can change if another character is added
+     *
+     * for (f):
+     * For NF*C: Get corresponding decomposition, get its last starter (cc==0),
+     *           check its composition list,
+     *           see if any of the second code points in the list
+     *           has cc less than the trailCC of the decomposition.
+     *
+     * For FCC: Test at runtime if the decomposition has a trailCC>1
+     *          -> there are characters with cc==1, they would order before the trail char
+     *          and prevent contiguous combination with the trail char.
+     */
+    if( (norm->qcFlags&(_NORM_QC_NFC&_NORM_QC_ANY_NO))!=0 ||
+        (norm->combiningFlags&3)!=0) {
+        return 0; /* non-zero flag for (f) only */
+    }
+    if(norm->lenNFD!=0 && canChangeWithFollowing(norm->nfd, norm->lenNFD, (uint8_t)norm->canonBothCCs)) {
+        return _NORM_AUX_NFC_SKIP_F_MASK;
+    }
+
+    return 0; /* skippable */
+}
+
 static void
 makeAux() {
     Norm *norm;
@@ -1302,6 +1559,8 @@ makeAux() {
         if(norm->unsafeStart || norm->udataCC!=0) {
             pData[i]|=_NORM_AUX_UNSAFE_MASK;
         }
+
+        pData[i]|=getSkippableFlags(norm);
     }
 }
 
@@ -1430,8 +1689,9 @@ processData() {
     /* store search tables and USerializedSets for canonical starters (after Hangul/Jamo specials!) */
     enumTrie(makeCanonSetFn, NULL);
 
-    /* clone the normalization trie to make the FCD trie */
-    if( NULL==utrie_clone(&fcdTrie, &normTrie, NULL, 0) ||
+    /* clone the normalization builder trie to make the final data tries */
+    if( NULL==utrie_clone(&norm32Trie, &normTrie, NULL, 0) ||
+        NULL==utrie_clone(&fcdTrie, &normTrie, NULL, 0) ||
         NULL==utrie_clone(&auxTrie, &normTrie, NULL, 0)
     ) {
         fprintf(stderr, "error: unable to clone the normalization trie\n");
@@ -1469,7 +1729,7 @@ generateData(const char *dataDir) {
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t size, normTrieSize, fcdTrieSize, auxTrieSize, dataLength;
 
-    normTrieSize=utrie_serialize(&normTrie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
+    normTrieSize=utrie_serialize(&norm32Trie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(normalization properties) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -1595,6 +1855,7 @@ cleanUpData(void) {
     utm_close(extraMem);
     utm_close(combiningTriplesMem);
     utrie_close(&normTrie);
+    utrie_close(&norm32Trie);
     utrie_close(&fcdTrie);
     utrie_close(&auxTrie);
 }
