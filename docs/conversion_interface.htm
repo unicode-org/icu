@@ -1,0 +1,56 @@
+<html>
+
+<head>
+<title>Conversion interface</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+</head>
+
+<body>
+
+<h1>Conversion interface</h1>
+
+<p>Conversion interface is a set of C functions used to convert to and from Unicode and
+various character sets/codepages. </p>
+
+<h2>Important files:</h2>
+
+<p>icu/source/common
+
+<ul>
+  <li>ucnv_io.{c,h} : Low level implementation of the aliasing and other file access services.</li>
+  <li>ucnv_bld.{c,h} : Implementation of the data structure.</li>
+  <li>ucnv_cnv.{c,h} : Implementation of the conversion loop.</li>
+  <li>ucnv.{c,h} : API implementation.</li>
+  <li>ucnv_imp.h : internal functions.</li>
+  <li>ucnv_err.{h,c} : sample implementation of error Callback Routines.</li>
+  <li>convert.cpp : C++ wrapers of the conversion routines.</li>
+</ul>
+
+<p>Data files: icu/data
+
+<ul>
+  <li>convrtrs.txt : Alias table used by the icu conversion routines for conversion data
+    files.</li>
+  <li>*.ucm : mapping tables.</li>
+</ul>
+
+<p>Tools : icu/source/tools/makeconv
+
+<ul>
+  <li>makeconv.c : Tool that compiles the .ucm files in a format that ICU understands (.cnv
+    files)</li>
+</ul>
+
+<p>Files that are used but not part of conversion per se (i.e. used by other parts of the
+ICU): icu/source/common
+
+<ul>
+  <li>ucmp8.{c,h} : compact array (array with compressed array for 8 bits char).</li>
+  <li>ucmp16.{c,h} : compact array (array with compressed array for 16 bits char).</li>
+  <li>uhash.{c,h} : hashtable implementation.</li>
+</ul>
+<font FACE="Helv" SIZE="2" COLOR="#000000">
+
+<p></font>&nbsp;</p>
+</body>
+</html>
