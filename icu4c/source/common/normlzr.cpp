@@ -205,7 +205,11 @@ Normalizer::compose(const UnicodeString& source,
       
       // We can only combine a character with the base if we haven't
       // already seen a combining character with the same canonical class.
-      if (type == ComposeData::COMBINING && (classesSeen & cclass) == 0
+      // We also only combine characters with an index from
+      // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
+      // non-combining; these formerly had an index of zero.
+      if (type == ComposeData::COMBINING && index < ComposeData::COMBINING_COUNT
+          && (classesSeen & cclass) == 0
           && (action = composeAction(baseIndex, index)) > 0)
             {
           if (action > ComposeData::MAX_COMPOSED) {
@@ -349,7 +353,8 @@ UChar Normalizer::nextCompose()
             
             // We can only combine a character with the base if we haven't
             // already seen a combining character with the same canonical class.
-            if (type == ComposeData::COMBINING && (classesSeen & cclass) == 0
+            if (type == ComposeData::COMBINING && index < ComposeData::COMBINING_COUNT
+                && (classesSeen & cclass) == 0
                 && (action = composeAction(baseIndex, index)) > 0)
             {
                 if (action > ComposeData::MAX_COMPOSED) {
