@@ -1207,6 +1207,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
 
   ListList = src->lh;
 
+  if(U_FAILURE(*status)) {
+      return 0;
+  }
+
   while(src->current < src->end) {
     src->parsedToken.prefixOffset = 0;
   
