@@ -767,7 +767,7 @@ void DateFormatRegressionTest::Test4104136(void)
         ParsePosition pos(0);
         UDate d = sdf->parse(text, pos);
         logln(" text: \"" + text + "\""); 
-        logln(" index: " + pos.getIndex()); 
+        logln(" index: %d", pos.getIndex()); 
         logln((UnicodeString) " result: " + d);
         if(pos.getIndex() != finish.getIndex())
             errln("Fail: Expected pos " + finish.getIndex());
