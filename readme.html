@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.0
     ReadMe</h1>
 
-    <p>Version: 2004-Jun-15<br>
+    <p>Version: 2004-Jun-17<br>
      Copyright &copy; 1997-2004 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -237,7 +237,6 @@
     a directory or package name. For example, if your resource package is named
     'mydata', and resides in a directory named 'mydata', the following will
     fail:</p>
-
 <pre>
 <samp>u_setDataDirectory("mydata");
 ures_open("mydata", NULL, &amp;status);
@@ -968,9 +967,9 @@ ures_open("mydata", NULL, &amp;status);
       release build of max speed optimization).</li>
     </ul>
 
-    <p>(If you want to build with Microsoft Visual C++ .NET, please refer to
-    the <a href="#HowToBuildWindowsDotNet">note about building with Visual
-    Studio .NET</a> below.)</p>
+    <p>(If you want to build with Microsoft Visual C++ 6, please refer to the
+    <a href="#HowToBuildWindowsMSVC6">note about building with Visual C++ 6</a>
+    below.)</p>
 
     <p>The steps are:</p>
 
@@ -983,37 +982,31 @@ ures_open("mydata", NULL, &amp;status);
       included in the <strong>PATH</strong> environment variable. The tests
       will not work without the location of the ICU DLL files in the path.</li>
 
-      <li>Open the "<i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw" workspace
-      file in Microsoft Visual C++ 6.0. (This workspace includes all the
-      International Components for Unicode libraries, necessary ICU building
-      tools, and the intltest and cintltest test suite projects). Please see
-      the note below if you want to build from the command line instead.</li>
+      <li>Open the "<i>&lt;ICU&gt;</i>\source\allinone\allinone.sln" workspace
+      file in Microsoft Visual Studio .NET 2003. (This solution includes all
+      the International Components for Unicode libraries, necessary ICU
+      building tools, and the test suite projects). Please see the <a href=
+      "HowToBuildWindowsCommandLine">command line note below</a> if you want to
+      build from the command line instead.</li>
 
-      <li>Set the active Project to the "all" project. To do this: Choose
-      "Project" menu, and select "Set active project". In the submenu, select
-      the "all" workspace.</li>
+      <li>Set the active configuration to "Debug" or "Release" (See <a href=
+      "#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
 
-      <li>Set the active configuration to "Win32 Debug" or "Win32 Release" (See
-      <a href="#HowToBuildWindowsConfig">Windows configuration note</a>
-      below).</li>
-
-      <li>Choose the "Build" menu and select "Rebuild All". If you want to
+      <li>Choose the "Build" menu and select "Rebuild Solution". If you want to
       build the Debug and Release at the same time, see the <a href=
       "#HowToBuildWindowsBatch">batch configuration note</a> below.</li>
 
       <li>Run the C++ test suite, "intltest". To do this: set the active
-      project to "intltest", and press F5 to run it.</li>
+      startup project to "intltest", and press Ctrl+F5 to run it. Make sure
+      that it passes without any errors.</li>
 
-      <li>Run the C test suite, "cintltst". To do this: set the active project
-      to "cintltst", and press F5 to run it.</li>
+      <li>Run the C test suite, "cintltst". To do this: set the active startup
+      project to "cintltst", and press Ctrl+F5 to run it. Make sure that it
+      passes without any errors.</li>
 
-      <li>Make sure that both "cintltst" and "intltest" passed without any
-      errors. The return codes are non-zero when they do not pass. Visual C++
-      will display the return codes in the debug tag of the output window. When
-      "intltest" and "cintltest" return 0, it means that everything is
-      installed correctly. You can press Ctrl+F5 on the test project to run the
-      test and see what error messages were displayed (if any tests
-      failed).</li>
+      <li>Run the I/O test suite, "iotest". To do this: set the active startup
+      project to "iotest", and press Ctrl+F5 to run it. Make sure that it
+      passes without any errors.</li>
 
       <li>You are now able to develop applications with ICU by using the
       libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
@@ -1028,8 +1021,11 @@ ures_open("mydata", NULL, &amp;status);
     "HowToBuildWindowsCommandLine"><strong>Using MSDEV At The Command Line
     Note:</strong></a> You can build ICU from the command line. Assuming that
     you have properly installed Microsoft Visual C++ to support command line
-    execution, you can run the following command, 'msdev
-    <i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw /MAKE "ALL"'.</p>
+    execution, you can run the following command, 'devenv.com
+    <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build Release'. You can
+    also use Cygwin with this compiler to build ICU, and you can refer to the
+    <a href="#HowToBuildCygwin">How To Build And Install On Windows with
+    Cygwin</a> section for more details.</p>
 
     <p><a name="HowToBuildWindowsConfig" id=
     "HowToBuildWindowsConfig"><strong>Setting Active Configuration
@@ -1037,37 +1033,33 @@ ures_open("mydata", NULL, &amp;status);
     possibilities are:</p>
 
     <ul>
-      <li>Choose "Build" menu, select "Set Active Configuration", and select
-      "Win32 Release" or "Win32 Debug".</li>
+      <li>Choose "Build" menu, select "Configuration Manager...", and select
+      "Release" or "Debug" for the Active Configuration Solution.</li>
 
-      <li>Another way is to select "Customize" in the "Tools" menu, select the
-      "Toolbars" tab, enable "Build" instead of "Build Minibar", and click on
-      "Close". This will bring up a toolbar which you can move aside the other
-      permanent toolbars at the top of the MSVC window. The advantage is that
-      you now have an easy-to-reach pop-up menu that will always show the
-      currently selected active configuration. Or, you can drag the project and
-      configuration selections and drop them on the menu bar for later
-      selection.</li>
+      <li>Another way is to select the desired build configuration from
+      "Solution Configurations" dropdown menu from the standard toolbar. It
+      will say "Release" or "Debug" in the dropdown list.</li>
     </ul>
 
     <p><a name="HowToBuildWindowsBatch" id=
     "HowToBuildWindowsBatch"><strong>Batch Configuration Note:</strong></a> If
     you want to build the Debug and Release configurations at the same time,
     choose "Build" menu and select "Batch Build..." instead (and mark all
-    configurations as checked), then click the button named "Rebuild All". The
-    "all" workspace will build all the libraries, test programs and various ICU
+    configurations as checked), then click the button named "Rebuild". The
+    "all" solution will build all the libraries, test programs and various ICU
     tools (e.g. genrb for generating binary locale data files).</p>
 
-    <p><a name="HowToBuildWindowsDotNet" id=
-    "HowToBuildWindowsDotNet"><strong>Microsoft Visual Studio .NET
-    Note:</strong></a> ICU will build with Microsoft Visual Studio .NET 2002.
-    It is recommended that you use the
-    "<i>&lt;ICU&gt;</i>\source\allinone\allinone.sln" solution workspace to
-    build ICU. The instructions for building with Visual Studio .NET are
-    similar to the instructions for Visual Studio .NET. If you have Microsoft
-    Visual Studio .NET 2003 the Visual Studio .NET 2002 project files will
-    automatically be converted to 2003 project files when you open the solution
-    workspace for the first time.</p>
+    <p><a name="HowToBuildWindowsMSVC6" id=
+    "HowToBuildWindowsMSVC6"><strong>Microsoft Visual Studio 6.0
+    Note:</strong></a> ICU will build with Microsoft Visual Studio 6. It is
+    recommended that you use the
+    "<i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw" workspace to build ICU.
+    The instructions for building with Visual Studio 6 are similar to the
+    instructions for Visual Studio .NET. If you have Microsoft Visual Studio
+    .NET 2002, it is recommended that you use build on the command line with
+    Cygwin, and those instructions are described in the <a href=
+    "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
+    section of this document.</p>
 
     <h3><a name="HowToBuildWindowsXP64" href="#HowToBuildWindowsXP64" id=
     "HowToBuildWindowsXP64">How To Build And Install On Windows XP on
@@ -1351,24 +1343,15 @@ ures_open("mydata", NULL, &amp;status);
       script to do this for you automatically. It will unpackage the tar file
       and convert all the necessary files for you automatically.</li>
 
-      <li>
-        <p>z/OS supports both native S/390 hexadecimal floating point and (with
-        OS/390 2.6 and later) IEEE 754 binary floating point. This is a compile
-        time option. Applications built with IEEE should use ICU DLLs that are
-        built with IEEE (and vice versa). The environment variable IEEE390=0
-        will cause the z/OS version of ICU to be built without IEEE floating
-        point support and use the native hexadecimal floating point. By default
-        ICU is built with IEEE 754 support.</p>
-
-        <p><em>Important:</em> Currently (ICU 1.4.2), native floating point
-        support is sufficient for codepage conversion, resource bundle and
-        UnicodeString operations, but the Format APIs require IEEE binary
-        floating point.</p>
-
-        <p>Examples for configuring ICU:<br>
-         Debug build: <code>./runConfigureICU --enable-debug zOS</code><br>
-         Release build: <code>./runConfigureICU zOS</code></p>
-      </li>
+      <li>z/OS supports both native S/390 hexadecimal floating point and (with
+      OS/390 2.6 and later) IEEE 754 binary floating point. This is a compile
+      time option. Applications built with IEEE should use ICU DLLs that are
+      built with IEEE (and vice versa). The environment variable IEEE390=0 will
+      cause the z/OS version of ICU to be built without IEEE floating point
+      support and use the native hexadecimal floating point. By default ICU is
+      built with IEEE 754 support. Native floating point support is sufficient
+      for codepage conversion, resource bundle and UnicodeString operations,
+      but the Format APIs require IEEE binary floating point.</li>
 
       <li>
         <p>z/OS introduced the concept of Extra Performance Linkage (XPLINK) to
@@ -1605,7 +1588,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     </ol>
 
     <p>Following these guidelines prevents other applications that use a
-    standard ICU distribution from conflicting any libraries that you need. On
+    standard ICU distribution from conflicting with any libraries that you need. On
     operating systems that do not have a standard C++ ABI (name mangling) for
     compilers, it is recommended to do this special packaging anyway. More
     details on customizing ICU are available in the <a href=
