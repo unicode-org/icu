@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -13,6 +13,7 @@
 
 // The following includes utypes.h, uobject.h and unistr.h
 #include "unicode/fmtable.h"
+#include "unicode/testlog.h"
 
 U_NAMESPACE_USE
 
@@ -65,7 +66,7 @@ UnicodeString toString(const Formattable& f); // liu
         }                             \
         break
 
-class IntlTest {
+class IntlTest : public TestLog {
 public:
 
     IntlTest();
@@ -189,6 +190,7 @@ public:
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
     static const char* loadTestData(UErrorCode& err);
+    virtual const char* getTestDataPath(UErrorCode& err);
 
 // static members
 public:

@@ -1,33 +1,18 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "unicode/utypes.h"
+#include "unicode/unistr.h"
 
 #if !UCONFIG_NO_COLLATION
 
-#ifndef _COLL
+#include "unicode/tstdtmod.h"
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
-#include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _TRCOLL
 #include "trcoll.h"
-#endif
-
 #include "sfwdchit.h"
 
 CollationTurkishTest::CollationTurkishTest()

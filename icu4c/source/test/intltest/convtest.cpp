@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -36,7 +36,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "convtest.h"
-#include "tstdtmod.h"
+#include "unicode/tstdtmod.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -74,7 +74,6 @@ ConversionTest::TestToUnicode() {
     int32_t offsetsLength;
     UConverterToUCallback callback;
 
-    TestLog testLog;
     TestDataModule *dataModule;
     TestData *testData;
     const DataMap *testCase;
@@ -82,7 +81,7 @@ ConversionTest::TestToUnicode() {
     int32_t i;
 
     errorCode=U_ZERO_ERROR;
-    dataModule=TestDataModule::getTestDataModule("conversion", testLog, errorCode);
+    dataModule=TestDataModule::getTestDataModule("conversion", *this, errorCode);
     if(U_SUCCESS(errorCode)) {
         testData=dataModule->createTestData("toUnicode", errorCode);
         if(U_SUCCESS(errorCode)) {
@@ -187,7 +186,6 @@ ConversionTest::TestFromUnicode() {
     int32_t offsetsLength;
     UConverterFromUCallback callback;
 
-    TestLog testLog;
     TestDataModule *dataModule;
     TestData *testData;
     const DataMap *testCase;
@@ -196,7 +194,7 @@ ConversionTest::TestFromUnicode() {
     int32_t i, length;
 
     errorCode=U_ZERO_ERROR;
-    dataModule=TestDataModule::getTestDataModule("conversion", testLog, errorCode);
+    dataModule=TestDataModule::getTestDataModule("conversion", *this, errorCode);
     if(U_SUCCESS(errorCode)) {
         testData=dataModule->createTestData("fromUnicode", errorCode);
         if(U_SUCCESS(errorCode)) {
@@ -329,7 +327,6 @@ ConversionTest::TestGetUnicodeSet() {
     UnicodeSet cnvSet, mapSet, mapnotSet, diffSet;
     UConverter *cnv;
 
-    TestLog testLog;
     TestDataModule *dataModule;
     TestData *testData;
     const DataMap *testCase;
@@ -337,7 +334,7 @@ ConversionTest::TestGetUnicodeSet() {
     int32_t i;
 
     errorCode=U_ZERO_ERROR;
-    dataModule=TestDataModule::getTestDataModule("conversion", testLog, errorCode);
+    dataModule=TestDataModule::getTestDataModule("conversion", *this, errorCode);
     if(U_SUCCESS(errorCode)) {
         testData=dataModule->createTestData("getUnicodeSet", errorCode);
         if(U_SUCCESS(errorCode)) {

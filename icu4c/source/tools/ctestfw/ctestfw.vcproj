@@ -22,7 +22,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\..\include"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;CTESTFW_EXPORTS;T_CTEST_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -87,7 +87,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\..\include"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;CTESTFW_EXPORTS;T_CTEST_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -151,12 +151,36 @@
 			<File
 				RelativePath=".\ctest.c">
 			</File>
+			<File
+				RelativePath=".\datamap.cpp">
+			</File>
+			<File
+				RelativePath=".\testdata.cpp">
+			</File>
+			<File
+				RelativePath=".\tstdtmod.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
 				RelativePath=".\unicode\ctest.h">
+			</File>
+			<File
+				RelativePath=".\unicode\datamap.h">
+			</File>
+			<File
+				RelativePath=".\unicode\testdata.h">
+			</File>
+			<File
+				RelativePath=".\unicode\testlog.h">
+			</File>
+			<File
+				RelativePath=".\unicode\testtype.h">
+			</File>
+			<File
+				RelativePath=".\unicode\tstdtmod.h">
 			</File>
 		</Filter>
 		<Filter
