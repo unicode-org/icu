@@ -812,7 +812,7 @@ public class CollationAPITest extends TestFmwk {
     
     public void TestBounds() 
     {
-        Collator coll = Collator.getInstance(new Locale("sh"));
+        Collator coll = Collator.getInstance(new Locale("sh", ""));
           
         String test[] = { "John Smith", "JOHN SMITH", 
                           "john SMITH", "j\u00F6hn sm\u00EFth",
