@@ -66,6 +66,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "genccode"=..\tools\genccode\genccode.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "gencol"=..\tools\gencol\gencol.dsp - Package Owner=<4>
 
 Package=<5>
@@ -79,6 +97,24 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name i18n
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gennames"=..\tools\gennames\gennames.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
     End Project Dependency
 }}}
 
@@ -145,6 +181,21 @@ Package=<4>
 ###############################################################################
 
 Project: "makeconv"=..\tools\makeconv\makeconv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "toolutil"=..\tools\toolutil\toolutil.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
