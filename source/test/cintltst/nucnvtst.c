@@ -1830,8 +1830,17 @@ TestGB18030() {
         0x82, 0x35, 0x8f, 0x34,
         0x84, 0x32, 0xeb, 0x37,
         0x90, 0x30, 0x81, 0x30,
-        0xe3, 0x32, 0x9a, 0x35,
+        0xe3, 0x32, 0x9a, 0x35
+#if 0
+        /*
+         * Feature removed   markus 2000-oct-26
+         * Only some codepages must match surrogate pairs into supplementary code points -
+         * see javadoc for ucnv_getNextUChar() and implementation notes in ucnvmbcs.c .
+         * GB 18030 provides direct encodings for supplementary code points, therefore
+         * it must not combine two single-encoded surrogates into one code point.
+         */
         0x83, 0x36, 0xc8, 0x30, 0x83, 0x37, 0xb0, 0x34 /* separately encoded surrogates */
+#endif
     };
 
     /* expected test results */
@@ -1846,8 +1855,11 @@ TestGB18030() {
         4, 0x9fa6,
         4, 0xffff,
         4, 0x10000,
-        4, 0x10ffff,
+        4, 0x10ffff
+#if 0
+        /* Feature removed. See comment above. */
         8, 0x10000
+#endif
     };
 
     const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
