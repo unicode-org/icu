@@ -997,7 +997,7 @@ CalendarRegressionTest::test4031502()
         UErrorCode status = U_ZERO_ERROR;
         Locale saveLocale = Locale::getDefault();
         //try {
-        Locale locales [] = { Locale::CHINESE, Locale::CHINA };
+        Locale locales [] = { Locale::getChinese(), Locale::getChina() };
             for (int32_t i=0; i<2; ++i) {
                 Locale::setDefault(locales[i], status);
                 failure(status, "Locale::setDefault");

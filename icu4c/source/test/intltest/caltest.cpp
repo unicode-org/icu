@@ -1199,9 +1199,9 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
      * to loop_addroll. - aliu */
     UErrorCode status = U_ZERO_ERROR;
     int32_t times = 20;
-    Calendar *cal=Calendar::createInstance(Locale::GERMANY, status);
+    Calendar *cal=Calendar::createInstance(Locale::getGermany(), status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
-    SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::GERMANY, status);
+    SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::getGermany(), status);
     if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
     sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-ee"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
@@ -1345,7 +1345,7 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
 
     UnicodeString us;
     UDate tst, original;
-    Calendar *tstres = new GregorianCalendar(Locale::GERMANY, errorCode);
+    Calendar *tstres = new GregorianCalendar(Locale::getGermany(), errorCode);
     for(int i=0; i<times; ++i) {
         sdf->format(Formattable(cal->getTime(errorCode),Formattable::kIsDate), us, errorCode);
         //logln("expected: "+us);

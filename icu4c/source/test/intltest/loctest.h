@@ -22,6 +22,10 @@ public:
      **/
     void TestBasicGetters(void);
     /**
+     * Test methods to set and get data fields
+     **/
+    void TestParallelAPIValues(void);
+    /**
      * Use Locale to access Resource file data and compare against expected values
      **/
     void TestSimpleResourceInfo(void);

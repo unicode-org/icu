@@ -366,7 +366,7 @@ void NumberFormatRegressionTest::Test4071492 (void)
 void NumberFormatRegressionTest::Test4086575(void) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    NumberFormat *nf1 = NumberFormat::createInstance(Locale::FRANCE, status);
+    NumberFormat *nf1 = NumberFormat::createInstance(Locale::getFrance(), status);
     failure(status, "NumberFormat::createInstance");
     
     // C++ workaround to make sure cast works
@@ -797,7 +797,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     UnicodeString expectedPercent(chars3, 9, 9);
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale::CANADA_FRENCH, status);
+    formatter = NumberFormat::createInstance(Locale::getCanadaFrench(), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
 
@@ -810,7 +810,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createCurrencyInstance(Locale::CANADA_FRENCH, status);
+    formatter = NumberFormat::createCurrencyInstance(Locale::getCanadaFrench(), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( 5789.9876, tempString );
@@ -824,7 +824,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createPercentInstance(Locale::CANADA_FRENCH, status);
+    formatter = NumberFormat::createPercentInstance(Locale::getCanadaFrench(), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
@@ -885,7 +885,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createPercentInstance(Locale::GERMANY, status);
+    formatter = NumberFormat::createPercentInstance(Locale::getGermany(), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
