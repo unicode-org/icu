@@ -53,6 +53,7 @@ static UOption options[]={
     {"rule",          NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0},
     {"normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0},
     {"scripts",       NULL, NULL, NULL, 't', UOPT_NO_ARG, 0},
+    {"reducehan",     NULL, NULL, NULL, 'e', UOPT_NO_ARG, 0},
 	UOPTION_VERBOSE
 };
 
@@ -180,7 +181,7 @@ void serialize(FILE *f, UCollationElements *iter) {
         sortkeylength = ucol_getSortKey(iter->iteratordata_.coll, codepoint, 
                                         -1, sortkey, 64);
     }
-    if (options[10].doesOccur) {
+    if (options[11].doesOccur) {
         serialize(stdout, codepoint);
         fprintf(stdout, "\n");
     }
@@ -925,7 +926,14 @@ UBool checkInScripts(UScriptCode script[], int scriptcount,
 {
     UErrorCode error = U_ZERO_ERROR;
     for (int i = 0; i < scriptcount; i ++) {
-        if (uscript_getScript(codepoint, &error) == script[i]) {
+        if (script[i] == USCRIPT_HAN && options[10].doesOccur) { 
+            if ((codepoint >= 0x2E80 && codepoint <= 0x2EE4) ||
+                (codepoint >= 0x2A672 && codepoint <= 0x2A6D6)) {
+                // reduce han
+                return TRUE;
+            }
+        }
+        else if (uscript_getScript(codepoint, &error) == script[i]) {
             return TRUE;
         }
         if (U_FAILURE(error)) {
@@ -985,7 +993,7 @@ int getScriptElements(UScriptCode script[], int scriptcount,
         }
         codepoint ++;
     }
-    
+
     UChar    ucarules[0x10000];
     UChar   *rule;
     int32_t  rulelength = 0;
@@ -1232,7 +1240,7 @@ void serializeScripts(UScriptCode script[], int scriptcount)
         return;
     }
 
-    outputScriptElem(scriptelem[0], 1, hasExpansions(coleiter));
+    outputScriptElem(scriptelem[0], -1, hasExpansions(coleiter));
     for (int i = 0; i < count - 1; i ++) {
         ucol_setText(coleiter, scriptelem[i + 1].ch, scriptelem[i + 1].count,
                      &error);
@@ -1351,8 +1359,8 @@ void serializeScripts() {
           int32_t  localelist = 0;
           int32_t  localesize;
         
-    localesize = ucol_countAvailable() - 1;
-    locale      = ucol_getAvailable(localelist);
+    localesize = ucol_countAvailable();
+    locale     = ucol_getAvailable(localelist);
 
     strcat(filename, "list.html");
     FILE *list = fopen(filename, "w");
@@ -1451,7 +1459,10 @@ int main(int argc, char *argv[]) {
                         "--normalizaton mode\n" 
                         "    UNormalizationMode mode to be used.\n"
                         "--scripts\n" 
-                        "    Codepoints from all scripts are sorted and serialized.\n");
+                        "    Codepoints from all scripts are sorted and serialized.\n"
+                        "--reducehan\n" 
+                        "    Only 200 Han script characters will be displayed with the use of --scripts.\n");
+
         fprintf(stdout, "Example: dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17\n\n");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
