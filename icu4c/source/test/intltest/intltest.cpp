@@ -808,7 +808,7 @@ void IntlTest::usage( void )
     logln("-----------");
 
     int32_t index = 0;
-    char* name = NULL;
+    const char* name = NULL;
     do{
         this->runIndexedTest( index, FALSE, name );
         if (!name) break;

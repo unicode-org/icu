@@ -518,7 +518,7 @@ SimpleTimeZone::compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen
     while (millis >= U_MILLIS_PER_DAY) {
         millis -= U_MILLIS_PER_DAY;
         ++dayOfMonth;
-        dayOfWeek = 1 + (dayOfWeek % 7); // dayOfWeek is one-based
+        dayOfWeek = (int8_t)(1 + (dayOfWeek % 7)); // dayOfWeek is one-based
         if (dayOfMonth > monthLen) {
             dayOfMonth = 1;
             /* When incrementing the month, it is desirible to overflow
@@ -531,7 +531,7 @@ SimpleTimeZone::compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen
     while (millis < 0) {
         millis += U_MILLIS_PER_DAY;
         --dayOfMonth;
-        dayOfWeek = 1 + ((dayOfWeek+5) % 7); // dayOfWeek is one-based
+        dayOfWeek = (int8_t)(1 + ((dayOfWeek+5) % 7)); // dayOfWeek is one-based
         if (dayOfMonth < 1) {
             dayOfMonth = prevMonthLen;
             --month;
@@ -804,7 +804,7 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
 {
     if(U_FAILURE(status)) return;
 
-    useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
+    useDaylight = (UBool)((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
     if (useDaylight && dstSavings == 0) {
         dstSavings = U_MILLIS_PER_HOUR;
     }
@@ -824,11 +824,11 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
             if (startDayOfWeek > 0) {
                 startMode = DOW_IN_MONTH_MODE;
             } else {
-                startDayOfWeek = -startDayOfWeek;
+                startDayOfWeek = (int8_t)-startDayOfWeek;
                 if (startDay > 0) {
                     startMode = DOW_GE_DOM_MODE;
                 } else {
-                    startDay = -startDay;
+                    startDay = (int8_t)-startDay;
                     startMode = DOW_LE_DOM_MODE;
                 }
             }
@@ -859,7 +859,7 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
 {
     if(U_FAILURE(status)) return;
 
-    useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
+    useDaylight = (UBool)((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
     if (useDaylight && dstSavings == 0) {
         dstSavings = U_MILLIS_PER_HOUR;
     }
@@ -879,11 +879,11 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
             if (endDayOfWeek > 0) {
                 endMode = DOW_IN_MONTH_MODE;
             } else {
-                endDayOfWeek = -endDayOfWeek;
+                endDayOfWeek = (int8_t)-endDayOfWeek;
                 if (endDay > 0) {
                     endMode = DOW_GE_DOM_MODE;
                 } else {
-                    endDay = -endDay;
+                    endDay = (int8_t)-endDay;
                     endMode = DOW_LE_DOM_MODE;
                 }
             }

@@ -318,7 +318,7 @@ CollationKey::copyValues(int32_t &size) const
     {
         while (output < size)
         {
-            result[output] = (input[0] << 8) | input[1];
+            result[output] = (uint16_t)((input[0] << 8) | input[1]);
             output += 1;
             input += 2;
         }
