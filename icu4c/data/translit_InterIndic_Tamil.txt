@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Tamil.txt
-// Date: Tue Nov 20 21:43:01 2001
+// Date: Tue Nov 27 20:47:50 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Tamil
@@ -82,7 +82,7 @@ translit_InterIndic_Tamil {
 "\ue030>\u0bb0;" // LETTER RA
 "\ue031>\u0bb1;" // LETTER RRA
 "\ue032>\u0bb2;" // LETTER LA
-"\ue033\ue03c>\u0bb4"
+"\ue033\ue03c>\u0bb4;"
 "\ue033>\u0bb3;" // LETTER LLA
 "\ue034>\u0bb4;" // LETTER LLLA
 "\ue035>\u0bb5;" // LETTER VA

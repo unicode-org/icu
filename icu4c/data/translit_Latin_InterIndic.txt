@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_InterIndic.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 27 20:47:50 2001
 //--------------------------------------------------------------------
 
 // Latin_InterIndic
@@ -159,29 +159,70 @@ translit_Latin_InterIndic {
     // $x was originally called '&'; $z was '%'
     "$x=[$virama$aa$ai$au$ii$i$uu$u$rrh$rh$lh$e$o$se$ce$so$co];"
     "$z=[bcdfghjklmnpqrstvwxyz];"
-    //DEBUG: $consonants=[$ka-$ha $virama];
+    "$consonants=[[$ka-$ha]$z[\u0915-\u0939][\u0995-\u09b9][\u0a15-\u0a39][\u0a95-\u0ab9][\u0b15-\u0b39][\u0b95-\u0bb9][\u0c15-\u0c39][\u0c95-\u0cb9][\u0d15-\u0d39]];"
     "\u0315 > $avagraha;"
-    "'-'\u0303>$chandrabindu$anusvara;"
-    "'-'m\u0310>$chandrabindu;"
-    "'-'h\u0323>$visarga;"
-    "mm>$anusvara;"
-    "x>$visarga;"
+    "\u0303>$chandrabindu$anusvara;"
+    "m\u0310>$chandrabindu;"
+    "h\u0323>$visarga;"
+    "x>$ka$virama$sa;"
 // convert to independent forms at start of word or syllable:
+// dependent forms for roundtrip
+    "\u0314a\u0304>$aa;"
+    "\u0314ai>$ai;"
+    "\u0314au>$au;"
+    "\u0314ii>$ii;"
+    "\u0314i\u0304>$ii;"
+    "\u0314i>$i;"
+    "\u0314u\u0304>$uu;"
+    "\u0314u>$u;"
+    "\u0314r\u0325\u0304>$rrh;"
+    "\u0314r\u0325>$rh;"
+    "\u0314l\u0325\u0304>$llh;"
+    "\u0314lh>$lh;"
+    "\u0314l\u0325>$lh;"
+    "\u0314e\u0304>$e;"
+    "\u0314o\u0304>$o;"
+    "\u0314a>;"
+    "\u0314e\u0306>$ce;"
+    "\u0314o\u0306>$co;"
+    "\u0314e>$se;"
+    "\u0314o>$so;"
+
+// preceeded by consonants
+    "$consonants{ a\u0304>$aa;"
+    "$consonants{ ai>$ai;"
+    "$consonants{ au>$au;"
+    "$consonants{ ii>$ii;"
+    "$consonants{ i\u0304>$ii;"
+    "$consonants{ i>$i;"
+    "$consonants{ u\u0304>$uu;"
+    "$consonants{ u>$u;"
+    "$consonants{ r\u0325\u0304>$rrh;"
+    "$consonants{ r\u0325a>$rh;"
+    "$consonants{ r\u0325>$rh;"
+    "$consonants{ l\u0325\u0304>$llh;"
+    "$consonants{ lh>$lh;"
+    "$consonants{ l\u0325>$lh;"
+    "$consonants{ e\u0304>$e;"
+    "$consonants{ o\u0304>$o;"
+    "$consonants{ e\u0306>$ce;"
+    "$consonants{ o\u0306>$co;"
+    "$consonants{ e>$se;"
+    "$consonants{ o>$so;"
+
 // e.g. keai -> {ka}{e}{wai}; k'ai -> {ka}{wai}; (ai) -> ({wai})
     "a\u0304>$waa;"
     "ai>$wai;"
     "au>$wau;"
     "i\u0304>$wii;"
     "i>$wi;"
-    //uu>$wuu;
     "u\u0304>$wuu;"
     "u>$wu;"
-    //rrh>$wrr;
     "r\u0325\u0304>$wrr;"
-    //rh>$wr;
     "r\u0325>$wr;"
     "l\u0325\u0304>$wll;"
-    "lh>$wl;l\u0325>$wl;"
+    "lh>$wl;"
+    "l\u0325>$wl;"
     "e\u0304>$we;"
     "o\u0304>$wo;"
     "a>$wa;"
@@ -190,16 +231,20 @@ translit_Latin_InterIndic {
     "e>$wse;"
     "''om>$om;"
     "o>$wso;"
+    
+    // rules for anusvara
+    "n}r\u0325           > $na|$virama;"
+    "n}l\u0325           > $na|$virama;"
     "n}na                > $na|$virama;"
     "n\u0307}[kg]        > $anusvara;"
-    "n\u0307}n\u0303     > $anusvara;"
+    "n\u0307}n\u0307     > $anusvara;"
     "n\u0304}[cj]        > $anusvara;"
-    "n\u0304}n\u0307     > $anusvara;"
+    "n\u0304}n\u0303     > $anusvara;"
     "n\u0323}[tdn]\u0323 > $anusvara;"
     "n}[tdn]             > $anusvara;"
     "m}[pbm]             > $anusvara;"
-    "n} [yrlvsh]         > $anusvara;"
-    "'-'m\u0307          > $anusvara;"
+    "n}[ylvshr]          > $anusvara;"
+    "m\u0307             > $anusvara;"
     
     //urdu compatibility
     "q>$uka|$virama;"
@@ -245,7 +290,7 @@ translit_Latin_InterIndic {
     "y>$ya|$virama;"
     "r\u0331>$rra|$virama;"
     "r>$ra|$virama;"
-    "l\u0323a>$lla;"
+    "l\u0323>$lla|$virama;"
     "l>$la|$virama;"
     "v>$va|$virama;"
     "w>$va|$virama;"
@@ -286,6 +331,8 @@ translit_Latin_InterIndic {
     "$virama o\u0306>$co;"
     "$virama e>$se;"
     "$virama o>$so;"
+
+
 // otherwise convert independent forms when separated by ': k'ai -> {ka}{virama}{wai}
     //$virama''aa>$waa;
     "$virama''a\u0304>$waa;"
@@ -311,6 +358,26 @@ translit_Latin_InterIndic {
     "$virama''o\u0306>$wco;"
     "$virama''e>$wse;"
     "$virama''o>$wso;"
+// no virama
+    "''a\u0304>$waa;"
+    "''ai>$wai;"
+    "''au>$wau;"
+    "''i\u0304>$wii;"
+    "''i>$wi;"
+    "''u\u0304>$wuu;"
+    "''u>$wu;"
+    "''r\u0325\u0304>$wrr;"
+    "''r\u0325>$wr;"
+    "''l\u0325\u0304>$wll;"
+    "''l\u0325>$wl;"
+    "''e\u0304>$we;"
+    "''o\u0304>$wo;"
+    "''a>$wa;"
+    "''e\u0306>$wce;"
+    "''o\u0306>$wco;"
+    "''e>$wse;"
+    "''o>$wso;"
+
     "$virama } [$z] > $virama;"
     "$virama } ' ' > $virama ;"
     "$virama}$endThing>;"

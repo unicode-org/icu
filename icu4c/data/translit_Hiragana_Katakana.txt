@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Hiragana_Katakana.txt
-// Date: Wed Nov 21 18:58:49 2001
+// Date: Tue Nov 27 20:47:50 2001
 //--------------------------------------------------------------------
 
 // Hiragana_Katakana
@@ -21,7 +21,7 @@ translit_Hiragana_Katakana {
 //--------------------------------------------------------------------
 
 // note: a global filter is more efficient, but MUST include all source chars
-":: [[:Hiragana:][:nonspacing mark:]ー] ;"
+":: [\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9Fー[:Hiragana:] [:Katakana:] [:nonspacing mark:]] ;"
 ":: NFKC ();"
 
 // Hiragana-Katakana
@@ -219,7 +219,7 @@ translit_Hiragana_Katakana {
 ":: (NFKC) ;"
 
 // note: a global filter is more efficient, but MUST include all source chars!!
-":: ([\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Katakana:] [:nonspacing mark:]]);"
+":: ([\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9Fー[:Hiragana:] [:Katakana:] [:nonspacing mark:]]);"
 
 // eof
   }

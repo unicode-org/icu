@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Oriya_InterIndic.txt
-// Date: Tue Nov 20 21:43:02 2001
+// Date: Tue Nov 27 20:47:51 2001
 //--------------------------------------------------------------------
 
 // Oriya_InterIndic
@@ -31,8 +31,8 @@ translit_Oriya_InterIndic {
 //--------------------------------------------------------------------
 // Oriya-InterIndic
 //:: NFD (NFC) ;
-"\u0B21\u0B3C>\uE05C;"// LETTER RRA
-"\u0B22\u0B3C>\uE05D;"// LETTER RHA
+//\u0B21\u0B3C>\uE05C;# LETTER RRA
+//\u0B22\u0B3C>\uE05D;# LETTER RHA
 "\u0B47\u0B56>\uE048;"// VOWEL SIGN AI
 "\u0B47\u0B3E>\uE04B;"// VOWEL SIGN O
 "\u0B47\u0B57>\uE04C;"// VOWEL SIGN AU
