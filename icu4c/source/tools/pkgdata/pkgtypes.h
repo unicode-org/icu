@@ -80,6 +80,14 @@ void pkg_deleteList(CharList *l);
 struct UPKGOptions_;
 typedef   void (UPKGMODE)(struct UPKGOptions_ *, FileStream *s, UErrorCode *status);
 
+/*
+ * Static mode - write the readme file 
+ * @param opt UPKGOptions
+ * @param libName Name of the .lib, etc file
+ * @param status ICU error code
+ */
+void pkg_sttc_writeReadme(struct UPKGOptions_ *opt, const char *libName, UErrorCode *status);
+
 /* 
  * Options to be passed throughout the program
  */
@@ -123,6 +131,7 @@ typedef struct UPKGOptions_
 # endif
 # define LIB_PREFIX ""
 # define OBJ_SUFFIX ".obj"
+# define UDATA_LIB_SUFFIX ".LIB"
 
 #else  /* POSIX? */
 # define LIB_PREFIX "lib"
