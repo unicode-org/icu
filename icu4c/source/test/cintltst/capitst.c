@@ -121,6 +121,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestGetTailoredSet, "tscoll/capitst/TestGetTailoredSet");
     addTest(root, &TestMergeSortKeys, "tscoll/capitst/TestMergeSortKeys");
     addTest(root, &TestShortString, "tscoll/capitst/TestShortString");
+    addTest(root, &TestGetContractionsAndUnsafes, "tscoll/capitst/TestGetContractionsAndUnsafes");
 }
 
 void TestGetSetAttr(void) {
@@ -1744,10 +1745,7 @@ static void TestShortString(void)
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     char fromShortBuffer[256], fromIDBuffer[256], fromIDRoundtrip[256], normalizedBuffer[256], fromNormalizedBuffer[256];
-    /*char buffer[256];*/
-    int32_t len = 0;
     uint32_t identifier = 0, idFromSS = 0;
-    UBool available = FALSE;
     const char* locale = NULL;
 
 
@@ -1828,6 +1826,109 @@ static void TestShortString(void)
         }
     }
 
+}
+
+static void
+doSetsTest(const USet *ref, USet *set, const char* inSet, const char* outSet, UErrorCode *status) {
+    UChar buffer[512];
+    int32_t bufLen;
+
+    uset_clear(set);
+    bufLen = u_unescape(inSet, buffer, 512); 
+    uset_applyPattern(set, buffer, bufLen, 0, status);
+    if(U_FAILURE(*status)) {
+        log_err("Failure setting pattern %s\n", u_errorName(*status));
+    }
+
+    if(!uset_containsAll(ref, set)) {
+        log_err("Some stuff from %s is not present in the set\n", inSet);
+    }
+
+    uset_clear(set);
+    bufLen = u_unescape(outSet, buffer, 512); 
+    uset_applyPattern(set, buffer, bufLen, 0, status);
+    if(U_FAILURE(*status)) {
+        log_err("Failure setting pattern %s\n", u_errorName(*status));
+    }
+
+    if(!uset_containsNone(ref, set)) {
+        log_err("Some stuff from %s is present in the set\n", outSet);
+    }
+}
+
+
+
+
+static void 
+TestGetContractionsAndUnsafes(void) 
+{
+    static struct {
+        const char* locale;
+        const char* inConts;
+        const char* outConts;
+        const char* unsafeCodeUnits;
+        const char* safeCodeUnits;
+    } tests[] = {
+        { "ru", 
+            "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}]", 
+            "[{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
+            "[\\u0306\\u0308]",
+            "[\\u0474\\u0430\\u0410\\u0433\\u0413aAbB]"
+        },
+        { "uk",
+            "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}" 
+            "{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
+            "[]",
+            "[\\u0306\\u030f\\u0308]",
+            "[\\u0474\\u0475\\u04D8\\u04D9\\u04E8\\u04E9\\u0430\\u0410\\u0433\\u0413aAbBxv]"
+        },
+        { "ja",
+            "[{\\u309d\\u3099}{\\u30fd\\u3099}]",
+            "[{lj}{nj}]",
+            "[\\u3099]",
+            "[\\u30a6\\u3044\\uff73]"
+        },
+        { "sh",
+            "[{C\\u0301}{C\\u030C}{C\\u0341}{DZ\\u030C}{Dz\\u030C}{D\\u017D}{D\\u017E}{lj}{nj}]",
+            "[{\\u309d\\u3099}{\\u30fd\\u3099}]",
+            "[j]",
+            "[n]"
+        }
+    };
+
+
+
+
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = NULL;
+    int32_t i = 0;
+    int32_t noConts = 0;
+    USet *conts = uset_open(0,0);
+    USet *set  = uset_open(0,0);
+    UChar buffer[32768];
+    int32_t setLen = 0;
+
+    for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+        log_verbose("Testing locale: %s\n", tests[i].locale);
+        coll = ucol_open(tests[i].locale, &status);
+        noConts = ucol_getContractions(coll, conts, &status);
+        doSetsTest(conts, set, tests[i].inConts, tests[i].outConts, &status);
+        setLen = uset_toPattern(conts, buffer, 32768, TRUE, &status);
+        if(U_SUCCESS(status)) {
+            log_verbose("%i: %s\n", noConts, aescstrdup(buffer, setLen));
+        } else {
+            log_err("error %s. %i\n", u_errorName(status), setLen);
+        }
+
+        noConts = ucol_getUnsafeSet(coll, conts, &status);
+        doSetsTest(conts, set, tests[i].unsafeCodeUnits, tests[i].safeCodeUnits, &status);
+
+        ucol_close(coll);
+    }
+
+
+    uset_close(conts);
+    uset_close(set);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

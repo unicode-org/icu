@@ -110,6 +110,12 @@
      */
     static void TestShortString(void);
 
+    /** 
+     * test getContractions and getUnsafeSet
+     */
+    static void TestGetContractionsAndUnsafes(void);
+
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
