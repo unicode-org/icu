@@ -1164,7 +1164,7 @@ void ICUServiceTest::testLocale() {
         UErrorCode status = U_ZERO_ERROR;
         StringEnumeration* locales = service.getAvailableLocales();
         if (locales) {
-            confirmIdentical("test available locales", locales->count(status), 5);
+            confirmIdentical("test available locales", locales->count(status), 6);
             logln("locales: ");
             {
                 const char* p;
