@@ -31,7 +31,6 @@
 #include "ucol_wgt.h"
 
 #include "uhash.h"
-#include "ucmp16.h"
 #include "umutex.h"
 #include "cpputils.h"
 
