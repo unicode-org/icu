@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/20 00:41:01 $
- * $Revision: 1.62 $
+ * $Date: 2001/11/20 17:55:22 $
+ * $Revision: 1.63 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.62 $ $Date: 2001/11/20 00:41:01 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.63 $ $Date: 2001/11/20 17:55:22 $
  */
 public abstract class Transliterator {
     /**
@@ -1798,14 +1798,12 @@ public abstract class Transliterator {
         registerSpecialInverse(NullTransliterator.SHORT_ID, NullTransliterator.SHORT_ID, false);
 
         // Register non-rule-based transliterators
-        registerClass(HexToUnicodeTransliterator._ID,
-                      HexToUnicodeTransliterator.class, null);
-        registerClass(UnicodeToHexTransliterator._ID,
-                      UnicodeToHexTransliterator.class, null);
         registerClass(NullTransliterator._ID,
                       NullTransliterator.class, null);
         registerClass(RemoveTransliterator._ID,
                       RemoveTransliterator.class, null);
+        EscapeTransliterator.register();
+        UnescapeTransliterator.register();
         LowercaseTransliterator.register();
         UppercaseTransliterator.register();
         TitlecaseTransliterator.register();
