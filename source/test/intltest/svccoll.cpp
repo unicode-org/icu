@@ -17,6 +17,7 @@ void CollationServiceTest::TestRegister()
   // register a singleton
   const Locale& FR = Locale::getFrance();
   const Locale& US = Locale::getUS();
+  const Locale US_FOO("en", "US", "FOO");
 
   UErrorCode status = U_ZERO_ERROR;
 
@@ -26,10 +27,32 @@ void CollationServiceTest::TestRegister()
   { // try override en_US collator
     URegistryKey key = Collator::registerInstance(frcol, US, status);
 
-    Collator* ncol = Collator::createInstance(US, status);
+    Collator* ncol = Collator::createInstance(US_FOO, status);
     if (*frcol != *ncol) {
-      errln("register of french collator for en_US failed");
+      errln("register of french collator for en_US failed on request for en_US_FOO");
     }
+	// ensure original collator's params not touched
+	Locale loc = frcol->getLocale(ULOC_REQUESTED_LOCALE, status);
+	if (loc != FR) {
+		errln((const UnicodeString&)"fr collator's requested locale changed to " + loc.getName());
+	}
+	loc = frcol->getLocale(ULOC_VALID_LOCALE, status);
+	if (loc != FR) {
+		errln((const UnicodeString&)"fr collator's valid locale changed to " + loc.getName());
+	}
+
+	loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
+	if (loc != US_FOO) {
+		errln((const UnicodeString&)"requested locale for en_US_FOO is not en_US_FOO but " + loc.getName());
+	}
+	loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
+	if (loc != US) {
+		errln((const UnicodeString&)"valid locale for en_US_FOO is not en_US but " + loc.getName());
+	}
+	loc = ncol->getLocale(ULOC_ACTUAL_LOCALE, status);
+	if (loc != US) {
+		errln((const UnicodeString&)"actual locale for en_US_FOO is not en_US but " + loc.getName());
+	}
     delete ncol; ncol = NULL;
 
     if (!Collator::unregister(key, status)) {

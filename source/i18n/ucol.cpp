@@ -410,7 +410,7 @@ clean:
     return NULL;
   }
 
-  result->validLocale = NULL;
+  result->validLocale = NULL; // default is to use rb info
 
   if(loc == NULL) {
     loc = ures_getLocale(result->rb, status);
@@ -419,7 +419,9 @@ clean:
   /* test for NULL */
   if (result->requestedLocale == NULL) {
 	*status = U_MEMORY_ALLOCATION_ERROR;
-        ures_close(collElem);
+	ures_close(b); // ??? appears needed
+    ures_close(collElem);
+    ures_close(binary); // ??? appears needed
 	return NULL;
   }
   uprv_strcpy(result->requestedLocale, loc);
@@ -434,12 +436,12 @@ ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *val
   if (coll) {
     if (coll->validLocale) {
       uprv_free(coll->validLocale);
-      coll->validLocale = validLocaleToAdopt;
-    }
+	}
+    coll->validLocale = validLocaleToAdopt;
     if (coll->requestedLocale) { // should always have
       uprv_free(coll->requestedLocale);
-      coll->requestedLocale = requestedLocaleToAdopt;
-    }
+	}
+    coll->requestedLocale = requestedLocaleToAdopt;
   }
 }
 
@@ -447,6 +449,15 @@ U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
   if(coll != NULL) {
+	// these are always owned by each UCollator struct, 
+	// so we always free them
+    if(coll->validLocale != NULL) {
+      uprv_free(coll->validLocale);
+    }
+    if(coll->requestedLocale != NULL) {
+      uprv_free(coll->requestedLocale);
+    }
+
     /* Here, it would be advisable to close: */
     /* - UData for UCA (unless we stuff it in the root resb */
     /* Again, do we need additional housekeeping... HMMM! */
@@ -473,12 +484,6 @@ ucol_close(UCollator *coll)
     }
     if(coll->elements != NULL) {
       ures_close(coll->elements);
-    }
-    if(coll->validLocale != NULL) {
-      uprv_free(coll->validLocale);
-    }
-    if(coll->requestedLocale != NULL) {
-      uprv_free(coll->requestedLocale);
     }
     if(coll->latinOneCEs != NULL) {
       uprv_free(coll->latinOneCEs);
@@ -1059,10 +1064,10 @@ ucol_initUCA(UErrorCode *status) {
             newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
             if(U_SUCCESS(*status)){
                 newUCA->rb = NULL;
-		newUCA->elements = NULL;
-		newUCA->validLocale = NULL;
-		newUCA->requestedLocale = NULL;
-		newUCA->hasRealData = FALSE; // real data lives in .dat file...
+				newUCA->elements = NULL;
+				newUCA->validLocale = NULL;
+				newUCA->requestedLocale = NULL;
+				newUCA->hasRealData = FALSE; // real data lives in .dat file...
                 umtx_lock(NULL);
                 if(UCA == NULL) {
                     UCA = newUCA;
@@ -6596,7 +6601,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
     }
-    if (!pBufferSize || !coll){
+    if ((stackBuffer && !pBufferSize) || !coll){
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -6610,11 +6615,11 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     }
     stackBuffer = (void *)stackBufferChars;
 
-    if (*pBufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+    if (stackBuffer && *pBufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
         *pBufferSize =  bufferSizeNeeded;
         return 0;
     }
-    if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL) {
+    if (!stackBuffer || *pBufferSize < bufferSizeNeeded) {
         /* allocate one here...*/
         int32_t length;
         const UChar * rules = ucol_getRules(coll, &length);
@@ -6633,6 +6638,8 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
         localCollator = (UCollator *)stackBuffer;
         memcpy(localCollator, coll, sizeof(UCollator));
         localCollator->freeOnClose = FALSE;
+		localCollator->requestedLocale = NULL; // zero copies of pointers
+		localCollator->validLocale = NULL;
     }
     return localCollator;
 }

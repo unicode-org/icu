@@ -73,11 +73,14 @@
 U_NAMESPACE_BEGIN
 
 /**
-* Copy constructor
+* Copy constructor, aliasing, not write-through
 */
-RuleBasedCollator::RuleBasedCollator(const RuleBasedCollator& that) :
-              Collator(that), dataIsOwned(FALSE), ucollator(that.ucollator),
-              urulestring(that.urulestring)
+RuleBasedCollator::RuleBasedCollator(const RuleBasedCollator& that) 
+   : Collator(that)
+   , dataIsOwned(FALSE)
+   , isWriteThroughAlias(FALSE)
+   , ucollator(that.ucollator)
+   , urulestring(that.urulestring)
 {
 }
 
@@ -124,19 +127,15 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 }
 
 void
-RuleBasedCollator::construct(const UnicodeString& rules,
-                             UColAttributeValue collationStrength,
-                             UColAttributeValue decompositionMode,
-                             UErrorCode& status)
+RuleBasedCollator::setRuleStringFromCollator(UErrorCode& status)
 {
-  ucollator = ucol_openRules(rules.getBuffer(), rules.length(),
-                             decompositionMode, collationStrength,
-                             NULL, &status);
+  urulestring = NULL;
   if (U_SUCCESS(status))
   {
     int32_t length;
     const UChar *r = ucol_getRules(ucollator, &length);
-    if (length > 0) {
+  
+	if (length > 0) {
         // alias the rules string
         urulestring = new UnicodeString(TRUE, r, length);
     }
@@ -148,8 +147,24 @@ RuleBasedCollator::construct(const UnicodeString& rules,
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    dataIsOwned = TRUE;
   }
+}
+
+// not aliasing, not write-through
+void
+RuleBasedCollator::construct(const UnicodeString& rules,
+                             UColAttributeValue collationStrength,
+                             UColAttributeValue decompositionMode,
+                             UErrorCode& status)
+{
+  ucollator = ucol_openRules(rules.getBuffer(), rules.length(),
+                             decompositionMode, collationStrength,
+                             NULL, &status);
+
+  dataIsOwned = TRUE; // since we own a collator now, we need to get rid of it
+  isWriteThroughAlias = FALSE;
+
+  setRuleStringFromCollator(status);
 }
 
 /* RuleBasedCollator public destructor ----------------------------------- */
@@ -191,6 +206,7 @@ UBool RuleBasedCollator::operator==(const Collator& that) const
   */
 }
 
+// aliasing, not write-through
 RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)
 {
   if (this != &that)
@@ -203,12 +219,14 @@ RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)
     }
 
     dataIsOwned = FALSE;
+	isWriteThroughAlias = FALSE;
     ucollator = that.ucollator;
     urulestring = that.urulestring;
   }
   return *this;
 }
 
+// aliasing, not write-through
 Collator* RuleBasedCollator::clone() const
 {
   return new RuleBasedCollator(*this);
@@ -229,7 +247,7 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
 }
 
 /**
-* Create a CollationElementIterator object that will iterator over the
+* Create a CollationElementIterator object that will iterate over the
 * elements in a string, using the collation rules defined in this
 * RuleBasedCollator
 */
@@ -445,6 +463,7 @@ void RuleBasedCollator::setAttribute(UColAttribute attr,
 {
   if (U_FAILURE(status))
     return;
+  checkOwned();
   ucol_setAttribute(ucollator, attr, value, &status);
 }
 
@@ -457,15 +476,18 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr,
 }
 
 uint32_t RuleBasedCollator::setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status) {
-  return ucol_setVariableTop(ucollator, varTop, len, &status);
+	checkOwned();
+	return ucol_setVariableTop(ucollator, varTop, len, &status);
 }
 
 uint32_t RuleBasedCollator::setVariableTop(const UnicodeString varTop, UErrorCode &status) {
-  return ucol_setVariableTop(ucollator, varTop.getBuffer(), varTop.length(), &status);
+	checkOwned();
+	return ucol_setVariableTop(ucollator, varTop.getBuffer(), varTop.length(), &status);
 }
 
 void RuleBasedCollator::setVariableTop(const uint32_t varTop, UErrorCode &status) {
-  ucol_restoreVariableTop(ucollator, varTop, &status);
+	checkOwned();
+	ucol_restoreVariableTop(ucollator, varTop, &status);
 }
 
 uint32_t RuleBasedCollator::getVariableTop(UErrorCode &status) const {
@@ -485,6 +507,8 @@ Collator* RuleBasedCollator::safeClone(void)
   UnicodeString *r = new UnicodeString(*urulestring);
   RuleBasedCollator *result = new RuleBasedCollator(ucol, r);
   result->dataIsOwned = TRUE;
+  result->isWriteThroughAlias = FALSE;
+
   return result;
 }
 
@@ -512,6 +536,7 @@ Collator::ECollationStrength RuleBasedCollator::getStrength(void) const
 
 void RuleBasedCollator::setStrength(ECollationStrength newStrength)
 {
+  checkOwned();
   UErrorCode intStatus = U_ZERO_ERROR;
   UCollationStrength strength = getUCollationStrength(newStrength);
   ucol_setAttribute(ucollator, UCOL_STRENGTH, strength, &intStatus);
@@ -544,6 +569,7 @@ const Locale RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode &s
 
 void
 RuleBasedCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale) {
+	checkOwned();
     size_t rlen = uprv_strlen(requestedLocale.getName());
     char* rloc  = (char *)uprv_malloc((rlen+1)*sizeof(char));
     if (rloc) {
@@ -561,12 +587,14 @@ RuleBasedCollator::setLocales(const Locale& requestedLocale, const Locale& valid
 
 // RuleBaseCollatorNew private constructor ----------------------------------
 
-RuleBasedCollator::RuleBasedCollator() : dataIsOwned(FALSE), ucollator(0)
+RuleBasedCollator::RuleBasedCollator() 
+  : dataIsOwned(FALSE), isWriteThroughAlias(FALSE), ucollator(0)
 {
 }
 
 RuleBasedCollator::RuleBasedCollator(UCollator *collator,
-                                     UnicodeString *rule) : dataIsOwned(FALSE)
+                                     UnicodeString *rule)
+  : dataIsOwned(FALSE), isWriteThroughAlias(FALSE) 
 {
   ucollator = collator;
   urulestring = rule;
@@ -631,9 +659,21 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
         return;
     }
     dataIsOwned = TRUE;
+	isWriteThroughAlias = FALSE;
   }
 
   return;
+}
+
+void
+RuleBasedCollator::checkOwned() {
+	if (!(dataIsOwned || isWriteThroughAlias)) {
+		UErrorCode status = U_ZERO_ERROR;
+		ucollator = ucol_safeClone(ucollator, NULL, NULL, &status);
+		setRuleStringFromCollator(status);
+		dataIsOwned = TRUE;
+		isWriteThroughAlias = FALSE;
+	}
 }
 
 /* RuleBasedCollator private data members -------------------------------- */

@@ -42,6 +42,16 @@ StringSearch::StringSearch(const UnicodeString &pattern,
     uprv_free(m_search_);
     m_search_ = NULL;
 
+	// !!! dlf m_collator_ is an odd beast.  basically it is an aliasing
+	// wrapper around the internal collator and rules, which (here) are
+	// owned by this stringsearch object.  this means 1) it's destructor
+	// _should not_ delete the ucollator or rules, and 2) changes made
+	// to the exposed collator (setStrength etc) _should_ modify the 
+	// ucollator.  thus the collator is not a copy-on-write alias, and it
+	// needs to distinguish itself not merely from 'stand alone' colators
+	// but also from copy-on-write ones.  it needs additional state, which
+	// setUCollator should set.
+
     if (U_SUCCESS(status)) {
               int32_t  length;
         const UChar   *rules = ucol_getRules(m_strsrch_->collator, &length);

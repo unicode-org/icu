@@ -650,6 +650,8 @@ private:
 
   UBool dataIsOwned;
 
+  UBool isWriteThroughAlias;
+
   /**
   * c struct for collation. All initialisation for it has to be done through
   * setUCollator().
@@ -752,9 +754,23 @@ public:
   */
   const UCollator * getUCollator();
 
+protected:
+ /**
+  * Used internally by registraton to define the requested and valid locales.
+  * @param requestedLocale the requsted locale
+  * @param validLocale the valid locale
+  * @internal
+  */
   virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
 
 private:
+
+  // if not owned and not a write through alias, copy the ucollator
+  void checkOwned(void);
+
+  // utility to init rule string used by checkOwned and construct
+  void setRuleStringFromCollator(UErrorCode& status);
+
   /**
   * Converts C's UCollationResult to EComparisonResult
   * @param result member of the enum UComparisonResult
@@ -804,6 +820,8 @@ inline void RuleBasedCollator::setUCollator(const char *locale,
   if (ucollator && dataIsOwned)
     ucol_close(ucollator);
   ucollator = ucol_open(locale, &status);
+  dataIsOwned = TRUE;
+  isWriteThroughAlias = FALSE;
 }
 
 inline void RuleBasedCollator::setUCollator(const Locale &locale,
@@ -811,6 +829,7 @@ inline void RuleBasedCollator::setUCollator(const Locale &locale,
 {
   setUCollator(locale.getName(), status);
 }
+
 
 inline void RuleBasedCollator::setUCollator(UCollator     *collator, 
                                             UnicodeString *rules)
@@ -822,6 +841,7 @@ inline void RuleBasedCollator::setUCollator(UCollator     *collator,
     ucollator   = collator;
     urulestring = rules;
     dataIsOwned = FALSE;
+	isWriteThroughAlias = TRUE;
 }
 
 inline const UCollator * RuleBasedCollator::getUCollator()
