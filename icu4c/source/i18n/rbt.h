@@ -204,7 +204,7 @@ class U_I18N_API RuleBasedTransliterator : public Transliterator {
     /**
      * If true, we own the data object and must delete it.
      */
-    bool_t dataIsOwned;
+    bool_t isDataOwned;
 
 public:
 
