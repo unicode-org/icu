@@ -554,7 +554,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
      */
     inline UChar getPadCharacter(void);
 
@@ -582,7 +582,7 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
      */
     inline void setPadCharacter(UChar padChar);
 
