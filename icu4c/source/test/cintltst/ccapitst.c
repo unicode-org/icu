@@ -1174,7 +1174,7 @@ static void TSCC_fromU(const void *context,
         }
 
         /* now, SET it */
-        ucnv_getFromUCallBack(fromUArgs->converter, &junkFrom, (void**)&junkCtx);
+        ucnv_getFromUCallBack(fromUArgs->converter, &junkFrom, (const void**)&junkCtx);
         ucnv_setFromUCallBack(fromUArgs->converter, junkFrom, newCtx, NULL, NULL, &subErr);
         
         if(U_FAILURE(subErr)) {
@@ -1220,7 +1220,7 @@ static void TSCC_toU(const void *context,
         }
 
         /* now, SET it */
-        ucnv_getToUCallBack(toUArgs->converter, &junkFrom, (void**)&junkCtx);
+        ucnv_getToUCallBack(toUArgs->converter, &junkFrom, (const void**)&junkCtx);
         ucnv_setToUCallBack(toUArgs->converter, junkFrom, newCtx, NULL, NULL, &subErr);
         
         if(U_FAILURE(subErr)) {
@@ -1297,8 +1297,8 @@ static void TestConvertSafeCloneCallback()
     log_verbose("Cloned to conv2=%p.\n", conv2);
 
 /**********   from *********************/
-    ucnv_getFromUCallBack(conv2, &junkFrom, (void**)&from2);
-    ucnv_getFromUCallBack(conv1, &junkFrom, (void**)&from3);
+    ucnv_getFromUCallBack(conv2, &junkFrom, (const void**)&from2);
+    ucnv_getFromUCallBack(conv1, &junkFrom, (const void**)&from3);
 
     TSCC_print_log(from2, "from2");
     TSCC_print_log(from3, "from3(==from1)");
@@ -1330,8 +1330,8 @@ static void TestConvertSafeCloneCallback()
     }
 
 /**********   to *********************/
-    ucnv_getToUCallBack(conv2, &junkTo, (void**)&to2);
-    ucnv_getToUCallBack(conv1, &junkTo, (void**)&to3);
+    ucnv_getToUCallBack(conv2, &junkTo, (const void**)&to2);
+    ucnv_getToUCallBack(conv1, &junkTo, (const void**)&to3);
 
     TSCC_print_log(to2, "to2");
     TSCC_print_log(to3, "to3(==to1)");
