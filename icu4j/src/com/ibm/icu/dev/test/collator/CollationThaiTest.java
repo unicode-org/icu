@@ -244,31 +244,58 @@ public class CollationThaiTest extends TestFmwk {
         logln("Words checked: " + wordCount);
     }
     
+    private byte savedByte = 0;
+    
     String readLine(DataInputStream in) {
         byte[] bytes = new byte[128];
         int i = 0;
         byte c = 0;
+        
         while (i < 128) {
-            try {
-                c = in.readByte();
-            } catch (EOFException ee) {
-                return null;
-            } catch (IOException e) {
-                errln("Cannot read line from the file");
-                return null;
+            if (savedByte != 0) {
+                c = savedByte;
+                savedByte = 0;
+            } else {
+                try {
+                    c = in.readByte();
+                } catch (EOFException ee) {
+                    return null;
+                } catch (IOException e) {
+                    errln("Cannot read line from the file");
+                    return null;
+                }
             }
-            if (c == 0xD || c == 0xA) {
+            
+            if (c == 0xD) {
+                try {
+                    c = in.readByte();
+                    
+                    if (c != 0xA) {
+                        savedByte = c;
+                    }
+                } catch (EOFException ee) {
+                    break;
+                } catch (IOException e) {
+                    errln("Cannot read line from the file");
+                    return null;
+                }
+                
+                break;
+            } else if (c == 0xA) {
                 break;
             }
+            
             bytes[i++] = c;
         }
         
         String line = null;
+        
         try {
             line = new String(bytes, 0, i, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             System.out.println(e);
         }
+        
         return line;
     }
     
