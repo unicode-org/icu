@@ -1044,7 +1044,22 @@ void TestAlias() {
             /* Make sure each alias maps back to the the same list of
                aliases.  Assume that if alias 0 is the same, the whole
                list is the same (this should always be true). */
-            const char *mapBack = ucnv_getAlias(alias, 0, &status);
+            const char *mapBack;
+
+            if (alias == NULL) {
+                log_err("FAIL: Converter \"%s\" (i=%d) has no alias\n",
+                        name, i);
+                continue;
+            }
+
+            mapBack = ucnv_getAlias(alias, 0, &status);
+
+            if (mapBack == NULL) {
+                log_err("FAIL: Converter \"%s\" (i=%d) has no mapBack\n",
+                        name, i);
+                continue;
+            }
+
             if (0 != uprv_strcmp(alias0, mapBack)) {
                 log_err("FAIL: Converter \"%s\" -> "
                         "alias[%d]=\"%s\" -> "
