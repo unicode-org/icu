@@ -95,8 +95,7 @@ TestDeprecatedCollationAPI(void)
   
   u_uastrcpy(temp, " & Z < ABC < Q < B");
 
-  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
-                                                UCOL_DEFAULT_STRENGTH, &status);
+  coll = ucol_openRules(temp, u_strlen(temp), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(cnt1)/sizeof(cnt1[0]);
@@ -119,8 +118,7 @@ TestDeprecatedCollationAPI(void)
 
 
   u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
-  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
-                                                UCOL_DEFAULT_STRENGTH, &status);
+  coll = ucol_openRules(temp, u_strlen(temp), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(cnt2)/sizeof(cnt2[0]);
