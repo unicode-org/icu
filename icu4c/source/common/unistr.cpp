@@ -392,7 +392,7 @@ UnicodeString::numDisplayCells( UTextOffset start,
     UTF_NEXT_CHAR(fArray, start, limit, c);
     switch(Unicode::getCellWidth(c)) {
     case Unicode::ZERO_WIDTH:
-      break;;
+      break;
 
     case Unicode::HALF_WIDTH:
       result += 1;
