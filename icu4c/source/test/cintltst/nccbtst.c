@@ -146,9 +146,6 @@ static void TestSingleByteCallBack()
 
 static void TestSkip(int32_t inputsize, int32_t outputsize)
 {
-    static const UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
-    static const UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
-
     static const uint8_t expskipIBM_949[]= { 
         0x00, 0xb0, 0xa1, 0xb0, 0xa2, 0xc8, 0xd3 };
 
@@ -158,42 +155,38 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
     static const uint8_t expskipIBM_930[] = { 
         0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x46, 0x6b };
 
-    static const UChar IBM_949skiptoUnicode[]= {0x0000, 0xAC00, 0xAC01, 0xD700 };
-    static const UChar IBM_943skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
-    static const UChar IBM_930skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
-
-
-    static const int32_t  toIBM949Offsskip [] = { 0, 1, 1, 2, 2, 4, 4};
-    static const int32_t  toIBM943Offsskip [] = { 0, 0, 1, 1, 3, 3};
-    static const int32_t  toIBM930Offsskip [] = { 0, 0, 0, 1, 1, 3, 3};
-
-    static const int32_t  fromIBM949Offs [] = { 0, 1, 3, 5};
-    static const int32_t  fromIBM943Offs [] = { 0, 2, 4};
-    static const int32_t  fromIBM930Offs [] = { 1, 3, 5};
-
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
 
     /*From Unicode*/
     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_SKIP  \n");
 
-    if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expskipIBM_949, sizeof(expskipIBM_949), "ibm-949",
-            UCNV_FROM_U_CALLBACK_SKIP, toIBM949Offsskip, NULL, 0 ))
-        log_err("u-> ibm-949 with skip did not match.\n");
-    if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-            expskipIBM_943, sizeof(expskipIBM_943), "ibm-943",
-            UCNV_FROM_U_CALLBACK_SKIP, toIBM943Offsskip, NULL, 0 ))
-        log_err("u-> ibm-943 with skip did not match.\n");
-    if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-            expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
-            UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0))
-        log_err("u-> ibm-930 with skip did not match.\n");
+    {
+        static const UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
+        static const UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
+
+        static const int32_t  toIBM949Offsskip [] = { 0, 1, 1, 2, 2, 4, 4};
+        static const int32_t  toIBM943Offsskip [] = { 0, 0, 1, 1, 3, 3};
+        static const int32_t  toIBM930Offsskip [] = { 0, 0, 0, 1, 1, 3, 3};
+
+        if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expskipIBM_949, sizeof(expskipIBM_949), "ibm-949",
+                UCNV_FROM_U_CALLBACK_SKIP, toIBM949Offsskip, NULL, 0 ))
+            log_err("u-> ibm-949 with skip did not match.\n");
+        if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+                expskipIBM_943, sizeof(expskipIBM_943), "ibm-943",
+                UCNV_FROM_U_CALLBACK_SKIP, toIBM943Offsskip, NULL, 0 ))
+            log_err("u-> ibm-943 with skip did not match.\n");
+        if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+                expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
+                UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0))
+            log_err("u-> ibm-930 with skip did not match.\n");
     
-    if(!testConvertFromUnicodeWithContext(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-            expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
-            UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0,"i", U_ILLEGAL_CHAR_FOUND))
-        log_err("u-> ibm-930 with skip did not match.\n");
+        if(!testConvertFromUnicodeWithContext(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+                expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
+                UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0,"i", U_ILLEGAL_CHAR_FOUND))
+            log_err("u-> ibm-930 with skip did not match.\n");
+    }
 
     {
         static const UChar fromU[] = { 0x61, 0xff5e, 0x62, 0x6d63, 0xff5e, 0x6d64, 0x63, 0xff5e, 0x6d66 };
@@ -657,26 +650,37 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
     /*to Unicode*/
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SKIP  \n");
 
-    if(!testConvertToUnicode(expskipIBM_949, sizeof(expskipIBM_949),
-             IBM_949skiptoUnicode, sizeof(IBM_949skiptoUnicode)/sizeof(IBM_949skiptoUnicode),"ibm-949",
-            UCNV_TO_U_CALLBACK_SKIP, fromIBM949Offs, NULL, 0 ))
-        log_err("ibm-949->u with skip did not match.\n");
-    if(!testConvertToUnicode(expskipIBM_943, sizeof(expskipIBM_943),
-             IBM_943skiptoUnicode, sizeof(IBM_943skiptoUnicode)/sizeof(IBM_943skiptoUnicode[0]),"ibm-943",
-            UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offs, NULL, 0 ))
-        log_err("ibm-943->u with skip did not match.\n");
+    {
+
+        static const UChar IBM_949skiptoUnicode[]= {0x0000, 0xAC00, 0xAC01, 0xD700 };
+        static const UChar IBM_943skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
+        static const UChar IBM_930skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
+
+        static const int32_t  fromIBM949Offs [] = { 0, 1, 3, 5};
+        static const int32_t  fromIBM943Offs [] = { 0, 2, 4};
+        static const int32_t  fromIBM930Offs [] = { 1, 3, 5};
+
+        if(!testConvertToUnicode(expskipIBM_949, sizeof(expskipIBM_949),
+                 IBM_949skiptoUnicode, sizeof(IBM_949skiptoUnicode)/sizeof(IBM_949skiptoUnicode),"ibm-949",
+                UCNV_TO_U_CALLBACK_SKIP, fromIBM949Offs, NULL, 0 ))
+            log_err("ibm-949->u with skip did not match.\n");
+        if(!testConvertToUnicode(expskipIBM_943, sizeof(expskipIBM_943),
+                 IBM_943skiptoUnicode, sizeof(IBM_943skiptoUnicode)/sizeof(IBM_943skiptoUnicode[0]),"ibm-943",
+                UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offs, NULL, 0 ))
+            log_err("ibm-943->u with skip did not match.\n");
 
 
-    if(!testConvertToUnicode(expskipIBM_930, sizeof(expskipIBM_930),
-             IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
-            UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0 ))
-        log_err("ibm-930->u with skip did not match.\n");
+        if(!testConvertToUnicode(expskipIBM_930, sizeof(expskipIBM_930),
+                 IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
+                UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0 ))
+            log_err("ibm-930->u with skip did not match.\n");
 
     
-    if(!testConvertToUnicodeWithContext(expskipIBM_930, sizeof(expskipIBM_930),
-             IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
-            UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
-        log_err("ibm-930->u with skip did not match.\n");
+        if(!testConvertToUnicodeWithContext(expskipIBM_930, sizeof(expskipIBM_930),
+                 IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
+                UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
+            log_err("ibm-930->u with skip did not match.\n");
+    }
 
     {
         static const uint8_t usasciiToUBytes[] = { 0x61, 0x80, 0x31 };
