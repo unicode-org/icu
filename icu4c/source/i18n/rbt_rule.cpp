@@ -57,6 +57,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          UBool anchorStart, UBool anchorEnd,
                                          const TransliterationRuleData* theData,
                                          UErrorCode& status) :
+    segments(0),
     data(theData) {
 
     if (U_FAILURE(status)) {
