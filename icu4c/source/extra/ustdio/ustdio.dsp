@@ -186,10 +186,6 @@ SOURCE=.\uscanf_p.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\uscanset.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\ustdio.c
 # End Source File
 # Begin Source File
@@ -236,10 +232,6 @@ SOURCE=.\uscanf.h
 # Begin Source File
 
 SOURCE=.\uscanf_p.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\uscanset.h
 # End Source File
 # Begin Source File
 
