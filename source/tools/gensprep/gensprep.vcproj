@@ -3,7 +3,6 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="gensprep"
-	ProjectGUID="{631C23CE-6C1D-4875-88F0-85E0A42B36EA}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -28,6 +27,7 @@
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
+				DisableLanguageExtensions="TRUE"
 				PrecompiledHeaderFile=".\Release/gensprep.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
@@ -37,9 +37,8 @@
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy $(TargetPath) ..\..\..\bin
-"
-				Outputs="..\..\..\bin\$(InputName).exe"/>
+				CommandLine="copy &quot;$(TargetPath)&quot; ..\..\..\bin"
+				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
@@ -83,6 +82,7 @@
 				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
+				DisableLanguageExtensions="TRUE"
 				PrecompiledHeaderFile=".\Debug/gensprep.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
@@ -93,9 +93,8 @@
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy $(TargetPath) ..\..\..\bin
-"
-				Outputs="..\..\..\bin\$(InputName).exe"/>
+				CommandLine="copy &quot;$(TargetPath)&quot; ..\..\..\bin"
+				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
