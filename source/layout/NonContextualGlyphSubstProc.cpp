@@ -1,5 +1,5 @@
 /*
- * @(#)NonContextualGlyphSubstitutionProcessor.cpp	1.5 00/03/15
+ * @(#)NonContextualGlyphSubstProc.cpp	1.5 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -8,8 +8,8 @@
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"
-#include "NonContextualGlyphSubstitution.h"
-#include "NonContextualGlyphSubstitutionProcessor.h"
+#include "NonContextualGlyphSubst.h"
+#include "NonContextualGlyphSubstProc.h"
 #include "SimpleArrayProcessor.h"
 #include "SegmentSingleProcessor.h"
 #include "SegmentArrayProcessor.h"

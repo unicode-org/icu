@@ -1,5 +1,5 @@
 /*
- * @(#)ContextualSubstitutionSubtables.cpp	1.11 00/03/15
+ * @(#)ContextualSubstSubtables.cpp	1.11 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -9,7 +9,7 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "GlyphSubstitutionTables.h"
-#include "ContextualSubstitutionSubtables.h"
+#include "ContextualSubstSubtables.h"
 #include "GlyphIterator.h"
 #include "LookupProcessor.h"
 #include "CoverageTables.h"

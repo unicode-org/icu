@@ -1,5 +1,5 @@
 /*
- * @(#)MarkToLigaturePositioningSubtables.cpp	1.5 00/03/15
+ * @(#)MarkToLigaturePosnSubtables.cpp	1.5 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -11,8 +11,8 @@
 #include "AnchorTables.h"
 #include "MarkArrays.h"
 #include "GlyphPositioningTables.h"
-#include "AttachmentPositioningSubtables.h"
-#include "MarkToLigaturePositioningSubtables.h"
+#include "AttachmentPosnSubtables.h"
+#include "MarkToLigaturePosnSubtables.h"
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 

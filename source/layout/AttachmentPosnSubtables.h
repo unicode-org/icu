@@ -1,5 +1,5 @@
 /*
- * @(#)AttachmentPositioningSubtables.h	1.6 00/03/15
+ * @(#)AttachmentPosnSubtables.h	1.6 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *

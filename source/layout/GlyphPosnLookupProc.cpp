@@ -1,5 +1,5 @@
 /*
- * @(#)GlyphPositioningLookupProcessor.cpp	1.6 00/03/15
+ * @(#)GlyphPosnLookupProc.cpp	1.6 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -16,13 +16,13 @@
 #include "SinglePositioningSubtables.h"
 #include "PairPositioningSubtables.h"
 //#include "CursivePositioningSubtables.h"
-#include "MarkToBasePositioningSubtables.h"
-#include "MarkToLigaturePositioningSubtables.h"
-#include "MarkToMarkPositioningSubtables.h"
+#include "MarkToBasePosnSubtables.h"
+#include "MarkToLigaturePosnSubtables.h"
+#include "MarkToMarkPosnSubtables.h"
 //#include "ContextualPositioningSubtables.h"
-#include "ContextualSubstitutionSubtables.h"
+#include "ContextualSubstSubtables.h"
 #include "LookupProcessor.h"
-#include "GlyphPositioningLookupProcessor.h"
+#include "GlyphPosnLookupProc.h"
 #include "LESwaps.h"
 
 // Aside from the names, the contextual positioning subtables are
