@@ -185,17 +185,18 @@ static void TestSurrogateBehaviour(){
         const uint8_t expected[] = {
                                     0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
                                     0x36, 0x21,
-                                    0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
-                                    0x0f, 0x1A, 
+                                    0x0F, 0x31, 
+                                    0x1A, 
                                     0x0f, 0x32
                                     };
+
         
 
         int32_t offsets[] = {
                                     0,    0,    0,    0,    0,    0,    0,      
                                     1,    1,
-                                    2,    2,    2,    2,    2,    2,    2,    2,
-                                    3,    3,
+                                    2,    2,
+                                    3,  
                                     5,    5,  };
 
         /*iso-2022-CN*/
@@ -468,8 +469,8 @@ static void TestErrorBehaviour(){
         int32_t offsets[]        = { 0x00, 0x00};
 
         UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x0f, 0x31, 0x1A,0x0f,0x32};
-        int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x02,0x02};
+        const uint8_t expected2[] = { 0x0f, 0x31, 0x1A,0x32};
+        int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x02};
 
         UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
         const uint8_t expected3MBCS[] = {0x0f, 0x51, 0x50, 0x1A};
@@ -1660,8 +1661,8 @@ static void TestResetBehaviour(void){
         const uint8_t expected[] = {
                                     0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
                                     0x36, 0x21,
-                                    0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
-                                    0x0f, 0x1A, 
+                                    0x0f, 0x31,
+                                    0x1A, 
                                     0x0f, 0x32
                                     };
         
@@ -1669,8 +1670,8 @@ static void TestResetBehaviour(void){
         int32_t offsets[] = {
                                     0,    0,    0,    0,    0,    0,    0,      
                                     1,    1,
-                                    2,    2,    2,    2,    2,    2,    2,    2,
-                                    3,    3,
+                                    2,    2,
+                                    3,    
                                     5,    5,  };
         
         UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
