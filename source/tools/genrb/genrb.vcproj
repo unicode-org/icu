@@ -142,6 +142,9 @@
 				RelativePath=".\parse.c">
 			</File>
 			<File
+				RelativePath=".\prscmnts.cpp">
+			</File>
+			<File
 				RelativePath=".\read.c">
 			</File>
 			<File
@@ -174,6 +177,9 @@
 			</File>
 			<File
 				RelativePath=".\parse.h">
+			</File>
+			<File
+				RelativePath=".\prscmnts.h">
 			</File>
 			<File
 				RelativePath=".\read.h">
