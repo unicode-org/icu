@@ -44,7 +44,7 @@ endif
 #       -Wc,"ros" seems to work, but not the "roc"
 CFLAGS          += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
-DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
+DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
 ARFLAGS         = -cr
 
 # TODO: Fix this configuration so that icu-config will work!
