@@ -1096,7 +1096,7 @@ static void TestAlias() {
 
 static void TestConvertSafeClone()
 {
-#define CLONETEST_CONVERTER_COUNT 8
+#define CLONETEST_CONVERTER_COUNT 9
 
     char charBuffer [21];   /* Leave at an odd number for alignment testing */
     uint8_t buffer [CLONETEST_CONVERTER_COUNT] [U_CNV_SAFECLONE_BUFFERSIZE];
@@ -1129,6 +1129,7 @@ static void TestConvertSafeClone()
     someConverters[5] = ucnv_open("ISCII,version=0",&err);
     someConverters[6] = ucnv_open("ISO_2022,locale=kr,version=1",&err);
     someConverters[7] = ucnv_open("ISO_2022,locale=jp,version=1",&err);
+    someConverters[8] = ucnv_open("BOCU-1", &err);
     
     /* Check the various error & informational states: */
 
