@@ -10,6 +10,9 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Converted to C
+* synwee                          Added TestBase, TestPlainDakutenHandakuten,
+*                                 TestSmallLarge, TestKatakanaHiragana,
+*                                 TestChooonKigoo
 *********************************************************************************/
 /**
  * CollationKannaTest(JAPAN) is a third level test class.  This tests the locale
@@ -31,7 +34,25 @@
      /*perform test with strength TERTIARY*/
 static    void TestTertiary(void);
 
+/* Testing base letters */
+static void TestBase(void);
 
-    
+/* Testing plain, Daku-ten, Handaku-ten letters */
+static void TestPlainDakutenHandakuten(void);
+
+/* 
+* Test Small, Large letters
+*/
+static void TestSmallLarge(void); 
+
+/*
+* Test Katakana, Hiragana letters
+*/
+static void TestKatakanaHiragana(void);
+
+/*
+* Test Choo-on kigoo
+*/
+static void TestChooonKigoo(void);
 
 #endif
