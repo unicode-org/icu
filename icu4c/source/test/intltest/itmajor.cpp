@@ -28,6 +28,7 @@
 #include "itrbnfrt.h"
 #include "normconf.h"
 #include "tstnorm.h"
+#include "canittst.h"
 
 #define CASE_SUITE(id, suite) case id:                  \
                           name = #suite;                \
@@ -129,6 +130,7 @@ void IntlTestNormalize::runIndexedTest( int32_t index, UBool exec, const char* &
     switch (index) {
         CASE_SUITE(0, BasicNormalizerTest);
         CASE_SUITE(1, NormalizerConformanceTest); // this takes a long time
+        CASE_SUITE(2, CanonicalIteratorTest);
         default:
             name="";
             break;
