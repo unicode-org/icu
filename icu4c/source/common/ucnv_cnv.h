@@ -214,7 +214,8 @@ extern const UConverterSharedData
     _UTF8Data, _UTF16BEData, _UTF16LEData, _UTF32BEData, _UTF32LEData,
     _EBCDICStatefulData, _ISO2022Data, 
     _LMBCSData1,_LMBCSData2, _LMBCSData3, _LMBCSData4, _LMBCSData5, _LMBCSData6,
-    _LMBCSData8,_LMBCSData11,_LMBCSData16,_LMBCSData17,_LMBCSData18,_LMBCSData19,_HZData;
+    _LMBCSData8,_LMBCSData11,_LMBCSData16,_LMBCSData17,_LMBCSData18,_LMBCSData19,
+    _HZData, _SCSUData;
 
 U_CDECL_END
 
@@ -282,8 +283,8 @@ ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex
  */
 U_CFUNC UChar32
 ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
-							 T_ToUnicodeFunction toU,
-							 UBool collectPairs,
-							 UErrorCode *pErrorCode);
+                             T_ToUnicodeFunction toU,
+                             UBool collectPairs,
+                             UErrorCode *pErrorCode);
 
 #endif /* UCNV_CNV */
