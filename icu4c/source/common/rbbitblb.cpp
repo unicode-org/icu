@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -367,7 +367,7 @@ void RBBITableBuilder::buildStateTable() {
             int32_t  ux;
             UBool    UinDstates = FALSE;
             if (U != NULL) {
-                assert(U->size() > 0);
+                U_ASSERT(U->size() > 0);
                 int  ix;
                 for (ix=0; ix<fDStates->size(); ix++) {
                     RBBIStateDescriptor *temp2;
@@ -649,8 +649,8 @@ void RBBITableBuilder::exportTable(void *where) {
     for (state=0; state<table->fNumStates; state++) {
         RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
         RBBIStateTableRow   *row = (RBBIStateTableRow *)(table->fTableData + state*table->fRowLen);
-        assert (-32768 < sd->fAccepting && sd->fAccepting <= 32767);
-        assert (-32768 < sd->fLookAhead && sd->fLookAhead <= 32767);
+        U_ASSERT (-32768 < sd->fAccepting && sd->fAccepting <= 32767);
+        U_ASSERT (-32768 < sd->fLookAhead && sd->fLookAhead <= 32767);
         row->fAccepting = (int16_t)sd->fAccepting;
         row->fLookAhead = (int16_t)sd->fLookAhead;
         row->fTag       = (int16_t)sd->fTagVal;

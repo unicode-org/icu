@@ -32,7 +32,6 @@
 #include <stdio.h>     // TODO - getrid of this.
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 
 U_NAMESPACE_BEGIN

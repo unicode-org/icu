@@ -33,7 +33,7 @@
 #include <stdio.h>     // TODO - getrid of this, or make conditional on debugging
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
+#include "uassert.h"
 
 
 U_NAMESPACE_BEGIN
@@ -308,7 +308,7 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action,
             break;
         }
         if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "rtree")) {printNodeStack("end of rule");}
-        assert(fNodeStackPtr == 1);
+        U_ASSERT(fNodeStackPtr == 1);
 
         // If this rule includes a look-ahead '/', add a endMark node to the
         //   expression tree.
@@ -456,7 +456,7 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action,
         {
             n = fNodeStack[fNodeStackPtr];
             uint32_t v = u_charDigitValue(fC.fChar);
-            assert(v >= 0);
+            U_ASSERT(v >= 0);
             n->fVal = n->fVal*10 + v;
             break;
         }
@@ -646,7 +646,7 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     if (el != NULL) {
         delete setToAdopt;
         node->fLeftChild = el->val;
-        assert(node->fLeftChild->fType == RBBINode::uset);
+        U_ASSERT(node->fLeftChild->fType == RBBINode::uset);
         return;
     }
 

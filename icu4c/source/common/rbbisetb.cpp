@@ -31,7 +31,7 @@
 #include "unicode/uniset.h"
 #include "utrie.h"
 #include "uvector.h"
-#include "assert.h"
+#include "uassert.h"
 #include "cmemory.h"
 #include <stdio.h>
 
@@ -521,7 +521,7 @@ RangeDescriptor::~RangeDescriptor() {
 //
 //-------------------------------------------------------------------------------------
 void RangeDescriptor::split(UChar32 where, UErrorCode &status) {
-    assert(where>fStartChar && where<=fEndChar);
+    U_ASSERT(where>fStartChar && where<=fEndChar);
     RangeDescriptor *nr = new RangeDescriptor(*this, status);
     /* test for NULL */
     if(nr == 0) {
