@@ -19,6 +19,7 @@
 */
 
 #include "uresimp.h"
+#include "cwchar.h"
 
 /* this is just for internal purposes. DO NOT USE! */
 static void entryCloseInt(UResourceDataEntry *resB);

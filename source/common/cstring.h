@@ -30,11 +30,6 @@
 #include <ctype.h>
 #include "unicode/utypes.h"
 
-/* Do this after utypes.h so that we have U_HAVE_WCHAR_H . */
-#if U_HAVE_WCHAR_H
-#   include <wchar.h>
-#endif
-
 #define uprv_strcpy(dst, src) U_STANDARD_CPP_NAMESPACE  strcpy(dst, src)
 #define uprv_strcpyWithSize(dst, src, size) U_STANDARD_CPP_NAMESPACE strncpy(dst, src, size)
 #define uprv_strncpy(dst, src, size) U_STANDARD_CPP_NAMESPACE strncpy(dst, src, size)
@@ -61,25 +56,6 @@
 #   define uprv_strnicmp(str1, str2, n) T_CString_strnicmp(str1, str2, n)
 #endif
 U_CAPI char *uprv_strdup(const char *src);
-
-/*===========================================================================*/
-/* Wide-character functions                                                  */
-/*===========================================================================*/
-
-/* The following are not available on all systems, defined in wchar.h or string.h. */
-#if U_HAVE_WCSCPY
-#   define uprv_wcscpy wcscpy
-#   define uprv_wcscat wcscat
-#   define uprv_wcslen wcslen
-#else
-U_CAPI wchar_t *uprv_wcscpy(wchar_t *dst, const wchar_t *src);
-U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src);
-U_CAPI size_t uprv_wcslen(const wchar_t *src);
-#endif
-
-/* The following are part of the ANSI C standard, defined in stdlib.h . */
-#define uprv_wcstombs(mbstr, wcstr, count) U_STANDARD_CPP_NAMESPACE wcstombs(mbstr, wcstr, count)
-#define uprv_mbstowcs(wcstr, mbstr, count) U_STANDARD_CPP_NAMESPACE mbstowcs(wcstr, mbstr, count)
 
 U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str);
