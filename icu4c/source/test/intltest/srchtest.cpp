@@ -2069,6 +2069,11 @@ void StringSearchTest::TestSearchIterator()
     if (search.getAttribute(USEARCH_OVERLAP) != USEARCH_OFF) {
         errln("Error resetting search");
     }
+    search2 = search3;
+    if (search2 != search3) {
+        errln("Error: search object has to be equals to its assignment copy");
+        return;
+    }
 }
 
 

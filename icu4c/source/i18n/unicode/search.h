@@ -218,6 +218,14 @@ public:
     // operator overloading ----------------------------------------------
 
     /**
+     * Assignment operator. Sets this iterator to have the same behavior,
+     * and iterate over the same text, as the one passed in.
+     * @param that instance to be copied.
+     */
+    virtual SearchIterator & operator=(const SearchIterator &that);
+
+
+    /**
      * Equality operator. 
      * @param that SearchIterator instance to be compared.
      * @return TRUE if both BreakIterators are of the same class, have the 
