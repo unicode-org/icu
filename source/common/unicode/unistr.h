@@ -39,8 +39,13 @@ class UnicodeConverterCPP;
  * UnicodeString are truncated to char, leading to undefined results with
  * anything not in the Latin1 character set.
  */
-class ostream;
+#if U_IOSTREAM_SOURCE >= 199711
+#include <iostream>
+U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
+#elif U_IOSTREAM_SOURCE >= 198506
+#include <iostream.h>
 U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
+#endif
 
 /**
  * Unicode String literals in C++.
@@ -1904,7 +1909,12 @@ private:
 
   friend class UnicodeStringStreamer;
   friend class UnicodeConverterCPP;
+#if U_IOSTREAM_SOURCE >= 199711
+  friend U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
+#elif U_IOSTREAM_SOURCE >= 198506
   friend U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
+#endif
+
   friend class StringCharacterIterator;
 
   /*
