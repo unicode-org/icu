@@ -856,8 +856,7 @@ static int32_t
 _decompose(UChar *dest, int32_t destCapacity,
            const UChar *src, int32_t srcLength,
            UBool compat, UBool ignoreHangul,
-           uint8_t &outTrailCC,
-           UErrorCode * /*pErrorCode*/) {
+           uint8_t &outTrailCC) {
     UChar buffer[3];
     const UChar *limit, *prevSrc, *p;
     uint32_t norm32, ccOrQCMask, qcMask;
@@ -1057,8 +1056,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
     destIndex=_decompose(dest, destCapacity,
                          src, srcLength,
                          compat, ignoreHangul,
-                         trailCC,
-                         pErrorCode);
+                         trailCC);
 
     return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
 }
@@ -1535,7 +1533,8 @@ _combine(const uint16_t *table, uint16_t combineBackIndex,
 }
 
 /*
- * recompose the characters in [p..limit[ (which is canonically ordered),
+ * recompose the characters in [p..limit[
+ * (which is in NFD - decomposed and canonically ordered),
  * adjust limit, and return the trailing cc
  *
  * since for NFKC we may get Jamos in decompositions, we need to
@@ -1580,12 +1579,20 @@ _recompose(UChar *p, UChar *&limit) {
                         }
                         *starter=c;
                     }
+#if 0
+                /*
+                 * The following is disabled with #if 0 because it can not occur:
+                 * Since the input is in NFD, there are no Hangul LV syllables that
+                 * a Jamo T could combine with.
+                 * All Jamo Ts are combined above when handling Jamo Ls.
+                 */
                 } else {
                     /* Jamo T, compose with previous Hangul that does not have a Jamo T */
                     if(isHangulWithoutJamoT(c2)) {
                         pRemove=p-1;
                         *starter=(UChar)(c2+(c-JAMO_T_BASE));
                     }
+#endif
                 }
 
                 if(pRemove!=NULL) {
@@ -1733,35 +1740,29 @@ _findNextStarter(const UChar *src, const UChar *limit,
             break; /* true starter */
         }
 
-        if((norm32&decompQCMask)==0) {
-            ++src; /* does not decompose, continue */
-            continue;
-        }
-
-        /* no Hangul/Jamo here because they are all true starters or don't decompose */
-        if(isNorm32Regular(norm32)) {
-            c2=0;
-        } else {
+        if(isNorm32LeadSurrogate(norm32)) {
             /* c is a lead surrogate, get the real norm32 */
-            if((src+1)==limit || UTF_IS_SECOND_SURROGATE(c2=*(src+1))) {
-                break; /* unmatched first surrogate */
+            if((src+1)==limit || !UTF_IS_SECOND_SURROGATE(c2=*(src+1))) {
+                break; /* unmatched first surrogate: counts as a true starter */
             }
             norm32=_getNorm32FromSurrogatePair(norm32, c2);
 
             if((norm32&ccOrQCMask)==0) {
                 break; /* true starter */
-            } else if((norm32&decompQCMask)==0) {
-                src+=2; /* does not decompose, continue */
-                continue;
             }
+        } else {
+            c2=0;
         }
 
-        /* (c, c2) decomposes, get everything from the variable-length extra data */
-        p=_decompose(norm32, decompQCMask, length, cc, trailCC);
+        /* (c, c2) is not a true starter but its decomposition may be */
+        if(norm32&decompQCMask) {
+            /* (c, c2) decomposes, get everything from the variable-length extra data */
+            p=_decompose(norm32, decompQCMask, length, cc, trailCC);
 
-        /* get the first character's norm32 to check if it is a true starter */
-        if(cc==0 && (_getNorm32(p, qcMask)&qcMask)==0) {
-            break; /* true starter */
+            /* get the first character's norm32 to check if it is a true starter */
+            if(cc==0 && (_getNorm32(p, qcMask)&qcMask)==0) {
+                break; /* true starter */
+            }
         }
 
         src+= c2==0 ? 1 : 2; /* not a true starter, continue */
@@ -1772,7 +1773,7 @@ _findNextStarter(const UChar *src, const UChar *limit,
 
 /*
  * recompose around the current character:
- * this function is called when unorm_decompose() finds a quick check "no" or "maybe"
+ * this function is called when _compose() finds a quick check "no" or "maybe"
  * after some text (with quick check "yes") has been copied already
  *
  * decompose this character as well as parts of the source surrounding it,
@@ -1818,19 +1819,16 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     length=_decompose(buffer, bufferCapacity,
                       prevStarter, src-prevStarter,
                       (decompQCMask&_NORM_QC_NFKD)!=0, FALSE,
-                      trailCC,
-                      pErrorCode);
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                      trailCC);
+    if(length>bufferCapacity) {
         if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*length, 0)) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        *pErrorCode=U_ZERO_ERROR;
         length=_decompose(buffer, bufferCapacity,
                           prevStarter, src-prevStarter,
                           (decompQCMask&_NORM_QC_NFKD)!=0, FALSE,
-                          trailCC,
-                          pErrorCode);
+                          trailCC);
     }
 
     /* set the next starter */
@@ -1845,6 +1843,56 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     /* return with a pointer to the recomposition and its length */
     length=recomposeLimit-buffer;
     return buffer;
+}
+
+static inline UBool
+_composeHangul(UChar prev, UChar c, uint32_t norm32, const UChar *&src, const UChar *limit,
+               UBool compat, UChar *dest) {
+    if(isJamoVTNorm32JamoV(norm32)) {
+        /* c is a Jamo V, compose with previous Jamo L and following Jamo T */
+        prev=(UChar)(prev-JAMO_L_BASE);
+        if(prev<JAMO_L_COUNT) {
+            c=(UChar)(HANGUL_BASE+(prev*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
+
+            /* check if the next character is a Jamo T (normal or compatibility) */
+            if(src!=limit) {
+                UChar next, t;
+
+                next=*src;
+                if((t=(UChar)(next-JAMO_T_BASE))<JAMO_T_COUNT) {
+                    /* normal Jamo T */
+                    ++src;
+                    c+=t;
+                } else if(compat) {
+                    /* if NFKC, then check for compatibility Jamo T (BMP only) */
+                    norm32=_getNorm32(next);
+                    if(isNorm32Regular(norm32) && (norm32&_NORM_QC_NFKD)) {
+                        const UChar *p;
+                        int32_t length;
+                        uint8_t cc, trailCC;
+
+                        p=_decompose(norm32, _NORM_QC_NFKD, length, cc, trailCC);
+                        if(length==1 && (t=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT) {
+                            /* compatibility Jamo T */
+                            ++src;
+                            c+=t;
+                        }
+                    }
+                }
+            }
+            if(dest!=0) {
+                *dest=c;
+            }
+            return TRUE;
+        }
+    } else if(isHangulWithoutJamoT(prev)) {
+        /* c is a Jamo T, compose with previous Hangul LV that does not contain a Jamo T */
+        if(dest!=0) {
+            *dest=(UChar)(prev+(c-JAMO_T_BASE));
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static int32_t
@@ -1883,7 +1931,17 @@ _compose(UChar *dest, int32_t destCapacity,
      * in _composePart(). Having a good prevStarter allows to just decompose
      * the entire [prevStarter..prevSrc[.
      *
-     * This relies on the assumption that the decomposition of a true starter
+     * When _composePart() backs out from prevSrc back to prevStarter,
+     * then it also backs out destIndex by the same amount.
+     * Therefore, at all times, the (prevSrc-prevStarter) source units
+     * must correspond 1:1 to destination units counted with destIndex,
+     * except for reordering.
+     * This is true for the qc "yes" characters copied in the fast loop,
+     * and for pure reordering.
+     * prevStarter must be set forward to src when this is not true:
+     * In _composePart() and after composing a Hangul syllable.
+     *
+     * This mechanism relies on the assumption that the decomposition of a true starter
      * also begins with a true starter. gennorm/store.c checks for this.
      */
     prevStarter=src;
@@ -1973,47 +2031,32 @@ _compose(UChar *dest, int32_t destCapacity,
         /*
          * norm32 is for c=*(src-1), and the quick check flag is "no" or "maybe", and/or cc!=0
          * check for Jamo V/T, then for surrogates and regular characters
-         * c is not a Hangul syllable because they are not marked with no/maybe for NFC & NFKC (and their cc==0)
+         * c is not a Hangul syllable or Jamo L because
+         * they are not marked with no/maybe for NFC & NFKC (and their cc==0)
          */
         if(isNorm32HangulOrJamo(norm32)) {
             /*
-             * Jamo V/T:
+             * c is a Jamo V/T:
              * try to compose with the previous character, Jamo V also with a following Jamo T,
              * and set values here right now in case we just continue with the main loop
              */
-            length=1;
             prevCC=cc=0;
-            prevStarter=prevSrc;
             reorderStartIndex=destIndex;
 
-            if(/* ### TODO: do we need to do this? !ignoreHangul && ### */ destIndex>0) {
-                /* c is a Jamo V/T, see if we can compose it with the previous character */
-                c2=*(prevSrc-1);
-                if(isJamoVTNorm32JamoV(norm32)) {
-                    /* Jamo V, compose with previous Jamo L and following Jamo T */
-                    c2=(UChar)(c2-JAMO_L_BASE);
-                    if(c2<JAMO_L_COUNT) {
-                        c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
-                        if(src!=limit && (c2=(UChar)(*src-JAMO_T_BASE))<JAMO_T_COUNT) {
-                            ++src;
-                            c+=c2;
-                        }
-                        if(destIndex<=destCapacity) {
-                            dest[destIndex-1]=c;
-                        }
-                        continue;
-                    }
-                } else {
-                    /* Jamo T, compose with previous Hangul that does not have a Jamo T */
-                    if(isHangulWithoutJamoT(c2)) {
-                        if(destIndex<=destCapacity) {
-                            dest[destIndex-1]=(UChar)(c2+(c-JAMO_T_BASE));
-                        }
-                        continue;
-                    }
-                }
+            if( /* ### TODO: do we need to do this? !ignoreHangul && ### */
+                destIndex>0 &&
+                _composeHangul(
+                    *(prevSrc-1), c, norm32, src, limit, compat,
+                    destIndex<=destCapacity ? dest+(destIndex-1) : 0)
+            ) {
+                prevStarter=src;
+                continue;
             }
+
+            /* the Jamo V/T did not compose into a Hangul syllable, just append to dest */
             c2=0;
+            length=1;
+            prevStarter=prevSrc;
         } else {
             if(isNorm32Regular(norm32)) {
                 c2=0;
