@@ -819,9 +819,9 @@ typedef enum UConverterUnicodeSet {
  * sets with different properties.
  *
  * @param cnv The converter for which a set is requested.
- * @param set A valid USet; it will be cleared by the function before
+ * @param setFillIn A valid USet *. It will be cleared by this function before
  *            the converter's specific set is filled into the USet.
- * @param which A UConverterUnicodeSet selector;
+ * @param whichSet A UConverterUnicodeSet selector;
  *              currently UCNV_ROUNDTRIP_SET is the only supported value.
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
@@ -833,8 +833,8 @@ typedef enum UConverterUnicodeSet {
  */
 U_DRAFT void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,
-                   USet *set,
-                   UConverterUnicodeSet which,
+                   USet *setFillIn,
+                   UConverterUnicodeSet whichSet,
                    UErrorCode *pErrorCode);
 
 /**
