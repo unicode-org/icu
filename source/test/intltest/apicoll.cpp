@@ -1793,9 +1793,9 @@ inline UBool TestCollator::operator!=(const TestCollator& other) const {
 }
 
 #define returnEComparisonResult(data) \
-	                    if (data < 0) return EComparisonResult::LESS;\
-					    if (data > 0) return EComparisonResult::GREATER;\
-                        return EComparisonResult::EQUAL;
+	                    if (data < 0) return Collator::LESS;\
+			    if (data > 0) return Collator::GREATER;\
+                        return Collator::EQUAL;
 
 Collator* TestCollator::clone() const
 {
