@@ -62,14 +62,8 @@ CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 
-### use the "--enable-mapped=" option to configure, to get mapped file behavior.
-# the case where '--enable-mapped=yes'
-@USE_MAPPED_TRUE@CPPFLAGS += -DUDATA_MAP
-
-# the case where '--enable-mapped=no'  (DEFAULT)
-@USE_MAPPED_FALSE@CPPFLAGS += -DUDATA_DLL
-###
-
+# Data packaging options are set at configure time with --with-data-packaging.
+CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 
 OBJECTS = chariter.o umutex.o compdata.o compitr.o convert.o		\
 cpputils.o cstring.o dcmpdata.o digitlst.o filestrm.o umemstrm.o locid.o locmap.o	\

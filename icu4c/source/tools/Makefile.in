@@ -36,16 +36,10 @@ pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = ..
 subdir = tools
 
-## Type of build
-@USE_MAPPED_TRUE@  DEFAULT_MODE=common
-@USE_MAPPED_FALSE@ DEFAULT_MODE=dll
-
 ## Allow overriding of package build mode
 ifeq ($(strip $(MODE)),)
-  MODE=$(DEFAULT_MODE)
+  MODE=@DATA_PACKAGING_MODE@
 endif
-
-
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
