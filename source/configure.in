@@ -38,7 +38,7 @@ UNICODE_VERSION="4.0.1"
 AC_SUBST(UNICODE_VERSION)
 
 AC_SUBST(CPPFLAGS)
-AC_SUBST(CINTLTST_CPPFLAGS)
+#AC_SUBST(CINTLTST_CPPFLAGS)
 
 dnl Checks for programs
 AC_PROG_CC
@@ -335,14 +335,21 @@ then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     OLD_CXXFLAGS="${CXXFLAGS}"
-    case "${host}" in
-        *-*-hpux*) 	
+    case "${icu_cv_host_frag}" in
+        mh-hpux-acc)
             CXXFLAGS="${CXXFLAGS} -AA"
         ;;
     esac
     AC_MSG_CHECKING([iostream usability])
     AC_TRY_COMPILE([#include <iostream>],[],
         [ac_cv_header_iostream=yes],[ac_cv_header_iostream=no])
+    if test $icu_cv_host_frag = mh-cygwin-msvc
+    then
+        dnl <iostream> is always there on Windows.
+        dnl We do this to prevent the C++ preprocessor from being used because
+        dnl autoconf can't deal with the Windows C++ preprocessor 
+        ac_cv_header_iostream=yes
+    fi
     AC_MSG_RESULT($ac_cv_header_iostream)
     if test $ac_cv_header_iostream = yes
     then
@@ -366,8 +373,8 @@ then
         if test $U_IOSTREAM_SOURCE -ge $streams
         then
             U_IOSTREAM_SOURCE=$streams
-            case "${host}" in
-                *-*-hpux*)
+            case "${icu_cv_host_frag}" in
+                mh-hpux-acc)
                     if test $U_IOSTREAM_SOURCE -lt 199711; then
                         CXXFLAGS=${OLD_CXXFLAGS}
                     fi
