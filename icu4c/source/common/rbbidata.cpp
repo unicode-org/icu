@@ -12,6 +12,7 @@
 #include "udatamem.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "umutex.h"
 
 #include "uassert.h"
 
@@ -155,14 +156,14 @@ int32_t  RBBIDataWrapper::hashCode() {
 //
 //-----------------------------------------------------------------------------
 void RBBIDataWrapper::removeReference() {
-    if (--fRefCount <= 0) {            // TODO   needs synchronization
+    if (umtx_atomic_dec(&fRefCount) == 0) {  
         delete this;
     }
 };
 
 
 RBBIDataWrapper *RBBIDataWrapper::addReference() {
-   ++fRefCount;                         // TODO:  needs synchronization
+   umtx_atomic_inc(&fRefCount);
    return this;
 };
 
