@@ -65,7 +65,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 
 U_CDECL_BEGIN
 static int8_t U_CALLCONV
-UVectorTest_compareInt32(const UHashTok key1, const UHashTok key2) {
+UVectorTest_compareInt32(UHashTok key1, UHashTok key2) {
     if (key1.integer > key2.integer) {
         return 1;
     }
