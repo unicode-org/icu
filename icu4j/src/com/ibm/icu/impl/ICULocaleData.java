@@ -95,9 +95,7 @@ public class ICULocaleData {
      * class path?
      */
     private static ResourceBundle instantiateBundle(String name, Locale l) {
-	System.out.println("instantiating " + name + " locale: " + l);
 	ResourceBundle rb = ResourceBundle.getBundle(name, l);
-	System.out.println("instantiate returning: " + rb);
 	return rb;
     }
 
