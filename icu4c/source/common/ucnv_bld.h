@@ -57,39 +57,7 @@ typedef union UConverterTable UConverterTable;
 struct UConverterImpl;
 typedef struct UConverterImpl UConverterImpl;
 
-/* ###
- * Markus Scherer on 2000feb04:
- * I have change UConverter and UConverterSharedData; there may be more changes,
- * or we may decide to roll back the structure definitions to what they were
- * before, with the additional UConverterImpl field and the new semantics for
- * referenceCounter.
- *
- * Reasons for changes: Attempt at performance improvements, especially
- * a) decrease amount of internal, implicit padding by reordering the fields
- * b) save space by storing the internal name of the converter only with a
- *    pointer instead of an array
- *
- * In addition to that, I added the UConverterImpl field for better
- * modularizing the code and making it more maintainable. It may actually
- * become slightly faster by doing this.
- *
- * I changed the UConverter.to|fromUnicodeStatus to be unsigned because
- * the defaultValues.toUnicodeStatus is unsigned, and it seemed to be a safer choice.
- *
- * Ultimately, I would prefer not to expose these definitions any more at all,
- * but this is suspect to discussions, proposals and design reviews.
- *
- * I would personally like to see more information hiding (with helper APIs),
- * useful state fields in UConverter that are reserved for the callbacks,
- * and directly included structures instead of pointers to allocated
- * memory, like for UConverterTable and its variant fields.
- *
- * Also, with the more C++-like converter implementation,
- * the conversionType does not need to be in UConverterSharedData any more:
- * it is in UConverterImpl and hardly used.
- */
-
-typedef struct {
+typedef struct UConverterStaticData {
     uint32_t structSize;            /* Size of this structure */
     
     char name [UCNV_MAX_CONVERTER_NAME_LENGTH];               /* internal name of the converter- invariant chars */
@@ -115,7 +83,7 @@ typedef struct {
  * Defines the UConverterSharedData struct,
  * the immutable, shared part of UConverter.
  */
-typedef struct {
+typedef struct UConverterSharedData {
     uint32_t structSize;            /* Size of this structure */
     uint32_t referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
 
@@ -210,8 +178,3 @@ UConverterDataLMBCS;
 #define CONVERTER_FILE_EXTENSION ".cnv"
 
 #endif /* _UCNV_BLD */
-
-
-
-
-
