@@ -57,12 +57,12 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     numRead=T_FileStream_read(in, start, sizeof(start));
 
     *cp = ucnv_detectUnicodeSignature(start, numRead, signatureLength, error);
-    if(*cp==NULL){
-        /* unread the bytes already read */
-        while(numRead>0) {
-            T_FileStream_ungetc(start[--numRead], in);
-        }
+    
+    /* unread the bytes beyond what was consumed for U+FEFF */
+    T_FileStream_rewind(in);
+    numRead = T_FileStream_read(in, start,*signatureLength);
 
+    if(*cp==NULL){
         *conv =NULL;
         return FALSE;
     }
@@ -84,10 +84,7 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
         *error=U_INTERNAL_PROGRAM_ERROR;
     }
 
-    /* unread the bytes beyond what was consumed for U+FEFF */
-    while(numRead>*signatureLength) {
-        T_FileStream_ungetc(start[--numRead], in);
-    }
+
 
     return TRUE; 
 }
