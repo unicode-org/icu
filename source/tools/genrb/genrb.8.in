@@ -4,7 +4,7 @@
 .\"
 .\" Copyright (C) 2000 IBM, Inc. and others.
 .\"
-.TH GENRB 8 "19 September 2000" "ICU @VERSION@"
+.TH GENRB 8 "29 September 2000" "ICU @VERSION@"
 .SH NAME
 .B genrb
 \- compile a resource bundle
@@ -39,10 +39,17 @@ The resulting files have a
 extension while resource bundle source files typically have a 
 .B .txt
 extension.
+The
+.I bundle
+file name should be a local identifier, e.g.
+.B ja_JP.txt
+for Japanese (Japan) data, or
+.B root.txt
+for the root bundle.
 .PP
-These binary files can then be loaded directly by ICU or reused by other
-tools such as
-.BR pkgdata (8).
+These binary files can then be read directly by ICU, or used by
+.BR pkgdata (8)
+for incorporation into a larger archive or library.
 .SH OPTIONS
 .TP
 .BR \-V\fP, \fB\-\-version
@@ -67,18 +74,16 @@ does automatically detect UTF-8, UTF-16BE, and UTF-16LE if a byte order mark
 (BOM) is present.
 .TP
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
+Set the source directory to
+.IR source .
+The default source directory is specified by the environment variable
+.BR ICU_DATA .
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 Set the destination directory to
 .IR destination .
 The default destination directory is specified by the environment variable
 .BR ICU_DATA .
-.B \-\-sourcedir=\fIpath\fP\fR \fP or \fB \-s=\fIpath\fP
-.TP 8
-.I bundle.txt ...
-Specify the source resource bundle files which will be compiled. 
-The filename should be a locale ID, for example,  \fBja_JP.txt\fP for Japanese (Japan),   
-or \fBroot.txt\fP for the root bundle. 
 .SH INVARIANT CHARACTERS
 The
 .B invariant character set
@@ -90,7 +95,7 @@ This is the set which is guaranteed to be available regardless of code page.
 .TP 10
 .B ICU_DATA
 Specifies the directory containing ICU data. Defaults to
-.BR I@prefix@share/icu/@VERSION@/ .
+.BR @thedatadir@/icu/@VERSION@/ .
 Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
@@ -101,4 +106,3 @@ is set.
 Copyright (C) 2000 IBM, Inc. and others.
 .SH SEE ALSO
 .BR pkgdata (8)
-
