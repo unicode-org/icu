@@ -421,6 +421,9 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%8u", -123456, "%8u", -123456);
     TestSPrintFormat("%-8u", -123456, "%-8u", -123456);
     TestSPrintFormat("%-08u", -123456, "%-08u", -123456);
+    TestSPrintFormat("%.5u", 123456, "%.5u", 123456);
+    TestSPrintFormat("%.6u", 123456, "%.6u", 123456);
+    TestSPrintFormat("%.7u", 123456, "%.7u", 123456);
 
     TestSPrintFormat("%8d", 123456, "%8d", 123456);
     TestSPrintFormat("%-8d", 123456, "%-8d", 123456);
