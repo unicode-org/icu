@@ -68,11 +68,12 @@
 #define LINKR      1
 #define LINKL      2
 
-static UChar IrrelevantPos[] = { 0x0, 0x2, 0x4, 0x6,
-                                 0x8, 0xA, 0xC, 0xE,
+static const UChar IrrelevantPos[] = {
+    0x0, 0x2, 0x4, 0x6,
+    0x8, 0xA, 0xC, 0xE,
 };
 
-static UChar convertLamAlef[] =
+static const UChar convertLamAlef[] =
 {
 /*FEF5*/    0x0622,
 /*FEF6*/    0x0622,
@@ -84,7 +85,7 @@ static UChar convertLamAlef[] =
 /*FEFC*/    0x0627
 };
 
-static UChar araLink[178]=
+static const UChar araLink[178]=
 {
   1           + 32 + 256 * 0x11,/*0x0622*/
   1           + 32 + 256 * 0x13,/*0x0623*/
@@ -163,7 +164,7 @@ static UChar araLink[178]=
   1, 1                          /*0x06D2-0x06D3*/
 };
 
-static UChar presLink[141]=
+static const UChar presLink[141]=
 {
   1 + 2,                        /*0xFE70*/
   1 + 2,                        /*0xFE71*/
@@ -205,7 +206,7 @@ static UChar presLink[141]=
   1
 };
 
-static UChar convertFEto06[] =
+static const UChar convertFEto06[] =
 {
 /***********0******1******2******3******4******5******6******7******8******9******A******B******C******D******E******F***/
 /*FE7*/   0x64B, 0x64B, 0x64C, 0x64C, 0x64D, 0x64D, 0x64E, 0x64E, 0x64F, 0x64F, 0x650, 0x650, 0x651, 0x651, 0x652, 0x652,
@@ -219,7 +220,7 @@ static UChar convertFEto06[] =
 /*FEF*/   0x649, 0x64A, 0x64A, 0x64A, 0x64A, 0x65C, 0x65C, 0x65D, 0x65D, 0x65E, 0x65E, 0x65F, 0x65F
 };
 
-static UChar shapeTable[4][4][4]=
+static const UChar shapeTable[4][4][4]=
 {
   { {0,0,0,0}, {0,0,0,0}, {0,1,0,3}, {0,1,0,1} },
   { {0,0,2,2}, {0,0,1,2}, {0,1,1,2}, {0,1,1,3} },
