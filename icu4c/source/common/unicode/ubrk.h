@@ -522,6 +522,26 @@ U_CAPI  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi);
 
 /**
+ * Get the statuses from the break rules that determined the most recently
+ * returned break position.  The values appear in the rule source
+ * within brackets, {123}, for example.  The default status value for rules
+ * that do not explicitly provide one is zero.
+ * <p>
+ * For word break iterators, the possible values are defined in enum UWordBreak.
+ * @param bi        The break iterator to use
+ * @param fillInVec an array to be filled in with the status values.  
+ * @param capacity  the length of the supplied vector.  A length of zero causes
+ *                  the function to return the number of status values, in the
+ *                  normal way, without attemtping to store any values.
+ * @param status    receives error codes.  
+ * @return          The number of rule status values from rules that determined 
+ *                  the most recent boundary returned by the break iterator.
+ * @draft ICU 3.0
+ */
+U_CAPI  int32_t U_EXPORT2
+ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status);
+
+/**
  * Return the locale of the break iterator. You can choose between the valid and
  * the actual locale.
  * @param bi break iterator

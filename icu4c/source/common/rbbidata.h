@@ -68,42 +68,50 @@ struct RBBIDataHeader {
     /*  All offsets are bytes from the start of the RBBIDataHeader. */
     /*  All sizes are in bytes. */
     /*  */
-    uint32_t         fFTable;      /*  forward state transition table. */
+    uint32_t         fFTable;         /*  forward state transition table. */
     uint32_t         fFTableLen;
-    uint32_t         fRTable;      /*  Offset to the reverse state transition table. */
+    uint32_t         fRTable;         /*  Offset to the reverse state transition table. */
     uint32_t         fRTableLen;
-    uint32_t         fSFTable;     /*  safe point forward transition table */
+    uint32_t         fSFTable;        /*  safe point forward transition table */
     uint32_t         fSFTableLen;
-    uint32_t         fSRTable;     /*  safe point reverse transition table */
+    uint32_t         fSRTable;        /*  safe point reverse transition table */
     uint32_t         fSRTableLen;
-    uint32_t         fTrie;        /*  Offset to Trie data for character categories */
+    uint32_t         fTrie;           /*  Offset to Trie data for character categories */
     uint32_t         fTrieLen;
-    uint32_t         fRuleSource;  /*  Offset to the source for for the break */
+    uint32_t         fRuleSource;     /*  Offset to the source for for the break */
     uint32_t         fRuleSourceLen;  /*    rules.  Stored UChar *. */
+    uint32_t         fStatusTable;    /* Offset to the table of rule status values */
+    uint32_t         fStatusTableLen;
 
-    uint32_t         fReserved[8]; /*  Reserved for expansion */
+    uint32_t         fReserved[6];    /*  Reserved for expansion */
 
 };
 
 
 
 struct  RBBIStateTableRow {
-    int16_t          fAccepting;    /*  Non-zero if this row is for an accepting state. */
-                                    /*  Value is the {nnn} value to return to calling */
-                                    /*     application. */
-    int16_t          fLookAhead;    /*  Non-zero if this row is for a state that */
-                                    /*    corresponds to a '/' in the rule source. */
-                                    /*    Value is the same as the fAccepting */
-                                    /*      value for the rule (which will appear */
-                                    /*      in a different state. */
-    int16_t          fTag;          /*  Non-zero if this row covers a {tagged} position */
-                                    /*     from a rule.  value is the tag number. */
+    int16_t          fAccepting;    /*  Non-zero if this row is for an accepting state.   */
+                                    /*  Value 0: not an accepting state.                  */
+                                    /*       -1: Unconditional Accepting state.           */
+                                    /*    positive:  Look-ahead match has completed.      */
+                                    /*           Actual boundary position happened earlier */
+                                    /*           Value here == fLookAhead in earlier      */
+                                    /*              state, at actual boundary pos.        */
+    int16_t          fLookAhead;    /*  Non-zero if this row is for a state that          */
+                                    /*    corresponds to a '/' in the rule source.        */
+                                    /*    Value is the same as the fAccepting             */
+                                    /*      value for the rule (which will appear         */
+                                    /*      in a different state.                         */
+    int16_t          fTagIdx;       /*  Non-zero if this row covers a {tagged} position   */
+                                    /*     from a rule.  Value is the index in the        */
+                                    /*     StatusTable of the set of matching             */
+                                    /*     tags (rule status values)                      */
     int16_t          fReserved;
-    uint16_t         fNextState[2]; /*  Next State, indexed by char category. */
-                                    /*    Array Size is fNumCols from the */
-                                    /*    state table header. */
-                                    /*    CAUTION:  see RBBITableBuilder::getTableSize() */
-                                    /*              before changing anything here. */
+    uint16_t         fNextState[2]; /*  Next State, indexed by char category.             */
+                                    /*    Array Size is fNumCols from the                 */
+                                    /*    state table header.                             */
+                                    /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
+                                    /*              before changing anything here.        */
 };
 
 
@@ -122,9 +130,9 @@ typedef enum {
 } RBBIStateTableFlags;
 
 
-/*  */
+/*                                        */
 /*   The reference counting wrapper class */
-/*  */
+/*                                        */
 class RBBIDataWrapper : public UMemory {
 public:
     RBBIDataWrapper(const RBBIDataHeader *data, UErrorCode &status);
@@ -145,15 +153,19 @@ public:
     #define printTable(heading, table)
 #endif
 
-    /*  */
+    /*                                     */
     /*   Pointers to items within the data */
-    /*  */
+    /*                                     */
     const RBBIDataHeader     *fHeader;
     const RBBIStateTable     *fForwardTable;
     const RBBIStateTable     *fReverseTable;
     const RBBIStateTable     *fSafeFwdTable;
     const RBBIStateTable     *fSafeRevTable;
     const UChar              *fRuleSource;
+    const int32_t            *fRuleStatusTable; 
+
+    /* number of int32_t values in the rule status table.   Used to sanity check indexing */
+    int32_t             fStatusMaxIdx;
 
     UTrie               fTrie;
 

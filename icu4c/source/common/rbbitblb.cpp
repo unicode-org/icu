@@ -133,8 +133,15 @@ void  RBBITableBuilder::build() {
     flagAcceptingStates();
     flagLookAheadStates();
     flagTaggedStates();
-    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "states")) {printStates();};
 
+    //
+    // Update the global table of rule status {tag} values
+    // The rule builder has a global vector of status values that are common
+    //    for all tables.  Merge the ones from this table into the global set.
+    //
+    mergeRuleStatusVals();
+
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "states")) {printStates();};
 }
 
 
@@ -637,18 +644,142 @@ void     RBBITableBuilder::flagTaggedStates() {
     }
     for (i=0; i<tagNodes.size(); i++) {                   // For each tag node t (all of 'em)
         tagNode = (RBBINode *)tagNodes.elementAt(i);
-
+        
         for (n=0; n<fDStates->size(); n++) {              //    For each state  s (row in the state table)
             RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
             if (sd->fPositions->indexOf(tagNode) >= 0) {  //       if  s include the tag node t
-                if (sd->fTagVal < tagNode->fVal) {
-                    // If more than one rule tag applies to this state, the larger
-                    //   tag takes precedence.
-                sd->fTagVal = tagNode->fVal;
+                sortedAdd(&sd->fTagVals, tagNode->fVal);
             }
         }
     }
 }
+
+
+
+
+//-----------------------------------------------------------------------------
+//
+//  mergeRuleStatusVals
+//
+//      Update the global table of rule status {tag} values
+//      The rule builder has a global vector of status values that are common
+//      for all tables.  Merge the ones from this table into the global set.
+//
+//-----------------------------------------------------------------------------
+void  RBBITableBuilder::mergeRuleStatusVals() {
+    //
+    //  The basic outline of what happens here is this...
+    //
+    //    for each state in this state table
+    //       if the status tag list for this state is in the global statuses list
+    //           record where and
+    //           continue with the next state
+    //       else
+    //           add the tag list for this state to the global list.
+    //
+    int i;
+    int n;
+
+    // Pre-set a single tag of {0} into the table.
+    //   We will need this as a default, for rule sets with no explicit tagging.
+    if (fRB->fRuleStatusVals->size() == 0) {
+        fRB->fRuleStatusVals->addElement(1, *fStatus);  // Num of statuses in group
+        fRB->fRuleStatusVals->addElement((int32_t)0, *fStatus);  //   and our single status of zero
+    }
+        
+    //    For each state 
+    for (n=0; n<fDStates->size(); n++) {     
+        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
+        UVector *thisStatesTagValues = sd->fTagVals;
+        if (thisStatesTagValues == NULL) {
+            // No tag values are explicitly associated with this state.
+            //   Set the default tag value.
+            sd->fTagsIdx = 0;
+            continue;
+        }
+
+        // There are tag(s) associated with this state.
+        //   fTagsIdx will be the index into the global tag list for this state's tag values.
+        //   Initial value of -1 flags that we haven't got it set yet.
+        sd->fTagsIdx = -1;
+        int32_t  thisTagGroupStart = 0;   // indexes into the global rule status vals list
+        int32_t  nextTagGroupStart = 0;
+        
+        // Loop runs once per group of tags in the global list
+        while (nextTagGroupStart < fRB->fRuleStatusVals->size()) {
+            thisTagGroupStart = nextTagGroupStart;
+            nextTagGroupStart += fRB->fRuleStatusVals->elementAti(thisTagGroupStart) + 1;
+            if (thisStatesTagValues->size() != fRB->fRuleStatusVals->elementAti(thisTagGroupStart)) {
+                // The number of tags for this state is different from
+                //    the number of tags in this group from the global list.
+                //    Continue with the next group from the global list.
+                continue;
+            }
+            // The lengths match, go ahead and compare the actual tag values
+            //    between this state and the group from the global list.
+            for (i=0; i<thisStatesTagValues->size(); i++) {
+                if (thisStatesTagValues->elementAti(i) != 
+                    fRB->fRuleStatusVals->elementAti(thisTagGroupStart + 1 + i) ) {
+                    // Mismatch.  
+                    break;
+                }
+            }
+            
+            if (i == thisStatesTagValues->size()) {
+                // We found a set of tag values in the global list that match
+                //   those for this state.  Use them.
+                sd->fTagsIdx = thisTagGroupStart;
+                break;   
+            }
+        }
+        
+        if (sd->fTagsIdx == -1) {
+            // No suitable entry in the global tag list already.  Add one
+            sd->fTagsIdx = fRB->fRuleStatusVals->size();
+            fRB->fRuleStatusVals->addElement(thisStatesTagValues->size(), *fStatus);
+            for (i=0; i<thisStatesTagValues->size(); i++) {
+                fRB->fRuleStatusVals->addElement(thisStatesTagValues->elementAti(i), *fStatus);
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------
+//
+//  sortedAdd  Add a value to a vector of sorted values (ints).
+//             Do not replicate entries; if the value is already there, do not
+//                add a second one.
+//             Lazily create the vector if it does not already exist.
+//
+//-----------------------------------------------------------------------------
+void RBBITableBuilder::sortedAdd(UVector **vector, int32_t val) {
+    int32_t i;
+
+    if (*vector == NULL) {
+        *vector = new UVector(*fStatus);
+    }
+    if (*vector == NULL || U_FAILURE(*fStatus)) {
+        return;
+    }
+    UVector *vec = *vector;
+    int32_t  vSize = vec->size();
+    for (i=0; i<vSize; i++) {
+        int32_t valAtI = vec->elementAti(i);
+        if (valAtI == val) {
+            // The value is already in the vector.  Don't add it again.
+            return;
+        }
+        if (valAtI > val) {
+            break;
+        }
+    }
+    vec->insertElementAt(val, i, *fStatus);
 }
 
 
@@ -676,6 +807,7 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
         elementAlreadyInDest: ;
     }
 }
+
 
 
 //-----------------------------------------------------------------------------
@@ -818,7 +950,7 @@ void RBBITableBuilder::exportTable(void *where) {
         U_ASSERT (-32768 < sd->fLookAhead && sd->fLookAhead <= 32767);
         row->fAccepting = (int16_t)sd->fAccepting;
         row->fLookAhead = (int16_t)sd->fLookAhead;
-        row->fTag       = (int16_t)sd->fTagVal;
+        row->fTagIdx    = (int16_t)sd->fTagsIdx;
         for (col=0; col<fRB->fSetBuilder->getNumCharCategories(); col++) {
             row->fNextState[col] = (uint16_t)sd->fDtran->elementAti(col);
         }
@@ -856,16 +988,20 @@ void RBBITableBuilder::printStates() {
 
     RBBIDebugPrintf("state |           i n p u t     s y m b o l s \n");
     RBBIDebugPrintf("      | Acc  LA    Tag");
-    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {RBBIDebugPrintf(" %2d", c);};
+    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
+        RBBIDebugPrintf(" %2d", c);
+    }
     RBBIDebugPrintf("\n");
     RBBIDebugPrintf("      |---------------");
-    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {RBBIDebugPrintf("---");};
+    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
+        RBBIDebugPrintf("---");
+    }
     RBBIDebugPrintf("\n");
 
     for (n=0; n<fDStates->size(); n++) {
         RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
         RBBIDebugPrintf("  %3d | " , n);
-        RBBIDebugPrintf("%3d %3d %5d ", sd->fAccepting, sd->fLookAhead, sd->fTagVal);
+        RBBIDebugPrintf("%3d %3d %5d ", sd->fAccepting, sd->fLookAhead, sd->fTagsIdx);
         for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
             RBBIDebugPrintf(" %2d", sd->fDtran->elementAti(c));
         }
@@ -877,6 +1013,33 @@ void RBBITableBuilder::printStates() {
 
 
 
+//-----------------------------------------------------------------------------
+//
+//   printRuleStatusTable    Debug Function.  Dump the common rule status table
+//
+//-----------------------------------------------------------------------------
+#ifdef RBBI_DEBUG
+void RBBITableBuilder::printRuleStatusTable() {
+    int32_t  thisRecord = 0;
+    int32_t  nextRecord = 0;
+    int      i;
+    UVector  *tbl = fRB->fRuleStatusVals;
+
+    RBBIDebugPrintf("index |  tags \n");
+    RBBIDebugPrintf("-------------------\n");
+    
+    while (nextRecord < tbl->size()) {
+        thisRecord = nextRecord;
+        nextRecord = thisRecord + tbl->elementAti(thisRecord) + 1;
+        RBBIDebugPrintf("%4d   ", thisRecord);
+        for (i=thisRecord+1; i<nextRecord; i++) {
+            RBBIDebugPrintf("  %5d", tbl->elementAti(i));
+        }
+        RBBIDebugPrintf("\n");
+    }
+    RBBIDebugPrintf("\n\n");
+}
+#endif
 
 
 //-----------------------------------------------------------------------------
@@ -890,17 +1053,13 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fMarked    = FALSE;
     fAccepting = 0;
     fLookAhead = 0;
-    fTagVal    = 0;
+    fTagsIdx   = 0;
+    fTagVals   = NULL;
     fPositions = NULL;
     fDtran     = NULL;
     
-    UErrorCode status = U_ZERO_ERROR;
-    fDtran     = new UVector(lastInputSymbol+1, status);
+    fDtran     = new UVector(lastInputSymbol+1, *fStatus);
     if (U_FAILURE(*fStatus)) {
-        return;
-    }
-    if (U_FAILURE(status)) {
-        *fStatus = status;
         return;
     }
     if (fDtran == NULL) {
@@ -917,8 +1076,10 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
 RBBIStateDescriptor::~RBBIStateDescriptor() {
     delete       fPositions;
     delete       fDtran;
+    delete       fTagVals;
     fPositions = NULL;
     fDtran     = NULL;
+    fTagVals   = NULL;
 }
 
 U_NAMESPACE_END
