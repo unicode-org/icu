@@ -1852,7 +1852,9 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
         // Contraction tables are used - so the whole process is not unlike contraction.
         // prefix data is stored backwards in the table.
         const UChar *UCharOffset;
-        UChar schar, tchar, *sourcePointer = source->pos;
+        UChar schar, tchar;
+        //UChar  *sourcePointer = source->pos;
+        UChar32 normOutput = 0;
         Normalizer n(source->string, source->pos-source->string, UNORM_NFKC);
         n.last();
         for(;;) {
@@ -1861,11 +1863,24 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
 
         // First we position ourselves at the begining of contraction sequence 
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-        schar = (UChar)n.previous();
-
-        if(schar==Normalizer::DONE) {
-          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-          break;
+        if(normOutput <= 0xFFFF) { // if the previous normalized char was a BMP, we continue processing
+          normOutput = n.previous();
+          if(normOutput==Normalizer::DONE) {
+            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+            break;
+          } else {
+            if(normOutput > 0xFFFF) { // Character is a supplementary
+              // we need to do surrogate processing
+              // get the trailing  surrogate, since the code points
+              // in the prefix table are in the reverse order
+              schar = UTF16_TRAIL(normOutput);
+            } else {
+              schar = normOutput;
+            }
+          }
+        } else { // previous normalized codepoint was a supplementary
+          // get the leading  surrogate
+          schar = UTF16_LEAD(normOutput);
         }
 
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
@@ -2058,10 +2073,12 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
     case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
       {
         const uint32_t
-        SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
-        LCount = 19, VCount = 21, TCount = 28,
-        NCount = VCount * TCount,   // 588
-        SCount = LCount * NCount;   // 11172
+          SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7;
+        //const uint32_t LCount = 19;
+        const uint32_t VCount = 21; 
+        const uint32_t TCount = 28;
+        //const uint32_t NCount = VCount * TCount;   // 588
+        //const uint32_t SCount = LCount * NCount;   // 11172
         uint32_t L = ch - SBase;
 
         // divide into pieces
@@ -2450,7 +2467,9 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         // Contraction tables are used - so the whole process is not unlike contraction.
         // prefix data is stored backwards in the table.
         const UChar *UCharOffset;
-        UChar schar, tchar, *sourcePointer = source->pos;
+        UChar schar, tchar;
+        //UChar *sourcePointer = source->pos;
+        UChar32 normOutput = 0;
         Normalizer n(source->string, source->pos-source->string+1, UNORM_NFKC);
         n.last();
         for(;;) {
@@ -2459,11 +2478,24 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
         // First we position ourselves at the begining of contraction sequence 
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-        schar = (UChar)n.previous();
-
-        if(schar==Normalizer::DONE) {
-          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-          break;
+        if(normOutput <= 0xFFFF) { // if the previous normalized char was a BMP, we continue processing
+          normOutput = n.previous();
+          if(normOutput==Normalizer::DONE) {
+            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+            break;
+          } else {
+            if(normOutput > 0xFFFF) { // Character is a supplementary
+              // we need to do surrogate processing
+              // get the trailing surrogate - as code points in the
+              // prefix table are in the reverse order
+              schar = UTF16_TRAIL(normOutput);
+            } else {
+              schar = normOutput;
+            }
+          }
+        } else { // previous normalized codepoint was a supplementary
+          // get the leading surrogate
+          schar = UTF16_LEAD(normOutput);
         }
 
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
@@ -2597,11 +2629,13 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       return *(source->toReturn);
     case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
       {
-        uint32_t
-        SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
-        LCount = 19, VCount = 21, TCount = 28,
-        NCount = VCount * TCount,   /* 588 */
-        SCount = LCount * NCount;   /* 11172 */
+        const uint32_t
+          SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7;
+        //const uint32_t LCount = 19; 
+        const uint32_t VCount = 21;
+        const uint32_t TCount = 28;
+        //const uint32_t NCount = VCount * TCount;   /* 588 */
+        //const uint32_t SCount = LCount * NCount;   /* 11172 */
 
         uint32_t L = ch - SBase;
         /*
