@@ -120,18 +120,23 @@
    need to edit the typedefs below. */
 #if U_HAVE_INTTYPES_H
 
-#include <inttypes.h>
-/* autoconf 2.13 sometimes can't properly find uint8_t, so we depend on <inttypes.h>. */
-/* os/390 on the other hand, never defines int8_t in <inttypes.h>. */
-/* So we have this work around */
+/* autoconf 2.13 sometimes can't properly find the data types in <inttypes.h> */
+/* os/390 needs <inttypes.h>, but it doesn't have int8_t, and it sometimes */
+/* doesn't have uint8_t depending on the OS version. */
+/* So we have this work around. */
 #ifdef OS390
+/* The features header is needed to get (u)int64_t sometimes. */
+#include <features.h>
 #if ! U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
-#if ! U_HAVE_UINT8_T && !defined(__uint8_t)
+#if !defined(__uint8_t)
+#define __uint8_t 1
 typedef unsigned char uint8_t;
 #endif
 #endif /* OS390 */
+
+#include <inttypes.h>
 
 #else /* U_HAVE_INTTYPES_H */
 
