@@ -75,7 +75,7 @@ void umtx_lock( UMTX *mutex )
 
   if(*mutex == NULL)
     {
-      umtx_init(NULL);
+      umtx_init(mutex);
     }
 
 #if defined(_WIN32)
