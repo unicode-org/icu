@@ -1401,6 +1401,16 @@ public:
    */
   inline UBool empty(void) const;
 
+  /**
+   * Return the capacity of the internal buffer of the UnicodeString object.
+   * This is useful together with the getBuffer functions.
+   * See there for details.
+   *
+   * @return the number of UChars available in the internal buffer
+   * @see getBuffer
+   * @draft ICU 2.0 was private before
+   */
+  inline int32_t getCapacity(void) const;
 
   /* Other operations */
 
@@ -2144,6 +2154,10 @@ public:
    * An attempted nested call will return 0, and will not further modify the
    * state of the UnicodeString object.
    *
+   * The actual capacity of the string buffer may be larger than minCapacity.
+   * getCapacity() returns the actual capacity.
+   * For many operations, the full capacity should be used to avoid reallocations.
+   *
    * While the buffer is "open" between getBuffer(minCapacity)
    * and releaseBuffer(newLength), the following applies:
    * - The string length is set to 0.
@@ -2202,7 +2216,16 @@ public:
    * The pointer that it returns will remain valid until the UnicodeString object is modified,
    * at which time the pointer is semantically invalidated and must not be used any more.
    *
-   * The buffer contents is not NUL-terminated.
+   * The capacity of the buffer can be determined with getCapacity().
+   * The part after length() may or may not be initialized and valid,
+   * depending on the history of the UnicodeString object.
+   *
+   * The buffer contents is (probably) not NUL-terminated.
+   * You can check if it is with
+   * <code>(s.length()<s.getCapacity() && buffer[s.length()]==0)</code>.
+   *
+   * The buffer may reside in read-only memory. Its contents must not
+   * be modified.
    *
    * @return a read-only pointer to the internal string buffer,
    *         or 0 if the string is empty or bogus
@@ -2570,9 +2593,6 @@ private:
   // get pointer to start of array
   inline UChar* getArrayStart(void);
   inline const UChar* getArrayStart(void) const;
-
-  // get the "real" capacity of the array, adjusted for ref count
-  inline int32_t getCapacity(void) const;
 
   // allocate the array; result may be fStackBuffer
   // sets refCount to 1 if appropriate
