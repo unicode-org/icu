@@ -1006,7 +1006,8 @@ UnicodeSetTest::expectPairs(const UnicodeSet& set, const UnicodeString& expected
 void UnicodeSetTest::expectToPattern(const UnicodeSet& set,
                                      const UnicodeString& expPat,
                                      char** expStrings) {
-    UnicodeString pat; set.toPattern(pat, true);
+    UnicodeString pat;
+    set.toPattern(pat, TRUE);
     if (pat == expPat) {
         logln((UnicodeString)"Ok:   toPattern() => \"" + pat + "\"");
     } else {
