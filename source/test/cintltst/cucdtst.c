@@ -170,6 +170,22 @@ void TestLetterNumber()
             log_verbose("Failed isNumber test at %.4X\n", i);
         }
     }
+    for (i = 0x0041; i < 0x005B; i++) {
+        log_verbose("Testing for isalnum\n");    
+        if (!u_isalnum(i))
+        {
+            log_err("Failed isAlNum test at  %.4X\n", i);
+            
+        }
+    }
+    for (i = 0x0660; i < 0x066A; i++) {
+        log_verbose("Testing for isalnum\n");    
+        if (!u_isalnum(i))
+        {
+            log_err("Failed isAlNum test at  %.4X\n", i);
+        }
+    }
+
 }
 
 /* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()),u_CharDigitValue(),u_CharCellWidth() */
