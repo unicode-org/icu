@@ -603,7 +603,7 @@ public:
      * @param result Receives a copy of the text under iteration.  
      * @stable ICU 2.0
      */
-    virtual void            getText(UnicodeString&  result) = 0;
+    virtual void            getText(UnicodeString&  result) const = 0;
 
 protected:
     /**
