@@ -51,18 +51,26 @@
 
 
 /*********** HZ Converter Protos ***********/
-static void _HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t options,UErrorCode *errorCode);
-static void _HZClose(UConverter *converter);
-U_CFUNC void _HZReset(UConverter *converter, UConverterResetChoice choice);
+static void 
+_HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t options,UErrorCode *errorCode);
 
-U_CFUNC void _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
-U_CFUNC UConverter * _HZ_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
+static void 
+_HZClose(UConverter *converter);
 
-U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC (UConverterToUnicodeArgs *args,
-                                                            UErrorCode *err);
+U_CFUNC void 
+_HZReset(UConverter *converter, UConverterResetChoice choice);
 
-U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs *args,
-                                                              UErrorCode *err);
+U_CFUNC void 
+_HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
+
+U_CFUNC UConverter * 
+_HZ_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
+
+U_CFUNC void 
+UConverter_toUnicode_HZ_OFFSETS_LOGIC (UConverterToUnicodeArgs *args,UErrorCode *err);
+
+U_CFUNC void 
+UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs *args,UErrorCode *err);
 
 static UConverterImpl _HZImpl={
 
@@ -128,7 +136,8 @@ typedef struct{
 
 
 
-static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, UErrorCode *errorCode){
+static void 
+_HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, UErrorCode *errorCode){
     cnv->toUnicodeStatus = 0;
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
@@ -145,14 +154,16 @@ static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_
 
 
 }
-static void _HZClose(UConverter *cnv){
+static void 
+_HZClose(UConverter *cnv){
     
      ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
      uprv_free(cnv->extraInfo);
 
 }
 
-U_CFUNC void _HZReset(UConverter *cnv, UConverterResetChoice choice){
+U_CFUNC void 
+_HZReset(UConverter *cnv, UConverterResetChoice choice){
     if(choice<=UCNV_RESET_TO_UNICODE) {
         cnv->toUnicodeStatus = 0;
         cnv->mode=0;
@@ -193,7 +204,8 @@ U_CFUNC void _HZReset(UConverter *cnv, UConverterResetChoice choice){
 */
 
 
-U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
+U_CFUNC void 
+UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[3];
     const char* pBuf;
@@ -398,7 +410,8 @@ SAVE_STATE:
 }
 
 
-U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+U_CFUNC void 
+UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                       UErrorCode * err){
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;

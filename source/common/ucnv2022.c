@@ -316,30 +316,50 @@ typedef enum{
 /*runs through a state machine to determine the escape sequence - codepage correspondance
  *changes the pointer pointed to be _this->extraInfo
  */
-static void changeState_2022(UConverter* _this,
-                                const char** source, 
-                                const char* sourceLimit,
-                                UBool flush,Variant2022 var,int* plane,
-                                UErrorCode* err);
+static void
+changeState_2022(UConverter* _this,
+                    const char** source, 
+                    const char* sourceLimit,
+                    UBool flush,Variant2022 var,int* plane,
+                    UErrorCode* err);
 
 
-UCNV_TableStates_2022 getKey_2022(char source,
-                                    int32_t* key,
-                                    int32_t* offset);
+UCNV_TableStates_2022 
+getKey_2022(char source,
+                int32_t* key,
+                int32_t* offset);
 
 /*********** ISO 2022 Converter Protos ***********/
-static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode);
-static void _ISO2022Close(UConverter *converter);
-U_CFUNC void _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
-static const char* _ISO2022getName(const UConverter* cnv);
-U_CFUNC void _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
-U_CFUNC UConverter * _ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
+static void 
+_ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode);
+
+static void
+ _ISO2022Close(UConverter *converter);
+
+U_CFUNC void 
+_ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
+
+static const char* 
+_ISO2022getName(const UConverter* cnv);
+
+U_CFUNC void 
+_ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
+
+U_CFUNC UConverter * 
+_ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
 /************ protos of functions for setting the initial state *********************/
-static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
-static void setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
-static void setInitialStateToUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
-static void setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
+static void 
+setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
+
+static void 
+setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
+
+static void 
+setInitialStateToUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
+
+static void 
+setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
 
 /*************** Converter implemenations ******************/
 static const UConverterImpl _ISO2022Impl={
@@ -541,7 +561,8 @@ const UConverterSharedData _ISO2022CNData={
 
 /**********/
 
-static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode){
+static void 
+_ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode){
 
     char myLocale[6]={' ',' ',' ',' ',' ',' '};
 
@@ -722,7 +743,8 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     }
 }
 
-static const char* _ISO2022getName(const UConverter* cnv){
+static const char* 
+_ISO2022getName(const UConverter* cnv){
     if(cnv->extraInfo){
         UConverterDataISO2022* myData= (UConverterDataISO2022*)cnv->extraInfo;
         return myData->name;
@@ -730,7 +752,8 @@ static const char* _ISO2022getName(const UConverter* cnv){
     return NULL;
 }
 
-static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData ){
+static void 
+setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData ){
     myConverterData->toUnicodeCurrentState =ASCII;
     myConverterData->currentConverter = NULL;
     myConverterData->isFirstBuffer = TRUE;
@@ -739,7 +762,8 @@ static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO
 
 }
 
-static void setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData){
+static void 
+setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData){
     myConverterData->fromUnicodeCurrentState= ASCII;
     myConverterData->isEscapeAppended=FALSE;
     myConverterData->isShiftAppended=FALSE;
@@ -749,7 +773,8 @@ static void setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataI
 
 }
 
-static void setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConverterData){
+static void 
+setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConverterData){
 
     myConverterData->isLocaleSpecified=TRUE;
     converter->mode = UCNV_SI;
@@ -757,7 +782,8 @@ static void setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2
 
 }
 
-static void setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData){
+static void 
+setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData){
    /* in ISO-2022-KR the desginator sequence appears only once
     * in a file so we append it only once
     */
