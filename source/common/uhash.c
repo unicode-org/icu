@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -355,6 +355,14 @@ uhash_removei(UHashtable *hash,
               const void* key) {
     UHashTok keyholder;
     keyholder.pointer = (void*) key;
+    return _uhash_remove(hash, keyholder).integer;
+}
+
+U_CAPI int32_t U_EXPORT2
+uhash_iremovei(UHashtable *hash,
+               int32_t key) {
+    UHashTok keyholder;
+    keyholder.integer = key;
     return _uhash_remove(hash, keyholder).integer;
 }
 
