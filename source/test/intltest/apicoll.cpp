@@ -1706,6 +1706,42 @@ void CollationAPITest::TestGetTailoredSet()
   }
 }
 
+void CollationAPITest::TestUClassID()
+{
+	char id = *((char *)RuleBasedCollator::getStaticClassID());
+	if (id != 0) {
+		errln("Static class id for RuleBasedCollator should be 0");
+	}
+	UErrorCode status = U_ZERO_ERROR;
+	RuleBasedCollator *coll 
+		= (RuleBasedCollator *)Collator::createInstance(status);
+	id = *((char *)coll->getDynamicClassID());
+	if (id != 0) {
+		errln("Dynamic class id for RuleBasedCollator should be 0");
+	}
+	id = *((char *)CollationKey::getStaticClassID());
+	if (id != 0) {
+		errln("Static class id for CollationKey should be 0");
+	}
+	CollationKey *key = new CollationKey();
+	id = *((char *)key->getDynamicClassID());
+	if (id != 0) {
+		errln("Dynamic class id for CollationKey should be 0");
+	}
+	id = *((char *)CollationElementIterator::getStaticClassID());
+	if (id != 0) {
+		errln("Static class id for CollationElementIterator should be 0");
+	}
+	UnicodeString str("testing");
+	CollationElementIterator *iter = coll->createCollationElementIterator(str);
+	id = *((char *)iter->getDynamicClassID());
+	if (id != 0) {
+		errln("Dynamic class id for CollationElementIterator should be 0");
+	}
+	delete iter;
+	delete coll;
+}
+
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -1730,6 +1766,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
         case 18: name = "TestBounds"; if (exec) TestBounds(); break;
         case 19: name = "TestGetTailoredSet"; if (exec) TestGetTailoredSet(); break;
+        case 20: name = "TestUClassID"; if (exec) TestUClassID(); break;
         default: name = ""; break;
     }
 }
