@@ -316,21 +316,33 @@ ibm-1089_P100-1995 { UTR22* }
                         ISO-8859-6-I { IANA MIME } # IANA considers this alias different and BiDi needs to be applied.
                         ISO-8859-6-E { IANA MIME } # IANA considers this alias different and BiDi needs to be applied.
 
+# ISO Greek (with euro update). This is really ISO_8859-7:2003
+ibm-9005_X100-2005 { UTR22* }
+                        ibm-9005 { IBM* }
+                        iso-8859-7 { MIME* IANA WINDOWS }
+                        greek { IANA WINDOWS }
+                        greek8 { IANA WINDOWS }
+                        ELOT_928 { IANA WINDOWS }
+                        ECMA-118 { IANA WINDOWS }
+                        csISOLatinGreek { IANA WINDOWS }
+                        iso-ir-126 { IANA WINDOWS }
+                        ISO_8859-7:1987 { IANA* WINDOWS }
+                        windows-28597 { WINDOWS* }
+
 # ISO Greek (w/o euro update)
 ibm-813_P100-1995 { UTR22* }
                         ibm-813 { IBM* JAVA }
-                        iso-8859-7 { MIME* IANA WINDOWS JAVA* }
-                        greek { IANA WINDOWS JAVA }
-                        greek8 { IANA WINDOWS JAVA }
-                        ELOT_928 { IANA WINDOWS JAVA }
-                        ECMA-118 { IANA WINDOWS JAVA }
-                        csISOLatinGreek { IANA WINDOWS JAVA }
-                        iso-ir-126 { IANA WINDOWS JAVA }
-                        ISO_8859-7:1987 { IANA* WINDOWS JAVA }
+                        iso-8859-7 { JAVA* }
+                        greek { JAVA }
+                        greek8 { JAVA }
+                        ELOT_928 { JAVA }
+                        ECMA-118 { JAVA }
+                        csISOLatinGreek { JAVA }
+                        iso-ir-126 { JAVA }
+                        ISO_8859-7:1987 { JAVA }
                         8859_7 { JAVA }
                         cp813 { JAVA }
                         813 { JAVA }
-                        windows-28597 { WINDOWS* }
 
 # hebrew
 # ISO_8859-8-E and ISO_8859-8-I are similar to this charset, but BiDi is done differently
