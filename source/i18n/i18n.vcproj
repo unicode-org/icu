@@ -332,6 +332,9 @@
 				RelativePath=".\ucol_imp.h">
 			</File>
 			<File
+				RelativePath=".\ucol_res.cpp">
+			</File>
+			<File
 				RelativePath=".\ucol_sit.cpp">
 			</File>
 			<File
