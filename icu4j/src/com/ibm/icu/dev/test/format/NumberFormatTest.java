@@ -250,6 +250,34 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                       ", expected " + DATA[i+3]);
             }
         }
+        
+        // format currency with CurrencyAmount
+        for (int i=0; i<DATA.length; i+=4) {
+            Locale locale = new Locale(DATA[i], DATA[i+1], DATA[i+2]);
+            
+            Currency curr = Currency.getInstance(locale);
+            logln("\nName of the currency is: " + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
+            CurrencyAmount cAmt = new CurrencyAmount(1.5, curr);
+            logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); //cover hashCode
+            
+            NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+            String sCurr = fmt.format(cAmt);
+            if (sCurr.equals(DATA[i+3])) {
+                logln("Ok: 1.50 x " + locale + " => " + sCurr);
+            } else {
+                errln("FAIL: 1.50 x " + locale + " => " + sCurr +
+                      ", expected " + DATA[i+3]);
+            }            
+        }
+        
+        //Cover MeasureFormat.getCurrencyFormat()
+        ULocale save = ULocale.getDefault();
+        ULocale.setDefault(ULocale.US);
+        MeasureFormat curFmt = MeasureFormat.getCurrencyFormat();
+        //Not knowing how to test this factory method,
+        //  because the concreat class of MeasureFormat -
+        //  CurrencyFormat is just for internal use.
+        ULocale.setDefault(save);        
     }
 
     /**
@@ -483,6 +511,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         //when the pattern problem is finalized, delete comment mark'//' 
         //of the following code
         expect2(NumberFormat.getScientificInstance(Locale.US), 12345.678901, "1.2345678901E4");
+        logln("Testing NumberFormat.getScientificInstance(ULocale) ..."); 
+        expect2(NumberFormat.getScientificInstance(ULocale.US), 12345.678901, "1.2345678901E4");        
     
         expect(new DecimalFormat("##0.###E0", US), 12345.0, "12.34E3");
         expect(new DecimalFormat("##0.###E0", US), 12345.00001, "12.35E3");
@@ -491,6 +521,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // pattern of NumberFormat.getScientificInstance(Locale.US) = "0.######E0" not "#E0"
         // so result = 1.234568E4 not 1.2345678901E4
         expect2(NumberFormat.getScientificInstance(Locale.FRANCE), 12345.678901, "1,2345678901E4");
+        logln("Testing NumberFormat.getScientificInstance(ULocale) ...");
+        expect2(NumberFormat.getScientificInstance(ULocale.FRANCE), 12345.678901, "1,2345678901E4");        
     
         expect(new DecimalFormat("##0.####E0", US), 789.12345e-9, "789.12E-9");
         expect2(new DecimalFormat("##0.####E0", US), 780.e-9, "780E-9");
@@ -869,12 +901,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestCurrencyKeyword() {
-	ULocale locale = new ULocale("th_TH@currency=QQQ");
-	NumberFormat format = NumberFormat.getCurrencyInstance(locale);
-	String result = format.format(12.34f);
-	if (!"QQQ12.34".equals(result)) {
-	    errln("got unexpected currency: " + result);
-	}
+    ULocale locale = new ULocale("th_TH@currency=QQQ");
+    NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+    String result = format.format(12.34f);
+    if (!"QQQ12.34".equals(result)) {
+        errln("got unexpected currency: " + result);
+    }
     }
     
     public void TestThreadedFormat() {

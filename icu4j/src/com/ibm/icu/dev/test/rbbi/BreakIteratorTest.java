@@ -1337,6 +1337,13 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         if (locList.length == 0)
             errln("getAvailableLocales() returned an empty list!");
         // I have no idea how to test this function...
+        
+        com.ibm.icu.util.ULocale[] ulocList = BreakIterator.getAvailableULocales();
+        if (ulocList.length == 0) {
+            errln("getAvailableULocales() returned an empty list!");        
+        } else {
+            logln("getAvailableULocales() returned " + ulocList.length + " locales");
+        }
     }
 
     /**
