@@ -1,6 +1,6 @@
-###################
-# Copyright (C) 2003, International Business Machines
-# Corporation and others.  All Rights Reserved.
+#################
+# This file was generated RFC 3454 (http://www.ietf.org/rfc/rfc3454.txt) with 
+# Copyright (C) The Internet Society (2002).  All Rights Reserved. 
 ###################
 
 ###################
@@ -1942,3 +1942,4 @@ E0001; ; PROHIBITED
 E0020..E007F; ; PROHIBITED
 
 # Total code points 82
+
