@@ -3,12 +3,6 @@
  * Copyright (C) 2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RBNFParseTest.java,v $
- * $Date: 2004/04/09 21:24:13 $
- * $Revision: 1.1 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
 
