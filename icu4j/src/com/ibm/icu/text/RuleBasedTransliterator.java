@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2002/02/16 03:06:13 $
- * $Revision: 1.53 $
+ * $Date: 2002/02/25 22:43:58 $
+ * $Revision: 1.54 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,7 @@ package com.ibm.icu.text;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.text.ParsePosition;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.data.ResourceReader;
 
 /**
@@ -279,7 +279,7 @@ import com.ibm.icu.impl.data.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.53 $ $Date: 2002/02/16 03:06:13 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.54 $ $Date: 2002/02/25 22:43:58 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -460,6 +460,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.54  2002/02/25 22:43:58  ram
+ * Move Utility class to icu.impl
+ *
  * Revision 1.53  2002/02/16 03:06:13  Mohan
  * ICU4J reorganization
  *
@@ -575,7 +578,7 @@ public class RuleBasedTransliterator extends Transliterator {
  * Add infinite loop check
  *
  * Revision 1.15  2000/02/10 07:36:25  johnf
- * fixed imports for com.ibm.icu.util.Utility
+ * fixed imports for com.ibm.icu.impl.Utility
  *
  * Revision 1.14  2000/02/03 18:18:42  Alan
  * Use array rather than hashtable for char-to-set map

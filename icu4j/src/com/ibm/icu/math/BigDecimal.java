@@ -2,7 +2,7 @@
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.icu.math;
 import java.math.BigInteger;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */

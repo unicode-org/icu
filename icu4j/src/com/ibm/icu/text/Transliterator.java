@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/02/16 03:06:17 $
- * $Revision: 1.74 $
+ * $Date: 2002/02/25 22:43:58 $
+ * $Revision: 1.75 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ import java.text.ParsePosition;
 import java.io.UnsupportedEncodingException;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.util.CaseInsensitiveString;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -242,7 +242,7 @@ import com.ibm.icu.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.74 $ $Date: 2002/02/16 03:06:17 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.75 $ $Date: 2002/02/25 22:43:58 $
  */
 public abstract class Transliterator {
     /**

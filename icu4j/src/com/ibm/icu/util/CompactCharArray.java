@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CompactCharArray.java,v $ 
- * $Date: 2002/02/16 03:06:27 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/25 22:43:59 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * class CompactATypeArray : use only on primitive data types
@@ -32,7 +32,7 @@ import com.ibm.icu.util.Utility;
  * A compact array is composed of a index array and value array.  The index
  * array contains the indicies of Unicode characters to the value array.
  * @see                CompactByteArray
- * @version            $Revision: 1.7 $
+ * @version            $Revision: 1.8 $
  * @author             Helena Shih
  */
 public final class CompactCharArray implements Cloneable {

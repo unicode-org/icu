@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2002/02/16 03:06:17 $
- * $Revision: 1.22 $
+ * $Date: 2002/02/25 22:43:58 $
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import java.util.*;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * A set of rules for a <code>RuleBasedTransliterator</code>.  This set encodes
@@ -28,7 +28,7 @@ import com.ibm.icu.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.22 $ $Date: 2002/02/16 03:06:17 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.23 $ $Date: 2002/02/25 22:43:58 $
  */
 class TransliterationRuleSet {
     /**
@@ -259,9 +259,12 @@ class TransliterationRuleSet {
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.22  2002/02/16 03:06:17  Mohan
- * ICU4J reorganization
+ * Revision 1.23  2002/02/25 22:43:58  ram
+ * Move Utility class to icu.impl
  *
+/* Revision 1.22  2002/02/16 03:06:17  Mohan
+/* ICU4J reorganization
+/*
 /* Revision 1.21  2002/02/09 01:01:47  alan
 /* jitterbug 1544: add char32At() to Replaceable
 /*

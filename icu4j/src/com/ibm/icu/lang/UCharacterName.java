@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/02/19 04:10:25 $ 
-* $Revision: 1.9 $
+* $Date: 2002/02/25 22:43:59 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import com.ibm.icu.util.*;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 
 

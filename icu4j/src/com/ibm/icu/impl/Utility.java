@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/02/16 03:06:31 $
- * $Revision: 1.22 $
+ * $Date: 2002/02/25 22:43:57 $
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.util;
+package com.ibm.icu.impl;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
@@ -1296,7 +1296,7 @@ public final class Utility {
                                      Transliterator.Position pos) {
         StringBuffer appendTo = new StringBuffer();
         formatInput(appendTo, input, pos);
-        return com.ibm.icu.util.Utility.escape(appendTo.toString());
+        return com.ibm.icu.impl.Utility.escape(appendTo.toString());
     }
 
     /**

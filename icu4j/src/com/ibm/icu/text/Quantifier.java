@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Quantifier.java,v $ 
- * $Date: 2002/02/16 03:06:11 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/25 22:43:58 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 class Quantifier implements UnicodeMatcher {
 

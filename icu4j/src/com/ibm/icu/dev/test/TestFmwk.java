@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2002/02/16 03:05:01 $ 
- * $Revision: 1.27 $
+ * $Date: 2002/02/25 22:43:59 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import java.util.Comparator;
 import java.io.*;
 import java.text.*;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UnicodeSet;
 
 

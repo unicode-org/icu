@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2002/02/22 03:43:32 $ 
-* $Revision: 1.13 $
+* $Date: 2002/02/25 22:43:57 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ package com.ibm.icu.dev.test.lang;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
 * Testing class for UTF16

@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2002/02/16 03:06:15 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/25 22:43:58 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * An object that matches a fixed input string, implementing the

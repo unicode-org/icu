@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/02/16 03:06:10 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/02/25 22:43:58 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,7 @@ import java.lang.Character;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.icu.util.CompactByteArray;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 
 /**

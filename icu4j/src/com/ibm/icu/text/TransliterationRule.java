@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2002/02/16 03:06:16 $
- * $Revision: 1.44 $
+ * $Date: 2002/02/25 22:43:57 $
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * A transliteration rule used by
@@ -46,7 +46,7 @@ import com.ibm.icu.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.44 $ $Date: 2002/02/16 03:06:16 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.45 $ $Date: 2002/02/25 22:43:57 $
  */
 class TransliterationRule {
 
@@ -583,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.45  2002/02/25 22:43:57  ram
+ * Move Utility class to icu.impl
+ *
  * Revision 1.44  2002/02/16 03:06:16  Mohan
  * ICU4J reorganization
  *
@@ -677,7 +680,7 @@ class TransliterationRule {
  * Copyright update
  *
  * Revision 1.13  2000/02/10 07:36:25  johnf
- * fixed imports for com.ibm.icu.util.Utility
+ * fixed imports for com.ibm.icu.impl.Utility
  *
  * Revision 1.12  2000/02/03 18:11:19  Alan
  * Use array rather than hashtable for char-to-set map
