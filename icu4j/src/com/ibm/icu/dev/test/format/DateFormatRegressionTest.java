@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/09/04 00:58:15 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -27,6 +27,8 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 /** 
  * Performs regression test for DateFormat
@@ -831,12 +833,10 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4210209() {
     
         String pattern = "MMM d, yyyy";
-        SimpleDateFormat sfmt = new SimpleDateFormat(pattern, Locale.US);
-        SimpleDateFormat sdisp = new SimpleDateFormat("MMM dd yyyy GG", Locale.US);
-        DateFormat fmt = (DateFormat) sfmt; // Yuck: See j25
-        DateFormat disp = (DateFormat) sdisp; // Yuck: See j25
+        DateFormat fmt = new SimpleDateFormat(pattern, Locale.US);
+        DateFormat disp = new SimpleDateFormat("MMM dd yyyy GG", Locale.US);
     
-        Calendar calx = (Calendar) fmt.getCalendar(); // cast away const!
+        Calendar calx = fmt.getCalendar();
         calx.setLenient(false);
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
@@ -846,7 +846,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         logln(disp.format(d) + " f> " + pattern + " => \"" + s + "\"");
         ParsePosition pos = new ParsePosition(0);
         d = fmt.parse(s, pos);
-        logln("\"" + s + "\" p> " + pattern + " => " + disp.format(d));
+        logln("\"" + s + "\" p> " + pattern + " => " +
+              (d!=null?disp.format(d):"null"));
         logln("Parse pos = " + pos.getIndex() + ", error pos = " + pos.getErrorIndex());
         if (pos.getErrorIndex() != -1) {
             errln("FAIL: Error index should be -1");
@@ -859,7 +860,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         cal.clear();
         cal.setLenient(false);
         cal.set(2000, Calendar.FEBRUARY, 29); // This should work!
-        logln("Attempt to set Calendar to Feb 29 2000: " + disp.format(cal.getTime()));
+        d = cal.getTime();
+        logln("Attempt to set Calendar to Feb 29 2000: " + disp.format(d));
     }
     
     public void Test714() {

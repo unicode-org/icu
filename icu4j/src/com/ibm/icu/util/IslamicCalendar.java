@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2003/06/03 18:49:36 $ 
- * $Revision: 1.19 $
+ * $Date: 2003/09/04 01:00:58 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.util;
 
-import com.ibm.icu.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTestJ.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/09/04 00:58:15 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -19,6 +19,7 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 import java.util.Date;
+import java.util.TimeZone;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/JapaneseCalendar.java,v $ 
- * $Date: 2002/12/18 19:35:07 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/09/04 01:00:59 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * <code>JapaneseCalendar</code> is a subclass of <code>GregorianCalendar</code>

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/09/04 00:58:15 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -22,6 +22,7 @@ import com.ibm.icu.util.*;
 import com.ibm.icu.impl.*;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
@@ -213,7 +214,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
           //  String str;
             DateFormat df = dateFormats[j];
             TimeZone tz = TimeZone.getTimeZone("PST");
-            ((SimpleTimeZone)tz).setDSTSavings(3600000);
             df.setTimeZone(tz);
             logln(" Pattern = " + ((SimpleDateFormat) df).toPattern());
             // str = "";
@@ -736,11 +736,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat dfUS = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
         //Set TimeZone = PDT
         TimeZone tz = TimeZone.getTimeZone("PST");
-        ((SimpleTimeZone)tz).setDSTSavings(3600000);
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
         String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 GMT-07:00";
-        String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
+        //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
         String expectedUS = "Monday, September 15, 1997 12:00:00 AM PDT";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);

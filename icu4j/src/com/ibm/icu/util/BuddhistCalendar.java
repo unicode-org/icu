@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2002/12/18 19:35:06 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/09/04 01:00:29 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@
 package com.ibm.icu.util;
 
 import java.util.Date;
-import com.ibm.icu.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.Locale;
 
 /**
