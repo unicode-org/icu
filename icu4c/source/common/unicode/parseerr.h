@@ -58,6 +58,7 @@ typedef struct UParseError {
      * it should be a positive integer. The default value of this field
      * is -1. It will be set to 0 if the code populating this struct is not
      * using line numbers.
+     * @stable ICU 2.0    
      */
     int32_t        line;
 
@@ -68,18 +69,21 @@ typedef struct UParseError {
      * the start of the text.The default value of this field
      * is -1. It will be set to appropriate value by the code that 
      * populating the struct.
+     * @stable ICU 2.0   
      */
     int32_t    offset;
 
     /**
      * Textual context before the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
+     * @stable ICU 2.0   
      */
     UChar          preContext[U_PARSE_CONTEXT_LEN];
 
     /**
      * Textual context after the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
+     * @stable ICU 2.0   
      */
     UChar          postContext[U_PARSE_CONTEXT_LEN];
 
