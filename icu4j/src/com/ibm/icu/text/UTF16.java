@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2003/12/02 01:34:31 $ 
-* $Revision: 1.33 $
+* $Date: 2003/12/13 00:30:54 $ 
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -2643,10 +2643,8 @@ public final class UTF16
     * points, 2 otherwise.</p>
     * @param ch code point
     * @return string representation of the code point
-    * @obsolete ICU 2.4. Use UCharacter.toString(int) instead since it will be
-    *           removed in that release.
     */
-    public static String toString(int ch)
+    private static String toString(int ch)
     {   
         if (ch < SUPPLEMENTARY_MIN_VALUE) {
             return String.valueOf((char)ch);

@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormat.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.9 $
+ * $Date: 2003/12/13 00:30:56 $
+ * $Revision: 1.10 $
  */
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;
@@ -125,7 +125,9 @@ public class ChineseDateFormat extends SimpleDateFormat {
                 return result;
             }
         default:
+            ///CLOVER:OFF
             return 0; // This can never happen
+            ///CLOVER:ON
         }
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/ConformanceTest.java,v $ 
- * $Date: 2003/11/14 00:07:08 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/12/13 00:30:50 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -380,12 +380,12 @@ public class ConformanceTest extends TestFmwk {
         if (dir > 0) {
             for (ch = normalizer.first(); ch != Normalizer.DONE;
                  ch = normalizer.next()) {
-                buf.append(UTF16.toString(ch));
+                buf.append(UTF16.valueOf(ch));
             }
         } else {
             for (ch = normalizer.last(); ch != Normalizer.DONE;
                  ch = normalizer.previous()) {
-                buf.insert(0, UTF16.toString(ch));
+                buf.insert(0, UTF16.valueOf(ch));
             }
         }
         return buf.toString();
@@ -409,12 +409,12 @@ public class ConformanceTest extends TestFmwk {
         if (dir > 0) {
             for (ch = normalizer.first(); ch != Normalizer.DONE;
                  ch = normalizer.next()) {
-                buf.append(UTF16.toString(ch));
+                buf.append(UTF16.valueOf(ch));
             }
         } else {
             for (ch = normalizer.last(); ch != Normalizer.DONE;
                  ch = normalizer.previous()) {
-                buf.insert(0, UTF16.toString(ch));
+                buf.insert(0, UTF16.valueOf(ch));
             }
         }
         return buf.toString();

@@ -1512,10 +1512,13 @@ public abstract class Calendar implements Serializable, Cloneable {
         // Allocate fields through the framework method.  Subclasses
         // may override this to define additional fields.
         fields = handleCreateFields();
+        ///CLOVER:OFF
+        // todo: fix, difficult to test without subclassing
         if (fields == null || fields.length < BASE_FIELD_COUNT ||
             fields.length > MAX_FIELD_COUNT) {
             throw new InternalError("Invalid fields[]");
         }
+        ///CLOVER:ON
         stamp = new int[fields.length];
         int mask = (1 << ERA) |
             (1 << YEAR) |

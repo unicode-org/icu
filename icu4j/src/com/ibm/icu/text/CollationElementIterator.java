@@ -1486,7 +1486,7 @@ public final class CollationElementIterator
                 if (m_bufferOffset_ < 0) {
                     // decompose into writable buffer
                     m_buffer_.replace(0, m_buffer_.length(), 
-                                      Normalizer.decompose(UTF16.toString(cp), 
+                                      Normalizer.decompose(UTF16.valueOf(cp), 
                                                            false));
                     // reorder Thai and the character after it
                     if (m_buffer_.length() >= 2 
@@ -2430,7 +2430,7 @@ public final class CollationElementIterator
             // in the normalization buffer
         }
         else {
-            String decomp = Normalizer.decompose(UTF16.toString(ch), false);
+            String decomp = Normalizer.decompose(UTF16.valueOf(ch), false);
             // we need to check if we will hit a contraction trigger because of 
             // decomposition
             for (int i = decomp.length() - 1; i >= 0; i --) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HolidayTest.java,v $ 
- * $Date: 2003/12/01 21:56:21 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/12/13 00:30:57 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -22,8 +22,8 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.EasterHoliday;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.Holiday;
-//import com.ibm.icu.util.RangeDateRule;
-//import com.ibm.icu.util.SimpleDateRule;
+import com.ibm.icu.util.RangeDateRule;
+import com.ibm.icu.util.SimpleDateRule;
 import com.ibm.icu.util.SimpleHoliday;
 
 /**
@@ -132,8 +132,27 @@ public class HolidayTest extends TestFmwk {
                         new SimpleHoliday(2, 29, 0, "Leap year", 1900, 2100)};
         exerciseHolidays(h, Locale.getDefault());
 
-//          RangeDateRule rdr = new RangeDateRule();
-//          rdr.add(new SimpleDateRule(7, 15));
+        RangeDateRule rdr = new RangeDateRule();
+        rdr.add(new SimpleDateRule(7, 10));
+        Date mbd = new Date(1953, Calendar.JULY, 10);
+        Date dbd = new Date(1958, Calendar.AUGUST, 15);
+        Date nbd = new Date(1990, Calendar.DECEMBER, 17);
+        Date abd = new Date(1992, Calendar.SEPTEMBER, 16);
+        Date xbd = new Date(1976, Calendar.JULY, 4);
+		Date ybd = new Date(2003, Calendar.DECEMBER, 8);
+        rdr.add(new SimpleDateRule(Calendar.JULY, 10, Calendar.MONDAY, false));
+        rdr.add(dbd, new SimpleDateRule(Calendar.AUGUST, 15, Calendar.WEDNESDAY, true));
+        rdr.add(xbd, null);
+        rdr.add(nbd, new SimpleDateRule(Calendar.DECEMBER, 17, Calendar.MONDAY, false));
+        rdr.add(ybd, null);
+
+		logln("first after " + mbd + " is " + rdr.firstAfter(mbd));
+		logln("first between " + mbd + " and " + dbd + " is " + rdr.firstBetween(mbd, dbd));
+		logln("first between " + dbd + " and " + nbd + " is " + rdr.firstBetween(dbd, nbd));
+		logln("first between " + nbd + " and " + abd + " is " + rdr.firstBetween(nbd, abd));
+		logln("first between " + abd + " and " + xbd + " is " + rdr.firstBetween(abd, xbd));
+		logln("first between " + abd + " and " + null + " is " + rdr.firstBetween(abd, null));
+		logln("first between " + xbd + " and " + null + " is " + rdr.firstBetween(xbd, null));
     }
 
     public void TestIsOn() {
@@ -142,27 +161,27 @@ public class HolidayTest extends TestFmwk {
         
         Calendar cal = new GregorianCalendar();
         cal.clear();
-        cal.set(cal.YEAR, 2000);
-        cal.set(cal.MONTH, cal.AUGUST);
-        cal.set(cal.DAY_OF_MONTH, 15);
+        cal.set(Calendar.YEAR, 2000);
+        cal.set(Calendar.MONTH, Calendar.AUGUST);
+        cal.set(Calendar.DAY_OF_MONTH, 15);
         
         Date d0 = cal.getTime();
-        cal.add(cal.SECOND, 1);
+        cal.add(Calendar.SECOND, 1);
         Date d1 = cal.getTime();
-        cal.add(cal.SECOND, -2);
+        cal.add(Calendar.SECOND, -2);
         Date d2 = cal.getTime();
-        cal.add(cal.DAY_OF_MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
         Date d3 = cal.getTime();
-        cal.add(cal.SECOND, 1);
+        cal.add(Calendar.SECOND, 1);
         Date d4 = cal.getTime();
-        cal.add(cal.SECOND, -2);
-        cal.set(cal.YEAR, 1957);
+        cal.add(Calendar.SECOND, -2);
+        cal.set(Calendar.YEAR, 1957);
         Date d5 = cal.getTime();
-        cal.set(cal.YEAR, 1958);
+        cal.set(Calendar.YEAR, 1958);
         Date d6 = cal.getTime();
-        cal.set(cal.YEAR, 2058);
+        cal.set(Calendar.YEAR, 2058);
         Date d7 = cal.getTime();
-        cal.set(cal.YEAR, 2059);
+        cal.set(Calendar.YEAR, 2059);
         Date d8 = cal.getTime();
 
         Date[] dates = { d0, d1, d2, d3, d4, d5, d6, d7, d8 };

@@ -744,6 +744,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     ///CLOVER:OFF
+    // turn off code coverage since all subclasses override this
     public int hashCode() {
         return numberFormat.hashCode();
         // just enough fields for a reasonable distribution
@@ -793,7 +794,10 @@ public abstract class DateFormat extends UFormat {
         try {
             return new SimpleDateFormat(timeStyle, dateStyle, loc);
         } catch (MissingResourceException e) {
+        	///CLOVER:OFF
+        	// coverage requires separate run with no data, so skip
             return new SimpleDateFormat("M/d/yy h:mm a");
+            ///CLOVER:ON
         }
     }
 
