@@ -29,7 +29,7 @@
 #define U_EOF 0xFFFF
 
 UFILE*
-u_finit(FileStream *f,
+u_finit(FileStream *f, const char *cp,
 	UErrorCode *status);
 
 void

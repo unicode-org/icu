@@ -33,7 +33,7 @@
 /* Protos */
 static void usage();
 static void version();
-static void processFile(const char *filename, UErrorCode *status);
+static void processFile(const char *filename, const char* cp, UErrorCode *status);
 static char* make_res_filename(const char *filename, UErrorCode *status);
 static char* make_col_filename(const char *filename, UErrorCode *status);
 int main(int argc, char **argv);
@@ -45,6 +45,7 @@ int main(int argc, char **argv);
 /* The version of genrb */
 #define GENRB_VERSION "1.0"
 
+  char *encoding = "";
 
 int
 main(int argc,
@@ -52,10 +53,12 @@ main(int argc,
 {
   int printUsage = 0;
   int printVersion = 0;
+  int useConversionLibrary = 0;
   int optind = 1;
   int i;
   char *arg;
   UErrorCode status;
+
 
   if(argc == 1)
       printUsage = 1;
@@ -73,6 +76,17 @@ main(int argc,
     else if(icu_strcmp(arg, "-h") == 0 || icu_strcmp(arg, "--help") == 0) {
       printUsage = 1;
     }
+
+    else if(icu_strncmp(arg, "-e", 2) == 0) {
+        useConversionLibrary = 1;
+        if(icu_strlen(arg) > icu_strlen("-e")) {
+            encoding = arg+2;
+        } else {
+            encoding = 0;
+        }
+
+    }
+
     /* POSIX.1 says all arguments after -- are not options */
     else if(icu_strcmp(arg, "--") == 0) {
       /* skip the -- */
@@ -105,7 +119,7 @@ main(int argc,
   /* generate the binary files */
   for(i = optind; i < argc; ++i) {
     status = U_ZERO_ERROR;
-    processFile(argv[i], &status);
+    processFile(argv[i], encoding, &status);
     if(U_FAILURE(status)) {
       printf("genrb: %s processing file \"%s\"\n", errorName(status), argv[i]);
       if(getErrorText() != 0)
@@ -122,8 +136,11 @@ usage()
 {  
   puts("Usage: genrb [OPTIONS] [FILES]");
   puts("Options:");
+  puts("  -e                Resource bundle is encoded with system default encoding");
+  puts("  -eEncoding        Resource bundle uses specified Encoding");
   puts("  -h, --help        Print this message and exit.");
   puts("  -v, --version     Print the version number of genrb and exit.");
+  encoding!=NULL?puts(encoding):puts("encoding is NULL");
 }
 
 /* Version information */
@@ -140,7 +157,7 @@ version()
 
 /* Process a file */
 static void
-processFile(const char *filename,
+processFile(const char *filename, const char *cp,
 	    UErrorCode *status)
 {
   FileStream *in;
@@ -162,7 +179,7 @@ processFile(const char *filename,
   }
 
   /* Parse the data into an SRBItemList */
-  data = parse(in, status);
+  data = parse(in, cp, status);
 
   /* Determine the target rb filename */
   rbname = make_res_filename(filename, status);
