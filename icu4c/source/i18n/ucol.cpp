@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2003, International Business Machines
+*   Copyright (C) 1996-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -7531,6 +7531,21 @@ U_CAPI int32_t U_EXPORT2
 ucol_countAvailable()
 {
   return uloc_countAvailable();
+}
+
+U_CAPI UEnumeration* U_EXPORT2
+ucol_openAvailableLocales(UErrorCode *status) {
+    return ures_openAvailableLocales(U_ICUDATA_COLL, status);
+}
+
+U_CAPI UEnumeration* U_EXPORT2
+ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
+    if (U_SUCCESS(*status) &&
+        keyword==NULL || uprv_strcmp(keyword, "collation")!=0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    return ures_getKeywordValues(U_ICUDATA_COLL, keyword, status);
 }
 
 U_CAPI void U_EXPORT2
