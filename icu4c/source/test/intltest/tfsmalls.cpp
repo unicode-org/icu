@@ -211,7 +211,7 @@ void test_Formattable( void )
         ucs,
         ucs_ptr
     };
-    const int32_t ft_cnt = sizeof(ftarray) / sizeof(Formattable);
+    const int32_t ft_cnt = (int32_t)(sizeof(ftarray) / sizeof(Formattable));
     Formattable ft_arr( ftarray, ft_cnt );
     UnicodeString temp;
     if ((ft_arr[0].getType() == Formattable::kDate)   && (ft_arr[0].getDate()   == 1.0)
@@ -246,8 +246,8 @@ void test_Formattable( void )
     const Formattable ftarr1[] = { Formattable( (int32_t)1 ), Formattable( (int32_t)2 ) };
     const Formattable ftarr2[] = { Formattable( (int32_t)3 ), Formattable( (int32_t)4 ) };
 
-    const int32_t ftarr1_cnt = sizeof(ftarr1) / sizeof(Formattable);
-    const int32_t ftarr2_cnt = sizeof(ftarr2) / sizeof(Formattable);
+    const int32_t ftarr1_cnt = (int32_t)(sizeof(ftarr1) / sizeof(Formattable));
+    const int32_t ftarr2_cnt = (int32_t)(sizeof(ftarr2) / sizeof(Formattable));
 
     ft_arr.setArray( ftarr1, ftarr1_cnt );
     if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == (int32_t)1)) {

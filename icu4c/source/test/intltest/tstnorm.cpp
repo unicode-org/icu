@@ -338,7 +338,7 @@ void BasicNormalizerTest::TestZeroIndex(void) {
         "c\\u0321\\u0327", "c\\u0321\\u0327", "c\\u0321\\u0327",
         "c\\u0327\\u0321", "\\u00E7\\u0321", "c\\u0327\\u0321",
     };
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     for (int32_t i=0; i<DATA_length; i+=3) {
         UErrorCode status = U_ZERO_ERROR;

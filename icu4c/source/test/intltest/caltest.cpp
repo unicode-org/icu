@@ -1104,8 +1104,8 @@ int32_t CalendarTest::EXPECTED_FIELDS[] = {
     Calendar::DAY_OF_YEAR, 295
 };
  
-const int32_t CalendarTest::EXPECTED_FIELDS_length = sizeof(CalendarTest::EXPECTED_FIELDS) /
-    sizeof(CalendarTest::EXPECTED_FIELDS[0]);
+const int32_t CalendarTest::EXPECTED_FIELDS_length = (int32_t)(sizeof(CalendarTest::EXPECTED_FIELDS) /
+    sizeof(CalendarTest::EXPECTED_FIELDS[0]));
 
 // -------------------------------------
  
