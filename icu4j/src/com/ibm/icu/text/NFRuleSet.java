@@ -92,6 +92,10 @@ public final class NFRuleSet {
     public NFRuleSet(String[] descriptions, int index) throws IllegalArgumentException {
         String description = descriptions[index];
 
+	if (description.length() == 0) {
+	  throw new IllegalArgumentException("Empty rule set description");
+	}
+
         // if the description begins with a rule set name (the rule set
         // name can be omitted in formatter descriptions that consist
         // of only one rule set), copy it out into our "name" member
@@ -530,6 +534,9 @@ public final class NFRuleSet {
 		    lo = mid + 1;
 		}
 	    }
+	    if (hi == 0) { // bad rule set
+		throw new IllegalStateException("The rule set " + name + " cannot format the value " + number);
+	    }
 	    NFRule result = rules[hi - 1];
 
 	    // use shouldRollBack() to see whether we need to invoke the
@@ -538,6 +545,10 @@ public final class NFRuleSet {
 	    // one rule and return that one instead of the one we'd normally
 	    // return
 	    if (result.shouldRollBack(number)) {
+		if (hi == 1) { // bad rule set
+		    throw new IllegalStateException("The rule set " + name + " cannot roll back from the rule '" +
+						    result + "'");
+		}
 		result = rules[hi - 2];
 	    }
 	    return result;

@@ -680,6 +680,11 @@ class MultiplierSubstitution extends NFSubstitution {
         // substitution.  Rather than keeping a back-pointer to the
         // rule, we keep a copy of the divisor
         this.divisor = divisor;
+
+	if (divisor == 0) { // this will cause recursion
+	    throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") " + description.substring(0, pos) + 
+				     " | " + description.substring(pos));
+	}
     }
 
     /**
@@ -689,6 +694,10 @@ class MultiplierSubstitution extends NFSubstitution {
      */
     public void setDivisor(int radix, int exponent) {
         divisor = Math.pow(radix, exponent);
+
+	if (divisor == 0) {
+	    throw new IllegalStateException("Substitution with divisor 0");
+	}
     }
 
     //-----------------------------------------------------------------------
@@ -844,6 +853,11 @@ class ModulusSubstitution extends NFSubstitution {
         // we keep a copy of the divisor
         this.divisor = divisor;
 
+	if (divisor == 0) { // this will cause recursion
+	    throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") "+ description.substring(0, pos) + 
+				     " | " + description.substring(pos));
+	}
+
         // the >>> token doesn't alter how this substituion calculates the
         // values it uses for formatting and parsing, but it changes
         // what's done with that value after it's obtained: >>> short-
@@ -864,6 +878,10 @@ class ModulusSubstitution extends NFSubstitution {
      */
     public void setDivisor(int radix, int exponent) {
         divisor = Math.pow(radix, exponent);
+
+	if (divisor == 0) { // this will cause recursion
+	    throw new IllegalStateException("Substitution with bad divisor");
+	}
     }
 
     //-----------------------------------------------------------------------
