@@ -580,6 +580,7 @@
 2e88:fe57*
 2e8b:fe58*
 2e8c:fe5d*
+2e97:fe5e**
 2ea7:fe6b*
 2eaa:fe6e*
 2eae:fe71*
@@ -23908,7 +23909,7 @@ e81f>fe5a*
 e820>fe5b*
 e821>fe5c*
 e822>fe5d*
-e823:fe5e
+e823>fe5e**
 e824>fe5f*
 e825>fe60*
 e826:fe61
