@@ -15,7 +15,7 @@ Devanagari_InterIndic {
 //--------------------------------------------------------------------
 
 // Devanagari-InterIndic
- ":: NFD (NFC) ;"
+// ":: NFD;"
  //Rules for Decomposed characters
  "\u0928\u093c  > \ue029;"  //\u0929
  "\u0930\u093c  > \ue031;"  //\u0932
@@ -133,6 +133,6 @@ Devanagari_InterIndic {
  "\u096e>\ue06e;"  // DIGIT EIGHT
  "\u096f>\ue06f;"  // DIGIT NINE
 // "\u0970>;" // UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
   }
 }

@@ -20,7 +20,7 @@ Gujarati_InterIndic {
 //--------------------------------------------------------------------
 
 // Gujarati-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0a81>\ue001;" // SIGN CANDRABINDU
 "\u0a82>\ue002;" // SIGN ANUSVARA
 "\u0a83>\ue003;" // SIGN VISARGA
@@ -99,7 +99,7 @@ Gujarati_InterIndic {
 "\u0aed>\ue06d;" // DIGIT SEVEN
 "\u0aee>\ue06e;" // DIGIT EIGHT
 "\u0aef>\ue06f;" // DIGIT NINE
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

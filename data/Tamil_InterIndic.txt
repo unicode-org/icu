@@ -20,7 +20,7 @@ Tamil_InterIndic {
 //--------------------------------------------------------------------
 
 // Tamil-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0b82>\ue002;" // SIGN ANUSVARA
 "\u0b83>\ue003;" // SIGN VISARGA
 "\u0b85>\ue005;" // LETTER A
@@ -82,7 +82,7 @@ Tamil_InterIndic {
 // \u0bf0>; // UNMAPPED Tamil-InterIndic: NUMBER TEN
 // \u0bf1>; // UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
 // \u0bf2>; // UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

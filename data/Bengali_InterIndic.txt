@@ -15,7 +15,7 @@ Bengali_InterIndic {
 //--------------------------------------------------------------------
 
 // Bengali-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0981>\ue001;" // SIGN CANDRABINDU
 "\u0982>\ue002;" // SIGN ANUSVARA
 "\u0983>\ue003;" // SIGN VISARGA
@@ -105,7 +105,7 @@ Bengali_InterIndic {
 // \u09f8>; // UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
 // \u09f9>; // UNMAPPED Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
 "\u09fa>\ue070;" // ISSHAR
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

@@ -20,7 +20,7 @@ InterIndic_Telugu {
 //--------------------------------------------------------------------
 
 // InterIndic-Telugu
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\ue001>\u0c01;" // SIGN CANDRABINDU
 "\ue002>\u0c02;" // SIGN ANUSVARA
 "\ue003>\u0c03;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Telugu {
 "\ue031>\u0c31;" // LETTER RRA
 "\ue046>\u0c46;" // VOWEL SIGN E
 "\ue04a>\u0c4a;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

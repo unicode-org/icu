@@ -20,7 +20,7 @@ Telugu_InterIndic {
 //--------------------------------------------------------------------
 
 // Telugu-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0c01>\ue001;" // SIGN CANDRABINDU
 "\u0c02>\ue002;" // SIGN ANUSVARA
 "\u0c03>\ue003;" // SIGN VISARGA
@@ -101,7 +101,7 @@ Telugu_InterIndic {
 "\u0c6d>\ue06d;" // DIGIT SEVEN
 "\u0c6e>\ue06e;" // DIGIT EIGHT
 "\u0c6f>\ue06f;" // DIGIT NINE
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

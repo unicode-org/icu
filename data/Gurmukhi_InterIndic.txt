@@ -20,7 +20,7 @@ Gurmukhi_InterIndic {
 //--------------------------------------------------------------------
 
 // Gurmukhi-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0a02>\ue001;" // REMAP (indicExceptions.txt): \u0a01>\u0a02 = SIGN CANDRABINDU>SIGN BINDI
 "\u0a05>\ue005;" // LETTER A
 "\u0a06>\ue006;" // LETTER AA
@@ -96,7 +96,7 @@ Gurmukhi_InterIndic {
 // \u0a72>; // UNMAPPED Gurmukhi-InterIndic: IRI
 // \u0a73>; // UNMAPPED Gurmukhi-InterIndic: URA
 // \u0a74>; // UNMAPPED Gurmukhi-InterIndic: EK ONKAR
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }
