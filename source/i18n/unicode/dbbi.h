@@ -92,7 +92,7 @@ public:
      * The caller owns the returned object and is responsible for deleting it.
      ======================================================================= */
  private:
-    DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename, UErrorCode& status);
+    DictionaryBasedBreakIterator(UDataMemory* tablesImage, char* dictionaryFilename, UErrorCode& status);
  public:
     //=======================================================================
     // boilerplate

@@ -13,6 +13,7 @@
 
 #include "rbbi_tbl.h"
 #include "brkdict.h"
+#include "unicode/udata.h"
 
 /* forward declaration */
 class DictionaryBasedBreakIterator;
@@ -45,7 +46,7 @@ private:
     // constructor
     //=======================================================================
 
-    DictionaryBasedBreakIteratorTables(const void* tablesImage,
+    DictionaryBasedBreakIteratorTables(UDataMemory* tablesMemory,
                                        char* dictionaryFilename,
                                        UErrorCode& status);
                                  
