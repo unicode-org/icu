@@ -17,8 +17,8 @@
  * UHashtable stores key-value pairs and does moderately fast lookup
  * based on keys.  It provides a good tradeoff between access time and
  * storage space.  As elements are added to it, it grows to accomodate
- * them.  In its current implementation, the table never shrinks, even
- * if all elements are removed from it.
+ * them.  By default, the table never shrinks, even if all elements
+ * are removed from it.
  *
  * Keys and values are stored as void* pointers.  These void* pointers
  * may be actual pointers to strings, objects, or any other structure
