@@ -167,14 +167,15 @@ public:
   virtual UBool        hasNext() = 0;
 
 protected:
-  /** Default constructor to be overridden in the implementing class. */
+  /** Default constructor to be overridden in the implementing class. @stable ICU 2.0*/
   ForwardCharacterIterator() : UObject() {}
   
-  /** Copy constructor to be overridden in the implementing class. */
+  /** Copy constructor to be overridden in the implementing class. @stable ICU 2.0*/
   ForwardCharacterIterator(const ForwardCharacterIterator &other) : UObject(other) {}
   
   /**
    * Assignment operator to be overridden in the implementing class.
+   * @stable ICU 2.0
    */
   ForwardCharacterIterator &operator=(const ForwardCharacterIterator&) { return *this; }
 };
