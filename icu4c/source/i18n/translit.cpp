@@ -759,7 +759,7 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
 
 // For public consumption
 void Transliterator::registerFactory(const UnicodeString& id,
-                                     TransliteratorFactory factory,
+                                     Transliterator::Factory factory,
                                      UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -774,7 +774,7 @@ void Transliterator::registerFactory(const UnicodeString& id,
 // To be called only by Transliterator subclasses that are called
 // to register themselves by initializeCache().
 void Transliterator::_registerFactory(const UnicodeString& id,
-                                      TransliteratorFactory factory,
+                                      Transliterator::Factory factory,
                                       UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -1045,7 +1045,7 @@ void Transliterator::CacheEntry::adoptPrototype(Transliterator* adopted) {
     u.prototype = adopted;
 }
 
-void Transliterator::CacheEntry::setFactory(TransliteratorFactory factory) {
+void Transliterator::CacheEntry::setFactory(Transliterator::Factory factory) {
     if (entryType == PROTOTYPE) {
         delete u.prototype;
     }

@@ -274,7 +274,7 @@ private:
     /**
      * A function that creates and returns a Transliterator.
      */
-    typedef Transliterator* (*TransliteratorFactory)(void);
+    typedef Transliterator* (*Factory)(void);
 
  private:
 
@@ -307,12 +307,12 @@ private:
         union {
             Transliterator* prototype; // For PROTOTYPE
             TransliterationRuleData* data; // For RBT_DATA
-            TransliteratorFactory factory; // For FACTORY
+            Factory factory; // For FACTORY
         } u;
         CacheEntry();
         ~CacheEntry();
         void adoptPrototype(Transliterator* adopted);
-        void setFactory(TransliteratorFactory factory);
+        void setFactory(Factory factory);
     };
 
     /**
@@ -745,7 +745,7 @@ public:
      * called later when the given ID is passed to createInstance()
      */
     static void registerFactory(const UnicodeString& id,
-                                TransliteratorFactory factory,
+                                Factory factory,
                                 UErrorCode& status);
 
     /**
@@ -784,7 +784,7 @@ private:
      * classes should be listed as friends immediately below.
      */
     static void _registerFactory(const UnicodeString& id,
-                                 TransliteratorFactory factory,
+                                 Factory factory,
                                  UErrorCode& status);
 
     friend class NormalizationTransliterator;
