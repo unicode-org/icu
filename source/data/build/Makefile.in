@@ -136,12 +136,12 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst
 # DAT FILES
 
 # uprops.dat
-uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TOOLDIR)/genprops/genprops
+uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops
 	@echo Creating uprops.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
 # unorm.dat
-unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/Mirror.txt $(TOOLDIR)/gennorm/gennorm
+unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm
 	@echo Creating unorm.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
