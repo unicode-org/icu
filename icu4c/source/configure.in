@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.183 2003/04/24 19:29:40 emader-oss Exp $
+dnl $Id: configure.in,v 1.184 2003/04/25 21:43:50 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -347,7 +347,7 @@ AC_SUBST(U_IOSTREAM_SOURCE)
 AC_LANG_RESTORE
 
 dnl Check for endianness
-AC_C_BIGENDIAN(unknown)
+AC_C_BIGENDIAN()
 if test $ac_cv_c_bigendian = no; then
 U_IS_BIG_ENDIAN=0
 U_ENDIAN_CHAR="l"
