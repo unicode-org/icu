@@ -24,6 +24,34 @@
                           }                             \
                           break
 
+
+JamoTest::JamoTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NAME_JAMO = new RuleBasedTransliterator("Name-Jamo",
+                                            JAMO_NAMES_RULES,
+                                            UTRANS_FORWARD, status);
+
+    if (U_FAILURE(status)) {
+        delete NAME_JAMO;
+        NAME_JAMO = NULL;
+    }
+    status = U_ZERO_ERROR;
+    JAMO_NAME = new RuleBasedTransliterator("Jamo-Name",
+                                            JAMO_NAMES_RULES,
+                                            UTRANS_REVERSE, status);
+    if (U_FAILURE(status)) {
+        delete JAMO_NAME;
+        JAMO_NAME = NULL;
+    }
+}
+
+JamoTest::~JamoTest()
+{
+    delete NAME_JAMO;
+    delete JAMO_NAME;
+}
+
 void
 JamoTest::runIndexedTest(int32_t index, UBool exec,
                          const char* &name, char* /*par*/) {
@@ -120,6 +148,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, hangul, jamo);
+    delete t;
 
     t = Transliterator::createInstance("NFC", UTRANS_FORWARD, status); // was Jamo-Hangul
     if (U_FAILURE(status) || t == 0) {
@@ -127,6 +156,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, jamo, hangul);
+    delete t;
 
     t = Transliterator::createInstance("Latin-Jamo", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -134,6 +164,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, latin, jamo);
+    delete t;
 
     t = Transliterator::createInstance("Jamo-Latin", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -141,6 +172,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, jamo, latin);
+    delete t;
 
     t = Transliterator::createInstance("Hangul-Latin", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -148,6 +180,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, hangul, latin);
+    delete t;
 
     t = Transliterator::createInstance("Latin-Hangul", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -155,6 +188,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, latin, hangul);
+    delete t;
 
     t = Transliterator::createInstance("Hangul-Latin; Latin-Jamo", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -162,6 +196,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, hangul, jamo);
+    delete t;
 
     t = Transliterator::createInstance("Jamo-Latin; Latin-Hangul", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -169,6 +204,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, jamo, hangul);
+    delete t;
 
     t = Transliterator::createInstance("Hangul-Latin; Latin-Hangul", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
@@ -176,6 +212,7 @@ void JamoTest::TestPiecemeal(void) {
         return;
     }
     expect(*t, hangul, hangul);
+    delete t;
 }
 
 void
@@ -462,9 +499,6 @@ const char* JamoTest::JAMO_NAMES_RULES =
         "'(Pf)' <> \\u11C1;"
         "'(Hf)' <> \\u11C2;";
 
-Transliterator* JamoTest::JAMO_NAME = 0;
-Transliterator* JamoTest::NAME_JAMO = 0;
-
 /**
  * Convert short names to actual jamo.  E.g., "x(LG)y" returns
  * "x\u11B0y".  See JAMO_NAMES for table of names.
@@ -472,15 +506,8 @@ Transliterator* JamoTest::NAME_JAMO = 0;
 UnicodeString
 JamoTest::nameToJamo(const UnicodeString& input) { 
     if (NAME_JAMO == 0) {
-        UErrorCode status = U_ZERO_ERROR;
-        NAME_JAMO = new RuleBasedTransliterator("Name-Jamo",
-                                                JAMO_NAMES_RULES,
-                                                UTRANS_FORWARD, status);
-        if (U_FAILURE(status)) {
-            delete NAME_JAMO;
-            NAME_JAMO = 0;
-            return input;
-        }
+        errln("Failed to create NAME_JAMO");
+        return input;   /* failure! */
     }
     UnicodeString result(input);
     NAME_JAMO->transliterate(result);
@@ -493,16 +520,9 @@ JamoTest::nameToJamo(const UnicodeString& input) {
  */
 UnicodeString
 JamoTest::jamoToName(const UnicodeString& input) {
-    if (JAMO_NAME == 0) {
-        UErrorCode status = U_ZERO_ERROR;
-        JAMO_NAME = new RuleBasedTransliterator("Jamo-Name",
-                                                JAMO_NAMES_RULES,
-                                                UTRANS_REVERSE, status);
-        if (U_FAILURE(status)) {
-            delete JAMO_NAME;
-            JAMO_NAME = 0;
-            return input;
-        }
+    if (NAME_JAMO == 0) {
+        errln("Failed to create NAME_JAMO");
+        return input;   /* failure! */
     }
     UnicodeString result(input);
     JAMO_NAME->transliterate(result);

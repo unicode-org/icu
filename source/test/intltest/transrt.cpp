@@ -502,5 +502,7 @@ void RTTest::test2() {
     }
     log->logln("");
     delete []type;
+    delete sourceToTarget;
+    delete targetToSource;
 }
 
