@@ -91,6 +91,7 @@ void cppapi() {
  *
  * @param nf The NumberFormat on which to set the currency; takes effect on
  *           currency-formatting NumberFormat instances.
+ *           This must actually be a DecimalFormat instance.
  *           The display style of the output is controlled by nf (its pattern,
  *           usually from the display locale ID used to create this instance)
  *           while the currency symbol and number of decimals are set for
@@ -100,10 +101,19 @@ void cppapi() {
  */
 static void
 setNumberFormatCurrency_2_4(NumberFormat &nf, const char *currency, UErrorCode &errorCode) {
+    // argument checking
     if(U_FAILURE(errorCode)) {
         return;
     }
     if(currency==NULL || strlen(currency)!=3) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    // check that the formatter is a DecimalFormat instance
+    // necessary because we will cast to the DecimalFormat subclass to set
+    // the currency symbol
+    if(nf.getDynamicClassID()!=DecimalFormat::getStaticClassID()) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -114,15 +124,30 @@ setNumberFormatCurrency_2_4(NumberFormat &nf, const char *currency, UErrorCode &
     // formatter for that and copy its values, but that would be slower,
     // and we have to hardcode something here anyway
     static const struct {
+        // ISO currency ID
         const char *currency;
+
+        // fractionDigits==minimumFractionDigits==maximumFractionDigits
+        // for these currencies
         int32_t fractionDigits;
+
+        /*
+         * Set the rounding increment to 0 if it is implied with the number of
+         * fraction digits. Setting an explicit rounding increment makes
+         * number formatting slower.
+         * In other words, set it to something other than 0 only for unusual
+         * cases like "nickel rounding" (0.05) when the increment differs from
+         * 10^(-maximumFractionDigits).
+         */
         double roundingIncrement;
+
+        // Unicode string with the desired currency display symbol or name
         UChar symbol[16];
     } currencyMap[]={
-        { "USD", 2, 0.01, { 0x24, 0 } },
-        { "GBP", 2, 0.01, { 0xa3, 0 } },
-        { "EUR", 2, 0.01, { 0x20ac, 0 } },
-        { "JPY", 0, 1.0, { 0xa5, 0 } }
+        { "USD", 2, 0.0, { 0x24, 0 } },
+        { "GBP", 2, 0.0, { 0xa3, 0 } },
+        { "EUR", 2, 0.0, { 0x20ac, 0 } },
+        { "JPY", 0, 0.0, { 0xa5, 0 } }
     };
 
     int32_t i;
@@ -139,7 +164,6 @@ setNumberFormatCurrency_2_4(NumberFormat &nf, const char *currency, UErrorCode &
     }
 
     // set the currency-related data into the caller's formatter
-    // assume that the formatter is a DecimalFormat instance
 
     nf.setMinimumFractionDigits(currencyMap[i].fractionDigits);
     nf.setMaximumFractionDigits(currencyMap[i].fractionDigits);
