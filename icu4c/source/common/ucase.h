@@ -44,6 +44,14 @@ ucase_close(UCaseProps *csp);
 U_CAPI UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode);
 
+/**
+ * Get a singleton dummy object, one that works with no real data.
+ * This can be used when the real data is not available.
+ * Using the dummy can reduce checks for available data after an initial failure.
+ */
+U_CAPI UCaseProps * U_EXPORT2
+ucase_getDummy(UErrorCode *pErrorCode);
+
 
 U_CAPI int32_t U_EXPORT2
 ucase_swap(const UDataSwapper *ds,

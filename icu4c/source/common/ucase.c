@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -192,7 +192,7 @@ ucase_close(UCaseProps *csp) {
 
 /* UCaseProps singleton ----------------------------------------------------- */
 
-static UCaseProps *gCsp=NULL;
+static UCaseProps *gCsp=NULL, *gCspDummy=NULL;
 static UErrorCode gErrorCode=U_ZERO_ERROR;
 static int8_t gHaveData=0;
 
@@ -201,6 +201,8 @@ static UBool U_CALLCONV ucase_cleanup(void) {
     gCsp=NULL;
     gErrorCode=U_ZERO_ERROR;
     gHaveData=0;
+    uprv_free(gCspDummy);
+    gCspDummy=NULL;
     return TRUE;
 }
 
@@ -242,6 +244,59 @@ ucase_getSingleton(UErrorCode *pErrorCode) {
 
         ucase_close(csp);
         return gCsp;
+    }
+}
+
+U_CAPI UCaseProps * U_EXPORT2
+ucase_getDummy(UErrorCode *pErrorCode) {
+    UCaseProps *csp;
+
+    if(U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
+
+    UMTX_CHECK(NULL, gCspDummy, csp);
+
+    if(csp!=NULL) {
+        /* the dummy object was already created */
+        return csp;
+    } else /* csp==NULL */ {
+        /* create the dummy object */
+        UCaseProps *csp;
+        int32_t *indexes;
+        
+        csp=(UCaseProps *)uprv_malloc(sizeof(UCaseProps)+UCASE_IX_TOP*4+UTRIE_DUMMY_SIZE);
+        if(csp==NULL) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        uprv_memset(csp, 0, sizeof(UCaseProps)+UCASE_IX_TOP*4);
+
+        csp->indexes=indexes=(int32_t *)(csp+1);
+        indexes[UCASE_IX_INDEX_TOP]=UCASE_IX_TOP;
+
+        indexes[UCASE_IX_TRIE_SIZE]=
+            utrie_unserializeDummy(&csp->trie, indexes+UCASE_IX_TOP, UTRIE_DUMMY_SIZE, 0, 0, TRUE, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            uprv_free(csp);
+            return NULL;
+        }
+
+        csp->formatVersion[0]=1;
+        csp->formatVersion[2]=UTRIE_SHIFT;
+        csp->formatVersion[3]=UTRIE_INDEX_SHIFT;
+
+        /* set the static variables */
+        umtx_lock(NULL);
+        if(gCspDummy==NULL) {
+            gCspDummy=csp;
+            csp=NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_UCASE, ucase_cleanup);
+        }
+        umtx_unlock(NULL);
+
+        uprv_free(csp);
+        return gCspDummy;
     }
 }
 
@@ -740,70 +795,6 @@ ucase_isCaseSensitive(const UCaseProps *csp, UChar32 c) {
     uint16_t props;
     GET_PROPS(csp, c, props);
     return (UBool)((props&UCASE_SENSITIVE)!=0);
-}
-
-/* public API (see uchar.h) ------------------------------------------------- */
-
-U_CAPI UBool U_EXPORT2
-u_isULowercase(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    UCaseProps *csp=ucase_getSingleton(&errorCode);
-    return (UBool)(csp!=NULL && UCASE_LOWER==ucase_getType(csp, c));
-}
-
-U_CAPI UBool U_EXPORT2
-u_isUUppercase(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    UCaseProps *csp=ucase_getSingleton(&errorCode);
-    return (UBool)(csp!=NULL && UCASE_UPPER==ucase_getType(csp, c));
-}
-
-/* Transforms the Unicode character to its lower case equivalent.*/
-U_CAPI UChar32 U_EXPORT2
-u_tolower(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    UCaseProps *csp=ucase_getSingleton(&errorCode);
-    if(csp!=NULL) {
-        return ucase_tolower(csp, c);
-    } else {
-        return c;
-    }
-}
-    
-/* Transforms the Unicode character to its upper case equivalent.*/
-U_CAPI UChar32 U_EXPORT2
-u_toupper(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    UCaseProps *csp=ucase_getSingleton(&errorCode);
-    if(csp!=NULL) {
-        return ucase_toupper(csp, c);
-    } else {
-        return c;
-    }
-}
-
-/* Transforms the Unicode character to its title case equivalent.*/
-U_CAPI UChar32 U_EXPORT2
-u_totitle(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    UCaseProps *csp=ucase_getSingleton(&errorCode);
-    if(csp!=NULL) {
-        return ucase_totitle(csp, c);
-    } else {
-        return c;
-    }
-}
-
-/* return the simple case folding mapping for c */
-U_CAPI UChar32 U_EXPORT2
-u_foldCase(UChar32 c, uint32_t options) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    UCaseProps *csp=ucase_getSingleton(&errorCode);
-    if(csp!=NULL) {
-        return ucase_fold(csp, c, options);
-    } else {
-        return c;
-    }
 }
 
 /* string casing ------------------------------------------------------------ */

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -781,13 +781,77 @@ TrieTest(void) {
         checkRanges3, ARRAY_LENGTH(checkRanges3));
 }
 
-#if 1
-void
-addTrieTest(TestNode** root);
+/* test utrie_unserializeDummy() -------------------------------------------- */
 
+static int32_t U_CALLCONV
+dummyGetFoldingOffset(uint32_t data) {
+    return -1; /* never get non-initialValue data for supplementary code points */
+}
+
+static void
+dummyTest(UBool make16BitTrie) {
+    static int32_t mem[UTRIE_DUMMY_SIZE/4];
+
+    UTrie trie;
+    UErrorCode errorCode;
+    UChar32 c;
+
+    uint32_t value, initialValue, leadUnitValue;
+
+    if(make16BitTrie) {
+        initialValue=0x313;
+        leadUnitValue=0xaffe;
+    } else {
+        initialValue=0x01234567;
+        leadUnitValue=0x89abcdef;
+    }
+
+    errorCode=U_ZERO_ERROR;
+    utrie_unserializeDummy(&trie, mem, sizeof(mem), initialValue, leadUnitValue, make16BitTrie, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("utrie_unserializeDummy(make16BitTrie=%d) failed - %s\n", make16BitTrie, u_errorName(errorCode));
+        return;
+    }
+    trie.getFoldingOffset=dummyGetFoldingOffset;
+
+    /* test that all code points have initialValue */
+    for(c=0; c<=0x10ffff; ++c) {
+        if(make16BitTrie) {
+            UTRIE_GET16(&trie, c, value);
+        } else {
+            UTRIE_GET32(&trie, c, value);
+        }
+        if(value!=initialValue) {
+            log_err("UTRIE_GET%s(dummy, U+%04lx)=0x%lx instead of 0x%lx\n",
+                make16BitTrie ? "16" : "32", (long)c, (long)value, (long)initialValue);
+        }
+    }
+
+    /* test that the lead surrogate code units have leadUnitValue */
+    for(c=0xd800; c<=0xdbff; ++c) {
+        if(make16BitTrie) {
+            value=UTRIE_GET16_FROM_LEAD(&trie, c);
+        } else {
+            value=UTRIE_GET32_FROM_LEAD(&trie, c);
+        }
+        if(value!=leadUnitValue) {
+            log_err("UTRIE_GET%s_FROM_LEAD(dummy, U+%04lx)=0x%lx instead of 0x%lx\n",
+                make16BitTrie ? "16" : "32", (long)c, (long)value, (long)leadUnitValue);
+        }
+    }
+}
+
+static void
+DummyTrieTest(void) {
+    dummyTest(TRUE);
+    dummyTest(FALSE);
+}
+
+#if 1
 void
 addTrieTest(TestNode** root) {
     addTest(root, &TrieTest, "tsutil/trietest/TrieTest");
+    addTest(root, &DummyTrieTest, "tsutil/trietest/DummyTrieTest");
 }
 #else
 /* standalone utrie development */

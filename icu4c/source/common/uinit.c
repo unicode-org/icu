@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2004, International Business Machines                   *
+* Copyright (C) 2001-2005, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -101,6 +101,10 @@ u_init(UErrorCode *status) {
 
     /* Char Properties */
     uprv_loadPropsData(status);
+
+    /* load the case and bidi properties but don't fail if they are not available */
+    u_isULowercase(0x61);
+    u_getIntPropertyValue(0x200D, UCHAR_JOINING_TYPE); /* ZERO WIDTH JOINER: Join_Causing */
 
 #if !UCONFIG_NO_NORMALIZATION
     /*  Normalization  */

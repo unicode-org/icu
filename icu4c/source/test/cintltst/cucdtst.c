@@ -2913,6 +2913,13 @@ static void TestUCase() {
 
     ucase_close(csp);
     udata_close(pData);
+
+    /* coverage for ucase_getDummy() */
+    errorCode=U_ZERO_ERROR;
+    csp=ucase_getDummy(&errorCode);
+    if(ucase_tolower(csp, 0x41)!=0x41) {
+        log_err("ucase_tolower(dummy, A)!=A\n");
+    }
 }
 
 /* API coverage for ubidi_props.c */
@@ -2944,4 +2951,11 @@ static void TestUBiDiProps() {
 
     ubidi_closeProps(bdp);
     udata_close(pData);
+
+    /* coverage for ubidi_getDummy() */
+    errorCode=U_ZERO_ERROR;
+    bdp=ubidi_getDummy(&errorCode);
+    if(ubidi_getClass(bdp, 0x20)!=0) {
+        log_err("ubidi_getClass(dummy, space)!=0\n");
+    }
 }
