@@ -28,12 +28,12 @@ typedef struct {
     UDataInfo info;
     char padding[8];
     uint32_t count, reserved;
-	/*
+    /*
     const struct {
     const char *const name; 
     const void *const data;
     } toc[1];
-	*/
+    */
    int   fakeNameAndData[4];       /* TODO:  Change this header type from */
                                    /*        pointerTOC to OffsetTOC.     */
 } ICU_Data_Header;
@@ -63,12 +63,12 @@ U_EXPORT const ICU_Data_Header U_EXPORT2 U_ICUDATA_ENTRY_POINT = {
     {0,0,0,0,0,0,0,0},  /* Padding[8]   */ 
     0,                  /* count        */
     0,                  /* Reserved     */
-/*    {        */         /*  TOC structure */
+    {                   /*  TOC structure */
 /*        {    */
-		  0 , 0 , 0, 0  /* name and data entries.  Count says there are none,  */
-		                /*  but put one in just in case.                       */
-/*		  }  */
-/*    }      */
+          0 , 0 , 0, 0  /* name and data entries.  Count says there are none,  */
+                        /*  but put one in just in case.                       */
+/*        }  */
+    }
 };
 
 
