@@ -12,12 +12,12 @@
 U_NAMESPACE_BEGIN
 
 Quantifier::Quantifier(UnicodeMatcher *adopted,
-                       uint32_t minCount, uint32_t maxCount) {
+                       uint32_t _minCount, uint32_t _maxCount) {
     // assert(adopted != 0);
     // assert(minCount <= maxCount);
     matcher = adopted;
-    this->minCount = minCount;
-    this->maxCount = maxCount;
+    this->minCount = _minCount;
+    this->maxCount = _maxCount;
 }
 
 Quantifier::Quantifier(const Quantifier& o) :
