@@ -3237,7 +3237,7 @@ void addMiscCollTest(TestNode** root)
     /*addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");*/
     addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
-    /*addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");*/
+    addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
     addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); 
     /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
     addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
