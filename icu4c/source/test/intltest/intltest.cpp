@@ -1374,6 +1374,32 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+static char ASSERT_BUF[256];
+
+static const char* extractToAssertBuf(const UnicodeString& message) {
+    message.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF)-1, 0);
+    ASSERT_BUF[sizeof(ASSERT_BUF)-1] = 0;
+    return ASSERT_BUF;
+}
+
+UBool IntlTest::assertTrue(const UnicodeString& message, UBool condition) {
+    return assertTrue(extractToAssertBuf(message), condition);
+}
+
+UBool IntlTest::assertFalse(const UnicodeString& message, UBool condition) {
+    return assertFalse(extractToAssertBuf(message), condition);
+}
+
+UBool IntlTest::assertSuccess(const UnicodeString& message, UErrorCode ec) {
+    return assertSuccess(extractToAssertBuf(message), ec);
+}
+
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             const UnicodeString& expected,
+                             const UnicodeString& actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+
 /*
  * Hey, Emacs, please set the following:
  *
