@@ -691,61 +691,45 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
         //    follows.
         c = fText->next32();
 
-        if (row->fAccepting == 0 && row->fLookAhead == 0) {
-            // No match, nothing of interest happening, common case.
-            goto continueOn;
+        if (row->fAccepting == -1) {
+            // Match found, common case, could have lookahead so we move on to check it
+            result = fText->getIndex();
+            /// added
+            fLastBreakTag   = row->fTag;   // Remember the break status (tag) value.
         }
 
-        if (row->fAccepting != 0 && row->fLookAhead != 0) {
-            // Lookahead match is completed.  Set the result accordingly, but only
-            //   if no other rule has matched further in the mean time.
-            ///
-            if (lookaheadResult >= result) {
-                // U_ASSERT(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
-                //    of overlapping lookahead matches.
+        if (row->fLookAhead != 0) {
+            if (lookaheadStatus != 0 
+                && row->fAccepting == lookaheadStatus) { 
+                // Lookahead match is completed.  Set the result accordingly, but only
+                // if no other rule has matched further in the mean time.
                 result          = lookaheadResult;
                 fLastBreakTag   = lookaheadTag;
                 lookaheadStatus = 0;
                 /// i think we have to back up to read the lookahead character again
-                fText->setIndex(lookaheadResult);
+                /// fText->setIndex(lookaheadResult);
                 /// TODO: this is a simple hack since reverse rules only have simple
                 /// lookahead rules that we can definitely break out from.
                 /// we need to make the lookahead rules not chain eventually.
-                return result;
-            }
-            int32_t  r = fText->getIndex();
-            if (r > result) {
-                ///
-                result = r;
-                lookaheadResult = r;
-                lookaheadStatus = row->fLookAhead;
-                lookaheadTag   = row->fTag;
+                /// return result;
+                /// this is going to be the longest match again
+                goto continueOn;
             }
 
-            goto continueOn;
-        }
-
-        if (row->fAccepting == -1) {
-            // Match found, common case, no lookahead involved.
-            //    (It's possible that some lookahead rule matched here also,
-            //     but since there's an unconditional match, we'll favor that.)
-            result          = fText->getIndex();
-            lookaheadStatus = 0;           // clear out any pending look-ahead matches.
-            fLastBreakTag   = row->fTag;   // Remember the break status (tag) value.
-            goto continueOn;
-        }
-
-        if (row->fAccepting == 0 && row->fLookAhead != 0) {
-            // Lookahead match point.  Remember it, but only if no other rule has
-            //                         unconitionally matched up to this point.
-            // TODO:  handle case where there's a pending match from a different rule -
-            //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
             int32_t  r = fText->getIndex();
             lookaheadResult = r;
             lookaheadStatus = row->fLookAhead;
-            lookaheadTag   = row->fTag;
+            lookaheadTag    = row->fTag;
             goto continueOn;
         }
+
+
+        if (row->fAccepting == 0) {
+            // No match, nothing of interest happening, common case.
+            goto continueOn;
+        }
+
+        lookaheadStatus = 0;           // clear out any pending look-ahead matches.
 
 continueOn:
         if (state == STOP_STATE) {
@@ -860,61 +844,46 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
             (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
-
-        if (row->fAccepting == 0 && row->fLookAhead == 0) {
-            // No match, nothing of interest happening, common case.
-            goto continueOn;
+    
+        if (row->fAccepting == -1) {
+            // Match found, common case, could have lookahead so we move on to check it
+            result = fText->getIndex();
+            /// added
+            fLastBreakTag   = row->fTag;   // Remember the break status (tag) value.
         }
 
-        if (row->fAccepting != 0 && row->fLookAhead != 0) {
-            // Lookahead match is completed.  Set the result accordingly, but only
-            //   if no other rule has matched further in the mean time.
-            if (row->fAccepting == lookaheadStatus) { ///lookaheadResult > 0 && lookaheadResult <= result) {
-                /// what on earth is this? 
-                /// U_ASSERT(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
-                //    of overlapping lookahead matches.
+        if (row->fLookAhead != 0) {
+            if (lookaheadStatus != 0 
+                && row->fAccepting == lookaheadStatus) { 
+                // Lookahead match is completed.  Set the result accordingly, but only
+                // if no other rule has matched further in the mean time.
                 result          = lookaheadResult;
                 fLastBreakTag   = lookaheadTag;
                 lookaheadStatus = 0;
                 /// i think we have to back up to read the lookahead character again
-                fText->setIndex(lookaheadResult);
+                /// fText->setIndex(lookaheadResult);
                 /// TODO: this is a simple hack since reverse rules only have simple
                 /// lookahead rules that we can definitely break out from.
                 /// we need to make the lookahead rules not chain eventually.
-                return result;
+                /// return result;
+                /// this is going to be the longest match again
+                goto continueOn;
             }
 
-            int32_t  r = fText->getIndex();
-            if (r < result) {
-                result = r;
-                lookaheadResult = r;
-                lookaheadStatus = row->fLookAhead;
-                lookaheadTag   = row->fTag;
-            }
-            goto continueOn;
-        }
-
-        if (row->fAccepting == -1) {
-            // Match found, common case, no lookahead involved.
-            result = fText->getIndex();
-            /// added
-            fLastBreakTag   = row->fTag;   // Remember the break status (tag) value.
-            lookaheadStatus = 0;     // clear out any pending look-ahead matches.
-            goto continueOn;
-        }
-
-        if (row->fAccepting == 0 && row->fLookAhead != 0) {
-            // Lookahead match point.  Remember it, but only if no other rule
-            //                         has unconditionally matched to this point.
-            // TODO:  handle case where there's a pending match from a different rule
-            //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
-            // 
             int32_t  r = fText->getIndex();
             lookaheadResult = r;
             lookaheadStatus = row->fLookAhead;
-            lookaheadTag    = row->fTag; 
+            lookaheadTag    = row->fTag;
             goto continueOn;
         }
+
+        // not lookahead
+        if (row->fAccepting == 0) {
+            // No match, nothing of interest happening, common case.
+            goto continueOn;
+        }
+
+        lookaheadStatus = 0;     // clear out any pending look-ahead matches.
 
 continueOn:
         if (state == STOP_STATE) { /// && lookaheadStatus == 0) {
@@ -930,10 +899,9 @@ continueOn:
     //        but where the implementation of previous() turns around and
     //        starts iterating forward again.
     // if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
-    /// if (hasPassedStartText) && row->fLookAhead != 0) {
-        /// return fText->setToStart();
-        /// return result;
-    /// }
+    /*** if (hasPassedStartText && row->fLookAhead) {
+        return fText->setToStart();
+    }***/
     fText->setIndex(result);
 
     return result;
