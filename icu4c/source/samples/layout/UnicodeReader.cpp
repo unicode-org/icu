@@ -109,7 +109,7 @@ const UChar *UnicodeReader::readFile(const char *fileName, GUISupport *guiSuppor
     }
     
     myText.extract(0, myText.length(), charBuffer);
-    charBuffer[charCount + 1] = 0;    // NULL terminate for easier reading in the debugger
+    charBuffer[charCount] = 0;    // NULL terminate for easier reading in the debugger
     
     return charBuffer;
 }
