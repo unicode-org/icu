@@ -696,14 +696,30 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
  * localized.
  * @see java.text.MessageFormat
  */
-UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
+UnicodeString& Transliterator::getDisplayName(const UnicodeString& id,
                                               const Locale& inLocale,
                                               UnicodeString& result) {
+    if (registry == 0) {
+        initializeRegistry();
+    }
+
     UErrorCode status = U_ZERO_ERROR;
 
     ResourceBundle bundle(u_getDataDirectory(), inLocale, status);
 
     // Suspend checking status until later...
+
+    result.truncate(0);
+
+    // Normalize the ID
+    UnicodeString source, target, variant;
+    IDtoSTV(id, source, target, variant);
+    if (target.length() < 1) {
+        // No target; malformed id
+        return result;
+    }
+    UnicodeString ID(source);
+    ID.append(ID_SEP).append(target).append(variant);
 
     // build the char* key
     char key[200];
@@ -733,26 +749,16 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
 
         // We pass either 2 or 3 Formattable objects to msg.
         Formattable args[3];
-        int32_t i = ID.indexOf(ID_SEP);
         int32_t nargs;
-        if (i < 0) {
-            args[0].setLong(1); // # of args to follow
-            args[1].setString(ID);
-            nargs = 2;
-        } else {
-            UnicodeString left, right;
-            ID.extractBetween(0, i, left);
-            ID.extractBetween(i+1, ID.length(), right);
-            args[0].setLong(2); // # of args to follow
-            args[1].setString(left);
-            args[2].setString(right);
-            nargs = 3;
-        }
+        args[0].setLong(2); // # of args to follow
+        args[1].setString(source);
+        args[2].setString(target);
+        nargs = 3;
 
         // Use display names for the scripts, if they exist
         UnicodeString s;
         length=(int32_t)uprv_strlen(RB_SCRIPT_DISPLAY_NAME_PREFIX);
-        for (int j=1; j<=((i<0)?1:2); ++j) {
+        for (int j=1; j<=2; ++j) {
             status = U_ZERO_ERROR;
             uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
             args[j].getString(s);
@@ -769,6 +775,7 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
         FieldPosition pos; // ignored by msg
         msg.format(args, nargs, result, pos, status);
         if (U_SUCCESS(status)) {
+            result.append(variant);
             return result;
         }
     }
@@ -881,6 +888,9 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                                                UErrorCode& status) {
     if (U_FAILURE(status)) {
         return 0;
+    }
+    if (registry == 0) {
+        initializeRegistry();
     }
 
     UVector list(status);
@@ -1113,6 +1123,55 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
 }
 
 /**
+ * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T,
+ * S-T/V, or S/V-T.  If the source is missing, return a source of
+ * ANY.
+ * @param id the id string, in any of several forms
+ * @param source fill-in for the source; if the source is not
+ * present, ANY will be given as the source, and FALSE will be
+ * returned.  Otherwise TRUE will be returned
+ * @param target fill-in for the target, which may be empty if the
+ * id is not well-formed.
+ * @param variant fill-in for the variant, which may be empty; if
+ * it is not, it will contain a leading '/'
+ * @return TRUE if the source was present
+ */
+UBool Transliterator::IDtoSTV(const UnicodeString& id,
+                              UnicodeString& source, UnicodeString& target,
+                              UnicodeString& variant) {
+    source = ANY;
+    int32_t sep = id.indexOf(ID_SEP);
+    int32_t var = id.indexOf(VARIANT_SEP);
+    if (var < 0) {
+        var = id.length();
+    }
+    UBool isSourcePresent = FALSE;
+    
+    if (sep < 0) {
+        // Form: T/V or T (or /V)
+        id.extractBetween(0, var, target);
+        id.extractBetween(var, 0x7FFFFFFF, variant);
+    } else if (sep < var) {
+        // Form: S-T/V or S-T (or -T/V or -T)
+        if (sep > 0) {
+            id.extractBetween(0, sep, source);
+            isSourcePresent = TRUE;
+        }
+        id.extractBetween(++sep, var, target);
+        id.extractBetween(var, 0x7FFFFFFF, variant);
+    } else {
+        // Form: (S/V-T or /V-T)
+        if (var > 0) {
+            id.extractBetween(0, var, source);
+            isSourcePresent = TRUE;
+        }
+        id.extractBetween(var, sep++, variant);
+        id.extractBetween(sep, 0x7FFFFFFF, target);
+    }
+    return isSourcePresent;
+}
+
+/**
  * Parse a single ID, possibly including an inline filter, and return
  * the resultant transliterator object.  NOTE: If 'create' is FALSE,
  * then the amount of syntax checking is limited.  However, the 'pos'
@@ -1255,38 +1314,11 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
         // produces T-S/V, with a default S of "Any".  If the ID has a special
         // non-canonical inverse, look it up (e.g., NFC -> NFD, Null -> Null).
         if (id.length() > 0) { // We handle empty IDs below
-            UnicodeString source(ANY);
+            UnicodeString source;
             UnicodeString target;
             UnicodeString variant; // Variant INCLUDING "/"
+            UBool isSourcePresent = IDtoSTV(id, source, target, variant);
 
-            int32_t sep = id.indexOf(ID_SEP);
-            int32_t var = id.indexOf(VARIANT_SEP);
-            if (var < 0) {
-                var = id.length();
-            }
-            UBool isSourcePresent = FALSE;
-
-            if (sep < 0) {
-                // Form: T/V or T (or /V)
-                id.extractBetween(0, var, target);
-                id.extractBetween(var, 0x7FFFFFFF, variant);
-            } else if (sep < var) {
-                // Form: S-T/V or S-T (or -T/V or -T)
-                if (sep > 0) {
-                    id.extractBetween(0, sep, source);
-                    isSourcePresent = TRUE;
-                }
-                id.extractBetween(++sep, var, target);
-                id.extractBetween(var, 0x7FFFFFFF, variant);
-            } else {
-                // Form: (S/V-T or /V-T)
-                if (var > 0) {
-                    id.extractBetween(0, var, source);
-                    isSourcePresent = TRUE;
-                }
-                id.extractBetween(var, sep++, variant);
-                id.extractBetween(sep, 0x7FFFFFFF, target);
-            }
             id.truncate(0);
             // Source and variant may be empty, but target may not be.
             if (target.length() == 0) {
