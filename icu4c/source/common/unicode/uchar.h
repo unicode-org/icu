@@ -736,6 +736,45 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
            char *buffer, UTextOffset bufferLength,
            UErrorCode *pErrorCode);
 
+/**
+ * Find a Unicode character by its name and return its code point value.
+ * ### TBD
+ */
+U_CAPI UChar32 U_EXPORT2
+u_charFromName(UCharNameChoice nameChoice,
+               const char *name,
+               UErrorCode *pErrorCode);
+
+U_CDECL_BEGIN
+
+/**
+ * Type of a callback function for u_enumCharNames() that gets called
+ * for each Unicode character with the code point value and
+ * the character name.
+ * If such a function returns FALSE, then the enumeration is stopped.
+ * ### TBD
+ */
+typedef UBool UEnumCharNamesFn(void *context,
+                               UChar32 code,
+                               UCharNameChoice nameChoice,
+                               char *name,
+                               UTextOffset length);
+
+U_CDECL_END
+
+/**
+ * Enumerate all assigned Unicode characters between the start and limit
+ * code points (start inclusive, limit exclusive) and call a function
+ * for each, passing the code point value and the character name.
+ * ### TBD
+ */
+U_CAPI void U_EXPORT2
+u_enumCharNames(UChar32 start, UChar32 limit,
+                UEnumCharNamesFn *fn,
+                void *context,
+                UCharNameChoice nameChoice,
+                UErrorCode *pErrorCode);
+
 /** 
  * The following functions are java specific.
  */

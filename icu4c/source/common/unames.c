@@ -144,6 +144,30 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
     return getName(uCharNames, code, nameChoice, buffer, (uint16_t)bufferLength);
 }
 
+/* ### TBD */
+U_CAPI UChar32 U_EXPORT2
+u_charFromName(UCharNameChoice nameChoice,
+               const char *name,
+               UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    *pErrorCode=U_UNSUPPORTED_ERROR;
+    return 0xffff;
+}
+
+U_CAPI void U_EXPORT2
+u_enumCharNames(UChar32 start, UChar32 limit,
+                UEnumCharNamesFn *fn,
+                void *context,
+                UCharNameChoice nameChoice,
+                UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+    *pErrorCode=U_UNSUPPORTED_ERROR;
+}
+
 /* implementation ----------------------------------------------------------- */
 
 static UBool
