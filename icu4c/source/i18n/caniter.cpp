@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/21 22:09:03 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/03/21 22:10:46 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,9 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
     // otherwise iterate through the string, and recursively permute all the other characters
     UChar32 cp;
     Hashtable *subpermute = new Hashtable(FALSE, status);
-    subpermute->setValueDeleter(uhash_deleteUnicodeString);
+    if (U_SUCCESS(status)) {
+        subpermute->setValueDeleter(uhash_deleteUnicodeString);
+    }
 
     for (i = 0; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = source.char32At(i);
@@ -296,7 +298,9 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
 // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
 UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) { //private String[] getEquivalents(String segment) 
     Hashtable *result = new Hashtable(FALSE, status);
-    result->setValueDeleter(uhash_deleteUnicodeString);
+    if (U_SUCCESS(status)) {
+        result->setValueDeleter(uhash_deleteUnicodeString);
+    }
     UChar USeg[256];
     int32_t segLen = segment.extract(USeg, 256, status);
     Hashtable *basic = getEquivalents2(USeg, segLen, status);
