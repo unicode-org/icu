@@ -66,12 +66,6 @@ Accents-Any:file:Transliterator_Any_Accents.txt:UTF8:REVERSE
 Any-Publishing:file:Transliterator_Any_Publishing.txt:UTF8:FORWARD
 Publishing-Any:file:Transliterator_Any_Publishing.txt:UTF8:REVERSE
 
-# One way rules (forward only)
-
-Han-Pinyin:file:Transliterator_Han_Pinyin.utf8.txt:UTF8:FORWARD
-Kanji-English:file:Transliterator_Kanji_English.utf8.txt:UTF8:FORWARD
-Kanji-OnRomaji:file:Transliterator_Kanji_OnRomaji.utf8.txt:UTF8:FORWARD
-
 # Korean
 # N.B. Don't end Latin-Jamo with NFC; that produces Hangul.  For
 # Hangul output use Latin-Hangul.
