@@ -621,6 +621,42 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
   return src->current;
 }
 
+inline void getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32_t strength, uint32_t *charsOffset, uint32_t *newCharsLen, UErrorCode *status) {
+  if(U_FAILURE(*status)) {
+    return;
+  }
+      /* this is a virgin before - we need to fish the anchor from the UCA */
+  collIterate s;
+  uint32_t baseCE = UCOL_NOT_FOUND, baseContCE = UCOL_NOT_FOUND;
+  uint32_t CE, SecondCE;
+  uint32_t invPos;
+  if(sourceToken != NULL) {
+    init_collIterate(src->UCA, src->source+((sourceToken->source)&0xFFFFFF), 1, &s); 
+  } else {
+    init_collIterate(src->UCA, src->source+*charsOffset, 1, &s); 
+  }
+
+  baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
+  baseContCE = ucol_getNextCE(src->UCA, &s, status);
+  if(baseContCE == UCOL_NO_MORE_CES) {
+    baseContCE = 0;
+  }
+
+  invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+
+  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
+  uint32_t ch = CETable[3*invPos+2];
+
+  if((ch &  UCOL_INV_SIZEMASK) != 0) {
+    uint32_t *conts = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
+    uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
+    ch = conts[offset];
+  }      
+  *src->extraCurrent++ = (UChar)ch;        
+  *charsOffset = src->extraCurrent - src->source - 1;
+  *newCharsLen = 1;
+}
+
 /*
 Processing Description
   1 Build a ListList. Each list has a header, which contains two lists (positive 
@@ -835,42 +871,25 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
           if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) { 
             /* this is a before that is already ordered in the UCA - so we need to get the previous with good strength */
-            if(sourceToken->previous != NULL) {
+            while(sourceToken->strength > strength && sourceToken->previous != NULL) {
               sourceToken = sourceToken->previous;
-              while(sourceToken->previous != NULL && sourceToken->previous->strength > strength) {
+            }
+            /* here, either we hit the strength or NULL */
+            if(sourceToken->strength == strength) {
+              if(sourceToken->previous != NULL) {
                 sourceToken = sourceToken->previous;
-              }
-              if(sourceToken->previous == NULL && sourceToken->strength > strength) {
+              } else { /* start of list */
                 sourceToken = sourceToken->listHeader->reset;
-              }
-            } else {
+              }              
+            } else { /* we hit NULL */
+              /* we should be doing the else part */
               sourceToken = sourceToken->listHeader->reset;
+              getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
+              sourceToken = NULL;
             }
-          } else { 
-            /* this is a virgin before - we need to fish the anchor from the UCA */
-            uint32_t baseCE = UCOL_NOT_FOUND, baseContCE = UCOL_NOT_FOUND;
-            uint32_t invPos;
-            init_collIterate(src->UCA, src->source+charsOffset, 1, &s); 
-
-            baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
-            baseContCE = ucol_getNextCE(src->UCA, &s, status);
-            if(baseContCE == UCOL_NO_MORE_CES) {
-              baseContCE = 0;
-            }
-
-            invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
-
-            uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
-            uint32_t ch = CETable[3*invPos+2];
-
-            if((ch &  UCOL_INV_SIZEMASK) != 0) {
-              uint32_t *conts = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
-              uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
-              ch = conts[offset];
-            }      
-            *src->extraCurrent++ = (UChar)ch;        
-            charsOffset = src->extraCurrent - src->source - 1;
-            newCharsLen = 1;
+          } else {
+            getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
+            sourceToken = NULL;
           }
         }
 
@@ -896,24 +915,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             the sourceToken in ListHeader of the new list */
         if(sourceToken == NULL) {
 
-          /*
-              3. The rule for "& abcdefg < xyz" is a bit tricky. What it turns into is:
-
-              a. Find the longest sequence in "abcdefg" that is in UCA *OR* in the
-              tailoring so far. Suppose that is "abcd".
-              b. Then treat this rule as equivalent to:
-              "& abcd < xyz / efg"
-          */
-#if 0
-          if(newCharsLen > 1) {
-            key.source = 0x01000000 | charsOffset;
-            sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
-            if(sourceToken != NULL) {
-              lastToken = sourceToken;
-              continue;
-            }
-          }
-#endif
           /* do the reset thing */
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->source = newCharsLen << 24 | charsOffset;

@@ -810,13 +810,16 @@ static void logFailure (const char *platform, const char *test,
                         const UChar *source, const uint32_t sLen,
                         const UChar *target, const uint32_t tLen,
                         UCollationResult realRes, uint32_t realStrength,
-                        UCollationResult expRes, uint32_t expStrength) {
+                        UCollationResult expRes, uint32_t expStrength, UBool error) {
 
   uint32_t i = 0;
 
   char sEsc[256], s[256], tEsc[256], t[256], b[256], output[256], relation[256];
 
   *sEsc = *tEsc = *s = *t = 0;
+  if(error == TRUE) {
+    log_err("Difference between expected and generated order. Run test with -v for more info\n");
+  }
   for(i = 0; i<sLen; i++) {
     sprintf(b, "%04X", source[i]);
     strcat(sEsc, "\\u");
@@ -921,7 +924,7 @@ static void printOutRules(const UChar *rules) {
 }
 
 
-static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t strength, const UChar *first, const UChar *second, const char* msg) {
+static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t strength, const UChar *first, const UChar *second, const char* msg, UBool error) {
   uint32_t diffs = 0;
   UCollationResult realResult;
   uint32_t realStrength;
@@ -933,17 +936,17 @@ static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t
   realStrength = probeStrength(func, collator, opts, first, sLen, second, tLen, realResult);
 
   if(strength == UCOL_IDENTICAL && realResult != UCOL_IDENTICAL) {
-    logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_EQUAL, strength);
+    logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_EQUAL, strength, error);
     diffs++;
   } else if(realResult != UCOL_LESS || realStrength != strength) {
-    logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_LESS, strength);
+    logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_LESS, strength, error);
     diffs++;
   }
   return diffs;
 }
 
 
-static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, const char *refName, UErrorCode *status) {
+static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, const char *refName, UBool error, UErrorCode *status) {
   const UChar *rules = NULL, *current = NULL;
   int32_t ruleLen = 0;
   uint32_t strength = 0;
@@ -998,7 +1001,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, const cha
 
       if(strength != UCOL_TOK_RESET) {
         if((*first<0x3400 || *first>=0xa000) && (*second<0x3400 || *second>=0xa000)) {
-          UCAdiff += testSwitch(&ucaTest, (void *)UCA, 0, strength, first, second, refName);
+          UCAdiff += testSwitch(&ucaTest, (void *)UCA, 0, strength, first, second, refName, error);
           /*Windiff += testSwitch(&winTest, (void *)lcid, 0, strength, first, second, "Win32");*/
         }
       }
@@ -1221,7 +1224,7 @@ static void TestCollations( ) {
         cName[nameSize] = 0;
         log_verbose("\nTesting locale %s (%s), LCID %04X\n", locName, cName, lcid);
         coll = ucol_open(locName, &status);
-        testAgainstUCA(coll, UCA, lcid, "UCA", &status);
+        testAgainstUCA(coll, UCA, lcid, "UCA", FALSE, &status);
         ucol_close(coll);
     }
   }
@@ -1304,65 +1307,6 @@ static void IsTailoredTest( ) {
     }
     ucol_close(coll);
   }
-}
-
-/**
-* Tests the [variable top] tag in rule syntax. Since the default [alternate]
-* tag has the value shifted, any codepoints before [variable top] should give
-* a primary ce of 0.
-*/
-static void TestVariableTop(void) {
-    const char       *str          = "[alternate shifted] &B [variable top]";
-          int         len          = strlen(str);
-          UChar      *rules;
-          UCollator  *myCollation;
-          UCollator  *enCollation;
-          UErrorCode  status       = U_ZERO_ERROR;
-          UChar       source[1];
-          UChar       ch;
-          uint8_t     result[20];
-
-    rules = (UChar*)malloc(sizeof(UChar*) * (len + 1));
-    u_uastrcpy(rules, str);
-
-    enCollation = ucol_open("en_US", &status);
-    myCollation = ucol_openRules(rules, len, UCOL_NO_NORMALIZATION,
-                                 UCOL_PRIMARY, &status);
-    if (U_FAILURE(status)) {
-        log_err("ERROR: in creation of rule based collator :%s\n",
-                myErrorName(status));
-    }
-
-    ucol_setStrength(enCollation, UCOL_PRIMARY);
-    ucol_setAttribute(enCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED,
-                      &status);
-    ucol_setAttribute(myCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED,
-                      &status);
-    if (ucol_getAttribute(myCollation, UCOL_ALTERNATE_HANDLING, &status) !=
-        UCOL_SHIFTED || U_FAILURE(status)) {
-        log_err("ERROR: ALTERNATE_HANDLING value can not be set to SHIFTED\n");
-    }
-
-    /* space is supposed to be a variable */
-    source[0] = ' ';
-    len = ucol_getSortKey(enCollation, source, 1, result,
-                          sizeof(result));
-
-    ch = 'A';
-    while (ch < 'z') {
-        source[0] = ch;
-        len = ucol_getSortKey(enCollation, source, 1, result,
-                              sizeof(result));
-        len = ucol_getSortKey(myCollation, source, 1, result,
-                              sizeof(result));
-        ch ++;
-    }
-
-    free(rules);
-    ucol_close(enCollation);
-    ucol_close(myCollation);
-    enCollation = NULL;
-    myCollation = NULL;
 }
 
 static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size) {
@@ -1580,7 +1524,7 @@ static void TestUnmappedSpaces(void) {
   UCollator *uca = ucol_open("", &status);
   for(u = 0; u < 0xFFFF; u++) {
     if(ucmp32_get(uca->mapping, u) == UCOL_NOT_FOUND) {
-      log_verbose("%04X ", u);
+      log_verbose("Codepoint %04X doesn't get mapped in the UCA!\n", u);
     }
   }
   ucol_close(uca);
@@ -1702,23 +1646,21 @@ static void TestJ815() {
 "& a < b < c < d& a < m",                                   "& a < m < b < c < d",
 "& a <<< b << c < d& a < m",                                "& a <<< b << c < m < d",
 "& a < b < c < d& [before 1] c < m",                        "& a < b < m < c < d",
-"& a << b <<< c << d <<< e& [before 3] e <<< x",            "& a << b <<< c << d <<< x <<< e",
-"& a << b <<< c << d <<< e& [before 2] e <<< x",            "& a << b <<< c <<< x << d <<< e",
-"& a << b <<< c << d <<< e& [before 1] e <<< x",            "& a <<< x << b <<< c << d <<< e",
-"& a << b <<< c << d <<< e <<< f < g& [before 1] e < x",    "& a << b <<< c << d <<< e <<< f < x < g",
+"& a < b <<< c << d <<< e& [before 3] e <<< x",            "& a < b <<< c << d <<< x <<< e",
+"& a < b <<< c << d <<< e& [before 2] e <<< x",            "& a < b <<< c <<< x << d <<< e",
+"& a < b <<< c << d <<< e& [before 1] e <<< x",            "& a <<< x < b <<< c << d <<< e",
+"& a < b <<< c << d <<< e <<< f < g& [before 1] g < x",    "& a < b <<< c << d <<< e <<< f < x < g",
 */
 static void TestRedundantRules() {
   int32_t i;
 
   const static char *rules[] = {
-    "&AE <<< a << b <<< c &d <<< f",
-    "&AE <<< a <<< b << c << d < e < f <<< g",
-    "&AE <<< B <<< C / D <<< F",
-    "& a << b <<< c << d <<< e& [before 1] e <<< x",
+    "& a <<< b <<< c << d <<< e& [before 1] e <<< x",
+    "& a < b <<< c << d <<< e& [before 1] e <<< x",
     "& a < b < c < d& [before 1] c < m",
-    "& a << b <<< c << d <<< e& [before 3] e <<< x",
-    "& a << b <<< c << d <<< e& [before 2] e <<< x",
-    "& a << b <<< c << d <<< e <<< f < g& [before 1] e < x",
+    "& a < b <<< c << d <<< e& [before 3] e <<< x",
+    "& a < b <<< c << d <<< e& [before 2] e <<< x",
+    "& a < b <<< c << d <<< e <<< f < g& [before 1] g < x",
     "& a <<< b << c < d& a < m",
     "&a<b<<b\\u0301 &z<b",
     "&z<m<<<q<<<m",
@@ -1730,14 +1672,12 @@ static void TestRedundantRules() {
   };
 
   const static char *expectedRules[] = {
-    "&A <<< a / E << b / E <<< c /E  &d <<< f",
-    "&A <<< a / E <<< b / E << c / E << d / E < e < f <<< g",
-    "&A <<< B / E <<< C / ED <<< F / E",
-    "& a <<< x << b <<< c << d <<< e",
+    "&\\u3029<<<x",
+    "& a <<< x < b <<< c << d <<< e",
     "& a < b < m < c < d",
-    "& a << b <<< c << d <<< x <<< e",
-    "& a << b <<< c <<< x << d <<< e",
-    "& a << b <<< c << d <<< e <<< f < x < g",
+    "& a < b <<< c << d <<< x <<< e",
+    "& a < b <<< c <<< x << d <<< e",
+    "& a < b <<< c << d <<< e <<< f < x < g",
     "& a <<< b << c < m < d",
     "&a<b\\u0301 &z<b",
     "&z<q<<<m",
@@ -1749,9 +1689,7 @@ static void TestRedundantRules() {
   };
 
   const static char *testdata[][8] = {
-    {"AE", "a", "b", "c"},
-    {"AE", "a", "b", "c", "d", "e", "f", "g"},
-    {"AE", "B", "C"}, /* / ED <<< F / E"},*/
+    {"\\u3029", "x"},
     {"a", "x", "b", "c", "d", "e"},
     {"a", "b", "m", "c", "d"},
     {"a", "b", "c", "d", "x", "e"},
@@ -1768,9 +1706,7 @@ static void TestRedundantRules() {
   };
 
   const static uint32_t testdatalen[] = {
-    4,
-      8,
-      3,
+    2,
       6,
       5,
       6,
@@ -1801,7 +1737,7 @@ static void TestRedundantRules() {
     rlen = u_unescape(expectedRules[i], rlz, 2048);
     cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
 
-    testAgainstUCA(cresulting, credundant, 0, "expected", &status);
+    testAgainstUCA(cresulting, credundant, 0, "expected", TRUE, &status);
 
     ucol_close(credundant);
     ucol_close(cresulting);
@@ -1811,6 +1747,59 @@ static void TestRedundantRules() {
     genericRulesStarter(rules[i], testdata[i], testdatalen[i]);
   }
 
+}
+
+static void TestExpansionSyntax() {
+  int32_t i;
+
+  const static char *rules[] = {
+    "&AE <<< a << b <<< c &d <<< f",
+    "&AE <<< a <<< b << c << d < e < f <<< g",
+    "&AE <<< B <<< C / D <<< F"
+  };
+
+  const static char *expectedRules[] = {
+    "&A <<< a / E << b / E <<< c /E  &d <<< f",
+    "&A <<< a / E <<< b / E << c / E << d / E < e < f <<< g",
+    "&A <<< B / E <<< C / ED <<< F / E"
+  };
+
+  const static char *testdata[][8] = {
+    {"AE", "a", "b", "c"},
+    {"AE", "a", "b", "c", "d", "e", "f", "g"},
+    {"AE", "B", "C"} /* / ED <<< F / E"},*/
+  };
+
+  const static uint32_t testdatalen[] = {
+      4,
+      8,
+      3
+  };
+
+
+
+  UCollator *credundant = NULL;
+  UCollator *cresulting = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  UChar rlz[2048] = { 0 };
+  uint32_t rlen = 0;
+
+  for(i = 0; i<sizeof(rules)/sizeof(rules[0]); i++) {
+    log_verbose("testing rule %s, expected to be %s\n", rules[i], expectedRules[i]);
+    rlen = u_unescape(rules[i], rlz, 2048);
+    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+    rlen = u_unescape(expectedRules[i], rlz, 2048);
+    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+
+    // testAgainstUCA(cresulting, credundant, 0, "expected", TRUE, &status);
+
+    ucol_close(credundant);
+    ucol_close(cresulting);
+
+    log_verbose("testing using data\n");
+
+    genericRulesStarter(rules[i], testdata[i], testdatalen[i]);
+  }
 }
 
 static void TestCase( )
@@ -2297,14 +2286,13 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
     addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
     addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");
+    addTest(root, &TestExpansionSyntax, "tscoll/cmsccoll/TestExpansionSyntax");
     addTest(root, &TestHangulTailoring, "tscoll/cmsccoll/TestHangulTailoring");
-    /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
-    /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/
-    /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
-    /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
+    addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");
     addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
-    /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/
     addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
+    /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
+    /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
 }
 
