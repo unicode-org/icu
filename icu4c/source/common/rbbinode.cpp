@@ -162,14 +162,22 @@ RBBINode *RBBINode::cloneTree() {
 //                      references with a copy of the variable's definition.
 //                      Aside from variables, the tree is not changed.
 //
+//                      Return the root of the tree.  If the root was not a variable
+//                      reference, it remains unchanged - the root we started with
+//                      is the root we return.  If, however, the root was a variable
+//                      reference, the root of the newly cloned replacement tree will
+//                      be returned.
+//
 //                      This function works by recursively walking the tree
 //                      without doing anything until a variable reference is
 //                      found, then calling cloneTree() at that point.  Any
 //                      nested references are handled by cloneTree(), not here.
 //
 //-------------------------------------------------------------------------
-void RBBINode::flattenVariables() {
-    U_ASSERT(fType != varRef);
+RBBINode *RBBINode::flattenVariables() {
+    if (fType == varRef) {
+        return fLeftChild->cloneTree();
+    }
 
     if (fLeftChild != NULL) {
         if (fLeftChild->fType==varRef) {
@@ -181,7 +189,7 @@ void RBBINode::flattenVariables() {
             fLeftChild->flattenVariables();
         }
     }
-
+    
     if (fRightChild != NULL) {
         if (fRightChild->fType==varRef) {
             RBBINode *oldChild   = fRightChild;
@@ -192,6 +200,7 @@ void RBBINode::flattenVariables() {
             fRightChild->flattenVariables();
         }
     }
+    return this;
 }
 
 

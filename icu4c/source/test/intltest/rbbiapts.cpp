@@ -690,6 +690,31 @@ void RBBIAPITest::TestWordStatus() {
 }
 
 
+//
+//   Bug 2190 Regression test.   Builder crash on rule consisting of only a
+//                               $variable reference
+void RBBIAPITest::TestBug2190() {
+     UnicodeString rulesString1 = "$aaa = abcd;\n"
+                                  "$bbb = $aaa;\n"
+                                  "$bbb;\n";
+     UnicodeString testString1  = "abcdabcd";
+                                // 01234567890
+     int32_t bounds1[] = {0, 4, 8};
+     UErrorCode status=U_ZERO_ERROR;
+     UParseError    parseError;
+     
+     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
+     if(U_FAILURE(status)) {
+         errln("FAIL : in construction");
+     } else {
+         bi->setText(testString1);
+         doBoundaryTest(*bi, testString1, bounds1);
+     }
+     delete bi;
+}
+
+
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -699,17 +724,18 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     if (exec) logln((UnicodeString)"TestSuite RuleBasedBreakIterator API ");
     switch (index) {
      //   case 0: name = "TestConstruction"; if (exec) TestConstruction(); break;
-        case 0: name = "TestCloneEquals"; if (exec) TestCloneEquals(); break;
-        case 1: name = "TestgetRules"; if (exec) TestgetRules(); break;
-        case 2: name = "TestHashCode"; if (exec) TestHashCode(); break;
-        case 3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
-        case 4: name = "TestFirstNextFollowing"; if (exec) TestFirstNextFollowing(); break;
-        case 5: name = "TestLastPreviousPreceding"; if (exec) TestLastPreviousPreceding(); break;
-        case 6: name = "TestIsBoundary"; if (exec) TestIsBoundary(); break;
-        case 7: name = "TestBuilder"; if (exec) TestBuilder(); break;
-        case 8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
-        case 9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
-                   
+        case  0: name = "TestCloneEquals"; if (exec) TestCloneEquals(); break;
+        case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
+        case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
+        case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
+        case  4: name = "TestFirstNextFollowing"; if (exec) TestFirstNextFollowing(); break;
+        case  5: name = "TestLastPreviousPreceding"; if (exec) TestLastPreviousPreceding(); break;
+        case  6: name = "TestIsBoundary"; if (exec) TestIsBoundary(); break;
+        case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
+        case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
+        case  9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
+        case 10: name = "TestBug2190"; if (exec) TestBug2190(); break;
+
         default: name = ""; break; /*needed to end loop*/
     }
 }

@@ -73,6 +73,8 @@ public:
      */
     void TestWordStatus();
 
+    void TestBug2190();
+
     /**
      *Internal subroutines
      **/

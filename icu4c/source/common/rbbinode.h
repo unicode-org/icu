@@ -83,7 +83,7 @@ class RBBINode : public UObject {
         ~RBBINode();
         
         RBBINode    *cloneTree();
-        void         flattenVariables();
+        RBBINode    *flattenVariables();
         void         flattenSets();
         void         findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &status);
 
