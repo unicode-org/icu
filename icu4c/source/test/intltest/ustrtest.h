@@ -71,6 +71,9 @@ public:
      * Test the unescape() function.
      */
     void TestUnescape(void);
+
+    void _testUnicodeStringHasMoreChar32Than(const UnicodeString &s, int32_t start, int32_t length, int32_t number);
+    void TestCountChar32(void);
 };
 
 class StringCaseTest: public IntlTest {
