@@ -47,14 +47,12 @@
         <ul class="TOC">
           <li><a href="#NewsUnicodeVer">Support for Unicode 3.1</a></li>
 
-          <li><a href="#NewsLicense">License Change from IPL to the X
-          license</a></li>
-
-          <li><a href="#NewsCollation">Collation Improvements</a></li>
-
           <li><a href="#NewsTranslit">Transliterator Improvements</a></li>
 
           <li><a href="#NewsUnicodeSet">UnicodeSet Improvements</a></li>
+
+          <li><a href="#NewsLicense">License Change from IPL to the X
+          license</a></li>
         </ul>
       </li>
 
@@ -167,6 +165,200 @@
     versions of ICU already supported Unicode 3.0 data with UTF-16 surrogate
     pairs.</p>
 
+    <h3><a name="NewsTranslit">Transliterator Improvements</a></h3>
+
+    <p>The transliterator service has undergone an extensive overhaul, in
+    both the rule-based engine and the built-in system rules.</p>
+
+    <ul>
+      <li><b>New or rewritten rules:</b> <tt>Any-Accents</tt>,
+      <tt>Any-Publishing</tt>, <tt>Cyrillic-Latin</tt>*,
+      <tt>Greek-Latin</tt>*, <tt>Greek-Latin/UNGEGN</tt> (aka
+      <tt>el-Latin</tt>), <tt>Hiragana-Latin</tt>*, and
+      <tt>Latin-Katakana</tt>*.  New algorithmic rules include
+      <tt>Any-Name</tt>*, the normalization rules <tt>Any-NFC</tt>,
+      <tt>Any-NFKC</tt>, <tt>Any-NFD</tt>, and <tt>Any-NFKD</tt>, casing
+      rules <tt>Any-Upper</tt>, <tt>Any-Lower</tt>, and <tt>Any-Title</tt>.
+      <tt>Unicode-Hex</tt>* has been renamed <tt>Any-Hex</tt>*.
+      <tt>Any-Remove</tt> deletes its input. [*<em>applies to reverse rule as
+      well</em>]</li>
+
+      <li><b>Indic script rules:</b> Transliterators between Indic scripts
+      and from each script to and from Latin have been completely revised.
+      Scripts included are Bengali, Devanagari, Gujarati, Gurmukhi, Kannada,
+      Malayalam, Oriya, Tamil, and Telugu. Taking Bengali as an example,
+      transliterators <tt>Bengali-X</tt> and <tt>X-Bengali</tt> exist, where
+      X is any of the other listed Indic scripts, or Latin.</li>
+
+      <li><b>Deleted rules:</b> <tt>UnicodeName-UnicodeChar</tt> has been
+      replaced by <tt>Any-Name</tt>*. <tt>Latin-Arabic</tt>* and
+      <tt>Latin-Hebrew</tt>* have been removed until they can be rewritten.
+      <tt>KeyboardEscape-Latin1</tt> has been replaced by
+      <tt>Any-Accents</tt> and <tt>Any-Publishing</tt>. <tt>Latin-Kana</tt>*
+      has been replaced by <tt>Latin-Katakana</tt>* and
+      <tt>Latin-Hiragana</tt>*. [*<em>applies to reverse rule as
+      well</em>]</li>
+
+      <li><b>ID syntax changes:</b> Transliterator IDs ignore case and
+      whitespace now. They now have the standard form
+      <em>[filter]source-target/variant</em>. The "<em>[filter]</em>" element
+      is optional; if present, it limits the characters that the
+      transliterator operates on. The "<em>source-</em>" element is optional;
+      if omitted, it is taken to be <tt>Any</tt>. The "<em>/variant</em>"
+      element is also optional; if present, it selects between different
+      flavors of a related set of transliterators, for example,
+      <tt>Greek-Latin</tt> and <tt>Greek-Latin/UNGEGN</tt>. The source,
+      target, and variant specifiers are case-insensitive strings of the form
+      <tt>/[_[:L:]][_[:L:][:N:]]*/</tt>.</li>
+    
+      <li>
+        <b>Locale support:</b> The source, target, or both may be locales. In
+        this case the transliterator rules will be looked up in the system
+        locale resource bundles. Rules are sought under three tags, listed
+        below. The text after the underscore in each tag is always
+        canonicalized to uppercase before lookup. <em>Note: The underscore is
+        currently omitted from ICU4C tags, but will be restored when
+        possible.</em> 
+
+        <ul>
+          <li><tt>TransliterateTo_<em>SCRIPT</em></tt>: Unidirectional rules
+          from the enclosing locale to another script or specifier.</li>
+
+          <li><tt>TransliterateFrom_<em>SCRIPT</em></tt>: Unidirectional
+          rules from another script or specifier to the enclosing
+          locale.</li>
+
+          <li><tt>Transliterate_<em>SCRIPT</em></tt>: Bidirectional rules,
+          with the forward direction being To and the reverse direction being
+          From.</li>
+        </ul>
+        Lookup proceeds in the following order: 
+
+        <ul>
+          <li>In the dynamic registry: <em>source-target</em></li>
+
+          <li>In the <em>source</em> locale:
+          <tt>TransliterateTo_<em>TARGET</em></tt> then
+          <tt>Transliterate_<em>TARGET</em></tt> (forward direction)</li>
+
+          <li>In the <em>target</em> locale:
+          <tt>TransliterateFrom_<em>SOURCE</em></tt> then
+          <tt>Transliterate_<em>SOURCE</em></tt> (reverse direction)</li>
+        </ul>
+
+        If either the source or target specifier is not a locale then the
+        corresponding locale lookup is skipped. If either is a locale, then
+        locale fallback from <tt>aa_BB_CCC</tt> to <tt>aa_BB</tt> to
+        <tt>aa</tt> is performed (where <tt>aa</tt>, <tt>BB</tt>, and
+        <tt>CCC</tt> are the locale language, country, and variant). The
+        final fallback is from the specifier, whether it is a locale or not
+        (e.g., script abbreviation), to the long script name associated with
+        that specifier. If a tag lookup succeeds, the attached element should
+        be a string array of <i>2n</i> items where <i>n</i> &gt;= 1. Each
+        pair of strings is a variant name and rule string. The variants are
+        matched against the requested variant. If no variant is specified
+        then the first variant is considered to match.
+      </li>
+
+      <li><b>Filters on compounds IDs:</b> A filter on a compound
+      transliterator can now be specified by giving a leading entry that
+      contains a filter and no transliterator ID. For example, "<tt>[abc];
+      Latin-Katakana; Katakana-Hiragana</tt>" submits only the characters
+      contained in the UnicodeSet <tt>[abc]</tt> to the compound
+      transliterator <tt>Latin-Katakana; Katakana-Hiragana</tt>.</li>
+    
+      <li><b>Explicit reverse IDs:</b> Typically if a transliterator
+      <tt>A-B</tt> is formed, and its inverse is requested, the system tries
+      to create <tt>B-A</tt>. That is, the source and target are exchanged.
+      In some cases, the user may wish a different transliterator to be
+      considered the reverse. In order to do this, the reverse ID is
+      specified in parentheses immediately following the ID. For example,
+      "<tt>A-B (B-C)</tt>" is a transliterator <tt>A-B</tt> whose inverse is
+      <tt>B-C</tt>. If the ID of the inverse is requested, "<tt>B-C
+      (A-B)</tt>" is returned. The forward or reverse component may be empty,
+      so "<tt>(B-C)</tt>" and "<tt>A-B()</tt>" are legal IDs with
+      <tt>Null</tt> transliterator for the forward and reverse direction,
+      respectively. This is most useful in compounds where one element has no
+      inverse or where a different inverse from the standard inverse is
+      desired. For example, "<tt>Any-Lower(); Latin-Cyrillic</tt>".</li>
+
+      <li><b>Quantifiers:</b> Transliterator rules may now contain
+      quantifiers '<tt>*</tt>', '<tt>+</tt>', and '<tt>?</tt>'. These
+      indicate zero or more, one or more, and zero or one matches,
+      respectively. Quantifiers apply to the last element, be it a single
+      character, a UnicodeSet, a segment definition, or a quote; the entire
+      preceding element is repeated. Quantifiers are implemented as greedy,
+      non-backtracking matchers, unlike their typical implementation in
+      regular expressions. As a result, expressions that match in a
+      traditional regular expression engine (e.g., Perl) will not match in
+      transliterator. E.g., "[a-z]+ q &gt; x;" will <em>not</em> match
+      "abcq", since the '<tt>+</tt>' quantifier consumes all four
+      characters.</li>
+
+      <li><b>Dot character:</b> A new special character is recognized in
+      rules, '<tt>.</tt>' (U+0020). This character matches any characters in
+      the set <tt>[^[:Zp:][:Zl:]\r\n$]</tt>. Note the trailing '<tt>$</tt>'
+      in the set pattern, which indicates that the ETHER character is
+      <em>not</em> matched by '<tt>.</tt>'.</li>
+
+      <li><b>::ID blocks in rules:</b> Transliterator IDs may now be included
+      in rule sets. These may occur in two locations: as one contiguous block
+      before any other rules, and as one contiguous block after all rules.
+      The effect of placing <tt>::ID</tt>s into a rule set is to enclose the
+      rule-based transliterator within a compound transliterator containing
+      the indicated IDs. The <tt>::ID</tt> syntax is exactly the same as the
+      standard ID syntax, with the difference that each ID element is
+      preceded by the special token "<tt>::</tt>".</li>
+
+      <li><b>Segment definitions more flexible:</b> Segment definitions may
+      be nested and are now unlimited in number. Prior to 2.0, segments could
+      not be nested and were limited to nine ($1 to $9).</li>
+
+      <li><b>Variable range pragma:</b> A new pragma is supported. This
+      follows the syntax:<code>use variable range 0xE800 0xEFFF;</code> (Any
+      two code points may be specified.) The code points are specified as
+      decimal constants, octal constants with a leading '0', or hexadecimal
+      constants with a leading "0x". The given range is used internally for
+      stand-in characters during processing. The default range is
+      <b>0xF000..0xF8FF</b>. If a rule set explicitly uses characters in the
+      default variable range, a new range, not containing any characters in
+      use in the rule set, must be specified. <em>Note:</em> This is the
+      first of several planned pragmas.</li>
+
+      <li><b>Factory method registration:</b> Factory methods (function
+      pointers in ICU4C; functor objects in ICU4J) may be registered against
+      transliterator IDs. This is generally more efficient than the
+      registration of singleton prototypes, since no actual transliterator
+      object need be created until the user requires one. See the
+      <tt>registerFactory()</tt> method in <tt>Transliterator</tt>.</li>
+
+      <li><b>Filtering semantics changed for subclasses:</b> Subclasses now
+      need not concern themselves with filters. Instead, they may assume that
+      all characters received by <tt>handleTransliterate()</tt> have already
+      passed through the filter. This simplifies subclass code greatly.</li>
+    </ul>
+
+    <h3><a name="NewsUnicodeSet">UnicodeSet Improvements</a></h3>
+
+    <ul>
+      <li><b><tt>[:Any:]</tt> set:</b> The set <tt>[:Any:]</tt> matches all
+      Unicode code points, that is, U+0000..U+10FFFF.</li>
+
+      <li><b><tt>\p{}</tt> syntax:</b> UnicodeSet now recognizes a Perlish
+      syntax for character properties. Any property designated as
+      <tt>[:Foo:]</tt> may equivalently be designated <tt>\p{Foo}</tt>.</li>
+
+      <li><b>Short, medium, and long property names:</b> In addition to the
+      short property names, such as <tt>[:Ll:]</tt>, equivalent medium (e.g.,
+      <tt>[:gc=Ll:]</tt>) and long (e.g.,
+      <tt>[:GeneralCategory=LowercaseLetter:]</tt>) forms are recongized. See
+      the <a href=
+      "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">
+      UnicodeSet Properties design document</a> for details. As of this
+      release, general categories, numeric value, and script are
+      supported.</li>
+    </ul>
+
     <h3><a name="NewsLicense">License Change</a></h3>
 
     <p>The ICU projects (ICU4C and ICU4J) have changed their licenses from
@@ -192,218 +384,6 @@
     the <a href=
     "http://oss.software.ibm.com/icu/project_faq.html#license">Project
     FAQ</a>.</p>
-
-    <h3><a name="NewsCollation">Collation Improvements</a></h3>
-
-    <p>The collation framework has been reimplemented to make it faster,
-    Unicode Collation Algorithm compliant, and to make the locale-specific
-    collation data smaller (by separating it from the shared UCA data).<br>
-     <em>Sort keys and even some collation results have changed from ICU 1.6
-    and ICU 1.7.</em><br>
-     For details, see our <a href=
-    "http://oss.software.ibm.com/icu/develop/collation/">collation design
-    document</a>.</p>
-
-    <h3><a name="NewsTranslit">Transliterator Improvements</a></h3>
-
-    <p>The transliterator service has undergone an extensive overhaul,
-    in both the rule-based engine and the built-in system rules.
-
-    <ul>
-
-    <li><b>New or rewritten rules:</b> <tt>Any-Accents</tt>,
-    <tt>Any-Publishing</tt>, <tt>Cyrillic-Latin</tt>*,
-    <tt>Greek-Latin</tt>*, <tt>Greek-Latin/UNGEGN</tt> (aka
-    <tt>el-Latin</tt>), <tt>Hiragana-Latin</tt>*, and
-    <tt>Latin-Katakana</tt>*.  New algorithmic rules include
-    <tt>Any-Name</tt>*, the normalization rules <tt>Any-NFC</tt>,
-    <tt>Any-NFKC</tt>, <tt>Any-NFD</tt>, and <tt>Any-NFKD</tt>, casing
-    rules <tt>Any-Upper</tt>, <tt>Any-Lower</tt>, and
-    <tt>Any-Title</tt>.  <tt>Unicode-Hex</tt>* has been renamed
-    <tt>Any-Hex</tt>*.  <tt>Any-Remove</tt> deletes its input.
-    [*<em>applies to reverse rule as well</em>]
-
-    <li><b>Indic script rules:</b> Transliterators between Indic
-    scripts and from each script to and from Latin have been
-    completely revised.  Scripts included are Bengali, Devanagari,
-    Gujarati, Gurmukhi, Kannada, Malayalam, Oriya, Tamil, and Telugu.
-    Taking Bengali as an example, transliterators <tt>Bengali-X</tt>
-    and <tt>X-Bengali</tt> exist, where X is any of the other listed
-    Indic scripts, or Latin.
-
-    <li><b>Deleted rules:</b> <tt>UnicodeName-UnicodeChar</tt> has
-    been replaced by <tt>Any-Name</tt>*.  <tt>Latin-Arabic</tt>* and
-    <tt>Latin-Hebrew</tt>* have been removed until they can be
-    rewritten.  <tt>KeyboardEscape-Latin1</tt> has been replaced by
-    <tt>Any-Accents</tt> and <tt>Any-Publishing</tt>.
-    <tt>Latin-Kana</tt>* has been replaced by <tt>Latin-Katakana</tt>*
-    and <tt>Latin-Hiragana</tt>*.
-    [*<em>applies to reverse rule as well</em>]
-
-    <li><b>ID syntax changes:</b> Transliterator IDs ignore case and
-    whitespace now.  They now have the standard form
-    <em>[filter]source-target/variant</em>.  The "<em>[filter]</em>"
-    element is optional; if present, it limits the characters that the
-    transliterator operates on.  The "<em>source-</em>" element is
-    optional; if omitted, it is taken to be <tt>Any</tt>.  The
-    "<em>/variant</em>" element is also optional; if present, it
-    selects between different flavors of a related set of
-    transliterators, for example, <tt>Greek-Latin</tt> and
-    <tt>Greek-Latin/UNGEGN</tt>.  The source, target, and variant
-    specifiers are case-insensitive strings of the form
-    <tt>/[_[:L:]][_[:L:][:N:]]*/</tt>.
-    
-    <li><b>Locale support:</b> The source, target, or both may be
-    locales.  In this case the transliterator rules will be looked up
-    in the system locale resource bundles.  Rules are sought under
-    three tags, listed below.  The text after the underscore in each
-    tag is always canonicalized to uppercase before lookup.  <em>Note:
-    The underscore is currently omitted from ICU4C tags, but will be
-    restored when possible.</em>
-
-    <ul><li><tt>TransliterateTo_<em>SCRIPT</em></tt>: 
-    Unidirectional rules from the enclosing locale to another script
-    or specifier.
-    <li><tt>TransliterateFrom_<em>SCRIPT</em></tt>: 
-    Unidirectional rules from another script
-    or specifier to the enclosing locale.
-    <li><tt>Transliterate_<em>SCRIPT</em></tt>:
-    Bidirectional rules, with the forward direction being To and
-    the reverse direction being From.
-    </ul>
-
-    Lookup proceeds in the following order:
-
-    <ul><li>In the dynamic registry:  <em>source-target</em>
-    <li>In the <em>source</em> locale:
-    <tt>TransliterateTo_<em>TARGET</em></tt> then
-    <tt>Transliterate_<em>TARGET</em></tt> (forward direction)
-    <li>In the <em>target</em> locale:
-    <tt>TransliterateFrom_<em>SOURCE</em></tt> then
-    <tt>Transliterate_<em>SOURCE</em></tt> (reverse direction)
-    </ul>
-
-    If either the source or target specifier is not a locale then the
-    corresponding locale lookup is skipped.  If either is a locale,
-    then locale fallback from <tt>aa_BB_CCC</tt> to <tt>aa_BB</tt> to
-    <tt>aa</tt> is performed (where <tt>aa</tt>, <tt>BB</tt>, and
-    <tt>CCC</tt> are the locale language, country, and variant).  The
-    final fallback is from the specifier, whether it is a locale or
-    not (e.g., script abbreviation), to the long script name
-    associated with that specifier.  If a tag lookup succeeds, the
-    attached element should be a string array of <i>2n</i> items where
-    <i>n</i> >= 1.  Each pair of strings is a variant name and rule
-    string.  The variants are matched against the requested variant.
-    If no variant is specified then the first variant is considered to
-    match.
-
-    <li><b>Filters on compounds IDs:</b> A filter on a compound
-    transliterator can now be specified by giving a leading entry that
-    contains a filter and no transliterator ID.  For example,
-    "<tt>[abc]; Latin-Katakana; Katakana-Hiragana</tt>" submits only
-    the characters contained in the UnicodeSet <tt>[abc]</tt> to the
-    compound transliterator <tt>Latin-Katakana;
-    Katakana-Hiragana</tt>.
-    
-    <li><b>Explicit reverse IDs:</b> Typically if a transliterator
-    <tt>A-B</tt> is formed, and its inverse is requested, the system
-    tries to create <tt>B-A</tt>.  That is, the source and target are
-    exchanged.  In some cases, the user may wish a different
-    transliterator to be considered the reverse.  In order to do this,
-    the reverse ID is specified in parentheses immediately following
-    the ID.  For example, "<tt>A-B (B-C)</tt>" is a transliterator
-    <tt>A-B</tt> whose inverse is <tt>B-C</tt>.  If the ID of the
-    inverse is requested, "<tt>B-C (A-B)</tt>" is returned.  The
-    forward or reverse component may be empty, so "<tt>(B-C)</tt>" and
-    "<tt>A-B()</tt>" are legal IDs with <tt>Null</tt> transliterator
-    for the forward and reverse direction, respectively.  This is most
-    useful in compounds where one element has no inverse or where a
-    different inverse from the standard inverse is desired.  For
-    example, "<tt>Any-Lower(); Latin-Cyrillic</tt>".
-
-    <li><b>Quantifiers:</b> Transliterator rules may now contain
-    quantifiers '<tt>*</tt>', '<tt>+</tt>', and '<tt>?</tt>'.  These
-    indicate zero or more, one or more, and zero or one matches,
-    respectively.  Quantifiers apply to the last element, be it a
-    single character, a UnicodeSet, a segment definition, or a quote;
-    the entire preceding element is repeated.  Quantifiers are
-    implemented as greedy, non-backtracking matchers, unlike their
-    typical implementation in regular expressions.  As a result,
-    expressions that match in a traditional regular expression engine
-    (e.g., Perl) will not match in transliterator.  E.g., "[a-z]+ q >
-    x;" will <em>not</em> match "abcq", since the '<tt>+</tt>'
-    quantifier consumes all four characters.
-
-    <li><b>Dot character:</b> A new special character is recognized in
-    rules, '<tt>.</tt>' (U+0020).  This character matches any
-    characters in the set <tt>[^[:Zp:][:Zl:]\r\n$]</tt>.  Note the
-    trailing '<tt>$</tt>' in the set pattern, which indicates that the
-    ETHER character is <em>not</em> matched by '<tt>.</tt>'.
-
-    <li><b>::ID blocks in rules:</b> Transliterator IDs may now be
-    included in rule sets.  These may occur in two locations: as one
-    contiguous block before any other rules, and as one contiguous
-    block after all rules.  The effect of placing <tt>::ID</tt>s into
-    a rule set is to enclose the rule-based transliterator within a
-    compound transliterator containing the indicated IDs.  The
-    <tt>::ID</tt> syntax is exactly the same as the standard ID
-    syntax, with the difference that each ID element is preceded by
-    the special token "<tt>::</tt>".
-
-    <li><b>Segment definitions more flexible:</b> Segment definitions
-    may be nested and are now unlimited in number.  Prior to 2.0,
-    segments could not be nested and were limited to nine ($1 to $9).
-
-    <li><b>Variable range pragma:</b> A new pragma is supported.  This
-    follows the syntax:<code>use variable range 0xE800 0xEFFF;</code>
-    (Any two code points may be specified.)  The code points are
-    specified as decimal constants, octal constants with a leading
-    '0', or hexadecimal constants with a leading "0x".  The given
-    range is used internally for stand-in characters during
-    processing.  The default range is <b>0xF000..0xF8FF</b>.  If a
-    rule set explicitly uses characters in the default variable range,
-    a new range, not containing any characters in use in the rule set,
-    must be specified.  <em>Note:</em> This is the first of several
-    planned pragmas.
-
-    <li><b>Factory method registration:</b> Factory methods (function
-    pointers in ICU4C; functor objects in ICU4J) may be registered
-    against transliterator IDs.  This is generally more efficient than
-    the registration of singleton prototypes, since no actual
-    transliterator object need be created until the user requires one.
-    See the <tt>registerFactory()</tt> method in
-    <tt>Transliterator</tt>.
-
-    <li><b>Filtering semantics changed for subclasses:</b> Subclasses
-    now need not concern themselves with filters.  Instead, they may
-    assume that all characters received by
-    <tt>handleTransliterate()</tt> have already passed through the
-    filter.  This simplifies subclass code greatly.
-
-    </ul>
-
-    <h3><a name="NewsUnicodeSet">UnicodeSet Improvements</a></h3>
-
-    <ul>
-
-    <li><b><tt>[:Any:]</tt> set:</b> The set <tt>[:Any:]</tt> matches
-    all Unicode code points, that is, U+0000..U+10FFFF.
-
-    <li><b><tt>\p{}</tt> syntax:</b> UnicodeSet now recognizes a
-    Perlish syntax for character properties.  Any property designated
-    as <tt>[:Foo:]</tt> may equivalently be designated
-    <tt>\p{Foo}</tt>.
-   
-    <li><b>Short, medium, and long property names:</b> In addition to
-    the short property names, such as <tt>[:Ll:]</tt>, equivalent
-    medium (e.g., <tt>[:gc=Ll:]</tt>) and long (e.g.,
-    <tt>[:GeneralCategory=LowercaseLetter:]</tt>) forms are
-    recongized.  See the <a
-    href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">UnicodeSet
-    Properties design document</a> for details.  As of this release,
-    general categories, numeric value, and script are supported.
-
-    </ul>
 
     <h2><a name="WhatContain">What the International Components for Unicode
     Contain</a></h2>
@@ -1093,10 +1073,6 @@
       automatically.</li>
 
       <li>Change directory to the "icu/source".</li>
-
-      <li>If it is not already set, please set the executable flag for the
-      following files (by executing 'chmod +x' command): runConfigureICU,
-      configure, install-sh and config.*,</li>
 
       <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
       for your platform. If you are not using the runConfigureICU script or
