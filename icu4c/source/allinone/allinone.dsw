@@ -59,6 +59,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name genprops
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makedata
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -346,6 +349,42 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name toolutil
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "makedata"=..\tools\makedata.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name genccode
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencmn
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencnval
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gennames
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genrb
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gentz
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
     End Project Dependency
 }}}
 
