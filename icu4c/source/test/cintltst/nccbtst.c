@@ -1731,7 +1731,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         static const UChar
             out1[]={ UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfeff },
             out2[]={ UTF16_LEAD(0x0f1000), UTF16_TRAIL(0x0f1000), 0xfffe },
-            out3[]={ 0xfefe, UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xd840, 0xdc01 },
+            out3[]={ 0xfefe, UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfffd, 0xfffd },
             out4[]={ UTF16_LEAD(0x10203), UTF16_TRAIL(0x10203), 0xfffd, 0x4e00 };
 
         static const int32_t
