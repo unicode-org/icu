@@ -660,6 +660,46 @@ public:
   virtual UColAttributeValue getAttribute(UColAttribute attr,
                                           UErrorCode &status);
 
+  /** 
+   * Sets the variable top to a collation element value of a string supplied. 
+   * @param varTop one or more (if contraction) UChars to which the variable top should be set
+   * @param len length of variable top string. If -1 it is considered to be zero terminated.
+   * @param status error code. If error code is set, the return value is undefined. Errors set by this function are: <br>
+   *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
+   *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
+   * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
+   * @draft
+   */
+  virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status);
+
+  /** 
+   * Sets the variable top to a collation element value of a string supplied. 
+   * @param varTop an UnicodeString size 1 or more (if contraction) of UChars to which the variable top should be set
+   * @param status error code. If error code is set, the return value is undefined. Errors set by this function are: <br>
+   *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
+   *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
+   * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
+   * @draft
+   */
+  virtual uint32_t setVariableTop(const UnicodeString varTop, UErrorCode &status);
+
+  /** 
+   * Sets the variable top to a collation element value supplied. Variable top is set to the upper 16 bits. 
+   * Lower 16 bits are ignored.
+   * @param varTop CE value, as returned by setVariableTop or ucol)getVariableTop
+   * @param status error code (not changed by function)
+   * @draft
+   */
+  virtual void setVariableTop(const uint32_t varTop, UErrorCode &status);
+
+  /** 
+   * Gets the variable top value of a Collator. 
+   * Lower 16 bits are undefined and should be ignored.
+   * @param status error code (not changed by function). If error code is set, the return value is undefined.
+   * @draft
+   */
+  virtual uint32_t getVariableTop(UErrorCode &status) const;
+
   /**
    * Thread safe cloning operation.
    * @return pointer to the new clone, user should remove it.
