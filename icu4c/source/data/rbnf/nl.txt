@@ -10,8 +10,7 @@ nl {
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
-//     * Spellout rules for Dutch
-    // can someone supply me with information on negatives and decimals?
+
     SpelloutRules {
         "-x: min >>;\n"
         "x.x: << komma >>;\n"
@@ -29,9 +28,8 @@ nl {
         "100: << honderd[ >>];\n"
         "1000: << duizend[ >>];\n"
         "1,000,000: << miljoen[ >>];\n"
-        "1,000,000,000: << biljoen[ >>];\n"
-        "1,000,000,000,000: << triljoen[ >>];\n"
+        "1,000,000,000: << miljard[ >>];\n"
+        "1,000,000,000,000: << biljoen[ >>];\n"
         "1,000,000,000,000,000: =#,##0="
     }
-
 }
