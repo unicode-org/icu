@@ -262,12 +262,13 @@ rb_parse(FileStream *f,
   if(U_FAILURE(status)) return 0;
 
   /* Open the hashtable for saving data */
-  retval = uhash_open((UHashFunction)uhash_OLD_hashUString,
-                      uhash_OLD_pointerComparator, &status);
+  retval = uhash_open(uhash_hashUnicodeString,
+                      uhash_compareUnicodeString, &status);
   if(retval == 0 || U_FAILURE(status)) {
     status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
+  uhash_setKeyDeleter(retval, uhash_deleteUnicodeString);
   uhash_setValueDeleter(retval, RBHashtable_valueDeleter);
 
   /* Read the byte order mark from the file */
@@ -307,7 +308,7 @@ rb_parse(FileStream *f,
           uhash_close(retval);
           return 0;
       }
-      uhash_OLD_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
+      uhash_put(retval, new UnicodeString(listname),
 		   strlist, &status);
       if(U_FAILURE(status)) {
 	uhash_close(retval);
@@ -317,7 +318,7 @@ rb_parse(FileStream *f,
 
     case sSTRINGLIST2D:
       strlist2d = read_strlist2d(f, listname, status);
-      uhash_OLD_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
+      uhash_put(retval, new UnicodeString(listname),
 		   strlist2d, &status);
       if(U_FAILURE(status)) {
 	uhash_close(retval);
@@ -327,7 +328,7 @@ rb_parse(FileStream *f,
 
     case sTAGGEDLIST:
       taglist = read_taglist(f, listname, status);
-      uhash_OLD_putKey(retval, listname.hashCode() & 0x7FFFFFFF, 
+      uhash_put(retval, new UnicodeString(listname),
 		   taglist, &status);
       if(U_FAILURE(status)) {
 	uhash_close(retval);
