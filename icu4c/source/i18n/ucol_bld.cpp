@@ -1155,7 +1155,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
 
     /* add latin-1 stuff */
     if(U_SUCCESS(*status)) {
-
       for(u = 0; u<0x100; u++) {
         if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND 
           /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
@@ -1171,7 +1170,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           init_collIterate(src->UCA, decomp, 1, &colIt);
           while(CE != UCOL_NO_MORE_CES) {
             CE = ucol_getNextCE(src->UCA, &colIt, status);
-            /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
             if(CE != UCOL_NO_MORE_CES) {
               el.CEs[el.noOfCEs++] = CE;
             }
@@ -1194,32 +1192,81 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
       }
       uprv_uca_closeTempTable(tempTable);    
     }
-
-
     if(U_SUCCESS(*status)) {
+      /* copy contractions */
+      uint32_t ucaCE = UCOL_NOT_FOUND, tailoredCE = UCOL_NOT_FOUND;
+      uint16_t *conts = (uint16_t *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
+      while(*conts != 0) {
+        tailoredCE = ucmp32_get(tempColl->mapping, *conts);
+        if(tailoredCE != UCOL_NOT_FOUND) {
+          UBool isTailoredContraction = isContraction(tailoredCE);
+          el.cPoints = el.uchars;
+          el.noOfCEs = 0;
+          el.uchars[0] = *conts;
+          el.uchars[1] = *(conts+1);
+          if(*(conts+2)!=0) {
+            el.uchars[2] = *(conts+2);
+            el.cSize = 3;
+          } else {
+            el.cSize = 2;
+          }
+          UCollationElements *ucaEl = ucol_openElements(src->UCA, el.uchars, el.cSize, status);
+          UCollationElements *tailorEl = ucol_openElements(tempColl, el.uchars, el.cSize, status);
+          UBool needToAdd = TRUE;
+          if(isTailoredContraction) {
+            do {
+              el.CEs[el.noOfCEs] = ucol_next(ucaEl, status);
+              tailoredCE = ucol_next(tailorEl, status);
+              if(tailoredCE == el.CEs[el.noOfCEs]) {
+                el.noOfCEs++;
+              } else {
+                needToAdd = FALSE;
+                break;
+              }
+            } while(tailoredCE != UCOL_NULLORDER);
+
+            if(needToAdd == TRUE) {
+              el.noOfCEs--; // remove UCOL_NULLORDER
+              uprv_uca_addAnElement(t, &el, status);
+            }
+          } else { // if the tailored CE is not a contraction, we need to add this onelk
+            while ((el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
+              el.noOfCEs++;
+            }
+            uprv_uca_addAnElement(t, &el, status);
+          }
+
+        }
+        conts+=3;
+      }
+      if(U_SUCCESS(*status)) {
+        ucol_close(tempColl);
+        tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+        UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+        tempColl = ucol_initCollator(tempData, 0, status);
+
+        if(U_SUCCESS(*status)) {
+          tempColl->rb = NULL;
+          tempColl->hasRealData = TRUE;
+        }
+        uprv_uca_closeTempTable(tempTable);    
+      }
+
       /* produce canonical closure */
       for(u = 0; u < 0xFFFF; u++) {
         if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
           || (noOfDec == 1 && *decomp != (UChar)u))
         {
-          //el.noOfCEs = ucol_getDynamicCEs(src, t, decomp, noOfDec, el.CEs, 128, status);
-
           if(ucol_strcoll(tempColl, (UChar *)&u, 1, decomp, noOfDec) != UCOL_EQUAL) {
             el.uchars[0] = (UChar)u;
             el.cPoints = el.uchars;
             el.cSize = 1;
             el.noOfCEs = 0;
-            //uint32_t noOfCEs = 0;
-            //uint32_t currCE = 0;
             UCollationElements* colEl = ucol_openElements(tempColl, decomp, noOfDec, status);
 
             while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
-            //while((currCE = ucol_next(colEl, status)) != UCOL_NULLORDER) {
-              //if(currCE != el.CEs[noOfCEs]) {
-                //fprintf(stderr, "%04X[%d] %08X vs %08X\n", u, noOfCEs, currCE, el.CEs[noOfCEs]);
-              //}
               el.noOfCEs++;
-              //noOfCEs++;
             }
 
             uprv_uca_addAnElement(t, &el, status);

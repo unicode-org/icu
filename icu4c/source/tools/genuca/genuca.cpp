@@ -34,27 +34,12 @@
 #include <console.h>
 #endif
 
-/*UHashtable *elements = NULL;*/
 UCAElements le;
 
 /*
  * Global - verbosity
  */
 UBool VERBOSE = FALSE;
-
-/*
-void deleteElement(void *element) {
-    UCAElements *el = (UCAElements *)element;
-    int32_t i = 0;
-    for(i = 0; i < el->noOfCEs; i++) {
-        free(el->primary[i]);
-        free(el->secondary[i]);
-        free(el->tertiary[i]);
-    }
-
-    free(el);
-}
-*/
 
 int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
     if(U_FAILURE(*status)) {
@@ -110,16 +95,6 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UError
         ((secvalue<<UCOL_SECONDARYORDERSHIFT)&UCOL_SECONDARYORDERMASK)|
         (tervalue&UCOL_TERTIARYORDERMASK);
 
-
-    // Here was case handling!
-    // case bits are already read from the UCA
-#if 0
-    if(caseBit == TRUE && tervalue != 0) {
-        value |= 0x40; // 0100 0000 set case bit
-    } else {
-        value &= 0xFFFFFFBF; // ... 1011 1111 (reset case bit)
-    }
-#endif
     if(primsave!='\0') {
         *primend = primsave;
     }
@@ -132,26 +107,10 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UError
     return value;
 }
 
-
-/*
-UCAElements *copyUCAElement(UCAElements *that) {
-    UCAElements *r = (UCAElements *)malloc(sizeof(*that));
-    memcpy(r, that, sizeof(*that));
-    return r;
-}
-
-void releaseUCACopy(UCAElements *r) {
-    free(r);
-}
-*/
-
 static uint32_t inverseTable[0xFFFF][3];
 static uint32_t inversePos = 0;
-/*UChar *stringContinue[0xFFFF];*/
 static UChar stringContinue[0xFFFF];
-/*static uint32_t stringContSize[0xFFFF]; */
 static uint32_t sContPos = 0;
-/*static uint32_t contSize = 0;*/
 
 static void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {
@@ -454,7 +413,6 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     }
     element->cPoints[0] = (UChar)theValue;
 
-    /*element->codepoint = element->cPoints[0];*/
     if(spacePointer == 0) {
         detectedContraction = FALSE;
         element->cSize = 1;
@@ -474,27 +432,6 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
     startCodePoint = endCodePoint+1;
 
-    /* Case bit is now associated with each collation element */
-    /* Also, there are two case bits, but we don't care about it here */
-#if 0
-    endCodePoint = strchr(startCodePoint, ';');
-
-    while(*startCodePoint != '0' && *startCodePoint != '1') {
-        startCodePoint++;
-        if(startCodePoint == endCodePoint) {
-            *status = U_INVALID_FORMAT_ERROR;
-            return NULL;
-        }
-    }
-
-    if(*startCodePoint == '0') {
-        element->caseBit = FALSE;
-    } else {
-        element->caseBit = TRUE;
-    }
-
-    startCodePoint = endCodePoint+1;
-#endif
     commentStart = strchr(startCodePoint, '#');
     if(commentStart == NULL) {
         commentStart = strlen(startCodePoint) + startCodePoint - 1;
@@ -521,7 +458,6 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
         uint32_t CEi = 1;
         while(2*CEi<element->sizePrim[i] || CEi<element->sizeSec[i] || CEi<element->sizeTer[i]) {
-          //uint32_t value = element->caseBit?0xC0:0x80; /* Continuation marker */
           uint32_t value = UCOL_CONTINUATION_MARKER; /* Continuation marker */
             if(2*CEi<element->sizePrim[i]) {
                 value |= ((hex2num(*(primary+4*CEi))&0xF)<<28);
@@ -564,15 +500,9 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
         pointer++;
     }
 
-    /*
-    strcpy(element->comment, commentStart);
-    uhash_put(elements, (void *)element->codepoint, element, status);
-    */
-
     if(U_FAILURE(*status)) {
         fprintf(stderr, "problem putting stuff in hash table\n");
         *status = U_INTERNAL_PROGRAM_ERROR;
-        //free(element);
         return NULL;
     }
 
@@ -581,12 +511,27 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
 
 void writeOutData(UCATableHeader *data,
+                  uint16_t contractions[][3],
+                  uint32_t noOfcontractions,
                   const char *outputDir,
                   const char *copyright,
                   UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return;
+    }
+
+    uint32_t size = data->size;
+
+    if(noOfcontractions != 0) {
+      contractions[noOfcontractions][0] = 0;
+      contractions[noOfcontractions][1] = 0;
+      contractions[noOfcontractions][2] = 0;
+      noOfcontractions++;
+
+
+      data->contractionUCACombos = size;
+      data->size += paddedsize((noOfcontractions*3*sizeof(uint16_t)));
     }
 
     UNewDataMemory *pData;
@@ -605,7 +550,12 @@ void writeOutData(UCATableHeader *data,
     fprintf(stdout, "Writing out UCA table: %s%s.%s\n", outputDir,
                                                         UCA_DATA_NAME,
                                                         UCA_DATA_TYPE);
-    udata_writeBlock(pData, data, data->size);
+    udata_writeBlock(pData, data, size);
+
+    if(noOfcontractions != 0) {
+      udata_writeBlock(pData, contractions, noOfcontractions*3*sizeof(uint16_t));
+      udata_writePadding(pData, paddedsize((noOfcontractions*3*sizeof(uint16_t))) - noOfcontractions*3*sizeof(uint16_t));
+    }
 
     /* finish up */
     dataLength=udata_finish(pData, status);
@@ -623,14 +573,12 @@ write_uca_table(const char *filename,
 {
     FILE *data = fopen(filename, "r");
     uint32_t line = 0;
-    int32_t sizesPrim[35], sizesSec[35], sizesTer[35];
-/*    int32_t sizeBreakDown[35][35][35];
-    int32_t *secValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);
-    int32_t *terValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);*/
     UCAElements *element = NULL;
     UChar variableTopValue = 0;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
+    uint16_t contractionCEs[256][3];
+    uint32_t noOfContractions = 0;
 
 
     if(data == NULL) {
@@ -638,12 +586,6 @@ write_uca_table(const char *filename,
         return -1;
     }
 
-/*    memset(secValue, 0, 0xffff*sizeof(int32_t));
-    memset(terValue, 0, 0xffff*sizeof(int32_t)); */
-    memset(sizesPrim, 0, 35*sizeof(int32_t));
-    memset(sizesSec, 0, 35*sizeof(int32_t));
-    memset(sizesTer, 0, 35*sizeof(int32_t));
-/*    memset(sizeBreakDown, 0, 35*35*35*sizeof(int32_t)); */
     memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
 
     opts->variableTopValue = variableTopValue;
@@ -652,7 +594,7 @@ write_uca_table(const char *filename,
     opts->alternateHandling = UCOL_NON_IGNORABLE; /* attribute for handling variable elements*/
     opts->caseFirst = UCOL_OFF;         /* who goes first, lower case or uppercase */
     opts->caseLevel = UCOL_OFF;         /* do we have an extra case level */
-    opts->normalizationMode = UCOL_OFF; /*UCOL_ON*/ /* attribute for normalization */
+    opts->normalizationMode = UCOL_OFF; /* attribute for normalization */
     /* populate the version info struct with version info*/
     myD->version[0] = UCOL_BUILDER_VERSION;
     /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
@@ -660,12 +602,6 @@ write_uca_table(const char *filename,
     myD->jamoSpecial = FALSE;
 
     tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, status);
-
-    /*
-    elements = uhash_open(uhash_hashLong, uhash_compareLong, &status);
-
-    uhash_setValueDeleter(elements, deleteElement);
-    */
 
 
     while(!feof(data)) {
@@ -677,33 +613,27 @@ write_uca_table(const char *filename,
         element = readAnElement(data, status);
         line++;
         if(element != NULL) {
-            /* this does statistics on CE lengths, but is currently broken */
-/*
-          for( i = 0; i<element->noOfCEs; i++) {
-            sizesPrim[element->sizePrim[i]]++;
-            sizesSec[element->sizeSec[i]]++;
-            sizesTer[element->sizeTer[i]]++;
-
-            sizeBreakDown[element->sizePrim[i]][element->sizeSec[i]][element->sizeTer[i]]++;
-
-            if(element->sizePrim[i] == 2 && element->sizeSec[i]==2) {
-              terValue[strtoul(element->tertiary[i], 0, 16)]++;
-              secValue[strtoul(element->secondary[i], 0, 16)]++;
-            }
-         }
-*/
-
-
             // we have read the line, now do something sensible with the read data!
             if(element->variableTop == TRUE && variableTopValue == 0) {
                 t->options->variableTopValue = element->cPoints[0];
+            }
+
+            // if element is a contraction, we want to add it to contractions
+            if(element->cSize > 1) { // this is a contraction
+              contractionCEs[noOfContractions][0] = element->cPoints[0];
+              contractionCEs[noOfContractions][1] = element->cPoints[1];
+              if(element->cSize > 2) { // the third one
+                contractionCEs[noOfContractions][2] = element->cPoints[2];
+              } else {
+                contractionCEs[noOfContractions][2] = 0;
+              }
+              noOfContractions++;
             }
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
             /* of code points and stuff... we don't want that to happen */
             addToInverse(element, status);
             uprv_uca_addAnElement(t, element, status);
-            //deleteElement(element);
         }
     }
 
@@ -712,79 +642,21 @@ write_uca_table(const char *filename,
         fprintf(stdout, "\nLines read: %i\n", line);
     }
 
-
-
-/*
-    for(i = 0; i<35; i++) {
-        fprintf(stderr, "size %i: P:%i S:%i T:%i\n", i, sizesPrim[i], sizesSec[i], sizesTer[i]);
-    }
-
-    for(i = 0; i<35; i++) {
-        UBool printedPrimary = FALSE;
-        for(j = 0; j<35; j++) {
-            for(k = 0; k<35; k++) {
-                if(sizeBreakDown[i][j][k] != 0) {
-                    if(!printedPrimary) {
-                        fprintf(stderr, "Primary: %i\n", i);
-                        printedPrimary = TRUE;
-                    }
-                    fprintf(stderr, "Sec: %i, Ter: %i = %i\n", j, k, sizeBreakDown[i][j][k]);
-                }
-            }
-        }
-    }
-
-    for(i = 0; i<(uint32_t)0xffff; i++) {
-      if(terValue[i] != 0) {
-        fprintf(stderr, "Tertiaries with value %04X : %i\n", i, terValue[i]);
-      }
-      if(secValue[i] != 0) {
-        fprintf(stderr, "Secondaries with value %04X : %i\n", i, secValue[i]);
-      }
-    }
-*/
     /* test */
     UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
-    writeOutData(myData, outputDir, copyright, status);
+    writeOutData(myData, contractionCEs, noOfContractions, outputDir, copyright, status);
 
     InverseTableHeader *inverse = assembleInverseTable(status);
     writeOutInverseData(inverse, outputDir, copyright, status);
-/*
-    uint32_t *itab = (uint32_t *)((uint8_t *)inverse + inverse->table);
-    UChar *conts = (UChar *)((uint8_t *)inverse + inverse->conts);
-    for(i = 0; i<inverse->tableSize; i++) {
-      fprintf(stderr, "[%04X] 0x%08X 0x%08X 0x%08X\n", i, *(itab+3*i), *(itab+3*i+1), *(itab+3*i+2));
-      if((*(itab+3*i+2) & UCOL_INV_SIZEMASK) != 0) {
-        uint32_t contIndex = *(itab+3*i+2) & UCOL_INV_OFFSETMASK;
-        uint32_t contSize = (*(itab+3*i+2) & UCOL_INV_SIZEMASK) >> UCOL_INV_SHIFTVALUE;
-        fprintf(stderr, "\t");
-        for(j = 0; j<contSize; j++) {
-          if(*(conts+contIndex+j) < 0xFFFE) {
-            fprintf(stderr, "%04X ", *(conts+contIndex+j));
-          } else {
-            fprintf(stderr, "\n\t");
-          }
-        }
-        fprintf(stderr, "\n");
-      }
-    }
-*/
 
     uprv_uca_closeTempTable(t);    
     uprv_free(myD);
     uprv_free(opts);
 
-    //printOutTable(myData, &status);
-    //uhash_close(elements);
 
     uprv_free(myData);
     uprv_free(inverse);
     fclose(data);
-
-/*
-    uprv_free(secValue);
-    uprv_free(terValue);
-*/
 
 	return 0;
 }
