@@ -969,6 +969,9 @@ void TransliteratorRoundTripTest::TestJamo() {
 }
 
 void TransliteratorRoundTripTest::TestHangul() {
+	if(quick){
+		return;
+	}
     RTTest t("Latin-Hangul");
     Legal *legal = new Legal();
     t.test(UnicodeString("[a-zA-Z]", ""), 
