@@ -640,9 +640,26 @@ U_CAPI
 
 /********************************
  * Will convert a codepage buffer one character at a time.
- * This function was written to be efficient when transcoding small amounts of data at a time.
+ * <p>This function was written to be efficient when transcoding small amounts of data at a time.
  * In that case it will be more efficient than \Ref{ucnv_toUnicode}.
- * When converting large buffers use \Ref{ucnv_toUnicode}.
+ * When converting large buffers use \Ref{ucnv_toUnicode}.</p>
+ *
+ * <p>Handling of surrogate pairs and supplementary-plane code points:<br>
+ * There are two different kinds of codepages that provide mappings for surrogate characters:
+ * <ul>
+ *   <li>Codepages like UTF-8, UTF-32, and GB 18030 provide direct representations for Unicode
+ *       code points U+10000-U+10ffff as well as for single surrogates U+d800-U+dfff.
+ *       Each valid sequence will result in exactly one returned code point.
+ *       If a sequence results in a single surrogate, then that will be returned
+ *       by itself, even if a neighboring sequence encodes the matching surrogate.</li>
+ *   <li>Codepages like SCSU and LMBCS (and UTF-16) provide direct representations only for BMP code points
+ *       including surrogates. Code points in supplementary planes are represented with
+ *       two sequences, each encoding a surrogate.
+ *       For these codepages, matching pairs of surrogates will be combined into single
+ *       code points for returning from this function.
+ *       (Note that SCSU is actually a mix of these codepage types.)</li>
+ * </ul></p>
+ *
  *@param converter an open UConverter
  *@param source the address of a pointer to the codepage buffer, will be updated to point after
  *the bytes consumed in the conversion call.
