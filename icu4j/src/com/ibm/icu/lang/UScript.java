@@ -236,9 +236,14 @@ public final class UScript {
     public static final int TIBETAN      = 39;  /* Tibt */
     /**
      * Unified Canadian Aboriginal Symbols
+     * @draft ICU 2.6
+     */
+    public static final int CANADIAN_ABORIGINAL = 40;  /* Cans */
+    /**
+     * Unified Canadian Aboriginal Symbols (alias)
      * @stable ICU 2.4
      */
-    public static final int UCAS         = 40;  /* Cans */
+    public static final int UCAS         = CANADIAN_ABORIGINAL;  /* Cans */
     /**
      * Yi syllables
      * @stable ICU 2.4
