@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.25 2002/01/04 23:48:42 yves-oss Exp $
+## $Id: mh-aix,v 1.26 2002/03/08 00:25:53 srl Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -16,13 +16,13 @@ COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
+#LINK.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
 LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
 LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	makeC++SharedLib_r -p 5000 -brtl
-SHLIB.cc=	makeC++SharedLib_r -p 5000 -brtl
+SHLIB.c=	$(AIX_SHLIB) -p 5000 -brtl
+SHLIB.cc=	$(AIX_SHLIB) -p 5000 -brtl
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
