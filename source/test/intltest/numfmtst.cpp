@@ -761,7 +761,7 @@ void NumberFormatTest::TestPad(void) {
     expect(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
            1.0/3, "0.33333__ g-m/s^2", status);
 
-    char *formatStr = "*x#,###,###,##0.0#;*x(###,###,##0.0#)";
+    const char *formatStr = "*x#,###,###,##0.0#;*x(###,###,##0.0#)";
     expect(new DecimalFormat(formatStr, US, status),
            int32_t(-10),  "xxxxxxxxxx(10.0)", status);
     expect(new DecimalFormat(formatStr, US, status),
@@ -798,15 +798,13 @@ void NumberFormatTest::TestPad(void) {
            10252045600.37,"10,252,045,600.37", status);
 
 // Use jitterbug 760 for checking in these fixes.
-    // Also consider deleting the extra decimal format variables
-    // or at least not newing the DecimalFormat
     UnicodeString icuVersionCurr(U_ICU_VERSION);
     UnicodeString icuVersion("1.7");
 if (icuVersionCurr == icuVersion) {
     logln("Not testing TestPad() at this time, fix in a later release");
 }
 else {
-    char *formatStr2 = "#,###,###,##0.0#*x;(###,###,##0.0#*x)";
+    const char *formatStr2 = "#,###,###,##0.0#*x;(###,###,##0.0#*x)";
     expect(new DecimalFormat(formatStr2, US, status),
            int32_t(-10),  "(10.0xxxxxxxxxx)", status);
     expect(new DecimalFormat(formatStr2, US, status),
@@ -842,8 +840,8 @@ else {
     expect(new DecimalFormat(formatStr2, US, status),
            10252045600.37,"10,252,045,600.37", status);
 }
-    
-   //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
+
+    //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
     DecimalFormat fmt("#", US, status);
     CHECK(status, "DecimalFormat constructor");
     UnicodeString padString("P");
@@ -862,7 +860,7 @@ else {
     UnicodeString pattern(patternChars);
     expectPad(fmt, pattern , DecimalFormat::kPadBeforePrefix, 4, padString);
  */
-    
+
 }
 
 /**
