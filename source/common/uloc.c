@@ -45,10 +45,7 @@
 #include "uenumimp.h"
 #include "uassert.h"
 
-
-#if defined(ULOC_DEBUG)
-#   include <stdio.h>
-#endif
+#include <stdio.h> /* for sprintf */
 
 /* ### Declarations **************************************************/
 
@@ -2831,12 +2828,22 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     int32_t i;
     int32_t l = uprv_strlen(httpAcceptLanguage);
 	int32_t jSize;
+	static char gDecimal = 0;
 	
 	j = smallBuffer;
 	jSize = sizeof(smallBuffer)/sizeof(smallBuffer[0]);
     if(U_FAILURE(*status)) {
         return -1;
     }
+
+	if (!gDecimal) {
+		char rep[5];
+		// For machines that decide to change the decimal on you,
+		// and try to be too smart with localization.
+		// This normally should be just a '.'.
+		sprintf(rep, "%+1.1f", 1.0);
+		gDecimal = rep[2];
+	}
 
     for(s=httpAcceptLanguage;s&&*s;) {
         while(isspace(*s)) /* eat space at the beginning */
@@ -2847,6 +2854,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             itemEnd = httpAcceptLanguage+l; /* end of string */
         }
         if(paramEnd && paramEnd<itemEnd) { 
+			char *decimal;
             /* semicolon (;) is closer than end (,) */
             t = paramEnd+1;
             if(*t=='q') {
@@ -2861,6 +2869,9 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             while(isspace(*t)) {
                 t++;
             }
+			if((decimal=uprv_strchr(t,'.'))<paramEnd) {
+				*decimal = gDecimal;
+			}
             j[n].q = uprv_strtod(t,NULL);
         } else {
             /* no semicolon - it's 1.0 */
@@ -2929,6 +2940,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     return res;
 }
 
+
 U_CAPI int32_t U_EXPORT2
 uloc_acceptLanguage(char *result, int32_t resultAvailable, 
                     UAcceptResult *outResult, const char **acceptList,
@@ -2946,6 +2958,10 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
         return -1;
     }
     fallbackList = uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount));
+	if(fallbackList==NULL) {
+		*status = U_MEMORY_ALLOCATION_ERROR;
+		return -1;
+	}
     for(i=0;i<acceptListCount;i++) {
 #if defined(ULOC_DEBUG)
         fprintf(stderr,"%02d: %s\n", i, acceptList[i]);
