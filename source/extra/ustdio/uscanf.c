@@ -531,7 +531,7 @@ u_scanf_scidbl_handler(UFILE             *stream,
   int32_t       scientificParsePos = 0, genericParsePos = 0;
   UErrorCode    scientificStatus = U_ZERO_ERROR;
   UErrorCode    genericStatus = U_ZERO_ERROR;
-  UBool        useScientific;
+  UBool         useScientific;
 
 
   /* since we can't determine by scanning the characters whether */
@@ -570,7 +570,7 @@ u_scanf_scidbl_handler(UFILE             *stream,
                    &genericParsePos, &genericStatus);
 
   /* determine which parse made it farther */
-  useScientific = scientificParsePos > genericParsePos;
+  useScientific = (UBool)(scientificParsePos > genericParsePos);
   
   /* stash the result in num */
   *num = useScientific ? scientificResult : genericResult;
@@ -847,7 +847,7 @@ u_scanf_char_handler(UFILE             *stream,
              const UChar        *fmt,
              int32_t            *consumed)
 {
-  UChar uc;
+  UChar uc = 0;
   char *result;
   char *c = (char*)(args[0].ptrValue);
   
