@@ -42,7 +42,7 @@ public:
     /**
      * Destructor.
      */
-    virtual inline ~SymbolTable() {};
+    virtual ~SymbolTable();
 
     /**
      * Lookup the characters associated with this string and return it.
