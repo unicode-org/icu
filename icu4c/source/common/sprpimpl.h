@@ -34,7 +34,7 @@ enum UStringPrepType{
     USPREP_PROHIBITED           = 0x0002 , 
     USPREP_LABEL_SEPARATOR      = 0x0003 ,
     USPREP_DELETE               = 0x0004 ,
-    USPREP_TYPE_LIMIT           = 0x0005 , 
+    USPREP_TYPE_LIMIT           = 0x0005  
 };
 
 typedef enum UStringPrepType UStringPrepType;
@@ -49,7 +49,7 @@ static const char* usprepTypeNames[] ={
 };
 enum{
     _SPREP_NORMALIZATION_ON = 0x0001,
-    _SPREP_CHECK_BIDI_ON    = 0x0002,
+    _SPREP_CHECK_BIDI_ON    = 0x0002
 };
 
 enum{
