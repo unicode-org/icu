@@ -23,6 +23,10 @@ LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.c=    $(CC) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.cc=   $(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
+## Additional flags when building libraries with thread safety
+LIBCPPFLAGS = -D_REENTRANT
+THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
+
 ## Compiler switch to embed a runtime search path
 LD_RPATH=
 LD_RPATH_PRE=  -Wl,-rpath,
