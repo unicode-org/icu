@@ -1070,14 +1070,6 @@ private:
     void updateTime(UErrorCode& status);
 
     /**
-     * Convert a UnicodeString to a long integer, using the standard C library. Return
-     * both the value obtained, and a UErrorCode indicating success or failure. We fail
-     * if the string is zero length, of if strtol() does not parse all of the characters
-     * in the string, or if the value is not in the range 1..7.
-     */
-    static int32_t  stringToDayNumber(const UnicodeString& string, UErrorCode& status);
-
-    /**
      * The resource tag for the resource where the week-count data is stored.
      */
     static const char kDateTimeElements[];

@@ -81,9 +81,9 @@ pt {
         UY { "Uruguai" }
         ZA { "\u00c1frica do Sul" }
     }
-    DateTimeElements { 
-        "2",
-        "1",
+    DateTimeElements:intvector { 
+        2,
+        1,
     }
     DateTimePatterns { 
         "HH'H'mm'm' z",

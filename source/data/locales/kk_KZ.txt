@@ -19,9 +19,9 @@ kk_KZ {
         "#,##0%",
         "#E0",
     }
-    DateTimeElements{
-  	    "0",
-  	    "1"
+    DateTimeElements:intvector{
+  	    1,
+  	    2
     }
 
 }

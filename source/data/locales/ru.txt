@@ -68,9 +68,9 @@ ru {
         US { "\u0421\u0428\u0410" }
         ZA { "\u042e\u0410\u0420" }
     }
-    DateTimeElements { 
-        "2",
-        "1",
+    DateTimeElements:intvector { 
+        2,
+        1,
     }
     DateTimePatterns { 
         "H:mm:ss z",

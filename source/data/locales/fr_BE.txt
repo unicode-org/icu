@@ -23,9 +23,9 @@ fr_BE {
         "d/MM/yy",
         "{1} {0}",
     }
-    DateTimeElements {
-        "2",
-        "1",
+    DateTimeElements:intvector {
+        2,
+        1,
     }
     LocaleID:int { 0x080c }
 //    LocaleString { "fr_BE" }
