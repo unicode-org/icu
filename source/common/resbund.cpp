@@ -253,14 +253,14 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other) {
             } else {
               resource = 0;
               fItemCache = 0;
-                resource = copyResb(0, other.resource);
+                resource = copyResb(0, other.resource, &status);
             }
 }
 
-ResourceBundle::ResourceBundle(UResourceBundle *res) {
+ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
     resource = 0;
     fItemCache = 0;
-    resource = copyResb(0, res);
+    resource = copyResb(0, res, &err);
 }
 
 ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) {
@@ -291,7 +291,7 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
     if(other.resource->fIsTopLevel == TRUE) {
         constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
     } else {
-        resource = copyResb(resource, other.resource);
+        resource = copyResb(resource, other.resource, &status);
     }
     return *this;
 }
@@ -394,7 +394,8 @@ void ResourceBundle::resetIterator(void) {
 
 ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
     UResourceBundle r;
-    return ResourceBundle(ures_getNextResource(resource, &r, &status));
+    ures_getNextResource(resource, &r, &status);
+    return ResourceBundle(&r, status);
 }
 
 UnicodeString ResourceBundle::getNextString(UErrorCode& status) {
@@ -411,7 +412,8 @@ UnicodeString ResourceBundle::getNextString(const char ** key, UErrorCode& statu
 
 ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
     UResourceBundle r;
-    return ResourceBundle(ures_getByIndex(resource, indexR, &r, &status));
+    ures_getByIndex(resource, indexR, &r, &status);
+    return ResourceBundle(&r, status);
 }
 
 UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) const {
@@ -422,7 +424,8 @@ UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) co
 
 ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
     UResourceBundle r;
-    return ResourceBundle(ures_getByKey(resource, key, &r, &status));
+    ures_getByKey(resource, key, &r, &status);
+    return ResourceBundle(&r, status);
 }
 
 UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) const {
@@ -499,6 +502,7 @@ ResourceBundle::getStringArray( const char             *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle array;
+	ures_initStackObject(&array);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -562,6 +566,7 @@ ResourceBundle::get2dArray(const char *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle array;
+	ures_initStackObject(&array);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -569,6 +574,7 @@ ResourceBundle::get2dArray(const char *resourceTag,
             if(rowCount > 0) {
                 result = new UnicodeString*[rowCount];
                 UResourceBundle row;
+		ures_initStackObject(&row);
                 ures_getByIndex(&array, 0, &row, &err);
                 columnCount = ures_getSize(&row);
                 const UChar* string = 0;
@@ -647,6 +653,7 @@ ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle table;
+	ures_initStackObject(&table);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &table, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
