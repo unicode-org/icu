@@ -151,6 +151,12 @@
 "AB\.C\eD\u0666E"              "<0>AB.C\u001BD\u0666E</0>F"
 "ab\Bde"                        "<0>abde</0>"
 
+# loop breaking
+"(a?)*"                        "<0><1></1></0>xyz"
+"(a?)+"                        "<0><1></1></0>xyz"
+"^(?:a?b?)*$"	               "a--"
+"(x?)*xyz"                     "<0>xx<1></1>xyz</0>"    # Sligthly wierd, but correct.  The "last" time through (x?),
+                                                        #   it matches the empty string.
 
 # {min,max} iteration qualifier
 "A{3}BC"                       "<0>AAABC</0>"
@@ -303,6 +309,25 @@
 "(?:(abc)|a)(?:bc)+"             "<0>abc</0>"
 "(?:(abc)|a)(?:bc)*"             "<0><1>abc</1></0>"
 "^[+\-]?[0-9]*\.?[0-9]*"         "<0>123.456</0>"
+
+"ab.+yz"                         "<0>abc12345xyz</0>ttt"
+"ab.+yz"                    s    "<0>abc12345xyz</0>ttt"
+
+"ab.+yz"                         "abc123\n45xyzttt"
+"ab.+yz"                    s    "<0>abc12\n345xyz</0>ttt"
+
+"ab[0-9]+yz"                     "---abyz+++"
+"ab[0-9]+yz"                     "---<0>ab1yz</0>+++"
+"ab[0-9]+yz"                     "---<0>ab12yz</0>+++"
+"ab[0-9]+yz"                     "---<0>ab123456yz</0>+++"
+
+"ab([0-9]+|[A-Z]+)yz"            "---abyz+++"
+"ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>1</1>yz</0>+++"
+"ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>12</1>yz</0>+++"
+"ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>A</1>yz</0>+++"
+"ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>AB</1>yz</0>+++"
+"ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>ABCDE</1>yz</0>+++"
+
 
 #
 #  Random debugging, Temporary
