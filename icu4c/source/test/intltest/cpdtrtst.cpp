@@ -211,7 +211,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
 		return;
 	}
 	int32_t count=ct1->getCount();
-    UnicodeString *array=split(ID, ';', count);
+    UnicodeString *array=split(ID, 0x003b, count);
 	int i;
 	for(i=0; i < count; i++){
 		UnicodeString child= ct1->getTransliterator(i).getID();
@@ -225,7 +225,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     
 	logln("Testing setTransliterator() API of CompoundTransliterator");
 	UnicodeString ID2("Hex-Unicode;Unicode-Hex;Latin-Cyrillic;Cyrillic-Latin;Halfwidth-Fullwidth;Fullwidth-Halfwidth");
-    array=split(ID2, ';', count);
+    array=split(ID2, 0x003b, count);
 	Transliterator** transarray=new Transliterator*[count];
 	for(i=0;i<count;i++){
 		transarray[i]=Transliterator::createInstance(*(array+i));
