@@ -149,6 +149,12 @@ public: // package
     virtual void TestDateFormatCalendar(void);
 
     virtual void TestSpaceParsing(void);
+
+    void TestExactCountFormat(void);
+
+ private:
+    void expectParse(const char** data, int32_t data_length,
+                     const Locale& locale);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -569,20 +569,6 @@ private:
 
     friend class DateFormat;
 
-    /**
-     * Gets the index for the given time zone ID to obtain the timezone strings
-     * for formatting. The time zone ID is just for programmatic lookup. NOT
-     * LOCALIZED!!!
-     *
-     * @param DateFormatSymbols     a DateFormatSymbols object contianing the time zone names
-     * @param ID        the given time zone ID.
-     * @return          the index of the given time zone ID.  Returns -1 if
-     *                  the given time zone ID can't be located in the
-     *                  DateFormatSymbols object.
-     * @see SimpleTimeZone
-     */
-    //int32_t getZoneIndex(const DateFormatSymbols&, const UnicodeString& ID) const;
-
     void initializeDefaultCentury(void);
 
     /**
@@ -694,16 +680,12 @@ private:
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                     UBool obeyCount, UBool ambiguousYear[], Calendar& cal) const;
+                     UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal) const;
 
-    /**
-     * Parse the given text, at the given position, as a numeric value, using
-     * this object's NumberFormat. Return the corresponding long value in the
-     * fill-in parameter 'value'. If the parse fails, this method leaves pos
-     * unchanged and returns FALSE; otherwise it advances pos and
-     * returns TRUE.
-     */
-    //UBool subParseLong(const UnicodeString& text, ParsePosition& pos, int32_t& value) const;
+    void parseInt(const UnicodeString& text,
+                  Formattable& number,
+                  ParsePosition& pos,
+                  UBool allowNegative) const;
 
     /**
      * Translate a pattern, mapping each character in the from string to the
@@ -722,11 +704,6 @@ private:
                                 const UnicodeString& from,
                                 const UnicodeString& to,
                                 UErrorCode& status);
-    /**
-     * Given a zone ID, try to locate it in our time zone array. Return the
-     * index (row index) of the found time zone, or -1 if we can't find it.
-     */
-    //int32_t getZoneIndex(const UnicodeString& ID) const;
 
     /**
      * Sets the starting date of the 100-year window that dates with 2-digit years
