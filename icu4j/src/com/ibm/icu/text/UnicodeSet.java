@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/09/19 17:43:38 $
- * $Revision: 1.32 $
+ * $Date: 2001/09/20 21:20:00 $
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -254,7 +254,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.32 $ $Date: 2001/09/19 17:43:38 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.33 $ $Date: 2001/09/20 21:20:00 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
@@ -1081,8 +1081,8 @@ public class UnicodeSet implements UnicodeFilter {
      * of <code>pattern</code>
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
-    private void applyPattern(String pattern, ParsePosition pos,
-                              SymbolTable symbols, boolean ignoreWhitespace) {
+    void applyPattern(String pattern, ParsePosition pos,
+                      SymbolTable symbols, boolean ignoreWhitespace) {
 
         boolean invert = false;
         clear();
