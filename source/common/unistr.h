@@ -1433,7 +1433,8 @@ public:
   
 private:
 
-  int8_t doCompare(UTextOffset start,
+  inline int8_t
+  doCompare(UTextOffset start,
            int32_t length,
            const UnicodeString& srcText,
            UTextOffset srcStart,
