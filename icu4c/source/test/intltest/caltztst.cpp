@@ -48,7 +48,7 @@ DateFormat*   CalendarTimeZoneTest::getDateFormat()
     if(theFormat == 0) // If we weren't able to pull it out of the cache, then we have to create it.
     {
         UErrorCode status = U_ZERO_ERROR;
-        theFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", status);
+        theFormat = new SimpleDateFormat(UnicodeString("EEE MMM dd HH:mm:ss zzz yyyy"), status);
         if (U_FAILURE(status))
         {
             delete theFormat;

@@ -376,7 +376,7 @@ CalendarRegressionTest::test4031502()
     void CalendarRegressionTest::test4061476() 
     {
         UErrorCode status = U_ZERO_ERROR;
-        SimpleDateFormat *fmt = new SimpleDateFormat("ddMMMyy", Locale::UK,status);
+        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("ddMMMyy"), Locale::UK,status);
         Calendar *cal = Calendar::createInstance(TimeZone::createTimeZone("GMT"), 
                                         Locale::UK,status);
         fmt->adoptCalendar(cal);
@@ -562,7 +562,7 @@ CalendarRegressionTest::test4031502()
         Locale::setDefault(Locale::UK,status); 
         TimeZone *newZone = TimeZone::createTimeZone("GMT");
         TimeZone::setDefault(*newZone);
-            date = new SimpleDateFormat("dd MMM yyy (zzzz) 'is in week' ww",status); 
+            date = new SimpleDateFormat(UnicodeString("dd MMM yyy (zzzz) 'is in week' ww"),status); 
             Calendar *cal = Calendar::createInstance(status); 
             cal->set(1997,Calendar::SEPTEMBER,30); 
             UDate now = cal->getTime(status); 
@@ -1004,7 +1004,7 @@ CalendarRegressionTest::test4031502()
                 for (int32_t j=0; j<3; ++j) {
                     UnicodeString temp;
                     if (n[j] == 0)
-                        errln(UnicodeString("Fail: No locales for ") + locales[i].getName(temp));
+                        errln(UnicodeString("Fail: No locales for ") + locales[i].getName());
                 }
             }
         //}
@@ -1144,7 +1144,7 @@ CalendarRegressionTest::test4031502()
     {
         UErrorCode status = U_ZERO_ERROR;
         GregorianCalendar *cal = (GregorianCalendar*) Calendar::createInstance(status);
-        DateFormat *fmt = new SimpleDateFormat("MMMM d, yyyy G",status);
+        DateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"),status);
         cal->clear();
         for (int32_t y=-20; y<=10; ++y) {
             cal->set(Calendar::ERA, y < 1 ? GregorianCalendar::BC : GregorianCalendar::AD);
@@ -1168,7 +1168,7 @@ CalendarRegressionTest::test4031502()
     void CalendarRegressionTest::test4125892() {
         UErrorCode status = U_ZERO_ERROR;
         GregorianCalendar *cal = (GregorianCalendar*) Calendar::createInstance(status);
-        DateFormat *fmt = new SimpleDateFormat("MMMM d, yyyy G",status);
+        DateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"),status);
         cal->clear();
         cal->set(Calendar::ERA, GregorianCalendar::BC);
         cal->set(Calendar::YEAR, 81); // 81 BC is a leap year (proleptically)
@@ -1549,7 +1549,7 @@ CalendarRegressionTest::Test4167060()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar::EDateFields field = Calendar::YEAR;
-    DateFormat *format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy G",
+    DateFormat *format = new SimpleDateFormat(UnicodeString("EEE MMM dd HH:mm:ss zzz yyyy G"),
         Locale::US, status);
     if(U_FAILURE(status)) {
         errln("Couldn't create SimpleDateFormat");

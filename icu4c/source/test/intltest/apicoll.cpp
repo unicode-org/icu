@@ -573,7 +573,7 @@ CollationAPITest::TestGetAll( char* par )
     for (int32_t i = 0; i < count; ++i) {
         UnicodeString locName, dispName;
         log("Locale name: "); 
-        log(list[i].getName(locName));
+        log(list[i].getName());
         log(" , the display name is : ");
         logln(list[i].getDisplayName(dispName));
     }

@@ -48,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.7 $ $Date: 2000/01/15 01:58:57 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.8 $ $Date: 2000/04/15 21:28:17 $
  *
  * @bug 4097450
  */
@@ -111,7 +111,7 @@ DateFormatMiscTests::test4097450()
 
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *formatter;
-    SimpleDateFormat *resultFormatter = new SimpleDateFormat("yyyy", status);
+    SimpleDateFormat *resultFormatter = new SimpleDateFormat((UnicodeString)"yyyy", status);
     failure(status, "new SimpleDateFormat");
 
     logln("Format\tSource\tResult");
@@ -140,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.7 $ $Date: 2000/01/15 01:58:57 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.8 $ $Date: 2000/04/15 21:28:17 $
  *
  * @bug 4099975
  */

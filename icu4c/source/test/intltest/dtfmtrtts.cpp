@@ -58,7 +58,7 @@ DateFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 void DateFormatRoundTripTest::TestDateFormatRoundTrip() 
 {
     UErrorCode status = U_ZERO_ERROR;
-    dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
+    dateFormat = new SimpleDateFormat((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
     failure(status, "new SimpleDateFormat");
 
     getFieldCal = Calendar::createInstance(status);

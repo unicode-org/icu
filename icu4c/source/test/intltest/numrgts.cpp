@@ -663,7 +663,7 @@ void NumberFormatRegressionTest::Test4092480 (void)
  * interpreted as monetary separator if currency symbol is seen!
  */
 void NumberFormatRegressionTest::Test4087244 (void) {
-    Locale *de = new Locale(UnicodeString("pt"), UnicodeString("PT"));
+    Locale *de = new Locale("pt","PT");
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
     if (nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
@@ -1392,7 +1392,7 @@ void NumberFormatRegressionTest::Test4122840(void)
         //if (pattern.indexOf("\u00A4") == -1 ) {
         UnicodeString temp;
         if (pattern.indexOf(foo) == -1 ) {
-            errln(UnicodeString("Currency format for ") + locales[i].getName(temp) +
+            errln(UnicodeString("Currency format for ") + UnicodeString(locales[i].getName()) +
                     " does not contain generic currency symbol:" +
                     pattern );
         }
@@ -1442,7 +1442,7 @@ void NumberFormatRegressionTest::Test4122840(void)
             result2 = fmt2->format(1.111, result2, pos);
             
             if (result1 != result2) {
-                errln("Results for " + locales[i].getName(temp) + " differ: " +
+                errln("Results for " + (temp=locales[i].getName()) + " differ: " +
                         result1 + " vs " + result2);
             }
         

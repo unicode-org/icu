@@ -352,7 +352,7 @@ void IntlTestNumberFormat::testAvailableLocales(char *par)
         for (int32_t i=0; i<count; ++i)
         {
             if (i!=0) all += ", ";
-            all += locales[i].getName(name);
+            all += locales[i].getName();
         }
         logln(all);
     }
@@ -372,8 +372,7 @@ void IntlTestNumberFormat::monsterTest(char *par)
         }
         for (int32_t i=0; i<count; ++i)
         {
-            UnicodeString name;
-            locales[i].getName(name);
+            UnicodeString name(locales[i].getName(), "");
             logln(SEP);
             testLocale(par, locales[i], name);
         }

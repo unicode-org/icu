@@ -137,7 +137,7 @@ void TimeZoneRegressionTest:: Test4073215()
     failure(status, "new GregorianCalendar");
     cal.adoptTimeZone(z);
 
-    SimpleDateFormat sdf("E d MMM yyyy G HH:mm", status); 
+    SimpleDateFormat sdf((UnicodeString)"E d MMM yyyy G HH:mm", status); 
     sdf.setCalendar(cal); 
     failure(status, "new SimpleDateFormat");
 
@@ -365,7 +365,7 @@ TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *t
     UDate testDate = testCal->getTime(status); 
 
     bool_t inDaylightTime = testTZ->inDaylightTime(testDate, status); 
-    SimpleDateFormat *sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", status); 
+    SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)"MM/dd/yyyy HH:mm", status); 
     sdf->setCalendar(*testCal); 
     UnicodeString inDaylightTimeString; 
 
