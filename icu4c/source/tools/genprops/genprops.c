@@ -26,6 +26,7 @@
 #include "unicode/uchar.h"
 #include "unicode/uset.h"
 #include "unicode/putil.h"
+#include "unicode/uclean.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "unewdata.h"
@@ -83,6 +84,19 @@ main(int argc, char* argv[]) {
     char *basename=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
 
+    /* Initialize ICU */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode) && errorCode != U_FILE_ACCESS_ERROR) {
+        /* Note: u_init() will try to open ICU property data.
+         *       failures here are expected when building ICU from scratch.
+         *       ignore them.
+        */
+        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
+            argv[0], u_errorName(errorCode));
+        exit(1);
+    }
+    errorCode = U_ZERO_ERROR;
+
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
@@ -123,6 +137,7 @@ main(int argc, char* argv[]) {
             "\t                    'genprops new' will read UnicodeData-new.txt etc.\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
+
 
     /* get the options values */
     beVerbose=options[2].doesOccur;
@@ -178,6 +193,7 @@ main(int argc, char* argv[]) {
         generateData(destDir);
     }
 
+    u_cleanup();
     return errorCode;
 }
 

@@ -24,6 +24,7 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "toolutil.h"
+#include "unicode/uclean.h"
 #include "unewdata.h"
 #include "uoptions.h"
 
@@ -126,6 +127,14 @@ main(int argc, char* argv[]) {
     char         tmp[1024];
     int32_t i;
 
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
     U_MAIN_INIT_ARGS(argc, argv);
 
     progname = argv[0];

@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/uclean.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -167,6 +168,15 @@ private:
 };
 
 int main(int argc, char *argv[]) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    /* Initialize ICU */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
+            argv[0], u_errorName(errorCode));
+        exit(1);
+    }
+
     gentz x;
 
     U_MAIN_INIT_ARGS(argc, argv);
