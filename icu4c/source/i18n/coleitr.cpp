@@ -178,7 +178,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
   if (length > 0) {
     string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
     /* test for NULL */
-    if (string == 0) {
+    if (string == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -187,7 +187,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
   else {
     string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
     /* test for NULL */
-    if (string == 0) {
+    if (string == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -212,7 +212,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
   if (length == 0) {
     buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
     /* test for NULL */
-    if (buffer == 0) {
+    if (buffer == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -221,7 +221,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
   else {
       buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
       /* test for NULL */
-      if (buffer == 0) {
+      if (buffer == NULL) {
           status = U_MEMORY_ALLOCATION_ERROR;
           return;
       }
@@ -276,7 +276,7 @@ CollationElementIterator::CollationElementIterator(
   if (length > 0) {
       string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
       /* test for NULL */
-      if (string == 0) {
+      if (string == NULL) {
           status = U_MEMORY_ALLOCATION_ERROR;
           return;
       }
@@ -289,7 +289,7 @@ CollationElementIterator::CollationElementIterator(
   else {
       string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
       /* test for NULL */
-      if (string == 0) {
+      if (string == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
       }
@@ -341,7 +341,7 @@ CollationElementIterator::CollationElementIterator(
   if (length > 0) {
       buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
       /* test for NULL */
-      if (buffer == 0) {
+      if (buffer == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
       }
@@ -357,7 +357,7 @@ CollationElementIterator::CollationElementIterator(
   else {
       buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
       /* test for NULL */
-      if (buffer == 0) {
+      if (buffer == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
       }
@@ -405,8 +405,12 @@ const CollationElementIterator& CollationElementIterator::operator=(
       /* create a duplicate of string */
       if (length > 0) {
           coliter->string = (UChar *)uprv_malloc(length * U_SIZEOF_UCHAR);
-          uprv_memcpy(coliter->string, othercoliter->string,
-                      length * U_SIZEOF_UCHAR);
+          if(coliter->string != NULL) {
+            uprv_memcpy(coliter->string, othercoliter->string,
+                        length * U_SIZEOF_UCHAR);
+          } else { // Error: couldn't allocate memory. No copying should be done
+            length = 0;
+          }
       }
       else {
           coliter->string = NULL;
@@ -430,10 +434,14 @@ const CollationElementIterator& CollationElementIterator::operator=(
               }
               coliter->writableBuffer = (UChar *)uprv_malloc(
                                          wlength * U_SIZEOF_UCHAR);
-              uprv_memcpy(coliter->writableBuffer, 
-                          othercoliter->writableBuffer,
-                          wlength * U_SIZEOF_UCHAR);
-              coliter->writableBufSize = wlength;
+              if(coliter->writableBuffer != NULL) {
+                uprv_memcpy(coliter->writableBuffer, 
+                            othercoliter->writableBuffer,
+                            wlength * U_SIZEOF_UCHAR);
+                coliter->writableBufSize = wlength;
+              } else { // Error: couldn't allocate memory for writableBuffer
+                coliter->writableBufSize = 0;
+              }
           }
       }
          
