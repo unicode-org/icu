@@ -368,7 +368,8 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_FIND("[{ab}]", "a");
+    //REGEX_TESTLM("X(.+)+X", "nomatch", TRUE,  TRUE);
+    REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
     exit(1);
 #endif
@@ -878,6 +879,7 @@ void RegexTest::API_Pattern() {
     RegexPattern         *pat1a = RegexPattern::compile(re1, pe, status);
     REGEX_ASSERT(*pat1a == *pat1);
 
+    REGEX_ASSERT(pat1a->flags() == 0);
 #if 0
     // Compile with different flags should be not equal
     RegexPattern        *pat1b = RegexPattern::compile(re1, UREGEX_CASE_INSENSITIVE, pe, status);
