@@ -5,8 +5,8 @@
  ********************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/test/intltest/canittst.cpp,v $ 
- * $Date: 2002/03/19 07:52:44 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/03/20 05:14:00 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  * @author Mark E. Davis
@@ -70,7 +70,8 @@ void CanonicalIteratorTest::TestExhaustive() {
     UChar32 i = 0;
     UnicodeString s, decomp, comp;
 
-    for (i = 0; i < 0x10FFFF; quick?i+=50:++i) {
+    for (i = 0; i < 0x10FFFF; quick?i+=0x10:++i) {
+    //for (i = 0xae00; i < 0xaf00; ++i) {
     	
      if ((i % 0x100) == 0) {
         logln("Testing U+%06X", i);
@@ -107,7 +108,7 @@ void CanonicalIteratorTest::TestExhaustive() {
     	}
 
     	if (!gotSource || !gotDecomp || !gotComp) {
-    		errln("FAIL CanonicalIterator: " + s);
+    		errln("FAIL CanonicalIterator: " + s + i);
     	}
     }
 }
@@ -136,7 +137,7 @@ void CanonicalIteratorTest::TestBasic() {
         + "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
         	);
 #endif
-    
+
     // check permute
     // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
 
