@@ -1317,10 +1317,6 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
 
 #endif
 
-    // Lock first, check registry pointer second
-    Mutex lock(&registryMutex);
-
-
 void Transliterator::initializeRegistry(void) {
     if (registry != 0) {
         return;
