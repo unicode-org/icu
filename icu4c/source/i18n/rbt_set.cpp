@@ -217,7 +217,7 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
         }
     }
     // No match or partial match from any rule
-    ++pos.start;
+    pos.start += UTF_CHAR_LENGTH(text.char32At(pos.start));
     return TRUE;
 }
 

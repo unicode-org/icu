@@ -85,7 +85,9 @@ public:
      * @param offset on input, the index into text at which to begin
      * matching.  On output, the limit of the matched text.  The
      * number of matched characters is the output value of offset
-     * minus the input value.
+     * minus the input value.  Offset should always point to the
+     * HIGH SURROGATE (leading code unit) of a pair of surrogates,
+     * both on entry and upon return.
      * @param limit the limit index of text to be matched.  Greater
      * than offset for a forward direction match, less than offset for
      * a backward direction match.  The last character to be

@@ -25,8 +25,14 @@ UMatchDegree UnicodeFilter::matches(const Replaceable& text,
         return U_MATCH;
     }
     if (offset > limit &&
-        contains(c = text.charAt(offset))) {
-        offset -= UTF_CHAR_LENGTH(c);
+        contains(c = text.char32At(offset))) {
+        // Backup offset by 1, unless the preceding character is a
+        // surrogate pair -- then backup by 2 (keep offset pointing at
+        // the lead surrogate).
+        --offset;
+        if (offset >= 0) {
+            offset -= UTF_CHAR_LENGTH(text.char32At(offset)) - 1;
+        }
         return U_MATCH;
     }
     if (incremental && offset == limit) {
