@@ -17,6 +17,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
+#include "unicode/measfmt.h"
 #include "digitlst.h"
 #include "textfile.h"
 #include "tokiter.h"
@@ -1583,7 +1584,9 @@ void NumberFormatTest::TestCases() {
 
     Locale loc("en", "US", "");
     DecimalFormat *ref = 0, *fmt = 0;
-    UnicodeString pat, tok, str, out, where;
+    MeasureFormat *mfmt = 0;
+    UnicodeString pat, tok, mloc, str, out, where, currAmt;
+    Formattable n;
 
     for (;;) {
         ec = U_ZERO_ERROR;
@@ -1609,7 +1612,6 @@ void NumberFormatTest::TestCases() {
         case 3: // fp:
         case 4: // rt:
         case 5: // p:
-        case 8: // fpc:
             if (!tokens.next(tok, ec)) goto error;
             if (tok != "-") {
                 pat = tok;
@@ -1620,7 +1622,7 @@ void NumberFormatTest::TestCases() {
                     ec = U_ZERO_ERROR;
                     if (!tokens.next(tok, ec)) goto error;
                     if (!tokens.next(tok, ec)) goto error;
-                    if (cmd == 3 || cmd == 8) {
+                    if (cmd == 3) {
                         if (!tokens.next(tok, ec)) goto error;
                     }
                     continue;
@@ -1633,7 +1635,6 @@ void NumberFormatTest::TestCases() {
                 UnicodeString num;
                 if (!tokens.next(num, ec)) goto error;
                 if (!tokens.next(str, ec)) goto error;
-                Formattable n;
                 ref->parse(num, n, ec);
                 assertSuccess("parse", ec);
                 assertEquals(where + "\"" + pat + "\".format(" + num + ")",
@@ -1652,36 +1653,6 @@ void NumberFormatTest::TestCases() {
                                  n, m);
                 } 
             }
-            // fpc: <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
-            else if (cmd == 8) {
-                UnicodeString currAmt;
-                if (!tokens.next(currAmt, ec)) goto error;
-                if (!tokens.next(str, ec)) goto error;
-                Formattable n;
-                parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
-                if (assertSuccess("parseCurrencyAmount", ec)) {
-                    UChar save[4];
-                    u_strcpy(save, fmt->getCurrency());
-                    assertEquals(where + "\"" + pat + "\".format(" + currAmt + ")",
-                                 str, fmt->format(n, out.remove(), ec));
-                    assertSuccess("format", ec);
-                    if (u_strcmp(save, fmt->getCurrency()) != 0) {
-                        errln((UnicodeString)"FAIL: " + where +
-                              "NumberFormat.getCurrency() => " + fmt->getCurrency() +
-                              ", expected " + save);
-                    }
-                }
-                if (!tokens.next(currAmt, ec)) goto error;
-                parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
-                if (assertSuccess("parseCurrencyAmount", ec)) {
-                    Formattable m;
-                    fmt->parseCurrency(str, m, ec);
-                    if (assertSuccess("parseCurrency", ec)) {
-                        assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
-                                     n, m);
-                    }
-                }
-            }
             // p: <pattern or '-'> <string to parse> <exp. number>
             else {
                 UnicodeString expstr;
@@ -1694,6 +1665,42 @@ void NumberFormatTest::TestCases() {
                 assertSuccess("parse", ec);
                 assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
                              exp, n);
+            }
+            break;
+        case 8: // fpc:
+            if (!tokens.next(tok, ec)) goto error;
+            if (tok != "-") {
+                mloc = tok;
+                delete mfmt;
+                mfmt = MeasureFormat::createCurrencyFormat(
+                           Locale::createFromName(CharString(mloc)), ec);
+                if (U_FAILURE(ec)) {
+                    errln("FAIL: " + where + "Loc \"" + mloc + "\": " + u_errorName(ec));
+                    ec = U_ZERO_ERROR;
+                    if (!tokens.next(tok, ec)) goto error;
+                    if (!tokens.next(tok, ec)) goto error;
+                    if (!tokens.next(tok, ec)) goto error;
+                    continue;
+                }
+            }
+            // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+            if (!tokens.next(currAmt, ec)) goto error;
+            if (!tokens.next(str, ec)) goto error;
+            parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
+            if (assertSuccess("parseCurrencyAmount", ec)) {
+                assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
+                             str, mfmt->format(n, out.remove(), ec));
+                assertSuccess("format", ec);
+            }
+            if (!tokens.next(currAmt, ec)) goto error;
+            parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
+            if (assertSuccess("parseCurrencyAmount", ec)) {
+                Formattable m;
+                mfmt->parseObject(str, m, ec);
+                if (assertSuccess("parseCurrency", ec)) {
+                    assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
+                                 n, m);
+                }
             }
             break;
         case 6:
@@ -1759,6 +1766,7 @@ void NumberFormatTest::TestCases() {
     }
 
  done:
+    delete mfmt;
     delete fmt;
     delete ref;
 }
