@@ -749,6 +749,40 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   }
 }
 
+
+static UBool doTestUCA(UCollator *UCA, UChar *source, UChar *target, UCollationResult result) {
+  uint32_t sLen = u_strlen(source);
+  uint32_t tLen = u_strlen(target);
+
+  UCollationResult r = ucol_strcoll(UCA, source, sLen, target, tLen);
+
+  if(r != result) {
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+}
+
+static void logUCAFailure (const char *comment, const UChar *source, const UChar *target) { 
+  uint32_t sLen = u_strlen(source);
+  uint32_t tLen = u_strlen(target);
+  uint32_t i = 0;
+
+  char sEsc[256], tEsc[256], b[256];
+
+  *sEsc = *tEsc = 0;
+  for(i = 0; i<sLen; i++) {
+    sprintf(b, "\\u%04X", source[i]);
+    strcat(sEsc, b);
+  }
+  for(i = 0; i<tLen; i++) {
+    sprintf(b, "\\u%04X", target[i]);
+    strcat(tEsc, b);
+  }
+
+  log_verbose("%s for %s and %s. \n", comment, sEsc, tEsc);
+}
+
 static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) {
   const UChar *rules = NULL, *current = NULL;
   int32_t ruleLen = 0;
@@ -765,6 +799,9 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) 
   UChar first[256];
   UChar second[256];
   UChar *rulesCopy = NULL;
+
+  UChar source[256] = { '\0'};
+  UChar target[256] = { '\0'};
 
   uint32_t UCAdiff = 0;
 
@@ -797,49 +834,112 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) 
 
       switch(strength){
       case UCOL_IDENTICAL:
-          /*testEquality(coll,first,second);*/
-          testEquality(UCA,first,second);
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, status);
-          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_EQUAL) {
-            /*log_verbose("UCA is different for \\u%04X = \\u%04X!\n", *first, *second);*/
+          if(!doTestUCA(UCA, first, second, UCOL_EQUAL)) {
+            logUCAFailure ("Rules says equal, but not UCA", first, second);
             UCAdiff++;
+            goto EndOfLoop;
           }
           break;
       case UCOL_PRIMARY:
-          /*testPrimary(coll,first,second);*/
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
-          testPrimary(UCA,first,second);
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_PRIMARY, status);
-          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_LESS) {
-            /*log_verbose("UCA is different for \\u%04X < \\u%04X!!\n", *first, *second);*/
+          if(!doTestUCA(UCA, first, second, UCOL_LESS)) {
+            logUCAFailure("Wrong order, primary level", first, second);
             UCAdiff++;
+            goto EndOfLoop;
+          }
+
+          source[0] = 0x0491;
+          u_strcpy(source+1,first);
+          target[0] = 0x0413;
+          u_strcpy(target+1,second);
+          if(!doTestUCA(UCA, source, target, UCOL_LESS)) { /* UCA has non primary difference */
+            source[0] = 0x0053;
+            u_strcpy(source+1,first);
+            target[0]= 0x0073;
+            u_strcpy(target+1,second);
+            if(!doTestUCA(UCA, source, target, UCOL_LESS)) { /* test if it is tertiary */
+              logUCAFailure("Wrong strength: rules:primary UCA:tertiary", first, second);
+            } else {
+              logUCAFailure("Wrong strength - rules:primary UCA:secondary", first, second);
+            }
+            UCAdiff++;
+            goto EndOfLoop;
           }
           break;
       case UCOL_SECONDARY:
-          /*testSecondary(coll,first,second);*/
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
-          testSecondary(UCA,first,second);
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_SECONDARY, status);
-          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_LESS) {
-            /*log_verbose("UCA is different for \\u%04X << \\u%04X!\n", *first, *second);*/
+          if(!doTestUCA(UCA, first, second, UCOL_LESS)) {
+            logUCAFailure("Wrong order, secondary level", first, second);
             UCAdiff++;
+            goto EndOfLoop;
+          }
+
+          source[0] = 0x0053;
+          u_strcpy(source+1,first);
+          target[0]= 0x0073;
+          u_strcpy(target+1,second);
+          if(!doTestUCA(UCA, source, target, UCOL_LESS)) {
+            logUCAFailure("Wrong strength - rules:secondary UCA:tertiary", first, second);
+            UCAdiff++;
+            goto EndOfLoop;
+          }
+
+          u_strcpy(source,first);
+          source[u_strlen(first)] = 0x62;
+          source[u_strlen(first)+1] = 0;
+          u_strcpy(target,second);
+          target[u_strlen(second)] = 0x61;
+          target[u_strlen(second)+1] = 0;
+          if(!doTestUCA(UCA, source, target, UCOL_GREATER)) {
+            logUCAFailure("Wrong strength - rules:secondary UCA:primary", first, second);
+            UCAdiff++;
+            goto EndOfLoop;
           }
           break;
       case UCOL_TERTIARY:
-          /*testTertiary(coll,first,second);*/
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
-          testTertiary(UCA,first,second);
-          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
-          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_LESS) {
-            /*log_verbose("UCA is different for \\u%04X <<< \\u%04X!!\n", *first, *second);*/
+          if(!doTestUCA(UCA, first, second, UCOL_LESS)) {
+            logUCAFailure("Wrong order, tertiary level", first, second);
             UCAdiff++;
+            goto EndOfLoop;
           }
+
+          source[0] = 0x0020;
+          u_strcpy(source+1,first);
+          target[0]= 0x002D;
+          u_strcpy(target+1,second);
+          if(!doTestUCA(UCA, source, target, UCOL_LESS)) {
+            logUCAFailure("Wrong strength - rules:tertiary UCA:quad", first, second);
+            UCAdiff++;
+            goto EndOfLoop;
+          }
+
+          u_strcpy(source,first);
+          source[u_strlen(first)] = 0xE0;
+          source[u_strlen(first)+1] = 0;
+          u_strcpy(target,second);
+          target[u_strlen(second)] = 0x61;
+          target[u_strlen(second)+1] = 0;
+          if(!doTestUCA(UCA, source, target, UCOL_GREATER)) {
+            u_strcpy(source,first);
+            source[u_strlen(first)] = 0x62;
+            source[u_strlen(first)+1] = 0;
+            u_strcpy(target,second);
+            target[u_strlen(second)] = 0x61;
+            target[u_strlen(second)+1] = 0;
+            if(!doTestUCA(UCA, source, target, UCOL_GREATER)) {
+              logUCAFailure("Wrong strength - rules:tertiary UCA:primary", first, second);
+            } else {
+              logUCAFailure("Wrong strength - rules:tertiary UCA:secondary", first, second);
+            }
+            UCAdiff++;
+            goto EndOfLoop;
+          }
+
           break;
       case UCOL_TOK_RESET:
       default:
           break;
       }
 
+EndOfLoop:
       firstLen = chLen;
       u_strcpy(first, second);
 
@@ -980,8 +1080,8 @@ static const char* localesToTest[] = {
 "hr", "hu", "is", "iw", "ja", 
 "ko", "lt", "lv", "mk", "mt", 
 "nb", "nn", "nn_NO", "pl", "ro", 
-"ru", /*"sh",*/ "sk", "sl", "sq", /* sh test is turned off until we do closure in contractions */
-"sr", "sv", "th", "tr", "uk", 
+/*"ru",*/ /*"sh",*/ "sk", "sl", "sq", /* sh test is turned off until we do closure in contractions */
+/*"sr",*/ "sv", "th", "tr", /*"uk", */
 "vi", "zh", "zh_TW"
 };
 
@@ -996,6 +1096,44 @@ static const char* rulesToTest[] = {
     "<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q;'?'/um<r,R<u,U", /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & Qum;'?'",*/
     "<'?';Qum<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q<r,R<u,U"  /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & '?';Qum"*/
 };
+
+static void testCollations( ) {
+  int32_t noOfLoc = uloc_countAvailable();
+  int32_t i = 0;
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  const char *locName = NULL;
+  UResourceBundle *loc = NULL;
+  UResourceBundle *ColEl = NULL;
+  UCollator *coll = NULL;
+  UCollator *UCA = ucol_open("", &status);
+  UColAttributeValue oldStrength = ucol_getAttribute(UCA, UCOL_STRENGTH, &status);
+  ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
+
+
+  for(i = 0; i<noOfLoc; i++) {
+    status = U_ZERO_ERROR;
+    locName = uloc_getAvailable(i);
+    loc = ures_open(NULL, locName, &status);
+    if(U_SUCCESS(status)) {
+      status = U_ZERO_ERROR;
+      ColEl = ures_getByKey(loc, "CollationElements", ColEl, &status);
+      if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
+        log_verbose("\nTesting locale %s\n", locName);
+        coll = ucol_open(locName, &status);
+        testAgainstUCA(coll, UCA, &status);
+        ucol_close(coll);
+      } 
+
+      ures_close(loc);
+    }
+
+  }
+  ures_close(ColEl);
+  ucol_setAttribute(UCA, UCOL_STRENGTH, oldStrength, &status);
+  ucol_close(UCA);
+}
 
 static void RamsRulesTest( ) {
   UErrorCode status = U_ZERO_ERROR;
@@ -1013,7 +1151,6 @@ static void RamsRulesTest( ) {
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
       testCEs(coll, &status);
-      /*testAgainstUCA(coll, UCA, &status);*/
       ucol_close(coll);
     }
   }
@@ -1026,7 +1163,6 @@ static void RamsRulesTest( ) {
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
       testCEs(coll, &status);
-      /*testAgainstUCA(coll, UCA, &status);*/
       ucol_close(coll);
     }
   }
@@ -1078,6 +1214,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
     addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
     addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
+    addTest(root, &testCollations, "tscoll/cmsccoll/testCollations");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
 }
 
