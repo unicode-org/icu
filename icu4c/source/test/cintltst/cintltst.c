@@ -230,12 +230,11 @@ void ctest_setICU_DATA() {
 #if defined (U_SRCDATADIR) 
     {
         static const char env_string = "ICU_DATA=" U_SRCDATADIR;
-        _putenv(env_string);
+        putenv(env_string);
         return
     }
 #endif
 
-#ifdef WIN32
     /* On Windows, the file name obtained from __FILE__ includes a full path.      
      *             This file is "wherever\icu\source\test\cintltst\cintltst.c"  
      *             Change to    "wherever\icu\source\data"     
@@ -262,11 +261,10 @@ void ctest_setICU_DATA() {
              *  Now append "source\data" and set the environment
              */
             strcpy(pBackSlash, "\\data");
-            _putenv(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
+            putenv(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
             return;
         }
     }
-#endif
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
