@@ -956,39 +956,50 @@ ucnv_io_getDefaultConverterName() {
     /* local variable to be thread-safe */
     const char *name=gDefaultConverterName;
     if(name==NULL) {
-        const char *codepage = uprv_getDefaultCodepage();
-        if(codepage!=NULL) {
-            UErrorCode errorCode=U_ZERO_ERROR;
-            name=ucnv_io_getConverterName(codepage, &errorCode);
-            if(U_FAILURE(errorCode) || name==NULL) {
-                name=codepage;
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = NULL;
+        int32_t length = 0;
+
+        name = uprv_getDefaultCodepage();
+
+        /* if the name is there, test it out and get the canonical name with options */
+        if(name != NULL) {
+            cnv = ucnv_open(name, &errorCode);
+            if(U_SUCCESS(errorCode) && cnv != NULL) {
+                name = ucnv_getName(cnv, &errorCode);
             }
         }
 
-        /* if the name is there, test it out */
-        if(name != NULL) {
-            UErrorCode errorCode = U_ZERO_ERROR;
-            UConverter *cnv = ucnv_open(name, &errorCode);
-            if(U_FAILURE(errorCode) || (cnv == NULL)) {
-                /* Panic time, let's use a fallback. */
+        if (name != NULL) {
+            length=(int32_t)(uprv_strlen(name));
+        }
+
+        if(name == NULL || name[0] == 0
+            || U_FAILURE(errorCode) || cnv == NULL
+            || length>=sizeof(gDefaultConverterNameBuffer))
+        {
+            /* Panic time, let's use a fallback. */
 #if (U_CHARSET_FAMILY == U_ASCII_FAMILY) 
-                name = "US-ASCII";
-                /* there is no 'algorithmic' converter for EBCDIC */
+            name = "US-ASCII";
+            /* there is no 'algorithmic' converter for EBCDIC */
 #elif defined(OS390)
-                name = "ibm-1047" UCNV_SWAP_LFNL_OPTION_STRING;
+            name = "ibm-1047_P100-1995" UCNV_SWAP_LFNL_OPTION_STRING;
 #else
-                name = "ibm-37";
+            name = "ibm-37_P100-1995";
 #endif
-            }
-            ucnv_close(cnv);
+            length=(int32_t)(uprv_strlen(name));
         }
 
-        if(name != NULL) {
-            umtx_lock(NULL);
-            /* Did find a name. And it works.*/
-            gDefaultConverterName=name;
-            umtx_unlock(NULL);
-        }
+        /* Copy the name before we close the converter. */
+        umtx_lock(NULL);
+        uprv_memcpy(gDefaultConverterNameBuffer, name, length);
+        gDefaultConverterNameBuffer[length]=0;
+        gDefaultConverterName = gDefaultConverterNameBuffer;
+        umtx_unlock(NULL);
+
+        /* The close may make the current name go away. */
+        ucnv_close(cnv);
+        name = gDefaultConverterName;
     }
 
     return name;
