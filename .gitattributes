@@ -298,7 +298,6 @@ icu4c/source/test/testdata/iscii.bin -text svneol=native#application/octet-strea
 icu4c/source/test/testdata/testdata_icu26_testtypes.res -text
 icu4c/source/test/testdata/testdata_icu26e_testtypes.res -text
 icu4c/source/test/testdata/uni-text.bin -text
-icu4c/source/tools/makeconv/gb18030/gb18030.html svneol=native#text/html
 icu4j/APIChangeReport.html svneol=native#text/html
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
