@@ -1,14 +1,14 @@
 #________________________________________________________________________
 #
-# (C) COPYRIGHT International Business Machines Corp. 1995
+# (C) COPYRIGHT International Business Machines Corp. 1997
 #     All Rights Reserved
 #
 #________________________________________________________________________
 #
-# File created on Wed Dec 13 10:17:17 1995
+# File created on Fri Dec  5 16:10:57 1997
 #
 # File created by dtcocm version 3.00
-# from source files IBM-1252.RPMAP100 and IBM-1252.TPMAP100
+# from source files ibm-1252.rpmap100 and ibm-1252.tpmap100
 #
 # Table Version : 1.00
 #
@@ -246,14 +246,11 @@ CHARMAP
 <UFF5E>         \x7E                # SD190000
 <U007E>         \x7E                # SD190000
 <U007F>         \x7F
-<U0080>         \x80
 <U0081>         \x81
 <U008D>         \x8D
-<U008E>         \x8E
 <U008F>         \x8F
 <U0090>         \x90
 <U009D>         \x9D
-<U009E>         \x9E
 <U00A0>         \xA0                # SP300000
 <U00A1>         \xA1                # SP030000
 <U00A2>         \xA2                # SC040000
@@ -361,7 +358,6 @@ CHARMAP
 <U02C6>         \x88                # SD150100
 <U02DC>         \x98                # SD190100
 <U2013>         \x96                # SS680000
-<U2015>         \x97                # SM120000 longdash
 <U2014>         \x97                # SM900000
 <U2018>         \x91                # SP190000
 <U2019>         \x92                # SP200000
@@ -376,8 +372,7 @@ CHARMAP
 <U2030>         \x89                # SM560000
 <U2039>         \x8B                # SP270000
 <U203A>         \x9B                # SP280000
-<U20A0>         \x80                # U00020A0 ecu
-<U20AC>         \x80                # SC200000 euro
+<U20AC>         \x80                # SC200000
 <U2122>         \x99                # SM540000
 #
 END CHARMAP
