@@ -12,13 +12,8 @@
 *   03/25/97    clhuang     Initial Implementation.
 ********************************************************************************
 */
-#ifndef _FMTABLE
 #include "unicode/fmtable.h"
-#endif
-
-#ifndef _CMEMORY
 #include "cmemory.h"
-#endif
 
 // *****************************************************************************
 // class Formattable

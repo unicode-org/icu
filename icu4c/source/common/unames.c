@@ -196,13 +196,13 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     }
 
     if(i==0) {
-	if (nameChoice == U_EXTENDED_CHAR_NAME) {
-	    /* extended character name */
+        if (nameChoice == U_EXTENDED_CHAR_NAME) {
+            /* extended character name */
             length = getExtName((uint32_t) code, buffer, (uint16_t) bufferLength);
-	} else {
-	    /* normal character name */
-	    length=getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
-	}
+        } else {
+            /* normal character name */
+            length=getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+        }
     }
 
     return u_terminateChars(buffer, bufferLength, length, pErrorCode);

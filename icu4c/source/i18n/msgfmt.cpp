@@ -28,6 +28,7 @@
 #include "unicode/ucnv_err.h"
 #include "unicode/uchar.h"
 #include "ustrfmt.h"
+#include "cmemory.h"
 
 // *****************************************************************************
 // class MessageFormat
@@ -116,8 +117,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   fCount(kMaxFormat),
   fArgumentNumbers(NULL)
 {
-    fOffsets = new int32_t[fCount];
-    fArgumentNumbers = new int32_t[fCount];
+    fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
+    fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
     for (int32_t i = 0; i < fCount; i++) {
         fFormats[i] = NULL;       // Format instances
         fOffsets[i] = 0;          // Starting offset
@@ -131,12 +132,11 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
                              UErrorCode& success)
 : fLocale(newLocale),  // Uses the default locale
   fOffsets(NULL),
-  fCount(0),
+  fCount(kMaxFormat),
   fArgumentNumbers(NULL)
 {
-    fCount = kMaxFormat;
-    fOffsets = new int32_t[fCount];
-    fArgumentNumbers = new int32_t[fCount];
+    fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
+    fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
     for (int32_t i = 0; i < fCount; i++) {
         fFormats[i] = NULL;       // Format instances
         fOffsets[i] = 0;          // Starting offset
@@ -151,12 +151,11 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
                              UErrorCode& success)
 : fLocale(newLocale),  // Uses the default locale
   fOffsets(NULL),
-  fCount(0),
+  fCount(kMaxFormat),
   fArgumentNumbers(NULL)
 {
-    fCount = kMaxFormat;
-    fOffsets = new int32_t[fCount];
-    fArgumentNumbers = new int32_t[fCount];
+    fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
+    fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
     for (int32_t i = 0; i < fCount; i++) {
         fFormats[i] = NULL;       // Format instances
         fOffsets[i] = 0;          // Starting offset
@@ -172,8 +171,8 @@ MessageFormat::~MessageFormat()
             delete fFormats[i];
         }
     }
-    delete [] fOffsets;
-    delete [] fArgumentNumbers;
+    uprv_free(fOffsets);
+    uprv_free(fArgumentNumbers);
     fCount = 0;
 }
 
@@ -214,14 +213,16 @@ MessageFormat::operator=(const MessageFormat& that)
             delete fFormats[j];
             fFormats[j] = NULL;
         }
-        delete [] fOffsets; fOffsets = NULL;
-        delete [] fArgumentNumbers; fArgumentNumbers = NULL;
+        uprv_free(fOffsets);
+        fOffsets = NULL;
+        uprv_free(fArgumentNumbers);
+        fArgumentNumbers = NULL;
         fPattern = that.fPattern;
         fLocale = that.fLocale;
         fCount = that.fCount;
         fMaxOffset = that.fMaxOffset;
-        fOffsets = new int32_t[fCount];
-        fArgumentNumbers = new int32_t[fCount];
+        fOffsets = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
+        fArgumentNumbers = (int32_t*) uprv_malloc( sizeof(int32_t) * fCount );
         // Sets up the format instance array, offsets and argument numbers.
         for (int32_t i = 0; i < fCount; i++) {
             if (that.fFormats[i] == NULL) {

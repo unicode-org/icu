@@ -24,9 +24,9 @@
 #include "ucol_cnt.h"
 #include "unicode/utypes.h"
 #include "ucol_imp.h"
-#include "cmemory.h"
 
 #ifdef UCOL_DEBUG
+#include "cmemory.h"
 #include <stdio.h>
 #endif
 

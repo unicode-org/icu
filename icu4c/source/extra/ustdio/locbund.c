@@ -19,23 +19,23 @@
 #include <stdlib.h>
 #include "locbund.h"
 
-#include "string.h"
+#include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
 
 ULocaleBundle*        
 u_locbund_new(const char *loc)
 {
-  ULocaleBundle *result = (ULocaleBundle*) malloc(sizeof(ULocaleBundle));
+  ULocaleBundle *result = (ULocaleBundle*) uprv_malloc(sizeof(ULocaleBundle));
   int32_t len;
 
   if(result == 0)
     return 0;
 
   len = (loc == 0 ? strlen(uloc_getDefault()) : strlen(loc));
-  result->fLocale = (char*) malloc(len + 1);
+  result->fLocale = (char*) uprv_malloc(len + 1);
   if(result->fLocale == 0) {
-    free(result);
+    uprv_free(result);
     return 0;
   }
   
@@ -55,15 +55,15 @@ u_locbund_new(const char *loc)
 ULocaleBundle*
 u_locbund_clone(const ULocaleBundle *bundle)
 {
-  ULocaleBundle *result = (ULocaleBundle*)malloc(sizeof(ULocaleBundle));
+  ULocaleBundle *result = (ULocaleBundle*)uprv_malloc(sizeof(ULocaleBundle));
   UErrorCode status = U_ZERO_ERROR;
 
   if(result == 0)
     return 0;
   
-  result->fLocale = (char*) malloc(strlen(bundle->fLocale) + 1);
+  result->fLocale = (char*) uprv_malloc(strlen(bundle->fLocale) + 1);
   if(result->fLocale == 0) {
-    free(result);
+    uprv_free(result);
     return 0;
   }
   
@@ -94,7 +94,7 @@ u_locbund_clone(const ULocaleBundle *bundle)
 void
 u_locbund_delete(ULocaleBundle *bundle)
 {
-  free(bundle->fLocale);
+  uprv_free(bundle->fLocale);
 
   if(bundle->fNumberFormat != 0)
     unum_close(bundle->fNumberFormat);
@@ -111,7 +111,7 @@ u_locbund_delete(ULocaleBundle *bundle)
   if(bundle->fTimeFormat != 0)
     udat_close(bundle->fTimeFormat);
 
-  free(bundle);
+  uprv_free(bundle);
 }
 
 UNumberFormat*        

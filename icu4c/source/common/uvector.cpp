@@ -56,7 +56,7 @@ UVector::UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UE
 }
 
 void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
-    elements = new UHashTok[initialCapacity];
+    elements = (UHashTok *)uprv_malloc(sizeof(UHashTok)*initialCapacity);
     if (elements == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {
@@ -66,7 +66,7 @@ void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
 
 UVector::~UVector() {
     removeAllElements();
-    delete[] elements;
+    uprv_free(elements);
     elements = 0;
 }
 
@@ -109,7 +109,7 @@ void UVector::insertElementAt(void* obj, int32_t index, UErrorCode &status) {
             elements[i] = elements[i-1];
         }
         elements[index].pointer = obj;
-		++count;
+        ++count;
     }
     /* else index out of range */
 }
@@ -170,7 +170,7 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
         if (newCap < minimumCapacity) {
             newCap = minimumCapacity;
         }
-        UHashTok* newElems = new UHashTok[newCap];
+        UHashTok* newElems = (UHashTok *)uprv_malloc(sizeof(UHashTok)*newCap);
         if (newElems == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;

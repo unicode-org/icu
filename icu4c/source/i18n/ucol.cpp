@@ -2194,7 +2194,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);
 
         } else { // Jamo is Special
-	  // Since Hanguls pass the FCD check, it is 
+          // Since Hanguls pass the FCD check, it is 
           // guaranteed that we won't be in
           // the normalization buffer if something like this happens
           // Move Jamos into normalization buffer
@@ -2760,7 +2760,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
         } else {
-	  // Since Hanguls pass the FCD check, it is 
+          // Since Hanguls pass the FCD check, it is 
           // guaranteed that we won't be in
           // the normalization buffer if something like this happens
           // Move Jamos into normalization buffer

@@ -178,7 +178,7 @@ T_CString_strnicmp(const char *str1, const char *str2, uint32_t n) {
 U_CAPI char* U_EXPORT2
 uprv_strdup(const char *src) {
     size_t len = strlen(src) + 1;
-    char *dup = (char *) malloc(len);
+    char *dup = (char *) uprv_malloc(len);
 
     if (dup) {
         uprv_memcpy(dup, src, len);

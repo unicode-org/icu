@@ -84,13 +84,13 @@ static const UChar * const tokenStrings[] = {
     gEqualPercent, gEqualHash, gEqualZero, NULL
 };
 
-void 
+void
 NFRule::makeRules(UnicodeString& description,
                   const NFRuleSet *ruleSet,
                   const NFRule *predecessor,
                   const RuleBasedNumberFormat *rbnf,
                   NFRuleList& rules,
-                  UErrorCode& status) 
+                  UErrorCode& status)
 {
     // we know we're making at least one rule, so go ahead and
     // new it up and initialize its basevalue and divisor
@@ -127,7 +127,7 @@ NFRule::makeRules(UnicodeString& description,
             && (rule1->baseValue % ((llong)rule1->radix).pow((int32_t)rule1->exponent)) == 0)
             || rule1->getType() == kImproperFractionRule
             || rule1->getType() == kMasterRule) {
-            
+
             // if it passes that test, new up the second rule.  If the
             // rule set both rules will belong to is a fraction rule
             // set, they both have the same base value; otherwise,
@@ -206,7 +206,7 @@ NFRule::makeRules(UnicodeString& description,
  * "description" with the descriptor and any trailing whitespace
  * stripped off.  Otherwise; it's "descriptor" unchangd.
  */
-void 
+void
 NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 {
     // the description consists of a rule descriptor and a rule body,
@@ -312,7 +312,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
                     // throw new IllegalArgumentException("Rule can't have radix of 0");
                     status = U_PARSE_ERROR;
                 }
-                
+
                 exponent = expectedExponent();
             }
 
@@ -357,7 +357,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 * @param predecessor The rule preseding this one in "owners" rule list
 * @param ownersOwner The RuleBasedFormat that owns this rule
 */
-void 
+void
 NFRule::extractSubstitutions(const NFRuleSet* ruleSet,
                              const NFRule* predecessor,
                              const RuleBasedNumberFormat* rbnf,
@@ -405,7 +405,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
     // end will actually find the > in the middle
     if (ruleText.indexOf(gGreaterGreaterGreater) == subStart) {
         subEnd = subStart + 2;
-        
+
         // otherwise the substitution token ends with the same character
         // it began with
     } else {
@@ -441,8 +441,8 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
  * constructed.  It should be used at any other time.
  * @param The new base value for the rule.
  */
-void 
-NFRule::setBaseValue(llong newBaseValue) 
+void
+NFRule::setBaseValue(llong newBaseValue)
 {
     // set the base value
     baseValue = newBaseValue;
@@ -480,8 +480,8 @@ NFRule::setBaseValue(llong newBaseValue)
 * value.  This will be the highest power the radix can be raised to
 * and still produce a result less than or equal to the base value.
 */
-int16_t 
-NFRule::expectedExponent() const 
+int16_t
+NFRule::expectedExponent() const
 {
     // since the log of 0, or the log base 0 of something, causes an
     // error, declare the exponent in these cases to be 0 (we also
@@ -510,7 +510,7 @@ NFRule::expectedExponent() const
  * _any_ of the strings in "strings").  If none of the strings in
  * "strings" is found in the rule's rule text, returns -1.
  */
-int32_t 
+int32_t
 NFRule::indexOfAny(const UChar* const strings[]) const
 {
     int result = -1;
@@ -545,10 +545,10 @@ NFRule::operator==(const NFRule& rhs) const
 
 /*
 static void
-util_append_llong(UnicodeString& result, const llong& value) 
+util_append_llong(UnicodeString& result, const llong& value)
 {
     llong n(value);
-    
+
     if (n < 0) {
         result.append(gMinus);
         n = -n;
@@ -647,7 +647,7 @@ NFRule::appendRuleText(UnicodeString& result) const
 * @param pos The position in toInsertInto where the resultant text
 * should be inserted
 */
-void 
+void
 NFRule::doFormat(const llong &number, UnicodeString& toInsertInto, int32_t pos) const
 {
     // first, insert the rule's rule text into toInsertInto at the
@@ -669,7 +669,7 @@ NFRule::doFormat(const llong &number, UnicodeString& toInsertInto, int32_t pos) 
 * @param pos The position in toInsertInto where the resultant text
 * should be inserted
 */
-void 
+void
 NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos) const
 {
     // first, insert the rule's rule text into toInsertInto at the
@@ -691,7 +691,7 @@ NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos) const
 * @return True if the rule set should use the rule that precedes
 * this one in its list; false if it should use this rule
 */
-UBool 
+UBool
 NFRule::shouldRollBack(double number) const
 {
     // we roll back if the rule contains a modulus substitution,
@@ -754,7 +754,7 @@ static void dumpUS(FILE* f, const UnicodeString& us) {
 
 UBool
 NFRule::doParse(const UnicodeString& text,
-                ParsePosition& parsePosition, 
+                ParsePosition& parsePosition,
                 UBool isFractionRule,
                 double upperBound,
                 Formattable& resVal) const
@@ -763,14 +763,14 @@ NFRule::doParse(const UnicodeString& text,
     // (because we're going to change it) and use our own ParsePosition
     ParsePosition pp;
     UnicodeString workText(text);
-    
+
     // check to see whether the text before the first substitution
     // matches the text at the beginning of the string being
     // parsed.  If it does, strip that off the front of workText;
     // otherwise, dump out with a mismatch
     UnicodeString prefix;
     prefix.setTo(ruleText, 0, sub1->getPos());
-    
+
 #ifdef RBNF_DEBUG
     fprintf(stderr, "doParse %x ", this);
     {
@@ -778,7 +778,7 @@ NFRule::doParse(const UnicodeString& text,
         appendRuleText(rt);
         dumpUS(stderr, rt);
     }
-    
+
     fprintf(stderr, " text: '", this);
     dumpUS(stderr, text);
     fprintf(stderr, "' prefix: '");
@@ -786,11 +786,11 @@ NFRule::doParse(const UnicodeString& text,
 #endif
     stripPrefix(workText, prefix, pp);
     int32_t prefixLength = text.length() - workText.length();
-    
+
 #ifdef RBNF_DEBUG
     fprintf(stderr, "' pl: %d ppi: %d s1p: %d\n", prefixLength, pp.getIndex(), sub1->getPos());
 #endif
-    
+
     if (pp.getIndex() == 0 && sub1->getPos() != 0) {
         // commented out because ParsePosition doesn't have error index in 1.1.x
         // restored for ICU4C port
@@ -798,7 +798,7 @@ NFRule::doParse(const UnicodeString& text,
         resVal.setLong(0);
         return TRUE;
     }
-    
+
     // this is the fun part.  The basic guts of the rule-matching
     // logic is matchToDelimiter(), which is called twice.  The first
     // time it searches the input string for the rule text BETWEEN
@@ -832,7 +832,7 @@ NFRule::doParse(const UnicodeString& text,
     double result = 0;
     int start = 0;
     double tempBaseValue = (baseValue <= 0) ? 0 : baseValue.asDouble();
-    
+
     UnicodeString temp;
     do {
         // our partial parse result starts out as this rule's base
@@ -840,23 +840,23 @@ NFRule::doParse(const UnicodeString& text,
         // will compose this in some way with what it gets back from
         // the substitution, giving us a new partial parse result
         pp.setIndex(0);
-        
+
         temp.setTo(ruleText, sub1->getPos(), sub2->getPos() - sub1->getPos());
         double partialResult = matchToDelimiter(workText, start, tempBaseValue,
             temp, pp, sub1,
             upperBound);
-        
+
         // if we got a successful match (or were trying to match a
         // null substitution), pp is now pointing at the first unmatched
         // character.  Take note of that, and try matchToDelimiter()
         // on the input text again
         if (pp.getIndex() != 0 || sub1->isNullSubstitution()) {
             start = pp.getIndex();
-            
+
             UnicodeString workText2;
             workText2.setTo(workText, pp.getIndex(), workText.length() - pp.getIndex());
             ParsePosition pp2;
-            
+
             // the second matchToDelimiter() will compose our previous
             // partial result with whatever it gets back from its
             // substitution if there's a successful match, giving us
@@ -865,7 +865,7 @@ NFRule::doParse(const UnicodeString& text,
             partialResult = matchToDelimiter(workText2, 0, partialResult,
                 temp, pp2, sub2,
                 upperBound);
-            
+
             // if we got a successful match on this second
             // matchToDelimiter() call, update the high-water mark
             // and result (if necessary)
@@ -895,11 +895,11 @@ NFRule::doParse(const UnicodeString& text,
         // keep trying to match things until the outer matchToDelimiter()
         // call fails to make a match (each time, it picks up where it
         // left off the previous time)
-    } while (sub1->getPos() != sub2->getPos() 
-        && pp.getIndex() > 0 
-        && pp.getIndex() < workText.length() 
+    } while (sub1->getPos() != sub2->getPos()
+        && pp.getIndex() > 0
+        && pp.getIndex() < workText.length()
         && pp.getIndex() != start);
-    
+
     // update the caller's ParsePosition with our high-water mark
     // (i.e., it now points at the first character this function
     // didn't match-- the ParsePosition is therefore unchanged if
@@ -910,19 +910,19 @@ NFRule::doParse(const UnicodeString& text,
     if (highWaterMark > 0) {
         parsePosition.setErrorIndex(0);
     }
-    
+
     // this is a hack for one unusual condition: Normally, whether this
     // rule belong to a fraction rule set or not is handled by its
     // substitutions.  But if that rule HAS NO substitutions, then
     // we have to account for it here.  By definition, if the matching
     // rule in a fraction rule set has no substitutions, its numerator
     // is 1, and so the result is the reciprocal of its base value.
-    if (isFractionRule && 
-        highWaterMark > 0 && 
+    if (isFractionRule &&
+        highWaterMark > 0 &&
         sub1->isNullSubstitution()) {
         result = 1 / result;
     }
-    
+
     resVal.setDouble(result);
     return TRUE; // ??? do we need to worry if it is a long or a double?
 }
@@ -943,7 +943,7 @@ NFRule::doParse(const UnicodeString& text,
 * @return If things match, this is the unparsed part of "text";
 * if they didn't match, this is "text".
 */
-void 
+void
 NFRule::stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const
 {
     // if the prefix text is empty, dump out without doing anything
@@ -992,13 +992,13 @@ NFRule::stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosit
 * the result to a double, so we might as well return one.
 */
 double
-NFRule::matchToDelimiter(const UnicodeString& text, 
-                         int32_t startPos, 
+NFRule::matchToDelimiter(const UnicodeString& text,
+                         int32_t startPos,
                          double _baseValue,
-                         const UnicodeString& delimiter, 
-                         ParsePosition& pp, 
-                         const NFSubstitution* sub, 
-                         double upperBound) const 
+                         const UnicodeString& delimiter,
+                         ParsePosition& pp,
+                         const NFSubstitution* sub,
+                         double upperBound) const
 {
     // if "delimiter" contains real (i.e., non-ignorable) text, search
     // it for "delimiter" beginning at "start".  If that succeeds, then
@@ -1007,14 +1007,14 @@ NFRule::matchToDelimiter(const UnicodeString& text,
     if (!allIgnorable(delimiter)) {
         ParsePosition tempPP;
         Formattable result;
-        
+
         // use findText() to search for "delimiter".  It returns a two-
         // element array: element 0 is the position of the match, and
         // element 1 is the number of characters that matched
         // "delimiter".
         int32_t dLen;
         int32_t dPos = findText(text, delimiter, startPos, &dLen);
-        
+
         // if findText() succeeded, isolate the text preceding the
         // match, and use "sub" to match that text
         while (dPos >= 0) {
@@ -1023,7 +1023,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
             if (subText.length() > 0) {
                 UBool success = sub->doParse(subText, tempPP, _baseValue, upperBound,
                     formatter->isLenient(), result);
-                
+
                 // if the substitution could match all the text up to
                 // where we found "delimiter", then this function has
                 // a successful match.  Bump the caller's parse position
@@ -1044,7 +1044,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                     }
                 }
             }
-            
+
             // if we didn't match the substitution, search for another
             // copy of "delimiter" in "text" and repeat the loop if
             // we find it
@@ -1055,7 +1055,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
         // leave pp unchanged and return 0
         pp.setIndex(0);
         return 0;
-        
+
         // if "delimiter" is empty, or consists only of ignorable characters
         // (i.e., is semantically empty), thwe we obviously can't search
         // for "delimiter".  Instead, just use "sub" to parse as much of
@@ -1063,7 +1063,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
     } else {
         ParsePosition tempPP;
         Formattable result;
-        
+
         // try to match the whole string against the substitution
         UBool success = sub->doParse(text, tempPP, _baseValue, upperBound,
             formatter->isLenient(), result);
@@ -1080,7 +1080,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
         else {
             pp.setErrorIndex(tempPP.getErrorIndex());
         }
-        
+
         // and if we get to here, then nothing matched, so we return
         // 0 and leave pp alone
         return 0;
@@ -1109,7 +1109,7 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
     if (prefix.length() == 0) {
         return 0;
     }
-    
+
     // go through all this grief if we're in lenient-parse mode
     if (formatter->isLenient()) {
         // get the formatter's collator and use it to create two
@@ -1122,46 +1122,46 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
         CollationElementIterator* strIter = collator->createCollationElementIterator(str);
         CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
-        
+
         UErrorCode err = U_ZERO_ERROR;
-        
-		// The original code was problematic.  Consider this match:
-		// prefix = "fifty-"
-		// string = " fifty-7"
-		// The intent is to match string up to the '7', by matching 'fifty-' at position 1
-		// in the string.  Unfortunately, we were getting a match, and then computing where
-		// the match terminated by rematching the string.  The rematch code was using as an
-		// initial guess the substring of string between 0 and prefix.length.  Because of
-		// the leading space and trailing hyphen (both ignorable) this was succeeding, leaving
-		// the position before the hyphen in the string.  Recursing down, we then parsed the
-		// remaining string '-7' as numeric.  The resulting number turned out as 43 (50 - 7).
-		// This was not pretty, especially since the string "fifty-7" parsed just fine.
-		//
-		// We have newer APIs now, so we can use calls on the iterator to determine what we
-		// matched up to.  If we terminate because we hit the last element in the string, 
-		// our match terminates at this length.  If we terminate because we hit the last element
-		// in the target, our match terminates at one before the element iterator position.
+
+        // The original code was problematic.  Consider this match:
+        // prefix = "fifty-"
+        // string = " fifty-7"
+        // The intent is to match string up to the '7', by matching 'fifty-' at position 1
+        // in the string.  Unfortunately, we were getting a match, and then computing where
+        // the match terminated by rematching the string.  The rematch code was using as an
+        // initial guess the substring of string between 0 and prefix.length.  Because of
+        // the leading space and trailing hyphen (both ignorable) this was succeeding, leaving
+        // the position before the hyphen in the string.  Recursing down, we then parsed the
+        // remaining string '-7' as numeric.  The resulting number turned out as 43 (50 - 7).
+        // This was not pretty, especially since the string "fifty-7" parsed just fine.
+        //
+        // We have newer APIs now, so we can use calls on the iterator to determine what we
+        // matched up to.  If we terminate because we hit the last element in the string,
+        // our match terminates at this length.  If we terminate because we hit the last element
+        // in the target, our match terminates at one before the element iterator position.
 
         // match collation elements between the strings
         int32_t oStr = strIter->next(err);
         int32_t oPrefix = prefixIter->next(err);
-        
+
         while (oPrefix != CollationElementIterator::NULLORDER) {
             // skip over ignorable characters in the target string
-            while (CollationElementIterator::primaryOrder(oStr) == 0 
+            while (CollationElementIterator::primaryOrder(oStr) == 0
                 && oStr != CollationElementIterator::NULLORDER) {
                 oStr = strIter->next(err);
             }
-            
+
             // skip over ignorable characters in the prefix
-            while (CollationElementIterator::primaryOrder(oPrefix) == 0 
+            while (CollationElementIterator::primaryOrder(oPrefix) == 0
                 && oPrefix != CollationElementIterator::NULLORDER) {
                 oPrefix = prefixIter->next(err);
             }
-            
-			// dlf: move this above following test, if we consume the
-			// entire target, aren't we ok even if the source was also
-			// entirely consumed?
+
+            // dlf: move this above following test, if we consume the
+            // entire target, aren't we ok even if the source was also
+            // entirely consumed?
 
             // if skipping over ignorables brought to the end of
             // the prefix, we DID match: drop out of the loop
@@ -1176,16 +1176,16 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
                 delete strIter;
                 return 0;
             }
-            
+
             // match collation elements from the two strings
             // (considering only primary differences).  If we
             // get a mismatch, dump out and return 0
-            if (CollationElementIterator::primaryOrder(oStr) 
+            if (CollationElementIterator::primaryOrder(oStr)
                 != CollationElementIterator::primaryOrder(oPrefix)) {
                 delete prefixIter;
                 delete strIter;
                 return 0;
-                
+
                 // otherwise, advance to the next character in each string
                 // and loop (we drop out of the loop when we exhaust
                 // collation elements in the prefix)
@@ -1194,26 +1194,26 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
                 oPrefix = prefixIter->next(err);
             }
         }
-        
-		int32_t result = strIter->getOffset();
-		if (oStr != CollationElementIterator::NULLORDER) {
-			--result; // back over character that we don't want to consume;
-		}
+
+        int32_t result = strIter->getOffset();
+        if (oStr != CollationElementIterator::NULLORDER) {
+            --result; // back over character that we don't want to consume;
+        }
 
 #ifdef RBNF_DEBUG
-		fprintf(stderr, "prefix length: %d\n", result);
+        fprintf(stderr, "prefix length: %d\n", result);
 #endif
         delete prefixIter;
         delete strIter;
-        
-		return result;
+
+        return result;
 #if 0
         //----------------------------------------------------------------
         // JDK 1.2-specific API call
         // return strIter.getOffset();
         //----------------------------------------------------------------
         // JDK 1.1 HACK (take out for 1.2-specific code)
-        
+
         // if we make it to here, we have a successful match.  Now we
         // have to find out HOW MANY characters from the target string
         // matched the prefix (there isn't necessarily a one-to-one
@@ -1229,12 +1229,12 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
             temp.setTo(str, 0, prefix.length());
             if (collator->equals(temp, prefix)) {
 #ifdef RBNF_DEBUG
-				fprintf(stderr, "returning: %d\n", prefix.length());
+                fprintf(stderr, "returning: %d\n", prefix.length());
 #endif
                 return prefix.length();
             }
         }
-        
+
         // if they're not equal, then we have to compare successively
         // larger and larger substrings of the target string until we
         // get to one that matches the prefix.  At that point, we know
@@ -1249,12 +1249,12 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
                 ++p;
             }
         }
-        
+
         // SHOULD NEVER GET HERE!!!
         return 0;
         //----------------------------------------------------------------
 #endif
-		
+
         // If lenient parsing is turned off, forget all that crap above.
         // Just use String.startsWith() and be done with it.
   } else {
@@ -1282,8 +1282,8 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
 * the same as the length of "key")
 */
 int32_t
-NFRule::findText(const UnicodeString& str, 
-                 const UnicodeString& key, 
+NFRule::findText(const UnicodeString& str,
+                 const UnicodeString& key,
                  int32_t startingAt,
                  int32_t* length) const
 {
@@ -1292,13 +1292,13 @@ NFRule::findText(const UnicodeString& str,
     if (!formatter->isLenient()) {
         *length = key.length();
         return str.indexOf(key, startingAt);
-        
+
         // but if lenient parsing is turned ON, we've got some work
         // ahead of us
     } else {
         //----------------------------------------------------------------
         // JDK 1.1 HACK (take out of 1.2-specific code)
-        
+
         // in JDK 1.2, CollationElementIterator provides us with an
         // API to map between character offsets and collation elements
         // and we can do this by marching through the string comparing
@@ -1306,7 +1306,7 @@ NFRule::findText(const UnicodeString& str,
         // we have to go through this horrible slow mess:
         int32_t p = startingAt;
         int32_t keyLen = 0;
-        
+
         // basically just isolate smaller and smaller substrings of
         // the target string (each running to the end of the string,
         // and with the first one running from startingAt to the end)
@@ -1329,7 +1329,7 @@ NFRule::findText(const UnicodeString& str,
         // which should be "safe"
         *length = 0;
         return -1;
-        
+
         //----------------------------------------------------------------
         // JDK 1.2 version of this routine
         //RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
@@ -1398,21 +1398,21 @@ NFRule::allIgnorable(const UnicodeString& str) const
     if (str.length() == 0) {
         return TRUE;
     }
-    
+
     // if lenient parsing is turned on, walk through the string with
     // a collation element iterator and make sure each collation
     // element is 0 (ignorable) at the primary level
     if (formatter->isLenient()) {
         RuleBasedCollator* collator = (RuleBasedCollator*)(formatter->getCollator());
         CollationElementIterator* iter = collator->createCollationElementIterator(str);
-        
+
         UErrorCode err = U_ZERO_ERROR;
         int32_t o = iter->next(err);
         while (o != CollationElementIterator::NULLORDER
             && CollationElementIterator::primaryOrder(o) == 0) {
             o = iter->next(err);
         }
-        
+
         delete iter;
         return o == CollationElementIterator::NULLORDER;
     }

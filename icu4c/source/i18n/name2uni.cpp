@@ -136,8 +136,8 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
                 UChar32 ch;
 
-		u_UCharsToChars(buf, cbuf, ibuf+1);
-		ch = u_charFromName(U_EXTENDED_CHAR_NAME, cbuf, &status);
+                u_UCharsToChars(buf, cbuf, ibuf+1);
+                ch = u_charFromName(U_EXTENDED_CHAR_NAME, cbuf, &status);
                 if (U_SUCCESS(status)) {
                     // Lookup succeeded
                     str.truncate(0);

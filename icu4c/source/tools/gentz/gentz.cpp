@@ -322,7 +322,7 @@ void gentz::fixupNameToEquiv() {
     uint32_t i;
 
     // First make a list that maps indices to offsets
-    uint32_t *offsets = new uint32_t[equivCount];
+    uint32_t *offsets = (uint32_t*) uprv_malloc(sizeof(uint32_t) * equivCount);
     offsets[0] = header.equivTableDelta;
     if (offsets[0] % 4 != 0) {
         die("Header size is not 4-aligned");
@@ -345,7 +345,7 @@ void gentz::fixupNameToEquiv() {
         nameToEquiv[i] = offsets[x];
     }
 
-    delete[] offsets;
+    uprv_free(offsets);
 }
 
 TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
@@ -376,7 +376,7 @@ TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
     }
     maxPossibleSize *= n; // Get size of entire set of structs.
 
-    int8_t *result = new int8_t[maxPossibleSize];
+    int8_t *result = (int8_t*) uprv_malloc(sizeof(int8_t) * maxPossibleSize);
     if (result == 0) {
         die("Out of memory");
     }
@@ -476,7 +476,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     uint32_t maxPossibleSize = n * (sizeof(OffsetIndex) +
         (maxPerOffset-1) * sizeof(uint16_t));
 
-    int8_t *result = new int8_t[maxPossibleSize];
+    int8_t *result = (int8_t*) uprv_malloc(sizeof(int8_t) * maxPossibleSize);
     if (result == 0) {
         die("Out of memory");
     }
@@ -541,7 +541,7 @@ CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
     uint32_t expectedSize = n*(sizeof(CountryIndex)-sizeof(uint16_t)) +
         header.count * sizeof(uint16_t);
     uint32_t pad = (4 - (expectedSize % 4)) % 4; // This will be 0 or 2
-    int8_t *result = new int8_t[expectedSize + pad];
+    int8_t *result = (int8_t*) uprv_malloc(sizeof(int8_t) * (expectedSize + pad));
     if (result == 0) {
         die("Out of memory");
     }
@@ -655,8 +655,8 @@ char* gentz::parseNameTable(FileStream* in) {
     if (n != (int32_t)header.count) {
         die("Zone count doesn't match name table count");
     }
-    char* names = new char[nameTableSize];
-    nameToEquiv = new uint32_t[n];
+    char* names = (char*) uprv_malloc(sizeof(char) * nameTableSize);
+    nameToEquiv = (uint32_t*) uprv_malloc(sizeof(uint32_t) * n);
     if (names == 0 || nameToEquiv == 0) {
         die("Out of memory");
     }

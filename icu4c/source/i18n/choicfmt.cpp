@@ -152,11 +152,15 @@ ChoiceFormat::operator=(const   ChoiceFormat& that)
     if (this != &that) {
         NumberFormat::operator=(that);
         fCount = that.fCount;
-        delete [] fChoiceLimits; fChoiceLimits = 0;
-        delete [] fClosures; fClosures = 0;
-        delete [] fChoiceFormats; fChoiceFormats = 0;
-        fChoiceLimits = new double[fCount];
-        fClosures = new UBool[fCount];
+        uprv_free(fChoiceLimits);
+        fChoiceLimits = NULL;
+        uprv_free(fClosures);
+        fClosures = NULL;
+        delete [] fChoiceFormats;
+        fChoiceFormats = NULL;
+
+        fChoiceLimits = (double*) uprv_malloc( sizeof(double) * fCount);
+        fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
         fChoiceFormats = new UnicodeString[fCount];
 
         uprv_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
@@ -170,12 +174,12 @@ ChoiceFormat::operator=(const   ChoiceFormat& that)
 
 ChoiceFormat::~ChoiceFormat()
 {
-    delete [] fChoiceLimits;
-    fChoiceLimits = 0;
-    delete [] fClosures;
-    fClosures = 0;
+    uprv_free(fChoiceLimits);
+    fChoiceLimits = NULL;
+    uprv_free(fClosures);
+    fClosures = NULL;
     delete [] fChoiceFormats;
-    fChoiceFormats = 0;
+    fChoiceFormats = NULL;
     fCount = 0;
 }
 
@@ -265,8 +269,8 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     }
 
     // Allocate the required storage.
-    double *newLimits = new double[count];
-    UBool *newClosures = new UBool[count];
+    double *newLimits = (double*) uprv_malloc( sizeof(double) * count);
+    UBool *newClosures = (UBool*) uprv_malloc( sizeof(UBool) * count);
     UnicodeString *newFormats = new UnicodeString[count];
 
     // Perform the second pass
@@ -347,8 +351,8 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     newFormats[k] = buf;
 
     // Don't modify this object until the parse succeeds
-    delete[] fChoiceLimits;
-    delete[] fClosures;
+    uprv_free(fChoiceLimits);
+    uprv_free(fClosures);
     delete[] fChoiceFormats;
     fCount = count;
     fChoiceLimits  = newLimits;
@@ -359,8 +363,8 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
 error:
     status = U_ILLEGAL_ARGUMENT_ERROR;
     syntaxError(pattern,i,parseError);
-    delete[] newLimits;
-    delete[] newClosures;
+    uprv_free(newLimits);
+    uprv_free(newClosures);
     delete[] newFormats;
     return;
 
@@ -444,8 +448,8 @@ ChoiceFormat::adoptChoices(double *limits,
     if(limits == 0 || formats == 0)
         return;
 
-    delete [] fChoiceLimits;
-    delete [] fClosures;
+    uprv_free(fChoiceLimits);
+    uprv_free(fClosures);
     delete [] fChoiceFormats;
     fChoiceLimits = limits;
     fClosures = closures;
@@ -453,7 +457,7 @@ ChoiceFormat::adoptChoices(double *limits,
     fCount = cnt;
 
     if (fClosures == 0) {
-        fClosures = new UBool[fCount];
+        fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
         int32_t i;
         for (i=0; i<fCount; ++i) {
             fClosures[i] = FALSE;
@@ -482,15 +486,15 @@ ChoiceFormat::setChoices(  const double* limits,
     if(limits == 0 || formats == 0)
         return;
 
-    delete [] fChoiceLimits;
-    delete [] fClosures;
+    uprv_free(fChoiceLimits);
+    uprv_free(fClosures);
     delete [] fChoiceFormats;
 
     // Note that the old arrays are deleted and this owns
     // the created array.
     fCount = cnt;
-    fChoiceLimits = new double[fCount];
-    fClosures = new UBool[fCount];
+    fChoiceLimits = (double*) uprv_malloc( sizeof(double) * fCount);
+    fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
     fChoiceFormats = new UnicodeString[fCount];
 
     uprv_arrayCopy(limits, fChoiceLimits, fCount);

@@ -23,15 +23,15 @@ static const UChar gPound = 0x0023;
 static const UChar gZero = 0x0030;
 static const UChar gSpace = 0x0020;
 
-static const UChar gEqualsEquals[] = 
+static const UChar gEqualsEquals[] =
 {
     0x3D, 0x3D, 0
 }; /* "==" */
-static const UChar gGreaterGreaterGreaterThan[] = 
+static const UChar gGreaterGreaterGreaterThan[] =
 {
     0x3E, 0x3E, 0x3E, 0
 }; /* ">>>" */
-static const UChar gGreaterGreaterThan[] = 
+static const UChar gGreaterGreaterThan[] =
 {
     0x3E, 0x3E, 0
 }; /* ">>" */
@@ -43,7 +43,7 @@ NFSubstitution::makeSubstitution(int32_t pos,
                                  const NFRuleSet* ruleSet,
                                  const RuleBasedNumberFormat* formatter,
                                  const UnicodeString& description,
-                                 UErrorCode& status) 
+                                 UErrorCode& status)
 {
     // if the description is empty, return a NullSubstitution
     if (description.length() == 0) {
@@ -89,7 +89,7 @@ NFSubstitution::makeSubstitution(int32_t pos,
         if (rule->getBaseValue() == NFRule::kNegativeNumberRule) {
             return new AbsoluteValueSubstitution(pos, ruleSet, formatter, description, status);
         }
-        
+
         // if the rule is a fraction rule, return a
         // FractionalPartSubstitution
         else if (rule->getBaseValue() == NFRule::kImproperFractionRule
@@ -97,7 +97,7 @@ NFSubstitution::makeSubstitution(int32_t pos,
             || rule->getBaseValue() == NFRule::kMasterRule) {
             return new FractionalPartSubstitution(pos, ruleSet, formatter, description, status);
         }
-        
+
         // if the rule set owning the rule is a fraction rule set,
         // throw an exception
         else if (ruleSet->isFractionRuleSet()) {
@@ -223,19 +223,19 @@ NFSubstitution::getDynamicClassID() const {
      * @param The substitution to compare this one to
      * @return true if the two substitutions are functionally equivalent
      */
-UBool 
+UBool
 NFSubstitution::operator==(const NFSubstitution& rhs) const
 {
     // compare class and all of the fields all substitutions have
     // in common
     // this should be called by subclasses before their own equality tests
-    return getDynamicClassID() == rhs.getDynamicClassID() 
+    return getDynamicClassID() == rhs.getDynamicClassID()
         && pos == rhs.pos
-		&& (ruleSet == NULL) == (rhs.ruleSet == NULL)
+        && (ruleSet == NULL) == (rhs.ruleSet == NULL)
         // && ruleSet == rhs.ruleSet causes circularity, other checks to make instead?
-		&& (numberFormat == NULL 
-		    ? (rhs.numberFormat == NULL)
-		    : (*numberFormat == *rhs.numberFormat)); 
+        && (numberFormat == NULL
+            ? (rhs.numberFormat == NULL)
+            : (*numberFormat == *rhs.numberFormat));
 }
 
     /**
@@ -244,7 +244,7 @@ NFSubstitution::operator==(const NFSubstitution& rhs) const
      * not be identical to the description it was created from, but
      * it'll produce the same result.
      */
-void 
+void
 NFSubstitution::toString(UnicodeString& text) const
 {
     // use tokenChar() to get the character at the beginning and
@@ -312,7 +312,7 @@ NFSubstitution::doSubstitution(const llong &number, UnicodeString& toInsertInto,
  * rule text begins (this value is added to this substitution's
  * position to determine exactly where to insert the new text)
  */
-void 
+void
 NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const {
     // perform a transformation on the number being formatted that
     // is dependent on the type of substitution this is
@@ -375,11 +375,11 @@ NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32
  * no match this is new Long(0) (not null), and parsePosition
  * is left unchanged.
  */
-UBool 
-NFSubstitution::doParse(const UnicodeString& text, 
-                        ParsePosition& parsePosition, 
+UBool
+NFSubstitution::doParse(const UnicodeString& text,
+                        ParsePosition& parsePosition,
                         double baseValue,
-                        double upperBound, 
+                        double upperBound,
                         UBool lenientParse,
                         Formattable& result) const
 {
@@ -421,8 +421,8 @@ NFSubstitution::doParse(const UnicodeString& text,
     // of its own).  Derive a parse result and return it as a Long,
     // if possible, or a Double
     if (parsePosition.getIndex() != 0) {
-        double tempResult = (result.getType() == Formattable::kLong) ? 
-            (double)result.getLong() : 
+        double tempResult = (result.getType() == Formattable::kLong) ?
+            (double)result.getLong() :
         result.getDouble();
 
         // composeRuleValue() produces a full parse result from
@@ -458,7 +458,7 @@ NFSubstitution::doParse(const UnicodeString& text,
 }
 
 
-UBool 
+UBool
 NFSubstitution::isNullSubstitution() const {
     return FALSE;
 }
@@ -469,7 +469,7 @@ NFSubstitution::isNullSubstitution() const {
      * proliferate and partially because we have to port this to C++.)
      * @return true if this object is an instance of ModulusSubstitution
      */
-UBool 
+UBool
 NFSubstitution::isModulusSubstitution() const {
     return FALSE;
 }
@@ -486,7 +486,7 @@ SameValueSubstitution::SameValueSubstitution(int32_t _pos,
                         const NFRuleSet* _ruleSet,
                         const RuleBasedNumberFormat* formatter,
                         const UnicodeString& description,
-                        UErrorCode& status) 
+                        UErrorCode& status)
 : NFSubstitution(_pos, _ruleSet, formatter, description, status)
 {
     if (description == gEqualsEquals) {
@@ -591,7 +591,7 @@ ModulusSubstitution::doSubstitution(const llong &   number, UnicodeString& toIns
     // to format its substitution value)
     if (ruleToUse == NULL) {
         NFSubstitution::doSubstitution(number, toInsertInto, _pos);
-        
+
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
     } else {
@@ -608,7 +608,7 @@ ModulusSubstitution::doSubstitution(const llong &   number, UnicodeString& toIns
 * into
 * @param pos The position of the rule text in toInsertInto
 */
-void 
+void
 ModulusSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const
 {
     // if this isn't a >>> substitution, just use the inherited version
@@ -616,12 +616,12 @@ ModulusSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, 
     // to format its substitution value)
     if (ruleToUse == NULL) {
         NFSubstitution::doSubstitution(number, toInsertInto, _pos);
-        
+
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
     } else {
         double numberToFormat = transformNumber(number);
-        
+
         ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos());
     }
 }
@@ -640,8 +640,8 @@ ModulusSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, 
  * @param baseValue The partial parse result prior to calling this
  * routine.
  */
-UBool 
-ModulusSubstitution::doParse(const UnicodeString& text, 
+UBool
+ModulusSubstitution::doParse(const UnicodeString& text,
                              ParsePosition& parsePosition,
                              double baseValue,
                              double upperBound,
@@ -730,14 +730,14 @@ FractionalPartSubstitution::FractionalPartSubstitution(int32_t _pos,
  * @param pos The position of the owning rule's rule text in
  * toInsertInto
  */
-void 
+void
 FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const
 {
     // if we're not in "byDigits" mode, just use the inherited
     // doSubstitution() routine
     if (!byDigits) {
         NFSubstitution::doSubstitution(number, toInsertInto, _pos);
-        
+
         // if we're in "byDigits" mode, transform the value into an integer
         // by moving the decimal point eight places to the right and
         // pulling digits off the right one at a time, formatting each digit
@@ -816,7 +816,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             digit = temp.getType() == Formattable::kLong ?
                 temp.getLong() :
             (int32_t)temp.getDouble();
-            
+
             if (lenientParse && workPos.getIndex() == 0) {
                 if (!fmt) {
                     UErrorCode status = U_ZERO_ERROR;
@@ -851,7 +851,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
     }
 }
 
-UBool 
+UBool
 FractionalPartSubstitution::operator==(const NFSubstitution& rhs) const
 {
     return NFSubstitution::operator==(rhs) &&
@@ -881,7 +881,7 @@ AbsoluteValueSubstitution::getDynamicClassID() const {
 // NumeratorSubstitution
 //===================================================================
 
-UBool 
+UBool
 NumeratorSubstitution::operator==(const NFSubstitution& rhs) const
 {
     return NFSubstitution::operator==(rhs) &&

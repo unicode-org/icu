@@ -137,7 +137,7 @@ unum_open(  UNumberFormatStyle    style,
         break;
 
       case UNUM_SPELLOUT:
-		return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
+        return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
 
       default:
         *status = U_UNSUPPORTED_ERROR;
@@ -151,7 +151,7 @@ unum_open(  UNumberFormatStyle    style,
 
       return retVal;
   }else{
-	  /* we don't support RBNF patterns yet */
+      /* we don't support RBNF patterns yet */
       UParseError tErr;
       int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
       const UnicodeString pat((UChar*)pattern, len, len);

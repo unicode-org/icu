@@ -1383,7 +1383,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     // case 12: // 'w' - WEEK_OF_YEAR
     // case 13: // 'W' - WEEK_OF_MONTH
     // case 16: // 'K' - HOUR: 0-based.  eg, 11PM + 1 hour =>> 0 AM
-	// 'e' - DOW_LOCAL
+    // 'e' - DOW_LOCAL
 
         // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
         int32_t parseStart = pos.getIndex();
