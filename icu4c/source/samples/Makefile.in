@@ -40,7 +40,7 @@ VERSION = @VERSION@
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = date cal
+SUBDIRS = XMLConverter date cal
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\
