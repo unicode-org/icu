@@ -6,7 +6,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests                                       mfc */
-/* Copyright (c) IBM Corporation 1996-2003.  All Rights Reserved.    */
+/* Copyright (c) IBM Corporation 1996-2004.  All Rights Reserved.     */
 /* ------------------------------------------------------------------ */
 /* DiagBigDecimal                                                     */
 /*                                                                    */
