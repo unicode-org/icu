@@ -129,6 +129,7 @@ install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc insta
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
 	( cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -e $(ICUDATA_BASENAME_VERSION) -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(libdir) )
 ifeq ($(strip $(PKGDATA_MODE)),dll)
+		$(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO) ; 
 		(cd $(DESTDIR)$(libdir); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO))
 endif
 
