@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/10/25 23:22:15 $
- * $Revision: 1.33 $
+ * $Date: 2001/10/30 18:04:08 $
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -30,13 +30,15 @@ import com.ibm.util.Utility;
  * Variables are detected by looking up each character in a supplied
  * variable list to see if it has been so defined.
  *
- * <p>A rule may contain segments in its input string and segment references in
- * its output string.  A segment is a substring of the input pattern, indicated
- * by an offset and limit.  The segment may span the preceding or following
- * context.  A segment reference is a special character in the output string
- * that causes a segment of the input string (not the input pattern) to be
- * copied to the output string.  The range of special characters that represent
- * segment references is defined by RuleBasedTransliterator.Data.
+ * <p>A rule may contain segments in its input string and segment
+ * references in its output string.  A segment is a substring of the
+ * input pattern, indicated by an offset and limit.  The segment may
+ * be in the preceding or following context.  It may not span a
+ * context boundary.  A segment reference is a special character in
+ * the output string that causes a segment of the input string (not
+ * the input pattern) to be copied to the output string.  The range of
+ * special characters that represent segment references is defined by
+ * RuleBasedTransliterator.Data.
  *
  * <p>Example: The rule "([a-z]) . ([0-9]) > $2 . $1" will change the input
  * string "abc.123" to "ab1.c23".
@@ -44,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.33 $ $Date: 2001/10/25 23:22:15 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.34 $ $Date: 2001/10/30 18:04:08 $
  */
 class TransliterationRule {
 
@@ -64,20 +66,13 @@ class TransliterationRule {
     private String output;
 
     /**
-     * An array of integers encoding the position of the segments.
-     * See RuleBasedTransliterator.Segments for more details.
+     * An array of matcher objects corresponding to the input pattern
+     * segments.  If there are no segments this is null.  N.B. This is
+     * a UnicodeMatcher for generality, but in practice it is always a
+     * StringMatcher.  In the future we may generalize this, but for
+     * now we sometimes cast down to StringMatcher.
      */
-    int[] segments;
-
-    /**
-     * A value we compute from segments.  The first index into segments[]
-     * that is >= anteContextLength.  That is, the first one that is within
-     * the forward scanned part of the pattern -- the key or the postContext.
-     * If there are no segments, this has the value -1.  This index is relative
-     * to FIRST_SEG_POS_INDEX; that is, it should be used as follows:
-     * segments[FIRST_SEG_POS_INDEX + firstKeySeg].
-     */
-    int firstKeySeg;
+    UnicodeMatcher[] segments;
 
     /**
      * The length of the string that must match before the key.  If
@@ -127,20 +122,6 @@ class TransliterationRule {
     private static final char APOSTROPHE = '\'';
     private static final char BACKSLASH  = '\\';
 
-    // Macros for accessing the array of integers encoding the position of
-    // the segments.  See RuleBasedTransliterator.Segments for more details.
-    // SEGMENTS_COUNT number of segments, n (half the number of parens)
-    // SEGMENTS_LEN   length of the segments array (number of elements)
-    // SEGMENTS_POS   position in 'pattern' of parenthesis i, where i=0..2n-1
-    // SEGMENTS_NUM   index into segments to access POS of $1.open,
-    //                $1.close, $2.open, $2.close,.., $n.open, $n.close
-    //                Relative to FIRST_SEG_POS_INDEX.  Ranges from 0..2n-1.
-    static final int FIRST_SEG_POS_INDEX = 2;
-    static final int SEGMENTS_COUNT(int[] x) { return x[0]; }
-    static final int SEGMENTS_LEN(int[] x) { return (SEGMENTS_COUNT(x)*4+4); }
-    static final int SEGMENTS_POS(int[] x,int i) { return x[FIRST_SEG_POS_INDEX+i]; }
-    static final int SEGMENTS_NUM(int[] x,int i) { return x[x[1]+i]-FIRST_SEG_POS_INDEX; }
-
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
 
@@ -165,12 +146,8 @@ class TransliterationRule {
      * 0.  For example, the rule "abc{def} > | @@@ xyz;" changes "def" to
      * "xyz" and moves the cursor to before "a".  It would have a cursorOffset
      * of -3.
-     * @param segs array of 2n integers.  Each of n pairs consists of offset,
-     * limit for a segment of the input string.  Characters in the output string
-     * refer to these segments if they are in a special range determined by the
-     * associated RuleBasedTransliterator.Data object.  May be null if there are
-     * no segments.  The caller is responsible for validating that segments
-     * are well-formed.
+     * @param segs array of UnicodeMatcher corresponding to input pattern
+     * segments, or null if there are none
      * @param anchorStart true if the the rule is anchored on the left to
      * the context start
      * @param anchorEnd true if the rule is anchored on the right to the
@@ -180,7 +157,7 @@ class TransliterationRule {
                                int anteContextPos, int postContextPos,
                                String output,
                                int cursorPos, int cursorOffset,
-                               int[] segs,
+                               UnicodeMatcher[] segs,
                                boolean anchorStart, boolean anchorEnd,
                                RuleBasedTransliterator.Data theData) {
         data = theData;
@@ -212,24 +189,10 @@ class TransliterationRule {
         this.cursorPos = cursorPos + cursorOffset;
         this.output = output;
         // We don't validate the segments array.  The caller must
-        // guarantee that the segments are well-formed.
+        // guarantee that the segments are well-formed (that is, that
+        // all $n references in the output refer to indices of this
+        // array, and that no array elements are null).
         this.segments = segs;
-
-        // Find the position of the first segment index that is after the
-        // anteContext (in the key).  Note that this may be a start or a
-        // limit index.  If all segments are in the ante context,
-        // firstKeySeg should point past the last segment -- that is, it
-        // should point at the end marker, which is -1.  This allows the
-        // code to back up by one to obtain the last ante context segment.
-        firstKeySeg = -1;
-        if (segments != null) {
-            firstKeySeg = FIRST_SEG_POS_INDEX;
-            while (segments[firstKeySeg] >= 0 &&
-                   segments[firstKeySeg] < anteContextLength) {
-                ++firstKeySeg;
-            }
-            firstKeySeg -= FIRST_SEG_POS_INDEX; // make relative to FSPI
-        }
 
         pattern = input;
         flags = 0;
@@ -410,25 +373,12 @@ class TransliterationRule {
 
         // ============================ MATCH ===========================
 
-        // Record the actual positions, in the text, of the segments.
-        // These are recorded in the order that they occur in the pattern.
-
-        // segPos[] is an array of 2*SEGMENTS_COUNT elements.  It
-        // records the position in 'text' of each segment boundary, in
-        // the order that they occur in 'pattern'.
-        int[] segPos = null;
+        // Reset segment match data
         if (segments != null) {
-            segPos = new int[2*SEGMENTS_COUNT(segments)];
+            for (int i=0; i<segments.length; ++i) {
+                ((StringMatcher) segments[i]).resetMatch();
+            }
         }
-        // iSeg is an index into segments[] that accesses the first
-        // array.  As such it ranges from 0 to SEGMENTS_COUNT*2 - 1.
-        // When indexing into segments[] FIRST_SEG_POS_INDEX must be
-        // added to it: segments[FIRST_SEG_POS_INDEX + iSeg].
-        int iSeg = firstKeySeg - 1;
-        // nextSegPos is an offset in 'pattern'.  When the cursor is
-        // equal to nextSegPos, we are at a segment boundary, and we
-        // record the position in the real text in segPos[].
-        int nextSegPos = (iSeg >= 0) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
 
         int lenDelta, keyLimit;
         int[] intRef = new int[1];
@@ -465,15 +415,6 @@ class TransliterationRule {
                 }
                 oText = intRef[0];
             }
-            while (nextSegPos == oPattern) {
-                segPos[iSeg] = oText;
-                if (oText >= 0) {
-                    segPos[iSeg] += UTF16.getCharCount(UTF16.charAt(text, oText));
-                } else {
-                    ++segPos[iSeg];
-                }
-                nextSegPos = (--iSeg >= FIRST_SEG_POS_INDEX) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
-            }
         }
 
         minOText = posAfter(text, oText);
@@ -485,9 +426,6 @@ class TransliterationRule {
         }
 
         // -------------------- Key and Post Context --------------------
-
-        iSeg = firstKeySeg;
-        nextSegPos = (iSeg >= 0) ? (segments[FIRST_SEG_POS_INDEX+iSeg] - anteContextLength) : -1;
 
         oPattern = 0;
         oText = pos.start;
@@ -511,10 +449,6 @@ class TransliterationRule {
             // depending on whether we're in the key or in the post
             // context.
 
-            while (oPattern == nextSegPos) {
-                segPos[iSeg] = oText;
-                nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
-            }
             if (oPattern == keyLength) {
                 keyLimit = oText;
             }
@@ -554,10 +488,6 @@ class TransliterationRule {
             //!    return UnicodeMatcher.U_MISMATCH;
             //!}
         }
-        while (oPattern == nextSegPos) {
-            segPos[iSeg] = oText;
-            nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
-        }
         if (oPattern == keyLength) {
             keyLimit = oText;
         }
@@ -576,8 +506,7 @@ class TransliterationRule {
         // =========================== REPLACE ==========================
 
         // We have a full match.  The key is between pos.start and
-        // keyLimit.  Segment indices have been recorded in segPos[].
-        // Perform a replacement.
+        // keyLimit.
 
         if (segments == null) {
             text.replace(pos.start, keyLimit, output);
@@ -629,11 +558,22 @@ class TransliterationRule {
                         buf.setLength(0);
                     }
                     // Copy segment with out-of-band data
-                    b *= 2;
-                    int start = segPos[SEGMENTS_NUM(segments,b)];
-                    int limit = segPos[SEGMENTS_NUM(segments,b+1)];
-                    text.copy(start, limit, dest);
-                    dest += limit - start;
+                    StringMatcher m = (StringMatcher) segments[b];
+                    int start = m.getMatchStart();
+                    int limit = m.getMatchLimit();
+                    // If there was no match, that means that a quantifier
+                    // matched zero-length.  E.g., x (a)* y matched "xy".
+                    if (start >= 0) {
+                        // Adjust indices for segments in post context
+                        // for any inserted text between the key and
+                        // the post context.
+                        if (start >= keyLimit) {
+                            start += dest - keyLimit;
+                            limit += dest - keyLimit;
+                        }
+                        text.copy(start, limit, dest);
+                        dest += limit - start;
+                    }
                 }
                 oOutput += UTF16.getCharCount(c);
             }
@@ -790,20 +730,6 @@ class TransliterationRule {
 
         StringBuffer rule = new StringBuffer();
 
-        // iseg indexes into segments[] directly (not offset from FSPI)
-        int iseg = FIRST_SEG_POS_INDEX-1;
-        int nextSeg = -1;
-        // Build an array of booleans specifying open vs. close paren
-        boolean[] isOpen = null;
-        if (segments != null) {
-            isOpen = new boolean[2*SEGMENTS_COUNT(segments)];
-            for (i=0; i<2*SEGMENTS_COUNT(segments); i+=2) {
-                isOpen[SEGMENTS_NUM(segments,i)  ] = true;
-                isOpen[SEGMENTS_NUM(segments,i+1)] = false;
-            }
-            nextSeg = segments[++iseg];
-        }
-
         // Accumulate special characters (and non-specials following them)
         // into quoteBuf.  Append quoteBuf, within single quotes, when
         // a non-quoted element must be inserted.
@@ -825,14 +751,6 @@ class TransliterationRule {
                 appendToRule(rule, '{', true, escapeUnprintable, quoteBuf);
             }
 
-            // Append either '(' or ')' if we are at a segment index
-            if (i == nextSeg) {
-                appendToRule(rule, isOpen[iseg-FIRST_SEG_POS_INDEX] ?
-                                 '(' : ')',
-                                 true, escapeUnprintable, quoteBuf);
-                nextSeg = segments[++iseg];
-            }
-
             if (emitBraces && i == (anteContextLength + keyLength)) {
                 appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
             }
@@ -845,11 +763,6 @@ class TransliterationRule {
                 appendToRule(rule, matcher.toPattern(escapeUnprintable),
                               true, escapeUnprintable, quoteBuf);
             }
-        }
-
-        if (i == nextSeg) {
-            // assert(!isOpen[iSeg-FIRST_SEG_POS_INDEX]);
-            appendToRule(rule, ')', true, escapeUnprintable, quoteBuf);
         }
 
         if (emitBraces && i == (anteContextLength + keyLength)) {
@@ -885,7 +798,7 @@ class TransliterationRule {
             } else {
                 ++seg; // make 1-based
                 appendToRule(rule, 0x20, true, escapeUnprintable, quoteBuf);
-                rule.append(0x24 /*$*/);
+                rule.append('$');
                 boolean show = false; // true if we should display digits
                 for (int p=9; p>=0; --p) {
                     int d = seg / POW10[p];
@@ -938,6 +851,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.34  2001/10/30 18:04:08  alan
+ * jitterbug 1406: make quantified segments behave like perl counterparts
+ *
  * Revision 1.33  2001/10/25 23:22:15  alan
  * jitterbug 73: changes to support zero-length matchers at end of key
  *

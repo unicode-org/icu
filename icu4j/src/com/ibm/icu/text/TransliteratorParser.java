@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2001/10/24 00:03:38 $
-* $Revision: 1.7 $
+* $Date: 2001/10/30 18:04:09 $
+* $Revision: 1.8 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -117,6 +117,7 @@ class TransliteratorParser {
     private static final char FWDREV_RULE_OP    = '~'; // internal rep of <> op
 
     private static final String OPERATORS = "=><";
+    private static final String HALF_ENDERS = "=><;";
 
     // Other special characters
     private static final char QUOTE               = '\'';
@@ -142,7 +143,7 @@ class TransliteratorParser {
     // private static final char ANCHOR_END       = '$';
 
     // Segments of the input string are delimited by "(" and ")".  In the
-    // output string these segments are referenced as "$1" through "$9".
+    // output string these segments are referenced as "$1", "$2", etc.
     private static final char SEGMENT_OPEN        = '(';
     private static final char SEGMENT_CLOSE       = ')';
 
@@ -286,209 +287,6 @@ class TransliteratorParser {
     };
 
     //----------------------------------------------------------------------
-    // class Segments
-    //----------------------------------------------------------------------
-
-    /**
-     * Segments are parentheses-enclosed regions of the input string.
-     * These are referenced in the output string using the notation $1,
-     * $2, etc.  Numbering is in order of appearance of the left
-     * parenthesis.  Number is one-based.  Segments are defined as start,
-     * limit pairs.  Segments may nest.
-     *
-     * During parsing, segment data is encoded in an object of class
-     * Segments.  At runtime, the same data is encoded in compact form as
-     * an array of integers in a TransliterationRule.  The runtime encoding
-     * must satisfy three goals:
-     *
-     * 1. Iterate over the offsets in a pattern, from left to right,
-     *    and indicate all segment boundaries, in order.  This is done
-     *    during matching.
-     *
-     * 2. Given a reference $n, produce the start and limit offsets
-     *    for that segment.  This is done during replacement.
-     *
-     * 3. Similar to goal 1, but in addition, indicate whether each
-     *    segment boundary is a start or a limit, in other words, whether
-     *    each is an open paren or a close paren.  This is required by
-     *    the toRule() method.
-     *
-     * Goal 1 must be satisfied at high speed since this is done during
-     * matching.  Goal 2 is next most important.  Goal 3 is not performance
-     * critical since it is only needed by toRule().
-     *
-     * The array of integers is actually two arrays concatenated.  The
-     * first gives the index values of the open and close parentheses in
-     * the order they appear.  The second maps segment numbers to the
-     * indices of the first array.  The two arrays have the same length.
-     * Iterating over the first array satisfies goal 1.  Indexing into the
-     * second array satisfies goal 2.  Goal 3 is satisfied by iterating
-     * over the second array and constructing the required data when
-     * needed.  This is what toRule() does.
-     *
-     * Example:  (a b(c d)e f)
-     *            0 1 2 3 4 5 6
-     *
-     * First array: Indices are 0, 2, 4, and 6.
-
-     * Second array: $1 is at 0 and 6, and $2 is at 2 and 4, so the
-     * second array is 0, 3, 1 2 -- these give the indices in the
-     * first array at which $1:open, $1:close, $2:open, and $2:close
-     * occur.
-     *
-     * The final array is: 2, 7, 0, 2, 4, 6, -1, 2, 5, 3, 4, -1
-     *
-     * Each subarray is terminated with a -1, and two leading entries
-     * give the number of segments and the offset to the first entry
-     * of the second array.  In addition, the second array value are
-     * all offset by 2 so they index directly into the final array.
-     * The total array size is 4*segments[0] + 4.  The second index is
-     * 2*segments[0] + 3.
-     *
-     * In the output string, a segment reference is indicated by a
-     * character in a special range, as defined by
-     * RuleBasedTransliterator.Data.
-     *
-     * Most rules have no segments, in which case segments is null, and the
-     * output string need not be checked for segment reference characters.
-     *
-     * See also rbt_rule.h/cpp.
-     */
-    private static class Segments {
-
-        private Vector offsets; // holds Integer objects
-
-        private Vector isOpenParen; // holds Boolean objects
-
-        private int offset(int i) {
-            return ((Integer) offsets.elementAt(i)).intValue();
-        }
-
-        private boolean isOpen(int i) {
-            return ((Boolean) isOpenParen.elementAt(i)).booleanValue();
-        }
-
-        // size of the Vectors
-        private int size() {
-            // assert(offset.size() == isOpenParen.size());
-            return offsets.size();
-        }
-
-        public Segments() {
-            offsets = new Vector();
-            isOpenParen = new Vector();
-        }
-
-        public void addParenthesisAt(int offset, boolean isOpen) {
-            offsets.addElement(new Integer(offset));
-            isOpenParen.addElement(new Boolean(isOpen));
-        }
-
-        public int getLastParenOffset(boolean[] isOpenParen) {
-            if (size() == 0) {
-                return -1;
-            }
-            isOpenParen[0] = isOpen(size()-1);
-            return offset(size()-1);
-        }
-
-        // Remove the last (rightmost) segment.  Store its offsets in start
-        // and limit, and then convert all offsets at or after start to be
-        // equal to start.  Upon failure, return FALSE.  Assume that the
-        // caller has already called getLastParenOffset() and validated that
-        // there is at least one parenthesis and that the last one is a close
-        // paren.
-        public boolean extractLastParenSubstring(int[] start, int[] limit) {
-            // assert(offsets.size() > 0);
-            // assert(isOpenParen.elementAt(isOpenParen.size()-1) == 0);
-            int i = size() - 1;
-            int n = 1; // count of close parens we need to match
-            // Record position of the last close paren
-            limit[0] = offset(i);
-            --i; // back up to the one before the last one
-            while (i >= 0 && n != 0) {
-                n += isOpen(i) ? -1 : 1;
-            }
-            if (n != 0) {
-                return false;
-            }
-            // assert(i>=0);
-            start[0] = offset(i);
-            // Reset all segment pairs from i to size() - 1 to [start, start+1).
-            while (i<size()) {
-                int o = isOpen(i) ? start[0] : (start[0]+1);
-                offsets.setElementAt(new Integer(o), i);
-                ++i;
-            }
-            return true;
-        }
-
-        // Assume caller has already gotten a TRUE validate().
-        public int[] createArray() {
-            int c = count(); // number of segments
-            int arrayLen = 4*c + 4;
-            int[] array = new int[arrayLen];
-            int a2offset = 2*c + 3; // offset to array 2
-
-            array[0] = c;
-            array[1] = a2offset;
-            int i;
-            for (i=0; i<2*c; ++i) {
-                array[2+i] = offset(i);
-            }
-            array[a2offset-1] = -1;
-            array[arrayLen-1] = -1;
-            // Now walk through and match up segment numbers with parentheses.
-            // Number segments from 0.  We're going to offset all entries by 2
-            // to skip the first two elements, array[0] and array[1].
-            Stack stack = new Stack();
-            int nextOpen = 0; // seg # of next open, 0-based
-            for (i=0; i<2*c; ++i) {
-                boolean open = isOpen(i);
-                // Let seg be the zero-based segment number.
-                // Open parens are at 2*seg in array 2.
-                // Close parens are at 2*seg+1 in array 2.
-                if (open) {
-                    array[a2offset + 2*nextOpen] = 2+i;
-                    stack.push(new Integer(nextOpen));
-                    ++nextOpen;
-                } else {
-                    int nextClose = ((Integer) stack.pop()).intValue();
-                    array[a2offset + 2*nextClose+1] = 2+i;
-                }
-            }
-            // assert(stack.empty());
-
-            return array;
-        }
-
-        public boolean validate() {
-            // want number of parens >= 2
-            // want number of parens to be even
-            // want first paren '('
-            // want parens to match up in the end
-            if ((size() < 2) || (size() % 2 != 0) || !isOpen(0)) {
-                return false;
-            }
-            int n = 0;
-            for (int i=0; i<size(); ++i) {
-                n += isOpen(i) ? 1 : -1;
-                if (n < 0) {
-                    return false;
-                }
-            }
-            return n == 0;
-        }
-
-        // Number of segments
-        // Assume caller has already gotten a TRUE validate().
-        public int count() {
-            // assert(validate());
-            return size() / 2;
-        }
-    }
-
-    //----------------------------------------------------------------------
     // class RuleHalf
     //----------------------------------------------------------------------
 
@@ -505,11 +303,7 @@ class TransliteratorParser {
         public int ante = -1;   // position of ante context marker '{' in text
         public int post = -1;   // position of post context marker '}' in text
 
-        // Record the position of the segment substrings and references.  A
-        // given side should have segments or segment references, but not
-        // both.
-        public Segments segments = null;
-        public int maxRef = -1; // index of largest ref (1..9)
+        public int maxRef = -1; // n where maximum segment ref is $n; 1-based
 
         // Record the offset to the cursor either to the left or to the
         // right of the key.  This is indicated by characters on the output
@@ -521,29 +315,88 @@ class TransliteratorParser {
         // output text.
         public int cursorOffset = 0; // only nonzero on output side
 
+        // Position of first CURSOR_OFFSET on _right_.  This will be -1
+        // for |@, -2 for |@@, etc., and 1 for @|, 2 for @@|, etc.
+        private int cursorOffsetPos = 0;
+
         public boolean anchorStart = false;
         public boolean anchorEnd   = false;
 
         /**
+         * UnicodeMatcher objects corresponding to each segment.
+         */
+        public Vector segments = new Vector();
+        
+        /**
+         * The segment number from 0..n-1 of the next '(' we see
+         * during parsing; 0-based.
+         */
+        private int nextSegmentNumber = 0;
+
+        /**
          * Parse one side of a rule, stopping at either the limit,
-         * the END_OF_RULE character, or an operator.  Return
-         * the pos of the terminating character (or limit).
+         * the END_OF_RULE character, or an operator.
+         * @return the index after the terminating character, or
+         * if limit was reached, limit
          */
         public int parse(String rule, int pos, int limit,
                          TransliteratorParser parser) {
             int start = pos;
             StringBuffer buf = new StringBuffer();
+            pos = parseSection(rule, pos, limit, parser, buf, false);
+            text = buf.toString();
+
+            if (cursorOffset > 0 && cursor != cursorOffsetPos) {
+                syntaxError("Misplaced " + CURSOR_POS, rule, start);
+            }
+
+            return pos;
+        }
+
+        /**
+         * Parse a section of one side of a rule, stopping at either
+         * the limit, the END_OF_RULE character, an operator, or a
+         * segment close character.  This method parses both a
+         * top-level rule half and a segment within such a rule half.
+         * It calls itself recursively to parse segments and nested
+         * segments.
+         * @param buf buffer into which to accumulate the rule pattern
+         * characters, either literal characters from the rule or
+         * standins for UnicodeMatcher objects including segments.
+         * @param isSegment if true, then we've already seen a '(' and
+         * pos on entry points right after it.  Accumulate everything
+         * up to the closing ')', put it in a segment matcher object,
+         * generate a standin for it, and add the standin to buf.  As
+         * a side effect, update the segments vector with a reference
+         * to the segment matcher.  This works recursively for nested
+         * segments.  If isSegment is false, just accumulate
+         * characters into buf.
+         * @return the index after the terminating character, or
+         * if limit was reached, limit
+         */
+        private int parseSection(String rule, int pos, int limit,
+                                 TransliteratorParser parser,
+                                 StringBuffer buf,
+                                 boolean isSegment) {
+            int start = pos;
             ParsePosition pp = null;
-            int cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
-            boolean done = false;
             int quoteStart = -1; // Most recent 'single quoted string'
             int quoteLimit = -1;
             int varStart = -1; // Most recent $variableReference
             int varLimit = -1;
             int[] iref = new int[1];
 
+            // If isSegment, then bufSegStart is the offset in buf to
+            // the first character of the segment we are parsing.
+            int bufSegStart = 0;
+            int segmentNumber = 0;
+            if (isSegment) {
+                bufSegStart = buf.length();
+                segmentNumber = nextSegmentNumber++;
+            }
+
         main:
-            while (pos < limit && !done) {
+            while (pos < limit) {
                 char c = rule.charAt(pos++);
                 if (Character.isWhitespace(c)) {
                     // Ignore whitespace.  Note that this is not Unicode
@@ -551,8 +404,11 @@ class TransliteratorParser {
                     // whitespace likely to be seen in code.
                     continue;
                 }
-                if (OPERATORS.indexOf(c) >= 0) {
-                    --pos; // Backup to point to operator
+                // HALF_ENDERS is all chars that end a rule half: "<>=;"
+                if (HALF_ENDERS.indexOf(c) >= 0) {
+                    if (isSegment) {
+                        syntaxError("Unclosed segment", rule, start);
+                    }
                     break main;
                 }
                 if (anchorEnd) {
@@ -614,7 +470,12 @@ class TransliteratorParser {
                     }
                     continue;
                 }
+
                 switch (c) {
+                    
+                //------------------------------------------------------
+                // Elements allowed within and out of segments
+                //------------------------------------------------------
                 case ANCHOR_START:
                     if (buf.length() == 0 && !anchorStart) {
                         anchorStart = true;
@@ -624,17 +485,8 @@ class TransliteratorParser {
                     }
                     break;
                 case SEGMENT_OPEN:
-                case SEGMENT_CLOSE:
-                    // Handle segment definitions "(" and ")"
-                    // Parse "(", ")"
-                    if (segments == null) {
-                        segments = new Segments();
-                    }
-                    segments.addParenthesisAt(buf.length(), c == SEGMENT_OPEN);
+                    pos = parseSection(rule, pos, limit, parser, buf, true);
                     break;
-                case END_OF_RULE:
-                    --pos; // Backup to point to END_OF_RULE
-                    break main;
                 case SymbolTable.SYMBOL_REF:
                     // Handle variable references and segment references "$1" .. "$9"
                     {
@@ -676,7 +528,7 @@ class TransliteratorParser {
                             }
                             pp.setIndex(pos);
                             String name = parser.parseData.
-                                            parseReference(rule, pp, limit);
+                                parseReference(rule, pp, limit);
                             if (name == null) {
                                 // This means the '$' was not followed by a
                                 // valid name.  Try to interpret it as an
@@ -697,25 +549,129 @@ class TransliteratorParser {
                         }
                     }
                     break;
+                case DOT:
+                    buf.append(parser.getDotStandIn());
+                    break;
+                case KLEENE_STAR:
+                case ONE_OR_MORE:
+                case ZERO_OR_ONE:
+                    // Quantifiers.  We handle single characters, quoted strings,
+                    // variable references, and segments.
+                    //  a+      matches  aaa
+                    //  'foo'+  matches  foofoofoo
+                    //  $v+     matches  xyxyxy if $v == xy
+                    //  (seg)+  matches  segsegseg
+                    {
+                        if (isSegment && buf.length() == bufSegStart) {
+                            // The */+ immediately follows '('
+                            syntaxError("Misplaced quantifier", rule, start);
+                            break;
+                        } 
+ 
+                        int qstart, qlimit;
+                        // The */+ follows an isolated character or quote
+                        // or variable reference
+                        if (buf.length() == quoteLimit) {
+                            // The */+ follows a 'quoted string'
+                            qstart = quoteStart;
+                            qlimit = quoteLimit;
+                        } else if (buf.length() == varLimit) {
+                            // The */+ follows a $variableReference
+                            qstart = varStart;
+                            qlimit = varLimit;
+                        } else {
+                            // The */+ follows a single character, possibly
+                            // a segment standin
+                            qstart = buf.length() - 1;
+                            qlimit = qstart + 1;
+                        }
+
+                        UnicodeMatcher m =
+                            new StringMatcher(buf.toString(), qstart, qlimit,
+                                              false, parser.data);
+                        int min = 0;
+                        int max = Quantifier.MAX;
+                        switch (c) {
+                        case ONE_OR_MORE:
+                            min = 1;
+                            break;
+                        case ZERO_OR_ONE:
+                            min = 0;
+                            max = 1;
+                            break;
+                            // case KLEENE_STAR:
+                            //    do nothing -- min, max already set
+                        }
+                        m = new Quantifier(m, min, max);
+                        buf.setLength(qstart);
+                        buf.append(parser.generateStandInFor(m));
+                    }
+                    break;
+
+                //------------------------------------------------------
+                // Elements allowed ONLY WITHIN segments
+                //------------------------------------------------------
+                case SEGMENT_CLOSE:
+                    if (isSegment) {
+                        // We're done parsing a segment.  The relevant
+                        // characters are in buf, starting at offset
+                        // bufSegStart.  Extract them into a string
+                        // matcher, and replace them with a standin
+                        // for that matcher.
+                        StringMatcher m =
+                            new StringMatcher(buf.substring(bufSegStart),
+                                              true, parser.data);
+                        // Since we call parseSection() recursively,
+                        // nested segments will result in segment i+1
+                        // getting parsed and stored before segment i;
+                        // be careful with the vector handling here.
+                        if ((segmentNumber+1) > segments.size()) {
+                            segments.setSize(segmentNumber+1);
+                        }
+                        segments.setElementAt(m, segmentNumber);
+                        buf.setLength(bufSegStart);
+                        buf.append(parser.generateStandInFor(m));
+                        break main;
+                    }
+                    // If we aren't in a segment, then a segment close
+                    // character is a syntax error.
+                    syntaxError("Unquoted special", rule, start);
+                    break;
+
+                //------------------------------------------------------
+                // Elements allowed ONLY OUTSIDE segments
+                //------------------------------------------------------
                 case CONTEXT_ANTE:
+                    if (isSegment) {
+                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
+                    }
                     if (ante >= 0) {
                         syntaxError("Multiple ante contexts", rule, start);
                     }
                     ante = buf.length();
                     break;
                 case CONTEXT_POST:
+                    if (isSegment) {
+                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
+                    }
                     if (post >= 0) {
                         syntaxError("Multiple post contexts", rule, start);
                     }
                     post = buf.length();
                     break;
                 case CURSOR_POS:
+                    if (isSegment) {
+                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
+                    }
                     if (cursor >= 0) {
                         syntaxError("Multiple cursors", rule, start);
                     }
                     cursor = buf.length();
                     break;
                 case CURSOR_OFFSET:
+                    if (isSegment) {
+                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
+                    }
                     if (cursorOffset < 0) {
                         if (buf.length() > 0) {
                             syntaxError("Misplaced " + c, rule, start);
@@ -737,74 +693,10 @@ class TransliteratorParser {
                         }
                     }
                     break;
-                case DOT:
-                    buf.append(parser.getDotStandIn());
-                    break;
-                case KLEENE_STAR:
-                case ONE_OR_MORE:
-                case ZERO_OR_ONE:
-                    // Quantifiers.  We handle single characters, quoted strings,
-                    // variable references, and segments.
-                    //  a+      matches  aaa
-                    //  'foo'+  matches  foofoofoo
-                    //  $v+     matches  xyxyxy if $v == xy
-                    //  (seg)+  matches  segsegseg
-                    {
-                        int qstart, qlimit;
-                        boolean[] isOpenParen = new boolean[1];
-                        boolean isSegment = false;
-                        if (segments != null &&
-                            segments.getLastParenOffset(isOpenParen) == buf.length()) {
-                            // The */+ immediately follows a segment
-                            if (isOpenParen[0]) {
-                                syntaxError("Misplaced quantifier", rule, start);
-                            }
-                            int[] startparam = new int[1];
-                            int[] limitparam = new int[1];
-                            if (!segments.extractLastParenSubstring(startparam, limitparam)) {
-                                syntaxError("Mismatched segment delimiters", rule, start);
-                            }
-                            qstart = startparam[0];
-                            qlimit = limitparam[0];
-                            isSegment = true;
-                        } else {
-                            // The */+ follows an isolated character or quote
-                            // or variable reference
-                            if (buf.length() == quoteLimit) {
-                                // The */+ follows a 'quoted string'
-                                qstart = quoteStart;
-                                qlimit = quoteLimit;
-                            } else if (buf.length() == varLimit) {
-                                // The */+ follows a $variableReference
-                                qstart = varStart;
-                                qlimit = varLimit;
-                            } else {
-                                // The */+ follows a single character
-                                qstart = buf.length() - 1;
-                                qlimit = qstart + 1;
-                            }
-                        }
-                        UnicodeMatcher m =
-                            new StringMatcher(buf.toString(), qstart, qlimit,
-                                              isSegment, parser.data);
-                        int min = 0;
-                        int max = Quantifier.MAX;
-                        switch (c) {
-                        case ONE_OR_MORE:
-                            min = 1;
-                            break;
-                        case ZERO_OR_ONE:
-                            min = 0;
-                            max = 1;
-                            break;
-                            // case KLEENE_STAR:
-                            //    do nothing -- min, max already set
-                        }
-                        m = new Quantifier(m, min, max);
-                        buf.setLength(qstart);
-                        buf.append(parser.generateStandInFor(m));
-                    }
-                    break;
+
+                //------------------------------------------------------
+                // Non-special characters
+                //------------------------------------------------------
                 default:
                     // Disallow unquoted characters other than [0-9A-Za-z]
                     // in the printable ASCII range.  These characters are
@@ -819,11 +711,6 @@ class TransliteratorParser {
                     break;
                 }
             }
-
-            if (cursorOffset > 0 && cursor != cursorOffsetPos) {
-                syntaxError("Misplaced " + CURSOR_POS, rule, start);
-            }
-            text = buf.toString();
             return pos;
         }
 
@@ -838,10 +725,12 @@ class TransliteratorParser {
         }
 
         /**
-         * Create and return an int[] array of segments.
+         * Create and return a UnicodeMatcher[] array of segments,
+         * or null if there are no segments.
          */
-        int[] createSegments() {
-            return (segments == null) ? null : segments.createArray();
+        UnicodeMatcher[] createSegments() {
+            return (segments.size() == 0) ? null :
+                (UnicodeMatcher[]) segments.toArray(new UnicodeMatcher[segments.size()]);
         }
     }
 
@@ -1096,9 +985,10 @@ class TransliteratorParser {
         pos = left.parse(rule, pos, limit, this);
 
         if (pos == limit ||
-            OPERATORS.indexOf(operator = rule.charAt(pos++)) < 0) {
-            syntaxError("No operator", rule, start);
+            OPERATORS.indexOf(operator = rule.charAt(--pos)) < 0) {
+            syntaxError("No operator pos=" + pos, rule, start);
         }
+        ++pos;
 
         // Found an operator char.  Check for forward-reverse operator.
         if (operator == REVERSE_RULE_OP &&
@@ -1110,7 +1000,7 @@ class TransliteratorParser {
         pos = right.parse(rule, pos, limit, this);
 
         if (pos < limit) {
-            if (rule.charAt(pos) == END_OF_RULE) {
+            if (rule.charAt(--pos) == END_OF_RULE) {
                 ++pos;
             } else {
                 // RuleHalf parser must have terminated at an operator
@@ -1173,7 +1063,7 @@ class TransliteratorParser {
         // apply.
         if (operator == FWDREV_RULE_OP) {
             right.removeContext();
-            right.segments = null;
+            right.segments.removeAllElements();
             left.cursor = left.maxRef = -1;
             left.cursorOffset = 0;
         }
@@ -1193,7 +1083,7 @@ class TransliteratorParser {
         // cannot place the cursor outside the limits of the context.
         // Anchors are only allowed on the input side.
         if (right.ante >= 0 || right.post >= 0 || left.cursor >= 0 ||
-            right.segments != null || left.maxRef >= 0 ||
+            right.segments.size() > 0 || left.maxRef >= 0 ||
             (right.cursorOffset != 0 && right.cursor < 0) ||
             // - The following two checks were used to ensure that the
             // - the cursor offset stayed within the ante- or postcontext.
@@ -1208,14 +1098,8 @@ class TransliteratorParser {
         // Check integrity of segments and segment references.  Each
         // segment's start must have a corresponding limit, and the
         // references must not refer to segments that do not exist.
-        if (left.segments != null) {
-            if (!left.segments.validate()) {
-                syntaxError("Missing segment close", rule, start);
-            }
-            int n = left.segments.count();
-            if (right.maxRef > n) {
-                syntaxError("Undefined segment reference", rule, start);
-            }
+        if (right.maxRef > left.segments.size()) {
+            syntaxError("Undefined segment reference $" + right.maxRef, rule, start);
         }
 
         data.ruleSet.addRule(new TransliterationRule(
@@ -1363,7 +1247,7 @@ class TransliteratorParser {
     char generateStandInFor(UnicodeMatcher matcher) {
         // assert(matcher != null);
         if (variableNext >= variableLimit) {
-            throw new RuntimeException("Private use variables exhausted");
+            throw new RuntimeException("Variable range exhausted");
         }
         variablesVector.addElement(matcher);
         return variableNext++;
@@ -1379,7 +1263,7 @@ class TransliteratorParser {
         }
         return (char) dotStandIn;
     }
-    
+
     /**
      * Append the value of the given variable name to the given
      * StringBuffer.

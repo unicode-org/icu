@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2001/10/25 22:32:02 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/30 18:04:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -18,16 +18,27 @@ class StringMatcher implements UnicodeMatcher {
 
     private boolean isSegment;
 
+    private int matchStart;
+
+    private int matchLimit;
+
     private final RuleBasedTransliterator.Data data;
+
+    public StringMatcher(String theString,
+                         boolean isSeg,
+                         RuleBasedTransliterator.Data theData) {
+        data = theData;
+        isSegment = isSeg;
+        pattern = theString;
+        matchStart = matchLimit = -1;
+    }
 
     public StringMatcher(String theString,
                          int start,
                          int limit,
                          boolean isSeg,
                          RuleBasedTransliterator.Data theData) {
-        data = theData;
-        isSegment = isSeg;
-        pattern = theString.substring(start, limit);
+        this(theString.substring(start, limit), isSeg, theData);
     }
 
     /**
@@ -40,6 +51,7 @@ class StringMatcher implements UnicodeMatcher {
         int i;
         int[] cursor = new int[] { offset[0] };
         if (limit < cursor[0]) {
+            // Match in the reverse direction
             for (i=pattern.length()-1; i>=0; --i) {
                 char keyChar = pattern.charAt(i);
                 UnicodeMatcher subm = data.lookup(keyChar);
@@ -57,6 +69,13 @@ class StringMatcher implements UnicodeMatcher {
                         return m;
                     }
                 }
+            }
+            // Record the match position, but adjust for a normal
+            // forward start, limit, and only if a prior match does not
+            // exist -- we want the rightmost match.
+            if (matchStart < 0) {
+                matchStart = cursor[0]+1;
+                matchLimit = offset[0]+1;
             }
         } else {
             for (i=0; i<pattern.length(); ++i) {
@@ -85,6 +104,9 @@ class StringMatcher implements UnicodeMatcher {
                     }
                 }
             }
+            // Record the match position
+            matchStart = offset[0];
+            matchLimit = cursor[0];
         }
 
         offset[0] = cursor[0];
@@ -114,7 +136,7 @@ class StringMatcher implements UnicodeMatcher {
             result.append(')');
         }
         // Flush quoteBuf out to result
-        TransliterationRule.appendToRule(result, (isSegment?')':-1),
+        TransliterationRule.appendToRule(result, -1,
                                          true, escapeUnprintable, quoteBuf);
         return result.toString();
     }
@@ -129,6 +151,32 @@ class StringMatcher implements UnicodeMatcher {
         int c = UTF16.charAt(pattern, 0);
         UnicodeMatcher m = data.lookup(c);
         return (m == null) ? ((c & 0xFF) == v) : m.matchesIndexValue(v);
+    }
+
+    /**
+     * Remove any match data.  This must be called before performing a
+     * set of matches with this segment.
+     */
+    public void resetMatch() {
+        matchStart = matchLimit = -1;
+    }
+
+    /**
+     * Return the start offset, in the match text, of the <em>rightmost</em>
+     * match.  This method may get moved up into the UnicodeMatcher if
+     * it turns out to be useful to generalize this.
+     */
+    public int getMatchStart() {
+        return matchStart;
+    }
+
+    /**
+     * Return the limit offset, in the match text, of the <em>rightmost</em>
+     * match.  This method may get moved up into the UnicodeMatcher if
+     * it turns out to be useful to generalize this.
+     */
+    public int getMatchLimit() {
+        return matchLimit;
     }
 }
 
