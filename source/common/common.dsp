@@ -544,6 +544,19 @@ InputPath=.\unicode\ubrk.h
 
 # End Source File
 # End Group
+# Begin Group "collation"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ucol_swp.c
+# ADD CPP /I "..\i18n"
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_swp.h
+# End Source File
+# End Group
 # Begin Group "collections"
 
 # PROP Default_Filter ""
@@ -1726,6 +1739,45 @@ SOURCE=.\util.cpp
 SOURCE=.\util.h
 # End Source File
 # End Group
+# Begin Group "idna"
+
+# PROP Default_Filter "*.c,*.h"
+# Begin Source File
+
+SOURCE=.\punycode.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\punycode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\uidna.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uidna.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uidna.h
+
+"..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Group "locales & resources"
 
 # PROP Default_Filter ""
@@ -2642,6 +2694,41 @@ SOURCE=.\icuserv.cpp
 SOURCE=.\icuserv.h
 # End Source File
 # End Group
+# Begin Group "sprep"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\sprpimpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\usprep.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\usprep.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\usprep.h
+
+"..\..\include\unicode\usprep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Group "strings"
 
 # PROP Default_Filter ""
@@ -3312,80 +3399,6 @@ InputPath=.\unicode\utf_old.h
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
-
-!ENDIF 
-
-# End Source File
-# End Group
-# Begin Group "idna"
-
-# PROP Default_Filter "*.c,*.h"
-# Begin Source File
-
-SOURCE=.\punycode.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\punycode.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\uidna.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\uidna.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\uidna.h
-
-"..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "common - Win64 Debug"
-
-!ENDIF 
-
-# End Source File
-# End Group
-# Begin Group "sprep"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\sprpimpl.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\usprep.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\usprep.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\usprep.h
-
-"..\..\include\unicode\usprep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "common - Win64 Debug"
 
 !ENDIF 
 

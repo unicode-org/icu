@@ -327,6 +327,16 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="collation"
+			Filter="">
+			<File
+				RelativePath=".\ucol_swp.c">
+			</File>
+			<File
+				RelativePath=".\ucol_swp.h">
+			</File>
+		</Filter>
+		<Filter
 			Name="collections"
 			Filter="">
 			<File
@@ -923,6 +933,36 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="idna"
+			Filter="*.c,*.h">
+			<File
+				RelativePath=".\punycode.c">
+			</File>
+			<File
+				RelativePath=".\punycode.h">
+			</File>
+			<File
+				RelativePath=".\uidna.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uidna.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputName).h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputName).h"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
 			Name="locales &amp; resources"
 			Filter="">
 			<File
@@ -1322,6 +1362,33 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="sprep"
+			Filter="">
+			<File
+				RelativePath=".\sprpimpl.h">
+			</File>
+			<File
+				RelativePath=".\usprep.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\usprep.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputName).h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputName).h"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
 			Name="strings"
 			Filter="">
 			<File
@@ -1575,63 +1642,6 @@
 			</File>
 			<File
 				RelativePath=".\unicode\utf_old.h">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
-						Outputs="..\..\include\unicode\$(InputName).h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
-						Outputs="..\..\include\unicode\$(InputName).h"/>
-				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
-			Name="idna"
-			Filter="*.c,*.h">
-			<File
-				RelativePath=".\punycode.c">
-			</File>
-			<File
-				RelativePath=".\punycode.h">
-			</File>
-			<File
-				RelativePath=".\uidna.cpp">
-			</File>
-			<File
-				RelativePath=".\unicode\uidna.h">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
-						Outputs="..\..\include\unicode\$(InputName).h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
-						Outputs="..\..\include\unicode\$(InputName).h"/>
-				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
-			Name="sprep"
-			Filter="">
-			<File
-				RelativePath=".\sprpimpl.h">
-			</File>
-			<File
-				RelativePath=".\usprep.cpp">
-			</File>
-			<File
-				RelativePath=".\unicode\usprep.h">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
