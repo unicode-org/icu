@@ -497,8 +497,8 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
 
     /* okay need to rearrange the array into sorted order */
     if (shiftsize == 0 /*|| *(pendexpansionce + pos) < endexpansion*/) { /* the commented part is actually both redundant and dangerous */
-      *(pendexpansionce + pos) = endexpansion;
-      *(pexpansionsize + pos)  = expansionsize;
+      *(pendexpansionce + pos + 1) = endexpansion;
+      *(pexpansionsize + pos + 1)  = expansionsize;
     }
     else {
       uprv_memmove(shiftpos + 1, shiftpos, shiftsize * sizeof(int32_t));
