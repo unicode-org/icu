@@ -268,9 +268,9 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
 
-#define isContinuation(CE) ((CE) & 0xC0) == 0x80
-#define isFlagged(CE) ((CE) & 0x80) == 0x80
-#define isLongPrimary(CE) ((CE) & 0xC0) == 0xC0
+#define isContinuation(CE) (((CE) & 0xC0) == 0x80)
+#define isFlagged(CE) (((CE) & 0x80) == 0x80)
+#define isLongPrimary(CE) (((CE) & 0xC0) == 0xC0)
 
 #define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
 #define isContraction(CE) (isSpecial((CE)) && (getCETag((CE)) == CONTRACTION_TAG))
@@ -342,7 +342,8 @@ struct UCollator {
     const UChar *contractionIndex;        
     const uint32_t *contractionCEs;       
     const uint8_t *scriptOrder;
-    uint8_t variableMax;
+    uint8_t variableMax1;
+    uint8_t variableMax2;
     UChar variableTopValue;
     UColAttributeValue frenchCollation;
     UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
