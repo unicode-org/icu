@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999-2001, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -231,7 +231,7 @@ private:
      */
     UnicodeString ID;
 
-    /** 
+    /**
      * This transliterator's filter.  Any character for which
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
@@ -446,7 +446,7 @@ public:
      * pending transliterations, clients should call {@link
      * #finishTransliteration} after the last call to this
      * method has been made.
-     * 
+     *
      * @param text the buffer holding transliterated and untransliterated text
      * @param index an array of three integers.
      *
@@ -496,7 +496,7 @@ public:
     virtual void transliterate(Replaceable& text, UTransPosition& index,
                                UChar insertion,
                                UErrorCode& status) const;
-    
+
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
@@ -759,7 +759,7 @@ public:
     /**
      * Unregisters a transliterator or class.  This may be either
      * a system transliterator or a user transliterator or class.
-     * 
+     *
      * @param ID the ID of the transliterator or class
      * @return the <code>Object</code> that was registered with
      * <code>ID</code>, or <code>null</code> if none was

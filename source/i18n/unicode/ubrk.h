@@ -1,5 +1,5 @@
 /*
-* Copyright © {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
 
@@ -9,13 +9,13 @@
 #include "unicode/utypes.h"
 /**
  * \file
- * \brief C API: BreakIterator 
+ * \brief C API: BreakIterator
  *
  * <h2> BreakIterator C API </h2>
  *
  * The BreakIterator C API defines  methods for finding the location
- * of boundaries in text. Pointer to a UBreakIterator maintain a 
- * current position and scan over text returning the index of characters 
+ * of boundaries in text. Pointer to a UBreakIterator maintain a
+ * current position and scan over text returning the index of characters
  * where boundaries occur.
  * <P>
  * Line boundary analysis determines where a text string can be broken
@@ -58,7 +58,7 @@
  *         u_strncpy(result, temp, end-start);
  *         res=(char*)malloc(sizeof(char) * (u_strlen(result)+1));
  *         u_austrcpy(res, result);
- *         printf("%s\n", res); 
+ *         printf("%s\n", res);
  *    }
  * \endcode
  * </pre>
@@ -128,18 +128,18 @@
  *           stringToExamine=(UChar*)malloc(sizeof(UChar) * (strlen("Aaa bbb ccc. Ddd eee fff.")+1) );
  *           u_uastrcpy(stringToExamine, "Aaa bbb ccc. Ddd eee fff.");
  *           printf("Examining: "Aaa bbb ccc. Ddd eee fff.");
- * 
+ *
  *           //print each sentence in forward and reverse order
  *           boundary = ubrk_open(UBRK_SENTENCE, "en_us", stringToExamine, u_strlen(stringToExamine), &status);
- *           printf("----- forward: -----------\n"); 
+ *           printf("----- forward: -----------\n");
  *           printEachForward(boundary, stringToExamine);
  *           printf("----- backward: ----------\n");
  *           printEachBackward(boundary, stringToExamine);
  *           ubrk_close(boundary);
- * 
+ *
  *           //print each word in order
  *           boundary = ubrk_open(UBRK_WORD, "en_us", stringToExamine, u_strlen(stringToExamine), &status);
- *           printf("----- forward: -----------\n"); 
+ *           printf("----- forward: -----------\n");
  *           printEachForward(boundary, stringToExamine);
  *           printf("----- backward: ----------\n");
  *           printEachBackward(boundary, stringToExamine);
@@ -152,14 +152,14 @@
  *           //print word at charpos 10
  *           printf("----- at pos 10: ---------\n");
  *           printAt(boundary, 10 , stringToExamine);
- * 
+ *
  *           ubrk_close(boundary);
  *       }
  * \endcode
  * </pre>
  */
 
-/** 
+/**
  * A text-break iterator.
  *  For usage in C programs.
  */
@@ -178,14 +178,14 @@ enum UBreakIteratorType {
 };
 typedef enum UBreakIteratorType UBreakIteratorType;
 
-/** Value indicating all text boundaries have been returned. 
+/** Value indicating all text boundaries have been returned.
  *
  */
 #define UBRK_DONE ((UTextOffset) -1)
 
 /**
  * Open a new UBreakIterator for locating text boundaries for a specified locale.
- * A UBreakIterator may be used for detecting character, line, word, 
+ * A UBreakIterator may be used for detecting character, line, word,
  * and sentence breaks in text.
  * @param type The type of UBreakIterator to open: one of UBRK_CHARACTER, UBRK_WORD,
  * UBRK_LINE, UBRK_SENTENCE
@@ -226,13 +226,13 @@ ubrk_openRules(const UChar *rules,
 /**
  * Thread safe cloning operation
  * @param bi iterator to be cloned
- * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+ * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated.
 	If buffer is not large enough, new memory will be allocated.
 	Clients can use the U_BRK_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
- * @param pBufferSize pointer to size of allocated space. 
-	If *pBufferSize == 0, a sufficient size for use in cloning will 
+ * @param pBufferSize pointer to size of allocated space.
+	If *pBufferSize == 0, a sufficient size for use in cloning will
 	be returned ('pre-flighting')
-	If *pBufferSize is not enough for a stack-based safe clone, 
+	If *pBufferSize is not enough for a stack-based safe clone,
 	new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
     An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
@@ -271,9 +271,9 @@ ubrk_setText(UBreakIterator* bi,
 
 /**
  * Determine the most recently-returned text boundary.
- * 
+ *
  * @param bi The break iterator to use.
- * @return The character index most recently returned by \Ref{ubrk_next}, \Ref{ubrk_previous}, 
+ * @return The character index most recently returned by \Ref{ubrk_next}, \Ref{ubrk_previous},
  * \Ref{ubrk_first}, or \Ref{ubrk_last}.
  * @stable
  */
@@ -282,7 +282,7 @@ ubrk_current(const UBreakIterator *bi);
 
 /**
  * Determine the text boundary following the current text boundary.
- * 
+ *
  * @param bi The break iterator to use.
  * @return The character index of the next text boundary, or UBRK_DONE
  * if all text boundaries have been returned.

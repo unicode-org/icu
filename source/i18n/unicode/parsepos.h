@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File PARSEPOS.H
@@ -17,14 +17,14 @@
 #define PARSEPOS_H
 
 #include "unicode/utypes.h"
-     
+
 /**
  * <code>ParsePosition</code> is a simple class used by <code>Format</code>
  * and its subclasses to keep track of the current position during parsing.
  * The <code>parseObject</code> method in the various <code>Format</code>
  * classes requires a <code>ParsePosition</code> object as an argument.
  *
- * <p> 
+ * <p>
  * By design, as you parse through a string with different formats,
  * you can use the same <code>ParsePosition</code>, since the index parameter
  * records the current position.
@@ -40,7 +40,7 @@ public:
      * Default constructor, the index starts with 0 as default.
      * @stable
      */
-    ParsePosition() 
+    ParsePosition()
       { this->index = 0; this->errorIndex = -1; }
 
     /**
@@ -48,15 +48,15 @@ public:
      * @param newIndex the new text offset.
      * @stable
      */
-    ParsePosition(UTextOffset newIndex) 
-      {    this->index = newIndex; this->errorIndex = -1; } 
-    
+    ParsePosition(UTextOffset newIndex)
+      {    this->index = newIndex; this->errorIndex = -1; }
+
     /**
      * Copy constructor
      * @param copy the object to be copied from.
      * @stable
      */
-    ParsePosition(const ParsePosition& copy) 
+    ParsePosition(const ParsePosition& copy)
       {    this->index = copy.index; this->errorIndex = copy.errorIndex; }
 
     /**
@@ -71,14 +71,14 @@ public:
      */
     ParsePosition&      operator=(const ParsePosition& copy);
 
-    /** 
+    /**
      * Equality operator.
      * @return TRUE if the two parse positions are equal, FALSE otherwise.
      * @stable
      */
     UBool              operator==(const ParsePosition& that) const;
 
-    /** 
+    /**
      * Equality operator.
      * @return TRUE if the two parse positions are not equal, FALSE otherwise.
      * @stable
@@ -105,14 +105,14 @@ public:
      * Set the index at which a parse error occurred.  Formatters
      * should set this before returning an error code from their
      * parseObject method.  The default value is -1 if this is not
-     * set.  
+     * set.
      * @stable
      */
     void setErrorIndex(UTextOffset ei);
 
     /**
      * Retrieve the index at which an error occurred, or -1 if the
-     * error index has not been set.  
+     * error index has not been set.
      * @stable
      */
     UTextOffset getErrorIndex(void) const;
@@ -125,7 +125,7 @@ private:
      * with each call setting index up for the next one.
      */
     UTextOffset index;
-    
+
     /**
      * The index at which a parse error occurred.
      */
@@ -143,7 +143,7 @@ ParsePosition::operator=(const ParsePosition& copy)
 inline UBool
 ParsePosition::operator==(const ParsePosition& copy) const
 {
-  if(index != copy.index || errorIndex != copy.errorIndex) 
+  if(index != copy.index || errorIndex != copy.errorIndex)
   return FALSE;
   else
   return TRUE;

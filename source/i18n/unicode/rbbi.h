@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/22/99    alan        Creation.
@@ -19,10 +19,10 @@ class BreakIterator;
 
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
- * 
+ *
  * <p>There are two kinds of rules, which are separated by semicolons: <i>substitutions</i>
  * and <i>regular expressions.</i></p>
- * 
+ *
  * <p>A substitution rule defines a name that can be used in place of an expression. It
  * consists of a name, which is a string of characters contained in angle brackets, an equals
  * sign, and an expression. (There can be no whitespace on either side of the equals sign.)
@@ -32,22 +32,22 @@ class BreakIterator;
  * long as those substitutions have been defined first. Substitutions are generally used to
  * make the regular expressions (which can get quite complex) shorted and easier to read.
  * They typically define either character categories or commonly-used subexpressions.</p>
- * 
+ *
  * <p>There is one special substitution.&nbsp; If the description defines a substitution
  * called &quot;&lt;ignore&gt;&quot;, the expression must be a [] expression, and the
  * expression defines a set of characters (the &quot;<em>ignore characters</em>&quot;) that
  * will be transparent to the BreakIterator.&nbsp; A sequence of characters will break the
  * same way it would if any ignore characters it contains are taken out.&nbsp; Break
  * positions never occur befoer ignore characters.</p>
- * 
+ *
  * <p>A regular expression uses a subset of the normal Unix regular-expression syntax, and
  * defines a sequence of characters to be kept together. With one significant exception, the
  * iterator uses a longest-possible-match algorithm when matching text to regular
  * expressions. The iterator also treats descriptions containing multiple regular expressions
  * as if they were ORed together (i.e., as if they were separated by |).</p>
- * 
+ *
  * <p>The special characters recognized by the regular-expression parser are as follows:</p>
- * 
+ *
  * <blockquote>
  *   <table border="1" width="100%">
  *     <tr>
@@ -129,10 +129,10 @@ class BreakIterator;
  *     </tr>
  *   </table>
  * </blockquote>
- * 
+ *
  * <p>Within a [] expression, a number of other special characters can be used to specify
  * groups of characters:</p>
- * 
+ *
  * <blockquote>
  *   <table border="1" width="100%">
  *     <tr>
@@ -174,7 +174,7 @@ class BreakIterator;
  *     </tr>
  *   </table>
  * </blockquote>
- * 
+ *
  * <p>For a more complete explanation, see <a
  * href="http://www.ibm.com/java/education/boundaries/boundaries.html">http://www.ibm.com/java/education/boundaries/boundaries.html</a>.
  * &nbsp; For examples, see the resource data (which is annotated).</p>
@@ -223,7 +223,7 @@ private:
     //=======================================================================
     // constructors
     //=======================================================================
-    
+
 // This constructor uses the udata interface to create a BreakIterator whose
 // internal tables live in a memory-mapped file.  "image" is a pointer to the
 // beginning of that file.
@@ -426,7 +426,7 @@ RuleBasedBreakIterator(UDataMemory* image);
 	virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
- 
+
 
 protected:
     //=======================================================================

@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/15/99    rgillam     Port from Java.
@@ -58,7 +58,7 @@ protected:
      * A temporary place to hold the rules as they're being processed.
      */
     UVector tempRuleList;
-    
+
     /**
      * A temporary holding place used for calculating the character categories.
      * This object contains UnicodeSet objects.

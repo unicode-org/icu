@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -123,7 +123,7 @@ public:
                                            const UTransPosition& pos,
                                            const TransliterationRuleData& data,
                                            const UnicodeFilter* filter) const;
-    
+
     /**
      * Attempt to find a matching rule at the specified point in the text.
      * Unlike <code>findMatch()</code>, this method does an incremental match.

@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
 *                                                                              *
 ********************************************************************************
 *
@@ -109,7 +109,7 @@ public:
     /**
      * Construct a SimpleTimeZone with the given raw GMT offset, time zone ID,
      * and times to start and end daylight savings time. To create a TimeZone that
-     * doesn't observe daylight savings time, don't use this constructor; use 
+     * doesn't observe daylight savings time, don't use this constructor; use
      * SimpleTimeZone(rawOffset, ID) instead. Normally, you should use
      * TimeZone.createInstance() to create a TimeZone instead of creating a
      * SimpleTimeZone directly with this constructor.
@@ -240,10 +240,10 @@ public:
      * @param status An UErrorCode
      * @stable
      */
-    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time, 
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time,
                       UErrorCode& status);
 
-    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time, 
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time,
                       TimeMode mode, UErrorCode& status);
 
     /**
@@ -264,10 +264,10 @@ public:
      * @param status An UErrorCode
      * @stable
      */
-    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                       int32_t time, UBool after, UErrorCode& status);
 
-    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                       int32_t time, TimeMode mode, UBool after, UErrorCode& status);
 
     /**
@@ -336,10 +336,10 @@ public:
      * @param status An UErrorCode
      * @stable
      */
-    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                     int32_t time, UBool after, UErrorCode& status);
 
-    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                     int32_t time, TimeMode mode, UBool after, UErrorCode& status);
 
     /**
@@ -383,11 +383,11 @@ public:
      * @stable
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                           uint8_t dayOfWeek, int32_t milliseconds, 
+                           uint8_t dayOfWeek, int32_t milliseconds,
                            int32_t monthLength, UErrorCode& status) const;
 
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                              uint8_t dayOfWeek, int32_t milliseconds, 
+                              uint8_t dayOfWeek, int32_t milliseconds,
                               int32_t monthLength, int32_t prevMonthLength,
                               UErrorCode& status) const;
 
@@ -495,7 +495,7 @@ public:
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
 private:
-    /** 
+    /**
      * Constants specifying values of startMode and endMode.
      */
     enum EMode
@@ -542,7 +542,7 @@ private:
     /**
      * Given a set of encoded rules in startDay and startDayOfMonth, decode
      * them and set the startMode appropriately.  Do the same for endDay and
-     * endDayOfMonth.  
+     * endDayOfMonth.
      * <P>
      * Upon entry, the day of week variables may be zero or
      * negative, in order to indicate special modes.  The day of month
@@ -585,13 +585,13 @@ inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth
 }
 
 inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
-                                         int32_t time, 
+                                         int32_t time,
                                          UErrorCode& status) {
     setStartRule(month, dayOfMonth, time, WALL_TIME, status);
 }
 
 inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
-                                         int32_t dayOfWeek, 
+                                         int32_t dayOfWeek,
                                          int32_t time, UBool after, UErrorCode& status) {
     setStartRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
 }
@@ -607,7 +607,7 @@ inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth,
     setEndRule(month, dayOfMonth, time, WALL_TIME, status);
 }
 
-inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                                        int32_t time, UBool after, UErrorCode& status) {
     setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
 }

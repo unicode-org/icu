@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright © {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -11,7 +11,7 @@
 #include <stdarg.h>
 /**
  * \file
- * \brief C API: MessageFormat 
+ * \brief C API: MessageFormat
  *
  * <h2>Message Format C API </h2>
  *
@@ -52,7 +52,7 @@
  *     printf("%s\n", austrdup(result) );//austrdup( a function used to convert UChar* to char*)
  *     //output>: "On March 18, 1999, there was a disturbance in force on planet 7
  * \endcode
- * </pre>  
+ * </pre>
  * Typically, the message format will come from resources, and the
  * arguments will be dynamically set at runtime.
  * <P>
@@ -100,25 +100,25 @@
  *  <pre>
  * \code
  *       messageFormatPattern := string ( "{" messageFormatElement "}" string )*
- *        
+ *
  *       messageFormatElement := argument { "," elementFormat }
- *        
+ *
  *       elementFormat := "time" { "," datetimeStyle }
  *                      | "date" { "," datetimeStyle }
  *                      | "number" { "," numberStyle }
  *                      | "choice" "," choiceStyle
- *   
+ *
  *       datetimeStyle := "short"
  *                      | "medium"
  *                      | "long"
  *                      | "full"
  *                      | dateFormatPattern
- * 
+ *
  *       numberStyle :=   "currency"
  *                      | "percent"
  *                      | "integer"
  *                      | numberFormatPattern
- *  
+ *
  *       choiceStyle :=   choiceFormatPattern
  * \endcode
  * </pre>
@@ -146,18 +146,18 @@
  * arguments or arguments that are not of the right class for the
  * specified format, a failing UErrorCode result is set.
  * <P>
- 
+
  * <P>
  * [Note:] As we see above, the string produced by a choice Format in
  * MessageFormat is treated specially; occurances of '{' are used to
- * indicated subformats.  
+ * indicated subformats.
  * <P>
  * [Note:] Formats are numbered by order of variable in the string.
  * This is [not] the same as the argument numbering!
  * <pre>
  * \code
  *    For example: with "abc{2}def{3}ghi{0}...",
- *    
+ *
  *    format0 affects the first variable {2}
  *    format1 affects the second variable {3}
  *    format2 affects the second variable {0}
@@ -179,7 +179,7 @@
 * @param status A pointer to an UErrorCode to receive any errors
 * @param ... A variable-length argument list containing the arguments specified
 * in pattern.
-* @return The total buffer size needed; if greater than resultLength, the 
+* @return The total buffer size needed; if greater than resultLength, the
 * output was truncated.
 * @see u_parseMessage
 * @draft  should this just be usprintf?
@@ -192,7 +192,7 @@ u_formatMessage(    const    char        *locale,
                 int32_t        resultLength,
                 UErrorCode    *status,
                 ...);
- 
+
 /**
 * Format a message for a locale.
 * This function may perform re-ordering of the arguments depending on the
@@ -206,7 +206,7 @@ u_formatMessage(    const    char        *locale,
 * @param ap A variable-length argument list containing the arguments specified
 * @param status A pointer to an UErrorCode to receive any errors
 * in pattern.
-* @return The total buffer size needed; if greater than resultLength, the 
+* @return The total buffer size needed; if greater than resultLength, the
 * output was truncated.
 * @see u_parseMessage
 */
@@ -221,7 +221,7 @@ u_vformatMessage(    const    char        *locale,
 /**
 * Parse a message.
 * For numeric arguments, this function will always use doubles.  Integer types
-* should not be passed.  
+* should not be passed.
 * This function is not able to parse all output from \Ref{u_formatMessage}.
 * @param locale The locale for which the message is formatted
 * @param pattern The pattern specifying the message's format
@@ -234,7 +234,7 @@ u_vformatMessage(    const    char        *locale,
 * @see u_formatMessage
 * @draft
 */
-U_CAPI void 
+U_CAPI void
 u_parseMessage(    const    char        *locale,
         const    UChar        *pattern,
             int32_t        patternLength,
@@ -246,7 +246,7 @@ u_parseMessage(    const    char        *locale,
 /**
 * Parse a message.
 * For numeric arguments, this function will always use doubles.  Integer types
-* should not be passed.  
+* should not be passed.
 * This function is not able to parse all output from \Ref{u_formatMessage}.
 * @param locale The locale for which the message is formatted
 * @param pattern The pattern specifying the message's format
@@ -258,7 +258,7 @@ u_parseMessage(    const    char        *locale,
 * specified in pattern.
 * @see u_formatMessage
 */
-U_CAPI void 
+U_CAPI void
 u_vparseMessage(    const    char        *locale,
         const    UChar        *pattern,
             int32_t        patternLength,

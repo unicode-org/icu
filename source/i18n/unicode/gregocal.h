@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File GREGOCAL.H
@@ -11,7 +11,7 @@
 *    07/28/98    stephen        Sync with JDK 1.2
 *    09/04/98    stephen        Re-sync with JDK 8/31 putback
 *    09/14/98    stephen        Changed type of kOneDay, kOneWeek to double.
-*                            Fixed bug in roll() 
+*                            Fixed bug in roll()
 *   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
 *                           Added documentation of WEEK_OF_YEAR computation.
 *   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
@@ -67,22 +67,22 @@
  *     if (idsCount == 0) {
  *         return;
  *     }
- * 
+ *
  *     // begin output
  *     cout << "Current Time" << endl;
- * 
+ *
  *     // create a Pacific Standard Time time zone
  *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *(ids[0]));
- *     
+ *
  *     // set up rules for daylight savings time
  *     pdt->setStartRule(Calendar::APRIL, 1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
  *     pdt->setEndRule(Calendar::OCTOBER, -1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
- *     
+ *
  *     // create a GregorianCalendar with the Pacific Daylight time zone
  *     // and the current date and time
  *     UErrorCode success = U_ZERO_ERROR;
  *     Calendar* calendar = new GregorianCalendar( pdt, success );
- *     
+ *
  *     // print out a bunch of interesting things
  *     cout << "ERA: " << calendar->get( Calendar::ERA, success ) << endl;
  *     cout << "YEAR: " << calendar->get( Calendar::YEAR, success ) << endl;
@@ -102,7 +102,7 @@
  *     cout << "MILLISECOND: " << calendar->get( Calendar::MILLISECOND, success ) << endl;
  *     cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl;
  *     cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl;
- * 
+ *
  *     cout << "Current Time, with hour reset to 3" << endl;
  *     calendar->clear(Calendar::HOUR_OF_DAY); // so doesn't override
  *     calendar->set(Calendar::HOUR, 3);
@@ -124,7 +124,7 @@
  *     cout << "MILLISECOND: " << calendar->get( Calendar::MILLISECOND, success ) << endl;
  *     cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl; // in hours
  *     cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl; // in hours
- * 
+ *
  *     delete[] ids;
  *     delete calendar; // also deletes pdt
  * \endcode
@@ -467,7 +467,7 @@ protected:
      */
     virtual void computeTime(UErrorCode& status);
 
-private: 
+private:
 
     /**
      * Return the ERA.  We need a special method for this because the
@@ -703,7 +703,7 @@ inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
   // If julian is negative, then julian%7 will be negative, so we adjust
   // accordingly.  We add 1 because Julian day 0 is Monday.
   int8_t dayOfWeek = (int8_t) uprv_fmod(julian + 1, 7);
-  
+
   uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7 + SUNDAY) : SUNDAY));
   return result;
 }

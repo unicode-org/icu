@@ -1,5 +1,5 @@
 /*
-* Copyright © {1996-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-1999, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -9,12 +9,12 @@
 #include "unicode/utypes.h"
 /**
  * \file
- * \brief C API: Calendar 
+ * \brief C API: Calendar
  *
  * <h2>Calendar C API</h2>
  *
  * UCalendar C API is used  for converting between a <code>UDate</code> object
- * and a set of integer fields such as <code>UCAL_YEAR</code>, <code>UCAL_MONTH</code>, 
+ * and a set of integer fields such as <code>UCAL_YEAR</code>, <code>UCAL_MONTH</code>,
  * <code>UCAL_DAY</code>, <code>UCAL_HOUR</code>, and so on.
  * (A <code>UDate</code> object represents a specific instant in
  * time with millisecond precision. See
@@ -24,14 +24,14 @@
  * <p>
  * Types of <code>UCalendar</code> interpret a <code>UDate</code>
  * according to the rules of a specific calendar system. The U_CAPI
- * provides the enum UCalendarType with UCAL_TRADITIONAL and 
+ * provides the enum UCalendarType with UCAL_TRADITIONAL and
  * UCAL_GREGORIAN.
  * <p>
  * Like other locale-sensitive C API, calendar API  provides a
  * function, <code>ucal_open()</code>, which returns a pointer to
- * <code>UCalendar</code> whose time fields have been initialized 
+ * <code>UCalendar</code> whose time fields have been initialized
  * with the current date and time. We need to specify the type of
- * calendar to be opened and the  timezoneId. 
+ * calendar to be opened and the  timezoneId.
  * <blockquote>
  * <pre>
  * \code
@@ -145,7 +145,7 @@ enum UCalendarType {
   UCAL_GREGORIAN
 };
 typedef enum UCalendarType UCalendarType;
-    
+
 /** Possible fields in a UCalendar */
 enum UCalendarDateFields {
   /** Era field */
@@ -287,12 +287,12 @@ ucal_countAvailableTZIDs(int32_t rawOffset);
 * @return The current date and time.
 * @stable
 */
-U_CAPI UDate 
+U_CAPI UDate
 ucal_getNow(void);
 
 /**
 * Open a UCalendar.
-* A UCalendar may be used to convert a millisecond value to a year, 
+* A UCalendar may be used to convert a millisecond value to a year,
 * month, and day.
 * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
 * @param len The length of zoneID, or -1 if null-terminated.
@@ -302,7 +302,7 @@ ucal_getNow(void);
 * @return A pointer to a UCalendar, or 0 if an error occurred.
 * @stable
 */
-U_CAPI UCalendar* 
+U_CAPI UCalendar*
 ucal_open(    const    UChar*          zoneID,
             int32_t        len,
         const    char*           locale,
@@ -327,7 +327,7 @@ ucal_close(UCalendar *cal);
 * @param status A pointer to an UErrorCode to receive any errors.
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_setTimeZone(        UCalendar*      cal,
             const    UChar*        zoneID,
                 int32_t        len,
@@ -350,7 +350,7 @@ typedef enum UCalendarDisplayNameType UCalendarDisplayNameType;
 * Get the display name for a UCalendar's TimeZone.
 * A display name is suitable for presentation to a user.
 * @param cal The UCalendar to query.
-* @param type The desired display name format; one of UCAL_STANDARD, UCAL_SHORT_STANDARD, 
+* @param type The desired display name format; one of UCAL_STANDARD, UCAL_SHORT_STANDARD,
 * UCAL_DST, UCAL_SHORT_DST
 * @param locale The desired locale for the display name.
 * @param status A pointer to an UErrorCode to receive any errors
@@ -377,8 +377,8 @@ ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
 * @return TRUE if cal is currently in daylight savings time, FALSE otherwise
 * @stable
 */
-U_CAPI UBool 
-ucal_inDaylightTime(    const    UCalendar*      cal, 
+U_CAPI UBool
+ucal_inDaylightTime(    const    UCalendar*      cal,
                 UErrorCode*     status );
 
 /** Types of UCalendar attributes */
@@ -388,16 +388,16 @@ enum UCalendarAttribute {
   /** First day of week */
   UCAL_FIRST_DAY_OF_WEEK,
   /** Minimum number of days in first week */
-  UCAL_MINIMAL_DAYS_IN_FIRST_WEEK    
+  UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
 };
 typedef enum UCalendarAttribute UCalendarAttribute;
 
-/** 
+/**
 * Get a numeric attribute associated with a UCalendar.
 * Numeric attributes include the first day of the week, or the minimal numbers
 * of days in the first week of the month.
 * @param cal The UCalendar to query.
-* @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK, 
+* @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
 * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
 * @return The value of attr.
 * @see ucal_setAttribute
@@ -407,12 +407,12 @@ U_CAPI int32_t
 ucal_getAttribute(    const    UCalendar*              cal,
                 UCalendarAttribute      attr);
 
-/** 
+/**
 * Set a numeric attribute associated with a UCalendar.
 * Numeric attributes include the first day of the week, or the minimal numbers
 * of days in the first week of the month.
 * @param cal The UCalendar to set.
-* @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK, 
+* @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
 * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
 * @param newValue The new value of attr.
 * @see ucal_getAttribute
@@ -457,7 +457,7 @@ ucal_countAvailable(void);
 * @see ucal_setDateTime
 * @stable
 */
-U_CAPI UDate 
+U_CAPI UDate
 ucal_getMillis(    const    UCalendar*      cal,
             UErrorCode*     status);
 
@@ -472,7 +472,7 @@ ucal_getMillis(    const    UCalendar*      cal,
 * @see ucal_setDateTime
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_setMillis(        UCalendar*      cal,
             UDate           dateTime,
             UErrorCode*     status );
@@ -482,7 +482,7 @@ ucal_setMillis(        UCalendar*      cal,
 * The date is represented as a series of 32-bit integers.
 * @param cal The UCalendar to set.
 * @param year The desired year.
-* @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY, 
+* @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY,
 * UCAL_JUNE, UCAL_JULY, UCAL_AUGUST, UCAL_SEPTEMBER, UCAL_OCTOBER, UCAL_NOVEMBER, UCAL_DECEMBER, UCAL_UNDECIMBER
 * @param date The desired day of the month.
 * @param status A pointer to an UErrorCode to receive any errors
@@ -491,7 +491,7 @@ ucal_setMillis(        UCalendar*      cal,
 * @see ucal_setDateTime
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_setDate(        UCalendar*        cal,
             int32_t            year,
             int32_t            month,
@@ -503,7 +503,7 @@ ucal_setDate(        UCalendar*        cal,
 * The date is represented as a series of 32-bit integers.
 * @param cal The UCalendar to set.
 * @param year The desired year.
-* @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY, 
+* @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY,
 * UCAL_JUNE, UCAL_JULY, UCAL_AUGUST, UCAL_SEPTEMBER, UCAL_OCTOBER, UCAL_NOVEMBER, UCAL_DECEMBER, UCAL_UNDECIMBER
 * @param date The desired day of the month.
 * @param hour The desired hour of day.
@@ -515,7 +515,7 @@ ucal_setDate(        UCalendar*        cal,
 * @see ucal_setDate
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_setDateTime(    UCalendar*        cal,
             int32_t            year,
             int32_t            month,
@@ -534,7 +534,7 @@ ucal_setDateTime(    UCalendar*        cal,
 * @return TRUE if cal1 and cal2 represent the same date, FALSE otherwise.
 * @stable
 */
-U_CAPI UBool 
+U_CAPI UBool
 ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2);
 
@@ -542,9 +542,9 @@ ucal_equivalentTo(    const UCalendar*      cal1,
 * Add a specified signed amount to a particular field in a UCalendar.
 * This can modify more significant fields in the calendar.
 * @param cal The UCalendar to which to add.
-* @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
 * @param amount The signed amount to add to field. If the amount causes the value
 * to exceed to maximum or minimum values for that field, other fields are modified
@@ -553,7 +553,7 @@ ucal_equivalentTo(    const UCalendar*      cal1,
 * @see ucal_roll
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_add(    UCalendar*            cal,
         UCalendarDateFields        field,
         int32_t                amount,
@@ -563,9 +563,9 @@ ucal_add(    UCalendar*            cal,
 * Add a specified signed amount to a particular field in a UCalendar.
 * This will not modify more significant fields in the calendar.
 * @param cal The UCalendar to which to add.
-* @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
 * @param amount The signed amount to add to field. If the amount causes the value
 * to exceed to maximum or minimum values for that field, the field is pinned to a permissible
@@ -574,7 +574,7 @@ ucal_add(    UCalendar*            cal,
 * @see ucal_add
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_roll(        UCalendar*        cal,
             UCalendarDateFields     field,
             int32_t            amount,
@@ -584,9 +584,9 @@ ucal_roll(        UCalendar*        cal,
 * Get the current value of a field from a UCalendar.
 * All fields are represented as 32-bit integers.
 * @param cal The UCalendar to query.
-* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the desired field.
@@ -596,7 +596,7 @@ ucal_roll(        UCalendar*        cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI int32_t 
+U_CAPI int32_t
 ucal_get(    const    UCalendar*            cal,
             UCalendarDateFields        field,
             UErrorCode*            status );
@@ -605,9 +605,9 @@ ucal_get(    const    UCalendar*            cal,
 * Set the value of a field in a UCalendar.
 * All fields are represented as 32-bit integers.
 * @param cal The UCalendar to set.
-* @param field The field to set; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The field to set; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
 * @param value The desired value of field.
 * @see ucal_get
@@ -616,7 +616,7 @@ ucal_get(    const    UCalendar*            cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_set(    UCalendar*            cal,
         UCalendarDateFields        field,
         int32_t                value);
@@ -625,9 +625,9 @@ ucal_set(    UCalendar*            cal,
 * Determine if a field in a UCalendar is set.
 * All fields are represented as 32-bit integers.
 * @param cal The UCalendar to query.
-* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
 * @param return TRUE if field is set, FALSE otherwise.
 * @see ucal_get
@@ -636,7 +636,7 @@ ucal_set(    UCalendar*            cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI UBool 
+U_CAPI UBool
 ucal_isSet(    const    UCalendar*        cal,
             UCalendarDateFields    field);
 
@@ -644,9 +644,9 @@ ucal_isSet(    const    UCalendar*        cal,
 * Clear a field in a UCalendar.
 * All fields are represented as 32-bit integers.
 * @param cal The UCalendar containing the field to clear.
-* @param field The field to clear; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The field to clear; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
 * @see ucal_get
 * @see ucal_set
@@ -654,7 +654,7 @@ ucal_isSet(    const    UCalendar*        cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_clearField(    UCalendar*        cal,
             UCalendarDateFields     field);
 
@@ -668,7 +668,7 @@ ucal_clearField(    UCalendar*        cal,
 * @see ucal_clearField
 * @stable
 */
-U_CAPI void 
+U_CAPI void
 ucal_clear(UCalendar* calendar);
 
 /** Possible limit values for a UCalendar */
@@ -692,17 +692,17 @@ typedef enum UCalendarLimitType UCalendarLimitType;
 * Determine a limit for a field in a UCalendar.
 * A limit is a maximum or minimum value for a field.
 * @param cal The UCalendar to query.
-* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH, 
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK, 
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND, 
+* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param type The desired critical point; one of UCAL_MINIMUM, UCAL_MAXIMUM, UCAL_GREATEST_MINIMUM, 
+* @param type The desired critical point; one of UCAL_MINIMUM, UCAL_MAXIMUM, UCAL_GREATEST_MINIMUM,
 * UCAL_LEAST_MAXIMUM, UCAL_ACTUAL_MINIMUM, UCAL_ACTUAL_MAXIMUM
 * @param status A pointer to an UErrorCode to receive any errors.
 * @return The requested value.
 * @stable
 */
-U_CAPI int32_t 
+U_CAPI int32_t
 ucal_getLimit(    const    UCalendar*              cal,
             UCalendarDateFields     field,
             UCalendarLimitType      type,
