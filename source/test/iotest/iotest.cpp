@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -713,13 +713,14 @@ static void U_CALLCONV TestStream(void)
     strncpy(defConvName, ucnv_getDefaultName(), sizeof(defConvName)/sizeof(defConvName[0]));
     ucnv_setDefaultName("UTF-8");
 
+    static const char * const TESTSTRING = "\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64";
 #ifdef USE_SSTREAM
     ostringstream outTestStream;
-    istringstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64");
+    istringstream inTestStream(TESTSTRING);
 #else
     char testStreamBuf[512];
     ostrstream outTestStream(testStreamBuf, sizeof(testStreamBuf));
-    istrstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64", 0);
+    istrstream inTestStream(TESTSTRING, 0);
 
     /* initialize testStreamBuf */
     memset(testStreamBuf, '*', sizeof(testStreamBuf));
