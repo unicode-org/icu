@@ -409,11 +409,11 @@ void TestSortKey()
     UErrorCode status = U_ZERO_ERROR;
 
 
-    char s1[] = { 0x9f, 0x00 };
-    char s2[] = { 0x61, 0x00 };
+    uint8_t s1[] = { 0x9f, 0x00 };
+    uint8_t s2[] = { 0x61, 0x00 };
     int  strcmpResult;
 
-    strcmpResult = strcmp(s1,s2);
+    strcmpResult = strcmp((const char *)s1, (const char *)s2);
     log_verbose("strcmp(0x9f..., 0x61...) = %d\n", strcmpResult);
     
     if(strcmpResult <= 0) {
