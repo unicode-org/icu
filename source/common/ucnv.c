@@ -1239,6 +1239,66 @@ ucnv_getInvalidUChars (const UConverter * converter,
     }
 }
 
+#define SIG_MAX_LEN 4
+
+U_CAPI const char* U_EXPORT2
+ucnv_detectUnicodeSignature( const char* source,
+                             int32_t sourceLength,
+                             int32_t* signatureLength,
+                             UErrorCode* pErrorCode){
+    
+    /* initial 0xa5 bytes: make sure that if we read <4 
+     * bytes we don't misdetect something 
+     */
+    char start[SIG_MAX_LEN]={ '\xa5', '\xa5', '\xa5', '\xa5' };
+    int i = 0;
+
+    if((pErrorCode==NULL) || U_FAILURE(*pErrorCode)){
+        return NULL;
+    }
+    
+    if(source == NULL || signatureLength == NULL || sourceLength < -1){
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    if(sourceLength==-1){
+        sourceLength=uprv_strlen(source);
+    }
+
+    
+    while(i<sourceLength&& i<SIG_MAX_LEN){
+        start[i]=source[i];
+        i++;
+    }
+  
+    if(start[0] == '\xFE' && start[1] == '\xFF') {
+        *signatureLength=2;
+        return  "UTF-16BE";
+    } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+        if(start[2] == '\x00' && start[3] =='\x00'){
+            *signatureLength=4;
+            return "UTF-32LE";
+        } else {
+            *signatureLength=2;
+            return  "UTF-16LE";
+        }
+    } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+        *signatureLength=3;
+        return  "UTF-8";
+    }else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF'){
+        *signatureLength=3;
+        return "SCSU";
+    }else if(start[0] == '\x00' && start[1] == '\x00' && 
+            start[2] == '\xFE' && start[3]=='\xFF'){
+        *signatureLength=4;
+        return  "UTF-32BE";
+    }else{
+        *signatureLength=0;
+        return NULL;
+    }
+}
+
 /*
  * Hey, Emacs, please set the following:
  *

@@ -29,6 +29,7 @@ static void TestJitterbug1293(void);
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
+static void TestSignatureDetection();
 static void TestUTF7(void);
 static void TestUTF8(void);
 static void TestUTF16BE(void);
@@ -186,6 +187,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestOutBufSizes, "tsconv/nucnvtst/TestOutBufSizes");
    addTest(root, &TestConverterTypesAndStarters, "tsconv/nucnvtst/TestConverterTypesAndStarters");
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
+   addTest(root, &TestSignatureDetection, "tsconv/nucnvtst/TestSignatureDetection");
    addTest(root, &TestUTF7, "tsconv/nucnvtst/TestUTF7");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
    addTest(root, &TestUTF16BE, "tsconv/nucnvtst/TestUTF16BE");
@@ -1318,6 +1320,197 @@ static void TestAmbiguous()
     }
     ucnv_close(sjis_cnv);
     ucnv_close(ascii_cnv);
+}
+
+static void 
+TestSignatureDetection(){
+    /* with null terminated strings */
+    {
+        char* data[] = { 
+                "\xFE\xFF\x00\x00",     /* UTF-16BE */
+                "\xFF\xFE\x00\x00",     /* UTF-16LE */
+                "\xEF\xBB\xBF\x00",     /* UTF-8    */
+                "\x0E\xFE\xFF\x00",     /* SCSU     */
+               
+                "\xFE\xFF",             /* UTF-16BE */
+                "\xFF\xFE",             /* UTF-16LE */
+                "\xEF\xBB\xBF",         /* UTF-8    */
+                "\x0E\xFE\xFF",         /* SCSU     */
+                
+                "\xFE\xFF\x41\x42",     /* UTF-16BE */
+                "\xFF\xFE\x41\x41",     /* UTF-16LE */
+                "\xEF\xBB\xBF\x41",     /* UTF-8    */
+                "\x0E\xFE\xFF\x41",     /* SCSU     */
+
+        };
+        char* expected[] = {
+                "UTF-16BE",
+                "UTF-16LE",
+                "UTF-8",
+                "SCSU",
+
+                "UTF-16BE",
+                "UTF-16LE",
+                "UTF-8",
+                "SCSU",
+
+                "UTF-16BE",
+                "UTF-16LE",
+                "UTF-8",
+                "SCSU",
+
+        };
+        int32_t expectedLength[] ={
+            2,
+            2,
+            3,
+            3,
+
+            2,
+            2,
+            3,
+            3,
+
+            2,
+            2,
+            3,
+            3,
+
+        };
+        int i=0;
+        UErrorCode err;
+        int32_t signatureLength = -1;
+        char* source = NULL;
+        const char* enc = NULL;
+        for( ; i<sizeof(data)/sizeof(char*); i++){
+            err = U_ZERO_ERROR;
+            source = data[i];
+            enc = ucnv_detectUnicodeSignature(source, -1 , &signatureLength, &err);
+            if(U_FAILURE(err)){
+                log_err("ucnv_detectUnicodeSignature failed for source : %s at index :%i. Error: %s\n", source,i,u_errorName(err));
+                continue;
+            }
+            if(enc == NULL || strcmp(enc,expected[i]) !=0){
+                log_err("ucnv_detectUnicodeSignature failed for source : %s at index :%i. Expected: %s. Got: %s\n",source,i,expected[i],enc);
+                continue;
+            }
+            if(signatureLength != expectedLength[i]){
+                log_err("ucnv_detectUnicodeSignature failed for source : %s at index :%i.Expected Length: %i. Got length: %i\n",source,i,signatureLength,expectedLength[i]);
+            }
+        }
+    }
+    {
+        char* data[] = { 
+                "\xFE\xFF\x00",         /* UTF-16BE */
+                "\xFF\xFE\x00",         /* UTF-16LE */
+                "\xEF\xBB\xBF\x00",     /* UTF-8    */
+                "\x0E\xFE\xFF\x00",     /* SCSU     */
+                "\x00\x00\xFE\xFF",     /* UTF-32BE */
+                "\xFF\xFE\x00\x00",     /* UTF-32LE */
+                "\xFE\xFF",             /* UTF-16BE */
+                "\xFF\xFE",             /* UTF-16LE */
+                "\xEF\xBB\xBF",         /* UTF-8    */
+                "\x0E\xFE\xFF",         /* SCSU     */
+                "\x00\x00\xFE\xFF",     /* UTF-32BE */
+                "\xFF\xFE\x00\x00",     /* UTF-32LE */
+                "\xFE\xFF\x41\x42",     /* UTF-16BE */
+                "\xFF\xFE\x41\x41",     /* UTF-16LE */
+                "\xEF\xBB\xBF\x41",     /* UTF-8    */
+                "\x0E\xFE\xFF\x41",     /* SCSU     */
+                "\x00\x00\xFE\xFF\x41", /* UTF-32BE */
+                "\xFF\xFE\x00\x00\x42", /* UTF-32LE */
+                "\xFF\x41\x42"          /* NULL     */
+        };
+        int len[] = {
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            5,
+            5,
+            3
+        };
+
+        char* expected[] = {
+                "UTF-16BE",
+                "UTF-16LE",
+                "UTF-8",
+                "SCSU",
+                "UTF-32BE",
+                "UTF-32LE",
+                "UTF-16BE",
+                "UTF-16LE",
+                "UTF-8",
+                "SCSU",
+                "UTF-32BE",
+                "UTF-32LE",
+                "UTF-16BE",
+                "UTF-16LE",
+                "UTF-8",
+                "SCSU",
+                "UTF-32BE",
+                "UTF-32LE",
+                NULL
+        };
+        int32_t expectedLength[] ={
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            0
+        };
+        int i=0;
+        UErrorCode err;
+        int32_t signatureLength = -1;
+        int32_t sourceLength=-1;
+        char* source = NULL;
+        const char* enc = NULL;
+        for( ; i<sizeof(data)/sizeof(char*); i++){
+            err = U_ZERO_ERROR;
+            source = data[i];
+            sourceLength = len[i];
+            enc = ucnv_detectUnicodeSignature(source, sourceLength , &signatureLength, &err);
+            if(U_FAILURE(err)){
+                log_err("ucnv_detectUnicodeSignature test2 failed for source : %s at index :%i. Error: %s\n", source,i,u_errorName(err));
+                continue;
+            }
+            if(enc == NULL || strcmp(enc,expected[i]) !=0){
+                if(expected[i] !=NULL){
+                 log_err("ucnv_detectUnicodeSignature test2 failed for source : %s at index :%i. Expected: %s. Got: %s\n",source,i,expected[i],enc);
+                 continue;
+                }
+            }
+            if(signatureLength != expectedLength[i]){
+                log_err("ucnv_detectUnicodeSignature test2 failed for source : %s at index :%i.Expected Length: %i. Got length: %i\n",source,i,signatureLength,expectedLength[i]);
+            }
+        }
+    }
 }
 
 void
