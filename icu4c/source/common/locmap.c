@@ -111,7 +111,7 @@ uprv_defaultCodePageForLocale(const char *locale)
     {
         return NULL;
     }
-    locale_len = uprv_strlen(locale);
+    locale_len = (int32_t)uprv_strlen(locale);
 
     if(locale_len < 2)
     {
@@ -124,7 +124,7 @@ uprv_defaultCodePageForLocale(const char *locale)
     {
         if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc,
                         uprv_min(locale_len,
-                                 uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
+                                 (int32_t)uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
             == 0)
         {
             return _localeToDefaultCharmapTable[i].charmap;

@@ -852,7 +852,7 @@ UnicodeString::doIndexOf(UChar c,
 
   do {
     if(*begin == c) {
-      return begin - getArrayStart();
+      return (int32_t)(begin - getArrayStart());
     }
   } while(++begin < limit);
 
@@ -874,7 +874,7 @@ UnicodeString::doIndexOf(UChar32 c,
     // surrogate code point
     const UChar *t = uprv_strFindSurrogate(fArray + start, length, (UChar)c);
     if(t != 0) {
-      return t - fArray;
+      return (int32_t)(t - fArray);
     } else {
       return -1;
     }
@@ -958,7 +958,7 @@ UnicodeString::doLastIndexOf(UChar c,
 
   do {
     if(*--limit == c) {
-      return limit - getArrayStart();
+      return (int32_t)(limit - getArrayStart());
     }
   } while(limit > begin);
 
@@ -980,7 +980,7 @@ UnicodeString::doLastIndexOf(UChar32 c,
     // surrogate code point
     const UChar *t = uprv_strFindLastSurrogate(fArray + start, length, (UChar)c);
     if(t != 0) {
-      return t - fArray;
+      return (int32_t)(t - fArray);
     } else {
       return -1;
     }
@@ -1751,7 +1751,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
            &mySource, mySourceEnd, 0, TRUE, &status);
 
     // update the conversion parameters
-    fLength = myTarget - fArray;
+    fLength = (int32_t)(myTarget - fArray);
 
     // allocate more space and copy data, if needed
     if(status == U_BUFFER_OVERFLOW_ERROR) {
@@ -1763,7 +1763,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 
       // estimate the new size needed, larger than before
       // try 2 UChar's per remaining source byte
-      arraySize = fLength + 2 * (mySourceEnd - mySource);
+      arraySize = (int32_t)(fLength + 2 * (mySourceEnd - mySource));
     } else {
       break;
     }
