@@ -131,6 +131,14 @@ const char DateFormatSymbols::fgAmPmMarkersTag[]="AmPmMarkers";
 const char DateFormatSymbols::fgZoneStringsTag[]="zoneStrings";
 const char DateFormatSymbols::fgLocalPatternCharsTag[]="localPatternChars";
 
+/**
+ * Jitterbug 2974: MSVC has a bug whereby new X[0] behaves badly.
+ * Work around this.
+ */
+static inline UnicodeString* newUnicodeStringArray(size_t count) {
+    return new UnicodeString[count ? count : 1];
+}
+
 //------------------------------------------------------
 
 DateFormatSymbols::DateFormatSymbols(const Locale& locale,
@@ -186,7 +194,7 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
     // *and* for as long as all the strings are in *private* fields, preventing
     // a subclass from creating these strings in an "unsafe" way (with respect to fastCopyFrom()).
     dstCount = srcCount;
-    dstArray = new UnicodeString[srcCount];
+    dstArray = newUnicodeStringArray(srcCount);
     if(dstArray != NULL) {
         int32_t i;
         for(i=0; i<srcCount; ++i) {
@@ -208,7 +216,7 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     for (row=0; row<fZoneStringsRowCount; ++row)
     {
-        fZoneStrings[row] = new UnicodeString[fZoneStringsColCount];
+        fZoneStrings[row] = newUnicodeStringArray(fZoneStringsColCount);
         for (col=0; col<fZoneStringsColCount; ++col) {
             // fastCopyFrom() - see assignArray comments
             fZoneStrings[row][col].fastCopyFrom(otherStrings[row][col]);
@@ -378,7 +386,7 @@ DateFormatSymbols::setEras(const UnicodeString* erasArray, int32_t count)
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fEras = new UnicodeString[count];
+    fEras = newUnicodeStringArray(count);
     uprv_arrayCopy(erasArray,fEras,  count);
     fErasCount = count;
 }
@@ -391,7 +399,7 @@ DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count)
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fMonths = new UnicodeString[count];
+    fMonths = newUnicodeStringArray(count);
     uprv_arrayCopy( monthsArray,fMonths,count);
     fMonthsCount = count;
 }
@@ -404,7 +412,7 @@ DateFormatSymbols::setShortMonths(const UnicodeString* shortMonthsArray, int32_t
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fShortMonths = new UnicodeString[count];
+    fShortMonths = newUnicodeStringArray(count);
     uprv_arrayCopy(shortMonthsArray,fShortMonths,  count);
     fShortMonthsCount = count;
 }
@@ -416,7 +424,7 @@ void DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t 
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fWeekdays = new UnicodeString[count];
+    fWeekdays = newUnicodeStringArray(count);
     uprv_arrayCopy(weekdaysArray,fWeekdays,count);
     fWeekdaysCount = count;
 }
@@ -429,7 +437,7 @@ DateFormatSymbols::setShortWeekdays(const UnicodeString* shortWeekdaysArray, int
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fShortWeekdays = new UnicodeString[count];
+    fShortWeekdays = newUnicodeStringArray(count);
     uprv_arrayCopy( shortWeekdaysArray,fShortWeekdays,count);
     fShortWeekdaysCount = count;
 }
@@ -442,7 +450,7 @@ DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    fAmPms = new UnicodeString[count];
+    fAmPms = newUnicodeStringArray(count);
     uprv_arrayCopy(amPmsArray,fAmPms,count);
     fAmPmsCount = count;
 }
@@ -502,7 +510,7 @@ void
 DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const ResourceBundle data, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         length = data.getSize();
-        *field = new UnicodeString[length];
+        *field = newUnicodeStringArray(length);
         if (*field) {
             for(int32_t i = 0; i<length; i++) {
                 // fastCopyFrom() - see assignArray comments
@@ -520,7 +528,7 @@ void
 DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         length = numStr;
-        *field = new UnicodeString[(size_t)numStr];
+        *field = newUnicodeStringArray((size_t)numStr);
         if (*field) {
             for(int32_t i = 0; i<length; i++) {
                 // readonly aliases - all "data" strings are constant
@@ -653,7 +661,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         return;
     }
     for(i = 0; i<fZoneStringsRowCount; i++) {
-        *(fZoneStrings+i) = new UnicodeString[fZoneStringsColCount];
+        *(fZoneStrings+i) = newUnicodeStringArray(fZoneStringsColCount);
         /* test for NULL */
         if ((*(fZoneStrings+i)) == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
