@@ -785,12 +785,39 @@
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
-        <!-- TODO this assumes no other target has extracted these files already, revisit -->
-        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-            <patternset includes="**/icudt30b/unames.icu"/>
+    </target>
+    
+    <!--
+            Targets to build only StringPrep and IDNA API
+     -->    
+    <target name="copyStringPrepData" depends="init">
+      <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+            <patternset includes="**/*.spp"/>
+      </unjar>
+    </target>
+    <target name="stringPrep" depends="init,normalizer,copyStringPrepData">
+         <javac includes="com/ibm/icu/text/*StringPrep*.java,com/ibm/icu/text/*IDNA*.java,com/ibm/icu/impl/*StringPrep*.java"
+            excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            source="1.4"
+            classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+    <target name="stringPrepTests" depends="stringPrep">
+        <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/stringprep/**/*"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}">
+            <patternset>
+              <include name="**/*.spp"/>
+              <include name="**/idna_rules.res"/>
+            </patternset>
         </unjar>
     </target>
-
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
     <target name="extraTransliteratorData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
