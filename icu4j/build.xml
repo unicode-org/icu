@@ -94,7 +94,7 @@
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
         <!-- fix the data folder every time there is a version update-->
-        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
+        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt32b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
 
         <path id="build.classpath">

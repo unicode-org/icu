@@ -56,7 +56,18 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      */
     public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
     
+    /**
+     * The base name of rbnf data to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
     public static final String ICU_RBNF_BASE_NAME = ICU_BASE_NAME + "/rbnf";
+    
+    /**
+     * The base name of transliterator data to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+    public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME + "/translit";
+  
     /**
      * The class loader constant to be used with getBundleInstance API
      * @draft ICU 3.0

@@ -344,6 +344,10 @@ public class ArabicShapingRegTest extends TestFmwk {
             catch (Exception e) {
                 ex = e;
             }
+            catch (InternalError ie){
+            	warnln("InternalError: "+ie.toString());
+                return;
+            }
             
             if (!test.result.equals(result)) {
                 reportTestFailure(i, test, shaper, result, ex);

@@ -207,7 +207,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
-            "mercredi", "", "", "", "", "", "", "", "PDT", "", "", "", "", "", "",
+            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
             "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700",
@@ -766,7 +766,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 PDT";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HAP (\u00C9UA)";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
         String expectedUS = "Monday, September 15, 1997 12:00:00 AM PDT";
         logln("Date set to : " + testDate);
@@ -1291,24 +1291,30 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // create DFS that recognizes our bogus time zone, sortof
             DateFormatSymbols xsym = new DateFormatSymbols();
             String[][] tzids = xsym.getZoneStrings();
+            boolean changedGMT = false;
             for (int i = 0; i < tzids.length; ++i) {
-                if (tzids[i][0].equals("GMT")) {
+                if (tzids[i][0].equals("Etc/GMT")) {
                     tzids[i][1] = "DBDY"; // change a local name
+                    logln("replaced GMT with DBDY");
+                    changedGMT = true;
                     break;
                 }
             }
             xsym.setZoneStrings(tzids);
             fmt.setDateFormatSymbols(xsym);
-
-            try {
-                fmt.parse(text);
-                logln("we parsed DBDY (as GMT, but still...)");
-            }
-            catch (ParseException e) {
-                errln("hey, still didn't recognize DBDY");
-            }
-            finally {
-                TimeZone.setDefault(oldtz);
+            if(changedGMT==true){
+                try {
+                    fmt.parse(text);
+                    logln("we parsed DBDY (as GMT, but still...)");
+                }
+                catch (ParseException e) {
+                    errln("hey, still didn't recognize DBDY");
+                }
+                finally {
+                    TimeZone.setDefault(oldtz);
+                }
+            }else{
+                errln("Could not find Etc/GMT in the tzids returned.");
             }
         }
 

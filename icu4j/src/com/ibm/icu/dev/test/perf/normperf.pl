@@ -17,20 +17,23 @@ my $TESTCLASS = 'com.ibm.icu.dev.test.perf.NormalizerPerformanceTest';
 
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
-my @METHODS  = (['TestICU_NFC_NFC_Text',  'TestJDK_NFC_NFC_Text'],
+my @METHODS  = (
+  		['TestICU_NFD_NFC_Text',  'TestJDK_NFD_NFC_Text'],
+		['TestICU_NFC_NFC_Text',  'TestJDK_NFC_NFC_Text'],
                 ['TestICU_NFC_NFD_Text',  'TestJDK_NFC_NFD_Text'],
                 ['TestICU_NFC_Orig_Text', 'TestJKD_NFC_Orig_Text'],
-				['TestICU_NFD_NFC_Text',  'TestJDK_NFD_NFC_Text'],
+		['TestICU_NFD_NFC_Text',  'TestJDK_NFD_NFC_Text'],
                 ['TestICU_NFD_NFD_Text',  'TestJDK_NFD_NFD_Text'],
                 ['TestICU_NFD_Orig_Text', 'TestJDK_NFD_Orig_Text'], 
                );
 
 # Patterns which define the set of characters used for testing.
 
-my $SOURCEDIR ="c:\\work\\DevICU\\icu\\source\\test\\perf\\normperf\\text\\";
+my $SOURCEDIR ="C:\\work\\icu4j\\src\\com\\ibm\\icu\\dev\\test\\perf\\data\\collation\\";
 
 my @OPTIONS = (
 #                      src text          	  src encoding  mode  
+		    [ "TestNames_SerbianSH.txt",    "UTF-8", "b"],
                     [ "arabic.txt",                 "UTF-8", "b"],
                     [ "french.txt",                 "UTF-8", "b"],
                     [ "greek.txt",                  "UTF-8", "b"],
@@ -257,7 +260,7 @@ sub measure1 {
 
         # calibrate: estimate ms/iteration
         print "Calibrating...";
-        my @t = callJava($method, $pat, -$CALIBRATE);
+        my @t = callJava($method, $pat, $CALIBRATE );
         print "done.\n";
 
         my @data = split(/\s+/, $t[0]->[2]);
@@ -319,7 +322,7 @@ sub callJava {
     my $pat = shift;
     my $n = shift;
     my $fileName = $SOURCEDIR . @$pat[0] ; 
-    my $cmd = "c:\\j2sdk1.4.0\\bin\\java -classpath ;classes; $TESTCLASS $method $n -f $fileName -e @$pat[1] -@$pat[2]";
+    my $cmd = "c:\\jdk1.4.2_04\\bin\\java -classpath ;classes; $TESTCLASS $method -t $n -f $fileName -e @$pat[1] -@$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;

@@ -448,7 +448,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // FIXME: cache only ResourceBundle. Hence every time, will do
         // getObject(). This won't be necessary if the Resource itself
         // is cached.
-        eras = calData.getStringArray("eras");
+        eras = calData.getEras("abbreviated");
         months = calData.getStringArray("monthNames", "wide");
         shortMonths = calData.getStringArray("monthNames", "abbreviated");
 

@@ -851,7 +851,7 @@ public class ULocaleTest extends TestFmwk {
         if(locales.length<10){
             errln("Did not get the correct result from getAvailableLocales");
         }
-        if(!locales[locales.length-1].equals("zh_TW")){
+        if(!locales[locales.length-1].equals("zh_Hant_TW")){
             errln("Did not get the expected result");   
         }
     }

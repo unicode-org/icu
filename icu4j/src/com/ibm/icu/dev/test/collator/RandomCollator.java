@@ -18,6 +18,7 @@ import com.ibm.icu.dev.test.util.BNF;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.Quoter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -53,7 +54,7 @@ public class RandomCollator extends TestFmwk {
 //        }
         if(skipIfBeforeICU(3,0)) return;
         String fileName;
-        PrintWriter pw = BagFormatter.openUTF8Writer("", "RandomCollationTestLog.txt");
+        PrintWriter pw = BagFormatter.openUTF8Writer(System.getProperty("user.dir")+File.separator, "RandomCollationTestLog.txt");
         TestCollator tc = new TestCollator(chars);
         pw.println("Collation Test Run");
         pw.println("Note: For parse-exception, " + POSITION + " indicates the errorOffset");

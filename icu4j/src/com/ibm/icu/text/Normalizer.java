@@ -1907,11 +1907,13 @@ public final class Normalizer implements Cloneable {
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
      * @return The codepoint as an int
+     * @deprecated ICU 3.2
+     * @obsolete ICU 3.2
      */
-    //    public int setIndex(int index) {
-    //          setIndexOnly(index);
-    //          return current();
-    //    }
+     public int setIndex(int index) {
+         setIndexOnly(index);
+         return current();
+     }
  
     /**
      * Retrieve the index of the start of the input text. This is the begin 

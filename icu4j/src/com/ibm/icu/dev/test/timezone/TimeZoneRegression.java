@@ -27,17 +27,17 @@ public class TimeZoneRegression extends TestFmwk {
 
     public void Test4052967() {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
-    String id = TimeZone.getDefault().getID();
-    try {
-        // user.timezone is a protected system property
-        logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
-        logln("TimeZone.getDefault().getID(): " + id);
-        logln(new Date().toString());
-        logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
-    }
-    catch (SecurityException e) {
-        warnln("security exception: " + e.toString());
-    }
+        String id = TimeZone.getDefault().getID();
+        try {
+            // user.timezone is a protected system property
+            logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
+            logln("TimeZone.getDefault().getID(): " + id);
+            logln(new Date().toString());
+            logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
+        }
+        catch (SecurityException e) {
+            warnln("security exception: " + e.toString());
+        }
     }
 
     public void Test4073209() {

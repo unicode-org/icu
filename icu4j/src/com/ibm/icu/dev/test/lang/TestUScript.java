@@ -102,6 +102,7 @@ public class TestUScript extends TestFmwk {
                 }
             }else{
                 numErrors++;
+                logln("Error getting script code for name "+testNames[i]);
             }
         }
         reportDataErrors(numErrors);
