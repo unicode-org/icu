@@ -10,7 +10,7 @@
 ----------------------------------------------------------------------
 OVERVIEW
 
-This file describes the tools in icu/source/tools/gentz/tzcode
+This file describes the tools in icu/source/tools/tzcode
 
 The purpose of these tools is to process the zoneinfo or "Olson" time
 zone database into a form usable by ICU4C (release 2.8 and later).
@@ -65,10 +65,10 @@ HOWTO
    and tzdataYYYYV.tar.gz (aka `tzdata') from the FTP site given
    above.  Either manually download or use wget:
 
-   $ cd {path_to}/icu/source/tools/gentz/tzcode
+   $ cd {path_to}/icu/source/tools/tzcode
    $ wget "ftp://elsie.nci.nih.gov/pub/tz*.tar.gz"
 
-2. Unpack tzcode and tzdata directly into the directory gentz/tzcode:
+2. Unpack tzcode and tzdata directly into the directory tzcode:
 
    $ tar xzvf tzcode*.tar.gz
    $ tar xzvf tzdata*.tar.gz
