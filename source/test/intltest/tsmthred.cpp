@@ -1040,8 +1040,8 @@ void MultithreadTest::TestCollators()
     }
   }
 
-  Line *lines = new Line[65000];
-  uprv_memset(lines, 0, sizeof(Line)*65000);
+  Line *lines = new Line[200000];
+  uprv_memset(lines, 0, sizeof(Line)*200000);
   int32_t lineNum = 0;
 
   UChar bufferU[1024];
