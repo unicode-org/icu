@@ -528,7 +528,7 @@ ubrk_getRuleStatus(UBreakIterator *bi);
  * @param type locale type (valid or actual)
  * @param status error code
  * @return locale string
- * @draft ICU 2.8
+ * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
  */
 U_CAPI const char* U_EXPORT2
 ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);
