@@ -146,10 +146,10 @@ $LB5Breaks = [$LB3Breaks $ZW];
 
 ($HangulSyllable) $CM*;
 
-# LB 7     Combining marks.  TODO:  get it right!
-#                                   $SP $CM needs to behave like $ID.
-#                                   X   $CM needs to behave like X, where X is not $SP.
-#                                   $CM not covered by the above needs to behave like $AL
+# LB 7     Combining marks.      $SP $CM needs to behave like $ID.
+#                                X   $CM needs to behave like X, where X is not $SP.   
+#                                $CM not covered by the above needs to behave like $AL   
+#                                
 $LB5NonBreaks $CM+;    #  Stick together any combining sequences that don't match other rules.
 
 # LB 8
@@ -219,11 +219,7 @@ $CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
 
 #
 #  Reverse Rules.
-#     TODO:  Something more efficient.  These rules just back up to hard breaks
-#            Note that the initial .. is to back over both halves of a CR/LF sequence
-#            at the current position.
 #
-
 ## -------------------------------------------------
 
 !!reverse;
