@@ -415,7 +415,8 @@ static void TestGetSetDateAPI()
     
     
     
-    
+    ctest_setTimeZone(NULL, &status);
+
     /*testing ucal_setTimeZone() function*/
     log_verbose("\nTesting if the function ucal_setTimeZone() works fine\n");
     ucal_setMillis(caldef2, d2, &status); 
@@ -474,6 +475,9 @@ static void TestGetSetDateAPI()
     else if (zoneOffset != -28800000) {
         log_err("Error in getting the time zone using ucal_get() after using ucal_setTimeZone() offset=%d\n", zoneOffset);
     }
+
+    ctest_resetTimeZone();
+
 /*----------------------------*     */
     
     
