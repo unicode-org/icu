@@ -81,9 +81,10 @@ ICUUNIDATA=$(ICUP)\source\data\unidata
 
 
 #  ICUMISC
-#       The directory that contains files that are miscelleneous data
+#       The directory that contains miscfiles.mk along with files that are miscelleneous data
 #
 ICUMISC=$(ICUP)\source\data\misc
+ICUMISC2=misc
 
 #
 #  ICUDATA
@@ -211,9 +212,24 @@ TRANLIT_SOURCE=$(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL)
 
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
+# Read list of miscellaneous resource bundle files
+!IF EXISTS("$(ICUSRCDATA)\$(ICUMISC2)\miscfiles.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUMISC2)\miscfiles.mk"
+!IF EXISTS("$(ICUSRCDATA)\$(ICUMISC2)\misclocal.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUMISC2)\misclocal.mk"
+MISC_SOURCE=$(MISC_SOURCE) $(MISC_SOURCE_LOCAL)
+!ELSE
+!MESSAGE Information: cannot find "misclocal.mk". Not building user-additional miscellaenous files. 
+!ENDIF
+!ELSE
+!MESSAGE Warning: cannot find "miscfiles.mk"
+!ENDIF
+
+MISC_FILES = $(MISC_SOURCE:.txt=.res)
+
 INDEX_RES_FILES = res_index.res
 
-ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(TRANSLIT_FILES)
+ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(TRANSLIT_FILES) $(MISC_FILES)
 
 #############################################################################
 #
@@ -230,7 +246,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat 
 #
-"$(TESTDATAOUT)\testdata.dat": $(ICUDT)ucadata.icu $(TRANSLIT_FILES) $(RB_FILES)  {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
+"$(TESTDATAOUT)\testdata.dat": $(ICUDT)ucadata.icu $(TRANSLIT_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" PKGOPT="$(PKGOPT)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
@@ -339,10 +355,19 @@ CLEAN : GODATA
 	@echo Generating converters
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -t -p"$(ICUPKG)" -d"$(ICUBLD)" $<
 
-# Batch infrence rule for creating transliterator resource files
+# Batch inference rule for creating transliterator resource files
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt.res::
 	@echo Making Transliterator Resource Bundle files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -t -p"$(ICUPKG)" -d"$(ICUBLD)" $<
+
+# Batch inference rule for creating miscellaneous resource files
+# TODO: -q option is specified to squelch the 120+ warnings about
+#       empty intvectors and binary elements.  Unfortunately, this may
+#       squelch other legitimate warnings.  When there is a better
+#       way, remove the -q.
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUMISC2)}.txt.res::
+	@echo Making Miscellaneous Resource Bundle files
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -t -q -p"$(ICUPKG)" -d"$(ICUBLD)" $<
 
 $(INDEX_RES_FILES):
 	@echo Generating <<res_index.txt
@@ -417,5 +442,4 @@ res_index {
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) "$(ICUBLD)\$(ICUDT)root.res" : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unorm.icu"
-
+$(TRANSLIT_SOURCE) $(MISC_SOURCE) $(GENRB_SOURCE) "$(ICUBLD)\$(ICUDT)root.res" : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unorm.icu"
