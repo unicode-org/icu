@@ -1103,7 +1103,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         if (!(isICUData && pCommonData && extendICUData(pCommonData, &errorCode))) {
             break;
         }
-    };
+    }
 
     /* data not found */
     if(U_SUCCESS(*pErrorCode)) {

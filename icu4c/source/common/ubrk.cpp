@@ -256,13 +256,13 @@ U_CAPI  UBool U_EXPORT2
 ubrk_isBoundary(UBreakIterator *bi, int32_t offset)
 {
     return ((BreakIterator *)bi)->isBoundary(offset);
-};
+}
 
 
 U_CAPI  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi)
 {
     return ((RuleBasedBreakIterator *)bi)->getRuleStatus();
-};
+}
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
