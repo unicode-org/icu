@@ -41,18 +41,18 @@ void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, const char
             }
             break;
 
-        case 1: name = "Default Locale";
-            if (exec) testLocale(/*par, */Locale::getDefault(), "Default Locale");
+        case 1: name = "DefaultLocale";
+            if (exec) testLocale(/*par, */Locale::getDefault(), name);
             break;
 
-        case 2: name = "Determine Available Locales"; 
+        case 2: name = "testAvailableLocales"; 
             if (exec) {
                 logln(name);
                 testAvailableLocales(/*par*/);
             }
             break;
 
-        case 3: name = "Test Available Locales"; 
+        case 3: name = "monsterTest";
             if (exec) {
                 logln(name);
                 monsterTest(/*par*/);
