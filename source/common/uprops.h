@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -14,7 +14,7 @@
 *   created by: Markus W. Scherer
 *
 *   Constants for mostly non-core Unicode character properties
-*   stored in uprops.dat.
+*   stored in uprops.icu.
 */
 
 #ifndef __UPROPS_H__
@@ -23,7 +23,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
 #include "uset_imp.h"
-#include "ucase.h"
 #include "udataswp.h"
 
 /* indexes[] entries */
@@ -49,42 +48,44 @@ enum {
 /* definitions for the main properties words */
 enum {
     /* general category shift==0                                0 (5 bits) */
-    UPROPS_EXCEPTION_SHIFT=5,                               /*  5 (1 bit)  */
-    UPROPS_BIDI_SHIFT,                                      /*  6 (5 bits) */
-    UPROPS_MIRROR_SHIFT=UPROPS_BIDI_SHIFT+5,                /* 11 (1 bit)  */
-    UPROPS_NUMERIC_TYPE_SHIFT,                              /* 12 (3 bits) */
-    UPROPS_CASE_SENSITIVE_SHIFT=UPROPS_NUMERIC_TYPE_SHIFT+3,/* 15 (1 bit) format version 3.2 */
-    UPROPS_RESERVED_SHIFT,                                  /* 16 (4 bits) */
-    UPROPS_VALUE_SHIFT=20,                                  /* 20 */
-
-    UPROPS_EXCEPTION_BIT=1UL<<UPROPS_EXCEPTION_SHIFT,
-    UPROPS_VALUE_BITS=32-UPROPS_VALUE_SHIFT,
-
-    UPROPS_MIN_VALUE=-(1L<<(UPROPS_VALUE_BITS-1)),
-    UPROPS_MAX_VALUE=(1L<<(UPROPS_VALUE_BITS-1))-1,
-    UPROPS_MAX_EXCEPTIONS_COUNT=1L<<UPROPS_VALUE_BITS
+    UPROPS_NUMERIC_TYPE_SHIFT=5,                            /*  5 (3 bits) */
+    UPROPS_NUMERIC_VALUE_SHIFT=8                            /*  8 (8 bits) */
 };
 
-#define PROPS_VALUE_IS_EXCEPTION(props) ((props)&UPROPS_EXCEPTION_BIT)
 #define GET_CATEGORY(props) ((props)&0x1f)
-#define GET_BIDI_CLASS(props) ((props>>UPROPS_BIDI_SHIFT)&0x1f)
-#define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
-#define GET_UNSIGNED_VALUE(props) ((props)>>UPROPS_VALUE_SHIFT)
-#define GET_SIGNED_VALUE(props) ((int32_t)(props)>>UPROPS_VALUE_SHIFT)
-#define GET_EXCEPTIONS(props) (exceptionsTable+GET_UNSIGNED_VALUE(props))
-
 #define CAT_MASK(props) U_MASK(GET_CATEGORY(props))
 
+#define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
+#define GET_NUMERIC_VALUE(props) (((props)>>UPROPS_NUMERIC_VALUE_SHIFT)&0xff)
+
+/* internal numeric pseudo-types for special encodings of numeric values */
 enum {
-    EXC_UPPERCASE,
-    EXC_LOWERCASE,
-    EXC_TITLECASE,
-    EXC_UNUSED,
-    EXC_NUMERIC_VALUE,
-    EXC_DENOMINATOR_VALUE,
-    EXC_MIRROR_MAPPING,
-    EXC_SPECIAL_CASING,
-    EXC_CASE_FOLDING
+    UPROPS_NT_FRACTION=4, /* ==U_NT_COUNT, must not change unless binary format version changes */
+    UPROPS_NT_LARGE,
+    UPROPS_NT_COUNT
+};
+
+/* encoding of fractional and large numbers */
+enum {
+    UPROPS_MAX_SMALL_NUMBER=0xff,
+
+    UPROPS_FRACTION_NUM_SHIFT=3,        /* numerator: bits 7..3 */
+    UPROPS_FRACTION_DEN_MASK=7,         /* denominator: bits 2..0 */
+
+    UPROPS_FRACTION_MAX_NUM=31,
+    UPROPS_FRACTION_DEN_OFFSET=2,       /* denominator values are 2..9 */
+
+    UPROPS_FRACTION_MIN_DEN=UPROPS_FRACTION_DEN_OFFSET,
+    UPROPS_FRACTION_MAX_DEN=UPROPS_FRACTION_MIN_DEN+UPROPS_FRACTION_DEN_MASK,
+
+    UPROPS_LARGE_MANT_SHIFT=4,          /* mantissa: bits 7..4 */
+    UPROPS_LARGE_EXP_MASK=0xf,          /* exponent: bits 3..0 */
+    UPROPS_LARGE_EXP_OFFSET=2,          /* regular exponents 2..17 */
+    UPROPS_LARGE_EXP_OFFSET_EXTRA=18,   /* extra large exponents 18..33 */
+
+    UPROPS_LARGE_MIN_EXP=UPROPS_LARGE_EXP_OFFSET,
+    UPROPS_LARGE_MAX_EXP=UPROPS_LARGE_MIN_EXP+UPROPS_LARGE_EXP_MASK,
+    UPROPS_LARGE_MAX_EXP_EXTRA=UPROPS_LARGE_EXP_OFFSET_EXTRA+UPROPS_LARGE_EXP_MASK
 };
 
 /* number of properties vector words */
@@ -129,8 +130,8 @@ enum {
  */
 enum {
     UPROPS_WHITE_SPACE,
-    UPROPS_BIDI_CONTROL,
-    UPROPS_JOIN_CONTROL,
+        UPROPS_WAS_BIDI_CONTROL,                /* reserved, was used in format version 3 */
+        UPROPS_WAS_JOIN_CONTROL,
     UPROPS_DASH,
     UPROPS_HYPHEN,
     UPROPS_QUOTATION_MARK,
@@ -142,8 +143,8 @@ enum {
     UPROPS_IDEOGRAPHIC,
     UPROPS_DIACRITIC,
     UPROPS_EXTENDER,
-    UPROPS_LOWERCASE,
-    UPROPS_UPPERCASE,
+        UPROPS_WAS_LOWERCASE,                   /* reserved, was used in format version 3 */
+        UPROPS_WAS_UPPERCASE,
     UPROPS_NONCHARACTER_CODE_POINT,
     UPROPS_GRAPHEME_EXTEND,
     UPROPS_GRAPHEME_LINK,
@@ -153,7 +154,7 @@ enum {
     UPROPS_UNIFIED_IDEOGRAPH,
     UPROPS_DEFAULT_IGNORABLE_CODE_POINT,
     UPROPS_DEPRECATED,
-    UPROPS_SOFT_DOTTED,
+        UPROPS_WAS_SOFT_DOTTED,                 /* reserved, was used in format version 3 */
     UPROPS_LOGICAL_ORDER_EXCEPTION,
     UPROPS_XID_START,
     UPROPS_XID_CONTINUE,
@@ -167,15 +168,15 @@ enum {
  * Properties in vector word 2
  * Bits
  * 31..24   More binary properties
- * 13..11   Joining Type
- * 10.. 5   Joining Group
+ * 13..11   reserved, was Joining Type in format version 3
+ * 10.. 5   reserved, was Joining Group in format version 3
  *  4.. 0   Decomposition Type
  */
-#define UPROPS_JT_MASK          0x00003800
-#define UPROPS_JT_SHIFT         11
+#define UPROPS_WAS_JT_MASK          0x00003800
+#define UPROPS_WAS_JT_SHIFT         11
 
-#define UPROPS_JG_MASK          0x000007e0
-#define UPROPS_JG_SHIFT         5
+#define UPROPS_WAS_JG_MASK          0x000007e0
+#define UPROPS_WAS_JG_SHIFT         5
 
 #define UPROPS_DT_MASK          0x0000001f
 

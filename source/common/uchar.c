@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -49,8 +49,7 @@ static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 static UTrie propsTrie={ 0 }, propsVectorsTrie={ 0 };
-static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL, *propsVectors=NULL;
-static const UChar *ucharsTable=NULL;
+static const uint32_t *pData32=NULL, *propsVectors=NULL;
 static int32_t countPropsVectors=0, propsVectorsColumns=0;
 
 static int8_t havePropsData=0;     /*  == 0   ->  Data has not been loaded.
@@ -60,16 +59,6 @@ static int8_t havePropsData=0;     /*  == 0   ->  Data has not been loaded.
 
 /* index values loaded from uprops.dat */
 static int32_t indexes[UPROPS_INDEX_COUNT];
-
-/* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
-static int32_t U_CALLCONV
-getFoldingPropsOffset(uint32_t data) {
-    if(data&0x8000) {
-        return (int32_t)(data&0x7fff);
-    } else {
-        return 0;
-    }
-}
 
 static UBool U_CALLCONV
 isAcceptable(void *context,
@@ -83,7 +72,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x50 &&
         pInfo->dataFormat[2]==0x72 &&
         pInfo->dataFormat[3]==0x6f &&
-        pInfo->formatVersion[0]==3 &&
+        pInfo->formatVersion[0]==4 &&
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
@@ -102,9 +91,6 @@ static UBool U_CALLCONV uchar_cleanup(void)
         propsData=NULL;
     }
     pData32=NULL;
-    props32Table=NULL;
-    exceptionsTable=NULL;
-    ucharsTable=NULL;
     propsVectors=NULL;
     countPropsVectors=0;
     dataErrorCode=U_ZERO_ERROR;
@@ -139,19 +125,12 @@ _openProps(UCharProps *ucp, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
-    ucp->propsTrie.getFoldingOffset=getFoldingPropsOffset;
 
-    /* unserialize the properties vectors trie, if any */
-    if( p[UPROPS_ADDITIONAL_TRIE_INDEX]!=0 &&
-        p[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0
-    ) {
-        length=(int32_t)(p[UPROPS_ADDITIONAL_VECTORS_INDEX]-p[UPROPS_ADDITIONAL_TRIE_INDEX])*4;
-        length=utrie_unserialize(&ucp->propsVectorsTrie, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            uprv_memset(&ucp->propsVectorsTrie, 0, sizeof(ucp->propsVectorsTrie));
-        } else {
-            ucp->propsVectorsTrie.getFoldingOffset=getFoldingPropsOffset;
-        }
+    /* unserialize the properties vectors trie */
+    length=(int32_t)(p[UPROPS_ADDITIONAL_VECTORS_INDEX]-p[UPROPS_ADDITIONAL_TRIE_INDEX])*4;
+    length=utrie_unserialize(&ucp->propsVectorsTrie, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        uprv_memset(&ucp->propsVectorsTrie, 0, sizeof(ucp->propsVectorsTrie));
     }
 }
 
@@ -190,9 +169,6 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
 
             /* initialize some variables */
             uprv_memcpy(indexes, pData32, sizeof(indexes));
-            props32Table=pData32+indexes[UPROPS_PROPS32_INDEX];
-            exceptionsTable=pData32+indexes[UPROPS_EXCEPTIONS_INDEX];
-            ucharsTable=(const UChar *)(pData32+indexes[UPROPS_EXCEPTIONS_TOP_INDEX]);
 
             /* additional properties */
             if(indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0) {
@@ -250,7 +226,7 @@ uprops_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x50 &&
         pInfo->dataFormat[2]==0x72 &&
         pInfo->dataFormat[3]==0x6f &&
-        pInfo->formatVersion[0]==3 &&
+        (pInfo->formatVersion[0]==3 || pInfo->formatVersion[0]==4) &&
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     )) {
@@ -360,49 +336,14 @@ uprops_swap(const UDataSwapper *ds,
 
 /* getting a uint32_t properties word from the data */
 #define HAVE_DATA (havePropsData>0 || loadPropsData()>0)
-#define VALIDATE(c) (((uint32_t)(c))<=0x10ffff && HAVE_DATA)
 #define GET_PROPS_UNSAFE(c, result) \
-    UTRIE_GET16(&propsTrie, c, result); \
-    (result)=props32Table[(result)]
+    UTRIE_GET16(&propsTrie, c, result);
 #define GET_PROPS(c, result) \
     if(HAVE_DATA) { \
         GET_PROPS_UNSAFE(c, result); \
     } else { \
         (result)=0; \
     }
-
-/* finding an exception value */
-#define HAVE_EXCEPTION_VALUE(flags, index) ((flags)&(1UL<<(index)))
-
-/* number of bits in an 8-bit integer value */
-#define EXC_GROUP 8
-static const uint8_t flagsOffset[256]={
-    0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
-    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-    4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
-};
-
-#define ADD_EXCEPTION_OFFSET(flags, index, offset) { \
-    if((index)>=EXC_GROUP) { \
-        (offset)+=flagsOffset[(flags)&((1<<EXC_GROUP)-1)]; \
-        (flags)>>=EXC_GROUP; \
-        (index)-=EXC_GROUP; \
-    } \
-    (offset)+=flagsOffset[(flags)&((1<<(index))-1)]; \
-}
 
 U_CFUNC UBool
 uprv_haveProperties(UErrorCode *pErrorCode) {
@@ -437,8 +378,7 @@ struct _EnumTypeCallback {
 
 static uint32_t U_CALLCONV
 _enumTypeValue(const void *context, uint32_t value) {
-    /* access the general category from the 32-bit properties, and those from the 16-bit trie value */
-    return GET_CATEGORY(props32Table[value]);
+    return GET_CATEGORY(value);
 }
 
 static UBool U_CALLCONV
@@ -695,114 +635,82 @@ u_isJavaIDPart(UChar32 c) {
 
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c) {
-    uint32_t props, numericType;
+    uint32_t props;
     GET_PROPS(c, props);
-    numericType=GET_NUMERIC_TYPE(props);
 
-    if(numericType==1) {
-        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-            return GET_SIGNED_VALUE(props);
-        } else {
-            const uint32_t *pe=GET_EXCEPTIONS(props);
-            uint32_t firstExceptionValue=*pe;
-            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_NUMERIC_VALUE)) {
-                int i=EXC_NUMERIC_VALUE;
-                ++pe;
-                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
-                return (int32_t)*pe;
-            }
-        }
+    if(GET_NUMERIC_TYPE(props)==1) {
+        return GET_NUMERIC_VALUE(props);
+    } else {
+        return -1;
     }
-
-    return -1;
 }
 
 U_CAPI double U_EXPORT2
 u_getNumericValue(UChar32 c) {
-    uint32_t props, numericType;
+    uint32_t props, numericType, numericValue;
     GET_PROPS(c, props);
     numericType=GET_NUMERIC_TYPE(props);
 
-    if(numericType==0 || numericType>=(int32_t)U_NT_COUNT) {
+    if(numericType==0 || numericType>=UPROPS_NT_COUNT) {
         return U_NO_NUMERIC_VALUE;
-    } else {
-        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-            return GET_SIGNED_VALUE(props);
-        } else {
-            const uint32_t *pe;
-            uint32_t firstExceptionValue;
+    }
 
-            double numValue;
-            uint32_t denominator;
+    numericValue=GET_NUMERIC_VALUE(props);
 
-            pe=GET_EXCEPTIONS(props);
-            firstExceptionValue=*pe++;
+    if(numericType<U_NT_COUNT) {
+        /* normal type, the value is stored directly */
+        return numericValue;
+    } else if(numericType==UPROPS_NT_FRACTION) {
+        /* fraction value */
+        int32_t numerator;
+        uint32_t denominator;
 
-            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_NUMERIC_VALUE)) {
-                uint32_t flags=firstExceptionValue;
-                int i=EXC_NUMERIC_VALUE;
-                const uint32_t *p=pe;
-                int32_t numerator;
+        numerator=(int32_t)numericValue>>UPROPS_FRACTION_NUM_SHIFT;
+        denominator=(numericValue&UPROPS_FRACTION_DEN_MASK)+UPROPS_FRACTION_DEN_OFFSET;
 
-                ADD_EXCEPTION_OFFSET(flags, i, p);
-                numerator=(int32_t)*p;
-
-                /*
-                 * There are special values for huge numbers that are powers of ten.
-                 * genprops/store.c documents:
-                 *   if numericValue=0x7fffff00+x then numericValue=10^x
-                 */
-                if(numerator<0x7fffff00) {
-                    numValue=(double)numerator;
-                } else {
-                    numerator&=0xff;
-
-                    /* 10^x without math.h */
-                    numValue=1.;
-                    while(numerator>=4) {
-                        numValue*=10000.;
-                        numerator-=4;
-                    }
-                    switch(numerator) {
-                    case 3:
-                        numValue*=1000.;
-                        break;
-                    case 2:
-                        numValue*=100.;
-                        break;
-                    case 1:
-                        numValue*=10.;
-                        break;
-                    case 0:
-                    default:
-                        break;
-                    }
-                }
-            } else {
-                numValue=0.;
-            }
-            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_DENOMINATOR_VALUE)) {
-                uint32_t flags=firstExceptionValue;
-                int i=EXC_DENOMINATOR_VALUE;
-                const uint32_t *p=pe;
-                ADD_EXCEPTION_OFFSET(flags, i, p);
-                denominator=*p;
-            } else {
-                denominator=0;
-            }
-
-            switch(firstExceptionValue&((1UL<<EXC_NUMERIC_VALUE)|(1UL<<EXC_DENOMINATOR_VALUE))) {
-            case 1UL<<EXC_NUMERIC_VALUE:
-                return numValue;
-            case 1UL<<EXC_DENOMINATOR_VALUE:
-                return (double)1./(double)denominator;
-            case (1UL<<EXC_NUMERIC_VALUE)|(1UL<<EXC_DENOMINATOR_VALUE):
-                return numValue/(double)denominator;
-            case 0: /* none (should not occur with numericType>0) */
-            default:
-                return U_NO_NUMERIC_VALUE;
-            }
+        if(numerator==0) {
+            numerator=-1;
         }
+        return (double)numerator/(double)denominator;
+    } else /* numericType==UPROPS_NT_LARGE */ {
+        /* large value with exponent */
+        double numValue;
+        int32_t mant, exp;
+
+        mant=(int32_t)numericValue>>UPROPS_LARGE_MANT_SHIFT;
+        exp=(int32_t)numericValue&UPROPS_LARGE_EXP_MASK;
+        if(mant==0) {
+            mant=1;
+            exp+=UPROPS_LARGE_EXP_OFFSET_EXTRA;
+        } else if(mant>9) {
+            return U_NO_NUMERIC_VALUE; /* reserved mantissa value */
+        } else {
+            exp+=UPROPS_LARGE_EXP_OFFSET;
+        }
+
+        numValue=mant;
+
+        /* multiply by 10^exp without math.h */
+        while(exp>=4) {
+            numValue*=10000.;
+            exp-=4;
+        }
+        switch(exp) {
+        case 3:
+            numValue*=1000.;
+            break;
+        case 2:
+            numValue*=100.;
+            break;
+        case 1:
+            numValue*=10.;
+            break;
+        case 0:
+        default:
+            break;
+        }
+
+        return numValue;
     }
 }
 
@@ -866,7 +774,6 @@ u_getUnicodeProperties(UChar32 c, int32_t column) {
         GET_PROPS(c, props);
         return props;
     } else if( !HAVE_DATA || countPropsVectors==0 ||
-               (uint32_t)c>0x10ffff ||
                column<0 || column>=propsVectorsColumns
     ) {
         return 0;
@@ -1069,18 +976,6 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     USET_ADD_CP_AND_NEXT(sa, FIGURESP);
     USET_ADD_CP_AND_NEXT(sa, NNBSP);
 
-    /* add for u_charDigitValue() */
-    USET_ADD_CP_AND_NEXT(sa, 0x3007);
-    USET_ADD_CP_AND_NEXT(sa, 0x4e00);
-    USET_ADD_CP_AND_NEXT(sa, 0x4e8c);
-    USET_ADD_CP_AND_NEXT(sa, 0x4e09);
-    USET_ADD_CP_AND_NEXT(sa, 0x56db);
-    USET_ADD_CP_AND_NEXT(sa, 0x4e94);
-    USET_ADD_CP_AND_NEXT(sa, 0x516d);
-    USET_ADD_CP_AND_NEXT(sa, 0x4e03);
-    USET_ADD_CP_AND_NEXT(sa, 0x516b);
-    USET_ADD_CP_AND_NEXT(sa, 0x4e5d);
-
     /* add for u_digit() */
     sa->add(sa->set, U_a);
     sa->add(sa->set, U_z+1);
@@ -1096,8 +991,4 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 
     /* add for UCHAR_GRAPHEME_BASE and others */
     USET_ADD_CP_AND_NEXT(sa, CGJ);
-
-    /* add for UCHAR_JOINING_TYPE */
-    sa->add(sa->set, ZWNJ); /* range ZWNJ..ZWJ */
-    sa->add(sa->set, ZWJ+1);
 }
