@@ -86,7 +86,7 @@
  *
  * <p>In other words, all the graphic characters in 7-bit ASCII should
  * be safely accessible except the following:</p>
- * 
+ *
  * \code
  *    '\' <backslash>
  *    '[' <left bracket>
@@ -152,7 +152,7 @@
 #endif
 
 /**
- * A single string literal containing the icudata stub name. i.e. 'icudt18e' for 
+ * A single string literal containing the icudata stub name. i.e. 'icudt18e' for
  * ICU 1.8.x on EBCDIC, etc..
  * @stable ICU 2.0
  */
@@ -173,11 +173,11 @@
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)
 /**
  * @internal
- */ 
+ */
 #define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
 /**
  * @internal
- */ 
+ */
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
 
 /**
@@ -470,7 +470,7 @@ operator delete[](void * /*p*/) {
  */
 typedef enum UErrorCode {
     /* The ordering of U_ERROR_INFO_START Vs U_USING_FALLBACK_WARNING looks weird
-     * and is that way because VC++ debugger displays first encountered constant, 
+     * and is that way because VC++ debugger displays first encountered constant,
      * which is not the what the code is used for
      */
 
@@ -481,7 +481,7 @@ typedef enum UErrorCode {
     U_USING_DEFAULT_WARNING   = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
 
     U_SAFECLONE_ALLOCATED_WARNING = -126, /**< A SafeClone operation required allocating memory (informational only) */
-    
+
     U_STATE_OLD_WARNING       = -125,   /**< ICU has to use compatibility layer to construct the service. Expect performance/memory usage degradation. Consider upgrading */
 
     U_STRING_NOT_TERMINATED_WARNING = -124,/**< An output string could not be NUL-terminated because output length==destCapacity. */
@@ -531,13 +531,13 @@ typedef enum UErrorCode {
     U_CE_NOT_FOUND_ERROR      = 21,     /**< Currently used only while setting variable top, but can be used generally */
     U_PRIMARY_TOO_LONG_ERROR  = 22,     /**< User tried to set variable top to a primary that is longer than two bytes */
     U_STATE_TOO_OLD_ERROR     = 23,     /**< ICU cannot construct a service from this state, as it is no longer supported */
-    U_TOO_MANY_ALIASES_ERROR  = 24,     /**< There are too many aliases in the path to the requested resource. 
+    U_TOO_MANY_ALIASES_ERROR  = 24,     /**< There are too many aliases in the path to the requested resource.
                                              It is very possible that a circular alias definition has occured */
     U_ENUM_OUT_OF_SYNC_ERROR  = 25,     /**< UEnumeration out of sync with underlying collection */
     U_INVARIANT_CONVERSION_ERROR = 26,  /**< Unable to convert a UChar* string to char* with the invariant converter. */
 
     U_STANDARD_ERROR_LIMIT,             /**< This must always be the last value to indicate the limit for standard errors */
-    /* 
+    /*
      * the error code range 0x10000 0x10100 are reserved for Transliterator
      */
     U_BAD_VARIABLE_DEFINITION=0x10000,/**< Missing '$' or duplicate variable name */
@@ -578,7 +578,7 @@ typedef enum UErrorCode {
     U_INVALID_FUNCTION,               /**< A "&fn()" rule specifies an unknown transliterator */
     U_PARSE_ERROR_LIMIT,              /**< The limit for Transliterator errors */
 
-    /* 
+    /*
      * the error code range 0x10100 0x10200 are reserved for formatting API parsing error
      */
     U_UNEXPECTED_TOKEN=0x10100,       /**< Syntax error in format pattern */
@@ -596,8 +596,8 @@ typedef enum UErrorCode {
     U_UNSUPPORTED_PROPERTY,           /**< UNUSED as of ICU 2.4 */
     U_UNSUPPORTED_ATTRIBUTE,          /**< UNUSED as of ICU 2.4 */
     U_FMT_PARSE_ERROR_LIMIT,          /**< The limit for format library errors */
-   
-    /* 
+
+    /*
      * the error code range 0x10200 0x102ff are reserved for Break Iterator related error
      */
     U_BRK_ERROR_START=0x10200,             /**< Start of codes indicating Break Iterator failures */
@@ -630,8 +630,9 @@ typedef enum UErrorCode {
      U_REGEX_MAX_LT_MIN,                   /**< In {min,max}, max is less than min.                */
      U_REGEX_INVALID_BACK_REF,             /**< Back-reference to a non-existent capture group.    */
      U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
+     U_REGEX_LOOK_BEHIND_LIMIT,            /**< Look-Behind pattern matches must have a bounded maximum length.    */
      U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
-     
+
      /*
       * The error code in the range 0x10400-0x104ff are reserved for IDNA related error codes
       */

@@ -75,7 +75,9 @@ public:
         atomic       = -3,
         lookAhead    = -4,
         negLookAhead = -5,
-        flags        = -6
+        flags        = -6,
+        lookBehind   = -7,
+        lookBehindN  = -8
     };
 
 private:

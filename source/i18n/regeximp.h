@@ -126,7 +126,26 @@ enum {
                                //   Parameter is the index of the
                                //   capture group variables in the state stack frame.
      URX_DOLLAR_M      = 42,   // $ in multi-line mode.
-     URX_CARET_M       = 43    // ^ in multi-line mode.
+     URX_CARET_M       = 43,   // ^ in multi-line mode.
+     URX_LB_START      = 44,   // LookBehind Start.
+                               //   Paramater is data location
+     URX_LB_CONT       = 45,   // LookBehind Continue.
+                               //   Param 0:  the data location
+                               //   Param 1:  The minimum length of the look-behind match
+                               //   Param 2:  The max length of the look-behind match
+     URX_LB_END        = 46,   // LookBehind End.
+                               //   Parameter is the data location.
+                               //     Check that match ended at the right spot,
+                               //     Restore original input string len.
+     URX_LBN_CONT      = 47,   // Negative LookBehind Continue
+                               //   Param 0:  the data location
+                               //   Param 1:  The minimum length of the look-behind match
+                               //   Param 2:  The max     length of the look-behind match
+                               //   Param 3:  The pattern loc following the look-behind block.
+     URX_LBN_END       = 48    // Negative LookBehind end
+                               //   Parameter is the data location.
+                               //   Check that the match ended at the right spot.
+
 };           
 
 // Keep this list of opcode names in sync with the above enum
@@ -175,7 +194,12 @@ enum {
         "STRING_I",            \
         "BACKREF_I",           \
         "DOLLAR_M",            \
-        "CARET_M"
+        "CARET_M",             \
+        "LB_START",            \
+        "LB_CONT",             \
+        "LB_END",              \
+        "LBN_CONT",            \
+        "LBN_END"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
