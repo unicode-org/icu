@@ -3088,7 +3088,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       uint32_t i;    /* general counter */
       collIterateState digitState;
 
-      if (coll->numericCollation == UCOL_ON){
+      if (source->coll->numericCollation == UCOL_ON){
 		UChar32 char32 = 0;
 
 		uint32_t digIndx = 0;
@@ -3777,7 +3777,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       uint32_t i;    /* general counter */
       collIterateState state;
 
-      if (coll->numericCollation == UCOL_ON){
+      if (source->coll->numericCollation == UCOL_ON){
 		UChar32 char32 = 0;
 
 		uint32_t digIndx = 0;
