@@ -887,7 +887,7 @@ callback:
             cnv->invalidCharLength=1;
 
             /* call the callback function */
-            toUCallback(cnv, cnv->toUContext, pArgs, (const char *)&b, 1, reason, pErrorCode);
+            toUCallback(cnv, cnv->toUContext, pArgs, cnv->invalidCharBuffer, 1, reason, pErrorCode);
 
             /* update target and deal with offsets if necessary */
             offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
@@ -1049,7 +1049,7 @@ _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
         cnv->invalidCharLength=1;
 
         /* call the callback function */
-        toUCallback(cnv, cnv->toUContext, pArgs, (const char *)&b, 1, reason, pErrorCode);
+        toUCallback(cnv, cnv->toUContext, pArgs, cnv->invalidCharBuffer, 1, reason, pErrorCode);
 
         /* update target and deal with offsets if necessary */
         offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
@@ -2474,35 +2474,33 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
                 reason=UCNV_UNASSIGNED;
                 *pErrorCode=U_INVALID_CHAR_FOUND;
             }
-        } else {
-            if(UTF_IS_SURROGATE_FIRST(c)) {
+        } else if(UTF_IS_SURROGATE_FIRST(c)) {
 getTrail:
-                if(source<sourceLimit) {
-                    /* test the following code unit */
-                    UChar trail=*source;
-                    if(UTF_IS_SECOND_SURROGATE(trail)) {
-                        ++source;
-                        c=UTF16_GET_PAIR_VALUE(c, trail);
-                        /* this codepage does not map supplementary code points */
-                        /* callback(unassigned) */
-                        reason=UCNV_UNASSIGNED;
-                        *pErrorCode=U_INVALID_CHAR_FOUND;
-                    } else {
-                        /* this is an unmatched lead code unit (1st surrogate) */
-                        /* callback(illegal) */
-                        reason=UCNV_ILLEGAL;
-                        *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                    }
+            if(source<sourceLimit) {
+                /* test the following code unit */
+                UChar trail=*source;
+                if(UTF_IS_SECOND_SURROGATE(trail)) {
+                    ++source;
+                    c=UTF16_GET_PAIR_VALUE(c, trail);
+                    /* this codepage does not map supplementary code points */
+                    /* callback(unassigned) */
+                    reason=UCNV_UNASSIGNED;
+                    *pErrorCode=U_INVALID_CHAR_FOUND;
                 } else {
-                    /* no more input */
-                    break;
+                    /* this is an unmatched lead code unit (1st surrogate) */
+                    /* callback(illegal) */
+                    reason=UCNV_ILLEGAL;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                 }
             } else {
-                /* this is an unmatched trail code unit (2nd surrogate) */
-                /* callback(illegal) */
-                reason=UCNV_ILLEGAL;
-                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                /* no more input */
+                break;
             }
+        } else {
+            /* this is an unmatched trail code unit (2nd surrogate) */
+            /* callback(illegal) */
+            reason=UCNV_ILLEGAL;
+            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
         }
 
         /* call the callback function with all the preparations and post-processing */
