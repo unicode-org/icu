@@ -6,9 +6,6 @@
 SHELL = @SHELL@
 VERSION = @VERSION@
 
-## Export MAKE or pkgdata will try to use gmake, and fail on many platforms
-export MAKE
-
 ## Install directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
