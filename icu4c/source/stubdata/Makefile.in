@@ -100,7 +100,16 @@ check: all check-local
 
 all-local: $(ALL_TARGETS)
 
-install-local:
+install-local: install-library
+
+install-library: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
+ifneq ($(ENABLE_STATIC),)
+	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+endif
+ifneq ($(ENABLE_SHARED),)
+	$(INSTALL-L) $(SO_TARGET) $(DESTDIR)$(libdir)/$(SO_TARGET)
+endif
 
 dist-local:
 
