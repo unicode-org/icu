@@ -50,13 +50,47 @@ typedef void (*UConverterFromUCallback) (UConverter *,
 
 U_CDECL_END
 
+/**
+ * Character that separates converter names from options and options from each other.
+ * @see ucnv_open
+ */
+#define UCNV_OPTION_SEP_CHAR ','
+
+/** String version of UCNV_OPTION_SEP_CHAR. */
+#define UCNV_OPTION_SEP_STRING ","
+
+/**
+ * Character that separates a converter option from its value.
+ * @see ucnv_open
+ */
+#define UCNV_VALUE_SEP_CHAR '='
+
+/** String version of UCNV_VALUE_SEP_CHAR. */
+#define UCNV_VALUE_SEP_STRING "="
+
+/**
+ * Converter option for specifying a locale.
+ * @see ucnv_open
+ */
+#define UCNV_LOCALE_OPTION_STRING ",locale="
 
 /**
  * Creates a UConverter object with the names specified as a C string.
  * The actual name will be resolved with the alias file.
- * if <TT>NULL</TT> is passed for the converter name, it will create one with the
+ * If <code>NULL</code> is passed for the converter name, it will create one with the
  * getDefaultName return value.
- * @param converterName : name of the uconv table
+ *
+ * <p>A converter name for ICU 1.5 and above may contain options
+ * like a locale specification to control the specific behavior of
+ * the newly instantiated converter.
+ * The meaning of the options depends on the particular converter.
+ * If an option is not defined for or recognized by a given converter, then it is ignored.</p>
+ *
+ * <p>Options are appended to the converter name string, with a
+ * <code>UCNV_OPTION_SEP_CHAR</code> between the name and the first option and
+ * also between adjacent options.</p>
+ *
+ * @param converterName : name of the uconv table, may have options appended
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
  * @see ucnv_openU
