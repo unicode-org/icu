@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/IntlTestDateFormatAPI.java,v $ 
- * $Date: 2001/10/30 02:42:49 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/21 19:26:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  **/
@@ -60,18 +60,19 @@ public class IntlTestDateFormatAPI extends com.ibm.test.TestFmwk
         if (!(a.equals(b)))
             errln("FAIL: DateFormat objects created at different times are unequal.");
 
-        if (b instanceof SimpleDateFormat)
-        {
-            //double ONE_YEAR = 365*24*60*60*1000.0; //The variable is never used
-            try {
+        // Why has this test been disabled??? - aliu
+//        if (b instanceof SimpleDateFormat)
+//        {
+//            //double ONE_YEAR = 365*24*60*60*1000.0; //The variable is never used
+//            try {
 //                ((SimpleDateFormat)b).setTwoDigitStartDate(start.getTime() + 50*ONE_YEAR);
 //                if (a.equals(b))
 //                    errln("FAIL: DateFormat objects with different two digit start dates are equal.");
-            }
-            catch (Exception e) {
-                errln("FAIL: setTwoDigitStartDate failed.");
-            }
-        }
+//            }
+//            catch (Exception e) {
+//                errln("FAIL: setTwoDigitStartDate failed.");
+//            }
+//        }
     }
 
     // This test checks various generic API methods in DateFormat to achieve 100% API coverage.
