@@ -122,6 +122,7 @@ UChar* extractBetween(UTextOffset start, UTextOffset end, UChar* text)
     result=(UChar*)malloc(sizeof(UChar) * ((end-start)+1));
     u_strcpy(temp, &text[start]);
     u_strncpy(result, temp, end-start);
+    result[end-start] = 0;
     free(temp);
     return result;
 }
