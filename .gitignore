@@ -14,6 +14,7 @@ icu4c/data/word.brk
 icu4c/data/word_th.brk
 icu4c/debian
 icu4c/source/Makefile
+icu4c/source/common/*.ao
 icu4c/source/common/*.d
 icu4c/source/common/Debug
 icu4c/source/common/Makefile
