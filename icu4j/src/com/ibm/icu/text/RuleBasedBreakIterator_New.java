@@ -27,6 +27,10 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     private static final int  START_STATE = 1;     // The state number of the starting state
     private static final int  STOP_STATE  = 0;     // The state-transition value indicating "stop"
 
+    /** @internal */
+    RuleBasedBreakIterator_New() {
+    }
+
     /**
      * The character iterator through which this BreakIterator accesses the text
      * @internal

@@ -405,15 +405,15 @@ public abstract class BreakIterator implements Cloneable
      */
     public abstract void setText(CharacterIterator newText);
 
-    /** @draft ICU 2.4 */
+    /** @stable ICU 2.4 */
     public static final int KIND_CHARACTER = 0;
-    /** @draft ICU 2.4 */
+    /** @stable ICU 2.4 */
     public static final int KIND_WORD = 1;
-    /** @draft ICU 2.4 */
+    /** @stable ICU 2.4 */
     public static final int KIND_LINE = 2;
-    /** @draft ICU 2.4 */
+    /** @stable ICU 2.4 */
     public static final int KIND_SENTENCE = 3;
-    /** @draft ICU 2.4 */
+    /** @stable ICU 2.4 */
     public static final int KIND_TITLE = 4;
 
     /** @since ICU 2.8 */
@@ -558,7 +558,7 @@ public abstract class BreakIterator implements Cloneable
      * @param locale the Locale for which this instance is to be registered
      * @param kind the type of iterator for which this instance is to be registered
      * @return a registry key that can be used to unregister this instance
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
         // If the registered object matches the one in the cache, then
@@ -579,7 +579,7 @@ public abstract class BreakIterator implements Cloneable
      * register call.  Key becomes invalid after this call and should not be used again.
      * @param key the registry key returned by a previous call to registerInstance
      * @return true if the iterator for the key was successfully unregistered
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static boolean unregister(Object key) {
         if (key == null) {
