@@ -129,6 +129,24 @@ static const SingleEnum blockSingleEnum={
     0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK
 };
 
+static const SingleEnum graphemeClusterBreakSingleEnum={
+    "GraphemeBreakProperty", "Grapheme_Cluster_Break",
+    UCHAR_GRAPHEME_CLUSTER_BREAK,
+    2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK
+};
+
+static const SingleEnum wordBreakSingleEnum={
+    "WordBreakProperty", "Word_Break",
+    UCHAR_WORD_BREAK,
+    2, UPROPS_WB_SHIFT, UPROPS_WB_MASK
+};
+
+static const SingleEnum sentenceBreakSingleEnum={
+    "SentenceBreakProperty", "Sentence_Break",
+    UCHAR_SENTENCE_BREAK,
+    2, UPROPS_SB_SHIFT, UPROPS_SB_MASK
+};
+
 static const SingleEnum lineBreakSingleEnum={
     "LineBreak", "line break",
     UCHAR_LINE_BREAK,
@@ -249,7 +267,11 @@ propListNames[]={
 
     /* new properties in Unicode 4.0.1 */
     { "STerm",                              2, UPROPS_V2_S_TERM },
-    { "Variation_Selector",                 2, UPROPS_V2_VARIATION_SELECTOR }
+    { "Variation_Selector",                 2, UPROPS_V2_VARIATION_SELECTOR },
+
+    /* new properties in Unicode 4.1 */
+    { "Pattern_Syntax",                     2, UPROPS_V2_PATTERN_SYNTAX },
+    { "Pattern_White_Space",                2, UPROPS_V2_PATTERN_WHITE_SPACE }
 };
 
 static const Binaries
@@ -416,6 +438,12 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     parseBinariesFile(filename, basename, suffix, &propListBinaries, pErrorCode);
 
     parseBinariesFile(filename, basename, suffix, &derCorePropsBinaries, pErrorCode);
+
+    parseSingleEnumFile(filename, basename, suffix, &graphemeClusterBreakSingleEnum, pErrorCode);
+
+    parseSingleEnumFile(filename, basename, suffix, &wordBreakSingleEnum, pErrorCode);
+
+    parseSingleEnumFile(filename, basename, suffix, &sentenceBreakSingleEnum, pErrorCode);
 
     /*
      * LineBreak-4.0.0.txt:
@@ -664,6 +692,9 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
             (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
             ((int32_t)USCRIPT_CODE_LIMIT-1);
         indexes[UPROPS_MAX_VALUES_2_INDEX]=
+            (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
+            (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
+            (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
             ((int32_t)U_DT_COUNT-1);
     }
 

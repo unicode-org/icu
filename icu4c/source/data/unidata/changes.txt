@@ -1,3 +1,93 @@
+Unicode 4.1 update
+
+*** related Jitterbugs
+
+4332 RFE: Update to Unicode 4.1
+4157 RBBI, TR29 4.1 updates
+
+*** data files & enums & parser code
+
+* file preparation
+- ucdstrip:
+    DerivedCoreProperties.txt
+    DerivedNormalizationProps.txt
+    NormalizationTest.txt
+    GraphemeBreakProperty.txt
+    SentenceBreakProperty.txt
+    WordBreakProperty.txt
+- ucdstrip and ucdmerge:
+    EastAsianWidth.txt
+    LineBreak.txt
+
+* add new files to the repository
+    GraphemeBreakProperty.txt
+    SentenceBreakProperty.txt
+    WordBreakProperty.txt
+
+* update FractionalUCA.txt and UCARules.txt with new canonical closure
+
+* genpname
+- handle new enumerated properties in sub read_uchar
+- run preparse.pl
+
+* uchar.h & uscript.h & uprops.h & uprops.c & genprops
+- new binary properties
+  + Pattern_Syntax
+  + Pattern_White_Space
+- new enumerated properties
+  + Grapheme_Cluster_Break
+  + Sentence_Break
+  + Word_Break
+- new block & script & line break values
+
+* gencase
+- case-ignorable changes
+  see http://www.unicode.org/versions/Unicode4.1.0/#CaseMods
+  now: (D47a) Word_Break=MidLetter or Mn, Me, Cf, Lm, Sk
+
+*** Unicode version numbers
+- makedata.mak
+- uchar.h
+- configure.in
+
+*** tests
+- verify that u_charMirror() round-trips
+- test all new properties and some new values of old properties
+
+*** other code
+
+* hardcoded Unihan range end/limit
+- Unihan range end moves from 9FA5 to 9FBB
+  search for both 9FA5 (end) and 9FA6 (limit) (regex 9FA[56], case-insensitive)
+  + do not modify BOCU/BOCSU code because that would change the encoding
+    and break binary compatibility!
+  + similarly, do not change the GB 18030 range data (ucnvmbcs.c),
+    NamePrepProfile.txt
+  + ignore trietest.c: test data is arbitrary
+  + ignore tstnorm.cpp: test optimization, not important
+  + ignore collation: 9FA[56] only appears in comments; swapCJK() uses the whole block up to 9FFF
+  + do change line_th.txt and word_th.txt
+    by replacing hardcoded ranges with the new property values
+  + do change gennames.c
+
+source\data\brkitr\line_th.txt(229):        \u33E0-\u33FE \u3400-\u4DB5 \u4E00-\u9FA5 \uA000-\uA48C \uA490-\uA4C6
+source\data\brkitr\word_th.txt(23):        \u33E0-\u33FE \u3400-\u4DB5 \u4E00-\u9FA5 \uA000-\uA48C \uA490-\uA4C6
+source\tools\gennames\gennames.c(971):        0x4e00, 0x9fa5,
+
+* case mappings
+- compare new special casing context conditions with previous ones
+  see http://www.unicode.org/versions/Unicode4.1.0/#CaseMods
+
+* genpname
+- consider storing only the short name if it is the same as the long name
+
+*** other reviews
+- UAX #29 changes (grapheme/word/sentence breaks)
+- UAX #14 changes (line breaks)
+- Pattern_Syntax & Pattern_White_Space
+
+---------------------------------------------------------------------------- ***
+
 Unicode 4.0.1 update
 
 *** related Jitterbugs

@@ -958,12 +958,8 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
         return;
     }
 
-    /* add the start code point of each same-value range of each trie */
+    /* add the start code point of each same-value range of the main trie */
     utrie_enum(&propsTrie, NULL, _enumPropertyStartsRange, sa);
-    if(propsVectorsColumns>0) {
-        /* if propsVectorsColumns==0 then the properties vectors trie may not be there at all */
-        utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
-    }
 
     /* add code points with hardcoded properties, plus the ones following them */
 
@@ -992,6 +988,16 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     sa->add(sa->set, U_z+1);
     sa->add(sa->set, U_A);
     sa->add(sa->set, U_Z+1);
+    sa->add(sa->set, U_FW_a);
+    sa->add(sa->set, U_FW_z+1);
+    sa->add(sa->set, U_FW_A);
+    sa->add(sa->set, U_FW_Z+1);
+
+    /* add for u_isxdigit() */
+    sa->add(sa->set, U_f+1);
+    sa->add(sa->set, U_F+1);
+    sa->add(sa->set, U_FW_f+1);
+    sa->add(sa->set, U_FW_F+1);
 
     /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
     sa->add(sa->set, WJ); /* range WJ..NOMDIG */
@@ -1002,4 +1008,22 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 
     /* add for UCHAR_GRAPHEME_BASE and others */
     USET_ADD_CP_AND_NEXT(sa, CGJ);
+}
+
+U_CAPI void U_EXPORT2
+upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    if(!HAVE_DATA) {
+        *pErrorCode=dataErrorCode;
+        return;
+    }
+
+    /* add the start code point of each same-value range of the properties vectors trie */
+    if(propsVectorsColumns>0) {
+        /* if propsVectorsColumns==0 then the properties vectors trie may not be there at all */
+        utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
+    }
 }

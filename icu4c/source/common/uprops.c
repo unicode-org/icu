@@ -86,7 +86,9 @@ static const struct {
     { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKD_INERT */
     { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFC_INERT */
     { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKC_INERT */
-    { UPROPS_SRC_NORM,  0 }                                     /* UCHAR_SEGMENT_STARTER */
+    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_SEGMENT_STARTER */
+    {  2,               U_MASK(UPROPS_V2_PATTERN_SYNTAX) },
+    {  2,               U_MASK(UPROPS_V2_PATTERN_WHITE_SPACE) }
 };
 
 U_CAPI UBool U_EXPORT2
@@ -231,6 +233,12 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
             return unorm_getFCD16FromCodePoint(c)&0xff;
 #endif
+        case UCHAR_GRAPHEME_CLUSTER_BREAK:
+            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_GCB_MASK)>>UPROPS_GCB_SHIFT;
+        case UCHAR_SENTENCE_BREAK:
+            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_SB_MASK)>>UPROPS_SB_SHIFT;
+        case UCHAR_WORD_BREAK:
+            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_WB_MASK)>>UPROPS_WB_SHIFT;
         default:
             return 0; /* undefined */
         }
@@ -249,7 +257,6 @@ u_getIntPropertyMinValue(UProperty which) {
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which) {
     UErrorCode errorCode;
-    int32_t max;
 
     if(which<UCHAR_BINARY_START) {
         return -1; /* undefined */
@@ -265,28 +272,23 @@ u_getIntPropertyMaxValue(UProperty which) {
             errorCode=U_ZERO_ERROR;
             return ubidi_getMaxValue(ubidi_getSingleton(&errorCode), which);
         case UCHAR_BLOCK:
-            max=(uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
-            return max!=0 ? max : (int32_t)UBLOCK_COUNT-1;
+            return (uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
         case UCHAR_CANONICAL_COMBINING_CLASS:
         case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
         case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
             return 0xff; /* TODO do we need to be more precise, getting the actual maximum? */
         case UCHAR_DECOMPOSITION_TYPE:
-            max=uprv_getMaxValues(2)&UPROPS_DT_MASK;
-            return max!=0 ? max : (int32_t)U_DT_COUNT-1;
+            return uprv_getMaxValues(2)&UPROPS_DT_MASK;
         case UCHAR_EAST_ASIAN_WIDTH:
-            max=(uprv_getMaxValues(0)&UPROPS_EA_MASK)>>UPROPS_EA_SHIFT;
-            return max!=0 ? max : (int32_t)U_EA_COUNT-1;
+            return (uprv_getMaxValues(0)&UPROPS_EA_MASK)>>UPROPS_EA_SHIFT;
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)U_CHAR_CATEGORY_COUNT-1;
         case UCHAR_LINE_BREAK:
-            max=(uprv_getMaxValues(0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
-            return max!=0 ? max : (int32_t)U_LB_COUNT-1;
+            return (uprv_getMaxValues(0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
         case UCHAR_NUMERIC_TYPE:
             return (int32_t)U_NT_COUNT-1;
         case UCHAR_SCRIPT:
-            max=uprv_getMaxValues(0)&UPROPS_SCRIPT_MASK;
-            return max!=0 ? max : (int32_t)USCRIPT_CODE_LIMIT-1;
+            return uprv_getMaxValues(0)&UPROPS_SCRIPT_MASK;
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             return (int32_t)U_HST_COUNT-1;
 #if !UCONFIG_NO_NORMALIZATION
@@ -297,6 +299,12 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_NFKC_QUICK_CHECK:
             return (int32_t)UNORM_MAYBE;
 #endif
+        case UCHAR_GRAPHEME_CLUSTER_BREAK:
+            return (uprv_getMaxValues(2)&UPROPS_GCB_MASK)>>UPROPS_GCB_SHIFT;
+        case UCHAR_SENTENCE_BREAK:
+            return (uprv_getMaxValues(2)&UPROPS_SB_MASK)>>UPROPS_SB_SHIFT;
+        case UCHAR_WORD_BREAK:
+            return (uprv_getMaxValues(2)&UPROPS_WB_MASK)>>UPROPS_WB_SHIFT;
         default:
             return -1; /* undefined */
         }
@@ -311,7 +319,7 @@ uprops_getSource(UProperty which) {
         return UPROPS_SRC_NONE; /* undefined */
     } else if(which<UCHAR_BINARY_LIMIT) {
         if(binProps[which].mask!=0) {
-            return UPROPS_SRC_CHAR;
+            return UPROPS_SRC_PROPSVEC;
         } else {
             return (UPropertySource)binProps[which].column;
         }
@@ -319,6 +327,10 @@ uprops_getSource(UProperty which) {
         return UPROPS_SRC_NONE; /* undefined */
     } else if(which<UCHAR_INT_LIMIT) {
         switch(which) {
+        case UCHAR_GENERAL_CATEGORY:
+        case UCHAR_NUMERIC_TYPE:
+            return UPROPS_SRC_CHAR;
+
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             return UPROPS_SRC_HST;
 
@@ -337,10 +349,43 @@ uprops_getSource(UProperty which) {
             return UPROPS_SRC_BIDI;
 
         default:
-            return UPROPS_SRC_CHAR;
+            return UPROPS_SRC_PROPSVEC;
         }
-    } else if(which==UCHAR_GENERAL_CATEGORY_MASK) {
-        return UPROPS_SRC_CHAR;
+    } else if(which<UCHAR_STRING_START) {
+        switch(which) {
+        case UCHAR_GENERAL_CATEGORY_MASK:
+        case UCHAR_NUMERIC_VALUE:
+            return UPROPS_SRC_CHAR;
+
+        default:
+            return UPROPS_SRC_NONE;
+        }
+    } else if(which<UCHAR_STRING_LIMIT) {
+        switch(which) {
+        case UCHAR_AGE:
+            return UPROPS_SRC_PROPSVEC;
+
+        case UCHAR_BIDI_MIRRORING_GLYPH:
+            return UPROPS_SRC_BIDI;
+
+        case UCHAR_CASE_FOLDING:
+        case UCHAR_LOWERCASE_MAPPING:
+        case UCHAR_SIMPLE_CASE_FOLDING:
+        case UCHAR_SIMPLE_LOWERCASE_MAPPING:
+        case UCHAR_SIMPLE_TITLECASE_MAPPING:
+        case UCHAR_SIMPLE_UPPERCASE_MAPPING:
+        case UCHAR_TITLECASE_MAPPING:
+        case UCHAR_UPPERCASE_MAPPING:
+            return UPROPS_SRC_CASE;
+
+        case UCHAR_ISO_COMMENT:
+        case UCHAR_NAME:
+        case UCHAR_UNICODE_1_NAME:
+            return UPROPS_SRC_NAMES;
+
+        default:
+            return UPROPS_SRC_NONE;
+        }
     } else {
         return UPROPS_SRC_NONE; /* undefined */
     }

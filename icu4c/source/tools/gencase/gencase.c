@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -102,6 +102,17 @@ derCorePropsNames[]={
 static const Binaries
 derCorePropsBinaries={
     "DerivedCoreProperties", derCorePropsNames, LENGTHOF(derCorePropsNames)
+};
+
+/* treat Word_Break=MidLetter as a binary property (we ignore all other Word_Break values) */
+static const Binary
+wordBreakNames[]={
+    { "MidLetter",                          1, U_MASK(UGENCASE_IS_MID_LETTER_SHIFT), U_MASK(UGENCASE_IS_MID_LETTER_SHIFT) }
+};
+
+static const Binaries
+wordBreakBinaries={
+    "WordBreakProperty", wordBreakNames, LENGTHOF(wordBreakNames)
 };
 
 static void U_CALLCONV
@@ -272,7 +283,7 @@ main(int argc, char* argv[]) {
     }
 
     /* initialize */
-    pv=upvec_open(1, 10000);
+    pv=upvec_open(2, 10000);
     caseSensitive=uset_open(1, 0); /* empty set (start>end) */
 
     /* process SpecialCasing.txt */
@@ -289,6 +300,10 @@ main(int argc, char* argv[]) {
     parseBinariesFile(filename, basename, suffix, &propListBinaries, &errorCode);
 
     parseBinariesFile(filename, basename, suffix, &derCorePropsBinaries, &errorCode);
+
+    if(ucdVersion>=UNI_4_1) {
+        parseBinariesFile(filename, basename, suffix, &wordBreakBinaries, &errorCode);
+    }
 
     /* process UnicodeData.txt */
     writeUCDFilename(basename, "UnicodeData", suffix);

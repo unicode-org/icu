@@ -1,8 +1,8 @@
-# DerivedNumericValues-4.0.1.txt
-# Date: 2004-03-11, 18:44:27 GMT [MD]
+# DerivedNumericValues-4.1.0.txt
+# Date: 2004-12-11, 05:44:37 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2004 Unicode, Inc.
+# Copyright (c) 1991-2005 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -30,6 +30,7 @@
 0A66          ; 0.0 # Nd       GURMUKHI DIGIT ZERO
 0AE6          ; 0.0 # Nd       GUJARATI DIGIT ZERO
 0B66          ; 0.0 # Nd       ORIYA DIGIT ZERO
+0BE6          ; 0.0 # Nd       TAMIL DIGIT ZERO
 0C66          ; 0.0 # Nd       TELUGU DIGIT ZERO
 0CE6          ; 0.0 # Nd       KANNADA DIGIT ZERO
 0D66          ; 0.0 # Nd       MALAYALAM DIGIT ZERO
@@ -41,6 +42,7 @@
 17F0          ; 0.0 # No       KHMER SYMBOL LEK ATTAK SON
 1810          ; 0.0 # Nd       MONGOLIAN DIGIT ZERO
 1946          ; 0.0 # Nd       LIMBU DIGIT ZERO
+19D0          ; 0.0 # Nd       NEW TAI LUE DIGIT ZERO
 2070          ; 0.0 # No       SUPERSCRIPT ZERO
 2080          ; 0.0 # No       SUBSCRIPT ZERO
 24EA          ; 0.0 # No       CIRCLED DIGIT ZERO
@@ -48,6 +50,7 @@
 3007          ; 0.0 # Nl       IDEOGRAPHIC NUMBER ZERO
 96F6          ; 0.0 # Lo       CJK UNIFIED IDEOGRAPH-96F6
 FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
+1018A         ; 0.0 # No       GREEK ZERO SIGN
 104A0         ; 0.0 # Nd       OSMANYA DIGIT ZERO
 1D7CE         ; 0.0 # Nd       MATHEMATICAL BOLD DIGIT ZERO
 1D7D8         ; 0.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT ZERO
@@ -55,7 +58,7 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 1D7EC         ; 0.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT ZERO
 1D7F6         ; 0.0 # Nd       MATHEMATICAL MONOSPACE DIGIT ZERO
 
-# Total code points: 32
+# Total code points: 35
 
 # ================================================
 
@@ -78,8 +81,9 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 # ================================================
 
 00BC          ; 0.25 # No       VULGAR FRACTION ONE QUARTER
+10140         ; 0.25 # Nl       GREEK ACROPHONIC ATTIC ONE QUARTER
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
@@ -103,8 +107,11 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 
 00BD          ; 0.5 # No       VULGAR FRACTION ONE HALF
 0F2A          ; 0.5 # No       TIBETAN DIGIT HALF ONE
+2CFD          ; 0.5 # No       COPTIC FRACTION ONE HALF
+10141         ; 0.5 # Nl       GREEK ACROPHONIC ATTIC ONE HALF
+10175..10176  ; 0.5 # No   [2] GREEK ONE HALF SIGN..GREEK ONE HALF SIGN ALTERNATE FORM
 
-# Total code points: 2
+# Total code points: 6
 
 # ================================================
 
@@ -121,14 +128,16 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 # ================================================
 
 2154          ; 0.66666667 # No       VULGAR FRACTION TWO THIRDS
+10177         ; 0.66666667 # No       GREEK TWO THIRDS SIGN
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
 00BE          ; 0.75 # No       VULGAR FRACTION THREE QUARTERS
+10178         ; 0.75 # No       GREEK THREE QUARTERS SIGN
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
@@ -168,11 +177,12 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 0ED1          ; 1.0 # Nd       LAO DIGIT ONE
 0F21          ; 1.0 # Nd       TIBETAN DIGIT ONE
 1041          ; 1.0 # Nd       MYANMAR DIGIT ONE
-1369          ; 1.0 # Nd       ETHIOPIC DIGIT ONE
+1369          ; 1.0 # No       ETHIOPIC DIGIT ONE
 17E1          ; 1.0 # Nd       KHMER DIGIT ONE
 17F1          ; 1.0 # No       KHMER SYMBOL LEK ATTAK MUOY
 1811          ; 1.0 # Nd       MONGOLIAN DIGIT ONE
 1947          ; 1.0 # Nd       LIMBU DIGIT ONE
+19D1          ; 1.0 # Nd       NEW TAI LUE DIGIT ONE
 2081          ; 1.0 # No       SUBSCRIPT ONE
 215F          ; 1.0 # No       FRACTION NUMERATOR ONE
 2160          ; 1.0 # Nl       ROMAN NUMERAL ONE
@@ -194,15 +204,19 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 5F0C          ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-5F0C
 FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 10107         ; 1.0 # No       AEGEAN NUMBER ONE
+10142         ; 1.0 # Nl       GREEK ACROPHONIC ATTIC ONE DRACHMA
+10158..1015A  ; 1.0 # Nl   [3] GREEK ACROPHONIC HERAEUM ONE PLETHRON..GREEK ACROPHONIC HERMIONE ONE
 10320         ; 1.0 # No       OLD ITALIC NUMERAL ONE
+103D1         ; 1.0 # Nl       OLD PERSIAN NUMBER ONE
 104A1         ; 1.0 # Nd       OSMANYA DIGIT ONE
+10A40         ; 1.0 # Nd       KHAROSHTHI DIGIT ONE
 1D7CF         ; 1.0 # Nd       MATHEMATICAL BOLD DIGIT ONE
 1D7D9         ; 1.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT ONE
 1D7E3         ; 1.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT ONE
 1D7ED         ; 1.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT ONE
 1D7F7         ; 1.0 # Nd       MATHEMATICAL MONOSPACE DIGIT ONE
 
-# Total code points: 51
+# Total code points: 58
 
 # ================================================
 
@@ -230,11 +244,12 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 0ED2          ; 2.0 # Nd       LAO DIGIT TWO
 0F22          ; 2.0 # Nd       TIBETAN DIGIT TWO
 1042          ; 2.0 # Nd       MYANMAR DIGIT TWO
-136A          ; 2.0 # Nd       ETHIOPIC DIGIT TWO
+136A          ; 2.0 # No       ETHIOPIC DIGIT TWO
 17E2          ; 2.0 # Nd       KHMER DIGIT TWO
 17F2          ; 2.0 # No       KHMER SYMBOL LEK ATTAK PII
 1812          ; 2.0 # Nd       MONGOLIAN DIGIT TWO
 1948          ; 2.0 # Nd       LIMBU DIGIT TWO
+19D2          ; 2.0 # Nd       NEW TAI LUE DIGIT TWO
 2082          ; 2.0 # No       SUBSCRIPT TWO
 2161          ; 2.0 # Nl       ROMAN NUMERAL TWO
 2171          ; 2.0 # Nl       SMALL ROMAN NUMERAL TWO
@@ -257,14 +272,17 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 8D30          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-8D30
 FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 10108         ; 2.0 # No       AEGEAN NUMBER TWO
+1015B..1015E  ; 2.0 # Nl   [4] GREEK ACROPHONIC EPIDAUREAN TWO..GREEK ACROPHONIC EPIDAUREAN TWO DRACHMAS
+103D2         ; 2.0 # Nl       OLD PERSIAN NUMBER TWO
 104A2         ; 2.0 # Nd       OSMANYA DIGIT TWO
+10A41         ; 2.0 # Nd       KHAROSHTHI DIGIT TWO
 1D7D0         ; 2.0 # Nd       MATHEMATICAL BOLD DIGIT TWO
 1D7DA         ; 2.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT TWO
 1D7E4         ; 2.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT TWO
 1D7EE         ; 2.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT TWO
 1D7F8         ; 2.0 # Nd       MATHEMATICAL MONOSPACE DIGIT TWO
 
-# Total code points: 51
+# Total code points: 58
 
 # ================================================
 
@@ -292,11 +310,12 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 0ED3          ; 3.0 # Nd       LAO DIGIT THREE
 0F23          ; 3.0 # Nd       TIBETAN DIGIT THREE
 1043          ; 3.0 # Nd       MYANMAR DIGIT THREE
-136B          ; 3.0 # Nd       ETHIOPIC DIGIT THREE
+136B          ; 3.0 # No       ETHIOPIC DIGIT THREE
 17E3          ; 3.0 # Nd       KHMER DIGIT THREE
 17F3          ; 3.0 # No       KHMER SYMBOL LEK ATTAK BEI
 1813          ; 3.0 # Nd       MONGOLIAN DIGIT THREE
 1949          ; 3.0 # Nd       LIMBU DIGIT THREE
+19D3          ; 3.0 # Nd       NEW TAI LUE DIGIT THREE
 2083          ; 3.0 # No       SUBSCRIPT THREE
 2162          ; 3.0 # Nl       ROMAN NUMERAL THREE
 2172          ; 3.0 # Nl       SMALL ROMAN NUMERAL THREE
@@ -317,13 +336,14 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 10109         ; 3.0 # No       AEGEAN NUMBER THREE
 104A3         ; 3.0 # Nd       OSMANYA DIGIT THREE
+10A42         ; 3.0 # Nd       KHAROSHTHI DIGIT THREE
 1D7D1         ; 3.0 # Nd       MATHEMATICAL BOLD DIGIT THREE
 1D7DB         ; 3.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT THREE
 1D7E5         ; 3.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT THREE
 1D7EF         ; 3.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT THREE
 1D7F9         ; 3.0 # Nd       MATHEMATICAL MONOSPACE DIGIT THREE
 
-# Total code points: 50
+# Total code points: 52
 
 # ================================================
 
@@ -350,11 +370,12 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 0ED4          ; 4.0 # Nd       LAO DIGIT FOUR
 0F24          ; 4.0 # Nd       TIBETAN DIGIT FOUR
 1044          ; 4.0 # Nd       MYANMAR DIGIT FOUR
-136C          ; 4.0 # Nd       ETHIOPIC DIGIT FOUR
+136C          ; 4.0 # No       ETHIOPIC DIGIT FOUR
 17E4          ; 4.0 # Nd       KHMER DIGIT FOUR
 17F4          ; 4.0 # No       KHMER SYMBOL LEK ATTAK BUON
 1814          ; 4.0 # Nd       MONGOLIAN DIGIT FOUR
 194A          ; 4.0 # Nd       LIMBU DIGIT FOUR
+19D4          ; 4.0 # Nd       NEW TAI LUE DIGIT FOUR
 2074          ; 4.0 # No       SUPERSCRIPT FOUR
 2084          ; 4.0 # No       SUBSCRIPT FOUR
 2163          ; 4.0 # Nl       ROMAN NUMERAL FOUR
@@ -375,13 +396,14 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 1010A         ; 4.0 # No       AEGEAN NUMBER FOUR
 104A4         ; 4.0 # Nd       OSMANYA DIGIT FOUR
+10A43         ; 4.0 # Nd       KHAROSHTHI DIGIT FOUR
 1D7D2         ; 4.0 # Nd       MATHEMATICAL BOLD DIGIT FOUR
 1D7DC         ; 4.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT FOUR
 1D7E6         ; 4.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT FOUR
 1D7F0         ; 4.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT FOUR
 1D7FA         ; 4.0 # Nd       MATHEMATICAL MONOSPACE DIGIT FOUR
 
-# Total code points: 47
+# Total code points: 49
 
 # ================================================
 
@@ -407,11 +429,12 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 0ED5          ; 5.0 # Nd       LAO DIGIT FIVE
 0F25          ; 5.0 # Nd       TIBETAN DIGIT FIVE
 1045          ; 5.0 # Nd       MYANMAR DIGIT FIVE
-136D          ; 5.0 # Nd       ETHIOPIC DIGIT FIVE
+136D          ; 5.0 # No       ETHIOPIC DIGIT FIVE
 17E5          ; 5.0 # Nd       KHMER DIGIT FIVE
 17F5          ; 5.0 # No       KHMER SYMBOL LEK ATTAK PRAM
 1815          ; 5.0 # Nd       MONGOLIAN DIGIT FIVE
 194B          ; 5.0 # Nd       LIMBU DIGIT FIVE
+19D5          ; 5.0 # Nd       NEW TAI LUE DIGIT FIVE
 2075          ; 5.0 # No       SUPERSCRIPT FIVE
 2085          ; 5.0 # No       SUBSCRIPT FIVE
 2164          ; 5.0 # Nl       ROMAN NUMERAL FIVE
@@ -430,6 +453,11 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 4F0D          ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-4F0D
 FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 1010B         ; 5.0 # No       AEGEAN NUMBER FIVE
+10143         ; 5.0 # Nl       GREEK ACROPHONIC ATTIC FIVE
+10148         ; 5.0 # Nl       GREEK ACROPHONIC ATTIC FIVE TALENTS
+1014F         ; 5.0 # Nl       GREEK ACROPHONIC ATTIC FIVE STATERS
+1015F         ; 5.0 # Nl       GREEK ACROPHONIC TROEZENIAN FIVE
+10173         ; 5.0 # Nl       GREEK ACROPHONIC DELPHIC FIVE MNAS
 10321         ; 5.0 # No       OLD ITALIC NUMERAL FIVE
 104A5         ; 5.0 # Nd       OSMANYA DIGIT FIVE
 1D7D3         ; 5.0 # Nd       MATHEMATICAL BOLD DIGIT FIVE
@@ -438,7 +466,7 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 1D7F1         ; 5.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT FIVE
 1D7FB         ; 5.0 # Nd       MATHEMATICAL MONOSPACE DIGIT FIVE
 
-# Total code points: 46
+# Total code points: 52
 
 # ================================================
 
@@ -464,11 +492,12 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 0ED6          ; 6.0 # Nd       LAO DIGIT SIX
 0F26          ; 6.0 # Nd       TIBETAN DIGIT SIX
 1046          ; 6.0 # Nd       MYANMAR DIGIT SIX
-136E          ; 6.0 # Nd       ETHIOPIC DIGIT SIX
+136E          ; 6.0 # No       ETHIOPIC DIGIT SIX
 17E6          ; 6.0 # Nd       KHMER DIGIT SIX
 17F6          ; 6.0 # No       KHMER SYMBOL LEK ATTAK PRAM-MUOY
 1816          ; 6.0 # Nd       MONGOLIAN DIGIT SIX
 194C          ; 6.0 # Nd       LIMBU DIGIT SIX
+19D6          ; 6.0 # Nd       NEW TAI LUE DIGIT SIX
 2076          ; 6.0 # No       SUPERSCRIPT SIX
 2086          ; 6.0 # No       SUBSCRIPT SIX
 2165          ; 6.0 # Nl       ROMAN NUMERAL SIX
@@ -495,7 +524,7 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 1D7F2         ; 6.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT SIX
 1D7FC         ; 6.0 # Nd       MATHEMATICAL MONOSPACE DIGIT SIX
 
-# Total code points: 46
+# Total code points: 47
 
 # ================================================
 
@@ -521,11 +550,12 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 0ED7          ; 7.0 # Nd       LAO DIGIT SEVEN
 0F27          ; 7.0 # Nd       TIBETAN DIGIT SEVEN
 1047          ; 7.0 # Nd       MYANMAR DIGIT SEVEN
-136F          ; 7.0 # Nd       ETHIOPIC DIGIT SEVEN
+136F          ; 7.0 # No       ETHIOPIC DIGIT SEVEN
 17E7          ; 7.0 # Nd       KHMER DIGIT SEVEN
 17F7          ; 7.0 # No       KHMER SYMBOL LEK ATTAK PRAM-PII
 1817          ; 7.0 # Nd       MONGOLIAN DIGIT SEVEN
 194D          ; 7.0 # Nd       LIMBU DIGIT SEVEN
+19D7          ; 7.0 # Nd       NEW TAI LUE DIGIT SEVEN
 2077          ; 7.0 # No       SUPERSCRIPT SEVEN
 2087          ; 7.0 # No       SUBSCRIPT SEVEN
 2166          ; 7.0 # Nl       ROMAN NUMERAL SEVEN
@@ -551,7 +581,7 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 1D7F3         ; 7.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT SEVEN
 1D7FD         ; 7.0 # Nd       MATHEMATICAL MONOSPACE DIGIT SEVEN
 
-# Total code points: 45
+# Total code points: 46
 
 # ================================================
 
@@ -577,11 +607,12 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 0ED8          ; 8.0 # Nd       LAO DIGIT EIGHT
 0F28          ; 8.0 # Nd       TIBETAN DIGIT EIGHT
 1048          ; 8.0 # Nd       MYANMAR DIGIT EIGHT
-1370          ; 8.0 # Nd       ETHIOPIC DIGIT EIGHT
+1370          ; 8.0 # No       ETHIOPIC DIGIT EIGHT
 17E8          ; 8.0 # Nd       KHMER DIGIT EIGHT
 17F8          ; 8.0 # No       KHMER SYMBOL LEK ATTAK PRAM-BEI
 1818          ; 8.0 # Nd       MONGOLIAN DIGIT EIGHT
 194E          ; 8.0 # Nd       LIMBU DIGIT EIGHT
+19D8          ; 8.0 # Nd       NEW TAI LUE DIGIT EIGHT
 2078          ; 8.0 # No       SUPERSCRIPT EIGHT
 2088          ; 8.0 # No       SUBSCRIPT EIGHT
 2167          ; 8.0 # Nl       ROMAN NUMERAL EIGHT
@@ -607,7 +638,7 @@ FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 1D7F4         ; 8.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT EIGHT
 1D7FE         ; 8.0 # Nd       MATHEMATICAL MONOSPACE DIGIT EIGHT
 
-# Total code points: 45
+# Total code points: 46
 
 # ================================================
 
@@ -633,11 +664,12 @@ FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 0ED9          ; 9.0 # Nd       LAO DIGIT NINE
 0F29          ; 9.0 # Nd       TIBETAN DIGIT NINE
 1049          ; 9.0 # Nd       MYANMAR DIGIT NINE
-1371          ; 9.0 # Nd       ETHIOPIC DIGIT NINE
+1371          ; 9.0 # No       ETHIOPIC DIGIT NINE
 17E9          ; 9.0 # Nd       KHMER DIGIT NINE
 17F9          ; 9.0 # No       KHMER SYMBOL LEK ATTAK PRAM-BUON
 1819          ; 9.0 # Nd       MONGOLIAN DIGIT NINE
 194F          ; 9.0 # Nd       LIMBU DIGIT NINE
+19D9          ; 9.0 # Nd       NEW TAI LUE DIGIT NINE
 2079          ; 9.0 # No       SUPERSCRIPT NINE
 2089          ; 9.0 # No       SUBSCRIPT NINE
 2168          ; 9.0 # Nl       ROMAN NUMERAL NINE
@@ -663,7 +695,7 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 1D7F5         ; 9.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT NINE
 1D7FF         ; 9.0 # Nd       MATHEMATICAL MONOSPACE DIGIT NINE
 
-# Total code points: 45
+# Total code points: 46
 
 # ================================================
 
@@ -684,9 +716,15 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 5341          ; 10.0 # Lo       CJK UNIFIED IDEOGRAPH-5341
 62FE          ; 10.0 # Lo       CJK UNIFIED IDEOGRAPH-62FE
 10110         ; 10.0 # No       AEGEAN NUMBER TEN
+10149         ; 10.0 # Nl       GREEK ACROPHONIC ATTIC TEN TALENTS
+10150         ; 10.0 # Nl       GREEK ACROPHONIC ATTIC TEN STATERS
+10157         ; 10.0 # Nl       GREEK ACROPHONIC ATTIC TEN MNAS
+10160..10164  ; 10.0 # Nl   [5] GREEK ACROPHONIC TROEZENIAN TEN..GREEK ACROPHONIC THESPIAN TEN
 10322         ; 10.0 # No       OLD ITALIC NUMERAL TEN
+103D3         ; 10.0 # Nl       OLD PERSIAN NUMBER TEN
+10A44         ; 10.0 # No       KHAROSHTHI NUMBER TEN
 
-# Total code points: 18
+# Total code points: 28
 
 # ================================================
 
@@ -787,8 +825,10 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 3039          ; 20.0 # Nl       HANGZHOU NUMERAL TWENTY
 5EFF          ; 20.0 # Lo       CJK UNIFIED IDEOGRAPH-5EFF
 10111         ; 20.0 # No       AEGEAN NUMBER TWENTY
+103D4         ; 20.0 # Nl       OLD PERSIAN NUMBER TWENTY
+10A45         ; 20.0 # No       KHAROSHTHI NUMBER TWENTY
 
-# Total code points: 8
+# Total code points: 10
 
 # ================================================
 
@@ -851,8 +891,9 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 325A          ; 30.0 # No       CIRCLED NUMBER THIRTY
 5345          ; 30.0 # Lo       CJK UNIFIED IDEOGRAPH-5345
 10112         ; 30.0 # No       AEGEAN NUMBER THIRTY
+10165         ; 30.0 # Nl       GREEK ACROPHONIC THESPIAN THIRTY
 
-# Total code points: 5
+# Total code points: 6
 
 # ================================================
 
@@ -977,9 +1018,14 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 217C          ; 50.0 # Nl       SMALL ROMAN NUMERAL FIFTY
 32BF          ; 50.0 # No       CIRCLED NUMBER FIFTY
 10114         ; 50.0 # No       AEGEAN NUMBER FIFTY
+10144         ; 50.0 # Nl       GREEK ACROPHONIC ATTIC FIFTY
+1014A         ; 50.0 # Nl       GREEK ACROPHONIC ATTIC FIFTY TALENTS
+10151         ; 50.0 # Nl       GREEK ACROPHONIC ATTIC FIFTY STATERS
+10166..10169  ; 50.0 # Nl   [4] GREEK ACROPHONIC TROEZENIAN FIFTY..GREEK ACROPHONIC THESPIAN FIFTY
+10174         ; 50.0 # Nl       GREEK ACROPHONIC STRATIAN FIFTY MNAS
 10323         ; 50.0 # No       OLD ITALIC NUMERAL FIFTY
 
-# Total code points: 6
+# Total code points: 14
 
 # ================================================
 
@@ -1019,8 +1065,13 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 767E          ; 100.0 # Lo       CJK UNIFIED IDEOGRAPH-767E
 964C          ; 100.0 # Lo       CJK UNIFIED IDEOGRAPH-964C
 10119         ; 100.0 # No       AEGEAN NUMBER ONE HUNDRED
+1014B         ; 100.0 # Nl       GREEK ACROPHONIC ATTIC ONE HUNDRED TALENTS
+10152         ; 100.0 # Nl       GREEK ACROPHONIC ATTIC ONE HUNDRED STATERS
+1016A         ; 100.0 # Nl       GREEK ACROPHONIC THESPIAN ONE HUNDRED
+103D5         ; 100.0 # Nl       OLD PERSIAN NUMBER HUNDRED
+10A46         ; 100.0 # No       KHAROSHTHI NUMBER ONE HUNDRED
 
-# Total code points: 8
+# Total code points: 13
 
 # ================================================
 
@@ -1031,8 +1082,9 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 # ================================================
 
 1011B         ; 300.0 # No       AEGEAN NUMBER THREE HUNDRED
+1016B         ; 300.0 # Nl       GREEK ACROPHONIC THESPIAN THREE HUNDRED
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
@@ -1045,8 +1097,12 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 216E          ; 500.0 # Nl       ROMAN NUMERAL FIVE HUNDRED
 217E          ; 500.0 # Nl       SMALL ROMAN NUMERAL FIVE HUNDRED
 1011D         ; 500.0 # No       AEGEAN NUMBER FIVE HUNDRED
+10145         ; 500.0 # Nl       GREEK ACROPHONIC ATTIC FIVE HUNDRED
+1014C         ; 500.0 # Nl       GREEK ACROPHONIC ATTIC FIVE HUNDRED TALENTS
+10153         ; 500.0 # Nl       GREEK ACROPHONIC ATTIC FIVE HUNDRED STATERS
+1016C..10170  ; 500.0 # Nl   [5] GREEK ACROPHONIC EPIDAUREAN FIVE HUNDRED..GREEK ACROPHONIC NAXIAN FIVE HUNDRED
 
-# Total code points: 3
+# Total code points: 11
 
 # ================================================
 
@@ -1080,8 +1136,12 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 4EDF          ; 1000.0 # Lo       CJK UNIFIED IDEOGRAPH-4EDF
 5343          ; 1000.0 # Lo       CJK UNIFIED IDEOGRAPH-5343
 10122         ; 1000.0 # No       AEGEAN NUMBER ONE THOUSAND
+1014D         ; 1000.0 # Nl       GREEK ACROPHONIC ATTIC ONE THOUSAND TALENTS
+10154         ; 1000.0 # Nl       GREEK ACROPHONIC ATTIC ONE THOUSAND STATERS
+10171         ; 1000.0 # Nl       GREEK ACROPHONIC THESPIAN ONE THOUSAND
+10A47         ; 1000.0 # No       KHAROSHTHI NUMBER ONE THOUSAND
 
-# Total code points: 7
+# Total code points: 11
 
 # ================================================
 
@@ -1105,8 +1165,11 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 
 2181          ; 5000.0 # Nl       ROMAN NUMERAL FIVE THOUSAND
 10126         ; 5000.0 # No       AEGEAN NUMBER FIVE THOUSAND
+10146         ; 5000.0 # Nl       GREEK ACROPHONIC ATTIC FIVE THOUSAND
+1014E         ; 5000.0 # Nl       GREEK ACROPHONIC ATTIC FIVE THOUSAND TALENTS
+10172         ; 5000.0 # Nl       GREEK ACROPHONIC THESPIAN FIVE THOUSAND
 
-# Total code points: 2
+# Total code points: 5
 
 # ================================================
 
@@ -1139,8 +1202,9 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 4E07          ; 10000.0 # Lo       CJK UNIFIED IDEOGRAPH-4E07
 842C          ; 10000.0 # Lo       CJK UNIFIED IDEOGRAPH-842C
 1012B         ; 10000.0 # No       AEGEAN NUMBER TEN THOUSAND
+10155         ; 10000.0 # Nl       GREEK ACROPHONIC ATTIC TEN THOUSAND STATERS
 
-# Total code points: 5
+# Total code points: 6
 
 # ================================================
 
@@ -1163,8 +1227,10 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 # ================================================
 
 1012F         ; 50000.0 # No       AEGEAN NUMBER FIFTY THOUSAND
+10147         ; 50000.0 # Nl       GREEK ACROPHONIC ATTIC FIFTY THOUSAND
+10156         ; 50000.0 # Nl       GREEK ACROPHONIC ATTIC FIFTY THOUSAND STATERS
 
-# Total code points: 1
+# Total code points: 3
 
 # ================================================
 

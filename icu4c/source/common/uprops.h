@@ -95,8 +95,7 @@ enum {
  * Properties in vector word 0
  * Bits
  * 31..24   DerivedAge version major/minor one nibble each
- * 23       reserved
- * 22..18   Line Break
+ * 23..18   Line Break
  * 17..15   East Asian Width
  * 14.. 7   UBlockCode
  *  6.. 0   UScriptCode
@@ -106,7 +105,7 @@ enum {
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
 
-#define UPROPS_LB_MASK          0x007C0000
+#define UPROPS_LB_MASK          0x00FC0000
 #define UPROPS_LB_SHIFT         18
 
 #define UPROPS_EA_MASK          0x00038000
@@ -168,21 +167,28 @@ enum {
  * Properties in vector word 2
  * Bits
  * 31..24   More binary properties
- * 13..11   reserved, was Joining Type in format version 3
- * 10.. 5   reserved, was Joining Group in format version 3
+ * 23..19   reserved
+ * 18..14   Sentence Break
+ * 13..10   Word Break
+ *  9.. 5   Grapheme Cluster Break
  *  4.. 0   Decomposition Type
  */
-#define UPROPS_WAS_JT_MASK          0x00003800
-#define UPROPS_WAS_JT_SHIFT         11
+#define UPROPS_SB_MASK          0x0007c000
+#define UPROPS_SB_SHIFT         14
 
-#define UPROPS_WAS_JG_MASK          0x000007e0
-#define UPROPS_WAS_JG_SHIFT         5
+#define UPROPS_WB_MASK          0x00003c00
+#define UPROPS_WB_SHIFT         10
+
+#define UPROPS_GCB_MASK         0x000003e0
+#define UPROPS_GCB_SHIFT        5
 
 #define UPROPS_DT_MASK          0x0000001f
 
 enum {
     UPROPS_V2_S_TERM=24,                        /* new in ICU 3.0 and Unicode 4.0.1 */
     UPROPS_V2_VARIATION_SELECTOR,
+    UPROPS_V2_PATTERN_SYNTAX,                   /* new in ICU 3.4 and Unicode 4.1 */
+    UPROPS_V2_PATTERN_WHITE_SPACE,
     UPROPS_V2_TOP                               /* must be <=32 */
 };
 
@@ -260,8 +266,10 @@ enum {
     FF      =0x000c,
     CR      =0x000d,
     U_A     =0x0041,
+    U_F     =0x0046,
     U_Z     =0x005a,
     U_a     =0x0061,
+    U_f     =0x0066,
     U_z     =0x007a,
     DEL     =0x007f,
     NL      =0x0085,
@@ -276,6 +284,12 @@ enum {
     WJ      =0x2060,
     INHSWAP =0x206a,
     NOMDIG  =0x206f,
+    U_FW_A  =0xff21,
+    U_FW_F  =0xff26,
+    U_FW_Z  =0xff3a,
+    U_FW_a  =0xff41,
+    U_FW_f  =0xff46,
+    U_FW_z  =0xff5a,
     ZWNBSP  =0xfeff
 };
 
@@ -331,8 +345,10 @@ uprv_getISOCommentCharacters(const USetAdder *sa);
 enum UPropertySource {
     /** No source, not a supported property. */
     UPROPS_SRC_NONE,
-    /** From uchar.c/uprops.icu */
+    /** From uchar.c/uprops.icu main trie */
     UPROPS_SRC_CHAR,
+    /** From uchar.c/uprops.icu properties vectors trie */
+    UPROPS_SRC_PROPSVEC,
     /** Hangul_Syllable_Type, from uchar.c/uprops.icu */
     UPROPS_SRC_HST,
     /** From unames.c/unames.icu */
@@ -343,7 +359,7 @@ enum UPropertySource {
     UPROPS_SRC_CASE,
     /** From ubidi_props.c/ubidi.icu */
     UPROPS_SRC_BIDI,
-    /** One more than the highes UPropertySource (UPROPS_SRC_) constant. */
+    /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };
 typedef enum UPropertySource UPropertySource;
@@ -356,12 +372,20 @@ U_CAPI UPropertySource U_EXPORT2
 uprops_getSource(UProperty which);
 
 /**
- * Enumerate each core properties data trie and add the
+ * Enumerate uprops.icu's main data trie and add the
  * start of each range of same properties to the set.
  * @internal
  */
 U_CAPI void U_EXPORT2
 uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
+
+/**
+ * Enumerate uprops.icu's properties vectors trie and add the
+ * start of each range of same properties to the set.
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Same as uchar_addPropertyStarts() but only for Hangul_Syllable_Type.

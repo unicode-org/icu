@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "4.0.1"
+#define U_UNICODE_VERSION "4.1"
 
 /**
  * \file
@@ -358,6 +358,16 @@ typedef enum UProperty {
         processing collation tailoring rules.
         @draft ICU 3.0 */
     UCHAR_SEGMENT_STARTER,
+    /** Binary property Pattern_Syntax (new in Unicode 4.1).
+        See UAX #31 Identifier and Pattern Syntax
+        (http://www.unicode.org/reports/tr31/)
+        @draft ICU 3.4 */
+    UCHAR_PATTERN_SYNTAX,
+    /** Binary property Pattern_White_Space (new in Unicode 4.1).
+        See UAX #31 Identifier and Pattern Syntax
+        (http://www.unicode.org/reports/tr31/)
+        @draft ICU 3.4 */
+    UCHAR_PATTERN_WHITE_SPACE,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
@@ -426,6 +436,21 @@ typedef enum UProperty {
         see UNORM_FCD and http://www.unicode.org/notes/tn5/#FCD .
         Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @draft ICU 3.0 */
     UCHAR_TRAIL_CANONICAL_COMBINING_CLASS,
+    /** Enumerated property Grapheme_Cluster_Break (new in Unicode 4.1).
+        Used in UAX #29: Text Boundaries
+        (http://www.unicode.org/reports/tr29/)
+        Returns UGraphemeClusterBreak values. @draft ICU 3.4 */
+    UCHAR_GRAPHEME_CLUSTER_BREAK,
+    /** Enumerated property Sentence_Break (new in Unicode 4.1).
+        Used in UAX #29: Text Boundaries
+        (http://www.unicode.org/reports/tr29/)
+        Returns USentenceBreak values. @draft ICU 3.4 */
+    UCHAR_SENTENCE_BREAK,
+    /** Enumerated property Word_Break (new in Unicode 4.1).
+        Used in UAX #29: Text Boundaries
+        (http://www.unicode.org/reports/tr29/)
+        Returns UWordBreakValues values. @draft ICU 3.4 */
+    UCHAR_WORD_BREAK,
     /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
     UCHAR_INT_LIMIT,
 
@@ -1119,6 +1144,49 @@ enum UBlockCode {
     /** @stable ICU 2.6 */
     UBLOCK_VARIATION_SELECTORS_SUPPLEMENT = 125, /*[E0100]*/
 
+    /* New blocks in Unicode 4.1 */
+
+    /** @draft ICU 3.4 */
+    UBLOCK_ANCIENT_GREEK_MUSICAL_NOTATION = 126, /*[1D200]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_ANCIENT_GREEK_NUMBERS = 127, /*[10140]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_ARABIC_SUPPLEMENT = 128, /*[0750]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_BUGINESE = 129, /*[1A00]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_CJK_BASIC_STROKES = 130, /*[31C0]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = 131, /*[1DC0]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_COPTIC = 132, /*[2C80]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_ETHIOPIC_EXTENDED = 133, /*[2D80]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_ETHIOPIC_SUPPLEMENT = 134, /*[1380]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_GEORGIAN_SUPPLEMENT = 135, /*[2D00]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_GLAGOLITIC = 136, /*[2C00]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_KHAROSHTHI = 137, /*[10A00]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_MODIFIER_TONE_LETTERS = 138, /*[A700]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_NEW_TAI_LUE = 139, /*[1980]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_OLD_PERSIAN = 140, /*[103A0]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_PHONETIC_EXTENSIONS_SUPPLEMENT = 141, /*[1D80]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_SUPPLEMENTAL_PUNCTUATION = 142, /*[2E00]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_SYLOTI_NAGRI = 143, /*[A800]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_Tifinagh = 144, /*[2D30]*/
+    /** @draft ICU 3.4 */
+    UBLOCK_VERTICAL_FORMS = 145, /*[FE10]*/
+
     /** @stable ICU 2.0 */
     UBLOCK_COUNT,
 
@@ -1296,6 +1364,65 @@ typedef enum UJoiningGroup {
 } UJoiningGroup;
 
 /**
+ * Grapheme Cluster Break constants.
+ *
+ * @see UCHAR_GRAPHEME_CLUSTER_BREAK
+ * @draft ICU 3.4
+ */
+typedef enum UGraphemeClusterBreak {
+    U_GCB_OTHER,            /*[Other]*/ /*See note !!*/
+    U_GCB_CONTROL,          /*[Control]*/
+    U_GCB_CR,               /*[CR]*/
+    U_GCB_EXTEND,           /*[Extend]*/
+    U_GCB_L,                /*[L]*/
+    U_GCB_LF,               /*[LF]*/
+    U_GCB_LV,               /*[LV]*/
+    U_GCB_LVT,              /*[LVT]*/
+    U_GCB_T,                /*[T]*/
+    U_GCB_V,                /*[V]*/
+    U_GCB_COUNT
+} UGraphemeClusterBreak;
+
+/**
+ * Word Break constants.
+ * (UWordBreak is a pre-existing enum type in ubrk.h for word break status tags.)
+ *
+ * @see UCHAR_WORD_BREAK
+ * @draft ICU 3.4
+ */
+typedef enum UWordBreakValues {
+    U_WB_OTHER,             /*[Other]*/ /*See note !!*/
+    U_WB_ALETTER,           /*[ALetter]*/
+    U_WB_FORMAT,            /*[Format]*/
+    U_WB_KATAKANA,          /*[Katakana]*/
+    U_WB_MIDLETTER,         /*[MidLetter]*/
+    U_WB_MIDNUM,            /*[MidNum]*/
+    U_WB_NUMERIC,           /*[Numeric]*/
+    U_WB_COUNT
+} UWordBreakValues;
+
+/**
+ * Sentence Break constants.
+ *
+ * @see UCHAR_SENTENCE_BREAK
+ * @draft ICU 3.4
+ */
+typedef enum USentenceBreak {
+    U_SB_OTHER,             /*[Other]*/ /*See note !!*/
+    U_SB_ATERM,             /*[ATerm]*/
+    U_SB_CLOSE,             /*[Close]*/
+    U_SB_FORMAT,            /*[Format]*/
+    U_SB_LOWER,             /*[Lower]*/
+    U_SB_NUMERIC,           /*[Numeric]*/
+    U_SB_OLETTER,           /*[OLetter]*/
+    U_SB_SEP,               /*[Sep]*/
+    U_SB_SP,                /*[Sp]*/
+    U_SB_STERM,             /*[STerm]*/
+    U_SB_UPPER,             /*[Upper]*/
+    U_SB_COUNT
+} USentenceBreak;
+
+/**
  * Line Break constants.
  *
  * @see UCHAR_LINE_BREAK
@@ -1335,6 +1462,11 @@ typedef enum ULineBreak {
     U_LB_ZWSPACE,           /*[ZW]*/
     U_LB_NEXT_LINE,         /*[NL]*/ /* from here on: new in Unicode 4/ICU 2.6 */
     U_LB_WORD_JOINER,       /*[WJ]*/
+    U_LB_H2,                /*[H2]*/ /* from here on: new in Unicode 4.1/ICU 3.4 */
+    U_LB_H3,                /*[H3]*/
+    U_LB_JL,                /*[JL]*/
+    U_LB_JT,                /*[JT]*/
+    U_LB_JV,                /*[JV]*/
     U_LB_COUNT
 } ULineBreak;
 

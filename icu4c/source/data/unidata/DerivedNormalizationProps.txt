@@ -1,8 +1,8 @@
-# DerivedNormalizationProps-4.0.1.txt
-# Date: 2004-03-02, 02:42:17 GMT [MD]
+# DerivedNormalizationProps-4.1.0.txt
+# Date: 2004-12-11, 05:42:12 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2004 Unicode, Inc.
+# Copyright (c) 1991-2005 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -41,6 +41,7 @@
 1D40  ; FC_NFKC; 0074
 1D41  ; FC_NFKC; 0075
 1D42  ; FC_NFKC; 0077
+1D78  ; FC_NFKC; 043D
 20A8  ; FC_NFKC; 0072 0073
 2102  ; FC_NFKC; 0063
 2103  ; FC_NFKC; 00B0 0063
@@ -579,7 +580,7 @@
 1D7A8 ; FC_NFKC; 03C9
 1D7BB ; FC_NFKC; 03C3
 
-# Total code points: 564
+# Total code points: 565
 
 # ================================================
 
@@ -649,6 +650,7 @@ FA22          ; Full_Composition_Exclusion
 FA25..FA26    ; Full_Composition_Exclusion
 FA2A..FA2D    ; Full_Composition_Exclusion
 FA30..FA6A    ; Full_Composition_Exclusion
+FA70..FAD9    ; Full_Composition_Exclusion
 FB1D          ; Full_Composition_Exclusion
 FB1F          ; Full_Composition_Exclusion
 FB2A..FB36    ; Full_Composition_Exclusion
@@ -661,7 +663,7 @@ FB46..FB4E    ; Full_Composition_Exclusion
 1D1BB..1D1C0  ; Full_Composition_Exclusion
 2F800..2FA1D  ; Full_Composition_Exclusion
 
-# Total code points: 1009
+# Total code points: 1115
 
 # ================================================
 
@@ -887,6 +889,7 @@ FA22          ; NFD_QC; N
 FA25..FA26    ; NFD_QC; N
 FA2A..FA2D    ; NFD_QC; N
 FA30..FA6A    ; NFD_QC; N
+FA70..FAD9    ; NFD_QC; N
 FB1D          ; NFD_QC; N
 FB1F          ; NFD_QC; N
 FB2A..FB36    ; NFD_QC; N
@@ -899,7 +902,7 @@ FB46..FB4E    ; NFD_QC; N
 1D1BB..1D1C0  ; NFD_QC; N
 2F800..2FA1D  ; NFD_QC; N
 
-# Total code points: 13098
+# Total code points: 13204
 
 # ================================================
 
@@ -975,6 +978,7 @@ FA22          ; NFC_QC; N
 FA25..FA26    ; NFC_QC; N
 FA2A..FA2D    ; NFC_QC; N
 FA30..FA6A    ; NFC_QC; N
+FA70..FAD9    ; NFC_QC; N
 FB1D          ; NFC_QC; N
 FB1F          ; NFC_QC; N
 FB2A..FB36    ; NFC_QC; N
@@ -987,7 +991,7 @@ FB46..FB4E    ; NFC_QC; N
 1D1BB..1D1C0  ; NFC_QC; N
 2F800..2FA1D  ; NFC_QC; N
 
-# Total code points: 1009
+# Total code points: 1115
 
 # ================================================
 
@@ -1163,11 +1167,14 @@ FB46..FB4E    ; NFC_QC; N
 0FAC          ; NFKD_QC; N
 0FB9          ; NFKD_QC; N
 1026          ; NFKD_QC; N
+10FC          ; NFKD_QC; N
 1D2C..1D2E    ; NFKD_QC; N
 1D30..1D3A    ; NFKD_QC; N
 1D3C..1D4D    ; NFKD_QC; N
 1D4F..1D61    ; NFKD_QC; N
 1D62..1D6A    ; NFKD_QC; N
+1D78          ; NFKD_QC; N
+1D9B..1DBF    ; NFKD_QC; N
 1E00..1E9B    ; NFKD_QC; N
 1EA0..1EF9    ; NFKD_QC; N
 1F00..1F15    ; NFKD_QC; N
@@ -1218,6 +1225,7 @@ FB46..FB4E    ; NFC_QC; N
 208A..208C    ; NFKD_QC; N
 208D          ; NFKD_QC; N
 208E          ; NFKD_QC; N
+2090..2094    ; NFKD_QC; N
 20A8          ; NFKD_QC; N
 2100..2101    ; NFKD_QC; N
 2102          ; NFKD_QC; N
@@ -1239,7 +1247,7 @@ FB46..FB4E    ; NFC_QC; N
 2135..2138    ; NFKD_QC; N
 2139          ; NFKD_QC; N
 213B          ; NFKD_QC; N
-213D..213F    ; NFKD_QC; N
+213C..213F    ; NFKD_QC; N
 2140          ; NFKD_QC; N
 2145..2149    ; NFKD_QC; N
 2153..215F    ; NFKD_QC; N
@@ -1278,6 +1286,7 @@ FB46..FB4E    ; NFC_QC; N
 2A0C          ; NFKD_QC; N
 2A74..2A76    ; NFKD_QC; N
 2ADC          ; NFKD_QC; N
+2D6F          ; NFKD_QC; N
 2E9F          ; NFKD_QC; N
 2EF3          ; NFKD_QC; N
 2F00..2FD5    ; NFKD_QC; N
@@ -1340,7 +1349,7 @@ FB46..FB4E    ; NFC_QC; N
 322A..3243    ; NFKD_QC; N
 3250          ; NFKD_QC; N
 3251..325F    ; NFKD_QC; N
-3260..327D    ; NFKD_QC; N
+3260..327E    ; NFKD_QC; N
 3280..3289    ; NFKD_QC; N
 328A..32B0    ; NFKD_QC; N
 32B1..32BF    ; NFKD_QC; N
@@ -1356,6 +1365,7 @@ FA22          ; NFKD_QC; N
 FA25..FA26    ; NFKD_QC; N
 FA2A..FA2D    ; NFKD_QC; N
 FA30..FA6A    ; NFKD_QC; N
+FA70..FAD9    ; NFKD_QC; N
 FB00..FB06    ; NFKD_QC; N
 FB13..FB17    ; NFKD_QC; N
 FB1D          ; NFKD_QC; N
@@ -1372,6 +1382,10 @@ FD50..FD8F    ; NFKD_QC; N
 FD92..FDC7    ; NFKD_QC; N
 FDF0..FDFB    ; NFKD_QC; N
 FDFC          ; NFKD_QC; N
+FE10..FE16    ; NFKD_QC; N
+FE17          ; NFKD_QC; N
+FE18          ; NFKD_QC; N
+FE19          ; NFKD_QC; N
 FE30          ; NFKD_QC; N
 FE31..FE32    ; NFKD_QC; N
 FE33..FE34    ; NFKD_QC; N
@@ -1445,8 +1459,7 @@ FF60          ; NFKD_QC; N
 FF61          ; NFKD_QC; N
 FF62          ; NFKD_QC; N
 FF63          ; NFKD_QC; N
-FF64          ; NFKD_QC; N
-FF65          ; NFKD_QC; N
+FF64..FF65    ; NFKD_QC; N
 FF66..FF6F    ; NFKD_QC; N
 FF70          ; NFKD_QC; N
 FF71..FF9D    ; NFKD_QC; N
@@ -1484,7 +1497,7 @@ FFED..FFEE    ; NFKD_QC; N
 1D540..1D544  ; NFKD_QC; N
 1D546         ; NFKD_QC; N
 1D54A..1D550  ; NFKD_QC; N
-1D552..1D6A3  ; NFKD_QC; N
+1D552..1D6A5  ; NFKD_QC; N
 1D6A8..1D6C0  ; NFKD_QC; N
 1D6C1         ; NFKD_QC; N
 1D6C2..1D6DA  ; NFKD_QC; N
@@ -1509,7 +1522,7 @@ FFED..FFEE    ; NFKD_QC; N
 1D7CE..1D7FF  ; NFKD_QC; N
 2F800..2FA1D  ; NFKD_QC; N
 
-# Total code points: 16396
+# Total code points: 16561
 
 # ================================================
 
@@ -1582,11 +1595,14 @@ FFED..FFEE    ; NFKD_QC; N
 0FA7          ; NFKC_QC; N
 0FAC          ; NFKC_QC; N
 0FB9          ; NFKC_QC; N
+10FC          ; NFKC_QC; N
 1D2C..1D2E    ; NFKC_QC; N
 1D30..1D3A    ; NFKC_QC; N
 1D3C..1D4D    ; NFKC_QC; N
 1D4F..1D61    ; NFKC_QC; N
 1D62..1D6A    ; NFKC_QC; N
+1D78          ; NFKC_QC; N
+1D9B..1DBF    ; NFKC_QC; N
 1E9A..1E9B    ; NFKC_QC; N
 1F71          ; NFKC_QC; N
 1F73          ; NFKC_QC; N
@@ -1634,6 +1650,7 @@ FFED..FFEE    ; NFKD_QC; N
 208A..208C    ; NFKC_QC; N
 208D          ; NFKC_QC; N
 208E          ; NFKC_QC; N
+2090..2094    ; NFKC_QC; N
 20A8          ; NFKC_QC; N
 2100..2101    ; NFKC_QC; N
 2102          ; NFKC_QC; N
@@ -1655,7 +1672,7 @@ FFED..FFEE    ; NFKD_QC; N
 2135..2138    ; NFKC_QC; N
 2139          ; NFKC_QC; N
 213B          ; NFKC_QC; N
-213D..213F    ; NFKC_QC; N
+213C..213F    ; NFKC_QC; N
 2140          ; NFKC_QC; N
 2145..2149    ; NFKC_QC; N
 2153..215F    ; NFKC_QC; N
@@ -1670,6 +1687,7 @@ FFED..FFEE    ; NFKD_QC; N
 2A0C          ; NFKC_QC; N
 2A74..2A76    ; NFKC_QC; N
 2ADC          ; NFKC_QC; N
+2D6F          ; NFKC_QC; N
 2E9F          ; NFKC_QC; N
 2EF3          ; NFKC_QC; N
 2F00..2FD5    ; NFKC_QC; N
@@ -1687,7 +1705,7 @@ FFED..FFEE    ; NFKD_QC; N
 322A..3243    ; NFKC_QC; N
 3250          ; NFKC_QC; N
 3251..325F    ; NFKC_QC; N
-3260..327D    ; NFKC_QC; N
+3260..327E    ; NFKC_QC; N
 3280..3289    ; NFKC_QC; N
 328A..32B0    ; NFKC_QC; N
 32B1..32BF    ; NFKC_QC; N
@@ -1702,6 +1720,7 @@ FA22          ; NFKC_QC; N
 FA25..FA26    ; NFKC_QC; N
 FA2A..FA2D    ; NFKC_QC; N
 FA30..FA6A    ; NFKC_QC; N
+FA70..FAD9    ; NFKC_QC; N
 FB00..FB06    ; NFKC_QC; N
 FB13..FB17    ; NFKC_QC; N
 FB1D          ; NFKC_QC; N
@@ -1718,6 +1737,10 @@ FD50..FD8F    ; NFKC_QC; N
 FD92..FDC7    ; NFKC_QC; N
 FDF0..FDFB    ; NFKC_QC; N
 FDFC          ; NFKC_QC; N
+FE10..FE16    ; NFKC_QC; N
+FE17          ; NFKC_QC; N
+FE18          ; NFKC_QC; N
+FE19          ; NFKC_QC; N
 FE30          ; NFKC_QC; N
 FE31..FE32    ; NFKC_QC; N
 FE33..FE34    ; NFKC_QC; N
@@ -1791,8 +1814,7 @@ FF60          ; NFKC_QC; N
 FF61          ; NFKC_QC; N
 FF62          ; NFKC_QC; N
 FF63          ; NFKC_QC; N
-FF64          ; NFKC_QC; N
-FF65          ; NFKC_QC; N
+FF64..FF65    ; NFKC_QC; N
 FF66..FF6F    ; NFKC_QC; N
 FF70          ; NFKC_QC; N
 FF71..FF9D    ; NFKC_QC; N
@@ -1830,7 +1852,7 @@ FFED..FFEE    ; NFKC_QC; N
 1D540..1D544  ; NFKC_QC; N
 1D546         ; NFKC_QC; N
 1D54A..1D550  ; NFKC_QC; N
-1D552..1D6A3  ; NFKC_QC; N
+1D552..1D6A5  ; NFKC_QC; N
 1D6A8..1D6C0  ; NFKC_QC; N
 1D6C1         ; NFKC_QC; N
 1D6C2..1D6DA  ; NFKC_QC; N
@@ -1855,7 +1877,7 @@ FFED..FFEE    ; NFKC_QC; N
 1D7CE..1D7FF  ; NFKC_QC; N
 2F800..2FA1D  ; NFKC_QC; N
 
-# Total code points: 4319
+# Total code points: 4484
 
 # ================================================
 
@@ -2408,7 +2430,7 @@ FB46..FB4E    ; Expands_On_NFC
 322A..3243    ; Expands_On_NFKD
 3250          ; Expands_On_NFKD
 3251..325F    ; Expands_On_NFKD
-326E..327D    ; Expands_On_NFKD
+326E..327E    ; Expands_On_NFKD
 32B1..32BF    ; Expands_On_NFKD
 32C0..32CF    ; Expands_On_NFKD
 3300..33FF    ; Expands_On_NFKD
@@ -2432,6 +2454,7 @@ FD50..FD8F    ; Expands_On_NFKD
 FD92..FDC7    ; Expands_On_NFKD
 FDF0..FDFB    ; Expands_On_NFKD
 FDFC          ; Expands_On_NFKD
+FE19          ; Expands_On_NFKD
 FE30          ; Expands_On_NFKD
 FE49..FE4C    ; Expands_On_NFKD
 FE70..FE72    ; Expands_On_NFKD
@@ -2443,7 +2466,7 @@ FFE3          ; Expands_On_NFKD
 1D15E..1D164  ; Expands_On_NFKD
 1D1BB..1D1C0  ; Expands_On_NFKD
 
-# Total code points: 13297
+# Total code points: 13299
 
 # ================================================
 
@@ -2561,6 +2584,7 @@ FD50..FD8F    ; Expands_On_NFKC
 FD92..FDC7    ; Expands_On_NFKC
 FDF0..FDFB    ; Expands_On_NFKC
 FDFC          ; Expands_On_NFKC
+FE19          ; Expands_On_NFKC
 FE30          ; Expands_On_NFKC
 FE49..FE4C    ; Expands_On_NFKC
 FE70..FE72    ; Expands_On_NFKC
@@ -2571,4 +2595,4 @@ FFE3          ; Expands_On_NFKC
 1D15E..1D164  ; Expands_On_NFKC
 1D1BB..1D1C0  ; Expands_On_NFKC
 
-# Total code points: 1170
+# Total code points: 1171
