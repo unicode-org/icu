@@ -5,6 +5,7 @@
 **********************************************************************
 *   Date        Name        Description
 *   11/24/99    aliu        Creation.
+*   09/26/00    aliu        Support for equivalency groups added.
 **********************************************************************
 */
 
@@ -51,7 +52,7 @@ static UDataInfo dataInfo = {
     sizeof(UChar),
     0,
 
-     0x7a, 0x6f, 0x6e, 0x65,  /* see TZ_SIG. Changed to literals, thanks to HP compiler */
+    TZ_SIG_0, TZ_SIG_1, TZ_SIG_2, TZ_SIG_3,
     TZ_FORMAT_VERSION, 0, 0, 0,                 /* formatVersion */
     0, 0, 0, 0 /* dataVersion - will be filled in with year.suffix */
 };
@@ -68,9 +69,6 @@ class gentz {
     // larger is considered an error.  Adjust as needed.
     enum { MAX_ZONES = 1000 };
 
-    // The largest maxNameLength we accept as sensible.  Adjust as needed.
-    enum { MAX_MAX_NAME_LENGTH = 100 };
-
     // The maximum sensible GMT offset, in seconds
     static const int32_t MAX_GMT_OFFSET;
 
@@ -81,6 +79,8 @@ class gentz {
     static const char SPACE;
     static const char TAB;
     static const char ZERO;
+    static const char STANDARD_MARK;
+    static const char DST_MARK;
     static const char SEP;
     static const char NUL;
     
@@ -89,24 +89,27 @@ class gentz {
     enum { BUFLEN = 1024 };
     char buffer[BUFLEN];
     int32_t lineNumber;
-    
-    TZHeader header;
-    StandardZone* stdZones;
-    DSTZone* dstZones;
-    char* nameTable;
-    int32_t* indexByName;
-    OffsetIndex* indexByOffset;
-    
-    uint32_t maxPerOffset; // Maximum number of zones per offset
-    uint32_t stdZoneSize;
-    uint32_t dstZoneSize;
+
+    // Binary data that we construct from tz.txt and write out as tz.dat
+    TZHeader              header;
+    TZEquivalencyGroup*   equivTable;
+    OffsetIndex*          offsetIndex;
+    uint32_t*             nameToEquiv;
+    char*                 nameTable;
+
+    uint32_t equivTableSize;  // Total bytes in equivalency group table
     uint32_t offsetIndexSize; // Total bytes in offset index table
-    uint32_t nameTableSize; // Total bytes in name table
+    uint32_t nameToEquivSize; // Total bytes in nameToEquiv
+    uint32_t nameTableSize;   // Total bytes in name table
+
+    uint32_t maxPerOffset; // Maximum number of zones per offset
+    uint32_t maxPerEquiv; // Maximum number of zones per equivalency group
+    uint32_t equivCount; // Number of equivalency groups
 
     UBool useCopyright;
 
 public:
-    int     gentzMain(int argc, char *argv[]);
+    int      Main(int argc, const char *argv[]);
 private:
     int32_t  writeTzDatFile(const char *destdir);
     void     parseTzTextFile(FileStream* in);
@@ -114,14 +117,12 @@ private:
     // High level parsing
     void          parseHeader(FileStream* in);
 
-    StandardZone* parseStandardZones(FileStream* in);
-    void          parse1StandardZone(FileStream* in, StandardZone& zone);
+    TZEquivalencyGroup* parseEquivTable(FileStream* in);
 
-    DSTZone*      parseDSTZones(FileStream* in);
-    void          parse1DSTZone(FileStream* in, DSTZone& zone);
+    void          fixupNameToEquiv();
+
     void          parseDSTRule(char*& p, TZRule& rule);
 
-    int32_t*      parseIndexTable(FileStream* in);
     OffsetIndex*  parseOffsetIndexTable(FileStream* in);
 
     char*         parseNameTable(FileStream* in);
@@ -142,7 +143,7 @@ int main(int argc, char *argv[]) {
 #ifdef XP_MAC_CONSOLE
 	argc=ccommand((char***)&argv);
 #endif
-    return x.gentzMain(argc, argv);
+    return x.Main(argc, (const char**)argv);
 }
 
 const int32_t gentz::MAX_GMT_OFFSET = (int32_t)24*60*60; // seconds
@@ -154,6 +155,8 @@ const char    gentz::SPACE          = ' ';
 const char    gentz::TAB            = '\t';
 const char    gentz::ZERO           = '0';
 const char    gentz::SEP            = ',';
+const char    gentz::STANDARD_MARK  = 's';
+const char    gentz::DST_MARK       = 'd';
 const char    gentz::NUL            = '\0';
 const char*   gentz::END_KEYWORD    = "end";
 
@@ -164,7 +167,7 @@ static UOption options[]={
     UOPTION_DESTDIR
 };
 
-int gentz::gentzMain(int argc, char* argv[]) {
+int gentz::Main(int argc, const char* argv[]) {
     /* preset then read command line options */
     options[3].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
@@ -220,6 +223,28 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     UNewDataMemory *pdata;
     UErrorCode status = U_ZERO_ERROR;
 
+    // Careful: The order in which the tables are written must match the offsets.
+    // Our order is:
+    // - equiv table
+    // - offset index
+    // - name index (name to equiv map)
+    // - name table
+    header.equivTableDelta = sizeof(header);
+    header.offsetIndexDelta = header.equivTableDelta + equivTableSize;
+    header.nameIndexDelta = header.offsetIndexDelta + offsetIndexSize;
+    header.nameTableDelta = header.nameIndexDelta + nameToEquivSize;
+
+    if (header.equivTableDelta < 0 ||
+        header.offsetIndexDelta < 0 ||
+        header.nameIndexDelta < 0 ||
+        header.nameTableDelta < 0) {
+        die("Table too big -- negative delta");
+    }
+
+    // Convert equivalency table indices to offsets.  This can only
+    // be done after the header offsets have been set up.
+    fixupNameToEquiv();
+
     // Fill in dataInfo with year.suffix
     *(uint16_t*)&(dataInfo.dataVersion[0]) = header.versionYear;
     *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
@@ -230,13 +255,10 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
         die("Unable to create data memory");
     }
 
-    // Careful: This order cannot be changed (without changing
-    // the offset fixup code).
     udata_writeBlock(pdata, &header, sizeof(header));
-    udata_writeBlock(pdata, stdZones, stdZoneSize);
-    udata_writeBlock(pdata, dstZones, dstZoneSize);
-    udata_writeBlock(pdata, indexByName, header.count * sizeof(indexByName[0]));
-    udata_writeBlock(pdata, indexByOffset, offsetIndexSize);
+    udata_writeBlock(pdata, equivTable, equivTableSize);
+    udata_writeBlock(pdata, offsetIndex, offsetIndexSize);
+    udata_writeBlock(pdata, nameToEquiv, nameToEquivSize);
     udata_writeBlock(pdata, nameTable, nameTableSize);
 
     uint32_t dataLength = udata_finish(pdata, &status);
@@ -244,10 +266,9 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
         die("Error writing output file");
     }
 
-    if (dataLength != (sizeof(header) + stdZoneSize +
-                       dstZoneSize + nameTableSize +
-                       header.count * sizeof(indexByName[0]) +
-                       offsetIndexSize
+    if (dataLength != (sizeof(header) + equivTableSize +
+                       offsetIndexSize + nameTableSize +
+                       nameToEquivSize
                        )) {
         die("Written file doesn't match expected size");
     }
@@ -256,76 +277,152 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
 
 void gentz::parseTzTextFile(FileStream* in) {
     parseHeader(in);
-    stdZones = parseStandardZones(in);
-    dstZones = parseDSTZones(in);
-    if (header.count != (header.standardCount + header.dstCount)) {
-        die("Zone counts don't add up");
-    }
+
+    // Read name table, create it, also create nameToEquiv index table
+    // as a side effect.
     nameTable = parseNameTable(in);
 
-    // Fixup the header offsets
-    header.standardDelta = sizeof(header);
-    header.dstDelta = header.standardDelta + stdZoneSize;
-    header.nameIndexDelta = header.dstDelta + dstZoneSize;
-
-    // Read in index tables after header is mostly fixed up
-    indexByName = parseIndexTable(in);
-    indexByOffset = parseOffsetIndexTable(in);
-
-    header.offsetIndexDelta = header.nameIndexDelta + header.count *
-        sizeof(indexByName[0]);
-    header.nameTableDelta = header.offsetIndexDelta + offsetIndexSize;
-
-    if (header.standardDelta < 0 ||
-        header.dstDelta < 0 ||
-        header.nameTableDelta < 0) {
-        die("Negative offset in header after fixup");
-    }
+    // Parse the equivalency groups
+    equivTable = parseEquivTable(in);
+    
+    // Parse the GMT offset index table
+    offsetIndex = parseOffsetIndexTable(in);
 }
 
 /**
- * Index tables are lists of specifiers of the form /[sd]\d+/, where
- * the first character determines if it is a standard or DST zone,
- * and the following number is in the range 0..n-1, where n is the
- * count of that type of zone.
- *
- * Header must already be read in and the offsets must be fixed up.
- * Standard and DST zones must be read in.
+ * Convert equivalency table indices to offsets.  The equivalency
+ * table offset (in the header) must be set already.
  */
-int32_t* gentz::parseIndexTable(FileStream* in) {
-    uint32_t n = readIntegerLine(in, 1, MAX_ZONES);
-    if (n != header.count) {
-        die("Count mismatch in index table");
+void gentz::fixupNameToEquiv() {
+    uint32_t i;
+
+    // First make a list that maps indices to offsets
+    uint32_t *offsets = new uint32_t[equivCount];
+    offsets[0] = header.equivTableDelta;
+    if (offsets[0] % 4 != 0) {
+        die("Header size is not 4-aligned");
     }
-    int32_t* result = new int32_t[n];
+    TZEquivalencyGroup *eg = equivTable;
+    for (i=1; i<equivCount; ++i) {
+        offsets[i] = offsets[i-1] + eg->nextEntryDelta;
+        if (offsets[i] % 4 != 0) {
+            die("Equivalency group table is not 4-aligned");
+        }
+        eg = (TZEquivalencyGroup*) (eg->nextEntryDelta + (int8_t*)eg);
+    }
+
+    // Now remap index values to offsets
+    for (i=0; i<header.count; ++i) {
+        uint32_t x = nameToEquiv[i];
+        if (x < 0 || x >= equivCount) {
+            die("Equiv index out of range");
+        }
+        nameToEquiv[i] = offsets[x];
+    }
+
+    delete[] offsets;
+}
+
+TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
+    uint32_t n = readIntegerLine(in, 1, MAX_ZONES);
+    if (n != equivCount) {
+        die("Equivalency table count mismatch");
+    }
+
+    // We don't know how big the whole thing will be yet, but we can use
+    // the maxPerEquiv number to compute an upper limit.
+    //
+    // The gmtOffset field within each struct must be
+    // 4-aligned for some architectures.  To ensure this, we do two
+    // things: 1. The entire struct is 4-aligned.  2. The gmtOffset is
+    // placed at a 4-aligned position within the struct.  3. The size
+    // of the whole structure is padded out to 4n bytes.  We achieve
+    // this last condition by adding two bytes of padding after the
+    // last entry, if necessary.  We adjust
+    // the nextEntryDelta and add 2 bytes of padding if necessary.
+    uint32_t maxPossibleSize = sizeof(TZEquivalencyGroup) +
+        (maxPerEquiv-1) * sizeof(uint16_t);
+    // Pad this out
+    if ((maxPossibleSize % 4) != 0) {
+        maxPossibleSize += 2;
+    }
+    if ((maxPossibleSize % 4) != 0) {
+        die("Bug in 4-align code for equiv table");
+    }
+    maxPossibleSize *= n; // Get size of entire set of structs.
+
+    int8_t *result = new int8_t[maxPossibleSize];
+    if (result == 0) {
+        die("Out of memory");
+    }
+
+    // Read each line and construct the corresponding entry
+    TZEquivalencyGroup* eg = (TZEquivalencyGroup*)result;
     for (uint32_t i=0; i<n; ++i) {
+        char *p;
+
         readLine(in);
-        char* p = buffer+1;
-        uint32_t index = parseInteger(p, NUL, 0, header.count);
-        switch (buffer[0]) {
-        case 's':
-            if (index >= header.standardCount) {
-                die("Standard index entry out of range");
-            }
-            result[i] = header.standardDelta +
-                sizeof(StandardZone)*index;
+
+        // Each line starts with 's,' or 'd,' to specify the zone type
+        char flavor = buffer[0];
+        if (buffer[1] != SEP) {
+            die("Syntax error in equiv table");
+        }
+        p = buffer + 2;
+
+        // This pointer will be adjusted to point to the start of the
+        // list of zones in this group.
+        uint16_t* pList = 0;
+        
+        switch (flavor) {
+        case STANDARD_MARK:
+            eg->isDST = 0;
+            eg->u.s.zone.gmtOffset = 1000 * // Convert s -> ms
+                parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
+            pList = &(eg->u.s.count);
             break;
-        case 'd':
-            if (index >= header.dstCount) {
-                die("DST index entry out of range");
-            } 
-            result[i] = header.dstDelta +
-                sizeof(DSTZone)*index;
+        case DST_MARK:
+            eg->isDST = 1;
+            eg->u.d.zone.gmtOffset = 1000 * // Convert s -> ms
+                parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
+            parseDSTRule(p, eg->u.d.zone.onsetRule);
+            parseDSTRule(p, eg->u.d.zone.ceaseRule);
+            eg->u.d.zone.dstSavings = (uint16_t) parseInteger(p, SEP, 0, 12*60);
+            pList = &(eg->u.d.count);
             break;
         default:
-            die("Malformed index entry");
-            break;
+            die("Invalid equiv table type marker (not s or d)");
         }
+
+        // Now parse the list of zones in this group
+        uint16_t egCount = (uint16_t) parseInteger(p, SEP, 1, maxPerEquiv);
+        *pList++ = egCount;
+        for (uint16_t j=0; j<egCount; ++j) {
+            *pList++ = (uint16_t) parseInteger(p, (j==(egCount-1)) ? NUL : SEP,
+                                               0, header.count-1);
+        }
+        
+        // At this point pList points to the byte after the last byte of this
+        // equiv group struct.  Time to 4-align it.
+        uint16_t structSize = (uint16_t) (((int8_t*)pList) - ((int8_t*)eg));
+        if ((structSize % 4) != 0) {
+            // assert(structSize % 4 == 2);
+            *pList++ = 0xFFFF; // Pad with invalid zone index
+            structSize += 2;
+        }
+
+        // Set up next entry delta
+        eg->nextEntryDelta = (i==(n-1)) ? (uint16_t) 0 : structSize;
+
+        eg->reserved = 0; // ignored
+
+        eg = (TZEquivalencyGroup*) (structSize + (int8_t*)eg);
     }
+    equivTableSize = (int8_t*)eg - (int8_t*)result;
     readEndMarker(in);
-    fprintf(stdout, " Read %lu name index table entries, in-memory size %ld bytes\n",
-            n, n * sizeof(int32_t));
-    return result;
+    fprintf(stdout, " Read %lu equivalency table entries, in-memory size %ld bytes\n",
+            equivCount, equivTableSize);
+    return (TZEquivalencyGroup*)result;
 }
 
 OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
@@ -402,73 +499,29 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
 }
 
 void gentz::parseHeader(FileStream* in) {
-    int32_t ignored;
+
+    int32_t version = readIntegerLine(in, 0, 0xFFFF);
+    if (version != TZ_FORMAT_VERSION) {
+        die("Version mismatch between gentz and input file");
+    }
 
     // Version string, e.g., "1999j" -> (1999<<16) | 10
     header.versionYear = (uint16_t) readIntegerLine(in, 1990, 0xFFFF);
     header.versionSuffix = (uint16_t) readIntegerLine(in, 0, 0xFFFF);
 
     header.count = readIntegerLine(in, 1, MAX_ZONES);
-    maxPerOffset = readIntegerLine(in, 1, MAX_ZONES);
-    /*header.maxNameLength*/ ignored = readIntegerLine(in, 1, MAX_MAX_NAME_LENGTH);
+    equivCount = readIntegerLine(in, 1, header.count);
+    maxPerOffset = readIntegerLine(in, 1, header.count);
+    maxPerEquiv = readIntegerLine(in, 1, equivCount);
 
     // Size of name table in bytes
     // (0x00FFFFFF is an arbitrary upper limit; adjust as needed.)
     nameTableSize = readIntegerLine(in, 1, 0x00FFFFFF);
 
+    readEndMarker(in);
+
     fprintf(stdout, " Read header, data version %u(%u), in-memory size %ld bytes\n",
             header.versionYear, header.versionSuffix, sizeof(header));
-}
-
-StandardZone* gentz::parseStandardZones(FileStream* in) {
-    header.standardCount = readIntegerLine(in, 1, MAX_ZONES);
-    StandardZone* zones = new StandardZone[header.standardCount];
-    if (zones == 0) {
-        die("Out of memory");
-    }
-    for (uint32_t i=0; i<header.standardCount; i++) {
-        parse1StandardZone(in, zones[i]);
-    }
-    readEndMarker(in);
-    stdZoneSize = sizeof(StandardZone)*header.standardCount;
-    fprintf(stdout, " Read %lu standard zones, in-memory size %ld bytes\n",
-            header.standardCount, stdZoneSize);
-    return zones;
-}
-
-void gentz::parse1StandardZone(FileStream* in, StandardZone& zone) {
-    readLine(in);
-    char* p = buffer;
-    /*zone.nameDelta =*/ parseInteger(p, SEP, 0, nameTableSize);
-    zone.gmtOffset = 1000 * // Convert s -> ms
-        parseInteger(p, NUL, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
-}
-
-DSTZone* gentz::parseDSTZones(FileStream* in) {
-    header.dstCount = readIntegerLine(in, 1, MAX_ZONES);
-    DSTZone* zones = new DSTZone[header.dstCount];
-    if (zones == 0) {
-        die("Out of memory");
-    }
-    for (uint32_t i=0; i<header.dstCount; i++) {
-        parse1DSTZone(in, zones[i]);
-    }
-    readEndMarker(in);
-    dstZoneSize = sizeof(DSTZone)*header.dstCount;
-    fprintf(stdout, " Read %lu DST zones, in-memory size %ld bytes\n",
-            header.dstCount, dstZoneSize);
-    return zones;
-}
-
-void gentz::parse1DSTZone(FileStream* in, DSTZone& zone) {
-    readLine(in);
-    char* p = buffer;
-    /*zone.nameDelta =*/ parseInteger(p, SEP, 0, nameTableSize);
-    zone.gmtOffset = 1000 * // Convert s -> ms
-        parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
-    parseDSTRule(p, zone.onsetRule);
-    parseDSTRule(p, zone.ceaseRule);
-    zone.dstSavings = (uint16_t) parseInteger(p, NUL, 0, 12*60);
 }
 
 void gentz::parseDSTRule(char*& p, TZRule& rule) {
@@ -496,21 +549,37 @@ void gentz::parseDSTRule(char*& p, TZRule& rule) {
     }
 }
 
+/**
+ * Parse the name table.
+ * Each entry of the name table looks like this:
+ * |36,Africa/Djibouti
+ * The integer is an equivalency table index.  We build up a name
+ * table, that just contains the names, and we return it.  We also
+ * build up the name index, which indexes names to equivalency table
+ * entries.  This is stored in the member variable nameToEquiv.
+ */
 char* gentz::parseNameTable(FileStream* in) {
     int32_t n = readIntegerLine(in, 1, MAX_ZONES);
     if (n != (int32_t)header.count) {
         die("Zone count doesn't match name table count");
     }
     char* names = new char[nameTableSize];
-    if (names == 0) {
+    nameToEquiv = new uint32_t[n];
+    if (names == 0 || nameToEquiv == 0) {
         die("Out of memory");
     }
+    nameToEquivSize = n * sizeof(nameToEquiv[0]);
     char* p = names;
     char* limit = names + nameTableSize;
     for (int32_t i=0; i<n; ++i) {
-        int32_t len = readLine(in);
+        readLine(in);
+        char* q = buffer;
+        // We store an index here for now -- later, in fixNameToEquiv,
+        // we convert it to an offset.
+        nameToEquiv[i] = (uint32_t) parseInteger(q, SEP, 0, equivCount-1);
+        int32_t len = uprv_strlen(q);
         if ((p + len) <= limit) {
-            uprv_memcpy(p, buffer, len);
+            uprv_memcpy(p, q, len);
             p += len;
             *p++ = NUL;
         } else {
@@ -598,24 +667,31 @@ void gentz::die(const char* msg) {
     exit(1);
 }
 
+/**
+ * Read a line.  Trim trailing comment and whitespace.  Ignore (skip)
+ * blank lines, or comment-only lines.  Return the number of characters
+ * on the line remaining.  On EOF, die.
+ */
 int32_t gentz::readLine(FileStream* in) {
     ++lineNumber;
-    T_FileStream_readLine(in, buffer, BUFLEN);
+    char* result = T_FileStream_readLine(in, buffer, BUFLEN);
+    if (result == 0) {
+        *buffer = 0;
+        die("Unexpected end of file");
+    }
     // Trim off trailing comment
     char* p = uprv_strchr(buffer, COMMENT);
     if (p != 0) {
-        // Back up past any space or tab characters before
-        // the comment character.
-        while (p > buffer && (p[-1] == SPACE || p[-1] == TAB)) {
-            p--;
-        }
         *p = NUL;
     }
-    // Delete any trailing ^J and/or ^M characters
+    // Delete trailing whitespace
     p = buffer + uprv_strlen(buffer);
-    while (p > buffer && (p[-1] == CR || p[-1] == LF)) {
+    while (p > buffer && (p[-1] == CR || p[-1] == LF ||
+                          p[-1] == SPACE || p[-1] == TAB)) {
         p--;
     }
     *p = NUL;
-    return uprv_strlen(buffer);
+    // If line is empty after trimming comments & whitespace,
+    // then read the next line.
+    return (*buffer == NUL) ? readLine(in) : uprv_strlen(buffer);
 }
