@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/07/16 22:57:13 $
- * $Revision: 1.112 $
+ * $Date: 2002/07/25 21:21:31 $
+ * $Revision: 1.113 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,6 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CaseInsensitiveString;
-import java.text.*;
 import java.util.*;
 
 /***********************************************************************
@@ -1794,9 +1793,7 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator latinToDev=Transliterator.getInstance("Latin-Devanagari", Transliterator.FORWARD );
         Transliterator devToLatin=Transliterator.getInstance("Devanagari-Latin", Transliterator.FORWARD);
 
-        String gotResult;
         for(int i= 0; i<source.length; i++){
-            gotResult = source[i];
             expect(latinToDev,(source[i]),(expected[i]));
             expect(devToLatin,(expected[i]),(source[i]));
         }
@@ -1833,9 +1830,7 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator latinToDev=Transliterator.getInstance("Latin-Telugu", Transliterator.FORWARD);
         Transliterator devToLatin=Transliterator.getInstance("Telugu-Latin", Transliterator.FORWARD);
 
-        String gotResult;
         for(int i= 0; i<source.length; i++){
-            gotResult = source[i];
             expect(latinToDev,(source[i]),(expected[i]));
             expect(devToLatin,(expected[i]),(source[i]));
         }
@@ -1884,10 +1879,7 @@ public class TransliteratorTest extends TestFmwk {
 
         Transliterator latinToDev=Transliterator.getInstance("Latin-Devanagari", Transliterator.FORWARD);
         Transliterator devToLatin=Transliterator.getInstance("Devanagari-Latin", Transliterator.FORWARD);
-
-        String gotResult;
         for(int i= 0; i<MAX_LEN; i++){
-            gotResult = source[i];
             expect(latinToDev,(source[i]),(expected[i]));
             expect(devToLatin,(expected[i]),(source[i]));
         }
@@ -1936,15 +1928,41 @@ public class TransliteratorTest extends TestFmwk {
 
         Transliterator latinToDevToLatin=Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin", Transliterator.FORWARD);
         Transliterator devToLatinToDev=Transliterator.getInstance("Devanagari-Latin;Latin-Devanagari", Transliterator.FORWARD);
-
-        String gotResult;
         for(int i= 0; i<MAX_LEN; i++){
-            gotResult = source[i];
             expect(latinToDevToLatin,(source[i]),(source[i]));
             expect(devToLatinToDev,(expected[i]),(expected[i]));
         }
     }
+    /**
+     * Test Gurmukhi-Devanagari Tippi and Bindi
+     */
+    public void TestGurmukhiDevanagari(){
+        // the rule says:
+        // (\u0902) (when preceded by vowel)      --->  (\u0A02)
+        // (\u0902) (when preceded by consonant)  --->  (\u0A70)
 
+        UnicodeSet vowel =new UnicodeSet("[\u0905-\u090A \u090F\u0910\u0913\u0914 \u093e-\u0942\u0947\u0948\u094B\u094C\u094D]");
+        UnicodeSet non_vowel =new UnicodeSet("[\u0915-\u0928\u092A-\u0930]");
+
+        UnicodeSetIterator vIter = new UnicodeSetIterator(vowel);
+        UnicodeSetIterator nvIter = new UnicodeSetIterator(non_vowel);
+        Transliterator trans = Transliterator.getInstance("Devanagari-Gurmukhi");
+        StringBuffer src = new StringBuffer(" \u0902");
+        StringBuffer expect = new StringBuffer(" \u0A02");
+        while(vIter.next()){
+            src.setCharAt(0,(char) vIter.codepoint);
+            expect.setCharAt(0,(char) (vIter.codepoint+0x0100));
+            expect(trans,src.toString(),expect.toString());
+        }
+        
+        expect.setCharAt(1,'\u0A70');
+        while(nvIter.next()){
+            //src.setCharAt(0,(char) nvIter.codepoint);
+            src.setCharAt(0,(char)nvIter.codepoint);
+            expect.setCharAt(0,(char) (nvIter.codepoint+0x0100));
+            expect(trans,src.toString(),expect.toString());
+        }
+    }
     /**
      * Test instantiation from a locale.
      */
