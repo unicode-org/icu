@@ -85,7 +85,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 
     list = new UChar32[capacity];
     list[0] = HIGH;
-    xor(start, end);
+    exclusiveOr(start, end);
 }
 
 /**
@@ -218,7 +218,7 @@ int32_t UnicodeSet::hashCode(void) const {
  */
 void UnicodeSet::set(UChar32 start, UChar32 end) {
     clear();
-    xor(start, end);
+    exclusiveOr(start, end);
 }
 
 /**
@@ -496,15 +496,15 @@ void UnicodeSet::remove(UChar32 c) {
  * @param end last character, inclusive, of range to be removed
  * from this set.
  */
-void UnicodeSet::xor(UChar32 start, UChar32 end) {
+void UnicodeSet::exclusiveOr(UChar32 start, UChar32 end) {
     if (start <= end) {
         UChar32 range[3] = { start, end+1, HIGH };
-        xor(range, 2, 0);
+        exclusiveOr(range, 2, 0);
     }
 }
 
-void UnicodeSet::xor(UChar32 c) {
-    xor(c, c);
+void UnicodeSet::exclusiveOr(UChar32 c) {
+    exclusiveOr(c, c);
 }
 
 /**
@@ -576,8 +576,8 @@ void UnicodeSet::removeAll(const UnicodeSet& c) {
  * @param c set that defines which elements will be xor'ed from
  *          this set.
  */
-void UnicodeSet::xorAll(const UnicodeSet& c) {
-    xor(c.list, c.len, 0);
+void UnicodeSet::exclusiveOrAll(const UnicodeSet& c) {
+    exclusiveOr(c.list, c.len, 0);
 }
 
 /**
@@ -1156,7 +1156,7 @@ inline UChar32 max(UChar32 a, UChar32 b) {
 // polarity = 0, 3 is normal: x xor y
 // polarity = 1, 2: x xor ~y == x === y
 
-void UnicodeSet::xor(const UChar32* other, int32_t otherLen, int8_t polarity) {
+void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t polarity) {
     ensureBufferCapacity(len + otherLen);
     int32_t i = 0, j = 0, k = 0;
     UChar32 a = list[i++];
