@@ -161,7 +161,7 @@ enum {
      * At most one Unicode version can be selected at a time.
      * @draft ICU 2.6
      */
-    UNORM_UNICODE_3_2=0x20,
+    UNORM_UNICODE_3_2=0x20
 };
 
 /**
