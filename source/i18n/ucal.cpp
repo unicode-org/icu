@@ -468,4 +468,10 @@ ucal_getLimit(    const    UCalendar*              cal,
   return -1;
 }
 
+U_CAPI const char * U_EXPORT2
+ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status) 
+{
+  return ((Calendar*)cal)->getLocaleInternal(type, *status);
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
