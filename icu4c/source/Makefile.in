@@ -39,6 +39,11 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 
 AUTOCONF = @AUTOCONF@
 
+
+## Platform-specific setup
+@host_frag@
+
+
 ## Pacakge information
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
@@ -117,19 +122,19 @@ doc:
 	done; \
 	echo "Generating html documentation..."; \
 	doc++ -H -d $$tmpdir/html $$tmpdir/include/*.h > /dev/null 2>&1; \
-	rm -rf $$tmpdir
+	$(RMV) $$tmpdir
 
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 distclean-local: clean-local
-	rm -f Makefile config.cache config.log config.status config/Makefile
-	rm -f common/unicode/platform.h common/icucfg.h
+	$(RMV) Makefile config.cache config.log config.status config/Makefile
+	$(RMV) common/unicode/platform.h common/icucfg.h
 ifeq ($(patsubst ..%,,@RELATIVEDATADIR@),@RELATIVEDATADIR@)
-	rm -f @DATABUILDDIR@/../source/test/testdata/*.goo @DATABUILDDIR@/../source/test/testdata/*.txt @DATABUILDDIR@/../source/test/testdata/*.uni
-	rm -f @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk
+	$(RMV) @DATABUILDDIR@/../source/test/testdata/*.goo @DATABUILDDIR@/../source/test/testdata/*.txt @DATABUILDDIR@/../source/test/testdata/*.uni
+	$(RMV) @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk
 endif
 
 check-local:

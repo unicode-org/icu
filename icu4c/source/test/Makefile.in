@@ -38,6 +38,11 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
+
+## Platform-specific setup
+@host_frag@
+
+
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
@@ -85,10 +90,10 @@ install-local:
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 distclean-local: clean-local
-	rm -f Makefile
+	$(RMV) Makefile
 
 check-local:
 

@@ -61,6 +61,11 @@ LIBICU = libicu-
 ## Shared object suffix (switch to dll for shared library build)
 SO=		dll
 
+## Force removal [for make clean]
+RMV = rm -rf
+## Platform command to move executable target
+INSTALL-S = $(INSTALL)
+
 ## Link commands to link to ICU libs
 LIBICU-UC= 	$(top_builddir)/common/libicu-uc.x
 LIBICU-I18N= 	$(top_builddir)/i18n/libicu-i18n.x

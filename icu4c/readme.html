@@ -674,14 +674,6 @@ resolution of CRTCPPMOD used by the icc compiler
 mh-os400 configure  file is used.
 <UL>      
    <LI> Run 'configure --host=as400-os400' 
-   <LI> Change the TARGET entries in 
-   <TT>common/Makefile.in, i18n/Makefile.in, tools/toolutil/Makefile.in </TT>  so that instead
-   of <TT>TARGET=<U>libicu-</U>uc.$(SO)</TT> they read
-   <TT>TARGET=<B>$(LIBICU)</B>uc.$(SO)</TT> [remove hyphens]
-   <LI> Change Makefile.in's (under source/tools) that have
-   LIBICU-TOOLUTIL so that it follows the other LIBICU variables on
-   the link line:
-   <TT>$(LIBICU-UC)&nbsp;$(LIBICU-TOOLUTIL)&nbsp;@LIBS@&nbsp;@LIB_M@</TT>
    <LI> The 'clean' and 'install' targets will not work without changes
 because of symbolic links. To delete the target module, program, or service programs replace <TT>rm -rf</TT> with <B>$(RMV)</B>, and in the
    library installation targets (install-library) change

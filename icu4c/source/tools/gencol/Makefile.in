@@ -114,7 +114,7 @@ build-data: .sentinel
 
 force-build-data: clean-sentinel build-data
 clean-sentinel:
-	rm -f .sentinel
+	$(RMV) .sentinel
 
 install-local: all-local
 #	$(mkinstalldirs) $(DESTDIR)$(sbindir)
@@ -125,12 +125,12 @@ install-local: all-local
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(TARGET) $(OBJECTS)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local clean-sentinel
-	rm -f Makefile $(DEPS) $(CNV_FILES)
-	rm -f @DATABUILDDIR@/*.col
+	$(RMV) Makefile $(DEPS) $(CNV_FILES)
+	$(RMV) @DATABUILDDIR@/*.col
 
 check-local:
 
