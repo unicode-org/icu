@@ -297,13 +297,13 @@ void testIEEEremainder()
     remainderTest(1.0, ninf, 1.0);
 
     /*test infinity and real*/
-    remainderTest(nan, 1.0, 1.25);
-    remainderTest(1.0, nan, 1.25);
+    remainderTest(nan, 1.0, nan);
+    remainderTest(1.0, nan, nan);
     /*test infinity and nan*/
-    remainderTest(ninf, nan, 1.25);
-    remainderTest(pinf, nan, 1.25);
+    remainderTest(ninf, nan, nan);
+    remainderTest(pinf, nan, nan);
 
-    /* test infinity and zero
+    /* test infinity and zero 
     remainderTest(pinf, pzero, 1.25);
     remainderTest(pinf, nzero, 1.25);
     remainderTest(ninf, pzero, 1.25);
