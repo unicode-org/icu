@@ -795,8 +795,8 @@ public class BagFormatter {
             log.println("Creating File: " 
                 + file.getCanonicalPath());
         }
-        //File parent = new File(file.getParent());
-        //parent.mkdirs();
+        File parent = new File(file.getParent());
+        parent.mkdirs();
         return new PrintWriter(
             new BufferedWriter(
                 new OutputStreamWriter(
