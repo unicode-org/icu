@@ -52,7 +52,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common
-LIBS = -L$(libdir) -L$(top_builddir)/common -licu-uc @LIBS@ @LIB_M@
+LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = read.o parse.o uprint.o
 

@@ -76,7 +76,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.1 $ 8/25/98
+ * @version            $Revision: 1.2 $ 8/25/98
  * @author             Helena Shih
  */
 

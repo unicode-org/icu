@@ -51,7 +51,7 @@ CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common
-LIBS = -L$(top_builddir)/common -licu-uc @LIBS@ @LIB_M@
+LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = ieeetest.o
 

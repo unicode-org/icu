@@ -99,7 +99,7 @@ install-local:
 
 ## Generate HTML documentation
 doc:
-	@uniq=`date '+%y%m%d8/13/99M%S'`; \
+	@uniq=`date '+%y%m%d8/20/99M%S'`; \
 	tmpdir="/tmp/icu-$$uniq"; \
 	list='$(DOCDIRS)'; for subdir in $$list; do \
 	  echo "Making install-headers in $$subdir"; \

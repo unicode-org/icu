@@ -975,7 +975,7 @@ const char* icu_getDefaultCodepage()
   /* Currently TBD 
      in the future should use thread specific CP
   */
-#elif defined(OS390OE)
+#elif defined(OS390)
   icu_strcpy(DEFAULT_CONVERTER_NAME, "ibm-1047");
 #elif defined(XP_MAC)
   /* TBD */

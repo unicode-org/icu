@@ -303,6 +303,7 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
   for(i = 0; i < kDataCount; ++i) {
     fData[i] = 0;
     fLoaded[i] = FALSE;
+    fDataStatus[i] = INTERNAL_PROGRAM_ERROR;
   }
   
   fLocaleIterator = 0;
@@ -332,6 +333,7 @@ ResourceBundle::saveCollationHashtable(const UnicodeString& localeName,
     if( ! bundle->fLoaded[i]) {
       bundle->fData[i] = hashtable;
       bundle->fLoaded[i] = TRUE;
+      bundle->fDataStatus[i] = ZERO_ERROR; /* ??? */
       return;
     }
   }
@@ -390,6 +392,7 @@ ResourceBundle::constructForLocale(const PathInfo& path,
   
   for(i = 1; i < kDataCount; ++i) {
     fData[i] = 0;
+    fDataStatus[i] = INTERNAL_PROGRAM_ERROR;
     fLoaded[i] = FALSE;
   }
   
@@ -397,6 +400,7 @@ ResourceBundle::constructForLocale(const PathInfo& path,
   error = ZERO_ERROR;
   fData[0] = getHashtableForLocale(fRealLocaleID, returnedLocale, error);
   fLoaded[0] = TRUE;
+  fDataStatus[0] = ZERO_ERROR;
   if(SUCCESS(error)) 
     fRealLocaleID = returnedLocale;
   
@@ -581,25 +585,31 @@ const ResourceBundleData*
 ResourceBundle::getDataForTag(const UnicodeString& tag,
 			      UErrorCode& err) const
 {
+  err = ZERO_ERROR; /* just to make sure there's no fallback/etc left over */
   // Iterate over the kDataCount hashtables which may be associated with this
   // bundle.  At most we have kDataCount, but we may have as few as one.
   for(int32_t i = 0; i < kDataCount; ++i) {
-    // First try to load up this hashtable, if it hasn't been loaded yet.
+
+  // First try to load up this hashtable, if it hasn't been loaded yet.
     if(!fLoaded[i] && fData[i] == 0) {
       ResourceBundle* nonconst = (ResourceBundle*)this;
       nonconst->fLoaded[i] = TRUE;
       if(fLocaleIterator->nextLocale(err)) {
+	UErrorCode getHashtableStatus = ZERO_ERROR;
+
+	nonconst->fDataStatus[i] = err;
 	nonconst->fData[i] = 
-	  nonconst->getHashtableForLocale(fLocaleIterator->getLocale(), err);
+	  nonconst->getHashtableForLocale(fLocaleIterator->getLocale(), getHashtableStatus);
       }
     }
+
     
     if(fData[i] != 0) {
       const ResourceBundleData* s = 
 	(const ResourceBundleData*)uhash_get(fData[i], 
 					     tag.hashCode() & 0x7FFFFFFF);
       if(s != 0) {
-	err = ZERO_ERROR;
+	err = fDataStatus[i];  /* restore the error from the original lookup. */
 	return s;
       }
     }

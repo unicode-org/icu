@@ -11,7 +11,7 @@
 *                                                                             *
 *******************************************************************************
 */
-// $Revision: 1.1 $
+// $Revision: 1.2 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.

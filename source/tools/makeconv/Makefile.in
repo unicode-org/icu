@@ -52,7 +52,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common
-LIBS = -L$(libdir) -L$(top_builddir)/common -licu-uc @LIBS@ @LIB_M@
+LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = makeconv.o
 
@@ -107,7 +107,7 @@ install-local: target-clean-local all-local
 	$(mkinstalldirs) $(sbindir)
 	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
-	@list='$(notdir $(CNV_FILES))'; for file in $$list; do \
+	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
 		echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 		$(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	done
