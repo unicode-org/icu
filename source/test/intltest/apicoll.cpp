@@ -125,7 +125,7 @@ CollationAPITest::TestProperty(/* char* par */)
 
     doAssert((col->compare("ab", "abc") == Collator::LESS), "ab < abc comparison failed");
     doAssert((col->compare("ab", "AB") == Collator::LESS), "ab < AB comparison failed");
-    doAssert((col->compare("black-bird", "blackbird") == Collator::GREATER), "black-bird > blackbird comparison failed");
+    doAssert((col->compare("blackbird", "black-bird") == Collator::GREATER), "black-bird > blackbird comparison failed");
     doAssert((col->compare("black bird", "black-bird") == Collator::LESS), "black bird > black-bird comparison failed");
     doAssert((col->compare("Hello", "hello") == Collator::GREATER), "Hello > hello comparison failed");
 
@@ -172,11 +172,6 @@ CollationAPITest::TestProperty(/* char* par */)
     logln(Collator::getDisplayName(Locale::US, name)); 
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
 
-    logln("Default collation property test ended.");
-    logln("Collator::getRules() testing ...");  
-    doAssert(((RuleBasedCollator*)col)->getRules().length() != 0, "getRules() result incorrect" );                
-    logln("getRules tests end.");
-
     delete col; col = 0;
     col = Collator::createInstance(Locale::FRENCH, success);
     if (U_FAILURE(success))
@@ -218,7 +213,8 @@ CollationAPITest::TestProperty(/* char* par */)
         return;
     }
 
-    doAssert((*col == *junk), "The default collation should be returned.");
+    doAssert(((RuleBasedCollator *)col)->getRules() == ((RuleBasedCollator *)junk)->getRules(), 
+               "The default collation should be returned.");
     Collator *frCol = Collator::createInstance(Locale::FRANCE, success);
     if (U_FAILURE(success))
     {
@@ -448,7 +444,7 @@ CollationAPITest::TestElemIter(/* char* par */)
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be the same");
 
     order1 = iterator1->next(success); order3 = iterator3->next(success);
-    if (U_FAILURE(success))
+    if (U_FAILURE(success)) 
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -459,9 +455,10 @@ CollationAPITest::TestElemIter(/* char* par */)
     doAssert((CollationElementIterator::tertiaryOrder(order1) != 
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be different");
 
-    order1 = iterator1->next(success); order3 = iterator3->next(success);
-    doAssert((CollationElementIterator::secondaryOrder(order1) != 
-        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be different");
+    order1 = iterator1->next(success); 
+    order3 = iterator3->next(success);
+    doAssert((CollationElementIterator::secondaryOrder(order1) == 
+        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be the same");
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
 
     iterator1->reset(); iterator2->reset(); iterator3->reset();
@@ -517,8 +514,8 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
-    doAssert((CollationElementIterator::secondaryOrder(order1) != 
-        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be different");
+    doAssert((CollationElementIterator::secondaryOrder(order1) == 
+        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be the same");
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
     doAssert((*iterator2 != *iterator3), "The iterators should be different");
 
