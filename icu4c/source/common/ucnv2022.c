@@ -565,7 +565,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             setInitialStateToUnicodeKR(cnv, myConverterData);
             setInitialStateFromUnicodeKR(cnv,myConverterData);
 
-            myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
+            myConverterData->currentConverter=myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
 
             /*set the substitution chars*/
             ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
@@ -637,20 +637,21 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
 
 static void
 _ISO2022Close(UConverter *converter) {
-   UConverter **array = ((UConverterDataISO2022 *) (converter->extraInfo))->myConverterArray;
+   UConverterDataISO2022* myData =(UConverterDataISO2022 *) (converter->extraInfo);
+   UConverter **array = myData->myConverterArray;
     
     if (converter->extraInfo != NULL) {
-
+		
         /*close the array of converter pointers and free the memory*/
         while(*array!=NULL){
-            if(*array==((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter){
-               ((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter=NULL;
+            if(*array==myData->currentConverter){
+               myData->currentConverter=NULL;
             }
             ucnv_close(*array++);
             
         }
-        if(((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter){
-            ucnv_close(((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
+        if(myData->currentConverter){
+            ucnv_close(myData->currentConverter);
         }
         uprv_free (converter->extraInfo);
     }
