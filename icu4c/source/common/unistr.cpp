@@ -1210,9 +1210,8 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     if(titleIter != 0) {
       cTitleIter = (UBreakIterator *)titleIter;
     } else {
-      /* ### TODO UBRK_TITLECASE */
       errorCode = U_ZERO_ERROR;
-      cTitleIter = ubrk_open(UBRK_WORD, locale.getName(),
+      cTitleIter = ubrk_open(UBRK_TITLE, locale.getName(),
                              oldArray, oldLength,
                              &errorCode);
       if(U_FAILURE(errorCode)) {
