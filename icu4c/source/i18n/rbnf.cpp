@@ -1190,7 +1190,7 @@ RuleBasedNumberFormat::initDefaultRuleSet()
 
 
 void
-RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* localizations,
+RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* localizationInfos,
                             UParseError& /* pErr */, UErrorCode& status)
 {
     // TODO: implement UParseError
@@ -1199,7 +1199,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         return;
     }
 
-    this->localizations = localizations == NULL ? NULL : localizations->ref();
+    this->localizations = localizationInfos == NULL ? NULL : localizationInfos->ref();
 
     UnicodeString description(rules);
     if (!description.length()) {
@@ -1343,17 +1343,17 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // a separate array of the public rule set names, so we have less work
     // to do here-- but we still need to check the names.
     
-    if (localizations) {
+    if (localizationInfos) {
         // confirm the names, if any aren't in the rules, that's an error
         // it is ok if the rules contain public rule sets that are not in this list
-        for (int32_t i = 0; i < localizations->getNumberOfRuleSets(); ++i) {
-            UnicodeString name(TRUE, localizations->getRuleSetName(i), -1);
+        for (int32_t i = 0; i < localizationInfos->getNumberOfRuleSets(); ++i) {
+            UnicodeString name(TRUE, localizationInfos->getRuleSetName(i), -1);
             NFRuleSet* rs = findRuleSet(name, status);
             if (rs == NULL) {
-              break; // error
+                break; // error
             }
             if (i == 0) {
-              defaultRuleSet = rs;
+                defaultRuleSet = rs;
             }
         }
     } else {
