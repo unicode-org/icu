@@ -1,13 +1,9 @@
-// ****************************************************************************
-// *                                                                          *
-// * COPYRIGHT:                                                               *
-// * (C) Copyright Taligent, Inc.,  1997                                      *
-// * (C) Copyright International Business Machines Corporation,  1997-99      *
-// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
-// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
-// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
-// *                                                                          *
-// ****************************************************************************
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
 
 sv {
     CollationElements { "& Z < \u00E6 , \u00C6 < a\u030A , A\u030A , aa , aA , A"
