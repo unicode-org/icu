@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -102,11 +102,6 @@ numericLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode);
 
-static void U_CALLCONV
-bidiClassLineFn(void *context,
-                char *fields[][2], int32_t fieldCount,
-                UErrorCode *pErrorCode);
-
 /* parse files with single enumerated properties ---------------------------- */
 
 struct SingleEnum {
@@ -144,18 +139,6 @@ static const SingleEnum eawSingleEnum={
     "EastAsianWidth", "east asian width",
     UCHAR_EAST_ASIAN_WIDTH,
     0, UPROPS_EA_SHIFT, UPROPS_EA_MASK
-};
-
-static const SingleEnum jtSingleEnum={
-    "DerivedJoiningType", "joining type",
-    UCHAR_JOINING_TYPE,
-    2, UPROPS_JT_SHIFT, UPROPS_JT_MASK
-};
-
-static const SingleEnum jgSingleEnum={
-    "DerivedJoiningGroup", "joining group",
-    UCHAR_JOINING_GROUP,
-    2, UPROPS_JG_SHIFT, UPROPS_JG_MASK
 };
 
 static void U_CALLCONV
@@ -246,8 +229,6 @@ typedef struct Binaries Binaries;
 static const Binary
 propListNames[]={
     { "White_Space",                        1, UPROPS_WHITE_SPACE },
-    { "Bidi_Control",                       1, UPROPS_BIDI_CONTROL },
-    { "Join_Control",                       1, UPROPS_JOIN_CONTROL },
     { "Dash",                               1, UPROPS_DASH },
     { "Hyphen",                             1, UPROPS_HYPHEN },
     { "Quotation_Mark",                     1, UPROPS_QUOTATION_MARK },
@@ -264,7 +245,6 @@ propListNames[]={
     { "Radical",                            1, UPROPS_RADICAL },
     { "Unified_Ideograph",                  1, UPROPS_UNIFIED_IDEOGRAPH },
     { "Deprecated",                         1, UPROPS_DEPRECATED },
-    { "Soft_Dotted",                        1, UPROPS_SOFT_DOTTED },
     { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION },
 
     /* new properties in Unicode 4.0.1 */
@@ -285,8 +265,6 @@ derCorePropsNames[]={
     /* before Unicode 4/ICU 2.6/format version 3.2, these used to be Other_XYZ from PropList.txt */
     { "Math",                               1, UPROPS_MATH },
     { "Alphabetic",                         1, UPROPS_ALPHABETIC },
-    { "Lowercase",                          1, UPROPS_LOWERCASE },
-    { "Uppercase",                          1, UPROPS_UPPERCASE },
     { "Grapheme_Extend",                    1, UPROPS_GRAPHEME_EXTEND },
     { "Default_Ignorable_Code_Point",       1, UPROPS_DEFAULT_IGNORABLE_CODE_POINT },
 
@@ -340,7 +318,9 @@ binariesLineFn(void *context,
     for(i=0;; ++i) {
         if(i==bin->binariesCount) {
             /* ignore unrecognized properties */
-            addIgnoredProp(s, fields[1][1]);
+            if(beVerbose) {
+                addIgnoredProp(s, fields[1][1]);
+            }
             return;
         }
         if(isToken(bin->binaries[i].propName, s)) {
@@ -382,8 +362,10 @@ parseBinariesFile(char *filename, char *basename, const char *suffix,
         fprintf(stderr, "error parsing %s.txt: %s\n", bin->ucdFile, u_errorName(*pErrorCode));
     }
 
-    for(i=0; i<ignoredPropsCount; ++i) {
-        printf("genprops: ignoring property %s in %s.txt\n", ignoredProps[i], bin->ucdFile);
+    if(beVerbose) {
+        for(i=0; i<ignoredPropsCount; ++i) {
+            printf("genprops: ignoring property %s in %s.txt\n", ignoredProps[i], bin->ucdFile);
+        }
     }
 }
 
@@ -392,6 +374,12 @@ parseBinariesFile(char *filename, char *basename, const char *suffix,
 U_CFUNC void
 initAdditionalProperties() {
     pv=upvec_open(UPROPS_VECTOR_WORDS, 20000);
+}
+
+U_CFUNC void
+exitAdditionalProperties() {
+    utrie_close(trie);
+    upvec_close(pv);
 }
 
 U_CFUNC void
@@ -404,9 +392,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     /* add Han numeric types & values */
     parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 2, numericLineFn, pErrorCode);
-
-    /* set proper bidi class for unassigned code points (Cn) */
-    parseTwoFieldFile(filename, basename, "DerivedBidiClass", suffix, bidiClassLineFn, pErrorCode);
 
     parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
@@ -440,10 +425,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
      * XX==U_LB_UNKNOWN==0 - nothing to do
      */
     parseSingleEnumFile(filename, basename, suffix, &lineBreakSingleEnum, pErrorCode);
-
-    parseSingleEnumFile(filename, basename, suffix, &jtSingleEnum, pErrorCode);
-
-    parseSingleEnumFile(filename, basename, suffix, &jgSingleEnum, pErrorCode);
 
     /*
      * Preset East Asian Width defaults:
@@ -481,7 +462,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
         return;
     }
 
-    pvCount=upvec_toTrie(pv, trie, pErrorCode);
+    pvCount=upvec_compact(pv, upvec_compactToTrieHandler, trie, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -538,7 +519,7 @@ static void U_CALLCONV
 numericLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
-    Props newProps;
+    Props newProps={ 0 };
     char *s, *end;
     uint32_t start, limit, value, oldProps32;
     int32_t oldType;
@@ -575,11 +556,14 @@ numericLineFn(void *context,
         /* try large powers of 10 first, may otherwise overflow strtoul() */
         if(0==uprv_strncmp(s, "10000000000", 11)) {
             /* large powers of 10 are encoded in a special way, see store.c */
-            value=0x7fffff00;
+            uint8_t exp=0;
+
             end=s;
             while(*(++end)=='0') {
-                ++value;
+                ++exp;
             }
+            value=1;
+            newProps.exponent=exp;
         } else {
             /* normal number parsing */
             value=(uint32_t)uprv_strtoul(s, &end, 10);
@@ -599,108 +583,51 @@ numericLineFn(void *context,
      * specific properties for single characters.
      */
 
+    /* set the new numeric type and value */
+    newProps.numericType=(uint8_t)U_NT_NUMERIC; /* assumed numeric type, see Unicode 4.0.1 comment */
+    newProps.numericValue=(int32_t)value;       /* newly parsed numeric value */
+    /* the exponent may have been set above */
+    value=makeProps(&newProps);
+
     for(; start<limit; ++start) {
         oldProps32=getProps(start);
         oldType=(int32_t)GET_NUMERIC_TYPE(oldProps32);
-        if(oldType!=0) {
-            /* this code point was already listed with its numeric value in UnicodeData.txt */
-            continue;
+
+        if(isFraction) {
+            if(oldType!=0) {
+                /* this code point was already listed with its numeric value in UnicodeData.txt */
+                continue;
+            } else {
+                fprintf(stderr, "genprops: not prepared for new fractions in DerivedNumericValues.txt field 1 at %s\n", fields[1][0]);
+                exit(U_PARSE_ERROR);
+            }
         }
 
         /*
-         * Do not set a numeric value for code points that have other
-         * values or exceptions because the code below is not prepared
-         * to maintain such values and exceptions.
-         *
-         * Check store.c (e.g., file format description and makeProps())
-         * for details of what code points get their value field interpreted.
-         * For example, case mappings for Ll/Lt/Lu and mirror mappings for mirrored characters.
-         *
          * For simplicity, and because we only expect to set numeric values for Han characters,
          * for now we only allow to set these values for Lo characters.
          */
-        if(GET_UNSIGNED_VALUE(oldProps32)!=0 || PROPS_VALUE_IS_EXCEPTION(oldProps32) || GET_CATEGORY(oldProps32)!=U_OTHER_LETTER) {
-            fprintf(stderr, "genprops error: new numeric value for a character with some other value in DerivedNumericValues.txt at %s\n", fields[0][0]);
+        if(oldType==0 && GET_CATEGORY(oldProps32)!=U_OTHER_LETTER) {
+            fprintf(stderr, "genprops error: new numeric value for a character other than Lo in DerivedNumericValues.txt at %s\n", fields[0][0]);
             exit(U_PARSE_ERROR);
         }
 
-        if(isFraction) {
-            fprintf(stderr, "genprops: not prepared for new fractions in DerivedNumericValues.txt field 1 at %s\n", fields[1][0]);
-            exit(U_PARSE_ERROR);
+        /* verify that we do not change an existing value (fractions were excluded above) */
+        if(oldType!=0) {
+            /* the code point already has a value stored */
+            if((oldProps32&0xff00)!=(value&0xff00)) {
+                fprintf(stderr, "genprops error: new numeric value differs from old one for U+%04lx\n", (long)start);
+                exit(U_PARSE_ERROR);
+            }
+            /* same value, continue */
+        } else {
+            /* the code point is getting a new numeric value */
+            if(beVerbose) {
+                printf("adding U+%04x numeric type %d value 0x%04x from %s\n", (int)start, U_NT_NUMERIC, (int)value, fields[0][0]);
+            }
+
+            addProps(start, value|GET_CATEGORY(oldProps32));
         }
-
-        if(beVerbose) {
-            printf("adding U+%04x numeric type %d value %u\n", (int)start, U_NT_NUMERIC, (int)value);
-        }
-
-        /* reconstruct the properties and set the new numeric type and value */
-        uprv_memset(&newProps, 0, sizeof(newProps));
-        newProps.code=start;
-        newProps.generalCategory=(uint8_t)GET_CATEGORY(oldProps32);
-        newProps.bidi=(uint8_t)GET_BIDI_CLASS(oldProps32);
-        newProps.isMirrored=(uint8_t)(oldProps32&(1UL<<UPROPS_MIRROR_SHIFT) ? TRUE : FALSE);
-        newProps.numericType=(uint8_t)U_NT_NUMERIC; /* assumed numeric type, see Unicode 4.0.1 comment */
-        newProps.numericValue=(int32_t)value;       /* newly parsed numeric value */
-        addProps(start, makeProps(&newProps));
-    }
-}
-
-/* DerivedBidiClass.txt ----------------------------------------------------- */
-
-static void U_CALLCONV
-bidiClassLineFn(void *context,
-                char *fields[][2], int32_t fieldCount,
-                UErrorCode *pErrorCode) {
-    char *s;
-    uint32_t oldStart, start, limit, value, props32;
-    UBool didSet;
-
-    /* get the code point range */
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in DerivedBidiClass.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse bidi class */
-    s=trimTerminateField(fields[1][0], fields[1][1]);
-    value=u_getPropertyValueEnum(UCHAR_BIDI_CLASS, s);
-    if((int32_t)value<0) {
-        fprintf(stderr, "genprops error: unknown bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
-        exit(U_PARSE_ERROR);
-    }
-
-    didSet=FALSE;
-    oldStart=start;
-    for(; start<limit; ++start) {
-        props32=getProps(start);
-
-        /* ignore if this bidi class is already set */
-        if(value==GET_BIDI_CLASS(props32)) {
-            continue;
-        }
-
-        /* ignore old bidi class, set only for unassigned code points (Cn) */
-        if(GET_CATEGORY(props32)!=0) {
-            /* error if this one contradicts what we parsed from UnicodeData.txt */
-            fprintf(stderr, "genprops error: different bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
-            exit(U_PARSE_ERROR);
-        }
-
-        /* remove whatever bidi class was set before */
-        props32&=~(0x1f<<UPROPS_BIDI_SHIFT);
-
-        /* set bidi class for Cn according to DerivedBidiClass.txt */
-        props32|=value<<UPROPS_BIDI_SHIFT;
-
-        /* set the modified properties */
-        addProps(start, props32);
-        didSet=TRUE;
-    }
-
-    if(didSet && beVerbose) {
-        printf("setting U+%04x..U+%04x bidi class %d\n", (int)oldStart, (int)limit-1, (int)value);
     }
 }
 
@@ -712,7 +639,7 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    length=utrie_serialize(trie, p, capacity, getFoldedPropsValue, TRUE, &errorCode);
+    length=utrie_serialize(trie, p, capacity, NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: unable to serialize trie for additional properties: %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -737,8 +664,6 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
             (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
             ((int32_t)USCRIPT_CODE_LIMIT-1);
         indexes[UPROPS_MAX_VALUES_2_INDEX]=
-            (((int32_t)U_JT_COUNT-1)<<UPROPS_JT_SHIFT)|
-            (((int32_t)U_JG_COUNT-1)<<UPROPS_JG_SHIFT)|
             ((int32_t)U_DT_COUNT-1);
     }
 
@@ -751,9 +676,5 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
     }
     length+=pvCount*4;
 
-    if(p!=NULL) {
-        utrie_close(trie);
-        upvec_close(pv);
-    }
     return length;
 }
