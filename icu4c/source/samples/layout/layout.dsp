@@ -129,10 +129,6 @@ SOURCE=.\ParagraphLayout.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\RenderingFontInstance.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\RunArrays.cpp
 # End Source File
 # Begin Source File
