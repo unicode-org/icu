@@ -62,9 +62,8 @@ static UOption options[]={
      UOPTION_DESTDIR,
      UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
 UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
-/*5*/  UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG)
 #ifdef CAN_GENERATE_OBJECTS
-/*6*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG)
+/*5*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG)
 #endif
 
 };
@@ -89,22 +88,6 @@ main(int argc, char* argv[]) {
     else
     {
       symPrefix[0] = 0;
-    }
-
-    if( options[5].doesOccur )
-    {
-      int len;
-      int i;
-      uprv_strcat(symPrefix, options[5].value); 
-      /* Convert non alpha numeric symbols to underscores */
-
-      /* turn dots in the entry name into underscores */
-      len=uprv_strlen(symPrefix);
-      for(i=0; i<len; ++i) {
-        if(symPrefix[i]=='.') {
-          symPrefix[i]='_';
-        }
-      }
     }
 
     /* add an underscore to the prefix if non empty */
@@ -138,7 +121,7 @@ main(int argc, char* argv[]) {
         const char *message, *filename;
         void (*writeCode)(const char *, const char *);
 #ifdef CAN_GENERATE_OBJECTS
-        if(options[6].doesOccur) {
+        if(options[5].doesOccur) {
             message="generating object code for %s\n";
             writeCode=&writeObjectCode;
         } else
