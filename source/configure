@@ -24,7 +24,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-threads        build ICU with threads [default=yes]"
 ac_help="$ac_help
-  --with-iostream=version specify the version of iostream to use (old, std, auto) [default=auto]"
+  --with-iostream=version specify the version of iostream to use (none, old, std, auto) [default=auto]"
 ac_help="$ac_help
   --enable-extras         build ICU extras [default=yes]"
 ac_help="$ac_help

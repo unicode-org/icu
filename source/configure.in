@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.119 2001/09/24 23:59:49 aheninger-oss Exp $
+dnl $Id: configure.in,v 1.120 2001/09/27 18:33:55 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -306,7 +306,7 @@ fi
 AC_SUBST(U_HAVE_INTTYPES_H)
 
 AC_ARG_WITH(iostream,
-	[  --with-iostream=version specify the version of iostream to use (old, std, auto) [default=auto]],
+	[  --with-iostream=version specify the version of iostream to use (none, old, std, auto) [default=auto]],
 	[case "${withval}" in
                 none) streams=none ;;
 		old) streams=198506 ;;
