@@ -22,10 +22,10 @@
 *   Signatures and semantics are the same as for the similarly named macros
 *   in utf16.h.
 *   utf8.h is included by utf.h after unicode/umachine.h
-*   and some common definitions.
+*   and some common definitions.</p>
 *   <b>Usage:</b>  ICU coding guidelines for if() statements should be followed when using these macros
 *                  Compound statements (curly braces {}) must be used  for if-else-while... 
-*                  bodies and all macro statements should be terminated with semicolon.</p>
+*                  bodies and all macro statements should be terminated with semicolon.
 */
 
 
