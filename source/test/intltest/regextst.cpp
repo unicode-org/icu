@@ -1465,6 +1465,45 @@ cleanUpAndReturn:
 //-------------------------------------------------------------------------------
 //
 //   PerlTests  - Run Perl's regular expression tests
+//                The input file for this test is re_tests, the standard regular
+//                expression test data distributed with the Perl source code.
+//
+//                Here is Perl's description of the test data file:
+//
+//        # The tests are in a separate file 't/op/re_tests'.
+//        # Each line in that file is a separate test.
+//        # There are five columns, separated by tabs.
+//        #
+//        # Column 1 contains the pattern, optionally enclosed in C<''>.
+//        # Modifiers can be put after the closing C<'>.
+//        #
+//        # Column 2 contains the string to be matched.
+//        #
+//        # Column 3 contains the expected result:
+//        # 	y	expect a match
+//        # 	n	expect no match
+//        # 	c	expect an error
+//        #	B	test exposes a known bug in Perl, should be skipped
+//        #	b	test exposes a known bug in Perl, should be skipped if noamp
+//        #
+//        # Columns 4 and 5 are used only if column 3 contains C<y> or C<c>.
+//        #
+//        # Column 4 contains a string, usually C<$&>.
+//        #
+//        # Column 5 contains the expected result of double-quote
+//        # interpolating that string after the match, or start of error message.
+//        #
+//        # Column 6, if present, contains a reason why the test is skipped.
+//        # This is printed with "skipped", for harness to pick up.
+//        #
+//        # \n in the tests are interpolated, as are variables of the form ${\w+}.
+//        #
+//        # If you want to add a regular expression test that can't be expressed
+//        # in this format, don't add it here: put it in op/pat.t instead.
+//
+//        For ICU, if field 3 contains an 'i', the test will be skipped.
+//        The test exposes is some known incompatibility between ICU and Perl regexps.
+//        (The i is in addition to whatever was there before.)
 //
 //-------------------------------------------------------------------------------
 void RegexTest::PerlTests() {
@@ -1502,28 +1541,21 @@ void RegexTest::PerlTests() {
     //
     //  Regex to identify test patterns with flag settings, and to separate them.
     //    Test patterns with flags look like 'pattern'i
-    //    Test patterns without flags are not quoted:   paterrn
+    //    Test patterns without flags are not quoted:   pattern
     //   Coming out, capture group 2 is the pattern, capture group 3 is the flags.
     //
     RegexPattern *flagPat = RegexPattern::compile("('?)(.*)\\1(.*)", 0, pe, status);
     RegexMatcher* flagMat = flagPat->matcher("", status);
 
     //
-    // Regex to find ${bang}.  Perl doesn't put literal '!'s into patterns.
-    //
-    RegexPattern *bangPat = RegexPattern::compile("\\$\\{bang\\}", 0, pe, status);
-    RegexMatcher *bangMat = bangPat->matcher("", status);
-    
-    //
-    // ${nulnul} and its replacement string.
+    // The Perl tests reference several perl-isms, which are evaluated/substituted
+    //   in the test data.  Not being perl, this must be done explicitly.  Here
+    //   are string constants and REs for these constructs.
     //
     UnicodeString nulnulSrc("${nulnul}");
     UnicodeString nulnul("\\u0000\\u0000");
     nulnul = nulnul.unescape();
 
-    //
-    // Regex to find ${ffff}.  Perl doesn't put \uffff into patterns.
-    //
     UnicodeString ffffSrc("${ffff}");
     UnicodeString ffff("\\uffff");
     ffff = ffff.unescape();
@@ -1537,10 +1569,19 @@ void RegexTest::PerlTests() {
     RegexMatcher *cgMat = cgPat->matcher("", status);
 
 
+    //
+    // Main Loop for the Perl Tests, runs once per line from the
+    //   test data file.
+    //
     int32_t  lineNum = 0;
     int32_t  skippedUnimplementedCount = 0;
     while (lineMat->find()) {
         lineNum++;
+
+        //
+        //  Get a line, break it into its fields, do the Perl
+        //    variable substitutions.
+        //
         UnicodeString line = lineMat->group(1, status);
         UnicodeString fields[7];
         fieldPat->split(line, fields, 7, status);
@@ -1548,10 +1589,14 @@ void RegexTest::PerlTests() {
         flagMat->reset(fields[0]);
         flagMat->matches(status);
         UnicodeString pattern  = flagMat->group(2, status);
-        bangMat->reset(pattern);
-        pattern = bangMat->replaceAll("!", status);
+        pattern.findAndReplace("${bang}", "!");
         pattern.findAndReplace(nulnulSrc, "\\u0000\\u0000");
         pattern.findAndReplace(ffffSrc, ffff);
+
+        //
+        //  Identify patterns that include match flag settings,
+        //    split off the flags, remove the extra quotes.
+        //
         UnicodeString flagStr = flagMat->group(3, status);
         // printf("pattern = %s\n", cstar(pattern));
         // printf("   flags = %s\n", cstar(flags));
@@ -1559,10 +1604,9 @@ void RegexTest::PerlTests() {
             errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
             return;
         }
-
         int32_t flags = 0;
-        const UChar UChar_c = 0x63;  // Damn the lack of Unicode support in C
-        const UChar UChar_i = 0x69;
+        const UChar UChar_c = 0x63;  // Char constants for the flag letters.
+        const UChar UChar_i = 0x69;  //   (Damn the lack of Unicode support in C)
         const UChar UChar_m = 0x6d;
         const UChar UChar_x = 0x78;
         const UChar UChar_y = 0x79;
@@ -1582,6 +1626,9 @@ void RegexTest::PerlTests() {
         status = U_ZERO_ERROR;
         RegexPattern *testPat = RegexPattern::compile(pattern, flags, pe, status);
         if (status == U_REGEX_UNIMPLEMENTED) {
+            //
+            // Test of a feature that is planned for ICU, but not yet implemented.
+            //   skip the test.
             skippedUnimplementedCount++;
             delete testPat;
             status = U_ZERO_ERROR;
@@ -1630,7 +1677,7 @@ void RegexTest::PerlTests() {
 
 
         //
-        // Run the test
+        // Run the test, check for expected match/don't match result.
         //
         RegexMatcher *testMat = testPat->matcher(matchString, status);
         UBool found = testMat->find();
@@ -1644,7 +1691,11 @@ void RegexTest::PerlTests() {
         }
 
         //
-        // Interpret the Perl expression from the fourth field of the data file.
+        // Interpret the Perl expression from the fourth field of the data file,
+        // building up an ICU string from the results of the ICU match.
+        //   The Perl expression will contain references to the results of 
+        //     a regex match, including the matched string, capture group strings,
+        //     group starting and ending indicies, etc.
         //
         UnicodeString resultString;
         UnicodeString perlExpr = fields[3];
@@ -1746,8 +1797,11 @@ void RegexTest::PerlTests() {
 
         delete testMat;
         delete testPat;
-
     }
+
+    //
+    // All done.  Clean up allocated stuff.
+    //
     delete cgMat;
     delete cgPat;
     
@@ -1756,8 +1810,12 @@ void RegexTest::PerlTests() {
     
     delete flagMat;
     delete flagPat;
+
+    delete lineMat;
+    delete linePat;
     
     delete fieldPat;
+    delete [] testData;
     
 
     logln("%d tests skipped because of unimplemented regexp features.", skippedUnimplementedCount);
