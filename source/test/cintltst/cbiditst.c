@@ -155,7 +155,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
     }
 }
 static void TestReorder(){
-    char* logicalOrder[] ={
+    static const char* const logicalOrder[] ={
             "DEL(\\u062F\\u0625)ADD(\\u062F.\\u0625.\\u200F)",
             "DEL(\\u0645\\u0627\\u064A\\u0648) ADD(\\u0623\\u064A\\u0627\\u0631)",
             "DEL(\\u0644\\u0644)ADD(\\u0644.\\u0644.\\u0029\\u0644)\\u0644.\\u200F",
@@ -168,7 +168,7 @@ static void TestReorder(){
             "DAY  7  \\u0633  \\u0627\\u0644\\u0633\\u0628\\u062A  DAYABBR",
             "HELLO\\u0627\\u0644\\u0633\\u0628\\u062A",
     };
-    char* visualOrder[]={
+    static const char* const visualOrder[]={
             "DEL(\\u0625\\u062F)ADD(\\u200F.\\u0625.\\u062F)",
             "DEL(\\u0648\\u064A\\u0627\\u0645) ADD(\\u0631\\u0627\\u064A\\u0623)",
             "DEL(\\u0644\\u0644)ADD(\\u0644\\u0029.\\u0644.\\u0644)\\u200F.\\u0644",
@@ -185,7 +185,7 @@ static void TestReorder(){
             "DAY  7  \\u062A\\u0628\\u0633\\u0644\\u0627  \\u0633  DAYABBR",
             "HELLO\\u062A\\u0628\\u0633\\u0644\\u0627",
     };
-    char* visualOrder1[]={
+    static const char* const visualOrder1[]={
             ")\\u062F.\\u0625.\\u200F(DDA)\\u062F\\u0625(LED",
             ")\\u0623\\u064A\\u0627\\u0631(DDA )\\u0645\\u0627\\u064A\\u0648(LED",
             "\\u0644.\\u0644.(\\u0644(\\u0644.\\u200F(DDA)\\u0644\\u0644(LED", 
@@ -199,7 +199,7 @@ static void TestReorder(){
             "\\u0627\\u0644\\u0633\\u0628\\u062AOLLEH",
     };
 
-    char* visualOrder2[]={
+    static const char* const visualOrder2[]={
             "\\u200E)\\u200E\\u062F.\\u0625.\\u200F\\u200E(DDA)\\u200E\\u062F\\u0625\\u200E(LED",
             "\\u200E)\\u200E\\u0623\\u064A\\u0627\\u0631\\u200E(DDA )\\u200E\\u0645\\u0627\\u064A\\u0648\\u200E(LED",
             "\\u0644.\\u0644.)\\u0644)\\u0644.\\u200F\\u200E(DDA)\\u200E\\u0644\\u0644\\u200E(LED",
@@ -212,7 +212,7 @@ static void TestReorder(){
             "RBBAYAD  \\u200E\\u0633  \\u0627\\u0644\\u0633\\u0628\\u062A\\u200E  7  YAD",
             "\\u0627\\u0644\\u0633\\u0628\\u062AOLLEH",
     };
-    char* visualOrder3[]={
+    static const char* const visualOrder3[]={
             ")\\u062F.\\u0625.\\u200F(DDA)\\u062F\\u0625(LED",
             ")\\u0623\\u064A\\u0627\\u0631(DDA )\\u0645\\u0627\\u064A\\u0648(LED",
             "\\u0644.\\u0644.)\\u0644)\\u0644.\\u200F(\\u0644\\u0644)DDA(LED",
@@ -225,7 +225,7 @@ static void TestReorder(){
             "RBBAYAD  \\u0627\\u0644\\u0633\\u0628\\u062A   \\u0633  7 YAD",
             "\\u0627\\u0644\\u0633\\u0628\\u062AOLLEH"
     };
-    char* visualOrder4[]={
+    static const char* const visualOrder4[]={
             "DEL(ADD(\\u0625\\u062F(.\\u0625.\\u062F)",
             "DEL( (\\u0648\\u064A\\u0627\\u0645ADD(\\u0631\\u0627\\u064A\\u0623)",
             "DEL(ADD(\\u0644\\u0644(.\\u0644(\\u0644(.\\u0644.\\u0644",
