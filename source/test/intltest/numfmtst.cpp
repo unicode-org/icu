@@ -54,7 +54,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(14,TestCurrencyObject);
         CASE(15,TestCurrencyPatterns);
 
-        CASE(16,TestDigitListAPI);
+        CASE(16,TestDigitList);
         CASE(17,TestWhiteSpaceParsing);
         CASE(18,TestComplexCurrency);
 
@@ -131,7 +131,7 @@ NumberFormatTest::TestPatterns(void)
 }
 
 void 
-NumberFormatTest::TestDigitListAPI(void)
+NumberFormatTest::TestDigitList(void)
 {
   // API coverage for DigitList
   /*
