@@ -61,14 +61,14 @@ U_CDECL_BEGIN
  * Constants.
  */
 
-/** The lowest Unicode code point value. Code points are non-negative. @stable */
+/** The lowest Unicode code point value. Code points are non-negative. @stable ICU 2.0 */
 #define UCHAR_MIN_VALUE 0
 
 /**
  * The highest Unicode code point value (scalar value) according to
  * The Unicode Standard. This is a 21-bit value (20.1 bits, rounded up).
  * For a single character, UChar32 is a simple type that can hold any code point value.
- * @stable 
+ * @stable ICU 2.0
  */
 #define UCHAR_MAX_VALUE 0x10ffff
 
@@ -348,69 +348,69 @@ typedef enum UCharCategory
 {
     /** See note !!.  Comments of the form "Cn" are read by genpname. */
 
-    /** Non-category for unassigned and non-character code points. @stable */
+    /** Non-category for unassigned and non-character code points. @stable ICU 2.0 */
     U_UNASSIGNED              = 0,
-    /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) @stable */
+    /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) @stable ICU 2.0 */
     U_GENERAL_OTHER_TYPES     = 0,
-    /** Lu @stable */
+    /** Lu @stable ICU 2.0 */
     U_UPPERCASE_LETTER        = 1,
-    /** Ll @stable */
+    /** Ll @stable ICU 2.0 */
     U_LOWERCASE_LETTER        = 2,
-    /** Lt @stable */
+    /** Lt @stable ICU 2.0 */
     U_TITLECASE_LETTER        = 3,
-    /** Lm @stable */
+    /** Lm @stable ICU 2.0 */
     U_MODIFIER_LETTER         = 4,
-    /** Lo @stable */
+    /** Lo @stable ICU 2.0 */
     U_OTHER_LETTER            = 5,
-    /** Mn @stable */
+    /** Mn @stable ICU 2.0 */
     U_NON_SPACING_MARK        = 6,
-    /** Me @stable */
+    /** Me @stable ICU 2.0 */
     U_ENCLOSING_MARK          = 7,
-    /** Mc @stable */
+    /** Mc @stable ICU 2.0 */
     U_COMBINING_SPACING_MARK  = 8,
-    /** Nd @stable */
+    /** Nd @stable ICU 2.0 */
     U_DECIMAL_DIGIT_NUMBER    = 9,
-    /** Nl @stable */
+    /** Nl @stable ICU 2.0 */
     U_LETTER_NUMBER           = 10,
-    /** No @stable */
+    /** No @stable ICU 2.0 */
     U_OTHER_NUMBER            = 11,
-    /** Zs @stable */
+    /** Zs @stable ICU 2.0 */
     U_SPACE_SEPARATOR         = 12,
-    /** Zl @stable */
+    /** Zl @stable ICU 2.0 */
     U_LINE_SEPARATOR          = 13,
-    /** Zp @stable */
+    /** Zp @stable ICU 2.0 */
     U_PARAGRAPH_SEPARATOR     = 14,
-    /** Cc @stable */
+    /** Cc @stable ICU 2.0 */
     U_CONTROL_CHAR            = 15,
-    /** Cf @stable */
+    /** Cf @stable ICU 2.0 */
     U_FORMAT_CHAR             = 16,
-    /** Co @stable */
+    /** Co @stable ICU 2.0 */
     U_PRIVATE_USE_CHAR        = 17,
-    /** Cs @stable */
+    /** Cs @stable ICU 2.0 */
     U_SURROGATE               = 18,
-    /** Pd @stable */
+    /** Pd @stable ICU 2.0 */
     U_DASH_PUNCTUATION        = 19,
-    /** Ps @stable */
+    /** Ps @stable ICU 2.0 */
     U_START_PUNCTUATION       = 20,
-    /** Pe @stable */
+    /** Pe @stable ICU 2.0 */
     U_END_PUNCTUATION         = 21,
-    /** Pc @stable */
+    /** Pc @stable ICU 2.0 */
     U_CONNECTOR_PUNCTUATION   = 22,
-    /** Po @stable */
+    /** Po @stable ICU 2.0 */
     U_OTHER_PUNCTUATION       = 23,
-    /** Sm @stable */
+    /** Sm @stable ICU 2.0 */
     U_MATH_SYMBOL             = 24,
-    /** Sc @stable */
+    /** Sc @stable ICU 2.0 */
     U_CURRENCY_SYMBOL         = 25,
-    /** Sk @stable */
+    /** Sk @stable ICU 2.0 */
     U_MODIFIER_SYMBOL         = 26,
-    /** So @stable */
+    /** So @stable ICU 2.0 */
     U_OTHER_SYMBOL            = 27,
-    /** Pi @stable */
+    /** Pi @stable ICU 2.0 */
     U_INITIAL_PUNCTUATION     = 28,
-    /** Pf @stable */
+    /** Pf @stable ICU 2.0 */
     U_FINAL_PUNCTUATION       = 29,
-    /** One higher than the last enum UCharCategory constant. @stable */
+    /** One higher than the last enum UCharCategory constant. @stable ICU 2.0 */
     U_CHAR_CATEGORY_COUNT
 } UCharCategory;
 
@@ -496,45 +496,45 @@ typedef enum UCharCategory
 typedef enum UCharDirection { 
     /** See note !!.  Comments of the form "EN" are read by genpname. */
 
-    /** L @stable */
+    /** L @stable ICU 2.0 */
     U_LEFT_TO_RIGHT               = 0, 
-    /** R @stable */
+    /** R @stable ICU 2.0 */
     U_RIGHT_TO_LEFT               = 1, 
-    /** EN @stable */
+    /** EN @stable ICU 2.0 */
     U_EUROPEAN_NUMBER             = 2,
-    /** ES @stable */
+    /** ES @stable ICU 2.0 */
     U_EUROPEAN_NUMBER_SEPARATOR   = 3,
-    /** ET @stable */
+    /** ET @stable ICU 2.0 */
     U_EUROPEAN_NUMBER_TERMINATOR  = 4,
-    /** AN @stable */
+    /** AN @stable ICU 2.0 */
     U_ARABIC_NUMBER               = 5,
-    /** CS @stable */
+    /** CS @stable ICU 2.0 */
     U_COMMON_NUMBER_SEPARATOR     = 6,
-    /** B @stable */
+    /** B @stable ICU 2.0 */
     U_BLOCK_SEPARATOR             = 7,
-    /** S @stable */
+    /** S @stable ICU 2.0 */
     U_SEGMENT_SEPARATOR           = 8,
-    /** WS @stable */
+    /** WS @stable ICU 2.0 */
     U_WHITE_SPACE_NEUTRAL         = 9, 
-    /** ON @stable */
+    /** ON @stable ICU 2.0 */
     U_OTHER_NEUTRAL               = 10, 
-    /** LRE @stable */
+    /** LRE @stable ICU 2.0 */
     U_LEFT_TO_RIGHT_EMBEDDING     = 11,
-    /** LRO @stable */
+    /** LRO @stable ICU 2.0 */
     U_LEFT_TO_RIGHT_OVERRIDE      = 12,
-    /** AL @stable */
+    /** AL @stable ICU 2.0 */
     U_RIGHT_TO_LEFT_ARABIC        = 13,
-    /** RLE @stable */
+    /** RLE @stable ICU 2.0 */
     U_RIGHT_TO_LEFT_EMBEDDING     = 14,
-    /** RLO @stable */
+    /** RLO @stable ICU 2.0 */
     U_RIGHT_TO_LEFT_OVERRIDE      = 15,
-    /** PDF @stable */
+    /** PDF @stable ICU 2.0 */
     U_POP_DIRECTIONAL_FORMAT      = 16,
-    /** NSM @stable */
+    /** NSM @stable ICU 2.0 */
     U_DIR_NON_SPACING_MARK        = 17,
-    /** BN @stable */
+    /** BN @stable ICU 2.0 */
     U_BOUNDARY_NEUTRAL            = 18,
-    /** @stable */
+    /** @stable ICU 2.0 */
     U_CHAR_DIRECTION_COUNT
 } UCharDirection;
 
@@ -544,25 +544,25 @@ typedef enum UCharDirection {
  * @stable ICU 2.0
  */
 enum UBlockCode {
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BASIC_LATIN = 1, /*[0000]*/ /*See note !!*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LATIN_1_SUPPLEMENT=2, /*[0080]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LATIN_EXTENDED_A =3, /*[0100]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LATIN_EXTENDED_B =4, /*[0180]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_IPA_EXTENSIONS =5, /*[0250]*/
     
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_SPACING_MODIFIER_LETTERS =6, /*[02B0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_COMBINING_DIACRITICAL_MARKS =7, /*[0300]*/
     
     /**
@@ -571,106 +571,106 @@ enum UBlockCode {
      */
     UBLOCK_GREEK =8, /*[0370]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CYRILLIC =9, /*[0400]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ARMENIAN =10, /*[0530]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HEBREW =11, /*[0590]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ARABIC =12, /*[0600]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_SYRIAC =13, /*[0700]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_THAANA =14, /*[0780]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_DEVANAGARI =15, /*[0900]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BENGALI =16, /*[0980]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GURMUKHI =17, /*[0A00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GUJARATI =18, /*[0A80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ORIYA =19, /*[0B00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_TAMIL =20, /*[0B80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_TELUGU =21, /*[0C00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_KANNADA =22, /*[0C80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MALAYALAM =23, /*[0D00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_SINHALA =24, /*[0D80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_THAI =25, /*[0E00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LAO =26, /*[0E80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_TIBETAN =27, /*[0F00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MYANMAR =28, /*[1000]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GEORGIAN =29, /*[10A0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HANGUL_JAMO =30, /*[1100]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ETHIOPIC =31, /*[1200]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CHEROKEE =32, /*[13A0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS =33, /*[1400]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_OGHAM =34, /*[1680]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_RUNIC =35, /*[16A0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_KHMER =36, /*[1780]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MONGOLIAN =37, /*[1800]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LATIN_EXTENDED_ADDITIONAL =38, /*[1E00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GREEK_EXTENDED =39, /*[1F00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GENERAL_PUNCTUATION =40, /*[2000]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS =41, /*[2070]*/
     
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CURRENCY_SYMBOLS =42, /*[20A0]*/
     
     /**
@@ -679,106 +679,106 @@ enum UBlockCode {
      */
     UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
     
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LETTERLIKE_SYMBOLS =44, /*[2100]*/
     
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_NUMBER_FORMS =45, /*[2150]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ARROWS =46, /*[2190]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MATHEMATICAL_OPERATORS =47, /*[2200]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MISCELLANEOUS_TECHNICAL =48, /*[2300]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CONTROL_PICTURES =49, /*[2400]*/
  
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_OPTICAL_CHARACTER_RECOGNITION =50, /*[2440]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ENCLOSED_ALPHANUMERICS =51, /*[2460]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BOX_DRAWING =52, /*[2500]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BLOCK_ELEMENTS =53, /*[2580]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GEOMETRIC_SHAPES =54, /*[25A0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MISCELLANEOUS_SYMBOLS =55, /*[2600]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_DINGBATS =56, /*[2700]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BRAILLE_PATTERNS =57, /*[2800]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_RADICALS_SUPPLEMENT =58, /*[2E80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_KANGXI_RADICALS =59, /*[2F00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS =60, /*[2FF0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION =61, /*[3000]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HIRAGANA =62, /*[3040]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_KATAKANA =63, /*[30A0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BOPOMOFO =64, /*[3100]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HANGUL_COMPATIBILITY_JAMO =65, /*[3130]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_KANBUN =66, /*[3190]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BOPOMOFO_EXTENDED =67, /*[31A0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ENCLOSED_CJK_LETTERS_AND_MONTHS =68, /*[3200]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY =69, /*[3300]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A =70, /*[3400]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS =71, /*[4E00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_YI_SYLLABLES =72, /*[A000]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_YI_RADICALS =73, /*[A490]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HANGUL_SYLLABLES =74, /*[AC00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HIGH_SURROGATES =75, /*[D800]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HIGH_PRIVATE_USE_SURROGATES =76, /*[DB80]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_LOW_SURROGATES =77, /*[DC00]*/
 
     /**
@@ -802,50 +802,50 @@ enum UBlockCode {
      */
     UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE, /*[E000]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS =79, /*[F900]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ALPHABETIC_PRESENTATION_FORMS =80, /*[FB00]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ARABIC_PRESENTATION_FORMS_A =81, /*[FB50]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_COMBINING_HALF_MARKS =82, /*[FE20]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_FORMS =83, /*[FE30]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_SMALL_FORM_VARIANTS =84, /*[FE50]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_ARABIC_PRESENTATION_FORMS_B =85, /*[FE70]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_SPECIALS =86, /*[FFF0]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87, /*[FF00]*/
     
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_OLD_ITALIC = 88  , /*[10300]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_GOTHIC = 89 , /*[10330]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_DESERET = 90 , /*[10400]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91 , /*[1D000]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MUSICAL_SYMBOLS = 92 , /*[1D100]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93  , /*[1D400]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94 , /*[20000]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 , /*[2F800]*/
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_TAGS = 96, /*[E0000]*/
 
     /* New blocks in Unicode 3.2 */
@@ -879,10 +879,10 @@ enum UBlockCode {
     /** @draft ICU 2.2 */
     UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_B = 110, /*[100000]*/
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_COUNT,
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1
 
 #ifdef ICU_UCHAR_USE_DEPRECATES
@@ -1071,7 +1071,7 @@ enum UBlockCode {
 #endif /* ICU_UCHAR_USE_DEPRECATES */
 };
 
-/** @stable */
+/** @stable ICU 2.0 */
 typedef enum UBlockCode UBlockCode;
 
 /**
@@ -1080,15 +1080,15 @@ typedef enum UBlockCode UBlockCode;
  */
 typedef enum UCellWidth
 {
-    /** @stable */
+    /** @stable ICU 2.0 */
     U_ZERO_WIDTH              = 0,
-    /** @stable */
+    /** @stable ICU 2.0 */
     U_HALF_WIDTH              = 1,
-    /** @stable */
+    /** @stable ICU 2.0 */
     U_FULL_WIDTH              = 2,
-    /** @stable */
+    /** @stable ICU 2.0 */
     U_NEUTRAL_WIDTH           = 3,
-    /** @stable */
+    /** @stable ICU 2.0 */
     U_CELL_WIDTH_COUNT
 } UCellWidth;
 
@@ -2354,7 +2354,7 @@ u_toupper(UChar32 c);
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c);
 
-/** Option value for case folding: use default mappings defined in CaseFolding.txt. @stable */
+/** Option value for case folding: use default mappings defined in CaseFolding.txt. @stable ICU 2.0 */
 #define U_FOLD_CASE_DEFAULT 0
 
 /**

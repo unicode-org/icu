@@ -219,7 +219,7 @@ public:
    *        iterate.
    * @return the collation element iterator of the source string using this as
    *         the based Collator.
-   * @stable 2.2
+   * @stable ICU 2.2
    */
     virtual CollationElementIterator* createCollationElementIterator(
                                            const UnicodeString& source) const;
@@ -231,7 +231,7 @@ public:
    *        which the CollationElementItgerator will iterate.
    * @return the collation element iterator of the source using this as the
    *         based Collator.
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   virtual CollationElementIterator* createCollationElementIterator(
                                        const CharacterIterator& source) const;
@@ -300,7 +300,7 @@ public:
    * @return Returns a byte value. GREATER if source is greater than target;
    *         EQUAL if source is equal to target; LESS if source is less than
    *         target
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength)
@@ -422,7 +422,7 @@ public:
    * @param length Returns the length of the data, in bytes
    * @param status the error code status.
    * @return memory, owned by the caller, of size 'length' bytes.
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   uint8_t *cloneRuleData(int32_t &length, UErrorCode &status);
 
@@ -431,7 +431,7 @@ public:
    * just the tailoring.
    * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
    * @param buffer UnicodeString to store the result rules
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   void getRules(UColRuleOption delta, UnicodeString &buffer);
 
@@ -440,7 +440,7 @@ public:
    * @param attr attribute type
    * @param value attribute value
    * @param status to indicate whether the operation went on smoothly or there were errors
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   virtual void setAttribute(UColAttribute attr, UColAttributeValue value,
                             UErrorCode &status);
@@ -450,7 +450,7 @@ public:
    * @param attr attribute type
    * @param status to indicate whether the operation went on smoothly or there were errors
    * @return attribute value
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   virtual UColAttributeValue getAttribute(UColAttribute attr,
                                           UErrorCode &status);
@@ -509,7 +509,7 @@ public:
   /**
    * Thread safe cloning operation.
    * @return pointer to the new clone, user should remove it.
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   virtual Collator* safeClone(void);
 
@@ -536,7 +536,7 @@ public:
    * @param resultLength length of the result buffer. If if not enough the
    *        buffer will be filled to capacity.
    * @return Number of bytes needed for storing the sort key
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   virtual int32_t getSortKey(const UChar *source, int32_t sourceLength,
                              uint8_t *result, int32_t resultLength) const;

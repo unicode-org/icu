@@ -368,15 +368,15 @@ typedef uint8_t UBiDiLevel;
  * @stable ICU 2.0
  */
 enum UBiDiDirection {
-    /** @memo All left-to-right text. This is a 0 value. @stable */
+    /** @memo All left-to-right text. This is a 0 value. @stable ICU 2.0 */
     UBIDI_LTR,
-    /** @memo All right-to-left text. This is a 1 value. @stable */
+    /** @memo All right-to-left text. This is a 1 value. @stable ICU 2.0 */
     UBIDI_RTL,
-    /** @memo Mixed-directional text. @stable */
+    /** @memo Mixed-directional text. @stable ICU 2.0 */
     UBIDI_MIXED
 };
 
-/** @stable */
+/** @stable ICU 2.0 */
 typedef enum UBiDiDirection UBiDiDirection;
 
 /**
@@ -391,7 +391,7 @@ typedef enum UBiDiDirection UBiDiDirection;
  */
 struct UBiDi;
 
-/** @stable */
+/** @stable ICU 2.0 */
 typedef struct UBiDi UBiDi;
 
 /**

@@ -41,10 +41,10 @@
 #ifndef UCNV_H
 #define UCNV_H
 
-/** Forward declaring the UConverter structure. @stable */
+/** Forward declaring the UConverter structure. @stable ICU 2.0 */
 struct UConverter;
 
-/** @stable */
+/** @stable ICU 2.0 */
 typedef struct UConverter UConverter;
 
 #include "unicode/utypes.h"
@@ -426,7 +426,7 @@ ucnv_safeClone(const UConverter *cnv,
                int32_t          *pBufferSize, 
                UErrorCode       *status);
 
-/** @stable */
+/** @stable ICU 2.0 */
 #define U_CNV_SAFECLONE_BUFFERSIZE  3072
 
 /**
@@ -907,7 +907,7 @@ ucnv_toUnicode (UConverter * converter,
  *         and a buffer of the indicated length would need to be passed in
  * @see ucnv_fromUnicode
  * @see ucnv_convert
- * @stable 
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ucnv_fromUChars(UConverter *cnv,
