@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Telugu.txt,v $
-# $Date: 2002/07/25 21:20:26 $
-# $Revision: 1.8 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.9 $
 #--------------------------------------------------------------------
 
 # InterIndic-Telugu
@@ -78,9 +78,11 @@
 \ue043>\u0c43; # VOWEL SIGN VOCALIC R
 \ue044>\u0c44; # VOWEL SIGN VOCALIC RR
 \ue045>\u0c46; # VOWEL SIGN CANDRA E>VOWEL SIGN E
+\ue046>\u0c46; # VOWEL SIGN E
 \ue047>\u0c47; # VOWEL SIGN EE
 \ue048>\u0c48; # VOWEL SIGN AI
 \ue049>\u0c4a; # REMAP (indicExceptions.txt): \u0c49>\u0c4a = VOWEL SIGN CANDRA O>VOWEL SIGN O
+\ue04a>\u0c4a; # VOWEL SIGN O
 \ue04b>\u0c4b; # VOWEL SIGN OO
 \ue04c>\u0c4c; # VOWEL SIGN AU
 \ue04d>\u0c4d; # SIGN VIRAMA
@@ -105,7 +107,7 @@
 \ue062>\u0c3f; # REMAP (indicExceptions.txt): \u0c62>\u0c3f = VOWEL SIGN VOCALIC L>VOWEL SIGN I
 \ue063>\u0c40; # REMAP (indicExceptions.txt): \u0c63>\u0c40 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
 \ue064>'.'   ; # FALLBACK FOR DANDA
-\ue065>'.'   ; # FALLBACK FOR DOUBLE DANDA	
+\ue065>'.'   ; # FALLBACK FOR DOUBLE DANDA      
 \ue066>\u0c66; # DIGIT ZERO
 \ue067>\u0c67; # DIGIT ONE
 \ue068>\u0c68; # DIGIT TWO
@@ -116,26 +118,27 @@
 \ue06d>\u0c6d; # DIGIT SEVEN
 \ue06e>\u0c6e; # DIGIT EIGHT
 \ue06f>\u0c6f; # DIGIT NINE
-# \ue080>; # UNMAPPED InterIndic-Telugu: ISSHAR
 
-
-\ue046>\u0c46; # VOWEL SIGN E
-\ue04a>\u0c4a; # VOWEL SIGN O
-\ue070>;
-\ue071>;
-\ue072>;
-\ue073>;
-\ue074>;
-\ue075>;
-\ue076>;
-\ue077>;
-\ue078>;
-\ue079>;
-\ue07A>;
+\ue070>;       # ABBREVIATION SIGN
+\ue071>\u0c30; # LETTER RA WITH MIDDLE DIAGONAL
+\ue072>\u0c30; # LETTER RA WITH LOWER DIAGONAL
+\ue073>;       # RUPEE MARK
+\ue074>;       # RUPEE SIGN
+\ue075>;       # CURRENCY NUMERATOR ONE
+\ue076>;       # CURRENCY NUMERATOR TWO
+\ue077>;       # CURRENCY NUMERATOR THREE
+\ue078>;       # CURRENCY NUMERATOR FOUR
+\ue079>;       # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\ue07A>;       # CURRENCY DENOMINATOR SIXTEEN
+\ue07B>;       # ISSHAR
+\uE07C>;       # TIPPI
+\uE07D>;       # ADDAK
+\uE07E>;       # IRI
+\uE07F>;       # URA
+\uE080>;       # EK ONKAR
 
 0 > \u0c66;       # FALLBACK FOR TAMIL
 1 > \u0c67;
-\ue0f0 >  \u0c30;  # FALLBACK RA 
-\ue0f1 >  \u0c30;  # FALLBACK RA
+
 #    :: NFC (NFD) ;
 # eof

@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Latin.txt,v $
-# $Date: 2002/07/25 21:20:26 $
-# $Revision: 1.7 $
+# $Date: 2002/09/19 18:11:21 $
+# $Revision: 1.8 $
 #--------------------------------------------------------------------
 
 # InterIndic-Latin
@@ -124,23 +124,7 @@
     $seven=\ue06d;    # DIGIT SEVEN
     $eight=\ue06e;    # DIGIT EIGHT
     $nine=\ue06f;     # DIGIT NINE
-    # For all other scripts
-    $ecp0=\ue070;
-    $ecp1=\ue071;
-    $ecp2=\ue072;
-    $ecp3=\ue073;
-    $ecp4=\ue074;
-    $ecp5=\ue075;
-    $ecp6=\ue076;
-    $ecp7=\ue077;
-    $ecp8=\ue078;
-    $ecp9=\ue079;
-    $ecpA=\ue07a;
-    $ecpB=\ue07b;
-    $ecpC=\ue07c;
-    $ecpD=\ue07d;
-    $ecpE=\ue07e;
-    $ecpF=\ue07f;
+
 # \u0970>; # UNMAPPED ABBREVIATION SIGN
     $depVowelAbove=[\ue03e-\ue040\ue045-\ue04c];
     $depVowelBelow=[\ue041-\ue044];
@@ -512,21 +496,31 @@
     $lm   >; 
     $ailm >;
     $aulm >;
-    $ecp0 >;
-    $ecp1 >;
-    $ecp2 >;
-    $ecp3 >;
-    $ecp4 >;
-    $ecp5 >;
-    $ecp6 >;
-    $ecp7 >;
-    $ecp8 >;
-    $ecp9 >;
-    $ecpA >;
-    $ecpB >;
-    $ecpC >;
-    $ecpD >;
-    $ecpE >;
-    $ecpF >;
+
     $danda>'.';
     $doubleDanda>'.';
+   
+    \ue070>;       # ABBREVIATION SIGN
+    # LETTER RA WITH MIDDLE DIAGONAL
+	\ue071}$x>ra; 
+	\ue071$virama>r;
+	\ue071>ra; 
+	# LETTER RA WITH LOWER DIAGONAL
+	\ue072}$x>ra; 
+	\ue072$virama>r;
+	\ue072>ra; 
+	
+	\ue073>;       # RUPEE MARK
+	\ue074>;       # RUPEE SIGN
+	\ue075>;       # CURRENCY NUMERATOR ONE
+	\ue076>;       # CURRENCY NUMERATOR TWO
+	\ue077>;       # CURRENCY NUMERATOR THREE
+	\ue078>;       # CURRENCY NUMERATOR FOUR
+	\ue079>;       # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+	\ue07A>;       # CURRENCY DENOMINATOR SIXTEEN
+	\ue07B>;       # ISSHAR
+	\uE07C>;       # TIPPI
+	\uE07D>;       # ADDAK
+	\uE07E>;       # IRI
+	\uE07F>;       # URA
+	\uE080>;       # EK ONKAR

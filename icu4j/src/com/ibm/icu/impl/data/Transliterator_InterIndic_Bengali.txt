@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Bengali.txt,v $
-# $Date: 2002/08/14 00:40:58 $
-# $Revision: 1.9 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.10 $
 #--------------------------------------------------------------------
 
 # InterIndic-Bengali
@@ -88,7 +88,7 @@
 \ue052>;
 \ue053>;
 \ue054>;
-\uE055>;               # UNMAPPED InterIndic-Bengali: LENGTH MARK
+\uE055>;                # LENGTH MARK
 \uE056>\u09C8;          # REMAP (indicExceptions.txt): \u09d6>\u09c8 = AI LENGTH MARK>VOWEL SIGN AI
 \uE057>\u09D7;          # AU LENGTH MARK
 \uE058>\u0995\u09BC;    # FALLBACK
@@ -115,20 +115,36 @@
 \uE06D>\u09ED;          # DIGIT SEVEN
 \uE06E>\u09EE;          # DIGIT EIGHT
 \uE06F>\u09EF;          # DIGIT NINE
-\uE070>\u09F0;          #  UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
-\uE071>\u09F1;
+\ue070>;                # ABBREVIATION SIGN
+\ue071>\u09F0;          # LETTER RA WITH MIDDLE DIAGONAL
+\ue072>\u09F1;          # LETTER RA WITH LOWER DIAGONAL
+\ue073>\u09F2;          # RUPEE MARK
+\ue074>\u09F3;          # RUPEE SIGN
+\ue075>\u09F4;          # CURRENCY NUMERATOR ONE
+\ue076>\u09F5;          # CURRENCY NUMERATOR TWO
+\ue077>\u09F6;          # CURRENCY NUMERATOR THREE
+\ue078>\u09F7;          # CURRENCY NUMERATOR FOUR
+\ue079>\u09F8;          # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\ue07A>\u09F9;          # CURRENCY DENOMINATOR SIXTEEN
+\ue07B>\u09FA;          # ISSHAR
+\uE07C>;                # TIPPI
+\uE07D>;                # ADDAK
+\uE07E>;                # IRI
+\uE07F>;                # URA
+\uE080>;                # EK ONKAR
+
 0 > \u09E6;       # FALLBACK FOR TAMIL
 1 > \u09E7;
-\ue072>;
-\ue073>;
-\ue074>;
 
-\ue075>\u09F5;
-\ue076>\u09F6;
-\ue077>\u09F7;
-\ue078>\u09F8;
-\ue079>\u09F9;
-\ue07A>\u09FA;		# ISSHAR
+
+
+
+
+
+
+
+
+
 
 #    :: NFC (NFD) ;
 # eof

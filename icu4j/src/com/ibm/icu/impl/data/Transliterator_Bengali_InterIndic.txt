@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Bengali_InterIndic.txt,v $
-# $Date: 2002/08/14 00:40:58 $
-# $Revision: 1.10 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # Bengali-InterIndic
@@ -88,17 +88,18 @@
 \u09ED>\uE06D; # DIGIT SEVEN
 \u09EE>\uE06E; # DIGIT EIGHT
 \u09EF>\uE06F; # DIGIT NINE
-\u09F0>\ue070; #  Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
-\u09F1>\ue071; # Bengali-InterIndic: LETTER RA WITH LOWER DIAGONAL
-\u09F2>;       # UNMAPPED Bengali-InterIndic: RUPEE MARK
-\u09F3>;       # UNMAPPED Bengali-InterIndic: RUPEE SIGN
-\u09F4>;       # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE
-\u09F5>;       # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR TWO
-\u09F6>;       # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR THREE
-\u09F7>;       # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR FOUR
-\u09F8>;       # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
-\u09F9>;       # UNMAPPED Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
-\u09FA>\ue07A; # ISSHAR
+\u09F0>\ue071; # Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
+\u09F1>\ue072; # Bengali-InterIndic: LETTER RA WITH LOWER DIAGONAL
+\u09F2>\ue073; # Bengali-InterIndic: RUPEE MARK
+\u09F3>\ue074; # Bengali-InterIndic: RUPEE SIGN
+\u09F4>\ue075; # Bengali-InterIndic: CURRENCY NUMERATOR ONE
+\u09F5>\ue076; # Bengali-InterIndic: CURRENCY NUMERATOR TWO
+\u09F6>\ue077; # Bengali-InterIndic: CURRENCY NUMERATOR THREE
+\u09F7>\ue078; # Bengali-InterIndic: CURRENCY NUMERATOR FOUR
+\u09F8>\ue079; # Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\u09F9>\ue07A; # Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
+\u09FA>\ue07B; # ISSHAR
+
 \u0964>\ue064;        # DANDA
 \u0965>\ue065;        # DOUBLE DANDA
 #    :: NFC (NFD) ;

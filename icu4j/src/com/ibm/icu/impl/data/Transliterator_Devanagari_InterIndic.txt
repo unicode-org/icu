@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Devanagari_InterIndic.txt,v $
-# $Date: 2002/03/02 00:27:27 $
-# $Revision: 1.9 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.10 $
 #--------------------------------------------------------------------
 
 # Devanagari-InterIndic
@@ -116,5 +116,5 @@
  \u096D>\uE06D;  # DIGIT SEVEN
  \u096E>\uE06E;  # DIGIT EIGHT
  \u096F>\uE06F;  # DIGIT NINE
-# \u0970>; # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
+ \u0970>\uE070;  # Devanagari-InterIndic: ABBREVIATION SIGN
 #    :: NFC (NFD) ;
