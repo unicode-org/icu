@@ -525,15 +525,7 @@ uk {
         ",",
         "+",
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 
     // TODO: Can someone supply me with information on negatives and decimals?
     // How about words for billions and trillions?

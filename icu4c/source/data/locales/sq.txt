@@ -100,8 +100,8 @@ sq {
         "+",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
+/*    zoneStrings { 
+       {
             "Europe/Tirane",
             "CET", // TODO: Replace with long Albanian name
             "CET",
@@ -109,6 +109,7 @@ sq {
             "CEST",
         }
     }
+*/
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }

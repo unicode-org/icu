@@ -94,15 +94,7 @@ mk {
         "+",
     }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
     LocaleScript{   
         "Cyrl",     // ISO 15924 Name 
     }

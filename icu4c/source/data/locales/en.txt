@@ -1479,27 +1479,38 @@ en {
     Keys{
          collation { "Collation" }
          calendar  { "Calendar" }
+         currency  { "Currency" }
     }
     Types{
         // variants for collation (traditional may also be used for traditional chinese)
         collation{
             phonebook   { "Phonebook Order" }
-            pinyin      { "Pinyin Order" }
-            traditional { "Traditional" }
-            stroke      { "Stroke Order" }
-            direct      { "Direct Order" }
-       }
-       calendar{
-            traditional{ "Traditional Calendar" }
-       }
+            pinyin      { "Pinyin Order"    }
+            traditional { "Traditional"     }
+            stroke      { "Stroke Order"    }
+            direct      { "Direct Order"    }
+        }
+        calendar{
+            traditional   { "Traditional Calendar" }
+            japanese      { "Japaneese Calendar"  }
+            buddhist      { "Buddhist Calendar"  }
+            islamic       { "Islamic Calendar"   }
+            islamic-civil { "Islamic-Civil Calendar" }
+            hebrew        { "Hebrew Calendar"    }
+            chinese       { "Chinese Calendar"   }
+            gregorian     { "Gregorian Calendar" }
+        }
+
+
     }
 
     // each variant name that occurs in locales should be listed with %% and a display string
     Variants{
         //PREEURO { "Pre-Euro" }   // PREEURO variant display name
-        EURO    { "Euro" }         // EURO variant display name
+        //EURO    { "Euro" }         // EURO variant display name
         //NY      { "Nynorsk" }      // Norwegian variant display name
         POSIX   { "Posix" }
+        REVISED {"Revised Orthography" }
     }
 
     // Format for the display name of a Transliterator.

@@ -377,16 +377,5 @@ bg {
         ",",
         "+",
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-//        {
-//            "Europe/Sofia",
-//        }
-    }
+
 }

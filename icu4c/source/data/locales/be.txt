@@ -99,15 +99,7 @@ be {
         "+",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
     LocaleScript{
         "Cyrl",     // Abbreviation 
     }

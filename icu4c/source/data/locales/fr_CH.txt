@@ -43,16 +43,7 @@ fr_CH {
         "#,##0%",
         "#E0",
     }
-// Fall back to French
-//    zoneStrings { 
-//        {
-//            "Africa/Casablanca",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//        }
-//    }
+
 
     //------------------------------------------------------------
     // Rule Based Number Format Support

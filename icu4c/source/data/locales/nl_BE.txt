@@ -28,14 +28,5 @@ nl_BE {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "BEL" }
-//    zoneStrings { 
-//        {
-//            "Africa/Casablanca",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//            "GMT",
-//        }
-//    }
+
 }
