@@ -174,7 +174,7 @@ ibm-1283                maccy                   # Apple Cyrillic
 
 ibm-1051                hp-roman8 roman8 r8 csHPRoman8  # HP Latin1
 
-ibm-1388                #MBCS
+ibm-1388                #S-Ch DBCS-Host Data GBK mixed MBCS
 
 # Added for more euro support
 
