@@ -551,7 +551,7 @@ void TimeZoneRegressionTest:: Test4154542()
     const int32_t GOOD_TIME        = 0;
 
     int32_t DATA [] = {
-        GOOD, INT_MIN,    0,  INT_MAX,   INT_MIN,
+        GOOD, INT32_MIN,    0,  INT32_MAX,   INT32_MIN,
         GOOD, Calendar::JANUARY,    -5,  Calendar::SUNDAY,     0,
         GOOD, Calendar::DECEMBER,    5,  Calendar::SATURDAY,   24*60*60*1000,
         BAD,  Calendar::DECEMBER,    5,  Calendar::SATURDAY,   24*60*60*1000+1,
