@@ -62,6 +62,8 @@
 #include <iostream.h>
 #include <string.h>
 
+#include "cmemory.h"
+
 /*-----------------------------------------------------------------------------
  * Implementation Notes
  *
@@ -203,10 +205,13 @@ ResourceBundle::LocaleFallbackIterator::LocaleFallbackIterator(const UnicodeStri
 :   fLocale(startingLocale),
     fRoot(root),
     fUseDefaultLocale(useDefaultLocale),
+
+    // Init from the default locale, if asked for.
+    fDefaultLocale( (useDefaultLocale)? (Locale::getDefault().getName()) : NULL , ""),
+
     fTriedDefaultLocale(FALSE),
     fTriedRoot(FALSE)
 {
-    if (fUseDefaultLocale) Locale::getDefault().getName(fDefaultLocale);
 }
 
 bool_t
@@ -283,7 +288,7 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
  * API constructor.  
  */
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
-                                const UnicodeString&    localeName,
+                                const char *localeName,
                                 UErrorCode&              status)
   :   fgCache(fgUserCache),
       fgVisitedFiles(fgUserVisitedFiles),
@@ -304,8 +309,8 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
   fLocaleIterator = 0;
   
   // If the file doesn't exist, return an error
-  if(fPath.fileExists(localeName)) {
-    parse(fPath, localeName, saveCollationHashtable, 
+  if(fPath.fileExists(UnicodeString(localeName,""))) {
+    parse(fPath, UnicodeString(localeName, ""), saveCollationHashtable, 
 	  (void*)this, fgCache, status);
   }
   else {
@@ -373,11 +378,10 @@ ResourceBundle::constructForLocale(const PathInfo& path,
   fVersionID = 0;
 
   // fRealLocale can be inited in three ways, see 1), 2), 3)
-  UnicodeString returnedLocale;
-  locale.getName(returnedLocale);
+  UnicodeString returnedLocale(locale.getName(), "");
   if (returnedLocale.length()!=0) {
 	// 1) Desired Locale has a name
-	fRealLocale = Locale(returnedLocale); 
+        fRealLocale = locale;
   } else {
 	// 2) Desired Locale name is empty, so we use default locale for the system
 	fRealLocale = Locale(kDefaultLocaleName); 
@@ -395,7 +399,14 @@ ResourceBundle::constructForLocale(const PathInfo& path,
   fDataStatus[0] = U_ZERO_ERROR;
   if(U_SUCCESS(error))
 		// 3) We're unable to get the desired Locale, so we're using what is provided (fallback occured)
-		fRealLocale = Locale(returnedLocale);
+    {
+      /* To avoid calling deprecated api's */
+      char *ch;
+      ch = new char[returnedLocale.size() + 1];
+      ch[returnedLocale.extract(0, 0x7fffffff, ch, "")] = 0;
+      fRealLocale = Locale(ch);
+      delete [] ch;
+    }
   
   fLocaleIterator = new LocaleFallbackIterator(fRealLocale.getName(), 
 					       kDefaultLocaleName, FALSE);
