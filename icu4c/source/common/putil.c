@@ -1898,58 +1898,59 @@ int_getDefaultCodepage()
     const char *defaultTable = NULL;
 
     uprv_memset(codesetName, 0, sizeof(codesetName));
-    localeName = uprv_getPOSIXID();
-    if (localeName != NULL && (name = (uprv_strchr(localeName, (int)'.'))) != NULL)
-    {
-        /* strip the locale name and look at the suffix only */
-        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
-        codesetName[sizeof(codesetName)-1] = 0;
-        if ((euro = (uprv_strchr(name, (int)'@'))) != NULL)
-        {
-           *euro = 0;
-        }
-        /* if we can find the codset name, return that. */
-        if (*name)
-        {
-            return name;
-        }
-    }
 
-    /* otherwise, try CTYPE */
-    if (*codesetName)
-    {
-        uprv_memset(codesetName, 0, sizeof(codesetName));
-    }
-    localeName = setlocale(LC_CTYPE, NULL);
-    if (localeName != NULL && (name = (uprv_strchr(localeName, (int)'.'))) != NULL)
-    {
+    /* Check setlocale before the environment variables
+       because the application may have set it first */
+    /* setlocale needs "" and not NULL for Linux and Solaris */
+    localeName = setlocale(LC_CTYPE, "");
+    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
         /* strip the locale name and look at the suffix only */
         name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
         codesetName[sizeof(codesetName)-1] = 0;
-        if ((euro = (uprv_strchr(name, (int)'@'))) != NULL)
-        {
+        if ((euro = (uprv_strchr(name, '@'))) != NULL) {
            *euro = 0;
         }
         /* if we can find the codset name from setlocale, return that. */
-        if (*name)
-        {
+        if (*name) {
             return name;
         }
     }
 
-    if (*codesetName)
-    {
+#if U_HAVE_NL_LANGINFO_CODESET
+    if (*codesetName) {
         uprv_memset(codesetName, 0, sizeof(codesetName));
     }
-#if U_HAVE_NL_LANGINFO_CODESET
+    /* When available, check nl_langinfo first because it usually gives more
+       useful names. It depends on LC_CTYPE and not LANG or LC_ALL */
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
         if (codeset != NULL) {
             uprv_strncpy(codesetName, codeset, sizeof(codesetName));
             codesetName[sizeof(codesetName)-1] = 0;
+            return codesetName;
         }
     }
 #endif
+
+    /* Try a locale specified by the user.
+       This is usually underspecified and usually checked by setlocale already. */
+    if (*codesetName) {
+        uprv_memset(codesetName, 0, sizeof(codesetName));
+    }
+    localeName = uprv_getPOSIXID();
+    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
+        /* strip the locale name and look at the suffix only */
+        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
+        codesetName[sizeof(codesetName)-1] = 0;
+        if ((euro = (uprv_strchr(name, '@'))) != NULL) {
+           *euro = 0;
+        }
+        /* if we can find the codset name, return that. */
+        if (*name) {
+            return name;
+        }
+    }
+
     if (*codesetName == 0)
     {
         /* if the table lookup failed, return US ASCII (ISO 646). */
