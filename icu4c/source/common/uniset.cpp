@@ -72,7 +72,7 @@ static const char NAME_PROP[] = "na"; // Unicode name property alias
 U_CDECL_BEGIN
     typedef UBool (U_CALLCONV *_C99_Property_Function)(UChar32);
 U_CDECL_END
-struct _C99_Map {
+static const struct _C99_Map {
     const char* name;
     _C99_Property_Function func;
 } _C99_DISPATCH[] = {

@@ -872,7 +872,7 @@ typedef struct {
  * '-', we use it as is (without the '-').  If it begins with '+', we
  * append a " Standard Time" if appropriate.
  */
-WindowsZoneRemap ZONE_REMAP[] = {
+static const WindowsZoneRemap ZONE_REMAP[] = {
     "Central European",     "-Warsaw",
     "Central Europe",       "-Prague Bratislava",
     "China",                "-Beijing",
@@ -888,11 +888,11 @@ WindowsZoneRemap ZONE_REMAP[] = {
 /**
  * Various registry keys and key fragments.
  */
-static const char* CURRENT_ZONE_REGKEY = "SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation\\";
-static const char* STANDARD_NAME_REGKEY = "StandardName";
-static const char* STANDARD_TIME_REGKEY = " Standard Time";
-static const char* TZI_REGKEY = "TZI";
-static const char* STD_REGKEY = "Std";
+static const char CURRENT_ZONE_REGKEY[] = "SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation\\";
+static const char STANDARD_NAME_REGKEY[] = "StandardName";
+static const char STANDARD_TIME_REGKEY[] = " Standard Time";
+static const char TZI_REGKEY[] = "TZI";
+static const char STD_REGKEY[] = "Std";
 
 /**
  * HKLM subkeys used to probe for the flavor of Windows.  Note that we
@@ -900,7 +900,7 @@ static const char* STD_REGKEY = "Std";
  * NT, but on XP has become "GMT Standard Time".  We need to
  * discriminate between these cases.
  */
-static const char* WIN_TYPE_PROBE_REGKEY[] = {
+static const char* const WIN_TYPE_PROBE_REGKEY[] = {
     /* WIN_9X_ME_TYPE */
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Time Zones",
 
@@ -914,7 +914,7 @@ static const char* WIN_TYPE_PROBE_REGKEY[] = {
  * The time zone root subkeys (under HKLM) for different flavors of
  * Windows.
  */
-static const char* TZ_REGKEY[] = {
+static const char* const TZ_REGKEY[] = {
     /* WIN_9X_ME_TYPE */
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Time Zones\\",
 
