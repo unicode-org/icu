@@ -736,8 +736,8 @@ findBasename(const char *path) {
 /*      build options are set to request it.                           */
 /*   Unless overridden by an explicit u_setCommonData, this will be    */
 /*      our common data.                                               */
-#ifdef UDATA_STATIC_LIB
-extern  DataHeader U_IMPORT U_ICUDATA_ENTRY_POINT;
+#if defined(UDATA_STATIC_LIB) || defined(UDATA_DLL)
+extern  const DataHeader U_IMPORT U_ICUDATA_ENTRY_POINT;
 #endif
 
 static UDataMemory *
@@ -756,7 +756,7 @@ openCommonData(UDataMemory *pData,
 
     /* ### we should have a real cache with a UHashTable and the path as the key */
 
-#ifdef UDATA_STATIC_LIB
+#if defined(UDATA_STATIC_LIB) || defined(UDATA_DLL)
     if (isICUData) {
         pHeader = &U_ICUDATA_ENTRY_POINT;
         if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
