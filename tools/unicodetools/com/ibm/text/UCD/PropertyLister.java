@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.5 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -34,6 +34,7 @@ abstract public class PropertyLister implements UCD_Types {
     protected int lastRealCp = -2;
     protected boolean alwaysBreaks = false; // set to true if property only breaks
     protected boolean commentOut = false;
+    protected boolean useKenName = true; // set to false to get meaningful names
     private UnicodeSet set = new UnicodeSet();
 
     public static final byte INCLUDE = 0, BREAK = 1, CONTINUE = 2, EXCLUDE = 3;
@@ -47,7 +48,7 @@ abstract public class PropertyLister implements UCD_Types {
         return "";
     }
 
-    public String propertyName(int cp) {
+    public String valueName(int cp) {
         return "";
     }
 
@@ -57,9 +58,10 @@ abstract public class PropertyLister implements UCD_Types {
 
     public String optionalComment(int cp) {
         if (!usePropertyComment || !breakByCategory) return "";
-        int cat = ucdData.getCategory(cp);
-        if (cat == Lt || cat == Ll || cat == Lu) return "L&";
-        return ucdData.getCategoryID(cp);
+        byte cat = getModCat(cp);
+        if (cat == FAKELC) return "L&";
+        if (cat == FAKENC) return "NC";
+        return ucdData.getCategoryID_fromIndex(cat);
     }
 
     public int minPropertyWidth() {
@@ -69,7 +71,7 @@ abstract public class PropertyLister implements UCD_Types {
     public void format(int startCp, int endCp, int realCount) {
         try {
             set.add(startCp, endCp);
-            String prop = propertyName(startCp);
+            String prop = valueName(startCp);
             String opt = "";
             String optCom = "";
             String commentSep = " # ";
@@ -134,6 +136,7 @@ abstract public class PropertyLister implements UCD_Types {
 
     String getKenName(int cp) {
         String result = ucdData.getName(cp);
+        if (!useKenName) return result;
         if (result == null) return "";
         if (DROP_INDICATORS && result.charAt(0) == '<') {
             if (cp < 0xFF) return "<control>";
@@ -164,6 +167,16 @@ abstract public class PropertyLister implements UCD_Types {
         }
         return lastSpace;
     }
+    
+    private static final byte FAKELC = 63; // fake category for comparison
+    private static final byte FAKENC = 64; // fake category for comparison
+    
+    private byte getModCat(int cp) {
+        byte cat = ucdData.getCategory(cp);
+        if (cat == Lt || cat == Ll || cat == Lu) cat = FAKELC;
+        if (cat == Cn && ucdData.isNoncharacter(cp)) cat = FAKENC;
+        return cat;
+    }
 
     public int print() {
         set.clear();
@@ -175,6 +188,7 @@ abstract public class PropertyLister implements UCD_Types {
 
         String header = headerString();
         if (header.length() != 0) {
+            // System.out.println(header);
             output.println(header);
             output.println();
         }
@@ -182,9 +196,7 @@ abstract public class PropertyLister implements UCD_Types {
             byte s = status(cp);
             if (alwaysBreaks && s == INCLUDE) s = BREAK;
             if (s == INCLUDE && firstRealCp != -1) {
-                byte cat = ucdData.getCategory(cp);
-                if (cat == Lt || cat == Ll) cat = Lu;
-                if (breakByCategory && cat != firstRealCpCat) s = BREAK;
+                if (breakByCategory && getModCat(cp) != firstRealCpCat) s = BREAK;
             }
 
             switch(s) {
@@ -193,8 +205,7 @@ abstract public class PropertyLister implements UCD_Types {
               case INCLUDE:
                 if (firstRealCp == -1) {
                     firstRealCp = cp;
-                    firstRealCpCat = ucdData.getCategory(firstRealCp);
-                    if (firstRealCpCat == Lt || firstRealCpCat == Ll) firstRealCpCat = Lu;
+                    firstRealCpCat = getModCat(firstRealCp);
                 }
                 lastRealCp = cp;
                 count++;
@@ -205,8 +216,7 @@ abstract public class PropertyLister implements UCD_Types {
                     format(firstRealCp, lastRealCp, realRangeCount);
                 }
                 lastRealCp = firstRealCp = cp;
-                firstRealCpCat = ucdData.getCategory(firstRealCp);
-                if (firstRealCpCat == Lt || firstRealCpCat == Ll) firstRealCpCat = Lu;
+                firstRealCpCat = getModCat(firstRealCp);
 
                 realRangeCount = 1;
                 count++;

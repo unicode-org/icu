@@ -3,16 +3,19 @@ public abstract class UnicodeProperty implements UCD_Types {
   
     protected UCD       ucd;
     protected boolean   isStandard = true;
+    protected byte      type = NOT_DERIVED;
     protected boolean   hasUnassigned = false;
     protected boolean   valueVaries = false;
     protected byte      defaultValueStyle = SHORT;
     protected byte      defaultPropertyStyle = LONG;
-    protected String    valueName = "YES";
-    protected String    shortValueName = "Y";
+    protected String    valueName;
+    protected String    numberValueName;
+    protected String    shortValueName;
     protected String    header;
     protected String    subheader;
     protected String    name;
     protected String    shortName;
+    protected String    numberName;
       
       /**
        * Return the UCD in use
@@ -24,6 +27,12 @@ public abstract class UnicodeProperty implements UCD_Types {
        */
       public boolean isStandard() { return isStandard; }
       public void setStandard(boolean in) { isStandard = in; }
+      
+      /**
+       * What type is it?
+       */
+      public byte getType() { return type; }
+      public void setType(byte in) { type = in; }
       
       /**
        * Does it apply to any unassigned characters?
@@ -55,16 +64,23 @@ public abstract class UnicodeProperty implements UCD_Types {
        * Get the property name. Style is SHORT, NORMAL, LONG
        */
       public String getProperty(byte style) { 
-          if (style == NORMAL) style = defaultPropertyStyle;
-          return style < LONG ? shortName : name;
+            if (style == NORMAL) style = defaultPropertyStyle;
+            switch (style) {
+                case LONG: return name.toString();
+                case SHORT: return shortName.toString();
+                case NUMBER: return numberName.toString();
+                default: throw new IllegalArgumentException("Bad property: " + style);
+            }
       }
       
       public String getProperty() { return getProperty(NORMAL); }
       
       public void setProperty(byte style, String in) {
+            if (style == NORMAL) style = defaultPropertyStyle;
             switch (style) {
               case LONG: name = in; break;
               case SHORT: shortName = in; break;
+              case NUMBER: numberName = in; break;
               default: throw new IllegalArgumentException("Bad property: " + style);
             }
       }
@@ -83,17 +99,29 @@ public abstract class UnicodeProperty implements UCD_Types {
 
       public void setValue(byte style, String in) {
             if (valueVaries) throw new IllegalArgumentException("Can't set varying value: " + style);
+            if (style == NORMAL) style = defaultValueStyle;
             switch (style) {
               case LONG: valueName = in; break;
               case SHORT: shortValueName = in; break;
+              case NUMBER: numberValueName = in; break;
               default: throw new IllegalArgumentException("Bad value: " + style);
             }
       }
       
       public String getValue(byte style) {
-            if (valueVaries) throw new IllegalArgumentException("Value varies; call getValue(cp)");
-            if (style == NORMAL) style = defaultValueStyle;
-            return style < LONG ? shortValueName : valueName;
+            if (valueVaries) throw new IllegalArgumentException(
+                "Value varies in " + getName(LONG) + "; call getValue(cp)");
+            try {
+                if (style == NORMAL) style = defaultValueStyle;
+                switch (style) {
+                    case LONG: return valueName.toString();
+                    case SHORT: return shortValueName.toString();
+                    case NUMBER: return numberValueName.toString();
+                    default: throw new IllegalArgumentException("Bad property: " + style);
+                }
+            } catch (RuntimeException e) {
+                throw new com.ibm.text.utility.ChainException("Unset value string in " + getName(LONG), null, e);
+            }
       }
       
       /**

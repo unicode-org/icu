@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/12/03 19:29:35 $
-* $Revision: 1.6 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -55,8 +55,9 @@ public final class Main {
             else if (arg.equalsIgnoreCase("Generate")) GenerateData.main(ucdVersion, Utility.split(args[++i],','));
             else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
-            else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
+            /*else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
+                */
             else {
                 System.out.println("Unknown option -- must be one of the following (case-insensitive)");
                 System.out.println("generateXML, checkCase, checkCanonicalProperties, CheckCaseFold,");

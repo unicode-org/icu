@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyFloatLister.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.3 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -23,7 +23,7 @@ class MyFloatLister extends PropertyLister {
         this.ucdData = ucd;
     }
 
-    public String propertyName(int cp) {
+    public String valueName(int cp) {
         return ""+ucdData.getNumericValue(cp);
     }
 

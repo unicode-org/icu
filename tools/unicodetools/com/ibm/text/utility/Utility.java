@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/11/13 02:31:34 $
-* $Revision: 1.8 $
+* $Date: 2001/12/06 00:05:52 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -449,9 +449,13 @@ public final class Utility {    // COMMON UTILITIES
     public static PrintWriter openPrintWriter(String filename, boolean removeCR) throws IOException {
         return new PrintWriter(
                     new UTF8StreamWriter(
-                        new FileOutputStream(DATA_DIR + File.separator + "GEN" + File.separator + filename),
+                        new FileOutputStream(getOutputName(filename)),
                         32*1024,
                         removeCR));
+    }
+    
+    public static String getOutputName(String filename) {
+        return DATA_DIR + File.separator + "GEN" + File.separator + filename;
     }
     
     public static void print(PrintWriter pw, Collection c, String separator) {
@@ -501,14 +505,20 @@ public final class Utility {    // COMMON UTILITIES
         out.close();
     }
 
-    public static BufferedReader openUnicodeFile(String filename, String version) throws IOException {
+    public static BufferedReader openUnicodeFile(String filename, String version, boolean show) throws IOException {
+        String name = getMostRecentUnicodeDataFile(filename, version, show);
+        if (name == null) return null;
+        return new BufferedReader(new FileReader(name),32*1024);
+    }
+
+    public static String getMostRecentUnicodeDataFile(String filename, String version, boolean show) throws IOException {
         // get all the files in the directory
 
         for (int i = 0; i < searchPath.length; ++i) {
             if (version.length() != 0 && version.compareTo(searchPath[i]) < 0) continue;
 
             String directoryName = DATA_DIR + File.separator + searchPath[i] + "-Update" + File.separator;
-            System.out.println("Trying: '" + directoryName + "'");
+            if (show) System.out.println("Trying: '" + directoryName + "', '" + filename + "'");
             File directory = new File(directoryName);
             String[] list = directory.list();
             for (int j = 0; j < list.length; ++j) {
@@ -520,8 +530,8 @@ public final class Utility {    // COMMON UTILITIES
                     continue;
                 }
                 //System.out.println(" -- HIT");
-                System.out.println("\tFound: '" + fn + "'");
-                return new BufferedReader(new FileReader(directoryName + fn),32*1024);
+                if (show) System.out.println("\tFound: '" + fn + "'");
+                return directoryName + fn;
             }
         }
         return null;

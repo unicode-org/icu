@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.6 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -55,7 +55,7 @@ final class DerivedPropertyLister extends PropertyLister {
         return uprop.getHeader();
     }
 
-    public String propertyName(int cp) {
+    public String valueName(int cp) {
         if (uprop.valueVaries()) return uprop.getValue(cp, LONG);
         return uprop.getProperty(LONG);
     }

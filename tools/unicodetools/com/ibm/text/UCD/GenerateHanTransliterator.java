@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2001/10/25 20:37:09 $
-* $Revision: 1.1 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -58,7 +58,7 @@ public final class GenerateHanTransliterator {
         out = Utility.openPrintWriter("Transliterate_Han_English.txt");
         err = Utility.openPrintWriter("Transliterate_Han_English.log.txt");
         
-        BufferedReader in = Utility.openUnicodeFile("Unihan", "3.2.0"); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", "3.2.0", true); 
 
         int count = 0;
         String oldCode = "";

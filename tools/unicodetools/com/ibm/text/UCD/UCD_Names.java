@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.9 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -38,7 +38,7 @@ final class UCD_Names implements UCD_Types {
         {"age", "Age"},
     };
 
-    static final String[] UNIFIED_PROPERTIES = {
+    static final String[] UNIFIED_PROPERTY_HEADERS = {
         "General Category (listing UnicodeData.txt, field 2: see UnicodeData.html)",
         "Combining Class (listing UnicodeData.txt, field 3: see UnicodeData.html)",
         "Bidi Class (listing UnicodeData.txt, field 4: see UnicodeData.html)",
@@ -56,7 +56,7 @@ final class UCD_Names implements UCD_Types {
         "Derived"
     };
 
-    static final String[] SHORT_UNIFIED_PROPERTIES = {
+    static final String[] UNIFIED_PROPERTIES = {
         "GeneralCategory",
         "CanonicalCombiningClass",
         "BidiClass",
@@ -72,7 +72,7 @@ final class UCD_Names implements UCD_Types {
         ""
     };
 
-    static final String[] ABB_UNIFIED_PROPERTIES = {
+    static final String[] SHORT_UNIFIED_PROPERTIES = {
         "gc",
         "ccc",
         "bc",
@@ -314,9 +314,9 @@ final class UCD_Names implements UCD_Types {
     "Goth",
     "Dsrt",
     "Qaai",
-    "Taga",
-    "Hanu",
-    "Buhi",
+    "Tglg",
+    "Hano",
+    "Buhd",
     "Tagb",
   };
 
@@ -424,7 +424,7 @@ final class UCD_Names implements UCD_Types {
         {"C", "Other", "Cc | Cf | Cn | Co | Cs"},
         {"S", "Symbol", "Sc | Sk | Sm | So"},
         {"P", "Punctuation", "Pc | Pd | Pe | Pf | Pi | Po | Ps"},
-        {"Lc", "Cased Letter", "Ll | Lt | Lu"},
+        {"LC", "Cased Letter", "Ll | Lt | Lu"},
     };
 
 
