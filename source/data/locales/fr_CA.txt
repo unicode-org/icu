@@ -17,7 +17,7 @@ fr_CA {
     // Currency display names
     Currencies {
         CAD { "$", "dollar canadien" } // Canadian Dollar
-        USD { "$ US", "dollar am\u00E9ricain" } // US Dollar
+        USD { "$ US", "dollar des \u00C9tats-Unis" } // US Dollar
     }
     calendar{
         gregorian{
