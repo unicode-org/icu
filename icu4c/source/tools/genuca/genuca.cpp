@@ -357,7 +357,7 @@ static void writeOutInverseData(InverseUCATableHeader *data,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
-        fprintf(stderr, "Error: unable to create data memory, error %d\n", *status);
+        fprintf(stderr, "Error: unable to create %s"INVC_DATA_NAME", error %s\n", outputDir, u_errorName(*status));
         return;
     }
 
@@ -704,7 +704,7 @@ void writeOutData(UCATableHeader *data,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
-        fprintf(stderr, "Error: unable to create data memory, error %d\n", *status);
+        fprintf(stderr, "Error: unable to create %s"UCA_DATA_NAME", error %s\n", outputDir, u_errorName(*status));
         return;
     }
 
@@ -1042,15 +1042,14 @@ int main(int argc, char* argv[]) {
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
     if(options[3].doesOccur) {
-      fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
+        fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
 #if UCONFIG_NO_COLLATION
             0, 0
 #else
             ucaDataInfo.formatVersion[0], ucaDataInfo.formatVersion[1]
 #endif
             );
-      fprintf(stdout, "Copyright (C) 2000-2001, International Business Machines\n");
-      fprintf(stdout, "Corporation and others.  All Rights Reserved.\n");
+        fprintf(stdout, U_COPYRIGHT_STRING"\n");
         exit(0);
     }
 
