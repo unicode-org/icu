@@ -4,7 +4,7 @@
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/06/03 20:58:21 $ $Revision: 1.2 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/06/10 17:44:58 $ $Revision: 1.3 $
  */
 
 #ifndef __HANLAYOUTENGINE_H
@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
 class HanOpenTypeLayoutEngine : public OpenTypeLayoutEngine
 {
 public:
-    /*
+    /**
      * This is the main constructor. It constructs an instance of HanOpenTypeLayoutEngine for
      * a particular font, script and language. It takes the GSUB table as a parameter since
      * LayoutEngine::layoutEngineFactory has to read the GSUB table to know that it has a
