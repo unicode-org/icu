@@ -2155,6 +2155,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
     UBool wasShifted = FALSE;
     UBool notIsContinuation = FALSE;
+    uint8_t leadPrimary = 0;
+    uint32_t primCompCount = 1;
 
 
     for(;;) {
@@ -2203,13 +2205,34 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             wasShifted = FALSE;
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
-            /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
+#ifdef UCOL_PRIM_COMPRESSION
+            if(primary1 != UCOL_IGNORABLE) {
+              if(notIsContinuation) {
+                if(primary1 != leadPrimary) {
+                  if(primCompCount > 1) {
+                    currentSize++;
+                    primCompCount = 1;
+                  }
+                  leadPrimary = primary1;
+                  currentSize++;
+                } else {
+                  primCompCount++;
+                }
+              } else {
+                currentSize++;
+              }
+              if(primary2 != UCOL_IGNORABLE) {
+                currentSize++;
+              }
+            }
+#else
             if(primary1 != UCOL_IGNORABLE) {
               currentSize++;
               if(primary2 != UCOL_IGNORABLE) {
                 currentSize++;
               }
             }
+#endif
 
             if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
               if(!isFrenchSec){
@@ -2263,6 +2286,13 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
           }
     }
+
+#ifdef UCOL_PRIM_COMPRESSION
+    if(primCompCount > 1) {
+      currentSize++;
+    }
+#endif
+
 
     if(c2 > 0) {
       currentSize += (c2/UCOL_BOT_COUNT2)+1;
@@ -2509,6 +2539,8 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint32_t prevBuffSize = 0;
 
     uint32_t count2 = 0, count3 = 0, count4 = 0;
+    uint8_t leadPrimary = 0;
+    uint32_t primCompCount = 1;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
@@ -2579,13 +2611,33 @@ ucol_calcSortKey(const    UCollator    *coll,
               wasShifted = FALSE;
               /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
               /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
-              /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
+#ifdef UCOL_PRIM_COMPRESSION
+            if(primary1 != UCOL_IGNORABLE) {
+              if(notIsContinuation) {
+                if(primary1 != leadPrimary) {
+                  if(primCompCount > 1) {
+                    *primaries++ = (primary1 > leadPrimary) ? 0xFF : 0x03;
+                    primCompCount = 1;
+                  }
+                  *primaries++ = leadPrimary = primary1; 
+                } else {
+                  primCompCount++;
+                }
+              } else {
+                *primaries++ = primary1; /* we are in continuation, so we're gonna add first primary to the key don't care */
+              }
+              if(primary2 != UCOL_IGNORABLE) {
+                *primaries++ = primary2; /* second part */
+              }
+            }
+#else
               if(primary1 != UCOL_IGNORABLE) {
                 *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
                 if(primary2 != UCOL_IGNORABLE) {
                   *primaries++ = primary2; /* second part */
                 }
               }
+#endif
 
             if(secondary > compareSec) {
               if(!isFrenchSec) {
@@ -2709,6 +2761,12 @@ ucol_calcSortKey(const    UCollator    *coll,
 
 
     if(U_SUCCESS(*status)) {
+#ifdef UCOL_PRIM_COMPRESSION
+      if(primCompCount > 1) {
+        *primaries++ = 0x03;
+      }
+#endif
+
       sortKeySize += (primaries - primStart);
       /* we have done all the CE's, now let's put them together to form a key */
       if(compareSec == 0) {
@@ -2979,6 +3037,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     uint32_t count2 = 0, count3 = 0;
     uint8_t leadPrimary = 0;
+    uint32_t primCompCount = 1;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
@@ -3014,9 +3073,17 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 #ifdef UCOL_PRIM_COMPRESSION
             if(primary1 != UCOL_IGNORABLE) {
               if(notIsContinuation) {
-                *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
+                if(primary1 != leadPrimary) {
+                  if(primCompCount > 1) {
+                    *primaries++ = (primary1 > leadPrimary) ? 0xFF : 0x03;
+                    primCompCount = 1;
+                  }
+                  *primaries++ = leadPrimary = primary1; 
+                } else {
+                  primCompCount++;
+                }
               } else {
-                *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
+                *primaries++ = primary1; /* we are in continuation, so we're gonna add first primary to the key don't care */
               }
               if(primary2 != UCOL_IGNORABLE) {
                 *primaries++ = primary2; /* second part */
@@ -3112,6 +3179,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     }
 
     if(U_SUCCESS(*status)) {
+#ifdef UCOL_PRIM_COMPRESSION
+      if(primCompCount > 1) {
+        *primaries++ = 0x03;
+      }
+#endif
       sortKeySize += (primaries - primStart);
       /* we have done all the CE's, now let's put them together to form a key */
       if (count2 > 0) {
