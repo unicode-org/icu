@@ -764,7 +764,7 @@ typedef struct AlgorithmicRange {
 
 static uint32_t
 generateAlgorithmicData(UNewDataMemory *pData) {
-    static char *prefix="CJK UNIFIED IDEOGRAPH-";
+    static char prefix[] = "CJK UNIFIED IDEOGRAPH-";
 #   define PREFIX_LENGTH 23
 #   define PREFIX_LENGTH_4 24
 
