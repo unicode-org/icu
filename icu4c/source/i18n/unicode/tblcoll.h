@@ -639,9 +639,6 @@ private:
 
     static const int32_t PRIMIGNORABLE;
 
-    static const int16_t FILEID;
-    static const char    kFilenameSuffix[];
-
     // private data members ---------------------------------------------------
 
     UBool dataIsOwned;

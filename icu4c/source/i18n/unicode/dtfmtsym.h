@@ -315,28 +315,16 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 private:
-    /**
-     * Tag names used by this class.
-     */
-    static const char fgErasTag[];   // resource bundle tag for era names
-    static const char fgMonthNamesTag[]; // resource bundle tag for month names
-    static const char fgMonthAbbreviationsTag[]; // resource bundle tag for month abbreviations
-    static const char fgDayNamesTag[];   // resource bundle tag for day names
-    static const char fgDayAbbreviationsTag[];   // resource bundle tag for day abbreviations
-    static const char fgAmPmMarkersTag[];    // resource bundle tag for AM/PM strings
-
-    static const char fgZoneStringsTag[];    // resource bundle tag for time zone names
-    static const char fgLocalPatternCharsTag[];  // resource bundle tag for localized pattern characters
 
     friend class SimpleDateFormat;
     friend class DateFormatSymbolsSingleSetter; // see udat.cpp
@@ -388,12 +376,6 @@ private:
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
     UnicodeString   fLocalPatternChars;
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 
 private:
 
@@ -509,14 +491,6 @@ private:
      */
     void disposeZoneStrings(void);
 };
-
-inline UClassID
-DateFormatSymbols::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-DateFormatSymbols::getDynamicClassID() const
-{ return DateFormatSymbols::getStaticClassID(); }
 
 U_NAMESPACE_END
 

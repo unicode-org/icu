@@ -22,13 +22,13 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UppercaseTransliterator)
 
-const char UppercaseTransliterator::_ID[] = "Any-Upper";
+const char CURR_ID[] = "Any-Upper";
 
 /**
  * Constructs a transliterator.
  */
 UppercaseTransliterator::UppercaseTransliterator(const Locale& theLoc) :
-    Transliterator(_ID, 0),
+    Transliterator(UnicodeString(CURR_ID, ""), 0),
     loc(theLoc), 
     buffer(0)
 {

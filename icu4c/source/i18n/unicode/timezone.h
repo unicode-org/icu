@@ -572,19 +572,6 @@ public:
     virtual TimeZone* clone(void) const = 0;
 
     /**
-     * Return the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  For example:
-     * <pre>
-     * .   Base* polymorphic_pointer = createPolymorphicObject();
-     * .   if (polymorphic_pointer->getDynamicClassID() ==
-     * .       Derived::getStaticClassID()) ...
-     * </pre>
-     * @return The class ID for all objects of this class.
-     * @stable ICU 2.0
-     */
-    static inline UClassID getStaticClassID(void);
-
-    /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual method. This method is to
      * implement a simple version of RTTI, since not all C++ compilers support genuine
      * RTTI. Polymorphic operator==() and clone() methods call this method.
@@ -631,8 +618,6 @@ protected:
     TimeZone& operator=(const TimeZone& right);
 
 private:
-    static const char fgClassID;
-
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 
     /**
@@ -655,10 +640,6 @@ private:
     UnicodeString           fID;    // this time zone's ID
 };
 
-
-inline UClassID
-TimeZone::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
 
 // -------------------------------------
 

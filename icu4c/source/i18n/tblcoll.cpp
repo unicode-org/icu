@@ -754,11 +754,6 @@ const int32_t RuleBasedCollator::RESETTERTIARY = 0x00000002;
 
 const int32_t RuleBasedCollator::PRIMIGNORABLE = 0x0202;
 
-/* unique file id for parity check */
-const int16_t RuleBasedCollator::FILEID = 0x5443;
-/* binary collation file extension */
-const char RuleBasedCollator::kFilenameSuffix[] = ".col";
-
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedCollator)
 
 U_NAMESPACE_END

@@ -88,7 +88,6 @@ private:
 
     Locale loc;
     UChar* buffer;
-    static const char _ID[];
 
 };
 

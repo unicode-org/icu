@@ -32,10 +32,6 @@ U_NAMESPACE_BEGIN
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
-    /**
-     * ID for this transliterator.
-     */
-    static const char _ID[];
 
     // Character constants defined here to avoid ASCII dependency
     enum {

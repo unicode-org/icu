@@ -27,12 +27,6 @@ U_NAMESPACE_BEGIN
  * @author Alan Liu
  */
 class U_I18N_API TitlecaseTransliterator : public Transliterator {
-
-    /**
-     * ID for this transliterator.
-     */
-    static const char _ID[];
-
  public:
 
     /**

@@ -25,7 +25,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HexToUnicodeTransliterator)
 /**
  * ID for this transliterator.
  */
-const char HexToUnicodeTransliterator::_ID[] = "Hex-Any";
+const char CURR_ID[] = "Hex-Any";
 
 /**
  * This pattern encodes the following specs for the default constructor:
@@ -53,7 +53,7 @@ HexToUnicodeTransliterator::~HexToUnicodeTransliterator() {}
  * Constructs a transliterator.
  */
 HexToUnicodeTransliterator::HexToUnicodeTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(_ID, adoptedFilter) {
+    Transliterator(UnicodeString(CURR_ID, ""), adoptedFilter) {
     // We don't need to pass the status back to the caller because
     // we know that the DEFAULT_PATTERN parses.
     UErrorCode status = U_ZERO_ERROR;
@@ -65,7 +65,7 @@ HexToUnicodeTransliterator::HexToUnicodeTransliterator(UnicodeFilter* adoptedFil
  */
 HexToUnicodeTransliterator::HexToUnicodeTransliterator(const UnicodeString& thePattern,
                                                        UErrorCode& status) :
-    Transliterator(_ID, 0) {
+    Transliterator(UnicodeString(CURR_ID, ""), 0) {
     applyPattern(thePattern, status);
 }
 
@@ -75,7 +75,7 @@ HexToUnicodeTransliterator::HexToUnicodeTransliterator(const UnicodeString& theP
 HexToUnicodeTransliterator::HexToUnicodeTransliterator(const UnicodeString& thePattern,
                                                        UnicodeFilter* adoptedFilter,
                                                        UErrorCode& status) :
-    Transliterator(_ID, adoptedFilter) {
+    Transliterator(UnicodeString(CURR_ID, ""), adoptedFilter) {
     applyPattern(thePattern, status);
 }
 

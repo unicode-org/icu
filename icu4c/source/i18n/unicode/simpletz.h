@@ -793,8 +793,6 @@ private:
     void decodeStartRule(UErrorCode& status);
     void decodeEndRule(UErrorCode& status);
 
-    static const char     fgClassID;
-
     int8_t startMonth, startDay, startDayOfWeek;   // the month, day, DOW, and time DST starts
     int32_t startTime;
     TimeMode startTimeMode, endTimeMode; // Mode for startTime, endTime; see TimeMode
@@ -803,7 +801,7 @@ private:
     int32_t startYear;  // the year these DST rules took effect
     int32_t rawOffset;  // the TimeZone's raw GMT offset
     UBool useDaylight; // flag indicating whether this TimeZone uses DST
-    static const int8_t staticMonthLength[12]; // lengths of the months
+    static const int8_t STATICMONTHLENGTH[12]; // lengths of the months
     EMode startMode, endMode;   // flags indicating what kind of rules the DST rules are
 
     /**
@@ -812,14 +810,6 @@ private:
      */
     int32_t dstSavings;
 };
-
-inline UClassID
-SimpleTimeZone::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-SimpleTimeZone::getDynamicClassID(void) const
-{ return SimpleTimeZone::getStaticClassID(); }
 
 inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth,
                                          int32_t dayOfWeek,
