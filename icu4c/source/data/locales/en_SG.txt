@@ -33,4 +33,14 @@ en_SG{
             }
         }
     }
+    zoneStrings{
+        {
+            "Pacific/Guadalcanal",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore",
+        }
+    }
 }

@@ -2551,7 +2551,7 @@ en{
             "NST",
             "Newfoundland Daylight Time",
             "NDT",
-            "St. Johns",
+            "St. John’s",
         }
         {
             "Europe/Paris",
