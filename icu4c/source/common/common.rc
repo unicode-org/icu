@@ -1,4 +1,4 @@
-//Do not edit with Microsoft Developer Studio because it will modify this 
+//Do not edit with Microsoft Developer Studio because it will modify this
 //script in the wrong way.
 //
 #define APSTUDIO_READONLY_SYMBOLS
@@ -12,7 +12,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 
+//
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
@@ -46,8 +46,8 @@ BEGIN
             VALUE "Comments", "http://oss.software.ibm.com/icu\0"
             VALUE "CompanyName", "IBM Inc.\0"
             VALUE "FileDescription", "IBM ICU Common DLL\0"
-            VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)   
-            VALUE "LegalCopyright", "Copyright (C) 2001 IBM Inc. \0"
+            VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
+            VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
 #ifdef _DEBUG
             VALUE "OriginalFilename", "icuuc" U_ICU_VERSION_SHORT "d.dll")
 #else
