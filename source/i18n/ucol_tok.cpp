@@ -738,10 +738,19 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
           d * ... into &x * c/y * d * ... 
         */
-        if(expandNext != 0 && sourceToken->expansion == 0) {
-          sourceToken->expansion = expandNext;
-          sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
-          //expandNext = 0;
+        if(expandNext != 0) {
+          if(sourceToken->strength == UCOL_PRIMARY) { /* primary strength kills off the implicit expansion */
+            expandNext = 0;
+          } else if(sourceToken->expansion == 0) { /* if there is no expansion, implicit is just added to the token */
+            sourceToken->expansion = expandNext;
+            sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
+          } else { /* there is both explicit and implicit expansion. We need to make a combination */
+            memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
+            memcpy(src->extraCurrent+(expandNext >> 24), src->source + extensionOffset, newExtensionsLen*sizeof(UChar));
+            sourceToken->expansion = ((expandNext >> 24) + newExtensionsLen)<<24 | (src->extraCurrent - src->source);
+            src->extraCurrent += (expandNext >> 24) + newExtensionsLen;
+            sourceToken->debugExpansion = *(src->source + (sourceToken->expansion & 0xFFFFFF));
+          }
         }
 
         /*
