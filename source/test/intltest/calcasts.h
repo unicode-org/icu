@@ -55,6 +55,7 @@ class CalendarCaseTest: public CalendarTest {
  private:
   // test cases
   void IslamicCivil();
+  void Hebrew();
 };
 
 #endif
