@@ -173,7 +173,7 @@ icuio {
                     "%x", "abcd ef01", "4", "abcd"
                 }
                 {
-                    "%*hx%hx", "abcd ef01", "4", "ef01"
+                    "%*hx%hx", "abcd ef01", "2", "ef01"
                 }
                 {
                     "%[abce]", "abcd ef01", "S", "abc"
