@@ -69,7 +69,19 @@ typedef struct USerializedSet {
     uint16_t staticArray[USET_SERIALIZED_STATIC_ARRAY_CAPACITY];
 } USerializedSet;
 
+/*********************************************************************
+ * Constants
+ *********************************************************************/
 
+enum {
+    /**
+     * Bitmask for UnicodeSet::closeOver() indicating letter case.
+     * This may be ORed together with other selectors.
+     * @draft ICU 2.6
+     */
+    USET_CASE = 1
+};
+    
 /*********************************************************************
  * USet API
  *********************************************************************/
