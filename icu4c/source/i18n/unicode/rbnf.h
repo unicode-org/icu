@@ -788,7 +788,18 @@ public:
   virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
 
 public:
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @stable ICU 2.8
+     */
     static UClassID getStaticClassID(void);
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @stable ICU 2.8
+     */
     virtual UClassID getDynamicClassID(void) const;
 
 private:

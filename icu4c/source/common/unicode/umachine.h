@@ -191,23 +191,31 @@
 # error int64_t is required for decimal format and rule-based number format.
 #else
 # ifndef INT64_C
-/* note: may be wrong for 64 bit platforms - ensure your compiler provides INT64_C */
+/**
+ * Provides a platform independent way to specify a signed 64-bit integer constant.
+ * note: may be wrong for some 64 bit platforms - ensure your compiler provides INT64_C
+ * @draft ICU 2.8
+ */
 #   define INT64_C(c) c ## LL
 # endif
 # ifndef UINT64_C
-/* note: may be wrong for 64 bit platforms - ensure your compiler provides INT64_C */
+/**
+ * Provides a platform independent way to specify an unsigned 64-bit integer constant.
+ * note: may be wrong for some 64 bit platforms - ensure your compiler provides UINT64_C
+ * @draft ICU 2.8
+ */
 #   define UINT64_C(c) c ## ULL
 # endif
 # ifndef U_INT64_MIN
-/** The smallest value a 64 bit signed integer can hold @stable ICU 2.0 */
+/** The smallest value a 64 bit signed integer can hold @stable ICU 2.8 */
 #     define U_INT64_MIN       ((int64_t)(INT64_C(-9223372036854775807)-1))
 # endif
 # ifndef U_INT64_MAX
-/** The largest value a 64 bit signed integer can hold @stable ICU 2.0 */
+/** The largest value a 64 bit signed integer can hold @stable ICU 2.8 */
 #     define U_INT64_MAX       ((int64_t)(INT64_C(9223372036854775807)))
 # endif
 # ifndef U_UINT64_MAX
-/** The largest value a 64 bit unsigned integer can hold @stable ICU 2.0 */
+/** The largest value a 64 bit unsigned integer can hold @stable ICU 2.8 */
 #     define U_UINT64_MAX      ((uint64_t)(UINT64_C(18446744073709551615)))
 # endif
 #endif

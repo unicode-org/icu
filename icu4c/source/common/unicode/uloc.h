@@ -787,7 +787,7 @@ uloc_getBaseName(const char*    localeID,
  * must get disposed of by the client using uenum_close function.
  *
  * @param localeID the locale to get the variant code with
- * @param err error information if retrieving the keywords failed
+ * @param status error information if retrieving the keywords failed
  * @return enumeration of keywords or NULL if there are no keywords.
  * @draft ICU 2.8
  */
