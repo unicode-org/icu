@@ -35,7 +35,6 @@ typedef struct {
 } ExpansionTable;
 
 typedef struct {
-    UChar codepoint;
     UChar uchars[128];
     UChar *cPoints;
     int32_t cSize;          /* Number of characters in sequence - for contraction */
