@@ -2178,8 +2178,7 @@ void RBBITest::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
                     }
                 }
                 if (!seen2) {
-                    errln("No break between U+" + UCharToUnicodeString(c1)
-                                + " and U+" + UCharToUnicodeString(c2));
+                    errln("No Break between \\U%04x and \\U%04x", c1, c2);
                     errCount++;
                     if (errCount >= 75)
                         return;
@@ -2206,8 +2205,8 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
             tb.setText(work);
             for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
-                    errln("Break between CR and LF in string U+" + UCharToUnicodeString(work[0]) + 
-                        ", U+d U+a U+" + UCharToUnicodeString(work[3]));
+                    errln("Break between CR and LF in string U\\%04x U\\%04x U\\%04x U\\%04x",
+                        work[0], work[1], work[2], work[3]);
                     errCount++;
                     if (errCount >= 75)
                         return;
