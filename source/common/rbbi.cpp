@@ -228,7 +228,11 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
  */
 int32_t
 RuleBasedBreakIterator::hashCode(void) const {
-    return fData->hashCode();
+    int32_t   hash = 0;
+    if (fData != NULL) {
+        hash = fData->hashCode();
+    }
+    return hash;
 }
 
 /**
@@ -236,7 +240,19 @@ RuleBasedBreakIterator::hashCode(void) const {
  */
 const UnicodeString&
 RuleBasedBreakIterator::getRules() const {
-    return fData->getRuleSourceString();
+    if (fData != NULL) {
+        return fData->getRuleSourceString();
+    } else {
+        static const UnicodeString *s;
+        if (s == NULL) {
+            // TODO:  something more elegant here.
+            //        perhaps API should return the string by value.
+            //        Note:  thread unsafe init & leak are semi-ok, better than
+            //               what was before.  Sould be cleaned up, though.
+            s = new UnicodeString;
+        }
+        return *s;
+    }
 }
 
 //=======================================================================
@@ -257,8 +273,10 @@ RuleBasedBreakIterator::getText() const {
     // The iterator is initialized pointing to no text at all, so if this
     // function is called while we're in that state, we have to fudge an
     // an iterator to return.
-    if (nonConstThis->fText == NULL)
+    if (nonConstThis->fText == NULL) {
+        // TODO:  do this in a way that does not do a default conversion!
         nonConstThis->fText = new StringCharacterIterator("");
+    };
     return *nonConstThis->fText;
 }
 
@@ -993,6 +1011,9 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
 //
 //-------------------------------------------------------------------------------
 UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
+    if (fData == NULL) {
+        return FALSE;
+    }
     uint16_t category;
     UTRIE_GET16(&fData->fTrie, c, category);
     return (category & 0x4000) != 0;
