@@ -1787,14 +1787,19 @@ TestMirroring() {
     /* verify that Bidi_Mirroring_Glyph roundtrips */
     errorCode=U_ZERO_ERROR;
     set=uset_openPattern(mirroredPattern, 17, &errorCode);
-    for(i=0; 0==uset_getItem(set, i, &start, &end, NULL, 0, &errorCode); ++i) {
-        do {
-            c2=u_charMirror(start);
-            c3=u_charMirror(c2);
-            if(c3!=start) {
-                log_err("u_charMirror() does not roundtrip: U+%04lx->U+%04lx->U+%04lx\n", (long)start, (long)c2, (long)c3);
-            }
-        } while(++start<=end);
+
+	if (U_FAILURE(errorCode)) {
+		log_err("uset_openPattern(mirroredPattern, 17, &errorCode) failed!");
+	} else {
+		for(i=0; 0==uset_getItem(set, i, &start, &end, NULL, 0, &errorCode); ++i) {
+			do {
+				c2=u_charMirror(start);
+				c3=u_charMirror(c2);
+				if(c3!=start) {
+					log_err("u_charMirror() does not roundtrip: U+%04lx->U+%04lx->U+%04lx\n", (long)start, (long)c2, (long)c3);
+				}
+			} while(++start<=end);
+		}
     }
 
     uset_close(set);
