@@ -72,6 +72,11 @@ udata_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode);
 
+static void U_CALLCONV
+printError(void *context, const char *fmt, va_list args) {
+    vfprintf((FILE *)context, fmt, args);
+}
+
 static int
 printUsage(const char *pname, UBool ishelp) {
     fprintf(stderr,
@@ -107,9 +112,9 @@ main(int argc, char *argv[]) {
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* get the program basename */
-    pname=strchr(argv[0], U_FILE_SEP_CHAR);
+    pname=strrchr(argv[0], U_FILE_SEP_CHAR);
     if(pname==NULL) {
-        pname=strchr(argv[0], '/');
+        pname=strrchr(argv[0], '/');
     }
     if(pname!=NULL) {
         ++pname;
@@ -190,7 +195,8 @@ main(int argc, char *argv[]) {
         goto done;
     }
 
-    /* ### TODO set ds->printError with a simple fprintf() implementation */
+    ds->printError=printError;
+    ds->printErrorContext=stderr;
 
     length=udata_swap(ds, data, length, data, &errorCode);
     udata_closeSwapper(ds);
@@ -279,6 +285,9 @@ udata_swap(const UDataSwapper *ds,
     }
 
     /* the dataFormat was not recognized */
+    udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x\n",
+                     pInfo->dataFormat[0], pInfo->dataFormat[1],
+                     pInfo->dataFormat[2], pInfo->dataFormat[3]);
     *pErrorCode=U_UNSUPPORTED_ERROR;
     return 0;
 }
