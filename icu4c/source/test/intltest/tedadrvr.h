@@ -80,6 +80,11 @@ public:
   // Gets the next test case
   virtual int32_t getNextTestCase(UnicodeString * testCase, int32_t capacity, UErrorCode &status) = 0;
 
+public:
+  // utilities
+  static int32_t utoi(const UnicodeString &s);
+
+
 protected:
   const char* fTestName;
   int32_t fNumberOfTests;

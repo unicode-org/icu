@@ -9,6 +9,8 @@
 #include "tedadrvr.h"
 #include "resbtddr.h"
 
+#include <stdlib.h>
+
 
 TestDataDriver *TestDataDriver::createTestInstance(const char *testName, UErrorCode &status) {
   if(U_FAILURE(status)) {
@@ -36,4 +38,14 @@ int32_t
 TestDataDriver::countTests(void) 
 {
   return fNumberOfTests;
+}
+
+int32_t 
+TestDataDriver::utoi(const UnicodeString &s)
+{
+  char ch[256];
+  const UChar *u = s.getBuffer();
+  int32_t len = s.length();
+  u_UCharsToChars(u, ch, len);
+  return atoi(ch);
 }
