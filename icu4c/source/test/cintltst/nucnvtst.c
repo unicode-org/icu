@@ -1586,6 +1586,8 @@ static void TestToAndFromUChars(const uint16_t* source, const UChar* sourceLimit
         uSource++;
         test++;
     }
+    free(uBuf);
+    free(cBuf);
 }
 
 static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, const char* cnvName){
