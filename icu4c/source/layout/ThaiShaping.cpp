@@ -146,37 +146,37 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
         LEUnicode errorChar, LEUnicode *outputBuffer, le_int32 *charIndicies, le_int32 &outputIndex)
 {
     switch (transition.action) {
-    case _A:
+    case tA:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
         
-    case _C:
+    case tC:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
         
-    case _D:
+    case tD:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = leftAboveVowel(currChar, glyphSet);
         break;
         
-    case _E:
+    case tE:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = lowerRightTone(currChar, glyphSet);
         break;
         
-    case _F:
+    case tF:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = lowerLeftTone(currChar, glyphSet);
         break;
     
-    case _G:
+    case tG:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = upperLeftTone(currChar, glyphSet);
         break;
         
-    case _H:
+    case tH:
     {
         LEUnicode cod = outputBuffer[outputIndex - 1];
         LEUnicode coa = noDescenderCOD(cod, glyphSet);
@@ -194,7 +194,7 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
         break;
     }
         
-    case _R:
+    case tR:
         charIndicies[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = errorChar;
 
@@ -202,7 +202,7 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
         outputBuffer[outputIndex++] = currChar;
         break;
         
-    case _S:
+    case tS:
         if (currChar == CH_SARA_AM) {
             charIndicies[outputIndex] = inputIndex;
             outputBuffer[outputIndex++] = errorChar;
@@ -240,17 +240,17 @@ le_bool ThaiShaping::isLegalHere(LEUnicode ch, le_uint8 prevState)
     StateTransition transition = getTransition(prevState, charClass);
 
     switch (transition.action) {
-    case _A:
-    case _C:
-    case _D:
-    case _E:
-    case _F:
-    case _G:
-    case _H:
+    case tA:
+    case tC:
+    case tD:
+    case tE:
+    case tF:
+    case tG:
+    case tH:
         return true;
             
-    case _R:
-    case _S:
+    case tR:
+    case tS:
         return false;
             
     default:
