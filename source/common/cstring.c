@@ -101,17 +101,26 @@ T_CString_toUpperCase(char* str)
     return origPtr;
 }
 
-/*Takes a int32_t and     fills in  a char* string with that number "radix"-based
- Return the length of the string */
-
+/*
+ * Takes a int32_t and fills in  a char* string with that number "radix"-based.
+ * Does not handle negative values (makes an empty string for them).
+ * Writes at most 11 chars ("2147483647" plus NUL).
+ * Returns the length of the string.
+ */
 U_CAPI int32_t U_EXPORT2
 T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
 {
-  int32_t length=0;
-  int32_t num = 0;
+  int32_t length;
+  int32_t num;
   int8_t digit;
   char temp;
 
+  if(i<0) {
+    *buffer = 0;
+    return 0;
+  }
+
+  length = 0;
   while (i>=radix)
     {
       num = i/radix;
@@ -121,13 +130,14 @@ T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
     }
 
   buffer[length] = (char)(T_CString_itosOffset(i));
-  buffer[length+1] = '\0';
+  buffer[++length] = '\0';
 
 
-  /*Reverses the string*/
-  for (i = 0; i < length; ++i, --length) {
-    temp = buffer[length];
-    buffer[length] = buffer[i];
+  /* Reverses the string, swap digits at buffer[0]..buffer[num] */
+  num = length - 1;
+  for (i = 0; i < num; ++i, --num) {
+    temp = buffer[num];
+    buffer[num] = buffer[i];
     buffer[i] = temp;
   }
 
