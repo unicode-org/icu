@@ -47,6 +47,7 @@
 
 /* U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it) */
 #if U_SIZEOF_WCHAR_T==0
+#   undef U_SIZEOF_WCHAR_T
 #   define U_SIZEOF_WCHAR_T 4
 #endif
 
