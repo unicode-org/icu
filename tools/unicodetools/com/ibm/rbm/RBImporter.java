@@ -1,13 +1,7 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBImporter.java,v $ 
- * $Date: 2002/05/20 18:53:10 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
@@ -31,7 +25,7 @@ import java.awt.event.*;
  * </OL>
  * </P>
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBImporter extends JDialog {
@@ -104,7 +98,7 @@ public class RBImporter extends JDialog {
 	
     protected void chooseFile() {
         int result = chooser.showOpenDialog(this);
-        if (result == chooser.APPROVE_OPTION) {
+        if (result == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             sourceLabel.setText(Resources.getTranslation("import_source_file",f.getAbsolutePath()));
             pathSet = true;
@@ -187,11 +181,11 @@ public class RBImporter extends JDialog {
      */
 	
     protected void resolveResource(Bundle bundle, BundleItem item) {
-        if (this.getResourceConflictOption() == this.RESOURCE_OPTION_IGNORE) return;
-        else if (this.getResourceConflictOption() == this.RESOURCE_OPTION_OVERWRITE) {
+        if (this.getResourceConflictOption() == RESOURCE_OPTION_IGNORE) return;
+        else if (this.getResourceConflictOption() == RESOURCE_OPTION_OVERWRITE) {
             bundle.removeItem(item.getKey());
             bundle.addBundleItem(item);
-        } else if (this.getResourceConflictOption() == this.RESOURCE_OPTION_PROMPT) {
+        } else if (this.getResourceConflictOption() == RESOURCE_OPTION_PROMPT) {
             BundleItem original = (BundleItem)bundle.allItems.get(item.getKey());
             if (original == null) return;
             String trans = original.getTranslation();
@@ -223,12 +217,12 @@ public class RBImporter extends JDialog {
             if (rbm.hasResource(encoding)) continue;
             else {
                 // We need to resolve this conflict
-                if (this.getFileConflictOption() == this.FILE_OPTION_IGNORE) continue;
-                else if (this.getFileConflictOption() == this.FILE_OPTION_POPULATE) {
+                if (this.getFileConflictOption() == FILE_OPTION_IGNORE) continue;
+                else if (this.getFileConflictOption() == FILE_OPTION_POPULATE) {
                     rbm.createResource(null, null, null, encoding, null, null, null, true);
-                } else if (this.getFileConflictOption() == this.FILE_OPTION_EMPTY) {
+                } else if (this.getFileConflictOption() == FILE_OPTION_EMPTY) {
                     rbm.createResource(null, null, null, encoding, null, null, null, true);
-                } else if (this.getFileConflictOption() == this.FILE_OPTION_PROMPT) {
+                } else if (this.getFileConflictOption() == FILE_OPTION_PROMPT) {
                     String options[] = { Resources.getTranslation("import_file_conflict_generate_populate"),
                                          Resources.getTranslation("import_file_conflict_generate_empty"),
                                          Resources.getTranslation("import_file_conflict_ignore")};
@@ -252,20 +246,20 @@ public class RBImporter extends JDialog {
     // Returns an integer mask describing the user's selection for file resolving missing file locale conflicts
 	
     private int getFileConflictOption() {
-        if (fileGeneratePopulateRadio.isSelected()) return this.FILE_OPTION_POPULATE;
-        if (fileGenerateEmptyRadio.isSelected()) return this.FILE_OPTION_EMPTY;
-        if (fileIgnoreRadio.isSelected()) return this.FILE_OPTION_IGNORE;
-        if (filePromptRadio.isSelected()) return this.FILE_OPTION_PROMPT;
-        return this.FILE_OPTION_PROMPT;
+        if (fileGeneratePopulateRadio.isSelected()) return FILE_OPTION_POPULATE;
+        if (fileGenerateEmptyRadio.isSelected()) return FILE_OPTION_EMPTY;
+        if (fileIgnoreRadio.isSelected()) return FILE_OPTION_IGNORE;
+        if (filePromptRadio.isSelected()) return FILE_OPTION_PROMPT;
+        return FILE_OPTION_PROMPT;
     }
 	
     // Returns an integer mask describing the user's selection for duplicate resource key conflicts
 	
     private int getResourceConflictOption() {
-        if (resourceOverwriteRadio.isSelected()) return this.RESOURCE_OPTION_OVERWRITE;
-        if (resourceIgnoreRadio.isSelected()) return this.RESOURCE_OPTION_IGNORE;
-        if (resourcePromptRadio.isSelected()) return this.RESOURCE_OPTION_PROMPT;
-        return this.RESOURCE_OPTION_PROMPT;
+        if (resourceOverwriteRadio.isSelected()) return RESOURCE_OPTION_OVERWRITE;
+        if (resourceIgnoreRadio.isSelected()) return RESOURCE_OPTION_IGNORE;
+        if (resourcePromptRadio.isSelected()) return RESOURCE_OPTION_PROMPT;
+        return RESOURCE_OPTION_PROMPT;
     }
 	
     // Returns the group name for use when no group name is specified

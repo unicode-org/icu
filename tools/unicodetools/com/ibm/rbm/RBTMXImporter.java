@@ -1,25 +1,17 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBTMXImporter.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
 
 import java.io.*;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 import java.util.*;
 
 import org.apache.xerces.parsers.*;
 import org.apache.xerces.dom.*;
-import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -30,7 +22,7 @@ import org.xml.sax.*;
  * displaying it to the user, performing the actual insertions into the resource bundle manager,
  * and managing any import conflicts.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBTMXImporter extends RBImporter {
