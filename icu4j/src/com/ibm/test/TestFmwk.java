@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestFmwk.java,v $ 
- * $Date: 2000/03/10 03:47:44 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/03/14 19:48:25 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -22,7 +22,7 @@ import java.text.*;
 
 
 /**
- * BITestFmwk is a base class for tests that can be run conveniently from
+ * TestFmwk is a base class for tests that can be run conveniently from
  * the command line as well as under the Java test harness.
  * <p>
  * Sub-classes implement a set of methods named Test<something>. Each
