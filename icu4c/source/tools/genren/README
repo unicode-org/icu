@@ -5,11 +5,11 @@ This script is intended to be used on Linux, although it should work on any plat
 The following instructions are for Linux version.
 - urename.h file should be generated after implementation is complete for a release.
 - the version number for a release should be set according to the list in source/common/unicode/uversion.h
-- source/common/unicode/utypes.h header should be edited to comment out #include "unicode/urename.h" line. THIS CHANGE SHOULD NOT BE COMMITED BACK TO CVS.
+- source/common/unicode/umachine.h header should be edited to comment out #include "unicode/urename.h" line. THIS CHANGE SHOULD NOT BE COMMITED BACK TO CVS.
 - ICU library should be built and installed.
 - Layout engine should be built and installed (it is not currently built by default)
 - In the directory where ICU libraries are installed, run 
 genren.pl libicuuc.so libicui18n.so libiculayout.so
 this will produce the urename.h header file
 - copy urename.h to source/common/unicode directory, overwriting the old version. Commit it.
-- Unedit changes to utypes.h
+- Unedit changes to umachine.h
