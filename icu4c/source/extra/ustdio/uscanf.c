@@ -812,6 +812,9 @@ u_scanf_scanset_handler(UFILE             *input,
     UChar           *alias, *limit;
 
 
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
+
     /* Create an empty set */
     scanset = uset_open(0, -1);
 
@@ -834,6 +837,7 @@ u_scanf_scanset_handler(UFILE             *input,
 
     /* verify that the parse was successful */
     if (U_SUCCESS(status)) {
+        c=0;
 
         /* grab characters one at a time and make sure they are in the scanset */
         while(alias < limit) {
