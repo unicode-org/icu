@@ -214,6 +214,10 @@ SOURCE=.\GlyphIterator.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\GlyphLookupTables.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GlyphPositioningTables.cpp
 # End Source File
 # Begin Source File
@@ -479,6 +483,10 @@ SOURCE=.\GlyphDefinitionTables.h
 # Begin Source File
 
 SOURCE=.\GlyphIterator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GlyphLookupTables.h
 # End Source File
 # Begin Source File
 
