@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/08/08 23:32:54 $
- * $Revision: 1.55 $
+ * $Date: 2003/09/09 21:30:46 $
+ * $Revision: 1.56 $
  *
  *******************************************************************************
  */
@@ -28,10 +28,10 @@ import java.util.Locale;
 public class RoundTripTest extends TestFmwk {
 
     // Time bomb code to temporarily modify the behavior of this test
-    // to account for changes in the Unicode properties for ICU 2.6.*.
-    static VersionInfo ICU26 = VersionInfo.getInstance(2,6,1,0);
-    static boolean isICU26() {
-        return ICU26.compareTo(VersionInfo.ICU_VERSION) == 0;
+    // to account for changes in the Unicode properties for ICU 2.8.*.
+    static VersionInfo ICU28 = VersionInfo.getInstance(2,8,0,0);
+    static boolean isICU28() {
+        return ICU28.compareTo(VersionInfo.ICU_VERSION) == 0;
     }
 
     static final boolean EXTRA_TESTS = true;
@@ -166,7 +166,7 @@ public class RoundTripTest extends TestFmwk {
 
     String getGreekSet() {
         // Time bomb
-        return isICU26() ?
+        return isICU28() ?
             "[[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]&[:Age=3.2:]]" :
             "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]";
     }
@@ -296,7 +296,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestDevanagariLatin() throws IOException, ParseException {
         long start = System.currentTimeMillis();
-        if(isICU26()){
+        if(isICU28()){
             new Test("Latin-DEVANAGARI", 50)
               .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965] & [:Age=3.2:]]", "[\u0965]", this, new LegalIndic());
 
@@ -670,7 +670,7 @@ public class RoundTripTest extends TestFmwk {
         }
         for(int i=0; i<num;i++){
            logln("Testing " + array[i][0] + " at index " + i   );
-           if(isICU26()){
+           if(isICU28()){
                new Test(array[i][0], 50)
                     .test("[" + array[i][1]+" & [:Age=3.2:]]",
                           "[" + array[i][2]+" & [:Age=3.2:]]",
