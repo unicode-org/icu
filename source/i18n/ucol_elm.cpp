@@ -670,12 +670,22 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     /* Unsafe chars table.  Finish it off, then copy it. */
     uprv_uca_unsafeCPAddCCNZ(t);
+    if (t->UCA != 0) {              /* Or in unsafebits from UCA, making a combined table.    */
+       for (i=0; i<UCOL_UNSAFECP_TABLE_SIZE; i++) {    
+           t->unsafeCP[i] |= t->UCA->unsafeCP[i];
+       }
+    }
     myData->unsafeCP = tableOffset;
     uprv_memcpy(dataStart + tableOffset, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
     tableOffset += paddedsize(UCOL_UNSAFECP_TABLE_SIZE);
 
 
-    /* Contraction Ending chars hash table.  Copy it out. */
+    /* Finish building Contraction Ending chars hash table and then copy it out.  */
+    if (t->UCA != 0) {              /* Or in unsafebits from UCA, making a combined table.    */
+        for (i=0; i<UCOL_UNSAFECP_TABLE_SIZE; i++) {    
+            t->contrEndCP[i] |= t->UCA->contrEndCP[i];
+        }
+    }
     myData->contrEndCP = tableOffset;
     uprv_memcpy(dataStart + tableOffset, t->contrEndCP, UCOL_UNSAFECP_TABLE_SIZE);
     tableOffset += paddedsize(UCOL_UNSAFECP_TABLE_SIZE);
