@@ -703,7 +703,7 @@ addAlias(const char *alias, uint16_t standard, uint16_t converter, UBool default
         aliasList->aliasCount++;
         startEmptyWithoutDefault = TRUE;
     }
-    aliasList->aliases = uprv_realloc(aliasList->aliases, (aliasList->aliasCount + 1) * sizeof(aliasList->aliases[0]));
+    aliasList->aliases = (uint16_t *)uprv_realloc(aliasList->aliases, (aliasList->aliasCount + 1) * sizeof(aliasList->aliases[0]));
     if (startEmptyWithoutDefault) {
         aliasList->aliases[0] = 0;
     }
