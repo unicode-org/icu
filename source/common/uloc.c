@@ -968,7 +968,7 @@ _canonicalize(const char* localeID,
                 } while(fieldCount<2);
             }
             posixVariantSize = _getVariantEx(localeID+1, '@', name+i, nameCapacity-i,
-                                             variantSize > 0);
+                                             (UBool)(variantSize > 0));
             if (posixVariantSize > 0) {
                 if (variant == NULL) {
                     variant = name+i;

@@ -91,8 +91,12 @@ U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec);
 
 /**
  * Assert that the UBool is TRUE, and return TRUE if it does.
+ *
+ * NOTE: Use 'int condition' rather than 'UBool condition' so the
+ * compiler doesn't complain about integral conversion of expressions
+ * like 'p != 0'.
  */
-U_CFUNC UBool assertTrue(const char* msg, UBool condition);
+U_CFUNC UBool assertTrue(const char* msg, int condition);
 
 /**
  * Assert that the actualString equals the expectedString, and return
