@@ -145,7 +145,7 @@ TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint
         if(U_FAILURE(errorCode)) {
             log_err("%s ucnv_getNextUChar() failed: %s\n", message, u_errorName(errorCode));
             break;
-        } else if((uint32_t)(s-s0)!=*r || c!=(UChar32)*(r+1)) {
+        } else if((uint32_t)(s-s0)!=*r || c!=*(r+1)) {
             log_err("%s ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
                 message, c, (s-s0), *(r+1), *r);
             break;
@@ -4542,7 +4542,7 @@ TestLMBCS() {
       const int *off = offsets32;
 
       UErrorCode errorCode=U_ZERO_ERROR;
-      uint32_t uniChar;
+      UChar32 uniChar;
 
       cnv=ucnv_open("LMBCS-1", &errorCode);
       if(U_FAILURE(errorCode)) {

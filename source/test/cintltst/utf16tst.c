@@ -124,7 +124,7 @@ static void TestGetChar()
         0xe000,
         0xd800
     };
-    static uint32_t result[]={
+    static UChar32 result[]={
      /*codepoint-unsafe,  codepoint-safe(not strict)  codepoint-safe(strict)*/
         0xfca10000,       0xdc00,                     UTF_ERROR_VALUE,   
         0x20ac,           0x20ac,                     0x20ac,
@@ -167,7 +167,7 @@ static void TestGetChar()
 static void TestNextPrevChar(){
 
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
-    static uint32_t result[]={
+    static UChar32 result[]={
     /*next_unsafe    next_safe_ns  next_safe_s       prev_unsafe   prev_safe_ns     prev_safe_s*/
         0x0061,        0x0061,       0x0061,           0x0000,       0x0000,          0x0000,
         0x10000,       0x10000,      0x10000,          0x120400,     0xdc00,          UTF_ERROR_VALUE, 

@@ -1696,7 +1696,7 @@ static void TestComposeDecompose(void) {
 
     log_verbose("Testing UCA extensively\n");
     coll = ucol_open("", &status);
-    for(u=0; u<noCases; u++) {
+    for(u=0; u<(UChar32)noCases; u++) {
       if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
         log_err("Failure: codePoint %05X fails TestComposeDecompose in the UCA\n", t[u]->u);
         doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
@@ -1739,7 +1739,7 @@ static void TestComposeDecompose(void) {
             coll = ucol_open(locName, &status);
             ucol_setStrength(coll, UCOL_IDENTICAL);
 
-            for(u=0; u<noCases; u++) {
+            for(u=0; u<(UChar32)noCases; u++) {
               if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
                 log_err("Failure: codePoint %05X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
                 doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
@@ -1748,7 +1748,7 @@ static void TestComposeDecompose(void) {
             ucol_close(coll);
         }
     }
-    for(u = 0; u <= noCases; u++) {
+    for(u = 0; u <= (UChar32)noCases; u++) {
         free(t[u]);
     }
     free(t);
