@@ -93,6 +93,12 @@ ucnv_open (const char *name,
     return ucnv_createConverter(name, err);
 }
 
+U_CAPI UConverter* U_EXPORT2 
+ucnv_openPackage   (const char *packageName, const char *converterName, UErrorCode * err)
+{
+    return ucnv_createConverterFromPackage(packageName, converterName,  err);
+}
+
 /*Extracts the UChar* to a char* and calls through createConverter */
 U_CAPI UConverter*   U_EXPORT2
 ucnv_openU (const UChar * name,
@@ -243,14 +249,23 @@ ucnv_close (UConverter * converter)
     if (converter->sharedData->impl->close != NULL) {
         converter->sharedData->impl->close(converter);
     }
-    if(!converter->isCopyLocal){
-        if (converter->sharedData->referenceCounter != ~0) {
-            umtx_lock (NULL);
-            if (converter->sharedData->referenceCounter != 0) {
-                converter->sharedData->referenceCounter--;
-            }
-            umtx_unlock (NULL);
+
+#if 1
+    if(!converter->isCopyLocal)
+#endif
+    if (converter->sharedData->referenceCounter != ~0) {
+        umtx_lock (NULL);
+        if (converter->sharedData->referenceCounter != 0) {
+            converter->sharedData->referenceCounter--;
         }
+        umtx_unlock (NULL);
+
+        if((converter->sharedData->referenceCounter == 0)&&(converter->sharedData->sharedDataCached == FALSE)) {
+            ucnv_deleteSharedConverterData(converter->sharedData);
+        }
+    }
+
+    if(!converter->isCopyLocal){
         uprv_free (converter);
     }
     return;

@@ -107,7 +107,7 @@ static struct {
  *goes to disk and opens it.
  *allocates the memory and returns a new UConverter object
  */
-static UConverterSharedData *createConverterFromFile (const char *converterName, UErrorCode * err);
+static UConverterSharedData *createConverterFromFile (const char *pkg, const char *converterName, UErrorCode * err);
 
 static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
 
@@ -155,12 +155,12 @@ isCnvAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x76 &&
         pInfo->dataFormat[3]==0x74 &&
-        pInfo->formatVersion[0]==6);
+        pInfo->formatVersion[0]==6);  /* Everything will be version 6 */
 }
 
 #define DATA_TYPE "cnv"
 
-static UConverterSharedData *createConverterFromFile (const char *fileName, UErrorCode * err)
+static UConverterSharedData *createConverterFromFile (const char* pkg, const char *fileName, UErrorCode * err)
 {
     UDataMemory *data;
     UConverterSharedData *sharedData;
@@ -169,7 +169,7 @@ static UConverterSharedData *createConverterFromFile (const char *fileName, UErr
         return NULL;
     }
 
-    data = udata_openChoice(NULL, DATA_TYPE, fileName, isCnvAcceptable, NULL, err);
+    data = udata_openChoice(pkg, DATA_TYPE, fileName, isCnvAcceptable, NULL, err);
     if(U_FAILURE(*err))
     {
         return NULL;
@@ -245,6 +245,9 @@ ucnv_shareConverterData(UConverterSharedData * data)
     }
     UCNV_DEBUG_LOG("put:chk",data->staticData->name,sanity);
     */
+    
+    /* Mark it shared */
+    data->sharedDataCached = TRUE;
 
     uhash_put(SHARED_DATA_HASHTABLE,
             (void*) data->staticData->name, /* Okay to cast away const as long as
@@ -283,11 +286,11 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
 {
     if (deadSharedData->referenceCounter > 0)
         return FALSE;
-    
+
     if (deadSharedData->impl->unload != NULL) {
         deadSharedData->impl->unload(deadSharedData);
     }
-
+    
     if(deadSharedData->dataMemory != NULL)
     {
         UDataMemory *data = (UDataMemory*)deadSharedData->dataMemory;
@@ -298,6 +301,20 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
     {
         uprv_free(deadSharedData->table);
     }
+
+#if 0
+    /* if the static data is actually owned by the shared data */
+    /* enable if we ever have this situation. */
+    if(deadSharedData->staticDataOwned == TRUE) /* see ucnv_bld.h */
+    {
+        uprv_free((void*)deadSharedData->staticData);
+    }
+#endif
+
+#if 0
+    /* Zap it ! */
+    uprv_memset(deadSharedData->0, sizeof(*deadSharedData));
+#endif
 
     uprv_free(deadSharedData);
     
@@ -452,7 +469,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         if (mySharedConverterData == NULL)
         {
             /*Not cached, we need to stream it in from file */
-            mySharedConverterData = createConverterFromFile (realName, err);
+            mySharedConverterData = createConverterFromFile (NULL, realName, err);
             if (U_FAILURE (*err) || (mySharedConverterData == NULL))
             {
                 umtx_unlock(&cnvCacheMutex);
@@ -475,8 +492,9 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         umtx_unlock(&cnvCacheMutex);
     }
 
+    myUConverter = ucnv_createConverterFromSharedData(mySharedConverterData, realName, locale, options, err);
+
     /* allocate the converter */
-    myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
     if (myUConverter == NULL)
     {
         if (mySharedConverterData->referenceCounter != ~0) {
@@ -484,6 +502,60 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
             --mySharedConverterData->referenceCounter;
             umtx_unlock (NULL);
         }
+        *err = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    return myUConverter;
+}
+
+
+UConverter*
+ucnv_createConverterFromPackage(const char *packageName, const char *converterName, UErrorCode * err)
+{
+    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
+    uint32_t options=0;
+    UConverter *myUConverter;
+    UConverterSharedData *mySharedConverterData = NULL;
+
+    if(U_FAILURE(*err)) {
+        return NULL; 
+    }
+
+    /* first, get the options out of the convertername string */
+    parseConverterOptions(converterName, cnvName, locale, &options, err);
+    if (U_FAILURE(*err)) {
+        /* Very bad name used. */
+        return NULL;
+    }
+    
+    /* open the data, unflatten the shared structure */
+    mySharedConverterData = createConverterFromFile(packageName, cnvName, err);
+    
+    if (U_FAILURE(*err)) {
+        return NULL; 
+    }
+
+    /* create the actual converter */
+    myUConverter = ucnv_createConverterFromSharedData( mySharedConverterData, cnvName, locale, options, err);
+    
+    if (U_FAILURE(*err)) {
+        ucnv_close(myUConverter);
+        return NULL; 
+    }
+    
+    return myUConverter;
+}
+
+
+UConverter*
+ucnv_createConverterFromSharedData(UConverterSharedData *mySharedConverterData, const char *realName, const char *locale, uint32_t options, UErrorCode *err)
+{
+    UConverter *myUConverter;
+
+    myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
+    if(myUConverter == NULL)
+    {
         *err = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
@@ -531,17 +603,6 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
         return NULL;
     }
 
-#if 0
-    /* necessary only if some converters have different formatVersion; now everything is at version 5 */
-    /* test for the format version: MBCS is at version 5, the rest still at 4 */
-    info.size=sizeof(UDataInfo);
-    udata_getInfo(pData, &info);
-    if(type == UCNV_MBCS ? info.formatVersion[0] != 5 : info.formatVersion[0] != 4) {
-        *status = U_INVALID_TABLE_FORMAT;
-        return NULL;
-    }
-#endif
-
     data = (UConverterSharedData *)uprv_malloc(sizeof(UConverterSharedData));
     if(data == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -560,6 +621,8 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
     }
     
     data->staticData = source;
+    
+    data->sharedDataCached = FALSE;
 
     /* fill in fields from the loaded data */
     data->dataMemory = (void*)pData; /* for future use */
@@ -614,6 +677,7 @@ ucnv_flushCache ()
             UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
             
             uhash_removeElement(SHARED_DATA_HASHTABLE, e);
+            mySharedData->sharedDataCached = FALSE;
             ucnv_deleteSharedConverterData (mySharedData);
         }
     }
