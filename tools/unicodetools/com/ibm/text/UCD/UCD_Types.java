@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2004/11/13 23:10:32 $
-* $Revision: 1.29 $
+* $Date: 2004/12/11 06:03:08 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -390,7 +390,16 @@ public interface UCD_Types {
         CYPRIOT = 52,
         BRAILLE = 53,
         KATAKANA_OR_HIRAGANA = 54,
-        LIMIT_SCRIPT = 55;
+        BUGINESE = 55,
+	    COPTIC = 56,
+	    NEW_TAI_LUE = 57,
+	    GLAGOLITIC = 58,
+	    TIFINAGH = 59,
+	    SYLOTI_NAGRI = 60,
+	    OLD_PERSIAN = 61,
+	    KHAROSHTHI = 62,
+
+        LIMIT_SCRIPT = 63;
 
   static final int
     UNKNOWN = 0,

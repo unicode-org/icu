@@ -1,15 +1,16 @@
 Generate: 
-DeltaVersion: 7
+DeltaVersion: 8
+CopyrightYear: 2005
 
-File: GraphemeClusterBreakProperty
+File: uax29/GraphemeBreakProperty
 Property: Grapheme_Cluster_Break
 Format:	skipValue=Other
 
-File: WordBreakProperty
+File: uax29/WordBreakProperty
 Property: Word_Break
 Format:	skipValue=Other
 
-File: SentenceBreakProperty
+File: uax29/SentenceBreakProperty
 Property: Sentence_Break
 Format:	skipValue=Other
 
@@ -20,9 +21,7 @@ Property: Block
 #         For example, "Latin Extended-A" and "latin extended a" are equivalent.
 #         For more information on the comparison of property values, 
 #            see UCD.html.
-#
-# Code points not explicitly listed in this file are given the value No_Block.
-Format:	valueList
+Format:	valueList skipUnassigned=No_Block
 
 File:	CaseFolding
 Property: SPECIAL
@@ -363,7 +362,7 @@ HackName:	Supplemental_Arrows-B
 HackName:	Supplementary_Private_Use_Area-A
 HackName:	Supplementary_Private_Use_Area-B
 HackName:	Canadian-Aboriginal
-HackName:	Old-Italic
+#HackName:	Old-Italic
 
 FinalComments
 Note that PropertyAliases sorts by the long name, while PropertyValueAliases

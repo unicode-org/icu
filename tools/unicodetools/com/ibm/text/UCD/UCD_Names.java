@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2004/11/13 23:10:32 $
-* $Revision: 1.29 $
+* $Date: 2004/12/11 06:03:08 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -318,7 +318,7 @@ final class UCD_Names implements UCD_Types {
     "BOPOMOFO", // 	BOPOMOFO
     "HAN", // 	HAN
     "YI", // 	YI
-    "OLD-ITALIC",
+    "OLD_ITALIC",
     "GOTHIC",
     "DESERET",
     "INHERITED",    // nonspacing marks
@@ -335,6 +335,14 @@ final class UCD_Names implements UCD_Types {
     "CYPRIOT", 
     "BRAILLE",
     "KATAKANA_OR_HIRAGANA",
+    "BUGINESE",
+    "COPTIC",
+    "NEW_TAI_LUE",
+    "GLAGOLITIC",
+    "TIFINAGH",
+    "SYLOTI_NAGRI",
+    "OLD_PERSIAN",
+    "KHAROSHTHI",
     
   };
 
@@ -403,6 +411,14 @@ final class UCD_Names implements UCD_Types {
     "Cprt",
     "Brai",
     "Hrkt",
+    "Bugi",
+    "Copt",
+    "Talu",
+    "Glag",
+    "Tfng",
+    "Sylo",
+    "Xpeo",
+    "Khar",
 
   };
 
