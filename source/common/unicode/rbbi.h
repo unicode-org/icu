@@ -412,11 +412,6 @@ public:
     virtual const uint8_t *getBinaryRules(uint32_t &length);
 
 
-#ifdef RBBI_DEBUG
-    void debugDumpTables() const;
-#endif
-
-
 protected:
     //=======================================================================
     // implementation

@@ -15,9 +15,7 @@
 #include "rbbirb.h"
 #include "rbbisetb.h"
 #include "rbbidata.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include "cstring.h"
 #include "uassert.h"
 
 U_NAMESPACE_BEGIN
@@ -65,8 +63,8 @@ void  RBBITableBuilder::build() {
     //   parse tree for the substition expression.
     //
     fTree->flattenVariables();
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "ftree")) {
-        printf("Parse tree after flattening variable references.\n");
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ftree")) {
+        RBBIDebugPrintf("Parse tree after flattening variable references.\n");
         fTree->printTree(TRUE);
     }
 
@@ -87,8 +85,8 @@ void  RBBITableBuilder::build() {
     //      expression.
     //
     fTree->flattenSets();
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "stree")) {
-        printf("Parse tree after flattening Unicode Set references.\n");
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "stree")) {
+        RBBIDebugPrintf("Parse tree after flattening Unicode Set references.\n");
         fTree->printTree(TRUE);
     }
 
@@ -104,8 +102,8 @@ void  RBBITableBuilder::build() {
     calcFirstPos(fTree);
     calcLastPos(fTree);
     calcFollowPos(fTree);
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "pos")) {
-        printf("\n\n");
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "pos")) {
+        RBBIDebugPrintf("\n\n");
         printPosSets(fTree);
     }
 
@@ -116,7 +114,7 @@ void  RBBITableBuilder::build() {
     flagAcceptingStates();
     flagLookAheadStates();
     flagTaggedStates();
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "states")) {printStates();};
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "states")) {printStates();};
 
 }
 
@@ -401,8 +399,10 @@ void RBBITableBuilder::buildStateTable() {
 //-----------------------------------------------------------------------------
 //
 //   flagAcceptingStates    Identify accepting states.
-//                          TODO:  implementation for tagging of rule match values
-//                                 will probably end up here.
+//                          First get a list of all of the end marker nodes.
+//                          Then, for each state s,
+//                              if s contains one of the end marker nodes in its list of tree positions then
+//                                  s is an accepting state.
 //
 //-----------------------------------------------------------------------------
 void     RBBITableBuilder::flagAcceptingStates() {
@@ -439,7 +439,7 @@ void     RBBITableBuilder::flagAcceptingStates() {
 
 //-----------------------------------------------------------------------------
 //
-//    flagLookAheadStates
+//    flagLookAheadStates   Very similar to flagAcceptingStates, above.
 //
 //-----------------------------------------------------------------------------
 void     RBBITableBuilder::flagLookAheadStates() {
@@ -481,10 +481,10 @@ void     RBBITableBuilder::flagTaggedStates() {
 
         for (n=0; n<fDStates->size(); n++) {              //    For each state  s (row in the state table)
             RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
-            if (sd->fPositions->indexOf(tagNode) >= 0) {  //       if  s include the tag node t   
+            if (sd->fPositions->indexOf(tagNode) >= 0) {  //       if  s include the tag node t
                 if (sd->fTagVal < tagNode->fVal) {
                     // If more than one rule tag applies to this state, the larger
-                    //   tag takes precedence. 
+                    //   tag takes precedence.
                 sd->fTagVal = tagNode->fVal;
             }
         }
@@ -571,15 +571,15 @@ void RBBITableBuilder::printPosSets(RBBINode *n) {
         return;
     }
     n->print();
-    printf("         Nullable:  %s\n", n->fNullable?"TRUE":"FALSE");
+    RBBIDebugPrintf("         Nullable:  %s\n", n->fNullable?"TRUE":"FALSE");
 
-    printf("         firstpos:  ");
+    RBBIDebugPrintf("         firstpos:  ");
     printSet(n->fFirstPosSet);
 
-    printf("         lastpos:   ");
+    RBBIDebugPrintf("         lastpos:   ");
     printSet(n->fLastPosSet);
 
-    printf("         followpos: ");
+    RBBIDebugPrintf("         followpos: ");
     printSet(n->fFollowPos);
 
     printPosSets(n->fLeftChild);
@@ -670,9 +670,9 @@ void RBBITableBuilder::printSet(UVector *s) {
     int32_t  i;
     for (i=0; i<s->size(); i++) {
         void *v = s->elementAt(i);
-        printf("%10p", v);
+        RBBIDebugPrintf("%10p", v);
     }
-    printf("\n");
+    RBBIDebugPrintf("\n");
 }
 
 
@@ -686,24 +686,24 @@ void RBBITableBuilder::printStates() {
     int     c;    // input "character"
     int     n;    // state number
 
-    printf("state |           i n p u t     s y m b o l s \n");
-    printf("      | Acc  LA    Tag");
-    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {printf(" %2d", c);};
-    printf("\n");
-    printf("      |---------------");
-    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {printf("---");};
-    printf("\n");
+    RBBIDebugPrintf("state |           i n p u t     s y m b o l s \n");
+    RBBIDebugPrintf("      | Acc  LA    Tag");
+    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {RBBIDebugPrintf(" %2d", c);};
+    RBBIDebugPrintf("\n");
+    RBBIDebugPrintf("      |---------------");
+    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {RBBIDebugPrintf("---");};
+    RBBIDebugPrintf("\n");
 
     for (n=0; n<fDStates->size(); n++) {
         RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
-        printf("  %3d | " , n);
-        printf("%3d %3d %5d ", sd->fAccepting, sd->fLookAhead, sd->fTagVal);
+        RBBIDebugPrintf("  %3d | " , n);
+        RBBIDebugPrintf("%3d %3d %5d ", sd->fAccepting, sd->fLookAhead, sd->fTagVal);
         for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
-            printf(" %2d", sd->fDtran->elementAti(c));
+            RBBIDebugPrintf(" %2d", sd->fDtran->elementAti(c));
         }
-        printf("\n");
+        RBBIDebugPrintf("\n");
     }
-    printf("\n\n");
+    RBBIDebugPrintf("\n\n");
 }
 
 
@@ -726,12 +726,10 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fTagVal    = 0;
     fPositions = NULL;
     fDtran     = NULL;
-    /* test for buffer overflows */
     if (U_FAILURE(*fStatus)) {
         return;
     }
     fDtran     = new UVector(lastInputSymbol+1, *fStatus);
-    /* test for NULL */
     if (fDtran == NULL) {
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
         return;

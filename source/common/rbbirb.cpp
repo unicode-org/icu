@@ -20,6 +20,7 @@
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 #include "rbbirb.h"
 #include "rbbinode.h"
@@ -29,9 +30,10 @@
 #include "rbbitblb.h"
 #include "rbbidata.h"
 
-#include <stdio.h>     // TODO - getrid of this.
-#include <stdlib.h>
-#include <string.h>
+#ifdef RBBI_DEBUG
+#include <stdio.h>
+#include <stdarg.h>
+#endif
 
 
 U_NAMESPACE_BEGIN
@@ -51,7 +53,10 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
 {
     fStatus     = &status;
     fParseError = &parseErr;
-    fDebugEnv   = getenv("U_RBBIDEBUG");      // TODO:  make conditional on some compile time setting
+    fDebugEnv   = NULL;
+#ifdef RBBI_DEBUG
+    fDebugEnv   = getenv("U_RBBIDEBUG");
+#endif
 
     fScanner            = new RBBIRuleScanner(this);
     fSetBuilder         = new RBBISetBuilder(this);
@@ -243,6 +248,24 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     return This;
 }
 
+
+
+//----------------------------------------------------------------------------
+//
+//   RBBIDebugPrintf    Printf equivalent, for debugging output.
+//                      Conditional compilation of the implementation lets us
+//                      get rid of the stdio dependency in environments where it
+//                      is unavailable.
+//
+//----------------------------------------------------------------------------
+void RBBIDebugPrintf(const char *fmt, ...) {
+#ifdef RBBI_DEBUG
+    va_list ap;
+    va_start(ap, fmt);
+    vprintf(fmt, ap);
+    va_end(ap);
+#endif
+}
 
 
 U_NAMESPACE_END

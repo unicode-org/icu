@@ -33,7 +33,7 @@
 #include "uvector.h"
 #include "uassert.h"
 #include "cmemory.h"
-#include <stdio.h>
+#include "cstring.h"
 
 #include "rbbisetb.h"
 #include "rbbinode.h"
@@ -127,7 +127,7 @@ void RBBISetBuilder::build() {
     RBBINode        *usetNode;
     RangeDescriptor *rlRange;
 
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "usets")) {printSets();}
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "usets")) {printSets();}
 
     //
     //  Initialize the process by creating a single range encompassing all characters
@@ -194,7 +194,7 @@ void RBBISetBuilder::build() {
         }
     }
 
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "range")) { printRanges();}
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "range")) { printRanges();}
 
     //
     //  Group the above ranges, with each group consisting of one or more
@@ -218,8 +218,8 @@ void RBBISetBuilder::build() {
         }
     }
 
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "rgroup")) {printRangeGroups();}
-    if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "esets")) {printSets();}
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "rgroup")) {printRangeGroups();}
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "esets")) {printSets();}
 
     //
     // Build the Trie table for mapping UChar32 values to the corresponding
@@ -251,7 +251,7 @@ int32_t RBBISetBuilder::getTrieSize() {
                                     getFoldedRBBIValue,
                                     TRUE,                // Reduce to 16 bits
                                     fStatus);
-    // printf("Trie table size is %d\n", trieSize);
+    // RBBIDebugPrintf("Trie table size is %d\n", trieSize);
     return fTrieSize;
 }
 
@@ -334,13 +334,13 @@ void RBBISetBuilder::printRanges() {
     RangeDescriptor       *rlRange;
     int                    i;
 
-    printf("\n\n Nonoverlapping Ranges ...\n");
+    RBBIDebugPrintf("\n\n Nonoverlapping Ranges ...\n");
     for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
-        printf("%2i  %4x-%4x  ", rlRange->fNum, rlRange->fStartChar, rlRange->fEndChar);
+        RBBIDebugPrintf("%2i  %4x-%4x  ", rlRange->fNum, rlRange->fStartChar, rlRange->fEndChar);
 
         for (i=0; i<rlRange->fIncludesSets->size(); i++) {
             RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);
-            UnicodeString   setName = "anon";   //  TODO:  no string literals.
+            UnicodeString   setName = "anon";
             RBBINode       *setRef = usetNode->fParent;
             if (setRef != NULL) {
                 RBBINode *varRef = setRef->fParent;
@@ -348,9 +348,9 @@ void RBBISetBuilder::printRanges() {
                     setName = varRef->fText;
                 }
             }
-            RBBINode::printUnicodeString(setName); printf("  ");
+            RBBINode::printUnicodeString(setName); RBBIDebugPrintf("  ");
         }
-        printf("\n");
+        RBBIDebugPrintf("\n");
     }
 }
 
@@ -367,14 +367,14 @@ void RBBISetBuilder::printRangeGroups() {
     int                    i;
     int                    lastPrintedGroupNum = 0;
 
-    printf("\nRanges grouped by Unicode Set Membership...\n");
+    RBBIDebugPrintf("\nRanges grouped by Unicode Set Membership...\n");
     for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
         int groupNum = rlRange->fNum & 0xbfff;
         if (groupNum > lastPrintedGroupNum) {
             lastPrintedGroupNum = groupNum;
-            printf("%2i  ", groupNum);
+            RBBIDebugPrintf("%2i  ", groupNum);
 
-            if (rlRange->fNum & 0x4000) { printf(" <DICT> ");};
+            if (rlRange->fNum & 0x4000) { RBBIDebugPrintf(" <DICT> ");};
 
             for (i=0; i<rlRange->fIncludesSets->size(); i++) {
                 RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);
@@ -386,22 +386,22 @@ void RBBISetBuilder::printRangeGroups() {
                         setName = varRef->fText;
                     }
                 }
-                RBBINode::printUnicodeString(setName); printf(" ");
+                RBBINode::printUnicodeString(setName); RBBIDebugPrintf(" ");
             }
 
             i = 0;
             for (tRange = rlRange; tRange != 0; tRange = tRange->fNext) {
                 if (tRange->fNum == rlRange->fNum) {
                     if (i++ % 5 == 0) {
-                        printf("\n    ");
+                        RBBIDebugPrintf("\n    ");
                     }
-                    printf("  %05x-%05x", tRange->fStartChar, tRange->fEndChar);
+                    RBBIDebugPrintf("  %05x-%05x", tRange->fStartChar, tRange->fEndChar);
                 }
             }
-            printf("\n");
+            RBBIDebugPrintf("\n");
         }
     }
-    printf("\n");
+    RBBIDebugPrintf("\n");
 }
 
 
@@ -417,7 +417,7 @@ void RBBISetBuilder::printSets() {
     int                   i;
     UnicodeSet            inputSet;
 
-    printf("\n\nUnicode Sets List\n------------------\n");
+    RBBIDebugPrintf("\n\nUnicode Sets List\n------------------\n");
     i = 0;
     for (usetNode=fRB->fSetsListHead; usetNode!=NULL; usetNode=usetNode->fRightChild) {
         RBBINode       *setRef;
@@ -425,7 +425,7 @@ void RBBISetBuilder::printSets() {
         UnicodeString   setName;
 
         i++;
-        printf("%3d    ", i);
+        RBBIDebugPrintf("%3d    ", i);
         setName = "anonymous";
         setRef = usetNode->fParent;
         if (setRef != NULL) {
@@ -435,14 +435,14 @@ void RBBISetBuilder::printSets() {
             }
         }
         RBBINode::printUnicodeString(setName);
-        printf("   ");
+        RBBIDebugPrintf("   ");
         RBBINode::printUnicodeString(usetNode->fText);
-        printf("\n");
+        RBBIDebugPrintf("\n");
         if (usetNode->fLeftChild != NULL) {
             usetNode->fLeftChild->printTree();
         }
     }
-    printf("\n");
+    RBBIDebugPrintf("\n");
 }
 
 
@@ -468,7 +468,7 @@ RangeDescriptor::RangeDescriptor(const RangeDescriptor &other, UErrorCode &statu
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    
+
     for (i=0; i<other.fIncludesSets->size(); i++) {
         this->fIncludesSets->addElement(other.fIncludesSets->elementAt(i), status);
     }
@@ -491,7 +491,7 @@ RangeDescriptor::RangeDescriptor(UErrorCode &status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    
+
 }
 
 
@@ -518,7 +518,7 @@ void RangeDescriptor::split(UChar32 where, UErrorCode &status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    
+
     //  RangeDescriptor copy constructor copies all fields.
     //  Only need to update those that are different after the split.
     nr->fStartChar = where;

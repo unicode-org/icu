@@ -20,8 +20,6 @@
 #include "uvector.h"
 #include "symtable.h"     // For UnicodeSet parsing, is the interface that
                           //    looks up references to $variables within a set.
-// #include "rbbinode.h"
-// #include "rbbitblb.h"
 
 
 
@@ -212,6 +210,16 @@ struct RBBISetTableEl {
     RBBINode      *val;
 };
 
+
+//----------------------------------------------------------------------------
+//
+//   RBBIDebugPrintf    Printf equivalent, for debugging output.
+//                      Conditional compilation of the implementation lets us
+//                      get rid of the stdio dependency in environments where it
+//                      is unavailable.
+//
+//----------------------------------------------------------------------------
+void RBBIDebugPrintf(const char *fmt, ...);
 
 U_NAMESPACE_END
 #endif

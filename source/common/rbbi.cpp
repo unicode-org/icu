@@ -19,7 +19,6 @@
 #include "filestrm.h"
 #include "cmemory.h"
 
-#include "stdio.h"
 #include "uassert.h"
 
 U_NAMESPACE_BEGIN
@@ -177,10 +176,12 @@ void RuleBasedBreakIterator::init() {
     fDictionaryCharCount = 0;
 
     if (debugInitDone == FALSE) {
+#ifdef RBBI_DEBUG
         char *debugEnv = getenv("U_RBBIDEBUG");
         if (debugEnv && strstr(debugEnv, "trace")) {
             fTrace = TRUE;
         }
+#endif
         debugInitDone = TRUE;
     }
 }
@@ -537,7 +538,7 @@ int32_t RuleBasedBreakIterator::current(void) const {
 //-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handleNext(void) {
     if (fTrace) {
-        printf("Handle Next   pos   char  state category  \n");
+        RBBIDebugPrintf("Handle Next   pos   char  state category  \n");
     }
 
     // No matter what, handleNext alway correctly sets the break tag value.
@@ -597,13 +598,13 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
         }
 
         if (fTrace) {
-            printf("             %4d   ", fText->getIndex());
+            RBBIDebugPrintf("             %4d   ", fText->getIndex());
             if (0x20<=c && c<0x7f) {
-                printf("\"%c\"  ", c);
+                RBBIDebugPrintf("\"%c\"  ", c);
             } else {
-                printf("%5x  ", c);
+                RBBIDebugPrintf("%5x  ", c);
             }
-            printf("%3d  %3d\n", state, category);
+            RBBIDebugPrintf("%3d  %3d\n", state, category);
         }
 
         // look up a state transition in the state table
@@ -680,7 +681,7 @@ continueOn:
 
     fText->setIndex(result);
     if (fTrace) {
-        printf("result = %d\n\n", result);
+        RBBIDebugPrintf("result = %d\n\n", result);
     }
     return result;
 }
@@ -723,7 +724,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
     }
 
     if (fTrace) {
-        printf("Handle Prev   pos   char  state category  \n");
+        RBBIDebugPrintf("Handle Prev   pos   char  state category  \n");
     }
 
     // loop until we reach the beginning of the text or transition to state 0
@@ -746,13 +747,13 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
         }
 
         if (fTrace) {
-            printf("             %4d   ", fText->getIndex());
+            RBBIDebugPrintf("             %4d   ", fText->getIndex());
             if (0x20<=c && c<0x7f) {
-                printf("\"%c\"  ", c);
+                RBBIDebugPrintf("\"%c\"  ", c);
             } else {
-                printf("%5x  ", c);
+                RBBIDebugPrintf("%5x  ", c);
             }
-            printf("%3d  %3d\n", state, category);
+            RBBIDebugPrintf("%3d  %3d\n", state, category);
         }
 
         // look up a state transition in the backwards state table
@@ -946,19 +947,6 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
 
     return clone;
 }
-
-
-
-//-------------------------------------------------------------------------------
-//
-//   debugDumpTables     Debugging Function
-//
-//-------------------------------------------------------------------------------
-#ifdef RBBI_DEBUG
-void RuleBasedBreakIterator::debugDumpTables() const {
-    fData->debugDumpTables();
-}
-#endif
 
 
 

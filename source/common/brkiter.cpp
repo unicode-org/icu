@@ -23,11 +23,10 @@
 #include "unicode/udata.h"
 #include "unicode/resbund.h"
 #include "cstring.h"
-#include <string.h>
 
 // *****************************************************************************
 // class BreakIterator
-// This class implements methods for finding the location of boundaries in text. 
+// This class implements methods for finding the location of boundaries in text.
 // Instances of BreakIterator maintain a current position and scan over text
 // returning the index of characters where boundaries occur.
 // *****************************************************************************
@@ -187,7 +186,7 @@ BreakIterator*
 BreakIterator::createTitleInstance(const Locale& /* key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
-    // default rules files.  This function will have to be made fully general 
+    // default rules files.  This function will have to be made fully general
     // at some time in the future!
     BreakIterator* result = NULL;
     static const char filename[] = "title";
