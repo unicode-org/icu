@@ -59,15 +59,10 @@
  * to the lookup are 21-bit unsigned integers, with not all of the
  * 21-bit range used.
  * 
- * It is assumed that client code keeps a uint32_t pointer
- * to the beginning of the data:
- * 
- *   const uint32_t *p32;
- *
  * *.spp files customarily begin with a UDataInfo structure, see udata.h and .c.
  * After that there are the following structures:
  *
- * uint16_t indexes[_SPREP_INDEX_TOP];          -- _SPREP_INDEX_TOP=16, see enum in sprpimpl.h file
+ * int32_t indexes[_SPREP_INDEX_TOP];           -- _SPREP_INDEX_TOP=16, see enum in sprpimpl.h file
  *
  * UTrie stringPrepTrie;                        -- size in bytes=indexes[_SPREP_INDEX_TRIE_SIZE]
  * 
