@@ -2071,6 +2071,7 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             if (source.length() != 0) {
                 expect(*t, source, exp);
             }
+            delete t;
         } else {
             errln((UnicodeString)"FAIL: " + id + " => " + (t!=0?t->getID():(UnicodeString)"NULL") + ", " +
                   u_errorName(ec));
@@ -2151,6 +2152,9 @@ void TransliteratorTest::TestNewEngine() {
         "$rough <> h ;");
 
     expect(gr, CharsToUnicodeString("\\u03B1\\u0314"), "ha");
+    delete a;
+    delete A;
+    delete array[1];
     delete t;
 }
 
@@ -2206,6 +2210,7 @@ void TransliteratorTest::TestQuantifiedSegment(void) {
     } else {
         logln((UnicodeString)"Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
     }
+    delete t;
 }
 
 //======================================================================
