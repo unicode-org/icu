@@ -8,4 +8,4 @@ Implementation-Vendor: International Business Machines Corp.
 Implementation-Vendor-Id: com.ibm
 
 Name: com/ibm/icu/
-Sealed: true
+Sealed: false
