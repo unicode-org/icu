@@ -26,6 +26,7 @@
 #define NEW_MAX_BUFFER 999
 
 #define nct_min(x,y)  ((x<y) ? x : y)
+#define ARRAY_LENGTH(array) (sizeof(array)/sizeof((array)[0]))
 
 static int32_t  gInBufferSize = 0;
 static int32_t  gOutBufferSize = 0;
@@ -613,7 +614,7 @@ void TestSub(int32_t inputsize, int32_t outputsize)
 
 
     }
-    log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
+    log_verbose("Testing toUnicode for UTF-8 with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
     {
         const uint8_t sampleText1[] = { 0x31, 0xe4, 0xba, 0x8c, 
             0xe0, 0x80,  0x61,};
@@ -626,6 +627,34 @@ void TestSub(int32_t inputsize, int32_t outputsize)
             log_err("utf8->u with substitute did not match.\n");;
     }
 
+    log_verbose("Testing GB 18030 with substitute callbacks\n");
+    {
+        static const UChar u1[]={
+            0x24, 0x7f, 0x80,                   0x1f9,      0x20ac, 0x4e00,     0x9fa6,                 0xffff,                 0xd800, 0xdc00,         0xdbff, 0xdfff };
+        static const uint8_t gb1[]={
+            0x24, 0x7f, 0x84, 0x32, 0xeb, 0x38, 0xa8, 0xbf, 0x80,   0xd2, 0xbb, 0x82, 0x35, 0x8f, 0x34, 0x84, 0x32, 0xeb, 0x37, 0x90, 0x30, 0x81, 0x30, 0xe3, 0x32, 0x9a, 0x35 };
+        static const offsets1[]={
+            0, 1, 2, 2, 2, 2, 3, 3, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 10, 10, 10, 10 };
+
+        static const UChar u2[]={
+            0x24, 0x7f, 0x80,                   0x1f9,      0x20ac, 0x4e00,     0x9fa6,                 0xffff,                 0xd800, 0xdc00,         0xfffd,                 0xdbff, 0xdfff };
+        static const uint8_t gb2[]={
+            0x24, 0x7f, 0x84, 0x32, 0xeb, 0x38, 0xa8, 0xbf, 0x80,   0xd2, 0xbb, 0x82, 0x35, 0x8f, 0x34, 0x84, 0x32, 0xeb, 0x37, 0x90, 0x30, 0x81, 0x30, 0xe3, 0x32, 0x9a, 0x36, 0xe3, 0x32, 0x9a, 0x35 };
+        static const offsets2[]={
+            0, 1, 2, 6, 8, 9, 11, 15, 19, 19, 23, 27, 27 };
+
+        if(!testConvertFromUnicode(u1, ARRAY_LENGTH(u1), gb1, ARRAY_LENGTH(gb1), "gb18030", 
+                                   (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
+        ) {
+            log_err("u->gb18030 with substitute did not match.\n");
+        }
+
+        if(!testConvertToUnicode(gb2, ARRAY_LENGTH(gb2), u2, ARRAY_LENGTH(u2), "gb18030", 
+                                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
+        ) {
+            log_err("gb18030->u with substitute did not match.\n");
+        }
+    }
 }
 
 void TestSubWithValue(int32_t inputsize, int32_t outputsize)
@@ -913,7 +942,7 @@ void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
 
 
 UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets, 
+                const char *codepage, UConverterFromUCallback callback , const int32_t *expectOffsets, 
                 const char *mySubChar, int8_t len)
 {
 
@@ -1120,7 +1149,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
 }
 
 UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets,
+               const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
                const char *mySubChar, int8_t len)
 {
     UErrorCode status = U_ZERO_ERROR;
