@@ -1077,6 +1077,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doBackslashB:
         {
+            #if  UCONFIG_NO_BREAK_ITERATION==1
+            if (fModeFlags & UREGEX_UWORD) {
+                error(U_UNSUPPORTED_ERROR);
+            }
+            #endif
             int32_t op = (fModeFlags & UREGEX_UWORD)? URX_BACKSLASH_BU : URX_BACKSLASH_B;
             fRXPat->fCompiledPat->addElement(URX_BUILD(op, 1), *fStatus);
         }
@@ -1084,6 +1089,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doBackslashb:
         {
+            #if  UCONFIG_NO_BREAK_ITERATION==1
+            if (fModeFlags & UREGEX_UWORD) {
+                error(U_UNSUPPORTED_ERROR);
+            }
+            #endif
             int32_t op = (fModeFlags & UREGEX_UWORD)? URX_BACKSLASH_BU : URX_BACKSLASH_B;
             fRXPat->fCompiledPat->addElement(URX_BUILD(op, 0), *fStatus);
         }
