@@ -22,7 +22,7 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-#include <malloc.h>
+#include <stdlib.h>
 #include "unicode/uloc.h"
 #include "unicode/ubrk.h"
 #include "unicode/ustring.h"
