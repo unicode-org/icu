@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/resources/Attic/HolidayBundle_de.java,v $ 
- * $Date: 2000/03/10 04:18:02 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/09/20 22:39:12 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -22,28 +22,28 @@ public class HolidayBundle_de extends ListResourceBundle {
         {   "Armistice Day",                "Waffenstillstandstag" },
         {   "Ascension",                    "Christi Himmelfahrt" },
         {   "Ash Wednesday",                "Aschermittwoch" },
-        {   "Assumption",                   "Mari„ Himmelfahrt" },
+        {   "Assumption",                   "Mari\u00e4 Himmelfahrt" },
         {   "Boxing Day",                   "2. Weihnachtstag" },
         {   "Carnival",                     "Karneval" },
         {   "Christmas",                    "Weihnachtstag" },
-        {   "Civic Holiday",                "B’rgerfeiertag" },
+        {   "Civic Holiday",                "B\u00fcrgerfeiertag" },
         {   "Constitution Day",             "Verfassungstag" },
         {   "Corpus Christi",               "Fronleichnam" },
-        {   "Day of Prayer and Repentance", "Buž- und Bettag" },
+        {   "Day of Prayer and Repentance", "Bu\u00df- und Bettag" },
         {   "Easter Monday",                "Ostermonntag" },
         {   "Easter Sunday",                "Ostersonntag" },
-        {   "Epiphany",                     "Heilige 3 K÷nige" },
+        {   "Epiphany",                     "Heilige 3 K\u00f6nige" },
         {   "Father's Day",                 "Vatertag" },
         {   "Flag Day",                     "Jahrestag der Nationalflagge" },
         {   "German Unity Day",             "Tag der deutschen Einheit" },
         {   "Good Friday",                  "Karfreitag" },
         {   "Halloween",                    "Abend vor Allerheiligen" },
-        {   "Immaculate Conception",        "Mari„ Empf„ngnis" },
-        {   "Independence Day",             "Unabh„ngigkeitstag" },
+        {   "Immaculate Conception",        "Mari\u00e4 Empf\u00e4ngnis" },
+        {   "Independence Day",             "Unabh\u00e4ngigkeitstag" },
         {   "Labor Day",                    "Tag der Arbeit" },
         {   "Liberation Day",               "Befreiungstag" },
         {   "Mardi Gras",                   "Faschingsdienstag" },
-        {   "Maundy Thursday",              "Gr’ndonnerstag" },
+        {   "Maundy Thursday",              "Gr\u00fcndonnerstag" },
         {   "May Day",                      "Maifeiertag" },
         {   "Memorial Day",                 "Tag des Gedenkens" },
         {   "Mother's Day",                 "Muttertag" },
@@ -52,13 +52,13 @@ public class HolidayBundle_de extends ListResourceBundle {
         {   "New Year's Eve",               "Silvesterabend" },
         {   "Palm Sunday",                  "Palmsonntag" },
         {   "Pentecost",                    "Pfingsten" },
-        {   "Presidents' Day",              "Pr„sidentstag" },
+        {   "Presidents' Day",              "Pr\u00e4sidentstag" },
         {   "Remembrance Day",              "Volkstrauertag" },
         {   "Revolution Day",               "Jahrestag der Revolution" },
         {   "Rose Monday",                  "Rosenmontag" },
         {   "St. Stephen's Day",            "Stephanitag" },
         {   "Shrove Tuesday",               "Faschingsdienstag" },
-        {   "Spring Holiday",               "Tag des Fr’hlings" },
+        {   "Spring Holiday",               "Tag des Fr\u00fchlings" },
         {   "Summer Bank Holiday",          "Bankfeiertag" },
         {   "Thanksgiving",                 "Dankfest" },
         {   "Unity Day",                    "Einheitstag" },
