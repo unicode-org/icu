@@ -740,7 +740,8 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         accordingly in the headers. 
         */
 
-        if(lastStrength == UCOL_TOK_RESET) {
+        if(lastStrength == UCOL_TOK_RESET 
+          || sourceToken->listHeader->first[sourceToken->polarity] == 0) {
         /* If LAST is a reset 
               insert sourceToken in the list. */
 
@@ -768,11 +769,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               sourceToken->next = lastToken->next;
               lastToken->next = sourceToken;
             }
-            /*
-            sourceToken->listHeader->first[sourceToken->polarity]->previous = sourceToken;
-            sourceToken->next = sourceToken->listHeader->first[sourceToken->polarity];
-            sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
-            */
           }
 
           /*
