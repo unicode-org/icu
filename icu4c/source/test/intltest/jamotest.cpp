@@ -1,3 +1,18 @@
+/******************************************************************************
+*                                                                             *
+* COPYRIGHT:                                                                  *
+*   (C) Copyright International Business Machines Corporation,  2001          *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
+*                                                                             *
+*******************************************************************************
+************************************************************************
+*   Date        Name        Description
+*   02/28/2001  aliu        Creation
+*   03/01/2001  George      port to HP/UX
+************************************************************************/
+
 #include "jamotest.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
@@ -40,7 +55,7 @@ JamoTest::TestJamo() {
         return;
     }
 
-    const char* CASE[] = {
+    static const char* CASE[] = {
         // Column 1 is the latin text L1 to be fed to Latin-Jamo
         // to yield output J.
         
@@ -91,7 +106,7 @@ JamoTest::TestJamo() {
 void
 JamoTest::TestRealText() {
     // Test text taken from the Unicode web site
-    const char* WHAT_IS_UNICODE[] = {
+     static const char* WHAT_IS_UNICODE[] = {
       "\\uc720\\ub2c8\\ucf54\\ub4dc\\uc5d0", "\\ub300\\ud574", "?",
 
       "\\uc5b4\\ub5a4", "\\ud50c\\ub7ab\\ud3fc,", "\\uc5b4\\ub5a4",
