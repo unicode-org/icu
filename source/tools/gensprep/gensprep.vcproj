@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="gensprep"
+	ProjectGUID="{631C23CE-6C1D-4875-88F0-85E0A42B36EA}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
