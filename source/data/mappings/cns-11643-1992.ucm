@@ -30,11 +30,25 @@
 <mb_cur_min>	      1
 <uconv_class>	      "MBCS"
 <subchar>		      \x81\x7e\x7e
-<icu:state> 	      81-89:1, 88:3, 8a-90:3
+
+# (state 0) lead byte, selects the CNS plane (0x80 + plane number)
+<icu:state> 	      81-82:1, 83:7, 84-89:3, 88:5, 8a-90:5
+
+# (1..2) regular middle and trail bytes, result in BMP code points
 <icu:state> 	      21-7e:2
-<icu:state> 	      21-7e.p
+<icu:state> 	      21-7e
+
+# (3..4) middle and trail bytes resulting in supplementary code points
 <icu:state> 	      21-7e:4
+<icu:state> 	      21-7e.p
+
+# (5..6) middle and trail bytes for valid but unassigned sequences
+<icu:state> 	      21-7e:6
 <icu:state> 	      21-7e.u
+
+# (7) middle byte for plane 3
+# most results in BMP, some in supplementary, some in unassigned
+<icu:state> 	      21-7e:2, 21:4, 23-27:4, 2a:4, 2e:4, 30:4, 34:4, 39-3a:4, 3f:4, 47-48:4, 50:4, 55:4, 57-58:4, 63:6, 68-7e:6
 
 #
 CHARMAP
