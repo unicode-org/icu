@@ -244,7 +244,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
             status = U_MEMORY_ALLOCATION_ERROR;  
         }else{
             allocateStrings();
-            applyPattern(pattern, 0, status);
+            applyPattern(pattern, USET_IGNORE_SPACE, status);
         }
     }
     _dbgct(this);
@@ -291,7 +291,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
             status = U_MEMORY_ALLOCATION_ERROR;   
         }else{
             allocateStrings();
-            applyPattern(pattern, pos, 0, &symbols, status);
+            applyPattern(pattern, pos, USET_IGNORE_SPACE, &symbols, status);
         }
     }
     _dbgct(this);
@@ -310,7 +310,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
             status = U_MEMORY_ALLOCATION_ERROR; 
         }else{
             allocateStrings();
-            applyPattern(pattern, pos, 0, NULL, status);
+            applyPattern(pattern, pos, USET_IGNORE_SPACE, NULL, status);
         }
     }
     _dbgct(this);
@@ -466,7 +466,7 @@ UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
  */
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status) {
-    return applyPattern(pattern, 0, status);
+    return applyPattern(pattern, USET_IGNORE_SPACE, status);
 }
 
 /**
