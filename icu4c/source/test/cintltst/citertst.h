@@ -23,12 +23,7 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
-struct ExpansionRecord
-    {
-        UChar character;
-        int32_t count;
-    };
-typedef struct ExpansionRecord ExpansionRecord;
+
 #define MAX_TOKEN_LEN 128
    
        /**
@@ -47,16 +42,23 @@ typedef struct ExpansionRecord ExpansionRecord;
      * Test for setText()
      */
     void TestSetText(void);
+    /** @bug 4108762
+     * Test for getMaxExpansion()
+     */
+    void TestMaxExpansion(void);
     
-       
     
     /*------------------------------------------------------------------------
      Internal utilities
      */
 
     static void backAndForth(UCollationElements* iter);
-
     
+    /**
+     * Verify that getMaxExpansion works on a given set of collation rules
+     */
+    void verifyExpansion(UChar* rules, const UChar tests[], int32_t testCount);
+      
       
     /**
      * Return an integer array containing all of the collation orders

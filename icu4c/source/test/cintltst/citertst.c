@@ -26,16 +26,18 @@
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 static UErrorCode status = U_ZERO_ERROR;
-UCollator *en_us;
+UCollator *en_us=0;
 
 
 void addCollIterTest(TestNode** root)
 {
     
-    
+   
     addTest(root, &TestPrevious, "tscoll/citertst/TestPrevious");
     addTest(root, &TestOffset, "tscoll/citertst/TestOffset");
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
+    addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
+   
     
 }
 
@@ -307,7 +309,109 @@ void backAndForth(UCollationElements *iter)
 
     
 }
+/** @bug 4108762
+ * Test for getMaxExpansion()
+ */
+void TestMaxExpansion()
+{
+    // Try a simple one first:
+    // The only expansion ends with 'e' and has length 2
+    UChar rule1[50];
+    UChar temp[20];
+    UChar singleUChar[2]={0x00e4};
+    const UChar test1[] =
+    {
+      /*character, count */
+        0x61, 1,
+        0x62, 1,
+        0x65, 2
+    };
+    const UChar test2[] =
+    {
+     /*character, count */
+        0x61, 1,
+        0x62, 1,
+        0x65, 2,
+        0x66, 4
+    };
+   
+    u_uastrcpy(rule1, "< a & ae = ");
+    u_strcat(rule1, singleUChar);
+    u_uastrcpy(temp, " < b < e");
+    u_strcat(rule1, temp);
+    verifyExpansion(rule1, test1, ARRAY_LENGTH(test1));
+    
+    // Now a more complicated one:
+    //   "a1" --> "ae"
+    //   "z" --> "aeef"
+    //
+    u_uastrcpy(rule1, "");
+    u_uastrcpy(rule1, "< a & ae = a1 & aeef = z < b < e < f");
+    verifyExpansion(rule1, test2, ARRAY_LENGTH(test2));
+}
+/**
+ * Verify that getMaxExpansion works on a given set of collation rules
+ *
+ * The first row of the "tests" array contains the collation rules
+ * at index 0, and the string at index 1 is ignored.
+ *
+ * Subsequent rows of the array contain a character and a number, both
+ * represented as strings.  The character's collation order is determined,
+ * and getMaxExpansion is called for that character.  If its value is
+ * not equal to the specified number, an error results.
+ */
+void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCount)
+{
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = NULL;
+    UChar source[10];
+    UCollationElements *iter=NULL;
+    coll = ucol_openRules(rules, u_strlen(rules), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
+    if (coll == NULL || U_FAILURE(status)) {
+        log_err("Couldn't create a RuleBasedCollator. Error =%s \n", myErrorName(status));
+        return;
+    }
+    u_uastrcpy(source, "");
+    iter=ucol_openElements(coll, source, u_strlen(source), &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+            myErrorName(status));
+        return;
+    }
+    for (i = 0; i < testCount; i += 2)
+    {
+        int32_t expansion, expect, order;
+        // First get the collation key that the test string expands to
+        UChar test[]={expansionTests[i+0]};
+        
+        ucol_setText(iter, test, u_strlen(test), &status);
+        if (U_FAILURE(status)) {
+            log_err("call to ucol_setText(iter, test, length) failed.");
+            return;
+        }
+        order = ucol_next(iter, &status);
 
+        if (U_FAILURE(status)) {
+            log_err("call to iter->next() failed.");
+            return;
+        }
+        
+        /*if (order == UCOL_NULLORDER || ucol_next(iter, &status) != UCOL_NULLORDER) {
+            ucol_reset(iter);
+            log_err("verifyExpansion: \'%s\' has multiple orders\n", austrdup(test));
+        }*/
+        
+        expansion = ucol_getMaxExpansion(iter, order);
+        expect = expansionTests[i+1];
+        
+        if (expansion != expect) {
+            log_err("Expansion for \'%s\' is wrong. Expected %d, Got %d\n", austrdup(test), expect, expansion); 
+        }
+    }
+    ucol_closeElements(iter);
+    ucol_close(coll);
+}
 
 /**
  * Return an integer array containing all of the collation orders
