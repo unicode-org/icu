@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/07/02 20:54:51 $ 
- * $Revision: 1.39 $
+ * $Date: 2001/07/03 23:28:33 $ 
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -824,7 +824,7 @@ public class TransliteratorTest extends TestFmwk {
         String[][] CANON = {
             // Input               Decomposed            Composed
             {"cat",                "cat",                "cat"               },
-            {"\u00e0ardvark",      "a\u0300ardvark",     "\u00e0ardvark",    },
+            {"\u00e0ardvark",      "a\u0300ardvark",     "\u00e0ardvark"     },
                                                          
             {"\u1e0a",             "D\u0307",            "\u1e0a"            }, // D-dot_above
             {"D\u0307",            "D\u0307",            "\u1e0a"            }, // D dot_above
@@ -860,7 +860,7 @@ public class TransliteratorTest extends TestFmwk {
                                                           
         String[][] COMPAT = {                        
             // Input               Decomposed            Composed
-            {"\uFB4f",             "\u05D0\u05DC",       "\u05D0\u05DC",     }, // Alef-Lamed vs. Alef, Lamed
+            {"\uFB4f",             "\u05D0\u05DC",       "\u05D0\u05DC"      }, // Alef-Lamed vs. Alef, Lamed
                                                          
             {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated for 3.0
             {"\u00fd\uFB03n",      "y\u0301ffin",        "\u00fdffin"        }, // ffi ligature -> f + f + i
