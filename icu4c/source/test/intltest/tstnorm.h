@@ -37,6 +37,7 @@ public:
     void TestConcatenate(void);
     void TestCompare(void);
     void FindFoldFCDExceptions();
+    void TestSkippable();
 
 private:
     UnicodeString canonTests[24][3];
