@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-irix,v 1.21 2002/01/10 02:41:39 yves-oss Exp $
+## $Id: mh-irix,v 1.22 2003/08/08 23:53:43 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -shared
@@ -48,8 +48,6 @@ STATIC_O = ao
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o: ../data/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 %.d : $(srcdir)/%.c

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-linux-cc,v 1.7 2002/05/13 23:50:12 grhoten-oss Exp $
+## $Id: mh-alpha-linux-cc,v 1.8 2003/08/08 23:53:43 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 #GEN_DEPS.c=	$(CC) $(DEFS) $(CPPFLAGS) -MD -c -msg_quiet
@@ -57,8 +57,6 @@ STATIC_O = ao
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o: ../data/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 #%.d: $(srcdir)/%.c

@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.27 2003/06/03 20:52:55 alan Exp $
+## $Id: mh-darwin,v 1.28 2003/08/08 23:53:43 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -53,8 +53,6 @@ MIDDLE_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o: ../data/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 %.d : $(srcdir)/%.c
