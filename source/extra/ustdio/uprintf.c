@@ -34,9 +34,9 @@
 #include <float.h>
 #include <limits.h>
 
-u_printf_handler     g_u_printf_handlers     [256];
-u_printf_info       g_u_printf_infos     [256];
-UBool            g_u_printf_inited    = FALSE;
+static u_printf_handler     g_u_printf_handlers     [256];
+static u_printf_info       g_u_printf_infos     [256];
+static UBool            g_u_printf_inited    = FALSE;
 
 /* buffer size for formatting */
 #define UFPRINTF_BUFFER_SIZE 1024
