@@ -251,6 +251,17 @@ SOURCE=.\ucnv_utf.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnvbocu.c
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnvhz.c
 # End Source File
 # Begin Source File

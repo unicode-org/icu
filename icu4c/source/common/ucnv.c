@@ -1276,7 +1276,7 @@ ucnv_detectUnicodeSignature( const char* source,
         *signatureLength=2;
         return  "UTF-16BE";
     } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-        if(start[2] == '\x00' && start[3] =='\x00'){
+        if(start[2] == '\x00' && start[3] =='\x00') {
             *signatureLength=4;
             return "UTF-32LE";
         } else {
@@ -1286,14 +1286,17 @@ ucnv_detectUnicodeSignature( const char* source,
     } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
         *signatureLength=3;
         return  "UTF-8";
-    }else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF'){
-        *signatureLength=3;
-        return "SCSU";
-    }else if(start[0] == '\x00' && start[1] == '\x00' && 
-            start[2] == '\xFE' && start[3]=='\xFF'){
+    } else if(start[0] == '\x00' && start[1] == '\x00' && 
+              start[2] == '\xFE' && start[3]=='\xFF') {
         *signatureLength=4;
         return  "UTF-32BE";
-    }else{
+    } else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF') {
+        *signatureLength=3;
+        return "SCSU";
+    } else if(start[0] == '\xFC' && start[1] == '\xEE' && start[2] == '\x27') {
+        *signatureLength=3;
+        return "BOCU-1";
+    } else {
         *signatureLength=0;
         return NULL;
     }
