@@ -72,11 +72,9 @@ do
         ;;
     --enable-debug)
         debug=1
-        release=0
         OPTS="$OPTS --enable-debug"
         ;;
     --disable-release)
-        debug=0
         release=0
         OPTS="$OPTS --disable-release"
         ;;
