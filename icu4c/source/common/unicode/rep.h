@@ -91,30 +91,18 @@ public:
     inline UChar32 char32At(UTextOffset offset) const;
 
     /**
-     * Copy characters from this object into the destination character
-     * array.  The first character to be copied is at index
-     * <code>srcStart</code>; the last character to be copied is at
-     * index <code>srcLimit-1</code> (thus the total number of
-     * characters to be copied is <code>srcLimit-srcStart</code>). The
-     * characters are copied into the subarray of <code>dst</code>
-     * starting at index <code>dstStart</code> and ending at index
-     * <code>dstStart + (srcLimit-srcStart) - 1</code>.
-     *
-     * @param srcStart the beginning index to copy, inclusive; <code>0
-     * <= srcStart <= srcLimit</code>.
-     * @param srcLimit the ending index to copy, exclusive;
-     * <code>srcStart <= srcLimit <= length()</code>.
-     * @param dst the destination array.
-     * @param dstStart the start offset in the destination array.  
-     * @draft
+     * Copy the characters in the range [<tt>start</tt>, <tt>limit</tt>) 
+     * into the UnicodeString <tt>target</tt>.
+     * @param start offset of first character which will be copied
+     * @param limit offset immediately following the last character to
+     * be copied
+     * @param target UnicodeString into which to copy characters.
+     * @return A reference to <TT>target</TT>
+     * @draft ICU 2.1
      */
-    /* THIS API IS NOT NEEDED, BUT KEPT HERE AS A COMMENT IN
-       CASE OF FUTURE NEED.  CURRENTLY INDIVIDUAL CHARACTER
-       ACCESS SUFFICES. */
-    /* virtual void extractBetween(UTextOffset srcStart,
-                                UTextOffset srcLimit,
-                                UChar* dst,
-                                UTextOffset dstStart = 0) const = 0; */
+    virtual void extractBetween(UTextOffset start,
+                                UTextOffset limit,
+                                UnicodeString& target) const = 0;
 
     /**
      * Replace a substring of this object with the given text.  If the

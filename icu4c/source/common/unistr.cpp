@@ -1582,6 +1582,12 @@ UnicodeString::extract(char *dest, int32_t destCapacity,
   return length;
 }
 
+void 
+UnicodeString::extractBetween(UTextOffset start,
+                  UTextOffset limit,
+                  UnicodeString& target) const
+{ doExtract(start, limit - start, target); }
+
 int32_t
 UnicodeString::doExtract(UTextOffset start, int32_t length,
                          char *dest, int32_t destCapacity,
