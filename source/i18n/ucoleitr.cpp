@@ -81,7 +81,7 @@ ucol_reset(UCollationElements *elems)
   collIterate *ci = &(elems->iteratordata_);
   elems->reset_   = TRUE;
   ci->pos         = ci->string;
-  if (ci->endp == NULL) {
+  if ((ci->flags & UCOL_ITER_HASLEN) == 0 || ci->endp == NULL) {
     ci->endp      = ci->string + u_strlen(ci->string);
   }
   ci->CEpos       = ci->toReturn = ci->CEs;
@@ -98,7 +98,7 @@ ucol_reset(UCollationElements *elems)
 }
 
 U_CAPI int32_t
-ucol_next(UCollationElements *elems,
+ucol_next(UCollationElements *elems, 
           UErrorCode         *status)
 {
   uint32_t result;
