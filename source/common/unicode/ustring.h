@@ -725,7 +725,8 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
  * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @retrun The pointer to destination buffer.
+ * @return The pointer to destination buffer.
+ * @draft
  */
 
 U_CAPI wchar_t* U_EXPORT2
@@ -751,7 +752,8 @@ u_strToWCS(wchar_t *dest,
  * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @retrun The pointer to destination buffer.
+ * @return The pointer to destination buffer.
+ * @draft
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromWCS(UChar   *dest,
@@ -776,7 +778,8 @@ u_strFromWCS(UChar   *dest,
  * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @retrun The pointer to destination buffer.
+ * @return The pointer to destination buffer.
+ * @draft
  */
 U_CAPI char* U_EXPORT2 
 u_strToUTF8(char *dest,           
@@ -802,7 +805,8 @@ u_strToUTF8(char *dest,
  * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @retrun The pointer to destination buffer.
+ * @return The pointer to destination buffer.
+ * @draft
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
@@ -828,7 +832,8 @@ u_strFromUTF8(UChar *dest,
  * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @retrun The pointer to destination buffer.
+ * @return The pointer to destination buffer.
+ * @draft
  */
 U_CAPI UChar32* U_EXPORT2 
 u_strToUTF32(UChar32 *dest, 
@@ -854,7 +859,8 @@ u_strToUTF32(UChar32 *dest,
  * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @retrun The pointer to destination buffer.
+ * @return The pointer to destination buffer.
+ * @draft
  */
 U_CAPI UChar* U_EXPORT2 
 u_strFromUTF32(UChar   *dest,
