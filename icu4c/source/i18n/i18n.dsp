@@ -2225,6 +2225,14 @@ SOURCE=.\anytrans.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\casetrn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\casetrn.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\cpdtrans.cpp
 # End Source File
 # Begin Source File

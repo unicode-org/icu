@@ -1537,7 +1537,6 @@ U_NAMESPACE_END
  * user, because RBTs hold pointers to common data objects.
  */
 U_CFUNC UBool transliterator_cleanup(void) {
-    TitlecaseTransliterator::cleanup();
     TransliteratorIDParser::cleanup();
     if (registry) {
         delete registry;
