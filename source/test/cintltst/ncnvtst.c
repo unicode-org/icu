@@ -22,7 +22,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 
-#define MAX_LENGTH 50
+#define MAX_LENGTH 99
 #ifdef TEST_BUFFER_SIZE
 #undef TEST_BUFFER_SIZE
 #endif
@@ -30,14 +30,34 @@
 
 #define UNICODE_LIMIT 0x10FFFF
 
+static int32_t  gInBufferSize = 0;
+static int32_t  gOutBufferSize = 0;
+static char     gNuConvTestName[1024];
+
+#define nct_min(x,y)  ((x<y) ? x : y)
+
 static void printSeq(const unsigned char* a, int len);
 static void printSeqErr(const unsigned char* a, int len);
 static void printUSeq(const UChar* a, int len);
 static void printUSeqErr(const UChar* a, int len);
-UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+static UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
                 const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
-UBool convertToU( const char *source, int sourceLen, const UChar *expect, int expectLen, 
+static UBool convertToU( const char *source, int sourceLen, const UChar *expect, int expectLen, 
                const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
+
+static UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+                const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets);
+static UBool testConvertToU( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets);
+
+static void setNuConvTestName(const char *codepage, const char *direction)
+{
+  sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
+      codepage,
+      direction,
+      gInBufferSize,
+      gOutBufferSize);
+}
 
 
 static void TestSurrogateBehaviour();
@@ -45,6 +65,10 @@ static void TestErrorBehaviour();
 static void TestToUnicodeErrorBehaviour();
 static void TestGetNextErrorBehaviour();
 static void TestRegression();
+static void TestAvailableConverters();
+static void TestFlushInternalBuffer();  /*for improved code coverage in ucnv_cnv.c*/
+
+static void TestWithBufferSize(int32_t osize, int32_t isize);
 
 
 void printSeq(const unsigned char* a, int len)
@@ -79,14 +103,16 @@ static void printUSeqErr(const UChar* a, int len)
 
 void addExtraTests(TestNode** root)
 {
-     addTest(root, &TestSurrogateBehaviour, "tsconv/ncnvtst/TestSurrogateBehaviour");
-     addTest(root, &TestErrorBehaviour, "tsconv/ncnvtst/TestErrorBehaviour");
-     addTest(root, &TestToUnicodeErrorBehaviour, "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
-     addTest(root, &TestGetNextErrorBehaviour, "tsconv/ncnvtst/TestGetNextErrorBehaviour");
-     addTest(root, &TestRegression, "tsconv/ncnvtst/TestRegression");
+     addTest(root, &TestSurrogateBehaviour,         "tsconv/ncnvtst/TestSurrogateBehaviour");
+     addTest(root, &TestErrorBehaviour,             "tsconv/ncnvtst/TestErrorBehaviour");
+     addTest(root, &TestToUnicodeErrorBehaviour,    "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
+     addTest(root, &TestGetNextErrorBehaviour,      "tsconv/ncnvtst/TestGetNextErrorBehaviour");
+     addTest(root, &TestRegression,                 "tsconv/ncnvtst/TestRegression");
+     addTest(root, &TestAvailableConverters,        "tsconv/ncnvtst/TestAvailableConverters");
+     addTest(root, &TestFlushInternalBuffer,        "tsconv/ncnvtst/TestFlushInternalBuffer");
 
 }
-
+/*test surrogate behaviour*/
 void TestSurrogateBehaviour(){
     log_verbose("Testing for SBCS and LATIN_1\n");
     {
@@ -171,6 +197,7 @@ void TestSurrogateBehaviour(){
 
 
 }
+/*test various error behaviours*/
 void TestErrorBehaviour(){
      log_verbose("Testing for SBCS and LATIN_1\n");
     {
@@ -290,6 +317,7 @@ void TestErrorBehaviour(){
     
      
 }
+/*test different convertToUnicode error behaviours*/
 void TestToUnicodeErrorBehaviour()
 {
     log_verbose("Testing error conditions for DBCS\n");
@@ -402,6 +430,8 @@ void TestGetNextErrorBehaviour(){
     
             
 }
+
+/*Regression test for utf8 converter*/
 void TestRegression(){
     char *buffer=0;
     UChar32 c;
@@ -493,8 +523,101 @@ void TestRegression(){
     free(extractedTargetBuffer);
     free(buffer);
 
+}
+/*Walk through the available converters*/
+void TestAvailableConverters(){
+    UErrorCode status=U_ZERO_ERROR;
+    UConverter *conv=NULL;
+    int32_t i=0;
+    for(i=0; i < ucnv_countAvailable(); i++){
+        status=U_ZERO_ERROR;
+        conv=ucnv_open(ucnv_getAvailableName(i), &status);
+        if(U_FAILURE(status)){
+            log_err("ERROR: converter creation failed. Failure in alias table or the data table for \n converter=%s. Error=%s\n", 
+                        ucnv_getAvailableName(i), myErrorName(status));
+            continue;
+        }
+        ucnv_close(conv);
+    }
 
+}
 
+void TestFlushInternalBuffer(){
+    TestWithBufferSize(MAX_LENGTH, 1);
+    TestWithBufferSize(1, 1);
+    TestWithBufferSize(1, MAX_LENGTH);
+    TestWithBufferSize(MAX_LENGTH, MAX_LENGTH);
+}
+
+void TestWithBufferSize(int32_t insize, int32_t outsize){
+
+    gInBufferSize =insize;
+    gOutBufferSize = outsize;
+
+     log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
+    {
+        UChar    sampleText[] = 
+            { 0x0031, 0x0032, 0x0033, 0x0000, 0x4e00, 0x4e8c, 0x4e09,  0x002E  };
+        const char expectedUTF8[] = 
+            { (char)0x31, (char)0x32, (char)0x33, (char)0x00, (char)0xe4, (char)0xb8, (char)0x80, (char)0xe4, (char)0xba, (char)0x8c, (char)0xe4, (char)0xb8, (char)0x89, (char)0x2E };
+        int32_t  toUTF8Offs[] = 
+            { (char)0x00, (char)0x01, (char)0x02, (char)0x03, (char)0x04, (char)0x04, (char)0x04, (char)0x05, (char)0x05, (char)0x05, (char)0x06, (char)0x06, (char)0x06, (char)0x07};
+        int32_t fmUTF8Offs[] = 
+            { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0007, 0x000a, 0x000d };
+        
+        /*UTF-8*/
+        if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expectedUTF8, sizeof(expectedUTF8), "UTF8", UCNV_FROM_U_CALLBACK_SUBSTITUTE, toUTF8Offs ))
+             log_err("u-> UTF8 did not match.\n");
+    }
+     
+     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_ESCAPE  \n");
+    {
+        UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
+        const char toIBM943[]= { (char)0x61, 
+            (char)0x25, (char)0x55, (char)0x44, (char)0x38, (char)0x30, (char)0x31,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x43, (char)0x30, (char)0x31,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x38, (char)0x30, (char)0x31,
+            (char)0x61 };
+        int32_t offset[]= {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 4};
+
+        if(!testConvertFromU(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
+			    toIBM943, sizeof(toIBM943), "ibm-943",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, offset))
+		    log_err("u-> ibm-943 with subst with value did not match.\n");
+    }
+
+     log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
+    {
+        const char sampleText1[] = { (char)0x31, (char)0xe4, (char)0xba, (char)0x8c, 
+            (char)0xe0, (char)0x80,  (char)0x61,};
+        UChar    expected1[] = {  0x0031, 0x4e8c, 0xfffd, 0x0061};
+        int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0006};
+
+        if(!testConvertToU(sampleText1, sizeof(sampleText1),
+			     expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8", UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1))
+		    log_err("utf8->u with substitute did not match.\n");;
+    }
+
+    
+    log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_ESCAPE \n");
+    /*to Unicode*/
+    {
+        const char sampleTxtToU[]= { (char)0x00, (char)0x9f, (char)0xaf, 
+            (char)0x81, (char)0xad, /*unassigned*/
+            (char)0x89, (char)0xd3 };
+	    UChar IBM_943toUnicode[] = { 0x0000, 0x6D63, 
+            0x25, 0x58, 0x38, 0x31, 0x25, 0x58, 0x41, 0x44,
+            0x7B87};
+        int32_t  fromIBM943Offs [] = 	{ 0, 1, 3, 3, 3, 3, 3, 3, 3, 3, 5};
+
+        if(!testConvertToU(sampleTxtToU, sizeof(sampleTxtToU),
+		         IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode[0]),"ibm-943",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs))
+		    log_err("ibm-943->u with substitute with value did not match.\n");
+
+    }
+    
 
 }
 
@@ -682,4 +805,335 @@ UBool convertToU( const char *source, int sourceLen, const UChar *expect, int ex
         return FALSE;
     }
    
+}
+
+
+UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+                const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *conv = 0;
+    char    junkout[MAX_LENGTH]; /* FIX */
+    int32_t    junokout[MAX_LENGTH]; /* FIX */
+    char *p;
+    const UChar *src;
+    char *end;
+    char *targ;
+    int32_t *offs;
+    int i;
+    int32_t   realBufferSize;
+    char *realBufferEnd;
+    const UChar *realSourceEnd;
+    const UChar *sourceLimit;
+    UBool checkOffsets = TRUE;
+    UBool doFlush;
+
+    UConverterFromUCallback oldAction = NULL;
+    void* oldContext = NULL;
+
+    for(i=0;i<MAX_LENGTH;i++)
+        junkout[i] = (char)0xF0;
+    for(i=0;i<MAX_LENGTH;i++)
+        junokout[i] = 0xFF;
+
+    setNuConvTestName(codepage, "FROM");
+
+    log_verbose("\n=========  %s\n", gNuConvTestName);
+
+    conv = ucnv_open(codepage, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Couldn't open converter %s\n",codepage);    
+        return FALSE;
+    }
+
+    log_verbose("Converter opened..\n");
+    /*----setting the callback routine----*/
+	ucnv_setFromUCallBack (conv, callback, NULL, &oldAction, &oldContext, &status);
+	if (U_FAILURE(status)) { 
+		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
+	}
+    /*------------------------*/
+
+    src = source;
+    targ = junkout;
+    offs = junokout;
+
+    realBufferSize = (sizeof(junkout)/sizeof(junkout[0]));
+    realBufferEnd = junkout + realBufferSize;
+    realSourceEnd = source + sourceLen;
+
+    if ( gOutBufferSize != realBufferSize )
+      checkOffsets = FALSE;
+ 
+    if( gInBufferSize != MAX_LENGTH )
+      checkOffsets = FALSE;
+
+    do
+      {
+        end = nct_min(targ + gOutBufferSize, realBufferEnd);
+        sourceLimit = nct_min(src + gInBufferSize, realSourceEnd);
+
+        doFlush = (sourceLimit == realSourceEnd);
+
+        if(targ == realBufferEnd)
+          {
+        log_err("Error, overflowed the real buffer while about to call fromUnicode! targ=%08lx %s", targ, gNuConvTestName);
+        return FALSE;
+          }
+        log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"TRUE":"FALSE");
+        
+
+        status = U_ZERO_ERROR;
+ 
+        ucnv_fromUnicode (conv,
+                  &targ,
+                  end,
+                  &src,
+                  sourceLimit,
+                  offs,
+                  doFlush, /* flush if we're at the end of the input data */
+                  &status);
+      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
+        
+    if(U_FAILURE(status)) {
+        log_err("Problem doing fromUnicode to %s, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
+        return FALSE;
+      }
+
+    log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
+        sourceLen, targ-junkout);
+    if(VERBOSITY)
+    {
+        char junk[999];
+        char offset_str[999];
+        char *p;
+        
+        junk[0] = 0;
+        offset_str[0] = 0;
+        for(p = junkout;p<targ;p++)
+        {
+            sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
+            sprintf(offset_str + strlen(offset_str), "0x%02x, ", (0xFF) & (unsigned int)junokout[p-junkout]);
+        }
+        
+        log_verbose(junk);
+        printSeq((const unsigned char *)expect, expectLen);
+        if ( checkOffsets )
+          {
+            log_verbose("\nOffsets:");
+            log_verbose(offset_str);
+          }
+        log_verbose("\n");
+    }
+    ucnv_close(conv);
+
+
+    if(expectLen != targ-junkout)
+    {
+        log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
+        log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
+        printf("\nGot:");
+		printSeqErr(junkout, targ-junkout);
+        printf("\nExpected:");
+		printSeqErr(expect, expectLen);
+        return FALSE;
+    }
+
+    if (checkOffsets && (expectOffsets != 0) )
+    {
+        log_verbose("comparing %d offsets..\n", targ-junkout);
+        if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
+            log_err("did not get the expected offsets. %s", gNuConvTestName);
+            log_err("Got  : ");
+			printSeqErr(junkout, targ-junkout);
+			for(p=junkout;p<targ;p++)
+				log_err("%d, ", junokout[p-junkout]); 
+			log_err("\nExpected: ");
+			for(i=0; i<(targ-junkout); i++)
+				log_err("%d,", expectOffsets[i]);
+        }
+    }
+
+    log_verbose("comparing..\n");
+    if(!memcmp(junkout, expect, expectLen))
+    {
+        log_verbose("Matches!\n");
+        return TRUE;
+    }
+    else
+    {    
+        log_err("String does not match. %s\n", gNuConvTestName);
+        printUSeqErr(source, sourceLen);
+        printf("\nGot:");
+        printSeqErr((const unsigned char *)junkout, expectLen);
+        printf("\nExpected:");
+        printSeqErr((const unsigned char *)expect, expectLen);
+        
+        return FALSE;
+    }
+}
+
+UBool testConvertToU( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *conv = 0;
+    UChar    junkout[MAX_LENGTH]; /* FIX */
+    int32_t    junokout[MAX_LENGTH]; /* FIX */
+    const char *src;
+    const char *realSourceEnd;
+    const char *srcLimit;
+    UChar *p;
+    UChar *targ;
+    UChar *end;
+    int32_t *offs;
+    int i;
+    UBool   checkOffsets = TRUE;
+    int32_t   realBufferSize;
+    UChar *realBufferEnd;
+
+    UConverterToUCallback oldAction = NULL;
+    void* oldContext = NULL;
+    
+
+    for(i=0;i<MAX_LENGTH;i++)
+        junkout[i] = 0xFFFE;
+
+    for(i=0;i<MAX_LENGTH;i++)
+        junokout[i] = -1;
+
+    setNuConvTestName(codepage, "TO");
+
+    log_verbose("\n=========  %s\n", gNuConvTestName);
+
+    conv = ucnv_open(codepage, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Couldn't open converter %s\n",gNuConvTestName);
+        return FALSE;
+    }
+
+    log_verbose("Converter opened..\n");
+     /*----setting the callback routine----*/
+	ucnv_setToUCallBack (conv, callback, NULL, &oldAction, &oldContext, &status);
+	if (U_FAILURE(status)) { 
+		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
+	}
+	/*-------------------------------------*/
+
+    src = source;
+    targ = junkout;
+    offs = junokout;
+    
+    realBufferSize = (sizeof(junkout)/sizeof(junkout[0]));
+    realBufferEnd = junkout + realBufferSize;
+    realSourceEnd = src + sourcelen;
+
+    if ( gOutBufferSize != realBufferSize )
+      checkOffsets = FALSE;
+
+    if( gInBufferSize != MAX_LENGTH )
+      checkOffsets = FALSE;
+
+    do
+      {
+        end = nct_min( targ + gOutBufferSize, realBufferEnd);
+        srcLimit = nct_min(realSourceEnd, src + gInBufferSize);
+
+        if(targ == realBufferEnd)
+          {
+        log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjey=%08lx %s",targ,gNuConvTestName);
+        return FALSE;
+          }
+        log_verbose("calling toUnicode @ %08lx to %08lx\n", targ,end);
+
+        /* oldTarg = targ; */
+
+        status = U_ZERO_ERROR;
+
+        ucnv_toUnicode (conv,
+                &targ,
+                end,
+                &src,
+                srcLimit,
+                offs,
+                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+                &status);
+
+        /*        offs += (targ-oldTarg); */
+
+      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
+
+    if(U_FAILURE(status))
+    {
+        log_err("Problem doing %s toUnicode, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
+        return FALSE;
+    }
+
+    log_verbose("\nConversion done. %d bytes -> %d chars.\nResult :",
+        sourcelen, targ-junkout);
+    if(VERBOSITY)
+    {
+        char junk[999];
+        char offset_str[999];
+    
+        UChar *p;
+        
+        junk[0] = 0;
+        offset_str[0] = 0;
+
+        for(p = junkout;p<targ;p++)
+        {
+            sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
+            sprintf(offset_str + strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[p-junkout]);
+        }
+        
+        log_verbose(junk);
+
+        if ( checkOffsets )
+          {
+            log_verbose("\nOffsets:");
+            log_verbose(offset_str);
+          }
+        log_verbose("\n");
+    }
+    ucnv_close(conv);
+
+    log_verbose("comparing %d uchars (%d bytes)..\n",expectlen,expectlen*2);
+
+    if (checkOffsets && (expectOffsets != 0))
+    {
+        if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t))){
+            
+            log_err("did not get the expected offsets. %s",gNuConvTestName);
+            for(p=junkout;p<targ;p++)
+		      log_err("%d, ", junokout[p-junkout]); 
+		    log_err("\nExpected: ");
+		    for(i=0; i<(targ-junkout); i++)
+		      log_err("%d,", expectOffsets[i]);
+		    log_err("");
+		    for(i=0; i<(targ-junkout); i++)
+		      log_err("%X,", junkout[i]);
+		    log_err("");
+		    for(i=0; i<(src-source); i++)
+		      log_err("%X,", (unsigned char)source[i]);
+		}
+    }
+
+    if(!memcmp(junkout, expect, expectlen*2))
+    {
+        log_verbose("Matches!\n");
+        return TRUE;
+    }
+    else
+    {    
+        log_err("String does not match. %s\n", gNuConvTestName);
+        log_verbose("String does not match. %s\n", gNuConvTestName);
+        printf("\nGot:");
+		printUSeq(junkout, expectlen);
+        printf("\nExpected:");
+        printUSeq(expect, expectlen); 
+        return FALSE;
+    }
 }
