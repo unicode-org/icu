@@ -669,7 +669,10 @@ void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, U
 
     if(cnvData->startMappings!=NULL)
     {
-        cnvData->startMappings(cnvData);
+        if(!cnvData->startMappings(cnvData)) {
+            *err = U_INVALID_TABLE_FORMAT;
+            return;
+        }
     }
 
     staticData->hasFromUnicodeFallback = staticData->hasToUnicodeFallback = FALSE;
@@ -829,8 +832,13 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     case UCNV_SBCS: 
       {
         /* SBCS: use MBCS data structure with a default state table */
+        if(mySharedData->staticData->maxBytesPerChar!=1) {
+            fprintf(stderr, "error: SBCS codepage with max bytes/char!=1\n");
+            *err = U_INVALID_TABLE_FORMAT;
+            break;
+        }
         myStaticData->conversionType = UCNV_MBCS;
-        mySharedData->table = (UConverterTable *)MBCSOpen(mySharedData->staticData->maxBytesPerChar);
+        mySharedData->table = (UConverterTable *)MBCSOpen(1);
         if(mySharedData->table != NULL) {
             if(!MBCSAddState((NewConverter *)mySharedData->table, "0-ff")) {
                 *err = U_INVALID_TABLE_FORMAT;
@@ -849,12 +857,53 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       }
     case UCNV_EBCDIC_STATEFUL: 
       {
-        mySharedData->table = (UConverterTable *)EBCDICStatefulOpen();
+        /* EBCDIC_STATEFUL: use MBCS data structure with a default state table */
+        if(mySharedData->staticData->maxBytesPerChar!=2) {
+            fprintf(stderr, "error: DBCS codepage with max bytes/char!=2\n");
+            *err = U_INVALID_TABLE_FORMAT;
+            break;
+        }
+        myStaticData->conversionType = UCNV_MBCS;
+        mySharedData->table = (UConverterTable *)MBCSOpen(2);
+        if(mySharedData->table != NULL) {
+            if( !MBCSAddState((NewConverter *)mySharedData->table, "0-ff, e:1.s, f:0.s") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "direct, 0-3f:4, e:1.s, f:0.s, 40:3, 41-fe:2, ff:4") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "0-40:1.i, 41-fe:1., ff:1.i") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "0-ff:1.i, 40:1.") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "0-ff:1.i")
+            ) {
+                *err = U_INVALID_TABLE_FORMAT;
+                ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+                mySharedData->table=NULL;
+            }
+        } else {
+            *err = U_MEMORY_ALLOCATION_ERROR;
+        }
         break;
       }
     case UCNV_DBCS: 
       {
-        mySharedData->table = (UConverterTable *)DBCSOpen();
+        /* DBCS: use MBCS data structure with a default state table */
+        if(mySharedData->staticData->maxBytesPerChar!=2) {
+            fprintf(stderr, "error: DBCS codepage with max bytes/char!=2\n");
+            *err = U_INVALID_TABLE_FORMAT;
+            break;
+        }
+        myStaticData->conversionType = UCNV_MBCS;
+        mySharedData->table = (UConverterTable *)MBCSOpen(2);
+        if(mySharedData->table != NULL) {
+            if( !MBCSAddState((NewConverter *)mySharedData->table, "0-3f:3, 40:2, 41-fe:1, ff:3") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "41-fe") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "40") ||
+                !MBCSAddState((NewConverter *)mySharedData->table, "")
+            ) {
+                *err = U_INVALID_TABLE_FORMAT;
+                ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+                mySharedData->table=NULL;
+            }
+        } else {
+            *err = U_MEMORY_ALLOCATION_ERROR;
+        }
         break;
       }
 
@@ -865,7 +914,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       break;
     };
 
-    if(mySharedData->table != NULL)
+    if(U_SUCCESS(*err) && mySharedData->table != NULL)
     {
         loadTableFromFile(convFile, mySharedData, err);
     }
