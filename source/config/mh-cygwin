@@ -24,8 +24,8 @@ LINK.c=       $(CXX) $(CXXFLAGS) $(LDFLAGS)
 #LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
