@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.160 2002/03/13 21:44:34 aheninger-oss Exp $
+dnl $Id: configure.in,v 1.161 2002/03/16 19:55:15 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -767,10 +767,8 @@ AC_ARG_WITH(library-suffix,
 	[ICULIBSUFFIX="${withval}"],
 	[ICULIBSUFFIX=])
 msg=$ICULIBSUFFIX
-U_HAVE_ICULIBSUFFIXCNAME=1
 if test "$msg" = ""; then
     msg=none
-    U_HAVE_ICULIBSUFFIXCNAME=0
 fi
 AC_MSG_RESULT($msg)
 AC_SUBST(ICULIBSUFFIX)
@@ -780,7 +778,6 @@ then
     ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
 fi
 changequote([, ])dnl
-AC_SUBST(U_HAVE_ICULIBSUFFIXCNAME)
 AC_SUBST(ICULIBSUFFIXCNAME)
 
 dnl Enable/disable tests
@@ -919,7 +916,9 @@ AC_OUTPUT([README icudefs.mk \
 		data/Makefile data/icupkg.inc \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
-		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile extra/scrptrun/Makefile \
+		extra/Makefile extra/ustdio/Makefile \
+                extra/icumsgs/Makefile \
+                extra/uconv/Makefile extra/scrptrun/Makefile
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
@@ -927,17 +926,20 @@ AC_OUTPUT([README icudefs.mk \
 		tools/pkgdata/Makefile \
 		tools/genccode/Makefile tools/gencmn/Makefile \
 		tools/gencnval/Makefile tools/gentz/Makefile \
-        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
+                tools/gennames/Makefile tools/toolutil/Makefile \
+                tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile  test/cintltst/Makefile test/iotest/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile \
+                test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
-		samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile \
+		samples/Makefile samples/date/Makefile \
+                samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])
 
 if test $ICU_USE_THREADS = 0; then
