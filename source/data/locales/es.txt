@@ -272,7 +272,7 @@ es {
         FI { "Finlandia" }
         FJ { "Fidji" }
         FK { "Islas Falkland (Malvinas)" }    // alternate name { "Islas Malvinas" }
-        FM { "Micronesia, Estados Federados de" }
+        //FM { "Micronesia, Estados Federados de" }
         FO { "Islas Feroe" }
         FR { "Francia" }
         GA { "Gab\u00F3n" }
@@ -293,7 +293,7 @@ es {
         //GU { "Guam" }
         //GW { "Guinea-Bissau" }
         //GY { "Guyana" }
-        //HK { "Hong Kong, Regi\u00F3n administrativa especial de China" }
+        HK { "Hong Kong, Regi\u00F3n administrativa especial de China" }
         HM { "Islas Heard y McDonald" }
         //HN { "Honduras" }
         HR { "Croacia" }
@@ -335,10 +335,10 @@ es {
         LY { "Libia" }
         MA { "Marruecos" }
         MC { "M\u00F3naco" }
-        MD { "Moldavia, Rep\u00FAblica de" }
+        //MD { "Moldavia, Rep\u00FAblica de" }
         //MG { "Madagascar" }
         MH { "Islas Marshall" }
-        MK { "Macedonia, Antigua Rep\u00FAblica Yugoslava de" }    // alternate name { "Macedonia, Rep\u00FAblica de" }
+        //MK { "Macedonia, Antigua Rep\u00FAblica Yugoslava de" }    // alternate name { "Macedonia, Rep\u00FAblica de" }
         ML { "Mal\u00ED" }
         //MM { "Myanmar" }
         //MN { "Mongolia" }
@@ -431,7 +431,8 @@ es {
         US { "Estados Unidos" }
         //UY { "Uruguay" }
         UZ { "Uzbekist\u00E1n" }
-        VA { "Santa Sede (Ciudad del Vaticano)" }
+        //VA { "Santa Sede (Ciudad del Vaticano)" }
+        VA { "Ciudad del Vaticano" }
         VC { "San Vicente y las Granadinas" }
         //VE { "Venezuela" }
         VG { "Islas V\u00EDrgenes Brit\u00E1nicas" }
@@ -520,7 +521,7 @@ es {
         ga { "irland\u00E9s" }
         gd { "ga\u00E9lico escoc\u00E9s" }
         gl { "gallego" }
-        gu { "goujarat\u00ED" }
+        gu { "goujarat\u00ED" } // If this changes, then change Gujr in Scripts too.
         gv { "ga\u00E9lico man\u00E9s" }
         ha { "hausa" }
         haw { "hawaiano" }
@@ -539,8 +540,8 @@ es {
         ka { "georgiano" }
         kk { "kazajo" }
         kl { "groenland\u00E9s" }
-        km { "kmer" }
-        kn { "canara" }
+        km { "kmer" } // If this changes, then change Khmr in Scripts too.
+        kn { "canara" } // If this changes, then change Knda in Scripts too.
         ko { "coreano" }
         ku { "kurdo" }
         kw { "c\u00F3rnico" }
@@ -651,6 +652,64 @@ es {
         "#,##0%",
         "#E0",
     }
+    Scripts {
+        Arab { "\u00E1rabe" }
+        Armn { "armenio" }
+        Beng { "bengal\u00ED" }
+        // ? Bopo { "Bopomofo" }
+        Brai { "braille" } // Lowercase?
+        // ? Buhd { "Buhid" }
+        // ? Cans { "Unified Canadian Aboriginal Symbols" }
+        // ? Cher { "Cherokee" }
+        Cprt { "chipriota" } // grecochipriota?
+        Cyrl { "cir\u00ED"lico" }
+        // ? Deva { "Devanagari" }
+        // ? Dsrt { "Deseret" }
+        // ? Ethi { "et\u00EDopico" }
+        Geor { "georgiano" }
+        Goth { "g\u00F3tico" }
+        Grek { "griego" }
+        Gujr { "goujarat\u00ED" }
+        // ? Guru { "Gurmukhi" }
+        // ? Hang { "Hangul" }
+        // ? Hano { "Hanunoo" }
+        // ? Hani { "han" }
+        // ? Hans { "simplificado han" } // Not a formal part of ISO-15924 yet
+        // ? Hant { "tradicional han" } // Not a formal part of ISO-15924 yet
+        Hebr { "hebreo" }
+        // ? Hira { "Hiragana" }
+        // ? Ital { "antigua bastardilla" } // Probably right.
+        // ? Kana { "Katakana" }
+        Khmr { "kmer" }
+        Knda { "canara" }
+        // ? Laoo { "Lao" }
+        Latn { "lat\u00EDn" }
+        // ? Limb { "Limbu" }
+        // ? Linb { "Linear B" }
+        // ? Mlym { "Malayalam" }
+        Mong { "mongoliano" }
+        Mymr { "myanmar" }
+        // ? Ogam { "Ogham" }
+        // ? Orya { "Oriya" }
+        // ? Osma { "Osmanya" }
+        // ? Qaac { "Coptic" } // Coptic is not a formal part of ISO-15924 yet
+        // ? Qaai { "Inherited" } // PUA  Difficult to translate
+        // ? Runr { "Runic" }
+        // ? Shaw { "Shavian" }
+        // ? Sinh { "Sinhala" }
+        // ? Syrc { "Syriac" }
+        // ? Tagb { "Tagbanwa" }
+        // ? Tale { "Tai Le" }
+        Taml { "tamil" }
+        Telu { "telugu" }
+        Tglg { "tagalo" }
+        // ? Thaa { "Thaana" }
+        Thai { "tailand\u00E9s" }
+        Tibt { "tibetano" }
+        // ? Ugar { "Ugaritic" }
+        // ? Yiii { "Yi" }
+        // ? Zyyy { "com\u00FAn" } // This may need to become "undetermined script"
+    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
@@ -720,6 +779,7 @@ es {
          collation { "Colaci\u00f3n" }
          calendar  { "Calendario" }
     }
+    // The following should probably be all lowercase.
     Types {
         collation{
             direct      { "Directo Orden" }
@@ -729,13 +789,13 @@ es {
             traditional { "Tradicional Orden" }
         }
         calendar{
-            traditional{ "Tradicional" }
-            // japanese  { "JAPANESE"  }
-            // buddhist  { "BUDDHIST"  }
-            // islamic   { "ISLAMIC"   }
-            // hebrew    { "HEBREW"    }
-            // chinese   { "CHINESE"   }
-            // gregorian { "GREGORIAN" }
+            //traditional { "Tradicional" }
+            japanese    { "Japon\u00E9s" }
+            buddhist    { "Budista" }
+            islamic     { "Isl\u00E1mico" }
+            hebrew      { "Hebreo" }
+            chinese     { "Chino" }
+            gregorian   { "Gregoriano" }
         }
     }
     Variants {
