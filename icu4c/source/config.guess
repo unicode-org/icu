@@ -286,6 +286,9 @@ EOF
     VAX*:ULTRIX*:*:*)
 	echo vax-dec-ultrix${UNAME_RELEASE}
 	exit 0 ;;
+    AS400*:OS400*:*:*)
+	echo os400-ibm${UNAME_RELEASE}
+	exit 0 ;;
     2020:CLIX:*:* | 2430:CLIX:*:*)
 	echo clipper-intergraph-clix${UNAME_RELEASE}
 	exit 0 ;;
@@ -948,6 +951,9 @@ EOF
 	exit 0 ;;
     *:OS/390:*:*)
 	echo ${UNAME_MACHINE}-ibm-os390${UNAME_RELEASE}
+	exit 0 ;;
+    *:OS400:*:*)
+	echo ${UNAME_MACHINE}-ibm-os400${UNAME_RELEASE}
 	exit 0 ;;
 esac
 
