@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/07/03 02:15:47 $ 
-* $Revision: 1.9 $
+* $Date: 2002/09/25 06:40:13 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -55,6 +55,7 @@ public class Main {
             else if (arg.equalsIgnoreCase("indexChart")) WriteCharts.indexChart();
             else if (arg.equalsIgnoreCase("special")) WriteCharts.special();
             
+            else if (arg.equalsIgnoreCase("writeCompositionChart")) WriteCharts.writeCompositionChart();
             
             else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(WriteCollationData.collator);

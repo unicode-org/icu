@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/08/04 21:38:44 $
-* $Revision: 1.24 $
+* $Date: 2002/09/25 06:40:14 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -18,11 +18,16 @@ import java.text.*;
 import java.io.*;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.UnicodeMatcher;
+
 import com.ibm.text.UCD.*;
 
 public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
     static final boolean UTF8 = true; // TODO -- make argument
+    public static final char BOM = '\uFEFF';
     
     public static String[] append(String[] array1, String[] array2) {
         String[] temp = new String[array1.length + array2.length];
@@ -334,6 +339,83 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
         return output.toString();
     }
+    
+    
+    public static final class Position {
+        public int start, limit;
+    }
+    
+    /**
+     * Finds the next position in the text that matches.
+     * @param divider A UnicodeMatcher, such as a UnicodeSet.
+     * @text obvious
+     * @offset starting offset
+     * @output start and limit of the piece found. If the return is false, then start,limit = length
+     * @return true iff match found
+     */
+    public static boolean next(UnicodeMatcher matcher, Replaceable text, int offset,
+      Position output) {
+        int[] io = new int[1]; // TODO replace later; extra object creation
+        int limit = text.length();
+        // don't worry about surrogates; matcher will handle
+        for (int i = offset; i <= limit; ++i) {
+            io[0] = i;
+            if (matcher.matches(text, io, limit, false) == UnicodeMatcher.U_MATCH) {
+                // a hit, return
+                output.start = i;
+                output.limit = io[0];
+                return true;
+            }
+        }
+        output.start = output.limit = limit;
+        return false;
+    }
+
+    /**
+     * Finds the next position in the text that matches.
+     * @param divider A UnicodeMatcher, such as a UnicodeSet.
+     * @text obvious
+     * @offset starting offset
+     * @output start and limit of the piece found. If the return is false, then start,limit = 0
+     * @return true iff match found
+     */
+    public static boolean previous(UnicodeMatcher matcher, Replaceable text, int offset,
+      Position output) {
+        int[] io = new int[1]; // TODO replace later; extra object creation
+        int limit = 0;
+        // don't worry about surrogates; matcher will handle
+        for (int i = offset; i >= limit; --i) {
+            io[0] = i;
+            if (matcher.matches(text, io, offset, false) == UnicodeMatcher.U_MATCH) {
+                // a hit, return
+                output.start = i;
+                output.limit = io[0];
+                return true;
+            }
+        }
+        output.start = output.limit = limit;
+        return false;
+    }
+
+    /**
+     * Splits a string containing divider into pieces, storing in output
+     * and returns the number of pieces. The string does not have to be terminated:
+     * the segment after the last divider is returned in the last output element.
+     * Thus if the string has no dividers, then the whole string is returned in output[0]
+     * with a return value of 1.
+     * @param divider A UnicodeMatcher, such as a UnicodeSet.
+     * @param s the text to be divided
+     * @param output where the resulting pieces go
+     * @return the number of items put into output
+     */
+	public static int split(UnicodeMatcher divider, Replaceable text, Position[] output) {
+	    int index = 0;
+	    for (int offset = 0;; offset = output[index-1].limit) {
+	        if (output[index] == null) output[index] = new Position();
+	        boolean matches = next(divider, text, offset, output[index++]);
+	        if (!matches) return index;
+	    }
+	}
 
     /**
      * Splits a string containing divider into pieces, storing in output
@@ -358,14 +440,14 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
 	}
 
 	public static String[] split(String s, char divider) {
-	    String[] result = new String[100];
+	    String[] result = new String[100]; // HACK
 	    int count = split(s, divider, result);
 	    return extract(result, 0, count);
 	}
 
-	public static String[] extract(String[] source, int start, int end) {
-	    String[] result = new String[end-start];
-	    System.arraycopy(source, start, result, 0, end - start);
+	public static String[] extract(String[] source, int start, int limit) {
+	    String[] result = new String[limit-start];
+	    System.arraycopy(source, start, result, 0, limit - start);
 	    return result;
 	}
 
@@ -564,7 +646,8 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     // Or if they are UTF8, use true, false
     public static PrintWriter openPrintWriter(String filename, byte options) throws IOException {
         File file = new File(getOutputName(filename));
-        System.out.println("Creating File: " + file);
+        Utility.fixDot();
+        System.out.println("Creating File: " + file.getCanonicalPath());
         File parent = new File(file.getParent());
         //System.out.println("Creating File: "+ parent);
         parent.mkdirs();
@@ -604,6 +687,28 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 pw.print(b.get(obj, last));
             } else {
                 pw.print(obj);
+            }
+            last = obj;
+        }
+    }
+    
+    public static void print(PrintWriter pw, Map c, String pairSeparator, String separator, Breaker b) {
+        Iterator it = c.keySet().iterator();
+        boolean first = true;
+        Object last = null;
+        while (it.hasNext()) {
+            Object obj = it.next();
+            Object result = c.get(obj);
+            if (b != null && !b.filter(obj)) continue;
+            if (first) {
+                first = false;
+            } else {
+                pw.print(separator);
+            }
+            if (b != null) {
+                pw.print(b.get(obj, last) + pairSeparator + result);
+            } else {
+                pw.print(obj + pairSeparator + result);
             }
             last = obj;
         }
@@ -870,19 +975,35 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     static PrintWriter showSetNamesPw;
     
     public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, UCD ucd) {
-        if (showSetNamesPw == null) showSetNamesPw = new PrintWriter(System.out);
-        showSetNames(showSetNamesPw, prefix, set, separateLines, false, ucd);
-        showSetNamesPw.flush();
+        showSetNames(prefix,  set,  separateLines,  false,  false, ucd);
+    }
+    
+    public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, boolean IDN, UCD ucd) {
+        showSetNames(prefix,  set,  separateLines,  IDN,  false, ucd);
     }
     
     public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, UCD ucd) {
+        showSetNames( pw,  prefix,  set,  separateLines,  IDN,  false, ucd);
+    }
+    
+    public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, boolean IDN, boolean withChar, UCD ucd) {
+        if (showSetNamesPw == null) showSetNamesPw = new PrintWriter(System.out);
+        showSetNames(showSetNamesPw, prefix, set, separateLines, IDN, withChar, ucd);
+        showSetNamesPw.flush();
+    }
+    
+    public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, 
+            boolean withChar, UCD ucd) {
         int count = set.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int start = set.getRangeStart(i);
             int end = set.getRangeEnd(i);
             if (separateLines || (IDN && isSeparateLineIDN(start,end,ucd))) {
                 for (int cp = start; cp <= end; ++cp) {
-                    if (!IDN) pw.println(prefix + ucd.getCodeAndName(cp));
+                    if (!IDN) pw.println(prefix + ucd.getCode(cp)
+                        + "\t# " 
+                        + (withChar ? " (" + UTF16.valueOf(cp) + ") " : "")
+                        + ucd.getName(cp));
                     else {
                         pw.println(prefix + Utility.hex(cp,4) + "; " + ucd.getName(cp));
                     }
@@ -891,7 +1012,10 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 if (!IDN) {
                     pw.println(prefix + ucd.getCode(start)
                         + ((start != end) ? (".." + ucd.getCode(end)) : "")
-                        + "\t# " + ucd.getName(start) + ((start != end) ? (".." + ucd.getName(end)) : "")
+                        + "\t# "
+                        + (withChar ? " (" + UTF16.valueOf(start)
+                            + ((start != end) ? (".." + UTF16.valueOf(end)) : "") + ") " : "")
+                        + ucd.getName(start) + ((start != end) ? (".." + ucd.getName(end)) : "")
                     );
                 } else {
                     

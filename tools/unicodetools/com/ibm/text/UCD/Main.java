@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/08/09 23:56:24 $
-* $Revision: 1.22 $
+* $Date: 2002/09/25 06:40:13 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -73,11 +73,15 @@ public final class Main implements UCD_Types {
             
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
             
+            else if (arg.equalsIgnoreCase("quicktest")) QuickTest.test();
+            else if (arg.equalsIgnoreCase("TernaryStore")) TernaryStore.test();
+            
             else if (arg.equalsIgnoreCase("checkBIDI")) VerifyUCD.checkBIDI();
             else if (arg.equalsIgnoreCase("Buildnames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("TestNormalization")) TestNormalization.main(null);
             
             
+            else if (arg.equalsIgnoreCase("GenerateCaseTest")) GenerateCaseTest.main(null);
             else if (arg.equalsIgnoreCase("checkDecompFolding")) VerifyUCD.checkDecompFolding();
             
             else if (arg.equalsIgnoreCase("breaktest")) GenerateBreakTest.main(null);
