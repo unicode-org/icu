@@ -832,13 +832,20 @@ _deleteVariant(char* variants, int32_t variantsLen,
 
 #define OPTION_SET(options, mask) ((options & mask) != 0)
 
+/**
+ * Canonicalize the given localeID, to level 1 or to level 2,
+ * depending on the options.  To specify level 1, pass in options=0.
+ * To specify level 2, pass in options=_ULOC_CANONICALIZE.
+ *
+ * This is the code underlying uloc_getName and uloc_canonicalize.
+ */
 static int32_t
 _canonicalize(const char* localeID,
               char* result,
               int32_t resultCapacity,
               uint32_t options,
               UErrorCode* err) {
-    int32_t i, j, len, fieldCount=0, scriptSize=0, variantSize=0, nameCapacity;
+    int32_t j, len, fieldCount=0, scriptSize=0, variantSize=0, nameCapacity;
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
     const char* keywordAssign = NULL;
     const char* separatorIndicator = NULL;
@@ -857,8 +864,9 @@ _canonicalize(const char* localeID,
     }
 
     /* if we are doing a full canonicalization, then put results in
-       localeBuffer; otherwise send them to result. */
-    if (OPTION_SET(options, _ULOC_CANONICALIZE)) {
+       localeBuffer, if necessary; otherwise send them to result. */
+    if (OPTION_SET(options, _ULOC_CANONICALIZE) &&
+        (result == NULL || resultCapacity <  sizeof(localeBuffer))) {
         name = localeBuffer;
         nameCapacity = sizeof(localeBuffer);
     } else {
@@ -867,43 +875,43 @@ _canonicalize(const char* localeID,
     }
 
     /* get all pieces, one after another, and separate with '_' */
-    i=_getLanguage(localeID, name, nameCapacity, &localeID);
+    len=_getLanguage(localeID, name, nameCapacity, &localeID);
     if(_isIDSeparator(*localeID)) {
         const char *scriptID;
 
         ++fieldCount;
-        if(i<nameCapacity) {
-            name[i]='_';
+        if(len<nameCapacity) {
+            name[len]='_';
         }
-        ++i;
+        ++len;
 
-        scriptSize=_getScript(localeID+1, name+i, nameCapacity-i, &scriptID);
+        scriptSize=_getScript(localeID+1, name+len, nameCapacity-len, &scriptID);
         if(scriptSize > 0) {
             /* Found optional script */
             localeID = scriptID;
             ++fieldCount;
-            i+=scriptSize;
+            len+=scriptSize;
             if (_isIDSeparator(*localeID)) {
                 /* If there is something else, then we add the _ */
-                if(i<nameCapacity) {
-                    name[i]='_';
+                if(len<nameCapacity) {
+                    name[len]='_';
                 }
-                ++i;
+                ++len;
             }
         }
 
         if (_isIDSeparator(*localeID)) {
-            i+=_getCountry(localeID+1, name+i, nameCapacity-i, &localeID);
+            len+=_getCountry(localeID+1, name+len, nameCapacity-len, &localeID);
             if(_isIDSeparator(*localeID)) {
                 ++fieldCount;
-                if(i<nameCapacity) {
-                    name[i]='_';
+                if(len<nameCapacity) {
+                    name[len]='_';
                 }
-                ++i;
-                variantSize = _getVariant(localeID+1, *localeID, name+i, nameCapacity-i);
+                ++len;
+                variantSize = _getVariant(localeID+1, *localeID, name+len, nameCapacity-len);
                 if (variantSize > 0) {
-                    variant = name+i;
-                    i += variantSize;
+                    variant = name+len;
+                    len += variantSize;
                     localeID += variantSize + 1; /* skip '_' and variant */
                 }
             }
@@ -921,17 +929,18 @@ _canonicalize(const char* localeID,
                 done = TRUE;
                 break;
             default:
-                if (i<nameCapacity) {
-                    name[i] = c;
+                if (len<nameCapacity) {
+                    name[len] = c;
                 }
-                ++i;
+                ++len;
                 ++localeID;
                 break;
             }
         } while (!done);
     }
 
-    /* Scan ahead to next '@' and determine if it is followed by '=' and/or ';' */
+    /* Scan ahead to next '@' and determine if it is followed by '=' and/or ';'
+       After this, localeID either points to '@' or is NULL */
     if ((localeID=locale_getKeywordsStart(localeID))!=NULL) {
         keywordAssign = uprv_strchr(localeID, '=');
         separatorIndicator = uprv_strchr(localeID, ';');
@@ -945,10 +954,10 @@ _canonicalize(const char* localeID,
             if (c == 0) {
                 break;
             }
-            if (i<nameCapacity) {
-                name[i] = c;
+            if (len<nameCapacity) {
+                name[len] = c;
             }
-            ++i;
+            ++len;
             ++localeID;
         }
     }
@@ -960,37 +969,40 @@ _canonicalize(const char* localeID,
             /* Add missing '_' if needed */
             if (fieldCount < 2 || (fieldCount < 3 && scriptSize > 0)) {
                 do {
-                    if(i<nameCapacity) {
-                        name[i]='_';
+                    if(len<nameCapacity) {
+                        name[len]='_';
                     }
-                    ++i;
+                    ++len;
                     ++fieldCount;
                 } while(fieldCount<2);
             }
-            posixVariantSize = _getVariantEx(localeID+1, '@', name+i, nameCapacity-i,
+            posixVariantSize = _getVariantEx(localeID+1, '@', name+len, nameCapacity-len,
                                              (UBool)(variantSize > 0));
             if (posixVariantSize > 0) {
                 if (variant == NULL) {
-                    variant = name+i;
+                    variant = name+len;
                 }
-                i += posixVariantSize;
+                len += posixVariantSize;
                 variantSize += posixVariantSize;
             }
         }
 
         /* Check for EURO variants. */
         sawEuro = _deleteVariant(variant, variantSize, "EURO", 4);
-        i -= sawEuro;
-        if (sawEuro > 0 && name[i-1] == '_') { /* delete trailing '_' */
-            --i;
+        len -= sawEuro;
+        if (sawEuro > 0 && name[len-1] == '_') { /* delete trailing '_' */
+            --len;
         }
 
         /* Look up the ID in the canonicalization map */
         for (j=0; j<(int32_t)(sizeof(CANONICALIZE_MAP)/sizeof(CANONICALIZE_MAP[0])); j++) {
             const char* id = CANONICALIZE_MAP[j].id;
             int32_t n = uprv_strlen(id);
-            if (i == n && uprv_strncmp(name, id, n) == 0) {
-                i = _copyCount(name, nameCapacity, CANONICALIZE_MAP[j].canonicalID);
+            if (len == n && uprv_strncmp(name, id, n) == 0) {
+                if (n == 0 && localeID != NULL) {
+                    break; /* Don't remap "" if keywords present */
+                }
+                len = _copyCount(name, nameCapacity, CANONICALIZE_MAP[j].canonicalID);
                 addKeyword = CANONICALIZE_MAP[j].keyword;
                 addValue = CANONICALIZE_MAP[j].value;
                 break;
@@ -1007,41 +1019,28 @@ _canonicalize(const char* localeID,
     if (!OPTION_SET(options, _ULOC_STRIP_KEYWORDS)) {
         if (localeID!=NULL && keywordAssign!=NULL &&
             (!separatorIndicator || separatorIndicator > keywordAssign)) {
-            if(i<nameCapacity) {
-                name[i]='@';
+            if(len<nameCapacity) {
+                name[len]='@';
             }
-            ++i;
+            ++len;
             ++fieldCount;
-            i += _getKeywords(localeID+1, '@', name+i, nameCapacity-i, NULL, 0, NULL, TRUE,
-                              addKeyword, addValue, err);
+            len += _getKeywords(localeID+1, '@', name+len, nameCapacity-len, NULL, 0, NULL, TRUE,
+                                addKeyword, addValue, err);
         } else if (addKeyword != NULL) {
             U_ASSERT(addValue != NULL);
             /* inelegant but works -- later make _getKeywords do this? */
-            i += _copyCount(name+i, nameCapacity-i, "@");
-            i += _copyCount(name+i, nameCapacity-i, addKeyword);
-            i += _copyCount(name+i, nameCapacity-i, "=");
-            i += _copyCount(name+i, nameCapacity-i, addValue);
+            len += _copyCount(name+len, nameCapacity-len, "@");
+            len += _copyCount(name+len, nameCapacity-len, addKeyword);
+            len += _copyCount(name+len, nameCapacity-len, "=");
+            len += _copyCount(name+len, nameCapacity-len, addValue);
         }
     }
-    len = u_terminateChars(name, nameCapacity, i, err);
 
-    if (OPTION_SET(options, _ULOC_CANONICALIZE)) {
-        if (U_SUCCESS(*err) && *err != U_STRING_NOT_TERMINATED_WARNING) {
-            uprv_strncpy(result, localeBuffer, (len > resultCapacity) ? resultCapacity : len);
-            u_terminateChars(result, resultCapacity, len, err);
-
-        /* I consider the following a bad idea.  If the user asks for full
-           canonicalization (canonicalize()), and it fails, we shouldn't
-           silently return 'lite' canonicalization (getName()) with no error
-           result.  We should just fail! [alan] */
-
-        /*} else {
-            *err = U_ZERO_ERROR;
-            return _canonicalize(original, result, resultCapacity, 0, err);
-         */
-        }
+    if (U_SUCCESS(*err) && name == localeBuffer) {
+        uprv_strncpy(result, localeBuffer, (len > resultCapacity) ? resultCapacity : len);
     }
-    return len;
+
+    return u_terminateChars(result, resultCapacity, len, err);
 }
 
 /* ### ID parsing API **************************************************/
