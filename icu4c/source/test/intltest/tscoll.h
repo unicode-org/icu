@@ -17,11 +17,7 @@
 
 #include "intltest.h"
 #include "unicode/coll.h"
-#include "unicode/sortkey.h"
-#include "unicode/schriter.h"
-#include "unicode/ures.h"
 #include "unicode/coleitr.h"
-#include "cmemory.h"
 
 
 class IntlTestCollator: public IntlTest {

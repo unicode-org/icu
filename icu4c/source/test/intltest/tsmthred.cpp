@@ -10,9 +10,9 @@
 # endif
 #endif
 
-#include <unicode/umachine.h>
 #include "unicode/utypes.h"
 #include "umutex.h"
+#include "cmemory.h"
 
 
 #if !defined(WIN32) && !defined(XP_MAC) && !defined(U_RHAPSODY)
