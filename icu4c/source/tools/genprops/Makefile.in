@@ -7,7 +7,9 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-include $(top_srcdir)/icudefs.mk
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
 
 ## Platform-specific setup
 include @platform_make_fragment@
@@ -15,7 +17,6 @@ include @platform_make_fragment@
 ##
 
 ## Build directory information
-top_builddir = ../..
 subdir = tools/genprops
 
 ICUDATADIR=$(top_builddir)/data
