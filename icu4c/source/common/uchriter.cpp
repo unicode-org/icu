@@ -323,13 +323,13 @@ UCharCharacterIterator::move32(int32_t delta, CharacterIterator::EOrigin origin)
         if(delta > 0) {
             UTF_FWD_N(text, pos, end, delta);
         } else {
-            UTF_BACK_N(text, pos, end, -delta);
+            UTF_BACK_N(text, begin, pos, -delta);
         }
         break;
     case kEnd:
         pos = end;
         if(delta < 0) {
-            UTF_BACK_N(text, pos, end, -delta);
+            UTF_BACK_N(text, begin, pos, -delta);
         }
         break;
     default:
