@@ -97,7 +97,7 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& newID,
 CompoundTransliterator::CompoundTransliterator(UTransDirection dir,
                                                UVector& list,
                                                UErrorCode& status) :
-    Transliterator(UnicodeString("", ""), 0),
+    Transliterator(UnicodeString(), 0),
     trans(0), compoundRBTIndex(-1)
 {
     init(list, dir, FALSE, status);

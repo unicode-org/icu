@@ -20,8 +20,8 @@ void RemoveTransliterator::registerIDs() {
 
     Transliterator::_registerFactory(::ID, _create, integerToken(0));
 
-    Transliterator::_registerSpecialInverse(UnicodeString("Remove", ""),
-                                            UnicodeString("Null", ""), FALSE);
+    Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE("Remove"),
+                                            UNICODE_STRING_SIMPLE("Null"), FALSE);
 }
 
 /**
