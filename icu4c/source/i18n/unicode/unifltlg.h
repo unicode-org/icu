@@ -19,6 +19,9 @@
 #define UNIFLTLG_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
@@ -97,5 +100,7 @@ private:
 inline UnicodeFilterLogic::UnicodeFilterLogic() {}
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

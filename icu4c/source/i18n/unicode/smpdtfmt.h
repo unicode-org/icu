@@ -24,6 +24,9 @@
 #define SMPDTFMT_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/datefmt.h"
 
 U_NAMESPACE_BEGIN
@@ -856,6 +859,8 @@ SimpleDateFormat::format(UDate date, UnicodeString& result) const {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _SMPDTFMT
 //eof

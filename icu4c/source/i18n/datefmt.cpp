@@ -17,6 +17,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/resbund.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
@@ -365,5 +369,7 @@ DateFormat::isLenient() const
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

@@ -21,6 +21,17 @@
 #define BRKITER_H
 
 #include "unicode/utypes.h"
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+/*
+ * Allow the declaration of APIs with pointers to BreakIterator
+ * even when break iteration is removed from the build.
+ */
+class BreakIterator;
+
+#else
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
@@ -517,6 +528,8 @@ inline UBool BreakIterator::isBufferClone()
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif // _BRKITER
 //eof

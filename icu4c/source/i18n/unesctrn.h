@@ -10,6 +10,10 @@
 #ifndef UNESCTRN_H
 #define UNESCTRN_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 
 U_NAMESPACE_BEGIN
@@ -124,5 +128,7 @@ class U_I18N_API UnescapeTransliterator : public Transliterator {
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

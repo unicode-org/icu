@@ -17,6 +17,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 /* global variables used by the C and C++ message formatting API. */
 
 extern const UChar  *g_umsgTypeList[];
@@ -38,5 +40,6 @@ extern const UChar g_umsg_medium[];
 extern const UChar g_umsg_long[];
 extern const UChar g_umsg_full[];
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

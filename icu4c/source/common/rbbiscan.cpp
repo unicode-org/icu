@@ -13,6 +13,9 @@
 //  create and use an instance of this class as part of the process.
 //
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
@@ -1086,3 +1089,4 @@ void RBBIRuleScanner::scanSet() {
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

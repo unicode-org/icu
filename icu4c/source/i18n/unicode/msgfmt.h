@@ -21,6 +21,9 @@
 #define MSGFMT_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/format.h"
 #include "unicode/locid.h"
 #include "unicode/parseerr.h"
@@ -672,6 +675,8 @@ MessageFormat::format(const Formattable& obj,
     return Format::format(obj, result, status);
 }
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _MSGFMT
 //eof

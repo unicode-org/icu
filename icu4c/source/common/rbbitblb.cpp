@@ -10,6 +10,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/unistr.h"
 #include "rbbitblb.h"
 #include "rbbirb.h"
@@ -749,3 +752,5 @@ RBBIStateDescriptor::~RBBIStateDescriptor() {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

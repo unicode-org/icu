@@ -11,6 +11,9 @@
 #define TRIDPARS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -393,5 +396,7 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

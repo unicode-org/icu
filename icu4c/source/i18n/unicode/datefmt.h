@@ -20,6 +20,9 @@
 #define DATEFMT_H
  
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/calendar.h"
 #include "unicode/numfmt.h"
 #include "unicode/format.h"
@@ -648,6 +651,8 @@ DateFormat::format(const Formattable& obj,
     return Format::format(obj, result, status);
 }
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _DATEFMT
 //eof

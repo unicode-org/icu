@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "strrepl.h"
 #include "rbt_data.h"
 #include "util.h"
@@ -293,5 +297,7 @@ void StringReplacer::setData(const TransliterationRuleData* d) {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 //eof

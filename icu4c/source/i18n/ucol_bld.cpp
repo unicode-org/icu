@@ -17,6 +17,10 @@
 * 
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucoleitr.h"
 #include "unicode/uchar.h"
 #include "ucol_bld.h" 
@@ -1151,4 +1155,4 @@ ucol_initInverseUCA(UErrorCode *status)
     return invUCA;
 }
 
-
+#endif /* #if !UCONFIG_NO_COLLATION */

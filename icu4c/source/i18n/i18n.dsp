@@ -525,10 +525,6 @@ InputPath=.\unicode\choicfmt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\colcache.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\coleitr.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -2098,6 +2094,10 @@ InputPath=.\unicode\umsg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\umsg_imp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unesctrn.h
 # End Source File
 # Begin Source File
@@ -2291,10 +2291,6 @@ InputPath=.\unicode\unum.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\upropset.h
 # End Source File
 # Begin Source File
 

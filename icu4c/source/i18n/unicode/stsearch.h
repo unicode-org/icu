@@ -10,6 +10,10 @@
 #ifndef STSEARCH_H
 #define STSEARCH_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/search.h"
@@ -495,6 +499,8 @@ private :
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
 

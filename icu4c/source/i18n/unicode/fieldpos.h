@@ -22,6 +22,9 @@
 #define FIELDPOS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
@@ -269,6 +272,8 @@ FieldPosition::operator!=(const FieldPosition& copy) const
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _FIELDPOS
 //eof

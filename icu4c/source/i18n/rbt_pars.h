@@ -9,6 +9,9 @@
 #define RBT_PARS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/rbt.h"
 #include "unicode/parseerr.h"
@@ -360,5 +363,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

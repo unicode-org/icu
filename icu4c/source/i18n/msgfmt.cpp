@@ -19,6 +19,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/msgfmt.h"
 #include "unicode/decimfmt.h"
 #include "unicode/datefmt.h"
@@ -1430,5 +1434,7 @@ MessageFormat::createIntegerFormat(const Locale& locale, UErrorCode& status) con
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

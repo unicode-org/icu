@@ -15,6 +15,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 /* This file defines the format of the memory-mapped data file
  * containing system time zone data for icu.  See also gentz
  * and tz.pl.
@@ -199,5 +201,7 @@ struct CountryIndex {
     uint16_t  count;
     uint16_t  zoneNumber; // There are actually 'count' uint16_t's here
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

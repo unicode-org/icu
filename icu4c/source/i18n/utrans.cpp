@@ -8,6 +8,10 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
 
@@ -458,3 +462,5 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
         *textLength = textLen;
     }
 }
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

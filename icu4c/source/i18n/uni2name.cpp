@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 #include "uni2name.h"
@@ -115,3 +119,4 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

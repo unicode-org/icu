@@ -25,6 +25,10 @@
 #include <stdlib.h>
 #endif
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "ucol_imp.h"
 #include "ucol_tok.h"
 #include "ucol_elm.h"
@@ -50,5 +54,7 @@ typedef struct {
   uint32_t fLow; /*forbidden Low */
   uint32_t fHigh; /*forbidden High */
 } ucolCEGenerator;
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

@@ -28,6 +28,10 @@
 //                      the previous step.
 //
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/uniset.h"
 #include "utrie.h"
 #include "uvector.h"
@@ -577,3 +581,5 @@ void RangeDescriptor::setDictionaryFlag() {
 
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

@@ -17,6 +17,10 @@
 ********************************************************************************
 */
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/decimfmt.h"
@@ -227,5 +231,7 @@ DecimalFormatSymbols::initialize() {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

@@ -12,6 +12,11 @@
 *   03/25/97    clhuang     Initial Implementation.
 ********************************************************************************
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/fmtable.h"
 #include "cmemory.h"
 
@@ -373,5 +378,7 @@ FormattableStreamer::streamOut(ostream& stream, const Formattable& obj)
 #endif
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

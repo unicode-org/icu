@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "tolowtrn.h"
@@ -114,3 +118,4 @@ void LowercaseTransliterator::handleTransliterate(Replaceable& text,
 }
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -19,6 +19,10 @@
 * 
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/umsg.h"
 #include "unicode/ustring.h"
 #include "unicode/fmtable.h"
@@ -538,4 +542,4 @@ umsg_vparse(UMessageFormat *fmt,
     delete [] args;
 }
 
-
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -11,6 +11,9 @@
 #define NORTRANS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 #include "unicode/normlzr.h"
 
@@ -122,5 +125,7 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

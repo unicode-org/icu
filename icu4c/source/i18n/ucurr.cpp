@@ -4,6 +4,11 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ucurr.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
@@ -197,5 +202,7 @@ ucurr_getRoundingIncrement(const UChar* currency) {
     // as of this writing, is CHF { 2, 25 }.
     return double(data[1]) / POW10[data[0]];
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

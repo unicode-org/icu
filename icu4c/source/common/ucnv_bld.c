@@ -45,12 +45,39 @@ extern void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l);
 
 static const UConverterSharedData * const
 converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
-    NULL, NULL, &_MBCSData, &_Latin1Data,
+    NULL, NULL,
+
+#if UCONFIG_NO_LEGACY_CONVERSION
+    NULL,
+#else
+    &_MBCSData,
+#endif
+
+    &_Latin1Data,
     &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_UTF32BEData, &_UTF32LEData,
-    NULL, &_ISO2022Data, 
+    NULL,
+
+#if UCONFIG_NO_LEGACY_CONVERSION
+    NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL,
+#else
+    &_ISO2022Data,
     &_LMBCSData1,&_LMBCSData2, &_LMBCSData3, &_LMBCSData4, &_LMBCSData5, &_LMBCSData6,
     &_LMBCSData8,&_LMBCSData11,&_LMBCSData16,&_LMBCSData17,&_LMBCSData18,&_LMBCSData19,
-    &_HZData, &_SCSUData, &_ISCIIData, &_ASCIIData,
+    &_HZData,
+#endif
+
+    &_SCSUData,
+
+#if UCONFIG_NO_LEGACY_CONVERSION
+    NULL,
+#else
+    &_ISCIIData,
+#endif
+
+    &_ASCIIData,
     &_UTF7Data, &_Bocu1Data, &_UTF16Data, &_UTF32Data, &_CESU8Data
 };
 
@@ -64,10 +91,13 @@ static struct {
 } const cnvNameType[] = {
   { "bocu1", UCNV_BOCU1 },
   { "cesu8", UCNV_CESU8 },
+#if !UCONFIG_NO_LEGACY_CONVERSION
   { "hz",UCNV_HZ },
   { "iscii", UCNV_ISCII },
   { "iso2022", UCNV_ISO_2022 },
+#endif
   { "iso88591", UCNV_LATIN_1 },
+#if !UCONFIG_NO_LEGACY_CONVERSION
   { "lmbcs1", UCNV_LMBCS_1 },
   { "lmbcs11",UCNV_LMBCS_11 },
   { "lmbcs16",UCNV_LMBCS_16 },
@@ -80,6 +110,7 @@ static struct {
   { "lmbcs5", UCNV_LMBCS_5 },
   { "lmbcs6", UCNV_LMBCS_6 },
   { "lmbcs8", UCNV_LMBCS_8 },
+#endif
   { "scsu", UCNV_SCSU },
   { "usascii", UCNV_US_ASCII },
   { "utf16", UCNV_UTF16 },

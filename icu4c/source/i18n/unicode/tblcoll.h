@@ -54,6 +54,10 @@
 #ifndef TBLCOLL_H
 #define TBLCOLL_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coll.h"
 #include "unicode/sortkey.h"
 #include "unicode/normlzr.h"
@@ -880,5 +884,7 @@ inline UCollationStrength RuleBasedCollator::getUCollationStrength(
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

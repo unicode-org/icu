@@ -37,6 +37,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "unicode/udata.h"
@@ -3625,3 +3628,5 @@ toUCallback(UConverter *cnv,
     /* call the normal callback function */
     cnv->fromCharErrorBehaviour(context, pArgs, codeUnits, length, reason, pErrorCode);
 }
+
+#endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */

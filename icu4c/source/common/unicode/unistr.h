@@ -2352,6 +2352,8 @@ public:
    */
   UnicodeString& toLower(const Locale& locale);
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
   /**
    * Titlecase this string, convenience function using the default locale.
    *
@@ -2406,6 +2408,8 @@ public:
    * @draft ICU 2.1
    */
   UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale);
+
+#endif
 
   /**
    * Case-fold the characters in this string.
