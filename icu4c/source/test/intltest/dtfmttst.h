@@ -7,7 +7,6 @@
 #ifndef _DATEFORMATTEST_
 #define _DATEFORMATTEST_
  
-#include "unicode/utypes.h"
 #include "caltztst.h"
 #include "unicode/datefmt.h"
 

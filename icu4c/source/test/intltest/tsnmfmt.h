@@ -10,10 +10,10 @@
 
 #include <stdlib.h>
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 #include "unicode/fmtable.h"
+#include "unicode/locid.h"
 
 class NumberFormat;
 

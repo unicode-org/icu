@@ -9,7 +9,6 @@
 #define _INTLTESTTEXTBOUNDARY
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 #include "unicode/brkiter.h"
 

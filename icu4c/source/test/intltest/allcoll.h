@@ -13,23 +13,10 @@
 #ifndef _ALLCOLL
 #define _ALLCOLL
 
-#ifndef _UTYPES
-#include "unicode/utypes.h"
-#endif
-
-#ifndef _COLL
-#include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
+#include "tscoll.h"
 
-#ifndef _INTLTEST
-#include "intltest.h"
-#endif
-
-class CollationDummyTest: public IntlTest {
+class CollationDummyTest: public IntlTestCollator {
 public:
     // If this is too small for the test data, just increase it.
     // Just don't make it too large, otherwise the executable will get too big

@@ -8,7 +8,6 @@
 #ifndef _CALTZTST
 #define _CALTZTST
 
-#include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "intltest.h"
 class SimpleDateFormat;

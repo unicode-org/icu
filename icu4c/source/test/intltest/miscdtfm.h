@@ -7,7 +7,6 @@
 #ifndef _DATEFORMATMISCTEST_
 #define _DATEFORMATMISCTEST_
  
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 /** 

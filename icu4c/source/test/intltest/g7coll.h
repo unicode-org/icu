@@ -31,12 +31,10 @@
 #ifndef _G7COLL
 #define _G7COLL
 
-#include "unicode/utypes.h"
-#include "unicode/coll.h"
 #include "unicode/tblcoll.h"
-#include "intltest.h"
+#include "tscoll.h"
 
-class G7CollationTest: public IntlTest {
+class G7CollationTest: public IntlTestCollator {
 public:
     // If this is too small for the test data, just increase it.
     // Just don't make it too large, otherwise the executable will get too big

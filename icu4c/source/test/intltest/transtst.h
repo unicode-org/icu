@@ -10,7 +10,6 @@
 #ifndef TRANSTST_H
 #define TRANSTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "intltest.h"
 

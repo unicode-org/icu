@@ -7,7 +7,6 @@
 #ifndef _CALENDARREGRESSIONTEST_
 #define _CALENDARREGRESSIONTEST_
  
-#include "unicode/utypes.h"
 #include "unicode/calendar.h"
 
 #include "intltest.h"

@@ -11,7 +11,6 @@
 #ifndef TRANSAPI_H
 #define TRANSAPI_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "intltest.h"
 

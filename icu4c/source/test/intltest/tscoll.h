@@ -12,12 +12,23 @@
 #define _INTLTESTCOLLATOR
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
+#include "unicode/coll.h"
+#include "unicode/sortkey.h"
 
 
 class IntlTestCollator: public IntlTest {
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+protected:
+    virtual void reportCResult( UnicodeString &source, UnicodeString &target,
+                                CollationKey &sourceKey, CollationKey &targetKey,
+                                Collator::EComparisonResult compareResult,
+                                Collator::EComparisonResult keyResult,
+                                Collator::EComparisonResult incResult,
+                                Collator::EComparisonResult expectedResult );
+
+    static UnicodeString &prettify(const CollationKey &source, UnicodeString &target);
+    static UnicodeString &appendCompareResult(Collator::EComparisonResult result, UnicodeString &target);
 };
 
 

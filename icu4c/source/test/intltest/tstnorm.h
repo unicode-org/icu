@@ -11,21 +11,8 @@
 #ifndef _TSTNORM
 #define _TSTNORM
 
-#ifndef _UTYPES
-#include "unicode/utypes.h"
-#endif
-
-#ifndef _COLL
-#include "unicode/coll.h"
-#endif
-
-#ifndef _NORMLZR
 #include "unicode/normlzr.h"
-#endif
-
-#ifndef _INTLTEST
 #include "intltest.h"
-#endif
 
 class BasicNormalizerTest : public IntlTest {
 public:

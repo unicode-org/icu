@@ -12,27 +12,10 @@
 #ifndef _CURRCOLL
 #define _CURRCOLL
 
-#ifndef _UTYPES
-#include "unicode/utypes.h"
-#endif
-
-#ifndef _COLL
-#include "unicode/coll.h"
-#endif
-
-#ifndef _COLEITR
 #include "unicode/coleitr.h"
-#endif
+#include "tscoll.h"
 
-#ifndef _INTLTEST
-#include "intltest.h"
-#endif
-
-#ifndef _UNISTR
-#include "unicode/unistr.h"
-#endif
-
-class CollationCurrencyTest: public IntlTest
+class CollationCurrencyTest: public IntlTestCollator
 {
 public:
 

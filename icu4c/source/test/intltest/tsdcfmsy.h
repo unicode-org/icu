@@ -8,7 +8,6 @@
 #define _INTLTESTDECIMALFORMATSYMBOLS
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 #include "unicode/dcfmtsym.h"
 /**

@@ -11,7 +11,6 @@
 #ifndef JAMOTOHANGTRTST_H
 #define JAMOTOHANGTRTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/jamohang.h"
 #include "intltest.h"

@@ -7,9 +7,6 @@
 #ifndef _NUMBERFORMATREGRESSIONTEST_
 #define _NUMBERFORMATREGRESSIONTEST_
  
-#include "unicode/utypes.h"
-#include "unicode/numfmt.h"
-
 #include "intltest.h"
 
 #include "unicode/numfmt.h"

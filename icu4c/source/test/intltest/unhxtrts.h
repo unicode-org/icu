@@ -11,7 +11,6 @@
 #ifndef UNITOHEXTRTST_H
 #define UNITOHEXTRTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/unitohex.h"
 #include "intltest.h"
