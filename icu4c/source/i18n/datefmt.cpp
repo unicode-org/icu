@@ -60,7 +60,11 @@ DateFormat& DateFormat::operator=(const DateFormat& other)
         } else {
           fCalendar = NULL;
         }
-        fNumberFormat = (NumberFormat*)other.fNumberFormat->clone();
+        if(other.fNumberFormat) {
+          fNumberFormat = (NumberFormat*)other.fNumberFormat->clone();
+        } else {
+          fNumberFormat = NULL;
+        }
     }
     return *this;
 }
@@ -88,8 +92,8 @@ DateFormat::operator==(const Format& other) const
 
     return (this == fmt) ||
         ((getDynamicClassID() == other.getDynamicClassID()) &&
-         fCalendar->isEquivalentTo(*fmt->fCalendar) &&
-         (*fNumberFormat == *fmt->fNumberFormat));
+         fCalendar&&(fCalendar->isEquivalentTo(*fmt->fCalendar)) &&
+         (fNumberFormat&&(*fNumberFormat == *fmt->fNumberFormat)) );
 }
 
 //----------------------------------------------------------------------
