@@ -72,6 +72,7 @@ static UOption options[]={
 /*13*/    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
 /*14*/    UOPTION_SOURCEDIR ,
 /*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
+/*16*/    UOPTION_DEF( "version", 'V', UOPT_REQUIRES_ARG)
 };
 
 const char options_help[][160]={
@@ -81,7 +82,7 @@ const char options_help[][160]={
 #else
       "Specify options for the builder",
 #endif
-  "Specify the mode of building (see below)",
+  "Specify the mode of building (see below; default: common)",
   "This usage text",
   "This usage text",
   "Make the output verbose",
@@ -94,7 +95,8 @@ const char options_help[][160]={
   "Specify temporary dir (default: output dir)",
   "Install the data (specify target)",
   "Specify a custom source directory",
-  "Specify a custom entrypoint name (default: short name)"
+  "Specify a custom entrypoint name (default: short name)",
+  "Specify a version when packaging in DLL mode"
 };
 
 int
@@ -109,6 +111,8 @@ main(int argc, char* argv[]) {
   int32_t i;
 
   progname = argv[0];
+
+  options[2].value = "common";
 
   /* read command line options */
   argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
@@ -129,9 +133,8 @@ main(int argc, char* argv[]) {
       fprintf(stderr, "Run '%s --help' for help.\n", progname);
       return 1;
     }
-    if(! (options[0].doesOccur && options[1].doesOccur &&
-          options[2].doesOccur) ) {
-      fprintf(stderr, " required parameters are missing: -p AND -O AND -m \n");
+    if(! (options[0].doesOccur && options[1].doesOccur) ) {
+      fprintf(stderr, " required parameters are missing: -p and -O are required \n");
       fprintf(stderr, "Run '%s --help' for help.\n", progname);
       return 1;
     }
@@ -155,7 +158,7 @@ main(int argc, char* argv[]) {
     fprintf(stderr, "\n options:\n");
     for(i=0;i<(sizeof(options)/sizeof(options[0]));i++) {
       fprintf(stderr, "%-5s -%c or --%-10s  %s\n",
-              (i<3?"[REQ]":""),
+              (i<2?"[REQ]":""),
               options[i].shortName,
               options[i].longName,
               options_help[i]);
