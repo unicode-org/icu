@@ -232,34 +232,35 @@ static const u_printf_info g_u_printf_infos[108] = {
 
 /* buffer size for formatting */
 #define UFPRINTF_BUFFER_SIZE 1024
+#define UFPRINTF_EXP_BUFFER_SIZE 8
 
-int32_t 
+int32_t
 u_fprintf(    UFILE        *f,
         const char    *patternSpecification,
         ... )
 {
   va_list ap;
   int32_t count;
-  
+
   va_start(ap, patternSpecification);
   count = u_vfprintf(f, patternSpecification, ap);
   va_end(ap);
-  
+
   return count;
 }
 
-int32_t 
+int32_t
 u_fprintf_u(    UFILE        *f,
         const UChar    *patternSpecification,
         ... )
 {
   va_list ap;
   int32_t count;
-  
+
   va_start(ap, patternSpecification);
   count = u_vfprintf_u(f, patternSpecification, ap);
   va_end(ap);
-  
+
   return count;
 }
 
@@ -270,20 +271,20 @@ u_vfprintf(    UFILE        *f,
 {
   int32_t count;
   UChar *pattern;
-  
+
   /* convert from the default codepage to Unicode */
-  pattern = ufmt_defaultCPToUnicode(patternSpecification, 
+  pattern = ufmt_defaultCPToUnicode(patternSpecification,
                     strlen(patternSpecification));
   if(pattern == 0) {
     return 0;
   }
-  
+
   /* do the work */
   count = u_vfprintf_u(f, pattern, ap);
 
   /* clean up */
   free(pattern);
-  
+
   return count;
 }
 
@@ -350,7 +351,7 @@ u_printf_string_handler(UFILE                 *stream,
     return 0;
   }
   len = u_strlen(s);
-  
+
   /* width = minimum # of characters to write */
   /* precision = maximum # of characters to write */
 
@@ -366,7 +367,7 @@ u_printf_string_handler(UFILE                 *stream,
 
   /* clean up */
   free(s);
-  
+
   return written;
 }
 
@@ -427,7 +428,7 @@ u_printf_integer_handler(UFILE                 *stream,
 
   /* format the number */
   unum_format(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
-  
+
   /* restore the number format */
   if(minDigits != -1)
     unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
@@ -455,7 +456,7 @@ u_printf_hex_handler(UFILE             *stream,
   ufmt_ltou(result, &len, num, 16,
         (UBool)(info->fSpec == 0x0078),
         (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
-  
+
   /* convert to alt form, if desired */
   if(num != 0 && info->fAlt && len < UFPRINTF_BUFFER_SIZE - 2) {
     /* shift the formatted string right by 2 chars */
@@ -585,7 +586,7 @@ u_printf_double_handler(UFILE                 *stream,
 
   /* format the number */
   unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
-  
+
   /* restore the number format */
   unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
@@ -600,7 +601,7 @@ u_printf_char_handler(UFILE                 *stream,
               const ufmt_args              *args)
 {
   UChar *s;
-  int32_t len, written;
+  int32_t len = 1, written;
   unsigned char arg = (unsigned char)(args[0].intValue);
 
   /* convert from default codepage to Unicode */
@@ -608,8 +609,10 @@ u_printf_char_handler(UFILE                 *stream,
   if(s == 0) {
     return 0;
   }
-  len = u_strlen(s);
-  
+  if (arg != 0) {
+    len = u_strlen(s);
+  }
+
   /* width = minimum # of characters to write */
   /* precision = maximum # of characters to write */
 
@@ -652,72 +655,107 @@ u_printf_scientific_handler(UFILE             *stream,
                 const u_printf_spec_info     *info,
                 const ufmt_args            *args)
 {
-  double        num         = (double) (args[0].doubleValue);
-  UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
-  int32_t        minDecimalDigits;
-  int32_t        maxDecimalDigits;
-  UErrorCode        status        = U_ZERO_ERROR;
-  
+    double        num         = (double) (args[0].doubleValue);
+    UNumberFormat        *format;
+    UChar            result        [UFPRINTF_BUFFER_SIZE];
+    int32_t        minDecimalDigits;
+    int32_t        maxDecimalDigits;
+    UErrorCode        status        = U_ZERO_ERROR;
+    UChar srcExpBuf[UFPRINTF_EXP_BUFFER_SIZE];
+    int32_t srcLen, expLen;
+    UChar expBuf[UFPRINTF_EXP_BUFFER_SIZE];
 
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLongDouble)
-      num &= DBL_MAX;*/
 
-  /* get the formatter */
-  format = u_locbund_getScientificFormat(stream->fBundle);
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLongDouble)
+    num &= DBL_MAX;*/
 
-  /* handle error */
-  if(format == 0)
-    return 0;
+    /* get the formatter */
+    format = u_locbund_getScientificFormat(stream->fBundle);
 
-  /* set the appropriate flags on the formatter */
+    /* handle error */
+    if(format == 0)
+        return 0;
 
-  /* clone the stream's bundle if it isn't owned */
-  if(! stream->fOwnBundle) {
-    stream->fBundle     = u_locbund_clone(stream->fBundle);
-    stream->fOwnBundle     = TRUE;
-    format           = u_locbund_getScientificFormat(stream->fBundle);
-  }
+    /* set the appropriate flags on the formatter */
 
-  /* set the number of decimal digits */
+    /* clone the stream's bundle if it isn't owned */
+    if(! stream->fOwnBundle) {
+        stream->fBundle     = u_locbund_clone(stream->fBundle);
+        stream->fOwnBundle     = TRUE;
+        format           = u_locbund_getScientificFormat(stream->fBundle);
+    }
 
-  /* save the formatter's state */
-  minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
-  maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
+    srcLen = unum_getSymbol(format,
+        UNUM_EXPONENTIAL_SYMBOL,
+        srcExpBuf,
+        sizeof(srcExpBuf),
+        &status);
 
-  if(info->fPrecision != -1) {
-    /* set the # of decimal digits */
-    unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
-  }
-  else if(info->fPrecision == 0 && ! info->fAlt) {
-    /* no decimal point in this case */
-    unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
-  }
-  else if(info->fAlt) {
-    /* '#' means always show decimal point */
-    /* copy of printf behavior on Solaris - '#' shows 6 digits */
-    unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
-  }
-  else {
-    /* # of decimal digits is 6 if precision not specified */
-    unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
-  }
+    /* Upper/lower case the e */
+    if (info->fSpec == (UChar)0x65 /* e */) {
+        expLen = u_strToLower(expBuf, (int32_t)sizeof(expBuf),
+             srcExpBuf, srcLen,
+             stream->fBundle->fLocale,
+             &status);
+    }
+    else {
+        expLen = u_strToUpper(expBuf, (int32_t)sizeof(expBuf),
+             srcExpBuf, srcLen,
+             stream->fBundle->fLocale,
+             &status);
+    }
 
-  /* set whether to show the sign */
-  if(info->fShowSign) {
-    /* set whether to show the sign*/
-    /* {sfb} TODO */
-  }
+    unum_setSymbol(format,
+        UNUM_EXPONENTIAL_SYMBOL,
+        expBuf,
+        expLen,
+        &status);
 
-  /* format the number */
-  unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+    /* set the number of decimal digits */
 
-  /* restore the number format */
-  unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
-  unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
+    /* save the formatter's state */
+    minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
+    maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+    if(info->fPrecision != -1) {
+        /* set the # of decimal digits */
+        unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
+    }
+    else if(info->fPrecision == 0 && ! info->fAlt) {
+        /* no decimal point in this case */
+        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
+    }
+    else if(info->fAlt) {
+        /* '#' means always show decimal point */
+        /* copy of printf behavior on Solaris - '#' shows 6 digits */
+        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
+    }
+    else {
+        /* # of decimal digits is 6 if precision not specified */
+        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
+    }
+
+    /* set whether to show the sign */
+    if(info->fShowSign) {
+        /* set whether to show the sign*/
+        /* {sfb} TODO */
+    }
+
+    /* format the number */
+    unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+
+    /* restore the number format */
+    unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
+    unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
+
+    unum_setSymbol(format,
+        UNUM_EXPONENTIAL_SYMBOL,
+        srcExpBuf,
+        srcLen,
+        &status);
+
+    return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
 int32_t
@@ -733,7 +771,7 @@ u_printf_date_handler(UFILE             *stream,
 
   /* get the formatter */
   format = u_locbund_getDateFormat(stream->fBundle);
-  
+
   /* handle error */
   if(format == 0)
     return 0;
@@ -757,7 +795,7 @@ u_printf_time_handler(UFILE             *stream,
 
   /* get the formatter */
   format = u_locbund_getTimeFormat(stream->fBundle);
-  
+
   /* handle error */
   if(format == 0)
     return 0;
@@ -952,7 +990,7 @@ u_printf_uchar_handler(UFILE                 *stream,
 {
   int32_t written = 0;
   UChar arg = (UChar)(args[0].intValue);
-  
+
 
   /* width = minimum # of characters to write */
   /* precision = maximum # of characters to write */
@@ -976,31 +1014,34 @@ u_printf_scidbl_handler(UFILE                 *stream,
             const u_printf_spec_info     *info,
             const ufmt_args            *args)
 {
-  double     num = (double)(args[0].doubleValue);
-  UBool     useE;
+    u_printf_spec_info scidbl_info;
+    double      num = args[0].doubleValue;
 
-  /* a precision of 0 is taken as 1 */
-  if(info->fPrecision == 0)
-    ((u_printf_spec_info*)info)->fPrecision = 1;
+    memcpy(&scidbl_info, info, sizeof(u_printf_spec_info));
 
-  /* determine whether to use 'e' or 'f' */
-  useE = (UBool)(num < 0.0001
-       || (info->fPrecision != -1 && num > uprv_pow10(info->fPrecision)));
-  
-  /* use 'e' */
-  if(useE) {
-    /* adjust the specifier */
-    ((u_printf_spec_info*)info)->fSpec = 0x0065;
-    /* call the scientific handler */
-    return u_printf_scientific_handler(stream, info, args);
-  }
-  /* use 'f' */
-  else {
-    /* adjust the specifier */
-    ((u_printf_spec_info*)info)->fSpec = 0x0066;
-    /* call the double handler */
-    return u_printf_double_handler(stream, info, args);
-  }
+    /* determine whether to use 'd', 'e' or 'f' notation */
+    if (scidbl_info.fPrecision == -1 && num == uprv_trunc(num))
+    {
+        /* use 'f' notation */
+        scidbl_info.fSpec = 0x0066;
+        scidbl_info.fPrecision = 0;
+        /* call the double handler */
+        return u_printf_double_handler(stream, &scidbl_info, args);
+    }
+    else if(num < 0.0001
+        || (scidbl_info.fPrecision != -1 && num > uprv_pow10(scidbl_info.fPrecision)))
+    {
+        /* use 'e' or 'E' notation */
+        scidbl_info.fSpec = scidbl_info.fSpec - 1;
+        /* call the scientific handler */
+        return u_printf_scientific_handler(stream, &scidbl_info, args);
+    }
+    else {
+        /* use 'f' notation */
+        scidbl_info.fSpec = 0x0066;
+        /* call the double handler */
+        return u_printf_double_handler(stream, &scidbl_info, args);
+    }
 }
 
 
@@ -1101,17 +1142,17 @@ u_vfprintf_u(    UFILE        *f,
 {
   u_printf_spec   spec;
   const UChar     *alias;
-  int32_t         count, written;
+  int32_t         patCount, written;
   uint16_t      handlerNum;
 
-  ufmt_args       args;  
-        
+  ufmt_args       args;
+
   ufmt_type_info    info;
   u_printf_handler handler;
 
   /* alias the pattern */
   alias = patternSpecification;
-  
+
   /* haven't written anything yet */
   written = 0;
 
@@ -1119,22 +1160,22 @@ u_vfprintf_u(    UFILE        *f,
   for(;;) {
 
     /* find the next '%' */
-    count = 0;
+    patCount = 0;
     while(*alias != UP_PERCENT && *alias != 0x0000) {
       alias++;
-      ++count;
+      ++patCount;
     }
 
     /* write any characters before the '%' */
-    if(count > 0)
-      written += u_file_write(alias - count, count, f);
+    if(patCount > 0)
+      written += u_file_write(alias - patCount, patCount, f);
 
     /* break if at end of string */
     if(*alias == 0x0000)
       break;
-    
+
     /* parse the specifier */
-    count = u_printf_parse_spec(alias, &spec);
+    patCount = u_printf_parse_spec(alias, &spec);
 
     /* fill in the precision and width, if specified out of line */
 
@@ -1147,7 +1188,7 @@ u_vfprintf_u(    UFILE        *f,
       else {
         /* handle positional parameter */
       }
-    
+
       /* if it's negative, take the absolute value and set left alignment */
       if(spec.fInfo.fWidth < 0) {
         spec.fInfo.fWidth     *= -1;
@@ -1164,17 +1205,17 @@ u_vfprintf_u(    UFILE        *f,
       else {
         /* handle positional parameter */
       }
-      
+
       /* if it's negative, set it to zero */
       if(spec.fInfo.fPrecision < 0)
         spec.fInfo.fPrecision = 0;
     }
-    
+
     handlerNum = (uint16_t)(spec.fInfo.fSpec - UPRINTF_BASE_FMT_HANDLERS);
     if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
         /* query the info function for argument information */
         info = g_u_printf_infos[ handlerNum ].info;
-        if(info > ufmt_simple_percent) { 
+        if(info > ufmt_simple_percent) {
           switch(info) {
 
           case ufmt_count:
@@ -1194,11 +1235,11 @@ u_vfprintf_u(    UFILE        *f,
           case ufmt_string:
             args.ptrValue = va_arg(ap, char*);
             break;
-    
+
           case ufmt_wstring:
             args.ptrValue = va_arg(ap, wchar_t*);
             break;
-    
+
           case ufmt_ustring:
             args.ptrValue = va_arg(ap, UChar*);
             break;
@@ -1206,11 +1247,11 @@ u_vfprintf_u(    UFILE        *f,
           case ufmt_pointer:
             args.ptrValue = va_arg(ap, void*);
             break;
-    
+
           case ufmt_float:
             args.floatValue = (float) va_arg(ap, double);
             break;
-    
+
           case ufmt_double:
             args.doubleValue = va_arg(ap, double);
             break;
@@ -1231,18 +1272,18 @@ u_vfprintf_u(    UFILE        *f,
         }
         else {
           /* just echo unknown tags */
-          written += u_file_write(alias, count, f);
+          written += u_file_write(alias, patCount, f);
         }
     }
     else {
       /* just echo unknown tags */
-      written += u_file_write(alias, count, f);
+      written += u_file_write(alias, patCount, f);
     }
-    
+
     /* update the pointer in pattern and continue */
-    alias += count;
+    alias += patCount;
   }
-  
+
   /* return # of UChars written */
   return written;
 }

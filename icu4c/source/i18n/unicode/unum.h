@@ -123,6 +123,8 @@ enum UNumberFormatStyle {
     UNUM_CURRENCY,
     /** Percent format */
     UNUM_PERCENT,
+    /** Scientific format */
+    UNUM_SCIENTIFIC,
     /** Spellout format */
     UNUM_SPELLOUT,
     /** Default format */

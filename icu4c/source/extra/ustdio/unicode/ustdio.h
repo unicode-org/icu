@@ -46,8 +46,6 @@
  * Make sure that #, blank and precision in the printf format specification
     works.
  * Make sure that * in the scanf format specification works.
- * e and g should lowercase the scientific notation.
- * E and F should uppercase the scientific notation.
  * Each UFILE takes up at least 2KB. This should be really reduced.
  * This library does buffering. The OS should do this for us already. Check on
     this, and remove it from this library, if this is the case. Double buffering
@@ -62,7 +60,6 @@
     don't use it. In some cases, libraries that use ICU should not include
     iostream.  This new header file should also include operator<< and
     operator>> for UDate (not double) and UChar *.
- * fprintf/fscanf should use sprintf/sscanf in order to make testing easier.
  * Testing should be done for reading and writing multi-byte encodings,
     and make sure that a character that is contained across buffer boundries
     works even for incomplete characters.
