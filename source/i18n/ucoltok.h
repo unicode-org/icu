@@ -19,8 +19,11 @@ typedef struct  {
 */
   UColToken* reset;
   uint32_t baseCE;
+  uint32_t baseContCE;
   uint32_t nextCE;
+  uint32_t nextContCE;
   uint32_t previousCE;
+  uint32_t previousContCE;
   uint32_t strongest[2];
 /*
   UColAttributeValue strongestP;

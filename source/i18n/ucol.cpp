@@ -76,82 +76,110 @@ isAcceptableInvUCA(void *context,
     }
 }
 
-uint32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE, UErrorCode *status) {
+int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
   uint32_t bottom = 0, top = invUCA->tableSize;
   uint32_t i;
-  uint32_t first = 0;
+  uint32_t first = 0, second = 0;
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
-
-  if(U_FAILURE(*status)) {
-    return 0;
-  }
 
   while(bottom < top-1) {
     i = (top+bottom)/2;
     first = *(CETable+3*i);
+    second = *(CETable+3*i+1);
     if(first > CE) {
       top = i;
     } else if(first < CE) {
       bottom = i;
     } else {
-      break;
+        if(second > SecondCE) {
+          top = i;
+        } else if(second < SecondCE) {
+          bottom = i;
+        } else {
+          break;
+        }
     }
   }
 
-  if(first == CE) {
+  if(first == CE && second == SecondCE) {
     return i;
   } else {
-    *status = U_INDEX_OUTOFBOUNDS_ERROR;
-    return 0;
+    return -1;
   }
 }
 
 static uint32_t strengthMask[3] = {
   0xFFFF0000,
-  0xFFFFFF00,
-  0xFFFFFFFF
+  0x0000FF00,
+  0x000000FF
 };
 
-uint32_t ucol_inv_getPrevious(uint32_t CE, uint32_t SecondCE, uint32_t strength, UErrorCode *status) {
+static uint32_t strengthShift[3] = {
+  16,
+  8,
+  0
+};
+
+int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
+
+  uint32_t CE = lh->baseCE;
+  uint32_t SecondCE = lh->baseContCE; 
 
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
-  uint32_t previousCE;
-  uint32_t iCE;
+  uint32_t previousCE, previousContCE;
+  int32_t iCE;
 
-  iCE = ucol_inv_findCE(CE, SecondCE, status);
+  iCE = ucol_inv_findCE(CE, SecondCE);
 
-  if(U_FAILURE(*status)) {
-    return 0;
+  if(iCE<0) {
+    return -1;
   }
 
   CE &= strengthMask[strength];
+  SecondCE &= strengthMask[strength];
 
   previousCE = CE;
+  previousContCE = SecondCE;
 
-  while(previousCE == CE) {
-    previousCE = (*(CETable+3*(--iCE))) & strengthMask[strength];
+  while((previousCE  & strengthMask[strength]) == CE && (previousContCE  & strengthMask[strength])== SecondCE) {
+    previousCE = (*(CETable+3*(--iCE)));
+    previousContCE = (*(CETable+3*(iCE)+1));
   }
+  lh->previousCE = previousCE;
+  lh->previousContCE = previousContCE;
+
   return previousCE;
 }
 
-uint32_t ucol_inv_getNext(uint32_t CE, uint32_t SecondCE, uint32_t strength, UErrorCode *status) {
+int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
+  uint32_t CE = lh->baseCE;
+  uint32_t SecondCE = lh->baseContCE; 
+
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
-  uint32_t nextCE;
-  uint32_t iCE;
+  uint32_t nextCE, nextContCE;
+  int32_t iCE;
 
-  iCE = ucol_inv_findCE(CE, SecondCE, status);
+  iCE = ucol_inv_findCE(CE, SecondCE);
 
-  if(U_FAILURE(*status)) {
-    return 0;
+  if(iCE<0) {
+    return -1;
   }
 
   CE &= strengthMask[strength];
+  SecondCE &= strengthMask[strength];
 
   nextCE = CE;
+  nextContCE = SecondCE;
 
-  while(nextCE == CE) {
-    nextCE = (*(CETable+3*(++iCE))) & strengthMask[strength];
+  while((nextCE  & strengthMask[strength]) == CE 
+    && (nextContCE  & strengthMask[strength]) == SecondCE) {
+    nextCE = (*(CETable+3*(++iCE)));
+    nextContCE = (*(CETable+3*(iCE)+1));
   }
+
+  lh->nextCE = nextCE;
+  lh->nextContCE = nextContCE;
+
   return nextCE;
 }
 
@@ -159,7 +187,6 @@ uint32_t ucol_inv_getNext(uint32_t CE, uint32_t SecondCE, uint32_t strength, UEr
 /* Following are the open/close functions                                   */
 /*                                                                          */
 /****************************************************************************/
-
 U_CAPI UCollator*
 ucol_open(    const    char         *loc,
         UErrorCode      *status)
@@ -205,6 +232,30 @@ ucol_close(UCollator *coll)
   }
 }
 
+typedef struct {
+uint8_t prims[128], *toAddP;
+uint8_t secs[128], *toAddS;
+uint8_t ters[128], *toAddT;
+} bufs;
+
+U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status) {
+  uint32_t mask = strengthMask[lh->strongest[UCOL_TOK_POLARITY_POSITIVE]];
+  ucol_inv_getNext(lh, lh->strongest[UCOL_TOK_POLARITY_POSITIVE]);
+  /* I'm trying to decide whether I should add to base or subtract from the next */
+  uint32_t base = lh->baseCE & mask;
+  uint32_t theGap = lh->nextCE & mask - base;
+  if(theGap == 0) {
+    theGap = (lh->nextContCE & mask) - (lh->baseContCE & mask);
+  }
+  theGap >>= strengthShift[lh->strongest[UCOL_TOK_POLARITY_POSITIVE]];
+  if((theGap & 0xFF) != 0) { 
+  } else {
+  }
+
+
+
+}
+
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resLen, UErrorCode *status) {
   int32_t i = 0;
 /*
@@ -246,10 +297,24 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
     boundaries except where there is only a single-byte primary. That is to 
     ensure that the script reordering will continue to work. 
 */
+  bufs b;
+
   for(i = 0; i<src->resultLen; i++) {
-    src->lh[i].nextCE = ucol_inv_getNext(src->lh[i].baseCE, 0, 
-      src->lh[i].strongest[UCOL_TOK_POLARITY_POSITIVE], status);
     /* now we need to generate the CEs */ 
+    /* We have three char buffers:      */
+    /* primary,                         */
+    /* secondary,                       */
+    /* tertiary                         */
+    /* We stuff the initial value in the buffers, and increase the appropriate buffer */
+    /* According to strength                                                          */
+    /* Inital value depends on both base and next CE. First we decide which one is    */
+    /* longer (in term of non zero bytes). If it's baseCE, we add 1 to it, if it's nextCE, */
+    /* we subtract 1 from it  */
+    ucol_initBuffers(&src->lh[i], &b, status);
+
+
+
+
     /* I'd really like to get them in a UCAElements structure very soon */
       UColToken *t = src->lh[i].first[UCOL_TOK_POLARITY_POSITIVE];
       uint32_t strongest = 0;
