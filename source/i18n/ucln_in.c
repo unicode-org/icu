@@ -35,6 +35,11 @@ static UBool i18n_cleanup(void)
     ucol_cleanup();
     ucol_bld_cleanup();
 #endif
+
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    regex_cleanup();
+#endif
+
     return TRUE;
 }
 

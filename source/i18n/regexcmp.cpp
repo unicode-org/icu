@@ -25,6 +25,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "ucln_in.h"
 
 #include "stdio.h"    // TODO:  Get rid of this
 
@@ -129,7 +130,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     //
     if (gRuleSets[kRuleSet_rule_char-128] == NULL) {
         //  TODO:  Make thread safe.
-        //  TODO:  Memory Cleanup on ICU shutdown.
+        ucln_i18n_registerCleanup();
         gRuleSets[kRuleSet_rule_char-128]       = new UnicodeSet(gRuleSet_rule_char_pattern,       status);
         gRuleSets[kRuleSet_white_space-128]     = (UnicodeSet*) uprv_openRuleWhiteSpaceSet(&status);
         gRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      status);
@@ -138,19 +139,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
         gPropSets[URX_ISSPACE_SET]              = new UnicodeSet(gIsSpacePattern,                  status);
 
         if (U_FAILURE(status)) {
-            delete gRuleSets[kRuleSet_rule_char-128];
-            delete gRuleSets[kRuleSet_white_space-128];
-            delete gRuleSets[kRuleSet_digit_char-128];
-            delete gUnescapeCharSet;
-            gRuleSets[kRuleSet_rule_char-128]   = NULL;
-            gRuleSets[kRuleSet_white_space-128] = NULL;
-            gRuleSets[kRuleSet_digit_char-128]  = NULL;
-            gUnescapeCharSet = NULL;
-            int i;
-            for (i=0; i<URX_LAST_SET; i++) {
-                delete (UnicodeSet *)gPropSets[i];
-                gPropSets[i] = NULL;
-            }
+            RegexCompile::cleanup();
             return;
         }
     }
@@ -165,6 +154,29 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
 //----------------------------------------------------------------------------------------
 RegexCompile::~RegexCompile() {
 }
+
+//----------------------------------------------------------------------------------------
+//
+//   cleanup.    Called (indirectly) by u_cleanup to free all cached memory
+//
+//----------------------------------------------------------------------------------------
+void RegexCompile::cleanup() {
+    delete gRuleSets[kRuleSet_rule_char-128];
+    delete gRuleSets[kRuleSet_white_space-128];
+    delete gRuleSets[kRuleSet_digit_char-128];
+    delete gUnescapeCharSet;
+    gRuleSets[kRuleSet_rule_char-128]   = NULL;
+    gRuleSets[kRuleSet_white_space-128] = NULL;
+    gRuleSets[kRuleSet_digit_char-128]  = NULL;
+    gUnescapeCharSet = NULL;
+    int i;
+    for (i=0; i<URX_LAST_SET; i++) {
+        delete (UnicodeSet *)gPropSets[i];
+        gPropSets[i] = NULL;
+    }
+    return;
+}
+
 
 //---------------------------------------------------------------------------------
 //
