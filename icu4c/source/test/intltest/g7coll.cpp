@@ -76,21 +76,6 @@ const int32_t G7CollationTest::results[G7CollationTest::TESTLOCALES][G7Collation
 };
 
 
-void G7CollationTest::doTest( Collator* myCollation, UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
-{
-    Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
-    myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
-    myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
-    if (U_FAILURE(key1status) || U_FAILURE(key2status)) {
-        errln("SortKey generation Failed.\n");
-        return;
-    }
-    Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
-}
-
 void G7CollationTest::TestG7Locales(/* char* par */)
 {
     int32_t i;

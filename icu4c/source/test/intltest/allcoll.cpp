@@ -91,58 +91,6 @@ const Collator::EComparisonResult CollationDummyTest::results[] = {
     Collator::LESS 
 };
 
-void 
-CollationDummyTest::doTestVariant(const UnicodeString source, const UnicodeString target, Collator::EComparisonResult result)
-{   
-  UErrorCode status = U_ZERO_ERROR;
-
-  Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-
-  CollationKey srckey, tgtkey;
-  myCollation->getCollationKey(source, srckey, status);
-  myCollation->getCollationKey(target, tgtkey, status);
-  if (U_FAILURE(status)){
-    errln("Creation of collation keys failed\n");
-  }
-  Collator::EComparisonResult keyResult = srckey.compareTo(tgtkey);
-
-  if (compareResult != result) {
-    errln("String comparison failed in variant test\n");
-  }
-  if (keyResult != result) {
-    errln("Collation key comparison failed in variant test\n");
-  }
-}
-
-void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
-{
-    /*
-    Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    SimpleFwdCharIterator src(source);
-    SimpleFwdCharIterator trg(target);
-    Collator::EComparisonResult incResult = myCollation->compare(src, trg);
-    CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
-    myCollation->getCollationKey(source, sortKey1, key1status );
-    myCollation->getCollationKey(target, sortKey2, key2status );
-    if (U_FAILURE(key1status) || U_FAILURE(key2status))
-    {
-        errln("SortKey generation Failed.\n");
-        return;
-    }
-
-    Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
-    */
-  doTestVariant(source, target, result);
-  if(result == Collator::LESS) {
-    doTestVariant(target, source, Collator::GREATER);
-  } else if (result == Collator::GREATER) {
-    doTestVariant(target, source, Collator::LESS);
-  } else {
-    doTestVariant(target, source, Collator::EQUAL);
-  }
-}
 
 void CollationDummyTest::TestTertiary(/* char* par */)
 {
@@ -150,7 +98,7 @@ void CollationDummyTest::TestTertiary(/* char* par */)
     myCollation->setStrength(Collator::TERTIARY);
     for (i = 0; i < 17 ; i++)
     {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 void CollationDummyTest::TestPrimary(/* char* par */)
@@ -168,7 +116,7 @@ void CollationDummyTest::TestPrimary(/* char* par */)
     
     for (int i = 17; i < 26 ; i++)
     {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 
@@ -178,7 +126,7 @@ void CollationDummyTest::TestSecondary(/* char* par */)
     myCollation->setStrength(Collator::SECONDARY);
     for (i = 26; i < 34; i++)
     {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 
@@ -190,7 +138,7 @@ void CollationDummyTest::TestExtra(/* char* par */)
     {
         for (j = i + 1; j < COUNT_TEST_CASES; j += 1)
         {
-            doTest(testCases[i], testCases[j], Collator::LESS);
+            doTest(myCollation, testCases[i], testCases[j], Collator::LESS);
         }
     }
 }
@@ -201,7 +149,7 @@ void CollationDummyTest::TestIdentical()
     myCollation->setStrength(Collator::IDENTICAL);
     for (i= 34; i<37; i++)
     {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 

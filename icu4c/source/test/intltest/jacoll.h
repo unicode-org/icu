@@ -29,9 +29,6 @@ public:
     virtual ~CollationKanaTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
-    // main test routine, tests rules specific to "Kana" locale
-    void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-
     // performs test with strength TERIARY
     void TestTertiary(/* char* par */);
 
