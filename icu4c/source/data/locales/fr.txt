@@ -476,7 +476,7 @@ fr {
         RON { "RON", "nouveau leu" }
         RUR { "RUR", "rouble de Russie (1991-1998)" }
         RWF { "RWF", "franc du Rwanda" }
-        SAR { "SAR", "riyal saoudien" }
+        SAR { "SAR", "riyal s\u00E9oudien" }
         SAS { "SAS", "riyal saoudien" }
         SBD { "SBD", "dollar de Salomon" }
         SCR { "SCR", "roupie des Seychelles" }
