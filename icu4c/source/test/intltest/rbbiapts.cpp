@@ -152,8 +152,12 @@ void RBBIAPITest::TestBoilerPlate()
         errln("Failed: boilerplate method operator!= does not return correct results");
     }
     BreakIterator* c = BreakIterator::createLineInstance(Locale("th"),status);
-    if(*c==*a){
-        errln("Failed: boilerplate method opertator== does not return correct results");
+    if(a && c){
+        if(*c==*a){
+            errln("Failed: boilerplate method opertator== does not return correct results");
+        }
+    }else{
+        errln("creation of break iterator failed");
     }
     delete a;
     delete b;
@@ -805,14 +809,17 @@ void RBBIAPITest::TestRegistration() {
     
     URegistryKey key = BreakIterator::registerInstance(thai_word, "xx", UBRK_WORD, status);
     {
-        if (*thai_word == *root_word) {
+        if (thai_word && *thai_word == *root_word) {
             errln("thai not different from root");
         }
     }
     
     {
         BreakIterator* result = BreakIterator::createWordInstance("xx_XX", status);
-        UBool fail = *result != *thai_word;
+        UBool fail = TRUE;
+        if(result){
+            fail = *result != *thai_word;
+        }
         delete result;
         if (fail) {
             errln("bad result for xx_XX/word");
@@ -821,7 +828,10 @@ void RBBIAPITest::TestRegistration() {
     
     {
         BreakIterator* result = BreakIterator::createCharacterInstance("th_TH", status);
-        UBool fail = *result != *thai_char;
+        UBool fail = TRUE;
+        if(result){
+            fail = *result != *thai_char;
+        }
         delete result;
         if (fail) {
             errln("bad result for th_TH/char");
@@ -830,7 +840,10 @@ void RBBIAPITest::TestRegistration() {
     
     {
         BreakIterator* result = BreakIterator::createCharacterInstance("xx_XX", status);
-        UBool fail = *result != *root_char;
+        UBool fail = TRUE;
+        if(result){
+            fail = *result != *root_char;
+        }
         delete result;
         if (fail) {
             errln("bad result for xx_XX/char");
@@ -863,7 +876,10 @@ void RBBIAPITest::TestRegistration() {
     {
         BreakIterator* result = BreakIterator::createWordInstance("xx", status);
         BreakIterator* root = BreakIterator::createWordInstance("", status);
-        UBool fail = *root != *result;
+        UBool fail = TRUE;
+        if(root){
+          fail = *root != *result;
+        }
         delete root;
         delete result;
         if (fail) {
