@@ -544,6 +544,10 @@ SOURCE=.\ucol_imp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucol_sit.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucol_tok.cpp
 # End Source File
 # Begin Source File
