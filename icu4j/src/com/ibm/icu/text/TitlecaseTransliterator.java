@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/11/28 02:00:31 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/12/11 00:01:40 $ 
+ * $Revision: 1.10 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -25,7 +25,7 @@ class TitlecaseTransliterator extends Transliterator {
      * The set of characters we skip.  These are neither cased nor
      * non-cased, to us; we copy them verbatim.
      */
-    static final UnicodeSet SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:]]");
+    static final UnicodeSet SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]");
 
     /**
      * The set of characters that cause the next non-SKIP character
