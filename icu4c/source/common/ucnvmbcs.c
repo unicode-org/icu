@@ -3026,7 +3026,9 @@ getTrail:
                 cnv->fromUnicodeStatus=prevLength; /* save the old state */
                 value=MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c);
                 if(value<=0xff) {
-                    if(prevLength<=1) {
+                    if(value==0 && MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c)==0) {
+                        /* no mapping, leave value==0 */
+                    } else if(prevLength<=1) {
                         length=1;
                     } else {
                         /* change from double-byte mode to single-byte */
