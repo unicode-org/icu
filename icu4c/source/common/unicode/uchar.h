@@ -290,45 +290,45 @@ typedef enum UProperty {
     UCHAR_BINARY_LIMIT,
 
     /** Enumerated property Bidi_Class.
-        Same as u_charDirection, returns UCharDirection values. @draft ICU 2.2 */
+        Same as u_charDirection, returns UCharDirection values. @stable ICU 2.2 */
     UCHAR_BIDI_CLASS=0x1000,
-    /** First constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
+    /** First constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
     UCHAR_INT_START=UCHAR_BIDI_CLASS,
     /** Enumerated property Block.
-        Same as ublock_getCode, returns UBlockCode values. @draft ICU 2.2 */
+        Same as ublock_getCode, returns UBlockCode values. @stable ICU 2.2 */
     UCHAR_BLOCK,
     /** Enumerated property Canonical_Combining_Class.
-        Same as u_getCombiningClass, returns 8-bit numeric values. @draft ICU 2.2 */
+        Same as u_getCombiningClass, returns 8-bit numeric values. @stable ICU 2.2 */
     UCHAR_CANONICAL_COMBINING_CLASS,
     /** Enumerated property Decomposition_Type.
-        Returns UDecompositionType values. @draft ICU 2.2 */
+        Returns UDecompositionType values. @stable ICU 2.2 */
     UCHAR_DECOMPOSITION_TYPE,
     /** Enumerated property East_Asian_Width.
         See http://www.unicode.org/reports/tr11/
-        Returns UEastAsianWidth values. @draft ICU 2.2 */
+        Returns UEastAsianWidth values. @stable ICU 2.2 */
     UCHAR_EAST_ASIAN_WIDTH,
     /** Enumerated property General_Category.
-        Same as u_charType, returns UCharCategory values. @draft ICU 2.2 */
+        Same as u_charType, returns UCharCategory values. @stable ICU 2.2 */
     UCHAR_GENERAL_CATEGORY,
     /** Enumerated property Joining_Group.
-        Returns UJoiningGroup values. @draft ICU 2.2 */
+        Returns UJoiningGroup values. @stable ICU 2.2 */
     UCHAR_JOINING_GROUP,
     /** Enumerated property Joining_Type.
-        Returns UJoiningType values. @draft ICU 2.2 */
+        Returns UJoiningType values. @stable ICU 2.2 */
     UCHAR_JOINING_TYPE,
     /** Enumerated property Line_Break.
-        Returns ULineBreak values. @draft ICU 2.2 */
+        Returns ULineBreak values. @stable ICU 2.2 */
     UCHAR_LINE_BREAK,
     /** Enumerated property Numeric_Type.
-        Returns UNumericType values. @draft ICU 2.2 */
+        Returns UNumericType values. @stable ICU 2.2 */
     UCHAR_NUMERIC_TYPE,
     /** Enumerated property Script.
-        Same as uscript_getScript, returns UScriptCode values. @draft ICU 2.2 */
+        Same as uscript_getScript, returns UScriptCode values. @stable ICU 2.2 */
     UCHAR_SCRIPT,
     /** Enumerated property Hangul_Syllable_Type, new in Unicode 4.
         Returns UHangulSyllableType values. @draft ICU 2.6 */
     UCHAR_HANGUL_SYLLABLE_TYPE,
-    /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
+    /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
     UCHAR_INT_LIMIT,
 
     /** Bitmask property General_Category_Mask.
@@ -953,33 +953,33 @@ enum UBlockCode {
 
     /* New blocks in Unicode 3.2 */
 
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, /*[0500]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_TAGALOG = 98, /*[1700]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_HANUNOO = 99, /*[1720]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_BUHID = 100, /*[1740]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_TAGBANWA = 101, /*[1760]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A = 102, /*[27C0]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_SUPPLEMENTAL_ARROWS_A = 103, /*[27F0]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_SUPPLEMENTAL_ARROWS_B = 104, /*[2900]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B = 105, /*[2980]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS = 106, /*[2A00]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_KATAKANA_PHONETIC_EXTENSIONS = 107, /*[31F0]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_VARIATION_SELECTORS = 108, /*[FE00]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_A = 109, /*[F0000]*/
-    /** @draft ICU 2.2 */
+    /** @stable ICU 2.2 */
     UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_B = 110, /*[100000]*/
 
     /* New blocks in Unicode 4 */
@@ -1030,7 +1030,7 @@ typedef enum UBlockCode UBlockCode;
  *
  * @see UCHAR_EAST_ASIAN_WIDTH
  * @see u_getIntPropertyValue
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 typedef enum UEastAsianWidth {
     U_EA_NEUTRAL,   /*[N]*/ /*See note !!*/
@@ -1087,7 +1087,7 @@ typedef enum UPropertyNameChoice {
  * Decomposition Type constants.
  *
  * @see UCHAR_DECOMPOSITION_TYPE
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 typedef enum UDecompositionType {
     U_DT_NONE,              /*[none]*/ /*See note !!*/
@@ -1115,7 +1115,7 @@ typedef enum UDecompositionType {
  * Joining Type constants.
  *
  * @see UCHAR_JOINING_TYPE
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 typedef enum UJoiningType {
     U_JT_NON_JOINING,       /*[U]*/ /*See note !!*/
@@ -1131,7 +1131,7 @@ typedef enum UJoiningType {
  * Joining Group constants.
  *
  * @see UCHAR_JOINING_GROUP
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 typedef enum UJoiningGroup {
     U_JG_NO_JOINING_GROUP,
@@ -1195,7 +1195,7 @@ typedef enum UJoiningGroup {
  * Line Break constants.
  *
  * @see UCHAR_LINE_BREAK
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 typedef enum ULineBreak {
     U_LB_UNKNOWN,           /*[XX]*/ /*See note !!*/
@@ -1236,7 +1236,7 @@ typedef enum ULineBreak {
  * Numeric Type constants.
  *
  * @see UCHAR_NUMERIC_TYPE
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 typedef enum UNumericType {
     U_NT_NONE,              /*[None]*/ /*See note !!*/
@@ -1392,7 +1392,7 @@ u_isUWhiteSpace(UChar32 c);
  * @see u_getIntPropertyMinValue
  * @see u_getIntPropertyMaxValue
  * @see u_getUnicodeVersion
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which);
@@ -1413,7 +1413,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which);
  * @see u_getUnicodeVersion
  * @see u_getIntPropertyMaxValue
  * @see u_getIntPropertyValue
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMinValue(UProperty which);
@@ -1442,7 +1442,7 @@ u_getIntPropertyMinValue(UProperty which);
  * @see u_getUnicodeVersion
  * @see u_getIntPropertyMaxValue
  * @see u_getIntPropertyValue
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which);
@@ -1465,7 +1465,7 @@ u_getIntPropertyMaxValue(UProperty which);
  * @return Numeric value of c, or U_NO_NUMERIC_VALUE if none is defined.
  *
  * @see U_NO_NUMERIC_VALUE
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI double U_EXPORT2
 u_getNumericValue(UChar32 c);
@@ -1475,7 +1475,7 @@ u_getNumericValue(UChar32 c);
  * no numeric value is defined for a code point.
  *
  * @see u_getNumericValue
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 #define U_NO_NUMERIC_VALUE ((double)-123456789.)
 
@@ -2118,7 +2118,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
  *         length of the name.
  *         The length does not include the zero-termination.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_getISOComment(UChar32 c,
@@ -2681,7 +2681,7 @@ u_getUnicodeVersion(UVersionInfo versionArray);
  *         length of the name.
  *         The length does not include the zero-termination.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);

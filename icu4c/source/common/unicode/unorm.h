@@ -271,7 +271,7 @@ unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength,
  *         "mode" normalization form.
  *
  * @see unorm_quickCheck
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI UBool U_EXPORT2
 unorm_isNormalized(const UChar *src, int32_t srcLength,
@@ -460,14 +460,14 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
 /**
  * Option bit for unorm_compare:
  * Both input strings are assumed to fulfill FCD conditions.
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 #define UNORM_INPUT_IS_FCD          0x20000
 
 /**
  * Option bit for unorm_compare:
  * Perform case-insensitive comparison.
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 #define U_COMPARE_IGNORE_CASE       0x10000
 
@@ -476,7 +476,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
 /**
  * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
  * Compare strings in code point order instead of code unit order.
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 #define U_COMPARE_CODE_POINT_ORDER  0x8000
 #endif
@@ -562,7 +562,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  * @see u_strCompare
  * @see u_strCaseCompare
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 unorm_compare(const UChar *s1, int32_t length1,
