@@ -166,8 +166,9 @@ U_CAPI int16_t  U_EXPORT2 uprv_log10(double d);
  */
 U_CAPI double  U_EXPORT2 uprv_log(double d);
 
-/** Does common notion of rounding e.g. uprv_floor(x + 0.5); */
-/* @param x the double number
+/**
+ * Does common notion of rounding e.g. uprv_floor(x + 0.5);
+ * @param x the double number
  * @return the rounded double
  * @internal
  */
@@ -377,7 +378,11 @@ u_charsToUChars(const char *cs, UChar *us, int32_t length);
 U_CAPI void U_EXPORT2
 u_UCharsToChars(const UChar *us, char *cs, int32_t length);
 
-/* Define U_UPPER_ORDINAL */
+/**
+ * \def U_UPPER_ORDINAL
+ * Get the ordinal number of an uppercase invariant character
+ * @stable ICU 2.4
+ */
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define U_UPPER_ORDINAL(x) ((x)-'A')
 #elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY

@@ -194,35 +194,48 @@
  * don't use de-de@EURO as an argument to resourcebundle.
  */
 
-/*
- * Useful constants for language.
- * @stable ICU 2.0
- */
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_CHINESE            "zh"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_ENGLISH            "en"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_FRENCH             "fr"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_GERMAN             "de"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_ITALIAN            "it"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_JAPANESE           "ja"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_KOREAN             "ko"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_SIMPLIFIED_CHINESE "zh_CN"
+/** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_TRADITIONAL_CHINESE "zh_TW"
 
-/*
- * Useful constants for country/region.
- * @stable ICU 2.0
- */
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_CANADA         "en_CA"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_CANADA_FRENCH  "fr_CA"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_CHINA          "zh_CN"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_PRC            "zh_CN"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_FRANCE         "fr_FR"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_GERMANY        "de_DE"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_ITALY          "it_IT"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_JAPAN          "ja_JP"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_KOREA          "ko_KR"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_TAIWAN         "zh_TW"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_UK             "en_GB"
+/** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_US             "en_US"
 
 /**
