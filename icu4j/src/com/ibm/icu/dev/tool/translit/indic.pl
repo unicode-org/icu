@@ -1,13 +1,7 @@
 #/**
 # *******************************************************************************
-# * Copyright (C) 2000-2002, International Business Machines Corporation and    *
+# * Copyright (C) 2000-2004, International Business Machines Corporation and    *
 # * others. All Rights Reserved.                                                *
-# *******************************************************************************
-# *
-# * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/indic.pl,v $
-# * $Date: 2002/12/18 03:56:41 $
-# * $Revision: 1.2 $
-# *
 # *******************************************************************************
 # */
 
