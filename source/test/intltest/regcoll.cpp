@@ -679,8 +679,10 @@ void CollationRegressionTest::Test4092260(/* char* par */)
 
 // @bug 4095316
 //
+// This bug is in direct contradiction with UCA and therefore is removed!
 void CollationRegressionTest::Test4095316(/* char* par */)
 {
+#if 0
     UErrorCode status = U_ZERO_ERROR;
     Locale el_GR("el", "GR");
     Collator *c = Collator::createInstance(el_GR, status);
@@ -702,6 +704,7 @@ void CollationRegressionTest::Test4095316(/* char* par */)
     compareArray(*c, tests, ARRAY_LENGTH(tests));
 
     delete c;
+#endif
 }
 
 // @bug 4101940
