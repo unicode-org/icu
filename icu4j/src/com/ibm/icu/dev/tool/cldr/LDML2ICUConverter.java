@@ -268,7 +268,7 @@ public class LDML2ICUConverter {
     private void createResourceBundle(String xmlfileName) {
          try {
 
-             System.out.println("INFO: Parsing "+xmlfileName);
+             System.out.println("INFO: Parsing: "+xmlfileName);
              
              Document doc = LDMLUtilities.parse(xmlfileName, false);
              // Create the Resource linked list which will hold the
