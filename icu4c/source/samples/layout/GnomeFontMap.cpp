@@ -29,5 +29,12 @@ GnomeFontMap::~GnomeFontMap()
 
 const LEFontInstance *GnomeFontMap::openFont(const char *fontName, le_int16 pointSize, LEErrorCode &status)
 {
-    return new GnomeFontInstance(fEngine, fontName, pointSize, status);
+    LEFontInstance *result = new GnomeFontInstance(fEngine, fontName, pointSize, status);
+
+    if (LE_FAILURE(status)) {
+      delete result;
+      result = NULL;
+    }
+
+    return result;
 }
