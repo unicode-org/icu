@@ -24,9 +24,10 @@
 
 /**
  * \file
- * \brief Description of Standard Compression for Unicode C API
+ * \brief C API:  Standard Compression for Unicode
  *
  * <h2> Standard Compression for Unicode </h2>
+ * @deprecated To be replaced by scsu encoding converter
  */
 
 /* Number of windows */
@@ -73,6 +74,7 @@ typedef struct UnicodeCompressor UnicodeCompressor;
  * Sets all windows to their default values.
  * @see #reset
  * @stable
+ * @deprecated To be replaced by scsu encoding converter
  */
 U_CAPI void U_EXPORT2 scsu_init(UnicodeCompressor *comp);
 
@@ -80,6 +82,7 @@ U_CAPI void U_EXPORT2 scsu_init(UnicodeCompressor *comp);
  * Reset the compressor to its initial state. 
  * @param comp The UnicodeCompressor to reset.
  * @stable
+ * @deprecated To be replaced by scsu encoding converter
  */
 U_CAPI void U_EXPORT2 scsu_reset(UnicodeCompressor *comp);
 
@@ -108,6 +111,7 @@ U_CAPI void U_EXPORT2 scsu_reset(UnicodeCompressor *comp);
  *
  * @see #decompress
  * @stable
+ * @deprecated To be replaced by scsu encoding converter
  */
 U_CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
 			uint8_t           **target,
@@ -143,6 +147,7 @@ U_CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
  *
  * @see #compress
  * @stable
+ * @deprecated To be replaced by scsu encoding converter
  */
 U_CAPI void U_EXPORT2 scsu_decompress(UnicodeCompressor *comp,
 			  UChar             **target,

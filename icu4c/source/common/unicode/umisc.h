@@ -19,7 +19,7 @@
 
 /**
  * \file
- * \brief Description of misc definitions for C API
+ * \brief  C API:misc definitions 
  *
  *  This file contains miscellaneous definitions for the C APIs. 
  */
