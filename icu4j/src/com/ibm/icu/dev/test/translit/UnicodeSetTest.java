@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/11/03 03:28:48 $ 
- * $Revision: 1.15 $
+ * $Date: 2001/11/12 20:55:06 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -273,6 +273,15 @@ public class UnicodeSetTest extends TestFmwk {
         expectContainment(set, "\u0391\u03B1", "aA");
         set = new UnicodeSet("\\P{ GENERAL Category = upper case letter }");
         expectContainment(set, "abc", "ABC");
+    }
+
+    /**
+     * Test cloning of UnicodeSet
+     */
+    public void TestClone() {
+        UnicodeSet s = new UnicodeSet("[abcxyz]");
+        UnicodeSet t = (UnicodeSet) s.clone();
+        expectContainment(t, "abc", "def");
     }
 
     /**
