@@ -215,6 +215,25 @@ static void TestPrevious()
     ucol_closeElements(iter);
     ucol_close(coll);
 
+    /* prev test */
+    source[0] = 0x0061;
+    source[1] = 0x30CF;
+    source[2] = 0x3099;
+    source[3] = 0x30FC;
+    source[4] = 0;
+
+    coll = ucol_open("ja_JP", &status);
+
+    iter=ucol_openElements(coll, source, u_strlen(source), &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+            myErrorName(status));
+        return;
+    }
+    backAndForth(iter);
+    ucol_closeElements(iter);
+    ucol_close(coll);
+
     free(source);
     free(test1);
     free(test2);
@@ -387,7 +406,8 @@ static void backAndForth(UCollationElements *iter)
       }
     }
 
-    while (index != 0 && orders[-- index] == 0) {
+    while (index != 0 && orders[index - 1] == 0) {
+      index --;
     }
 
     if (index != 0)
