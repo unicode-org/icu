@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.3 2003/03/19 01:56:29 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.4 2003/03/21 01:12:29 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -105,19 +105,19 @@ LIBUSTDIO=	$(top_builddir)/extra/ustdio/libustdio$(ICULIBSUFFIX)$(SO_TARGET_VERS
 	@rc.exe /fo$@ $<
 
 ## Versioned target for a shared library.
-FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 MIDDLE_SO_TARGET=$(SO_TARGET)
 
 ## Versioned import library names.
 IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
 IMPORT_STUBDATA_LIB = $(IMPORT_LIB)
-FINAL_IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
+FINAL_IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)$(IMPORT_LIB_EXT)
 FINAL_IMPORT_STUBDATA_LIB = $(FINAL_IMPORT_LIB)
 
 ## Versioned libraries rules
-#%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+#%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
 #	$(RM) $@ && cp $< $@
-%.$(SO): %$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+%.$(SO): %$(SO_TARGET_VERSION_MAJOR).$(SO)
 	$(RM) $@ && ln -s $< $@
 
 ##  Bind internal references
