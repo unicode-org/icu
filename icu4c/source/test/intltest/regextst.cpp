@@ -618,6 +618,38 @@ void RegexTest::API_Match() {
         delete pat;
     }
 
+
+    //
+    //  find, with \G in pattern (true if at the end of a previous match).
+    //
+    {
+        int32_t             flags=0;
+        UParseError         pe;
+        UErrorCode          status=U_ZERO_ERROR;
+
+        UnicodeString       re(".*?(?:(\\Gabc)|(abc))");
+        RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
+        REGEX_CHECK_STATUS;
+        UnicodeString data = ".abcabc.abc..";
+        //                    012345678901234567
+        
+        RegexMatcher *matcher = pat->matcher(data, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher->find());
+        REGEX_ASSERT(matcher->start(status) == 0);
+        REGEX_ASSERT(matcher->start(1, status) == -1);    
+        REGEX_ASSERT(matcher->start(2, status) == 1);
+
+        REGEX_ASSERT(matcher->find());
+        REGEX_ASSERT(matcher->start(status) == 4);
+        REGEX_ASSERT(matcher->start(1, status) == 4);    
+        REGEX_ASSERT(matcher->start(2, status) == -1);
+        REGEX_CHECK_STATUS;
+
+        delete matcher;
+        delete pat;
+    }
+
     //
     //  Replace
     //
@@ -1016,6 +1048,11 @@ void RegexTest::Extended() {
     REGEX_FIND( "\\w+", "  $%^&*( <0>hello123</0>%^&*(");
     REGEX_FIND( "\\W+", "<0>  $%^&*( </0>hello123%^&*(");
 
+    // \A   match at beginning of input only.
+    REGEX_FIND (".*\\Ahello", "<0>hello</0> hello");
+    REGEX_FIND (".*hello", "<0>hello hello</0>");
+    REGEX_FIND(".*\\Ahello", "stuff\nhello");   // don't match after embedded new-line.
+
     // \b \B
     REGEX_FIND( ".*?\\b(.).*", "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>");
 
@@ -1040,6 +1077,13 @@ void RegexTest::Extended() {
     REGEX_FIND("\\D+", "<0>non digits</0>");
     REGEX_FIND("\\D*(\\d*)(\\D*)", "<0>non-digits<1>3456666</1><2>more non digits</2></0>");
 
+    // \Q...\E quote mode
+    REGEX_FIND("hel\\Qlo, worl\\Ed", "<0>hello, world</0>");
+    REGEX_FIND("\\Q$*^^(*)?\\A\\E(a*)", "<0>$*^^(*)?\\\\A<1>aaaaaaaaaaaaaaa</1></0>");
+
+    // \S and \s  space characters
+    REGEX_FIND("\\s+", "not_space<0> \\t \\r \\n \\u3000 \\u2004 \\u2028 \\u2029</0>xyz");
+    REGEX_FIND("(\\S+).*?(\\S+).*", "<0><1>Not-spaces</1>   <2>more-non-spaces</2>  </0>");
 }
 
 

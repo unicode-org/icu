@@ -220,7 +220,18 @@ UBool RegexMatcher::find() {
     // Start at the position of the last match end.  (Will be zero if the
     //   matcher has been reset.
     UErrorCode status = U_ZERO_ERROR;
-    return find(fMatchEnd, status);
+
+    int32_t  startPos;
+    for (startPos=fMatchEnd; startPos < fInputLength; startPos++) {
+        MatchAt(startPos, status);
+        if (U_FAILURE(status)) {
+            return FALSE;
+        }
+        if (fMatch) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 
@@ -233,6 +244,7 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
+    this->reset();
 
     // TODO:  optimize a search for the first char of a possible match.
     // TODO:  optimize the search for a leading literal string.
@@ -378,7 +390,7 @@ RegexMatcher &RegexMatcher::reset() {
     fMatch        = FALSE;
     int i;
     for (i=0; i<=fPattern->fNumCaptureGroups; i++) {
-        fCaptureStarts->setElementAt(i, -1);
+        fCaptureStarts->setElementAt(-1, i);
     }
     
     return *this;
@@ -537,6 +549,14 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         return;
     }
 
+    // Clear out capture results from any previous match.
+    // Needed to clear capture groups in patterns with | operations that may not match at all,
+    //   although the pattern as a whole does match.
+    int i;
+    for (i=0; i<=fPattern->fNumCaptureGroups; i++) {
+        fCaptureStarts->setElementAt(-1, i);
+    }
+
     //  Cache frequently referenced items from the compiled pattern
     //  in local variables.
     //
@@ -678,7 +698,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
 
         case URX_BACKSLASH_G:          // Test for position at end of previous match
-            if (FALSE) {
+            if (!((fMatch && inputIdx==fMatchEnd) || fMatch==FALSE && inputIdx==0)) {
                 backTrack(inputIdx, patIdx);
             }
             break;

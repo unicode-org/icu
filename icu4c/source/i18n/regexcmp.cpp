@@ -91,6 +91,10 @@ static const UChar gIsWordPattern[] = {
 //          \     p     {     N     d     }     ]
           0x5c, 0x70, 0x7b, 0x4e, 0x64, 0x7d, 0x5d, 0};
 
+    static const UChar gIsSpacePattern[] = {
+//    [     \     t     \     n     \     f     \     r     \     p     {     Z     }     ]
+    0x5b, 0x5c, 0x74, 0x5c, 0x6e, 0x5c, 0x66, 0x5c, 0x72, 0x5c, 0x70, 0x7b, 0x5a, 0x7d, 0x5d,  0};
+
 static const UnicodeSet *gPropSets[URX_LAST_SET];
 
 //----------------------------------------------------------------------------------------
@@ -128,6 +132,8 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
         gRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      status);
         gUnescapeCharSet                        = new UnicodeSet(gUnescapeCharPattern,             status);
         gPropSets[URX_ISWORD_SET]               = new UnicodeSet(gIsWordPattern,                   status); 
+        gPropSets[URX_ISSPACE_SET]              = new UnicodeSet(gIsSpacePattern,                  status); 
+
         if (U_FAILURE(status)) {
             delete gRuleSets[kRuleSet_rule_char-128];
             delete gRuleSets[kRuleSet_white_space-128];
@@ -721,6 +727,16 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_G, 0), *fStatus);
         break;        
 
+    case doBackslashS:
+        fRXPat->fCompiledPat->addElement(
+            URX_BUILD(URX_STATIC_SETREF, URX_ISSPACE_SET | URX_NEG_SET), *fStatus);
+        break;
+
+    case doBackslashs:
+        fRXPat->fCompiledPat->addElement(
+            URX_BUILD(URX_STATIC_SETREF, URX_ISSPACE_SET), *fStatus);
+        break;
+
     case doBackslashW:
         fRXPat->fCompiledPat->addElement(
             URX_BUILD(URX_STATIC_SETREF, URX_ISWORD_SET | URX_NEG_SET), *fStatus);
@@ -760,6 +776,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
             UnicodeSet *theSet = scanSet();
             compileSet(theSet);
         }
+        break;
+
+    case doEnterQuoteMode:
+        // Just scanned a \Q.  Put character scanner into quote mode.
+        fQuoteMode = TRUE;
         break;
             
     default:
@@ -954,6 +975,7 @@ static const UChar      chNEL       = 0x85;      //    NEL newline variant
 static const UChar      chLS        = 0x2028;    //    Unicode Line Separator
 static const UChar      chApos      = 0x27;      //  single quote, for quoted chars.
 static const UChar      chPound     = 0x23;      // '#', introduces a comment.
+static const UChar      chE         = 0x45;      // 'E'
 static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
 static const UChar      chLParen    = 0x28;
 static const UChar      chRParen    = 0x29;
@@ -1042,6 +1064,11 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
 
     if (fQuoteMode) {
         c.fQuoted = TRUE;
+        if ((c.fChar==chBackSlash && peekCharLL()==chE) || c.fChar == (UChar32)-1) {
+            fQuoteMode = FALSE;  //  Exit quote mode,
+            nextCharLL();       // discard the E
+            nextChar(c);        // recurse to get the real next char
+        }
     }
     else
     {
