@@ -65,7 +65,7 @@ void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
     parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
     /* make up commands.. */
-    sprintf(stanza, "$(TOOL) $(GENCCODE) -d $(TEMP_DIR) $<");
+    sprintf(stanza, "$(TOOL) $(GENCCODE) -n %s -d $(TEMP_DIR) $<", o->shortName);
     commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
     sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
@@ -140,16 +140,19 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\tdone;\n\n");
   }
 
-  T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.o : $(TEMP_DIR)/icudata_dat.c\n"
-                         "\t$(COMPILE.c) -o $@ $<\n\n");
+  sprintf(tmp,"$(TEMP_DIR)/%s_dat.o : $(TEMP_DIR)/%s_dat.c\n"
+                         "\t$(COMPILE.c) -o $@ $<\n\n",
+          o->shortName,
+          o->shortName);
+  T_FileStream_writeLine(makefile, tmp);
 
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
-  if(!strcmp(o->shortName, "icudata")) {
-    T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.c: $(CMNLIST)\n"
-                           "\t$(TOOL) $(GENCMN) -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
-    sprintf(tmp, "TOCOBJ= icudata_dat%s \n\n", OBJ_SUFFIX);
-    T_FileStream_writeLine(makefile, tmp);
-  }
+
+  sprintf(tmp, "$(TEMP_DIR)/%s_dat.c: $(CMNLIST)\n"
+                         "\t$(TOOL) $(GENCMN) -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->shortName);
+  T_FileStream_writeLine(makefile, tmp);
+  sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
+  T_FileStream_writeLine(makefile, tmp);
 
   T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
