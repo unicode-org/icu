@@ -38,7 +38,9 @@ Normalizer::Normalizer(const UnicodeString& str,
     fMode(mode), fOptions(0),
     text(new StringCharacterIterator(str)), nextIndex(-1),
     buffer(), bufferPos(0)
-{}
+{
+    checkData();
+}
 
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode, 
@@ -46,20 +48,26 @@ Normalizer::Normalizer(const UnicodeString& str,
     fMode(mode), fOptions(options),
     text(new StringCharacterIterator(str)), nextIndex(-1),
     buffer(), bufferPos(0)
-{}
+{
+    checkData();
+}
 
 Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
     fMode(mode), fOptions(0),
     text(new UCharCharacterIterator(str, length)), nextIndex(-1),
     buffer(), bufferPos(0)
-{}
+{
+    checkData();
+}
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode) :
     fMode(mode), fOptions(0),
     text(iter.clone()), nextIndex(-1),
     buffer(), bufferPos(0)
-{}
+{
+    checkData();
+}
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode, 
@@ -67,13 +75,28 @@ Normalizer::Normalizer(const CharacterIterator& iter,
     fMode(mode), fOptions(options),
     text(iter.clone()), nextIndex(-1),
     buffer(), bufferPos(0)
-{}
+{
+    checkData();
+}
 
 Normalizer::Normalizer(const Normalizer &copy) :
     fMode(copy.fMode), fOptions(copy.fOptions),
     text(copy.text->clone()), nextIndex(copy.nextIndex),
     buffer(copy.buffer), bufferPos(copy.bufferPos)
-{}
+{
+    checkData();
+}
+
+static const UChar _NUL=0;
+
+void
+Normalizer::checkData() {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(!unorm_haveData(&errorCode)) {
+        delete text;
+        text=new UCharCharacterIterator(&_NUL, 0);
+    }
+}
 
 Normalizer::~Normalizer()
 {
@@ -247,7 +270,7 @@ UChar32 Normalizer::next() {
         if(nextIndex>=0) {
             text->setIndex(nextIndex);
         }
-        if(nextNormalize()) {
+        if(text->hasNext() && nextNormalize()) {
             c=buffer.char32At(bufferPos);
             bufferPos+=UTF_CHAR_LENGTH(c);
             return c;
@@ -265,7 +288,7 @@ UChar32 Normalizer::next() {
 UChar32 Normalizer::previous() {
     UChar32 c;
 
-    if(bufferPos>0 || previousNormalize()) {
+    if(bufferPos>0 || text->hasPrevious() && previousNormalize()) {
         c=buffer.char32At(bufferPos-1);
         bufferPos-=UTF_CHAR_LENGTH(c);
         return c;
@@ -482,70 +505,26 @@ void Normalizer::clearBuffer() {
 UBool
 Normalizer::nextNormalize() {
     UErrorCode errorCode=U_ZERO_ERROR;
-    int32_t length;
 
     clearBuffer();
-    switch(fMode) {
-    case NO_OP:
-        buffer.setTo(text->next32PostInc());
-        length=buffer.length();
-        break;
-    case COMPOSE:        
-    case COMPOSE_COMPAT:
-        length=unorm_nextCompose(buffer.fArray, buffer.fCapacity, *text,
-                                 fMode==COMPOSE_COMPAT, (fOptions&IGNORE_HANGUL)!=0,
-                                 UnicodeString::growBuffer, &buffer,
-                                 &errorCode);
-        break;
-    case DECOMP:    
-    case DECOMP_COMPAT:
-        length=unorm_nextDecompose(buffer.fArray, buffer.fCapacity, *text,
-                                   fMode==COMPOSE_COMPAT, (fOptions&IGNORE_HANGUL)!=0,
-                                   UnicodeString::growBuffer, &buffer,
-                                   &errorCode);
-        break;
-    case FCD:
-        length=unorm_nextFCD(buffer.fArray, buffer.fCapacity, *text,
-                             UnicodeString::growBuffer, &buffer,
-                             &errorCode);
-        break;
-    }
-
-    return U_SUCCESS(errorCode) && length>0;
+    buffer.fLength=unorm_nextNormalize(buffer.fArray, buffer.fCapacity, *text,
+                                       getUNormalizationMode(fMode, errorCode),
+                                       (fOptions&IGNORE_HANGUL)!=0,
+                                       UnicodeString::growBuffer, &buffer,
+                                       &errorCode);
+    return U_SUCCESS(errorCode) && buffer.length()>0;
 }
 
 UBool
 Normalizer::previousNormalize() {
     UErrorCode errorCode=U_ZERO_ERROR;
-    int32_t length;
 
     clearBuffer();
-    switch(fMode) {
-    case NO_OP:
-        buffer.setTo(text->previous32());
-        length=buffer.length();
-        break;
-    case COMPOSE:        
-    case COMPOSE_COMPAT:
-        length=unorm_prevCompose(buffer.fArray, buffer.fCapacity, *text,
-                                 fMode==COMPOSE_COMPAT, (fOptions&IGNORE_HANGUL)!=0,
-                                 UnicodeString::growBuffer, &buffer,
-                                 &errorCode);
-        break;
-    case DECOMP:    
-    case DECOMP_COMPAT:
-        length=unorm_prevDecompose(buffer.fArray, buffer.fCapacity, *text,
-                                   fMode==COMPOSE_COMPAT, (fOptions&IGNORE_HANGUL)!=0,
-                                   UnicodeString::growBuffer, &buffer,
-                                   &errorCode);
-        break;
-    case FCD:
-        length=unorm_prevFCD(buffer.fArray, buffer.fCapacity, *text,
-                             UnicodeString::growBuffer, &buffer,
-                             &errorCode);
-        break;
-    }
-
-    bufferPos=length;
-    return U_SUCCESS(errorCode) && length>0;
+    buffer.fLength=unorm_previousNormalize(buffer.fArray, buffer.fCapacity, *text,
+                                           getUNormalizationMode(fMode, errorCode),
+                                           (fOptions&IGNORE_HANGUL)!=0,
+                                           UnicodeString::growBuffer, &buffer,
+                                           &errorCode);
+    bufferPos=buffer.length();
+    return U_SUCCESS(errorCode) && buffer.length()>0;
 }

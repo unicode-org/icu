@@ -743,7 +743,7 @@ private:
   UBool nextNormalize();
   UBool previousNormalize();
 
-  void    init(CharacterIterator* iter, EMode mode, int32_t option);
+  void    checkData();
   void    clearBuffer(void);
 
   //-------------------------------------------------------------------------
