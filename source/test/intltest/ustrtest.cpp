@@ -96,6 +96,9 @@ UnicodeStringTest::TestCompare()
     UnicodeString   test3("this is a test of the emergency broadcast system");
     UnicodeString   test4("never say, \"this is a test\"!!");
 
+    UnicodeString   test5((UChar)0x5000);
+    UnicodeString   test6((UChar)0x5100);
+
     UChar         uniChars[] = { 't', 'h', 'i', 's', ' ', 'i', 's', 
                  ' ', 'a', ' ', 't', 'e', 's', 't', 0 };
     char            chars[] = "this is a test";
@@ -105,8 +108,11 @@ UnicodeStringTest::TestCompare()
         errln("operator== or operator!= failed");
 
     // test operator> and operator<
-    if (test1 > test2 || test1 < test2 || test1 > test3 || test1 < test4)
+    if (test1 > test2 || test1 < test2 || !(test1 < test3) || !(test1 > test4) ||
+        !(test5 < test6)
+    ) {
         errln("operator> or operator< failed");
+    }
 
     // test operator>= and operator<=
     if (!(test1 >= test2) || !(test1 <= test2) || !(test1 <= test3) || !(test1 >= test4))
