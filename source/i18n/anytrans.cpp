@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.1 $
+* $Revision: 1.2 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -12,195 +12,186 @@
 */
 #include "anytrans.h"
 #include "uvector.h"
+#include "tridpars.h"
+#include "hash.h"
 #include "unicode/nultrans.h"
 #include "unicode/uscript.h"
 
 //------------------------------------------------------------
 // Constants
 
-static const UChar HYPHEN = 45; // '-'
-static const UChar ANY[] = {65,110,121,45,0}; // "Any-"
+static const UChar TARGET_SEP = 45; // '-'
+static const UChar VARIANT_SEP = 47; // '/'
+static const UChar ANY[] = {65,110,121,0}; // "Any"
+static const UChar NULL_ID[] = {78,117,108,108,0}; // "Null"
+static const UChar LATIN_PIVOT[] = {45,76,97,116,105,110,59,76,97,116,105,110,45,0}; // "-Latin;Latin-"
+
+//------------------------------------------------------------
+
+/**
+ * Deleter function for Transliterator*.
+ */
+static void _deleteTransliterator(void *obj) {
+    delete (Transliterator*) obj;    
+}
+
+//------------------------------------------------------------
+
+U_NAMESPACE_BEGIN
+
+//------------------------------------------------------------
+// ScriptRunIterator
+
+/**
+ * Returns a series of ranges corresponding to scripts. They will be
+ * of the form:
+ *
+ * ccccSScSSccccTTcTcccc   - c = common, S = first script, T = second
+ * |            |          - first run (start, limit)
+ *          |           |  - second run (start, limit)
+ *
+ * That is, the runs will overlap. The reason for this is so that a
+ * transliterator can consider common characters both before and after
+ * the scripts.
+ */
+class ScriptRunIterator {
+private:
+    const Replaceable& text;
+    int32_t textStart;
+    int32_t textLimit;
+
+public:
+    /**
+     * The code of the current run, valid after next() returns.  May
+     * be USCRIPT_INVALID_CODE if and only if the entire text is
+     * COMMON/INHERITED.
+     */
+    UScriptCode scriptCode;
+
+    /**
+     * The start of the run, inclusive, valid after next() returns.
+     */
+    int32_t start;
+
+    /**
+     * The end of the run, exclusive, valid after next() returns.
+     */
+    int32_t limit;
+    
+    /**
+     * Constructs a run iterator over the given text from start
+     * (inclusive) to limit (exclusive).
+     */
+    ScriptRunIterator(const Replaceable& text, int32_t start, int32_t limit);
+
+    /**
+     * Returns TRUE if there are any more runs.  TRUE is always
+     * returned at least once.  Upon return, the caller should
+     * examine scriptCode, start, and limit.
+     */
+    UBool next();
+
+    /**
+     * Adjusts internal indices for a change in the limit index of the
+     * given delta.  A positive delta means the limit has increased.
+     */
+    void adjustLimit(int32_t delta);
+};
+
+ScriptRunIterator::ScriptRunIterator(const Replaceable& theText,
+                                     int32_t start, int32_t limit) :
+    text(theText) {
+    this->textStart = start;
+    this->textLimit = limit;
+    this->limit = start;
+}
+
+UBool ScriptRunIterator::next() {
+    UChar32 ch;
+    UScriptCode s;
+    UErrorCode ec = U_ZERO_ERROR;
+
+    scriptCode = USCRIPT_INVALID_CODE; // don't know script yet
+    start = limit;
+
+    // Are we done?
+    if (start == textLimit) {
+        return FALSE;
+    }
+
+    // Move start back to include adjacent COMMON or INHERITED
+    // characters
+    while (start > textStart) {
+        ch = text.char32At(start - 1); // look back
+        s = uscript_getScript(ch, &ec);
+        if (s == USCRIPT_COMMON || s == USCRIPT_INHERITED) {
+            --start;
+        } else {
+            break;
+        }
+    }
+
+    // Move limit ahead to include COMMON, INHERITED, and characters
+    // of the current script.
+    while (limit < textLimit) {
+        ch = text.char32At(limit); // look ahead
+        s = uscript_getScript(ch, &ec);
+        if (s != USCRIPT_COMMON && s != USCRIPT_INHERITED) {
+            if (scriptCode == USCRIPT_INVALID_CODE) {
+                scriptCode = s;
+            } else if (s != scriptCode) {
+                break;
+            }
+        }
+        ++limit;
+    }
+
+    // Return TRUE even if the entire text is COMMON / INHERITED, in
+    // which case scriptCode will be USCRIPT_INVALID_CODE.
+    return TRUE;
+}
+
+void ScriptRunIterator::adjustLimit(int32_t delta) {
+    limit += delta;
+    textLimit += delta;
+}
 
 //------------------------------------------------------------
 // AnyTransliterator
 
-U_NAMESPACE_BEGIN
-
-/**
- * Try to create a transliterator with the given ID, which should be
- * of the form "Any-X".  The "X" will be pulled off and passed to
- * createInstance().
- */
-Transliterator* AnyTransliterator::_create(const UnicodeString& ID, Token /*context*/) {
-    UnicodeString target(ID);
-    int32_t i = target.indexOf(HYPHEN);
-    if (i >= 0) {
-        target.remove(0, i+1);
-    }
-    return AnyTransliterator::createInstance(target, TRUE, TRUE);
-}
-
-/**
- * Registers standard variants with the system.  Called by
- * Transliterator during initialization.
- */
-void AnyTransliterator::registerIDs() {
-    Token t = integerToken(0);
-
-    // Register Any-Latin and make its inverse Null
-    Transliterator::_registerFactory("Any-Latin", _create, t);
-    Transliterator::_registerSpecialInverse("Latin", "Null", FALSE);
-}
-
-/**
- * Return the script code for a given name, or -1 if not found.
- */
-int32_t AnyTransliterator::scriptNameToCode(const UnicodeString& name) {
-    char buf[128];
-    UScriptCode code;
-    UErrorCode ec = U_ZERO_ERROR;
-
-    name.extract(0, 128, buf, 128, "");
-    if (uscript_getCode(buf, &code, 1, &ec) != 1 ||
-        U_FAILURE(ec)) {
-        code = (UScriptCode) -1;
-    }
-    return (int32_t) code;
-}
-
-/**
- * Factory method to create an Any-X transliterator.  Relies on
- * registered transliterators at the time of the call to build the
- * Any-X transliterator.  If there are no registered transliterators
- * of the form Y-X, then the logical result is Any-Null.  If there is
- * exactly one transliterator of the form Y-X, then the logical result
- * is Y-X, a degenerate result.  If there are 2 or more
- * transliterators of the form Y-X, then an AnyTransliterator is
- * instantiated and returned. 
- * @param allowNull if true, then return Any-Null if there are no
- * transliterator to the given script; otherwise return NULL
- * @param allowDegenerate if true, then return a transliterator of the
- * form X-Y if there is only one such transliterator
- * the given script; otherwise return NULL
- */
-Transliterator* AnyTransliterator::createInstance(const UnicodeString& toTarget,
-                                                  UBool allowNull,
-                                                  UBool allowDegenerate) {
-    UErrorCode ec = U_ZERO_ERROR;
-    UVector translits(ec);
-    if (U_FAILURE(ec)) {
-        return NULL;
-    }
-
-    // Count transliterators _to_ the given target.  This is
-    // inconvenient since we have to iterate over all sources.
-    int32_t sourceCount = Transliterator::countAvailableSources();
-    for (int32_t s=0; s<sourceCount; ++s) {
-        UnicodeString source;
-        Transliterator::getAvailableSource(s, source);
-        int32_t targetCount = Transliterator::countAvailableTargets(source);
-        for (int32_t t=0; t<targetCount; ++t) {
-            UnicodeString target;
-            Transliterator::getAvailableTarget(t, source, target);
-            if (target.caseCompare(toTarget, 0 /*U_FOLD_CASE_DEFAULT*/) == 0) {
-                // We have a source match.  It must also be a script
-                // or we can't use it.
-                int32_t code = scriptNameToCode(source);
-                if (code < 0) {
-                    continue;
-                }
-
-                // Try to instantiate the given transliterator
-                UnicodeString id(source);
-                id.append(HYPHEN).append(toTarget);
-                Transliterator* t = Transliterator::createInstance(
-                                         id, UTRANS_FORWARD, ec);
-                if (U_FAILURE(ec) || t == NULL) {
-                    delete t;
-                    continue;
-                }
-
-                // We have a script code and a transliterator; save
-                // them.
-                translits.addElement(new Elem((UScriptCode) code, t), ec);
-            }
-        }
-    }
-
-    switch (translits.size()) {
-    case 0:
-        // There is nothing registered going to the requested target,
-        // so return Any-Null, if allowed
-        return allowNull ? new NullTransliterator() : NULL;
-    case 1:
-        // Exactly one transliterator goes to the requested target, so
-        // return it, if allowed
-        {
-            Transliterator* t = NULL;
-            if (allowDegenerate) {
-                Elem *e = (Elem*) translits.orphanElementAt(0);
-                t = e->translit;
-                delete e;
-            }
-            return t;
-        }
-    }
-
-    // We have 2 or more script-toTarget transliterators.  Assemble an
-    // AnyTransliterator and return it.
-    UnicodeString id(ANY);
-    id.append(toTarget);
-    return new AnyTransliterator(id, translits);
-}
-
-//|/**
-//| * Factory method to create an Any-X transliterator.  Convenience
-//| * function that takes a script code.
-//| */
-//|Transliterator* AnyTransliterator::createInstance(UScriptCode target,
-//|                                                  UBool allowNull,
-//|                                                  UBool allowDegenerate) {
-//|    UnicodeString name(uscript_getName(target), "");
-//|    return createInstance(name, allowNull, allowDegenerate);
-//|}
-
-/**
- * Constructs aa transliterator with the given ID.  The vector should
- * contain Elem objects.  Each will be removed from the vector and
- * ownership taken of its storage, including the contained
- * transliterator.  Upon return the vector will be empty.
- */
-AnyTransliterator::AnyTransliterator(const UnicodeString& id, UVector& vec) :
-    Transliterator(id, NULL)
+AnyTransliterator::AnyTransliterator(const UnicodeString& id,
+                                     const UnicodeString& theTarget,
+                                     const UnicodeString& theVariant,
+                                     UScriptCode theTargetScript,
+                                     UErrorCode& ec) :
+    Transliterator(id, NULL),
+    targetScript(theTargetScript) 
 {
-    count = vec.size();
-    elems = new Elem[count];
-    for (int32_t i=count-1; i>=0; --i) {
-        Elem* e = (Elem*) vec.orphanElementAt(i);
-        elems[i] = *e;
-        delete e;
+    cache = uhash_open(uhash_hashLong, uhash_compareLong, &ec);
+    uhash_setValueDeleter(cache, _deleteTransliterator);
+
+    target = theTarget;
+    if (theVariant.length() > 0) {
+        target.append(VARIANT_SEP).append(theVariant);
     }
 }
 
 AnyTransliterator::~AnyTransliterator() {
-    for (int32_t i=0; i<count; ++i) {
-        delete elems[i].translit;
-    }
-    delete[] elems;
+    uhash_close(cache);
 }
 
 /**
  * Copy constructor.
  */
 AnyTransliterator::AnyTransliterator(const AnyTransliterator& o) :
-    Transliterator(o)
+    Transliterator(o),
+    target(o.target),
+    targetScript(o.targetScript)
 {
-    count = o.count;
-    elems = new Elem[count];
-    for (int32_t i=0; i<count; ++i) {
-        elems[i] = o.elems[i];
-        elems[i].translit = elems[i].translit->clone();
-    }
+    // Don't copy the cache contents
+    UErrorCode ec = U_ZERO_ERROR;
+    cache = uhash_open(uhash_hashLong, uhash_compareLong, &ec);
+    uhash_setValueDeleter(cache, _deleteTransliterator);
 }
 
 /**
@@ -215,85 +206,151 @@ Transliterator* AnyTransliterator::clone() const {
  */
 void AnyTransliterator::handleTransliterate(Replaceable& text, UTransPosition& pos,
                                             UBool isIncremental) const {
+    int32_t allStart = pos.start;
+    int32_t allLimit = pos.limit;
 
-    // Compute indices relative to contextStart
-    int32_t start = pos.start - pos.contextStart;
-    int32_t limit = pos.limit - pos.contextStart;
-    int32_t contextLimit = pos.contextLimit - pos.contextStart;
+    ScriptRunIterator it(text, pos.contextStart, pos.contextLimit);
 
-    if (start == limit) return; // Short circuit
+    while (it.next()) {
+        // Ignore runs in the ante context
+        if (it.limit <= allStart) continue;
 
-    // Extract contextStart..contextLimit
-    UnicodeString ustext;
-    text.extractBetween(pos.contextStart, pos.contextLimit, ustext);
+        // Try to instantiate transliterator from it.scriptCode to
+        // our target or target/variant
+        Transliterator* t = getTransliterator(it.scriptCode);
+       
+        if (t == NULL) {
+            // We have no transliterator.  Do nothing, but keep
+            // pos.start up to date.
+            pos.start = it.limit;
+            continue;
+        }
 
-    // Work directly on the buffer.  We don't need to release the
-    // buffer since the UnicodeString is automatic scope.
-    UChar* utext = ustext.getBuffer(-1);
+        // If the run end is before the transliteration limit, do
+        // a non-incremental transliteration.  Otherwise do an
+        // incremental one.
+        UBool incremental = isIncremental && (it.limit >= allLimit);
+        
+        pos.start = uprv_max(allStart, it.start);
+        pos.limit = uprv_min(allLimit, it.limit);
+        int32_t limit = pos.limit;
+        t->filteredTransliterate(text, pos, incremental);
+        int32_t delta = pos.limit - limit;
+        allLimit += delta;
+        it.adjustLimit(delta);
 
-    UErrorCode ec = U_ZERO_ERROR;
-    UScriptRun* run = uscript_openRun(utext, contextLimit, &ec);
-    if (U_FAILURE(ec)) {
-        pos.start = pos.limit; // we're done
-        uscript_closeRun(run);
-        return;
+        // We're done if we enter the post context
+        if (it.limit >= allLimit) break;
     }
 
-    int32_t origLimit = pos.limit; // save original limit
-    int32_t delta = 0; // cumulative change in length
+    // Restore limit.  pos.start is fine where the last transliterator
+    // left it, or at the end of the last run.
+    pos.limit = allLimit;
+}
 
-    // Iterate over runs
-    int32_t runStart, runLimit;
-    UScriptCode runScript;
+Transliterator* AnyTransliterator::getTransliterator(UScriptCode source) const {
 
-    // We're done if we've entered the post context or when there are
-    // no more script runs (which should only happen when we call
-    // nextRun _after_ runLimit has been returned at contextLimit).
-    runLimit = 0;
-    while (runLimit < limit &&
-           uscript_nextRun(run, &runStart, &runLimit, &runScript)) {
+    if (source == targetScript || source == USCRIPT_INVALID_CODE) {
+        return NULL;
+    }
 
-        // Do nothing if we're still in the ante context
-        if (runLimit <= start) continue;
-
-        // See if we have a transliterator for this run
-        Transliterator* t = NULL;
-        for (int32_t i=0; i<count; ++i) {
-            if (elems[i].script == runScript) {
-                t = elems[i].translit;
-                break;
+    Transliterator* t = (Transliterator*) uhash_iget(cache, (int32_t) source);
+    if (t == NULL) {
+        UErrorCode ec = U_ZERO_ERROR;
+        UnicodeString sourceName(uscript_getName(source), "");
+        UnicodeString id(sourceName);
+        id.append(TARGET_SEP).append(target);
+        
+        t = Transliterator::createInstance(id, UTRANS_FORWARD, ec);
+        if (U_FAILURE(ec) || t == NULL) {
+            delete t;
+            
+            // Try to pivot around Latin, our most common script
+            id = sourceName;
+            id.append(LATIN_PIVOT).append(target);
+            t = Transliterator::createInstance(id, UTRANS_FORWARD, ec);
+            if (U_FAILURE(ec) || t == NULL) {
+                delete t;
+                t = NULL;
             }
         }
 
-        // Transliterate max(start, runStart) to min(limit, runLimit).
-        // Adjust indices to text-relative ones
-        pos.start = uprv_max(start, runStart) + pos.contextStart + delta;
-        pos.limit = uprv_min(limit, runLimit) + pos.contextStart + delta;
-        
-        // If we don't have a transliterator for this script, then
-        // leave the text unchanged.
-        if (t == NULL) {
-            pos.start = pos.limit;
-        }
-
-        else {
-            // If the run end is before the transliteration limit, do
-            // a non-incremental transliteration.  Otherwise do an
-            // incremental one.
-            UBool incremental = isIncremental && (runLimit >= limit);
-            
-            // Transliterate and record change in length
-            int32_t l = pos.limit;
-            t->filteredTransliterate(text, pos, incremental);
-            delta += pos.limit - l;
+        if (t != NULL) {
+            uhash_iput(cache, (int32_t) source, t, &ec);
         }
     }
 
-    uscript_closeRun(run);
+    return t;
+}
 
-    // pos.start can stay where the last transliterator left it.  pos.limit
-    // needs to be adjusted for changes in length.
-    pos.limit = origLimit + delta;
+/**
+ * Return the script code for a given name, or -1 if not found.
+ */
+UScriptCode AnyTransliterator::scriptNameToCode(const UnicodeString& name) {
+    char buf[128];
+    UScriptCode code;
+    UErrorCode ec = U_ZERO_ERROR;
+
+    name.extract(0, 128, buf, 128, "");
+    if (uscript_getCode(buf, &code, 1, &ec) != 1 ||
+        U_FAILURE(ec)) {
+        code = USCRIPT_INVALID_CODE;
+    }
+    return code;
+}
+
+/**
+ * Registers standard transliterators with the system.  Called by
+ * Transliterator during initialization.  Scan all current targets and
+ * register those that are scripts T as Any-T/V.
+ */
+void AnyTransliterator::registerIDs() {
+
+    UErrorCode ec;
+    Hashtable seen(TRUE);
+
+    int32_t sourceCount = Transliterator::countAvailableSources();
+    for (int32_t s=0; s<sourceCount; ++s) {
+        UnicodeString source;
+        Transliterator::getAvailableSource(s, source);
+
+        // Ignore the "Any" source
+        if (source.caseCompare(ANY, 0 /*U_FOLD_CASE_DEFAULT*/) == 0) continue;
+
+        int32_t targetCount = Transliterator::countAvailableTargets(source);
+        for (int32_t t=0; t<targetCount; ++t) {
+            UnicodeString target;
+            Transliterator::getAvailableTarget(t, source, target);
+
+            // Only process each target once
+            if (seen.geti(target) != 0) continue;
+            ec = U_ZERO_ERROR;
+            seen.puti(target, 1, ec);
+            
+            // Get the script code for the target.  If not a script, ignore.
+            UScriptCode targetScript = scriptNameToCode(target);
+            if (targetScript == USCRIPT_INVALID_CODE) continue;
+
+            int32_t variantCount = Transliterator::countAvailableVariants(source, target);
+            // assert(variantCount >= 1);
+            for (int32_t v=0; v<variantCount; ++v) {
+                UnicodeString variant;
+                Transliterator::getAvailableVariant(v, source, target, variant);
+                
+                UnicodeString id;
+                TransliteratorIDParser::STVtoID(ANY, target, variant, id);
+                ec = U_ZERO_ERROR;
+                AnyTransliterator* t = new AnyTransliterator(id, target, variant,
+                                                             targetScript, ec);
+                if (U_FAILURE(ec)) {
+                    delete t;
+                } else {
+                    Transliterator::_registerInstance(t);
+                    Transliterator::_registerSpecialInverse(target, NULL_ID, FALSE);
+                }
+            }
+        }
+    }
 }
 
 U_NAMESPACE_END

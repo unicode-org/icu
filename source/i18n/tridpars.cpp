@@ -568,6 +568,25 @@ void TransliteratorIDParser::IDtoSTV(const UnicodeString& id,
 }
 
 /**
+ * Given source, target, and variant strings, concatenate them into a
+ * full ID.  If the source is empty, then "Any" will be used for the
+ * source, so the ID will always be of the form s-t/v or s-t.
+ */
+void TransliteratorIDParser::STVtoID(const UnicodeString& source,
+                                     const UnicodeString& target,
+                                     const UnicodeString& variant,
+                                     UnicodeString& id) {
+    id = source;
+    if (id.length() == 0) {
+        id = ANY;
+    }
+    id.append(TARGET_SEP).append(target);
+    if (variant.length() != 0) {
+        id.append(VARIANT_SEP).append(variant);
+    }
+}
+
+/**
  * Register two targets as being inverses of one another.  For
  * example, calling registerSpecialInverse("NFC", "NFD", TRUE) causes
  * Transliterator to form the following inverse relationships:

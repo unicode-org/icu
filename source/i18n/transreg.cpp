@@ -465,7 +465,7 @@ void TransliteratorRegistry::remove(const UnicodeString& ID) {
     TransliteratorIDParser::IDtoSTV(ID, source, target, variant, sawSource);
     // Only need to do this if ID.indexOf('-') < 0
     UnicodeString id;
-    STVtoID(source, target, variant, id);
+    TransliteratorIDParser::STVtoID(source, target, variant, id);
     registry.remove(id);
     removeSTV(source, target, variant);
     availableIDs.removeElement((void*) &id);
@@ -586,25 +586,6 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
 //----------------------------------------------------------------------
 
 /**
- * Given source, target, and variant strings, concatenate them into a
- * full ID.  If the source is empty, then "Any" will be used for the
- * source, so the ID will always be of the form s-t/v or s-t.
- */
-void TransliteratorRegistry::STVtoID(const UnicodeString& source,
-                                     const UnicodeString& target,
-                                     const UnicodeString& variant,
-                                     UnicodeString& id) {
-    id = source;
-    if (id.length() == 0) {
-        id = ANY;
-    }
-    id.append(ID_SEP).append(target);
-    if (variant.length() != 0) {
-        id.append(VARIANT_SEP).append(variant);
-    }
-}
-
-/**
  * Convenience method.  Calls 6-arg registerEntry().
  */
 void TransliteratorRegistry::registerEntry(const UnicodeString& source,
@@ -617,7 +598,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& source,
     if (s.length() == 0) {
         s = ANY;
     }
-    STVtoID(source, target, variant, ID);
+    TransliteratorIDParser::STVtoID(source, target, variant, ID);
     registerEntry(ID, s, target, variant, adopted, visible);
 }
 
@@ -632,7 +613,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
     TransliteratorIDParser::IDtoSTV(ID, source, target, variant, sawSource);
     // Only need to do this if ID.indexOf('-') < 0
     UnicodeString id;
-    STVtoID(source, target, variant, id);
+    TransliteratorIDParser::STVtoID(source, target, variant, id);
     registerEntry(id, source, target, variant, adopted, visible);
 }
 
@@ -737,7 +718,7 @@ Entry* TransliteratorRegistry::findInDynamicStore(const Spec& src,
                                                   const Spec& trg,
                                                   const UnicodeString& variant) {
     UnicodeString ID;
-    STVtoID(src, trg, variant, ID);
+    TransliteratorIDParser::STVtoID(src, trg, variant, ID);
     Entry *e = (Entry*) registry.get(ID);
     DEBUG_useEntry(e);
     return e;

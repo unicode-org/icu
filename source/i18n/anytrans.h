@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.h,v $ 
-* $Revision: 1.1 $
+* $Revision: 1.2 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -15,94 +15,40 @@
 
 #include "unicode/translit.h"
 #include "unicode/uscript.h"
+#include "uhash.h"
 
 U_NAMESPACE_BEGIN
 
 /**
- * A transliterator named Any-X, where X is the target, that contains
- * multiple transliterators, all going to X, all with script sources.
- * The target need not be a script.  It uses the script run API
- * (uscript.h) to partition text into runs of the same script, and
- * then based on the script of each run, transliterates from that
- * script to the given target.
- *
- * <p>For example, "Any-Latin" might contain two transliterators,
- * "Greek-Latin" and "Hiragana-Latin".  It would then transliterate
- * runs of Greek with Greek-Latin, runs of Hiragana with
- * Hirgana-Latin, and pass other runs through unchanged.
- *
- * <p>There is no inverse of an Any-X transliterator.  Although it
- * would be possible to tag the output text with script markers to
- * make inversion possible, this is not currently implemented.
+ * A transliterator named Any-T or Any-T/V, where T is the target
+ * script and V is the optional variant, that uses multiple
+ * transliterators, all going to T or T/V, all with script sources.
+ * The target must be a script.  It partitions text into runs of the
+ * same script, and then based on the script of each run,
+ * transliterates from that script to the given target or
+ * target/variant.  Adjacent COMMON or INHERITED script characters are
+ * included in each run.
  *
  * @author Alan Liu
  */
 class U_I18N_API AnyTransliterator : public Transliterator {
 
     /**
-     * A script code and associated transliterator.  It does _not_ own
-     * the transliterator.
+     * Cache mapping UScriptCode values to Transliterator*.
      */
-    class Elem {
-    public:
-        UScriptCode script;
-        Transliterator* translit;
-        Elem(UScriptCode s=(UScriptCode)0, Transliterator* t=NULL) {
-            script = s;
-            translit = t;
-        }
-        Elem& operator=(const Elem& o) {
-            script = o.script;
-            translit = o.translit;
-            return *this;
-        }
-    };
+    UHashtable* cache;
 
     /**
-     * Array of script codes and associated transliterators.  We
-     * own the transliterators.
+     * The target or target/variant string.
      */
-    Elem* elems;
+    UnicodeString target;
 
     /**
-     * Length of elems, always at least 2.
+     * The target script code.  Never USCRIPT_INVALID_CODE.
      */
-    int32_t count;
+    UScriptCode targetScript;
 
 public:
-
-    /**
-     * Factory method to create an Any-X transliterator.  Relies on
-     * registered transliterators at the time of the call to build the
-     * Any-X transliterator.  If there are no registered transliterators
-     * of the form Y-X, then the logical result is Any-Null.  If there is
-     * exactly one transliterator of the form Y-X, then the logical result
-     * is Y-X, a degenerate result.  If there are 2 or more
-     * transliterators of the form Y-X, then an AnyTransliterator is
-     * instantiated and returned. 
-     * @param target the target, which need not be a script.  This
-     * be a string such as "Latin", <em>not</em> "Any-Latin".
-     * @param allowNull if true, then return Any-Null if there are no
-     * transliterator to the given script; otherwise return NULL
-     * @param allowDegenerate if true, then return a transliterator of the
-     * form X-Y if there is only one such transliterator
-     * the given script; otherwise return NULL
-     * @return a new Transliterator, or NULL.  If allowNull or
-     * allowDegenerate is TRUE, the result may not be an
-     * AnyTransliterator.  If they are both false, the result will be
-     * an AnyTransliterator.
-     */
-    static Transliterator* createInstance(const UnicodeString& target,
-                                          UBool allowNull,
-                                          UBool allowDegenerate);
-    
-//|    /**
-//|     * Factory method to create an Any-X transliterator.  Convenience
-//|     * function that takes a script code.
-//|     */
-//|    static Transliterator* createInstance(UScriptCode target,
-//|                                          UBool allowNull,
-//|                                          UBool allowDegenerate);
     
     /**
      * Destructor.
@@ -128,18 +74,36 @@ public:
 private:
 
     /**
-     * Private constructor for Transliterator.
+     * Private constructor
+     * @param id the ID of the form S-T or S-T/V, where T is theTarget
+     * and V is theVariant.  Must not be empty.
+     * @param theTarget the target name.  Must not be empty, and must
+     * name a script corresponding to theTargetScript.
+     * @param theVariant the variant name, or the empty string if
+     * there is no variant
+     * @param theTargetScript the script code corresponding to
+     * theTarget.
+     * @param ec error code, fails if the internal hashtable cannot be
+     * allocated
      */
-    AnyTransliterator(const UnicodeString& id, UVector& vec);
+    AnyTransliterator(const UnicodeString& id,
+                      const UnicodeString& theTarget,
+                      const UnicodeString& theVariant,
+                      UScriptCode theTargetScript,
+                      UErrorCode& ec);
 
     /**
-     * Try to create a transliterator with the given ID, which should
-     * be of the form "Any-X".
+     * Returns a transliterator from the given source to our target or
+     * target/variant.  Returns NULL if the source is the same as our
+     * target script, or if the source is USCRIPT_INVALID_CODE.
+     * Caches the result and returns the same transliterator the next
+     * time.  The caller does NOT own the result and must not delete
+     * it.
      */
-    static Transliterator* _create(const UnicodeString& ID, Token /*context*/);
-    
+    Transliterator* getTransliterator(UScriptCode source) const;
+
     /**
-     * Registers standard variants with the system.  Called by
+     * Registers standard transliterators with the system.  Called by
      * Transliterator during initialization.
      */
     static void registerIDs();
@@ -147,9 +111,10 @@ private:
     friend class Transliterator; // for registerIDs()
     
     /**
-     * Return the script code for a given name, or -1 if not found.
+     * Return the script code for a given name, or
+     * USCRIPT_INVALID_CODE if not found.
      */
-    static int32_t scriptNameToCode(const UnicodeString& name);
+    static UScriptCode scriptNameToCode(const UnicodeString& name);
 };
 
 U_NAMESPACE_END
