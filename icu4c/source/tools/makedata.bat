@@ -10,16 +10,17 @@ if "%ICU_DATA%"=="" set ICU_DATA=%1\icu\data\
 
 rem toolversion: Debug or Release
 set toolversion=Release
+if not "%2"=="" set toolversion=%2
 
-rem create conversion tables
+echo create conversion tables
 cd makeconv
 call mkcnvfle %toolversion% %1
 
-rem create locale resource bundles
+echo create locale resource bundles
 cd ..\genrb
 call genrb %toolversion% %1
 
-rem create binary collation tables
+echo create binary collation tables
 cd ..\gencol
 %toolversion%\gencol
 
@@ -32,5 +33,6 @@ echo call makedata with the absolute path to the icu directory
 echo for example, if the full path is d:\mytools\icu then call
 echo makedata d:\mytools
 echo the current directory must be the icu\source\tools directory with makedata.bat
+echo a second, optional, parameter can be Debug or Release to specify the tools versions
 
 :end
