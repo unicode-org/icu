@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2002/08/08 22:02:27 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/10/24 19:31:46 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -15,11 +15,12 @@ package com.ibm.icu.dev.test.calendar;
 // AstroTest
 
 import java.util.Date;
+import java.util.Locale;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.util.*;
-
 import com.ibm.icu.util.CalendarAstronomer.*;
+import com.ibm.icu.text.DateFormat;
 
 // TODO: try finding next new moon after  07/28/1984 16:00 GMT
 
@@ -118,5 +119,37 @@ public class AstroTest extends TestFmwk {
 	    logln("   prev full moon: " + new Date(astro.getMoonTime(astro.FULL_MOON, false)));
 	    logln("   next full moon: " + new Date(astro.getMoonTime(astro.FULL_MOON, true)));
 	}
+    }
+
+    public void TestSunriseTimes() {
+        //        logln("Sunrise/Sunset times for San Jose, California, USA");
+        //        CalendarAstronomer astro = new CalendarAstronomer(-121.55, 37.20);
+        //        TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+
+        logln("Sunrise/Sunset times for Toronto, Canada");
+        CalendarAstronomer astro = new CalendarAstronomer(-79.38, 43.65);
+        TimeZone tz = TimeZone.getTimeZone("America/Detroit");
+
+        GregorianCalendar cal = new GregorianCalendar(tz, Locale.US);
+        cal.set(cal.YEAR, 2001);
+        cal.set(cal.MONTH, cal.APRIL);
+        cal.set(cal.DAY_OF_MONTH, 1);
+
+        DateFormat df = DateFormat.getTimeInstance(cal, DateFormat.MEDIUM, Locale.US);
+        DateFormat day = DateFormat.getDateInstance(cal, DateFormat.MEDIUM, Locale.US);
+		
+		
+        for (int i=0; i < 30; i++) {
+            astro.setDate(cal.getTime());
+			
+            Date sunrise = new Date(astro.getSunRiseSet(true));
+            Date sunset = new Date(astro.getSunRiseSet(false));
+
+            logln("Date: " + day.format(cal.getTime()) +
+                  ", Sunrise: " + df.format(sunrise) +
+                  ", Sunset: " + df.format(sunset));
+			
+            cal.add(Calendar.DATE, 1);
+        }		
     }
 }
