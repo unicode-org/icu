@@ -17,29 +17,11 @@
 #ifndef _CUCDTST
 #define _CUCDTST
 
-
-static void setUpDataTable(void);
-static void cleanUpDataTable(void);
-
-static void TestUpperLower(void);
-static void TestLetterNumber(void);
-static void TestMisc(void);
-static void TestControlPrint(void);
-static void TestIdentifier(void);
-static void TestUnicodeData(void);
-static void TestStringCopy(void);
-static void TestStringFunctions(void);
-static void TestStringSearching(void);
-static void TestCharNames(void);
-static void TestMirroring(void);
-static void TestUnescape(void);
-static void TestCaseMapping(void);
-static void TestCaseFolding(void);
-static void TestCaseCompare(void);
-static void TestUScriptCodeAPI(void);
-
-/* internal methods used */
-static int32_t MakeProp(char* str);
-static int32_t MakeDir(char* str);
+/* cstrcase.c */
+U_CFUNC void TestCaseLower(void);
+U_CFUNC void TestCaseUpper(void);
+U_CFUNC void TestCaseTitle(void);
+U_CFUNC void TestCaseFolding(void);
+U_CFUNC void TestCaseCompare(void);
 
 #endif
