@@ -51,7 +51,7 @@ int main(int argc, char **argv);
 /* The version of genrb */
 #define GENRB_VERSION "1.0"
 
-  char *encoding = ""; 
+  const char *encoding = ""; 
 
 
 int
@@ -63,9 +63,9 @@ main(int argc,
   int useConversionLibrary = 0;
   int optind = 1;
   int i;
-  char *arg;
+  const char *arg;
   UErrorCode status;
-  char *outputDir = NULL; /* NULL = no output directory, use current */
+  const char *outputDir = NULL; /* NULL = no output directory, use current */
 
 
   if(argc == 1)
