@@ -581,7 +581,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         const uint8_t sampleTxt_iso_2022_cn[]={ 
             0x0f,   0x41,   0x44,
             0x1B,   0x24,   0x29,   0x47, 
-            0x0E,   0x40,   0x6c, /*unassigned*/
+            0x0E,   0x40,   0x6f, /*unassigned*/
             0x0f,   0x42,
             
         };
@@ -1613,7 +1613,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_HEX did not match.\n"); 
 
         }
-        {             
+        {
             const uint8_t to_iso_2022_cn4_v2[]={  
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                              0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
