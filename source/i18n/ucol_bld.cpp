@@ -17,9 +17,7 @@
 * 
 */
 
-#include "ucol_bld.h"
-/* checkout this one - it might be replaceable by something faster */
-#include "dcmpdata.h"
+#include "ucol_bld.h" 
 
 static const UChar *rulesToParse = 0;
 static const InverseTableHeader* invUCA = NULL;
@@ -889,12 +887,8 @@ uint32_t uprv_ucol_getNextDynamicCE(tempUCATable *t, collIterate *collationSourc
 }
 
 uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp, uint32_t noOfDec, uint32_t *result, uint32_t resultSize, UErrorCode *status) {
-  uint32_t j = 0, i = 0;
-  uint32_t CE = 0, firstFound = UCOL_NOT_FOUND;
-  uint32_t firstIndex = 0;
   uint32_t resLen = 0;
   collIterate colIt;
-  UBool lastNotFound = FALSE;
 
   init_collIterate(src->UCA, decomp, noOfDec, &colIt);
 
@@ -964,6 +958,24 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
       ucol_initBuffers(src, &src->lh[i], tailored, status);
     }
   }
+
+  if(src->varTop != NULL) { /* stuff the variable top value */
+    src->opts->variableTopValue = (*(src->varTop->CEs))>>16;
+    /* remove it from the list */
+    if(src->varTop->listHeader->first[src->varTop->polarity] == src->varTop) { /* first in list */
+      src->varTop->listHeader->first[src->varTop->polarity] = src->varTop->next;
+    }
+    if(src->varTop->listHeader->last[src->varTop->polarity] == src->varTop) { /* first in list */
+      src->varTop->listHeader->last[src->varTop->polarity] = src->varTop->previous;    
+    }
+    if(src->varTop->next != NULL) {
+      src->varTop->next->previous = src->varTop->previous;
+    }
+    if(src->varTop->previous != NULL) {
+      src->varTop->previous->next = src->varTop->next;
+    }
+  }
+
 
   tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, status);
 

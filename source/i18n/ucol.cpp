@@ -285,6 +285,7 @@ ucol_openRules(    const    UChar                  *rules,
   src.invUCA = ucol_initInverseUCA(status);
   src.resultLen = 0;
   src.lh = 0;
+  src.varTop = NULL;
 
   src.opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
 
@@ -2570,7 +2571,6 @@ ucol_calcSortKey(const    UCollator    *coll,
             }
           }
       }
-
       *(primaries++) = '\0';
     }
 
@@ -2952,9 +2952,13 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
 void ucol_updateInternalState(UCollator *coll) {
+/*
       uint32_t variableMaxCE = ucmp32_get(coll->mapping, coll->variableTopValue);
       coll->variableMax1 = (uint8_t)((variableMaxCE & 0xFF000000) >> 24);
       coll->variableMax2 = (uint8_t)((variableMaxCE & 0x00FF0000) >> 16);
+*/
+      coll->variableMax1 = (uint8_t)((coll->variableTopValue & 0xFF00) >> 8);
+      coll->variableMax2 = (uint8_t)((coll->variableTopValue & 0x00FF));
 
       if(coll->caseFirst == UCOL_UPPER_FIRST) {
         coll->caseSwitch = UCOL_CASE_SWITCH;
@@ -3321,6 +3325,98 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
   } else {
     return FALSE;
   }
+}
+
+/* INTERNAL! */
+/*
+ * Encode a Unicode string for the identical level of a sort key.
+ * Restrictions:
+ * - byte stream (unsigned 8-bit bytes)
+ * - lexical order of the identical-level run must be
+ *   the same as code point order for the string
+ * - avoid byte values 0, 1, 2
+ *
+ * Method: Slope Detection
+ * Remember the previous code point (initial 0).
+ * For each cp in the string, encode the difference to the previous one.
+ *
+ * With a compact encoding of differences, this yields good results for
+ * small scripts and UTF-like results otherwise.
+ *
+ * Encoding of differences:
+ * Similar to a UTF, encoding the length of the byte sequence in the lead bytes.
+ * Does not need to be friendly for decoding or random access
+ * (trail byte values may overlap with lead/single byte values).
+ * The signedness must be encoded as the most significant part.
+ *
+ * We encode differences with few bytes if their absolute values are small.
+ * For correct ordering, we must treat the entire value range -10ffff..+10ffff
+ * in ascending order, which forbids encoding the sign and the absolute value separately.
+ * Instead, we split the lead byte range in the middle and encode non-negative values
+ * going up and negative values going down.
+ * Trail bytes always collect the remaining bits in groups of 7, with
+ * bit number 7 of each trail byte set. This is the easiest way to avoid byte values
+ * 0, 1, 2 in trail bytes.
+ * The lead bytes and encodings of the difference values is as follows:
+ *
+ * diff value x    lead/single trail bytes
+ * +40800..+10ffff ff          trail trail trail
+ *  +1020.. +407ff ef+(x>>14)  trail trail
+ *    +4e..  +101f cf+(x>>7)   trail
+ *    -4d..    +4d 81+x
+ *  -1020..    -4e 34+(x>>7)   trail
+ * -40800..  -1021 14+(x>>14)  trail trail
+ *-10ffff.. -40801 03          trail trail trail
+ *
+ * This encoding does not use byte values 0, 1, 2, but uses all other byte values
+ * for lead/single bytes so that the middle range of single bytes is as large
+ * as possible.
+ * Note that the lead byte ranges overlap some, but that the sequences as a whole
+ * are well ordered. I.e., even if the lead byte is the same for sequences of different
+ * lengths, the trail bytes establish correct order.
+ * It would be possible to encode slightly larger ranges for each length (>1) by
+ * subtracting the lower bound of the range. However, that would also slow down the
+ * calculation.
+ */
+
+/*
+ * encode one difference value -0x10ffff..+0x10ffff in 1..4 bytes,
+ * preserving lexical order
+ */
+static uint8_t *
+writeDiff(int32_t diff, uint8_t *p) {
+    if(diff>=-0x4d) {
+        if(diff<=0x4d) {
+            *p++=(uint8_t)(0x81+diff);
+        } else {
+            if(diff<=0x101f) {
+                *p++=(uint8_t)(0xcf+(diff>>7));
+            } else {
+                if(diff<=0x407ff) {
+                    *p++=(uint8_t)(0xef+(diff>>14));
+                } else {
+                    *p++=0xff;
+                    *p++=(uint8_t)(0x80|(diff>>14));
+                }
+                *p++=(uint8_t)(0x80|(diff>>7));
+            }
+            *p++=(uint8_t)(0x80|diff);
+        }
+    } else {
+        if(diff>=-0x1020) {
+            *p++=(uint8_t)(0x34+(diff>>7));
+        } else {
+            if(diff>=-0x40800) {
+                *p++=(uint8_t)(0x14+(diff>>14));
+            } else {
+                *p++=0x03;
+                *p++=(uint8_t)(0x80|(diff>>14));
+            }
+            *p++=(uint8_t)(0x80|(diff>>7));
+        }
+        *p++=(uint8_t)(0x80|diff);
+    }
+    return p;
 }
 
 

@@ -19,8 +19,11 @@
 
 #ifndef UCOL_BLD_H
 #define UCOL_BLD_H
+
+#ifdef UCOL_DEBUG
 #include <stdio.h>
 #include <stdlib.h>
+#endif
 
 #include "ucol_imp.h"
 #include "ucol_tok.h"
