@@ -37,17 +37,17 @@ TrimmedArrayProcessor::~TrimmedArrayProcessor()
 
 void TrimmedArrayProcessor::process(LEGlyphStorage &glyphStorage)
 {
-	le_int32 glyphCount = glyphStorage.getGlyphCount();
+    le_int32 glyphCount = glyphStorage.getGlyphCount();
     le_int32 glyph;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
-		LEGlyphID thisGlyph = glyphStorage[glyph];
+        LEGlyphID thisGlyph = glyphStorage[glyph];
         TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(thisGlyph);
 
         if ((ttGlyph > firstGlyph) && (ttGlyph < lastGlyph)) {
             TTGlyphID newGlyph = SWAPW(trimmedArrayLookupTable->valueArray[ttGlyph - firstGlyph]);
 
-			glyphStorage[glyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
+            glyphStorage[glyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
         }
     }
 } 

@@ -59,7 +59,7 @@ void MPreFixups::apply(LEGlyphStorage &glyphStorage)
             continue;
         }
 
-		LEErrorCode success = LE_NO_ERROR;
+        LEErrorCode success = LE_NO_ERROR;
         le_int32   mpreCount = mpreLimit - mpreIndex;
         le_int32   moveCount = baseIndex - mpreLimit;
         le_int32   mpreDest  = baseIndex - mpreCount;
@@ -69,20 +69,20 @@ void MPreFixups::apply(LEGlyphStorage &glyphStorage)
 
         for (i = 0; i < mpreCount; i += 1) {
             mpreSave[i]  = glyphStorage[mpreIndex + i];
-			indexSave[i] = glyphStorage.getCharIndex(mpreIndex + i, success); //charIndices[mpreIndex + i];
+            indexSave[i] = glyphStorage.getCharIndex(mpreIndex + i, success); //charIndices[mpreIndex + i];
         }
 
         for (i = 0; i < moveCount; i += 1) {
-			LEGlyphID glyph = glyphStorage[mpreLimit + i];
-			le_int32 charIndex = glyphStorage.getCharIndex(mpreLimit + i, success);
+            LEGlyphID glyph = glyphStorage[mpreLimit + i];
+            le_int32 charIndex = glyphStorage.getCharIndex(mpreLimit + i, success);
 
-			glyphStorage[mpreIndex + i] = glyph;
-			glyphStorage.setCharIndex(mpreIndex + i, charIndex, success);
+            glyphStorage[mpreIndex + i] = glyph;
+            glyphStorage.setCharIndex(mpreIndex + i, charIndex, success);
         }
 
         for (i = 0; i < mpreCount; i += 1) {
-			glyphStorage[mpreDest + i] = mpreSave[i];
-			glyphStorage.setCharIndex(mpreDest, indexSave[i], success);
+            glyphStorage[mpreDest + i] = mpreSave[i];
+            glyphStorage.setCharIndex(mpreDest, indexSave[i], success);
         }
         
         LE_DELETE_ARRAY(indexSave);

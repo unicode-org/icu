@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -48,7 +48,7 @@ public:
      * array of limit indices.
      *
      * @param limits is an array of limit indices. This array must remain
-	 *               valid until the <code>RunArray</code> object is destroyed.
+     *               valid until the <code>RunArray</code> object is destroyed.
      *
      * @param count is the number of entries in the limit array.
      *
@@ -195,9 +195,9 @@ private:
 
     le_int32 ensureCapacity();
 
-	RunArray();
-	RunArray(const RunArray & /*other*/);
-	RunArray &operator=(const RunArray & /*other*/) { return *this; };
+    RunArray();
+    RunArray(const RunArray & /*other*/);
+    RunArray &operator=(const RunArray & /*other*/) { return *this; };
 
     const le_int32 *fLimits;
           le_int32  fCount;
@@ -205,15 +205,15 @@ private:
 };
 
 inline RunArray::RunArray()
-	: UObject(), fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(0)
+    : UObject(), fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(0)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline RunArray::RunArray(const RunArray & /*other*/)
-	: UObject(), fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(0)
+    : UObject(), fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(0)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline RunArray::RunArray(const le_int32 *limits, le_int32 count)
@@ -255,11 +255,11 @@ public:
      * and limit indices.
      *
      * @param fonts is the address of an array of pointers to <code>LEFontInstance</code> objects. This
-	 *              array, and the <code>LEFontInstance</code> objects to which it points must remain
-	 *              valid until the <code>FontRuns</code> object is destroyed.
+     *              array, and the <code>LEFontInstance</code> objects to which it points must remain
+     *              valid until the <code>FontRuns</code> object is destroyed.
      *
      * @param limits is the address of an array of limit indices. This array must remain valid until
-	 *               the <code>FontRuns</code> object is destroyed.
+     *               the <code>FontRuns</code> object is destroyed.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -317,7 +317,7 @@ public:
      * arrays, and use the returned run index to store data their own arrays.
      *
      * @param font is the address of the <code>LEFontInstance</code> to add. This object must
-	 *             remain valid until the <code>FontRuns</code> object is destroyed.
+     *             remain valid until the <code>FontRuns</code> object is destroyed.
      *
      * @param limit is the limit index to add
      *
@@ -347,9 +347,9 @@ protected:
 
 private:
 
-	FontRuns();
-	FontRuns(const FontRuns &other);
-	FontRuns &operator=(const FontRuns & /*other*/) { return *this; };
+    FontRuns();
+    FontRuns(const FontRuns &other);
+    FontRuns &operator=(const FontRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -361,15 +361,15 @@ private:
 };
 
 inline FontRuns::FontRuns()
-	: RunArray(0), fFonts(NULL)
+    : RunArray(0), fFonts(NULL)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline FontRuns::FontRuns(const FontRuns & /*other*/)
-	: RunArray(0), fFonts(NULL)
+    : RunArray(0), fFonts(NULL)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline FontRuns::FontRuns(const LEFontInstance **fonts, const le_int32 *limits, le_int32 count)
@@ -392,11 +392,11 @@ public:
      * and limit indices.
      *
      * @param locales is the address of an array of pointers to <code>Locale</code> objects. This array,
-	 *                and the <code>Locale</code> objects to which it points, must remain valid until
-	 *                the <code>LocaleRuns</code> object is destroyed.
+     *                and the <code>Locale</code> objects to which it points, must remain valid until
+     *                the <code>LocaleRuns</code> object is destroyed.
      *
      * @param limits is the address of an array of limit indices. This array must remain valid until the
-	 *               <code>LocaleRuns</code> object is destroyed.
+     *               <code>LocaleRuns</code> object is destroyed.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -454,7 +454,7 @@ public:
      * arrays, and use the returned run index to store data their own arrays.
      *
      * @param locale is the address of the <code>Locale</code> to add. This object must remain valid
-	 *               until the <code>LocaleRuns</code> object is destroyed.
+     *               until the <code>LocaleRuns</code> object is destroyed.
      *
      * @param limit is the limit index to add
      *
@@ -484,9 +484,9 @@ protected:
 
 private:
 
-	LocaleRuns();
-	LocaleRuns(const LocaleRuns &other);
-	LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; };
+    LocaleRuns();
+    LocaleRuns(const LocaleRuns &other);
+    LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -498,15 +498,15 @@ private:
 };
 
 inline LocaleRuns::LocaleRuns()
-	: RunArray(0), fLocales(NULL)
+    : RunArray(0), fLocales(NULL)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline LocaleRuns::LocaleRuns(const LocaleRuns & /*other*/)
-	: RunArray(0), fLocales(NULL)
+    : RunArray(0), fLocales(NULL)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline LocaleRuns::LocaleRuns(const Locale **locales, const le_int32 *limits, le_int32 count)
@@ -528,10 +528,10 @@ public:
      * and limit indices.
      *
      * @param values is the address of an array of integer. This array must remain valid until
-	 *               the <code>ValueRuns</code> object is destroyed.
+     *               the <code>ValueRuns</code> object is destroyed.
      *
      * @param limits is the address of an array of limit indices. This array must remain valid until
-	 *               the <code>ValueRuns</code> object is destroyed.
+     *               the <code>ValueRuns</code> object is destroyed.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -618,9 +618,9 @@ protected:
 
 private:
 
-	ValueRuns();
-	ValueRuns(const ValueRuns &other);
-	ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; };
+    ValueRuns();
+    ValueRuns(const ValueRuns &other);
+    ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -632,15 +632,15 @@ private:
 };
 
 inline ValueRuns::ValueRuns()
-	: RunArray(0), fValues(NULL)
+    : RunArray(0), fValues(NULL)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline ValueRuns::ValueRuns(const ValueRuns & /*other*/)
-	: RunArray(0), fValues(NULL)
+    : RunArray(0), fValues(NULL)
 {
-	// nothing else to do...
+    // nothing else to do...
 }
 
 inline ValueRuns::ValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count)

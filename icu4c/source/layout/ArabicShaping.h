@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -59,11 +59,11 @@ private:
 
     static const LETag tagArray[];
 
-	static ShapeType getShapeType(LEUnicode c);
+    static ShapeType getShapeType(LEUnicode c);
 
     static const ShapeType shapeTypes[];
 
-	static void adjustTags(le_int32 outIndex, le_int32 shapeOffset, LEGlyphStorage &glyphStorage); 
+    static void adjustTags(le_int32 outIndex, le_int32 shapeOffset, LEGlyphStorage &glyphStorage); 
 };
 
 U_NAMESPACE_END

@@ -34,7 +34,7 @@ public:
 
     virtual ~GlyphIterator();
 
-	void reset(le_uint16 newLookupFlags, LETag newFeatureTag);
+    void reset(le_uint16 newLookupFlags, LETag newFeatureTag);
 
     le_bool next(le_uint32 delta = 1);
     le_bool prev(le_uint32 delta = 1);
@@ -73,8 +73,8 @@ public:
     void adjustCursiveLastGlyphPositionAdjustment(float xPlacmentAdjust, float yPlacementAdjust,
                                            float xAdvanceAdjust, float yAdvanceAdjust);
 
-	LEGlyphID *insertGlyphs(le_int32 count);
-	le_int32 applyInsertions();
+    LEGlyphID *insertGlyphs(le_int32 count);
+    le_int32 applyInsertions();
 
 private:
     GlyphIterator();
@@ -91,10 +91,10 @@ private:
     le_int32  cursiveLastPosition;
     float     cursiveBaselineAdjustment;
     LEPoint   cursiveLastExitPoint;
-	LEGlyphStorage &glyphStorage;
+    LEGlyphStorage &glyphStorage;
     GlyphPositionAdjustment *glyphPositionAdjustments;
-	le_int32 srcIndex;
-	le_int32 destIndex;
+    le_int32 srcIndex;
+    le_int32 destIndex;
     le_uint16 lookupFlags;
     LETag    featureTag;
     const GlyphClassDefinitionTable *glyphClassDefinitionTable;

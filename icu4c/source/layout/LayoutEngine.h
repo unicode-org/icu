@@ -1,6 +1,5 @@
 
 /*
- * %W% %W%
  *
  * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
@@ -287,7 +286,7 @@ protected:
      *
      * @internal
      */
-	static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 charCount, le_bool reverse, LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
+    static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 charCount, le_bool reverse, LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
 
 
 public:

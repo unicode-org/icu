@@ -1,7 +1,6 @@
 /*
- * @(#)GlyphPositionAdjustments.h	1.8 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 

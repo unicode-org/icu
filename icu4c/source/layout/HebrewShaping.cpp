@@ -1,5 +1,4 @@
 /*
- * %W% %E%
  *
  * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
@@ -25,7 +24,7 @@ void HebrewShaping::shape(const LEUnicode * /*chars*/, le_int32 /*offset*/, le_i
 {
 
     le_int32 count, out = 0, dir = 1;
-	LEErrorCode success = LE_NO_ERROR;
+    LEErrorCode success = LE_NO_ERROR;
 
     if (rightToLeft) {
         out = charCount - 1;
@@ -33,8 +32,8 @@ void HebrewShaping::shape(const LEUnicode * /*chars*/, le_int32 /*offset*/, le_i
     }
 
     for (count = 0; count < charCount; count += 1, out += dir) {
-		glyphStorage.setAuxData(out, (void *) hebrewTags, success);
-	}
+        glyphStorage.setAuxData(out, (void *) hebrewTags, success);
+    }
 }
 
 U_NAMESPACE_END

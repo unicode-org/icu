@@ -1,7 +1,6 @@
 /*
- * @(#)GlyphDefinitionTables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2004 - All Rights Reserved
  *
  */
 

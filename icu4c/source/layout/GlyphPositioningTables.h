@@ -27,7 +27,7 @@ class LEGlyphStorage;
 struct GlyphPositioningTableHeader : public GlyphLookupTableHeader
 {
     void    process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustment *glyphPositionAdjustments,
-		        le_bool rightToLeft, LETag scriptTag, LETag languageTag,
+                le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                 const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                 const LEFontInstance *fontInstance, const LETag *featureOrder) const;
 };

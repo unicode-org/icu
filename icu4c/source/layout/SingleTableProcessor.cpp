@@ -37,7 +37,7 @@ void SingleTableProcessor::process(LEGlyphStorage &glyphStorage)
 {
     const LookupSingle *entries = singleTableLookupTable->entries;
     le_int32 glyph;
-	le_int32 glyphCount = glyphStorage.getGlyphCount();
+    le_int32 glyphCount = glyphStorage.getGlyphCount();
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
         const LookupSingle *lookupSingle = singleTableLookupTable->lookupSingle(entries, glyphStorage[glyph]);

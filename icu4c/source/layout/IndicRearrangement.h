@@ -1,7 +1,6 @@
 /*
- * @(#)IndicRearrangement.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 

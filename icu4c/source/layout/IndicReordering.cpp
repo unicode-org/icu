@@ -16,7 +16,7 @@ U_NAMESPACE_BEGIN
 class ReorderingOutput : public UMemory {
 private:
     le_int32 fOutIndex;
-	LEUnicode *fOutChars;
+    LEUnicode *fOutChars;
 
     LEGlyphStorage &fGlyphStorage;
 
@@ -241,12 +241,12 @@ public:
     
     void writeChar(LEUnicode ch, le_uint32 charIndex, const LETag *charTags)
     {
-		LEErrorCode success = LE_NO_ERROR;
+        LEErrorCode success = LE_NO_ERROR;
 
         fOutChars[fOutIndex] = ch;
 
-		fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
-		fGlyphStorage.setAuxData(fOutIndex, (void *) charTags, success);
+        fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
+        fGlyphStorage.setAuxData(fOutIndex, (void *) charTags, success);
 
         fOutIndex += 1;
     }

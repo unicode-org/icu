@@ -46,7 +46,7 @@ ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphStorag
 
     if (markOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + markOffset * 2);
-		LEGlyphID mGlyph = glyphStorage[markGlyph];
+        LEGlyphID mGlyph = glyphStorage[markGlyph];
         TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(mGlyph)]);
 
          glyphStorage[markGlyph] = LE_SET_GLYPH(mGlyph, newGlyph);
@@ -54,7 +54,7 @@ ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphStorag
 
     if (currOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + currOffset * 2);
-		LEGlyphID thisGlyph = glyphStorage[currGlyph];
+        LEGlyphID thisGlyph = glyphStorage[currGlyph];
         TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(thisGlyph)]);
 
         glyphStorage[currGlyph] = LE_SET_GLYPH(thisGlyph, newGlyph);

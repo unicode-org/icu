@@ -113,10 +113,10 @@ const LETag *ArabicShaping::getFeatureOrder()
 
 void ArabicShaping::adjustTags(le_int32 outIndex, le_int32 shapeOffset, LEGlyphStorage &glyphStorage)
 {
-	LEErrorCode success = LE_NO_ERROR;
-	const LETag *glyphTags = (const LETag *) glyphStorage.getAuxData(outIndex, success);
+    LEErrorCode success = LE_NO_ERROR;
+    const LETag *glyphTags = (const LETag *) glyphStorage.getAuxData(outIndex, success);
 
-	glyphStorage.setAuxData(outIndex, (void *) &glyphTags[TAGS_PER_GLYPH * shapeOffset], success);
+    glyphStorage.setAuxData(outIndex, (void *) &glyphTags[TAGS_PER_GLYPH * shapeOffset], success);
 }
 
 void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
@@ -138,7 +138,7 @@ void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 char
     //   shaper.shape(out, 1) (isolate to final)
 
     ShapeType rightType = ST_NOSHAPE_NONE, leftType = ST_NOSHAPE_NONE;
-	LEErrorCode success = LE_NO_ERROR;
+    LEErrorCode success = LE_NO_ERROR;
     le_int32 i;
 
     for (i = offset - 1; i >= 0; i -= 1) {
@@ -173,7 +173,7 @@ void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 char
         LEUnicode c = chars[in];
         ShapeType t = getShapeType(c);
 
-		glyphStorage.setAuxData(out, (void *) tagArray, success);
+        glyphStorage.setAuxData(out, (void *) tagArray, success);
 
         if ((t & MASK_TRANSPARENT) != 0) {
             continue;

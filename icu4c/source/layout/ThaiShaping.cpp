@@ -145,7 +145,7 @@ LEUnicode ThaiShaping::noDescenderCOD(LEUnicode cod, le_uint8 glyphSet)
 le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currChar, le_int32 inputIndex, le_uint8 glyphSet,
         LEUnicode errorChar, LEUnicode *outputBuffer, LEGlyphStorage &glyphStorage, le_int32 &outputIndex)
 {
-	LEErrorCode success = LE_NO_ERROR;
+    LEErrorCode success = LE_NO_ERROR;
 
     switch (transition.action) {
     case tA:
