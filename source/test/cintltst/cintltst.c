@@ -38,9 +38,9 @@ U_CAPI void U_EXPORT2 ucnv_orphanAllConverters();
 
 static char* _testDirectory=NULL;
 #if defined(OS400)
-int main (int args, char** argv)
+int main (int argc, char* argv[])
 #else
-int main ( int argc, const char **argv )
+int main ( int argc, const char *argv[] )
 #endif
 {
     int nerrors;
