@@ -806,43 +806,7 @@ u_getNumericValue(UChar32 c) {
     }
 }
 
-/* Gets the character's linguistic directionality.*/
-U_CAPI UCharDirection U_EXPORT2
-u_charDirection(UChar32 c) {   
-    uint32_t props;
-    GET_PROPS(c, props);
-    return (UCharDirection)GET_BIDI_CLASS(props);
-}
-
-U_CAPI UBool U_EXPORT2
-u_isMirrored(UChar32 c) {
-    uint32_t props;
-    GET_PROPS(c, props);
-    return (UBool)(props&(1UL<<UPROPS_MIRROR_SHIFT) ? TRUE : FALSE);
-}
-
-U_CAPI UChar32 U_EXPORT2
-u_charMirror(UChar32 c) {
-    uint32_t props;
-    GET_PROPS(c, props);
-    if((props&(1UL<<UPROPS_MIRROR_SHIFT))==0) {
-        /* not mirrored - the value is not a mirror offset */
-        return c;
-    } else if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        return c+GET_SIGNED_VALUE(props);
-    } else {
-        const uint32_t *pe=GET_EXCEPTIONS(props);
-        uint32_t firstExceptionValue=*pe;
-        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_MIRROR_MAPPING)) {
-            int i=EXC_MIRROR_MAPPING;
-            ++pe;
-            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
-            return (UChar32)*pe;
-        } else {
-            return c;
-        }
-    }
-}
+/* ICU 3.4: bidi/shaping properties moved to ubidi_props.c */
 
 /* ICU 2.1: u_getCombiningClass() moved to unorm.cpp */
 

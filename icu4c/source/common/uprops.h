@@ -340,7 +340,7 @@ enum UPropertySource {
     UPROPS_SRC_NORM,
     /** From ucase.c/ucase.icu */
     UPROPS_SRC_CASE,
-    /** From ubidi.c/ubidi.icu */
+    /** From ubidi_props.c/ubidi.icu */
     UPROPS_SRC_BIDI,
     /** One more than the highes UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
