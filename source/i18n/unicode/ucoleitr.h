@@ -32,7 +32,7 @@
  * The UCollationElements struct.
  * For usage in C programs.
  */
-// typedef void * UCollationElements;
+/* typedef void * UCollationElements; */
 typedef struct UCollationElements UCollationElements;
 
 /**
