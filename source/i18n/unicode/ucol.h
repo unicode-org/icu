@@ -582,7 +582,7 @@ typedef enum {
  *               issued.
  * @return The size needed to fully store the bound. 
  * @see ucol_keyHashCode
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_getBound(const uint8_t       *source,
@@ -770,7 +770,7 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);

@@ -588,7 +588,7 @@ public:
    * @param toAppendTo the string that will hold the (appended) result
    * @param pos the fieldposition
    * @return A textual representation of the number.
-   * @draft ICU 2.1
+   * @stable ICU 2.1
    */
   virtual UnicodeString& format(int64_t number,
                                 UnicodeString& toAppendTo,
@@ -630,7 +630,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @draft ICU 2.1
+   * @stable ICU 2.1
    */
   virtual UnicodeString& format(int64_t number,
                                 const UnicodeString& ruleSetName,

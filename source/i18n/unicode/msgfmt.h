@@ -360,7 +360,7 @@ public:
      *                   of error within pattern.
      * @param status    Input/output error code.  If the
      *                  pattern cannot be parsed, set to failure code.
-     * @draft ICU 2.0
+     * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                              UParseError& parseError,

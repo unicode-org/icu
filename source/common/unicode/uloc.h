@@ -272,7 +272,7 @@
  * from the UCA)
  * The locale is considered supported by ICU if there is a core ICU bundle 
  * for that locale (although it may be empty).
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef enum {
   /** This is locale the data actually comes from */
