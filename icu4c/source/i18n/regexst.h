@@ -28,7 +28,7 @@ U_NAMESPACE_BEGIN
 class  UnicodeSet;
 
 
-class RegexStaticSets {
+class RegexStaticSets : public UMemory {
 public:
     static RegexStaticSets *gStaticSets;  // Ptr to all lazily initialized constant
                                           //   shared sets.

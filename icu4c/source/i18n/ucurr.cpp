@@ -134,7 +134,7 @@ struct CReg;
 static UMTX gCRegLock = 0;
 static CReg* gCRegHead = 0;
 
-struct CReg {
+struct CReg : public UMemory {
   CReg *next;
   UChar iso[4];
   char  id[12];
