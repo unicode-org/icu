@@ -21,7 +21,7 @@
 *   compact binary tables for random-access lookup
 *   in a u_charName() API function.
 *
-* unames.dat file format (after UDataInfo header etc. - see udata.c)
+* unames.icu file format (after UDataInfo header etc. - see udata.c)
 * (all data is static const)
 *
 * UDataInfo fields:
@@ -141,7 +141,7 @@
 #define MAX_GROUP_COUNT 5000
 
 #define DATA_NAME "unames"
-#define DATA_TYPE "dat"
+#define DATA_TYPE "icu"
 #define VERSION_STRING "unam"
 #define NAME_SEPARATOR_CHAR ';'
 
