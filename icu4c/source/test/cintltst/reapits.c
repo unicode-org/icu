@@ -562,6 +562,84 @@ void TestRegexCAPI(void) {
     /*
      *  replaceAll()
      */
+    {
+        UChar    text1[80];
+        UChar    text2[80];
+        UChar    replText[80];
+        UChar    buf[80];
+        int32_t  resultSz;
+        int32_t  expectedResultSize;
+        int32_t  i;
+
+        u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
+        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+        u_uastrncpy(replText, "<$1>", sizeof(replText)/2);
+        expectedResultSize = u_strlen(text1);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /*  Normal case, with match */
+        uregex_setText(re, text1, -1, &status);
+        resultSz = uregex_replaceAll(re, replText, -1, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, TRUE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+
+        /* No match.  Text should copy to output with no changes.  */
+        status = U_ZERO_ERROR;
+        uregex_setText(re, text2, -1, &status);
+        resultSz = uregex_replaceAll(re, replText, -1, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("No match here.", buf, TRUE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("No match here."));
+
+        /*  Match, output just fills buffer, no termination warning. */
+        status = U_ZERO_ERROR;
+        uregex_setText(re, text1, -1, &status);
+        memset(buf, -1, sizeof(buf));
+        resultSz = uregex_replaceAll(re, replText, -1, buf, strlen("Replace xaax x1x x...x."), &status);
+        TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+        TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, FALSE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace <aa> <1> <...>."));
+        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+
+        /* Do the replaceFirst again, without first resetting anything.
+         *  Should give the same results.
+         */
+        status = U_ZERO_ERROR;
+        memset(buf, -1, sizeof(buf));
+        resultSz = uregex_replaceAll(re, replText, -1, buf, strlen("Replace xaax x1x x...x."), &status);
+        TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+        TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, FALSE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace <aa> <1> <...>."));
+        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+
+        /* NULL buffer, zero buffer length */
+        status = U_ZERO_ERROR;
+        resultSz = uregex_replaceAll(re, replText, -1, NULL, 0, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace <aa> <1> <...>."));
+
+        /* Buffer too small.  Try every size, which will tickle edge cases
+         * in uregex_appendReplacement (used by replaceAll)   */
+        for (i=0; i<expectedResultSize; i++) {
+            char  expected[80];
+            status = U_ZERO_ERROR;
+            memset(buf, -1, sizeof(buf));
+            resultSz = uregex_replaceAll(re, replText, -1, buf, i, &status);
+            TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+            strcpy(expected, "Replace <aa> <1> <...>.");
+            expected[i] = 0;
+            TEST_ASSERT_STRING(expected, buf, FALSE);
+            TEST_ASSERT(resultSz == expectedResultSize);
+            TEST_ASSERT(buf[i] == (UChar)0xffff);
+        }
+
+        uregex_close(re);
+    }
+
 
     /*
      *  appendReplacement()
@@ -574,6 +652,38 @@ void TestRegexCAPI(void) {
     /*
      *  split()
      */
+    {
+        UChar    textToSplit[80];
+        UChar    text2[80];
+        UChar    buf[200];
+        UChar    *fields[10];
+        int32_t  numFields;
+        int32_t  requiredCapacity;
+        int32_t  spaceNeeded;
+
+        u_uastrncpy(textToSplit, "first : second:  third",  sizeof(textToSplit)/2);
+        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC(":", 0, NULL, &status);
+        uregex_setText(re, textToSplit, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        numFields = 
+            uregex_split(re, buf, sizeof(buf)/2, &requiredCapacity, fields, 10, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(numFields == 3);
+        TEST_ASSERT_STRING("first ",  fields[0], TRUE);
+        TEST_ASSERT_STRING(" second", fields[1], TRUE);
+        TEST_ASSERT_STRING("  third", fields[2], TRUE);
+        TEST_ASSERT(fields[3] == NULL);
+
+        spaceNeeded = u_strlen(textToSplit) -
+                      (numFields - 1)  +  /* Field delimiters do not appear in output */
+                      numFields;          /* Each field gets a NUL terminator */ 
+
+        TEST_ASSERT(spaceNeeded == requiredCapacity);
+    }
 }
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */
