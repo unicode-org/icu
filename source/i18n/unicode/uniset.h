@@ -265,15 +265,10 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      */
     UnicodeString pat;
 
-#ifndef HPUX
-    static const UChar32 HIGH; // HIGH > all valid values. 110000 for codepoints
-#endif
-    static const UChar32 LOW; // LOW <= all valid values. ZERO for codepoints
-
     static const int32_t START_EXTRA; // initial storage. Must be >= 0
     static const int32_t GROW_EXTRA; // extra amount for growth. Must be >= 0
 
-    static const UnicodeString CATEGORY_NAMES;
+    static const UChar CATEGORY_NAMES[];
 
     /**
      * A cache mapping character category integers, as returned by
