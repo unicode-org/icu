@@ -81,6 +81,10 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Percent %%P (non-ANSI): %P\n", myFloat);
     u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", myFloat);
 
+    if (u_feof(myFile)) {
+        log_err("Got feof while writing the file.\n");
+    }
+
     *n = 1;
     u_fprintf(myFile, "\t\nPointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
     u_fprintf(myFile, "Pointer to integer Value: %d\n", *n);
@@ -95,6 +99,10 @@ static void TestFileFromICU(UFILE *myFile) {
     if (myFile == NULL) {
         log_err("Can't read test file.");
         return;
+    }
+
+    if (u_feof(myFile)) {
+        log_err("Got feof while reading the file and not at the end of the file.\n");
     }
 
     myUString[0] = u_fgetc(myFile);
@@ -269,6 +277,24 @@ static void TestFileFromICU(UFILE *myFile) {
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "\t") != 0) {
         log_err("u_fgets got \"%s\"\n", myString);
+    }
+
+    u_austrncpy(myString, u_fgets(myUString, sizeof(myUString)/sizeof(*myUString), myFile),
+        sizeof(myUString)/sizeof(*myUString));
+    if (strcmp(myString, "Normal fprintf count: n=1  n=1\n") != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
+
+    if (u_feof(myFile)) {
+        log_err("Got feof while reading the file and not at the end of the file.\n");
+    }
+    u_austrncpy(myString, u_fgets(myUString, sizeof(myUString)/sizeof(*myUString), myFile),
+        sizeof(myUString)/sizeof(*myUString));
+    if (strcmp(myString, "\tNormal fprintf count value: n=27\n") != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
+    if (!u_feof(myFile)) {
+        log_err("Got feof while reading the end of the file.\n");
     }
 
     u_fclose(myFile);
