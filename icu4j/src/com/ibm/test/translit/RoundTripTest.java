@@ -77,7 +77,6 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestHangul() throws IOException, ParseException {
         Test t = new Test("Latin-Hangul");
-        t.setDoublePercentage(0.02);
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
     }
 
@@ -606,9 +605,7 @@ public class RoundTripTest extends TestFmwk {
         UnicodeSet toTarget;
         UnicodeSet roundtripExclusions;
         
-        double doublePercentage = 1.0;
-        
-        TestLog log;
+        RoundTripTest log;
         Legal legalSource;
         UnicodeSet badCharacters;
     
@@ -627,10 +624,6 @@ public class RoundTripTest extends TestFmwk {
             pairLimit = limit;
         }
         
-        public void setDoublePercentage(double newval) {
-            doublePercentage = newval;
-        }
-    
         // Added to do better equality check.
         
         public static boolean isSame(String a, String b) {
@@ -683,7 +676,7 @@ public class RoundTripTest extends TestFmwk {
         static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
       
         public void test(String sourceRange, String targetRange, String roundtripExclusions,
-                         TestLog log, Legal legalSource) 
+                         RoundTripTest log, Legal legalSource) 
           throws java.io.IOException, java.text.ParseException {
             
             this.legalSource = legalSource;
@@ -710,7 +703,7 @@ public class RoundTripTest extends TestFmwk {
             log.logln(Utility.escape("Source:  " + this.sourceRange));
             log.logln(Utility.escape("Target:  " + this.targetRange));
             log.logln(Utility.escape("Exclude: " + this.roundtripExclusions));
-            if (doublePercentage < 1.0) log.logln("Double Percentage: " + doublePercentage);
+            if (log.isQuick()) log.logln("Abbreviated Test");
             
             badCharacters = new UnicodeSet("[:other:]");
 
@@ -879,7 +872,7 @@ public class RoundTripTest extends TestFmwk {
             UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
             sourceRangeMinusFailures.removeAll(failSourceTarg);
             
-            usi.reset(sourceRangeMinusFailures);
+            usi.reset(sourceRangeMinusFailures, log.isQuick());
             while (true) {
                 int c = usi.next();
                 if (c < 0) break;
@@ -890,7 +883,7 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                 */
-                usi2.reset(sourceRangeMinusFailures);
+                usi2.reset(sourceRangeMinusFailures, log.isQuick());
                 while (true) {
                     int d = usi2.next();
                     if (d < 0) break;
@@ -969,19 +962,12 @@ public class RoundTripTest extends TestFmwk {
                     !targetRange.contains(c)) continue;
                     */
             
-            usi.reset(targetRangeMinusFailures);
+            usi.reset(targetRangeMinusFailures, log.isQuick());
+
             while (true) {
                 int c = usi.next();
                 if (c < 0) break;
                 
-                if (doublePercentage != 1.0) {
-                    double rand = Math.random();
-                    if (rand > doublePercentage) {
-                        //log.log(".");
-                        continue;
-                    }
-                }
-                    
                 if (++count > pairLimit) {
                     throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
                 }
@@ -992,15 +978,11 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                         */
-                usi2.reset(targetRangeMinusFailures);
+                usi2.reset(targetRangeMinusFailures, log.isQuick());
                 while (true) {
                     int d = usi2.next();
                     if (d < 0) break;
                     
-                    if (doublePercentage != 1.0) {
-                        if (Math.random() > doublePercentage) continue;
-                    }
-                                            
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = targetToSource.transliterate(cs);
                     String reverse = sourceToTarget.transliterate(targ);
