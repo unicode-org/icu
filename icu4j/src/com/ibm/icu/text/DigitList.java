@@ -352,7 +352,7 @@ final class DigitList {
 
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
-        round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits);
+        round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 
     /**
@@ -442,12 +442,13 @@ final class DigitList {
      * Round the representation to the given number of digits.
      * @param maximumDigits The maximum number of digits to be shown.
      * Upon return, count will be less than or equal to maximumDigits.
+     * This now performs rounding when maximumDigits is 0, formerly it did not.
      */
     public final void round(int maximumDigits) {        
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
         // [bnf] rewritten to fix 4179818
-        if (maximumDigits > 0 && maximumDigits < count) {
+        if (maximumDigits >= 0 && maximumDigits < count) {
             if (shouldRoundUp(maximumDigits)) {
                 // Rounding up involves incrementing digits from LSD to MSD.
                 // In most cases this is simple, but in a worst case situation
@@ -630,7 +631,13 @@ final class DigitList {
 
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
-        round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits);
+	// {dlf} Some callers depend on passing '0' to round to mean 'don't round', but
+	// rather than pass that information explicitly, we rely on some magic with maximumDigits
+	// and decimalAt.  Unfortunately, this is no good, because there are cases where maximumDigits
+	// is zero and we do want to round, e.g. BigDecimal values -1 < x < 1.  So since round
+	// changed to perform rounding when the argument is 0, we now force the argument
+	// to -1 in the situations where it matters.
+        round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 
     /**

@@ -416,4 +416,33 @@ public class BigNumberFormatTest extends TestFmwk {
             }
         }
     }
+
+    public void TestBigDecimalRounding() {
+        // jb 3657
+        java.text.DecimalFormat jdkFormat=new java.text.DecimalFormat("###,###,###,##0");
+        com.ibm.icu.text.DecimalFormat icuFormat=new com.ibm.icu.text.DecimalFormat("###,###,###,##0");
+        String[] values = {
+            "-1.74", "-1.24", "-0.74", "-0.24", "0.24", "0.74", "1.24", "1.74"
+        };
+        for (int i = 0; i < values.length; ++i) {
+            String val = values[i];
+            java.math.BigDecimal bd = new java.math.BigDecimal(val);
+            String jdk = jdkFormat.format(bd);
+            String icu = icuFormat.format(bd);
+            logln("Format of BigDecimal " + val + " by JDK is " + jdk);
+            logln("Format of BigDecimal " + val + " by ICU is " + icu);
+            if (!jdk.equals(icu)) {
+                errln("BigDecimal jdk: " + jdk + " != icu: " + icu);
+            }
+
+            double d = bd.doubleValue();
+            jdk = jdkFormat.format(d);
+            icu = icuFormat.format(d);
+            logln("Format of double " + val + " by JDK is " + jdk);
+            logln("Format of double " + val + " by ICU is " + icu);
+            if (!jdk.equals(icu)) {
+                errln("double jdk: " + jdk + " != icu: " + icu);
+            }
+        }
+    }
 }
