@@ -47,7 +47,7 @@ top_builddir = ../..
 subdir = tools/genrb
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(TARGET).$(SECTION)
+CLEANFILES = *~ $(TARGET).$(SECTION) $(DEPS) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
 ## Target information
 TARGET = genrb
@@ -121,7 +121,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+	$(RMV) Makefile
 
 check-local: all-local
 

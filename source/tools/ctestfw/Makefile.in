@@ -44,7 +44,7 @@ top_builddir = ../..
 subdir = tools/ctestfw
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = libctestfw.$(SO)
@@ -86,7 +86,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS)
+	$(RMV) Makefile
 
 check-local: all-local
 

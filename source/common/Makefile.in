@@ -49,7 +49,7 @@ top_builddir = ..
 subdir = common
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 
@@ -139,7 +139,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS)
+	$(RMV) Makefile
 
 check-local:
 
