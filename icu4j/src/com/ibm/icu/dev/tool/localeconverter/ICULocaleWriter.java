@@ -33,19 +33,19 @@ public class ICULocaleWriter extends LocaleWriter {
         } else {
             CollationItem[] items = (CollationItem[])o;
             if(items[0]!=null){
-	            print("Sequence");
-	            println(" { ");
-	            for (int i = 0; i < items.length; i++) {
-	                if(items[i]!=null){
-	                    printString(items[i].toString());
-	                    if (items[i].comment != null) {
-	                        tabTo(30);
-	                        print("//");
-	                        println(items[i].comment);
-	                    }
-	                }
-	            }
-	            println("}");
+            print("Sequence");
+            println(" { ");
+            for (int i = 0; i < items.length; i++) {
+                if(items[i]!=null){
+                    printString(items[i].toString());
+                    if (items[i].comment != null) {
+                        tabTo(30);
+                        print("//");
+                        println(items[i].comment);
+                    }
+                }
+            }
+            println("}");
             }
         }
     }

@@ -216,7 +216,7 @@ public class ConvertPOSIXLocale {
     public ConvertPOSIXLocale(String args[]) {
         process(args);
             //{{INIT_CONTROLS
-		//}}
+                //}}
     }
     
     public void process(String args[]) {
@@ -342,5 +342,5 @@ public class ConvertPOSIXLocale {
         return new Locale(language, country, variant);
     }
     //{{DECLARE_CONTROLS
-	//}}
+        //}}
 }

@@ -26,7 +26,7 @@ final public class SortedVector {
         this.comparator = comparator;
         addElements(newValues);
             //{{INIT_CONTROLS
-		//}}
+//}}
 }
 
     public SortedVector(Vector newValues, Comparator comparator) {
@@ -345,6 +345,6 @@ final public class SortedVector {
         };
     }
     //{{DECLARE_CONTROLS
-	//}}
+//}}
 }
 

@@ -119,7 +119,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
         
         parentLocale = new Locale(language, country, variant);
             //{{INIT_CONTROLS
-		//}}
+//}}
     }
 
     protected void convert(final Hashtable result, final Hashtable source) 
@@ -1052,6 +1052,6 @@ public class PosixToNeutralConverter extends LocaleConverter {
             return result.toString();
         }
     }
-	//{{DECLARE_CONTROLS
-	//}}
+//{{DECLARE_CONTROLS
+//}}
 }

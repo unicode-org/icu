@@ -517,10 +517,9 @@ public class myLocaleElements extends ListResourceBundle {
             { "CountryNumber" , ""},
             { "CountryISBNNumber" , ""},
             { "LanguageLibraryUse" , ""},
-            { "PaperSize", new String[][]{
-                            {"Height",""},
-                            {"Width",""},
-                            {"Units", ""}
+            { "PaperSize", new Object[][]{
+                            {"Height",new Integer(0)},
+                            {"Width",new Integer(0)},
                         }
             },
           
@@ -537,14 +536,14 @@ public class myLocaleElements extends ListResourceBundle {
             },
 
             {"NameFormat", new String[][]{
-                                	{"NamePattern",""},
-		                            {"GeneralSalutaion", ""},
-		                            {"ShortSalutationMr", ""},
-		                            {"ShortSalutationMiss",""},
-		                            {"ShortSalutationMrs",""},
-		                            {"LongSalutationMr",""},
-		                            {"LongSalutationMiss",""},
-		                            {"LongSalutationMrs",""}
+                                {"NamePattern",""},
+                            {"GeneralSalutaion", ""},
+                            {"ShortSalutationMr", ""},
+                            {"ShortSalutationMiss",""},
+                            {"ShortSalutationMrs",""},
+                            {"LongSalutationMr",""},
+                            {"LongSalutationMiss",""},
+                            {"LongSalutationMrs",""}
                             }
             }, 
             { "Identification", new String[][]{
