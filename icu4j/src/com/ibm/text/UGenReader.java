@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenReader.java,v $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.3 $
+* $Date: 2001/08/22 22:38:30 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -94,7 +94,7 @@ abstract class UGenReader
         headersize --;
         byte charsize = input.readByte();
         headersize --;
-        byte reserved = input.readByte();
+        input.readByte();
         headersize --;
         
         byte dataformatid[] = new byte[getFileFormatIDSize()];
@@ -115,6 +115,7 @@ abstract class UGenReader
       }
     } 
     catch (Exception e) {
+        return false;
     }
     return false;
   }

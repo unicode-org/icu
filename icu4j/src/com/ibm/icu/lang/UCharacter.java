@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/07/03 16:34:22 $ 
-* $Revision: 1.10 $
+* $Date: 2001/08/22 22:38:30 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -1117,8 +1117,6 @@ public final class UCharacter
     public static boolean isLegal(String str) 
     {
         int size = str.length();
-        char lead,
-            trail;
         int codepoint;
         for (int i = 0; i < size; i ++)
         {
@@ -1272,7 +1270,6 @@ public final class UCharacter
         int size = UTF16.countCodePoint(str);
         StringBuffer result = new StringBuffer(size << 1); // initial buffer
         int props;
-        int exception;
         int ch;
         int index;
         String lang = locale.getLanguage();
@@ -1322,7 +1319,6 @@ public final class UCharacter
         int size = UTF16.countCodePoint(str);
         StringBuffer result = new StringBuffer(size << 1); // initial buffer
         int props;
-        int exception;
         int ch;
         int index;
         String lang = locale.getLanguage();

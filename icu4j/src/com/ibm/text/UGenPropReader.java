@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.5 $
+* $Date: 2001/08/22 22:38:30 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -193,7 +193,6 @@ final class UGenPropReader extends UGenReader
       
     char array[] = new char[stagesize];
     
-    int max = 0;
     int props = m_prop_ - INDEX_SIZE_;
     // setting up the propery index for stage 1 to 3
     for (int count = 0; count < stagesize; count ++)

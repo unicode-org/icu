@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterNameDB.java,v $ 
-* $Date: 2001/07/03 16:34:22 $ 
-* $Revision: 1.4 $
+* $Date: 2001/08/22 22:38:30 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -770,6 +770,7 @@ final class UCharacterNameDB extends UCharacterDB
           }
           catch (NumberFormatException e)
           {
+            return -1;
           }
           break;
         case TYPE_1_ : 
