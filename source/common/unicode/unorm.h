@@ -139,11 +139,10 @@ typedef UNormalizationMode UNormalizationOption;
  * and options.
  * @param source The string to normalize.
  * @param sourceLength The length of source, or -1 if null-terminated.
- * @param mode The normalization mode; one of UCOL_NO_NORMALIZATION, 
- * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP, 
- * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
+ * @param mode The normalization mode; one of UNORM_NONE, 
+ * UNORM_NFD, UNORM_NFC, UNORM_NFKC, UNORM_NFKD, UNORM_DEFAULT
  * @param options The normalization options, ORed together; possible values
- * are UCOL_IGNORE_HANGUL
+ * are UNORM_IGNORE_HANGUL
  * @param result A pointer to a buffer to receive the attribute.
  * @param resultLength The maximum size of result.
  * @param status A pointer to an UErrorCode to receive any errors
@@ -188,9 +187,7 @@ typedef enum {
  * results.
  * @param source       string for determining if it is in a normalized format
  * @param sourcelength length of source to test
- * @paran mode         normalization format either UCOL_DECOMP_CAN, 
- *                     UCOL_DECOMP_COMPAT, UCOL_DECOMP_CAN_COMP_COMPAT or
- *                     UCOL_DECOMP_COMPAT_COMP_CAN
+ * @paran mode         normalization format from the enum UNormalizationMode
  * @param status A pointer to an UErrorCode to receive any errors
  * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
  */
@@ -212,9 +209,7 @@ u_quickCheck(const UChar*       source,
  * results.
  * @param source       string for determining if it is in a normalized format
  * @param sourcelength length of source to test
- * @paran mode         normalization format either UCOL_DECOMP_CAN, 
- *                     UCOL_DECOMP_COMPAT, UCOL_DECOMP_CAN_COMP_COMPAT or
- *                     UCOL_DECOMP_COMPAT_COMP_CAN
+ * @paran mode         normalization format from the enum UNormalizationEnum
  * @param options The normalization options, ORed together; possible values
  *        are UCOL_IGNORE_HANGUL
  * @param status A pointer to an UErrorCode to receive any errors

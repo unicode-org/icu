@@ -866,20 +866,20 @@ inline UNormalizationMode Normalizer::getUNormalizationMode(
     switch (mode)
     {
     case Normalizer::NO_OP : 
-      return UCOL_NO_NORMALIZATION;
+      return UNORM_NONE;
     case Normalizer::COMPOSE :
-      return UCOL_DECOMP_CAN_COMP_COMPAT;
+      return UNORM_NFC;
     case Normalizer::COMPOSE_COMPAT :
-      return UCOL_DECOMP_COMPAT_COMP_CAN;
+      return UNORM_NFKC;
     case Normalizer::DECOMP :
-      return UCOL_DECOMP_CAN;
+      return UNORM_NFD;
     case Normalizer::DECOMP_COMPAT :
-      return UCOL_DECOMP_COMPAT;
+      return UNORM_NFKD;
     default : 
       status = U_ILLEGAL_ARGUMENT_ERROR; 
     }
   }
-  return UCOL_DEFAULT_NORMALIZATION;
+  return UNORM_DEFAULT;
 }
 
 inline Normalizer::EMode Normalizer::getNormalizerEMode(
@@ -889,15 +889,15 @@ inline Normalizer::EMode Normalizer::getNormalizerEMode(
   {
     switch (mode)
     {
-    case UCOL_NO_NORMALIZATION :
+    case UNORM_NONE :
       return Normalizer::NO_OP;
-    case UCOL_DECOMP_CAN :
+    case UNORM_NFD :
       return Normalizer::DECOMP;
-    case UCOL_DECOMP_COMPAT :
+    case UNORM_NFKD :
       return Normalizer::DECOMP_COMPAT;
-    case UCOL_DECOMP_CAN_COMP_COMPAT :
+    case UNORM_NFC :
       return Normalizer::COMPOSE;
-    case UCOL_DECOMP_COMPAT_COMP_CAN :
+    case UNORM_NFKC :
       return Normalizer::COMPOSE_COMPAT;
     default : 
       status = U_ILLEGAL_ARGUMENT_ERROR; 
