@@ -87,7 +87,7 @@ int main(int argc, const char* const argv[])
         return 1;
     }
 
-    fprintf(stderr, "Default locale for this run is %s\n", uloc_getDefault());
+    fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
 
     root = NULL;
     addAllTests(&root);
