@@ -23,7 +23,7 @@ MAN_FILES = $(TARGET_STUB_NAME).$(SECTION) $(DERB_STUB_NAME).$(SECTION)
 subdir = tools/genrb
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(MAN_FILES) $(DEPS) 
+CLEANFILES = *~ $(MAN_FILES) $(DEPS) $(DERB_DEPS)
 
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
