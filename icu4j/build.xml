@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2004/02/19 00:30:53 $
-* $Revision: 1.89 $
+* $Date: 2004/03/24 18:40:35 $
+* $Revision: 1.90 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -215,6 +215,8 @@
               <fileset dir="${src.dir}/com/ibm/icu/dev/data"
                  includes="*.spp"/>
         </copy>
+        <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
+              todir="${build.dir}/com/ibm/icu/dev/test/format"/>
     </target>
 
     <!-- builds richedit and richedit tests -->
