@@ -25,8 +25,11 @@
 #include "cstring.h"
 #include "uarrsort.h"
 #include "udataswp.h"
+#include "ucol_swp.h"
 #include "uresdata.h"
 #include "uresimp.h"
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /*
  * Resource access helpers
@@ -475,6 +478,21 @@ enum {
     STACK_ROW_CAPACITY=200
 };
 
+/* binary data with known formats is swapped too */
+typedef enum UResSpecialType {
+    URES_NO_SPECIAL_TYPE,
+    URES_COLLATION_BINARY,
+    URES_SPECIAL_TYPE_COUNT
+} UResSpecialType;
+
+/* resource table key for collation binaries: "%%CollationBin" */
+static const UChar gCollationBinKey[]={
+    0x25, 0x25,
+    0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+    0x42, 0x69, 0x6e,
+    0
+};
+
 /*
  * preflight one resource item and set bottom and top values;
  * length, bottom, and top count Resource item offsets (4 bytes each), not bytes
@@ -605,6 +623,7 @@ static void
 ures_swapResource(const UDataSwapper *ds,
                   const Resource *inBundle, Resource *outBundle,
                   Resource res, /* caller swaps res itself */
+                  UResSpecialType specialType,
                   TempTable *pTempTable,
                   UErrorCode *pErrorCode) {
     const Resource *p;
@@ -632,9 +651,15 @@ ures_swapResource(const UDataSwapper *ds,
         ds->swapArray16(ds, p+1, 2*count, q+1, pErrorCode);
         break;
     case URES_BINARY:
+        count=udata_readInt32(ds, (int32_t)*p);
         /* swap length */
         ds->swapArray32(ds, p, 4, q, pErrorCode);
         /* no need to swap or copy bytes - ures_swap() copied them all */
+
+        /* swap known formats */
+        if(specialType==URES_COLLATION_BINARY) {
+            ucol_swapBinary(ds, p+1, count, q+1, pErrorCode);
+        }
         break;
     case URES_TABLE:
         {
@@ -660,16 +685,25 @@ ures_swapResource(const UDataSwapper *ds,
 
             /* recurse */
             for(i=0; i<count; ++i) {
-                item=ds->readUInt32(p[i]);
                 /*
-                 * ### TODO detect a collation binary that is to be swapped via
-                 * ds->compareInvChars(ds, keyChars+readUInt16(pKey[i]), "CollationElements")
+                 * detect a collation binary that is to be swapped via
+                 * ds->compareInvChars(ds, outData+readUInt16(pKey[i]), "%%CollationBin")
                  * etc.
                  *
                  * use some UDataSwapFn pointer from somewhere for collation swapping
                  * because the common library cannot directly call into the i18n library
                  */
-                ures_swapResource(ds, inBundle, outBundle, item, pTempTable, pErrorCode);
+                if(0==ds->compareInvChars(ds,
+                            ((const char *)outBundle)+ds->readUInt16(pKey[i]), -1,
+                            gCollationBinKey, LENGTHOF(gCollationBinKey)-1)
+                ) {
+                    specialType=URES_COLLATION_BINARY;
+                } else {
+                    specialType=URES_NO_SPECIAL_TYPE;
+                }
+
+                item=ds->readUInt32(p[i]);
+                ures_swapResource(ds, inBundle, outBundle, item, specialType, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     udata_printError(ds, "ures_swapResource(table res=%08x)[%d].recurse(%08x) failed - %s\n",
                                      res, i, item, u_errorName(*pErrorCode));
@@ -747,7 +781,7 @@ ures_swapResource(const UDataSwapper *ds,
             /* recurse */
             for(i=0; i<count; ++i) {
                 item=ds->readUInt32(p[i]);
-                ures_swapResource(ds, inBundle, outBundle, item, pTempTable, pErrorCode);
+                ures_swapResource(ds, inBundle, outBundle, item, URES_NO_SPECIAL_TYPE, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     udata_printError(ds, "ures_swapResource(array res=%08x)[%d].recurse(%08x) failed - %s\n",
                                      res, i, item, u_errorName(*pErrorCode));
@@ -855,7 +889,7 @@ ures_swap(const UDataSwapper *ds,
 
         ds->swapInvChars(ds, inChars, stringsLength, outBundle+1, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-          udata_printError(ds, "ures_swapResource().swapInvChars(keys,%d) failed - %s\n",  stringsLength,
+            udata_printError(ds, "ures_swap().swapInvChars(keys[%d]) failed - %s\n",  stringsLength,
                              u_errorName(*pErrorCode));
             return 0;
         }
@@ -877,7 +911,7 @@ ures_swap(const UDataSwapper *ds,
         }
 
         /* swap the resources */
-        ures_swapResource(ds, inBundle, outBundle, rootRes, &tempTable, pErrorCode);
+        ures_swapResource(ds, inBundle, outBundle, rootRes, URES_NO_SPECIAL_TYPE, &tempTable, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ures_swapResource(root res=%08x) failed - %s\n",
                              rootRes, u_errorName(*pErrorCode));
