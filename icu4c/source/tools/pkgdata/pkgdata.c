@@ -25,6 +25,8 @@
 #include "toolutil.h"
 #include "unewdata.h"
 #include "uoptions.h"
+
+U_CDECL_BEGIN
 #include "pkgtypes.h"
 #include "makefile.h"
 
@@ -36,6 +38,8 @@ extern void pkg_mode_dll(UPKGOptions* o, FileStream *stream, UErrorCode *status)
 #endif /*#ifdef UDATA_SO_SUFFIX*/
 extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *status);
 #endif /*#ifdef WIN32*/
+
+U_CDECL_END
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 

@@ -121,7 +121,7 @@ $(TARGET) : $(OBJECTS)
 
 @DATABUILDDIR@/../source/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
-	@ICU_DATA=@DATABUILDDIR@ ./genrb -s @DATABUILDDIR@/../source/test/testdata/ -d @DATABUILDDIR@/../source/test/testdata/ $(<F)
+	ICU_DATA=@DATABUILDDIR@ ./genrb -s $(top_srcdir)/test/testdata/ -d @DATABUILDDIR@../source/test/testdata/ $(<F)
 
 #@DATABUILDDIR@/translit/%.res : $(top_srcdir)/../data/translit/%.txt
 #	@echo "Creating translit resource file for $<"

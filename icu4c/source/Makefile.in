@@ -104,6 +104,8 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 all-local: $(srcdir)/configure builddata
 
 install-local: $(top_builddir)/config/Makefile.inc $(EXTRA_DATA:%=$(DESTDIR)$(pkgdatadir)/$(VERSION)/%)
+	@$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
+	@$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkgdatadir)/Makefile.inc
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir)/mkinstalldirs
 
@@ -155,11 +157,12 @@ config.status: $(srcdir)/configure
 builddata: @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk @DATABUILDDIR@/../source/test/testdata/default.goo
 
 @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt: $(srcdir)/../data/UnicodeData-$(UNICODE_VERSION).txt
-	ln -s `pwd`/$< @DATABUILDDIR@
+	ln -sf $< @DATABUILDDIR@
 
 @DATABUILDDIR@/thaidict.brk: $(srcdir)/../data/thaidict.brk
-	ln -s `pwd`/$< @DATABUILDDIR@
+	ln -sf $< @DATABUILDDIR@
 
 @DATABUILDDIR@/../source/test/testdata/default.goo: $(srcdir)/test/testdata/default.goo
-	ln -s `pwd`/$(srcdir)/test/testdata/*.goo `pwd`/$(srcdir)/test/testdata/*.txt `pwd`/$(srcdir)/test/testdata/*.bin `pwd`/$(srcdir)/test/testdata/*.uni  @DATABUILDDIR@/../source/test/testdata/
+	ln -sf $(srcdir)/test/testdata/*.goo $(srcdir)/test/testdata/*.txt $(srcdir)/test/testdata/*.bin $(srcdir)/test/testdata/*.uni @DATABUILDDIR@/../source/test/testdata/
+	ln -sf $(srcdir)/../data/unidata @DATABUILDDIR@
 
