@@ -10,7 +10,7 @@ AC_INIT(common/unicode/utypes.h)
 AC_CONFIG_HEADER(common/icucfg.h)
 PACKAGE="icu"
 AC_SUBST(PACKAGE)
-VERSION=1.6.1
+VERSION=1.6.0.1
 VERSION_MAJOR=`echo $VERSION | sed 's/\..*//'`
 AC_SUBST(VERSION)
 AC_SUBST(VERSION_MAJOR)
