@@ -26,10 +26,8 @@
 
 #if U_IOSTREAM_SOURCE >= 199711
 #define STD_NAMESPACE std::
-#include <strstream>
 #else
 #define STD_NAMESPACE
-#include <strstrea.h>
 #endif
 
 #define STD_OSTREAM STD_NAMESPACE ostream
@@ -80,6 +78,8 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
 {
     /* ipfx should eat whitespace when ios::skipws is set */
     UChar uBuffer[16];
+    char buffer[16];
+    int32_t idx = 0;
     UConverter *converter;
     UErrorCode errorCode = U_ZERO_ERROR;
 
@@ -91,6 +91,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
         const UChar *uLimit = uBuffer + sizeof(uBuffer)/sizeof(*uBuffer);
         const char *s, *sLimit;
         char ch;
+        UChar ch32;
         UBool intialWhitespace = TRUE;
 
         /* We need to consume one byte at a time to see what is considered whitespace. */
@@ -105,19 +106,27 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
                 /* Something really bad happened */
                 return stream;
             }
+            /* Was the character consumed? */
             if (us != uBuffer) {
-                /* Was the character consumed? */
-                if (u_isWhitespace(ch)) {
+                UTF_GET_CHAR_SAFE(uBuffer, 0, 0, sizeof(uBuffer), ch32, FALSE);
+                if (u_isWhitespace(ch32)) {
                     if (!intialWhitespace) {
-                        stream.putback(ch);
+                        buffer[idx++] = ch;
+                        while (idx > 0) {
+                            stream.putback(buffer[--idx]);
+                        }
                         break;
                     }
                     /* else skip intialWhitespace */
                 }
                 else {
-                    str.append(uBuffer, (int32_t)(us - uBuffer));
+                    str.append(ch32);
                     intialWhitespace = FALSE;
                 }
+                idx = 0;
+            }
+            else {
+                buffer[idx++] = ch;
             }
         }
         u_releaseDefaultConverter(converter);
