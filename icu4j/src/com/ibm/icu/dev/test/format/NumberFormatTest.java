@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/10/29 00:20:05 $ 
- * $Revision: 1.20 $
+ * $Date: 2003/11/19 19:51:56 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,7 @@
 
 package com.ibm.icu.dev.test.format;
 
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.*;
 import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.util.*;
@@ -750,25 +751,25 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestScientific2() {
-	// jb 2552
-	DecimalFormat fmt = (DecimalFormat)NumberFormat.getCurrencyInstance();
-	Number num = new Double(12.34);
-	expect(fmt, num, "$12.34");
-	fmt.setScientificNotation(true);
-	expect(fmt, num, "$1.23E1");
-	fmt.setScientificNotation(false);
-	expect(fmt, num, "$12.34");
+        // jb 2552
+        DecimalFormat fmt = (DecimalFormat)NumberFormat.getCurrencyInstance();
+        Number num = new Double(12.34);
+        expect(fmt, num, "$12.34");
+        fmt.setScientificNotation(true);
+        expect(fmt, num, "$1.23E1");
+        fmt.setScientificNotation(false);
+        expect(fmt, num, "$12.34");
     }
 
     public void TestScientificGrouping() {
-	// jb 2552
-	DecimalFormat fmt = new DecimalFormat("###.##E0");
-	expect(fmt, .01234, "12.3E-3");
-	expect(fmt, .1234, "123E-3");
-	expect(fmt, 1.234, "1.23E0");
-	expect(fmt, 12.34, "12.3E0");
-	expect(fmt, 123.4, "123E0");
-	expect(fmt, 1234, "1.23E3");
+        // jb 2552
+        DecimalFormat fmt = new DecimalFormat("###.##E0");
+        expect(fmt, .01234, "12.3E-3");
+        expect(fmt, .1234, "123E-3");
+        expect(fmt, 1.234, "1.23E0");
+        expect(fmt, 12.34, "12.3E0");
+        expect(fmt, 123.4, "123E0");
+        expect(fmt, 1234, "1.23E3");
     }
 
     // additional coverage tests
@@ -776,35 +777,35 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // sigh, can't have static inner classes, why not?
 
     static final class PI extends Number {
-	private PI() {};
-	public int intValue() { return (int)Math.PI; }
-	public long longValue() { return (long)Math.PI; }
-	public float  floatValue() { return (float)Math.PI; }
-	public double doubleValue() { return (double)Math.PI; }
-	public byte byteValue() { return (byte)Math.PI; }
-	public short shortValue() { return (short)Math.PI; }
+        private PI() {};
+        public int intValue() { return (int)Math.PI; }
+        public long longValue() { return (long)Math.PI; }
+        public float  floatValue() { return (float)Math.PI; }
+        public double doubleValue() { return (double)Math.PI; }
+        public byte byteValue() { return (byte)Math.PI; }
+        public short shortValue() { return (short)Math.PI; }
 
-	public static final Number INSTANCE = new PI();
+        public static final Number INSTANCE = new PI();
     }
 
     public void TestCoverage() {
-	NumberFormat fmt = NumberFormat.getNumberInstance(); // default locale
-	logln(fmt.format(new BigInteger("1234567890987654321234567890987654321", 10)));
+        NumberFormat fmt = NumberFormat.getNumberInstance(); // default locale
+        logln(fmt.format(new BigInteger("1234567890987654321234567890987654321", 10)));
 
-	fmt = NumberFormat.getScientificInstance(); // default locale
+        fmt = NumberFormat.getScientificInstance(); // default locale
 
-	logln(fmt.format(PI.INSTANCE));
+        logln(fmt.format(PI.INSTANCE));
 
-	try {
-	    logln(fmt.format("12345"));
-	    errln("numberformat of string did not throw exception");
-	}
-	catch (Exception e) {
-	}
+        try {
+            logln(fmt.format("12345"));
+            errln("numberformat of string did not throw exception");
+        }
+        catch (Exception e) {
+        }
 
-	int hash = fmt.hashCode();
+        int hash = fmt.hashCode();
 
-	logln("compare to string returns: " + fmt.equals(""));
+        logln("compare to string returns: " + fmt.equals(""));
 
         // For ICU 2.6 - alan
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
@@ -870,6 +871,63 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(fmt, -10.0, "-Rs. 10.00");
     }
     
+    public void TestThreadedFormat() {
+
+        class FormatTask implements Runnable {
+            DecimalFormat fmt;
+            StringBuffer buf;
+            boolean inc;
+            float num;
+
+            FormatTask(DecimalFormat fmt, int index) {
+                this.fmt = fmt;
+                this.buf = new StringBuffer();
+                this.inc = (index & 0x1) == 0;
+                this.num = inc ? 0 : 10000;
+            }
+
+            public void run() {
+		if (inc) {
+		    while (num < 10000) {
+			buf.append(fmt.format(num) + "\n");
+			num += 3.14159;
+		    }
+		} else {
+		    while (num > 0) {
+			buf.append(fmt.format(num) + "\n");
+			num -= 3.14159;
+		    }
+		}
+	    }
+
+	    String result() {
+		return buf.toString();
+	    }
+	}
+
+        DecimalFormat fmt = new DecimalFormat("0.####");
+        FormatTask[] tasks = new FormatTask[8];
+        for (int i = 0; i < tasks.length; ++i) {
+	    tasks[i] = new FormatTask(fmt, i);
+	}
+
+	TestUtil.runUntilDone(tasks);
+
+        for (int i = 2; i < tasks.length; i++) {
+	    String str1 = tasks[i].result();
+	    String str2 = tasks[i-2].result();
+            if (!str1.equals(str2)) {
+                System.out.println("mismatch at " + i);
+                System.out.println(str1);
+                System.out.println(str2);
+                errln("decimal format thread mismatch");
+                
+                break;
+            }
+            str1 = str2;
+        }
+    }
+
     //------------------------------------------------------------------
     // Support methods
     //------------------------------------------------------------------

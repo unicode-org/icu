@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/11/17 23:48:19 $
- * $Revision: 1.8 $
+ * $Date: 2003/11/19 19:51:56 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -45,20 +45,20 @@ public class TestUtil {
         String s = System.getProperty(DATA_PATH_PROPERTY);
         if (s == null) {
             // assume user.dir is directly above src directory
-	    // data path must end in '/' or '\', fileName should not start with one
+            // data path must end in '/' or '\', fileName should not start with one
             s = System.getProperty("user.dir"); // protected property
             s = s + DATA_PATH;
         }
-	return s + fileName;
+        return s + fileName;
     }
 
     /**
      * Return a buffered reader on the data file at path 'name' rooted at the data path.
      */
     public static final BufferedReader getDataReader(String name) throws IOException {
-	InputStream is = new FileInputStream(dataPath(name));
-	InputStreamReader isr = new InputStreamReader(is);
-	return new BufferedReader(isr);
+        InputStream is = new FileInputStream(dataPath(name));
+        InputStreamReader isr = new InputStreamReader(is);
+        return new BufferedReader(isr);
     }
 
     /**
@@ -66,9 +66,9 @@ public class TestUtil {
      * using the provided encoding.
      */
     public static final BufferedReader getDataReader(String name, String charset) throws IOException {
-	InputStream is = new FileInputStream(dataPath(name));
-	InputStreamReader isr = new InputStreamReader(is, charset);
-	return new BufferedReader(isr);
+        InputStream is = new FileInputStream(dataPath(name));
+        InputStreamReader isr = new InputStreamReader(is, charset);
+        return new BufferedReader(isr);
     }
 
     /**
@@ -119,4 +119,73 @@ public class TestUtil {
         return false;
     }
 
+    static class Lock {
+        private int count;
+
+        synchronized void inc() {
+            ++count;
+        }
+
+        synchronized void dec() {
+            --count;
+        }
+
+        synchronized int count() {
+            return count;
+        }
+
+        void go() {
+            try {
+                while (count() > 0) {
+                    synchronized(this) {
+                        notifyAll();
+                    }
+                    Thread.sleep(50);
+                }
+            }
+            catch (InterruptedException e) {
+            }
+        }
+    }
+
+    static class TestThread extends Thread {
+        Lock lock;
+        Runnable target;
+
+        TestThread(Lock lock, Runnable target) {
+            this.lock = lock;
+            this.target = target;
+
+            lock.inc();
+        }
+        
+        public void run() {
+            try {
+                synchronized (lock) {
+                    lock.wait();
+                }
+                target.run();
+            }
+            catch (InterruptedException e) {
+            }
+
+            lock.dec();
+        }
+    }
+
+    public static void runUntilDone(Runnable[] targets) {
+        if (targets == null) {
+            throw new IllegalArgumentException("targets is null");
+        }
+        if (targets.length == 0) {
+            return;
+        }
+
+        Lock lock = new Lock();
+        for (int i = 0; i < targets.length; ++i) {
+            new TestThread(lock, targets[i]).start();
+        }
+
+        lock.go();
+    }
 }
