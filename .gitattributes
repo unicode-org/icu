@@ -87,8 +87,6 @@ icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
-icu4j/src/com/ibm/icu/text/unames.dat -text
-icu4j/src/com/ibm/icu/text/uprops.dat -text
 icu4j/src/com/ibm/text/resources/Transliterator_Bengali_InterIndic.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Devanagari_InterIndic.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Fullwidth_Halfwidth.utf8.txt -text
@@ -123,6 +121,8 @@ icu4j/src/com/ibm/text/resources/Transliterator_Tamil_InterIndic.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Telugu_InterIndic.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_UnicodeName_UnicodeChar.utf8.txt -text
 icu4j/src/com/ibm/text/resources/thai_dict -text
+icu4j/src/com/ibm/text/unames.dat -text
+icu4j/src/com/ibm/text/uprops.dat -text
 icu4j/src/data/holidays_jp.ucs -text
 icu4j/src/data/thai6.ucs -text
 icu4j/src/data/unicode/Draft-TestSuite.txt -text

@@ -6,12 +6,12 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2001/02/26 23:45:37 $ 
-* $Revision: 1.2 $
+* $Date: 2001/02/28 20:59:44 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.text;
+package com.ibm.text;
 
 /**
 * Internal class to manage character names.

@@ -4,14 +4,14 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacterNameDB.java,v $ 
-* $Date: 2001/02/26 23:45:37 $ 
-* $Revision: 1.2 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterNameDB.java,v $ 
+* $Date: 2001/02/28 20:59:44 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.text;
+package com.ibm.text;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
@@ -32,7 +32,7 @@ import java.io.BufferedInputStream;
 * Data populated by <a href=UGenNameReader.html>UGenNameReader</a>
 * @author Syn Wee Quek
 * @since oct2700
-* @see com.ibm.icu.text.UGenReader
+* @see com.ibm.text.UGenReader
 */
 
 final class UCharacterNameDB extends UCharacterDB

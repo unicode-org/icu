@@ -4,13 +4,13 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UGenNameReader.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenNameReader.java,v $ 
+* $Date: 2001/02/28 20:59:44 $ 
 * $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.text;
+package com.ibm.text;
 
 import java.io.DataInputStream;
 
