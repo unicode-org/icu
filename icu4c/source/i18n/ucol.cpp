@@ -352,7 +352,7 @@ ucol_open(const char *loc,
     result = ucol_open_internal(loc, status);
   }
   UTRACE_DATA1(UTRACE_INFO, "Returning %p", result);
-  UTRACE_EXIT(*status);
+  UTRACE_EXIT_S(*status);
   return result;
 }
 
@@ -471,49 +471,53 @@ ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *val
 U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
+  UTRACE_ENTRY(UTRACE_UCNV_CLOSE);
+  UTRACE_DATA1(UTRACE_INFO, "coll = %p", coll);
   if(coll != NULL) {
-	// these are always owned by each UCollator struct, 
-	// so we always free them
-    if(coll->validLocale != NULL) {
-      uprv_free(coll->validLocale);
-    }
-    if(coll->requestedLocale != NULL) {
-      uprv_free(coll->requestedLocale);
-    }
-
-    /* Here, it would be advisable to close: */
-    /* - UData for UCA (unless we stuff it in the root resb */
-    /* Again, do we need additional housekeeping... HMMM! */
-    if(coll->freeOnClose == FALSE){
-      return; /* for safeClone, if freeOnClose is FALSE,
-              don't free the other instance data */
-    }
-    if(coll->freeOptionsOnClose != FALSE) {
-      if(coll->options != NULL) {
-        uprv_free(coll->options);
+      // these are always owned by each UCollator struct, 
+      // so we always free them
+      if(coll->validLocale != NULL) {
+          uprv_free(coll->validLocale);
       }
-    }
-    if(coll->mapping != NULL) {
-        /*ucmpe32_close(coll->mapping);*/
-      uprv_free(coll->mapping);
-    }
-    if(coll->rules != NULL && coll->freeRulesOnClose) {
-      uprv_free((UChar *)coll->rules);
-    }
-    if(coll->rb != NULL) { /* pointing to read-only memory */
-      ures_close(coll->rb);
-    } 
-    if(coll->freeImageOnClose == TRUE) {
-      uprv_free((UCATableHeader *)coll->image);
-    }
-    if(coll->elements != NULL) {
-      ures_close(coll->elements);
-    }
-    if(coll->latinOneCEs != NULL) {
-      uprv_free(coll->latinOneCEs);
-    }
-    uprv_free(coll);
+      if(coll->requestedLocale != NULL) {
+          uprv_free(coll->requestedLocale);
+      }
+      
+      /* Here, it would be advisable to close: */
+      /* - UData for UCA (unless we stuff it in the root resb */
+      /* Again, do we need additional housekeeping... HMMM! */
+      UTRACE_DATA1(UTRACE_INFO, "coll->freeOnClose: %d", coll->freeOnClose);
+      if(coll->freeOnClose){
+      /* for safeClone, if freeOnClose is FALSE,
+          don't free the other instance data */
+          if(coll->freeOptionsOnClose != FALSE) {
+              if(coll->options != NULL) {
+                  uprv_free(coll->options);
+              }
+          }
+          if(coll->mapping != NULL) {
+              /*ucmpe32_close(coll->mapping);*/
+              uprv_free(coll->mapping);
+          }
+          if(coll->rules != NULL && coll->freeRulesOnClose) {
+              uprv_free((UChar *)coll->rules);
+          }
+          if(coll->rb != NULL) { /* pointing to read-only memory */
+              ures_close(coll->rb);
+          } 
+          if(coll->freeImageOnClose == TRUE) {
+              uprv_free((UCATableHeader *)coll->image);
+          }
+          if(coll->elements != NULL) {
+              ures_close(coll->elements);
+          }
+          if(coll->latinOneCEs != NULL) {
+              uprv_free(coll->latinOneCEs);
+          }
+          uprv_free(coll);
+      }
   }
+  UTRACE_EXIT();
 }
 
 U_CAPI UCollator* U_EXPORT2
@@ -4279,21 +4283,33 @@ ucol_getSortKey(const    UCollator    *coll,
         uint8_t        *result,
         int32_t        resultLength)
 {
-  UErrorCode status = U_ZERO_ERROR;
-
-  if(source == NULL) {
-    // this is actually an error situation, but we would need to 
-    // have an error code to return it. Until we introduce a new
-    // API, it stays like this
-    return 0;
+  UTRACE_ENTRY(UTRACE_UCOL_GET_SORTKEY);
+  if (UTRACE_LEVEL(UTRACE_VERBOSE)) {
+      int32_t actualSrcLen = sourceLength;
+      if (actualSrcLen==0 && source!=NULL) {
+          actualSrcLen = u_strlen(source);
+      }
+      UTRACE_DATA2(UTRACE_VERBOSE, "source string %vh", source, actualSrcLen);
   }
-  /* this uses the function pointer that is set in updateinternalstate */
-  /* currently, there are two funcs: */
-  /*ucol_calcSortKey(...);*/
-  /*ucol_calcSortKeySimpleTertiary(...);*/
 
-  int32_t keySize = coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
-  //((UCollator *)coll)->errorCode = status; /*semantically const */
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t keySize   = 0;
+
+  if(source != NULL) {
+      // source == NULL is actually an error situation, but we would need to 
+      // have an error code to return it. Until we introduce a new
+      // API, it stays like this
+      
+      /* this uses the function pointer that is set in updateinternalstate */
+      /* currently, there are two funcs: */
+      /*ucol_calcSortKey(...);*/
+      /*ucol_calcSortKeySimpleTertiary(...);*/
+      
+      keySize = coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+      //((UCollator *)coll)->errorCode = status; /*semantically const */
+  }
+  UTRACE_DATA2(UTRACE_VERBOSE, "Sort Key = %vb", result, keySize);
+  UTRACE_EXIT_S(status);
   return keySize;
 }
 
@@ -8560,10 +8576,14 @@ ucol_strcoll( const UCollator    *coll,
               const UChar        *target,
               int32_t            targetLength) {
     U_ALIGN_CODE(16);
+    UTRACE_ENTRY(UTRACE_UCOL_STRCOLL);
+    UTRACE_DATA5(UTRACE_VERBOSE, "coll=%p, source=%p, sourceLength=%d, target=%p, targetLength=%d",
+                  coll, source, sourceLength, target, targetLength);
     UErrorCode status = U_ZERO_ERROR;
     if(source == NULL || target == NULL) {
       // do not crash, but return. Should have 
       // status argument to return error.
+      UTRACE_EXIT_D(UTRACE_UCOL_STRCOLL);
       return UCOL_EQUAL;
     }
       collIterate sColl, tColl;
@@ -8580,6 +8600,7 @@ ucol_strcoll( const UCollator    *coll,
         //    Check for them being the same string, and scan through
         //    any leading equal portion.
         if (source==target) {
+            UTRACE_EXIT_D(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
 
@@ -8594,6 +8615,7 @@ ucol_strcoll( const UCollator    *coll,
             pTarg++;
         }
         if (*pSrc == 0 && *pTarg == 0) {
+            UTRACE_EXIT_D(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
         equalLength = pSrc - source;
@@ -8604,6 +8626,7 @@ ucol_strcoll( const UCollator    *coll,
         /* check if source and target are same strings */
 
         if (source==target  && sourceLength==targetLength) {
+            UTRACE_EXIT_D(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
         const UChar    *pSrcEnd = source + sourceLength;
@@ -8632,6 +8655,7 @@ ucol_strcoll( const UCollator    *coll,
             // If we made it all the way through both strings, we are done.  They are ==
             if ((pSrc ==pSrcEnd  || (pSrcEnd <pSrc  && *pSrc==0))  &&   /* At end of src string, however it was specified. */
                 (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))  {  /* and also at end of dest string                  */
+                UTRACE_EXIT_D(UCOL_EQUAL);
                 return UCOL_EQUAL;
             }
     }
@@ -8665,14 +8689,17 @@ ucol_strcoll( const UCollator    *coll,
         }
     }
 
+    UCollationResult  returnVal;
     if(!coll->latinOneUse || (sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) {
       // Preparing the context objects for iterating over strings
       IInit_collIterate(coll, source, sourceLength, &sColl);
       IInit_collIterate(coll, target, targetLength, &tColl);
-      return ucol_strcollRegular(&sColl, &tColl, &status);
+      returnVal = ucol_strcollRegular(&sColl, &tColl, &status);
     } else {
-      return ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
+      returnVal = ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
     }
+    UTRACE_EXIT_D(returnVal);
+    return returnVal;
 }
 
 /* convenience function for comparing strings */
@@ -8718,6 +8745,9 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
   if(status == NULL || U_FAILURE(*status)) {
     return NULL;
   }
+  UTRACE_ENTRY(UTRACE_COLLATION_GETLOCALE);
+  UTRACE_DATA1(UTRACE_INFO, "coll=%p", coll);
+
   switch(type) {
   case ULOC_ACTUAL_LOCALE:
     // validLocale is set only if service registration has explicitly set the
@@ -8742,6 +8772,8 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
   default:
     *status = U_ILLEGAL_ARGUMENT_ERROR;
   }
+  UTRACE_DATA1(UTRACE_INFO, "result = %s", result);
+  UTRACE_EXIT_S(*status);
   return result;
 }
 

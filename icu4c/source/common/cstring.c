@@ -133,50 +133,45 @@ T_CString_toUpperCase(char* str)
 /*
  * Takes a int32_t and fills in  a char* string with that number "radix"-based.
  * Does not handle negative values (makes an empty string for them).
- * Writes at most 11 chars ("2147483647" plus NUL).
+ * Writes at most 12 chars ("-2147483647" plus NUL).
  * Returns the length of the string (not including the NUL).
  */
 U_CAPI int32_t U_EXPORT2
-T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
+T_CString_integerToString(char* buffer, int32_t v, int32_t radix)
 {
-  int32_t length;
-  int32_t num;
-  int8_t digit;
-  char temp;
-
-  if(i<0) {
-    *buffer = 0;
-    return 0;
-  }
-
-  length = 0;
-  while (i>=radix)
-    {
-      num = i/radix;
-      digit = (int8_t)(i - num*radix);
-      buffer[length++] = (char)(T_CString_itosOffset(digit));
-      i = num;
+    char      tbuf[30];
+    int32_t   tbx    = sizeof(tbuf);
+    uint8_t   digit;
+    int32_t   length = 0;
+    uint32_t  uval;
+    
+    U_ASSERT(radix>=2 && radix<=16);
+    uval = (uint32_t) v;
+    if(v<0 && radix == 10) {
+        /* Only in base 10 do we conside numbers to be signed. */
+        uval = (uint32_t)(-v); 
+        buffer[length++] = '-';
     }
-
-  buffer[length] = (char)(T_CString_itosOffset(i));
-  buffer[++length] = '\0';
-
-
-  /* Reverses the string, swap digits at buffer[0]..buffer[num] */
-  num = length - 1;
-  for (i = 0; i < num; ++i, --num) {
-    temp = buffer[num];
-    buffer[num] = buffer[i];
-    buffer[i] = temp;
-  }
-
-  return length;
+    
+    tbx = sizeof(tbuf)-1;
+    tbuf[tbx] = 0;   /* We are generating the digits backwards.  Null term the end. */
+    do {
+        digit = (uint8_t)(uval % radix);
+        tbuf[--tbx] = (char)(T_CString_itosOffset(digit));
+        uval  = uval / radix;
+    } while (uval != 0);
+    
+    /* copy converted number into user buffer  */
+    uprv_strcpy(buffer+length, tbuf+tbx);
+    length += sizeof(tbuf) - tbx -1;
+    return length;
 }
+
 
 
 /*
  * Takes a int64_t and fills in  a char* string with that number "radix"-based.
- * Writes at most TODO: chars ("??????" plus NUL).
+ * Writes at most 21: chars ("-9223372036854775807" plus NUL).
  * Returns the length of the string, not including the terminating NULL.
  */
 U_CAPI int32_t U_EXPORT2
@@ -190,7 +185,8 @@ T_CString_int64ToString(char* buffer, int64_t v, uint32_t radix)
     
     U_ASSERT(radix>=2 && radix<=16);
     uval = (uint64_t) v;
-    if(v<0) {
+    if(v<0 && radix == 10) {
+        /* Only in base 10 do we conside numbers to be signed. */
         uval = (uint64_t)(-v); 
         buffer[length++] = '-';
     }

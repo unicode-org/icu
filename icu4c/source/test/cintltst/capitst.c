@@ -33,23 +33,6 @@ static void TestAttribute(void);
         int TestBufferSize();	/* defined in "colutil.c" */
 
 
-/*
- * Tracing functions.
- */
-void U_CALLCONV TraceEntry(const void *context, int32_t fnNumber) {
-    fprintf(stderr, "Trace Entry %#x!!!\n", fnNumber);
-}
-        
-void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, UErrorCode status) {
-}
-
-void U_CALLCONV TraceData(const void *context, int32_t fnNumber, 
-                          int32_t level, const char *fmt, va_list args) {
-    char buf[2000];
-    utrace_format(buf, sizeof(buf), fmt, args);
-    fprintf(stderr, "Trace Data fn %#x \"%s\"\n", fnNumber, buf); 
-}
-
     
 
 /* next two function is modified from "i18n/ucol.cpp" to avoid include "ucol_imp.h" */
@@ -448,11 +431,6 @@ void TestRuleBasedColl()
     u_uastrcpy(ruleset1, "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
     u_uastrcpy(ruleset2, "&9 < a, A < b, B < c, C < d, D, e, E");
     
-    utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData, UTRACE_VERBOSE, &status);
-    if (U_FAILURE(status)) {
-        log_err("utrace_setFunctions()  failed.: %s\n", myErrorName(status));
-        return;
-    }
 
     col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {

@@ -1,7 +1,7 @@
 /*
 *****************************************************************************************
 *
-*   Copyright (C) 1996-2000, International Business Machines
+*   Copyright (C) 1996-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *****************************************************************************************
@@ -12,6 +12,7 @@
 #define CTEST_H
 
 #include "unicode/utypes.h"
+#include "unicode/utrace.h"
 
 /*Deals with imports and exports of the dynamic library*/
 #if defined(_WIN32) || defined(U_CYGWIN)
@@ -96,6 +97,13 @@ T_CTEST_EXPORT_API extern int QUICK;
  * @internal Internal APIs for testing purpose only
  */
 T_CTEST_EXPORT_API extern int WARN_ON_MISSING_DATA;
+
+/**
+ * ICU tracing level, is set by command line option
+ *
+ * @internal
+ */
+T_CTEST_EXPORT_API extern UTraceLevel ICU_TRACE;
 
 /**
  * Show the names of all nodes.
