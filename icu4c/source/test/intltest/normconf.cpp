@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
 #include "cstring.h"
