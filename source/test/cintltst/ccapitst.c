@@ -449,13 +449,13 @@ static void TestConvert()
         else {
             for(i=0; i<targetCapacity; i++){
                 if(target[i] != expectedTarget[i]){
-                    log_data_err("FAIL: ucnv_convert(ibm-1363->ibm-1364) failed.at index \n i=%d,  Expected: %lx Got: %lx\n", i, (UChar)expectedTarget[i], (uint8_t)target[i]);
+                    log_err("FAIL: ucnv_convert(ibm-1363->ibm-1364) failed.at index \n i=%d,  Expected: %lx Got: %lx\n", i, (UChar)expectedTarget[i], (uint8_t)target[i]);
                 }
             }
 
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source+1, -1, &err);
-            if(U_FAILURE(err) || i!=6){
-                log_data_err("FAILURE! ucnv_convert() with sourceLimit=-1 failed: %s, returned %d instead of 6\n",
+            if(U_FAILURE(err) || i!=7){
+                log_err("FAILURE! ucnv_convert() with sourceLimit=-1 failed: %s, returned %d instead of 7\n",
                     u_errorName(err), i);
             }
 
@@ -463,14 +463,14 @@ static void TestConvert()
             err=U_ZERO_ERROR;
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, 0, &err);
             if(i !=0){
-                log_data_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
+                log_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
             }
 
             err=U_ILLEGAL_ARGUMENT_ERROR;
             sourceLimit=sizeof(source)/sizeof(source[0]);
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
             if(i !=0 ){
-                log_data_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
+                log_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
             }
 
             err=U_ZERO_ERROR;
@@ -478,7 +478,7 @@ static void TestConvert()
             targetLimit=0;
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
             if(!(U_FAILURE(err) && err==U_BUFFER_OVERFLOW_ERROR)){
-                log_data_err("FAILURE! ucnv_convert() with targetLimit=0 is expected to throw U_BUFFER_OVERFLOW_ERROR\n");
+                log_err("FAILURE! ucnv_convert() with targetLimit=0 is expected to throw U_BUFFER_OVERFLOW_ERROR\n");
             }
             err=U_ZERO_ERROR;
             free(target);
