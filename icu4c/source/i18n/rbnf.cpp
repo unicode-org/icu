@@ -22,6 +22,7 @@
 
 #include "cmemory.h"
 #include "cstring.h"
+#include "uprops.h"
 
 static const UChar gPercentPercent[] =
 {
@@ -451,7 +452,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
                 lpEnd = description.length() - 1;
             }
             int lpStart = lp + u_strlen(gLenientParse);
-            while (u_isWhitespace(description.charAt(lpStart))) {
+            while (uprv_isRuleWhiteSpace(description.charAt(lpStart))) {
                 ++lpStart;
             }
 
@@ -557,7 +558,7 @@ RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
     while (start != -1 && start < description.length()) {
         // seek to the first non-whitespace character...
         while (start < description.length()
-            && u_isWhitespace(description.charAt(start))) {
+            && uprv_isRuleWhiteSpace(description.charAt(start))) {
             ++start;
         }
 

@@ -25,6 +25,8 @@
 #include "nfrlist.h"
 #include "nfsubs.h"
 
+#include "uprops.h"
+
 U_NAMESPACE_BEGIN
 
 extern const UChar* CSleftBracket;
@@ -238,7 +240,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
         descriptor.setTo(description, 0, p);
 
         ++p;
-        while (p < description.length() && u_isWhitespace(description.charAt(p))) {
+        while (p < description.length() && uprv_isRuleWhiteSpace(description.charAt(p))) {
             ++p;
         }
         description.removeBetween(0, p);
@@ -281,7 +283,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
                 else if (c == gSlash || c == gGreaterThan) {
                     break;
                 }
-                else if (u_isWhitespace(c) || c == gComma || c == gDot) {
+                else if (uprv_isRuleWhiteSpace(c) || c == gComma || c == gDot) {
                 }
                 else {
                     // throw new IllegalArgumentException("Illegal character in rule descriptor");
@@ -310,7 +312,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
                     else if (c == gGreaterThan) {
                         break;
                     }
-                    else if (u_isWhitespace(c) || c == gComma || c == gDot) {
+                    else if (uprv_isRuleWhiteSpace(c) || c == gComma || c == gDot) {
                     }
                     else {
                         // throw new IllegalArgumentException("Illegal character is rule descriptor");
