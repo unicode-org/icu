@@ -116,15 +116,27 @@ typedef enum  {
         CNS_11643_7
 } StateEnum;
 
+#define CSM(cs) ((uint16_t)1<<(cs))
 
+/*
+ * Each of these charset masks contains a bit for a charset in exact correspondence
+ * to whether that charset is listed in the same version's row of nextStateToUnicodeJP[].
+ */
+static const uint16_t jpCharsetMasks[5]={
+    CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT),
+    CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212),
+    CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212)|CSM(GB2312)|CSM(KSC5601)|CSM(ISO8859_1)|CSM(ISO8859_7),
+    CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212)|CSM(GB2312)|CSM(KSC5601)|CSM(ISO8859_1)|CSM(ISO8859_7),
+    CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212)|CSM(GB2312)|CSM(KSC5601)|CSM(ISO8859_1)|CSM(ISO8859_7)
+};
 
 typedef enum {
         ASCII1=0,
         LATIN1,
         SBCS,
         DBCS,
-        MBCS
-
+        MBCS,
+        HWKANA
 }Cnv2022Type;
 
 typedef struct ISO2022State {
@@ -401,6 +413,8 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
     if(cnv->extraInfo != NULL) {
         UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) cnv->extraInfo;
+        uint32_t version;
+
         uprv_memset(myConverterData, 0, sizeof(UConverterDataISO2022));
         myConverterData->currentConverter = NULL;
         myConverterData->fromUnicodeConverter = NULL;
@@ -412,21 +426,26 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             uprv_strncpy(myLocale, locale, sizeof(myLocale));
         }
         myConverterData->version= 0;
+        version = options & UCNV_OPTIONS_VERSION_MASK;
         myConverterData->myConverterArray[0] =NULL;
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
             int len=0;
             /* open the required converters and cache them */
-            myConverterData->myConverterArray[0]=   ucnv_open("ASCII", errorCode );
-            myConverterData->myConverterArray[1]=   ucnv_open("ISO8859_1", errorCode);
-            myConverterData->myConverterArray[2]=   ucnv_open("ISO8859_7", errorCode);
-            myConverterData->myConverterArray[3]=   ucnv_open("jisx-201", errorCode);
-            myConverterData->myConverterArray[4]=   ucnv_open("jisx-208", errorCode);
-            myConverterData->myConverterArray[5]=   ucnv_open("jisx-212", errorCode);
-            myConverterData->myConverterArray[6]=   ucnv_open("ibm-5478", errorCode);   /* gb_2312_80-1 */
-            myConverterData->myConverterArray[7]=   ucnv_open("ksc_5601", errorCode);
-            myConverterData->myConverterArray[8]=   ucnv_open("jisx-201", errorCode);
-            myConverterData->myConverterArray[9]=   NULL;
+            if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
+                myConverterData->myConverterArray[ISO8859_7]= ucnv_open("ISO8859_7", errorCode);
+            }
+            myConverterData->myConverterArray[JISX201]      = ucnv_open("jisx-201", errorCode);
+            myConverterData->myConverterArray[JISX208]      = ucnv_open("jisx-208", errorCode);
+            if(jpCharsetMasks[version]&CSM(JISX212)) {
+                myConverterData->myConverterArray[JISX212]  = ucnv_open("jisx-212", errorCode);
+            }
+            if(jpCharsetMasks[version]&CSM(GB2312)) {
+                myConverterData->myConverterArray[GB2312]   = ucnv_open("ibm-5478", errorCode);   /* gb_2312_80-1 */
+            }
+            if(jpCharsetMasks[version]&CSM(KSC5601)) {
+                myConverterData->myConverterArray[KSC5601]  = ucnv_open("ksc_5601", errorCode);
+            }
 
             /* initialize the state variables */
             setInitialStateToUnicodeJPCN(cnv, myConverterData);
@@ -436,7 +455,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
 
-            myConverterData->version =options & UCNV_OPTIONS_VERSION_MASK;
+            myConverterData->version = version;
             uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
             len = uprv_strlen(myConverterData->name);
             myConverterData->name[len]=(char)(myConverterData->version+(int)'0');
@@ -469,11 +488,9 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             (myLocale[2]=='_' || myLocale[2]=='\0')){
 
             /* open the required converters and cache them */
-            myConverterData->myConverterArray[0] = NULL;
             myConverterData->myConverterArray[GB2312_1]     = ucnv_open("ibm-5478",errorCode);
             myConverterData->myConverterArray[ISO_IR_165]   = ucnv_open("iso-ir-165",errorCode);
             myConverterData->myConverterArray[CNS_11643]    = ucnv_open("cns-11643-1992",errorCode);
-            myConverterData->myConverterArray[4] = NULL;
 
 
             /*initialize the state variables*/
@@ -518,17 +535,19 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 
 static void
 _ISO2022Close(UConverter *converter) {
-   UConverterDataISO2022* myData =(UConverterDataISO2022 *) (converter->extraInfo);
-   UConverter **array = myData->myConverterArray;
+    UConverterDataISO2022* myData =(UConverterDataISO2022 *) (converter->extraInfo);
+    UConverter **array = myData->myConverterArray;
+    int32_t i;
 
     if (converter->extraInfo != NULL) {
         /*close the array of converter pointers and free the memory*/
-        while(*array!=NULL){
-            if(*array==myData->currentConverter){
-                myData->currentConverter=NULL;
+        for (i=0; i<UCNV_2022_MAX_CONVERTERS; i++) {
+            if(array[i]!=NULL) {
+                if(array[i]==myData->currentConverter) {
+                    myData->currentConverter=NULL;
+                }
+                ucnv_close(array[i]);
             }
-            ucnv_close(*array++);
-            
         }
 
         ucnv_close(myData->currentConverter); /* if not closed above */
@@ -1271,8 +1290,7 @@ static const Cnv2022Type myConverterType[MAX_VALID_CP_JP]={
     DBCS,
     DBCS,
     DBCS,
-    SBCS,
-
+    HWKANA
 };
 
 static const StateEnum nextStateArray[5][MAX_VALID_CP_JP]= {
@@ -1295,7 +1313,7 @@ static const char escSeqChars[MAX_VALID_CP_JP][6] ={
 
 };
 static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
-    3, /* length of  <ESC>(B  ASCII      */
+    3, /* length of <ESC>(B  ASCII       */
     3, /* length of <ESC>.A  ISO-8859-1  */
     3, /* length of <ESC>.F  ISO-8859-7  */
     3, /* length of <ESC>(J  JISX-201    */
@@ -1368,8 +1386,12 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
         goto getTrail;
     }
     
-    *currentConverter = convArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
-    sharedData= (*currentConverter)->sharedData;
+    *currentConverter = convArray[*currentState];
+    if(*currentConverter != NULL) {
+        sharedData = (*currentConverter)->sharedData;
+    } else {
+        sharedData = NULL;
+    }
     
     while( source < sourceLimit){
 
@@ -1395,7 +1417,7 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                         }
                         break;
                     case ASCII1:
-                        if(sourceChar < 0x7f){
+                        if(sourceChar <= 0x7f){
                             targetByteUnit = sourceChar;
                         }
                         break;
@@ -1407,21 +1429,9 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                          * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
                          * which becomes the same as missingCharMarker with the cast to uint16_t.
                          */
-                        /* Check if the sourceChar is in the HW Kana range*/
-                        if(0xFF9F-sourceChar<=(0xFF9F-0xFF61)){
-                            if( converterData->version==3){
-                                /*we get a1-df from _MBCSSingleFromUChar32 so subtract 0x80*/
-                                targetByteUnit-=0x80; 
-                                *currentState = HWKANA_7BIT;
-                            }
-                            else if( converterData->version==4){
-                                *currentState = JISX201;
-                            }
-                            else{
-                                targetByteUnit=missingCharMarker;
-                            }
-                            *currentConverter = convArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
-                            *currentType = (Cnv2022Type) myConverterType[*currentState];
+                        if(targetByteUnit>0x7f && converterData->version!=4) {
+                            /* use bytes >0x7f only for JIS8 */
+                            targetByteUnit = missingCharMarker;
                         }
                         break;
 
@@ -1431,15 +1441,37 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                         }
 
                         break;
+
+                    case HWKANA:
+                        /* Check if the sourceChar is in the HW Kana range*/
+                        if(0xFF9F-sourceChar<=(0xFF9F-0xFF61)){
+                            if( converterData->version==4){
+                                /* 8-bit Katakana */
+                                targetByteUnit = (uint32_t)(sourceChar - (0xff61 - 0xa1));
+                                *currentState = JISX201;
+                            }
+                            else{
+                                /* 7-bit Katakana */
+                                targetByteUnit = (uint32_t)(sourceChar - (0xff61 - 0x21));
+                                *currentState = HWKANA_7BIT;
+                            }
+                            *currentConverter = convArray[*currentState];
+                            *currentType = (Cnv2022Type) myConverterType[*currentState];
+                        }
+                        break;
                     default:
                         /*not expected */
                         break;
                     }
                     if(targetByteUnit==missingCharMarker){
                         *currentState = nextStateArray[converterData->version][*currentState];
-                        *currentConverter = convArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
+                        *currentConverter = convArray[*currentState];
                         *currentType = (Cnv2022Type) myConverterType[*currentState];
-                        sharedData= (*currentConverter)->sharedData;
+                        if(*currentConverter != NULL) {
+                            sharedData = (*currentConverter)->sharedData;
+                        } else {
+                            sharedData = NULL;
+                        }
                    }
                    else
                        /*got the mapping so break from while loop*/
@@ -1654,12 +1686,12 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 
 
             case ASCII1:
-                if( mySourceChar < 0x7F){
+                if( mySourceChar <= 0x7F){
                     targetUniChar = (UChar) mySourceChar;
                 }
                 else if((uint8_t)(mySourceChar - 0xa1) <= (0xdf - 0xa1) && myData->version==4) {
                     /* 8-bit halfwidth katakana in any single-byte mode for JIS8 */
-                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->myConverterArray[JISX201]->sharedData, mySourceChar);
+                    targetUniChar = mySourceChar + (0xff61 - 0xa1);
                 }
 
                 break;
@@ -1667,19 +1699,21 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             case SBCS:
                 if((uint8_t)(mySourceChar - 0xa1) <= (0xdf - 0xa1) && myData->version==4) {
                     /* 8-bit halfwidth katakana in any single-byte mode for JIS8 */
-                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->myConverterArray[JISX201]->sharedData, mySourceChar);
-                }
-                else if(*currentState==HWKANA_7BIT){
-                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->myConverterArray[JISX201]->sharedData, mySourceChar+0x80);   
+                    targetUniChar = mySourceChar + (0xff61 - 0xa1);
                 }
                 else {
                     targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
                 }
+                break;
 
+            case HWKANA:
+                if((uint8_t)(mySourceChar - 0x21) <= (0x5f - 0x21)) {
+                    /* 7-bit halfwidth Katakana */
+                    targetUniChar = mySourceChar + (0xff61 - 0x21);
+                }
                 break;
 
             case LATIN1:
-                
                 targetUniChar = (UChar) mySourceChar;
                 break;
 
@@ -1695,8 +1729,8 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             }
             if(targetUniChar < (missingCharMarker-1/*0xfffe*/)){
                 if(args->offsets){
-                    args->offsets[myTarget - args->target]= mySource - args->source - 2 
-                                                            +(myConverterType[*currentState] <= SBCS);
+                    args->offsets[myTarget - args->target]= mySource - args->source -
+                                                            (mySourceChar <= 0xff ? 1 : 2);
 
                 }
                 *(myTarget++)=(UChar)targetUniChar;
@@ -2772,12 +2806,45 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
         return;
     }
 
-    cnvSet = uset_open(0, 0);
+    /* open a set and initialize it with code points that are algorithmically round-tripped */
+    switch(cnvData->locale[0]){
+    case 'j':
+        if(jpCharsetMasks[cnvData->version]&CSM(ISO8859_1)) {
+            /* include Latin-1 for some variants of JP */
+            cnvSet = uset_open(0, 0xff);
+        } else {
+            /* include ASCII for JP */
+            cnvSet = uset_open(0, 0x7f);
+        }
+        /* include half-width Katakana for JP */
+        uset_addRange(cnvSet, 0xff61, 0xff9f);
+        break;
+    case 'c':
+    case 'z':
+        /* include ASCII for CN */
+        cnvSet = uset_open(0, 0x7f);
+        break;
+    case 'k':
+        /* there is only one converter for KR, and it is not in the myConverterArray[] */
+        ucnv_getUnicodeSet(cnvData->currentConverter, set, which, pErrorCode);
+        return;
+    default:
+        cnvSet = uset_open(1, 0);
+        break;
+    }
+
     if (!cnvSet) {
         *pErrorCode =U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
+    /*
+     * TODO: need to make this version-specific for CN.
+     * CN version 0 does not map CNS planes 3..7 although
+     * they are all available in the CNS conversion table;
+     * CN version 1 does map them all.
+     * The two versions need to create different Unicode sets.
+     */
     for (i=0; i<UCNV_2022_MAX_CONVERTERS; i++) {
         if(cnvData->myConverterArray[i]!=NULL) {
             ucnv_getUnicodeSet(cnvData->myConverterArray[i], cnvSet, which, pErrorCode);
