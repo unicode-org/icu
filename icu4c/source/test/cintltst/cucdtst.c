@@ -1876,10 +1876,6 @@ static void TestUScriptCodeAPI(){
 
  }
 
-/* ### TODO: move this into uchar.h */
-U_CAPI void U_EXPORT2
-u_charAge(UChar32 c, UVersionInfo versionArray);
-
 /* test additional, non-core properties */
 static void
 TestAdditionalProperties() {
