@@ -71,6 +71,13 @@ class TableCollationData;
 struct collIterate;
 typedef void *  UCollator;
 
+enum UColRuleOption {
+	UCOL_TAILORING_ONLY,
+	UCOL_FULL_RULES
+};
+
+
+
 /**
  * The RuleBasedCollator class provides the simple implementation of Collator,
  * using data-driven tables.  The user can create a customized table-based
@@ -573,6 +580,83 @@ public:
    * @draft INTERNAL USE ONLY
    */
   uint8_t *cloneRuleData(int32_t &length, UErrorCode &status);
+
+	/**
+	 * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
+	 * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
+	 * @return UnicodeString with rules
+	 */
+	UnicodeString getRules(UColRuleOption delta);
+
+  /* New APIs for 1.7. Not yet implemented */
+
+/**
+ * Universal attribute setter
+ * @param attr attribute type 
+ * @param value attribute value
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @draft API 1.7 freeze
+ */
+virtual void setAttribute(const UColAttribute attr, const UColAttributeValue value, UErrorCode &status);
+
+/**
+ * Universal attribute getter
+ * @param attr attribute type
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @return attribute value
+ * @draft API 1.7 freeze
+ */
+virtual UColAttributeValue getAttribute(const UColAttribute attr, UErrorCode &status);
+
+/**
+ * Thread safe cloning operation
+ * @return pointer to the new clone, user should remove it.
+ * @draft API 1.7 freeze
+ */
+virtual Collator* safeClone(void);
+
+
+/**
+ * String compare that uses user supplied character iteration.
+ * The idea is to prevent users from having to convert the whole string into UChar's before comparing
+ * since sometimes strings differ on first couple of characters.
+ * @param coll collator to be used for comparing
+ * @param source pointer to function for iterating over the first string
+ * @param target pointer to function for iterating over the second string
+ * @return The result of comparing the strings; one of UCOL_EQUAL,
+ * UCOL_GREATER, UCOL_LESS
+ * @draft API 1.7 freeze
+ */
+virtual EComparisonResult compare(ForwardCharacterIterator &source,
+								 ForwardCharacterIterator &target);
+
+/**
+ * Get the sort key as an array of bytes from an UnicodeString.
+ * @param source string to be processed.
+ * @param result buffer to store result in. If NULL, number of bytes needed will be returned.
+ * @param resultLength length of the result buffer. If if not enough the buffer will be filled to capacity. 
+ * @return Number of bytes needed for storing the sort key
+ * @draft API 1.7 freeze
+ */
+  virtual int32_t       getSortKey(const   UnicodeString&  source,
+						  uint8_t *result,
+						  int32_t resultLength) const;
+
+/**
+ * Get the sort key as an array of bytes from an UChar buffer.
+ * @param source string to be processed.
+ * @param sourceLength length of string to be processed. 
+ *			If -1, the string is 0 terminated and length will be decided by the function.
+ * @param result buffer to store result in. If NULL, number of bytes needed will be returned.
+ * @param resultLength length of the result buffer. If if not enough the buffer will be filled to capacity. 
+ * @return Number of bytes needed for storing the sort key
+ * @draft API 1.7 freeze
+ */
+  virtual int32_t       getSortKey(const   UChar *source,
+						  int32_t sourceLength,
+						  uint8_t *result,
+						  int32_t resultLength) const;
+
 
  /*****************************************************************************
  * PRIVATE

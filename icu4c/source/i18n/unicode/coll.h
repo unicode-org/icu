@@ -49,8 +49,60 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/normlzr.h"
+#include "unicode/chariter.h"
 
 class CollationKey;
+
+enum UColAttribute {
+     UCOL_FRENCH_COLLATION, /* attribute for direction of secondary weights*/
+     UCOL_ALTERNATE_HANDLING, /* attribute for handling variable elements*/
+     UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
+     UCOL_CASE_LEVEL, /* do we have an extra case level */
+     UCOL_NORMALIZATION_MODE, /* attribute for normalization */
+     UCOL_STRENGTH,         /* attribute for strength */
+     UCOL_ATTRIBUTE_COUNT
+};
+
+enum UColAttributeValue {
+     /* accepted by most attributes */
+          UCOL_ATTR_DEFAULT,
+     /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
+          UCOL_ATTR_ON,
+          UCOL_ATTR_OFF,
+     /* for UCOL_ALTERNATE_HANDLING */
+          UCOL_ATTR_SHIFTED,
+          UCOL_ATTR_NON_IGNORABLE,
+     /* for UCOL_CASE_FIRST */
+          UCOL_ATTR_LOWER_FIRST,
+          UCOL_ATTR_UPPER_FIRST,
+     /* for UCOL_NORMALIZATION_MODE */
+          /** No decomposition/composition */
+          UCOL_ATTR_NO_NORMALIZATION,
+          /** Canonical decomposition */
+          UCOL_ATTR_DECOMP_CAN,
+          /** Compatibility decomposition */
+          UCOL_ATTR_DECOMP_COMPAT,
+          /** Default normalization */
+          UCOL_ATTR_DEFAULT_NORMALIZATION = UCOL_ATTR_DECOMP_COMPAT, 
+          /** Canonical decomposition followed by canonical composition */
+          UCOL_ATTR_DECOMP_CAN_COMP_COMPAT,
+          /** Compatibility decomposition followed by canonical composition */
+          UCOL_ATTR_DECOMP_COMPAT_COMP_CAN,
+     /* for UCOL_STRENGTH */
+            /** Primary collation strength */
+            UCOL_ATTR_PRIMARY,
+            /** Secondary collation strength */
+            UCOL_ATTR_SECONDARY,
+            /** Tertiary collation strength */
+            UCOL_ATTR_TERTIARY,
+            UCOL_ATTR_DEFAULT_STRENGTH = UCOL_ATTR_TERTIARY,
+            /** Quaternary collation strength */
+            UCOL_ATTR_QUATERNARY,
+            /** Identical collation strength */
+            UCOL_ATTR_IDENTICAL,
+            /** Default collation strength */
+	    UCOL_ATTRIBUTE_VALUE_COUNT
+};
 
 /**
  * The <code>Collator</code> class performs locale-sensitive
@@ -549,6 +601,75 @@ public:
    * @stable
    */
   virtual UClassID getDynamicClassID(void) const = 0;
+
+  /* New APIs for 1.7. Not yet implemented */
+
+/**
+ * Universal attribute setter
+ * @param attr attribute type 
+ * @param value attribute value
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @draft API 1.7 freeze
+ */
+virtual void setAttribute(const UColAttribute attr, const UColAttributeValue value, UErrorCode &status) = 0;
+
+/**
+ * Universal attribute getter
+ * @param attr attribute type
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @return attribute value
+ * @draft API 1.7 freeze
+ */
+virtual UColAttributeValue getAttribute(const UColAttribute attr, UErrorCode &status) = 0;
+
+/**
+ * Thread safe cloning operation
+ * @return pointer to the new clone, user should remove it.
+ * @draft API 1.7 freeze
+ */
+virtual Collator* safeClone(void) = 0;
+
+
+/**
+ * String compare that uses user supplied character iteration.
+ * The idea is to prevent users from having to convert the whole string into UChar's before comparing
+ * since sometimes strings differ on first couple of characters.
+ * @param coll collator to be used for comparing
+ * @param source pointer to function for iterating over the first string
+ * @param target pointer to function for iterating over the second string
+ * @return The result of comparing the strings; one of UCOL_EQUAL,
+ * UCOL_GREATER, UCOL_LESS
+ * @draft API 1.7 freeze
+ */
+virtual EComparisonResult compare(ForwardCharacterIterator &source,
+								 ForwardCharacterIterator &target) = 0;
+
+/**
+ * Get the sort key as an array of bytes from an UnicodeString.
+ * @param source string to be processed.
+ * @param result buffer to store result in. If NULL, number of bytes needed will be returned.
+ * @param resultLength length of the result buffer. If if not enough the buffer will be filled to capacity. 
+ * @return Number of bytes needed for storing the sort key
+ * @draft API 1.7 freeze
+ */
+  virtual int32_t       getSortKey(const   UnicodeString&  source,
+						  uint8_t *result,
+						  int32_t resultLength) const = 0;
+
+/**
+ * Get the sort key as an array of bytes from an UChar buffer.
+ * @param source string to be processed.
+ * @param sourceLength length of string to be processed. 
+ *			If -1, the string is 0 terminated and length will be decided by the function.
+ * @param result buffer to store result in. If NULL, number of bytes needed will be returned.
+ * @param resultLength length of the result buffer. If if not enough the buffer will be filled to capacity. 
+ * @return Number of bytes needed for storing the sort key
+ * @draft API 1.7 freeze
+ */
+  virtual int32_t       getSortKey(const   UChar *source,
+						  int32_t sourceLength,
+						  uint8_t *result,
+						  int32_t resultLength) const = 0;
 
 protected:
   /**
