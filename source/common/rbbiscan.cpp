@@ -20,6 +20,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h"
+#include "upropset.h"
 #include "cmemory.h"
 
 #include "rbbirpt.h"   // Contains state table for the rbbi rules parser.
@@ -63,9 +64,6 @@ static const UChar gRuleSet_rule_char_pattern[]       = {
     0x2d, 0x5c, 0x75, 0x30, 0x30, 0x37, 0x66, 0x5d, 0x2d, 0x5b, 0x5c, 0x70,
  //   {     L     }    ]     -     [      \     p     {     N    }      ]     ] 
     0x7b, 0x4c, 0x7d, 0x5d, 0x2d, 0x5b, 0x5c, 0x70, 0x7b, 0x4e, 0x7d, 0x5d, 0x5d, 0};
-static const UChar gRuleSet_white_space_pattern[]     =
- //   [    \      p    {     Z     }      \     n     \     r    \      t     ]
-  { 0x5b, 0x5c, 0x70, 0x7b, 0x5a, 0x7d, 0x5c, 0x6e, 0x5c, 0x72, 0x5c, 0x74, 0x5d, 0};
 
 static const UChar gRuleSet_name_char_pattern[]       = {
 //    [    _      \    p     {     L      }     \     p     {    N      }     ]
@@ -125,7 +123,7 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     //            and the time to build these few sets should be small compared to a
     //            full break iterator build.
     fRuleSets[kRuleSet_rule_char-128]       = new UnicodeSet(gRuleSet_rule_char_pattern,       *rb->fStatus);
-    fRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(gRuleSet_white_space_pattern,     *rb->fStatus);
+    fRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(UnicodePropertySet::getRuleWhiteSpaceSet());
     fRuleSets[kRuleSet_name_char-128]       = new UnicodeSet(gRuleSet_name_char_pattern,       *rb->fStatus);
     fRuleSets[kRuleSet_name_start_char-128] = new UnicodeSet(gRuleSet_name_start_char_pattern, *rb->fStatus);
     fRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      *rb->fStatus);
