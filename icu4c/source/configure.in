@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.196 2003/08/21 00:30:31 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.197 2003/09/15 22:30:28 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -250,6 +250,14 @@ if test $threads = true; then
    if test $ac_cv_func_pthread_mutex_lock = yes; then
      ICU_USE_THREADS=1
    fi
+   dnl Check to see if we are using CygWin with MSVC
+   case "${host}" in
+   *-pc-cygwin*|*-pc-mingw*)
+     if test "$ac_cv_prog_gcc" = no; then
+       dnl We're using normal windows compilers. Threading is available.
+       ICU_USE_THREADS=1
+     fi ;;
+   esac
   fi
  fi
 fi
