@@ -591,14 +591,15 @@ private:
     UnicodeString fErrorString;
 };
 
+#define kFormatThreadIterations 20  // # of iterations per thread
+#define kFormatThreadThreads    10  // # of threads to spawn
+#define kFormatThreadPatience   60  // time in seconds to wait for all threads
+
 #if !UCONFIG_NO_FORMATTING
 
 // ** FormatThreadTest - a thread that tests performing a number of numberformats.
 
 
-#define kFormatThreadIterations 20  // # of iterations per thread
-#define kFormatThreadThreads    10  // # of threads to spawn
-#define kFormatThreadPatience   60  // time in seconds to wait for all threads
 struct FormatThreadTestData
 {
     double number;
