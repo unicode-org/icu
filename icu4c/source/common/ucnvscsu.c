@@ -193,7 +193,7 @@ _SCSUOpen(UConverter *cnv,
           UErrorCode *pErrorCode) {
     cnv->extraInfo=uprv_malloc(sizeof(SCSUData));
     if(cnv->extraInfo!=NULL) {
-        if(locale!=NULL && locale[0]=='j' && locale[1]=='a' && (locale[2]==0 || locale[2]==' ')) {
+        if(locale!=NULL && locale[0]=='j' && locale[1]=='a' && (locale[2]==0 || locale[2]=='_')) {
             ((SCSUData *)cnv->extraInfo)->locale=l_ja;
         } else {
             ((SCSUData *)cnv->extraInfo)->locale=lGeneric;
@@ -1295,6 +1295,18 @@ callback:
 
 /* miscellaneous ------------------------------------------------------------ */
 
+U_CFUNC const char *
+_SCSUGetName(const UConverter *cnv) {
+    SCSUData *scsu=(SCSUData *)cnv->extraInfo;
+
+    switch(scsu->locale) {
+    case l_ja:
+        return "SCSU,locale=ja";
+    default:
+        return "SCSU";
+    }
+}
+
 U_CFUNC void
 _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
                int32_t offsetIndex,
@@ -1336,7 +1348,7 @@ static const UConverterImpl _SCSUImpl={
     _SCSUGetNextUChar,
 
     NULL,
-    NULL,
+    _SCSUGetName,
     _SCSUWriteSub
 };
 
