@@ -1299,11 +1299,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // for a zone; in that case, we don't want to match the first three
         // characters of GMT+/-HH:MM etc.
 
-        UnicodeString lcaseText(text);
-        UnicodeString lcaseGMT(gGmt);
         int32_t sign = 0;
         int32_t offset;
-        int32_t gmtLen = lcaseGMT.length();
+        int32_t gmtLen = u_strlen(gGmt);
 
         // For time zones that have no known names, look for strings
         // of the form:
@@ -1311,12 +1309,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         //    GMT[+-]hhmm or
         //    GMT.
         
-        // {sfb} kludge for case-insensitive compare
-        lcaseText.toLower();
-        lcaseGMT.toLower();
-        
         if ((text.length() - start) > gmtLen &&
-            (lcaseText.compare(start, gmtLen, lcaseGMT, 0, gmtLen)) == 0)
+            (text.caseCompare(start, gmtLen, gGmt, 0, gmtLen, U_FOLD_CASE_DEFAULT)) == 0)
         {
             cal.set(UCAL_DST_OFFSET, 0);
 
