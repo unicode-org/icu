@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -25,7 +25,6 @@ int main()
    UnicodeString easyPatterns[] = {"FoX", "CAT", "jump", "under" };
    int exactOffsets[] = { -1, -1, 12, -1 };
    int tertiaryOffsets[] = { 8, -1, 12, -1 };
-   uint32_t patternIndex[] = { 3, 9, 13, 17 };
    UnicodeString monkeyTarget("abcdefgh");
    UnicodeString monkeyTarget2("ijklmnop");
 
@@ -38,7 +37,8 @@ int main()
         fprintf(stderr, "Failed to create a StringSearch object for the default locale.\n");
    }
    fprintf(stdout, "Try with default normalization mode and strength.\n");
-   for (i = 0; TRUE; i++)
+   i = 0;
+   while (TRUE)
    {
        status = U_ZERO_ERROR;
        searchIter->reset();
@@ -46,11 +46,12 @@ int main()
        if ( pos != exactOffsets[i] )
           fprintf(stdout, "Exact match failed at the index %d pattern.\n", i);
        
-       if (i + 1 == 4) {
+       i ++;
+       if (i == 4) {
            break;
        }
 
-       searchIter->setPattern(easyPatterns[i+1], status);
+       searchIter->setPattern(easyPatterns[i], status);
        if (U_FAILURE(status))
        {
             fprintf(stderr, "Failed to set a pattern for %d element.\n", i);
@@ -168,3 +169,4 @@ cleanup:
     delete searchIter;
     return 0;
 }
+

@@ -68,7 +68,7 @@ SearchIterator::~SearchIterator()
     }
 }
 
-bool_t SearchIterator::operator == (const SearchIterator& that) const
+UBool SearchIterator::operator == (const SearchIterator& that) const
 {
     if (this == &that) return TRUE;
     if (*that.breaker != *breaker) return FALSE;
@@ -166,12 +166,12 @@ int32_t SearchIterator::getIndex() const
     return index == SearchIterator::BEFORE ? SearchIterator::DONE : index;
 }
 
-void SearchIterator::setOverlapping(bool_t allowOverlap) 
+void SearchIterator::setOverlapping(UBool allowOverlap) 
 {
      overlap = allowOverlap;
 }
     
-bool_t SearchIterator::isOverlapping(void) const
+UBool SearchIterator::isOverlapping(void) const
 {
     return overlap;
 }
@@ -264,16 +264,17 @@ void SearchIterator::setIndex(int32_t pos) {
     length = 0;
 }
 
-bool_t SearchIterator::isBreakUnit(int32_t start, 
+UBool SearchIterator::isBreakUnit(int32_t start, 
                                    int32_t end)
 {
     if (breaker == NULL) {
         return TRUE;
     } 
-    bool_t startBound = breaker->isBoundary(start);
-    bool_t endBound = (end == target->endIndex()) || breaker->isBoundary(end);
+    UBool startBound = breaker->isBoundary(start);
+    UBool endBound = (end == target->endIndex()) || breaker->isBoundary(end);
     
     return startBound && endBound;
 }
+
 
 
