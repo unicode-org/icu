@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestDataModule.java,v $
- * $Date: 2002/08/31 04:55:10 $
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
