@@ -27,7 +27,10 @@
 #define UCNV_IMP_H
 
 #include "utypes.h"
-#include "uhash.h"
+
+#ifndef UHASH_H
+typedef struct _UHashtable UHashtable;
+#endif
 
 /*Hashtable used to store UConverterSharedData objects supporting
  *the Caching mechanism
