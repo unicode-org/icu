@@ -624,7 +624,7 @@ ucol_getRules(    const    UCollator    *coll,
  *  http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Naming_Collators
  *  This API supports preflighting.
  *  @param coll a collator
- *  @param locale locale for the collator. If NULL, collator's real locale will be used
+ *  @param locale locale for the collator.
  *  @param buffer space to hold the resulting string
  *  @param capacity capacity of the buffer
  *  @param status for returning errors. All the preflighting errors are featured
@@ -1003,6 +1003,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 /**
  * Get a 31-bit identifier given a collator. 
  * @param coll UCollator
+ * @param locale locale for the collator.
  * @param status set U_BUFFER_OVERFLOW_ERROR if collator cannot be encoded
  * @return 31-bit identifier. MSB is not used, hence the 31 bits
  * @see ucol_openFromIdentifier
