@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/03/26 20:34:36 $ 
-* $Revision: 1.6 $
+* $Date: 2001/06/21 23:20:53 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -176,6 +176,11 @@ public final class UCharacter
   * Shift 16 bits
   */
   private static final int SHIFT_16_ = 16;
+  
+  /**
+  * Shift 24 bits
+  */
+  private static final int SHIFT_24_ = 24;
   
   /**
   * Minimum value that indicates if a character is not-a-character
@@ -1342,6 +1347,143 @@ public final class UCharacter
         }
       }
     }
+    return result.toString();
+  }
+  
+  /**
+  * The given character is mapped to its case folding equivalent according to
+  * UnicodeData.txt and CaseFolding.txt; if the character has no case folding 
+  * equivalent, the character itself is returned.
+  * Only "simple", single-code point case folding mappings are used.
+  * For "full", multiple-code point mappings use the API 
+  * foldCase(String str, boolean default).
+  * @param ch             the character to be converted
+  * @param defaultmapping Indicates if all mappings defined in CaseFolding.txt 
+  *                       is to be used, otherwise the mappings for dotted I 
+  *                       and dotless i marked with 'I' in CaseFolding.txt will 
+  *                       be skipped.
+  * @return               the case folding equivalent of the character, if any;
+  *                       otherwise the character itself.
+  * @see                  foldCase(String, boolean)
+  */
+  public static int foldCase(int ch, boolean defaultmapping)
+  {
+    int props = PROPERTY_DB_.getProperty(ch);
+    if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
+      int type = UCharacterPropertyDB.getPropType(props);
+      if (type == UCharacterCategory.UPPERCASE_LETTER ||
+        type == UCharacterCategory.TITLECASE_LETTER) {
+          return ch + UCharacterPropertyDB.getSignedValue(props);
+      }
+    } 
+    else {
+      int index = UCharacterPropertyDB.getExceptionIndex(props);
+      if (PROPERTY_DB_.hasExceptionValue(index, 
+                                  UCharacterPropertyDB.EXC_CASE_FOLDING_)) {
+        int exception = PROPERTY_DB_.getException(index, 
+                                       UCharacterPropertyDB.EXC_CASE_FOLDING_);
+        if (exception != 0) {
+          int foldedcasech = 
+                      PROPERTY_DB_.getFoldCase(exception & LAST_CHAR_MASK_);
+          if (foldedcasech != 0){
+            return foldedcasech;
+          }
+        }
+        else {
+          // special case folding mappings, hardcoded
+          if (defaultmapping && (ch == LATIN_SMALL_LETTER_DOTLESS_I_ || 
+                               ch == LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) {
+            // map dotted I and dotless i to U+0069 small i
+            return LATIN_SMALL_LETTER_I_;
+          }
+          // return ch itself because it is excluded from case folding
+          return ch;
+        }                                  
+      }
+      if (PROPERTY_DB_.hasExceptionValue(index, 
+                                  UCharacterPropertyDB.EXC_LOWERCASE_)) {  
+        // not else! - allow to fall through from above
+        return PROPERTY_DB_.getException(index, 
+                                         UCharacterPropertyDB.EXC_LOWERCASE_);
+      }
+    }
+        
+    return ch; // no mapping - return the character itself
+  }
+
+  /**
+  * The given string is mapped to its case folding equivalent according to
+  * UnicodeData.txt and CaseFolding.txt; if any character has no case folding 
+  * equivalent, the character itself is returned.
+  * "Full", multiple-code point case folding mappings are returned here.
+  * For "simple" single-code point mappings use the API 
+  * foldCase(int ch, boolean default).
+  * @param str            the String to be converted
+  * @param defaultmapping Indicates if all mappings defined in CaseFolding.txt 
+  *                       is to be used, otherwise the mappings for dotted I 
+  *                       and dotless i marked with 'I' in CaseFolding.txt will 
+  *                       be skipped.
+  * @return               the case folding equivalent of the character, if any;
+  *                       otherwise the character itself.
+  * @see                  foldCase(int, boolean)
+  */
+  public static String foldCase(String str, boolean defaultmapping)
+  {
+    StringBuffer result = new StringBuffer(str.length() << 1);
+    int          count  = 0;
+    int          ch;
+    int          size   = UTF16.countCodePoint(str);
+
+    // case mapping loop
+    while (count < size) {
+      ch = UTF16.charAtCodePointOffset(str, count);
+      count ++;
+      int props = PROPERTY_DB_.getProperty(ch);
+      if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
+        int type = UCharacterPropertyDB.getPropType(props);
+        if (type == UCharacterCategory.UPPERCASE_LETTER ||
+          type == UCharacterCategory.TITLECASE_LETTER) {
+            ch += UCharacterPropertyDB.getSignedValue(props);
+        }
+      }  
+      else {
+        int index = UCharacterPropertyDB.getExceptionIndex(props);
+        if (PROPERTY_DB_.hasExceptionValue(index, 
+                                  UCharacterPropertyDB.EXC_CASE_FOLDING_)) {
+          int exception = PROPERTY_DB_.getException(index, 
+                                       UCharacterPropertyDB.EXC_CASE_FOLDING_);                             
+          if (exception != 0) {
+            PROPERTY_DB_.getFoldCase(exception & LAST_CHAR_MASK_, 
+                                     exception >> SHIFT_24_, result);
+          } 
+          else {
+            // special case folding mappings, hardcoded
+            if (defaultmapping && (ch == LATIN_SMALL_LETTER_DOTLESS_I_ || 
+                               ch == LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) {
+              // map dotted I and dotless i to U+0069 small i
+              result.append(LATIN_SMALL_LETTER_I_);
+            } 
+            else {
+              // output c itself because it is excluded from case folding
+              UTF16.append(result, ch);
+            }
+          }
+          // do not fall through to the output of c
+          continue;
+        } 
+        else {
+          if (PROPERTY_DB_.hasExceptionValue(index, 
+                                 UCharacterPropertyDB.EXC_LOWERCASE_)) {
+            ch = PROPERTY_DB_.getException(index, 
+                                        UCharacterPropertyDB.EXC_LOWERCASE_);
+          }
+        }
+      }
+
+      // handle 1:1 code point mappings from UnicodeData.txt
+      UTF16.append(result, ch);
+    }
+    
     return result.toString();
   }
   
