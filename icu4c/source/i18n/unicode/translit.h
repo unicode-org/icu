@@ -824,6 +824,11 @@ protected:
                                  Token context);
 
     /**
+     * @internal
+     */
+    static void _registerInstance(Transliterator* adoptedObj);
+
+    /**
      * Register two targets as being inverses of one another.  For
      * example, calling registerSpecialInverse("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
