@@ -229,21 +229,6 @@ public:
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const = 0;
 
-    /**
-     * This method gets a name from the font. (e.g. the family name) The encoding
-     * of the name is specified by the platform, the script, and the language.
-     *
-     * @param platformID - the platform id
-     * @param scriptID - the script id
-     * @param langaugeID - the language id
-     * @param name - the destination character array (can be null)
-     *
-     * @return the number of characters in the name
-     *
-     * @draft ICU 2.6
-     */
-    virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const;
-
     //
     // Metrics
     //
@@ -500,15 +485,6 @@ private:
 inline le_bool LEFontInstance::canDisplay(LEUnicode32 ch) const
 {
     return mapCharToGlyph(ch) != 0;
-}
-
-inline le_int32 LEFontInstance::getName(le_uint16 /*platformID*/, le_uint16 /*scriptID*/, le_uint16 /*languageID*/, le_uint16 /*nameID*/, LEUnicode *name) const
-{
-    if (name != NULL) {
-        *name = 0;
-    }
-
-    return 0;
 }
 
 inline float LEFontInstance::xUnitsToPoints(float xUnits) const
