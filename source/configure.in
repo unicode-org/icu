@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.200 2003/10/16 21:08:30 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.201 2003/12/03 17:33:41 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -913,7 +913,7 @@ if test "$ac_cv_func_dllload" = "yes"; then
 fi
 
 dnl output the Makefiles
-AC_OUTPUT([README icudefs.mk \
+AC_OUTPUT([icudefs.mk \
 		Makefile \
 		data/Makefile data/icupkg.inc \
 		common/Makefile config/Makefile.inc i18n/Makefile \
