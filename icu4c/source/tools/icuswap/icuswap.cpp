@@ -310,8 +310,9 @@ static int32_t
 udata_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode) {
+    char dataFormatChars[4];
     const UDataInfo *pInfo;
-    int32_t headerSize, i;
+    int32_t headerSize, i, swappedLength;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
@@ -334,45 +335,55 @@ udata_swap(const UDataSwapper *ds,
         return 0; /* the data format was not recognized */
     }
 
-    /* dispatch to the swap function for the dataFormat */
     pInfo=(const UDataInfo *)((const char *)inData+4);
+
+    {
+        /* convert the data format from ASCII to Unicode to the system charset */
+        UChar u[4]={
+             pInfo->dataFormat[0], pInfo->dataFormat[1],
+             pInfo->dataFormat[2], pInfo->dataFormat[3]
+        };
+
+        if(uprv_isInvariantUString(u, 4)) {
+            u_UCharsToChars(u, dataFormatChars, 4);
+        } else {
+            dataFormatChars[0]=dataFormatChars[1]=dataFormatChars[2]=dataFormatChars[3]='?';
+        }
+    }
+
+    /* dispatch to the swap function for the dataFormat */
     for(i=0; i<LENGTHOF(swapFns); ++i) {
         if(0==memcmp(swapFns[i].dataFormat, pInfo->dataFormat, 4)) {
-            length=swapFns[i].swapFn(ds, inData, length, outData, pErrorCode);
+            swappedLength=swapFns[i].swapFn(ds, inData, length, outData, pErrorCode);
 
             if(U_FAILURE(*pErrorCode)) {
-                /* data formats are chosen to be ASCII-readable mnemonics */
-#               if(U_CHARSET_FAMILY==U_ASCII_FAMILY)
-                    udata_printError(ds, "udata_swap(): failure swapping data format %02x.%02x.%02x.%02x (\"%c%c%c%c\") - %s\n",
-                                     pInfo->dataFormat[0], pInfo->dataFormat[1],
-                                     pInfo->dataFormat[2], pInfo->dataFormat[3],
-                                     (char)pInfo->dataFormat[0], (char)pInfo->dataFormat[1],
-                                     (char)pInfo->dataFormat[2], (char)pInfo->dataFormat[3],
-                                     u_errorName(*pErrorCode));
-#               else
-                    udata_printError(ds, "udata_swap(): failure swapping data format %02x.%02x.%02x.%02x - %s\n",
-                                     pInfo->dataFormat[0], pInfo->dataFormat[1],
-                                     pInfo->dataFormat[2], pInfo->dataFormat[3],
-                                     u_errorName(*pErrorCode));
-#               endif
+                udata_printError(ds, "udata_swap(): failure swapping data format %02x.%02x.%02x.%02x (\"%c%c%c%c\") - %s\n",
+                                 pInfo->dataFormat[0], pInfo->dataFormat[1],
+                                 pInfo->dataFormat[2], pInfo->dataFormat[3],
+                                 dataFormatChars[0], dataFormatChars[1],
+                                 dataFormatChars[2], dataFormatChars[3],
+                                 u_errorName(*pErrorCode));
+            } else if(swappedLength<(length-15)) {
+                /* swapped less than expected */
+                udata_printError(ds, "udata_swap() warning: swapped only %d out of %d bytes - data format %02x.%02x.%02x.%02x (\"%c%c%c%c\")\n",
+                                 swappedLength, length,
+                                 pInfo->dataFormat[0], pInfo->dataFormat[1],
+                                 pInfo->dataFormat[2], pInfo->dataFormat[3],
+                                 dataFormatChars[0], dataFormatChars[1],
+                                 dataFormatChars[2], dataFormatChars[3],
+                                 u_errorName(*pErrorCode));
             }
 
-            return length;
+            return swappedLength;
         }
     }
 
     /* the dataFormat was not recognized */
-    if(ds->inCharset==U_CHARSET_FAMILY) {
-        udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x (\"%c%c%c%c\")\n",
-                         pInfo->dataFormat[0], pInfo->dataFormat[1],
-                         pInfo->dataFormat[2], pInfo->dataFormat[3],
-                         (char)pInfo->dataFormat[0], (char)pInfo->dataFormat[1],
-                         (char)pInfo->dataFormat[2], (char)pInfo->dataFormat[3]);
-    } else {
-        udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x\n",
-                         pInfo->dataFormat[0], pInfo->dataFormat[1],
-                         pInfo->dataFormat[2], pInfo->dataFormat[3]);
-    }
+    udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x (\"%c%c%c%c\")\n",
+                     pInfo->dataFormat[0], pInfo->dataFormat[1],
+                     pInfo->dataFormat[2], pInfo->dataFormat[3],
+                     dataFormatChars[0], dataFormatChars[1],
+                     dataFormatChars[2], dataFormatChars[3]);
 
     *pErrorCode=U_UNSUPPORTED_ERROR;
     return 0;
