@@ -56,11 +56,14 @@ import java.util.Locale;
  *      http://www.faqs.org/faqs/calendars/faq/</a>
  * </ul>
  * <p>
+ * Note This API has not been promoted to @stable and instead has been left
+ * as @draft ICU 2.4.  It may yet change or be removed in a future release.
+ *
  * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu
- * @internal
+ * @draft ICU 2.4
  */
 public class HebrewCalendar extends Calendar {
 
@@ -73,31 +76,31 @@ public class HebrewCalendar extends Calendar {
 
     /** 
      * Constant for Tishri, the 1st month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int TISHRI = 0;
 
     /**
      * Constant for Heshvan, the 2nd month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int HESHVAN = 1;
 
     /**
      * Constant for Kislev, the 3rd month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int KISLEV = 2;
 
     /**
      * Constant for Tevet, the 4th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int TEVET = 3;
 
     /**
      * Constant for Shevat, the 5th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int SHEVAT = 4;
 
@@ -105,49 +108,49 @@ public class HebrewCalendar extends Calendar {
      * Constant for Adar I, the 6th month of the Hebrew year
      * (present in leap years only). In non-leap years, the calendar
      * jumps from Shevat (5th month) to Adar (7th month).
-     * @internal
+     * @draft ICU 2.4
      */
     public static final int ADAR_1 = 5;
 
     /** 
      * Constant for the Adar, the 7th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int ADAR = 6;
 
     /**
      * Constant for Nisan, the 8th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int NISAN = 7;
 
     /**
      * Constant for Iyar, the 9th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int IYAR = 8;
 
     /**
      * Constant for Sivan, the 10th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int SIVAN = 9;
 
     /**
      * Constant for Tammuz, the 11th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int TAMUZ = 10;
 
     /**
      * Constant for Av, the 12th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int AV = 11;
 
     /**
      * Constant for Elul, the 13th month of the Hebrew year. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     public static final int ELUL = 12;
 
@@ -267,7 +270,7 @@ public class HebrewCalendar extends Calendar {
     /**
      * Constructs a default <code>HebrewCalendar</code> using the current time
      * in the default time zone with the default locale.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar() {
         this(TimeZone.getDefault(), Locale.getDefault());
@@ -278,7 +281,7 @@ public class HebrewCalendar extends Calendar {
      * in the given time zone with the default locale.
      *
      * @param zone The time zone for the new calendar.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar(TimeZone zone) {
         this(zone, Locale.getDefault());
@@ -289,7 +292,7 @@ public class HebrewCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param aLocale The locale for the new calendar.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar(Locale aLocale) {
         this(TimeZone.getDefault(), aLocale);
@@ -302,7 +305,7 @@ public class HebrewCalendar extends Calendar {
      * @param zone The time zone for the new calendar.
      *
      * @param aLocale The locale for the new calendar.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
@@ -319,7 +322,7 @@ public class HebrewCalendar extends Calendar {
      *                  The value is 0-based. e.g., 0 for Tishri.
      *
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar(int year, int month, int date) {
         super(TimeZone.getDefault(), Locale.getDefault());
@@ -333,7 +336,7 @@ public class HebrewCalendar extends Calendar {
      * in the default time zone with the default locale.
      *
      * @param date      The date to which the new calendar is set.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar(Date date) {
         super(TimeZone.getDefault(), Locale.getDefault());
@@ -356,7 +359,7 @@ public class HebrewCalendar extends Calendar {
      * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
      *
      * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
-     * @internal
+     * @draft ICU 2.4
      */
     public HebrewCalendar(int year, int month, int date, int hour,
                              int minute, int second)
@@ -402,7 +405,7 @@ public class HebrewCalendar extends Calendar {
      *
      * @exception   IllegalArgumentException if the field is invalid or refers
      *              to a field that cannot be handled by this method.
-     * @internal
+     * @draft ICU 2.4
      */
     public void add(int field, int amount)
     {
@@ -488,7 +491,7 @@ public class HebrewCalendar extends Calendar {
      *
      * @exception   IllegalArgumentException if the field is invalid or refers
      *              to a field that cannot be handled by this method.
-     * @internal
+     * @draft ICU 2.4
      */
     public void roll(int field, int amount)
     {
@@ -662,7 +665,7 @@ public class HebrewCalendar extends Calendar {
     //-------------------------------------------------------------------------
 
     /**
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
@@ -670,7 +673,7 @@ public class HebrewCalendar extends Calendar {
 
     /**
      * Returns the length of the given month in the given year
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
 
@@ -688,7 +691,7 @@ public class HebrewCalendar extends Calendar {
 
     /**
      * Returns the number of days in the given Hebrew year
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleGetYearLength(int eyear) {
         return (int)(startOfYear(eyear+1) - startOfYear(eyear));
@@ -717,7 +720,7 @@ public class HebrewCalendar extends Calendar {
      * <p>In addition, subclasses should compute any subclass-specific
      * fields, that is, fields from BASE_FIELD_COUNT to
      * getFieldCount() - 1.
-     * @internal
+     * @draft ICU 2.4
      */
     protected void handleComputeFields(int julianDay) {
         long d = julianDay - 347997;
@@ -757,7 +760,7 @@ public class HebrewCalendar extends Calendar {
     //-------------------------------------------------------------------------
 
     /**
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleGetExtendedYear() {
         int year;
@@ -771,7 +774,7 @@ public class HebrewCalendar extends Calendar {
 
     /**
      * Return JD of start of given month/year.
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
