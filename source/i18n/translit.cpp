@@ -957,7 +957,7 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
     UErrorCode ec = U_ZERO_ERROR;
     TransliteratorAlias* alias = 0;
     Transliterator* t = 0;
-    
+
     umtx_init(&registryMutex);
     umtx_lock(&registryMutex);
     if (HAVE_REGISTRY) {
@@ -968,17 +968,47 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
     if (U_FAILURE(ec)) {
         delete t;
         delete alias;
-        return NULL;
+        return 0;
     }
 
-    if (alias != 0) {
-        // Instantiate an alias
+    // We may have not gotten a transliterator:  Because we can't
+    // instantiate a transliterator from inside TransliteratorRegistry::
+    // get() (that would deadlock), we sometimes pass back an alias.  This
+    // contains the data we need to finish the instantiation outside the
+    // registry mutex.  The alias may, in turn, generate another alias, so
+    // we handle aliases in a loop.  The max times through the loop is two.
+    // [alan]
+    while (alias != 0) {
         U_ASSERT(t==0);
-        t = alias->create(pe, ec);
-        delete alias;
+        // Rule-based aliases are handled with TransliteratorAlias::
+        // parse(), followed by TransliteratorRegistry::reget().
+        // Other aliases are handled with TransliteratorAlias::create().
+        if (alias->isRuleBased()) {
+            // Step 1. parse
+            TransliteratorParser parser;
+            alias->parse(parser, pe, ec);
+            delete alias;
+            alias = 0;
+
+            // Step 2. reget
+            umtx_lock(&registryMutex);
+            if (HAVE_REGISTRY) {
+                t = registry->reget(id, parser, alias, pe, ec);
+            }
+            umtx_unlock(&registryMutex);
+
+            // Step 3. Loop back around!
+        } else {
+            t = alias->create(pe, ec);
+            delete alias;
+            alias = 0;
+            break;
+        }
         if (U_FAILURE(ec)) {
             delete t;
+            delete alias;
             t = NULL;
+            break;
         }
     }
 
