@@ -50,6 +50,7 @@ static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
 static void TestNumericProperties(void);
 static void TestPropertyNames(void);
+static void TestPropertyValues(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -135,6 +136,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
     addTest(root, &TestUScriptRunAPI, "tsutil/cucdtst/TestUScriptRunAPI");
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
+    addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
 }
 
 /*==================================================== */
@@ -2098,7 +2100,7 @@ TestAdditionalProperties() {
     if( u_getIntPropertyMinValue(UCHAR_DASH)!=0 ||
         u_getIntPropertyMinValue(UCHAR_BIDI_CLASS)!=0 ||
         u_getIntPropertyMinValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_INVALID_CODE ||
-        u_getIntPropertyMinValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_INVALID_CODE ||
+        u_getIntPropertyMinValue(UCHAR_SCRIPT)!=0 || /*JB#2410*/
         u_getIntPropertyMinValue(0x2345)!=0
     ) {
         log_err("error: u_getIntPropertyMinValue() wrong\n");
@@ -2111,7 +2113,7 @@ TestAdditionalProperties() {
         u_getIntPropertyMaxValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_COUNT-1 ||
         u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1 ||
         u_getIntPropertyMaxValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_CODE_LIMIT-1 ||
-        u_getIntPropertyMaxValue(0x2345)!=0
+        u_getIntPropertyMaxValue(0x2345)!=-1 /*JB#2410*/
     ) {
         log_err("error: u_getIntPropertyMaxValue() wrong\n");
     }
@@ -2310,6 +2312,63 @@ TestPropertyNames(void) {
             } else if (p>=UCHAR_BINARY_LIMIT) {
                 p = UCHAR_INT_START - 1;
             }
+        }
+    }
+}
+
+/**
+ * Test the property values API.  See JB#2410.
+ */
+static void
+TestPropertyValues(void) {
+    int32_t i, p, min, max;
+    UErrorCode ec;
+
+    /* Min should be 0 for everything. */
+    /* Until JB#2478 is fixed, the one exception is UCHAR_BLOCK. */
+    for (p=UCHAR_INT_START; p<UCHAR_INT_LIMIT; ++p) {
+        min = u_getIntPropertyMinValue(p);
+        if (min != 0) {
+            if (p == UCHAR_BLOCK) {
+                /* This is okay...for now.  See JB#2487.
+                   TODO Update this for JB#2487. */
+            } else {
+                const char* name;
+                name = u_getPropertyName(p, U_LONG_PROPERTY_NAME);
+                if (name == NULL) name = "<ERROR>";
+                log_err("FAIL: u_getIntPropertyMinValue(%s) = %d, exp. 0\n",
+                        name, min);
+            }
+        }
+    }
+
+    /* Max should be -1 for invalid properties. */
+    max = u_getIntPropertyMaxValue(-1);
+    if (max != -1) {
+        log_err("FAIL: u_getIntPropertyMaxValue(-1) = %d, exp. -1\n",
+                max);
+    }
+
+    /* Script should return 0 for an invalid code point. */
+    for (i=0; i<2; ++i) {
+        int32_t script;
+        const char* desc;
+        ec = U_ZERO_ERROR;
+        switch (i) {
+        case 0:
+            script = uscript_getScript(-1, &ec);
+            desc = "uscript_getScript(-1)";
+            break;
+        case 1:
+            script = u_getIntPropertyValue(-1, UCHAR_SCRIPT);
+            desc = "u_getIntPropertyValue(-1, UCHAR_SCRIPT)";
+            break;
+        }
+        /* We don't explicitly test ec.  It should be U_FAILURE but it
+           isn't documented as such. */
+        if (script != 0) {
+            log_err("FAIL: %s = %d, exp. 0\n",
+                    desc, script);
         }
     }
 }

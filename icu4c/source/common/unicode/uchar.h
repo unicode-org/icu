@@ -1445,7 +1445,6 @@ u_getIntPropertyValue(UChar32 c, UProperty which);
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
  *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
  * @return Minimum value returned by u_getIntPropertyValue for a Unicode property.
- *         Can be negative.
  *         0 if the property selector is out of range.
  *
  * @see UProperty
@@ -1469,13 +1468,13 @@ u_getIntPropertyMinValue(UProperty which);
  * - UCHAR_SCRIPT:       -1/45 (USCRIPT_INVALID_CODE/USCRIPT_TAGBANWA)
  * - UCHAR_IDEOGRAPHIC:   0/1  (FALSE/TRUE)
  *
- * For undefined UProperty constant values, both min/max values will be 0.
+ * For undefined UProperty constant values, min/max values will be 0/-1.
 
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
  *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
  * @return Maximum value returned by u_getIntPropertyValue for a Unicode property.
- *         0 if the property selector is out of range.
+ *         <=0 if the property selector is out of range.
  *
  * @see UProperty
  * @see u_hasBinaryProperty
