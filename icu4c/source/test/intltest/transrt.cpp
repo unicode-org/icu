@@ -76,7 +76,7 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 // Time bomb - allows temporary behavior that expires at a given
 //             release
 //--------------------------------------------------------------------
-
+/*
 static const UVersionInfo ICU_30 = {3,0,0,0};
 
 static UBool isICUVersionAtLeast(const UVersionInfo x) {
@@ -84,6 +84,7 @@ static UBool isICUVersionAtLeast(const UVersionInfo x) {
     u_getVersion(v);
     return (uprv_memcmp(v, x, U_MAX_VERSION_LENGTH) >= 0);
 }
+*/
 
 //--------------------------------------------------------------------
 // TransliteratorPointer
