@@ -106,6 +106,8 @@ void TestConvert()
     const UChar* tmp_consumedUni=NULL;
     const char* tmp_mytarget_use;
     const char* tmp_consumed; 
+
+	int flushCount = 0;
     
     /******************************************************************
                                 Checking Unicode -> ksc
@@ -204,7 +206,7 @@ void TestConvert()
     void* oldToUContext = NULL;
 
     /* flush the converter cache to get a consistent state before the flushing is tested */
-    ucnv_flushCache();
+    flushCount = ucnv_flushCache();
 
     /*Calling all the UnicodeConverterCPP API and checking functionality*/
   
@@ -374,31 +376,32 @@ void TestConvert()
     }
 
     /*Testing ucnv_open()*/
+	/* Note: These converters have been chosen because they do NOT
+	   encode the Latin characters (U+0041, ...), and therefore are
+	   highly unlikely to be chosen as system default codepages */
 
-    someConverters[0] = ucnv_open("ibm-949", &err);
+    someConverters[0] = ucnv_open("ibm-1038", &err);
     if (U_FAILURE(err)) { log_err("FAILURE!  %s\n", myErrorName(err)); }
     
-    someConverters[1] = ucnv_open("ibm-949", &err);
+    someConverters[1] = ucnv_open("ibm-1038", &err);
     if (U_FAILURE(err)) { log_err("FAILURE!  %s\n", myErrorName(err)); }
     
-    someConverters[2] = ucnv_open("ibm-949", &err);
+    someConverters[2] = ucnv_open("ibm-1038", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
     
     someConverters[3] = ucnv_open("ibm-834", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
     
-    someConverters[4] = ucnv_open("ibm-943", &err);
+    someConverters[4] = ucnv_open("ibm-941", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err));}
-
-    
 
     
     /* Testing ucnv_flushCache() */
     log_verbose("\n---Testing ucnv_flushCache...\n");
-        if (ucnv_flushCache()==0)
+        if ((flushCount=ucnv_flushCache())==0)
         log_verbose("Flush cache ok\n");
     else 
-        log_err("Flush Cache failed\n");
+        log_err("Flush Cache failed [line %d], expect 0 got %d \n", __LINE__, flushCount);
     
     /*testing ucnv_close() and ucnv_flushCache() */
      ucnv_close(someConverters[0]);
@@ -406,16 +409,18 @@ void TestConvert()
     ucnv_close(someConverters[2]);
     ucnv_close(someConverters[3]);
     
-        if (j=ucnv_flushCache()==2) 
+        if (j=(flushCount=ucnv_flushCache())==2) 
         log_verbose("Flush cache ok\n");  /*because first, second and third are same  */
     else 
-        log_err("Flush Cache failed or there is an error in ucnv_close()\n");
+        log_err("Flush Cache failed  line %d, got %d expected 2 or there is an error in ucnv_close()\n",
+			__LINE__,
+			flushCount);
     
     ucnv_close(someConverters[4]);
-    if (ucnv_flushCache()==1) 
+    if ( (flushCount=ucnv_flushCache())==1) 
         log_verbose("Flush cache ok\n");
     else 
-        log_err("Flush Cache failed\n");
+        log_err("Flush Cache failed line %d, expected 1 got %d \n", __LINE__, flushCount);
 
     /*Testing ucnv_openCCSID and ucnv_open with error conditions*/
     log_verbose("\n---Testing ucnv_open with err ! = U_ZERO_ERROR...\n");
