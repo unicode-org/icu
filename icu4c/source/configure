@@ -3088,10 +3088,11 @@ ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile \
-		common/Makefile config/Makefile i18n/Makefile \
+		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
+		tools/pkgdata/Makefile tools/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
@@ -3222,10 +3223,11 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile \
-		common/Makefile config/Makefile i18n/Makefile \
+		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
+		tools/pkgdata/Makefile tools/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
