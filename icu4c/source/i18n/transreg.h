@@ -41,17 +41,24 @@ class UnicodeString;
 class TransliteratorAlias : public UMemory {
  public:
     /**
-     * Construct a simple alias.
+     * Construct a simple alias (type == SIMPLE)
      * @param aliasID the given id.
      */
     TransliteratorAlias(const UnicodeString& aliasID);
     
     /**
-     * Construct a compound RBT alias.
+     * Construct a compound RBT alias (type == COMPOUND)
      */
     TransliteratorAlias(const UnicodeString& ID, const UnicodeString& idBlock,
                         Transliterator* adopted, int32_t idSplitPoint,
                         const UnicodeSet* compoundFilter);
+
+    /**
+     * Construct a rules alias (type = RULES)
+     */
+    TransliteratorAlias(const UnicodeString& theID,
+                        const UnicodeString& rules,
+                        UTransDirection dir);
 
     ~TransliteratorAlias();
     
@@ -59,11 +66,36 @@ class TransliteratorAlias : public UMemory {
      * The whole point of create() is that the caller must invoke
      * it when the registry mutex is NOT held, to prevent deadlock.
      * It may only be called once.
+     *
+     * Note: Only call create() if isRuleBased() returns FALSE.
+     *
+     * This method must be called *outside* of the TransliteratorRegistry
+     * mutex.
      */
     Transliterator* create(UParseError&, UErrorCode&);
+
+    /**
+     * Return TRUE if this alias is rule-based.  If so, the caller
+     * must call parse() on it, then call TransliteratorRegistry::reget().
+     */
+    UBool isRuleBased() const;
+
+    /**
+     * If isRuleBased() returns TRUE, then the caller must call this
+     * method, followed by TransliteratorRegistry::reget().  The latter
+     * method must be called inside the TransliteratorRegistry mutex.
+     *
+     * Note: Only call parse() if isRuleBased() returns TRUE.
+     *
+     * This method must be called *outside* of the TransliteratorRegistry
+     * mutex, because it can instantiate Transliterators embedded in
+     * the rules via the "&Latin-Arabic()" syntax.
+     */
+    void parse(TransliteratorParser& parser,
+               UParseError& pe, UErrorCode& ec) const;
     
  private:
-    // We actually come in two flavors:
+    // We actually come in three flavors:
     // 1. Simple alias
     //    Here aliasID is the alias string.  Everything else is
     //    null, zero, empty.
@@ -72,11 +104,15 @@ class TransliteratorAlias : public UMemory {
     //    contained RBT, and idSplitPoint is the offet in aliasID
     //    where the contained RBT goes.  compoundFilter is the
     //    compound filter, and it is _not_ owned.
+    // 3. Rules
+    //    Here ID is the ID, aliasID is the rules string.
+    //    idSplitPoint is the UTransDirection.
     UnicodeString ID;
-    UnicodeString aliasID;
+    UnicodeString aliasID; // rename! holds rules for RULES type
     Transliterator* trans; // owned
     const UnicodeSet* compoundFilter; // alias
-    int32_t idSplitPoint;
+    int32_t idSplitPoint; // rename! holds UTransDirection for RULES type
+    enum { SIMPLE, COMPOUND, RULES } type;
 
     TransliteratorAlias(const TransliteratorAlias &other); // forbid copying of this class
     TransliteratorAlias &operator=(const TransliteratorAlias &other); // forbid copying of this class
@@ -130,7 +166,8 @@ class TransliteratorRegistry : public UMemory {
      * filters or compounds, which we do not understand.  Caller should
      * make aliasReturn NULL before calling.
      * @param ID          the given ID
-     * @param aliasReturn the given TransliteratorAlias
+     * @param aliasReturn output param to receive TransliteratorAlias;
+     *                    should be NULL on entry
      * @param parseError  Struct to recieve information on position 
      *                    of error if an error is encountered
      * @param status      Output param set to success/failure code.
@@ -139,6 +176,27 @@ class TransliteratorRegistry : public UMemory {
                         TransliteratorAlias*& aliasReturn,
                         UParseError& parseError,
                         UErrorCode& status);
+
+    /**
+     * The caller must call this after calling get(), if [a] calling get()
+     * returns an alias, and [b] the alias is rule based.  In that
+     * situation the caller must call alias->parse() to do the parsing
+     * OUTSIDE THE REGISTRY MUTEX, then call this method to retry
+     * instantiating the transliterator.
+     *
+     * Note: Another alias might be returned by this method.
+     *
+     * This method (like all public methods of this class) must be called
+     * from within the TransliteratorRegistry mutex.
+     *
+     * @param aliasReturn output param to receive TransliteratorAlias;
+     *                    should be NULL on entry
+     */
+    Transliterator* reget(const UnicodeString& ID,
+                          TransliteratorParser& parser,
+                          TransliteratorAlias*& aliasReturn,
+                          UParseError& parseError,
+                          UErrorCode& status);
 
     /**
      * Register a prototype (adopted).  This adds an entry to the
@@ -326,7 +384,7 @@ class TransliteratorRegistry : public UMemory {
                        Entry* adopted,
                        UBool visible);
 
-   void registerEntry(const UnicodeString& ID,
+    void registerEntry(const UnicodeString& ID,
                        const UnicodeString& source,
                        const UnicodeString& target,
                        const UnicodeString& variant,
