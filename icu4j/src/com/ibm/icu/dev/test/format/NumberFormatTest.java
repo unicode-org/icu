@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/06/11 18:49:38 $ 
- * $Revision: 1.19 $
+ * $Date: 2003/10/29 00:20:05 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -24,6 +24,7 @@ import com.ibm.icu.util.*;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.text.ParseException;
 import java.util.Locale;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
@@ -173,6 +174,20 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Expected a'b123");
     }
     
+    public void TestParseCurrencyTrailingSymbol() {
+        // see sun bug 4709840
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+        float val = 12345.67f;
+        String str = fmt.format(val);
+        logln("val: " + val + " str: " + str);
+        try {
+            Number num = fmt.parse(str);
+            logln("num: " + num);
+        } catch (ParseException e) {
+            errln("parse of '" + str + "' threw exception: " + e);
+        }
+    }
+
     /**
      * Test the handling of the currency symbol in patterns.
      **/
@@ -732,6 +747,28 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!f5.format(n).equals(f2.format(n))) {
             errln("unregistered service did not match original");
         }
+    }
+
+    public void TestScientific2() {
+	// jb 2552
+	DecimalFormat fmt = (DecimalFormat)NumberFormat.getCurrencyInstance();
+	Number num = new Double(12.34);
+	expect(fmt, num, "$12.34");
+	fmt.setScientificNotation(true);
+	expect(fmt, num, "$1.23E1");
+	fmt.setScientificNotation(false);
+	expect(fmt, num, "$12.34");
+    }
+
+    public void TestScientificGrouping() {
+	// jb 2552
+	DecimalFormat fmt = new DecimalFormat("###.##E0");
+	expect(fmt, .01234, "12.3E-3");
+	expect(fmt, .1234, "123E-3");
+	expect(fmt, 1.234, "1.23E0");
+	expect(fmt, 12.34, "12.3E0");
+	expect(fmt, 123.4, "123E0");
+	expect(fmt, 1234, "1.23E3");
     }
 
     // additional coverage tests

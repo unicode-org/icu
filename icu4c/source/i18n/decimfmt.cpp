@@ -104,6 +104,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
 const int32_t DecimalFormat::kDoubleIntegerDigits  = 309;
 const int32_t DecimalFormat::kDoubleFractionDigits = 340;
 
+const int32_t DecimalFormat::kMaxScientificIntegerDigits = 8;
+
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
@@ -612,15 +614,12 @@ DecimalFormat::format(int32_t number,
                               || number < (INT32_MIN / fMultiplier))))
     {
         digits.set(((double)number) * fMultiplier,
-                   fUseExponentialNotation ?
-                            getMinimumIntegerDigits() + getMaximumFractionDigits() : 0,
+			precision(FALSE),
                    !fUseExponentialNotation);
     }
     else
     {
-        digits.set(number * fMultiplier,
-                   fUseExponentialNotation ?
-                            getMinimumIntegerDigits() + getMaximumFractionDigits() : 0);
+        digits.set(number * fMultiplier, precision(TRUE));
     }
 
     return subformat(appendTo, fieldPosition, digits, TRUE);
@@ -704,9 +703,7 @@ DecimalFormat::format(  double number,
     DigitList digits;
 
     // This detects negativity too.
-    digits.set(number, fUseExponentialNotation ?
-                             getMinimumIntegerDigits() + getMaximumFractionDigits() :
-                             getMaximumFractionDigits(),
+    digits.set(number, precision(FALSE),
                              !fUseExponentialNotation);
 
     return subformat(appendTo, fieldPosition, digits, FALSE);
@@ -802,6 +799,15 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     }
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t minIntDig = getMinimumIntegerDigits();
+    if (fUseExponentialNotation && maxIntDig > kMaxScientificIntegerDigits) {
+        maxIntDig = 1;
+	    if (maxIntDig < minIntDig) {
+		    maxIntDig = minIntDig;
+	    }
+    }
+    if (fUseExponentialNotation && maxIntDig > minIntDig) {
+        minIntDig = 1;
+    }
 
     /* Per bug 4147706, DecimalFormat must respect the sign of numbers which
      * format as zero.  This allows sensible computations and preserves
@@ -926,8 +932,14 @@ DecimalFormat::subformat(UnicodeString& appendTo,
 
         DigitList expDigits;
         expDigits.set(exponent);
-        for (i=expDigits.fDecimalAt; i<fMinExponentDigits; ++i)
-            appendTo += (zero);
+		{
+            int expDig = fMinExponentDigits;
+            if (fUseExponentialNotation && expDig < 1) {
+                expDig = 1;
+            }
+            for (i=expDigits.fDecimalAt; i<expDig; ++i)
+                appendTo += (zero);
+		}
         for (i=0; i<expDigits.fDecimalAt; ++i)
         {
             UChar32 c = (UChar32)((i < expDigits.fCount) ?
@@ -2091,9 +2103,6 @@ UBool DecimalFormat::isScientificNotation() {
  */
 void DecimalFormat::setScientificNotation(UBool useScientific) {
     fUseExponentialNotation = useScientific;
-    if (fUseExponentialNotation && fMinExponentDigits < 1) {
-        fMinExponentDigits = 1;
-    }
 }
 
 /**
@@ -2619,9 +2628,15 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
         if (g > 0 && fGroupingSize2 > 0 && fGroupingSize2 != fGroupingSize) {
             g += fGroupingSize2;
         }
-        int32_t maxIntDig = fUseExponentialNotation ? getMaximumIntegerDigits() :
-          (uprv_max(uprv_max(g, getMinimumIntegerDigits()),
-                   roundingDecimalPos) + 1);
+        int maxIntDig = getMaximumIntegerDigits();
+        if (fUseExponentialNotation) {
+            if (maxIntDig > kMaxScientificIntegerDigits) {
+                maxIntDig = 1;
+            }
+        } else {
+            maxIntDig = uprv_max(uprv_max(g, getMinimumIntegerDigits()),
+                      roundingDecimalPos) + 1;
+        }
         for (i = maxIntDig; i > 0; --i) {
             if (!fUseExponentialNotation && i<maxIntDig &&
                 isGroupingPosition(i)) {
@@ -3461,6 +3476,13 @@ void DecimalFormat::setCurrency(const UChar* theCurrency) {
 
         expandAffixes();
     }
+}
+
+int32_t
+DecimalFormat::precision(UBool isIntegral) const {
+	return fUseExponentialNotation 
+	    ? getMinimumIntegerDigits() + getMaximumFractionDigits() 
+	    : (isIntegral ? 0 : getMaximumFractionDigits());
 }
 
 U_NAMESPACE_END
