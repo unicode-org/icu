@@ -8,7 +8,10 @@
 #
 #	12/10/1999	weiv	Created
 
-U_ICUDATA_NAME=icudt20
+##############################################################################
+# Keep the following in sync with the version - see common/unicode/uversion.h
+U_ICUDATA_NAME=icudt21
+##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=3.1.1
 
