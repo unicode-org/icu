@@ -28,6 +28,9 @@ struct TestNode
   struct TestNode* child;
 };
 
+
+static const struct TestNode* currentTest;
+
 typedef enum { RUNTESTS, SHOWTESTS } TestMode;
 #define TEST_SEPARATOR '/'
 
@@ -241,7 +244,9 @@ static void iterateTestsWithLevel ( const TestNode* root,
     if ( (mode == RUNTESTS) && (root->test != NULL))
     {
         int myERROR_COUNT = ERROR_COUNT;
+        currentTest = root;
         root->test();
+        currentTest = NULL;
         if (myERROR_COUNT != ERROR_COUNT)
         {
 
@@ -307,6 +312,15 @@ void runTests ( const TestNode *root )
         log_info("\n[All tests passed successfully...]\n");
     }
 
+}
+
+const char* getTestName(void)
+{
+  if(currentTest != NULL) {
+    return currentTest->name;
+  } else {
+    return NULL;
+  }
 }
 
 const TestNode* getTest(const TestNode* root, const char* name)
