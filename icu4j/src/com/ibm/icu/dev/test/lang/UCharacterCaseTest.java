@@ -311,6 +311,17 @@ public final class UCharacterCaseTest extends TestFmwk
                           hex(UCharacter.toTitleCase(test,
                                                      TITLE_BREAKITERATORS_[i])));
                 }
+                //cover toTitleCase(Locale, String, BreakIterator)
+                Locale def = Locale.getDefault();
+                String data = TITLE_DATA_[i << 1];
+                if (!expected.equals(
+                    UCharacter.toTitleCase(def, data,
+                                           TITLE_BREAKITERATORS_[i]))) {
+                    errln("error: titlecasing for " + hex(data) + " should be " +
+                          hex(expected) + " but got " +
+                          hex(UCharacter.toTitleCase(def, data,
+                                                     TITLE_BREAKITERATORS_[i])));
+                }                
             }
          }catch(Exception ex){
             warnln("Could not find data for BreakIterators");

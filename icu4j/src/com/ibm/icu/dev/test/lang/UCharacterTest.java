@@ -645,6 +645,14 @@ public final class UCharacterTest extends TestFmwk
                         " expected wrong direction " + dir);
                     break;
                 }
+                
+                byte bdir = (byte)dir;
+                if (UCharacter.getDirectionality(ch) != bdir)
+                {
+                    errln("FAIL \\u" + hex(ch) +
+                        " expected wrong directionality " + bdir);
+                    break;
+                }                
 
                 // testing iso comment
                 try{
@@ -2225,4 +2233,12 @@ public final class UCharacterTest extends TestFmwk
 
    } 
 
+    public void TestCoverage() {
+        //cover forDigit
+        char ch1 = UCharacter.forDigit(7, 11);
+        assertEquals("UCharacter.forDigit ", "7", String.valueOf(ch1));
+        char ch2 = UCharacter.forDigit(17, 20);
+        assertEquals("UCharacter.forDigit ", "h", String.valueOf(ch2));         
+    }
+    
 }

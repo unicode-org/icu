@@ -136,6 +136,14 @@ public final class UCharacterSurrogateTest extends TestFmwk {
         if (UCharacter.codePointBefore(c, i+1) != bvalues[i]) errln("chars before: " + i);
         if (UCharacter.codePointBefore(b, i+1) != bvalues[i]) errln("stringbuffer before: " + i);
     }
+    
+    //cover codePointAtBefore with limit
+    logln("Testing codePointAtBefore with limit ...");
+    for (int i = 0; i < avalues.length; ++i) {
+        if (UCharacter.codePointAt(c, i, 4) != avalues[i]) errln("chars at: " + i);
+        if (UCharacter.codePointBefore(c, i+1, 0) != bvalues[i]) errln("chars before: " + i);
+    }
+            
     }
 
     public void TestToChars() {
