@@ -2538,7 +2538,7 @@ RBBILineMonkey::RBBILineMonkey()
         "(\\p{Line_Break=PR}\\p{Line_Break=CM}*)?"
         "((\\p{Line_Break=OP}|\\p{Line_Break=HY})\\p{Line_Break=CM}*)?"
         "\\p{Line_Break=NU}\\p{Line_Break=CM}*"
-        "((\\p{Line_Break=NU}|\\p{Line_Break=IS})\\p{Line_Break=CM}*)*"
+        "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})\\p{Line_Break=CM}*)*"
         "(\\p{Line_Break=CL}\\p{Line_Break=CM}*)?"
         "(\\p{Line_Break=PO}\\p{Line_Break=CM}*)?", 
         0, status);
@@ -2799,7 +2799,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         if (!fNU->contains(prevChar) && fCL->contains(thisChar) ||
                                         fEX->contains(thisChar) ||
             !fNU->contains(prevChar) && fIS->contains(thisChar) ||
-                                        fSY->contains(thisChar))    {
+            !fNU->contains(prevChar) && fSY->contains(thisChar))    {
             continue;
         }
 
@@ -2910,6 +2910,14 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             }
         }
 
+        if (fPR->contains(prevChar) && fAL->contains(thisChar)) {
+            continue;
+        }
+
+        if (fPR->contains(prevChar) && fID->contains(thisChar)) {
+            continue;
+        }
+
         // LB 18b
         if (fHY->contains(prevChar) || fBB->contains(thisChar)) {
             break;
@@ -2917,6 +2925,11 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
         // LB 19
         if (fAL->contains(prevChar) && fAL->contains(thisChar)) {
+            continue;
+        }
+
+        // LB 19b
+        if (fIS->contains(prevChar) && fAL->contains(thisChar)) {
             continue;
         }
 
@@ -3238,6 +3251,7 @@ void RBBITest::TestLineBreaks(void)
     UChar         str[50]; 
     static const char *strlist[] = 
     {
+     "\\u0668\\u192b\\u002f\\u2034\\ufe39\\u00b4\\u0cc8\\u2571\\u200b\\u003f",
      "\\ufeff\\ufffc\\u3289\\u0085\\u2772\\u0020\\U000e010a\\u0020\\u2025\\u000a\\U000e0123",
      "\\ufe3c\\u201c\\u000d\\u2025\\u2007\\u201c\\u002d\\u20a0\\u002d\\u30a7\\u17a4",
      "\\u2772\\u0020\\U000e010a\\u0020\\u2025\\u000a\\U000e0123",
@@ -3317,7 +3331,7 @@ void RBBITest::TestSentBreaks(void)
     };
     int loop;
     int forward[100];
-    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
+	for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         u_unescape(strlist[loop], str, 100);
         UnicodeString ustr(str);
 
