@@ -185,6 +185,10 @@ SOURCE="$(InputPath)"
 
 SOURCE=.\gentest.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\genres32.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
