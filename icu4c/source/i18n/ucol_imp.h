@@ -48,9 +48,16 @@
  * udata header in front of the image and should be opened using udata_open.
  * Tailoring images are currently stored inside resource bundles and are intialized
  * through ucol_open API.
+ *
+ * The following describes the formats for collation binaries
+ * (UCA & tailorings) and for the inverse UCA table.
+ * Substructures are described in the collation design document at
+ * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
+ *
  * Here is the format of binary collation image.
+ *
  * int32_t size; - image size in bytes
-
+ *
  * Offsets to interesting data. All offsets are in bytes.
  * to get the address add to the header address and cast properly.
  * Offsets are in ascending order if non-zero. 
