@@ -2266,6 +2266,9 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
         }
     }
 
+    delete scratch;
+    scratch = NULL;
+
     if (mode != 2) {
         // syntaxError(chars, "Missing ']'");
         ec = U_MALFORMED_SET;
