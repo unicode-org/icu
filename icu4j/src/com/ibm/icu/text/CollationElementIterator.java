@@ -651,17 +651,6 @@ public final class CollationElementIterator
     { 
         return (ch >= 0xe40 && ch <= 0xe44) || (ch >= 0xec0 && ch <= 0xec4);
     }
-
-    /**
-     * Determine if a character is a Thai base consonant, which sorts before 
-     * its prevowel
-     * @param ch character to test
-     * @return true if ch is a Thai base consonant, false otherwise
-     */
-    static final boolean isThaiBaseConsonant(char ch)
-    {
-        return ch >= 0xe01 && ch <= 0xe2e;
-    }
     
     // private inner class --------------------------------------------------
     
@@ -2118,6 +2107,9 @@ public final class CollationElementIterator
         // using the current collation element iterator will mean that the 
         // forward and backwards iteration will share and change the same 
         // buffers. it is going to be painful. 
+        int originaldecomp = collator.getDecomposition();
+        // for faster access, since string would have been normalized above
+        collator.setDecomposition(Collator.NO_DECOMPOSITION); 
         CollationElementIterator temp = 
             new CollationElementIterator(buffer.toString(), collator);
         ce = temp.next();
@@ -2139,7 +2131,7 @@ public final class CollationElementIterator
             m_CEBuffer_[m_CEBufferSize_ ++] = ce;
             ce = temp.next();
         }
-            
+        collator.setDecomposition(originaldecomp);       
         m_CEBufferOffset_ = m_CEBufferSize_ - 1;
         return m_CEBuffer_[m_CEBufferOffset_];
     }
