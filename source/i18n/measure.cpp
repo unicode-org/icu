@@ -17,6 +17,8 @@
 
 U_NAMESPACE_BEGIN
 
+Measure::Measure() {}
+
 Measure::Measure(const Formattable& _number, MeasureUnit* adoptedUnit,
                  UErrorCode& ec) :
     number(_number), unit(adoptedUnit) {
