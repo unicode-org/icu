@@ -1,7 +1,7 @@
 ﻿#	NOTE: Since UCA handles canonical equivalents, no composites are necessary
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
-# VERSION: UCA=3.1.1d1, UCD=3.2.0
+# VERSION: UCA=3.1.1d2, UCD=3.2.0
 & [last tertiary ignorable]
 
     =	 '\u0001'
@@ -134,6 +134,7 @@
     =	 ⁭
     =	 ⁮
     =	 ⁯
+    =	 ���
     =	 ﻿
     =	 ￹
     =	 ￺
@@ -273,7 +274,6 @@
     =	 󠁽
     =	 󠁾
     =	 󠁿
-    =	 ���
 & [last primary ignorable]
   <<	 ̲
   <<	 ̓
@@ -9445,72 +9445,22 @@
    <<<	 𐐤
  <	 𐑍
    <<<	 𐐥
-& 一		# U+4E00 CJK UNIFIED IDEOGRAPH-4E00
-    =	 ⼀
-    =	 ㆒
-    =	 ㊀
-& 丁		# U+4E01 CJK UNIFIED IDEOGRAPH-4E01
-    =	 ㆜
-& 七		# U+4E03 CJK UNIFIED IDEOGRAPH-4E03
-    =	 ㊆
-& 三		# U+4E09 CJK UNIFIED IDEOGRAPH-4E09
-    =	 ㆔
-    =	 ㊂
-& 上		# U+4E0A CJK UNIFIED IDEOGRAPH-4E0A
-    =	 ㆖
-    =	 ㊤
-& 下		# U+4E0B CJK UNIFIED IDEOGRAPH-4E0B
-    =	 ㆘
-    =	 ㊦
-& 丙		# U+4E19 CJK UNIFIED IDEOGRAPH-4E19
-    =	 ㆛
-& 丨		# U+4E28 CJK UNIFIED IDEOGRAPH-4E28
-    =	 ⼁
 & 丬		# U+4E2C CJK UNIFIED IDEOGRAPH-4E2C
     =	 ⺦
-& 中		# U+4E2D CJK UNIFIED IDEOGRAPH-4E2D
-    =	 ㆗
-    =	 ㊥
-& 丶		# U+4E36 CJK UNIFIED IDEOGRAPH-4E36
-    =	 ⼂
 & 丸		# U+4E38 CJK UNIFIED IDEOGRAPH-4E38
     =	 丸
 & 丽		# U+4E3D CJK UNIFIED IDEOGRAPH-4E3D
     =	 丽
-& 丿		# U+4E3F CJK UNIFIED IDEOGRAPH-4E3F
-    =	 ⼃
 & 乁		# U+4E41 CJK UNIFIED IDEOGRAPH-4E41
     =	 乁
-& 乙		# U+4E59 CJK UNIFIED IDEOGRAPH-4E59
-    =	 ⼄
-    =	 ㆚
 & 乚		# U+4E5A CJK UNIFIED IDEOGRAPH-4E5A
     =	 ⺃
 & 乛		# U+4E5B CJK UNIFIED IDEOGRAPH-4E5B
     =	 ⺂
-& 九		# U+4E5D CJK UNIFIED IDEOGRAPH-4E5D
-    =	 ㊈
-& 亅		# U+4E85 CJK UNIFIED IDEOGRAPH-4E85
-    =	 ⼅
-& 二		# U+4E8C CJK UNIFIED IDEOGRAPH-4E8C
-    =	 ⼆
-    =	 ㆓
-    =	 ㊁
-& 五		# U+4E94 CJK UNIFIED IDEOGRAPH-4E94
-    =	 ㊄
-& 亠		# U+4EA0 CJK UNIFIED IDEOGRAPH-4EA0
-    =	 ⼇
-& 人		# U+4EBA CJK UNIFIED IDEOGRAPH-4EBA
-    =	 ⼈
-    =	 ㆟
 & 亻		# U+4EBB CJK UNIFIED IDEOGRAPH-4EBB
     =	 ⺅
 & 仌		# U+4ECC CJK UNIFIED IDEOGRAPH-4ECC
     =	 仌
-& 企		# U+4F01 CJK UNIFIED IDEOGRAPH-4F01
-    =	 ㊭
-& 休		# U+4F11 CJK UNIFIED IDEOGRAPH-4F11
-    =	 ㊡
 & 你		# U+4F60 CJK UNIFIED IDEOGRAPH-4F60
     =	 你
 & 侮		# U+4FAE CJK UNIFIED IDEOGRAPH-4FAE
@@ -9527,56 +9477,32 @@
     =	 像
 & 僧		# U+50E7 CJK UNIFIED IDEOGRAPH-50E7
     =	 僧
-& 優		# U+512A CJK UNIFIED IDEOGRAPH-512A
-    =	 ㊝
-& 儿		# U+513F CJK UNIFIED IDEOGRAPH-513F
-    =	 ⼉
 & 免		# U+514D CJK UNIFIED IDEOGRAPH-514D
     =	 免
 & 兔		# U+5154 CJK UNIFIED IDEOGRAPH-5154
     =	 兔
 & 兤		# U+5164 CJK UNIFIED IDEOGRAPH-5164
     =	 兤
-& 入		# U+5165 CJK UNIFIED IDEOGRAPH-5165
-    =	 ⼊
 & 內		# U+5167 CJK UNIFIED IDEOGRAPH-5167
     =	 內
-& 八		# U+516B CJK UNIFIED IDEOGRAPH-516B
-    =	 ⼋
-    =	 ㊇
-& 六		# U+516D CJK UNIFIED IDEOGRAPH-516D
-    =	 ㊅
 & 具		# U+5177 CJK UNIFIED IDEOGRAPH-5177
     =	 具
-& 冂		# U+5182 CJK UNIFIED IDEOGRAPH-5182
-    =	 ⼌
 & 再		# U+518D CJK UNIFIED IDEOGRAPH-518D
     =	 再
 & 冒		# U+5192 CJK UNIFIED IDEOGRAPH-5192
     =	 冒
 & 冕		# U+5195 CJK UNIFIED IDEOGRAPH-5195
     =	 冕
-& 冖		# U+5196 CJK UNIFIED IDEOGRAPH-5196
-    =	 ⼍
 & 冗		# U+5197 CJK UNIFIED IDEOGRAPH-5197
     =	 冗
-& 写		# U+5199 CJK UNIFIED IDEOGRAPH-5199
-    =	 ㊢
 & 冤		# U+51A4 CJK UNIFIED IDEOGRAPH-51A4
     =	 冤
-& 冫		# U+51AB CJK UNIFIED IDEOGRAPH-51AB
-    =	 ⼎
 & 冬		# U+51AC CJK UNIFIED IDEOGRAPH-51AC
     =	 冬
 & 况		# U+51B5 CJK UNIFIED IDEOGRAPH-51B5
     =	 况
-& 几		# U+51E0 CJK UNIFIED IDEOGRAPH-51E0
-    =	 ⼏
 & 凵		# U+51F5 CJK UNIFIED IDEOGRAPH-51F5
-    =	 ⼐
     =	 凵
-& 刀		# U+5200 CJK UNIFIED IDEOGRAPH-5200
-    =	 ⼑
 & 刂		# U+5202 CJK UNIFIED IDEOGRAPH-5202
     =	 ⺉
 & 刃		# U+5203 CJK UNIFIED IDEOGRAPH-5203
@@ -9591,58 +9517,28 @@
     =	 割
 & 剷		# U+5277 CJK UNIFIED IDEOGRAPH-5277
     =	 剷
-& 力		# U+529B CJK UNIFIED IDEOGRAPH-529B
-    =	 ⼒
 & 劳		# U+52B3 CJK UNIFIED IDEOGRAPH-52B3
     =	 劳
-& 労		# U+52B4 CJK UNIFIED IDEOGRAPH-52B4
-    =	 ㊘
 & 勇		# U+52C7 CJK UNIFIED IDEOGRAPH-52C7
     =	 勇
 & 勉		# U+52C9 CJK UNIFIED IDEOGRAPH-52C9
     =	 勉
 & 勤		# U+52E4 CJK UNIFIED IDEOGRAPH-52E4
     =	 勤
-& 勹		# U+52F9 CJK UNIFIED IDEOGRAPH-52F9
-    =	 ⼓
 & 勺		# U+52FA CJK UNIFIED IDEOGRAPH-52FA
     =	 勺
 & 包		# U+5305 CJK UNIFIED IDEOGRAPH-5305
     =	 包
 & 匆		# U+5306 CJK UNIFIED IDEOGRAPH-5306
     =	 匆
-& 匕		# U+5315 CJK UNIFIED IDEOGRAPH-5315
-    =	 ⼔
 & 北		# U+5317 CJK UNIFIED IDEOGRAPH-5317
     =	 北
-& 匚		# U+531A CJK UNIFIED IDEOGRAPH-531A
-    =	 ⼕
-& 匸		# U+5338 CJK UNIFIED IDEOGRAPH-5338
-    =	 ⼖
-& 医		# U+533B CJK UNIFIED IDEOGRAPH-533B
-    =	 ㊩
-& 十		# U+5341 CJK UNIFIED IDEOGRAPH-5341
-    =	 ⼗
-    =	 〸
-    =	 ㊉
-& 卄		# U+5344 CJK UNIFIED IDEOGRAPH-5344
-    =	 〹
-& 卅		# U+5345 CJK UNIFIED IDEOGRAPH-5345
-    =	 〺
 & 卉		# U+5349 CJK UNIFIED IDEOGRAPH-5349
     =	 卉
 & 卑		# U+5351 CJK UNIFIED IDEOGRAPH-5351
     =	 卑
-& 協		# U+5354 CJK UNIFIED IDEOGRAPH-5354
-    =	 ㊯
 & 博		# U+535A CJK UNIFIED IDEOGRAPH-535A
     =	 博
-& 卜		# U+535C CJK UNIFIED IDEOGRAPH-535C
-    =	 ⼘
-& 卩		# U+5369 CJK UNIFIED IDEOGRAPH-5369
-    =	 ⼙
-& 印		# U+5370 CJK UNIFIED IDEOGRAPH-5370
-    =	 ㊞
 & 即		# U+5373 CJK UNIFIED IDEOGRAPH-5373
     =	 即
 & 卽		# U+537D CJK UNIFIED IDEOGRAPH-537D
@@ -9651,28 +9547,16 @@
     =	 卿
     =	 卿
     =	 卿
-& 厂		# U+5382 CJK UNIFIED IDEOGRAPH-5382
-    =	 ⼚
-& 厶		# U+53B6 CJK UNIFIED IDEOGRAPH-53B6
-    =	 ⼛
-& 又		# U+53C8 CJK UNIFIED IDEOGRAPH-53C8
-    =	 ⼜
 & 及		# U+53CA CJK UNIFIED IDEOGRAPH-53CA
     =	 及
 & 叟		# U+53DF CJK UNIFIED IDEOGRAPH-53DF
     =	 叟
-& 口		# U+53E3 CJK UNIFIED IDEOGRAPH-53E3
-    =	 ⼝
 & 叫		# U+53EB CJK UNIFIED IDEOGRAPH-53EB
     =	 叫
 & 叱		# U+53F1 CJK UNIFIED IDEOGRAPH-53F1
     =	 叱
-& 右		# U+53F3 CJK UNIFIED IDEOGRAPH-53F3
-    =	 ㊨
 & 吆		# U+5406 CJK UNIFIED IDEOGRAPH-5406
     =	 吆
-& 名		# U+540D CJK UNIFIED IDEOGRAPH-540D
-    =	 ㊔
 & 吸		# U+5438 CJK UNIFIED IDEOGRAPH-5438
     =	 吸
 & 呈		# U+5448 CJK UNIFIED IDEOGRAPH-5448
@@ -9708,20 +9592,10 @@
     =	 噑
 & 噴		# U+5674 CJK UNIFIED IDEOGRAPH-5674
     =	 噴
-& 囗		# U+56D7 CJK UNIFIED IDEOGRAPH-56D7
-    =	 ⼞
-& 四		# U+56DB CJK UNIFIED IDEOGRAPH-56DB
-    =	 ㆕
-    =	 ㊃
 & 圖		# U+5716 CJK UNIFIED IDEOGRAPH-5716
     =	 圖
 & 圗		# U+5717 CJK UNIFIED IDEOGRAPH-5717
     =	 圗
-& 土		# U+571F CJK UNIFIED IDEOGRAPH-571F
-    =	 ⼟
-    =	 ㊏
-& 地		# U+5730 CJK UNIFIED IDEOGRAPH-5730
-    =	 ㆞
 & 型		# U+578B CJK UNIFIED IDEOGRAPH-578B
     =	 型
 & 城		# U+57CE CJK UNIFIED IDEOGRAPH-57CE
@@ -9736,37 +9610,20 @@
     =	 堲
 & 墬		# U+58AC CJK UNIFIED IDEOGRAPH-58AC
     =	 墬
-& 士		# U+58EB CJK UNIFIED IDEOGRAPH-58EB
-    =	 ⼠
 & 壮		# U+58EE CJK UNIFIED IDEOGRAPH-58EE
     =	 壮
 & 売		# U+58F2 CJK UNIFIED IDEOGRAPH-58F2
     =	 売
 & 壷		# U+58F7 CJK UNIFIED IDEOGRAPH-58F7
     =	 壷
-& 夂		# U+5902 CJK UNIFIED IDEOGRAPH-5902
-    =	 ⼡
 & 夆		# U+5906 CJK UNIFIED IDEOGRAPH-5906
     =	 夆
-& 夊		# U+590A CJK UNIFIED IDEOGRAPH-590A
-    =	 ⼢
-& 夕		# U+5915 CJK UNIFIED IDEOGRAPH-5915
-    =	 ⼣
 & 多		# U+591A CJK UNIFIED IDEOGRAPH-591A
     =	 多
-& 夜		# U+591C CJK UNIFIED IDEOGRAPH-591C
-    =	 ㊰
 & 夢		# U+5922 CJK UNIFIED IDEOGRAPH-5922
     =	 夢
-& 大		# U+5927 CJK UNIFIED IDEOGRAPH-5927
-    =	 ⼤
-& 天		# U+5929 CJK UNIFIED IDEOGRAPH-5929
-    =	 ㆝
 & 奢		# U+5962 CJK UNIFIED IDEOGRAPH-5962
     =	 奢
-& 女		# U+5973 CJK UNIFIED IDEOGRAPH-5973
-    =	 ⼥
-    =	 ㊛
 & 姘		# U+59D8 CJK UNIFIED IDEOGRAPH-59D8
     =	 姘
 & 姬		# U+59EC CJK UNIFIED IDEOGRAPH-59EC
@@ -9784,14 +9641,6 @@
 & 嬾		# U+5B3E CJK UNIFIED IDEOGRAPH-5B3E
     =	 嬾
     =	 嬾
-& 子		# U+5B50 CJK UNIFIED IDEOGRAPH-5B50
-    =	 ⼦
-& 学		# U+5B66 CJK UNIFIED IDEOGRAPH-5B66
-    =	 ㊫
-& 宀		# U+5B80 CJK UNIFIED IDEOGRAPH-5B80
-    =	 ⼧
-& 宗		# U+5B97 CJK UNIFIED IDEOGRAPH-5B97
-    =	 ㊪
 & 寃		# U+5BC3 CJK UNIFIED IDEOGRAPH-5BC3
     =	 寃
 & 寘		# U+5BD8 CJK UNIFIED IDEOGRAPH-5BD8
@@ -9800,29 +9649,19 @@
     =	 寧
 & 寳		# U+5BF3 CJK UNIFIED IDEOGRAPH-5BF3
     =	 寳
-& 寸		# U+5BF8 CJK UNIFIED IDEOGRAPH-5BF8
-    =	 ⼨
 & 寿		# U+5BFF CJK UNIFIED IDEOGRAPH-5BFF
     =	 寿
 & 将		# U+5C06 CJK UNIFIED IDEOGRAPH-5C06
     =	 将
-& 小		# U+5C0F CJK UNIFIED IDEOGRAPH-5C0F
-    =	 ⼩
 & 尢		# U+5C22 CJK UNIFIED IDEOGRAPH-5C22
     =	 ⺐
-    =	 ⼪
     =	 尢
 & 尣		# U+5C23 CJK UNIFIED IDEOGRAPH-5C23
     =	 ⺏
-& 尸		# U+5C38 CJK UNIFIED IDEOGRAPH-5C38
-    =	 ⼫
 & 屠		# U+5C60 CJK UNIFIED IDEOGRAPH-5C60
     =	 屠
 & 屮		# U+5C6E CJK UNIFIED IDEOGRAPH-5C6E
-    =	 ⼬
     =	 屮
-& 山		# U+5C71 CJK UNIFIED IDEOGRAPH-5C71
-    =	 ⼭
 & 岍		# U+5C8D CJK UNIFIED IDEOGRAPH-5C8D
     =	 岍
 & 峀		# U+5CC0 CJK UNIFIED IDEOGRAPH-5CC0
@@ -9837,37 +9676,22 @@
     =	 嵼
 & 嶲		# U+5DB2 CJK UNIFIED IDEOGRAPH-5DB2
     =	 嶲
-& 巛		# U+5DDB CJK UNIFIED IDEOGRAPH-5DDB
-    =	 ⼮
 & 巡		# U+5DE1 CJK UNIFIED IDEOGRAPH-5DE1
     =	 巡
 & 巢		# U+5DE2 CJK UNIFIED IDEOGRAPH-5DE2
     =	 巢
-& 工		# U+5DE5 CJK UNIFIED IDEOGRAPH-5DE5
-    =	 ⼯
-& 左		# U+5DE6 CJK UNIFIED IDEOGRAPH-5DE6
-    =	 ㊧
-& 己		# U+5DF1 CJK UNIFIED IDEOGRAPH-5DF1
-    =	 ⼰
 & 巳		# U+5DF3 CJK UNIFIED IDEOGRAPH-5DF3
     =	 ⺒
 & 巽		# U+5DFD CJK UNIFIED IDEOGRAPH-5DFD
     =	 巽
-& 巾		# U+5DFE CJK UNIFIED IDEOGRAPH-5DFE
-    =	 ⼱
 & 帨		# U+5E28 CJK UNIFIED IDEOGRAPH-5E28
     =	 帨
 & 帽		# U+5E3D CJK UNIFIED IDEOGRAPH-5E3D
     =	 帽
 & 幩		# U+5E69 CJK UNIFIED IDEOGRAPH-5E69
     =	 幩
-& 干		# U+5E72 CJK UNIFIED IDEOGRAPH-5E72
-    =	 ⼲
 & 幺		# U+5E7A CJK UNIFIED IDEOGRAPH-5E7A
     =	 ⺓
-    =	 ⼳
-& 广		# U+5E7F CJK UNIFIED IDEOGRAPH-5E7F
-    =	 ⼴
 & 庰		# U+5EB0 CJK UNIFIED IDEOGRAPH-5EB0
     =	 庰
 & 庳		# U+5EB3 CJK UNIFIED IDEOGRAPH-5EB3
@@ -9876,36 +9700,21 @@
     =	 庶
 & 廊		# U+5ECA CJK UNIFIED IDEOGRAPH-5ECA
     =	 廊
-& 廴		# U+5EF4 CJK UNIFIED IDEOGRAPH-5EF4
-    =	 ⼵
 & 廾		# U+5EFE CJK UNIFIED IDEOGRAPH-5EFE
-    =	 ⼶
     =	 廾
-& 弋		# U+5F0B CJK UNIFIED IDEOGRAPH-5F0B
-    =	 ⼷
-& 弓		# U+5F13 CJK UNIFIED IDEOGRAPH-5F13
-    =	 ⼸
 & 弢		# U+5F22 CJK UNIFIED IDEOGRAPH-5F22
     =	 弢
     =	 弢
 & 弳		# U+5F33 CJK UNIFIED IDEOGRAPH-5F33
     =	 弳
-& 彐		# U+5F50 CJK UNIFIED IDEOGRAPH-5F50
-    =	 ⼹
 & 彑		# U+5F51 CJK UNIFIED IDEOGRAPH-5F51
     =	 ⺔
-& 彡		# U+5F61 CJK UNIFIED IDEOGRAPH-5F61
-    =	 ⼺
 & 形		# U+5F62 CJK UNIFIED IDEOGRAPH-5F62
     =	 形
 & 彫		# U+5F6B CJK UNIFIED IDEOGRAPH-5F6B
     =	 彫
-& 彳		# U+5F73 CJK UNIFIED IDEOGRAPH-5F73
-    =	 ⼻
 & 徚		# U+5F9A CJK UNIFIED IDEOGRAPH-5F9A
     =	 徚
-& 心		# U+5FC3 CJK UNIFIED IDEOGRAPH-5FC3
-    =	 ⼼
 & 忄		# U+5FC4 CJK UNIFIED IDEOGRAPH-5FC4
     =	 ⺖
 & 忍		# U+5FCD CJK UNIFIED IDEOGRAPH-5FCD
@@ -9943,16 +9752,10 @@
     =	 懲
 & 懶		# U+61F6 CJK UNIFIED IDEOGRAPH-61F6
     =	 懶
-& 戈		# U+6208 CJK UNIFIED IDEOGRAPH-6208
-    =	 ⼽
 & 成		# U+6210 CJK UNIFIED IDEOGRAPH-6210
     =	 成
 & 戛		# U+621B CJK UNIFIED IDEOGRAPH-621B
     =	 戛
-& 戶		# U+6236 CJK UNIFIED IDEOGRAPH-6236
-    =	 ⼾
-& 手		# U+624B CJK UNIFIED IDEOGRAPH-624B
-    =	 ⼿
 & 扌		# U+624C CJK UNIFIED IDEOGRAPH-624C
     =	 ⺘
 & 扝		# U+625D CJK UNIFIED IDEOGRAPH-625D
@@ -9987,59 +9790,32 @@
     =	 摾
 & 撝		# U+649D CJK UNIFIED IDEOGRAPH-649D
     =	 撝
-& 支		# U+652F CJK UNIFIED IDEOGRAPH-652F
-    =	 ⽀
-& 攴		# U+6534 CJK UNIFIED IDEOGRAPH-6534
-    =	 ⽁
 & 攵		# U+6535 CJK UNIFIED IDEOGRAPH-6535
     =	 ⺙
 & 敏		# U+654F CJK UNIFIED IDEOGRAPH-654F
     =	 敏
 & 敬		# U+656C CJK UNIFIED IDEOGRAPH-656C
     =	 敬
-& 文		# U+6587 CJK UNIFIED IDEOGRAPH-6587
-    =	 ⽂
-& 斗		# U+6597 CJK UNIFIED IDEOGRAPH-6597
-    =	 ⽃
-& 斤		# U+65A4 CJK UNIFIED IDEOGRAPH-65A4
-    =	 ⽄
-& 方		# U+65B9 CJK UNIFIED IDEOGRAPH-65B9
-    =	 ⽅
-& 无		# U+65E0 CJK UNIFIED IDEOGRAPH-65E0
-    =	 ⽆
 & 旡		# U+65E1 CJK UNIFIED IDEOGRAPH-65E1
     =	 ⺛
 & 旣		# U+65E3 CJK UNIFIED IDEOGRAPH-65E3
     =	 旣
-& 日		# U+65E5 CJK UNIFIED IDEOGRAPH-65E5
-    =	 ⽇
-    =	 ㊐
 & 晉		# U+6649 CJK UNIFIED IDEOGRAPH-6649
     =	 晉
 & 暑		# U+6691 CJK UNIFIED IDEOGRAPH-6691
     =	 暑
 & 暜		# U+669C CJK UNIFIED IDEOGRAPH-669C
     =	 暜
-& 曰		# U+66F0 CJK UNIFIED IDEOGRAPH-66F0
-    =	 ⽈
 & 書		# U+66F8 CJK UNIFIED IDEOGRAPH-66F8
     =	 書
 & 最		# U+6700 CJK UNIFIED IDEOGRAPH-6700
     =	 最
-& 月		# U+6708 CJK UNIFIED IDEOGRAPH-6708
-    =	 ⽉
-    =	 ㊊
-& 有		# U+6709 CJK UNIFIED IDEOGRAPH-6709
-    =	 ㊒
 & 朗		# U+6717 CJK UNIFIED IDEOGRAPH-6717
     =	 朗
 & 望		# U+671B CJK UNIFIED IDEOGRAPH-671B
     =	 望
 & 朡		# U+6721 CJK UNIFIED IDEOGRAPH-6721
     =	 朡
-& 木		# U+6728 CJK UNIFIED IDEOGRAPH-6728
-    =	 ⽊
-    =	 ㊍
 & 杓		# U+6753 CJK UNIFIED IDEOGRAPH-6753
     =	 杓
 & 杞		# U+675E CJK UNIFIED IDEOGRAPH-675E
@@ -10050,8 +9826,6 @@
     =	 柺
 & 栟		# U+681F CJK UNIFIED IDEOGRAPH-681F
     =	 栟
-& 株		# U+682A CJK UNIFIED IDEOGRAPH-682A
-    =	 ㊑
 & 桒		# U+6852 CJK UNIFIED IDEOGRAPH-6852
     =	 桒
 & 梅		# U+6885 CJK UNIFIED IDEOGRAPH-6885
@@ -10070,45 +9844,20 @@
     =	 檨
 & 櫛		# U+6ADB CJK UNIFIED IDEOGRAPH-6ADB
     =	 櫛
-& 欠		# U+6B20 CJK UNIFIED IDEOGRAPH-6B20
-    =	 ⽋
 & 次		# U+6B21 CJK UNIFIED IDEOGRAPH-6B21
     =	 次
 & 歔		# U+6B54 CJK UNIFIED IDEOGRAPH-6B54
     =	 歔
-& 止		# U+6B62 CJK UNIFIED IDEOGRAPH-6B62
-    =	 ⽌
-& 正		# U+6B63 CJK UNIFIED IDEOGRAPH-6B63
-    =	 ㊣
 & 歲		# U+6B72 CJK UNIFIED IDEOGRAPH-6B72
     =	 歲
-& 歹		# U+6B79 CJK UNIFIED IDEOGRAPH-6B79
-    =	 ⽍
 & 殟		# U+6B9F CJK UNIFIED IDEOGRAPH-6B9F
     =	 殟
-& 殳		# U+6BB3 CJK UNIFIED IDEOGRAPH-6BB3
-    =	 ⽎
 & 殺		# U+6BBA CJK UNIFIED IDEOGRAPH-6BBA
     =	 殺
 & 殻		# U+6BBB CJK UNIFIED IDEOGRAPH-6BBB
     =	 殻
-& 毋		# U+6BCB CJK UNIFIED IDEOGRAPH-6BCB
-    =	 ⽏
-& 母		# U+6BCD CJK UNIFIED IDEOGRAPH-6BCD
-    =	 ⺟
-& 比		# U+6BD4 CJK UNIFIED IDEOGRAPH-6BD4
-    =	 ⽐
-& 毛		# U+6BDB CJK UNIFIED IDEOGRAPH-6BDB
-    =	 ⽑
-& 氏		# U+6C0F CJK UNIFIED IDEOGRAPH-6C0F
-    =	 ⽒
 & 民		# U+6C11 CJK UNIFIED IDEOGRAPH-6C11
     =	 ⺠
-& 气		# U+6C14 CJK UNIFIED IDEOGRAPH-6C14
-    =	 ⽓
-& 水		# U+6C34 CJK UNIFIED IDEOGRAPH-6C34
-    =	 ⽔
-    =	 ㊌
 & 氵		# U+6C35 CJK UNIFIED IDEOGRAPH-6C35
     =	 ⺡
 & 氺		# U+6C3A CJK UNIFIED IDEOGRAPH-6C3A
@@ -10121,8 +9870,6 @@
     =	 沿
 & 泍		# U+6CCD CJK UNIFIED IDEOGRAPH-6CCD
     =	 泍
-& 注		# U+6CE8 CJK UNIFIED IDEOGRAPH-6CE8
-    =	 ㊟
 & 洖		# U+6D16 CJK UNIFIED IDEOGRAPH-6D16
     =	 洖
 & 洴		# U+6D34 CJK UNIFIED IDEOGRAPH-6D34
@@ -10161,9 +9908,6 @@
     =	 瀹
 & 灊		# U+704A CJK UNIFIED IDEOGRAPH-704A
     =	 灊
-& 火		# U+706B CJK UNIFIED IDEOGRAPH-706B
-    =	 ⽕
-    =	 ㊋
 & 灬		# U+706C CJK UNIFIED IDEOGRAPH-706C
     =	 ⺣
 & 灰		# U+7070 CJK UNIFIED IDEOGRAPH-7070
@@ -10180,42 +9924,20 @@
     =	 熜
 & 爨		# U+7228 CJK UNIFIED IDEOGRAPH-7228
     =	 爨
-& 爪		# U+722A CJK UNIFIED IDEOGRAPH-722A
-    =	 ⽖
 & 爫		# U+722B CJK UNIFIED IDEOGRAPH-722B
     =	 ⺤
 & 爵		# U+7235 CJK UNIFIED IDEOGRAPH-7235
     =	 爵
-& 父		# U+7236 CJK UNIFIED IDEOGRAPH-7236
-    =	 ⽗
-& 爻		# U+723B CJK UNIFIED IDEOGRAPH-723B
-    =	 ⽘
-& 爿		# U+723F CJK UNIFIED IDEOGRAPH-723F
-    =	 ⽙
-& 片		# U+7247 CJK UNIFIED IDEOGRAPH-7247
-    =	 ⽚
 & 牐		# U+7250 CJK UNIFIED IDEOGRAPH-7250
     =	 牐
-& 牙		# U+7259 CJK UNIFIED IDEOGRAPH-7259
-    =	 ⽛
-& 牛		# U+725B CJK UNIFIED IDEOGRAPH-725B
-    =	 ⽜
-& 特		# U+7279 CJK UNIFIED IDEOGRAPH-7279
-    =	 ㊕
 & 犀		# U+7280 CJK UNIFIED IDEOGRAPH-7280
     =	 犀
 & 犕		# U+7295 CJK UNIFIED IDEOGRAPH-7295
     =	 犕
-& 犬		# U+72AC CJK UNIFIED IDEOGRAPH-72AC
-    =	 ⽝
 & 犭		# U+72AD CJK UNIFIED IDEOGRAPH-72AD
     =	 ⺨
 & 獺		# U+737A CJK UNIFIED IDEOGRAPH-737A
     =	 獺
-& 玄		# U+7384 CJK UNIFIED IDEOGRAPH-7384
-    =	 ⽞
-& 玉		# U+7389 CJK UNIFIED IDEOGRAPH-7389
-    =	 ⽟
 & 王		# U+738B CJK UNIFIED IDEOGRAPH-738B
     =	 王
 & 玥		# U+73A5 CJK UNIFIED IDEOGRAPH-73A5
@@ -10230,46 +9952,14 @@
     =	 璅
 & 瓊		# U+74CA CJK UNIFIED IDEOGRAPH-74CA
     =	 瓊
-& 瓜		# U+74DC CJK UNIFIED IDEOGRAPH-74DC
-    =	 ⽠
-& 瓦		# U+74E6 CJK UNIFIED IDEOGRAPH-74E6
-    =	 ⽡
-& 甘		# U+7518 CJK UNIFIED IDEOGRAPH-7518
-    =	 ⽢
-& 生		# U+751F CJK UNIFIED IDEOGRAPH-751F
-    =	 ⽣
 & 甤		# U+7524 CJK UNIFIED IDEOGRAPH-7524
     =	 甤
-& 用		# U+7528 CJK UNIFIED IDEOGRAPH-7528
-    =	 ⽤
-& 田		# U+7530 CJK UNIFIED IDEOGRAPH-7530
-    =	 ⽥
-& 甲		# U+7532 CJK UNIFIED IDEOGRAPH-7532
-    =	 ㆙
-& 男		# U+7537 CJK UNIFIED IDEOGRAPH-7537
-    =	 ㊚
 & 甾		# U+753E CJK UNIFIED IDEOGRAPH-753E
     =	 甾
 & 異		# U+7570 CJK UNIFIED IDEOGRAPH-7570
     =	 異
-& 疋		# U+758B CJK UNIFIED IDEOGRAPH-758B
-    =	 ⽦
-& 疒		# U+7592 CJK UNIFIED IDEOGRAPH-7592
-    =	 ⽧
 & 瘐		# U+7610 CJK UNIFIED IDEOGRAPH-7610
     =	 瘐
-& 癶		# U+7676 CJK UNIFIED IDEOGRAPH-7676
-    =	 ⽨
-& 白		# U+767D CJK UNIFIED IDEOGRAPH-767D
-    =	 ⽩
-& 皮		# U+76AE CJK UNIFIED IDEOGRAPH-76AE
-    =	 ⽪
-& 皿		# U+76BF CJK UNIFIED IDEOGRAPH-76BF
-    =	 ⽫
-& 監		# U+76E3 CJK UNIFIED IDEOGRAPH-76E3
-    =	 ㊬
-& 目		# U+76EE CJK UNIFIED IDEOGRAPH-76EE
-    =	 ⽬
 & 直		# U+76F4 CJK UNIFIED IDEOGRAPH-76F4
     =	 直
 & 眞		# U+771E CJK UNIFIED IDEOGRAPH-771E
@@ -10281,36 +9971,18 @@
     =	 睊
 & 瞋		# U+778B CJK UNIFIED IDEOGRAPH-778B
     =	 瞋
-& 矛		# U+77DB CJK UNIFIED IDEOGRAPH-77DB
-    =	 ⽭
-& 矢		# U+77E2 CJK UNIFIED IDEOGRAPH-77E2
-    =	 ⽮
-& 石		# U+77F3 CJK UNIFIED IDEOGRAPH-77F3
-    =	 ⽯
 & 硎		# U+784E CJK UNIFIED IDEOGRAPH-784E
     =	 硎
 & 碌		# U+788C CJK UNIFIED IDEOGRAPH-788C
     =	 碌
 & 磌		# U+78CC CJK UNIFIED IDEOGRAPH-78CC
     =	 磌
-& 示		# U+793A CJK UNIFIED IDEOGRAPH-793A
-    =	 ⽰
 & 礻		# U+793B CJK UNIFIED IDEOGRAPH-793B
     =	 ⺭
-& 社		# U+793E CJK UNIFIED IDEOGRAPH-793E
-    =	 ㊓
 & 祖		# U+7956 CJK UNIFIED IDEOGRAPH-7956
     =	 祖
-& 祝		# U+795D CJK UNIFIED IDEOGRAPH-795D
-    =	 ㊗
 & 福		# U+798F CJK UNIFIED IDEOGRAPH-798F
     =	 福
-& 禸		# U+79B8 CJK UNIFIED IDEOGRAPH-79B8
-    =	 ⽱
-& 禾		# U+79BE CJK UNIFIED IDEOGRAPH-79BE
-    =	 ⽲
-& 秘		# U+79D8 CJK UNIFIED IDEOGRAPH-79D8
-    =	 ㊙
 & 秫		# U+79EB CJK UNIFIED IDEOGRAPH-79EB
     =	 秫
 & 穀		# U+7A40 CJK UNIFIED IDEOGRAPH-7A40
@@ -10319,28 +9991,18 @@
     =	 穊
 & 穏		# U+7A4F CJK UNIFIED IDEOGRAPH-7A4F
     =	 穏
-& 穴		# U+7A74 CJK UNIFIED IDEOGRAPH-7A74
-    =	 ⽳
 & 窮		# U+7AAE CJK UNIFIED IDEOGRAPH-7AAE
     =	 窮
-& 立		# U+7ACB CJK UNIFIED IDEOGRAPH-7ACB
-    =	 ⽴
-& 竹		# U+7AF9 CJK UNIFIED IDEOGRAPH-7AF9
-    =	 ⽵
 & 篆		# U+7BC6 CJK UNIFIED IDEOGRAPH-7BC6
     =	 篆
 & 築		# U+7BC9 CJK UNIFIED IDEOGRAPH-7BC9
     =	 築
-& 米		# U+7C73 CJK UNIFIED IDEOGRAPH-7C73
-    =	 ⽶
 & 糒		# U+7CD2 CJK UNIFIED IDEOGRAPH-7CD2
     =	 糒
 & 糣		# U+7CE3 CJK UNIFIED IDEOGRAPH-7CE3
     =	 糣
 & 糨		# U+7CE8 CJK UNIFIED IDEOGRAPH-7CE8
     =	 糨
-& 糸		# U+7CF8 CJK UNIFIED IDEOGRAPH-7CF8
-    =	 ⽷
 & 糹		# U+7CF9 CJK UNIFIED IDEOGRAPH-7CF9
     =	 ⺯
 & 紀		# U+7D00 CJK UNIFIED IDEOGRAPH-7D00
@@ -10355,113 +10017,444 @@
     =	 繅
 & 纟		# U+7E9F CJK UNIFIED IDEOGRAPH-7E9F
     =	 ⺰
-& 缶		# U+7F36 CJK UNIFIED IDEOGRAPH-7F36
-    =	 ⽸
-& 网		# U+7F51 CJK UNIFIED IDEOGRAPH-7F51
-    =	 ⽹
 & 罒		# U+7F52 CJK UNIFIED IDEOGRAPH-7F52
     =	 ⺲
 & 罓		# U+7F53 CJK UNIFIED IDEOGRAPH-7F53
     =	 ⺱
 & 罺		# U+7F7A CJK UNIFIED IDEOGRAPH-7F7A
     =	 罺
-& 羊		# U+7F8A CJK UNIFIED IDEOGRAPH-7F8A
-    =	 ⽺
 & 羋		# U+7F8B CJK UNIFIED IDEOGRAPH-7F8B
     =	 ⺸
 & 羕		# U+7F95 CJK UNIFIED IDEOGRAPH-7F95
     =	 羕
-& 羽		# U+7FBD CJK UNIFIED IDEOGRAPH-7FBD
-    =	 ⽻
 & 翺		# U+7FFA CJK UNIFIED IDEOGRAPH-7FFA
     =	 翺
+& 一		# U+4E00 CJK UNIFIED IDEOGRAPH-4E00
+   <<<	 ⼀
+& 丨		# U+4E28 CJK UNIFIED IDEOGRAPH-4E28
+   <<<	 ⼁
 & 丶		# U+4E36 CJK UNIFIED IDEOGRAPH-4E36
+   <<<	 ⼂
   <<	 ⺀
+& 丿		# U+4E3F CJK UNIFIED IDEOGRAPH-4E3F
+   <<<	 ⼃
 & 乙		# U+4E59 CJK UNIFIED IDEOGRAPH-4E59
+   <<<	 ⼄
   <<	 ⺄
+& 亅		# U+4E85 CJK UNIFIED IDEOGRAPH-4E85
+   <<<	 ⼅
+& 二		# U+4E8C CJK UNIFIED IDEOGRAPH-4E8C
+   <<<	 ⼆
+& 亠		# U+4EA0 CJK UNIFIED IDEOGRAPH-4EA0
+   <<<	 ⼇
+& 人		# U+4EBA CJK UNIFIED IDEOGRAPH-4EBA
+   <<<	 ⼈
+& 儿		# U+513F CJK UNIFIED IDEOGRAPH-513F
+   <<<	 ⼉
+& 入		# U+5165 CJK UNIFIED IDEOGRAPH-5165
+   <<<	 ⼊
+& 八		# U+516B CJK UNIFIED IDEOGRAPH-516B
+   <<<	 ⼋
 & 冂		# U+5182 CJK UNIFIED IDEOGRAPH-5182
+   <<<	 ⼌
   <<	 ⺆
+& 冖		# U+5196 CJK UNIFIED IDEOGRAPH-5196
+   <<<	 ⼍
+& 冫		# U+51AB CJK UNIFIED IDEOGRAPH-51AB
+   <<<	 ⼎
 & 几		# U+51E0 CJK UNIFIED IDEOGRAPH-51E0
+   <<<	 ⼏
   <<	 ⺇
+& 凵		# U+51F5 CJK UNIFIED IDEOGRAPH-51F5
+   <<<	 ⼐
 & 刀		# U+5200 CJK UNIFIED IDEOGRAPH-5200
+   <<<	 ⼑
   <<	 ⺈
+& 力		# U+529B CJK UNIFIED IDEOGRAPH-529B
+   <<<	 ⼒
+& 勹		# U+52F9 CJK UNIFIED IDEOGRAPH-52F9
+   <<<	 ⼓
+& 匕		# U+5315 CJK UNIFIED IDEOGRAPH-5315
+   <<<	 ⼔
+& 匚		# U+531A CJK UNIFIED IDEOGRAPH-531A
+   <<<	 ⼕
+& 匸		# U+5338 CJK UNIFIED IDEOGRAPH-5338
+   <<<	 ⼖
+& 十		# U+5341 CJK UNIFIED IDEOGRAPH-5341
+   <<<	 ⼗
+    =	 〸
+& 卄		# U+5344 CJK UNIFIED IDEOGRAPH-5344
+   <<<	 〹
+& 卅		# U+5345 CJK UNIFIED IDEOGRAPH-5345
+   <<<	 〺
 & 卜		# U+535C CJK UNIFIED IDEOGRAPH-535C
+   <<<	 ⼘
   <<	 ⺊
 & 卩		# U+5369 CJK UNIFIED IDEOGRAPH-5369
+   <<<	 ⼙
   <<	 ⺋
 & 厂		# U+5382 CJK UNIFIED IDEOGRAPH-5382
+   <<<	 ⼚
   <<	 ⺁
+& 厶		# U+53B6 CJK UNIFIED IDEOGRAPH-53B6
+   <<<	 ⼛
+& 又		# U+53C8 CJK UNIFIED IDEOGRAPH-53C8
+   <<<	 ⼜
+& 口		# U+53E3 CJK UNIFIED IDEOGRAPH-53E3
+   <<<	 ⼝
+& 囗		# U+56D7 CJK UNIFIED IDEOGRAPH-56D7
+   <<<	 ⼞
+& 土		# U+571F CJK UNIFIED IDEOGRAPH-571F
+   <<<	 ⼟
+& 士		# U+58EB CJK UNIFIED IDEOGRAPH-58EB
+   <<<	 ⼠
+& 夂		# U+5902 CJK UNIFIED IDEOGRAPH-5902
+   <<<	 ⼡
+& 夊		# U+590A CJK UNIFIED IDEOGRAPH-590A
+   <<<	 ⼢
+& 夕		# U+5915 CJK UNIFIED IDEOGRAPH-5915
+   <<<	 ⼣
+& 大		# U+5927 CJK UNIFIED IDEOGRAPH-5927
+   <<<	 ⼤
+& 女		# U+5973 CJK UNIFIED IDEOGRAPH-5973
+   <<<	 ⼥
+& 子		# U+5B50 CJK UNIFIED IDEOGRAPH-5B50
+   <<<	 ⼦
+& 宀		# U+5B80 CJK UNIFIED IDEOGRAPH-5B80
+   <<<	 ⼧
+& 寸		# U+5BF8 CJK UNIFIED IDEOGRAPH-5BF8
+   <<<	 ⼨
 & 小		# U+5C0F CJK UNIFIED IDEOGRAPH-5C0F
+   <<<	 ⼩
   <<	 ⺌
   <<	 ⺍
 & 尢		# U+5C22 CJK UNIFIED IDEOGRAPH-5C22
+   <<<	 ⼪
   <<	 ⺎
 & 尣		# U+5C23 CJK UNIFIED IDEOGRAPH-5C23
   <<	 ⺑
+& 尸		# U+5C38 CJK UNIFIED IDEOGRAPH-5C38
+   <<<	 ⼫
+& 屮		# U+5C6E CJK UNIFIED IDEOGRAPH-5C6E
+   <<<	 ⼬
+& 山		# U+5C71 CJK UNIFIED IDEOGRAPH-5C71
+   <<<	 ⼭
+& 巛		# U+5DDB CJK UNIFIED IDEOGRAPH-5DDB
+   <<<	 ⼮
+& 工		# U+5DE5 CJK UNIFIED IDEOGRAPH-5DE5
+   <<<	 ⼯
+& 己		# U+5DF1 CJK UNIFIED IDEOGRAPH-5DF1
+   <<<	 ⼰
+& 巾		# U+5DFE CJK UNIFIED IDEOGRAPH-5DFE
+   <<<	 ⼱
+& 干		# U+5E72 CJK UNIFIED IDEOGRAPH-5E72
+   <<<	 ⼲
+& 幺		# U+5E7A CJK UNIFIED IDEOGRAPH-5E7A
+   <<<	 ⼳
+& 广		# U+5E7F CJK UNIFIED IDEOGRAPH-5E7F
+   <<<	 ⼴
+& 廴		# U+5EF4 CJK UNIFIED IDEOGRAPH-5EF4
+   <<<	 ⼵
+& 廾		# U+5EFE CJK UNIFIED IDEOGRAPH-5EFE
+   <<<	 ⼶
+& 弋		# U+5F0B CJK UNIFIED IDEOGRAPH-5F0B
+   <<<	 ⼷
+& 弓		# U+5F13 CJK UNIFIED IDEOGRAPH-5F13
+   <<<	 ⼸
 & 彐		# U+5F50 CJK UNIFIED IDEOGRAPH-5F50
+   <<<	 ⼹
   <<	 ⺕
+& 彡		# U+5F61 CJK UNIFIED IDEOGRAPH-5F61
+   <<<	 ⼺
+& 彳		# U+5F73 CJK UNIFIED IDEOGRAPH-5F73
+   <<<	 ⼻
 & 心		# U+5FC3 CJK UNIFIED IDEOGRAPH-5FC3
+   <<<	 ⼼
   <<	 ⺗
+& 戈		# U+6208 CJK UNIFIED IDEOGRAPH-6208
+   <<<	 ⼽
+& 戶		# U+6236 CJK UNIFIED IDEOGRAPH-6236
+   <<<	 ⼾
+& 手		# U+624B CJK UNIFIED IDEOGRAPH-624B
+   <<<	 ⼿
+& 支		# U+652F CJK UNIFIED IDEOGRAPH-652F
+   <<<	 ⽀
+& 攴		# U+6534 CJK UNIFIED IDEOGRAPH-6534
+   <<<	 ⽁
+& 文		# U+6587 CJK UNIFIED IDEOGRAPH-6587
+   <<<	 ⽂
+& 斗		# U+6597 CJK UNIFIED IDEOGRAPH-6597
+   <<<	 ⽃
+& 斤		# U+65A4 CJK UNIFIED IDEOGRAPH-65A4
+   <<<	 ⽄
+& 方		# U+65B9 CJK UNIFIED IDEOGRAPH-65B9
+   <<<	 ⽅
+& 无		# U+65E0 CJK UNIFIED IDEOGRAPH-65E0
+   <<<	 ⽆
 & 日		# U+65E5 CJK UNIFIED IDEOGRAPH-65E5
+   <<<	 ⽇
   <<	 ⺜
+& 曰		# U+66F0 CJK UNIFIED IDEOGRAPH-66F0
+   <<<	 ⽈
 & 月		# U+6708 CJK UNIFIED IDEOGRAPH-6708
+   <<<	 ⽉
   <<	 ⺝
+& 木		# U+6728 CJK UNIFIED IDEOGRAPH-6728
+   <<<	 ⽊
+& 欠		# U+6B20 CJK UNIFIED IDEOGRAPH-6B20
+   <<<	 ⽋
+& 止		# U+6B62 CJK UNIFIED IDEOGRAPH-6B62
+   <<<	 ⽌
+& 歹		# U+6B79 CJK UNIFIED IDEOGRAPH-6B79
+   <<<	 ⽍
 & 歺		# U+6B7A CJK UNIFIED IDEOGRAPH-6B7A
   <<	 ⺞
+& 殳		# U+6BB3 CJK UNIFIED IDEOGRAPH-6BB3
+   <<<	 ⽎
+& 毋		# U+6BCB CJK UNIFIED IDEOGRAPH-6BCB
+   <<<	 ⽏
+& 母		# U+6BCD CJK UNIFIED IDEOGRAPH-6BCD
+   <<<	 ⺟
+& 比		# U+6BD4 CJK UNIFIED IDEOGRAPH-6BD4
+   <<<	 ⽐
+& 毛		# U+6BDB CJK UNIFIED IDEOGRAPH-6BDB
+   <<<	 ⽑
+& 氏		# U+6C0F CJK UNIFIED IDEOGRAPH-6C0F
+   <<<	 ⽒
+& 气		# U+6C14 CJK UNIFIED IDEOGRAPH-6C14
+   <<<	 ⽓
+& 水		# U+6C34 CJK UNIFIED IDEOGRAPH-6C34
+   <<<	 ⽔
+& 火		# U+706B CJK UNIFIED IDEOGRAPH-706B
+   <<<	 ⽕
+& 爪		# U+722A CJK UNIFIED IDEOGRAPH-722A
+   <<<	 ⽖
 & 爫		# U+722B CJK UNIFIED IDEOGRAPH-722B
   <<	 ⺥
+& 父		# U+7236 CJK UNIFIED IDEOGRAPH-7236
+   <<<	 ⽗
+& 爻		# U+723B CJK UNIFIED IDEOGRAPH-723B
+   <<<	 ⽘
+& 爿		# U+723F CJK UNIFIED IDEOGRAPH-723F
+   <<<	 ⽙
+& 片		# U+7247 CJK UNIFIED IDEOGRAPH-7247
+   <<<	 ⽚
+& 牙		# U+7259 CJK UNIFIED IDEOGRAPH-7259
+   <<<	 ⽛
 & 牛		# U+725B CJK UNIFIED IDEOGRAPH-725B
+   <<<	 ⽜
   <<	 ⺧
+& 犬		# U+72AC CJK UNIFIED IDEOGRAPH-72AC
+   <<<	 ⽝
+& 玄		# U+7384 CJK UNIFIED IDEOGRAPH-7384
+   <<<	 ⽞
+& 玉		# U+7389 CJK UNIFIED IDEOGRAPH-7389
+   <<<	 ⽟
 & 王		# U+738B CJK UNIFIED IDEOGRAPH-738B
   <<	 ⺩
+& 瓜		# U+74DC CJK UNIFIED IDEOGRAPH-74DC
+   <<<	 ⽠
+& 瓦		# U+74E6 CJK UNIFIED IDEOGRAPH-74E6
+   <<<	 ⽡
+& 甘		# U+7518 CJK UNIFIED IDEOGRAPH-7518
+   <<<	 ⽢
+& 生		# U+751F CJK UNIFIED IDEOGRAPH-751F
+   <<<	 ⽣
+& 用		# U+7528 CJK UNIFIED IDEOGRAPH-7528
+   <<<	 ⽤
+& 田		# U+7530 CJK UNIFIED IDEOGRAPH-7530
+   <<<	 ⽥
 & 疋		# U+758B CJK UNIFIED IDEOGRAPH-758B
+   <<<	 ⽦
   <<	 ⺪
+& 疒		# U+7592 CJK UNIFIED IDEOGRAPH-7592
+   <<<	 ⽧
+& 癶		# U+7676 CJK UNIFIED IDEOGRAPH-7676
+   <<<	 ⽨
+& 白		# U+767D CJK UNIFIED IDEOGRAPH-767D
+   <<<	 ⽩
+& 皮		# U+76AE CJK UNIFIED IDEOGRAPH-76AE
+   <<<	 ⽪
+& 皿		# U+76BF CJK UNIFIED IDEOGRAPH-76BF
+   <<<	 ⽫
 & 目		# U+76EE CJK UNIFIED IDEOGRAPH-76EE
+   <<<	 ⽬
   <<	 ⺫
+& 矛		# U+77DB CJK UNIFIED IDEOGRAPH-77DB
+   <<<	 ⽭
+& 矢		# U+77E2 CJK UNIFIED IDEOGRAPH-77E2
+   <<<	 ⽮
+& 石		# U+77F3 CJK UNIFIED IDEOGRAPH-77F3
+   <<<	 ⽯
 & 示		# U+793A CJK UNIFIED IDEOGRAPH-793A
+   <<<	 ⽰
   <<	 ⺬
+& 禸		# U+79B8 CJK UNIFIED IDEOGRAPH-79B8
+   <<<	 ⽱
+& 禾		# U+79BE CJK UNIFIED IDEOGRAPH-79BE
+   <<<	 ⽲
+& 穴		# U+7A74 CJK UNIFIED IDEOGRAPH-7A74
+   <<<	 ⽳
+& 立		# U+7ACB CJK UNIFIED IDEOGRAPH-7ACB
+   <<<	 ⽴
 & 竹		# U+7AF9 CJK UNIFIED IDEOGRAPH-7AF9
+   <<<	 ⽵
   <<	 ⺮
+& 米		# U+7C73 CJK UNIFIED IDEOGRAPH-7C73
+   <<<	 ⽶
+& 糸		# U+7CF8 CJK UNIFIED IDEOGRAPH-7CF8
+   <<<	 ⽷
+& 缶		# U+7F36 CJK UNIFIED IDEOGRAPH-7F36
+   <<<	 ⽸
+& 网		# U+7F51 CJK UNIFIED IDEOGRAPH-7F51
+   <<<	 ⽹
 & 罒		# U+7F52 CJK UNIFIED IDEOGRAPH-7F52
   <<	 ⺵
 & 罓		# U+7F53 CJK UNIFIED IDEOGRAPH-7F53
   <<	 ⺳
   <<	 ⺴
 & 羊		# U+7F8A CJK UNIFIED IDEOGRAPH-7F8A
+   <<<	 ⽺
   <<	 ⺶
   <<	 ⺷
-& 大		# U+5927 CJK UNIFIED IDEOGRAPH-5927
-   <<<	 ㍽ / 正
-& 平		# U+5E73 CJK UNIFIED IDEOGRAPH-5E73
-   <<<	 ㍻ / 成
-& 明		# U+660E CJK UNIFIED IDEOGRAPH-660E
-   <<<	 ㍾ / 治
-& 昭		# U+662D CJK UNIFIED IDEOGRAPH-662D
-   <<<	 ㍼ / 和
+& 羽		# U+7FBD CJK UNIFIED IDEOGRAPH-7FBD
+   <<<	 ⽻
+& 一		# U+4E00 CJK UNIFIED IDEOGRAPH-4E00
+   <<<	 ㊀
+& 七		# U+4E03 CJK UNIFIED IDEOGRAPH-4E03
+   <<<	 ㊆
+& 三		# U+4E09 CJK UNIFIED IDEOGRAPH-4E09
+   <<<	 ㊂
+& 上		# U+4E0A CJK UNIFIED IDEOGRAPH-4E0A
+   <<<	 ㊤
+& 下		# U+4E0B CJK UNIFIED IDEOGRAPH-4E0B
+   <<<	 ㊦
+& 中		# U+4E2D CJK UNIFIED IDEOGRAPH-4E2D
+   <<<	 ㊥
+& 九		# U+4E5D CJK UNIFIED IDEOGRAPH-4E5D
+   <<<	 ㊈
+& 二		# U+4E8C CJK UNIFIED IDEOGRAPH-4E8C
+   <<<	 ㊁
+& 五		# U+4E94 CJK UNIFIED IDEOGRAPH-4E94
+   <<<	 ㊄
+& 企		# U+4F01 CJK UNIFIED IDEOGRAPH-4F01
+   <<<	 ㊭
+& 休		# U+4F11 CJK UNIFIED IDEOGRAPH-4F11
+   <<<	 ㊡
+& 優		# U+512A CJK UNIFIED IDEOGRAPH-512A
+   <<<	 ㊝
+& 八		# U+516B CJK UNIFIED IDEOGRAPH-516B
+   <<<	 ㊇
+& 六		# U+516D CJK UNIFIED IDEOGRAPH-516D
+   <<<	 ㊅
+& 写		# U+5199 CJK UNIFIED IDEOGRAPH-5199
+   <<<	 ㊢
+& 労		# U+52B4 CJK UNIFIED IDEOGRAPH-52B4
+   <<<	 ㊘
+& 医		# U+533B CJK UNIFIED IDEOGRAPH-533B
+   <<<	 ㊩
+& 十		# U+5341 CJK UNIFIED IDEOGRAPH-5341
+   <<<	 ㊉
+& 協		# U+5354 CJK UNIFIED IDEOGRAPH-5354
+   <<<	 ㊯
+& 印		# U+5370 CJK UNIFIED IDEOGRAPH-5370
+   <<<	 ㊞
+& 右		# U+53F3 CJK UNIFIED IDEOGRAPH-53F3
+   <<<	 ㊨
+& 名		# U+540D CJK UNIFIED IDEOGRAPH-540D
+   <<<	 ㊔
+& 四		# U+56DB CJK UNIFIED IDEOGRAPH-56DB
+   <<<	 ㊃
+& 土		# U+571F CJK UNIFIED IDEOGRAPH-571F
+   <<<	 ㊏
+& 夜		# U+591C CJK UNIFIED IDEOGRAPH-591C
+   <<<	 ㊰
+& 女		# U+5973 CJK UNIFIED IDEOGRAPH-5973
+   <<<	 ㊛
+& 学		# U+5B66 CJK UNIFIED IDEOGRAPH-5B66
+   <<<	 ㊫
+& 宗		# U+5B97 CJK UNIFIED IDEOGRAPH-5B97
+   <<<	 ㊪
+& 左		# U+5DE6 CJK UNIFIED IDEOGRAPH-5DE6
+   <<<	 ㊧
+& 日		# U+65E5 CJK UNIFIED IDEOGRAPH-65E5
+   <<<	 ㊐
+& 月		# U+6708 CJK UNIFIED IDEOGRAPH-6708
+   <<<	 ㊊
+& 有		# U+6709 CJK UNIFIED IDEOGRAPH-6709
+   <<<	 ㊒
+& 木		# U+6728 CJK UNIFIED IDEOGRAPH-6728
+   <<<	 ㊍
 & 株		# U+682A CJK UNIFIED IDEOGRAPH-682A
-   <<<	 ㍿ / 式会社
-& 老		# U+8001 CJK UNIFIED IDEOGRAPH-8001
-    =	 ⽼
+   <<<	 ㊑
+& 正		# U+6B63 CJK UNIFIED IDEOGRAPH-6B63
+   <<<	 ㊣
+& 水		# U+6C34 CJK UNIFIED IDEOGRAPH-6C34
+   <<<	 ㊌
+& 注		# U+6CE8 CJK UNIFIED IDEOGRAPH-6CE8
+   <<<	 ㊟
+& 火		# U+706B CJK UNIFIED IDEOGRAPH-706B
+   <<<	 ㊋
+& 特		# U+7279 CJK UNIFIED IDEOGRAPH-7279
+   <<<	 ㊕
+& 男		# U+7537 CJK UNIFIED IDEOGRAPH-7537
+   <<<	 ㊚
+& 監		# U+76E3 CJK UNIFIED IDEOGRAPH-76E3
+   <<<	 ㊬
+& 社		# U+793E CJK UNIFIED IDEOGRAPH-793E
+   <<<	 ㊓
+& 祝		# U+795D CJK UNIFIED IDEOGRAPH-795D
+   <<<	 ㊗
+& 秘		# U+79D8 CJK UNIFIED IDEOGRAPH-79D8
+   <<<	 ㊙
+& 一		# U+4E00 CJK UNIFIED IDEOGRAPH-4E00
+   <<<	 ㆒
+& 丁		# U+4E01 CJK UNIFIED IDEOGRAPH-4E01
+   <<<	 ㆜
+& 三		# U+4E09 CJK UNIFIED IDEOGRAPH-4E09
+   <<<	 ㆔
+& 上		# U+4E0A CJK UNIFIED IDEOGRAPH-4E0A
+   <<<	 ㆖
+& 下		# U+4E0B CJK UNIFIED IDEOGRAPH-4E0B
+   <<<	 ㆘
+& 丙		# U+4E19 CJK UNIFIED IDEOGRAPH-4E19
+   <<<	 ㆛
+& 中		# U+4E2D CJK UNIFIED IDEOGRAPH-4E2D
+   <<<	 ㆗
+& 乙		# U+4E59 CJK UNIFIED IDEOGRAPH-4E59
+   <<<	 ㆚
+& 二		# U+4E8C CJK UNIFIED IDEOGRAPH-4E8C
+   <<<	 ㆓
+& 人		# U+4EBA CJK UNIFIED IDEOGRAPH-4EBA
+   <<<	 ㆟
+& 四		# U+56DB CJK UNIFIED IDEOGRAPH-56DB
+   <<<	 ㆕
+& 地		# U+5730 CJK UNIFIED IDEOGRAPH-5730
+   <<<	 ㆞
+& 天		# U+5929 CJK UNIFIED IDEOGRAPH-5929
+   <<<	 ㆝
+& 甲		# U+7532 CJK UNIFIED IDEOGRAPH-7532
+   <<<	 ㆙
+& 大		# U+5927 CJK UNIFIED IDEOGRAPH-5927
+  <<	 ㍽ / 正
+& 平		# U+5E73 CJK UNIFIED IDEOGRAPH-5E73
+  <<	 ㍻ / 成
+& 明		# U+660E CJK UNIFIED IDEOGRAPH-660E
+  <<	 ㍾ / 治
+& 昭		# U+662D CJK UNIFIED IDEOGRAPH-662D
+  <<	 ㍼ / 和
+& 株		# U+682A CJK UNIFIED IDEOGRAPH-682A
+  <<	 ㍿ / 式会社
 & 耂		# U+8002 CJK UNIFIED IDEOGRAPH-8002
     =	 ⺹
 & 者		# U+8005 CJK UNIFIED IDEOGRAPH-8005
     =	 者
-& 而		# U+800C CJK UNIFIED IDEOGRAPH-800C
-    =	 ⽽
-& 耒		# U+8012 CJK UNIFIED IDEOGRAPH-8012
-    =	 ⽾
-& 耳		# U+8033 CJK UNIFIED IDEOGRAPH-8033
-    =	 ⽿
 & 聠		# U+8060 CJK UNIFIED IDEOGRAPH-8060
     =	 聠
 & 聰		# U+8070 CJK UNIFIED IDEOGRAPH-8070
     =	 聰
-& 聿		# U+807F CJK UNIFIED IDEOGRAPH-807F
-    =	 ⾀
 & 肀		# U+8080 CJK UNIFIED IDEOGRAPH-8080
     =	 ⺺
-& 肉		# U+8089 CJK UNIFIED IDEOGRAPH-8089
-    =	 ⾁
 & 肭		# U+80AD CJK UNIFIED IDEOGRAPH-80AD
     =	 肭
 & 育		# U+80B2 CJK UNIFIED IDEOGRAPH-80B2
@@ -10470,31 +10463,11 @@
     =	 脃
 & 脾		# U+813E CJK UNIFIED IDEOGRAPH-813E
     =	 脾
-& 臣		# U+81E3 CJK UNIFIED IDEOGRAPH-81E3
-    =	 ⾂
-& 自		# U+81EA CJK UNIFIED IDEOGRAPH-81EA
-    =	 ⾃
-& 至		# U+81F3 CJK UNIFIED IDEOGRAPH-81F3
-    =	 ⾄
-& 臼		# U+81FC CJK UNIFIED IDEOGRAPH-81FC
-    =	 ⾅
 & 舁		# U+8201 CJK UNIFIED IDEOGRAPH-8201
     =	 舁
     =	 舁
 & 舄		# U+8204 CJK UNIFIED IDEOGRAPH-8204
     =	 舄
-& 舌		# U+820C CJK UNIFIED IDEOGRAPH-820C
-    =	 ⾆
-& 舛		# U+821B CJK UNIFIED IDEOGRAPH-821B
-    =	 ⾇
-& 舟		# U+821F CJK UNIFIED IDEOGRAPH-821F
-    =	 ⾈
-& 艮		# U+826E CJK UNIFIED IDEOGRAPH-826E
-    =	 ⾉
-& 色		# U+8272 CJK UNIFIED IDEOGRAPH-8272
-    =	 ⾊
-& 艸		# U+8278 CJK UNIFIED IDEOGRAPH-8278
-    =	 ⾋
 & 艹		# U+8279 CJK UNIFIED IDEOGRAPH-8279
     =	 ⺾
 & 芋		# U+828B CJK UNIFIED IDEOGRAPH-828B
@@ -10543,8 +10516,6 @@
     =	 蔖
 & 蕤		# U+8564 CJK UNIFIED IDEOGRAPH-8564
     =	 蕤
-& 虍		# U+864D CJK UNIFIED IDEOGRAPH-864D
-    =	 ⾌
 & 虎		# U+864E CJK UNIFIED IDEOGRAPH-864E
     =	 ⻁
 & 虐		# U+8650 CJK UNIFIED IDEOGRAPH-8650
@@ -10555,8 +10526,6 @@
     =	 虧
 & 虩		# U+8669 CJK UNIFIED IDEOGRAPH-8669
     =	 虩
-& 虫		# U+866B CJK UNIFIED IDEOGRAPH-866B
-    =	 ⾍
 & 蚈		# U+8688 CJK UNIFIED IDEOGRAPH-8688
     =	 蚈
 & 蚩		# U+86A9 CJK UNIFIED IDEOGRAPH-86A9
@@ -10577,14 +10546,9 @@
     =	 蟡
 & 蠁		# U+8801 CJK UNIFIED IDEOGRAPH-8801
     =	 蠁
-& 血		# U+8840 CJK UNIFIED IDEOGRAPH-8840
-    =	 ⾎
-& 行		# U+884C CJK UNIFIED IDEOGRAPH-884C
-    =	 ⾏
 & 衠		# U+8860 CJK UNIFIED IDEOGRAPH-8860
     =	 衠
 & 衣		# U+8863 CJK UNIFIED IDEOGRAPH-8863
-    =	 ⾐
     =	 衣
 & 衤		# U+8864 CJK UNIFIED IDEOGRAPH-8864
     =	 ⻂
@@ -10594,21 +10558,14 @@
     =	 裞
 & 裺		# U+88FA CJK UNIFIED IDEOGRAPH-88FA
     =	 裺
-& 襾		# U+897E CJK UNIFIED IDEOGRAPH-897E
-    =	 ⾑
 & 西		# U+897F CJK UNIFIED IDEOGRAPH-897F
     =	 ⻄
 & 覀		# U+8980 CJK UNIFIED IDEOGRAPH-8980
     =	 ⻃
-& 見		# U+898B CJK UNIFIED IDEOGRAPH-898B
-    =	 ⾒
 & 见		# U+89C1 CJK UNIFIED IDEOGRAPH-89C1
     =	 ⻅
 & 角		# U+89D2 CJK UNIFIED IDEOGRAPH-89D2
     =	 ⻆
-    =	 ⾓
-& 言		# U+8A00 CJK UNIFIED IDEOGRAPH-8A00
-    =	 ⾔
 & 誠		# U+8AA0 CJK UNIFIED IDEOGRAPH-8AA0
     =	 誠
 & 諭		# U+8AED CJK UNIFIED IDEOGRAPH-8AED
@@ -10617,67 +10574,34 @@
     =	 變
 & 讠		# U+8BA0 CJK UNIFIED IDEOGRAPH-8BA0
     =	 ⻈
-& 谷		# U+8C37 CJK UNIFIED IDEOGRAPH-8C37
-    =	 ⾕
-& 豆		# U+8C46 CJK UNIFIED IDEOGRAPH-8C46
-    =	 ⾖
 & 豕		# U+8C55 CJK UNIFIED IDEOGRAPH-8C55
-    =	 ⾗
     =	 豕
-& 豸		# U+8C78 CJK UNIFIED IDEOGRAPH-8C78
-    =	 ⾘
-& 貝		# U+8C9D CJK UNIFIED IDEOGRAPH-8C9D
-    =	 ⾙
-& 財		# U+8CA1 CJK UNIFIED IDEOGRAPH-8CA1
-    =	 ㊖
 & 貫		# U+8CAB CJK UNIFIED IDEOGRAPH-8CAB
     =	 貫
 & 賁		# U+8CC1 CJK UNIFIED IDEOGRAPH-8CC1
     =	 賁
-& 資		# U+8CC7 CJK UNIFIED IDEOGRAPH-8CC7
-    =	 ㊮
 & 贛		# U+8D1B CJK UNIFIED IDEOGRAPH-8D1B
     =	 贛
 & 贝		# U+8D1D CJK UNIFIED IDEOGRAPH-8D1D
     =	 ⻉
-& 赤		# U+8D64 CJK UNIFIED IDEOGRAPH-8D64
-    =	 ⾚
-& 走		# U+8D70 CJK UNIFIED IDEOGRAPH-8D70
-    =	 ⾛
 & 起		# U+8D77 CJK UNIFIED IDEOGRAPH-8D77
     =	 起
-& 足		# U+8DB3 CJK UNIFIED IDEOGRAPH-8DB3
-    =	 ⾜
 & 趼		# U+8DBC CJK UNIFIED IDEOGRAPH-8DBC
     =	 趼
 & 跋		# U+8DCB CJK UNIFIED IDEOGRAPH-8DCB
     =	 跋
 & 跰		# U+8DF0 CJK UNIFIED IDEOGRAPH-8DF0
     =	 跰
-& 身		# U+8EAB CJK UNIFIED IDEOGRAPH-8EAB
-    =	 ⾝
-& 車		# U+8ECA CJK UNIFIED IDEOGRAPH-8ECA
-    =	 ⾞
 & 軔		# U+8ED4 CJK UNIFIED IDEOGRAPH-8ED4
     =	 軔
 & 輸		# U+8F38 CJK UNIFIED IDEOGRAPH-8F38
     =	 輸
 & 车		# U+8F66 CJK UNIFIED IDEOGRAPH-8F66
     =	 ⻋
-& 辛		# U+8F9B CJK UNIFIED IDEOGRAPH-8F9B
-    =	 ⾟
 & 辞		# U+8F9E CJK UNIFIED IDEOGRAPH-8F9E
     =	 辞
-& 辰		# U+8FB0 CJK UNIFIED IDEOGRAPH-8FB0
-    =	 ⾠
-& 辵		# U+8FB5 CJK UNIFIED IDEOGRAPH-8FB5
-    =	 ⾡
 & 辶		# U+8FB6 CJK UNIFIED IDEOGRAPH-8FB6
     =	 ⻌
-& 適		# U+9069 CJK UNIFIED IDEOGRAPH-9069
-    =	 ㊜
-& 邑		# U+9091 CJK UNIFIED IDEOGRAPH-9091
-    =	 ⾢
 & 邔		# U+9094 CJK UNIFIED IDEOGRAPH-9094
     =	 邔
 & 郱		# U+90F1 CJK UNIFIED IDEOGRAPH-90F1
@@ -10686,15 +10610,6 @@
     =	 鄑
 & 鄛		# U+911B CJK UNIFIED IDEOGRAPH-911B
     =	 鄛
-& 酉		# U+9149 CJK UNIFIED IDEOGRAPH-9149
-    =	 ⾣
-& 釆		# U+91C6 CJK UNIFIED IDEOGRAPH-91C6
-    =	 ⾤
-& 里		# U+91CC CJK UNIFIED IDEOGRAPH-91CC
-    =	 ⾥
-& 金		# U+91D1 CJK UNIFIED IDEOGRAPH-91D1
-    =	 ⾦
-    =	 ㊎
 & 鈸		# U+9238 CJK UNIFIED IDEOGRAPH-9238
     =	 鈸
 & 鉼		# U+927C CJK UNIFIED IDEOGRAPH-927C
@@ -10711,57 +10626,28 @@
     =	 ⻐
 & 長		# U+9577 CJK UNIFIED IDEOGRAPH-9577
     =	 ⻑
-    =	 ⾧
 & 镸		# U+9578 CJK UNIFIED IDEOGRAPH-9578
     =	 ⻒
 & 长		# U+957F CJK UNIFIED IDEOGRAPH-957F
     =	 ⻓
-& 門		# U+9580 CJK UNIFIED IDEOGRAPH-9580
-    =	 ⾨
 & 開		# U+958B CJK UNIFIED IDEOGRAPH-958B
     =	 開
 & 閷		# U+95B7 CJK UNIFIED IDEOGRAPH-95B7
     =	 閷
 & 门		# U+95E8 CJK UNIFIED IDEOGRAPH-95E8
     =	 ⻔
-& 阜		# U+961C CJK UNIFIED IDEOGRAPH-961C
-    =	 ⾩
 & 阝		# U+961D CJK UNIFIED IDEOGRAPH-961D
     =	 ⻖
-& 隶		# U+96B6 CJK UNIFIED IDEOGRAPH-96B6
-    =	 ⾪
-& 隹		# U+96B9 CJK UNIFIED IDEOGRAPH-96B9
-    =	 ⾫
 & 雃		# U+96C3 CJK UNIFIED IDEOGRAPH-96C3
     =	 雃
-& 雨		# U+96E8 CJK UNIFIED IDEOGRAPH-96E8
-    =	 ⾬
 & 霣		# U+9723 CJK UNIFIED IDEOGRAPH-9723
     =	 霣
-& 靑		# U+9751 CJK UNIFIED IDEOGRAPH-9751
-    =	 ⾭
 & 青		# U+9752 CJK UNIFIED IDEOGRAPH-9752
     =	 ⻘
-& 非		# U+975E CJK UNIFIED IDEOGRAPH-975E
-    =	 ⾮
-& 面		# U+9762 CJK UNIFIED IDEOGRAPH-9762
-    =	 ⾯
-& 革		# U+9769 CJK UNIFIED IDEOGRAPH-9769
-    =	 ⾰
-& 韋		# U+97CB CJK UNIFIED IDEOGRAPH-97CB
-    =	 ⾱
 & 韠		# U+97E0 CJK UNIFIED IDEOGRAPH-97E0
     =	 韠
 & 韦		# U+97E6 CJK UNIFIED IDEOGRAPH-97E6
     =	 ⻙
-& 韭		# U+97ED CJK UNIFIED IDEOGRAPH-97ED
-    =	 ⾲
-& 音		# U+97F3 CJK UNIFIED IDEOGRAPH-97F3
-    =	 ⾳
-& 頁		# U+9801 CJK UNIFIED IDEOGRAPH-9801
-    =	 ⾴
-& 項		# U+9805 CJK UNIFIED IDEOGRAPH-9805
-    =	 ㊠
 & 頋		# U+980B CJK UNIFIED IDEOGRAPH-980B
     =	 頋
     =	 頋
@@ -10769,17 +10655,12 @@
     =	 頩
 & 页		# U+9875 CJK UNIFIED IDEOGRAPH-9875
     =	 ⻚
-& 風		# U+98A8 CJK UNIFIED IDEOGRAPH-98A8
-    =	 ⾵
 & 风		# U+98CE CJK UNIFIED IDEOGRAPH-98CE
     =	 ⻛
-& 飛		# U+98DB CJK UNIFIED IDEOGRAPH-98DB
-    =	 ⾶
 & 飞		# U+98DE CJK UNIFIED IDEOGRAPH-98DE
     =	 ⻜
 & 食		# U+98DF CJK UNIFIED IDEOGRAPH-98DF
     =	 ⻝
-    =	 ⾷
 & 飠		# U+98E0 CJK UNIFIED IDEOGRAPH-98E0
     =	 ⻟
 & 飢		# U+98E2 CJK UNIFIED IDEOGRAPH-98E2
@@ -10788,110 +10669,51 @@
     =	 餩
 & 饣		# U+9963 CJK UNIFIED IDEOGRAPH-9963
     =	 ⻠
-& 首		# U+9996 CJK UNIFIED IDEOGRAPH-9996
-    =	 ⾸
-& 香		# U+9999 CJK UNIFIED IDEOGRAPH-9999
-    =	 ⾹
 & 馧		# U+99A7 CJK UNIFIED IDEOGRAPH-99A7
     =	 馧
-& 馬		# U+99AC CJK UNIFIED IDEOGRAPH-99AC
-    =	 ⾺
 & 駂		# U+99C2 CJK UNIFIED IDEOGRAPH-99C2
     =	 駂
 & 駾		# U+99FE CJK UNIFIED IDEOGRAPH-99FE
     =	 駾
 & 马		# U+9A6C CJK UNIFIED IDEOGRAPH-9A6C
     =	 ⻢
-& 骨		# U+9AA8 CJK UNIFIED IDEOGRAPH-9AA8
-    =	 ⾻
-& 高		# U+9AD8 CJK UNIFIED IDEOGRAPH-9AD8
-    =	 ⾼
-& 髟		# U+9ADF CJK UNIFIED IDEOGRAPH-9ADF
-    =	 ⾽
 & 鬒		# U+9B12 CJK UNIFIED IDEOGRAPH-9B12
     =	 鬒
-& 鬥		# U+9B25 CJK UNIFIED IDEOGRAPH-9B25
-    =	 ⾾
-& 鬯		# U+9B2F CJK UNIFIED IDEOGRAPH-9B2F
-    =	 ⾿
-& 鬲		# U+9B32 CJK UNIFIED IDEOGRAPH-9B32
-    =	 ⿀
-& 鬼		# U+9B3C CJK UNIFIED IDEOGRAPH-9B3C
-    =	 ⿁
-& 魚		# U+9B5A CJK UNIFIED IDEOGRAPH-9B5A
-    =	 ⿂
 & 鱀		# U+9C40 CJK UNIFIED IDEOGRAPH-9C40
     =	 鱀
 & 鱼		# U+9C7C CJK UNIFIED IDEOGRAPH-9C7C
     =	 ⻥
-& 鳥		# U+9CE5 CJK UNIFIED IDEOGRAPH-9CE5
-    =	 ⿃
 & 鳽		# U+9CFD CJK UNIFIED IDEOGRAPH-9CFD
     =	 鳽
 & 鵧		# U+9D67 CJK UNIFIED IDEOGRAPH-9D67
     =	 鵧
 & 鸟		# U+9E1F CJK UNIFIED IDEOGRAPH-9E1F
     =	 ⻦
-& 鹵		# U+9E75 CJK UNIFIED IDEOGRAPH-9E75
-    =	 ⿄
-& 鹿		# U+9E7F CJK UNIFIED IDEOGRAPH-9E7F
-    =	 ⿅
-& 麥		# U+9EA5 CJK UNIFIED IDEOGRAPH-9EA5
-    =	 ⿆
 & 麦		# U+9EA6 CJK UNIFIED IDEOGRAPH-9EA6
     =	 ⻨
 & 麻		# U+9EBB CJK UNIFIED IDEOGRAPH-9EBB
-    =	 ⿇
     =	 麻
-& 黃		# U+9EC3 CJK UNIFIED IDEOGRAPH-9EC3
-    =	 ⿈
 & 黄		# U+9EC4 CJK UNIFIED IDEOGRAPH-9EC4
     =	 ⻩
-& 黍		# U+9ECD CJK UNIFIED IDEOGRAPH-9ECD
-    =	 ⿉
-& 黑		# U+9ED1 CJK UNIFIED IDEOGRAPH-9ED1
-    =	 ⿊
 & 黹		# U+9EF9 CJK UNIFIED IDEOGRAPH-9EF9
-    =	 ⿋
     =	 黹
-& 黽		# U+9EFD CJK UNIFIED IDEOGRAPH-9EFD
-    =	 ⿌
 & 黾		# U+9EFE CJK UNIFIED IDEOGRAPH-9EFE
     =	 ⻪
     =	 黾
 & 鼅		# U+9F05 CJK UNIFIED IDEOGRAPH-9F05
     =	 鼅
-& 鼎		# U+9F0E CJK UNIFIED IDEOGRAPH-9F0E
-    =	 ⿍
 & 鼏		# U+9F0F CJK UNIFIED IDEOGRAPH-9F0F
     =	 鼏
-& 鼓		# U+9F13 CJK UNIFIED IDEOGRAPH-9F13
-    =	 ⿎
 & 鼖		# U+9F16 CJK UNIFIED IDEOGRAPH-9F16
     =	 鼖
-& 鼠		# U+9F20 CJK UNIFIED IDEOGRAPH-9F20
-    =	 ⿏
 & 鼻		# U+9F3B CJK UNIFIED IDEOGRAPH-9F3B
-    =	 ⿐
     =	 鼻
-& 齊		# U+9F4A CJK UNIFIED IDEOGRAPH-9F4A
-    =	 ⿑
 & 齐		# U+9F50 CJK UNIFIED IDEOGRAPH-9F50
     =	 ⻬
-& 齒		# U+9F52 CJK UNIFIED IDEOGRAPH-9F52
-    =	 ⿒
 & 齿		# U+9F7F CJK UNIFIED IDEOGRAPH-9F7F
     =	 ⻮
-& 龍		# U+9F8D CJK UNIFIED IDEOGRAPH-9F8D
-    =	 ⿓
 & 龙		# U+9F99 CJK UNIFIED IDEOGRAPH-9F99
     =	 ⻰
-& 龜		# U+9F9C CJK UNIFIED IDEOGRAPH-9F9C
-    =	 ⿔
-& 龟		# U+9F9F CJK UNIFIED IDEOGRAPH-9F9F
-    =	 ⻳
-& 龠		# U+9FA0 CJK UNIFIED IDEOGRAPH-9FA0
-    =	 ⿕
 & 﨎		# U+FA0E CJK COMPATIBILITY IDEOGRAPH-FA0E
     =	 﨎
 & 﨏		# U+FA0F CJK COMPATIBILITY IDEOGRAPH-FA0F
@@ -10916,47 +10738,223 @@
     =	 﨨
 & 﨩		# U+FA29 CJK COMPATIBILITY IDEOGRAPH-FA29
     =	 﨩
+& 老		# U+8001 CJK UNIFIED IDEOGRAPH-8001
+   <<<	 ⽼
+& 而		# U+800C CJK UNIFIED IDEOGRAPH-800C
+   <<<	 ⽽
+& 耒		# U+8012 CJK UNIFIED IDEOGRAPH-8012
+   <<<	 ⽾
+& 耳		# U+8033 CJK UNIFIED IDEOGRAPH-8033
+   <<<	 ⽿
 & 聿		# U+807F CJK UNIFIED IDEOGRAPH-807F
+   <<<	 ⾀
   <<	 ⺻
 & 肉		# U+8089 CJK UNIFIED IDEOGRAPH-8089
+   <<<	 ⾁
   <<	 ⺼
+& 臣		# U+81E3 CJK UNIFIED IDEOGRAPH-81E3
+   <<<	 ⾂
+& 自		# U+81EA CJK UNIFIED IDEOGRAPH-81EA
+   <<<	 ⾃
+& 至		# U+81F3 CJK UNIFIED IDEOGRAPH-81F3
+   <<<	 ⾄
 & 臼		# U+81FC CJK UNIFIED IDEOGRAPH-81FC
+   <<<	 ⾅
   <<	 ⺽
+& 舌		# U+820C CJK UNIFIED IDEOGRAPH-820C
+   <<<	 ⾆
+& 舛		# U+821B CJK UNIFIED IDEOGRAPH-821B
+   <<<	 ⾇
+& 舟		# U+821F CJK UNIFIED IDEOGRAPH-821F
+   <<<	 ⾈
+& 艮		# U+826E CJK UNIFIED IDEOGRAPH-826E
+   <<<	 ⾉
+& 色		# U+8272 CJK UNIFIED IDEOGRAPH-8272
+   <<<	 ⾊
+& 艸		# U+8278 CJK UNIFIED IDEOGRAPH-8278
+   <<<	 ⾋
 & 艹		# U+8279 CJK UNIFIED IDEOGRAPH-8279
   <<	 ⺿
   <<	 ⻀
+& 虍		# U+864D CJK UNIFIED IDEOGRAPH-864D
+   <<<	 ⾌
+& 虫		# U+866B CJK UNIFIED IDEOGRAPH-866B
+   <<<	 ⾍
+& 血		# U+8840 CJK UNIFIED IDEOGRAPH-8840
+   <<<	 ⾎
+& 行		# U+884C CJK UNIFIED IDEOGRAPH-884C
+   <<<	 ⾏
+& 衣		# U+8863 CJK UNIFIED IDEOGRAPH-8863
+   <<<	 ⾐
+& 襾		# U+897E CJK UNIFIED IDEOGRAPH-897E
+   <<<	 ⾑
+& 見		# U+898B CJK UNIFIED IDEOGRAPH-898B
+   <<<	 ⾒
 & 角		# U+89D2 CJK UNIFIED IDEOGRAPH-89D2
+   <<<	 ⾓
   <<	 ⻇
+& 言		# U+8A00 CJK UNIFIED IDEOGRAPH-8A00
+   <<<	 ⾔
+& 谷		# U+8C37 CJK UNIFIED IDEOGRAPH-8C37
+   <<<	 ⾕
+& 豆		# U+8C46 CJK UNIFIED IDEOGRAPH-8C46
+   <<<	 ⾖
+& 豕		# U+8C55 CJK UNIFIED IDEOGRAPH-8C55
+   <<<	 ⾗
+& 豸		# U+8C78 CJK UNIFIED IDEOGRAPH-8C78
+   <<<	 ⾘
+& 貝		# U+8C9D CJK UNIFIED IDEOGRAPH-8C9D
+   <<<	 ⾙
+& 赤		# U+8D64 CJK UNIFIED IDEOGRAPH-8D64
+   <<<	 ⾚
+& 走		# U+8D70 CJK UNIFIED IDEOGRAPH-8D70
+   <<<	 ⾛
 & 足		# U+8DB3 CJK UNIFIED IDEOGRAPH-8DB3
+   <<<	 ⾜
   <<	 ⻊
+& 身		# U+8EAB CJK UNIFIED IDEOGRAPH-8EAB
+   <<<	 ⾝
+& 車		# U+8ECA CJK UNIFIED IDEOGRAPH-8ECA
+   <<<	 ⾞
+& 辛		# U+8F9B CJK UNIFIED IDEOGRAPH-8F9B
+   <<<	 ⾟
+& 辰		# U+8FB0 CJK UNIFIED IDEOGRAPH-8FB0
+   <<<	 ⾠
+& 辵		# U+8FB5 CJK UNIFIED IDEOGRAPH-8FB5
+   <<<	 ⾡
 & 辶		# U+8FB6 CJK UNIFIED IDEOGRAPH-8FB6
   <<	 ⻍
   <<	 ⻎
 & 邑		# U+9091 CJK UNIFIED IDEOGRAPH-9091
+   <<<	 ⾢
   <<	 ⻏
+& 酉		# U+9149 CJK UNIFIED IDEOGRAPH-9149
+   <<<	 ⾣
+& 釆		# U+91C6 CJK UNIFIED IDEOGRAPH-91C6
+   <<<	 ⾤
+& 里		# U+91CC CJK UNIFIED IDEOGRAPH-91CC
+   <<<	 ⾥
+& 金		# U+91D1 CJK UNIFIED IDEOGRAPH-91D1
+   <<<	 ⾦
+& 長		# U+9577 CJK UNIFIED IDEOGRAPH-9577
+   <<<	 ⾧
+& 門		# U+9580 CJK UNIFIED IDEOGRAPH-9580
+   <<<	 ⾨
 & 阜		# U+961C CJK UNIFIED IDEOGRAPH-961C
+   <<<	 ⾩
   <<	 ⻕
+& 隶		# U+96B6 CJK UNIFIED IDEOGRAPH-96B6
+   <<<	 ⾪
+& 隹		# U+96B9 CJK UNIFIED IDEOGRAPH-96B9
+   <<<	 ⾫
 & 雨		# U+96E8 CJK UNIFIED IDEOGRAPH-96E8
+   <<<	 ⾬
   <<	 ⻗
+& 靑		# U+9751 CJK UNIFIED IDEOGRAPH-9751
+   <<<	 ⾭
+& 非		# U+975E CJK UNIFIED IDEOGRAPH-975E
+   <<<	 ⾮
+& 面		# U+9762 CJK UNIFIED IDEOGRAPH-9762
+   <<<	 ⾯
+& 革		# U+9769 CJK UNIFIED IDEOGRAPH-9769
+   <<<	 ⾰
+& 韋		# U+97CB CJK UNIFIED IDEOGRAPH-97CB
+   <<<	 ⾱
+& 韭		# U+97ED CJK UNIFIED IDEOGRAPH-97ED
+   <<<	 ⾲
+& 音		# U+97F3 CJK UNIFIED IDEOGRAPH-97F3
+   <<<	 ⾳
+& 頁		# U+9801 CJK UNIFIED IDEOGRAPH-9801
+   <<<	 ⾴
+& 風		# U+98A8 CJK UNIFIED IDEOGRAPH-98A8
+   <<<	 ⾵
+& 飛		# U+98DB CJK UNIFIED IDEOGRAPH-98DB
+   <<<	 ⾶
+& 食		# U+98DF CJK UNIFIED IDEOGRAPH-98DF
+   <<<	 ⾷
 & 飠		# U+98E0 CJK UNIFIED IDEOGRAPH-98E0
   <<	 ⻞
 & 首		# U+9996 CJK UNIFIED IDEOGRAPH-9996
+   <<<	 ⾸
   <<	 ⻡
+& 香		# U+9999 CJK UNIFIED IDEOGRAPH-9999
+   <<<	 ⾹
+& 馬		# U+99AC CJK UNIFIED IDEOGRAPH-99AC
+   <<<	 ⾺
 & 骨		# U+9AA8 CJK UNIFIED IDEOGRAPH-9AA8
+   <<<	 ⾻
   <<	 ⻣
+& 高		# U+9AD8 CJK UNIFIED IDEOGRAPH-9AD8
+   <<<	 ⾼
+& 髟		# U+9ADF CJK UNIFIED IDEOGRAPH-9ADF
+   <<<	 ⾽
+& 鬥		# U+9B25 CJK UNIFIED IDEOGRAPH-9B25
+   <<<	 ⾾
+& 鬯		# U+9B2F CJK UNIFIED IDEOGRAPH-9B2F
+   <<<	 ⾿
+& 鬲		# U+9B32 CJK UNIFIED IDEOGRAPH-9B32
+   <<<	 ⿀
 & 鬼		# U+9B3C CJK UNIFIED IDEOGRAPH-9B3C
+   <<<	 ⿁
   <<	 ⻤
+& 魚		# U+9B5A CJK UNIFIED IDEOGRAPH-9B5A
+   <<<	 ⿂
+& 鳥		# U+9CE5 CJK UNIFIED IDEOGRAPH-9CE5
+   <<<	 ⿃
 & 鹵		# U+9E75 CJK UNIFIED IDEOGRAPH-9E75
+   <<<	 ⿄
   <<	 ⻧
+& 鹿		# U+9E7F CJK UNIFIED IDEOGRAPH-9E7F
+   <<<	 ⿅
+& 麥		# U+9EA5 CJK UNIFIED IDEOGRAPH-9EA5
+   <<<	 ⿆
+& 麻		# U+9EBB CJK UNIFIED IDEOGRAPH-9EBB
+   <<<	 ⿇
+& 黃		# U+9EC3 CJK UNIFIED IDEOGRAPH-9EC3
+   <<<	 ⿈
+& 黍		# U+9ECD CJK UNIFIED IDEOGRAPH-9ECD
+   <<<	 ⿉
+& 黑		# U+9ED1 CJK UNIFIED IDEOGRAPH-9ED1
+   <<<	 ⿊
+& 黹		# U+9EF9 CJK UNIFIED IDEOGRAPH-9EF9
+   <<<	 ⿋
+& 黽		# U+9EFD CJK UNIFIED IDEOGRAPH-9EFD
+   <<<	 ⿌
+& 鼎		# U+9F0E CJK UNIFIED IDEOGRAPH-9F0E
+   <<<	 ⿍
+& 鼓		# U+9F13 CJK UNIFIED IDEOGRAPH-9F13
+   <<<	 ⿎
+& 鼠		# U+9F20 CJK UNIFIED IDEOGRAPH-9F20
+   <<<	 ⿏
+& 鼻		# U+9F3B CJK UNIFIED IDEOGRAPH-9F3B
+   <<<	 ⿐
 & 齊		# U+9F4A CJK UNIFIED IDEOGRAPH-9F4A
+   <<<	 ⿑
   <<	 ⻫
 & 齒		# U+9F52 CJK UNIFIED IDEOGRAPH-9F52
+   <<<	 ⿒
   <<	 ⻭
 & 龍		# U+9F8D CJK UNIFIED IDEOGRAPH-9F8D
+   <<<	 ⿓
   <<	 ⻯
 & 龜		# U+9F9C CJK UNIFIED IDEOGRAPH-9F9C
+   <<<	 ⿔
   <<	 ⻱
   <<	 ⻲
+& 龟		# U+9F9F CJK UNIFIED IDEOGRAPH-9F9F
+   <<<	 ⻳
+& 龠		# U+9FA0 CJK UNIFIED IDEOGRAPH-9FA0
+   <<<	 ⿕
+& 財		# U+8CA1 CJK UNIFIED IDEOGRAPH-8CA1
+   <<<	 ㊖
+& 資		# U+8CC7 CJK UNIFIED IDEOGRAPH-8CC7
+   <<<	 ㊮
+& 適		# U+9069 CJK UNIFIED IDEOGRAPH-9069
+   <<<	 ㊜
+& 金		# U+91D1 CJK UNIFIED IDEOGRAPH-91D1
+   <<<	 ㊎
+& 項		# U+9805 CJK UNIFIED IDEOGRAPH-9805
+   <<<	 ㊠
 & 㒞		# U+349E CJK UNIFIED IDEOGRAPH-349E
     =	 㒞
 & 㒹		# U+34B9 CJK UNIFIED IDEOGRAPH-34B9
