@@ -853,6 +853,12 @@ protected:
   // Collator protected methods -----------------------------------------
 
 
+ /**
+  * Used internally by registraton to define the requested and valid locales.
+  * @param requestedLocale the requsted locale
+  * @param validLocale the valid locale
+  * @internal
+  */
   virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
 
 private:
@@ -863,6 +869,7 @@ private:
   Collator& operator=(const Collator& other);
 
   friend class CFactory;
+  friend class SimpleCFactory;
   friend class ICUCollatorFactory;
   friend class ICUCollatorService;
   static Collator* makeInstance(const Locale& desiredLocale, 

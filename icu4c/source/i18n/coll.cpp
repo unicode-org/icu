@@ -115,6 +115,23 @@ class ICUCollatorService : public ICULocaleService {
         return Collator::makeInstance(loc, status);
     }
 
+	virtual UObject* getKey(ICUServiceKey& key, UnicodeString* actualReturn, UErrorCode& status) const {
+		UnicodeString ar;
+		if (actualReturn == NULL) {
+			actualReturn = &ar;
+		}
+		Collator* result = (Collator*)ICULocaleService::getKey(key, actualReturn, status);
+		if (result) {
+			const LocaleKey& lkey = (const LocaleKey&)key;
+			Locale canonicalLocale;
+			Locale currentLocale;
+
+			result->setLocales(lkey.canonicalLocale(canonicalLocale), 
+				LocaleUtility::initLocaleFromName(*actualReturn, currentLocale));
+		}
+		return result;
+	}
+
     virtual UBool isDefault() const {
         return countFactories() == 1;
     }
@@ -427,16 +444,19 @@ CFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode
 {
     if (handlesKey(key, status)) {
         const LocaleKey& lkey = (const LocaleKey&)key;
-        Locale requestedLoc;
-        lkey.canonicalLocale(requestedLoc);
         Locale validLoc;
         lkey.currentLocale(validLoc);
+		return _delegate->createCollator(validLoc);
+		/*
+        Locale requestedLoc;
+        lkey.canonicalLocale(requestedLoc);
 
         Collator* result = _delegate->createCollator(validLoc);
         if (result) {
             result->setLocales(requestedLoc, validLoc);
         }
         return result;
+		*/
     }
     return NULL;
 }

@@ -136,7 +136,7 @@ public:
     /**
      * Creating a <tt>StringSearch</tt> instance using the argument locale 
      * language rule set. A collator will be created in the process, which 
-     * will be owned by this instance and will be deleted in during 
+     * will be owned by this instance and will be deleted during 
      * destruction
      * @param pattern The text for which this object will search.
      * @param text    The text in which to search for the pattern.
@@ -189,7 +189,7 @@ public:
     /**
      * Creating a <tt>StringSearch</tt> instance using the argument locale 
      * language rule set. A collator will be created in the process, which 
-     * will be owned by this instance and will be deleted in during 
+     * will be owned by this instance and will be deleted during 
      * destruction
      * <p>
      * Note: No parsing of the text within the <tt>CharacterIterator</tt> 
@@ -338,11 +338,11 @@ public:
     virtual void setText(CharacterIterator &text, UErrorCode &status);
 
     /**
-     * Gets the collator used for the language rules. 
+     * Gets the collator used for the language rules.
      * <p>
-     * Deleting the returned <tt>RuleBasedCollator</tt> before calling 
-     * the destructor would cause the string search to fail.
-     * The destructor will delete the collator if this instance owns it
+     * Caller may modify but <b>must not</b> delete the <tt>RuleBasedCollator</tt>!
+	 * Modifications to this collator will affect the original collator passed in to 
+	 * the <tt>StringSearch>/tt> constructor or to setCollator, if any.
      * @return collator used for string search
      * @stable ICU 2.0
      */

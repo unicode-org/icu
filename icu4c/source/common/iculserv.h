@@ -316,6 +316,11 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
                            int32_t kind, 
                            int32_t coverage);
 
+    SimpleLocaleKeyFactory(UObject* objToAdopt, 
+                           const Locale& locale, 
+                           int32_t kind, 
+                           int32_t coverage);
+
     /**
      * Destructor.
      */
