@@ -165,14 +165,19 @@ SimpleThread::~SimpleThread()
     delete (Win32ThreadImplementation*)fImplementation;
 }
 
-void SimpleThread::start()
+int32_t SimpleThread::start()
 {
     Win32ThreadImplementation *imp = (Win32ThreadImplementation*)fImplementation;
 
     if(imp->fHandle != NULL)
-        return;
+        return 0;
 
     imp->fHandle = CreateThread(NULL,0,SimpleThreadProc,(void*)this,0,&imp->fThreadID);
+    if(imp->fHandle == NULL) {
+      return -1;
+    } else {
+      return 0;
+    }
 }
 
 void SimpleThread::sleep(int32_t millis)
@@ -194,9 +199,9 @@ SimpleThread::SimpleThread()
 SimpleThread::~SimpleThread()
 {}
 
-void 
+int32_t 
 SimpleThread::start()
-{}
+{ return 0; }
 
 void 
 SimpleThread::run()
@@ -233,7 +238,7 @@ SimpleThread::~SimpleThread()
     delete (PosixThreadImplementation*)fImplementation;
 }
 
-void SimpleThread::start()
+int32_t SimpleThread::start()
 {
     PosixThreadImplementation *imp = (PosixThreadImplementation*)fImplementation;
 
@@ -250,6 +255,7 @@ void SimpleThread::start()
     rc = pthread_create(&(imp->fThread),&attr,&SimpleThreadProc,(void*)this);
     pthread_attr_destroy(&attr);
 #endif
+    return rc;
 
 }
 
@@ -847,7 +853,7 @@ void MultithreadTest::TestThreadedIntl()
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
-#define kCollatorThreadThreads   10  // # of threads to spawn
+#define kCollatorThreadThreads   10000  // # of threads to spawn
 #define kCollatorThreadPatience kCollatorThreadThreads*100
 
 struct Line {
@@ -876,6 +882,7 @@ public:
     noLines = nl;
   }
   virtual void run() {
+    //sleep(10000);
     UErrorCode status = U_ZERO_ERROR;
   int32_t line = 0;
 
@@ -893,6 +900,8 @@ public:
       res = strcmp((char *)oldSk, (char *)newSk);
       cmpres = ucol_strcoll(coll, lines[i-1].buff, lines[i-1].buflen, lines[i].buff, lines[i].buflen);
       cmpres2 = ucol_strcoll(coll, lines[i].buff, lines[i].buflen, lines[i-1].buff, lines[i-1].buflen);
+      //cmpres = res;
+      //cmpres2 = -cmpres;
 
       if(cmpres != -cmpres2) {
         error("Compare result not symmetrical on line "+ line);
@@ -1019,17 +1028,27 @@ void MultithreadTest::TestCollators()
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
   ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
 
+  int32_t noSpawned = 0;
+  int32_t spawnResult = 0;
     CollatorThreadTest *tests;
     tests = new CollatorThreadTest[kCollatorThreadThreads];
  
     logln(UnicodeString("Spawning: ") + kCollatorThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
     int32_t j = 0;
     for(j = 0; j < kCollatorThreadThreads; j++) {
+      //logln("Setting collator %i", j);
       tests[j].setCollator(coll, lines, lineNum);
     }
     for(j = 0; j < kCollatorThreadThreads; j++) {
-      tests[j].start();
+      log("%i ", j);
+      spawnResult = tests[j].start();
+      if(spawnResult != 0) {
+	logln("Couldn't spawn more than %i threads", noSpawned);
+	break;
+      }
+      noSpawned++;
     }
+    logln("Spawned all");
 
     //for(int32_t patience = kCollatorThreadPatience;patience > 0; patience --)
     for(;;)
@@ -1046,7 +1065,7 @@ void MultithreadTest::TestCollators()
             {
                 completed++;
 
-                logln(UnicodeString("Test #") + i + " is complete.. ");
+                //logln(UnicodeString("Test #") + i + " is complete.. ");
 
                 UnicodeString theErr;
                 if(tests[i].getError(theErr))
@@ -1057,8 +1076,9 @@ void MultithreadTest::TestCollators()
                 // print out the error, too, if any.
             }
         }
+	logln("Completed %i tests", completed);
 
-        if(completed == kCollatorThreadThreads)
+        if(completed == noSpawned)
         {
             logln("Done!");
 
