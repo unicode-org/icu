@@ -87,7 +87,7 @@ int32_t uprv_cnttab_moveTable(CntTable *table, uint32_t oldOffset, uint32_t newO
 
 int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *status) {
     int32_t i = 0, j = 0;
-    if(U_FAILURE(*status)) {
+    if(U_FAILURE(*status) || table->size == 0) {
         return 0;
     }
 
