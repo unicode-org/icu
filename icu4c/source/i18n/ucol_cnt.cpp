@@ -212,7 +212,11 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
         CEPointer += size;
     }
 
-
+    // TODO: this one apparently updates the contraction CEs to point to a real address (relative to the 
+    // start of the flat file). However, what is done below is just wrong and it affects building of 
+    // tailorings that have constructions in a bad way. At least, one should enumerate the trie. Also,
+    // keeping a list of code points that are contractions might be smart, although I'm not sure if it's
+    // feasible.
     uint32_t CE;
     for(i = 0; i<=0x10FFFF; i++) {
         /*CE = ucmpe32_get(table->mapping, i);*/
