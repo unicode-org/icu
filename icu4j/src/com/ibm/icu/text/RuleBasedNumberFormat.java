@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2003/05/21 18:55:27 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/05/23 16:23:58 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -195,7 +195,7 @@ import java.util.ResourceBundle;
  * of the <tt>lenient-parse</tt> rule set.</p>
  *
  * <p>The body of a rule set consists of an ordered, semicolon-delimited list of <em>rules.</em>
- * Internally, every rule has a base value, a divisor, rule text, and zero, one, or two <em>substtutions.</em>
+ * Internally, every rule has a base value, a divisor, rule text, and zero, one, or two <em>substitutions.</em>
  * These parameters are controlled by the description syntax, which consists of a <em>rule
  * descriptor,</em> a colon, and a <em>rule body.</em></p>
  *
@@ -474,7 +474,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.14 $ $Date: 2003/05/21 18:55:27 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.15 $ $Date: 2003/05/23 16:23:58 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
