@@ -901,26 +901,26 @@ TimeZoneTest::TestDSTSavings()
                                                              U_MILLIS_PER_HOUR) + " hours instead.");
 
     int32_t offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JANUARY, 1,
-                              Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR);
+                              Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 1/1/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JUNE, 1, Calendar::MONDAY,
-                          10 * U_MILLIS_PER_HOUR);
+                          10 * U_MILLIS_PER_HOUR,status);
     if (offset != -4.5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 6/1/98 should have been -4.5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     tz->setDSTSavings(U_MILLIS_PER_HOUR, status);
     offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JANUARY, 1,
-                          Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR);
+                          Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 1/1/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JUNE, 1, Calendar::MONDAY,
-                          10 * U_MILLIS_PER_HOUR);
+                          10 * U_MILLIS_PER_HOUR,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 6/1/98 (with a 1-hour DST offset) should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
@@ -950,24 +950,24 @@ TimeZoneTest::TestAlternateRules()
         errln("tz.setStartRule failed");
 
     int32_t offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 5,
-                              Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR);
+                              Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/5/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 15,
-                          Calendar::SUNDAY, 10 * millisPerHour);
+                          Calendar::SUNDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/15/98 should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 15,
-                          Calendar::THURSDAY, 10 * millisPerHour);
+                          Calendar::THURSDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/15/98 should have been -4 hours, but we got ")              + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 25,
-                          Calendar::SUNDAY, 10 * millisPerHour);
+                          Calendar::SUNDAY, 10 * millisPerHour,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/25/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
@@ -981,25 +981,25 @@ TimeZoneTest::TestAlternateRules()
         errln("tz.setStartRule failed");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 11,
-                          Calendar::WEDNESDAY, 10 * millisPerHour);
+                          Calendar::WEDNESDAY, 10 * millisPerHour,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/11/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 14,
-                          Calendar::SATURDAY, 10 * millisPerHour);
+                          Calendar::SATURDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/14/98 should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 15,
-                          Calendar::THURSDAY, 10 * millisPerHour);
+                          Calendar::THURSDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/15/98 should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 17,
-                          Calendar::SATURDAY, 10 * millisPerHour);
+                          Calendar::SATURDAY, 10 * millisPerHour,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/17/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
