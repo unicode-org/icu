@@ -1143,74 +1143,9 @@ static void TestObsoleteNames(void)
 
 }
 
-/**
- * List of all valid ISO 4217 codes.  Include historical as well as
- * current codes.  This list must be updated to include any new
- * currencies added to ICU.  We check locale data against this list to
- * ensure that invalid currency codes are not added.
- */
-static const char* ISO_4217[] = {
-    /* Modern currencies */
-    "ADP", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG",
-    "AZM", "BAM", "BBD", "BDT", "BGL", "BGN", "BHD", "BIF", "BMD", "BND",
-    "BOB", "BOV", "BRL", "BSD", "BTN", "BWP", "BYR", "BZD", "CAD", "CDF",
-    "CHF", "CLF", "CLP", "CNY", "COP", "CRC", "CUP", "CVE", "CYP", "CZK",
-    "DJF", "DKK", "DOP", "DZD", "ECS", "ECV", "EEK", "EGP", "ERN", "ETB",
-    "EUR", "FJD", "FKP", "GBP", "GEL", "GHC", "GIP", "GMD", "GNF", "GTQ",
-    "GWP", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR",
-    "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF",
-    "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL",
-    "LTL", "LVL", "LYD", "MAD", "MDL", "MGF", "MKD", "MMK", "MNT", "MOP",
-    "MRO", "MTL", "MUR", "MVR", "MWK", "MXN", "MXV", "MYR", "MZM", "NAD",
-    "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP",
-    "PKR", "PLN", "PYG", "QAR", "ROL", "RUB", "RUR", "RWF", "SAR", "SBD",
-    "SCR", "SDD", "SEK", "SGD", "SHP", "SIT", "SKK", "SLL", "SOS", "SRG",
-    "STD", "SVC", "SYP", "SZL", "THB", "TJS", "TMM", "TND", "TOP", "TRL",
-    "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "USN", "USS", "UYU", "UZS",
-    "VEB", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF", "YER", "YUM",
-    "ZAR", "ZMK", "ZWD",
-
-    /* From ISO 4217:1981 */
-    "AFA", "AOK", "AON", "ARP", "ATS", "BEC", "BEF", "BEL", "BOP", "BRC",
-    "BRR", "BUK", "CSK", "DDM", "DEM", "ESA", "ESB", "ESP", "FIM", "FRF",
-    "GEK", "GNS", "GQE", "GRD", "IEP", "ITL", "LSM", "LUF", "MLF", "MTP",
-    "MXP", "NIC", "NLG", "PES", "PLZ", "PTE", "SDP", "SUR", "TPE", "UAK",
-    "UGS", "UYP", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XXX",
-    "YDD", "YUD", "ZAL", "ZRZ",
-
-    /* Obsolete currencies, less well-documented */
-    "AOR", /* ANGOLA Kwanza Readjustado */
-    "ARA", /* ARGENTINA Austral */
-    "BAD", /* BOSNIA Bosnian Dinar */
-    "BYB", /* BELARUS Belarussian Ruble */
-    "HRD", /* CROATIA Croatian Dinar */
-    "PEI", /* PERU Inti */
-    "TJR", /* TAJIKISTAN Tajik Ruble */
-    "YUN"  /* YUGOSLAVIA Yugoslavian Dinar */
-
-    /* Invalid codes that are sometimes seen:
-       "DRP",
-       "ECU",
-       "KIS",
-       "NIS",
-       "RMB",
-    */
-};
-
-static const int32_t ISO_4217_COUNT = sizeof(ISO_4217)/sizeof(ISO_4217[0]);
-
-static UBool isValidISO4217(const char* curr) {
-    int32_t i;
-    for (i=0; i<ISO_4217_COUNT; ++i) {
-        if (strcmp(curr, ISO_4217[i]) == 0) {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
 static void
-TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, const char *locale) {
+TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
+                       UResourceBundle *currentBundle, const char *locale) {
     UErrorCode errorCode = U_ZERO_ERROR;
     UResourceBundle *subRootBundle = NULL, *subBundle = NULL;
 
@@ -1218,6 +1153,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
     ures_resetIterator(currentBundle);
     while (ures_hasNext(currentBundle)) {
         const char *subBundleKey = NULL;
+        const char *currentBundleKey = NULL;
 
         errorCode = U_ZERO_ERROR;
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
@@ -1226,6 +1162,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
             continue;
         }
         subBundleKey = ures_getKey(subBundle);
+        currentBundleKey = ures_getKey(currentBundle);
 
         subRootBundle = ures_getByKey(root, subBundleKey, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
@@ -1238,16 +1175,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                     break;
                 }
                 else {*/
-                    const char* bundleKey = ures_getKey(currentBundle);
-                    if (bundleKey != NULL &&
-                        strcmp(bundleKey, "Currencies") == 0) {
-                        if (!isValidISO4217(subBundleKey)) {
-
-                            log_data_err("Unknown ISO 4217 code \"%s\" in locale \"%s\"; see cloctst.c/ISO_4217[]\n",
-                                         subBundleKey,
-                                         locale);
-                        }
-                    } else if (subBundleKey == NULL
+                    if (subBundleKey == NULL
                         || (strcmp(subBundleKey, "TransliterateLATIN") != 0 /* Ignore these special cases */
                         && strcmp(subBundleKey, "BreakDictionaryData") != 0))
                     {
@@ -1306,7 +1234,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
             if (sameArray
                 && !(strcmp(locale, "es_US") == 0 && strcmp(subBundleKey, "DateTimeElements") == 0))
             {
-                log_err("Arrays are the same with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
+                log_err("Integer vectors are the same with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
@@ -1337,7 +1265,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                 }
                 else {
                     /* Here is one of the recursive parts */
-                    TestKeyInRootRecursive(subRootBundle, subBundle, locale);
+                    TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
                 }
             }
             else {
@@ -1449,7 +1377,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                                 locale);
                     }
                 }
-                if (sameArray) {
+                if (sameArray && strcmp(rootName, "root") == 0) {
                     log_err("Arrays are the same with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
                             subBundleKey,
                             ures_getKey(currentBundle),
@@ -1510,7 +1438,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
         }
         else if (ures_getType(subBundle) == URES_TABLE) {
             /* Here is one of the recursive parts */
-            TestKeyInRootRecursive(subRootBundle, subBundle, locale);
+            TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
         }
         else if (ures_getType(subBundle) == URES_BINARY || ures_getType(subBundle) == URES_INT) {
             /* Can't do anything to check it */
@@ -1608,7 +1536,7 @@ testLCID(UResourceBundle *currentBundle,
 
 static void
 TestLocaleStructure(void) {
-    UResourceBundle *root, *currentLocale;
+    UResourceBundle *root, *completeLoc, *currentLocale, *subtable, *completeSubtable;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1644,6 +1572,11 @@ TestLocaleStructure(void) {
         log_data_err("Can't open root\n");
         return;
     }
+    completeLoc = ures_openDirect(NULL, "en", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("Can't open en\n");
+        return;
+    }
     for (locIndex = 0; locIndex < locCount; locIndex++) {
         errorCode=U_ZERO_ERROR;
         currLoc = uloc_getAvailable(locIndex);
@@ -1671,14 +1604,23 @@ TestLocaleStructure(void) {
             log_verbose("WARNING: The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
                 currLoc);
         }
-        TestKeyInRootRecursive(root, currentLocale, currLoc);
+        TestKeyInRootRecursive(root, "root", currentLocale, currLoc);
+
+        completeSubtable = ures_getByKey(completeLoc, "Currencies", NULL, &errorCode);
+        subtable = ures_getByKey(currentLocale, "Currencies", NULL, &errorCode);
+        TestKeyInRootRecursive(completeSubtable, "en", subtable, currLoc);
+
 #ifdef WIN32
         testLCID(currentLocale, currLoc);
 #endif
+
+        ures_close(completeSubtable);
+        ures_close(subtable);
         ures_close(currentLocale);
     }
 
     ures_close(root);
+    ures_close(completeLoc);
 }
 
 static void
