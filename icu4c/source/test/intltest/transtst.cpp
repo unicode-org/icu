@@ -86,7 +86,7 @@ void TransliteratorTest::TestInstantiation() {
             // When createInstance fails, it deletes the failing
             // entry from the available ID list.  We detect this
             // here by looking for a change in countAvailableIDs.
-            int nn = Transliterator::countAvailableIDs();
+            int32_t nn = Transliterator::countAvailableIDs();
             if (nn == (n - 1)) {
                 n = nn;
                 --i; // Compensate for deleted entry
@@ -481,7 +481,7 @@ void TransliteratorTest::TestPatternQuoting(void) {
         "[male adult]"
     };
 
-    for (int i=0; i<3; i+=3) {
+    for (int32_t i=0; i<3; i+=3) {
         logln(UnicodeString("Pattern: ") + prettify(DATA[i]));
         UErrorCode status = U_ZERO_ERROR;
         RuleBasedTransliterator t("<ID>", DATA[i], status);
