@@ -47,22 +47,11 @@
       <li><a href="#WhatContain">What the International Components for
       Unicode Contain</a></li>
 
-      <li><a href="#API">API Overview</a></li>
-
       <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
 
       <li><a href="#ImportantNotes">Important Installation Notes</a></li>
 
       <li><a href="#HowToInstall">How to Build And Install ICU</a></li>
-
-      <li><a href="#dataHandling">How ICU Handles Data</a></li>
-
-      <li><a href="#CharsetConvert">Character Set Conversion
-      Information</a></li>
-
-      <li><a href="#VersionNumbers">Version Numbers In ICU</a></li>
-
-      <li><a href="#ProgrammingNotes">Programming Notes</a></li>
 
       <li><a href="#WhereToFindMore">Where To Find More Information</a></li>
 
@@ -661,6 +650,9 @@
 
     <h3><a name="ImportantNotesOS390">OS/390 Platform</a></h3>
 
+    <p><em>Note that ICU 1.7 is not supported on OS/390!</em>
+    ICU 1.6 is supported, and ICU 1.8 is scheduled to be.</p>
+
     <p>If you are building on the OS/390 UNIX System Services platform, it is
     important that you understand a few details:</p>
 
@@ -1041,272 +1033,63 @@
     be unloaded and replaced without stopping and restarting the process.</p>
 
 
-    <h2><a name="CharsetConvert">Character Set Conversion
-    Information</a></h2>
+    <h3><a name="ErrcodeChanges">Important Change Of Error Codes From
+    Streaming Conversion Functions (change for ICU 1.6)</a></h3>
 
-    <p>The charset conversion library provides ways to convert simple text
-    strings (e.g., char*) such as ISO 8859-1 to and from Unicode. The
-    objective is to provide clean, simple, reliable, portable and adaptable
-    data structures and algorithms to support the International Components
-    for Unicode's character codeset Conversion APIs. The conversion data in
-    the library originated from the NLTC lab in IBM. The IBM character set
-    conversion tables are publicly available in the published IBM document
-    called "CHARACTER DATA REPRESENTATION ARCHITECTURE - REFERENCE AND
-    REGISTRY". The character set conversion library includes single-byte,
-    double-byte and some UCS encodings to and from Unicode. This document can
-    be ordered through Mechanicsberg and it comes with 2 CD ROMs which have
-    machine-readable conversion tables on them. The license agreement is
-    included in International Components for Unicode agreement.</p>
-
-    <p>Click <a href="data/convrtrs.txt">here</a> to view converters
-    implemented in ICU. To see converters in action, please visit <a href=
-    "http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;">
-    http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;</a></p>
-
-    <p>To order the document in the US you can call 1-800-879-2755 and
-    request document number SC09-2190-00. The cost of this publication is
-    $75.00 US not including tax.</p>
-
-    <h2><a name="VersionNumbers">Version Numbers In ICU</a></h2>
-
-    <p>ICU supports extensive versioning of its code and data. Versioning
-    allows clients to determine when parts of ICU change, and what the effect
-    of the change is.</p>
-
-    <p>ICU as a whole has a version number. ICU components such as Collator
-    have their own distinct version numbers. Each resource bundle, including
-    all the locale data resource bundles, has its own version number.
-    Individual tagged items within a resource bundle have their own version
-    numbers.</p>
-
-    <p>All version numbers are in the form of a UVersionInfo structure, which
-    is an array of four unsigned bytes. These bytes are:</p>
-
-    <ul>
-      <li>0: Major version number</li>
-
-      <li>1: Minor version number</li>
-
-      <li>2: Milli version number</li>
-
-      <li>3: Patch version number</li>
-    </ul>
-
-    <p>UVersionNumber structures can be converted to and from string
-    representations as dotted integers, such as "1.4.5.0", using the
-    u_versionToString() and u_stringToVersion() functions.</p>
-
-    <p>Version numbers monotonically increase as changes are made. Two
-    UVersionInfo structure may be compared using binary comparison (memcmp)
-    to see which is larger (newer). It only makes sense to compare the same
-    flavor of version number; you cannot compare the ICU version number to
-    the Collator version number, for instance.</p>
-
-    <p>The interpretation of version numbers depends on what is being
-    described.</p>
-
-    <h3><a name="VersionNumbersRelease">ICU Release Version Number</a></h3>
-
-    <p>0 (Major): Reference release with major feature addition or
-    change.</p>
-
-    <p>1 (Minor): Reference release without major feature addition.</p>
-
-    <p>2 (Milli): Maintenance update to the reference releases.</p>
-
-    <p>3 (Patch): Enhancement/patch update.</p>
-
-    <h3><a name="VersionNumbersCode">Code Component Version Numbers</a></h3>
-
-    <p>0 (Major): Breaking change. Results and data generated by the new
-    version are incompatible with those generated by the preceding version.
-    <em>Example</em>: In ICU 1.5, the implementation of ResourceBundle
-    changed drastically. The data structure, algorithm for parsing data, and
-    so on are completely different in 1.5. This required an increment of the
-    major version number.</p>
-
-    <p>1 (Minor): Backward-compatible change. The new version of the code can
-    read or use data generated by the old version, but the old version cannot
-    read or use data generated by the new version. <em>Example</em>: The
-    delimiter in the CollationKey gets changed from 0x0000 to 0xFFFF. The
-    algorithm keeps track of the differences and recognize these two
-    different formats before and after a particular release.</p>
-
-    <p>2 (Milli): Compatible change. Results and data generated by the new
-    version are compatible with those generated by the preceding version.
-    <em>Example</em>: A byte in the reserved bytes in the data structure is
-    now used as a flag/bitmask or whatever, e.g. UDataInfo. The size of the
-    data structure is changed and new code is added to check for this flag.
-    No other changes are made.</p>
-
-    <p>3 (Patch): Enhancement. A minor change. <em>Example</em>: Performance
-    enhancements applied to the code but no changes other than that.</p>
-
-    <h3><a name="VersionNumbersData">Data Component Version Numbers</a></h3>
-
-    <p>0 (Major): Incompatible format change. The layout or format of the
-    data has changed. For example, an additional array element has been
-    added, or an additional tag. <em>Example</em>: ICU 1.6 changes the
-    element layout in "CollationElements". We changed this from a tag with
-    plain string value to a tagged array with 3 new subtags, "Version",
-    "Override" and "Sequence". This change is incompatible with pre-1.6 code
-    and data.</p>
-
-    <p>1 (Minor): Backward-compatible format change. A change that can be
-    read and used by previous versions of ICU, but that adds data used by
-    newer versions. <em>Example</em>: We added a new tag called "Author" to
-    the data file. The only difference between the previous version of the
-    data files and the current version is this tag.</p>
-
-    <p>2 (Milli): Compatible change. A change to the data without
-    modification of the format. <em>Example</em>: We updated the value of a
-    tag "LocaleID" from "041C" to "3801". No other changes were made.</p>
-
-    <p>3 (Patch): Enhancement. A minor change. <em>Example</em>: We changed
-    the comments in the data file, perhaps the copyright notices.</p>
-
-    <h3><a name="VersionNumbersRB">Resource Bundles and Elements</a></h3>
-
-    <p>The data stored in resource bundles is tagged with version numbers. A
-    resource bundle can contain a tagged string named "Version" that declares
-    the version number in dotted-integer format. <em>Example</em>:</p>
+    <p>We have decided to make a semantic change to the conversion API which
+    affects applications using ICU that are migrated to use ICU versions 1.6 or later
+    compared to earlier ICU versions before 1.6:<br>
+     The error code that is set from streaming conversion like</p>
 <pre>
-en {
-  Version { "1.0.3.5" }
-  ...
-}
+ucnv_fromUnicode() - ucnv_toUnicode()
+ucnv_fromUChars()  - ucnv_toUChars()
+scsu_compress()    - scsu_decompress()
 </pre>
+    when the target buffer is full but the source not empty is changed from
+    <code>U_INDEX_OUTOFBOUNDS_ERROR</code> to
+    <code>U_BUFFER_OVERFLOW_ERROR</code>. This change makes the error codes
+    more consistent with their names and with their use in other icu
+    APIs.<br>
+     <br>
+     
 
-    <p>A resource bundle may omit the "Version" element, in which case it
-    will inherit one along the usual chain. <em>Example</em>: If the resource
-    bundle en_US contained no "Version" element, it would inherit "1.0.3.5"
-    from en.</p>
+    <p>You need to test for this new error code if your code uses ICU for
+    conversion and used the old error code. ucnv.h and scsu.h are updated
+    with this information. Please search in your source code for
+    <code>U_INDEX_OUTOFBOUNDS_ERROR</code>. If it is used with the above
+    functions (<em>not</em> with <code>ucnv_getNextUChar()</code>), then you
+    need to change it to <code>U_BUFFER_OVERFLOW_ERROR</code> in order to get
+    your code to work with icu 1.6 or later.</p>
 
-    <p>If inheritance passes all the way to the root resource bundle and it
-    contains no "Version" resource, then the default version number 1.0.0.0
-    is returned.</p>
-
-    <p>Elements within a resource bundle may also contain version numbers,
-    for example:</p>
-<pre>
-be {
-  CollationElements { 
-    Version { "1.0.0.0" }
-    ...
-  }
-}
-</pre>
-
-    <p>Here the CollationElements data is version 1.0.0.0. This version may
-    differ from the version of the enclosing bundle.</p>
-
-    <p>If a resource element lacks a "Version" element, then it inherits the
-    "Version" element of its enclosing resource bundle. (This is a special
-    case; in general, resource bundle elements do not inherit data from
-    enclosing structures.) <em>Example</em>:</p>
-<pre>
-en {
-  Version { "1.0.3.5" }
-  ...
-}
-
-en_US {
-  CollationElements { 
-    ...(contains no "Version" element)
-  }
-}
-</pre>
-
-    <p>Here, the version of the CollationElements in en_US is 1.0.3.5. It
-    inherits the en_US version, which is inherited from en.</p>
-
-    <p><strong>Note:</strong> The API and code to fully support the mechanism
-    described above is not in place yet as of ICU 1.6. See <a href=
-    "#VersionNumbersFuture">Future Enhancements</a> below.</p>
-
-    <h3><a name="VersionNumbersWhatComponents">What Components are
-    Versioned</a></h3>
-
-    <p>Currently, the following components are versioned.</p>
-
-    <ul>
-      <li>The version of ICU as a whole is returned by
-      <code>u_getVersion()</code>.</li>
-
-      <li>The version of a ResourceBundle is returned by
-      <code>ures_getVersion()</code> and
-      <code>ResourceBundle::getVersion()</code>. This is a data version
-      number for the bundle as a whole.</li>
-
-      <li>The version of the Unicode character data underlying ICU is
-      returned by <code>u_getUnicodeVersion()</code> and
-      <code>Unicode::getUnicodeVersion()</code>. This version reflects the
-      numbering of the Unicode releases; see <a href=
-      "http://www.unicode.org">http://www.unicode.org</a>.</li>
-
-      <li>The version of the Collator is returned by
-      <code>Collator::getVersion()</code>. This is a code version number for
-      the collation code and algorithm.</li>
-    </ul>
-
-    <h3><a name="VersionNumbersFuture">Future Enhancements</a></h3>
-
-    <ul>
-      <li>The ResourceBundle version number inheritance mechanism is not
-      fully implemented and tested.</li>
-
-      <li>The resource element version number is not implemented at all. API
-      for this does not yet exist.</li>
-
-      <li>Versioning of a RuleBasedCollator's data is only possible through
-      the ResourceBundle API. There should probably be API on
-      RuleBasedCollator (or Collator) to obtain the data version number.</li>
-
-      <li>Versioning of the Normalizer data is not implemented.</li>
-
-      <li>Versioning of the Normalizer algorithm is not implemented.</li>
-
-      <li>Versioning of the Transliterators is not implemented.</li>
-
-      <li>Versioning of formatters, break iterators, and so on is not
-      implemented.</li>
-    </ul>
-
-    <h2><a name="ProgrammingNotes">Programming Notes</a></h2>
+    <p>See the updated sample code in <code>icu/source/samples</code>. All
+    samples are updated. See <a href=
+    "http://oss.software.ibm.com/developerworks/opensource/icu/bugs?findid=516">
+    jitterbug 516</a> for details. This was discussed in July 2000 on the icu
+    mailing list. Please see the list archive for the <a href=
+    "http://oss.software.ibm.com/icu/archives/icu/icu.0007/msg00142.html">discussion</a>.</p>
 
     <h2><a name="WhereToFindMore">Where To Find More Information</a></h2>
 
-    <p><a href=
-    "http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a>
-    is a pointer to general information about the International Components
-    for Unicode.</p>
+    <p><a href="http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a>
+    is the homepage of the International Components for Unicode.</p>
 
-    <p><a href="docs/udata.html">docs/udata.html</a> is a raw draft of ICU
-    data handling.</p>
+    <p>The API Documentation is available <a href="http://oss.software.ibm.com/icu/apiref/">online</a> or
+    <a href="http://oss.software.ibm.com/icu/download/">for download</a>.
+    The (draft of) the User Guide is available for <a href="http://oss.software.ibm.com/icu/userguide/">browsing and as a PDF file</a>.</p>
 
-    <p><a href="../icuhtml/aindex.html">icuhtml/aindex.html</a> is an
-    alphabetical index to detailed API documentation.<br>
-     <a href="../icuhtml/HIER.html">icuhtml/HIER.html</a> is a hierarchical
-    index to detailed API documentation.</p>
+    <p><a href="http://www.ibm.com/developer/unicode/">http://www.ibm.com/developer/unicode/</a>
+    is a pointer to information on how to make applications global.</p>
 
-    <p><a href="docs/collate.html">docs/collate.html</a> is an overview to
-    Collation.</p>
-
-    <p><a href="docs/BreakIterator.html">docs/BreakIterator.html</a> is a
-    diagram showing how BreakIterator processes text elements.</p>
-
-    <p><a href=
-    "http://www.ibm.com/developer/unicode/">http://www.ibm.com/developer/unicode/</a>
-    is a pointer to information on how to make applications global.<br>
-    </p>
 
     <h2><a name="SubmittingComments">Submitting Comments, Requesting Features
     and Reporting Bugs</a></h2>
 
-    <p>To submit comments, request features and report bugs, please contact
-    us. While we are not able to respond individually to each comment, we do
-    review all comments. Send Internet email to <a href=
-    "mailto:icu@oss.software.ibm.com">icu@oss.software.ibm.com</a>.</p>
+    <p>To submit comments, request features and report bugs, please contact us.
+    The best forum is the ICU mailing list.
+    See the <a href="http://oss.software.ibm.com/icu/archives/">information on how to browse and join the list</a>.
+    If you find a bug in the code that has not been submitted and/or fixed yet, then please
+    <a href="http://oss.software.ibm.com/developerworks/opensource/icu/bugs">submit a jitterbug</a>.</p>
+
     <hr>
 
     <p>Copyright &copy; 1997-2000 International Business Machines Corporation
