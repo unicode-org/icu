@@ -663,26 +663,6 @@ static const uint16_t *FCD_STAGE_2_;
 static const uint16_t *FCD_STAGE_3_;
 
 
-inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
-    if (c < coll->minUnsafeCP) {
-        return FALSE;
-    }
-
-    int32_t  hash = c;
-    uint8_t  htbyte;
-
-    if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
-        if (hash >= 0xd800 && hash <= 0xf8ff) {
-            /*  Part of a surrogate, or in private use area.            */
-            /*   These are always considered unsafe.                    */
-            return TRUE;
-        }
-        hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
-    }
-    htbyte = coll->unsafeCP[hash>>3];
-    return (((htbyte >> (hash & 7)) & 1) == 1);
-}
-
 /**
 * Approximate determination if a character is at a contraction end.
 * Guaranteed to be TRUE if a character is at the end of a contraction,
