@@ -95,13 +95,13 @@ inline  void IInit_collIterate(const UCollator *collator, const UChar *sourceStr
     (s)->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE; 
     (s)->coll = (collator); 
     (s)->fcdPosition = 0; 
-    if(collator->normalizationMode == UCOL_ON)
-        (s)->flags |= UCOL_ITER_NORM;
+    if(collator->normalizationMode == UCOL_ON) {
+        (s)->flags |= UCOL_ITER_NORM; }
 }
 
 U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString,
                              int32_t sourceLen, collIterate *s){
-    // Out-of-line version for use from other files.
+    /* Out-of-line version for use from other files. */
     IInit_collIterate(collator, sourceString, sourceLen, s);
 }
 
@@ -536,19 +536,21 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
 
     UChar ch;
 
-    for (;;)                           // Loop handles case when incremental normalize switches
-    {                                  //   to or from the side buffer / original string, and we
-        //   need to start again to get the next character.
+    for (;;)                           /* Loop handles case when incremental normalize switches   */
+    {                                  /*   to or from the side buffer / original string, and we  */
+                                       /*   need to start again to get the next character.        */
         
         if ((collationSource->flags & (UCOL_ITER_HASLEN | UCOL_ITER_INNORMBUF | UCOL_ITER_NORM )) == 0)
         {  
             // The source string is null terminated and we're not working from the side buffer,
             //   and we're not normalizing.  This is the fast path.
             ch = *collationSource->pos++;
-            if (ch != 0) 
+            if (ch != 0) {
                 break;
-            else
+            }
+            else {
                 return UCOL_NO_MORE_CES;
+            }
         }
 
         if (collationSource->flags & UCOL_ITER_HASLEN) {
@@ -564,8 +566,9 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
         {
             // Null terminated string, and we are in the side buffer.
             ch = *collationSource->pos++;
-            if (ch != 0)
+            if (ch != 0) {
                 break;   // Side buffer is always normalized; we can skip further tests.
+            }
             
             // Ran off the end of the normalize side buffer.  Revert to the main string and 
             //   loop back to top to try again to get a character.
@@ -575,8 +578,9 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
         }
         
         // We've got a character.  See if there's any fcd and/or normalization stuff to do.
-        if ((collationSource->flags & UCOL_ITER_NORM) == 0)
+        if ((collationSource->flags & UCOL_ITER_NORM) == 0) {
             break;
+        }
         
         if (collationSource->fcdPosition >= collationSource->pos) {
             // An earlier FCD check has already covered the current character.
@@ -591,14 +595,16 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
         
         if (ch < NFC_ZERO_CC_BLOCK_LIMIT_) {
             // We need to peek at the next character in order to tell if we are FCD
-            if ((collationSource->flags & UCOL_ITER_HASLEN) && collationSource->pos >= collationSource->endp)
+            if ((collationSource->flags & UCOL_ITER_HASLEN) && collationSource->pos >= collationSource->endp) {
                 // We are at the last char of source string.
                 //  It is always OK for FCD check.
                 break;
+            }
             
             // Not at last char of source string (or we'll check against terminating null).  Do the FCD fast test
-            if (*collationSource->pos < NFC_ZERO_CC_BLOCK_LIMIT_)
+            if (*collationSource->pos < NFC_ZERO_CC_BLOCK_LIMIT_) {
                 break;
+            }
         }
         
         // Need a more complete FCD check and possible normalization.
@@ -951,8 +957,9 @@ inline void collIterFCD(collIterate *collationSource) {
         //   a char with a leading cc of zero.
         for (;;)
         {
-            if (count >= length)
+            if (count >= length) {
                 break;
+            }
             UTF_NEXT_CHAR(srcP, count, length, codepoint);
             
             /* trie access */
@@ -961,11 +968,13 @@ inline void collIterFCD(collIterate *collationSource) {
                 ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
                 (codepoint & STAGE_3_MASK_)];
             leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
-            if (leadingCC == 0)
+            if (leadingCC == 0) {
                 break;
+            }
             
-            if (leadingCC < prevTrailingCC)
+            if (leadingCC < prevTrailingCC) {
                 needNormalize = TRUE;
+            }
             
             prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
         }
@@ -978,8 +987,9 @@ inline void collIterFCD(collIterate *collationSource) {
         collationSource->fcdPosition--;
     }
 
-    if (needNormalize)
+    if (needNormalize) {
         collIterNormalize(collationSource);
+    }
 }
 
 
@@ -3157,7 +3167,7 @@ ucol_getVersion(const UCollator* coll,
 }
 
 
-static UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
+inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     int32_t  hash = c;
     uint8_t  htbyte;
 
@@ -3170,13 +3180,15 @@ static UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
         hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
     }
     htbyte = coll->unsafeCP[hash>>3];
-    if (((htbyte >> (hash & 7)) & 1) == 1)
+    if (((htbyte >> (hash & 7)) & 1) == 1) {
         return TRUE;   
+    }
 
     /*  TODO:  main UCA table data needs to be merged into tailoring tables,   */
     /*         and this second level of test removed from here.                */
-    if (coll == UCA)
+    if (coll == UCA) {
         return FALSE;
+    }
     
     htbyte = UCA->unsafeCP[hash>>3];
     return ((htbyte >> (hash & 7)) & 1) == 1;
@@ -3281,10 +3293,12 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
     }
     else 
     {       
-        if (sLen == -1)
+        if (sLen == -1) {
             sLen = u_strlen(sBuf);
-        if (tLen == -1)
+        }
+        if (tLen == -1) {
             tLen = u_strlen(tBuf);
+        }
         comparison = u_strncmp(sBuf, tBuf, uprv_min(sLen, tLen));
     }
     
@@ -3300,10 +3314,12 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
         }
     }
 
-    if (sAlloc)
+    if (sAlloc) {
         delete sBuf;
-    if (tAlloc)
+    }
+    if (tAlloc) {
         delete tBuf;
+    }
 
     return result;
 }
@@ -3324,8 +3340,9 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b) {
     newSize = oldSize * 2;
     newBuf = (uint32_t *)uprv_malloc(newSize * sizeof(uint32_t));
     uprv_memcpy(newBuf, b->buf, oldSize * sizeof(uint32_t));
-    if (b->buf != b->localArray)
+    if (b->buf != b->localArray) {
         delete b->buf;
+    }
     b->buf = newBuf;
     b->endp = b->buf + newSize;
     b->pos  = b->buf + oldSize;
@@ -3368,12 +3385,15 @@ ucol_strcoll(    const    UCollator    *coll,
 #endif
 
     for (;;) {
-        if (pSrc == pSrcEnd || pTarg == pTargEnd)
+        if (pSrc == pSrcEnd || pTarg == pTargEnd) {
             break;
-        if (*pSrc == 0 && (sourceLength == -1 || targetLength == -1))
+        }
+        if (*pSrc == 0 && (sourceLength == -1 || targetLength == -1)) {
             break;
-         if (*pSrc != *pTarg)
+        }
+        if (*pSrc != *pTarg) {
             break;
+        }
         pSrc++;
         pTarg++;
     }
@@ -3381,8 +3401,9 @@ ucol_strcoll(    const    UCollator    *coll,
 
     // If we made it all the way through both strings, we are done.  They are ==
     if ((pSrc ==pSrcEnd  || (pSrcEnd <pSrc  && *pSrc==0))  &&   /* At end of src string, however it was specified. */
-        (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))     /* and also at end of dest string                  */
+        (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))  {  /* and also at end of dest string                  */
         return UCOL_EQUAL;
+    }
     
     if (equalLength > 1) {
         /* There is an identical portion at the beginning of the two strings.        */
@@ -3406,10 +3427,12 @@ ucol_strcoll(    const    UCollator    *coll,
         
         source += equalLength;
         target += equalLength;
-        if (sourceLength > 0)
-        sourceLength -= equalLength;
-        if (targetLength > 0)
-        targetLength -= equalLength;
+        if (sourceLength > 0) {
+            sourceLength -= equalLength;
+        }
+        if (targetLength > 0) {
+            targetLength -= equalLength;
+        }
     }
     
     
@@ -3841,15 +3864,19 @@ ucol_strcoll(    const    UCollator    *coll,
     }
 
 commonReturn:
-    if (sColl.writableBuffer != sColl.stackWritableBuffer)
+    if (sColl.writableBuffer != sColl.stackWritableBuffer) {
         uprv_free(sColl.writableBuffer);
-    if (tColl.writableBuffer != tColl.stackWritableBuffer)
+    }
+    if (tColl.writableBuffer != tColl.stackWritableBuffer) {
         uprv_free(tColl.writableBuffer);
+    }
 
-    if (sCEs.buf != sCEs.localArray )
+    if (sCEs.buf != sCEs.localArray ) {
         uprv_free(sCEs.buf);
-    if (tCEs.buf != tCEs.localArray )
+    }
+    if (tCEs.buf != tCEs.localArray ) {
         uprv_free(tCEs.buf);
+    }
 
     return result;
 }
