@@ -697,7 +697,7 @@ _ISO2022Close(UConverter *converter) {
 
         ucnv_close(myData->currentConverter); /* if not closed above */
 
-        if(!converter->isCopyLocal){
+        if(!converter->isExtraLocal){
             uprv_free (converter->extraInfo);
         }
     }

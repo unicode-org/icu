@@ -88,11 +88,13 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
 
 static void 
 _HZClose(UConverter *cnv){
-    if((cnv->extraInfo != NULL) && !cnv->isCopyLocal){
-         ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
-         uprv_free(cnv->extraInfo);
+    if(cnv->extraInfo != NULL) {
+        ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
+        if(!cnv->isExtraLocal) {
+            uprv_free(cnv->extraInfo);
+        }
+        cnv->extraInfo = NULL;
     }
-
 }
 
 static void 
@@ -630,6 +632,7 @@ _HZ_SafeClone(const UConverter *cnv,
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
     localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isExtraLocal = TRUE;
 
     /* deep-clone the sub-converter */
     size = (int32_t)sizeof(UConverter);
