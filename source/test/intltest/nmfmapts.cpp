@@ -300,7 +300,8 @@ IntlTestNumberFormatAPI::testRegistration()
 	UNumberFormat* uf3 = unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(),NULL, &status);
 	UNumberFormat* uf4 = unum_open(UNUM_DEFAULT, NULL, 0, SRC_LOC.getName(), NULL, &status);
 
-	for (const UnicodeString* res = locs->snext(status); res; res = locs->snext(status)) {
+    const UnicodeString* res;
+	for (res = locs->snext(status); res; res = locs->snext(status)) {
 		logln(*res); // service is still in synch
 	}
 
@@ -373,12 +374,12 @@ IntlTestNumberFormatAPI::testRegistration()
 	delete f1;
 	delete f0;
 
-	for (const UnicodeString* res = locs->snext(status); res; res = locs->snext(status)) {
+	for (res = locs->snext(status); res; res = locs->snext(status)) {
 		errln(*res); // service should be out of synch
 	}
 
 	locs->reset(status); // now in synch again, we hope
-	for (const UnicodeString* res = locs->snext(status); res; res = locs->snext(status)) {
+	for (res = locs->snext(status); res; res = locs->snext(status)) {
 		logln(*res);
 	}
 
