@@ -367,7 +367,11 @@ UnicodeConverter::getDisplayName(const Locale&   displayLocale,
 {
     UErrorCode err = U_ZERO_ERROR;
     UChar name[UCNV_MAX_CONVERTER_NAME_LENGTH];
-    int32_t length = ucnv_getDisplayName(myUnicodeConverter, displayLocale.getName(), name, sizeof(name), &err);
+    int32_t length = ucnv_getDisplayName(myUnicodeConverter,
+                                         displayLocale.getName(),
+                                         name,
+                                         UCNV_MAX_CONVERTER_NAME_LENGTH,
+                                         &err);
     if (U_SUCCESS(err))
     {
         displayName.replace(0, 0x7fffffff, name, length);
