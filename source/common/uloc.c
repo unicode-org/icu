@@ -543,6 +543,20 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
  */
 #define _isTerminator(a)  ((a==0)||(a=='.')||(a=='@'))
 
+static char* _strnchr(const char* str, int32_t len, char c) {
+    U_ASSERT(str != 0 && len >= 0);
+    while (len-- != 0) {
+        char d = *str;
+        if (d == c) {
+            return (char*) str;
+        } else if (d == 0) {
+            break;
+        }
+        ++str;
+    }
+    return NULL;
+}
+
 /**
  * Lookup 'key' in the array 'list'.  The array 'list' should contain
  * a NULL entry, followed by more entries, and a second NULL entry.
@@ -815,7 +829,7 @@ _deleteVariant(char* variants, int32_t variantsLen,
             delta += d;
             uprv_memmove(variants, variants+d, variantsLen);
         } else {
-            char* p = uprv_strchr(variants, '_');
+            char* p = _strnchr(variants, variantsLen, '_');
             if (p == NULL) {
                 return delta;
             }
