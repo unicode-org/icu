@@ -25,13 +25,17 @@
 
 TRANSLIT_SOURCE=t_Any_Accents.txt\
 t_Any_Publishing.txt\
+t_Arab_Latn.txt\
 t_Beng_InterIndic.txt\
 t_Cyrl_Latn.txt\
 t_Deva_InterIndic.txt\
 t_FWidth_HWidth.txt\
 t_Grek_Latn.txt\
+t_Grek_Latn_UNGEGN.txt\
 t_Gujr_InterIndic.txt\
 t_Guru_InterIndic.txt\
+t_Hani_Latn.txt\
+t_Hebr_Latn.txt\
 t_Hira_Kana.txt\
 t_Hira_Latn.txt\
 t_InterIndic_Beng.txt\

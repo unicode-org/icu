@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_InterIndic_Malayalam.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Malayalam.txt
+// Date: Sat Jul 27 10:31:07 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Malayalam
@@ -135,6 +135,12 @@ t_InterIndic_Mlym {
 "\ue072>;"
 "\ue073>;"
 "\ue074>;"
+"\ue075>;"
+"\ue076>;"
+"\ue077>;"
+"\ue078>;"
+"\ue079>;"
+"\ue07A>;"
 "0 > \u0d66;"       // FALLBACK FOR TAMIL
 "1 > \u0d67;"
 "\ue0f0 >  \u0d30;"  // FALLBACK RA 

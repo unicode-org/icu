@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: Transliterator_index.txt
-// Date: Sun Mar 31 14:31:31 2002
+// Date: Sat Jul 27 10:31:01 2002
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -68,17 +68,52 @@ translit_index {
 { "Latin-Cyrillic", "file", "t_Cyrl_Latn", "REVERSE" },
 { "Cyrillic-Latin", "file", "t_Cyrl_Latn", "FORWARD" },
 
+{ "Latin-Hebrew", "file", "t_Hebr_Latn", "REVERSE" },
+{ "Hebrew-Latin", "file", "t_Hebr_Latn", "FORWARD" },
+
+{ "Latin-Arabic", "file", "t_Arab_Latn", "REVERSE" },
+{ "Arabic-Latin", "file", "t_Arab_Latn", "FORWARD" },
+
+{ "Latin-Han", "file", "t_Hani_Latn", "REVERSE" },
+{ "Han-Latin", "file", "t_Hani_Latn", "FORWARD" },
+
+// Comment these out; they are only for testing
+// Latin-Han/definition:file:Transliterator_Han_Latin_Definition.txt:UTF8:REVERSE
+// Han-Latin/definition:file:Transliterator_Han_Latin_Definition.txt:UTF8:FORWARD
+
+//Latin-Han/EDICT:file:Transliterator_Han_Latin_EDICT.txt:UTF8:REVERSE
+//Han-Latin/EDICT:file:Transliterator_Han_Latin_EDICT.txt:UTF8:FORWARD
+
 { "Latin-Greek", "file", "t_Grek_Latn", "REVERSE" },
 { "Greek-Latin", "file", "t_Grek_Latn", "FORWARD" },
 
-{ "Latin-Greek/UNGEGN", "alias", "Latin-el", "" },
-{ "Greek-Latin/UNGEGN", "alias", "el-Latin", "" },
+{ "Latin-Greek/UNGEGN", "file", "t_Grek_Latn_UNGEGN", "REVERSE" },
+{ "Greek-Latin/UNGEGN", "file", "t_Grek_Latn_UNGEGN", "FORWARD" },
 
 { "Latin-Katakana", "file", "t_Latn_Kana", "FORWARD" },
 { "Katakana-Latin", "file", "t_Latn_Kana", "REVERSE" },
 
 { "Latin-Hiragana", "file", "t_Hira_Latn", "REVERSE" },
 { "Hiragana-Latin", "file", "t_Hira_Latn", "FORWARD" },
+
+//Thai Stuff: will change if we get \b into Transliterator
+
+// Java only: { "Thai-ThaiSemi", "internal", "-", "FORWARD" },
+
+// Java only: { "Thai-ThaiLogical", "internal", "-", "FORWARD" },
+// Java only: { "ThaiLogical-Thai", "internal", "-", "REVERSE" },
+
+// Java only: { "ThaiLogical-Latin", "internal", "-", "FORWARD" },
+// Java only: { "Latin-ThaiLogical", "internal", "-", "REVERSE" },
+
+// Must use the order below!
+// We need two separate passes because of the Thai vowel reversal
+// Thai-Logical also converts spaces to semicolons. That has to be done before we insert latin spaces
+
+{ "Thai-Latin", "alias", "[[", "thai", "] \u0E01-\u0E3A\u0E40-\u0E5B];NFD;Thai-ThaiSemi;Any-BreakInternal;Thai-ThaiLogical;ThaiLogical-Latin;NFC", "" },
+{ "Latin-Thai", "alias", "[[", "Latin", "][", "Mn", "][", "Me", "] \ \;0-9|~\u00A7\u00AB\u00BB\u02B9\u0374\u2021];NFD;Latin-ThaiLogical;ThaiLogical-Thai;NFC", "" },
+
+// end of Thai Stuff
 
 { "Hiragana-Katakana", "file", "t_Hira_Kana", "FORWARD" },
 { "Katakana-Hiragana", "file", "t_Hira_Kana", "REVERSE" },
