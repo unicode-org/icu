@@ -115,15 +115,14 @@ class ComposedCharIter;
  * reason that <tt>Normalizer</tt> does not implement the
  * {@link CharacterIterator} interface.
  * <p>
- * <b>Note:</b> <tt>Normalizer</tt> is currently based on version 2.1.8
- * of the <a href="http://www.unicode.org" target="unicode">Unicode Standard</a>.
- * It will be updated as later versions of Unicode are released.  If you are
- * using this class on a JDK that supports an earlier version of Unicode, it
- * is possible that <tt>Normalizer</tt> may generate composed or dedecomposed
- * characters for which your JDK's {@link java.lang.Character} class does not
- * have any data.
- * <p>
- * @author Laura Werner, Mark Davis
+ *
+ * Form FCD, "Fast C or D", is designed for collation.
+ * It allows to work on strings that are not necessarily normalized
+ * with an algorithm (like in collation) that works under "canonical closure", i.e., it treats precomposed
+ * characters and their decomposed equivalents the same.
+ * For more details see {@link unorm.h }.
+ *
+ * @author Laura Werner, Mark Davis, Markus Scherer
  */
 class U_COMMON_API Normalizer
 {
@@ -133,7 +132,8 @@ class U_COMMON_API Normalizer
   enum {
     COMPAT_BIT         = 1,
     DECOMP_BIT         = 2,
-    COMPOSE_BIT     = 4
+    COMPOSE_BIT        = 4,
+    FCD_BIT            = 8
   };
 
 
@@ -222,7 +222,9 @@ class U_COMMON_API Normalizer
      * <p>
      * @see #setMode
      */
-    DECOMP_COMPAT     = DECOMP_BIT | COMPAT_BIT
+    DECOMP_COMPAT     = DECOMP_BIT | COMPAT_BIT,
+
+    FCD = FCD_BIT
   };
 
   /** The options for a Normalizer object */
@@ -853,6 +855,8 @@ inline UNormalizationMode Normalizer::getUNormalizationMode(
       return UNORM_NFD;
     case Normalizer::DECOMP_COMPAT :
       return UNORM_NFKD;
+    case Normalizer::FCD:
+      return UNORM_FCD;
     default : 
       status = U_ILLEGAL_ARGUMENT_ERROR; 
     }
@@ -877,6 +881,8 @@ inline Normalizer::EMode Normalizer::getNormalizerEMode(
       return Normalizer::COMPOSE;
     case UNORM_NFKC :
       return Normalizer::COMPOSE_COMPAT;
+    case UNORM_FCD:
+      return Normalizer::FCD;
     default : 
       status = U_ILLEGAL_ARGUMENT_ERROR; 
     }
