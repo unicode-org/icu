@@ -1457,7 +1457,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                 }
 
                 if ((subBundleKey == NULL
-                    || (subBundleKey != NULL && strcmp(subBundleKey, "LocaleScript") != 0))
+                    || (subBundleKey != NULL &&  strcmp(subBundleKey, "LocaleScript") != 0 && strcmp(subBundleKey, "PTE") != 0))
                     && ures_getSize(subRootBundle) != ures_getSize(subBundle))
                 {
                     log_err("Different size array with key \"%s\" in \"%s\" from root for locale \"%s\"\n"
@@ -2167,58 +2167,71 @@ static void VerifyTranslation(void) {
                         currLoc, strIdx);
                 }
             }
+            {
+                UResourceBundle* cal = ures_getByKey(currentLocale, "calendar", NULL, &errorCode);
+                UResourceBundle* greg = ures_getByKeyWithFallback(cal, "gregorian", NULL, &errorCode);
+                UResourceBundle* names = ures_getByKeyWithFallback(greg,  "dayNames", NULL, &errorCode);
+                UResourceBundle* format = ures_getByKeyWithFallback(names,  "format", NULL, &errorCode);
+                resArray = ures_getByKeyWithFallback(format,  "wide", NULL, &errorCode);
 
-            resArray = ures_getByKey(currentLocale, "DayNames", NULL, &errorCode);
-            if (U_FAILURE(errorCode)) {
-                log_err("error ures_getByKey returned %s\n", u_errorName(errorCode));
-            }
-            if (QUICK) {
-                end = 1;
-            }
-            else {
-                end = ures_getSize(resArray);
-            }
-
-
-            for (idx = 0; idx < end; idx++) {
-                const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
                 if (U_FAILURE(errorCode)) {
-                    log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
-                    continue;
+                    log_err("error ures_getByKey returned %s\n", u_errorName(errorCode));
                 }
-                strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
-                if (strIdx >= 0) {
-                    log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
-                        currLoc, idx, strIdx);
+                if (QUICK) {
+                    end = 1;
                 }
-            }
-            ures_close(resArray);
+                else {
+                    end = ures_getSize(resArray);
+                }
 
-            resArray = ures_getByKey(currentLocale, "MonthNames", NULL, &errorCode);
-            if (U_FAILURE(errorCode)) {
-                log_err("error ures_getByKey returned %s\n", u_errorName(errorCode));
-            }
-            if (QUICK) {
-                end = 1;
-            }
-            else {
-                end = ures_getSize(resArray);
-            }
 
-            for (idx = 0; idx < end; idx++) {
-                const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
+                for (idx = 0; idx < end; idx++) {
+                    const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
+                    if (U_FAILURE(errorCode)) {
+                        log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
+                        continue;
+                    }
+                    strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                    if (strIdx >= 0) {
+                        log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
+                            currLoc, idx, strIdx);
+                    }
+                }
+                ures_close(resArray);
+                ures_close(format);
+                ures_close(names);
+
+                names = ures_getByKeyWithFallback(greg, "monthNames", NULL, &errorCode);
+                format = ures_getByKeyWithFallback(names,"format", NULL, &errorCode);
+                resArray = ures_getByKeyWithFallback(format, "wide", NULL, &errorCode);
                 if (U_FAILURE(errorCode)) {
-                    log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
-                    continue;
+                    log_err("error ures_getByKey returned %s\n", u_errorName(errorCode));
                 }
-                strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
-                if (strIdx >= 0) {
-                    log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
-                        currLoc, idx, strIdx);
+                if (QUICK) {
+                    end = 1;
                 }
-            }
-            ures_close(resArray);
+                else {
+                    end = ures_getSize(resArray);
+                }
 
+                for (idx = 0; idx < end; idx++) {
+                    const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
+                    if (U_FAILURE(errorCode)) {
+                        log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
+                        continue;
+                    }
+                    strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                    if (strIdx >= 0) {
+                        log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
+                            currLoc, idx, strIdx);
+                    }
+                }
+                ures_close(resArray);
+                ures_close(format);
+                ures_close(names);
+                ures_close(greg);
+                ures_close(cal);
+            }
             errorCode = U_ZERO_ERROR;
             numScripts = uscript_getCode(currLoc, scripts, sizeof(scripts)/sizeof(scripts[0]), &errorCode);
             if (numScripts == 0) {
