@@ -15,7 +15,7 @@
 
 #include "unicode/utypes.h"
 #include "ucmp8.h"
-/*#include "ucmpe32.h"*/
+#include "umemstrm.h"
 #include "cmemory.h"
 #include "cintltst.h"
 #include "ucol_imp.h"
@@ -35,13 +35,16 @@ addCompactArrayTest(TestNode** root)
 }
 
 static void TestUCMP8API(){
+    UErrorCode status = U_ZERO_ERROR;
     CompactByteArray* ucmp8Array=NULL;
     CompactByteArray ucmp8Array1;
     CompactByteArray ucmp8Array2;
+    CompactByteArray ucmp8Clone;
     int32_t i=0;
     uint8_t *values;
     uint8_t *valuesSet;
     uint8_t const TEST_DEFAULT_VALUE = (uint8_t)0xFF;
+    //UMemoryStream *
     
 
     /*ucmp8_open*/
@@ -118,6 +121,38 @@ static void TestUCMP8API(){
              log_err("ERROR: ucmp8_set() failed\n");
              break;
         }
+    }
+
+    log_verbose("Testing ucmp8_flattenMem()\n");
+    {
+        int32_t len = 0;
+        const uint8_t *buff = NULL; 
+        UMemoryStream *MS = uprv_mstrm_openNew(65536);
+        int32_t size = ucmp8_flattenMem(&ucmp8Array1, MS);
+        
+        /* try after compacting */
+        buff = uprv_mstrm_getBuffer(MS, &len);
+        
+        if(size == 0 || len == 0 || buff == NULL) {
+            log_err("Unable to flatten!\n");
+        } else {
+            log_verbose("Testing ucmp8_initFromData()\n");
+            ucmp8_initFromData(&ucmp8Clone, &buff, &status);
+            if(U_FAILURE(status) || ucmp8_isBogus(&ucmp8Clone) == TRUE){
+                log_err("ERROR: ucmp8_initFromData() failed\n");
+                status = U_ZERO_ERROR;
+            } else {
+              valuesSet=(uint8_t*)ucmp8_getArray(&ucmp8Clone);
+              for(i =0 ; i< 10; i++ ){
+                  if(valuesSet[0] != (uint8_t)0xFD ){
+                       log_err("ERROR: did not get the values back from flattened clone\n");
+                       break;
+                  }
+              }
+              ucmp8_close(&ucmp8Clone);
+            }
+        }
+        uprv_mstrm_close(MS);
     }
 
     ucmp8_close(ucmp8Array);
