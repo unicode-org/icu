@@ -90,25 +90,27 @@ class UnicodeConverter;     // unicode/convert.h
  * @stable
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING_SIMPLE(cs) UnicodeString((const UChar *)L ## cs)
+#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(TRUE, (const UChar *)L ## cs, -1)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING_SIMPLE(cs) UnicodeString((const UChar *)cs)
+#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(TRUE, (const UChar *)cs, -1)
 #else
 #   define UNICODE_STRING_SIMPLE(cs) UnicodeString(cs, "")
 #endif
 
- /**
+/**
  * UnicodeString is a string class that stores Unicode characters directly and provides
- * similar functionality as the Java String class.
+ * similar functionality as the Java String and StringBuffer classes.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).
  *
- * <p>In ICU, strings are stored and used as UTF-16.
- * This means that a string internally consists of 16-bit Unicode <i>code units</i>.<br>
- * UTF-16 is a variable-length encoding: A Unicode character may be stored with either
+ * <p>For an overview of Unicode strings in C and C++ see the
+ * <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide Strings chapter</a>.</p>
+ *
+ * <p>In ICU, a Unicode string consists of 16-bit Unicode <em>code units</em>.
+ * A Unicode character may be stored with either
  * one code unit &mdash; which is the most common case &mdash; or with a matched pair of
  * special code units ("surrogates").
  * The data type for code units is UChar.<br>
- * For single-character handling, a Unicode character code <i>point</i> is a scalar value
+ * For single-character handling, a Unicode character code <em>point</em> is a value
  * in the range 0..0x10ffff. ICU uses the UChar32 type for code points.</p>
  *
  * <p>Indexes and offsets into and lengths of strings always count code units, not code points.
@@ -119,41 +121,17 @@ class UnicodeConverter;     // unicode/convert.h
  * UnicodeString::getChar32Start() and UnicodeString::getChar32Limit()
  * (or, in C, the equivalent macros UTF_SET_CHAR_START() and UTF_SET_CHAR_LIMIT(), see utf.h).</p>
  *
- * <p>UnicodeString uses four storage models:
- * <ol>
- * <li>Short strings are normally stored inside the UnicodeString object itself.
- *     The object has fields for the "bookkeeping" and a small UChar array.
- *     When the object is copied, then the internal characters are copied
- *     into the destination object.</li>
- * <li>Longer strings are normally stored in allocated memory.
- *     The allocated UChar array is preceeded by a reference counter.
- *     When the string object is copied, then the allocated buffer is shared by
- *     incrementing the reference counter.</li>
- * <li>A UnicodeString can be constructed or setTo() such that it aliases a read-only
- *     buffer instead of copying the characters. In this case, the string object
- *     uses this aliased buffer for as long as it is not modified, and it will never
- *     attempt to modify or release the buffer. This has copy-on-write semantics:
- *     When the string object is modified, then the buffer contents is first copied
- *     into writable memory (inside the object for short strings, or allocated
- *     buffer for longer strings). When a UnicodeString with a read-only alias
- *     is assigned to another UnicodeString, then both string objects will
- *     share the same read-only alias.</li>
- * <li>A UnicodeString can be constructed or setTo() such that it aliases a writable
- *     buffer instead of copying the characters. The difference from the above is that
- *     the string object will write through to this aliased buffer for write
- *     operations. Only when the capacity of the buffer is not sufficient is
- *     a new buffer allocated and the contents copied.
- *     An efficient way to get the string contents into the original buffer is
- *     to use the extract(..., UChar *dst, ...) function: It will only copy the
- *     string contents if the dst buffer is different from the buffer of the string
- *     object itself. If a string grows and shrinks during a sequence of operations,
- *     then it will not use the same buffer any more, but may fit into it again.
- *     When a UnicodeString with a writable alias is assigned to another UnicodeString,
- *     then the contents is always copied. The destination string will not alias
- *     to the buffer that the source string aliases.</li>
- * </ol></p>
+ * <p>UnicodeString uses several storage methods.
+ * String contents can be stored inside the UnicodeString object itself,
+ * in an allocated and shared buffer, or in an outside buffer that is "aliased".
+ * Most of this is done transparently, but careful aliasing in particular provides
+ * significant performance improvements.
+ * Also, the internal buffer is accessible via special functions.
+ * For details see the
+ * <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide Strings chapter</a>.</p>
  *
- * @see Unicode
+ * @see utf.h
+ * @see CharacterIterator
  * @stable
  */
 class U_COMMON_API UnicodeString : public Replaceable
