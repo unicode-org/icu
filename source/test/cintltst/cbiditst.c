@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -25,6 +25,9 @@
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 /* prototypes ---------------------------------------------------------------*/
+
+static void
+charFromDirPropTest(void);
 
 static void
 doBiDiTest(void);
@@ -68,6 +71,9 @@ static void TestReorder(void);
 
 static const char *levelString="...............................................................";
 
+static void
+initCharFromDirProps(void);
+
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, int32_t length);
 
@@ -80,6 +86,7 @@ void addComplexTest(TestNode** root);
 
 void
 addComplexTest(TestNode** root) {
+    addTest(root, charFromDirPropTest, "complex/bidi/charFromDirPropTest");
     addTest(root, doBiDiTest, "complex/bidi/BiDiTest");
     addTest(root, doInverseBiDiTest, "complex/bidi/inverse");
     addTest(root, TestReorder,"complex/bidi/TestReorder");
@@ -87,6 +94,21 @@ addComplexTest(TestNode** root) {
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
+}
+
+/* verify that the exemplar characters have the expected bidi classes */
+static void
+charFromDirPropTest(void) {
+    int32_t i;
+
+    initCharFromDirProps();
+
+    for(i=0; i<U_CHAR_DIRECTION_COUNT; ++i) {
+        if(u_charDirection(charFromDirProp[i])!=(UCharDirection)i) {
+            log_err("u_charDirection(charFromDirProp[%d]=U+%04x)!=%d\n",
+                    i, charFromDirProp[i], i);
+        }
+    }
 }
 
 static void
@@ -1352,11 +1374,30 @@ doLOGICALArabicDeShapingTest() {
 
 /* helpers ------------------------------------------------------------------ */
 
+static void
+initCharFromDirProps() {
+    static const UVersionInfo ucd401={ 4, 0, 1, 0 };
+    static UVersionInfo ucdVersion={ 0, 0, 0, 0 };
+
+    /* lazy initialization */
+    if(ucdVersion[0]>0) {
+        return;
+    }
+
+    u_getUnicodeVersion(ucdVersion);
+    if(memcmp(ucdVersion, ucd401, sizeof(UVersionInfo))>0) {
+        /* Unicode 4.0.1 changes bidi classes for +-/ */
+        charFromDirProp[U_EUROPEAN_NUMBER_SEPARATOR]=0x2b; /* change ES character from / to + */
+    }
+}
+
 /* return a string with characters according to the desired directional properties */
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, int32_t length) {
     static UChar s[MAX_STRING_LENGTH];
     int32_t i;
+
+    initCharFromDirProps();
 
     /* this part would have to be modified for UTF-x */
     for(i=0; i<length; ++i) {
