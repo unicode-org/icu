@@ -10,7 +10,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.test.RuleBasedBreakIterator;
+package com.ibm.test.rbbi;
 
 import java.util.Locale;
 import com.ibm.text.BreakIterator;

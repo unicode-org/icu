@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DBBIDemo.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:47 $
+ * $RCSfile: DBBIDemo.java,v $ $Revision: 1.2 $ $Date: 2000/03/02 00:39:49 $
  *
  * (C) Copyright Taligent, Inc. 1996 - 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
@@ -27,7 +27,7 @@
  * DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
  *
  */
-package com.ibm.demo.RuleBasedBreakIterator;
+package com.ibm.demo.rbbi;
 
 import com.ibm.demo.*;
 import java.applet.Applet;
