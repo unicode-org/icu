@@ -35,16 +35,6 @@
 /* Check our settings... */
 #include "unicode/utypes.h"
 
-/* APP_NO_THREADS is an old symbol. We'll honour it if present. */
-#ifdef APP_NO_THREADS
-# define ICU_USE_THREADS 0
-#endif
-
-/* Default: use threads. */
-#ifndef ICU_USE_THREADS
-# define ICU_USE_THREADS 1
-#endif
-
 
 #if defined(POSIX) && (ICU_USE_THREADS==1)
   /* Usage: uncomment the following, and breakpoint WeAreDeadlocked to
