@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.113 2001/07/23 18:34:35 grhoten Exp $
+dnl $Id: configure.in,v 1.114 2001/07/23 19:52:19 grhoten Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -81,9 +81,10 @@ SOL64=no
 case "${host}" in
 *-*-solaris*)
 	if test "$ac_cv_prog_gcc" = no; then
-		AC_MSG_CHECKING([if we have a 64-bit (sparcv9) compiler])
+		AC_MSG_CHECKING([if we can use a 64-bit (sparcv9) compiler])
 		SOL64=`$CXX -xarch=v9 && $CC -xarch=v9 2>&1 |grep -v usage:`
-		if test -z "$SOL64"; then
+		SPARCV9=`isainfo -n | grep sparcv9`
+		if test -z "$SOL64" && test -n "$SPARCV9"; then
 			AC_MSG_RESULT(yes)
 			SOL64=yes
 		else
