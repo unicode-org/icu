@@ -316,7 +316,7 @@ inline UBool StringPrep::getNormalization(){
 }
 
 inline void StringPrep::getUnicodeVersion(UVersionInfo& info){
-    for(int32_t i=0; i< (sizeof(info)/sizeof(info[0])); i++){
+    for(int32_t i=0; i< (int32_t)(sizeof(info)/sizeof(info[0])); i++){
         info[i] = unicodeVersion[i];
     }
 }
