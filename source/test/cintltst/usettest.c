@@ -245,8 +245,9 @@ static void expectContainment(const USet* set,
             int32_t stringLength = 0;
             char strCopy[64];
 
-            while (*p++ != '}') {}
-            stringLength = p - stringStart - 1;
+            while (*p++ != '}') {
+            }
+            stringLength = (int32_t)(p - stringStart - 1);
             strncpy(strCopy, stringStart, stringLength);
             strCopy[stringLength] = 0;
 
@@ -391,8 +392,9 @@ static void expectItems(const USet* set,
             int32_t stringLength = 0;
             char strCopy[64];
 
-            while (*p++ != '}') {}
-            stringLength = p - stringStart - 1;
+            while (*p++ != '}') {
+            }
+            stringLength = (int32_t)(p - stringStart - 1);
             strncpy(strCopy, stringStart, stringLength);
             strCopy[stringLength] = 0;
 
