@@ -119,6 +119,14 @@ static const float RESIZE_POLICY_RATIO_TABLE[6] = {
                 (*hash->valueDeleter)(valuepointer); \
             }
 
+/*
+ * Constants for hinting whether a key or value is an integer
+ * or a pointer.  If a hint bit is zero, then the associated
+ * token is assumed to be an integer.
+ */
+#define HINT_KEY_POINTER   (1)
+#define HINT_VALUE_POINTER (2)
+
 /********************************************************************
  * Debugging
  ********************************************************************/
@@ -159,9 +167,10 @@ static UHashElement* _uhash_find(const UHashtable *hash, UHashTok key,
                                  int32_t hashcode);
 
 static UHashTok _uhash_put(UHashtable *hash,
-                        UHashTok key,
-                        UHashTok value,
-                        UErrorCode *status);
+                           UHashTok key,
+                           UHashTok value,
+                           int8_t hint,
+                           UErrorCode *status);
 
 static UHashTok _uhash_remove(UHashtable *hash,
                            UHashTok key);
@@ -169,7 +178,9 @@ static UHashTok _uhash_remove(UHashtable *hash,
 static UHashTok _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e);
 
 static UHashTok _uhash_setElement(UHashtable* hash, UHashElement* e,
-                               int32_t hashcode, UHashTok key, UHashTok value);
+                                  int32_t hashcode,
+                                  UHashTok key, UHashTok value,
+                                  int8_t hint);
 
 static void _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePolicy policy);
 
@@ -288,7 +299,9 @@ uhash_put(UHashtable *hash,
     UHashTok keyholder, valueholder;
     keyholder.pointer = key;
     valueholder.pointer = value;
-    return _uhash_put(hash, keyholder, valueholder, status).pointer;
+    return _uhash_put(hash, keyholder, valueholder,
+                      HINT_KEY_POINTER | HINT_VALUE_POINTER,
+                      status).pointer;
 }
 
 void*
@@ -299,7 +312,9 @@ uhash_iput(UHashtable *hash,
     UHashTok keyholder, valueholder;
     keyholder.integer = key;
     valueholder.pointer = value;
-    return _uhash_put(hash, keyholder, valueholder, status).pointer;
+    return _uhash_put(hash, keyholder, valueholder,
+                      HINT_VALUE_POINTER,
+                      status).pointer;
 }
 
 int32_t
@@ -310,7 +325,9 @@ uhash_puti(UHashtable *hash,
     UHashTok keyholder, valueholder;
     keyholder.pointer = key;
     valueholder.integer = value;
-    return _uhash_put(hash, keyholder, valueholder, status).integer;
+    return _uhash_put(hash, keyholder, valueholder,
+                      HINT_KEY_POINTER,
+                      status).integer;
 }
 
 U_CAPI void*
@@ -758,6 +775,7 @@ static UHashTok
 _uhash_put(UHashtable *hash,
            UHashTok key,
            UHashTok value,
+           int8_t hint,
            UErrorCode *status) {
 
     /* Put finds the position in the table for the new value.  If the
@@ -808,7 +826,7 @@ _uhash_put(UHashtable *hash,
      * old key, then it must be deleted (if the deleter != NULL).
      * Make hashcodes stored in table positive.
      */
-    return _uhash_setElement(hash, e, hashcode & 0x7FFFFFFF, key, value);
+    return _uhash_setElement(hash, e, hashcode & 0x7FFFFFFF, key, value, hint);
 
  err:
     /* If the deleters are non-NULL, this method adopts its key and/or
@@ -845,7 +863,8 @@ _uhash_remove(UHashtable *hash,
 
 static UHashTok
 _uhash_setElement(UHashtable *hash, UHashElement* e,
-                  int32_t hashcode, UHashTok key, UHashTok value) {
+                  int32_t hashcode,
+                  UHashTok key, UHashTok value, int8_t hint) {
 
     void* oldKeyPtr = e->key.pointer;
     UHashTok oldValue = e->value;
@@ -860,12 +879,22 @@ _uhash_setElement(UHashtable *hash, UHashElement* e,
         }
         oldValue.pointer = NULL;
     }
-    /* Compilers should copy the UHashTok union correctly.  If they do
-     * not, replace this line with e->key.pointer = key.pointer for
-     * platforms with sizeof(void*) >= sizeof(int32_t), e->key.integer
-     * = key.integer otherwise.  */
-    e->key = key;
-    e->value = value;
+    /* Compilers should copy the UHashTok union correctly, but even if
+     * they do, memory heap tools (e.g. BoundsChecker) can get
+     * confused when a pointer is cloaked in a union and then copied.
+     * TO ALLEVIATE THIS, we use hints (based on what API the user is
+     * calling) to copy pointers when we know the user thinks
+     * something is a pointer. */
+    if (hint & HINT_KEY_POINTER) {
+        e->key.pointer = key.pointer;
+    } else {
+        e->key = key;
+    }
+    if (hint & HINT_VALUE_POINTER) {
+        e->value.pointer = value.pointer;
+    } else {
+        e->value = value;
+    }
     e->hashcode = hashcode;
     return oldValue;
 }
@@ -879,7 +908,7 @@ _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e) {
     assert(!IS_EMPTY_OR_DELETED(e->hashcode));
     --hash->count;
     empty.pointer = NULL; empty.integer = 0;
-    return _uhash_setElement(hash, e, HASH_DELETED, empty, empty);
+    return _uhash_setElement(hash, e, HASH_DELETED, empty, empty, 0);
 }
 
 static void
