@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (c) 2004, International Business Machines
+# Copyright (c) 2003-2004, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # Author: Alan Liu
@@ -35,3 +35,10 @@ gcm       ; General_Category_Mask
 # Binary Properties
 # ================================================
 Sensitive ; Case_Sensitive
+
+nfdinert; NFD_Inert
+nfkdinert; NFKD_Inert
+nfcinert; NFC_Inert
+nfkcinert; NFKC_Inert
+
+segstart; Segment_Starter

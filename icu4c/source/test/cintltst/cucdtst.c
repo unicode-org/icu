@@ -2015,6 +2015,29 @@ TestAdditionalProperties() {
         { 0xfb1d, UCHAR_FULL_COMPOSITION_EXCLUSION, TRUE },
         { 0x1d15f, UCHAR_FULL_COMPOSITION_EXCLUSION, TRUE },
         { 0xfb1e, UCHAR_FULL_COMPOSITION_EXCLUSION, FALSE },
+
+        { 0x110a, UCHAR_NFD_INERT, TRUE },      /* Jamo L */
+        { 0x0308, UCHAR_NFD_INERT, FALSE },
+
+        { 0x1164, UCHAR_NFKD_INERT, TRUE },     /* Jamo V */
+        { 0x1d79d, UCHAR_NFKD_INERT, FALSE },   /* math compat version of xi */
+
+        { 0x0021, UCHAR_NFC_INERT, TRUE },      /* ! */
+        { 0x0061, UCHAR_NFC_INERT, FALSE },     /* a */
+        { 0x00e4, UCHAR_NFC_INERT, FALSE },     /* a-umlaut */
+        { 0x0102, UCHAR_NFC_INERT, FALSE },     /* a-breve */
+        { 0xac1c, UCHAR_NFC_INERT, FALSE },     /* Hangul LV */
+        { 0xac1d, UCHAR_NFC_INERT, TRUE },      /* Hangul LVT */
+
+        { 0x1d79d, UCHAR_NFKC_INERT, FALSE },   /* math compat version of xi */
+        { 0x2a6d6, UCHAR_NFKC_INERT, TRUE },    /* Han, last of CJK ext. B */
+
+        { 0x00e4, UCHAR_SEGMENT_STARTER, TRUE },
+        { 0x0308, UCHAR_SEGMENT_STARTER, FALSE },
+        { 0x110a, UCHAR_SEGMENT_STARTER, TRUE }, /* Jamo L */
+        { 0x1164, UCHAR_SEGMENT_STARTER, FALSE },/* Jamo V */
+        { 0xac1c, UCHAR_SEGMENT_STARTER, TRUE }, /* Hangul LV */
+        { 0xac1d, UCHAR_SEGMENT_STARTER, TRUE }, /* Hangul LVT */
 #endif
 
         { 0x0044, UCHAR_HEX_DIGIT, TRUE },
