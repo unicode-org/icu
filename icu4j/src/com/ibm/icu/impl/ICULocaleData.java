@@ -197,7 +197,7 @@ public class ICULocaleData {
                 parent = instantiate(name.substring(0, i));
             }
             try {
-                final Locale rootLocale = new Locale("");
+                final Locale rootLocale = new Locale("", "", "");
                 Locale locale = rootLocale;
                 i = name.indexOf('_');
                 if (i != -1) {
