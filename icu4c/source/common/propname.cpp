@@ -528,8 +528,8 @@ NameToEnum::swap(const UDataSwapper *ds,
                        upname_compareRows, &cmp,
                        TRUE, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "upname_swap(NameToEnum).uprv_sortArray(%d items) failed - %s\n",
-                             tempMap->count, u_errorName(*pErrorCode));
+            udata_printError(ds, "upname_swap(NameToEnum).uprv_sortArray(%d items) failed\n",
+                             tempMap->count);
             return 0;
         }
 

@@ -611,8 +611,8 @@ ures_preflightResource(const UDataSwapper *ds,
                                            pBottom, pTop, pMaxTableLength,
                                            pErrorCode);
                     if(U_FAILURE(*pErrorCode)) {
-                        udata_printError(ds, "ures_preflightResource(table res=%08x)[%d].recurse(%08x) failed - %s\n",
-                                         res, i, item, u_errorName(*pErrorCode));
+                        udata_printError(ds, "ures_preflightResource(table res=%08x)[%d].recurse(%08x) failed\n",
+                                         res, i, item);
                         break;
                     }
                 }
@@ -636,8 +636,8 @@ ures_preflightResource(const UDataSwapper *ds,
                                            pBottom, pTop, pMaxTableLength,
                                            pErrorCode);
                     if(U_FAILURE(*pErrorCode)) {
-                        udata_printError(ds, "ures_preflightResource(array res=%08x)[%d].recurse(%08x) failed - %s\n",
-                                         res, i, item, u_errorName(*pErrorCode));
+                        udata_printError(ds, "ures_preflightResource(array res=%08x)[%d].recurse(%08x) failed\n",
+                                         res, i, item);
                         break;
                     }
                 }
@@ -785,8 +785,8 @@ ures_swapResource(const UDataSwapper *ds,
                 item=ds->readUInt32(p[i]);
                 ures_swapResource(ds, inBundle, outBundle, item, specialType, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    udata_printError(ds, "ures_swapResource(table res=%08x)[%d].recurse(%08x) failed - %s\n",
-                                     res, i, item, u_errorName(*pErrorCode));
+                    udata_printError(ds, "ures_swapResource(table res=%08x)[%d].recurse(%08x) failed\n",
+                                     res, i, item);
                     return;
                 }
             }
@@ -826,8 +826,8 @@ ures_swapResource(const UDataSwapper *ds,
                            ures_compareRows, pTempTable->keyChars,
                            FALSE, pErrorCode);
             if(U_FAILURE(*pErrorCode)) {
-                udata_printError(ds, "ures_swapResource(table res=%08x).uprv_sortArray(%d items) failed - %s\n",
-                                 res, count, u_errorName(*pErrorCode));
+                udata_printError(ds, "ures_swapResource(table res=%08x).uprv_sortArray(%d items) failed\n",
+                                 res, count);
                 return;
             }
 
@@ -905,8 +905,8 @@ ures_swapResource(const UDataSwapper *ds,
                 item=ds->readUInt32(p[i]);
                 ures_swapResource(ds, inBundle, outBundle, item, URES_NO_SPECIAL_TYPE, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    udata_printError(ds, "ures_swapResource(array res=%08x)[%d].recurse(%08x) failed - %s\n",
-                                     res, i, item, u_errorName(*pErrorCode));
+                    udata_printError(ds, "ures_swapResource(array res=%08x)[%d].recurse(%08x) failed\n",
+                                     res, i, item);
                     return;
                 }
             }
@@ -995,8 +995,8 @@ ures_swap(const UDataSwapper *ds,
                                &bottom, &top, &maxTableLength,
                                pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_preflightResource(root res=%08x) failed - %s\n",
-                             rootRes, u_errorName(*pErrorCode));
+            udata_printError(ds, "ures_preflightResource(root res=%08x) failed\n",
+                             rootRes);
             return 0;
         }
     } else {
@@ -1030,8 +1030,7 @@ ures_swap(const UDataSwapper *ds,
         udata_swapInvStringBlock(ds, inBundle+stringsBottom, 4*(bottom-stringsBottom),
                                     outBundle+stringsBottom, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed - %s\n", 4*(bottom-1),
-                             u_errorName(*pErrorCode));
+            udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed\n", 4*(bottom-1));
             return 0;
         }
 
@@ -1054,8 +1053,8 @@ ures_swap(const UDataSwapper *ds,
         /* swap the resources */
         ures_swapResource(ds, inBundle, outBundle, rootRes, URES_NO_SPECIAL_TYPE, &tempTable, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_swapResource(root res=%08x) failed - %s\n",
-                             rootRes, u_errorName(*pErrorCode));
+            udata_printError(ds, "ures_swapResource(root res=%08x) failed\n",
+                             rootRes);
         }
 
         if(tempTable.rows!=rows) {

@@ -1820,8 +1820,8 @@ makeTokenMap(const UDataSwapper *ds,
                 c1=(uint8_t)i;
                 ds->swapInvChars(ds, &c1, 1, &c2, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    udata_printError(ds, "unames/makeTokenMap() finds variant character 0x%02x used (input charset family %d) - %s\n",
-                                     i, ds->inCharset, u_errorName(*pErrorCode));
+                    udata_printError(ds, "unames/makeTokenMap() finds variant character 0x%02x used (input charset family %d)\n",
+                                     i, ds->inCharset);
                     return;
                 }
 
@@ -2000,8 +2000,7 @@ uchar_swapNames(const UDataSwapper *ds,
         udata_swapInvStringBlock(ds, inBytes+tokenStringOffset, (int32_t)(groupsOffset-tokenStringOffset),
                                     outBytes+tokenStringOffset, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "uchar_swapNames(token strings) failed - %s\n",
-                             u_errorName(*pErrorCode));
+            udata_printError(ds, "uchar_swapNames(token strings) failed\n");
             return 0;
         }
 
@@ -2080,8 +2079,8 @@ uchar_swapNames(const UDataSwapper *ds,
                 ds->swapInvChars(ds, inRange+1, (int32_t)uprv_strlen((const char *)(inRange+1)),
                                     outRange+1, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
-                    udata_printError(ds, "uchar_swapNames(prefix string of algorithmic range %u) failed - %s\n",
-                                     i, u_errorName(*pErrorCode));
+                    udata_printError(ds, "uchar_swapNames(prefix string of algorithmic range %u) failed\n",
+                                     i);
                     return 0;
                 }
                 break;
