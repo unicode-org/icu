@@ -151,5 +151,19 @@ UnicodeString& RuleBasedTransliterator::toRules(UnicodeString& rulesSource,
     return data->ruleSet.toRules(rulesSource, escapeUnprintable);
 }
 
+/**
+ * Implement Transliterator framework
+ */
+void RuleBasedTransliterator::handleGetSourceSet(UnicodeSet& result) const {
+    data->ruleSet.getSourceTargetSet(result, FALSE);
+}
+
+/**
+ * Override Transliterator framework
+ */
+UnicodeSet& RuleBasedTransliterator::getTargetSet(UnicodeSet& result) const {
+    return data->ruleSet.getSourceTargetSet(result, TRUE);
+}
+
 U_NAMESPACE_END
 

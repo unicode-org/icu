@@ -16,6 +16,7 @@ U_NAMESPACE_BEGIN
 
 class Replaceable;
 class UnicodeString;
+class UnicodeSet;
 
 /**
  * <code>UnicodeReplacer</code> defines a protocol for objects that
@@ -67,6 +68,13 @@ class U_I18N_API UnicodeReplacer /* not : public UObject because this is an inte
      */
     virtual UnicodeString& toReplacerPattern(UnicodeString& result,
                                              UBool escapeUnprintable) const = 0;
+
+    /**
+     * Union the set of all characters that may output by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the output characters
+     */
+    virtual void addReplacementSetTo(UnicodeSet& toUnionTo) const = 0;
 };
 
 U_NAMESPACE_END

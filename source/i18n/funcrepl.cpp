@@ -9,6 +9,7 @@
 */
 #include "funcrepl.h"
 #include "unicode/translit.h"
+#include "unicode/uniset.h"
 
 static const UChar AMPERSAND = 38; // '&'
 static const UChar OPEN[]    = {40,32,0}; // "( "
@@ -89,6 +90,14 @@ UnicodeString& FunctionReplacer::toReplacerPattern(UnicodeString& rule,
     rule.append(replacer->toReplacer()->toReplacerPattern(str, escapeUnprintable));
     rule.append(CLOSE);
     return rule;
+}
+
+/**
+ * Implement UnicodeReplacer
+ */
+void FunctionReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+    UnicodeSet set;
+    toUnionTo.addAll(translit->getTargetSet(set));
 }
 
 /**

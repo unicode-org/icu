@@ -95,6 +95,13 @@ public:
      */
     virtual void setData(const TransliterationRuleData*) {}
 
+    /**
+     * Stubbed out implementation of UnicodeMatcher API.
+     * @param toUnionTo the set into which to union the source characters
+     * @return a reference to toUnionTo
+     */
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const;
+
 protected:
 
     UnicodeFilter();

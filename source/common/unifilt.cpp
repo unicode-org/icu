@@ -62,6 +62,10 @@ UBool UnicodeFilter::matchesIndexValue(uint8_t v) const {
     return FALSE;
 }
 
+// Stub this out for filters that do not implement this
+void UnicodeFilter::addMatchSetTo(UnicodeSet& toUnionTo) const {
+}
+
 U_NAMESPACE_END
 
 //eof

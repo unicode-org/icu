@@ -780,6 +780,51 @@ public:
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
 
+    /**
+     * Returns the set of all characters that may be modified in the
+     * input text by this Transliterator.  This incorporates this
+     * object's current filter; if the filter is changed, the return
+     * value of this function will change.  The default implementation
+     * returns an empty set.  Some subclasses may override {@link
+     * #handleGetSourceSet} to return a more precise result.  The
+     * return result is approximate in any case and is intended for
+     * use by tests, tools, or utilities.
+     * @param result receives result set; previous contents lost
+     * @return a reference to result
+     * @see #getTargetSet
+     * @see #handleGetSourceSet
+     */
+    UnicodeSet& getSourceSet(UnicodeSet& result) const;
+
+    /**
+     * Framework method that returns the set of all characters that
+     * may be modified in the input text by this Transliterator,
+     * ignoring the effect of this object's filter.  The base class
+     * implementation returns the empty set.  Subclasses that wish to
+     * implement this should override this method.
+     * @return the set of characters that this transliterator may
+     * modify.  The set may be modified, so subclasses should return a
+     * newly-created object.
+     * @param result receives result set; previous contents lost
+     * @see #getSourceSet
+     * @see #getTargetSet
+     */
+    virtual void handleGetSourceSet(UnicodeSet& result) const;
+
+    /**
+     * Returns the set of all characters that may be generated as
+     * replacement text by this transliterator.  The default
+     * implementation returns the empty set.  Some subclasses may
+     * override this method to return a more precise result.  The
+     * return result is approximate in any case and is intended for
+     * use by tests, tools, or utilities requiring such
+     * meta-information.
+     * @param result receives result set; previous contents lost
+     * @return a reference to result
+     * @see #getTargetSet
+     */
+    virtual UnicodeSet& getTargetSet(UnicodeSet& result) const;
+
 public:
 
     /**
