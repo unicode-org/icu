@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -72,7 +72,32 @@ U_CAPI uint32_t * U_EXPORT2
 upvec_getRow(uint32_t *pv, int32_t rowIndex,
              UChar32 *pRangeStart, UChar32 *pRangeLimit);
 
+/*
+ * Compact the vectors:
+ * - modify the memory
+ * - keep only unique vectors
+ * - store them contiguously from the beginning of the memory
+ * - for each (non-unique) row, call the handler function
+ *
+ * The handler's rowIndex is the uint32_t index of the row in the compacted
+ * memory block.
+ * (Therefore, it starts at 0 increases in increments of the columns value.)
+ */
+
+typedef void U_CALLCONV
+UPVecCompactHandler(void *context,
+                    UChar32 start, UChar32 limit,
+                    int32_t rowIndex, uint32_t *row, int32_t columns,
+                    UErrorCode *pErrorCode);
+
 U_CAPI int32_t U_EXPORT2
-upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode);
+upvec_compact(uint32_t *pv, UPVecCompactHandler *handler, void *context, UErrorCode *pErrorCode);
+
+/* context=UNewTrie, stores the rowIndex values into the trie */
+U_CAPI void U_CALLCONV
+upvec_compactToTrieHandler(void *context,
+                           UChar32 start, UChar32 limit,
+                           int32_t rowIndex, uint32_t *row, int32_t columns,
+                           UErrorCode *pErrorCode);
 
 #endif

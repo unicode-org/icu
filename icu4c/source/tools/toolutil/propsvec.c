@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -277,16 +277,17 @@ upvec_compareRows(const void *context, const void *l, const void *r) {
 }
 
 U_CAPI int32_t U_EXPORT2
-upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode) {
+upvec_compact(uint32_t *pv, UPVecCompactHandler *handler, void *context, UErrorCode *pErrorCode) {
     uint32_t *row;
     int32_t columns, valueColumns, rows, count;
+    UChar32 start, limit;
 
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    if(pv==NULL || trie==NULL) {
+    if(pv==NULL || handler==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -294,6 +295,10 @@ upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode) {
     row=pv+UPVEC_HEADER_LENGTH;
     columns=(int32_t)pv[UPVEC_COLUMNS];
     rows=(int32_t)pv[UPVEC_ROWS];
+
+    if(rows==0) {
+        return 0;
+    }
 
     /* sort the properties vectors to find unique vector values */
     if(rows>1) {
@@ -306,7 +311,7 @@ upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode) {
 
     /*
      * Move vector contents up to a contiguous array with only unique
-     * vector values, and set indexes to those values into the trie.
+     * vector values, and call the handler function for each vector.
      *
      * This destroys the Properties Vector structure and replaces it
      * with an array of just vector values.
@@ -315,19 +320,34 @@ upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode) {
     count=-valueColumns;
 
     do {
+        /* fetch these first before memmove() may overwrite them */
+        start=(UChar32)row[0];
+        limit=(UChar32)row[1];
+
         /* add a new values vector if it is different from the current one */
         if(count<0 || 0!=uprv_memcmp(row+2, pv+count, valueColumns*4)) {
             count+=valueColumns;
             uprv_memmove(pv+count, row+2, valueColumns*4);
         }
 
-        if(count>0 && !utrie_setRange32(trie, (UChar32)row[0], (UChar32)row[1], (uint32_t)count, FALSE)) {
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        handler(context, start, limit, count, pv+count, valueColumns, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
             return 0;
         }
 
         row+=columns;
     } while(--rows>0);
 
+    /* count is at the beginning of the last vector, add valueColumns to include that last vector */
     return count+valueColumns;
+}
+
+U_CAPI void U_CALLCONV
+upvec_compactToTrieHandler(void *context,
+                           UChar32 start, UChar32 limit,
+                           int32_t rowIndex, uint32_t *row, int32_t columns,
+                           UErrorCode *pErrorCode) {
+    if(!utrie_setRange32((UNewTrie *)context, start, limit, (uint32_t)rowIndex, FALSE)) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
 }
