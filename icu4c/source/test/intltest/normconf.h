@@ -67,11 +67,12 @@ class NormalizerConformanceTest : public IntlTest {
      * @param msg description of this test
      * @param return true if got == exp
      */
-    UBool assertEqual(const UnicodeString& op,
+    UBool assertEqual(const char *op,
                       const UnicodeString& s,
                       const UnicodeString& got,
                       const UnicodeString& exp,
-                      const UnicodeString& msg);
+                      const char *msg,
+                      int32_t field);
 
     /**
      * Split a string into pieces based on the given delimiter
