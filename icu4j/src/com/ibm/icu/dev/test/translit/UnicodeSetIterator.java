@@ -10,43 +10,73 @@ public final class UnicodeSetIterator {
     public UnicodeSet set;
     int endRange = 0;
     int range = 0;
+    int startElement = 0;
     int endElement;
     int element;
+    boolean abbreviated = false;
         
+    public UnicodeSetIterator(UnicodeSet set, boolean abb) {
+        reset(set, abb);
+    }
+    
     public UnicodeSetIterator(UnicodeSet set) {
-        reset(set);
+        reset(set, false);
     }
         
     public UnicodeSetIterator() {
-        reset(new UnicodeSet());
+        reset(new UnicodeSet(), false);
+    }
+        
+    public void setAbbreviated(boolean value) {
+        abbreviated = value;
+    }
+    
+    public boolean getAbbreviated() {
+        return abbreviated;
     }
         
     /* returns -1 when done */
         
     public int next() {
+        if (abbreviated) {
+            if (element >= startElement + 50 && element <= endElement - 50) {
+                element = endElement - 50;
+            }
+        }
         if (element < endElement) {
             return ++element;
         }
         if (range >= endRange) return -1;
         ++range;
         endElement = set.getRangeEnd(range);
+        startElement = set.getRangeStart(range);
         element = set.getRangeStart(range);
         return element;
     }
         
-    public void reset(UnicodeSet set) {
+    public void reset(UnicodeSet set, boolean abb) {
+        abbreviated = abb;
         this.set = set;
         endRange = set.getRangeCount() - 1;
-        reset();
+        resetInternal();
+    }
+        
+    public void reset(UnicodeSet set) {
+        reset(set, false);
     }
         
     public void reset() {
+        reset(new UnicodeSet(), false);
+    }
+        
+    void resetInternal() {
         range = 0;
         endElement = 0;
         element = 0;            
         if (endRange >= 0) {
             element = set.getRangeStart(range);
             endElement = set.getRangeEnd(range);
+            startElement = set.getRangeStart(range);
         }
     }
         
