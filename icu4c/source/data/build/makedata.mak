@@ -207,9 +207,10 @@ CLEAN :
 	-@erase "word_th.brk"
 	-@erase "test*.*"
 	-@erase "base*.*"
-	@cd $(TEST)
-	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
+
+#	@cd $(TEST)
+#	-@erase "*.res"
 
 $(TESTDATA)\root.res:$(TESTDATA)\root.txt
         @echo Making Special Test Resource Bundle files
@@ -217,10 +218,18 @@ $(TESTDATA)\root.res:$(TESTDATA)\root.txt
 $(TESTDATA)\te.res:$(TESTDATA)\te.txt
         @echo Making Special Test Resource Bundle files
         @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
-# Inference rule for creating resource bundles
-{$(TESTDATA)}.txt.res:
-        @echo Making Test Resource Bundle files
+$(TESTDATA)\te_IN.res:$(TESTDATA)\te_IN.txt
+        @echo Making Special Test Resource Bundle files
         @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
+$(TESTDATA)\testtypes.res:$(TESTDATA)\testtypes.txt
+        @echo Making Special Test Resource Bundle files
+        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
+
+
+# Inference rule for creating resource bundles
+#{$(TESTDATA)}.txt{$(TESTDATA)}.res:
+#        @echo Making Test Resource Bundle files
+#        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
 
 {$(ICUDATA)}.txt.res:
 	@echo Making Resource Bundle files
