@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2003/04/02 05:16:44 $
-* $Revision: 1.5 $
+* $Date: 2003/04/03 02:29:31 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -23,11 +23,60 @@ import com.ibm.icu.text.UnicodeSet;
 abstract public class GenerateBreakTest implements UCD_Types {
 
     static boolean DEBUG = false;
+    static final boolean SHOW_TYPE = false;
+    
+    UnicodeMap sampleMap = null;
+   
+    // ====================== Main ===========================
+    
+    public static void main(String[] args) throws IOException {
+        System.out.println("Remember to add length marks (half & full) and other punctuation for sentence, with FF61");
+        //Default.setUCD();
+        
+        if (DEBUG) {
+            checkDecomps();
+
+            Utility.showSetNames("", new UnicodeSet("[\u034F\u00AD\u1806[:DI:]-[:Cs:]-[:Cn:]]"), true, Default.ucd);
+
+            System.out.println("*** Extend - Cf");
+
+            generateTerminalClosure();
+
+            GenerateWordBreakTest gwb = new GenerateWordBreakTest();
+            PrintWriter systemPrintWriter = new PrintWriter(System.out);
+            gwb.printLine(systemPrintWriter, "n\u0308't", true, true, false);
+            systemPrintWriter.flush();
+            //showSet("sepSet", GenerateSentenceBreakTest.sepSet);
+            //showSet("atermSet", GenerateSentenceBreakTest.atermSet);
+            //showSet("termSet", GenerateSentenceBreakTest.termSet);
+        }
+        
+        if (true) {
+            GenerateBreakTest foo = new GenerateLineBreakTest();
+            //foo.isBreak("(\"Go.\") (He did)", 5, true);
+            foo.isBreak("\u4e00\u4300", 1, true);
+            /*
+            GenerateSentenceBreakTest foo = new GenerateSentenceBreakTest();
+            //foo.isBreak("(\"Go.\") (He did)", 5, true);
+            foo.isBreak("3.4", 2, true);
+            */
+        }
+
+        new GenerateGraphemeBreakTest().run();
+        new GenerateWordBreakTest().run();
+        new GenerateLineBreakTest().run();
+        new GenerateSentenceBreakTest().run();
+        
+        //if (true) return; // cut short for now
+        
+    }
 
     // COMMON STUFF for Hangul
+    /*
     static final byte hNot = -1, hL = 0, hV = 1, hT = 2, hLV = 3, hLVT = 4, hLIMIT = 5;
     static final String[] hNames = {"L", "V", "T", "LV", "LVT"};
 
+    
     static byte getHangulType(int cp) {
         if (Default.ucd.isLeadingJamo(cp)) return hL;
         if (Default.ucd.isVowelJamo(cp)) return hV;
@@ -38,7 +87,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
         }
         return hNot;
     }
-
+    */
+    
+   /* static { 
+        Default.setUCD();
+    }
+    */
+    
     public static boolean onCodepointBoundary(String s, int offset) {
         if (offset < 0 || offset > s.length()) return false;
         if (offset == 0 || offset == s.length()) return true;
@@ -71,72 +126,6 @@ abstract public class GenerateBreakTest implements UCD_Types {
         return result + insertion;
     }
 
-
-    static UnicodeSet midLetterSet = new UnicodeSet("[\u0027\u002E\u003A\u00AD\u05F3\u05F4\u2019\uFE52\uFE55\uFF07\uFF0E\uFF1A]");
-
-    static UnicodeSet ambigSentPunct = new UnicodeSet("[\u002E\u0589\u06D4]");
-
-    static UnicodeSet sentPunct = new UnicodeSet("[\u0021\u003F\u0387\u061F\u0964\u203C\u203D\u2048\u2049"
-        + "\u3002\ufe52\ufe57\uff01\uff0e\uff1f\uff61]");
-        
-    static { 
-        Default.setUCD();
-    }
-        
-    static UnicodeSet extraAlpha = new UnicodeSet("[\\u02B9-\\u02BA\\u02C2-\\u02CF\\u02D2-\\u02DF\\u02E5-\\u02ED\\u05F3]");
-    static UnicodeSet alphabeticSet = UnifiedBinaryProperty.make(DERIVED | PropAlphabetic).getSet()
-        .addAll(extraAlpha);
-        
-    static UnicodeSet ideographicSet = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Ideographic).getSet();
-    
-    static {
-        if (false) System.out.println("alphabetic: " + alphabeticSet.toPattern(true));
-    }
-    
-
-    // ====================== Main ===========================
-    
-    static final boolean SHOW_TYPE = false;
-    
-    UnicodeMap sampleMap = null;
-
-
-    public static void main(String[] args) throws IOException {
-        System.out.println("Remember to add length marks (half & full) and other punctuation for sentence, with FF61");
-        Default.setUCD();
-        
-        if (DEBUG) {
-            checkDecomps();
-
-            Utility.showSetNames("", new UnicodeSet("[\u034F\u00AD\u1806[:DI:]-[:Cs:]-[:Cn:]]"), true, Default.ucd);
-
-            System.out.println("*** Extend - Cf");
-
-            generateTerminalClosure();
-
-            GenerateWordBreakTest gwb = new GenerateWordBreakTest();
-            PrintWriter systemPrintWriter = new PrintWriter(System.out);
-            gwb.printLine(systemPrintWriter, "n\u0308't", true, true, false);
-            systemPrintWriter.flush();
-            //showSet("sepSet", GenerateSentenceBreakTest.sepSet);
-            //showSet("atermSet", GenerateSentenceBreakTest.atermSet);
-            //showSet("termSet", GenerateSentenceBreakTest.termSet);
-        }
-        
-        if (true) {
-            GenerateSentenceBreakTest foo = new GenerateSentenceBreakTest();
-            //foo.isBreak("(\"Go.\") (He did)", 5, true);
-            foo.isBreak("3.4", 2, true);
-        }
-
-        new GenerateGraphemeBreakTest().run();
-        new GenerateWordBreakTest().run();
-        new GenerateLineBreakTest().run();
-        new GenerateSentenceBreakTest().run();
-        
-        //if (true) return; // cut short for now
-        
-    }
 
     static void checkDecomps() {
         UnicodeProperty[]  INFOPROPS = {UnifiedProperty.make(CATEGORY), UnifiedProperty.make(LINE_BREAK)};
@@ -227,8 +216,27 @@ abstract public class GenerateBreakTest implements UCD_Types {
     }
     
     
+    /*
+    static UnicodeSet extraAlpha = new UnicodeSet("[\\u02B9-\\u02BA\\u02C2-\\u02CF\\u02D2-\\u02DF\\u02E5-\\u02ED\\u05F3]");
+    static UnicodeSet alphabeticSet = UnifiedBinaryProperty.make(DERIVED | PropAlphabetic).getSet()
+        .addAll(extraAlpha);
+        
+    static UnicodeSet ideographicSet = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Ideographic).getSet();
+    
+    static {
+        if (false) System.out.println("alphabetic: " + alphabeticSet.toPattern(true));
+    }
+    */
+
 
     static void generateTerminalClosure() {
+        UnicodeSet midLetterSet = new UnicodeSet("[\u0027\u002E\u003A\u00AD\u05F3\u05F4\u2019\uFE52\uFE55\uFF07\uFF0E\uFF1A]");
+
+        UnicodeSet ambigSentPunct = new UnicodeSet("[\u002E\u0589\u06D4]");
+
+        UnicodeSet sentPunct = new UnicodeSet("[\u0021\u003F\u0387\u061F\u0964\u203C\u203D\u2048\u2049"
+            + "\u3002\ufe52\ufe57\uff01\uff0e\uff1f\uff61]");
+        
         UnicodeSet terminals = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Terminal_Punctuation).getSet();
         UnicodeSet extras = getClosure(terminals).removeAll(terminals);
         System.out.println("Current Terminal_Punctuation");
@@ -263,13 +271,31 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     //============================
 
-    protected String rule;
+    protected String currentRule;
     protected String fileName;
     protected String[] samples = new String[100];
     protected String[] extraSamples = new String[0];
     protected String[] extraSingleSamples = new String[0];
     protected int sampleLimit = 0;
     protected int tableLimit = -1;
+    
+    protected int[] skippedSamples = new int[100];
+    protected boolean didSkipSamples = false;
+    
+    private String[] ruleList = new String[100];
+    private int ruleListCount = 0;
+    protected boolean collectingRules = false;
+    
+    public void setRule(String rule) {
+        if (collectingRules) {
+            ruleList[ruleListCount++] = rule;
+        }
+        currentRule = rule;
+    }
+
+    public String getRule() {
+        return currentRule;
+    }
 
     public void run() throws IOException {
         findSamples();
@@ -286,10 +312,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
         out.println("</style></head>");
 
 
-        out.println("<body bgcolor='#FFFFFF'><h2>" + fileName + " Break Chart</h2>");
-        out.println("<p>Version: " + Default.ucd.getVersion() + "</p>");
-
-
+        out.println("<body bgcolor='#FFFFFF'>");
+        out.println("<h2>" + fileName + " Break Chart</h2>");
+        out.println("<p><b>Unicode Version:</b> " + Default.ucd.getVersion() + "; <b>Date:</b> " + Default.getDate() + "</p>");
         if (recommendedDiffers()) {
             generateTable(out, false);
             out.println("<h3>Recommended:</h3>");
@@ -373,8 +398,14 @@ abstract public class GenerateBreakTest implements UCD_Types {
     public void sampleDescription(PrintWriter out) {}
 
     abstract public boolean isBreak(String source, int offset, boolean recommended);
+    
+    abstract public String fullBreakSample();
 
     abstract public byte getType (int cp, boolean recommended);
+    
+    public byte getSampleType (int cp, boolean recommended) {
+        return getType(cp, recommended);
+    }
     
     public int mapType(int input) {
         return input;
@@ -438,8 +469,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     public String getTableEntry(String before, String after, boolean recommended, String[] ruleOut) {
         boolean normalBreak = isBreak(before + after, before.length(), recommended);
-        String normalRule = rule;
-        ruleOut[0] = rule;
+        String normalRule = getRule();
+        ruleOut[0] = normalRule;
         return normalBreak ? BREAK : NOBREAK;
     }
 
@@ -461,7 +492,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
             result.append(Default.ucd.getCodeAndName(cp));
             result.append(", gc=" + Default.ucd.getCategoryID_fromIndex(Default.ucd.getCategory(cp),SHORT));
             result.append(", sc=" + Default.ucd.getScriptID_fromIndex(Default.ucd.getScript(cp),SHORT));
-            result.append(", lb=" + Default.ucd.getLineBreakID_fromIndex(Default.ucd.getLineBreak(cp)));
+            result.append(", lb=" + Default.ucd.getLineBreakID_fromIndex(Default.ucd.getLineBreak(cp))
+                + "=" + Default.ucd.getLineBreakID_fromIndex(Default.ucd.getLineBreak(cp), LONG));
         }
         return result.toString();
     }
@@ -488,6 +520,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
         String[] rule = new String[1];
         String[] rule2 = new String[1];
         for (int type = 0; type < sampleLimit; ++type) {
+            if (type == tableLimit) {
+                out.println("<tr><td bgcolor='#0000FF' colSpan='" + (tableLimit + 1) + "' style='font-size: 1px'>&nbsp;</td></tr>");
+            }
             String before = samples[type];
             if (before == null) continue;
 
@@ -515,20 +550,44 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 } else if (t.equals(NOBREAK)) {
                     background = " bgcolor='#CCCCFF'";
                 }
-                line += "<th title='" + rule[0] + "'" + background + ">" + t + "</th>";
+                line += "<th title='" + rule[0] + "'" + background + " class='pairItem'>" + t + "</th>";
             }
             out.println(line + "</tr>");
         }
         out.println("</table>");
-            out.println("<h3>Sample Strings</h3>");
-        
-        out.println("<ol>");
-            for (int ii = 0; ii < extraSingleSamples.length; ++ii) {
-                out.println("<li><font size='5'>");
-                printLine(out, extraSingleSamples[ii], true, recommended, true);
-                out.println("</font></li>");
+            
+        if (didSkipSamples) {
+            out.println("<p><b>Suppressed:</b> ");
+            for (int i = 0; i < skippedSamples.length; ++i) {
+                if (skippedSamples[i] > 0) {
+                    out.println(getTypeID(UTF16.valueOf(skippedSamples[i]), true));
+                }
             }
-        out.println("</ol>");
+            out.println("</p>");
+        }
+        
+        // gather the data for the rules
+        collectingRules = true;
+        isBreak(fullBreakSample(), 1, true);
+        collectingRules = false;
+        
+        out.println("<h3>Rules</h3>");
+        out.println("<ul>");
+            for (int ii = 0; ii < ruleListCount; ++ii) {
+                out.println("<li>" + ruleList[ii] + "</li>");
+            }
+        out.println("</ul>");
+        
+        if (extraSingleSamples.length > 0) {
+            out.println("<h3>Sample Strings</h3>");
+            out.println("<ol>");
+                for (int ii = 0; ii < extraSingleSamples.length; ++ii) {
+                    out.println("<li><font size='5'>");
+                    printLine(out, extraSingleSamples[ii], true, recommended, true);
+                    out.println("</font></li>");
+                }
+            out.println("</ol>");
+        }
     }
 
     static final String BREAK = "\u00F7";
@@ -542,12 +601,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
         String status;
         if (html) {
             status = hasBreak ? " style='border-right: 1px solid blue'" : "";
-            string.append("<span title='" + rule + "'><span" + status + ">&nbsp;</span>&nbsp;<span>");
+            string.append("<span title='" + getRule() + "'><span" + status + ">&nbsp;</span>&nbsp;<span>");
         } else {
             status = hasBreak ? BREAK : NOBREAK;
             string.append(status);
         }
-        comment.append(' ').append(status).append(" [").append(rule).append(']');
+        comment.append(' ').append(status).append(" [").append(getRule()).append(']');
 
         for (int offset = 0; offset < source.length(); offset += UTF16.getCharCount(cp)) {
 
@@ -561,7 +620,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
                     + "'>"
                     + Utility.quoteXML(Utility.getDisplay(cp), true)
                     + "</span>");
-                string.append("<span title='" + rule + "'><span" + status + ">&nbsp;</span>&nbsp;<span>");
+                string.append("<span title='" + getRule() + "'><span" + status + ">&nbsp;</span>&nbsp;<span>");
             } else {
                 if (string.length() > 0) {
                     string.append(' ');
@@ -573,7 +632,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 string.append(Utility.hex(cp));
                 comment.append(Default.ucd.getName(cp) + " (" + getTypeID(cp) + ")");
                 string.append(' ').append(status);
-                comment.append(' ').append(status).append(" [").append(rule).append(']');
+                comment.append(' ').append(status).append(" [").append(getRule()).append(']');
             }
         }
 
@@ -596,9 +655,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (DEBUG && i == 0x1100) {
                 System.out.println("debug");
             }
-            byte lb = getType(i);
-            byte lb2 = getType(i, true);
-            if (lb == lb2 && skipType(lb)) continue;
+            byte lb = getSampleType(i, false);
+            byte lb2 = getSampleType(i, true);
+            if (lb == lb2 && skipType(lb)) {
+                skippedSamples[lb] = i;
+                didSkipSamples = true;
+                continue;
+            }
 
             int combined = (mapType(lb) << 7) + mapType(lb2);
             if (!bitset.get(combined)) {
@@ -758,14 +821,19 @@ abstract public class GenerateBreakTest implements UCD_Types {
         public byte getType(int cp, boolean recommended) {
             return (byte) map.getIndex(cp);
         }
+        
+        public String fullBreakSample() {
+            return "aa";
+        }
 
         public boolean isBreak(String source, int offset, boolean recommended) {
             recommended = true; // don't care about old stuff
-            rule="1: sot ÷";
+            
+            setRule("1: sot ÷");
             if (offset < 0 || offset > source.length()) return false;
             if (offset == 0) return true;
 
-            rule = "2: ÷ eot";
+            setRule("2: ÷ eot");
             if (offset == source.length()) return true;
 
             // UTF-16: never break in the middle of a code point
@@ -780,29 +848,29 @@ abstract public class GenerateBreakTest implements UCD_Types {
             byte before = getResolvedType(cpBefore, recommended);
             byte after = getResolvedType(cpAfter, recommended);
 
-            rule = "3: CR × LF";
+            setRule("3: CR × LF");
             if (before == CR && after == LF) return false;
 
-            rule = "4: ( Control | CR | LF ) ÷";
+            setRule("4: ( Control | CR | LF ) ÷");
             if (before == CR || before == LF || before == Control) return true;
 
-            rule = "5: ÷ ( Control | CR | LF )";
+            setRule("5: ÷ ( Control | CR | LF )");
             if (after == Control || after == LF || after == CR) return true;
 
-            rule = "6: L × ( L | V | LV | LVT )";
+            setRule("6: L × ( L | V | LV | LVT )");
             if (before == L && (after == L || after == V || after == LV || after == LVT)) return false;
 
-            rule = "7: ( LV | V ) × ( V | T )";
+            setRule("7: ( LV | V ) × ( V | T )");
             if ((before == LV || before == V) && (after == V || after == T)) return false;
 
-            rule = "8: ( LVT | T ) × T";
+            setRule("8: ( LVT | T ) × T");
             if ((before == LVT || before == T) && (after == T)) return false;
 
-            rule = "9: × Extend";
+            setRule("9: × Extend");
             if (after == Extend) return false;
 
             // Otherwise break after all characters.
-            rule = "10: Any ÷ Any";
+            setRule("10: Any ÷ Any");
             return true;
 
         }
@@ -853,7 +921,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             fileName = "Word";
             sampleMap = map;
             extraSamples = new String[] {
-                "\uFF70", "\uFF65", "\u30FD", "a\u2060", "a:", "a'", "a'\u2060", "a,", "1:", "1'", "1,",  "1.\u2060"
+                /*"\uFF70", "\uFF65", "\u30FD", */ "a\u2060", "a:", "a'", "a'\u2060", "a,", "1:", "1'", "1,",  "1.\u2060"
             };
 
             String [] temp = {"can't", "can\u2019t", "ab\u00ADby", "a$-34,567.14%b", "3a" };
@@ -877,6 +945,10 @@ abstract public class GenerateBreakTest implements UCD_Types {
         public byte getType(int cp, boolean recommended) {
             return (byte) map.getIndex(cp);
         }
+        
+        public String fullBreakSample() {
+            return " a";
+        }
 
         public int genTestItems(String before, String after, String[] results) {
             results[0] = before + after;
@@ -889,20 +961,23 @@ abstract public class GenerateBreakTest implements UCD_Types {
         public boolean isBreak(String source, int offset, boolean recommended) {
             recommended = true; // don't care about old stuff
 
-            rule = "1: sot ÷";
+            setRule("1: sot ÷");
             if (offset < 0 || offset > source.length()) return false;
   
             if (offset == 0) return true;
 
-            rule = "2: ÷ eot";
+            setRule("2: ÷ eot");
             if (offset == source.length()) return true;
 
             // Treat a grapheme cluster as if it were a single character:
             // the first base character, if there is one; otherwise the first character.
-            // GC => FB
 
-            rule="3: GC -> FB; 4: X Format* -> X";
+            setRule("3: GC -> FC");
             if (!grapheme.isBreak( source,  offset,  recommended)) return false;
+
+            setRule("4: X Format* -> X");
+            byte afterChar = getResolvedType(source.charAt(offset), recommended);
+            if (afterChar == Format) return false;
 
             // now get the base character before and after, and their types
 
@@ -915,43 +990,43 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             //Don't break between most letters
 
-            rule = "5: ALetter × ALetter";
+            setRule("5: ALetter × ALetter");
             if (before == ALetter && after == ALetter) return false;
 
             // Don’t break letters across certain punctuation
 
-            rule = "6: ALetter × (MidLetter | MidNumLet) ALetter";
+            setRule("6: ALetter × (MidLetter | MidNumLet) ALetter");
             if (before == ALetter && (after == MidLetter || after == MidNumLet) && after2 == ALetter) return false;
 
-            rule = "7: ALetter (MidLetter | MidNumLet) × ALetter";
+            setRule("7: ALetter (MidLetter | MidNumLet) × ALetter");
             if (before2 == ALetter && (before == MidLetter || before == MidNumLet) && after == ALetter) return false;
 
             // Don’t break within sequences of digits, or digits adjacent to letters.
 
-            rule = "8: Numeric × Numeric";
+            setRule("8: Numeric × Numeric");
             if (before == Numeric && after == Numeric) return false;
 
-            rule = "9: ALetter × Numeric";
+            setRule("9: ALetter × Numeric");
             if (before == ALetter && after == Numeric) return false;
 
-            rule = "10: Numeric × ALetter";
+            setRule("10: Numeric × ALetter");
             if (before == Numeric && after == ALetter) return false;
 
 
             // Don’t break within sequences like: '-3.2'
-            rule = "11: Numeric (MidNum | MidNumLet) × Numeric";
+            setRule("11: Numeric (MidNum | MidNumLet) × Numeric");
             if (before2 == Numeric && (before == MidNum || before == MidNumLet) && after == Numeric) return false;
 
-            rule = "12: Numeric × (MidNum | MidNumLet) Numeric";
+            setRule("12: Numeric × (MidNum | MidNumLet) Numeric");
             if (before == Numeric && (after == MidNum || after == MidNumLet) && after2 == Numeric) return false;
 
             // Don't break between Katakana
 
-            rule = "13: Katakana × Katakana";
+            setRule("13: Katakana × Katakana");
             if (before == Katakana && after == Katakana) return false;
 
             // Otherwise break always.
-            rule = "14: Any ÷ Any";
+            setRule("14: Any ÷ Any");
             return true;
 
         }
@@ -1082,6 +1157,10 @@ abstract public class GenerateBreakTest implements UCD_Types {
             return Default.ucd.getLineBreakID(cp); // AsmusOrderToMyOrder[result]);
         }
 
+        public String fullBreakSample() {
+            return ")a";
+        }
+
         // stuff that subclasses need to override
         public byte getType(int cp, boolean recommended) {
             /*if (cp > 0xFFFF) return LB_SUP;
@@ -1095,29 +1174,28 @@ abstract public class GenerateBreakTest implements UCD_Types {
         public String getTableEntry(String before, String after, boolean recommended, String[] ruleOut) {
             String t = "_"; // break
             boolean spaceBreak = isBreak(before + " " + after, before.length()+1, recommended);
-            String spaceRule = rule;
+            String spaceRule = getRule();
 
             boolean spaceBreak2 = isBreak(before + " " + after, before.length(), recommended);
-            String spaceRule2 = rule;
+            String spaceRule2 = getRule();
 
             boolean normalBreak = isBreak(before + after, before.length(), recommended);
-            String normalRule = rule;
+            String normalRule = getRule();
 
+            ruleOut[0] = normalRule;
             if (!normalBreak) {
                 if (!spaceBreak && !spaceBreak2) {
                     t = "^"; // don't break, even with intervening spaces
                 } else {
                     t = "%"; // don't break, but break with intervening spaces
                 }
-                rule = normalRule;
                 if (!spaceRule2.equals(normalRule)) {
-                    rule += " [" + spaceRule2 + "]";
+                    ruleOut[0] += " [" + spaceRule2 + "]";
                 }
                 if (!spaceRule.equals(normalRule) && !spaceRule.equals(spaceRule2)) {
-                    rule += " {" + spaceRule + "}";
+                    ruleOut[0] += " {" + spaceRule + "}";
                 }
             }
-            ruleOut[0] = rule;
             return t;
         }
         
@@ -1163,14 +1241,22 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 // case LB_SG: result = LB_XX; break; Surrogates; will never occur
                 case LB_XX: result = LB_AL; break;
             }
+            /*
             if (recommended) {
                 if (getHangulType(cp) != hNot) {
                         result = LB_ID;
                 }
             }
-
+            */
+            
             return result;
         }
+        
+        public byte getSampleType (int cp, boolean recommended) {
+            if (Default.ucd.getHangulSyllableType(cp) != NA) return LB_XX;
+            return getType(cp, recommended);
+        }
+
 
         // find out whether there is a break at offset
         // WARNING: as a side effect, sets "rule"
@@ -1184,12 +1270,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // LB 2a  Never break at the start of text
 
-            rule="2a: × sot";
+            setRule("2a: × sot");
             if (offset <= 0) return false;
 
             // LB 2b  Always break at the end of text
 
-            rule="2b: ! eot";
+            setRule("2b: ! eot");
             if (offset >= source.length()) return true;
 
 
@@ -1218,7 +1304,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             //byte after = getResolvedType(cpAfter, recommended);
 
 
-            rule="3a: CR × LF ; ( BK | CR | LF | NL ) !";
+            setRule("3a: CR × LF ; ( BK | CR | LF | NL ) !");
             
             // Always break after hard line breaks (but never between CR and LF).
             // CR ^ LF
@@ -1226,37 +1312,31 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (before == LB_BK || before == LB_LF || before == LB_CR) return true;
 
             //LB 3b  Don’t break before hard line breaks.
-            rule="3b: × ( BK | CR | LF )";
-            if (after == LB_BK || after == LB_LF | after == LB_CR) return false;
+            setRule("3b: × ( BK | CR | LF )");
+            if (after == LB_BK || after == LB_LF || after == LB_CR) return false;
 
             // LB 4  Don’t break before spaces or zero-width space.
-            // × SP
-            // × ZW
-
-            rule="4: × ( SP | ZW )";
+            setRule("4: × ( SP | ZW )");
             if (after == LB_SP || after == LB_ZW) return false;
 
             // LB 5 Break after zero-width space.
-            // ZW ÷
-            rule="5: ZW ÷";
+            setRule("5: ZW ÷");
             if (before == LB_ZW) return true;
 
             // LB 6  Don’t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
-            rule="6: GC -> FB ; X CM -> X";
-            //rule="3: GC -> FB; 4: X Format* -> X";
+            setRule("6: GC -> FC");
             if (!grapheme.isBreak( source,  offset,  recommended)) return false;
+            
+            setRule("6a: X CM* -> X");
             if (after == LB_CM) return false;
 
             
             /*
-
             if (before == LB_L && (after == LB_L || after == LB_V || after == LB_LV || after == LB_LVT)) return false;
-
             if ((before == LB_LV || before == LB_V) && (after == LB_V || after == LB_T)) return false;
-
             if ((before == LB_LVT || before == LB_T) && (after == LB_T)) return false;
-
             */
+            
             boolean setBase = false;
             if (before == LB_CM) {
                 setBase = true;
@@ -1272,13 +1352,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
             // LB 7  In all of the following rules, if a space is the base character for a combining mark,
             // the space is changed to type ID. In other words, break before SP CM* in the same cases as
             // one would break before an ID.
-            rule="7: SP CM* -> ID";
+            setRule("7: SP CM* -> ID");
             if (setBase && before == LB_SP) before = LB_ID;
             if (after == LB_SP && after2 == LB_CM) after = LB_ID;
 
             // LB 8  Don’t break before ‘]’ or ‘!’ or ‘;’ or ‘/’,  even after spaces.
             // × CL, × EX, × IS, × SY
-            rule="8: × ( CL | EX | IS | SY )";
+            setRule("8: × ( CL | EX | IS | SY )");
             if (after == LB_CL || after == LB_EX || after == LB_SY | after == LB_IS) return false;
 
 
@@ -1293,22 +1373,22 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // LB 9  Don’t break after ‘[’, even after spaces.
             // OP SP* ×
-            rule="9: OP SP* ×";
+            setRule("9: OP SP* ×");
             if (lastNonSpace == LB_OP) return false;
 
             // LB 10  Don’t break within ‘”[’, , even with intervening spaces.
             // QU SP* × OP
-            rule="10: QU SP* × OP";
+            setRule("10: QU SP* × OP");
             if (lastNonSpace == LB_QU && after == LB_OP) return false;
 
             // LB 11  Don’t break within ‘]h’, even with intervening spaces.
             // CL SP* × NS
-            rule="11: CL SP* × NS";
+            setRule("11: CL SP* × NS");
             if (lastNonSpace == LB_CL && after == LB_NS) return false;
 
             // LB 11a  Don’t break within ‘——’, even with intervening spaces.
             // B2 × B2
-            rule="11a: B2 × B2";
+            setRule("11a: B2 × B2");
             if (lastNonSpace == LB_B2 && after == LB_B2) return false;
 
 
@@ -1316,45 +1396,43 @@ abstract public class GenerateBreakTest implements UCD_Types {
             // × GL
             // GL ×
 
-            rule="11b: × WJ ; WJ ×";
+            setRule("11b: × WJ ; WJ ×");
             if (after == LB_WJ || before == LB_WJ) return false;
 
             // [Note: by this time, all of the "X" in the table are accounted for. We can safely break after spaces.]
 
-            rule="12: SP ÷";
             // LB 12  Break after spaces
-            // SP ÷
-
+            setRule("12: SP ÷");
             if (before == LB_SP) return true;
 
             // LB 13  Don’t break before or after NBSP or WORD JOINER
-            rule="13: × GL ; GL ×";
+            setRule("13: × GL ; GL ×");
             if (after == LB_GL || before == LB_GL) return false;
 
-            rule="14: × QU ; QU ×";
             // LB 14  Don’t break before or after ‘”’
+            setRule("14: × QU ; QU ×");
             if (before == LB_QU || after == LB_QU) return false;
 
             // LB 14a  Break before and after CB
-            rule = "14a: ÷ CB ; CB ÷";
+            setRule("14a: ÷ CB ; CB ÷");
             if (before == LB_CB || after == LB_CB) return true;
 
             // LB 15  Don’t break before hyphen-minus, other hyphens, fixed-width spaces,
             // small kana and other non- starters,  or after acute accents:
 
-            rule="15: × ( BA | HY | NS ) ; BB ×";
+            setRule("15: × ( BA | HY | NS ) ; BB ×");
             if (after == LB_NS) return false;
             if (after == LB_HY) return false;
             if (after == LB_BA) return false;
             if (before == LB_BB) return false;
 
 
-            //rule="15a: HY × NU"; // NEW
+            //setRule("15a: HY × NU"); // NEW
             //if (before == LB_HY && after == LB_NU) return false;
 
             // LB 16  Don’t break between two ellipses, or between letters or numbers and ellipsis:
             // Examples: ’9...’, ‘a...’, ‘H...’
-            rule="16: ( AL | ID | IN | NU ) × IN";
+            setRule("16: ( AL | ID | IN | NU ) × IN");
             if ((before == LB_NU || before == LB_AL || before == LB_ID) && after == LB_IN) return false;
             if (before == LB_IN && after == LB_IN) return false;
 
@@ -1364,7 +1442,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             // Examples:   $(12.35)    2,1234    (12)¢    12.54¢
             // This is approximated with the following rules. (Some cases already handled above,
             // like ‘9,’, ‘[9’.)
-            rule="17: ID × PO ; AL × NU; NU × AL";
+            setRule("17: ID × PO ; AL × NU; NU × AL");
             if (before == LB_ID && after == LB_PO) return false;
             if (before == LB_AL && after == LB_NU) return false;
             if (before == LB_NU && after == LB_AL) return false;
@@ -1383,7 +1461,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             // SY × NU
             // Example pairs: ‘$9’, ‘$[’, ‘$-‘, ‘-9’, ‘/9’, ‘99’, ‘,9’,  ‘9%’ ‘]%’
 
-            rule="18: CL × PO ; NU × PO ; ( IS | NU | HY | PR | SY ) × NU ; PR × ( AL | HY | ID | OP )";
+            setRule("18: CL × PO ; NU × PO ; ( IS | NU | HY | PR | SY ) × NU ; PR × ( AL | HY | ID | OP )");
             if (before == LB_CL && after == LB_PO) return false;
             if (before == LB_IS && after == LB_NU) return false;
             if (before == LB_NU && after == LB_NU) return false;
@@ -1400,21 +1478,21 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (before == LB_SY && after == LB_NU) return false;
 
             // LB 15b  Break after hyphen-minus, and before acute accents:
-            rule="18b: HY ÷ ; ÷ BB";
+            setRule("18b: HY ÷ ; ÷ BB");
             if (before == LB_HY) return true;
             if (after == LB_BB) return true;
 
             // LB 19  Don’t break between alphabetics (“at”)
             // AL × AL
 
-            rule="19: AL × AL";
+            setRule("19: AL × AL");
             if (before == LB_AL && after == LB_AL) return false;
 
             // LB 20  Break everywhere else
             // ALL ÷
             // ÷ ALL
 
-            rule="20: ALL ÷ ; ÷ ALL";
+            setRule("20: ALL ÷ ; ÷ ALL");
             return true;
         }
     }
@@ -1464,7 +1542,11 @@ abstract public class GenerateBreakTest implements UCD_Types {
             return map.getLabel(cp);
         }
 
-        // stuff that subclasses need to override
+        public String fullBreakSample() {
+            return "!a";
+        }
+
+       // stuff that subclasses need to override
         public byte getType(int cp, boolean recommended) {
             return (byte) map.getIndex(cp);
         }
@@ -1571,44 +1653,53 @@ abstract public class GenerateBreakTest implements UCD_Types {
         public boolean isBreak(String source, int offset, boolean recommended) {
     
             // Break at the start and end of text.
-            rule = "1: sot ÷";
+            setRule("1: sot ÷");
             if (offset < 0 || offset > source.length()) return false;
   
             if (offset == 0) return true;
 
-            rule = "2: ÷ eot";
+            setRule("2: ÷ eot");
             if (offset == source.length()) return true;
 
-            rule = "3: Sep ÷";
+            setRule("3: Sep ÷");
             byte beforeChar = getResolvedType(source.charAt(offset-1), recommended);
             if (beforeChar == Sep) return true;
             
             // Treat a grapheme cluster as if it were a single character:
             // the first base character, if there is one; otherwise the first character.
-            // GC => FB
-            // Ignore interior Format characters. That is, ignore Format characters in all subsequent rules.
-            // X Format*
-            // ?
-            // X
-            // (5)
 
-            rule="4: GC -> FB; 5: X Format* -> X";
+            setRule("4: GC -> FC");
             if (!grapheme.isBreak( source,  offset,  recommended)) return false;
             
-            getGraphemeBases(source, offset, recommended, Format, context);
+            // Ignore interior Format characters. That is, ignore Format characters in all subsequent rules.
+            setRule("5: X Format* -> X");
+            byte afterChar = getResolvedType(source.charAt(offset), recommended);
+            if (afterChar == Format) return false;
 
+            getGraphemeBases(source, offset, recommended, Format, context);
             byte before = context.tBefore;
             byte after = context.tAfter;
             byte before2 = context.tBefore2;
             byte after2 = context.tAfter2;
             
+            // HACK COPY for rule collection!
+            if (collectingRules) {
+                setRule("6: ATerm × ( Numeric | Lower )");
+                setRule("7: Upper ATerm × Upper");
+                setRule("8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower");
+                setRule("9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )");
+                setRule("10: ( Term | ATerm ) Close* Sp × ( Sp | Sep )");
+                setRule("11: ( Term | ATerm ) Close* Sp* ÷");
+                setRule("12: Any × Any");
+                collectingRules = false;
+            }
             
             // Do not break after ambiguous terminators like period, if immediately followed by a number or lowercase letter, is between uppercase letters, or if the first following letter (optionally after certain punctuation) is lowercase. For example, a period may be an abbreviation or numeric period, and not mark the end of a sentence.
-
+            
             if (before == ATerm) {
-                rule = "6: ATerm × ( Numeric | Lower )";
+                setRule("6: ATerm × ( Numeric | Lower )");
                 if (after == Lower || after == Numeric) return false;
-                rule = "7: Upper ATerm × Upper";
+                setRule("7: Upper ATerm × Upper");
                 if (DEBUG_GRAPHEMES) System.out.println(context + ", " + Upper);
                 if (before2 == Upper && after == Upper) return false;
             }
@@ -1668,7 +1759,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (lookAfter == -1) {
                 // Otherwise, do not break
                 // Any × Any (11)
-                rule = "12: Any × Any";
+                setRule("12: Any × Any");
                 return false;
             }
                 
@@ -1695,16 +1786,16 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 if (isFirst) {
                     isFirst = false;
                     if (lookAfter == ATerm && t == Upper) {
-                        rule = "8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower";
+                        setRule("8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower");
                         return false;
                     }
                     if (gotSpace) {
                         if (t == Sp || t == Sep) {
-                            rule = "10: ( Term | ATerm ) Close* Sp × ( Sp | Sep )";
+                            setRule("10: ( Term | ATerm ) Close* Sp × ( Sp | Sep )");
                             return false;
                         }
                     } else if (t == Close || t == Sp || t == Sep) {
-                        rule = "9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )";
+                        setRule("9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )");
                         return false;
                     }
                     if (lookAfter == Term) break;
@@ -1713,12 +1804,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 // at this point, we have an ATerm. All other conditions are ok, but we need to verify 6
                 if (t != OLetter && t != Upper && t != Lower) continue;
                 if (t == Lower) {
-                    rule = "8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower";
+                    setRule("8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower");
                     return false;
                 }
                 break;
             }
-            rule = "11: ( Term | ATerm ) Close* Sp* ÷";
+            setRule("11: ( Term | ATerm ) Close* Sp* ÷");
             return true;
         }
     }
