@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.12 2001/03/21 20:31:13 weiv Exp $
+## $Id: mh-os400,v 1.13 2001/06/01 18:15:03 grhoten Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -11,6 +11,10 @@ GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc=	$(CXX) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Special macro separator for compiling C++
+## e.g. -D'U_SRCDATADIR=$(MACRO_SEPARATOR)"$(top_srcdir)/../data/"'
+MACRO_SEPARATOR=\x40
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
