@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -279,7 +279,7 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
     addNewInverse(element, status);
   } else if(compareCEs(inverseTable[inversePos], element->CEs) > 0) {
     while((compResult = compareCEs(inverseTable[--position], element->CEs)) > 0);
-    if(VERBOSE) { fprintf(stdout, "p:%i ", position); }
+    if(VERBOSE) { fprintf(stdout, "p:%u ", (int)position); }
     if(compResult == 0) {
       addToExistingInverse(element, position, status);
     } else {
@@ -316,9 +316,9 @@ static InverseUCATableHeader *assembleInverseTable(UErrorCode *status)
 
     for(i = 2; i<inversePos; i++) {
       if(compareCEs(inverseTable[i-1], inverseTable[i]) > 0) { 
-        fprintf(stderr, "Error at %i: %08X & %08X\n", i, inverseTable[i-1][0], inverseTable[i][0]);
+        fprintf(stderr, "Error at %i: %08X & %08X\n", (int)i, (int)inverseTable[i-1][0], (int)inverseTable[i][0]);
       } else if(inverseTable[i-1][0] == inverseTable[i][0] && !(inverseTable[i-1][1] < inverseTable[i][1])) {
-        fprintf(stderr, "Continuation error at %i: %08X %08X & %08X %08X\n", i, inverseTable[i-1][0], inverseTable[i-1][1], inverseTable[i][0], inverseTable[i][1]);
+        fprintf(stderr, "Continuation error at %i: %08X %08X & %08X %08X\n", (int)i, (int)inverseTable[i-1][0], (int)inverseTable[i-1][1], (int)inverseTable[i][0], (int)inverseTable[i][1]);
       }
     }
 
@@ -870,15 +870,15 @@ struct {
     int32_t surrogateCount = 0;
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
-            fprintf(stderr, "Something returned an error %i (%s) while processing line %i of %s. Exiting...\n",
-                *status, u_errorName(*status), line, filename);
+            fprintf(stderr, "Something returned an error %i (%s) while processing line %u of %s. Exiting...\n",
+                *status, u_errorName(*status), (int)line, filename);
             exit(*status);
         }
 
         element = readAnElement(data, t, &consts, status);
         line++;
         if(VERBOSE) {
-          fprintf(stdout, "%i ", line);
+          fprintf(stdout, "%u ", (int)line);
         }
         if(element != NULL) {
             // we have read the line, now do something sensible with the read data!
@@ -922,13 +922,13 @@ struct {
     }*/
 
     if (VERBOSE) {
-        fprintf(stdout, "\nLines read: %i\n", line);
-        fprintf(stdout, "Surrogate count: %i\n", surrogateCount);
+        fprintf(stdout, "\nLines read: %u\n", (int)line);
+        fprintf(stdout, "Surrogate count: %i\n", (int)surrogateCount);
         fprintf(stdout, "Raw data breakdown:\n");
         /*fprintf(stdout, "Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);*/
-        fprintf(stdout, "Number of contractions: %i\n", noOfContractions);
-        fprintf(stdout, "Contraction image size: %i\n", t->image->contractionSize);
-        fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
+        fprintf(stdout, "Number of contractions: %u\n", (int)noOfContractions);
+        fprintf(stdout, "Contraction image size: %u\n", (int)t->image->contractionSize);
+        fprintf(stdout, "Expansions size: %i\n", (int)t->expansions->position);
     }
 
 
@@ -938,7 +938,7 @@ struct {
     /* do the closure */
     int32_t noOfClosures = uprv_uca_canonicalClosure(t, status);
     if(noOfClosures != 0) {
-      fprintf(stderr, "Warning: %i canonical closures occured!\n", noOfClosures);
+      fprintf(stderr, "Warning: %i canonical closures occured!\n", (int)noOfClosures);
     }
 
     /* test */
@@ -947,9 +947,9 @@ struct {
     if (VERBOSE) {
         fprintf(stdout, "Compacted data breakdown:\n");
         /*fprintf(stdout, "Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);*/
-        fprintf(stdout, "Number of contractions: %i\n", noOfContractions);
-        fprintf(stdout, "Contraction image size: %i\n", t->image->contractionSize);
-        fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
+        fprintf(stdout, "Number of contractions: %u\n", (int)noOfContractions);
+        fprintf(stdout, "Contraction image size: %u\n", (int)t->image->contractionSize);
+        fprintf(stdout, "Expansions size: %i\n", (int)t->expansions->position);
     }
 
     if(U_FAILURE(*status)) {

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -830,7 +830,7 @@ addFromUTrieEntry(CnvExtData *extData, UChar32 c, uint32_t value) {
         extData->stage1[i1]=(uint16_t)newBlock;
         extData->stage2Top=newBlock+MBCS_STAGE_2_BLOCK_SIZE;
         if(extData->stage2Top>LENGTHOF(extData->stage2)) {
-            fprintf(stderr, "error: too many stage 2 entries at U+%04x\n", c);
+            fprintf(stderr, "error: too many stage 2 entries at U+%04x\n", (int)c);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
     }
@@ -852,7 +852,7 @@ addFromUTrieEntry(CnvExtData *extData, UChar32 c, uint32_t value) {
 
         extData->stage3Top=newBlock+MBCS_STAGE_3_BLOCK_SIZE;
         if(extData->stage3Top>LENGTHOF(extData->stage3)) {
-            fprintf(stderr, "error: too many stage 3 entries at U+%04x\n", c);
+            fprintf(stderr, "error: too many stage 3 entries at U+%04x\n", (int)c);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
     }
@@ -896,7 +896,7 @@ addFromUTrieEntry(CnvExtData *extData, UChar32 c, uint32_t value) {
         }
     } else {
         if((i3b=extData->stage3bTop++)>=LENGTHOF(extData->stage3b)) {
-            fprintf(stderr, "error: too many stage 3b entries at U+%04x\n", c);
+            fprintf(stderr, "error: too many stage 3b entries at U+%04x\n", (int)c);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
 

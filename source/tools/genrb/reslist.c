@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -414,7 +414,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
     size = udata_finish(mem, status);
     if(top != size) {
         fprintf(stderr, "genrb error: wrote %u bytes but counted %u\n",
-                size, top);
+                (int)size, (int)top);
         *status = U_INTERNAL_PROGRAM_ERROR;
     }
 }
