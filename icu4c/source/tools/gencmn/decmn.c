@@ -27,6 +27,7 @@
 #include "unicode/udata.h"
 #include "uoptions.h"
 #include "cstring.h"
+#include "toolutil.h"
 
 static uint8_t buffer[100000], buffer2[128*1024];
 
@@ -55,7 +56,8 @@ static int
 copyFile(FILE *in, int32_t offset, int32_t size, const char *dir, const char *name) {
     FILE *out;
     int32_t length;
-    char path[512], *p;
+    char path[512], *p, *endDir;
+    UErrorCode status = U_ZERO_ERROR;
 
     if(0!=fseek(in, offset, SEEK_SET)) {
         fprintf(stderr, "%s: cannot seek to position %ld for file \"%s\"\n", pname,
@@ -63,6 +65,32 @@ copyFile(FILE *in, int32_t offset, int32_t size, const char *dir, const char *na
         return 4;
     }
 
+    /* Make sure that subdirectories are created first */
+    uprv_strcpy(path, dir);
+    p = path + strlen(path);
+    if (p[-1] != U_FILE_SEP_CHAR) {
+        *p++ = U_FILE_SEP_CHAR;
+    }
+    uprv_strcpy(p, name);
+    endDir = uprv_strrchr(p, U_TREE_ENTRY_SEP_CHAR);
+    if (endDir != NULL) {
+        /* Create the parent directories before creating the current directory. */
+        for (;;) {
+            p = uprv_strchr(p, U_TREE_ENTRY_SEP_CHAR);
+            if (p == NULL) {
+                break;
+            }
+            *p = 0;
+            uprv_mkdir(path, &status);
+            if (U_FAILURE(status)) {
+                fprintf(stderr, "%s: unable to create directory \"%s\"\n", pname, path);
+                return 5;
+            }
+            *(p++) = U_FILE_SEP_CHAR;
+        }
+    }
+
+    /* Set up the path with the real name now */
     uprv_strcpy(path, dir);
     p = path + strlen(path);
     if (p[-1] != U_FILE_SEP_CHAR) {
@@ -122,9 +150,9 @@ main(int argc, char *argv[]) {
     U_MAIN_INIT_ARGS(argc, argv);
 
     pname = uprv_strchr(*argv, U_FILE_SEP_CHAR);
-#ifdef U_WINDOWS
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
     if (!pname) {
-        pname = uprv_strchr(*argv, '/');
+        pname = uprv_strchr(*argv, U_FILE_ALT_SEP_CHAR);
     }
 #endif
     if (pname) {

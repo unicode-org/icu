@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -48,6 +48,14 @@ getLongPathname(const char *pathname);
  */
 U_CAPI const char * U_EXPORT2
 findBasename(const char *filename);
+
+/*
+ * Creates a diretory with pathname.
+ *
+ * @param status Set to an error code when mkdir failed.
+ */
+U_CAPI void U_EXPORT2
+uprv_mkdir(const char *pathname, UErrorCode *status);
 
 /*
  * UToolMemory is used for generic, custom memory management.
