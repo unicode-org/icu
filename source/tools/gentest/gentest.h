@@ -9,6 +9,6 @@
 
 #include "unicode/utypes.h"
 
-U_CAPI int genres32(const char *prog, const char *path);
+U_CFUNC int genres32(const char *prog, const char *path);
 
 

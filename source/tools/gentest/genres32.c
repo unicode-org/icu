@@ -38,7 +38,7 @@ incKey(char *key, char *limit) {
     }
 }
 
-U_CAPI int
+U_CFUNC int
 genres32(const char *prog, const char *path) {
     /*
      * key string, gets incremented binary numbers
