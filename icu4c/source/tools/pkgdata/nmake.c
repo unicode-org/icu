@@ -25,7 +25,7 @@ char linebuf[2048];
 void
 pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 {
-  sprintf(linebuf, "## Makefile for %s created by pkgtool\n"
+  sprintf(linebuf, "## Makefile for %s created by pkgdata\n"
                    "## from ICU Version %s\n"
                    "\n",
           o->shortName,
