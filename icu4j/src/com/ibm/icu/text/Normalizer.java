@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/03/20 05:11:15 $ 
- * $Revision: 1.16 $
+ * $Date: 2002/03/20 22:55:32 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -1408,7 +1408,115 @@ public final class Normalizer {
         reset();
     }
 
+    //-------------------------------------------------------------------------
+    // Internal methods (for now)
+    //-------------------------------------------------------------------------
 
+	/**
+	 * Convenience method that can have faster implementation
+	 * by simply accessing the data for a single character.
+	 * @internal
+     * @param char32	the input string to be normalized.
+     *
+     * @param aMode     the normalization mode
+     *
+     * @param options   the optional features to be enabled.
+     */
+	// TODO: actually do the optimization when the guts of Normalizer are upgraded
+	// --has just dumb implementation for now
+	public static String normalize(int char32, Mode mode, int options) {
+    	return Normalizer.normalize(UTF16.valueOf(char32), mode, options);
+    }
+    
+	/**
+	 * Convenience method that can have faster implementation
+	 * by not allocating buffers.
+	 * @internal
+     * @param str       the input string to be checked to see if it is normalized
+     *
+     * @param aMode     the normalization mode
+     *
+     * @param options   the optional features to be enabled.
+     */
+	// TODO: actually do the optimization when the guts of Normalizer are upgraded
+	// --has just dumb implementation for now
+	public static boolean isNormalized(String str, Mode mode, int options) {
+		return str.equals(Normalizer.normalize(str, mode, options));
+	}
+	
+	/**
+	 * Convenience method that can have faster implementation
+	 * by not allocating buffers.
+	 * @internal
+     * @param char32	the input code point to be checked to see if it is normalized
+     *
+     * @param aMode     the normalization mode
+     *
+     * @param options   the optional features to be enabled.
+     */
+	// TODO: actually do the optimization when the guts of Normalizer are upgraded
+	// --has just dumb implementation for now
+	public static boolean isNormalized(int char32, Mode mode, int options) {
+		return isNormalized(UTF16.valueOf(char32), mode, options);
+	}
+    
+	/**
+	 * Convenience method that can have faster implementation
+	 * by not allocating buffers.
+	 * @internal
+     * @param str1	the first string to be checked against the
+     * @param str2	the second string
+     *
+     * @param aMode     the normalization mode
+     *
+     * @param options   the optional features to be enabled.
+     */
+	// TODO: actually do the optimization when the guts of Normalizer are upgraded
+	// --has just dumb implementation for now
+	public static boolean isEquivalent(String str1, String str2, Mode mode, int options) {
+		return Normalizer.normalize(str1, mode, options)
+			.equals(Normalizer.normalize(str2, mode, options));
+	}
+    
+    
+	/**
+	 * Convenience method that can have faster implementation
+	 * by not allocating buffers.
+	 * @internal
+     * @param char32a	the first code point to be checked against the
+     * @param char32b	the second code point
+     *
+     * @param aMode     the normalization mode
+     *
+     * @param options   the optional features to be enabled.
+     */
+	// TODO: actually do the optimization when the guts of Normalizer are upgraded
+	// --has just dumb implementation for now
+	public static boolean isEquivalent(int char32a, int char32b, Mode mode, int options) {
+		return Normalizer.normalize(char32a, mode, options)
+			.equals(Normalizer.normalize(char32b, mode, options));
+	}
+    
+    
+	/**
+	 * Convenience method that can have faster implementation
+	 * by not allocating buffers.
+	 * @internal
+     * @param char32a	the first code point to be checked against the
+     * @param str2	the second string
+     *
+     * @param aMode     the normalization mode
+     *
+     * @param options   the optional features to be enabled.
+     */
+	// TODO: actually do the optimization when the guts of Normalizer are upgraded
+	// --has just dumb implementation for now
+	public static boolean isEquivalent(int char32a, String str2, Mode mode, int options) {
+		return Normalizer.normalize(char32a, mode, options)
+			.equals(Normalizer.normalize(str2, mode, options));
+	}
+    
+    
     //-------------------------------------------------------------------------
     // Private utility methods
     //-------------------------------------------------------------------------
