@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/usetiter.h,v $ 
-* $Date: 2002/04/25 23:36:02 $ 
-* $Revision: 1.1 $
+* $Date: 2002/04/29 16:46:48 $ 
+* $Revision: 1.2 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -59,7 +59,7 @@ class U_I18N_API UnicodeSetIterator {
      * If <tt>codepoint == IS_STRING</tt>, then examine
      * <tt>string</tt> for the current iteration result.
      */
-	static enum { IS_STRING = -1 };
+	enum { IS_STRING = -1 };
 
 	/**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
