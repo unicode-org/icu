@@ -898,25 +898,27 @@ void UnicodeSetTest::TestEscapePattern() {
         "[\\uFEFF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
     const char exp[] =
         "[\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
-    UErrorCode ec = U_ZERO_ERROR;
-    UnicodeSet set;
-
-    // We used to test this with two passes; in the second pass we 
-    // would pre-unescape the pattern.  The problem is that U+FEFF
-    // is rule whitespace, so this doesn't work.
-    // (Keep code in place in case we need it later)
-    //for (int32_t pass=1; pass<=2; ++pass) {
-    for (int32_t pass=1; pass<=1; ++pass) {
+    // We test this with two passes; in the second pass we
+    // pre-unescape the pattern.  Since U+FEFF and several other code
+    // points are rule whitespace, this fails -- which is what we
+    // expect.
+    for (int32_t pass=1; pass<=2; ++pass) {
+        UErrorCode ec = U_ZERO_ERROR;
         UnicodeString pat(pattern);
-        //if (pass==2) {
-        //    pat = pat.unescape();
-        //}
+        if (pass==2) {
+            pat = pat.unescape();
+        }
+        // Pattern is only good for pass 1
+        UBool isPatternValid = (pass==1);
 
-        set.applyPattern(pat, ec);
-        if (U_FAILURE(ec)){
+        UnicodeSet set(pat, ec);
+        if (U_SUCCESS(ec) != isPatternValid){
             errln((UnicodeString)"FAIL: applyPattern(" +
-                  escape(pat) + ") failed: " +
+                  escape(pat) + ") => " +
                   u_errorName(ec));
+            continue;
+        }
+        if (U_FAILURE(ec)) {
             continue;
         }
         if (set.contains((UChar)0x0644)){
@@ -931,18 +933,21 @@ void UnicodeSetTest::TestEscapePattern() {
             errln((UnicodeString)"FAIL: " + escape(pat) + " => " + newpat);
         }
 
-        // Dump ranges, for debugging -- not needed during std. test
-        /*
         for (int32_t i=0; i<set.getRangeCount(); ++i) {
-            UnicodeString str(" ");
+            UnicodeString str("Range ");
             str.append((UChar)(0x30 + i))
                 .append(": ")
                 .append((UChar32)set.getRangeStart(i))
                 .append(" - ")
                 .append((UChar32)set.getRangeEnd(i));
-            logln(escape(str));
+            str = str + " (" + set.getRangeStart(i) + " - " +
+                set.getRangeEnd(i) + ")";
+            if (set.getRangeStart(i) < 0) {
+                errln((UnicodeString)"FAIL: " + escape(str));
+            } else {
+                logln(escape(str));
+            }
         }
-        */
     }
 }
 
