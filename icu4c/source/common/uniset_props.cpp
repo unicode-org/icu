@@ -1468,6 +1468,8 @@ void UnicodeSet::applyPropertyPattern(RuleCharacterIterator& chars,
 // Inclusions list
 //----------------------------------------------------------------
 
+U_CDECL_BEGIN
+
 // USetAdder implementation
 // Does not use uset.h to reduce code dependencies
 static void U_CALLCONV
@@ -1484,6 +1486,8 @@ static void U_CALLCONV
 _set_addString(USet *set, const UChar *str, int32_t length) {
     ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
 }
+
+U_CDECL_END
 
 const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &status) {
     umtx_lock(NULL);

@@ -29,6 +29,8 @@ static const UChar OPEN_DELIM  = 92;  // '\\' first char of OPEN
 static const UChar CLOSE_DELIM = 125; // '}'
 static const UChar SPACE       = 32;  // ' '
 
+U_CDECL_BEGIN
+
 // USetAdder implementation
 // Does not use uset.h to reduce code dependencies
 static void U_CALLCONV
@@ -45,6 +47,8 @@ static void U_CALLCONV
 _set_addString(USet *set, const UChar *str, int32_t length) {
     ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
 }
+
+U_CDECL_END
 
 /**
  * Constructs a transliterator with the default delimiters '{' and

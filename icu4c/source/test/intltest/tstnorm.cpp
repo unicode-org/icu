@@ -1671,6 +1671,8 @@ initExpectedSkippables(UnicodeSet skipSets[UNORM_MODE_COUNT]) {
         "D6A8-\\U0001D7C9\\U0001D7CE-\\U0001D7FF\\U0002F800-\\U0002FA1D]", ""), errorCode);
 }
 
+U_CDECL_BEGIN
+
 // USetAdder implementation
 // Does not use uset.h to reduce code dependencies
 static void U_CALLCONV
@@ -1687,6 +1689,8 @@ static void U_CALLCONV
 _set_addString(USet *set, const UChar *str, int32_t length) {
     ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
 }
+
+U_CDECL_END
 
 void
 BasicNormalizerTest::TestSkippable() {
