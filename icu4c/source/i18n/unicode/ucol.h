@@ -511,7 +511,8 @@ ucol_getSortKey(const    UCollator    *coll,
  *  The destination buffer provided must be big enough to store
  *  the number of requested bytes. Generated sortkey is not 
  *  compatible with sortkeys generated using ucol_getSortKey
- *  API, since we don't do any compression.
+ *  API, since we don't do any compression. If uncompressed
+ *  sortkeys are required, this API can be used.
  *  @param coll The UCollator containing the collation rules.
  *  @param iter UCharIterator containing the string we need 
  *              the sort key to be calculated for.

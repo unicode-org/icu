@@ -1201,53 +1201,6 @@ inline void normalizeIterator(collIterate *collationSource) {
   collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
 }
 
-// This function takes the iterator and extracts normalized stuff up to the previous boundary
-// There is one assumption I use here: due to the nature of how the iterative collation works,
-// we will never arrive here unless the normalization mode is turned on and in that case 
-// we are always in the normalization buffer and want to preserve the original flags (see
-// below).
-static
-inline void normalizeIteratorBackwards(collIterate *collationSource) {
-  UErrorCode status = U_ZERO_ERROR;
-  UBool wasNormalized = FALSE;
-  collationSource->iterator->move(collationSource->iterator, -1, UITER_CURRENT);
-  //int32_t iterIndex = collationSource->iterator->getIndex(collationSource->iterator, UITER_CURRENT);
-  uint32_t iterIndex = collationSource->iterator->getState(collationSource->iterator);
-  *(collationSource->writableBuffer) = 0;
-  int32_t normLen = unorm_previous(collationSource->iterator, collationSource->writableBuffer+1, 
-    (int32_t)collationSource->writableBufSize, UNORM_FCD, 0, TRUE, &wasNormalized, &status);
-  if(status == U_BUFFER_OVERFLOW_ERROR || normLen == (int32_t)collationSource->writableBufSize) {
-    // reallocate and terminate
-    if(!u_growBufferFromStatic(collationSource->stackWritableBuffer,
-                               &collationSource->writableBuffer,
-                               (int32_t *)&collationSource->writableBufSize, normLen + 1,
-                               0)
-    ) {
-    #ifdef UCOL_DEBUG
-        fprintf(stderr, "normalizeIterator(), out of memory\n");
-    #endif
-        return;
-    }
-    *(collationSource->writableBuffer) = 0;
-    status = U_ZERO_ERROR;
-    //collationSource->iterator->move(collationSource->iterator, iterIndex, UITER_ZERO);
-    collationSource->iterator->setState(collationSource->iterator, iterIndex, &status);
-    normLen = unorm_previous(collationSource->iterator, collationSource->writableBuffer+1, 
-    (int32_t)collationSource->writableBufSize, UNORM_FCD, 0, TRUE, &wasNormalized, &status);
-  }
-  // Terminate the buffer - we already checked that it is big enough
-  if(collationSource->writableBuffer != collationSource->stackWritableBuffer) {
-      collationSource->flags |= UCOL_ITER_ALLOCATED;
-  }
-  collationSource->pos        = collationSource->writableBuffer+1+normLen;
-  // Do not copy the original flags, they were already copied. See the comment
-  // on the opening line of the function.
-  //collationSource->origFlags  = collationSource->flags;
-  collationSource->flags     |= UCOL_ITER_INNORMBUF;
-  collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
-}
-
-
 
 /* Incremental FCD check and normalize                                                    */
 /*   Called from getNextCE when normalization state is suspect.                           */
@@ -1382,24 +1335,11 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
             ch = *collationSource->pos++;
         }
         else if(collationSource->flags & UCOL_USE_ITERATOR) {
-          //if(!(collationSource->flags & UCOL_ITER_NORM)) {
             UChar32 iterCh = collationSource->iterator->next(collationSource->iterator);
             if(iterCh == U_SENTINEL) {
               return UCOL_NO_MORE_CES;
             }
             ch = (UChar)iterCh;
-#if 0
-          } else {
-            // do the incremental normalization of the iterator contents.
-            // God knows how we're going to get back from it :)
-            if(collationSource->iterator->hasNext(collationSource->iterator)) {
-              normalizeIterator(collationSource);
-              continue;
-            } else {
-              return UCOL_NO_MORE_CES;
-            }
-          }
-#endif
         }
         else
         {
@@ -1418,7 +1358,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
                     // Usually this means the end of the normalized data,
                     // except for one odd case: a null followed by combining chars,
                     //   which is the case if we are at the start of the buffer.
-                  // iterTODO - this seems to be fine with the iterator code.
                     if (collationSource->pos == collationSource->writableBuffer+1) {
                         break;
                     }
@@ -1426,9 +1365,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
                     //  Null marked end of side buffer.
                     //   Revert to the main string and
                     //   loop back to top to try again to get a character.
-                    // iterTODO - this also seems to be fine - fcdPosition should be NULL
-                    // when we constructed the side buffer. origFlags will put the iterator
-                    // back in control.
                     collationSource->pos   = collationSource->fcdPosition;
                     collationSource->flags = collationSource->origFlags;
                     continue;
@@ -1450,7 +1386,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
             break;
         }
 
-        // iterTODO
         if (collationSource->fcdPosition >= collationSource->pos) {
             // An earlier FCD check has already covered the current character.
             // We can go ahead and process this char.
@@ -1464,7 +1399,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
 
         if (ch < NFC_ZERO_CC_BLOCK_LIMIT_) {
             // We need to peek at the next character in order to tell if we are FCD
-        // iterTODO
             if ((collationSource->flags & UCOL_ITER_HASLEN) && collationSource->pos >= collationSource->endp) {
                 // We are at the last char of source string.
                 //  It is always OK for FCD check.
@@ -1472,7 +1406,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
             }
 
             // Not at last char of source string (or we'll check against terminating null).  Do the FCD fast test
-        // iterTODO
             if (*collationSource->pos < NFC_ZERO_CC_BLOCK_LIMIT_) {
                 break;
             }
@@ -1481,7 +1414,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
 
         // Need a more complete FCD check and possible normalization.
         if (collIterFCD(collationSource)) {
-        // iterTODO done above!
             collIterNormalize(collationSource);
         }
         if ((collationSource->flags & UCOL_ITER_INNORMBUF) == 0) {
@@ -1505,14 +1437,12 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
       }
       else
       {
-          /*order = ucmpe32_get(coll->mapping, ch);*/                             /* we'll go for slightly slower trie */
           order = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
               order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
           }
           if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
-            /*order = ucmpe32_get(UCA->mapping, ch);*/
             order = UTRIE_GET32_FROM_LEAD(UCA->mapping, ch);
 
             if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
@@ -2388,523 +2318,6 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource) {
   return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
 }
 
-static
-inline UChar getPrevNormalizedChar(collIterate *data);
-
-/* This function handles the special CEs like contractions, expansions, surrogates, Thai */
-/* It is called by getNextCE */
-
-uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
-  collIterateState entryState;
-  backupState(source, &entryState);
-  UChar32 cp = ch;
-
-  //UChar *entryPos = source->pos;
-  for (;;) {
-    // This loop will repeat only in the case of contractions, and only when a contraction
-    //   is found and the first CE resulting from that contraction is itself a special
-    //   (an expansion, for example.)  All other special CE types are fully handled the
-    //   first time through, and the loop exits.
-
-    const uint32_t *CEOffset = NULL;
-    switch(getCETag(CE)) {
-    case NOT_FOUND_TAG:
-      /* This one is not found, and we'll let somebody else bother about it... no more games */
-      return CE;
-    case SURROGATE_TAG:
-      /* we encountered a leading surrogate. We shall get the CE by using the following code unit */
-      /* two things can happen here: next code point can be a trailing surrogate - we will use it */
-      /* to retrieve the CE, or it is not a trailing surrogate (or the string is done). In that case */
-      /* we return 0 (completely ignorable - per UCA specification */
-      {
-        UChar trail;
-        collIterateState state;
-        backupState(source, &state);
-        if (collIter_eos(source) || !(UTF16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
-          // we chould have stepped one char forward and it might have turned that it 
-          // was not a trail surrogate. In that case, we have to backup.
-          loadState(source, &state, TRUE);
-          return 0;
-        } else {
-          /* CE = ucmpe32_getSurrogate(coll->mapping, CE, trail); */
-          /* TODO: CE contain the data from the previous CE + the mask. It should at least be unmasked */
-          CE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, CE&0xFFFFFF, trail);
-          if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
-            // We need to backup
-            loadState(source, &state, TRUE);
-            return CE;
-          } 
-          // calculate the supplementary code point value, if surrogate was not tailored
-          cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
-        }
-      }
-      break;
-    case THAI_TAG:
-      /* Thai/Lao reordering */
-        if  (((source->flags) & UCOL_ITER_INNORMBUF)      /* Already Swapped     ||                 */
-            || (source->iterator && !source->iterator->hasNext(source->iterator))
-            || (source->pos && source->endp == source->pos)                /* At end of string.  No swap possible || */
-            /*|| UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0*/)  /* next char not Thai base cons.*/ // This is from the old specs - we now rearrange unconditionally
-        {
-            // Treat Thai as a length one expansion */
-            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-            CE = *CEOffset++;
-        }
-        else
-        {
-            // Move the prevowel and the following base Consonant into the normalization buffer
-            //   with their order swapped
-
-            source->writableBuffer[0] = peekCharacter(source, 0);
-            //source->writableBuffer[0] = *source->pos;
-            source->writableBuffer[1] = peekCharacter(source, -1);
-            //source->writableBuffer[1] = *(source->pos - 1);
-            source->writableBuffer[2] = 0;
-
-            if(source->pos) {
-              source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
-                                                           //   after exhausting the writableBuffer
-            } else if(source->iterator) {
-              source->iterator->next(source->iterator);
-            }
-        source->pos   = source->writableBuffer;
-            source->origFlags         = source->flags;
-            source->flags            |= UCOL_ITER_INNORMBUF;
-            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
-
-        CE = UCOL_IGNORABLE;
-      }
-      break;
-    case SPEC_PROC_TAG:
-      {
-        // Special processing is getting a CE that is preceded by a certain prefix
-        // Currently this is only needed for optimizing Japanese length and iteration marks.
-        // When we encouter a special processing tag, we go backwards and try to see if 
-        // we have a match. 
-        // Contraction tables are used - so the whole process is not unlike contraction.
-        // prefix data is stored backwards in the table.
-        const UChar *UCharOffset;
-        UChar schar, tchar;
-        //UChar32 normOutput = 0;
-        collIterateState prefixState;
-        backupState(source, &prefixState);
-        loadState(source, &entryState, TRUE);
-        goBackOne(source);
-        //source->pos--;
-
-        //UChar  *sourcePointer = --entryPos; //source->pos; // We want to look at the point where we entered - actually one
-        // before that...
-
-        for(;;) {
-        // This loop will run once per source string character, for as long as we
-        //  are matching a potential contraction sequence                  
-
-          // First we position ourselves at the begining of contraction sequence 
-          const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-          if (collIter_bos(source)) {
-            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-            break;
-          }
-          schar = getPrevNormalizedChar(source);
-          goBackOne(source);
-          //source->pos--;
-          //schar = *(--sourcePointer);
-
-          while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
-            UCharOffset++;
-          }
-
-          if (schar == tchar) {
-              // Found the source string char in the table.
-              //  Pick up the corresponding CE from the table.
-              CE = *(coll->contractionCEs +
-                  (UCharOffset - coll->contractionIndex));
-          }
-          else
-          {
-              // if there is a completely ignorable code point in the middle of 
-              // a prefix, we need to act as if it's not there
-              // assumption: 'real' noncharacters (*fffe, *ffff, fdd0-fdef are set to zero)
-              // lone surrogates cannot be set to zero as it would break other processing
-              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
-              // it's easy for BMP code points
-              if(isZeroCE == 0) {
-                continue;
-              } else if(UTF_IS_TRAIL(schar) || UTF_IS_LEAD(schar)) {
-                // for supplementary code points, we have to check the next one
-                // situations where we are going to ignore
-                // 1. beginning of the string: schar is a lone surrogate
-                // 2. schar is a lone surrogate
-                // 3. schar is a trail surrogate in a valid surrogate sequence
-                //    that is explicitly set to zero.
-                if (!collIter_bos(source)) {
-                  UChar lead;
-                  if(UTF_IS_LEAD(lead = getPrevNormalizedChar(source))) {
-                    isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
-                    if(getCETag(isZeroCE) == SURROGATE_TAG) {
-                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
-                      if(finalCE == 0) {
-                        // this is a real, assigned completely ignorable code point
-                        goBackOne(source);
-                        //source->pos--;
-                        continue;
-                      }
-                    }
-                  } else {
-                    // lone surrogate, completely ignorable
-                    continue;
-                  }
-                } else {
-                  // lone surrogate at the beggining, completely ignorable
-                  continue;
-                }
-              }
-              // Source string char was not in the table.
-              //   We have not found the prefix.
-              CE = *(coll->contractionCEs +
-                  (ContractionStart - coll->contractionIndex));
-          }
-
-          if(!isPrefix(CE)) {
-              // The source string char was in the contraction table, and the corresponding
-              //   CE is not a prefix CE.  We found the prefix, break
-              //   out of loop, this CE will end up being returned.  This is the normal
-              //   way out of prefix handling when the source actually contained
-              //   the prefix.
-              break;
-          }
-        }
-        if(CE != UCOL_NOT_FOUND) { // we found something and we can merilly continue
-          loadState(source, &prefixState, TRUE);
-          if(source->origFlags & UCOL_USE_ITERATOR) {
-            source->flags = source->origFlags;
-          }
-        } else { // prefix search was a failure, we have to backup all the way to the start
-          loadState(source, &entryState, TRUE);
-        }
-      break;
-      }
-    case CONTRACTION_TAG:
-      {
-      /* This should handle contractions */
-      collIterateState state;
-      backupState(source, &state);
-      uint32_t firstCE = UCOL_NOT_FOUND;
-      const UChar *UCharOffset;
-      UChar schar, tchar;
-
-      for (;;) {
-        /* This loop will run once per source string character, for as long as we     */
-        /*  are matching a potential contraction sequence                  */
-
-        /* First we position ourselves at the begining of contraction sequence */
-        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-
-        if (collIter_eos(source)) {
-            // Ran off the end of the source string.
-            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-            // So we'll pick whatever we have at the point...
-            if (CE == UCOL_NOT_FOUND) {
-                // back up the source over all the chars we scanned going into this contraction.
-                CE = firstCE;  
-                loadState(source, &state, TRUE);
-                if(source->origFlags & UCOL_USE_ITERATOR) {
-                  source->flags = source->origFlags;
-                }
-            }
-            break;
-        }
-
-        uint8_t maxCC = (uint8_t)(*(UCharOffset)&0xFF); /*get the discontiguos stuff */ /* skip the backward offset, see above */
-        uint8_t allSame = (uint8_t)(*(UCharOffset++)>>8);
-
-        schar = getNextNormalizedChar(source);
-        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
-          UCharOffset++;
-        }
-
-        if (schar == tchar) {
-            // Found the source string char in the contraction table.
-            //  Pick up the corresponding CE from the table.
-            CE = *(coll->contractionCEs +
-                (UCharOffset - coll->contractionIndex));
-        }
-        else
-        {
-            // if there is a completely ignorable code point in the middle of 
-            // contraction, we need to act as if it's not there
-            uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
-            // it's easy for BMP code points
-            if(isZeroCE == 0) {
-              continue;
-            } else if(UTF_IS_LEAD(schar)) {
-              if(!collIter_eos(source)) {
-                backupState(source, &state);
-                UChar trail = getNextNormalizedChar(source);
-                if(UTF_IS_TRAIL(trail)) { // do stuff with trail
-                  if(getCETag(isZeroCE) == SURROGATE_TAG) {
-                    uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, trail);
-                    if(finalCE == 0) {
-                      continue;
-                    }
-                  }
-                } else {
-                  // broken surrogate sequence, thus completely ignorable
-                  loadState(source, &state, TRUE);
-                  continue;
-                }
-                loadState(source, &state, TRUE);
-              } else { // no  more characters, so broken surrogate pair... 
-                // this contraction will ultimately fail, but not because of us
-                continue; 
-              }
-            } // else if(UTF_IS_LEAD(schar))
-
-            // Source string char was not in contraction table.
-            //   Unless we have a discontiguous contraction, we have finished
-            //   with this contraction.
-            uint8_t sCC;
-            if (schar < 0x300 ||   
-                maxCC == 0 ||
-                (sCC = i_getCombiningClass(schar, coll)) == 0 ||
-                sCC>maxCC || 
-                (allSame != 0 && sCC == maxCC) ||
-                collIter_eos(source)) {
-                    //  Contraction can not be discontiguous.  
-                    goBackOne(source);
-                    //source->pos --;     // back up the source string pointer by one, 
-                                        //  because  the character we just looked at was
-                                        //  not part of the contraction.   */
-                    CE = *(coll->contractionCEs +
-                        (ContractionStart - coll->contractionIndex));
-            } else {
-                //
-                // Contraction is possibly discontiguous.
-                //   Scan more of source string looking for a match
-                //
-                UChar tempchar;
-                /* find the next character if schar is not a base character
-                    and we are not yet at the end of the string */
-                tempchar = getNextNormalizedChar(source);
-                goBackOne(source);
-                //source->pos --;
-                if (i_getCombiningClass(tempchar, coll) == 0) {
-                    goBackOne(source);
-                    //source->pos --;
-                    /* Spit out the last char of the string, wasn't tasty enough */
-                    CE = *(coll->contractionCEs +
-                        (ContractionStart - coll->contractionIndex));
-                } else {
-                    CE = getDiscontiguous(coll, source, ContractionStart);
-                }
-            }
-        } // else after if(schar == tchar)
-
-        if(CE == UCOL_NOT_FOUND) {
-            /* The Source string did not match the contraction that we were checking.  */
-            /*  Back up the source position to undo the effects of having partially    */
-            /*   scanned through what ultimately proved to not be a contraction.       */
-          loadState(source, &state, TRUE);
-          CE = firstCE;
-          if(source->origFlags & UCOL_USE_ITERATOR) {
-            source->flags = source->origFlags;
-          }
-          break;
-        }
-        
-        if(!isContraction(CE)) {
-            // The source string char was in the contraction table, and the corresponding
-            //   CE is not a contraction CE.  We completed the contraction, break
-            //   out of loop, this CE will end up being returned.  This is the normal
-            //   way out of contraction handling when the source actually contained
-            //   the contraction.
-            break;
-        }
-        
-
-        // The source string char was in the contraction table, and the corresponding
-        //   CE is IS  a contraction CE.  We will continue looping to check the source
-        //   string for the remaining chars in the contraction.
-        uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
-        if(tempCE != UCOL_NOT_FOUND) {
-            // We have scanned a a section of source string for which there is a
-            //  CE from the contraction table.  Remember the CE and scan position, so 
-            //  that we can return to this point if further scanning fails to
-            //  match a longer contraction sequence.
-            firstCE = tempCE;
-
-            goBackOne(source);
-            backupState(source, &state);
-            getNextNormalizedChar(source);
-
-            // Another way to do this is:
-            //collIterateState tempState;
-            //backupState(source, &tempState);
-            //goBackOne(source);
-            //backupState(source, &state);
-            //loadState(source, &tempState, TRUE);
-
-            // The problem is that for incomplete contractions we have to remember the previous
-            // position. Before, the only thing I needed to do was state.pos--; 
-            // After iterator introduction and especially after introduction of normalizing
-            // iterators, it became much more difficult to decrease the saved state. 
-            // I'm not yet sure which of the two methods above is faster.
-        }
-      } // for(;;)
-      break;
-      } // case CONTRACTION_TAG:
-    case LONG_PRIMARY_TAG:
-      {
-        *(source->CEpos++) = ((CE & 0xFF)<<24)|UCOL_CONTINUATION_MARKER;
-        CE = ((CE & 0xFFFF00) << 8) | (UCOL_BYTE_COMMON << 8) | UCOL_BYTE_COMMON;
-        return CE;
-      }
-    case EXPANSION_TAG:
-      {
-      /* This should handle expansion. */
-      /* NOTE: we can encounter both continuations and expansions in an expansion! */
-      /* I have to decide where continuations are going to be dealt with */
-      uint32_t size;
-      uint32_t i;    /* general counter */
-      CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-      size = getExpansionCount(CE);
-      CE = *CEOffset++;
-      if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
-        for(i = 1; i<size; i++) {
-          *(source->CEpos++) = *CEOffset++;
-        }
-      } else { /* else, we do */
-        while(*CEOffset != 0) {
-          *(source->CEpos++) = *CEOffset++;
-        }
-      }
-      return CE;
-      }
-    /* various implicits optimization */
-    // TODO: remove CJK_IMPLICIT_TAG completely - handled by the getImplicit
-    case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
-      //return getImplicit(cp, source, 0x04000000);
-      return getImplicit(cp, source);
-    case IMPLICIT_TAG:        /* everything that is not defined otherwise */
-      /* UCA is filled with these. Tailorings are NOT_FOUND */
-      //return getImplicit(cp, source, 0);
-      return getImplicit(cp, source);
-    case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
-      return 0; /* broken surrogate sequence */
-    case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
-      UChar nextChar;
-      if( source->flags & UCOL_USE_ITERATOR) {
-        if(U_IS_TRAIL(nextChar = (UChar)source->iterator->current(source->iterator))) {
-          cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
-          source->iterator->next(source->iterator);
-          return getImplicit(cp, source);
-        }  else {
-          return 0;
-        }
-      } else if((((source->flags & UCOL_ITER_HASLEN) == 0 ) || (source->pos<source->endp)) &&
-        U_IS_TRAIL((nextChar=*source->pos))) {
-        cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
-        //cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
-        source->pos++;
-#if 0
-        // CJKs handled in the getImplicit function. No need for fixup
-        if((cp >= 0x20000 && cp <= 0x2a6d6) || 
-           (cp >= 0x2F800 && cp <= 0x2FA1D)) { // this might be a CJK supplementary cp
-          return getImplicit(cp, source, 0x04000000); 
-        } else { // or a regular one
-          return getImplicit(cp, source, 0);
-        }
-#endif
-        return getImplicit(cp, source);
-      } else {
-        return 0; /* completely ignorable */
-      }
-    case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
-      {
-        const uint32_t
-          SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7;
-        //const uint32_t LCount = 19;
-        const uint32_t VCount = 21; 
-        const uint32_t TCount = 28;
-        //const uint32_t NCount = VCount * TCount;   // 588
-        //const uint32_t SCount = LCount * NCount;   // 11172
-        uint32_t L = ch - SBase;
-
-        // divide into pieces
-
-        uint32_t T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
-        L /= TCount;
-        uint32_t V = L % VCount;
-        L /= VCount;
-
-        // offset them
-
-        L += LBase;
-        V += VBase;
-        T += TBase;
-
-        // return the first CE, but first put the rest into the expansion buffer
-        if (!source->coll->image->jamoSpecial) { // FAST PATH
-
-          /**(source->CEpos++) = ucmpe32_get(UCA->mapping, V);*/
-          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, V);
-          if (T != TBase) {
-              /**(source->CEpos++) = ucmpe32_get(UCA->mapping, T);*/
-              /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);*/
-              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, T);
-          }
-
-          /*return ucmpe32_get(UCA->mapping, L);*/ // return first one
-          /*return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);*/
-          return UTRIE_GET32_FROM_LEAD(coll->mapping, L);
-
-        } else { // Jamo is Special
-          // Since Hanguls pass the FCD check, it is 
-          // guaranteed that we won't be in
-          // the normalization buffer if something like this happens
-          // However, if we are using a uchar iterator and normalization
-          // is ON, the Hangul that lead us here is going to be in that
-          // normalization buffer. Here we want to restore the uchar 
-          // iterator state and pull out of the normalization buffer
-          if(source->iterator != NULL && source->flags & UCOL_ITER_INNORMBUF) {
-            source->flags = source->origFlags; // restore the iterator
-            source->pos = NULL;
-          }
-          // Move Jamos into normalization buffer
-          source->writableBuffer[0] = (UChar)L;
-          source->writableBuffer[1] = (UChar)V;
-          if (T != TBase) {
-            source->writableBuffer[2] = (UChar)T;
-            source->writableBuffer[3] = 0;
-          } else {
-            source->writableBuffer[2] = 0;
-          }
-
-          source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
-                                                         //   after exhausting the writableBuffer
-          source->pos   = source->writableBuffer;
-          source->origFlags         = source->flags;
-          source->flags            |= UCOL_ITER_INNORMBUF;
-          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
-
-          return(UCOL_IGNORABLE);
-        }
-      }
-    case CHARSET_TAG:
-    /* not yet implemented */
-      /* probably after 1.8 */
-      return UCOL_NOT_FOUND;
-    default:
-      *status = U_INTERNAL_PROGRAM_ERROR;
-      CE=0;
-      break;
-    }
-    if (CE <= UCOL_NOT_FOUND) break;
-  }
-  return CE;
-}
-
 /**
 * Inserts the argument character into the front of the buffer replacing the
 * front null terminator.
@@ -3057,18 +2470,10 @@ inline UChar getPrevNormalizedChar(collIterate *data)
       if(data->flags & UCOL_USE_ITERATOR) {
         data->iterator->move(data->iterator, -1, UITER_CURRENT);
         return (UChar)data->iterator->next(data->iterator);
-      } else if((data->origFlags & UCOL_USE_ITERATOR) && innormbuf) {
-        normalizeIteratorBackwards(data); 
-        return *(data->pos - 1);
       } else {
         return *(data->pos - 1);
       }
     }
-
-    //if(data->flags & UCOL_USE_ITERATOR) {
-      //normalizeIteratorBackwards(data); 
-      //return *(data->pos - 1);
-    //}
 
     start = data->pos;
     if (data->flags & UCOL_ITER_HASLEN) {
@@ -3127,6 +2532,496 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     }
 
     return ch;
+}
+
+/* This function handles the special CEs like contractions, expansions, surrogates, Thai */
+/* It is called by getNextCE */
+
+uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
+  collIterateState entryState;
+  backupState(source, &entryState);
+  UChar32 cp = ch;
+
+  for (;;) {
+    // This loop will repeat only in the case of contractions, and only when a contraction
+    //   is found and the first CE resulting from that contraction is itself a special
+    //   (an expansion, for example.)  All other special CE types are fully handled the
+    //   first time through, and the loop exits.
+
+    const uint32_t *CEOffset = NULL;
+    switch(getCETag(CE)) {
+    case NOT_FOUND_TAG:
+      /* This one is not found, and we'll let somebody else bother about it... no more games */
+      return CE;
+    case SURROGATE_TAG:
+      /* we encountered a leading surrogate. We shall get the CE by using the following code unit */
+      /* two things can happen here: next code point can be a trailing surrogate - we will use it */
+      /* to retrieve the CE, or it is not a trailing surrogate (or the string is done). In that case */
+      /* we return 0 (completely ignorable - per UCA specification */
+      {
+        UChar trail;
+        collIterateState state;
+        backupState(source, &state);
+        if (collIter_eos(source) || !(UTF16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
+          // we chould have stepped one char forward and it might have turned that it 
+          // was not a trail surrogate. In that case, we have to backup.
+          loadState(source, &state, TRUE);
+          return 0;
+        } else {
+          /* TODO: CE contain the data from the previous CE + the mask. It should at least be unmasked */
+          CE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, CE&0xFFFFFF, trail);
+          if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
+            // We need to backup
+            loadState(source, &state, TRUE);
+            return CE;
+          } 
+          // calculate the supplementary code point value, if surrogate was not tailored
+          cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
+        }
+      }
+      break;
+    case THAI_TAG:
+      /* Thai/Lao reordering */
+        if  (((source->flags) & UCOL_ITER_INNORMBUF)      /* Already Swapped     ||                 */
+            || (source->iterator && !source->iterator->hasNext(source->iterator))
+            || (source->pos && source->endp == source->pos)                /* At end of string.  No swap possible || */
+            /*|| UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0*/)  /* next char not Thai base cons.*/ // This is from the old specs - we now rearrange unconditionally
+        {
+            // Treat Thai as a length one expansion */
+            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+            CE = *CEOffset++;
+        }
+        else
+        {
+            // Move the prevowel and the following base Consonant into the normalization buffer
+            //   with their order swapped
+
+            source->writableBuffer[0] = peekCharacter(source, 0);
+            source->writableBuffer[1] = peekCharacter(source, -1);
+            source->writableBuffer[2] = 0;
+
+            if(source->pos) {
+              source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
+                                                           //   after exhausting the writableBuffer
+            } else if(source->iterator) {
+              source->iterator->next(source->iterator);
+            }
+        source->pos   = source->writableBuffer;
+            source->origFlags         = source->flags;
+            source->flags            |= UCOL_ITER_INNORMBUF;
+            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
+
+        CE = UCOL_IGNORABLE;
+      }
+      break;
+    case SPEC_PROC_TAG:
+      {
+        // Special processing is getting a CE that is preceded by a certain prefix
+        // Currently this is only needed for optimizing Japanese length and iteration marks.
+        // When we encouter a special processing tag, we go backwards and try to see if 
+        // we have a match. 
+        // Contraction tables are used - so the whole process is not unlike contraction.
+        // prefix data is stored backwards in the table.
+        const UChar *UCharOffset;
+        UChar schar, tchar;
+        collIterateState prefixState;
+        backupState(source, &prefixState);
+        loadState(source, &entryState, TRUE);
+        goBackOne(source); // We want to look at the point where we entered - actually one
+        // before that...
+
+        for(;;) {
+        // This loop will run once per source string character, for as long as we
+        //  are matching a potential contraction sequence                  
+
+          // First we position ourselves at the begining of contraction sequence 
+          const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+          if (collIter_bos(source)) {
+            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+            break;
+          }
+          schar = getPrevNormalizedChar(source);
+          goBackOne(source);
+
+          while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+            UCharOffset++;
+          }
+
+          if (schar == tchar) {
+              // Found the source string char in the table.
+              //  Pick up the corresponding CE from the table.
+              CE = *(coll->contractionCEs +
+                  (UCharOffset - coll->contractionIndex));
+          }
+          else
+          {
+              // if there is a completely ignorable code point in the middle of 
+              // a prefix, we need to act as if it's not there
+              // assumption: 'real' noncharacters (*fffe, *ffff, fdd0-fdef are set to zero)
+              // lone surrogates cannot be set to zero as it would break other processing
+              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+              // it's easy for BMP code points
+              if(isZeroCE == 0) {
+                continue;
+              } else if(UTF_IS_TRAIL(schar) || UTF_IS_LEAD(schar)) {
+                // for supplementary code points, we have to check the next one
+                // situations where we are going to ignore
+                // 1. beginning of the string: schar is a lone surrogate
+                // 2. schar is a lone surrogate
+                // 3. schar is a trail surrogate in a valid surrogate sequence
+                //    that is explicitly set to zero.
+                if (!collIter_bos(source)) {
+                  UChar lead;
+                  if(UTF_IS_LEAD(lead = getPrevNormalizedChar(source))) {
+                    isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
+                    if(getCETag(isZeroCE) == SURROGATE_TAG) {
+                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
+                      if(finalCE == 0) {
+                        // this is a real, assigned completely ignorable code point
+                        goBackOne(source);
+                        continue;
+                      }
+                    }
+                  } else {
+                    // lone surrogate, completely ignorable
+                    continue;
+                  }
+                } else {
+                  // lone surrogate at the beggining, completely ignorable
+                  continue;
+                }
+              }
+              // Source string char was not in the table.
+              //   We have not found the prefix.
+              CE = *(coll->contractionCEs +
+                  (ContractionStart - coll->contractionIndex));
+          }
+
+          if(!isPrefix(CE)) {
+              // The source string char was in the contraction table, and the corresponding
+              //   CE is not a prefix CE.  We found the prefix, break
+              //   out of loop, this CE will end up being returned.  This is the normal
+              //   way out of prefix handling when the source actually contained
+              //   the prefix.
+              break;
+          }
+        }
+        if(CE != UCOL_NOT_FOUND) { // we found something and we can merilly continue
+          loadState(source, &prefixState, TRUE);
+          if(source->origFlags & UCOL_USE_ITERATOR) {
+            source->flags = source->origFlags;
+          }
+        } else { // prefix search was a failure, we have to backup all the way to the start
+          loadState(source, &entryState, TRUE);
+        }
+      break;
+      }
+    case CONTRACTION_TAG:
+      {
+      /* This should handle contractions */
+      collIterateState state;
+      backupState(source, &state);
+      uint32_t firstCE = UCOL_NOT_FOUND;
+      const UChar *UCharOffset;
+      UChar schar, tchar;
+
+      for (;;) {
+        /* This loop will run once per source string character, for as long as we     */
+        /*  are matching a potential contraction sequence                  */
+
+        /* First we position ourselves at the begining of contraction sequence */
+        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+
+        if (collIter_eos(source)) {
+            // Ran off the end of the source string.
+            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+            // So we'll pick whatever we have at the point...
+            if (CE == UCOL_NOT_FOUND) {
+                // back up the source over all the chars we scanned going into this contraction.
+                CE = firstCE;  
+                loadState(source, &state, TRUE);
+                if(source->origFlags & UCOL_USE_ITERATOR) {
+                  source->flags = source->origFlags;
+                }
+            }
+            break;
+        }
+
+        uint8_t maxCC = (uint8_t)(*(UCharOffset)&0xFF); /*get the discontiguos stuff */ /* skip the backward offset, see above */
+        uint8_t allSame = (uint8_t)(*(UCharOffset++)>>8);
+
+        schar = getNextNormalizedChar(source);
+        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+          UCharOffset++;
+        }
+
+        if (schar == tchar) {
+            // Found the source string char in the contraction table.
+            //  Pick up the corresponding CE from the table.
+            CE = *(coll->contractionCEs +
+                (UCharOffset - coll->contractionIndex));
+        }
+        else
+        {
+            // if there is a completely ignorable code point in the middle of 
+            // contraction, we need to act as if it's not there
+            uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+            // it's easy for BMP code points
+            if(isZeroCE == 0) {
+              continue;
+            } else if(UTF_IS_LEAD(schar)) {
+              if(!collIter_eos(source)) {
+                backupState(source, &state);
+                UChar trail = getNextNormalizedChar(source);
+                if(UTF_IS_TRAIL(trail)) { // do stuff with trail
+                  if(getCETag(isZeroCE) == SURROGATE_TAG) {
+                    uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, trail);
+                    if(finalCE == 0) {
+                      continue;
+                    }
+                  }
+                } else {
+                  // broken surrogate sequence, thus completely ignorable
+                  loadState(source, &state, TRUE);
+                  continue;
+                }
+                loadState(source, &state, TRUE);
+              } else { // no  more characters, so broken surrogate pair... 
+                // this contraction will ultimately fail, but not because of us
+                continue; 
+              }
+            } // else if(UTF_IS_LEAD(schar))
+
+            // Source string char was not in contraction table.
+            //   Unless we have a discontiguous contraction, we have finished
+            //   with this contraction.
+            uint8_t sCC;
+            if (schar < 0x300 ||   
+                maxCC == 0 ||
+                (sCC = i_getCombiningClass(schar, coll)) == 0 ||
+                sCC>maxCC || 
+                (allSame != 0 && sCC == maxCC) ||
+                collIter_eos(source)) {
+                    //  Contraction can not be discontiguous.  
+                    goBackOne(source);  // back up the source string by one, 
+                                        //  because  the character we just looked at was
+                                        //  not part of the contraction.   */
+                    CE = *(coll->contractionCEs +
+                        (ContractionStart - coll->contractionIndex));
+            } else {
+                //
+                // Contraction is possibly discontiguous.
+                //   Scan more of source string looking for a match
+                //
+                UChar tempchar;
+                /* find the next character if schar is not a base character
+                    and we are not yet at the end of the string */
+                tempchar = getNextNormalizedChar(source);
+                goBackOne(source);
+                if (i_getCombiningClass(tempchar, coll) == 0) {
+                    goBackOne(source);
+                    /* Spit out the last char of the string, wasn't tasty enough */
+                    CE = *(coll->contractionCEs +
+                        (ContractionStart - coll->contractionIndex));
+                } else {
+                    CE = getDiscontiguous(coll, source, ContractionStart);
+                }
+            }
+        } // else after if(schar == tchar)
+
+        if(CE == UCOL_NOT_FOUND) {
+            /* The Source string did not match the contraction that we were checking.  */
+            /*  Back up the source position to undo the effects of having partially    */
+            /*   scanned through what ultimately proved to not be a contraction.       */
+          loadState(source, &state, TRUE);
+          CE = firstCE;
+          if(source->origFlags & UCOL_USE_ITERATOR) {
+            source->flags = source->origFlags;
+          }
+          break;
+        }
+        
+        if(!isContraction(CE)) {
+            // The source string char was in the contraction table, and the corresponding
+            //   CE is not a contraction CE.  We completed the contraction, break
+            //   out of loop, this CE will end up being returned.  This is the normal
+            //   way out of contraction handling when the source actually contained
+            //   the contraction.
+            break;
+        }
+        
+
+        // The source string char was in the contraction table, and the corresponding
+        //   CE is IS  a contraction CE.  We will continue looping to check the source
+        //   string for the remaining chars in the contraction.
+        uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+        if(tempCE != UCOL_NOT_FOUND) {
+            // We have scanned a a section of source string for which there is a
+            //  CE from the contraction table.  Remember the CE and scan position, so 
+            //  that we can return to this point if further scanning fails to
+            //  match a longer contraction sequence.
+            firstCE = tempCE;
+
+            goBackOne(source);
+            backupState(source, &state);
+            getNextNormalizedChar(source);
+
+            // Another way to do this is:
+            //collIterateState tempState;
+            //backupState(source, &tempState);
+            //goBackOne(source);
+            //backupState(source, &state);
+            //loadState(source, &tempState, TRUE);
+
+            // The problem is that for incomplete contractions we have to remember the previous
+            // position. Before, the only thing I needed to do was state.pos--; 
+            // After iterator introduction and especially after introduction of normalizing
+            // iterators, it became much more difficult to decrease the saved state. 
+            // I'm not yet sure which of the two methods above is faster.
+        }
+      } // for(;;)
+      break;
+      } // case CONTRACTION_TAG:
+    case LONG_PRIMARY_TAG:
+      {
+        *(source->CEpos++) = ((CE & 0xFF)<<24)|UCOL_CONTINUATION_MARKER;
+        CE = ((CE & 0xFFFF00) << 8) | (UCOL_BYTE_COMMON << 8) | UCOL_BYTE_COMMON;
+        return CE;
+      }
+    case EXPANSION_TAG:
+      {
+      /* This should handle expansion. */
+      /* NOTE: we can encounter both continuations and expansions in an expansion! */
+      /* I have to decide where continuations are going to be dealt with */
+      uint32_t size;
+      uint32_t i;    /* general counter */
+      CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+      size = getExpansionCount(CE);
+      CE = *CEOffset++;
+      if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+        for(i = 1; i<size; i++) {
+          *(source->CEpos++) = *CEOffset++;
+        }
+      } else { /* else, we do */
+        while(*CEOffset != 0) {
+          *(source->CEpos++) = *CEOffset++;
+        }
+      }
+      return CE;
+      }
+    /* various implicits optimization */
+    // TODO: remove CJK_IMPLICIT_TAG completely - handled by the getImplicit
+    case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
+      //return getImplicit(cp, source, 0x04000000);
+      return getImplicit(cp, source);
+    case IMPLICIT_TAG:        /* everything that is not defined otherwise */
+      /* UCA is filled with these. Tailorings are NOT_FOUND */
+      //return getImplicit(cp, source, 0);
+      return getImplicit(cp, source);
+    case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
+      return 0; /* broken surrogate sequence */
+    case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
+      UChar nextChar;
+      if( source->flags & UCOL_USE_ITERATOR) {
+        if(U_IS_TRAIL(nextChar = (UChar)source->iterator->current(source->iterator))) {
+          cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
+          source->iterator->next(source->iterator);
+          return getImplicit(cp, source);
+        }  else {
+          return 0;
+        }
+      } else if((((source->flags & UCOL_ITER_HASLEN) == 0 ) || (source->pos<source->endp)) &&
+        U_IS_TRAIL((nextChar=*source->pos))) {
+        cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
+        source->pos++;
+        return getImplicit(cp, source);
+      } else {
+        return 0; /* completely ignorable */
+      }
+    case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
+      {
+        const uint32_t
+          SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7;
+        //const uint32_t LCount = 19;
+        const uint32_t VCount = 21; 
+        const uint32_t TCount = 28;
+        //const uint32_t NCount = VCount * TCount;   // 588
+        //const uint32_t SCount = LCount * NCount;   // 11172
+        uint32_t L = ch - SBase;
+
+        // divide into pieces
+
+        uint32_t T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
+        L /= TCount;
+        uint32_t V = L % VCount;
+        L /= VCount;
+
+        // offset them
+
+        L += LBase;
+        V += VBase;
+        T += TBase;
+
+        // return the first CE, but first put the rest into the expansion buffer
+        if (!source->coll->image->jamoSpecial) { // FAST PATH
+
+          /**(source->CEpos++) = ucmpe32_get(UCA->mapping, V);*/
+          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, V);
+          if (T != TBase) {
+              /**(source->CEpos++) = ucmpe32_get(UCA->mapping, T);*/
+              /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);*/
+              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, T);
+          }
+
+          /*return ucmpe32_get(UCA->mapping, L);*/ // return first one
+          /*return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);*/
+          return UTRIE_GET32_FROM_LEAD(coll->mapping, L);
+
+        } else { // Jamo is Special
+          // Since Hanguls pass the FCD check, it is 
+          // guaranteed that we won't be in
+          // the normalization buffer if something like this happens
+          // However, if we are using a uchar iterator and normalization
+          // is ON, the Hangul that lead us here is going to be in that
+          // normalization buffer. Here we want to restore the uchar 
+          // iterator state and pull out of the normalization buffer
+          if(source->iterator != NULL && source->flags & UCOL_ITER_INNORMBUF) {
+            source->flags = source->origFlags; // restore the iterator
+            source->pos = NULL;
+          }
+          // Move Jamos into normalization buffer
+          source->writableBuffer[0] = (UChar)L;
+          source->writableBuffer[1] = (UChar)V;
+          if (T != TBase) {
+            source->writableBuffer[2] = (UChar)T;
+            source->writableBuffer[3] = 0;
+          } else {
+            source->writableBuffer[2] = 0;
+          }
+
+          source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
+                                                         //   after exhausting the writableBuffer
+          source->pos   = source->writableBuffer;
+          source->origFlags         = source->flags;
+          source->flags            |= UCOL_ITER_INNORMBUF;
+          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+
+          return(UCOL_IGNORABLE);
+        }
+      }
+    case CHARSET_TAG:
+    /* not yet implemented */
+      /* probably after 1.8 */
+      return UCOL_NOT_FOUND;
+    default:
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      CE=0;
+      break;
+    }
+    if (CE <= UCOL_NOT_FOUND) break;
+  }
+  return CE;
 }
 
 
@@ -3199,8 +3094,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           *(tempbuffer - 2) = 0;
           *(tempbuffer - 1) = peekCharacter(source, 0);
           *(tempbuffer)     = peekCharacter(source, -1);
-          //*(tempbuffer - 1) = *source->pos;
-          //*(tempbuffer)     = *(source->pos - 1);
 
           /*
           Indicate where to continue in main input string after exhausting
@@ -3233,8 +3126,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         UChar schar, tchar;
         collIterateState prefixState;
         backupState(source, &prefixState);
-        //UChar *sourcePointer = source->pos;
-        //UChar32 normOutput = 0;
         for(;;) {
         // This loop will run once per source string character, for as long as we
         //  are matching a potential contraction sequence                  
@@ -3243,14 +3134,11 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
           if (collIter_bos(source)) {
-          //if(sourcePointer == source->string) {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
           }
           schar = getPrevNormalizedChar(source);
           goBackOne(source);
-          //source->pos--;
-          //schar = *(--sourcePointer);
 
           while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
             UCharOffset++;
@@ -3288,7 +3176,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                       if(finalCE == 0) {
                         // this is a real, assigned completely ignorable code point
                         goBackOne(source);
-                        //source->pos--;
                         continue;
                       }
                     }
@@ -3327,7 +3214,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         overlapping contractions will not occur.
         */
         schar = peekCharacter(source, 0);
-        //schar = *(source->pos);
         constart = (UChar *)coll->image + getContractOffset(CE);
         if (isAtStartPrevIterate(source)
             /* commented away contraction end checks after adding the checks
@@ -3348,7 +3234,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             UCharOffset --;
             schar = getPrevNormalizedChar(source);
             goBackOne(source);
-            //source->pos --;
             // TODO: when we exhaust the contraction buffer,
             // it needs to get reallocated. The problem is
             // that the size depends on the string which is
@@ -3375,7 +3260,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                                              UCOL_MAX_BUFFER * sizeof(UChar));
                 UCharOffset --;
             }
-            //if (collIter_bos(source) ||
             if ((source->pos && (source->pos == source->string ||
                 ((source->flags & UCOL_ITER_INNORMBUF) &&
                 *(source->pos - 1) == 0 && source->fcdPosition == NULL)))
@@ -5425,7 +5309,6 @@ ucol_nextSortKeyPart(const UCollator *coll,
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
-              //dest[i++] = UCOL_LEVELTERMINATOR; 
               byteCountOrFrenchDone=0;
               // Restart the iteration an move to the
               // second level
@@ -5434,9 +5317,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
               break;
           }
           if(!isShiftedCE(CE, LVT, &wasShifted)) {
-            CE >>= 16; /* get primary */
+            CE >>= UCOL_PRIMARYORDERSHIFT; /* get primary */
             if(CE != 0) {
               if(byteCountOrFrenchDone == 0) {
+                // get the second byte of primary
                 dest[i++]=(uint8_t)(CE >> 8);
               } else {
                 byteCountOrFrenchDone = 0;
@@ -5491,7 +5375,6 @@ ucol_nextSortKeyPart(const UCollator *coll,
             if(CE==UCOL_NO_MORE_CES) {
                 // Add the level separator
                 terminatePSKLevel(level, maxLevel, i, dest);
-                //dest[i++] = UCOL_LEVELTERMINATOR; 
                 byteCountOrFrenchDone=0;
                 // Restart the iteration an move to the
                 // second level
@@ -5543,7 +5426,6 @@ ucol_nextSortKeyPart(const UCollator *coll,
             if(CE==UCOL_NO_MORE_CES) {
                 // Add the level separator
                 terminatePSKLevel(level, maxLevel, i, dest);
-                //dest[i++] = UCOL_LEVELTERMINATOR; 
                 byteCountOrFrenchDone=0;
                 // Restart the iteration an move to the next level
                 s.iterator->move(s.iterator, 0, UITER_START);
@@ -5623,7 +5505,6 @@ ucol_nextSortKeyPart(const UCollator *coll,
             if(i < count) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
-              //dest[i++] = UCOL_LEVELTERMINATOR; 
               // Restart the iteration and move to the
               // next level
               s.iterator->move(s.iterator, 0, UITER_START);
@@ -5711,7 +5592,6 @@ ucol_nextSortKeyPart(const UCollator *coll,
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
-              //dest[i++] = UCOL_LEVELTERMINATOR; 
               byteCountOrFrenchDone=0;
               // Restart the iteration an move to the
               // second level
@@ -5948,12 +5828,12 @@ saveState:
     // is the number of bocsu bytes written.
     if(level < UCOL_PSK_IDENTICAL) {
       if((consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) != consumedExpansionCEs) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
+        *status = U_INDEX_OUTOFBOUNDS_ERROR;
       }
       state[1] = (consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) << UCOL_PSK_USED_ELEMENTS_SHIFT;
     } else {
       if((bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) != bocsuBytesUsed) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
+        *status = U_INDEX_OUTOFBOUNDS_ERROR;
       }
       state[1] = (bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) << UCOL_PSK_USED_ELEMENTS_SHIFT;
     }
@@ -5974,14 +5854,14 @@ saveState:
     }
     // Check for iterSkips overflow
     if((iterSkips & UCOL_PSK_ITER_SKIP_MASK) != iterSkips) {
-      *status = U_BUFFER_OVERFLOW_ERROR;
+      *status = U_INDEX_OUTOFBOUNDS_ERROR;
     }
     // Store iterSkips
     state[1] |= ((iterSkips & UCOL_PSK_ITER_SKIP_MASK) << UCOL_PSK_ITER_SKIP_SHIFT);
 
     // Check for French overflow
     if((usedFrench & UCOL_PSK_USED_FRENCH_MASK) != usedFrench) {
-      *status = U_BUFFER_OVERFLOW_ERROR;
+      *status = U_INDEX_OUTOFBOUNDS_ERROR;
     }
     // Store number of bytes written in the French secondary continuation sequence
     state[1] |= ((usedFrench & UCOL_PSK_USED_FRENCH_MASK) << UCOL_PSK_USED_FRENCH_SHIFT);
@@ -6856,44 +6736,6 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
       comparison = u_strCompareIter(sIt, tIt, TRUE);
       unorm_closeIter(sNIt);
       unorm_closeIter(tNIt);
-#if 0
-      sBuf = sStackBuf;
-      UChar *sBufp = sBuf;
-      tBuf = tStackBuf;
-      UChar *tBufp = tBuf;
-      while(sColl->iterator->hasNext(sColl->iterator)) {
-        *sBufp++ = (UChar)sColl->iterator->next(sColl->iterator);
-        if(sBufp - sBuf == sBufSize) {
-          int32_t sSize = sColl->iterator->getIndex(sColl->iterator, UITER_LENGTH);
-          UChar *newBuf = (UChar *)uprv_malloc(2*sSize*sizeof(UChar)); // Two times bigger, for normalization.
-          if(newBuf == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return UCOL_LESS;
-          }
-          uprv_memcpy(newBuf, sBuf, sBufSize*sizeof(UChar));
-          sBufp = newBuf + sBufSize;
-          sBuf = newBuf;
-          freeSBuf = TRUE;
-        }
-      }
-      while(tColl->iterator->hasNext(tColl->iterator)) {
-        *tBufp++ = (UChar)tColl->iterator->next(tColl->iterator);
-        if(tBufp - tBuf == tBufSize) {
-          int32_t tSize = tColl->iterator->getIndex(tColl->iterator, UITER_LENGTH);
-          UChar *newBuf = (UChar *)uprv_malloc(2*tSize*sizeof(UChar)); // Two times bigger, for normalization.
-          if(newBuf == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return UCOL_LESS;
-          }
-          uprv_memcpy(newBuf, tBuf, tBufSize*sizeof(UChar));
-          tBufp = newBuf + tBufSize;
-          tBuf = newBuf;
-          freeTBuf = TRUE;
-        }
-      }
-      sLen = sBufp - sBuf;
-      tLen = tBufp - tBuf;
-#endif
     } else {
       sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? sColl->endp - sColl->string : -1;
       sBuf = sColl->string;
