@@ -786,8 +786,7 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   {
       for (i = 0; i < ucmp16_getkUnicodeCount(); i++) 
       {
-        if ((ucmp16_get
-u(myToUnicode, i) == 0xFFFD) &&
+        if ((ucmp16_getu(myToUnicode, i) == 0xFFFD) &&
             (ucmp16_getu(myToUnicodeFallback, i) != 0xFFFD))
         {
             seenFallback = TRUE;
