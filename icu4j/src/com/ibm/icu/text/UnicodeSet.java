@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/15 19:45:43 $
- * $Revision: 1.64 $
+ * $Date: 2002/03/15 20:09:00 $
+ * $Revision: 1.65 $
  *
  *****************************************************************************************
  */
@@ -209,7 +209,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.64 $ $Date: 2002/03/15 19:45:43 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.65 $ $Date: 2002/03/15 20:09:00 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -684,7 +684,8 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
-     * Implementation of UnicodeMatcher.matches().
+     * Implementation of UnicodeMatcher.matches().  Always matches the
+     * longest possible multichar string.
      */
     public int matches(Replaceable text,
                        int[] offset,
@@ -718,9 +719,9 @@ public class UnicodeSet extends UnicodeFilter {
                 // the reverse direction.
                 char firstChar = text.charAt(offset[0]);
 
-// For the forward direction (ONLY) we can use a high-water mark to
-// bail out early.  TODO revisit this.
-//                int highWaterLength = 0;
+                // If there are multiple strings that can match we
+                // return the longest match.
+                int highWaterLength = 0;
 
                 while (it.hasNext()) {
                     String trial = (String) it.next();
@@ -731,29 +732,41 @@ public class UnicodeSet extends UnicodeFilter {
                     // assert(trial.length() != 0); // We ensure this elsewhere
 
                     char c = trial.charAt(forward ? 0 : trial.length() - 1);
-                    
+
+                    // Strings are sorted, so we can optimize in the
+                    // forward direction.
+                    if (forward && c > firstChar) break;
                     if (c != firstChar) continue;
                         
                     int len = matchRest(text, offset[0], limit, trial);
 
+                    if (incremental) {
+                        int maxLen = forward ? limit-offset[0] : offset[0]-limit;
+                        if (len == maxLen) {
+                            // We have successfully matched but only up to limit.
+                            return U_PARTIAL_MATCH;
+                        }
+                    }
+
                     if (len == trial.length()) {
                         // We have successfully matched the whole string.
-                        offset[0] += forward ? len : -len;
-                        return U_MATCH;
+                        if (len > highWaterLength) {
+                            highWaterLength = len;
+                        }
+                        // In the forward direction we know strings
+                        // are sorted so we can bail early.
+                        if (forward && len < highWaterLength) {
+                            break;
+                        }
+                        continue;
                     }
+                }
 
-                    int maxLen = forward ? limit - offset[0] : offset[0] - limit;
-                    if (len == maxLen && incremental) {
-                        // We have successfully matched but only up to limit.
-                        return U_PARTIAL_MATCH;
-                    }
-
-                    // This only works if forward==true
-//                    if (len > highWaterLength) {
-//                        highWaterLength = len;
-//                    } else if (len < highWaterLength) { // bail if we get smaller, since they are sorted
-//                        break;
-//                    }
+                // We've checked all strings without a partial match.
+                // If we have full matches, return the longest one.
+                if (highWaterLength != 0) {
+                    offset[0] += forward ? highWaterLength : -highWaterLength;
+                    return U_MATCH;
                 }
             }
             return super.matches(text, offset, limit, incremental);
