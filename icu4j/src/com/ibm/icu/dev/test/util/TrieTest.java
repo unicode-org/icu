@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TrieTest.java,v $ 
-* $Date: 2003/06/03 18:49:31 $ 
-* $Revision: 1.6 $
+* $Date: 2003/06/10 00:55:41 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -110,6 +110,7 @@ public final class TrieTest extends TestFmwk
         }
         
         for (int i = 0; i < 0xFFFF; i ++) {
+            
     		if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
     			errln("For BMP codepoint, getBMPValue should be the same " +
     			       "as getCodepointValue");
@@ -138,6 +139,12 @@ public final class TrieTest extends TestFmwk
     	}
     	
     	for (int i = 0; i < 0xFFFF; i ++) {
+            if (i < 0xFF 
+                && trie.getBMPValue((char)i) 
+                    != trie.getLatin1LinearValue((char)i)) {
+                errln("For latin 1 codepoint, getBMPValue should be the same " +
+                       "as getLatin1LinearValue");
+            }
     		if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
     			errln("For BMP codepoint, getBMPValue should be the same " +
     			       "as getCodepointValue");
