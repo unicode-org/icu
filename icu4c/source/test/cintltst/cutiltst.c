@@ -20,6 +20,7 @@ void addResourceBundleTest(TestNode**);
 void addNEWResourceBundleTest(TestNode**);
 void addSCSUTest(TestNode** root);
 void addHashtableTest(TestNode** root);
+void addCStringTest(TestNode** root);
 
 void addUtility(TestNode** root)
 {
@@ -29,5 +30,6 @@ void addUtility(TestNode** root)
 	addNEWResourceBundleTest(root);
     addSCSUTest(root);
     addHashtableTest(root);
+    addCStringTest(root);
 }
 
