@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ULocale.java,v $
-* $Date: 2004/01/15 22:18:09 $
-* $Revision: 1.9 $
+* $Date: 2004/03/03 18:33:45 $
+* $Revision: 1.10 $
 *
 ******************************************************************************
 */
@@ -58,6 +58,9 @@ import java.io.IOException;
  */
 public final class ULocale implements Serializable {
 
+    // Either 'locale' will be non-null, or 'locName' will be
+    // non-null, or both.  Null members are instantiated on demand.
+
     private transient Locale locale;
 
     private String locName;
@@ -74,7 +77,6 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      */
     public ULocale(Locale loc) {
-        this.locName = loc.toString();
         this.locale = loc;
     }
     
@@ -86,7 +88,6 @@ public final class ULocale implements Serializable {
      */ 
     public ULocale(String locName) {
         this.locName  = locName;
-        this.locale = new Locale(locName, "");
     }
 
     /**
@@ -96,6 +97,9 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      */
     public Locale toLocale() {
+        if (locale == null) {
+            locale = new Locale(locName, "");
+        }
         return locale;
     }
     
@@ -111,7 +115,10 @@ public final class ULocale implements Serializable {
      * Return a string representation of this object.
      */
     public final String toString() {
-        return "ULocale(" + locale.toString() + ")";
+        if (locName == null) {
+            locName = locale.toString();
+        }
+        return "ULocale(" + locName + ")";
     }
 
     /** 
@@ -155,12 +162,15 @@ public final class ULocale implements Serializable {
         
     private void writeObject(java.io.ObjectOutputStream out)
         throws IOException {
+        if (locName == null) {
+            locName = locale.toString();
+        }
         out.writeObject(locName);
     }
 
     private void readObject(java.io.ObjectInputStream in)
         throws IOException, ClassNotFoundException {
         locName = (String)in.readObject();
-        locale = new Locale(locName, "");
+        locale = null;
     }
 }
