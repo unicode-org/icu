@@ -54,8 +54,8 @@ $Numeric   = [:LineBreak = Numeric:];
 $CR      = \u000d;
 $LF      = \u000a;
 $Control = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
-$Extend  = [[:Grapheme_Extend = TRUE:] - $Control];
-$Format  = [[:Cf:]];
+$Extend  = [[:Grapheme_Extend = TRUE:]];
+$Format  = [[:Cf:] - $Extend];
 $Hiragana = [:Hiragana:];
 $Ideographic = [:IDEOGRAPHIC:];
 

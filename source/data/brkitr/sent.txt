@@ -14,7 +14,7 @@
 # Character categories as defined in TR 29
 #
 $Sep     = [\u000a \u000d \u0085 \u2028 \u2029];
-$Format  = [[:Format:]];
+$Format  = [[:Format:] - [:Grapheme_Extend:]];
 $Sp      = [[:Whitespace:] - $Sep];
 $Lower   = [[:Lowercase:]];
 $Upper   = [[:TitleCase_Letter:] [:Uppercase:]];

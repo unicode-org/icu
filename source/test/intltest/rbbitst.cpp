@@ -2091,7 +2091,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fMatcher = new RegexMatcher("\\X", 0, status);     // Pattern to match a grampheme cluster
 
     fCRLFSet    = new UnicodeSet("[\\r\\n]", status);
-    fControlSet = new UnicodeSet("[[\\p{Zl}\\p{Zp}\\p{Cc}\\p{Cf}]-[\\n]-[\\r]]", status);
+    fControlSet = new UnicodeSet("[[\\p{Zl}\\p{Zp}\\p{Cc}\\p{Cf}]-[\\n]-[\\r]-\\p{Grapheme_Extend}]", status);
     fExtendSet  = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
     fHangulSet  = new UnicodeSet(
         "[\\p{Hangul_Syllable_Type=L}\\p{Hangul_Syllable_Type=L}\\p{Hangul_Syllable_Type=T}"
@@ -2200,7 +2200,7 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     fMidNumLetSet  = new UnicodeSet("[\\u002e\\u003a]", status);
     fMidNumSet     = new UnicodeSet("[\\p{Line_Break=Infix_Numeric}]", status);
     fNumericSet    = new UnicodeSet("[\\p{Line_Break=Numeric}]", status);
-    fFormatSet     = new UnicodeSet("[\\p{Format}]", status);
+    fFormatSet     = new UnicodeSet("[\\p{Format}-\\p{Grapheme_Extend}]", status);
     fExtendSet     = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
     fOtherSet      = new UnicodeSet();
     if(U_FAILURE(status)) {
