@@ -10,6 +10,7 @@
 
 #include "unicode/rbt.h"
 #include "uvector.h"
+#include "unicode/parseerr.h"
 
 class TransliterationRuleData;
 class UnicodeSet;
@@ -32,6 +33,12 @@ class TransliterationRuleParser {
      * through each API, we keep it here.
      */
     UErrorCode status;
+
+    /**
+     * Pointer to user structure in which to return parse error information.
+     * May be NULL.
+     */
+    ParseError* parseError;
 
     /**
      * Temporary symbol table used during parsing.
@@ -84,7 +91,8 @@ public:
 
     static TransliterationRuleData*
         parse(const UnicodeString& rules,
-              RuleBasedTransliterator::Direction direction);
+              RuleBasedTransliterator::Direction direction,
+              ParseError* parseError = 0);
     
 private:
 
@@ -94,7 +102,8 @@ private:
      * rules
      */
     TransliterationRuleParser(const UnicodeString& rules,
-                              RuleBasedTransliterator::Direction direction);
+                              RuleBasedTransliterator::Direction direction,
+                              ParseError* parseError = 0);
 
     /**
      * Destructor.
@@ -135,7 +144,7 @@ private:
      * @param rule pattern string
      * @param start position of first character of current rule
      */
-    int32_t syntaxError(const char* msg, const UnicodeString&, int32_t start);
+    int32_t syntaxError(int32_t parseErrorCode, const UnicodeString&, int32_t start);
 
     /**
      * Allocate a private-use substitution character for the given set,
@@ -155,24 +164,20 @@ private:
     void determineVariableRange(void);
 
     /**
-     * Returns the index of the first character in a set, ignoring quoted text.
+     * Returns the index of a character, ignoring quoted text.
      * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
-     * found by a search for "h".  Unlike String.indexOf(), this method searches
-     * not for a single character, but for any character of the string
-     * <code>setOfChars</code>.
+     * found by a search for 'h'.
      * @param text text to be searched
      * @param start the beginning index, inclusive; <code>0 <= start
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
-     * @param setOfChars string with one or more distinct characters
-     * @return Offset of the first character in <code>setOfChars</code>
-     * found, or -1 if not found.
-     * @see #indexOf
+     * @param c character to search for
+     * @return Offset of the first instance of c, or -1 if not found.
      */
     static int32_t quotedIndexOf(const UnicodeString& text,
                                  int32_t start, int32_t limit,
-                                 const UnicodeString& setOfChars);
+                                 UChar c);
 };
 
 #endif

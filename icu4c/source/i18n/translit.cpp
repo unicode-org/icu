@@ -534,7 +534,8 @@ Transliterator* Transliterator::createInverse(void) const {
  * @see #getID
  */
 Transliterator* Transliterator::createInstance(const UnicodeString& ID,
-                                               Transliterator::Direction dir) {
+                                               Transliterator::Direction dir,
+                                               ParseError* parseError) {
     if (ID.indexOf(ID_DELIM) >= 0) {
         return new CompoundTransliterator(ID, dir, 0);
     }
@@ -546,10 +547,10 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             ID.extractBetween(i+1, ID.length(), inverseID);
             ID.extractBetween(0, i, right);
             inverseID.append(ID_SEP).append(right);
-            t = _createInstance(inverseID);
+            t = _createInstance(inverseID, parseError);
         }
     } else {
-        t = _createInstance(ID);
+        t = _createInstance(ID, parseError);
     }
     return t;
 }
@@ -607,7 +608,8 @@ inline int32_t Transliterator::hash(const UnicodeString& str) {
  * Returns a transliterator object given its ID.  Unlike getInstance(),
  * this method returns null if it cannot make use of the given ID.
  */
-Transliterator* Transliterator::_createInstance(const UnicodeString& ID) {
+Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
+                                                ParseError* parseError) {
     UErrorCode status = U_ZERO_ERROR;
 
     if (!cacheInitialized) {
@@ -660,8 +662,9 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID) {
 
             data = TransliterationRuleParser::parse(*rules, isReverse
                                     ? RuleBasedTransliterator::REVERSE
-                                    : RuleBasedTransliterator::FORWARD);
-            
+                                    : RuleBasedTransliterator::FORWARD,
+                                    parseError);
+
             // Double check to see if someone has modified the entry
             // since we last looked at it.
             if (entry->entryType != CacheEntry::RBT_DATA) {

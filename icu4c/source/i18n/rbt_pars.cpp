@@ -16,6 +16,7 @@
 #include "cstring.h"
 #include "unicode/parsepos.h"
 #include "symtable.h"
+#include "unicode/parseerr.h"
 
 // Operators
 const UChar TransliterationRuleParser::VARIABLE_DEF_OP = 0x003D/*=*/;
@@ -91,8 +92,9 @@ void ParseData::lookup(const UnicodeString& name, UChar& c, UnicodeSet*& set,
 
 TransliterationRuleData*
 TransliterationRuleParser::parse(const UnicodeString& rules,
-                                 RuleBasedTransliterator::Direction direction) {
-    TransliterationRuleParser parser(rules, direction);
+                                 RuleBasedTransliterator::Direction direction,
+                                 ParseError* parseError) {
+    TransliterationRuleParser parser(rules, direction, parseError);
     parser.parseRules();
     if (U_FAILURE(parser.status)) {
         delete parser.data;
@@ -108,8 +110,9 @@ TransliterationRuleParser::parse(const UnicodeString& rules,
  */
 TransliterationRuleParser::TransliterationRuleParser(
                                      const UnicodeString& theRules,
-                                     RuleBasedTransliterator::Direction theDirection) :
-    rules(theRules), direction(theDirection), data(0) {
+                                     RuleBasedTransliterator::Direction theDirection,
+                                     ParseError* theParseError) :
+    rules(theRules), direction(theDirection), data(0), parseError(theParseError) {
     parseData = new ParseData(0, &setVariablesVector);
 }
 
@@ -139,6 +142,9 @@ void TransliterationRuleParser::parseRules(void) {
 
     parseData->data = data;
     setVariablesVector.removeAllElements();
+    if (parseError != 0) {
+        parseError->code = 0;
+    }
     determineVariableRange();
 
     int32_t pos = 0;
@@ -225,19 +231,19 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
         // Handle escapes
         if (c == ESCAPE) {
             if (pos == limit) {
-                return syntaxError("Trailing backslash", rules, start);
+                return syntaxError(RuleBasedTransliterator::TRAILING_BACKSLASH, rules, start);
             }
             // Parse \uXXXX escapes
             c = rules.charAt(pos++);
             if (c == 0x0075/*u*/) {
                 if ((pos+4) > limit) {
-                    return syntaxError("Malformed Unicode escape", rules, start);
+                    return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rules, start);
                 }
                 c = (UChar)0x0000;
                 for (int32_t plim=pos+4; pos<plim; ++pos) { // [sic]
                     int32_t digit = Unicode::digit(rules.charAt(pos), 16);
                     if (digit<0) {
-                        return syntaxError("Malformed Unicode escape", rules, start);
+                        return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rules, start);
                     }
                     c = (UChar) ((c << 4) | digit);
                 }
@@ -261,7 +267,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
                  */
                 for (;;) {
                     if (iq < 0) {
-                        return syntaxError("Unterminated quote", rules, start);
+                        return syntaxError(RuleBasedTransliterator::UNTERMINATED_QUOTE, rules, start);
                     }
                     scratch.truncate(0);
                     rules.extractBetween(pos, iq, scratch);
@@ -280,7 +286,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
         }
         if (OPERATORS.indexOf(c) >= 0) {
             if (op != 0) {
-                return syntaxError("Unquoted special", rules, start);
+                return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rules, start);
             }
             // Found an operator char.  Check for forward-reverse operator.
             if (c == REVERSE_RULE_OP &&
@@ -308,21 +314,21 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
             {
                 int32_t j = rules.indexOf(VARIABLE_REF_CLOSE, pos);
                 if (pos == j || j < 0) { // empty or unterminated
-                    return syntaxError("Malformed variable reference", rules, start);
+                    return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_REFERENCE, rules, start);
                 }
                 scratch.truncate(0);
                 rules.extractBetween(pos, j, scratch);
                 pos = j+1;
                 UChar v = data->lookupVariable(scratch, status);
                 if (U_FAILURE(status)) {
-                    return syntaxError("Undefined variable", rules, start);
+                    return syntaxError(RuleBasedTransliterator::UNDEFINED_VARIABLE, rules, start);
                 }
                 buf.append(v);
             }
             break;
         case CONTEXT_OPEN:
             if (post >= 0) {
-                return syntaxError("Multiple post contexts", rules, start);
+                return syntaxError(RuleBasedTransliterator::MULTIPLE_POST_CONTEXTS, rules, start);
             }
             // Ignore CONTEXT_OPEN if buffer length is zero -- that means
             // this is the optional opening delimiter for the ante context.
@@ -332,14 +338,14 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
             break;
         case CONTEXT_CLOSE:
             if (postClose >= 0) {
-                return syntaxError("Unexpected ')'", rules, start);
+                return syntaxError(RuleBasedTransliterator::UNEXPECTED_CLOSE_CONTEXT, rules, start);
             }
             if (post >= 0) {
                 // This is probably the optional closing delimiter
                 // for the post context; save the pos and check later.
                 postClose = buf.length();
             } else if (ante >= 0) {
-                return syntaxError("Multiple ante contexts", rules, start);
+                return syntaxError(RuleBasedTransliterator::MULTIPLE_ANTE_CONTEXTS, rules, start);
             } else {
                 ante = buf.length();
             }
@@ -348,16 +354,16 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
             ParsePosition pp(pos-1); // Backup to opening '['
             buf.append(registerSet(new UnicodeSet(rules, pp, *parseData, status)));
             if (U_FAILURE(status)) {
-                return syntaxError("Invalid set", rules, start);
+                return syntaxError(RuleBasedTransliterator::MALFORMED_SET, rules, start);
             }
             pos = pp.getIndex(); }
             break;
         case VARIABLE_REF_CLOSE:
         case SET_CLOSE:
-            return syntaxError("Unquoted special", rules, start);
+            return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rules, start);
         case CURSOR_POS:
             if (cursor >= 0) {
-                return syntaxError("Multiple cursors", rules, start);
+                return syntaxError(RuleBasedTransliterator::MULTIPLE_CURSORS, rules, start);
             }
             cursor = buf.length();
             break;
@@ -367,13 +373,13 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
         }
     }
     if (op == 0) {
-        return syntaxError("No operator", rules, start);
+        return syntaxError(RuleBasedTransliterator::MISSING_OPERATOR, rules, start);
     }
 
     // Check context close parameters
     if ((leftPostClose >= 0 && leftPostClose != left.length()) ||
         (postClose >= 0 && postClose != buf.length())) {
-        return syntaxError("Extra text after ]", rules, start);
+        return syntaxError(RuleBasedTransliterator::TEXT_AFTER_CLOSE_CONTEXT, rules, start);
     }
 
     // Context is only allowed on the input side; that is, the left side
@@ -388,10 +394,10 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
         // character, it is either a multi-character string, or multiple
         // sets, or a mixture of chars and sets -- syntax error.
         if (buf.length() != 1) {
-            return syntaxError("Malformed RHS", rules, start);
+            return syntaxError(RuleBasedTransliterator::MALFORMED_RHS, rules, start);
         }
         if (data->isVariableDefined(left)) {
-            return syntaxError("Duplicate definition", rules, start);
+            return syntaxError(RuleBasedTransliterator::DUPLICATE_VARIABLE_DEFINITION, rules, start);
         }
         data->defineVariable(left, buf.charAt(0), status);
         break;
@@ -399,7 +405,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     case FORWARD_RULE_OP:
         if (direction == RuleBasedTransliterator::FORWARD) {
             if (ante >= 0 || post >= 0 || leftCursor >= 0) {
-                return syntaxError("Malformed rule", rules, start);
+                return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rules, start);
             }
             data->ruleSet.addRule(new TransliterationRule(
                                      left, leftAnte, leftPost,
@@ -410,7 +416,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     case REVERSE_RULE_OP:
         if (direction == RuleBasedTransliterator::REVERSE) {
             if (leftAnte >= 0 || leftPost >= 0 || cursor >= 0) {
-                return syntaxError("Malformed rule", rules, start);
+                return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rules, start);
             }
             data->ruleSet.addRule(new TransliterationRule(
                                      buf, ante, post,
@@ -457,15 +463,19 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
  * @param rule pattern string
  * @param start position of first character of current rule
  */
-int32_t TransliterationRuleParser::syntaxError(const char* /*msg*/,
-                                               const UnicodeString& /*rule*/,
+int32_t TransliterationRuleParser::syntaxError(int32_t parseErrorCode,
+                                               const UnicodeString& rule,
                                                int32_t start) {
-//|    int end = quotedIndexOf(rule, start, rule.length(), ";");
-//|    if (end < 0) {
-//|        end = rule.length();
-//|    }
-//|    throw new IllegalArgumentException(msg + " in " +
-//|                                       rule.substring(start, end));
+    if (parseError != 0) {
+        parseError->code = parseErrorCode;
+        parseError->line = 0; // We don't return a line #
+        parseError->offset = start; // Character offset from rule start
+        int32_t end = quotedIndexOf(rule, start, rule.length(), END_OF_RULE);
+        if (end < 0) {
+            end = rule.length();
+        }
+        rule.extractBetween(start, end, parseError->context); // Current rule
+    }
     status = U_ILLEGAL_ARGUMENT_ERROR;
     return start;
 }
@@ -512,30 +522,21 @@ void TransliterationRuleParser::determineVariableRange(void) {
 }
 
 /**
- * Returns the index of the first character in a set, ignoring quoted text.
+ * Returns the index of a character, ignoring quoted text.
  * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
- * found by a search for "h".  Unlike String.indexOf(), this method searches
- * not for a single character, but for any character of the string
- * <code>setOfChars</code>.
- * @param text text to be searched
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param setOfChars string with one or more distinct characters
- * @return Offset of the first character in <code>setOfChars</code>
- * found, or -1 if not found.
- * @see #indexOf
+ * found by a search for 'h'.
  */
 int32_t TransliterationRuleParser::quotedIndexOf(const UnicodeString& text,
                                                  int32_t start, int32_t limit,
-                                                 const UnicodeString& setOfChars) {
+                                                 UChar charToFind) {
     for (int32_t i=start; i<limit; ++i) {
         UChar c = text.charAt(i);
-        if (c == QUOTE) {
+        if (c == ESCAPE) {
+            ++i;
+        } else if (c == QUOTE) {
             while (++i < limit
                    && text.charAt(i) != QUOTE) {}
-        } else if (setOfChars.indexOf(c) >= 0) {
+        } else if (c == charToFind) {
             return i;
         }
     }

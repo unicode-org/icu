@@ -15,11 +15,12 @@
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          Direction direction,
-                                         UErrorCode& status) {
+                                         UErrorCode& status,
+                                         ParseError* parseError) {
     data = 0;
     isDataOwned = TRUE;
     if (U_SUCCESS(status)) {
-        data = TransliterationRuleParser::parse(rules, direction);
+        data = TransliterationRuleParser::parse(rules, direction, parseError);
         if (data == 0) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
