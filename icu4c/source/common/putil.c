@@ -1108,7 +1108,7 @@ getLibraryPath(char *path, int size) {
 #   define LIB_FILENAME "icuuc.dll"
 #elif defined(U_LINUX)
 #   define LIB_PATH_VAR "LD_LIBRARY_PATH"
-#   define LIB_FILENAME "libicuuc.so"
+#   define LIB_FILENAME U_COMMON_LIBNAME
 #elif defined(OS2)
 #   define LIB_PATH_VAR "LIBPATH"
 #   define LIB_FILENAME "icuuc.dll"
@@ -1125,7 +1125,7 @@ getLibraryPath(char *path, int size) {
 #elif defined(HPUX)
 #elif defined(U_POSIX)
 #   define LIB_PATH_VAR "LIBPATH"
-#   define LIB_FILENAME "libicuuc.so"
+#   define LIB_FILENAME U_COMMON_LIBNAME
 #endif
 
 /*
@@ -1199,6 +1199,11 @@ findLibraryPath(char *path, int size) {
 /* #include <stdio.h> */
 /* #include <unistd.h> */
 
+#if HAVE_DLOPEN
+#define LIB_PREFIX "lib"
+#else
+#define LIB_PREFIX
+#endif
 
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
@@ -1283,6 +1288,49 @@ u_getDataDirectory(void) {
                 }
             }
 #       endif
+
+        /* before being fancy, check if we can find the right kind of
+           data in the hardcoded path */
+        if(path==NULL || *path==0) {
+            char fileBuffer[1024];      /* XXX sloppy, should be FILE_MAX. */
+            size_t length;
+            FileStream *f;
+
+            /* ICU_DATA_DIR may be set as a compile option */
+#           ifdef ICU_DATA_DIR
+                path=ICU_DATA_DIR;
+#           else
+                length=getSystemPath(pathBuffer, sizeof(pathBuffer));
+                if(length>0) {
+                    uprv_strcpy(pathBuffer+length, FALLBACK_PATH);
+                    path=pathBuffer;
+                } else {
+                    path=FALLBACK_PATH;
+                }
+#           endif
+
+            length = uprv_strlen(path);
+            uprv_memcpy(fileBuffer, path, length);
+
+            /* produce the path of a file that should be here given the way
+               that ICU was compiled; if it's here in the hardcoded location,
+               we should just use the hardcoded path without further
+               guessing */
+#           if defined(UDATA_DLL)
+                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING LIB_PREFIX U_ICUDATA_NAME UDATA_SO_SUFFIX);
+#           elif defined(UDATA_MAP)
+                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING U_ICUDATA_FILE "." DATA_TYPE); /* XXX Sloppy, won't be good enough on OS390 probably. */
+#	    elif defined(UDATA_FILES)
+                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING "uprops.dat");
+#           endif
+
+            f = T_FileStream_open(fileBuffer, "rb");    /* XXX Sloppy, use stat(). */
+            if (f) {
+                T_FileStream_close(f); /* found it, keep path */
+            } else {
+                path = NULL;    /* not found, reset path */
+            }
+        }
 
         /* next, try to get the path to the ICU dynamic library */
         if(path==NULL || *path==0) {
@@ -2297,3 +2345,11 @@ uprv_defaultCodePageForLocale(const char *locale)
   return NULL;
 }
 
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
