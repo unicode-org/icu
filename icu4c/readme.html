@@ -32,7 +32,7 @@
   <abbr title="International Components for Unicode">ICU</abbr> 3.0
   ReadMe</h1>
 
-  <p>Version: 2004-May-12<br>
+  <p>Version: 2004-May-13<br>
   Copyright &copy; 1997-2004 International Business Machines Corporation and
   others. All Rights Reserved.</p>
   <!-- Remember that there is a copyright at the end too -->
@@ -1350,41 +1350,6 @@ and *srvpgm objects.<br>
     <li>Run <tt>'cp ../as_is/os400/configure .'</tt></li>
 
     <li>Run <tt>'./configure --host=as400-os400'</tt></li>
-
-    <li>If you specified <tt>--with-data-packaging=archive</tt> to configure,
-    you can skip this step. In a future release of ICU, we hope to eliminate
-    this complicated step. Any suggestions to improve the ICU installation
-    are greatly appreciated, and you can send those suggestions to the
-    <a href=
-    "http://oss.software.ibm.com/developerworks/oss/mailman/listinfo/icu4c-support/">
-      icu4c-support</a> mailing list.
-
-      <ol type="a">
-        <li>Run <tt>'mv data/Makefile data/Makefile.hide'</tt></li>
-
-        <li>Run <tt>'gmake'</tt> to build some of the ICU libraries.</li>
-
-        <li>When the gmake command fails in icu/source/data, run the
-        following commands to setup and build the data library:
-          <pre>
-<samp>cd data
-mv Makefile.hide Makefile
-system CRTLIB "LIB(<i>datalibraryname</i>)"
-gmake OUTPUTDIR=<i>datalibraryname</i>
-system CRTSRVPGM "SRVPGM(<i>libraryname</i>/LIBICUDATA)" "MODULE(<i>datalibraryname</i>/*ALL)"
-                 "EXPORT(*ALL)" "TEXT('ICU 3.0 DATA')" "OPTION(*DUPPROC *DUPVAR)"
-ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm out/libicudata.so
-cd ..
-del common/libicuuc.so
-</samp>
-</pre>
-        </li>
-
-        <li>Your data library should now be usable. Go to the next step,
-        which is needed to rebind to the actual data library and finish the
-        build.</li>
-      </ol>
-    </li>
 
     <li>Run <tt>'gmake'</tt> to build ICU.</li>
 
