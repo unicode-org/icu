@@ -138,7 +138,6 @@ static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_
         ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
-         //ucnv_setSubstChars(cnv,"\x7E\x7D\x1A", 3, errorCode);
     }
 
 
@@ -197,8 +196,6 @@ U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[3]; 
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
     const char *mySourceLimit = args->sourceLimit;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
@@ -415,7 +412,7 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
     UConverterCallbackReason reason;
     UBool isEscapeAppended =FALSE;
     int len =0;
-    char* escSeq=NULL;
+    const char* escSeq=NULL;
     
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -450,19 +447,13 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
 
             }
             /* only DBCS or SBCS characters are expected*/
-            if(length > 2 || length==0){
-                reason =UCNV_ILLEGAL;
-                *err =U_INVALID_CHAR_FOUND;
-                goto CALLBACK;
-            }
             /* DB haracters with high bit set to 1 are expected */
-            if(((targetUniChar & 0x8080) != 0x8080)&& length==2){
+            if(length > 2 || length==0 ||(((targetUniChar & 0x8080) != 0x8080)&& length==2)){
                 reason =UCNV_ILLEGAL;
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
             }
-            
-            
+ 
             if (targetUniChar != missingCharMarker){
                myConverterData->isTargetUCharDBCS = isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);     
                  if(oldIsTargetUCharDBCS != isTargetUCharDBCS || !myConverterData->isEscapeAppended ){
@@ -509,7 +500,7 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
                 /* write the offsets */
                 if(offsets){
                     int i = mySourceIndex-1;
-                    int len = 2 - (targetUniChar < 0x00FF);
+                    len = 2 - (targetUniChar < 0x00FF);
                     while(len-->0){
                         *(offsets++) = i;
                     }
@@ -595,7 +586,6 @@ getTrail:
                         }
                     }
                     isTargetUCharDBCS=myConverterData->isTargetUCharDBCS;
-                    //myConverterData->isShiftAppended =FALSE;
                     args->source = saveSource;
                     args->target = saveTarget;
                     args->offsets = saveOffsets;
