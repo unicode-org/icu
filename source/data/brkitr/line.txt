@@ -17,6 +17,8 @@
 #  Character Classes defined by TR 14.
 #
 
+!!chain  
+
 $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];
 $BA = [:LineBreak =  Break_After:];
@@ -82,75 +84,78 @@ $SPcm = $SP $CM*;
 $SYcm = $SY $CM*;
 
 
-#  New Lines.  Always break after, never break before.
-#              Rule LB 3
-#
-#  Endings.    NewLine or Zero Width Space, or both.  Rules 4, 5
-#              Because we never break before these things, $Endings
-#              appears at the end of line break rule.
-#
-$NLF = $BK | $CR | $LF | $NL | $CR $LF;
-$EndingsSoft = ($ZW* $SP)* $ZW*;
-$EndingsHard = ($ZW* $SP)* $ZW* $NLF;
+#  
+#  Rule LB 3
+$LB3NonBreaks = [^$BK $CR $LF $NL];               
+$LB3NonBreaks ($BK | $CR | $LF | $NL){100};   
+$CR $LF {100};
+
+# LB 4         x SP
+#              x ZW
+$LB3NonBreaks [$SP $ZW];
+
+# LB 5         Break after zero width space
+$LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
+
+# LB 7     Combining marks.  TODO:  get it right!
+#                                   $SP $CM needs to behave like $ID.
+#                                   X   $CM needs to behave like X, where X is not $SP.
+#                                   $CM not covered by the above needs to behave like $AL
+[$LB5NonBreaks] $CM*;    #  Stick together any combining sequences that don't match other rules.
+
+# LB 8     
+$LB5NonBreaks [$CL  $EX $IS $SY];
+
+# LB 9
+$OPcm $SP* $LB3NonBreaks?;           #  Need to force trailing $BKs to rule 3, to get status right.
+$OPcm $SP* [$LB5NonBreaks] $CM*;
+
+# LB 10
+$QUcm $SP* $OPcm;
+
+# LB 11
+$CLcm $SP* $NScm;
+
+# LB 11a
+($B2cm)+;
+
+# LB 11b
+$LB5NonBreaks $GLcm $LB3NonBreaks?;
+$LB5NonBreaks $GLcm [$LB5NonBreaks] $CM*;
+$GLcm $LB3NonBreaks?;
+$GLcm [$LB5NonBreaks] $CM*;
+
+# LB 12
+$LB12NonBreaks = [[$LB5NonBreaks] - [$SP]];
+
+# LB 14
+$LB12NonBreaks $QUcm+ $LB3NonBreaks?;
+$LB12NonBreaks $QUcm+ [$LB5NonBreaks] $CM*;
+$QUcm $LB3NonBreaks?;
+$QUcm [$LB5NonBreaks] $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
+
+# LB 14a
+$LB14NonBreaks = [[$LB12NonBreaks] - [$CB]];
 
 
-#
-#  Openings  Sequences that can precede Words, and that should not be separated from them.
-#            Rules LB 9, 10
-#
-$Openings = ((($QUcm ($ZW* $SP)*)? $OPcm ($ZW* $SP)*) | $GLcm)+;
+# LB 15
+$LB14NonBreaks ($BAcm | $HYcm | $NScm);   
+$BBcm [^$CB];
 
-#
-#  Closings  Seqences that follow words, and that should not be separated from them,
-#            Rule LB 8, 11, 15
-$Closings =  (($ZW* $SP)*( ($CLcm (($ZW* $SP)* $NScm)?  |  $EX  | $IS  | $SY) $CM*) | $BAcm | $HYcm  | $NScm)*;
+# LB 16
+($ALcm | $IDcm | $INcm | $NUcm) $INcm*;
 
-$WordClosings = ($SP* $CLcm | $SP* $EXcm | $SP* $IScm | $SP* $SYcm | $BAcm | $HYcm | $NScm)*;
-
-#
-#  Words.  Includes mixed Alpha-numerics.
-#          Rules 11a, 16, 17, 19, more or less.
-#
-$Number         =  $PRcm? ($OPcm | $HYcm)? $NU ($NU | $IS)* $CL? $POcm?; # Numbers 
-                                                                       # Regex form, rather than rule 18
-                                                                       
-# Alpha-numeric.   16, 17 
-$Word   =  ($ALcm | $NUcm)+  $INcm*  |
-           $IDcm ($POcm? | $INcm*)   |
-           $CM+  ($POcm? | $INcm*)   |                      # CM with no base is like ID  (LB 7a)
-           $INcm+                    |
-           $CB;                                             # Deviation from Unicode spec for $CB
-                                                            #   We treat as a single char word
-                                                            
-$Dashes = (($B2cm ($ZW* $SP)*)*);                                             # Dashes           11a   
-        
-        
-
-$HYMinus = $HYcm ($NUcm ($NUcm | $IS)* $CL? $POcm?)?;       # For Rle LB15, Don't break before  Hypen-minus,
-                                                            #  we also need to match a whole number, if that
-                                                            #  is what follows the '-'
- 
- 
-        
-$Word15 = $Openings? (
-             ($BBcm* $Openings? ($Word | $Number | $Dashes)? ($BAcm | $HYMinus | $NScm)*) |   # Rule 15. Stuff sticks around words.
-             $BBcm* [^[:Cc:] $BK $CR $LF $NL $ZW ($ZW* $SP) $GL ] $CM*  |                 # Allow characters that don't meet the
-             $BBcm* [^$BK $CR $LF $NL $ZW ($ZW* $SP) $GL ]                                 #  more elaborate definitions for WORD
-             )  $WordClosings?;                                                          #  to be glued.
-       
-$GluedWord  = $Openings? $Word15 ((($ZW* $SP)* $GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
- #$GluedWord  = $Openings? $Word15 ((($ZW* $SP)* $Openings) $Word15)*;  # "Glue" will stick anything below it together.
-                                                                    # Rules 13, 14
-
-#
-#  The actual rule, a combination of everything defined above.
-#
-$Openings? $GluedWord  $Closings $EndingsSoft{0};
-$Openings? $GluedWord  $Closings $EndingsHard{100};
-# $GluedWord;
+# $LB 17
+$IDcm $POcm;
+$ALcm+ $NUcm;       # includes $LB19
+$NUcm $ALcm+;
 
 
+# LB 18
+$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm? $POcm?;
 
+# LB 19
+$ALcm+;
 
 
 #
@@ -161,8 +166,4 @@ $Openings? $GluedWord  $Closings $EndingsHard{100};
 #     containing a space that may inhibit a break from occuring.
 #
 
-$SpaceGlue  = ([$ZW $CL $IS $NS $OP]  ($CM* $SP)) | (($CM* $SP)+ $OP);
-$ClumpingChars = [^$SP $BK $CR $LF];
-
-#!. . $ClumpingChars*  ($SpaceGlue $ClumpingChars*)* (. | $LF $CR);
 !.*;

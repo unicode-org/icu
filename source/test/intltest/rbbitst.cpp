@@ -2526,13 +2526,10 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
     //   Depends on the previous char, and whether it eats following CombiningMarks
     //   or not.
     UChar32   c = fText->char32At(prevPos);
-    if (c == 0x0d || c == 0x0a || c == 0x85 || fBK->contains(c) || fSP->contains(c)) {
-        // char doesn't automatically combine with CM.
-        nextPos = fText->moveIndex32(prevPos, 1);
-    } else {
-        nextPos = fCharBI->following(prevPos);
+    nextPos = fText->moveIndex32(prevPos, 1);
+    if (!(c == 0x0d || c == 0x0a || c == 0x85 || c == 0x200b /* ZW */ || fBK->contains(c))) {
         for (;;) {
-            UChar32 c = fText->char32At(nextPos);
+            c = fText->char32At(nextPos);
             if (!fCM->contains(c)) {
                 break;
             }
@@ -2714,12 +2711,9 @@ fall_through_11:
         }
 
         // LB 14a  Break around a CB
-        //   NOTE:  DISABLE FOR ICU, FOR NOW.  Too hard to implement in Rules.
-        #if 0
         if (fCB->contains(thisChar) || fCB->contains(prevChar)) {
             break;
         }
-        #endif
 
         // LB 15 
         if (fBA->contains(thisChar) ||
