@@ -25,6 +25,7 @@
 #include "parse.h"
 #include "write.h"
 #include "util.h"
+#include "toolutil.h"
 
 #include "ucol.h"
 #include "uloc.h"
@@ -119,10 +120,11 @@ main(int argc,
   /* generate the binary files */
   for(i = optind; i < argc; ++i) {
     status = U_ZERO_ERROR;
-    processFile(argv[i], encoding, &status);
-    make_col(argv[i], &status);
+    arg = getLongPathname(argv[i]);
+    processFile(arg, encoding, &status);
+    make_col(arg, &status);
     if(U_FAILURE(status)) {
-      printf("genrb: %s processing file \"%s\"\n", u_errorName(status), argv[i]);
+      printf("genrb: %s processing file \"%s\"\n", u_errorName(status), arg);
       if(getErrorText() != 0)
 	printf("       (%s)\n", getErrorText());
     }
