@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Gurmukhi_InterIndic.txt,v $
-# $Date: 2002/07/25 21:20:26 $
-# $Revision: 1.10 $
+# $Date: 2002/08/14 00:40:58 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # Gurmukhi-InterIndic
@@ -61,7 +61,6 @@
 \u0A35>\uE035;  # LETTER VA
 \u0a36>\ue036;
 \u0A38\0a3c>\ue036;
-\u0A37>\uE036;
 \u0A38>\uE038;  # LETTER SA
 \u0A39>\uE039;  # LETTER HA
 \u0A3C>\uE03C;  # SIGN NUKTA

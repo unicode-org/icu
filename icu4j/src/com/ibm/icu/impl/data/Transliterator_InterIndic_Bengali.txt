@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Bengali.txt,v $
-# $Date: 2002/07/25 21:20:26 $
-# $Revision: 1.8 $
+# $Date: 2002/08/14 00:40:58 $
+# $Revision: 1.9 $
 #--------------------------------------------------------------------
 
 # InterIndic-Bengali
@@ -116,7 +116,7 @@
 \uE06E>\u09EE;          # DIGIT EIGHT
 \uE06F>\u09EF;          # DIGIT NINE
 \uE070>\u09F0;          #  UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
-\uE071>;
+\uE071>\u09F1;
 0 > \u09E6;       # FALLBACK FOR TAMIL
 1 > \u09E7;
 \ue072>;
