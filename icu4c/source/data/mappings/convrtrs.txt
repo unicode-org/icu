@@ -113,7 +113,7 @@ ibm-813			# Same as 4909 (w/o euro update)
 ibm-916			iso-8859-8 { MIME } hebrew cp916 8859-8	csisolatinhebrew iso-ir-138 ISO_8859-8:1988 { IANA }   # hebrew iso-8859-8i - typo?
 ibm-920			iso-8859-9 { MIME } ECMA-128 latin5	cp920 8859-9 csisolatin5 iso-ir-148 ISO_8859-9:1989 { IANA } l5 # Turkish
 ibm-923			iso-8859-15	{ MIME } latin9 cp923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
-ibm-1252		windows-1252  {	MIME } cp1252 ibm-1004 cp1004	     # Windows Latin 1 We don't	have an ibm-5348, so this is a best	possible match
+ibm-1252		ibm-1004 cp1004	     # Windows Latin 1 without Euro
 ibm-943			Shift_JIS { MIME } csWindows31J     sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
 ibm-949			KS_C_5601-1987 { IANA }	iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 { MIME } johab ks_x_1001:1992	     # KSC-5601-1992, korean
 ibm-1370		Big5 { MIME	} csBig5 x-big5 cp950 # Taiwan Big-5 (w/ euro update)
@@ -163,14 +163,15 @@ ibm-922			# PC Estonian (w/o euro	update)
 ibm-942			shift_jis78	sjis78 ibm-932   # Old s_jis ibm-932 added!
 #ibm-941		 jis-208 jisx-208 # Pure DBCS jisx-208#	ibm-941 is not JISX 208	code page
 #ibm-1038		Adobe-Symbol-Encoding csHPPSMath symbol
-ibm-5346		windows-1250 { MIME } cp1250	# Windows Latin2 (w/ euro update)
-ibm-5347		windows-1251 { MIME } cp1251	# Windows Cyrillic (w/ euro update)
-ibm-5349		windows-1253 { MIME } cp1253	# Windows Greek	(w/ euro update)
-ibm-5350		windows-1254 { MIME } cp1254	# Windows Turkish (w/ euro update)
-ibm-5351		windows-1255 { MIME } cp1255	# Windows Hebrew (w/ euro update)
-ibm-5352		windows-1256 { MIME } cp1256	# Windows Arabic (w/ euro update)
-ibm-5353		windows-1257 { MIME } cp1257	# Windows Baltic (w/ euro update)
-ibm-5354		windows-1258 { MIME } cp1258	# Windows Vietnamese (w/ euro update)
+ibm-5346		windows-1250 { IANA MIME } cp1250	# Windows Latin2 (w/ euro update)
+ibm-5347		windows-1251 { IANA MIME } cp1251	# Windows Cyrillic (w/ euro update)
+ibm-5348		windows-1252 { IANA MIME } cp1252	# Windows Latin1 (w/ euro update)
+ibm-5349		windows-1253 { IANA MIME } cp1253	# Windows Greek	(w/ euro update)
+ibm-5350		windows-1254 { IANA MIME } cp1254	# Windows Turkish (w/ euro update)
+ibm-5351		windows-1255 { IANA MIME } cp1255	# Windows Hebrew (w/ euro update)
+ibm-5352		windows-1256 { IANA MIME } cp1256	# Windows Arabic (w/ euro update)
+ibm-5353		windows-1257 { IANA MIME } cp1257	# Windows Baltic (w/ euro update)
+ibm-5354		windows-1258 { IANA MIME } cp1258	# Windows Vietnamese (w/ euro update)
 ibm-1250		# Windows Latin2 (w/o euro update)
 ibm-1251		# Windows Cyrillic (w/o	euro update)
 ibm-1253		# Windows Greek	(w/o euro update)
