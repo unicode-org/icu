@@ -3,12 +3,6 @@
  * Copyright (C) 2002-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/CanonicalCharacterData.java,v $ 
- * $Date: 2004/05/03 21:07:28 $ 
- * $Revision: 1.1 $
- *
- *******************************************************************************
  */
 
 package com.ibm.icu.dev.tool.layout;
