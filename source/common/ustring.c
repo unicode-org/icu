@@ -26,7 +26,7 @@
 static UConverter *fgDefaultConverter = NULL;
 
 static UConverter*
-getDefaultConverter();
+getDefaultConverter(void);
 
 static void
 releaseDefaultConverter(UConverter *converter);

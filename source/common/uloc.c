@@ -161,7 +161,7 @@ static int16_t _findIndex(const char* list, int32_t listLength, const char* key)
 static const char* _findCharSeparator(const char* string);
 
 /*Lazy evaluated the list of installed locales*/
-static void _lazyEvaluate_installedLocales();
+static void _lazyEvaluate_installedLocales(void);
 
 /*returns TRUE if a is an ID separator FALSE otherwise*/
 #define _isIDSeparator(a) (a == '_' || a == '-')
