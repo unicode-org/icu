@@ -116,21 +116,21 @@ static void TestFileFromICU(UFILE *myFile) {
 
     *n = -1234;
 
-    myString[0] = u_fgetc(myFile);
-    if (myString[0] != 0x53 /* S */) {
+    myUString[0] = u_fgetc(myFile);
+    if (myUString[0] != 0x53 /* S */) {
         log_err("u_fgetc 1 returned %X. Expected 'S'.", myString[0]);
     }
-    u_fungetc(myString[0], myFile);
-    myString[0] = u_fgetc(myFile);
-    if (myString[0] != 0x53 /* S */) {
+    u_fungetc(myUString[0], myFile);
+    myUString[0] = u_fgetc(myFile);
+    if (myUString[0] != 0x53 /* S */) {
         log_err("u_fgetc 2 returned %X. Expected 'S'.", myString[0]);
     }
-    u_fungetc(myString[0], myFile);
-    myString[0] = u_fgetc(myFile);
-    if (myString[0] != 0x53 /* S */) {
+    u_fungetc(myUString[0], myFile);
+    myUString[0] = u_fgetc(myFile);
+    if (myUString[0] != 0x53 /* S */) {
         log_err("u_fgetc 3 returned %X. Expected 'S'.", myString[0]);
     }
-    u_fungetc(myString[0], myFile);
+    u_fungetc(myUString[0], myFile);
 
     *newValuePtr = 1;
     u_fscanf(myFile, "Signed decimal integer %%d: %d\n", newValuePtr);
