@@ -22,32 +22,64 @@
 #include "unicode/ustring.h"
 #include "ucbuf.h"
 
+#define DEBUG 1
+
 #define MAX_IN_BUF 1000
 #define MAX_U_BUF 1500
+
+static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
+  
+  char start[4]={'\0'};
+  int cap =T_FileStream_size(in);
+  UBool autodetect =FALSE;
+  int i=4;
+  *numRead=4;
+  *cp="";
+  if(cap>0){
+       T_FileStream_read(in, start, 4);
+       if(start[0] == '\xFE' && start[1] == '\xFF') {
+           *cp = "UTF16_BigEndian";
+           autodetect = TRUE;
+       } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+           *cp = "UTF16_LittleEndian";
+           *numRead-=2;
+           if(start[2] == '\x00' && start[3] =='\0x00'){
+               *cp="UTF32_LittleEndian";
+               *numRead+=2;
+           }
+           autodetect = TRUE;
+       } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+           *cp = "UTF8";
+           *numRead-=1;
+           autodetect = TRUE;
+       }else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF'){
+           *cp ="SCSU";
+           *numRead-=1;
+           autodetect = TRUE;
+       }else if(start[0] == '\x00' && start[1] == '\x00' && start[2] == '\xFF' && start[3]=='\xFE'){
+            *cp = "UTF32_BigEndian";
+            autodetect =TRUE;
+       }else{
+           *numRead =0;
+       }
+  }
+  while(i> *numRead){
+    T_FileStream_ungetc(start[i-1],in);
+    i--;
+  }
+  return autodetect;
+}
 
 /* Autodetects UTF8, UTF-16-BigEndian and UTF-16-LittleEndian BOMs*/
 U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp){
   UBool autodetect = FALSE;
-  char start[3];
-  int cap =T_FileStream_size(in);
-  if(cap>0){
-      T_FileStream_read(in, start, 3);
-      if(start[0] == '\xFE' && start[1] == '\xFF') {
-          *cp = "UTF16_BigEndian";
-          autodetect = TRUE;
-      } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-          *cp = "UTF16_LittleEndian";
-          autodetect = TRUE;
-      } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-          *cp = "UTF8";
-          autodetect = TRUE;
-      }
-      if(!autodetect){
-          T_FileStream_rewind(in);
-          *cp="";
-      }
-  }
+  int numRead =0;
+  char* tcp ="";
+  autodetect=ucbuf_autodetect_nrw(in,&tcp, &numRead);
+  *cp =tcp;
+  /* rewind the file Stream */
+  T_FileStream_rewind(in);
   return autodetect;
 }
 
@@ -126,8 +158,7 @@ U_CAPI UChar32 U_EXPORT2
 ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     int32_t length;
     int32_t offset;
-    UChar32 c32;
-    UChar c16;
+    UChar32 c32,c1;
     
     /* Fill the buffer if it is empty */
     if (buf->currentPos >=buf->bufLimit) {
@@ -136,14 +167,14 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
 
     /* Get the next character in the buffer */
     if (buf->currentPos < buf->bufLimit) {
-        c16 = *(buf->currentPos)++;
+        c1 = *(buf->currentPos)++;
     } else {
-        c16 = U_EOF;
+        c1 = U_EOF;
     }
 
     /* If it isn't a backslash, return it */
-    if (c16 != 0x005C /*'\\'*/) {
-        return c16;
+    if (c1 != 0x005C /*|| *(buf->currentPos+1)==0x005C /*'\\'*/) {
+        return c1;
     }
 
     /* Determine the amount of data in the buffer */
@@ -170,15 +201,18 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
 
 /* open a UCHARBUF */
 U_CAPI UCHARBUF* U_EXPORT2
-ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
+ucbuf_open(FileStream* in, UErrorCode* err){
 
     UCHARBUF* buf =(UCHARBUF*) uprv_malloc(sizeof(UCHARBUF));
+    char *cp ="";
+    int numRead =0;
     if(U_FAILURE(*err)){
         return NULL;
     }
     if(buf){
         buf->in=in;
-        buf->remaining=T_FileStream_size(in);
+        ucbuf_autodetect_nrw(in,&cp,&numRead);
+        buf->remaining=T_FileStream_size(in)-numRead;
         buf->buffer=(UChar*) uprv_malloc(sizeof(UChar)* MAX_U_BUF);
 		if (buf->buffer == NULL) {
 			*err = U_MEMORY_ALLOCATION_ERROR;
@@ -188,7 +222,6 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
         buf->bufLimit=buf->buffer;
         if(*cp!='\0'){
             buf->conv=ucnv_open(cp,err);
-            buf->remaining-=3;
         }else{
             buf->conv=NULL;
         }
