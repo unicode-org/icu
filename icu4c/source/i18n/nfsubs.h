@@ -424,7 +424,7 @@ public:
         ParsePosition& parsePosition,
         double baseValue,
         double upperBound,
-        UBool lenientParse,
+        UBool /*lenientParse*/,
         Formattable& result) const 
     {
         // we don't have to do anything special to do the parsing here,
@@ -461,7 +461,7 @@ public:
                 ParsePosition& /*parsePosition*/, 
                 double baseValue,
                 double /*upperBound*/,
-                UBool lenientParse,
+                UBool /*lenientParse*/,
                 Formattable& result) const
             { result.setDouble(baseValue); return TRUE; }
     double composeRuleValue(double /*newRuleValue*/, double /*oldRuleValue*/) const { return 0.0; } // never called
