@@ -742,7 +742,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createCurrencyInstance(Locale::FRANCE, status);
+    formatter = NumberFormat::createCurrencyInstance(Locale("fr_FR_PREEURO"), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( 5789.9876, tempString );
@@ -756,7 +756,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createPercentInstance(Locale::FRANCE, status);
+    formatter = NumberFormat::createPercentInstance(Locale("fr_FR_PREEURO"), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
@@ -930,7 +930,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createCurrencyInstance(Locale::ITALY, status);
+    formatter = NumberFormat::createCurrencyInstance(Locale("it_IT_PREEURO"), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( -5789.9876, tempString );
@@ -944,7 +944,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createPercentInstance(Locale::ITALY, status);
+    formatter = NumberFormat::createPercentInstance(Locale("it_IT_PREEURO"), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
