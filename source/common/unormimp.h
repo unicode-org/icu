@@ -260,8 +260,26 @@ typedef struct UCharIterator UCharIterator;
 enum UCharIteratorOrigin {
     UITERATOR_START, UITERATOR_CURRENT, UITERATOR_END
 };
-
 typedef enum UCharIteratorOrigin UCharIteratorOrigin;
+
+typedef int32_t U_CALLCONV
+UCharIteratorMove( UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin);
+
+typedef UBool U_CALLCONV
+UCharIteratorHasNext(UCharIterator *iter);
+
+typedef UBool U_CALLCONV
+UCharIteratorHasPrevious(UCharIterator *iter);
+ 
+typedef UChar U_CALLCONV
+UCharIteratorCurrent(UCharIterator *iter);
+
+typedef UChar U_CALLCONV
+UCharIteratorNext(UCharIterator *iter);
+
+typedef UChar U_CALLCONV
+UCharIteratorPrevious(UCharIterator *iter);
+
 
 /**
  * C API for code unit iteration.
@@ -311,44 +329,38 @@ struct UCharIterator {
      * @param origin move relative to the start, end, or current index
      * @return the new index
      */
-    int32_t U_CALLCONV
-    (*move)(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin);
+    UCharIteratorMove *move;
 
     /**
      * (public) Check if current() and next() can still
      * return another code unit.
      */
-    UBool U_CALLCONV
-    (*hasNext)(UCharIterator *iter);
+    UCharIteratorHasNext *hasNext;
 
     /**
      * (public) Check if previous() can still return another code unit.
      */
-    UBool U_CALLCONV
-    (*hasPrevious)(UCharIterator *iter);
+    UCharIteratorHasPrevious *hasPrevious;
 
     /**
      * (public) Return the code unit at the current position,
      * or 0xffff if there is none (index is at the end).
      */
-    UChar U_CALLCONV
-    (*current)(UCharIterator *iter);
+    UCharIteratorCurrent *current;
 
     /**
      * (public) Return the code unit at the current index and increment
      * the index (post-increment, like s[i++]),
      * or return 0xffff if there is none (index is at the end).
      */
-    UChar U_CALLCONV
-    (*next)(UCharIterator *iter);
+    UCharIteratorNext *next;
 
     /**
      * (public) Decrement the index and return the code unit from there
      * (pre-decrement, like s[--i]),
      * or return 0xffff if there is none (index is at the start).
      */
-    UChar U_CALLCONV
-    (*previous)(UCharIterator *iter);
+    UCharIteratorPrevious *previous;
 };
 
 /**
