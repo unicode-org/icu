@@ -156,7 +156,7 @@ static void
 version()
 {
   printf("genrb version %s (ICU version %s).\n", 
-	 GENRB_VERSION, ICU_VERSION);
+	 GENRB_VERSION, U_ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }
 
