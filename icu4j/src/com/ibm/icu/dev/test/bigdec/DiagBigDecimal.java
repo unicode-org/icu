@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.bigdec;
 import java.math.BigInteger;
 import com.ibm.icu.math.*;
+import com.ibm.icu.dev.test.TestFmwk;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests                                       mfc */
@@ -90,7 +91,7 @@ import com.ibm.icu.math.*;
  * @author  Mike Cowlishaw
  */
 
-public class DiagBigDecimal{
+public class DiagBigDecimal extends TestFmwk{
  private static final java.lang.String $0="DiagBigDecimal.nrx";
  
  /* properties shared */
@@ -184,7 +185,7 @@ public class DiagBigDecimal{
    }
    catch (DiagException $1){de=$1;
     say();
-    say("**** Failed:"+" "+de.getMessage()+" "+"****");
+    errln("**** Failed:"+" "+de.getMessage()+" "+"****");
     say();
     fails=fails+de.failcount;
     if ((!isContinue)) 
@@ -194,7 +195,7 @@ public class DiagBigDecimal{
   }
   catch (java.lang.RuntimeException $2){e=$2; // any other exception is total failure; just show trace and quit
    say();
-   say("**** Failed: unexpected exception ****");
+   errln("**** Failed: unexpected exception ****");
    e.printStackTrace();
    return -1;
   }/*num*/
@@ -5163,7 +5164,7 @@ public class DiagBigDecimal{
    if ((!item.ok)) 
     {
      bad++;
-     say("Failed:"+" "+item.name);
+     errln("Failed:"+" "+item.name);
     }
    }
   }/*i*/
@@ -5217,13 +5218,13 @@ public class DiagBigDecimal{
  /*         [null or omitted gives blank line] */
  // this version doesn't heed continuation final character
  
- private static void say(){
+ private void say(){
   say((java.lang.String)null);return;
   }
- private static void say(java.lang.String s){
+ private void say(java.lang.String s){
   if (s==null) 
-   s="";
-  java.lang.System.out.println(s);
+   s="  ";
+  logln(s);
   return;}
 
  /* ----------------------------------------------------------------- */
@@ -5238,19 +5239,17 @@ public class DiagBigDecimal{
   *   if the first word is '<code>continue</code>' then try and run
   *   all tests, otherwise stop after the first failing test group.
   */
- 
- public static void main(java.lang.String args[]){
-  boolean $continue;
-  DiagBigDecimal dbd;
-  int fails;
-  $continue=false;
-  if (args.length>0) 
-   $continue=args[0].equals("continue");
-  dbd=new DiagBigDecimal(); // make the runner
-  fails=dbd.diagrun($continue); // and run the tests
-  if (fails==0) 
-   {System.exit(0);return;}
-  {System.exit(1);return;}
+ public static void main(String[] args) throws Exception{
+    new DiagBigDecimal().run(args);
+ }
+ public void TestBigDecimal(){
+	  boolean $continue;
+	  int fails;
+	  $continue=false;
+	  fails=diagrun($continue); // and run the tests
+	  if(fails!=0) {
+         errln("Diagnostic Tests for math failed. Number of errors: " +fails);
+	  }
   }
 
 /* ------------------------------------------------------------------ */

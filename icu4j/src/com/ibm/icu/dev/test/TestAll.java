@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/07/29 23:40:03 $ 
- * $Revision: 1.32 $
+ * $Date: 2002/07/30 02:31:34 $ 
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.bigdec.DiagBigDecimal;
 
 /**
  * Top level test used to run all other tests as a batch.
@@ -207,5 +208,10 @@ public class TestAll extends TestFmwk {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.util.ICUListResourceBundleTest(),
             });
+    }
+    public void TestMath() throws Exception{
+        run( new TestFmwk[]{
+                new DiagBigDecimal(),
+              });
     }
 }
