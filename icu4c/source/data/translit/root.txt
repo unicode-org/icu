@@ -251,7 +251,7 @@ root{
             alias {"[[:thai:] \u0E01-\u0E3A\u0E40-\u0E5B];NFD;Thai-ThaiSemi;Any-BreakInternal;Thai-ThaiLogical;ThaiLogical-Latin;NFC"}
         }
         Latin-Thai {
-            alias {"[[:Latin:][:Mn:][:Me:] \ \;0-9|~\u00A7\u00AB\u00BB\u02B9\u0374\u2021\u02CC];NFD;Latin-ThaiLogical;ThaiLogical-Thai;NFC"}
+            alias {"[[:Latin:][:Mn:][:Me:] \\u0020 \;0-9|~\u00A7\u00AB\u00BB\u02B9\u0374\u2021\u02CC];NFD;Latin-ThaiLogical;ThaiLogical-Thai;NFC"}
         }
 
 // end of Thai Stuff
@@ -729,7 +729,33 @@ root{
         Malayalam-Kannada {
             alias {"[\u0D02-\u0D03\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D28\u0D2A-\u0D39\u0D3E-\u0D43\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D60-\u0D61\u0D66-\u0D6F];NFD;Malayalam-InterIndic;InterIndic-Kannada;NFC"}
         }
-
+        /*
+          # Comment these out; they are only for testing
+          Latin-Han/definition{
+             file {
+                    resource:include{"Han_Latin_Definition.txt"}
+                    direction{"REVERSE"}
+             }
+          }
+          Han-Latin/definition{
+             file {
+                    resource:include{"Han_Latin_Definition.txt"}
+                    direction{"FORWARD"}
+             }
+          }
+          Latin-Han/EDICT{
+             file {
+                    resource:include{"Han_Latin_EDICT.txt"}
+                    direction{"REVERSE"}
+             }
+          }
+          Han-Latin/EDICT{
+             file {
+                    resource:include{"Han_Latin_EDICT.txt"}
+                    direction{"FORWARD"}
+             }
+          }
+        */
 // eof
     }
     TransliteratorNamePattern {
