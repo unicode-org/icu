@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <title>ReadMe for ICU</title>
-    <style type="text/css">
+<style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
       h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
       h2.TOC {page-break-before: auto}
@@ -74,6 +74,9 @@
         <ul class="TOC">
           <li><a href="#ImportantNotesCPlusPlus">Using ICU in a Multithreaded
           Environment</a></li>
+
+          <li><a href="#ImportantNotesBinaryCompat">Binary
+          Compatibility</a></li>
 
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
@@ -204,107 +207,125 @@
 
     <h2><a name="News" href="#News">What is new in this release?</a></h2>
 
-    <p>The following list concentrates on <em> changes that affect existing
-    applications migrating from previous ICU releases</em>. For more news about this
-    release, see the <a href=
+    <p>The following list concentrates on <em>changes that affect existing
+    applications migrating from previous ICU releases</em>. For more news about
+    this release, see the <a href=
     "http://oss.software.ibm.com/icu/download/2.2/">ICU 2.2 download
     page</a>.</p>
 
     <h3>Support for Unicode 3.2</h3>
 
-    <p>Unicode properties and algorithms have been upgraded to <a href="http://www.unicode.org/unicode/standard/versions/enumeratedversions.html#Unicode_3_2_0">Unicode
-    3.2</a>, which includes the addition of more than 1000 new encoded
-    characters. The UCA (<a href="http://www.unicode.org/reports/tr10/">Unicode Collation Algorithm</a>)
-            table is updated to the current version 3.1.1, with Unicode 3.2-based canonical closure.
-       All Unicode properties (except for those in Unihan.txt) are now <a href=
-      "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/ucd_icu.html">
-      available via direct APIs, and most via UnicodeSet</a>.</p>
+    <p>Unicode properties and algorithms have been upgraded to <a href=
+    "http://www.unicode.org/unicode/standard/versions/enumeratedversions.html#Unicode_3_2_0">
+    Unicode 3.2</a>, which includes the addition of more than 1000 new encoded
+    characters. The UCA (<a href="http://www.unicode.org/reports/tr10/">Unicode
+    Collation Algorithm</a>) table is updated to the current version 3.1.1,
+    with Unicode 3.2-based canonical closure. All Unicode properties (except
+    for those in Unihan.txt) are now <a href=
+    "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/ucd_icu.html">
+    available via direct APIs, and most via UnicodeSet</a>.</p>
 
-    <h3>
-        <b>Additional and modified converters</b></h3>
-    <p>
-         New converter implementations are added for:</p>
+    <h3><b>Additional and modified converters</b></h3>
 
-        <ul>
-          <li>UTF-16 and UTF-32 (detect/emit BOM according to IANA
-          registration)<br>
-           These and related names used to be aliases for UTF16_PlatformEndian
-          and UTF32_PlatformEndian but are now separate, IANA-registration-compliant converters that detect and emit the
-          respective Byte Order Mark. The "platform endian&quot; converters
-            (without automatic BOM handling) are now
-          only available via their specific names.</li>
+    <p>New converter implementations are added for:</p>
 
-          <li><a href="http://www.unicode.org/reports/tr26/">CESU-8</a> (while
-          the <a href=
-          "http://www.unicode.org/reports/tr28/#3_1_conformance">UTF-8 code is
-          tightened according to Unicode 3.2</a>)</li>
+    <ul>
+      <li>UTF-16 and UTF-32 (detect/emit BOM according to IANA
+      registration)<br>
+       These and related names used to be aliases for UTF16_PlatformEndian and
+      UTF32_PlatformEndian but are now separate, IANA-registration-compliant
+      converters that detect and emit the respective Byte Order Mark. The
+      "platform endian" converters (without automatic BOM handling) are now
+      only available via their specific names.</li>
 
-          <li><a href=
-          "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/conversion/bocu1/bocu1.html">
-          BOCU-1</a> (MIME-compatible compression of Unicode text that preserves binary order)</li>
-        </ul>
+      <li><a href="http://www.unicode.org/reports/tr26/">CESU-8</a> (while the
+      <a href="http://www.unicode.org/reports/tr28/#3_1_conformance">UTF-8 code
+      is tightened according to Unicode 3.2</a>)</li>
+
+      <li><a href=
+      "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/conversion/bocu1/bocu1.html">
+      BOCU-1</a> (MIME-compatible compression of Unicode text that preserves
+      binary order)</li>
+    </ul>
+
     <h3><b>Flexible data loading</b></h3>
-    <p>
-       ICU 2.2 has an extended search path functionality, more flexible data
-      override capabilities, and removes lesser-known heuristics for
-      determining the data path.</p>
-        <ul>
-          <li>Performance: ICU will only load data from packages, not from single files, when the
-            search path is empty. This eliminates all file system accesses after the packages (ICU
-            data + application data) are loaded.<br>
-            If this is important, then an application should set the search path to the empty path
-            during initialization.</li>
-          <li>Customizability: If the search path is not empty, then ICU searches for single files
-            before looking in packages, allowing to override/update packaged data.</li>
-          <li>User data: The new function ucnv_openPackage allows an application to load an ICU
-            character mapping table from its own data. This enables applications to support more
-            codepages than the ICU installation that it uses.</li>
-          <li>Separation between ICU data and user data: Single data files must now always have a
-            package name as prefix, which results in different file names between ICU and all
-            application packages even for the same locale IDs etc.</li>
-          <li>Multi-path: The search path can now contain multiple folders and can list packages
-            directly instead of just a single
-            folder.</li>
-          <li>Predictability: The search path can be set via the ICU_DATA environment variable or via the
-            u_setDataDirectory() function.<br>
-            ICU does not perform any other heuristics any more.</li>
-        </ul>
-        <b>Note:</b> while some of the old binary data may be still readable by ICU 2.2 (resource bundles,
-          for example), they need to be repackaged in order to be used.
-	  <ul>
-	    <li>If you have individual binary files, you have to rename them so that you prepend a <code>'packagename_'</code>. 
-	      Then use <code>packagename</code> for opening.</li>
-	    <li>If you have a memory-mapped package file, you'll need do unpack it (use decmn tool), rename individual files 
-	      as above (prepending the package name), and repack the files.</li>
-	    <li>If you have a shared library file, you'll need to somehow get individual files and repackage them.</li>
-	  </ul>
+
+    <p>ICU 2.2 has an extended search path functionality, more flexible data
+    override capabilities, and removes lesser-known heuristics for determining
+    the data path.</p>
+
+    <ul>
+      <li>Performance: ICU will only load data from packages, not from single
+      files, when the search path is empty. This eliminates all file system
+      accesses after the packages (ICU data + application data) are loaded.<br>
+       If this is important, then an application should set the search path to
+      the empty path during initialization.</li>
+
+      <li>Customizability: If the search path is not empty, then ICU searches
+      for single files before looking in packages, allowing to override/update
+      packaged data.</li>
+
+      <li>User data: The new function ucnv_openPackage allows an application to
+      load an ICU character mapping table from its own data. This enables
+      applications to support more codepages than the ICU installation that it
+      uses.</li>
+
+      <li>Separation between ICU data and user data: Single data files must now
+      always have a package name as prefix, which results in different file
+      names between ICU and all application packages even for the same locale
+      IDs etc.</li>
+
+      <li>Multi-path: The search path can now contain multiple folders and can
+      list packages directly instead of just a single folder.</li>
+
+      <li>Predictability: The search path can be set via the ICU_DATA
+      environment variable or via the u_setDataDirectory() function.<br>
+       ICU does not perform any other heuristics any more.</li>
+    </ul>
+    <b>Note:</b> while some of the old binary data may be still readable by ICU
+    2.2 (resource bundles, for example), they need to be repackaged in order to
+    be used. 
+
+    <ul>
+      <li>If you have individual binary files, you have to rename them so that
+      you prepend a <code>'packagename_'</code>. Then use
+      <code>packagename</code> for opening.</li>
+
+      <li>If you have a memory-mapped package file, you will need to unpack it
+      (use decmn tool), rename individual files as above (prepending the
+      package name), and repack the files.</li>
+
+      <li>If you have a shared library file, you'll need to somehow get
+      individual files and repackage them.</li>
+    </ul>
 
     <h3><b>Customizable memory management</b></h3>
 
-    <p>
-       ICU 2.2 libraries do not use the global operators new and delete.
-      Instead, all C++ classes are derived from a common base class UObject
-        which implements new and delete operators for all of ICU's C++ classes.
-      Users can customize the ICU memory allocation by changing the functions in
-    source/common/cmemory.c that
-      are used for non-class types and in UObject's new and delete operators.<br>
-        This also means that ICU libraries may safely use a different heap than
-        the application because all memory is consistently allocated and
-        released from within the libraries. On Windows it is now possible to
-        link the application with, for example, the static C runtime library
-        even though ICU libraries use the DLL-based runtime.</p>
+    <p>ICU 2.2 libraries do not use the global operators new and delete.
+    Instead, all C++ classes are derived from a common base class UObject which
+    implements new and delete operators for all of ICU's C++ classes. Users can
+    customize the ICU memory allocation by changing the functions in
+    source/common/cmemory.c that are used for non-class types and in UObject's
+    new and delete operators.</p>
+
+    <p>This also means that ICU libraries may safely use a different heap than
+    the application because all memory is consistently allocated and released
+    from within the libraries. On Windows it is now possible to link the
+    application with, for example, the static C runtime library even though ICU
+    libraries use the DLL-based runtime.</p>
 
     <h3>Experimental locales moved to new repository</h3>
 
-    <p>Experimental locales are ones for which we have incomplete data. Data for
-    such locales used to be included in the default ICU download, but have been
-    moved to a new <a href="http://oss.software.ibm.com/cvs/icu/locale/icu/experimental/">locale
-    data repository</a>, stored as another <a href="http://oss.software.ibm.com/icu/develop/cvs.html">ICU
-    CVS module</a>. This data can be added back into a customized ICU build, see
-    the <a href="http://oss.software.ibm.com/icu/userguide/icudata.html">User
-    Guide Data chapter</a>. It can also still be viewed with the <a href="http://oss.software.ibm.com/icu/demo/">LocaleExplorer
-    demo</a>.</p>
-
+    <p>Experimental locales are ones for which we have incomplete data. Data
+    for such locales used to be included in the default ICU download, but have
+    been moved to a new <a href=
+    "http://oss.software.ibm.com/cvs/icu/locale/icu/experimental/">locale data
+    repository</a>, stored as another <a href=
+    "http://oss.software.ibm.com/icu/develop/cvs.html">ICU CVS module</a>. This
+    data can be added back into a customized ICU build, see the <a href=
+    "http://oss.software.ibm.com/icu/userguide/icudata.html">User Guide Data
+    chapter</a>. It can also still be viewed with the <a href=
+    "http://oss.software.ibm.com/icu/demo/">LocaleExplorer demo</a>.</p>
     <hr>
 
     <h2><a name="Download" href="#Download">How To Download the Source
@@ -839,13 +860,16 @@
     the files or not (this creates new files) and then follow the rest of the
     build instructions.</p>
 
-    <h3><a name="HowToBuildWindows" href="#HowToBuildWindows">How To Build And
-    Install On Windows XP on IA64</a></h3>
+    <h3><a name="HowToBuildWindowsXP64" href="#HowToBuildWindowsXP64">How To
+    Build And Install On Windows XP on IA64</a></h3>
 
     <p>Building International Components for Unicode requires:</p>
 
     <ul>
-      <li>Microsoft XP on an IA64 (Itainium) machine</li>
+      <li>Microsoft XP on an IA64 (Itanium&reg;) machine</li>
+
+      <li>Microsoft Visual C++ 6.0 (Service Pack 2 is required to work with the
+      release build of max speed optimization).</li>
 
       <li>Microsoft Platform SDK.</li>
     </ul>
@@ -853,15 +877,17 @@
     <p>The steps are:</p>
 
     <ol>
-      <li>Open the "Set Windows XP 64bit (Retail)" command
-      window from the Microsoft Platform SDK.</li>
+      <li>Follow steps 1-3 in the <a href="#HowToBuildWindows">in the previous
+      section</a>.</li>
 
-      <li>Follow steps 1-3 in the <a href="#HowToBuildWindows">in the
-      previous section</a>.</li>
+      <li>Open the "Set Windows XP 64-bit Build Environment (Retail)" command
+      window from the Microsoft Platform SDK.</li>
 
       <li>Use cd to get into the <i>&lt;ICU&gt;</i> directory.</li>
 
-      <li>Run this command: 'msdev /USEENV <i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw /MAKE "all - Win64 Release"'</li>
+      <li>Run this command: 'msdev /USEENV
+      <i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw /MAKE "all - Win64
+      Release"'</li>
 
       <li>Run "cd source\test\intltest\Release"</li>
 
@@ -871,16 +897,8 @@
 
       <li>Run the C test suite, "cintltst". There should be no errors.</li>
 
-      <li>Reset the <strong>TZ</strong> environment variable to its original
-      value, unless you plan on testing ICU any further.</li>
-
-      <li>You are now able to develop applications with ICU by using the
-      libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
-      <i>&lt;ICU&gt;</i>\include\ and the link libraries are in
-      <i>&lt;ICU&gt;</i>\lib\. To install the ICU runtime on a machine, or ship
-      it with your application, copy the needed components from
-      <i>&lt;ICU&gt;</i>\bin\ to a location on the system PATH or to your
-      application directory.</li>
+      <li>Follow the last two steps in the <a href="#HowToBuildWindows">in the
+      previous section</a>.</li>
     </ol>
 
     <h3><a name="HowToBuildUnix" href="#HowToBuildUnix">How To Build And
@@ -1017,8 +1035,9 @@
 
       <li>Since the default make on z/OS is not gmake, the pkgdata tool
       requires that the "make" command is aliased to your installed version of
-      gmake. GNU make is available with the "z/OS Unix - Tools and Toys" that
-      was mentioned above. The required version is the same Unix build
+      gmake. You may also need to set $MAKE equal to the fully-qualified path
+      of GNU make. GNU make is available with the "z/OS Unix - Tools and Toys"
+      that was mentioned above. The required version is the same Unix build
       instructions.</li>
 
       <li>The makedep executable that is used with the z/OS ICU build process
@@ -1109,10 +1128,10 @@ Data set name type  : PDS</samp>
 
     <p>ICU Reference Release 2.2 contains partial support for the iSeries
     platform. After building ICU and running the tests, you will notice that
-    some of the multthread and formatting tests fail. The SPAWN CL command
-    will allow the multithread tests in the intltest test suite to run
-    successfully. The formating failures can be ignored for now. These failures
-    are expected to be resolved in a future release of ICU.</p>
+    some of the multthread and formatting tests fail. The SPAWN CL command will
+    allow the multithread tests in the intltest test suite to run successfully.
+    The formating failures can be ignored for now. These failures are expected
+    to be resolved in a future release of ICU.</p>
 
     <p>The following describes how to setup and build ICU.</p>
 
@@ -1165,7 +1184,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                                                                                                                                                                                                the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
@@ -1195,8 +1214,9 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
           <li>Change your current directory to icu/source.</li>
 
-          <li>Run 'as_is/os400/configure --host=as400-os400
-          --with-data-packaging=archive'</li>
+          <li>Run 'cp ../as_is/os400/configure .'</li>
+
+          <li>Run './configure --host=as400-os400'</li>
 
           <li>Run 'gmake -e'. The '-e' option is needed to pickup the
           compilers.</li>
@@ -1232,6 +1252,16 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <p>ICU does not use C++ static initialization for anything else, and
     disabling threads in ICU will disable all C++ static initialization in
     ICU.</p>
+
+    <h3><a name="ImportantNotesBinaryCompat" href=
+    "#ImportantNotesBinaryCompat">Binary Compatibility</a></h3>
+
+    <p>Even though the ICU development team tries to make a stable API, some
+    breaking changes are required from time to time. ICU does not guarentee
+    binary compatibility of its functions or its data between releases. Please
+    view the <a href=
+    "http://oss.software.ibm.com/icu/userguide/design.html">ICU Design</a>
+    chapter of the User's Guide for details.</p>
 
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows">Windows
     Platform</a></h3>
@@ -1370,24 +1400,24 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 #  define U_USE_DEPRECATED_FORMAT_API 1
 #endif
 
-#include &quot;unicode/udat.h&quot;
+#include "unicode/udat.h"
 
 int main(){
     UDateFormat *def, *fr, *fr_pat ;
     UErrorCode status = U_ZERO_ERROR;
     UChar temp[30];
 
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, &quot;fr_FR&quot;, NULL,0, &amp;status);
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &amp;status);
     if(U_FAILURE(status)){
-        printf(&quot;Error creating the french dateformat using full time style\n %s\n&quot;,
+        printf("Error creating the french dateformat using full time style\n %s\n",
             myErrorName(status) );
     }
     /* This is supposed to open default date format,
-       but later on it treats it like it is &quot;en_US&quot;.
+       but later on it treats it like it is "en_US".
        This is very bad when you try to run the tests
-       on a machine where the default locale is NOT &quot;en_US&quot;
+       on a machine where the default locale is NOT "en_US"
     */
-    def = udat_open(UDAT_SHORT, UDAT_SHORT, &quot;en_US&quot;, NULL, 0, &amp;status);
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &amp;status);
     if(U_FAILURE(status)){
         .... /* handle the error */
     }
