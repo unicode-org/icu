@@ -475,6 +475,8 @@ public class ICUService extends ICUNotifier {
 
         return dncache;
     }
+    // we define a class so we get atomic simultaneous access to both the 
+    // locale and corresponding map
     private static class LocaleRef {
 	Locale locale;
 	SoftReference ref;
