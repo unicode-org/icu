@@ -1652,6 +1652,71 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             i += 2; // skip over expected hour, min
         }
     }
+
+    /**
+     * DateFormat class mistakes date style and time style as follows:
+     * - DateFormat.getDateTimeInstance takes date style as time
+     * style, and time style as date style
+     * - If a Calendar is passed to
+     * DateFormat.getDateInstance, it returns time instance
+     * - If a Calendar
+     * is passed to DateFormat.getTimeInstance, it returns date instance
+     */
+    public void TestDateFormatFactoryJ26() {
+        TimeZone zone = TimeZone.getDefault();
+        try {
+            Locale loc = Locale.US;
+            TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"));
+            Date date = new Date(2001, Calendar.APRIL, 5, 17, 43, 53);
+            Calendar cal = Calendar.getInstance(loc);
+            Object[] DATA = {
+                DateFormat.getDateInstance(DateFormat.SHORT, loc),
+                "DateFormat.getDateInstance(DateFormat.SHORT, loc)",
+                "4/5/01",
+
+                DateFormat.getTimeInstance(DateFormat.SHORT, loc),
+                "DateFormat.getTimeInstance(DateFormat.SHORT, loc)",
+                "5:43 PM",
+
+                DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc),
+                "DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc)",
+                "Friday, April 5, 3901 5:43 PM",
+
+                DateFormat.getDateInstance(cal, DateFormat.SHORT, loc),
+                "DateFormat.getDateInstance(cal, DateFormat.SHORT, loc)",
+                "4/5/01",
+
+                DateFormat.getTimeInstance(cal, DateFormat.SHORT, loc),
+                "DateFormat.getTimeInstance(cal, DateFormat.SHORT, loc)",
+                "5:43 PM",
+
+                DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc),
+                "DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc)",
+                "Friday, April 5, 3901 5:43 PM",
+            
+                cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc),
+                "cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc)",
+                "4/5/01 5:43:53 PM PST",
+
+                cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc),
+                "cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc)",
+                "Friday, April 5, 3901 5:43 PM",
+            };
+            for (int i=0; i<DATA.length; i+=3) {
+                DateFormat df = (DateFormat) DATA[i];
+                String desc = (String) DATA[i+1];
+                String exp = (String) DATA[i+2];
+                String got = df.format(date);
+                if (got.equals(exp)) {
+                    logln("Ok: " + desc + " => " + got);
+                } else {
+                    errln("FAIL: " + desc + " => " + got + ", expected " + exp);
+                }
+            }
+        } finally {
+            TimeZone.setDefault(zone);
+        }
+    }
 }
 
 //eof
