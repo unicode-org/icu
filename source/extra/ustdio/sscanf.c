@@ -30,6 +30,7 @@
 #include "unicode/uloc.h"
 
 #include "cmemory.h"
+#include "ustr_imp.h"
 
 /* --- Prototypes ---------------------------- */
 
@@ -343,10 +344,10 @@ u_sscanf_skip_leading_ws(u_localized_string    *input,
     int32_t   skipped;
 
     /* skip all leading ws in the stream */
-    while( ((c = input->str[count]) != 0xFFFF) && (c == pad || ufmt_isws(c)) )
+    while( ((c = input->str[count]) != U_EOF) && (c == pad || u_isWhitespace(c)) )
         count++;
 
-    if(c == 0xFFFF)
+    if(c == U_EOF)
         count++;
 
     skipped = count - input->pos;
@@ -392,21 +393,20 @@ u_sscanf_string_handler(u_localized_string    *input,
     count = 0;
 
     /* open the default converter */
-    conv = ucnv_open(ucnv_getDefaultName(), &status);
+    conv = u_getDefaultConverter(&status);
 
     if(U_FAILURE(status))
         return -1;
 
-    /* since there is no real limit, just use a reasonable value */
-    limit = alias + 2048; /* TODO: Specify a real limit! */
-
-    while( ((c = input->str[input->pos++]) != 0xFFFF)
-        && (c != info->fPadChar && ! ufmt_isws(c))
+    while( ((c = input->str[input->pos++]) != U_EOF)
+        && (c != info->fPadChar && !u_isWhitespace(c))
         && (info->fWidth == -1 || count < info->fWidth) )
     {
 
         /* put the character from the stream onto the target */
         source = &c;
+        /* Since we do this one character at a time, do it this way. */
+        limit = alias + ucnv_getMaxCharSize(conv);
 
         /* convert the character to the default codepage */
         ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
@@ -420,14 +420,14 @@ u_sscanf_string_handler(u_localized_string    *input,
     }
 
     /* put the final character we read back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         input->pos--;
 
     /* add the terminator */
     *alias = 0x00;
 
     /* clean up */
-    ucnv_close(conv);
+    u_releaseDefaultConverter(conv);
 
     /* we converted 1 arg */
     return 1;
@@ -451,8 +451,8 @@ u_sscanf_ustring_handler(u_localized_string    *input,
     /* get the string one character at a time, truncating to the width */
     count = 0;
 
-    while( ((c = input->str[input->pos++]) != 0xFFFF)
-        && (c != info->fPadChar && ! ufmt_isws(c))
+    while( ((c = input->str[input->pos++]) != U_EOF)
+        && (c != info->fPadChar && ! u_isWhitespace(c))
         && (info->fWidth == -1 || count < info->fWidth) )
     {
 
@@ -464,7 +464,7 @@ u_sscanf_ustring_handler(u_localized_string    *input,
     }
 
     /* put the final character we read back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         input->pos--;
 
     /* add the terminator */
@@ -911,7 +911,7 @@ u_sscanf_char_handler(u_localized_string    *input,
         uc = input->str[input->pos++];
 
     /* handle EOF */
-    if(uc == 0xFFFF)
+    if(uc == U_EOF)
         return -1;
 
     /* convert the character to the default codepage */
@@ -942,7 +942,7 @@ u_sscanf_uchar_handler(u_localized_string    *input,
         *c = input->str[input->pos];
 
     /* handle EOF */
-    if(*c == 0xFFFF)
+    if(*c == U_EOF)
         return -1;
 
     /* we converted 1 arg */
@@ -1145,14 +1145,14 @@ u_sscanf_scanset_handler(u_localized_string    *input,
     ++(*consumed);
 
     /* open the default converter */
-    conv = ucnv_open(ucnv_getDefaultName(), &status);
+    conv = u_getDefaultConverter(&status);
 
     /* verify that the parse was successful and the converter opened */
     if(! success || U_FAILURE(status))
         return -1;
 
     /* grab characters one at a time and make sure they are in the scanset */
-    while( (c = input->str[input->pos++]) != 0xFFFF && alias < limit) {
+    while( (c = input->str[input->pos++]) != U_EOF && alias < limit) {
         if(u_scanf_scanset_in(&scanset, c)) {
             source = &c;
             /* convert the character to the default codepage */
@@ -1169,7 +1169,7 @@ u_sscanf_scanset_handler(u_localized_string    *input,
     }
 
     /* put the final character we read back on the stream */
-    if(c != 0xFFFF)
+    if(c != U_EOF)
         input->pos--;
 
     /* if we didn't match at least 1 character, fail */
@@ -1180,7 +1180,7 @@ u_sscanf_scanset_handler(u_localized_string    *input,
         *alias = 0x00;
 
     /* clean up */
-    ucnv_close(conv);
+    u_releaseDefaultConverter(conv);
 
     /* we converted 1 arg */
     return 1;

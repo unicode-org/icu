@@ -109,19 +109,6 @@ ufmt_utol(const UChar     *buffer,
     return result;
 }
 
-UBool
-ufmt_isws(UChar c)
-{
-    return (UBool)(c == 0x0020 || /* space */
-        c == 0x0009 || /* tab */
-        c == 0x000D || /* CR */
-        c == 0x000A || /* LF */
-        c == 0x000B || /* vertical tab */
-        c == 0x000C || /* form feed */
-        u_isspace(c));
-}
-
-
 UChar*
 ufmt_defaultCPToUnicode(const char *s,
                         int32_t len)

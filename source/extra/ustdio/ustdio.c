@@ -282,6 +282,7 @@ u_file_write_flush(    const UChar     *chars,
     char            *myTarget     = f->fCharBuffer;
     int32_t        bufferSize    = UFILE_CHARBUFFER_SIZE;
     int32_t        written        = 0;
+    int32_t        numConverted   = 0;
 
     if((f->fTranslit) && (f->fTranslit->translit))
     {
@@ -308,14 +309,17 @@ u_file_write_flush(    const UChar     *chars,
             u_UCharsToChars(mySource, myTarget, count);
             myTarget += count;
         }
+        numConverted = (myTarget - f->fCharBuffer);
 
-        /* write the converted bytes */
-        fwrite(f->fCharBuffer,
-            sizeof(char),
-            myTarget - f->fCharBuffer,
-            f->fFile);
+        if (numConverted > 0) {
+            /* write the converted bytes */
+            fwrite(f->fCharBuffer,
+                sizeof(char),
+                numConverted,
+                f->fFile);
 
-        written     += (myTarget - f->fCharBuffer);
+            written     += numConverted;
+        }
         myTarget     = f->fCharBuffer;
     }
     while(status == U_BUFFER_OVERFLOW_ERROR);
