@@ -30,6 +30,9 @@ public:
 
     void TestExemplar(void);
 
+    void TestGetSize(void);
+    void TestGetLocaleByType(void);
+
 private:
     /**
      * The assignment operator has no real implementation.
