@@ -940,7 +940,9 @@ public class RoundTripTest extends TestFmwk {
             UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
             sourceRangeMinusFailures.removeAll(failSourceTarg);
             
-            usi.reset(sourceRangeMinusFailures, log.isQuick());
+            boolean skipSome = log.getInclusion() < 10;
+            
+            usi.reset(sourceRangeMinusFailures, skipSome);
             while (true) {
                 int c = usi.next();
                 if (c < 0) break;
@@ -951,7 +953,7 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                 */
-                usi2.reset(sourceRangeMinusFailures, log.isQuick());
+                usi2.reset(sourceRangeMinusFailures, skipSome);
                 while (true) {
                     int d = usi2.next();
                     if (d < 0) break;
@@ -1030,7 +1032,7 @@ public class RoundTripTest extends TestFmwk {
                     !targetRange.contains(c)) continue;
                     */
             
-            usi.reset(targetRangeMinusFailures, log.isQuick());
+            usi.reset(targetRangeMinusFailures, skipSome);
 
             while (true) {
                 int c = usi.next();
@@ -1046,7 +1048,7 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                         */
-                usi2.reset(targetRangeMinusFailures, log.isQuick());
+                usi2.reset(targetRangeMinusFailures, skipSome);
                 while (true) {
                     int d = usi2.next();
                     if (d < 0) break;
