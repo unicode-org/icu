@@ -16,7 +16,7 @@
 #define POSIX 1
 #endif
 
-#if defined(POSIX)||defined(U_SOLARIS)||defined(AIX)||defined(HPUX)
+#if defined(POSIX)||defined(U_SOLARIS)||defined(AIX)||defined(HPUX)||defined(U_RHAPSODY)||defined(U_DARWIN)
 #define HAVE_IMP
 
 #include <pthread.h>
