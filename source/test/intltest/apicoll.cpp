@@ -167,11 +167,13 @@ CollationAPITest::TestProperty(/* char* par */)
     logln("Get display name for the US English collation in English : ");
     logln(Collator::getDisplayName(Locale::US, Locale::ENGLISH, name)); 
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
-
+#if 0
+    // weiv : this test is bogus if we're running on any machine that has different default locale than English.
+    // Therefore, it is banned!
     logln("Get display name for the US English in default locale language : ");
     logln(Collator::getDisplayName(Locale::US, name)); 
-    doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
-
+    doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed if this is an English machine");
+#endif
     delete col; col = 0;
     col = Collator::createInstance(Locale::FRENCH, success);
     if (U_FAILURE(success))
