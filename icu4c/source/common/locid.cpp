@@ -394,7 +394,15 @@ Locale::Locale( const   char * newLanguage,
 
         if ( ksize != 0)
         {
-            *p++ = '@';
+            if (uprv_strchr(newKeywords, '=')) {
+                *p++ = '@'; /* keyword parsing */
+            }
+            else {
+                *p++ = '_'; /* Variant parsing with a script */
+                if ( vsize == 0) {
+                    *p++ = '_'; /* No country found */
+                }
+            }
             uprv_strcpy(p, newKeywords);
             p += ksize;
         }
@@ -550,7 +558,7 @@ Locale& Locale::init(const char* localeID)
             break; // error: one of the fields is too long
         }
 
-        variantField = 0;
+        variantField = 2; /* Usually the 2nd one, except when a script is used. */
         if (fieldLen[0] > 0) {
             /* We have a language */
             uprv_memcpy(language, fullName, fieldLen[0]);
@@ -571,7 +579,6 @@ Locale& Locale::init(const char* localeID)
             /* We have a country and no script */
             uprv_memcpy(country, field[1], fieldLen[1]);
             country[fieldLen[1]] = 0;
-            variantField = 2;
         }
         if (variantField > 0 && fieldLen[variantField] > 0) {
             /* We have a variant */

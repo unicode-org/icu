@@ -226,11 +226,12 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         TESTCASE(25, TestKeywordVariantParsing);
         TESTCASE(26, TestGetBaseName);
         TESTCASE(27, TestGetLocale);
+        TESTCASE(28, TestVariantWithOutCountry);
 
         // keep the last index in sync with the condition in default:
 
         default:
-            if (index <= 27) { // keep this in sync with the last index!
+            if (index <= 28) { // keep this in sync with the last index!
                 name = "(test omitted by !UCONFIG_NO_FORMATTING)";
             } else {
                 name = "";
@@ -1732,7 +1733,7 @@ void LocaleTest::_checklocs(const char* label,
     }
 }
 
-void LocaleTest::TestGetLocale() {
+void LocaleTest::TestGetLocale(void) {
     UErrorCode ec = U_ZERO_ERROR;
     const char *req;
     Locale valid, actual, reqLoc;
@@ -1937,3 +1938,27 @@ void LocaleTest::TestGetLocale() {
     delete coll;
 #endif
 }
+
+void LocaleTest::TestVariantWithOutCountry(void) {
+    Locale loc("en","","POSIX");
+    if (0 != strcmp(loc.getVariant(), "POSIX")) {
+        errln("FAIL: en__POSIX didn't get parsed correctly");
+    }
+    Locale loc2("en","","FOUR");
+    if (0 != strcmp(loc2.getVariant(), "FOUR")) {
+        errln("FAIL: en__FOUR didn't get parsed correctly");
+    }
+    Locale loc3("en","Latn","","FOUR");
+    if (0 != strcmp(loc3.getVariant(), "FOUR")) {
+        errln("FAIL: en_Latn__FOUR didn't get parsed correctly");
+    }
+    Locale loc4("","Latn","","FOUR");
+    if (0 != strcmp(loc4.getVariant(), "FOUR")) {
+        errln("FAIL: _Latn__FOUR didn't get parsed correctly");
+    }
+    Locale loc5("","Latn","US","FOUR");
+    if (0 != strcmp(loc5.getVariant(), "FOUR")) {
+        errln("FAIL: _Latn_US_FOUR didn't get parsed correctly");
+    }
+}
+
