@@ -13,7 +13,7 @@ import java.util.*;
 
 /*
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.6 $ $Date: 2001/10/31 20:19:00 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.7 $ $Date: 2001/11/15 22:12:04 $
  */
 public class NormalizationTransliterator extends Transliterator {
 
@@ -64,6 +64,8 @@ public class NormalizationTransliterator extends Transliterator {
                     getInstance(Normalizer.DECOMP_COMPAT);
             }
         });
+        Transliterator.registerSpecialInverses("NFC", "NFD");
+        Transliterator.registerSpecialInverses("NFKC", "NFKD");
     }
 
     /**
