@@ -251,7 +251,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.2 $ $Date: 2000/02/26 02:22:15 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.3 $ $Date: 2000/03/08 23:50:19 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1090,15 +1090,10 @@ visitedChars = 0;
          * just vectors different parts of the job off to other functions.
          */
         public void buildBreakIterator() {
-            System.err.println("*1");
             Vector tempRuleList = buildRuleList(description);
-            System.err.println("*2");
             buildCharCategories(tempRuleList);
-            System.err.println("*3");
             buildStateTable(tempRuleList);
-            System.err.println("*4");
             buildBackwardsStateTable(tempRuleList);
-            System.err.println("*5");
         }
 
         /**
@@ -1659,7 +1654,6 @@ visitedChars = 0;
             for (int i = 0; i < tempRuleList.size(); i++) {
                 String rule = (String)tempRuleList.elementAt(i);
                 if (rule.charAt(0) != '!') {
-                    System.err.println("**" + (i+1) + " of " + n);
                     parseRule(rule, true);
                 }
             }
