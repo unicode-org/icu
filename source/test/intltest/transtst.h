@@ -130,6 +130,7 @@ class TransliteratorTest : public IntlTest {
     //======================================================================
     // Support methods
     //======================================================================
+ protected:
     void expect(const UnicodeString& rules,
                 const UnicodeString& source,
                 const UnicodeString& expectedResult);
@@ -148,7 +149,7 @@ class TransliteratorTest : public IntlTest {
                    const UnicodeString& result,
                    const UnicodeString& expectedResult);
     
-    void expectAux(const UnicodeString& tag,
+    virtual void expectAux(const UnicodeString& tag,
                    const UnicodeString& summary, UBool pass,
                    const UnicodeString& expectedResult);
 };
