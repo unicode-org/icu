@@ -1138,7 +1138,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
     Cnv2022Type myType;
-    UChar mySourceChar = 0x0000;
+    UChar32 mySourceChar = 0x0000;
     int iterCount = 0;
     const char *escSeq = NULL;
     UBool isShiftAppended = FALSE;
@@ -1174,7 +1174,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
             if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
                 if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
                     /* no more input */
-                    args->converter->fromUSurrogateLead = mySourceChar;
+                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
                     continue;
                 }
                 else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
@@ -1756,7 +1756,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     int32_t sourceLength = args->sourceLimit - args->source;
     int32_t length=0;
     UChar32 targetUniChar = 0x0000;
-    UChar mySourceChar = 0x0000,c=0x0000;
+    UChar32 mySourceChar = 0x0000,c=0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
@@ -1775,7 +1775,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
             if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
                 if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
                     /* no more input */
-                    args->converter->fromUSurrogateLead = mySourceChar;
+                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
                     continue;
                 }
                 else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
@@ -1909,7 +1909,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
     UChar32 targetUniChar = 0x0000;
-    UChar mySourceChar = 0x0000;
+    UChar32 mySourceChar = 0x0000;
     uint32_t targetValue=0;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -1930,7 +1930,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
                 if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
                     /* no more input */
-                    args->converter->fromUSurrogateLead = mySourceChar;
+                    args->converter->fromUSurrogateLead =(UChar) mySourceChar;
                     continue;
                 }
                 else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
@@ -2405,7 +2405,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     
     StateEnumCN currentState=ASCII;
     
-    UChar mySourceChar = 0x0000;
+    UChar32 mySourceChar = 0x0000;
     int iterCount = 0;
     const char *escSeq = NULL;
     UBool isShiftAppended = FALSE;
@@ -2436,7 +2436,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
             if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
                 if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
                     /* no more input */
-                    args->converter->fromUSurrogateLead = mySourceChar;
+                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
                     continue;
                 }
                 else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
