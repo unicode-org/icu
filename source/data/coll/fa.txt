@@ -24,8 +24,5 @@ fa{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            fa_IR{""}
-        }
     }
 }

@@ -23,8 +23,5 @@ mt{
             }
             Version{"1.2"}
         }
-        validSubLocales{
-            mt_MT{""}
-        }
     }
 }

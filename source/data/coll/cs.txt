@@ -16,8 +16,5 @@ cs{
             Sequence{"&C<č<<<Č&H<ch<<<cH<<<Ch<<<CH&R<ř<<<Ř&S<š<<<Š&Z<ž<<<Ž"}
             Version{"1.0"}
         }
-        validSubLocales{
-            cs_CZ{""}
-        }
     }
 }

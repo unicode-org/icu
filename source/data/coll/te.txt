@@ -16,8 +16,5 @@ te{
             Sequence{" [normalization on ]&హ<ఁ<ం<ః<్"}
             Version{"1.0"}
         }
-        validSubLocales{
-            te_IN{""}
-        }
     }
 }

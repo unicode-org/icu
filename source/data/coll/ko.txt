@@ -683,8 +683,5 @@ ko{
             }
             Version{"2.1"}
         }
-        validSubLocales{
-            ko_KR{""}
-        }
     }
 }

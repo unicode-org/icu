@@ -18,20 +18,5 @@ root{
             Sequence{""}
             Version{"0.0"}
         }
-        validSubLocales{
-            ga{""}
-            ga_IE{""}
-            id{""}
-            id_ID{""}
-            ms{""}
-            ms_BN{""}
-            ms_MY{""}
-            nl{""}
-            nl_BE{""}
-            nl_NL{""}
-            pt{""}
-            pt_BR{""}
-            pt_PT{""}
-        }
     }
 }

@@ -23,8 +23,5 @@ fi{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            fi_FI{""}
-        }
     }
 }

@@ -26,8 +26,5 @@ sk{
             }
             Version{"1.0"}
         }
-        validSubLocales{
-            sk_SK{""}
-        }
     }
 }

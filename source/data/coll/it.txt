@@ -16,9 +16,5 @@ it{
             Sequence{"&ae<<æ<<<Æ"}
             Version{"1.0"}
         }
-        validSubLocales{
-            it_CH{""}
-            it_IT{""}
-        }
     }
 }

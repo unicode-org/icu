@@ -16,8 +16,5 @@ el{
             Sequence{" [normalization on ]"}
             Version{"2.0"}
         }
-        validSubLocales{
-            el_GR{""}
-        }
     }
 }

@@ -25,9 +25,5 @@ sv{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            sv_FI{""}
-            sv_SE{""}
-        }
     }
 }

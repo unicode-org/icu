@@ -16,8 +16,5 @@ mr{
             Sequence{" [normalization on ]"}
             Version{"1.0"}
         }
-        validSubLocales{
-            mr_IN{""}
-        }
     }
 }

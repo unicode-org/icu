@@ -23,8 +23,5 @@ hr{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            hr_HR{""}
-        }
     }
 }

@@ -26,8 +26,5 @@ lv{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            lv_LV{""}
-        }
     }
 }

@@ -16,8 +16,5 @@ tr{
             Sequence{"&C<ç<<<Ç&G<ğ<<<Ğ&[before 1]i<ı<<<I&i<<<İ&O<ö<<<Ö&S<ş<<<Ş&U<ü<<<Ü"}
             Version{"2.1"}
         }
-        validSubLocales{
-            tr_TR{""}
-        }
     }
 }

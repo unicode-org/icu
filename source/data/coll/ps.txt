@@ -34,8 +34,5 @@ ps{
             }
             Version{"1.0"}
         }
-        validSubLocales{
-            ps_AF{""}
-        }
     }
 }

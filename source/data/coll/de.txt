@@ -20,12 +20,5 @@ de{
             Sequence{"&ae<<æ<<<Æ"}
             Version{"1.0"}
         }
-        validSubLocales{
-            de_AT{""}
-            de_BE{""}
-            de_CH{""}
-            de_DE{""}
-            de_LU{""}
-        }
     }
 }

@@ -28,8 +28,5 @@ sq{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            sq_AL{""}
-        }
     }
 }

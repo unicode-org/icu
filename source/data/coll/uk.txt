@@ -16,8 +16,5 @@ uk{
             Sequence{"&Г<ґ<<<Ґ"}
             Version{"1.0"}
         }
-        validSubLocales{
-            uk_UA{""}
-        }
     }
 }
