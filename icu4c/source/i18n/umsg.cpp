@@ -825,7 +825,7 @@ umsg_vformat(   UMessageFormat *fmt,
         return -1;
     }
 
-    return resultStr.extract(result, resultStr.length(), *status);
+    return resultStr.extract(result, resultLength, *status);
 }
 
 U_CAPI void
