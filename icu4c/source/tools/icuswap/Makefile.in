@@ -16,7 +16,7 @@ subdir = tools/icuswap
 
 ##
 
-SECTION = 8
+SECTION = 1
 
 MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 

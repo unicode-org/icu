@@ -97,7 +97,7 @@ printUsage(const char *pname, UBool ishelp) {
                 "         Read the input file, swap its platform properties according\n"
                 "         to the -t or --type option, and write the result to the output file.\n"
                 "         -tl               change to little-endian/ASCII charset family\n"
-                "         -tb               change to little-endian/ASCII charset family\n"
+                "         -tb               change to big-endian/ASCII charset family\n"
                 "         -te               change to little-endian/EBCDIC charset family\n");
     }
 
@@ -297,9 +297,16 @@ udata_swap(const UDataSwapper *ds,
     }
 
     /* the dataFormat was not recognized */
-    udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x\n",
+    udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x  %c%c%c%c\n",
                      pInfo->dataFormat[0], pInfo->dataFormat[1],
-                     pInfo->dataFormat[2], pInfo->dataFormat[3]);
+                     pInfo->dataFormat[2], pInfo->dataFormat[3],
+#if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
+                     (char)pInfo->dataFormat[0], (char)pInfo->dataFormat[1],
+                     (char)pInfo->dataFormat[2], (char)pInfo->dataFormat[3]);
+#else
+                     ' ',' ',' ',' ');
+#endif
+
     *pErrorCode=U_UNSUPPORTED_ERROR;
     return 0;
 }
