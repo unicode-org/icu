@@ -30,6 +30,14 @@ CollationKanaTest::CollationKanaTest()
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::JAPAN, status);
+    if(!myCollation || U_FAILURE(status)) {
+      errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+	/* if it wasn't already: */
+	delete myCollation;
+	myCollation = NULL;
+	return;
+    }
+
     myCollation->setDecomposition(Normalizer::DECOMP);
 }
 

@@ -118,6 +118,12 @@ void CollationTurkishTest::TestPrimary(/* char* par */)
 void CollationTurkishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationTurkishTest: ");
+
+    if((!myCollation) && exec) {
+      errln(__FILE__ " cannot test - failed to create collator.");
+      name = "";
+      return;
+    }
     switch (index) {
         case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
         case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
