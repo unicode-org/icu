@@ -627,7 +627,7 @@ uloc_getDisplayVariant(const char* locale,
  *    int32_t keywordCount = 0;
  *    UChar displayKeyword[256];
  *    int32_t displayKeywordLen = 0;
- *    UEnumeration* keywordEnum = uloc_getKeywords("de_DE@collation=PHONEBOOK;calendar=TRADITIONAL", &status);
+ *    UEnumeration* keywordEnum = uloc_openKeywords("de_DE@collation=PHONEBOOK;calendar=TRADITIONAL", &status);
  *    for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
  *          if(U_FAILURE(status)){
  *              ...something went wrong so handle the error...
@@ -652,7 +652,7 @@ uloc_getDisplayVariant(const char* locale,
  * @param status            error information if retrieving the displayable string failed. 
  *                          Should not be NULL and should not indicate failure on entry.
  * @return the actual buffer size needed for the displayable variant code.  
- * @see #uloc_getKeywords
+ * @see #uloc_openKeywords
  * @draft ICU 2.8
  */
 U_DRAFT int32_t U_EXPORT2
