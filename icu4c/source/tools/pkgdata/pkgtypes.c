@@ -199,31 +199,34 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
 }
 
 CharList *pkg_appendUniqueDirToList(CharList *l, CharList** end, const char *strAlias) {
-  char aBuf[1024];
-  char *rPtr; 
-  rPtr = uprv_strrchr(strAlias, U_FILE_SEP_CHAR);
+    char aBuf[1024];
+    char *rPtr; 
+    rPtr = uprv_strrchr(strAlias, U_FILE_SEP_CHAR);
 #if defined(U_FILE_ALT_SEP_CHAR) && (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
-  aPtr = uprv_strrchr(strAlias, U_FILE_ALT_SEP_CHAR);
-  if(!rPtr || /* regular char wasn't found or.. */
-     (aPtr && (aPtr > rPtr))) { /* alt ptr exists and is to the right of r ptr */
-    rPtr = aPtr; /* may copy NULL which is OK */
-  }
+    {
+        char *aPtr = uprv_strrchr(strAlias, U_FILE_ALT_SEP_CHAR);
+        if(!rPtr || /* regular char wasn't found or.. */
+            (aPtr && (aPtr > rPtr)))
+        { /* alt ptr exists and is to the right of r ptr */
+            rPtr = aPtr; /* may copy NULL which is OK */
+        }
+    }
 #endif
-  if(!rPtr) {
-    return l; /* no dir path */
-  }
-  if((rPtr-strAlias) > (sizeof(aBuf)/sizeof(aBuf[0]))) {
-    fprintf(stderr, "## ERR: Path too long [%d chars]: %s\n", sizeof(aBuf), strAlias);
-    return l;
-  }
-  strncpy(aBuf, strAlias,(rPtr-strAlias));
-  aBuf[rPtr-strAlias]=0;  /* no trailing slash */
-  
-  if(!pkg_listContains(l, aBuf)) {
-    return pkg_appendToList(l, end, uprv_strdup(aBuf));
-  } else {
-    return l; /* already found */
-  }
+    if(!rPtr) {
+        return l; /* no dir path */
+    }
+    if((rPtr-strAlias) > (sizeof(aBuf)/sizeof(aBuf[0]))) {
+        fprintf(stderr, "## ERR: Path too long [%d chars]: %s\n", sizeof(aBuf), strAlias);
+        return l;
+    }
+    strncpy(aBuf, strAlias,(rPtr-strAlias));
+    aBuf[rPtr-strAlias]=0;  /* no trailing slash */
+
+    if(!pkg_listContains(l, aBuf)) {
+        return pkg_appendToList(l, end, uprv_strdup(aBuf));
+    } else {
+        return l; /* already found */
+    }
 }
 
 #if 0
