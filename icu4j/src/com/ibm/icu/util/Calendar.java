@@ -751,10 +751,39 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private int             minimalDaysInFirstWeek;
 
-    // Weekend onset and cease
+    /**
+     * First day of the weekend in this calendar's locale.  Must be in
+     * the range SUNDAY...SATURDAY (1..7).  The weekend starts at
+     * weekendOnsetMillis milliseconds after midnight on that day of
+     * the week.  This value is taken from locale resource data.
+     */
     private int weekendOnset;
+
+    /**
+     * Milliseconds after midnight at which the weekend starts on the
+     * day of the week weekendOnset.  Times that are greater than or
+     * equal to weekendOnsetMillis are considered part of the weekend.
+     * Must be in the range 0..24*60*60*1000-1.  This value is taken
+     * from locale resource data.
+     */
     private int weekendOnsetMillis;
+
+    /**
+     * Day of the week when the weekend stops in this calendar's
+     * locale.  Must be in the range SUNDAY...SATURDAY (1..7).  The
+     * weekend stops at weekendCeaseMillis milliseconds after midnight
+     * on that day of the week.  This value is taken from locale
+     * resource data.
+     */
     private int weekendCease;
+
+    /**
+     * Milliseconds after midnight at which the weekend stops on the
+     * day of the week weekendCease.  Times that are greater than or
+     * equal to weekendCeaseMillis are considered not to be the
+     * weekend.  Must be in the range 0..24*60*60*1000-1.  This value
+     * is taken from locale resource data.
+     */
     private int weekendCeaseMillis;
 
     /**
