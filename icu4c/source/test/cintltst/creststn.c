@@ -363,6 +363,7 @@ static void TestAPI() {
     const UChar* value=NULL;
     char testdatapath[256];
     UChar utestdatapath[256];
+    char convOutput[256];
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
@@ -412,7 +413,7 @@ static void TestAPI() {
     if(U_FAILURE(status)){
         log_err("ERROR: ures_getByIndex on string resource failed\n");
     }
-    if(strcmp(austrdup(ures_getString(teFillin2, &len, &status)), "TE") != 0){
+    if(strcmp(u_austrcpy(convOutput, ures_getString(teFillin2, &len, &status)), "TE") != 0){
         status=U_ZERO_ERROR;
         log_err("ERROR: ures_getByIndex on string resource fetched the key=%s, expected \"TE\" \n", austrdup(ures_getString(teFillin2, &len, &status)));
     }
@@ -472,7 +473,7 @@ static void TestErrorConditions(){
     status=U_ILLEGAL_ARGUMENT_ERROR;
     teRes=ures_openU(utestdatapath, "te", &status);
     if(U_FAILURE(status)){
-        log_verbose("ERROR: ures_openU() failed as expected path =%s with status != U_ZERO_ERROR", austrdup(utestdatapath));
+        log_verbose("ERROR: ures_openU() failed as expected path =%s with status != U_ZERO_ERROR", testdatapath);
     }else{
         log_err("ERROR: ures_openU() is supposed to fail path =%s with status != U_ZERO_ERROR", austrdup(utestdatapath));
         ures_close(teRes);
@@ -672,13 +673,15 @@ static void TestGetVersion(){
 
     ures_getVersion(resB, versionArray);
     for (i=0; i<4; ++i) {
-      if (versionArray[i] < minVersionArray[i] ||
-          versionArray[i] > maxVersionArray[i]) {
-        log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
-            versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
-        break;
-      }
+        if (versionArray[i] < minVersionArray[i] ||
+            versionArray[i] > maxVersionArray[i])
+        {
+            log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
+                versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+            break;
+        }
     }
+    ures_close(resB);
 }
 
 static void TestResourceBundles()
@@ -711,6 +714,7 @@ static void TestConstruction1()
     int32_t len2=0;
     UVersionInfo versionInfo;
     char versionString[256];
+    char verboseOutput[256];
 
     U_STRING_DECL(rootVal, "ROOT", 4);
     U_STRING_DECL(te_inVal, "TE_IN", 5);
@@ -725,7 +729,7 @@ static void TestConstruction1()
 
     empty = ures_open(testdatapath, "empty", &status);
     if(empty == NULL || U_FAILURE(status)) {
-      log_err("opening empty failed!\n");
+        log_err("opening empty failed!\n");
     }
     ures_close(empty);
 
@@ -744,8 +748,8 @@ static void TestConstruction1()
         log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(status));
         return;
     }
-    log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", austrdup(result1));
-    log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
+    log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", u_austrcpy(verboseOutput, result1));
+    log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", u_austrcpy(verboseOutput, result2));
     if(u_strcmp(result1, rootVal) !=0  || u_strcmp(result2, te_inVal) !=0 ){
         log_err("construction test failed. Run Verbose for more information");
     }
@@ -782,6 +786,7 @@ static void TestConstruction2()
     wchar_t widedirectory[256];
     char testdatapath[256];
     int32_t len=0;
+    char verboseOutput[256];
 
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
@@ -802,7 +807,7 @@ static void TestConstruction2()
         return;
     }
 
-    log_verbose("for string_in_Root_te_te_IN, te_IN.txt had  %s\n", austrdup(result4));
+    log_verbose("for string_in_Root_te_te_IN, te_IN.txt had  %s\n", u_austrcpy(verboseOutput, result4));
     u_uastrcpy(temp, "TE_IN");
 
     if(u_strcmp(result4, temp)!=0)
@@ -856,6 +861,7 @@ static UBool testTag(const char* frag,
     int32_t index = 0;
     int32_t tag_count= 0;
     char testdatapath[256];
+    char verboseOutput[256];
     UResourceBundle* array=NULL;
     UResourceBundle* array2d=NULL;
     UResourceBundle* tags=NULL;
@@ -1177,7 +1183,7 @@ static UBool testTag(const char* frag,
                 tagelement=ures_getByIndex(tags, index, tagelement, &status);
                 key=ures_getKey(tagelement);
                 value=(UChar*)ures_getNextString(tagelement, &len, &key, &status);
-                log_verbose("tag = %s, value = %s\n", key, austrdup(value));
+                log_verbose("tag = %s, value = %s\n", key, u_austrcpy(verboseOutput, value));
                 if(strncmp(key, "tag", 3) == 0 && u_strncmp(value, base, u_strlen(base)) == 0){
                     record_pass();
                 }else{
