@@ -75,15 +75,6 @@ extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
 extern void
-compactStage2(void);
-
-extern void
-compactStage3(void);
-
-extern void
-compactProps(void);
-
-extern void
 generateData(const char *dataDir);
 
 #endif

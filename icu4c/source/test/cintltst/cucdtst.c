@@ -634,7 +634,7 @@ static void TestUnicodeData()
     /* sanity check on repeated properties */
     for(c=0xfffe; c<=0x10ffff;) {
         if(u_charType(c)!=U_UNASSIGNED) {
-            log_err("error: u_charType(U+%04lx)!=U_UNASSIGNED\n", c);
+            log_err("error: u_charType(U+%04lx)!=U_UNASSIGNED (returns %d)\n", c, u_charType(c));
         }
         if((c&0xffff)==0xfffe) {
             ++c;

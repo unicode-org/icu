@@ -180,10 +180,6 @@ main(int argc, char* argv[]) {
 
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
-        compactProps();
-        compactStage3();
-        compactStage2();
-
         /* write the properties data file */
         generateData(destDir);
     }
