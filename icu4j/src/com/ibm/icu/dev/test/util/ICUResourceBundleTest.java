@@ -585,6 +585,25 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("%%ALIAS mechanism failed for iw_IL");
         }
     }
+    public void TestXPathAlias(){
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN");
+        ICUResourceBundle b = rb.get("aliasClient");
+        String result = b.getString();
+        String expResult= "teindest"; 
+        if(!result.equals(expResult)){
+            errln("Did not get the expected result for XPath style alias");
+        }
+        try{
+            ICUResourceBundle c = rb.get("rootAliasClient");
+            result = c.getString();
+            expResult = "correct"; 
+            if(!result.equals(expResult)){
+                errln("Did not get the expected result for XPath style alias for rootAliasClient");
+            }
+        }catch( MissingResourceException ex){
+            errln("Could not get rootAliasClient");
+        }
+    }
     public void TestCircularAliases(){
         try{
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases");
@@ -813,11 +832,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
             try{
                 t = root.getWithFallback("calendar/islamic-civil/eras/abbreviated/0/mikimaus/pera");
                 errln("Second resource does not exist. How did it get here?\n");
-            }catch(UResourceTypeMismatchException ex){
+            }catch(MissingResourceException ex){
                 logln("Got the expected exception");
             }
         } catch (MissingResourceException e) {
-           warnln("Could not load the locale data");
+           warnln("Could not load the locale data: " + e.getMessage());
         }
     }
 }
