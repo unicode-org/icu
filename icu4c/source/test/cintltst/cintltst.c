@@ -74,7 +74,10 @@ void addSetup(TestNode** root)
 int main(int argc, const char* const argv[])
 {
     int nerrors = 0;
+    int warnOnMissingData = 0;
+    int i;
     TestNode *root;
+    const char *warnOrErr = "Failure"; 
 
     /* initial check for the default converter */
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -83,6 +86,14 @@ int main(int argc, const char* const argv[])
 
     /* This must be tested before using anything! */
     gMutexInitialized = umtx_isInitialized(NULL);
+
+    /* Checkargs */
+    for(i=1;i<argc;i++) {
+      if(!strcmp(argv[i],"-w")) {
+	warnOnMissingData = 1;
+	warnOrErr = "Warning";
+      }
+    }
 
     while (REPEAT_TESTS > 0) {
 
@@ -116,10 +127,13 @@ int main(int argc, const char* const argv[])
             ucnv_close(cnv);
         } else {
             fprintf(stderr,
-                "*** Failure! The default converter cannot be opened.\n"
+                "*** %s! The default converter cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n");
-            return 1;
+                "*** check that the data files are present.\n", warnOrErr);
+	    if(warnOnMissingData == 0) {
+	      fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+	      return 1;
+	    }
         }
 
         /* try more data */
@@ -129,10 +143,13 @@ int main(int argc, const char* const argv[])
             ucnv_close(cnv);
         } else {
             fprintf(stderr,
-                    "*** Failure! The converter for " TRY_CNV_2 " cannot be opened.\n"
+                    "*** %s! The converter for " TRY_CNV_2 " cannot be opened.\n"
                     "*** Check the ICU_DATA environment variable and \n"
-                    "*** check that the data files are present.\n");
-            return 1;
+                    "*** check that the data files are present.\n", warnOrErr);
+	    if(warnOnMissingData == 0) {
+	      fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+	      return 1;
+	    }
         }
 
         rb = ures_open(NULL, "en", &errorCode);
@@ -141,10 +158,13 @@ int main(int argc, const char* const argv[])
             ures_close(rb);
         } else {
             fprintf(stderr,
-                    "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
+                    "*** %s! The \"en\" locale resource bundle cannot be opened.\n"
                     "*** Check the ICU_DATA environment variable and \n"
-                    "*** check that the data files are present.\n");
-            return 1;
+                    "*** check that the data files are present.\n", warnOrErr);
+	    if(warnOnMissingData == 0) {
+	      fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+	      return 1;
+	    }
         }
 
         fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
