@@ -88,7 +88,7 @@ static UResourceBundle *gBundle = NULL;
 
 U_STRING_DECL(gNoFormatting, " (UCONFIG_NO_FORMATTING see uconfig.h)", 38);
 
-U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
+U_CFUNC UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
 {
   if(U_FAILURE(*err))
   {
@@ -119,7 +119,7 @@ U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
 }
 
 /* Format a message and print it's output to fp */
-U_CAPI int u_wmsg(FILE *fp, const char *tag, ... )
+U_CFUNC int u_wmsg(FILE *fp, const char *tag, ... )
 {
     const UChar *msg;
     int32_t      msgLen;
@@ -216,7 +216,7 @@ static const UChar *fetchErrorName(UErrorCode err)
         return gInfoMessages[err-U_ERROR_WARNING_START];
 }
 
-U_CAPI const UChar *u_wmsg_errorName(UErrorCode err)
+U_CFUNC const UChar *u_wmsg_errorName(UErrorCode err)
 {
     UChar *msg;
     int32_t msgLen;
