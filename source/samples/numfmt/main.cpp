@@ -1,6 +1,7 @@
 #include "unicode/unistr.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
+#include "unicode/uclean.h"
 #include "util.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,8 @@ int main(int argc, char **argv) {
 
     printf("C API\n");
     capi();
+
+    u_cleanup();    // Release any additional storage held by ICU.  
 
     printf("Exiting successfully\n");
     return 0;
@@ -56,4 +59,5 @@ void cppapi() {
     printf("\"\n");
 
     delete fmt; // Release the storage used by the formatter
+    
 }

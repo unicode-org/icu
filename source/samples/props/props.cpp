@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/uclean.h"
 
 static void
 printProps(UChar32 codePoint) {
@@ -58,5 +59,7 @@ main(int argc, const char *argv[]) {
         printProps(codePoints[i]);
         puts("");
     }
+
+    u_cleanup();
     return 0;
 }

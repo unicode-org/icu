@@ -20,7 +20,13 @@ void capi() {
     double a;
     
     /* Create a formatter for the US locale */
-    fmt = unum_open(UNUM_DECIMAL, "en_US", &status);
+    fmt = unum_open(
+          UNUM_DECIMAL,      /* style         */
+          0,                 /* pattern       */
+          0,                 /* patternLength */
+          "en_US",           /* locale        */
+          0,                 /* parseErr      */
+          &status);
     if (U_FAILURE(status)) {
         printf("FAIL: unum_open\n");
         exit(1);

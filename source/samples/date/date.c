@@ -20,6 +20,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/uclean.h"
 
 #include "unicode/ucnv.h"
 #include "unicode/udat.h"
@@ -118,6 +119,7 @@ main(int argc,
   /* print the date */
   date(tz, style, &status);
 
+  u_cleanup();
   return (U_FAILURE(status) ? 1 : 0);
 }
 
