@@ -644,6 +644,7 @@ class FormatThreadTest : public ThreadWithStatus
 {
 public:
     FormatThreadTest() // constructor is NOT multithread safe.
+        : ThreadWithStatus()
         // the locale to use
     {
         static int32_t fgOffset = 0;
