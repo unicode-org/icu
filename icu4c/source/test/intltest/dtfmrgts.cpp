@@ -1275,7 +1275,7 @@ void DateFormatRegressionTest::Test1684(void)
     new Test1684Data(2001,12,30, /*2002, 1,  6,*/  2002,1,1,UCAL_SUNDAY,    "2002 01 01 Sun", "2001 12 06 Sun")
   };
 
-#define kTest1684Count  (sizeof(tests)/sizeof(tests[0]))
+#define kTest1684Count  ((int32_t)(sizeof(tests)/sizeof(tests[0])))
 
   int32_t pass = 0, error = 0, warning = 0;
   int32_t i;
@@ -1321,7 +1321,6 @@ void DateFormatRegressionTest::Test1684(void)
       pass++;
     }
     
-    ms2 = NULL;
     ms2 = sdf->parse(test.data, status);
     if(U_FAILURE(status)) {
       errln("parse exception: " + UnicodeString(u_errorName(status)));
