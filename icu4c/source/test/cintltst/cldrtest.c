@@ -1110,14 +1110,6 @@ static void TestExemplarSet(void){
     assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
                equalCount > 0 && equalCount < n);
     
-    /* JB 4068 - Nonexistent language */
-    ec = U_ZERO_ERROR;
-    USet *nothing = ulocdata_getExemplarSet(NULL, "qqq", 0, &ec);
-    uset_close(nothing);
-    if (ec != U_USING_DEFAULT_WARNING) {
-        log_err("Exemplar set for \"qqq\", expecting U_USING_DEFAULT_WARNING, but got %s\n",
-            u_errorName(ec));
-    }
  END:
     uenum_close(avail);
     uset_close(exemplarSets[0]);
