@@ -81,6 +81,15 @@ static pthread_mutex_t gPlatformMutex;
 
 #endif
 #endif /* ICU_USE_THREADS==1 */
+U_CAPI UBool U_EXPORT2
+umtx_isInitialized(UMTX *mutex)
+{
+    if (mutex == NULL)
+    {
+        mutex = &gGlobalMutex;
+    }
+    return (UBool)(*mutex != NULL);
+}
 
 U_CAPI void  U_EXPORT2
 umtx_lock(UMTX *mutex)

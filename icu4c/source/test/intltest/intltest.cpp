@@ -27,6 +27,8 @@
 #include "caltztst.h"
 #include "itmajor.h"
 
+#include "umutex.h"
+
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
 #include "Files.h"
@@ -873,11 +875,6 @@ IntlTest::run_phase2( char* name, char* par ) // supports reporting memory leaks
 int
 main(int argc, char* argv[])
 {
-
-#ifdef XP_MAC_CONSOLE
-    argc = ccommand( &argv );
-#endif
-
     UBool syntax = FALSE;
     UBool all = TRUE;
     UBool verbose = FALSE;
@@ -885,10 +882,23 @@ main(int argc, char* argv[])
     UBool quick = TRUE;
     UBool name = FALSE;
     UBool leaks = FALSE;
-    // initial check for the default converter
     UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter *cnv = NULL;
+
+    /* This must be tested before using anything! */
+    if (!umtx_isInitialized(NULL)) {
+        fprintf(stderr,
+                "*** Failure! The global mutex was not initialized.\n"
+                "*** Make sure the right linker was used.\n");
+        return 1;
+    }
+
+#ifdef XP_MAC_CONSOLE
+    argc = ccommand( &argv );
+#endif
+
     /* try opening the data from dll instead of the dat file */
-    UConverter *cnv = ucnv_open("iso-8859-7", &errorCode);
+    cnv = ucnv_open("iso-8859-7", &errorCode);
     if(cnv != 0) {
         /* ok */
         ucnv_close(cnv);
