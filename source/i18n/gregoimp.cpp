@@ -42,13 +42,6 @@ const int8_t Grego::MONTH_LENGTH[24] =
     {31,28,31,30,31,30,31,31,30,31,30,31,
      31,29,31,30,31,30,31,31,30,31,30,31};
 
-/**
- * Convert a year, month, and day-of-month, given in the proleptic Gregorian
- * calendar, to 1970 epoch days.
- * @param year Gregorian year, with 0 == 1 BCE, -1 == 2 BCE, etc.
- * @param month 0-based month, with 0==Jan
- * @param dom 1-based day of month
- */
 double Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
 
     int32_t y = year - 1;
@@ -60,15 +53,6 @@ double Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
     return julian - JULIAN_1970_CE; // JD => epoch day
 }
 
-/**
- * Convert a 1970-epoch day number to proleptic Gregorian year, month,
- * day-of-month, and day-of-week.
- * @param day 1970-epoch day (integral value)
- * @param year output parameter to receive year
- * @param month output parameter to receive month (0-based, 0==Jan)
- * @param dom output parameter to receive day-of-month (1-based)
- * @param dow output parameter to receive day-of-week (1-based, 1==Sun)
- */
 void Grego::dayToFields(double day, int32_t& year, int32_t& month,
                         int32_t& dom, int32_t& dow) {
     int32_t doy;
@@ -76,6 +60,10 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
     day += JULIAN_1970_CE - JULIAN_1_CE;
 
+    // Convert from the day number to the multiple radix
+    // representation.  We use 400-year, 100-year, and 4-year cycles.
+    // For example, the 4-year cycle has 4 years + 1 leap day; giving
+    // 1461 == 365*4 + 1 days.
     int32_t n400 = Math::floorDivide(day, 146097, doy); // 400-year cycle length
     int32_t n100 = Math::floorDivide(doy, 36524, doy); // 100-year cycle length
     int32_t n4   = Math::floorDivide(doy, 1461, doy); // 4-year cycle length
