@@ -694,7 +694,7 @@ public:
      * @see #setPadPosition
      * @stable ICU 2.0
      */
-    virtual void setPadCharacter(UnicodeString padChar);
+    virtual void setPadCharacter(const UnicodeString &padChar);
 
     /**
      * Get the position at which padding will take place.  This is the location

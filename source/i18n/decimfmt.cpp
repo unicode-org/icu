@@ -1730,7 +1730,7 @@ UnicodeString DecimalFormat::getPadCharacterString() {
  * @see #getPadPosition
  * @see #setPadPosition
  */
-void DecimalFormat::setPadCharacter(UnicodeString padChar) {
+void DecimalFormat::setPadCharacter(const UnicodeString &padChar) {
     if (padChar.length() > 0) {
         fPad = padChar;
     }
