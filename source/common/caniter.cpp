@@ -196,41 +196,27 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
     // catch degenerate case
     if (newSource.length() == 0) {
-        pieces_length = 1;
         pieces = (UnicodeString **)uprv_malloc(sizeof(UnicodeString *));
-        /* test for NULL */
-        if (pieces == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        current_length = 1;
+        pieces_lengths = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
+        pieces_length = 1;
         current = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
-        /* test for NULL */
-        if (current == NULL) {
+        current_length = 1;
+        if (pieces == NULL || pieces_lengths == NULL || current == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             goto CleanPartialInitialization;
         }
         current[0] = 0;
         pieces[0] = new UnicodeString[1];
-        /* test for NULL */
+        pieces_lengths[0] = 1;
         if (pieces[0] == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             goto CleanPartialInitialization;
         }
-        pieces[0][0] = UnicodeString();
-        pieces_lengths = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
-        /* test for NULL */
-        if (pieces_lengths == 0) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            goto CleanPartialInitialization;
-        }
-        pieces_lengths[0] = 1;
         return;
     }
 
 
     list = new UnicodeString[source.length()];
-    /* test for NULL */
     if (list == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         goto CleanPartialInitialization;
@@ -257,28 +243,17 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
     // allocate the arrays, and find the strings that are CE to each segment
     pieces = (UnicodeString **)uprv_malloc(list_length * sizeof(UnicodeString *));
-    /* test for NULL */
-    if (pieces == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        goto CleanPartialInitialization;
-    }
     pieces_length = list_length;
     pieces_lengths = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
-    /* test for NULL */
-    if (pieces_lengths == 0) {
+    current = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
+    current_length = list_length;
+    if (pieces == NULL || pieces_lengths == NULL || current == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         goto CleanPartialInitialization;
     }
 
-    current_length = list_length;
-    current = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
-    /* test for NULL */
-    if (current == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        goto CleanPartialInitialization;
-    }
     for (i = 0; i < current_length; i++) {
-      current[i] = 0;
+        current[i] = 0;
     }
     // for each segment, get all the combinations that can produce 
     // it after NFD normalization
@@ -291,7 +266,9 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     return;
 // Common section to cleanup all local variables and reset object variables.
 CleanPartialInitialization:
-    delete[] list;
+    if (list != NULL) {
+        delete[] list;
+    }
     if (pieces != NULL) {
         uprv_free(pieces);
     }
