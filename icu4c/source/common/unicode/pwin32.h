@@ -142,7 +142,7 @@ typedef unsigned short uint16_t;
 /*===========================================================================*/
 
 #define U_EXPORT __declspec(dllexport)
-#define U_EXPORT2
+#define U_EXPORT2 __cdecl
 #define U_IMPORT __declspec(dllimport)
 
 /*===========================================================================*/
