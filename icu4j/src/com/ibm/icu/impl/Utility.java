@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2001/11/29 21:32:28 $
- * $Revision: 1.16 $
+ * $Date: 2001/12/03 18:35:33 $
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -1105,10 +1105,11 @@ public final class Utility {
                                        '8','9','A','B','C','D','E','F'};
 
     /**
-     * Return true if the character is NOT printable ASCII.
+     * Return true if the character is NOT printable ASCII.  The tab,
+     * newline and linefeed characters are considered unprintable.
      */
     public static boolean isUnprintable(int c) {
-        return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
+        return !(c >= 0x20 && c <= 0x7E);
     }
 
     /**
