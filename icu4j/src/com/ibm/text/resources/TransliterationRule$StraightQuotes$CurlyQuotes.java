@@ -2,7 +2,7 @@ package com.ibm.text.resources;
 
 import java.util.ListResourceBundle;
 
-public class TransliterationRuleStraightQuotesCurlyQuotes extends ListResourceBundle {
+public class TransliterationRule$StraightQuotes$CurlyQuotes extends ListResourceBundle {
     /**
      * Overrides ListResourceBundle
      */

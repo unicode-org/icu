@@ -8,7 +8,7 @@ import java.util.ListResourceBundle;
  * 1999, pp. 30-35.
  * @author Alan Liu
  */
-public class TransliterationRuleLatinKana extends ListResourceBundle {
+public class TransliterationRule$Latin$Kana extends ListResourceBundle {
     /**
      * Overrides ListResourceBundle
      */
