@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -28,12 +28,29 @@
  * @param err The error code
  * @return the newly created converter
  */
-UConverter *ucnv_createConverter (const char *converterName, UErrorCode * err);
+UConverter *ucnv_createConverter (UConverter *myUConverter, const char *converterName, UErrorCode * err);
+
+/*
+ * Open a purely algorithmic converter, specified by a type constant.
+ * @param myUConverter  NULL, or pre-allocated UConverter structure to avoid
+ *                      a memory allocation
+ * @param type          requested converter type
+ * @param locale        locale parameter, or ""
+ * @param options       converter options bit set (default 0)
+ * @param err           ICU error code, not tested for U_FAILURE on input
+ *                      because this is an internal function
+ * @internal
+ */
+U_CFUNC UConverter *
+ucnv_createAlgorithmicConverter(UConverter *myUConverter,
+                                UConverterType type,
+                                const char *locale, uint32_t options,
+                                UErrorCode *err);
 
 /* Creates a converter from shared data 
  */
 UConverter*
-ucnv_createConverterFromSharedData(UConverterSharedData *mySharedConverterData, const char *realName, const char *locale, uint32_t options, UErrorCode *err);
+ucnv_createConverterFromSharedData(UConverter *myUConverter, UConverterSharedData *mySharedConverterData, const char *realName, const char *locale, uint32_t options, UErrorCode *err);
 
 UConverter* ucnv_createConverterFromPackage(const char *packageName, const char *converterName,  
                                             UErrorCode *err);

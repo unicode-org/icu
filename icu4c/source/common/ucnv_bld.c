@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2002, International Business Machines Corporation and
+ * Copyright (c) 1996-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -466,11 +466,10 @@ parseConverterOptions(const char *inName,
  * -Call AlgorithmicConverter initializer (Data=FALSE, Cached=TRUE)
  */
 UConverter *
-ucnv_createConverter(const char *converterName, UErrorCode * err)
+ucnv_createConverter(UConverter *myUConverter, const char *converterName, UErrorCode * err)
 {
     char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
     const char *realName;
-    UConverter *myUConverter = NULL;
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     uint32_t options=0;
@@ -549,23 +548,43 @@ ucnv_createConverter(const char *converterName, UErrorCode * err)
         umtx_unlock(&cnvCacheMutex);
     }
 
-    myUConverter = ucnv_createConverterFromSharedData(mySharedConverterData, realName, locale, options, err);
+    myUConverter = ucnv_createConverterFromSharedData(myUConverter, mySharedConverterData, realName, locale, options, err);
 
-    /* allocate the converter */
-    if (myUConverter == NULL)
+    if (U_FAILURE(*err))
     {
         if (mySharedConverterData->referenceCounter != ~0) {
             umtx_lock (NULL);
             --mySharedConverterData->referenceCounter;
             umtx_unlock (NULL);
         }
-        *err = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
     return myUConverter;
 }
 
+UConverter *
+ucnv_createAlgorithmicConverter(UConverter *myUConverter,
+                                UConverterType type,
+                                const char *locale, uint32_t options,
+                                UErrorCode *err) {
+    const UConverterSharedData *sharedData;
+
+    if(type<0 || UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES<=type) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    sharedData = converterData[type];
+    if(sharedData == NULL || sharedData->referenceCounter != ~0) {
+        /* not a valid type, or not an algorithmic converter */
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    return ucnv_createConverterFromSharedData(myUConverter, (UConverterSharedData *)sharedData, "",
+                locale != NULL ? locale : "", options, err);
+}
 
 UConverter*
 ucnv_createConverterFromPackage(const char *packageName, const char *converterName, UErrorCode * err)
@@ -594,7 +613,7 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
     }
 
     /* create the actual converter */
-    myUConverter = ucnv_createConverterFromSharedData( mySharedConverterData, cnvName, locale, options, err);
+    myUConverter = ucnv_createConverterFromSharedData(NULL, mySharedConverterData, cnvName, locale, options, err);
     
     if (U_FAILURE(*err)) {
         ucnv_close(myUConverter);
@@ -606,19 +625,29 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
 
 
 UConverter*
-ucnv_createConverterFromSharedData(UConverterSharedData *mySharedConverterData, const char *realName, const char *locale, uint32_t options, UErrorCode *err)
+ucnv_createConverterFromSharedData(UConverter *myUConverter,
+                                   UConverterSharedData *mySharedConverterData,
+                                   const char *realName, const char *locale, uint32_t options,
+                                   UErrorCode *err)
 {
-    UConverter *myUConverter;
+    UBool isCopyLocal;
 
-    myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
     if(myUConverter == NULL)
     {
-        *err = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
+        if(myUConverter == NULL)
+        {
+            *err = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        isCopyLocal = FALSE;
+    } else {
+        isCopyLocal = TRUE;
     }
 
     /* initialize the converter */
     uprv_memset(myUConverter, 0, sizeof(UConverter));
+    myUConverter->isCopyLocal = isCopyLocal;
     myUConverter->sharedData = mySharedConverterData;
     myUConverter->options = options;
     myUConverter->mode = UCNV_SI;
