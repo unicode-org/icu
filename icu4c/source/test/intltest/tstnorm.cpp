@@ -1108,9 +1108,10 @@ BasicNormalizerTest::TestCompare() {
 
         "\\u00cc",
         "\\u0069\\u0300",
-
+        "a\\u0360\\u0345\\u0360\\u0345b",
+        "a\\u0345\\u0360\\u0345\\u0360b",
         // empty string
-        // 42
+        // 44
         ""
     };
 

@@ -38,7 +38,7 @@ public:
 
     void TestUCharIterator();
     void TestUCharIterator(UCharIterator *iter, CharacterIterator &ci, const char *moves, const char *which);
-
+    void TestCoverage();
     void TestCharIteratorSubClasses();
 };
 
