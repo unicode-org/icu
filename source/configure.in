@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.169 2002/05/29 22:07:29 srl Exp $
+dnl $Id: configure.in,v 1.170 2002/05/31 23:16:07 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -36,7 +36,7 @@ AC_SUBST(LIB_VERSION)
 AC_SUBST(LIB_VERSION_MAJOR)
 AC_MSG_RESULT([release $VERSION, library $LIB_VERSION])
 
-UNICODE_VERSION="3.1.1"
+UNICODE_VERSION="3.2"
 AC_SUBST(UNICODE_VERSION)
 
 AC_SUBST(CPPFLAGS)
