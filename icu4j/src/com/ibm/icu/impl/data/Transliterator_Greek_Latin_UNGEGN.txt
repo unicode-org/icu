@@ -1,18 +1,26 @@
-﻿# Rules are predicated on running NFD first, and NFC afterwards
+﻿#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others. All Rights Reserved.
+#--------------------------------------------------------------------
+# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin_UNGEGN.txt,v $
+# $Date: 2002/07/26 16:09:04 $
+# $Revision: 1.2 $
+#--------------------------------------------------------------------
+# For modern Greek, based on UNGEGN rules.
+
+# Rules are predicated on running NFD first, and NFC afterwards
 # MINIMAL FILTER GENERATED FOR: Greek-Latin/UNGEGN
 # WARNING: need to add accents to both filters ###
 # :: [́̄̆̈;µ·ÀÂÈÊÌÎÒÔÙÛàâèêìîòôùûĈ-ĉĜ-ĝĤ-ĥĴ-ĵŜ-ŝŴ-ŷǛ-ǜǸ-ǹ̀̂̓-̔̀͂-̓ͅͺ;Ά-ΊΌΎ-ΡΣ-ώϐ-ϖϰ-ϵЀЍѐѝḔ-ḕṐ-ṑẀ-ẁẐ-ẑẤ-ậẰ-ằẾ-ệỐ-ộỜ-ờỪ-ừỲ-ỳἀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼι῁-ῄῆ-῍῏-ΐῖ-Ί῝῟-῭ῲ-ῴῶ-ῼΩ] ;
 
-# :: [\\u0000-\\u007F \· [:Greek:] [:nonspacing mark:]] ;
+:: [[[:Greek:][:Mn:][:Me:]] [\:-;?\u00B7\u037E\u0387]] ;
 ::NFD (NFC) ;
-
-# For modern Greek.
 
 # Useful variables
 
 $lower = [[:latin:][:greek:] & [:Ll:]] ;
 $upper = [[:latin:][:greek:] & [:Lu:]] ;
-$accent = [:M:] ;
+$accent = [[:Mn:][:Me:]] ;
 
 $macron = ̄ ;
 $ddot = ̈ ;
@@ -39,8 +47,8 @@ $under = ̱;
 
 $caron = ̌;
 
-$afterLetter = [:L:] [\'[:M:]]* ;
-$beforeLetter = [\'[:M:]]* [:L:] ;
+$afterLetter = [:L:] [\'$accent]* ;
+$beforeLetter = [\'$accent]* [:L:] ;
 
 # Fix punctuation
 
@@ -75,10 +83,10 @@ $iotasub > ;
 
 # at begining or end of word, convert mp to b
 
-[^[:L:][:M:]] { μπ > b ;
-μπ } [^[:L:][:M:]] > b ;
-[^[:L:][:M:]] { [Μμ][Ππ] > B ;
-[Μμ][Ππ] } [^[:L:][:M:]] > B ;
+[^[:L:]$accent] { μπ > b ;
+μπ } [^[:L:]$accent] > b ;
+[^[:L:]$accent] { [Μμ][Ππ] > B ;
+[Μμ][Ππ] } [^[:L:]$accent] > B ;
 
 μπ < b ;
 Μπ < B } $beforeLower ;
@@ -92,7 +100,7 @@ $iotasub > ;
 οΥ <> oU ;
 
 $fmaker = [aeiAEI] $under ? ;
-$shiftForwardVowels = [:Mn:] ;
+$shiftForwardVowels = [[:Mn:]-[\u0308]]; # note: a diaeresis keeps the items separate
 
 $fmaker { υ ( $shiftForwardVowels )* } $softener > $1 v $under ;
 υ $1 < ( $shiftForwardVowels )* v $under ;
@@ -237,6 +245,4 @@ $afterLetter { ς <> $afterLetter { s ;
 ::NFC (NFD) ;
 
 # MINIMAL FILTER GENERATED FOR: Latin-Greek/UNGEGN BACKWARD
-# :: ( [́̄̆̈':?A-Za-zÀ-ÅÇ-ÏÑ-ÖÙ-Ýà-åç-ïñ-öù-ýÿ-ďĒ-ĥĨ-İĴ-ķĹ-ľŃ-ňŌ-őŔ-ťŨ-žƠ-ơƯ-ưǍ-ǜǞ-ǡǦ-ǭǰǴ-ǵǸ-ǻȀ-țȞ-ȟȦ-ȳ̱Ḁ-ẙẠ-ỹK-Å] ) ;
-
-# :: ([\\u0000-\\u007F [:Latin:] [:nonspacing mark:]]) ;
+:: ([[[:Latin:][:Mn:][:Me:]] ['\:?]]) ;
