@@ -234,6 +234,7 @@ class U_COMMON_API Normalizer
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
+   * @stable
    */
   Normalizer(const UnicodeString& str, 
          EMode mode);
@@ -254,6 +255,7 @@ class U_COMMON_API Normalizer
    *              Currently the only available option is {@link #IGNORE_HANGUL}
    *              If you want the default behavior corresponding to one of the
    *              standard Unicode Normalization Forms, use 0 for this argument
+   * @stable
    */
   Normalizer(const UnicodeString& str, 
          EMode mode, 
@@ -267,11 +269,34 @@ class U_COMMON_API Normalizer
    *              will start at the beginning of the string.
    *
    * @param length Lenght of the string
+   * @param mode  The normalization mode.
+   * @stable
    *
    */
   Normalizer(const UChar* str,
          int32_t length,
          EMode mode);
+
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of a given UChar string.
+   * <p>
+   * @param str   The string to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param length Lenght of the string
+   * @param mode  The normalization mode.
+   * @param opt   Any optional features to be enabled.
+   *              Currently the only available option is {@link #IGNORE_HANGUL}
+   *              If you want the default behavior corresponding to one of the
+   *              standard Unicode Normalization Forms, use 0 for this argument
+   * @add
+   *
+   */
+  Normalizer(const UChar* str,
+         int32_t length,
+         EMode mode,
+		 int32_t option);
 
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
@@ -281,6 +306,7 @@ class U_COMMON_API Normalizer
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
+   * @stable
    *
    */
   Normalizer(const CharacterIterator& iter, 
@@ -299,6 +325,7 @@ class U_COMMON_API Normalizer
    *              Currently the only available option is {@link #IGNORE_HANGUL}
    *              If you want the default behavior corresponding to one of the
    *              standard Unicode Normalization Forms, use 0 for this argument
+   * @stable
    */
   Normalizer(const CharacterIterator& iter, 
          EMode mode, 
@@ -306,11 +333,13 @@ class U_COMMON_API Normalizer
   
   /**
    * Copy constructor.
+   * @stable
    */
   Normalizer(const Normalizer& copy);
   
   /**
    * Destructor
+   * @stable
    */
   ~Normalizer();
   
@@ -337,6 +366,7 @@ class U_COMMON_API Normalizer
    * @param result    The normalized string (on output).
    *
    * @param status    The error code.
+   * @stable
    */
   static void normalize(const UnicodeString& source, 
             EMode mode, 
@@ -365,6 +395,7 @@ class U_COMMON_API Normalizer
    * @param result    The composed string (on output).
    *
    * @param status    The error code.
+   * @stable
    */
   static void compose(const UnicodeString& source, 
               bool_t compat,
@@ -396,6 +427,7 @@ class U_COMMON_API Normalizer
    * @param status    The error code.
    *
    * @return      the decomposed string.
+   * @stable
    */
   static void decompose(const UnicodeString& source, 
             bool_t compat,
@@ -410,12 +442,14 @@ class U_COMMON_API Normalizer
   
   /**
    * Return the current character in the normalized text.
+   * @draft
    */
   UChar                current(void) const;
   
   /**
    * Return the first character in the normalized text.  This resets
    * the <tt>Normalizer's</tt> position to the beginning of the text.
+   * @draft
    */
   UChar                first(void);
 
@@ -423,6 +457,7 @@ class U_COMMON_API Normalizer
    * Return the last character in the normalized text.  This resets
    * the <tt>Normalizer's</tt> position to be just before the
    * the input text corresponding to that normalized character.
+   * @draft
    */
   UChar                last(void);
   
@@ -430,6 +465,7 @@ class U_COMMON_API Normalizer
    * Return the next character in the normalized text and advance
    * the iteration position by one.  If the end
    * of the text has already been reached, {@link #DONE} is returned.
+   * @draft
    */
   UChar                next(void);
   
@@ -437,6 +473,7 @@ class U_COMMON_API Normalizer
    * Return the previous character in the normalized text and decrement
    * the iteration position by one.  If the beginning
    * of the text has already been reached, {@link #DONE} is returned.
+   * @draft
    */
   UChar                previous(void);
   
@@ -455,9 +492,7 @@ class U_COMMON_API Normalizer
    *
    * @return      the first normalized character that is the result of iterating
    *              forward starting at the given index.
-   *
-   * @throws IllegalArgumentException if the given index is less than
-   *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
+   * @draft
    */
   UChar                setIndex(UTextOffset index);
   
@@ -467,6 +502,7 @@ class U_COMMON_API Normalizer
    * character in the normalized text.  In contrast, calling <tt>setIndex(0)</tt> followed
    * by <tt>next</tt> will return the <em>second</em> character in the normalized text,
    * because <tt>setIndex</tt> itself returns the first character
+   * @stable
    */
   void                reset(void);
   
@@ -482,7 +518,7 @@ class U_COMMON_API Normalizer
    * correspondence between characters returned by <tt>next</tt> and
    * <tt>previous</tt> and the indices passed to and returned from
    * <tt>setIndex</tt> and {@link #getIndex}.
-   *
+   * @stable
    */
   UTextOffset            getIndex(void) const;
   
@@ -490,6 +526,7 @@ class U_COMMON_API Normalizer
    * Retrieve the index of the start of the input text.  This is the begin index
    * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
    * over which this <tt>Normalizer</tt> is iterating
+   * @stable
    */
   UTextOffset            startIndex(void) const;
   
@@ -497,6 +534,7 @@ class U_COMMON_API Normalizer
    * Retrieve the index of the end of the input text.  This is the end index
    * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
    * over which this <tt>Normalizer</tt> is iterating
+   * @stable
    */
   UTextOffset            endIndex(void) const;
   
@@ -504,6 +542,7 @@ class U_COMMON_API Normalizer
   /**
    * Returns true when both iterators refer to the same character in the same
    * character-storage object.
+   * @stable
    */
   //  virtual bool_t    operator==(const CharacterIterator& that) const;
   bool_t        operator==(const Normalizer& that) const;
@@ -512,11 +551,13 @@ class U_COMMON_API Normalizer
   /**
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
+   * @stable
    */
   Normalizer*        clone(void) const;
   
   /**
    * Generates a hash code for this iterator.
+   * @stable
    */
   int32_t                hashCode(void) const;
 
@@ -548,6 +589,7 @@ class U_COMMON_API Normalizer
    * </ul>
    *
    * @see #getMode
+   * @stable
    */
   void setMode(EMode newMode);
   
@@ -555,6 +597,7 @@ class U_COMMON_API Normalizer
    * Return the basic operation performed by this <tt>Normalizer</tt>
    *
    * @see #setMode
+   * @stable
    */
   EMode getMode(void) const;
   
@@ -579,6 +622,7 @@ class U_COMMON_API Normalizer
    *                  turn the option on and <tt>false</tt> to turn it off.
    *
    * @see #getOption
+   * @stable
    */
   void setOption(int32_t option, 
          bool_t value);
@@ -587,12 +631,14 @@ class U_COMMON_API Normalizer
    * Determine whether an option is turned on or off.
    * <p>
    * @see #setOption
+   * @stable
    */
   bool_t getOption(int32_t option) const;
   
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
    * The iteration position is set to the beginning.
+   * @stable
    */
   void setText(const UnicodeString& newText, 
            UErrorCode &status);
@@ -600,6 +646,7 @@ class U_COMMON_API Normalizer
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
    * The iteration position is set to the beginning.
+   * @stable
    */
   void setText(const CharacterIterator& newText, 
            UErrorCode &status);
@@ -607,6 +654,7 @@ class U_COMMON_API Normalizer
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
    * The iteration position is set to the beginning.
+   * @stable
    */
   void setText(const UChar* newText,
                     int32_t length,
@@ -615,9 +663,17 @@ class U_COMMON_API Normalizer
    * Copies the text under iteration into the UnicodeString referred to by 
    * "result".
    * @param result Receives a copy of the text under iteration.
+   * @draft should also return the result UnicodeString &
    */
   void            getText(UnicodeString&  result);
   
+  /**
+   * Returns the text under iteration into the UChar* buffer pointer.
+   * @param result Receives a copy of the text under iteration.
+   * @add
+   */
+  const UChar*     getText(int32_t&  count);
+
 private:
   // Private utility methods for iteration
   // For documentation, see the source code

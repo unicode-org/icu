@@ -30,7 +30,7 @@
 #define U_UNICODE_VERSION "3.0.0"
 
 /**
- * The Unicode C API allows you to query the properties associated with individual 
+ * @name The Unicode C API allows you to query the properties associated with individual 
  * Unicode character values.  
  * <p>
  * The Unicode character information, provided implicitly by the 
@@ -53,12 +53,14 @@
 /**
  * The maximum value a UChar can have.  The greatest value a
  * UChar can have is 0xffff.
+ * @draft
  */
 
  static UChar UCHAR_MAX_VALUE;
 
  /**
  * Data for enumerated Unicode general category types
+ * @draft
  */
 enum UCharCategory
 {
@@ -180,7 +182,9 @@ typedef enum UCharDirection UCharDirection;
  * Script range as defined in the Unicode standard.
  */
 
-/* Generated from Unicode Data files */
+/** Generated from Unicode Data files 
+ *  @draft
+ */
 enum UCharScript {
 /* Script names */
 	/** */
@@ -366,6 +370,7 @@ typedef enum UCharScript UCharScript;
 
 /**
  * Values returned by the u_getCellWidth() function.
+ * @draft
  */
 enum UCellWidth
 {
@@ -414,6 +419,7 @@ typedef enum UCharNameChoice UCharNameChoice;
  * @see u_isupper()
  * @see u_istitle()
  * @see u_islower()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_islower(UChar32 c);
@@ -427,6 +433,7 @@ u_islower(UChar32 c);
  * @see u_islower()
  * @see u_istitle
  * @see u_tolower()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isupper(UChar32 c);
@@ -440,6 +447,7 @@ u_isupper(UChar32 c);
  * @see u_isupper()
  * @see u_islower()
  * @see u_totitle()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_istitle(UChar32 c);
@@ -450,6 +458,7 @@ u_istitle(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is a digit; false otherwise.
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isdigit(UChar32 c);
@@ -460,6 +469,7 @@ u_isdigit(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is a letter or a digit; false otherwise.
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isalnum(UChar32 c);
@@ -477,6 +487,7 @@ u_isalnum(UChar32 c);
  * @see u_isupper()
  * @see u_islower()
  * @see u_istitle()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isdefined(UChar32 c);
@@ -490,6 +501,7 @@ u_isdefined(UChar32 c);
  *
  * @see u_isdigit()
  * @see u_isalnum()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isalpha(UChar32 c);
@@ -499,6 +511,7 @@ u_isalpha(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is a space character; false otherwise.
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isspace(UChar32 c);
@@ -510,6 +523,7 @@ u_isspace(UChar32 c);
  * @return  true if the Unicode character is a control character; false otherwise.
  *
  * @see u_isprint()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_iscntrl(UChar32 c);
@@ -523,6 +537,7 @@ u_iscntrl(UChar32 c);
  * @return  true if the Unicode character is a printable character; false otherwise.
  *
  * @see u_iscntrl()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isprint(UChar32 c);
@@ -536,6 +551,7 @@ u_isprint(UChar32 c);
  *
  * @see u_isalpha()
  * @see u_isdigit()
+ * @draft
  */
 U_CAPI bool_t U_EXPORT2
 u_isbase(UChar32 c);
@@ -546,6 +562,7 @@ u_isbase(UChar32 c);
   * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
   * property.
   * @see UCharDirection
+  * @draft
   */
 U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c);
@@ -599,6 +616,7 @@ u_charDirection(UChar32 c);
  * choseong filler character at the beginning of syllables that don't have an initial
  * consonant.  The results may be slightly off with Korean text following different
  * conventions.
+ * @draft
  */
 U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 c);
@@ -609,6 +627,7 @@ u_charCellWidth(UChar32 c);
  * @param c            the character to be tested
  * @return a value of type int, the character category.
  * @see UCharCategory
+ * @draft
  */
 U_CAPI int8_t U_EXPORT2
 u_charType(UChar32 c);
@@ -619,6 +638,7 @@ u_charType(UChar32 c);
  * @param c the digit character for which to get the numeric value
  * @return the numeric value of ch in decimal radix.  This method returns
  * -1 if ch is not a valid digit character.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c);
@@ -627,6 +647,7 @@ u_charDigitValue(UChar32 c);
  * Returns the script associated with a character.
  *
  * @see #UCharScript
+ * @draft
  */
 U_CAPI UCharScript     U_EXPORT2
 u_charScript(UChar32    ch);
@@ -649,6 +670,7 @@ u_charScript(UChar32    ch);
  *        returns.
  *
  * @see UCharNameChoice
+ * @draft
  */
 U_CAPI UTextOffset U_EXPORT2
 u_charName(uint32_t code, UCharNameChoice nameChoice,
@@ -669,6 +691,7 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
   *          FALSE otherwise.
   * @see     u_isalpha
   * @see     u_isIDPart
+  * @draft
   */
 U_CAPI bool_t U_EXPORT2
 u_isIDStart(UChar32 c);
@@ -694,7 +717,8 @@ u_isIDStart(UChar32 c);
   *          FALSE otherwise.
   * @see     u_isIDIgnorable
   * @see     u_isIDStart
-     */
+  * @draft
+  */
 U_CAPI bool_t U_EXPORT2
 u_isIDPart(UChar32 c);
 /**
@@ -719,6 +743,7 @@ u_isIDPart(UChar32 c);
   * @return  TRUE if the character may be part of a Unicode identifier;
   *          FALSE otherwise.
   * @see     u_isIDPart
+  * @draft
   */
 U_CAPI bool_t U_EXPORT2
 u_isIDIgnorable(UChar32 c);
@@ -740,6 +765,7 @@ u_isIDIgnorable(UChar32 c);
      * @see     u_isJavaIDPart
      * @see     u_isalpha
      * @see     u_isIDStart
+     * @draft
      */
 U_CAPI bool_t U_EXPORT2
 u_isJavaIDStart(UChar32 c);
@@ -769,6 +795,7 @@ u_isJavaIDStart(UChar32 c);
      * @see     u_isalpha
      * @see     u_isdigit
      * @see     u_isIDPart
+     * @draft
      */
 
 U_CAPI bool_t U_EXPORT2
@@ -794,6 +821,7 @@ u_isJavaIDPart(UChar32 c);
  * @param ch    the character to be converted
  * @return  the lowercase equivalent of the character, if any;
  *      otherwise the character itself.
+ * @draft
  */
 U_CAPI UChar32 U_EXPORT2
 u_tolower(UChar32 c);
@@ -811,6 +839,7 @@ u_tolower(UChar32 c);
  * @param ch    the character to be converted
  * @return  the uppercase equivalent of the character, if any;
  *      otherwise the character itself.
+ * @draft
  */
 U_CAPI UChar32 U_EXPORT2
 u_toupper(UChar32 c);
@@ -826,6 +855,7 @@ u_toupper(UChar32 c);
  * @param ch    the character to be converted
  * @return  the titlecase equivalent of the character, if any;
  *      otherwise the character itself.
+ * @draft
  */
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c);
@@ -835,6 +865,7 @@ u_totitle(UChar32 c);
  * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
  * is then represented as 0x01031F02.
  * @param versionArray the version # information, the result will be filled in
+ * @stable
  */
 U_CAPI void U_EXPORT2
 u_getUnicodeVersion(UVersionInfo info);

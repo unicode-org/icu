@@ -209,6 +209,7 @@ public:
    /**
     * Construct an empty locale. It's only used when a fill-in parameter is
     * needed.
+    * @stable
     */
                                 Locale(); 
 
@@ -219,14 +220,28 @@ public:
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
+     * @stable
      */
                                 Locale( const   UnicodeString&  language, 
                                         const   UnicodeString&  country , 
                                         const   UnicodeString&  variant );
 
-                Locale( const   UnicodeString&  language, 
+     /**
+     * Construct a locale from language, country.
+     *
+     * @param language Lowercase two-letter ISO-639 code.
+     * @param country  Uppercase two-letter ISO-3166 code. (optional)
+     * @stable
+     */
+               Locale( const   UnicodeString&  language, 
                                         const   UnicodeString&  country );
                 
+    /**
+     * Construct a locale from language.
+     *
+     * @param language Lowercase two-letter ISO-639 code.
+     * @stable
+     */
                 Locale( const   UnicodeString&  language);
 
 
@@ -235,12 +250,14 @@ public:
      * Initializes a Locale object from another Locale object.
      *
      * @param other The Locale object being copied in.
+     * @stable
      */
                                 Locale(const    Locale& other);
 
 
     /**
      * Destructor
+     * @stable
      */
                                 ~Locale() ;
                   
@@ -249,6 +266,7 @@ public:
      *
      * @param other The Locale object being copied in.
      * @return      *this
+     * @stable
      */
     Locale&                     operator=(const Locale& other);
 
@@ -257,6 +275,7 @@ public:
      *
      * @param other The locale key object to be compared with this.
      * @return      True if the two locale keys are the same, false otherwise.
+     * @stable
      */
                 bool_t          operator==(const    Locale&     other) const;   
 
@@ -266,6 +285,7 @@ public:
      * @param other The locale key object to be compared with this.
      * @return      True if the two locale keys are not the same, false
      *              otherwise.
+     * @stable
      */
                 bool_t          operator!=(const    Locale&     other) const;
 
@@ -280,6 +300,8 @@ public:
      * different fields, e.g. in a spreadsheet.
      *
      * Note that the initial setting will match the host system.
+     * @system
+     * @stable
      */
     static  Locale&             getDefault(void);
 
@@ -288,6 +310,8 @@ public:
      * application, then never reset. setDefault does NOT reset the host locale.
      *
      * @param newLocale Locale to set to.
+     * @system
+     * @stable
      */
     static      void            setDefault(const    Locale&     newLocale,
                                                     UErrorCode&  success);
@@ -296,18 +320,21 @@ public:
      * Fills in "lang" with the locale's two-letter ISO-639 language code.
      * @param lang  Receives the language code.
      * @return      A reference to "lang".
+     * @stable
      */
                 UnicodeString&  getLanguage(        UnicodeString&  lang) const;
     /**
      * Fills in "cntry" with the locale's two-letter ISO-3166 country code.
      * @param cntry Receives the country code.
      * @return      A reference to "cntry".
+     * @stable
      */
                 UnicodeString&  getCountry(         UnicodeString&  cntry) const;
     /**
      * Fills in "var" with the locale's variant code.
      * @param var   Receives the variant code.
      * @return      A reference to "var".
+     * @stable
      */
                 UnicodeString&  getVariant(         UnicodeString&  var) const;
 
@@ -318,6 +345,7 @@ public:
      * "de_POSIX", "fr_MAC"
      * @param var   Receives the programmatic locale name.
      * @return      A reference to "name".
+     * @stable
      */
                 UnicodeString&  getName(        UnicodeString&  name) const;
 
@@ -336,10 +364,13 @@ public:
      * @param name  Receives the three-letter language code.
      * @param status An UErrorCode to receive any MISSING_RESOURCE_ERRORs
      * @return      A reference to "name".
+     * @stable
      */
                 UnicodeString&  getISO3Language(UnicodeString&  name, UErrorCode& status) const;
 
-    // this version is deprecated, use getISO3Language(UnicodeString&, UErrorCode&)
+    /**
+     * @deprecated use getISO3Language(UnicodeString&, UErrorCode&) instead
+     */
                 UnicodeString&  getISO3Language(UnicodeString&  name) const;
 
     /**
@@ -347,10 +378,13 @@ public:
      * @param name  Receives the three-letter country code.
      * @param status An UErrorCode to receive any MISSING_RESOURCE_ERRORs
      * @return      A reference to "name".
+     * @stable
      */
                 UnicodeString&  getISO3Country( UnicodeString&  name, UErrorCode& status) const;
 
-    // this version is deprecated, use getISO3Country(UnicodeString&, UErrorCode&);
+    /**
+     * @deprecated use getISO3Country(UnicodeString&, UErrorCode&); instead
+     */
                 UnicodeString&  getISO3Country( UnicodeString&  name) const;
 
     /**
@@ -358,6 +392,7 @@ public:
      * This value is stored in the resource data for the locale as a one-to-four-digit
      * hexadecimal number.  If the resource is missing, in the wrong format, or
      * there is no Windows LCID value that corresponds to this locale, returns 0.
+     * @stable
      */
                 uint32_t        getLCID(void) const;
 
@@ -368,6 +403,7 @@ public:
      * dispLang to "French".
      * @param dispLang  Receives the language's display name.
      * @return          A reference to "dispLang".
+     * @stable
      */
                 UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
 
@@ -382,6 +418,7 @@ public:
      *                  for inLocale would result in "Englisch".
      * @param dispLang  Receives the language's display name.
      * @return          A reference to "dispLang".
+     * @stable
      */
                 UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
                                                             UnicodeString&  dispLang) const;
@@ -392,6 +429,7 @@ public:
      * dispCountry to "France".
      * @param dispCountry   Receives the country's display name.
      * @return              A reference to "dispCountry".
+     * @stable
      */
                 UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
     /**
@@ -406,6 +444,7 @@ public:
      *                      "Vereinigte Staaten".
      * @param dispCountry   Receives the country's display name.
      * @return              A reference to "dispCountry".
+     * @stable
      */
                 UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
                                                             UnicodeString&  dispCountry) const;
@@ -415,6 +454,7 @@ public:
      * for user display in the default locale.
      * @param dispVar   Receives the variant's name.
      * @return          A reference to "dispVar".
+     * @stable
      */
                 UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
     /**
@@ -423,6 +463,7 @@ public:
      * @param inLocale  Specifies the locale to be used to display the name.
      * @param dispVar   Receives the variant's display name.
      * @return          A reference to "dispVar".
+     * @stable
      */
                 UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
                                                             UnicodeString&  dispVar) const;
@@ -435,6 +476,7 @@ public:
      * would be "Spanish (Mexico,Traditional)".
      * @param name  Receives the locale's display name.
      * @return      A reference to "name".
+     * @stable
      */
                 UnicodeString&  getDisplayName(         UnicodeString&  name) const;
     /**
@@ -447,12 +489,14 @@ public:
      * @param inLocale  Specifies the locale to be used to display the name.
      * @param name      Receives the locale's display name.
      * @return          A reference to "name".
+     * @stable
      */
                 UnicodeString&  getDisplayName( const   Locale&         inLocale,
                                                         UnicodeString&  name) const;
     /**
      * Generates a hash code for the locale. Since Locales are often used in hashtables, 
      * caches the value for speed.
+     * @stable
      */
                 int32_t         hashCode(void) const;
 
@@ -462,6 +506,7 @@ public:
      * @return      A pointer to an array of Locale objects.  This array is the list
      *              of all locales with installed resource files.  The called does NOT
      *              get ownership of this list, and must NOT delete it.
+     * @stable
      */
     static  const   Locale*     getAvailableLocales(int32_t& count);
 
@@ -471,6 +516,7 @@ public:
      * @param count Receives the number of countries in the list.
      * @return A pointer to an array of UnicodeString objects. The caller does NOT
      *  get ownership of this list, and must NOT delete it.
+     * @stable
      */
     static const UnicodeString* getISOCountries(int32_t& count);
 
@@ -483,6 +529,7 @@ public:
      * @param count Receives the number of languages in the list.
      * @return A pointer to an array of UnicodeString objects. The caller does NOT
      *  get ownership of this list, and must NOT delete it.
+     * @stable
      */
     static const UnicodeString* getISOLanguages(int32_t& count);
     
@@ -495,6 +542,7 @@ public:
      * specified by TPlatformUtilities::getDefaultDataDirectory().
      *
      * @return Current data path.
+     * @deprecated 1999dec14
      */
     static  const   char*       getDataDirectory(void);
 
@@ -504,9 +552,16 @@ public:
      * data files in the specified directory in order to obtain locale data.
      *
      * @param path The new data path to be set to.
+     * @deprecated 1999dec14
      */
     static  void                setDataDirectory(const char* path);
 
+    /**
+     * Initialize the locale object with a new name.
+     *
+     * @param cLocaleID The new locale name.
+     * @deprecated
+     */
     Locale& init(const char* cLocaleID);
     
 protected: // only protected for testing purposes. DO NOT USE.
