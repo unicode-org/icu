@@ -1056,7 +1056,12 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
     if(U_SUCCESS(*status)) {
-      ucol_initBuffers(src, &src->lh[i], status);
+      if(src->lh[i].first) { // if there are any elements
+        // due to the way parser works, subsequent tailorings
+        // may remove all the elements from a sequence, therefore
+        // leaving an empty tailoring sequence.
+        ucol_initBuffers(src, &src->lh[i], status);
+      }
     }
     if(U_FAILURE(*status)) {
       return NULL;
