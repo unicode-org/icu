@@ -483,6 +483,10 @@ typedef enum {
     CJK_IMPLICIT_TAG = 9,    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
     IMPLICIT_TAG = 10,
     SPEC_PROC_TAG = 11,
+    /* ICU 2.1 */
+    LONG_PRIMARY_TAG = 12,   /* This is a three byte primary with starting secondaries and tertiaries */
+                             /* It fits in a single 32 bit CE and is used instead of expansion to save */
+                             /* space without affecting the performance (hopefully) */
     CE_TAGS_COUNT
 } UColCETags;
 

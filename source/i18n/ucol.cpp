@@ -2106,6 +2106,13 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       }
       break;
       }
+    case LONG_PRIMARY_TAG:
+      {
+        *(source->CEpos++) = ((CE & 0xFF)<<24)|UCOL_CONTINUATION_MARKER;
+        CE = ((CE & 0xFFFF00) << 8) | (UCOL_BYTE_COMMON << 8) | UCOL_BYTE_COMMON;
+        return CE;
+        break;
+      }
     case EXPANSION_TAG:
       {
       /* This should handle expansion. */
@@ -2679,6 +2686,14 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             source->CEpos = source->CEs;
         }
         return *(source->toReturn);
+    case LONG_PRIMARY_TAG:
+      {
+        *(source->CEpos++) = ((CE & 0xFFFF00) << 8) | (UCOL_BYTE_COMMON << 8) | UCOL_BYTE_COMMON;
+        *(source->CEpos++) = ((CE & 0xFF)<<24)|UCOL_CONTINUATION_MARKER;
+        source->toReturn = source->CEpos - 1;
+        return *(source->toReturn);
+        break;
+      }
     case EXPANSION_TAG: /* this tag always returns */
       /*
       This should handle expansion.
