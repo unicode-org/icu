@@ -124,9 +124,11 @@ dist-local:
 clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
-distclean-local:
+distclean-local: clean-local
 	rm -f Makefile config.cache config.log config.status config/Makefile
 	rm -f common/unicode/platform.h common/icucfg.h
+	rm -f *.goo *.txt *.uni
+	rm -f @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk
 
 check-local:
 

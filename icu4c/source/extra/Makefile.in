@@ -93,7 +93,7 @@ clean-local:
 
 check-local:
 
-distclean-local:
+distclean-local: clean-local
 	rm -f Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
