@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
  * A utility class providing mathematical functions used by time zone
  * and calendar code.  Do not instantiate.
  */
-class U_I18N_API Math {
+class Math {
  public:
     /**
      * Divide two integers, returning the floor of the quotient.
@@ -130,7 +130,7 @@ class U_I18N_API Math {
  * Note:  Unlike GregorianCalendar, all computations performed by this
  * class occur in the pure proleptic GregorianCalendar.
  */
-class U_I18N_API Grego {
+class Grego {
  public:
     /**
      * Return TRUE if the given year is a leap year.
@@ -259,10 +259,10 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
 }
 
 /**
- * This class provides convenient access to the data needed for a calendar. 
+ * This utility class provides convenient access to the data needed for a calendar. 
  * @internal ICU 3.0
  */
-class U_I18N_API CalendarData : public UObject {
+class CalendarData : public UMemory {
 public: 
     /**
      * Construct a CalendarData from the given locale.
@@ -298,31 +298,6 @@ public:
     UResourceBundle* getByKey2(const char *key, const char *subKey, UErrorCode& status);
 
     ~CalendarData();
-
-    /**
-     * Override Calendar Returns a unique class ID POLYMORPHICALLY. Pure virtual
-     * override. This method is to implement a simple version of RTTI, since not all C++
-     * compilers support genuine RTTI. Polymorphic operator==() and clone() methods call
-     * this method.
-     *
-     * @return   The class ID for this object. All objects of a given class have the
-     *           same class ID. Objects of other classes have different class IDs.
-     * @stable ICU 2.0
-     */
-    virtual UClassID getDynamicClassID(void) const;
-
-    /**
-     * Return the class ID for this class. This is useful only for comparing to a return
-     * value from getDynamicClassID(). For example:
-     *
-     *      Base* polymorphic_pointer = createPolymorphicObject();
-     *      if (polymorphic_pointer->getDynamicClassID() ==
-     *          Derived::getStaticClassID()) ...
-     *
-     * @return   The class ID for all objects of this class.
-     * @stable ICU 2.0
-     */
-    static UClassID U_EXPORT2 getStaticClassID(void);
 
 private:
     void initData(const char *locale, const char *type, UErrorCode& status);
