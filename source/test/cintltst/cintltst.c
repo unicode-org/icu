@@ -88,28 +88,20 @@ int main(int argc, const char* const argv[])
         ctst_init();
 #endif
         /* Initialize ICU */
+        ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
         u_init(&errorCode);
         if (U_FAILURE(errorCode)) {
-
             fprintf(stderr,
-                    "#### WARNING! u_init() failed with status = \"%s\".\n"
-                    "Trying again with additional data locations...\n", u_errorName(errorCode));
-            errorCode = U_ZERO_ERROR;
-            ctest_setICU_DATA();
-            u_init(&errorCode);
-            if (U_FAILURE(errorCode)) {
-                fprintf(stderr,
-                    "*** %s! ICU Can not be initialized.\n"
-                    "*** Check the ICU_DATA environment variable and \n"
-                    "*** check that the data files are present.\n", warnOrErr, u_errorName(errorCode));
+                "#### ERROR! %s: u_init() failed with status = \"%s\".\n" 
+                "*** Check the ICU_DATA environment variable and \n"
+                "*** check that the data files are present.\n", argv[0], u_errorName(errorCode));
                 if(warnOnMissingData == 0) {
                     fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
                     u_cleanup();
                     return 1;
                 }
-            }
         }
-
+        
 
 
         /* try more data */
