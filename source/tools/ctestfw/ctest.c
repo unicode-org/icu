@@ -12,6 +12,8 @@
 #include <assert.h>
 #include <stdarg.h>
 
+#include "unicode/utrace.h"
+
 /* NOTES:
    3/20/1999 srl - strncpy called w/o setting nulls at the end
  */
@@ -85,6 +87,7 @@ int VERBOSITY = 0; /* be No-verbose by default */
 int ERR_MSG =1; /* error messages will be displayed by default*/
 int QUICK = 1;  /* Skip some of the slower tests? */
 int WARN_ON_MISSING_DATA = 0; /* Reduce data errs to warnings? */
+UTraceLevel ICU_TRACE = UTRACE_OFF;  /* ICU tracing level */
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
@@ -580,7 +583,19 @@ int processArgs(const TestNode* root,
         {
             subtreeOptionSeen=FALSE;
         }
-        else if (strcmp( argv[1], "-h" )==0 )
+        else if (strcmp( argv[i], "-t_info") == 0) {
+            ICU_TRACE = UTRACE_INFO;
+        }
+        else if (strcmp( argv[i], "-t_error") == 0) {
+            ICU_TRACE = UTRACE_ERROR;
+        }
+        else if (strcmp( argv[i], "-t_warn") == 0) {
+            ICU_TRACE = UTRACE_WARNING;
+        }
+        else if (strcmp( argv[i], "-t_verbose") == 0) {
+            ICU_TRACE = UTRACE_VERBOSE;
+        }
+        else if (strcmp( argv[i], "-h" )==0 || strcmp( argv[i], "--help" )==0)
         {
             help( argv[0] );
             return 0;
@@ -619,19 +634,21 @@ int processArgs(const TestNode* root,
 
 static void help ( const char *argv0 )
 {
-    printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] \n [ -no_err_msg] [ -h ] [ /path/to/test ]\n",
+    printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] [ -no_err_msg]\n"
+           "                [ -h ] [-t_info | -t_error | -t_warn | -t_verbose] [ /path/to/test ]\n",
             argv0);
-    printf("    -l To get a list of test names\n");
-    printf("    -e to do exhaustive testing\n");
+    printf("    -l  To get a list of test names\n");
+    printf("    -e  to do exhaustive testing\n");
     printf("    -verbose To turn ON verbosity\n");
-    printf("    -v To turn ON verbosity(same as -verbose)\n");
-    printf("    -h To print this message\n");
-    printf("    -n To turn OFF printing error messages\n");
-    printf("    -w Don't fail on data-loading errs, just warn. Useful if\n"
+    printf("    -v  To turn ON verbosity(same as -verbose)\n");
+    printf("    -h  To print this message\n");
+    printf("    -n  To turn OFF printing error messages\n");
+    printf("    -w  Don't fail on data-loading errs, just warn. Useful if\n"
            "        user has reduced/changed the common set of ICU data \n");
+    printf("    -t_info | -t_error | -t_warn | -t_verbose  Enable ICU tracing\n");
     printf("    -no_err_msg (same as -n) \n");
-    printf("    -r repeat tests after calling u_cleanup \n");
-    printf("    -[/subtest] To run a subtest \n");
+    printf("    -r  repeat tests after calling u_cleanup \n");
+    printf("    -[/subtest]  To run a subtest \n");
     printf("    eg: to run just the utility tests type: cintltest /tsutil) \n");
 }
 
