@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="layout"
 	SccProjectName=""
 	SccLocalPath="">
@@ -62,7 +62,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -117,13 +123,24 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			<File
+				RelativePath=".\cmaps.cpp">
+			</File>
 			<File
 				RelativePath=".\FontMap.cpp">
 			</File>
@@ -140,7 +157,13 @@
 				RelativePath=".\GDIGUISupport.cpp">
 			</File>
 			<File
+				RelativePath=".\layout.cpp">
+			</File>
+			<File
 				RelativePath=".\LayoutSample.rc">
+			</File>
+			<File
+				RelativePath=".\paragraph.cpp">
 			</File>
 			<File
 				RelativePath=".\ScriptCompositeFontInstance.cpp">
@@ -148,19 +171,13 @@
 			<File
 				RelativePath=".\UnicodeReader.cpp">
 			</File>
-			<File
-				RelativePath=".\cmaps.cpp">
-			</File>
-			<File
-				RelativePath=".\layout.cpp">
-			</File>
-			<File
-				RelativePath=".\paragraph.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath=".\cmaps.h">
+			</File>
 			<File
 				RelativePath=".\FontMap.h">
 			</File>
@@ -180,25 +197,22 @@
 				RelativePath=".\GUISupport.h">
 			</File>
 			<File
-				RelativePath=".\RenderingSurface.h">
-			</File>
-			<File
-				RelativePath=".\ScriptCompositeFontInstance.h">
-			</File>
-			<File
-				RelativePath=".\UnicodeReader.h">
-			</File>
-			<File
-				RelativePath=".\cmaps.h">
-			</File>
-			<File
 				RelativePath=".\paragraph.h">
+			</File>
+			<File
+				RelativePath=".\RenderingSurface.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">
 			</File>
 			<File
+				RelativePath=".\ScriptCompositeFontInstance.h">
+			</File>
+			<File
 				RelativePath=".\sfnt.h">
+			</File>
+			<File
+				RelativePath=".\UnicodeReader.h">
 			</File>
 		</Filter>
 		<Filter
