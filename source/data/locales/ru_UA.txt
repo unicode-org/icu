@@ -12,15 +12,15 @@ ru_UA {
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "d MMMM yyyy '\u0433.'",
-        "d MMMM yyyy '\u0433.'",
-        "dd.MM.yyyy",
+        "EEEE, d MMMM yyyy '\u0433.'",
+        "d MMMM yyyy",
+        "d MMM yyyy",
         "dd.MM.yy",
         "{1} {0}",
     }
     NumberElements {
         ",",
-        ".",
+        "\u00A0",
         ";",
         "%",
         "0",
@@ -39,6 +39,4 @@ ru_UA {
         "#,##0%",
         "#E0",
     }
-//    LocaleString{ "ru_UA" }
-//    ShortCountry { "UA" }
 }
