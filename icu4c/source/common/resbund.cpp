@@ -192,23 +192,34 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
     constructForLocale(path, locale, err);
 }
 
-ResourceBundle::ResourceBundle(const ResourceBundle &other) {
+ResourceBundle::ResourceBundle(const ResourceBundle &other)
+: fRealLocale(other.fRealLocale)
+{
     UErrorCode status = U_ZERO_ERROR;
 
     if (other.resource) {
-        if(other.resource->fIsTopLevel == TRUE) {
-            constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
-        } else {
-            resource = copyResb(0, other.resource, &status);
+        resource = copyResb(0, other.resource, &status);
+    } else {
+        /* Copying a bad resource bundle */
+        resource = NULL;
+    }
+//        if(other.resource->fIsTopLevel == TRUE) {
+//            constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
+//        } else {
+//            resource = copyResb(0, other.resource, &status);
+//        }
+}
+
+ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
+    if (res) {
+        resource = copyResb(0, res, &err);
+        if(U_SUCCESS(err)) {
+            fRealLocale = Locale(ures_getRealLocale(resource, &err));
         }
     } else {
         /* Copying a bad resource bundle */
         resource = NULL;
     }
-}
-
-ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
-    resource = copyResb(0, res, &err);
 }
 
 ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) {
@@ -226,14 +237,21 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
     }
     if(resource != 0) {
         ures_close(resource);
-        resource = 0;
+        resource = NULL;
     }
     UErrorCode status = U_ZERO_ERROR;
-    if(other.resource->fIsTopLevel == TRUE) {
-        constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
+    if (other.resource) {
+        resource = copyResb(0, other.resource, &status);
     } else {
-        resource = copyResb(resource, other.resource, &status);
+        /* Copying a bad resource bundle */
+        resource = NULL;
     }
+    fRealLocale = other.fRealLocale;
+//    if(other.resource->fIsTopLevel == TRUE) {
+//        constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
+//    } else {
+//        resource = copyResb(resource, other.resource, &status);
+//    }
     return *this;
 }
 
@@ -293,11 +311,11 @@ const int32_t *ResourceBundle::getIntVector(int32_t& len, UErrorCode& status) co
 }
 
 uint32_t ResourceBundle::getUInt(UErrorCode& status) const {
-  return ures_getUInt(resource, &status);
+    return ures_getUInt(resource, &status);
 }
 
 int32_t ResourceBundle::getInt(UErrorCode& status) const {
-  return ures_getInt(resource, &status);
+    return ures_getInt(resource, &status);
 }
 
 const char *ResourceBundle::getName(void) {
@@ -329,7 +347,9 @@ ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
 
     ures_setIsStackObject(&r, TRUE);
     ures_getNextResource(resource, &r, &status);
-    return ResourceBundle(&r, status);
+    ResourceBundle res(&r, status);
+    ures_close(&r);
+    return res;
 }
 
 UnicodeString ResourceBundle::getNextString(UErrorCode& status) {
@@ -349,7 +369,9 @@ ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
 
     ures_setIsStackObject(&r, TRUE);
     ures_getByIndex(resource, indexR, &r, &status);
-    return ResourceBundle(&r, status);
+    ResourceBundle res(&r, status);
+    ures_close(&r);
+    return res;
 }
 
 UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) const {
@@ -363,7 +385,9 @@ ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
 
     ures_setIsStackObject(&r, TRUE);
     ures_getByKey(resource, key, &r, &status);
-    return ResourceBundle(&r, status);
+    ResourceBundle res(&r, status);
+    ures_close(&r);
+    return res;
 }
 
 UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) const {
