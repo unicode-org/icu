@@ -50,6 +50,8 @@ public:
 
 	void TestGetAdoptFilter();
 
+    void TestNullTransliterator();
+
 	/*Internal functions used*/
 	void doTest(const UnicodeString& , const UnicodeString& , const UnicodeString& );
 

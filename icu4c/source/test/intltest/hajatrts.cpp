@@ -112,8 +112,11 @@ void HangToJamoTransliteratorTest::TestCloneEqual(){
 		return;
 	}
     
-	HangulJamoTransliterator *trans1equal=trans1;
-	HangulJamoTransliterator *trans2equal=trans2;
+	HangulJamoTransliterator *trans1equal=new HangulJamoTransliterator();
+	HangulJamoTransliterator *trans2equal=new HangulJamoTransliterator();
+    *trans1equal=*trans1;
+    *trans2equal=*trans2;
+
 	if(trans1equal == 0 || trans2equal==0 ){
 		errln("=Operator failed");
 		delete trans1;

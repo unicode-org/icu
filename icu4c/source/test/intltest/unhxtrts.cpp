@@ -59,7 +59,7 @@ class TestUniFilter : public UnicodeFilter {
         return new TestUniFilter(*this);
     }
     virtual UBool contains(UChar c) const {
-       if(c=='c' || c=='a' || c=='C' || c=='A')
+       if(c==0x0063 || c==0x0061 || c==0x0043 || c==0x0041)
           return FALSE;
        else
           return TRUE;
@@ -169,9 +169,13 @@ void UniToHexTransliteratorTest::TestCloneEqual(){
 	
 
 	logln("Testing the =operator of the UnicodeToHexTransliterator");
-    UnicodeToHexTransliterator *transdefaultequal=transdefault;
-	UnicodeToHexTransliterator *trans1equal=trans1;
-	UnicodeToHexTransliterator *trans2equal=trans2;
+    UnicodeToHexTransliterator *transdefaultequal=new UnicodeToHexTransliterator();
+    UnicodeToHexTransliterator *trans1equal=new UnicodeToHexTransliterator();
+	UnicodeToHexTransliterator *trans2equal=new UnicodeToHexTransliterator();
+    *transdefaultequal=*transdefault;
+    *trans1equal=*trans1;
+    *trans2equal=*trans2;
+	//UnicodeToHexTransliterator value3=trans1assign;
 	if(transdefault->toPattern() != transdefaultequal->toPattern()      ||
 		transdefault->isUppercase() != transdefaultequal->isUppercase() ||
 		trans1->toPattern() != trans1equal->toPattern()      ||
@@ -304,12 +308,12 @@ void UniToHexTransliteratorTest::TestTransliterate(){
     UErrorCode status=U_ZERO_ERROR;
 	UnicodeString Data[]={
 		//pattern, source, index.start, index.limit, index.cursor, expectedResult, expectedResult using filter(a, b)
-		"U+##00",    "abc", "1", "3", "2", "abU+63", "abc",		
-		"\\\\u0000", "abc", "1", "2", "1", "a\\u0062c", "a\\u0062c",
-		"Uni0000",   "abc", "1", "3", "2", "abUni0063", "abc",
-		"U[0000]",   "hello", "0", "4", "2", "heU[006C]U[006C]o", "heU[006C]U[006C]o",
-		"prefix-0000-suffix", "abc", "1", "3", "1", "aprefix-0062-suffixprefix-0063-suffix", "aprefix-0062-suffixc",
-		"*##00*",     "hellothere", "1", "8", "4", "hell*6F**74**68**65*re", "hell*6F**74**68**65*re",
+		(UnicodeString)"U+##00",    (UnicodeString)"abc", "1", "3", "2", (UnicodeString)"abU+63", (UnicodeString)"abc",		
+		(UnicodeString)"\\\\u0000", (UnicodeString)"abc", "1", "2", "1", (UnicodeString)"a\\u0062c", (UnicodeString)"a\\u0062c",
+		(UnicodeString)"Uni0000",   (UnicodeString)"abc", "1", "3", "2", (UnicodeString)"abUni0063", (UnicodeString)"abc",
+		(UnicodeString)"U[0000]",   (UnicodeString)"hello", "0", "4", "2", (UnicodeString)"heU[006C]U[006C]o", (UnicodeString)"heU[006C]U[006C]o",
+		(UnicodeString)"prefix-0000-suffix", (UnicodeString)"abc", "1", "3", "1", (UnicodeString)"aprefix-0062-suffixprefix-0063-suffix", (UnicodeString)"aprefix-0062-suffixc",
+		(UnicodeString)"*##00*",     (UnicodeString)"hellothere", "1", "8", "4", (UnicodeString)"hell*6F**74**68**65*re", (UnicodeString)"hell*6F**74**68**65*re",
 	
 	};
 	int i;
