@@ -397,31 +397,31 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
  */
 UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
                                       UBool escapeUnprintable) const {
-    if (pat.length() > 0) {
-        int32_t i;
-        int32_t backslashCount = 0;
-        for (i=0; i<pat.length(); ++i) {
-            UChar c = pat.charAt(i);
-            if (_isUnprintable(c)) {
-                // If the unprintable character is preceded by an odd
-                // number of backslashes, then it has been escaped.
-                // Before unescaping it, we delete the final
-                // backslash.
-                if ((backslashCount % 2) == 1) {
-                    result.truncate(result.length() - 1);
-                }
-                _escapeUnprintable(result, c);
-            } else {
-                result.append(c);
-                if (c == BACKSLASH) {
-                    ++backslashCount;
-                } else {
-                    backslashCount = 0;
-                }
-            }
-        }
-        return result;
-    }
+//    if (pat.length() > 0) {
+//        int32_t i;
+//        int32_t backslashCount = 0;
+//        for (i=0; i<pat.length(); ++i) {
+//            UChar c = pat.charAt(i);
+//            if (_isUnprintable(c)) {
+//                // If the unprintable character is preceded by an odd
+//                // number of backslashes, then it has been escaped.
+//                // Before unescaping it, we delete the final
+//                // backslash.
+//                if ((backslashCount % 2) == 1) {
+//                    result.truncate(result.length() - 1);
+//                }
+//                _escapeUnprintable(result, c);
+//            } else {
+//                result.append(c);
+//                if (c == BACKSLASH) {
+//                    ++backslashCount;
+//                } else {
+//                    backslashCount = 0;
+//                }
+//            }
+//        }
+//        return result;
+//    }
     
     return _generatePattern(result, escapeUnprintable);
 }
