@@ -133,18 +133,23 @@ main(int argc, char* argv[]) {
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(stderr,
             "usage: %s [-options] maxsize [list-filename]\n"
-            "\tread the list file (default: stdin) and \n"
-            "\tcreate a common data file from all the files listed but each not larger than maxsize\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-v or --verbose     verbose output\n"
-            "\t\t-c or --copyright   include the ICU copyright notice\n"
-            "\t\t-C or --comment     include a comment string\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-n or --name        name of the destination file, defaults to " COMMON_DATA_NAME "\n"
-            "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n"
-            "\t\t-S or --source      write a .c source file with the table of contents\n"
-            "\t\t-e or --entrypoint  override the c entrypoint name (default: <name>_<type> )",
+            "  read the list file (default: stdin) and \n"
+            "  create a common data file from specified files; omit any larger than maxsize\n"
+            " \n"
+            "      option              parameter   description\n"
+            "      ---------------------------------------------------------------------------\n"
+            "      -h or -? or --help              this usage text\n"
+            "      -v or --verbose                 verbose output\n"
+            "      -c or --copyright               include the ICU copyright notice\n"
+            "      -C or --comment     \"text\"      include a comment string\n"
+            "      -d or --destdir     dir         destination directory\n"
+            "      -n or --name        file-name   output file name, without .type extension\n"
+            "                                         defaults to " COMMON_DATA_NAME "\n"
+            "      -t or --type        file-type   type of the destination file\n"
+            "                                         defaults to \"" DATA_TYPE "\"\n"
+            "      -S or --source      toc-file    write a .c source file with the table of contents\n"
+            "      -e or --entrypoint  name        override the c entrypoint name\n"
+            "                                         defaults to \"<name>_<type>\" ",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
