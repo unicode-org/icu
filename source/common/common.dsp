@@ -2538,6 +2538,14 @@ InputPath=.\unicode\symtable.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ubidi_props.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ubidi_props.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucase.c
 # End Source File
 # Begin Source File

@@ -27,6 +27,7 @@
 #include "putilimp.h"
 #include "uparse.h"
 #include "ucase.h"
+#include "ubidi_props.h"
 #include "uprops.h"
 #include "uset_imp.h"
 #include "usc_impl.h"
@@ -58,6 +59,7 @@ static void TestPropertyNames(void);
 static void TestPropertyValues(void);
 static void TestConsistency(void);
 static void TestUCase(void);
+static void TestUBiDiProps(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -147,6 +149,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
     addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
     addTest(root, &TestUCase, "tsutil/cucdtst/TestUCase");
+    addTest(root, &TestUBiDiProps, "tsutil/cucdtst/TestUBiDiProps");
 }
 
 /*==================================================== */
@@ -1764,6 +1767,7 @@ TestMirroring() {
 
     log_verbose("Testing u_charMirror()\n");
     if(!(u_charMirror(0x3c)==0x3e && u_charMirror(0x5d)==0x5b && u_charMirror(0x208d)==0x208e && u_charMirror(0x3017)==0x3016 &&
+         u_charMirror(0xbb)==0xab && u_charMirror(0x2215)==0x29F5 && u_charMirror(0x29F5)==0x2215 && /* large delta between the code points */
          u_charMirror(0x2e)==0x2e && u_charMirror(0x6f3)==0x6f3 && u_charMirror(0x301c)==0x301c && u_charMirror(0xa4ab)==0xa4ab 
          )
     ) {
@@ -2841,5 +2845,36 @@ static void TestUCase() {
     }
 
     ucase_close(csp);
+    udata_close(pData);
+}
+
+/* API coverage for ubidi_props.c */
+static void TestUBiDiProps() {
+    UDataMemory *pData;
+    UBiDiProps *bdp;
+    UErrorCode errorCode;
+
+    /* coverage for ubidi_openBinary() */
+    errorCode=U_ZERO_ERROR;
+    pData=udata_open(NULL, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unable to open " UBIDI_DATA_NAME "." UBIDI_DATA_TYPE ": %s\n",
+                    u_errorName(errorCode));
+        return;
+    }
+
+    bdp=ubidi_openBinary((const uint8_t *)pData->pHeader, -1, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ubidi_openBinary() fails for the contents of " UBIDI_DATA_NAME "." UBIDI_DATA_TYPE ": %s\n",
+                u_errorName(errorCode));
+        udata_close(pData);
+        return;
+    }
+
+    if(0x2215!=ubidi_getMirror(bdp, 0x29F5)) { /* verify some data */
+        log_err("ubidi_openBinary() does not seem to return working UBiDiProps\n");
+    }
+
+    ubidi_closeProps(bdp);
     udata_close(pData);
 }
