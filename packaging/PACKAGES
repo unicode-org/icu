@@ -76,11 +76,34 @@ variable). For example, for ICU 1.6.0.1, it is 16, so the package name
 is `libicu16'. The major version is part of the package name to allow
 for the simultaneous installation of different ICU releases.
 
+This package contains:
+
 - All the shared libraries, and their major number symbolic link, but
 not the .so symbolic link that is only used at link time (this one is
 part of the development package).
 
 + The ICU package
+
+The ICU package is simply named `icu'.  It provides data used by the ICU
+libraries package and commands to create and manipulate that data.
+
+This package contains:
+
+- The Unicode data files (uprops.dat and unames.dat as of this writing).
+- The time zones data files (tz.dat).
+- All the binary data files for converters (.cnv files).
+- All the ICU commands.
+- The manual pages for ICU commands and file formats.
+
++ The ICU locales package
+
+The ICU locales package is named `icu-locales'. It provides data used by
+internationalization support in ICU.
+
+- This package contains:
+
+- All the data for locales in ICU (.dat files).
+- All the break data for specific locales (.brk files).
 
 + More to be written...
 
