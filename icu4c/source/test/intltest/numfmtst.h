@@ -104,6 +104,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestAdoptDecimalFormatSymbols(void);
 
+    void TestPerMill(void);
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);

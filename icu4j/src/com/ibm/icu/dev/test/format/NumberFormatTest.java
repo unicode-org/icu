@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/11/19 19:51:56 $ 
- * $Revision: 1.21 $
+ * $Date: 2004/02/12 01:10:19 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -926,6 +926,19 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
             str1 = str2;
         }
+    }
+
+    public void TestPerMill() {
+        DecimalFormat fmt = new DecimalFormat("###.###\u2030");
+        assertEquals("0.4857 x ###.###\u2030",
+                     "485.7\u2030", fmt.format(0.4857));
+
+        DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.ENGLISH);
+        sym.setPerMill('m');
+        DecimalFormat fmt2 = new DecimalFormat("", sym);
+        fmt2.applyLocalizedPattern("###.###m");
+        assertEquals("0.4857 x ###.###m",
+                     "485.7m", fmt2.format(0.4857));
     }
 
     //------------------------------------------------------------------

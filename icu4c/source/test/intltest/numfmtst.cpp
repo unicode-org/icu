@@ -65,6 +65,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 		CASE(23,TestScientificGrouping);
 		CASE(24,TestInt64);
 
+        CASE(25,TestPerMill);
+
         default: name = ""; break;
     }
 }
@@ -1468,6 +1470,24 @@ void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
     } else {
         errln("Fail: setDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
     }
+}
+
+void NumberFormatTest::TestPerMill() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeString str;
+    DecimalFormat fmt(ctou("###.###\\u2030"), ec);
+    if (!assertSuccess("DecimalFormat ct", ec)) return;
+    assertEquals("0.4857 x ###.###\\u2030",
+                 ctou("485.7\\u2030"), fmt.format(0.4857, str));
+    
+    DecimalFormatSymbols sym(Locale::getUS(), ec);
+    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, ctou("m"));
+    DecimalFormat fmt2("", sym, ec);
+    fmt2.applyLocalizedPattern("###.###m", ec);
+    if (!assertSuccess("setup", ec)) return;
+    str.truncate(0);
+    assertEquals("0.4857 x ###.###m",
+                 "485.7m", fmt2.format(0.4857, str));
 }
 
 //----------------------------------------------------------------------
