@@ -998,6 +998,12 @@
 			Name="locales &amp; resources"
 			Filter="">
 			<File
+				RelativePath=".\locbased.cpp">
+			</File>
+			<File
+				RelativePath=".\locbased.h">
+			</File>
+			<File
 				RelativePath=".\locid.cpp">
 			</File>
 			<File
