@@ -326,11 +326,14 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public ICUResourceBundle get(int index){
-        ICUResourceBundle obj =  handleGet(index);
+        return getImpl(index, null, this);
+    }
+    protected ICUResourceBundle getImpl(int index, HashMap table, ICUResourceBundle requested){
+        ICUResourceBundle obj =  handleGet(index, table, requested);
         if (obj == null) {
             obj = (ICUResourceBundle)getParent();
             if ( obj!= null) {
-                obj = obj.get(index);
+                obj = obj.getImpl(index, table, requested);
             }
             if (obj == null)
                 throw new MissingResourceException("Can't find resource for bundle "
@@ -352,11 +355,15 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public ICUResourceBundle get(String key){
-        ICUResourceBundle obj =  handleGet(key);
+        return getImpl(key, null, this);
+    }
+    protected ICUResourceBundle getImpl(String key, HashMap table, ICUResourceBundle requested){
+        ICUResourceBundle obj =  handleGet(key, table, requested);
         if (obj == null) {
             obj = (ICUResourceBundle)getParent();
             if ( obj!= null) {
-                obj = obj.get(key);
+                //call the get method to recursively
+                obj = obj.getImpl(key, table, requested);
             }
             if (obj == null){
                 String fullName = ICUResourceBundleReader.getFullName(getBaseName(), getLocaleID());
@@ -368,8 +375,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             }
         }
         return obj;
-
-   }
+    }
 
     /**
      * Returns the string in a given resource at the specified index.
@@ -394,6 +400,13 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public abstract UResourceBundle getParent();
+    
+    /**
+     * Returns the locale id of this bundle as String
+     * @return String locale id 
+     * @draft ICU 3.4
+     */
+    protected abstract String getLocaleID();
 
     /**
      * Returns a functionally equivalent locale, considering keywords as well, for the specified keyword.
@@ -742,10 +755,10 @@ public abstract class ICUResourceBundle extends UResourceBundle{
 
     protected static final long RES_BOGUS = 0xffffffff;
 
-    protected  ICUResourceBundle handleGet(String key, HashMap table){
+    protected  ICUResourceBundle handleGet(String key, HashMap table, ICUResourceBundle requested){
         throw new UResourceTypeMismatchException("");
     }
-    protected  ICUResourceBundle handleGet(int index, HashMap table){
+    protected  ICUResourceBundle handleGet(int index, HashMap table, ICUResourceBundle requested){
         throw new UResourceTypeMismatchException("");
     }
 
@@ -759,13 +772,23 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     public Locale getLocale() {
         return getULocale().toLocale();
     }
-
+    // this method is declared in ResourceBundle class 
+    // so cannot change the signature
     protected Object handleGetObject(String key){
-        Object obj = handleGetObjectImpl(key);
+        return handleGetObjectImpl(key, this);
+    }
+    // To facilitate XPath style aliases we need a way to pass the reference 
+    // to requested locale. The only way I could figure out is to implement
+    // the look up logic here. This has a disadvantage that if the client 
+    // loads an ICUResourceBundle, calls ResourceBundle.getObject method
+    // with a key that does not exist in the bundle then the lookup is
+    // done twice before throwing a MissingResourceExpection.
+    private Object handleGetObjectImpl(String key, ICUResourceBundle requested){
+        Object obj = resolveObject(key, requested);
         if (obj == null) {
-            UResourceBundle parent = getParent();
+            ICUResourceBundle parent = (ICUResourceBundle) getParent();
             if ( parent!= null) {
-                obj = parent.getObject(key);
+                obj = parent.handleGetObjectImpl(key, requested);
             }
             if (obj == null)
                 throw new MissingResourceException("Can't find resource for bundle "
@@ -774,13 +797,13 @@ public abstract class ICUResourceBundle extends UResourceBundle{
                                                    this.getClass().getName(),
                                                    key);
         }
-        return obj;
+        return obj;  
     }
-    private Object handleGetObjectImpl(String key){
+    private Object resolveObject(String key, ICUResourceBundle requested){
         if(getType()==STRING){
             return getString();
         }
-        ICUResourceBundle obj =  handleGet(key);
+        ICUResourceBundle obj =  handleGet(key, requested);
         if(obj!=null){
             if(obj.getType()==STRING){
                 return obj.getString();
@@ -796,10 +819,10 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         return obj;
     }
 
-    protected ICUResourceBundle handleGet(int index){
+    protected ICUResourceBundle handleGet(int index, ICUResourceBundle requested){
         return null;
     }
-    protected ICUResourceBundle handleGet(String key){
+    protected ICUResourceBundle handleGet(String key, ICUResourceBundle requested){
         return null;
     }
     protected String[] handleGetStringArray(){
