@@ -354,8 +354,8 @@ public class CanonGSUBBuilder
     }
     
     /*
-     * Best guess Hebrew mark order: dagesh < sin_and_shin_dots < points_5B0_5BB < meteg_and_rafe < others
-     * Best guess Arabic mark order: hamza < combining_alef < madda < sukun < shadda < vowel_marks < qur'anic_marks
+     * Hebrew mark order taken from the SBL Hebrew Font manual
+     * Arabic mark order per Thomas Milo: hamza < shadda < combining_alef < sukun, vowel_marks < madda < qur'anic_marks
      */
     public static ClassTable buildCombiningClassTable()
     {
@@ -364,48 +364,78 @@ public class CanonGSUBBuilder
         ClassTable combiningClasses = new ClassTable();
         int markCount = markSet.size();
         
-        exceptions.addMapping(0x05BC, 10); // HEBREW POINT DAGESH OR MAPIQ
+        exceptions.addMapping(0x05C1,  10); // Point Shin Dot
+        exceptions.addMapping(0x05C2,  11); // Point Sin Dot
+        exceptions.addMapping(0x05BC,  21); // Point Dagesh or Mapiq
+        exceptions.addMapping(0x05BF,  23); // Point Rafe
+        exceptions.addMapping(0x05B9,  27); // Point Holam
+        exceptions.addMapping(0x0323, 220); // Comb. Dot Below (low punctum)
+        exceptions.addMapping(0x0591, 220); // Accent Etnahta
+        exceptions.addMapping(0x0596, 220); // Accent Tipeha
+        exceptions.addMapping(0x059B, 220); // Accent Tevir
+        exceptions.addMapping(0x05A3, 220); // Accent Munah
+        exceptions.addMapping(0x05A4, 220); // Accent Mahapakh
+        exceptions.addMapping(0x05A5, 220); // Accent Merkha
+        exceptions.addMapping(0x05A6, 220); // Accent Merkha Kefula
+        exceptions.addMapping(0x05A7, 220); // Accent Darga
+        exceptions.addMapping(0x05AA, 220); // Accent Yerah Ben Yomo
+        exceptions.addMapping(0x05B0, 220); // Point Sheva
+        exceptions.addMapping(0x05B1, 220); // Point Hataf Segol
+        exceptions.addMapping(0x05B2, 220); // Point Hataf Patah
+        exceptions.addMapping(0x05B3, 220); // Point Hataf Qamats
+        exceptions.addMapping(0x05B4, 220); // Point Hiriq
+        exceptions.addMapping(0x05B5, 220); // Point Tsere
+        exceptions.addMapping(0x05B6, 220); // Point Segol
+        exceptions.addMapping(0x05B7, 220); // Point Patah
+        exceptions.addMapping(0x05B8, 220); // Point Qamats
+        exceptions.addMapping(0x05BB, 220); // Point Qubuts
+        exceptions.addMapping(0x05BD, 220); // Point Meteg
+        exceptions.addMapping(0x059A, 222); // Accent Yetiv
+        exceptions.addMapping(0x05AD, 222); // Accent Dehi
+        exceptions.addMapping(0x05C4, 230); // Mark Upper Dot (high punctum)
+        exceptions.addMapping(0x0593, 230); // Accent Shalshelet
+        exceptions.addMapping(0x0594, 230); // Accent Zaqef Qatan
+        exceptions.addMapping(0x0595, 230); // Accent Zaqef Gadol
+        exceptions.addMapping(0x0597, 230); // Accent Revia
+        exceptions.addMapping(0x0598, 230); // Accent Zarqa
+        exceptions.addMapping(0x059F, 230); // Accent Qarney Para
+        exceptions.addMapping(0x059E, 230); // Accent Gershayim
+        exceptions.addMapping(0x059D, 230); // Accent Geresh Muqdam
+        exceptions.addMapping(0x059C, 230); // Accent Geresh
+        exceptions.addMapping(0x0592, 230); // Accent Segolta
+        exceptions.addMapping(0x05A0, 230); // Accent Telisha Gedola
+        exceptions.addMapping(0x05AC, 230); // Accent Iluy
+        exceptions.addMapping(0x05A8, 230); // Accent Qadma
+        exceptions.addMapping(0x05AB, 230); // Accent Ole
+        exceptions.addMapping(0x05AF, 230); // Mark Masora Circle
+        exceptions.addMapping(0x05A1, 230); // Accent Pazer
+      //exceptions.addMapping(0x0307, 230); // Mark Number/Masora Dot
+        exceptions.addMapping(0x05AE, 232); // Accent Zinor
+        exceptions.addMapping(0x05A9, 232); // Accent Telisha Qetana
+        exceptions.addMapping(0x0599, 232); // Accent Pashta
+        
+        exceptions.addMapping(0x0655,  27); // ARABIC HAMZA BELOW
+        exceptions.addMapping(0x0654,  27); // ARABIC HAMZA ABOVE
 
-        exceptions.addMapping(0x05C1, 11); // HEBREW POINT SHIN DOT
-        exceptions.addMapping(0x05C2, 11); // HEBREW POINT SIN DOT
+        exceptions.addMapping(0x0651,  28); // ARABIC SHADDA
 
-        exceptions.addMapping(0x05B0, 12); // HEBREW POINT SHEVA
-        exceptions.addMapping(0x05B1, 12); // HEBREW POINT HATAF SEGOL
-        exceptions.addMapping(0x05B2, 12); // HEBREW POINT HATAF PATAH
-        exceptions.addMapping(0x05B3, 12); // HEBREW POINT HATAF QAMATS
-        exceptions.addMapping(0x05B4, 12); // HEBREW POINT HIRIQ
-        exceptions.addMapping(0x05B5, 12); // HEBREW POINT TSERE
-        exceptions.addMapping(0x05B6, 12); // HEBREW POINT SEGOL
-        exceptions.addMapping(0x05B7, 12); // HEBREW POINT PATAH
-        exceptions.addMapping(0x05B8, 12); // HEBREW POINT QAMATS
-        exceptions.addMapping(0x05B9, 12); // HEBREW POINT HOLAM
-        exceptions.addMapping(0x05BB, 12); // HEBREW POINT QUBUTS
+        exceptions.addMapping(0x0656,  29); // ARABIC SUBSCRIPT ALEF
+        exceptions.addMapping(0x0670,  29); // ARABIC LETTER SUPERSCRIPT ALEF
 
-        exceptions.addMapping(0x05BD, 13); // HEBREW POINT METEG
-        exceptions.addMapping(0x05BF, 13); // HEBREW POINT RAFE
+        exceptions.addMapping(0x064D,  30); // ARABIC KASRATAN
+        exceptions.addMapping(0x0650,  30); // ARABIC KASRA
 
-        exceptions.addMapping(0x0655, 27); // ARABIC HAMZA BELOW
-        exceptions.addMapping(0x0654, 27); // ARABIC HAMZA ABOVE
+        exceptions.addMapping(0x0652,  31); // ARABIC SUKUN
+        exceptions.addMapping(0x06E1,  31); // ARABIC SMALL HIGH DOTLESS HEAD OF KHAH
 
-        exceptions.addMapping(0x0656, 28); // ARABIC SUBSCRIPT ALEF
-        exceptions.addMapping(0x0670, 28); // ARABIC LETTER SUPERSCRIPT ALEF
+        exceptions.addMapping(0x064B,  31); // ARABIC FATHATAN
+        exceptions.addMapping(0x064C,  31); // ARABIC DAMMATAN
+        exceptions.addMapping(0x064E,  31); // ARABIC FATHA
+        exceptions.addMapping(0x064F,  31); // ARABIC DAMMA
+        exceptions.addMapping(0x0657,  31); // ARABIC INVERTED DAMMA
+        exceptions.addMapping(0x0658,  31); // ARABIC MARK NOON GHUNNA
 
-        exceptions.addMapping(0x0653, 29); // ARABIC MADDAH ABOVE
-
-        exceptions.addMapping(0x0652, 30); // ARABIC SUKUN
-        exceptions.addMapping(0x06E1, 30); // ARABIC SMALL HIGH DOTLESS HEAD OF KHAH
-
-        exceptions.addMapping(0x0651, 31); // ARABIC SHADDA
-
-        exceptions.addMapping(0x064D, 32); // ARABIC KASRATAN
-        exceptions.addMapping(0x0650, 32); // ARABIC KASRA
-
-        exceptions.addMapping(0x064B, 33); // ARABIC FATHATAN
-        exceptions.addMapping(0x064C, 33); // ARABIC DAMMATAN
-        exceptions.addMapping(0x064E, 33); // ARABIC FATHA
-        exceptions.addMapping(0x064F, 33); // ARABIC DAMMA
-        exceptions.addMapping(0x0657, 33); // ARABIC INVERTED DAMMA
-        exceptions.addMapping(0x0658, 33); // ARABIC MARK NOON GHUNNA
+        exceptions.addMapping(0x0653,  32); // ARABIC MADDAH ABOVE
         
         exceptions.snapshot();
         
@@ -426,7 +456,8 @@ public class CanonGSUBBuilder
     
     public static void buildDecompTables(String fileName)
     {
-        UnicodeSet decompSet = new UnicodeSet("[[\\P{Hangul}] & [\\p{DecompositionType=Canonical}]]");
+        // F900 - FAFF are compatibility ideographs. They all decompose to a single other character, and can be ignored.
+        UnicodeSet decompSet = new UnicodeSet("[[[\\P{Hangul}] & [\\p{DecompositionType=Canonical}]] - [\uF900-\uFAFF]]");
         CanonicalCharacterData data = CanonicalCharacterData.factory(decompSet);
         ClassTable classTable = new ClassTable();
         
