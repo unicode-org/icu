@@ -1533,6 +1533,12 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
             // Since unsafeCPSet is static in ucol_elm, we are going
             // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
           }
+          if(UCOL_ISTHAIPREVOWEL(el.cPoints[0])) {
+            el.isThai = TRUE;
+          } else {
+            el.isThai = FALSE;
+          }
+
           uprv_uca_addAnElement(t, &el, status);
         }
       }
