@@ -206,7 +206,7 @@ ResourceBundle::LocaleFallbackIterator::LocaleFallbackIterator(const UnicodeStri
     fUseDefaultLocale(useDefaultLocale),
 
     // Init from the default locale, if asked for.
-    fDefaultLocale( (useDefaultLocale)? (Locale::getDefault().getName()) : NULL , ""),
+    fDefaultLocale( (useDefaultLocale)? (Locale::getDefault().getName()) : 0, ""),
 
     fTriedDefaultLocale(FALSE),
     fTriedRoot(FALSE)
