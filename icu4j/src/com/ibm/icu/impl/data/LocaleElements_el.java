@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/11/14 01:34:01 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/20 01:13:29 $ 
+ * $Revision: 1.4 $
  **************************************************************************
  */
 
@@ -22,7 +22,9 @@ public class LocaleElements_el extends ListResourceBundle {
               new String[] { "UNGEGN",
 
 "# Rules are predicated on running NFD first, and NFC afterwards\n"+
-"::NFD (NFC) ; "+
+
+":: [\\u0000-\\u007F \\u00B7 [:Greek:] [:nonspacing mark:]] ;"+
+"::NFKD (NFC) ; "+
 
 "# For modern Greek.\n"+
 
@@ -232,7 +234,9 @@ public class LocaleElements_el extends ListResourceBundle {
 " < [\u03a0\u03c0] { \\' } [Ss] ;"+
 " < [\u039d\u03bd] { \\' } $egammaLike ;"+
 
-"::NFC (NFD) ; "
+"::NFC (NFKD) ; "+
+
+":: ([\\u0000-\\u007F [:Latin:] [:nonspacing mark:]]) ;"
 
               }
             }
