@@ -325,8 +325,10 @@ compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
 static int
 compareProps(const void *l, const void *r);
 
+#if DO_DEBUG_OUT
 static uint32_t
 getProps2(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3, uint16_t *pI4);
+#endif
 
 static uint32_t
 getProps(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3);
@@ -437,7 +439,7 @@ addProps(Props *p) {
     x=0;
     value=0;
     count=0;
-    isNumber= genCategoryNames[p->generalCategory][0]=='N';
+    isNumber= (UBool)(genCategoryNames[p->generalCategory][0]=='N');
 
     if(p->upperCase!=0) {
         /* verify that no numbers and no Mn have case mappings */
@@ -839,7 +841,8 @@ compactStage2(void) {
     }
     stage2Top=newTop;
 
-    if(DO_DEBUG_OUT) {
+#if DO_DEBUG_OUT
+    {
         /* debug output */
         uint16_t i1, i2, i3, i4;
         uint32_t c;
@@ -847,6 +850,7 @@ compactStage2(void) {
             printf("properties(0x%06x)=0x%06x\n", c, getProps2(c, &i1, &i2, &i3, &i4));
         }
     }
+#endif
 }
 
 extern void
@@ -859,7 +863,8 @@ compactStage3(void) {
     }
     stage3Top=newTop;
 
-    if(DO_DEBUG_OUT) {
+#if DO_DEBUG_OUT
+    {
         /* debug output */
         uint16_t i1, i2, i3, i4;
         uint32_t c;
@@ -867,6 +872,7 @@ compactStage3(void) {
             printf("properties(0x%06x)=0x%06x\n", c, getProps2(c, &i1, &i2, &i3, &i4));
         }
     }
+#endif
 }
 
 static uint16_t
@@ -892,18 +898,18 @@ compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
     map[0]=0;
     newStart=blockSize;
     for(start=newStart; start<stageTop;) {
-        prevEnd=newStart-1;
+        prevEnd=(uint16_t)(newStart-1);
         x=stage[start];
         if(x==stage[prevEnd]) {
             /* overlap by at least one */
             for(i=1; i<blockSize && x==stage[start+i] && x==stage[prevEnd-i]; ++i) {}
 
             /* overlap by i */
-            map[start]=newStart-i;
+            map[start]=(uint16_t)(newStart-i);
 
             /* move the non-overlapping indexes to their new positions */
             start+=i;
-            for(i=blockSize-i; i>0; --i) {
+            for(i=(uint16_t)(blockSize-i); i>0; --i) {
                 stage[newStart++]=stage[start++];
             }
         } else if(newStart<start) {
@@ -925,7 +931,7 @@ compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
     }
 
     /* we saved some space */
-    return stageTop-(start-newStart);
+    return (uint16_t)(stageTop-(start-newStart));
 }
 
 extern void
@@ -946,7 +952,8 @@ compactProps(void) {
      */
     uint16_t i, oldIndex, newIndex;
     uint32_t x;
-    if(DO_DEBUG_OUT) {
+#if DO_DEBUG_OUT
+    {
         /* debug output */
         uint16_t i1, i2, i3;
         uint32_t c;
@@ -954,6 +961,7 @@ compactProps(void) {
             printf("properties(0x%06x)=0x%06x\n", c, getProps(c, &i1, &i2, &i3));
         }
     }
+#endif
 
     /* build the index table */
     for(i=propsTop; i>0;) {
@@ -990,7 +998,8 @@ compactProps(void) {
     if(beVerbose) {
         printf("compactProps() reduced propsTop from %u to %u\n", stage3Top, propsTop);
     }
-    if(DO_DEBUG_OUT) {
+#if DO_DEBUG_OUT
+    {
         /* debug output */
         uint16_t i1, i2, i3, i4;
         uint32_t c;
@@ -998,6 +1007,7 @@ compactProps(void) {
             printf("properties(0x%06x)=0x%06x\n", c, getProps2(c, &i1, &i2, &i3, &i4));
         }
     }
+#endif
 }
 
 static int
@@ -1039,7 +1049,7 @@ generateData(const char *dataDir) {
         stage2[i]+=offset;
     }
 
-    offset=(offset+stage3Top+1)/2;  /* uint32_t offset to props[], include padding */
+    offset=(uint16_t)((offset+stage3Top+1)/2);  /* uint32_t offset to props[], include padding */
     for(i=0; i<stage3Top; ++i) {
         stage3[i]+=offset;
     }
@@ -1089,16 +1099,18 @@ generateData(const char *dataDir) {
 /* helpers ------------------------------------------------------------------ */
 
 /* get properties after compacting them */
+#if DO_DEBUG_OUT
 static uint32_t
 getProps2(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3, uint16_t *pI4) {
     uint16_t i1, i2, i3, i4;
 
     *pI1=i1=(uint16_t)(c>>STAGE_1_SHIFT);
-    *pI2=i2=stage1[i1]+(uint16_t)((c>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1));
-    *pI3=i3=stage2[i2]+(uint16_t)(c&(STAGE_3_BLOCK-1));
+    *pI2=i2=(uint16_t)(stage1[i1]+((c>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1)));
+    *pI3=i3=(uint16_t)(stage2[i2]+(c&(STAGE_3_BLOCK-1)));
     *pI4=i4=stage3[i3];
     return props32[i4];
 }
+#endif
 
 /* get properties before compacting them */
 static uint32_t
@@ -1106,8 +1118,8 @@ getProps(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3) {
     uint16_t i1, i2, i3;
 
     *pI1=i1=(uint16_t)(c>>STAGE_1_SHIFT);
-    *pI2=i2=stage1[i1]+(uint16_t)((c>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1));
-    *pI3=i3=stage2[i2]+(uint16_t)(c&(STAGE_3_BLOCK-1));
+    *pI2=i2=(uint16_t)(stage1[i1]+((c>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1)));
+    *pI3=i3=(uint16_t)(stage2[i2]+(c&(STAGE_3_BLOCK-1)));
     return props[i3];
 }
 
@@ -1157,7 +1169,7 @@ allocProps(void) {
 
 static uint16_t
 addUChars(const UChar *s, uint16_t length) {
-    uint16_t top=ucharsTop+length+1;
+    uint16_t top=(uint16_t)(ucharsTop+length+1);
     UChar *p;
 
     if(top>=MAX_UCHAR_COUNT) {
