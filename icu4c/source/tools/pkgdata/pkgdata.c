@@ -651,19 +651,42 @@ void fillInMakefileFromICUConfig(UOption *option)
 #else  /* ! U_HAVE_POPEN */
 
 #ifdef WIN32
-    char tmp[1024];
-    char *fullEXEpath = _fullpath(tmp, progname, sizeof(tmp));
-    char *pathstuff = (char *)options[1].value;
+    char pathbuffer[_MAX_PATH] = {0};
+    char *fullEXEpath = NULL;
+    char *pathstuff = NULL;
 
-    if (fullEXEpath) {
-        pathstuff = strrchr(fullEXEpath, U_FILE_SEP_CHAR);
-        if (pathstuff) {
-            pathstuff[1] = 0;
-            uprv_memmove(fullEXEpath + 2, fullEXEpath, uprv_strlen(fullEXEpath)+1);
-            fullEXEpath[0] = PKGDATA_DERIVED_PATH;
-            fullEXEpath[1] = ':';
-            option->value = uprv_strdup(fullEXEpath);
-            option->doesOccur = TRUE;
+    if (strchr(progname, U_FILE_SEP_CHAR) != NULL || strchr(progname, U_FILE_ALT_SEP_CHAR) != NULL) {
+        /* pkgdata was executed with relative path */
+        fullEXEpath = _fullpath(pathbuffer, progname, sizeof(pathbuffer));
+        pathstuff = (char *)options[1].value;
+
+        if (fullEXEpath) {
+            pathstuff = strrchr(fullEXEpath, U_FILE_SEP_CHAR);
+            if (pathstuff) {
+                pathstuff[1] = 0;
+                uprv_memmove(fullEXEpath + 2, fullEXEpath, uprv_strlen(fullEXEpath)+1);
+                fullEXEpath[0] = PKGDATA_DERIVED_PATH;
+                fullEXEpath[1] = ':';
+                option->value = uprv_strdup(fullEXEpath);
+                option->doesOccur = TRUE;
+            }
+        }
+    }
+    else {
+        /* pkgdata was executed from the path */
+        /* Search for file in PATH environment variable: */
+        _searchenv("pkgdata.exe", "PATH", pathbuffer );
+        if( *pathbuffer != '\0' ) {
+            fullEXEpath = pathbuffer;
+            pathstuff = strrchr(pathbuffer, U_FILE_SEP_CHAR);
+            if (pathstuff) {
+                pathstuff[1] = 0;
+                uprv_memmove(fullEXEpath + 2, fullEXEpath, uprv_strlen(fullEXEpath)+1);
+                fullEXEpath[0] = PKGDATA_DERIVED_PATH;
+                fullEXEpath[1] = ':';
+                option->value = uprv_strdup(fullEXEpath);
+                option->doesOccur = TRUE;
+            }
         }
     }
     /* else can't determine the path */
