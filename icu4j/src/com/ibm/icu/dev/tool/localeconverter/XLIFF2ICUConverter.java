@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.10 $
+* $Revision: 1.11 $
 *
 ******************************************************************************
 */
@@ -38,7 +38,8 @@ public final class XLIFF2ICUConverter {
     private static final int SOURCEDIR = 2;
     private static final int DESTDIR = 3;
     private static final int TARGETONLY = 4;
-    private static final int FILENAME = 5;
+    private static final int SOURCEONLY = 5;
+    private static final int MAKE_SOURCE_ROOT = 6;
        
     private static final UOption[] options = new UOption[] {
         UOption.HELP_H(),
@@ -46,8 +47,11 @@ public final class XLIFF2ICUConverter {
         UOption.SOURCEDIR(),
         UOption.DESTDIR(),
         UOption.create("target-only", 't', UOption.OPTIONAL_ARG),
+        UOption.create("source-only", 'c', UOption.OPTIONAL_ARG),
+        UOption.create("make-source-root", 'r', UOption.NO_ARG)
     };
-
+    
+    private static final String ROOT            = "root";
     private static final String RESTYPE         = "restype";
     private static final String RESNAME         = "resname";
     private static final String YES             = "yes";
@@ -102,26 +106,29 @@ public final class XLIFF2ICUConverter {
         XLIFF2ICUConverter cnv = new XLIFF2ICUConverter();
         cnv.processArgs(args);
     }
-    private String    sourceDir = null;
-    private String    fileName = null;
-    private String    destDir = null;
-    private boolean   targetOnly =false;
-    private String    targetName = null; 
+    private String    sourceDir      = null;
+    private String    fileName       = null;
+    private String    destDir        = null;
+    private boolean   targetOnly     = false;
+    private String    targetFileName = null; 
+    private boolean   makeSourceRoot = false;
+    private String    sourceFileName = null;
+    private boolean   sourceOnly     = false;
     
     private void processArgs(String[] args) {
         int remainingArgc = 0;
         try{
             remainingArgc = UOption.parseArgs(args, options);
         }catch (Exception e){
-            System.out.println("ERROR: "+ e.toString());
+            System.err.println("ERROR: "+ e.toString());
             usage();
         }
         if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
             usage();
         }
         if(remainingArgc==0){
-            System.out.println("ERROR: Either the file name to be processed is not "+
-                               "specified or the it is specified after the -t \n"+
+            System.err.println("ERROR: Either the file name to be processed is not "+
+                               "specified or the it is specified after the -t/-c \n"+
                                "option which has an optional argument. Try rearranging "+
                                "the options.");
             usage();
@@ -134,11 +141,24 @@ public final class XLIFF2ICUConverter {
         }
         if(options[TARGETONLY].doesOccur){
             targetOnly = true;
-            targetName = options[TARGETONLY].value;
+            targetFileName = options[TARGETONLY].value;
+        }
+        if(options[SOURCEONLY].doesOccur){
+            sourceOnly = true;
+            sourceFileName = options[SOURCEONLY].value;
+        }
+        
+        if(options[MAKE_SOURCE_ROOT].doesOccur){
+            makeSourceRoot = true;
         }
         if(destDir==null){
             destDir = ".";
         }
+        if(sourceOnly == true && targetOnly == true){
+            System.err.println("--source-only and --target-only are specified. Please check the arguments and try again.");
+            usage();
+        }
+        
         for (int i = 0; i < remainingArgc; i++) {
             int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1; /* add 1 to skip past the separator */
             fileName = args[i].substring(lastIndex, args[i].length());
@@ -153,10 +173,14 @@ public final class XLIFF2ICUConverter {
             "This program is used to convert XLIFF files to ICU ResourceBundle TXT files.\n"+
             "Please refer to the following options. Options are not case sensitive.\n"+
             "Options:\n"+
-            "-s or --sourcedir    source directory for files followed by path, default is current directory.\n" +
-            "-d or --destdir      destination directory, followed by the path, default is current directory.\n" +
-            "-h or -? or --help   this usage text.\n"+
-            "-t or --target-only  only generate the target language txt file, followed by optional output file name.\n" +
+            "-s or --sourcedir          source directory for files followed by path, default is current directory.\n" +
+            "-d or --destdir            destination directory, followed by the path, default is current directory.\n" +
+            "-h or -? or --help         this usage text.\n"+
+            "-t or --target-only        only generate the target language txt file, followed by optional output file name.\n" +
+            "                           Cannot be used in conjunction with --source-only.\n"+
+            "-c or --source-only        only generate the source language bundle followed by optional output file name.\n"+
+            "                           Cannot be used in conjunction with --target-only.\n"+
+            "-r or --make-source-root   produce root bundle from source elements.\n" +
             "example: com.ibm.icu.dev.tool.localeconverter.XLIFF2ICUConverter -t <optional argument> -s xxx -d yyy myResources.xlf");
         System.exit(-1);
     }
@@ -356,8 +380,10 @@ public final class XLIFF2ICUConverter {
             set[0] = new ResourceTable();
             set[1] = new ResourceTable();
             
-            // lenient extraction of source language 
-            if(sourceLang!=null){
+            // lenient extraction of source language
+            if(makeSourceRoot == true){ 
+                set[0].name = ROOT;
+            }else if(sourceLang!=null){
                 set[0].name = sourceLang.replace('-','_');
             }else{
                 if(xmlSrcLang != null){
@@ -383,7 +409,7 @@ public final class XLIFF2ICUConverter {
             // check if any <alt-trans> elements are present
             NodeList altTrans = doc.getElementsByTagName(ALTTRANS);
             if(altTrans.getLength()>0){
-                throw new RuntimeException("<alt-trans> elements in XLIFF format are not supported.");
+                System.err.println("WARNING: <alt-trans> elements in found. Ignoring all <alt-trans> elements.");
             }
             
             // get all the group elements
@@ -397,20 +423,22 @@ public final class XLIFF2ICUConverter {
             writeResource(set, xmlfileName);
          }
         catch (Throwable se) {
-            System.out.println("ERROR :" + se.toString());
+            System.err.println("ERROR: " + se.toString());
             System.exit(1);
         }        
     }
     
     private void writeResource(Resource[] set, String xmlfileName){
         if(targetOnly==false){
-            writeResource(set[0], xmlfileName, null);
+            writeResource(set[0], xmlfileName, sourceFileName);
         }
-        if(targetOnly==true && set[1].name == null){
-            throw new RuntimeException("The "+ xmlfileName +" does not contain translation\n");
-        }
-        if(set[1].name != null){
-            writeResource(set[1], xmlfileName, targetName);
+        if(sourceOnly == false){
+            if(targetOnly==true && set[1].name == null){
+                throw new RuntimeException("The "+ xmlfileName +" does not contain translation\n");
+            }
+            if(set[1].name != null){
+                writeResource(set[1], xmlfileName, targetFileName);
+            }
         }
     }
     
@@ -436,7 +464,7 @@ public final class XLIFF2ICUConverter {
             writer.flush();
             writer.close();
         } catch (Exception ie) {
-            System.out.println("ERROR :" + ie.toString());
+            System.err.println("ERROR :" + ie.toString());
             return;
         }
     }
@@ -848,7 +876,7 @@ public final class XLIFF2ICUConverter {
                     
                     //verify that the binary value conforms to the CRC
                     if(Integer.parseInt(crc, 10) != CalculateCRC32.computeCRC32(value)) {
-                        System.out.println("crc error! Please check.");
+                        System.err.println("ERROR: CRC value incorrect! Please check.");
                         System.exit(1);
                     }
                     
