@@ -75,7 +75,7 @@ uchar.o uchriter.o ucmp8.o ucmp16.o ucmp32.o ucnv.o ucnv_bld.o ucnv_cb.o		\
 ucnv_cnv.o ucnv_err.o ucnv_io.o uhash.o uhash_us.o uloc.o unicode.o unistr.o	\
 uresbund.o uresdata.o ustring.o rbdata.o ubidi.o ubidiwrt.o ubidiln.o \
 bidi.o ushape.o uvector.o udata.o unames.o utf_impl.o \
-ucnv2022.o ucnvlat1.o ucnv_utf.o ucnvsbcs.o ucnvmbcs.o ucnv_lmb.o
+ucnv2022.o ucnvebdc.o ucnvlat1.o ucnv_utf.o ucnvsbcs.o ucnvmbcs.o ucnv_lmb.o
 
 DEPS = $(OBJECTS:.o=.d)
 
