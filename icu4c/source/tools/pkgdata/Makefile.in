@@ -19,7 +19,7 @@ subdir = tools/pkgdata
 
 ##
 
-SECTION = 8
+SECTION = 1
 
 MANX_FILES = $(TARGET).$(SECTION)
 
@@ -64,8 +64,8 @@ check: all check-local
 all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
-	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
 
 # man page
 install-man: install-manx

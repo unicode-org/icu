@@ -19,7 +19,7 @@ subdir = tools/gencnval
 
 ##
 
-SECTION = 8
+SECTION = 1
 
 MANX_FILES = $(TARGET).$(SECTION)
 MAN5_FILES = convrtrs.txt.5 $(srcdir)/cnvalias.dat.5
@@ -72,8 +72,8 @@ check: all check-local
 all-local: $(TARGET) $(ALL_MAN_FILES) build-data
 
 install-local: all-local build-data install-man
-	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
 
 
 dist-local:
