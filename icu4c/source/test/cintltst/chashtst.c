@@ -229,7 +229,7 @@ int32_t hashChars(const void* key) {
 UBool isEqualChars(const void* key1, const void* key2) {
     return (UBool)((key1 != NULL) &&
         (key2 != NULL) &&
-        (uprv_strcmp(key1, key2) == 0));
+        (uprv_strcmp((const char*)key1, (const char*)key2) == 0));
 }
 
 /**********************************************************************

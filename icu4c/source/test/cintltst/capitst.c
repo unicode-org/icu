@@ -63,7 +63,7 @@ void TestGetDefaultRules(){
     const UChar * defaultRulesArray=ucol_getDefaultRulesArray(&size);
     log_verbose("Test the function ucol_getDefaultRulesArray()\n");
 
-    coll = ucol_openRules(defaultRulesArray, size, UCOL_DECOMP_CAN, 0, &status);
+    coll = ucol_openRules(defaultRulesArray, size, UCOL_DECOMP_CAN, UCOL_PRIMARY, &status);
     ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
     if(U_SUCCESS(status) && coll !=NULL) {
         binColData = (uint8_t*)ucol_cloneRuleData(coll, &len1, &status);

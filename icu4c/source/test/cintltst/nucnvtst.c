@@ -302,9 +302,9 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         printf("\nGot:");
-        printSeqErr(junkout, targ-junkout);
+        printSeqErr((const unsigned char*)junkout, targ-junkout);
         printf("\nExpected:");
-        printSeqErr(expect, expectLen);
+        printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
 
@@ -314,7 +314,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("did not get the expected offsets. %s", gNuConvTestName);
             log_err("Got  : ");
-            printSeqErr(junkout, targ-junkout);
+            printSeqErr((const unsigned char*)junkout, targ-junkout);
             for(p=junkout;p<targ;p++)
                 log_err("%d, ", junokout[p-junkout]); 
             log_err("\nExpected: ");
@@ -1708,7 +1708,7 @@ TestLMBCS() {
          {
             log_err("Unexpected value on 0-byte source request to ucnv_getnextUChar \n");
          }
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
 
          /* running out of target room : U_BUFFER_OVERFLOW_ERROR */
 
@@ -1719,7 +1719,7 @@ TestLMBCS() {
             log_err("Unexpected results on out of target room to ucnv_fromUnicode\n");
          }
 
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
 
          pLIn = pszLMBCS;
          ucnv_toUnicode(cnv, &pUOut,pUOut+4,(const char **)&pLIn,(const char *)(pLIn+sizeof(pszLMBCS)),off,FALSE, &errorCode);
@@ -1737,7 +1737,7 @@ TestLMBCS() {
          LIn [3] = 0x14; 
          LIn [4] = 0xDC; 
          pLIn = LIn;
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
          pUOut = UOut;
             
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
@@ -1751,7 +1751,7 @@ TestLMBCS() {
          LIn [1] = 0xD8; 
          LIn [2] = 0x01; 
          pLIn = LIn;
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+3),off,TRUE, &errorCode);
@@ -1768,7 +1768,7 @@ TestLMBCS() {
          LIn [4] = 0xC9; 
          LIn [5] = 0xD0;
          pLIn = LIn;
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+6),off,TRUE, &errorCode);
@@ -1785,7 +1785,7 @@ TestLMBCS() {
          LIn [4] = 0xC9; 
          
          pLIn = LIn;
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
@@ -1802,7 +1802,7 @@ TestLMBCS() {
          LIn [4] = 0x3B; 
          
          pLIn = LIn;
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
@@ -1818,7 +1818,7 @@ TestLMBCS() {
          LIn [3] = 0x0F; 
                   
          pLIn = LIn;
-         errorCode = 0;
+         errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
          ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),(const char **)&pLIn,(const char *)(pLIn+4),off,TRUE, &errorCode);

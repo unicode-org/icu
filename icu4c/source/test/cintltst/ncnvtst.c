@@ -664,7 +664,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
         log_err("Expected %d chars out, got %d FROM Unicode to %s\n", expectLen, targ-buffer, codepage);
         log_verbose("Expected %d chars out, got %d FROM Unicode to %s\n", expectLen, targ-buffer, codepage);
         printSeqErr((const unsigned char *)buffer, targ-buffer);
-        printSeqErr(expect, expectLen);
+        printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
     
@@ -686,7 +686,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
         if(memcmp(offsetBuffer,expectOffsets,(targ-buffer) * sizeof(int32_t) )){
             log_err("did not get the expected offsets. for FROM Unicode to %s\n", codepage);
             printf("\nGot  : ");
-            printSeqErr(buffer, targ-buffer);
+            printSeqErr((const unsigned char*)buffer, targ-buffer);
             for(p=buffer;p<targ;p++)
                 printf("%d, ", offsetBuffer[p-buffer]); 
             printf("\nExpected: ");
@@ -922,9 +922,9 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         printf("\nGot:");
-        printSeqErr(junkout, targ-junkout);
+        printSeqErr((const unsigned char*)junkout, targ-junkout);
         printf("\nExpected:");
-        printSeqErr(expect, expectLen);
+        printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
 
@@ -934,7 +934,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("did not get the expected offsets. %s", gNuConvTestName);
             log_err("Got  : ");
-            printSeqErr(junkout, targ-junkout);
+            printSeqErr((const unsigned char*)junkout, targ-junkout);
             for(p=junkout;p<targ;p++)
                 log_err("%d, ", junokout[p-junkout]); 
             log_err("\nExpected: ");

@@ -590,10 +590,10 @@ void setUpDataTable()
 {
     int32_t i,j;
     if(dataTable == NULL) {
-        dataTable = calloc(sizeof(UChar**),3);
+        dataTable = (UChar***)calloc(sizeof(UChar**),3);
 
             for (i = 0; i < 3; i++) {
-              dataTable[i] = calloc(sizeof(UChar*),4);
+              dataTable[i] = (UChar**)calloc(sizeof(UChar*),4);
                 for (j = 0; j < 4; j++){
                     dataTable[i][j] = (UChar*) malloc(sizeof(UChar)*(strlen(raw[i][j])+1));
                     u_uastrcpy(dataTable[i][j],raw[i][j]);

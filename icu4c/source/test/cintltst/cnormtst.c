@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Ported for C API
-*********************************************************************************
+*********************************************************************************/
 /*tests for u_normalization*/
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"

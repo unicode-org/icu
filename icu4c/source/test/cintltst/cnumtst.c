@@ -395,14 +395,14 @@ free(temp1);
     for(i = 0; i < UNUM_FORMAT_SYMBOL_COUNT; ++i) {
         symbol[0] = (UChar)(0x41 + i);
         symbol[1] = (UChar)(0x61 + i);
-        unum_setSymbol(cur_frpattern, i, symbol, 2, &status);
+        unum_setSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, 2, &status);
         if(U_FAILURE(status)) {
             log_err("Error from unum_setSymbol(%d): %s\n", i, myErrorName(status));
             return;
         }
     }
     for(i = 0; i < UNUM_FORMAT_SYMBOL_COUNT; ++i) {
-        resultlength = unum_getSymbol(cur_frpattern, i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
+        resultlength = unum_getSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
         if(U_FAILURE(status)) {
             log_err("Error from unum_getSymbol(%d): %s\n", i, myErrorName(status));
             return;
@@ -412,7 +412,7 @@ free(temp1);
         }
     }
     /*try getting from a bogus symbol*/
-    unum_getSymbol(cur_frpattern, i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
+    unum_getSymbol(cur_frpattern, (UNumberFormatSymbol)i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
     if(U_SUCCESS(status)){
         log_err("Error : Expected U_ILLEGAL_ARGUMENT_ERROR for bogus symbol");
     }

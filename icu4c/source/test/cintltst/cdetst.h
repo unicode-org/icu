@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Converted to C
-*********************************************************************************
+*********************************************************************************/
 /**
  * CollationGERMANTest is a third level test class.  This tests the locale
  * specific primary, secondary and tertiary rules.  For example, the ignorable

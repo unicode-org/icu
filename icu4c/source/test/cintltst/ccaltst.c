@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda               Creation
-*********************************************************************************
+*********************************************************************************/
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
@@ -215,7 +215,7 @@ void TestCalendar()
             log_err("FAIL: set/getFirstDayOfWeek failed\n");
     }
     /*get bogus Attribute*/
-    count=ucal_getAttribute(calit, 99); /* BOGUS_ATTRIBUTE */
+    count=ucal_getAttribute(calit, (UCalendarAttribute)99); /* BOGUS_ATTRIBUTE */
     if(count != -1){
         log_err("FAIL: get/bogus attribute should return -1\n");
     }
@@ -623,7 +623,7 @@ void TestAddRollExtensive()
     if (U_FAILURE(status)) { log_err("ucal_add failed: %s\n", myErrorName(status) ); return; }
     ++m;
     checkDate(cal, y, m, d);
-    ucal_add(cal, -1, 10, &status);
+    ucal_add(cal, (UCalendarDateFields)-1, 10, &status);
     if(status==U_ILLEGAL_ARGUMENT_ERROR)
         log_verbose("Pass: Illegal argument error as expected\n");
     else{
@@ -657,7 +657,7 @@ void TestAddRollExtensive()
     if (U_FAILURE(status)) { log_err("ucal_roll failed: %s\n", myErrorName(status) ); return; }
     d = 2;
     checkDate(cal, y, m, d);
-    ucal_roll(cal, -1, 10, &status);
+    ucal_roll(cal, (UCalendarDateFields)-1, 10, &status);
     if(status==U_ILLEGAL_ARGUMENT_ERROR)
         log_verbose("Pass: illegal arguement error as expected\n");
     else{
@@ -814,7 +814,7 @@ void TestGetLimits()
 
     
     /*get BOGUS_LIMIT type*/
-    val=ucal_getLimit(cal, UCAL_SECOND, 99, &status);
+    val=ucal_getLimit(cal, UCAL_SECOND, (UCalendarLimitType)99, &status);
     if(val != -1){
         log_err("FAIL: ucal_getLimit() with BOGUS type should return -1\n");
     }

@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda               Creation
-*********************************************************************************
+*********************************************************************************/
 /* C API TEST FOR BREAKITERATOR */
 
 #ifndef _CBRKITRAPITST

@@ -22,7 +22,7 @@
 #include <stdio.h>
 
 
-void printUChars(UChar *uchars);
+void printUChars(const UChar *uchars);
 
 void TestCodeUnitValues();
 void TestCharLength();
@@ -409,7 +409,7 @@ void TestAppendChar(){
           4
     };
           
-    static uint16_t result[][5]={
+    static UChar result[][5]={
         /*unsafe*/
         {0xd841, 0xdc41, 0x0063, 0x0064, 0x0000},    
         {0x0061, 0x0062, 0x0028, 0x0064, 0x0000},
@@ -429,7 +429,7 @@ void TestAppendChar(){
         
     };
     uint16_t i, count=0;
-    UChar *str=malloc(sizeof(UChar) * (u_strlen(s)+1));
+    UChar *str=(UChar*)malloc(sizeof(UChar) * (u_strlen(s)+1));
     uint16_t offset;
     for(i=0; i<sizeof(test)/sizeof(test[0]); i=(uint16_t)(i+2)){
         if(count<5){
@@ -470,7 +470,7 @@ void TestAppendChar(){
     free(str);
 
 }
-void printUChars(UChar *uchars){
+void printUChars(const UChar *uchars){
     int16_t i=0;
     for(i=0; i<u_strlen(uchars); i++){
         printf("%x ", *(uchars+i));

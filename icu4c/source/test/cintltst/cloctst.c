@@ -24,7 +24,63 @@
 
 void PrintDataTable();
 
-static char* rawData2[23][5];
+/*---------------------------------------------------
+  table of valid data
+ --------------------------------------------------- */
+
+
+static  char* rawData2[23][5] = {
+    /* language code */
+    {   "en",   "fr",   "hr",   "el",   "no"    },
+    /* country code */
+    {   "US",   "FR",   "HR",   "GR",   "NO"    },
+    /* variant code */
+    {   "",     "",     "",     "",     "NY"    },
+    /* full name */
+    {   "en_US",    "fr_FR",    "hr_HR",    "el_GR",    "no_NO_NY"  },
+    /* ISO-3 language */
+    {   "eng",  "fra",  "hrv",  "ell",  "nor"   },
+    /* ISO-3 country */
+    {   "USA",  "FRA",  "HRV",  "GRC",  "NOR"   },
+    /* LCID (not currently public) */
+    {   "409", "40c", "41a", "408", "814"  },
+
+    /* display langage (English) */
+    {   "English",  "French",   "Croatian", "Greek",    "Norwegian" },
+    /* display country (English) */
+    {   "United States",    "France",   "Croatia",  "Greece",   "Norway"    },
+    /* display variant (English) */
+    {   "",     "",     "",     "",     "Nynorsk"    },
+    /* display name (English) */
+    {   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
+
+    /* display langage (French) */
+    {   "anglais",  "fran\\u00E7ais",   "", "grec",    "norv\\u00E9gien" },
+    /* display country (French) */
+    {   "\\u00C9tats-Unis",    "France",   "",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
+    /* display variant (French) */
+    {   "",     "",     "",     "",     "Nynorsk"    },
+    /* display name (French) */
+    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
+
+    /* display langage (Croatian) */
+    {   "",  "", "hrvatski", "",    "" },
+    /* display country (Croatian)  */
+    {   "",    "",   "Hrvatska",  "",   ""    },
+    /* display variant (Croatian) */
+    {   "",     "",     "",     "",     ""    },
+    /* display name (Croatian) */
+    {   "", "", "hrvatski (Hrvatska)", "", "" },
+
+    /* display langage (Greek) [actual values listed below] */
+    {   "",  "", "", "",    "" },
+    /* display country (Greek) [actual values listed below] */
+    {   "",    "",   "",  "",   ""    },
+    /* display variant (Greek) */
+    {   "",     "",     "",     "",     ""    },
+    /* display name (Greek) [actual values listed below] */
+    {   "", "", "", "", "" }
+};
 
 static UChar*** dataTable=0;
 enum {
@@ -608,64 +664,6 @@ void TestISOFunctions()
 
 
 
-/*---------------------------------------------------
-  table of valid data
- --------------------------------------------------- */
-
-
-static  char* rawData2[23][5] = {
-    /* language code */
-    {   "en",   "fr",   "hr",   "el",   "no"    },
-    /* country code */
-    {   "US",   "FR",   "HR",   "GR",   "NO"    },
-    /* variant code */
-    {   "",     "",     "",     "",     "NY"    },
-    /* full name */
-    {   "en_US",    "fr_FR",    "hr_HR",    "el_GR",    "no_NO_NY"  },
-    /* ISO-3 language */
-    {   "eng",  "fra",  "hrv",  "ell",  "nor"   },
-    /* ISO-3 country */
-    {   "USA",  "FRA",  "HRV",  "GRC",  "NOR"   },
-    /* LCID (not currently public) */
-    {   "409", "40c", "41a", "408", "814"  },
-
-    /* display langage (English) */
-    {   "English",  "French",   "Croatian", "Greek",    "Norwegian" },
-    /* display country (English) */
-    {   "United States",    "France",   "Croatia",  "Greece",   "Norway"    },
-    /* display variant (English) */
-    {   "",     "",     "",     "",     "Nynorsk"    },
-    /* display name (English) */
-    {   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
-
-    /* display langage (French) */
-    {   "anglais",  "fran\\u00E7ais",   "", "grec",    "norv\\u00E9gien" },
-    /* display country (French) */
-    {   "\\u00C9tats-Unis",    "France",   "",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
-    /* display variant (French) */
-    {   "",     "",     "",     "",     "Nynorsk"    },
-    /* display name (French) */
-    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
-
-    /* display langage (Croatian) */
-    {   "",  "", "hrvatski", "",    "" },
-    /* display country (Croatian)  */
-    {   "",    "",   "Hrvatska",  "",   ""    },
-    /* display variant (Croatian) */
-    {   "",     "",     "",     "",     ""    },
-    /* display name (Croatian) */
-    {   "", "", "hrvatski (Hrvatska)", "", "" },
-
-    /* display langage (Greek) [actual values listed below] */
-    {   "",  "", "", "",    "" },
-    /* display country (Greek) [actual values listed below] */
-    {   "",    "",   "",  "",   ""    },
-    /* display variant (Greek) */
-    {   "",     "",     "",     "",     ""    },
-    /* display name (Greek) [actual values listed below] */
-    {   "", "", "", "", "" }
-};
-
 static UChar greekDisplayLanguage[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba, 0x03ac, 0 };
 static UChar greekDisplayCountry[] = { 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0 };
 static UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba,
@@ -675,10 +673,10 @@ static UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03
 void setUpDataTable()
 {
     int32_t i,j;
-    dataTable = calloc(sizeof(UChar**),23);
+    dataTable = (UChar***)(calloc(sizeof(UChar**),23));
 
         for (i = 0; i < 23; i++) {
-          dataTable[i] = calloc(sizeof(UChar*),5);
+          dataTable[i] = (UChar**)(calloc(sizeof(UChar*),5));
             for (j = 0; j < 5; j++){
                 dataTable[i][j] = CharsToUChars(rawData2[i][j]);
             }
