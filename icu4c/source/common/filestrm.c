@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -22,6 +22,9 @@
 */
 
 #include "filestrm.h"
+
+#if !defined(UCONFIG_NO_FILE_IO) || !UCONFIG_NO_FILE_IO
+
 #include "cmemory.h"
 
 #include <stdio.h>
@@ -223,4 +226,5 @@ T_FileStream_remove(const char* fileName){
     return (remove(fileName) == 0);
 }
 
+#endif /* !UCONFIG_NO_FILE_IO */
 

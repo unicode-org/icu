@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -25,9 +25,9 @@
 #ifndef FILESTRM_H
 #define FILESTRM_H
 
-#ifndef _UTYPES
 #include "unicode/utypes.h"
-#endif
+
+#if !defined(UCONFIG_NO_FILE_IO) || !UCONFIG_NO_FILE_IO
 
 typedef struct _FileStream FileStream;
 
@@ -102,8 +102,7 @@ T_FileStream_stderr(void);
 
 U_CAPI UBool U_EXPORT2
 T_FileStream_remove(const char* fileName);
+
+#endif /* !UCONFIG_NO_FILE_IO */
 #endif /* _FILESTRM*/
-
-
-
 
