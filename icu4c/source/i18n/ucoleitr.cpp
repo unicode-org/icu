@@ -105,10 +105,8 @@ ucol_next(UCollationElements *elems,
   }
 
   elems->reset_ = FALSE;
-  
-  UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
 
-#ifdef UCOL_DEBUG
+#ifdef _DEBUG
   if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
     {                       
       result = *((elems->iteratordata_).toReturn++);                                      
@@ -135,6 +133,8 @@ ucol_next(UCollationElements *elems,
       } 
       else
         (result) = UCOL_NO_MORE_CES;
+#else
+      UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
 #endif
   
   if (result == UCOL_NO_MORE_CES) {
@@ -160,10 +160,7 @@ ucol_previous(UCollationElements *elems,
 
     elems->reset_ = FALSE;
 
-    UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
-                   elems->length_, status);
-
-#ifdef UCOL_DEBUG
+#ifdef _DEBUG
     const UCollator   *coll  = elems->collator_;
           collIterate *data  = &(elems->iteratordata_);
           int32_t     length = elems->length_;
@@ -186,8 +183,17 @@ ucol_previous(UCollationElements *elems,
         UChar ch = *(data->pos);
         if (ch <= 0xFF)                                                
           (result) = (coll)->latinOneMapping[ch];                                                                                       
-        else
-          (result) = ucmp32_get((coll)->mapping, ch);                           
+        else {
+          if (data->isThai && UCOL_ISTHAIBASECONSONANT(ch) && 
+                (data->pos) != data->string &&
+                (data->pos) != data->writableBuffer &&
+                UCOL_ISTHAIPREVOWEL(*(data->pos -1))) {
+            result = UCOL_THAI;                     
+         }
+          else {
+            (result) = ucmp32_get((coll)->mapping, ch);
+         }
+        }
                                                                        
         if ((result) >= UCOL_NOT_FOUND) 
         {
@@ -197,6 +203,9 @@ ucol_previous(UCollationElements *elems,
         }                                                                      
       }                                                                        
     } 
+#else
+    UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
+                   elems->length_, status);
 #endif
     
     if (result == UCOL_NO_MORE_CES) {
