@@ -19,7 +19,7 @@ StringMatcher::StringMatcher(const UnicodeString& theString,
                              int32_t limit,
                              int32_t segmentNum,
                              const TransliterationRuleData& theData) :
-    data(theData),
+    data(&theData),
     segmentNumber(segmentNum),
     matchStart(-1),
     matchLimit(-1)
@@ -79,7 +79,7 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
         // Match in the reverse direction
         for (i=pattern.length()-1; i>=0; --i) {
             UChar keyChar = pattern.charAt(i);
-            UnicodeMatcher* subm = data.lookupMatcher(keyChar);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
             if (subm == 0) {
                 if (cursor > limit &&
                     keyChar == text.charAt(cursor)) {
@@ -110,7 +110,7 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
                 return U_PARTIAL_MATCH;
             }
             UChar keyChar = pattern.charAt(i);
-            UnicodeMatcher* subm = data.lookupMatcher(keyChar);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
             if (subm == 0) {
                 // Don't need the cursor < limit check if
                 // incremental is TRUE (because it's done above); do need
@@ -151,7 +151,7 @@ UnicodeString& StringMatcher::toPattern(UnicodeString& result,
     }
     for (int32_t i=0; i<pattern.length(); ++i) {
         UChar keyChar = pattern.charAt(i);
-        const UnicodeMatcher* m = data.lookupMatcher(keyChar);
+        const UnicodeMatcher* m = data->lookupMatcher(keyChar);
         if (m == 0) {
             ICU_Utility::appendToRule(result, keyChar, FALSE, escapeUnprintable, quoteBuf);
         } else {
@@ -176,7 +176,7 @@ UBool StringMatcher::matchesIndexValue(uint8_t v) const {
         return TRUE;
     }
     UChar32 c = pattern.char32At(0);
-    const UnicodeMatcher *m = data.lookupMatcher(c);
+    const UnicodeMatcher *m = data->lookupMatcher(c);
     return (m == 0) ? ((c & 0xFF) == v) : m->matchesIndexValue(v);
 }
 
@@ -219,14 +219,29 @@ UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
 }
 
 /**
- * Remove any match data.  This must be called before performing a
+ * Remove any match info.  This must be called before performing a
  * set of matches with this segment.
  */
  void StringMatcher::resetMatch() {
     matchStart = matchLimit = -1;
 }
 
+/**
+ * Implement UnicodeFunctor
+ */
+void StringMatcher::setData(const TransliterationRuleData* d) {
+    data = d;
+    int32_t i = 0;
+    while (i<pattern.length()) {
+        UChar32 c = pattern.char32At(i);
+        UnicodeFunctor* f = data->lookup(c);
+        if (f != NULL) {
+            f->setData(data);
+        }
+        i += UTF_CHAR_LENGTH(c);
+    }    
+}
+
 U_NAMESPACE_END
 
 //eof
-

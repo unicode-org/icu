@@ -68,16 +68,22 @@ TransliterationRuleData::~TransliterationRuleData() {
     }
 }
 
+UnicodeFunctor*
+TransliterationRuleData::lookup(UChar32 standIn) const {
+    int32_t i = standIn - variablesBase;
+    return (i >= 0 && i < variablesLength) ? variables[i] : 0;
+}
+
 UnicodeMatcher*
 TransliterationRuleData::lookupMatcher(UChar32 standIn) const {
-    int32_t i = standIn - variablesBase;
-    return (i >= 0 && i < variablesLength) ? variables[i]->toMatcher() : 0;
+    UnicodeFunctor *f = lookup(standIn);
+    return (f != 0) ? f->toMatcher() : 0;
 }
 
 UnicodeReplacer*
 TransliterationRuleData::lookupReplacer(UChar32 standIn) const {
-    int32_t i = standIn - variablesBase;
-    return (i >= 0 && i < variablesLength) ? variables[i]->toReplacer() : 0;
+    UnicodeFunctor *f = lookup(standIn);
+    return (f != 0) ? f->toReplacer() : 0;
 }
 
 U_NAMESPACE_END

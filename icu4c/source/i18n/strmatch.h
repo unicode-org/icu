@@ -97,6 +97,11 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
     virtual UBool matchesIndexValue(uint8_t v) const;
 
     /**
+     * Implement UnicodeFunctor
+     */
+    virtual void setData(const TransliterationRuleData*);
+
+    /**
      * Replace characters in 'text' from 'start' to 'limit' with the
      * output text of this object.  Update the 'cursor' parameter to
      * give the cursor position and return the length of the
@@ -151,7 +156,7 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
      * Context object that maps stand-ins to matcher and replacer
      * objects.
      */
-    const TransliterationRuleData& data;
+    const TransliterationRuleData* data;
 
     /**
      * The segment number, 1-based, or 0 if not a segment.

@@ -486,6 +486,15 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     return rule;
 }
 
+void TransliterationRule::setData(const TransliterationRuleData* d) {
+    data = d;
+    anteContext->setData(d);
+    postContext->setData(d);
+    key->setData(d);
+    output->setData(d);
+    // Don't have to do segments since they are in the context or key
+}
+
 U_NAMESPACE_END
 
 //eof

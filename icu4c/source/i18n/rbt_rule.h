@@ -204,7 +204,7 @@ public:
      * Change the data object that this rule belongs to.  Used
      * internally by the TransliterationRuleData copy constructor.
      */
-    inline void setData(const TransliterationRuleData* data);
+    void setData(const TransliterationRuleData* data);
 
     /**
      * Return the preceding context length.  This method is needed to
@@ -280,10 +280,6 @@ public:
 
     friend class StringMatcher;
 };
-
-inline void TransliterationRule::setData(const TransliterationRuleData* d) {
-    data = d;
-}
 
 U_NAMESPACE_END
 
