@@ -130,7 +130,6 @@ void Test4056591()
     UChar s[10];
     UChar *gotdate, *expdate;
     UChar pat[10];
-    UChar *tzID;
     UDate d[4];
     UErrorCode status = U_ZERO_ERROR;
     const char* strings[] = {
@@ -141,9 +140,7 @@ void Test4056591()
         };
 
     log_verbose("Testing s[get] 2 digit year start regressively\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
-    u_uastrcpy(tzID, "PST");
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
+    cal=ucal_open(NULL, 0, "en_US", UCAL_GREGORIAN, &status);
     if(U_FAILURE(status)){
         log_err("error in ucal_open caldef : %s\n", myErrorName(status));
     }
@@ -161,7 +158,7 @@ void Test4056591()
 
     
     u_uastrcpy(pat, "yyMMdd");
-    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, tzID, -1, pat, u_strlen(pat), &status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, NULL, 0, pat, u_strlen(pat), &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
@@ -190,7 +187,6 @@ void Test4056591()
     
     udat_close(def);
     ucal_close(cal);
-    free(tzID);
 }
 
 
@@ -279,18 +275,19 @@ void Test4060212()
     UDate myDate;
     UChar *myString;
     UChar dateString[20], pattern[20], tzID[4];
-    u_uastrcpy(dateString, "1995-040.05:01:29");
-    u_uastrcpy(pattern, "yyyy-DDD.hh:mm:ss");
+    u_uastrcpy(dateString, "1995-040.05:01:29 -8");
+    u_uastrcpy(pattern, "yyyy-DDD.hh:mm:ss z");
 
     log_verbose( "dateString= %s Using yyyy-DDD.hh:mm:ss\n", austrdup(dateString) );
     status = U_ZERO_ERROR;
-    
-    formatter = udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
+    u_uastrcpy(tzID, "PST");
+
+    formatter = udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US",tzID,-1,pattern, u_strlen(pattern), &status);
     pos=0;
     myDate = udat_parse(formatter, dateString, u_strlen(dateString), &pos, &status);
     
     
-    fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, NULL, 0, NULL, 0, &status);
+    fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, tzID, -1, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style: %s\n", 
@@ -298,7 +295,6 @@ void Test4060212()
         return;
     }
     myString = myFormatit(fmt, myDate);
-    u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: error in ucal_open caldef : %s\n", myErrorName(status));
