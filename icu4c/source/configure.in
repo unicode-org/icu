@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.180 2003/03/14 21:44:43 rviswanadha Exp $
+dnl $Id: configure.in,v 1.181 2003/03/15 02:22:06 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -815,16 +815,17 @@ case "${host}" in
 	*-*-linux*) 	platform=U_LINUX ;;
 	*-*-*bsd*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=AIX ;;
-	*-sequent-*)	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
-	*-dec-osf*) 	platform=U_OSF ;;
-	*-*-irix*)      platform=IRIX ;;
+	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
+	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
 			ICUDATA_CHAR="e" ;;
 	*-*-os400*)	platform=OS400
 			ICUDATA_CHAR="e" ;;
-	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
-	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
+	*-*-nto*)	platform=U_QNX ;;
+	*-dec-osf*) 	platform=U_OSF ;;
+	*-*-irix*)      platform=IRIX ;;
+	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 AC_SUBST(ICUDATA_CHAR)
@@ -840,11 +841,11 @@ case "${host}" in
 	*-*-linux*) 	ld_rpath_suf=" " ;;
 	*-*-*bsd*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
-	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
-	*-*-irix*)      ld_rpath_suf=" " ;;
 	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
 	*-*-os400*)	ld_rpath_suf=" " ;;
+	*-sequent-*)	ld_rpath_suf="" ;;
+	*-*-irix*)      ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
 AC_SUBST(ld_rpath_suf)
