@@ -91,7 +91,7 @@ MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
     mbcsData->newConverter.finishMappings=MBCSPostprocess;
     mbcsData->newConverter.write=MBCSWrite;
 
-    mbcsData->header.version[0]=1;
+    mbcsData->header.version[0]=2;
     mbcsData->stateFlags[0]=MBCS_STATE_FLAG_DIRECT;
     mbcsData->maxCharLength=maxCharLength;
     mbcsData->header.flags=maxCharLength-1; /* outputType */
@@ -149,9 +149,9 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
     uint32_t start, end, i;
     int32_t value;
 
-    /* initialize the state */
+    /* initialize the state: all illegal with U+ffff */
     for(i=0; i<256; ++i) {
-        state[i]=0x80000000|(MBCS_STATE_ILLEGAL<<27);
+        state[i]=0x807fff80|(MBCS_STATE_ILLEGAL<<27);
     }
 
     /* skip leading white space */
@@ -219,7 +219,8 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
 
                 s=skipWhitespace(s+1);
                 if(*s=='u') {
-                    value|=MBCS_STATE_UNASSIGNED<<27UL;
+                    /* unassigned set U+fffe */
+                    value|=0x7fff00|(MBCS_STATE_UNASSIGNED<<27UL);
                     s=skipWhitespace(s+1);
                 } else if(*s=='p') {
                     if(*pFlags!=MBCS_STATE_FLAG_DIRECT) {
@@ -232,9 +233,11 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
                     value|=MBCS_STATE_CHANGE_ONLY<<27UL;
                     s=skipWhitespace(s+1);
                 } else if(*s=='i') {
-                    value|=MBCS_STATE_ILLEGAL<<27UL;
+                    /* illegal set U+ffff */
+                    value|=0x7fff80|(MBCS_STATE_ILLEGAL<<27UL);
                     s=skipWhitespace(s+1);
                 } else {
+                    /* default to valid */
                     value|=MBCS_STATE_VALID_16<<27UL;
                 }
             } else {
@@ -544,8 +547,8 @@ MBCSAddToUnicode(NewConverter *cnvData,
             case 16|MBCS_STATE_VALID_DIRECT_16:
             case 16|MBCS_STATE_FALLBACK_DIRECT_20:
             case 16|MBCS_STATE_VALID_DIRECT_20:
-                if((entry&0x7ffff80)!=0x7fff00) {
-                    /* the "direct" action's value is not "unassigned" any more */
+                if((entry&0xffffff80)!=(0x807fff00|(MBCS_STATE_VALID_DIRECT_16<<27))) {
+                    /* the "direct" action's value is not "valid-direct-16-unassigned" any more */
                     if((entry&(1L<<27))==0) {
                         old=entry>>7;
                     } else {
@@ -809,14 +812,12 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
         for(cell=0; cell<256; ++cell) {
             entry=mbcsData->stateTable[state][cell];
             /*
-             * if the entry is a final one with a "...-direct" action code
+             * if the entry is a final one with an MBCS_STATE_VALID_DIRECT_16 action code
              * and the code point is "unassigned" (0xfffe), then change it to
-             * the "unassigned" action code with bits 26..7 set to zero.
+             * the "unassigned" action code with bits 26..23 set to zero and U+fffe.
              */
-            if( ((uint32_t)(((entry&0xf8000000)>>27U)-(16|MBCS_STATE_FALLBACK_DIRECT_16))<=3) &&
-                (entry&0x7ffff80)==0x7fff00
-            ) {
-                mbcsData->stateTable[state][cell]=(entry&0x8000007f)|(MBCS_STATE_UNASSIGNED<<27UL);
+            if((entry&0xffffff80)==(0x807fff00|(MBCS_STATE_VALID_DIRECT_16<<27))) {
+                mbcsData->stateTable[state][cell]=(entry&0x87ffffff)|(MBCS_STATE_UNASSIGNED<<27UL);
             }
         }
     }
