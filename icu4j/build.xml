@@ -99,10 +99,10 @@
         <property name="richedit.manifest" value="${src.dir}/com/ibm/richtext/manifest.stub"/>
 
         <mkdir dir="${build.dir}"/>
-    <uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
-        <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-        <srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
-    </uptodate>
+    	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
+        	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+        	<srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
+    	</uptodate>
         <echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
@@ -118,7 +118,15 @@
         <unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
     </target>
-
+    <target name="icudata" depends="init">
+        <!-- use this target to force resources to be rebuilt -->
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
+    </target>
+	<target name="testdata" depends="init">
+        <!-- use this target to force resources to be rebuilt -->
+        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
+    </target>	
+	
     <target name="_resources" depends="init" if="icu4j.resources">
         <!-- use this target to conditionally build resources only if icu4j.resources is set -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
@@ -126,7 +134,7 @@
     </target>
 
     <!-- core does not build richedit or tests -->
-    <target name="core" depends="init,coreData,_resources">
+    <target name="core" depends="init,coreData,_resources,icudata">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -136,7 +144,7 @@
         encoding="ascii"/>
     </target>
 
-    <target name="tests" depends="core,testData">
+    <target name="tests" depends="core,testData,testdata">
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -186,7 +194,7 @@
             doctitle="icu4j"
             encoding="iso-8859-1"
             docencoding="iso-8859-1"
-            bottom="&lt;font size=-1>Copyright (c) 2002 IBM Corporation and others.&lt;/font>"
+            bottom="&lt;font size=-1>Copyright (c) 2004 IBM Corporation and others.&lt;/font>"
             additionalparam="${doc.params}"
             link="http://java.sun.com/j2se/1.4/docs/api"
         />
