@@ -138,6 +138,7 @@ tools/unicodetools/com/ibm/rbm/images/tree_icon_item.gif -text
 tools/unicodetools/com/ibm/rbm/images/tree_icon_language.gif -text
 tools/unicodetools/com/ibm/rbm/images/tree_icon_project.gif -text
 tools/unicodetools/com/ibm/rbm/images/tree_icon_variant.gif -text
+tools/unicodetools/com/ibm/rbm/rbmanager_scanner.xml svneol=native#text/xml
 tools/unicodetools/com/ibm/text/UCA/case_help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/case_index_header.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/charts.css svneol=native#text/css
