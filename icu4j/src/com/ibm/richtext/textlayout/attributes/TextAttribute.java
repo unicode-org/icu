@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextAttribute.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:33:07 $
+ * @(#)$RCSfile: TextAttribute.java,v $ $Revision: 1.2 $ $Date: 2000/04/25 00:18:51 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -61,7 +61,7 @@ public class TextAttribute extends Attribute {
             return instance;
         } else {
             throw new InvalidObjectException("unknown attribute name");
-        };
+        }
     }
 
     public static final Object FONT = java.awt.font.TextAttribute.FONT;
