@@ -196,9 +196,12 @@ import java.text.ParsePosition;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.11 $ $Date: 2000/01/18 02:30:49 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.12 $ $Date: 2000/01/18 17:51:09 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.12  2000/01/18 17:51:09  Alan
+ * Remove "keyboard" from method names. Make maximum context a field of Transliterator, and have subclasses set it.
+ *
  * Revision 1.11  2000/01/18 02:30:49  Alan
  * Add Jamo-Hangul, Hangul-Jamo, fix rules, add compound ID support
  *
@@ -246,6 +249,7 @@ public class RuleBasedTransliterator extends Transliterator {
             throw new IllegalArgumentException("Invalid direction");
         }
         data = parse(rules, direction);
+        setMaximumContextLength(data.ruleSet.getMaximumContextLength());
     }
 
     /**
@@ -262,6 +266,7 @@ public class RuleBasedTransliterator extends Transliterator {
     RuleBasedTransliterator(String ID, Data data, UnicodeFilter filter) {
         super(ID, filter);
         this.data = data;
+        setMaximumContextLength(data.ruleSet.getMaximumContextLength());
     }
 
     static Data parse(String[] rules, int direction) {
@@ -399,10 +404,10 @@ public class RuleBasedTransliterator extends Transliterator {
     }
 
     /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    protected void handleKeyboardTransliterate(Replaceable text,
-                                               int[] index) {
+    protected void handleTransliterate(Replaceable text,
+                                       int[] index) {
         int start = index[START];
         int limit = index[LIMIT];
         int cursor = index[CURSOR];
@@ -448,16 +453,6 @@ public class RuleBasedTransliterator extends Transliterator {
 
         index[LIMIT] = limit;
         index[CURSOR] = cursor;
-    }
-
-    /**
-     * Returns the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.
-     * @return Maximum number of preceding context characters this
-     * transliterator needs to examine
-     */
-    protected int getMaximumContextLength() {
-        return data.ruleSet.getMaximumContextLength();
     }
 
 
@@ -650,7 +645,7 @@ public class RuleBasedTransliterator extends Transliterator {
                     }
                 }
             } catch (IllegalArgumentException e) {
-                // errors = new StringBuffer(e.getMessage());
+                errors = new StringBuffer(e.getMessage());
             }
             
             // Index the rules

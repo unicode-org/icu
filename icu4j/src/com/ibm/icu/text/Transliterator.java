@@ -83,13 +83,13 @@ import java.text.MessageFormat;
  * is 'h', the tau changes to a theta.  This is accomplished by
  * maintaining a cursor position (independent of the insertion point,
  * and invisible in the GUI) across calls to
- * <code>keyboardTransliterate()</code>.  Typically, the cursor will
+ * <code>transliterate()</code>.  Typically, the cursor will
  * be coincident with the insertion point, but in a case like the one
  * above, it will precede the insertion point.
  *
  * <p>Keyboard transliteration methods maintain a set of three indices
  * that are updated with each call to
- * <code>keyboardTransliterate()</code>, including the cursor, start,
+ * <code>transliterate()</code>, including the cursor, start,
  * and limit.  Since these indices are changed by the method, they are
  * passed in an <code>int[]</code> array. The <code>START</code> index
  * marks the beginning of the substring that the transliterator will
@@ -112,7 +112,7 @@ import java.text.MessageFormat;
  * for more characters to arrive.  When the client code knows that no
  * more characters are forthcoming, perhaps because the user has
  * performed some input termination operation, then it should call
- * <code>finishKeyboardTransliteration()</code> to complete any
+ * <code>finishTransliteration()</code> to complete any
  * pending transliterations.
  *
  * <p><b>Inverses</b>
@@ -187,18 +187,18 @@ import java.text.MessageFormat;
  *
  * <p><b>Subclassing</b>
  *
- * <p>Subclasses must implement the abstract
- * <code>transliterate()</code> method.  They should also override the
- * <code>transliterate()</code> method taking a <code>String</code>
- * and <code>StringBuffer</code> if the performance of these methods
- * can be improved over the performance obtained by the default
- * implementations in this class.  Subclasses must also implement
- * <code>handleKeyboardTransliterate()</code>.
+ * Subclasses must implement the abstract method
+ * <code>handleTransliterate()</code>.  <p>Subclasses should override
+ * the <code>transliterate()</code> method taking a
+ * <code>Replaceable</code> and the <code>transliterate()</code>
+ * method taking a <code>String</code> and <code>StringBuffer</code>
+ * if the performance of these methods can be improved over the
+ * performance obtained by the default implementations in this class.
  *
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.7 $ $Date: 2000/01/18 02:30:49 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.8 $ $Date: 2000/01/18 17:51:09 $
  */
 public abstract class Transliterator {
     /**
@@ -222,24 +222,24 @@ public abstract class Transliterator {
     public static final int REVERSE = 1;    
 
     /**
-     * In the <code>keyboardTransliterate()</code>
+     * In the <code>transliterate()</code>
      * <code>index[]</code> array, the beginning index, inclusive
-     * @see #keyboardTransliterate
+     * @see #transliterate
      */
     public static final int START  = 0;
 
     /**
-     * In the <code>keyboardTransliterate()</code>
+     * In the <code>transliterate()</code>
      * <code>index[]</code> array, the ending index, exclusive
-     * @see #keyboardTransliterate
+     * @see #transliterate
      */
     public static final int LIMIT  = 1;
 
     /**
-     * In the <code>keyboardTransliterate()</code>
+     * In the <code>transliterate()</code>
      * <code>index[]</code> array, the next character to be considered
      * for transliteration
-     * @see #keyboardTransliterate
+     * @see #transliterate
      */
     public static final int CURSOR = 2;
 
@@ -255,6 +255,8 @@ public abstract class Transliterator {
      * <tt>null</tt> then no filtering is applied.
      */
     private UnicodeFilter filter;
+
+    private int maximumContextLength = 0;
 
     /**
      * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -402,7 +404,9 @@ public abstract class Transliterator {
 
     /**
      * Transliterates a segment of a string, with optional filtering.
-     * Subclasses must override this abstract method.
+     * The default implementation simply calls <code>handleTransliterate</code>.
+     * Subclasses that can supply a more efficient implementation should
+     * override this method.
      *
      * @param text the string to be transliterated
      * @param start the beginning index, inclusive; <code>0 <= start
@@ -418,7 +422,14 @@ public abstract class Transliterator {
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
      * <em>new-limit</em> is the return value.
      */
-    public abstract int transliterate(Replaceable text, int start, int limit);
+    public int transliterate(Replaceable text, int start, int limit) {
+        /* This is a default implementation that should be replaced by
+         * a more efficient subclass implementation if possible.
+         */
+        int[] offsets = { start, limit, start };
+        handleTransliterate(text, offsets);
+        return offsets[LIMIT];
+    }
 
     /**
      * Transliterates an entire string. Convenience method.
@@ -483,7 +494,7 @@ public abstract class Transliterator {
      * method, there may be untransliterated text that is waiting for
      * more input to resolve an ambiguity.  In order to perform these
      * pending transliterations, clients should call {@link
-     * #finishKeyboardTransliteration} after the last call to this
+     * #finishTransliteration} after the last call to this
      * method has been made.
      * 
      * @param text the buffer holding transliterated and untransliterated text
@@ -510,12 +521,12 @@ public abstract class Transliterator {
      * @see #START
      * @see #LIMIT
      * @see #CURSOR
-     * @see #handleKeyboardTransliterate
+     * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index[]</code>
      * is invalid
      */
-    public final void keyboardTransliterate(Replaceable text, int[] index,
-                                            String insertion) {
+    public final void transliterate(Replaceable text, int[] index,
+                                    String insertion) {
         if (index.length < 3 ||
             index[START] < 0 ||
             index[LIMIT] > text.length() ||
@@ -530,7 +541,7 @@ public abstract class Transliterator {
             index[LIMIT] += insertion.length();
         }
 
-        handleKeyboardTransliterate(text, index);
+        handleTransliterate(text, index);
 
         index[START] = Math.max(index[CURSOR] - getMaximumContextLength(),
                                 originalStart);
@@ -541,48 +552,48 @@ public abstract class Transliterator {
      * transliterated unambiguosly after a new character has been
      * inserted, typically as a result of a keyboard event.  This is a
      * convenience method; see {@link
-     * #keyboardTransliterate(Replaceable, int[], String)} for details.
+     * #transliterate(Replaceable, int[], String)} for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #keyboardTransliterate(Replaceable, int[], String)}.
+     * #transliterate(Replaceable, int[], String)}.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
      * <code>index[LIMIT]</code>.
-     * @see #keyboardTransliterate(Replaceable, int[], String)
+     * @see #transliterate(Replaceable, int[], String)
      */
-    public final void keyboardTransliterate(Replaceable text, int[] index,
-                                            char insertion) {
-        keyboardTransliterate(text, index, String.valueOf(insertion));
+    public final void transliterate(Replaceable text, int[] index,
+                                    char insertion) {
+        transliterate(text, index, String.valueOf(insertion));
     }
 
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
-     * {@link #keyboardTransliterate(Replaceable, int[], String)} for
+     * {@link #transliterate(Replaceable, int[], String)} for
      * details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #keyboardTransliterate(Replaceable, int[], String)}.
-     * @see #keyboardTransliterate(Replaceable, int[], String)
+     * #transliterate(Replaceable, int[], String)}.
+     * @see #transliterate(Replaceable, int[], String)
      */
-    public final void keyboardTransliterate(Replaceable text, int[] index) {
-        keyboardTransliterate(text, index, null);
+    public final void transliterate(Replaceable text, int[] index) {
+        transliterate(text, index, null);
     }
 
     /**
      * Finishes any pending transliterations that were waiting for
      * more characters.  Clients should call this method as the last
      * call after a sequence of one or more calls to
-     * <code>keyboardTransliterate()</code>.
+     * <code>transliterate()</code>.
      * @param text the buffer holding transliterated and
      * untransliterated text.
      * @param index the array of indices previously passed to {@link
-     * #keyboardTransliterate}
+     * #transliterate}
      */
-    public final void finishKeyboardTransliteration(Replaceable text,
-                                                    int[] index) {
+    public final void finishTransliteration(Replaceable text,
+                                            int[] index) {
         transliterate(text, index[START], index[LIMIT]);
     }
 
@@ -606,26 +617,36 @@ public abstract class Transliterator {
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #keyboardTransliterate(Replaceable, int[], String)}.
-     * @see #keyboardTransliterate
+     * #transliterate(Replaceable, int[], String)}.
+     * @see #transliterate
      */
-    protected abstract void handleKeyboardTransliterate(Replaceable text,
-                                                        int[] index);
+    protected abstract void handleTransliterate(Replaceable text,
+                                                int[] index);
 
     /**
      * Returns the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.  The default implementation supplied
-     * by <code>Transliterator</code> returns zero; subclasses
-     * that use preceding context should override this method to return the
-     * correct value.  For example, if a transliterator translates "ddd" (where
+     * This is <em>preceding</em> context.  The default value is zero, but
+     * subclasses can change this by calling <code>setMaximumContextLength()</code>.
+     * For example, if a transliterator translates "ddd" (where
      * d is any digit) to "555" when preceded by "(ddd)", then the preceding
      * context length is 5, the length of "(ddd)".
      *
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    protected int getMaximumContextLength() {
-        return 0;
+    final int getMaximumContextLength() {
+        return maximumContextLength;
+    }
+
+    /**
+     * Method for subclasses to use to set the maximum context length.
+     * @see #getMaximumContextLength
+     */
+    protected void setMaximumContextLength(int a) {
+        if (a < 0) {
+            throw new IllegalArgumentException("Invalid context length " + a);
+        }
+        maximumContextLength = a;
     }
 
     /**
@@ -902,6 +923,17 @@ public abstract class Transliterator {
      */
     public static final Enumeration getAvailableIDs() {
         return cache.keys();
+    }
+
+    /**
+     * Method for subclasses to use to obtain a character in the given
+     * string, with filtering.
+     */
+    protected char filteredCharAt(Replaceable text, int i) {
+        char c;
+        UnicodeFilter filter = getFilter();
+        return (filter == null) ? text.charAt(i) :
+            (filter.isIn(c = text.charAt(i)) ? c : '\uFFFF');
     }
 
     static {

@@ -10,7 +10,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.2 $ $Date: 2000/01/18 17:51:09 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -91,25 +91,10 @@ public class UnicodeToHexTransliterator extends Transliterator {
     }
 
     /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @return the new limit index
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    public int transliterate(Replaceable text, int start, int limit) {
-        int[] offsets = { start, limit, start };
-        handleKeyboardTransliterate(text, offsets);
-        return offsets[LIMIT];
-    }
-
-    /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
-     */
-    protected void handleKeyboardTransliterate(Replaceable text,
-                                               int[] offsets) {
+    protected void handleTransliterate(Replaceable text,
+                                       int[] offsets) {
         /**
          * Performs transliteration changing all characters to
          * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
@@ -137,17 +122,6 @@ public class UnicodeToHexTransliterator extends Transliterator {
 
         offsets[LIMIT] = limit;
         offsets[CURSOR] = cursor;
-    }
-
-    /**
-     * Return the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.
-     * @param direction either <code>FORWARD</code> or <code>REVERSE</code>
-     * @return maximum number of preceding context characters this
-     * transliterator needs to examine
-     */
-    protected int getMaximumContextLength() {
-        return 0;
     }
 
     /**

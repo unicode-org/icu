@@ -36,8 +36,8 @@ public class NullTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleKeyboardTransliterate}.
      */
-    protected void handleKeyboardTransliterate(Replaceable text,
-                                               int[] offsets) {
+    protected void handleTransliterate(Replaceable text,
+                                       int[] offsets) {
         offsets[CURSOR] = offsets[LIMIT];
     }
 }
