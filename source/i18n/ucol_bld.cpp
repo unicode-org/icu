@@ -544,7 +544,6 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     el.cSize = decompSize; /*(tok->source >> 24); *//* + (tok->expansion >> 24);*/
     el.cPoints = el.uchars;
 
-    el.caseBit = FALSE; /* how to see if there is case bit - pick it out from the UCA */
     if(UCOL_ISTHAIPREVOWEL(el.cPoints[0])) {
       el.isThai = TRUE;
     } else {
@@ -555,14 +554,16 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);
     if((caseCE & 0x40) != 0) {
       el.caseBit = TRUE;
-/*      el.CEs[0] |= 0x40;*/
-      for(i = 0; i<el.noOfCEs; i++) {
+/*      for(i = 0; i<el.noOfCEs; i++) {*/
+/* we don't want to change the case of expansion CEs */
+      for(i = 0; i<tok->noOfCEs; i++) {
         el.CEs[i] |= 0x40;
       }
     } else {
       el.caseBit = FALSE;
-/*      el.CEs[0] &= 0xFFFFFFBF;*/
-      for(i = 0; i<el.noOfCEs; i++) {
+/*      for(i = 0; i<el.noOfCEs; i++) {*/
+/* we don't want to change the case of expansion CEs */
+      for(i = 0; i<tok->noOfCEs; i++) {
         el.CEs[i] &= 0xFFFFFFBF;
       }
     }
@@ -636,6 +637,7 @@ int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
 uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp, uint32_t noOfDec, uint32_t *result, uint32_t resultSize, UErrorCode *status) {
   uint32_t j = 0, i = 0;
   uint32_t CE = 0, firstFound = UCOL_NOT_FOUND;
+  uint32_t firstIndex = 0;
   uint32_t resLen = 0;
   collIterate colIt;
   UBool lastNotFound = FALSE;
@@ -644,7 +646,10 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
   while(j<noOfDec) {
     CE = ucmp32_get(t->mapping, decomp[j]);
     if(CE == UCOL_NOT_FOUND || lastNotFound) { /* get it from the UCA */
-      lastNotFound = FALSE;
+      if(lastNotFound) {
+        lastNotFound = FALSE;
+        j = firstIndex;
+      }
       if(firstFound == UCOL_NOT_FOUND) {
         init_collIterate(src->UCA, decomp+j, 1, &colIt, TRUE);
         while(CE != UCOL_NO_MORE_CES) {
@@ -655,7 +660,9 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
         }
       } else { /* there was some stuff found in contraction */
         result[resLen++] = firstFound;
+        j = firstIndex;
         firstFound = UCOL_NOT_FOUND;
+        //firstIndex = 0;
         continue;
       }
 
@@ -706,7 +713,10 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
               /* had something, we'll return not found and pick the wrong */
               /* guys from UCA. I think getComplicatedCE needs to be checked */
               /* for this type of error */
-                firstFound = ctb->CEs[0];
+                if(ctb->CEs[0] != UCOL_NOT_FOUND) {
+                  firstFound = ctb->CEs[0];
+                  firstIndex = j-1;
+                }
               }
                 continue;
             } else {
@@ -721,6 +731,9 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
       *status = U_MEMORY_ALLOCATION_ERROR;
     }
     j++;
+    if(!lastNotFound) {
+      firstIndex = j;
+    }
   }
   return resLen;
 }
