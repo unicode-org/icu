@@ -1,13 +1,7 @@
 /*
 *******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   (C) Copyright Taligent, Inc.,  1997                                       *
-*   (C) Copyright International Business Machines Corporation,  1997-1998     *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
+* Copyright (C) 1997-1999, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * File DTFMTSYM.CPP
@@ -19,6 +13,7 @@
 *   07/21/98    stephen     Added getZoneIndex
 *                            Changed weekdays/short weekdays to be one-based
 *   06/14/99    stephen     Removed SimpleDateFormat::fgTimeZoneDataSuffix
+*   11/16/99    weiv        Added 'Y' and 'e' to fgPatternChars
 *******************************************************************************
 */
  
