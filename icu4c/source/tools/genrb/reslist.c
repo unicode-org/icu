@@ -39,14 +39,14 @@ static const UDataInfo dataInfo={
     1, 4, 0, 0                  /* dataVersion take a look at version inside parsed resb*/
 };
 
-uint8_t calcPadding(uint32_t size) {
+static uint8_t calcPadding(uint32_t size) {
     /* returns space we need to pad */
     return (uint8_t)((size%sizeof(uint32_t))?(sizeof(uint32_t)-(size%sizeof(uint32_t))):0);
 
 }
 
 /* Writing Functions */
-uint32_t string_write(UNewDataMemory *mem, struct SResource *res, 
+static uint32_t string_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
     udata_write32(mem, res->u.fString.fLength);
     udata_writeUString(mem, res->u.fString.fChars, (res->u.fString.fLength)+1);
@@ -54,7 +54,7 @@ uint32_t string_write(UNewDataMemory *mem, struct SResource *res,
     return usedOffset;
 }
 
-uint32_t array_write(UNewDataMemory *mem, struct SResource *res, 
+static uint32_t array_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
     uint32_t i = 0;
     uint32_t *resources = NULL;
@@ -105,12 +105,12 @@ uint32_t array_write(UNewDataMemory *mem, struct SResource *res,
     return usedOffset;
 }
 
-uint32_t intvector_write(UNewDataMemory *mem, struct SResource *res, 
+static uint32_t intvector_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
     return usedOffset;
 }
 
-uint32_t bin_write(UNewDataMemory *mem, struct SResource *res, 
+static uint32_t bin_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
     uint32_t pad = 0;
     uint32_t extrapad = calcPadding(res->fSize);
@@ -127,13 +127,13 @@ uint32_t bin_write(UNewDataMemory *mem, struct SResource *res,
     return usedOffset;
 }
 
-uint32_t int_write(UNewDataMemory *mem, struct SResource *res, 
+static uint32_t int_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
     return usedOffset;
 }
 
 
-uint32_t table_write(UNewDataMemory *mem, struct SResource *res, 
+static uint32_t table_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
     uint8_t pad = 0;
     uint32_t i = 0;
@@ -225,6 +225,8 @@ uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
             break;
         case RES_TABLE : 
             return table_write(mem, res, usedOffset, status);
+            break;
+        default:
             break;
         }
     }
@@ -594,6 +596,9 @@ void res_close(struct SResource *res, UErrorCode *status) {
         case RES_TABLE : 
             table_close(res, status);
             break;
+        default:
+            /* Shouldn't happen */
+            break;
         }
 
         uprv_free(res);
@@ -766,7 +771,7 @@ uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *stat
 
     keypos = bundle->fKeyPoint;
 
-    bundle->fKeyPoint += uprv_strlen(tag)+1;
+    bundle->fKeyPoint += (uint16_t)(uprv_strlen(tag)+1);
 
     if(bundle->fKeyPoint > KEY_SPACE_SIZE) {
         *status = U_MEMORY_ALLOCATION_ERROR;
