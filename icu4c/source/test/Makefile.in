@@ -2,46 +2,18 @@
 ## Copyright (c) 1999, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
-
-## Shell to use
-SHELL = @SHELL@
-
-## Install directory information
+## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
 
-bindir = @bindir@
-sbindir = @sbindir@
-datadir = @datadir@
-libdir = @libdir@
-includedir = @includedir@
+include $(top_srcdir)/icudefs.mk
 
-pkgdatadir = $(datadir)/@PACKAGE@
-pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
+## Platform-specific setup
+include @platform_make_fragment@
 
 ## Build directory information
 top_builddir = ..
 subdir = test
-
-## Install program information
-MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
-
-INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
-INSTALL_DATA = @INSTALL_DATA@
-INSTALL_SCRIPT = @INSTALL_SCRIPT@
-
-## Package information
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
-
-
-## Platform-specific setup
-@host_frag@
-
 
 ## Files to remove for 'make clean'
 CLEANFILES = *~
@@ -60,7 +32,9 @@ check check-recursive check-local
 ## List of standard targets
 everything: all-recursive all-local
 all:
+ifneq ($(RECURSIVE),YES)
 	@echo simply use \`make\' \(or \`make everything\'\) to do all
+endif
 
 install: install-recursive install-local
 clean: clean-recursive clean-local

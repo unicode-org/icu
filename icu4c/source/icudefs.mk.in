@@ -1,0 +1,57 @@
+
+# Make definitions that are shared by the different subprojects of ICU.
+#
+# Yves Arrouye.
+#
+# Copyright (C) 2000, International Business Machines Corporation and others.
+# All Rights Reserved.
+
+# Shell to use
+
+SHELL = @SHELL@
+
+# Standard directories
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+datadir = @datadir@
+libdir = @libdir@
+includedir = @includedir@
+mandir = @mandir@
+sysconfdir = @sysconfdir@
+
+# Package information
+
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+UNICODE_VERSION = @UNICODE_VERSION@
+
+# ICU specific directories
+
+pkgdatadir = $(datadir)/$(PACKAGE)
+#pkglibdir = $(libdir)/$(PACKAGE)
+pkglibdir = $(datadir)/$(PACKAGE)
+pkgsysconfdir = $(sysconfdir)/$(PACKAGE)
+
+# Installation programs
+
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+# Compiler and tools
+
+CC = @CC@
+CXX = @CXX@
+
+# Echo w/o newline
+
+ECHO_N = @ECHO_N@
+ECHO_C = @ECHO_C@
+

@@ -55,6 +55,7 @@ icu4c/source/i18n/Debug
 icu4c/source/i18n/Makefile
 icu4c/source/i18n/Release
 icu4c/source/i18n/libicu*.*
+icu4c/source/icudefs.mk
 icu4c/source/samples/Makefile
 icu4c/source/samples/XMLConverter/*.d
 icu4c/source/samples/XMLConverter/*.pdb
