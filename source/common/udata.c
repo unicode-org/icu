@@ -404,7 +404,9 @@ typedef struct {
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map>0) {
             if(munmap((void *)pData->pHeader, pData->map)==-1) {
-                perror("munmap");
+#               ifdef UDATA_DEBUG
+                    perror("munmap");
+#               endif
             }
             pData->pHeader=NULL;
             pData->map=0;
