@@ -233,7 +233,7 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     }
 
     // Clear error struct
-    parseError.offset = 0;
+    parseError.offset = -1;
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
 
     // Perform 2 passes.  The first computes the number of limits in
