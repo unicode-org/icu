@@ -23,6 +23,8 @@
 
 U_NAMESPACE_BEGIN
 
+class MPreFixups;
+
 /**
  * This class implements OpenType layout for Indic OpenType fonts, as
  * specified by Microsoft in "Creating and Supporting OpenType Fonts for
@@ -160,6 +162,8 @@ private:
      * for ICU "poor man's RTTI".
      */
     static const char fgClassID;
+
+    MPreFixups *fMPreFixups;
 };
 
 U_NAMESPACE_END

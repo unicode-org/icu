@@ -26,13 +26,13 @@ const char IndicOpenTypeLayoutEngine::fgClassID=0;
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                     const GlyphSubstitutionTableHeader *gsubTable)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable), fMPreFixups(NULL)
 {
     fFeatureOrder = IndicReordering::getFeatureOrder();
 }
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode), fMPreFixups(NULL)
 {
     fFeatureOrder = IndicReordering::getFeatureOrder();
 }
@@ -62,7 +62,7 @@ le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_
         return 0;
     }
 
-    IndicReordering::adjustMPres(&chars[offset], count, glyphs, charIndices, fScriptCode);
+    IndicReordering::adjustMPres(fMPreFixups, glyphs, charIndices);
 
     return retCount;
 }
@@ -104,7 +104,7 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
 
     // NOTE: assumes this allocates featureTags...
     // (probably better than doing the worst case stuff here...)
-    return IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, charIndices, featureTags);
+    return IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, charIndices, featureTags, &fMPreFixups);
 }
 
 U_NAMESPACE_END
