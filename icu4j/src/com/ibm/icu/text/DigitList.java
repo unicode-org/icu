@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2003/06/03 18:49:34 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/06/11 18:48:44 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -98,17 +98,19 @@ final class DigitList implements Cloneable {
         return true;
     }
 
-    /**
-     * Clears out the digits.
-     * Use before appending them.
-     * Typically, you set a series of digits with append, then at the point
-     * you hit the decimal point, you set myDigitList.decimalAt = myDigitList.count;
-     * then go on appending digits.
-     */
-    public void clear () {
-        decimalAt = 0;
-        count = 0;
-    }
+// Unused as of ICU 2.6 - alan
+//    /**
+//     * Clears out the digits.
+//     * Use before appending them.
+//     * Typically, you set a series of digits with append, then at the point
+//     * you hit the decimal point, you set myDigitList.decimalAt = myDigitList.count;
+//     * then go on appending digits.
+//     */
+//    public void clear () {
+//        decimalAt = 0;
+//        count = 0;
+//    }
+
     /**
      * Appends digits to the list.
      */
@@ -224,63 +226,65 @@ final class DigitList implements Cloneable {
         return count == 0 || decimalAt >= count;
     }
 
-    /**
-     * Return true if the number represented by this object can fit into
-     * a long.
-     */
-    boolean fitsIntoLong(boolean isPositive)
-    {
-        // Figure out if the result will fit in a long.  We have to
-        // first look for nonzero digits after the decimal point;
-        // then check the size.  If the digit count is 18 or less, then
-        // the value can definitely be represented as a long.  If it is 19
-        // then it may be too large.
+// Unused as of ICU 2.6 - alan
+//    /**
+//     * Return true if the number represented by this object can fit into
+//     * a long.
+//     */
+//    boolean fitsIntoLong(boolean isPositive)
+//    {
+//        // Figure out if the result will fit in a long.  We have to
+//        // first look for nonzero digits after the decimal point;
+//        // then check the size.  If the digit count is 18 or less, then
+//        // the value can definitely be represented as a long.  If it is 19
+//        // then it may be too large.
+//
+//        // Trim trailing zeros.  This does not change the represented value.
+//        while (count > 0 && digits[count - 1] == (byte)'0') --count;
+//
+//        if (count == 0) {
+//            // Positive zero fits into a long, but negative zero can only
+//            // be represented as a double. - bug 4162852
+//            return isPositive;
+//        }
+//
+//        if (decimalAt < count || decimalAt > MAX_LONG_DIGITS) return false;
+//
+//        if (decimalAt < MAX_LONG_DIGITS) return true;
+//
+//        // At this point we have decimalAt == count, and count == MAX_LONG_DIGITS.
+//        // The number will overflow if it is larger than 9223372036854775807
+//        // or smaller than -9223372036854775808.
+//        for (int i=0; i<count; ++i)
+//        {
+//            byte dig = digits[i], max = LONG_MIN_REP[i];
+//            if (dig > max) return false;
+//            if (dig < max) return true;
+//        }
+//
+//        // At this point the first count digits match.  If decimalAt is less
+//        // than count, then the remaining digits are zero, and we return true.
+//        if (count < decimalAt) return true;
+//
+//        // Now we have a representation of Long.MIN_VALUE, without the leading
+//        // negative sign.  If this represents a positive value, then it does
+//        // not fit; otherwise it fits.
+//        return !isPositive;
+//    }
 
-        // Trim trailing zeros.  This does not change the represented value.
-        while (count > 0 && digits[count - 1] == (byte)'0') --count;
-
-        if (count == 0) {
-            // Positive zero fits into a long, but negative zero can only
-            // be represented as a double. - bug 4162852
-            return isPositive;
-        }
-
-        if (decimalAt < count || decimalAt > MAX_LONG_DIGITS) return false;
-
-        if (decimalAt < MAX_LONG_DIGITS) return true;
-
-        // At this point we have decimalAt == count, and count == MAX_LONG_DIGITS.
-        // The number will overflow if it is larger than 9223372036854775807
-        // or smaller than -9223372036854775808.
-        for (int i=0; i<count; ++i)
-        {
-            byte dig = digits[i], max = LONG_MIN_REP[i];
-            if (dig > max) return false;
-            if (dig < max) return true;
-        }
-
-        // At this point the first count digits match.  If decimalAt is less
-        // than count, then the remaining digits are zero, and we return true.
-        if (count < decimalAt) return true;
-
-        // Now we have a representation of Long.MIN_VALUE, without the leading
-        // negative sign.  If this represents a positive value, then it does
-        // not fit; otherwise it fits.
-        return !isPositive;
-    }
-
-    /**
-     * Set the digit list to a representation of the given double value.
-     * This method supports fixed-point notation.
-     * @param source Value to be converted; must not be Inf, -Inf, Nan,
-     * or a value <= 0.
-     * @param maximumFractionDigits The most fractional digits which should
-     * be converted.
-     */
-    public final void set(double source, int maximumFractionDigits)
-    {
-        set(source, maximumFractionDigits, true);
-    }
+// Unused as of ICU 2.6 - alan
+//    /**
+//     * Set the digit list to a representation of the given double value.
+//     * This method supports fixed-point notation.
+//     * @param source Value to be converted; must not be Inf, -Inf, Nan,
+//     * or a value <= 0.
+//     * @param maximumFractionDigits The most fractional digits which should
+//     * be converted.
+//     */
+//    public final void set(double source, int maximumFractionDigits)
+//    {
+//        set(source, maximumFractionDigits, true);
+//    }
 
     /**
      * Set the digit list to a representation of the given double value.
