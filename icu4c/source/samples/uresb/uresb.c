@@ -54,7 +54,7 @@ const UChar *getErrorName(UErrorCode errorNumber);
 void reportError(UErrorCode *status);
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status);
 void printIndent(UFILE *out, int32_t indent);
-void printHex(UFILE *out, const int8_t *what);
+void printHex(UFILE *out, const uint8_t *what);
 
 static UOption options[]={
     UOPTION_HELP_H,
@@ -178,12 +178,8 @@ void printIndent(UFILE *out, int32_t indent) {
 	u_fprintf(out, "%s", inchar);
 }
 
-void printHex(UFILE *out, const int8_t *what) {
-	if(*what < 0x10) {
-		u_fprintf(out, "0%X", *what);
-	}  else {
-		u_fprintf(out, "%X", *what);
-	}
+void printHex(UFILE *out, const uint8_t *what) {
+  u_fprintf(out, "%02X", *what);
 }
 
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status) {
@@ -237,7 +233,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 				u_fprintf(out, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
 				len = truncsize/2;
 			}
-			if(U_SUCCESS(*status) && len > 0) {
+			if(U_SUCCESS(*status)) {
 				printIndent(out, indent);
 				if(key != NULL) {
 		  		  u_fprintf(out, "%s", key);
@@ -257,6 +253,33 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 			}
 		}
 		break;
+    case RES_INT_VECTOR :
+      {
+		int32_t len = 0;
+		const int32_t *data = ures_getIntVector(resource, &len, status);
+	    if(U_SUCCESS(*status)) {
+		    printIndent(out, indent);
+		    if(key != NULL) {
+		  	  u_fprintf(out, "%s", key);
+		    } 
+            u_fprintf(out, ":intvector { ");
+			for(i = 0; i<len-1; i++) {
+              u_fprintf(out, "%d, ", data[i]);
+			}
+            if(len > 0) {
+		      u_fprintf(out, "%d ", data[len-1]);
+            }
+		    u_fprintf(out, "}");
+            if(VERBOSE) {
+              u_fprintf(out, " // INTVECTOR");
+            }
+		    u_fprintf(out, "\n");
+
+	    } else {
+		    reportError(status);
+	    }
+      }
+      break;
 	case RES_TABLE :
 	case RES_ARRAY :
 		{
