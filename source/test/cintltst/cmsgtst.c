@@ -1010,6 +1010,28 @@ static void OpenMessageFormatTest(void)
     umsg_close(f3);
 }
 
+static void MessageLength(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    const char patChars[] = {"123{0}456{0}"};
+    const char expectedChars[] = {"123abc"};
+    UChar pattern[sizeof(patChars)];
+    UChar arg[] = {0x61,0x62,0x63,0};
+    UChar result[128] = {0};
+    UChar expected[sizeof(expectedChars)];
+
+    u_uastrncpy(pattern, patChars, sizeof(pattern)/sizeof(pattern[0]));
+    u_uastrncpy(expected, expectedChars, sizeof(expected)/sizeof(expected[0]));
+
+    u_formatMessage("en_US", pattern, 6, result, sizeof(result)/sizeof(result[0]), &status, arg);
+    if (U_FAILURE(status)) {
+        log_err("u_formatMessage method failed. Error: %s \n",u_errorName(status));
+    }
+    if (u_strcmp(result, expected) != 0) {
+        log_err("u_formatMessage didn't return expected result\n");
+    }
+}
+
 
 void addMsgForTest(TestNode** root);
 
@@ -1026,7 +1048,7 @@ void addMsgForTest(TestNode** root)
     addTest(root, &TestMessageFormatWithValist, "tsformat/cmsgtst/TestMessageFormatWithValist");
     addTest(root, &TestParseMessageWithValist, "tsformat/cmsgtst/TestParseMessageWithValist");
     addTest(root, &TestJ904, "tsformat/cmsgtst/TestJ904");
-
+    addTest(root, &MessageLength, "tsformat/cmsgtst/MessageLength");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
