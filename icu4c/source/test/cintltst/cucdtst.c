@@ -748,11 +748,13 @@ void TestStringFunctions()
     u_uastrcpy(subString, "ab");
     u_strcpy(temp, subString);
     result=u_strstr(uchars, subString);
-    /*commented because it is yet to be implemented*/
-   /*
-    if(u_strcmp(result, temp) != 0){
+    if(u_strncmp(result, temp, 2) != 0){
         log_err("There is an error in u_strstr() Expected %s Got %s\n", austrdup(temp), austrdup(result));
-    }*/
+    }
+    result=u_strstr(subString, uchars);
+    if(result != NULL){
+        log_err("There is an error in u_strstr() Expected NULL Got %s\n", austrdup(result));
+    }
     
     /*Testing u_strstr32*/
     log_verbose("Testing u_strchr\n");
@@ -762,6 +764,10 @@ void TestStringFunctions()
     if(u_strcmp(temp, result) !=0){
         log_err("There is an error in u_strstr32() Expected %s Got %s\n", austrdup(temp), austrdup(result));
     }
+    result=u_strchr32(uchars, (UChar32)0x00FB);
+    if(result != NULL){
+        log_err("There is an error in u_strstr32() Expected NULL Got %s\n", austrdup(result));
+    }
     
     
     u_uastrcpy(subString, "");
@@ -770,14 +776,11 @@ void TestStringFunctions()
     subString[2]=0x0000;
     u_strcpy(temp, subString);
     result=u_strchr32(subString, (UChar32)0x20402);
-    /*commented because it is yet to be implemented*/
-    /*if(u_strcmp(temp, result) !=0){
+    if(u_strcmp(temp, result) !=0){
         log_err("There is an error in u_strstr32() Expected %s Got %s\n", austrdup(temp), austrdup(result));
-    }*/
+    }
    
   }
-
-
 }
 
 /* test u_charName() -------------------------------------------------------- */
