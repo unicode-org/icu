@@ -628,7 +628,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
             // On the Parentheses stack, start a new frame and add the postions
             //   of the NOPs.  
-            fParenStack.push(EParenClass::lookAhead, *fStatus);           // Begin a new frame.
+            fParenStack.push(lookAhead, *fStatus);                        // Begin a new frame.
             fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
         }
@@ -659,7 +659,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
             // On the Parentheses stack, start a new frame and add the postions
             //   of the StateSave and NOP.  
-            fParenStack.push(EParenClass::negLookAhead, *fStatus);        // Begin a new frame.
+            fParenStack.push( negLookAhead, *fStatus);                    // Begin a new frame.
             fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The STATE_SAVE
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
             
@@ -1513,7 +1513,7 @@ void  RegexCompile::handleCloseParen() {
         }
         break;
 
-    case EParenClass::lookAhead:
+    case lookAhead:
         {
             int32_t  startOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen-1);
             U_ASSERT(URX_TYPE(startOp) == URX_LA_START);

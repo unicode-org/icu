@@ -370,9 +370,31 @@ private:
  */
 class U_I18N_API RegexMatcher: public UObject {
 public:
+
+    /**
+      * Construct a RegexMatcher for a regular expression.
+      * This is a convenience method that avoids the need to explicitly create
+      * a RegexPattern object.  Note that if several RegexMatchers need to be
+      * created for the same expression, it will be more efficient to
+      * separately create and cache a RegexPattern object, and use
+      * its matcher() method to create the RegexMatcher objects.
+      */
+    RegexMatcher(const UnicodeString &regexp, uint32_t flags, UErrorCode &status);
+
+    /**
+      * Construct a RegexMatcher for a regular expression.
+      * This is a convenience method that avoids the need to explicitly create
+      * a RegexPattern object.  Note that if several RegexMatchers need to be
+      * created for the same expression, it will be more efficient to
+      * separately create and cache a RegexPattern object, and use
+      * its matcher() method to create the RegexMatcher objects.
+      */
+    RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
+        uint32_t flags, UErrorCode &status);
+
+
    /**
-    *   Destructor.  Note that there are no public constructors; creation is
-    *   done with RegexPattern::matcher().
+    *   Destructor.  
     *
     *  @draft ICU 2.4
     */
@@ -660,7 +682,6 @@ public:
 private:
     // Constructors and other object boilerplate are private.
     // Instances of RegexMatcher can not be assigned, copied, cloned, etc.
-    // Creation by users is only through the factory method in class RegexPattern
     RegexMatcher(const RegexPattern *pat);
     RegexMatcher(const RegexMatcher &other);
     RegexMatcher &operator =(const RegexMatcher &rhs);
@@ -680,6 +701,8 @@ private:
 
 
     const RegexPattern  *fPattern;
+    UBool                fPatternOwned;    // True if this matcher owns the pattern, and
+                                           //   should delete it when through.
     const UnicodeString *fInput;
 
     UBool                fMatch;           // True if the last match was successful.

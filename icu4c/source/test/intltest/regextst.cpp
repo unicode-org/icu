@@ -1355,13 +1355,6 @@ static UBool ReplaceFirst(UnicodeString &target, const UnicodeString &pattern,
     return retVal;
 }
 
-static char *cstar(const UnicodeString &s) {
-    UErrorCode status=U_ZERO_ERROR;
-    static char buf[1000];
-    s.extract(buf, 1000, NULL, status);
-    buf[999] = 0;
-    return buf;
-}
 
 //-------------------------------------------------------------------------------
 //
@@ -1376,66 +1369,70 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     FILE        *f       = NULL;
  
     ulen = 0;
-    {
-        if (U_FAILURE(status)) {
-            return retPtr;
-        }
-        
-        //
-        //  Open the file.
-        //
-        f = fopen(fileName, "rb");
-        if (f == 0) {
-            errln("Error opening test data file %s\n", fileName);
-            goto cleanUpAndReturn;
-        }
-        //
-        //  Read it in
-        //
-        fseek( f, 0, SEEK_END);
-        int fileSize = ftell(f);
-        fileBuf = new char[fileSize];
-        fseek(f, 0, SEEK_SET);
-        int amt_read = fread(fileBuf, 1, fileSize, f);
-        if (amt_read != fileSize || fileSize <= 0) {
-            errln("Error reading test data file.");
-            goto cleanUpAndReturn;
-        }
-        
-        //
-        // Look for a Unicode Signature (BOM) on the data just read
-        //
-        int32_t        signatureLength;
-        const char *   fileBufC = fileBuf;
-        const char*    encoding = ucnv_detectUnicodeSignature(
-            fileBuf, fileSize, &signatureLength, &status);
-        if(encoding!=NULL ){
-            fileBufC  += signatureLength;
-            fileSize  -= signatureLength;
-        }
-        
-        //
-        // Open a converter to take the rule file to UTF-16
-        //
-        conv = ucnv_open(encoding, &status);
-        if (U_FAILURE(status)) {
-            goto cleanUpAndReturn;
-        }
-        
-        //
-        // Convert the rules to UChar.
-        //  Preflight first to determine required buffer size.
-        //
-        ulen = ucnv_toUChars(conv,
-            NULL,           //  dest,
-            0,              //  destCapacity,
-            fileBufC,
-            fileSize,
-            &status);
-        if (status == U_BUFFER_OVERFLOW_ERROR) {
-            // Buffer Overflow is expected from the preflight operation.
-            status = U_ZERO_ERROR;
-        }
+    if (U_FAILURE(status)) {
+        return retPtr;
+    }
+    
+    //
+    //  Open the file.
+    //
+    f = fopen(fileName, "rb");
+    if (f == 0) {
+        errln("Error opening test data file %s\n", fileName);
+        goto cleanUpAndReturn;
+    }
+    //
+    //  Read it in
+    //
+    int   fileSize;
+    int   amt_read;
+    
+    fseek( f, 0, SEEK_END);
+    fileSize = ftell(f);
+    fileBuf = new char[fileSize];
+    fseek(f, 0, SEEK_SET);
+    amt_read = fread(fileBuf, 1, fileSize, f);
+    if (amt_read != fileSize || fileSize <= 0) {
+        errln("Error reading test data file.");
+        goto cleanUpAndReturn;
+    }
+    
+    //
+    // Look for a Unicode Signature (BOM) on the data just read
+    //
+    int32_t        signatureLength;
+    const char *   fileBufC;
+    const char*    encoding;
+    
+    fileBufC = fileBuf;
+    encoding = ucnv_detectUnicodeSignature(
+        fileBuf, fileSize, &signatureLength, &status);
+    if(encoding!=NULL ){
+        fileBufC  += signatureLength;
+        fileSize  -= signatureLength;
+    }
+    
+    //
+    // Open a converter to take the rule file to UTF-16
+    //
+    conv = ucnv_open(encoding, &status);
+    if (U_FAILURE(status)) {
+        goto cleanUpAndReturn;
+    }
+    
+    //
+    // Convert the rules to UChar.
+    //  Preflight first to determine required buffer size.
+    //
+    ulen = ucnv_toUChars(conv,
+        NULL,           //  dest,
+        0,              //  destCapacity,
+        fileBufC,
+        fileSize,
+        &status);
+    if (status == U_BUFFER_OVERFLOW_ERROR) {
+        // Buffer Overflow is expected from the preflight operation.
+        status = U_ZERO_ERROR;
         
         retPtr = new UChar[ulen+1];
         ucnv_toUChars(conv,
@@ -1516,7 +1513,7 @@ void RegexTest::PerlTests() {
     ReplaceFirst(tdd, "([/\\\\])out[/\\\\]testdata", "$1re_tests.txt", status);
 
     int    len;
-    UChar *testData = ReadAndConvertFile(cstar(tdd), len, status);
+    UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);
 
     //
     //  Put the test data into a UnicodeString
@@ -1596,8 +1593,6 @@ void RegexTest::PerlTests() {
         //    split off the flags, remove the extra quotes.
         //
         UnicodeString flagStr = flagMat->group(3, status);
-        // printf("pattern = %s\n", cstar(pattern));
-        // printf("   flags = %s\n", cstar(flags));
         if (U_FAILURE(status)) {
             errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
             return;
