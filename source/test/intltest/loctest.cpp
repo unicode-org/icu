@@ -13,7 +13,7 @@
 //#include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 
-char* rawData[27][7] = {
+const char* rawData[27][7] = {
 
         // language code
         {   "en",   "fr",   "hr",   "el",   "no",   "it",   "xx"    },
@@ -146,7 +146,7 @@ LocaleTest::~LocaleTest()
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void LocaleTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite LocaleTest: ");
     switch (index) {

@@ -648,7 +648,7 @@ UBool IntlTest::runTest( char* name, char* par )
 }
 
 // call individual tests, to be overriden to call implementations
-void IntlTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void IntlTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // to be overriden by a method like:
     /*
@@ -666,7 +666,7 @@ void IntlTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par
 UBool IntlTest::runTestLoop( char* testname, char* par )
 {
     int32_t    index = 0;
-    char*   name;
+    const char*   name;
     UBool  run_this_test;
     int32_t    lastErrorCount;
     UBool  rval = FALSE;

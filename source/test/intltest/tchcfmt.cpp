@@ -493,12 +493,12 @@ static double randDouble()
 {
     // Assume 8-bit (or larger) rand values.  Also assume
     // that the system rand() function is very poor, which it always is.
-    double d;
+    double d = 0;
     int32_t i;
+    char* poke = (char*)&d;
     for (i=0; i < sizeof(double); ++i)
     {
-        char* poke = (char*)&d;
-        poke[i] = (rand() & 0xFF);
+        poke[i] = (char)(rand() & 0xFF);
     }
     return d;
 }
@@ -635,7 +635,7 @@ TestChoiceFormat::testValue( double val )
 }
 
 
-void TestChoiceFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void TestChoiceFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     switch (index) {
         case 0: name = "TestSimpleExample"; 

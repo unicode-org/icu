@@ -31,7 +31,7 @@ public:
 
     CollationFrenchTest();
     virtual ~CollationFrenchTest();
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     // amin test routine, test rules specific to the french locale
     void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);

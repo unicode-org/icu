@@ -75,7 +75,7 @@ MultithreadTest::~MultithreadTest()
 
 #if (ICU_USE_THREADS==0)
 void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
-                char* &name, char* par ) {
+                const char* &name, char* par ) {
   if (exec) logln("TestSuite MultithreadTest: ");
 
   if(index == 0)
@@ -215,11 +215,11 @@ void SimpleThread::start()
     pthread_attr_t attr;
 
 #ifdef HPUX_CMA
-	rc = pthread_attr_create(&attr);
+    rc = pthread_attr_create(&attr);
     rc = pthread_create(&(imp->fThread),attr,&SimpleThreadProc,(void*)this);
     pthread_attr_delete(&attr);
 #else
-	rc = pthread_attr_init(&attr);
+    rc = pthread_attr_init(&attr);
     rc = pthread_create(&(imp->fThread),&attr,&SimpleThreadProc,(void*)this);
     pthread_attr_destroy(&attr);
 #endif
@@ -266,7 +266,7 @@ void SimpleThread::sleep(int32_t millis)
 
 /* now begins the real test. */
 void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
-                char* &name, char* par ) {
+                const char* &name, char* par ) {
   if (exec) logln("TestSuite MultithreadTest: ");
   switch (index) {
   case 0: name = "TestThreads"; if (exec) TestThreads(); break;

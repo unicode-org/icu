@@ -20,7 +20,7 @@ class DateFormat;
  */
 class CalendarLimitTest: public CalendarTimeZoneTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public: // package
     static const UDate EARLIEST_SUPPORTED_MILLIS;
     static const UDate LATEST_SUPPORTED_MILLIS;

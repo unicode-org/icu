@@ -57,7 +57,7 @@ public:
 
     G7CollationTest() {}
     virtual ~G7CollationTest() {}
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     // main test routine, tests comparisons for a set of strings against sets of expected results
     void doTest( Collator* col, UnicodeString source, UnicodeString target, Collator::EComparisonResult result);

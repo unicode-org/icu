@@ -37,7 +37,7 @@
 #include "calregts.h"       // CalendarRegressionTest
 #include "tzregts.h"        // TimeZoneRegressionTest
 
-void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // for all format tests, always set default Locale and TimeZone to ENGLISH and PST.
     TimeZone* saveDefaultTimeZone;

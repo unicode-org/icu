@@ -20,7 +20,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-TimeZoneRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+TimeZoneRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -689,14 +689,14 @@ TimeZoneRegressionTest::Test4154525()
                     z->setDSTSavings(savings, status);
                     break;
             }
-                
+
             if(U_FAILURE(status)) {
                 if(valid) {
                     errln(UnicodeString("Fail: DST savings of ") + savings + " to " + method + " gave " + u_errorName(status));
-                } 
+                }
                 else {
                     logln(UnicodeString("Pass: DST savings of ") + savings + " to " + method + " gave " + u_errorName(status));
-                }               
+                }
             }
             else {
                 if(valid) {
@@ -797,7 +797,7 @@ TimeZoneRegressionTest::Test4162593()
      * Transition expected between start+1H and start+2H
      */
     TimeZone *DATA_TZ [] = {
-	  0, 0, 0 };
+      0, 0, 0 };
 
     int32_t DATA_INT [] [5] = {
         {98, Calendar::SEPTEMBER, 30, 22, 0},

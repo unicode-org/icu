@@ -29,40 +29,40 @@ class UnicodeFilterLogic;
  */
 class UnicodeFilterLogicTest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
 
     /*Tests all the NOT, OR and AND filters */
     void TestAll(void);
 
-	void TestNOT(Transliterator& t,
-				 const UnicodeFilter* f1, 
-				 const UnicodeString& message,
-				 const UnicodeString& source,
-				 const UnicodeString& expected);
+    void TestNOT(Transliterator& t,
+                 const UnicodeFilter* f1, 
+                 const UnicodeString& message,
+                 const UnicodeString& source,
+                 const UnicodeString& expected);
 
-	void TestAND(Transliterator& t,
-		         const UnicodeFilter* f1,
-				 const UnicodeFilter* f2,
-				 const UnicodeString& message,
-				 const UnicodeString& source,
-				 const UnicodeString& expected);
-	
-	void TestOR(Transliterator& t,
-		         const UnicodeFilter* f1,
-				 const UnicodeFilter* f2,
-				 const UnicodeString& message,
-				 const UnicodeString& source,
-				 const UnicodeString& expected);
+    void TestAND(Transliterator& t,
+                 const UnicodeFilter* f1,
+                 const UnicodeFilter* f2,
+                 const UnicodeString& message,
+                 const UnicodeString& source,
+                 const UnicodeString& expected);
 
-	//support functions
-	void expect(const Transliterator& t,
-								 const UnicodeString& message,
-                                const UnicodeString& source,
-                                const UnicodeString& expectedResult);
+    void TestOR(Transliterator& t,
+                 const UnicodeFilter* f1,
+                 const UnicodeFilter* f2,
+                 const UnicodeString& message,
+                 const UnicodeString& source,
+                 const UnicodeString& expected);
 
-	void expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, UBool pass,
-                                   const UnicodeString& expectedResult); 
+    //support functions
+    void expect(const Transliterator& t,
+                const UnicodeString& message,
+                const UnicodeString& source,
+                const UnicodeString& expectedResult);
+
+    void expectAux(const UnicodeString& tag,
+                   const UnicodeString& summary, UBool pass,
+                   const UnicodeString& expectedResult); 
 
 };
 

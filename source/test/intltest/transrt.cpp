@@ -25,7 +25,7 @@
 
 void
 TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
-                                   char* &name, char* par) {
+                                   const char* &name, char* par) {
     switch (index) {
         CASE(0,TestHiragana);
         CASE(1,TestKatakana);

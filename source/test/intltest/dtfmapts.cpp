@@ -19,7 +19,7 @@
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 
-void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite DateFormatAPI");
     switch (index) {

@@ -21,7 +21,7 @@ class Transliterator;
  */
 class TransliteratorTest : public IntlTest {
 
-    void runIndexedTest(int32_t index, UBool exec, char* &name,
+    void runIndexedTest(int32_t index, UBool exec, const char* &name,
                         char* par=NULL);
 
     void TestInstantiation(void);

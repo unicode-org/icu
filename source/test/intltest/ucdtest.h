@@ -14,7 +14,7 @@ public:
     UnicodeTest();
     ~UnicodeTest();
     
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     /** 
      * Test methods toUpperCase() and toLowerCase()
@@ -42,17 +42,17 @@ public:
      * as well as characterDirection()
      **/
     void TestUnicodeData(void);
-	 /** 
+    /** 
       * tests methods isSingle(), isLead(), and isTrail() 
       **/
     void TestCodeUnit(void);
-	 /**
+    /**
       * Tests for isSurrogate(), isUnicodeChar(), isError(), isValid() 
-	  **/
+      **/
     void TestCodePoint();
-	/**
+    /**
       * Tests for needMultipleChar(), charLength()
-	  **/
+      **/
     void TestCharLength();
 
 private:

@@ -36,7 +36,7 @@ int32_t getInt(UnicodeString str)
 // runIndexedTest
 //---------------------------------------------
 
-void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite Transliterator API ");
     switch (index) {
@@ -109,7 +109,7 @@ void TransliteratorAPITest::TestgetID() {
         errln("FAIL: construction");
     if(t1->getID() != t5->getID() || t5->getID() != t3->getID() || t1->getID() != t3->getID())
         errln("FAIL: getID or clone failed");
-	     
+
 
     delete t1;
     delete t2;
@@ -119,55 +119,56 @@ void TransliteratorAPITest::TestgetID() {
 }
 
 void TransliteratorAPITest::TestgetInverse() {
-         Transliterator* t1    = Transliterator::createInstance("Kana-Latin");
-         Transliterator* invt1 = Transliterator::createInstance("Latin-Kana");
-         Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari");
-         Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin");
-         if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0) {
-             errln("FAIL: in instantiation");
-             return;
-         }
+     Transliterator* t1    = Transliterator::createInstance("Kana-Latin");
+     Transliterator* invt1 = Transliterator::createInstance("Latin-Kana");
+     Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari");
+     Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin");
+     if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0) {
+         errln("FAIL: in instantiation");
+         return;
+     }
 
-         Transliterator* inverse1=t1->createInverse();
-         Transliterator* inverse2=t2->createInverse();
-         if(inverse1->getID() != invt1->getID() || inverse2->getID() != invt2->getID()
-            || inverse1->getID() == invt2->getID() || inverse2->getID() == invt1->getID() ) 
-            errln("FAIL: getInverse() ");
+     Transliterator* inverse1=t1->createInverse();
+     Transliterator* inverse2=t2->createInverse();
+     if(inverse1->getID() != invt1->getID() || inverse2->getID() != invt2->getID()
+        || inverse1->getID() == invt2->getID() || inverse2->getID() == invt1->getID() ) 
+        errln("FAIL: getInverse() ");
 
-         UnicodeString TransID[]={
-           "Halfwidth-Fullwidth",
-           "Fullwidth-Halfwidth",
-           "Greek-Latin" ,
-           "Latin-Greek", 
-           "Arabic-Latin",
-           "Latin-Arabic",
-           "Kana-Latin",
-           "Latin-Kana",
-           "Hebrew-Latin",
-           "Latin-Hebrew",
-           "Cyrillic-Latin", 
-           "Latin-Cyrillic", 
-           "Devanagari-Latin", 
-           "Latin-Devanagari", 
-           "Unicode-Hex",
-           "Hex-Unicode"
-         };
-         for(int i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
-             t1=Transliterator::createInstance(TransID[i]);
-             if(t1 == 0){
-               errln("FAIL: in instantiation for" + TransID[i]);
-               continue;
-             }
-             inverse1=t1->createInverse();
-             if(inverse1->getID() != TransID[i+1] )
-                 errln("FAIL :getInverse() for " + TransID[i] + " returned " + inverse1->getID() + " instead of " + TransID[i+1]);
+     UnicodeString TransID[]={
+       "Halfwidth-Fullwidth",
+       "Fullwidth-Halfwidth",
+       "Greek-Latin" ,
+       "Latin-Greek", 
+       "Arabic-Latin",
+       "Latin-Arabic",
+       "Kana-Latin",
+       "Latin-Kana",
+       "Hebrew-Latin",
+       "Latin-Hebrew",
+       "Cyrillic-Latin", 
+       "Latin-Cyrillic", 
+       "Devanagari-Latin", 
+       "Latin-Devanagari", 
+       "Unicode-Hex",
+       "Hex-Unicode"
+     };
+     for(int i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
+         t1=Transliterator::createInstance(TransID[i]);
+         if(t1 == 0){
+           errln("FAIL: in instantiation for" + TransID[i]);
+           continue;
          }
-         delete t1;
-         delete t2;
-         delete invt1;
-         delete invt2;
-   
- }
+         inverse1=t1->createInverse();
+         if(inverse1->getID() != TransID[i+1] )
+             errln("FAIL :getInverse() for " + TransID[i] + " returned " + inverse1->getID() + " instead of " + TransID[i+1]);
+     }
+     delete t1;
+     delete t2;
+     delete invt1;
+     delete invt2;
+
+}
+
 void TransliteratorAPITest::TestClone(){
     Transliterator *t1, *t2, *t3, *t4;
     t1=Transliterator::createInstance("Latin-Devanagari");
@@ -207,7 +208,7 @@ void TransliteratorAPITest::TestGetDisplayName() {
           "Kana-Latin"                 ,"Kana to Latin"        
       };
     UnicodeString name="";
-    Transliterator* t=NULL;
+    Transliterator* t;
     UnicodeString message;
     for (int32_t i=0; i<sizeof(dispNames)/sizeof(dispNames[0]); i=i+2 ) {
         t = Transliterator::createInstance(dispNames[i+0]);
@@ -226,9 +227,10 @@ void TransliteratorAPITest::TestGetDisplayName() {
     // message="Display name for on english locale ID:" + t->getID();
         doTest(message, name, dispNames[i+1]);
         name="";
+
+        delete t;
     }
 
-    delete t;
 
 }
 
@@ -249,7 +251,7 @@ void TransliteratorAPITest::TestTransliterate1(){
     UnicodeString gotResult;
     UnicodeString temp;
     UnicodeString message;
-    Transliterator* t=NULL;
+    Transliterator* t;
     logln("Testing transliterate");
 
     for(int i=0;i<sizeof(Data)/sizeof(Data[0]); i=i+3){
@@ -271,9 +273,9 @@ void TransliteratorAPITest::TestTransliterate1(){
         message.append("->transliterate(Replaceable) for \n\tSource:");
         message.append(Data[i][1]);
         doTest(message, temp, Data[i+2]);
-    }
 
-    delete t;
+        delete t;
+    }
 }
 
 void TransliteratorAPITest::TestTransliterate2(){

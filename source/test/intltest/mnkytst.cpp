@@ -277,7 +277,7 @@ void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString m
     reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationMonkeyTest: ");
     switch (index) {

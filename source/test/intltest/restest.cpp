@@ -68,7 +68,7 @@ itoa(int32_t i, char* buf)
     char* p = buf;
     do
     {
-        *p++ = '0' + (i % 10);
+        *p++ = (char)('0' + (i % 10));
         i /= 10;
     }
     while (i);
@@ -132,8 +132,9 @@ randul()
         initialized = TRUE;
     }
     // Assume rand has at least 12 bits of precision
-    uint32_t l;
-    for (int32_t i=0; i<sizeof(l); ++i) ((char*)&l)[i] = (rand() & 0x0FF0) >> 4;
+    uint32_t l = 0;
+    for (int32_t i=0; i<sizeof(l); ++i)
+        ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
 }
 
@@ -173,7 +174,7 @@ ResourceBundleTest::~ResourceBundleTest()
 {
 }
 
-void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite ResourceBundleTest: ");
     switch (index) {

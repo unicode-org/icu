@@ -1167,7 +1167,7 @@ void CollationRegressionTest::assertEqual(CollationElementIterator &i1, Collatio
     while (c1 != CollationElementIterator::NULLORDER);
 }
 
-void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, char* &name, char* par)
+void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par)
 {
     if (exec)
     {

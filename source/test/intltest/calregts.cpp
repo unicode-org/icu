@@ -25,7 +25,7 @@ const UDate CalendarRegressionTest::LATEST_SUPPORTED_MILLIS    =   4503599627370
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 void 
-CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -431,7 +431,7 @@ CalendarRegressionTest::test4031502()
         cal->setTime(d,status);
         //cal.add(field, amount); //<-- PROBLEM SEEN WITH field = DATE,MONTH 
         // cal.getTime();  // <--- REMOVE THIS TO SEE BUG
-        while (TRUE) {
+        for (;;) {
             int32_t wd = cal->get(Calendar::DAY_OF_WEEK, status);
             if (wd == Calendar::SATURDAY || wd == Calendar::SUNDAY) {
                 cal->add(Calendar::DATE, 1, status);
@@ -1707,7 +1707,7 @@ void CalendarRegressionTest::Test4197699() {
         int32_t amount;
         int32_t before; // ms before cutover
         int32_t after;  // ms after cutover
-	} J81_DATA;
+    } J81_DATA;
 
 /**
  * Rolling and adding across the Gregorian cutover should work as expected.

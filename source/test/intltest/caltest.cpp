@@ -15,7 +15,7 @@
 // class CalendarTest
 // *****************************************************************************
 
-void CalendarTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite TestCalendar");
     switch (index) {
@@ -1172,21 +1172,21 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
     cal->clear();
     cal->set(1997, Calendar::DECEMBER, 25);
-	doYEAR_WOYLoop(cal, sdf, times, status);
+    doYEAR_WOYLoop(cal, sdf, times, status);
     //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
     cal->clear();
     cal->set(1998, Calendar::DECEMBER, 25);
-	doYEAR_WOYLoop(cal, sdf, times, status);
+    doYEAR_WOYLoop(cal, sdf, times, status);
     //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
     cal->clear();
     cal->set(1582, Calendar::OCTOBER, 1);
-	doYEAR_WOYLoop(cal, sdf, times, status);
+    doYEAR_WOYLoop(cal, sdf, times, status);
     //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
@@ -1319,7 +1319,7 @@ void
 CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf, 
                                     int32_t times, UErrorCode& errorCode) {
 
-	char s[100];
+    char s[100];
     UnicodeString us;
     UDate tst, original;
     Calendar *tstres = new GregorianCalendar(Locale::GERMANY, errorCode);

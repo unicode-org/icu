@@ -122,7 +122,7 @@ void CollationGermanTest::TestPrimary( char* par )
     }
 }
 
-void CollationGermanTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationGermanTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationGermanTest: ");
     switch (index)

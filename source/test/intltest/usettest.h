@@ -22,14 +22,14 @@ class UnicodeString;
  */
 class UnicodeSetTest: public IntlTest {
 
-    void runIndexedTest(int32_t index, UBool exec, char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
     
 private:
 
     void TestPatterns(void);
     void TestCategories(void);
     void TestAddRemove(void);
-	void TestCloneEqualHash(void);
+    void TestCloneEqualHash(void);
 
     /**
      * Make sure minimal representation is maintained.
@@ -85,7 +85,7 @@ private:
                        const UnicodeString& expectedPairs);
     void expectPairs(const UnicodeSet& set,
                      const UnicodeString& expectedPairs);
-	void doAssert(UBool, const char*);
+    void doAssert(UBool, const char*);
 public:
     static UnicodeString escape(const UnicodeString& s);
 };
