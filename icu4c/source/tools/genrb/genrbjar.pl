@@ -11,6 +11,7 @@
 # Alan Liu
 
 use File::Path;
+use File::Copy;
 
 usage() unless (@ARGV >= 3);
 my $ICU_ROOT = shift;
@@ -136,10 +137,15 @@ my $cmd = "jar uf $jarFile $pkg/*.class $pkg/*.bin $pkg/*.res $pkg/*.utf8";
 # Do jar command
 print "Directory: $javaRootDir\n";
 chdir($javaRootDir);
-if (! -e "$jarFile.orig") {
-    cmd("copy $jarFile $jarFile.orig");
+if(-e "$jarFile"){
+   if (! -e "$jarFile.orig") {
+       copy("$jarFile","$jarFile.orig");
+   }
+}else{
+   $jarFile ="$ICU_ROOT/source/data/locales/java/ICULocaleData.jar";
+   $cmd = "jar cvf $jarFile $pkg/*.class $pkg/*.bin $pkg/*.res $pkg/*.utf8";
 }
-cmd($cmd);
+cmd($cmd); 
 
 # Done!
 print "All done.\n";
@@ -284,7 +290,7 @@ are listed, all locales are processed.
 Before running this tool, a JDK must be installed and the javac and
 jar binaries for that JDK must be on the system path.
 e.g: 
-	i)  on MacOSX: ./genrbjar.pl /Users/build/ICU_MACOSX/icu /Users/build/icu4j DYN_LD_LIBRARY_PATH
+	i)  on MacOSX: ./genrbjar.pl /Users/build/ICU_MACOSX/icu /Users/build/icu4j DYLD_LIBRARY_PATH
 	ii) on Linux: ./genrbjar.pl /Users/build/ICU_MACOSX/icu /Users/build/icu4j LD_LIBRARY_PATH
 END
   exit(0);
