@@ -1204,53 +1204,14 @@ main(int argc, char* argv[])
 }
 
 const char* IntlTest::loadTestData(UErrorCode& err){
+    const char*      directory=NULL;
     UResourceBundle* test =NULL;
     char* tdpath=NULL;
-    const char* directory = ".";
-    const char* tdrelativepath = U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     if( _testDataPath == NULL){
+        directory= pathToDataDirectory();
 
-     /* get the data/out dir */
-        
-#if defined (U_TOPBUILDDIR)
-       directory =  U_TOPBUILDDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata";
-#else
-    // Use #else so we don't get compiler warnings due to the return above.
-
-    /* On Windows, the file name obtained from __FILE__ includes a full path.
-     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
-     *             Change to    "wherever\icu\source\data"
-     */
-    {
-        char p[1024];
-        char *pBackSlash;
-        int i;
-
-        strcpy(p, __FILE__);
-        /* We want to back over three '\' chars.                            */
-        /*   Only Windows should end up here, so looking for '\' is safe.   */
-        for (i=1; i<=3; i++) {
-            pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
-            if (pBackSlash != NULL) {
-                *pBackSlash = 0;        /* Truncate the string at the '\'   */
-            }
-        }
-
-        if (pBackSlash != NULL) {
-            /* We found and truncated three names from the path.
-            *  Now append "source\data" and set the environment
-            */
-            strcpy(pBackSlash, U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata");
-            directory = p;
-        }
-        else {
-            /* __FILE__ on MSVC7 does not contain the directory */
-            directory = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
-        }
-    }
-#endif
-    
-     tdpath = new char[(( strlen(directory) * strlen(tdrelativepath)) + 10)];//(char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
+        tdpath = (char*) malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 100));
 
 
         /* u_getDataDirectory shoul return \source\data ... set the
@@ -1259,53 +1220,18 @@ const char* IntlTest::loadTestData(UErrorCode& err){
          * Fallback: When Memory mapped file is built
          * ..\source\data\out\..\..\test\testdata\out\testdata
          */
-        strcpy(tdpath, directory);
+		strcpy(tdpath, directory);
+        strcat(tdpath, "out"U_FILE_SEP_STRING);
         strcat(tdpath, tdrelativepath);
         strcat(tdpath,"testdata");
-    
+
         test=ures_open(tdpath, "testtypes", &err);
-    
-        /* we could not find the data in tdpath 
-         * try tdpathFallback
-         */
-        if(U_FAILURE(err))
-        {
-            fprintf(stderr, "Path %s failed to load testdata\n", tdpath);
-            strcpy(tdpath,directory);
-            strcat(tdpath,".."U_FILE_SEP_STRING);
-            strcat(tdpath, tdrelativepath);
-            strcat(tdpath,"testdata");
-            err =U_ZERO_ERROR;
-            test=ures_open(tdpath, "testtypes", &err);
-            /* we could not find the data in tdpath 
-             * try one more tdpathFallback
-             */
-            if(U_FAILURE(err)){
-                fprintf(stderr, "Path %s failed to load testdata\n", tdpath);
-                strcpy(tdpath,directory);
-                strcat(tdpath,".."U_FILE_SEP_STRING);
-                strcat(tdpath,".."U_FILE_SEP_STRING);
-                strcat(tdpath, tdrelativepath);
-                strcat(tdpath,"testdata");
-                err =U_ZERO_ERROR;
-                test=ures_open(tdpath, "testtypes", &err);
-                /* Fall back did not succeed either so return */
-                if(U_FAILURE(err)){
-                    err = U_FILE_ACCESS_ERROR;
-                    it_errln((UnicodeString)"construction of NULL did not succeed:  "
-                           + (UnicodeString)u_errorName(err)
-                           + ", path was based on " 
-                           + (UnicodeString)tdpath
-                           + (UnicodeString)" \n");
-                    return "";
-                }
-                ures_close(test);
-                _testDataPath = tdpath;
-                return _testDataPath;
-            }
-            ures_close(test);
-            _testDataPath = tdpath;
-            return _testDataPath;
+
+        /* Fall back did not succeed either so return */
+        if(U_FAILURE(err)){
+            err = U_FILE_ACCESS_ERROR;
+            it_errln((UnicodeString)"Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
+            return "";
         }
         ures_close(test);
         _testDataPath = tdpath;
@@ -1366,7 +1292,14 @@ const char *  IntlTest::pathToDataDirectory()
         }
         else {
             /* __FILE__ on MSVC7 does not contain the directory */
-            fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+			FILE *file = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "Makefile.in", "r");
+			if (file) {
+				fclose(file);
+	            fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+			}
+			else {
+	            fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+			}
         }
     }
 #endif
