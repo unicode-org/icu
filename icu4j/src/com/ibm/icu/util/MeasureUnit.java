@@ -19,4 +19,6 @@ package com.ibm.icu.util;
  * @draft ICU 3.0
  */
 public abstract class MeasureUnit {
+    // javadoc bug in identifying synthetic constructors, avoid checktags warning
+    private MeasureUnit() {};
 }

@@ -25,6 +25,9 @@ import com.ibm.icu.util.ULocale;
  */
 public abstract class MeasureFormat extends UFormat {
 
+    // javadoc bug in identifying synthetic constructors, avoid checktags warning
+    private MeasureFormat() {};
+    
     /**
      * Return a formatter for CurrencyAmount objects in the given
      * locale.
