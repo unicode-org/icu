@@ -609,11 +609,6 @@ private:
     static void             loadZoneData(void);
 
     // See source file for documentation
-    static UBool U_CALLCONV isDataAcceptable(void *context,
-                                   const char *type, const char *name,
-                                   const UDataInfo *pInfo);
-
-    // See source file for documentation
     static TimeZone* createSystemTimeZone(const UnicodeString& name);
 
     // See source file for documentation
