@@ -122,6 +122,11 @@ abstract public class TimeZone implements Serializable, Cloneable {
     abstract public int getOffset(int era, int year, int month, int day,
                                   int dayOfWeek, int milliseconds);
 
+    // (The following is never called because it is always overridden
+    // by the concrete SimpleTimeZone subclass.  It cannot be made
+    // abstract without breaking other existing client subclasses.
+    // 2003-06-11 ICU 2.6 Alan)
+    ///CLOVER:OFF
     /**
      * Gets the time zone offset, for current date, modified in case of
      * daylight savings. This is the offset to add *to* UTC to get local time.
@@ -142,6 +147,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
 	// SimpleTimeZone overrides this and actually uses monthLength.
 	return getOffset(era, year, month, day, dayOfWeek, milliseconds);
     }
+    ///CLOVER:ON
     
     /**
      * NEWCAL

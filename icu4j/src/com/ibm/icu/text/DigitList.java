@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2003/06/11 18:48:44 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/06/11 22:29:38 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -645,36 +645,6 @@ final class DigitList implements Cloneable {
     }
 
     /**
-     * equality test between two digit lists.
-     */
-    public boolean equals(Object obj) {
-        if (this == obj)                      // quick check
-            return true;
-        if (!(obj instanceof DigitList))         // (1) same object?
-            return false;
-        DigitList other = (DigitList) obj;
-        if (count != other.count ||
-        decimalAt != other.decimalAt)
-            return false;
-        for (int i = 0; i < count; i++)
-            if (digits[i] != other.digits[i])
-                return false;
-        return true;
-    }
-
-    /**
-     * Generates the hash code for the digit list.
-     */
-    public int hashCode() {
-        int hashcode = decimalAt;
-
-        for (int i = 0; i < count; i++)
-            hashcode = hashcode * 37 + digits[i];
-
-        return hashcode;
-    }
-
-    /**
      * Returns true if this DigitList represents Long.MIN_VALUE;
      * false, otherwise.  This is required so that getLong() works.
      */
@@ -734,6 +704,41 @@ final class DigitList implements Cloneable {
 //
 //    private static final double LOG10 = Math.log(10.0);
 
+    // (The following boilerplate methods are currently not called,
+    // and cannot be called by tests since this class is
+    // package-private.  The methods may be useful in the future, so
+    // we do not delete them.  2003-06-11 ICU 2.6 Alan)
+    ///CLOVER:OFF
+    /**
+     * equality test between two digit lists.
+     */
+    public boolean equals(Object obj) {
+        if (this == obj)                      // quick check
+            return true;
+        if (!(obj instanceof DigitList))         // (1) same object?
+            return false;
+        DigitList other = (DigitList) obj;
+        if (count != other.count ||
+        decimalAt != other.decimalAt)
+            return false;
+        for (int i = 0; i < count; i++)
+            if (digits[i] != other.digits[i])
+                return false;
+        return true;
+    }
+
+    /**
+     * Generates the hash code for the digit list.
+     */
+    public int hashCode() {
+        int hashcode = decimalAt;
+
+        for (int i = 0; i < count; i++)
+            hashcode = hashcode * 37 + digits[i];
+
+        return hashcode;
+    }
+
     public String toString()
     {
         if (isZero()) return "0";
@@ -743,4 +748,5 @@ final class DigitList implements Cloneable {
         buf.append(decimalAt);
         return buf.toString();
     }
+    ///CLOVER:ON
 }

@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2003/06/03 18:49:35 $
-* $Revision: 1.26 $
+* $Date: 2003/06/11 22:29:37 $
+* $Revision: 1.27 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -1286,6 +1286,10 @@ class TransliteratorParser {
         }
     }
 
+    // (The following method is part of an unimplemented feature.
+    // Remove this clover pragma after the feature is implemented.
+    // 2003-06-11 ICU 2.6 Alan)
+    ///CLOVER:OFF
     /**
      * Set the maximum backup to 'backup', in response to a pragma
      * statement.
@@ -1294,7 +1298,12 @@ class TransliteratorParser {
         //TODO Finish
         throw new IllegalArgumentException("use maximum backup pragma not implemented yet");
     }
+    ///CLOVER:ON
 
+    // (The following method is part of an unimplemented feature.
+    // Remove this clover pragma after the feature is implemented.
+    // 2003-06-11 ICU 2.6 Alan)
+    ///CLOVER:OFF
     /**
      * Begin normalizing all rules using the given mode, in response
      * to a pragma statement.
@@ -1303,6 +1312,7 @@ class TransliteratorParser {
         //TODO Finish
         throw new IllegalArgumentException("use normalize rules pragma not implemented yet");
     }
+    ///CLOVER:ON
 
     /**
      * Return true if the given rule looks like a pragma.
