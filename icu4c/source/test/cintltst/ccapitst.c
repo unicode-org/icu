@@ -1108,14 +1108,31 @@ static void TestAlias() {
         const char *alias0;
         uint16_t na = ucnv_countAliases(name, &status);
         uint16_t j;
+        UConverter *cnv;
 
         if (na == 0) {
-            log_data_err("FAIL: Converter \"%s\" (i=%d)"
+            log_err("FAIL: Converter \"%s\" (i=%d)"
                     " has no aliases; expect at least one\n",
                     name, i);
             continue;
         }
+        cnv = ucnv_open(name, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("FAIL: Converter \"%s\" (i=%d)"
+                    " can't be opened.\n",
+                    name, i);
+        }
+        else {
+            if (strcmp(ucnv_getName(cnv, &status), name) != 0 
+                && (strstr(name, "PlatformEndian") == 0 && strstr(name, "OppositeEndian") == 0)) {
+                log_err("FAIL: Converter \"%s\" returned \"%s\" for getName. "
+                        "The should be the same\n",
+                        name, ucnv_getName(cnv, &status));
+            }
+        }
+        ucnv_close(cnv);
 
+        status = U_ZERO_ERROR;
         alias0 = ucnv_getAlias(name, 0, &status);
         for (j=1; j<na; ++j) {
             const char *alias;
