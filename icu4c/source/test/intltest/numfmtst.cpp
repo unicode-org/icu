@@ -398,13 +398,13 @@ NumberFormatTest::TestInt64() {
 		expect(fmt, (Formattable)(int64_t)1, "1E0");
 		expect(fmt, (Formattable)(int64_t)2147483647, "2.147483647E9");
 		expect(fmt, (Formattable)((int64_t)-2147483647-1), "-2.147483648E9");
-		expect(fmt, (Formattable)(int64_t)9223372036854775807, "9.223372036854775807E18");
-		expect(fmt, (Formattable)((int64_t)-9223372036854775807-1), "-9.223372036854775808E18");
+		expect(fmt, (Formattable)(int64_t)U_INT64_MAX, "9.223372036854775807E18");
+		expect(fmt, (Formattable)((int64_t)U_INT64_MIN), "-9.223372036854775808E18");
 	}
 
 	// also test digitlist
-	int64_t int64max = 9223372036854775807;
-	int64_t int64min = -9223372036854775807 - 1;
+	int64_t int64max = U_INT64_MAX;
+	int64_t int64min = U_INT64_MIN;
 	const char* int64maxstr = "9223372036854775807";
 	const char* int64minstr = "-9223372036854775808";
 	UnicodeString fail("fail: ");
