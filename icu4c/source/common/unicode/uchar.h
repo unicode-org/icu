@@ -860,11 +860,24 @@ enum UBlockCode {
     U_LOW_SURROGATES=77,
 
     /**
-     * Unicode 3.2 renames this block to "Private Use Area".
+     * Same as UBLOCK_PRIVATE_USE_AREA.
+     * Until Unicode 3.1.1, the corresponding block name was "Private Use",
+     * and multiple code point ranges had this block.
+     * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
+     * adds separate blocks for the supplementary PUAs.
+     *
      * @draft ICU 2.0
      */
     UBLOCK_PRIVATE_USE = 78,
-    /** @deprecated  Use UBLOCK_PRIVATE_USE. Remove after Aug, 2002 */
+    /**
+     * Same as UBLOCK_PRIVATE_USE.
+     * Until Unicode 3.1.1, the corresponding block name was "Private Use",
+     * and multiple code point ranges had this block.
+     * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
+     * adds separate blocks for the supplementary PUAs.
+     *
+     * @draft ICU 2.0
+     */
     UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_PRIVATE_USE_AREA=78,
