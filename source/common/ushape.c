@@ -939,10 +939,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
               uint32_t options,
               UErrorCode *pErrorCode) {
 
-    int32_t outputSize;
-    int32_t spacesCountl=0;
-    int32_t spacesCountr=0;
-    UChar *tempbuffer=NULL;
+    int32_t destCapacity;
 
     /* usual error checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -965,7 +962,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         sourceLength=u_strlen(source);
     }
     if(sourceLength==0) {
-        return 0;
+        return u_terminateUChars(dest, destSize, 0, pErrorCode);
     }
 
     /* check that source and destination do not overlap */
@@ -977,20 +974,36 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         return 0;
     }
 
+    destCapacity=destSize;
+
     if((options&U_SHAPE_LETTERS_MASK)!=U_SHAPE_LETTERS_NOOP) {
-        /* calculate destination size if destSize equals 0 */
-        /* ### TODO: does preflighting work if destSize is too small but >0? */
-        if( (destSize == 0) &&
-            ((options&U_SHAPE_LENGTH_MASK)==U_SHAPE_LENGTH_GROW_SHRINK) ) {
-            destSize = calculateSize(source,sourceLength,destSize,options);
-            return destSize;
+        UChar buffer[300];
+        UChar *tempbuffer;
+        int32_t outputSize, spacesCountl=0, spacesCountr=0;
+
+        /* calculate destination size */
+        /* TODO: do we ever need to do this pure preflighting? */
+        if((options&U_SHAPE_LENGTH_MASK)==U_SHAPE_LENGTH_GROW_SHRINK) {
+            outputSize=calculateSize(source,sourceLength,destSize,options);
+        } else {
+            outputSize=sourceLength;
+        }
+        if(outputSize>destSize) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            return outputSize;
         }
 
         /* Start of Arabic letter shaping part */
-        tempbuffer = (UChar *)uprv_malloc((sourceLength*2)*U_SIZEOF_UCHAR);
-        uprv_memset(tempbuffer, 0, (sourceLength*2)*U_SIZEOF_UCHAR);
-
+        if(outputSize<=sizeof(buffer)/U_SIZEOF_UCHAR) {
+            outputSize=sizeof(buffer)/U_SIZEOF_UCHAR;
+            tempbuffer=buffer;
+        } else {
+            tempbuffer = (UChar *)uprv_malloc(outputSize*U_SIZEOF_UCHAR);
+        }
         uprv_memcpy(tempbuffer, source, sourceLength*U_SIZEOF_UCHAR);
+        if(sourceLength<outputSize) {
+            uprv_memset(tempbuffer+sourceLength, 0, (outputSize-sourceLength)*U_SIZEOF_UCHAR);
+        }
 
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL) {
             countSpaces(tempbuffer,sourceLength,options,&spacesCountl,&spacesCountr);
@@ -1016,19 +1029,22 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             break;
         }
 
-        if(outputSize > destSize)
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL) {
             countSpaces(tempbuffer,outputSize,options,&spacesCountl,&spacesCountr);
             invertBuffer(tempbuffer,outputSize,options,&spacesCountl,&spacesCountr);
         }
-        uprv_memcpy(dest, tempbuffer, (outputSize>=destSize ? destSize:outputSize)*U_SIZEOF_UCHAR);
-        destSize = outputSize;
+        uprv_memcpy(dest, tempbuffer, uprv_min(outputSize, destSize)*U_SIZEOF_UCHAR);
 
-        if(tempbuffer) {
+        if(tempbuffer!=buffer) {
             uprv_free(tempbuffer);
         }
+
+        if(outputSize>destSize) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            return outputSize;
+        }
+        destSize = outputSize;
+
         /* End of Arabic letter shaping part */
     } else {
         /*
@@ -1105,5 +1121,5 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         }
     }
 
-    return destSize;
+    return u_terminateUChars(dest, destCapacity, destSize, pErrorCode);
 }
