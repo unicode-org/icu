@@ -84,16 +84,21 @@
  *
  */ 
  
-/* The global ICU mutex.   */ 
-#if defined(WIN32) || (ICU_USE_THREADS==0)
+/* The global ICU mutex.   */
+#if defined(WIN32) 
 static UMTX              gGlobalMutex      = NULL;
 #endif
 
-#if defined(POSIX) && (ICU_USE_THREADS==1)
+#if defined(POSIX) 
+#if (ICU_USE_THREADS == 1)
 static pthread_mutex_t   gGlobalPosixMutex = PTHREAD_MUTEX_INITIALIZER;
 static UMTX              gGlobalMutex      = &gGlobalPosixMutex;
 static UMTX              gIncDecMutex      = NULL;
+#else
+static UMTX              gGlobalMutex      = NULL;
+static UMTX              gIncDecMutex      = NULL;
 #endif
+#endif  /* POSIX */
 
 
 /* Detect Recursive locking of the global mutex.  For debugging only. */
@@ -286,7 +291,7 @@ static void initGlobalMutex() {
         U_ASSERT(gGlobalMutex = &gGlobalPosixMutex);
     #endif /* cascade of platforms */
 #else  /* ICU_USE_THREADS */
-        gGlobalMutex = &gGlobalMutex  /* With no threads, we must still set the mutex to
+        gGlobalMutex = &gGlobalMutex;  /* With no threads, we must still set the mutex to
                                         * some non-null value to make the rest of the
                                         *   (not ifdefed) mutex code think that it is initialized.
                                         */
@@ -524,9 +529,10 @@ U_CFUNC UBool umtx_cleanup(void) {
     gGlobalMutex    = NULL;
 #if defined (POSIX)
     gIncDecMutex    = NULL;
+#if (ICU_USE_THREADS == 1)
     gGlobalMutex    = &gGlobalPosixMutex;
 #endif
-
+#endif
     pIncFn         = NULL;
     pDecFn         = NULL;
 
