@@ -46,7 +46,7 @@
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
 #include "unicode/dcfmtsym.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/uchar.h"
 #include "unicode/curramt.h"
 #include "ucurrimp.h"
@@ -306,10 +306,14 @@ DecimalFormat::construct(UErrorCode&             status,
     // one specified.
     if (pattern == NULL)
     {
-        ResourceBundle resource((char *)0, Locale::getDefault(), status);
+        int32_t len = 0;
+        UResourceBundle *resource = ures_open(NULL, Locale::getDefault().getName(), &status);
 
-        str = resource.get(fgNumberPatterns, status).getStringEx((int32_t)0, status);
+        resource = ures_getByKey(resource, fgNumberPatterns, resource, &status);
+        const UChar *resStr = ures_getStringByIndex(resource, (int32_t)0, &len, &status);
+        str.setTo(TRUE, resStr, len);
         pattern = &str;
+        ures_close(resource);
     }
 
     if (U_FAILURE(status))

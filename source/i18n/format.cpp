@@ -181,13 +181,6 @@ Format::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
 }
 
 void
-Format::setLocales(const ResourceBundle& res) {
-    UErrorCode status = U_ZERO_ERROR;
-    setLocaleIDs(res.getLocale(ULOC_VALID_LOCALE, status).getName(),
-                 res.getLocale(ULOC_ACTUAL_LOCALE, status).getName());
-}
-
-void
 Format::setLocaleIDs(const char* valid, const char* actual) {
     U_LOCALE_BASED(locBased, *this);
     locBased.setLocaleIDs(valid, actual);
