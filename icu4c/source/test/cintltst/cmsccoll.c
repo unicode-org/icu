@@ -652,7 +652,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   if(U_SUCCESS(*status) && ruleLen > 0) {
     rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
-    src.source = src.current = rulesCopy;
+    src.current = src.source = rulesCopy;
     src.end = rulesCopy+ruleLen;
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -1017,7 +1017,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   if(U_SUCCESS(*status) && ruleLen > 0) {
     rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
-    src.source = src.current = rulesCopy;
+    src.current = src.source = rulesCopy;
     src.end = rulesCopy+ruleLen;
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -1152,7 +1152,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   if(U_SUCCESS(*status) && ruleLen > 0) {
     rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
-    src.source = src.current = rulesCopy;
+    src.current = src.source = rulesCopy;
     src.end = rulesCopy+ruleLen;
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -2551,7 +2551,10 @@ static void TestCyrillicTailoring(void) {
       "\\u0410\\u0306a",
       "\\u04d0A"
   };
-    genericLocaleStarter("ru", test, 3);
+    /* Russian overrides contractions, so this test is not valid anymore */
+    /*genericLocaleStarter("ru", test, 3);*/ 
+
+    genericLocaleStarter("root", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410", test, 3);
     genericRulesStarter("&Z < \\u0410", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410 < \\u04d0", test, 3);
@@ -2886,7 +2889,7 @@ static void TestVariableTopSetting(void) {
 
   if(U_SUCCESS(status) && rulesLen > 0) {
     ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
-    src.source = src.current = rulesCopy;
+    src.current = src.source = rulesCopy;
     src.end = rulesCopy+rulesLen;
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE; 
@@ -3620,6 +3623,27 @@ static void TestRuleOptions(void) {
   }
 }
 
+
+static void TestUnicodeSetRules(void) {
+
+  static struct {
+    const char *rules;
+    const char *data[50];
+    const uint32_t len;
+  } tests[] = {  
+    /* - all befores here amount to zero */
+    { "[copy [\\uAC00-\\uD7FF]]&a = a", 
+    { "a", "b"}, 2} /* you cannot go before first tertiary ignorable */
+  };
+  uint32_t i;
+
+
+  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+    genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+  }
+
+}
+
 void addMiscCollTest(TestNode** root)
 {
     addTest(root, &TestRuleOptions, "tscoll/cmsccoll/TestRuleOptions");
@@ -3664,6 +3688,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
+    addTest(root, &TestUnicodeSetRules, "tscoll/cmsccoll/TestUnicodeSetRules");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
