@@ -15,6 +15,7 @@
 #include "GUISupport.h"
 #include "UnicodeReader.h"
 
+#define BYTE(b) (((int) b) & 0xFF)
 
 /*
  * Read the text from a file. The text must start with a Unicode Byte
@@ -69,7 +70,7 @@ const UChar *UnicodeReader::readFile(const char *fileName, GUISupport *guiSuppor
         signatureLength = 4;
     } else {
         sprintf(errorMessage, "Couldn't detect the encoding of %s: (%2.2X, %2.2X, %2.2X, %2.2X)\n", fileName,
-                    startBytes[0], startBytes[1], startBytes[2], startBytes[3]);
+                    BYTE(startBytes[0]), BYTE(startBytes[1]), BYTE(startBytes[2]), BYTE(startBytes[3]));
         guiSupport->postErrorMessage(errorMessage, "Text File Error");
         fclose(f);
         return 0;
