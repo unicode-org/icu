@@ -397,5 +397,10 @@ const Locale &ResourceBundle::getLocale(void) const
   return *locName;
 }
 
+const Locale ResourceBundle::getLocale(ULocDataLocaleType type, UErrorCode &status) const
+{
+  return ures_getLocaleByType(resource, type, &status);
+}
+
 //eof
 U_NAMESPACE_END
