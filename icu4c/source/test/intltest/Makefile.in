@@ -74,7 +74,7 @@ distclean-local: clean-local
 -include Makefile.local
 
 check-local: all-local
-	 TZ=PST8PDT $(INVOKE) ./$(TARGET)  $(INTLTESTOPTS) || true
+	 TZ=PST8PDT $(INVOKE) ./$(TARGET)  $(INTLTEST_OPTS) || true
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
