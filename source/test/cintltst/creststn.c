@@ -271,6 +271,7 @@ static void TestDecodedBundle(){
         }
         num++;
     }
+    ures_close(resB);
 }
 
 static void TestNewTypes() {
