@@ -1194,10 +1194,10 @@ LocaleTest::TestEuroSupport()
         NumberFormat *nf = NumberFormat::createCurrencyInstance(loc, status);
         UnicodeString pos;
 
-		if (U_FAILURE(status)) {
-			dataerrln("Error calling NumberFormat::createCurrencyInstance(%s)", *locales);
-			continue;
-		}
+        if (U_FAILURE(status)) {
+            dataerrln("Error calling NumberFormat::createCurrencyInstance(%s)", *locales);
+            continue;
+        }
 
         nf->format(271828.182845, pos);
         UnicodeString neg;

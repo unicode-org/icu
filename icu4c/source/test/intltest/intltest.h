@@ -78,10 +78,10 @@ public:
     virtual UBool setNoErrMsg( UBool no_err_msg = TRUE );
     virtual UBool setQuick( UBool quick = TRUE );
     virtual UBool setLeaks( UBool leaks = TRUE );
-	virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = TRUE );
+    virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = TRUE );
 
     virtual int32_t getErrors( void );
-	virtual int32_t getDataErrors (void );
+    virtual int32_t getDataErrors (void );
 
     virtual void setCaller( IntlTest* callingTest ); // for internal use only
     virtual void setPath( char* path ); // for internal use only
@@ -104,9 +104,9 @@ public:
 
     virtual void errln( const UnicodeString &message );
 
-	virtual void dataerr( const UnicodeString &message );
+    virtual void dataerr( const UnicodeString &message );
 
-	virtual void dataerrln( const UnicodeString &message );
+    virtual void dataerrln( const UnicodeString &message );
 
     // convenience functions: sprintf() + errln() etc.
     void log(const char *fmt, ...);
@@ -115,8 +115,8 @@ public:
     void infoln(const char *fmt, ...);
     void err(const char *fmt, ...);
     void errln(const char *fmt, ...);
-	void dataerr(const char *fmt, ...);
-	void dataerrln(const char *fmt, ...);
+    void dataerr(const char *fmt, ...);
+    void dataerrln(const char *fmt, ...);
 
     // Print ALL named errors encountered so far
     void printErrors(); 
@@ -174,7 +174,7 @@ protected:
 
     virtual int32_t IncErrorCount( void );
 
-	virtual int32_t IncDataErrorCount( void );
+    virtual int32_t IncDataErrorCount( void );
 
     virtual UBool callTest( IntlTest& testToBeCalled, char* par );
 
@@ -183,14 +183,14 @@ protected:
     UBool      no_err_msg;
     UBool      quick;
     UBool      leaks;
-	UBool      warn_on_missing_data;
+    UBool      warn_on_missing_data;
 
 private:
     UBool      LL_linestart;
     int32_t     LL_indentlevel;
 
     int32_t     errorCount;
-	int32_t     dataErrorCount;
+    int32_t     dataErrorCount;
     IntlTest*   caller;
     char*       path;           // specifies subtests
 
