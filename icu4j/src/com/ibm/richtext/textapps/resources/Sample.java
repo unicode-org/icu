@@ -1,3 +1,15 @@
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/richtext/textapps/resources/Sample.java,v $
+ * $Date: 2002/08/13 23:44:45 $
+ * $Revision: 1.2 $
+ *
+ *******************************************************************************
+ */
 package com.ibm.richtext.textapps.resources;
 
 import java.util.ListResourceBundle;
