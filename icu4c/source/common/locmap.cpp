@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.8 $
+// $Revision: 1.9 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -39,13 +39,14 @@
 
 #include "locmap.h"
 #include "unicode/locid.h"
+#include "unicode/uloc.h"
 #include "mutex.h"
 #include "cmemory.h"
 #include "cstring.h"
 
 int32_t        IGlobalLocales::fgLocaleCount = 0;
 uint32_t       IGlobalLocales::fgStdLang = 0x0400;
-const uint32_t IGlobalLocales::kMapSize = 73;
+const uint32_t IGlobalLocales::kMapSize = 74;
 ILcidPosixMap* IGlobalLocales::fgPosixIDmap = 0;
 
 /////////////////////////////////////////////////
@@ -106,7 +107,7 @@ private:
   ILcidPosixMap& operator=(const ILcidPosixMap&);
 
   uint16_t fHostLangID;
-  char fPosixLangID[3];
+  char fPosixLangID[128];
 
   ILcidPosixElement* fRegionMaps;
   uint32_t fMapSize;
@@ -139,7 +140,7 @@ IGlobalLocales::initializeMapRegions()
   newPosixIDmap[5].initialize(0x0402,  "bg_BG");       //    bg  Bulgarian                 0x02 
   newPosixIDmap[6].initialize(0x0445,  "bn_IN");       //    bn  Bengali; Bangla           0x45 
   newPosixIDmap[7].initialize(0x0403,  "ca_ES");       //    ca  Catalan                   0x03 
-  newPosixIDmap[8].initialize(0x0405,  "cs_CS");       //    cs  Czech                     0x05 
+  newPosixIDmap[8].initialize(0x0405,  "cs_CZ");       //    cs  Czech                     0x05 
   newPosixIDmap[9].initialize(0x0406,  "da_DK");       //    da  Danish                    0x06 
   newPosixIDmap[10].initialize(0x07,   "de",     5);   //    de  German                    0x07 
   newPosixIDmap[11].initialize(0x0408, "el_GR");       //    el  Greek                     0x08 
@@ -184,26 +185,27 @@ IGlobalLocales::initializeMapRegions()
   newPosixIDmap[50].initialize(0x0415, "pl_PL");       //    pl  Polish                    0x15 
   newPosixIDmap[51].initialize(0x16,   "pt",     2);   //    pt  Portuguese                0x16 
   newPosixIDmap[52].initialize(0x0418, "ro_RO");       //    ro  Romanian                  0x18 
-  newPosixIDmap[53].initialize(0x0419, "ru_RU");       //    ru  Russian                   0x19 
-  newPosixIDmap[54].initialize(0x044f, "sa_IN");       //    sa  Sanskrit                  0x4f 
-  newPosixIDmap[55].initialize(0x0459, "sd_IN");       //    sd  Sindhi                    0x59 
-  newPosixIDmap[56].initialize(0x081a, "sh_YU");       //    sh  Serbo-Croatian	      0x1a 
-  newPosixIDmap[57].initialize(0x041b, "sk_SK");       //    sk  Slovak                    0x1b 
-  newPosixIDmap[58].initialize(0x0424, "sl_SI");       //    sl  Slovenian                 0x24 
-  newPosixIDmap[59].initialize(0x041c, "sq_AL");       //    sq  Albanian                  0x1c 
-  newPosixIDmap[60].initialize(0x0c1a, "sr_YU");       //    sr  Serbian                   0x1a 
-  newPosixIDmap[61].initialize(0x1d,   "sv_SE",    2); //    sv  Swedish                   0x1d 
-  newPosixIDmap[62].initialize(0x0441, "sw");          //    sw  Swahili                   0x41 
-  newPosixIDmap[63].initialize(0x0449, "ta_IN");       //    ta  Tamil                     0x49 
-  newPosixIDmap[64].initialize(0x044a, "te_IN");       //    te  Telugu                    0x4a 
-  newPosixIDmap[65].initialize(0x041e, "th_TH");       //    th  Thai                      0x1e 
-  newPosixIDmap[66].initialize(0x041f, "tr_TR");       //    tr  Turkish                   0x1f 
-  newPosixIDmap[67].initialize(0x0444, "tt_RU");       //    tt  Tatar                     0x44 
-  newPosixIDmap[68].initialize(0x0422, "uk_UA");       //    uk  Ukrainian                 0x22 
-  newPosixIDmap[69].initialize(0x20,   "ur", 2);       //    ur  Urdu                      0x20 
-  newPosixIDmap[70].initialize(0x43,   "uz_UZ", 2);    //    uz  Uzbek                     0x43 
-  newPosixIDmap[71].initialize(0x0422, "vi_VN");       //    vi  Vietnamese                0x2a 
-  newPosixIDmap[72].initialize(0x04,   "zh",     5);   //    zh  Chinese                   0x04 
+  newPosixIDmap[53].initialize(0x00, "root");          //    root                          0x00
+  newPosixIDmap[54].initialize(0x0419, "ru_RU");       //    ru  Russian                   0x19 
+  newPosixIDmap[55].initialize(0x044f, "sa_IN");       //    sa  Sanskrit                  0x4f 
+  newPosixIDmap[56].initialize(0x0459, "sd_IN");       //    sd  Sindhi                    0x59 
+  newPosixIDmap[57].initialize(0x081a, "sh_YU");       //    sh  Serbo-Croatian	      0x1a 
+  newPosixIDmap[58].initialize(0x041b, "sk_SK");       //    sk  Slovak                    0x1b 
+  newPosixIDmap[59].initialize(0x0424, "sl_SI");       //    sl  Slovenian                 0x24 
+  newPosixIDmap[60].initialize(0x041c, "sq_AL");       //    sq  Albanian                  0x1c 
+  newPosixIDmap[61].initialize(0x0c1a, "sr_YU");       //    sr  Serbian                   0x1a 
+  newPosixIDmap[62].initialize(0x1d,   "sv_SE",    2); //    sv  Swedish                   0x1d 
+  newPosixIDmap[63].initialize(0x0441, "sw");          //    sw  Swahili                   0x41 
+  newPosixIDmap[64].initialize(0x0449, "ta_IN");       //    ta  Tamil                     0x49 
+  newPosixIDmap[65].initialize(0x044a, "te_IN");       //    te  Telugu                    0x4a 
+  newPosixIDmap[66].initialize(0x041e, "th_TH");       //    th  Thai                      0x1e 
+  newPosixIDmap[67].initialize(0x041f, "tr_TR");       //    tr  Turkish                   0x1f 
+  newPosixIDmap[68].initialize(0x0444, "tt_RU");       //    tt  Tatar                     0x44 
+  newPosixIDmap[69].initialize(0x0422, "uk_UA");       //    uk  Ukrainian                 0x22 
+  newPosixIDmap[70].initialize(0x20,   "ur", 2);       //    ur  Urdu                      0x20 
+  newPosixIDmap[71].initialize(0x43,   "uz_UZ", 2);    //    uz  Uzbek                     0x43 
+  newPosixIDmap[72].initialize(0x042a, "vi_VN");       //    vi  Vietnamese                0x2a 
+  newPosixIDmap[73].initialize(0x04,   "zh",     5);   //    zh  Chinese                   0x04 
 
   newPosixIDmap[1].addRegion(0x3801, "ar_AE");
   newPosixIDmap[1].addRegion(0x3c01, "ar_BH");
@@ -258,11 +260,11 @@ IGlobalLocales::initializeMapRegions()
   newPosixIDmap[13].addRegion(0x480a, "es_HN");
   newPosixIDmap[13].addRegion(0x080a, "es_MX");
   newPosixIDmap[13].addRegion(0x4c0a, "es_NI");
-  newPosixIDmap[13].addRegion(0x440a, "es_SV");
   newPosixIDmap[13].addRegion(0x180a, "es_PA");
   newPosixIDmap[13].addRegion(0x280a, "es_PE");
   newPosixIDmap[13].addRegion(0x500a, "es_PR");
   newPosixIDmap[13].addRegion(0x3c0a, "es_PY");
+  newPosixIDmap[13].addRegion(0x440a, "es_SV");
   newPosixIDmap[13].addRegion(0x380a, "es_UY");
   newPosixIDmap[13].addRegion(0x200a, "es_VE");
 
@@ -294,20 +296,20 @@ IGlobalLocales::initializeMapRegions()
   newPosixIDmap[51].addRegion(0x0416, "pt_BR");
   newPosixIDmap[51].addRegion(0x0816, "pt_PT");
 
-  newPosixIDmap[61].addRegion(0x081d, "sv_FI");
-  newPosixIDmap[61].addRegion(0x041d, "sv_SE");
+  newPosixIDmap[62].addRegion(0x081d, "sv_FI");
+  newPosixIDmap[62].addRegion(0x041d, "sv_SE");
 
-  newPosixIDmap[69].addRegion(0x0820, "ur_IN");
-  newPosixIDmap[69].addRegion(0x0420, "ur_PK");
+  newPosixIDmap[70].addRegion(0x0820, "ur_IN");
+  newPosixIDmap[70].addRegion(0x0420, "ur_PK");
 
-  newPosixIDmap[70].addRegion(0x0843, "uz_UZ_C");
-  newPosixIDmap[70].addRegion(0x0443, "uz_UZ_L");
+  newPosixIDmap[71].addRegion(0x0843, "uz_UZ_C");
+  newPosixIDmap[71].addRegion(0x0443, "uz_UZ_L");
 
-  newPosixIDmap[72].addRegion(0x0804, "zh_CN");
-  newPosixIDmap[72].addRegion(0x0c04, "zh_HK");
-  newPosixIDmap[72].addRegion(0x1404, "zh_MO");
-  newPosixIDmap[72].addRegion(0x1004, "zh_SG");
-  newPosixIDmap[72].addRegion(0x0404, "zh_TW");
+  newPosixIDmap[73].addRegion(0x0804, "zh_CN");
+  newPosixIDmap[73].addRegion(0x0c04, "zh_HK");
+  newPosixIDmap[73].addRegion(0x1404, "zh_MO");
+  newPosixIDmap[73].addRegion(0x1004, "zh_SG");
+  newPosixIDmap[73].addRegion(0x0404, "zh_TW");
 
   {
     Mutex m;
@@ -363,6 +365,8 @@ T_convertToPosix(uint32_t hostid)
 uint32_t
 IGlobalLocales::convertToLCID(const char* posixID)
 {
+
+    UErrorCode status = U_ZERO_ERROR;
   if (!posixID || strlen(posixID) < 2)
     return 0;
   
@@ -373,10 +377,8 @@ IGlobalLocales::convertToLCID(const char* posixID)
   uint32_t  low = 0, mid = 0;
   uint32_t  high = kMapSize - 1;
 
-  char langID[3];
-  langID[0] = posixID[0];
-  langID[1] = posixID[1];
-  langID[2] = 0;
+  char langID[1024];
+  uloc_getLanguage(posixID, langID, 1024, &status);
 
   while (low <= high) {
 
@@ -456,11 +458,11 @@ ILcidPosixMap::initialize (uint32_t hostID,
                            const char* posixID,
                            uint32_t totalRegions)
 {
+    UErrorCode status = U_ZERO_ERROR;
+
   fHostLangID = IGlobalLocales::languageLCID(hostID);
 
-  fPosixLangID[0] = posixID[0]; // don't care about these being called twice. not critical.
-  fPosixLangID[1] = posixID[1];
-  fPosixLangID[2] = 0;
+  uloc_getLanguage(posixID, fPosixLangID, 128, &status);
 
   fMapSize = totalRegions + 1;
    fNumRegions=0;
@@ -513,9 +515,7 @@ ILcidPosixMap::operator=(const ILcidPosixMap& that)
   if (this != &that)
     {
       fHostLangID = that.fHostLangID;
-      fPosixLangID[0] = that.fPosixLangID[0];
-      fPosixLangID[1] = that.fPosixLangID[1];
-      fPosixLangID[2] = 0;
+      uprv_strcpy(fPosixLangID, that.fPosixLangID);
 
       fRegionMaps = 0;
       fMapSize = 0;
