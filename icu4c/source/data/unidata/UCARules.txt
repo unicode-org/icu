@@ -1,10 +1,10 @@
 ﻿#	UCA Rules
 #	This file contains the UCA tables for the given version, but transformed into rule syntax.
-#	Generated:   2002-07-02,12:30:59 GMT [MD]
+#	Generated:   2002-07-02,18:49:17 GMT [MD]
 #	NOTE: Since UCA handles canonical equivalents, no composites are necessary
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
-# VERSION: UCA=3.1.1d5, UCD=3.2.0
+# VERSION: UCA=3.1.1d6, UCD=3.2.0
 & [last tertiary ignorable]
 
     =	 '\u0001'
@@ -548,7 +548,7 @@
   <<	 ⃡
   <<	 ⃢
   <<	 ⃣
-& [top]
+& [last non-ignorable]
  <	 '\u0009'
  <	 '\u000A'
  <	 '\u000B'
@@ -4227,7 +4227,6 @@
    <<<	 ㏜ / v
   <<	 ß / s
   <<	 ſ
-   <<<	 ẛ / ̇
    <<<	 ﬅ / t
  <	 ʂ
  <	 ʃ
@@ -5325,11 +5324,9 @@
  <	 ט
  <	 י
    <<<	 ײ / י
-   <<<	 ײַ / יַ
  <	 כ
    <<<	 ﬤ
    <<<	 ך
-   <<<	 ךּ / ּ
  <	 ל
    <<<	 ﬥ
  <	 מ
@@ -5342,7 +5339,6 @@
    <<<	 ﬠ
  <	 פ
    <<<	 ף
-   <<<	 ףּ / ּ
  <	 צ
    <<<	 ץ
  <	 ק
@@ -6114,7 +6110,7 @@
    <<<	 ﮥ / ٔ
    <<<	 ﮤ / ٔ
  <	 و
-    =	 ۥ
+   <<<	 ۥ
    <<<	 ٶ / ٴ
    <<<	 ﻮ
    <<<	 ﻭ
@@ -6150,7 +6146,7 @@
    <<<	 ﻯ
    <<<	 ﱝ / ٰ
  <	 ي
-    =	 ۦ
+   <<<	 ۦ
    <<<	 ٸ / ٴ
    <<<	 ﻳ
    <<<	 ﳚ / ج
@@ -7086,9 +7082,7 @@
  <	 ೇ
  <	 ೈ
  <	 ೊ
-    =	 ೊ
  <	 ೋ
-    =	 ೋ
  <	 ೌ
  <	 ್
  <	 ೕ
@@ -7231,9 +7225,7 @@
  <	 ේ
  <	 ෛ
  <	 ො
-    =	 ො
  <	 ෝ
-    =	 ෝ
  <	 ෞ
  <	 ෟ
  <	 ෲ
