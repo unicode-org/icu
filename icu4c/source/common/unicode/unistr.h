@@ -1115,6 +1115,43 @@ public:
    */
   inline UTextOffset getCharLimit(UTextOffset offset) const;
 
+  /**
+   * Move the code unit index along the string by delta code points.
+   * Interpret the input index as a code unit-based offset into the string,
+   * move the index forward or backward by delta code points, and
+   * return the resulting index.
+   * The input index should point to the first code unit of a code point,
+   * if there is more than one.
+   *
+   * Both input and output indexes are code unit-based as for all
+   * string indexes/offsets in ICU (and other libraries, like MBCS char*).
+   * If delta<0 then the index is moved backward (toward the start of the string).
+   * If delta>0 then the index is moved forward (toward the end of the string).
+   *
+   * This behaves like CharacterIterator::move32(delta, kCurrent).
+   *
+   * Examples:
+   * <pre>
+   * // s has code points 'a' U+10000 'b' U+10ffff U+2029
+   * UnicodeString s=UNICODE_STRING("a\\U00010000b\\U0010ffff\\u2029", 31).unescape();
+   *
+   * // initial index: position of U+10000
+   * UTextOffset index=1;
+   *
+   * // the following examples will all result in index==4, position of U+10ffff
+   *
+   * // skip 2 code points from some position in the string
+   * index=s.moveIndex32(index, 2); // skips U+10000 and 'b'
+   *
+   * // go to the 3rd code point from the start of s (0-based)
+   * index=s.moveIndex32(0, 3); // skips 'a', U+10000, and 'b'
+   *
+   * // go to the next-to-last code point of s
+   * index=s.moveIndex32(s.length(), -2); // backward-skips U+2029 and U+10ffff
+   * </pre>
+   */
+  UTextOffset moveIndex32(UTextOffset index, int32_t delta) const;
+
   /* Substring extraction */
 
   /**
