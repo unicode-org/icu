@@ -286,9 +286,15 @@ ucnv_compareNames(const char *name1, const char *name2);
  * <code>UCNV_OPTION_SEP_CHAR</code> between the name and the first option and
  * also between adjacent options.</p>
  *
- * If the alias is ambiguous, then the preferred converter is used
- * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
- * @param converterName : name of the uconv table, may have options appended
+ * <p>If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.</p>
+ *
+ * <p>The conversion behavior and names can vary between platforms. ICU may
+ * convert some characters differently from other platforms. Details on this topic
+ * are in the <a href="http://oss.software.ibm.com/icu/userguide/conversion.html">User's
+ * Guide</a>.</p>
+ *
+ * @param converterName Name of the uconv table, may have options appended
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, U_FILE_ACCESS_ERROR</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
  * @see ucnv_openU
