@@ -435,10 +435,10 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
 
   ucol_uprv_tok_initData();
 
-  while(u_isWhitespace(*start)) { /* eat whitespace */
+  while(u_isWhitespace(*start) && start < end) { /* eat whitespace */
     start++;
   }
-  if(start == end) {
+  if(start >= end) {
     return NULL;
   }
   /* skip opening '[' */
