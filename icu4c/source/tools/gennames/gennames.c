@@ -271,9 +271,8 @@ static UOption options[]={
     UOPTION_QUIET,
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
-    UOPTION_SOURCEDIR,
     { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
-    { "unicode1names", NULL, NULL, NULL, '1', UOPT_NO_ARG, 0 }
+    { "unicode1-names", NULL, NULL, NULL, '1', UOPT_NO_ARG, 0 }
 };
 
 extern int
@@ -283,8 +282,7 @@ main(int argc, char* argv[]) {
 
     /* preset then read command line options */
     options[5].value=u_getDataDirectory();
-    options[6].value="";
-    options[7].value="3.0.0";
+    options[6].value="3.1.1";
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -308,9 +306,8 @@ main(int argc, char* argv[]) {
             "\t\t-q or --quiet       no output\n"
             "\t\t-c or --copyright   include a copyright notice\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-s or --sourcedir   source directory, followed by the path\n"
             "\t\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n"
-            "\t\t-1 or --unicode1names  store Unicode 1.0 character names\n",
+            "\t\t-1 or --unicode1-names  store Unicode 1.0 character names\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -319,10 +316,10 @@ main(int argc, char* argv[]) {
     beVerbose=options[2].doesOccur;
     beQuiet=options[3].doesOccur;
     haveCopyright=options[4].doesOccur;
-    store10Names=options[8].doesOccur;
+    store10Names=options[7].doesOccur;
 
     /* set the Unicode version */
-    u_versionFromString(version, options[7].value);
+    u_versionFromString(version, options[6].value);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 
     init();
