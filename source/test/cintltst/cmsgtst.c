@@ -199,6 +199,13 @@ static void MessageFormatTest( void )
                     log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
                         austrdup(result), austrdup(testResultStrings[i]) );
                 }
+                umsg_parse(formatter,result,resultLength,&count,&ec,one,two,three);
+                if(ec!=U_ILLEGAL_ARGUMENT_ERROR){
+                    log_err("FAIL: Did not get expected error for umsg_parse(). Expected: U_ILLEGAL_ARGUMENT_ERROR Got: %s \n",u_errorName(ec));
+                }else{
+                    ec = U_ZERO_ERROR;
+                }
+            
                 umsg_parse(formatter,result,resultLength,&count,&ec,&one,&two,&three);
                 if(U_FAILURE(ec)){
                     log_err("umsg_parse could not parse the pattern. Error: %s.\n",u_errorName(ec));
