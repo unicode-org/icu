@@ -22,6 +22,7 @@ CFG=Debug
 !ERROR Can't find path!
 !ELSE
 ICUDATA=$(ICUP)\icu\data
+ICU_DATA=$(ICUDATA)\
 DATA_PATH=$(ICUP)\icu\data^\
 TRANS=translit^\
 TEST=..\source\test\testdata^\
@@ -215,6 +216,7 @@ CLEAN :
 .ucm.cnv::
 	@echo Generating converters and c source files
 	@cd $(ICUDATA)
+	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\makeconv\$(CFG)\makeconv $<
 #	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
 
@@ -235,15 +237,18 @@ $(CPP_FLAGS) $<
 # Targets for unames.dat
 unames.dat : UnicodeData-3.0.0.txt
 	@echo Creating data file for Unicode Names
+	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- UnicodeData-3.0.0.txt
 
 unames_dat.c : unames.dat
 	@echo Creating C source file for Unicode Names
+	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for converters
 cnvalias.dat : convrtrs.txt
 	@echo Creating data file for Converter Aliases
+	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval -c-
 
 cnvalias_dat.c : cnvalias.dat
@@ -253,6 +258,7 @@ cnvalias_dat.c : cnvalias.dat
 # Targets for tz
 tz.dat : {$(ICUTOOLS)\gentz}tz.txt
 	@echo Creating data file for Timezones
+	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\gentz\$(CFG)\gentz -c- $(ICUTOOLS)\gentz\tz.txt
 
 tz_dat.c : tz.dat
