@@ -7,11 +7,10 @@
 
 el_GR_EURO {
     CurrencyElements { 
-            "\u20ac",
-            "EUR ",
+            "\u20AC",
+            "EUR",
             ",",
     }
-    
     
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
