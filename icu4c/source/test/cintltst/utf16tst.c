@@ -467,6 +467,7 @@ void TestAppendChar(){
         }
         count++;
     }  
+    free(str);
 
 }
 void printUChars(UChar *uchars){
