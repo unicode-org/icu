@@ -381,10 +381,10 @@ en {
         DZG { "DZG", "Algerian Franc Germinal" } // 08/04/1851-12/31/1959
         ECS { "ECS", "Ecuador Sucre"        } // 4/1/1884-2000
         ECV { "ECV", "Ecuador Unidad de Valor Constante (UVC)" } // 1980-
-        EEK { "EEK", "Estonian Kroon"        } // 06/21/1992-
+        EEK { "EEK", "Estonian Kroon"       } // 06/21/1992-
         EGP { "EGP", "Egyptian Pound"       } // 11/14/1885-
         ERN { "ERN", "Eritrean Nakfa"       } // 1997-
-        ESP { "ESP", "Spanish Peseta"       } // 01/01/1859-02/28/2002
+        ESP { "\u20A7","Spanish Peseta"     } // 01/01/1859-02/28/2002
         ETB { "Br",  "Ethiopian Birr"       } // 09/15/1976-
         ETD { "ETD", "Ethiopian Dollar"     } // 07/23/1945-09/15/1976
         EUR { "\u20AC","Euro"               } // 01/01/1999-
