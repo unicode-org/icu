@@ -702,8 +702,8 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
               for(i = 0; i < ures_getSize(resource); i++) {
                 /* need to know if it's an alias */
                 if(ures_getType(resource) == RES_TABLE) {
-                  r = derb_getTableItem(resource->fResData.pRoot, resource->fRes, i);
-                  key = derb_getTableKey(resource->fResData.pRoot, resource->fRes, i);
+                  r = derb_getTableItem(resource->fResData.pRoot, resource->fRes, (int16_t)i);
+                  key = derb_getTableKey(resource->fResData.pRoot, resource->fRes, (int16_t)i);
                 } else {
                   r = derb_getArrayItem(resource->fResData.pRoot, resource->fRes, i);
                 }
