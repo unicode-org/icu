@@ -113,26 +113,26 @@ public class RuleBasedBreakIterator extends BreakIterator {
     
         /** Tag value for "words" that do not fit into any of other categories. 
          *  Includes spaces and most punctuation. */
-        public static final int UBRK_WORD_NONE           = 0;
+        public static final int WORD_NONE           = 0;
         /** Upper bound for tags for uncategorized words. */
-        public static final int UBRK_WORD_NONE_LIMIT     = 100;
+        public static final int WORD_NONE_LIMIT     = 100;
         /** Tag value for words that appear to be numbers, lower limit. */
-        public static final int UBRK_WORD_NUMBER         = 100;
+        public static final int WORD_NUMBER         = 100;
         /** Tag value for words that appear to be numbers, upper limit. */
-        public static final int UBRK_WORD_NUMBER_LIMIT   = 200;
+        public static final int WORD_NUMBER_LIMIT   = 200;
         /** Tag value for words that contain letters, excluding
          *  hiragana, katakana or ideographic characters, lower limit. */
-        public static final int UBRK_WORD_LETTER         = 200;
+        public static final int WORD_LETTER         = 200;
         /** Tag value for words containing letters, upper limit  */
-        public static final int UBRK_WORD_LETTER_LIMIT   = 300;
+        public static final int WORD_LETTER_LIMIT   = 300;
         /** Tag value for words containing kana characters, lower limit */
-        public static final int UBRK_WORD_KANA           = 300;
+        public static final int WORD_KANA           = 300;
         /** Tag value for words containing kana characters, upper limit */
-        public static final int UBRK_WORD_KANA_LIMIT     = 400;
+        public static final int WORD_KANA_LIMIT     = 400;
         /** Tag value for words containing ideographic characters, lower limit */
-        public static final int UBRK_WORD_IDEO           = 400;
+        public static final int WORD_IDEO           = 400;
         /** Tag value for words containing ideographic characters, upper limit */
-        public static final int UBRK_WORD_IDEO_LIMIT     = 500;
+        public static final int WORD_IDEO_LIMIT     = 500;
 
     //=======================================================================
     // BreakIterator overrides
