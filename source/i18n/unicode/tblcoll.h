@@ -59,6 +59,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/coll.h"
+#include "unicode/ucol.h"
 #include "unicode/sortkey.h"
 #include "unicode/normlzr.h"
 

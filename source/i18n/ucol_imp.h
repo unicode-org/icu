@@ -361,6 +361,10 @@ ucol_getSortKeySize(const UCollator *coll, collIterate *s,
 U_CAPI uint8_t* U_EXPORT2 
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
+/**
+ * Used to set requested and valid locales on a collator returned by the collator
+ * service.
+ */
 U_CAPI void U_EXPORT2
 ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt);
 
