@@ -897,7 +897,8 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
             if (ch == 0) {
                 // Ran off end of buffer.
                 if ((collationSource->flags & UCOL_ITER_INNORMBUF) == 0) {
-                    // Ran off end of main string.
+                    // Ran off end of main string. backing up one character.
+                    collationSource->pos--;
                     return UCOL_NO_MORE_CES;
                 }
                 else
@@ -1164,9 +1165,8 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         side buffer / original string, and we need to start again to get the
         next character.
         */
-
         for (;;) {
-            if ((data->flags & UCOL_ITER_INNORMBUF) == 0) {
+            if (data->flags & UCOL_ITER_HASLEN) {
                 /*
                 Normal path for strings when length is specified.
                 Not in side buffer because it is always null terminated.
@@ -1175,10 +1175,14 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     /* End of the main source string */
                     return UCOL_NO_MORE_CES;
                 }
+                data->pos --;
+                ch = *data->pos;
             }
             else {
+                data->pos --;
+                ch = *data->pos;
                 /* we are in the side buffer. */
-                if (*(data->pos - 1) == 0) {
+                if (ch == 0) {
                     /*
                     At the start of the normalize side buffer.
                     Go back to string.
@@ -1196,20 +1200,19 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     continue;
                 }
             }
-            data->pos --;
-            ch = *(data->pos);
-
+            
             /*
-            * if there's no fcd and/or normalization stuff to do.
+            * got a character to determine if there's fcd and/or normalization 
+            * stuff to do.
             * if the current character is not fcd.
             * if current character is at the start of the string
             * Trailing combining class == 0.
             * Note if pos is in the writablebuffer, norm is always 0
             */
             if ((data->flags & UCOL_ITER_NORM) == 0 ||
-                data->fcdPosition <= data->pos ||
-                data->string == data->pos ||
-                ch < ZERO_CC_LIMIT_) {
+                ch < ZERO_CC_LIMIT_ ||
+                (data->fcdPosition != NULL && data->fcdPosition <= data->pos) 
+                || data->string == data->pos) {
                 break;
             }
 
@@ -1246,11 +1249,14 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         contraction
         */
         if (!isAtStartPrevIterate(data) && ucol_contractionEndCP(ch, coll)) {
-            result = UCOL_CONTRACTION;
+            result = getSpecialPrevCE(coll, UCOL_CONTRACTION, data, status);
         }
         else {
             if (ch <= 0xFF) {
               result = coll->latinOneMapping[ch];
+              if (result > UCOL_NOT_FOUND) {
+                    result = getSpecialPrevCE(coll, result, data, status);
+              }
             }
             else {
                 if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
@@ -1262,13 +1268,12 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 else {
                     result = ucmp32_get(coll->mapping, ch);
                 }
-            }
-        }
-
-        if (result >= UCOL_NOT_FOUND) {
-            result = getSpecialPrevCE(coll, result, data, status);
-            if (result == UCOL_NOT_FOUND) {
-                result = ucol_getPrevUCA(ch, data, status);
+                if (result > UCOL_NOT_FOUND) {
+                    result = getSpecialPrevCE(coll, result, data, status);
+                }
+                if (result == UCOL_NOT_FOUND) {
+                    result = ucol_getPrevUCA(ch, data, status);
+                }
             }
         }
     }
