@@ -898,9 +898,9 @@ static void TestFprintfFormat(void) {
     int32_t cNumPrinted;
     UFILE *myFile;
 
-    TestFPrintFormat("%8U", abcUChars, "%8s", abcChars);
-    TestFPrintFormat("%-8U", abcUChars, "%-8s", abcChars);
-    TestFPrintFormat("%.2U", abcUChars, "%.2s", abcChars); /* strlen is 3 */
+    TestFPrintFormat("%8S", abcUChars, "%8s", abcChars);
+    TestFPrintFormat("%-8S", abcUChars, "%-8s", abcChars);
+    TestFPrintFormat("%.2S", abcUChars, "%.2s", abcChars); /* strlen is 3 */
 
     TestFPrintFormat("%8s", abcChars, "%8s", abcChars);
     TestFPrintFormat("%-8s", abcChars, "%-8s", abcChars);
