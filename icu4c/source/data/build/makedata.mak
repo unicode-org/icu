@@ -10,6 +10,7 @@
 
 U_ICUDATA_NAME=icudt20
 U_ICUDATA_ENDIAN_SUFFIX=l
+UNICODE_VERSION=3.1.1
 
 #  ICUDBLD
 #     Must be provided by whoever runs this makefile.
@@ -268,19 +269,19 @@ icudata.res: "$(ICUDATA)\icudata.rc"
 unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 $(ICUDATA)\unidata\UnicodeData.txt
+	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) $(ICUDATA)\unidata\UnicodeData.txt
 
 # Targets for uprops.dat
 uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -s "$(ICUDATA)\unidata"
+	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -s "$(ICUDATA)\unidata"
 
 # Targets for unorm.dat
 unorm.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUDATA)\unidata\DerivedNormalizationProperties.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
 	@echo Creating data file for Unicode Normalization
 	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -s "$(ICUDATA)\unidata"
+	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -u $(UNICODE_VERSION) -s "$(ICUDATA)\unidata"
 
 # Targets for converters
 cnvalias.dat : {"$(ICUDATA)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
