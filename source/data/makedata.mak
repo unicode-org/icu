@@ -26,8 +26,12 @@ UNICODE_VERSION=4
 !ENDIF
 !MESSAGE ICU data make path is $(ICUMAKE)
 
-ICUBLD=$(ICUMAKE)\out\build
 ICUOUT=$(ICUMAKE)\out
+
+# need to nuke \\ for .NET...
+ICUOUT=$(ICUOUT:\\=\)
+
+ICUBLD=$(ICUOUT)\build
 
 # ICUDT
 #  the prefix "icudt21_" for use in filenames
