@@ -282,7 +282,7 @@ TimeZoneTest::TestPRTOffset()
       int32_t expectedHour = -4;
       double expectedOffset = (((double)expectedHour) * millisPerHour);
       double foundOffset = tz->getRawOffset();
-      int32_t foundHour = foundOffset / millisPerHour;
+      int32_t foundHour = (int32_t)foundOffset / millisPerHour;
       if (expectedOffset != foundOffset) {
         errln("FAIL: Offset for PRT should be %d, found %d", expectedHour, foundHour);
       } else {

@@ -331,7 +331,6 @@ void IntlCalendarTest::TestJapanese() {
 }
 
 void IntlCalendarTest::TestBuddhistFormat() {
-    Calendar *cal;
     UErrorCode status = U_ZERO_ERROR;
     
     // Test simple parse/format with adopt
