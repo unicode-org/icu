@@ -17,11 +17,11 @@ U_NAMESPACE_BEGIN
 //
 // Character classes for RBBI rule scanning.
 //
-    const uint8_t kRuleSet_digit_char = 128;
-    const uint8_t kRuleSet_rule_char = 129;
-    const uint8_t kRuleSet_white_space = 130;
-    const uint8_t kRuleSet_name_char = 131;
-    const uint8_t kRuleSet_name_start_char = 132;
+    static const uint8_t kRuleSet_digit_char = 128;
+    static const uint8_t kRuleSet_rule_char = 129;
+    static const uint8_t kRuleSet_white_space = 130;
+    static const uint8_t kRuleSet_name_char = 131;
+    static const uint8_t kRuleSet_name_start_char = 132;
 
 
 enum RBBI_RuleParseAction {
@@ -71,7 +71,7 @@ struct RBBIRuleTableEl {
     UBool                         fNextChar;
 };
 
-struct RBBIRuleTableEl gRuleParseStateTable[] = {
+static const struct RBBIRuleTableEl gRuleParseStateTable[] = {
     {doNOP, 0, 0, 0, TRUE}
     , {doExprStart, 254, 12, 8, FALSE}     //  1      start
     , {doNOP, 130, 1,0,  TRUE}     //  2 
@@ -159,7 +159,7 @@ struct RBBIRuleTableEl gRuleParseStateTable[] = {
     , {doRuleErrorAssignExpr, 255, 85,0,  FALSE}     //  84 
     , {doExit, 255, 85,0,  TRUE}     //  85      errorDeath
  };
-const char *RBBIRuleStateNames[] = {    0,
+static const char *RBBIRuleStateNames[] = {    0,
      "start",
     0,
     0,
