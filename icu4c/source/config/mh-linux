@@ -9,16 +9,17 @@ GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
 ## Flags for position independent code
 ifneq (@ENABLE_SHARED@,)
-PIC = -fPIC -DPIC
+PICFLAGS = -fPIC
+PICCPPFLAGS = -DPIC
 endif
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(PIC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) $(PIC) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC) $(PICFLAGS) $(PICCPPFLAGS) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(PICFLAGS) $(PICCPPFLAGS) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
-LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CC) $(PICFLAGS) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(PICFLAGS) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
