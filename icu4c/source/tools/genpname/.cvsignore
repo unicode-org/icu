@@ -4,3 +4,4 @@ Debug
 Makefile
 Release
 genpname
+*.plg
