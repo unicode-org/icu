@@ -4186,7 +4186,7 @@ static void TestTibetanConformance(void)
 }
 
 static void PinyinProblem(void) {
-    char *test[] = { "\\u4E56\\u4E56\\u7761", "\\u4E56\\u5B69\\u5B50" };
+    static const char *test[] = { "\\u4E56\\u4E56\\u7761", "\\u4E56\\u5B69\\u5B50" };
     genericLocaleStarter("zh__PINYIN", test, sizeof(test)/sizeof(test[0]));
 }
 
