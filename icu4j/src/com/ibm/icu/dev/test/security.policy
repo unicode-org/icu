@@ -4,6 +4,9 @@ grant // codebase "file:${user.dir}/icu4jtests.jar"
 	// temporary for debugging
         // permission java.lang.RuntimePermission "getProtectionDomain";
 
+	// ibm 141 on ibm xp can't use reflection
+	permission java.lang.RuntimePermission "accessDeclaredMembers";
+
 	// needed for Locale.setDefault, only used in tests and demos
 	permission java.util.PropertyPermission "user.language", "write";
 
