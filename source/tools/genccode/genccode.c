@@ -102,7 +102,7 @@ main(int argc, char* argv[]) {
             argv[0]);
     } else {
         const char *message, *filename;
-        void (*writeCode)(const char *filename, const char *destdir);
+        void (*writeCode)(const char *, const char *);
         if(options[3].doesOccur) {
             message="Generating object code for %s\n";
             writeCode=&writeObjectCode;
@@ -155,7 +155,7 @@ writeCCode(const char *filename, const char *destdir) {
         "    double bogus;\n"
         "    uint8_t bytes[%ld]; \n"
         "} %s%s={ 0, {\n",
-        T_FileStream_size(in), symPrefix, entry);
+        (long)T_FileStream_size(in), symPrefix, entry);
     T_FileStream_writeLine(out, buffer);
 
     for(;;) {
