@@ -2493,7 +2493,6 @@ RBBILineMonkey::RBBILineMonkey()
     fAL    = new UnicodeSet("[\\p{Line_break=AL}]", status);
     fID    = new UnicodeSet("[\\p{Line_break=ID}]", status);
     fSA    = new UnicodeSet("[\\p{Line_break=SA}]", status);
-    fWJ    = new UnicodeSet("[\\p{Line_break=WJ}]", status);
     fXX    = new UnicodeSet("[\\p{Line_break=XX}]", status);
 
     fAL->addAll(*fXX);     // Default behavior for XX is identical to AL
@@ -3159,6 +3158,7 @@ void RBBITest::TestWordBreaks(void)
 
         testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
+    delete bi;
 }
 
 void RBBITest::TestWordBoundary(void)
@@ -3234,6 +3234,7 @@ void RBBITest::TestWordBoundary(void)
             prev = i;
         }
     }
+    delete bi;
 }
 
 void RBBITest::TestLineBreaks(void)
@@ -3299,6 +3300,7 @@ void RBBITest::TestLineBreaks(void)
 
         testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
+    delete bi;
 }
 
 void RBBITest::TestSentBreaks(void)
@@ -3334,6 +3336,7 @@ void RBBITest::TestSentBreaks(void)
         }
         testBreakBoundPreceding(this, ustr, bi, forward, count);
     }
+    delete bi;
 }
 
 void RBBITest::TestMonkey(char *params) {
