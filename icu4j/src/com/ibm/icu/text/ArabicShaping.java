@@ -49,6 +49,7 @@ import com.ibm.icu.lang.*;
  * length of the text to be constant. They expect extra spaces to be added
  * or consumed either next to the affected character or at the end of the
  * text.</p>
+ * @stable
  */
 public final class ArabicShaping {
     private final int options;
@@ -77,6 +78,7 @@ public final class ArabicShaping {
      *   If an error occurs, then no output was written, or it may be
      *   incomplete.
      * @throws ArabicShapingException if the text cannot be converted according to the options.
+     * @stable
      */
     public int shape(char[] source, int sourceStart, int sourceLength,
                      char[] dest, int destStart, int destSize) throws ArabicShapingException {
@@ -109,6 +111,7 @@ public final class ArabicShaping {
      * @param start The start of the range of text to convert
      * @param length The length of the range of text to convert
      * @throws ArabicShapingException if the text cannot be converted according to the options.
+     * @stable
      */
     public void shape(char[] source, int start, int length) throws ArabicShapingException {
         if ((options & LENGTH_MASK) == LENGTH_GROW_SHRINK) {
@@ -123,6 +126,7 @@ public final class ArabicShaping {
      * @param source The string to convert.
      * @return The converted string.
      * @throws ArabicShapingException if the string cannot be converted according to the options.
+     * @stable
      */
     public String shape(String text) throws ArabicShapingException {
         char[] src = text.toCharArray();
@@ -151,6 +155,7 @@ public final class ArabicShaping {
      * European to Arabic-Indic or vice-versa.<br>
      * 'DIGIT_TYPE' flags control whether standard or extended Arabic-Indic
      * digits are used when performing digit conversion.
+     * @stable
      */
     public ArabicShaping(int options) {
         this.options = options;
@@ -162,52 +167,61 @@ public final class ArabicShaping {
 
     /**
      * Memory option: allow the result to have a different length than the source.
+     * @stable
      */
     public static final int LENGTH_GROW_SHRINK = 0;
 
     /**
      * Memory option: the result must have the same length as the source.
      * If more room is necessary, then try to consume spaces next to modified characters.
+     * @stable
      */
     public static final int LENGTH_FIXED_SPACES_NEAR = 1;
 
     /**
      * Memory option: the result must have the same length as the source.
      * If more room is necessary, then try to consume spaces at the end of the text.
+     * @stable
      */
     public static final int LENGTH_FIXED_SPACES_AT_END = 2;
 
     /**
      * Memory option: the result must have the same length as the source.
      * If more room is necessary, then try to consume spaces at the beginning of the text.
+     * @stable
      */
     public static final int LENGTH_FIXED_SPACES_AT_BEGINNING = 3;
 
     /** 
      * Bit mask for memory options. 
+     * @stable
      */
     public static final int LENGTH_MASK = 3;
 
 
     /** 
      * Direction indicator: the source is in logical (keyboard) order. 
+     * @stable
      */
     public static final int TEXT_DIRECTION_LOGICAL = 0;
 
     /** 
      * Direction indicator: the source is in visual (display) order, that is,
      * the leftmost displayed character is stored first.
+     * @stable
      */
     public static final int TEXT_DIRECTION_VISUAL_LTR = 4;
 
     /** 
      * Bit mask for direction indicators. 
+     * @stable
      */
     public static final int TEXT_DIRECTION_MASK = 4;
 
 
     /**
      * Letter shaping option: do not perform letter shaping. 
+     * @stable
      */
     public static final int LETTERS_NOOP = 0;
 
@@ -215,6 +229,7 @@ public final class ArabicShaping {
      * Letter shaping option: replace normative letter characters in the U+0600 (Arabic) block,
      * by shaped ones in the U+FE70 (Presentation Forms B) block. Performs Lam-Alef ligature
      * substitution.
+     * @stable
      */
     public static final int LETTERS_SHAPE = 8;
 
@@ -222,6 +237,7 @@ public final class ArabicShaping {
      * Letter shaping option: replace shaped letter characters in the U+FE70 (Presentation Forms B) block
      * by normative ones in the U+0600 (Arabic) block.  Converts Lam-Alef ligatures to pairs of Lam and
      * Alef characters, consuming spaces if required.
+     * @stable
      */
     public static final int LETTERS_UNSHAPE = 0x10;
 
@@ -230,27 +246,32 @@ public final class ArabicShaping {
      * except for the TASHKEEL characters at U+064B...U+0652, by shaped ones in the U+Fe70
      * (Presentation Forms B) block.  The TASHKEEL characters will always be converted to
      * the isolated forms rather than to their correct shape.
+     * @stable
      */
     public static final int LETTERS_SHAPE_TASHKEEL_ISOLATED = 0x18;
 
     /** 
      * Bit mask for letter shaping options. 
+     * @stable
      */
     public static final int LETTERS_MASK = 0x18;
 
 
     /** 
      * Digit shaping option: do not perform digit shaping. 
+     * @stable
      */
     public static final int DIGITS_NOOP = 0;
 
     /**
      * Digit shaping option: Replace European digits (U+0030...U+0039) by Arabic-Indic digits.
+     * @stable
      */
     public static final int DIGITS_EN2AN = 0x20;
 
     /**
      * Digit shaping option: Replace Arabic-Indic digits by European digits (U+0030...U+0039).
+     * @stable
      */
     public static final int DIGITS_AN2EN = 0x40;
 
@@ -262,6 +283,7 @@ public final class ArabicShaping {
      * The initial state at the start of the text is assumed to be not an Arabic,
      * letter, so European digits at the start of the text will not change.
      * Compare to DIGITS_ALEN2AN_INIT_AL.
+     * @stable
      */
     public static final int DIGITS_EN2AN_INIT_LR = 0x60;
 
@@ -273,6 +295,7 @@ public final class ArabicShaping {
      * The initial state at the start of the text is assumed to be an Arabic,
      * letter, so European digits at the start of the text will change.
      * Compare to DIGITS_ALEN2AN_INT_LR.
+     * @stable
      */
     public static final int DIGITS_EN2AN_INIT_AL = 0x80;
 
@@ -281,34 +304,47 @@ public final class ArabicShaping {
 
     /** 
      * Bit mask for digit shaping options. 
+     * @stable
      */
     public static final int DIGITS_MASK = 0xe0;
 
     /** 
      * Digit type option: Use Arabic-Indic digits (U+0660...U+0669). 
+     * @stable
      */
     public static final int DIGIT_TYPE_AN = 0;
 
     /** 
      * Digit type option: Use Eastern (Extended) Arabic-Indic digits (U+06f0...U+06f9). 
+     * @stable
      */
     public static final int DIGIT_TYPE_AN_EXTENDED = 0x100;
 
     /** 
      * Bit mask for digit type options. 
+     * @stable
      */
     public static final int DIGIT_TYPE_MASK = 0x0100; // 0x3f00?
 
+    /**
+     * @stable
+     */
     public boolean equals(Object rhs) {
         return rhs != null && 
             rhs.getClass() == ArabicShaping.class && 
             options == ((ArabicShaping)rhs).options;
     }
 
+    /**
+     * @stable
+     */
     public int hashCode() {
         return options;
     }
 
+    /**
+     * @stable
+     */
     public String toString() {
         StringBuffer buf = new StringBuffer(super.toString());
         buf.append('[');

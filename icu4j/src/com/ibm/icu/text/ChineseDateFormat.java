@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormat.java,v $
- * $Date: 2002/03/02 00:07:28 $
- * $Revision: 1.5 $
+ * $Date: 2002/12/03 19:45:38 $
+ * $Revision: 1.6 $
  */
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;
@@ -38,15 +38,25 @@ import java.util.Locale;
  * @see com.ibm.icu.util.ChineseCalendar
  * @see ChineseDateFormatSymbols
  * @author Alan Liu
+ * @stable
  */
 public class ChineseDateFormat extends SimpleDateFormat {
 
     // TODO Finish the constructors
 
-    public ChineseDateFormat(String pattern, Locale locale) {
+    /**
+     * Construct a ChineseDateFormat from a date format pattern and locale
+     * @param pattern the pattern
+     * @param locale the locale
+     * @stable
+     */
+   public ChineseDateFormat(String pattern, Locale locale) {
         super(pattern, new ChineseDateFormatSymbols(locale));
     }
 
+    /**
+     * @stable
+     */
     protected String subFormat(char ch, int count, int beginOffset,
                                FieldPosition pos, DateFormatSymbols formatData,
                                Calendar cal)  {
@@ -65,6 +75,9 @@ public class ChineseDateFormat extends SimpleDateFormat {
         }
     }    
 
+    /**
+     * @stable
+     */
     protected int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean[] ambiguousYear, Calendar cal) {
         if (ch != 'G' && ch != 'l' && ch != 'y') {

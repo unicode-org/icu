@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 
 /**
  * Thrown by ArabicShaping when there is a shaping error.
+ * @stable
  */
 public final class ArabicShapingException extends Exception {
     ArabicShapingException(String message) {
