@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -117,5 +117,116 @@ u_parseDelimitedFile(const char *filename, char delimiter,
 
     if(filename!=NULL) {
         T_FileStream_close(file);
+    }
+}
+
+/*
+ * parse a list of code points
+ * store them as a UTF-32 string in dest[destCapacity]
+ * return the number of code points
+ */
+U_CAPI int32_t U_EXPORT2
+u_parseCodePoints(const char *s,
+                  uint32_t *dest, int32_t destCapacity,
+                  UErrorCode *pErrorCode) {
+    char *end;
+    uint32_t value;
+    int32_t count;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(s==NULL || destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    count=0;
+    for(;;) {
+        s=u_skipWhitespace(s);
+        if(*s==';' || *s==0) {
+            return count;
+        }
+
+        /* read one code point */
+        value=(uint32_t)uprv_strtoul(s, &end, 16);
+        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
+            *pErrorCode=U_PARSE_ERROR;
+            return 0;
+        }
+
+        /* append it to the destination array */
+        if(count<destCapacity) {
+            dest[count++]=value;
+        } else {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+
+        /* go to the following characters */
+        s=end;
+    }
+}
+
+/* read a range like start or start..end */
+U_CAPI int32_t U_EXPORT2
+u_parseCodePointRange(const char *s,
+                      uint32_t *pStart, uint32_t *pEnd,
+                      UErrorCode *pErrorCode) {
+    char *end;
+    uint32_t value;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(s==NULL || pStart==NULL || pEnd==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    s=u_skipWhitespace(s);
+    if(*s==';' || *s==0) {
+        *pErrorCode=U_PARSE_ERROR;
+        return 0;
+    }
+
+    /* read the start code point */
+    value=(uint32_t)uprv_strtoul(s, &end, 16);
+    if(end<=s || (*end!=' ' && *end!='\t' && *end!='.' && *end!=';') || value>=0x110000) {
+        *pErrorCode=U_PARSE_ERROR;
+        return 0;
+    }
+    *pStart=*pEnd=value;
+
+    /* is there a "..end"? */
+    s=u_skipWhitespace(end);
+    if(*s==';' || *s==0) {
+        return 1;
+    }
+
+    if(*s!='.' || s[1]!='.') {
+        *pErrorCode=U_PARSE_ERROR;
+        return 0;
+    }
+    s+=2;
+
+    /* read the end code point */
+    value=(uint32_t)uprv_strtoul(s, &end, 16);
+    if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
+        *pErrorCode=U_PARSE_ERROR;
+        return 0;
+    }
+    *pEnd=value;
+
+    /* is this a valid range? */
+    if(value<*pStart) {
+        *pErrorCode=U_PARSE_ERROR;
+        return 0;
+    }
+
+    /* no garbage after that? */
+    s=u_skipWhitespace(end);
+    if(*s==';' || *s==0) {
+        return value-*pStart+1;
+    } else {
+        *pErrorCode=U_PARSE_ERROR;
+        return 0;
     }
 }
