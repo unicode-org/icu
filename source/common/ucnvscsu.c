@@ -934,7 +934,7 @@ callback:
 static UChar32
 _SCSUGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
-    return ucnv_getNextUCharFromToUImpl(pArgs, _SCSUToUnicodeWithOffsets, TRUE, pErrorCode);
+    return ucnv_getNextUCharFromToUImpl(pArgs, _SCSUToUnicode, TRUE, pErrorCode);
 }
 
 /* SCSU-from-Unicode conversion functions ----------------------------------- */
