@@ -2770,4 +2770,24 @@ uloc_getISOCountries()
     return COUNTRIES;
 }
 
+U_CAPI int32_t U_EXPORT2
+uloc_acceptLanguageFromHTTP(char *result, int32_t *resultAvailable, UAcceptResult *outResult,
+			const char *httpAcceptLanguage,
+                          UEnumeration* availableLocales,
+                          UErrorCode *status)
+{
+  *status = U_INTERNAL_PROGRAM_ERROR;
+  return -1;
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_acceptLanguage(char *result, int32_t resultAvailable, 
+                    UAcceptResult *outResult, const char *acceptList[],
+                    UEnumeration* availableLocales,
+                    UErrorCode *status) {
+  *status = U_INTERNAL_PROGRAM_ERROR;
+  return -1;
+}
+
+
 /*eof*/
