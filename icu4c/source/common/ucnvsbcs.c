@@ -222,7 +222,7 @@ UChar T_UConverter_getNextUChar_SBCS(UConverter* converter,
     }
 }
 
-static UConverterImpl _SBCSImpl={
+static const UConverterImpl _SBCSImpl={
     UCNV_SBCS,
 
     _SBCSLoad,
@@ -236,10 +236,12 @@ static UConverterImpl _SBCSImpl={
     NULL,
     T_UConverter_fromUnicode_SBCS,
     NULL,
-    T_UConverter_getNextUChar_SBCS
+    T_UConverter_getNextUChar_SBCS,
+
+    NULL
 };
 
-extern UConverterSharedData _SBCSData={
+extern const UConverterSharedData _SBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_SBCSImpl, "SBCS",
     0, UCNV_IBM, UCNV_SBCS, 1, 1,
@@ -506,7 +508,7 @@ UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
     }
 } 
 
-static UConverterImpl _DBCSImpl={
+static const UConverterImpl _DBCSImpl={
     UCNV_DBCS,
 
     _DBCSLoad,
@@ -520,10 +522,12 @@ static UConverterImpl _DBCSImpl={
     NULL,
     T_UConverter_fromUnicode_DBCS,
     NULL,
-    T_UConverter_getNextUChar_DBCS
+    T_UConverter_getNextUChar_DBCS,
+
+    NULL
 };
 
-extern UConverterSharedData _DBCSData={
+extern const UConverterSharedData _DBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_DBCSImpl, "DBCS",
     0, UCNV_IBM, UCNV_DBCS, 2, 2,

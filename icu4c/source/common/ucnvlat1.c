@@ -141,7 +141,7 @@ UChar T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
   return  (UChar)*((*source)++);
 }
 
-static UConverterImpl _Latin1Impl={
+static const UConverterImpl _Latin1Impl={
     UCNV_LATIN_1,
 
     NULL,
@@ -155,10 +155,12 @@ static UConverterImpl _Latin1Impl={
     NULL,
     T_UConverter_fromUnicode_LATIN_1,
     NULL,
-    T_UConverter_getNextUChar_LATIN_1
+    T_UConverter_getNextUChar_LATIN_1,
+
+    NULL
 };
 
-extern UConverterSharedData _Latin1Data={
+extern const UConverterSharedData _Latin1Data={
     sizeof(UConverterSharedData), ~0,
     NULL, NULL, &_Latin1Impl, "LATIN_1",
     819, UCNV_IBM, UCNV_LATIN_1, 1, 1,

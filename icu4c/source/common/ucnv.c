@@ -1048,17 +1048,15 @@ void ucnv_getStarters(const UConverter* converter,
 		      bool_t starters[256],
 		      UErrorCode* err)
 {
-  if (U_FAILURE(*err)) return;
-  /*Fire off an error if converter is not UCNV_MBCS*/
-  if (converter->sharedData->conversionType != UCNV_MBCS) 
-    {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return;
+    if (err == NULL || U_FAILURE(*err)) {
+        return;
     }
-  
-  /*fill's in the starters boolean array*/
-  uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
-  return;
+
+    if(converter->sharedData->impl->getStarters != NULL) {
+        converter->sharedData->impl->getStarters(converter, starters, err);
+    } else {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
 }
 
 int32_t ucnv_getAmbiguousCCSID(const UConverter *cnv)
