@@ -307,6 +307,19 @@ public:
     UBool   operator!=(const    Locale&     other) const;
 
     /**
+     * Clone this object.
+     * Clones can be used concurrently in multiple threads.
+     * If an error occurs, then NULL is returned.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    Locale *clone() const;
+
+    /**
      * Common methods of getting the current default Locale. Used for the
      * presentation: menus, dialogs, etc. Generally set once when your applet or
      * application is initialized, then never reset. (If you do reset the
