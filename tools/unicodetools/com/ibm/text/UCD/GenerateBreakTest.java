@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2003/02/25 23:38:23 $
-* $Revision: 1.3 $
+* $Date: 2003/04/01 02:52:00 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -97,6 +97,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
     // ====================== Main ===========================
     
     static final boolean SHOW_TYPE = false;
+    
+    UnicodeMap sampleMap = null;
 
 
     public static void main(String[] args) throws IOException {
@@ -116,9 +118,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
             PrintWriter systemPrintWriter = new PrintWriter(System.out);
             gwb.printLine(systemPrintWriter, "n\u0308't", true, true, false);
             systemPrintWriter.flush();
-            showSet("sepSet", GenerateSentenceBreakTest.sepSet);
-            showSet("atermSet", GenerateSentenceBreakTest.atermSet);
-            showSet("termSet", GenerateSentenceBreakTest.termSet);
+            //showSet("sepSet", GenerateSentenceBreakTest.sepSet);
+            //showSet("atermSet", GenerateSentenceBreakTest.atermSet);
+            //showSet("termSet", GenerateSentenceBreakTest.termSet);
         }
         
         if (true) {
@@ -127,13 +129,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
             foo.isBreak("3.4", 2, true);
         }
 
+        new GenerateGraphemeBreakTest().run();
+        new GenerateWordBreakTest().run();
+        new GenerateLineBreakTest().run();
         new GenerateSentenceBreakTest().run();
         
         //if (true) return; // cut short for now
         
-        new GenerateLineBreakTest().run();
-        new GenerateGraphemeBreakTest().run();
-        new GenerateWordBreakTest().run();
     }
 
     static void checkDecomps() {
@@ -146,8 +148,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
         tests[0].isBreak("\u0300\u0903", 1, true);
         
         System.out.println("Check Decomps");
-        System.out.println("otherExtendSet: " + ((GenerateGraphemeBreakTest)tests[0]).otherExtendSet.toPattern(true));
-        Utility.showSetNames("", ((GenerateGraphemeBreakTest)tests[0]).otherExtendSet, false, Default.ucd);
+        //System.out.println("otherExtendSet: " + ((GenerateGraphemeBreakTest)tests[0]).otherExtendSet.toPattern(true));
+        //Utility.showSetNames("", ((GenerateGraphemeBreakTest)tests[0]).otherExtendSet, false, Default.ucd);
         
         for (int k = 0; k < tests.length; ++k) {
             for (int i = 0; i < 0x10FFFF; ++i) {
@@ -223,6 +225,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
         }
         return result;
     }
+    
+    
 
     static void generateTerminalClosure() {
         UnicodeSet terminals = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Terminal_Punctuation).getSet();
@@ -274,10 +278,16 @@ abstract public class GenerateBreakTest implements UCD_Types {
         //printLine(out, samples[LB_ZW], "", samples[LB_CL]);
         //printLine(out, samples[LB_ZW], " ", samples[LB_CL]);
 
-        PrintWriter out = Utility.openPrintWriter(fileName + "BreakTest.html", Utility.UTF8_WINDOWS);
-        out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><title>"
-            + fileName + " Break Chart</title></head>");
-        out.println("<body bgcolor='#FFFFFF'><h3>Current:</h3>");
+        PrintWriter out = Utility.openPrintWriter("TR29\\" + fileName + "BreakTest.html", Utility.UTF8_WINDOWS);
+        out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+        out.println("<title>" + fileName + " Break Chart</title>");
+        out.println("<style>");
+        out.println("td, th { vertical-align: top }");
+        out.println("</style></head>");
+
+
+        out.println("<body bgcolor='#FFFFFF'><h2>Sample Break Table</h2>");
+        out.println("<p>Version: " + Default.ucd.getVersion() + "</p>");
 
 
         if (recommendedDiffers()) {
@@ -288,20 +298,33 @@ abstract public class GenerateBreakTest implements UCD_Types {
         } else {
             generateTable(out, true);
         }
+        
+
+        if (sampleMap != null) {
+            out.println("<h3>Character Type Breakdown</h3>");
+            out.println("<table border='1' cellspacing='0' width='100%'>");
+            for (int i = 0; i < sampleMap.size(); ++i) {
+                out.println("<tr><th>" + sampleMap.getLabelFromIndex(i) 
+                    + "</th><td>" + sampleMap.getSetFromIndex(i)
+                    + "</td></tr>");
+            }
+            out.println("</table>");
+        }
+
         out.close();
         
         if (recommendedDiffers()) {
             generateTest(false, false);
         }
         generateTest(false, true);
-
+        
     }
     
     public void generateTest(boolean shortVersion, boolean recommended) throws IOException {
         String[] testCase = new String[50];
         // do main test
 
-        PrintWriter out = Utility.openPrintWriter(fileName + "BreakTest" 
+        PrintWriter out = Utility.openPrintWriter("TR29\\" + fileName + "BreakTest" 
             + (recommended & recommendedDiffers() ? "_NEW" : "")
             + (shortVersion ? "_SHORT" : "")
             + ".txt", Utility.UTF8_WINDOWS);
@@ -436,7 +459,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
     }
 
     public void generateTable(PrintWriter out, boolean recommended) {
-        String width = "width='" + (100 / (tableLimit + 2)) + "%'";
+        String width = "width='" + (100 / (tableLimit + 1)) + "%'";
         out.print("<table border='1' cellspacing='0' width='100%'>");
         String types = "";
         String codes = "";
@@ -445,12 +468,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (after == null) continue;
 
             String h = getTypeID(after, recommended);
-            types += "<th " + width + ">" + h + "</th>";
-            codes += "<th " + width + " title='" + getInfo(after) + "'>" + Utility.hex(after) + "</th>";
+            types += "<th " + width + " title='" + getInfo(after) + "'>" + h + "</th>";
+            //codes += "<th " + width + " title='" + getInfo(after) + "'>" + Utility.hex(after) + "</th>";
         }
 
-        out.println("<tr><th " + width + "></th><th " + width + "></th>" + types + "</tr>");
-        out.println("<tr><th " + width + "></th><th " + width + "></th>" + codes + "</tr>");
+        out.println("<tr><th " + width + "></th>" + types + "</tr>");
+        // out.println("<tr><th " + width + "></th><th " + width + "></th>" + codes + "</tr>");
 
         String[] rule = new String[1];
         String[] rule2 = new String[1];
@@ -458,8 +481,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
             String before = samples[type];
             if (before == null) continue;
 
-            String line = "<tr><th>" + getTypeID(before, recommended) + "</th>"
-                + "<th title='" + Default.ucd.getCodeAndName(before) + "'>" + Utility.hex(before) + "</th>";
+            String line = "<tr><th title='" + Default.ucd.getCodeAndName(before) + "'>" 
+                + getTypeID(before, recommended) + "</th>";
 
             for (int type2 = 0; type2 < tableLimit; ++type2) {
                 String after = samples[type2];
@@ -482,6 +505,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
             out.println(line + "</tr>");
         }
         out.println("</table>");
+            out.println("<h3>Sample Strings</h3>");
+        
         out.println("<ol>");
             for (int ii = 0; ii < extraSingleSamples.length; ++ii) {
                 out.println("<li><font size='5'>");
@@ -622,6 +647,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
         return -1;
     }
 
+    public static UnicodeSet getSet(int prop, byte propValue) {
+        return UnifiedBinaryProperty.make(prop | propValue).getSet();
+    }
 
     static public class Context {
         public int cpBefore2, cpBefore, cpAfter, cpAfter2;
@@ -635,7 +663,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         }
     }
 
-    public void getGraphemeBases(String source, int offset, boolean recommended, byte ignoreType, Context context) {
+    public void getGraphemeBases(String source, int offset, boolean recommended, int ignoreType, Context context) {
         context.cpBefore2 = context.cpBefore = context.cpAfter = context.cpAfter2 = -1;
         context.tBefore2 = context.tBefore = context.tAfter = context.tAfter2 = -1;
         //if (DEBUG_GRAPHEMES) System.out.println(Utility.hex(source) + "; " + offset + "; " + ignoreType);
@@ -676,6 +704,244 @@ abstract public class GenerateBreakTest implements UCD_Types {
         }
     }
 
+
+    //==============================================
+
+    static class GenerateGraphemeBreakTest extends GenerateBreakTest {
+
+
+        static final UnicodeMap map = new UnicodeMap();
+        static final int
+            CR =    map.add("CR",    new UnicodeSet(0xA, 0xA)),
+            LF =    map.add("LF",    new UnicodeSet(0xD, 0xD)),
+            Control = map.add("Control", 
+                        getSet(CATEGORY, Cc)
+                .addAll(getSet(CATEGORY, Cf))
+                .addAll(getSet(CATEGORY, Zp))
+                .addAll(getSet(CATEGORY, Zl))
+                .removeAll(map.getSetFromIndex(CR))
+                .removeAll(map.getSetFromIndex(LF))),
+            Extend = map.add("Extend", getSet(DERIVED, GraphemeExtend)),
+            L =     map.add("L",     getSet(HANGUL_SYLLABLE_TYPE, UCD_Types.L)),
+            V =     map.add("V",     getSet(HANGUL_SYLLABLE_TYPE, UCD_Types.V)),
+            T =     map.add("T",     getSet(HANGUL_SYLLABLE_TYPE, UCD_Types.T)),
+            LV =    map.add("LV",    getSet(HANGUL_SYLLABLE_TYPE, UCD_Types.LV)),
+            LVT =   map.add("LVT",   getSet(HANGUL_SYLLABLE_TYPE, UCD_Types.LVT)),
+            Other = map.add("Other", new UnicodeSet(0,0x10FFFF), false, false);            
+                
+        {
+            fileName = "GraphemeCluster";
+            sampleMap = map;
+        }
+
+        // stuff that subclasses need to override
+        public String getTypeID(int cp, boolean recommended) {
+            return map.getLabel(cp);
+        }
+
+        // stuff that subclasses need to override
+        public byte getType(int cp, boolean recommended) {
+            return (byte) map.getIndex(cp);
+        }
+
+        public boolean isBreak(String source, int offset, boolean recommended) {
+            recommended = true; // don't care about old stuff
+            rule="1: sot ÷";
+            if (offset < 0 || offset > source.length()) return false;
+            if (offset == 0) return true;
+
+            rule = "2: ÷ eot";
+            if (offset == source.length()) return true;
+
+            // UTF-16: never break in the middle of a code point
+            if (!onCodepointBoundary(source, offset)) return false;
+
+            // now get the character before and after, and their types
+
+
+            int cpBefore = UTF16.charAt(source, offset-1);
+            int cpAfter = UTF16.charAt(source, offset);
+
+            byte before = getResolvedType(cpBefore, recommended);
+            byte after = getResolvedType(cpAfter, recommended);
+
+            rule = "3: CR × LF";
+            if (before == CR && after == LF) return false;
+
+            rule = "4: ( Control | CR | LF ) ÷";
+            if (before == CR || before == LF || before == Control) return true;
+
+            rule = "5: ÷ ( Control | CR | LF )";
+            if (after == Control || after == LF || after == CR) return true;
+
+            rule = "6: L × ( L | V | LV | LVT )";
+            if (before == L && (after == L || after == V || after == LV || after == LVT)) return false;
+
+            rule = "7: ( LV | V ) × ( V | T )";
+            if ((before == LV || before == V) && (after == V || after == T)) return false;
+
+            rule = "8: ( LVT | T ) × T";
+            if ((before == LVT || before == T) && (after == T)) return false;
+
+            rule = "9: × Extend";
+            if (after == Extend) return false;
+
+            // Otherwise break after all characters.
+            rule = "10: Any ÷ Any";
+            return true;
+
+        }
+
+    }
+
+    //==============================================
+
+    static class GenerateWordBreakTest extends GenerateBreakTest {
+        
+        //static String LENGTH = "[\u30FC\uFF70]";
+        //static String HALFWIDTH_KATAKANA = "[\uFF66-\uFF9F]";
+        //static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
+        //static String HIRAGANA_ITERATION = "[\u309D\u309E]";
+        
+        static final UnicodeMap map = new UnicodeMap();
+        static final int
+            Format =    map.add("Format",    getSet(CATEGORY, Cf).remove(0x00AD)),
+            Katakana =    map.add("Katakana",    getSet(SCRIPT, KATAKANA_SCRIPT)
+                .addAll(new UnicodeSet("[\u30FC\uFF70\uFF9E\uFF9F]"))
+                //.addAll(new UnicodeSet(HALFWIDTH_KATAKANA))
+                //.addAll(new UnicodeSet(KATAKANA_ITERATION))
+                ),
+            ALetter = map.add("ALetter", 
+                        getSet(DERIVED, PropAlphabetic)
+                .add(0x05F3, 0x05F3)
+                .removeAll(map.getSetFromIndex(Katakana))
+                .removeAll(getSet(BINARY_PROPERTIES, Ideographic))
+                .removeAll(getSet(SCRIPT, THAI_SCRIPT))
+                .removeAll(getSet(SCRIPT, LAO_SCRIPT))
+                .removeAll(getSet(SCRIPT, HIRAGANA_SCRIPT))
+                ),
+            MidLetter = map.add("MidLetter", 
+                new UnicodeSet("[\\u0027\\u00AD\\u00B7\\u05f4\\u05F4\\u2019\\u2027]")),
+            MidNumLet =     map.add("MidNumLet",
+                new UnicodeSet("[\\u002E\\u003A]")),
+            MidNum =     map.add("MidNum",     getSet(LINE_BREAK, LB_IN)
+                .removeAll(map.getSetFromIndex(MidNumLet))),
+            Numeric =     map.add("Numeric",     getSet(LINE_BREAK, LB_NU)),
+            Other = map.add("Other", new UnicodeSet(0,0x10FFFF), false, false);      
+                
+        
+
+        static GenerateGraphemeBreakTest grapheme = new GenerateGraphemeBreakTest();
+        static Context context = new Context();
+
+        {
+            fileName = "Word";
+            sampleMap = map;
+            extraSamples = new String[] {
+                "\uFF70", "\uFF65", "\u30FD", "a\u2060", "a:", "a'", "a'\u2060", "a,", "1:", "1'", "1,",  "1.\u2060"
+            };
+
+            String [] temp = {"can't", "can\u2019t", "ab\u00ADby", "a$-34,567.14%b", "3a" };
+            extraSingleSamples = new String [temp.length * 2];
+            System.arraycopy(temp, 0, extraSingleSamples, 0, temp.length);
+            for (int i = 0; i < temp.length; ++i) {
+                extraSingleSamples[i+temp.length] = insertEverywhere(temp[i], "\u2060", grapheme);
+            }
+            
+            if (false) Utility.showSetDifferences("Katakana", map.getSetFromIndex(Katakana), 
+                "Script=Katakana", getSet(SCRIPT, KATAKANA_SCRIPT), false, Default.ucd);
+
+        }
+
+        // stuff that subclasses need to override
+        public String getTypeID(int cp, boolean recommended) {
+            return map.getLabel(cp);
+        }
+
+        // stuff that subclasses need to override
+        public byte getType(int cp, boolean recommended) {
+            return (byte) map.getIndex(cp);
+        }
+
+        public int genTestItems(String before, String after, String[] results) {
+            results[0] = before + after;
+            results[1] = 'a' + before + "\u0301\u0308" + after + "\u0301\u0308" + 'a';
+            results[2] = 'a' + before + "\u0301\u0308" + samples[MidLetter] + after + "\u0301\u0308" + 'a';
+            results[3] = 'a' + before + "\u0301\u0308" + samples[MidNum] + after + "\u0301\u0308" + 'a';
+            return 3;
+        }
+
+        public boolean isBreak(String source, int offset, boolean recommended) {
+            recommended = true; // don't care about old stuff
+
+            rule = "1: sot ÷";
+            if (offset < 0 || offset > source.length()) return false;
+  
+            if (offset == 0) return true;
+
+            rule = "2: ÷ eot";
+            if (offset == source.length()) return true;
+
+            // Treat a grapheme cluster as if it were a single character:
+            // the first base character, if there is one; otherwise the first character.
+            // GC => FB
+
+            rule="3: GC -> FB; 4: X Format* -> X";
+            if (!grapheme.isBreak( source,  offset,  recommended)) return false;
+
+            // now get the base character before and after, and their types
+
+            getGraphemeBases(source, offset, recommended, Format, context);
+
+            byte before = context.tBefore;
+            byte after = context.tAfter;
+            byte before2 = context.tBefore2;
+            byte after2 = context.tAfter2;
+
+            //Don't break between most letters
+
+            rule = "5: ALetter × ALetter";
+            if (before == ALetter && after == ALetter) return false;
+
+            // Don’t break letters across certain punctuation
+
+            rule = "6: ALetter × (MidLetter | MidNumLet) ALetter";
+            if (before == ALetter && (after == MidLetter || after == MidNumLet) && after2 == ALetter) return false;
+
+            rule = "7: ALetter (MidLetter | MidNumLet) × ALetter";
+            if (before2 == ALetter && (before == MidLetter || before == MidNumLet) && after == ALetter) return false;
+
+            // Don’t break within sequences of digits, or digits adjacent to letters.
+
+            rule = "8: Numeric × Numeric";
+            if (before == Numeric && after == Numeric) return false;
+
+            rule = "9: ALetter × Numeric";
+            if (before == ALetter && after == Numeric) return false;
+
+            rule = "10: Numeric × ALetter";
+            if (before == Numeric && after == ALetter) return false;
+
+
+            // Don’t break within sequences like: '-3.2'
+            rule = "11: Numeric (MidNum | MidNumLet) × Numeric";
+            if (before2 == Numeric && (before == MidNum || before == MidNumLet) && after == Numeric) return false;
+
+            rule = "12: Numeric × (MidNum | MidNumLet) Numeric";
+            if (before == Numeric && (after == MidNum || after == MidNumLet) && after2 == Numeric) return false;
+
+            // Don't break between Katakana
+
+            rule = "13: Katakana × Katakana";
+            if (before == Katakana && after == Katakana) return false;
+
+            // Otherwise break always.
+            rule = "14: Any ÷ Any";
+            return true;
+
+        }
+
+    }
 
     // ========================================
 
@@ -1070,399 +1336,56 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     //==============================================
 
-    static class GenerateGraphemeBreakTest extends GenerateBreakTest {
-
-        static final byte CR = 0, LF = 1, Control = 2, Extend = 3, Link = 4, CGJ = 5, Base = 6, LetterBase = 7, Other = 8,
-            oLIMIT = 9, // RESET THIS IF LIST ABOVE CHANGES!
-            L = oLIMIT + hL, V = oLIMIT + hV, T = oLIMIT + hT, LV = oLIMIT + hLV, LVT = oLIMIT + hLVT,
-            LIMIT = LVT + 1;
-
-        static final String[] Names = {"CR", "LF", "CTL", "Extend", "Link", "CGJ", "Base", "LetterBase", "Other" };
-
-        static UnicodeProperty extendProp = UnifiedBinaryProperty.make(DERIVED | GraphemeExtend);
-        static UnicodeProperty baseProp = UnifiedBinaryProperty.make(DERIVED | GraphemeBase);
-        static UnicodeProperty linkProp = UnifiedBinaryProperty.make(BINARY_PROPERTIES | GraphemeLink);
-        static UnicodeSet otherExtendSet = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Other_GraphemeExtend).getSet()
-            .addAll(new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B57\u0BD7\u0BBE"
-            + "\u0CC2\u0CD5\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\\U0001D165\\U0001D16E\\U0001D16F]"));
-
-        {
-            fileName = "GraphemeCluster";
-        }
-
-        // stuff that subclasses need to override
-        public String getTypeID(int cp, boolean recommended) {
-            byte type = getType(cp, recommended);
-            if (type >= oLIMIT) return hNames[type - oLIMIT];
-            return Names[type];
-        }
-
-        // stuff that subclasses need to override
-        public byte getType(int cp, boolean recommended) {
-            recommended = true; // don't care about old stuff
-            // single characters
-            if (cp == 0xA) return LF;
-            if (cp == 0xD) return CR;
-            if (recommended) {
-                if (cp == 0x034F) return Extend;
-            }
-            if (cp == 0x2028 || cp == 0x2029) return Control;
-
-            // Hangul
-            byte result = getHangulType(cp);
-            if (result != hNot) return (byte)(result + oLIMIT);
-
-            // other properties
-            // category based
-            byte cat = Default.ucd.getCategory(cp);
-            if (cat == Cc) return Control;
-            if (recommended) {
-                if (cat == Cf) return Control;
-                if (cat == Me || cat == Mn) return Extend;
-                // FOR FUTURE! if (otherExtendSet.contains(cp)) return Extend;
-                return Base;
-            }
-            if (cat == Cf) return Extend;
-
-            if (((1<<cat) & LETTER_MASK) != 0) return LetterBase;
-
-            // other binary properties
-
-            if (linkProp.hasValue(cp)) return Link;
-            if (extendProp.hasValue(cp)) return Extend;
-            if (baseProp.hasValue(cp)) return Base;
-
-            return Other;
-        }
-
-        public boolean isBreak(String source, int offset, boolean recommended) {
-            recommended = true; // don't care about old stuff
-            rule="1";
-            if (offset < 0 || offset > source.length()) return false;
-            if (offset == 0) return true;
-
-            rule = "2";
-            if (offset == source.length()) return true;
-
-            // UTF-16: never break in the middle of a code point
-            if (!onCodepointBoundary(source, offset)) return false;
-
-            // now get the character before and after, and their types
-
-
-            int cpBefore = UTF16.charAt(source, offset-1);
-            int cpAfter = UTF16.charAt(source, offset);
-
-            byte before = getResolvedType(cpBefore, recommended);
-            byte after = getResolvedType(cpAfter, recommended);
-
-            rule = "3";
-            if (before == CR && after == LF) return false;
-
-            rule = "4";
-            if (before == CR || before == LF || before == Control
-                || after == Control || after == LF || after == CR) return true;
-
-            rule = "6";
-            if (before == L && (after == L || after == V || after == LV || after == LVT)) return false;
-
-            rule = "7";
-            if ((before == LV || before == V) && (after == V || after == T)) return false;
-
-            rule = "8";
-            if ((before == LVT || before == T) && (after == T)) return false;
-
-            rule = "9";
-            if (after == Extend) return false;
-
-            if (recommended) {
-                if (after == Link || after == CGJ) return false;
-            } else {
-
-                // Do not break around a CGJ.
-                rule = "10";
-                if (before == CGJ && (after == Base
-                    || after == LetterBase || after == L || after == V || after == T || after == LV || after == LVT)) return false;
-                rule = "11";
-                if (after == CGJ) return false;
-
-                // Do not break between linking characters and letters, or before linking characters. This provides for Indic graphemes, where virama (halant) will link character clusters together.
-
-                rule = "12";
-                //Link Extend* × LetterBase  (12)
-                if (after == LetterBase || after == L || after == V || after == T || after == LV || after == LVT) {
-                    int backOffset = findLastNon(source, offset, Extend, recommended);
-                    if (backOffset >= 0) {
-                        byte last = getResolvedType(UTF16.charAt(source, backOffset), recommended);
-                        if (last == Link) return false;
-                    }
-                }
-
-                rule = "13";
-                if (after == Link) return false;
-            }
-
-            // Otherwise break after all characters.
-            rule = "14";
-            return true;
-
-        }
-
-    }
-
-    //==============================================
-
-    static class GenerateWordBreakTest extends GenerateBreakTest {
-
-        static final byte Format = 0, Katakana = 1, ALetter = 2, MidLetter = 3, Hyphen = 4,
-            Numeric = 5, Infix_Numeric = 6, Prefix_Numeric = 7, Postfix_Numeric = 8,
-            Prefix = 9, Postfix = 10, MidNumLet = 11, Hiragana = 12, Other = 13,
-            LIMIT = Other + 1;
-
-        static final String[] Names = {"Format", "Katakana", "ALetter", "MidLetter", "Hyphen",
-            "Numeric", "INum", "PrNum", "PoNum", "PreLet", "PostLet", "MidNumLet", "Hiragana", "Other" };
-
-        static GenerateGraphemeBreakTest grapheme = new GenerateGraphemeBreakTest();
-        static Context context = new Context();
-
-        static String LENGTH = "[\u30FC\uFF70]";
-        static String HALFWIDTH_KATAKANA = "[\uFF65-\uFF9F]";
-        static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
-        static String HIRAGANA_ITERATION = "[\u309D\u309E]";
-
-        static UnicodeSet extraKatakana = new UnicodeSet("[" + LENGTH + HALFWIDTH_KATAKANA + KATAKANA_ITERATION + "]");
-
-        static UnicodeProperty baseProp = UnifiedBinaryProperty.make(DERIVED | GraphemeBase);
-        static UnicodeProperty linkProp = UnifiedBinaryProperty.make(BINARY_PROPERTIES | GraphemeLink);
-
-        static UnicodeSet prefixSet = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Logical_Order_Exception).getSet();
-        static UnicodeSet postfixSet;
-        static UnicodeSet exceptionLetters;
-        static UnicodeSet normalLetters;
-        static UnicodeSet thaiLaoNormal;
-
-        static UnicodeSet marks = UnifiedBinaryProperty.make(CATEGORY | Mn).getSet()
-                .addAll(UnifiedBinaryProperty.make(CATEGORY | Me).getSet());
-
-        static UnicodeSet oughtToBeLm = new UnicodeSet("[\u02B9-\u02BA\u02C2-\u02CF\u02D2-\u02DF\u02E5-\u02ED]");
-/*
-U+02B9..U+02BA  # MODIFIER LETTER PRIME..MODIFIER LETTER DOUBLE PRIME
-U+02C2..U+02CF  # MODIFIER LETTER LEFT ARROWHEAD..MODIFIER LETTER LOW ACUTE ACCENT
-U+02D2..U+02DF  # MODIFIER LETTER CENTRED RIGHT HALF RING..MODIFIER LETTER CROSS ACCE
-U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRATED
-*/
-
-        static UnicodeSet letterSet = UnifiedBinaryProperty.make(CATEGORY | Lo).getSet()
-                .addAll(UnifiedBinaryProperty.make(CATEGORY | Lu).getSet())
-                .addAll(UnifiedBinaryProperty.make(CATEGORY | Lt).getSet())
-                .addAll(UnifiedBinaryProperty.make(CATEGORY | Ll).getSet())
-                .addAll(UnifiedBinaryProperty.make(CATEGORY | Lm).getSet())
-                .addAll(UnifiedBinaryProperty.make(CATEGORY | Mc).getSet())
-                .addAll(oughtToBeLm);
-
-        {
-
-            UnicodeSet linebreakNS = UnifiedBinaryProperty.make(LINE_BREAK | LB_NS).getSet();
-
-            postfixSet = new UnicodeSet(linebreakNS)
-                .retainAll(letterSet)
-                .addAll(new UnicodeSet("[\u0e30-\u0E3A\u0e45-\u0e4e]"))
-                .addAll(new UnicodeSet("[[\u0eb0-\u0EBd\u0ec6-\u0ece]-[:Cn:]]"))
-                .removeAll(new UnicodeSet("[:mn:]"))
-                .removeAll(new UnicodeSet("[:katakana:]").addAll(extraKatakana));
-
-            thaiLaoNormal = new UnicodeSet("[[:thai:][:lao:]]").removeAll(prefixSet).removeAll(postfixSet);
-
-            // we want ideographics, hiragana, thai (except prefix/suffix)
-            //UnicodeSet compatIdeographics = new UnicodeSet("[\uf900-\ufa6a\\U0002F800-\\U0002FA1D]");
-
-            UnicodeSet hiragana = UnifiedBinaryProperty.make(SCRIPT | HIRAGANA_SCRIPT).getSet();
-            UnicodeSet smallHiragana = new UnicodeSet(hiragana).retainAll(linebreakNS);
-
-
-            UnicodeSet missingKatakana = new UnicodeSet(extraKatakana).removeAll(new UnicodeSet("[:katakana:]"));
-            
-            if (DEBUG) {
-                System.out.println("missingKatakana: " + missingKatakana.toPattern(true));
-                Utility.showSetNames("", missingKatakana, false, Default.ucd);
-
-
-                System.out.println("oughtToBeLm: " + oughtToBeLm.toPattern(true));
-                Utility.showSetNames("", oughtToBeLm, false, Default.ucd);
-
-
-                System.out.println("Prefix: " + prefixSet.toPattern(true));
-                Utility.showSetNames("", prefixSet, false, Default.ucd);
-
-                System.out.println("Postfix: " + postfixSet.toPattern(true));
-                Utility.showSetNames("", postfixSet, false, Default.ucd);
-
-                System.out.println("exceptionLetters: " + exceptionLetters.toPattern(true));
-
-                System.out.println("hiragana: " + hiragana.toPattern(true));
-
-                System.out.println("smallHiragana: " + hiragana.toPattern(true));
-                Utility.showSetNames("", smallHiragana, true, Default.ucd);
-
-                System.out.println("midLetterSet: " + midLetterSet.toPattern(true));
-                Utility.showSetNames("", midLetterSet, true, Default.ucd);
-            }
-
-
-            fileName = "Word";
-            extraSamples = new String[] {
-                "\uFF70", "\uFF65", "\u30FD", "a\u2060", "a:", "a'", "a'\u2060", "a,", "1:", "1'", "1,",  "1.\u2060"
-            };
-            if (DEBUG) {
-                System.out.println("length not covered: "
-                    + new UnicodeSet(LENGTH).removeAll(new UnicodeSet("[:katakana:]")).toPattern(true));
-                System.out.println("half-width not covered: "
-                    + new UnicodeSet(HALFWIDTH_KATAKANA).removeAll(new UnicodeSet("[:katakana:]")).toPattern(true));
-                System.out.println("k.iteration not covered: "
-                    + new UnicodeSet(KATAKANA_ITERATION).removeAll(new UnicodeSet("[:katakana:]")).toPattern(true));
-                System.out.println("h.iteration not covered: "
-                    + new UnicodeSet(HIRAGANA_ITERATION).removeAll(new UnicodeSet("[:hiragana:]")).toPattern(true));
-                System.out.println("L1: " + getTypeID('\u30FC'));
-                System.out.println("L2: " + getTypeID('\uFF70'));
-            }
-
-            String [] temp = {"can't", "can\u2019t", "ab\u00ADby", "a$-34,567.14%b", "3a" };
-            extraSingleSamples = new String [temp.length * 2];
-            System.arraycopy(temp, 0, extraSingleSamples, 0, temp.length);
-            for (int i = 0; i < temp.length; ++i) {
-                extraSingleSamples[i+temp.length] = insertEverywhere(temp[i], "\u2060", grapheme);
-            }
-
-        }
-
-        // stuff that subclasses need to override
-        public String getTypeID(int cp, boolean recommended) {
-            byte type = getType(cp, recommended);
-            return Names[type];
-        }
-
-        // stuff that subclasses need to override
-        public byte getType(int cp, boolean recommended) {
-            byte cat = Default.ucd.getCategory(cp);
-            
-            if (cat == Cf) return Format;
-            
-            byte script = Default.ucd.getScript(cp);
-
-            if (script == KATAKANA_SCRIPT) return Katakana;
-            if (extraKatakana.contains(cp)) return Katakana;
-            
-            if (script == HIRAGANA_SCRIPT || script == THAI_SCRIPT || script == LAO_SCRIPT) return Other;
-            if (ideographicSet.contains(cp)) return Other;
-
-            if (alphabeticSet.contains(cp)) return ALetter;
-            
-            byte lb = Default.ucd.getLineBreak(cp);
-
-            if (lb == LB_NU) return Numeric;
-            
-            if (midLetterSet.contains(cp)) {
-                if (lb == LB_IS) return MidNumLet;
-                return MidLetter;
-            }
-            if (lb == LB_IS) return Infix_Numeric;
-            
-            return Other;
-        }
-
-        public int genTestItems(String before, String after, String[] results) {
-            results[0] = before + after;
-            results[1] = 'a' + before + "\u0301\u0308" + after + "\u0301\u0308" + 'a';
-            results[2] = 'a' + before + "\u0301\u0308" + samples[MidLetter] + after + "\u0301\u0308" + 'a';
-            results[3] = 'a' + before + "\u0301\u0308" + samples[Infix_Numeric] + after + "\u0301\u0308" + 'a';
-            return 3;
-        }
-
-        public boolean isBreak(String source, int offset, boolean recommended) {
-            recommended = true; // don't care about old stuff
-
-            rule = "1";
-            if (offset < 0 || offset > source.length()) return false;
-  
-            if (offset == 0) return true;
-
-            rule = "2";
-            if (offset == source.length()) return true;
-
-            // Treat a grapheme cluster as if it were a single character:
-            // the first base character, if there is one; otherwise the first character.
-            // GC => FB
-
-            rule="3";
-            if (!grapheme.isBreak( source,  offset,  recommended)) return false;
-
-            // now get the base character before and after, and their types
-
-            getGraphemeBases(source, offset, recommended, Format, context);
-
-            byte before = context.tBefore;
-            byte after = context.tAfter;
-            byte before2 = context.tBefore2;
-            byte after2 = context.tAfter2;
-
-            //Don't break between most letters
-            // ALetter × ALetter
-
-            rule = "5";
-            if (before == ALetter && after == ALetter) return false;
-
-            // Don’t break letters across certain punctuation
-            // ALetter×(MidLetter | MidNumLet) ALetter(6)
-            // ALetter (MidLetter | MidNumLet)×ALetter(7)
-
-            rule = "6";
-            if (before == ALetter && (after == MidLetter || after == MidNumLet) && after2 == ALetter) return false;
-
-            rule = "7";
-            if (before2 == ALetter && (before == MidLetter || before == MidNumLet) && after == ALetter) return false;
-
-            // Don’t break within sequences of digits, or digits adjacent to letters.
-
-            // Numeric × Numeric (5)
-            rule = "8";
-            if (before == Numeric && after == Numeric) return false;
-
-            // ALetter × Numeric (6)
-            rule = "9";
-            if (before == ALetter && after == Numeric) return false;
-
-            // Numeric × ALetter (7)
-            rule = "10";
-            if (before == Numeric && after == ALetter) return false;
-
-
-            // Don’t break within sequences like: '-3.2'
-            // Numeric (MidNum | MidNumLet)×Numeric(11)
-            rule = "11";
-            if (before2 == Numeric && (before == Infix_Numeric || before == MidNumLet) && after == Numeric) return false;
-
-            // Numeric×(MidNum | MidNumLet) Numeric(12)
-            rule = "12";
-            if (before == Numeric && (after == Infix_Numeric || after == MidNumLet) && after2 == Numeric) return false;
-
-            // Don't break between Hiragana
-
-            // Hiragana × Hiragana (13)
-            rule = "13";
-            if (before == Hiragana && after == Hiragana) return false;
-
-            // Otherwise break always.
-            rule = "14";
-            return true;
-
-        }
-
-    }
-
-    //==============================================
-
     static class GenerateSentenceBreakTest extends GenerateBreakTest {
         
+        static final UnicodeMap map = new UnicodeMap();
+        static final int
+            Sep =    map.add("Sep",    new UnicodeSet("[\\u000A\\u000D\\u0085\\u2028\\u2029]")),
+            Format =    map.add("Format",    getSet(CATEGORY, Cf)),
+            Sp = map.add("Sp", getSet(BINARY_PROPERTIES, White_space)
+                .removeAll(map.getSetFromIndex(Sep))),
+            Lower = map.add("Lower", getSet(DERIVED, PropLowercase)),
+            Upper = map.add("Upper", getSet(CATEGORY, Lt)
+                .addAll(getSet(DERIVED, PropUppercase))),
+            OLetter = map.add("OLetter", 
+                        getSet(DERIVED, PropAlphabetic)
+                .add(0x05F3, 0x05F3)
+                .removeAll(map.getSetFromIndex(Lower))
+                .removeAll(map.getSetFromIndex(Upper))
+                ),
+            Numeric =     map.add("Numeric",     getSet(LINE_BREAK, LB_NU)),
+            ATerm =     map.add("ATerm", new UnicodeSet(0x002E,0x002E)),
+            Term =    map.add("Term", new UnicodeSet(
+                "[\\u0021\\u003F\\u0589\\u061F\\u06D4\\u0700\\u0701\\u0702\\u0964\\u1362\\u1367"
+                + "\\u1368\\u104A\\u104B\\u166E\\u1803\\u1809\\u203C\\u203D\\u2047\\u2048\\u2049"
+                + "\\u3002\\uFE52\\uFE57\\uFF01\\uFF0E\\uFF1F\\uFF61]")),
+            Close =     map.add("Close",     
+                getSet(CATEGORY, Po)
+                .addAll(getSet(CATEGORY, Pe))
+                .addAll(getSet(LINE_BREAK, LB_QU))
+                .removeAll(map.getSetFromIndex(ATerm))
+                .removeAll(map.getSetFromIndex(Term))
+                .remove(0x05F3)
+                ),
+            Other = map.add("Other", new UnicodeSet(0,0x10FFFF), false, false);            
+                
+        {
+            fileName = "GraphemeCluster";
+            sampleMap = map;
+        }
+
+        // stuff that subclasses need to override
+        public String getTypeID(int cp, boolean recommended) {
+            return map.getLabel(cp);
+        }
+
+        // stuff that subclasses need to override
+        public byte getType(int cp, boolean recommended) {
+            return (byte) map.getIndex(cp);
+        }
+
+        
+        /*
         static final byte Format = 0, Sep = 1, Sp = 2, OLetter = 3, Lower = 4, Upper = 5,
             Numeric = 6, Close = 7, ATerm = 8, Term = 9, Other = 10,
             LIMIT = Other + 1;
@@ -1470,7 +1393,6 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
         static final String[] Names = {"Format", "Sep", "Sp", "OLetter", "Lower", "Upper", "Numeric",
             "Close", "ATerm", "Term", "Other" };
 
-        static GenerateGraphemeBreakTest grapheme = new GenerateGraphemeBreakTest();
 
         static UnicodeSet sepSet = new UnicodeSet("[\\u000a\\u000d\\u0085\\u2029\\u2028]");
         static UnicodeSet atermSet = new UnicodeSet("[\\u002E]");
@@ -1484,7 +1406,9 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
         static UnicodeProperty uppercaseProp = UnifiedBinaryProperty.make(DERIVED | PropUppercase);
         
         UnicodeSet linebreakNS = UnifiedBinaryProperty.make(LINE_BREAK | LB_NU).getSet();
+        */
         
+        static GenerateGraphemeBreakTest grapheme = new GenerateGraphemeBreakTest();
         {
 
             fileName = "Sentence";
@@ -1515,7 +1439,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             extraSingleSamples = temp;
 
         }
-        
+        /*
         // stuff that subclasses need to override
         public String getTypeID(int cp, boolean recommended) {
             byte type = getType(cp, recommended);
@@ -1539,13 +1463,14 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
                 || Default.ucd.getLineBreak(cp) == LB_QU) return Close;
             return Other;
         }
-
+        */
+        
         public int genTestItems(String before, String after, String[] results) {
             results[0] = before + after;
             /*
             results[1] = 'a' + before + "\u0301\u0308" + after + "\u0301\u0308" + 'a';
             results[2] = 'a' + before + "\u0301\u0308" + samples[MidLetter] + after + "\u0301\u0308" + 'a';
-            results[3] = 'a' + before + "\u0301\u0308" + samples[Infix_Numeric] + after + "\u0301\u0308" + 'a';
+            results[3] = 'a' + before + "\u0301\u0308" + samples[MidNum] + after + "\u0301\u0308" + 'a';
             */
             return 1;
         }
@@ -1553,17 +1478,17 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
         static Context context = new Context();
         
         public boolean isBreak(String source, int offset, boolean recommended) {
-
-            rule = "1";
+    
+            // Break at the start and end of text.
+            rule = "1: sot ÷";
             if (offset < 0 || offset > source.length()) return false;
   
             if (offset == 0) return true;
 
-            rule = "2";
+            rule = "2: ÷ eot";
             if (offset == source.length()) return true;
 
-            // Sep ÷  (3) 
-            rule = "3";
+            rule = "3: Sep ÷";
             byte beforeChar = getResolvedType(source.charAt(offset-1), recommended);
             if (beforeChar == Sep) return true;
             
@@ -1576,7 +1501,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             // X
             // (5)
 
-            rule="3";
+            rule="4: GC -> FB; 5: X Format* -> X";
             if (!grapheme.isBreak( source,  offset,  recommended)) return false;
             
             getGraphemeBases(source, offset, recommended, Format, context);
@@ -1589,13 +1514,10 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             
             // Do not break after ambiguous terminators like period, if immediately followed by a number or lowercase letter, is between uppercase letters, or if the first following letter (optionally after certain punctuation) is lowercase. For example, a period may be an abbreviation or numeric period, and not mark the end of a sentence.
 
-            // ATerm × (Lower | Numeric) (6)
-            // Upper ATerm × Upper (7)
-
             if (before == ATerm) {
-                rule = "6";
+                rule = "6: ATerm × ( Numeric | Lower )";
                 if (after == Lower || after == Numeric) return false;
-                rule = "7";
+                rule = "7: Upper ATerm × Upper";
                 if (DEBUG_GRAPHEMES) System.out.println(context + ", " + Upper);
                 if (before2 == Upper && after == Upper) return false;
             }
@@ -1608,7 +1530,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             graphemeIterator.set(source, offset);
             
             int state = 0;
-            byte lookAfter = -1;
+            int lookAfter = -1;
             int cp;
             byte t;
             boolean gotSpace = false;
@@ -1655,7 +1577,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             if (lookAfter == -1) {
                 // Otherwise, do not break
                 // Any × Any (11)
-                rule = "12";
+                rule = "12: Any × Any";
                 return false;
             }
                 
@@ -1682,16 +1604,16 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
                 if (isFirst) {
                     isFirst = false;
                     if (lookAfter == ATerm && t == Upper) {
-                        rule = "8";
+                        rule = "8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower";
                         return false;
                     }
                     if (gotSpace) {
                         if (t == Sp || t == Sep) {
-                            rule = "10";
+                            rule = "10: ( Term | ATerm ) Close* Sp × ( Sp | Sep )";
                             return false;
                         }
                     } else if (t == Close || t == Sp || t == Sep) {
-                        rule = "9";
+                        rule = "9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )";
                         return false;
                     }
                     if (lookAfter == Term) break;
@@ -1700,12 +1622,12 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
                 // at this point, we have an ATerm. All other conditions are ok, but we need to verify 6
                 if (t != OLetter && t != Upper && t != Lower) continue;
                 if (t == Lower) {
-                    rule = "8";
+                    rule = "8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower";
                     return false;
                 }
                 break;
             }
-            rule = "11";
+            rule = "11: ( Term | ATerm ) Close* Sp* ÷";
             return true;
         }
     }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/03/19 17:30:56 $
-* $Revision: 1.30 $
+* $Date: 2003/04/01 02:52:00 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -1070,6 +1070,15 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
     
     static PrintWriter showSetNamesPw;
+    
+    public static void showSetDifferences(String name1, UnicodeSet set1, String name2, UnicodeSet set2, boolean separateLines, UCD ucd) {
+        UnicodeSet temp = new UnicodeSet(set1).removeAll(set2);
+        showSetNames("In " + name1 + ", but not " + name2,  temp,  separateLines,  false,  false, ucd);
+        temp = new UnicodeSet(set2).removeAll(set1);
+        showSetNames("In " + name2 + ", but not " + name1,  temp,  separateLines,  false,  false, ucd);
+        temp = new UnicodeSet(set2).retainAll(set1);
+        showSetNames("In " + name1 + " and " + name2,  temp,  separateLines,  false,  false, ucd);
+    }
     
     public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, UCD ucd) {
         showSetNames(prefix,  set,  separateLines,  false,  false, ucd);

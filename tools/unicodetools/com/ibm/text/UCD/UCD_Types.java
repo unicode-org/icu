@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/03/20 21:47:26 $
-* $Revision: 1.21 $
+* $Date: 2003/04/01 02:52:00 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -190,7 +190,7 @@ public interface UCD_Types {
         Math_Property = 10,
         Hex_Digit = 11,
         ASCII_Hex_Digit = 12,
-	    Alphabetic = 13,
+	    Other_Alphabetic = 13,
         Ideographic = 14,
         Diacritic = 15,
         Extender = 16,
@@ -215,7 +215,7 @@ public interface UCD_Types {
     static final int
 	    BidiMirroredMask = 1<<BidiMirrored,
 	    CompositionExclusionMask = 1<<CompositionExclusion,
-	    AlphabeticMask = 1<<Alphabetic,
+	    AlphabeticMask = 1<<Other_Alphabetic,
 	    Bidi_ControlMask = 1<<Bidi_Control,
         DashMask = 1<<Dash,
         DiacriticMask = 1<<Diacritic,
@@ -466,7 +466,7 @@ public static byte
     
     // DERIVED PROPERTY
     
-    static final int
+    static final byte
         PropMath = 0,
         PropAlphabetic = 1,
         PropLowercase = 2,

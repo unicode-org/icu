@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.19 $
+* $Date: 2003/04/01 02:52:00 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -501,7 +501,7 @@ public final class DerivedProperty implements UCD_Types {
             public boolean hasValue(int cp) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Lu || cat == Ll || cat == Lt || cat == Lm || cat == Lo || cat == Nl
-                || ucdData.getBinaryProperty(cp, Alphabetic)) return true;
+                || ucdData.getBinaryProperty(cp, Other_Alphabetic)) return true;
                 return false;
             }
         };

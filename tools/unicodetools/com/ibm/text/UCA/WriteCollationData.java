@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2003/03/19 23:31:12 $ 
-* $Revision: 1.30 $
+* $Date: 2003/04/01 02:51:57 $ 
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -2492,17 +2492,26 @@ F900..FAFF; CJK Compatibility Ideographs
     
     static StringBuffer quoteOperandBuffer = new StringBuffer(); // faster
     
+    static UnicodeSet needsQuoting = null;
+    
     static final String quoteOperand(String s) {
+        if (needsQuoting == null) {
+            /*
+            c >= 'a' && c <= 'z' 
+              || c >= 'A' && c <= 'Z' 
+              || c >= '0' && c <= '9'
+              || (c >= 0xA0 && !UCharacterProperty.isRuleWhiteSpace(c))
+              */
+            needsQuoting = new UnicodeSet("[a-zA-Z0-9\\u00A0-\\U00010FFF]");
+            needsQuoting.remove();
+        }
     	s = NFC.normalize(s);
         quoteOperandBuffer.setLength(0);
         boolean noQuotes = true;
         boolean inQuote = false;
         for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
-            if (c >= 'a' && c <= 'z' 
-              || c >= 'A' && c <= 'Z' 
-              || c >= '0' && c <= '9'
-              || (c >= 0xA0 && !UCharacterProperty.isRuleWhiteSpace(c))) {
+            if (!needsQuoting.contains(c)) {
                 if (inQuote) {
                     quoteOperandBuffer.append('\'');
                     inQuote = false;
