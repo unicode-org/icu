@@ -98,7 +98,7 @@ debian/%: debian/%.in
 	cd $(builddir) \
 	  && CONFIG_FILES=../$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-DEBIAN_FILES = icu.conffiles icu.postinst icu.prerm
+DEBIAN_FILES = icu.conffiles icu.postinst icu.prerm libicu16.prerm
 
 # Build architecture-dependent files here.
 binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
