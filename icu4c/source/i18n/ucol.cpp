@@ -173,11 +173,14 @@ ucol_openRules(    const    UChar                  *rules,
     return 0;
   }
 
-  /* do we need to normalize the string beforehand? */
-
-  src.source = rules;
-  src.current = rules;
-  src.end = rules+rulesLength;
+  /*src.source = rules;*/
+  src.source = (UChar *)uprv_malloc((rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+  uprv_memcpy(src.source, rules, rulesLength*sizeof(UChar));
+  src.current = src.source;
+  src.end = src.source+rulesLength;
+  src.sourceCurrent = src.source;
+  src.extraCurrent = src.end;
+  src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
   src.UCA = UCA;
   src.invUCA = ucol_initInverseUCA(status);
   src.resultLen = 0;
