@@ -2,7 +2,7 @@ package com.ibm.text.resources;
 
 import java.util.ListResourceBundle;
 
-public class TransliterationRule$Latin$Russian extends ListResourceBundle {
+public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
     /**
      * Overrides ListResourceBundle
      */
