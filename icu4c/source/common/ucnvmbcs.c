@@ -283,6 +283,25 @@
 /* prototypes --------------------------------------------------------------- */
 
 U_CFUNC void
+_MBCSLoad(UConverterSharedData *sharedData,
+          const uint8_t *raw,
+          UErrorCode *pErrorCode);
+
+U_CFUNC void
+_MBCSReset(UConverter *cnv, UConverterResetChoice choice);
+
+U_CFUNC void
+_MBCSOpen(UConverter *cnv,
+          const char *name,
+          const char *locale,
+          uint32_t options,
+          UErrorCode *pErrorCode);
+
+U_CFUNC void
+_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                          UErrorCode *pErrorCode);
+
+U_CFUNC void
 _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                                 UErrorCode *pErrorCode);
 
@@ -291,12 +310,20 @@ _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode);
 
 U_CFUNC UChar32
-_MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
+_MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode);
+
+U_CFUNC UChar32
+_MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
+                        UErrorCode *pErrorCode);
 
 U_CFUNC UChar32
 _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
                               uint8_t b, UBool useFallback);
+
+U_CFUNC void
+_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode);
 
 U_CFUNC void
 _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
@@ -309,6 +336,11 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 U_CFUNC void
 _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode);
+
+U_CFUNC void
+_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
+              int32_t offsetIndex,
+              UErrorCode *pErrorCode);
 
 static void
 fromUCallback(UConverter *cnv,
@@ -342,19 +374,19 @@ toUCallback(UConverter *cnv,
  */
 static const uint32_t
 gb18030Ranges[13][4]={
-    0x10000, 0x10FFFF, LINEAR(0x90308130), LINEAR(0xE3329A35),
-    0x9FA6, 0xD7FF, LINEAR(0x82358F33), LINEAR(0x8336C738),
-    0x0452, 0x200F, LINEAR(0x8130D330), LINEAR(0x8136A531),
-    0xE865, 0xF92B, LINEAR(0x8336D030), LINEAR(0x84308534),
-    0x2643, 0x2E80, LINEAR(0x8137A839), LINEAR(0x8138FD38),
-    0xFA2A, 0xFE2F, LINEAR(0x84309C38), LINEAR(0x84318537),
-    0x3CE1, 0x4055, LINEAR(0x8231D438), LINEAR(0x8232AF32),
-    0x361B, 0x3917, LINEAR(0x8230A633), LINEAR(0x8230F237),
-    0x49B8, 0x4C76, LINEAR(0x8234A131), LINEAR(0x8234E733),
-    0x4160, 0x4336, LINEAR(0x8232C937), LINEAR(0x8232F837),
-    0x478E, 0x4946, LINEAR(0x8233E838), LINEAR(0x82349638),
-    0x44D7, 0x464B, LINEAR(0x8233A339), LINEAR(0x8233C931),
-    0xFFE6, 0xFFFF, LINEAR(0x8431A234), LINEAR(0x8431A439)
+    {0x10000, 0x10FFFF, LINEAR(0x90308130), LINEAR(0xE3329A35)},
+    {0x9FA6, 0xD7FF, LINEAR(0x82358F33), LINEAR(0x8336C738)},
+    {0x0452, 0x200F, LINEAR(0x8130D330), LINEAR(0x8136A531)},
+    {0xE865, 0xF92B, LINEAR(0x8336D030), LINEAR(0x84308534)},
+    {0x2643, 0x2E80, LINEAR(0x8137A839), LINEAR(0x8138FD38)},
+    {0xFA2A, 0xFE2F, LINEAR(0x84309C38), LINEAR(0x84318537)},
+    {0x3CE1, 0x4055, LINEAR(0x8231D438), LINEAR(0x8232AF32)},
+    {0x361B, 0x3917, LINEAR(0x8230A633), LINEAR(0x8230F237)},
+    {0x49B8, 0x4C76, LINEAR(0x8234A131), LINEAR(0x8234E733)},
+    {0x4160, 0x4336, LINEAR(0x8232C937), LINEAR(0x8232F837)},
+    {0x478E, 0x4946, LINEAR(0x8233E838), LINEAR(0x82349638)},
+    {0x44D7, 0x464B, LINEAR(0x8233A339), LINEAR(0x8233C931)},
+    {0xFFE6, 0xFFFF, LINEAR(0x8431A234), LINEAR(0x8431A439)}
 };
 
 /* MBCS setup functions ----------------------------------------------------- */
@@ -404,9 +436,9 @@ _MBCSLoad(UConverterSharedData *sharedData,
      */
     info.size=sizeof(UDataInfo);
     udata_getInfo((UDataMemory *)sharedData->dataMemory, &info);
-    if(info.formatVersion[0]>6 || info.formatVersion[0]==6 && info.formatVersion[1]>=1) {
+    if(info.formatVersion[0]>6 || (info.formatVersion[0]==6 && info.formatVersion[1]>=1)) {
         /* mask off possible future extensions to be safe */
-        mbcsTable->unicodeMask=sharedData->staticData->unicodeMask&3;
+        mbcsTable->unicodeMask=(uint8_t)(sharedData->staticData->unicodeMask&3);
     } else {
         /* for older versions, assume worst case: contains anything possible (prevent over-optimizations) */
         mbcsTable->unicodeMask=UCNV_HAS_SUPPLEMENTARY|UCNV_HAS_SURROGATES;
@@ -550,7 +582,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                  * An if-else-if chain provides more reliable performance for
                  * the most common cases compared to a switch.
                  */
-                action=MBCS_ENTRY_FINAL_ACTION(entry);
+                action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
                 if(action==MBCS_STATE_VALID_16) {
                     offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                     c=unicodeCodeUnits[offset];
@@ -592,7 +624,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                         }
                     } else if(UCNV_TO_U_USE_FALLBACK(cnv) ? c<=0xdfff : c<=0xdbff) {
                         /* output roundtrip or fallback surrogate pair */
-                        *target++=(c&0xdbff);
+                        *target++=(UChar)(c&0xdbff);
                         if(offsets!=NULL) {
                             *offsets++=sourceIndex;
                         }
@@ -841,7 +873,7 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
              * An if-else-if chain provides more reliable performance for
              * the most common cases compared to a switch.
              */
-            action=MBCS_ENTRY_FINAL_ACTION(entry);
+            action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
             if(action==MBCS_STATE_VALID_DIRECT_20) {
 valid20:
                 entry=MBCS_ENTRY_FINAL_VALUE(entry);
@@ -1090,7 +1122,7 @@ unrolled:
          * An if-else-if chain provides more reliable performance for
          * the most common cases compared to a switch.
          */
-        action=MBCS_ENTRY_FINAL_ACTION(entry);
+        action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
         if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
             if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
                 /* callback(unassigned) */
@@ -1249,7 +1281,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
              * An if-else-if chain provides more reliable performance for
              * the most common cases compared to a switch.
              */
-            action=MBCS_ENTRY_FINAL_ACTION(entry);
+            action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
             if(action==MBCS_STATE_VALID_16) {
                 offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                 c=unicodeCodeUnits[offset];
@@ -1452,7 +1484,7 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
          * An if-else-if chain provides more reliable performance for
          * the most common cases compared to a switch.
          */
-        action=MBCS_ENTRY_FINAL_ACTION(entry);
+        action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
         if(action==MBCS_STATE_VALID_DIRECT_20) {
             /* output supplementary code point */
             return (UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
@@ -1580,7 +1612,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
              * An if-else-if chain provides more reliable performance for
              * the most common cases compared to a switch.
              */
-            action=MBCS_ENTRY_FINAL_ACTION(entry);
+            action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
             if(action==MBCS_STATE_VALID_16) {
                 offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                 entry=unicodeCodeUnits[offset];
@@ -1675,7 +1707,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
      * An if-else-if chain provides more reliable performance for
      * the most common cases compared to a switch.
      */
-    action=MBCS_ENTRY_FINAL_ACTION(entry);
+    action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
     if(action==MBCS_STATE_VALID_DIRECT_20) {
         /* output supplementary code point */
         return 0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
@@ -1988,7 +2020,7 @@ getTrail:
 
             /* is this code point assigned, or do we use fallbacks? */
             if(!((stage2Entry&(1<<(16+(c&0xf))))!=0 ||
-                 UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0))
+                 (UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)))
             ) {
                 /*
                  * We allow a 0 byte output if the Unicode code point is
@@ -2312,7 +2344,7 @@ getTrail:
 
             /* is this code point assigned, or do we use fallbacks? */
             if(!((stage2Entry&(1<<(16+(c&0xf))))!=0 ||
-                 UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0))
+                 (UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)))
             ) {
                 /*
                  * We allow a 0 byte output if the Unicode code point is
@@ -2483,7 +2515,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         /* use only roundtrips and fallbacks from private-use characters */
         minValue=0xc00;
     }
-    hasSupplementary=cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY;
+    hasSupplementary=(UBool)(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY);
 
     /* get the converter state from UConverter */
     c=cnv->fromUSurrogateLead;
@@ -3047,7 +3079,7 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
 
     /* is this code point assigned, or do we use fallbacks? */
     if( (stage2Entry&(1<<(16+(c&0xf))))!=0 ||
-        FROM_U_USE_FALLBACK(useFallback, c) && (value!=0 || c==0)
+        (FROM_U_USE_FALLBACK(useFallback, c) && (value!=0 || c==0))
     ) {
         /*
          * We allow a 0 byte output if the Unicode code point is
