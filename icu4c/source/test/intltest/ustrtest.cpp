@@ -137,6 +137,14 @@ UnicodeStringTest::TestBasicManipulation()
         ) {
             errln("UnicodeString::moveIndex32() failed");
         }
+
+        if(s.getChar32Start(1)!=0 || s.getChar32Start(2)!=2) {
+            errln("UnicodeString::getChar32Start() failed");
+        }
+
+        if(s.getChar32Limit(1)!=2 || s.getChar32Limit(2)!=2) {
+            errln("UnicodeString::getChar32Limit() failed");
+        }
     }
 
 	{
@@ -235,6 +243,9 @@ UnicodeStringTest::TestCompare()
     if( test1==test2 || test1<=test2 ||
         test1.compare(test2)<=0 ||
         test1.compareCodePointOrder(test2)<=0 ||
+        test1.compareCodePointOrder(0, INT32_MAX, test2)<=0 ||
+        test1.compareCodePointOrder(0, INT32_MAX, test2, 0, INT32_MAX)<=0 ||
+        test1.compareCodePointOrderBetween(0, INT32_MAX, test2, 0, INT32_MAX)<=0 ||
         test1.caseCompare(test2, U_FOLD_CASE_DEFAULT)<=0
     ) {
         errln("UnicodeStrings that share a buffer but have different lengths compare as equal");
@@ -263,7 +274,7 @@ UnicodeStringTest::TestCompare()
         }
 
         for(i=0; i<(int32_t)(sizeof(strings)/sizeof(strings[0])-1); ++i) {
-            if(u[i].compareCodePointOrder(u[i+1])>=0) {
+            if(u[i].compareCodePointOrder(u[i+1])>=0 || u[i].compareCodePointOrder(0, INT32_MAX, u[i+1].getBuffer())>=0) {
                 errln("error: UnicodeString::compareCodePointOrder() fails for string %d and the following one\n", i);
             }
         }
@@ -287,7 +298,7 @@ UnicodeStringTest::TestCompare()
 
         /* test caseCompare() */
         result=mixed.caseCompare(otherDefault, U_FOLD_CASE_DEFAULT);
-        if(result!=0) {
+        if(result!=0 || 0!=mixed.caseCompareBetween(0, INT32_MAX, otherDefault, 0, INT32_MAX, U_FOLD_CASE_DEFAULT)) {
             errln("error: mixed.caseCompare(other, default)=%ld instead of 0\n", result);
         }
         result=mixed.caseCompare(otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
@@ -295,7 +306,7 @@ UnicodeStringTest::TestCompare()
             errln("error: mixed.caseCompare(otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I)=%ld instead of 0\n", result);
         }
         result=mixed.caseCompare(otherDefault, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
-        if(result==0) {
+        if(result==0 || 0==mixed.caseCompareBetween(0, INT32_MAX, otherDefault, 0, INT32_MAX, U_FOLD_CASE_EXCLUDE_SPECIAL_I)) {
             errln("error: mixed.caseCompare(other, U_FOLD_CASE_EXCLUDE_SPECIAL_I)=0 instead of !=0\n");
         }
 
@@ -307,7 +318,7 @@ UnicodeStringTest::TestCompare()
 
         /* test caseCompare() - include the folded sharp s (U+00df) with different lengths */
         result=mixed.caseCompare(1, 4, different, 1, 5, U_FOLD_CASE_DEFAULT);
-        if(result!=0) {
+        if(result!=0 || 0!=mixed.caseCompareBetween(1, 5, different, 1, 6, U_FOLD_CASE_DEFAULT)) {
             errln("error: mixed.caseCompare(mixed, 1, 4, different, 1, 5, default)=%ld instead of 0\n", result);
         }
 
@@ -684,6 +695,14 @@ UnicodeStringTest::TestSearching()
         errln((UnicodeString)"indexOf with character & start & end offsets failed: expected to find 2 occurrences, found " + occurrences);
     //---
 
+    if(test1.lastIndexOf(test2)!=29) {
+        errln("test1.lastIndexOf(test2)!=29");
+    }
+
+    if(test1.lastIndexOf(test2, 15)!=29 || test1.lastIndexOf(test2, 29)!=29 || test1.lastIndexOf(test2, 30)!=-1) {
+        errln("test1.lastIndexOf(test2, start) failed");
+    }
+
     for ( occurrences = 0, startPos = 32;
           startPos != -1;
           (startPos = test1.lastIndexOf(test2, 5, startPos - 5)) != -1 ? ++occurrences : 0)
@@ -726,7 +745,10 @@ UnicodeStringTest::TestSearching()
     if(test3.indexOf((UChar32)0xd841) != 4 || test3.indexOf((UChar32)0xdc02) != 3) {
         errln("error: UnicodeString::indexOf(UChar32 surrogate) finds a partial supplementary code point");
     }
-    if(test3.lastIndexOf((UChar32)0xd841, 0, 17) != 4 || test3.lastIndexOf((UChar32)0xdc02, 0, 17) != 16) {
+    if( UnicodeString(test3, 0, 17).lastIndexOf((UChar)0xd841, 0) != 4 ||
+        UnicodeString(test3, 0, 17).lastIndexOf((UChar32)0xd841, 2) != 4 ||
+        test3.lastIndexOf((UChar32)0xd841, 0, 17) != 4 || test3.lastIndexOf((UChar32)0xdc02, 0, 17) != 16
+    ) {
         errln("error: UnicodeString::lastIndexOf(UChar32 surrogate) finds a partial supplementary code point");
     }
 }
@@ -800,23 +822,36 @@ UnicodeStringTest::TestPrefixAndSuffix()
     UnicodeString test3("country.");
     UnicodeString test4("count");
 
-    if (!test1.startsWith(test2))
+    if (!test1.startsWith(test2) || !test1.startsWith(test2, 0, test2.length())) {
         errln("startsWith() failed: \"" + test2 + "\" should be a prefix of \"" + test1 + "\".");
+    }
 
-    if (test1.startsWith(test3))
+    if (test1.startsWith(test3) ||
+        test1.startsWith(test3.getBuffer(), test3.length()) ||
+        test1.startsWith(test3.getTerminatedBuffer(), 0, -1)
+    ) {
         errln("startsWith() failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test1 + "\".");
+    }
 
-    if (test1.endsWith(test2))
+    if (test1.endsWith(test2)) {
         errln("endsWith() failed: \"" + test2 + "\" shouldn't be a suffix of \"" + test1 + "\".");
+    }
 
-    if (!test1.endsWith(test3))
+    if (!test1.endsWith(test3) ||
+        !test1.endsWith(test3, 0, INT32_MAX) ||
+        !test1.endsWith(test3.getBuffer(), test3.length()) ||
+        !test1.endsWith(test3.getTerminatedBuffer(), 0, -1)
+    ) {
         errln("endsWith() failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+    }
 
-    if (!test3.startsWith(test4))
+    if (!test3.startsWith(test4)) {
         errln("startsWith() failed: \"" + test4 + "\" should be a prefix of \"" + test3 + "\".");
+    }
 
-    if (test4.startsWith(test3))
+    if (test4.startsWith(test3)) {
         errln("startsWith() failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test4 + "\".");
+    }
 }
 
 void
@@ -979,12 +1014,31 @@ UnicodeStringTest::TestMiscellaneous()
         errln("UnicodeString(u[-1]).getTerminatedBuffer() returns a bad buffer");
     }
 
-/*
-#if U_IOSTREAM_SOURCE
-    logln("Testing the operator \"<<\" \n");
-    cout<<"Testing the \"<<\" operator---test1="<<test1<<". "<<test3<<endl;
-#endif
-*/
+    test1=UNICODE_STRING("la", 2);
+    test1.append(UNICODE_STRING(" lila", 5).getTerminatedBuffer(), 0, -1);
+    if(test1!=UNICODE_STRING("la lila", 7)) {
+        errln("UnicodeString::append(const UChar *, start, length) failed");
+    }
+
+    test1.insert(3, UNICODE_STRING("dudum ", 6), 0, INT32_MAX);
+    if(test1!=UNICODE_STRING("la dudum lila", 13)) {
+        errln("UnicodeString::insert(start, const UniStr &, start, length) failed");
+    }
+
+    static const UChar ucs[]={ 0x68, 0x6d, 0x20, 0 };
+    test1.insert(9, ucs, -1);
+    if(test1!=UNICODE_STRING("la dudum hm lila", 16)) {
+        errln("UnicodeString::insert(start, const UChar *, length) failed");
+    }
+
+    test1.replace(9, 2, (UChar)0x2b);
+    if(test1!=UNICODE_STRING("la dudum + lila", 15)) {
+        errln("UnicodeString::replace(start, length, UChar) failed");
+    }
+
+    if(test1.hasMetaData() || UnicodeString().hasMetaData()) {
+        errln("UnicodeString::hasMetaData() returns TRUE");
+    }
 }
 
 void
