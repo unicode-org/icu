@@ -356,6 +356,18 @@ UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
 }
 
 /**
+ * Rollback makes global filters and compound transliterators very
+ * bulletproof, but it also makes some transliterators completely
+ * non-incremental -- that is, for some transliterators, rollback
+ * is always triggered, until finishTransliteration() is called.
+ * Since this eliminates most of the usefulness of incremental
+ * mode, rollback should usually be disabled.
+ *
+ * This is used by Transliterator and CompoundTransliterator.
+ */
+// #define TRANSLIT_ROLLBACK
+
+/**
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
@@ -430,6 +442,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
     // operation.
     int32_t compoundStart = index.start;
     
+#ifdef TRANSLIT_ROLLBACK
     // Rollback may be required.  Consider a compound
     // transliterator with two or more transliterators in it.  For
     // discussion purposes, assume that the first transliterator
@@ -451,6 +464,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         rollbackCopy = text.length();
         text.copy(compoundStart, compoundLimit, rollbackCopy);
     }
+#endif
 
     int32_t delta = 0; // delta in length
 
@@ -466,6 +480,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         delta += index.limit - limit;
         
         if (incremental) {
+#ifdef TRANSLIT_ROLLBACK
             // If one component transliterator does not complete,
             // then roll everything back and return.  It's okay if
             // component zero doesn't complete since it gets
@@ -474,6 +489,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
                 doRollback = TRUE;
                 break;
             }
+#endif
 
             // In the incremental case, only allow subsequent
             // transliterators to modify what has already been
@@ -485,6 +501,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
     }
 
     compoundLimit += delta;
+#ifdef TRANSLIT_ROLLBACK
     rollbackCopy += delta;
 
     if (doRollback) {
@@ -513,6 +530,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         // Delete the rollback copy
         text.handleReplaceBetween(rollbackCopy, text.length(), EMPTY);
     }
+#endif
 
     // Start is good where it is -- where the last transliterator left
     // it.  Limit needs to be put back where it was, modulo
