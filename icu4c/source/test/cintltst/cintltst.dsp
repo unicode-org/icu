@@ -482,6 +482,10 @@ SOURCE=.\cnumtst.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\cldrtest.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cloctst.c
 # End Source File
 # Begin Source File

@@ -413,6 +413,9 @@
 			Name="locales &amp; resources"
 			Filter="">
 			<File
+				RelativePath=".\cldrtest.c">
+			</File>
+			<File
 				RelativePath=".\cloctst.c">
 			</File>
 			<File
