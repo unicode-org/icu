@@ -180,7 +180,7 @@ public class CheckTags {
 
     static final String[] tagKinds = {
         "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
-        "@param", "@return", "@throws, @obsolete"
+        "@param", "@return", "@throws, @obsolete, @exception"
     };
 
     static final int UNKNOWN = -1;
@@ -196,6 +196,7 @@ public class CheckTags {
     static final int RETURN = 9;
     static final int THROWS = 10;
     static final int OBSOLETE = 11;
+    static final int EXCEPTION = 12;
 
     static int tagKindIndex(String kind) {
         for (int i = 0; i < tagKinds.length; ++i) {
@@ -237,8 +238,8 @@ public class CheckTags {
     }
 
     void tagErr(Tag tag) {
-        // errln(tag.toString() + " [" + tag.position() + "]");
-        errln(tag.toString()); // comment out since JDK 1.3.0 doesn't define tag.position()
+        // Tag.position() requires JDK 1.4, build.xml tests for this
+        errln(tag.toString() + " [" + tag.position() + "]");
     }
 
     void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
@@ -313,6 +314,9 @@ public class CheckTags {
             case SINCE:
                 tagErr(tag);
                 break;
+
+            case EXCEPTION:
+                logln("You really ought to use @throws, you know... :-)");
 
             case AUTHOR:
             case SEE:

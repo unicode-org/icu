@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/12/02 20:06:32 $
-* $Revision: 1.58 $
+* $Date: 2002/12/03 06:27:43 $
+* $Revision: 1.59 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -43,28 +43,28 @@
     </target>
     <!-- ### end clover setup ### -->
 
-    <target name="hack1">
+    <target name="anthack1">
         <!-- It's a real pain to set properties conditionally.
           Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
           properties are write-once so you can't even set a default and then
           override it, which we used to do for Ant 1.4. -->
-        <condition property="version.1.4.or.higher">
+        <condition property="version.1.4">
         <or>
 	    <equals arg1="${ant.java.version}" arg2="1.4"/>
         </or>
         </condition>
 
 	<condition property="doc.params"
-	    value="-breakiterator -tag draft:a:&quot;Draft&quot; -tag internal:X:&quot;Internal&quot; -tag stable:a:&quot;Stable&quot;">
-            <equals arg1="${version.1.4.or.higher}" arg2="true"/>
+	    value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet">
+            <equals arg1="${version.1.4}" arg2="true"/>
 	</condition>
     </target>
 
-    <target name="hack2" unless="doc.params">
+    <target name="anthack2" unless="doc.params">
         <property name="doc.params" value=""/>
     </target>
 
-    <target name="init" depends="hack1, hack2">
+    <target name="init">
         <tstamp/>
         <property name="src.dir" value="src"/>
         <property name="build.dir" value="classes"/>
@@ -94,7 +94,6 @@
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
-        <echo message="doc params: ${doc.params}"/>
     </target>
 
     <!-- build everything but dist-related stuff -->
@@ -142,8 +141,8 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="tools" depends="core">
-        <javac includes="com/ibm/icu/dev/tool/**/*.java"
+    <target name="one4tools" depends="anthack1,anthack2" if="version.1.4">
+        <javac includes="com/ibm/icu/dev/tool/docs/*.java"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
     	    destdir="${build.dir}"
@@ -151,7 +150,17 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="docs" depends="init">
+    <target name="tools" depends="core,one4tools">
+        <javac includes="com/ibm/icu/dev/tool/**/*.java"
+            excludes="com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="docs" depends="anthack1,anthack2,tools">
+        <echo message="doc params: ${doc.params}"/>
         <mkdir dir="${doc.dir}"/>
         <javadoc packagenames="com.ibm.icu.lang,com.ibm.icu.dev.tool.translit,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.compression,com.ibm.icu.dev.tool.normalizer,com.ibm.icu.util,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
             sourcepath="${src.dir}"
@@ -276,9 +285,12 @@
 	</java>
     </target>
 
+    <target name="_requires14" unless="version.1.4">
+        <echo message="One of your targets requires JAVA_HOME to be set to JDK version 1.4"/>
+    </target>
 
-    <target name="checktags" depends="tools">
-        <echo message="Execute with a JDK that provides access to com.sun.* packages"/>
+    <target name="_checktags" depends="anthack1,anthack2,tools" if="version.1.4">
+        <echo message="doc params: ${doc.params}"/>
         <javadoc sourcepath="${src.dir}" 
                  packagenames="com.ibm.icu.*"
                  excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
@@ -289,6 +301,8 @@
             </doclet>       
         </javadoc>
     </target>
+
+    <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags"/>
 
     <target name="clean" depends="init">
         <delete dir="${build.dir}"/>
