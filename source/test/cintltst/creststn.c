@@ -306,23 +306,53 @@ static void TestDecodedBundle(){
     UResourceBundle* resB; 
 
     const UChar* srcFromRes;
-    static const char* src = 
-        "\\u0009\\u092f\\u0941\\u0928\\u0947\\u0938\\u094d\\u0915\\u094b .\\u0915\\u0947 .\\u090f\\u0915 .\\u0905\\u0927\\u094d\\u092f\\u092f\\u0928 .\\u0915\\u0947 \\u0905\\u0928\\u0941\\u0938\\u093e\\u0930 1990 \\u0924\\u0915 \\u0915\\u0902\\u092a\\u094d\\u092f\\u0942\\u091f\\u0930-\\u092a\\u094d\\u0930\\u092c\\u0902\\u0927\\u093f\\u0924 \\u0938\\u0942\\u091a\\u0928\\u093e"
-        "\\u092a\\u094d\\u0930\\u0923\\u093e\\u0932\\u0940 .\\u0915\\u0947 .\\u092f\\u094b\\u0917\\u0926\\u093e\\u0928 .\\u0915\\u0947 .\\u092b\\u0932\\u0938\\u094d\\u0935\\u0930\\u0942\\u092a .\\u0935\\u093f\\u0936\\u094d\\u0935 .\\u092e\\u0947\\u0902 .\\u0938\\u093e\\u0932\\u093e\\u0928\\u093e .2200 \\u0905\\u0930\\u092c \\u0930\\u0941\\u092a\\u092f\\u0947 \\u092e\\u0942\\u0932\\u094d\\u092f"
-        "\\u0915\\u0940 .4\\u0935\\u0938\\u094d\\u0924\\u0941\\u0913\\u0902 .4\\u0915\\u093e .4\\u0909\\u0924\\u094d\\u092a\\u093e\\u0926\\u0928 .4\\u0939\\u094b\\u0917\\u093e, .3\\u091c\\u092c\\u0915\\u093f .3\\u0915\\u0902\\u092a\\u094d\\u092f\\u0942\\u091f\\u0930 .3\\u0915\\u093e .3\\u0915\\u0941\\u0932 .3\\u092f\\u094b\\u0917\\u0926\\u093e\\u0928 .3\\u0907\\u0938\\u0938\\u0947"
-        "\\u0915\\u0939\\u093f ./\\u091c\\u094d\\u092f\\u093e\\u0926\\u093e ./\\u0939\\u094b\\u0917\\u093e\\u0964 ./\\u0905\\u0928\\u0941\\u0938\\u0902\\u0927\\u093e\\u0928 ./\\u0915\\u0940 ./\\u091a\\u0930\\u092e \\u0938\\u0940\\u092e\\u093e\\u0913\\u0902 \\u092a\\u0930 \\u092a\\u0939\\u0941\\u0902\\u091a\\u0928\\u0947 \\u0915\\u0947 \\u0932\\u093f\\u090f \\u0915\\u0902\\u092a\\u094d\\u092f\\u0942\\u091f\\u0930"
-        "\\u090f\\u0915 ./\\u0906\\u092e ./\\u091c\\u0930\\u0942\\u0930\\u0924 ./\\u091c\\u0948\\u0938\\u093e \\u092c\\u0928 \\u0917\\u092f\\u093e \\u0939\\u0948\\u0964 \\u092d\\u093e\\u0930\\u0924 \\u092e\\u0947\\u0902 \\u092d\\u0940, \\u0916\\u093e\\u0938\\u0915\\u0930 \\u092e\\u094c\\u091c\\u0942\\u0926\\u093e \\u0938\\u0930\\u0915\\u093e\\u0930"
-        "\\u0928\\u0947, \\u0915\\u0902\\u092a\\u094d\\u092f\\u0942\\u091f\\u0930 \\u0915\\u0947 \\u092a\\u094d\\u0930\\u092f\\u094b\\u0917 \\u092a\\u0930 \\u091c\\u092c\\u0930\\u0926\\u0938\\u094d\\u0924 \\u090f\\u095c \\u0932\\u0917\\u093e\\u092f\\u0940 \\u0939\\u0948, \\u0915\\u093f\\u0902\\u0924\\u0941 \\u0907\\u0938\\u0915\\u0947 \\u0938\\u0930\\u092a\\u091f \\u0926\\u094c\\u095c"
-        "\\u0932\\u0917\\u093e\\u0928\\u0947 .2\\u0915\\u0947 .2\\u0932\\u093f\\u090f .2\\u0915\\u094d\\u092f\\u093e .2\\u0938\\u092a\\u093e\\u091f .2\\u0930\\u093e\\u0938\\u094d\\u0924\\u093e .2\\u0909\\u092a\\u0932\\u092c\\u094d\\u0927 .\\u0939\\u0948, .\\u0905\\u0925\\u0935\\u093e .\\u0935\\u093f\\u0936\\u094d\\u0935 .\\u092e\\u0947\\u0902 .\\u0915\\u0902\\u092a\\u094d\\u092f\\u0942\\u091f\\u0930 .\\u0915\\u0940"
-        "\\u0938\\u092b\\u0932\\u0924\\u093e .3\\u0935 .3\\u0935\\u093f\\u092b\\u0932\\u0924\\u093e .3\\u0938\\u0947 .3\\u0938\\u092c\\u0915 .3\\u0932\\u0947 .3\\u0915\\u0930 .3\\u0915\\u094d\\u092f\\u093e .3\\u0939\\u092e .3\\u0907\\u0938\\u0915\\u093e .3\\u092f\\u0941\\u0915\\u094d\\u0924\\u093f\\u092a\\u0942\\u0930\\u094d\\u0923 .2\\u0935\\u093f\\u0938\\u094d\\u0924\\u093e\\u0930 "
-        "\\u0905\\u092a\\u0947\\u0915\\u094d\\u0937\\u093f\\u0924 \\u0915\\u0930 \\u0938\\u0915\\u0947\\u0902\\u0917\\u0947 ? ";
-    int32_t len = uprv_strlen(src);
-    UChar* uSrc = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * len);
+    int32_t len;
+    static const UChar uSrc[] = {
+        0x0009,0x092F,0x0941,0x0928,0x0947,0x0938,0x094D,0x0915,0x094B,0x0020,0x002E,0x0915,0x0947,0x0020,0x002E,0x090F,
+        0x0915,0x0020,0x002E,0x0905,0x0927,0x094D,0x092F,0x092F,0x0928,0x0020,0x002E,0x0915,0x0947,0x0020,0x0905,0x0928,
+        0x0941,0x0938,0x093E,0x0930,0x0020,0x0031,0x0039,0x0039,0x0030,0x0020,0x0924,0x0915,0x0020,0x0915,0x0902,0x092A,
+        0x094D,0x092F,0x0942,0x091F,0x0930,0x002D,0x092A,0x094D,0x0930,0x092C,0x0902,0x0927,0x093F,0x0924,0x0020,0x0938,
+        0x0942,0x091A,0x0928,0x093E,0x092A,0x094D,0x0930,0x0923,0x093E,0x0932,0x0940,0x0020,0x002E,0x0915,0x0947,0x0020,
+        0x002E,0x092F,0x094B,0x0917,0x0926,0x093E,0x0928,0x0020,0x002E,0x0915,0x0947,0x0020,0x002E,0x092B,0x0932,0x0938,
+        0x094D,0x0935,0x0930,0x0942,0x092A,0x0020,0x002E,0x0935,0x093F,0x0936,0x094D,0x0935,0x0020,0x002E,0x092E,0x0947,
+        0x0902,0x0020,0x002E,0x0938,0x093E,0x0932,0x093E,0x0928,0x093E,0x0020,0x002E,0x0032,0x0032,0x0030,0x0030,0x0020,
+        0x0905,0x0930,0x092C,0x0020,0x0930,0x0941,0x092A,0x092F,0x0947,0x0020,0x092E,0x0942,0x0932,0x094D,0x092F,0x0915,
+        0x0940,0x0020,0x002E,0x0034,0x0935,0x0938,0x094D,0x0924,0x0941,0x0913,0x0902,0x0020,0x002E,0x0034,0x0915,0x093E,
+        0x0020,0x002E,0x0034,0x0909,0x0924,0x094D,0x092A,0x093E,0x0926,0x0928,0x0020,0x002E,0x0034,0x0939,0x094B,0x0917,
+        0x093E,0x002C,0x0020,0x002E,0x0033,0x091C,0x092C,0x0915,0x093F,0x0020,0x002E,0x0033,0x0915,0x0902,0x092A,0x094D,
+        0x092F,0x0942,0x091F,0x0930,0x0020,0x002E,0x0033,0x0915,0x093E,0x0020,0x002E,0x0033,0x0915,0x0941,0x0932,0x0020,
+        0x002E,0x0033,0x092F,0x094B,0x0917,0x0926,0x093E,0x0928,0x0020,0x002E,0x0033,0x0907,0x0938,0x0938,0x0947,0x0915,
+        0x0939,0x093F,0x0020,0x002E,0x002F,0x091C,0x094D,0x092F,0x093E,0x0926,0x093E,0x0020,0x002E,0x002F,0x0939,0x094B,
+        0x0917,0x093E,0x0964,0x0020,0x002E,0x002F,0x0905,0x0928,0x0941,0x0938,0x0902,0x0927,0x093E,0x0928,0x0020,0x002E,
+        0x002F,0x0915,0x0940,0x0020,0x002E,0x002F,0x091A,0x0930,0x092E,0x0020,0x0938,0x0940,0x092E,0x093E,0x0913,0x0902,
+        0x0020,0x092A,0x0930,0x0020,0x092A,0x0939,0x0941,0x0902,0x091A,0x0928,0x0947,0x0020,0x0915,0x0947,0x0020,0x0932,
+        0x093F,0x090F,0x0020,0x0915,0x0902,0x092A,0x094D,0x092F,0x0942,0x091F,0x0930,0x090F,0x0915,0x0020,0x002E,0x002F,
+        0x0906,0x092E,0x0020,0x002E,0x002F,0x091C,0x0930,0x0942,0x0930,0x0924,0x0020,0x002E,0x002F,0x091C,0x0948,0x0938,
+        0x093E,0x0020,0x092C,0x0928,0x0020,0x0917,0x092F,0x093E,0x0020,0x0939,0x0948,0x0964,0x0020,0x092D,0x093E,0x0930,
+        0x0924,0x0020,0x092E,0x0947,0x0902,0x0020,0x092D,0x0940,0x002C,0x0020,0x0916,0x093E,0x0938,0x0915,0x0930,0x0020,
+        0x092E,0x094C,0x091C,0x0942,0x0926,0x093E,0x0020,0x0938,0x0930,0x0915,0x093E,0x0930,0x0928,0x0947,0x002C,0x0020,
+        0x0915,0x0902,0x092A,0x094D,0x092F,0x0942,0x091F,0x0930,0x0020,0x0915,0x0947,0x0020,0x092A,0x094D,0x0930,0x092F,
+        0x094B,0x0917,0x0020,0x092A,0x0930,0x0020,0x091C,0x092C,0x0930,0x0926,0x0938,0x094D,0x0924,0x0020,0x090F,0x095C,
+        0x0020,0x0932,0x0917,0x093E,0x092F,0x0940,0x0020,0x0939,0x0948,0x002C,0x0020,0x0915,0x093F,0x0902,0x0924,0x0941,
+        0x0020,0x0907,0x0938,0x0915,0x0947,0x0020,0x0938,0x0930,0x092A,0x091F,0x0020,0x0926,0x094C,0x095C,0x0932,0x0917,
+        0x093E,0x0928,0x0947,0x0020,0x002E,0x0032,0x0915,0x0947,0x0020,0x002E,0x0032,0x0932,0x093F,0x090F,0x0020,0x002E,
+        0x0032,0x0915,0x094D,0x092F,0x093E,0x0020,0x002E,0x0032,0x0938,0x092A,0x093E,0x091F,0x0020,0x002E,0x0032,0x0930,
+        0x093E,0x0938,0x094D,0x0924,0x093E,0x0020,0x002E,0x0032,0x0909,0x092A,0x0932,0x092C,0x094D,0x0927,0x0020,0x002E,
+        0x0939,0x0948,0x002C,0x0020,0x002E,0x0905,0x0925,0x0935,0x093E,0x0020,0x002E,0x0935,0x093F,0x0936,0x094D,0x0935,
+        0x0020,0x002E,0x092E,0x0947,0x0902,0x0020,0x002E,0x0915,0x0902,0x092A,0x094D,0x092F,0x0942,0x091F,0x0930,0x0020,
+        0x002E,0x0915,0x0940,0x0938,0x092B,0x0932,0x0924,0x093E,0x0020,0x002E,0x0033,0x0935,0x0020,0x002E,0x0033,0x0935,
+        0x093F,0x092B,0x0932,0x0924,0x093E,0x0020,0x002E,0x0033,0x0938,0x0947,0x0020,0x002E,0x0033,0x0938,0x092C,0x0915,
+        0x0020,0x002E,0x0033,0x0932,0x0947,0x0020,0x002E,0x0033,0x0915,0x0930,0x0020,0x002E,0x0033,0x0915,0x094D,0x092F,
+        0x093E,0x0020,0x002E,0x0033,0x0939,0x092E,0x0020,0x002E,0x0033,0x0907,0x0938,0x0915,0x093E,0x0020,0x002E,0x0033,
+        0x092F,0x0941,0x0915,0x094D,0x0924,0x093F,0x092A,0x0942,0x0930,0x094D,0x0923,0x0020,0x002E,0x0032,0x0935,0x093F,
+        0x0938,0x094D,0x0924,0x093E,0x0930,0x0020,0x0905,0x092A,0x0947,0x0915,0x094D,0x0937,0x093F,0x0924,0x0020,0x0915,
+        0x0930,0x0020,0x0938,0x0915,0x0947,0x0902,0x0917,0x0947,0x0020,0x003F,0x0020,
+        0
+    };
 
     /* pre-flight */
     int32_t num =0;
     const char *testdatapath = loadTestData(&error);
-    len = u_unescape(src,uSrc, len);  
     resB = ures_open(testdatapath, "iscii", &error);
     srcFromRes=ures_getStringByKey(resB,"str",&len,&error);
     if(U_FAILURE(error)){
@@ -331,21 +361,22 @@ static void TestDecodedBundle(){
 #else
         log_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
 #endif
-	uprv_free(uSrc);
-	ures_close(resB);
-	return;
+        ures_close(resB);
+        return;
     }
     if(u_strncmp(srcFromRes,uSrc,len)!=0){
         log_err("Genrb produced res files after decoding failed\n");
     }
-    while(num<len  ){
-        if(src[num]!=srcFromRes[num]){
-            log_verbose(" Expected:  0x%04X Got: 0x%04X \n", src[num],srcFromRes[num]);
+    while(num<len){
+        if(uSrc[num]!=srcFromRes[num]){
+            log_verbose(" Expected:  0x%04X Got: 0x%04X \n", uSrc[num],srcFromRes[num]);
         }
         num++;
     }
+    if (len != u_strlen(uSrc)) {
+        log_err("Genrb produced a string larger than expected\n");
+    }
     ures_close(resB);
-    uprv_free(uSrc);
 }
 
 static void TestNewTypes() {
@@ -400,7 +431,7 @@ static void TestNewTypes() {
     }
     for(i=0;i<len;i++){
         if(zeroString[i]!= expected[i]){
-            log_verbose("Output didnot match Expected: \\u%4X Got: \\u%4X", expected[i], zeroString[i]);
+            log_verbose("Output did not match Expected: \\u%4X Got: \\u%4X", expected[i], zeroString[i]);
         }
     }
 
@@ -487,36 +518,37 @@ static void TestNewTypes() {
             }
         }
     }
-	/* this tests if unescaping works are expected */
-	{
-			char* pattern = "[ \\\\u0020 \\\\u00A0 \\\\u1680 \\\\u2000 \\\\u2001 \\\\u2002 \\\\u2003 \\\\u2004 \\\\u2005 \\\\u2006 \\\\u2007 "
-					"\\\\u2008 \\\\u2009 \\\\u200A \\u200B \\\\u202F \\u205F \\\\u3000 \\u0000-\\u001F \\u007F \\u0080-\\u009F "
-					"\\\\u06DD \\\\u070F \\\\u180E \\\\u200C \\\\u200D \\\\u2028 \\\\u2029 \\\\u2060 \\\\u2061 \\\\u2062 \\\\u2063 "
-					"\\\\u206A-\\\\u206F \\\\uFEFF \\\\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD "
-					"\\U00100000-\\U0010FFFD \\uFDD0-\\uFDEF \\uFFFE-\\uFFFF \\U0001FFFE-\\U0001FFFF \\U0002FFFE-\\U0002FFFF "
-					"\\U0003FFFE-\\U0003FFFF \\U0004FFFE-\\U0004FFFF \\U0005FFFE-\\U0005FFFF \\U0006FFFE-\\U0006FFFF "
-					"\\U0007FFFE-\\U0007FFFF \\U0008FFFE-\\U0008FFFF \\U0009FFFE-\\U0009FFFF \\U000AFFFE-\\U000AFFFF "
-					"\\U000BFFFE-\\U000BFFFF \\U000CFFFE-\\U000CFFFF \\U000DFFFE-\\U000DFFFF \\U000EFFFE-\\U000EFFFF "
-					"\\U000FFFFE-\\U000FFFFF \\U0010FFFE-\\U0010FFFF \\uD800-\\uDFFF \\\\uFFF9 \\\\uFFFA \\\\uFFFB "
-					"\\uFFFC \\uFFFD \\u2FF0-\\u2FFB \\u0340 \\u0341 \\\\u200E \\\\u200F \\\\u202A \\\\u202B \\\\u202C "
-					"\\\\u202D \\\\u202E \\\\u206A \\\\u206B \\\\u206C \\\\u206D \\\\u206E \\\\u206F \\U000E0001 \\U000E0020-\\U000E007F "
-					"]";
-			
-			UErrorCode status = U_ZERO_ERROR;
-			int32_t patternLen =uprv_strlen(pattern), len=0, i=0;
-			UChar* expected = (UChar*)uprv_malloc(U_SIZEOF_UCHAR* patternLen);
-			const UChar* got = ures_getStringByKey(theBundle,"test_unescaping",&len,&status);
-			int32_t expectedLen = u_unescape(pattern,expected,patternLen);
-			if(u_strncmp(expected,got,expectedLen)!=0 || expectedLen != len){
-				log_err("genrb failed to unescape string\n");
-			}
-			for(i=0;i<expectedLen;i++){
-				if(expected[i] != got[i]){
-					log_verbose("Expected: 0x%04X Got: 0x%04X \n",expected[i], got[i]);
-				}
-			}
-            uprv_free(expected);
-	}
+    /* this tests if unescaping works are expected */
+    len=0;
+    {
+        static const char pattern[] = "[ \\\\u0020 \\\\u00A0 \\\\u1680 \\\\u2000 \\\\u2001 \\\\u2002 \\\\u2003 \\\\u2004 \\\\u2005 \\\\u2006 \\\\u2007 "
+            "\\\\u2008 \\\\u2009 \\\\u200A \\u200B \\\\u202F \\u205F \\\\u3000 \\u0000-\\u001F \\u007F \\u0080-\\u009F "
+            "\\\\u06DD \\\\u070F \\\\u180E \\\\u200C \\\\u200D \\\\u2028 \\\\u2029 \\\\u2060 \\\\u2061 \\\\u2062 \\\\u2063 "
+            "\\\\u206A-\\\\u206F \\\\uFEFF \\\\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD "
+            "\\U00100000-\\U0010FFFD \\uFDD0-\\uFDEF \\uFFFE-\\uFFFF \\U0001FFFE-\\U0001FFFF \\U0002FFFE-\\U0002FFFF "
+            "\\U0003FFFE-\\U0003FFFF \\U0004FFFE-\\U0004FFFF \\U0005FFFE-\\U0005FFFF \\U0006FFFE-\\U0006FFFF "
+            "\\U0007FFFE-\\U0007FFFF \\U0008FFFE-\\U0008FFFF \\U0009FFFE-\\U0009FFFF \\U000AFFFE-\\U000AFFFF "
+            "\\U000BFFFE-\\U000BFFFF \\U000CFFFE-\\U000CFFFF \\U000DFFFE-\\U000DFFFF \\U000EFFFE-\\U000EFFFF "
+            "\\U000FFFFE-\\U000FFFFF \\U0010FFFE-\\U0010FFFF \\uD800-\\uDFFF \\\\uFFF9 \\\\uFFFA \\\\uFFFB "
+            "\\uFFFC \\uFFFD \\u2FF0-\\u2FFB \\u0340 \\u0341 \\\\u200E \\\\u200F \\\\u202A \\\\u202B \\\\u202C "
+            "\\\\u202D \\\\u202E \\\\u206A \\\\u206B \\\\u206C \\\\u206D \\\\u206E \\\\u206F \\U000E0001 \\U000E0020-\\U000E007F "
+            "]";
+
+        int32_t patternLen = uprv_strlen(pattern);
+        UChar* expectedEscaped = (UChar*)uprv_malloc(U_SIZEOF_UCHAR * patternLen);
+        const UChar* got = ures_getStringByKey(theBundle,"test_unescaping",&len,&status);
+        int32_t expectedLen = u_unescape(pattern,expectedEscaped,patternLen);
+        if(u_strncmp(expectedEscaped,got,expectedLen)!=0 || expectedLen != len){
+            log_err("genrb failed to unescape string\n");
+        }
+        for(i=0;i<expectedLen;i++){
+            if(expectedEscaped[i] != got[i]){
+                log_verbose("Expected: 0x%04X Got: 0x%04X \n",expectedEscaped[i], got[i]);
+            }
+        }
+        uprv_free(expectedEscaped);
+        status = U_ZERO_ERROR;
+    }
     /* test for jitterbug#1435 */
     {
         const UChar* str = ures_getStringByKey(theBundle,"test_underscores",&len,&status);
@@ -527,22 +559,21 @@ static void TestNewTypes() {
             log_err("Did not get the expected string for test_underscores.\n");
         }
     }
-	/* test for jitterbug#2626 */
-	{
-		UResourceBundle* resB = NULL;
-		const UChar* str  = NULL;
-		int32_t strLength = 0;
-		const UChar my[] = {0x0026,0x0027,0x0075,0x0027,0x0020,0x003d,0x0020,0x0027,0xff55,0x0027,0x0000}; /* &'\u0075' = '\uFF55' */
-		status = U_ZERO_ERROR;
-		resB = ures_getByKey(theBundle,"CollationElements", resB,&status);
-		str  = ures_getStringByKey(resB,"Sequence",&strLength,&status);
-		if(u_strcmp(my,str) != 0){
-			log_err("Did not get te expeted string for escaped \\u0075\n");
-		}
-		ures_close(resB);
-	}
+    /* test for jitterbug#2626 */
     {
         UResourceBundle* resB = NULL;
+        const UChar* str  = NULL;
+        int32_t strLength = 0;
+        const UChar my[] = {0x0026,0x0027,0x0075,0x0027,0x0020,0x003d,0x0020,0x0027,0xff55,0x0027,0x0000}; /* &'\u0075' = '\uFF55' */
+        status = U_ZERO_ERROR;
+        resB = ures_getByKey(theBundle,"CollationElements", resB,&status);
+        str  = ures_getStringByKey(resB,"Sequence",&strLength,&status);
+        if(u_strcmp(my,str) != 0){
+            log_err("Did not get te expeted string for escaped \\u0075\n");
+        }
+        ures_close(resB);
+    }
+    {
         const char *sourcePath = ctest_dataSrcDir();
         int32_t srcPathLen = strlen(sourcePath);
         const char *deltaPath = U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
@@ -564,10 +595,10 @@ static void TestNewTypes() {
                 log_err("Could not get testincludeUTF resource from testtypes bundle. Error: %s\n",u_errorName(status));
             }else{
                 /* open the file */
-                char* cp = NULL; 
-                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,(char**)&cp,FALSE,FALSE,&status);
+                const char* cp = NULL; 
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,FALSE,FALSE,&status);
+                len = 0;
                 if(U_SUCCESS(status)){
-                    int32_t len = 0;
                     const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
                     if(U_SUCCESS(status)){
                         /* verify the contents */
@@ -597,10 +628,10 @@ static void TestNewTypes() {
                 log_err("Could not get testinclude resource from testtypes bundle. Error: %s\n",u_errorName(status));
             }else{
                 /* open the file */
-                char* cp=NULL;
-                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,(char**)&cp,FALSE,FALSE,&status);
+                const char* cp=NULL;
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,FALSE,FALSE,&status);
+                len = 0;
                 if(U_SUCCESS(status)){
-                    int32_t len = 0;
                     const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
                     if(U_SUCCESS(status)){
                         /* verify the contents */
