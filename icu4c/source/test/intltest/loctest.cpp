@@ -1738,6 +1738,7 @@ void LocaleTest::TestGetLocale() {
     Locale valid, actual, reqLoc;
     
     // Calendar
+#if !UCONFIG_NO_FORMATTING
     req = "en_US_BROOKLYN";
     Calendar* cal = Calendar::createInstance(Locale::createFromName(req), ec);
     if (U_FAILURE(ec)) {
@@ -1752,8 +1753,10 @@ void LocaleTest::TestGetLocale() {
         }
     }
     delete cal;
+#endif
 
     // DecimalFormat, DecimalFormatSymbols
+#if !UCONFIG_NO_FORMATTING
     req = "fr_FR_NICE";
     DecimalFormat* dec = (DecimalFormat*)
         NumberFormat::createInstance(Locale::createFromName(req), ec);
@@ -1780,8 +1783,10 @@ void LocaleTest::TestGetLocale() {
         }        
     }
     delete dec;
+#endif
 
     // DateFormat, DateFormatSymbols
+#if !UCONFIG_NO_FORMATTING
     req = "de_CH_LUCERNE";
     SimpleDateFormat* dat = (SimpleDateFormat*)
         DateFormat::createDateInstance(DateFormat::kDefault,
@@ -1806,8 +1811,10 @@ void LocaleTest::TestGetLocale() {
         _checklocs("DateFormatSymbols", req, valid, actual);
     }        
     delete dat;
+#endif
 
     // BreakIterator
+#if !UCONFIG_NO_BREAK_ITERATION
     req = "es_ES_BARCELONA";
     reqLoc = Locale::createFromName(req);
     BreakIterator* brk = BreakIterator::createWordInstance(reqLoc, ec);
@@ -1866,8 +1873,10 @@ void LocaleTest::TestGetLocale() {
         }
     }
     delete brk;
+#endif
 
     // Collator
+#if !UCONFIG_NO_COLLATION
     req = "hi_IN_BHOPAL";
     reqLoc = Locale::createFromName(req);
     Collator* coll = Collator::createInstance(reqLoc, ec);
@@ -1926,4 +1935,5 @@ void LocaleTest::TestGetLocale() {
         }
     }
     delete coll;
+#endif
 }
