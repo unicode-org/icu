@@ -17,21 +17,15 @@
 #include "uenumimp.h"
 #include "cmemory.h"
 
-static const UEnumeration nullEnumeration = {
-    NULL, /* context */
-    NULL, /* close */
-    NULL, /* count */
-    NULL, /* uNext */
-    NULL, /* next */
-    NULL  /* reset */
-};
-
 U_CAPI void U_EXPORT2
 uenum_close(UEnumeration* en)
 {
     if (en) {
         if (en->close != NULL) {
             en->close(en);
+            if (en->baseContext) {
+                uprv_free(en->baseContext);
+            }
         } else { /* this seems dangerous, but we better kill the object */
             uprv_free(en);
         }
@@ -49,6 +43,32 @@ uenum_count(UEnumeration* en, UErrorCode* status)
     } else {
         *status = U_UNSUPPORTED_ERROR;
         return -1;
+    }
+}
+
+/* Don't call this directly. Only uenum_unext should be calling this. */
+U_CAPI const UChar* U_EXPORT2
+uenum_unextDefault(UEnumeration* en,
+            int32_t* resultLength,
+            UErrorCode* status)
+{
+    if (en->next != NULL) {
+        const char *tempCharVal = en->next(en, resultLength, status);
+        UChar *tempUCharVal;
+
+        if (en->baseContext) {
+            uprv_free(en->baseContext);
+        }
+        tempUCharVal = uprv_malloc((*resultLength+1) * sizeof(UChar));
+        if (!tempUCharVal) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        u_charsToUChars(tempCharVal, tempUCharVal, *resultLength + 1);
+        en->baseContext = tempUCharVal;
+        return tempUCharVal;
+    } else {
+        *status = U_UNSUPPORTED_ERROR;
+        return NULL;
     }
 }
 

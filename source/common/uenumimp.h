@@ -102,26 +102,38 @@ UEnumReset(UEnumeration* en,
 
 
 struct UEnumeration {
-  /* context. Use it for what you need */
-  void *context;
+    /* baseContext. For the base class only. Don't touch! */
+    void *baseContext;
 
-  /** 
-   * these are functions that will 
-   * be used for APIs
-   */
-  /* called from uenum_close */
-  UEnumClose *close;
-  /* called from uenum_count */
-  UEnumCount *count;
-  /* called from uenum_unext */
-  UEnumUNext *uNext;
-  /* called from uenum_next */
-  UEnumNext  *next;
-  /* called from uenum_reset */
-  UEnumReset *reset;
+    /* context. Use it for what you need */
+    void *context;
+
+    /** 
+     * these are functions that will 
+     * be used for APIs
+     */
+    /* called from uenum_close */
+    UEnumClose *close;
+    /* called from uenum_count */
+    UEnumCount *count;
+    /* called from uenum_unext */
+    UEnumUNext *uNext;
+    /* called from uenum_next */
+    UEnumNext  *next;
+    /* called from uenum_reset */
+    UEnumReset *reset;
 };
 
 U_CDECL_END
+
+/* This is the default implementation for uenum_unext().
+ * It automatically converts the char * string to UChar *.
+ * Don't call this directly. Only uenum_unext should be calling this.
+ */
+U_CAPI const UChar* U_EXPORT2
+uenum_unextDefault(UEnumeration* en,
+            int32_t* resultLength,
+            UErrorCode* status);
 
 
 #endif

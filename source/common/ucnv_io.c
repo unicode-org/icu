@@ -457,7 +457,11 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
         const uint16_t *currList = taggedAliasLists + listOffset + 1;
 
         if (myContext->listIdx < listCount) {
-            return GET_STRING(currList[myContext->listIdx++]);
+            const char *myStr = GET_STRING(currList[myContext->listIdx++]);
+            if (resultLength) {
+                *resultLength = uprv_strlen(myStr);
+            }
+            return myStr;
         }
     }
     /* Either we accessed a zero length list, or we enumerated too far. */
@@ -479,9 +483,10 @@ ucnv_io_closeUEnumeration(UEnumeration *enumerator) {
 /* Enumerate the aliases for the specified converter and standard tag */
 static const UEnumeration gEnumAliases = {
     NULL,
+    NULL,
     ucnv_io_closeUEnumeration,
     ucnv_io_countStandardAliases,
-    NULL,
+    uenum_unextDefault,
     ucnv_io_nextStandardAliases,
     ucnv_io_resetStandardAliases
 };
