@@ -1,13 +1,7 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/Bundle.java,v $ 
- * $Date: 2002/05/20 18:53:10 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
@@ -21,7 +15,7 @@ import java.util.*;
 /**
  * A class representing the entire Bundle of Resources for a particular language, country, variant.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class Bundle {
@@ -110,7 +104,7 @@ public class Bundle {
     }
 		
     /**
-     * Encodings are of the form -> language_country_variant <- (e.g. en_us_southern)
+     * Encodings are of the form -> language_country_variant <- (for example: "en_us_southern").
      * This method returns the language encoding string, or null if it is not specified
      */
 		
@@ -121,7 +115,7 @@ public class Bundle {
     }
 		
     /**
-     * Encodings are of the form -> language_country_variant <- (e.g. en_us_southern)
+     * Encodings are of the form -> language_country_variant <- (for example: "en_us_southern").
      * This method returns the country encoding string, or null if it is not specified
      */
 		
@@ -134,7 +128,7 @@ public class Bundle {
     }
 		
     /**
-     * Encodings are of the form -> language_country_variant <- (e.g. en_us_southern)
+     * Encodings are of the form -> language_country_variant <- (for example: "en_us_southern").
      * This method returns the variant encoding string, or null if it is not specified
      */
 		

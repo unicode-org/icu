@@ -1,31 +1,22 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBJavaImporter.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
 
 
 import java.io.*;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.net.*;
 
 /**
  * This is the super class for all importer plug-in classes. As of yet, there
  * is little contained in this class.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBJavaImporter extends RBImporter {

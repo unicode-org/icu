@@ -1,29 +1,18 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBReporterScanner.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
 
 
-import javax.swing.*;
-import java.awt.*;
-import javax.swing.event.*;
 import javax.swing.filechooser.*;
-import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
 import org.apache.xerces.parsers.*;
 import org.apache.xerces.dom.*;
-import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -31,7 +20,7 @@ import org.xml.sax.*;
  * RBReporterScaner is a utility class for RBReporter. It creates a report from an xml settings
  * file that scans code for resources and compares them against a resource bundle.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBReporter
  */
 public class RBReporterScanner {

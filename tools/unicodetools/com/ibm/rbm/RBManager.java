@@ -1,21 +1,13 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBManager.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
 
 import java.util.*;
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 import javax.swing.UIManager;
 import javax.swing.JOptionPane;
 
@@ -26,7 +18,7 @@ import javax.swing.JOptionPane;
  * through a constructor, or it can be run from the command line. For additional information on the
  * command line results, see the <CODE>main</CODE> method.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBManager {
@@ -513,7 +505,7 @@ public class RBManager {
      * @param name The unique key of the item
      * @param value The translation of the item for the base class
      * @param groupName The group name, should all ready exist in the base class
-     * @param Comment An optional comment to be added to the item, can be <CODE>null</CODE>
+     * @param comment An optional comment to be added to the item, can be <CODE>null</CODE>
      * @return An error response. If the creation was successful <CODE>true</CODE> is returned, if there was an error <CODE>false</CODE> is returned.
      */
 	

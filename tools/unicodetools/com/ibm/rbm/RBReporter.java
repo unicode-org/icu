@@ -1,29 +1,20 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBReporter.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
 
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.xerces.parsers.*;
 import org.apache.xerces.dom.*;
 import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
-import org.xml.sax.*;
 
 /**
  * RBReporter is a fully functional application that runs separate from RBManager.
@@ -32,7 +23,7 @@ import org.xml.sax.*;
  * generated. For more information on command line arguments and usage see the
  * comments for the main() method.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBReporter extends JFrame {

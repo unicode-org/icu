@@ -1,13 +1,7 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/Attic/RBManagerGUI.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
@@ -22,14 +16,13 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.text.*;
 import javax.swing.tree.*;
-import javax.swing.filechooser.*;
 
 /**
  * The Graphical User Interface for working with and through a Resource Bundle Manager. The GUI has no public main
  * method. It is instead instantiated from running the main method in RBManager. For help with using this interface,
  * consult the documentation included in the project.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBManagerGUI extends JFrame implements ActionListener, MouseListener, ChangeListener, TreeSelectionListener

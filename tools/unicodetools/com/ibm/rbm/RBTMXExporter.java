@@ -1,13 +1,7 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBTMXExporter.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
@@ -18,7 +12,6 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 import java.util.*;
 
-import org.apache.xerces.parsers.*;
 import org.apache.xerces.dom.*;
 import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
@@ -28,7 +21,7 @@ import org.w3c.dom.*;
  * along with some of the meta-data associated by RBManager to the TMX specification.
  * For more information on TMX visit the web site <A HREF=http://www.lis.org/tmx>http://www.lisa.org/tmx</A>
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
 public class RBTMXExporter extends RBExporter {
