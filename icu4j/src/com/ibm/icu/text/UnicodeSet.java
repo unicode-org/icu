@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/09/24 19:16:33 $
- * $Revision: 1.98 $
+ * $Date: 2003/09/24 22:06:27 $
+ * $Revision: 1.99 $
  *
  *****************************************************************************************
  */
@@ -1984,8 +1984,8 @@ public class UnicodeSet extends UnicodeFilter {
 
         StringBuffer pat = new StringBuffer(), buf = null;
         boolean usePat = false;
-
         UnicodeSet scratch = null;
+        Object backup = null;
 
         // mode: 0=before [, 1=between [...], 2=after ]
         // lastItem: 0=none, 1=char, 2=set
@@ -2006,10 +2006,17 @@ public class UnicodeSet extends UnicodeFilter {
                 }
             }
 
-            // -------- Get the next character into `c' and `literal'
+            int c = 0;
+            boolean literal = false;
+            UnicodeSet nested = null;
 
-            int c = chars.current(opts);
-            boolean literal = chars.isEscaped();
+            // -------- Check for property pattern
+
+            // setMode: 0=none, 1=unicodeset, 2=propertypat, 3=preparsed
+            int setMode = 0;
+            if (resemblesPropertyPattern(chars, opts)) {
+                setMode = 2;
+            }
 
             // -------- Parse '[' of opening delimiter OR nested set.
             // If there is a nested set, use `setMode' to define how
@@ -2019,48 +2026,51 @@ public class UnicodeSet extends UnicodeFilter {
             // characters representing a nested set in the symbol
             // table.
 
-            // setMode: 0=none, 1=unicodeset, 2=propertypat, 3=preparsed
-            int setMode = 0;
-            UnicodeSet nested = null;
+            else {
+                // Prepare to backup if necessary
+                backup = chars.getPos(backup);
+                c = chars.next(opts);
+                literal = chars.isEscaped();
 
-            if (resemblesPropertyPattern(chars, opts)) {
-                setMode = 2;
-            } else if (c == '[' && !literal) {
-                if (mode == 1) {
-                    setMode = 1;
-                } else {
-                    // Handle opening '[' delimiter
-                    mode = 1;
-                    pat.append('[');
-                    chars.next(opts);
-                    c = chars.current(opts);
-                    literal = chars.isEscaped();
-                    if (c == '^' && !literal) {
-                        invert = true;
-                        pat.append('^');
-                        chars.next(opts);
-                        c = chars.current(opts);
-                        literal = chars.isEscaped();
-                    }
-                    // Fall through to handle special leading '-';
-                    // otherwise restart loop for nested [], \p{}, etc.
-                    if (c == '-') {
-                        literal = true; // ...and fall through
+                if (c == '[' && !literal) {
+                    if (mode == 1) {
+                        chars.setPos(backup); // backup
+                        setMode = 1;
                     } else {
-                        continue;
+                        // Handle opening '[' delimiter
+                        mode = 1;
+                        pat.append('[');
+                        backup = chars.getPos(backup); // prepare to backup
+                        c = chars.next(opts);
+                        literal = chars.isEscaped();
+                        if (c == '^' && !literal) {
+                            invert = true;
+                            pat.append('^');
+                            backup = chars.getPos(backup); // prepare to backup
+                            c = chars.next(opts);
+                            literal = chars.isEscaped();
+                        }
+                        // Fall through to handle special leading '-';
+                        // otherwise restart loop for nested [], \p{}, etc.
+                        if (c == '-') {
+                            literal = true;
+                            // Fall through to handle literal '-' below
+                        } else {
+                            chars.setPos(backup); // backup
+                            continue;
+                        }
                     }
-                }
-            } else if (symbols != null) {
-                 UnicodeMatcher m = symbols.lookupMatcher(c); // may be null
-                 if (m != null) {
-                     try {
-                         nested = (UnicodeSet) m;
-                         chars.next(opts);
-                         setMode = 3;
-                     } catch (ClassCastException e) {
-                         syntaxError(chars, "Syntax error");
+                } else if (symbols != null) {
+                     UnicodeMatcher m = symbols.lookupMatcher(c); // may be null
+                     if (m != null) {
+                         try {
+                             nested = (UnicodeSet) m;
+                             setMode = 3;
+                         } catch (ClassCastException e) {
+                             syntaxError(chars, "Syntax error");
+                         }
                      }
-                 }
+                }
             }
 
             // -------- Handle a nested set.  This either is inline in
@@ -2129,8 +2139,6 @@ public class UnicodeSet extends UnicodeFilter {
             if (mode == 0) {
                 syntaxError(chars, "Missing '['");
             }
-
-            chars.next(opts);
 
             // -------- Parse special (syntax) characters.  If the
             // current character is not special, or if it is escaped,
@@ -2918,14 +2926,14 @@ public class UnicodeSet extends UnicodeFilter {
                                                     int iterOpts) {
         boolean result = false;
         iterOpts &= ~RuleCharacterIterator.PARSE_ESCAPES;
-        Object save = chars.getState();
+        Object pos = chars.getPos(null);
         int c = chars.next(iterOpts);
         if (c == '[' || c == '\\') {
             int d = chars.next(iterOpts & ~RuleCharacterIterator.SKIP_WHITESPACE);
             result = (c == '[') ? (d == ':') :
                      (d == 'N' || d == 'p' || d == 'P');
         }
-        chars.setState(save);
+        chars.setPos(pos);
         return result;
     }
 

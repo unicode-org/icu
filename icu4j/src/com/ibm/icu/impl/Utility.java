@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/09/24 19:16:05 $
- * $Revision: 1.43 $
+ * $Date: 2003/09/24 22:06:27 $
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -852,26 +852,26 @@ public final class Utility {
         int dig;
         int i;
         boolean braces = false;
-        Object save = chars.getState();
+        Object save = chars.getPos(null), backup = null;
 
         /* Fetch first UChar after '\\' */
-        c = chars.current(0);
+        c = chars.next(0);
 
         /* Convert hexadecimal and octal escapes */
         switch (c) {
         case 'u':
-            chars.next(0);
+            c = chars.next(0); 
             minDig = maxDig = 4;
             break;
         case 'U':
-            chars.next(0);
+            c = chars.next(0); 
             minDig = maxDig = 8;
             break;
         case 'x':
-            chars.next(0);
+            c = chars.next(0);
             minDig = 1;
-            if (chars.current(0) == 0x7B /*{*/) {
-                chars.next(0);
+            if (c == 0x7B /*{*/) {
+                c = chars.next(0);
                 braces = true;
                 maxDig = 8;
             } else {
@@ -879,45 +879,42 @@ public final class Utility {
             }
             break;
         default:
-            dig = UCharacter.digit(c, 8);
-            if (dig >= 0) {
+            if (UCharacter.digit(c, 8) >= 0) {
                 minDig = 1;
                 maxDig = 3;
-                n = 1; /* Already have first octal digit */
                 bitsPerDigit = 3;
-                result = dig;
             }
             break;
         }
         if (minDig != 0) {
             while (n < maxDig && !chars.atEnd()) {
-                c = chars.current(0);
                 dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
                 if (dig < 0) {
                     break;
                 }
                 result = (result << bitsPerDigit) | dig;
                 ++n;
-                chars.next(0);
+                backup = chars.getPos(backup);
+                c = chars.next(0);
             }
             if (n < minDig) {
-                chars.setState(save);
+                chars.setPos(save);
                 return -1;
             }
             if (braces) {
                 if (c != 0x7D /*}*/) {
-                    chars.setState(save);
+                    chars.setPos(save);
                     return -1;
                 }
-                chars.next(0);
-            }	    
+            } else {
+                chars.setPos(backup);
+            }
             if (result < 0 || result >= 0x110000) {
+                chars.setPos(save);
                 result = -1;
             }           
             return result;
         }
-
-        chars.next(0);
 
         /* Convert C-style escapes in table */
         for (i=0; i<UNESCAPE_MAP.length; i+=2) {
@@ -931,11 +928,10 @@ public final class Utility {
         /* Map \cX to control-X: X & 0x1F */
         if (c == 'c') {
             if (chars.atEnd()) {
-                chars.setState(save);
+                chars.setPos(save);
                 return -1;
             }
-            c = chars.next(0);
-            return 0x1F & c;
+            return 0x1F & chars.next(0);
         }
 
         /* If no special forms are recognized, then consider
