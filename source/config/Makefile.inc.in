@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -79,29 +79,10 @@ ld_rpath_suf=@ld_rpath_suf@
 @host_frag@
 # end host fragment
 
-
 DEFAULT_MODE=@DATA_PACKAGING_MODE@
 
 GENCCODE=$(sbindir)/genccode
 GENCMN=$(sbindir)/gencmn
 
-TOOL=env LD_LIBRARY_PATH=$(libdir) LIBPATH=$(libdir)
-
-# Try to optimize the path
-
-ifeq ($(strip $(PLATFORM)),AIX)
-  TOOL=env LIBPATH=$(libdir)
-endif
-
-ifeq ($(strip $(PLATFORM)),HPUX)
-  TOOL=env LD_LIBRARY_PATH=$(libdir)
-endif
-
-ifeq ($(strip $(PLATFORM)),U_LINUX)
-  TOOL=env LD_LIBRARY_PATH=$(libdir)
-endif
-
-ifeq ($(strip $(PLATFORM)),U_SOLARIS)
-  TOOL=env LD_LIBRARY_PATH=$(libdir)
-endif
+INVOKE=$(LDLIBARRYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
 
