@@ -112,8 +112,14 @@ U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pD
 
 /*initializes some global variables */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
+static UMTX        cnvCacheMutex;         /* Mutex for synchronizing cnv cache access. */
+                                          /*  Note:  the global mutex is used for      */
+                                          /*         reference count updates.          */
 
-/* The calling function uses the global mutex, so there is no need to use it here too */
+
+/* ucnv_cleanup - delete all storage held by the converter cache, except any in use    */
+/*                by open converters.                                                  */
+/*                Not thread safe.                                                     */
 UBool ucnv_cleanup(void) {
     if (SHARED_DATA_HASHTABLE != NULL) {
         ucnv_flushCache();
@@ -122,6 +128,10 @@ UBool ucnv_cleanup(void) {
             SHARED_DATA_HASHTABLE = NULL;
         }
     }
+
+    umtx_destroy(&cnvCacheMutex);           /* Don't worry about destroying the mutex even  */
+                                            /*  if the hash table still exists.  The mutex  */
+                                            /*  will lazily re-init  itself if needed.      */
     return (SHARED_DATA_HASHTABLE == NULL);
 }
 
@@ -202,7 +212,9 @@ getAlgorithmicTypeFromName(const char *realName)
     return NULL;
 }
 
-/*Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
+/* Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
+/*   Will always be called with the cnvCacheMutex alrady being held   */
+/*     by the calling function.                                       */
 void
 ucnv_shareConverterData(UConverterSharedData * data)
 {
@@ -212,19 +224,13 @@ ucnv_shareConverterData(UConverterSharedData * data)
 
     if (SHARED_DATA_HASHTABLE == NULL)
     {
-        UHashtable* myHT = uhash_openSize (uhash_hashIChars, uhash_compareIChars,
+        SHARED_DATA_HASHTABLE = uhash_openSize (uhash_hashIChars, uhash_compareIChars,
                             ucnv_io_countAvailableAliases(&err),
                             &err);
-        if (U_FAILURE(err))
+        if (U_FAILURE(err)) 
             return;
-        umtx_lock(NULL);
-        if (SHARED_DATA_HASHTABLE == NULL)
-            SHARED_DATA_HASHTABLE = myHT;
-        else
-            uhash_close(myHT);
-        umtx_unlock(NULL);
     }
-umtx_lock (NULL);
+
     /* ### check to see if the element is not already there! */
 
     /*
@@ -242,9 +248,11 @@ umtx_lock (NULL);
             data,
             &err);
     UCNV_DEBUG_LOG("put", data->staticData->name,data);
-umtx_unlock (NULL);
+
 }
 
+/*  Look up a converter name in the shared data cache.                    */
+/*    cnvCacheMutex must be held by the caller to protect the hash table. */
 UConverterSharedData *
 ucnv_getSharedConverterData(const char *name)
 {
@@ -257,9 +265,7 @@ ucnv_getSharedConverterData(const char *name)
     {
         UConverterSharedData *rc;
 
-umtx_lock(NULL);
         rc = (UConverterSharedData*)uhash_get(SHARED_DATA_HASHTABLE, name);
-umtx_unlock(NULL);
         UCNV_DEBUG_LOG("get",name,rc);
         return rc;
     }
@@ -411,7 +417,12 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
     mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName (realName);
     if (mySharedConverterData == NULL)
     {
-        /* it is a data-based converter, get its shared data */
+        /* it is a data-based converter, get its shared data.               */
+        /* Hold the cnvCacheMutex through the whole process of checking the */
+        /*   converter data cache, and adding new entries to the cache      */
+        /*   to prevent other threads from modifying the cache during the   */
+        /*   process.                                                       */
+        umtx_lock(&cnvCacheMutex);
         mySharedConverterData = ucnv_getSharedConverterData (realName);
         if (mySharedConverterData == NULL)
         {
@@ -419,6 +430,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
             mySharedConverterData = createConverterFromFile (realName, err);
             if (U_FAILURE (*err) || (mySharedConverterData == NULL))
             {
+                umtx_unlock(&cnvCacheMutex);
                 return NULL;
             }
             else
@@ -429,12 +441,13 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         }
         else
         {
-            /* ### this is unsafe: the shared data could have been deleted since sharing or getting it - these operations should increase the counter! */
-            /* update the reference counter: one more client */
+            /* The data for this converter was already in the cache.            */
+            /* Update the reference counter on the shared data: one more client */
             umtx_lock (NULL);
             mySharedConverterData->referenceCounter++;
             umtx_unlock (NULL);
         }
+        umtx_unlock(&cnvCacheMutex);
     }
 
     /* allocate the converter */
@@ -554,9 +567,17 @@ ucnv_flushCache ()
         return 0;
 
     /*creates an enumeration to iterate through every element in the
-    *table
+    * table
+    *
+    * Synchronization:  holding cnvCacheMutex will prevent any other thread from
+    *                   accessing or modifying the hash table during the iteration.
+    *                   The reference count of an entry may be decremented by
+    *                   ucnv_close while the iteration is in process, but this is
+    *                   benign.  It can't be incremented (in ucnv_createConverter())
+    *                   because the sequence of looking up in the cache + incrementing
+    *                   is protected by cnvCacheMutex.
     */
-    umtx_lock (NULL);
+    umtx_lock (&cnvCacheMutex);
     while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
     {
         mySharedData = (UConverterSharedData *) e->value.pointer;
@@ -571,7 +592,7 @@ ucnv_flushCache ()
             ucnv_deleteSharedConverterData (mySharedData);
         }
     }
-    umtx_unlock (NULL);
+    umtx_unlock (&cnvCacheMutex);
 
     return tableDeletedNum;
 }
