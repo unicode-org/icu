@@ -387,7 +387,7 @@ uset_removeString(USet* set, const UChar* str, int32_t strLen);
  * set so that its value is the <i>asymmetric set difference</i> of
  * the two sets.
  * @param set the object from which the elements are to be removed
- * @param remove the object that defines which elements will be
+ * @param removeSet the object that defines which elements will be
  * removed from this set
  * @draft ICU 3.2
  */
