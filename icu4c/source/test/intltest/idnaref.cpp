@@ -241,7 +241,7 @@ CLEANUP:
 
 
 
-U_CFUNC int32_t  
+U_CFUNC int32_t U_EXPORT2
 idnaref_toASCII(const UChar* src, int32_t srcLength, 
 			  UChar* dest, int32_t destCapacity,
               int32_t options,
@@ -391,7 +391,7 @@ CLEANUP:
 }
 
 
-U_CFUNC int32_t  
+U_CFUNC int32_t U_EXPORT2
 idnaref_toUnicode(const UChar* src, int32_t srcLength,
 				UChar* dest, int32_t destCapacity,
                 int32_t options,
@@ -640,7 +640,7 @@ getNextSeparator(UChar *src,int32_t srcLength,NamePrepTransform* prep,
     }
 }
 
-U_CFUNC int32_t 
+U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
 				   UChar* dest, int32_t destCapacity,
 				   int32_t options,
@@ -792,7 +792,7 @@ CLEANUP:
     return u_terminateUChars(dest, destCapacity, reqLength, status);
 }
 
-U_CFUNC int32_t
+U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
 				     UChar* dest, int32_t destCapacity,
 					 int32_t options,
@@ -941,7 +941,7 @@ CLEANUP:
     return u_terminateUChars(dest, destCapacity, reqLength, status);
 }
 
-U_CFUNC int32_t
+U_CFUNC int32_t U_EXPORT2
 idnaref_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
 				int32_t options,

@@ -27,12 +27,12 @@
 
 U_CDECL_BEGIN
 typedef int32_t  
-(*TestFunc) (   const UChar *src, int32_t srcLength,
+(U_EXPORT2 *TestFunc) (   const UChar *src, int32_t srcLength,
                 UChar *dest, int32_t destCapacity,
                 int32_t options, UParseError *parseError,
                 UErrorCode *status);
 typedef int32_t  
-(*CompareFunc) (const UChar *s1, int32_t s1Len,
+(U_EXPORT2 *CompareFunc) (const UChar *s1, int32_t s1Len,
                 const UChar *s2, int32_t s2Len,
                 int32_t options,
                 UErrorCode *status);
