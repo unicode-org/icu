@@ -30,8 +30,8 @@
 /**                   that it contains the new major/minor combination        */
 /** source/i18n/i18n.dsp - same as for the common.dsp                         */
 /** source/layout/layout.dsp - same as for the common.dsp                     */
-/** source/extra/ustdio/ustdio.dsp - same as for the common.dsp               */
 /** source/stubdata/stubdata.dsp - same as for the common.dsp                 */
+/** source/extra/ustdio/ustdio.dsp - same as for the common.dsp               */
 /** source/data/makedata.mak - change U_ICUDATA_NAME so that it contains      */
 /**                            the new major/minor combination                */
 /** source/tools/genren/genren.pl - use this script according to the README   */
@@ -44,7 +44,7 @@
  *  @draft ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2002, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2003, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** Maximum length of the copyright string.
  *  @draft ICU 2.4
@@ -59,9 +59,9 @@
 
 /** The current ICU minor version as an integer. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @draft ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 4
+#define U_ICU_VERSION_MINOR_NUM 6
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
@@ -71,22 +71,22 @@
 
 /** Glued version suffix for renamers 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @draft ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _2_4
+#define U_ICU_VERSION_SUFFIX _2_6
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @draft ICU 2.4
  */
-#define U_ICU_VERSION "2.4"
+#define U_ICU_VERSION "2.6"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @draft ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "24"
+#define U_ICU_VERSION_SHORT "26"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @draft ICU 2.4
@@ -109,7 +109,7 @@
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#define U_ICU_NAMESPACE icu_2_4
+#define U_ICU_NAMESPACE icu_2_6
 namespace U_ICU_NAMESPACE { }
 namespace icu = U_ICU_NAMESPACE;
 U_NAMESPACE_USE

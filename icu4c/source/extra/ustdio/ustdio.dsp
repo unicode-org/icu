@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:I386 /out:"..\..\..\bin\icuio24.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\"
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:I386 /out:"..\..\..\bin\icuio26.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\..\bin\icuio24d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\..\bin\icuio26d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
@@ -108,8 +108,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IA64
-# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IA64 /out:"..\..\..\bin\icuio24.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IX86 /out:"..\..\..\bin\icuio26.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\" /machine:IA64
 
 !ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
 
@@ -134,8 +134,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IA64 /pdbtype:sept
-# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /incremental:no /debug /machine:IA64 /out:"..\..\..\bin\icuio24d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /incremental:no /debug /machine:IX86 /out:"..\..\..\bin\icuio26d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\" /machine:IA64
 
 !ENDIF 
 
@@ -275,7 +275,7 @@ SOURCE=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -285,7 +285,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -295,7 +295,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -305,7 +305,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -322,7 +322,7 @@ SOURCE=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -332,7 +332,7 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -342,7 +342,7 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -352,7 +352,7 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
