@@ -214,12 +214,16 @@ NumberFormatTest::TestExponential(void)
                 logln((UnicodeString)"  -parse-> " + a);
                 // Use epsilon comparison as necessary
                 if ((useEpsilon &&
-                     (uprv_fabs(a - valParse[v+ival]) / a > (2*DBL_EPSILON))) ||
+                    (uprv_fabs(a - valParse[v+ival]) / a > (2*DBL_EPSILON))) ||
                     (!useEpsilon && a != valParse[v+ival]))
-                errln((UnicodeString)"FAIL: Expected " + valParse[v+ival]);
+                {
+                    errln((UnicodeString)"FAIL: Expected " + valParse[v+ival]);
+                }
             }
-            else
+            else {
                 errln((UnicodeString)"FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
+                errln((UnicodeString)"  should be (" + s.length() + " chars) -> " + valParse[v+ival]);
+            }
         }
         for (v=0; v<lval_length; ++v)
         {

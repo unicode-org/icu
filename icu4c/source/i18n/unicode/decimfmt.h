@@ -991,7 +991,7 @@ public:
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
 private:
-    static char fgClassID;
+    static const char fgClassID;
     static UParseError fParseError;
     /**
      * Do real work of constructing a new DecimalFormat.
@@ -1110,7 +1110,7 @@ private:
     /*transient*/ double    fRoundingDouble;
     ERoundingMode           fRoundingMode;
 
-    UChar                   fPad;
+    UnicodeString           fPad;
     int32_t                 fFormatWidth;
     EPadPosition            fPadPosition;
 
