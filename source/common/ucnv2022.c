@@ -382,7 +382,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale, 
             myConverterData->myConverterArray[4]=   ucnv_open("jisx-208", errorCode);
             myConverterData->myConverterArray[5]=   ucnv_open("jisx-212", errorCode);
             myConverterData->myConverterArray[6]=   ucnv_open("gb_2312_80-1", errorCode);
-            myConverterData->myConverterArray[7]=   ucnv_open("KSC5601", errorCode);
+            myConverterData->myConverterArray[7]=   ucnv_open("ksc_5601_1", errorCode);
             myConverterData->myConverterArray[8]=   NULL;
             
             /* initialize the state variables */
@@ -1068,7 +1068,7 @@ static Cnv2022Type myConverterType[8]={
     DBCS,
     DBCS,
     DBCS,
-    MBCS,
+    DBCS,
         
 };
 
@@ -1202,7 +1202,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]));
                     
                     TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
-                }*/
+                }
+                //myConverterData->isEscapeAppended=isEscapeAppended =FALSE;*/
             }
             /* if the source character is CR or LF then append the ASCII escape sequence*/
             else if(mySourceChar== 0x000A || mySourceChar== 0x000D || mySourceChar==0x0009 || mySourceChar==0x000B){
