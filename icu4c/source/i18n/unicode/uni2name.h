@@ -61,7 +61,6 @@ class U_I18N_API UnicodeNameTransliterator : public Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @draft
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
