@@ -183,6 +183,8 @@ DecimalFormat::construct(UErrorCode&             status,
     fRoundingIncrement = NULL;
     fRoundingDouble = 0.0;
     fRoundingMode = kRoundHalfEven;
+    fPad = kPatternPadEscape;
+    fPadPosition = kPadBeforePrefix;
     if (U_FAILURE(status)) return;
 
     fPosPrefixPattern = fPosSuffixPattern = NULL;
