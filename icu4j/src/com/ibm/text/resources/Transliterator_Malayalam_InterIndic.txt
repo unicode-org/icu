@@ -16,9 +16,6 @@
 #--------------------------------------------------------------------
 # Malayalam-InterIndic
 #:: NFD (NFC) ;
-\u0D46\u0D3E>\uE04A;# VOWEL SIGN O
-\u0D47\u0D3E>\uE04B;# VOWEL SIGN OO
-\u0D46\u0D57>\uE04C;# VOWEL SIGN AU
 
 \u0D02>\uE002;      # SIGN ANUSVARA
 \u0D03>\uE003;      # SIGN VISARGA

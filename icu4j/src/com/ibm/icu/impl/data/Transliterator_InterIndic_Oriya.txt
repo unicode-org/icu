@@ -91,7 +91,11 @@
 \ue04c>\u0b4c; # VOWEL SIGN AU
 \ue04d>\u0b4d; # SIGN VIRAMA
 \ue050>\u0b13\u0b01; # REMAP (indicExceptions.txt): \u0b50>\u0b13\u0b01 = OM>LETTER O.SIGN CANDRABINDU
-# \ue055>; # UNMAPPED InterIndic-Oriya: LENGTH MARK
+\ue051>;
+\ue052>;
+\ue053>;
+\ue054>;
+\ue055>; # UNMAPPED InterIndic-Oriya: LENGTH MARK
 \ue056>\u0b56; # AI LENGTH MARK
 \ue057>\u0b57; # AU LENGTH MARK
 \ue059>\u0b16\u0b3c; # REMAP (indicExceptions.txt): \u0b59>\u0b16\u0b3c = LETTER KHHA>LETTER KHA.SIGN NUKTA
@@ -117,6 +121,7 @@
 \ue06e>\u0b6e; # DIGIT EIGHT
 \ue06f>\u0b6f; # DIGIT NINE
 \ue070>\u0b70; # ISSHAR
+\ue071>;
 \ue072>;
 \ue073>;
 \ue074>;

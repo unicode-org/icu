@@ -62,9 +62,11 @@
 \ue02d>\u0d2d; # LETTER BHA
 \ue02e>\u0d2e; # LETTER MA
 \ue02f>\u0d2f; # LETTER YA
+\ue030\ue03c>\u0d31;
 \ue030>\u0d30; # LETTER RA
 \ue031>\u0d31; # LETTER RRA
 \ue032>\u0d32; # LETTER LA
+\ue033\ue03c>\u0d34;
 \ue033>\u0d33; # LETTER LLA
 \ue034>\u0d34; # LETTER LLLA
 \ue035>\u0d35; # LETTER VA
@@ -93,6 +95,10 @@
 \ue04c>\u0d4c; # VOWEL SIGN AU
 \ue04d>\u0d4d; # SIGN VIRAMA
 \ue050>\u0d13\u0d02; # UNMAPPED InterIndic-Malayalam: OM
+\ue051>;
+\ue052>;
+\ue053>;
+\ue054>;
 \ue055>; # FALLBACK BLOW AWAY LENGTH MARK
 \ue056>\u0d48; # REMAP (indicExceptions.txt): \u0d56>\u0d48 = AI LENGTH MARK>VOWEL SIGN AI
 \ue057>\u0d57; # AU LENGTH MARK
@@ -119,6 +125,8 @@
 \ue06e>\u0d6e; # DIGIT EIGHT
 \ue06f>\u0d6f; # DIGIT NINE
 \ue080>; # UNMAPPED InterIndic-Malayalam: ISSHAR
+\ue070>;
+\ue071>;
 \ue072>;
 \ue073>;
 \ue074>;

@@ -16,6 +16,7 @@
 #--------------------------------------------------------------------
 # Telugu-InterIndic
 #:: NFD (NFC) ;
+\u0c46\u0c4d\u0c56>\ue048\ue04d;
 \u0C46\u0C56>\uE048;# VOWEL SIGN AI
 \u0C01>\uE001;      # SIGN CANDRABINDU
 \u0C02>\uE002;      # SIGN ANUSVARA

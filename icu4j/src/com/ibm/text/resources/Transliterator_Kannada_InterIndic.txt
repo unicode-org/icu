@@ -16,6 +16,7 @@
 #--------------------------------------------------------------------
 # Kannada-InterIndic
 \u0CC6\u0CD5>\uE047;        # VOWEL SIGN EE
+\u0CC6\u0CCD\u0CD6>\uE048\ue04d;        # VOWEL SIGN AI
 \u0CC6\u0CD6>\uE048;        # VOWEL SIGN AI
 \u0CC6\u0CC2\u0CD5>\uE04B;  # VOWEL SIGN OO
 \u0CC6\u0CC2>\uE04A;        # VOWEL SIGN O

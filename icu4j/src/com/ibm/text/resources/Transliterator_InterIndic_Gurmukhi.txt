@@ -91,6 +91,10 @@
 \ue04c>\u0a4c; # VOWEL SIGN AU
 \ue04d>\u0a4d; # SIGN VIRAMA
 \ue050>\u0a0f\u0a02; #  FALLBACK to OO+BINDI : OM
+\ue051>;
+\ue052>;
+\ue053>;
+\ue054>;
 \ue055>; # FALLBACK BLOW AWAY LENGTH MARK
 \ue056>\u0a48; # REMAP (indicExceptions.txt): \u0a56>\u0a48 = AI LENGTH MARK>VOWEL SIGN AI
 \ue057>\u0a4c; # REMAP (indicExceptions.txt): \u0a57>\u0a4c = AU LENGTH MARK>VOWEL SIGN AU

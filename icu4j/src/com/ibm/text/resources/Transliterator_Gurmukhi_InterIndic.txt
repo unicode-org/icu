@@ -20,8 +20,8 @@
 \u0A16\u0A3C>\uE059; # LETTER KHHA
 \u0A17\u0A3C>\uE05A; # LETTER GHHA
 \u0A1C\u0A3C>\uE05B; # LETTER ZA
-\u0A38\u0A3C>\uE036; # LETTER SHA
-\u0A32\u0A3C>\uE033; # LETTER LLA
+#\u0A38\u0A3C>\uE036; # LETTER SHA
+#\u0A32\u0A3C>\uE033; # LETTER LLA
 \u0A2B\u0A3C>\uE05E; # LETTER FA
 
 \u0A02>\uE001;  # REMAP (indicExceptions.txt): \u0a01>\u0a02 = SIGN CANDRABINDU>SIGN BINDI
@@ -97,6 +97,8 @@
 \u0A72>\uE072;  # IRI
 \u0A73>\uE073;  # URA
 \u0A74>\uE074;  # EK ONKAR
+\u0964>.;        # UNMAPPED Devanagari-InterIndic: DANDA
+\u0965>.;        # UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
 #    :: NFC (NFD) ;
 # eof
 

@@ -62,6 +62,7 @@
 \ue02d>\u0cad; # LETTER BHA
 \ue02e>\u0cae; # LETTER MA
 \ue02f>\u0caf; # LETTER YA
+\ue030\ue03c>\u0cb1;
 \ue030>\u0cb0; # LETTER RA
 \ue031>\u0cb1; # LETTER RRA
 \ue032>\u0cb2; # LETTER LA
@@ -93,6 +94,10 @@
 \ue04c>\u0ccc; # VOWEL SIGN AU
 \ue04d>\u0ccd; # SIGN VIRAMA
 \ue050>\u0c93\u0c82; # REMAP (indicExceptions.txt): \u0cd0>\u0c93\u0c82 = OM>LETTER OO.SIGN ANUSVARA
+\ue051>;
+\ue052>;
+\ue053>;
+\ue054>;
 \ue055>\u0cd5; # LENGTH MARK
 \ue056>\u0cd6; # AI LENGTH MARK
 \ue057>\u0ccc; # REMAP (indicExceptions.txt): \u0cd7>\u0ccc = AU LENGTH MARK>VOWEL SIGN AU
@@ -119,6 +124,8 @@
 \ue06e>\u0cee; # DIGIT EIGHT
 \ue06f>\u0cef; # DIGIT NINE
 \ue080>; # UNMAPPED InterIndic-Kannada: ISSHAR
+\ue070>;
+\ue071>;
 \ue072>;
 \ue073>;
 \ue074>;
