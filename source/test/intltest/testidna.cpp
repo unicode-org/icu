@@ -385,6 +385,12 @@ static struct ErrorCases{
       U_IDNA_STD3_ASCII_RULES_ERROR,
       TRUE, TRUE, FALSE
     },
+    { 
+      {0},
+      NULL,
+      U_ILLEGAL_ARGUMENT_ERROR,
+      TRUE, TRUE, FALSE
+    }
 };
 
 
@@ -589,13 +595,17 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     UChar destStack[MAX_DEST_SIZE];
     int32_t destLen = 0;
     UChar* dest = NULL;
-    int32_t expectedLen = u_strlen(expected);
+    int32_t expectedLen = (expected != NULL) ? u_strlen(expected) : 0;
     int32_t options = (useSTD3ASCIIRules == TRUE) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
     UParseError parseError;
-    int32_t tSrcLen = u_strlen(src);
-    UChar* tSrc = (UChar*) uprv_malloc( U_SIZEOF_UCHAR * tSrcLen );
+    int32_t tSrcLen = 0; 
+    UChar* tSrc = NULL; 
 
-    uprv_memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
+    if(src != NULL){
+        tSrcLen = u_strlen(src);
+        tSrc  =(UChar*) uprv_malloc( U_SIZEOF_UCHAR * tSrcLen );
+        uprv_memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
+    }
 
     // test null-terminated source and return value of number of UChars required
     if( expectedStatus != U_IDNA_STD3_ASCII_RULES_ERROR ){
@@ -1000,22 +1010,32 @@ void TestIDNA::testErrorCases(const char* toASCIIName, TestFunc toASCII,
                     const char* IDNToUnicodeName, TestFunc IDNToUnicode){
     UChar buf[MAX_DEST_SIZE];
     int32_t bufLen=0;
+
     for(int32_t i=0;i< (int32_t)(sizeof(errorCases)/sizeof(errorCases[0]));i++){
         ErrorCases errorCase = errorCases[i];
-        bufLen = uprv_strlen(errorCase.ascii);
-        u_charsToUChars(errorCase.ascii,buf, bufLen+1);
-
+        UChar* src =NULL;
+        if(errorCase.ascii != NULL){
+            bufLen =  uprv_strlen(errorCase.ascii);
+            u_charsToUChars(errorCase.ascii,buf, bufLen+1);
+        }else{
+            bufLen = 1 ;
+            memset(buf,0,U_SIZEOF_UCHAR*MAX_DEST_SIZE);
+        }
+        
+        if(errorCase.unicode[0]!=0){
+            src = errorCase.unicode;
+        }
         // test toASCII
-        testAPI(errorCase.unicode,buf,
+        testAPI(src,buf,
                 IDNToASCIIName, errorCase.useSTD3ASCIIRules,
                 errorCase.expected, TRUE, TRUE, IDNToASCII);
         if(errorCase.testLabel ==TRUE){
-            testAPI(errorCase.unicode,buf,
+            testAPI(src,buf,
                 toASCIIName, errorCase.useSTD3ASCIIRules,
                 errorCase.expected, FALSE,TRUE, toASCII);
         }
         if(errorCase.testToUnicode ==TRUE){
-            testAPI(buf,errorCase.unicode,
+            testAPI((src==NULL)? NULL : buf,src,
                     IDNToUnicodeName, errorCase.useSTD3ASCIIRules,
                     errorCase.expected, TRUE, TRUE, IDNToUnicode);   
         }
@@ -1044,10 +1064,12 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
             errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
             continue;
         }
-        u_strFromUTF8(expected,MAX_DEST_SIZE,&expectedLen,utf8Chars2,utf8Chars2Len, &status);
-        if(U_FAILURE(status)){
-            errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
-            continue;
+        if(utf8Chars2 != NULL){
+            u_strFromUTF8(expected,MAX_DEST_SIZE,&expectedLen,utf8Chars2,utf8Chars2Len, &status);
+            if(U_FAILURE(status)){
+                errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
+                continue;
+            }
         }
         
         if(conformanceTestCases[i].expectedStatus != U_ZERO_ERROR){
