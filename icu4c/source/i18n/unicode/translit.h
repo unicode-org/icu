@@ -811,10 +811,11 @@ public:
      */
     static void registerInstance(Transliterator* adoptedObj);
 
-private:
+protected:
 
-    friend class NormalizationTransliterator;
-
+    /**
+     * @internal
+     */
     static void _registerFactory(const UnicodeString& id,
                                  Factory factory,
                                  Token context);
@@ -850,6 +851,7 @@ private:
      * Any-target.getInverse() => Any-inverseTarget
      * @param bidirectional if true, register the reverse relation
      * as well, that is, Any-inverseTarget.getInverse() => Any-target
+     * @internal
      */
     static void _registerSpecialInverse(const UnicodeString& target,
                                         const UnicodeString& inverseTarget,
