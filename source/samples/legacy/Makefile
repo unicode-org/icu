@@ -1,4 +1,4 @@
-# Copyright (c) 2001 IBM, Inc. and others
+# Copyright (c) 2001-2004 IBM, Inc. and others
 # conversion sample code
 
 
