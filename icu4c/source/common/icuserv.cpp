@@ -319,7 +319,7 @@ StringPair::StringPair(const UnicodeString& _displayName,
 }
 
 U_CAPI void U_EXPORT2
-deleteStringPair(void *obj) {
+userv_deleteStringPair(void *obj) {
   U_NAMESPACE_USE
     delete (StringPair*) obj;
 }
