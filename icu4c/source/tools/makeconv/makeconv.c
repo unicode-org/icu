@@ -256,7 +256,7 @@ static UOption options[]={
 int main(int argc, char* argv[])
 {
     UConverterSharedData* mySharedData = NULL;
-    UErrorCode err = U_ZERO_ERROR;
+    UErrorCode err = U_ZERO_ERROR, localError;
     char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     char touchFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     const char* destdir, *arg;
@@ -370,9 +370,9 @@ int main(int argc, char* argv[])
     }
 #endif
 
+  err = U_ZERO_ERROR;
   for (++argv; --argc; ++argv)
     {
-      err = U_ZERO_ERROR;
       arg = getLongPathname(*argv);
 
       /*produces the right destination path for display*/
@@ -427,14 +427,17 @@ int main(int argc, char* argv[])
         printf("makeconv: processing %s  ...\n", arg);
         fflush(stdout);
 #endif
-      mySharedData = createConverterFromTableFile(arg, &err);
+      localError = U_ZERO_ERROR;
+      mySharedData = createConverterFromTableFile(arg, &localError);
 
-      if (U_FAILURE(err) || (mySharedData == NULL))
+      if (U_FAILURE(localError) || (mySharedData == NULL))
         {
           /* if an error is found, print out an error msg and keep going */
-          fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (error code %d - %s)\n", outFileName, arg, err,
-                        u_errorName(err));
-          err = U_ZERO_ERROR;
+          fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
+                        u_errorName(localError));
+          if(U_SUCCESS(err)) {
+              err = localError;
+          }
         }
       else
         {
@@ -449,6 +452,16 @@ int main(int argc, char* argv[])
 
           uprv_strcpy((char*)mySharedData->staticData->name, cnvName);
 
+          if(!uprv_isInvariantString((char*)mySharedData->staticData->name, -1)) {
+              fprintf(stderr,
+                  "Error: A converter name must contain only invariant characters.\n"
+                  "%s is not a valid converter name.\n",
+                  mySharedData->staticData->name);
+              if(U_SUCCESS(err)) {
+                  err = U_INVALID_TABLE_FORMAT;
+              }
+          }
+
           if(pkgName == NULL)
           {
               uprv_strcpy(cnvNameWithPkg, cnvName);
@@ -460,7 +473,8 @@ int main(int argc, char* argv[])
               uprv_strcat(cnvNameWithPkg, cnvName);
           }
 
-          writeConverterData(mySharedData, cnvNameWithPkg, destdir, &err);
+          localError = U_ZERO_ERROR;
+          writeConverterData(mySharedData, cnvNameWithPkg, destdir, &localError);
           ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
           if(TOUCHFILE)
           {
@@ -474,7 +488,7 @@ int main(int argc, char* argv[])
               if(q == NULL)
               {
                   fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
-                  err = U_FILE_ACCESS_ERROR;
+                  localError = U_FILE_ACCESS_ERROR;
               }
 
               else
@@ -488,11 +502,14 @@ int main(int argc, char* argv[])
           uprv_free((UConverterStaticData *)mySharedData->staticData);
           uprv_free(mySharedData);
 
-          if(U_FAILURE(err))
+          if(U_FAILURE(localError))
           {
                   /* if an error is found, print out an error msg and keep going*/
-            fprintf(stderr, "Error writing \"%s\" file for \"%s\" (error code %d - %s)\n", outFileName, arg, err,
-                    u_errorName(err));
+            fprintf(stderr, "Error writing \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
+                    u_errorName(localError));
+              if(U_SUCCESS(err)) {
+                  err = localError;
+              }
           }
           else
           {
