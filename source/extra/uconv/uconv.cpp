@@ -84,8 +84,8 @@ static void initMsg(const char *pname) {
  
             err = U_ZERO_ERROR;
             /* that was try #1, try again with a path */
-            strcpy(dataPath, u_getDataDirectory());
-            strcat(dataPath, UCONVMSG);
+            uprv_strcpy(dataPath, u_getDataDirectory());
+            uprv_strcat(dataPath, UCONVMSG);
 
             gBundle = u_wmsg_setPath(dataPath, &err);
             if (U_FAILURE(err)) {
@@ -250,7 +250,7 @@ static int printConverters(const char *pname, const char *lookfor,
         if (U_FAILURE(err)) {
             printf("%s", name);
 
-            UnicodeString str(name, strlen(name) + 1);
+            UnicodeString str(name, uprv_strlen(name) + 1);
             putchar('\t');
             u_wmsg(stderr, "cantGetAliases", str.getBuffer(),
                 u_wmsg_errorName(err));
@@ -264,7 +264,7 @@ static int printConverters(const char *pname, const char *lookfor,
                 const char *alias = ucnv_getAlias(name, a, &err);
 
                 if (U_FAILURE(err)) {
-                    UnicodeString str(name, strlen(name) + 1);
+                    UnicodeString str(name, uprv_strlen(name) + 1);
                     putchar('\t');
                     u_wmsg(stderr, "cantGetAliases", str.getBuffer(),
                         u_wmsg_errorName(err));
@@ -353,7 +353,7 @@ static int printTransliterators(int canon)
             }
             utrans_getAvailableID(i, buf, buflen);
             if (len >= buflen) {
-                strcpy(buf + buflen - 4, "..."); /* Truncate the name. */
+                uprv_strcpy(buf + buflen - 4, "..."); /* Truncate the name. */
             }
         }
 
@@ -506,7 +506,7 @@ static UBool convertFile(const char *pname,
 
     convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err)) {
-        UnicodeString str(fromcpage, strlen(fromcpage) + 1);
+        UnicodeString str(fromcpage, uprv_strlen(fromcpage) + 1);
         initMsg(pname);
         u_wmsg(stderr, "cantOpenFromCodeset", str.getBuffer(),
             u_wmsg_errorName(err));
@@ -521,7 +521,7 @@ static UBool convertFile(const char *pname,
 
     convto = ucnv_open(tocpage, &err);
     if (U_FAILURE(err)) {
-        UnicodeString str(tocpage, strlen(tocpage) + 1);
+        UnicodeString str(tocpage, uprv_strlen(tocpage) + 1);
         initMsg(pname);
         u_wmsg(stderr, "cantOpenToCodeset", str.getBuffer(),
             u_wmsg_errorName(err));
@@ -583,7 +583,7 @@ static UBool convertFile(const char *pname,
         if (U_FAILURE(err)) {
             char pos[32];
             sprintf(pos, "%u", infoffset - 1);
-            UnicodeString str(pos, strlen(pos) + 1);
+            UnicodeString str(pos, uprv_strlen(pos) + 1);
             initMsg(pname);
             u_wmsg(stderr, "problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
             willexit = 1;
@@ -595,7 +595,7 @@ static UBool convertFile(const char *pname,
         if (flush && !willexit && cbufp != (buf + rd)) {
             char pos[32];
             sprintf(pos, "%u", infoffset);
-            UnicodeString str(pos, strlen(pos) + 1);
+            UnicodeString str(pos, uprv_strlen(pos) + 1);
             initMsg(pname);
             u_wmsg(stderr, "premEndInput", str.getBuffer());
             willexit = 1;
@@ -651,7 +651,7 @@ static UBool convertFile(const char *pname,
                     errtag = "problemCvtFromU";
                 }
                 sprintf(pos, "%u", ferroffset);
-                UnicodeString str(pos, strlen(pos) + 1);
+                UnicodeString str(pos, uprv_strlen(pos) + 1);
                 initMsg(pname);
                 u_wmsg(stderr, errtag, str.getBuffer(),
                        u_wmsg_errorName(err));
@@ -663,7 +663,7 @@ static UBool convertFile(const char *pname,
             if (flush && !willexit && unibufbp != (unibufu + (size_t) (unibufp - unibufu))) {
                 char pos[32];
                 sprintf(pos, "%u", infoffset);
-                UnicodeString str(pos, strlen(pos) + 1);
+                UnicodeString str(pos, uprv_strlen(pos) + 1);
                 initMsg(pname);
                 u_wmsg(stderr, "premEnd", str.getBuffer());
                 willexit = 1;
@@ -726,7 +726,7 @@ static void usage(const char *pname, int ecode) {
     msg =
         ures_getStringByKey(gBundle, ecode ? "lcUsageWord" : "ucUsageWord",
                             &msgLen, &err);
-    UnicodeString upname(pname, strlen(pname) + 1);
+    UnicodeString upname(pname, uprv_strlen(pname) + 1);
     UnicodeString mname(msg, msgLen + 1);
 
     res = u_wmsg(fp, "usage", mname.getBuffer(), upname.getBuffer());
