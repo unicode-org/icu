@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2001/11/27 21:48:31 $
-* $Revision: 1.16 $
+* $Date: 2002/02/07 00:53:54 $
+* $Revision: 1.17 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -69,6 +69,21 @@ class TransliteratorParser {
      * element 0 corresponds to character data.variablesBase.
      */
     private Vector variablesVector;
+
+    /**
+     * String of standins for segments.  Used during the parsing of a single
+     * rule.  segmentStandins.charAt(0) is the standin for "$1" and corresponds
+     * to StringMatcher object segmentObjects.elementAt(0), etc.
+     */
+    private StringBuffer segmentStandins;
+
+    /**
+     * Vector of StringMatcher objects for segments.  Used during the
+     * parsing of a single rule.  
+     * segmentStandins.charAt(0) is the standin for "$1" and corresponds
+     * to StringMatcher object segmentObjects.elementAt(0), etc.
+     */
+    private Vector segmentObjects;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -147,6 +162,18 @@ class TransliteratorParser {
     private static final char SEGMENT_OPEN        = '(';
     private static final char SEGMENT_CLOSE       = ')';
 
+    // A function is denoted &Source-Target/Variant(text)
+    private static final char FUNCTION            = '&';
+
+    // Special characters disallowed at the top level
+    private static UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]");
+
+    // Special characters disallowed within a segment
+    private static UnicodeSet ILLEGAL_SEG = new UnicodeSet("[\\{\\}\\|\\@]");
+
+    // Special characters disallowed within a function argument
+    private static UnicodeSet ILLEGAL_FUNC = new UnicodeSet("[\\^\\(\\.\\*\\+\\?\\{\\}\\|\\@]");
+
     //----------------------------------------------------------------------
     // class ParseData
     //----------------------------------------------------------------------
@@ -199,6 +226,34 @@ class TransliteratorParser {
             }
             pos.setIndex(i);
             return text.substring(start, i);
+        }
+
+        /**
+         * Return true if the given character is a matcher standin or a plain
+         * character (non standin).
+         */
+        public boolean isMatcher(int ch) {
+            // Note that we cannot use data.lookup() because the
+            // set array has not been constructed yet.
+            int i = ch - data.variablesBase;
+            if (i >= 0 && i < variablesVector.size()) {
+                return variablesVector.elementAt(i) instanceof UnicodeMatcher;
+            }
+            return true;
+        }
+
+        /**
+         * Return true if the given character is a replacer standin or a plain
+         * character (non standin).
+         */
+        public boolean isReplacer(int ch) {
+            // Note that we cannot use data.lookup() because the
+            // set array has not been constructed yet.
+            int i = ch - data.variablesBase;
+            if (i >= 0 && i < variablesVector.size()) {
+                return variablesVector.elementAt(i) instanceof UnicodeReplacer;
+            }
+            return true;
         }
     }
 
@@ -303,8 +358,6 @@ class TransliteratorParser {
         public int ante = -1;   // position of ante context marker '{' in text
         public int post = -1;   // position of post context marker '}' in text
 
-        public int maxRef = -1; // n where maximum segment ref is $n; 1-based
-
         // Record the offset to the cursor either to the left or to the
         // right of the key.  This is indicated by characters on the output
         // side that allow the cursor to be positioned arbitrarily within
@@ -324,15 +377,10 @@ class TransliteratorParser {
         public boolean anchorEnd   = false;
 
         /**
-         * UnicodeMatcher objects corresponding to each segment.
+         * The segment number from 1..n of the next '(' we see
+         * during parsing; 1-based.
          */
-        public Vector segments = new Vector();
-        
-        /**
-         * The segment number from 0..n-1 of the next '(' we see
-         * during parsing; 0-based.
-         */
-        private int nextSegmentNumber = 0;
+        private int nextSegmentNumber = 1;
 
         /**
          * Parse one side of a rule, stopping at either the limit,
@@ -344,7 +392,7 @@ class TransliteratorParser {
                          TransliteratorParser parser) {
             int start = pos;
             StringBuffer buf = new StringBuffer();
-            pos = parseSection(rule, pos, limit, parser, buf, false);
+            pos = parseSection(rule, pos, limit, parser, buf, ILLEGAL_TOP, false);
             text = buf.toString();
 
             if (cursorOffset > 0 && cursor != cursorOffsetPos) {
@@ -364,6 +412,8 @@ class TransliteratorParser {
          * @param buf buffer into which to accumulate the rule pattern
          * characters, either literal characters from the rule or
          * standins for UnicodeMatcher objects including segments.
+         * @param illegal the set of special characters that is illegal during
+         * this parse.
          * @param isSegment if true, then we've already seen a '(' and
          * pos on entry points right after it.  Accumulate everything
          * up to the closing ')', put it in a segment matcher object,
@@ -378,6 +428,7 @@ class TransliteratorParser {
         private int parseSection(String rule, int pos, int limit,
                                  TransliteratorParser parser,
                                  StringBuffer buf,
+                                 UnicodeSet illegal,
                                  boolean isSegment) {
             int start = pos;
             ParsePosition pp = null;
@@ -386,15 +437,7 @@ class TransliteratorParser {
             int varStart = -1; // Most recent $variableReference
             int varLimit = -1;
             int[] iref = new int[1];
-
-            // If isSegment, then bufSegStart is the offset in buf to
-            // the first character of the segment we are parsing.
-            int bufSegStart = 0;
-            int segmentNumber = 0;
-            if (isSegment) {
-                bufSegStart = buf.length();
-                segmentNumber = nextSegmentNumber++;
-            }
+            int bufStart = buf.length();
 
         main:
             while (pos < limit) {
@@ -449,10 +492,10 @@ class TransliteratorParser {
                         buf.append(c); // Parse [''] outside quotes as [']
                         ++pos;
                     } else {
-                        /* This loop picks up a segment of quoted text of the
-                         * form 'aaaa' each time through.  If this segment
+                        /* This loop picks up a run of quoted text of the
+                         * form 'aaaa' each time through.  If this run
                          * hasn't really ended ('aaaa''bbbb') then it keeps
-                         * looping, each time adding on a new segment.  When it
+                         * looping, each time adding on a new run.  When it
                          * reaches the final quote it breaks.
                          */
                         quoteStart = buf.length();
@@ -481,6 +524,10 @@ class TransliteratorParser {
 
                 parser.checkVariableRange(c, rule, start);
 
+                if (illegal.contains(c)) {
+                    syntaxError("Illegal character '" + c + '\'', rule, start);
+                }
+
                 switch (c) {
                     
                 //------------------------------------------------------
@@ -495,7 +542,62 @@ class TransliteratorParser {
                     }
                     break;
                 case SEGMENT_OPEN:
-                    pos = parseSection(rule, pos, limit, parser, buf, true);
+                    {
+                        // bufSegStart is the offset in buf to the first
+                        // character of the segment we are parsing.
+                        int bufSegStart = buf.length();
+
+                        // Record segment number now, since nextSegmentNumber
+                        // will be incremented during the call to parseSection
+                        // if there are nested segments.
+                        int segmentNumber = nextSegmentNumber++; // 1-based
+
+                        // Parse the segment
+                        pos = parseSection(rule, pos, limit, parser, buf, ILLEGAL_SEG, true);
+
+                        // After parsing a segment, the relevant characters are
+                        // in buf, starting at offset bufSegStart.  Extract them
+                        // into a string matcher, and replace them with a
+                        // standin for that matcher.
+                        StringMatcher m =
+                            new StringMatcher(buf.substring(bufSegStart),
+                                              segmentNumber, parser.data);
+
+                        // Record and associate object and segment number
+                        parser.setSegmentObject(segmentNumber, m);
+                        buf.setLength(bufSegStart);
+                        buf.append(parser.getSegmentStandin(segmentNumber));
+                    }
+                    break;
+                case FUNCTION:
+                    {
+                        iref[0] = pos;
+                        String id = TransliteratorIDParser.parseBasicID(rule, iref);
+                        // The next character MUST be a segment open
+                        if (id == null ||
+                            !Utility.parseChar(rule, iref, SEGMENT_OPEN)) {
+                            syntaxError("Invalid function", rule, start);
+                        }
+
+                        Transliterator t = Transliterator.getBasicInstance(id, id);
+
+                        // bufSegStart is the offset in buf to the first
+                        // character of the segment we are parsing.
+                        int bufSegStart = buf.length();
+
+                        // Parse the segment
+                        pos = parseSection(rule, iref[0], limit, parser, buf, ILLEGAL_FUNC, true);
+
+                        // After parsing a segment, the relevant characters are
+                        // in buf, starting at offset bufSegStart.
+                        FunctionReplacer r =
+                            new FunctionReplacer(t,
+                                new StringReplacer(buf.substring(bufSegStart), parser.data));
+
+                        // Replace the buffer contents with a stand-in
+                        buf.setLength(bufSegStart);
+                        buf.append(parser.generateStandInFor(r));
+                    }
                     break;
                 case SymbolTable.SYMBOL_REF:
                     // Handle variable references and segment references "$1" .. "$9"
@@ -512,25 +614,15 @@ class TransliteratorParser {
                         }
                         // Parse "$1" "$2" .. "$9" .. (no upper limit)
                         c = rule.charAt(pos);
-                        int r = Character.digit(c, 10);
+                        int r = UCharacter.digit(c, 10);
                         if (r >= 1 && r <= 9) {
-                            ++pos;
-                            while (pos < limit) {
-                                c = rule.charAt(pos);
-                                int d = Character.digit(c, 10);
-                                if (d < 0) {
-                                    break;
-                                }
-                                if (r > 214748364 ||
-                                    (r == 214748364 && d > 7)) {
-                                    syntaxError("Undefined segment reference",
-                                                rule, start);
-                                }
-                                r = 10*r + d;
+                            iref[0] = pos;
+                            r = Utility.parseNumber(rule, iref, 10);
+                            if (r < 0) {
+                                syntaxError("Undefined segment reference",
+                                            rule, start);
                             }
-                            if (r > maxRef) {
-                                maxRef = r;
-                            }
+                            pos = iref[0];
                             buf.append(parser.getSegmentStandin(r));
                         } else {
                             if (pp == null) { // Lazy create
@@ -572,7 +664,7 @@ class TransliteratorParser {
                     //  $v+     matches  xyxyxy if $v == xy
                     //  (seg)+  matches  segsegseg
                     {
-                        if (isSegment && buf.length() == bufSegStart) {
+                        if (isSegment && buf.length() == bufStart) {
                             // The */+ immediately follows '('
                             syntaxError("Misplaced quantifier", rule, start);
                             break;
@@ -598,7 +690,7 @@ class TransliteratorParser {
 
                         UnicodeMatcher m =
                             new StringMatcher(buf.toString(), qstart, qlimit,
-                                              false, parser.data);
+                                              0, parser.data);
                         int min = 0;
                         int max = Quantifier.MAX;
                         switch (c) {
@@ -622,66 +714,32 @@ class TransliteratorParser {
                 // Elements allowed ONLY WITHIN segments
                 //------------------------------------------------------
                 case SEGMENT_CLOSE:
-                    if (isSegment) {
-                        // We're done parsing a segment.  The relevant
-                        // characters are in buf, starting at offset
-                        // bufSegStart.  Extract them into a string
-                        // matcher, and replace them with a standin
-                        // for that matcher.
-                        StringMatcher m =
-                            new StringMatcher(buf.substring(bufSegStart),
-                                              true, parser.data);
-                        // Since we call parseSection() recursively,
-                        // nested segments will result in segment i+1
-                        // getting parsed and stored before segment i;
-                        // be careful with the vector handling here.
-                        if ((segmentNumber+1) > segments.size()) {
-                            segments.setSize(segmentNumber+1);
-                        }
-                        segments.setElementAt(m, segmentNumber);
-                        buf.setLength(bufSegStart);
-                        buf.append(parser.generateStandInFor(m));
-                        break main;
-                    }
-                    // If we aren't in a segment, then a segment close
-                    // character is a syntax error.
-                    syntaxError("Unquoted special", rule, start);
-                    break;
+                    // assert(isSegment);
+                    // We're done parsing a segment.
+                    break main;
 
                 //------------------------------------------------------
                 // Elements allowed ONLY OUTSIDE segments
                 //------------------------------------------------------
                 case CONTEXT_ANTE:
-                    if (isSegment) {
-                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
-                    }
                     if (ante >= 0) {
                         syntaxError("Multiple ante contexts", rule, start);
                     }
                     ante = buf.length();
                     break;
                 case CONTEXT_POST:
-                    if (isSegment) {
-                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
-                    }
                     if (post >= 0) {
                         syntaxError("Multiple post contexts", rule, start);
                     }
                     post = buf.length();
                     break;
                 case CURSOR_POS:
-                    if (isSegment) {
-                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
-                    }
                     if (cursor >= 0) {
                         syntaxError("Multiple cursors", rule, start);
                     }
                     cursor = buf.length();
                     break;
                 case CURSOR_OFFSET:
-                    if (isSegment) {
-                        syntaxError("Illegal character '" + c + "' in segment", rule, start);
-                    }
                     if (cursorOffset < 0) {
                         if (buf.length() > 0) {
                             syntaxError("Misplaced " + c, rule, start);
@@ -735,12 +793,33 @@ class TransliteratorParser {
         }
 
         /**
-         * Create and return a UnicodeMatcher[] array of segments,
-         * or null if there are no segments.
+         * Return true if this half looks like valid output, that is, does not
+         * contain quantifiers or other special input-only elements.
          */
-        UnicodeMatcher[] createSegments() {
-            return (segments.size() == 0) ? null :
-                (UnicodeMatcher[]) segments.toArray(new UnicodeMatcher[segments.size()]);
+        public boolean isValidOutput(TransliteratorParser parser) {
+            for (int i=0; i<text.length(); ) {
+                int c = UTF16.charAt(text, i);
+                i += UTF16.getCharCount(c);
+                if (!parser.parseData.isReplacer(c)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * Return true if this half looks like valid input, that is, does not
+         * contain functions or other special output-only elements.
+         */
+        public boolean isValidInput(TransliteratorParser parser) {
+            for (int i=0; i<text.length(); ) {
+                int c = UTF16.charAt(text, i);
+                i += UTF16.getCharCount(c);
+                if (!parser.parseData.isMatcher(c)) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
@@ -824,6 +903,9 @@ class TransliteratorParser {
         this.compoundFilter = null;
         int compoundFilterOffset = -1;
 
+        // The number of ::ID block entries we have parsed
+        int idBlockCount = 0;
+
     main:
         for (;;) {
             String rule = ruleArray.nextLine();
@@ -866,34 +948,50 @@ class TransliteratorParser {
                             ++pos;
                             c = rule.charAt(pos);
                         }
-                        int lengthBefore = idBlockResult.length();
                         if (mode == 1) {
+                            // We have just entered the footer ::ID block
                             mode = 2;
-                            // In the forward direction parseID adds elements at the end.
-                            // In the reverse direction parseID adds elements at the start.
-                            idSplitPoint = (direction == Transliterator.REVERSE) ? 0 : lengthBefore;
+                            // In the forward direction add elements at the end.
+                            // In the reverse direction add elements at the start.
+                            idSplitPoint = idBlockCount;
                         }
                         int[] p = new int[] { pos };
-                        boolean[] sawDelim = new boolean[1];
-                        UnicodeSet[] cpdFilter = new UnicodeSet[1];
-                        Transliterator.parseID(rule, idBlockResult, p, sawDelim, cpdFilter, direction, false);
-                        if (p[0] == pos || !sawDelim[0]) {
-                            // Invalid ::id
-                            syntaxError("Invalid ::ID", rule, pos);
-                        }
-                        if (direction == Transliterator.REVERSE && idSplitPoint >= 0) {
-                            // In the reverse direction parseID adds elements at the start.
-                            idSplitPoint += idBlockResult.length() - lengthBefore;
-                        }
-                        if (cpdFilter[0] != null) {
-                            if (compoundFilter != null) {
-                                // Multiple compound filters
-                                syntaxError("Multiple compound filters", rule, pos);
+
+                        TransliteratorIDParser.SingleID id =
+                            TransliteratorIDParser.parseSingleID(
+                                          rule, p, direction);
+                        if (p[0] != pos && Utility.parseChar(rule, p, END_OF_RULE)) {
+                            // Successful ::ID parse.
+
+                            if (direction == Transliterator.FORWARD) {
+                                idBlockResult.append(id.canonID).append(END_OF_RULE);
+                            } else {
+                                idBlockResult.insert(0, id.canonID + END_OF_RULE);
                             }
-                            compoundFilter = cpdFilter[0];
-                            compoundFilterOffset = (direction == Transliterator.FORWARD) ?
-                                lengthBefore : idBlockResult.length();
+
+                            ++idBlockCount;
+
+                        } else {
+                            // Couldn't parse an ID.  Try to parse a global filter
+                            int[] withParens = new int[] { -1 };
+                            UnicodeSet f = TransliteratorIDParser.parseGlobalFilter(rule, p, direction, withParens, idBlockResult);
+                            if (f != null && Utility.parseChar(rule, p, END_OF_RULE)) {
+                                if ((direction == Transliterator.FORWARD) ==
+                                    (withParens[0] == 0)) {
+                                    if (compoundFilter != null) {
+                                        // Multiple compound filters
+                                        syntaxError("Multiple global filters", rule, pos);
+                                    }
+                                    compoundFilter = f;
+                                    compoundFilterOffset = idBlockCount;
+                               }
+                            } else {
+                                // Invalid ::id
+                                // Can be parsed as neither an ID nor a global filter
+                                syntaxError("Invalid ::ID", rule, pos);
+                            }
                         }
+
                         pos = p[0];
                     } else if (resemblesPragma(rule, pos, limit)) {
                         int ppp = parsePragma(rule, pos, limit);
@@ -930,8 +1028,16 @@ class TransliteratorParser {
 
         idBlock = idBlockResult.toString();
 
+        if (idSplitPoint < 0) {
+            idSplitPoint = idBlockCount;
+        }
+
+        if (direction == Transliterator.REVERSE) {
+            idSplitPoint = idBlockCount - idSplitPoint;
+        }
+
         // Convert the set vector to an array
-        data.variables = new UnicodeMatcher[variablesVector.size()];
+        data.variables = new Object[variablesVector.size()];
         variablesVector.copyInto(data.variables);
         variablesVector = null;
 
@@ -941,16 +1047,12 @@ class TransliteratorParser {
                 if ((direction == Transliterator.FORWARD &&
                      compoundFilterOffset != 0) ||
                     (direction == Transliterator.REVERSE &&
-                     compoundFilterOffset != idBlock.length())) {
+                     compoundFilterOffset != idBlockCount)) {
                     throw new IllegalArgumentException("Compound filters misplaced");
                 }
             }
 
             data.ruleSet.freeze();
-
-            if (idSplitPoint < 0) {
-                idSplitPoint = idBlock.length();
-            }
 
             if (ruleCount == 0) {
                 data = null;
@@ -987,6 +1089,10 @@ class TransliteratorParser {
         // Locate the left side, operator, and right side
         int start = pos;
         char operator = 0;
+
+        // Set up segments data
+        segmentStandins = new StringBuffer();
+        segmentObjects = new Vector();
 
         RuleHalf left  = new RuleHalf();
         RuleHalf right = new RuleHalf();
@@ -1053,6 +1159,21 @@ class TransliteratorParser {
                         rule, start);
         }
 
+        // Verify segments
+        if (segmentStandins.length() > segmentObjects.size()) {
+            syntaxError("Undefined segment reference", rule, start);
+        }
+        for (int i=0; i<segmentStandins.length(); ++i) {
+            if (segmentStandins.charAt(i) == 0) {
+                syntaxError("Internal error", rule, start); // will never happen
+            }
+        }
+        for (int i=0; i<segmentObjects.size(); ++i) {
+            if (segmentObjects.elementAt(i) == null) {
+                syntaxError("Internal error", rule, start); // will never happen
+            }
+        }
+
         // If the direction we want doesn't match the rule
         // direction, do nothing.
         if (operator != FWDREV_RULE_OP &&
@@ -1073,8 +1194,7 @@ class TransliteratorParser {
         // apply.
         if (operator == FWDREV_RULE_OP) {
             right.removeContext();
-            right.segments.removeAllElements();
-            left.cursor = left.maxRef = -1;
+            left.cursor = -1;
             left.cursorOffset = 0;
         }
 
@@ -1093,7 +1213,6 @@ class TransliteratorParser {
         // cannot place the cursor outside the limits of the context.
         // Anchors are only allowed on the input side.
         if (right.ante >= 0 || right.post >= 0 || left.cursor >= 0 ||
-            right.segments.size() > 0 || left.maxRef >= 0 ||
             (right.cursorOffset != 0 && right.cursor < 0) ||
             // - The following two checks were used to ensure that the
             // - the cursor offset stayed within the ante- or postcontext.
@@ -1102,41 +1221,26 @@ class TransliteratorParser {
             //(right.cursorOffset > (left.text.length() - left.post)) ||
             //(-right.cursorOffset > left.ante) ||
             right.anchorStart || right.anchorEnd ||
-            !isValidOutput(right.text) ||
+            !left.isValidInput(this) || !right.isValidOutput(this) ||
             left.ante > left.post) {
             syntaxError("Malformed rule", rule, start);
         }
 
-        // Check integrity of segments and segment references.  Each
-        // segment's start must have a corresponding limit, and the
-        // references must not refer to segments that do not exist.
-        if (right.maxRef > left.segments.size()) {
-            syntaxError("Undefined segment reference $" + right.maxRef, rule, start);
+        // Flatten segment objects vector to an array
+        UnicodeMatcher[] segmentsArray = null;
+        if (segmentObjects.size() > 0) {
+            segmentsArray = new UnicodeMatcher[segmentObjects.size()];
+            segmentObjects.toArray(segmentsArray);
         }
 
         data.ruleSet.addRule(new TransliterationRule(
                                      left.text, left.ante, left.post,
                                      right.text, right.cursor, right.cursorOffset,
-                                     left.createSegments(),
+                                     segmentsArray,
                                      left.anchorStart, left.anchorEnd,
                                      data));
 
         return pos;
-    }
-
-    /**
-     * Return true if the given string looks like valid output, that is,
-     * does not contain quantifiers or other special input-only elements.
-     */
-    private boolean isValidOutput(String output) {
-        for (int i=0; i<output.length(); ) {
-            int c = UTF16.charAt(output, i);
-            i += UTF16.getCharCount(c);
-            if (parseData.lookupMatcher(c) != null) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -1147,10 +1251,6 @@ class TransliteratorParser {
             throw new IllegalArgumentException("Invalid variable range " + start + ", " + end);
         }
         
-        // Segment references work down; variables work up.  We don't
-        // know how many of each we will need.
-        data.segmentBase = (char) end;
-        data.segmentCount = 0;
         data.variablesBase = variableNext = (char) start; // first private use
         variableLimit = (char) (end + 1);
     }
@@ -1281,16 +1381,67 @@ class TransliteratorParser {
     }
 
     /**
-     * Generate and return a stand-in for a new UnicodeMatcher.  Store
-     * the matcher.
+     * Generate and return a stand-in for a new UnicodeMatcher or UnicodeReplacer.
+     * Store the object.
      */
-    char generateStandInFor(UnicodeMatcher matcher) {
-        // assert(matcher != null);
+    char generateStandInFor(Object obj) {
+        // assert(obj != null);
+
+        // Look up previous stand-in, if any.  This is a short list
+        // (typical n is 0, 1, or 2); linear search is optimal.
+        for (int i=0; i<variablesVector.size(); ++i) {
+            if (variablesVector.elementAt(i) == obj) { // [sic] pointer comparison
+                return (char) (data.variablesBase + i);
+            }
+        }
+
         if (variableNext >= variableLimit) {
             throw new RuntimeException("Variable range exhausted");
         }
-        variablesVector.addElement(matcher);
+        variablesVector.addElement(obj);
         return variableNext++;
+    }
+
+    /**
+     * Return the standin for segment seg (1-based).
+     */
+    public char getSegmentStandin(int seg) {
+        if (segmentStandins.length() < seg) {
+            segmentStandins.setLength(seg);
+        }
+        char c = segmentStandins.charAt(seg-1);
+        if (c == 0) {
+            if (variableNext >= variableLimit) {
+                throw new RuntimeException("Variable range exhausted");
+            }
+            c = variableNext++;
+            // Set a placeholder in the master variables vector that will be
+            // filled in later by setSegmentObject().  We know that we will get
+            // called first because setSegmentObject() will call us.
+            variablesVector.addElement(null);
+            segmentStandins.setCharAt(seg-1, c);
+        }
+        return c;
+    }
+    
+    /**
+     * Set the object for segment seg (1-based).
+     */
+    public void setSegmentObject(int seg, StringMatcher obj) {
+        // Since we call parseSection() recursively, nested
+        // segments will result in segment i+1 getting parsed
+        // and stored before segment i; be careful with the
+        // vector handling here.
+        if (segmentObjects.size() < seg) {
+            segmentObjects.setSize(seg);
+        }
+        int index = getSegmentStandin(seg) - data.variablesBase;
+        if (segmentObjects.elementAt(seg-1) != null ||
+            variablesVector.elementAt(index) != null) {
+            throw new RuntimeException(); // should never happen
+        }
+        segmentObjects.setElementAt(obj, seg-1);
+        variablesVector.setElementAt(obj, index);
     }
 
     /**
@@ -1329,18 +1480,6 @@ class TransliteratorParser {
         } else {
             buf.append(ch);
         }
-    }
-
-    char getSegmentStandin(int r) {
-        // assert(r>=1);
-        if (r > data.segmentCount) {
-            data.segmentCount = r;
-            variableLimit = (char) (data.segmentBase - r + 1);
-            if (variableNext >= variableLimit) {
-                throw new IllegalArgumentException("Too many variables / segments");
-            }
-        }
-        return data.getSegmentStandin(r);
     }
 }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/29 22:59:49 $
- * $Revision: 1.71 $
+ * $Date: 2002/02/07 00:53:54 $
+ * $Revision: 1.72 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.71 $ $Date: 2001/11/29 22:59:49 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.72 $ $Date: 2002/02/07 00:53:54 $
  */
 public abstract class Transliterator {
     /**
@@ -380,8 +380,6 @@ public abstract class Transliterator {
     private static TransliteratorRegistry registry;
 
     private static Hashtable displayNameCache;
-
-    private static Hashtable specialInverses;
 
     /**
      * Prefix for resource bundle key for the display name for a
@@ -1095,12 +1093,15 @@ public abstract class Transliterator {
             RB_LOCALE_ELEMENTS, inLocale);
 
         // Normalize the ID
-        String stv[] = IDtoSTV(id);
-        if (stv[1].length() < 1) {
+        String stv[] = TransliteratorIDParser.IDtoSTV(id);
+        if (stv == null) {
             // No target; malformed id
             return "";
         }
-        String ID = stv[0] + '-' + stv[1] + stv[2];
+        String ID = stv[0] + '-' + stv[1];
+        if (stv[2] != null && stv[2].length() > 0) {
+            ID = ID + '/' + stv[2];
+        }
 
         // Use the registered display name, if any
         String n = (String) displayNameCache.get(new CaseInsensitiveString(ID));
@@ -1131,7 +1132,9 @@ public abstract class Transliterator {
             }
 
             // Format it using the pattern in the resource
-            return format.format(args) + stv[2];
+            return (stv[2].length() > 0) ?
+                (format.format(args) + '/' + stv[2]) :
+                format.format(args);
         } catch (MissingResourceException e2) {}
 
         // We should not reach this point unless there is something
@@ -1160,6 +1163,10 @@ public abstract class Transliterator {
         this.filter = filter;
     }
 
+    public static final Transliterator getInstance(String ID) {
+        return getInstance(ID, FORWARD);
+    }
+
     /**
      * Returns a <code>Transliterator</code> object given its ID.
      * The ID must be either a system transliterator ID or a ID registered
@@ -1172,49 +1179,54 @@ public abstract class Transliterator {
      * @see #getAvailableIDs
      * @see #getID
      */
-    public static final Transliterator getInstance(String ID, int direction) {
-        return getInstance(ID, direction, -1, null);
-    }
-
-    public static final Transliterator getInstance(String ID) {
-        return getInstance(ID, FORWARD, -1, null);
-    }
-
-    /**
-     * Create a transliterator given a compound ID (possibly degenerate,
-     * with no ID_DELIM).  If idSplitPoint >= 0 and adoptedSplitTrans !=
-     * 0, then insert adoptedSplitTrans in the compound ID at offset
-     * idSplitPoint.  Otherwise idSplitPoint should be -1 and
-     * adoptedSplitTrans should be 0.  The resultant transliterator will
-     * be an atomic (non-compound) transliterator if this is indicated by
-     * ID.  Otherwise it will be a compound translitertor.
-     */
-    private static Transliterator getInstance(String ID,
-                                              int dir,
-                                              int idSplitPoint,
-                                              Transliterator adoptedSplitTrans) {
+    public static Transliterator getInstance(String ID,
+                                             int dir) {
+        StringBuffer canonID = new StringBuffer();
         Vector list = new Vector();
-        int[] ignored = new int[1];
-        UnicodeSet[] compoundFilter = new UnicodeSet[1];
-        StringBuffer regenID = new StringBuffer();
-        parseCompoundID(ID, regenID, dir, idSplitPoint, adoptedSplitTrans,
-                        list, ignored, compoundFilter);
+        UnicodeSet[] globalFilter = new UnicodeSet[1];
+        if (!TransliteratorIDParser.parseCompoundID(ID, dir, canonID, list, globalFilter)) {
+            throw new IllegalArgumentException("Invalid ID " + ID);
+        }
 
+        TransliteratorIDParser.instantiateList(list, null, -1);
+
+        // assert(list.size() > 0);
         Transliterator t = null;
         switch (list.size()) {
-        case 0:
-            t = new NullTransliterator();
-            break;
         case 1:
             t = (Transliterator) list.elementAt(0);
             break;
         default:
-            t = new CompoundTransliterator(dir, list);
+            t = new CompoundTransliterator(list);
             break;
         }
-        t.setID(regenID.toString());
-        if (compoundFilter[0] != null) {
-            t.setFilter(compoundFilter[0]);
+        t.setID(canonID.toString());
+        if (globalFilter[0] != null) {
+            t.setFilter(globalFilter[0]);
+        }
+        return t;
+    }
+
+    /**
+     * Create a transliterator from a basic ID.  This is an ID
+     * containing only the forward direction source, target, and
+     * variant.
+     * @param id a basic ID of the form S-T or S-T/V.
+     * @param canonID canonical ID to apply to the result, or
+     * null to leave the ID unchanged
+     * @return a newly created Transliterator or null if the ID is
+     * invalid.
+     */
+    static Transliterator getBasicInstance(String id, String canonID) {
+        StringBuffer s = new StringBuffer();
+        Transliterator t = registry.get(id, s);
+        if (s.length() != 0) {
+            // assert(t==0);
+            // Instantiate an alias
+            t = getInstance(s.toString(), FORWARD);
+        }
+        if (t != null && canonID != null) {
+            t.setID(canonID);
         }
         return t;
     }
@@ -1304,503 +1316,6 @@ public abstract class Transliterator {
     }
 
     /**
-     * Parse a compound ID (possibly a degenerate one, containing no
-     * ID_DELIM).  If idSplitPoint >= 0 and adoptedSplitTrans != 0, then
-     * insert adoptedSplitTrans in the compound ID at offset idSplitPoint.
-     * Otherwise idSplitPoint should be -1 and adoptedSplitTrans should be
-     * 0.  Return in the result vector the instantiated transliterator
-     * objects (one of these will be adoptedSplitTrans, if the latter was
-     * specified).  These will be in order of id, so if dir is REVERSE,
-     * then the caller will have to reverse the order.
-     *
-     * @param regenID regenerated ID, reversed if appropriate, which
-     * should be applied to the final created transliterator
-     * @param splitTransIndex output parameter to receive the index in
-     * 'result' at which the adoptedSplitTrans is stored, or -1 if
-     * adoptedSplitTrans == 0
-     * @param compoundFilter output parameter to receive the parsed
-     * compound filter, if any.  It receives either the FORWARD or the
-     * REVERSE compound filter, depending on dir.
-     */
-    static void parseCompoundID(String id,
-                                StringBuffer regenID,
-                                int dir,
-                                int idSplitPoint,
-                                Transliterator splitTrans,
-                                Vector result,
-                                int[] splitTransIndex,
-                                UnicodeSet[] compoundFilter) {
-        regenID.setLength(0);
-        splitTransIndex[0] = -1;
-        int pos = 0;
-        int i;
-
-        // A compound filter is a filter on an entire compound
-        // transliterator.  It is indicated by the syntax [abc]; A-B;
-        // B-C or in the reverse direction A-B; B-C; ([abc]).  We
-        // record the filter and its index (in terms of the result
-        // vector).
-        compoundFilter[0] = null;
-        int compoundFilterIndex = -1;
-
-        while (pos < id.length()) {
-            // We compare (pos >= split), not (pos == split), so we can
-            // skip over whitespace (see below).
-            if (pos >= idSplitPoint && splitTrans != null) {
-                splitTransIndex[0] = result.size();
-                result.addElement(splitTrans);
-                splitTrans = null;
-            }
-            int[] p = new int[] { pos };
-            boolean[] sawDelimiter = new boolean[1];
-            UnicodeSet[] cpdFilter = new UnicodeSet[1];
-            Transliterator t =
-                parseID(id, regenID, p, sawDelimiter, cpdFilter, dir, true);
-
-            if (p[0] == pos || (p[0] < id.length() && !sawDelimiter[0])) {
-                throw new IllegalArgumentException("Invalid ID " + id);
-            }
-            if (cpdFilter[0] != null) {
-                if (compoundFilter[0] != null) {
-                    // Multiple compound filters
-                    throw new IllegalArgumentException("Multiple compound filters in " + id);
-                }
-                compoundFilter[0] = cpdFilter[0];
-                compoundFilterIndex = result.size();
-            }
-            pos = p[0];
-            // The return value may be NULL when, for instance, creating a
-            // REVERSE transliterator of ID "Latin-Greek()".
-            if (t != null) {
-                result.addElement(t);
-            }
-        }
-
-        // Handle case of idSplitPoint == id.length()
-        if (pos >= idSplitPoint && splitTrans != null) {
-            splitTransIndex[0] = result.size();
-            result.addElement(splitTrans);
-            splitTrans = null;
-        }
-
-        // Check validity of compound filter position
-        if (compoundFilter[0] != null) {
-            if ((dir == FORWARD && compoundFilterIndex != 0) ||
-                (dir == REVERSE && compoundFilterIndex != result.size())) {
-                throw new IllegalArgumentException("Compound filters misplaced in " + id);
-            }
-        }
-    }
-
-    /**
-     * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T,
-     * S-T/V, or S/V-T.  If the source is missing, return a source of
-     * ANY.
-     * @param id the id string, in any of several forms
-     * @return an array of 4 strings: source, target, variant, and
-     * isSourcePresent.  If the source is not present, ANY will be
-     * given as the source, and isSourcePresent will be "".  Otherwise
-     * isSourcePresent will be != "".  The target may be empty if the
-     * id is not well-formed.  The variant may be empty; if it is not,
-     * it will contain a leading '/'.
-     */
-    static String[] IDtoSTV(String id) {
-        String source = ANY;
-        String target = null;
-        String variant = ""; // Variant INCLUDING "/"
-        
-        int sep = id.indexOf(ID_SEP);
-        int var = id.indexOf(VARIANT_SEP);
-        if (var < 0) {
-            var = id.length();
-        }
-        boolean isSourcePresent = false;
-        
-        if (sep < 0) {
-            // Form: T/V or T (or /V)
-            target = id.substring(0, var);
-            variant = id.substring(var);
-        } else if (sep < var) {
-            // Form: S-T/V or S-T (or -T/V or -T)
-            if (sep > 0) {
-                source = id.substring(0, sep);
-              isSourcePresent = true;
-            }
-            target = id.substring(++sep, var);
-            variant = id.substring(var);
-        } else {
-            // Form: (S/V-T or /V-T)
-            if (var > 0) {
-                source = id.substring(0, var);
-                isSourcePresent = true;
-            }
-            variant = id.substring(var, sep++);
-            target = id.substring(sep);
-        }
-        
-        return new String[] { source, target, variant,
-                              isSourcePresent ? "1" : "" };
-  }
-
-    /**
-     * Parse a single ID, possibly including an inline filter, and return
-     * the resultant transliterator object.  NOTE: If 'create' is false,
-     * then the amount of syntax checking is limited.  However, the 'pos'
-     * parameter will be updated correctly, assuming the input string is
-     * valid.
-     *
-     * A trailing /;? \s* / is skipped.  The parameter sawDelimiter
-     * indicates whether the ';' was seen or not.  Upon return, if pos is
-     * advanced, it will either point to a non-whitespace character past
-     * the trailing ';', if any, or be equal to length().
-     *
-     * @param ID the ID string
-     * @param regenID regenerated ID, reversed if appropriate, which
-     * should be applied to the final created transliterator.  This method
-     * will append to this parameter for FORWARD direction and insert
-     * addition text at offset 0 for REVERSE direction.
-     * @param pos INPUT-OUTPUT parameter.  On input, the position of the
-     * first character to parse.  On output, the position after the last
-     * character parsed.  This will be a semicolon or ID.length().  In the
-     * case of an error this value will be unchanged.
-     * @param compoundFilter OUTPUT parameter to receive a compound
-     * filter, if one is parsed.  When a non-null compound filter is
-     * returned then a null Transliterator pointer is returned.
-     * @param create if true, create and return the result.  If false,
-     * only scan the ID, and return NULL (but still form the regenID).
-     * @return a newly created transliterator, or NULL.  NULL is returned
-     * in all cases if create is false.  If create is true, then NULL is
-     * returned on error, or if the ID is effectively empty.
-     * E.g. "Latin-Greek()" with dir == REVERSE.  Do NOT check for NULL to
-     * determine if there was an error.  Instead, check to see if pos
-     * moved.
-     */
-    static Transliterator parseID(String ID,
-                                  StringBuffer regenID,
-                                  int[] pos,
-                                  boolean[] sawDelimiter,
-                                  UnicodeSet[] compoundFilter,
-                                  int dir,
-                                  boolean create) {
-        int limit, preDelimLimit,
-            revStart, revLimit=0,
-            idStart, idLimit,
-            setStart, setLimit;
-
-        UnicodeSet[] fwdFilter = new UnicodeSet[1];
-        UnicodeSet[] revFilter = new UnicodeSet[1];
-        UnicodeSet filter = null;
-        int[] indices = new int[4];
-
-        parseIDBounds(ID, pos[0], false, indices, fwdFilter);
-        limit = indices[0];
-        setStart = indices[1];
-        setLimit = indices[2];
-        revStart = indices[3];
-        filter = fwdFilter[0];
-
-        idStart = pos[0];
-        idLimit = limit;
-
-        if (revStart >= 0 && revStart < limit) {
-            int revSetStart, revSetLimit;
-            parseIDBounds(ID, revStart+1, true, indices, revFilter);
-            revLimit = indices[0];
-            revSetStart = indices[1];
-            revSetLimit = indices[2];
-            // we ignore indices[3]
-
-            // revStart points to '('
-            if (dir == REVERSE) {
-                idStart = revStart+1;
-                idLimit = revLimit;
-                setStart = revSetStart;
-                setLimit = revSetLimit;
-                filter = revFilter[0];
-            } else {
-                idLimit = revStart;
-            }
-            // assert(revLimit < ID.length() && ID.charAt(revLimit) == ')');
-            limit = revLimit+1;
-        } else {
-            // Ignore () exprs outside of this atomic ID, that is, in
-            // "Greek-Latin; Title()", ignore the "()" after Title when
-            // parsing Greek-Latin.
-            revStart = -1;
-        }
-
-        // Advance limit past /\s*;?\s*/
-        preDelimLimit = limit;
-        limit = skipSpaces(ID, limit);
-        sawDelimiter[0] = (limit < ID.length() && ID.charAt(limit) == ID_DELIM);
-        if (sawDelimiter[0]) {
-            limit = skipSpaces(ID, ++limit);
-        }
-
-        // 'id' is the ID with the filter pattern removed and with
-        // whitespace deleted.  In a Foo(Bar) ID, id is Foo for FORWARD
-        // and Bar for REVERSE.
-        String str;
-        str = ID.substring(setLimit, idLimit);
-        StringBuffer id = new StringBuffer(ID.substring(idStart, setStart));
-        id.append(str);
-
-        // Delete whitespace
-        int i;
-        for (i=0; i<id.length(); ++i) {
-            if (UCharacter.isWhitespace(id.charAt(i))) {
-                id.deleteCharAt(i);
-                --i;
-            }
-        }
-
-        Transliterator t = null;
-
-        // If id is empty, then we have either an empty specifier,
-        // which is illegal, or a compound filter, which is legal
-        // as long as its in the right place -- we let the caller
-        // decide that.
-        boolean isCompoundFilter = (id.length() == 0 && filter != null);
-        if (isCompoundFilter) {
-            compoundFilter[0] = (dir == REVERSE) ? revFilter[0] : fwdFilter[0];
-        }
-
-        else {
-
-            // Normalize the ID.  Take IDs of the form T, T/V, S-T, S-T/V, or S/V-T
-            // and produce S-T/V.  If the ID needs to be reversed, do so.  This
-            // produces T-S/V, with a default S of "Any".  If the ID has a special
-            // non-canonical inverse, look it up (e.g., NFC -> NFD, Null -> Null).
-            if (id.length() > 0) { // We handle empty IDs below
-                String[] stv = IDtoSTV(id.toString());
-                String source = stv[0];
-                String target = stv[1];
-                String variant = stv[2];
-                boolean isSourcePresent = stv[3].length() != 0;
-
-                id.setLength(0);
-                // Source and variant may be empty, but target may not be.
-                if (target.length() == 0) {
-                    return null;
-                }
-                // For forward IDs *or IDs that were part of a Foo(Bar) ID*,
-                // normalize them to canonical form.
-                if (dir == FORWARD || revStart >= 0) {
-                    id.append(source).append(ID_SEP).append(target);
-                } else {
-                    // Handle special, non-canonical inverse mappings,
-                    // e.g. inverse(Any-NFC) = Any-NFD and vice versa.
-                    if (source.equals(ANY)) {
-                        String inverseTarget = (String) specialInverses.get(
-                            new CaseInsensitiveString(target));
-                        if (inverseTarget != null) {
-                            // If the original ID contained "Any-" then make the
-                            // special inverse "Any-Foo"; otherwise make it "Foo".
-                            // So "Any-NFC" => "Any-NFD" but "NFC" => "NFD".
-                            if (!isSourcePresent) {
-                                id.append(inverseTarget);
-                            } else {
-                                source = inverseTarget;
-                                target = ANY;
-                            }
-                        }
-                    }
-                    if (id.length() == 0) {
-                        id.append(target).append(ID_SEP).append(source);
-                    }
-                }
-                // If the variant is empty ("/") then don't append it
-                if (variant.length() > 1) {
-                    id.append(variant);
-                }
-            }
-            
-            // If we have a reverse part of the ID, e.g., Foo(Bar), then we
-            // need to check for an empty part, which represents a Null
-            // transliterator.  We return 0 (not a NullTransliterator).  If we
-            // are not of the form Foo(Bar) then an empty string is illegal.
-            if (revStart >= 0 && id.length() == 0) {
-                // Ignore any filters; filters on Null are meaningless (and we
-                // can't attach them to 0 anyway)
-                filter = null;
-            }
-
-            else if (create) {
-                StringBuffer s = new StringBuffer();
-
-                t = registry.get(id.toString(), s);
-
-                if (s.length() != 0) {
-                    // assert(t==0);
-                    // Instantiate an alias
-                    t = getInstance(s.toString(), FORWARD);
-                }
-
-                if (t == null) {
-                    // Creation failed; the ID is invalid or is an alias
-                    filter = null;
-                    return null;
-                }
-
-                // Set the filter, if any.  The transliterator may
-                // already have a filter on it so we need to AND any
-                // id-based filter together with it.  E.g.,
-                // getInstance("[abc] Latin-Foo"), where Latin-Foo is
-                // an RBT of "::[:Latin:]; a>A;".
-                // getInstance("Latin-Foo") is going to return an RBT
-                // with an a [:Latin:] filter, and we need to AND this
-                // with [abc].
-                t.setFilter(UnicodeFilterLogic.and(filter, t.getFilter()));
-            }
-        }
-
-        // Set the ID.  This is normally just a substring of the input
-        // ID, but for reverse transliterators we need to munge A-B to
-        // B-A or Foo(Bar) to Bar(Foo).
-        if (dir == FORWARD) {
-            id.setLength(0);
-            id.append(ID.substring(pos[0], preDelimLimit));
-        } else if (isCompoundFilter) {
-            // Change [:Foo:] to ([:Foo:]) and vice versa
-            id.setLength(0);
-            if (revStart < 0) {
-                id.append('(').append(ID.substring(setStart, setLimit)).
-                    append(')');
-            } else {
-                id.append(ID.substring(revStart+1, revLimit));
-            }
-        } else if (revStart < 0) {
-            id.insert(0, ID.substring(setStart, setLimit));
-        } else {
-            // Change Foo(Bar) to Bar(Foo)
-            str = ID.substring(pos[0], revStart);
-            str = str.trim();
-            id.setLength(0);
-            id.append(ID.substring(revStart+1, revLimit));
-            Utility.trim(id);
-            id.append('(').append(str).append(')');
-        }
-        Utility.trim(id);
-
-        if (t != null) {
-            t.setID(id.toString());
-        }
-
-        // Regenerate ID of a compound entity
-        if (dir == FORWARD) {
-            if (regenID.length() != 0) {
-                regenID.append(ID_DELIM);
-            }
-            regenID.append(id);
-        } else {
-            if (regenID.length() != 0) {
-                regenID.insert(0, ID_DELIM);
-            }
-            regenID.insert(0, id);
-        }
-
-        // Indicate success by bumping pos past the final /;?\s*/.
-        pos[0] = limit;
-
-        return t;
-    }
-
-    /**
-     * Internal method used by parseID.  Given a piece of a single ID,
-     * find the boundaries of various parts.  For IDs of the form
-     * Foo(Bar), this method parses the Foo, then the Bar.  In each piece
-     * it locates any inline UnicodeSet pattern [setStart, setLimit)
-     * and finds the limit (this will point to either ';' or ')' or
-     * ID.length()).
-     *
-     * @param ID the ID to be parsed
-     * @param pos the index of ID at which to start
-     * @param withinParens if true, parse the Bar of Foo(Bar), stop at a
-     * close paren, and do not look for an open paren.  If true then a
-     * close paren MUST be seen or false is returned; if false then the
-     * ';' delimiter is optional.
-     * @param indices[0] = limit set to the position of ';' or ')' (depending on
-     * withinParens), or ID.length() if no delimiter was found
-     * @param indices[1] = setStart set to the start of an inline filter pattern,
-     * or pos if none
-     * @param indices[2] = setLimit set to the limit of an inline filter pattern,
-     * or pos if none
-     * @param indices[3] = revStart if not withinParens then set to the position of the
-     * first '(', which may be > limit; otherwise set to -1
-     * @param filter set to a newly created UnicodeSet object for the
-     * inline filter pattern, if any; OWNED BY THE CALLER
-     *
-     * @return true if the pattern is valid, false is there is an invalid
-     * UnicodeSet pattern or if withinParens is true and no close paren is
-     * seen.
-     */
-    private static void parseIDBounds(String ID,
-                                      int pos,
-                                      boolean withinParens,
-                                      int[] indices,
-                                      UnicodeSet[] filter) {
-        int limit;
-        int setStart;
-        int setLimit;
-        int revStart;
-
-        char endDelimiter = withinParens ? ')' : ID_DELIM;
-        limit = ID.indexOf(endDelimiter, pos);
-        if (limit < 0) {
-            if (withinParens) {
-                //return false;
-                throw new IllegalArgumentException("Missing closing parenthesis in " + ID);
-            }
-            limit = ID.length();
-        }
-        setStart = ID.indexOf('[', pos);
-        revStart = withinParens ? -1 : ID.indexOf('(', pos);
-
-        if (setStart >= 0 && setStart < limit &&
-            (revStart < 0 || setStart < revStart)) {
-            ParsePosition ppos = new ParsePosition(setStart);
-            // TODO Improve performance by scanning the UnicodeSet pattern
-            // without actually constructing it, if create is false.  That
-            // is, create a method like this one for UnicodeSet.
-            filter[0] = new UnicodeSet();
-            filter[0].applyPattern(ID, ppos, null, true);
-            setLimit = ppos.getIndex();
-            if (limit < setLimit) {
-                limit = ID.indexOf(endDelimiter, setLimit);
-                if (limit < 0) {
-                    if (withinParens) {
-                        //return false;
-                        throw new IllegalArgumentException("Missing closing parenthesis in " + ID);
-                    }
-                    limit = ID.length();
-                }
-            }
-            if (revStart >= 0 && revStart < setLimit) {
-                revStart = ID.indexOf(')', setLimit);
-            }
-        } else {
-            setStart = setLimit = pos;
-        }
-        indices[0] = limit;
-        indices[1] = setStart;
-        indices[2] = setLimit;
-        indices[3] = revStart;
-    }
-
-    /**
-     * If pos is the index of a space in str, then advance it over that
-     * space and any immediately subsequent ones.
-     */
-    private static int skipSpaces(String str,
-                                  int pos) {
-        while (pos < str.length() &&
-               UCharacter.isWhitespace(str.charAt(pos))) {
-            ++pos;
-        }
-        return pos;
-    }
-
-    /**
      * Returns this transliterator's inverse.  See the class
      * documentation for details.  This implementation simply inverts
      * the two entities in the ID and attempts to retrieve the
@@ -1885,10 +1400,7 @@ public abstract class Transliterator {
     static void registerSpecialInverse(String target,
                                        String inverseTarget,
                                        boolean bidirectional) {
-        specialInverses.put(new CaseInsensitiveString(target), inverseTarget);
-        if (bidirectional && !target.equalsIgnoreCase(inverseTarget)) {
-            specialInverses.put(new CaseInsensitiveString(inverseTarget), target);
-        }
+        TransliteratorIDParser.registerSpecialInverse(target, inverseTarget, bidirectional);
     }
 
     /**
@@ -2026,7 +1538,6 @@ public abstract class Transliterator {
             }
         }
 
-        specialInverses = new Hashtable();
         registerSpecialInverse(NullTransliterator.SHORT_ID, NullTransliterator.SHORT_ID, false);
 
         // Register non-rule-based transliterators

@@ -162,6 +162,10 @@ SOURCE=.\format.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\funcrepl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\gregocal.cpp
 # End Source File
 # Begin Source File
@@ -266,6 +270,10 @@ SOURCE=.\strmatch.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strrepl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\stsearch.cpp
 # End Source File
 # Begin Source File
@@ -295,6 +303,10 @@ SOURCE=.\translit.cpp
 # Begin Source File
 
 SOURCE=.\transreg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tridpars.cpp
 # End Source File
 # Begin Source File
 
@@ -359,6 +371,10 @@ SOURCE=.\unifilt.cpp
 # Begin Source File
 
 SOURCE=.\unifltlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unifunct.cpp
 # End Source File
 # Begin Source File
 

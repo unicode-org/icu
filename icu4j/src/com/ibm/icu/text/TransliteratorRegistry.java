@@ -373,7 +373,7 @@ class TransliteratorRegistry {
      * unaffected.
      */
     public void remove(String ID) {
-        String[] stv = IDtoSTV(ID);
+        String[] stv = TransliteratorIDParser.IDtoSTV(ID);
         // Only need to do this if ID.indexOf('-') < 0
         String id = STVtoID(stv[0], stv[1], stv[2]);
         registry.remove(new CaseInsensitiveString(id));
@@ -386,7 +386,7 @@ class TransliteratorRegistry {
     //----------------------------------------------------------------------
 
     /**
-     * An internal class that adapts a n enumeration over
+     * An internal class that adapts an enumeration over
      * CaseInsensitiveStrings to an enumeration over Strings.
      */
     private static class IDEnumeration implements Enumeration {
@@ -466,39 +466,6 @@ class TransliteratorRegistry {
     //----------------------------------------------------------------------
 
     /**
-     * Given an ID, parse it into source, target, and variant strings.
-     * The variant may be empty.  If the source is empty it will be set to
-     * "Any".  If the variant is empty it will be set to the empty string.
-     * Must be one of the canonical forms S-T, S-T/V, T, T/V.  See
-     * Transliterator.parseID() for code that normalizes IDs to one of
-     * these forms.
-     */
-    private String[] IDtoSTV(String id) {
-        String source = ANY;
-        String target = null;
-        String variant = "";
-
-        int dash = id.indexOf(ID_SEP);
-        int stroke = id.indexOf(VARIANT_SEP);
-        int start = 0;
-        int limit = id.length();
-        if (dash < 0) {
-            source = ANY;
-        } else {
-            source = id.substring(0, dash);
-            start = dash + 1;
-        }
-        if (stroke >= 0) {
-            variant = id.substring(stroke + 1, id.length());
-            limit = stroke;
-        } else {
-            variant = "";
-        }
-        target = id.substring(start, limit);
-        return new String[] { source, target, variant };
-    }
-
-    /**
      * Given source, target, and variant strings, concatenate them into a
      * full ID.  If the source is empty, then "Any" will be used for the
      * source, so the ID will always be of the form s-t/v or s-t.
@@ -511,7 +478,7 @@ class TransliteratorRegistry {
             id.append(ANY);
         }
         id.append(ID_SEP).append(target);
-        if (variant.length() != 0) {
+        if (variant != null && variant.length() != 0) {
             id.append(VARIANT_SEP).append(variant);
         }
         return id.toString();
@@ -539,7 +506,7 @@ class TransliteratorRegistry {
     private void registerEntry(String ID,
                                Object entry,
                                boolean visible) {
-        String[] stv = IDtoSTV(ID);
+        String[] stv = TransliteratorIDParser.IDtoSTV(ID);
         // Only need to do this if ID.indexOf('-') < 0
         String id = STVtoID(stv[0], stv[1], stv[2]);
         registerEntry(id, stv[0], stv[1], stv[2], entry, visible);
@@ -769,7 +736,7 @@ class TransliteratorRegistry {
      * Convenience method.  Calls 3-arg find().
      */
     private Object[] find(String ID) {
-        String[] stv = IDtoSTV(ID);
+        String[] stv = TransliteratorIDParser.IDtoSTV(ID);
         return find(stv[0], stv[1], stv[2]);
     }
 

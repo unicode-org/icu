@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/12/11 22:11:04 $
- * $Revision: 1.41 $
+ * $Date: 2002/02/07 00:53:54 $
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.41 $ $Date: 2001/12/11 22:11:04 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.42 $ $Date: 2002/02/07 00:53:54 $
  */
 class TransliterationRule {
 
@@ -74,6 +74,12 @@ class TransliterationRule {
     private StringMatcher postContext;
 
     /**
+     * The object that performs the replacement if the key,
+     * anteContext, and postContext are matched.  Never null.
+     */
+    private UnicodeReplacer output;
+
+    /**
      * The string that must be matched, consisting of the anteContext, key,
      * and postContext, concatenated together, in that order.  Some components
      * may be empty (zero length).
@@ -81,12 +87,6 @@ class TransliterationRule {
      * @see keyLength
      */
     private String pattern;
-
-    /**
-     * The string that is emitted if the key, anteContext, and postContext
-     * are matched.
-     */
-    private String output;
 
     /**
      * An array of matcher objects corresponding to the input pattern
@@ -109,13 +109,6 @@ class TransliterationRule {
      * anteContextLength + keyLength) is the key.
      */
     private int keyLength;
-
-    /**
-     * The position of the cursor after emitting the output string, from 0 to
-     * output.length().  For most rules with no special cursor specification,
-     * the cursorPos is output.length().
-     */
-    private int cursorPos;
 
     /**
      * Miscellaneous attributes.
@@ -141,9 +134,6 @@ class TransliterationRule {
      * at the start and/or end.
      */
     static final char ETHER = '\uFFFF';
-
-    private static final char APOSTROPHE = '\'';
-    private static final char BACKSLASH  = '\\';
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
@@ -208,8 +198,7 @@ class TransliterationRule {
         } else if (cursorPos > output.length()) {
             throw new IllegalArgumentException("Invalid cursor position");
         }
-        this.cursorPos = cursorPos + cursorOffset;
-        this.output = output;
+
         // We don't validate the segments array.  The caller must
         // guarantee that the segments are well-formed (that is, that
         // all $n references in the output refer to indices of this
@@ -228,29 +217,23 @@ class TransliterationRule {
         anteContext = null;
         if (anteContextLength > 0) {
             anteContext = new StringMatcher(pattern.substring(0, anteContextLength),
-                                            false, data);
+                                            0, data);
         }
 
         key = null;
         if (keyLength > 0) {
             key = new StringMatcher(pattern.substring(anteContextLength, anteContextLength + keyLength),
-                                    false, data);
+                                    0, data);
         }
 
         int postContextLength = pattern.length() - keyLength - anteContextLength;
         postContext = null;
         if (postContextLength > 0) {
             postContext = new StringMatcher(pattern.substring(anteContextLength + keyLength),
-                                            false, data);
+                                            0, data);
         }
-    }
 
-    /**
-     * Return the position of the cursor within the output string.
-     * @return a value from 0 to <code>getOutput().length()</code>, inclusive.
-     */
-    public int getCursorPos() {
-        return cursorPos;
+        this.output = new StringReplacer(output, cursorPos + cursorOffset, data);
     }
 
     /**
@@ -275,7 +258,7 @@ class TransliterationRule {
             return -1;
         }
         int c = UTF16.charAt(pattern, anteContextLength);
-        return data.lookup(c) == null ? (c & 0xFF) : -1;
+        return data.lookupMatcher(c) == null ? (c & 0xFF) : -1;
     }
 
     /**
@@ -416,7 +399,7 @@ class TransliterationRule {
             }
         }
 
-        int lenDelta, keyLimit;
+        int keyLimit;
         int[] intRef = new int[1];
 
         // ------------------------ Ante Context ------------------------
@@ -425,7 +408,6 @@ class TransliterationRule {
         // is an outright U_MISMATCH regardless of whether we are
         // incremental or not.
         int oText; // offset into 'text'
-        int newStart = 0;
         int minOText;
 
         // Note (1): We process text in 16-bit code units, rather than
@@ -503,101 +485,9 @@ class TransliterationRule {
         // We have a full match.  The key is between pos.start and
         // keyLimit.
 
-        if (segments == null) {
-            text.replace(pos.start, keyLimit, output);
-            lenDelta = output.length() - (keyLimit - pos.start);
-            if (cursorPos >= 0 && cursorPos <= output.length()) {
-                // Within the output string, the cursor refers to 16-bit code units
-                newStart = pos.start + cursorPos;
-            } else {
-                newStart = pos.start;
-                int n = cursorPos;
-                // Outside the output string, cursorPos counts code points
-                while (n > 0) {
-                    newStart += UTF16.getCharCount(UTF16.charAt(text, newStart));
-                    --n;
-                }
-                while (n < 0) {
-                    newStart -= UTF16.getCharCount(UTF16.charAt(text, newStart-1));
-                    ++n;
-                }
-            }
-        } else {
-            /* When there are segments to be copied, use the Replaceable.copy()
-             * API in order to retain out-of-band data.  Copy everything to the
-             * point after the key, then delete the key.  That is, copy things
-             * into offset + keyLength, then replace offset .. offset +
-             * keyLength with the empty string.
-             *
-             * Minimize the number of calls to Replaceable.replace() and
-             * Replaceable.copy().
-             */
-            int dest = keyLimit; // copy new text to here
-            StringBuffer buf = new StringBuffer();
-            int oOutput; // offset into 'output'
-            for (oOutput=0; oOutput<output.length(); ) {
-                if (oOutput == cursorPos) {
-                    // Record the position of the cursor
-                    newStart = dest - (keyLimit - pos.start);
-                }
-                int c = UTF16.charAt(output, oOutput);
-                int b = data.lookupSegmentReference(c);
-                if (b < 0) {
-                    // Accumulate straight (non-segment) text.
-                    UTF16.append(buf, c);
-                } else {
-                    // Insert any accumulated straight text.
-                    if (buf.length() > 0) {
-                        text.replace(dest, dest, buf.toString());
-                        dest += buf.length();
-                        buf.setLength(0);
-                    }
-                    // Copy segment with out-of-band data
-                    StringMatcher m = (StringMatcher) segments[b];
-                    int start = m.getMatchStart();
-                    int limit = m.getMatchLimit();
-                    // If there was no match, that means that a quantifier
-                    // matched zero-length.  E.g., x (a)* y matched "xy".
-                    if (start >= 0) {
-                        if (start != limit) {
-                            // Adjust indices for segments in post context
-                            // for any inserted text between the key and
-                            // the post context.
-                            if (start >= keyLimit) {
-                                start += dest - keyLimit;
-                                limit += dest - keyLimit;
-                            }
-                            text.copy(start, limit, dest);
-                            dest += limit - start;
-                        }
-                    }
-                }
-                oOutput += UTF16.getCharCount(c);
-            }
-            // Insert any accumulated straight text.
-            if (buf.length() > 0) {
-                text.replace(dest, dest, buf.toString());
-                dest += buf.length();
-            }
-            if (oOutput == cursorPos) {
-                // Record the position of the cursor
-                newStart = dest - (keyLimit - pos.start);
-            }
-            // Delete the key
-            buf.setLength(0);
-            text.replace(pos.start, keyLimit, buf.toString());
-            lenDelta = dest - keyLimit - (keyLimit - pos.start);
-            // Handle cursor in postContext
-            if (cursorPos > output.length()) {
-                newStart = pos.start + (dest - keyLimit);
-                int n = cursorPos - output.length();
-                // cursorPos counts code points
-                while (n > 0) {
-                    newStart += UTF16.getCharCount(UTF16.charAt(text, newStart));
-                    n--;
-                }
-            }
-        }
+        int newLength = output.replace(text, pos.start, keyLimit, intRef);
+        int lenDelta = newLength - (keyLimit - pos.start);
+        int newStart = intRef[0];
 
         oText += lenDelta;
         pos.limit += lenDelta;
@@ -605,127 +495,6 @@ class TransliterationRule {
         // Restrict new value of start to [minOText, min(oText, pos.limit)].
         pos.start = Math.max(minOText, Math.min(Math.min(oText, pos.limit), newStart));
         return UnicodeMatcher.U_MATCH;
-    }
-
-    /**
-     * Append a character to a rule that is being built up.  To flush
-     * the quoteBuf to rule, make one final call with isLiteral == true.
-     * If there is no final character, pass in (int)-1 as c.
-     * @param rule the string to append the character to
-     * @param c the character to append, or (int)-1 if none.
-     * @param isLiteral if true, then the given character should not be
-     * quoted or escaped.  Usually this means it is a syntactic element
-     * such as > or $
-     * @param escapeUnprintable if true, then unprintable characters
-     * should be escaped using <backslash>uxxxx or <backslash>Uxxxxxxxx.  These escapes will
-     * appear outside of quotes.
-     * @param quoteBuf a buffer which is used to build up quoted
-     * substrings.  The caller should initially supply an empty buffer,
-     * and thereafter should not modify the buffer.  The buffer should be
-     * cleared out by, at the end, calling this method with a literal
-     * character.
-     */
-    static void appendToRule(StringBuffer rule,
-                             int c,
-                             boolean isLiteral,
-                             boolean escapeUnprintable,
-                             StringBuffer quoteBuf) {
-        // If we are escaping unprintables, then escape them outside
-        // quotes.  <backslash>u and <backslash>U are not recognized within quotes.  The same
-        // logic applies to literals, but literals are never escaped.
-        if (isLiteral ||
-            (escapeUnprintable && Utility.isUnprintable(c))) {
-            if (quoteBuf.length() > 0) {
-                // We prefer backslash APOSTROPHE to double APOSTROPHE
-                // (more readable, less similar to ") so if there are
-                // double APOSTROPHEs at the ends, we pull them outside
-                // of the quote.
-
-                // If the first thing in the quoteBuf is APOSTROPHE
-                // (doubled) then pull it out.
-                while (quoteBuf.length() >= 2 &&
-                       quoteBuf.charAt(0) == APOSTROPHE &&
-                       quoteBuf.charAt(1) == APOSTROPHE) {
-                    rule.append(BACKSLASH).append(APOSTROPHE);
-                    quoteBuf.delete(0, 2);
-                }
-                // If the last thing in the quoteBuf is APOSTROPHE
-                // (doubled) then remove and count it and add it after.
-                int trailingCount = 0;
-                while (quoteBuf.length() >= 2 &&
-                       quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
-                       quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
-                    quoteBuf.setLength(quoteBuf.length()-2);
-                    ++trailingCount;
-                }
-                if (quoteBuf.length() > 0) {
-                    rule.append(APOSTROPHE);
-                    rule.append(quoteBuf);
-                    rule.append(APOSTROPHE);
-                    quoteBuf.setLength(0);
-                }
-                while (trailingCount-- > 0) {
-                    rule.append(BACKSLASH).append(APOSTROPHE);
-                }
-            }
-            if (c != -1) {
-                if (!escapeUnprintable || !Utility.escapeUnprintable(rule, c)) {
-                    UTF16.append(rule, c);
-                }
-            }
-        }
-
-        // Escape ' and '\' and don't begin a quote just for them
-        else if (quoteBuf.length() == 0 &&
-                 (c == APOSTROPHE || c == BACKSLASH)) {
-            rule.append(BACKSLASH).append((char)c);
-        }
-
-        // Specials (printable ascii that isn't [0-9a-zA-Z]) and
-        // whitespace need quoting.  Also append stuff to quotes if we are
-        // building up a quoted substring already.
-        else if (quoteBuf.length() > 0 ||
-                 (c >= 0x0021 && c <= 0x007E &&
-                  !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
-                    (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
-                    (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-                 UCharacter.isWhitespace(c)) {
-            UTF16.append(quoteBuf, c);
-            // Double ' within a quote
-            if (c == APOSTROPHE) {
-                quoteBuf.append((char)c);
-            }
-        }
-
-        // Otherwise just append
-        else {
-            UTF16.append(rule, c);
-        }
-    }
-
-    static final void appendToRule(StringBuffer rule,
-                                   String text,
-                                   boolean isLiteral,
-                                   boolean escapeUnprintable,
-                                   StringBuffer quoteBuf) {
-        for (int i=0; i<text.length(); ++i) {
-            // Okay to process in 16-bit code units here
-            appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
-        }
-    }
-
-    /**
-     * Given a matcher reference, which may be null, append its
-     * pattern as a literal to the given rule.
-     */
-    static final void appendToRule(StringBuffer rule,
-                                   UnicodeMatcher matcher,
-                                   boolean escapeUnprintable,
-                                   StringBuffer quoteBuf) {
-        if (matcher != null) {
-            appendToRule(rule, matcher.toPattern(escapeUnprintable),
-                         true, escapeUnprintable, quoteBuf);
-        }
     }
 
     /**
@@ -753,67 +522,33 @@ class TransliterationRule {
         }
 
         // Emit the input pattern
-        appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
+        Utility.appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
 
         if (emitBraces) {
-            appendToRule(rule, '{', true, escapeUnprintable, quoteBuf);
+            Utility.appendToRule(rule, '{', true, escapeUnprintable, quoteBuf);
         }
 
-        appendToRule(rule, key, escapeUnprintable, quoteBuf);
+        Utility.appendToRule(rule, key, escapeUnprintable, quoteBuf);
 
         if (emitBraces) {
-            appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
+            Utility.appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
         }
 
-        appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
+        Utility.appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
 
         // Emit end anchor
         if ((flags & ANCHOR_END) != 0) {
             rule.append('$');
         }
 
-        appendToRule(rule, " > ", true, escapeUnprintable, quoteBuf);
+        Utility.appendToRule(rule, " > ", true, escapeUnprintable, quoteBuf);
 
         // Emit the output pattern
 
-        // Handle a cursor preceding the output
-        int cursor = cursorPos;
-        if (cursor < 0) {
-            while (cursor++ < 0) {
-                appendToRule(rule, '@', true, escapeUnprintable, quoteBuf);
-            }
-            // Fall through and append '|' below
-        }
+        Utility.appendToRule(rule, output.toReplacerPattern(escapeUnprintable),
+                     true, escapeUnprintable, quoteBuf);
 
-        for (i=0; i<output.length(); ++i) {
-            if (i == cursor) {
-                appendToRule(rule, '|', true, escapeUnprintable, quoteBuf);
-            }
-            char c = output.charAt(i); // Ok to use 16-bits here
-            int seg = data.lookupSegmentReference(c);
-            if (seg < 0) {
-                appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
-            } else {
-                ++seg; // make 1-based
-                appendToRule(rule, 0x20, true, escapeUnprintable, quoteBuf);
-                rule.append('$');
-                Utility.appendNumber(rule, seg, 10, 1);
-                rule.append(' ');
-            }
-        }
-
-        // Handle a cursor after the output.  Use > rather than >= because
-        // if cursor == output.length() it is at the end of the output,
-        // which is the default position, so we need not emit it.
-        if (cursor > output.length()) {
-            cursor -= output.length();
-            while (cursor-- > 0) {
-                appendToRule(rule, '@', true, escapeUnprintable, quoteBuf);
-            }
-            appendToRule(rule, '|', true, escapeUnprintable, quoteBuf);
-        }
-
-        appendToRule(rule, ';', true, escapeUnprintable, quoteBuf);
+        Utility.appendToRule(rule, ';', true, escapeUnprintable, quoteBuf);
 
         return rule.toString();
     }
@@ -823,17 +558,7 @@ class TransliterationRule {
      * @return string representation of this object
      */
     public String toString() {
-        return getClass().getName() + '{'
-            + Utility.escape((anteContextLength > 0 ? (pattern.substring(0, anteContextLength) +
-                                              " {") : "")
-                     + pattern.substring(anteContextLength, anteContextLength + keyLength)
-                     + (anteContextLength + keyLength < pattern.length() ?
-                        ("} " + pattern.substring(anteContextLength + keyLength)) : "")
-                     + " > "
-                     + (cursorPos < output.length()
-                        ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
-                        : output))
-            + '}';
+        return getClass().getName() + '{' + toRule(true) + '}';
     }
 
     /**
@@ -845,7 +570,7 @@ class TransliterationRule {
         for (int i=anteContextLength; i<limit; ) {
             int ch = UTF16.charAt(pattern, i);
             i += UTF16.getCharCount(ch);
-            UnicodeMatcher matcher = data.lookup(ch);
+            UnicodeMatcher matcher = data.lookupMatcher(ch);
             if (matcher == null) {
                 toUnionTo.add(ch);
             } else {
@@ -858,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.42  2002/02/07 00:53:54  alan
+ * jitterbug 1234: make output side of RBTs object-oriented; rewrite ID parsers and modularize them; implement &Any-Lower() support
+ *
  * Revision 1.41  2001/12/11 22:11:04  alan
  * jitterbug 1591: edit comments
  *

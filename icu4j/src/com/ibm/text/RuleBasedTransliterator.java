@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $
- * $Date: 2001/11/29 22:31:18 $
- * $Revision: 1.51 $
+ * $Date: 2002/02/07 00:53:54 $
+ * $Revision: 1.52 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.51 $ $Date: 2001/11/29 22:31:18 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.52 $ $Date: 2002/02/07 00:53:54 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -396,7 +396,7 @@ public class RuleBasedTransliterator extends Transliterator {
         Hashtable variableNames;
 
         /**
-         * Map category variable (Character) to set (UnicodeSet).
+         * Map category variable (Character) to UnicodeMatcher or UnicodeReplacer.
          * Variables that correspond to a set of characters are mapped
          * from variable name to a stand-in character in data.variableNames.
          * The stand-in then serves as a key in this hash to lookup the
@@ -404,7 +404,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * stored in the rule text to represent the set of characters.
          * variables[i] represents character (variablesBase + i).
          */
-        UnicodeMatcher[] variables;
+        Object[] variables;
 
         /**
          * The character that represents variables[0].  Characters
@@ -414,40 +414,23 @@ public class RuleBasedTransliterator extends Transliterator {
         char variablesBase;
 
         /**
-         * The character that represents segment 1.  Characters segmentBase
-         * through segmentBase - segmentCount + 1 represent segments 1
-         * through segmentCount.  Segments work down while variables work up.
-         */
-        char segmentBase;
-
-        int segmentCount;
-
-        /**
          * Return the UnicodeMatcher represented by the given character, or
          * null if none.
          */
-        public UnicodeMatcher lookup(int standIn) {
+        public UnicodeMatcher lookupMatcher(int standIn) {
             int i = standIn - variablesBase;
             return (i >= 0 && i < variables.length)
-                ? variables[i] : null;
+                ? (UnicodeMatcher) variables[i] : null;
         }
 
         /**
-         * Return the zero-based index of the segment represented by the given
-         * character, or -1 if none.  Repeat: This is a zero-based return value,
-         * 0..8, even though these are notated "$1".."$9".
+         * Return the UnicodeReplacer represented by the given character, or
+         * null if none.
          */
-        public int lookupSegmentReference(int c) {
-            int i = segmentBase - c;
-            return (i >= 0 && i < segmentCount) ? i : -1;
-        }
-
-        /**
-         * Return the character used to stand for the given segment reference.
-         * The reference must be in the range 1..segmentCount.
-         */
-        char getSegmentStandin(int ref) {
-            return (char)(segmentBase - ref + 1);
+        public UnicodeReplacer lookupReplacer(int standIn) {
+            int i = standIn - variablesBase;
+            return (i >= 0 && i < variables.length)
+                ? (UnicodeReplacer) variables[i] : null;
         }
     }
 
@@ -477,6 +460,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.52  2002/02/07 00:53:54  alan
+ * jitterbug 1234: make output side of RBTs object-oriented; rewrite ID parsers and modularize them; implement &Any-Lower() support
+ *
  * Revision 1.51  2001/11/29 22:31:18  alan
  * jitterbug 1560: add source-set methods and TransliteratorUtility class
  *

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/12/11 00:00:27 $
- * $Revision: 1.94 $
+ * $Date: 2002/02/07 00:56:13 $
+ * $Revision: 1.95 $
  *
  *****************************************************************************************
  */
@@ -749,17 +749,17 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestFilterIDs() {
         String[] DATA = {
-            "Any[aeiou]-Hex", // ID
+            "[aeiou]Any-Hex", // ID
             "[aeiou]Hex-Any", // expected inverse ID
             "quizzical",      // src
             "q\\u0075\\u0069zz\\u0069c\\u0061l", // expected ID.translit(src)
 
-            "Any[aeiou]-Hex;Hex[^5]-Any",
+            "[aeiou]Any-Hex;[^5]Hex-Any",
             "[^5]Any-Hex;[aeiou]Hex-Any",
             "quizzical",
             "q\\u0075izzical",
 
-            "Null[abc]",
+            "[abc]Null",
             "[abc]Null",
             "xyz",
             "xyz",
@@ -834,7 +834,7 @@ public class TransliteratorTest extends TestFmwk {
         String DATA[] = {
             "latin-greek", null /*"Latin-Greek"*/, "case insensitivity",
             "  Null  ", "Null", "whitespace",
-            " Latin[a-z]-Greek  ", "Latin[a-z]-Greek", "inline filter",
+            " Latin[a-z]-Greek  ", "[a-z]Latin-Greek", "inline filter",
             "  null  ; latin-greek  ", null /*"Null;Latin-Greek"*/, "compound whitespace",
         };
 
@@ -959,7 +959,7 @@ public class TransliteratorTest extends TestFmwk {
                       "::Any-Lower;\n" +
                       "a > '.A.';\n" +
                       "b > '.B.';\n" +
-                      "::Any[^t]-Upper;";
+                      "::[^t]Any-Upper;";
         Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
         if (t == null) {
             errln("FAIL: createFromRules failed");
@@ -1447,6 +1447,7 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator t = Transliterator.createFromRules(
                                "TEST", "::NFD; aa > Q; a > q;",
                                Transliterator.FORWARD);
+        logln(t.toRules(true));
         expect(t, "aa", "Q");
     }
 
@@ -2049,44 +2050,51 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestIDForms() {
         String DATA[] = {
-            "NFC", "NFD",
-            "nfd", "NFC", // make sure case is ignored
-            "Any-NFKD", "Any-NFKC",
-            "Null", "Null",
-            "-nfkc", "NFKD",
-            "-nfkc/", "NFKD",
-            "Latin-Greek/UNGEGN", "Greek-Latin/UNGEGN",
-            "Greek/UNGEGN-Latin", "Latin-Greek/UNGEGN",
-            "Bengali-Devanagari/", "Devanagari-Bengali",
-            "Source-", null,
-            "Source/Variant-", null,
-            "Source-/Variant", null,
-            "/Variant", null,
-            "/Variant-", null,
-            "-/Variant", null,
-            "-/", null,
-            "-", null,
-            "/", null,
+            "NFC", null, "NFD",
+            "nfd", null, "NFC", // make sure case is ignored
+            "Any-NFKD", null, "Any-NFKC",
+            "Null", null, "Null",
+            "-nfkc", "nfkc", "NFKD",
+            "-nfkc/", "nfkc", "NFKD",
+            "Latin-Greek/UNGEGN", null, "Greek-Latin/UNGEGN",
+            "Greek/UNGEGN-Latin", "Greek-Latin/UNGEGN", "Latin-Greek/UNGEGN",
+            "Bengali-Devanagari/", "Bengali-Devanagari", "Devanagari-Bengali",
+            "Source-", null, null,
+            "Source/Variant-", null, null,
+            "Source-/Variant", null, null,
+            "/Variant", null, null,
+            "/Variant-", null, null,
+            "-/Variant", null, null,
+            "-/", null, null,
+            "-", null, null,
+            "/", null, null,
         };
 
-        for (int i=0; i<DATA.length; i+=2) {
+        for (int i=0; i<DATA.length; i+=3) {
+            String ID = DATA[i];
+            String expID = DATA[i+1];
+            String expInvID = DATA[i+2];
+            boolean expValid = (expInvID != null);
+            if (expID == null) {
+                expID = ID;
+            }
             try {
                 Transliterator t =
-                    Transliterator.getInstance(DATA[i]);
+                    Transliterator.getInstance(ID);
                 Transliterator u = t.getInverse();
-                if (t.getID().equals(DATA[i]) &&
-                    u.getID().equals(DATA[i+1])) {
-                    logln("Ok: " + DATA[i] + ".getInverse() => " + DATA[i+1]);
+                if (t.getID().equals(expID) &&
+                    u.getID().equals(expInvID)) {
+                    logln("Ok: " + ID + ".getInverse() => " + expInvID);
                 } else {
-                    errln("FAIL: getInstance(" + DATA[i] + ") => " +
+                    errln("FAIL: getInstance(" + ID + ") => " +
                           t.getID() + " x getInverse() => " + u.getID() +
-                          ", expected " + DATA[i+1]);
+                          ", expected " + expInvID);
                 }
             } catch (IllegalArgumentException e) {
-                if (DATA[i+1] == null) {
-                    logln("Ok: getInstance(" + DATA[i] + ") => " + e.getMessage());
+                if (!expValid) {
+                    logln("Ok: getInstance(" + ID + ") => " + e.getMessage());
                 } else {
-                    errln("FAIL: getInstance(" + DATA[i] + ") => " + e.getMessage());
+                    errln("FAIL: getInstance(" + ID + ") => " + e.getMessage());
                 }
             }
         }
@@ -2416,6 +2424,50 @@ public class TransliteratorTest extends TestFmwk {
             errln("Incomplete, " + t.getID() + ":  " + Utility.formatInput(test, pos));
             gotError = true;
         }
+    }
+
+    public void TestFunction() {
+        // Careful with spacing and ';' here:  Phrase this exactly
+        // as toRules() is going to return it.  If toRules() changes
+        // with regard to spacing or ';', then adjust this string.
+        String rule =
+            "([:Lu:]) > $1 '(' &Lower( $1 ) '=' &Hex( &Any-Lower( $1 ) ) ')';";
+
+        Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createFromRules failed");
+            return;
+        }
+
+        String r = t.toRules(true);
+        if (r.equals(rule)) {
+            logln("OK: toRules() => " + r);
+        } else {
+            errln("FAIL: toRules() => " + r +
+                  ", expected " + rule);
+        }
+        
+        expect(t, "The Quick Brown Fox",
+               "T(t=\\u0074)he Q(q=\\u0071)uick B(b=\\u0062)rown F(f=\\u0066)ox");
+        rule =
+            "([^\\ -\\u007F]) > &Hex/Unicode( $1 ) ' ' &Name( $1 ) ;";
+
+        t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createFromRules failed");
+            return;
+        }
+
+        r = t.toRules(true);
+        if (r.equals(rule)) {
+            logln("OK: toRules() => " + r);
+        } else {
+            errln("FAIL: toRules() => " + r +
+                  ", expected " + rule);
+        }
+        
+        expect(t, "\u0301",
+               "U+0301 {COMBINING ACUTE ACCENT}");
     }
 
     //======================================================================

@@ -20,6 +20,8 @@
 
 U_NAMESPACE_BEGIN
 
+class UnicodeMatcher;
+
 class ICU_Utility {
  public:
 
@@ -73,11 +75,29 @@ class ICU_Utility {
                                  UChar c);
 
     /**
-     * Skip over a sequence of zero or more white space characters
-     * at pos.  Return the index of the first non-white-space character
-     * at or after pos, or str.length(), if there is none.
+     * Skip over a sequence of zero or more white space characters at pos.
+     * @param advance if true, advance pos to the first non-white-space
+     * character at or after pos, or str.length(), if there is none.
+     * Otherwise leave pos unchanged.
+     * @return the index of the first non-white-space character at or
+     * after pos, or str.length(), if there is none.
      */
-    static int32_t skipWhitespace(const UnicodeString& str, int32_t pos);
+    static int32_t skipWhitespace(const UnicodeString& str, int32_t& pos,
+                                  UBool advance = FALSE);
+
+    /**
+     * Parse a single non-whitespace character 'ch', optionally
+     * preceded by whitespace.
+     * @param id the string to be parsed
+     * @param pos INPUT-OUTPUT parameter.  On input, pos[0] is the
+     * offset of the first character to be parsed.  On output, pos[0]
+     * is the index after the last parsed character.  If the parse
+     * fails, pos[0] will be unchanged.
+     * @param ch the non-whitespace character to be parsed.
+     * @return true if 'ch' is seen preceded by zero or more
+     * whitespace characters.
+     */
+    static UBool parseChar(const UnicodeString& id, int32_t& pos, UChar ch);
 
     /**
      * Parse a pattern string starting at offset pos.  Keywords are
@@ -110,6 +130,58 @@ class ICU_Utility {
      * parsed character.
      */
     static int32_t parseInteger(const UnicodeString& rule, int32_t& pos, int32_t limit);
+
+    /**
+     * Parse a Unicode identifier from the given string at the given
+     * position.  Return the identifier, or an empty string if there
+     * is no identifier.
+     * @param str the string to parse
+     * @param pos INPUT-OUPUT parameter.  On INPUT, pos is the
+     * first character to examine.  It must be less than str.length(),
+     * and it must not point to a whitespace character.  That is, must
+     * have pos < str.length() and
+     * !UCharacter::isWhitespace(str.char32At(pos)).  On
+     * OUTPUT, the position after the last parsed character.
+     * @return the Unicode identifier, or an empty string if there is
+     * no valid identifier at pos.
+     */
+    static UnicodeString parseUnicodeIdentifier(const UnicodeString& str, int32_t& pos);
+
+    /**
+     * Parse an unsigned 31-bit integer at the given offset.  Use
+     * UCharacter.digit() to parse individual characters into digits.
+     * @param text the text to be parsed
+     * @param pos INPUT-OUTPUT parameter.  On entry, pos is the
+     * offset within text at which to start parsing; it should point
+     * to a valid digit.  On exit, pos is the offset after the last
+     * parsed character.  If the parse failed, it will be unchanged on
+     * exit.  Must be >= 0 on entry.
+     * @param radix the radix in which to parse; must be >= 2 and <=
+     * 36.
+     * @return a non-negative parsed number, or -1 upon parse failure.
+     * Parse fails if there are no digits, that is, if pos does not
+     * point to a valid digit on entry, or if the number to be parsed
+     * does not fit into a 31-bit unsigned integer.
+     */
+    static int32_t parseNumber(const UnicodeString& text,
+                               int32_t& pos, int8_t radix);
+
+    static void appendToRule(UnicodeString& rule,
+                             UChar32 c,
+                             UBool isLiteral,
+                             UBool escapeUnprintable,
+                             UnicodeString& quoteBuf);
+    
+    static void appendToRule(UnicodeString& rule,
+                             const UnicodeString& text,
+                             UBool isLiteral,
+                             UBool escapeUnprintable,
+                             UnicodeString& quoteBuf);
+
+    static void appendToRule(UnicodeString& rule,
+                             const UnicodeMatcher* matcher,
+                             UBool escapeUnprintable,
+                             UnicodeString& quoteBuf);
 };
 
 U_NAMESPACE_END

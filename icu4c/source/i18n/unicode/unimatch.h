@@ -58,18 +58,6 @@ class U_I18N_API UnicodeMatcher {
 public:
 
     /**
-     * Destructor
-     */
-    virtual ~UnicodeMatcher();
-
-    /**
-     * Returns a copy of this object.  All UnicodeMatcher objects have
-     * to support cloning in order to allow classes using
-     * UnicodeMatchers to implement cloning.
-     */
-    virtual UnicodeMatcher* clone() const = 0;
-
-    /**
      * Return a UMatchDegree value indicating the degree of match for
      * the given text at the given offset.  Zero, one, or more
      * characters may be matched.
@@ -140,59 +128,7 @@ public:
      * indexing.
      */
     virtual UBool matchesIndexValue(uint8_t v) const = 0;
-
-    /**
-     * Return the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  For example:
-     * <pre>
-     * .      Base* polymorphic_pointer = createPolymorphicObject();
-     * .      if (polymorphic_pointer->getDynamicClassID() ==
-     * .          Derived::getStaticClassID()) ...
-     * </pre>
-     * @return          The class ID for all objects of this class.
-     * @stable
-     */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-
-    /**
-     * Returns a unique class ID <b>polymorphically</b>.  This method
-     * is to implement a simple version of RTTI, since not all C++
-     * compilers support genuine RTTI.  Polymorphic operator==() and
-     * clone() methods call this method.
-     * 
-     * <p>Concrete subclasses of UnicodeMatcher that wish clients to
-     * be able to identify them should implement getDynamicClassID()
-     * and also a static method and data member:
-     * 
-     * <pre>
-     * static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-     * static char fgClassID;
-     * </pre>
-     *
-     * Subclasses that do not implement this method will have a
-     * dynamic class ID of UnicodeMatcher::getStatisClassID().
-     *
-     * @return The class ID for this object. All objects of a given
-     * class have the same class ID.  Objects of other classes have
-     * different class IDs.
-     */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
-
-private:
-
-    /**
-     * Class identifier for subclasses of UnicodeMatcher that do not
-     * define their class (anonymous subclasses).
-     */
-    static const char fgClassID;
-
-protected:
-
-    UnicodeMatcher();
 };
-
-inline UnicodeMatcher::UnicodeMatcher() {}
-inline UnicodeMatcher::~UnicodeMatcher() {}
 
 U_NAMESPACE_END
 

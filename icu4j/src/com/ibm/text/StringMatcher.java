@@ -5,40 +5,98 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/StringMatcher.java,v $ 
- * $Date: 2001/12/11 17:43:56 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/07 00:53:54 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.text;
+import com.ibm.util.Utility;
 
-class StringMatcher implements UnicodeMatcher {
+/**
+ * An object that matches a fixed input string, implementing the
+ * UnicodeMatcher API.  This object also implements the
+ * UnicodeReplacer API, allowing it to emit the matched text as
+ * output.  Since the match text may contain flexible match elements,
+ * such as UnicodeSets, the emitted text is not the match pattern, but
+ * instead a substring of the actual matched text.  Following
+ * convention, the output text is the leftmost match seen up to this
+ * point.
+ *
+ * A StringMatcher may represent a segment, in which case it has a
+ * positive segment number.  This affects how the matcher converts
+ * itself to a pattern but does not otherwise affect its function.
+ *
+ * A StringMatcher that is not a segment should not be used as a
+ * UnicodeReplacer.
+ */
+class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
 
+    /**
+     * The text to be matched.
+     */
     private String pattern;
 
-    private boolean isSegment;
-
+    /**
+     * Start offset, in the match text, of the <em>rightmost</em>
+     * match.
+     */
     private int matchStart;
-
+    
+    /**
+     * Limit offset, in the match text, of the <em>rightmost</em>
+     * match.
+     */
     private int matchLimit;
 
+    /**
+     * The segment number, 1-based, or 0 if not a segment.
+     */
+    private int segmentNumber;
+
+    /**
+     * Context object that maps stand-ins to matcher and replacer
+     * objects.
+     */
     private final RuleBasedTransliterator.Data data;
 
+    /**
+     * Construct a matcher that matches the given pattern string.
+     * @param theString the pattern to be matched, possibly containing
+     * stand-ins that represent nested UnicodeMatcher objects.
+     * @param segmentNum the segment number from 1..n, or 0 if this is
+     * not a segment.
+     * @param theData context object mapping stand-ins to
+     * UnicodeMatcher objects.
+     */
     public StringMatcher(String theString,
-                         boolean isSeg,
+                         int segmentNum,
                          RuleBasedTransliterator.Data theData) {
         data = theData;
-        isSegment = isSeg;
         pattern = theString;
         matchStart = matchLimit = -1;
+        segmentNumber = segmentNum;
     }
 
+    /**
+     * Construct a matcher that matches a substring of the given
+     * pattern string.
+     * @param theString the pattern to be matched, possibly containing
+     * stand-ins that represent nested UnicodeMatcher objects.
+     * @param start first character of theString to be matched
+     * @param limit index after the last character of theString to be
+     * matched.
+     * @param segmentNum the segment number from 1..n, or 0 if this is
+     * not a segment.
+     * @param theData context object mapping stand-ins to
+     * UnicodeMatcher objects.
+     */
     public StringMatcher(String theString,
                          int start,
                          int limit,
-                         boolean isSeg,
+                         int segmentNum,
                          RuleBasedTransliterator.Data theData) {
-        this(theString.substring(start, limit), isSeg, theData);
+        this(theString.substring(start, limit), segmentNum, theData);
     }
 
     /**
@@ -58,7 +116,7 @@ class StringMatcher implements UnicodeMatcher {
             // Match in the reverse direction
             for (i=pattern.length()-1; i>=0; --i) {
                 char keyChar = pattern.charAt(i); // OK; see note (1) above
-                UnicodeMatcher subm = data.lookup(keyChar);
+                UnicodeMatcher subm = data.lookupMatcher(keyChar);
                 if (subm == null) {
                     if (cursor[0] > limit &&
                         keyChar == text.charAt(cursor[0])) { // OK; see note (1) above
@@ -89,7 +147,7 @@ class StringMatcher implements UnicodeMatcher {
                     return U_PARTIAL_MATCH;
                 }
                 char keyChar = pattern.charAt(i); // OK; see note (1) above
-                UnicodeMatcher subm = data.lookup(keyChar);
+                UnicodeMatcher subm = data.lookupMatcher(keyChar);
                 if (subm == null) {
                     // Don't need the cursor < limit check if
                     // incremental is true (because it's done above); do need
@@ -123,25 +181,25 @@ class StringMatcher implements UnicodeMatcher {
     public String toPattern(boolean escapeUnprintable) {
         StringBuffer result = new StringBuffer();
         StringBuffer quoteBuf = new StringBuffer();
-        if (isSegment) {
+        if (segmentNumber > 0) { // i.e., if this is a segment
             result.append('(');
         }
         for (int i=0; i<pattern.length(); ++i) {
             char keyChar = pattern.charAt(i); // OK; see note (1) above
-            UnicodeMatcher m = data.lookup(keyChar);
+            UnicodeMatcher m = data.lookupMatcher(keyChar);
             if (m == null) {
-                TransliterationRule.appendToRule(result, keyChar, false, escapeUnprintable, quoteBuf);
+                Utility.appendToRule(result, keyChar, false, escapeUnprintable, quoteBuf);
             } else {
-                TransliterationRule.appendToRule(result, m.toPattern(escapeUnprintable),
-                                                 true, escapeUnprintable, quoteBuf);
+                Utility.appendToRule(result, m.toPattern(escapeUnprintable),
+                                     true, escapeUnprintable, quoteBuf);
             }
         }
-        if (isSegment) {
+        if (segmentNumber > 0) { // i.e., if this is a segment
             result.append(')');
         }
         // Flush quoteBuf out to result
-        TransliterationRule.appendToRule(result, -1,
-                                         true, escapeUnprintable, quoteBuf);
+        Utility.appendToRule(result, -1,
+                             true, escapeUnprintable, quoteBuf);
         return result.toString();
     }
 
@@ -153,7 +211,7 @@ class StringMatcher implements UnicodeMatcher {
             return true;
         }
         int c = UTF16.charAt(pattern, 0);
-        UnicodeMatcher m = data.lookup(c);
+        UnicodeMatcher m = data.lookupMatcher(c);
         return (m == null) ? ((c & 0xFF) == v) : m.matchesIndexValue(v);
     }
 
@@ -169,7 +227,7 @@ class StringMatcher implements UnicodeMatcher {
             // OK TO GET 16-BIT code point because stand-ins are always
             // in the BMP
             int ch = pattern.charAt(i);
-            UnicodeMatcher matcher = data.lookup(ch);
+            UnicodeMatcher matcher = data.lookupMatcher(ch);
             if (matcher == null) {
                 toUnionTo.add(ch);
             } else {
@@ -180,29 +238,47 @@ class StringMatcher implements UnicodeMatcher {
     }
 
     /**
+     * UnicodeReplacer API
+     */
+    public int replace(Replaceable text,
+                       int start,
+                       int limit,
+                       int[] cursor) {
+
+        int outLen = 0;
+
+        // Copy segment with out-of-band data
+        int dest = limit;
+        // If there was no match, that means that a quantifier
+        // matched zero-length.  E.g., x (a)* y matched "xy".
+        if (matchStart >= 0) {
+            if (matchStart != matchLimit) {
+                text.copy(matchStart, matchLimit, dest);
+                outLen = matchLimit - matchStart;
+            }
+        }
+
+        text.replace(start, limit, ""); // delete original text
+
+        return outLen;
+    }
+
+    /**
+     * UnicodeReplacer API
+     */
+    public String toReplacerPattern(boolean escapeUnprintable) {
+        // assert(segmentNumber > 0);
+        StringBuffer rule = new StringBuffer("$");
+        Utility.appendNumber(rule, segmentNumber, 10, 1);
+        return rule.toString();
+    }
+
+    /**
      * Remove any match data.  This must be called before performing a
      * set of matches with this segment.
      */
     public void resetMatch() {
         matchStart = matchLimit = -1;
-    }
-
-    /**
-     * Return the start offset, in the match text, of the <em>rightmost</em>
-     * match.  This method may get moved up into the UnicodeMatcher if
-     * it turns out to be useful to generalize this.
-     */
-    public int getMatchStart() {
-        return matchStart;
-    }
-
-    /**
-     * Return the limit offset, in the match text, of the <em>rightmost</em>
-     * match.  This method may get moved up into the UnicodeMatcher if
-     * it turns out to be useful to generalize this.
-     */
-    public int getMatchLimit() {
-        return matchLimit;
     }
 }
 
