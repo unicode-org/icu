@@ -1405,62 +1405,60 @@ uprv_getDefaultCodepage()
     const char *localeName = NULL;
     const char *defaultTable = NULL;
 
-    uprv_memset(codesetName, 0, 100);
+    uprv_memset(codesetName, 0, sizeof(codesetName));
     localeName = uprv_getPOSIXID();
-    if (localeName != NULL)
+    if (localeName != NULL && (name = (uprv_strchr(localeName, (int)'.'))) != NULL)
     {
-        uprv_strcpy(codesetName, localeName);
-        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL)
+        /* strip the locale name and look at the suffix only */
+        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
+        codesetName[sizeof(codesetName)-1] = 0;
+        if ((euro = (uprv_strchr(name, (int)'@'))) != NULL)
         {
-            /* strip the locale name and look at the suffix only */
-            name++;
-            if ((euro  = (uprv_strchr(name, (int)'@'))) != NULL)
-            {
-               *euro  = 0;
-            }
-            /* if we can find the codset name from setlocale, return that. */
-            if (uprv_strlen(name) != 0)
-            {
-                return name;
-            }
+           *euro = 0;
+        }
+        /* if we can find the codset name, return that. */
+        if (*name)
+        {
+            return name;
         }
     }
 
     /* otherwise, try CTYPE */
-
-    uprv_memset(codesetName, 0, 100);
-    localeName = setlocale(LC_CTYPE, "");
-    if (localeName != NULL)
+    if (*codesetName)
     {
-        uprv_strcpy(codesetName, localeName);
-        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL)
+        uprv_memset(codesetName, 0, sizeof(codesetName));
+    }
+    localeName = setlocale(LC_CTYPE, "");
+    if (localeName != NULL && (name = (uprv_strchr(localeName, (int)'.'))) != NULL)
+    {
+        /* strip the locale name and look at the suffix only */
+        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
+        codesetName[sizeof(codesetName)-1] = 0;
+        if ((euro = (uprv_strchr(name, (int)'@'))) != NULL)
         {
-            /* strip the locale name and look at the suffix only */
-            name++;
-            if ((euro  = (uprv_strchr(name, (int)'@'))) != NULL)
-            {
-               *euro  = 0;
-            }
-            /* if we can find the codset name from setlocale, return that. */
-            if (uprv_strlen(name) != 0)
-            {
-                return name;
-            }
+           *euro = 0;
+        }
+        /* if we can find the codset name from setlocale, return that. */
+        if (*name)
+        {
+            return name;
         }
     }
-    if (strlen(codesetName) != 0)
+
+    if (*codesetName)
     {
-        uprv_memset(codesetName, 0, 100);
+        uprv_memset(codesetName, 0, sizeof(codesetName));
     }
 #if U_HAVE_NL_LANGINFO_CODESET
-    /**/ {
+    {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
         if (codeset != NULL) {
-            uprv_strcpy(codesetName, codeset);
+            uprv_strncpy(codesetName, codeset, sizeof(codesetName));
+            codesetName[sizeof(codesetName)-1] = 0;
         }
     }
 #endif
-    if (uprv_strlen(codesetName) == 0)
+    if (*codesetName == 0)
     {
         /* look up in srl's table */
         defaultTable = uprv_defaultCodePageForLocale(localeName);
