@@ -325,6 +325,22 @@ U_CAPI UChar U_EXPORT2
 u_fgetc(UFILE        *f);
 
 /**
+ * Read a UChar from a UFILE and process escape sequences.  If the
+ * next character is not a backslash, this is the same as calling
+ * u_fgetc().  If it is, then additional characters comprising the
+ * escape sequence will be read from the UFILE, parsed, and the
+ * resultant UChar returned.  Ill-formed escape sequences return
+ * U+FFFFFFFF.
+ * @param f The UFILE from which to read.
+ * @return The UChar value read, or U+FFFF if no character was
+ * available, or U+FFFFFFFF if an ill-formed escape sequence was
+ * encountered.
+ * @see u_unescape()
+ */
+U_CAPI UChar32 U_EXPORT2
+u_fgetcx(UFILE        *f);
+
+/**
  * Unget a UChar from a UFILE.
  * If this function is not the first to operate on <TT>f</TT> after a call
  * to <TT>u_fgetc</TT>, the results are undefined.
