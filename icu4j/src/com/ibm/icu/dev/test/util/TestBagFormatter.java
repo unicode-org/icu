@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2004/02/07 00:59:25 $
- * $Revision: 1.7 $
+ * $Date: 2004/02/12 00:47:30 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -67,14 +67,17 @@ public class TestBagFormatter {
             
             BagFormatter bf = new BagFormatter();
 
-            UnicodeSet us = new UnicodeSet("[:numeric_value=2:]");   
-            bf.showSetNames(BagFormatter.CONSOLE,"[:numeric_value=2:]", us);
+            UnicodeSet us = new UnicodeSet("[:numeric_value=2:]");  
+            BagFormatter.CONSOLE.println("[:numeric_value=2:]");
+            bf.showSetNames(BagFormatter.CONSOLE,us);
             us = new UnicodeSet("[:numeric_type=numeric:]");   
-            bf.showSetNames(BagFormatter.CONSOLE,"[:numeric_type=numeric:]", us);
+            BagFormatter.CONSOLE.println("[:numeric_type=numeric:]");
+            bf.showSetNames(BagFormatter.CONSOLE,us);
             
             UnicodeProperty.Factory ups = ICUPropertyFactory.make();
             us = ups.getSet("gc=mn", null, null); 
-            bf.showSetNames(bf.CONSOLE,"gc=mn", us);
+            BagFormatter.CONSOLE.println("gc=mn");
+            bf.showSetNames(bf.CONSOLE, us);
             
             if (true) return;
             //showNames("Name", ".*MARK.*");

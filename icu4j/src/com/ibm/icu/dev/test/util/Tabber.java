@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Tabber.java,v $
- * $Date: 2004/02/07 00:59:26 $
- * $Revision: 1.3 $
+ * $Date: 2004/02/12 00:47:30 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -58,11 +58,21 @@ public abstract class Tabber {
         private List stops = new ArrayList();
         private List types = new ArrayList();
     
+        /**
+         * Adds tab stop and how to align the text UP TO that stop
+         * @param tabPos
+         * @param type
+         */
         public void addAbsolute(int tabPos, int type) {
             stops.add(new Integer(tabPos));
             types.add(new Integer(type));
         }
     
+        /**
+         * Adds relative tab stop and how to align the text UP TO that stop
+         * @param tabPos
+         * @param type
+         */
         public void add(int fieldWidth, byte type) {
             int last = getStop(stops.size()-1);
             stops.add(new Integer(last + fieldWidth));
@@ -71,7 +81,13 @@ public abstract class Tabber {
         
         public int getStop(int fieldNumber) {
             if (fieldNumber < 0) return 0;
+            if (fieldNumber >= stops.size()) fieldNumber = stops.size() - 1;
             return ((Integer)stops.get(fieldNumber)).intValue();
+        }
+        public int getType(int fieldNumber) {
+            if (fieldNumber < 0) return LEFT;
+            if (fieldNumber >= stops.size()) return LEFT;
+            return ((Integer)types.get(fieldNumber)).intValue();
         }
         /*
         public String process(String source) {
@@ -99,12 +115,24 @@ public abstract class Tabber {
         
         public void process_field(int count, String source, int start, int limit, StringBuffer output) {
             String piece = source.substring(start, limit);
-            int pos = getStop(count);
-            if (output.length() < pos) {
-                output.append(repeat(" ", pos - output.length()));
-                // TODO fix type
-            } else {
-                output.append(" ");
+            int startPos = getStop(count-1);
+            int endPos = getStop(count) - 1;
+            int type = getType(count);
+            switch (type) {
+                case LEFT: 
+                    break;
+                case RIGHT: 
+                    startPos = endPos - piece.length();
+                    break;
+                case CENTER: 
+                    startPos = (startPos + endPos - piece.length() + 1)/2;
+                    break;
+            }
+
+            if (output.length() < startPos) {
+                output.append(repeat(" ", startPos - output.length()));
+            } else if (startPos != 0) { // don't do anything on first instance
+                output.append(" "); // otherwise minimum of first space
             }
             output.append(piece);
         }

@@ -1,5 +1,7 @@
 package com.ibm.icu.dev.test.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,9 +20,12 @@ import com.ibm.icu.text.UnicodeSetIterator;
 
 public abstract class UnicodeProperty extends UnicodeLabel {
     
+    public static boolean DEBUG = false;
+    
     private String propertyAlias;
+    private String shortestPropertyAlias = null;
     private int type;
-    private Map mapToShortName = null;
+    private Map valueToShortValue = null;
     
     public static final int UNKNOWN = 0,
         BINARY = 2, EXTENDED_BINARY = 3,
@@ -63,14 +68,48 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         type = i;
     }
 
-    public abstract String getValue(int codepoint);
-    public abstract Collection getAliases(Collection result);
-    public abstract Collection getValueAliases(String valueAlias, Collection result);
-    abstract public Collection getAvailableValueAliases(Collection result);
+    public String getVersion() {
+        return _getVersion();
+    }
+    public String getValue(int codepoint) {
+        return _getValue(codepoint);
+    }
+    public Collection getAliases(Collection result) {
+        return _getAliases(result);
+    }
+    public Collection getValueAliases(String valueAlias, Collection result) {
+        result = _getValueAliases(valueAlias, result);
+        if (!result.contains(valueAlias) && type < NUMERIC) {
+            throw new IllegalArgumentException(
+                "Internal error: result doesn't contain " + valueAlias);
+        }
+        return result;
+    }
+    public Collection getAvailableValueAliases(Collection result) {
+        return _getAvailableValueAliases(result);
+    }
+
+    protected abstract String _getVersion();
+    protected abstract String _getValue(int codepoint);
+    protected abstract Collection _getAliases(Collection result);
+    protected abstract Collection _getValueAliases(String valueAlias, Collection result);
+    protected abstract Collection _getAvailableValueAliases(Collection result);
+    
+    // conveniences
+    public final Collection getAliases() {
+        return _getAliases(null);
+    }
+    public final Collection getValueAliases(String valueAlias) {
+        return _getValueAliases(valueAlias, null);
+    }
+    public final Collection getAvailableValueAliases() {
+        return _getAvailableValueAliases(null);
+    }
     
     static public class Factory {
         Map canonicalNames = new TreeMap();
         Map skeletonNames = new TreeMap();
+        Map propertyCache = new HashMap();
         
         public final Factory add(UnicodeProperty sp) {
             canonicalNames.put(sp.getName(), sp);
@@ -107,6 +146,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             }
             return result;
         }
+        InverseMatcher inverseMatcher = new InverseMatcher();
         /**
          * Format is:
          *    propname ('=' | '!=') propvalue ( '|' propValue )*
@@ -114,18 +154,25 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         public final UnicodeSet getSet(String propAndValue, Matcher matcher, UnicodeSet result) {
             int equalPos = propAndValue.indexOf('=');
             String prop = propAndValue.substring(0,equalPos);
+            String value = propAndValue.substring(equalPos+1);
             boolean negative = false;
             if (prop.endsWith("!")) {
                 prop = prop.substring(0,prop.length()-1);
+                negative = true;
             }
             prop = prop.trim();
-            String value = propAndValue.substring(equalPos+1);
             UnicodeProperty up = getProperty(prop);
-            if (matcher != null) {
-                return up.getSet(matcher.set(value), result);
+            if (matcher == null) {
+                matcher = new SimpleMatcher(value,
+                up.getType() >= STRING ? null : new SkeletonComparator());
             }
-            return up.getSet(value,result);
+            if (negative) {
+                inverseMatcher.set(matcher); 
+                matcher = inverseMatcher;
+            }
+            return up.getSet(matcher.set(value), result);
         }
+        
         public final UnicodeSet getSet(String propAndValue, Matcher matcher) {
             return getSet(propAndValue, matcher, null);
         }
@@ -134,12 +181,13 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         }
     }
 
-    static class FilteredUnicodeProperty extends UnicodeProperty {
-        UnicodeProperty property;
+    public static class FilteredProperty extends UnicodeProperty {
+        private UnicodeProperty property;
         protected StringFilter filter;
         protected UnicodeSetIterator matchIterator = new UnicodeSetIterator(new UnicodeSet(0,0x10FFFF));
-
-        FilteredUnicodeProperty(UnicodeProperty property, StringFilter filter) {
+        protected HashMap backmap;
+        
+        public FilteredProperty(UnicodeProperty property, StringFilter filter) {
             this.property = property;
             this.filter = filter;
         }
@@ -153,37 +201,68 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return this;
         }
 
-        public Collection getAvailableValueAliases(Collection result) {
-            return property.getAvailableValueAliases(result);
+        Collection temp = new ArrayList();
+        
+        public Collection _getAvailableValueAliases(Collection result) {
+            temp.clear();
+            return filter.addUnique(property.getAvailableValueAliases(temp), result);
         }
 
-        public Collection getAliases(Collection result) {
-            return property.getAliases(result);
+        public Collection _getAliases(Collection result) {
+            temp.clear();
+            return filter.addUnique(
+                property.getAliases(temp), result);
         }
 
-        public String getValue(int codepoint) {
+        public String _getValue(int codepoint) {
             return filter.remap(property.getValue(codepoint));
         }
 
-        public Collection getValueAliases(
-            String valueAlias,
-            Collection result) {
-            return property.getValueAliases(valueAlias, result);
+        public Collection _getValueAliases(String valueAlias, Collection result) {
+            temp.clear();
+            if (backmap == null) {
+                backmap = new HashMap();
+                temp.clear();
+                Iterator it = property.getAvailableValueAliases(temp).iterator();
+                while (it.hasNext()) {
+                    String item = (String) it.next();
+                    String mappedItem = filter.remap(item);
+                    if (backmap.get(mappedItem) != null) {
+                        throw new IllegalArgumentException("Filter makes values collide!");
+                    }
+                    backmap.put(mappedItem, item);
+                }
+            }
+            return filter.addUnique(
+              property.getValueAliases((String) backmap.get(valueAlias), temp), result);
+        }
+
+        public String _getVersion() {
+            return property.getVersion();
         }
 
     }
 
-    public static class StringFilter implements Cloneable {
-        public String remap(String original) {
-            return original;
+    public static abstract class StringFilter implements Cloneable {
+        public abstract String remap(String original);
+        public final Collection addUnique(Collection source, Collection result) {
+            if (result == null) result = new ArrayList();
+            Iterator it = source.iterator();
+            while (it.hasNext()) {
+                UnicodeProperty.addUnique(
+                    remap((String) it.next()), result);                
+            }
+            return result;
         }
-        public Object clone() {
+        /*
+         public Object clone() {
             try {
                 return super.clone();
             } catch (CloneNotSupportedException e) {
                 throw new InternalError("Should never happen.");
             }
         }
+        */
     }
     
     public static class MapFilter extends StringFilter {
@@ -210,6 +289,21 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         public Matcher set(String pattern);
     }
     
+    public static class InverseMatcher implements Matcher {
+        Matcher other;
+        public Matcher set(Matcher toInverse) {
+            other = toInverse;
+            return this;
+        }
+        public boolean matches(String value) {
+            return !other.matches(value);
+        }
+        public Matcher set(String pattern) {
+            other.set(pattern);
+            return this;
+        }
+    }
+    
     public static class SimpleMatcher implements Matcher {
         Comparator comparator;
         String pattern;
@@ -231,16 +325,23 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         private String shortAlias;
         Collection valueAliases = new ArrayList();
         Map toAlternates = new HashMap();
+        String version;
         
-        protected void set(String alias, String shortAlias, int propertyType, String valueAlias) {
-            set(alias,shortAlias,propertyType,new String[]{valueAlias},null);
-        }
-        
-        protected void set(String alias, String shortAlias, int propertyType,
-          String[] valueAliases, String[] alternateValueAliases) {
+        public SimpleProperty setMain(String alias, String shortAlias, int propertyType,
+          String version) {
             setName(alias);
             setType(propertyType);
             this.shortAlias = shortAlias;
+            this.version = version;
+            return this;
+        }
+        
+        public SimpleProperty setValues(String valueAlias) {
+            setValues(new String[]{valueAlias}, null);
+            return this;
+        }
+        
+        public SimpleProperty setValues(String[] valueAliases, String[] alternateValueAliases) {
             this.valueAliases = Arrays.asList((Object[]) valueAliases.clone());
             
             for (int i = 0; i < valueAliases.length; ++i) {
@@ -249,34 +350,42 @@ public abstract class UnicodeProperty extends UnicodeLabel {
                 if (alternateValueAliases != null) addUnique(alternateValueAliases[i],a);               
                 toAlternates.put(valueAliases[i], a);
             }
+            return this;
         }
         
-        protected void set(String alias, String shortAlias, int propertyType,
-          Collection valueAliases) {
-            setName(alias);
-            setType(propertyType);
-            this.shortAlias = shortAlias;
-            this.valueAliases = new ArrayList(valueAliases);
+        public SimpleProperty setValues(Collection valueAliases) {
+            this.valueAliases = new ArrayList(valueAliases);           
+            for (Iterator it = this.valueAliases.iterator(); it.hasNext(); ) {
+                Object item = it.next();
+                List list = new ArrayList();
+                list.add(item);
+                toAlternates.put(item, list);
+            }
+            return this;
         }
         
-        public Collection getAliases(Collection result) {
+        public Collection _getAliases(Collection result) {
             if (result == null) result = new ArrayList();
             addUnique(getName(), result);
             addUnique(shortAlias, result);
             return result;
         }
 
-        public Collection getValueAliases(String valueAlias, Collection result) {
+        public Collection _getValueAliases(String valueAlias, Collection result) {
             if (result == null) result = new ArrayList();
             Collection a = (Collection) toAlternates.get(valueAlias);
-            if (a != null) result.addAll(valueAliases);
+            if (a != null) addAllUnique(a, result);
             return result;
         }
 
-        public Collection getAvailableValueAliases(Collection result) {
+        public Collection _getAvailableValueAliases(Collection result) {
             if (result == null) result = new ArrayList();
             result.addAll(valueAliases);
             return result;
+        }
+        
+        public String _getVersion() {
+            return version;
         }
     }
 
@@ -284,13 +393,31 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     public final String getValue(int codepoint, boolean getShortest) {
         String result = getValue(codepoint);
         if (!getShortest || result == null) return result;
-        if (mapToShortName == null) getValueCache();
-        return (String)mapToShortName.get(result);
+        return getShortestValueAlias(result);
+    }
+    
+    public final String getShortestValueAlias(String value) {
+        if (valueToShortValue == null) getValueCache();
+        return (String)valueToShortValue.get(value);       
+    }
+
+    public final String getShortestAlias() {
+        if (shortestPropertyAlias == null) {
+            shortestPropertyAlias = propertyAlias;
+            for (Iterator it = _getAliases(null).iterator(); it.hasNext();) {
+                String item = (String) it.next();
+                if (item.length() < shortestPropertyAlias.length()) {
+                    shortestPropertyAlias = item;
+                }
+            }
+        }
+        return shortestPropertyAlias;       
     }
 
     private void getValueCache() {
-        maxWidth = 0;
-        mapToShortName = new HashMap();
+        maxValueWidth = 0;
+        maxShortestValueWidth = 0;
+        valueToShortValue = new HashMap();
         Iterator it = getAvailableValueAliases(null).iterator();
         while (it.hasNext()) {
             String value = (String)it.next();
@@ -300,18 +427,28 @@ public abstract class UnicodeProperty extends UnicodeLabel {
                 String other = (String)it2.next();
                 if (shortest.length() > other.length()) shortest = other;
             }
-            mapToShortName.put(value,shortest);
-            if (shortest.length() > maxWidth) maxWidth = shortest.length();
+            valueToShortValue.put(value,shortest);
+            if (value.length() > maxValueWidth) maxValueWidth = value.length();
+            if (shortest.length() > maxShortestValueWidth) maxShortestValueWidth = shortest.length();
         }
     }
     
-    private int maxWidth = -1;
+    private int maxValueWidth = -1;
+    private int maxShortestValueWidth = -1;
     
     public final int getMaxWidth(boolean getShortest) {
-        if (maxWidth < 0) getValueCache();
-        return maxWidth;
+        if (maxValueWidth < 0) getValueCache();
+        if (getShortest) return maxShortestValueWidth;
+        return maxValueWidth;
     }
     
+    public final UnicodeSet getSet(String propertyValue) {
+        return getSet(propertyValue,null);
+    }
+    public final UnicodeSet getSet(Matcher matcher) {
+        return getSet(matcher,null);
+    }
+        
     public final UnicodeSet getSet(String propertyValue, UnicodeSet result) {
         int type = getType();
         return getSet(new SimpleMatcher(propertyValue,
@@ -332,12 +469,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             }
             return result;
         }
-        if (cacheValueToSet == null) {
-            cacheValueToSet = new UnicodeMap();
-            for (int i = 0; i <= 0x10FFFF; ++i) {
-                cacheValueToSet.put(i, getValue(i));
-            }
-        }
+        if (cacheValueToSet == null) cacheValueToSet = _getUnicodeMap();
         Collection temp = new HashSet(); // to avoid reallocating...
         Iterator it = cacheValueToSet.getAvailableValues(null).iterator();
         main:
@@ -356,6 +488,21 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         }
         return result;
     }
+    
+    protected UnicodeMap _getUnicodeMap() {
+        UnicodeMap result = new UnicodeMap();
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));
+            result.put(i, getValue(i));
+        }
+        if (DEBUG) {
+            System.out.println(getName() + ":\t" + getClass().getName()
+                 + "\t" + getVersion());
+            System.out.println(getStack());
+            System.out.println(result);
+        } 
+        return result;
+    }
 
     /*
     public UnicodeSet getMatchSet(UnicodeSet result) {
@@ -369,6 +516,16 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     }
     */
     
+    public static String getStack() {
+        Exception e = new Exception();
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        pw.flush();
+        return "Showing Stack with fake " + sw.getBuffer().toString();
+    }
+    
+
     public static Collection addUnique(Object obj, Collection result) {
         if (obj != null && !result.contains(obj)) result.add(obj);
         return result;
@@ -386,6 +543,9 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     public static class SkeletonComparator implements Comparator {
         public int compare(Object o1, Object o2) {
             // TODO optimize
+            if (o1 == o2) return 0;
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
             return toSkeleton((String)o1).compareTo(toSkeleton((String)o2));
         }
     }

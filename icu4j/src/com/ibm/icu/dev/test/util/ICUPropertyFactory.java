@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUPropertyFactory.java,v $
- * $Date: 2004/02/07 00:59:26 $
- * $Revision: 1.1 $
+ * $Date: 2004/02/12 00:47:30 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -34,6 +34,7 @@ import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.VersionInfo;
 
 
 /**
@@ -68,7 +69,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
 
             boolean shownException = false;
             
-            public String getValue(int codePoint) {
+            public String _getValue(int codePoint) {
                 if (propEnum < UProperty.INT_LIMIT) {
                     int enumValue = -1;
                     String value = null;
@@ -121,7 +122,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 return null;
             }
 
-            public Collection getAvailableValueAliases(Collection result) {
+            public Collection _getAvailableValueAliases(Collection result) {
                 if (result == null) result = new ArrayList();
                 if (propEnum < UProperty.INT_LIMIT) {
                     if (Binary_Extras.isInRange(propEnum)) {
@@ -183,7 +184,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 }
             }
 
-            public Collection getAliases(Collection result) {
+            public Collection _getAliases(Collection result) {
                 if (result == null) result = new ArrayList();
                 String alias = String_Extras.get(propEnum);
                 if (alias == null) alias = Binary_Extras.get(propEnum);
@@ -206,7 +207,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 return result;
             }
 
-            public Collection getValueAliases(String valueAlias, Collection result) {
+            public Collection _getValueAliases(String valueAlias, Collection result) {
                 if (result == null) result = new ArrayList();
                 for (int nameChoice = 0; ; ++nameChoice) {
                     String alias = getFixedValueAlias(valueAlias, -1, nameChoice);
@@ -247,6 +248,13 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 if (propEnum < UProperty.STRING_START) return UnicodeProperty.EXTENDED_NUMERIC;
                 if (propEnum < UProperty.STRING_LIMIT) return UnicodeProperty.STRING;
                 return UnicodeProperty.EXTENDED_STRING;
+            }
+
+            /* (non-Javadoc)
+             * @see com.ibm.icu.dev.test.util.UnicodeProperty#getVersion()
+             */
+            public String _getVersion() {
+                return VersionInfo.ICU_VERSION.toString();
             }
         }
 

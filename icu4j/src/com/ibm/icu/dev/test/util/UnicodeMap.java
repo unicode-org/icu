@@ -58,14 +58,50 @@ public class UnicodeMap {
                 UnicodeSet set = (UnicodeSet) objectToSet.get(it.next());
                 set.removeAll(codepoints);
             }
-            missing.removeAll(codepoints);
         }
+        missing.removeAll(codepoints);
         UnicodeSet set = (UnicodeSet) objectToSet.get(value);
         if (set == null) {
             set = new UnicodeSet();
             objectToSet.put(value,set);
         }
         set.addAll(codepoints);
+        return this;
+    }
+    
+    /**
+     * Adds bunch o' codepoints; otherwise like add.
+     * @param codepoints
+     * @param value
+     * @return this, for chaining
+     */
+    public UnicodeMap putAll(int startCodePoint, int endCodePoint, Object value) {
+        // TODO optimize
+        return putAll(new UnicodeSet(startCodePoint, endCodePoint), value);
+    }
+    /**
+     * Add all the (main) values from a Unicode property
+     * @param prop
+     * @return
+     */
+    public UnicodeMap putAll(UnicodeProperty prop) {
+        UnicodeSet temp = new UnicodeSet();
+        Iterator it = prop.getAliases().iterator();
+        while(it.hasNext()) {
+            String value = (String) it.next();
+            temp.clear();
+            putAll(prop.getSet(value,temp), value);
+        }
+        return null;
+    }
+    
+    /**
+     * Set the currently unmapped Unicode code points to the given value.
+     * @param value
+     * @return
+     */public UnicodeMap setMissing(Object value) {
+        objectToSet.put(value,missing);
+        missing = new UnicodeSet();
         return this;
     }
     /**
@@ -108,5 +144,19 @@ public class UnicodeMap {
             if (set.contains(codepoint)) return value;
         }
         return null;
+    }
+    
+    public String toString() {
+        StringBuffer result = new StringBuffer();       
+        Iterator it = objectToSet.keySet().iterator();
+        while (it.hasNext()) {
+            Object value = it.next();
+            UnicodeSet set = (UnicodeSet) objectToSet.get(value);
+            result.append(value)
+            .append("=>")
+            .append(set.toPattern(true))
+            .append("\r\n");
+        }
+        return result.toString();
     }
 }
