@@ -1365,7 +1365,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return result.toString();
     }
 
-    protected void postProcess(StringBuffer result, NFRuleSet ruleSet) {
+    /**
+     * Post-process the rules if we have a post-processor.
+     */
+    private void postProcess(StringBuffer result, NFRuleSet ruleSet) {
         if (postProcessRules != null) {
             if (postProcessor == null) {
                 int ix = postProcessRules.indexOf(";");
