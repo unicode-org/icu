@@ -39,9 +39,8 @@
 
 #include <memory.h>
 #include <wchar.h>
-
-
 #include <stdlib.h>
+#include "cmemory.h"
 
 /*===========================================================================*/
 /* Include platform-dependent definitions                                    */
@@ -254,37 +253,37 @@ inline bool_t FAILURE(UErrorCode code) { return (bool_t)(code>ZERO_ERROR); }
 
 #ifdef XP_CPLUSPLUS
 inline void icu_arrayCopy(const double* src, double* dst, int32_t count)
-{ memcpy(dst, src, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst, src, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const double* src, int32_t srcStart,
               double* dst, int32_t dstStart, int32_t count)
-{ memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const int8_t* src, int8_t* dst, int32_t count)
-    { memcpy(dst, src, (size_t)(count * sizeof(*src))); }
+    { icu_memcpy(dst, src, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const int8_t* src, int32_t srcStart,
               int8_t* dst, int32_t dstStart, int32_t count)
-{ memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const int16_t* src, int16_t* dst, int32_t count)
-{ memcpy(dst, src, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst, src, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const int16_t* src, int32_t srcStart,
               int16_t* dst, int32_t dstStart, int32_t count)
-{ memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const int32_t* src, int32_t* dst, int32_t count)
-{ memcpy(dst, src, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst, src, (size_t)(count * sizeof(*src))); }
 
 inline void icu_arrayCopy(const int32_t* src, int32_t srcStart,
               int32_t* dst, int32_t dstStart, int32_t count)
-{ memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
 
 inline void
 icu_arrayCopy(const UChar *src, int32_t srcStart,
         UChar *dst, int32_t dstStart, int32_t count)
-{ memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
+{ icu_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
 
 #endif
 
