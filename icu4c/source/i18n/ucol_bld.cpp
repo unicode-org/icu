@@ -53,7 +53,7 @@ isAcceptableInvUCA(void * /*context*/,
         UVersionInfo UCDVersion;
         u_getUnicodeVersion(UCDVersion);
         if(pInfo->dataVersion[0]==UCDVersion[0] &&
-        pInfo->dataVersion[1]>=UCDVersion[1]) {
+        pInfo->dataVersion[1]==UCDVersion[1]) {
         //pInfo->dataVersion[1]==invUcaDataInfo.dataVersion[1] &&
         //pInfo->dataVersion[2]==invUcaDataInfo.dataVersion[2] &&
         //pInfo->dataVersion[3]==invUcaDataInfo.dataVersion[3]) {

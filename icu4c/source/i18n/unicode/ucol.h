@@ -594,7 +594,9 @@ ucol_getBound(const uint8_t       *source,
         UErrorCode          *status);
         
 /**
- * Gets the version information for a Collator. 
+ * Gets the version information for a Collator. Version is currently
+ * an opaque 32-bit number which depends, among other things, on major
+ * versions of the collator tailoring and UCA.
  * @param coll The UCollator to query.
  * @param info the version # information, the result will be filled in
  * @stable ICU 2.0
