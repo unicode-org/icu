@@ -1195,7 +1195,7 @@ static void TestTranslitOps(void)
     a = utrans_open("Latin-Greek", UTRANS_FORWARD, NULL, -1, NULL, &err);
     if(U_FAILURE(err))
     {
-        log_err("Err opening transliterator %s\n", u_errorName(err));
+        log_err("Error opening transliterator %s\n", u_errorName(err));
         u_fclose(f);
         return;
     }
@@ -1205,15 +1205,40 @@ static void TestTranslitOps(void)
     b = u_fsettransliterator(f, U_WRITE, a, &err);
     if(U_FAILURE(err))
     {
-        log_err("Err setting transliterator %s\n", u_errorName(err));
+        log_err("Error setting transliterator %s\n", u_errorName(err));
         u_fclose(f);
         return;
     }
 
     if(b != NULL)
     {
-        log_err("Err, a transliterator was already set!\n");
+        log_err("Error, a transliterator was already set!\n");
     }
+
+    b = u_fsettransliterator(NULL, U_WRITE, a, &err);
+    if(err != U_ILLEGAL_ARGUMENT_ERROR)
+    {
+        log_err("Error setting transliterator on NULL file err=%s\n", u_errorName(err));
+    }
+
+    if(b != a)
+    {
+        log_err("Error getting the same transliterator was not returned on NULL file\n");
+    }
+
+    err = U_FILE_ACCESS_ERROR;
+    b = u_fsettransliterator(f, U_WRITE, a, &err);
+    if(err != U_FILE_ACCESS_ERROR)
+    {
+        log_err("Error setting transliterator on error status err=%s\n", u_errorName(err));
+    }
+
+    if(b != a)
+    {
+        log_err("Error getting the same transliterator on error status\n");
+    }
+    err = U_ZERO_ERROR;
+
 
     log_verbose("un-setting transliterator (setting to null)\n");
     c = u_fsettransliterator(f, U_WRITE, NULL, &err);
