@@ -100,7 +100,8 @@ const UConverterStaticData _HZStaticData={
         FALSE, 
         FALSE,
         0,
-        { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }, /* reserved */
+        0,
+        { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }, /* reserved */
 
 };
             

@@ -361,7 +361,8 @@ const UConverterStaticData _ISO2022StaticData={
     FALSE,
     FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 const UConverterSharedData _ISO2022Data={
     sizeof(UConverterSharedData),
@@ -409,7 +410,8 @@ const UConverterStaticData _ISO2022JPStaticData={
     FALSE,
     FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 const UConverterSharedData _ISO2022JPData={
     sizeof(UConverterSharedData),
@@ -457,7 +459,8 @@ const UConverterStaticData _ISO2022KRStaticData={
     FALSE,
     FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 const UConverterSharedData _ISO2022KRData={
     sizeof(UConverterSharedData),
@@ -506,7 +509,8 @@ const UConverterStaticData _ISO2022CNStaticData={
     FALSE,
     FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 const UConverterSharedData _ISO2022CNData={
     sizeof(UConverterSharedData),
@@ -2977,6 +2981,7 @@ DONE:
             uprv_memcpy(myUConverter->subChar, 
                 _this->subChar,
                 myUConverter->subCharLen = _this->subCharLen);
+            myUConverter->subChar1 = 0;
 
             _this->mode = UCNV_SO;
         }

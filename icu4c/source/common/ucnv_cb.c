@@ -210,6 +210,10 @@ void ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
 
     if(args->converter->sharedData->impl->writeSub!=NULL) {
         args->converter->sharedData->impl->writeSub(args, offsetIndex, err);
+    } else if(args->converter->subChar1!=0 && args->converter->invalidUCharBuffer[0]<=0xff) {
+        ucnv_cbFromUWriteBytes(args,
+                               (const char *)&args->converter->subChar1, 1,
+                               offsetIndex, err);
     } else {
         ucnv_cbFromUWriteBytes(args,
                                (const char *)args->converter->subChar, args->converter->subCharLen,
@@ -278,8 +282,12 @@ void ucnv_cbToUWriteSub (UConverterToUnicodeArgs *args,
                          int32_t offsetIndex,
                        UErrorCode * err)
 {
-  static const UChar kSubstituteChar  = 0xFFFD ;
+  static const UChar kSubstituteChar1 = 0x1A, kSubstituteChar = 0xFFFD;
 
   /* could optimize this case, just one uchar */
-  ucnv_cbToUWriteUChars(args, &kSubstituteChar, 1, offsetIndex, err);
+  if(args->converter->invalidCharLength == 1 && args->converter->subChar1 != 0) {
+    ucnv_cbToUWriteUChars(args, &kSubstituteChar1, 1, offsetIndex, err);
+  } else {
+    ucnv_cbToUWriteUChars(args, &kSubstituteChar, 1, offsetIndex, err);
+  }
 }
