@@ -1058,7 +1058,7 @@ _testIter(const UChar *src, int32_t srcLength,
                 expectNeeded=FALSE;
             }
         }
-        index=iter->move(iter, 0, UITER_CURRENT);
+        index=iter->getIndex(iter, UITER_CURRENT);
 
         if(U_FAILURE(errorCode)) {
             log_err("error unorm iteration (next/previous %d %s)[%d]: %s\n",

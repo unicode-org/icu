@@ -851,7 +851,7 @@ isFollowedByCasedLetter(UCharIterator *iter, int32_t index) {
         return FALSE;
     }
 
-    iter->move(iter, index, UITER_START);
+    iter->move(iter, index, UITER_ZERO);
     for(;;) {
         c=uiter_next32(iter);
         if(c<0) {
@@ -880,7 +880,7 @@ isPrecededByCasedLetter(UCharIterator *iter, int32_t index) {
         return FALSE;
     }
 
-    iter->move(iter, index, UITER_START);
+    iter->move(iter, index, UITER_ZERO);
     for(;;) {
         c=uiter_previous32(iter);
         if(c<0) {
@@ -909,7 +909,7 @@ isAfter_i(UCharIterator *iter, int32_t index) {
         return FALSE;
     }
 
-    iter->move(iter, index, UITER_START);
+    iter->move(iter, index, UITER_ZERO);
     for(;;) {
         c=uiter_previous32(iter);
         if(c<0) {
@@ -938,7 +938,7 @@ isAfter_I(UCharIterator *iter, int32_t index) {
         return FALSE;
     }
 
-    iter->move(iter, index, UITER_START);
+    iter->move(iter, index, UITER_ZERO);
     for(;;) {
         c=uiter_previous32(iter);
         if(c<0) {
@@ -967,7 +967,7 @@ isFollowedByMoreAbove(UCharIterator *iter, int32_t index) {
         return FALSE;
     }
 
-    iter->move(iter, index, UITER_START);
+    iter->move(iter, index, UITER_ZERO);
     for(;;) {
         c=uiter_next32(iter);
         if(c<0) {
@@ -995,7 +995,7 @@ isFollowedByDotAbove(UCharIterator *iter, int32_t index) {
         return FALSE;
     }
 
-    iter->move(iter, index, UITER_START);
+    iter->move(iter, index, UITER_ZERO);
     for(;;) {
         c=uiter_next32(iter);
         if(c<0) {
@@ -1211,7 +1211,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
             /* handle all exceptions in u_internalToLower() */
             int32_t length;
 
-            iter.move(&iter, srcIndex, UITER_START);
+            iter.move(&iter, srcIndex, UITER_ZERO);
             if(destIndex<destCapacity) {
                 length=u_internalToLower(c, &iter, dest+destIndex, destCapacity-destIndex, locale);
             } else {
@@ -1389,7 +1389,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
             /* handle all exceptions in u_internalToUpper() */
             int32_t length;
 
-            iter.move(&iter, srcIndex, UITER_START);
+            iter.move(&iter, srcIndex, UITER_ZERO);
             if(destIndex<destCapacity) {
                 length=u_internalToUpperOrTitle(c, &iter, dest+destIndex, destCapacity-destIndex, locale, TRUE);
             } else {
