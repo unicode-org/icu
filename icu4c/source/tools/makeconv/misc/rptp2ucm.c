@@ -151,7 +151,8 @@ usesPUA,
 variantLF,
 variantASCII,
 variantControls,
-variantSUB;
+variantSUB,
+is7Bit;
 
 static void
 init() {
@@ -168,6 +169,7 @@ init() {
     variantASCII=0;
     variantControls=0;
     variantSUB=0;
+    is7Bit=0;
 }
 
 /* lexically compare Mappings for sorting */
@@ -381,7 +383,7 @@ mergeMappings() {
 
 static void
 analyzeTable() {
-    unsigned long u, b, f, minTwoByte=0xffff, maxTwoByte=0;
+    unsigned long u, b, f, minTwoByte=0xffff, maxTwoByte=0, oredBytes=0;
     long i, countASCII=0;
     char length;
 
@@ -389,6 +391,8 @@ analyzeTable() {
         f=fromUMappings[i].u>>24;
         u=fromUMappings[i].u&0xffffff;
         b=fromUMappings[i].b;
+
+        oredBytes|=b;
 
         /* character length? */
         if(b<=0xff) {
@@ -452,6 +456,7 @@ analyzeTable() {
         } else if(u<0x20 || u==0x7f) {
             /* non-ISO C0 controls? */
             if(u!=b) {
+                /* IBM PC rotation of SUB and other controls: 0x1a->0x7f->0x1c->0x1a */
                 if(u==0x1a && b==0x7f || u==0x1c && b==0x1a || u==0x7f && b==0x1c) {
                     charsetFamily=ASCII;
                     variantSUB=1;
@@ -461,6 +466,8 @@ analyzeTable() {
             }
         }
     }
+
+    is7Bit= oredBytes<=0x7f;
 
     if(charsetFamily==UNKNOWN) {
         if(minCharLength==2 && maxCharLength==2) {
@@ -562,7 +569,7 @@ getStateTable() {
         }
     }
 
-    return "";
+    return NULL;
 }
 
 static void
@@ -581,6 +588,7 @@ writeBytes(char *s, unsigned long b) {
 static void
 writeUCM(FILE *f, const char *ucmname, const char *rpname, const char *tpname) {
     char buffer[100];
+    const char *s;
     long i;
 
     /* write the header */
@@ -663,10 +671,16 @@ writeUCM(FILE *f, const char *ucmname, const char *rpname, const char *tpname) {
     fputs(buffer, f);
 
     /* write the state table - <icu:state> */
-    fputs(getStateTable(), f);
+    s=getStateTable();
+    if(s!=NULL) {
+        fputs(s, f);
+        fputs("\n", f);
+    } else if(is7Bit) {
+        fputs("<icu:state>                   0-7f\n\n", f);
+    }
 
     /* write the mappings */
-    fputs("\nCHARMAP\n", f);
+    fputs("CHARMAP\n", f);
     for(i=0; i<fromUMappingsTop; ++i) {
         writeBytes(buffer, fromUMappings[i].b);
         fprintf(f, "<U%04lX> %s |%lu\n", fromUMappings[i].u&0xffffff, buffer, fromUMappings[i].u>>24);
