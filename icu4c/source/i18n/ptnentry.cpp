@@ -209,9 +209,9 @@ void PatternEntry::appendQuoted(const UnicodeString& chars, UnicodeString& toAdd
     toAddTo += (UChar)0x0027/*'\''*/;
 }
 
-PatternEntry::Parser::Parser(const UnicodeString &pattern, 
+PatternEntry::Parser::Parser(const UnicodeString &patternStr, 
                              Normalizer::EMode decompMode)
-  : pattern(pattern), index(0), 
+  : pattern(patternStr), index(0), 
     fDecompMode(decompMode), newChars(), newExtensions()
 {
 }
