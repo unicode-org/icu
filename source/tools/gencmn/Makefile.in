@@ -49,7 +49,7 @@ CLEANFILES = *~ mkmap.tmp
 TARGET = gencmn
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \

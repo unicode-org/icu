@@ -47,7 +47,7 @@ CLEANFILES = *~
 TARGET = libicu-toolutil.$(SO)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@  $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)

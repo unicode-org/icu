@@ -53,7 +53,7 @@ CLEANFILES = *~
 TARGET = libicu-uc.$(SO)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -DICU_DATA_DIR=\"$(pkgdatadir)/$(VERSION)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(TARGET)\"
+CPPFLAGS = @CPPFLAGS@ -I. -I$(srcdir) -DICU_DATA_DIR=\"$(pkgdatadir)/$(VERSION)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(TARGET)\"
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@
@@ -80,7 +80,7 @@ ucnv2022.o ucnvlat1.o ucnv_utf.o ucnvsbcs.o ucnvmbcs.o
 DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
-HEADERS = unicode/*.h
+HEADERS = unicode/*.h $(srcdir)/unicode/*.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -109,8 +109,8 @@ install-library: all-local
 install-headers:
 	$(mkinstalldirs) $(includedir)/unicode
 	@for file in $(HEADERS); do \
-	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
-	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
+	 echo "$(INSTALL_DATA) $$file $(includedir)/unicode"; \
+	 $(INSTALL_DATA) $$file $(includedir)/unicode; \
 	done
 
 dist-local:

@@ -54,7 +54,7 @@ TARGET = cintltst
 DEFS = @DEFS@
 
 # we define ICU_UNICODE_VERSION so we can test it
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw  \
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw  \
  -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\"
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
@@ -101,7 +101,7 @@ distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
 check-local: $(TARGET)
-	HOME=$(top_builddir)/../.. ICU_DATA=$(top_builddir)/../data/ TZ=PST8PDT ./$(TARGET)
+	HOME=$(top_srcdir)/../.. ICU_DATA=$(top_srcdir)/../data/ TZ=PST8PDT ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

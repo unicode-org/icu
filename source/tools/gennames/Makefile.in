@@ -8,8 +8,8 @@ SHELL = @SHELL@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
 
-ICUDATADIR=$(top_builddir)/../data/
-UNICODEFILE=$(top_builddir)/../data/UnicodeData-$(UNICODE_VERSION).txt
+ICUDATADIR=$(top_builddir)/data/
+UNICODEFILE=$(top_srcdir)/../data/UnicodeData-$(UNICODE_VERSION).txt
 
 ## Install directory information
 srcdir = @srcdir@
@@ -54,7 +54,7 @@ CLEANFILES = *~
 TARGET = gennames
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \

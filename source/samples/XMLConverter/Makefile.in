@@ -47,7 +47,7 @@ CLEANFILES = *~
 TARGET = XMLConverter
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common 
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \

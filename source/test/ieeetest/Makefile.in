@@ -48,7 +48,7 @@ CLEANFILES = *~
 TARGET = ieeetest
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common
@@ -87,7 +87,7 @@ distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
 check-local: $(TARGET)
-	ICU_DATA=$(top_builddir)/../data/ ./$(TARGET)
+	ICU_DATA=$(top_srcdir)/../data/ ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

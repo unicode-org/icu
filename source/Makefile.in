@@ -96,16 +96,16 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit 1; \
 	fi
 
-all-local: configure
+all-local: $(srcdir)/configure
 
 
 install-local:
 	@for file in $(EXTRA_DATA); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	done
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile $(pkgdatadir)/Makefile.inc
-	$(INSTALL_SCRIPT) mkinstalldirs $(sbindir)/mkinstalldirs
+	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(sbindir)/mkinstalldirs
 
 ## Generate HTML documentation
 doc:
@@ -128,6 +128,7 @@ clean-local:
 distclean-local:
 	rm -f Makefile config.cache config.log config.status config/Makefile
 	rm -f common/unicode/platform.h common/icucfg.h
+	rm -rf data
 
 check-local:
 

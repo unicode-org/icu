@@ -48,7 +48,7 @@ CLEANFILES = *~
 TARGET = genrb
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/extra/ustdio -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
@@ -89,9 +89,9 @@ lgreek.txt fullhalf.txt lhebrew.txt lkana.txt lcyril.txt       \
 quotes.txt ucname.txt index.txt ljamo.txt
 
 TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
-RES_FILES = $(TXT_FILES:.txt=.res)
+RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=$(top_builddir)/data/%.res)
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
-TRANSLIT_RES = $(TRANSLIT_FILES:.txt=.res)
+TRANSLIT_RES = $(TRANSLIT_FILES:$(top_srcdir)/../data/translit/%.txt=$(top_builddir)/data/translit/%.res)
 TEST_FILES = $(top_srcdir)/test/testdata/default.res \
 $(top_srcdir)/test/testdata/te.res \
 $(top_srcdir)/test/testdata/te_IN.res
@@ -119,13 +119,13 @@ install-local: target-clean-local all-local
 	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
 	@list='$(notdir $(RES_FILES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-		$(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+		$(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	done
 	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)/translit
 	@list='$(notdir $(TRANSLIT_RES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) $(top_srcdir)/../data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
-		$(INSTALL_DATA) $(top_srcdir)/../data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
+		echo $(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
+		$(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
 	done
 
 dist-local:
@@ -150,13 +150,15 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.c) -o $@ $^ $(LIBS)
 
 ## Rule to build a compiled cnv file
-%.res : %.txt
+$(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
 	@echo "Creating compiled resource file for $<"
-	@ICU_DATA=$(top_builddir)/../data/ ./genrb $< > /dev/null 2>&1
+	@ICU_DATA=$(top_builddir)/data/ ./genrb $< > /dev/null 2>&1
 
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)
 endif
 
 
+all-local:
+install-local:
 
