@@ -120,16 +120,22 @@ native_dir=$(shell cygpath -dma $(1))
 # Current full path directory for use in source code in a -D compiler option.
 CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))
 
+ifeq ($(srcdir),.)
+SOURCE_FILE=$<
+else
+SOURCE_FILE=$(shell cygpath -dma $<)
+endif
+
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
-	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) /Fo$@ $<
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) /Fo$@ $(SOURCE_FILE)
 %.o: $(srcdir)/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) /Fo$@ $<
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) /Fo$@ $(SOURCE_FILE)
 
 %.$(STATIC_O): $(srcdir)/%.cpp
-	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) /Fo$@ $<
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) /Fo$@ $(SOURCE_FILE)
 %.o: $(srcdir)/%.cpp
-	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) /Fo$@ $<
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) /Fo$@ $(SOURCE_FILE)
 
 
 ## Dependency rules
@@ -160,7 +166,7 @@ CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))
 
 ## Compile a Windows resource file
 %.res : $(srcdir)/%.rc
-	rc.exe /fo$@ $<
+	rc.exe /fo$@ $(SOURCE_FILE)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
