@@ -122,7 +122,7 @@ void printUChars(const char  *name = "?",
 void printString(const char *name, const UnicodeString& string)
 {
   UChar *uch;
-  int32_t len = string.size();
+  int32_t len = string.length();
   uch = (UChar*)malloc(sizeof(UChar)*(len+1));
   string.extract(0,len,uch,0);
   uch[len]=0;
@@ -570,7 +570,7 @@ UErrorCode convsample_11()
 
   // **************************** START SAMPLE *******************
 
-  char source[] = { 0x63, 0x61, 0x74, 0x94, 0x4C, 0x82, 0x6E, 0x82, 0x6A, 0x00 };
+  char source[] = { 0x63, 0x61, 0x74, (char)0x94, 0x4C, (char)0x82, 0x6E, (char)0x82, 0x6A, 0x00 };
   int32_t sourceSize = sizeof(source);
   UnicodeString target;
   UErrorCode status = U_ZERO_ERROR;
@@ -612,7 +612,7 @@ UErrorCode convsample_12()
 
   // **************************** START SAMPLE *******************
 
-  char source[] = { 0x63, 0x61, 0x74, 0x94, 0x4C, 0x82, 0x6E, 0x82, 0x6A, 0x00 };
+  char source[] = { 0x63, 0x61, 0x74, (char)0x94, 0x4C, (char)0x82, 0x6E, (char)0x82, 0x6A, 0x00 };
   UChar target[100];
   UErrorCode status = U_ZERO_ERROR;
   UConverter *conv;
@@ -651,7 +651,7 @@ UErrorCode convsample_13()
          "Sample 13: C: simple Big5 -> unicode conversion, char at a time\n");
 
 
-  const char sourceChars[] = { 0x7a, 0x68, 0x3d, 0xa4, 0xa4, 0xa4, 0xe5, 0x2e };
+  const char sourceChars[] = { 0x7a, 0x68, 0x3d, (char)0xa4, (char)0xa4, (char)0xa4, (char)0xe5, (char)0x2e };
   //  const char sourceChars[] = { 0x7a, 0x68, 0x3d, 0xe4, 0xb8, 0xad, 0xe6, 0x96, 0x87, 0x2e };
   const char *source, *sourceLimit;
   UChar32 target;
