@@ -1877,6 +1877,11 @@ public class CollationMiscTest extends TestFmwk {
                                      preZeroTestStrings[j],0);
             }
         }
+
+        //cover setNumericCollationDefault, getNumericCollation
+        assertTrue("The Numeric Collation setting is on", coll.getNumericCollation());
+        coll.setNumericCollationDefault();
+        logln("After set Numeric to default, the setting is: " + coll.getNumericCollation());
     }
     
     public void Test3249()
