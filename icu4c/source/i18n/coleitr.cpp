@@ -355,7 +355,8 @@ CollationElementIterator::next(UErrorCode& status)
         }
         
         if (isThaiPreVowel(ch)) {
-            UChar32 consonant = text->next();
+            UChar32 consonant = text->current();
+            text->next();
             if (isThaiBaseConsonant(consonant)) {
                 
                 bufferAlias = makeReorderedBuffer((UChar)consonant, value, bufferAlias,
