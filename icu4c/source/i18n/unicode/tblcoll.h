@@ -934,8 +934,9 @@ inline Collator::EComparisonResult RuleBasedCollator::getEComparisonResult(
     return Collator::LESS;
   case UCOL_EQUAL :
     return Collator::EQUAL;  
+  default :
+    return Collator::GREATER;
   }
-  return Collator::GREATER;
 }
 
 inline Collator::ECollationStrength RuleBasedCollator::getECollationStrength(
@@ -949,8 +950,9 @@ inline Collator::ECollationStrength RuleBasedCollator::getECollationStrength(
     return Collator::SECONDARY;
   case UCOL_TERTIARY : 
     return Collator::TERTIARY;
+  default :
+    return Collator::IDENTICAL;
   }
-  return Collator::IDENTICAL;
 }
 
 inline UCollationStrength RuleBasedCollator::getUCollationStrength(
@@ -964,8 +966,9 @@ inline UCollationStrength RuleBasedCollator::getUCollationStrength(
     return UCOL_SECONDARY;
   case Collator::TERTIARY : 
     return UCOL_TERTIARY;
+  default :
+    return UCOL_IDENTICAL;
   }
-  return UCOL_IDENTICAL;
 }
 
 #endif
