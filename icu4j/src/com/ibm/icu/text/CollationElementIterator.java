@@ -9,6 +9,7 @@
 */
 package com.ibm.icu.text;
 
+import java.text.StringCharacterIterator;
 import java.text.CharacterIterator;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;

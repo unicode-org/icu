@@ -17,9 +17,10 @@
 
 package com.ibm.icu.dev.test.search;
 
+import java.util.Locale;
+import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
-import java.util.Locale;
 
 public class SearchTest extends TestFmwk {
     
