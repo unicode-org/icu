@@ -1405,6 +1405,14 @@ SOURCE=.\unicode\uversion.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\uversion.h
+
+"..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # Begin Custom Build
