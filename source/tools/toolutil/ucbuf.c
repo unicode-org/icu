@@ -154,10 +154,10 @@ U_CAPI UChar32 U_EXPORT2
 ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     int32_t length;
     int32_t offset;
-    UChar32 c32,c1;
-    
+    UChar32 c32,c1,c2;
+
     /* Fill the buffer if it is empty */
-    if (buf->currentPos >=buf->bufLimit) {
+    if (buf->currentPos >=buf->bufLimit-2) {
         ucbuf_fillucbuf(buf,err);
     }
 
@@ -169,10 +169,22 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     }
 
     /* If it isn't a backslash, return it */
-    if (c1 != 0x005C /*|| *(buf->currentPos+1)==0x005C */ /*'\\'*/) {
+    if (c1 != 0x005C) {
         return c1;
     }
 
+    c2 = *(buf->currentPos);
+
+    /* Check if the sequence is valid */
+    switch(c2){
+    default:     /* falls through */    
+    case 0x005C: /* '\\' */
+        return c1;
+    case 0x0055: /* '\U' */
+    case 0x0075: /* '\u' */
+    case 0x0078: /* '\x' */
+        break;
+    }
     /* Determine the amount of data in the buffer */
     length = buf->bufLimit-buf->currentPos;
     
