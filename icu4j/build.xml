@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/20 17:57:12 $ 
-* $Revision: 1.10 $
+* $Date: 2000/04/20 18:46:25 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -74,7 +74,7 @@
   
   <target name="docs" depends="core">
     <mkdir dir="${doc.dir}"/>
-    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math"
+    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext"
               sourcepath="${src.dir}"
     		  destdir="${doc.dir}"
     		  nodeprecatedlist="true"
