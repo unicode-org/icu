@@ -50,6 +50,13 @@ void CharIterTest::TestConstructionAndEquality() {
     CharacterIterator* test4 = new StringCharacterIterator(testText2);
     CharacterIterator* test5 = test1->clone();
 
+    if (test1d->startIndex() < 0)
+        errln("Construction failed: startIndex is negative");
+    if (test1d->endIndex() > testText.length())
+        errln("Construction failed: endIndex is greater than the text length");
+    if (test1d->getIndex() < test1d->startIndex() || test1d->endIndex() < test1d->getIndex())
+        errln("Construction failed: startIndex is negative");
+
     if (*test1 == *test2 || *test1 == *test3 || *test1 == *test4)
         errln("Construction or operator== failed: Unequal objects compared equal");
     if (*test1 != *test5)
