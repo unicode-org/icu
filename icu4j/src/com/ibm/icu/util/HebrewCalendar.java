@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2003/02/14 22:27:00 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/05/14 19:43:45 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -162,7 +162,7 @@ public class HebrewCalendar extends Calendar {
      * time of day in sync with that of the Gregorian calendar, we use
      * midnight, rather than sunset the day before.
      */
-    private static final long EPOCH_MILLIS = -180799862400000L; // 1/1/1 HY
+    //private static final long EPOCH_MILLIS = -180799862400000L; // 1/1/1 HY
 
     private static final int LIMITS[][] = {
         // Minimum  Greatest    Least  Maximum

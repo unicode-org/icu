@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2003/04/24 23:05:03 $
- * $Revision: 1.88 $
+ * $Date: 2003/05/14 19:43:44 $
+ * $Revision: 1.89 $
  *
  *****************************************************************************************
  */
@@ -19,9 +19,7 @@ import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.impl.UCharacterProperty;
 
-import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.text.ParsePosition;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -498,8 +496,6 @@ public abstract class Transliterator {
      * @deprecated ICU 2.4 To be made package private after 2003-12-01.
      */
     protected static final char VARIANT_SEP = '/';
-
-    private static final String ANY = "Any";
 
     /**
      * To enable debugging output in the Transliterator component, set

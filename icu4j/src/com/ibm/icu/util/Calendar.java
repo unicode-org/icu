@@ -1630,9 +1630,10 @@ public abstract class Calendar implements Serializable, Cloneable {
         return factoryMap;
     }
 
-    private static void addFactory(Map m, CalendarFactory f) {
-        m.put(f.factoryName(), f);
-    }
+// Never used -- why is this here? Alan 2003-05
+//    private static void addFactory(Map m, CalendarFactory f) {
+//        m.put(f.factoryName(), f);
+//    }
 
     /**
      * Return a set of all the registered calendar factory names.

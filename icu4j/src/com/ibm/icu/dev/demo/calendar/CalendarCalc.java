@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarCalc.java,v $ 
- * $Date: 2003/05/14 18:35:53 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/05/14 19:43:45 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -63,11 +63,7 @@ public class CalendarCalc extends DemoApplet
  */
 class CalendarCalcFrame extends Frame implements ActionListener
 {
-    private static final String     creditString = "";
-
     static final Locale[] locales = DemoUtility.getG7Locales();
-
-    private static final boolean    DEBUG = false;
 
     private DemoApplet              applet;
     private long                    time = System.currentTimeMillis();
@@ -502,7 +498,6 @@ class CalendarCalcFrame extends Frame implements ActionListener
     */
 
     private static final int        FIELD_COLUMNS = 35;
-    private static final String     DEFAULT_FORMAT = "EEEE MMMM d, yyyy G";
 
 
     class CalendarRec {

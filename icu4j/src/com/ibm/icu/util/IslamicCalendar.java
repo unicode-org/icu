@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2003/05/14 19:03:48 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/05/14 19:43:45 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -336,24 +336,25 @@ public class IslamicCalendar extends Calendar {
     // Assorted calculation utilities
     //
 
-    /**
-     * Find the day of the week for a given day
-     *
-     * @param day   The # of days since the start of the Islamic calendar.
-     */
-    // private and uncalled, perhaps not used yet?
-    ///CLOVER:OFF
-    private static final int absoluteDayToDayOfWeek(long day)
-    {
-        // Calculate the day of the week.
-        // This relies on the fact that the epoch was a Thursday.
-        int dayOfWeek = (int)(day + THURSDAY) % 7 + SUNDAY;
-        if (dayOfWeek < 0) {
-            dayOfWeek += 7;
-        }
-        return dayOfWeek;
-    }
-    ///CLOVER:ON
+// Unused code - Alan 2003-05
+//    /**
+//     * Find the day of the week for a given day
+//     *
+//     * @param day   The # of days since the start of the Islamic calendar.
+//     */
+//    // private and uncalled, perhaps not used yet?
+//    ///CLOVER:OFF
+//    private static final int absoluteDayToDayOfWeek(long day)
+//    {
+//        // Calculate the day of the week.
+//        // This relies on the fact that the epoch was a Thursday.
+//        int dayOfWeek = (int)(day + THURSDAY) % 7 + SUNDAY;
+//        if (dayOfWeek < 0) {
+//            dayOfWeek += 7;
+//        }
+//        return dayOfWeek;
+//    }
+//    ///CLOVER:ON
 
     /**
      * Determine whether a year is a leap year in the Islamic civil calendar

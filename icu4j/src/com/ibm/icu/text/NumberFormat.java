@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/04/24 22:58:03 $ 
- * $Revision: 1.24 $
+ * $Date: 2003/05/14 19:43:44 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -983,10 +983,11 @@ public abstract class NumberFormat extends Format{
         stream.defaultWriteObject();
     }
 
-    /**
-     * Cache to hold the NumberPatterns of a Locale.
-     */
-    private static final Hashtable cachedLocaleData = new Hashtable(3);
+// Unused -- Alan 2003-05
+//    /**
+//     * Cache to hold the NumberPatterns of a Locale.
+//     */
+//    private static final Hashtable cachedLocaleData = new Hashtable(3);
 
     /*Bug 4408066
       Add Field for the new method getIntegerInstance() [Richard/GCL]
