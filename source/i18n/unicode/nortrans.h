@@ -17,7 +17,7 @@
 /**
  * A transliterator that performs normalization.
  * @author Alan Liu
- * @version $RCSfile: nortrans.h,v $ $Revision: 1.1 $ $Date: 2001/07/03 23:44:45 $
+ * @version $RCSfile: nortrans.h,v $ $Revision: 1.2 $ $Date: 2001/07/09 16:44:36 $
  */
 class U_I18N_API NormalizationTransliterator : public Transliterator {
 
@@ -75,7 +75,7 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
 
  private:
 
-    // TransliteratorFactory methods
+    // Transliterator::Factory methods
     static Transliterator* _createNFC();
     static Transliterator* _createNFKC();
     static Transliterator* _createNFD();
