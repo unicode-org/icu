@@ -20,6 +20,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "ncnvfbts.h"
+#include "cmemory.h"
+#include "cstring.h"
 
 #define NEW_MAX_BUFFER 999
 
@@ -218,7 +220,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
         offset_str[0] = 0;
         for(p = junkout;p<targ;p++)
         {
-            sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
+            sprintf(junk + uprv_strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
             sprintf(offset_str + strlen(offset_str), "0x%02x, ", (0xFF) & (unsigned int)junokout[p-junkout]);
         }
 
@@ -246,7 +248,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     if (checkOffsets && (expectOffsets != 0) )
     {
         log_verbose("\ncomparing %d offsets..\n", targ-junkout);
-        if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
+        if(uprv_memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("\ndid not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got  : ");
             printSeqErr((const unsigned char*)junkout, targ-junkout);
