@@ -11,11 +11,11 @@
 <mb_cur_max>        4
 <mb_cur_min>        1
 <uconv_class>       "MBCS"
-<subchar>           \xff
-<icu:state>         0, 1:1, 5-9
-<icu:state>         2:2
-<icu:state>         3:3
-<icu:state>         a-f.p
+<subchar>	        \xff
+<icu:state>	        0, 1:1, 5-9
+<icu:state>	        2:2
+<icu:state>	        3:3
+<icu:state>	        a-f.p
 
 CHARMAP
 
@@ -26,11 +26,11 @@ CHARMAP
 <U0005>     \x05 |0
 
 # toUnicode result is fallback direct
-<U0006>     \x06 |1
+<U0006>     \x06 |3
 
 # toUnicode result is direct non-BMP code point
 <U101234>   \x07 |0
-<Ufebcd>    \x08 |1
+<Ufebcd>    \x08 |3
 
 #unassigned \x09
 
@@ -38,8 +38,8 @@ CHARMAP
 <U23456>    \x01\x02\x03\x0a |0
 <U000b>     \x01\x02\x03\x0b |0
 #unassigned \x01\x02\x03\x0c
-<U34567>    \x01\x02\x03\x0d |1
-<U000e>     \x01\x02\x03\x0e |1
+<U34567>    \x01\x02\x03\x0d |3
+<U000e>     \x01\x02\x03\x0e |3
 #unassigned \x01\x02\x03\x0f
 
 END CHARMAP
