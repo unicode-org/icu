@@ -1223,8 +1223,7 @@ LocaleTest::TestEuroSupport()
                             "nl_BE",
                             "nl_NL",
                             "pt_PT",
-                            '\0'
-
+                            NULL
                         };
     const char** locales = localeArr;
 
@@ -1233,7 +1232,7 @@ LocaleTest::TestEuroSupport()
     UnicodeString temp;
 
     int32_t locCount = 0;
-    for (;*locales!='\0';locales++) {
+    for (;*locales!=NULL;locales++) {
         Locale loc (*locales);
         UnicodeString temp;
             NumberFormat *nf = NumberFormat::createCurrencyInstance(loc, status);
