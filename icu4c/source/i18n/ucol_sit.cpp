@@ -58,6 +58,17 @@ static const char* locales[] = {
 /* 60 - 64 */ "zh_HK", "zh_MO", "zh_TW", "zh_TW_STROKE", "zh__PINYIN"
 };
 
+static const char* keywords[] = {
+/* 00 */ "",
+/* 01 */ "direct",
+/* 02 */ "phonebook",
+/* 03 */ "pinyin",
+/* 04 */ "standard",
+/* 05 */ "stroke",
+/* 06 */ "traditional"
+};
+
+
 /* option starters chars. */
 static const char alternateHArg     = 'A';
 static const char variableTopValArg = 'B';
@@ -75,6 +86,8 @@ static const char variableTopArg    = 'T';
 static const char variantArg        = 'V';
 static const char RFC3066Arg        = 'X';
 static const char scriptArg         = 'Z';
+
+static const char *collationKeyword  = "@collation=";
 
 static const int32_t locElementCount = 5;
 static const int32_t locElementCapacity = 32;
@@ -121,6 +134,31 @@ static const AttributeConversion conversions[12] = {
     { 'U', UCOL_UPPER_FIRST },
     { 'X', UCOL_OFF }
 };
+
+
+static char 
+ucol_sit_attributeValueToLetter(UColAttributeValue value, UErrorCode *status) {
+    int32_t i = 0;
+    for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
+        if(conversions[i].value == value) {
+            return conversions[i].letter;
+        }
+    }
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+}
+
+static UColAttributeValue 
+ucol_sit_letterToAttributeValue(char letter, UErrorCode *status) {
+    int32_t i = 0;
+    for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
+        if(conversions[i].letter == letter) {
+            return conversions[i].value;
+        }
+    }
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return UCOL_DEFAULT;
+}
 
 /* function prototype for functions used to parse a short string */
 U_CDECL_BEGIN
@@ -176,18 +214,12 @@ _processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string,
                        UErrorCode *status) 
 {
     int32_t i = 0;
-    for(i = 0; i < (int32_t)(sizeof(conversions)/sizeof(conversions[0])); i++) {
-        if(*string == conversions[i].letter) {
-            spec->options[option] = conversions[i].value;
-            if(*(++string) != '_' && *string) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                return string;
-            }
-            return ++string;
-        }
+    spec->options[option] = ucol_sit_letterToAttributeValue(*string, status);
+    if((*(++string) != '_' && *string) || U_FAILURE(*status)) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return string;
     }
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return string;
+    return ++string;
 }
 U_CDECL_END
 
@@ -298,8 +330,8 @@ void ucol_sit_initCollatorSpecs(CollatorSpec *spec)
     }
 }
 
-static
-void ucol_sit_readSpecs(CollatorSpec *s, const char *string, 
+static const char* 
+ucol_sit_readSpecs(CollatorSpec *s, const char *string, 
                         UParseError *parseError, UErrorCode *status)
 {
     const char *definition = string;
@@ -307,12 +339,9 @@ void ucol_sit_readSpecs(CollatorSpec *s, const char *string,
         string = ucol_sit_readOption(string, s, status);
     }
     if(U_FAILURE(*status)) {
-        parseError->line = 0;
         parseError->offset = string - definition;
-        // perhaps just stuff chars in UChar[]?
-        parseError->preContext[0] = 0;
-        parseError->postContext[0] = 0;
     }
+    return string;
 }
 
 static
@@ -329,7 +358,7 @@ int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, UErrorCode *statu
                     len++;
                 } 
                 optName = *(s->entries[i].start);
-                if(optName == languageArg || optName == regionArg || optName == variantArg) {
+                if(optName == languageArg || optName == regionArg || optName == variantArg || optName == keywordArg) {
                     for(j = 0; j < s->entries[i].len; j++) {
                         destination[len++] = uprv_toupper(*(s->entries[i].start+j));
                     }
@@ -345,34 +374,43 @@ int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, UErrorCode *statu
     }
 }
 
-/** 
- * Open a collator defined by a short form string.
- * The structure and the syntax of the string is defined in the "Naming collators"
- * section of the users guide:
- * http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Naming_Collators
- * The call to this function is equivalent to a call to ucol_open, followed by a
- * series of calls to ucol_setAttribute and ucol_setVariableTop.
- * Attributes are overriden by the subsequent attributes. So, for "S2_S3", final
- * strength will be 3. 3066bis locale overrides individual locale parts.
- * @param definition A short string containing a locale and a set of attributes.
- *                   Attributes not explicitly mentioned are left at the default
- *                   state for a locale.
- * @param parseError if not NULL, structure that will get filled with error's pre
- *                   and post context in case of error.
- * @param status     Error code. Apart from regular error conditions connected to
- *                   instantiating collators (like out of memory or similar), this
- *                   API will return an error if an invalid attribute or attribute/value
- *                   combination is specified.
- * @return           A pointer to a UCollator or 0 if an error occured (including an
- *                   invalid attribute).
- * @see ucol_open
- * @see ucol_setAttribute
- * @see ucol_setVariableTop
- * @draft ICU 3.0
- *
- */
+static void
+ucol_sit_calculateWholeLocale(CollatorSpec *s) {
+    // put the locale together, unless we have a done
+    // locale
+    int32_t i = 0;
+    if(s->locale[0] == 0) {
+        // first the language
+        uprv_strcat(s->locale, s->locElements[0]);
+        // then the script, if present
+        if(*(s->locElements[1])) {
+            uprv_strcat(s->locale, "_");
+            uprv_strcat(s->locale, s->locElements[1]);
+        }
+        // then the region, if present
+        if(*(s->locElements[2])) {
+            uprv_strcat(s->locale, "_");
+            uprv_strcat(s->locale, s->locElements[2]);
+        } else if(*(s->locElements[3])) { // if there is a variant, we need an underscore
+            uprv_strcat(s->locale, "_");
+        }
+        // add variant, if there
+        if(*(s->locElements[3])) {
+            uprv_strcat(s->locale, "_");
+            uprv_strcat(s->locale, s->locElements[3]);
+        }
+
+        // if there is a collation keyword, add that too
+        if(*(s->locElements[4])) {
+            uprv_strcat(s->locale, collationKeyword);
+            uprv_strcat(s->locale, s->locElements[4]);
+        }
+    }
+}
+
 U_CAPI UCollator* U_EXPORT2
 ucol_openFromShortString( const char *definition,
+                          UBool forceDefaults,
                           UParseError *parseError,
                           UErrorCode *status)
 {
@@ -380,6 +418,17 @@ ucol_openFromShortString( const char *definition,
     UTRACE_DATA1(UTRACE_INFO, "short string = \"%s\"", definition);
 
     if(U_FAILURE(*status)) return 0;
+
+    UParseError internalParseError;
+
+    if(!parseError) {
+        parseError = &internalParseError;
+    }
+    parseError->line = 0;
+    parseError->offset = 0;
+    parseError->preContext[0] = 0;
+    parseError->postContext[0] = 0;
+
 
     // first we want to pick stuff out of short string.
     // we'll end up with an UCA version, locale and a bunch of
@@ -390,50 +439,28 @@ ucol_openFromShortString( const char *definition,
     const char *string = definition;
     CollatorSpec s;
     ucol_sit_initCollatorSpecs(&s);
-    ucol_sit_readSpecs(&s, definition, parseError, status);
-
+    string = ucol_sit_readSpecs(&s, definition, parseError, status);
+    ucol_sit_calculateWholeLocale(&s);
     
-    // put the locale together, unless we have a done
-    // locale
-    int32_t i = 0;
-    if(s.locale[0] == 0) {
-        // first the language
-        uprv_strcat(s.locale, s.locElements[0]);
-        // then the script, if present
-        if(*(s.locElements[1])) {
-            uprv_strcat(s.locale, "_");
-            uprv_strcat(s.locale, s.locElements[1]);
-        }
-        // then the region, if present
-        if(*(s.locElements[2])) {
-            uprv_strcat(s.locale, "_");
-            uprv_strcat(s.locale, s.locElements[2]);
-        } else if(*(s.locElements[3])) { // if there is a variant, we need an underscore
-            uprv_strcat(s.locale, "_");
-        }
-        // add variant, if there
-        if(*(s.locElements[3])) {
-            uprv_strcat(s.locale, "_");
-            uprv_strcat(s.locale, s.locElements[3]);
-        }
-
-        // if there is a collation keyword, add that too
-        if(*(s.locElements[4])) {
-            uprv_strcat(s.locale, "@collation=");
-            uprv_strcat(s.locale, s.locElements[4]);
-        }
-    }
     char buffer[internalBufferSize];
     uprv_memset(buffer, 0, internalBufferSize);
     uloc_canonicalize(s.locale, buffer, internalBufferSize, status);
 
     UCollator *result = ucol_open(s.locale, status);
+    int32_t i = 0;
 
     for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
         if(s.options[i] != UCOL_DEFAULT) {
-            if(ucol_getAttribute(result, (UColAttribute)i, status) != s.options[i]) {
+            if(ucol_getAttribute(result, (UColAttribute)i, status) != s.options[i] || forceDefaults) {
                 ucol_setAttribute(result, (UColAttribute)i, s.options[i], status);
             }
+
+            if(U_FAILURE(*status)) {
+                parseError->offset = string - definition;
+                ucol_close(result);
+                return NULL;
+            }
+
         }
     }
     if(s.variableTopSet) {
@@ -464,7 +491,7 @@ static void appendShortStringElement(const char *src, int32_t len, char *result,
         }
         *resultSize += len + 1;
         uprv_strncat(result, &arg, 1);
-        uprv_strcat(result, src);
+        uprv_strncat(result, src, len);
     }
 }
 
@@ -512,13 +539,9 @@ ucol_getShortDefinitionString(const UCollator *coll,
         if(options[i].action == _processCollatorOption) {
             attribute = ucol_getAttributeOrDefault(coll, (UColAttribute)options[i].attr, status);
             if(attribute != UCOL_DEFAULT) {
-                for(j = 0; j < sizeof(conversions)/sizeof(conversions[0]); j++) {
-                    if(attribute == conversions[j].value) {
-                        appendShortStringElement(&(conversions[j].letter), 1, 
-                            buffer, &resultSize, options[i].optionStart);
-                        break;
-                    }
-                }
+                char letter = ucol_sit_attributeValueToLetter(attribute, status);
+                appendShortStringElement(&letter, 1, 
+                    buffer, &resultSize, options[i].optionStart);
             }
         }
     }
@@ -559,27 +582,87 @@ ucol_normalizeShortDefinitionString(const char *definition,
 // identifier number.
 // locale is packed separately
 struct bitPacking {
+    char letter;
     uint32_t offset;
     uint32_t width;
     UColAttribute attribute;
-    UColAttributeValue values[5];
+    UColAttributeValue values[6];
 };
 
 static const bitPacking attributesToBits[UCOL_ATTRIBUTE_COUNT] = {
-    /* french */        { 30, 1, UCOL_FRENCH_COLLATION,         { UCOL_OFF, UCOL_ON }},
-    /* alternate */     { 29, 1, UCOL_ALTERNATE_HANDLING,       { UCOL_NON_IGNORABLE, UCOL_SHIFTED }}, 
-    /* case first */    { 27, 2, UCOL_CASE_FIRST,               { UCOL_OFF, UCOL_LOWER_FIRST, UCOL_UPPER_FIRST }},
-    /* case level */    { 26, 1, UCOL_CASE_LEVEL,               { UCOL_OFF, UCOL_ON }},
-    /* normalization */ { 25, 1, UCOL_NORMALIZATION_MODE,       { UCOL_OFF, UCOL_ON }},
-    /* strength */      { 22, 3, UCOL_STRENGTH,                 { UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL }},
-    /* hiragana */      { 21, 1, UCOL_HIRAGANA_QUATERNARY_MODE, { UCOL_OFF, UCOL_ON }},
-    /* numeric coll */  { 20, 1, UCOL_NUMERIC_COLLATION,        { UCOL_OFF, UCOL_ON }}
+    /* french */        { frenchCollArg,    29, 2, UCOL_FRENCH_COLLATION,         { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
+    /* alternate */     { alternateHArg,    27, 2, UCOL_ALTERNATE_HANDLING,       { UCOL_DEFAULT, UCOL_NON_IGNORABLE, UCOL_SHIFTED }}, 
+    /* case first */    { caseFirstArg,     25, 2, UCOL_CASE_FIRST,               { UCOL_DEFAULT, UCOL_OFF, UCOL_LOWER_FIRST, UCOL_UPPER_FIRST }},
+    /* case level */    { caseLevelArg,     23, 2, UCOL_CASE_LEVEL,               { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
+    /* normalization */ { normArg,          21, 2, UCOL_NORMALIZATION_MODE,       { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
+    /* strength */      { strengthArg,      18, 3, UCOL_STRENGTH,                 { UCOL_DEFAULT, UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL }},
+    /* hiragana */      { hiraganaQArg,     16, 2, UCOL_HIRAGANA_QUATERNARY_MODE, { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
+    /* numeric coll */  { numericCollArg,   14, 2, UCOL_NUMERIC_COLLATION,        { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }}
 };
 
+static const uint32_t keywordShift =   9;
+static const uint32_t keywordWidth =   5;
 static const uint32_t localeShift =    0;
-static const uint32_t localeWidth =    8;
+static const uint32_t localeWidth =    7;
 
 static const uint32_t needExpansion = 0xC0000000;
+
+
+static uint32_t ucol_sit_putLocaleInIdentifier(uint32_t result, const char* locale, UErrorCode* status) {
+    char buffer[internalBufferSize], keywordBuffer[internalBufferSize], 
+        baseName[internalBufferSize], localeBuffer[internalBufferSize];
+    int32_t len = 0, keywordLen = 0,
+        baseNameLen = 0, localeLen = 0;
+    int32_t i = 0;
+    UBool isAvailable = FALSE;
+    if(locale) {
+        len = uloc_canonicalize(locale, buffer, internalBufferSize, status);
+        localeLen = ucol_getFunctionalEquivalent(localeBuffer, internalBufferSize, "collation", buffer, &isAvailable, status);
+        keywordLen = uloc_getKeywordValue(buffer, "collation", keywordBuffer, internalBufferSize, status);
+        baseNameLen = uloc_getBaseName(buffer, baseName, internalBufferSize, status);
+
+        /*Binary search for the map entry for normal cases */
+
+        uint32_t   low     = 0;
+        uint32_t   high    = sizeof(locales)/sizeof(locales[0]);
+        uint32_t   mid     = high;
+        uint32_t   oldmid  = 0;
+        int32_t    compVal = 0;
+
+
+        while (high > low)  /*binary search*/{
+
+            mid = (high+low) >> 1; /*Finds median*/
+
+            if (mid == oldmid) 
+                return needExpansion; // we didn't find it
+
+            compVal = uprv_strcmp(baseName, locales[mid]);
+            if (compVal < 0){
+                high = mid;
+            }
+            else if (compVal > 0){
+                low = mid;
+            }
+            else /*we found it*/{
+                break;
+            }
+            oldmid = mid;
+        }
+
+        result |= (mid & ((1 << localeWidth) - 1)) << localeShift;
+    }
+
+    if(keywordLen) {
+        for(i = 1; i < sizeof(keywords)/sizeof(keywords[0]); i++) {
+            if(uprv_strcmp(keywords[i], keywordBuffer) == 0) {
+                result |= (i & ((1 << keywordWidth) - 1)) << keywordShift;
+                break;
+            }
+        }
+    }
+    return result;
+}
 
 U_CAPI uint32_t U_EXPORT2
 ucol_collatorToIdentifier(const UCollator *coll,
@@ -600,39 +683,10 @@ ucol_collatorToIdentifier(const UCollator *coll,
         locale = ucol_getLocale(coll, ULOC_VALID_LOCALE, status);
     }
 
-    /*Binary search for the map entry for normal cases */
-
-    uint32_t   low     = 0;
-    uint32_t   high    = sizeof(locales)/sizeof(locales[0]);
-    uint32_t   mid     = high;
-    uint32_t   oldmid  = 0;
-    int32_t    compVal = 0;
-
-
-    while (high > low)  /*binary search*/{
-
-        mid = (high+low) >> 1; /*Finds median*/
-
-        if (mid == oldmid) 
-            return needExpansion; // we didn't find it
-
-        compVal = uprv_strcmp(locale, locales[mid]);
-        if (compVal < 0){
-            high = mid;
-        }
-        else if (compVal > 0){
-            low = mid;
-        }
-        else /*we found it*/{
-            break;
-        }
-        oldmid = mid;
-    }
-
-    result |= (mid & ((1 << localeWidth) - 1)) << localeShift;
+    result = ucol_sit_putLocaleInIdentifier(result, locale, status);
 
     for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
-        attrValue = ucol_getAttribute(coll, attributesToBits[i].attribute, status);
+        attrValue = ucol_getAttributeOrDefault(coll, attributesToBits[i].attribute, status);
         j = 0;
         while(attributesToBits[i].values[j] != attrValue) {
             j++;
@@ -645,15 +699,26 @@ ucol_collatorToIdentifier(const UCollator *coll,
 
 U_CAPI UCollator* U_EXPORT2
 ucol_openFromIdentifier(uint32_t identifier,
+                        UBool forceDefaults,
                         UErrorCode *status) 
 {
     int32_t i = 0, j = 0;
-    int32_t value = 0;
+    int32_t value = 0, keyword = 0;
+    char locale[internalBufferSize];
 
     value = (identifier >> localeShift) & ((1 << localeWidth) - 1);
+    keyword = (identifier >> keywordShift) & ((1 << keywordWidth) - 1);
+    
+    uprv_strcpy(locale, locales[value]);
+
+    if(keyword) {
+        uprv_strcat(locale, collationKeyword);
+        uprv_strcat(locale, keywords[keyword]);
+    }
+
     UColAttributeValue attrValue = UCOL_DEFAULT;
 
-    UCollator *result = ucol_open(locales[value], status);
+    UCollator *result = ucol_open(locale, status);
 
     // variable top is not set in the identifier, so we can easily skip that on
 
@@ -662,8 +727,11 @@ ucol_openFromIdentifier(uint32_t identifier,
         attrValue = attributesToBits[i].values[value];
         // the collator is all default, so we will set only the values that will differ from 
         // the default values.
-        if(ucol_getAttribute(result, attributesToBits[i].attribute, status) != attrValue) {
-            ucol_setAttribute(result, attributesToBits[i].attribute, attrValue, status);
+        if(attrValue != UCOL_DEFAULT) {
+            if(ucol_getAttribute(result, attributesToBits[i].attribute, status) != attrValue 
+                || forceDefaults) {
+                ucol_setAttribute(result, attributesToBits[i].attribute, attrValue, status);
+            }
         }
     }
 
@@ -674,13 +742,88 @@ U_CAPI int32_t U_EXPORT2
 ucol_identifierToShortString(uint32_t identifier,
                              char *buffer,
                              int32_t capacity,
+                             UBool forceDefaults,
                              UErrorCode *status) 
 {
-    UCollator *coll = ucol_openFromIdentifier(identifier, status);
     int32_t locIndex = (identifier >> localeShift) & ((1 << localeWidth) - 1);
-    int32_t resultLen = ucol_getShortDefinitionString(coll, locales[locIndex], buffer, capacity, status);
+    int32_t keywordIndex = (identifier >> keywordShift) & ((1 << keywordWidth) - 1);
+    CollatorSpec s;
+    ucol_sit_initCollatorSpecs(&s);
+    uprv_strcpy(s.locale, locales[locIndex]);
+    if(keywordIndex) {
+        uprv_strcat(s.locale, collationKeyword);
+        uprv_strcat(s.locale, keywords[keywordIndex]);
+    }
+    UCollator *coll = ucol_openFromIdentifier(identifier, forceDefaults, status);
+    int32_t resultLen = ucol_getShortDefinitionString(coll, s.locale, buffer, capacity, status);
     ucol_close(coll);
     return resultLen;
+
+#if 0
+    // TODO: Crumy, crumy, crumy... Very hard to currently go algorithmically from 
+    // identifier to short string. Do rethink
+    if(forceDefaults == FALSE) {
+        UCollator *coll = ucol_openFromIdentifier(identifier, FALSE, status);
+        int32_t resultLen = ucol_getShortDefinitionString(coll, s.locale, buffer, capacity, status);
+        ucol_close(coll);
+        return resultLen;
+    } else { // forceDefaults == TRUE
+        char letter;
+        UColAttributeValue value;
+        int32_t i = 0;
+        for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
+            value = attributesToBits[i].values[(identifier >> attributesToBits[i].offset) & ((1 << attributesToBits[i].width) - 1)];
+            if(value != UCOL_DEFAULT) {
+                uprv_strcat(buffer, "_");
+                uprv_strncat(buffer, &attributesToBits[i].letter, 1);
+                letter = ucol_sit_attributeValueToLetter(value, status);
+                uprv_strncat(buffer, &letter, 1);
+            }
+        }
+        return ucol_sit_dumpSpecs(&s, buffer, status);
+    }
+#endif
+}
+
+U_CAPI uint32_t U_EXPORT2
+ucol_shortStringToIdentifier(const char *definition,
+                             UBool forceDefaults,
+                             UErrorCode *status) 
+{
+    UParseError parseError;
+    CollatorSpec s;
+    uint32_t result = 0;
+    int32_t i = 0, j = 0;
+    ucol_sit_initCollatorSpecs(&s);
+
+    ucol_sit_readSpecs(&s, definition, &parseError, status);
+    ucol_sit_calculateWholeLocale(&s);
+
+    char locBuffer[internalBufferSize];
+    UBool isAvailable = FALSE;
+    UColAttributeValue attrValue = UCOL_DEFAULT;
+
+    ucol_getFunctionalEquivalent(locBuffer, internalBufferSize, "collation", s.locale, &isAvailable, status);
+
+    if(forceDefaults == FALSE) {
+        UCollator *coll = ucol_openFromShortString(definition, FALSE, &parseError, status);
+        result = ucol_collatorToIdentifier(coll, locBuffer, status);
+        ucol_close(coll);
+    } else { // forceDefaults == TRUE
+        result = ucol_sit_putLocaleInIdentifier(result, locBuffer, status);
+
+        for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
+            attrValue = s.options[i];
+            j = 0;
+            while(attributesToBits[i].values[j] != attrValue) {
+                j++;
+            }
+            result |= (j & ((1 << attributesToBits[i].width) - 1)) << attributesToBits[i].offset;
+        }
+
+    }
+    return result;
+        
 }
 
 U_CAPI UColAttributeValue  U_EXPORT2

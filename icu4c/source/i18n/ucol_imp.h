@@ -991,16 +991,6 @@ uprv_uca_getRawFromCodePoint(UChar32 i);
 U_CAPI UChar32 U_EXPORT2
 uprv_uca_getCodePointFromRaw(UChar32 i);
 
-/** Check whether two collators are equal. Collators are considered equal if they
- *  will sort strings the same. This means that both the current attributes and the
- *  rules must be equivalent. Currently used for RuleBasedCollator::operator==.
- *  @param source first collator
- *  @param target second collator
- *  @return TRUE or FALSE
- */
-U_CAPI UBool U_EXPORT2
-ucol_equals(const UCollator *source, const UCollator *target);
-
 
 
 #ifdef XP_CPLUSPLUS
