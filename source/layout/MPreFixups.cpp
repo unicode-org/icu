@@ -2,15 +2,13 @@
  * (C) Copyright IBM Corp. 2002, 2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/MPreFixups.cpp,v $
- * $Date: 2003/01/04 02:52:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/01/07 22:47:18 $
+ * $Revision: 1.2 $
  *
  */
 
 #include "LETypes.h"
 #include "MPreFixups.h"
-
-#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -19,14 +17,6 @@ struct FixupData
     le_int32 fBaseIndex;
     le_int32 fMPreIndex;
 };
-
-#define LE_NEW_ARRAY(type, count) (type *) uprv_malloc(count * sizeof(type))
-#define LE_DELETE_ARRAY(array) uprv_free(array)
-
-#if 0
-#define LE_NEW_ARRAY(type, count) new type[count]
-#define LE_DELETE_ARRAY(array) delete[] array
-#endif
 
 MPreFixups::MPreFixups(le_int32 charCount)
     : fFixupData(NULL), fFixupCount(0)

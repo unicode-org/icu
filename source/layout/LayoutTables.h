@@ -9,7 +9,6 @@
 #define __LAYOUTTABLES_H
 
 #include "LETypes.h"
-#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
