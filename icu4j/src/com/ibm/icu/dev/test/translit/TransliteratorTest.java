@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/01/28 18:55:35 $
- * $Revision: 1.118 $
+ * $Date: 2003/02/05 05:45:16 $
+ * $Revision: 1.119 $
  *
  *****************************************************************************************
  */
@@ -2478,6 +2478,7 @@ public class TransliteratorTest extends TestFmwk {
                 while(variants.hasMoreElements()) {
                     String variant = (String) variants.nextElement();
                     String id = source + "-" + target + "/" + variant;
+                    logln("id: " + id);
 
                     String filter = getFilter();
                     if (filter != null && id.indexOf(filter) < 0) continue;
@@ -2886,7 +2887,7 @@ public class TransliteratorTest extends TestFmwk {
 
     boolean expectAux(String tag, String[] results, boolean pass,
                    String expectedResult) {
-        logln((pass?"(":"FAIL: (")+tag+")", pass);
+        msg((pass?"(":"FAIL: (")+tag+")", pass ? LOG : ERR, true, true);
 
         for (int i = 0; i < results.length; ++i) {
             String label;
@@ -2898,11 +2899,11 @@ public class TransliteratorTest extends TestFmwk {
                 if (!isVerbose() && pass) continue;
                 label = "interm" + i + ":  ";
             }
-            logln("    " + label + results[i], pass, false);
+            msg("    " + label + results[i], pass ? LOG : ERR, false, true);
         }
 
         if (!pass) {
-            logln(  "    expected: " + expectedResult, pass, false);
+            msg(  "    expected: " + expectedResult, ERR, false, true);
         }
 
         return pass;

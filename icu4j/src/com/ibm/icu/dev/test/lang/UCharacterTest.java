@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/02/01 00:51:47 $
-* $Revision: 1.48 $
+* $Date: 2003/02/05 05:45:16 $
+* $Revision: 1.49 $
 *
 *******************************************************************************
 */
@@ -635,7 +635,7 @@ public final class UCharacterTest extends TestFmwk
             }
             input.close();
             if(numErrors > 0){
-                infoln("Could not find unames.icu");
+                warnln("Could not find unames.icu");
             }
         }
         catch (Exception e)
@@ -904,9 +904,7 @@ public final class UCharacterTest extends TestFmwk
             }
         }catch(IllegalArgumentException e){
             if(e.getMessage().indexOf("unames.icu") >= 0){
-                if(isModularBuild()){
-                    infoln("Could not find unames.icu. No tests executed.");
-                }
+                warnln("Could not find unames.icu");
             }else{
                 throw e;
             }
@@ -918,7 +916,7 @@ public final class UCharacterTest extends TestFmwk
     */
     public void TestNameIteration()throws Exception
     {
-        try{
+        try {
             ValueIterator iterator = UCharacter.getExtendedNameIterator();
             ValueIterator.Element element = new ValueIterator.Element();
             ValueIterator.Element old     = new ValueIterator.Element();
@@ -1060,13 +1058,16 @@ public final class UCharacterTest extends TestFmwk
                 }
                 old.integer = element.integer;
             }
-        }catch(Exception e){
+        } catch(Exception e){
+            // !!! wouldn't preflighting be simpler?  This looks like
+            // it is effectively be doing that.  It seems that for every
+            // true error the code will call errln, which will throw the error, which
+            // this will catch, which this will then rethrow the error.  Just seems
+            // cumbersome.
             if(e.getMessage().indexOf("unames.icu") >= 0){
-                if(isModularBuild()){
-                    infoln("Could not find unames.icu. No tests executed");
-                    return;
-                }
-                throw e;
+                warnln("Could not find unames.icu");
+            } else {
+                errln(e.getMessage());
             }
         }
     }

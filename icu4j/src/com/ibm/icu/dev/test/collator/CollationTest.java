@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/02/01 00:52:32 $
- * $Revision: 1.9 $
+ * $Date: 2003/02/05 05:45:16 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
@@ -72,11 +72,7 @@ public class CollationTest extends ModuleTest
                 Locale l = LocaleUtility.getLocaleFromName(locale);
                 col = (RuleBasedCollator)Collator.getInstance(l);
             }catch (MissingResourceException e){
-                if(isModularBuild()){
-                    infoln("Could not load the locale data");
-                }else{
-                    throw e;
-                }
+                warnln("Could not load the locale data for locale " + locale);
             }catch (Exception e) {
                 errln("Error creating collator for locale " + locale);
             }
@@ -91,11 +87,7 @@ public class CollationTest extends ModuleTest
             try {
                 col = new RuleBasedCollator(rules);
             }catch (MissingResourceException e){
-                if(isModularBuild()){
-                    infoln("Could not load the locale data");
-                }else{
-                    throw e;
-                }
+		warnln("Could not load the locale data: " + e.getMessage());
             } catch (Exception e) {
                 errln("Error creating collator for rules " + rules);
             }
@@ -137,6 +129,7 @@ public class CollationTest extends ModuleTest
                 if(!isModularBuild()){
                     errln("Error in collation arguments, missing ["); // no opening '['
                 }
+                // !!! following line has no effect
                 printInfo=true;
                 return;
             }
@@ -171,10 +164,17 @@ public class CollationTest extends ModuleTest
                 }
             }
         }
+        if (printInfo) {
+            warnln("Could not load the locale data. Skipping...");
+        }
+        // !!! effect is odd, if no modular build, this emits no
+        // message at all.  How come?  Hmmm.  printInfo is never
+        // true if we get here, so this code is never executed.
+        /*
         if(printInfo == true && isModularBuild()){
             infoln("Could not load the locale data. Skipping...");
         }
-
+        */
     }
 
     private void processReadyCollator(RuleBasedCollator col) {
@@ -314,6 +314,12 @@ public class CollationTest extends ModuleTest
         int compareResult  = myCollation.compare(source, target);
         if (compareResult != result) {
             printInfo = true;
+            // !!! if not mod build, error, else nothing.
+            // warnln if not build, error, else always print warning.
+            // do we need a 'quiet warning?' (err or log).  Hmmm,
+            // would it work to have the 'verbose' flag let you 
+            // suppress warnings?  Are there ever some warnings you
+            // want to suppress, and others you don't?
             if(!isModularBuild()){
                 errln("Comparing \"" + Utility.hex(source) + "\" with \""
                       + Utility.hex(target) + "\" expected " + result
@@ -331,8 +337,14 @@ public class CollationTest extends ModuleTest
                       + " but got " + compareResult);
            }
         }
-        if(printInfo == true && isModularBuild()){
-            infoln("Could not load locale data skipping.");
+        // hmmm, but here we issue a warning
+        // only difference is, one warning or two, and detailed info or not?
+        // hmmm, does seem preferable to omit detail if we know it is due to missing resource data.
+        // well, if we label the errors as warnings, we can let people know the details, but
+        // also know they may be due to missing resource data.  basically this code is asserting
+        // that the errors are due to missing resource data, which may or may not be true.
+        if (printInfo) {
+            warnln("Could not load locale data skipping.");
         }
     }
 

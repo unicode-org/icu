@@ -79,6 +79,8 @@ icu4j/src/com/ibm/icu/impl/data/ucadata.icu -text
 icu4j/src/com/ibm/icu/impl/data/unames.icu -text
 icu4j/src/com/ibm/icu/impl/data/unorm.icu -text
 icu4j/src/com/ibm/icu/impl/data/uprops.icu -text
+icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
+icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text

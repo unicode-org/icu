@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/ModuleTest.java,v $
- * $Date: 2002/08/31 04:55:10 $
- * $Revision: 1.3 $
+ * $Date: 2003/02/05 05:45:15 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -21,6 +21,8 @@ import java.util.Map;
 
 import com.ibm.icu.dev.test.TestDataModule.TestData;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
+import com.ibm.icu.dev.test.TestFmwk.MethodTarget;
+import com.ibm.icu.dev.test.TestFmwk.Target;
 
 /**
  * A convenience extension of TestFmwk for use by data module-driven
@@ -69,10 +71,32 @@ public class ModuleTest extends TestFmwk {
      */
     protected DataMap testcase;
 
+
+    protected Target getTargets(String targetName) {
+        if (methodName != null && params.doMethods()) {
+            Target target = null;
+            List list = getModuleNames();
+            if (list != null) {
+                try {
+                    Method method = getClass().getMethod(methodName, null);
+                    Iterator i = list.iterator();
+                    while (i.hasNext()) {
+                        target = new MethodTarget((String)i.next(), method).setNext(target);
+                    }
+                }
+                catch (Exception e) {
+                    throw new InternalError(e.getMessage());
+                }
+            }
+            return target;
+        }
+
+        return super.getTargets(targetName);
+    }
+
     /*
      * If we were initialized with the name of a method to run the
      * data driven tests, drive tests off the data using that method.
-     */
     protected Map getAvailableTests() {
         if (methodName != null) {
             List list = getModuleNames();
@@ -87,6 +111,7 @@ public class ModuleTest extends TestFmwk {
             return super.getAvailableTests();
         }
     }
+     */
 
     /**
      * TestFmwk calls this before trying to run a suite of tests.
@@ -176,7 +201,6 @@ public class ModuleTest extends TestFmwk {
      * @param names the names to associated with the named method.
      * @param methodName the name of the method in this class to associate with names
      * @param dest the map to hold the name->method mapping 
-     */
     protected void addNamedMethodToMap(List names, String methodName, Map dest) {
         try {
             Method method = getClass().getMethod(methodName, null);
@@ -189,6 +213,7 @@ public class ModuleTest extends TestFmwk {
             throw new InternalError(e.getMessage());
         }
     }
+     */
     
     /**
      * Get information on this module.  Returns null if no module
@@ -226,9 +251,15 @@ public class ModuleTest extends TestFmwk {
 	return testcase != null;
     }
 
+    public void msg(String message, int level, boolean incCount, boolean newln) {
+        if (level == ERR && t != null) {
+            t.stopIteration();
+        }
+        super.msg(message, level, incCount, newln);
+    }
+    
     /**
      * Report an error, and stop iteration of the current test.
-     */
     public void err(String message) {
 	if (t != null) {
 	    t.stopIteration();
@@ -238,11 +269,11 @@ public class ModuleTest extends TestFmwk {
 
     /**
      * Report an error, and stop iteration of the current test.
-     */
     public void errln(String message) {
 	if (t != null) {
 	    t.stopIteration();
 	}
 	super.errln(message);
     }
+     */
 }

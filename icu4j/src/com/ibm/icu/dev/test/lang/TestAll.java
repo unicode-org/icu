@@ -5,44 +5,32 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/TestAll.java,v $
- * $Date: 2003/01/28 18:55:33 $
- * $Revision: 1.1 $
+ * $Date: 2003/02/05 05:45:16 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.lang;
-import com.ibm.icu.dev.test.TestFmwk;
-import java.util.TimeZone;
+
+import com.ibm.icu.dev.test.TestFmwk.TestGroup;
 
 /**
- * Top level test used to run all other tests as a batch.
+ * Top level test used to run character property tests.
  */
-
-public class TestAll extends TestFmwk {
-
+public class TestAll extends TestGroup {
     public static void main(String[] args) throws Exception {
-        TimeZone.setDefault(TimeZone.getTimeZone("PST"));
         new TestAll().run(args);
     }
-    public void TestCharacter() throws Exception {
-        run(new TestFmwk[] {
-            new com.ibm.icu.dev.test.lang.UCharacterTest(),
-            new com.ibm.icu.dev.test.lang.UCharacterCaseTest(),
-            new com.ibm.icu.dev.test.lang.UCharacterIteratorTest(),
-            new com.ibm.icu.dev.test.lang.UCharacterCategoryTest(),
-            new com.ibm.icu.dev.test.lang.UCharacterDirectionTest(),
-            new com.ibm.icu.dev.test.lang.UPropertyAliasesTest(),
-            new com.ibm.icu.dev.test.lang.UTF16Test()
-                });
+
+    public TestAll() {
+        super(
+              new String[] { 
+                  "TestCharacter", 
+                  "TestUScript", 
+                  "TestUScriptRun" 
+              },
+              "Character and Script Tests");
     }
-    public void TestUScript() throws Exception {
-            run( new TestFmwk[] {
-                new com.ibm.icu.dev.test.lang.TestUScript(),
-            });
-    }
-    public void TestUScriptRun() throws Exception {
-            run( new TestFmwk[] {
-                new com.ibm.icu.dev.test.lang.TestUScriptRun(),
-            });
-    }
+
+    public static final String CLASS_TARGET_NAME = "Property";
 }

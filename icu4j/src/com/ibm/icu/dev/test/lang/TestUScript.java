@@ -65,11 +65,7 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            if(isModularBuild()){
-                infoln("Could not find Locale data");
-            }else{
-                throw  e;
-            }
+            warnln("Could not find locale data: " + e.getMessage());
         }
     }
     public void TestMultipleCode(){
@@ -100,11 +96,7 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            if(isModularBuild()){
-                infoln("Could not find Locale data");
-            }else{
-                throw  e;
-            }
+            warnln("Could not find locale data: " + e.getMessage());
         }
     }
     public void TestGetCode(){
@@ -174,11 +166,7 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            if(isModularBuild()){
-                infoln("Could not find Locale data");
-            }else{
-                throw e;
-            }
+            warnln("Could not find locale data: " + e.getMessage());
         }
 
     }
@@ -207,11 +195,7 @@ public class TestUScript extends TestFmwk{
             i++;
         }
         if(numErrors >0 ){
-            if(isModularBuild()){
-                infoln("Could not find Locale data");
-            }else{
-                errln("Number of Errors in UScript.getName() : " + numErrors);
-            }
+            warnln("encountered " + numErrors + " errors in UScript.getName()");
         }
 
     }
@@ -242,11 +226,7 @@ public class TestUScript extends TestFmwk{
             i++;
         }
         if(numErrors >0 ){
-            if(isModularBuild()){
-                infoln("Could not find Locale data");
-            }else{
-                errln("Number of Errors in UScript.getShortName() : " + numErrors);
-            }
+            warnln("encountered " + numErrors + " errors in UScript.getShortName()");
         }
     }
     public void TestGetScript(){

@@ -5,13 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceThreadTest.java,v $
- * $Date: 2003/01/28 18:55:35 $
- * $Revision: 1.6 $
+ * $Date: 2003/02/05 05:45:16 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.dev.test.AbstractTestLog;
+import com.ibm.icu.dev.test.AbstractTestLog.DelegatingLog;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestLog;
 import com.ibm.icu.impl.ICUService;
@@ -128,17 +130,17 @@ public class ICUServiceThreadTest extends TestFmwk
 	}
     }
 
-    static class TestThread extends Thread implements TestLog {
+    static class TestThread extends Thread {
 	private final String name;
 	protected ICUService service;
 	private final long delay;
-	private final TestLog log;
+	protected final TestLog log;
 
 	public TestThread(String name, ICUService service, long delay, TestLog log) {
 	    this.name = name + " ";
 	    this.service = service;
 	    this.delay = delay;
-	    this.log = log;
+	    this.log = new DelegatingLog(log);
 	    this.setDaemon(true);
 	}
 
@@ -162,6 +164,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	protected void iterate() {
 	}
 
+        /*
 	public boolean logging() {
 	    return log != null;
 	}
@@ -189,17 +192,19 @@ public class ICUServiceThreadTest extends TestFmwk
 		log.errln(name + msg);
 	    }
 	}
-    public void info(String msg) {
+
+        public void warn(String msg) {
 	    if (logging()) {
 		log.info(name + msg);
 	    }
 	}
 
-	public void infoln(String msg) {
+	public void warnln(String msg) {
 	    if (logging()) {
 		log.infoln(name + msg);
 	    }
 	}
+        */
     }
 
     static class RegisterFactoryThread extends TestThread {
@@ -210,7 +215,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	protected void iterate() {
 	    Factory f = new TestFactory(getCLV());
 	    service.registerFactory(f);
-	    logln(f.toString());
+	    log.logln(f.toString());
 	}
     }
 
@@ -233,7 +238,7 @@ public class ICUServiceThreadTest extends TestFmwk
 		int n = r.nextInt(s);
 		Factory f = (Factory)factories.remove(n);
 		boolean success = service.unregisterFactory(f);
-		if (logging()) logln("factory: " + f + (success ? " succeeded." : " *** failed."));
+		log.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
 	    }
 	}
     }
@@ -252,7 +257,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    if (n < factories.length) {
 		Factory f = factories[n++];
 		boolean success = service.unregisterFactory(f);
-		if (logging()) logln("factory: " + f + (success ? " succeeded." : " *** failed."));
+		log.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
 	    }
 	}
     }
@@ -270,7 +275,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    while (--n >= 0 && iter.hasNext()) {
 		String id = (String)iter.next();
 		Object result = service.get(id);
-		logln("iter: " + n + " id: " + id + " result: " + result);
+		log.logln("iter: " + n + " id: " + id + " result: " + result);
 	    }
 	}
     }
@@ -293,10 +298,10 @@ public class ICUServiceThreadTest extends TestFmwk
 		String dname = (String)e.getKey();
 		String id = (String)e.getValue();
 		Object result = service.get(id);
-		if (logging()) logln(" iter: " + n + 
-				     " dname: " + dname + 
-				     " id: " + id + 
-				     " result: " + result);
+		log.logln(" iter: " + n + 
+                          " dname: " + dname + 
+                          " id: " + id + 
+                          " result: " + result);
 	    }
 	}
     }
@@ -313,8 +318,8 @@ public class ICUServiceThreadTest extends TestFmwk
 	protected void iterate() {
 	    String id = getCLV();
 	    Object o = service.get(id, actualID);
-	    if (logging() && o != null) {
-		logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
+	    if (o != null) {
+		log.logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
 	    }
 	}
     }
@@ -335,9 +340,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    }
 	    String id = list[n];
 	    Object o = service.get(id);
-	    if (logging()) {
-		logln(" id: " + id + " result: " + o);
-	    }
+            log.logln(" id: " + id + " result: " + o);
 	}
     }
 
