@@ -326,16 +326,16 @@ typedef int32_t UTextOffset;
 
 /** @deprecated ICU 2.4. Renamed to U8_GET_UNSAFE, see utf_old.h. */
 #define UTF8_GET_CHAR_UNSAFE(s, i, c) { \
-    int32_t __I=(int32_t)(i); \
-    UTF8_SET_CHAR_START_UNSAFE(s, __I); \
-    UTF8_NEXT_CHAR_UNSAFE(s, __I, c); \
+    int32_t _utf8_get_char_unsafe_index=(int32_t)(i); \
+    UTF8_SET_CHAR_START_UNSAFE(s, _utf8_get_char_unsafe_index); \
+    UTF8_NEXT_CHAR_UNSAFE(s, _utf8_get_char_unsafe_index, c); \
 }
 
 /** @deprecated ICU 2.4. Use U8_GET instead, see utf_old.h. */
 #define UTF8_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
-    int32_t __I=(int32_t)(i); \
-    UTF8_SET_CHAR_START_SAFE(s, start, __I); \
-    UTF8_NEXT_CHAR_SAFE(s, __I, length, c, strict); \
+    int32_t _utf8_get_char_safe_index=(int32_t)(i); \
+    UTF8_SET_CHAR_START_SAFE(s, start, _utf8_get_char_safe_index); \
+    UTF8_NEXT_CHAR_SAFE(s, _utf8_get_char_safe_index, length, c, strict); \
 }
 
 /** @deprecated ICU 2.4. Renamed to U8_NEXT_UNSAFE, see utf_old.h. */
