@@ -246,6 +246,23 @@ UChar* u_uastrcpy(UChar *ucs1,
   return ucs1;
 }
 
+/*
+ returns the minimum of (the length of the null-terminated string) and n.
+*/
+int32_t u_astrnlen(const char *ucs1, int32_t n)
+{
+    int32_t len = 0;
+
+    if (ucs1)
+    {
+        while (*(ucs1++) && n--)
+        {
+            len++;
+        }
+    }
+    return len;
+}
+
 UChar* u_uastrncpy(UChar *ucs1,
            const char *s2 ,
            int32_t n)
@@ -259,7 +276,7 @@ UChar* u_uastrncpy(UChar *ucs1,
                    &target,
                    ucs1+n,
                    &s2,
-                   s2+uprv_strlen(s2),
+                   s2+u_astrnlen(s2, n),
                    NULL,
                    TRUE,
                    &err);
