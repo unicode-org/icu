@@ -33,6 +33,7 @@
 
 /* test setup --------------------------------------------------------------- */
 
+static void setUpDataTable(void);
 static void TestStringCopy(void);
 static void TestStringFunctions(void);
 static void TestStringSearching(void);
