@@ -1944,13 +1944,18 @@ void RBBITest::TestLineBreakData() {
             
 }
 
-
+//---------------------------------------------------------------------------------------
 //
-//  Monkey Test for Break Iteration
-//  Abstract interface class.   Concrete derived classes independently
-//    implement the break rules for different iterator types.
+//   classs RBBIMonkeyKind
+//
+//      Monkey Test for Break Iteration
+//      Abstract interface class.   Concrete derived classes independently
+//      implement the break rules for different iterator types.
+//
+//      The Monkey Test itself uses doesn't know which type of break iterator it is
+//      testing, but works purely in terms of the interface defined here.
 //  
-//
+//---------------------------------------------------------------------------------------
 class RBBIMonkeyKind {
 public:
     // Return a UVector of UnicodeSets, representing the character classes used
@@ -1961,19 +1966,27 @@ public:
     // Return -1 after reaching end of string.
     virtual  int32_t   next(const UnicodeString &s, int32_t i) = 0;
 
-    virtual ~RBBIMonkeyKind() {};
+    virtual ~RBBIMonkeyKind();
     UErrorCode       deferredStatus; 
 
 
 protected:
-    RBBIMonkeyKind() {};
+    RBBIMonkeyKind();
 
 private:
 };
 
+RBBIMonkeyKind::RBBIMonkeyKind() {
+    deferredStatus = U_ZERO_ERROR;
+}
+
+RBBIMonkeyKind::~RBBIMonkeyKind() {
+}
+
 //------------------------------------------------------------------------------------------
 //
-//   class RBBICharMonkey      Character (Grapheme Cluster) specific stuff.
+//   class RBBICharMonkey      Character (Grapheme Cluster) specific implementation
+//                             of RBBIMonkeyKind.
 //
 //------------------------------------------------------------------------------------------
 class RBBICharMonkey: public RBBIMonkeyKind {
@@ -2051,6 +2064,7 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fMatcher;
 }
 
+//-------------------------------------------------------------------------------------------
 //
 //   TestMonkey
 //
@@ -2065,7 +2079,7 @@ RBBICharMonkey::~RBBICharMonkey() {
 //
 //       type = char | work | line | sent | title
 //
-//       
+//-------------------------------------------------------------------------------------------
 
 static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t defaultVal) {
     int32_t val = defaultVal;
@@ -2095,11 +2109,14 @@ void RBBITest::TestMonkey(char *params) {
     UnicodeString  breakType = "all";
     Locale         locale("en");
 
+    if (quick == FALSE) {
+        loopCount = 100000;
+    }
 
     if (params) {
         UnicodeString p(params);
-        loopCount = getIntParam("loop", p, 100);
-        seed      = getIntParam("seed", p, 1);
+        loopCount = getIntParam("loop", p, loopCount);
+        seed      = getIntParam("seed", p, seed);
 
         RegexMatcher m(" *type *= *(char|work|line|sent|title) *", p, 0, status);
         if (m.find()) {
