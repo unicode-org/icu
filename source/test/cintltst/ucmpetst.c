@@ -14,8 +14,7 @@
 */
 
 #include "unicode/utypes.h"
-#include "ucmp16.h"
-#include "ucmp8.h"
+#include "umemstrm.h"
 #include "ucmpe32.h"
 #include "cmemory.h"
 #include "cintltst.h"
@@ -26,6 +25,22 @@ static void TestUCMPE32API(void);
 
 void addCompactArrayTest(TestNode** root);
 
+struct {
+  UChar lead;
+  UChar trail;
+  int32_t value;
+} testarray[] = {
+  { 0x0, 0x0020, 0x00000020 },
+  { 0x0, 0x0040, 0x00000040 },
+  { 0x0, 0x004B, 0x0000004B },
+  { 0x0, 0x00AC, 0x000000AC },
+  { 0x0, 0x0400, 0x00000400 },
+  { 0x0, 0xa123, 0x0000a123 },
+  { 0x0, 0xeeee, 0x0000eeee },
+  { 0xd800, 0xdc00, 0x0001000 },
+  { 0xd900, 0xdc00, 0x0005000 }
+};
+
 
 void
 addCompactArrayExTest(TestNode** root)
@@ -34,157 +49,106 @@ addCompactArrayExTest(TestNode** root)
  
 }
 
+static void fillup(CompactEIntArray *a) {
+  int32_t i = 0;
+  for(i = 0; i<sizeof(testarray)/sizeof(testarray[0]); i++) {
+    if(testarray[i].lead == 0) {
+      ucmpe32_set32(a, testarray[i].trail, testarray[i].value);
+    } else {
+      ucmpe32_setSurrogate(a, testarray[i].lead, testarray[i].trail, testarray[i].value);
+    }
+  }
+}
+
 static void query(CompactEIntArray *a) {
-      uint32_t CP = 0;
-      int32_t value;
-      int32_t result;
-      UChar lead = 0;
-      UChar trail = 0;
-      for(value = 0; value < 0xd800; value++) {
-        result = ucmpe32_get(a, (UChar)value);
-        if(value%128 == 0) {
-          if(result != value) {
-            log_err("Expected %04X, got %04X\n", value, result);
-          }
-        } else {
-          if(result != 0xF0000000) {
-            log_err("For %04X expected 0, got %04X\n", value, result);
-          }
-        }
+  int32_t i = 0;      
+  int32_t result = 0;
+  for(i = 0; i<sizeof(testarray)/sizeof(testarray[0]); i++) {
+    if(testarray[i].lead == 0) {
+      result = ucmpe32_get(a, testarray[i].trail);
+      if(result != testarray[i].value) {
+        log_err("Wrong value for %04X, expected %08X, got %08X\n", 
+          testarray[i].trail, testarray[i].value, result);
       }
-      /* skip the surrogate space */
-      for(value = 0xe000; value < 0x10000; value++) {
-        result = ucmpe32_get(a, (UChar)value);
-        if(value%128 == 0) {
-          if(result != value) {
-            log_err("Expected %04X, got %04X\n", value, result);
-          }
-        } else {
-          if(result != 0xF0000000) {
-            log_err("For %04X expected 0x0, got %04X\n", value, result);
-          }
+    } else {
+      if(a->fCompact == TRUE) {
+        result = ucmpe32_get(a, testarray[i].lead);
+        result = ucmpe32_getSurrogate(a, result, testarray[i].trail);
+        if(result != ucmpe32_getSurrogateEx(a, testarray[i].lead, testarray[i].trail)) {
+          log_err("results for getsurrogate and getsurrogateex do not match in compacted array\n");
         }
+      } else {
+        result = ucmpe32_getSurrogateEx(a, testarray[i].lead, testarray[i].trail);
       }
-
-      for(value = 0x10000; value < 0x110000; value++) {
-        lead = (UChar)((value>>10) + 0xd7c0);
-        trail = (UChar)((value & 0x3ff) + 0xdc00);
-
-        result = ucmpe32_getSurrogate(a, lead, trail);
-        if(value%1024 == 0) {
-          if(result != value) {
-            log_err("Expected %04X, got %04X\n", value, result);
-          }
-        } else {
-          if(result != 0xF0000000) {
-            log_err("For %04X expected 0x0, got %04X\n", value, result);
-          }
-        }
-      }   
+      if(result != testarray[i].value) {
+        log_err("Wrong value for %04X %04X, expected %08X, got %08X\n", 
+          testarray[i].lead, testarray[i].trail, testarray[i].value, result);
+      }
+    }
+  }
 }
 
 static void TestUCMPE32API(){
-    CompactEIntArray* ucmpe32Array=NULL;
+    CompactEIntArray *ucmpe32Array=NULL, *ucmpe32Clone = NULL;
    
     int32_t i=0;
     /*int32_t *values;*/
     int32_t const TEST_DEFAULT_VALUE = 0xFFFF;
-
-    return;
+    UErrorCode status = U_ZERO_ERROR;
 
     /*ucmpe32_open*/
     log_verbose("Testing ucmpe32_open()\n");
-    ucmpe32Array=ucmpe32_open(UCOL_NOT_FOUND);
-    if(ucmpe32Array == NULL){
+    ucmpe32Array=ucmpe32_open(UCOL_NOT_FOUND, UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), &status);
+    if(U_FAILURE(status) || ucmpe32Array == NULL){
         log_err("ERROR: ucmpe32_open() failed\n");
-    }
-    if( (int32_t)ucmpe32_getCount(ucmpe32Array) != (int32_t)ucmpe32_getkUnicodeCount()) {
-        log_err("ERROR: ucmpe32_open or ucmp_getCount() failed failed\n");
-    }
-    /*ucmpe32_getkBlockCount*/
-    if(ucmpe32_getkBlockCount() != 128 ){
-        log_err("Error in ucmpe32_getkBlockCount()\n");
-    }
-    if(ucmpe32_getArray(ucmpe32Array) == NULL ||
-        ucmpe32_getIndex(ucmpe32Array) == NULL ){
-        log_err("Error in ucmpe32_open of ucmpe32_getArray() or ucmpe32_getIndex()\n");
-    }
+        status = U_ZERO_ERROR;
+    } else {
+      fillup(ucmpe32Array);
+      query(ucmpe32Array);
 
-    {
-      uint32_t CP = 0;
-      int32_t value;
-      UChar lead = 0;
-      UChar trail = 0;
-      for(value = 0; value < 0x10000; value+=128) {
-        ucmpe32_set(ucmpe32Array, (UChar)value, value);
+      log_verbose("Testing ucmpe32_clone()\n");
+      ucmpe32Clone=ucmpe32_clone(ucmpe32Array, &status);
+      if(U_FAILURE(status) || ucmpe32Clone == NULL){
+          log_err("ERROR: ucmpe32_clone() failed\n");
+          status = U_ZERO_ERROR;
+      } else {
+        query(ucmpe32Clone);
+        ucmpe32_close(ucmpe32Clone);
+        ucmpe32Clone = NULL;
       }
 
-      for(value = 0x10000; value < 0x110000; value+=1024) {
-        lead = (UChar)((value>>10) + 0xd7c0);
-        trail = (UChar)((value & 0x3ff) + 0xdc00);
-        ucmpe32_setSurrogate(ucmpe32Array, lead, trail, value);
+      log_verbose("Testing ucmpe32_flattenMem()\n");
+      {
+        UMemoryStream *MS = uprv_mstrm_openNew(65536);
+        int32_t size = ucmpe32_flattenMem(ucmpe32Array, MS);
+        int32_t len = 0;
+        const uint8_t *buff = NULL; 
+        if(size > 0) {
+          log_err("Managed to flatten uncompacted array\n");
+        }
+        ucmpe32_compact(ucmpe32Array);
+        query(ucmpe32Array);
+
+        /* try after compacting */
+        size = ucmpe32_flattenMem(ucmpe32Array, MS);
+        buff = uprv_mstrm_getBuffer(MS, &len);
+
+        if(size == 0 || len == 0 || buff == NULL) {
+          log_err("Unable to flatten!\n");
+        } else {
+          log_verbose("Testing ucmpe32_openFromData()\n");
+          ucmpe32Clone = ucmpe32_openFromData(&buff, &status);
+          if(U_FAILURE(status) || ucmpe32Clone == NULL){
+              log_err("ERROR: ucmpe32_openFromData() failed\n");
+              status = U_ZERO_ERROR;
+          } else {
+            query(ucmpe32Clone);
+            ucmpe32_close(ucmpe32Clone);
+            ucmpe32Clone = NULL;
+          }
+        }
+
       }
-
-      query(ucmpe32Array);
-      ucmpe32_compact(ucmpe32Array, 1);  
-      query(ucmpe32Array);
+      ucmpe32_close(ucmpe32Array);
     }
-
-
-
-#if 0
-     /*ucmpe32_compact*/
-    if(ucmpe32Array->fCompact == TRUE){
-        log_err("Error: ucmpe32_open failed Got compact for expanded data\n");
-    } 
-    
-    ucmpe32_compact(ucmpe32Array, 1);
-    if(ucmpe32Array->fCompact != TRUE){
-        log_err("Error: ucmpe32_compact failed\n");
-    } 
-   
-    /* ucmpe32_set*/
-    ucmpe32_set(ucmpe32Array, 0,  TEST_DEFAULT_VALUE);
-    values=(int32_t*)ucmpe32_getArray(ucmpe32Array);
-    if(values[0] != TEST_DEFAULT_VALUE){
-        log_err("ERROR: ucmpe32_set() failed\n");
-    }
-    if(ucmpe32Array->fCompact == TRUE){
-        log_err("Error: ucmpe32_set didn't expand\n");
-    } 
-   
-    /*ucmpe32_set where the value != defaultValue*/
-    ucmpe32_compact(ucmpe32Array, 1);
-    ucmpe32_set(ucmpe32Array, 0,  0xFFFE);
-    values=(int32_t*)ucmpe32_getArray(ucmpe32Array);
-    if(values[0] != 0xFFFE){
-        log_err("ERROR: ucmpe32_set() failed\n");
-    }
-
-    /*ucmpe32_setRange*/
-    ucmpe32_compact(ucmpe32Array, 1);
-    ucmpe32_setRange(ucmpe32Array, 0,  10, 0xFFFF);
-    values=(int32_t*)ucmpe32_getArray(ucmpe32Array);
-    for(i=0; i<10; i++){
-        if(values[0] != 0xFFFF){
-            log_err("ERROR: ucmpe32_set() failed\n");
-            break;
-        }
-    }
-    if(ucmpe32Array->fCompact == TRUE){
-        log_err("Error: ucmpe32_setRange didn't expand\n");
-    } 
-    /*ucmpe32_setRange where the value != defaultValue*/
-    ucmpe32_compact(ucmpe32Array, 1);
-    ucmpe32_setRange(ucmpe32Array, 0,  10, 0xFFFE);
-    values=(int32_t*)ucmpe32_getArray(ucmpe32Array);
-    for(i=0; i<10; i++){
-        if(values[0] != 0xFFFE){
-            log_err("ERROR: ucmpe32_set() failed\n");
-            break;
-        }
-    }
-#endif
-    
-    ucmpe32_close(ucmpe32Array);
 }
