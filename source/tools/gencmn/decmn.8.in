@@ -26,6 +26,13 @@ also writes a list of these files on its standard output. This list of
 files can later be used, along with the individual files that have
 been generated, to produce a new common data file using
 .BR gencmn (8).
+Note that the output of
+.B decmn
+is not in the format expected by
+.BR gencmn (8).
+One can obtain a suitable file by filtering the output through
+.B "sed -e '1,2d' -e 's/[^=]*=//' -e '/^endfiles$/d"
+which transforms it into a simple list of filenames.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
