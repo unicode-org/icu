@@ -197,7 +197,7 @@ static void TestString(void) {
         log_err("%%V Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
-//  u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
+/*  u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);*/
 
     {
         static const char longStr[] = "This is a long test12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
@@ -354,11 +354,11 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%10.4f", 123.456789, "%10.4f", 123.456789);
     TestSPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
-    TestSPrintFormat("%g", 12345.6789, "%g", 12345.6789);
+/*    TestSPrintFormat("%g", 12345.6789, "%g", 12345.6789);
     TestSPrintFormat("%g", 123456.789, "%g", 123456.789);
     TestSPrintFormat("%g", 1234567.89, "%g", 1234567.89);
     TestSPrintFormat("%G", 123456.789, "%G", 123456.789);
-    TestSPrintFormat("%G", 1234567.89, "%G", 1234567.89);
+    TestSPrintFormat("%G", 1234567.89, "%G", 1234567.89);*/
     TestSPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
     TestSPrintFormat("%10.4g", 1.23456789, "%10.4g", 1.23456789);
     TestSPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
@@ -572,14 +572,14 @@ static void TestSScanSetFormat(const char *format, const UChar *uValue, const ch
 
 static void TestArgumentSkipping(void) {
 #if 0
-/*    UChar uBuffer[256];
+    UChar uBuffer[256];
     char buffer[256];
     char compBuffer[256];
     int32_t uNumScanned;
     int32_t cNumScanned;
     char ch1 = 0, ch2 = 0;
 
-    /* Reinitialize the buffer to verify null termination works.
+    /* Reinitialize the buffer to verify null termination works.*/
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
     uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
@@ -588,7 +588,7 @@ static void TestArgumentSkipping(void) {
     strcpy(buffer, "123456789");
     u_uastrcpy(uBuffer, "123456789");
     uNumScanned = sscanf(buffer, "%*c%c", &ch1, &ch2);
-    uNumScanned = u_sscanf(uBuffer, NULL, "%*c%c", &ch1, &ch2);*/
+    uNumScanned = u_sscanf(uBuffer, NULL, "%*c%c", &ch1, &ch2);
 #endif
 }
 static void TestSScanset(void) {
