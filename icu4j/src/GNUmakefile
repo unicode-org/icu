@@ -1,5 +1,7 @@
+# Copyright © 1999-2000, International Business Machines Corporation and others. All Rights Reserved
+
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/02/26 21:55:43 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.3 $ $Date: 2000/03/07 22:09:02 $
 # 
 
 TOPDIR=..

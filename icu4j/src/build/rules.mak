@@ -1,3 +1,5 @@
+# Copyright © 1999-2000, International Business Machines Corporation and others. All Rights Reserved
+
 default: classes
 
 JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
