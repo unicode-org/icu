@@ -19,8 +19,8 @@ es_HN {
         "hh:mm a",
         "EEEE dd' de 'MMMM' de 'yyyy",
         "dd' de 'MMMM' de 'yyyy",
-        "MM/dd/yyyy",
-        "MM/dd/yy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
         "{1} {0}",
     }
     LocaleID:int { 0x480a }

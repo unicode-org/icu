@@ -18,14 +18,18 @@ de_BE {
     }
     DateTimePatterns { 
         "HH 'h' mm 'min' ss 's' z",
-        "HH 'h' mm 'min' ss 's' z",
-        "HH 'h' mm 'min' ss 's' z",
-        "HH 'h' mm 'min' ss 's'",
-        "EEEE dd MMMM yyyy",
-        "EEEE dd MMMM yyyy",
-        "EEEE dd MMMM yyyy",
-        "dd MMMM yyyy",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d-MMM-yy",
+        "d/MM/yy",
         "{1} {0}",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
     }
     DayAbbreviations { 
         "Son",
@@ -89,7 +93,7 @@ de_BE {
 //    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
-        "#,##0.0000\u00A4;-\u00A4#,##0.0000",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
         "#,##0%",
         "#E0",
     }

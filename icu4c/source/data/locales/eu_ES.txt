@@ -8,6 +8,15 @@
 eu_ES {
     Version { "1.0" }
     // /* Discarding duplicate data for tag: AmPmMarkers */
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
     DateTimePatterns {
         "HH:mm:ss z",
         "HH:mm:ss z",
@@ -18,11 +27,6 @@ eu_ES {
         "yy'-'MMM'-'dd",
         "yy'-'MM'-'dd",
         "{1} {0}",
-    }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

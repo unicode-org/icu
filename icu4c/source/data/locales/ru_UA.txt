@@ -8,20 +8,33 @@
 ru_UA {
     Version { "1.1" }
     CurrencyElements { 
-        "\u0433\u0440",
-        "UAH",
-        ".",
+        "\u0433\u0440\u043D.",
+        "UAK",
+        ",",
     }
     DateTimePatterns { 
-        "H:mm:ss a z",
-        "H:mm:ss a z",
-        "H:mm:ss",
-        "H:mm",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
         "d MMMM yyyy '\u0433.'",
         "d MMMM yyyy '\u0433.'",
         "dd.MM.yyyy",
         "dd.MM.yy",
         "{1} {0}",
+    }
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

@@ -1313,7 +1313,7 @@ zh_TW {
     DateTimePatterns { 
         "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
         "ahh'\u6642'mm'\u5206'ss'\u79D2'",
-        "a hh:mm:ss",
+        "a h:mm:ss",
         "a h:mm",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",

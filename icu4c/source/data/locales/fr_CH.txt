@@ -17,7 +17,7 @@ fr_CH {
         4,
     }
     DateTimePatterns { 
-        "HH.mm.' h' z",
+        "HH.mm' h' z",
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",

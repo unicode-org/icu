@@ -17,10 +17,10 @@ es_NI {
         "hh:mm:ss a z",
         "hh:mm:ss a",
         "hh:mm a",
-        "EEEE dd' de 'MMMM' de 'yyyy",
-        "dd' de 'MMMM' de 'yyyy",
-        "MM/dd/yyyy",
-        "MM/dd/yy",
+        "EEEE d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
         "{1} {0}",
     }
     LocaleID:int { 0x4c0a }
