@@ -13,9 +13,7 @@ import com.ibm.rbm.gui.RBManagerGUI;
 
 import java.util.*;
 
-import org.apache.xerces.dom.DocumentImpl;
 import org.apache.xerces.dom.ElementImpl;
-import org.apache.xerces.dom.TextImpl;
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -30,7 +28,7 @@ import org.xml.sax.*;
  */
 public class RBxliffImporter extends RBImporter {
 	
-    DocumentImpl xlf_xml = null;
+    Document xlf_xml = null;
 
     /**
      * Basic constructor for the XLIFF importer from the parent RBManager data and a Dialog title.
@@ -62,7 +60,7 @@ public class RBxliffImporter extends RBImporter {
             //is.setEncoding("UTF-8");
             DOMParser parser = new DOMParser();
             parser.parse(is);
-            xlf_xml = (DocumentImpl)parser.getDocument();
+            xlf_xml = parser.getDocument();
             fis.close();
         } catch (SAXException e) {
             RBManagerGUI.debugMsg(e.getMessage());
@@ -81,7 +79,7 @@ public class RBxliffImporter extends RBImporter {
             return;
         String language = "";
         String bundleNote = null;
-        ElementImpl root = (ElementImpl)xlf_xml.getDocumentElement();
+        Element root = xlf_xml.getDocumentElement();
         Node fileNode = root.getFirstChild();
         Node header = null;
         Node node = null;
@@ -97,9 +95,9 @@ public class RBxliffImporter extends RBImporter {
         }
         if (header.getNodeName().equalsIgnoreCase("header")) {
         	// Get the notes if from the header if they exist.
-            NodeList header_note_list = ((ElementImpl)header).getElementsByTagName("note");
+            NodeList header_note_list = ((Element)header).getElementsByTagName("note");
             if (header_note_list.getLength() > 0) {
-	            TextImpl text_elem = (TextImpl)header_note_list.item(0).getChildNodes().item(0);
+	            Text text_elem = (Text)header_note_list.item(0).getChildNodes().item(0);
 	            if (text_elem != null) {
 		            String value = text_elem.getNodeValue();
 		            if (value != null && value.length() > 0) {
@@ -113,11 +111,11 @@ public class RBxliffImporter extends RBImporter {
             node = node.getNextSibling();
         }
         
-        ElementImpl body = (ElementImpl)node;
+        Element body = (Element)node;
         //resolveEncodings(getEncodingsVector(body));
         
-        String sourceLocale = ((ElementImpl)fileNode).getAttribute("source-language");
-        String targetLocale = ((ElementImpl)fileNode).getAttribute("target-language");
+        String sourceLocale = ((Element)fileNode).getAttribute("source-language");
+        String targetLocale = ((Element)fileNode).getAttribute("target-language");
         if (!sourceLocale.equals("")) {
             language = sourceLocale;
         }
@@ -145,7 +143,7 @@ public class RBxliffImporter extends RBImporter {
         }
         if (elementCount == 1 && groupCount == 1) {
 	        // ICU style group where the top group is just the locale.
-	        ElementImpl localeNode = (ElementImpl)last_group_node; 
+	        Element localeNode = (Element)last_group_node; 
 	        tu_list = last_group_node.getChildNodes();
             String rootGroupName = localeNode.getAttribute("id");
             if (rootGroupName != null && rootGroupName.equals("root")) {
@@ -169,10 +167,10 @@ public class RBxliffImporter extends RBImporter {
         rbm.getBundle(language).comment = bundleNote;
 
         for (int i=0; i < tu_list.getLength(); i++) {
-            if (!(tu_list.item(i) instanceof ElementImpl)) {
+            if (!(tu_list.item(i) instanceof Element)) {
                 continue;
             }
-            ElementImpl tu_elem = (ElementImpl)tu_list.item(i);
+            Element tu_elem = (Element)tu_list.item(i);
             
             // Get the key value
             String name = tu_elem.getAttribute("id");
@@ -185,7 +183,7 @@ public class RBxliffImporter extends RBImporter {
                 String groupComment = "";
                 NodeList notes_list = tu_elem.getElementsByTagName("note");
                 if (notes_list.getLength() > 0) {
-    	            TextImpl text_elem = (TextImpl)notes_list.item(0).getChildNodes().item(0);
+    	            Text text_elem = (Text)notes_list.item(0).getChildNodes().item(0);
     	            String value = text_elem.getNodeValue();
     	            if (value != null && value.length() > 0) {
     	            	groupComment = value;
@@ -203,14 +201,14 @@ public class RBxliffImporter extends RBImporter {
             NodeList trans_unit_list = tu_elem.getElementsByTagName("trans-unit");
             // For each trans-unit element
             for (int j=0; j < trans_unit_list.getLength(); j++) {
-                parseTranslationUnit(language, group, (ElementImpl)trans_unit_list.item(j));
+                parseTranslationUnit(language, group, (Element)trans_unit_list.item(j));
             }
         }
     }
 
-    private void parseTranslationUnit(String language, String group, ElementImpl trans_unit_elem) {
+    private void parseTranslationUnit(String language, String group, Element trans_unit_elem) {
         // Get the translation value
-        ElementImpl target_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("target").item(0);
+    	ElementImpl target_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("target").item(0);
         if (target_elem == null) {
             // This is a template, or a skeleton
             target_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("source").item(0);
@@ -221,7 +219,7 @@ public class RBxliffImporter extends RBImporter {
         NodeList text_list = target_elem.getChildNodes();
         if (text_list.getLength() < 1)
             return;
-        TextImpl text_elem = (TextImpl)text_list.item(0);
+        Text text_elem = (Text)text_list.item(0);
         String transValue = text_elem.getNodeValue();
         if (transValue == null || transValue.length() < 1)
             return;
@@ -247,11 +245,11 @@ public class RBxliffImporter extends RBImporter {
             item.setModifiedDate(date);
         }
 
-        ElementImpl note_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("note").item(0);
+        Element note_elem = (Element)trans_unit_elem.getElementsByTagName("note").item(0);
         if (note_elem != null) {
             NodeList note_list = note_elem.getChildNodes();
             if (note_list.getLength() > 0) {
-	            TextImpl note_text_elem = (TextImpl)note_list.item(0);
+	            Text note_text_elem = (Text)note_list.item(0);
 	            String comment = note_text_elem.getNodeValue();
 	            if (comment != null && comment.length() > 0) {
 	            	item.setComment(comment);
@@ -259,13 +257,13 @@ public class RBxliffImporter extends RBImporter {
             }
         }
 
-        ElementImpl prop_group_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("prop-group").item(0);
+        Element prop_group_elem = (Element)trans_unit_elem.getElementsByTagName("prop-group").item(0);
         if (prop_group_elem != null) {
             NodeList prop_list = prop_group_elem.getChildNodes();
         	int propertyLen = prop_list.getLength();
             for (int prop = 0; prop < propertyLen; prop++) {
-            	if (prop_list.item(prop) instanceof ElementImpl) {
-	            	ElementImpl property_elem = (ElementImpl)prop_list.item(prop);
+            	if (prop_list.item(prop) instanceof Element) {
+	            	Element property_elem = (Element)prop_list.item(prop);
 	            	String propertyType = property_elem.getAttribute("prop-type");
 	            	if (propertyType != null) {
 			            String value = property_elem.getChildNodes().item(0).getNodeValue();
