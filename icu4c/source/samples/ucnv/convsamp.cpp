@@ -20,6 +20,9 @@
 *       '***END SAMPLE***' mark pieces suitable for stand alone
 *       code snippets.
 *
+*
+*  Each test can define it's own BUFFERSIZE 
+*
 */
 
 #include <stdio.h>
@@ -57,12 +60,12 @@ void prettyPrintUChar(UChar c)
     o = u_charName(c, U_UNICODE_CHAR_NAME, buf, 1000, &status);
     if(U_SUCCESS(status) && (o>0) ) {
       buf[6] = 0;
-      printf("%- 7s", buf);
+      printf("%7s", buf);
     } else {
       o = u_charName(c, U_UNICODE_10_CHAR_NAME, buf, 1000, &status);
       if(U_SUCCESS(status) && (o>0)) {
         buf[5] = 0;
-        printf("~%- 6s", buf);
+        printf("~%6s", buf);
       }
       else {
         printf("??????? ");
@@ -97,19 +100,19 @@ void printUChars(const char  *name = "?",
     len = u_strlen(uch);
   }
 
-  printf("% 5s:", name);
+  printf("%5s:", name);
   for( i = 0; i <len; i++) {
-    printf("%- 6d ", i);
+    printf("%-6d ", i);
   }
   printf("\n");
 
-  printf("% 5s: ", "uni");
+  printf("%5s: ", "uni");
   for( i = 0; i <len; i++) {
     printf("\\u%04X ", (int)uch[i]);
   }
   printf("\n");
 
-  printf("% 5s: ", "ch");
+  printf("%5s: ", "ch");
   for( i = 0; i <len; i++) {
     prettyPrintUChar(uch[i]);
   }
@@ -137,19 +140,19 @@ void printBytes(const char  *name = "?",
     len = strlen(uch);
   }
 
-  printf("% 5s:", name);
+  printf("%5s:", name);
   for( i = 0; i <len; i++) {
     printf(" %- 4d", i);
   }
   printf("\n");
 
-  printf("% 5s: ", "uni");
+  printf("%5s: ", "uni");
   for( i = 0; i <len; i++) {
     printf("\\x%02X ", 0x00FF & (int)uch[i]);
   }
   printf("\n");
 
-  printf("% 5s: ", "ch");
+  printf("%5s: ", "ch");
   for( i = 0; i <len; i++) {
     if(isgraph(uch[i])) {
       printf(" '%c' ", (char)uch[i]);
@@ -488,7 +491,9 @@ UErrorCode convsample_12()
   assert(U_SUCCESS(status));
 
   // convert to Unicode
-  len = ucnv_toUChars(conv, target, 100, source, -1, &status);
+  // Note: we can use strlen, we know it's an 8 bit null terminated codepage
+  target[6] = 0xFDCA;
+  len = ucnv_toUChars(conv, target, 100, source, strlen(source), &status);
   U_ASSERT(status);
   // close the converter
   ucnv_close(conv);
@@ -496,7 +501,7 @@ UErrorCode convsample_12()
   // ***************************** END SAMPLE ********************
   
   // Print it out
-  printBytes("src", source);
+  printBytes("src", source, strlen(source) );
   printf("\n");
   printUChars("targ", target, len);
 
@@ -650,151 +655,439 @@ UErrorCode convsample_20()
   return U_ZERO_ERROR;
 }
 
-/* main */
-const char *scriptName(UCharScript script)
+//  40-  C, cp37 -> UTF16 [data02.bin -> data40.utf16]
+
+#define BUFFERSIZE 17 /* make it interesting :) */
+
+UErrorCode convsample_40()
 {
-  switch(script)
+  printf("\n\n==============================================\n"
+    "Sample 40: C: convert data02.bin from cp37 to UTF16 [data40.utf16]\n");
+
+  FILE *f;
+  FILE *out;
+  int32_t count;
+  char inBuf[BUFFERSIZE];
+  const char *source;
+  const char *sourceLimit;
+  UChar *uBuf;
+  UChar *target;
+  UChar *targetLimit;
+  int32_t uBufSize = 0;
+  UConverter *conv = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t inbytes=0, total=0;
+
+  f = fopen("data02.bin", "rb");
+  if(!f)
+  {
+    fprintf(stderr, "Couldn't open file 'data02.bin' (cp37 data file).\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  out = fopen("data40.utf16", "wb");
+  if(!out)
+  {
+    fprintf(stderr, "Couldn't create file 'data40.utf16'.\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  // **************************** START SAMPLE *******************
+  conv = ucnv_openCCSID(37, UCNV_IBM, &status);
+  assert(U_SUCCESS(status));
+
+  uBufSize = (BUFFERSIZE/ucnv_getMinCharSize(conv));
+  printf("input bytes %d / min chars %d = %d UChars\n",
+         BUFFERSIZE, ucnv_getMinCharSize(conv), uBufSize);
+  uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
+  assert(uBuf!=NULL);
+
+  // grab another buffer's worth
+  while((!feof(f)) && 
+        ((count=fread(inBuf, 1, BUFFERSIZE , f)) > 0) )
+  {
+    inbytes += count;
+
+    // Convert bytes to unicode
+    source = inBuf;
+    sourceLimit = inBuf + count;
+    
+    do
     {
-case U_BASIC_LATIN: return ("BASIC_LATIN"); 
-case U_LATIN_1_SUPPLEMENT: return ("LATIN_1_SUPPLEMENT"); 
-case U_LATIN_EXTENDED_A: return ("LATIN_EXTENDED_A"); 
-case U_LATIN_EXTENDED_B: return ("LATIN_EXTENDED_B"); 
-case U_IPA_EXTENSIONS: return ("IPA_EXTENSIONS"); 
-case U_SPACING_MODIFIER_LETTERS: return ("SPACING_MODIFIER_LETTERS"); 
-case U_COMBINING_DIACRITICAL_MARKS: return ("COMBINING_DIACRITICAL_MARKS"); 
-case U_GREEK: return ("GREEK"); 
-case U_CYRILLIC: return ("CYRILLIC"); 
-case U_ARMENIAN: return ("ARMENIAN"); 
-case U_HEBREW: return ("HEBREW"); 
-case U_ARABIC: return ("ARABIC"); 
-case U_SYRIAC: return ("SYRIAC"); 
-case U_THAANA: return ("THAANA"); 
-case U_DEVANAGARI: return ("DEVANAGARI"); 
-case U_BENGALI: return ("BENGALI"); 
-case U_GURMUKHI: return ("GURMUKHI"); 
-case U_GUJARATI: return ("GUJARATI"); 
-case U_ORIYA: return ("ORIYA"); 
-case U_TAMIL: return ("TAMIL"); 
-case U_TELUGU: return ("TELUGU"); 
-case U_KANNADA: return ("KANNADA"); 
-case U_MALAYALAM: return ("MALAYALAM"); 
-case U_SINHALA: return ("SINHALA"); 
-case U_THAI: return ("THAI"); 
-case U_LAO: return ("LAO"); 
-case U_TIBETAN: return ("TIBETAN"); 
-case U_MYANMAR: return ("MYANMAR"); 
-case U_GEORGIAN: return ("GEORGIAN"); 
-case U_HANGUL_JAMO: return ("HANGUL_JAMO"); 
-case U_ETHIOPIC: return ("ETHIOPIC"); 
-case U_CHEROKEE: return ("CHEROKEE"); 
-case U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS: return ("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS"); 
-case U_OGHAM: return ("OGHAM"); 
-case U_RUNIC: return ("RUNIC"); 
-case U_KHMER: return ("KHMER"); 
-case U_MONGOLIAN: return ("MONGOLIAN"); 
-case U_LATIN_EXTENDED_ADDITIONAL: return ("LATIN_EXTENDED_ADDITIONAL"); 
-case U_GREEK_EXTENDED: return ("GREEK_EXTENDED"); 
-case U_GENERAL_PUNCTUATION: return ("GENERAL_PUNCTUATION"); 
-case U_SUPERSCRIPTS_AND_SUBSCRIPTS: return ("SUPERSCRIPTS_AND_SUBSCRIPTS"); 
-case U_CURRENCY_SYMBOLS: return ("CURRENCY_SYMBOLS"); 
-case U_COMBINING_MARKS_FOR_SYMBOLS: return ("COMBINING_MARKS_FOR_SYMBOLS"); 
-case U_LETTERLIKE_SYMBOLS: return ("LETTERLIKE_SYMBOLS"); 
-case U_NUMBER_FORMS: return ("NUMBER_FORMS"); 
-case U_ARROWS: return ("ARROWS"); 
-case U_MATHEMATICAL_OPERATORS: return ("MATHEMATICAL_OPERATORS"); 
-case U_MISCELLANEOUS_TECHNICAL: return ("MISCELLANEOUS_TECHNICAL"); 
-case U_CONTROL_PICTURES: return ("CONTROL_PICTURES"); 
-case U_OPTICAL_CHARACTER_RECOGNITION: return ("OPTICAL_CHARACTER_RECOGNITION"); 
-case U_ENCLOSED_ALPHANUMERICS: return ("ENCLOSED_ALPHANUMERICS"); 
-case U_BOX_DRAWING: return ("BOX_DRAWING"); 
-case U_BLOCK_ELEMENTS: return ("BLOCK_ELEMENTS"); 
-case U_GEOMETRIC_SHAPES: return ("GEOMETRIC_SHAPES"); 
-case U_MISCELLANEOUS_SYMBOLS: return ("MISCELLANEOUS_SYMBOLS"); 
-case U_DINGBATS: return ("DINGBATS"); 
-case U_BRAILLE_PATTERNS: return ("BRAILLE_PATTERNS"); 
-case U_CJK_RADICALS_SUPPLEMENT: return ("CJK_RADICALS_SUPPLEMENT"); 
-case U_KANGXI_RADICALS: return ("KANGXI_RADICALS"); 
-case U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS: return ("IDEOGRAPHIC_DESCRIPTION_CHARACTERS"); 
-case U_CJK_SYMBOLS_AND_PUNCTUATION: return ("CJK_SYMBOLS_AND_PUNCTUATION"); 
-case U_HIRAGANA: return ("HIRAGANA"); 
-case U_KATAKANA: return ("KATAKANA"); 
-case U_BOPOMOFO: return ("BOPOMOFO"); 
-case U_HANGUL_COMPATIBILITY_JAMO: return ("HANGUL_COMPATIBILITY_JAMO"); 
-case U_KANBUN: return ("KANBUN"); 
-case U_BOPOMOFO_EXTENDED: return ("BOPOMOFO_EXTENDED"); 
-case U_ENCLOSED_CJK_LETTERS_AND_MONTHS: return ("ENCLOSED_CJK_LETTERS_AND_MONTHS"); 
-case U_CJK_COMPATIBILITY: return ("CJK_COMPATIBILITY"); 
-case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A: return ("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A"); 
-case U_CJK_UNIFIED_IDEOGRAPHS: return ("CJK_UNIFIED_IDEOGRAPHS"); 
-case U_YI_SYLLABLES: return ("YI_SYLLABLES"); 
-case U_YI_RADICALS: return ("YI_RADICALS"); 
-case U_HANGUL_SYLLABLES: return ("HANGUL_SYLLABLES"); 
-case U_HIGH_SURROGATES: return ("HIGH_SURROGATES"); 
-case U_HIGH_PRIVATE_USE_SURROGATES: return ("HIGH_PRIVATE_USE_SURROGATES"); 
-case U_LOW_SURROGATES: return ("LOW_SURROGATES"); 
-case U_PRIVATE_USE_AREA /* PRIVATE_USE */: return ("PRIVATE_USE_AREA"); 
-case U_CJK_COMPATIBILITY_IDEOGRAPHS: return ("CJK_COMPATIBILITY_IDEOGRAPHS"); 
-case U_ALPHABETIC_PRESENTATION_FORMS: return ("ALPHABETIC_PRESENTATION_FORMS"); 
-case U_ARABIC_PRESENTATION_FORMS_A: return ("ARABIC_PRESENTATION_FORMS_A"); 
-case U_COMBINING_HALF_MARKS: return ("COMBINING_HALF_MARKS"); 
-case U_CJK_COMPATIBILITY_FORMS: return ("CJK_COMPATIBILITY_FORMS"); 
-case U_SMALL_FORM_VARIANTS: return ("SMALL_FORM_VARIANTS"); 
-case U_ARABIC_PRESENTATION_FORMS_B: return ("ARABIC_PRESENTATION_FORMS_B"); 
-case U_SPECIALS: return ("SPECIALS"); 
-case U_HALFWIDTH_AND_FULLWIDTH_FORMS: return ("HALFWIDTH_AND_FULLWIDTH_FORMS"); 
-  /*case U_CHAR_SCRIPT_COUNT: return ("SCRIPT_COUNT");  */
-case U_NO_SCRIPT: return ("NO_SCRIPT"); 
+        target = uBuf;
+        targetLimit = uBuf + uBufSize;
+        
+        ucnv_toUnicode( conv, &target, targetLimit, 
+                       &source, sourceLimit, NULL,
+                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                                   /* is true (when no more data will come) */
+                         &status);
+      
+        if(status == U_BUFFER_OVERFLOW_ERROR)
+        {
+          // simply ran out of space - we'll reset the target ptr the next
+          // time through the loop.
+          status = U_ZERO_ERROR;
+        }
+        else
+        {
+          //  Check other errors here.
+          assert(U_SUCCESS(status));
+          // Break out of the loop (by force)
+        }
 
-    default: return("Unknown??????");
-    }
+        // Process the Unicode
+        // Todo: handle UTF-16/surrogates
+        assert(fwrite(uBuf, sizeof(uBuf[0]), (target-uBuf), out) ==
+               (size_t)(target-uBuf));
+        total += (target-uBuf);
+    } while (source < sourceLimit); // while simply out of space
+  }
+
+  printf("%d bytes in,  %d UChars out.\n", inbytes, total);
+  
+  // ***************************** END SAMPLE ********************
+  ucnv_close(conv);
+
+  fclose(f);
+  fclose(out);
+  printf("\n");
+
+  return U_ZERO_ERROR;
 }
+#undef BUFFERSIZE
 
-void dumpTest()
+//        convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
+
+#define BUFFERSIZE 17 /* make it interesting :) */
+
+UErrorCode convsample_41()
 {
-    char buf[1000];
-    UErrorCode status = U_ZERO_ERROR;
-    UTextOffset o;
-    int32_t n;
-    UChar c;
-    FILE *q;
+  printf("\n\n==============================================\n"
+         "Sample 41: C++: convert data02.bin from cp37 to UTF16 [data41.utf16]\n");
 
-    q = fopen("nt.txt", "w");
+  FILE *f;
+  FILE *out;
+  int32_t count;
+  char inBuf[BUFFERSIZE];
+  const char *source;
+  const char *sourceLimit;
+  UChar *uBuf;
+  UChar *target;
+  UChar *targetLimit;
+  int32_t uBufSize = 0;
+  UnicodeConverter *conv;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t inbytes=0, total=0;
 
-    for(n=0;n<0x10000;n++)
-      {
-        c = (UChar)n;
-        status = U_ZERO_ERROR;
-        o = u_charName(c, U_UNICODE_10_CHAR_NAME, buf, 1000, &status);
-        if(U_SUCCESS(status) && (o>0) ) {
-          fprintf(q, "%06X:% 8s:%s\n", n, scriptName(u_charScript(c)), buf);
+  f = fopen("data02.bin", "rb");
+  if(!f)
+  {
+    fprintf(stderr, "Couldn't open file 'data02.bin' (cp37 data file).\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  out = fopen("data41.utf16", "wb");
+  if(!out)
+  {
+    fprintf(stderr, "Couldn't create file 'data41.utf16'.\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  // **************************** START SAMPLE *******************
+  conv = new UnicodeConverter(37, UCNV_IBM, status);
+  assert(U_SUCCESS(status));
+
+  uBufSize = (BUFFERSIZE/conv->getMinBytesPerChar());
+  printf("input bytes %d / min chars %d = %d UChars\n",
+         BUFFERSIZE, conv->getMinBytesPerChar(), uBufSize);
+  uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
+  assert(uBuf!=NULL);
+
+  // grab another buffer's worth
+  while((!feof(f)) && 
+        ((count=fread(inBuf, 1, BUFFERSIZE , f)) > 0) )
+  {
+    inbytes += count;
+
+    // Convert bytes to unicode
+    source = inBuf;
+    sourceLimit = inBuf + count;
+    
+    do
+    {
+        target = uBuf;
+        targetLimit = uBuf + uBufSize;
+        
+        conv->toUnicode( target, targetLimit, 
+                       source, sourceLimit, NULL,
+                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                                   /* is true (when no more data will come) */
+                         status);
+      
+        if(status == U_BUFFER_OVERFLOW_ERROR)
+        {
+          // simply ran out of space - we'll reset the target ptr the next
+          // time through the loop.
+          status = U_ZERO_ERROR;
         }
-        else {
-          fprintf(q, "%06X:% 8s:_______________\n", n, scriptName(u_charScript(c)));
+        else
+        {
+          //  Check other errors here.
+          assert(U_SUCCESS(status));
+          // Break out of the loop (by force)
         }
-      }
-    fclose(q);
+
+        // Process the Unicode
+        // Todo: handle UTF-16/surrogates
+        assert(fwrite(uBuf, sizeof(uBuf[0]), (target-uBuf), out) ==
+               (size_t)(target-uBuf));
+        total += (target-uBuf);
+    } while (source < sourceLimit); // while simply out of space
+  }
+
+  printf("%d bytes in,  %d UChars out.\n", inbytes, total);
+  
+  // ***************************** END SAMPLE ********************
+  delete conv;
+
+  fclose(f);
+  fclose(out);
+  printf("\n");
+
+  return U_ZERO_ERROR;
 }
+#undef BUFFERSIZE
 
+
+
+//  46-  C, UTF16 -> latin2 [data41.utf16 -> data46.out]
+
+#define BUFFERSIZE 23 /* make it interesting :) */
+
+UErrorCode convsample_46()
+{
+  printf("\n\n==============================================\n"
+    "Sample 46: C: convert data41.utf16 from UTF16 to latin2 [data46.out]\n");
+
+  FILE *f;
+  FILE *out;
+  int32_t count;
+  UChar inBuf[BUFFERSIZE];
+  const UChar *source;
+  const UChar *sourceLimit;
+  char *buf;
+  char *target;
+  char *targetLimit;
+
+  int32_t bufSize = 0;
+  UConverter *conv = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t inchars=0, total=0;
+
+  f = fopen("data41.utf16", "rb");
+  if(!f)
+  {
+    fprintf(stderr, "Couldn't open file 'data41.utf16' (did you run convsample_41() ?)\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  out = fopen("data46.out", "wb");
+  if(!out)
+  {
+    fprintf(stderr, "Couldn't create file 'data46.out'.\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  // **************************** START SAMPLE *******************
+  conv = ucnv_open( "iso-8859-2", &status);
+  assert(U_SUCCESS(status));
+
+  bufSize = (BUFFERSIZE*ucnv_getMaxCharSize(conv));
+  printf("input UChars[16] %d * max charsize %d = %d bytes output buffer\n",
+         BUFFERSIZE, ucnv_getMaxCharSize(conv), bufSize);
+  buf = (char*)malloc(bufSize * sizeof(char));
+  assert(buf!=NULL);
+
+  // grab another buffer's worth
+  while((!feof(f)) && 
+        ((count=fread(inBuf, sizeof(UChar), BUFFERSIZE , f)) > 0) )
+  {
+    inchars += count;
+
+    // Convert bytes to unicode
+    source = inBuf;
+    sourceLimit = inBuf + count;
+    
+    do
+    {
+        target = buf;
+        targetLimit = buf + bufSize;
+        
+        ucnv_fromUnicode( conv, &target, targetLimit, 
+                       &source, sourceLimit, NULL,
+                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                                   /* is true (when no more data will come) */
+                         &status);
+      
+        if(status == U_BUFFER_OVERFLOW_ERROR)
+        {
+          // simply ran out of space - we'll reset the target ptr the next
+          // time through the loop.
+          status = U_ZERO_ERROR;
+        }
+        else
+        {
+          //  Check other errors here.
+          assert(U_SUCCESS(status));
+          // Break out of the loop (by force)
+        }
+
+        // Process the Unicode
+        assert(fwrite(buf, sizeof(buf[0]), (target-buf), out) ==
+               (size_t)(target-buf));
+        total += (target-buf);
+    } while (source < sourceLimit); // while simply out of space
+  }
+
+  printf("%d Uchars (%d bytes) in, %d chars out.\n", inchars, inchars * sizeof(UChar), total);
+  
+  // ***************************** END SAMPLE ********************
+  ucnv_close(conv);
+
+  fclose(f);
+  fclose(out);
+  printf("\n");
+
+  return U_ZERO_ERROR;
+}
+#undef BUFFERSIZE
+
+#define BUFFERSIZE 219
+
+UErrorCode convsample_47()
+{
+  printf("\n\n==============================================\n"
+         "Sample 47: C++: convert data40.utf16 from UTF16 to latin2 [data47.out]\n");
+
+  FILE *f;
+  FILE *out;
+  int32_t count;
+  UChar inBuf[BUFFERSIZE];
+  const UChar *source;
+  const UChar *sourceLimit;
+  char *buf;
+  char *target;
+  char *targetLimit;
+
+  int32_t bufSize = 0;
+  UnicodeConverter *conv = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t inchars=0, total=0;
+
+  f = fopen("data40.utf16", "rb");
+  if(!f)
+  {
+    fprintf(stderr, "Couldn't open file 'data40.utf16' (Did you run convsample_40() ?)\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  out = fopen("data47.out", "wb");
+  if(!out)
+  {
+    fprintf(stderr, "Couldn't create file 'data47.out'.\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+
+  // **************************** START SAMPLE *******************
+  conv = new UnicodeConverter( "iso-8859-2", status);
+  assert(U_SUCCESS(status));
+
+  bufSize = (BUFFERSIZE*conv->getMaxBytesPerChar());
+  printf("input UChars[16] %d * max charsize %d = %d bytes output buffer\n",
+         BUFFERSIZE, conv->getMaxBytesPerChar(), bufSize);
+  buf = (char*)malloc(bufSize * sizeof(char));
+  assert(buf!=NULL);
+
+  // grab another buffer's worth
+  while((!feof(f)) && 
+        ((count=fread(inBuf, sizeof(UChar), BUFFERSIZE , f)) > 0) )
+  {
+    inchars += count;
+
+    // Convert bytes to unicode
+    source = inBuf;
+    sourceLimit = inBuf + count;
+    
+    do
+    {
+        target = buf;
+        targetLimit = buf + bufSize;
+        
+        conv->fromUnicode( target, targetLimit, 
+                source, sourceLimit, NULL,
+                           feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                           /* is true (when no more data will come) */
+                           status);
+        
+        if(status == U_BUFFER_OVERFLOW_ERROR)
+        {
+          // simply ran out of space - we'll reset the target ptr the next
+          // time through the loop.
+          status = U_ZERO_ERROR;
+        }
+        else
+        {
+          //  Check other errors here.
+          assert(U_SUCCESS(status));
+          // Break out of the loop (by force)
+        }
+
+        // Process the Unicode
+        assert(fwrite(buf, sizeof(buf[0]), (target-buf), out) ==
+               (size_t)(target-buf));
+        total += (target-buf);
+    } while (source < sourceLimit); // while simply out of space
+  }
+
+  printf("%d Uchars (%d bytes) in, %d chars out.\n", inchars, inchars * sizeof(UChar), total);
+  
+  // ***************************** END SAMPLE ********************
+  delete conv;
+
+  fclose(f);
+  fclose(out);
+  printf("\n");
+
+  return U_ZERO_ERROR;
+}
+#undef BUFFERSIZE
+
+
+/* main */
 
 int main()
 {
 
-  //  dumpTest();
-  //  return 0;
-
-  printf("DEFCONV=%s, DEVLOC=%s\n", ucnv_getDefaultName(), uloc_getDefault());
-
+  printf("Default Converter=%s\n", ucnv_getDefaultName() );
   
-    convsample_01();
-    convsample_02();
-    convsample_03();
-  //  convsample_04();  /* not written yet */
-    convsample_05();
-    convsample_11();
-  //  convsample_12(); [fails]
-    convsample_13();
-
-    convsample_20();
-
+  convsample_01();  // C++, u->koi8r, conv
+  convsample_02();  // C  , u->koi8r, conv
+  convsample_03();  // C,   iterate
+  //    //  convsample_04();  /* not written yet */
+  convsample_05();  // C,  utf8->u, getNextUChar
+  convsample_11();  // C++, sjis->u, conv
+  convsample_12();  // C,  sjis->u, conv
+  convsample_13();  // C,  big5->u, getNextU
+  
+  convsample_20();  // C, callback
+  
+  convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
+  convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
+  
+  convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
+  convsample_47();  // C++,UTF16 -> latin3 [data40.utf16 -> data47.out]
+        
    return 0;
 }
