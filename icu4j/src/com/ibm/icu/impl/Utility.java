@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $ 
- * $Date: 2000/07/12 16:42:16 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/09/22 20:06:12 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -634,5 +634,100 @@ public final class Utility {
         }
         return buf.toString();
     }
-}
 
+    /**
+     * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
+     * "0041".
+     */
+    public static String hex(char ch) {
+        StringBuffer temp = new StringBuffer();
+        return hex(ch, temp).toString();
+    }
+
+    /**
+     * Convert a string to comma-separated groups of 4 hex uppercase
+     * digits.  E.g., hex('ab') => "0041,0042".
+     */
+    public static String hex(String s) {
+        StringBuffer temp = new StringBuffer();
+        return hex(s, temp).toString();
+    }
+
+    /**
+     * Convert a string to comma-separated groups of 4 hex uppercase
+     * digits.  E.g., hex('ab') => "0041,0042".
+     */
+    public static String hex(StringBuffer s) {
+        return hex(s.toString());
+    }
+
+    /**
+     * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
+     * "0041".  Append the output to the given StringBuffer.
+     */
+    public static StringBuffer hex(char ch, StringBuffer output) {
+        String foo = Integer.toString(ch,16).toUpperCase();
+        for (int i = foo.length(); i < 4; ++i) {
+            output.append('0');
+        }
+        output.append(foo);
+        return output;
+    }
+
+    /**
+     * Convert a string to comma-separated groups of 4 hex uppercase
+     * digits.  E.g., hex('ab') => "0041,0042".  Append the output
+     * to the given StringBuffer.
+     */
+    public static StringBuffer hex(String s, StringBuffer result) {
+        for (int i = 0; i < s.length(); ++i) {
+            if (i != 0) result.append(',');
+            hex(s.charAt(i), result);
+        }
+        return result;
+    }
+
+    /**
+     * Split a string into pieces based on the given divider character
+     * @param s the string to split
+     * @param divider the character on which to split.  Occurrences of
+     * this character are not included in the output
+     * @param output an array to receive the substrings between
+     * instances of divider.  It must be large enough on entry to
+     * accomodate all output.  Adjacent instances of the divider
+     * character will place empty strings into output.  Before
+     * returning, output is padded out with empty strings.
+     */
+    public static void split(String s, char divider, String[] output) {
+        int last = 0;
+        int current = 0;
+        int i;
+        for (i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == divider) {
+                output[current++] = s.substring(last,i);
+                last = i+1;
+            }
+        }
+        output[current++] = s.substring(last,i);
+        while (current < output.length) {
+            output[current++] = "";
+        }
+    }
+
+    /**
+     * Look up a given string in a string array.  Returns the index at
+     * which the first occurrence of the string was found in the
+     * array, or -1 if it was not found.
+     * @param source the string to search for
+     * @param target the array of zero or more strings in which to
+     * look for source
+     * @return the index of target at which source first occurs, or -1
+     * if not found
+     */
+    public static int lookup(String source, String[] target) {
+        for (int i = 0; i < target.length; ++i) {
+            if (source.equals(target[i])) return i;
+        }
+        return -1;
+    }
+}
