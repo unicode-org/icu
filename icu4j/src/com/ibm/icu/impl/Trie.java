@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/04/02 21:00:09 $
-* $Revision: 1.4 $
+* $Date: 2002/04/25 22:19:25 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -72,6 +72,17 @@ public abstract class Trie
         * @draft 2.1
         */
         public int getFoldingOffset(int value);
+    }
+    
+    // public methods --------------------------------------------------
+    
+    /**
+     * Determines if this trie has a linear latin 1 array
+     * @return true if this trie has a linear latin 1 array, false otherwise
+     */
+    public final boolean isLatin1Linear()
+    {
+    	return m_isLatin1Linear_;
     }
 
     // protected constructor -------------------------------------------
