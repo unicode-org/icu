@@ -270,9 +270,11 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
         return NULL;
     }
 
+#ifdef RBBI_DEBUG
     if (builder.fDebugEnv && uprv_strstr(builder.fDebugEnv, "states")) {
         builder.fForwardTables->printRuleStatusTable();
     }
+#endif
 
     //
     //   Package up the compiled data into a memory image
