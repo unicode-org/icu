@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.*;
 
 /**
@@ -387,6 +392,130 @@ public abstract class PerfTest {
             result[i] = ((Integer) list.get(i)).intValue();
         }
         return result;
+    }
+    public static char[] readToEOS(InputStreamReader stream) {
+        ArrayList vec = new ArrayList();
+        int count = 0;
+        int pos = 0;
+        final int MAXLENGTH = 0x8000; // max buffer size - 32K
+        int length = 0x80; // start with small buffers and work up
+        do {
+            pos = 0;
+            length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
+            char[] buffer = new char[length];
+            try {
+                do {
+                    int n = stream.read(buffer, pos, length - pos);
+                    if (n == -1) {
+                    break;
+                    }
+                    pos += n;
+                } while (pos < length);
+            }
+            catch (IOException e) {
+            }
+            vec.add(buffer);
+            count += pos;
+        } while (pos == length);
+                            
+        char[] data = new char[count];
+        pos = 0;
+        for (int i = 0; i < vec.size(); ++i) {
+            char[] buf = (char[])vec.get(i);
+            int len = Math.min(buf.length, count - pos);
+            System.arraycopy(buf, 0, data, pos, len);
+            pos += len;
+        }
+        return data;
+    }
+    public static byte[] readToEOS(InputStream stream) {
+
+        ArrayList vec = new ArrayList();
+        int count = 0;
+        int pos = 0;
+        final int MAXLENGTH = 0x8000; // max buffer size - 32K
+        int length = 0x80; // start with small buffers and work up
+        do {
+            pos = 0;
+            length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
+            byte[] buffer = new byte[length];
+            try {
+                do {
+                    int n = stream.read(buffer, pos, length - pos);
+                    if (n == -1) {
+                    break;
+                    }
+                    pos += n;
+                } while (pos < length);
+            }
+            catch (IOException e) {
+            }
+            vec.add(buffer);
+            count += pos;
+        } while (pos == length);
+                            
+                            
+        byte[] data = new byte[count];
+        pos = 0;
+        for (int i = 0; i < vec.size(); ++i) {
+            byte[] buf = (byte[])vec.get(i);
+            int len = Math.min(buf.length, count - pos);
+            System.arraycopy(buf, 0, data, pos, len);
+            pos += len;
+        }
+        return data;
+    }
+    
+    public String[] readLines(String fileName, String encoding) {
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        try {
+            fis = new FileInputStream(fileName);
+            isr = new InputStreamReader(fis, encoding);
+            br= new BufferedReader(isr);
+        } catch (Exception e) {
+            System.err.println("Error: File access exception: " + e.getMessage() + "!");
+            System.exit(1);
+        }
+        ArrayList list = new ArrayList();
+        while (true) {
+            String line = null;
+            try {
+                line = readDataLine(br);
+            } catch (Exception e) {
+                System.err.println("Read File Error" + e.getMessage() + "!");
+                System.exit(1);
+            }
+            if (line == null) break;
+            if (line.length() == 0) continue;
+            list.add(line);
+        }
+        
+        int size = list.size();
+        String[] lines = new String [size];
+        
+        for (int i = 0; i < size; ++i) {
+            lines[i] = (String) list.get(i);
+        }
+        return lines;
+    }
+    
+    public String readDataLine(BufferedReader br) throws Exception {
+        String originalLine = "";
+        String line = "";
+        try {
+            line = originalLine = br.readLine();
+            if (line == null) return null;
+            if (line.length() > 0 && line.charAt(0) == 0xFEFF) line = line.substring(1);
+            int commentPos = line.indexOf('#');
+            if (commentPos >= 0) line = line.substring(0, commentPos);
+            line = line.trim();
+        } catch (Exception e) {
+            throw new Exception("Line \"{0}\",  \"{1}\"" + originalLine + " "
+                                + line + " " + e.toString());
+        }
+        return line;
     }
 }
 
