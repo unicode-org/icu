@@ -5,36 +5,83 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/03/20 05:11:17 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/04/25 23:34:32 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.Utility;
-//import java.text.*;
 import java.util.*;
 import java.io.*;
 
 /**
- * Class that allows simple iteration over a UnicodeSet.
+ * UnicodeSetIterator iterates over the contents of a UnicodeSet.  It
+ * iterates over either code points or code point ranges.  After all
+ * code points or ranges have been returned, it returns the
+ * multicharacter strings of the UnicodSet, if any.
+ *
+ * <p>To iterate over code points, use a loop like this:
+ * <pre>
+ * UnicodeSetIterator it(set);
+ * while (set.next()) {
+ *   if (set.codepoint != UnicodeSetIterator::IS_STRING) {
+ *     processCodepoint(set.codepoint);
+ *   } else {
+ *     processString(set.string);
+ *   }
+ * }
+ * </pre>
+ *
+ * <p>To iterate over code point ranges, use a loop like this:
+ * <pre>
+ * UnicodeSetIterator it(set);
+ * while (set.nextRange()) {
+ *   if (set.codepoint != UnicodeSetIterator::IS_STRING) {
+ *     processCodepointRange(set.codepoint, set.codepointEnd);
+ *   } else {
+ *     processString(set.string);
+ *   }
+ * }
+ * </pre>
  * @author M. Davis
  * @draft
- * @internal -- this API is not for general use, and may change at any time.
  */
 public final class UnicodeSetIterator {
 	
+    /**
+     * Value of <tt>codepoint</tt> if the iterator points to a string.
+     * If <tt>codepoint == IS_STRING</tt>, then examine
+     * <tt>string</tt> for the current iteration result.
+     */
 	public static int IS_STRING = -1;
 	
-	// for results of iteration
-	
+	/**
+     * Current code point, or the special value <tt>IS_STRING</tt>, if
+     * the iterator points to a string.
+     */
 	public int codepoint;
+
+    /**
+     * When iterating over ranges using <tt>nextRange()</tt>,
+     * <tt>codepointEnd</tt> contains the inclusive end of the
+     * iteration range, if <tt>codepoint != IS_STRING</tt>.  If
+     * iterating over code points using <tt>next()</tt>, or if
+     * <tt>codepoint == IS_STRING</tt>, then the value of
+     * <tt>codepointEnd</tt> is undefined.
+     */
 	public int codepointEnd;
+
+    /**
+     * If <tt>codepoint == IS_STRING</tt>, then <tt>string</tt> points
+     * to the current string.  If <tt>codepoint != IS_STRING</tt>, the
+     * value of <tt>string</tt> is undefined.
+     */
 	public String string;
 
     /**
-     * Create an iterator
+     * Create an iterator over the given set.
      * @param set set to iterate over
      */
     public UnicodeSetIterator(UnicodeSet set) {
@@ -42,20 +89,31 @@ public final class UnicodeSetIterator {
     }
         
     /**
-     * Create an iterator. Convenience for when the contents are to be set later.
+     * Create an iterator over nothing.  <tt>next()</tt> and
+     * <tt>nextRange()</tt> return false. This is a convenience
+     * constructor allowing the target to be set later.
      */
     public UnicodeSetIterator() {
         reset(new UnicodeSet());
     }
         
     /**
-     * Returns the next element in the set.
-     * @return true if there was another element in the set.
-     * if so, if codepoint == IS_STRING, the value is a string in the string field
-     * else the value is a single code point in the codepoint field.
-     * <br>You are guaranteed that the codepoints are in sorted order, and the strings are in sorted order,
-     * and that all code points are returned before any strings are returned.
-     * <br>Note also that the codepointEnd is undefined after calling this method.
+     * Returns the next element in the set, either a single code point
+     * or a string.  If there are no more elements in the set, return
+     * false.  If <tt>codepoint == IS_STRING</tt>, the value is a
+     * string in the <tt>string</tt> field.  Otherwise the value is a
+     * single code point in the <tt>codepoint</tt> field.
+     * 
+     * <p>The order of iteration is all code points in sorted order,
+     * followed by all strings sorted order.  <tt>codepointEnd</tt> is
+     * undefined after calling this method.  <tt>string</tt> is
+     * undefined unless <tt>codepoint == IS_STRING</tt>.  Do not mix
+     * calls to <tt>next()</tt> and <tt>nextRange()</tt> without
+     * calling <tt>reset()</tt> between them.  The results of doing so
+     * are undefined.
+     *
+     * @return true if there was another element in the set and this
+     * object contains the element.
      */
     public boolean next() {
         if (nextElement <= endElement) {
@@ -63,12 +121,7 @@ public final class UnicodeSetIterator {
             return true;
         }
         if (range < endRange) {
-        	++range;
-        	nextElement = startElement = set.getRangeStart(range);
-        	endElement = set.getRangeEnd(range);
-        	if (abbreviated && (endElement > startElement + 50)) {
-            	endElement = startElement + 50;
-        	}
+        	loadRange(++range);
         	codepoint = codepointEnd = nextElement++;
         	return true;
         }
@@ -83,15 +136,23 @@ public final class UnicodeSetIterator {
     }
         
     /**
-     * @return true if there was another element in the set.
-     * if so, if codepoint == IS_STRING, the value is a string in the string field
-     * else the value is a range of codepoints in the <codepoint, codepointEnd> fields.
-     * <br>Note that the codepoints are in sorted order, and the strings are in sorted order,
-     * and that all code points are returned before any strings are returned.
-     * <br>You are guaranteed that the ranges are in sorted order, and the strings are in sorted order,
-     * and that all ranges are returned before any strings are returned.
-     * <br>You are also guaranteed that ranges are disjoint and non-contiguous.
-     * <br>Note also that the codepointEnd is undefined after calling this method.
+     * Returns the next element in the set, either a code point range
+     * or a string.  If there are no more elements in the set, return
+     * false.  If <tt>codepoint == IS_STRING</tt>, the value is a
+     * string in the <tt>string</tt> field.  Otherwise the value is a
+     * range of one or more code points from <tt>codepoint</tt> to
+     * <tt>codepointeEnd</tt> inclusive.
+     * 
+     * <p>The order of iteration is all code points ranges in sorted
+     * order, followed by all strings sorted order.  Ranges are
+     * disjoint and non-contiguous.  <tt>string</tt> is undefined
+     * unless <tt>codepoint == IS_STRING</tt>.  Do not mix calls to
+     * <tt>next()</tt> and <tt>nextRange()</tt> without calling
+     * <tt>reset()</tt> between them.  The results of doing so are
+     * undefined.
+     *
+     * @return true if there was another element in the set and this
+     * object contains the element.
      */
     public boolean nextRange() {
         if (nextElement <= endElement) {
@@ -101,12 +162,7 @@ public final class UnicodeSetIterator {
             return true;
         }
         if (range < endRange) {
-        	++range;
-        	nextElement = startElement = set.getRangeStart(range);
-        	endElement = set.getRangeEnd(range);
-        	if (abbreviated && (endElement > startElement + 50)) {
-            	endElement = startElement + 50;
-        	}
+            loadRange(++range);
         	codepointEnd = endElement;
         	codepoint = nextElement;
         	nextElement = endElement+1;
@@ -123,33 +179,45 @@ public final class UnicodeSetIterator {
     }
         
     /**
-     *@param set the set to iterate over. This allows reuse of the iterator.
+     * Sets this iterator to visit the elements of the given set and
+     * resets it to the start of that set.  The iterator is valid only
+     * so long as <tt>set</tt> is valid.
+     * @param set the set to iterate over.
      */
     public void reset(UnicodeSet set) {
         this.set = set;
-        endRange = set.getRangeCount() - 1;
-        resetInternal();
+        reset();
     }
         
     /**
-     * Resets to the start, to allow the iteration to start over again.
+     * Resets this iterator to the start of the set.
      */
     public void reset() {
         endRange = set.getRangeCount() - 1;
-        resetInternal();
+        range = 0;
+        endElement = -1;
+        nextElement = 0;            
+        if (endRange >= 0) {
+            loadRange(range);
+        }
+        stringIterator = null;
+        if (set.strings != null) {
+        	stringIterator = set.strings.iterator();
+        	if (!stringIterator.hasNext()) stringIterator = null;
+        }
     }
     
     /**
-     * Causes the interation to only to part of long ranges
-     * @internal -- used only for testing
+     * INTERNAL: Causes the interation to only visit part of long ranges
+     * @internal used only for testing
      */
     public void setAbbreviated(boolean abbr) {
         abbreviated = abbr;
     }
     
     /**
-     * Causes the interation to only to part of long ranges
-     * @internal -- used only for testing
+     * INTERNAL: Causes the interation to only visit part of long ranges
+     * @internal used only for testing
      */
     public boolean getAbbreviated() {
         return abbreviated;
@@ -160,7 +228,6 @@ public final class UnicodeSetIterator {
     private UnicodeSet set;
     private int endRange = 0;
     private int range = 0;
-    private int startElement = 0;
     private int endElement;
     private int nextElement;
     private boolean abbreviated = false;
@@ -169,22 +236,12 @@ public final class UnicodeSetIterator {
     /**
      * Invariant: stringIterator is null when there are no (more) strings remaining
      */
-        
-    private void resetInternal() {
-        range = 0;
-        endElement = -1;
-        nextElement = 0;            
-        if (endRange >= 0) {
-            nextElement = startElement = set.getRangeStart(range);
-            endElement = set.getRangeEnd(range);
-            if (abbreviated && (endElement > startElement + 50)) {
-            	endElement = startElement + 50;
-        	}
-        }
-        stringIterator = null;
-        if (set.strings != null) {
-        	stringIterator = set.strings.iterator();
-        	if (!stringIterator.hasNext()) stringIterator = null;
+
+    private final void loadRange(int range) {
+        nextElement = set.getRangeStart(range);
+        endElement = set.getRangeEnd(range);
+        if (abbreviated && (endElement > nextElement + 50)) {
+            endElement = nextElement + 50;
         }
     }
 }
