@@ -29,6 +29,7 @@
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
+#include "Files.h"
 #endif
 
 static char* _testDirectory=NULL;
@@ -401,7 +402,15 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     sepChar = U_FILE_SEP_CHAR;
     char sepString[] = U_FILE_SEP_STRING;
 
-    // marty@broadjump.com:  XP_MAC specific code no longer needed thanks to the fopen hack
+#if defined(XP_MAC)
+    Str255 volName;
+    int16_t volNum;
+    OSErr err = GetVol( volName, &volNum );
+    if (err != noErr)
+        volName[0] = 0;
+    mainDir = (char*) &(volName[1]);
+    mainDir[volName[0]] = 0;
+#else
     char mainDirBuffer[255];
     if(mainDir!=NULL) {
         strcpy(mainDirBuffer, mainDir);
@@ -410,6 +419,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
         mainDirBuffer[0]='\0';
     }
     mainDir=mainDirBuffer;
+#endif
     
     if (relPath[0] == '|')
         relPath++;
