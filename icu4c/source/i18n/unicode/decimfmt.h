@@ -153,8 +153,17 @@ class DigitList;
  * countries for ten-thousands. The interval is a constant number of
  * digits between the grouping characters, such as 100,000,000 or 1,0000,0000.
  * If you supply a pattern with multiple grouping characters, the interval
- * between the last one and the end of the integer is the one that is
- * used. So "#,##,###,####" == "######,####" == "##,####,####".
+ * between the last one and the end of the integer determines the primary
+ * grouping size, and the interval between the last two determines
+ * the secondary grouping size (see below); all others are ignored.
+ * So "#,##,###,####" == "###,###,####" == "##,#,###,####".
+ * <P>
+ * Some locales have two different grouping intervals:  One used for the
+ * least significant integer digits (the primary grouping size), and
+ * one used for all others (the secondary grouping size).  For example,
+ * if the primary grouping interval is 3, and the secondary is 2, then
+ * this corresponds to the pattern "#,##,##0", and the number 123456789
+ * is formatted as "12,34,56,789".
  * <P>
  * This class only handles localized digits where the 10 digits are
  * contiguous in Unicode, from 0 to 9. Other digits sets (such as
@@ -734,6 +743,35 @@ public:
     virtual void setGroupingSize(int32_t newValue);
 
     /**
+     * Return the secondary grouping size. In some locales one
+     * grouping interval is used for the least significant integer
+     * digits (the primary grouping size), and another is used for all
+     * others (the secondary grouping size).  A formatter supporting a
+     * secondary grouping size will return a positive integer unequal
+     * to the primary grouping size returned by
+     * <code>getGroupingSize()</code>.  For example, if the primary
+     * grouping size is 4, and the secondary grouping size is 2, then
+     * the number 123456789 formats as "1,23,45,6789", and the pattern
+     * appears as "#,##,###0".
+     * @return the secondary grouping size, or a value less than
+     * one if there is none
+     * @see setSecondaryGroupingSize
+     * @see NumberFormat::isGroupingUsed
+     * @see DecimalFormatSymbols::getGroupingSeparator
+     */
+    int32_t getSecondaryGroupingSize(void) const;
+
+    /**
+     * Set the secondary grouping size. If set to a value less than 1,
+     * then secondary grouping is turned off, and the primary grouping
+     * size is used for all intervals, not just the least significant.
+     * @see getSecondaryGroupingSize
+     * @see NumberFormat#setGroupingUsed
+     * @see DecimalFormatSymbols::setGroupingSeparator
+     */
+    virtual void setSecondaryGroupingSize(int32_t newValue);
+
+    /**
      * Allows you to get the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
      *
@@ -974,6 +1012,8 @@ private:
     void addPadding(UnicodeString& result, UBool hasAffixes,
                     UBool isNegative) const;
 
+    UBool isGroupingPosition(int32_t pos) const;
+
     /**
      * Constants.
      */
@@ -991,6 +1031,7 @@ private:
     UnicodeString*          fNegSuffixPattern;
     int32_t                 fMultiplier;
     int32_t                 fGroupingSize;
+    int32_t                 fGroupingSize2;
     UBool                  fDecimalSeparatorAlwaysShown;
     /*transient*/ UBool    fIsCurrencyFormat;
     DecimalFormatSymbols*   fSymbols;
