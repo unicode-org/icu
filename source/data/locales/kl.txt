@@ -1,4 +1,4 @@
-﻿// ***************************************************************************
+// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -8,19 +8,25 @@
 kl{
     Version { "2.0" }
     collations {
-      standard { 
-        Version { "1.0" }
-        Sequence { 
-            "&D<<đ<<<Đ<<ð<<<Ð"
-            "&Q<<ĸ<<<K''"	// Greenland only
-            "&t<<<þ/h"
-            "&T<<<Þ/H"
-            "&Y<<ü<<<Ü<<ű<<<Ű"
-            "&[before 1]ʒ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å"
+        standard { 
+            Version { "1.0" }
+            Sequence { 
+                "&D<<\u0111<<<\u0110<<\u00F0<<<\u00D0"
+                "&Q<<\u0138<<<K''"	// Greenland only
+                "&t<<<\u00FE/h"
+                "&T<<<\u00DE/H"
+                "&Y<<u\u0308<<<U\u0308<<u\u030B<<<U\u030B"
+                "&[before 1]\u0292<\u00E6<<<\u00C6<<\u00E4<<<\u00C4<<e\u0328<<<E\u0328<\u00F8<<<\u00D8<<\u00F6<<<\u00D6<<\u0151<<<\u0150<<\u0153<<<\u0152<\u00E5<<<\u00C5"
+            }
         }
-      }
     }
-
+    Countries {
+        GL { "Kalaallit Nunaat" }
+    }
+    // Currency display names
+    Currencies {
+        DKK { "kr", "DKK" }
+    }
     DayAbbreviations { 
         "sab",
         "ata",
@@ -38,6 +44,13 @@ kl{
         "sisamanngorneq",
         "tallimanngorneq",
         "arfininngorneq",
+    }
+    Languages {
+        kl { "kalaallisut" }
+    }
+    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00fa\u00e2\u00ea\u00ee\u00f4\u00fb\u00e6\u00e5\u00f8\u00e3\u0129\u0169\u0138]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
     }
     MonthAbbreviations { 
         "jan",
@@ -82,23 +95,13 @@ kl{
         ",",
         "+",
     }
-    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00fa \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00e6 \u00e5 \u00f8 \u00e3 \u0129 \u0169 \u0138]" }
 
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
-    }
+    // /**************** Info Below is needed ****************/
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
 
-            // /**************** Info Below is needed ****************/
-            // Countries{}
-            // Eras{}
-            // Languages{}
-            // ShortLanguage { }
-            // localPatternChars{}
-            //
-
-
-    // Currency display names
-    Currencies {
-        DKK { "kr", "DKK" }
-    }
 }
