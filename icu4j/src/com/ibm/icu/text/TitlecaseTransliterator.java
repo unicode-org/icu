@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/11/21 21:23:28 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/11/25 23:12:22 $ 
+ * $Revision: 1.8 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -19,6 +19,7 @@ import java.util.*;
 class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
+    private Locale loc;
 
     /**
      * The set of characters we skip.  These are neither cased nor
@@ -38,29 +39,23 @@ class TitlecaseTransliterator extends Transliterator {
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new TitlecaseTransliterator();
+                return new TitlecaseTransliterator(Locale.US);
             }
         });
 
         registerSpecialInverse("Title", "Lower", false);
     }
 
-    /**
+   /**
      * Constructs a transliterator.
      */
-    public TitlecaseTransliterator() {
-        this(null);
-    }
-
-    /**
-     * Constructs a transliterator.
-     */
-    public TitlecaseTransliterator(UnicodeFilter f) {
-        super(_ID, f);
+    public TitlecaseTransliterator(Locale loc) {
+        super(_ID, null);
+        this.loc = loc;
         // Need to look back 2 characters in the case of "can't"
         setMaximumContextLength(2);
     }
-
+     
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
@@ -88,19 +83,51 @@ class TitlecaseTransliterator extends Transliterator {
         // Convert things after a CASED character toLower; things
         // after a non-CASED, non-SKIP character toTitle.  SKIP
         // characters are copied directly and do not change the mode.
-        for (start=offsets.start; start<offsets.limit; ++start) {
-            char c = text.charAt(start);
-            if (SKIP.contains(c)) {
-                continue;
-            }
-            char d = (char) (doTitle ? UCharacter.toTitleCase(c)
-                                     : UCharacter.toLowerCase(c));
-            if (c != d) {
-                text.replace(start, start+1, String.valueOf(d));
-            }
-            doTitle = !CASED.contains(c);
-        }
 
-        offsets.start = start;
+        int textPos = offsets.start;
+        if (textPos >= offsets.limit) return;
+
+        // get string for context
+        // TODO: add convenience method to do this, since we do it all over
+        
+        char[] strBuffer = new char[offsets.contextLimit - offsets.contextStart]; // get whole context
+        text.getChars(offsets.contextStart, offsets.contextLimit, strBuffer, 0);
+        String original = new String(strBuffer);
+        
+        // Walk through original string
+        // If there is a case change, modify corresponding position in replaceable
+        
+        int i = textPos - offsets.contextStart;
+        int limit = offsets.limit - offsets.contextStart;
+        int cp;
+        int oldLen;
+        int newLen;
+        
+        for (; i < limit; i += oldLen) {
+            cp = UTF16.charAt(original, i);
+            oldLen = UTF16.getCharCount(cp);
+            
+            if (!SKIP.contains(cp)) {
+                if (doTitle) {
+                    newLen = UCharacter.toTitleCase(loc, original, i, buffer);
+                } else {
+                    newLen = UCharacter.toLowerCase(loc, original, i, buffer);
+                }
+                doTitle = !CASED.contains(cp);
+                if (newLen >= 0) {
+                    text.replace(textPos, textPos + oldLen, buffer, 0, newLen);
+                    if (newLen != oldLen) {
+                        textPos += newLen;
+                        offsets.limit += newLen - oldLen;
+                        offsets.contextLimit += newLen - oldLen;
+                        continue;
+                    }
+                }
+            }
+            textPos += oldLen;
+        }
+        offsets.start = offsets.limit;
     }
+    
+    private char buffer[] = new char[UCharacter.getMaxCaseExpansion()];
 }

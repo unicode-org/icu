@@ -13,9 +13,9 @@ import java.util.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.10 $ $Date: 2001/11/21 20:57:08 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.11 $ $Date: 2001/11/25 23:12:22 $
  */
-class NormalizationTransliterator extends Transliterator {
+final class NormalizationTransliterator extends Transliterator {
 
     /**
      * The normalization mode of this transliterator.
@@ -36,8 +36,23 @@ class NormalizationTransliterator extends Transliterator {
      *
      * TODO Update this to 4 separate sets, one for each norm. form.
      */
-    static final UnicodeSet UNSAFE_START = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
-
+     
+    static final UnicodeSet[] UNSAFE_STARTS = new UnicodeSet[4];
+    
+    static final int
+        D = 0, C = 1, KD= 2, KC = 3;
+    
+    // TODO: Set to exact values for different NFs for more accuracy
+    static {
+        UNSAFE_STARTS[D] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
+        UNSAFE_STARTS[C] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
+        UNSAFE_STARTS[KD] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
+        UNSAFE_STARTS[KC] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
+    }
+    
+    // Instance data, simply pointer to one of the above
+    final UnicodeSet UNSAFE_START;
+    
     /**
      * System registration hook.
      */
@@ -76,11 +91,18 @@ class NormalizationTransliterator extends Transliterator {
     public static NormalizationTransliterator getInstance(Normalizer.Mode m,
                                                           int opt) {
         StringBuffer id = new StringBuffer("NF");
+        int choice = 0;
         if (m.compat()) {
             id.append('K');
+            choice |= KD;
         }
-        id.append(m.compose() ? 'C' : 'D');
-        return new NormalizationTransliterator(id.toString(), m, opt);
+        if (m.compose()) {
+            id.append('C');
+            choice |= C;
+        } else {
+            id.append('D');
+        }
+        return new NormalizationTransliterator(id.toString(), m, choice, opt);
     }
 
     /**
@@ -93,11 +115,12 @@ class NormalizationTransliterator extends Transliterator {
     /**
      * Constructs a transliterator.
      */
-    private NormalizationTransliterator(String id, Normalizer.Mode m,
+    private NormalizationTransliterator(String id, Normalizer.Mode m, int startChoice,
                                         int opt) {
         super(id, null);
         mode = m;
         options = opt;
+        UNSAFE_START = UNSAFE_STARTS[startChoice];
     }
 
     /**
@@ -107,32 +130,56 @@ class NormalizationTransliterator extends Transliterator {
                                        Position offsets, boolean isIncremental) {
         int start = offsets.start;
         int limit = offsets.limit;
+        if (start >= limit) return;
 
-        // For the non-incremental case normalize right up to
-        // offsets.limit.  In the incremental case, find the last base
-        // character b, and pass everything from the start up to the
-        // character before b to normalizer.
-        if (isIncremental) {
-            --limit;
-            char c;
-            while (limit > start &&
-                   (UCharacter.getCombiningClass(c=text.charAt(limit)) != 0 ||
-                    UNSAFE_START.contains(c))) {
-                --limit;
+        int overallDelta = 0;
+            
+        // Walk through the string looking for safe characters.
+        // Whenever you hit one normalize from the start of the last
+        // safe character up to just before the next safe character
+        // Also, if you hit the end and we are not in incremental mode,
+        // do to end.
+            
+        // TODO: fix for surrogates
+        // TODO: add QuickCheck, so we rarely convert OK stuff
+            
+        int lastSafe = start; // go back to start in any event
+        int cp;
+        for (int i = start+1; i < limit; i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(text, i);
+            if (UCharacter.getCombiningClass(cp) == 0 && !UNSAFE_START.contains(cp)) {
+                int delta = convert(text, lastSafe, i);
+                i += delta;
+                limit += delta;
+                overallDelta += delta;
+                lastSafe = i;
             }
         }
-        
-        if (limit > start) {
-            char chars[] = new char[limit - start];
-            text.getChars(start, limit, chars, 0);
-            String input = new String(chars);
-            String output = Normalizer.normalize(input, mode, options);
-            text.replace(start, limit, output);
-
-            int delta = output.length() - input.length();
-            offsets.contextLimit += delta;
-            offsets.limit += delta;
-            offsets.start = limit + delta;
+        if (!isIncremental) {
+            overallDelta += convert(text, lastSafe, limit);
         }
+        offsets.contextLimit += overallDelta;
+        offsets.limit += overallDelta;
+        offsets.start = lastSafe;
     }
+    
+    int convert(Replaceable text, int lastSafe, int limit) {        
+        //System.out.println("t: " + com.ibm.util.Utility.hex(text.toString()) + ", s: " + lastSafe + ", l: " + limit);
+
+        int len = limit - lastSafe;
+        if (buffer.length < len) {
+            buffer = new char[len]; // rare, and we don't care if we grow too large
+        }
+        text.getChars(lastSafe, limit, buffer, 0);
+        String input = new String(buffer, 0, len); // TODO: fix normalizer to take char[]
+        String output = Normalizer.normalize(input, mode, options);
+        if (output.equals(input)) {
+            return 0;
+        }
+        text.replace(lastSafe, limit, output);
+        return output.length() - len;
+    }
+    
+    private char buffer[] = new char[30];
+    
 }
