@@ -28,7 +28,7 @@ CompoundTransliterator::CompoundTransliterator(
                            int32_t count,
                            UnicodeFilter* adoptedFilter) :
     Transliterator(joinIDs(transliterators, count), adoptedFilter),
-    trans(0), count(0) {
+    trans(0), count(0), filters(0) {
     setTransliterators(transliterators, count);
 }
 
@@ -42,9 +42,8 @@ CompoundTransliterator::CompoundTransliterator(
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                               Transliterator::Direction direction,
                               UnicodeFilter* adoptedFilter) :
-    Transliterator(ID, adoptedFilter) {
-    // changed MED
-    // Later, add "rule1[filter];rule2...
+    Transliterator(ID, 0), // set filter to 0 here!
+    filters(0) {
     UnicodeString* list = split(ID, ';', count);
     trans = new Transliterator*[count];
     for (int32_t i = 0; i < count; ++i) {
@@ -53,6 +52,7 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
     }
     delete[] list;
     computeMaximumContextLength();
+    adoptFilter(adoptedFilter);
 }
 
 /**
@@ -105,7 +105,7 @@ UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
  * Copy constructor.
  */
 CompoundTransliterator::CompoundTransliterator(const CompoundTransliterator& t) :
-    Transliterator(t), trans(0), count(0) {
+    Transliterator(t), trans(0), count(0), filters(0) {
     *this = t;
 }
 
@@ -119,9 +119,14 @@ CompoundTransliterator::~CompoundTransliterator() {
 void CompoundTransliterator::freeTransliterators(void) {
     for (int32_t i=0; i<count; ++i) {
         delete trans[i];
+        if (filters != 0) {
+            delete filters[i];
+        }
     }
-    delete[] trans;    
+    delete[] trans;
+    delete[] filters;
     trans = 0;
+    filters = 0;
     count = 0;
 }
 
@@ -135,14 +140,23 @@ CompoundTransliterator& CompoundTransliterator::operator=(
     for (i=0; i<count; ++i) {
         delete trans[i];
         trans[i] = 0;
+        if (filters != 0) {
+            delete filters[i];
+            filters[i] = 0;
+        }
     }
     if (t.count > count) {
         delete[] trans;
         trans = new Transliterator*[t.count];
+        delete[] filters;
+        filters = (t.filter == 0) ? 0 : new UnicodeFilter*[t.count];
     }
     count = t.count;
     for (i=0; i<count; ++i) {
         trans[i] = t.trans[i]->clone();
+        if (t.filters != 0) {
+            filters[i] = t.filters[i]->clone();
+        }
     }
     return *this;
 }
@@ -171,7 +185,6 @@ const Transliterator& CompoundTransliterator::getTransliterator(int32_t index) c
     return *trans[index];
 }
 
-
 void CompoundTransliterator::setTransliterators(Transliterator* const transliterators[],
                                                 int32_t transCount) {
     Transliterator** a = new Transliterator*[transCount];
@@ -183,10 +196,64 @@ void CompoundTransliterator::setTransliterators(Transliterator* const transliter
 
 void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransliterators[],
                                                   int32_t transCount) {
+    // First free trans[] and set count to zero.  Once this is done,
+    // orphan the filter.  Set up the new trans[], and call
+    // adoptFilter() to fix up the filters in trans[].
     freeTransliterators();
+    UnicodeFilter *f = orphanFilter();
     trans = adoptedTransliterators;
     count = transCount;
     computeMaximumContextLength();
+    adoptFilter(f);
+}
+
+/**
+ * Override Transliterator.  Modify the transliterators that make up
+ * this compound transliterator so their filters are the logical AND
+ * of this transliterator's filter and their own.  Original filters
+ * are kept in the filters array.
+ */
+void CompoundTransliterator::adoptFilter(UnicodeFilter* f) {
+    /**
+     * If there is a filter F for the compound transliterator as a
+     * whole, then we need to modify every non-null filter f in
+     * the chain to be f' = F & f.
+     *
+     * There are two possible states:
+     * 1. getFilter() != 0
+     *    original filters in filters[]
+     *    createAnd() filters in trans[]
+     * 2. getFilter() == 0
+     *    filters[] either unallocated or empty
+     *    original filters in trans[]
+     * This method must insure that we stay in one of these states.
+     */
+    if (count > 0) {
+        if (f == 0) {
+            // Restore original filters
+            if (getFilter() != 0 && filters != 0) {
+                for (int32_t i=0; i<count; ++i) {
+                    trans[i]->adoptFilter(filters[i]);
+                    filters[i] = 0;
+                }
+            }
+        } else {
+            // If the previous filter is 0, then the component filters
+            // are in trans[i], and need to be pulled out into filters[].
+            if (getFilter() == 0) {
+                if (filters == 0) {
+                    filters = new UnicodeFilter*[count];
+                }
+                for (int32_t i=0; i<count; ++i) {
+                    filters[i] = trans[i]->orphanFilter();
+                }
+            }
+            for (int32_t i=0; i<count; ++i) {
+                trans[i]->adoptFilter(UnicodeFilterLogic::createAnd(f, filters[i]));
+            }
+        }
+    }
+    Transliterator::adoptFilter(f);
 }
 
 /**
@@ -252,28 +319,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, Position& in
         return; // Short circuit for empty compound transliterators
     }
 
-    /**
-     * One more wrinkle.  If there is a filter F for the compound
-     * transliterator as a whole, then we need to modify every
-     * non-null filter f in the chain to be f' = F & f.  Then,
-     * when we're done, we restore the original filters.
-     *
-     * A possible future optimization is to change f to f' at
-     * construction time, but then if anyone else is using the
-     * transliterators in the chain outside of this context, they
-     * will get unexpected results.
-     */
-    const UnicodeFilter* F = getFilter();
 	int32_t i;
-    UnicodeFilter** f = 0;
-    if (F != 0) {
-        f = new UnicodeFilter*[count];
-        for (i=0; i<count; ++i) {
-            f[i] = trans[i]->getFilter()->clone();
-            trans[i]->adoptFilter(UnicodeFilterLogic::createAnd(*F, *f[i]));
-        }
-    }
-
     int32_t cursor = index.cursor;
     int32_t limit = index.limit;
     int32_t globalLimit = limit;
@@ -297,14 +343,6 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, Position& in
     // transliterator left it.  Limit needs to be put back
     // where it was, modulo adjustments for deletions/insertions.
     index.limit = globalLimit;
-    
-    // Fixup the transliterator filters, if we had to modify them.
-    if (f != 0) {
-        for (i=0; i<count; ++i) {
-            trans[i]->adoptFilter(f[i]);
-        }
-        delete[] f;
-    }
 }
 
 /**
