@@ -741,7 +741,7 @@ void IntlTestRBNF::TestLLong()
         }
     }
 
-    logln("Testing operator%=, operator%");
+    logln("Testing operator%%=, operator%%");
     //operator%=, operator%
     {
         const llong ZERO;
