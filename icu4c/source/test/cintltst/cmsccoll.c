@@ -2439,8 +2439,8 @@ static void TestExpansion() {
     };
     const static UChar testdata[][3] = {
         {(UChar)'J', (UChar)'A', 0},
-        {(UChar)'K', (UChar)'A', 0},
         {(UChar)'M', (UChar)'A', 0},
+        {(UChar)'K', (UChar)'A', 0},
         {(UChar)'K', (UChar)'C', 0},
         {(UChar)'J', (UChar)'C', 0},
         {(UChar)'M', (UChar)'C', 0}
@@ -2496,7 +2496,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
     addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
     addTest(root, &TestContraction, "tscoll/cmsccoll/TestContraction");
-    /* addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion"); */
+    addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
 }
