@@ -80,8 +80,6 @@ public class ICUResourceBundleIterator{
     
     /**
      * Resets the internal context of a resource so that iteration starts from the first element.
-     *
-     * @param resourceBundle a resource
      * @draft ICU 3.0
      */
     public void reset(){
@@ -91,8 +89,6 @@ public class ICUResourceBundleIterator{
     
     /**
      * Checks whether the given resource has another element to iterate over.
-     *
-     * @param resourceBundle a resource
      * @return TRUE if there are more elements, FALSE if there is no more elements
      * @draft ICU 3.0
      */

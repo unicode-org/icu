@@ -114,7 +114,7 @@ import com.ibm.icu.util.VersionInfo;
  *
  *
  */
-public class ICUResourceBundleReader implements ICUBinary.Authenticate{
+public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
 
     /**
      * File format version that this class understands.
@@ -138,7 +138,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
     //private static final int    URES_STRINGS_BOTTOM=(1+URES_INDEX_TOP)*4;
     private static final boolean DEBUG = false;
     
-    private ByteBuffer data;
+    private byte[] data;
     
     private ICUResourceBundleReader(InputStream stream, String resolvedName){
 
@@ -171,7 +171,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
     }
     /* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
         
-    private static ByteBuffer readData(InputStream stream)
+    private static byte[] readData(InputStream stream)
             throws IOException{
         
         DataInputStream ds = new DataInputStream(stream);
@@ -190,17 +190,11 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
         
         int length = indexes[URES_INDEX_BUNDLE_TOP]*4;
         if(DEBUG) System.out.println("The number of bytes in the bundle: "+length);
-        
-        if(stream instanceof FileInputStream){
-            FileChannel channel = ((FileInputStream)stream).getChannel();
-            ByteBuffer val = channel.map(FileChannel.MapMode.READ_ONLY,0,length);
-            return val;
-        }else{    
-            byte[] data = new byte[length];
-            ds.readFully(data);
-            return ByteBuffer.wrap(data);
-        }
-        
+    
+        byte[] data = new byte[length];
+        ds.readFully(data);
+        return data;
+       
     }
     /**
      * Gets the full name of the resource with suffix.
@@ -236,7 +230,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
                && version[3] == DATA_FORMAT_VERSION[3];
     }
     
-    public ByteBuffer getData(){
+    public byte[] getData(){
         return data;   
     }
     
