@@ -24,6 +24,8 @@
 #include "unicode/ustdio.h"
 #include "unicode/uloc.h"
 #include "uoptions.h"
+#include "toolutil.h"
+
 #include <stdlib.h>
 #ifdef WIN32
 #include <direct.h>
@@ -71,6 +73,7 @@ main(int argc, char* argv[]) {
 	UErrorCode status = U_ZERO_ERROR;
     UFILE *out = NULL;
     int32_t i = 0;
+    const char* arg;
 #ifdef WIN32
     currdir = _getcwd(NULL, 0);
 #else
@@ -125,24 +128,34 @@ main(int argc, char* argv[]) {
 		trunc = FALSE;
 	}
 
-	outerr = u_finit(stderr, locale, encoding);
+    outerr = u_finit(stderr, locale, encoding);
 	out = u_finit(stdout, locale, encoding); 
 
     u_fprintf(outerr, "We are running under %s locale\n", locale);
+
 /*
     for(i = 0; i<20; i++) {
 		reportError(&i);
     }
 */
-	bundle = ures_open(resPath, locale, &status);
-	if(U_SUCCESS(status)) {
-		u_fprintf(out, "%s\n", locale);
-		printOutBundle(out, bundle, 0, &status);
-	} else {
-		reportError(&status);
-	}
 
-	ures_close(bundle);
+    for(i = 1; i < argc; ++i) {
+        status = U_ZERO_ERROR;
+        arg = getLongPathname(argv[i]);
+
+        printf("uresb: processing file \"%s\"\n", arg);
+	    bundle = ures_open(resPath, arg, &status);
+	    if(U_SUCCESS(status)) {
+		    u_fprintf(out, "%s\n", arg);
+		    printOutBundle(out, bundle, 0, &status);
+	    } else {
+		    reportError(&status);
+	    }
+
+	    ures_close(bundle);
+    }
+
+
 
     u_fclose(out);
     u_fclose(outerr);
