@@ -99,15 +99,11 @@
 #define _UTF32LEData _UTF32LEData_3_1
 #define _UTF7Data _UTF7Data_3_1
 #define _UTF8Data _UTF8Data_3_1
-#define breakiterator_cleanup breakiterator_cleanup_3_1
 #define cmemory_cleanup cmemory_cleanup_3_1
 #define cmemory_inUse cmemory_inUse_3_1
-#define locale_cleanup locale_cleanup_3_1
 #define locale_getKeywords locale_getKeywords_3_1
 #define locale_get_default locale_get_default_3_1
 #define locale_set_default locale_set_default_3_1
-#define pname_cleanup pname_cleanup_3_1
-#define putil_cleanup putil_cleanup_3_1
 #define res_countArrayItems res_countArrayItems_3_1
 #define res_findResource res_findResource_3_1
 #define res_getAlias res_getAlias_3_1
@@ -120,7 +116,6 @@
 #define res_getTableItemByKey res_getTableItemByKey_3_1
 #define res_load res_load_3_1
 #define res_unload res_unload_3_1
-#define service_cleanup service_cleanup_3_1
 #define transliterator_cleanup transliterator_cleanup_3_1
 #define u_UCharsToChars u_UCharsToChars_3_1
 #define u_austrcpy u_austrcpy_3_1
@@ -397,7 +392,6 @@
 #define ucal_setMillis ucal_setMillis_3_1
 #define ucal_setTimeZone ucal_setTimeZone_3_1
 #define ucase_addPropertyStarts ucase_addPropertyStarts_3_1
-#define ucase_cleanup ucase_cleanup_3_1
 #define ucase_close ucase_close_3_1
 #define ucase_fold ucase_fold_3_1
 #define ucase_getSingleton ucase_getSingleton_3_1
@@ -416,9 +410,10 @@
 #define ucase_totitle ucase_totitle_3_1
 #define ucase_toupper ucase_toupper_3_1
 #define uchar_addPropertyStarts uchar_addPropertyStarts_3_1
-#define uchar_cleanup uchar_cleanup_3_1
 #define uchar_getHST uchar_getHST_3_1
 #define uchar_swapNames uchar_swapNames_3_1
+#define ucln_common_lib_cleanup ucln_common_lib_cleanup_3_1
+#define ucln_common_registerCleanup ucln_common_registerCleanup_3_1
 #define ucln_i18n_registerCleanup ucln_i18n_registerCleanup_3_1
 #define ucln_registerCleanup ucln_registerCleanup_3_1
 #define ucmp8_close ucmp8_close_3_1
@@ -454,7 +449,6 @@
 #define ucnv_cbFromUWriteUChars ucnv_cbFromUWriteUChars_3_1
 #define ucnv_cbToUWriteSub ucnv_cbToUWriteSub_3_1
 #define ucnv_cbToUWriteUChars ucnv_cbToUWriteUChars_3_1
-#define ucnv_cleanup ucnv_cleanup_3_1
 #define ucnv_close ucnv_close_3_1
 #define ucnv_compareNames ucnv_compareNames_3_1
 #define ucnv_convert ucnv_convert_3_1
@@ -508,7 +502,6 @@
 #define ucnv_getType ucnv_getType_3_1
 #define ucnv_getUnicodeSet ucnv_getUnicodeSet_3_1
 #define ucnv_incrementRefCount ucnv_incrementRefCount_3_1
-#define ucnv_io_cleanup ucnv_io_cleanup_3_1
 #define ucnv_io_countAliases ucnv_io_countAliases_3_1
 #define ucnv_io_countAvailableAliases ucnv_io_countAvailableAliases_3_1
 #define ucnv_io_countAvailableConverters ucnv_io_countAvailableConverters_3_1
@@ -677,7 +670,6 @@
 #define udat_setSymbols udat_setSymbols_3_1
 #define udat_toPattern udat_toPattern_3_1
 #define udata_checkCommonData udata_checkCommonData_3_1
-#define udata_cleanup udata_cleanup_3_1
 #define udata_close udata_close_3_1
 #define udata_closeSwapper udata_closeSwapper_3_1
 #define udata_getHeaderSize udata_getHeaderSize_3_1
@@ -779,7 +771,6 @@
 #define uiter_setUTF16BE uiter_setUTF16BE_3_1
 #define uiter_setUTF8 uiter_setUTF8_3_1
 #define uloc_canonicalize uloc_canonicalize_3_1
-#define uloc_cleanup uloc_cleanup_3_1
 #define uloc_countAvailable uloc_countAvailable_3_1
 #define uloc_getAvailable uloc_getAvailable_3_1
 #define uloc_getBaseName uloc_getBaseName_3_1
@@ -829,9 +820,7 @@
 #define umtx_init umtx_init_3_1
 #define umtx_lock umtx_lock_3_1
 #define umtx_unlock umtx_unlock_3_1
-#define unames_cleanup unames_cleanup_3_1
 #define unorm_addPropertyStarts unorm_addPropertyStarts_3_1
-#define unorm_cleanup unorm_cleanup_3_1
 #define unorm_closeIter unorm_closeIter_3_1
 #define unorm_compare unorm_compare_3_1
 #define unorm_compose unorm_compose_3_1
@@ -1004,7 +993,6 @@
 #define uregex_split uregex_split_3_1
 #define uregex_start uregex_start_3_1
 #define ures_appendResPath ures_appendResPath_3_1
-#define ures_cleanup ures_cleanup_3_1
 #define ures_close ures_close_3_1
 #define ures_copyResb ures_copyResb_3_1
 #define ures_countArrayItems ures_countArrayItems_3_1
@@ -1090,7 +1078,6 @@
 #define uset_applyPattern uset_applyPattern_3_1
 #define uset_applyPropertyAlias uset_applyPropertyAlias_3_1
 #define uset_charAt uset_charAt_3_1
-#define uset_cleanup uset_cleanup_3_1
 #define uset_clear uset_clear_3_1
 #define uset_close uset_close_3_1
 #define uset_compact uset_compact_3_1
@@ -1126,9 +1113,7 @@
 #define uset_setSerializedToOne uset_setSerializedToOne_3_1
 #define uset_size uset_size_3_1
 #define uset_toPattern uset_toPattern_3_1
-#define usprep_cleanup usprep_cleanup_3_1
 #define usprep_close usprep_close_3_1
-#define usprep_init usprep_init_3_1
 #define usprep_open usprep_open_3_1
 #define usprep_prepare usprep_prepare_3_1
 #define usprep_swap usprep_swap_3_1
@@ -1164,6 +1149,7 @@
 #define utrans_openInverse utrans_openInverse_3_1
 #define utrans_openU utrans_openU_3_1
 #define utrans_register utrans_register_3_1
+#define utrans_rep_caseContextIterator utrans_rep_caseContextIterator_3_1
 #define utrans_setFilter utrans_setFilter_3_1
 #define utrans_trans utrans_trans_3_1
 #define utrans_transIncremental utrans_transIncremental_3_1
@@ -1306,12 +1292,14 @@
 #define LayoutEngine LayoutEngine_3_1
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_3_1
 #define LigatureSubstitutionSubtable LigatureSubstitutionSubtable_3_1
+#define LocDataParser LocDataParser_3_1
 #define Locale Locale_3_1
 #define LocaleBased LocaleBased_3_1
 #define LocaleKey LocaleKey_3_1
 #define LocaleKeyFactory LocaleKeyFactory_3_1
 #define LocaleRuns LocaleRuns_3_1
 #define LocaleUtility LocaleUtility_3_1
+#define LocalizationInfo LocalizationInfo_3_1
 #define LookupListTable LookupListTable_3_1
 #define LookupProcessor LookupProcessor_3_1
 #define LookupSubtable LookupSubtable_3_1
@@ -1413,6 +1401,7 @@
 #define StateTableProcessor StateTableProcessor_3_1
 #define StringCharacterIterator StringCharacterIterator_3_1
 #define StringEnumeration StringEnumeration_3_1
+#define StringLocalizationInfo StringLocalizationInfo_3_1
 #define StringMatcher StringMatcher_3_1
 #define StringPair StringPair_3_1
 #define StringReplacer StringReplacer_3_1
@@ -1440,6 +1429,7 @@
 #define UMemory UMemory_3_1
 #define UObject UObject_3_1
 #define UStack UStack_3_1
+#define UStringEnumeration UStringEnumeration_3_1
 #define UVector UVector_3_1
 #define UVector32 UVector32_3_1
 #define UnescapeTransliterator UnescapeTransliterator_3_1
