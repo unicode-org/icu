@@ -293,10 +293,10 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
         }
         // Show the start index '{' and the cursor '|'
         UnicodeString a, b, c;
-        s.extractBetween(0, index[Transliterator.START], a);
-        s.extractBetween(index[Transliterator.START],
-                           index[Transliterator.CURSOR], b);
-        s.extractBetween(index[Transliterator.CURSOR],
+        s.extractBetween(0, index[Transliterator::START], a);
+        s.extractBetween(index[Transliterator::START],
+                           index[Transliterator::CURSOR], b);
+        s.extractBetween(index[Transliterator::CURSOR],
                            s.length(), c);
         log.append(a).
             append('{').
@@ -482,8 +482,8 @@ void TransliteratorTest::expect(const Transliterator& t,
         // Append the string buffer with a vertical bar '|' where
         // the committed index is.
         UnicodeString left, right;
-        rsource.extractBetween(0, index[Transliterator.CURSOR], left);
-        rsource.extractBetween(index[Transliterator.CURSOR], rsource.length(), right);
+        rsource.extractBetween(0, index[Transliterator::CURSOR], left);
+        rsource.extractBetween(index[Transliterator::CURSOR], rsource.length(), right);
         log.append(left).append((UChar)'|').append(right);
     }
     

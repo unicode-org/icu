@@ -83,8 +83,14 @@ sl_SI.txt sq.txt sq_AL.txt sr.txt sr_YU.txt sv.txt sv_SE.txt th.txt	\
 th_TH.txt tr.txt tr_TR.txt uk.txt uk_UA.txt vi.txt vi_VN.txt zh.txt	\
 zh_CN.txt zh_HK.txt zh_TW.txt default.txt index.txt
 
+TRANSLIT_SOURCE = expcon.txt kbdescl1.txt larabic.txt ldevan.txt \
+lgreek.txt lhalfwid.txt lhebrew.txt lkana.txt lrussian.txt       \
+quotes.txt ucname.txt
+
 TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
 RES_FILES = $(TXT_FILES:.txt=.res)
+TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
+TRANSLIT_RES = $(TRANSLIT_FILES:.txt=.res)
 TEST_FILES = $(top_srcdir)/test/testdata/default.res \
 $(top_srcdir)/test/testdata/te.res \
 $(top_srcdir)/test/testdata/te_IN.res
@@ -105,7 +111,7 @@ distclean : distclean-local
 dist: dist-local
 check: check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TEST_FILES)
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
 install-local: target-clean-local all-local
 	$(mkinstalldirs) $(sbindir)
@@ -114,6 +120,11 @@ install-local: target-clean-local all-local
 	@list='$(notdir $(RES_FILES))'; for file in $$list; do \
 		echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 		$(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	done
+	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)/translit
+	@list='$(notdir $(TRANSLIT_RES))'; for file in $$list; do \
+		echo $(INSTALL_DATA) $(top_srcdir)/../data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
+		$(INSTALL_DATA) $(top_srcdir)/../data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
 	done
 
 dist-local:
