@@ -25,7 +25,9 @@ testtypes
     emptybin:bin { "" }
     emptyint:int { "" }
     emptytable:table { }
-    emptyarray:array { }
+    emptyarray:array 
+    {
+    }
     
 }
 
