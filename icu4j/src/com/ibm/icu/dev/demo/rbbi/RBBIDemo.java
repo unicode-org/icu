@@ -8,6 +8,7 @@ package com.ibm.icu.dev.demo.rbbi;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -240,6 +241,37 @@ JTextArea text;
         enableEvents(WindowEvent.WINDOW_CLOSING);
         enableEvents(KeyEvent.KEY_PRESSED);
         enableEvents(KeyEvent.KEY_RELEASED);    
+
+	text.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    if (e.isControlDown()) {
+			int kc = e.getKeyCode();
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_N:
+			case KeyEvent.VK_RIGHT:
+			    handleForward();
+			    break;
+			case KeyEvent.VK_P:
+			case KeyEvent.VK_LEFT:
+			    handleBackward();
+			    break;
+			default:
+			    break;
+			}
+			e.consume();
+		    }
+		}
+		public void keyReleased(KeyEvent e) {
+		    if (e.isControlDown()) {
+			e.consume();
+		    }
+		}
+		public void keyTyped(KeyEvent e) {
+		    if (e.isControlDown()) {
+			e.consume();
+		    }
+		}
+	    });
 
         // (new Thread(this)).start();
     }
