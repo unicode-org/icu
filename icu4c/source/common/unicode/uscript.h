@@ -16,6 +16,11 @@
 #define USCRIPT_H
 #include "utypes.h"
 
+/**
+ * Constants for Unicode script values from ScriptNames.txt .
+ *
+ * @draft ICU 2.0
+ */
 typedef enum UScriptCode {
       USCRIPT_INVALID_CODE = -1,
       USCRIPT_COMMON       =  0 , /* Zyyy */
@@ -63,9 +68,6 @@ typedef enum UScriptCode {
       USCRIPT_CODE_LIMIT   = 42 
 } UScriptCode;
 
-
-
-
 /**
  * Gets script codes associated with the given locale or ISO 15924 abbreviation or name. 
  * Fills in USCRIPT_MALAYAM given "Malayam" OR "Mlym".
@@ -77,7 +79,7 @@ typedef enum UScriptCode {
  * @param capacity the capacity (size) fo UScriptCode buffer passed in.
  * @param err the error status code.
  * @return The number of script codes filled in the buffer passed in 
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI int32_t 
 uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capacity,UErrorCode *err);
@@ -87,7 +89,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capac
  * Returns  "Malayam" given USCRIPT_MALAYAM
  * @param scriptCode UScriptCode enum
  * @return script name as a string in full as given in TR#24
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI const char* 
 uscript_getName(UScriptCode scriptCode);
@@ -97,11 +99,10 @@ uscript_getName(UScriptCode scriptCode);
  * Returns  "Mlym" given USCRIPT_MALAYAM
  * @param scriptCode UScriptCode enum
  * @return script abbreviated name as a string  as given in TR#24
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI const char* 
 uscript_getShortName(UScriptCode scriptCode);
-
 
 /** 
  * Gets the script code associated with the given codepoint.
@@ -109,6 +110,7 @@ uscript_getShortName(UScriptCode scriptCode);
  * @param codepoint UChar32 codepoint
  * @param err the error status code.
  * @return The UScriptCode 
+ * @draft ICU 2.0
  */
 U_CAPI UScriptCode 
 uscript_getScript(UChar32 codepoint, UErrorCode *err);

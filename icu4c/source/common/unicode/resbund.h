@@ -153,7 +153,7 @@ class RuleBasedCollator;
  *     myResources.getString("CancelKey", button2Title, success );
  * \endcode
  * </pre>
- * @draft
+ * @stable
  */
 class U_COMMON_API ResourceBundle {
 public:
@@ -182,14 +182,30 @@ public:
      * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that
      * the default locale data was used; neither the requested locale nor any of its
      * fall back locales could be found.
-     * @draft
+     * @stable
      */
     ResourceBundle( const UnicodeString&    path,
                     const Locale&           locale,
                     UErrorCode&              err);
+
+    /**
+     * Construct a resource bundle for the root bundle in the specified path.
+     *
+     * @param path A path/basename for the data file(s) containing the bundle.
+     * @param err A UErrorCode value
+     * @stable
+     */
     ResourceBundle( const UnicodeString&    path,
                     UErrorCode&              err);
+
+    /**
+     * Construct a resource bundle for the ICU root bundle.
+     *
+     * @param err A UErrorCode value
+     * @stable
+     */
     ResourceBundle(UErrorCode &err);
+
     /**
      * Constructs a ResourceBundle
      *
@@ -198,13 +214,47 @@ public:
     ResourceBundle( const wchar_t* path,
                     const Locale& locale,
                     UErrorCode& err);
+
+    /**
+     * Standard constructor, onstructs a resource bundle for the locale-specific
+     * bundle in the specified path.
+     *
+     * @param path A path/basename for the data file(s) containing the bundle.
+     *             NULL is used for ICU data.
+     * @param locale The locale for which to open a resource bundle.
+     * @param err A UErrorCode value
+     * @stable
+     */
     ResourceBundle( const char* path,
                     const Locale& locale,
                     UErrorCode& err);
+
+    /**
+     * Copy constructor.
+     *
+     * @param original The resource bundle to copy.
+     * @stable
+     */
     ResourceBundle(const ResourceBundle &original);
+
+    /**
+     * Constructor from a C UResourceBundle.
+     *
+     * @param res A pointer to the C resource bundle.
+     * @param status A UErrorCode value.
+     * @stable
+     */
     ResourceBundle(UResourceBundle *res, UErrorCode &status);
 
+    /**
+     * Assignment operator.
+     *
+     * @param other The resource bundle to copy.
+     * @stable
+     */
     ResourceBundle& operator=(const ResourceBundle& other);
+
+    /** Destructor. @stable */
     ~ResourceBundle();
 
     /**
@@ -267,7 +317,7 @@ public:
      *                could be a non-failing error 
      *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
      * @return an unsigned integer value
-     * @draft
+     * @draft ICU 2.0
      */
     uint32_t getUInt(UErrorCode& status) const;
 
@@ -280,7 +330,7 @@ public:
      *                could be a non-failing error 
      *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
      * @return a signed integer value
-     * @draft
+     * @draft ICU 2.0
      */
     int32_t getInt(UErrorCode& status) const;
 
@@ -288,14 +338,14 @@ public:
      * Checks whether the resource has another element to iterate over.
      *
      * @return TRUE if there are more elements, FALSE if there is no more elements
-     * @draft
+     * @stable
      */
     UBool hasNext(void) const;
 
     /**
      * Resets the internal context of a resource so that iteration starts from the first element.
      *
-     * @draft
+     * @stable
      */
     void resetIterator(void);
 
@@ -304,10 +354,16 @@ public:
      * those that are members of a table.
      *
      * @return a key associated to this resource, or NULL if it doesn't have a key
-     * @draft
+     * @stable
      */
     const char *getKey(void);
 
+    /**
+     * Gets the locale ID of the resource bundle as a string.
+     * Same as getLocale().getName() .
+     *
+     * @stable
+     */
     const char *getName(void);
 
 
@@ -324,7 +380,7 @@ public:
      *
      * @param status            fills in the outgoing error code
      * @return                  ResourceBundle object.
-     * @draft
+     * @stable
      */
     ResourceBundle getNext(UErrorCode& status);
 
@@ -334,7 +390,7 @@ public:
      *
      * @param status            fills in the outgoing error code
      * @return an UnicodeString object.
-     * @draft
+     * @stable
      */
     UnicodeString getNextString(UErrorCode& status);
 
@@ -345,7 +401,7 @@ public:
      * @param key               fill in for key associated with this string
      * @param status            fills in the outgoing error code
      * @return an UnicodeString object.
-     * @draft
+     * @stable
      */
     UnicodeString getNextString(const char ** key, UErrorCode& status);
 
@@ -392,33 +448,28 @@ public:
     UnicodeString getStringEx(const char* key, UErrorCode& status) const;
     
     /**
-     * Return the version number associated with this ResourceBundle. This version
-     * number is a string of the form MAJOR.MINOR, where MAJOR is the version number of
-     * the current analytic code package, and MINOR is the version number contained in
-     * the resource file as the value of the tag "Version". A change in the MINOR
-     * version indicated an updated data file. A change in the MAJOR version indicates a
-     * new version of the code which is not binary-compatible with the previous version.
-     * If no "Version" tag is present in a resource file, the MINOR version "0" is assigned.
+     * Return the version number associated with this ResourceBundle as a string.
      *
-     * For example, if the Collation sort key algorithm changes, the MAJOR version
-     * increments. If the collation data in a resource file changes, the MINOR version
-     * for that file increments.
-     *
-     * @return  A string of the form N.n, where N is the major version number,
-     *          representing the code version, and n is the minor version number,
-     *          representing the resource data file. The caller does not own this
-     *          string.
-     * @draft
+     * @return  A version number string as specified in the resource bundle or its parent.
+     *          The caller does not own this string.
+     * @stable
      */
     const char*   getVersionNumber(void) const;
 
+    /**
+     * Return the version number associated with this ResourceBundle as a UVersionInfo array.
+     *
+     * @param versionInfo A UVersionInfo array that is filled with the version number
+     *                    as specified in the resource bundle or its parent.
+     * @stable
+     */
     void getVersion(UVersionInfo versionInfo) const;
 
     /**
      * Return the Locale associated with this ResourceBundle. 
      *
      * @return a Locale object
-     * @draft
+     * @stable
      */
     const Locale &getLocale(void) const ;
 

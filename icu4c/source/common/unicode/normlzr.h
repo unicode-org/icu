@@ -107,6 +107,7 @@ U_NAMESPACE_BEGIN
  * later with setIndexOnly().
  *
  * @author Laura Werner, Mark Davis, Markus Scherer
+ * @draft ICU 2.0
  */
 class U_COMMON_API Normalizer
 {
@@ -267,6 +268,7 @@ public:
    * @paran mode         normalization format
    * @param status A pointer to a UErrorCode to receive any errors
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+   * @draft ICU 2.0
    */
   static UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
@@ -281,7 +283,7 @@ public:
    * The getIndex() is not changed.
    *
    * @return the current normalized code point
-   * @draft
+   * @draft ICU 2.0
    */
   UChar32              current(void);
 
@@ -291,7 +293,7 @@ public:
    * (Post-increment semantics.)
    *
    * @return the first normalized code point
-   * @draft
+   * @draft ICU 2.0
    */
   UChar32              first(void);
 
@@ -301,7 +303,7 @@ public:
    * (Pre-decrement semantics.)
    *
    * @return the last normalized code point
-   * @draft
+   * @draft ICU 2.0
    */
   UChar32              last(void);
 
@@ -311,7 +313,7 @@ public:
    * If the end of the text has already been reached, {@link #DONE} is returned.
    *
    * @return the next normalized code point
-   * @draft
+   * @draft ICU 2.0
    */
   UChar32              next(void);
 
@@ -321,7 +323,7 @@ public:
    * If the beginning of the text has already been reached, {@link #DONE} is returned.
    *
    * @return the previous normalized code point
-   * @draft
+   * @draft ICU 2.0
    */
   UChar32              previous(void);
 
@@ -346,6 +348,15 @@ public:
    */
   UChar32              setIndex(UTextOffset index);
 
+  /**
+   * Set the iteration position in the input text that is being normalized,
+   * without any immediate normalization.
+   * After setIndexOnly(), getIndex() will return the same index that is
+   * specified here.
+   *
+   * @param index the desired index in the input text.
+   * @draft ICU 2.0
+   */
   void                 setIndexOnly(UTextOffset index);
 
   /**
@@ -531,7 +542,7 @@ public:
    * Copies the input text into the UnicodeString argument.
    *
    * @param result Receives a copy of the text under iteration.
-   * @draft
+   * @stable
    */
   void            getText(UnicodeString&  result);
 
@@ -731,7 +742,6 @@ public:
    *              If you want the default behavior corresponding to one of the
    *              standard Unicode Normalization Forms, use 0 for this argument
    * @unimplemented 
-   *
    */
   Normalizer(const UChar* str,
          int32_t length,

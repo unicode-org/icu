@@ -63,12 +63,14 @@
 
 /**
  * FROM_U, TO_U options for sub and skip callbacks
+ * @draft ICU 1.8
  */
 #define UCNV_SUB_STOP_ON_ILLEGAL "i"
 #define UCNV_SKIP_STOP_ON_ILLEGAL "i"
 
 /**
  * FROM_U_CALLBACK_ESCAPE options
+ * @draft ICU 1.8
  */
 #define UCNV_ESCAPE_ICU     NULL
 #define UCNV_ESCAPE_JAVA    "J"
@@ -78,6 +80,7 @@
 
 /** 
  * The process condition code to be used with the callbacks.  
+ * @stable
  */
 typedef enum {
     UCNV_UNASSIGNED = 0,  /**< The code point is unassigned.
@@ -105,6 +108,7 @@ typedef enum {
 
 /**
  * The structure for the fromUnicode callback function parameter.
+ * @stable
  */
 typedef struct {
     uint16_t size;
@@ -120,6 +124,7 @@ typedef struct {
 
 /**
  * The structure for the toUnicode callback function parameter.
+ * @stable
  */
 typedef struct {
     uint16_t size;

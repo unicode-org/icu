@@ -171,6 +171,8 @@
  *                                            UnicodeString& displayName)
  * </pre>
  * </blockquote>
+ *
+ * @stable
  */
 U_NAMESPACE_BEGIN
 class U_COMMON_API Locale
@@ -179,6 +181,7 @@ public:
 #ifdef ICU_LOCID_USE_DEPRECATES
     /**
      * Useful constants for language.
+     * @deprecated Remove after 2002-aug-31. Use one of the Locale get functions.
      */
     static const Locale ENGLISH;
     static const Locale FRENCH;
@@ -192,6 +195,7 @@ public:
 
     /**
      * Useful constants for country.
+     * @deprecated Remove after 2002-aug-31. Use one of the Locale get functions.
      */
     static const Locale FRANCE;
     static const Locale GERMANY;
@@ -310,48 +314,48 @@ public:
 
 #endif /* ICU_LOCID_USE_DEPRECATES */
 
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getEnglish(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getFrench(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getGerman(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getItalian(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getJapanese(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getKorean(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getChinese(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getSimplifiedChinese(void);
-    /** Useful constant for this language. */
+    /** Useful constant for this language. @draft ICU 2.0 */
     static const Locale &getTraditionalChinese(void);
 
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getFrance(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getGermany(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getItaly(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getJapan(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getKorea(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getChina(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getPRC(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getTaiwan(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getUK(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getUS(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getCanada(void);
-    /** Useful constant for this country/region. */
+    /** Useful constant for this country/region. @draft ICU 2.0 */
     static const Locale &getCanadaFrench(void);
 
 
