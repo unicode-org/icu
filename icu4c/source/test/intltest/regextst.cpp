@@ -512,6 +512,61 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(RegexPattern::matches("abc", "abc", pe, status) == FALSE);
     REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
+
+    //
+    // Split()
+    //
+    status = U_ZERO_ERROR;
+    pat1 = RegexPattern::compile(" +",  pe, status);
+    REGEX_CHECK_STATUS;
+    UnicodeString  fields[10];
+
+    int32_t n;
+    n = pat1->split("Now is the time", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==4);
+    REGEX_ASSERT(fields[0]=="Now");
+    REGEX_ASSERT(fields[1]=="is");
+    REGEX_ASSERT(fields[2]=="the");
+    REGEX_ASSERT(fields[3]=="time");
+    REGEX_ASSERT(fields[4]=="");
+
+    n = pat1->split("Now is the time", fields, 2, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==2);
+    REGEX_ASSERT(fields[0]=="Now");
+    REGEX_ASSERT(fields[1]=="is the time");
+    REGEX_ASSERT(fields[2]=="the");   // left over from previous test
+
+    fields[1] = "*";
+    n = pat1->split("Now is the time", fields, 1, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==1);
+    REGEX_ASSERT(fields[0]=="Now is the time");
+    REGEX_ASSERT(fields[1]=="*");
+
+    n = pat1->split("    Now       is the time   ", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==5);
+    REGEX_ASSERT(fields[0]=="");
+    REGEX_ASSERT(fields[1]=="Now");
+    REGEX_ASSERT(fields[2]=="is");
+    REGEX_ASSERT(fields[3]=="the");
+    REGEX_ASSERT(fields[4]=="time");
+    REGEX_ASSERT(fields[5]=="");
+
+    n = pat1->split("     ", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==1);
+    REGEX_ASSERT(fields[0]=="");
+
+    fields[0] = "foo";
+    n = pat1->split("", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==0);
+    REGEX_ASSERT(fields[0]=="foo");
+
+
 }
 
 
