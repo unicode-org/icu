@@ -50,6 +50,9 @@ static void TestAdditionalProperties(void);
 static int32_t MakeProp(char* str);
 static int32_t MakeDir(char* str);
 
+/* get the sign of an integer */
+#define _SIGN(value) ((value)==0 ? 0 : ((int32_t)(value)>>31)|1)
+
 /* test data ---------------------------------------------------------------- */
 
 UChar*** dataTable = NULL;
@@ -1171,10 +1174,27 @@ static void TestStringFunctions()
             { 0xd800, 0xdc02, 0 },          /* U+10002 */
             { 0xd84d, 0xdc56, 0 }           /* U+23456 */
         };
+        int32_t len1, len2;
 
         for(i=0; i<(sizeof(strings)/sizeof(strings[0])-1); ++i) {
             if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
                 log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
+            }
+
+            /* test u_strCompare(TRUE) */
+            len1=u_strlen(strings[i]);
+            len2=u_strlen(strings[i+1]);
+            if( u_strCompare(strings[i], -1, strings[i+1], -1, TRUE)>=0 ||
+                u_strCompare(strings[i], -1, strings[i+1], len2, TRUE)>=0 ||
+                u_strCompare(strings[i], len1, strings[i+1], -1, TRUE)>=0 ||
+                u_strCompare(strings[i], len1, strings[i+1], len2, TRUE)>=0
+            ) {
+                log_err("error: u_strCompare(code point order) fails for string %d and the following one\n", i);
+            }
+
+            /* test u_strCompare(FALSE) */
+            if(_SIGN(u_strCompare(strings[i], -1, strings[i+1], -1, FALSE))!=_SIGN(u_strcmp(strings[i], strings[i+1]))) {
+                log_err("error: u_strCompare(code unit order)!=u_strcmp() for string %d and the following one\n", i);
             }
         }
     }
