@@ -762,7 +762,6 @@ zh {
         bad { "\u73ed\u8fbe\u6587" }
         bai { "\u5df4\u7c73\u7d2f\u514b\u6587" }
         bal { "\u4ffe\u8def\u652f\u6587" }
-        bam { "\u73ed\u5df4\u62c9\u6587" }
         ban { "\u5df4\u91cc\u6587" }
         bas { "\u5df4\u8428\u6587" }
         bat { "\u6ce2\u7f57\u7684\u6d77\u5730\u533a\u4e4b\u8bed\u8a00" }

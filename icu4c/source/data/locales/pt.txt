@@ -775,7 +775,6 @@ pt {
         bad { "banda" }
         bai { "bamileke Languages" }
         bal { "bal\u00fachi" }
-        bam { "bambara" }
         ban { "balin\u00eas" }
         bas { "basa" }
         bat { "b\u00e1lticos (outros)" }
