@@ -775,7 +775,7 @@ static void TestISOFunctions()
         }
 	else
 	{
-	  test = *(str+count);
+	  test = *(str+count-1);
 	  if(!strcmp(test,"in")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
 	  if(!strcmp(test,"iw")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
 	  if(!strcmp(test,"ji")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
@@ -801,7 +801,7 @@ static void TestISOFunctions()
         }
 	else
 	{
-	  test = *(str1+count);
+	  test = *(str1+count-1);
 	  if(!strcmp(test,"FX")) log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
 	  if(!strcmp(test,"ZR")) log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
 	}
