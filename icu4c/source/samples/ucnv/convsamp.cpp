@@ -175,8 +175,8 @@ void printUChar(UChar32 ch32)
 }
 
 /*******************************************************************
-  Very simple C++ sample to convert the word 'Moscow' in Russian, followed
-  by an exclamation mark (!) into the KOI8-R Russian code page.
+  Very simple C++ sample to convert the word 'Moscow' in Russian in Unicode,
+  followed by an exclamation mark (!) into the KOI8-R Russian code page.
 
   This example first creates a UnicodeString out of the Unicode chars.
 
@@ -233,7 +233,8 @@ UErrorCode convsample_01()
 
 
 /******************************************************
-  Similar sample to the preceding one. 
+  Similar sample to the preceding one.  Converting FROM unicode 
+  to koi8-r.
   You must call ucnv_close to clean up the memory used by the
   converter.
 
@@ -416,6 +417,137 @@ UErrorCode convsample_05()
   
   // ***************************** END SAMPLE ********************
   ucnv_close(conv);
+
+  printf("\n");
+
+  return U_ZERO_ERROR;
+}
+#undef BUFFERSIZE
+
+#define BUFFERSIZE 1024
+typedef struct
+{
+  UChar32  codepoint;
+  uint32_t frequency;
+} CharFreqInfo;
+
+UErrorCode convsample_06()
+{
+  printf("\n\n==============================================\n"
+         "Sample 06: C: frequency distribution of letters in a UTF-8 document\n");
+
+  FILE *f;
+  int32_t count;
+  char inBuf[BUFFERSIZE];
+  const char *source;
+  const char *sourceLimit;
+  UChar *uBuf;
+  int32_t uBufSize = 0;
+  UConverter *conv;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t letters=0, total=0;
+
+  CharFreqInfo   *info;
+  UChar32   charCount = 0x10000;  /* increase this if you want to handle non bmp.. todo: automatically bump it.. */
+  UChar32   p;
+
+  uint32_t ie = 0;
+  uint32_t gh = 0;
+  UChar32 l = 0;
+
+  f = fopen("data06.ut8", "r");
+  if(!f)
+  {
+    fprintf(stderr, "Couldn't open file 'data06.ut8' (UTF-8 data file).\n");
+    return U_FILE_ACCESS_ERROR;
+  }
+
+  info = (CharFreqInfo*)malloc(sizeof(CharFreqInfo) * charCount);
+  if(!info)
+  {
+    fprintf(stderr, " Couldn't allocate %d bytes for freq counter\n", sizeof(CharFreqInfo)*charCount);
+  }
+
+  /* reset frequencies */
+  for(p=0;p<charCount;p++)
+  {
+    info[p].codepoint = p;
+    info[p].frequency = 0;
+  }
+
+  // **************************** START SAMPLE *******************
+  conv = ucnv_open("utf-8", &status);
+  assert(U_SUCCESS(status));
+
+  uBufSize = (BUFFERSIZE/ucnv_getMinCharSize(conv));
+  printf("input bytes %d / min chars %d = %d UChars\n",
+         BUFFERSIZE, ucnv_getMinCharSize(conv), uBufSize);
+  uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
+  assert(uBuf!=NULL);
+
+  // grab another buffer's worth
+  while((!feof(f)) && 
+        ((count=fread(inBuf, 1, BUFFERSIZE , f)) > 0) )
+  {
+    // Convert bytes to unicode
+    source = inBuf;
+    sourceLimit = inBuf + count;
+    
+    while(source < sourceLimit)
+    {
+      p = ucnv_getNextUChar(conv, &source, sourceLimit, &status);
+      if(U_FAILURE(status))
+      {
+        fprintf(stderr, "%s @ %d\n", u_errorName(status), total);
+        status = U_ZERO_ERROR;
+        continue;
+      }
+      U_ASSERT(status);
+      total++;
+
+      if(u_isalpha(p))
+        letters++;
+
+      if((u_tolower(l) == 'i') && (u_tolower(p) == 'e'))
+        ie++;
+
+      if((u_tolower(l) == 'g') && (u_tolower(p) == 0x0127))
+        gh++;
+
+      if(p>charCount)
+      {
+        fprintf(stderr, "U+%06X: oh.., we only handle BMP characters so far.. redesign!\n", p);
+        return U_UNSUPPORTED_ERROR;
+      }
+      info[p].frequency++;
+      l = p;
+    }
+  }
+
+  fclose(f);
+  ucnv_close(conv);
+
+  printf("%d letters out of %d total UChars.\n", letters, total);
+  printf("%d ie digraphs, %d gh digraphs.\n", ie, gh);
+
+  // now, we could sort it..
+
+  //  qsort(info, charCount, sizeof(info[0]), charfreq_compare);
+
+  for(p=0;p<charCount;p++)
+  {
+    if(info[p].frequency)
+    {
+      printf("% 5d U+%06X ", info[p].frequency, p);
+      if(p <= 0xFFFF)
+      {
+        prettyPrintUChar((UChar)p);
+      }
+      printf("\n");
+    }
+  }
+  free(info);
+  // ***************************** END SAMPLE ********************
 
   printf("\n");
 
@@ -799,6 +931,7 @@ UErrorCode convsample_41()
   assert(U_SUCCESS(status));
 
   uBufSize = (BUFFERSIZE/conv->getMinBytesPerChar());
+  //uBufSize = 4;
   printf("input bytes %d / min chars %d = %d UChars\n",
          BUFFERSIZE, conv->getMinBytesPerChar(), uBufSize);
   uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
@@ -843,6 +976,10 @@ UErrorCode convsample_41()
         assert(fwrite(uBuf, sizeof(uBuf[0]), (target-uBuf), out) ==
                (size_t)(target-uBuf));
         total += (target-uBuf);
+
+        fprintf(stderr, "srcLeft=%d, wrote %d, err %s\n",
+                sourceLimit - source, target-uBuf, u_errorName(status));
+
     } while (source < sourceLimit); // while simply out of space
   }
 
@@ -863,7 +1000,7 @@ UErrorCode convsample_41()
 
 //  46-  C, UTF16 -> latin2 [data41.utf16 -> data46.out]
 
-#define BUFFERSIZE 23 /* make it interesting :) */
+#define BUFFERSIZE 24 /* make it interesting :) */
 
 UErrorCode convsample_46()
 {
@@ -1072,22 +1209,23 @@ int main()
 
   printf("Default Converter=%s\n", ucnv_getDefaultName() );
   
-  convsample_01();  // C++, u->koi8r, conv
-  convsample_02();  // C  , u->koi8r, conv
-  convsample_03();  // C,   iterate
-  //    //  convsample_04();  /* not written yet */
-  convsample_05();  // C,  utf8->u, getNextUChar
-  convsample_11();  // C++, sjis->u, conv
-  convsample_12();  // C,  sjis->u, conv
-  convsample_13();  // C,  big5->u, getNextU
+    convsample_01();  // C++, u->koi8r, conv
+    convsample_02();  // C  , u->koi8r, conv
+    convsample_03();  // C,   iterate
+ //  convsample_04();  /* not written yet */
+    convsample_05();  // C,  utf8->u, getNextUChar
+    convsample_06(); // C freq counter thingy
+    convsample_11();  // C++, sjis->u, conv
+    convsample_12();  // C,  sjis->u, conv
+    convsample_13();  // C,  big5->u, getNextU
   
-  convsample_20();  // C, callback
+    convsample_20();  // C, callback
   
-  convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
-  convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
+    convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
+    convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
   
-  convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
-  convsample_47();  // C++,UTF16 -> latin3 [data40.utf16 -> data47.out]
+    convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
+    convsample_47();  // C++,UTF16 -> latin3 [data40.utf16 -> data47.out]
         
    return 0;
 }
