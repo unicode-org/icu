@@ -12,6 +12,7 @@
 #include "OpenTypeTables.h"
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
