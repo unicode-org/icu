@@ -1528,12 +1528,17 @@ static void SetBadCommonData(void) {
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("FAIL: udata_setCommonData did not fail with bad arguments.\n");
     }
-    /* Check that we don't change the common data. Many ICU tests will fail after this test, if this works. */
-    /* We could do a better test, if we called u_cleanup and udata_setCommonData returned the last value. */
-    status = U_ZERO_ERROR;
-    udata_setCommonData(&gOffsetTOCAppData_dat, &status);
-    if (status != U_USING_DEFAULT_WARNING) {
-        log_err("FAIL: udata_setCommonData allowed the data to be changed after initialization!\n");
+    if (u_getDataDirectory() == NULL || u_getDataDirectory()[0] == 0) {
+        /* Check that we don't change the common data. Many ICU tests will fail after this test, if this works. */
+        /* We could do a better test, if we called u_cleanup and udata_setCommonData returned the last value. */
+        status = U_ZERO_ERROR;
+        udata_setCommonData(&gOffsetTOCAppData_dat, &status);
+        if (status != U_USING_DEFAULT_WARNING) {
+            log_err("FAIL: udata_setCommonData allowed the data to be changed after initialization!\n");
+        }
+    }
+    else {
+        log_verbose("Can't test setting common data because files mode may have been used.\n");
     }
 }
 
