@@ -353,8 +353,8 @@ public class GregorianCalendar extends Calendar {
     /**
      * Constructs a GregorianCalendar based on the current time
      * in the default time zone with the given locale.
-     * @param aLocale the given locale.
-     * @draftICU 3.2
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public GregorianCalendar(ULocale locale) {
