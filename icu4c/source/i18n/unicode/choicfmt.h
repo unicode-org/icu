@@ -541,7 +541,7 @@ public:
      * If NaN, returns same value.
      * <P>
      * Does not affect floating-point flags,
-     * @stable
+     * @deprecated This will be removed after 2002-Jun-30. Use closures API instead.
      */
     static double nextDouble(double d, UBool positive);
 
@@ -550,7 +550,7 @@ public:
      * If NaN, returns same value.
      * Used to make half-open intervals.
      * @see ChoiceFormat::previousDouble
-     * @stable
+     * @deprecated This will be removed after 2002-Jun-30. Use closures API instead.
      */
     static double nextDouble(double d );
 
@@ -558,7 +558,7 @@ public:
      * Finds the greatest double less than d.
      * If NaN, returns same value.
      * @see ChoiceFormat::nextDouble
-     * @stable
+     * @deprecated This will be removed after 2002-Jun-30. Use closures API instead.
      */
     static double previousDouble(double d );
 
