@@ -8,8 +8,6 @@
 
 <h1>ICU - Formats and API for Binary Data Files</h1>
 
-<p>This is a raw draft.</p>
-
 <h2>Finding ICU data</h2>
 
 <p>ICU data, when stored in files, is loaded from the file system
@@ -52,8 +50,15 @@ Here are some points to consider:</p>
 
 <ul>
     <li>The data memory starts at an offset within the data file
-        that is divisible by 16 if you use <code>unewdata.h/.c</code>
-        to write the data.</li>
+        that is divisible by (at least) <code>sizeof(double)</code>
+        (the largest scalar data type)
+        if you use <code>unewdata.h/.c</code>
+        to write the data.
+        To be exact, <code>unewdata</code> writes the data 16-aligned,
+        and it is 16-aligned in memory-mapped files. However, the build
+        process forced us to insert a <code>double</code> before the
+        binary data to get any alignment, thus only 8-aligning
+        (<code>sizeof(double)==8</code> on most machines) the data.</li>
     <li>Write explicitly sized values: explicitly 32 bits with an
         <code>int32_t</code>, not using an ambiguous <code>int</code>.</li>
     <li>Align all values according to their data type size:
@@ -130,7 +135,7 @@ If the file also contains <code>char[]</code> strings,
 then it can be easily shared among all big-endian <em>and</em>
 ASCII-based machines, but not with (e.g.) an OS/390.<br>
 OS/390 and OS/400 systems, however, could easily share such
-a data file.</p>
+a data file <em>created</em> on either of <em>these</em> systems.</p>
 
 <p>To make sure that the relevant platform properties of
 the data file and the loading machine match, the
@@ -145,8 +150,10 @@ a different platform to begin with, especially data files packaged as DLLs
 
 <h2>Writing a binary data file</h2>
 
+<p>This is a raw draft.</p>
+
 <p>... Use <code>icu/source/tools/toolutil/unewdata.h|.c</code> to write data files,
-can include a copyright statement or other comment...</p>
+can include a copyright statement or other comment...See <code>icu/source/tools/gennames</code>...</p>
 
 </body>
 
