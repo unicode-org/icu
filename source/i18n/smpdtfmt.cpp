@@ -97,11 +97,11 @@ SimpleDateFormat::~SimpleDateFormat()
 //----------------------------------------------------------------------
 
 SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
-:   fSymbols(NULL),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+  :   fSymbols(NULL),fLocale(Locale::getDefault()),
+      fDefaultCenturyStart(fgSystemDefaultCentury),
+      fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
 {
-    construct(kShort, (EStyle) (kShort + kDateOffset), Locale::getDefault(), status);
+    construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -109,11 +109,13 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
 SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode &status)
 :   fPattern(pattern),
-    fSymbols(new DateFormatSymbols(status)),
+    fSymbols(NULL),
+    fLocale(Locale::getDefault()),
     fDefaultCenturyStart(fgSystemDefaultCentury),
     fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
 {
-    initialize(Locale::getDefault(), status);
+    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initialize(fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -122,11 +124,12 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(pattern),
-    fSymbols(new DateFormatSymbols(locale, status)),
+    fLocale(locale),
     fDefaultCenturyStart(fgSystemDefaultCentury),
     fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
 {
-    initialize(locale, status);
+    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initialize(fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -136,10 +139,12 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fSymbols(symbolsToAdopt),
+    fLocale(Locale::getDefault()),
     fDefaultCenturyStart(fgSystemDefaultCentury),
     fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
 {
-    initialize(Locale::getDefault(), status);
+    initializeCalendar(NULL,fLocale,status);
+    initialize(fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -150,9 +155,11 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fSymbols(new DateFormatSymbols(symbols)),
     fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear),
+    fLocale(Locale::getDefault())
 {
-    initialize(Locale::getDefault(), status);
+    initializeCalendar(NULL, fLocale, status);
+    initialize(fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -164,9 +171,10 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
                                    UErrorCode& status)
 :   fSymbols(NULL),
     fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear),
+    fLocale(locale)
 {
-    construct(timeStyle, dateStyle, locale, status);
+    construct(timeStyle, dateStyle, fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -180,11 +188,12 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(fgDefaultPattern),
     fSymbols(NULL),
+    fLocale(locale),
     fDefaultCenturyStart(fgSystemDefaultCentury),
     fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
 {
     if (U_FAILURE(status)) return;
-    fSymbols = new DateFormatSymbols(locale, status);
+    fSymbols = new DateFormatSymbols(fLocale, status);
     if (U_FAILURE(status))
     {
         status = U_ZERO_ERROR;
@@ -197,7 +206,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
             return;
         }
     }
-    initialize(locale, status);
+    initialize(fLocale, status);
 }
 
 //----------------------------------------------------------------------
@@ -282,8 +291,9 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         return;
     }
 
+    initializeSymbols(locale, initializeCalendar(NULL, locale, status), status);
     // create a symbols object from the locale
-    fSymbols = new DateFormatSymbols(locale, status);
+    if (U_FAILURE(status)) return;
     /* test for NULL */
     if (fSymbols == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -342,6 +352,26 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 }
 
 //----------------------------------------------------------------------
+
+Calendar*
+SimpleDateFormat::initializeCalendar(TimeZone* adoptZone, const Locale& locale, UErrorCode& status)
+{
+  if(!U_FAILURE(status)) {
+    fCalendar = Calendar::createInstance(adoptZone?adoptZone:TimeZone::createDefault(), locale, status);
+  }
+  return fCalendar;
+}
+
+void
+SimpleDateFormat::initializeSymbols(const Locale& locale, Calendar* calendar, UErrorCode& status)
+{
+  if(U_FAILURE(status)) {
+    fSymbols = NULL;
+  } else {
+    // pass in calendar type - use NULL (default) if no calendar set (or err).
+    fSymbols = new DateFormatSymbols(locale, calendar?calendar->getType() :NULL , status);
+  }
+}
 
 void
 SimpleDateFormat::initialize(const Locale& locale,
@@ -1547,6 +1577,16 @@ SimpleDateFormat::initializeSystemDefaultCentury()
         // out.
     }
 }
+
+void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  DateFormat::adoptCalendar(calendarToAdopt);
+  delete fSymbols; 
+  fSymbols=NULL;
+  initializeSymbols(fLocale, fCalendar, status);
+}
+
 
 U_NAMESPACE_END
 

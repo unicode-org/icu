@@ -647,7 +647,8 @@ GregorianCalendar::computeFields(UErrorCode& status)
 
     // Call getOffset() to get the TimeZone offset.  The millisInDay value must
     // be standard local millis.
-    int32_t dstOffset = getTimeZone().getOffset(era, year, month, date, dayOfWeek, millisInDay,
+    int32_t gregoYear = getGregorianYear(status);
+    int32_t dstOffset = getTimeZone().getOffset((gregoYear>0?AD:BC), getGregorianYear(status), month, date, dayOfWeek, millisInDay,
                                             monthLength(month), status) - rawOffset;
     if(U_FAILURE(status))
         return;
@@ -778,6 +779,24 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
 
 // -------------------------------------
 
+int32_t
+GregorianCalendar::getGregorianYear(UErrorCode &status) 
+{
+    int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kEpochYear;
+    int32_t era = AD;
+    if (fStamp[UCAL_ERA] != kUnset) {
+        era = internalGet(UCAL_ERA);
+        if (era == BC)
+            year = 1 - year;
+        // Even in lenient mode we disallow ERA values other than AD & BC
+        else if (era != AD) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return kEpochYear;
+        }
+    }
+    return year;
+}
+
 void
 GregorianCalendar::computeTime(UErrorCode& status)
 {
@@ -794,18 +813,8 @@ GregorianCalendar::computeTime(UErrorCode& status)
 
     // The year is either the YEAR or the epoch year.  YEAR_WOY is
     // used only if WOY is the predominant field; see computeJulianDay.
-    int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kEpochYear;
-    int32_t era = AD;
-    if (fStamp[UCAL_ERA] != kUnset) {
-        era = internalGet(UCAL_ERA);
-        if (era == BC)
-            year = 1 - year;
-        // Even in lenient mode we disallow ERA values other than AD & BC
-        else if (era != AD) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-    }
+    int32_t year = getGregorianYear(status);
+    int32_t era = (year>0)?AD:BC;  // calculate era from extended year.
 
     // First, use the year to determine whether to use the Gregorian or the
     // Julian calendar. If the year is not the year of the cutover, this
@@ -2009,8 +2018,8 @@ GregorianCalendar::getActualMaximum(UCalendarDateFields field) const
             /* Perform a binary search, with the invariant that lowGood is a
              * valid year, and highBad is an out of range year.
              */
-            int32_t lowGood = kLeastMaxValues[field];
-            int32_t highBad = kMaxValues[field] + 1;
+            int32_t lowGood = getLeastMaximum(field);
+            int32_t highBad = getMaximum(field) + 1;
             while((lowGood + 1) < highBad) {
                 int32_t y = (lowGood + highBad) / 2;
                 cal->set(field, y);

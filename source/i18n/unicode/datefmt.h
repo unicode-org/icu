@@ -538,6 +538,7 @@ public:
      * Set the calendar to be used by this date format. Initially, the default
      * calendar for the specified or default locale is used.  The caller should
      * not delete the Calendar object after it is adopted by this call.
+     * Adopting a new calendar will change to the default symbols.
      *
      * @param calendarToAdopt    Calendar object to be adopted.
      * @stable ICU 2.0

@@ -30,9 +30,7 @@
 
 #include "unicode/resbund.h"
 #include "unicode/gregocal.h"
-#ifdef U_ENABLE_INTL_CALENDARS
-# include "buddhcal.h"
-#endif
+#include "buddhcal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "iculserv.h"
@@ -45,7 +43,7 @@ U_NAMESPACE_BEGIN
 //
 //-------------------------------------------
 //#define U_DEBUG_CALSVC 1
-//#define U_ENABLE_INTL_CALENDARS    [disabled for now]
+//
 
 #ifdef U_DEBUG_CALSVC
 #include <stdio.h>
@@ -115,14 +113,12 @@ protected:
 
   if(!fType || !*fType || !strcmp(fType,"gregorian")) {  // Gregorian (default)
     return new GregorianCalendar(canLoc, status);
-#ifdef U_ENABLE_INTL_CALENDARS
 # if 0
   } else if(!strcmp(fType, "japanese")) {
     return new JapaneseCalendar(loc, status);
-# endif
+#endif
   } else if(!strcmp(fType, "buddhist")) {
     return new BuddhistCalendar(canLoc, status);
-#endif
   } else { 
     status = U_UNSUPPORTED_ERROR;
     return NULL;
@@ -265,10 +261,8 @@ getService(void)
 #endif
 
     // Register all basic instances. 
-#ifdef U_ENABLE_INTL_CALENDARS
     newservice->registerFactory(new BasicCalendarFactory("japanese"),status);
     newservice->registerFactory(new BasicCalendarFactory("buddhist"),status);
-#endif
     newservice->registerFactory(new BasicCalendarFactory("gregorian"),status);
 
 #ifdef U_DEBUG_CALSVC
@@ -1177,9 +1171,6 @@ Calendar::updateTime(UErrorCode& status)
 
 U_NAMESPACE_END
 
-extern "C" void calLoadSvc() {
-  getService();
-}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
