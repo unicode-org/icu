@@ -334,7 +334,7 @@ struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
     return res;
 }
 
-struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, UErrorCode *status) {
+struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status) {
 
     struct SResource *res;
 
@@ -359,15 +359,15 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, U
 
     res->fNext = NULL;
 
-    res->u.fString.fLength = u_strlen(value);
-    res->u.fString.fChars = (UChar *)uprv_malloc(sizeof(UChar) * (u_strlen(value)+1));
+    res->u.fString.fLength = len;
+    res->u.fString.fChars = (UChar *)uprv_malloc(sizeof(UChar) * (len+1));
     if(res->u.fString.fChars == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(res);
         return NULL;
     }
-    u_strcpy(res->u.fString.fChars, value);
-    res->fSize = sizeof(int32_t) + sizeof(UChar) * (u_strlen(value)+1);
+    uprv_memcpy(res->u.fString.fChars, value, sizeof(UChar) * (len+1));
+    res->fSize = sizeof(int32_t) + sizeof(UChar) * (len+1);
 
     return res;
 }
