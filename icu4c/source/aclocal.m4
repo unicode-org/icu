@@ -182,13 +182,22 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 
     if test "$ac_use_strict_options" = yes
     then
+echo "${host}"
         if test "$GCC" = yes
         then
-	    CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            case "${host}" in
+            *-*-solaris*)
+                CFLAGS="$CFLAGS -D__STDC__=0";;
+            esac
         fi
         if test "$GXX" = yes
         then
-	    CXXFLAGS="$CXXFLAGS -Wall -ansi -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            case "${host}" in
+            *-*-solaris*)
+                CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
+            esac
         fi
     fi
 ])
