@@ -22,14 +22,8 @@ MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 
 ALL_MAN_FILES = $(MANX_FILES)
 
-##
-
-ICUDATADIR=$(top_builddir)/data/
-UNICODEDATADIR=$(top_srcdir)/../data/unidata
-UNICODEFILE=$(UNICODEDATADIR)/UnicodeData.txt
-
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = gennames$(EXEEXT)
@@ -44,7 +38,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local\
 distclean distclean-local dist dist-local check	\
-check-local build-data install-man install-manx
+check-local install-man install-manx
 
 ## Clear suffix list
 .SUFFIXES :
@@ -59,7 +53,7 @@ check: all check-local
 
 all-local: $(TARGET) $(ALL_MAN_FILES)
 
-install-local: all-local build-data install-man
+install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 

@@ -23,7 +23,7 @@ MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 ALL_MAN_FILES = $(MANX_FILES)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) mkmap.tmp $(ALL_MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = pkgdata$(EXEEXT)
@@ -37,7 +37,7 @@ OBJECTS = pkgdata.o pkgtypes.o make.o dllmode.o cmnmode.o filemode.o sttcmode.o 
 DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local		\
+.PHONY : all all-local install install-local clean clean-local	\
 distclean distclean-local dist dist-local check	\
 check-local install-man install-manx
 
@@ -52,7 +52,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(ALL_MAN_FILES)
+all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)

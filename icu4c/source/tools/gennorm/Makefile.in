@@ -20,11 +20,8 @@ MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 ## Build directory information
 subdir = tools/gennorm
 
-ICUDATADIR=$(top_builddir)/data
-UNICODEDATADIR=$(top_srcdir)/../data/unidata
-
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(MAN_FILES)
 
 ## Target information
 TARGET = gennorm$(EXEEXT)
@@ -39,7 +36,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local build-data install-man
+check-local install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -52,7 +49,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) build-data $(MAN_FILES)
+all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
