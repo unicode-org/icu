@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2001/10/25 02:23:53 $
-* $Revision: 1.3 $
+* $Date: 2001/11/07 19:24:21 $
+* $Revision: 1.4 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -52,7 +52,7 @@ import com.ibm.util.Utility;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.3 $ $Date: 2001/10/25 02:23:53 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.4 $ $Date: 2001/11/07 19:24:21 $
  */
 class UnicodePropertySet {
 
@@ -78,6 +78,44 @@ class UnicodePropertySet {
 
     // Special value codes
     private static final int ANY = -1; // general category: all code points
+
+    // >From UnicodeData:
+    // 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
+    // 4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
+    // 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
+    // 9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+    // AC00;<Hangul Syllable, First>;Lo;0;L;;;;;N;;;;;
+    // D7A3;<Hangul Syllable, Last>;Lo;0;L;;;;;N;;;;;
+    // D800;<Non Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+    // DB7F;<Non Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+    // DB80;<Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+    // DBFF;<Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+    // DC00;<Low Surrogate, First>;Cs;0;L;;;;;N;;;;;
+    // DFFF;<Low Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+    // E000;<Private Use, First>;Co;0;L;;;;;N;;;;;
+    // F8FF;<Private Use, Last>;Co;0;L;;;;;N;;;;;
+    // 20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
+    // 2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
+    // F0000;<Plane 15 Private Use, First>;Co;0;L;;;;;N;;;;;
+    // FFFFD;<Plane 15 Private Use, Last>;Co;0;L;;;;;N;;;;;
+    // 100000;<Plane 16 Private Use, First>;Co;0;L;;;;;N;;;;;
+    // 10FFFD;<Plane 16 Private Use, Last>;Co;0;L;;;;;N;;;;;
+    // 
+    // >Large Blocks of Unassigned: (from DerivedGeneralCategory)
+    // 1044E..1CFFF  ; Cn # [52146]
+    // 1D800..1FFFF  ; Cn # [10240]
+    // 2A6D7..2F7FF  ; Cn # [20777]
+    // 2FA1E..E0000  ; Cn # [722403]
+    // E0080..EFFFF  ; Cn # [65408]
+
+    /**
+     * A set of all characters _except_ the first characters of
+     * certain ranges.  These ranges are ranges of characters whose
+     * properties are all exactly alike, e.g. CJK Ideographs from
+     * U+4E00 to U+9FA5.
+     */
+    private static final UnicodeSet INCLUSIONS =
+        new UnicodeSet("[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]");
 
     //----------------------------------------------------------------
     // Public API
@@ -351,30 +389,59 @@ class UnicodePropertySet {
         // Walk through all Unicode characters, noting the start
         // and end of each range for which filter.contain(c) is
         // true.  Add each range to a set.
+        //
+        // To improve performance, use the INCLUSIONS set, which
+        // encodes information about character ranges that are known
+        // to have identical properties, such as the CJK Ideographs
+        // from U+4E00 to U+9FA5.  INCLUSIONS contains all characters
+        // except the first characters of such ranges.
+
         UnicodeSet set = new UnicodeSet();
-        int start = -1;
-        int end = -2;
+        int startHasProperty = -1;
+        int limitRange = INCLUSIONS.getRangeCount();
 
-        // TODO Extend this up to UnicodeSet.MAX_VALUE when we have
-        // better performance; i.e., when this code can get moved into
-        // the UCharacter class and not have to iterate over code
-        // points.  Right now it's way too slow to iterate to 10FFFF.
+        for (int j=0; j<limitRange; ++j) {
+            // get current range
+            int start = INCLUSIONS.getRangeStart(j);
+            int end = INCLUSIONS.getRangeEnd(j);
 
-        for (int i=UnicodeSet.MIN_VALUE; i<=0xFFFF; ++i) {
-            if (filter.contains(i)) {
-                if ((end+1) == i) {
-                    end = i;
-                } else {
-                    if (start >= 0) {
-                        set.add(start, end);
+            // for all the code points in the range, process
+            for (int ch = start; ch <= end; ++ch) {
+                // only add to the unicodeset on inflection points --
+                // where the hasProperty value changes to false
+                if (filter.contains(ch)) {
+                    if (startHasProperty < 0) {
+                        startHasProperty = ch;
                     }
-                    start = end = i;
+                } else if (startHasProperty >= 0) {
+                    set.add(startHasProperty, ch-1);
+                    startHasProperty = -1;
                 }
             }
         }
-        if (start >= 0) {
-            set.add(start, end);
+        if (startHasProperty >= 0) {
+            set.add(startHasProperty, 0x10FFFF);
         }
+
+//      int start = -1;
+//      int end = -2;
+
+//      for (int i=UnicodeSet.MIN_VALUE; i<=0xFFFF; ++i) {
+//          if (filter.contains(i)) {
+//              if ((end+1) == i) {
+//                  end = i;
+//              } else {
+//                  if (start >= 0) {
+//                      set.add(start, end);
+//                  }
+//                  start = end = i;
+//              }
+//          }
+//      }
+//      if (start >= 0) {
+//          set.add(start, end);
+//      }
+
         return set;
     }
 
