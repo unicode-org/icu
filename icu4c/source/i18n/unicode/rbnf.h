@@ -634,7 +634,7 @@ public:
                                 FieldPosition& pos) const;
 
   /**
-   * Formats the specified number using the default ruleset.
+   * Formats the specified number using the named ruleset.
    * @param number The number to format.
    * @param ruleSetName The name of the rule set to format the number with.
    * This must be the name of a valid public rule set for this formatter.
@@ -650,7 +650,7 @@ public:
                                 FieldPosition& pos,
                                 UErrorCode& status) const;
   /**
-   * Formats the specified 64-bit number using the default ruleset.
+   * Formats the specified 64-bit number using the named ruleset.
    * @param number The number to format.
    * @param ruleSetName The name of the rule set to format the number with.
    * This must be the name of a valid public rule set for this formatter.
@@ -666,7 +666,7 @@ public:
                                 FieldPosition& pos,
                                 UErrorCode& status) const;
   /**
-   * Formats the specified number using the default ruleset.
+   * Formats the specified number using the named ruleset.
    * @param number The number to format.
    * @param ruleSetName The name of the rule set to format the number with.
    * This must be the name of a valid public rule set for this formatter.
