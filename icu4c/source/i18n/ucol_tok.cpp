@@ -254,7 +254,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   // UCOL_FIRST_NON_VARIABLE
   setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
   // UCOL_LAST_NON_VARIABLE
-  setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, 0);
+  setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
 
 }
 
