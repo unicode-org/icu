@@ -453,7 +453,7 @@ u_isWhitespace(UChar32 c) {
     return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0 &&
-           c!=0xa0 && c!=0xfeff;
+           c!=0xa0 && c!=0x202f && c!=0xfeff; /* exclude no-break spaces */
 }
 
 /* Checks if the Unicode character is printable.*/
