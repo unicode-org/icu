@@ -14,33 +14,33 @@ AC_DEFUN(ICU_CHECK_MH_FRAG, [
 case "${host}" in
 *-*-solaris*)
 	if test "$ac_cv_prog_gcc" = yes; then	
-		icu_cv_host_frag=$srcdir/config/mh-solaris-gcc 
+		icu_cv_host_frag=mh-solaris-gcc 
 	else
 		if test "$SOL64" = yes; then
-	                icu_cv_host_frag=$srcdir/config/mh-solaris-sparcv9  
+	                icu_cv_host_frag=mh-solaris-sparcv9  
 		else
-			icu_cv_host_frag=$srcdir/config/mh-solaris 
+			icu_cv_host_frag=mh-solaris 
 		fi
 	fi ;;
-*-*-mips*)	icu_cv_host_frag=$srcdir/config/mh-irix ;;
-*-*-linux*) 	icu_cv_host_frag=$srcdir/config/mh-linux ;;
-*-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=$srcdir/config/mh-bsd-gcc ;;
+*-*-mips*)	icu_cv_host_frag=mh-irix ;;
+*-*-linux*) 	icu_cv_host_frag=mh-linux ;;
+*-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*) 	
 	case "$CXX" in
-	*vacpp*)icu_cv_host_frag=$srcdir/config/mh-aix-va ;;
-	*)	icu_cv_host_frag=$srcdir/config/mh-aix ;;
+	*vacpp*)icu_cv_host_frag=mh-aix-va ;;
+	*)	icu_cv_host_frag=mh-aix ;;
 	esac;;
-*-sequent-*) 	icu_cv_host_frag=$srcdir/config/mh-ptx ;;
+*-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *-*-hpux*)
 	case "$CXX" in 
-	*aCC)    icu_cv_host_frag=$srcdir/config/mh-hpux-acc ;;
-	*CC)     icu_cv_host_frag=$srcdir/config/mh-hpux-cc ;;
+	*aCC)    icu_cv_host_frag=mh-hpux-acc ;;
+	*CC)     icu_cv_host_frag=mh-hpux-cc ;;
 	esac;;
-*-*-os390*)	icu_cv_host_frag=$srcdir/config/mh-os390 ;;
-*-*-os400*)	icu_cv_host_frag=$srcdir/config/mh-os400 ;;
-*-apple-rhapsody*)	icu_cv_host_frag=$srcdir/config/mh-darwin ;;
-*-apple-darwin*)	icu_cv_host_frag=$srcdir/config/mh-darwin ;;
-*) 		icu_cv_host_frag=$srcdir/config/mh-unknown ;;
+*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
+*-*-os400*)	icu_cv_host_frag=mh-os400 ;;
+*-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
+*-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
+*) 		icu_cv_host_frag=mh-unknown ;;
 esac
 		]
 	)

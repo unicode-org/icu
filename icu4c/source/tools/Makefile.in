@@ -2,36 +2,19 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
-## Shell to use
-SHELL = @SHELL@
-VERSION = @VERSION@
-
-## Install directory information
+## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
 
-CC = @CC@
-CXX = @CXX@
+include $(top_srcdir)/icudefs.mk
+
+include @platform_make_fragment@
+
+##
 
 CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_builddir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-
-@host_frag@
-
-bindir = @bindir@
-sbindir = @sbindir@
-datadir = @datadir@
-libdir = @libdir@
-includedir = @includedir@
-sysconfdir = @sysconfdir@
-
-pkgdatadir = $(datadir)/@PACKAGE@
-pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
-pkgsysconfdir = $(sysconfdir)/@PACKAGE@
 
 ## Build directory information
 top_builddir = ..
@@ -44,7 +27,6 @@ endif
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
-ICUDATADIR=$(pkgdatadir)/$(VERSION)
 #SRCDATADIR=$(shell cd $(top_srcdir)/../data && /bin/pwd)
 SRCDATADIR=$(top_srcdir)/../data
 
@@ -217,9 +199,8 @@ build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst 
 	(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
-	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(pkgdatadir)/$(VERSION)
-	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
-
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(pkglibdir)/$(VERSION)
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkglibdir)/$(VERSION))
 
 clean-pkgdata:
 	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
