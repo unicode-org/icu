@@ -603,7 +603,7 @@ root {
         TM { "Turkmenistan" }
         TN { "Tunisia" }
         TO { "Tonga" }
-        TP { "East Timor" }
+        TL { "East Timor" }
         TR { "Turkey" }
         TT { "Trinidad and Tobago" }
         TV { "Tuvalu" }
