@@ -1042,7 +1042,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
 }
 
 U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
-    if(state == TRUE) {
+    if(state) {
         resB->fMagic1 = 0;
         resB->fMagic2 = 0;
     } else {
