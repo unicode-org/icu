@@ -182,7 +182,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
                   myTarget[myTargetIndex++] = targetChar;
                 }
           }
-          if (targetChar == 0 && !mySource[mySourceIndex-1])
+          if (targetChar == 0 && mySource[mySourceIndex-1] != 0)
           {
               *err = U_INVALID_CHAR_FOUND;
               _this->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex - 1];
