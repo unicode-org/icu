@@ -42,16 +42,18 @@ addHeapMutexTest(TestNode** root)
     addTest(root, &TestIncDecFunctions,     "tsutil/hpmufn/TestIncDecFunctions");
 }
 
+static int32_t gMutexFailures = 0;
 
 #define TEST_STATUS(status, expected) \
 if (status != expected) { \
 log_err("FAIL at  %s:%d. Actual status = \"%s\";  Expected status = \"%s\"\n", \
-__FILE__, __LINE__, u_errorName(status), u_errorName(expected)); }
+  __FILE__, __LINE__, u_errorName(status), u_errorName(expected)); gMutexFailures++; }
 
 
 #define TEST_ASSERT(expr) \
 if (!(expr)) { \
     log_err("FAILED Assertion \"" #expr "\" at  %s:%d.\n", __FILE__, __LINE__); \
+    gMutexFailures++; \
 }
 
 
@@ -270,6 +272,8 @@ static void TestMutexFunctions() {
     const void      *traceContext;
     int32_t          traceLevel;
 
+    gMutexFailures = 0;
+
     /*  Save initial ICU state so that it can be restored later.
      *  u_cleanup(), which is called in this test, resets ICU's state.
      */
@@ -350,6 +354,11 @@ static void TestMutexFunctions() {
 
     ures_close(rb);
     free(icuDataDir);
+
+    if(gMutexFailures) {
+      log_info("Note: these failures may be caused by ICU failing to initialize/uninitialize properly.\n");
+      log_verbose("Check for prior tests which may not have closed all open resources.\n");
+    }
 }
 
 
