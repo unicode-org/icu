@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/03/13 20:28:29 $ 
- * $Revision: 1.19 $
+ * $Date: 2003/04/04 19:20:52 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.impl.UCharacterProperty;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -669,10 +670,10 @@ public class SimpleDateFormat extends DateFormat {
      * @see DateFormat
      * @stable ICU 2.0
      */
-    public void parse(String text, Calendar cal, ParsePosition pos)
+    public void parse(String text, Calendar cal, ParsePosition parsePos)
     {
-        int start = pos.getIndex();
-        int oldStart = start;
+        int pos = parsePos.getIndex();
+        int start = pos;
         boolean[] ambiguousYear = {false};
         int count = 0;
 
@@ -684,52 +685,13 @@ public class SimpleDateFormat extends DateFormat {
         int abutPat = -1; // If >=0, we are in a run of abutting numeric fields
         int abutStart = 0;
         int abutPass = 0;
+        boolean inQuote = false;
 
         for (int i=0; i<pattern.length(); ++i) {
             char ch = pattern.charAt(i);
 
-            // Handle quoted strings.  Two consecutive quotes is a
-            // quote literal, inside or outside of quotes.
-            if (ch == '\'') {
-                abutPat = -1; // End of any abutting fields
-
-                // Match a quote literal '' outside of quotes
-                if ((i+1)<pattern.length() && pattern.charAt(i+1)==ch) {
-                    if (start==text.length() || text.charAt(start) != ch) {
-                        pos.setIndex(oldStart);
-                        pos.setErrorIndex(start);
-                        return;
-                    }
-                    ++start;
-                    ++i; // Skip over doubled quote
-                    continue;
-                }
-
-                // Match a quoted string, including any embedded ''
-                // quote literals.  Note that we allow an unclosed
-                // quote for backward compatibility.
-                while (++i<pattern.length()) {
-                    ch = pattern.charAt(i);
-                    if (ch == '\'') {
-                        if ((i+1)<pattern.length() && pattern.charAt(i+1)==ch) {
-                            ++i;
-                            // Fall through and match literal quote
-                        } else {
-                            break; // Closing quote seen
-                        }
-                    }
-                    if (start==text.length() || text.charAt(start) != ch) {
-                        pos.setIndex(oldStart);
-                        pos.setErrorIndex(start);
-                        return;
-                    }
-                    ++start;
-                }
-                continue;
-            }
-
             // Handle alphabetic field characters.
-            if (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z') {
+            if (!inQuote && (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z')) {
                 int fieldPat = i;
 
                 // Count the length of this field specifier
@@ -766,7 +728,7 @@ public class SimpleDateFormat extends DateFormat {
                             // fields.
                             if (abutting) {
                                 abutPat = fieldPat;
-                                abutStart = start;
+                                abutStart = pos;
                                 abutPass = 0;
                             }
                         }
@@ -790,20 +752,20 @@ public class SimpleDateFormat extends DateFormat {
                     if (fieldPat == abutPat) {
                         count -= abutPass++;
                         if (count == 0) {
-                            pos.setIndex(oldStart);
-                            pos.setErrorIndex(start);
+                            parsePos.setIndex(start);
+                            parsePos.setErrorIndex(pos);
                             return;
                         }
                     }
 
-                    start = subParse(text, start, ch, count,
-                                     true, false, ambiguousYear, cal);
+                    pos = subParse(text, pos, ch, count,
+                                   true, false, ambiguousYear, cal);
 
                     // If the parse fails anywhere in the run, back up to the
                     // start of the run and retry.
-                    if (start < 0) {
+                    if (pos < 0) {
                         i = abutPat - 1;
-                        start = abutStart;
+                        pos = abutStart;
                         continue;
                     }
                 }
@@ -811,28 +773,70 @@ public class SimpleDateFormat extends DateFormat {
                 // Handle non-numeric fields and non-abutting numeric
                 // fields.
                 else {
-                    int k = start;
-                    start=subParse(text, start, ch, count,
+                    int s = pos;
+                    pos = subParse(text, pos, ch, count,
                                    false, true, ambiguousYear, cal);
 
-                    if (start < 0) {
-                        pos.setErrorIndex(k);
-                        pos.setIndex(oldStart);
+                    if (pos < 0) {
+                        parsePos.setErrorIndex(s);
+                        parsePos.setIndex(start);
                         return;
                     }
                 }
             }
 
-            // Handle unquoted non-alphabetic characters.  These are
-            // treated as literals.
+            // Handle literal pattern characters.  These are any
+            // quoted characters and non-alphabetic unquoted
+            // characters.
             else {
+                
                 abutPat = -1; // End of any abutting fields
-                if (start==text.length() || text.charAt(start) != ch) {
-                    pos.setIndex(oldStart);
-                    pos.setErrorIndex(start);
-                    return;
+
+                // Handle quotes.  Two consecutive quotes is a quote
+                // literal, inside or outside of quotes.  Otherwise a
+                // quote indicates entry or exit from a quoted region.
+                if (ch == '\'') {
+                    // Match a quote literal '' within OR outside of quotes
+                    if ((i+1)<pattern.length() && pattern.charAt(i+1)==ch) {
+                        ++i; // Skip over doubled quote
+                        // Fall through and treat quote as a literal
+                    } else {
+                        // Enter or exit quoted region
+                        inQuote = !inQuote;
+                        continue;
+                    }
                 }
-                ++start;
+
+                // A run of white space in the pattern matches a run
+                // of white space in the input text.
+                if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+                    // Advance over run in pattern
+                    while ((i+1)<pattern.length() &&
+                           UCharacterProperty.isRuleWhiteSpace(pattern.charAt(i+1))) {
+                        ++i;
+                    }
+                    
+                    // Advance over run in input text
+                    int s = pos;
+                    while (pos<text.length() &&
+                           UCharacter.isUWhiteSpace(text.charAt(pos))) {
+                        ++pos;
+                    }
+
+                    // Must see at least one white space char in input
+                    if (pos > s) {
+                        continue;
+                    }
+                } else if (pos<text.length() && text.charAt(pos)==ch) {
+                    // Match a literal
+                    ++pos;
+                    continue;
+                }
+
+                // We fall through to this point if the match fails
+                parsePos.setIndex(start);
+                parsePos.setErrorIndex(pos);
+                return;
             }
         }
 
@@ -840,7 +844,7 @@ public class SimpleDateFormat extends DateFormat {
         // will fill in default values for missing fields when the time
         // is computed.
 
-        pos.setIndex(start);
+        parsePos.setIndex(pos);
 
         // This part is a problem:  When we call parsedDate.after, we compute the time.
         // Take the date April 3 2004 at 2:30 am.  When this is first set up, the year
@@ -883,8 +887,8 @@ public class SimpleDateFormat extends DateFormat {
         // An IllegalArgumentException will be thrown by Calendar.getTime()
         // if any fields are out of range, e.g., MONTH == 17.
         catch (IllegalArgumentException e) {
-            pos.setErrorIndex(start);
-            pos.setIndex(oldStart);
+            parsePos.setErrorIndex(pos);
+            parsePos.setIndex(start);
         }
     }
 

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/02/25 23:39:43 $ 
- * $Revision: 1.10 $
+ * $Date: 2003/04/04 19:20:52 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -842,6 +842,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestWhiteSpaceParsing() {
+        DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat fmt = new DecimalFormat("a  b#0c  ", US);
+        int n = 1234;
+        expect(fmt, "a b1234c ", n);
+        expect(fmt, "a   b1234c   ", n);
+    }
+    
     public void expectPad(DecimalFormat fmt, String pat, int pos) {
         expectPad(fmt, pat, pos, 0, (char)0);
     }
