@@ -59,7 +59,7 @@ Note 3 is the minimum value for Thai collation to work correctly.
 /* WARNING THIS BUFFER DOES NOT HAVE MALLOC FALLBACK. If you make it too small, you'll get in trouble */
 /* Reasonable small value is around 10, if you don't do Arabic or other funky collations that have long expansion sequence */
 /* This is the longest expansion sequence we can handle without bombing out */
-#define UCOL_EXPAND_CE_BUFFER_SIZE 64
+#define UCOL_EXPAND_CE_BUFFER_SIZE 512 /* synwee :TODO revert back 64*/
 
 
 /* Unsafe UChar hash table table size.                                           */
