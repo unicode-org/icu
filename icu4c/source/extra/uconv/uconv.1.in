@@ -18,6 +18,8 @@
 [
 .BI "\-l\fP, \fB\-\-list"
 |
+.BI "\-l\fP, \fB\-\-list\-code" " code"
+|
 .BI "\-\-default-code"
 ]
 [
@@ -48,8 +50,15 @@ Print help about usage and exit.
 .BI "\-l\fP, \fB\-\-list"
 List all the available encodings and exit.
 .TP
+.BI "\-l\fP, \fB\-\-list\-code" " code"
+List only the
+.I code
+encoding and exit. If
+.I code
+is not a proper encoding, exit with an error.
+.TP
 .BI "\-\-default-code"
-Print the name of the default encoding and exit.
+List only the name of the default encoding and exit.
 .TP
 .BI "\--canon"
 If used with
