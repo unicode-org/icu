@@ -64,18 +64,8 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
     el->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
     el->position = 0;
     el->size = INIT_EXP_TABLE_SIZE;
-    el->forward = TRUE;
     uprv_memset(el->CEs, 'F', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
     uprv_memset(el->codePoints, 'F', INIT_EXP_TABLE_SIZE*sizeof(UChar));
-
-    el->reversed = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
-    el->reversed->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    el->reversed->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
-    el->reversed->position = 0;
-    el->reversed->size = INIT_EXP_TABLE_SIZE;
-    el->reversed->forward = FALSE;
-    uprv_memset(el->reversed->CEs, 'R', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    uprv_memset(el->reversed->codePoints, 'R', INIT_EXP_TABLE_SIZE*sizeof(UChar));
 
     table->elements[table->size] = el;
 
@@ -135,10 +125,6 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
     for(i = 0; i<table->size; i++) {
         table->offsets[i] = table->position+mainOffset;
         table->position += table->elements[i]->position;
-        if(table->elements[i]->reversed->position > 0) {
-            table->elements[i]->codePoints[0] = (UChar)(table->elements[i]->position); /* set offset for backwards table */
-            table->position += table->elements[i]->reversed->position;
-        }
     }
 
     /* Allocate it */
@@ -181,18 +167,6 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         }
         cpPointer += size;
         CEPointer += size;
-        if(table->elements[i]->reversed->position > 0) {
-            int32_t size2 = table->elements[i]->reversed->position;
-            uprv_memcpy(cpPointer, (table->elements[i]->reversed->codePoints), size2*sizeof(UChar));
-            uprv_memcpy(CEPointer, (table->elements[i]->reversed->CEs), size2*sizeof(uint32_t));
-            for(j = 0; j<size2; j++) {
-                if(isContraction(*(CEPointer+j))) {
-                    *(CEPointer+j) = constructContractCE(table->offsets[getContractOffset(*(CEPointer+j))]);
-                }
-            }
-            cpPointer += size2;
-            CEPointer += size2;
-        }
     }
 
 
@@ -215,8 +189,6 @@ ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t) {
   r->position = t->position;
   r->size = t->size;
   r->backSize = t->backSize;
-  r->forward = t->forward;
-  r->reversed = t->reversed;
 
   r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
   r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
@@ -242,7 +214,6 @@ CntTable *uprv_cnttab_clone(CntTable *t) {
 
   for(i = 0; i<t->size; i++) {
     r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i]);
-    r->elements[i]->reversed = uprv_cnttab_cloneContraction(t->elements[i]->reversed);
   }
 
   if(t->CEs != NULL) {
@@ -272,9 +243,6 @@ CntTable *uprv_cnttab_clone(CntTable *t) {
 void uprv_cnttab_close(CntTable *table) {
     int32_t i = 0;
     for(i = 0; i<table->size; i++) {
-        free(table->elements[i]->reversed->CEs);
-        free(table->elements[i]->reversed->codePoints);
-        free(table->elements[i]->reversed);
         free(table->elements[i]->CEs);
         free(table->elements[i]->codePoints);
         free(table->elements[i]);
@@ -287,7 +255,7 @@ void uprv_cnttab_close(CntTable *table) {
 }
 
 /* this is for adding non contractions */
-uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErrorCode *status) {
     element &= 0xFFFFFF;
 
     ContractionTable *tbl = NULL;
@@ -299,18 +267,14 @@ uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t va
         tbl = addATableElement(table, &element, status);
     }
 
-    if(forward == TRUE) {
-        tbl->CEs[tbl->position-1] = value;
-    } else {
-        tbl->reversed->CEs[tbl->reversed->position-1] = value;
-    }
+    tbl->CEs[tbl->position-1] = value;
 
     return(constructContractCE(element));
 }
 
 
 /* inserts a part of contraction sequence in table. Sequences behind the offset are moved back. If element is non existent, it creates on. Returns element handle */
-uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -321,10 +285,6 @@ uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar 
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
-    }
-
-    if(forward == FALSE) {
-        tbl = tbl->reversed;
     }
 
     uprv_growTable(tbl, status);
@@ -352,7 +312,7 @@ uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar 
 
 
 /* adds more contractions in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
 
     element &= 0xFFFFFF;
 
@@ -366,10 +326,6 @@ uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar cod
         tbl = addATableElement(table, &element, status);
     } 
 
-    if(forward == FALSE) {
-        tbl = tbl->reversed;
-    }
-
     uprv_growTable(tbl, status);
 
     tbl->CEs[tbl->position] = value;
@@ -381,7 +337,7 @@ uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar cod
 }
 
 /* sets a part of contraction sequence in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -392,10 +348,6 @@ uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t 
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
-    }
-
-    if(forward == FALSE) {
-        tbl = tbl->reversed;
     }
 
     if(offset >= tbl->size) {
@@ -409,7 +361,7 @@ uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t 
     return(constructContractCE(element));
 }
 
-uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -420,10 +372,6 @@ uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, 
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
       return 0;
-    }
-
-    if(forward == FALSE) {
-        tbl = tbl->reversed;
     }
 
     uint32_t position = 0;
@@ -441,7 +389,7 @@ uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, 
     }
 }
 
-uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -452,10 +400,6 @@ uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position,
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         return UCOL_NOT_FOUND;
-    }
-
-    if(forward == FALSE) {
-        tbl = tbl->reversed;
     }
 
 
@@ -466,7 +410,7 @@ uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position,
     }
 }
 
-uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -477,10 +421,6 @@ uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar 
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
       return 0;
-    }
-
-    if(forward == FALSE) {
-        tbl = tbl->reversed;
     }
 
     uint32_t position = 0;

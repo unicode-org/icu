@@ -34,8 +34,6 @@ struct ContractionTable {
     uint32_t position;
     uint32_t size;
     uint32_t backSize;
-    UBool forward;
-    ContractionTable *reversed;
 };
 
 struct CntTable {
@@ -58,17 +56,17 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
 /* moves table around... since we have absolute offsets from the start of the table */
 int32_t uprv_cnttab_moveTable(CntTable *table, uint32_t oldOffset, uint32_t newOffset, UErrorCode *status);
 /* adds more contractions in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status);
 /* sets a part of contraction sequence in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UErrorCode *status);
 /* inserts a part of contraction sequence in table. Sequences behind the offset are moved back. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status);
 /* this is for adding non contractions */
-uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErrorCode *status);
 
-uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status);
 
-uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UBool forward, UErrorCode *status);
-uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status);
+uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UErrorCode *status);
 
 #endif
