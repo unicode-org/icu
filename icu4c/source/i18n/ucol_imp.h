@@ -542,6 +542,10 @@ typedef struct {
       uint8_t reserved[64];                 /* for future use */
 } UCATableHeader;
 
+#define UCOL_INV_SIZEMASK 0xFFF00000
+#define UCOL_INV_OFFSETMASK 0x000FFFFF
+#define UCOL_INV_SHIFTVALUE 20
+
 typedef struct {
   uint32_t byteSize;
   uint32_t tableSize;

@@ -29,6 +29,11 @@
 #define UCOL_TOK_POLARITY_NEGATIVE 0
 #define UCOL_TOK_POLARITY_POSITIVE 1
 
+#define UCOL_TOK_TOP 0x04
+#define UCOL_TOK_VARIABLE_TOP 0x08
+#define UCOL_TOK_BEFORE 0x03
+#define UCOL_TOK_SUCCESS 0x10
+
 /* this is space for the extra strings that need to be unquoted */
 /* during the parsing of the rules */
 #define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 1024
@@ -127,7 +132,7 @@ U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src,
                         uint32_t *strength, 
                         uint32_t *chOffset, uint32_t *chLen, 
                         uint32_t *exOffset, uint32_t *exLen,
-                        UBool *varT, UBool *top_,
+                        uint8_t *specs,
                         UBool startOfRules,
                         UErrorCode *status);
 
