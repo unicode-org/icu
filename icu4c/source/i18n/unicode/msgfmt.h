@@ -531,7 +531,7 @@ private:
      * @param segments the string that contains the parsed pattern segments.
      * @param success the error code
      */
-    void            makeFormat( int32_t position, 
+    void            makeFormat( /*int32_t position, */
                                 int32_t offsetNumber, 
                                 UnicodeString* segments, 
                                 UErrorCode& success);
