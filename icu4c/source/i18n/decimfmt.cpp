@@ -356,7 +356,8 @@ void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
         // Trap an error in mapping locale to currency.  If we can't
         // map, then don't fail and set the currency to "".
         UErrorCode ec2 = U_ZERO_ERROR;
-        c = ucurr_forLocale(locale, &ec2);
+        UChar c[4];
+        ucurr_forLocale(locale, c, 4, &ec2);
     }
     setCurrency(c);
 }
@@ -1851,7 +1852,8 @@ DecimalFormat::setCurrencyForSymbols() {
     UErrorCode ec = U_ZERO_ERROR;
     const UChar* c = NULL;
     const char* loc = fSymbols->getLocale().getName();
-    const UChar* intlCurrencySymbol = ucurr_forLocale(loc, &ec);
+    UChar intlCurrencySymbol[4]; 
+    ucurr_forLocale(loc, intlCurrencySymbol, 4, &ec);
     UnicodeString currencySymbol;
 
     uprv_getStaticCurrencyName(intlCurrencySymbol, loc, currencySymbol, ec);

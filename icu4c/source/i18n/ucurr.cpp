@@ -14,6 +14,7 @@
 #include "unicode/resbund.h"
 #include "unicode/ustring.h"
 #include "unicode/choicfmt.h"
+#include "ustr_imp.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
@@ -282,70 +283,74 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
 
 // -------------------------------------
 
-U_CAPI const UChar* U_EXPORT2
-ucurr_forLocale(const char* locale, UErrorCode* ec) {
+U_CAPI int32_t U_EXPORT2
+ucurr_forLocale(const char* locale,                 
+                UChar* buff,
+                int32_t buffCapacity,
+                UErrorCode* ec) {
+    int32_t resLen = 0;
+    const UChar* s = NULL;
     if (ec != NULL && U_SUCCESS(*ec)) {
+      if((buff && buffCapacity) || !buffCapacity) {
         UErrorCode localStatus = U_ZERO_ERROR;
-        UResourceBundle *rb = NULL;
-        UResourceBundle *cm = NULL;
-        const UChar* s = NULL;
         char id[ULOC_FULLNAME_CAPACITY];
         int32_t currLen = 0;
-        if(currLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus)) {
+        if(resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus)) {
           // there is a currency keyword. Try to see if it's valid
-          if(currLen == 3) {
-            rb = ures_open(NULL, "", &localStatus);
-            cm = ures_getByKey(rb, "CurrencyCodes", NULL, &localStatus);
-            s = ures_getStringByKey(cm, id, NULL, &localStatus);
-            if(U_FAILURE(localStatus)) {
-              s = NULL;
-              *ec = localStatus;
-            }
+          if(buffCapacity > resLen) {
+            u_charsToUChars(id, buff, resLen);
           }
         } else {
           uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
 
           if (U_FAILURE(*ec)) {
-              return NULL;
+              return 0;
           }
         
           const UChar* result = CReg::get(id);
           if (result) {
-              return result;
+              if(buffCapacity > u_strlen(result)) {
+                u_strcpy(buff, result);
+              }
+              return u_strlen(result);
           }
         
           // Look up the CurrencyMap element in the root bundle.
-          rb = ures_open(NULL, "", &localStatus);
-          cm = ures_getByKey(rb, CURRENCY_MAP, NULL, &localStatus);
-          s = ures_getStringByKey(cm, id, NULL, &localStatus);
+          UResourceBundle *rb = ures_open(NULL, "", &localStatus);
+          UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, NULL, &localStatus);
+          s = ures_getStringByKey(cm, id, &resLen, &localStatus);
 
           if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
               && (id[0] != 0))
           {
               // We don't know about it.  Check to see if we support the variant.
               if (variantType & VARIANT_IS_EURO) {
-                  s = ures_getStringByKey(cm, VAR_DELIM_EURO, NULL, ec);
+                  s = ures_getStringByKey(cm, VAR_DELIM_EURO, &resLen, ec);
               }
               else {
                   uloc_getParent(locale, id, sizeof(id), ec);
                   *ec = U_USING_FALLBACK_WARNING;
-                  s = ucurr_forLocale(id, ec);
+                  return ucurr_forLocale(id, buff, buffCapacity, ec);
               }
           }
           else if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) {
               // There is nothing to fallback to. Report the failure/warning if possible.
               *ec = localStatus;
           }
-
-      }
-      ures_close(cm);
-      ures_close(rb);
-    
-      if (U_SUCCESS(*ec)) {
-          return s;
+          if (U_SUCCESS(*ec)) {
+            if(buffCapacity > resLen) {
+              u_strcpy(buff, s);
+            }
+          }
+          ures_close(cm);
+          ures_close(rb);
+        }
+        return u_terminateUChars(buff, buffCapacity, resLen, ec);
+      } else {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
       }
     }
-    return NULL;
+    return resLen;
 }
 
 // end registration

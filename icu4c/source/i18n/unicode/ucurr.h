@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.9 $
+* $Revision: 1.10 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -34,16 +34,24 @@ typedef const void* UCurrRegistryKey;
  */
 
 /**
- * Returns a currency code for the default currency in the given
- * locale.
- * @param locale the locale for which to retrieve a currency code
+ * Finds a currency code for the given locale.
+ * @param locale the locale for which to retrieve a currency code. 
+ *               Currency can be specified by the "currency" keyword
+ *               in which case it overrides the default currency code
+ * @param buff   fill in buffer. Can be NULL for preflighting.
+ * @param buffCapacity capacity of the fill in buffer. Can be 0 for
+ *               preflighting. If it is non-zero, the buff parameter
+ *               must not be NULL.
  * @param ec error code
- * @return a pointer to a 3-character ISO 4217 currency code, or
- * NULL if none is found.
- * @draft ICU 2.2
+ * @return length of the currency string. It should always be 3. If 0,
+ *                currency couldn't be found or the input values are 
+ *                invalid. 
+ * @draft ICU 2.8
  */
-U_CAPI const UChar* U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucurr_forLocale(const char* locale,
+                UChar* buff,
+                int32_t buffCapacity,
                 UErrorCode* ec);
 
 /**
