@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2004/01/08 22:27:09 $ 
- * $Revision: 1.28 $
+ * $Date: 2004/03/09 22:25:05 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -59,6 +59,7 @@ import java.util.ResourceBundle;
  * ------   -------                 ------------        -------
  * G        era designator          (Text)              AD
  * y        year                    (Number)            1996
+ * Y        year (week of year)     (Number)            1997
  * u        extended year           (Number)            4601
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
@@ -67,7 +68,8 @@ import java.util.ResourceBundle;
  * m        minute in hour          (Number)            30
  * s        second in minute        (Number)            55
  * S        millisecond             (Number)            978
- * E        day in week             (Text)              Tuesday
+ * E        day of week             (Text)              Tuesday
+ * e        day of week (local 1~7) (Number)            2
  * D        day in year             (Number)            189
  * F        day of week in month    (Number)            2 (2nd Wed in July)
  * w        week in year            (Number)            27
@@ -76,8 +78,11 @@ import java.util.ResourceBundle;
  * k        hour in day (1~24)      (Number)            24
  * K        hour in am/pm (0~11)    (Number)            0
  * z        time zone               (Text)              Pacific Standard Time
- * '        escape for text         (Delimiter)
- * ''       single quote            (Literal)           '
+ * Z        time zone (RFC 822)     (Number)            -0800
+ * g        Julian day              (Number)            2451334
+ * A        milliseconds in day     (Number)            69540000
+ * '        escape for text         (Delimiter)         'Date='
+ * ''       single quote            (Literal)           'o''clock'
  * </pre>
  * </blockquote>
  * The count of pattern letters determine the format.
@@ -440,7 +445,7 @@ public class SimpleDateFormat extends DateFormat {
             // when a different pattern or non-pattern character is seen
             if (ch != prevCh && count > 0) {
                 toAppendTo.append(
-                        subFormat(prevCh, count, toAppendTo.length(), pos, formatData, cal));
+                                  subFormat(prevCh, count, toAppendTo.length(), pos, formatData, cal));
                 count = 0;
             }
             if (ch == '\'') {
@@ -467,7 +472,7 @@ public class SimpleDateFormat extends DateFormat {
         // Format the last item in the pattern, if any
         if (count > 0) {
             toAppendTo.append(
-                    subFormat(prevCh, count, toAppendTo.length(), pos, formatData, cal));
+                              subFormat(prevCh, count, toAppendTo.length(), pos, formatData, cal));
         }
         return toAppendTo;
     }
@@ -475,26 +480,26 @@ public class SimpleDateFormat extends DateFormat {
     // Map index into pattern character string to Calendar field number
     private static final int[] PATTERN_INDEX_TO_CALENDAR_FIELD =
     {
-        Calendar.ERA, Calendar.YEAR, Calendar.MONTH, Calendar.DATE,
-        Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY, Calendar.MINUTE,
-        Calendar.SECOND, Calendar.MILLISECOND, Calendar.DAY_OF_WEEK,
-        Calendar.DAY_OF_YEAR, Calendar.DAY_OF_WEEK_IN_MONTH,
-        Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH,
-        Calendar.AM_PM, Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
-        Calendar.EXTENDED_YEAR
+        /*GyM*/ Calendar.ERA, Calendar.YEAR, Calendar.MONTH,
+        /*dkH*/ Calendar.DATE, Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY,
+        /*msS*/ Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND,
+        /*EDF*/ Calendar.DAY_OF_WEEK, Calendar.DAY_OF_YEAR, Calendar.DAY_OF_WEEK_IN_MONTH,
+        /*wWa*/ Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH, Calendar.AM_PM,
+        /*hKz*/ Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
+        /*Yeu*/ Calendar.YEAR_WOY, Calendar.DOW_LOCAL, Calendar.EXTENDED_YEAR,
+        /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET
     };
 
     // Map index into pattern character string to DateFormat field number
     private static final int[] PATTERN_INDEX_TO_DATE_FORMAT_FIELD = {
-        DateFormat.ERA_FIELD, DateFormat.YEAR_FIELD, DateFormat.MONTH_FIELD,
-        DateFormat.DATE_FIELD, DateFormat.HOUR_OF_DAY1_FIELD,
-        DateFormat.HOUR_OF_DAY0_FIELD, DateFormat.MINUTE_FIELD,
-        DateFormat.SECOND_FIELD, DateFormat.MILLISECOND_FIELD,
-        DateFormat.DAY_OF_WEEK_FIELD, DateFormat.DAY_OF_YEAR_FIELD,
-        DateFormat.DAY_OF_WEEK_IN_MONTH_FIELD, DateFormat.WEEK_OF_YEAR_FIELD,
-        DateFormat.WEEK_OF_MONTH_FIELD, DateFormat.AM_PM_FIELD,
-        DateFormat.HOUR1_FIELD, DateFormat.HOUR0_FIELD,
-        DateFormat.TIMEZONE_FIELD,
+        /*GyM*/ DateFormat.ERA_FIELD, DateFormat.YEAR_FIELD, DateFormat.MONTH_FIELD,
+        /*dkH*/ DateFormat.DATE_FIELD, DateFormat.HOUR_OF_DAY1_FIELD, DateFormat.HOUR_OF_DAY0_FIELD,
+        /*msS*/ DateFormat.MINUTE_FIELD, DateFormat.SECOND_FIELD, DateFormat.MILLISECOND_FIELD,
+        /*EDF*/ DateFormat.DAY_OF_WEEK_FIELD, DateFormat.DAY_OF_YEAR_FIELD, DateFormat.DAY_OF_WEEK_IN_MONTH_FIELD,
+        /*wWa*/ DateFormat.WEEK_OF_YEAR_FIELD, DateFormat.WEEK_OF_MONTH_FIELD, DateFormat.AM_PM_FIELD,
+        /*hKz*/ DateFormat.HOUR1_FIELD, DateFormat.HOUR0_FIELD, DateFormat.TIMEZONE_FIELD,
+        /*Yeu*/ DateFormat.YEAR_WOY_FIELD, DateFormat.DOW_LOCAL_FIELD, DateFormat.EXTENDED_YEAR_FIELD,
+        /*gAZ*/ DateFormat.JULIAN_DAY_FIELD, DateFormat.MILLISECONDS_IN_DAY_FIELD, DateFormat.TIMEZONE_RFC_FIELD
     };
 
     /**
@@ -512,12 +517,12 @@ public class SimpleDateFormat extends DateFormat {
     protected String subFormat(char ch, int count, int beginOffset,
                                FieldPosition pos, DateFormatSymbols formatData,
                                Calendar cal)
-         throws IllegalArgumentException
+        throws IllegalArgumentException
     {
         int     maxIntCount = Integer.MAX_VALUE;
         String  current = "";
 
-		int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);
+        int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);
         if (patternCharIndex == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "'");
@@ -550,7 +555,7 @@ public class SimpleDateFormat extends DateFormat {
             else
                 current = zeroPaddingNumber(value+1, count, maxIntCount);
             break;
-        case 4: // 'k' - HOUR_OF_DAY: 1-based.  eg, 23:59 + 1 hour =>> 24:59
+        case 4: // 'k' - HOUR_OF_DAY (1..24)
             if (value == 0)
                 current = zeroPaddingNumber(
                                             cal.getMaximum(Calendar.HOUR_OF_DAY)+1,
@@ -564,10 +569,10 @@ public class SimpleDateFormat extends DateFormat {
             else // count < 4, use abbreviated form if exists
                 current = formatData.shortWeekdays[value];
             break;
-        case 14:    // 'a' - AM_PM
+        case 14: // 'a' - AM_PM
             current = formatData.ampms[value];
             break;
-        case 15: // 'h' - HOUR:1-based.  eg, 11PM + 1 hour =>> 12 AM
+        case 15: // 'h' - HOUR (1..12)
             if (value == 0)
                 current = zeroPaddingNumber(
                                             cal.getLeastMaximum(Calendar.HOUR)+1,
@@ -619,9 +624,24 @@ public class SimpleDateFormat extends DateFormat {
                     current = formatData.zoneStrings[zoneIndex][2];
             }
             break;
+        case 23: // 'Z' - TIMEZONE_RFC
+            {
+                char sign = '+';
+                value = (cal.get(Calendar.ZONE_OFFSET) +
+                         cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
+                if (value < 0) {
+                    value = -value;
+                    sign = '-';
+                }
+                value = (value / 3) * 5 + (value % 60); // minutes => KKmm
+                StringBuffer buf = new StringBuffer();
+                buf.append(sign).append(zeroPaddingNumber(value, 4, 4));
+                current = buf.toString();
+            }
+            break;
         default:
             // case 3: // 'd' - DATE
-            // case 5: // 'H' - HOUR_OF_DAY:0-based.  eg, 23:59 + 1 hour =>> 00:59
+            // case 5: // 'H' - HOUR_OF_DAY (0..23)
             // case 6: // 'm' - MINUTE
             // case 7: // 's' - SECOND
             // case 8: // 'S' - MILLISECOND
@@ -629,18 +649,22 @@ public class SimpleDateFormat extends DateFormat {
             // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
             // case 12: // 'w' - WEEK_OF_YEAR
             // case 13: // 'W' - WEEK_OF_MONTH
-            // case 16: // 'K' - HOUR: 0-based.  eg, 11PM + 1 hour =>> 0 AM
-            // case 18: // 'u' - EXTENDED_YEAR
+            // case 16: // 'K' - HOUR (0..11)
+            // case 18: // 'Y' - YEAR_WOY
+            // case 19: // 'e' - DOW_LOCAL
+            // case 20: // 'u' - EXTENDED_YEAR
+            // case 21: // 'g' - JULIAN_DAY
+            // case 22: // 'A' - MILLISECONDS_IN_DAY
+
             current = zeroPaddingNumber(value, count, maxIntCount);
             break;
         } // switch (patternCharIndex)
 
-        if (pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
-            // set for the first occurence only.
-            if (pos.getBeginIndex() == 0 && pos.getEndIndex() == 0) {
-                pos.setBeginIndex(beginOffset);
-                pos.setEndIndex(beginOffset + current.length());
-            }
+        // Set the FieldPosition (for the first occurence only)
+        if (pos.getBeginIndex() == pos.getEndIndex() &&
+            pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
+            pos.setBeginIndex(beginOffset);
+            pos.setEndIndex(beginOffset + current.length());
         }
 
         return current;
@@ -862,11 +886,11 @@ public class SimpleDateFormat extends DateFormat {
         // add 100 years, and get April 3 2004 at 3:30 am.  Note that April 3 2004 is
         // a Saturday, so it can have a 2:30 am -- and it should. [LIU]
         /*
-        Date parsedDate = cal.getTime();
-        if( ambiguousYear[0] && !parsedDate.after(defaultCenturyStart) ) {
-            cal.add(Calendar.YEAR, 100);
-            parsedDate = cal.getTime();
-        }
+          Date parsedDate = cal.getTime();
+          if( ambiguousYear[0] && !parsedDate.after(defaultCenturyStart) ) {
+          cal.add(Calendar.YEAR, 100);
+          parsedDate = cal.getTime();
+          }
         */
         // Because of the above condition, save off the fields in case we need to readjust.
         // The procedure we use here is not particularly efficient, but there is no other
@@ -949,70 +973,70 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     private int matchZoneString(String text, int start, int zoneIndex) {
-    int j;
-    for (j = 1; j <= 4; ++j) {
-        // Checking long and short zones [1 & 2],
-        // and long and short daylight [3 & 4].
-        if (text.regionMatches(true, start,
-                   formatData.zoneStrings[zoneIndex][j], 0,
-                   formatData.zoneStrings[zoneIndex][j].length())) {
-        break;
+        int j;
+        for (j = 1; j <= 4; ++j) {
+            // Checking long and short zones [1 & 2],
+            // and long and short daylight [3 & 4].
+            if (text.regionMatches(true, start,
+                                   formatData.zoneStrings[zoneIndex][j], 0,
+                                   formatData.zoneStrings[zoneIndex][j].length())) {
+                break;
+            }
         }
-    }
-    return (j > 4) ? -1 : j;
+        return (j > 4) ? -1 : j;
     }   
 
     /**
      * find time zone 'text' matched zoneStrings and set cal
      */
     private int subParseZoneString(String text, int start, Calendar cal) {
-    // At this point, check for named time zones by looking through
-    // the locale data from the DateFormatZoneData strings.
-    // Want to be able to parse both short and long forms.
-    int zoneIndex = 
-        formatData.getZoneIndex (getTimeZone().getID());
-    TimeZone tz = null;
-    int j = 0, i = 0;
-    if (zoneIndex != -1) {
-    	j = matchZoneString(text, start, zoneIndex);
-    	if (j > 0) {
+        // At this point, check for named time zones by looking through
+        // the locale data from the DateFormatZoneData strings.
+        // Want to be able to parse both short and long forms.
+        int zoneIndex = 
+            formatData.getZoneIndex (getTimeZone().getID());
+        TimeZone tz = null;
+        int j = 0, i = 0;
+        if (zoneIndex != -1) {
+            j = matchZoneString(text, start, zoneIndex);
+            if (j > 0) {
         	tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
         	i = zoneIndex;
-    	}
-    }
+            }
+        }
     
-    if (tz == null) {
-        zoneIndex = 
-        formatData.getZoneIndex (TimeZone.getDefault().getID());
-        if (zoneIndex != -1) {
+        if (tz == null) {
+            zoneIndex = 
+                formatData.getZoneIndex (TimeZone.getDefault().getID());
+            if (zoneIndex != -1) {
         	j = matchZoneString(text, start, zoneIndex);
         	if (j > 0) {
-        		tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
-        		i = zoneIndex;
+                    tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
+                    i = zoneIndex;
         	}
-        }
-    }       
+            }
+        }       
 
-    if (tz == null) {
-        for (i = 0; i < formatData.zoneStrings.length; i++) {
-			j = matchZoneString(text, start, i);
+        if (tz == null) {
+            for (i = 0; i < formatData.zoneStrings.length; i++) {
+                j = matchZoneString(text, start, i);
         	if (j > 0) {
-            	tz = TimeZone.getTimeZone(formatData.zoneStrings[i][0]);
-            	break;
+                    tz = TimeZone.getTimeZone(formatData.zoneStrings[i][0]);
+                    break;
         	}
+            }
         }
-    }
     
-    if (tz != null) { // Matched any ?
-        cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
-        int savings = 0;
-        if (j >= 3) {
+        if (tz != null) { // Matched any ?
+            cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
+            int savings = 0;
+            if (j >= 3) {
         	savings = tz.getDSTSavings();
+            }
+            cal.set(Calendar.DST_OFFSET, savings);
+            return (start + formatData.zoneStrings[i][j].length());
         }
-        cal.set(Calendar.DST_OFFSET, savings);
-        return (start + formatData.zoneStrings[i][j].length());
-    }
-    return 0;
+        return 0;
     }
 
     /**
@@ -1132,7 +1156,7 @@ public class SimpleDateFormat extends DateFormat {
                 // Want to be able to parse both short and long forms.
                 // Try count == 4 first:
                 int newStart = matchString(text, start, Calendar.MONTH,
-					formatData.months, cal);
+                                           formatData.months, cal);
                 if (newStart > 0) {
                     return newStart;
                 } else { // count == 4 failed, now try count == 3
@@ -1140,7 +1164,7 @@ public class SimpleDateFormat extends DateFormat {
                                        formatData.shortMonths, cal);
                 }
             }
-        case 4: // 'k' - HOUR_OF_DAY: 1-based.  eg, 23:59 + 1 hour =>> 24:59
+        case 4: // 'k' - HOUR_OF_DAY (1..24)
             // [We computed 'value' above.]
             if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) value = 0;
             cal.set(Calendar.HOUR_OF_DAY, value);
@@ -1149,7 +1173,7 @@ public class SimpleDateFormat extends DateFormat {
             // Want to be able to parse both short and long forms.
             // Try count == 4 (DDDD) first:
             int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
-				formatData.weekdays, cal);
+                                       formatData.weekdays, cal);
             if (newStart > 0) {
                 return newStart;
             } else { // DDDD failed, now try DDD
@@ -1157,14 +1181,15 @@ public class SimpleDateFormat extends DateFormat {
                                    formatData.shortWeekdays, cal);
             }
         }
-        case 14:    // 'a' - AM_PM
+        case 14: // 'a' - AM_PM
             return matchString(text, start, Calendar.AM_PM, formatData.ampms, cal);
-        case 15: // 'h' - HOUR:1-based.  eg, 11PM + 1 hour =>> 12 AM
+        case 15: // 'h' - HOUR (1..12)
             // [We computed 'value' above.]
             if (value == cal.getLeastMaximum(Calendar.HOUR)+1) value = 0;
             cal.set(Calendar.HOUR, value);
             return pos.getIndex();
         case 17: // 'z' - ZONE_OFFSET
+        case 23: // 'Z' - TIMEZONE_RFC
             // First try to parse generic forms such as GMT-07:00. Do this first
             // in case localized DateFormatZoneData contains the string "GMT"
             // for a zone; in that case, we don't want to match the first three
@@ -1185,21 +1210,25 @@ public class SimpleDateFormat extends DateFormat {
 
                     pos.setIndex(start + GMT.length());
 
-            try { // try-catch for "GMT" only time zone string
-            if( text.charAt(pos.getIndex()) == '+' ) {
-                sign = 1;
-            } else if( text.charAt(pos.getIndex()) == '-' ) {
-                sign = -1;
-            } 
-            } catch(StringIndexOutOfBoundsException e) {
+                    try { // try-catch for "GMT" only time zone string
+                        switch (text.charAt(pos.getIndex())) {
+                        case '+':
+                            sign = 1;
+                            break;
+                        case '-':
+                            sign = -1;
+                            break;
+                        }
+                    } catch(StringIndexOutOfBoundsException e) {
                     }
-            if (sign == 0) {
-            cal.set(Calendar.ZONE_OFFSET, 0 );
-            return pos.getIndex();
-            }
+                    if (sign == 0) {
+                        cal.set(Calendar.ZONE_OFFSET, 0 );
+                        return pos.getIndex();
+                    }
 
                     // Look for hours:minutes or hhmm.
                     pos.setIndex(pos.getIndex() + 1);
+                    int st = pos.getIndex();
                     Number tzNumber = numberFormat.parse(text, pos);
                     if( tzNumber == null) {
                         return -start;
@@ -1219,10 +1248,11 @@ public class SimpleDateFormat extends DateFormat {
                     else {
                         // This is the hhmm case.
                         offset = tzNumber.intValue();
-                        if( offset < 24 )
+                        // Assume "-23".."+23" refers to hours.
+                        if( offset < 24 && (pos.getIndex() - st) <= 2)
                             offset *= 60;
                         else
-                        	// todo: this looks questionable, should have more error checking
+                            // todo: this looks questionable, should have more error checking
                             offset = offset % 100 + offset / 100 * 60;
                     }
 
@@ -1232,9 +1262,9 @@ public class SimpleDateFormat extends DateFormat {
                     // At this point, check for named time zones by looking through
                     // the locale data from the DateFormatZoneData strings.
                     // Want to be able to parse both short and long forms.
-            i = subParseZoneString(text, start, cal);
-            if (i != 0)
-            return i;
+                    i = subParseZoneString(text, start, cal);
+                    if (i != 0)
+                        return i;
 
                     // As a last resort, look for numeric timezones of the form
                     // [+-]hhmm as specified by RFC 822.  This code is actually
@@ -1252,7 +1282,8 @@ public class SimpleDateFormat extends DateFormat {
                         sign = -1;
                         offset = -offset;
                     }
-                    if( offset < 24 )
+                    // Assume "-23".."+23" refers to hours. Length includes sign.
+                    if( offset < 24 && (pos.getIndex() - start) <= 3)
                         offset = offset * 60;
                     else
                         offset = offset % 100 + offset / 100 * 60;
@@ -1261,30 +1292,24 @@ public class SimpleDateFormat extends DateFormat {
                 }
 
                 // Do the final processing for both of the above cases.  We only
-                // arrive here if the form GMT+/-... or an RFC 822 form was seen.                ///CLOVER:OFF
-                // as it turns out, sign is never 0 if we get here
-                // if (sign != 0)
-                // {
-                    offset *= millisPerMinute * sign;
+                // arrive here if the form GMT+/-... or an RFC 822 form was seen.
 
-                    if (cal.getTimeZone().useDaylightTime())
-                    {
-                        cal.set(Calendar.DST_OFFSET, millisPerHour);
-                        offset -= millisPerHour;
-                    }
-                    cal.set(Calendar.ZONE_OFFSET, offset);
+                // assert (sign != 0) : sign; // enable when guaranteed JDK >= 1.4
+                offset *= millisPerMinute * sign;
 
-                    return pos.getIndex();
-                // }
+                if (cal.getTimeZone().useDaylightTime())
+                {
+                    cal.set(Calendar.DST_OFFSET, millisPerHour);
+                    offset -= millisPerHour;
+                }
+                cal.set(Calendar.ZONE_OFFSET, offset);
+
+                return pos.getIndex();
             }
-
-            // All efforts to parse a zone failed.
-            // since sign != 0 is always true (see above), we never get here            // todo: clover bug, if I clover comment this, default gets lost
-            // return -start;
 
         default:
             // case 3: // 'd' - DATE
-            // case 5: // 'H' - HOUR_OF_DAY:0-based.  eg, 23:59 + 1 hour =>> 00:59
+            // case 5: // 'H' - HOUR_OF_DAY (0..23)
             // case 6: // 'm' - MINUTE
             // case 7: // 's' - SECOND
             // case 8: // 'S' - MILLISECOND
@@ -1292,8 +1317,12 @@ public class SimpleDateFormat extends DateFormat {
             // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
             // case 12: // 'w' - WEEK_OF_YEAR
             // case 13: // 'W' - WEEK_OF_MONTH
-            // case 16: // 'K' - HOUR: 0-based.  eg, 11PM + 1 hour =>> 0 AM
-            // case 18: // 'u' - EXTENDED_YEAR
+            // case 16: // 'K' - HOUR (0..11)
+            // case 18: // 'Y' - YEAR_WOY
+            // case 19: // 'e' - DOW_LOCAL
+            // case 20: // 'u' - EXTENDED_YEAR
+            // case 21: // 'g' - JULIAN_DAY
+            // case 22: // 'A' - MILLISECONDS_IN_DAY
 
             // Handle "generic" fields
             if (obeyCount)
@@ -1470,19 +1499,19 @@ public class SimpleDateFormat extends DateFormat {
      * Override readObject.
      */
     private void readObject(ObjectInputStream stream)
-         throws IOException, ClassNotFoundException {
-             stream.defaultReadObject();
-             ///CLOVER:OFF
-             // don't have old serial data to test with
-             if (serialVersionOnStream < 1) {
-                 // didn't have defaultCenturyStart field
-                 initializeDefaultCentury();
-             }
-             ///CLOVER:ON
-             else {
-                 // fill in dependent transient field
-                 parseAmbiguousDatesAsAfter(defaultCenturyStart);
-             }
-             serialVersionOnStream = currentSerialVersion;
+        throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        ///CLOVER:OFF
+        // don't have old serial data to test with
+        if (serialVersionOnStream < 1) {
+            // didn't have defaultCenturyStart field
+            initializeDefaultCentury();
+        }
+        ///CLOVER:ON
+        else {
+            // fill in dependent transient field
+            parseAmbiguousDatesAsAfter(defaultCenturyStart);
+        }
+        serialVersionOnStream = currentSerialVersion;
     }
 }
