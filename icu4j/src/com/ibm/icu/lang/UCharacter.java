@@ -4334,6 +4334,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.NFC_QUICK_CHECK:
             case UProperty.NFKC_QUICK_CHECK:
                 return NormalizerImpl.quickCheck(ch, (type-UProperty.NFD_QUICK_CHECK)+2); // 2=UNORM_NFD
+            case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
+                return NormalizerImpl.getFCD16(ch)>>8;
+            case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
+                return NormalizerImpl.getFCD16(ch)&0xff;
             default:
                
                                 return 0; /* undefined */
@@ -4415,6 +4419,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                       & BLOCK_MASK_) >> BLOCK_SHIFT_;
                 return (max!=0) ? max : UnicodeBlock.COUNT - 1;
             case UProperty.CANONICAL_COMBINING_CLASS:
+            case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
+            case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
                 return 0xff; // TODO do we need to be more precise, 
                              // getting the actual maximum?
             case UProperty.DECOMPOSITION_TYPE:
