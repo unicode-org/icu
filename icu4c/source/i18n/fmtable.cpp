@@ -28,8 +28,6 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
 
-UnicodeString* Formattable::gBogus = NULL;
-
 // -------------------------------------
 // default constructor.
 // Creates a formattable object with a long value 0.
@@ -46,6 +44,7 @@ Formattable::Formattable()
 Formattable::Formattable(UDate date, ISDATE /*isDate*/)
     :   UObject(), fType(kDate)
 {
+    fBogus.setToBogus();
     fValue.fDate = date;
 }
 
@@ -55,6 +54,7 @@ Formattable::Formattable(UDate date, ISDATE /*isDate*/)
 Formattable::Formattable(double value)
     :   UObject(), fType(kDouble)
 {
+    fBogus.setToBogus();
     fValue.fDouble = value;
 }
 
@@ -64,6 +64,7 @@ Formattable::Formattable(double value)
 Formattable::Formattable(int32_t value)
     :   UObject(), fType(kLong)
 {
+    fBogus.setToBogus();
     fValue.fInt64 = value;
 }
 
@@ -73,6 +74,7 @@ Formattable::Formattable(int32_t value)
 Formattable::Formattable(int64_t value)
     :   UObject(), fType(kInt64)
 {
+    fBogus.setToBogus();
     fValue.fInt64 = value;
 }
 
@@ -82,6 +84,7 @@ Formattable::Formattable(int64_t value)
 Formattable::Formattable(const char* stringToCopy)
     :   UObject(), fType(kString)
 {
+    fBogus.setToBogus();
     fValue.fString = new UnicodeString(stringToCopy);
 }
 
@@ -91,6 +94,7 @@ Formattable::Formattable(const char* stringToCopy)
 Formattable::Formattable(const UnicodeString& stringToCopy)
     :   UObject(), fType(kString)
 {
+    fBogus.setToBogus();
     fValue.fString = new UnicodeString(stringToCopy);
 }
 
@@ -101,6 +105,7 @@ Formattable::Formattable(const UnicodeString& stringToCopy)
 Formattable::Formattable(UnicodeString* stringToAdopt)
     :   UObject(), fType(kString)
 {
+    fBogus.setToBogus();
     fValue.fString = stringToAdopt;
 }
 
@@ -109,6 +114,7 @@ Formattable::Formattable(UnicodeString* stringToAdopt)
 Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
     :   UObject(), fType(kArray)
 {
+    fBogus.setToBogus();
     fValue.fArrayAndCount.fArray = createArrayCopy(arrayToCopy, count);
     fValue.fArrayAndCount.fCount = count;
 }
@@ -119,6 +125,7 @@ Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
 Formattable::Formattable(const Formattable &source)
     :   UObject(source), fType(kLong)
 {
+    fBogus.setToBogus();
     *this = source;
 }
 
@@ -221,6 +228,7 @@ void Formattable::dispose()
     case kDate:
     case kDouble:
     case kLong:
+    case kInt64:
         break;
     }
 }
@@ -462,13 +470,9 @@ Formattable::getArray(int32_t& count, UErrorCode* status) const
 // Gets the bogus string, ensures mondo bogosity.
 
 UnicodeString*
-Formattable::getBogus() 
+Formattable::getBogus() const 
 {
-  if (gBogus == NULL) {
-    gBogus = new UnicodeString();
-  }
-  gBogus->setToBogus();
-  return gBogus;
+    return (UnicodeString*)&fBogus; /* cast away const :-( */
 }
 
 #if 0
