@@ -3,6 +3,6 @@
 Debug
 Makefile
 Release
-libicuctestfw.so.20.0
+libicuctestfw*
 pkgdata
 tmp

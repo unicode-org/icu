@@ -215,7 +215,7 @@ icu4c/source/tools/ctestfw/*.pdb
 icu4c/source/tools/ctestfw/Debug
 icu4c/source/tools/ctestfw/Makefile
 icu4c/source/tools/ctestfw/Release
-icu4c/source/tools/ctestfw/libicuctestfw.so.20.0
+icu4c/source/tools/ctestfw/libicuctestfw*
 icu4c/source/tools/ctestfw/pkgdata
 icu4c/source/tools/ctestfw/tmp
 icu4c/source/tools/dumpce/*.css
@@ -353,6 +353,7 @@ icu4c/source/tools/pkgdata/Makefile
 icu4c/source/tools/pkgdata/Release
 icu4c/source/tools/pkgdata/icupkg.inc
 icu4c/source/tools/pkgdata/pkgdata
+icu4c/source/tools/pkgdata/pkgdata.[0-9]
 icu4c/source/tools/pkgdata/tmp
 icu4c/source/tools/rbdump/*.d
 icu4c/source/tools/rbdump/*.pdb
