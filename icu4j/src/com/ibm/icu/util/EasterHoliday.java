@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/EasterHoliday.java,v $ 
- * $Date: 2003/12/01 21:18:22 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/12/04 05:01:41 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -149,9 +149,6 @@ class EasterRule implements DateRule {
      */
     public Date firstAfter(Date start)
     {
-        if (startDate != null && start.before(startDate)) {
-            start = startDate;
-        }
         return doFirstBetween(start, null);
     }
 
@@ -161,10 +158,6 @@ class EasterRule implements DateRule {
      */
     public Date firstBetween(Date start, Date end)
     {
-        // Pin to the min/max dates for this rule
-        if (startDate != null && start.before(startDate)) {
-            start = startDate;
-        }
         return doFirstBetween(start, end);
     }
 
@@ -173,10 +166,6 @@ class EasterRule implements DateRule {
      */
     public boolean isOn(Date date)
     {
-        if (startDate != null && date.before(startDate)) {
-            return false;
-        }
-
         synchronized(calendar) {
             calendar.setTime(date);
             int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
@@ -284,6 +273,5 @@ class EasterRule implements DateRule {
     private static GregorianCalendar orthodox = new GregorianCalendar(/* new SimpleTimeZone(0, "UTC") */);
 
     private int               daysAfterEaster;
-    private Date              startDate = null;
     private GregorianCalendar calendar = gregorian;
 }
