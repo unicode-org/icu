@@ -475,7 +475,7 @@ class NFRuleSet;
  * @author Richard Gillam
  * @see NumberFormat
  * @see DecimalFormat
- * @draft
+ * @draft ICU 2.0
  */
 
 /** Tags for the predefined rulesets. */
@@ -506,7 +506,7 @@ public:
    * lenient parsing.
    * @param perror The parse error if an error was encountered.
    * @param status The status indicating whether the constructor succeeded.
-   * @draft
+   * @draft ICU 2.0
    */
   RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale, 
 	  UParseError& perror, UErrorCode& status);
@@ -522,7 +522,7 @@ public:
    * and URBNF_DURATION, which formats a duration in seconds as hours, minutes, and seconds.
    * @param locale The locale for the formatter.
    * @param status The status indicating whether the constructor succeeded.
-   * @draft
+   * @draft ICU 2.0
    */
   RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& locale, UErrorCode& status);
 
@@ -564,7 +564,7 @@ public:
   /**
    * @return the rules that were provided to the RuleBasedNumberFormat.
    * @return the result String that was passed in
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString getRules() const;
 
@@ -573,14 +573,14 @@ public:
    * the function returns null.
    * @param index the index of the ruleset
    * @return the name of the index'th public ruleSet.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString getRuleSetName(int32_t index) const;
 
   /**
    * Return the number of public rule set names.
    * @return the number of public rule set names.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual int32_t getNumberOfRuleSetNames() const;
 
@@ -590,7 +590,7 @@ public:
    * @param toAppendTo the string that will hold the (appended) result
    * @param pos the fieldposition
    * @return A textual representation of the number.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString& format(int32_t number,
                                 UnicodeString& toAppendTo,
@@ -601,7 +601,7 @@ public:
    * @param toAppendTo the string that will hold the (appended) result
    * @param pos the fieldposition
    * @return A textual representation of the number.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString& format(double number,
                                 UnicodeString& toAppendTo,
@@ -616,7 +616,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString& format(int32_t number,
                                 const UnicodeString& ruleSetName,
@@ -632,7 +632,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString& format(double number,
                                 const UnicodeString& ruleSetName,
@@ -647,7 +647,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual UnicodeString& format(const Formattable& obj,
                                 UnicodeString& toAppendTo,
@@ -687,7 +687,7 @@ public:
    * in "text" to examine.  On exit, has been updated to contain the position
    * of the first character in "text" that wasn't consumed by the parse.
    * @see #setLenientParseMode
-   * @draft
+   * @draft ICU 2.0
    */
   virtual void parse(const UnicodeString& text,
 			         Formattable& result,
@@ -734,7 +734,7 @@ public:
    *
    * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
    * @see RuleBasedCollator
-   * @draft
+   * @draft ICU 2.0
    */
   virtual void setLenient(UBool enabled);
 
@@ -743,7 +743,7 @@ public:
    * by default.
    * @return true if lenient-parse mode is turned on.
    * @see #setLenientParseMode
-   * @draft
+   * @draft ICU 2.0
    */
   virtual inline UBool isLenient(void) const;
 

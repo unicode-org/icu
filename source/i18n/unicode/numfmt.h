@@ -147,6 +147,10 @@ public:
         FRACTION_FIELD        = kFractionField
     };
 
+    /**
+     * Destructor.
+     * @stable
+     */
     virtual ~NumberFormat();
 
     /**
@@ -209,7 +213,7 @@ public:
                              ParsePosition& parse_pos) const;
 
     /**
-     * Format a double or long number. These methods call the NumberFormat
+     * Format a double number. These methods call the NumberFormat
      * pure virtual format() methods with the default FieldPosition.
      *
      * @param number    The value to be formatted.
@@ -220,11 +224,20 @@ public:
     UnicodeString& format(  double number,
                             UnicodeString& output) const;
 
+    /**
+     * Format a long number. These methods call the NumberFormat
+     * pure virtual format() methods with the default FieldPosition.
+     *
+     * @param number    The value to be formatted.
+     * @param output    Output param with the formatted string.
+     * @return          A reference to 'output' param.
+     * @stable
+     */
     UnicodeString& format(  int32_t number,
                             UnicodeString& output) const;
 
    /**
-    * Format a double or long number. Concrete subclasses must implement
+    * Format a double number. Concrete subclasses must implement
     * these pure virtual methods.
     *
     * @param number     The value to be formatted.
@@ -233,11 +246,23 @@ public:
     * @param pos        On input: an alignment field, if desired.
     *                   On output: the offsets of the alignment field.
     * @return           A reference to 'toAppendTo'.
-     * @stable
+    * @stable
     */
     virtual UnicodeString& format(double number,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos) const = 0;
+   /**
+    * Format a long number. Concrete subclasses must implement
+    * these pure virtual methods.
+    *
+    * @param number     The value to be formatted.
+    * @param toAppendTo The string to append the formatted string to.
+    *                   This is an output parameter.
+    * @param pos        On input: an alignment field, if desired.
+    *                   On output: the offsets of the alignment field.
+    * @return           A reference to 'toAppendTo'.
+    * @stable
+    */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos) const = 0;
