@@ -827,16 +827,19 @@ void RBBITableBuilder::exportTable(void *where) {
 //   printSet    Debug function.   Print the contents of a UVector
 //
 //-----------------------------------------------------------------------------
-void RBBITableBuilder::printSet(UVector *s) {
 #ifdef RBBI_DEBUG
+void RBBITableBuilder::printSet(UVector *s) {
     int32_t  i;
     for (i=0; i<s->size(); i++) {
         void *v = s->elementAt(i);
         RBBIDebugPrintf("%10p", v);
     }
     RBBIDebugPrintf("\n");
-#endif
 }
+#else
+/* Use an empty function for non-debug builds to ignore warnings. */
+void RBBITableBuilder::printSet(UVector *) {}
+#endif
 
 
 //-----------------------------------------------------------------------------

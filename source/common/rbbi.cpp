@@ -1001,7 +1001,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     int32_t            lookaheadStatus = 0;//[]   = {0, 0, 0, 0, 0};
     int32_t            lookaheadResult = 0;//[]   = {0, 0, 0, 0, 0};
     int32_t            lookaheadTag = 0;//[]      = {0, 0, 0, 0, 0};
-    int32_t            lookaheadCount = 0;
+    /*int32_t            lookaheadCount = 0;*/
     RBBIStateTableRow *row;
 
     row = (RBBIStateTableRow *)

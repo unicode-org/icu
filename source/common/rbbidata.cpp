@@ -204,8 +204,8 @@ const UnicodeString &RBBIDataWrapper::getRuleSourceString() {
 //  print   -  debugging function to dump the runtime data tables.
 //
 //-----------------------------------------------------------------------------
-void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *table) {
 #ifdef RBBI_DEBUG
+void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *table) {
     uint32_t   c;
     uint32_t   s;
 
@@ -232,8 +232,11 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
         RBBIDebugPrintf("\n");
     }
     RBBIDebugPrintf("\n");
-#endif
 }
+#else
+/* Use an empty function for non-debug builds to ignore warnings. */
+void  RBBIDataWrapper::printTable(const char *, const RBBIStateTable *) {}
+#endif
 
 
 void  RBBIDataWrapper::printData() {
