@@ -322,7 +322,7 @@ void Transliterator::_transliterate(Replaceable& text,
         return;
     }
 
-    int32_t originalStart = index.contextStart;
+//    int32_t originalStart = index.contextStart;
     if (insertion != 0) {
         text.handleReplaceBetween(index.limit, index.limit, *insertion);
         index.limit += insertion->length();
@@ -677,7 +677,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         return 0;
     }
 
-    UVector list;
+    UVector list(status);
     int32_t ignored;
     UnicodeString regenID;
     parseCompoundID(ID, regenID, dir, idSplitPoint, adoptedSplitTrans,
@@ -813,7 +813,7 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
         // skip over whitespace (see below).
         if (pos >= idSplitPoint && adoptedSplitTrans != 0) {
             splitTransIndex = result.size();
-            result.addElement(adoptedSplitTrans);
+            result.addElement(adoptedSplitTrans, status);
             adoptedSplitTrans = 0;
         }
         int32_t p = pos;
@@ -829,14 +829,14 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
         // The return value may be NULL when, for instance, creating a
         // REVERSE transliterator of ID "Latin-Greek()".
         if (t != 0) {
-            result.addElement(t);
+            result.addElement(t, status);
         }
     }
 
     // Handle case of idSplitPoint == id.length()
     if (pos >= idSplitPoint && adoptedSplitTrans != 0) {
         splitTransIndex = result.size();
-        result.addElement(adoptedSplitTrans);
+        result.addElement(adoptedSplitTrans, status);
         adoptedSplitTrans = 0;
     }
 
@@ -1334,12 +1334,12 @@ void Transliterator::initializeRegistry(void) {
         return;
     }
 
-    registry = new TransliteratorRegistry();
-    if (registry == 0) {
+    UErrorCode status = U_ZERO_ERROR;
+
+    registry = new TransliteratorRegistry(status);
+    if (registry == 0 || U_FAILURE(status)) {
         return; // out of memory, no recovery
     }
-
-    UErrorCode status = U_ZERO_ERROR;
 
     /* The following code parses the index table located in
      * icu/data/translit_index.txt.  The index is an n x 4 table

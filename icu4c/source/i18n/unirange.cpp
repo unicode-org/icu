@@ -65,12 +65,15 @@ UnicodeRange* UnicodeRange::split(UChar c) {
  * CALLER OWNS RESULT.
  */
 UnicodeRange*
-UnicodeRange::largestUnusedSubrange(const UnicodeString& str) const {
+UnicodeRange::largestUnusedSubrange(const UnicodeString& str, UErrorCode &status) const {
     int32_t n = str.length();
 
-    UVector v;
+    UVector v(status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     v.setDeleter(UnicodeRange::deleter);
-    v.addElement(clone());
+    v.addElement(clone(), status);
     for (int32_t i=0; i<n; ++i) {
         UChar c = str.charAt(i);
         if (contains(c)) {
@@ -79,7 +82,7 @@ UnicodeRange::largestUnusedSubrange(const UnicodeString& str) const {
                 if (r->contains(c)) {
                     r = r->split(c);
                     if (r != 0) {
-                        v.addElement(r);
+                        v.addElement(r, status);
                     }
                     break;
                 }

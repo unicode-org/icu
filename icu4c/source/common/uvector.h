@@ -84,12 +84,10 @@ private:
 
     UKeyComparator comparer;
 
-    static UBool outOfMemory;
-
 public:
-    UVector(int32_t initialCapacity = 8);
+    UVector(UErrorCode &status, int32_t initialCapacity = 8);
 
-    UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity = 8);
+    UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity = 8);
 
     ~UVector();
 
@@ -97,15 +95,15 @@ public:
     // java.util.Vector API
     //------------------------------------------------------------
 
-    void addElement(void* obj);
+    void addElement(void* obj, UErrorCode &status);
 
-    void addElement(int32_t elem);
+    void addElement(int32_t elem, UErrorCode &status);
 
     void setElementAt(void* obj, int32_t index);
 
     void setElementAt(int32_t elem, int32_t index);
 
-    void insertElementAt(void* obj, int32_t index);
+    void insertElementAt(void* obj, int32_t index, UErrorCode &status);
 
     void* elementAt(int32_t index) const;
 
@@ -129,7 +127,7 @@ public:
 
     UBool isEmpty(void) const;
 
-    UBool ensureCapacity(int32_t minimumCapacity);
+    UBool ensureCapacity(int32_t minimumCapacity, UErrorCode &status);
 
     //------------------------------------------------------------
     // New API
@@ -138,8 +136,6 @@ public:
     UObjectDeleter setDeleter(UObjectDeleter d);
 
     UKeyComparator setComparer(UKeyComparator c);
-
-    static UBool isOutOfMemory(void);
 
     void* operator[](int32_t index) const;
 
@@ -155,7 +151,7 @@ public:
     void* orphanElementAt(int32_t index);
 
 private:
-    void _init(int32_t initialCapacity);
+    void _init(int32_t initialCapacity, UErrorCode &status);
 
     // Disallow
     UVector(const UVector&);
@@ -183,9 +179,9 @@ private:
  */
 class U_COMMON_API UStack : public UVector {
 public:
-    UStack(int32_t initialCapacity = 8);
+    UStack(UErrorCode &status, int32_t initialCapacity = 8);
 
-    UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity = 8);
+    UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity = 8);
 
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.
@@ -198,9 +194,9 @@ public:
     
     int32_t popi(void);
     
-    void* push(void* obj);
+    void* push(void* obj, UErrorCode &status);
 
-    int32_t push(int32_t i);
+    int32_t push(int32_t i, UErrorCode &status);
 
     int32_t search(void* obj) const;
 
@@ -249,13 +245,13 @@ inline void* UStack::peek(void) const {
     return lastElement();
 }
 
-inline void* UStack::push(void* obj) {
-    addElement(obj);
+inline void* UStack::push(void* obj, UErrorCode &status) {
+    addElement(obj, status);
     return obj;
 }
 
-inline int32_t UStack::push(int32_t i) {
-    addElement(i);
+inline int32_t UStack::push(int32_t i, UErrorCode &status) {
+    addElement(i, status);
     return i;
 }
 

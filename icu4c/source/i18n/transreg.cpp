@@ -47,7 +47,7 @@ class CharString {
 };
 
 CharString::CharString(const UnicodeString& str) {
-    if (str.length() >= sizeof(buf)) {
+    if (str.length() >= (int32_t)sizeof(buf)) {
         ptr = new char[str.length() + 8];
     } else {
         ptr = buf;
@@ -283,9 +283,11 @@ static void deleteEntry(void* obj) {
 // class TransliteratorRegistry: Basic public API
 //----------------------------------------------------------------------
 
-TransliteratorRegistry::TransliteratorRegistry() :
+TransliteratorRegistry::TransliteratorRegistry(UErrorCode& status) :
     registry(TRUE),
-    specDAG(TRUE) {
+    specDAG(TRUE),
+    availableIDs(status)
+{
     registry.setValueDeleter(deleteEntry);
     availableIDs.setDeleter(uhash_deleteUnicodeString);
     availableIDs.setComparer(uhash_compareCaselessUnicodeString);
@@ -545,7 +547,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
     if (visible) {
         registerSTV(source, target, variant);
         if (!availableIDs.contains((void*) &ID)) {
-            availableIDs.addElement(new UnicodeString(ID));
+            availableIDs.addElement(new UnicodeString(ID), status);
         }
     } else {
         removeSTV(source, target, variant);
@@ -577,7 +579,7 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
     UVector *variants = (UVector*) targets->get(target);
     if (variants == 0) {
         variants = new UVector(uhash_deleteUnicodeString,
-                               uhash_compareCaselessUnicodeString);
+                               uhash_compareCaselessUnicodeString, status);
         if (variants == 0) {
             return;
         }
@@ -588,9 +590,9 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
     // string, that is, the empty string, we add it at position zero.
     if (!variants->contains((void*) &variant)) {
         if (variant.length() > 0) {
-            variants->addElement(new UnicodeString(variant));
+            variants->addElement(new UnicodeString(variant), status);
         } else {
-            variants->insertElementAt(new UnicodeString(NO_VARIANT), 0);
+            variants->insertElementAt(new UnicodeString(NO_VARIANT), 0, status);
         }
     }
 }
@@ -603,7 +605,7 @@ void TransliteratorRegistry::removeSTV(const UnicodeString& source,
                                        const UnicodeString& variant) {
     // assert(source.length() > 0);
     // assert(target.length() > 0);
-    UErrorCode status = U_ZERO_ERROR;
+//    UErrorCode status = U_ZERO_ERROR;
     Hashtable *targets = (Hashtable*) specDAG.get(source);
     if (targets == 0) {
         return; // should never happen for valid s-t/v

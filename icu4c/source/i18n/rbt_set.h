@@ -52,7 +52,7 @@ public:
     /**
      * Construct a new empty rule set.
      */
-    TransliterationRuleSet();
+    TransliterationRuleSet(UErrorCode& status);
 
     /**
      * Copy constructor.

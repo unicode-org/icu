@@ -19,11 +19,14 @@ static void U_CALLCONV _deleteRule(void *rule) {
 /**
  * Construct a new empty rule set.
  */
-TransliterationRuleSet::TransliterationRuleSet() {
+TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) {
     maxContextLength = 0;
-    ruleVector = new UVector();
+    ruleVector = new UVector(status);
     ruleVector->setDeleter(&_deleteRule);
     rules = NULL;
+    if (ruleVector == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 /**
@@ -71,7 +74,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
         delete adoptedRule;
         return;
     }
-    ruleVector->addElement(adoptedRule);
+    ruleVector->addElement(adoptedRule, status);
 
     int32_t len;
     if ((len = adoptedRule->getContextLength()) > maxContextLength) {
@@ -93,10 +96,6 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
  * although for optimal performance it shouldn't be.
  */
 void TransliterationRuleSet::freeze(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     /* Construct the rule array and index table.  We reorder the
      * rules by sorting them into 256 bins.  Each bin contains all
      * rules matching the index value for that bin.  A rule
@@ -116,7 +115,11 @@ void TransliterationRuleSet::freeze(UErrorCode& status) {
     int32_t n = ruleVector->size();
     int32_t j;
     int16_t x;
-    UVector v(2*n); // heuristic; adjust as needed
+    UVector v(status, 2*n); // heuristic; adjust as needed
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     /* Precompute the index values.  This saves a LOT of time.
      */
@@ -130,7 +133,7 @@ void TransliterationRuleSet::freeze(UErrorCode& status) {
         for (j=0; j<n; ++j) {
             if (indexValue[j] >= 0) {
                 if (indexValue[j] == x) {
-                    v.addElement(ruleVector->elementAt(j));
+                    v.addElement(ruleVector->elementAt(j), status);
                 }
             } else {
                 // If the indexValue is < 0, then the first key character is
@@ -139,7 +142,7 @@ void TransliterationRuleSet::freeze(UErrorCode& status) {
                 // rarely, so we seldom tread this code path.
                 TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
                 if (r->matchesIndexValue((uint8_t)x)) {
-                    v.addElement(r);
+                    v.addElement(r, status);
                 }
             }
         }
