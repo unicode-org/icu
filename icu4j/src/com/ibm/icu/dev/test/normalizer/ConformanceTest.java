@@ -17,8 +17,7 @@ public class ConformanceTest extends TestFmwk {
 
     Normalizer normalizer;
 
-    static final String TEST_SUITE_FILE =
-        "src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt";
+    static String TEST_SUITE_FILE ="src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt";
 
     public static void main(String[] args) throws Exception {
         new ConformanceTest().run(args);
@@ -42,9 +41,25 @@ public class ConformanceTest extends TestFmwk {
         StringBuffer buf = new StringBuffer();
         int passCount = 0;
         int failCount = 0;
-
+		TEST_SUITE_FILE.replace('/',File.pathSeparatorChar);
+		// unicode data file path system name
+	    final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
+	    String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
+	    if (s==null ) {
+	    // assuming runtime directory is on the same level as the source
+	      s = System.getProperty("user.dir") + TEST_SUITE_FILE;
+	    }
+	    else {
+	      StringBuffer tempfilename = new StringBuffer(s);
+	      if (tempfilename.charAt(tempfilename.length() - 1) != 
+	          File.pathSeparatorChar) {
+	        tempfilename.append(File.separatorChar);
+	      }
+	      tempfilename.append("Draft-TestSuite.txt");
+	      s = tempfilename.toString();
+	    }
         try {
-            input = new BufferedReader(new FileReader(TEST_SUITE_FILE),64*1024);
+            input = new BufferedReader(new FileReader(s),64*1024);
             for (int count = 0;;++count) {
                 line = input.readLine();
                 if (line == null) break;
