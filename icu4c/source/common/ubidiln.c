@@ -110,11 +110,11 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     /* check the argument values */
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return;
-    } else if(pParaBiDi==NULL ||
-              start<0 || start>limit || limit>pParaBiDi->length ||
-              pLineBiDi==NULL
-    ) {
+    } else if(pParaBiDi==NULL || pLineBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    } else if(start<0 || start>limit || limit>pParaBiDi->length) {
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return;
     }
 
@@ -826,8 +826,11 @@ CAPI UTextOffset U_EXPORT2
 ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return 0;
-    } else if(pBiDi==NULL || logicalIndex<0 || pBiDi->length<=logicalIndex) {
+    } else if(pBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    } else if(logicalIndex<0 || pBiDi->length<=logicalIndex) {
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     } else {
         /* we can do the trivial cases without the runs array */
@@ -868,8 +871,11 @@ CAPI UTextOffset U_EXPORT2
 ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return 0;
-    } else if(pBiDi==NULL || visualIndex<0 || pBiDi->length<=visualIndex) {
+    } else if(pBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    } else if(visualIndex<0 || pBiDi->length<=visualIndex) {
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     } else {
         /* we can do the trivial cases without the runs array */
