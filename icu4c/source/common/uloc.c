@@ -508,7 +508,7 @@ uint32_t uloc_getLCID(const char* localeID)
   char temp[30];
   const UChar* lcid = NULL;
   uint32_t result = 0;
-  UResourceBundle* bundle = ures_open(uloc_getDataDirectory(), localeID, &err);
+  UResourceBundle* bundle = ures_open(u_getDataDirectory(), localeID, &err);
   
   if (U_SUCCESS(err))
     {
@@ -541,7 +541,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
   UResourceBundle* bundle;
   const UChar* temp = NULL;  
   bool_t isDefaultLocale = FALSE;
-  const char* dataDir = uloc_getDataDirectory();
+  const char* dataDir = u_getDataDirectory();
   bool_t done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
@@ -666,7 +666,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
   UResourceBundle* bundle = NULL;
   char inLocaleBuffer[TEMPBUFSIZE];
   bool_t isDefaultLocale = FALSE;
-  const char* dataDir = uloc_getDataDirectory();
+  const char* dataDir = u_getDataDirectory();
   bool_t done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
@@ -790,7 +790,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
   bool_t isDefaultLocale = FALSE;
   char inVariantTagBuffer[TEMPBUFSIZE+2];
   char* inVariantTag = inVariantTagBuffer;
-  const char* dataDir = uloc_getDataDirectory();
+  const char* dataDir = u_getDataDirectory();
   bool_t done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
@@ -1054,7 +1054,7 @@ void _lazyEvaluate_installedLocales()
   int32_t strSize;
   if (_installedLocales == NULL)
     {
-      temp = T_ResourceBundle_listInstalledLocales(uloc_getDataDirectory(),
+      temp = T_ResourceBundle_listInstalledLocales(u_getDataDirectory(),
                            &_installedLocalesCount);
       temp2 = (char **) icu_malloc(sizeof(char*) * (_installedLocalesCount+1));
       
@@ -1159,20 +1159,4 @@ const char* const* uloc_getISOCountries()
       }
     }
   return (const char* const*)_isoCountries;
-}
-
-/**
- * Functions to get and set the directory containing the locale data files.
- */
-
-const char*
-uloc_getDataDirectory()
-{
-  return u_getDataDirectory();
-}
-
-void
-uloc_setDataDirectory(const char* newDirectory) 
-{
-  u_setDataDirectory(newDirectory);
 }
