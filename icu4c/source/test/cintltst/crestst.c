@@ -524,9 +524,19 @@ TestOpenDirect(void) {
     errorCode=U_ZERO_ERROR;
     translit_index=ures_open(NULL, "translit_index", &errorCode);
     if(U_FAILURE(errorCode) || errorCode==U_USING_DEFAULT_ERROR || errorCode==U_USING_FALLBACK_ERROR) {
+        /* falling back to default or root is ok */
         errorCode=U_ZERO_ERROR;
     } else {
         log_err("ures_open(\"translit_index\") succeeded, should fail!\n");
+        ures_close(translit_index);
+    }
+
+    /* ures_openDirect("translit_index_WronG") must fail */
+    translit_index=ures_openDirect(NULL, "translit_index_WronG", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        errorCode=U_ZERO_ERROR;
+    } else {
+        log_err("ures_openDirect(\"translit_index_WronG\") succeeded, should fail!\n");
         ures_close(translit_index);
     }
 }
