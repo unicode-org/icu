@@ -130,7 +130,7 @@ main(int argc,
                 "\t                     NOTE: ICU must be completely built to use this option\n"
                 "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
                 "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
-                "\t                     followed by path, defaults to %s\n",
+                "\t                     followed by path, defaults to %s\n"
                 "\t-c or --copyright    include copyright notice \n",
                 argv[0], u_getDataDirectory(), u_getDataDirectory(),u_getDataDirectory());
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
