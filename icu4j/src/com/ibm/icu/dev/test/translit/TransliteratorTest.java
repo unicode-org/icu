@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/03/15 19:45:15 $
- * $Revision: 1.99 $
+ * $Date: 2002/03/15 20:09:19 $
+ * $Revision: 1.100 $
  *
  *****************************************************************************************
  */
@@ -2477,6 +2477,7 @@ public class TransliteratorTest extends TestFmwk {
     //======================================================================
 
     public void TestMulticharStringSet() {
+        // Basic testing
         String rule =
             "       [{aa}]       > x;" +
             "         a          > y;" +
@@ -2492,6 +2493,23 @@ public class TransliteratorTest extends TestFmwk {
         
         expect(t, "a aa ab bc d gd de gde gdefg ddefg",
                   "y x yz z d gd de gdq gdqfg ddrfg");
+
+        // Overlapped string test.  Make sure that when multiple
+        // strings can match that the longest one is matched.
+        rule =
+            "    [a {ab} {abc}]    > x;" +
+            "           b          > y;" +
+            "           c          > z;" +
+            " q [t {st} {rst}] { e > p;" ;
+        
+        t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createFromRules failed");
+            return;
+        }
+        
+        expect(t, "a ab abc qte qste qrste",
+                  "x x x qtp qstp qrstp");
     }
 
     //======================================================================
