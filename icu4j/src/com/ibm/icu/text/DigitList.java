@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2002/02/16 03:06:07 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/05/14 19:43:44 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -700,34 +700,35 @@ final class DigitList implements Cloneable {
         }
     }
 
-    /**
-     * Return the floor of the log base 10 of a given double.
-     * This method compensates for inaccuracies which arise naturally when
-     * computing logs, and always give the correct value.  The parameter
-     * must be positive and finite.
-     */
-    private static final int log10(double d)
-    {
-        // The reason this routine is needed is that simply taking the
-        // log and dividing by log10 yields a result which may be off
-        // by 1 due to rounding errors.  For example, the naive log10
-        // of 1.0e300 taken this way is 299, rather than 300.
-        double log10 = Math.log(d) / LOG10;
-        int ilog10 = (int)Math.floor(log10);
-        // Positive logs could be too small, e.g. 0.99 instead of 1.0
-        if (log10 > 0 && d >= Math.pow(10, ilog10 + 1))
-        {
-            ++ilog10;
-        }
-        // Negative logs could be too big, e.g. -0.99 instead of -1.0
-        else if (log10 < 0 && d < Math.pow(10, ilog10))
-        {
-            --ilog10;
-        }
-        return ilog10;
-    }
-
-    private static final double LOG10 = Math.log(10.0);
+// Unused -- Alan 2003-05
+//    /**
+//     * Return the floor of the log base 10 of a given double.
+//     * This method compensates for inaccuracies which arise naturally when
+//     * computing logs, and always give the correct value.  The parameter
+//     * must be positive and finite.
+//     */
+//    private static final int log10(double d)
+//    {
+//        // The reason this routine is needed is that simply taking the
+//        // log and dividing by log10 yields a result which may be off
+//        // by 1 due to rounding errors.  For example, the naive log10
+//        // of 1.0e300 taken this way is 299, rather than 300.
+//        double log10 = Math.log(d) / LOG10;
+//        int ilog10 = (int)Math.floor(log10);
+//        // Positive logs could be too small, e.g. 0.99 instead of 1.0
+//        if (log10 > 0 && d >= Math.pow(10, ilog10 + 1))
+//        {
+//            ++ilog10;
+//        }
+//        // Negative logs could be too big, e.g. -0.99 instead of -1.0
+//        else if (log10 < 0 && d < Math.pow(10, ilog10))
+//        {
+//            --ilog10;
+//        }
+//        return ilog10;
+//    }
+//
+//    private static final double LOG10 = Math.log(10.0);
 
     public String toString()
     {

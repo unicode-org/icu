@@ -28,28 +28,10 @@ class TransliteratorRegistry {
 
     // char constants
     private static final char LOCALE_SEP  = '_';
-    private static final char ID_SEP      = '-';
-    private static final char VARIANT_SEP = '/';
 
     // String constants
     private static final String NO_VARIANT = ""; // empty string
     private static final String ANY = "Any";
-
-    /**
-     * Resource bundle key for the RuleBasedTransliterator rule.
-     */
-    private static final String RB_RULE = "Rule";
-
-    /**
-     * Resource bundle containing locale-specific transliterator data.
-     */
-    private static final String RB_LOCALE_ELEMENTS =
-        "com.ibm.icu.impl.data.LocaleElements";
-
-    /**
-     * Locale indicating the root.
-     */
-    private static final Locale ROOT_LOCALE = new Locale("", "", "");
 
     /**
      * Dynamic registry mapping full IDs to Entry objects.  This

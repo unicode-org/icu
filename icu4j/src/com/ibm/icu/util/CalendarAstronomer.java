@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2003/01/20 20:03:53 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/05/14 19:43:45 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -200,7 +200,6 @@ public class CalendarAstronomer {
     static private final double PI = 3.14159265358979323846;
     static private final double PI2 = PI * 2.0;
 
-    static private final double HOUR_RAD = PI / 12;        // hours -> radians
     static private final double RAD_HOUR = 12 / PI;        // radians -> hours
     static private final double DEG_RAD  = PI / 180;        // degrees -> radians
     static private final double RAD_DEG  = 180 / PI;        // radians -> degrees

@@ -97,7 +97,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
     // Constants used internally; unit is milliseconds
     private static final int ONE_MINUTE = 60*1000;
     private static final int ONE_HOUR   = 60*ONE_MINUTE;
-    private static final int ONE_DAY    = 24*ONE_HOUR;
 
     /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
