@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Apr-14<br>
+    <p>Version: 2003-Apr-16<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1408,13 +1408,12 @@ del common/libicuuc.o
     mutex is not initialized:</p>
 
     <ul>
+      <li>Static ICU libraries are used.</li>
+
       <li>ICU is used on Mac OS X</li>
 
       <li>ICU is used on HP-UX and the program's main() function is not
       declared in a C++ file.</li>
-
-      <li>Static ICU libraries are used and the program's main() function is
-      not declared in a C++ file.</li>
     </ul>
 
     <p>Upon the first usage of most ICU APIs, the global mutex will get
