@@ -27,6 +27,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "cmemory.h"
+
 // This is the UnicodeConverter headerfile
 #include "unicode/convert.h"
 
@@ -76,11 +78,27 @@ static void initMsg(const char *pname) {
 }
 
 // Print all available codepage converters
-static void printAllConverters(const char *pname, int canon)
+static int printAllConverters(const char *pname, int canon)
 {
     UErrorCode err = U_ZERO_ERROR;
     int32_t num = ucnv_countAvailable();
     uint16_t num_stds = ucnv_countStandards();
+    const char ** stds = (const char **) uprv_malloc(num_stds * sizeof(*stds));
+
+    if (!stds) {
+      u_wmsg("cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
+      return -1;
+    } else {
+        uint16_t s;
+
+        for (s = 0; s < num_stds; ++s) {
+            stds[s] = ucnv_getStandard(s, &err);
+            if (U_FAILURE(err)) {
+                u_wmsg("cantGetTag", u_wmsg_errorName(err));
+                return -1;
+            }
+        }
+    }
 
 #if 0
     size_t numprint = 0;
@@ -91,7 +109,7 @@ static void printAllConverters(const char *pname, int canon)
     {
       initMsg(pname);   
       u_wmsg("cantGetNames");
-      return;
+      return -1;
     }
 
     for (int32_t i = 0; i<num; i++)
@@ -110,43 +128,67 @@ static void printAllConverters(const char *pname, int canon)
             numprint = 0;
         }
 #else
-        printf("%s", name);
-
         err = U_ZERO_ERROR;
         num_aliases = ucnv_countAliases(name, &err);
         if (U_FAILURE(err)) {
+            printf("%s", name);
+
             UnicodeString str(name);
             putchar('\t');
             u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
-        } else if (num_aliases > 1) {
-            uint16_t a;
+            return -1;
+        } else {
+            uint16_t a, s, t;
             
-            putchar(canon ? '\t' : ' ');
-            
-            for (a = 1; a < num_aliases; ++a) {
+            for (a = 0; a < num_aliases; ++a) {
                 const char *alias = ucnv_getAlias(name, a, &err);
                 
                 if (U_FAILURE(err)) {
                     UnicodeString str(name);
                     putchar('\t');
                     u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
-                    break;
+                    return -1;
                 }
                 
                 printf("%s", alias);
-                
+         
+                /* Look (slowly) for a tag. */
+
+                if (canon) {
+                    for (s = t = 0; s < num_stds; ++s) {
+                        const char *standard = ucnv_getStandardName(name, stds[s], &err);
+                        if (U_SUCCESS(err) && standard) {
+                            if (!strcmp(standard, alias)) {
+                                if (!t) {
+                                    printf(" {");
+                                    t = 1;
+                                }
+                                printf(" %s", stds[s]);
+                            }
+                        }
+                    }
+                    if (t) {
+                        printf(" }");
+                    }
+                }
+
+                /* Move on. */
+
                 if (a < num_aliases - 1) {
-                    putchar(' ');
+                    putchar(a || !canon ? ' ' : '\t');
                 }
             }
-            if (canon) {
-                putchar('\n');
-            } else if (i < num - 1) {
-                putchar(' ');
-            } 
         }
+        if (canon) {
+            putchar('\n');
+        } else if (i < num - 1) {
+            putchar(' ');
+        } 
+
 #endif
     }
+
+    return 0;
 }
 
 // Convert a file from one encoding to another
@@ -377,7 +419,7 @@ int main(int argc, char** argv)
         else if (strcmp("-c", *iter) == 0) {
             printCanon = 1;
         }
-        else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter) == 0 || !strcmp("--help", *iter))
+        else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)|| !strcmp("--help", *iter))
         {
             usage(pname, 0);
         }
@@ -391,8 +433,7 @@ int main(int argc, char** argv)
     }
 
     if (printConvs) {
-            printAllConverters(pname, printCanon);
-            goto normal_exit;
+        return printAllConverters(pname, printCanon) ? 2 : 0;
     }
 
     if (fromcpage==0 && tocpage==0)
