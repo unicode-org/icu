@@ -395,17 +395,26 @@ public class LDMLUtilities {
      *  according to the DTD.</p>
      *
      * @param source
-     * @param overide
+     * @param override
      * @return the merged document
      */
-    private static Node mergeLDMLDocuments(Document source, Node overide, StringBuffer xpath, 
+    private static Node mergeLDMLDocuments(Document source, Node override, StringBuffer xpath, 
                                           String thisName, String sourceDir){
     	if(source==null){
-    		return overide;
+    		return override;
         }
         if(xpath.length()==0){
         	xpath.append("/");
         }
+        
+//        boolean gotcha = false;
+//        String oldx = new String(xpath);
+//        if(override.getNodeName().equals("week")) {
+//            gotcha = true;
+//            System.out.println("SRC: " + getNode(source, xpath.toString()).toString());
+//            System.out.println("OVR: " + override.toString());
+//        }
+        
         // we know that every child xml file either adds or 
         // overrides the elements in parent
         // so we traverse the child, at every node check if 
@@ -414,7 +423,7 @@ public class LDMLUtilities {
         //    recurse to replace any nodes that need to be overridded
         // else
         //    import the node into source
-        Node child = overide.getFirstChild();
+        Node child = override.getFirstChild();
         while( child!=null){
             // we are only concerned with element nodes
             if(child.getNodeType()!=Node.ELEMENT_NODE){
@@ -460,7 +469,10 @@ public class LDMLUtilities {
                 Node childToImport = source.importNode(child,true);
                 parentNodeInSource.replaceChild(childToImport, nodeInSource);
             }else{
-                if(areChildrenElementNodes(child) &&  areChildrenElementNodes(nodeInSource)){
+                boolean childElementNodes = areChildrenElementNodes(child);
+                boolean sourceElementNodes = areChildrenElementNodes(nodeInSource);
+//                System.out.println(childName + ":" + childElementNodes + "/" + sourceElementNodes);
+                if(childElementNodes &&  sourceElementNodes){
                     //recurse to pickup any children!
                     mergeLDMLDocuments(source, child, xpath, thisName, sourceDir);
                 }else{
@@ -474,6 +486,9 @@ public class LDMLUtilities {
             xpath.delete(savedLength,xpath.length());
             child= child.getNextSibling();
         }
+//        if(gotcha==true) {
+//            System.out.println("Final: " + getNode(source, oldx).toString());
+//        }
         return source;
     }
     private static Node[] getNodeArray(Document doc, String tagName){
