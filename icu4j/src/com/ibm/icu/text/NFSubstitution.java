@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFSubstitution.java,v $ 
- * $Date: 2000/05/26 21:38:55 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/10/02 17:42:40 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.4 $ $Date: 2000/05/26 21:38:55 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.5 $ $Date: 2001/10/02 17:42:40 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -217,7 +217,7 @@ abstract class NFSubstitution {
         // notations: formats where you want to see a particular part of
         // a number even when it's 0)
         else if (description.charAt(0) == '>') {
-            this.ruleSet = null;
+            this.ruleSet = ruleSet; // was null, thai rules added to control space
             this.numberFormat = null;
         }
 
@@ -269,7 +269,7 @@ abstract class NFSubstitution {
      */
     public String toString() {
         // use tokenChar() to get the character at the beginning and
-        // end of the substitutin token.  In between them will go
+        // end of the substitution token.  In between them will go
         // either the name of the rule set it uses, or the pattern of
         // the DecimalFormat it uses
         if (ruleSet != null) {
@@ -1181,6 +1181,12 @@ class FractionalPartSubstitution extends NFSubstitution {
     private boolean byDigits = false;
 
     /**
+     * true if we automatically insert spaces to separate names of digits
+     * set to false by '>>>' in fraction rules, used by Thai.
+     */
+    private boolean useSpaces = true;
+
+    /**
      * The largest number of digits after the decimal point that this
      * object will show in "by digits" mode
      */
@@ -1200,8 +1206,11 @@ class FractionalPartSubstitution extends NFSubstitution {
                                RuleBasedNumberFormat formatter,
                                String description) {
         super(pos, ruleSet, formatter, description);
-        if (description.equals(">>") || ruleSet == this.ruleSet) {
+        if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {
             byDigits = true;
+            if (description.equals(">>>")) {
+              useSpaces = false;
+            }
         } else {
             this.ruleSet.makeIntoFractionRuleSet();
         }
@@ -1243,7 +1252,7 @@ class FractionalPartSubstitution extends NFSubstitution {
             for (int i = 0; i < MAXDECIMALDIGITS; i++) {
                 int digit = numberToFormat % 10;
                 if (digit != 0 || doZeros) {
-                    if (doZeros) {
+                    if (doZeros && useSpaces) {
                         toInsertInto.insert(pos + this.pos, ' ');
                     }
                     doZeros = true;

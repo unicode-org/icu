@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2000/03/10 03:47:47 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/02 17:43:34 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -329,6 +329,34 @@ public class RbnfTest extends TestFmwk {
             { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
         };
         doLenientParseTest(formatter, lpTestData);
+    }
+
+    /**
+     * Perform a simple spot check on the German spellout rules
+     */
+    public void TestThaiSpellout() {
+        RuleBasedNumberFormat formatter
+            = new RuleBasedNumberFormat(new Locale("th", "TH", ""),
+                        RuleBasedNumberFormat.SPELLOUT);
+        String[][] testData = {
+      { "0", "\u0e28\u0e39\u0e19\u0e22\u0e4c" },
+      { "1", "\u0e2b\u0e19\u0e36\u0e48\u0e07" },
+      { "10", "\u0e2a\u0e34\u0e1a" },
+      { "11", "\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
+	  { "21", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
+      { "101", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e2b\u0e19\u0e36\u0e48\u0e07" },
+      { "1.234", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e2d\u0e07\u0e2a\u0e32\u0e21\u0e2a\u0e35\u0e48" },
+        };
+
+        doTest(formatter, testData, true);
+
+        /*
+        formatter.setLenientParseMode(true);
+        String[][] lpTestData = {
+            { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
+        };
+        doLenientParseTest(formatter, lpTestData);
+        */
     }
 
     void doTest(RuleBasedNumberFormat formatter, String[][] testData,
