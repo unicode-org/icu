@@ -816,6 +816,23 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   args.size = sizeof(args);
   if (targetSize > 0)
     {
+       /*
+        * ISO-2022 converters contain state information
+        * as soon as they are opened so we need to 
+        * deal with the stored carry over data
+        */
+       if (args.converter->charErrorBufferLength > 0)
+       {
+         int32_t myTargetIndex = 0;
+
+         flushInternalCharBuffer (args.converter, 
+                               args.target,
+                               &myTargetIndex,
+                               targetSize,
+                               NULL,
+                               err);
+         args.target+=myTargetIndex;
+       }
       /*calls the specific conversion routines */
       args.converter->sharedData->impl->fromUnicode(&args, err); 
   
@@ -915,6 +932,22 @@ int32_t ucnv_toUChars (const UConverter * converter,
       /*Not in pure pre-flight mode */
 
       args.targetLimit = myTarget_limit;
+     /*
+      * Some converters have state immidiately after
+      * an open call so we need to deal with that
+      */
+      if (args.converter->UCharErrorBufferLength > 0)
+      {
+        int32_t myTargetIndex = 0;
+
+        flushInternalUnicodeBuffer (args.converter, 
+                                  args.target,
+                                  &myTargetIndex,
+                                  targetSize,
+                                  NULL,
+                                  err);
+        args.target += myTargetIndex;
+      }
       args.converter->sharedData->impl->toUnicode(&args, err); 
 
       /*Null terminates the string */
