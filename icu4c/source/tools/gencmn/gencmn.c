@@ -1,12 +1,9 @@
 /*
 *******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   (C) Copyright International Business Machines Corporation, 1999           *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
+*
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
 *******************************************************************************
 *   file name:  gencmn.c
 *   encoding:   US-ASCII
@@ -34,15 +31,6 @@
 
 #define COMMON_DATA_NAME "icudata"
 #define DATA_TYPE "dat"
-
-#define DATA_COPYRIGHT "\n" \
-    "*******************************************************************************\n" \
-    "* COPYRIGHT:                                                                  *\n" \
-    "*   (C) Copyright International Business Machines Corporation, 1999           *\n" \
-    "*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *\n" \
-    "*   US Government Users Restricted Rights - Use, duplication, or disclosure   *\n" \
-    "*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *\n" \
-    "*******************************************************************************\n"
 
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo={
@@ -156,7 +144,7 @@ main(int argc, char *argv[]) {
     }
 
     /* create the output file */
-    out=udata_create(DATA_TYPE, COMMON_DATA_NAME, &dataInfo, DATA_COPYRIGHT, &errorCode);
+    out=udata_create(DATA_TYPE, COMMON_DATA_NAME, &dataInfo, U_COPYRIGHT_STRING, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);

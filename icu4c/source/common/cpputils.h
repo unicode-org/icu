@@ -1,3 +1,16 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1997-1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  cpputils.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*/
+
 #ifndef CPPUTILS_H
 #define CPPUTILS_H
 

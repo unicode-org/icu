@@ -1,12 +1,9 @@
 /*
 *******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   (C) Copyright International Business Machines Corporation, 1999           *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
+*
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
 *******************************************************************************
 *   file name:  gennames.c
 *   encoding:   US-ASCII

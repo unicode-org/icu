@@ -1,6 +1,9 @@
-/****************************************
- * Copyright (C) 1999 IBM, Inc. and Others.
- ****************************************/ 
+/********************************************************************
+*
+*   Copyright (C) 1997-1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*********************************************************************/
 
 /**
    API's for writing UCMPs

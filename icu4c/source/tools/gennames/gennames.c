@@ -1,12 +1,9 @@
 /*
 *******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   (C) Copyright International Business Machines Corporation, 1999           *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
+*
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
 *******************************************************************************
 *   file name:  gennames.c
 *   encoding:   US-ASCII
@@ -49,15 +46,6 @@
 #define DATA_TYPE "dat"
 #define VERSION_STRING "unam"
 #define NAME_SEPARATOR_CHAR ';'
-
-#define DATA_COPYRIGHT "\n" \
-    "*******************************************************************************\n" \
-    "* COPYRIGHT:                                                                  *\n" \
-    "*   (C) Copyright International Business Machines Corporation, 1999           *\n" \
-    "*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *\n" \
-    "*   US Government Users Restricted Rights - Use, duplication, or disclosure   *\n" \
-    "*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *\n" \
-    "*******************************************************************************\n"
 
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo={
@@ -642,7 +630,7 @@ generateData() {
     int16_t token;
 
     pData=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
-                       haveCopyright ? DATA_COPYRIGHT : NULL, &errorCode);
+                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames: unable to create data memory, error %d\n", errorCode);
         exit(errorCode);
