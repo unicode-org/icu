@@ -416,7 +416,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
     // This method processes text in two groupings:
     //
     // RUNS -- A run is a contiguous group of characters which are contained
-    // in the filter for this transliterator (filter.contains(ch) == true).
+    // in the filter for this transliterator (filter.contains(ch) == TRUE).
     // Text outside of runs may appear as context but it is not modified.
     // The start and limit Position values are narrowed to each run.
     //
@@ -562,7 +562,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
                 // return, start will be updated to point after the
                 // transliterated text, and limit and contextLimit will be
                 // adjusted for length changes.
-                handleTransliterate(text, index, true);
+                handleTransliterate(text, index, TRUE);
 
                 delta = index.limit - passLimit; // change in length
 
