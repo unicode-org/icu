@@ -38,6 +38,9 @@
 #define HAVE_UINT32_T 0
 #define HAVE_BOOL_T 0
 
+/* Determines the endianness of the platform */
+#define U_IS_BIG_ENDIAN 1
+
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
