@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/07/12 21:59:22 $ 
-* $Revision: 1.10 $
+* $Date: 2002/07/26 18:25:06 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -961,12 +961,7 @@ public final class RuleBasedCollator extends Collator
 		 * Upper case sorts before lower case 
 		 */
 		static final int UPPER_FIRST_ = 25;
-	    /** 
-		 * Valid for NORMALIZATION_MODE ON and OFF are also allowed for this 
-		 * attribute 
-		 */
-		static final int ON_WITHOUT_HANGUL_ = 28;
-		/**
+	    /**
 		 * Number of attribute values
 		 */
 	    static final int LIMIT_ = 29;
