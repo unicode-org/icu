@@ -3852,11 +3852,20 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 		}
 
 		if (digIndx % 2 != 0){
-				numTempBuf[((digIndx)/2) + 2] = collateVal*2 + 6;
-				digIndx += 1;				
-		}
+            if (collateVal == 0 && leadingZeroIndex == 0) {
+                // This removes the leading 0 in a odd number sequence of 
+                // numbers e.g. avery001
+                leadingZeroIndex = ((digIndx - 1) >> 1) + 2;
+            }
+            else {
+                // this is not a leading 0, we add it in
+                numTempBuf[((digIndx)/2) + 2] = collateVal*2 + 6;
+                digIndx += 1;				
+            }
+        }
 		
-		endIndex = leadingZeroIndex ? leadingZeroIndex : ((digIndx/2) + 2) ;				
+		endIndex = leadingZeroIndex ? leadingZeroIndex : ((digIndx/2) + 2) ;
+        digIndx = ((endIndex - 2) << 1) + 1; // removing initial zeros
 		
 		// Subtract one off of the last byte. Really the first byte here, but it's reversed...
 		numTempBuf[2] -= 1;			

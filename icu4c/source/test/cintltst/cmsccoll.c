@@ -4096,8 +4096,11 @@ static void TestNumericCollation(void)
         u_uastrcpy(t1, preZeroTestStrings[i]);
         u_uastrcpy(t2, preZeroTestStrings[j]);
         doTest(coll, t1, t2, UCOL_EQUAL);
-    	}
-  	}
+        iter=ucol_openElements(coll, t2, u_strlen(t2), &status);
+        backAndForth(iter);
+        ucol_closeElements(iter);
+      }
+    }
 
 	/* 
       Testing collation element iterator. Running backAndForth on 
