@@ -1,8 +1,24 @@
-icu (2.0-2.0.1pre-1) unstable; urgency=low
+icu (2.0-2.1pre20020318-1) unstable; urgency=low
 
-  * Prerelease of 2.0.1 with a working upgraded uconv(1).
+  * Use the library number in the development package too.
+  * ICU changed to version 2.1.
 
- -- Yves Arrouye <yves@debian.org>  Thu, 31 Jan 2002 16:55:26 -0800
+ -- Yves Arrouye <yves@debian.org>  Tue, 19 Mar 2002 18:38:37 -0800
+
+icu (2.0-2.1pre20020303-1) unstable; urgency=low
+
+  * Fixed a crash in uconv when no argument is passed to -f or -t.
+  * Other upstream changes.
+  * Fresh upload with an up to date orig tar file so that future
+    diffs won't be 6 megabytes long!
+
+ -- Yves Arrouye <yves@debian.org>  Sun,  3 Mar 2002 15:31:13 -0800
+
+icu (2.0-2.1pre-1) unstable; urgency=low
+
+  * Prerelease of 2.1 with a working upgraded uconv(1).
+
+ -- Yves Arrouye <yves@debian.org>  Fri,  1 Mar 2002 21:51:47 -0800
 
 icu (2.0-3) unstable; urgency=low
 
