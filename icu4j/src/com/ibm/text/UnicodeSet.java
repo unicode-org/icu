@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/11/29 22:31:18 $
- * $Revision: 1.48 $
+ * $Date: 2001/12/01 01:31:18 $
+ * $Revision: 1.49 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.48 $ $Date: 2001/11/29 22:31:18 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.49 $ $Date: 2001/12/01 01:31:18 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -443,6 +443,8 @@ public class UnicodeSet extends UnicodeFilter {
         case '\\': //BACKSLASH:
         case '{':
         case '}':
+        case '$':
+        case ':':
             buf.append('\\');
             break;
         default:
@@ -475,8 +477,9 @@ public class UnicodeSet extends UnicodeFilter {
         if (pat != null) {
             int i;
             int backslashCount = 0;
-            for (i=0; i<pat.length(); ++i) {
-                char c = pat.charAt(i);
+            for (i=0; i<pat.length(); ) {
+                int c = UTF16.charAt(pat, i);
+                i += UTF16.getCharCount(c);
                 if (escapeUnprintable && Utility.isUnprintable(c)) {
                     // If the unprintable character is preceded by an odd
                     // number of backslashes, then it has been escaped.
@@ -488,7 +491,7 @@ public class UnicodeSet extends UnicodeFilter {
                     Utility.escapeUnprintable(result, c);
                     backslashCount = 0;
                 } else {
-                    result.append(c);
+                    UTF16.append(result, c);
                     if (c == '\\') {
                         ++backslashCount;
                     } else {
@@ -706,7 +709,7 @@ public class UnicodeSet extends UnicodeFilter {
                 int start = list[i++];
                 int count = list[i++] - start;
                 if (index < count) {
-                    return (char)(start + index);
+                    return start + index;
                 }
                 index -= count;
             }
@@ -1114,6 +1117,7 @@ public class UnicodeSet extends UnicodeFilter {
 
         final int NONE = -1;
         int lastChar = NONE; // This is either a char (0..10FFFF) or -1
+        boolean isLastLiteral = false; // TRUE if lastChar was a literal
         char lastOp = 0;
 
         /* This loop iterates over the characters in the pattern.  We start at
@@ -1343,7 +1347,7 @@ public class UnicodeSet extends UnicodeFilter {
                     if (lastOp != 0) {
                         throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     }
-                    add((char) lastChar, (char) lastChar);
+                    add(lastChar, lastChar);
                     if (nestedPatDone) {
                         // If there was a character before the nested set,
                         // then we need to insert it in newPat before the
@@ -1416,10 +1420,11 @@ public class UnicodeSet extends UnicodeFilter {
             } else {
                 if (lastChar != NONE) {
                     // We have <char><char>
-                    add((char) lastChar, (char) lastChar);
+                    add(lastChar, lastChar);
                     _appendToPat(newPat, lastChar, false);
                 }
                 lastChar = c;
+                isLastLiteral = isLiteral;
             }
         }
 
@@ -1430,9 +1435,9 @@ public class UnicodeSet extends UnicodeFilter {
         // Treat a trailing '$' as indicating ETHER.  This code is only
         // executed if symbols == NULL; otherwise other code parses the
         // anchor.
-        if (lastChar == SymbolTable.SYMBOL_REF) {
+        if (lastChar == SymbolTable.SYMBOL_REF && !isLastLiteral) {
             rebuildPattern = true;
-            newPat.append(lastChar);
+            newPat.append((char) lastChar);
             add(TransliterationRule.ETHER);
         }
         

@@ -402,11 +402,13 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
     case BACKSLASH:
     case 123/*{*/:
     case 125/*}*/:
+    case SymbolTable::SYMBOL_REF:
+    case COLON:
         buf.append(BACKSLASH);
         break;
     default:
         // Escape whitespace
-        if (Unicode::isWhitespace(c)) {
+        if (u_isspace(c)) {
             buf.append(BACKSLASH);
         }
         break;
@@ -435,8 +437,9 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
     if (pat.length() > 0) {
         int32_t i;
         int32_t backslashCount = 0;
-        for (i=0; i<pat.length(); ++i) {
-            UChar c = pat.charAt(i);
+        for (i=0; i<pat.length(); ) {
+            UChar32 c = pat.char32At(i);
+            i += UTF_CHAR_LENGTH(c);
             if (escapeUnprintable && Utility::isUnprintable(c)) {
                 // If the unprintable character is preceded by an odd
                 // number of backslashes, then it has been escaped.
@@ -940,6 +943,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 
     const UChar32 NONE = (UChar32) -1;
     UChar32 lastChar = NONE; // This is either a char (0..10FFFF) or NONE
+    UBool isLastLiteral = FALSE; // TRUE if lastChar was a literal
     UChar lastOp = 0;
 
     /* This loop iterates over the characters in the pattern.  We start at
@@ -1269,6 +1273,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 _appendToPat(newPat, lastChar, FALSE);
             }
             lastChar = c;
+            isLastLiteral = isLiteral;
         }
     }
 
@@ -1281,7 +1286,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // Treat a trailing '$' as indicating ETHER.  This code is only
     // executed if symbols == NULL; otherwise other code parses the
     // anchor.
-    if (lastChar == (UChar)SymbolTable::SYMBOL_REF) {
+    if (lastChar == (UChar)SymbolTable::SYMBOL_REF && !isLastLiteral) {
         rebuildPattern = TRUE;
         newPat.append(lastChar);
         add(TransliterationRule::ETHER);

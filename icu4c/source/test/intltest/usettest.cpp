@@ -44,8 +44,86 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(7,TestPropertySet);
         CASE(8,TestClone);
         CASE(9,TestExhaustive);
+        CASE(10,TestToPattern);
         default: name = ""; break;
     }
+}
+
+/**
+ * Test that toPattern() round trips with syntax characters and
+ * whitespace.
+ */
+void UnicodeSetTest::TestToPattern() {
+    for (UChar32 i = 0; i <= 0x10FFFF; ++i) {
+        if ((i <= 0xFF && !u_isalpha(i)) || u_isspace(i)) {
+            // check various combinations to make sure they all work.
+            if (i != 0 && !toPatternAux(i, i)) continue;
+            if (!toPatternAux(0, i)) continue;
+            if (!toPatternAux(i, 0xFFFF)) continue;
+        }
+    }
+    
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeString spat = "[:nonspacing mark:]";
+    UnicodeSet s(spat, ec);
+    if (U_FAILURE(ec)) { errln("FAIL: UnicodeSet constructor"); return; }
+    UnicodeString tpat;
+    s.toPattern(tpat, TRUE);
+    UnicodeSet t(tpat, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: " + spat + ".toPattern() => " + tpat +
+              ": INVALID PATTERN");
+    } else {
+        if (s!=t) {
+            UnicodeString str;
+            t.toPattern(str, TRUE);
+            errln((UnicodeString)"FAIL: " + spat + ".toPattern().new UnicodeSet() => " +
+                  str);
+        }
+    }
+}
+    
+UBool UnicodeSetTest::toPatternAux(UChar32 start, UChar32 end) {
+    // use Integer.toString because Utility.hex doesn't handle ints
+    UnicodeString pat = "";
+    // TODO do these in hex
+    //String source = "0x" + Integer.toString(start,16).toUpperCase();
+    //if (start != end) source += "..0x" + Integer.toString(end,16).toUpperCase();
+    UnicodeString source = source + (int32_t)start;
+    if (start != end) source = source + ".." + (int32_t)end;
+    UnicodeSet testSet;
+    testSet.add(start, end);
+        
+    // What we want to make sure of is that a pattern generated
+    // by toPattern(), with or without escaped unprintables, can
+    // be passed back into the UnicodeSet constructor.
+    UnicodeString pat0; testSet.toPattern(pat0, TRUE);
+    if (!checkPat(source + " (escaped)", testSet, pat0)) return FALSE;
+    
+    //String pat1 = unescapeLeniently(pat0);
+    //if (!checkPat(source + " (in code)", testSet, pat1)) return false;
+    
+    UnicodeString pat2; testSet.toPattern(pat2, FALSE);
+    if (!checkPat(source, testSet, pat2)) return FALSE;
+    
+    //String pat3 = unescapeLeniently(pat2);
+    //if (!checkPat(source + " (in code)", testSet, pat3)) return false;
+    
+    //logln(source + " => " + pat0 + ", " + pat1 + ", " + pat2 + ", " + pat3);
+    logln((UnicodeString)source + " => " + pat0 + ", " + pat2);
+    return TRUE;
+}
+    
+UBool UnicodeSetTest::checkPat(const UnicodeString& source,
+                               const UnicodeSet& testSet,
+                               const UnicodeString& pat) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeSet testSet2(pat, ec);
+    if (testSet2 != testSet) {
+        errln((UnicodeString)"Fail toPattern: " + source + " => " + pat);
+        return FALSE;
+    }
+    return TRUE;
 }
 
 void
