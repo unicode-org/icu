@@ -24,7 +24,7 @@
 #include "string.h"
 #include "cstring.h"
 #include "unicode/uchar.h"
-
+#include "ucol_imp.h"  /* for U_ICUDATA_COLL */
 #define RESTEST_HEAP_CHECK 0
 
 #include "unicode/uloc.h"
@@ -172,6 +172,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestResourceBundles,       "tsutil/creststn/TestResourceBundle");
     addTest(root, &TestFallback,              "tsutil/creststn/TestFallback");
     addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
+    addTest(root, &TestGetVersionColl,        "tsutil/creststn/TestGetVersionColl");
     addTest(root, &TestAliasConflict,         "tsutil/creststn/TestAliasConflict");
     addTest(root, &TestNewTypes,              "tsutil/creststn/TestNewTypes");
     addTest(root, &TestEmptyTypes,            "tsutil/creststn/TestEmptyTypes");
@@ -221,13 +222,13 @@ static void TestErrorCodes(void) {
   UResourceBundle *r = NULL, *r2 = NULL;
 
   /* first bundle should return fallback warning */
-  r = ures_open(NULL, "sr_YU_VOJVODINA", &status);
+  r = ures_open(U_ICUDATA_COLL, "sr_YU_VOJVODINA", &status);
   checkStatus(U_USING_FALLBACK_WARNING, status);
   ures_close(r);
 
   /* this bundle should return zero error, so it shouldn't change the status*/
   status = U_USING_DEFAULT_WARNING;
-  r = ures_open(NULL, "sr_YU", &status);
+  r = ures_open(U_ICUDATA_COLL, "sr_YU", &status);
   checkStatus(U_USING_DEFAULT_WARNING, status);
 
   /* we look up the resource which is aliased, but it lives in fallback */
@@ -240,7 +241,7 @@ static void TestErrorCodes(void) {
 
   /* this bundle should return zero error, so it shouldn't change the status*/
   status = U_USING_DEFAULT_WARNING;
-  r = ures_open(NULL, "sr", &status);
+  r = ures_open(U_ICUDATA_COLL, "sr", &status);
   checkStatus(U_USING_DEFAULT_WARNING, status);
 
   /* we look up the resource which is aliased and at our level */
@@ -252,7 +253,7 @@ static void TestErrorCodes(void) {
   ures_close(r);
 
   status = U_USING_FALLBACK_WARNING;
-  r = ures_open(NULL, "nolocale", &status);
+  r = ures_open(U_ICUDATA_COLL, "nolocale", &status);
   checkStatus(U_USING_DEFAULT_WARNING, status);
   ures_close(r);
   ures_close(r2);
@@ -1285,8 +1286,55 @@ static void TestGetVersion(){
             ures_close(resB);
             return;
         }
+        ures_getVersion(resB, versionArray);
+        for (i=0; i<4; ++i) {
+            if (versionArray[i] < minVersionArray[i] ||
+                versionArray[i] > maxVersionArray[i])
+            {
+                log_err("Testing ures_getVersion(%-5s) - unexpected result: %d.%d.%d.%d\n", 
+                    locName, versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+                break;
+            }
+        }
+        ures_close(resB);
+    }
+}
+
+
+static void TestGetVersionColl(){
+    UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
+    UVersionInfo maxVersionArray = {0x50, 0x80, 0xcf, 0xcf};
+    UVersionInfo versionArray;
+    UErrorCode status= U_ZERO_ERROR;
+    UResourceBundle* resB = NULL;   
+    UEnumeration *locs= NULL;
+    int i=0;
+    const char *locName = "root";
+    int32_t locLen;
+    const UChar* rules =NULL;
+    int32_t len = 0;
+    
+    log_verbose("The ures_getVersion(%s) tests begin : \n", U_ICUDATA_COLL);
+    locs = ures_openAvailableLocales(U_ICUDATA_COLL, &status);
+    if (U_FAILURE(status)) {
+       log_err("enumeration of %s failed.: %s\n", U_ICUDATA_COLL, myErrorName(status));
+       return;
+    }
+
+    do{
+        log_verbose("Testing version number for locale %s\n", locName);
+        resB = ures_open(U_ICUDATA_COLL,locName, &status);
+        if (U_FAILURE(status)) {
+            log_err("Resource bundle creation for locale %s:%s failed.: %s\n", U_ICUDATA_COLL, locName, myErrorName(status));
+            ures_close(resB);
+            return;
+        }
         /* test NUL termination of UCARules */
         rules = ures_getStringByKey(resB,"%%UCARULES",&len, &status);
+        if(!rules || U_FAILURE(status)) {
+          log_data_err("Could not load %%UCARULES for locale %s\n", locName);
+          continue;
+        }
         if(u_strlen(rules) != len){
             log_err("UCARules string not nul terminated! \n");
         }
@@ -1301,7 +1349,12 @@ static void TestGetVersion(){
             }
         }
         ures_close(resB);
+    } while((locName = uenum_next(locs,&locLen,&status))&&U_SUCCESS(status));
+    
+    if(U_FAILURE(status)) {
+        log_err("Err %s testing Collation locales.\n", u_errorName(status));
     }
+    uenum_close(locs);
 }
 
 static void TestResourceBundles()
@@ -1978,6 +2031,7 @@ static void TestResourceLevelAliasing(void) {
         uk = ures_findResource("uk/collations/standard/Sequence", uk, &status);
         if((uk == NULL) || U_FAILURE(status)) {
             log_err("Couldn't findResource('uk/collations/standard/sequence') err %s\n", u_errorName(status));
+            goto cleanup;
             return;
         } 
         
@@ -2118,7 +2172,7 @@ static void TestResourceLevelAliasing(void) {
             }
         }
     }
-    
+cleanup:
     ures_close(aliasB);
     ures_close(tb);
     ures_close(en);
