@@ -140,6 +140,12 @@ typedef uint16_t UChar;
 /* Calendar/TimeZone data types                                              */
 /*===========================================================================*/
 
+/**
+ * Date and Time data type.
+ * This is a primitive data type that holds the date and time
+ * as the number of milliseconds since 1970-jan-01, 00:00 UTC.
+ * UTC leap seconds are ignored.
+ */
 typedef double UDate;
 
 /* Common time manipulation constants */
@@ -148,17 +154,6 @@ typedef double UDate;
 #define kMillisPerHour       (3600000)
 #define kMillisPerDay       (86400000)
 
-
-/** A struct representing a range of text containing a specific field */
-struct UFieldPosition {
-  /** The field */
-  int32_t field;
-  /** The start of the text range containing field */
-  int32_t beginIndex;
-  /** The limit of the text range containing field */
-  int32_t endIndex;
-};
-typedef struct UFieldPosition UFieldPosition;
 
 /*===========================================================================*/
 /* ClassID-based RTTI */
@@ -274,15 +269,6 @@ inline bool_t FAILURE(UErrorCode code) { return (bool_t)(code>U_ZERO_ERROR); }
    T_INT32 is replaced) */
 #define T_INT32(i) ((int32_t)i)
 
-
-/*===========================================================================*/
-/* Wide-character functions                                                  */
-/*===========================================================================*/
-#define icu_wcscat(dst, src) wcscat(dst, src)
-#define icu_wcscpy(dst, src) wcscpy(dst, src)
-#define icu_wcslen(src) wcslen(src)
-#define icu_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
-#define icu_mbstowcs(wcstr, mbstr, count) mbstowcs(wcstr, mbstr, count)
 
 /*===========================================================================*/
 /* Debugging */
