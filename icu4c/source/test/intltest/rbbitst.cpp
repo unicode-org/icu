@@ -2791,7 +2791,16 @@ fall_through_11:
             // TODO:  Check status codes
             int32_t numEndIdx = prevPos + fNumberMatcher->end(status);
             if (numEndIdx > pos) {
+                // We got a match on a number of more than one char.
+                // Need to move "pos" and "nextPos" to reflect the end
+                //   of the number before continuing.
+                UChar32   lastCharInNumber;
                 nextPos = numEndIdx;
+                pos     = numEndIdx;
+                do {
+                    pos = fText->moveIndex32(nextPos, -1);
+                    lastCharInNumber = fText->char32At(pos);
+                } while (fCM->contains(lastCharInNumber));
                 continue;
             }
         }
@@ -2937,37 +2946,45 @@ void RBBITest::TestMonkey(char *params) {
     if (breakType == "char" || breakType == "all") {
         RBBICharMonkey  m;
         BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
-        RunMonkey(bi, m, seed, loopCount);
+        RunMonkey(bi, m, "char", seed, loopCount);
         delete bi;
     }
 
     if (breakType == "word" || breakType == "all") {
+        logln("Word Break Monkey Test");
         RBBIWordMonkey  m;
         BreakIterator  *bi = BreakIterator::createWordInstance(locale, status);
         if (params == NULL) {
             // TODO:  Resolve rule ambiguities, unpin loop count.
             loopCount = 2;
         }
-        RunMonkey(bi, m, seed, loopCount);
+        RunMonkey(bi, m, "word", seed, loopCount);
         delete bi;
     }
 
     if (breakType == "line" || breakType == "all") {
-#if 1
-        // TODO:  Enable test
+        logln("Line Break Monkey Test");
         RBBILineMonkey  m;
         BreakIterator  *bi = BreakIterator::createLineInstance(locale, status);
-        RunMonkey(bi, m, seed, loopCount);
+        RunMonkey(bi, m, "line", seed, loopCount);
         delete bi;
-#endif
     }
 
 
 #endif
 }
 
+//
+//  Run a RBBI monkey test.  Common routine, for all break iterator types.
+//    Parameters:
+//       bi      - the break iterator to use
+//       mk      - MonkeyKind, abstraction for obtaining expected results
+//       name    - Name of test (char, word, etc.) for use in error messages
+//       seed    - Seed for starting random number generator (parameter from user)
+//       numIterations
+//
+void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint32_t  seed, int32_t numIterations) {
 
-void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, int32_t numIterations) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
     const int32_t    TESTSTRINGLEN = 500;
@@ -3037,7 +3054,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, 
         bi->setText(testText);
         for (i=bi->first(); i != BreakIterator::DONE; i=bi->next()) {
             if (i < 0 || i > testText.length()) {
-                errln("Out of range value returned by breakIterator::next()");
+                errln("%s break monkey test: Out of range value returned by breakIterator::next()", name);
                 break;
             }
             forwardBreaks[i] = 1;
@@ -3047,7 +3064,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, 
         memset(reverseBreaks, 0, sizeof(reverseBreaks));
         for (i=bi->last(); i != BreakIterator::DONE; i=bi->previous()) {
             if (i < 0 || i > testText.length()) {
-                errln("Out of range value returned by breakIterator::next()");
+                errln("%s break monkey test: Out of range value returned by breakIterator::next()", name);
                 break;
             }
             reverseBreaks[i] = 1;
@@ -3116,8 +3133,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, 
                 UErrorCode status = U_ZERO_ERROR;
                 errorText.extract(charErrorTxt, sizeof(charErrorTxt), NULL, status);
                 charErrorTxt[sizeof(charErrorTxt)-1] = 0;
-                errln("ERROR.  %s. Direction = %s; Random seed = %d;  buf Idx = %d\n%s",
-                    (expectedBreaks[i]? "break expected but not found" : "break found but not expected"),
+                errln("%s break monkey test error.  %s. Direction = %s; Random seed = %d;  buf Idx = %d\n%s",
+                    name, (expectedBreaks[i]? "break expected but not found" : "break found but not expected"),
                     (forwardError?"forward":"reverse"), seed, i, charErrorTxt);
                 break;
             }

@@ -117,7 +117,7 @@ private:
     void doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars);
     void doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars);
 
-    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, int32_t loopCount);
+    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint32_t  seed, int32_t loopCount);
 
 };
 
