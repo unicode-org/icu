@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/10/29 22:55:40 $ 
-* $Revision: 1.9 $
+* $Date: 2002/10/30 05:43:33 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -394,9 +394,10 @@ final class CollationParsedRuleBuilder
     
     private void copyRangeFromUCA(BuildTable t, int start, int end) {
         StringBuffer str = new StringBuffer();
-        for (char u = (char)start; u <= (char)end; u ++) {
+        int u = 0;
+        for (u = start; u <= end; u ++) {
             // if ((CE = ucmpe32_get(t.m_mapping, u)) == UCOL_NOT_FOUND
-            int CE = t.m_mapping_.getValue((int)u);
+            int CE = t.m_mapping_.getValue(u);
             if (CE == CE_NOT_FOUND_ 
                 // this test is for contractions that are missing the starting 
                 // element. Looks like latin-1 should be done before 
@@ -405,7 +406,8 @@ final class CollationParsedRuleBuilder
                 || (isContractionTableElement(CE) 
                    && getCE(t.m_contractions_, CE, 0) == CE_NOT_FOUND_)) {
                 str.delete(0, str.length());
-                str.append(u);
+                UTF16.append(str, u);
+                //str.append(u);
                 m_utilElement_.m_uchars_ = str.toString();
                 m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
                 m_utilElement_.m_prefix_ = 0;
