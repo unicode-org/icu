@@ -5,26 +5,24 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genuca.cpp
+*   file name:  genuca.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
+*
+*   created at the end of XX century
+*   created by: Vladimir Weinstein
 *
 *   This program reads the Franctional UCA table and generates
 *   internal format for UCA table as well as inverse UCA table.
 *   It then writes binary files containing the data: ucadata.dat 
 *   & invuca.dat
-*
-*   Change history:
-*
-*   02/08/2001  Vladimir Weinstein      Created this program
-*   02/23/2001  grhoten                 Made it into a tool
 */
-
 
 #ifndef UCADATA_H
 #define UCADATA_H
 
+#include "ucaelems.h"
 #include <stdio.h>
 #include <string.h>
 #include "unicode/utypes.h"
@@ -36,7 +34,6 @@
 #include "umemstrm.h"
 #include "unewdata.h"
 
-#define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 
 /* UDataInfo for UCA mapping table */
 static const UDataInfo dataInfo={
@@ -68,50 +65,13 @@ static const UDataInfo invDataInfo={
     3, 0, 0, 0                  /* dataVersion = Unicode Version*/
 };
 
-typedef struct {
-    UChar codepoint;
-    UChar uchars[128];
-    UChar *cPoints;
-    int32_t cSize;          /* Number of characters in sequence - for contraction */
-    int32_t noOfCEs;        /* Number of collation elements                       */
-    uint32_t CEs[128];      /* These are collation elements - there could be more than one - in case of expansion */
-    uint32_t mapCE;         /* This is the value element maps in original table   */
-    uint32_t sizePrim[128];
-    uint32_t sizeSec[128];
-    uint32_t sizeTer[128];
-    UBool variableTop;
-    UBool caseBit;
-    UBool isThai;
-} UCAElements;
-
-typedef struct {
-    uint32_t *CEs;
-    int32_t position;
-    int32_t size;
-} ExpansionTable;
-
-struct ContractionTable {
-    UChar *codePoints;
-    uint32_t *CEs;
-    int32_t position;
-    int32_t size;
-    int32_t backSize;
-    UBool forward;
-    ContractionTable *reversed;
-};
 
 void deleteElement(void *element);
 int32_t readElement(char **from, char *to, char separator, UErrorCode *status);
-int32_t addExpansion(uint32_t value, UErrorCode *status);
 uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UBool caseBit, UErrorCode *status);
-uint32_t processContraction(UCAElements *element, uint32_t existingCE, UBool forward, UErrorCode *status);
 void printOutTable(UCATableHeader *myData, UErrorCode *status);
-UCATableHeader *assembleTable(UChar variableTopValue, UErrorCode *status);
 void processFile(FILE *data, UErrorCode *status);
-/* This adds a read element, while testing for existence */
-uint32_t addAnElement(UCAElements *element, UErrorCode *status);
 UCAElements *readAnElement(FILE *data, UErrorCode *status);
-void reverseElement(UCAElements *el);
 
 
 #endif

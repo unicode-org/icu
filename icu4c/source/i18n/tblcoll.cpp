@@ -66,8 +66,6 @@
 
 /* forward declarations ----------------------------------------------------- */
 
-U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
-
 UChar forwardCharIteratorGlue(void *iterator);
 
 /* global variable ---------------------------------------------------------- */
@@ -691,11 +689,6 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
       status = U_ZERO_ERROR;
 
       uint32_t size = 0;
-      const UChar * defaultrules = ucol_getDefaultRulesArray(&size);
-
-      ucollator = ucol_openRules(defaultrules, size, 
-                                 UCOL_DEFAULT_NORMALIZATION, 
-                                 UCOL_DEFAULT_STRENGTH, &status);
       if (status == U_ZERO_ERROR)
         status = U_USING_DEFAULT_ERROR;
       
