@@ -433,13 +433,13 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
     DecimalFormat f("#,##,###", US, status);
     CHECK(status, "DecimalFormat ct");
 
-    expect(f, 123456789L, "12,34,56,789");
+    expect(f, (int32_t)123456789L, "12,34,56,789");
     expectPat(f, "#,##,###");
     f.applyPattern("#,###", status);
     CHECK(status, "applyPattern");
 
     f.setSecondaryGroupingSize(4);
-    expect(f, 123456789L, "12,3456,789");
+    expect(f, (int32_t)123456789L, "12,3456,789");
     expectPat(f, "#,####,###");
     NumberFormat *g = NumberFormat::createInstance(Locale("hi", "IN"), status);
     CHECK(status, "createInstance(hi_IN)");
