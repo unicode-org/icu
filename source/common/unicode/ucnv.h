@@ -1811,6 +1811,32 @@ ucnv_detectUnicodeSignature(const char* source,
                             int32_t *signatureLength,
                             UErrorCode *pErrorCode);
 
+/**
+ * Returns the number of UChars held in the in the converter's internal state 
+ * because more input is needed for completing the conversion.
+ * @param cnv       The converter in which the input is held
+ * @param status    A pointer to receive information about any errors that may occur during detection.
+ *                  Must be a valid pointer to an error code value, which must not indicate a failure
+ *                  before the function call.
+ * @return The number of UChars in the state. 0 if none and -1 if the converter is NULL.
+ * @draft ICU 3.4
+ */
+U_DRAFT int32_t U_EXPORT2
+ucnv_fromUInputHeld(const UConverter* cnv, UErrorCode* status);
+
+/**
+ * Returns the number of chars held in the in the converter's internal state
+ * because more input is needed for completing the conversion.
+ * @param cnv       The converter in which the input is held as internal state
+ * @param status    A pointer to receive information about any errors that may occur during detection.
+ *                  Must be a valid pointer to an error code value, which must not indicate a failure
+ *                  before the function call.
+ * @return The number of chars in the state. -1 if an error is encountered is NULL.
+ * @draft ICU 3.4
+ */
+U_DRAFT int32_t U_EXPORT2
+ucnv_toUInputHeld(const UConverter* cnv, UErrorCode* status);
+
 #endif
 
 #endif
