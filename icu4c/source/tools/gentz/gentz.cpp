@@ -46,7 +46,7 @@ static const UDataInfo dataInfo = {
     sizeof(UChar),
     0,
 
-    TZ_SIG[0], TZ_SIG[1], TZ_SIG[2], TZ_SIG[3], /* dataFormat */
+     0x7a, 0x6f, 0x6e, 0x65,  /* see TZ_SIG. Changed to literals, thanks to HP compiler */
     TZ_FORMAT_VERSION, 0, 0, 0,                 /* formatVersion */
     0, 0, 0, 0 /* dataVersion - will be filled in with year.suffix */
 };

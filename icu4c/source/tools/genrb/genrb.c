@@ -21,10 +21,15 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
+
+U_CDECL_BEGIN
+
 #include "error.h"
 #include "parse.h"
 #include "write.h"
 #include "util.h"
+
+U_CDECL_END
 #include "toolutil.h"
 
 #include "ucol.h"
