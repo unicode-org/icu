@@ -18,13 +18,13 @@
     <alias from="jw" to="jv"/> 
     <alias from="no_NO" to="nb_NO"/> 
     <alias from="no_NO_NY" to="nn_NO" /> 
-    <alias from="sh" to="sr" /> 
-    <alias from="sh_YU" to="sr_YU" /> 
     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 
-    <alias from="zh_CN" to="zh_Hans_CN" /> 
-    <alias from="zh_HK" to="zh_Hant_HK" /> 
-    <alias from="zh_MO" to="zh_Hant_MO" /> 
-    <alias from="zh_SG" to="zh_Hans_SG" /> 
-    <alias from="zh_TW" to="zh_Hant_TW" /> 
+    <aliasLocale locale="sh" /> 
+    <aliasLocale locale="sh_YU" /> 
+    <aliasLocale locale="zh_CN" /> 
+    <aliasLocale locale="zh_HK" /> 
+    <aliasLocale locale="zh_MO" /> 
+    <aliasLocale locale="zh_SG" /> 
+    <aliasLocale locale="zh_TW" />
   </deprecates> 
 </deprecatedList>

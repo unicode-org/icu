@@ -7,7 +7,7 @@
 <!ELEMENT deprecatedList ( deprecates* ) >
 <!ATTLIST deprecatedList version CDATA #FIXED "1.0" >
 
-<!ELEMENT deprecates ( alias* ) >
+<!ELEMENT deprecates ( alias | aliasLocale )* >
 <!ATTLIST deprecates type NMTOKEN #REQUIRED >
 
 <!ELEMENT alias EMPTY >
@@ -15,4 +15,6 @@
 <!ATTLIST alias to CDATA #REQUIRED >
 <!ATTLIST alias xpath CDATA #IMPLIED >
 
+<!ELEMENT aliasLocale EMPTY >
+<!ATTLIST aliasLocale locale CDATA #REQUIRED >
 
