@@ -41,7 +41,7 @@
 #include "digitlst.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "cmemory.h"
 
 U_NAMESPACE_BEGIN

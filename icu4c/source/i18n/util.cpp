@@ -10,7 +10,6 @@
 
 #include "util.h"
 #include "unicode/uchar.h"
-#include "unicode/unicode.h"
 #include "unicode/unimatch.h"
 
 // Define UChar constants using hex for EBCDIC compatibility
@@ -457,7 +456,7 @@ void ICU_Utility::appendToRule(UnicodeString& rule,
               !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
                 (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
                 (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-             Unicode::isWhitespace(c)) {
+             u_isWhitespace(c)) {
         quoteBuf.append(c);
         // Double ' within a quote
         if (c == APOSTROPHE) {

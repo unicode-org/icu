@@ -33,7 +33,7 @@
 #include "unicode/timezone.h"
 #include "unicode/decimfmt.h"
 #include "unicode/dcfmtsym.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include <float.h>
 
@@ -1122,8 +1122,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // century, for parsed strings from "00" to "99".  Any other string
         // is treated literally:  "2250", "-1", "1", "002".
         if (count <= 2 && (pos.getIndex() - start) == 2
-            && Unicode::isDigit(text.charAt(start))
-            && Unicode::isDigit(text.charAt(start+1)))
+            && u_isdigit(text.charAt(start))
+            && u_isdigit(text.charAt(start+1)))
         {
             // Assume for example that the defaultCenturyStart is 6/18/1903.
             // This means that two-digit years will be forced into the range
@@ -1143,8 +1143,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     case kYearWOYField:
         // Comment is the same as for kYearFiels - look above
         if (count <= 2 && (pos.getIndex() - start) == 2
-            && Unicode::isDigit(text.charAt(start))
-            && Unicode::isDigit(text.charAt(start+1)))
+            && u_isdigit(text.charAt(start))
+            && u_isdigit(text.charAt(start+1)))
         {
             int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
             ambiguousYear[0] = (value == ambiguousTwoDigitYear);

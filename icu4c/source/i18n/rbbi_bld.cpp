@@ -11,7 +11,7 @@
 #include "unicode/rbbi.h"
 #include "rbbi_bld.h"
 #include "cmemory.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 
 //=======================================================================
 // RuleBasedBreakIterator.Builder
@@ -508,8 +508,8 @@ RuleBasedBreakIteratorBuilder::buildRuleList(UnicodeString& description,
             // if the character is anything else (escaped characters are
             // skipped and don't make it here), it's an error
             default:
-                if (c >= ASCII_LOW && c < ASCII_HI && !Unicode::isLetter(c)
-                    && !Unicode::isDigit(c) && !sawIllegalChar) {
+                if (c >= ASCII_LOW && c < ASCII_HI && !u_isalpha(c)
+                    && !u_isdigit(c) && !sawIllegalChar) {
                     sawIllegalChar = TRUE;
                     illegalCharPos = p;
                 }
@@ -979,8 +979,8 @@ RuleBasedBreakIteratorBuilder::parseRule(const UnicodeString& rule,
         // effectively literal characters too), the . token, and [] expressions
         if (c == OPEN_BRACKET
             || c == BACKSLASH
-            || Unicode::isLetter(c)
-            || Unicode::isDigit(c)
+            || u_isalpha(c)
+            || u_isdigit(c)
             || c < ASCII_LOW
             || c == PERIOD
             || c >= ASCII_HI) {
