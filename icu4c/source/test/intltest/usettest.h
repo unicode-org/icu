@@ -72,6 +72,8 @@ private:
 
     void TestSurrogate();
 
+    void TestPosixClasses();
+
 private:
 
     UBool toPatternAux(UChar32 start, UChar32 end);
