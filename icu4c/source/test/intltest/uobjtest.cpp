@@ -212,12 +212,12 @@ public:
 void UObjectTest::testIDs()
 {
     ids_count = 0;
-    const UChar SMALL_STR[] = {0x51, 0x51, 0x51, 0}; // "QQQ"
+    UErrorCode status = U_ZERO_ERROR;
+    static const UChar SMALL_STR[] = {0x51, 0x51, 0x51, 0}; // "QQQ"
 
-#if !UCONFIG_NO_TRANSLITERATION
+#if !UCONFIG_NO_TRANSLITERATION && !UCONFIG_NO_FORMATTING
     UParseError parseError;
 #endif
-    UErrorCode status = U_ZERO_ERROR;
    
 
     
@@ -239,7 +239,9 @@ void UObjectTest::testIDs()
     /* TESTCLASSID_FACTORY(NFSubstitution,  NFSubstitution::makeSubstitution(8, */
     /* TESTCLASSID_DEFAULT(DigitList);  UMemory but not UObject*/
     TESTCLASSID_ABSTRACT(NumberFormat);
+    TESTCLASSID_CTOR(RuleBasedNumberFormat, (UnicodeString("%default: -x: minus >>;"), parseError, status));
     TESTCLASSID_CTOR(ChoiceFormat, (UNICODE_STRING_SIMPLE("0#are no files|1#is one file|1<are many files"), status));
+    TESTCLASSID_CTOR(MessageFormat, (UnicodeString(), status));
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));
     TESTCLASSID_DEFAULT(FieldPosition);
