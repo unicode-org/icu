@@ -2515,7 +2515,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (decimalPos >= 0) {
                         // Multiple decimal separators
                         debug("Multiple decimal separators")
-                        status = U_MULTIPLE_DECIMAL_SEPERATORS;
+                        status = U_MULTIPLE_DECIMAL_SEPARATORS;
                         syntaxError(pattern,pos,parseError);
                         return;
                     }
