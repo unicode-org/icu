@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2003/03/19 17:30:55 $ 
-* $Revision: 1.29 $
+* $Date: 2003/03/19 23:31:12 $ 
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.util.*;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.impl.UCharacterProperty;
 
 import java.io.*;
 //import java.text.*;
@@ -1972,7 +1973,7 @@ F900..FAFF; CJK Compatibility Ideographs
                     case T_IGNORE: reset = "last tertiary ignorable"; break;
                     case S_IGNORE: reset = "last secondary ignorable"; break;
                     case P_IGNORE: reset = "last primary ignorable"; break;
-                    case VARIABLE: reset = "last non-ignorable"; break;
+                    case VARIABLE: reset = "last regular"; break;
                     case NON_IGNORE: /*reset = "top"; */ insertVariableTop = true; break;
                     case TRAILING: reset = "last trailing"; break;
                 }
@@ -2501,7 +2502,7 @@ F900..FAFF; CJK Compatibility Ideographs
             if (c >= 'a' && c <= 'z' 
               || c >= 'A' && c <= 'Z' 
               || c >= '0' && c <= '9'
-              || c >= 0xA0) {
+              || (c >= 0xA0 && !UCharacterProperty.isRuleWhiteSpace(c))) {
                 if (inQuote) {
                     quoteOperandBuffer.append('\'');
                     inQuote = false;
