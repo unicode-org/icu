@@ -1,0 +1,95 @@
+
+Sizes of Normalizer data:
+
+Before any work
+    Total runtime size of decomp data is 30200
+      offsets:      16128
+      canonClasses:  4096
+      replace:       9976
+
+    Total runtime size of compose data is 113361
+      lookup:       16640
+      actions:      83808
+      actionIndex:   2244
+      typeMask:      394
+      replace:      10275
+
+Turn on overlapping in CompactArray:
+    Total runtime size of decomp data is 28830
+      offsets:      14758
+      canonClasses:  4096
+      replace:       9976
+
+    Total runtime size of compose data is 112039
+      lookup:       15318
+      actions:      83808
+      actionIndex:   2244
+      typeMask:       394
+      replace:      10275
+
+Turn "actions" into a CompactArray and turn overlapping back off due to a bug:
+    Total runtime size of decomp data is 30200
+      offsets:      16128
+      canonClasses:  4096
+      replace:       9976
+
+    Total runtime size of compose data is 70272
+      lookup:       16640
+      actions:      40704
+      actionIndex:   2244
+      typeMask:       394
+      replace:      10275
+
+Put compatibility decomps first in "replace" array and eliminate dups:
+    Total runtime size of decomp data is 27980
+      offsets:      16128
+      canonClasses: 4096
+      replace:      7756
+
+    Total runtime size of compose data is 68052
+      lookup:       16640
+      actions:      40704
+      actionIndex:  2244
+      typeMask:     394
+      replace:      8070
+
+Tweak CompactArray block size to 32
+    Total runtime size of decomp data is 26892
+      offsets:      15040
+      canonClasses: 4096
+      replace:      7756
+
+    Total runtime size of compose data is 49044
+      lookup:       16192
+      actions:      22144
+      actionIndex:  2244
+      typeMask:     394
+      replace:      8070
+
+
+Use 2 bits for length of decomposition:
+    Total runtime size of decomp data is 23738
+      offsets:      14976
+      canonClasses: 4096
+      replace:      4666
+
+    Total runtime size of compose data is 49051
+      lookup:       16192
+      actions:      22144
+      actionIndex:  2244
+      typeMask:     394
+      replace:      8077
+
+----------------------------------------------------------------------
+Now using UnicodeData-2.1.2.txt  (overlapping is still off)
+    Total runtime size of decomp data is 23532
+      offsets:      14400
+      canonClasses: 4096
+      replace:      5036
+
+    Total runtime size of compose data is 50520
+      lookup:       15872
+      actions:      23872
+      actionIndex:  2298
+      typeMask:     406
+      replace:      8072
