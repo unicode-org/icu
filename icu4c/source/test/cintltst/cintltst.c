@@ -63,6 +63,14 @@ void addSetup(TestNode** root)
     addTest(root, &TestMutex,    "setup/TestMutex");
 }
 
+#if UCONFIG_NO_LEGACY_CONVERSION
+#   define TRY_CNV_1 "iso-8859-1"
+#   define TRY_CNV_2 "ibm-1208"
+#else
+#   define TRY_CNV_1 "iso-8859-7"
+#   define TRY_CNV_2 "sjis"
+#endif
+
 int main(int argc, const char* const argv[])
 {
     int nerrors = 0;
@@ -82,13 +90,13 @@ int main(int argc, const char* const argv[])
         ctst_init();
 #endif
         /* try opening the data from dll instead of the dat file */
-        cnv = ucnv_open("iso-8859-7", &errorCode);
+        cnv = ucnv_open(TRY_CNV_1, &errorCode);
         if(cnv != 0) {
             /* ok */
             ucnv_close(cnv);
         } else {
             fprintf(stderr,
-                    "#### WARNING! The converter for iso-8859-7 cannot be loaded from data dll/so."
+                    "#### WARNING! The converter for " TRY_CNV_1 " cannot be loaded from data dll/so."
                     "Proceeding to load data from dat file.\n");
             errorCode = U_ZERO_ERROR;
 
@@ -115,13 +123,13 @@ int main(int argc, const char* const argv[])
         }
 
         /* try more data */
-        cnv = ucnv_open("iso-8859-7", &errorCode);
+        cnv = ucnv_open(TRY_CNV_2, &errorCode);
         if(cnv != 0) {
             /* ok */
             ucnv_close(cnv);
         } else {
             fprintf(stderr,
-                    "*** Failure! The converter for iso-8859-7 cannot be opened.\n"
+                    "*** Failure! The converter for " TRY_CNV_2 " cannot be opened.\n"
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n");
             return 1;
