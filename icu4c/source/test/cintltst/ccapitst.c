@@ -361,7 +361,7 @@ static void TestConvert()
         log_err("FAILURE! %s\n", myErrorName(err));
     }
 
-    someConverters[4] = ucnv_open("ibm-941", &err);
+    someConverters[4] = ucnv_open("ibm-949", &err);
     if (U_FAILURE(err)) {
         log_err("FAILURE! %s\n", myErrorName(err));
     }

@@ -159,7 +159,7 @@ ibm-949_P11A-2000       ibm-949_VSUB_VPUA KS_C_5601-1987 { IANA } iso-ir-149 KS_
 ibm-1370                Big5 { MIME     } csBig5 x-big5 cp950 950 # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 (w/o euro update)
 ibm-1386                gbk cp936 zh_cn # Chinese GBK removed
-ibm-33722               EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseucpkdfmtjapanese X-EUC-JP  cp33722 33722# Japan EUC
+ibm-33722               EUC-JP { MIME } ibm-5050 ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseucpkdfmtjapanese X-EUC-JP  cp33722 33722# Japan EUC
 ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR                       # Korean EUC
 ibm-964                 EUC-TW { MIME } ibm-eucTW cns11643              # Taiwan EUC
 ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } chinese gb iso-ir-58 csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383  csGB2312# China EUC
