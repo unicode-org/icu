@@ -2682,7 +2682,7 @@ u_foldCase(UChar32 c, uint32_t options);
  *
  * Same as java.lang.Character.digit().
  *
- * @param   c       the code point to be tested.
+ * @param   ch      the code point to be tested.
  * @param   radix   the radix.
  * @return  the numeric value represented by the character in the
  *          specified radix,
@@ -2757,7 +2757,7 @@ u_charAge(UChar32 c, UVersionInfo versionArray);
  * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
-u_getUnicodeVersion(UVersionInfo info);
+u_getUnicodeVersion(UVersionInfo versionArray);
 
 /**
  * Get the FC_NFKC_Closure property string for a character.
