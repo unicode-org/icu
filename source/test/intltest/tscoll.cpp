@@ -168,12 +168,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("G7CollationTest---");
-            logln("Temporary removed");
-
-            /*
+            
             G7CollationTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -184,10 +181,8 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationMonkeyTest---");
             
-            /*
             CollationMonkeyTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -226,12 +221,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationCurrencyTest---");
             logln("");
-            logln("Temporary removed");
-
-            /*
+            
             CollationCurrencyTest test;
             callTest( test, par );
-            */
         }
         break;
 
