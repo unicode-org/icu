@@ -14,6 +14,8 @@ class Quantifier : public UnicodeMatcher {
 
  public:
 
+    enum { MAX = 0x7FFFFFFF };
+
     Quantifier(UnicodeMatcher *adopted,
                uint32_t minCount, uint32_t maxCount);
 
@@ -46,6 +48,8 @@ class Quantifier : public UnicodeMatcher {
     virtual UBool matchesIndexValue(uint8_t v) const;
 
  private:
+
+    static void appendNumber(UnicodeString& result, int32_t n);
 
     UnicodeMatcher* matcher; // owned
 

@@ -7,6 +7,7 @@
 */
 
 #include "quant.h"
+#include "unicode/unistr.h"
 
 Quantifier::Quantifier(UnicodeMatcher *adopted,
                        uint32_t minCount, uint32_t maxCount) {
@@ -61,12 +62,48 @@ UMatchDegree Quantifier::matches(const Replaceable& text,
     return U_MISMATCH;
 }
 
+static const int32_t POW10[] = {1, 10, 100, 1000, 10000, 100000, 1000000,
+                                10000000, 100000000, 1000000000};
+
+void Quantifier::appendNumber(UnicodeString& result, int32_t n) {
+    // assert(n >= 0);
+    // assert(n < 1e10);
+    UBool show = FALSE; // TRUE if we should display digits
+    for (int32_t p=9; p>=0; --p) {
+        int32_t d = n / POW10[p];
+        n -= d * POW10[p];
+        if (d != 0 || p == 0) {
+            show = TRUE;
+        }
+        if (show) {
+            result.append((UChar)(48+d));
+        }
+    }
+}
+
 /**
  * Implement UnicodeMatcher
  */
 UnicodeString& Quantifier::toPattern(UnicodeString& result,
                                      UBool escapeUnprintable) const {
-    // TODO finish this
+    matcher->toPattern(result, escapeUnprintable);
+    if (minCount == 0) {
+        if (maxCount == 1) {
+            return result.append((UChar)63); /*?*/
+        } else if (maxCount == MAX) {
+            return result.append((UChar)42); /***/
+        }
+        // else fall through
+    } else if (minCount == 1 && maxCount == MAX) {
+        return result.append((UChar)43); /*+*/
+    }
+    result.append((UChar)123); /*{*/
+    appendNumber(result, minCount);
+    result.append((UChar)44); /*,*/
+    if (maxCount != MAX) {
+        appendNumber(result, maxCount);
+    }
+    result.append((UChar)125); /*}*/
     return result;
 }
 

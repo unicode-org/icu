@@ -23,9 +23,7 @@ class StringMatcher : public UnicodeMatcher {
     StringMatcher(const UnicodeString& string,
                   int32_t start,
                   int32_t limit,
-                  const TransliterationRuleData& data);
-
-    StringMatcher(const UnicodeString& string,
+                  UBool isSegment,
                   const TransliterationRuleData& data);
 
     StringMatcher(const StringMatcher& o);
@@ -64,6 +62,8 @@ class StringMatcher : public UnicodeMatcher {
     UnicodeString pattern;
 
     const TransliterationRuleData& data;
+
+    UBool isSegment;
 };
 
 #endif
