@@ -36,9 +36,6 @@
 #define INPUT_FILE "tz.txt"
 #define OUTPUT_FILE "tz.dat"
 
-#define DATA_NAME "tz"
-#define DATA_TYPE "dat"
-
 #define DATA_COPYRIGHT \
     "Copyright (C) 1999, International Business Machines " \
     "Corporation and others.  All Rights Reserved."
@@ -53,9 +50,9 @@ static const UDataInfo dataInfo = {
     sizeof(UChar),
     0,
 
-    'z', 'o', 'n', 'e',         /* dataFormat */
-    1, 0, 0, 0,                 /* formatVersion */
-    1, 9, 9, 9                  /* dataVersion */
+    TZ_SIG[0], TZ_SIG[1], TZ_SIG[2], TZ_SIG[3], /* dataFormat */
+    TZ_FORMAT_VERSION, 0, 0, 0,                 /* formatVersion */
+    0, 0, 0, 0 /* dataVersion - will be filled in with year.suffix */
 };
 
 
@@ -69,6 +66,9 @@ class gentz {
     // The largest number of zones we accept as sensible.  Anything
     // larger is considered an error.  Adjust as needed.
     enum { MAX_ZONES = 1000 };
+
+    // The largest maxNameLength we accept as sensible.  Adjust as needed.
+    enum { MAX_MAX_NAME_LENGTH = 100 };
 
     // The maximum sensible GMT offset, in seconds
     static const int32_t MAX_GMT_OFFSET;
@@ -87,15 +87,19 @@ class gentz {
 
     enum { BUFLEN = 1024 };
     char buffer[BUFLEN];
+    int32_t lineNumber;
     
     TZHeader header;
     StandardZone* stdZones;
     DSTZone* dstZones;
     char* nameTable;
+    int32_t* indexByName;
+    OffsetIndex* indexByOffset;
     
-    int32_t zoneCount; // Total number of zones
+    int32_t maxPerOffset; // Maximum number of zones per offset
     int32_t stdZoneSize;
     int32_t dstZoneSize;
+    int32_t offsetIndexSize; // Total bytes in offset index table
     int32_t nameTableSize; // Total bytes in name table
 
     bool_t useCopyright;
@@ -116,9 +120,13 @@ private:
     void          parse1DSTZone(FileStream* in, DSTZone& zone);
     void          parseDSTRule(char*& p, TZRule& rule);
 
+    int32_t*      parseIndexTable(FileStream* in);
+    OffsetIndex*  parseOffsetIndexTable(FileStream* in);
+
     char*         parseNameTable(FileStream* in);
 
     // Low level parsing and reading
+    void     readEndMarker(FileStream* in);
     int32_t  readIntegerLine(FileStream* in, int32_t min, int32_t max);
     int32_t  _parseInteger(char*& p);
     int32_t  parseInteger(char*& p, char nextExpectedChar, int32_t, int32_t);
@@ -134,7 +142,7 @@ int main(int argc, char *argv[]) {
     return x.main(argc, argv);
 }
 
-const int32_t gentz::MAX_GMT_OFFSET = (int32_t)24*60*60;
+const int32_t gentz::MAX_GMT_OFFSET = (int32_t)24*60*60; // seconds
 const char    gentz::COMMENT        = '#';
 const char    gentz::CR             = ((char)13);
 const char    gentz::LF             = ((char)10);
@@ -148,19 +156,19 @@ const char*   gentz::END_KEYWORD    = "end";
 
 void gentz::usage(const char* argv0) {
     fprintf(stderr,
-            "Usage: %s [-c[+|-]] infile outfile\n"
+            "Usage: %s [-c[+|-]] infile\n"
             " -c[+|-] [do|do not] include copyright (default=+)\n"
-            " infile  text file produced by tz.pl\n"
-            " outfile binary file suitable for memory mapping\n",
+            " infile  text file produced by tz.pl\n",
             argv0);
     exit(1);
 }
 
 int gentz::main(int argc, char *argv[]) {
+    ////////////////////////////////////////////////////////////
     // Parse arguments
+    ////////////////////////////////////////////////////////////
     useCopyright = TRUE;
     const char* infile = 0;
-    const char* outfile = 0;
     for (int i=1; i<argc; ++i) {
         const char* arg = argv[i];
         if (arg[0] == '-') {
@@ -179,17 +187,20 @@ int gentz::main(int argc, char *argv[]) {
             }
         } else if (infile == 0) {
             infile = arg;
-        } else if (outfile == 0) {
-            outfile = arg;
         } else {
             usage(argv[0]);
         }
     }
-    if (outfile == 0) {
+    if (infile == 0) {
         usage(argv[0]);
     }
 
+    ////////////////////////////////////////////////////////////
+    // Read the input file
+    ////////////////////////////////////////////////////////////
     *buffer = NUL;
+    lineNumber = 0;
+    fprintf(stdout, "Input file: %s\n", infile);
     FileStream* in = T_FileStream_open(infile, "r");
     if (in == 0) {
         die("Cannot open input file");
@@ -197,14 +208,13 @@ int gentz::main(int argc, char *argv[]) {
     parseTzTextFile(in);
     T_FileStream_close(in);
     *buffer = NUL;
-    fprintf(stdout, "Input file %s, data version %u(%u)\n",
-            infile, header.versionYear, header.versionSuffix);
-    fprintf(stdout, "Read %ld standard zones, %ld dst zones, %ld zone names\n",
-            header.standardCount, header.dstCount, zoneCount);
 
+    ////////////////////////////////////////////////////////////
+    // Write the output file
+    ////////////////////////////////////////////////////////////
     int32_t wlen = writeTzDatFile();
-    fprintf(stdout, "Wrote to %s: %ld bytes\n",
-            outfile, wlen);
+    fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
+            TZ_DATA_NAME, TZ_DATA_TYPE, wlen);
 
     return 0; // success
 }
@@ -213,15 +223,23 @@ int32_t gentz::writeTzDatFile() {
     UNewDataMemory *pdata;
     UErrorCode status = U_ZERO_ERROR;
 
-    pdata = udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
+    // Fill in dataInfo with year.suffix
+    *(uint16_t*)&(dataInfo.dataVersion[0]) = header.versionYear;
+    *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
+
+    pdata = udata_create(TZ_DATA_TYPE, TZ_DATA_NAME, &dataInfo,
                          useCopyright ? DATA_COPYRIGHT : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");
     }
 
+    // Careful: This order cannot be changed (without changing
+    // the offset fixup code).
     udata_writeBlock(pdata, &header, sizeof(header));
     udata_writeBlock(pdata, stdZones, stdZoneSize);
     udata_writeBlock(pdata, dstZones, dstZoneSize);
+    udata_writeBlock(pdata, indexByName, header.count * sizeof(indexByName[0]));
+    udata_writeBlock(pdata, indexByOffset, offsetIndexSize);
     udata_writeBlock(pdata, nameTable, nameTableSize);
 
     uint32_t dataLength = udata_finish(pdata, &status);
@@ -230,7 +248,10 @@ int32_t gentz::writeTzDatFile() {
     }
 
     if (dataLength != (sizeof(header) + stdZoneSize +
-                       dstZoneSize + nameTableSize)) {
+                       dstZoneSize + nameTableSize +
+                       header.count * sizeof(indexByName[0]) +
+                       offsetIndexSize
+                       )) {
         die("Written file doesn't match expected size");
     }
     return dataLength;
@@ -240,37 +261,139 @@ void gentz::parseTzTextFile(FileStream* in) {
     parseHeader(in);
     stdZones = parseStandardZones(in);
     dstZones = parseDSTZones(in);
-    if (zoneCount != (int32_t)(header.standardCount + header.dstCount)) {
+    if (header.count != (header.standardCount + header.dstCount)) {
         die("Zone counts don't add up");
     }
     nameTable = parseNameTable(in);
 
     // Fixup the header offsets
-    stdZoneSize = (char*)&stdZones[header.standardCount] - (char*)&stdZones[0];
-    dstZoneSize = (char*)&dstZones[header.dstCount] - (char*)&dstZones[0];
+    header.standardDelta = sizeof(header);
+    header.dstDelta = header.standardDelta + stdZoneSize;
+    header.nameIndexDelta = header.dstDelta + dstZoneSize;
 
-    header.standardOffset = sizeof(header);
-    header.dstOffset = header.standardOffset + stdZoneSize;
-    header.nameTableOffset = header.dstOffset + dstZoneSize;
+    // Read in index tables after header is mostly fixed up
+    indexByName = parseIndexTable(in);
+    indexByOffset = parseOffsetIndexTable(in);
 
-    if (header.standardOffset < 0 ||
-        header.dstOffset < 0 ||
-        header.nameTableOffset < 0) {
+    header.offsetIndexDelta = header.nameIndexDelta + header.count *
+        sizeof(indexByName[0]);
+    header.nameTableDelta = header.offsetIndexDelta + offsetIndexSize;
+
+    if (header.standardDelta < 0 ||
+        header.dstDelta < 0 ||
+        header.nameTableDelta < 0) {
         die("Negative offset in header after fixup");
     }
 }
 
+/**
+ * Index tables are lists of specifiers of the form /[sd]\d+/, where
+ * the first character determines if it is a standard or DST zone,
+ * and the following number is in the range 0..n-1, where n is the
+ * count of that type of zone.
+ *
+ * Header must already be read in and the offsets must be fixed up.
+ * Standard and DST zones must be read in.
+ */
+int32_t* gentz::parseIndexTable(FileStream* in) {
+    uint32_t n = readIntegerLine(in, 1, MAX_ZONES);
+    if (n != header.count) {
+        die("Count mismatch in index table");
+    }
+    int32_t* result = new int32_t[n];
+    for (uint32_t i=0; i<n; ++i) {
+        readLine(in);
+        char* p = buffer+1;
+        uint32_t index = parseInteger(p, NUL, 0, header.count);
+        switch (buffer[0]) {
+        case 's':
+            if (index >= header.standardCount) {
+                die("Standard index entry out of range");
+            }
+            result[i] = header.standardDelta +
+                ((char*)&stdZones[index] - (char*)&stdZones[0]); 
+            break;
+        case 'd':
+            if (index >= header.dstCount) {
+                die("DST index entry out of range");
+            } 
+            result[i] = header.dstDelta +
+                ((char*)&dstZones[index] - (char*)&dstZones[0]);
+            break;
+        default:
+            die("Malformed index entry");
+            break;
+        }
+    }
+    readEndMarker(in);
+    fprintf(stdout, " Read %lu name index table entries, in-memory size %ld bytes\n",
+            n, n * sizeof(int32_t));
+    return result;
+}
+
+OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
+    uint32_t n = readIntegerLine(in, 1, MAX_ZONES);
+
+    // We don't know how big the whole thing will be yet, but we can use
+    // the maxPerOffset number to compute an upper limit.
+    //
+    // Structs will not be 4-aligned because we'll be writing them out
+    // ourselves.  Don't try to compute the exact size in advance
+    // (unless we want to avoid the use of sizeof(), which may
+    // introduce padding that we won't actually employ).
+    int32_t maxPossibleSize = n * (sizeof(OffsetIndex) +
+        (maxPerOffset-1) * sizeof(uint16_t));
+
+    int8_t *result = new int8_t[maxPossibleSize];
+    if (result == 0) {
+        die("Out of memory");
+    }
+
+    // Read each line and construct the corresponding entry
+    OffsetIndex* index = (OffsetIndex*)result;
+    for (uint32_t i=0; i<n; ++i) {
+        readLine(in);
+        char* p = buffer;
+        index->gmtOffset = 1000 * // Convert s -> ms
+            parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
+        index->count = (uint16_t)parseInteger(p, SEP, 1, maxPerOffset);
+        uint16_t* zoneNumberArray = &(index->zoneNumber);
+        for (uint16_t j=0; j<index->count; ++j) {
+            zoneNumberArray[j] = (uint16_t)
+                parseInteger(p, (j==(index->count-1))?NUL:SEP,
+                             0, header.count-1);
+        }
+        int8_t* nextIndex = (int8_t*)&(zoneNumberArray[index->count]);
+        index->nextEntryDelta = (i==(n-1)) ? 0 : (nextIndex - (int8_t*)index);
+        index = (OffsetIndex*)nextIndex;
+    }
+    offsetIndexSize = (int8_t*)index - (int8_t*)result;
+    if (offsetIndexSize > maxPossibleSize) {
+        die("Yikes! Interal error while constructing offset index table");
+    }
+    readEndMarker(in);
+    fprintf(stdout, " Read %lu offset index table entries, in-memory size %ld bytes\n",
+            n, offsetIndexSize);
+    return (OffsetIndex*)result;
+}
+
 void gentz::parseHeader(FileStream* in) {
+    int32_t ignored;
+
     // Version string, e.g., "1999j" -> (1999<<16) | 10
-    header.versionYear = (uint16_t) readIntegerLine(in, 0, 0xFFFF);
+    header.versionYear = (uint16_t) readIntegerLine(in, 1990, 0xFFFF);
     header.versionSuffix = (uint16_t) readIntegerLine(in, 0, 0xFFFF);
 
-    // Zone count
-    zoneCount = readIntegerLine(in, 0, MAX_ZONES);
+    header.count = readIntegerLine(in, 1, MAX_ZONES);
+    maxPerOffset = readIntegerLine(in, 1, MAX_ZONES);
+    /*header.maxNameLength*/ ignored = readIntegerLine(in, 1, MAX_MAX_NAME_LENGTH);
 
     // Size of name table in bytes
     // (0x00FFFFFF is an arbitrary upper limit; adjust as needed.)
     nameTableSize = readIntegerLine(in, 1, 0x00FFFFFF);
+
+    fprintf(stdout, " Read header, data version %u(%u), in-memory size %ld bytes\n",
+            header.versionYear, header.versionSuffix, sizeof(header));
 }
 
 StandardZone* gentz::parseStandardZones(FileStream* in) {
@@ -282,18 +405,19 @@ StandardZone* gentz::parseStandardZones(FileStream* in) {
     for (uint32_t i=0; i<header.standardCount; i++) {
         parse1StandardZone(in, zones[i]);
     }
-    readLine(in);
-    if (icu_strcmp(buffer, END_KEYWORD) != 0) {
-        die("Keyword 'end' missing");
-    }
+    readEndMarker(in);
+    stdZoneSize = (char*)&stdZones[header.standardCount] - (char*)&stdZones[0];
+    fprintf(stdout, " Read %lu standard zones, in-memory size %ld bytes\n",
+            header.standardCount, stdZoneSize);
     return zones;
 }
 
 void gentz::parse1StandardZone(FileStream* in, StandardZone& zone) {
     readLine(in);
     char* p = buffer;
-    zone.nameOffset = parseInteger(p, SEP, 0, nameTableSize);
-    zone.gmtOffset = parseInteger(p, NUL, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
+    /*zone.nameDelta =*/ parseInteger(p, SEP, 0, nameTableSize);
+    zone.gmtOffset = 1000 * // Convert s -> ms
+        parseInteger(p, NUL, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
 }
 
 DSTZone* gentz::parseDSTZones(FileStream* in) {
@@ -305,18 +429,19 @@ DSTZone* gentz::parseDSTZones(FileStream* in) {
     for (uint32_t i=0; i<header.dstCount; i++) {
         parse1DSTZone(in, zones[i]);
     }
-    readLine(in);
-    if (icu_strcmp(buffer, END_KEYWORD) != 0) {
-        die("Keyword 'end' missing");
-    }
+    readEndMarker(in);
+    dstZoneSize = (char*)&dstZones[header.dstCount] - (char*)&dstZones[0];
+    fprintf(stdout, " Read %lu DST zones, in-memory size %ld bytes\n",
+            header.dstCount, dstZoneSize);
     return zones;
 }
 
 void gentz::parse1DSTZone(FileStream* in, DSTZone& zone) {
     readLine(in);
     char* p = buffer;
-    zone.nameOffset = parseInteger(p, SEP, 0, nameTableSize);
-    zone.gmtOffset = parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
+    /*zone.nameDelta =*/ parseInteger(p, SEP, 0, nameTableSize);
+    zone.gmtOffset = 1000 * // Convert s -> ms
+        parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
     parseDSTRule(p, zone.onsetRule);
     parseDSTRule(p, zone.ceaseRule);
     zone.dstSavings = (uint16_t) parseInteger(p, NUL, 0, 12*60);
@@ -349,7 +474,7 @@ void gentz::parseDSTRule(char*& p, TZRule& rule) {
 
 char* gentz::parseNameTable(FileStream* in) {
     int32_t n = readIntegerLine(in, 1, MAX_ZONES);
-    if (n != zoneCount) {
+    if (n != (int32_t)header.count) {
         die("Zone count doesn't match name table count");
     }
     char* names = new char[nameTableSize];
@@ -371,7 +496,19 @@ char* gentz::parseNameTable(FileStream* in) {
     if (p != limit) {
         die("Name table shorter than declared size");
     }
+    readEndMarker(in);
+    fprintf(stdout, " Read %ld names, in-memory size %ld bytes\n", n, nameTableSize);
     return names;
+}
+
+/**
+ * Read the end marker (terminates each list).
+ */
+void gentz::readEndMarker(FileStream* in) {
+    readLine(in);
+    if (icu_strcmp(buffer, END_KEYWORD) != 0) {
+        die("Keyword 'end' missing");
+    }
 }
 
 /**
@@ -432,12 +569,13 @@ int32_t gentz::parseInteger(char*& p, char nextExpectedChar,
 void gentz::die(const char* msg) {
     fprintf(stderr, "ERROR, %s\n", msg);
     if (*buffer) {
-        fprintf(stderr, "Current input line: %s\n", buffer);
+        fprintf(stderr, "Input file line %ld: \"%s\"\n", lineNumber, buffer);
     }
     exit(1);
 }
 
 int32_t gentz::readLine(FileStream* in) {
+    ++lineNumber;
     T_FileStream_readLine(in, buffer, BUFLEN);
     // Trim off trailing comment
     char* p = icu_strchr(buffer, COMMENT);

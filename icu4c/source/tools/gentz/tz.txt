@@ -1,399 +1,435 @@
-1999 # (tzdata1999j) ftp://elsie.nci.nih.gov data version YEAR
-10 # (tzdata1999j) ftp://elsie.nci.nih.gov data version SUFFIX
-387 # total zone count
-5906 # length of name table in bytes
-208 # count of standard zones to follow
-0,0 # Africa/Abidjan GMT+0:00
-28,10800 # Africa/Addis_Ababa GMT+3:00
-47,3600 # Africa/Algiers GMT+1:00
-62,10800 # Africa/Asmera GMT+3:00
-76,0 # Africa/Bamako GMT+0:00
-90,3600 # Africa/Bangui GMT+1:00
-104,0 # Africa/Banjul GMT+0:00
-118,0 # Africa/Bissau GMT+0:00
-132,7200 # Africa/Blantyre GMT+2:00
-148,3600 # Africa/Brazzaville GMT+1:00
-167,7200 # Africa/Bujumbura GMT+2:00
-197,0 # Africa/Casablanca GMT+0:00
-228,0 # Africa/Conakry GMT+0:00
-243,0 # Africa/Dakar GMT+0:00
-256,10800 # Africa/Dar_es_Salaam GMT+3:00
-277,10800 # Africa/Djibouti GMT+3:00
-293,3600 # Africa/Douala GMT+1:00
-307,0 # Africa/El_Aaiun GMT+0:00
-339,7200 # Africa/Gaborone GMT+2:00
-355,7200 # Africa/Harare GMT+2:00
-389,10800 # Africa/Kampala GMT+3:00
-420,7200 # Africa/Kigali GMT+2:00
-434,3600 # Africa/Kinshasa GMT+1:00
-450,3600 # Africa/Lagos GMT+1:00
-463,3600 # Africa/Libreville GMT+1:00
-481,0 # Africa/Lome GMT+0:00
-493,3600 # Africa/Luanda GMT+1:00
-507,7200 # Africa/Lubumbashi GMT+2:00
-525,7200 # Africa/Lusaka GMT+2:00
-539,3600 # Africa/Malabo GMT+1:00
-553,7200 # Africa/Maputo GMT+2:00
-567,7200 # Africa/Maseru GMT+2:00
-581,7200 # Africa/Mbabane GMT+2:00
-596,10800 # Africa/Mogadishu GMT+3:00
-613,0 # Africa/Monrovia GMT+0:00
-629,10800 # Africa/Nairobi GMT+3:00
-644,3600 # Africa/Ndjamena GMT+1:00
-660,3600 # Africa/Niamey GMT+1:00
-674,0 # Africa/Nouakchott GMT+0:00
-692,0 # Africa/Ouagadougou GMT+0:00
-711,3600 # Africa/Porto-Novo GMT+1:00
-729,0 # Africa/Sao_Tome GMT+0:00
-745,0 # Africa/Timbuktu GMT+0:00
-761,7200 # Africa/Tripoli GMT+2:00
-836,-14400 # America/Anguilla GMT-4:00
-853,-14400 # America/Antigua GMT-4:00
-887,-14400 # America/Aruba GMT-4:00
-935,-10800 # America/Belem GMT-3:00
-1069,-14400 # America/Caracas GMT-4:00
-1085,-10800 # America/Catamarca GMT-3:00
-1103,-10800 # America/Cayenne GMT-3:00
-1119,-18000 # America/Cayman GMT-5:00
-1168,-10800 # America/Cordoba GMT-3:00
-1218,-14400 # America/Curacao GMT-4:00
-1249,-25200 # America/Dawson_Creek GMT-7:00
-1301,-14400 # America/Dominica GMT-4:00
-1444,-14400 # America/Grenada GMT-4:00
-1460,-14400 # America/Guadeloupe GMT-4:00
-1497,-18000 # America/Guayaquil GMT-5:00
-1515,-14400 # America/Guyana GMT-4:00
-1561,-18000 # America/Indiana/Knox GMT-5:00
-1582,-18000 # America/Indiana/Marengo GMT-5:00
-1606,-18000 # America/Indiana/Vevay GMT-5:00
-1628,-18000 # America/Indianapolis GMT-5:00
-1680,-18000 # America/Jamaica GMT-5:00
-1696,-10800 # America/Jujuy GMT-3:00
-1725,-14400 # America/La_Paz GMT-4:00
-1807,-21600 # America/Managua GMT-6:00
-1823,-14400 # America/Manaus GMT-4:00
-1838,-14400 # America/Martinique GMT-4:00
-1874,-10800 # America/Mendoza GMT-3:00
-1981,-14400 # America/Montserrat GMT-4:00
-2061,-7200 # America/Noronha GMT-2:00
-2077,-18000 # America/Panama GMT-5:00
-2112,-10800 # America/Paramaribo GMT-3:00
-2131,-25200 # America/Phoenix GMT-7:00
-2170,-14400 # America/Port_of_Spain GMT-4:00
-2192,-18000 # America/Porto_Acre GMT-5:00
-2211,-14400 # America/Porto_Velho GMT-4:00
-2231,-14400 # America/Puerto_Rico GMT-4:00
-2292,-21600 # America/Regina GMT-6:00
-2307,-10800 # America/Rosario GMT-3:00
-2340,-14400 # America/Santo_Domingo GMT-4:00
-2418,-14400 # America/St_Kitts GMT-4:00
-2435,-14400 # America/St_Lucia GMT-4:00
-2452,-14400 # America/St_Thomas GMT-4:00
-2470,-14400 # America/St_Vincent GMT-4:00
-2489,-21600 # America/Swift_Current GMT-6:00
-2581,-14400 # America/Tortola GMT-4:00
-2687,28800 # Antarctica/Casey GMT+8:00
-2704,25200 # Antarctica/Davis GMT+7:00
-2721,36000 # Antarctica/DumontDUrville GMT+10:00
-2747,21600 # Antarctica/Mawson GMT+6:00
-2802,10800 # Antarctica/Syowa GMT+3:00
-2819,10800 # Asia/Aden GMT+3:00
-2887,18000 # Asia/Ashkhabad GMT+5:00
-2915,10800 # Asia/Bahrain GMT+3:00
-2938,25200 # Asia/Bangkok GMT+7:00
-2976,28800 # Asia/Brunei GMT+8:00
-2988,19800 # Asia/Calcutta GMT+5:30
-3017,21600 # Asia/Colombo GMT+6:00
-3030,21600 # Asia/Dacca GMT+6:00
-3055,28800 # Asia/Dili GMT+8:00
-3065,14400 # Asia/Dubai GMT+4:00
-3076,18000 # Asia/Dushanbe GMT+5:00
-3140,25200 # Asia/Jakarta GMT+7:00
-3153,32400 # Asia/Jayapura GMT+9:00
-3182,16200 # Asia/Kabul GMT+4:30
-3208,18000 # Asia/Karachi GMT+5:00
-3234,20700 # Asia/Katmandu GMT+5:45
-3265,28800 # Asia/Kuala_Lumpur GMT+8:00
-3283,28800 # Asia/Kuching GMT+8:00
-3296,10800 # Asia/Kuwait GMT+3:00
-3344,14400 # Asia/Muscat GMT+4:00
-3396,25200 # Asia/Phnom_Penh GMT+7:00
-3412,32400 # Asia/Pyongyang GMT+9:00
-3427,10800 # Asia/Qatar GMT+3:00
-3438,23400 # Asia/Rangoon GMT+6:30
-3451,10800 # Asia/Riyadh GMT+3:00
-3463,11224 # Asia/Riyadh87 GMT+3:07:04
-3477,11224 # Asia/Riyadh88 GMT+3:07:04
-3491,11224 # Asia/Riyadh89 GMT+3:07:04
-3505,25200 # Asia/Saigon GMT+7:00
-3517,18000 # Asia/Samarkand GMT+5:00
-3557,28800 # Asia/Singapore GMT+8:00
-3584,18000 # Asia/Tashkent GMT+5:00
-3623,21600 # Asia/Thimbu GMT+6:00
-3635,32400 # Asia/Tokyo GMT+9:00
-3646,28800 # Asia/Ujung_Pandang GMT+8:00
-3693,25200 # Asia/Vientiane GMT+7:00
-3819,-3600 # Atlantic/Cape_Verde GMT-1:00
-3855,-3600 # Atlantic/Jan_Mayen GMT-1:00
-3891,0 # Atlantic/Reykjavik GMT+0:00
-3910,-7200 # Atlantic/South_Georgia GMT-2:00
-3933,0 # Atlantic/St_Helena GMT+0:00
-4122,28800 # Australia/Perth GMT+8:00
-4163,0 # Etc/GMT GMT+0
-4171,-3600 # Etc/GMT+1 GMT-1
-4181,-36000 # Etc/GMT+10 GMT-10
-4192,-39600 # Etc/GMT+11 GMT-11
-4203,-43200 # Etc/GMT+12 GMT-12
-4214,-7200 # Etc/GMT+2 GMT-2
-4224,-10800 # Etc/GMT+3 GMT-3
-4234,-14400 # Etc/GMT+4 GMT-4
-4244,-18000 # Etc/GMT+5 GMT-5
-4254,-21600 # Etc/GMT+6 GMT-6
-4264,-25200 # Etc/GMT+7 GMT-7
-4274,-28800 # Etc/GMT+8 GMT-8
-4284,-32400 # Etc/GMT+9 GMT-9
-4294,3600 # Etc/GMT-1 GMT+1
-4304,36000 # Etc/GMT-10 GMT+10
-4315,39600 # Etc/GMT-11 GMT+11
-4326,43200 # Etc/GMT-12 GMT+12
-4337,46800 # Etc/GMT-13 GMT+13
-4348,50400 # Etc/GMT-14 GMT+14
-4359,7200 # Etc/GMT-2 GMT+2
-4369,10800 # Etc/GMT-3 GMT+3
-4379,14400 # Etc/GMT-4 GMT+4
-4389,18000 # Etc/GMT-5 GMT+5
-4399,21600 # Etc/GMT-6 GMT+6
-4409,25200 # Etc/GMT-7 GMT+7
-4419,28800 # Etc/GMT-8 GMT+8
-4429,32400 # Etc/GMT-9 GMT+9
-4439,0 # Etc/UCT GMT+0
-4447,0 # Etc/UTC GMT+0
-4962,7200 # Europe/Tallinn GMT+2:00
-5111,10800 # Indian/Antananarivo GMT+3:00
-5131,18000 # Indian/Chagos GMT+5:00
-5145,25200 # Indian/Christmas GMT+7:00
-5162,23400 # Indian/Cocos GMT+6:30
-5175,10800 # Indian/Comoro GMT+3:00
-5189,18000 # Indian/Kerguelen GMT+5:00
-5206,14400 # Indian/Mahe GMT+4:00
-5218,18000 # Indian/Maldives GMT+5:00
-5234,14400 # Indian/Mauritius GMT+4:00
-5251,10800 # Indian/Mayotte GMT+3:00
-5266,14400 # Indian/Reunion GMT+4:00
-5285,-39600 # Pacific/Apia GMT-11:00
-5360,46800 # Pacific/Enderbury GMT+13:00
-5378,-36000 # Pacific/Fakaofo GMT-10:00
-5407,43200 # Pacific/Funafuti GMT+12:00
-5424,-21600 # Pacific/Galapagos GMT-6:00
-5442,-32400 # Pacific/Gambier GMT-9:00
-5458,39600 # Pacific/Guadalcanal GMT+11:00
-5478,36000 # Pacific/Guam GMT+10:00
-5491,-36000 # Pacific/Honolulu GMT-10:00
-5508,-36000 # Pacific/Johnston GMT-10:00
-5525,50400 # Pacific/Kiritimati GMT+14:00
-5544,39600 # Pacific/Kosrae GMT+11:00
-5559,43200 # Pacific/Kwajalein GMT+12:00
-5577,43200 # Pacific/Majuro GMT+12:00
-5592,-34200 # Pacific/Marquesas GMT-9:30
-5610,-39600 # Pacific/Midway GMT-11:00
-5625,43200 # Pacific/Nauru GMT+12:00
-5639,-39600 # Pacific/Niue GMT-11:00
-5652,41400 # Pacific/Norfolk GMT+11:30
-5683,-39600 # Pacific/Pago_Pago GMT-11:00
-5701,32400 # Pacific/Palau GMT+9:00
-5715,-28800 # Pacific/Pitcairn GMT-8:00
-5732,39600 # Pacific/Ponape GMT+11:00
-5747,36000 # Pacific/Port_Moresby GMT+10:00
-5786,36000 # Pacific/Saipan GMT+10:00
-5801,-36000 # Pacific/Tahiti GMT-10:00
-5816,43200 # Pacific/Tarawa GMT+12:00
-5849,36000 # Pacific/Truk GMT+10:00
-5862,43200 # Pacific/Wake GMT+12:00
-5875,43200 # Pacific/Wallis GMT+12:00
-5890,36000 # Pacific/Yap GMT+10:00
+1999 # (tzdata1999j) version of Olson zone
+10 #  data from ftp://elsie.nci.nih.gov
+416 # total zone count
+41 # max count of zones with same gmtOffset
+25 # max name length not incl final zero
+6022 # length of name table in bytes
+222 # count of standard zones to follow
+20,0 # Africa/Abidjan GMT+0:00
+48,10800 # Africa/Addis_Ababa GMT+3:00
+67,3600 # Africa/Algiers GMT+1:00
+82,10800 # Africa/Asmera GMT+3:00
+96,0 # Africa/Bamako GMT+0:00
+110,3600 # Africa/Bangui GMT+1:00
+124,0 # Africa/Banjul GMT+0:00
+138,0 # Africa/Bissau GMT+0:00
+152,7200 # Africa/Blantyre GMT+2:00
+168,3600 # Africa/Brazzaville GMT+1:00
+187,7200 # Africa/Bujumbura GMT+2:00
+217,0 # Africa/Casablanca GMT+0:00
+248,0 # Africa/Conakry GMT+0:00
+263,0 # Africa/Dakar GMT+0:00
+276,10800 # Africa/Dar_es_Salaam GMT+3:00
+297,10800 # Africa/Djibouti GMT+3:00
+313,3600 # Africa/Douala GMT+1:00
+327,0 # Africa/El_Aaiun GMT+0:00
+359,7200 # Africa/Gaborone GMT+2:00
+375,7200 # Africa/Harare GMT+2:00
+409,10800 # Africa/Kampala GMT+3:00
+440,7200 # Africa/Kigali GMT+2:00
+454,3600 # Africa/Kinshasa GMT+1:00
+470,3600 # Africa/Lagos GMT+1:00
+483,3600 # Africa/Libreville GMT+1:00
+501,0 # Africa/Lome GMT+0:00
+513,3600 # Africa/Luanda GMT+1:00
+527,7200 # Africa/Lubumbashi GMT+2:00
+545,7200 # Africa/Lusaka GMT+2:00
+559,3600 # Africa/Malabo GMT+1:00
+573,7200 # Africa/Maputo GMT+2:00
+587,7200 # Africa/Maseru GMT+2:00
+601,7200 # Africa/Mbabane GMT+2:00
+616,10800 # Africa/Mogadishu GMT+3:00
+633,0 # Africa/Monrovia GMT+0:00
+649,10800 # Africa/Nairobi GMT+3:00
+664,3600 # Africa/Ndjamena GMT+1:00
+680,3600 # Africa/Niamey GMT+1:00
+694,0 # Africa/Nouakchott GMT+0:00
+712,0 # Africa/Ouagadougou GMT+0:00
+731,3600 # Africa/Porto-Novo GMT+1:00
+749,0 # Africa/Sao_Tome GMT+0:00
+765,0 # Africa/Timbuktu GMT+0:00
+781,7200 # Africa/Tripoli GMT+2:00
+856,-14400 # America/Anguilla GMT-4:00
+873,-14400 # America/Antigua GMT-4:00
+907,-14400 # America/Aruba GMT-4:00
+955,-10800 # America/Belem GMT-3:00
+1089,-14400 # America/Caracas GMT-4:00
+1105,-10800 # America/Catamarca GMT-3:00
+1123,-10800 # America/Cayenne GMT-3:00
+1139,-18000 # America/Cayman GMT-5:00
+1188,-10800 # America/Cordoba GMT-3:00
+1238,-14400 # America/Curacao GMT-4:00
+1269,-25200 # America/Dawson_Creek GMT-7:00
+1321,-14400 # America/Dominica GMT-4:00
+1464,-14400 # America/Grenada GMT-4:00
+1480,-14400 # America/Guadeloupe GMT-4:00
+1517,-18000 # America/Guayaquil GMT-5:00
+1535,-14400 # America/Guyana GMT-4:00
+1581,-18000 # America/Indiana/Knox GMT-5:00
+1602,-18000 # America/Indiana/Marengo GMT-5:00
+1626,-18000 # America/Indiana/Vevay GMT-5:00
+1648,-18000 # America/Indianapolis GMT-5:00
+1700,-18000 # America/Jamaica GMT-5:00
+1716,-10800 # America/Jujuy GMT-3:00
+1745,-14400 # America/La_Paz GMT-4:00
+1827,-21600 # America/Managua GMT-6:00
+1843,-14400 # America/Manaus GMT-4:00
+1858,-14400 # America/Martinique GMT-4:00
+1894,-10800 # America/Mendoza GMT-3:00
+2001,-14400 # America/Montserrat GMT-4:00
+2081,-7200 # America/Noronha GMT-2:00
+2097,-18000 # America/Panama GMT-5:00
+2132,-10800 # America/Paramaribo GMT-3:00
+2151,-25200 # America/Phoenix GMT-7:00
+2190,-14400 # America/Port_of_Spain GMT-4:00
+2212,-18000 # America/Porto_Acre GMT-5:00
+2231,-14400 # America/Porto_Velho GMT-4:00
+2251,-14400 # America/Puerto_Rico GMT-4:00
+2312,-21600 # America/Regina GMT-6:00
+2327,-10800 # America/Rosario GMT-3:00
+2360,-14400 # America/Santo_Domingo GMT-4:00
+2438,-14400 # America/St_Kitts GMT-4:00
+2455,-14400 # America/St_Lucia GMT-4:00
+2472,-14400 # America/St_Thomas GMT-4:00
+2490,-14400 # America/St_Vincent GMT-4:00
+2509,-21600 # America/Swift_Current GMT-6:00
+2601,-14400 # America/Tortola GMT-4:00
+2707,28800 # Antarctica/Casey GMT+8:00
+2724,25200 # Antarctica/Davis GMT+7:00
+2741,36000 # Antarctica/DumontDUrville GMT+10:00
+2767,21600 # Antarctica/Mawson GMT+6:00
+2822,10800 # Antarctica/Syowa GMT+3:00
+2839,10800 # Asia/Aden GMT+3:00
+2907,18000 # Asia/Ashkhabad GMT+5:00
+2935,10800 # Asia/Bahrain GMT+3:00
+2958,25200 # Asia/Bangkok GMT+7:00
+2996,28800 # Asia/Brunei GMT+8:00
+3008,19800 # Asia/Calcutta GMT+5:30
+3037,21600 # Asia/Colombo GMT+6:00
+3050,21600 # Asia/Dacca GMT+6:00
+3075,28800 # Asia/Dili GMT+8:00
+3085,14400 # Asia/Dubai GMT+4:00
+3096,18000 # Asia/Dushanbe GMT+5:00
+3160,25200 # Asia/Jakarta GMT+7:00
+3173,32400 # Asia/Jayapura GMT+9:00
+3202,16200 # Asia/Kabul GMT+4:30
+3228,18000 # Asia/Karachi GMT+5:00
+3254,20700 # Asia/Katmandu GMT+5:45
+3285,28800 # Asia/Kuala_Lumpur GMT+8:00
+3303,28800 # Asia/Kuching GMT+8:00
+3316,10800 # Asia/Kuwait GMT+3:00
+3364,14400 # Asia/Muscat GMT+4:00
+3416,25200 # Asia/Phnom_Penh GMT+7:00
+3432,32400 # Asia/Pyongyang GMT+9:00
+3447,10800 # Asia/Qatar GMT+3:00
+3458,23400 # Asia/Rangoon GMT+6:30
+3471,10800 # Asia/Riyadh GMT+3:00
+3483,11224 # Asia/Riyadh87 GMT+3:07:04
+3497,11224 # Asia/Riyadh88 GMT+3:07:04
+3511,11224 # Asia/Riyadh89 GMT+3:07:04
+3525,25200 # Asia/Saigon GMT+7:00
+3537,18000 # Asia/Samarkand GMT+5:00
+3577,28800 # Asia/Singapore GMT+8:00
+3604,18000 # Asia/Tashkent GMT+5:00
+3643,21600 # Asia/Thimbu GMT+6:00
+3655,32400 # Asia/Tokyo GMT+9:00
+3666,28800 # Asia/Ujung_Pandang GMT+8:00
+3713,25200 # Asia/Vientiane GMT+7:00
+3839,-3600 # Atlantic/Cape_Verde GMT-1:00
+3875,-3600 # Atlantic/Jan_Mayen GMT-1:00
+3911,0 # Atlantic/Reykjavik GMT+0:00
+3930,-7200 # Atlantic/South_Georgia GMT-2:00
+3953,0 # Atlantic/St_Helena GMT+0:00
+4142,28800 # Australia/Perth GMT+8:00
+4179,21600 # BST GMT+6:00
+4183,7200 # CAT GMT+2:00
+4203,10800 # EAT GMT+3:00
+4219,0 # Etc/GMT GMT+0
+4227,-3600 # Etc/GMT+1 GMT-1
+4237,-36000 # Etc/GMT+10 GMT-10
+4248,-39600 # Etc/GMT+11 GMT-11
+4259,-43200 # Etc/GMT+12 GMT-12
+4270,-7200 # Etc/GMT+2 GMT-2
+4280,-10800 # Etc/GMT+3 GMT-3
+4290,-14400 # Etc/GMT+4 GMT-4
+4300,-18000 # Etc/GMT+5 GMT-5
+4310,-21600 # Etc/GMT+6 GMT-6
+4320,-25200 # Etc/GMT+7 GMT-7
+4330,-28800 # Etc/GMT+8 GMT-8
+4340,-32400 # Etc/GMT+9 GMT-9
+4350,3600 # Etc/GMT-1 GMT+1
+4360,36000 # Etc/GMT-10 GMT+10
+4371,39600 # Etc/GMT-11 GMT+11
+4382,43200 # Etc/GMT-12 GMT+12
+4393,46800 # Etc/GMT-13 GMT+13
+4404,50400 # Etc/GMT-14 GMT+14
+4415,7200 # Etc/GMT-2 GMT+2
+4425,10800 # Etc/GMT-3 GMT+3
+4435,14400 # Etc/GMT-4 GMT+4
+4445,18000 # Etc/GMT-5 GMT+5
+4455,21600 # Etc/GMT-6 GMT+6
+4465,25200 # Etc/GMT-7 GMT+7
+4475,28800 # Etc/GMT-8 GMT+8
+4485,32400 # Etc/GMT-9 GMT+9
+4495,0 # Etc/UCT GMT+0
+4503,0 # Etc/UTC GMT+0
+5018,7200 # Europe/Tallinn GMT+2:00
+5167,-36000 # HST GMT-10:00
+5171,-18000 # IET GMT-5:00
+5175,19800 # IST GMT+5:30
+5179,10800 # Indian/Antananarivo GMT+3:00
+5199,18000 # Indian/Chagos GMT+5:00
+5213,25200 # Indian/Christmas GMT+7:00
+5230,23400 # Indian/Cocos GMT+6:30
+5243,10800 # Indian/Comoro GMT+3:00
+5257,18000 # Indian/Kerguelen GMT+5:00
+5274,14400 # Indian/Mahe GMT+4:00
+5286,18000 # Indian/Maldives GMT+5:00
+5302,14400 # Indian/Mauritius GMT+4:00
+5319,10800 # Indian/Mayotte GMT+3:00
+5334,14400 # Indian/Reunion GMT+4:00
+5349,32400 # JST GMT+9:00
+5357,-39600 # MIT GMT-11:00
+5373,18000 # PLT GMT+5:00
+5377,-25200 # PNT GMT-7:00
+5381,-14400 # PRT GMT-4:00
+5389,-39600 # Pacific/Apia GMT-11:00
+5464,46800 # Pacific/Enderbury GMT+13:00
+5482,-36000 # Pacific/Fakaofo GMT-10:00
+5511,43200 # Pacific/Funafuti GMT+12:00
+5528,-21600 # Pacific/Galapagos GMT-6:00
+5546,-32400 # Pacific/Gambier GMT-9:00
+5562,39600 # Pacific/Guadalcanal GMT+11:00
+5582,36000 # Pacific/Guam GMT+10:00
+5595,-36000 # Pacific/Honolulu GMT-10:00
+5612,-36000 # Pacific/Johnston GMT-10:00
+5629,50400 # Pacific/Kiritimati GMT+14:00
+5648,39600 # Pacific/Kosrae GMT+11:00
+5663,43200 # Pacific/Kwajalein GMT+12:00
+5681,43200 # Pacific/Majuro GMT+12:00
+5696,-34200 # Pacific/Marquesas GMT-9:30
+5714,-39600 # Pacific/Midway GMT-11:00
+5729,43200 # Pacific/Nauru GMT+12:00
+5743,-39600 # Pacific/Niue GMT-11:00
+5756,41400 # Pacific/Norfolk GMT+11:30
+5787,-39600 # Pacific/Pago_Pago GMT-11:00
+5805,32400 # Pacific/Palau GMT+9:00
+5819,-28800 # Pacific/Pitcairn GMT-8:00
+5836,39600 # Pacific/Ponape GMT+11:00
+5851,36000 # Pacific/Port_Moresby GMT+10:00
+5890,36000 # Pacific/Saipan GMT+10:00
+5905,-36000 # Pacific/Tahiti GMT-10:00
+5920,43200 # Pacific/Tarawa GMT+12:00
+5953,36000 # Pacific/Truk GMT+10:00
+5966,43200 # Pacific/Wake GMT+12:00
+5979,43200 # Pacific/Wallis GMT+12:00
+5994,36000 # Pacific/Yap GMT+10:00
+6006,39600 # SST GMT+11:00
+6010,0 # UTC GMT+0
+6014,25200 # VST GMT+7:00
 end
-179 # count of dst zones to follow
-15,0,8,1,0,0,w,11,31,0,0,w,20 # Africa/Accra GMT+0:00 Sep 1 0:00 Dec 31 0:00 0:20
-184,7200,3,-1,6,0,s,8,-1,5,1380,s,60 # Africa/Cairo GMT+2:00 Apr lastFri 0:00s Sep lastThu 23:00s 1:00
-215,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Africa/Ceuta GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-323,0,5,1,0,0,w,8,1,0,0,w,60 # Africa/Freetown GMT+0:00 Jun 1 0:00 Sep 1 0:00 1:00
-369,7200,8,15,-1,120,w,2,15,-1,120,w,60 # Africa/Johannesburg GMT+2:00 Sep Sun>=15 2:00 Mar Sun>=15 2:00 1:00
-404,7200,3,-1,1,0,w,9,15,0,0,w,60 # Africa/Khartoum GMT+2:00 Apr lastSun 0:00 Oct 15 0:00 1:00
-776,3600,4,1,0,0,s,8,-1,1,0,s,60 # Africa/Tunis GMT+1:00 May 1 0:00s Sep lastSun 0:00s 1:00
-789,3600,8,1,-1,120,w,3,1,-1,120,w,60 # Africa/Windhoek GMT+1:00 Sep Sun>=1 2:00 Apr Sun>=1 2:00 1:00
-805,-36000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Adak GMT-10:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-818,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Anchorage GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-869,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Araguaina GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
-901,-14400,9,1,-1,0,w,1,-1,1,0,w,60 # America/Asuncion GMT-4:00 Oct Sun>=1 0:00 Feb lastSun 0:00 1:00
-918,-14400,3,15,-1,120,w,8,25,0,120,w,60 # America/Barbados GMT-4:00 Apr Sun>=15 2:00 Sep 25 2:00 1:00
-949,-21600,11,18,0,0,w,1,12,0,0,w,60 # America/Belize GMT-6:00 Dec 18 0:00 Feb 12 0:00 1:00
-964,-14400,9,1,-1,0,w,1,21,0,0,w,60 # America/Boa_Vista GMT-4:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
-982,-18000,4,2,0,0,w,11,31,0,0,w,60 # America/Bogota GMT-5:00 May 2 0:00 Dec 31 0:00 1:00
-997,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Boise GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1011,-10800,9,15,-1,0,w,2,1,-1,0,w,60 # America/Buenos_Aires GMT-3:00 Oct Sun>=15 0:00 Mar Sun>=1 0:00 1:00
-1032,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Cambridge_Bay GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1054,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Cancun GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1134,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Chicago GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1150,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Chihuahua GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1184,-21600,0,15,-7,0,w,2,15,0,0,w,60 # America/Costa_Rica GMT-6:00 Jan Sat>=15 0:00 Mar 15 0:00 1:00
-1203,-14400,9,1,-1,0,w,1,21,0,0,w,60 # America/Cuiaba GMT-4:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
-1234,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Dawson GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1270,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Denver GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1285,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Detroit GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1318,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Edmonton GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1335,-21600,4,1,-1,0,w,8,-1,1,0,w,60 # America/El_Salvador GMT-6:00 May Sun>=1 0:00 Sep lastSun 0:00 1:00
-1355,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Fortaleza GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
-1373,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Glace_Bay GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1391,-10800,2,-1,1,60,u,9,-1,1,60,u,60 # America/Godthab GMT-3:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-1407,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Goose_Bay GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1425,-18000,3,1,-1,0,w,9,-1,1,0,w,60 # America/Grand_Turk GMT-5:00 Apr Sun>=1 0:00 Oct lastSun 0:00 1:00
-1479,-21600,2,23,0,0,w,8,7,0,0,w,60 # America/Guatemala GMT-6:00 Mar 23 0:00 Sep 7 0:00 1:00
-1530,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Halifax GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1546,-18000,3,1,0,0,s,9,-1,1,0,s,60 # America/Havana GMT-5:00 Apr 1 0:00s Oct lastSun 0:00s 1:00
-1649,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Inuvik GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1664,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Iqaluit GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1710,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Juneau GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1740,-18000,0,1,0,0,w,3,1,0,0,w,60 # America/Lima GMT-5:00 Jan 1 0:00 Apr 1 0:00 1:00
-1753,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Los_Angeles GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1773,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Louisville GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1792,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Maceio GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
-1857,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Mazatlan GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1890,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Menominee GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1908,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Mexico_City GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1928,-10800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Miquelon GMT-3:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-1945,-10800,9,18,0,0,w,1,28,0,0,w,60 # America/Montevideo GMT-3:00 Oct 18 0:00 Feb 28 0:00 1:00
-1964,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Montreal GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2000,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Nassau GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2015,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/New_York GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2032,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Nipigon GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2048,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Nome GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2092,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Pangnirtung GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2147,-18000,3,1,-1,60,s,9,-1,1,60,s,60 # America/Port-au-Prince GMT-5:00 Apr Sun>=1 1:00s Oct lastSun 1:00s 1:00
-2251,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Rainy_River GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2271,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Rankin_Inlet GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2323,-14400,9,9,-1,0,w,3,4,0,0,w,60 # America/Santiago GMT-4:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
-2362,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Sao_Paulo GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
-2380,-3600,2,-1,1,60,u,9,-1,1,60,u,60 # America/Scoresbysund GMT-1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-2401,-12600,3,1,-1,120,w,9,-1,1,120,w,60 # America/St_Johns GMT-3:30 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2511,-21600,4,1,-1,0,w,8,-1,1,0,w,60 # America/Tegucigalpa GMT-6:00 May Sun>=1 0:00 Sep lastSun 0:00 1:00
-2531,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Thule GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2545,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Thunder_Bay GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2565,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Tijuana GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2597,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Vancouver GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2615,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Whitehorse GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2634,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Winnipeg GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2651,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Yakutat GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2667,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Yellowknife GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-2765,43200,9,1,-1,120,s,2,15,-1,120,s,60 # Antarctica/McMurdo GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
-2784,-14400,9,9,-1,0,w,3,4,0,0,w,60 # Antarctica/Palmer GMT-4:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
-2829,21600,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Almaty GMT+6:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
-2841,7200,3,1,0,0,w,9,1,0,0,w,60 # Asia/Amman GMT+2:00 Apr 1 0:00 Oct 1 0:00 1:00
-2852,43200,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Anadyr GMT+12:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-2864,14400,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Aqtau GMT+4:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
-2875,18000,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Aqtobe GMT+5:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
-2902,10800,3,1,0,180,s,9,1,0,180,s,60 # Asia/Baghdad GMT+3:00 Apr 1 3:00s Oct 1 3:00s 1:00
-2928,14400,2,-1,1,60,w,9,-1,1,60,w,60 # Asia/Baku GMT+4:00 Mar lastSun 1:00 Oct lastSun 1:00 1:00
-2951,7200,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Beirut GMT+2:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
-2963,18000,2,-1,1,150,w,9,-1,1,150,w,60 # Asia/Bishkek GMT+5:00 Mar lastSun 2:30 Oct lastSun 2:30 1:00
-3002,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Chungking GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3041,7200,3,1,0,0,w,9,1,0,0,w,60 # Asia/Damascus GMT+2:00 Apr 1 0:00 Oct 1 0:00 1:00
-3090,7200,3,15,-6,0,w,9,15,-6,0,w,60 # Asia/Gaza GMT+2:00 Apr Fri>=15 0:00 Oct Fri>=15 0:00 1:00
-3100,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Harbin GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3112,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Hong_Kong GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3127,28800,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Irkutsk GMT+8:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3167,7200,3,1,-6,120,w,8,3,0,120,w,60 # Asia/Jerusalem GMT+2:00 Apr Fri>=1 2:00 Sep 3 2:00 1:00
-3193,43200,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Kamchatka GMT+12:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3221,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Kashgar GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3248,25200,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Krasnoyarsk GMT+7:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3308,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Macao GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3319,39600,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Magadan GMT+11:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3332,28800,2,22,0,0,w,8,21,0,0,w,60 # Asia/Manila GMT+8:00 Mar 22 0:00 Sep 21 0:00 1:00
-3356,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Asia/Nicosia GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-3369,21600,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Novosibirsk GMT+6:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3386,21600,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Omsk GMT+6:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3532,32400,4,-14,-1,0,w,9,-14,-1,0,w,60 # Asia/Seoul GMT+9:00 May Sun<=14 0:00 Oct Sun<=14 0:00 1:00
-3543,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Shanghai GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3572,28800,5,30,0,0,w,8,30,0,0,w,60 # Asia/Taipei GMT+8:00 Jun 30 0:00 Sep 30 0:00 1:00
-3598,14400,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Tbilisi GMT+4:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
-3611,12600,2,20,0,0,w,8,23,0,0,w,60 # Asia/Tehran GMT+3:30 Mar 20 0:00 Sep 23 0:00 1:00
-3665,28800,2,-1,1,0,w,8,-1,1,0,w,60 # Asia/Ulan_Bator GMT+8:00 Mar lastSun 0:00 Sep lastSun 0:00 1:00
-3681,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Urumqi GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
-3708,36000,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Vladivostok GMT+10:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3725,32400,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Yakutsk GMT+9:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3738,18000,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Yekaterinburg GMT+5:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3757,14400,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Yerevan GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-3770,-3600,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Azores GMT-1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-3786,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # Atlantic/Bermuda GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-3803,0,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Canary GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-3839,0,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Faeroe GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-3874,0,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Madeira GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-3952,-14400,8,8,-1,0,w,3,16,-1,0,w,60 # Atlantic/Stanley GMT-4:00 Sep Sun>=8 0:00 Apr Sun>=16 0:00 1:00
-3969,34200,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Adelaide GMT+9:30 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
-3988,36000,9,-1,1,120,s,2,1,-1,120,s,60 # Australia/Brisbane GMT+10:00 Oct lastSun 2:00s Mar Sun>=1 2:00s 1:00
-4007,34200,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Broken_Hill GMT+9:30 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
-4029,34200,9,3,0,120,w,2,-1,1,120,w,60 # Australia/Darwin GMT+9:30 Oct 3 2:00 Mar lastSun 2:00 1:00
-4046,36000,9,1,-1,120,s,2,-1,1,120,s,60 # Australia/Hobart GMT+10:00 Oct Sun>=1 2:00s Mar lastSun 2:00s 1:00
-4063,36000,9,-1,1,120,s,2,1,-1,120,s,60 # Australia/Lindeman GMT+10:00 Oct lastSun 2:00s Mar Sun>=1 2:00s 1:00
-4082,37800,9,-1,1,120,s,2,-1,1,120,s,30 # Australia/Lord_Howe GMT+10:30 Oct lastSun 2:00s Mar lastSun 2:00s 0:30
-4102,36000,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Melbourne GMT+10:00 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
-4138,36000,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Sydney GMT+10:00 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
-4155,3600,2,-1,1,120,s,9,-1,1,120,s,60 # CET GMT+1:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-4159,7200,2,-1,1,60,u,9,-1,1,60,u,60 # EET GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4455,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Amsterdam GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4472,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Andorra GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4487,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Athens GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4501,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Belfast GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4516,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Belgrade GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4532,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Berlin GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4546,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Brussels GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4562,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Bucharest GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4579,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Budapest GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4595,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Chisinau GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4611,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Copenhagen GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4629,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Dublin GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4643,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Gibraltar GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4660,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Helsinki GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4676,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Istanbul GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4692,7200,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Kaliningrad GMT+2:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-4711,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Kiev GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4723,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Lisbon GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4737,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/London GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4751,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Luxembourg GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4769,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Madrid GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4783,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Malta GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4796,7200,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Minsk GMT+2:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-4809,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Monaco GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4823,10800,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Moscow GMT+3:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-4837,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Oslo GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4849,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Paris GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4862,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Prague GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4876,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Riga GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4888,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Rome GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4900,14400,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Samara GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-4914,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Simferopol GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4932,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Sofia GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4945,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Stockholm GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4977,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Tirane GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-4991,10800,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Tiraspol GMT+3:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-5007,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Uzhgorod GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5023,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Vaduz GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5036,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Vienna GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5050,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Vilnius GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5065,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Warsaw GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5079,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Zaporozhye GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5097,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Zurich GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5281,3600,2,-1,1,120,s,9,-1,1,120,s,60 # MET GMT+1:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-5298,43200,9,1,-1,120,s,2,15,-1,120,s,60 # Pacific/Auckland GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
-5315,45900,9,1,-1,165,s,2,15,-1,165,s,60 # Pacific/Chatham GMT+12:45 Oct Sun>=1 2:45s Mar Sun>=15 2:45s 1:00
-5331,-21600,9,9,-1,0,w,3,4,0,0,w,60 # Pacific/Easter GMT-6:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
-5346,39600,9,23,-1,0,w,0,23,-1,0,w,60 # Pacific/Efate GMT+11:00 Oct Sun>=23 0:00 Jan Sun>=23 0:00 1:00
-5394,43200,10,1,-1,120,w,1,-1,1,180,w,60 # Pacific/Fiji GMT+12:00 Nov Sun>=1 2:00 Feb lastSun 3:00 1:00
-5668,39600,11,1,0,120,s,2,2,0,120,s,60 # Pacific/Noumea GMT+11:00 Dec 1 2:00s Mar 2 2:00s 1:00
-5768,-36000,9,-1,1,0,w,2,1,-1,0,w,30 # Pacific/Rarotonga GMT-10:00 Oct lastSun 0:00 Mar Sun>=1 0:00 0:30
-5831,46800,9,1,-7,120,s,3,16,-1,120,s,60 # Pacific/Tongatapu GMT+13:00 Oct Sat>=1 2:00s Apr Sun>=16 2:00s 1:00
-5902,0,2,-1,1,60,u,9,-1,1,60,u,60 # WET GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+194 # count of dst zones to follow
+0,34200,9,3,0,120,w,2,-1,1,120,w,60 # ACT GMT+9:30 Oct 3 2:00 Mar lastSun 2:00 1:00
+4,36000,9,-1,1,120,s,2,-1,1,120,s,60 # AET GMT+10:00 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
+8,-10800,9,15,-1,0,w,2,1,-1,0,w,60 # AGT GMT-3:00 Oct Sun>=15 0:00 Mar Sun>=1 0:00 1:00
+12,7200,3,-1,6,0,s,8,-1,5,1380,s,60 # ART GMT+2:00 Apr lastFri 0:00s Sep lastThu 23:00s 1:00
+16,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # AST GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+35,0,8,1,0,0,w,11,31,0,0,w,20 # Africa/Accra GMT+0:00 Sep 1 0:00 Dec 31 0:00 0:20
+204,7200,3,-1,6,0,s,8,-1,5,1380,s,60 # Africa/Cairo GMT+2:00 Apr lastFri 0:00s Sep lastThu 23:00s 1:00
+235,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Africa/Ceuta GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+343,0,5,1,0,0,w,8,1,0,0,w,60 # Africa/Freetown GMT+0:00 Jun 1 0:00 Sep 1 0:00 1:00
+389,7200,8,15,-1,120,w,2,15,-1,120,w,60 # Africa/Johannesburg GMT+2:00 Sep Sun>=15 2:00 Mar Sun>=15 2:00 1:00
+424,7200,3,-1,1,0,w,9,15,0,0,w,60 # Africa/Khartoum GMT+2:00 Apr lastSun 0:00 Oct 15 0:00 1:00
+796,3600,4,1,0,0,s,8,-1,1,0,s,60 # Africa/Tunis GMT+1:00 May 1 0:00s Sep lastSun 0:00s 1:00
+809,3600,8,1,-1,120,w,3,1,-1,120,w,60 # Africa/Windhoek GMT+1:00 Sep Sun>=1 2:00 Apr Sun>=1 2:00 1:00
+825,-36000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Adak GMT-10:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+838,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Anchorage GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+889,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Araguaina GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+921,-14400,9,1,-1,0,w,1,-1,1,0,w,60 # America/Asuncion GMT-4:00 Oct Sun>=1 0:00 Feb lastSun 0:00 1:00
+938,-14400,3,15,-1,120,w,8,25,0,120,w,60 # America/Barbados GMT-4:00 Apr Sun>=15 2:00 Sep 25 2:00 1:00
+969,-21600,11,18,0,0,w,1,12,0,0,w,60 # America/Belize GMT-6:00 Dec 18 0:00 Feb 12 0:00 1:00
+984,-14400,9,1,-1,0,w,1,21,0,0,w,60 # America/Boa_Vista GMT-4:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+1002,-18000,4,2,0,0,w,11,31,0,0,w,60 # America/Bogota GMT-5:00 May 2 0:00 Dec 31 0:00 1:00
+1017,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Boise GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1031,-10800,9,15,-1,0,w,2,1,-1,0,w,60 # America/Buenos_Aires GMT-3:00 Oct Sun>=15 0:00 Mar Sun>=1 0:00 1:00
+1052,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Cambridge_Bay GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1074,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Cancun GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1154,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Chicago GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1170,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Chihuahua GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1204,-21600,0,15,-7,0,w,2,15,0,0,w,60 # America/Costa_Rica GMT-6:00 Jan Sat>=15 0:00 Mar 15 0:00 1:00
+1223,-14400,9,1,-1,0,w,1,21,0,0,w,60 # America/Cuiaba GMT-4:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+1254,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Dawson GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1290,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Denver GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1305,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Detroit GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1338,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Edmonton GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1355,-21600,4,1,-1,0,w,8,-1,1,0,w,60 # America/El_Salvador GMT-6:00 May Sun>=1 0:00 Sep lastSun 0:00 1:00
+1375,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Fortaleza GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+1393,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Glace_Bay GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1411,-10800,2,-1,1,60,u,9,-1,1,60,u,60 # America/Godthab GMT-3:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+1427,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Goose_Bay GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1445,-18000,3,1,-1,0,w,9,-1,1,0,w,60 # America/Grand_Turk GMT-5:00 Apr Sun>=1 0:00 Oct lastSun 0:00 1:00
+1499,-21600,2,23,0,0,w,8,7,0,0,w,60 # America/Guatemala GMT-6:00 Mar 23 0:00 Sep 7 0:00 1:00
+1550,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Halifax GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1566,-18000,3,1,0,0,s,9,-1,1,0,s,60 # America/Havana GMT-5:00 Apr 1 0:00s Oct lastSun 0:00s 1:00
+1669,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Inuvik GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1684,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Iqaluit GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1730,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Juneau GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1760,-18000,0,1,0,0,w,3,1,0,0,w,60 # America/Lima GMT-5:00 Jan 1 0:00 Apr 1 0:00 1:00
+1773,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Los_Angeles GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1793,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Louisville GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1812,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Maceio GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+1877,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Mazatlan GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1910,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Menominee GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1928,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Mexico_City GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1948,-10800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Miquelon GMT-3:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+1965,-10800,9,18,0,0,w,1,28,0,0,w,60 # America/Montevideo GMT-3:00 Oct 18 0:00 Feb 28 0:00 1:00
+1984,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Montreal GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2020,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Nassau GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2035,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/New_York GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2052,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Nipigon GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2068,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Nome GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2112,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Pangnirtung GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2167,-18000,3,1,-1,60,s,9,-1,1,60,s,60 # America/Port-au-Prince GMT-5:00 Apr Sun>=1 1:00s Oct lastSun 1:00s 1:00
+2271,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Rainy_River GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2291,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Rankin_Inlet GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2343,-14400,9,9,-1,0,w,3,4,0,0,w,60 # America/Santiago GMT-4:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
+2382,-10800,9,1,-1,0,w,1,21,0,0,w,60 # America/Sao_Paulo GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+2400,-3600,2,-1,1,60,u,9,-1,1,60,u,60 # America/Scoresbysund GMT-1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+2421,-12600,3,1,-1,120,w,9,-1,1,120,w,60 # America/St_Johns GMT-3:30 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2531,-21600,4,1,-1,0,w,8,-1,1,0,w,60 # America/Tegucigalpa GMT-6:00 May Sun>=1 0:00 Sep lastSun 0:00 1:00
+2551,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Thule GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2565,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # America/Thunder_Bay GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2585,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Tijuana GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2617,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Vancouver GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2635,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # America/Whitehorse GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2654,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # America/Winnipeg GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2671,-32400,3,1,-1,120,w,9,-1,1,120,w,60 # America/Yakutat GMT-9:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2687,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # America/Yellowknife GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+2785,43200,9,1,-1,120,s,2,15,-1,120,s,60 # Antarctica/McMurdo GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
+2804,-14400,9,9,-1,0,w,3,4,0,0,w,60 # Antarctica/Palmer GMT-4:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
+2849,21600,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Almaty GMT+6:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
+2861,7200,3,1,0,0,w,9,1,0,0,w,60 # Asia/Amman GMT+2:00 Apr 1 0:00 Oct 1 0:00 1:00
+2872,43200,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Anadyr GMT+12:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+2884,14400,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Aqtau GMT+4:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
+2895,18000,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Aqtobe GMT+5:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
+2922,10800,3,1,0,180,s,9,1,0,180,s,60 # Asia/Baghdad GMT+3:00 Apr 1 3:00s Oct 1 3:00s 1:00
+2948,14400,2,-1,1,60,w,9,-1,1,60,w,60 # Asia/Baku GMT+4:00 Mar lastSun 1:00 Oct lastSun 1:00 1:00
+2971,7200,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Beirut GMT+2:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
+2983,18000,2,-1,1,150,w,9,-1,1,150,w,60 # Asia/Bishkek GMT+5:00 Mar lastSun 2:30 Oct lastSun 2:30 1:00
+3022,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Chungking GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3061,7200,3,1,0,0,w,9,1,0,0,w,60 # Asia/Damascus GMT+2:00 Apr 1 0:00 Oct 1 0:00 1:00
+3110,7200,3,15,-6,0,w,9,15,-6,0,w,60 # Asia/Gaza GMT+2:00 Apr Fri>=15 0:00 Oct Fri>=15 0:00 1:00
+3120,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Harbin GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3132,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Hong_Kong GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3147,28800,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Irkutsk GMT+8:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3187,7200,3,1,-6,120,w,8,3,0,120,w,60 # Asia/Jerusalem GMT+2:00 Apr Fri>=1 2:00 Sep 3 2:00 1:00
+3213,43200,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Kamchatka GMT+12:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3241,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Kashgar GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3268,25200,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Krasnoyarsk GMT+7:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3328,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Macao GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3339,39600,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Magadan GMT+11:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3352,28800,2,22,0,0,w,8,21,0,0,w,60 # Asia/Manila GMT+8:00 Mar 22 0:00 Sep 21 0:00 1:00
+3376,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Asia/Nicosia GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+3389,21600,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Novosibirsk GMT+6:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3406,21600,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Omsk GMT+6:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3552,32400,4,-14,-1,0,w,9,-14,-1,0,w,60 # Asia/Seoul GMT+9:00 May Sun<=14 0:00 Oct Sun<=14 0:00 1:00
+3563,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Shanghai GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3592,28800,5,30,0,0,w,8,30,0,0,w,60 # Asia/Taipei GMT+8:00 Jun 30 0:00 Sep 30 0:00 1:00
+3618,14400,2,-1,1,0,w,9,-1,1,0,w,60 # Asia/Tbilisi GMT+4:00 Mar lastSun 0:00 Oct lastSun 0:00 1:00
+3631,12600,2,20,0,0,w,8,23,0,0,w,60 # Asia/Tehran GMT+3:30 Mar 20 0:00 Sep 23 0:00 1:00
+3685,28800,2,-1,1,0,w,8,-1,1,0,w,60 # Asia/Ulan_Bator GMT+8:00 Mar lastSun 0:00 Sep lastSun 0:00 1:00
+3701,28800,3,10,-1,0,w,8,11,-1,0,w,60 # Asia/Urumqi GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+3728,36000,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Vladivostok GMT+10:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3745,32400,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Yakutsk GMT+9:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3758,18000,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Yekaterinburg GMT+5:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3777,14400,2,-1,1,120,s,9,-1,1,120,s,60 # Asia/Yerevan GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+3790,-3600,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Azores GMT-1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+3806,-14400,3,1,-1,120,w,9,-1,1,120,w,60 # Atlantic/Bermuda GMT-4:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+3823,0,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Canary GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+3859,0,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Faeroe GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+3894,0,2,-1,1,60,u,9,-1,1,60,u,60 # Atlantic/Madeira GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+3972,-14400,8,8,-1,0,w,3,16,-1,0,w,60 # Atlantic/Stanley GMT-4:00 Sep Sun>=8 0:00 Apr Sun>=16 0:00 1:00
+3989,34200,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Adelaide GMT+9:30 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
+4008,36000,9,-1,1,120,s,2,1,-1,120,s,60 # Australia/Brisbane GMT+10:00 Oct lastSun 2:00s Mar Sun>=1 2:00s 1:00
+4027,34200,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Broken_Hill GMT+9:30 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
+4049,34200,9,3,0,120,w,2,-1,1,120,w,60 # Australia/Darwin GMT+9:30 Oct 3 2:00 Mar lastSun 2:00 1:00
+4066,36000,9,1,-1,120,s,2,-1,1,120,s,60 # Australia/Hobart GMT+10:00 Oct Sun>=1 2:00s Mar lastSun 2:00s 1:00
+4083,36000,9,-1,1,120,s,2,1,-1,120,s,60 # Australia/Lindeman GMT+10:00 Oct lastSun 2:00s Mar Sun>=1 2:00s 1:00
+4102,37800,9,-1,1,120,s,2,-1,1,120,s,30 # Australia/Lord_Howe GMT+10:30 Oct lastSun 2:00s Mar lastSun 2:00s 0:30
+4122,36000,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Melbourne GMT+10:00 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
+4158,36000,9,-1,1,120,s,2,-1,1,120,s,60 # Australia/Sydney GMT+10:00 Oct lastSun 2:00s Mar lastSun 2:00s 1:00
+4175,-10800,9,1,-1,0,w,1,21,0,0,w,60 # BET GMT-3:00 Oct Sun>=1 0:00 Feb 21 0:00 1:00
+4187,3600,2,-1,1,120,s,9,-1,1,120,s,60 # CET GMT+1:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+4191,-12600,3,1,-1,120,w,9,-1,1,120,w,60 # CNT GMT-3:30 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+4195,-21600,3,1,-1,120,w,9,-1,1,120,w,60 # CST GMT-6:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+4199,28800,3,10,-1,0,w,8,11,-1,0,w,60 # CTT GMT+8:00 Apr Sun>=10 0:00 Sep Sun>=11 0:00 1:00
+4207,3600,2,-1,1,60,u,9,-1,1,60,u,60 # ECT GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4211,7200,2,-1,1,60,u,9,-1,1,60,u,60 # EET GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4215,-18000,3,1,-1,120,w,9,-1,1,120,w,60 # EST GMT-5:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+4511,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Amsterdam GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4528,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Andorra GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4543,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Athens GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4557,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Belfast GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4572,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Belgrade GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4588,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Berlin GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4602,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Brussels GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4618,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Bucharest GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4635,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Budapest GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4651,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Chisinau GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4667,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Copenhagen GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4685,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Dublin GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4699,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Gibraltar GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4716,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Helsinki GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4732,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Istanbul GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4748,7200,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Kaliningrad GMT+2:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+4767,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Kiev GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4779,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Lisbon GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4793,0,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/London GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4807,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Luxembourg GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4825,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Madrid GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4839,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Malta GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4852,7200,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Minsk GMT+2:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+4865,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Monaco GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4879,10800,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Moscow GMT+3:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+4893,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Oslo GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4905,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Paris GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4918,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Prague GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4932,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Riga GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4944,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Rome GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4956,14400,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Samara GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+4970,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Simferopol GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+4988,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Sofia GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5001,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Stockholm GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5033,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Tirane GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5047,10800,2,-1,1,120,s,9,-1,1,120,s,60 # Europe/Tiraspol GMT+3:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+5063,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Uzhgorod GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5079,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Vaduz GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5092,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Vienna GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5106,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Vilnius GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5121,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Warsaw GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5135,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Zaporozhye GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5153,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Zurich GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5353,3600,2,-1,1,120,s,9,-1,1,120,s,60 # MET GMT+1:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+5361,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # MST GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+5365,14400,2,-1,1,120,s,9,-1,1,120,s,60 # NET GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+5369,43200,9,1,-1,120,s,2,15,-1,120,s,60 # NST GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
+5385,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # PST GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+5402,43200,9,1,-1,120,s,2,15,-1,120,s,60 # Pacific/Auckland GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
+5419,45900,9,1,-1,165,s,2,15,-1,165,s,60 # Pacific/Chatham GMT+12:45 Oct Sun>=1 2:45s Mar Sun>=15 2:45s 1:00
+5435,-21600,9,9,-1,0,w,3,4,0,0,w,60 # Pacific/Easter GMT-6:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
+5450,39600,9,23,-1,0,w,0,23,-1,0,w,60 # Pacific/Efate GMT+11:00 Oct Sun>=23 0:00 Jan Sun>=23 0:00 1:00
+5498,43200,10,1,-1,120,w,1,-1,1,180,w,60 # Pacific/Fiji GMT+12:00 Nov Sun>=1 2:00 Feb lastSun 3:00 1:00
+5772,39600,11,1,0,120,s,2,2,0,120,s,60 # Pacific/Noumea GMT+11:00 Dec 1 2:00s Mar 2 2:00s 1:00
+5872,-36000,9,-1,1,0,w,2,1,-1,0,w,30 # Pacific/Rarotonga GMT-10:00 Oct lastSun 0:00 Mar Sun>=1 0:00 0:30
+5935,46800,9,1,-7,120,s,3,16,-1,120,s,60 # Pacific/Tongatapu GMT+13:00 Oct Sat>=1 2:00s Apr Sun>=16 2:00s 1:00
+6018,0,2,-1,1,60,u,9,-1,1,60,u,60 # WET GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
 end
-387 # count of names to follow
+416 # count of names to follow
+ACT
+AET
+AGT
+ART
+AST
 Africa/Abidjan
 Africa/Accra
 Africa/Addis_Ababa
@@ -654,8 +690,17 @@ Australia/Lord_Howe
 Australia/Melbourne
 Australia/Perth
 Australia/Sydney
+BET
+BST
+CAT
 CET
+CNT
+CST
+CTT
+EAT
+ECT
 EET
+EST
 Etc/GMT
 Etc/GMT+1
 Etc/GMT+10
@@ -729,6 +774,9 @@ Europe/Vilnius
 Europe/Warsaw
 Europe/Zaporozhye
 Europe/Zurich
+HST
+IET
+IST
 Indian/Antananarivo
 Indian/Chagos
 Indian/Christmas
@@ -740,7 +788,16 @@ Indian/Maldives
 Indian/Mauritius
 Indian/Mayotte
 Indian/Reunion
+JST
 MET
+MIT
+MST
+NET
+NST
+PLT
+PNT
+PRT
+PST
 Pacific/Apia
 Pacific/Auckland
 Pacific/Chatham
@@ -780,5 +837,467 @@ Pacific/Truk
 Pacific/Wake
 Pacific/Wallis
 Pacific/Yap
+SST
+UTC
+VST
 WET
+end
+416 # count of name index table entries to follow
+d0 # ACT
+d1 # AET
+d2 # AGT
+d3 # ART
+d4 # AST
+s0 # Africa/Abidjan
+d5 # Africa/Accra
+s1 # Africa/Addis_Ababa
+s2 # Africa/Algiers
+s3 # Africa/Asmera
+s4 # Africa/Bamako
+s5 # Africa/Bangui
+s6 # Africa/Banjul
+s7 # Africa/Bissau
+s8 # Africa/Blantyre
+s9 # Africa/Brazzaville
+s10 # Africa/Bujumbura
+d6 # Africa/Cairo
+s11 # Africa/Casablanca
+d7 # Africa/Ceuta
+s12 # Africa/Conakry
+s13 # Africa/Dakar
+s14 # Africa/Dar_es_Salaam
+s15 # Africa/Djibouti
+s16 # Africa/Douala
+s17 # Africa/El_Aaiun
+d8 # Africa/Freetown
+s18 # Africa/Gaborone
+s19 # Africa/Harare
+d9 # Africa/Johannesburg
+s20 # Africa/Kampala
+d10 # Africa/Khartoum
+s21 # Africa/Kigali
+s22 # Africa/Kinshasa
+s23 # Africa/Lagos
+s24 # Africa/Libreville
+s25 # Africa/Lome
+s26 # Africa/Luanda
+s27 # Africa/Lubumbashi
+s28 # Africa/Lusaka
+s29 # Africa/Malabo
+s30 # Africa/Maputo
+s31 # Africa/Maseru
+s32 # Africa/Mbabane
+s33 # Africa/Mogadishu
+s34 # Africa/Monrovia
+s35 # Africa/Nairobi
+s36 # Africa/Ndjamena
+s37 # Africa/Niamey
+s38 # Africa/Nouakchott
+s39 # Africa/Ouagadougou
+s40 # Africa/Porto-Novo
+s41 # Africa/Sao_Tome
+s42 # Africa/Timbuktu
+s43 # Africa/Tripoli
+d11 # Africa/Tunis
+d12 # Africa/Windhoek
+d13 # America/Adak
+d14 # America/Anchorage
+s44 # America/Anguilla
+s45 # America/Antigua
+d15 # America/Araguaina
+s46 # America/Aruba
+d16 # America/Asuncion
+d17 # America/Barbados
+s47 # America/Belem
+d18 # America/Belize
+d19 # America/Boa_Vista
+d20 # America/Bogota
+d21 # America/Boise
+d22 # America/Buenos_Aires
+d23 # America/Cambridge_Bay
+d24 # America/Cancun
+s48 # America/Caracas
+s49 # America/Catamarca
+s50 # America/Cayenne
+s51 # America/Cayman
+d25 # America/Chicago
+d26 # America/Chihuahua
+s52 # America/Cordoba
+d27 # America/Costa_Rica
+d28 # America/Cuiaba
+s53 # America/Curacao
+d29 # America/Dawson
+s54 # America/Dawson_Creek
+d30 # America/Denver
+d31 # America/Detroit
+s55 # America/Dominica
+d32 # America/Edmonton
+d33 # America/El_Salvador
+d34 # America/Fortaleza
+d35 # America/Glace_Bay
+d36 # America/Godthab
+d37 # America/Goose_Bay
+d38 # America/Grand_Turk
+s56 # America/Grenada
+s57 # America/Guadeloupe
+d39 # America/Guatemala
+s58 # America/Guayaquil
+s59 # America/Guyana
+d40 # America/Halifax
+d41 # America/Havana
+s60 # America/Indiana/Knox
+s61 # America/Indiana/Marengo
+s62 # America/Indiana/Vevay
+s63 # America/Indianapolis
+d42 # America/Inuvik
+d43 # America/Iqaluit
+s64 # America/Jamaica
+s65 # America/Jujuy
+d44 # America/Juneau
+s66 # America/La_Paz
+d45 # America/Lima
+d46 # America/Los_Angeles
+d47 # America/Louisville
+d48 # America/Maceio
+s67 # America/Managua
+s68 # America/Manaus
+s69 # America/Martinique
+d49 # America/Mazatlan
+s70 # America/Mendoza
+d50 # America/Menominee
+d51 # America/Mexico_City
+d52 # America/Miquelon
+d53 # America/Montevideo
+d54 # America/Montreal
+s71 # America/Montserrat
+d55 # America/Nassau
+d56 # America/New_York
+d57 # America/Nipigon
+d58 # America/Nome
+s72 # America/Noronha
+s73 # America/Panama
+d59 # America/Pangnirtung
+s74 # America/Paramaribo
+s75 # America/Phoenix
+d60 # America/Port-au-Prince
+s76 # America/Port_of_Spain
+s77 # America/Porto_Acre
+s78 # America/Porto_Velho
+s79 # America/Puerto_Rico
+d61 # America/Rainy_River
+d62 # America/Rankin_Inlet
+s80 # America/Regina
+s81 # America/Rosario
+d63 # America/Santiago
+s82 # America/Santo_Domingo
+d64 # America/Sao_Paulo
+d65 # America/Scoresbysund
+d66 # America/St_Johns
+s83 # America/St_Kitts
+s84 # America/St_Lucia
+s85 # America/St_Thomas
+s86 # America/St_Vincent
+s87 # America/Swift_Current
+d67 # America/Tegucigalpa
+d68 # America/Thule
+d69 # America/Thunder_Bay
+d70 # America/Tijuana
+s88 # America/Tortola
+d71 # America/Vancouver
+d72 # America/Whitehorse
+d73 # America/Winnipeg
+d74 # America/Yakutat
+d75 # America/Yellowknife
+s89 # Antarctica/Casey
+s90 # Antarctica/Davis
+s91 # Antarctica/DumontDUrville
+s92 # Antarctica/Mawson
+d76 # Antarctica/McMurdo
+d77 # Antarctica/Palmer
+s93 # Antarctica/Syowa
+s94 # Asia/Aden
+d78 # Asia/Almaty
+d79 # Asia/Amman
+d80 # Asia/Anadyr
+d81 # Asia/Aqtau
+d82 # Asia/Aqtobe
+s95 # Asia/Ashkhabad
+d83 # Asia/Baghdad
+s96 # Asia/Bahrain
+d84 # Asia/Baku
+s97 # Asia/Bangkok
+d85 # Asia/Beirut
+d86 # Asia/Bishkek
+s98 # Asia/Brunei
+s99 # Asia/Calcutta
+d87 # Asia/Chungking
+s100 # Asia/Colombo
+s101 # Asia/Dacca
+d88 # Asia/Damascus
+s102 # Asia/Dili
+s103 # Asia/Dubai
+s104 # Asia/Dushanbe
+d89 # Asia/Gaza
+d90 # Asia/Harbin
+d91 # Asia/Hong_Kong
+d92 # Asia/Irkutsk
+s105 # Asia/Jakarta
+s106 # Asia/Jayapura
+d93 # Asia/Jerusalem
+s107 # Asia/Kabul
+d94 # Asia/Kamchatka
+s108 # Asia/Karachi
+d95 # Asia/Kashgar
+s109 # Asia/Katmandu
+d96 # Asia/Krasnoyarsk
+s110 # Asia/Kuala_Lumpur
+s111 # Asia/Kuching
+s112 # Asia/Kuwait
+d97 # Asia/Macao
+d98 # Asia/Magadan
+d99 # Asia/Manila
+s113 # Asia/Muscat
+d100 # Asia/Nicosia
+d101 # Asia/Novosibirsk
+d102 # Asia/Omsk
+s114 # Asia/Phnom_Penh
+s115 # Asia/Pyongyang
+s116 # Asia/Qatar
+s117 # Asia/Rangoon
+s118 # Asia/Riyadh
+s119 # Asia/Riyadh87
+s120 # Asia/Riyadh88
+s121 # Asia/Riyadh89
+s122 # Asia/Saigon
+s123 # Asia/Samarkand
+d103 # Asia/Seoul
+d104 # Asia/Shanghai
+s124 # Asia/Singapore
+d105 # Asia/Taipei
+s125 # Asia/Tashkent
+d106 # Asia/Tbilisi
+d107 # Asia/Tehran
+s126 # Asia/Thimbu
+s127 # Asia/Tokyo
+s128 # Asia/Ujung_Pandang
+d108 # Asia/Ulan_Bator
+d109 # Asia/Urumqi
+s129 # Asia/Vientiane
+d110 # Asia/Vladivostok
+d111 # Asia/Yakutsk
+d112 # Asia/Yekaterinburg
+d113 # Asia/Yerevan
+d114 # Atlantic/Azores
+d115 # Atlantic/Bermuda
+d116 # Atlantic/Canary
+s130 # Atlantic/Cape_Verde
+d117 # Atlantic/Faeroe
+s131 # Atlantic/Jan_Mayen
+d118 # Atlantic/Madeira
+s132 # Atlantic/Reykjavik
+s133 # Atlantic/South_Georgia
+s134 # Atlantic/St_Helena
+d119 # Atlantic/Stanley
+d120 # Australia/Adelaide
+d121 # Australia/Brisbane
+d122 # Australia/Broken_Hill
+d123 # Australia/Darwin
+d124 # Australia/Hobart
+d125 # Australia/Lindeman
+d126 # Australia/Lord_Howe
+d127 # Australia/Melbourne
+s135 # Australia/Perth
+d128 # Australia/Sydney
+d129 # BET
+s136 # BST
+s137 # CAT
+d130 # CET
+d131 # CNT
+d132 # CST
+d133 # CTT
+s138 # EAT
+d134 # ECT
+d135 # EET
+d136 # EST
+s139 # Etc/GMT
+s140 # Etc/GMT+1
+s141 # Etc/GMT+10
+s142 # Etc/GMT+11
+s143 # Etc/GMT+12
+s144 # Etc/GMT+2
+s145 # Etc/GMT+3
+s146 # Etc/GMT+4
+s147 # Etc/GMT+5
+s148 # Etc/GMT+6
+s149 # Etc/GMT+7
+s150 # Etc/GMT+8
+s151 # Etc/GMT+9
+s152 # Etc/GMT-1
+s153 # Etc/GMT-10
+s154 # Etc/GMT-11
+s155 # Etc/GMT-12
+s156 # Etc/GMT-13
+s157 # Etc/GMT-14
+s158 # Etc/GMT-2
+s159 # Etc/GMT-3
+s160 # Etc/GMT-4
+s161 # Etc/GMT-5
+s162 # Etc/GMT-6
+s163 # Etc/GMT-7
+s164 # Etc/GMT-8
+s165 # Etc/GMT-9
+s166 # Etc/UCT
+s167 # Etc/UTC
+d137 # Europe/Amsterdam
+d138 # Europe/Andorra
+d139 # Europe/Athens
+d140 # Europe/Belfast
+d141 # Europe/Belgrade
+d142 # Europe/Berlin
+d143 # Europe/Brussels
+d144 # Europe/Bucharest
+d145 # Europe/Budapest
+d146 # Europe/Chisinau
+d147 # Europe/Copenhagen
+d148 # Europe/Dublin
+d149 # Europe/Gibraltar
+d150 # Europe/Helsinki
+d151 # Europe/Istanbul
+d152 # Europe/Kaliningrad
+d153 # Europe/Kiev
+d154 # Europe/Lisbon
+d155 # Europe/London
+d156 # Europe/Luxembourg
+d157 # Europe/Madrid
+d158 # Europe/Malta
+d159 # Europe/Minsk
+d160 # Europe/Monaco
+d161 # Europe/Moscow
+d162 # Europe/Oslo
+d163 # Europe/Paris
+d164 # Europe/Prague
+d165 # Europe/Riga
+d166 # Europe/Rome
+d167 # Europe/Samara
+d168 # Europe/Simferopol
+d169 # Europe/Sofia
+d170 # Europe/Stockholm
+s168 # Europe/Tallinn
+d171 # Europe/Tirane
+d172 # Europe/Tiraspol
+d173 # Europe/Uzhgorod
+d174 # Europe/Vaduz
+d175 # Europe/Vienna
+d176 # Europe/Vilnius
+d177 # Europe/Warsaw
+d178 # Europe/Zaporozhye
+d179 # Europe/Zurich
+s169 # HST
+s170 # IET
+s171 # IST
+s172 # Indian/Antananarivo
+s173 # Indian/Chagos
+s174 # Indian/Christmas
+s175 # Indian/Cocos
+s176 # Indian/Comoro
+s177 # Indian/Kerguelen
+s178 # Indian/Mahe
+s179 # Indian/Maldives
+s180 # Indian/Mauritius
+s181 # Indian/Mayotte
+s182 # Indian/Reunion
+s183 # JST
+d180 # MET
+s184 # MIT
+d181 # MST
+d182 # NET
+d183 # NST
+s185 # PLT
+s186 # PNT
+s187 # PRT
+d184 # PST
+s188 # Pacific/Apia
+d185 # Pacific/Auckland
+d186 # Pacific/Chatham
+d187 # Pacific/Easter
+d188 # Pacific/Efate
+s189 # Pacific/Enderbury
+s190 # Pacific/Fakaofo
+d189 # Pacific/Fiji
+s191 # Pacific/Funafuti
+s192 # Pacific/Galapagos
+s193 # Pacific/Gambier
+s194 # Pacific/Guadalcanal
+s195 # Pacific/Guam
+s196 # Pacific/Honolulu
+s197 # Pacific/Johnston
+s198 # Pacific/Kiritimati
+s199 # Pacific/Kosrae
+s200 # Pacific/Kwajalein
+s201 # Pacific/Majuro
+s202 # Pacific/Marquesas
+s203 # Pacific/Midway
+s204 # Pacific/Nauru
+s205 # Pacific/Niue
+s206 # Pacific/Norfolk
+d190 # Pacific/Noumea
+s207 # Pacific/Pago_Pago
+s208 # Pacific/Palau
+s209 # Pacific/Pitcairn
+s210 # Pacific/Ponape
+s211 # Pacific/Port_Moresby
+d191 # Pacific/Rarotonga
+s212 # Pacific/Saipan
+s213 # Pacific/Tahiti
+s214 # Pacific/Tarawa
+d192 # Pacific/Tongatapu
+s215 # Pacific/Truk
+s216 # Pacific/Wake
+s217 # Pacific/Wallis
+s218 # Pacific/Yap
+s219 # SST
+s220 # UTC
+s221 # VST
+d193 # WET
+end
+39 # index by offset entries to follow
+-43200,1,280
+-39600,6,279,365,373,393,395,398
+-36000,8,57,278,349,379,386,387,403,405
+-34200,1,392
+-32400,7,4,58,110,130,163,288,383
+-28800,8,83,113,158,160,161,287,372,400
+-25200,12,69,78,84,85,88,106,119,135,164,286,366,370
+-21600,22,66,71,72,77,80,89,97,107,116,121,122,133,141,142,143,154,155,162,270,285,376,382
+-18000,24,68,76,86,94,98,101,102,103,104,105,108,112,114,125,127,128,129,132,136,138,157,275,284,350
+-14400,36,59,60,62,63,64,67,73,81,82,87,91,93,95,96,99,100,111,117,118,126,137,139,140,145,146,150,151,152,153,156,159,170,245,254,283,371
+-12600,2,149,269
+-10800,19,2,61,65,70,74,75,79,90,92,109,115,120,123,124,134,144,147,265,282
+-7200,3,131,252,281
+-3600,5,148,244,247,249,277
+0,30,5,6,10,12,13,18,20,21,25,26,36,45,49,50,52,53,246,248,250,251,253,276,303,304,308,316,322,323,413,415
+3600,41,8,11,15,19,24,33,34,35,37,40,47,48,51,55,56,268,273,289,305,306,309,310,311,313,315,317,324,325,326,328,330,331,332,334,338,340,343,344,346,348,364
+7200,39,3,14,16,17,27,28,29,31,32,38,39,41,42,43,54,174,183,190,194,200,214,267,274,295,307,312,314,318,319,320,321,327,333,336,337,339,342,345,347
+10800,21,7,9,22,23,30,44,46,171,172,179,180,209,219,221,272,296,329,341,352,356,361
+11224,3,222,223,224
+12600,1,233
+14400,12,176,181,192,213,232,243,297,335,358,360,362,367
+16200,1,201
+18000,13,177,178,184,193,203,226,231,242,298,353,357,359,369
+19800,2,186,351
+20700,1,205
+21600,9,168,173,188,189,215,216,234,266,299
+23400,2,220,355
+25200,10,166,182,198,206,217,225,239,300,354,414
+28800,21,165,185,187,191,195,196,197,204,207,208,210,212,228,229,230,236,237,238,263,271,301
+32400,8,199,218,227,235,241,302,363,399
+34200,4,0,255,257,258
+36000,14,1,167,240,256,259,260,262,264,290,385,402,404,408,411
+37800,1,261
+39600,8,211,291,377,384,389,397,401,412
+41400,1,396
+43200,14,169,175,202,292,368,374,380,381,390,391,394,406,409,410
+45900,1,375
+46800,3,293,378,407
+50400,2,294,388
 end
