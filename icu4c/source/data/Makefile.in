@@ -59,7 +59,7 @@ check check-local check-recursive build-testdlls build-basetestdata build-local
 
 ## List of standard targets
 all: all-local
-install: all-local 
+install: all-local install-local 
 clean: clean-local
 distclean : distclean-local
 dist: 
@@ -100,7 +100,7 @@ cleanpackage:
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
-	$(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_BASENAME_VERSION) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_BASENAME_VERSION) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
 install-convrtrstxt: $(UCMSRCDIR)/convrtrs.txt
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
