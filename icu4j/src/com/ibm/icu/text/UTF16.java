@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2001/07/25 20:41:33 $ 
-* $Revision: 1.4 $
+* $Date: 2001/07/25 20:49:30 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -155,9 +155,10 @@ public final class UTF16
   * @param source array of UTF-16 chars
   * @param offset16 UTF-16 offset to the start of the character.
   * @return UTF-32 value for the UTF-32 value that contains the char at 
-  *         offset16, otherwise -1 if there's an error.
-  *         The boundaries of that codepoint are the same as in 
+  *         offset16. The boundaries of that codepoint are the same as in 
   *         <code>bounds32()</code>. 
+  * @exception StringIndexOutOfBoundsException thrown if offset16 is
+  *                   out of bounds.
   */
   public static int charAt(String source, int offset16) 
   {
@@ -210,7 +211,8 @@ public final class UTF16
   *         <code>bounds32()</code>. 
   * @param source array of UTF-16 chars
   * @param offset32 UTF-32 offset to the start of the character.
-  * @return a single UTF32 value, otherwise -1 if there's an error
+  * @return a single UTF32 value
+  * @exception StringIndexOutOfBoundsException if offset16 is out of bounds.
   */
   public static int charAtCodePointOffset(String source, int offset32) 
   {
