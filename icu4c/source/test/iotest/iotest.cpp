@@ -372,6 +372,20 @@ int main(int argc, char* argv[])
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);
 
+#if 1
+    {
+        FILE* fileToRemove = fopen(STANDARD_TEST_FILE, "r");
+        /* This should delete any temporary files. */
+        if (fileToRemove) {
+            fclose(fileToRemove);
+            if (remove(STANDARD_TEST_FILE) != 0) {
+                /* Maybe someone didn't close the file correctly. */
+                fprintf(stderr, "FAIL: Could not delete %s\n", STANDARD_TEST_FILE);
+            }
+        }
+    }
+#endif
+
     cleanUpTestTree(root);
     u_cleanup();
     return nerrors;
