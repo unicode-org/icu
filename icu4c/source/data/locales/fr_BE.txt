@@ -23,6 +23,10 @@ fr_BE {
         "d/MM/yy",
         "{1} {0}",
     }
+    DateTimeElements {
+        "2",
+        "1",
+    }
     LocaleID { "080c" }
 //    LocaleString { "fr_BE" }
     NumberElements { 
