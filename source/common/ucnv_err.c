@@ -227,7 +227,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
   ucnv_setFromUCallBack (&myConverter,
 			 (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP,
              NULL,  /* To Do for HSYS: context is null? */
-             original,
+             &original,
              NULL,
 			 &err2);
   if (U_FAILURE (err2))

@@ -406,7 +406,7 @@ UConverterFromUCallback  ucnv_getFromUCallBack (const UConverter * converter)
 void   ucnv_setToUCallBack (UConverter * converter,
 					UConverterToUCallback newAction,
 					void* newContext,
-					UConverterToUCallback oldAction,
+					UConverterToUCallback *oldAction,
 					void** oldContext,
 					UErrorCode * err)
 {
@@ -414,25 +414,25 @@ void   ucnv_setToUCallBack (UConverter * converter,
 
   if (U_FAILURE (*err))
     return;
-  oldAction = converter->fromCharErrorBehaviour;
+  oldAction = &converter->fromCharErrorBehaviour;
   converter->fromCharErrorBehaviour = newAction;
-  oldContext = converter->toUContext;
+  oldContext = &converter->toUContext;
   converter->toUContext = newContext;
 }
 
 void   ucnv_setFromUCallBack (UConverter * converter,
 					UConverterFromUCallback newAction,
 					void* newContext,
-					UConverterFromUCallback oldAction,
+					UConverterFromUCallback *oldAction,
 					void** oldContext,
 					UErrorCode * err)
 {
   
   if (U_FAILURE (*err))
     return;
-  oldAction = converter->fromUCharErrorBehaviour;
+  oldAction = &converter->fromUCharErrorBehaviour;
   converter->fromUCharErrorBehaviour = newAction;
-  oldContext = converter->fromUContext;
+  oldContext = &converter->fromUContext;
   converter->fromUContext = newContext;
 }
 void   ucnv_fromUnicode (UConverter * _this,

@@ -455,7 +455,7 @@ U_CAPI void U_EXPORT2
     ucnv_setToUCallBack (UConverter * converter,
 			 UConverterToUCallback newAction,
 			 void* newContext,
-             UConverterToUCallback oldAction,
+             UConverterToUCallback *oldAction,
 			 void** oldContext,
 			 UErrorCode * err);
 
@@ -475,7 +475,7 @@ U_CAPI void U_EXPORT2
     ucnv_setFromUCallBack (UConverter * converter,
 			   UConverterFromUCallback newAction,
 			   void *newContext,
-			   UConverterFromUCallback oldAction,
+			   UConverterFromUCallback *oldAction,
                void **oldContext,
 			   UErrorCode * err);
 
