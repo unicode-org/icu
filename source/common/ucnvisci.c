@@ -1154,7 +1154,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     
     data = (UConverterDataISCII*)(args->converter->extraInfo);
     contextCharToUnicode = &data->contextCharToUnicode; /* contains previous ISCII codepoint visited */
-    toUnicodeStatus = &args->converter->toUnicodeStatus;/* contains the mapping to Unicode of the above codepoint*/
+    toUnicodeStatus = (UChar32*)&args->converter->toUnicodeStatus;/* contains the mapping to Unicode of the above codepoint*/
 
     while(source< args->sourceLimit){
 
