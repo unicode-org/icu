@@ -266,8 +266,10 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
     if(U_FAILURE(status)) {
       return NULL; 
     } else {
-      UnicodeString *ret = new UnicodeString("@calendar=","");
-      (*ret) += UnicodeString(keyword, "");
+      UnicodeString *ret = new UnicodeString();
+      ret->append((UChar)0x40); // '@' is a variant character
+      ret->append(UNICODE_STRING("calendar=", 9));
+      (*ret) += UnicodeString(keyword, -1, US_INV);
       return ret;
     }
   }
