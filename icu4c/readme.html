@@ -898,7 +898,7 @@ under OS/400.
    <LI> Change Makefile.in's (under source/tools) that have
    LIBICU-TOOLUTIL so that it follows the other LIBICU variables on
    the link line:
-   <TT>$(LIBICU-UC)&nbsp;$(LIBICU-TOOLUTIL)&nbsp;@LIBS@&nbsp;@LIB_M</TT>
+   <TT>$(LIBICU-UC)&nbsp;$(LIBICU-TOOLUTIL)&nbsp;@LIBS@&nbsp;@LIB_M@</TT>
    <LI> The 'clean' and 'install' targets will not function correctly
    unless <TT>rm -rf</TT> is replaced by <B>$(RMV)</B>, and in the
    library installation targets (install-library) change
