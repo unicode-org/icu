@@ -86,7 +86,7 @@ void reportCResult( const UChar source[], const UChar target[],
     if (incResult != expectedResult)
     {
         
-        appendCompareResult(compareResult, sResult);
+        appendCompareResult(incResult, sResult);
         appendCompareResult(expectedResult, sExpect);
         log_err("incCompare(%s , %s) returned: %s expected: %s\n", austrdup(source), austrdup(target),
             austrdup(sResult), austrdup(sExpect) );
