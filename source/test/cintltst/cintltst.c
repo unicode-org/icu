@@ -40,7 +40,7 @@ U_CFUNC void ctst_freeAll(void);
 U_CFUNC void ctst_init(void);
 #endif
 
-static char* _testDirectory=NULL;
+static char* _testDataPath=NULL;
 
 /*
  *  Forward Declarations
@@ -181,29 +181,6 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
     }
 }
 
-const char*
-ctest_getTestDirectory()
-{
-    if (_testDirectory == NULL)
-    {
-        /* always relative to icu/source/data/.. */
-        ctest_setTestDirectory("test|testdata|");
-    }
-    return _testDirectory;
-}
-
-void
-ctest_setTestDirectory(const char* newDir)
-{
-    char newTestDir[256];
-    ctest_pathnameInContext(newTestDir, (int32_t)sizeof(newTestDir), newDir);
-    if(_testDirectory != NULL)
-        free(_testDirectory);
-    _testDirectory = (char*) ctst_malloc(sizeof(char*) * (strlen(newTestDir) + 1));
-    strcpy(_testDirectory, newTestDir);
-}
-
-
 
 /*  ctest_setICU_DATA  - if the ICU_DATA environment variable is not already
  *                       set, try to deduce the directory in which ICU was built,
@@ -312,57 +289,56 @@ char *aescstrdup(const UChar* unichars){
     return newString;
 }
 
-void loadTestData(char* testdatapath,int32_t len, UErrorCode* err ){
+const char* loadTestData(UErrorCode* err){
     const char*      directory=NULL;
     UResourceBundle* test =NULL;
-    char tdpath[256];
+    char* tdpath=NULL;
     const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    char tdpathFallback[256];
+    if( _testDataPath == NULL){
+        directory= u_getDataDirectory();
+    
+        tdpath = (char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
 
-    directory= u_getDataDirectory();
-    strcpy(tdpath, directory);
-    strcpy(tdpathFallback,directory);
-    
-    if(len < 256){
-        *err = U_BUFFER_OVERFLOW_ERROR;
-        return ;
-    }
 
-    /* u_getDataDirectory shoul return \source\data ... set the
-     * directory to ..\source\data\..\test\testdata\out\testdata
-     *
-     * Fallback: When Memory mapped file is built
-     * ..\source\data\out\..\..\test\testdata\out\testdata
-     */
-    strcat(tdpath, tdrelativepath);
-    strcat(tdpath,"testdata");
+        /* u_getDataDirectory shoul return \source\data ... set the
+         * directory to ..\source\data\..\test\testdata\out\testdata
+         *
+         * Fallback: When Memory mapped file is built
+         * ..\source\data\out\..\..\test\testdata\out\testdata
+         */
+        strcpy(tdpath, directory);
+        strcat(tdpath, tdrelativepath);
+        strcat(tdpath,"testdata");
+
     
-    strcat(tdpathFallback,".."U_FILE_SEP_STRING);
-    strcat(tdpathFallback, tdrelativepath);
-    strcat(tdpathFallback,"testdata");
+        test=ures_open(tdpath, "testtypes", err);
     
-    test=ures_open(tdpath, "testtypes", err);
-    
-    /* we could not find the data in tdpath 
-     * try tdpathFallback
-     */
-    if(U_FAILURE(*err))
-    {
-        testdatapath=tdpathFallback;
-        *err =U_ZERO_ERROR;
-        test=ures_open(testdatapath, "ja_data", err);
-        /* Fall back did not succeed either so return */
-        if(U_FAILURE(*err)){
-            *err = U_FILE_ACCESS_ERROR;
-            log_err("construction of NULL did not succeed  :  %s \n", myErrorName(*err));
-            return;
+        /* we could not find the data in tdpath 
+         * try tdpathFallback
+         */
+        if(U_FAILURE(*err))
+        {
+            strcpy(tdpath,directory);
+            strcat(tdpath,".."U_FILE_SEP_STRING);
+            strcat(tdpath, tdrelativepath);
+            strcat(tdpath,"testdata");
+            *err =U_ZERO_ERROR;
+            test=ures_open(tdpath, "ja_data", err);
+            /* Fall back did not succeed either so return */
+            if(U_FAILURE(*err)){
+                *err = U_FILE_ACCESS_ERROR;
+                log_err("construction of NULL did not succeed  :  %s \n", u_errorName(*err));
+                return "";
+            }
+            ures_close(test);
+            _testDataPath = tdpath;
+            return _testDataPath;
         }
         ures_close(test);
-        strcpy(testdatapath,tdpathFallback);
-        return;
+        _testDataPath = tdpath;
+        return _testDataPath;
     }
-    ures_close(test);
-    strcpy(testdatapath,tdpath);
+    return _testDataPath;
 }
 
 #define CTST_MAX_ALLOC 10000
@@ -401,6 +377,6 @@ void ctst_freeAll() {
             free(ctst_allocated_stuff[i]);
         }
     }
-    _testDirectory=NULL;
+    _testDataPath=NULL;
 }
 #endif

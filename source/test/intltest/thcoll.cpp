@@ -104,10 +104,19 @@ void CollationThaiTest::TestDictionary(void) {
         errln("Error: could not construct Thai collator");
         return;
     }
-
+ 
     // Read in a dictionary of Thai words
+    UErrorCode status = U_ZERO_ERROR;
     char buffer[1024];
-    uprv_strcpy(buffer, IntlTest::getTestDirectory());
+    uprv_strcpy(buffer,IntlTest::loadTestData(status) );
+    char* index = 0;
+   
+    index=strrchr(buffer,(char)U_FILE_SEP_CHAR);
+
+    if((unsigned int)(index-buffer) != (strlen(buffer)-1)){
+            *(index+1)=0;
+    }
+    uprv_strcat(buffer,".."U_FILE_SEP_STRING);
     uprv_strcat(buffer, TEST_FILE);
 
     FileStream *in = T_FileStream_open(buffer, "rb");
