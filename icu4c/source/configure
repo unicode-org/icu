@@ -12,7 +12,7 @@ ac_help=
 ac_default_prefix=/usr/local
 # Any additions from configure.in:
 ac_help="$ac_help
-  --enable-strict         compile with strict compiler options [default=yes]"
+  --enable-strict         compile with strict compiler options [default=no]"
 ac_help="$ac_help
   --enable-hpuxcma        build ICU with HPUX CMA threads (only ver>=11) [default=no]"
 ac_help="$ac_help
@@ -1066,18 +1066,18 @@ if test "${enable_strict+set}" = set; then
   
     	if test "$enableval" = no
     	then
-	    yc_use_strict_options=no
+	    ac_use_strict_options=no
         else
-	    yc_use_strict_options=yes
+	    ac_use_strict_options=yes
         fi
       
 else
-  yc_use_strict_options=yes
+  ac_use_strict_options=yes
 fi
 
-    echo "$ac_t""$yc_use_strict_options" 1>&6
+    echo "$ac_t""$ac_use_strict_options" 1>&6
 
-    if test "$yc_use_strict_options" = yes
+    if test "$ac_use_strict_options" = yes
     then
         if test "$GCC" = yes
         then

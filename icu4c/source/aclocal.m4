@@ -76,17 +76,17 @@ dnl Strict compilation options.
 AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [
     AC_MSG_CHECKING([whether strict compiling is on])
-    AC_ARG_ENABLE(strict,[  --enable-strict         compile with strict compiler options [default=yes]], [
+    AC_ARG_ENABLE(strict,[  --enable-strict         compile with strict compiler options [default=no]], [
     	if test "$enableval" = no
     	then
-	    yc_use_strict_options=no
+	    ac_use_strict_options=no
         else
-	    yc_use_strict_options=yes
+	    ac_use_strict_options=yes
         fi
-      ], [yc_use_strict_options=yes])
-    AC_MSG_RESULT($yc_use_strict_options)
+      ], [ac_use_strict_options=yes])
+    AC_MSG_RESULT($ac_use_strict_options)
 
-    if test "$yc_use_strict_options" = yes
+    if test "$ac_use_strict_options" = yes
     then
         if test "$GCC" = yes
         then
