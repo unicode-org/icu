@@ -39,8 +39,13 @@
 .B uconv
 converts its input from one given
 .I encoding
-to another. It can also run the transcoding to a specified
-.IR transliterator .
+to another. The transcoding is done using Unicode as a pivot encoding
+(e.g. the data are first transcoded from their orifinal encoding to
+Unicode, and then from Unicode to the destination encoding).
+It can also run the transcoding to a specified
+.IR transliterator ,
+in which case transliteration will happen as an intermediate step,
+after the data have been transcoded to Unicode.
 .SH OPTIONS
 .TP
 .BR \-h\fP, \fB\-?\fP, \fB\-\-help
@@ -71,8 +76,10 @@ the list of encodings is produced in a format compatible with
 .BR convrtrs.txt (5).
 .TP
 .BI "\-x" " transliterator"
-Run the transcoding through the given
-.IR transliterator .
+Run the transcoded Unicode data through the given
+.IR transliterator 
+and use the transliterated data as input for the transcoding to
+the the destination encoding.
 .TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
