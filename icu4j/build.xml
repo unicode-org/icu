@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/14 01:15:08 $ 
-* $Revision: 1.8 $
+* $Date: 2000/04/14 22:59:53 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -17,10 +17,14 @@
 <project name="ICU4J" default="core" basedir=".">
 
   <target name="init">
+    <tstamp/>
     <property name="src.dir" value="src"/>
     <property name="doc.dir" value="doc"/>
     <property name="build.dir" value="classes"/>
+    <property name="obsolete.dir" value="build"/>
     <property name="jar.file" value="icu4j.jar"/>
+    <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
+    <property name="zipsrc.file" value="../icu4jsrc${DSTAMP}.zip"/>
     <property name="classpath" value="${build.dir}"/>
     <property name="build.compiler" value="classic"/>
   </target>
@@ -83,9 +87,27 @@
   </target>
 
   <target name="jar" depends="core">
-     <jar jarfile="${jar.file}"
-          includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*"
-          basedir="${build.dir}"/>
+    <jar jarfile="${jar.file}"
+         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*"
+         basedir="${build.dir}"/>
+  </target>
+
+  <target name="zip" depends="docs,jar">
+    <!--Create a zip archive of the source, docs, and jar file for
+    distribution.  The zip file will be created in the directory above
+    the root ICU4J directory.-->
+    <zip zipfile="${zip.file}"
+         basedir="."
+         excludes="${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+  </target>
+
+  <target name="zipsrc">
+    <!--Create a zip archive of just the source for distribution.  The
+    zip file will be created in the directory above the root ICU4J
+    directory.-->
+    <zip zipfile="${zipsrc.file}"
+         basedir="."
+         excludes="${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,${doc.dir}/**,${jar.file},**/CVS/**/*"/>
   </target>
 
   <target name="clean">
