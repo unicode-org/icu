@@ -24,7 +24,7 @@ TESTTARGET = letest
 GENTARGET  = gendata
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(includedir) -I$(includedir)/layout 
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/layout -I$(top_srcdir)
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
