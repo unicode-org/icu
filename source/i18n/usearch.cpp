@@ -2414,39 +2414,29 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedText(const UStringSearch *strsrch,
                                             int32_t        resultCapacity, 
                                             UErrorCode    *status)
 {
-    if (strsrch == NULL) {
+    if (status == NULL || U_FAILURE(*status)) {
+        return USEARCH_DONE;
+    }
+    if (strsrch == NULL || resultCapacity < 0 || (resultCapacity > 0 && result == NULL)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return USEARCH_DONE;
     }
 
-    if (result == NULL || resultCapacity == 0) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
+    int32_t     copylength = strsrch->search->matchedLength;
+    UTextOffset copyindex  = strsrch->search->matchedIndex;
+    if (copyindex == USEARCH_DONE) {
+        u_terminateUChars(result, resultCapacity, 0, status);
+        return USEARCH_DONE;
     }
-    else {
-        int32_t     copylength = strsrch->search->matchedLength;
-        UTextOffset copyindex  = strsrch->search->matchedIndex;
-        if (copyindex == USEARCH_DONE) {
-            result[0] = 0;
-            return USEARCH_DONE;
-        }
 
-        if (resultCapacity < copylength) {
-            copylength = resultCapacity;
-            *status = U_BUFFER_OVERFLOW_ERROR;
-        }
-        else if (resultCapacity == copylength) {
-            *status = U_STRING_NOT_TERMINATED_WARNING;
-        }
-        else if (resultCapacity > copylength) {
-            result[copylength] = 0;
-        }
-      
-        if (copylength > 0) {
-            uprv_memcpy(result, strsrch->search->text + copyindex, 
-                        copylength * sizeof(UChar));
-        }
+    if (resultCapacity < copylength) {
+        copylength = resultCapacity;
     }
-    return strsrch->search->matchedLength;
+    if (copylength > 0) {
+        uprv_memcpy(result, strsrch->search->text + copyindex, 
+                    copylength * sizeof(UChar));
+    }
+    return u_terminateUChars(result, resultCapacity, strsrch->search->matchedLength, status);
 }
     
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
