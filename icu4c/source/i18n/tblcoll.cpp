@@ -829,6 +829,8 @@ RuleBasedCollator::constructFromBundle(const char* name,
 	status = U_MISSING_RESOURCE_ERROR;
 	return 0;
       }
+    } else {
+        return 0;
     }
 }
 
