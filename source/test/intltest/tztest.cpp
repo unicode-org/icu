@@ -1014,6 +1014,10 @@ void TimeZoneTest::TestCountries() {
     UnicodeString tokyoZone("Asia/Tokyo", "");
     int32_t i;
 
+    if (s == NULL || n <= 0) {
+        errln("FAIL: TimeZone::createAvailableIDs() returned nothing");
+        return;
+    }
     for (i=0; i<n; ++i) {
         if (*s[i] == (laZone)) {
             la = TRUE;
