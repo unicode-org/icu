@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002, International Business Machines Corporation and    *
+ * Copyright (C) 2002, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/11/15 21:04:19 $ 
- * $Revision: 1.25 $
+ * $Date: 2002/11/21 01:39:07 $ 
+ * $Revision: 1.26 $
  *
  *******************************************************************************
  */
@@ -45,10 +45,10 @@ import com.ibm.icu.impl.Utility;
  * </p>
  *
  * To a user of your program, however, both of these sequences should be
- * treated as the same "user-level" character "A with acute accent".  When you are searching or
- * comparing text, you must ensure that these two sequences are treated 
- * equivalently.  In addition, you must handle characters with more than one
- * accent.  Sometimes the order of a character's combining accents is
+ * treated as the same "user-level" character "A with acute accent".  When you 
+ * are searching or comparing text, you must ensure that these two sequences are 
+ * treated equivalently.  In addition, you must handle characters with more than
+ * one accent.  Sometimes the order of a character's combining accents is
  * significant, while in other cases accent sequences in different orders are
  * really equivalent.
  *
@@ -73,45 +73,48 @@ import com.ibm.icu.impl.Utility;
  * into the corresponding semantic characters.  When sorting and searching, you
  * will often want to use these mappings.
  *
- * <code>normalize</code> helps solve these problems by transforming text into the
- * canonical composed and decomposed forms as shown in the first example above.  
- * In addition, you can have it perform compatibility decompositions so that 
- * you can treat compatibility characters the same as their equivalents.
+ * <code>normalize</code> helps solve these problems by transforming text into 
+ * the canonical composed and decomposed forms as shown in the first example 
+ * above. In addition, you can have it perform compatibility decompositions so 
+ * that you can treat compatibility characters the same as their equivalents.
  * Finally, <code>normalize</code> rearranges accents into the proper canonical
  * order, so that you do not have to worry about accent rearrangement on your
  * own.
  *
  * Form FCD, "Fast C or D", is also designed for collation.
  * It allows to work on strings that are not necessarily normalized
- * with an algorithm (like in collation) that works under "canonical closure", i.e., it treats precomposed
- * characters and their decomposed equivalents the same.
+ * with an algorithm (like in collation) that works under "canonical closure", 
+ * i.e., it treats precomposed characters and their decomposed equivalents the 
+ * same.
  *
- * It is not a normalization form because it does not provide for uniqueness of representation. Multiple strings
- * may be canonically equivalent (their NFDs are identical) and may all conform to FCD without being identical
- * themselves.
+ * It is not a normalization form because it does not provide for uniqueness of 
+ * representation. Multiple strings may be canonically equivalent (their NFDs 
+ * are identical) and may all conform to FCD without being identical themselves.
  *
- * The form is defined such that the "raw decomposition", the recursive canonical decomposition of each character,
- * results in a string that is canonically ordered. This means that precomposed characters are allowed for as long
- * as their decompositions do not need canonical reordering.
+ * The form is defined such that the "raw decomposition", the recursive 
+ * canonical decomposition of each character, results in a string that is 
+ * canonically ordered. This means that precomposed characters are allowed for 
+ * as long as their decompositions do not need canonical reordering.
  *
- * Its advantage for a process like collation is that all NFD and most NFC texts - and many unnormalized texts -
- * already conform to FCD and do not need to be normalized (NFD) for such a process. The FCD quick check will
- * return YES for most strings in practice.
+ * Its advantage for a process like collation is that all NFD and most NFC texts
+ * - and many unnormalized texts - already conform to FCD and do not need to be 
+ * normalized (NFD) for such a process. The FCD quick check will return YES for 
+ * most strings in practice.
  *
  * normalize(FCD) may be implemented with NFD.
  *
  * For more details on FCD see the collation design document:
  * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
  *
- * ICU collation performs either NFD or FCD normalization automatically if normalization
- * is turned on for the collator object.
- * Beyond collation and string search, normalized strings may be useful for string equivalence comparisons,
- * transliteration/transcription, unique representations, etc.
+ * ICU collation performs either NFD or FCD normalization automatically if 
+ * normalization is turned on for the collator object. Beyond collation and 
+ * string search, normalized strings may be useful for string equivalence 
+ * comparisons, transliteration/transcription, unique representations, etc.
  *
  * The W3C generally recommends to exchange texts in NFC.
- * Note also that most legacy character encodings use only precomposed forms and often do not
- * encode any combining marks by themselves. For conversion to such character encodings the
- * Unicode text needs to be normalized to NFC.
+ * Note also that most legacy character encodings use only precomposed forms and
+ * often do not encode any combining marks by themselves. For conversion to such
+ * character encodings the Unicode text needs to be normalized to NFC.
  * For more usage examples, see the Unicode Standard Annex.
  */
 
@@ -196,209 +199,239 @@ public final class Normalizer implements Cloneable{
     public static final Mode NONE = new Mode(1);
 
     /** Canonical decomposition.  */
-    public static final Mode NFD = new Mode(2){
-            protected int normalize( char[] src, int srcStart, int srcLimit,
-                          char[] dest,int destStart,int destLimit){
-              return decompose(src,  srcStart,srcLimit,
-                               dest, destStart,destLimit,
-                               false);
-            }
-            
-            protected String normalize( String src){
-                return decompose(src,false);
-            }
-            protected int getMinC(){
-                return NormalizerImpl.MIN_WITH_LEAD_CC;
-            }
-            protected IsPrevBoundary getPrevBoundary(){
-                return new IsPrevNFDSafe();
-            }
-            protected IsNextBoundary getNextBoundary(){
-                return new IsNextNFDSafe();
-            }
-            protected int getMask(){
-                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD);
-            }
-            protected QuickCheckResult quickCheck(char[] src,int start, 
-                                                  int limit,boolean allowMaybe){
-                return NormalizerImpl.quickCheck(
-                                      src, start,limit,
-                                      NormalizerImpl.getFromIndexesArr(
-                                           NormalizerImpl.INDEX_MIN_NFD_NO_MAYBE
-                                      ),
-                                      NormalizerImpl.QC_NFD,
-                                      allowMaybe
-                                 );
-            }
-            protected boolean isNFSkippable(int c){
-                return NormalizerImpl.isNFSkippable(c,this,
-                                (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD)
-                       );
-            }           
-         };
+    public static final Mode NFD = new NFDMode(2);
+    
+    private static final class NFDMode extends Mode{
+        private NFDMode(int value){
+            super(value);
+        }
+        protected int normalize( char[] src, int srcStart, int srcLimit,
+                      char[] dest,int destStart,int destLimit){
+          return decompose(src,  srcStart,srcLimit,
+                           dest, destStart,destLimit,
+                           false);
+        }
+        
+        protected String normalize( String src){
+            return decompose(src,false);
+        }
+        protected int getMinC(){
+            return NormalizerImpl.MIN_WITH_LEAD_CC;
+        }
+        protected IsPrevBoundary getPrevBoundary(){
+            return new IsPrevNFDSafe();
+        }
+        protected IsNextBoundary getNextBoundary(){
+            return new IsNextNFDSafe();
+        }
+        protected int getMask(){
+            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD);
+        }
+        protected QuickCheckResult quickCheck(char[] src,int start, 
+                                              int limit,boolean allowMaybe){
+            return NormalizerImpl.quickCheck(
+                                  src, start,limit,
+                                  NormalizerImpl.getFromIndexesArr(
+                                       NormalizerImpl.INDEX_MIN_NFD_NO_MAYBE
+                                  ),
+                                  NormalizerImpl.QC_NFD,
+                                  allowMaybe
+                             );
+        }
+        protected boolean isNFSkippable(int c){
+            return NormalizerImpl.isNFSkippable(c,this,
+                                  (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD)
+                   );
+        }           
+    };
                                          
     /** Compatibility decomposition.  */
-    public static final Mode NFKD = new Mode(3){
-            protected int normalize( char[] src, int srcStart, int srcLimit,
-                           char[] dest,int destStart,int destLimit){
-              return decompose(src,  srcStart,srcLimit,
-                               dest, destStart,destLimit,
-                               true);
-            }
-            protected String normalize( String src){
-                return decompose(src,true);
-            }
-            protected int getMinC(){
-                return NormalizerImpl.MIN_WITH_LEAD_CC;
-            }
-            protected IsPrevBoundary getPrevBoundary(){
-                return new IsPrevNFDSafe();
-            }
-            protected IsNextBoundary getNextBoundary(){
-                return new IsNextNFDSafe();
-            }
-            protected int getMask(){
-                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD);
-            }
-            protected QuickCheckResult quickCheck(char[] src,int start, 
-                                                  int limit,boolean allowMaybe){
-                return NormalizerImpl.quickCheck(
-                                      src,start,limit,
-                                      NormalizerImpl.getFromIndexesArr(
-                                          NormalizerImpl.INDEX_MIN_NFKD_NO_MAYBE
-                                      ),
-                                      NormalizerImpl.QC_NFKD,
-                                      allowMaybe
-                                );
-            }
-            protected boolean isNFSkippable(int c){
-                return NormalizerImpl.isNFSkippable(c, this,
-                                (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD)
-                       );
-            }                                         
-         };
+    public static final Mode NFKD = new NFKDMode(3);
+    
+    private static final class NFKDMode extends Mode{
+        private NFKDMode(int value){
+            super(value);
+        }
+        protected int normalize( char[] src, int srcStart, int srcLimit,
+                       char[] dest,int destStart,int destLimit){
+          return decompose(src,  srcStart,srcLimit,
+                           dest, destStart,destLimit,
+                           true);
+        }
+        protected String normalize( String src){
+            return decompose(src,true);
+        }
+        protected int getMinC(){
+            return NormalizerImpl.MIN_WITH_LEAD_CC;
+        }
+        protected IsPrevBoundary getPrevBoundary(){
+            return new IsPrevNFDSafe();
+        }
+        protected IsNextBoundary getNextBoundary(){
+            return new IsNextNFDSafe();
+        }
+        protected int getMask(){
+            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD);
+        }
+        protected QuickCheckResult quickCheck(char[] src,int start, 
+                                              int limit,boolean allowMaybe){
+            return NormalizerImpl.quickCheck(
+                                  src,start,limit,
+                                  NormalizerImpl.getFromIndexesArr(
+                                      NormalizerImpl.INDEX_MIN_NFKD_NO_MAYBE
+                                  ),
+                                  NormalizerImpl.QC_NFKD,
+                                  allowMaybe
+                            );
+        }
+        protected boolean isNFSkippable(int c){
+            return NormalizerImpl.isNFSkippable(c, this,
+                            (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD)
+                   );
+        }                                         
+    };
                                          
     /** Canonical decomposition followed by canonical composition.  */
-    public static final Mode NFC = new Mode(4){
-            protected int normalize( char[] src, int srcStart, int srcLimit,
-                          char[] dest,int destStart,int destLimit){
-              return compose(src,  srcStart,srcLimit,
-                             dest, destStart,destLimit,
-                             false);
-            }
-            
-            protected String normalize( String src){
-                return compose(src,false);
-            }
-           
-            protected int getMinC(){
-                return NormalizerImpl.getFromIndexesArr(
-                                        NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
-                                    );
-            }
-            protected IsPrevBoundary getPrevBoundary(){
-                return new IsPrevTrueStarter();
-            }
-            protected IsNextBoundary getNextBoundary(){
-                return new IsNextTrueStarter();
-            }
-            protected int getMask(){
-                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFC);
-            }
-            protected QuickCheckResult quickCheck(char[] src,int start, 
-                                                  int limit,boolean allowMaybe){
-                return NormalizerImpl.quickCheck(
-                                       src,start,limit,
-                                       NormalizerImpl.getFromIndexesArr(
-                                           NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
-                                       ),
-                                       NormalizerImpl.QC_NFC,
-                                       allowMaybe
-                                   );
-            }
-            protected boolean isNFSkippable(int c){
-                return NormalizerImpl.isNFSkippable(c,this,
-                                (NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|(NormalizerImpl.QC_NFC & NormalizerImpl.QC_ANY_NO))
-                       );
-            } 
-         };
+    public static final Mode NFC = new NFCMode(4);
+    
+    private static final class NFCMode extends Mode{
+        private NFCMode(int value){
+            super(value);
+        }
+        protected int normalize( char[] src, int srcStart, int srcLimit,
+                      char[] dest,int destStart,int destLimit){
+          return compose(src,  srcStart,srcLimit,
+                         dest, destStart,destLimit,
+                         false);
+        }
+        
+        protected String normalize( String src){
+            return compose(src,false);
+        }
+       
+        protected int getMinC(){
+            return NormalizerImpl.getFromIndexesArr(
+                                    NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
+                                );
+        }
+        protected IsPrevBoundary getPrevBoundary(){
+            return new IsPrevTrueStarter();
+        }
+        protected IsNextBoundary getNextBoundary(){
+            return new IsNextTrueStarter();
+        }
+        protected int getMask(){
+            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFC);
+        }
+        protected QuickCheckResult quickCheck(char[] src,int start, 
+                                              int limit,boolean allowMaybe){
+            return NormalizerImpl.quickCheck(
+                                   src,start,limit,
+                                   NormalizerImpl.getFromIndexesArr(
+                                       NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
+                                   ),
+                                   NormalizerImpl.QC_NFC,
+                                   allowMaybe
+                               );
+        }
+        protected boolean isNFSkippable(int c){
+            return NormalizerImpl.isNFSkippable(c,this,
+                           ( NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|
+                             (NormalizerImpl.QC_NFC & NormalizerImpl.QC_ANY_NO)
+                           )
+                   );
+        } 
+    };
                                          
     /** Default normalization.  */
     public static final Mode DEFAULT = NFC; 
     
     /** Compatibility decomposition followed by canonical composition.  */
-    public static final Mode NFKC =new Mode(5){
-            protected int normalize( char[] src, int srcStart, int srcLimit,
-                          char[] dest,int destStart,int destLimit){
-              return compose(src,  srcStart,srcLimit,
-                             dest, destStart,destLimit,
-                             true);
-            }
-            protected String normalize( String src){
-                return compose(src,true);
-            }
-            protected int getMinC(){
-                return NormalizerImpl.getFromIndexesArr(
-                                        NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
-                                    );
-            }
-            protected IsPrevBoundary getPrevBoundary(){
-                return new IsPrevTrueStarter();
-            }
-            protected IsNextBoundary getNextBoundary(){
-                return new IsNextTrueStarter();
-            }
-            protected int getMask(){
-                return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKC);
-            }
-            protected QuickCheckResult quickCheck(char[] src,int start, 
-                                                  int limit,boolean allowMaybe){
-                return NormalizerImpl.quickCheck(
-                                       src,start,limit,
-                                       NormalizerImpl.getFromIndexesArr(
-                                          NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
-                                       ),
-                                       NormalizerImpl.QC_NFKC,
-                                       allowMaybe
-                                     );
-            }
-            protected boolean isNFSkippable(int c){
-                return NormalizerImpl.isNFSkippable(c, this,
-                                (NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|(NormalizerImpl.QC_NFKC & NormalizerImpl.QC_ANY_NO))
-                       );
-            } 
-         };
+    public static final Mode NFKC =new Mode(5);
+    
+    private static final class NFKCMode extends Mode{
+        private NFKCMode(int value){
+            super(value);
+        }
+        protected int normalize( char[] src, int srcStart, int srcLimit,
+                      char[] dest,int destStart,int destLimit){
+          return compose(src,  srcStart,srcLimit,
+                         dest, destStart,destLimit,
+                         true);
+        }
+        protected String normalize( String src){
+            return compose(src,true);
+        }
+        protected int getMinC(){
+            return NormalizerImpl.getFromIndexesArr(
+                                    NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
+                                );
+        }
+        protected IsPrevBoundary getPrevBoundary(){
+            return new IsPrevTrueStarter();
+        }
+        protected IsNextBoundary getNextBoundary(){
+            return new IsNextTrueStarter();
+        }
+        protected int getMask(){
+            return (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKC);
+        }
+        protected QuickCheckResult quickCheck(char[] src,int start, 
+                                              int limit,boolean allowMaybe){
+            return NormalizerImpl.quickCheck(
+                                   src,start,limit,
+                                   NormalizerImpl.getFromIndexesArr(
+                                      NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
+                                   ),
+                                   NormalizerImpl.QC_NFKC,
+                                   allowMaybe
+                                 );
+        }
+        protected boolean isNFSkippable(int c){
+            return NormalizerImpl.isNFSkippable(c, this,
+                          ( NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|
+                            (NormalizerImpl.QC_NFKC & NormalizerImpl.QC_ANY_NO)
+                          )
+                   );
+        } 
+    };
                                         
     /** "Fast C or D" form. @since ICU 2.1 */
-    public static final Mode FCD = new Mode(6){
-            protected int normalize( char[] src, int srcStart, int srcLimit,
-                          char[] dest,int destStart,int destLimit){
-              return NormalizerImpl.makeFCD(src, srcStart,srcLimit,
-                                            dest, destStart,destLimit);
-            }
-            protected String normalize( String src){
-                return makeFCD(src);
-            }
-            protected int getMinC(){
-                return NormalizerImpl.MIN_WITH_LEAD_CC;
-            }
-            protected IsPrevBoundary getPrevBoundary(){
-                return new IsPrevNFDSafe();
-            }
-            protected IsNextBoundary getNextBoundary(){
-                return new IsNextNFDSafe();
-            }
-            protected int getMask(){
-                return NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD;
-            }
-            protected QuickCheckResult quickCheck(char[] src,int start, 
-                                                  int limit,boolean allowMaybe){
-                return NormalizerImpl.checkFCD(src,start,limit) ? YES : NO;
-            }
-            protected boolean isNFSkippable(int c){
-               return (NormalizerImpl.getFCD16(c)>1);
-            }   
-         };
+    public static final Mode FCD = new FCDMode(6);
+    
+    private static final class FCDMode extends Mode{
+        private FCDMode(int value){
+            super(value);
+        }
+        protected int normalize( char[] src, int srcStart, int srcLimit,
+                      char[] dest,int destStart,int destLimit){
+          return NormalizerImpl.makeFCD(src, srcStart,srcLimit,
+                                        dest, destStart,destLimit);
+        }
+        protected String normalize( String src){
+            return makeFCD(src);
+        }
+        protected int getMinC(){
+            return NormalizerImpl.MIN_WITH_LEAD_CC;
+        }
+        protected IsPrevBoundary getPrevBoundary(){
+            return new IsPrevNFDSafe();
+        }
+        protected IsNextBoundary getNextBoundary(){
+            return new IsNextNFDSafe();
+        }
+        protected int getMask(){
+            return NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD;
+        }
+        protected QuickCheckResult quickCheck(char[] src,int start, 
+                                              int limit,boolean allowMaybe){
+            return NormalizerImpl.checkFCD(src,start,limit) ? YES : NO;
+        }
+        protected boolean isNFSkippable(int c){
+            /* FCD: skippable if lead cc==0 and trail cc<=1 */
+           return (NormalizerImpl.getFCD16(c)>1);
+        }   
+    };
 
     
     /**
@@ -419,12 +452,14 @@ public final class Normalizer implements Cloneable{
 
     /**
      * Canonical decomposition followed by canonical composition.  Used with the
-     * {@link #Normalizer constructors} and the static {@link #normalize normalize}
-     * method to determine the operation to be performed.
+     * {@link #Normalizer constructors} and the static 
+     * {@link #normalize normalize} method to determine the operation to be 
+     * performed.
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical Form</a>
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
+     * Form</a>
      * <b>C</b>.
      * <p>
      * @see #setMode
@@ -436,11 +471,13 @@ public final class Normalizer implements Cloneable{
     /**
      * Compatibility decomposition followed by canonical composition.
      * Used with the {@link #Normalizer constructors} and the static
-     * {@link #normalize normalize} method to determine the operation to be performed.
+     * {@link #normalize normalize} method to determine the operation to be 
+     * performed.
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical Form</a>
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
+     * Form</a>
      * <b>KC</b>.
      * <p>
      * @see #setMode
@@ -451,12 +488,14 @@ public final class Normalizer implements Cloneable{
 
     /**
      * Canonical decomposition.  This value is passed to the
-     * {@link #Normalizer constructors} and the static {@link #normalize normalize}
+     * {@link #Normalizer constructors} and the static
+     * {@link #normalize normalize}
      * method to determine the operation to be performed.
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical Form</a>
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
+     * Form</a>
      * <b>D</b>.
      * <p>
      * @see #setMode
@@ -467,12 +506,14 @@ public final class Normalizer implements Cloneable{
 
     /**
      * Compatibility decomposition.  This value is passed to the
-     * {@link #Normalizer constructors} and the static {@link #normalize normalize}
+     * {@link #Normalizer constructors} and the static 
+     * {@link #normalize normalize}
      * method to determine the operation to be performed.
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical Form</a>
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
+     * Form</a>
      * <b>KD</b>.
      * <p>
      * @see #setMode
@@ -596,7 +637,8 @@ public final class Normalizer implements Cloneable{
      *            Currently the only available option is {@link #IGNORE_HANGUL}.
      *            If you want the default behavior corresponding to one of the
      *            standard Unicode Normalization Forms, use 0 for this argument.
-     * @deprecated To be removed after 2003-Aug-31. Use Normalizer( String str, Mode mode).
+     * @deprecated To be removed after 2003-Aug-31. 
+     *              Use Normalizer( String str, Mode mode).
      */
     public Normalizer(String str, Mode mode, int opt) {
         this.text = UCharacterIterator.getInstance(str);
@@ -634,7 +676,8 @@ public final class Normalizer implements Cloneable{
      *            Currently the only available option is {@link #IGNORE_HANGUL}.
      *            If you want the default behavior corresponding to one of the
      *            standard Unicode Normalization Forms, use 0 for this argument.
-     * @deprecated To be removed after 2003-Aug-31. Use Normalizer(CharacterIterator iter, Mode mode).
+     * @deprecated To be removed after 2003-Aug-31. 
+     *              Use Normalizer(CharacterIterator iter, Mode mode).
      */
     public Normalizer(CharacterIterator iter, Mode mode, int opt){
         this.text = UCharacterIterator.getInstance(
@@ -726,7 +769,8 @@ public final class Normalizer implements Cloneable{
      *                    NFC rules.
      * @param options    The only recognized option is IGNORE_HANGUL
      * @return String    The composed string   
-     * @deprecated To be removed after 2003-Aug-31. Use compose(String str, boolean compat).
+     * @deprecated To be removed after 2003-Aug-31. 
+     *              Use compose(String str, boolean compat).
      */            
     public static String compose(String str, boolean compat, int options){
         return compose(str,compat);                     
@@ -793,8 +837,9 @@ public final class Normalizer implements Cloneable{
      * Decompose a string.
      * The string will be decomposed to according the the specified mode.
      * @param str       The string to decompose.
-     * @param compat    If true the string will be decomposed accoding to NFKD rules
-     *                   and if false will be decomposed according to NFD rules.
+     * @param compat    If true the string will be decomposed accoding to NFKD 
+     *                   rules and if false will be decomposed according to NFD 
+     *                   rules.
      * @return String   The decomposed string   
      */         
     public static String decompose(String str, boolean compat){
@@ -818,10 +863,12 @@ public final class Normalizer implements Cloneable{
      * Decompose a string.
      * The string will be decomposed to according the the specified mode.
      * @param str     The string to decompose.
-     * @param compat  If true the string will be decomposed accoding to NFKD rules
-     *                 and if false will be decomposed according to NFD rules.
+     * @param compat  If true the string will be decomposed accoding to NFKD 
+     *                 rules and if false will be decomposed according to NFD 
+     *                 rules.
      * @return String The decomposed string 
-     * @deprecated To be removed after 2003-Aug-31. Use decompose(String str, boolean compat).
+     * @deprecated To be removed after 2003-Aug-31. 
+     *              Use decompose(String str, boolean compat).
      */         
     public static String decompose(String str, boolean compat, int options){
         return decompose(str,compat);                 
@@ -912,7 +959,8 @@ public final class Normalizer implements Cloneable{
      * @param aMode     the normalization mode
      *
      * @param options   the optional features to be enabled.
-     * @deprecated     To be removed after 2003-Aug-31. Use normalize(String str, Mode mode).
+     * @deprecated     To be removed after 2003-Aug-31. 
+     *                  Use normalize(String str, Mode mode).
      */
     public static String normalize(String str, Mode mode, int options){
         return normalize(str,mode);
@@ -920,8 +968,8 @@ public final class Normalizer implements Cloneable{
     
     /**
      * Normalize a string.
-     * The string will be normalized according the the specified normalization mode
-     * and options.
+     * The string will be normalized according the the specified normalization 
+     * mode and options.
      * @param source     The string to normalize.
      * @param mode       The normalization mode; one of Normalizer.NONE, 
      *                    Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
@@ -934,17 +982,17 @@ public final class Normalizer implements Cloneable{
     }
     /**
      * Normalize a string.
-     * The string will be normalized according the the specified normalization mode
-     * and options.
+     * The string will be normalized according the the specified normalization 
+     * mode and options.
      * @param source The char array to normalize.
      * @param target A char buffer to receive the normalized text.
      * @param mode   The normalization mode; one of Normalizer.NONE, 
      *                Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
      *                Normalizer.NFKD, Normalizer.DEFAULT
-     * @return int   The total buffer size needed;if greater than length of result,
-     *                the output was truncated.
-     * @exception    IndexOutOfBoundsException if the target capacity is less than
-     *                the required length     
+     * @return int   The total buffer size needed;if greater than length of 
+     *                result, the output was truncated.
+     * @exception    IndexOutOfBoundsException if the target capacity is less 
+     *                than the required length     
      */
     public static int normalize(char[] source,char[] target, Mode  mode){
 		int length = normalize(source,0,source.length,target,0,target.length,mode);
@@ -957,26 +1005,27 @@ public final class Normalizer implements Cloneable{
     
     /**
      * Normalize a string.
-     * The string will be normalized according the the specified normalization mode
-     * and options.
+     * The string will be normalized according the the specified normalization
+     * mode and options.
      * @param src       The char array to compose.
      * @param srcStart  Start index of the source
      * @param srcLimit  Limit index of the source
      * @param dest      The char buffer to fill in
      * @param destStart Start index of the destination buffer  
      * @param destLimit End index of the destination buffer
-     * @param mode   The normalization mode; one of Normalizer.NONE, 
-     *               Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
-     *               Normalizer.NFKD, Normalizer.DEFAULT
-     * @return int   The total buffer size needed;if greater than length of result,
-     *               the output was truncated.
-     * @exception IndexOutOfBoundsException if the target capacity is less than
+     * @param mode      The normalization mode; one of Normalizer.NONE, 
+     *                   Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
+     *                   Normalizer.NFKD, Normalizer.DEFAULT
+     * @return int      The total buffer size needed;if greater than length of 
+     *                   result, the output was truncated.
+     * @exception       IndexOutOfBoundsException if the target capacity is 
+     *                   less than
      *             the required length     
      */       
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
                                 Mode  mode){
-        int length =mode.normalize(src,srcStart,srcLimit,dest,destStart,destLimit);
+        int length = mode.normalize(src,srcStart,srcLimit,dest,destStart,destLimit);
        
         if(length<=(destLimit-destStart)){
             return length;
@@ -991,8 +1040,8 @@ public final class Normalizer implements Cloneable{
      * @param aMode     The normalization mode
      * @return String   The normalized string
      */
-    // TODO: actually do the optimization when the guts of Normalizer are upgraded
-    // --has just dumb implementation for now
+    // TODO: actually do the optimization when the guts of Normalizer are 
+    // upgraded --has just dumb implementation for now
     public static String normalize(int char32, Mode mode) {
         return normalize(UTF16.valueOf(char32), mode);
     }
@@ -1000,10 +1049,10 @@ public final class Normalizer implements Cloneable{
     /**
      * Convenience method.
      *
-     * @param source       string for determining if it is in a normalized format
-     * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
-     *                     Normalizer.NFKC,Normalizer.NFKD)
-     * @return             Return code to specify if the text is normalized or not 
+     * @param source   string for determining if it is in a normalized format
+     * @param mode     normalization format (Normalizer.NFC,Normalizer.NFD,  
+     *                  Normalizer.NFKC,Normalizer.NFKD)
+     * @return         Return code to specify if the text is normalized or not 
      *                     (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
      */
     public static QuickCheckResult quickCheck( String source, Mode mode){
@@ -1013,7 +1062,8 @@ public final class Normalizer implements Cloneable{
     /**
      * Convenience method.
      *
-     * @param source Array of characters for determining if it is in a normalized format
+     * @param source Array of characters for determining if it is in a 
+     *                normalized format
      * @param mode   normalization format (Normalizer.NFC,Normalizer.NFD,  
      *                Normalizer.NFKC,Normalizer.NFKD)
      * @return       Return code to specify if the text is normalized or not 
@@ -1029,18 +1079,19 @@ public final class Normalizer implements Cloneable{
      * Three types of result can be returned Normalizer.YES, Normalizer.NO or
      * Normalizer.MAYBE. Result Normalizer.YES indicates that the argument
      * string is in the desired normalized format, Normalizer.NO determines that
-     * argument string is not in the desired normalized format. A Normalizer.MAYBE
-     * result indicates that a more thorough check is required, the user may have to
-     * put the string in its normalized form and compare the results.
+     * argument string is not in the desired normalized format. A 
+     * Normalizer.MAYBE result indicates that a more thorough check is required, 
+     * the user may have to put the string in its normalized form and compare 
+     * the results.
      *
-     * @param source       string for determining if it is in a normalized format
-     * @param start        the start index of the source
-     * @param limit        the limit index of the source it is equal to the length
-     * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
-     *                     Normalizer.NFKC,Normalizer.NFKD)
-     * @return             Return code to specify if the text is normalized or not 
-     *                     (Normalizer.YES, Normalizer.NO or
-     *                     Normalizer.MAYBE)
+     * @param source    string for determining if it is in a normalized format
+     * @param start     the start index of the source
+     * @param limit     the limit index of the source it is equal to the length
+     * @param mode      normalization format (Normalizer.NFC,Normalizer.NFD,  
+     *                   Normalizer.NFKC,Normalizer.NFKD)
+     * @return          Return code to specify if the text is normalized or not 
+     *                   (Normalizer.YES, Normalizer.NO or
+     *                   Normalizer.MAYBE)
      */
 
     public static QuickCheckResult quickCheck(char[] source,int start, 
@@ -1070,14 +1121,15 @@ public final class Normalizer implements Cloneable{
      * @return Boolean value indicating whether the source string is in the
      *         "mode" normalization form
      */
-    public static boolean isNormalized(char[] src,int start,int limit, Mode mode) {
+    public static boolean isNormalized(char[] src,int start,
+                                       int limit, Mode mode) {
         return (mode.quickCheck(src,start,limit,false)==YES);
     }
     
     /**
      * Convenience Method
-     * @param str       the input string to be checked to see if it is normalized
-     *
+     * @param str       the input string to be checked to see if it is 
+     *                   normalized
      * @param aMode     the normalization mode
      * @see #isNormalized
      */
@@ -1087,13 +1139,13 @@ public final class Normalizer implements Cloneable{
     
     /**
      * Convenience Method
-     * @param char32    the input code point to be checked to see if it is normalized
-     *
+     * @param char32    the input code point to be checked to see if it is 
+     *                   normalized
      * @param aMode     the normalization mode
      * @see #isNormalized
      */
-    // TODO: actually do the optimization when the guts of Normalizer are upgraded
-    // --has just dumb implementation for now
+    // TODO: actually do the optimization when the guts of Normalizer are 
+    // upgraded --has just dumb implementation for now
     public static boolean isNormalized(int char32, Mode mode) {
         return isNormalized(UTF16.valueOf(char32), mode);
     }
@@ -1109,9 +1161,9 @@ public final class Normalizer implements Cloneable{
      * (and optionally case-folding) both strings entirely,
      * improving performance significantly.
      *
-     * Bulk normalization is only necessary if the strings do not fulfill the FCD
-     * conditions. Only in this case, and only if the strings are relatively long,
-     * is memory allocated temporarily.
+     * Bulk normalization is only necessary if the strings do not fulfill the 
+     * FCD conditions. Only in this case, and only if the strings are relatively 
+     * long, is memory allocated temporarily.
      * For FCD strings and short non-FCD strings there is no memory allocation.
      *
      * Semantically, this is equivalent to
@@ -1132,8 +1184,8 @@ public final class Normalizer implements Cloneable{
      *     are quick-checked for FCD.
      *
      *   - INPUT_IS_FCD
-     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
-     *     If not set, the function will quickCheck for FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD 
+     *     conditions.If not set, the function will quickCheck for FCD
      *     and normalize if necessary.
      *
      *   - COMPARE_CODE_POINT_ORDER
@@ -1172,8 +1224,8 @@ public final class Normalizer implements Cloneable{
      *     are quick-checked for FCD.
      *
      *   - INPUT_IS_FCD
-     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
-     *     If not set, the function will quickCheck for FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD 
+     *     conditions. If not set, the function will quickCheck for FCD
      *     and normalize if necessary.
      *
      *   - COMPARE_CODE_POINT_ORDER
@@ -1212,8 +1264,8 @@ public final class Normalizer implements Cloneable{
      *     are quick-checked for FCD.
      *
      *   - INPUT_IS_FCD
-     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
-     *     If not set, the function will quickCheck for FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD 
+     *     conditions. If not set, the function will quickCheck for FCD
      *     and normalize if necessary.
      *
      *   - COMPARE_CODE_POINT_ORDER
@@ -1243,8 +1295,8 @@ public final class Normalizer implements Cloneable{
      *
      * @param aMode     the normalization mode
      */
-    // TODO: actually do the optimization when the guts of Normalizer are upgraded
-    // --has just dumb implementation for now
+    // TODO: actually do the optimization when the guts of Normalizer are 
+    // upgraded --has just dumb implementation for now
     public static int compare(int char32a, int char32b,int options) {
         return compare(UTF16.valueOf(char32a), UTF16.valueOf(char32b), options);
     }
@@ -1260,8 +1312,8 @@ public final class Normalizer implements Cloneable{
      * @param aMode     the normalization mode
      *
      */
-    // TODO: actually do the optimization when the guts of Normalizer are upgraded
-    // --has just dumb implementation for now
+    // TODO: actually do the optimization when the guts of Normalizer are 
+    // upgraded --has just dumb implementation for now
     public static int compare(int charA, String str2, int options) {
         return compare(UTF16.valueOf(charA), str2, options);
     }
@@ -1306,7 +1358,7 @@ public final class Normalizer implements Cloneable{
      * @exception IndexOutOfBoundsException if target capacity is less than the
      *             required length
      */
-     /* Concatenation of normalized strings ---------------------------------- */
+     /* Concatenation of normalized strings --------------------------------- */
     
     public static int concatenate(char[] left,  int leftStart,  int leftLimit,
                                   char[] right, int rightStart, int rightLimit, 
@@ -1601,8 +1653,8 @@ public final class Normalizer implements Cloneable{
      * <p>
      * @param index the desired index in the input text->
      *
-     * @return      the first normalized character that is the result of iterating
-     *              forward starting at the given index.
+     * @return   the first normalized character that is the result of iterating
+     *            forward starting at the given index.
      *
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
@@ -1614,9 +1666,9 @@ public final class Normalizer implements Cloneable{
     }
  
     /**
-     * Retrieve the index of the start of the input text.  This is the begin index
-     * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
-     * over which this <tt>Normalizer</tt> is iterating
+     * Retrieve the index of the start of the input text. This is the begin 
+     * index of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the 
+     * <tt>String</tt> over which this <tt>Normalizer</tt> is iterating
      * @deprecated To be removed after 2003-aug-31. Use startIndex() instead.
      * @return The codepoint as an int
      * @see #startIndex
@@ -1682,9 +1734,9 @@ public final class Normalizer implements Cloneable{
     }
 	
     /**
-     * Retrieve the index of the start of the input text->  This is the begin index
-     * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
-     * over which this <tt>Normalizer</tt> is iterating
+     * Retrieve the index of the start of the input text. This is the begin 
+     * index of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the 
+     * <tt>String</tt> over which this <tt>Normalizer</tt> is iterating
      * @return The current iteration position
      */
     public int startIndex(){
@@ -1748,10 +1800,11 @@ public final class Normalizer implements Cloneable{
      * Currently the only available option is:
      * <p>
      * <ul>
-     *   <li>{@link #IGNORE_HANGUL} - Do not decompose Hangul syllables into the Jamo alphabet
-     *          and vice-versa.  This option is off by default (<i>i.e.</i> Hangul processing
-     *          is enabled) since the Unicode standard specifies that Hangul to Jamo
-     *          is a canonical decomposition.  For any of the standard Unicode Normalization
+     *   <li>{@link #IGNORE_HANGUL} - Do not decompose Hangul syllables into the
+     *          Jamo alphabet and vice-versa.  This option is off by default 
+     *          (<i>i.e.</i> Hangul processing is enabled) since the Unicode 
+     *          standard specifies that Hangul to Jamo is a canonical 
+     *          decomposition.  For any of the standard Unicode Normalization 
      *          Forms, you should leave this option off.
      * </ul>
      * <p>
@@ -1896,7 +1949,7 @@ public final class Normalizer implements Cloneable{
     //-------------------------------------------------------------------------
     
 
-    /* backward iteration ------------------------------------------------------- */
+    /* backward iteration --------------------------------------------------- */
                
     /*
      * read backwards and get norm32
@@ -1936,7 +1989,7 @@ public final class Normalizer implements Cloneable{
                 return 0;
             } else {
                 /* norm32 must be a surrogate special */
-                return NormalizerImpl.getNorm32FromSurrogatePair(norm32, chars[0]);
+                return NormalizerImpl.getNorm32FromSurrogatePair(norm32,chars[0]);
             }
         } else {
             /* unpaired second surrogate, undo the c2=src.previous() movement */
@@ -1963,7 +2016,10 @@ public final class Normalizer implements Cloneable{
                                       int/*unsigned*/ ccOrQCMask, 
                                       char[] chars) {
     
-            return NormalizerImpl.isNFDSafe(getPrevNorm32(src, minC, ccOrQCMask, chars), ccOrQCMask, ccOrQCMask& NormalizerImpl.QC_MASK);
+            return NormalizerImpl.isNFDSafe(getPrevNorm32(src, minC, 
+                                                          ccOrQCMask, chars), 
+                                            ccOrQCMask, 
+                                            ccOrQCMask& NormalizerImpl.QC_MASK);
         }
     }
     
@@ -1983,7 +2039,7 @@ public final class Normalizer implements Cloneable{
             
             decompQCMask=(ccOrQCMask<<2)&0xf; /*decomposition quick check mask*/
             norm32=getPrevNorm32(src, minC, ccOrQCMask|decompQCMask, chars);
-            return NormalizerImpl.isTrueStarter(norm32, ccOrQCMask, decompQCMask);
+            return NormalizerImpl.isTrueStarter(norm32,ccOrQCMask,decompQCMask);
         }
     }
     
@@ -2121,7 +2177,7 @@ public final class Normalizer implements Cloneable{
 
  
     
-    /* forward iteration -------------------------------------------------------- */
+    /* forward iteration ---------------------------------------------------- */
     /*
      * read forward and check if the character is a next-iteration boundary
      * if c2!=0 then (c, c2) is a surrogate pair
@@ -2162,7 +2218,7 @@ public final class Normalizer implements Cloneable{
                     return 0;
                 } else {
                     /* norm32 must be a surrogate special */
-                    return NormalizerImpl.getNorm32FromSurrogatePair(norm32, (char)chars[1]);
+                    return NormalizerImpl.getNorm32FromSurrogatePair(norm32,(char)chars[1]);
                 }
             } else {
                 /* unmatched surrogate */
@@ -2183,7 +2239,7 @@ public final class Normalizer implements Cloneable{
                                int/*unsigned*/ minC, 
                                int/*unsigned*/ ccOrQCMask, 
                                int[] chars) {
-            return NormalizerImpl.isNFDSafe(getNextNorm32(src, minC, ccOrQCMask, chars), 
+            return NormalizerImpl.isNFDSafe(getNextNorm32(src,minC,ccOrQCMask,chars), 
                              ccOrQCMask, ccOrQCMask&NormalizerImpl.QC_MASK);
        }
     }
