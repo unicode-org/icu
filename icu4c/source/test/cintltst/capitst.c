@@ -370,6 +370,11 @@ void TestDecomposition() {
     el_GR = ucol_open("el_GR", &status);
     vi_VN = ucol_open("vi_VN", &status);
 
+    if (U_FAILURE(status)) {
+        log_err("ERROR: collation creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+
     /* there is no reason to have canonical decomposition in en_US OR default locale */
     if(ucol_getNormalization(vi_VN) != UCOL_DECOMP_CAN)
       {
