@@ -82,13 +82,40 @@
 /*===========================================================================*/
 /* Related version information                                               */
 /*===========================================================================*/
-#define U_ICU_VERSION "1.6.0.1"
+#define U_ICU_VERSION "1.7"
+#define U_ICU_VERSION_SHORT "17"
 
 #define U_MAX_VERSION_LENGTH 4
 #define U_VERSION_DELIMITER '.'
 #define U_MAX_VERSION_STRING_LENGTH 20
 
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
+
+/*===========================================================================*/
+/* ICUDATA naming scheme                                                     */
+/*===========================================================================*/
+
+#if U_CHARSET_FAMILY
+#   if U_IS_BIG_ENDIAN
+   /* EBCDIC - should always be BE */
+#     define U_ICUDATA_TYPE_LETTER "e"
+#   else
+#     error "Don't know what to do with little endian EBCDIC!"
+#     define U_ICUDATA_TYPE_LETTER "x"
+#   endif
+#else
+#   if U_IS_BIG_ENDIAN
+      /* Big-endian ASCII */
+#     define U_ICUDATA_TYPE_LETTER "b"
+#   else
+	  /* Little-endian ASCII */
+#     define U_ICUDATA_TYPE_LETTER "l"
+#   endif
+#endif
+
+/* A single string literal containing the icudata stub name, i.e. 'icudt18e' for 
+   ICU 1.8.x on EBCDIC, etc.. */
+#define U_ICUDATA_NAME    "icudt" U_ICU_VERSION_SHORT U_ICUDATA_TYPE_LETTER
 
 /* Work around the OS390 compiler issue, to be removed when the compiler 
 updates come out.  */
