@@ -83,7 +83,7 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
         else
 	    ac_use_strict_options=yes
         fi
-      ], [ac_use_strict_options=yes])
+      ], [ac_use_strict_options=no])
     AC_MSG_RESULT($ac_use_strict_options)
 
     if test "$ac_use_strict_options" = yes
