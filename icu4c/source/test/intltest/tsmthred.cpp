@@ -1027,7 +1027,11 @@ void MultithreadTest::TestCollators()
 
   
   UCollator *coll = ucol_open("root", &status);
-    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+  if(U_FAILURE(status)) {
+    errln("Couldn't open UCA collator");
+    return;
+  }
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
   ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
   ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
