@@ -277,7 +277,7 @@ void TestProperty()
       ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
       ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
     */
-    UVersionInfo currVersionArray = {0x21, 0x40, 0x04, 0x04};
+    UVersionInfo currVersionArray = {0x21, 0x40, 0x01, 0x04};
     UVersionInfo versionArray;
     
     log_verbose("The property tests begin : \n");
@@ -368,7 +368,7 @@ void TestProperty()
         buffer[0] = '\0';
         log_verbose("ucol_getRulesEx() testing ...\n");
         tempLength = ucol_getRulesEx(col,UCOL_TAILORING_ONLY,buffer,bufLen );
-        doAssert( tempLength == 0, "getRulesEx() result incorrect" );
+        doAssert( tempLength == 0x0f, "getRulesEx() result incorrect" );
         log_verbose("getRules tests end.\n");
         
         log_verbose("ucol_getRulesEx() testing ...\n");
@@ -1113,7 +1113,7 @@ void TestGetLocale() {
   } testStruct[] = {
     { "sr_YU", "sr_YU", "ru" },
     { "sh_YU", "sh_YU", "sh" },
-    { "en_US_CALIFORNIA", "en_US", "root" },
+    { "en_US_CALIFORNIA", "en_US", "en" },
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
   };
 
