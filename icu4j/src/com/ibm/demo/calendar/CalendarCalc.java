@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarCalc.java,v $ 
- * $Date: 2000/05/12 23:21:23 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/10/19 00:27:16 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -505,7 +505,7 @@ class CalendarCalcFrame extends Frame
             text = new JTextField("",FIELD_COLUMNS);
             text.setFont(DemoUtility.editFont);
 
-            format = IBMCalendar.getDateFormat(cal, DateFormat.FULL,
+            format = DateFormat.getDateInstance(cal, DateFormat.FULL,
                                                 Locale.getDefault());
             //format.applyPattern(DEFAULT_FORMAT);
         }
@@ -513,8 +513,8 @@ class CalendarCalcFrame extends Frame
         public void setLocale(Locale loc) {
             String pattern = toPattern();
 
-            format = IBMCalendar.getDateFormat(calendar, DateFormat.FULL,
-                                                                    loc);
+            format = DateFormat.getDateInstance(calendar, DateFormat.FULL,
+                                                loc);
             applyPattern(pattern);
         }
 

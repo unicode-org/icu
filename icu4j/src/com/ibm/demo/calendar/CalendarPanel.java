@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarPanel.java,v $ 
- * $Date: 2000/05/12 23:21:23 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/10/19 00:27:16 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -46,8 +46,8 @@ class CalendarPanel extends Canvas {
 
             for (int i = 0; i < fCalendar.length; i++) {
                 if (fCalendar[i] != null) {
-                    fSymbols[i] = IBMCalendar.getDateFormatSymbols(fCalendar[i],
-                                                                   fDisplayLocale);
+                    fSymbols[i] = new DateFormatSymbols(fCalendar[i],
+                                                        fDisplayLocale);
                 }
             }
             String lang = locale.getLanguage();
@@ -86,7 +86,7 @@ class CalendarPanel extends Canvas {
         fCalendar[index] = c;
         fCalendar[index].setTime(date);
 
-        fSymbols[index] = IBMCalendar.getDateFormatSymbols(c, fDisplayLocale);
+        fSymbols[index] = new DateFormatSymbols(c, fDisplayLocale);
         dirty = true;
         repaint();
     }
