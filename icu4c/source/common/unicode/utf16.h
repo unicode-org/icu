@@ -27,8 +27,8 @@
 /* single-code point definitions -------------------------------------------- */
 
 /* handle surrogate pairs */
-#define UTF_IS_FIRST_SURROGATE(uchar) (((uchar)&0xfc00)==0xd800)
-#define UTF_IS_SECOND_SURROGATE(uchar) (((uchar)&0xfc00)==0xdc00)
+#define UTF_IS_FIRST_SURROGATE(uchar) (((uchar)&0xfffffc00)==0xd800)
+#define UTF_IS_SECOND_SURROGATE(uchar) (((uchar)&0xfffffc00)==0xdc00)
 
 #define UTF_IS_SURROGATE_FIRST(c) (((c)&0x400)==0)
 
