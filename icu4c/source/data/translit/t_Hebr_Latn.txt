@@ -4,16 +4,15 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: ../../../impl/data/Transliterator_Hebrew_Latin.txt
-// Date: Tue May 18 17:24:49 2004
+// Tool: \icu4j\src\com\ibm\icu\dev\tool\translit\dumpICURules.bat
+// Source: \icu4j\src\com\ibm\icu\impl\data/Transliterator_Hebrew_Latin.txt
+// Date: Fri May 28 17:07:31 2004
 //--------------------------------------------------------------------
 
 // Hebrew_Latin
 
 t_Hebr_Latn {
   Rule {
-//--------------------------------------------------------------------
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
@@ -37,7 +36,7 @@ t_Hebr_Latn {
 // For more information, see"
 //   http://oss.software.ibm.com/icu/userguide/Transliteration.html
 
-":: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;"
+":: [[:Hebrew:] [:^ccc=0:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;"
 ":: nfkd (nfc) ;"
 "$letterAfter = [:M:]* [:L:] ;"
 
@@ -82,15 +81,28 @@ t_Hebr_Latn {
 "ׂ <> ̂ ;" // sin dot -> s
 
 // points
-"ֲ <> à ;"
-"ָ <> á ;"
-"ֱ <> è ;"
-"ֵ <> é ;"
-"ְ <> ê ;"
-"ִ <> i ;"
-"ֹ <> ò ;"
-"ֻ <> u ;"
+"$above = [^[:ccc=0:][:ccc=230:]]*;"
 
+"‎ֲ‎ > à ;"
+"‎ֲ‎ $1< a ($above)  ̀;"
+
+"‎ָ‎ > á ;"
+"‎ָ‎  $1 < a ($above)  ́;"
+
+"‎ֱ‎ > è ;"
+"‎ֱ‎  $1 < e ($above)  ̀;"
+
+"‎ֵ‎ > é ;"
+"‎ֵ‎  $1 < e ($above)   ́;"
+
+"‎ְ‎ > e ̆ ;"
+"‎ְ‎  $1 < e ($above)   ̆;"
+
+"‎ֹ‎ > ò ;"
+"‎ֹ‎  $1 < o ($above)   ̀;"
+
+"ִ <> i ;"
+"ֻ <> u ;"
 "ַ <> a ;"
 "ֶ <> e ;"
 "ֳ <> o ;"
@@ -107,6 +119,6 @@ t_Hebr_Latn {
 
 ":: (lower);"
 ":: nfc (nfd) ;"
-":: ([[:Latin:] [\u02BB-\u02BC\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    ̄ ]]);"
+":: ([[:Latin:] [:^ccc=0:] [\u02BB-\u02BC\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    ̄ ]]);"
   }
 }
