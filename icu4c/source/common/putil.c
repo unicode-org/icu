@@ -34,6 +34,10 @@
 *******************************************************************************
 */
 
+#ifdef _AIX
+#    include<sys/types.h>
+#endif
+
 /* Define _XOPEN_SOURCE for Solaris and friends. */
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
