@@ -41,8 +41,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="..\..\lib\icuucd.lib"
 				OutputFile="..\..\bin\icule28d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -108,8 +106,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="..\..\lib\icuuc.lib"
 				OutputFile="..\..\bin\icule28.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
