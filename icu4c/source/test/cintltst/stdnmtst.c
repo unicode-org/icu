@@ -29,7 +29,9 @@ addStandardNamesTest(TestNode** root)
   addTest(root, &TestStandardNames,    "stdnmtst/TestStandardNames");
 }
 
-static void dotestname(const char *name, const char *standard, const char *expected) {
+static int dotestname(const char *name, const char *standard, const char *expected) {
+    int res = 1;
+
     UErrorCode error;
     const char *tag;
 
@@ -37,14 +39,19 @@ static void dotestname(const char *name, const char *standard, const char *expec
     tag = ucnv_getStandardName(name, standard, &error);
     if (!tag) {
         log_err("FAIL: could not find %s standard name for %s\n", standard, name);
+	res = 0;
     } else if (expected && uprv_strcmp(expected, tag)) {
         log_err("FAIL: expected %s for %s standard name for %s, got %s\n", expected, standard, name, tag);
+	res = 0;
     }
+
+    return res;
 }
 
 void TestStandardNames()
 {
-#if  0
+    int res = 1;
+
     int i, count;
     UErrorCode err;
 
@@ -57,23 +64,31 @@ void TestStandardNames()
         std = ucnv_getStandard(i, &err);
         if (U_FAILURE(err)) {
             log_err("FAIL: ucnv_getStandard(%d), error=%s\n", i, u_errorName(err));
+            res = 0;
         } else if (!std || !*std) {
             log_err("FAIL: %s standard name at index %d\n", (std ? "empty" :
                 "null"), i);
+            res = 0;
         }
     }
     err = U_ZERO_ERROR;
     if (ucnv_getStandard(i, &err)) {
         log_err("FAIL: ucnv_getStandard(%d) should return NULL\n", i);
+        res = 0;
     }
 
-#endif
+    if (res) {
+        log_verbose("PASS: iterating over standard names works\n");
+    }
 
     /* Test for some expected results. */
 
-    dotestname("ibm-1208", "MIME", "utf-8");
-    dotestname("cp1252", "MIME", "windows-1252");
-    dotestname("ascii", "MIME", "us-ascii");
-    dotestname("ascii", "IANA", "ANSI_X3.4-1968");
+    if (dotestname("ibm-1208", "MIME", "utf-8") &&
+        dotestname("cp1252", "MIME", "windows-1252") &&
+        dotestname("ascii", "MIME", "us-ascii") &&
+        dotestname("ascii", "IANA", "ANSI_X3.4-1968") &&
+        dotestname("cp850", "IANA", "IBM850")) {
+        log_verbose("PASS: getting IANA and MIME stadard names works\n");
+    }
 }
 
