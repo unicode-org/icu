@@ -45,7 +45,6 @@
         } \
 }
 
-
 /* Added by ram for ISO-2022JP implementation*/
 typedef enum  {
     ASCII = 0,
@@ -124,6 +123,14 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs* args,
 U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
                                                               UErrorCode* err);
 
+U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args, 
+                                                  UErrorCode* err);
+
+U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs* args, 
+                                              UErrorCode* err);
+
+U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
+                                                              UErrorCode* err);
 
 #define ESC_2022 0x1B /*ESC*/
 
@@ -1044,7 +1051,7 @@ UCNV_TableStates_2022 getKey_2022(char c,
 
 
 
-void changeState_2022(UConverter* _this,
+static void changeState_2022(UConverter* _this,
                       const char** source, 
                       const char* sourceLimit,
                       UBool flush,
@@ -1172,8 +1179,29 @@ void changeState_2022(UConverter* _this,
             myUConverter =myData2022->currentConverter;
         }
         else if(uprv_strcmp(chosenConverterName,"latin1")==0 && uprv_strcmp(myData2022->currentLocale,"jp")==0){
-            _this->mode = UCNV_SI;
-            myUConverter =myData2022->currentConverter;
+            /* 
+             * In ISO-2022-JP2 encoding there must be a switch to ASCII or to JIS X 0201-Roman before a
+             * space character (but notnecessarily before "ESC 4/14 2/0" or "ESC N ' '") or control
+             * characters such as tab or CRLF.  This means that the next line starts in the character set that 
+             * was switched to before the end of the previous line.  
+             *  
+             */
+            if(*source+1 <= sourceLimit){
+                if(*(*source+1)<=0x0020){
+                    _this->mode = UCNV_SI;
+                    myUConverter =myData2022->currentConverter;
+                }
+                else{
+                    _this->mode = UCNV_SI;
+                    ucnv_close(myData2022->currentConverter);
+                    myData2022->currentConverter = myUConverter = ucnv_open(chosenConverterName, err);
+                }
+            }
+            else {
+                    _this->mode = UCNV_SI;
+                    myData2022->previousConverter =myData2022->currentConverter;
+                    myData2022->currentConverter = myUConverter = ucnv_open(chosenConverterName, err);
+            }
 
         }
         else{
@@ -1204,7 +1232,7 @@ void changeState_2022(UConverter* _this,
  *if the match we return a pointer to the initial start of the sequence otherwise
  *we return sourceLimit
  */
-const char* getEndOfBuffer_2022(const char* source,
+static const char* getEndOfBuffer_2022(const char* source,
                                 const char* sourceLimit,
                                 UBool flush){
 
@@ -1266,6 +1294,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
       return;
     }
     if(((UConverterDataISO2022*)(args->converter->extraInfo))->currentLocale){
+
         if(uprv_strcmp(((UConverterDataISO2022*)(args->converter->extraInfo))->currentLocale, "kr") ==0){
             UConverter_toUnicode_ISO_2022_KR(args,err);
             return;
@@ -1281,7 +1310,15 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
 
             saveThis = args->converter;
             args->offsets = NULL;
-            args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter;
+
+            if(((UConverterDataISO2022*)(args->converter->extraInfo))->previousConverter && *(args->source)<=0x0020){
+            
+                args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->previousConverter;
+                ((UConverterDataISO2022*)(args->converter->extraInfo))->previousConverter=NULL;
+            }
+            else{
+                args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter;
+            }
             ucnv_toUnicode(args->converter,
                   &args->target,
                   args->targetLimit,
@@ -2062,7 +2099,5 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs* args, UEr
 }
 
 /*************************** END ISO2022-KR *********************************/
-
-
 
 
