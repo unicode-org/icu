@@ -575,6 +575,13 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     status = U_ZERO_ERROR;
     ruleCount = 0;
 
+    // Clear error struct
+    if (parseError != 0) {
+        parseError->code = parseError->line = 0;
+        parseError->offset = 0;
+        parseError->preContext[0] = parseError->postContext[0] = (UChar)0;
+    }
+
     delete data;
     data = new TransliterationRuleData(status);
     if (U_FAILURE(status)) {
