@@ -13,9 +13,16 @@ import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.Utility;
-import java.io.*;
-import java.text.ParseException;
-import java.util.Locale;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.MissingResourceException;
 
 /**
@@ -27,8 +34,9 @@ public class RoundTripTest extends TestFmwk {
     // Time bomb code to temporarily modify the behavior of this test
     // to account for changes in the Unicode properties for ICU 2.8.*.
     static VersionInfo ICU28 = VersionInfo.getInstance(2,8,0,0);
-    static boolean isICU28() {
-        return ICU28.compareTo(VersionInfo.ICU_VERSION) == 0;
+    static VersionInfo ICU34 = VersionInfo.getInstance(3,4,0,0);
+    static boolean isICUVersionAtLeast(VersionInfo version) {
+        return ICU28.compareTo(VersionInfo.ICU_VERSION) >= 0;
     }
 
     static final boolean EXTRA_TESTS = true;
@@ -109,28 +117,28 @@ public class RoundTripTest extends TestFmwk {
         logln(name + " took " + dur + " seconds");
     }
 
-    public void TestKana() throws IOException, ParseException {
+    public void TestKana() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Katakana-Hiragana")
           .test(KATAKANA, "[" + HIRAGANA + LENGTH + "]", "[" + HALFWIDTH_KATAKANA + LENGTH + "]", this, new Legal());
         showElapsed(start, "TestKana");
     }
 
-    public void TestHiragana() throws IOException, ParseException {
+    public void TestHiragana() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Hiragana")
           .test("[a-zA-Z]", HIRAGANA, HIRAGANA_ITERATION, this, new Legal());
         showElapsed(start, "TestHiragana");
     }
 
-    public void TestKatakana() throws IOException, ParseException {
+    public void TestKatakana() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Katakana")
           .test("[a-zA-Z]", KATAKANA, "[" + KATAKANA_ITERATION + HALFWIDTH_KATAKANA + "]", this, new Legal());
         showElapsed(start, "TestKatakana");
     }
 
-    public void TestJamo() throws IOException, ParseException {
+    public void TestJamo() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Jamo")
             .test("[a-zA-Z]", "[\u1100-\u1112 \u1161-\u1175 \u11A8-\u11C2]", "", this, new LegalJamo());
@@ -148,7 +156,7 @@ public class RoundTripTest extends TestFmwk {
         SLimit = SBase + SCount;    // D7A4
 */
 
-    public void TestHangul() throws IOException, ParseException {
+    public void TestHangul() throws IOException {
         long start = System.currentTimeMillis();
         Test t = new Test("Latin-Hangul", 5);
         if (getInclusion() < 10) t.setPairLimit(1000);
@@ -207,6 +215,13 @@ public class RoundTripTest extends TestFmwk {
 
     String getGreekSet() {
         // Time bomb
+        if (isICUVersionAtLeast(ICU34)) {
+            // We temporarily filter against Unicode 4.1, but we only do this
+            // before version 3.4.
+            errln("TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
+        } else {
+            logln("TestGreek needs to be updated to remove delete the section marked [:Age=4.0:] filter");
+        }
         return 
         // isICU28() ? "[[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]&[:Age=3.2:]]" :
             "[\u003B\u00B7[[:Greek:]&[:Letter:]]-[" +
@@ -214,10 +229,10 @@ public class RoundTripTest extends TestFmwk {
             "\u1D5D-\u1D61" + // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
             "\u1D66-\u1D6A" + // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
             "\u03D7-\u03EF" + // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
-            "]]";
+            "] & [:Age=4.0:]]";
     }
     
-    public void TestGreek() throws IOException, ParseException {
+    public void TestGreek() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek", 50)
         .test("[a-zA-Z]", getGreekSet(),
@@ -226,7 +241,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestGreek");
     }
 
-    public void TestGreekUNGEGN() throws IOException, ParseException {
+    public void TestGreekUNGEGN() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek/UNGEGN")
           .test("[a-zA-Z]", getGreekSet(),
@@ -235,7 +250,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestGreekUNGEGN");
     }
 
-    public void Testel() throws IOException, ParseException {
+    public void Testel() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-el")
           .test("[a-zA-Z]", getGreekSet(),
@@ -244,7 +259,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "Testel");
     }
 
-    public void TestCyrillic() throws IOException, ParseException {
+    public void TestCyrillic() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Cyrillic")
           .test("[a-zA-Z\u0110\u0111\u02BA\u02B9]", "[\u0400-\u045F]", null, this, new Legal());
@@ -253,21 +268,21 @@ public class RoundTripTest extends TestFmwk {
 
     static final String ARABIC = "[\u060C\u061B\u061F\u0621\u0627-\u063A\u0641-\u0655\u0660-\u066C\u067E\u0686\u0698\u06A4\u06AD\u06AF\u06CB-\u06CC\u06F0-\u06F9]";
 
-    public void TestArabic() throws IOException, ParseException {
+    public void TestArabic() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Arabic")
           .test("[a-zA-Z\u02BE\u02BF]", ARABIC, "[a-zA-Z\u02BE\u02BF\u207F]", null, this, new Legal()); //
         showElapsed(start, "TestArabic");
     }
 
-    public void TestHebrew() throws IOException, ParseException {
+    public void TestHebrew() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Hebrew")
           .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\u05BD\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
         showElapsed(start, "TestHebrew");
     }
 
-    public void TestThai() throws IOException, ParseException {
+    public void TestThai() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Thai")
           .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
@@ -298,7 +313,7 @@ public class RoundTripTest extends TestFmwk {
         String avagraha = "\u093d\u09bd\u0abd\u0b3d\u0cbd";
         String nukta = "\u093c\u09bc\u0a3c\u0abc\u0b3c\u0cbc";
         String virama = "\u094d\u09cd\u0a4d\u0acd\u0b4d\u0bcd\u0c4d\u0ccd\u0d4d";
-        String sanskritStressSigns = "\u0951\u0952\u0953\u0954";
+        String sanskritStressSigns = "\u0951\u0952\u0953\u0954\u097d";
         String chandrabindu = "\u0901\u0981\u0A81\u0b01\u0c01";
         public boolean is(String sourceString){
             int cp=sourceString.charAt(0);
@@ -327,7 +342,7 @@ public class RoundTripTest extends TestFmwk {
                                    "\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148"+
                                    "\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0"+
                                    "\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB"+
-                                   "\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0303-\u0304\u0306\u0314-\u0315"+
+                                   "\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0294\u0303-\u0304\u0306\u0314-\u0315"+
                                    "\u0325\u040E\u0419\u0439\u045E\u04C1-\u04C2\u04D0-\u04D1\u04D6-\u04D7"+
                                    "\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1F01\u1F03\u1F05"+
                                    "\u1F07\u1F09\u1F0B\u1F0D\u1F0F\u1F11\u1F13\u1F15\u1F19\u1F1B\u1F1D\u1F21"+
@@ -340,9 +355,9 @@ public class RoundTripTest extends TestFmwk {
                                    "\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"+
                                    "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
 
-    public void TestDevanagariLatin() throws IOException, ParseException {
+    public void TestDevanagariLatin() throws IOException {
         long start = System.currentTimeMillis();
-        if(isICU28()){
+        if(isICUVersionAtLeast(ICU28)){
             new Test("Latin-DEVANAGARI", 50)
               .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965] & [:Age=3.2:]]", "[\u0965]", this, new LegalIndic());
 
@@ -354,19 +369,19 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestDevanagariLatin");
     }
 
-    private static final String [][] array= new String[][]{
+    private static final String [][] interIndicArray= new String[][]{
         new String [] {  "BENGALI-DEVANAGARI",
             "[:BENGALI:]", "[:Devanagari:]",
-                "[\u0904\u0951-\u0954\u0943-\u0949\u094a\u0962\u0963\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u0904\u0951-\u0954\u0943-\u0949\u094a\u0962\u0963\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u0950\u0958\u0959\u095a\u095b\u095e\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-BENGALI",
            "[:Devanagari:]", "[:BENGALI:]",
-                  "[\u09D7\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1\u09f2-\u09fa]", /*roundtrip exclusions*/
+                  "[\u09D7\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "GURMUKHI-DEVANAGARI",
           "[:GURMUKHI:]", "[:Devanagari:]",
-                "[\u0904\u0902\u0936\u0933\u0951-\u0954\u0902\u0903\u0943-\u0949\u094a\u0962\u0963\u090B\u090C\u090D\u090e\u0911\u0912\u0934\u0937\u093D\u0950\u0960\u0961\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
+                "[\u0904\u0902\u0936\u0933\u0951-\u0954\u0902\u0903\u0943-\u0949\u094a\u0962\u0963\u090B\u090C\u090D\u090e\u0911\u0912\u0934\u0937\u093D\u0950\u0960\u0961\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-GURMUKHI",
            "[:Devanagari:]", "[:GURMUKHI:]",
@@ -375,7 +390,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "GUJARATI-DEVANAGARI",
           "[:GUJARATI:]", "[:Devanagari:]",
-                "[\u0904\u0946\u094A\u0962\u0963\u0951-\u0954\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
+                "[\u0904\u0946\u094A\u0962\u0963\u0951-\u0954\u0961\u090c\u090e\u0912\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-GUJARATI",
            "[:Devanagari:]", "[:GUJARATI:]",
@@ -384,7 +399,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "ORIYA-DEVANAGARI",
           "[:ORIYA:]", "[:Devanagari:]",
-                "[\u0904\u0912\u0911\u090D\u090e\u0931\u0943-\u094a\u0962\u0963\u0951-\u0954\u0950]", /*roundtrip exclusions*/
+                "[\u0904\u0912\u0911\u090D\u090e\u0931\u0943-\u094a\u0962\u0963\u0951-\u0954\u0950\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-ORIYA",
            "[:Devanagari:]", "[:ORIYA:]",
@@ -393,7 +408,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Tamil-DEVANAGARI",
           "[:tamil:]", "[:Devanagari:]",
-                  "[\u0901\u0904\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
+                  "[\u0901\u0904\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]\u097d]", /*roundtrip exclusions*/
                   },
         new String [] {  "DEVANAGARI-Tamil",
            "[:Devanagari:]", "[:tamil:]",
@@ -402,7 +417,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Telugu-DEVANAGARI",
           "[:telugu:]", "[:Devanagari:]",
-                "[\u0904\u093c\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                "[\u0904\u093c\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-TELUGU",
            "[:Devanagari:]", "[:TELUGU:]",
@@ -411,7 +426,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-DEVANAGARI",
           "[:KANNADA:]", "[:Devanagari:]",
-                "[\u0901\u0904\u0946\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                "[\u0901\u0904\u0946\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-KANNADA",
            "[:Devanagari:]", "[:KANNADA:]",
@@ -420,7 +435,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-DEVANAGARI",
           "[:MALAYALAM:]", "[:Devanagari:]",
-                "[\u0901\u0904\u094a\u094b\u094c\u093c\u0950\u0944\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                "[\u0901\u0904\u094a\u094b\u094c\u093c\u0950\u0944\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]\u097d]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-MALAYALAM",
            "[:Devanagari:]", "[:MALAYALAM:]",
@@ -429,7 +444,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "GURMUKHI-BENGALI",
           "[:GURMUKHI:]", "[:BENGALI:]",
-                "[\u0982\u09b6\u09e2\u09e3\u09c3\u09c4\u09d7\u098B\u098C\u09B7\u09E0\u09E1\u09F0\u09F1\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u0982\u09b6\u09e2\u09e3\u09c3\u09c4\u09d7\u098B\u098C\u09B7\u09E0\u09E1\u09F0\u09F1\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-GURMUKHI",
            "[:BENGALI:]", "[:GURMUKHI:]",
@@ -438,7 +453,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "GUJARATI-BENGALI",
           "[:GUJARATI:]", "[:BENGALI:]",
-                "[\u09d7\u09e2\u09e3\u098c\u09e1\u09f0\u09f1\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u09d7\u09e2\u09e3\u098c\u09e1\u09f0\u09f1\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-GUJARATI",
            "[:BENGALI:]", "[:GUJARATI:]",
@@ -447,7 +462,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "ORIYA-BENGALI",
           "[:ORIYA:]", "[:BENGALI:]",
-                "[\u09c4\u09e2\u09e3\u09f0\u09f1\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u09c4\u09e2\u09e3\u09f0\u09f1\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-ORIYA",
            "[:BENGALI:]", "[:ORIYA:]",
@@ -456,7 +471,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Tamil-BENGALI",
           "[:tamil:]", "[:BENGALI:]",
-                  "[\u0981\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1\u09f2-\u09fa]", /*roundtrip exclusions*/
+                  "[\u0981\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                   },
         new String [] {  "BENGALI-Tamil",
            "[:BENGALI:]", "[:tamil:]",
@@ -465,7 +480,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Telugu-BENGALI",
           "[:telugu:]", "[:BENGALI:]",
-                "[\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-TELUGU",
            "[:BENGALI:]", "[:TELUGU:]",
@@ -474,7 +489,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-BENGALI",
           "[:KANNADA:]", "[:BENGALI:]",
-                "[\u0981\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u0981\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-KANNADA",
            "[:BENGALI:]", "[:KANNADA:]",
@@ -483,7 +498,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-BENGALI",
           "[:MALAYALAM:]", "[:BENGALI:]",
-                "[\u0981\u09e2\u09e3\u09bc\u09c4\u09f0\u09f1\u09dc\u09dd\u09df\u09f2-\u09fa]", /*roundtrip exclusions*/
+                "[\u0981\u09e2\u09e3\u09bc\u09c4\u09f0\u09f1\u09dc\u09dd\u09df\u09f2-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-MALAYALAM",
            "[:BENGALI:]", "[:MALAYALAM:]",
@@ -514,7 +529,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "GURMUKHI-TAMIL",
            "[:GURMUKHI:]", "[:TAMIL:]",
-                  "[\u0b82\u0bc6\u0bca\u0bd7\u0bb7\u0bb3\u0b83\u0B8E\u0B92\u0BA9\u0BB1\u0BB4]", /*roundtrip exclusions*/
+                  "[\u0b82\u0bc6\u0bca\u0bd7\u0bb7\u0bb3\u0b83\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0bb6]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "TELUGU-GURMUKHI",
@@ -675,7 +690,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "Latin-Bengali",
             latinForIndic, "[[:Bengali:][\u0964\u0965]]",
-               "[\u0965\u09f0-\u09fa]", /*roundtrip exclusions*/
+               "[\u0965\u09f0-\u09fa\u09ce]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Gurmukhi",
            latinForIndic, "[[:Gurmukhi:][\u0964\u0965]]",
@@ -709,24 +724,24 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestInterIndic() throws Exception{
         long start = System.currentTimeMillis();
-        int num = array.length;
+        int num = interIndicArray.length;
         if (isQuick()) {
-            logln("Testing only 5 of "+ array.length+" Skipping rest (use -e for exhaustive)");
+            logln("Testing only 5 of "+ interIndicArray.length+" Skipping rest (use -e for exhaustive)");
             num = 5;
         }
         for(int i=0; i<num;i++){
-           logln("Testing " + array[i][0] + " at index " + i   );
-           if(isICU28()){
-               new Test(array[i][0], 50)
-                    .test("[" + array[i][1]+" & [:Age=3.2:]]",
-                          "[" + array[i][2]+" & [:Age=3.2:]]",
-                          array[i][3],
+           logln("Testing " + interIndicArray[i][0] + " at index " + i   );
+           if(isICUVersionAtLeast(ICU28)){
+               new Test(interIndicArray[i][0], 50)
+                    .test("[" + interIndicArray[i][1]+" & [:Age=3.2:]]",
+                          "[" + interIndicArray[i][2]+" & [:Age=3.2:]]",
+                          interIndicArray[i][3],
                           this, new LegalIndic());
            }else{
-               new Test(array[i][0], 50)
-                    .test(array[i][1],
-                          array[i][2],
-                          array[i][3],
+               new Test(interIndicArray[i][0], 50)
+                    .test(interIndicArray[i][1],
+                          interIndicArray[i][2],
+                          interIndicArray[i][3],
                           this, new LegalIndic());
            }
 
@@ -998,7 +1013,7 @@ public class RoundTripTest extends TestFmwk {
 
         public void test(String sourceRange, String targetRange,
           String roundtripExclusions, RoundTripTest log, Legal legalSource)
-          throws java.io.IOException, java.text.ParseException {
+          throws java.io.IOException {
             test(sourceRange, targetRange, sourceRange, roundtripExclusions, log, legalSource);
         }
 
@@ -1010,7 +1025,7 @@ public class RoundTripTest extends TestFmwk {
          */
         public void test(String sourceRange, String targetRange, String backtoSourceRange,
           String roundtripExclusions, RoundTripTest log, Legal legalSource)
-          throws java.io.IOException, java.text.ParseException {
+          throws java.io.IOException {
 
             this.legalSource = legalSource;
             this.sourceRange = new UnicodeSet(sourceRange);
