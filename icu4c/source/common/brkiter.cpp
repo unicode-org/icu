@@ -348,13 +348,11 @@ public:
 
 // -------------------------------------
 
-static UMTX gLock = 0;
-
 static ICULocaleService* 
 getService(void)
 {
   if (gService == NULL) {
-    Mutex mutex(&gLock);
+    Mutex mutex;
     if (gService == NULL) {
       gService = new ICUBreakIteratorService();
     }
@@ -433,7 +431,6 @@ U_CFUNC UBool breakiterator_cleanup(void) {
     delete gService;
     gService = NULL;
   }
-  umtx_destroy(&gLock);
   return TRUE;
 }
 
