@@ -604,7 +604,9 @@ ucnv_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode);
 /**
  * Fill-up the list of alias names for the given alias
  * @param alias alias name
- * @param aliases fill-in list
+ * @param aliases fill-in list, aliases is a pointer to an array of
+ *        <code>ucnv_countAliases()</code> string-pointers
+ *        (<code>const char *</code>) that will be filled in
  * @param pErrorCode result of operation
  */
 U_CAPI void
