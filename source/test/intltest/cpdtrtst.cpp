@@ -362,7 +362,11 @@ void CompoundTransliteratorTest::expect(const CompoundTransliterator& t,
 	// Test handleTransliterate (incremental) transliteration -- 
     rsource.remove();
 	rsource.append(source);
-    UTransPosition index={0,source.length(),0,source.length()};
+    UTransPosition index;
+    index.contextStart =0;
+    index.contextLimit = source.length();
+    index.start = 0;
+    index.limit = source.length();
 	t.handleTransliterate(rsource, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterate ", source + "->" + rsource, rsource==expectedResult, expectedResult);
 
