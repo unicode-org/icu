@@ -152,7 +152,8 @@ public:
      * @param cursorOffset an offset to be added to cursorPos to position the
      * cursor either in the ante context, if < 0, or in the post context, if >
      * 0.  For example, the rule "abc{def} > | @@@ xyz;" changes "def" to
-     * "xyz" and moves the cursor to before "a".
+     * "xyz" and moves the cursor to before "a".  It would have a cursorOffset
+     * of -3.
      * @param adoptedSegs array of 2n integers.  Each of n pairs consists of offset,
      * limit for a segment of the input string.  Characters in the output string
      * refer to these segments if they are in a special range determined by the
