@@ -105,7 +105,7 @@ install-resfiles: $(RESFILES)
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
 	@$(MKINSTALLDIRS) $(RESDIR)
-	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eutf-8 -d $(RESDIR) $^
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eUTF-8 -d $(RESDIR) $^
 
 
 # Don't do this.  This is a problem when changing platforms.
