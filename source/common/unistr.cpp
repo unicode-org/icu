@@ -424,6 +424,7 @@ UnicodeString UnicodeString::unescape() const {
         if (c == 0x005C /*'\\'*/) {
             c = unescapeAt(i); // advances i
             if (c == (UChar32)0xFFFFFFFF) {
+                result.remove(); // return empty string
                 break; // invalid escape sequence
             }
         }
