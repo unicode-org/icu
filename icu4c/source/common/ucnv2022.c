@@ -631,7 +631,7 @@ _ISO2022Close(UConverter *converter) {
    UConverter **array = myData->myConverterArray;
     
     if (converter->extraInfo != NULL) {
-		
+
         /*close the array of converter pointers and free the memory*/
         while(*array!=NULL){
             if(*array==myData->currentConverter){
@@ -675,7 +675,7 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
                 setInitialStateFromUnicodeJPCN(myConverterData);
             }
         }
-        else if(myConverterData->locale[0] ='k'){
+        else if(myConverterData->locale[0] == 'k'){
             if(choice<=UCNV_RESET_TO_UNICODE) {
                 setInitialStateToUnicodeKR(converter, myConverterData);
             }
@@ -901,7 +901,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
     int32_t base = 0;
     const char* mySourceLimit;
     char const* sourceStart;
-    UConverter* saveThis = NULL;
+    UConverter* saveThis;
     int plane =0;/*dummy variable*/
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -944,7 +944,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
             && ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter==NULL){
             
             const UChar* myTargetStart = args->target;
-            UConverter* saveThis = args->converter;
+            saveThis = args->converter;
             args->offsets = NULL;
             ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter = ucnv_open("ASCII",err);
             
@@ -964,7 +964,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
             args->converter = saveThis;
             args->converter->mode = UCNV_SO;
             ((UConverterDataISO2022*)(args->converter->extraInfo))->isFirstBuffer=FALSE;
-            args->converter = saveThis;
+/*            args->converter = saveThis;*/
             {
                 int32_t lim =  args->target - myTargetStart;
                 int32_t i = 0;
@@ -4260,6 +4260,9 @@ SAVE_STATE:
                         case MBCS:
                             args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
                             args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[2];
+                        default:
+                            break;
+                            /* There should be no other type */
                     }
 
                     args->target = myTarget;
