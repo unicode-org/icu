@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <iostream.h>
 #include <assert.h>
 
 #include "unicode/utypes.h"
@@ -526,9 +525,6 @@ IntlTest& operator<<(IntlTest& test, const int32_t num)
     return test;
 }
 
-//inline _CRTIMP ostream& __cdecl endl(ostream& _outs) { return _outs << '\n' << flush; }
-//inline ostream& ostream::operator<<(ostream& (__cdecl * _f)(ostream&)) { (*_f)(*this); return *this; }
-
 IntlTest& endl( IntlTest& test )
 {
     test.logln();
@@ -552,7 +548,7 @@ IntlTest::IntlTest()
     no_err_msg = FALSE;
     quick = FALSE;
     leaks = FALSE;
-    testout = &cout;
+    testoutfp = stdout;
     LL_indentlevel = indentLevel_offset;
 }
 
@@ -563,7 +559,7 @@ void IntlTest::setCaller( IntlTest* callingTest )
         verbose = caller->verbose;
         no_err_msg = caller->no_err_msg;
         quick = caller->quick;
-        testout = caller->testout;
+        testoutfp = caller->testoutfp;
         LL_indentlevel = caller->LL_indentlevel + indentLevel_offset;
     }
 }
@@ -776,7 +772,7 @@ void IntlTest::LL_message( UnicodeString message, bool_t newline )
     // stream out the indentation string first if necessary
     if(LL_linestart) {
         length = indent.extract(0, indent.length(), buffer);
-        testout->write(buffer, length);
+        fwrite(buffer, sizeof(*buffer), length, testoutfp);
     }
 
     // replace each LineFeed by the indentation string
@@ -784,9 +780,8 @@ void IntlTest::LL_message( UnicodeString message, bool_t newline )
 
     // stream out the message
     length = message.extract(0, message.length(), buffer);
-    testout->write(buffer, length);
-
-    testout->flush();
+    fwrite(buffer, sizeof(*buffer), length, testoutfp);
+    fflush(testoutfp);
 
     // keep the terminating newline as a state for the next call,
     // for use with the then active indentation
@@ -876,7 +871,8 @@ main(int argc, char* argv[])
     if (!all && !name) syntax = TRUE;
  
     if (syntax) {
-        cout << "### Syntax:\n"
+        fprintf(stdout,
+                "### Syntax:\n"
                 "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
                 "### where options are: verbose (v), all (a), noerrormsg (n), \n"
                 "### exhaustive (e) and leaks (l). \n"
@@ -891,7 +887,7 @@ main(int argc, char* argv[])
                 "### To run just the Locale test type: intltest utility/LocaleTest \n"
                 "### \n"
                 "### A parameter can be specified for a test by appending '@' and the value \n"
-                "### to the testname. \n\n";
+                "### to the testname. \n\n");
         return 1;
     }
 
@@ -901,17 +897,17 @@ main(int argc, char* argv[])
     major.setNoErrMsg( no_err_msg );
     major.setQuick( quick );
     major.setLeaks( leaks );
-    cout << "-----------------------------------------------" << endl;
-    cout << " IntlTest Test Suite for                       " << endl;
-    cout << "   International Classes for Unicode           " << endl;
-    cout << "-----------------------------------------------" << endl;
-    cout << " Options:                                       " << endl;
-    cout << "   all (a)               : " << (all?        "On" : "Off") << endl;
-    cout << "   Verbose (v)           : " << (verbose?    "On" : "Off") << endl;
-    cout << "   No error messages (n) : " << (no_err_msg? "On" : "Off") << endl;
-    cout << "   Exhaustive (e)        : " << (!quick?     "On" : "Off") << endl;
-    cout << "   Leaks (l)             : " << (leaks?      "On" : "Off") << endl;
-    cout << "-----------------------------------------------" << endl << endl;
+    fprintf(stdout, "-----------------------------------------------\n");
+    fprintf(stdout, " IntlTest Test Suite for                       \n");
+    fprintf(stdout, "   International Classes for Unicode           \n");
+    fprintf(stdout, "-----------------------------------------------\n");
+    fprintf(stdout, " Options:                                       \n");
+    fprintf(stdout, "   all (a)               : %s\n", (all?        "On" : "Off"));
+    fprintf(stdout, "   Verbose (v)           : %s\n", (verbose?    "On" : "Off"));
+    fprintf(stdout, "   No error messages (n) : %s\n", (no_err_msg? "On" : "Off"));
+    fprintf(stdout, "   Exhaustive (e)        : %s\n", (!quick?     "On" : "Off"));
+    fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
+    fprintf(stdout, "-----------------------------------------------\n");
 
     // initial check for the default converter
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -920,9 +916,10 @@ main(int argc, char* argv[])
         // ok
         ucnv_close(cnv);
     } else {
-        cout << "*** Failure! The default converter cannot be opened." << endl <<
-                "*** Check the ICU_DATA environment variable and " << endl <<
-                "*** check that the data files are present." << endl;
+        fprintf(stdout,
+                "*** Failure! The default converter cannot be opened.\n"
+                "*** Check the ICU_DATA environment variable and\n"
+                "*** check that the data files are present.\n");
         return 1;
     }
 
@@ -932,9 +929,10 @@ main(int argc, char* argv[])
         // ok
         ucnv_close(cnv);
     } else {
-        cout << "*** Failure! The converter for iso-8859-7 cannot be opened." << endl <<
-                "*** Check the ICU_DATA environment variable and " << endl <<
-                "*** check that the data files are present." << endl;
+        fprintf(stdout,
+                "*** Failure! The converter for iso-8859-7 cannot be opened.\n"
+                "*** Check the ICU_DATA environment variable and \n"
+                "*** check that the data files are present.\n");
         return 1;
     }
 
@@ -943,9 +941,10 @@ main(int argc, char* argv[])
         // ok
         ures_close(rb);
     } else {
-        cout << "*** Failure! The \"en\" locale resource bundle cannot be opened." << endl <<
-                "*** Check the ICU_DATA environment variable and " << endl <<
-                "*** check that the data files are present." << endl;
+        fprintf(stdout,
+                "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
+                "*** Check the ICU_DATA environment variable and \n"
+                "*** check that the data files are present.\n");
         return 1;
     }
 
@@ -958,7 +957,7 @@ main(int argc, char* argv[])
         for (int i = 1; i < argc; ++i) {
             if (argv[i][0] != '-') {
                 char* name = argv[i];
-                cout << "\n=== Handling test: " << name << ": ===\n";
+                fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
                 char* parameter = strchr( name, '@' );
                 if (parameter) {
                     *parameter = 0;
@@ -970,23 +969,23 @@ main(int argc, char* argv[])
                     major.run_phase2( name, parameter );
                 }
                 if (!res || (execCount <= 0)) {
-                    cout << "\n---ERROR: Test doesn't exist: " << name << " !\n";
+                    fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
                     all_tests_exist = FALSE;
                 }
             }
         }
     }
-    cout << "\n--------------------------------------\n";
+    fprintf(stdout, "\n--------------------------------------\n");
     if (major.getErrors() == 0) {
-        cout << "OK: All tests passed without error.\n";
+        fprintf(stdout, "OK: All tests passed without error.\n");
     }else{
-        cout << "Errors in total: " << major.getErrors() << ".\n";
+	fprintf(stdout, "Errors in total: %ld.\n", major.getErrors());
     }
 
-    cout << "--------------------------------------\n";
+    fprintf(stdout, "--------------------------------------\n");
 
     if (execCount <= 0) {
-        cout << "***** Not all called tests actually exist! *****\n";
+        fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
 
     return major.getErrors();
@@ -1031,3 +1030,13 @@ UnicodeString CharsToUnicodeString(const char* chars)
     }
     return result;
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
+

@@ -177,7 +177,6 @@ void ParsePositionTest::TestFieldPosition_example()
             tempLen : (tempLen - pos.getEndIndex());
         for (int j=0; j<tempOffset; j++) 
             temp += UnicodeString("="/*'='*/); // initialize
-        //cout << temp << fmtText   << endl;
         logln("FP " + temp + res);
     }
 

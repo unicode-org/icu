@@ -11,13 +11,13 @@
 #ifndef _INTLTEST
 #define _INTLTEST
 
+#include <stdio.h>
+
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/coll.h"
 #include "unicode/sortkey.h"
 #include "unicode/fmtable.h" // liu
-
-#include <iostream.h>
 
 #ifdef OS390
 // avoid collision with math.h/log()
@@ -88,7 +88,7 @@ public:
     
     virtual void usage( void ) ;
 
-    ostream*    testout;
+    FILE *testoutfp;
 
 protected:
     virtual void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL ); // overide !
