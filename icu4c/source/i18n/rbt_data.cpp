@@ -7,10 +7,10 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "rbt_data.h"
-#include "hash.h"
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
+#include "rbt_data.h"
+#include "hash.h"
 
 U_NAMESPACE_BEGIN
 

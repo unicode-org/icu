@@ -9,11 +9,11 @@
 
 #include "unicode/usearch.h"
 #include "unicode/ustring.h"
-#include "unormimp.h"
 #include "unicode/uchar.h"
-#include "cmemory.h"
+#include "unormimp.h"
 #include "ucol_imp.h"
 #include "usrchimp.h"
+#include "cmemory.h"
 
 // internal definition ---------------------------------------------------
 

@@ -7,9 +7,9 @@
 **********************************************************************
 */
 
-#include "cmemory.h"
-#include "usrchimp.h"
 #include "unicode/stsearch.h"
+#include "usrchimp.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 

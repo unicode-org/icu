@@ -17,9 +17,9 @@
 #include "unicode/decimfmt.h"
 #include "unicode/rbnf.h"
 #include "unicode/ustring.h"
-#include "cpputils.h"
 #include "unicode/fmtable.h"
 #include "unicode/dcfmtsym.h"
+#include "cpputils.h"
 U_NAMESPACE_USE
 /*
 U_CAPI UNumberFormat*

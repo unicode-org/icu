@@ -7,11 +7,11 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "rbt_rule.h"
 #include "unicode/rep.h"
-#include "rbt_data.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
+#include "rbt_rule.h"
+#include "rbt_data.h"
 #include "cmemory.h"
 #include "strmatch.h"
 #include "strrepl.h"

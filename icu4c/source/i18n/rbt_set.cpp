@@ -7,10 +7,10 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "rbt_set.h"
-#include "rbt_rule.h"
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
+#include "rbt_set.h"
+#include "rbt_rule.h"
 #include "cmemory.h"
 
 U_CDECL_BEGIN

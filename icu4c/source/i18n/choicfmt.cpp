@@ -23,10 +23,10 @@
 ********************************************************************************
 */
 
-#include "cpputils.h"
 #include "unicode/choicfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
+#include "cpputils.h"
 #include "ustrfmt.h"
 
 // *****************************************************************************

@@ -8,9 +8,9 @@
 **********************************************************************
 */
 
-#include "name2uni.h"
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
+#include "name2uni.h"
 
 // As of Unicode 3.0.0, the longest name is 83 characters long.
 #define LONGEST_NAME 83

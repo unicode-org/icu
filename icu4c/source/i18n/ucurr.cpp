@@ -5,10 +5,10 @@
 **********************************************************************
 */
 #include "unicode/ucurr.h"
-#include "cstring.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
 #include "unicode/ustring.h"
+#include "cstring.h"
 
 //------------------------------------------------------------
 // Constants

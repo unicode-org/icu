@@ -7,10 +7,10 @@
 #ifndef _NUMBERFORMATROUNDTRIPTEST_
 #define _NUMBERFORMATROUNDTRIPTEST_
  
-#include <stdlib.h>
 #include "unicode/numfmt.h"
 #include "unicode/fmtable.h"
 #include "intltest.h"
+#include <stdlib.h>
 
 /** 
  * Performs round-trip tests for NumberFormat

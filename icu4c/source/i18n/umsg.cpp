@@ -22,9 +22,9 @@
 #include "unicode/umsg.h"
 #include "unicode/ustring.h"
 #include "unicode/fmtable.h"
-#include "cpputils.h"
 #include "unicode/msgfmt.h"
 #include "unicode/unistr.h"
+#include "cpputils.h"
 
 U_NAMESPACE_USE
 

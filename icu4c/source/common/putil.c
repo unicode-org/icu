@@ -58,15 +58,6 @@
 
 #endif /* PTX */
 
-/* Include standard headers. */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <locale.h>
-#include <time.h>
-#include <float.h>
-
 /* include ICU headers */
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -75,6 +66,15 @@
 #include "cstring.h"
 #include "locmap.h"
 #include "ucln_cmn.h"
+
+/* Include standard headers. */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <locale.h>
+#include <time.h>
+#include <float.h>
 
 /* include system headers */
 #ifdef WIN32

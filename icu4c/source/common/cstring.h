@@ -25,10 +25,10 @@
 #ifndef CSTRING_H
 #define CSTRING_H 1
 
+#include "unicode/utypes.h"
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "unicode/utypes.h"
 
 #define uprv_strcpy(dst, src) U_STANDARD_CPP_NAMESPACE  strcpy(dst, src)
 #define uprv_strcpyWithSize(dst, src, size) U_STANDARD_CPP_NAMESPACE strncpy(dst, src, size)
