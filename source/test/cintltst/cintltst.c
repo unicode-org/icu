@@ -30,10 +30,6 @@ U_CDECL_END
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 
-#ifdef HAVE_CONFIG_H
-#include "icucfg.h"
-#endif
-
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
 #endif
@@ -174,11 +170,7 @@ ctest_getTestDirectory()
     if (_testDirectory == NULL) 
     {
 #if defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
-#if BUILD_OUT_OF_SOURCE
         ctest_setTestDirectory("test|testdata|");
-#else
-        ctest_setTestDirectory("source|test|testdata|");
-#endif
 #else
         ctest_setTestDirectory("icu|source|test|testdata|");
 #endif
