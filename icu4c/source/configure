@@ -558,7 +558,7 @@ echo "configure:558: checking for ICU version numbers" >&5
 
 
 geticuversion() {
-    sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p,q' "$@"
+    sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"
 }
 VERSION=`geticuversion $srcdir/common/unicode/uversion.h`
 if test x"$VERSION" = x; then
