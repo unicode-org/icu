@@ -504,6 +504,13 @@ inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     return (((htbyte >> (hash & 7)) & 1) == 1);
 }
 
+/** 
+* Approximate determination if a character is at a contraction end.
+* Guaranteed to be TRUE if a character is at the end of a contraction, 
+* otherwise it is not deterministic.
+* @param c character to be determined
+* @param coll collator
+*/
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
     if (c < coll->minContrEndCP) {
         return FALSE;
@@ -1058,6 +1065,18 @@ inline UBool collPrevIterFCD(collIterate *data)
 }
 
 /**
+* Determines if we are at the start of the data string in the backwards
+* collation iterator
+* @param data collation iterator
+* @return TRUE if we are at the start
+*/
+inline UBool isAtStartPrevIterate(collIterate *data) {
+    return (data->pos == data->string) ||
+            ((data->flags & UCOL_ITER_INNORMBUF) &&
+            *(data->pos - 1) == 0 && data->fcdPosition == NULL);
+}
+
+/**
 * Inline function that gets a simple CE.
 * So what it does is that it will first check the expansion buffer. If the
 * expansion buffer is not empty, ie the end pointer to the expansion buffer
@@ -1164,18 +1183,26 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
             */
         }
 
-        if (ch <= 0xFF) {
-          result = coll->latinOneMapping[ch];
+        /* attempt to handle contractions, after removal of the backwards 
+        contraction
+        */
+        if (!isAtStartPrevIterate(data) && ucol_contractionEndCP(ch, coll)) {
+            result = UCOL_CONTRACTION;
         }
         else {
-            if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
-                UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->string &&
-                UCOL_ISTHAIPREVOWEL(*(data->pos -1)))
-            {
-                result = UCOL_THAI;
+            if (ch <= 0xFF) {
+              result = coll->latinOneMapping[ch];
             }
             else {
-                result = ucmp32_get(coll->mapping, ch);
+                if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
+                    UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->string &&
+                    UCOL_ISTHAIPREVOWEL(*(data->pos -1)))
+                {
+                    result = UCOL_THAI;
+                }
+                else {
+                    result = ucmp32_get(coll->mapping, ch);
+                }
             }
         }
 
@@ -1430,11 +1457,17 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
                          UErrorCode *status)
 {
   uint32_t order;
-  if (ch <= 0xFF) {
-    order = UCA->latinOneMapping[ch];
+  if (!isAtStartPrevIterate(collationSource) && 
+      ucol_contractionEndCP(ch, collationSource->coll)) {
+      order = UCOL_CONTRACTION;
   }
   else {
-    order = ucmp32_get(UCA->mapping, ch);
+      if (ch <= 0xFF) {
+        order = UCA->latinOneMapping[ch];
+      }
+      else {
+        order = ucmp32_get(UCA->mapping, ch);
+      }
   }
 
   if (order > UCOL_NOT_FOUND) {
@@ -2367,6 +2400,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         uint32_t size;
 /*        uint32_t firstCE      = UCOL_NOT_FOUND;*/
         UChar    buffer[UCOL_MAX_BUFFER];
+        UChar   *strbuffer;
 
   for(;;)
   {
@@ -2429,21 +2463,33 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         */
         schar = *(source->pos);
         constart = (UChar *)coll->image + getContractOffset(CE);
-        if (source->pos == source->string ||
-            ((source->flags & UCOL_ITER_INNORMBUF) &&
-            *(source->pos - 1) == 0 && source->fcdPosition == NULL) ||
-            !ucol_contractionEndCP(schar, coll)) {
+        if (isAtStartPrevIterate(source)
+            /* commented away contraction end checks after adding the checks
+            in getPrevCE and getPrevUCA 
+            || !ucol_contractionEndCP(schar, coll)*/) {
             /* start of string or this is not the end of any contraction */
-            CE = *(coll->contractionCEs + (constart - coll->contractionIndex));
+            CE = *(coll->contractionCEs + 
+                     (constart - coll->contractionIndex));
             break;
         }
-        UCharOffset = buffer + (UCOL_MAX_BUFFER - 1);
+        strbuffer = buffer;
+        UCharOffset = strbuffer + (UCOL_MAX_BUFFER - 1);
         *(UCharOffset --) = 0;
         while (ucol_unsafeCP(schar, coll)) {
             *(UCharOffset) = schar;
             UCharOffset --;
             schar = getPrevNormalizedChar(source);
             source->pos --;
+            if (UCharOffset + 1 == buffer) {
+                /* we have exhausted the buffer */
+                int newsize = source->pos - source->string + 1;
+                strbuffer = (UChar *)uprv_malloc(sizeof(UChar) * 
+                                             (newsize + UCOL_MAX_BUFFER));
+                UCharOffset = strbuffer + newsize;
+                uprv_memcpy(UCharOffset, buffer, 
+                                             UCOL_MAX_BUFFER * sizeof(UChar));
+                UCharOffset --;
+            }
             if (source->pos == source->string ||
                 ((source->flags & UCOL_ITER_INNORMBUF) &&
                 *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
@@ -2466,6 +2512,9 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             CE = ucol_IGetNextCE(coll, &temp, status);
         }
         freeHeapWritableBuffer(&temp);
+        if (strbuffer != buffer) {
+            uprv_free(strbuffer);
+        }
         source->toReturn = source->CEpos - 1;
         if (source->toReturn == source->CEs) {
             source->CEpos = source->CEs;
