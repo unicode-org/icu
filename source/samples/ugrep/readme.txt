@@ -52,8 +52,9 @@ To Build on Unixes
            gmake install
            
     3.  Build the sample
+           Put the install directory containing icu-config on the $PATH.  
+               This will generally be <icu install directory>/bin
            cd <icu directory>/source/samples/ugrep
-           export ICU_PREFIX= <icu install directory>
            gmake
            
  To Run on Unixes

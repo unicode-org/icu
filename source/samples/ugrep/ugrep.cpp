@@ -186,7 +186,7 @@ void processOptions(int argc, const char **argv) {
         else if(strcmp(arg, "--help") == 0) {
             doUsage = TRUE;
         }
-        if(strcmp(arg, "-n") == 0 || strcmp(arg, "--line-number") == 0) {
+        else if(strcmp(arg, "-n") == 0 || strcmp(arg, "--line-number") == 0) {
             displayLineNum = TRUE;
         }
         /* POSIX.1 says all arguments after -- are not options */
@@ -212,7 +212,7 @@ void processOptions(int argc, const char **argv) {
     }
 
     if (doVersion) {
-        printf("ugrep version 0.01");
+        printf("ugrep version 0.01\n");
         if (optInd == argc) {
             exit(0);
         }
