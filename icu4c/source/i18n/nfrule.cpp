@@ -739,6 +739,8 @@ NFRule::shouldRollBack(double number) const
 * result is an integer and Double otherwise.  The result is never null.
 */
 #ifdef RBNF_DEBUG
+#include <stdio.h>
+
 static void dumpUS(FILE* f, const UnicodeString& us) {
   int len = us.length();
   char* buf = new char[len+1];
@@ -1114,7 +1116,7 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         // and another over the prefix (right now, we'll throw an
         // exception if the collator we get back from the formatter
         // isn't a RuleBasedCollator, because RuleBasedCollator defines
-        // the CollationElementIteratoer protocol.  Hopefully, this
+        // the CollationElementIterator protocol.  Hopefully, this
         // will change someday.)
         RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
         CollationElementIterator* strIter = collator->createCollationElementIterator(str);
@@ -1122,6 +1124,23 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         
         UErrorCode err = U_ZERO_ERROR;
         
+		// The original code was problematic.  Consider this match:
+		// prefix = "fifty-"
+		// string = " fifty-7"
+		// The intent is to match string up to the '7', by matching 'fifty-' at position 1
+		// in the string.  Unfortunately, we were getting a match, and then computing where
+		// the match terminated by rematching the string.  The rematch code was using as an
+		// initial guess the substring of string between 0 and prefix.length.  Because of
+		// the leading space and trailing hyphen (both ignorable) this was succeeding, leaving
+		// the position before the hyphen in the string.  Recursing down, we then parsed the
+		// remaining string '-7' as numeric.  The resulting number turned out as 43 (50 - 7).
+		// This was not pretty, especially since the string "fifty-7" parsed just fine.
+		//
+		// We have newer APIs now, so we can use calls on the iterator to determine what we
+		// matched up to.  If we terminate because we hit the last element in the string, 
+		// our match terminates at this length.  If we terminate because we hit the last element
+		// in the target, our match terminates at one before the element iterator position.
+
         // match collation elements between the strings
         int32_t oStr = strIter->next(err);
         int32_t oPrefix = prefixIter->next(err);
@@ -1139,18 +1158,22 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
                 oPrefix = prefixIter->next(err);
             }
             
+			// dlf: move this above following test, if we consume the
+			// entire target, aren't we ok even if the source was also
+			// entirely consumed?
+
+            // if skipping over ignorables brought to the end of
+            // the prefix, we DID match: drop out of the loop
+            if (oPrefix == CollationElementIterator::NULLORDER) {
+                break;
+            }
+
             // if skipping over ignorables brought us to the end
             // of the target string, we didn't match and return 0
             if (oStr == CollationElementIterator::NULLORDER) {
                 delete prefixIter;
                 delete strIter;
                 return 0;
-            }
-            
-            // if skipping over ignorables brought to the end of
-            // the prefix, we DID match: drop out of the loop
-            else if (oPrefix == CollationElementIterator::NULLORDER) {
-                break;
             }
             
             // match collation elements from the two strings
@@ -1171,9 +1194,19 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
             }
         }
         
+		int32_t result = strIter->getOffset();
+		if (oStr != CollationElementIterator::NULLORDER) {
+			--result; // back over character that we don't want to consume;
+		}
+
+#ifdef RBNF_DEBUG
+		fprintf(stderr, "prefix length: %d\n", result);
+#endif
         delete prefixIter;
         delete strIter;
         
+		return result;
+#if 0
         //----------------------------------------------------------------
         // JDK 1.2-specific API call
         // return strIter.getOffset();
@@ -1194,6 +1227,9 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
             UnicodeString temp;
             temp.setTo(str, 0, prefix.length());
             if (collator->equals(temp, prefix)) {
+#ifdef RBNF_DEBUG
+				fprintf(stderr, "returning: %d\n", prefix.length());
+#endif
                 return prefix.length();
             }
         }
@@ -1216,7 +1252,8 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         // SHOULD NEVER GET HERE!!!
         return 0;
         //----------------------------------------------------------------
-        
+#endif
+		
         // If lenient parsing is turned off, forget all that crap above.
         // Just use String.startsWith() and be done with it.
   } else {

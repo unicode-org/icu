@@ -517,6 +517,8 @@ NFRuleSet::findFractionRuleSetRule(double number) const
  * left unchanged.
  */
 #ifdef RBNF_DEBUG
+#include <stdio.h>
+
 static void dumpUS(FILE* f, const UnicodeString& us) {
   int len = us.length();
   char* buf = new char[len+1];
