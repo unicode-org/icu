@@ -3101,7 +3101,7 @@ static void TestNewJapanese() {
     "tt8",
     "\\u30b7\\u30e3\\u30fc\\u30ec",
   };
-  /*genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));*/
+  genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));
   genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));
   /*genericLocaleStarter("ja_JP_JIS", test3, sizeof(test3)/sizeof(test3[0]));*/
 
