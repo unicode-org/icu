@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/12/03 00:47:53 $ 
-* $Revision: 1.6 $
+* $Date: 2002/12/04 00:12:54 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -485,21 +485,21 @@ public interface UProperty
          * Selector for the abbreviated name of a property or value.
          * Most properties and values have a short name; those that do
          * not return null.
-         * @since ICU 2.4
+         * @draft ICU 2.4
          */
         static final int SHORT = 0;
 
         /**
          * Selector for the long name of a property or value.  All
          * properties and values have a long name.
-         * @since ICU 2.4
+         * @draft ICU 2.4
          */
         static final int LONG = 1;
 
         /**
          * The number of predefined property name choices.  Individual
          * properties or values may have more than COUNT aliases.
-         * @since ICU 2.4
+         * @draft ICU 2.4
          */
         static final int COUNT = 2;
     }
