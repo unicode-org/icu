@@ -120,7 +120,9 @@ Transliterator* TitlecaseTransliterator::clone(void) const {
  */
 void TitlecaseTransliterator::handleTransliterate(
                                   Replaceable& text, UTransPosition& offsets,
-                                  UBool isIncremental) const {
+                                  UBool /*isIncremental*/) const
+{
+    /* TODO: Verify that isIncremental can be ignored */
     if (SKIP == NULL) {
         return;
     }
