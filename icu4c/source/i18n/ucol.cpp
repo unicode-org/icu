@@ -2073,6 +2073,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
             in writable buffer, at this point fcdPosition can not be
             pointing to the end of the data string. see contracting tag.
             */
+          if(data->fcdPosition) {
             if (*(data->fcdPosition + 1) == 0 ||
                 data->fcdPosition + 1 == data->endp) {
                 /* at the end of the string, dump it into the normalizer */
@@ -2082,6 +2083,13 @@ inline UChar getNextNormalizedChar(collIterate *data)
             }
             pEndWritableBuffer = data->pos;
             data->pos = data->fcdPosition;
+          } else if(data->origFlags & UCOL_USE_ITERATOR) {
+            // if we are here, we're using a normalizing iterator.
+            // we should just continue further.
+            data->flags = data->origFlags;
+            data->pos = NULL;
+            return (UChar)data->iterator->next(data->iterator);
+          }
           //}
         }
         else {
@@ -5058,7 +5066,7 @@ static inline
 UBool isShiftedCE(uint32_t CE, uint32_t LVT, UBool *wasShifted) {
   UBool notIsContinuation = !isContinuation(CE);
   uint8_t primary1 = (uint8_t)((CE >> 24) & 0xFF); 
-  if(LVT && ((notIsContinuation && CE <= LVT && primary1 > 0)
+  if(LVT && ((notIsContinuation && (CE & 0xFFFF0000)<= LVT && primary1 > 0)
     || (!notIsContinuation && *wasShifted))
     || (*wasShifted && primary1 == 0)) { /* amendment to the UCA says that primary ignorables */
     // The stuff below should probably be in the sortkey code... maybe not...
