@@ -344,7 +344,7 @@ public class Currency extends MeasureUnit implements Serializable {
                         s = ((String[]) currencies[i][1])[nameStyle];
                         break;
                     }
-                } 
+                } c
                 */               
             }
             catch (MissingResourceException e) {}
@@ -582,7 +582,7 @@ public class Currency extends MeasureUnit implements Serializable {
             // Get CurrencyMeta resource out of root locale file.  [This may
             // move out of the root locale file later; if it does, update this
             // code.]
-            ICUResourceBundle root = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData");
+            ICUResourceBundle root = ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             ICUResourceBundle currencyMeta = root.get("CurrencyMeta");
 
             //Integer[] i = null;
