@@ -533,7 +533,7 @@ public:
 
     /**
      * Unregister a previously-registered BreakIterator using the key returned from the
-     * register call.  Key becomes invalid after this call and should not be used again.
+     * register call.  Key becomes invalid after a successful call and should not be used again.
      * The BreakIterator corresponding to the key will be deleted.
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
