@@ -25,7 +25,7 @@ typedef struct TestNode TestNode;
  *
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_EXPORT_API extern int REPEAT_TESTS;
+extern T_CTEST_EXPORT_API int REPEAT_TESTS;
 
 /**
  * Set this to zero to disable log_verbose() messages.
@@ -33,7 +33,7 @@ T_CTEST_EXPORT_API extern int REPEAT_TESTS;
  *
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_EXPORT_API extern int VERBOSITY;
+extern T_CTEST_EXPORT_API int VERBOSITY;
 
 /**
  * Set this to zero to disable log_verbose() messages.
@@ -41,7 +41,7 @@ T_CTEST_EXPORT_API extern int VERBOSITY;
  *
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_EXPORT_API extern int ERR_MSG;
+extern T_CTEST_EXPORT_API int ERR_MSG;
 
 /**
  * Set this to zero to disable some of the slower tests.
@@ -49,7 +49,7 @@ T_CTEST_EXPORT_API extern int ERR_MSG;
  *
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_EXPORT_API extern int QUICK;
+extern T_CTEST_EXPORT_API int QUICK;
 
 /**
  * Set this to nonzero to warn (not error) on missing data. 
@@ -59,14 +59,14 @@ T_CTEST_EXPORT_API extern int QUICK;
  * @see log_data_err
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_EXPORT_API extern int WARN_ON_MISSING_DATA;
+extern T_CTEST_EXPORT_API int WARN_ON_MISSING_DATA;
 
 /**
  * ICU tracing level, is set by command line option
  *
  * @internal
  */
-T_CTEST_EXPORT_API extern UTraceLevel ICU_TRACE;
+extern T_CTEST_EXPORT_API UTraceLevel ICU_TRACE;
 
 /**
  * Show the names of all nodes.
