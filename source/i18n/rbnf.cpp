@@ -212,7 +212,9 @@ public:
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
-                uprv_memset(buf + cap / 2, 0, cap / 2 * sizeof(void*));
+                void* start = &buf[size];
+                size_t count = (cap - size) * sizeof(void*);
+                uprv_memset(start, 0, count); // fill with nulls, just because
             }
             buf[size++] = elem;
         }
@@ -553,6 +555,8 @@ LocDataParser::parseError(const char* str) {
     
     uprv_free(data);
     data = NULL;
+    p = NULL;
+    e = NULL;
     
     if (U_SUCCESS(ec)) {
         ec = U_PARSE_ERROR;
