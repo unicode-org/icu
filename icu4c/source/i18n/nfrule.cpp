@@ -574,7 +574,7 @@ util_append_llong(UnicodeString& result, const llong& value)
 static void util_append64(UnicodeString& result, const llong& n)
 {
     UChar buffer[256];
-    int32_t len = n.u_lltoa(buffer, sizeof(buffer));
+    int32_t len = n.lltou(buffer, sizeof(buffer));
     UnicodeString temp(buffer, len);
     result.append(temp);
 }

@@ -18,15 +18,13 @@
 
 #include "unicode/utypes.h"
 
-/* This is set to zero because we want to increase the code coverage percentage */
-#define LLONG_STRING_CONVERSION 0
-
 U_NAMESPACE_BEGIN
 
 // machine dependent value, need to move
 //#define __u_IntBits 32
 
-class llong {
+// export so that we can test this
+class U_I18N_API llong {
 #ifdef RBNF_DEBUG
 public:
 #else
@@ -41,8 +39,8 @@ private:
     // so make public in order that file statics can access this constructor
 public:
     static const double kD32;  // 2^^32 as a double
-    static const double kDMin; // -(2^^54), minimum double with full integer precision
-    static const double kDMax; // 2^^54, maximum double with full integer precision
+    // static const double kDMin; // -(2^^54), minimum double with full integer precision
+    // static const double kDMax; // 2^^54, maximum double with full integer precision
 
     llong(int32_t h, uint32_t l) : lo(l), hi(h) {}
 private:
@@ -119,7 +117,23 @@ public:
     }
     inline llong operator>>(int32_t shift) const { llong r(*this); r >>= shift; return r; }
 
-    // unsigned right shift
+     // right shift without sign extension, non-const 
+    llong& ushr(int32_t shift) {
+        shift &= 63;
+        if (shift < 32) {
+			if (shift > 0) {
+				lo >>= shift;
+				lo |= (hi << (32 - shift));
+				hi = (int32_t)(((unsigned)hi) >> shift);
+			}
+        } else {
+            lo = (uint32_t)(((unsigned)hi) >> (shift - 32));
+            hi = 0;
+        }
+        return *this;
+    }
+
+   // right shift without sign extension, const
     inline llong ushr(int32_t shift) const;
 
     // bit operations
@@ -199,39 +213,19 @@ public:
     inline llong pow(uint32_t n) const;
 
     // absolute value
-    llong abs() const;
+    inline llong abs() const;
 
-#if LLONG_STRING_CONVERSION
     // simple construction from ASCII and Unicode strings
     static llong atoll(const char* str, uint32_t radix = 10);
-    static llong u_atoll(const UChar* str, uint32_t radix = 10);
+    static llong utoll(const UChar* str, uint32_t radix = 10);
 
     // output as ASCII or Unicode strings or as raw values, preceeding '-' if signed
     uint32_t lltoa(char* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
-#endif
-    uint32_t u_lltoa(UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
-
-    // useful public constants - perhaps should not have class statics
-//    static const llong getZero();
-//    static const llong getOne();
+    uint32_t lltou(UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
 
 private:
     static const llong getMaxDouble();
     static const llong getMinDouble();
-
-    // right shift without sign extension
-    llong& ushr(int32_t shift) {
-        shift &= 0x63;
-        if (shift < 32) {
-            lo >>= shift;
-            lo |= (hi << (32 - shift));
-            hi = (int32_t)(((unsigned)hi) >> shift);
-        } else {
-            lo = (uint32_t)(((unsigned)hi) >> (shift - 32));
-            hi = 0;
-        }
-        return *this;
-    }
 
     // back door for test
     friend void llong_test();
@@ -270,7 +264,7 @@ inline UBool llong::ule(const llong& rhs) const { return hi == rhs.hi ? lo <= rh
 
 inline llong llong::ushr(int32_t shift) const { llong r(*this); r.ushr(shift); return r; }
 
-inline int32_t  llong::asInt() const { return (int32_t)(lo | (hi < 0 ? 0x80000000 : 0)); }
+inline int32_t  llong::asInt() const { return (int32_t)((lo & 0x7fffffff) | (hi < 0 ? 0x80000000 : 0)); }
 inline uint32_t llong::asUInt() const { return lo; }
 inline double   llong::asDouble() const { return llong::kD32 * hi + lo; }
 
