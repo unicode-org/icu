@@ -211,6 +211,49 @@ UnicodeStringTest::TestCompare()
             }
         }
     }
+
+    /* test caseCompare() */
+    {
+        static const UChar
+        _mixed[]=               { 0x61, 0x42, 0x131, 0x3a3, 0xdf,       0xfb03,           0xd93f, 0xdfff, 0 },
+        _otherDefault[]=        { 0x41, 0x62, 0x69,  0x3c3, 0x73, 0x53, 0x46, 0x66, 0x49, 0xd93f, 0xdfff, 0 },
+        _otherExcludeSpecialI[]={ 0x41, 0x62, 0x131, 0x3c3, 0x53, 0x73, 0x66, 0x46, 0x69, 0xd93f, 0xdfff, 0 },
+        _different[]=           { 0x41, 0x62, 0x69,  0x3c3, 0x73, 0x53, 0x46, 0x66, 0x49, 0xd93f, 0xdffd, 0 };
+
+        UnicodeString
+            mixed(TRUE, _mixed, -1),
+            otherDefault(TRUE, _otherDefault, -1),
+            otherExcludeSpecialI(TRUE, _otherExcludeSpecialI, -1),
+            different(TRUE, _different, -1);
+
+        int8_t result;
+
+        /* ### TODO after ICU 1.8: if u_getUnicodeVersion()>=3.1.0.0 then test exclude-special-i cases as well */
+
+        /* test caseCompare() */
+        result=mixed.caseCompare(otherDefault, U_FOLD_CASE_DEFAULT);
+        if(result!=0) {
+            errln("error: mixed.caseCompare(other, default)=%ld instead of 0\n", result);
+        }
+
+        /* test caseCompare() */
+        result=mixed.caseCompare(different, U_FOLD_CASE_DEFAULT);
+        if(result<=0) {
+            errln("error: mixed.caseCompare(different, default)=%ld instead of positive\n", result);
+        }
+
+        /* test caseCompare() - include the folded sharp s (U+00df) with different lengths */
+        result=mixed.caseCompare(1, 4, different, 1, 5, U_FOLD_CASE_DEFAULT);
+        if(result!=0) {
+            errln("error: mixed.caseCompare(mixed, 1, 4, different, 1, 5, default)=%ld instead of 0\n", result);
+        }
+
+        /* test caseCompare() - stop in the middle of the sharp s (U+00df) */
+        result=mixed.caseCompare(1, 4, different, 1, 4, U_FOLD_CASE_DEFAULT);
+        if(result<=0) {
+            errln("error: mixed.caseCompare(1, 4, different, 1, 4, default)=%ld instead of positive\n", result);
+        }
+    }
 }
 
 void
