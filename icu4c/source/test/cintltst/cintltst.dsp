@@ -292,6 +292,10 @@ SOURCE=.\susctest.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\trietest.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmptst.c
 # End Source File
 # Begin Source File
