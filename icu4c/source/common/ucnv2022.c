@@ -2505,7 +2505,7 @@ getTrail:
             }
 
             /* do the conversion */
-            if(sourceChar == CR || sourceChar == LF){
+            if(sourceChar < 0x007f ){
                 targetUniChar = sourceChar;
                 if(*currentState!= ASCII_1){
                     *currentState = ASCII_1;
