@@ -1162,6 +1162,14 @@ SOURCE=.\unicode\hangjamo.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\hangjamo.h
+
+"..\..\include\unicode\hangjamo.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy   unicode\hangjamo.h    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
@@ -1207,6 +1215,14 @@ InputPath=.\unicode\hextouni.h
 SOURCE=.\unicode\jamohang.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\jamohang.h
+
+"..\..\include\unicode\jamohang.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy   unicode\jamohang.h    ..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -1258,6 +1274,14 @@ SOURCE=.\unicode\nultrans.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\nultrans.h
+
+"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\nultrans.h                ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
@@ -1303,6 +1327,14 @@ InputPath=.\unicode\numfmt.h
 SOURCE=.\unicode\parseerr.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\parseerr.h
+
+"..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy   unicode\parseerr.h    ..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
