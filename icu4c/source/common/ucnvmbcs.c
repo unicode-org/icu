@@ -1002,7 +1002,7 @@ unrolled:
     if(targetCapacity>=16) {
         int32_t count, loops, oredEntries;
 
-        loops=count=targetCapacity>>16;
+        loops=count=targetCapacity>>4;
         do {
             oredEntries=entry=stateTable[0][*source++];
             *target++=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
