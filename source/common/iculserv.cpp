@@ -17,6 +17,13 @@
 
 U_NAMESPACE_BEGIN
 
+static Hashtable * LocaleUtility_cache = NULL;
+
+#define UNDERSCORE_CHAR ((UChar)0x005f)
+
+static UMTX LocaleUtility_lock = 0;
+
+
 /*
  ******************************************************************
  */
@@ -87,7 +94,7 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
     // have to ignore bundleID for the moment, since we don't have easy C++ api.
     // assume it's the default bundle
 
-    if (cache == NULL) {
+    if (LocaleUtility_cache == NULL) {
         Hashtable* result = new Hashtable();
         if (result) {
             UErrorCode status = U_ZERO_ERROR;
@@ -101,16 +108,16 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
                 }
             }
             {
-                Mutex mutex(&lock);
-                if (cache == NULL) {
-                    cache = result;
-                    return cache;
+                Mutex mutex(&LocaleUtility_lock);
+                if (LocaleUtility_cache == NULL) {
+                    LocaleUtility_cache = result;
+                    return LocaleUtility_cache;
                 }
             }
             delete result;
         }
     }
-    return cache;
+    return LocaleUtility_cache;
 }
 
 UBool
@@ -123,26 +130,18 @@ LocaleUtility::isFallbackOf(const UnicodeString& root, const UnicodeString& chil
 
 UBool
 LocaleUtility::cleanup(void) {
-  if (cache) {
-    Mutex mutex(&lock);
-    delete cache;
-    cache = NULL;
-  }
-  umtx_destroy(&lock);
-  return TRUE;
+    if (LocaleUtility_cache) {
+        Mutex mutex(&LocaleUtility_lock);
+        delete LocaleUtility_cache;
+        LocaleUtility_cache = NULL;
+    }
+    umtx_destroy(&LocaleUtility_lock);
+    return TRUE;
 }
-
-Hashtable * LocaleUtility::cache = NULL;
-
-const UChar LocaleUtility::UNDERSCORE_CHAR = 0x005f;
-
-UMTX LocaleUtility::lock = 0;
 
 /*
  ******************************************************************
  */
-
-const UChar LocaleKey::UNDERSCORE_CHAR = 0x005f;
 
 const int32_t LocaleKey::KIND_ANY = -1;
 
