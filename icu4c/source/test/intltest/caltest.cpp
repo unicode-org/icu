@@ -1294,17 +1294,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
-#ifndef _TMP_ROLLOVER_28
-    static const UDate kExpire = 1067480869000.0;
-    
-    if(Calendar::getNow() >= kExpire) {
-      errln("FAIL: please remove #ifdef _TMP_ROLLOVER_28 and fix this code - [%s:%d]", __FILE__, __LINE__);
-    } else {
-      logln("WARNING: %.0lf days until gregorian cutover test reenabled - please #define _TMP_ROLLOVER_28 or remove these #ifdefs [%s:%d]\n", (kExpire-Calendar::getNow())/86400000.0, __FILE__, __LINE__);
-    }
-#endif
 
-#ifdef _TMP_ROLLOVER_28
     cal->clear();
     cal->set(1582, UCAL_OCTOBER, 1);
     doYEAR_WOYLoop(cal, sdf, times, status);
@@ -1312,7 +1302,6 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
-#endif
     delete sdf;
     delete cal;
 
@@ -1453,28 +1442,29 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
         if(original!=tst) {
             us.remove();
             sdf->format(Formattable(original, Formattable::kIsDate), us, errorCode);
-            errln("Parsed time doesn't match with regular");
-            logln("expected "+us);
+            errln("FAIL: Parsed time doesn't match with regular");
+            logln("expected "+us + " " + calToStr(*cal));
             us.remove();
             sdf->format(Formattable(tst, Formattable::kIsDate), us, errorCode);
-            logln("got "+us);
+            logln("got "+us + " " + calToStr(*tstres));
         }
         tstres->clear();
         tstres->set(UCAL_YEAR_WOY, cal->get(UCAL_YEAR_WOY, errorCode));
         tstres->set(UCAL_WEEK_OF_YEAR, cal->get(UCAL_WEEK_OF_YEAR, errorCode));
         tstres->set(UCAL_DOW_LOCAL, cal->get(UCAL_DOW_LOCAL, errorCode));
         if(cal->get(UCAL_YEAR, errorCode) != tstres->get(UCAL_YEAR, errorCode)) {
-            errln("Different Year!");
+            errln("FAIL: Different Year!");
             logln((UnicodeString)"Expected "+cal->get(UCAL_YEAR, errorCode));
             logln((UnicodeString)"Got "+tstres->get(UCAL_YEAR, errorCode));
             return;
         }
         if(cal->get(UCAL_DAY_OF_YEAR, errorCode) != tstres->get(UCAL_DAY_OF_YEAR, errorCode)) {
-            errln("Different Day Of Year!");
+            errln("FAIL: Different Day Of Year!");
             logln((UnicodeString)"Expected "+cal->get(UCAL_DAY_OF_YEAR, errorCode));
             logln((UnicodeString)"Got "+tstres->get(UCAL_DAY_OF_YEAR, errorCode));
             return;
         }
+        //logln(calToStr(*cal));
         cal->add(UCAL_DATE, 1, errorCode);
         if (U_FAILURE(errorCode)) { errln("Add error"); return; }
         us.remove();

@@ -1956,8 +1956,10 @@ void CalendarRegressionTest::TestJ81() {
     fmt.setCalendar(cal);
     // Get the Gregorian cutover
     UDate cutover = cal.getGregorianChange();
+    UDate days = ONE_DAY;
+    days = cutover/days;
     logln(UnicodeString("Cutover: {") +
-          fmt.format(cutover, temp) + "}(" + cutover/ONE_DAY + ")");
+          fmt.format(cutover, temp) + "}(epoch days-" + (int)days + ", jd" + (2440588 + days) +")");
 
     // Check woy and doy handling.  Reference data:
     /* w40 d274 Mon 1 Oct 1582
@@ -1993,24 +1995,11 @@ void CalendarRegressionTest::TestJ81() {
         26, 42, 289, UCAL_TUESDAY,
         27, 42, 290, UCAL_WEDNESDAY,
         28, 42, 291, UCAL_THURSDAY,
-
-#ifdef _TMP_ROLLOVER_28
         29, 42, 292, UCAL_FRIDAY,
         30, 42, 293, UCAL_SATURDAY,
         31, 43, 294, UCAL_SUNDAY
-#endif
     };
     int32_t DOY_DATA_length = (int32_t)(sizeof(DOY_DATA) / sizeof(DOY_DATA[0]));
-
-#ifndef _TMP_ROLLOVER_28
-    static const UDate kExpire = 1067480869000.0;
-    
-    if(Calendar::getNow() >= kExpire) {
-      errln("FAIL: please remove #ifdef _TMP_ROLLOVER_28 and fix this code - [%s:%d]", __FILE__, __LINE__);
-    } else {
-      logln("WARNING: %.0lf days until gregorian cutover test reenabled - please #define _TMP_ROLLOVER_28 or remove these #ifdefs [%s:%d]\n", (kExpire-Calendar::getNow())/86400000.0, __FILE__, __LINE__);
-    }
-#endif
 
     for (i=0; i<DOY_DATA_length; i+=4) {
         // Test time->fields
@@ -2025,7 +2014,8 @@ void CalendarRegressionTest::TestJ81() {
         if (woy != DOY_DATA[i+1] || doy != DOY_DATA[i+2] || dow != DOY_DATA[i+3]) {
             errln((UnicodeString)"Fail: expect woy=" + DOY_DATA[i+1] +
                   ", doy=" + DOY_DATA[i+2] + ", dow=" + DOY_DATA[i+3] + " on " +
-                  fmt.format(cal.getTime(status), temp.remove()));
+                  fmt.format(cal.getTime(status), temp.remove()) +
+                  " set(1582,OCTOBER, " + DOY_DATA[i] + ")");
             logln(CalendarTest::calToStr(cal));
             status = U_ZERO_ERROR;
         }  else {
@@ -2035,7 +2025,6 @@ void CalendarRegressionTest::TestJ81() {
           logln(CalendarTest::calToStr(cal));
           status = U_ZERO_ERROR;
         }
-
         // Test fields->time for WOY
         cal.clear();
         cal.set(UCAL_YEAR, 1582);
@@ -2051,6 +2040,7 @@ void CalendarRegressionTest::TestJ81() {
                   " dow=" + DOY_DATA[i+3] + " => " +
                   fmt.format(cal.getTime(status), temp.remove()) +
                   ", expected 1582 Oct " + DOY_DATA[i]);
+            logln(CalendarTest::calToStr(cal));
             status = U_ZERO_ERROR;
         }
 
@@ -2072,11 +2062,6 @@ void CalendarRegressionTest::TestJ81() {
         }
     }
     status = U_ZERO_ERROR;
-
-#ifndef _TMP_ROLLOVER_28
-    logln("warning: %s:%d exitting early\n", __FILE__, __LINE__);
-    return;
-#endif
 
 #define ADD_ROLL  ADD|ROLL
 #define PLUS_MINUS PLUS|MINUS
