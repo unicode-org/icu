@@ -36,7 +36,11 @@ install: install-recursive install-local
 clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
-check: all check-recursive check-local
+
+# Note (srl 4/15/2002) do  NOT recursively check samples for 2.1, look into testing them in the future.
+#check: all check-recursive check-local
+check: all check-local
+
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
