@@ -32,8 +32,9 @@
 #include "ustr_imp.h"
 #include "uprops.h"
 
-// Machine-generated data
-// See com.ibm.icu.dev.tools.UnicodeSetCloseOver
+/* Machine-generated data
+ * See com.ibm.icu.dev.tools.UnicodeSetCloseOver
+ */
 static const UChar32 CASE_UNIQUE_RANGES[] = {
     0x0041,0x005A,0x0061,0x007A,0x00B5,0x00B5,0x00C0,0x00D6,0x00D8,0x00F6,
     0x00F8,0x0130,0x0132,0x0137,0x0139,0x017F,0x0181,0x018C,0x018E,0x0199,
@@ -2057,7 +2058,7 @@ uchar_isCaseUnique(UChar32 ch) {
 
     if (CASE_UNIQUE == NULL) {
         UErrorCode ec = U_ZERO_ERROR;
-        USet* s = uset_open(0, -1); // empty
+        USet* s = uset_open(0, -1); /* empty */
         int32_t i;
         if (s == NULL) {
             return FALSE;
