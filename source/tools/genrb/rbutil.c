@@ -16,7 +16,7 @@
 */
 
 #include "unicode/putil.h"
-#include "util.h"
+#include "rbutil.h"
 #include "cmemory.h"
 #include "cstring.h"
 

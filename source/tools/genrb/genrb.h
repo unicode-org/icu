@@ -26,7 +26,7 @@
 #include "ucbuf.h"
 #include "errmsg.h"
 #include "parse.h"
-#include "util.h"
+#include "rbutil.h"
 #include "reslist.h"
 
 
