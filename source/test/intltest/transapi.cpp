@@ -532,7 +532,7 @@ class TestFilter1 : public UnicodeFilter {
         return new TestFilter1(*this);
     }
     virtual bool_t contains(UChar c) const {
-       if(c=='c' || c=='a' || c=='C' || c=='A')
+       if(c==0x63 || c==0x61 || c==0x43 || c==0x41)
           return FALSE;
        else
           return TRUE;
@@ -543,7 +543,7 @@ class TestFilter2 : public UnicodeFilter {
         return new TestFilter2(*this);
     }
     virtual bool_t contains(UChar c) const {
-        if(c=='e' || c=='l')
+        if(c==0x65 || c==0x6c)
            return FALSE;
         else
            return TRUE;
@@ -554,7 +554,7 @@ class TestFilter3 : public UnicodeFilter {
         return new TestFilter3(*this);
     }
     virtual bool_t contains(UChar c) const {
-        if(c=='o' || c=='w')
+        if(c==0x6f || c==0x77)
            return FALSE;
         else
            return TRUE;

@@ -54,7 +54,7 @@ ibm-1112.ucm ibm-1114.ucm ibm-1115.ucm ibm-1116.ucm ibm-1117.ucm ibm-1118.ucm ib
 ibm-833.ucm ibm-835.ucm ibm-891.ucm ibm-897.ucm ibm-903.ucm ibm-904.ucm ibm-907.ucm ibm-909.ucm\
 ibm-910.ucm ibm-939.ucm ibm-941.ucm ibm-944.ucm ibm-946.ucm ibm-947.ucm ibm-948.ucm\
 ibm-953.ucm ibm-955.ucm\
-ibm-37-s390.ucm\
+ibm-37-s390.ucm ibm-1047-s390.ucm\
 ibm-1140-s390.ucm ibm-1142-s390.ucm ibm-1143-s390.ucm ibm-1144-s390.ucm\
 ibm-1145-s390.ucm ibm-1146-s390.ucm ibm-1147-s390.ucm ibm-1148-s390.ucm\
 ibm-1149-s390.ucm ibm-1153-s390.ucm ibm-12712-s390.ucm ibm-16804-s390.ucm\

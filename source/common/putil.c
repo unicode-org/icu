@@ -1361,7 +1361,7 @@ const char* uprv_getDefaultCodepage()
 #if defined(OS400)
   return "ibm-37";
 #elif defined(OS390)
-  return "ibm-37-s390";
+  return "ibm-1047-s390";
 #elif defined(XP_MAC)
   /* TBD */
 #elif defined(WIN32)

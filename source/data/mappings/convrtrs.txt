@@ -236,6 +236,7 @@ ibm-16804              cpibm16804 ibm16804 ebcdic-ar # EBCDIC Arabic
 
 # without Euro
 ibm-37-s390        ibm037-s390   # EBCDIC US
+ibm-1047-s390      ibm1047-s390  # EBCDIC for S/390 Open Edition
 
 # with Euro
 ibm-1140-s390      ibm1140-s390  # EBCDIC US
