@@ -224,3 +224,112 @@ umtx_destroy(UMTX *mutex) {
     *mutex = NULL;
 #endif /* ICU_USE_THREADS==1 */
 }
+
+
+#if (ICU_USE_THREADS == 1) 
+
+
+//
+//   umtx_atomic_inc
+//   umtx_atomic_dec
+//
+#if defined (WIN32)
+//
+//  Win32 - use the Windows API functions for atomic increment and decrement.
+//
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_inc(int32_t *p)
+{
+    return InterlockedIncrement(p);
+}
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_dec(int32_t *p)
+{
+    return InterlockedDecrement(p); 
+}
+
+#elif defined (POSIX)
+//
+//  POSIX platforms without specific atomic operations.  Use a posix mutex
+//     to protect the increment and decrement.
+//     Put the mutex in static storage so we don't have to come back and delete it
+//     when the process exits.
+//
+static pthread_mutex_t gIncDecMutex;
+static UBool           gIncDecMutexInitialized = FALSE;
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_inc(int32_t *p)
+{
+    int32_t    retVal;
+
+    if (gIncDecMutexInitialized == FALSE) {
+        umtx_lock(NULL);
+        if (gIncDecMutexInitialized == FALSE) {
+# if defined (HPUX_CMA)
+            pthread_mutex_init((pthread_mutex_t*)&gIncDecMutex, pthread_mutexattr_default);
+# else
+            pthread_mutex_init((pthread_mutex_t*)&gIncDecMutex, NULL);
+            gIncDecMutexInitialized = TRUE;
+        }
+# endif
+        umtx_unlock(NULL);
+    }
+   
+
+    pthread_mutex_lock(&gIncDecMutex);
+    retVal = ++(*p);
+    pthread_mutex_unlock(&gIncDecMutex);
+    return retVal;
+}
+
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_dec(int32_t *p)
+{
+    int32_t    retVal;
+
+    pthread_mutex_lock(&gIncDecMutex);
+    retVal = --(*p);
+    pthread_mutex_unlock(&gIncDecMutex);
+    return retVal;
+}
+
+// TODO:  pthread_mutex_destroy() when the time comes.
+
+#else 
+   
+// No recognized platform. 
+#warning  No atomic increment and decrement defined for this platform.
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_inc(int32_t *p) {
+    return ++(*p);
+}
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_dec(int32_t *p) {
+    return --(*p);
+}
+
+#endif   // Platform selection for atomic_inc and dec.
+
+
+#elif  // (ICU_USE_THREADS == 1)
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_inc(int32_t *p) {
+    return ++(*p);
+}
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_dec(int32_t *p) {
+    return --(*p);
+}
+
+#endif // (ICU_USE_THREADS == 1)
+
+
+
+

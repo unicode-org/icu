@@ -30,6 +30,7 @@
 #include "unicode/ubrk.h"
 #include "uhash.h"
 #include "ustr_imp.h"
+#include "umutex.h"
 
 #if 0
 
@@ -90,6 +91,37 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
 }
 
 U_NAMESPACE_BEGIN
+
+
+//========================================
+// Reference Counting functions, put at top of file so that optimizing compilers
+//                               have a chance to automatically inline.
+//========================================
+
+void
+UnicodeString::addRef()
+{  umtx_atomic_inc((int32_t *)fArray - 1);}
+
+int32_t
+UnicodeString::removeRef()
+{ return umtx_atomic_dec((int32_t *)fArray - 1);}
+
+int32_t
+UnicodeString::refCount() const 
+{ return *((int32_t *)fArray - 1); }
+
+int32_t
+UnicodeString::setRefCount(int32_t count)
+{ return (*((int32_t *)fArray - 1) = count); }
+
+void
+UnicodeString::releaseArray() {
+  if((fFlags & kRefCounted) && removeRef() == 0) {
+    uprv_free((int32_t *)fArray - 1);
+  }
+}
+
+
 
 //========================================
 // Constructors
@@ -329,13 +361,6 @@ UnicodeString::allocate(int32_t capacity) {
 UnicodeString::~UnicodeString()
 {
   releaseArray();
-}
-
-void
-UnicodeString::releaseArray() {
-  if((fFlags & kRefCounted) && removeRef() == 0) {
-    uprv_free((int32_t *)fArray - 1);
-  }
 }
 
 
@@ -1853,7 +1878,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
       if(flags & kRefCounted) {
         // the array is refCounted; decrement and release if 0
         int32_t *pRefCount = ((int32_t *)array - 1);
-        if(--*pRefCount == 0) {
+        if(umtx_atomic_dec(pRefCount) == 0) {
           if(pBufferToDelete == 0) {
             uprv_free(pRefCount);
           } else {
