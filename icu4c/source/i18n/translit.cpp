@@ -1475,6 +1475,8 @@ UBool Transliterator::initializeRegistry() {
                 u_charsToUChars(typeStr, &type, 1);
 
                 if (U_SUCCESS(status)) {
+                    int32_t len = 0;
+                    const UChar *resString;
                     switch (type) {
                     case 0x66: // 'f'
                     case 0x69: // 'i'
@@ -1482,19 +1484,19 @@ UBool Transliterator::initializeRegistry() {
                         // row[2]=resource, row[3]=direction
                         {
                             
-                            UnicodeString resString = ures_getUnicodeStringByKey(res, "resource", &status);
+                            resString = ures_getStringByKey(res, "resource", &len, &status);
                             UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir = 
                                 (ures_getUnicodeStringByKey(res, "direction", &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
-                            registry->put(id, resString, dir, visible);
+                            registry->put(id, UnicodeString(TRUE, resString, len), dir, visible);
                         }
                         break;
                     case 0x61: // 'a'
                         // 'alias'; row[2]=createInstance argument
-                        UnicodeString resString = ures_getUnicodeString(res, &status);
-                        registry->put(id, resString, TRUE);
+                        resString = ures_getString(res, &len, &status);
+                        registry->put(id, UnicodeString(TRUE, resString, len), TRUE);
                         break;
                     }
                 }
