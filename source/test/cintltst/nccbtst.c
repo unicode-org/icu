@@ -515,6 +515,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 		if(!memcmp(junkout, expect, expectLen))
 		{
 		log_verbose("Matches!\n");
+    	ucnv_close(conv);
 		return TRUE;
 		}
 		else
@@ -523,6 +524,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 		log_verbose("String does not match. %s\n", gNuConvTestName);
 		printSeq(junkout, expectLen);
 		printSeq(expect, expectLen);
+    	ucnv_close(conv);
 		return FALSE;
 		}
 		
@@ -703,6 +705,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		if(!memcmp(junkout, expect, expectlen*2))
 		{
 		log_verbose("Matches!\n");
+    	ucnv_close(conv);
 		return TRUE;
 		}
 		else
@@ -711,6 +714,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		log_verbose("String does not match. %s\n", gNuConvTestName);
 		printUSeq(junkout, expectlen);
 		printUSeq(expect, expectlen);
+    	ucnv_close(conv);
 		return FALSE;
 		}
 		

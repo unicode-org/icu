@@ -52,7 +52,7 @@ void addElement(Vector *q, const char* string)
     q->link=p;
 
 }
-void addElement2(Vector *q, const UChar* string)
+UChar* addElement2(Vector *q, const UChar* string)
 {
 
     Vector *p;
@@ -64,6 +64,18 @@ void addElement2(Vector *q, const UChar* string)
         q=q->link;
     q->link=p;
 
+    return (UChar *)string;
+
+}
+
+void cleanupVector(Vector *q) {
+    Vector *p;
+    while(q != NULL) {
+        p = q->link;
+        free(q->text);
+        free(q);
+        q = p;
+    }
 }
 
 int32_t Count(Vector *q)
@@ -108,7 +120,7 @@ UChar* extractBetween(UTextOffset start, UTextOffset end, UChar* text)
     result=(UChar*)malloc(sizeof(UChar) * ((end-start)+1));
     u_strcpy(temp, &text[start]);
     u_strncpy(result, temp, end-start);
-
+    free(temp);
     return result;
 }
 /* -------------------------------------------------------------------------------------- */
@@ -164,10 +176,10 @@ void addTestWordData()
     wordSelectionData->link=NULL;
         
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A2)));   /*cent sign */
-    addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A3)));   /*pound sign */
-    addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A4)));   /*currency sign */
-    addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A5)));   /*yen sign */
+    free(addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A2))));   /*cent sign */
+    free(addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A3))));   /*pound sign */
+    free(addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A4))));   /*currency sign */
+    free(addElement2(wordSelectionData, UCharToUCharArray((UChar)(0x00A5))));   /*yen sign */
     addElement(wordSelectionData, "alpha-beta-gamma");
     addElement(wordSelectionData, ".");
     addElement(wordSelectionData, " ");
@@ -238,7 +250,7 @@ void addTestWordData()
     addElement(wordSelectionData, " ");
 
   /* to test for bug #4097779 */
-   addElement2(wordSelectionData, CharsToUChars("aa\\u0300a"));
+   free(addElement2(wordSelectionData, CharsToUChars("aa\\u0300a")));
    addElement(wordSelectionData, " ");
 
    /* to test for bug #4098467
@@ -247,28 +259,28 @@ void addTestWordData()
      it correctly), first as precomposed syllables, and then as conjoining jamo.
      Both sequences should be semantically identical and break the same way.
      precomposed syllables... */
-    addElement2(wordSelectionData, CharsToUChars("\\uc0c1\\ud56d"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\uc0c1\\ud56d")));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUChars("\\ud55c\\uc778"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\ud55c\\uc778")));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUChars("\\uc5f0\\ud569"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\uc5f0\\ud569")));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUChars("\\uc7a5\\ub85c\\uad50\\ud68c"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\uc7a5\\ub85c\\uad50\\ud68c")));
     addElement(wordSelectionData, " ");
     /* conjoining jamo... */
-    addElement2(wordSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc")));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab")));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8")));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c")));
     addElement(wordSelectionData, " ");
 
     /* this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
        count as a Kanji character for the purposes of word breaking */
     addElement(wordSelectionData, "abc"); 
-    addElement2(wordSelectionData, CharsToUChars("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
+    free(addElement2(wordSelectionData, CharsToUChars("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03")));
     addElement(wordSelectionData, "abc");
 
     elems= Count(wordSelectionData);
@@ -288,6 +300,7 @@ void addTestSentenceData()
 {
     int32_t elems;
     UChar temp[100];
+    UChar *td;
 
     sentenceSelectionData=(Vector*)malloc(sizeof(Vector));
     sentenceSelectionData->text=(UChar*)malloc(sizeof(UChar) * (strlen("This is a simple sample sentence. ")+1));
@@ -306,14 +319,18 @@ void addTestSentenceData()
     addElement(sentenceSelectionData, "He said, that I said, that you said!! ");
 
     u_uastrcpy(temp, "Don't rock the boat");
-    u_strcat(temp, UCharToUCharArray(kParagraphSeparator));
+    td = UCharToUCharArray(kParagraphSeparator);
+    u_strcat(temp, td);
+    free(td);
     addElement2(sentenceSelectionData, temp);
 
     addElement(sentenceSelectionData, "Because I am the daddy, that is why. ");
     addElement(sentenceSelectionData, "Not on my time (el timo.)! ");
 
     u_uastrcpy(temp, "So what!!");
-    u_strcat(temp, UCharToUCharArray(kParagraphSeparator));
+    td = UCharToUCharArray(kParagraphSeparator);
+    u_strcat(temp, td);
+    free(td);
     addElement2(sentenceSelectionData, temp);
     
     addElement(sentenceSelectionData, "\"But now,\" he said, \"I know!\" ");
@@ -329,47 +346,59 @@ void addTestSentenceData()
 
     /* test for bug #4113835: \n and \r count as spaces, not as paragraph breaks */
     u_uastrcpy(temp, "Now\ris\nthe\r\ntime\n\rfor\r\rall");
-    u_strcat(temp, UCharToUCharArray(kParagraphSeparator));
+    td = UCharToUCharArray(kParagraphSeparator);
+    u_strcat(temp, td);
+    free(td);
     addElement2(sentenceSelectionData, temp);
 
     /* test for bug #4117554: Treat fullwidth variants of .!? the same as their
        normal counterparts */
-    addElement2(sentenceSelectionData, CharsToUChars("I know I'm right\\uff0e "));
-    addElement2(sentenceSelectionData, CharsToUChars("Right\\uff1f "));
-    addElement2(sentenceSelectionData, CharsToUChars("Right\\uff01 "));
+    free(addElement2(sentenceSelectionData, CharsToUChars("I know I'm right\\uff0e ")));
+    free(addElement2(sentenceSelectionData, CharsToUChars("Right\\uff1f ")));
+    free(addElement2(sentenceSelectionData, CharsToUChars("Right\\uff01 ")));
 
     /* test for bug #4117554: Break sentence between a sentence terminator and
        opening punctuation */
     addElement(sentenceSelectionData, "no?");
         u_uastrcpy(temp, "(yes)");
-     u_strcat(temp, CharsToUChars("\\u2029"));
+        td = CharsToUChars("\\u2029");
+     u_strcat(temp, td);
+     free(td);
     addElement2(sentenceSelectionData, temp);
 
     /* test for bug #4158381: Don't break sentence after period if it isn't
        followed by a space */
     addElement(sentenceSelectionData, "Test <code>Flags.Flag</code> class.  ");
      u_uastrcpy(temp, "Another test.");
-     u_strcat(temp, CharsToUChars("\\u2029"));
+     td = CharsToUChars("\\u2029");
+     u_strcat(temp, td);
+     free(td);
     addElement2(sentenceSelectionData, temp);
     
     /* test for bug #4158381: No breaks when there are no terminators around  */
     addElement(sentenceSelectionData, "<P>Provides a set of &quot;lightweight&quot; (all-java<FONT SIZE=\"-2\"><SUP>TM</SUP></FONT> language) components that, to the maximum degree possible, work the same on all platforms.  ");
      u_uastrcpy(temp, "Another test.");
-     u_strcat(temp, CharsToUChars("\\u2029"));
+     td = CharsToUChars("\\u2029");
+     u_strcat(temp, td);
+     free(td);    
     addElement2(sentenceSelectionData, temp);
     
     /* test for bug #4143071: Make sure sentences that end with digits work right */
     addElement(sentenceSelectionData, "Today is the 27th of May, 1998.  ");
     addElement(sentenceSelectionData, "Tomorrow with be 28 May 1998.  ");
      u_uastrcpy(temp, "The day after will be the 30th.");
-     u_strcat(temp, CharsToUChars("\\u2029"));
+     td = CharsToUChars("\\u2029");
+     u_strcat(temp, td);
+     free(td);    
     addElement2(sentenceSelectionData, temp);
     
     /* test for bug #4152416: Make sure sentences ending with a capital
        letter are treated correctly */
     addElement(sentenceSelectionData, "The type of all primitive <code>boolean</code> values accessed in the target VM.  ");
      u_uastrcpy(temp, "Calls to xxx will return an implementor of this interface.");
-     u_strcat(temp, CharsToUChars("\\u2029"));
+     td = CharsToUChars("\\u2029");
+     u_strcat(temp, td);
+     free(td);    
     addElement2(sentenceSelectionData, temp);
 
 
@@ -378,12 +407,15 @@ void addTestSentenceData()
     addElement(sentenceSelectionData, "Constructs a randomly generated BigInteger, uniformly distributed over the range <tt>0</tt> to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ");
     addElement(sentenceSelectionData, "The uniformity of the distribution assumes that a fair source of random bits is provided in <tt>rnd</tt>.  ");
      u_uastrcpy(temp, "Note that this constructor always constructs a non-negative BigInteger.");
-     u_strcat(temp, CharsToUChars("\\u2029"));
+     td = CharsToUChars("\\u2029");
+     u_strcat(temp, td);
+     free(td);    
     addElement2(sentenceSelectionData, temp);
     
     elems = Count(sentenceSelectionData);
     log_verbose("In sentence: the no: of sentences are %d\n", elems);
     testSentenceText = createTestData(sentenceSelectionData, elems);
+
     
 }
 
@@ -419,7 +451,7 @@ void addTestLineData()
     addElement(lineSelectionData, "are\r");
     
     
-    addElement2(lineSelectionData, CharsToUChars("you\\u2028")); /* lineSeperator */
+    free(addElement2(lineSelectionData, CharsToUChars("you\\u2028"))); /* lineSeperator */
     
     addElement(lineSelectionData, "fine.\t");
     addElement(lineSelectionData, "good.  ");
@@ -434,22 +466,22 @@ void addTestLineData()
     addElement(lineSelectionData, "all ");
 
     /* to test for bug #4068133  */
-    addElement2(lineSelectionData, CharsToUChars("\\u96f6"));
-    addElement2(lineSelectionData, CharsToUChars("\\u4e00\\u3002"));
-    addElement2(lineSelectionData, CharsToUChars("\\u4e8c\\u3001"));
-    addElement2(lineSelectionData, CharsToUChars("\\u4e09\\u3002\\u3001"));
-    addElement2(lineSelectionData, CharsToUChars("\\u56db\\u3001\\u3002\\u3001"));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u96f6")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e00\\u3002")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e8c\\u3001")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e09\\u3002\\u3001")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u56db\\u3001\\u3002\\u3001")));
        
     
-    addElement2(lineSelectionData, CharsToUChars("\\u4e94,"));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e94,")));
     
-    addElement2(lineSelectionData, CharsToUChars("\\u516d."));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u516d.")));
 
-    addElement2(lineSelectionData, CharsToUChars("\\u4e03.\\u3001,\\u3002"));
-    addElement2(lineSelectionData, CharsToUChars("\\u516b"));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e03.\\u3001,\\u3002")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u516b")));
 
     /* to test for bug #4086052 */
-    addElement2(lineSelectionData, CharsToUChars("foo\\u00a0bar "));
+    free(addElement2(lineSelectionData, CharsToUChars("foo\\u00a0bar ")));
    
     /* to test for bug #4097920 */
     addElement(lineSelectionData, "dog,");
@@ -472,24 +504,25 @@ void addTestLineData()
        it correctly), first as precomposed syllables, and then as conjoining jamo.
        Both sequences should be semantically identical and break the same way.
        precomposed syllables... */
-    addElement2(lineSelectionData, CharsToUChars("\\uc0c1\\ud56d "));
-    addElement2(lineSelectionData, CharsToUChars("\\ud55c\\uc778 "));
-    addElement2(lineSelectionData, CharsToUChars("\\uc5f0\\ud569 "));
-    addElement2(lineSelectionData, CharsToUChars("\\uc7a5\\ub85c\\uad50\\ud68c "));
+    free(addElement2(lineSelectionData, CharsToUChars("\\uc0c1\\ud56d ")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\ud55c\\uc778 ")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\uc5f0\\ud569 ")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\uc7a5\\ub85c\\uad50\\ud68c ")));
     /* conjoining jamo... */
-    addElement2(lineSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
-    addElement2(lineSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
-    addElement2(lineSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
-    addElement2(lineSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc ")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab ")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 ")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c")));
 
     /* to test for bug #4117554: Fullwidth .!? should be treated as postJwrd */
-    addElement2(lineSelectionData, CharsToUChars("\\u4e01\\uff0e"));
-    addElement2(lineSelectionData, CharsToUChars("\\u4e02\\uff01"));
-    addElement2(lineSelectionData, CharsToUChars("\\u4e03\\uff1f"));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e01\\uff0e")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e02\\uff01")));
+    free(addElement2(lineSelectionData, CharsToUChars("\\u4e03\\uff1f")));
 
     elems = Count(lineSelectionData);
     log_verbose("In line: the no: of lines are %d\n", elems);
     testLineText = createTestData(lineSelectionData, elems);
+
     
 }
 
@@ -509,6 +542,7 @@ void addTestCharacterData()
 {
     int32_t elems;
     UChar temp[10];
+    UChar *td;
 
     characterSelectionData=(Vector*)malloc(sizeof(Vector));
     characterSelectionData->text=(UChar*)malloc(sizeof(UChar) * 2);
@@ -516,11 +550,17 @@ void addTestCharacterData()
     characterSelectionData->link=NULL;
 
     u_uastrcpy(temp, "S");
-    u_strcat(temp, UCharToUCharArray(0x0317));
+     td = UCharToUCharArray(0x0317);
+     u_strcat(temp, td);
+     free(td);    
+    /*u_strcat(temp, UCharToUCharArray(0x0317));*/
     addElement2(characterSelectionData, temp); /* graveS */
   
     u_uastrcpy(temp, "i");
-    u_strcat(temp, UCharToUCharArray(0x0301));
+     td = UCharToUCharArray(0x0301);
+     u_strcat(temp, td);
+     free(td);    
+    /*u_strcat(temp, UCharToUCharArray(0x0301));*/
     addElement2(characterSelectionData, temp); /* acuteBelowI */
     
     addElement(characterSelectionData, "m");
@@ -528,14 +568,18 @@ void addTestCharacterData()
     addElement(characterSelectionData, "l");
  
     u_uastrcpy(temp, "e");
-    u_strcat(temp, UCharToUCharArray(0x0301));
+     td = UCharToUCharArray(0x0301);
+     u_strcat(temp, td);
+     free(td);    
     addElement2(characterSelectionData, temp);/* acuteE */
     
     addElement(characterSelectionData, " ");
     addElement(characterSelectionData, "s");
  
     u_uastrcpy(temp, "a");
-    u_strcat(temp, UCharToUCharArray(0x0302));
+     td = UCharToUCharArray(0x0302);
+     u_strcat(temp, td);
+     free(td);    
     addElement2(characterSelectionData, temp);/* circumflexA */
     
     addElement(characterSelectionData, "m");
@@ -543,14 +587,18 @@ void addTestCharacterData()
     addElement(characterSelectionData, "l");
   
     u_uastrcpy(temp, "e");
-    u_strcat(temp, UCharToUCharArray(0x0303));
+     td = UCharToUCharArray(0x0303);
+     u_strcat(temp, td);
+     free(td);    
     addElement2(characterSelectionData, temp); /* tildeE */
     
     addElement(characterSelectionData, ".");
     addElement(characterSelectionData, "w");
     
     u_uastrcpy(temp, "a");
-    u_strcat(temp, UCharToUCharArray(0x0302));
+     td = UCharToUCharArray(0x0302);
+     u_strcat(temp, td);
+     free(td);    
     addElement2(characterSelectionData, temp);/* circumflexA */
 
     addElement(characterSelectionData, "w");
@@ -568,39 +616,38 @@ void addTestCharacterData()
        it correctly), first as precomposed syllables, and then as conjoining jamo.
        Both sequences should be semantically identical and break the same way.
        precomposed syllables... */
-    addElement2(characterSelectionData, CharsToUChars("\\uc0c1"));
-    addElement2(characterSelectionData, CharsToUChars("\\ud56d"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\uc0c1")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\ud56d")));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUChars("\\ud55c"));
-    addElement2(characterSelectionData, CharsToUChars("\\uc778"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\ud55c")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\uc778")));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUChars("\\uc5f0"));
-    addElement2(characterSelectionData, CharsToUChars("\\ud569"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\uc5f0")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\ud569")));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUChars("\\uc7a5"));
-    addElement2(characterSelectionData, CharsToUChars("\\ub85c"));
-    addElement2(characterSelectionData, CharsToUChars("\\uad50"));
-    addElement2(characterSelectionData, CharsToUChars("\\ud68c"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\uc7a5")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\ub85c")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\uad50")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\ud68c")));
     addElement(characterSelectionData, " ");
     /* conjoining jamo... */
-    addElement2(characterSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc"));
-    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11bc"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11bc")));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab"));
-    addElement2(characterSelectionData, CharsToUChars("\\u110b\\u1175\\u11ab"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u110b\\u1175\\u11ab")));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab"));
-    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11b8"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11b8")));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc"));
-    addElement2(characterSelectionData, CharsToUChars("\\u1105\\u1169"));
-    addElement2(characterSelectionData, CharsToUChars("\\u1100\\u116d"));
-    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u116c"));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1105\\u1169")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1100\\u116d")));
+    free(addElement2(characterSelectionData, CharsToUChars("\\u1112\\u116c")));
 
     elems = Count(characterSelectionData);
     log_verbose("In character: the no: of characters are %d", elems);
     testCharacterText = createTestData(characterSelectionData, elems);
-    
 }
 
 UChar* createTestData(Vector *select, int32_t e)
@@ -638,7 +685,9 @@ void TestForwardSentenceSelection()
     log_verbose("Testing forward sentence selection.....\n");
     doForwardSelectionTest(e, testSentenceText, sentenceSelectionData);
     ubrk_close(e);
-    free(sentenceSelectionData);
+    cleanupVector(sentenceSelectionData);
+    free(testSentenceText);
+    /*free(sentenceSelectionData);*/
 }
 
 void TestFirstSentenceSelection()
@@ -654,7 +703,9 @@ void TestFirstSentenceSelection()
     log_verbose("Testing first sentence selection.....\n");
     doFirstSelectionTest(e, testSentenceText, sentenceSelectionData);
     ubrk_close(e);
-    free(sentenceSelectionData);
+    cleanupVector(sentenceSelectionData);
+    free(testSentenceText);
+    /*free(sentenceSelectionData);*/
 }
 
 void TestLastSentenceSelection()
@@ -670,7 +721,9 @@ void TestLastSentenceSelection()
     log_verbose("Testing last sentence selection.....\n");
     doLastSelectionTest(e, testSentenceText, sentenceSelectionData);
     ubrk_close(e);
-    free(sentenceSelectionData);
+    cleanupVector(sentenceSelectionData);
+    free(testSentenceText);
+    /*free(sentenceSelectionData);*/
 }
 
 void TestBackwardSentenceSelection()
@@ -686,7 +739,9 @@ void TestBackwardSentenceSelection()
     log_verbose("Testing backward sentence selection.....\n");
     doBackwardSelectionTest(e, testSentenceText, sentenceSelectionData);
     ubrk_close(e);
-    free(sentenceSelectionData);
+    cleanupVector(sentenceSelectionData);
+    free(testSentenceText);
+    /*free(sentenceSelectionData);*/
 }
 
 void TestForwardSentenceIndexSelection()
@@ -702,7 +757,9 @@ void TestForwardSentenceIndexSelection()
     log_verbose("Testing sentence forward index selection.....\n");
     doForwardIndexSelectionTest(e, testSentenceText, sentenceSelectionData);
     ubrk_close(e);
-    free(sentenceSelectionData);
+    cleanupVector(sentenceSelectionData);
+    free(testSentenceText);
+    /*free(sentenceSelectionData);*/
 }
 
 void TestBackwardSentenceIndexSelection()
@@ -718,7 +775,9 @@ void TestBackwardSentenceIndexSelection()
     log_verbose("Testing sentence backward index selection.....\n");
     doBackwardIndexSelectionTest(e, testSentenceText, sentenceSelectionData);
     ubrk_close(e);
-    free(sentenceSelectionData);
+    cleanupVector(sentenceSelectionData);
+    free(testSentenceText);
+    /*free(sentenceSelectionData);*/
 }
 
 
@@ -756,7 +815,9 @@ void TestForwardWordSelection()
     doForwardSelectionTest(e, testWordText, wordSelectionData);
     doForwardSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
-    free(wordSelectionData);
+    cleanupVector(wordSelectionData);
+    free(testWordText);
+    /*free(wordSelectionData);*/
 }
 
 void TestFirstWordSelection()
@@ -772,7 +833,9 @@ void TestFirstWordSelection()
     log_verbose("Testing first word selection.....\n");
     doFirstSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
-    free(wordSelectionData);
+    cleanupVector(wordSelectionData);
+    free(testWordText);
+    /*free(wordSelectionData);*/
 }
 
 void TestLastWordSelection()
@@ -788,7 +851,9 @@ void TestLastWordSelection()
     log_verbose("Testing last word selection.....\n");
     doLastSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
-    free(wordSelectionData);
+    cleanupVector(wordSelectionData);
+    free(testWordText);
+    /*free(wordSelectionData);*/
 }
 
 void TestBackwardWordSelection()
@@ -804,7 +869,9 @@ void TestBackwardWordSelection()
     log_verbose("Testing backward word selection.....\n");
     doBackwardSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
-    free(wordSelectionData);
+    cleanupVector(wordSelectionData);
+    free(testWordText);
+    /*free(wordSelectionData);*/
 }
 
 void TestForwardWordIndexSelection()
@@ -820,7 +887,9 @@ void TestForwardWordIndexSelection()
     log_verbose("Testing forward word index selection.....\n");
     doForwardIndexSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
-    free(wordSelectionData);
+    cleanupVector(wordSelectionData);
+    free(testWordText);
+    /*free(wordSelectionData);*/
 }
 
 void TestBackwardWordIndexSelection()
@@ -836,7 +905,9 @@ void TestBackwardWordIndexSelection()
     log_verbose("Testing backward word index selection.....\n");
     doBackwardIndexSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
-    free(wordSelectionData);
+    cleanupVector(wordSelectionData);
+    free(testWordText);
+    /*free(wordSelectionData);*/
 }
 
 void TestWordInvariants()
@@ -874,6 +945,8 @@ void TestForwardLineSelection()
     log_verbose("Testing forward line selection.....\n");
     doForwardSelectionTest(e, testLineText, lineSelectionData);
     ubrk_close(e);
+    cleanupVector(lineSelectionData);
+    free(testLineText);
 }
 
 void TestFirstLineSelection()
@@ -889,7 +962,9 @@ void TestFirstLineSelection()
     log_verbose("Testing first line selection.....\n");
     doFirstSelectionTest(e, testLineText, lineSelectionData);
     ubrk_close(e);
-    free(lineSelectionData);
+    cleanupVector(lineSelectionData);
+    free(testLineText);
+    /*free(lineSelectionData);*/
 }
 
 void TestLastLineSelection()
@@ -905,7 +980,9 @@ void TestLastLineSelection()
     log_verbose("Testing last line selection.....\n");
     doLastSelectionTest(e, testLineText, lineSelectionData);
     ubrk_close(e);
-    free(lineSelectionData);
+    cleanupVector(lineSelectionData);
+    free(testLineText);
+    /*free(lineSelectionData);*/
 }
 
 void TestBackwardLineSelection()
@@ -921,7 +998,9 @@ void TestBackwardLineSelection()
     log_verbose("Testing backward line selection.....\n");
     doBackwardSelectionTest(e, testLineText, lineSelectionData);
     ubrk_close(e);
-    free(lineSelectionData);
+    cleanupVector(lineSelectionData);
+    free(testLineText);
+    /*free(lineSelectionData);*/
 }
 
 void TestForwardLineIndexSelection()
@@ -937,7 +1016,9 @@ void TestForwardLineIndexSelection()
     log_verbose("Testing forward line index selection.....\n");
     doForwardIndexSelectionTest(e, testLineText, lineSelectionData);
     ubrk_close(e);
-    free(lineSelectionData);
+    cleanupVector(lineSelectionData);
+    free(testLineText);
+    /*free(lineSelectionData);*/
 }
 
 void TestBackwardLineIndexSelection()
@@ -953,7 +1034,9 @@ void TestBackwardLineIndexSelection()
     log_verbose("Testing backward line index selection.....\n");
     doBackwardIndexSelectionTest(e, testLineText, lineSelectionData);
     ubrk_close(e);
-    free(lineSelectionData);
+    cleanupVector(lineSelectionData);
+    free(testLineText);
+    /*free(lineSelectionData);*/
 }
 void TestLineInvariants()
 {
@@ -1075,7 +1158,9 @@ void TestForwardCharacterSelection()
     log_verbose("Testing forward character selection.....\n");
     doForwardSelectionTest(e, testCharacterText, characterSelectionData);
     ubrk_close(e);
-    free(characterSelectionData);
+    cleanupVector(characterSelectionData);    
+    free(testCharacterText);
+    /*free(characterSelectionData);*/
 }
 
 void TestFirstCharacterSelection()
@@ -1091,7 +1176,9 @@ void TestFirstCharacterSelection()
     log_verbose("Testing first character selection.....\n");
     doFirstSelectionTest(e, testCharacterText, characterSelectionData);
     ubrk_close(e);
-    free(characterSelectionData);
+    cleanupVector(characterSelectionData);    
+    free(testCharacterText);
+    /*free(characterSelectionData);*/
 }
 
 void TestLastCharacterSelection()
@@ -1107,7 +1194,9 @@ void TestLastCharacterSelection()
     log_verbose("Testing last character selection.....\n");
     doLastSelectionTest(e, testCharacterText, characterSelectionData);
     ubrk_close(e);
-    free(characterSelectionData);
+    cleanupVector(characterSelectionData);    
+    free(testCharacterText);
+    /*free(characterSelectionData);*/
 }
 
 void TestBackwardCharacterSelection()
@@ -1123,7 +1212,9 @@ void TestBackwardCharacterSelection()
     log_verbose("Testing backward character selection.....\n");
     doBackwardSelectionTest(e, testCharacterText, characterSelectionData);
     ubrk_close(e);
-    free(characterSelectionData);
+    cleanupVector(characterSelectionData);    
+    free(testCharacterText);
+    /*free(characterSelectionData);*/
 }
 
 void TestForwardCharacterIndexSelection()
@@ -1139,7 +1230,9 @@ void TestForwardCharacterIndexSelection()
     log_verbose("Testing forward index character selection.....\n");
     doForwardIndexSelectionTest(e, testCharacterText, characterSelectionData);
     ubrk_close(e);
-    free(characterSelectionData);
+    cleanupVector(characterSelectionData);    
+    free(testCharacterText);
+    /*free(characterSelectionData);*/
 }
 
 void TestBackwardCharacterIndexSelection()
@@ -1155,7 +1248,9 @@ void TestBackwardCharacterIndexSelection()
     log_verbose("Testing backward character index selection.....\n");
     doBackwardSelectionTest(e, testCharacterText, characterSelectionData);
     ubrk_close(e);
-    free(characterSelectionData);
+    cleanupVector(characterSelectionData);    
+    free(testCharacterText);
+    /*free(characterSelectionData);*/
 }
 
 void TestCharacterInvariants()
@@ -1269,6 +1364,7 @@ void doForwardSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* r
         forwardSelectionCounter++;
         lastOffset = offset;
         offset = ubrk_next(iterator);
+        free(selectionResult);
     }
     if (forwardSelectionCounter < Count(result) - 1){
         log_err("\n*** Selection #%d not found at offset %d !!!\n", forwardSelectionCounter, offset);
@@ -1303,6 +1399,7 @@ void doBackwardSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* 
         backwardSelectionCounter--;
         lastOffset = offset;
         offset = ubrk_previous(iterator);
+        free(selectionResult);
     }
     if (backwardSelectionCounter >= 0 && offset != UBRK_DONE){
         log_err("*** Selection #%d not found!!!\n", backwardSelectionCounter);
@@ -1313,7 +1410,7 @@ void doFirstSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* res
 {
     int32_t selectionStart, selectionEnd;
     UChar* expectedFirstSelection;
-    UChar* tempFirst;
+    UChar* tempFirst = NULL;
     UBool success = TRUE;
     
     log_verbose("doFirstSelectionTest.......\n"); 
@@ -1344,13 +1441,17 @@ void doFirstSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* res
             austrdup(expectedFirstSelection), austrdup(tempFirst) );
         
     }
+    if(tempFirst!= NULL) {
+            free(tempFirst);
+    }
+
 }
 
 void doLastSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* result)
 {
     int32_t selectionEnd, selectionStart;
     UChar *expectedLastSelection;
-    UChar *tempLast;
+    UChar *tempLast = NULL;
     UBool success = TRUE;
   
     log_verbose("doLastSelectionTest.......\n"); 
@@ -1381,6 +1482,9 @@ void doLastSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* resu
         log_verbose("Calculated last Selection: %s is correct\n",  austrdup(tempLast) );
     }
     
+    if(tempLast!=NULL) {
+            free(tempLast);
+    }
 }
 
 /**
@@ -1610,6 +1714,7 @@ void sample(UBreakIterator* tb, UChar* text)
         substring=extractBetween(start, end, text);
         log_err("[%d,%d] \"%s\" \n", start, end, austrdup(substring) );
         start = end;
+        free(substring);
     }
     
 }

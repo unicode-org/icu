@@ -39,7 +39,7 @@ void TestDateFormat()
     UDateFormat *def, *fr, *it, *de, *def1, *fr_pat;
     UDateFormat *copy;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* result;
+    UChar* result = NULL;
     const UCalendar *cal;
     const UNumberFormat *numformat1, *numformat2;
     UChar temp[30];
@@ -120,6 +120,10 @@ void TestDateFormat()
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
+        if(result != NULL) {
+            free(result);
+            result = NULL;
+        }
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(def, d, result, resultlength, &pos, &status);
     }
@@ -136,6 +140,10 @@ void TestDateFormat()
     /*format using fr */
     
     u_uastrcpy(temp, "10 juil. 96 16 h 05 GMT-07:00");
+    if(result != NULL) {
+        free(result);
+        result = NULL;
+    }
     result=myDateFormat(fr, d);
     if(u_strcmp(result, temp)==0)
         log_verbose("PASS: Date Format for french locale successful uisng udat_format()\n");
@@ -149,7 +157,6 @@ void TestDateFormat()
     else
         log_err("FAIL: Date Format for italian locale failed using udat_format()\n");
 
-free(result);
     
     /*Testing parsing using udat_parse()*/
     log_verbose("\nTesting parsing using udat_parse()\n");
@@ -210,8 +217,10 @@ free(result);
     else
         log_verbose("PASS: applyPattern and toPattern work fine\n");
     
-
-free(result);    
+    if(result != NULL) {
+        free(result);    
+        result = NULL;
+    }
     
     
     /*Testing getter and setter functions*/
@@ -282,7 +291,9 @@ free(result);
     else
         log_verbose("PASS: getting and setting calendar successful\n");
         
-        
+    if(result!=NULL) {
+        free(result);
+    }
     
     /*Closing the UDateForamt */
     udat_close(def);
@@ -291,6 +302,7 @@ free(result);
     udat_close(de);
     udat_close(def1);
     udat_close(fr_pat);
+    udat_close(copy);
     
 }
 
@@ -299,7 +311,8 @@ void TestSymbols()
 {
     UDateFormat *def, *fr;
     UErrorCode status = U_ZERO_ERROR;
-    UChar *value, *result;
+    UChar *value; 
+    UChar *result = NULL;
     int32_t resultlength;
     int32_t resultlengthout;
     UChar *pattern;
@@ -347,6 +360,10 @@ void TestSymbols()
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
+        if(result != NULL) {
+            free(result);
+            result = NULL;
+        }
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(fr, UDAT_WEEKDAYS, 5, result, resultlength, &status);
         
@@ -379,7 +396,10 @@ void TestSymbols()
     VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYe");
 
 
-free(result);
+        if(result != NULL) {
+            free(result);
+            result = NULL;
+        }
 free(pattern);    
     
     log_verbose("\nTesting setSymbols\n");
@@ -406,6 +426,10 @@ free(pattern);
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthout + 1;
+        if(result != NULL) {
+            free(result);
+            result = NULL;
+        }
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE,result, resultlength, &status);
     }
@@ -419,7 +443,6 @@ free(pattern);
     else
         log_err("pattern could not be applied properly\n");
 
-free(result);
 free(pattern);
     /*testing set symbols */
     resultlength=0;
@@ -427,6 +450,10 @@ free(pattern);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
+        if(result != NULL) {
+            free(result);
+            result = NULL;
+        }
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(fr, UDAT_MONTHS, 11, result, resultlength, &status);
         
@@ -486,7 +513,10 @@ free(pattern);
     
     udat_close(fr);
     udat_close(def);
-    free(result);
+    if(result != NULL) {
+        free(result);
+        result = NULL;
+    }
     free(value);
     
 }
@@ -637,7 +667,8 @@ UChar* myNumformat(const UNumberFormat* numfor, double d)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
-        result2=(UChar*)malloc(sizeof(UChar) * resultlength);
+        /*result2=(UChar*)malloc(sizeof(UChar) * resultlength);*/ /* this leaks */
+        result2=(UChar*)ctst_malloc(sizeof(UChar) * resultlength); /*this won't*/
         unum_formatDouble(numfor, d, result2, resultlength, &pos, &status);
     }
     if(U_FAILURE(status))

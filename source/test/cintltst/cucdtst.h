@@ -35,4 +35,5 @@ int32_t MakeProp(char* str);
 int32_t MakeDir(char* str);
 
 void setUpDataTable(void);
+void cleanUpDataTable(void);
 #endif

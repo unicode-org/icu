@@ -109,6 +109,8 @@ T_CTEST_API void addTest ( TestNode** root,
            TestFunctionPtr test,
            const char *path);
 
+T_CTEST_API void cleanUpTestTree(TestNode *tn);
+
 /**
  * Retreive a specific subtest. (subtree).
  *
