@@ -13,8 +13,8 @@ eo {
     // see Jitterbug 1440 http://www.jtcsv.com/cgibin/icu-bugs?findid=1440
     CollationElements { 
         Version { "1.0" }
-        Sequence { "&c<\u0109 &C<\u0108 &g<\u011d &G<\u011c &h<\u0125 &H<\u0124"
-                   "&j<\u0135 &J<\u0134 &s<\u015d &S<\u015c &u<\u016d &U<\u016c" }
+        Sequence { "&C<\u0109<<<\u0108 &G<\u011d<<<\u011c &H<\u0125<<<\u0124"
+                   "&J<\u0135<<<\u0134 &S<\u015d<<<\u015c &U<\u016d<<<\u016c" }
     }
 
     Countries { 
