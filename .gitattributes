@@ -75,6 +75,7 @@ icu4c/source/data/brkitr/wordBE.brk -text
 icu4c/source/data/brkitr/wordLE.brk -text
 icu4c/source/data/brkitr/word_thBE.brk -text
 icu4c/source/data/brkitr/word_thLE.brk -text
+icu4c/source/samples/ucnv/data01.ut8 -text
 icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/uni-text.txt -text
 icu4j/src/com/ibm/demo/rbbi/english.dict -text
