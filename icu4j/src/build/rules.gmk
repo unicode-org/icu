@@ -12,7 +12,7 @@ FILES_class= $(FILES_java:.java=.class)
 
 CLASSLIST= classes.list
 
-{$(SRCDIR)\$(PKGPATH)}.java{$(CLASSDIR)\$(PKGPATH)}.class:
+{$(SRCDIR)/$(PKGPATH)}.java{$(CLASSDIR)/$(PKGPATH)}.class:
 	@echo $(?) >> $(CLASSLIST)
 
 ifdef FILES_dict
@@ -30,7 +30,8 @@ ifdef FILES_dict
 	cp $(SRC_FILES_dict) $(TARGDIR)
 endif
 ifdef SUBDIRS
-	@for %%d in ( $(SUBDIRS) ) do cd %d && gmake -f makefile.gmk classes && cd ..
+	for D in $(SUBDIRS) ; do cd $$D ; gmake -f makefile.gmk classes ; cd .. ; done
+#	@for %%d in ( $(SUBDIRS) ) do cd %d && gmake -f makefile.gmk classes && cd ..
 endif
 
 dict: $(SRC_FILES_dict)
@@ -42,7 +43,7 @@ delete.classlist:
 	@rm -f $(CLASSLIST)
 
 clean:
-	rm -rf ..\classes\com
+	rm -rf ../classes/com
 #!ifdef FILES_java
 #	rm -f $(FILES_class)
 #!endif
