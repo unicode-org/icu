@@ -1166,6 +1166,57 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
     return uprv_strCompare(s1, count, s2, count, FALSE, TRUE);
 }
 
+/* mutexed access to a shared default converter ----------------------------- */
+
+U_CAPI UConverter* U_EXPORT2
+u_getDefaultConverter(UErrorCode *status)
+{
+    UConverter *converter = NULL;
+    
+    if (gDefaultConverter != NULL) {
+        umtx_lock(NULL);
+        
+        /* need to check to make sure it wasn't taken out from under us */
+        if (gDefaultConverter != NULL) {
+            converter = gDefaultConverter;
+            gDefaultConverter = NULL;
+        }
+        umtx_unlock(NULL);
+    }
+
+    /* if the cache was empty, create a converter */
+    if(converter == NULL) {
+        converter = ucnv_open(NULL, status);
+        if(U_FAILURE(*status)) {
+            ucnv_close(converter);
+            converter = NULL;
+        }
+    }
+
+    return converter;
+}
+
+U_CAPI void U_EXPORT2
+u_releaseDefaultConverter(UConverter *converter)
+{
+    if(gDefaultConverter == NULL) {
+        if (converter != NULL) {
+            ucnv_reset(converter);
+        }
+        umtx_lock(NULL);
+
+        if(gDefaultConverter == NULL) {
+            gDefaultConverter = converter;
+            converter = NULL;
+        }
+        umtx_unlock(NULL);
+    }
+
+    if(converter != NULL) {
+        ucnv_close(converter);
+    }
+}
+
 /* conversions between char* and UChar* ------------------------------------- */
 
 /*
@@ -1308,56 +1359,6 @@ u_austrcpy(char *s1,
     *s1 = 0;
   }
   return s1;
-}
-
-/* mutexed access to a shared default converter ----------------------------- */
-
-U_CAPI UConverter* U_EXPORT2
-u_getDefaultConverter(UErrorCode *status)
-{
-    UConverter *converter = NULL;
-    
-    if (gDefaultConverter != NULL) {
-        umtx_lock(NULL);
-        
-        /* need to check to make sure it wasn't taken out from under us */
-        if (gDefaultConverter != NULL) {
-            converter = gDefaultConverter;
-            gDefaultConverter = NULL;
-        }
-        umtx_unlock(NULL);
-    }
-
-    /* if the cache was empty, create a converter */
-    if(converter == NULL) {
-        converter = ucnv_open(NULL, status);
-        if(U_FAILURE(*status)) {
-            return NULL;
-        }
-    }
-
-    return converter;
-}
-
-U_CAPI void U_EXPORT2
-u_releaseDefaultConverter(UConverter *converter)
-{
-  if(gDefaultConverter == NULL) {
-    if (converter != NULL) {
-      ucnv_reset(converter);
-    }
-    umtx_lock(NULL);
-
-    if(gDefaultConverter == NULL) {
-      gDefaultConverter = converter;
-      converter = NULL;
-    }
-    umtx_unlock(NULL);
-  }
-
-  if(converter != NULL) {
-    ucnv_close(converter);
-  }
 }
 
 /* u_unescape & support fns ------------------------------------------------- */
