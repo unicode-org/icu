@@ -34,7 +34,7 @@
 #define STD_OSTREAM STD_NAMESPACE ostream
 #define STD_ISTREAM STD_NAMESPACE istream
 
-U_USTDIO_API STD_OSTREAM &
+U_IO_API STD_OSTREAM &
 operator<<(STD_OSTREAM& stream, const UnicodeString& str)
 {
     if(str.length() > 0) {
@@ -66,7 +66,7 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
     return stream;
 }
 
-U_USTDIO_API STD_ISTREAM &
+U_IO_API STD_ISTREAM &
 operator>>(STD_ISTREAM& stream, UnicodeString& str)
 {
     /* ipfx should eat whitespace when ios::skipws is set */

@@ -53,10 +53,8 @@ U_CDECL_BEGIN
  */
 #ifdef UTRACE_IMPL
 U_EXPORT int32_t
-#elif U_COMMON_IMPLEMENTATION
-U_CFUNC int32_t
 #else
-U_CFUNC U_IMPORT int32_t 
+U_CFUNC U_COMMON_API int32_t
 #endif
 utrace_level;
 
