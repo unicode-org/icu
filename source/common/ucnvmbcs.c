@@ -437,7 +437,11 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                             *offsets++=sourceIndex;
                         }
                     } else if(c==0xfffe) {
-                        if(cnv->useFallback && (entry=(int32_t)_MBCSGetFallback(&cnv->sharedData->table->mbcs, offset))!=0xfffe) {
+                        /*
+                         * For the fallback, we need to restore the offset that
+                         * we had before the unicodeCodeUnits[offset++] above that incremented it!
+                         */
+                        if(cnv->useFallback && (entry=(int32_t)_MBCSGetFallback(&cnv->sharedData->table->mbcs, offset-1))!=0xfffe) {
                             goto output32;
                         }
                         /* callback(unassigned) */
