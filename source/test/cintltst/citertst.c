@@ -40,7 +40,7 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestPrevious, "tscoll/citertst/TestPrevious");
     addTest(root, &TestOffset, "tscoll/citertst/TestOffset");
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
-    // addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
+    addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
     addTest(root, &TestUnicodeChar, "tscoll/citertst/TestUnicodeChar");
 
 }
