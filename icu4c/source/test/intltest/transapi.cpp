@@ -27,8 +27,6 @@
 #include "unicode/locid.h"
 #include "unicode/uniset.h"
 
-static const UVersionInfo ICU_31 = {3,1,0,0};
-
 int32_t getInt(UnicodeString str)
 {
     char buffer[20];
@@ -63,6 +61,7 @@ TransliteratorAPITest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(11,TestClone);
         TESTCASE(12,TestNullTransliterator);
         TESTCASE(13,TestRegisterUnregister);
+        TESTCASE(14,TestUnicodeFunctor);
         default: name = ""; break;
     }
 }
@@ -87,7 +86,7 @@ void TransliteratorAPITest::TestgetID() {
     for (i=0; i<Transliterator::countAvailableIDs(); i++){
         status = U_ZERO_ERROR;
         ID = (UnicodeString) Transliterator::getAvailableID(i);
-        if(ID.indexOf("Thai")>-1 && isICUVersionAtLeast(ICU_31)){
+        if(ID.indexOf("Thai")>-1){
             continue;
         }   
         t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
@@ -964,7 +963,24 @@ void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
     delete clonedTR;
 }
 
+static const int MyUnicodeFunctorTestClassID = 0;
+class MyUnicodeFunctorTestClass : public UnicodeFunctor {
+public:
+    virtual UnicodeFunctor* clone() const {return NULL;}
+    static UClassID getStaticClassID(void) {return (UClassID)&MyUnicodeFunctorTestClassID;}
+    virtual UClassID getDynamicClassID(void) const {return getStaticClassID();};
+    virtual void setData(const TransliterationRuleData*) {}
+};
 
+void TransliteratorAPITest::TestUnicodeFunctor() {
+    MyUnicodeFunctorTestClass myClass;
+    if (myClass.toMatcher() != NULL) {
+        errln("FAIL: UnicodeFunctor::toMatcher did not return NULL");
+    }
+    if (myClass.toReplacer() != NULL) {
+        errln("FAIL: UnicodeFunctor::toReplacer did not return NULL");
+    }
+}
 
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */

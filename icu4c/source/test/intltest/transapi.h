@@ -59,6 +59,8 @@ public:
     
     void TestDevanagariLatinRT(void);
 
+    void TestUnicodeFunctor(void);
+
     /*Internal functions used*/
     void doTest(const UnicodeString& , const UnicodeString& , const UnicodeString& );
 
