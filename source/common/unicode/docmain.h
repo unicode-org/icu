@@ -134,7 +134,7 @@
  *   <tr>
  *     <td>Collation and Searching</td>
  *     <td>ucol.h, usearch.h</td>
- *     <td>Collator, StringSeach</td>
+ *     <td>Collator, StringSearch</td>
  *   </tr>
  *   <tr>
  *     <td>Text boundary analysis<br>(Break Iteration)</td>
