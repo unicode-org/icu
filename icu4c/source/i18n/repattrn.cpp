@@ -18,6 +18,7 @@
 #include "uvectr32.h"
 #include "regexcmp.h"
 #include "regeximp.h"
+#include "regexst.h"
 
 U_NAMESPACE_BEGIN
 
@@ -26,8 +27,13 @@ U_NAMESPACE_BEGIN
 //    RegexPattern    Default Constructor
 //
 //--------------------------------------------------------------------------
+RegexStaticSets *RegexPattern::gStaticSets = NULL;
 RegexPattern::RegexPattern() {
+    // Init all of this instances data.
     init();
+
+    // Lazy init of all shared global sets.
+    RegexStaticSets::initGlobals(&RegexPattern::gStaticSets, &fDeferredStatus);
 };
 
 

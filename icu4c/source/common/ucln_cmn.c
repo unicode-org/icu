@@ -16,9 +16,14 @@
 
 #include "unicode/uclean.h"
 #include "unicode/uchar.h"
+#include "unicode/uloc.h"
+#include "unicode/uidna.h"
+#include "unormimp.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
 #include "ucln.h"
+
+static UMTX     InitMutex = NULL;  
 
 static cleanupFunc *gCleanupFunctions[UCLN_COMMON] = {
     NULL,
@@ -80,49 +85,72 @@ u_cleanup(void)
      * time. The global mutex is being destroyed so that heap and
      * resource checkers don't complain. [grhoten]
      */
+    umtx_destroy(&InitMutex);
     umtx_destroy(NULL);
 }
 
 
-static UMTX     InitMutex = NULL;  
+
+/*
+ *
+ *   ICU Initialization Function.  Force loading and/or initialization of
+ *           any shared data that could potentially be used concurrently
+ *           multiple threads.
+ */
 
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
-    /*
-     * Lock and unlock the global mutex, thus forcing into existence
-     *   if it hasn't already been created.
-     */
-    umtx_lock(NULL);
-    umtx_unlock(NULL);
-
-
     /* Lock a private mutex for the duration of the initialization,
      *  ensuring that there are no races through here, and to serve as
      *  a memory barrier.  Don't use the global mutex, because of the 
      *  possibility that some of the functions called within here might
      *  use it.
+     *
+     * First use of a private mutex also forces global mutex into existance,
+     *   it it wasn't already set up.
      */
     umtx_lock(&InitMutex);
 
-    /*
-     *  Do a simple operation using each of the data-requiring APIs that do
-     *   not have a service object, ensuring that the required data is loaded.
+    /* Do any required init for services that don't have open operations. 
+     * TODO:  use of public APIs for the side effect of data initialization
+     *        is risky because implementation changes might inadvertantly
+     *        cause problems.
      */
 
 
-    /* Char Properties */
-    u_hasBinaryProperty(0x20, UCHAR_WHITE_SPACE);
+    /* Locales */
+    uprv_getDefaultLocaleID();
+    uloc_countAvailable();
 
-    /* Char Names  */
+
+    /* IDNA.    */
+    {
+        UChar  nameSrc[] = {0x41, 0x42, 0x43, 0x00};
+        UChar  nameDst[100];
+        uidna_toASCII(nameSrc, 3, 
+                      nameDst, 100, UIDNA_DEFAULT,
+                      NULL,     /* UParseError pointer */
+                      status);
+    }
+
+
+    /* Char Properties */
+    uprv_haveProperties(status);
+
+    /* Char Names.                         */
     {
         char buf[100];
         u_charName(0x20, U_UNICODE_CHAR_NAME,  buf, 100,  status);
     }
 
 
-    /*  TODO:  the rest of 'em  */
+    /*  Normalization  */
+    unorm_haveData(status);
+
+    /* Time Zone.  TODO:  move data loading from I18n lib to common, so we don't   */
+    /*                    have a dependency?                                       */
+    /*  TODO: an implementation();                                                 */
 
 
     umtx_unlock(&InitMutex);
-
 }
