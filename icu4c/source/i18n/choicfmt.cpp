@@ -658,9 +658,9 @@ ChoiceFormat::parse(const UnicodeString& text,
     double bestNumber = uprv_getNaN();
     double tempNumber = 0.0;
     for (int i = 0; i < fCount; ++i) {
-        UnicodeString tempString = fChoiceFormats[i];
-        if(text.compareBetween(start, tempString.length(), tempString, 0, tempString.length()) == 0) {
-            status.setIndex(start + tempString.length());
+        int32_t len = fChoiceFormats[i].length();
+        if (text.compare(start, len, fChoiceFormats[i]) == 0) {
+            status.setIndex(start + len);
             tempNumber = fChoiceLimits[i];
             if (status.getIndex() > furthest) {
                 furthest = status.getIndex();
