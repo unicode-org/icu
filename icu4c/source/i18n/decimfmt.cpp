@@ -1205,11 +1205,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
             {
                 // If we're only parsing integers, or if we ALREADY saw the
                 // decimal, then don't parse this one.
-                if (!isParseIntegerOnly() && !sawDecimal)
-                {
-                    digits.fDecimalAt = digitCount; // Not digits.fCount!
-                    sawDecimal = TRUE;
-                }
+                if (isParseIntegerOnly() || sawDecimal)
+                    break;
+                digits.fDecimalAt = digitCount; // Not digits.fCount!
+                sawDecimal = TRUE;
             }
             else if (!isExponent && ch == grouping && isGroupingUsed())
             {
