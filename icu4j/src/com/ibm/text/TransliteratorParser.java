@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/11/17 06:43:17 $
-* $Revision: 1.12 $
+* $Date: 2001/11/27 21:33:29 $
+* $Revision: 1.13 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -312,7 +312,8 @@ class TransliteratorParser {
         // def to xyz and moves the cursor to before abc.  Offset characters
         // must be at the start or end, and they cannot move the cursor past
         // the ante- or postcontext text.  Placeholders are only valid in
-        // output text.
+        // output text.  The length of the ante and post context is
+        // determined at runtime, because of supplementals and quantifiers.
         public int cursorOffset = 0; // only nonzero on output side
 
         // Position of first CURSOR_OFFSET on _right_.  This will be -1
