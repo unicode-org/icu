@@ -606,17 +606,13 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
                 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
               }
             } else if(o->embed == 0) {
-              /* Normal mode Assume ALL paths are relative to srcdir */
-              uprv_strcpy(tmp, o->shortName);
-              uprv_strcat(tmp, U_TREE_SEPARATOR_STRING);
-              uprv_strcat(tmp, linePtr);
-              o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
-              
+              /* normal mode.. o->files is just the bare list without package names */
+              o->files = pkg_appendToList(o->files, &tail, uprv_strdup(linePtr));
               uprv_strcpy(tmp, o->srcDir);
               uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
               uprv_strcat(tmp, s);
               o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
-            } else {/* compatibliity mode */
+            } else {/* embedded package_ mode */
               baseName = findBasename(s);
               
               if(s != baseName) {
