@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -84,5 +84,21 @@ U_CFUNC void ctest_setTimeZone(const char *optionalTimeZone, UErrorCode *status)
  */
 U_CFUNC void ctest_resetTimeZone(void);
 
+/**
+ * Assert that the given UErrorCode succeeds, and return TRUE if it does.
+ */
+U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec);
+
+/**
+ * Assert that the UBool is TRUE, and return TRUE if it does.
+ */
+U_CFUNC UBool assertTrue(const char* msg, UBool condition);
+
+/**
+ * Assert that the actualString equals the expectedString, and return
+ * TRUE if it does.
+ */
+U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
+                           const char* actualString);
 
 #endif
