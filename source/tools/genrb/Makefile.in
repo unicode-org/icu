@@ -28,6 +28,7 @@ CLEANFILES = *~ $(TARGET).$(SECTION) $(DEPS)
 
 ## Target information
 TARGET = genrb
+DERB = derb
 
 ENABLE_STATIC = @ENABLE_STATIC@
 
@@ -51,9 +52,10 @@ LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
 ##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
 ##rblist.o	util.o
 OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o  wrtjava.o rle.o
+DERB_OBJ = derb.o
 
 DEPS = $(OBJECTS:.o=.d)
-
+DERB_DEPS = $(DERB_OBJ:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -71,17 +73,18 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(MAN_FILES) 
+all-local: $(TARGET) $(DERB) $(MAN_FILES) 
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(DERB) $(DESTDIR)$(sbindir)
 
 <dist-local:
 
 clean-local: 
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(TARGET) $(OBJECTS)
+	$(RMV) $(TARGET) $(DERB) $(OBJECTS) $(DERB_OBJ)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -93,6 +96,9 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
+	$(LINK) -o $@ $^ $(LIBS) 
+
+$(DERB) : $(DERB_OBJ)
 	$(LINK) -o $@ $^ $(LIBS) 
 
 
@@ -116,8 +122,10 @@ $(TARGET).pdf: $(TARGET).ps
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
+-include $(DERB_DEPS)
 else
 ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+
