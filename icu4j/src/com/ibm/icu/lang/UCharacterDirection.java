@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterDirection.java $ 
-* $Date: 2002/02/28 23:42:04 $ 
-* $Revision: 1.4 $
+* $Date: 2002/09/11 00:12:39 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,9 @@ package com.ibm.icu.lang;
 /**
 * Enumerated Unicode character linguistic direction constants.
 * Used as return results from <a href=UCharacter.html>UCharacter</a>
+* <p>
+* This class is not subclassable
+* </p>
 * @author Syn Wee Quek
 * @since oct0300
 */
