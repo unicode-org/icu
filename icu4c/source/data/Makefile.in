@@ -27,7 +27,11 @@ subdir = data
 include @platform_make_fragment@
 
 ## Files to remove for 'make clean'
+ifeq ($(strip $(PKGDATA_MODE)), dll)
 CLEANFILES = *~ $(SPECIALTESTDATA) $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO)
+else
+CLEANFILES = *~ $(SPECIALTESTDATA) 
+endif
 
 DOCDIRS = 
 SUBDIRS = build
@@ -105,24 +109,28 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 packagedata: build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	( cd build ; \
-	$(INVOKE) $(PKGDATA) -e $(ICUDATA_NAME) -s . -T . -p $(ICUDATA_NAME) -m dll icudata.lst ; \
+	$(INVOKE) $(PKGDATA) -e $(ICUDATA_NAME) -s . -T . -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) icudata.lst ; \
 	)
-	$(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO) ; \
+ifeq ($(strip $(PKGDATA_MODE)), dll)
+		$(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO) ; 
+endif
 
 packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata -m common testdata.lst )
 
 cleanpackage:
 	@echo Cleaning up packaged data..
-	@-( cd build ; $(INVOKE) $(PKGDATA) -m dll -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null)
+	@-( cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null)
 	@-( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -m common -T . -s . -p testdata testdata.lst  --clean 2> /dev/null )
 	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc install-convrtrstxt
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-	( cd build ; $(INVOKE) $(PKGDATA) -m dll -e icudata -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(libdir) )
-	(cd $(DESTDIR)$(libdir); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO))
+	( cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -e icudata -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(libdir) )
+ifeq ($(strip $(PKGDATA_MODE)),dll)
+		(cd $(DESTDIR)$(libdir); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO))
+endif
 
 install-convrtrstxt: $(top_srcdir)/../data/convrtrs.txt
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)

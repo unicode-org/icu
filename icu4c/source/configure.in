@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.131 2001/10/30 23:41:05 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.132 2001/10/31 00:38:57 aheninger-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -675,11 +675,7 @@ if test x"$mapped" != x; then
 fi
 
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
-    if test "$HAVE_DLOPEN" -eq 1; then
 	datapackaging=library
-    else
-	datapackaging=archive
-    fi
 fi
 
 case "$datapackaging" in
