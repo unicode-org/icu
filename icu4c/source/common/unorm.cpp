@@ -735,7 +735,7 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
         const UChar *s;
         int32_t length;
 
-        s=extraData+aux;
+        s=(const UChar *)(extraData+aux);
         if(*s<0xff00) {
             /* s points to the single-unit string */
             length=1;
