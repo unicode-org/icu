@@ -33,7 +33,7 @@ static UnicodeString str(const char *input)
   
   while ((index = result.indexOf("\\u")) != -1)
     {
-      if (index + 6 <= result.size())
+      if (index + 6 <= result.length())
     {
       UChar c = 0;
       for (int i = index + 2; i < index + 6; i++) {
@@ -267,7 +267,7 @@ UnicodeString BasicNormalizerTest::hex(UChar ch) {
 
 UnicodeString BasicNormalizerTest::hex(const UnicodeString& s) {
     UnicodeString result;
-    for (int i = 0; i < s.size(); ++i) {
+    for (int i = 0; i < s.length(); ++i) {
         if (i != 0) result += ',';
         appendHex(s[i], 4, result);
     }

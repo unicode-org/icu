@@ -160,7 +160,7 @@ MergeCollation::getPattern(UnicodeString& result, bool_t withWhiteSpace) const
     {
       // if the entry is an expanding ligature, queue up the entries until
       // the last same ligature has been processed.
-      if (entry->extension.size() != 0)
+      if (entry->extension.length() != 0)
         {
           if (extList == NULL)
         {
@@ -268,7 +268,7 @@ void MergeCollation::addPattern(const   UnicodeString&  pattern,
                                 Normalizer::EMode decompMode,
                 UErrorCode&      success)
 {
-  if (U_FAILURE(success) || (pattern.size() == 0))
+  if (U_FAILURE(success) || (pattern.length() == 0))
     {
       return;
     }
@@ -319,7 +319,7 @@ const PatternEntry* MergeCollation::getItemAt(UTextOffset index) const {
 const PatternEntry* MergeCollation::findLastWithNoExtension(int32_t i) const {
   for (--i;i >= 0; --i) {
     PatternEntry* entry = patterns->at(i);
-    if ((entry != 0) && (entry->extension.size() == 0)) {
+    if ((entry != 0) && (entry->extension.length() == 0)) {
       return entry;
     }
   }
@@ -350,7 +350,7 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
       // replace the previous one.  This will improve the single
       // char entries dramatically which is the majority of the 
       // entries.
-      if (newEntry->chars.size() == 1)
+      if (newEntry->chars.length() == 1)
     {
       UChar c = newEntry->chars[0];
       int32_t statusIndex = c >> BYTEPOWER;
@@ -401,7 +401,7 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
     }
 
       // Do not change the last entry if the new entry is a expanding character
-      if (excess.size() != 0)
+      if (excess.length() != 0)
     {
       // newEntry.extension = excess + newEntry.extensions;
       newEntry->extension.insert(0, excess);
@@ -451,7 +451,7 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
 
       // If the last entry is a single char entry and has been installed, 
       // that means the last index is the real last index.
-      if (lastEntry->chars.size() == 1)
+      if (lastEntry->chars.length() == 1)
     {
       int32_t index = lastEntry->chars[0] >> BYTEPOWER;
 
@@ -497,11 +497,11 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
           // be 'Q'.  We save the characters that didn't match ("uestion-mark" in
           // this case), and then return the next index.
           //
-          if (entry->chars.compareBetween(0, entry->chars.size(),
-                          lastEntry->chars,0,entry->chars.size()) == 0)
+          if (entry->chars.compareBetween(0, entry->chars.length(),
+                          lastEntry->chars,0,entry->chars.length()) == 0)
         {
-          lastEntry->chars.extractBetween(entry->chars.size(), 
-                          lastEntry->chars.size(),
+          lastEntry->chars.extractBetween(entry->chars.length(), 
+                          lastEntry->chars.length(),
                           buffer);
           excess += buffer;
           break;

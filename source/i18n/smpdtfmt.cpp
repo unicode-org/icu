@@ -404,19 +404,19 @@ SimpleDateFormat::format(UDate date, UnicodeString& toAppendTo, FieldPosition& p
     UnicodeString str;
     
     // loop through the pattern string character by character
-    for (int32_t i = 0; i < fPattern.size() && U_SUCCESS(status); ++i) {
+    for (int32_t i = 0; i < fPattern.length() && U_SUCCESS(status); ++i) {
         UChar ch = fPattern[i];
         
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            toAppendTo += subFormat(str, prevCh, count, toAppendTo.size(), pos, status);
+            toAppendTo += subFormat(str, prevCh, count, toAppendTo.length(), pos, status);
             count = 0;
         }
         if (ch == 0x0027 /*'\''*/) {
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
-            if ((i+1) < fPattern.size() && fPattern[i+1] == 0x0027 /*'\''*/) {
+            if ((i+1) < fPattern.length() && fPattern[i+1] == 0x0027 /*'\''*/) {
                 toAppendTo += 0x0027 /*'\''*/;
                 ++i;
             } else {
@@ -438,7 +438,7 @@ SimpleDateFormat::format(UDate date, UnicodeString& toAppendTo, FieldPosition& p
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        toAppendTo += subFormat(str, prevCh, count, toAppendTo.size(), pos, status);
+        toAppendTo += subFormat(str, prevCh, count, toAppendTo.length(), pos, status);
     }
 
     // and if something failed (e.g., an invalid format character), reset our FieldPosition
@@ -659,7 +659,7 @@ SimpleDateFormat::subFormat(UnicodeString& result,
     if (pos.getField() == fgPatternIndexToDateFormatField[patternCharIndex]) {
         if (pos.getBeginIndex() == 0 && pos.getEndIndex() == 0) {
             pos.setBeginIndex(beginOffset);
-            pos.setEndIndex(beginOffset + result.size());
+            pos.setEndIndex(beginOffset + result.length());
         }
     }
     
@@ -730,7 +730,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
 
     // loop through the pattern string character by character, using it to control how
     // we match characters in the input
-    for (int32_t i = 0; i < fPattern.size();++i) {
+    for (int32_t i = 0; i < fPattern.length();++i) {
         UChar ch = fPattern[i];
         
         // if we're inside a quoted string, match characters exactly until we hit
@@ -746,7 +746,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
                 // a quote literal we need to match.
                 if (count == 0)
                 {
-                    if(start > text.size() || ch != text[start])
+                    if(start > text.length() || ch != text[start])
                         {
                             pos.setIndex(oldStart);
                             pos.setErrorIndex(start);
@@ -761,7 +761,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
             else
                 {
                     // pattern uses text following from 1st single quote.
-                    if (start >= text.size() || ch != text[start]) {
+                    if (start >= text.length() || ch != text[start]) {
                         // Check for cases like: 'at' in pattern vs "xt"
                         // in time text, where 'a' doesn't match with 'x'.
                         // If fail to match, return null.
@@ -801,7 +801,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
                         // for example, 'o''clock'.  We need to parse this as
                         // representing a single quote within the quote.
                         int32_t startOffset = start;
-                        if (start >= text.size() ||  ch != text[start])
+                        if (start >= text.length() ||  ch != text[start])
                         {
                             pos.setErrorIndex(startOffset);
                             pos.setIndex(oldStart);
@@ -857,7 +857,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
                     // {sfb} correct Date?
                     return 0;
                 }
-                if (start >= text.size() || ch != text[start]) {
+                if (start >= text.length() || ch != text[start]) {
                     // handle cases like: 'MMMM dd' in pattern vs. "janx20"
                     // in time text, where ' ' doesn't match with 'x'.
                     pos.setErrorIndex(start);
@@ -873,7 +873,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
             // otherwise, match characters exactly
             else 
             {
-                if (start >= text.size() || ch != text[start]) {
+                if (start >= text.length() || ch != text[start]) {
                     // handle cases like: 'MMMM   dd' in pattern vs.
                     // "jan,,,20" in time text, where "   " doesn't
                     // match with ",,,".
@@ -997,7 +997,7 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
 
     for (; i < count; ++i)
     {
-        int32_t length = data[i].size();
+        int32_t length = data[i].length();
         // Always compare if we have no match yet; otherwise only compare
         // against potentially better matches (longer strings).
 
@@ -1082,7 +1082,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     // If there are any spaces here, skip over them.  If we hit the end
     // of the string, then fail.
     for (;;) {
-        if (pos.getIndex() >= text.size()) 
+        if (pos.getIndex() >= text.length()) 
             return -start;
         UChar c = text[pos.getIndex()];
         if (c != 0x0020 /*' '*/ && c != 0x0009 /*'\t'*/) 
@@ -1104,7 +1104,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // but that's going to be difficult.
         if (obeyCount)
         {
-            if ((start+count) > text.size()) 
+            if ((start+count) > text.length()) 
                 return -start;
             UnicodeString temp;
             text.extractBetween(0, start + count, temp);
@@ -1216,12 +1216,12 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         UnicodeString lcaseGMT(fgGmt);
         lcaseGMT.toLower();
         
-        if ((text.size() - start) > fgGmt.size() &&
-            (lcaseText.compare(start, lcaseGMT.size(), lcaseGMT, 0, lcaseGMT.size())) == 0)
+        if ((text.length() - start) > fgGmt.length() &&
+            (lcaseText.compare(start, lcaseGMT.length(), lcaseGMT, 0, lcaseGMT.length())) == 0)
         {
             fCalendar->set(Calendar::DST_OFFSET, 0);
 
-            pos.setIndex(start + fgGmt.size());
+            pos.setIndex(start + fgGmt.length());
 
             if( text[pos.getIndex()] == 0x002B /*'+'*/ )
                 sign = 1;
@@ -1285,7 +1285,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                     UnicodeString s2(fSymbols->fZoneStrings[i][j]);
                     s2.toLower();
                 
-                    if ((s1.compare(start, s2.size(), s2, 0, s2.size())) == 0)
+                    if ((s1.compare(start, s2.length(), s2, 0, s2.length())) == 0)
                         break;
                 }
                 if (j <= 4)
@@ -1296,7 +1296,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                     // use the correct DST SAVINGS for the zone.
                     delete tz;
                     fCalendar->set(Calendar::DST_OFFSET, j >= 3 ? U_MILLIS_PER_HOUR : 0);
-                    return (start + fSymbols->fZoneStrings[i][j].size());
+                    return (start + fSymbols->fZoneStrings[i][j].length());
                 }
             }
 
@@ -1367,7 +1367,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // Handle "generic" fields
         if (obeyCount)
         {
-            if ((start+count) > text.size()) 
+            if ((start+count) > text.length()) 
                 return -start;
             UnicodeString s;
             // {sfb} old code had extract, make sure it works
@@ -1404,7 +1404,7 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
   
   translatedPattern.remove();
   bool_t inQuote = FALSE;
-  for (UTextOffset i = 0; i < originalPattern.size(); ++i) {
+  for (UTextOffset i = 0; i < originalPattern.length(); ++i) {
     UChar c = originalPattern[i];
     if (inQuote) {
       if (c == 0x0027 /*'\''*/) 

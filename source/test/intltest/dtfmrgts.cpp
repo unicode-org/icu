@@ -189,7 +189,7 @@ void DateFormatRegressionTest::Test4052408()
                          pos.getBeginIndex() + ", " +
                          pos.getEndIndex());
         UnicodeString exp = expected[i];
-        if((exp.size() == 0 && str.size() == 0) || str == exp)
+        if((exp.length() == 0 && str.length() == 0) || str == exp)
             logln(" ok");
         else {
             logln(UnicodeString(" expected ") + exp);

@@ -51,10 +51,10 @@ findKeyword(const     UnicodeString&     s,
     // If so, the string contains a modifier, and we only want to 
     // parse the type
     int32_t commaPos = buffer.indexOf(0x002C);
-    commaPos = (commaPos == -1 ? buffer.size() : commaPos);
+    commaPos = (commaPos == -1 ? buffer.length() : commaPos);
     buffer.truncate(commaPos);
     if(buffer == list[i]) {
-      kwLen = list[i].size();
+      kwLen = list[i].length();
       return i;
     }
   }

@@ -129,7 +129,7 @@ static UChar toHexString(int32_t i) { return i + (i < 10 ? '0' : ('A' - 10)); }
 UnicodeString
 UnicodeSetTest::escape(const UnicodeString& s) {
     UnicodeString buf;
-    for (int32_t i=0; i<s.size(); ++i)
+    for (int32_t i=0; i<s.length(); ++i)
     {
         UChar c = s[(UTextOffset)i];
         if (' ' <= c && c <= (UChar)0x7F) {

@@ -225,7 +225,7 @@ ResourceBundle::LocaleFallbackIterator::nextLocale(UErrorCode& status)
   if(status != U_USING_DEFAULT_ERROR) 
     status = U_USING_FALLBACK_ERROR;
   
-  if(fLocale.size() == 0) {
+  if(fLocale.length() == 0) {
     if(fUseDefaultLocale && !fTriedDefaultLocale) {
       fLocale = fDefaultLocale;
       fTriedDefaultLocale = TRUE;
@@ -249,7 +249,7 @@ ResourceBundle::LocaleFallbackIterator::nextLocale(UErrorCode& status)
 void
 ResourceBundle::LocaleFallbackIterator::chopLocale()
 {
-  int32_t size = fLocale.size();
+  int32_t size = fLocale.length();
   int32_t i;
   
   for(i = size - 1; i > 0; i--) 
@@ -381,7 +381,7 @@ ResourceBundle::constructForLocale(const PathInfo& path,
   // fRealLocale can be inited in three ways, see 1), 2), 3)
   UnicodeString returnedLocale;
   locale.getName(returnedLocale);
-  if (returnedLocale.size()!=0) {
+  if (returnedLocale.length()!=0) {
 	// 1) Desired Locale has a name
 	fRealLocale = Locale(returnedLocale); 
   } else {
@@ -922,8 +922,8 @@ ResourceBundle::getVersionNumber()  const
     // the end).
     int32_t len = icu_strlen(ICU_VERSION);
     int32_t minor_len = 0;
-    if(U_SUCCESS(status) && minor_version.size() > 0) 
-      minor_len = minor_version.size();
+    if(U_SUCCESS(status) && minor_version.length() > 0) 
+      minor_len = minor_version.length();
     len += (minor_len > 0) ? minor_len : 1 /*==icu_strlen(kDefaultMinorVersion)*/;
     ++len; // Add length of separator
     
@@ -1289,7 +1289,7 @@ ResourceBundle::PathInfo::openFile(const UnicodeString& localeName) const
 {
   if(fWPrefix) {
     //use the wide version of fopen in TPlatformUtilities.
-    int32_t nameSize = localeName.size();
+    int32_t nameSize = localeName.length();
     char* temp = new char[nameSize + 1];
     localeName.extract(0, nameSize, temp);
     temp[nameSize] = 0;
@@ -1328,7 +1328,7 @@ ResourceBundle::PathInfo::openFile(const UnicodeString& localeName) const
   else {
     //open file using standard char* routines
     UnicodeString workingName(makeCacheKey(localeName));
-    int32_t size = workingName.size();
+    int32_t size = workingName.length();
     char* returnVal = new char[size + 1];
     workingName.extract(0, size, returnVal, "");
     returnVal[size] = 0;

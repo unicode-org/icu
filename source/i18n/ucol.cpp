@@ -271,7 +271,7 @@ ucol_getRules(    const    UCollator        *coll,
         int32_t            *length)
 {
   const UnicodeString& rules = ((RuleBasedCollator*)coll)->getRules();
-  *length = rules.size();
+  *length = rules.length();
   return rules.getUChars();
 }
 

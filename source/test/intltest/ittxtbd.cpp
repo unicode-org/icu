@@ -752,14 +752,14 @@ void IntlTestTextBoundary::TestLineInvariants()
     // it doesn't break around the non-breaking characters
     UnicodeString noBreak = CharsToUnicodeString("\\u00a0\\u2007\\u2011\\ufeff");
     UnicodeString work("aaa");
-    for (i = 0; i < testChars.size(); i++) {
+    for (i = 0; i < testChars.length(); i++) {
         UChar c = testChars[i];
         if (c == '\r' || c == '\n' || c == 0x2029 || c == 0x2028 || c == 0x0003)
             continue;
         work[0] = c;
-        for (j = 0; j < noBreak.size(); j++) {
+        for (j = 0; j < noBreak.length(); j++) {
             work[1] = noBreak[j];
-            for (k = 0; k < testChars.size(); k++) {
+            for (k = 0; k < testChars.length(); k++) {
                 work[2] = testChars[k];
                 e->setText(&work);
                 for (int l = e->first(); l != BreakIterator::DONE; l = e->next())
@@ -777,11 +777,11 @@ void IntlTestTextBoundary::TestLineInvariants()
     // it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
     // a currency symbol, a non-breaking space, or a line or paragraph separator)
     UnicodeString dashes = CharsToUnicodeString("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
-    for (i = 0; i < testChars.size(); i++) {
+    for (i = 0; i < testChars.length(); i++) {
         work[0] = testChars[i];
-        for (j = 0; j < dashes.size(); j++) {
+        for (j = 0; j < dashes.length(); j++) {
             work[1] = dashes[j];
-            for (k = 0; k < testChars.size(); k++) {
+            for (k = 0; k < testChars.length(); k++) {
                 UChar c = testChars[k];
                 if (Unicode::getType(c) == Unicode::DECIMAL_DIGIT_NUMBER ||
                     Unicode::getType(c) == Unicode::OTHER_NUMBER ||
@@ -915,7 +915,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
 
     UTextOffset i;
 
-    for (i = 0; i < precedingChars.size(); i++) {
+    for (i = 0; i < precedingChars.length(); i++) {
         testString[1] = precedingChars[i];
         iter->adoptText(it);
         int32_t j = iter->first();
@@ -931,7 +931,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
                         + "' (" + ((int)(precedingChars[i])) + ")");
     }
 
-    for (i = 0; i < followingChars.size(); i++) {
+    for (i = 0; i < followingChars.length(); i++) {
         testString[1] = followingChars[i];
         it = new StringCharacterIterator(testString);
         iter->adoptText(it);
@@ -1053,7 +1053,7 @@ void IntlTestTextBoundary::doForwardSelectionTest(BreakIterator& iterator,
     CharacterIterator *itSource = 0;
     CharacterIterator *itTarget = 0;
 
-    logln("doForwardSelectionTest text of length: "+testText.size());
+    logln("doForwardSelectionTest text of length: "+testText.length());
 
     // check to make sure setText() and getText() work right
     iterator.setText(&testText);
@@ -1074,7 +1074,7 @@ void IntlTestTextBoundary::doForwardSelectionTest(BreakIterator& iterator,
             errln((UnicodeString)"current() failed: it returned " + iterator.current() + " and offset was " + offset);
 
         expectedResult = result->elementAt(forwardSelectionCounter);
-        forwardSelectionOffset += expectedResult.size();
+        forwardSelectionOffset += expectedResult.length();
         testText.extractBetween(lastOffset, offset, selectionResult);
         if (offset != forwardSelectionOffset) {
             errln((UnicodeString)"\n*** Selection #" +
@@ -1082,11 +1082,11 @@ void IntlTestTextBoundary::doForwardSelectionTest(BreakIterator& iterator,
                   "\nExpected : " +
                   expectedResult +
                   " - length : " +
-                  expectedResult.size() +
+                  expectedResult.length() +
                   "\nSelected : " +
                   selectionResult +
                   " - length : " +
-                  selectionResult.size());
+                  selectionResult.length());
         }
         logln((UnicodeString)"#" + forwardSelectionCounter + " ["+lastOffset+", "+offset+"] : " + selectionResult);
 
@@ -1105,7 +1105,7 @@ void IntlTestTextBoundary::doBackwardSelectionTest(BreakIterator& iterator,
                                                    Vector* result)
 {
     int32_t backwardSelectionCounter = (result->size() - 1);
-    int32_t neededOffset = testText.size();
+    int32_t neededOffset = testText.length();
     int32_t lastOffset = iterator.last();
     iterator.setText(&testText);
     int32_t offset = iterator.previous();
@@ -1116,7 +1116,7 @@ void IntlTestTextBoundary::doBackwardSelectionTest(BreakIterator& iterator,
     while(offset != BreakIterator::DONE)
     {
         expectedResult = (UnicodeString)result->elementAt(backwardSelectionCounter);
-        neededOffset -= expectedResult.size();
+        neededOffset -= expectedResult.length();
         testText.extractBetween(offset, lastOffset, selectionResult);
         if(offset != neededOffset) {
             errln(
@@ -1161,16 +1161,16 @@ void IntlTestTextBoundary::doFirstSelectionTest(BreakIterator& iterator,
                 "\nExpexcted : " +
                 expectedFirstSelection +
                 " - length : " +
-                expectedFirstSelection.size() +
+                expectedFirstSelection.length() +
                 "\nSelected : " +
                 tempFirst +
                 " - length : " +
-                tempFirst.size() +
+                tempFirst.length() +
                 "\n");
             success = FALSE;
         }
     }
-    else if (selectionStart != 0 || testText.size() != 0) {
+    else if (selectionStart != 0 || testText.length() != 0) {
         errln((UnicodeString)"\n### Error in TTestFindWord::doFirstSelectionTest. Could not get first selection.\n"+
             "start = "+selectionStart+"  end = "+selectionEnd);
         success = FALSE;
@@ -1208,16 +1208,16 @@ void IntlTestTextBoundary::doLastSelectionTest(BreakIterator& iterator,
                 "\nExpexcted : " +
                 expectedLastSelection +
                 " - length : " +
-                expectedLastSelection.size() +
+                expectedLastSelection.length() +
                 "\nSelected : " +
                  tempLast +
                  " - length : " +
-                tempLast.size() +
+                tempLast.length() +
                  "\n");
             success = FALSE;
         }
     }
-    else if (selectionEnd != 0 || testText.size() != 0) {
+    else if (selectionEnd != 0 || testText.length() != 0) {
         errln((UnicodeString)"\n### Error in TTestFindWord::doLastSelectionTest. Could not get last selection."+
             "["+selectionStart+","+selectionEnd+"]");
         success = FALSE;
@@ -1242,7 +1242,7 @@ void IntlTestTextBoundary::doForwardIndexSelectionTest(BreakIterator& iterator,
                                                        Vector* result)
 {
     int32_t arrayCount = result->size();
-    int32_t textLength = testText.size();
+    int32_t textLength = testText.length();
     iterator.setText(&testText);
     for(UTextOffset offset = 0; offset < textLength; offset++) {
         int32_t selBegin = iterator.preceding(offset);
@@ -1253,7 +1253,7 @@ void IntlTestTextBoundary::doForwardIndexSelectionTest(BreakIterator& iterator,
         int32_t pos = 0;
         if (selBegin != BreakIterator::DONE) {
             while (pos < selBegin && entry < arrayCount) {
-                pos += ((UnicodeString)(result->elementAt(entry))).size();
+                pos += ((UnicodeString)(result->elementAt(entry))).length();
                 ++entry;
             }
             if (pos != selBegin) {
@@ -1261,7 +1261,7 @@ void IntlTestTextBoundary::doForwardIndexSelectionTest(BreakIterator& iterator,
                 continue;
             }
             else {
-                pos += ((UnicodeString)(result->elementAt(entry))).size();
+                pos += ((UnicodeString)(result->elementAt(entry))).length();
                 ++entry;
             }
         }
@@ -1271,7 +1271,7 @@ void IntlTestTextBoundary::doForwardIndexSelectionTest(BreakIterator& iterator,
                 continue;
             }
             else {
-                pos += ((UnicodeString)(result->elementAt(entry))).size();
+                pos += ((UnicodeString)(result->elementAt(entry))).length();
                 ++entry;
             }
         }
@@ -1290,7 +1290,7 @@ void IntlTestTextBoundary::doBackwardIndexSelectionTest(BreakIterator& iterator,
                                                         Vector* result)
 {
     int32_t arrayCount = result->size();
-    int32_t textLength = testText.size();
+    int32_t textLength = testText.length();
     iterator.setText(&testText);
     for(UTextOffset offset = textLength - 1; offset >= 0; offset--) {
         int32_t selBegin = iterator.preceding(offset);
@@ -1301,7 +1301,7 @@ void IntlTestTextBoundary::doBackwardIndexSelectionTest(BreakIterator& iterator,
         int32_t pos = 0;
         if (selBegin != BreakIterator::DONE) {
             while (pos < selBegin && entry < arrayCount) {
-                pos += ((UnicodeString)(result->elementAt(entry))).size();
+                pos += ((UnicodeString)(result->elementAt(entry))).length();
                 ++entry;
             }
             if (pos != selBegin) {
@@ -1309,7 +1309,7 @@ void IntlTestTextBoundary::doBackwardIndexSelectionTest(BreakIterator& iterator,
                 continue;
             }
             else {
-                pos += ((UnicodeString)(result->elementAt(entry))).size();
+                pos += ((UnicodeString)(result->elementAt(entry))).length();
                 ++entry;
             }
         }
@@ -1319,7 +1319,7 @@ void IntlTestTextBoundary::doBackwardIndexSelectionTest(BreakIterator& iterator,
                 continue;
             }
             else {
-                pos += ((UnicodeString)(result->elementAt(entry))).size();
+                pos += ((UnicodeString)(result->elementAt(entry))).length();
                 ++entry;
             }
         }
@@ -1337,7 +1337,7 @@ void IntlTestTextBoundary::TestBug4153072() {
     BreakIterator *iter = BreakIterator::createWordInstance();
     UnicodeString str("...Hello, World!...");
     int32_t begin = 3;
-    int32_t end = str.size() - 3;
+    int32_t end = str.length() - 3;
     bool_t gotException = FALSE;
     bool_t dummy;
 
@@ -1363,7 +1363,7 @@ void IntlTestTextBoundary::doMultipleSelectionTest(BreakIterator& iterator,
     int32_t testOffset;
     int32_t count = 0;
 
-    logln("doMultipleSelectionTest text of length: "+testText.size());
+    logln("doMultipleSelectionTest text of length: "+testText.length());
 
     if (*testIterator != iterator)
         errln("clone() or operator!= failed: two clones compared unequal");
@@ -1410,11 +1410,11 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
     UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
     UTextOffset i, j;
 
-    for (i = 0; i < breaks.size(); i++) {
+    for (i = 0; i < breaks.length(); i++) {
         work[1] = breaks[i];
-        for (j = 0; j < testChars.size(); j++) {
+        for (j = 0; j < testChars.length(); j++) {
             work[0] = testChars[j];
-            for (int k = 0; k < testChars.size(); k++) {
+            for (int k = 0; k < testChars.length(); k++) {
                 UChar c = testChars[k];
 
                 // if a cr is followed by lf, ps, ls or etx, don't do the check (that's
@@ -1449,9 +1449,9 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
     UTextOffset i, j;
 
     // a break should never occur between CR and LF
-    for (i = 0; i < testChars.size(); i++) {
+    for (i = 0; i < testChars.length(); i++) {
         work[0] = testChars[i];
-        for (j = 0; j < testChars.size(); j++) {
+        for (j = 0; j < testChars.length(); j++) {
             work[3] = testChars[j];
             tb.setText(&work);
             for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
@@ -1469,12 +1469,12 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
     // character is CR, LF, PS, or LS
     work.remove();
     work += "aaaa";
-    for (i = 0; i < testChars.size(); i++) {
+    for (i = 0; i < testChars.length(); i++) {
         UChar c = testChars[i];
         if (c == '\n' || c == '\r' || c == 0x2029 || c == 0x2028 || c == 0x0003)
             continue;
         work[1] = c;
-        for (j = 0; j < testChars.size(); j++) {
+        for (j = 0; j < testChars.length(); j++) {
             c = testChars[j];
             if ((Unicode::getType(c) != Unicode::NON_SPACING_MARK) && 
                 (Unicode::getType(c) != Unicode::ENCLOSING_MARK))
@@ -1500,7 +1500,7 @@ void IntlTestTextBoundary::sample(BreakIterator& tb,
     UnicodeString   substring;
     bool_t verboseWas = verbose;
     verbose = TRUE;
-    logln("-------------------------"+title+" length = "+text.size());
+    logln("-------------------------"+title+" length = "+text.length());
     tb.setText(&text);
     int32_t start = tb.first();
     int32_t end;

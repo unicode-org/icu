@@ -300,7 +300,7 @@ IntlTest::prettify(const UnicodeString &source,
   target.remove();
   target += "\"";
   
-  for (i = 0; i < source.size(); i += 1)
+  for (i = 0; i < source.length(); i += 1)
     {
       UChar ch = source[i];
 
@@ -710,7 +710,7 @@ void IntlTest::LL_message( UnicodeString message, bool_t newline )
     int32_t        saveFlags = stream.flags();
     stream << hex;
 
-    int32_t len = message.size();
+    int32_t len = message.length();
     UTextOffset pos = 0;
     bool_t gen = FALSE;
     do{

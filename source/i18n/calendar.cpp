@@ -671,7 +671,7 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
     // ResourceBundle returns all data in string form, so we have to convert it here.)
     if (U_FAILURE(status)) return 0;
 
-    int32_t len = string.size();
+    int32_t len = string.length();
     char *number = new char[1 + len];
     if (number == 0) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
     char *end;
