@@ -753,6 +753,9 @@ private:
 
     UBool               fTraceDebug;       // Set true for debug tracing of match engine.
 
+    UErrorCode          fDeferredStatus;   // Save error state if that cannot be immediately
+                                           //   reported, or that permanently disables this matcher.
+
     /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".

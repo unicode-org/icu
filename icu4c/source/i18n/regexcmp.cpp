@@ -2,7 +2,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2003 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -172,14 +172,16 @@ static void ThreadSafeUnicodeSetInit(UnicodeSet **pSet, const UChar *pattern, UE
 //                             determination of Grapheme Cluster boundaries.
 //
 //----------------------------------------------------------------------------------------
-static void InitGraphemeClusterSets() {
-    UErrorCode status = U_ZERO_ERROR;     // TODO:  some sort of error handling needed.
+static void InitGraphemeClusterSets(UErrorCode &status) {
     ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_EXTEND],       gGC_ExtendPattern,           status);    
     ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_CONTROL],      gGC_ControlPattern,          status);    
     ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_L],            gGC_LPattern,                status);    
     ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_V],            gGC_VPattern,                status);    
     ThreadSafeUnicodeSetInit(&gPropSets[URX_GC_T],            gGC_TPattern,                status);   
-    
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     if (gPropSets[URX_GC_NORMAL] == NULL) {
 
         //
@@ -278,7 +280,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISWORD_SET],           gIsWordPattern,              status);
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISSPACE_SET],          gIsSpacePattern,             status);    
 
-    InitGraphemeClusterSets();
+    InitGraphemeClusterSets(status);
 }
 
 
@@ -922,13 +924,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doBadOpenParenType:
     case doRuleError:
         error(U_REGEX_RULE_SYNTAX);
-        returnVal = FALSE;
         break;
 
 
     case doMismatchedParenErr:
         error(U_REGEX_MISMATCHED_PAREN);
-        returnVal = FALSE;
         break;
 
     case doPlus:
@@ -1210,7 +1210,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
     case doBackslashx:              // \x{abcd}   alternate hex format
-        //  TODO:  implement
+        //  TODO:  this is waiting for a decision on adding \x to unescape.
         error(U_REGEX_UNIMPLEMENTED);
         break;
 
@@ -1477,9 +1477,13 @@ UBool RegexCompile::doParseActions(EParseAction action)
     default:
         U_ASSERT(FALSE);
         error(U_REGEX_INTERNAL_ERROR);
-        returnVal = FALSE;
         break;
     }
+
+    if (U_FAILURE(*fStatus)) {
+        returnVal = FALSE;
+    }
+
     return returnVal;
 };
 
@@ -1560,9 +1564,9 @@ void RegexCompile::literalChar(UChar32 c)  {
 //------------------------------------------------------------------------------
 void RegexCompile::emitONE_CHAR(UChar32  c) {
     int32_t op;
-    if ((fModeFlags & UREGEX_CASE_INSENSITIVE) && (u_tolower(c) != u_toupper(c))) {
+    if ((fModeFlags & UREGEX_CASE_INSENSITIVE) &&
+        u_hasBinaryProperty(c, UCHAR_CASE_SENSITIVE)) {
         // We have a cased character, and are in case insensitive matching mode.
-        // TODO: replace with a better test.  See Alan L.'s mail of 2/6
         c  = u_foldCase(c, U_FOLD_CASE_DEFAULT);
         op = URX_BUILD(URX_ONECHAR_I, c);
     } else {
@@ -1963,7 +1967,8 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
     UChar32  firstSetChar = theSet->charAt(0);
     if (firstSetChar == -1) {
         // Sets that contain only strings, but no individual chars,
-        // will end up here.   TODO:  figure out what to with sets containing strings.
+        // will end up here.
+        error(U_REGEX_SET_CONTAINS_STRING);
         setSize = 0;
     }
 
@@ -2049,21 +2054,6 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
 
 
 
-
-//----------------------------------------------------------------------------------------
-//
-//  possibleNullMatch    Test a range of compiled pattern for the possibility that it
-//                       might match an empty string.  Used to control the generation
-//                       of extra checking code to prevent infinite loops in the match
-//                       engine on repeated empty matches, such as might happen with
-//                            (x?)*
-//                       when the input string is not at an x.
-//
-//----------------------------------------------------------------------------------------
-UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
-    // for now, just return true.  TODO:  make a real implementation
-    return TRUE;
-}
 
 
 //----------------------------------------------------------------------------------------
@@ -3038,14 +3028,19 @@ void RegexCompile::stripNOPs() {
 void RegexCompile::error(UErrorCode e) {
     if (U_SUCCESS(*fStatus)) {
         *fStatus = e;
-        fParseErr->line  = fLineNum;
+        fParseErr->line   = fLineNum;
         fParseErr->offset = fCharNum;
-        fParseErr->preContext[0] = 0;    // TODO:  copy in some input pattern text
-        fParseErr->preContext[0] = 0;
+
+        // Fill in the context.
+        //   Note: extractBetween() pins supplied indicies to the string bounds.
+        uprv_memset(fParseErr->preContext,  0, sizeof(fParseErr->preContext));
+        uprv_memset(fParseErr->postContext, 0, sizeof(fParseErr->postContext));
+        fRXPat->fPattern.extractBetween(fScanIndex-U_PARSE_CONTEXT_LEN+1, fScanIndex,
+            fParseErr->preContext,  0);
+        fRXPat->fPattern.extractBetween(fScanIndex, fScanIndex+U_PARSE_CONTEXT_LEN-1,
+            fParseErr->postContext, 0);
     }
 }
-
-
 
 
 //
@@ -3186,7 +3181,6 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
                     }
                 }
                 if (uprv_isRuleWhiteSpace(c.fChar) == FALSE) {
-                    //  TODO:  is RuleWhiteSpace the right thing to use here?
                     break;
                 }
                 c.fChar = nextCharLL();
@@ -3218,13 +3212,13 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
             {
                 // We are in a '\' escape that will be handled by the state table scanner.
                 // Just return the backslash, but remember that the following char is to
-                //  be taken literally.  TODO:  this is awkward
+                //  be taken literally.  TODO:  this is awkward, think about alternatives.
                 fInBackslashQuote = TRUE;
             }
         }
     }
 
-    // re-enable # to end-of-line comments, in case they were disabled..
+    // re-enable # to end-of-line comments, in case they were disabled.
     // They are disabled by the parser upon seeing '(?', but this lasts for
     //  the fetching of the next character only.
     fEOLComments = TRUE;
@@ -3325,7 +3319,7 @@ UnicodeSet *RegexCompile::scanProp() {
         nextChar(fC);
         if (fC.fChar == -1) {
             // Hit the end of the input string without finding the closing '}'
-            *fStatus = U_REGEX_PROPERTY_SYNTAX;
+            error(U_REGEX_PROPERTY_SYNTAX);
             return NULL;
         }
     }

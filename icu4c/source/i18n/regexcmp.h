@@ -1,7 +1,7 @@
 //
 //  regexcmp.h
 //
-//  Copyright (C) 2002, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2003, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexCompile
@@ -105,8 +105,6 @@ private:
                                                      //   generated code at the specified location.
     void        emitONE_CHAR(UChar32 c);             // EMit a ONE_CHAR op into the compiled code,
                                                      //   taking case mode into account.
-    UBool       possibleNullMatch(int32_t start,     // Test a range of compiled pattern for
-                                  int32_t end);      //   for possibly matching an empty string.
     int32_t     minMatchLength(int32_t start,
                                int32_t end);
     int32_t     maxMatchLength(int32_t start,
