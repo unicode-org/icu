@@ -19,16 +19,20 @@
 
 #include "unicode/utypes.h"
 
-U_CAPI UBool U_EXPORT2 ucnv_cleanup(void);
+/* These are the cleanup functions for various APIs. */
 
-U_CAPI UBool U_EXPORT2 ures_cleanup(void);
+U_CFUNC UBool unorm_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 uloc_cleanup(void);
+U_CFUNC UBool uloc_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 ustring_cleanup(void);
+U_CFUNC UBool ustring_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 udata_cleanup(void);
+U_CFUNC UBool ucnv_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 ucnv_io_cleanup(void);
+U_CFUNC UBool ucnv_io_cleanup(void);
+
+U_CFUNC UBool ures_cleanup(void);
+
+U_CFUNC UBool udata_cleanup(void);
 
 #endif

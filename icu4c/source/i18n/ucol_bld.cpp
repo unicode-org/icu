@@ -18,8 +18,10 @@
 */
 
 #include "ucol_bld.h" 
+#include "ucln_in.h" 
 
 static const InverseTableHeader* invUCA = NULL;
+static UDataMemory* invUCA_DATA_MEM = NULL;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
@@ -1024,35 +1026,53 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   return myData;
 }
 
-const InverseTableHeader *ucol_initInverseUCA(UErrorCode *status) {
-  if(U_FAILURE(*status)) return NULL;
-
-  if(invUCA == NULL) {
-    InverseTableHeader *newInvUCA = NULL;
-    UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
-
-    if(U_FAILURE(*status)) {
-        udata_close(result);
-        uprv_free(newInvUCA);
-    }
-
-    if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
-      newInvUCA = (InverseTableHeader *)udata_getMemory(result);
-
-      umtx_lock(NULL);
-      if(invUCA == NULL) {
-          invUCA = newInvUCA;
-          newInvUCA = NULL;
-      }
-      umtx_unlock(NULL);
-
-      if(newInvUCA != NULL) {
-          udata_close(result);
-          uprv_free(newInvUCA);
-      }
-    }
-
-  }
-  return invUCA;
+UBool
+ucol_bld_cleanup(void)
+{
+    udata_close(invUCA_DATA_MEM);
+    invUCA_DATA_MEM = NULL;
+    invUCA = NULL;
+    return TRUE;
 }
+
+const InverseTableHeader *
+ucol_initInverseUCA(UErrorCode *status)
+{
+    if(U_FAILURE(*status)) return NULL;
+    
+    if(invUCA == NULL) {
+        InverseTableHeader *newInvUCA = NULL;
+        UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
+        
+        if(U_FAILURE(*status)) {
+            if (result) {
+                udata_close(result);
+            }
+            uprv_free(newInvUCA);
+        }
+        
+        if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
+            newInvUCA = (InverseTableHeader *)udata_getMemory(result);
+            
+            umtx_lock(NULL);
+            if(invUCA == NULL) {
+                invUCA = newInvUCA;
+                invUCA_DATA_MEM = result;
+                result = NULL;
+                newInvUCA = NULL;
+            }
+            umtx_unlock(NULL);
+            
+            if(newInvUCA != NULL) {
+                udata_close(result);
+                uprv_free(newInvUCA);
+            }
+            else {
+                i18n_registerCleanup();
+            }
+        }
+    }
+    return invUCA;
+}
+
 

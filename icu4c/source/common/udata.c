@@ -676,7 +676,7 @@ static UHashtable *udata_getHashTable() {
     }
     umtx_unlock(NULL);
 
-    if U_FAILURE(err) {
+    if (U_FAILURE(err)) {
         return NULL;      /* TODO:  handle this error better.  */
     }
     return gHashTable;
@@ -691,7 +691,7 @@ static UDataMemory *udata_findCachedData(const char *path)
     DataCacheElement  *el;
     const char        *baseName;
 
-    baseName = findBasename(path);   // Cache remembers only the base name, not the full path.
+    baseName = findBasename(path);   /* Cache remembers only the base name, not the full path. */
     htable = udata_getHashTable();
     umtx_lock(NULL);
     el = (DataCacheElement *)uhash_get(htable, baseName);
@@ -816,17 +816,15 @@ static void checkCommonData(UDataMemory *udm, UErrorCode *err) {
 }
 
 
-U_CAPI UBool U_EXPORT2
+UBool
 udata_cleanup()
 {
-    umtx_lock(NULL);
     if (gHashTable) {              /* Delete the cache of user data mappings.  */
         uhash_close(gHashTable);   /*   Table owns the contents, and will delete them. */
         gHashTable = 0;            /*   Cleanup is not thread safe.                */
     }
 
     udata_close(&commonICUData);   /* Clean up common ICU Data             */
-    umtx_unlock(NULL);
 
     return TRUE;                   /* Everything was cleaned up */
 }

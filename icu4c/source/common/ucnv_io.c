@@ -159,7 +159,7 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
     }
 }
 
-U_CAPI UBool U_EXPORT2
+UBool 
 ucnv_io_cleanup()
 {
     if (aliasData) {

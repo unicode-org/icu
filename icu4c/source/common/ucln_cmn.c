@@ -17,9 +17,35 @@
 #include "unicode/uclean.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
+#include "ucln.h"
+
+static cleanupFunc *gCleanupFunctions[UCLN_COMMON] = {
+    NULL,
+    NULL,
+    NULL
+};
+
+U_CAPI void U_EXPORT2
+ucln_registerCleanup(ECleanupLibraryType type,
+                     cleanupFunc *func)
+{
+    if (UCLN_START < type && type < UCLN_COMMON)
+    {
+        gCleanupFunctions[type] = func;
+    }
+}
 
 void u_cleanup(void)
 {
+    ECleanupLibraryType libType = UCLN_START;
+    while (++libType < UCLN_COMMON)
+    {
+        if (gCleanupFunctions[libType])
+        {
+            gCleanupFunctions[libType]();
+        }
+
+    }
     uloc_cleanup();
     ustring_cleanup();
     ucnv_cleanup();
