@@ -27,11 +27,13 @@ LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.c=        $(CC) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.cc=       $(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
-
-
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
 LD_RPATH_PRE=
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET)
+MIDDLE_SO_TARGET = 
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names

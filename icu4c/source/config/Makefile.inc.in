@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -33,6 +33,8 @@ oldincludedir=@oldincludedir@
 infodir=@infodir@
 mandir=@mandir@
 PACKAGE=@PACKAGE@
+VERSION_MAJOR=@VERSION_MAJOR@
+VERSION_MINOR=@VERSION_MINOR@
 VERSION=@VERSION@
 CC=@CC@
 CXX=@CXX@

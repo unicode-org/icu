@@ -32,6 +32,8 @@ CC = @CC@
 CXX = @CXX@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
+SO_TARGET_VERSION = @VERSION@
+SO_TARGET_VERSION_MAJOR = @VERSION_MAJOR@
 
 ## Platform-specific setup
 @host_frag@
@@ -44,7 +46,8 @@ subdir = i18n
 CLEANFILES = *~
 
 ## Target information
-TARGET = $(LIBICU)i18n.$(SO)
+SO_TARGET = $(LIBICU)i18n.$(SO)
+ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common
@@ -85,13 +88,17 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET)
+all-local: $(ALL_SO_TARGETS)
 
 install-local: install-headers install-library 
 
 install-library: all-local
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	$(INSTALL-S) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+	$(INSTALL-S) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
+	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
+	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
+endif
 
 install-headers:
 	$(mkinstalldirs) $(DESTDIR)$(includedir)/unicode
@@ -104,7 +111,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(TARGET)
+	$(RMV) $(OBJECTS) $(ALL_SO_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile $(DEPS)
@@ -115,8 +122,8 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TARGET) : $(OBJECTS)
-	$(SHLIB.cc) -o $@ $^ $(LIBS)
+$(FINAL_SO_TARGET): $(OBJECTS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

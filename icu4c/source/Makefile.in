@@ -28,6 +28,7 @@ pkgincludedir = $(includedir)/@PACKAGE@
 
 ## Build directory information
 top_builddir = .
+subdir = .
 
 ## Install program information
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -44,7 +45,7 @@ AUTOCONF = @AUTOCONF@
 @host_frag@
 
 
-## Pacakge information
+## Package information
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
