@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
     fprintf(outputFile, header);
 
     for (test = 0; test < testCount; test += 1) {
-        PFIErrorCode fontStatus = PFI_NO_ERROR;
+        LEErrorCode fontStatus = LE_NO_ERROR;
         PortableFontInstance fontInstance(testInputs[test].fontName, 12, fontStatus);
 
         if (LE_FAILURE(fontStatus)) {

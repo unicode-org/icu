@@ -26,7 +26,7 @@ GENTARGET  = gendata
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/layout -I$(top_srcdir)
 LIBS = $(LIBICULE) $(LIBICUUC) @LIBS@ @LIB_M@
 
-COMMONOBJECTS = cmaps.o PortableFontInstance.o
+COMMONOBJECTS = cmaps.o FontTableCache.o PortableFontInstance.o
 TESTOBJECTS   = testdata.o letest.o
 GENOBJECTS    = gendata.o
 

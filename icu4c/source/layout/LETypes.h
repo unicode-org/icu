@@ -279,7 +279,7 @@ typedef struct LEPoint LEPoint;
  *
  * @stable ICU 2.4
  */
-#define LE_ARRAY_COPY(dst, src, count) memcpy(dst, src, (count) * sizeof (src)[0])
+#define LE_ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
 
 /**
  * Allocate an array of basic types. This is used to isolate the rest of
@@ -290,12 +290,20 @@ typedef struct LEPoint LEPoint;
 #define LE_NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
 
 /**
+ * Re-allocate an array of basic types. This is used to isolate the rest of
+ * the LayoutEngine code from cmemory.h.
+ *
+ * @draft ICU 2.6
+ */
+#define LE_GROW_ARRAY(array, newSize) uprv_realloc((void *) (array), newSize * sizeof (array)[0])
+
+ /**
  * Free an array of basic types. This is used to isolate the rest of
  * the LayoutEngine code from cmemory.h.
  *
  * @draft ICU 2.6
  */
-#define LE_DELETE_ARRAY(array) uprv_free(array)
+#define LE_DELETE_ARRAY(array) uprv_free((void *) (array))
 
 /**
  * Error codes returned by the LayoutEngine.
@@ -314,7 +322,9 @@ enum LEErrorCode {
     LE_MEMORY_ALLOCATION_ERROR      = U_MEMORY_ALLOCATION_ERROR,
     LE_INDEX_OUT_OF_BOUNDS_ERROR    = U_INDEX_OUTOFBOUNDS_ERROR,
     LE_NO_LAYOUT_ERROR              = U_UNSUPPORTED_ERROR,
-    LE_INTERNAL_ERROR               = U_INTERNAL_PROGRAM_ERROR
+    LE_INTERNAL_ERROR               = U_INTERNAL_PROGRAM_ERROR,
+    LE_FONT_FILE_NOT_FOUND_ERROR    = U_FILE_ACCESS_ERROR,
+    LE_MISSING_FONT_TABLE_ERROR     = U_MISSING_RESOURCE_ERROR
 };
 
 #ifndef XP_CPLUSPLUS

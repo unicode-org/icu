@@ -91,6 +91,10 @@ SOURCE=.\cmaps.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FontTableCache.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\letest.cpp
 # End Source File
 # Begin Source File
@@ -108,6 +112,10 @@ SOURCE=.\testdata.cpp
 # Begin Source File
 
 SOURCE=.\cmaps.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FontTableCache.h
 # End Source File
 # Begin Source File
 
