@@ -595,7 +595,7 @@ static UBool convertFile(const char *pname,
         if (flush && !willexit && cbufp != (buf + rd)) {
             char pos[32];
             sprintf(pos, "%u", infoffset);
-            UnicodeString str(pos, (uprv_strlen(pos) + 1));
+            UnicodeString str(pos, (int32_t)(uprv_strlen(pos) + 1));
             initMsg(pname);
             u_wmsg(stderr, "premEndInput", str.getBuffer());
             willexit = 1;
