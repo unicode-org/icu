@@ -42,7 +42,7 @@ PKGDATA = $(top_builddir_from_tmp)/tools/pkgdata/pkgdata -O $(top_builddir_from_
 
 
 ## List of phony targets
-.PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
+.PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls install-convrtrstxt	\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive builddata
@@ -114,13 +114,16 @@ cleanpackage:
 	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
-install:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
+install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc install-convrtrstxt
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
 	( cd build ; $(INVOKE) $(PKGDATA) -e icudata -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION) )
 ifeq ($(strip $(PKGDATA_MODE)),dll)
 	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(ICUDATA_NAME).$(SO) icudata.$(SO))
 endif
 
+install-convrtrstxt: $(top_srcdir)/../data/convrtrs.txt
+	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
+	$(INSTALL_DATA) $< $(DESTDIR)$(pkgsysconfdir
 
 # specials
 testdata: $(SPECIALTESTDATA)
