@@ -511,10 +511,10 @@ lowsurogate:
             {
                 indexToWrite = 3;
                 temp[3] = (char) ((ch >> 18) | 0xf0);
-                temp[2] = (char) ((ch >> 12) & 0x3f | 0x80);
+                temp[2] = (char) (((ch >> 12) & 0x3f) | 0x80);
             }
-            temp[1] = (char) ((ch >> 6) & 0x3f | 0x80);
-            temp[0] = (char) (ch & 0x3f | 0x80);
+            temp[1] = (char) (((ch >> 6) & 0x3f) | 0x80);
+            temp[0] = (char) ((ch & 0x3f) | 0x80);
 
             for (; indexToWrite >= 0; indexToWrite--)
             {
@@ -617,10 +617,10 @@ lowsurogate:
             {
                 indexToWrite = 3;
                 temp[3] = (char) ((ch >> 18) | 0xf0);
-                temp[2] = (char) ((ch >> 12) & 0x3f | 0x80);
+                temp[2] = (char) (((ch >> 12) & 0x3f) | 0x80);
             }
-            temp[1] = (char) ((ch >> 6) & 0x3f | 0x80);
-            temp[0] = (char) (ch & 0x3f | 0x80);
+            temp[1] = (char) (((ch >> 6) & 0x3f) | 0x80);
+            temp[0] = (char) ((ch & 0x3f) | 0x80);
 
             for (; indexToWrite >= 0; indexToWrite--)
             {
