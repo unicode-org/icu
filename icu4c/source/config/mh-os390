@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.28 2001/11/07 22:53:22 grhoten-oss Exp $
+## $Id: mh-os390,v 1.29 2001/11/08 20:03:44 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -79,7 +79,7 @@ endif
 
 ## Link commands to link to ICU libs
 #LIBICUDT=	$(top_builddir)/data/libicudata.$(SO_TARGET_VERSION).x
-LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUDATA_NAME)$(BATCH_SUFFIX).x
+LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUDATA_NAME)$(BATCH_STUB_SUFFIX).x
 LIBICUUC=	$(top_builddir)/common/libicuuc.$(SO_TARGET_VERSION).x
 LIBICUI18N=	$(top_builddir)/i18n/libicui18n.$(SO_TARGET_VERSION).x
 LIBICULE=	$(top_builddir)/layout/libicule.$(SO_TARGET_VERSION).x
