@@ -12,6 +12,7 @@ root {
     "%%EURO" { "Euro" }         // Euro variant display name
     "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
     "%%NY"   { "Nynorsk" }      // Norwegian variant display name
+    "%%AL" { "\u00C5LAND" } // Aland variant display name
     // Formats for the display name of a locale, for a list of
     // items, and for composing two items in a list into one item.
     // The list patterns are used in the variant name and in the
@@ -581,148 +582,454 @@ root {
             "AD",
     }
     Languages { 
-        ab { "Abkhazian" }
-        aa { "Afar" }
-        af { "Afrikaans" }
-        sq { "Albanian" }
-        am { "Amharic" }
-        ar { "Arabic" }
-        hy { "Armenian" }
-        as { "Assamese" }
-        ay { "Aymara" }
-        az { "Azerbaijani" }
-        ba { "Bashkir" }
-        eu { "Basque" }
-        bn { "Bengali" }
-        dz { "Bhutani" }
-        bh { "Bihari" }
+        ab  { "Abkhazian" }
+        ace { "Achinese" }
+        ach { "Acoli" } 
+        ada { "Adangme" }      
+        aa  { "Afar" }
+        afh { "Afrihili" }               
+        af  { "Afrikaans" }
+        afa { "Afro-Asiatic (Other)" }
+        aka { "Akan" }
+        akk { "Akkadien" }          
+        sq  { "Albanian" }
+        ale { "Aleut" } 
+        alg {  "Algonquian Languages" }
+        tut { "Altaic (Other)" }          
+        am  { "Amharic" }
+        apa { "Apache Languages"}            
+        ar  { "Arabic" }
+        arc { "Aramaic" }
+        arp { "Arapaho" }
+        arn { "Araucanian" }
+        arw { "Arawak" }             
+        hy  { "Armenian" }
+        art { "Artificial (Other)" }           
+        as  { "Assamese" }    
+        ath { "Athapaskan Languages" }
+        aus { "Australian Languages" }
+        map { "Austronesian" }
+        ava { "Avaric" }       
+        ae { "Avestan" }  
+        awa { "Awadhi" }                      
+        ay  { "Aymara" }             
+        az  { "Azerbaijani" }        
+        ban { "Balinese" }
+        bat { "Baltic (Other)" }
+        bal { "Baluuchi" }
+        bam { "Bambara" }
+        bai { "Bamileke Languages" }
+        bad { "Banda" }
+        bnt { "Bantu" }
+        bas { "Basa" }
+        ba  { "Bashkir" }
+        eu  { "Basque" }
+        btk { "Batak" }
+        bej { "Beja" }
+        be  { "Belarusian" }
+        bem { "Bemba" }             
+        bn  { "Bengali" }
+        ber { "Beber" }
+        bho { "Bhojpuri" }
+        dz  { "Bhutani" } 
+        bh  { "Bihari" }   
+        bik { "Bikol" }
+        bin { "Bini" }
         bi { "Bislama" }
-        br { "Breton" }
-        bg { "Bulgarian" }
-        my { "Burmese" }
-        be { "Byelorussian" }
-        km { "Cambodian" }
-        ca { "Catalan" }
-        zh { "Chinese" }
-        co { "Corsican" }
-        hr { "Croatian" }
-        cs { "Czech" }
-        da { "Danish" }
-        nl { "Dutch" }
+        bs { "Bosnian"}
+        bra { "Braj" }
+        br  { "Brenton" }
+        bug { "Buginese" }
+        bg  { "Bulgarian" }               
+        bua { "Buriat" }                     
+        my  { "Burmese" }
+        cad { "Caddo" }
+        car { "Carib" }
+        ca  { "Catlan" }
+        cau { "Caucasian (Other) " }              
+        km  { "Cambodian" }          
+        ca  { "Catalan" }
+        ceb { "Cebuano" }
+        cel  { "Celtic (Other)" } 
+        cai { "Central American Indian (Other)" }
+        ch { "Chamoro" }
+        chg { "Chagatai" }
+        cmc { "Chamic Languages" }
+        ch { "Chamorro" }
+        ce { "Chechen" }
+        chr { "Cherokee" }
+        chy { "Cheyenne" }
+        chb { "Chibcha" }   
+        ny  { " Chichewa; Nyanja" }           
+        zh  { "Chinese" }
+        chn { "Chinook Jargon" }
+        chp { "Chipewyan" }
+        cho { "Choctaw" }
+        cu { "Church Slavic" }
+        chk { "Chuukese" }
+        cv { "Chuvash" }
+        cop { "Coptic" }
+        kw { "Cornish" }            
+        co  { "Corsican" }
+        cre { "Cree" }
+        mus { "Creek" }
+        crp  { "Creoles and Pidgins (Other)" }
+        cpe { "Creoles and Pidgins, English-based (Other)" }
+        cpf  { "Creoles and Pidgins, French-based (Other)" }           
+        hr  { "Croatian" }
+        cus { "Cushitic (Other)" }           
+        cs  { "Czech" }
+        dak { "Dakota" }              
+        da  { "Danish" } 
+        day { "Dayak" }
+        del { "Delaware" }
+        din { "Dinka" }
+        div { "Divehi" }
+        doi { "Dogri" }
+        dgr { "Dogrib" }
+        dra { "Dravidian (Other)" }
+        dua { "Duala" }            
+        nl  { "Dutch" }  
+        dum { "Dutch, Middle (ca. 1050-1350)" }
+        dyu { "Dyula" }
+        dzo { "Dzongkha" }
+        efi { "Efik" }
+        egy  { "Egyptian (Ancient)" }
+        eka { "Ekajuk" }
+        elx { "Elamite" }
         en { "English" }
-        eo { "Esperanto" }
-        et { "Estonian" }
-        fo { "Faeroese" }
-        fj { "Fiji" }
-        fi { "Finnish" }
-        fr { "French" }
-        fy { "Frisian" }
+        enm { "English, Middle( 1100 -1500)" }
+        ang { "English, Old (ca.450-1100)" }        
+        eo  { "Esperanto" }          
+        et  { "Estonian" }
+        ewe { "Ewe" }
+        ewo { "Ewondo" }
+        fan { "Fang" }
+        fat { "Fanti" }          
+        fo  { "Faeroese" }           
+        fj  { "Fiji" }               
+        fi  { "Finnish" }
+        fiu { "Finno - Ugrian" }
+        fon { "Fon" }            
+        fr  { "French" }
+        frm { "French, Middle (ca.1400-1600)" }
+        fro { "French, Old (842-ca.1400)" }
+        fy  { "Frisian" } 
+        fur { "Friulian" }
+        ful { "Fulah" }
+        gaa { "Ga" }
+        gla { "Gaelic (Scots)" }  
+        gl  { "Gallegan" }
         gl { "Galician" }
-        ka { "Georgian" }
-        de { "German" }
-        el { "Greek" }
-        kl { "Greenlandic" }
-        gn { "Guarani" }
-        gu { "Gujarati" }
-        ha { "Hausa" }
-        he { "Hebrew" }
-        iw { "Hebrew" }
-        hi { "Hindi" }
-        hu { "Hungarian" }
-        is { "Icelandic" }
-        id { "Indonesian" }
-        in { "Indonesian" }
-        ia { "Interlingua" }
-        ie { "Interlingue" }
-        iu { "Inukitut" }
-        ik { "Inupiak" }
-        ga { "Irish" }
-        it { "Italian" }
-        ja { "Japanese" }
-        jw { "Javanese" }
-        kn { "Kannada" }
-        ks { "Kashmiri" }
-        kk { "Kazakh" }
-        rw { "Kinyarwanda" }
-        ky { "Kirghiz" }
-        rn { "Kirundi" }
-        ko { "Korean" }
-        ku { "Kurdish" }
-        lo { "Laothian" }
-        la { "Latin" }
+        lug { "Ganda" }
+        gay { "Gayo" }
+        gba {"Gbaya" }           
+        ka  { "Georgian" }           
+        de  { "German" }
+        gmh { "German, Middle High (ca.1050-1500)" }
+        goh { " German, Old High (ca.750-1050)" }
+        gem { "Germanic (Other)" }
+        gil { "Gilbertese" }
+        gon { "Gondi" }
+        gor { "Gorontalo" }
+        got { "Gothic" }
+        grb { "Gerbo" }
+        grc { "Greek, Ancient (to 1453)" }
+        el { "Greek, Modern (1453-)" }          
+        kl  { "Greenlandic" }        
+        gn  { "Guarani" }            
+        gu  { "Gujarati" }
+        gwi { "Gwich'in" }
+        hai { "Haida" }
+        hau { "Hausa" }
+        haw { "Hawaiian" }            
+        he  { "Hebrew" }
+        iw { "Hebrew" }             
+        hz { "Herero" }
+        him { "Himachali" }             
+        hi  { "Hindi" } 
+        ho { "Hiri Motu" }
+        hit { "Hittite" }
+        hmn { "Hmong" }             
+        hu  { "Hungarian" }
+        hup { "Hupa" }
+        iba { "Iban" }          
+        is  { "Icelandic" }
+        ibo { "Igbo" }
+        ijo { "Ijo" }
+        ilo { "Iloko" }
+        inc { "Indic (Other) }
+        ine  { "Indo-European" }          
+        id  { "Indonesian" }               
+        ia  { "Interlingua" }        
+        ie  { "Interlingue" }        
+        iu  { "Inukitut" }           
+        ik  { "Inupiak" }
+        ira { "Iranian " }            
+        ga  { "Irish" }
+        mga { "Irish, Middle (900-1200)" }
+        sga { "Irish, Old (to 900)" }
+        iro { "Iroguoian  Languages" }              
+        it  { "Italian" }            
+        ja  { "Japanese" }           
+        jw  { "Javanese" }           
+        jrb { "Judeo-Arabic" }
+        jpr { "Judeo-Persian" }
+        kab { "Kabyle" }
+        kac { "Kachin" }
+        kl { "Kalaallisut" }
+        kam { "Kamba" }
+        kn  { "Kannada" }
+        kau { "Kanuri" }
+        kaa { "Kara-Kalpak" }
+        kar { "Karen" }            
+        ks  { "Kashmiri" }
+        kaw { "Kawi" }           
+        kk  { "Kazakh" }
+        kha { "Khasi" }
+        km { "Khmer" }
+        khi { "Khoisan" }
+        kho { "Khotanese" }
+        ki { "Kikuyu" }   
+        kmb { "Kimbundu" }         
+        rw  { "Kinyarwanda" }        
+        ky  { "Kirghiz" }
+        kv { "Komi" }
+        kon { "Kongo" }
+        kok { "Konkani" }            
+        rn  { "Kirundi" }            
+        ko  { "Korean" }   
+        kos { "Kosrean" }
+        kpe { "Kpelle" }
+        kro { "Kru" }
+        kum { "Kumyk" }      
+        ku  { "Kurdish" }
+        kru { "Kuruckh" }
+        kut { "Kutenai" }
+        lad { "Ladino" }
+        lah { "Lahnda" }
+        lam { "Lamba" }
+        lo { "Lao" }
+        la  { "Latin" }              
         lv { "Latvian (Lettish)" }
-        ln { "Lingala" }
-        lt { "Lithuanian" }
-        mk { "Macedonian" }
-        mg { "Malagasy" }
-        ms { "Malay" }
-        ml { "Malayalam" }
-        mt { "Maltese" }
-        mi { "Maori" }
-        mr { "Marathi" }
-        mo { "Moldavian" }
-        mn { "Mongolian" }
-        na { "Nauru" }
-        ne { "Nepali" }
-        no { "Norwegian" }
-        oc { "Occitan" }
-        or { "Oriya" }
-        om { "Oromo (Afan)" }
-        ps { "Pashto (Pushto)" }
-        fa { "Persian" }
-        pl { "Polish" }
-        pt { "Portuguese" }
-        pa { "Punjabi" }
-        qu { "Quechua" }
-        rm { "Rhaeto-Romance" }
-        ro { "Romanian" }
-        ru { "Russian" }
-        sm { "Samoan" }
-        sg { "Sangro" }
+        lb  { "Letzeburgesch" } 
+        lez  { "Lezghian" }
+        lin { "Lingala" }
+        ln  { "Lingala" }            
+        lt  { "Lithuanian" }         
+        lit { "Lithuanian" }
+        nds { "Low German; Low Saxon" }
+        nds { "Los Saxon; Low German" }
+        loz { "Lozi" }
+        lub { "Luba-Katanga" }
+        lua { "Luba-Lulua" }
+        lui { "Luiseeno" }
+        lun { "Lunda" }
+        luo { "Lua" }
+        lus { "Lushai" }
+        mk  { "Macedonian" }     
+        mad { "Madurese" }
+        mag { "Magahi" }
+        mai { "Maithili" }
+        mak { "Makasar" }        
+        mg  { "Malagasy" }           
+        ms  { "Malay" }              
+        ml  { "Malayalam" }          
+        mt  { "Maltese" } 
+        mnc { "Manchu" }
+        mdr { "Mandar" }
+        man { "Mandingue" }
+        mni { "Manipuri" }
+        mno { "Manobo Languages" }
+        gv   { "Manx" }           
+        mi  { "Maori" }              
+        mr  { "Marathi" } 
+        chm { "Mari" }        
+        mh	{ "Marshall"}
+        mwr { "Marwari" } 
+        mas { "Masai" }
+        myn { "Mayan" }
+        men { "Mende" }
+        mic { "Mic-Mac" }
+        min { "Minangkabau" }
+        mis { "Miscellaneous Languages" }
+        moh { "Mohawk" }          
+        mo  { "Moldavian" }
+        mkh { "Mon-Khmer (Ohter)" }
+        lol { "Mongo" }          
+        mn  { "Mongolian" }
+        mos { "Mossi" }
+        mul { "Multiple Languages" }
+        mun { "Munda Languages" }
+        nah { "Nahuatl" }
+        na  { "Nauru" } 
+        nv  {"Navajo"}
+        nd { "Ndebele, North" }   
+        nr  { "Ndebele, South" }
+        ng { "Ndonga" }   
+        ne  { "Nepali" }  
+        new { "Newari" }    
+        nia { "Nias" }
+        nic { "Niger - Kordofanian" }
+        ssa { "Nilo-Saharam" }      
+        niu { "Niuean" }
+        non { "Norse, Old" } 
+        nai { "North American Indian (Ohter)" }
+        no  { "Norwegian" }
+        se  { "Northern Sami" }
+        nn  { "Norwegian Nynorsk" }
+        nb  { "Norwegian Bokm\u00e5l" }    
+        nub { "Nubian Languages" }
+        nym { "Nyamwezi" }
+        nyo { "Nyankole" }
+        nyo { "Nyoro" }
+        nzi { "Nzima" }
+        oc  { "Occitan" } 
+        oji { "Ojibwa" }          
+        or  { "Oriya" }              
+        om  { "Oromo (Afan)" }
+        osa { "Osage" }     
+        os  { "Ossetic" }
+        oto { "Otomian Languages" }
+        pal { "Pahlavi" }
+        pau { "Palauan" }
+        ps  { "Pashto (Pushto)" }  
+        pi  { "Pali" }  
+        pam { "pampamga" }
+        pag { "Pangasinan" }
+        pap { "Papiamento" }
+        paa { "Papuan (Ohter)" }
+        fa  { "Persian" } 
+        peo { "Persian Old (ca.600-400 B.C.)"  }    
+        phi { "Philippine (Other)" }
+        phn { "Phoenician" }    
+        pon { "Pohnpeian" }
+        pl  { "Polish" }             
+        pt  { "Portuguese" }
+        pra { "Prakrit Languages" }
+        oc { " Provençal; Occitan (post 1500) "}
+        pro {  "Provençal, Old (to 1500)" }     
+        pa  { "Punjabi" }            
+        qu  { "Quechua" }            
+        rm  { "Rhaeto-Romance" }
+        raj { "Rajastani" }
+        rap { "Rapanui" }
+        rar { "Rarotongan" }
+        roa { "Romance (Other)" }
+        rom { "Romany" }    
+        ro  { "Romanian" }   
+        rn { "Rundi" }        
+        ru  { "Russian" }     
+        sal { "Salishan" }
+        sam { "Samritan" }
+        se { "Sami Languages" }       
+        sm  { "Samoan" }          
+        sad { "Sandawe" }   
+        sg  { "Sango" }
         sa { "Sanskrit" }
-        gd { "Scots Gaelic" }
-        sr { "Serbian" }
-        sh { "Serbo-Croatian" }
-        st { "Sesotho" }
-        tn { "Setswana" }
-        sn { "Shona" }
+        sat { "Santali" }
+        sc  { "Sardinian" }  
+        sas { "Saska" }
+        sco { "Scots" }
+        sel { "Selkup" }
+        sem { "Semitic" }         
+        gd  { "Scots Gaelic" }  
+        sr  { "Serbian" }   
+        srr  { "Serer" }
+        shn { "Shan" }   
+        sn  { "Shona" }
+        sid { "Sidamo" }
+        sgn { "Sign Languages" }
+        bla { "Siksika" }
         sd { "Sindhi" }
-        si { "Singhalese" }
-        ss { "Siswati" }
-        sk { "Slovak" }
-        sl { "Slovenian" }
-        so { "Somali" }
-        es { "Spanish" }
-        su { "Sundanese" }
-        sw { "Swahili" }
-        sv { "Swedish" }
-        tl { "Tagalog" }
-        tg { "Tajik" }
-        ta { "Tamil" }
-        tt { "Tatar" }
-        te { "Telugu" }
-        th { "Thai" }
-        bo { "Tibetan" }
-        ti { "Tigrinya" }
-        to { "Tonga" }
-        ts { "Tsonga" }
-        tr { "Turkish" }
-        tk { "Turkmen" }
-        tw { "Twi" }
-        ug { "Uighur" }
-        uk { "Ukrainian" }
-        ur { "Urdu" }
-        uz { "Uzbek" }
-        vi { "Vietnamese" }
-        vo { "Volapuk" }
-        cy { "Welsh" }
-        wo { "Wolof" }
-        xh { "Xhosa" }
-        ji { "Yiddish" }
-        yi { "Yiddish" }
-        yo { "Yoruba" }
-        za { "Zhuang" }
-        zu { "Zulu" }
+        si { "Sinhalese" }
+        sit  { "Sino-Tibetan (Other)" }
+        sio { "Siouan Languages" }
+        den { "Slave" }
+        sh  { "Serbo-Croatian" }     
+        st  { "Sesotho" }            
+        tn  { "Setswana" }                 
+        ss  { "Siswati" }            
+        sk  { "Slovak" }             
+        sl  { "Slovenian" }   
+        sog { "Sogdien" }       
+        so  { "Somali" }
+        son { "Songhai" }
+        snk { "Soninke" }
+        wen { "Sorbian Languages" }
+        nso { "Sotho, Northern" }
+        st  { "Sotho, Southern" }
+        sai { "South American Indian (Ohter)" }           
+        es  { "Spanish" }            
+        suk { "Sukuma" }
+        sux { "Sumerian"}
+        su  { "Sundanese" }
+        sus { "Susu" }          
+        sw  { "Swahili" }            
+        sv  { "Swedish" }
+        syr { "Syriac" }
+        ss { "Swati" }  
+        ty  { "Tahitian" }          
+        tl  { "Tagalog" }
+        tai { "Tai (Other)" }            
+        tg  { "Tajik" }        
+        tmh { "Tamashek" }      
+        ta  { "Tamil" }              
+        tt  { "Tatar" }              
+        te  { "Telugu" }     
+        ter { "Tereno" }
+        tet { "Tetum" }        
+        th  { "Thai" }               
+        bo  { "Tibetan" }
+        tig { "Tigre" }            
+        tir { "Tigrinya" } 
+        tem { "Timne" }
+        tiv { "Tiv" }
+        tli { "Tlingit" }          
+        tog  { "Tonga (Nyasa)" }
+        ton  { "Tongan (Tonga Islands)" }
+        tsi { "Tsimshian" }           
+        ts  { "Tsonga" }    
+        tn { "Tswana" }
+        tum { "Tumbuka" }
+        tur { "Turkish" }
+        ota { "Turkish (Ottoman Empire)" }      
+        tr  { "Turkish" }            
+        tk  { "Turkmen" } 
+        tvl { "Tuvalu" }
+        tyv { "Tuvinian" }           
+        tw  { "Twi" }    
+        uga { "Ugaritic" }            
+        ug  { "Uighur" }             
+        uk  { "Ukrainian" }   
+        umb { "Umbundu" }
+        und { "Undetermined" }       
+        ur  { "Urdu" }               
+        uz  { "Uzbek" }            
+        vai { "Vai" }
+        ven { "Venda" }  
+        vi  { "Vietnamese" }         
+        vo  { "Volapuk" }    
+        vot  { "Votic" }
+        wak { "Wakashan Languages" }
+        wal { "Walamo" }
+        war { "Waray" }
+        was { "Washo" }        
+        cy  { "Welsh" }              
+        wo  { "Wolof" }              
+        xh  { "Xhosa" }
+        sah { "Yakut" }
+        yao { "Yao" }
+        yap { "Yapese" }              
+        yi  { "Yiddish" }            
+        yor  { "Yoruba" }       
+        ypk { "Yupik Languages" }
+        znd { "Zande" }
+        zap { "Zapotec" }
+        zen { "Zenaga" }      
+        za  { "Zhuang" }             
+        zu  { "Zulu" }     
+        zun { "Zuni" }          
     }
     LocaleID { "0409" }
     LocaleString { "en" }
@@ -763,6 +1070,7 @@ root {
             "%",
             "0",
             "#",
+            "+",
             "-",
             "E",
             "\u2030",
