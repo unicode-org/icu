@@ -43,6 +43,7 @@
 #define icu_strcat(dst, src) strcat(dst, src)
 #define icu_strncat(dst, src, n) strncat(dst, src, n)
 #define icu_strchr(s, c) strchr(s, c)
+#define icu_strstr(s, c) strstr(s, c)
 #define icu_strrchr(s, c) strrchr(s, c)
 #define icu_toupper(c) toupper(c)
 #define icu_tolower(c) tolower(c)
