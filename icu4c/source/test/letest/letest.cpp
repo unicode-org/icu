@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -68,6 +68,21 @@ le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *ac
     return TRUE;
 }
 
+static void checkFontVersion(PortableFontInstance &fontInstance, const char *testVersionString, le_uint32 testChecksum)
+{
+    le_uint32 fontChecksum = fontInstance.getFontChecksum();
+
+    if (fontChecksum != testChecksum) {
+        const char *fontVersionString = fontInstance.getNameString(NAME_VERSION_STRING,
+            PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
+
+        printf("this may not be the same font used to generate the test data.\n");
+        printf("Your font's version string is \"%s\"\n", fontVersionString);
+        printf("The expected version string is \"%s\"\n", testVersionString);
+        printf("If you see errors, they may be due to the version of the font you're using.\n");
+    }
+}
+
 int main(int argc, char *argv[])
 {
     le_int32 failures = 0;
@@ -83,6 +98,8 @@ int main(int argc, char *argv[])
             printf("could not open font.\n");
             continue;
         }
+
+        checkFontVersion(fontInstance, testInputs[test].fontVersionString, testInputs[test].fontChecksum);
 
         LEErrorCode success = LE_NO_ERROR;
         LayoutEngine *engine = LayoutEngine::layoutEngineFactory(&fontInstance, testInputs[test].scriptCode, -1, success);
