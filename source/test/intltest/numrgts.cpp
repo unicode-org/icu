@@ -1834,10 +1834,10 @@ NumberFormatRegressionTest::Test4162852(void)
         logln(UnicodeString("") +
               d + " -> " +
               '"' + s + '"' + " -> " + e);
-#if !defined(OS390) || IEEE_754
-        if (e != 0.0 || 1.0/e > 0.0) {
-#else
+#if (defined(OS390) && !defined(IEEE_754)) || defined(OS400)
         if (e != 0.0) {
+#else
+        if (e != 0.0 || 1.0/e > 0.0) {
 #endif
             logln("Failed to parse negative zero");
         }
