@@ -625,12 +625,12 @@ Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
 }
 
 Locale
-Collator::getFunctionalEquivalent(const Locale& locale, UBool& isAvailable,
-                                  UErrorCode& status) {
+Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
+                                  UBool& isAvailable, UErrorCode& status) {
     // This is a wrapper over ucol_getFunctionalEquivalent
     char loc[ULOC_FULLNAME_CAPACITY];
     /*int32_t len =*/ ucol_getFunctionalEquivalent(loc, sizeof(loc),
-                           locale.getName(), &isAvailable, &status);
+                           keyword, locale.getName(), &isAvailable, &status);
     if (U_FAILURE(status)) {
         *loc = 0; // root
     }

@@ -542,14 +542,16 @@ void CollationServiceTest::TestSeparateTree() {
     delete iter;
 
     UBool isAvailable;
-    Locale equiv = Collator::getFunctionalEquivalent(Locale::createFromName("fr"),
+    Locale equiv = Collator::getFunctionalEquivalent("collation",
+                                                     Locale::createFromName("fr"),
                                                      isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
     assertEquals("getFunctionalEquivalent(fr)", "fr", equiv.getName());
     assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
                isAvailable == TRUE);
     
-    equiv = Collator::getFunctionalEquivalent(Locale::createFromName("fr_FR"),
+    equiv = Collator::getFunctionalEquivalent("collation",
+                                              Locale::createFromName("fr_FR"),
                                               isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
     assertEquals("getFunctionalEquivalent(fr_FR)", "fr", equiv.getName());

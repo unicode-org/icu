@@ -520,6 +520,8 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status);
  * requested locale.
  * @param result fillin for the functionally equivalent locale
  * @param resultCapacity capacity of the fillin buffer
+ * @param keyword a particular keyword as enumerated by
+ * ucol_getKeywords.
  * @param locale the requested locale
  * @param isAvailable if non-NULL, pointer to a fillin parameter that
  * indicates whether the requested locale was 'available' to the
@@ -533,8 +535,8 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status);
  */
 U_DRAFT int32_t U_EXPORT2
 ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
-                             const char* locale, UBool* isAvailable,
-                             UErrorCode* status);
+                             const char* keyword, const char* locale,
+                             UBool* isAvailable, UErrorCode* status);
 
 /**
  * Get the collation rules from a UCollator.
