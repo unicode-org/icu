@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2003 International Business Machines
+﻿# Copyright (c) 2001-2004 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -445,7 +445,7 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 <data>•foo\u00a0bar•</data>
 
 #     to test for bug #4097920
-<data>•dog,•cat,•mouse •(one)•(two)\n<100></data>
+<data>•dog,cat,mouse •(one)•(two)\n<100></data>
 
 #     to test for bug #4035266
 <data>•The •balance •is •$-23,456.78, •not •-•$32,456.78!\n<100></data>

@@ -1,8 +1,10 @@
 /*
- * Created on Apr 23, 2004
- *
+ *******************************************************************************
+ * Copyright (C) 2003-2004 International Business Machines Corporation and     *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  */
-package com.ibm.icu.dev.test.rbbi;
+ package com.ibm.icu.dev.test.rbbi;
 
 
 // Monkey testing of RuleBasedBreakIterator
@@ -22,6 +24,10 @@ import java.util.Locale;
  * Monkey tests for RBBI.  These tests have independent implementations of
  * the Unicode TR boundary rules, and compare results between these and ICU's
  * implementation, using random data.
+ * 
+ * Tests cover Grapheme Cluster (char), Word and Line breaks
+ * 
+ * Ported from ICU4C, original code in file source/test/intltest/rbbitst.cpp
  *
  */
 public class RBBITestMonkey extends TestFmwk {
@@ -685,7 +691,7 @@ public class RBBITestMonkey extends TestFmwk {
     			if (!fNU.contains(prevChar) && fCL.contains(thisChar) ||
     					fEX.contains(thisChar) ||
 						!fNU.contains(prevChar) && fIS.contains(thisChar) ||
-						fSY.contains(thisChar))    {
+						!fNU.contains(prevChar) && fSY.contains(thisChar))    {
     				continue;
     			}
     			
@@ -793,7 +799,12 @@ public class RBBITestMonkey extends TestFmwk {
     					continue;
     				}
     			}
-    			
+                if (fPR.contains(prevChar) && fAL.contains(thisChar)) {
+                    continue;   
+                }
+    			if (fPR.contains(prevChar) && fID.contains(thisChar)) {
+    				continue;
+                }
     			// LB 18b
     			if (fHY.contains(prevChar) || fBB.contains(thisChar)) {
     				break;
@@ -803,6 +814,11 @@ public class RBBITestMonkey extends TestFmwk {
     			if (fAL.contains(prevChar) && fAL.contains(thisChar)) {
     				continue;
     			}
+                
+                // LB 19b
+                if (fIS.contains(prevChar) && fAL.contains(thisChar)) {
+                	continue;
+                }
     			
     			// LB 20    Break everywhere else
     			break;
@@ -927,8 +943,8 @@ public class RBBITestMonkey extends TestFmwk {
         
         
         // Match the following regular expression in the input text.
-        //     (PR CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS) CM*) * (CL CM*)?  (PO CM*)?
-        //      0  1       3    3    3        7     7    7    7      9   9     11 11    (match states)
+        //     (PR CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS | SY) CM*) * (CL CM*)?  (PO CM*)?
+        //      0  1       3    3    3        7     7    7    7    7      9   9     11 11    (match states)
         //  retVals array  [0]  index of the start of the match, or -1 if no match
         //                 [1]  index of first char following the match.
         private int[] LBNumberCheck(StringBuffer s, int startIdx, int[] retVals) {
@@ -992,8 +1008,8 @@ public class RBBITestMonkey extends TestFmwk {
                             break;
                         }
                         break matchLoop;   /* No Match  */
-                        //     (PR CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS) CM*) * (CL CM*)?  (PO CM*)?
-                        //      0  1       3    3    4    7   7     7    7    7      9   9     11 11    (match states)
+                        //     (PR CM*)? ((OP | HY) CM*)? NU CM* ((NU | IS | SY) CM*) * (CL CM*)?  (PO CM*)?
+                        //      0  1       3    3    4    7   7     7    7    7    7      9   9     11 11    (match states)
 
                     case 7:
                         if (cLBType == UCharacter.LineBreak.COMBINING_MARK) {
@@ -1007,6 +1023,10 @@ public class RBBITestMonkey extends TestFmwk {
                         if (cLBType == UCharacter.LineBreak.INFIX_NUMERIC) {
                             matchState = 7;
                             break;                           
+                        }
+                        if (cLBType == UCharacter.LineBreak.BREAK_SYMBOLS) {
+                            matchState = 7;
+                            break;       
                         }
                         if (cLBType == UCharacter.LineBreak.CLOSE_PUNCTUATION) {
                             matchState = 9;
@@ -1121,7 +1141,9 @@ public class RBBITestMonkey extends TestFmwk {
     }
 
 
- 
+    //
+    //  The following UnicodeSets are used in matching a Grapheme Cluster
+    //
     private static UnicodeSet GC_Control =
          new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]-[:Grapheme_Extend:]]");
     
@@ -1308,6 +1330,8 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
     boolean[]        forwardBreaks    = new boolean[TESTSTRINGLEN*2 + 1];
     boolean[]        reverseBreaks    = new boolean[TESTSTRINGLEN*2 + 1];
     boolean[]        isBoundaryBreaks = new boolean[TESTSTRINGLEN*2 + 1];
+    boolean[]        followingBreaks  = new boolean[TESTSTRINGLEN*2 + 1];
+    boolean[]        precedingBreaks  = new boolean[TESTSTRINGLEN*2 + 1];
     int              i;
     int              loopCount        = 0;
     boolean          printTestData    = false;
@@ -1388,6 +1412,8 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
         Arrays.fill(forwardBreaks, false);
         Arrays.fill(reverseBreaks, false);
         Arrays.fill(isBoundaryBreaks, false);
+        Arrays.fill(followingBreaks, false);
+        Arrays.fill(precedingBreaks, false);
  
         // Calculate the expected results for this test string.
         mk.setText(testText);
@@ -1446,6 +1472,47 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
             isBoundaryBreaks[i] = bi.isBoundary(i);
         }
 
+        // Find the break positions using the following() function.
+        lastBreakPos = 0;
+        followingBreaks[0] = true;
+        for (i=0; i<testText.length(); i++) {
+            breakPos = bi.following(i);
+            if (breakPos <= i ||
+                breakPos < lastBreakPos ||
+                breakPos > testText.length() ||
+                breakPos > lastBreakPos && lastBreakPos > i ) {
+                errln(name + " break monkey test: " +
+                    "Out of range value returned by BreakIterator::following().\n" +
+                    "index=" + i + "following returned=" + breakPos +
+					"lastBreak=" + lastBreakPos);
+                precedingBreaks[i] = !expectedBreaks[i];   // Forces an error.
+            } else {
+            	followingBreaks[breakPos] = true;
+            	lastBreakPos = breakPos;
+            }
+        }
+        
+        // Find the break positions using the preceding() function.
+        lastBreakPos = testText.length();
+        precedingBreaks[testText.length()] = true;
+        for (i=testText.length(); i>0; i--) {
+            breakPos = bi.preceding(i);
+            if (breakPos >= i ||
+                breakPos > lastBreakPos ||
+                breakPos < 0 ||
+                breakPos < lastBreakPos && lastBreakPos < i ) {
+                errln(name + " break monkey test: " +
+                        "Out of range value returned by BreakIterator::preceding().\n" +
+                        "index=" + i + "preceding returned=" + breakPos +
+                        "lastBreak=" + lastBreakPos);
+                precedingBreaks[i] = !expectedBreaks[i];   // Forces an error.
+            } else {
+                precedingBreaks[breakPos] = true;
+                lastBreakPos = breakPos;
+            }
+        }
+
+        
 
         // Compare the expected and actual results.
         for (i=0; i<=testText.length(); i++) {
@@ -1456,6 +1523,10 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 errorType = "previous()";
             } else if (isBoundaryBreaks[i] != expectedBreaks[i]) {
                 errorType = "isBoundary()";
+            } else if (followingBreaks[i] != expectedBreaks[i]) {
+            	errorType = "following()";
+            } else if (precedingBreaks[i] != expectedBreaks[i]) {
+                errorType = "preceding()";
             }
 
 

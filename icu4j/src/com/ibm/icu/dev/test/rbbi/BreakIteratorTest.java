@@ -800,9 +800,7 @@ public class BreakIteratorTest extends TestFmwk
     public void TestBug4097920() {
         Vector lineSelectionData = new Vector();
 
-        lineSelectionData.addElement("dog,");
-        lineSelectionData.addElement("cat,");
-        lineSelectionData.addElement("mouse ");
+        lineSelectionData.addElement("dog,cat,mouse ");
         lineSelectionData.addElement("(one)");
         lineSelectionData.addElement("(two)\n");
         generalIteratorTest(lineBreak, lineSelectionData);
@@ -964,8 +962,9 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         lineSelectionData.addElement("\u0e40\u0e03\u0e35\u0e22\u0e07");
         lineSelectionData.addElement("\u0e43\u0e2b\u0e21\u0e48");
 
-        generalIteratorTest(BreakIterator.getLineInstance(new Locale("th", "", "")),
-                lineSelectionData);
+        Locale loc = new Locale("th", "", "");
+        BreakIterator bi = BreakIterator.getLineInstance(loc);      
+        generalIteratorTest(bi, lineSelectionData);
     }
 
     /**

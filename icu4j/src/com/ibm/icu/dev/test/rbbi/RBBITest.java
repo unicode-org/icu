@@ -510,9 +510,7 @@ public class RBBITest extends TestFmwk
     // linedata.addElement("foo\ufeffbar");
 
     // to test for bug #4097920
-     linedata.addElement("dog,");
-     linedata.addElement("cat,");
-     linedata.addElement("mouse ");
+     linedata.addElement("dog,cat,mouse ");
      linedata.addElement("(one)");
      linedata.addElement("(two)\n");
 
