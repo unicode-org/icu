@@ -120,7 +120,8 @@ static UMTX        cnvCacheMutex;         /* Mutex for synchronizing cnv cache a
 /* ucnv_cleanup - delete all storage held by the converter cache, except any in use    */
 /*                by open converters.                                                  */
 /*                Not thread safe.                                                     */
-UBool ucnv_cleanup(void) {
+/*                Not supported  API.  Marked U_CAPI only for use by test programs.    */
+U_CAPI UBool U_EXPORT2 ucnv_cleanup(void) {
     if (SHARED_DATA_HASHTABLE != NULL) {
         ucnv_flushCache();
         if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
