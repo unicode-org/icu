@@ -18,6 +18,7 @@
 #include "ucol_imp.h"
 #include "usrchimp.h"
 #include "cmemory.h"
+#include "ucln_in.h"
 
 // internal definition ---------------------------------------------------
 
@@ -94,7 +95,14 @@ inline void initializeFCD(UErrorCode *status)
 {
     if (FCD_ == NULL) {
         FCD_ = unorm_getFCDTrie(status);
+        ucln_i18n_registerCleanup();
     }
+}
+
+U_CFUNC UBool 
+usearch_cleanup(void) {
+    FCD_ = NULL;
+    return TRUE;
 }
 
 /**
