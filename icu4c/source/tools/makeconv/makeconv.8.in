@@ -50,10 +50,13 @@ The
 must be in the IBM NLTC ucmap format in order to be understood by
 .BR makeconv .
 .PP
-Note that converters will not be automatically found by ICU. They need to
+Note that new converters will automatically found by ICU after their
+installation in ICU's data directory. They do not need to
 be listed in the
 .BR convrtrs.txt (5)
 converters aliases file in order to be available to applications using ICU.
+They do need to be listed there if one wants to give them aliases, or
+tags, though.
 .SH OPTIONS
 .BR \-V\fP, \fB\-\-version
 Print the version of
@@ -83,6 +86,16 @@ Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
 is set.
+.SH CAVEATS
+If an existing converter table is changed and recompiled using
+.BR makeconv ,
+the resulting binary file must be packaged in the same way that it was
+packaged initially. For example, if converters were grouped together in
+an archive or a library with
+.BR pkgdata (8),
+then the archive or library must be rebuilt with the new binary file.
+A standalone binary converter file will not take precedence over a
+packaged one.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
