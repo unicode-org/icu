@@ -972,6 +972,8 @@ ucnv_flushCache ()
     } while(++i == 1 && remaining > 0);
     umtx_unlock(&cnvCacheMutex);
 
+    UTRACE_DATA1(UTRACE_INFO, "ucnv_flushCache() exits with %d converters remaining", remaining);
+
     ucnv_io_flushAvailableConverterCache();
 
     UTRACE_EXIT_VALUE(tableDeletedNum);
