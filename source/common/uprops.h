@@ -59,6 +59,9 @@ enum {
  * Each bit encodes one binary property.
  * The following constants represent the bit number, use 1<<UPROPS_XYZ.
  * UPROPS_BINARY_1_TOP<=32!
+ *
+ * Keep this list of property enums in sync with
+ * propListNames[] in icu/source/tools/genprops/props2.c!
  */
 enum {
     UPROPS_WHITE_SPACE,
@@ -88,6 +91,7 @@ enum {
     UPROPS_DEPRECATED,
     UPROPS_SOFT_DOTTED,
     UPROPS_LOGICAL_ORDER_EXCEPTION,
+    UPROPS_OTHER_CASE_IGNORABLE,
     UPROPS_BINARY_1_TOP
 };
 
