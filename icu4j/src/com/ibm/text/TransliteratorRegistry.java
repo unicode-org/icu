@@ -470,29 +470,33 @@ class TransliteratorRegistry {
      * Given an ID, parse it into source, target, and variant strings.
      * The variant may be empty.  If the source is empty it will be set to
      * "Any".  If the variant is empty it will be set to the empty string.
+     * Could be T, T/V, S-T, S-T/V, S/V-T
      */
     private String[] IDtoSTV(String id) {
-        String source = null;
+        String source = ANY;
         String target = null;
-        String variant = null;
+        String variant = "";
 
-        int dash = id.indexOf(ID_SEP);
+        int dash = id.indexOf(ID_SEP);  // -1 if missing
         int stroke = id.indexOf(VARIANT_SEP);
-        int start = 0;
+        
         int limit = id.length();
-        if (dash < 0) {
-            source = ANY;
-        } else {
-            source = id.substring(0, dash);
-            start = dash + 1;
-        }
-        if (stroke >= 0) {
-            variant = id.substring(stroke + 1, id.length());
-            limit = stroke;
-        } else {
-            variant = "";
-        }
-        target = id.substring(start, limit);
+        if (stroke < 0) stroke = limit; // fix to end if missing
+        
+        if (dash < stroke) {
+            if (dash > 0) {
+                source = id.substring(0, dash);
+            }
+            ++dash;
+            target = id.substring(dash, stroke++);
+            if (stroke < limit) {
+                variant = id.substring(stroke, limit);
+            }
+        } else { // stroke < dash, so all three exist
+            source = id.substring(0, stroke++);
+            variant = id.substring(stroke, dash++);
+            target = id.substring(dash, limit);
+        }           
         return new String[] { source, target, variant };
     }
 
