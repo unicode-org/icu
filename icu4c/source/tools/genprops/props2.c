@@ -360,6 +360,10 @@ blocksLineFn(void *context,
 
 /* PropList.txt ------------------------------------------------------------- */
 
+/*
+ * Keep this list of property names in sync with
+ * enums in icu/source/common/uprops.h, see UPROPS_BINARY_1_TOP!
+ */
 static const char *const
 propListNames[]={
     "White_Space",
@@ -388,7 +392,8 @@ propListNames[]={
     "Other_Default_Ignorable_Code_Point",
     "Deprecated",
     "Soft_Dotted",
-    "Logical_Order_Exception"
+    "Logical_Order_Exception",
+    "Other_Case_Ignorable"
 };
 
 static void
