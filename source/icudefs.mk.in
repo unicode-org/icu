@@ -125,8 +125,8 @@ ENABLE_SHARED = @ENABLE_SHARED@
 
 # Echo w/o newline
 
-ECHO_N = @ECHO_N@
-ECHO_C = @ECHO_C@
+#ECHO_N = @ECHO_N@
+#ECHO_C = @ECHO_C@
 
 # Commands to compile
 COMPILE.c=    $(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c

@@ -2,14 +2,14 @@
 .\"
 .\" icu-config.1: manual page for the icu-config utility
 .\"
-.\" Copyright (C) 2002 IBM, Inc. and others.
+.\" Copyright (C) 2002-2004 IBM, Inc. and others.
 .\"
 .\" Based on  Yves Arrouye's pkgdata page <yves@arrouye.net>
 .\" Modified by Steven R. Loomis <srl@jtcsv.com>.
 .\" With help from http://www.igpm.rwth-aachen.de/~albrecht/manpage.html
 
-.TH ICU-CONFIG 1 "17 May 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
-.\".Dd "17 May 2002"
+.TH ICU-CONFIG 1 "17 May 2004" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.\".Dd "17 May 2004"
 .\".Dt ICU-CONFIG 1
 .\".Os 
 
@@ -86,7 +86,7 @@
 .BI "\-\-ldflags\-system"
 ]
 [
-.BI "\-\-ldflags\-ustdio"
+.BI "\-\-ldflags\-icuio"
 ]
 [
 .BI "\-\-mandir"
@@ -233,15 +233,15 @@ Print any flags which should be passed to the linker. These may include
 this option will attempt to link in the "common" (libicuuc) and "i18n" 
 (libicui18n) libraries, as well as the data library. If additional libraries
 are required, any of the following two flags may be added in conjunction with this one,
-for example "\-\-ldflags \-\-ldflags-ustdio" if the ustdio library is required
+for example "\-\-ldflags \-\-ldflags-icuio" if the icuio library is required
 in addition to the standard ICU libraries.
 Equivalent to the $(LDFLAGS) Makefile variable.
 .TP
 .BI "\-\-ldflags\-layout"
 Prints the link option for the ICU layout library.
 .TP
-.BI "\-\-ldflags\-ustdio"
-Prints the link option to add the UStdio package
+.BI "\-\-ldflags\-icuio"
+Prints the link option to add the ICU I/O package
 .TP
 .BI "\-\-ldflags\-libsonly"
 Similar to \fI\-\-ldflags\fP but only includes the \-l options.
@@ -284,5 +284,5 @@ Steven Loomis
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2002 IBM, Inc. and others.
+Copyright (C) 2002-2004 IBM, Inc. and others.
 

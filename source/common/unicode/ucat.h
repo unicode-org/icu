@@ -57,7 +57,7 @@
  * The catgets function is commonly used in combination with functions
  * like printf and strftime.  ICU components like message format can
  * be used instead, although they use a different format syntax.
- * There is an unsupported ICU package, ustdio, that provides some of
+ * There is an ICU package, icuio, that provides some of
  * the POSIX-style formatting API.
  */
 

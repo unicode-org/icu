@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999, International Business Machines
+#   Copyright (C) 1999-2004, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -15,8 +15,7 @@ top_builddir = ..
 
 include $(top_builddir)/icudefs.mk
 
-@USTDIO_TRUE@USTDIO = ustdio
-@USTDIO_FALSE@USTDIO =
+@ICUIO_TRUE@ICUIO = ustdio
 
 ## Build directory information
 subdir = extra
@@ -24,7 +23,7 @@ subdir = extra
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = $(USTDIO) uconv
+SUBDIRS = $(ICUIO) uconv
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\

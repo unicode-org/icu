@@ -1,6 +1,6 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.10 $
-## Copyright (c) 2002-2003, International Business Machines Corporation and
+## BEGIN of icu-config-bottom. $Revision: 1.11 $
+## Copyright (c) 2002-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
@@ -46,7 +46,7 @@ allflags()
     echo "  --ldflags-libsonly     Same as --ldflags, but only the -l directives"
     echo "  --ldflags-searchpath   Print only -L (search path) directive"
     echo "  --ldflags-system       Print only system libs ICU links with (-lpthread, -lm)"
-    echo "  --ldflags-ustdio       Print ICU ustdio link directive. Use in addition to --ldflags "
+    echo "  --ldflags-icuio        Print ICU icuio link directive. Use in addition to --ldflags "
     echo "  --ldflags-obsolete     Print ICU obsolete link directive. Use in addition to --ldflags. (requires icuapps/obsolete to be built and installed.) "
     echo "  --mandir               Print manpage (man) path"
     echo "  --prefix               Print PREFIX to icu install (/usr/local)"
@@ -218,8 +218,8 @@ do
 	    echo $ICULIBS_I18N $ICULIBS_COMMON $ICULIBS_DATA 
 	    ;;
 
-	--ldflags-ustdio)
-	    echo $ICULIBS_USTDIO
+	--ldflags-icuio)
+	    echo $ICULIBS_ICUIO
 	    ;;
 
 	--ldflags-obsolete)
