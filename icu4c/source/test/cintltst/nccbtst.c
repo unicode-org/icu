@@ -862,19 +862,19 @@ void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
         UChar ebcdic_inputTest[] = { 0x0061, 0x6d64, 0x0061, 0x00A2, 0x6d65 };
         const char toIBM930[]= { (char)0x62, (char)0x0e, (char)0x5d, (char)0x63, (char)0x0f, 
             (char)0x62,  (char)0xb1, (char)0x0e, (char)0xfe, (char)0xfe, (char)0x0f};
-        int32_t offset_930[]={0, 1, 1, 1, 1, 2, 3, 4, 4, 4, 4,};
+        int32_t offset_930[]={0, 1, 1, 1, 2, 2, 3, 4, 4, 4, 4,};
 
         const char toIBM930_maxbuffer[]= { (char)0x62, (char)0x0e, (char)0x5d, (char)0x63, (char)0x0f, 
             (char)0x62,  (char)0xb1, (char)0xfe, (char)0xfe};
-        int32_t offset_930_maxbuffer[]={0, 1, 1, 1, 1, 2, 3, 4, 4, };
-
+        int32_t offset_930_maxbuffer[]={0, 1, 1, 1, 2, 2, 3, 4, 4, };
+/*                                      s  E  doubl F sng s  fe fe */
         /*EBCDIC_STATEFUL with subChar=3f*/
         const char toIBM930_subvaried[]= { (char)0x62, (char)0x0e, (char)0x5d, (char)0x63, (char)0x0f, (char)0x62,  (char)0xb1, (char)0x3f};
         int32_t offset_930_subvaried[]= {0, 1, 1, 1, 1, 2, 3, 4, };
         const char mySubChar[]={ (char)0x3f};
 
         const char toIBM930_subvaried_maxbuffer[]= { (char)0x62, (char)0x0e, (char)0x5d, (char)0x63, (char)0x0f, (char)0x62,  (char)0xb1, (char)0x0f, (char)0x3f, (char)0x0e};
-        int32_t offset_930_subvaried_maxbuffer[]= {0, 1, 1, 1, 1, 2, 3, 4, 4, 4, 4,};
+        int32_t offset_930_subvaried_maxbuffer[]= {0, 1, 1, 1, 2, 2, 3, 4, 4, 4, 4,};
 
         gInBufferSize = inputsize;
 	    gOutBufferSize = outputsize;
@@ -888,7 +888,7 @@ void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
             
             if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
 			    toIBM930_subvaried_maxbuffer, sizeof(toIBM930_subvaried_maxbuffer), "ibm-930",
-	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried, mySubChar, 1 ))
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried_maxbuffer, mySubChar, 1 ))
 		            log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst(setSubChar=0x3f) did not match.\n");
         }else {
             
@@ -1028,10 +1028,10 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 		{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
-        printf("\nGot:");
-		printSeq(junkout, expectLen);
-        printf("\nExpected:");
-		printSeq(expect, expectLen);
+        log_info("\nGot:");
+		printSeqErr(junkout, expectLen);
+        log_info("\nExpected:");
+		printSeqErr(expect, expectLen);
     	ucnv_close(conv);
 		return FALSE;
 		}
@@ -1107,9 +1107,9 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 		log_verbose("String does not match. %s\n", gNuConvTestName);
         printf("\nsource: ");
         printUSeqErr(source, sourceLen);
-        printf("\nGot: ");
+        log_err("\nGot: ");
 		printSeqErr(junkout, expectLen);
-        printf("\nExpected: ");
+        log_err("\nExpected: ");
 		printSeqErr(expect, expectLen);
 		return FALSE;
 	}
