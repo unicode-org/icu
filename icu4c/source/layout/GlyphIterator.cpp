@@ -58,6 +58,25 @@ GlyphIterator::GlyphIterator(GlyphIterator &that)
     markAttachClassDefinitionTable = that.markAttachClassDefinitionTable;
 }
 
+GlyphIterator::GlyphIterator(GlyphIterator &that, LETag newFeatureTag)
+{
+    direction    = that.direction;
+    position     = that.position;
+    nextLimit    = that.nextLimit;
+    prevLimit    = that.prevLimit;
+
+    cursiveFirstPosition = that.cursiveFirstPosition;
+    cursiveLastPosition  = that.cursiveLastPosition;
+
+    glyphs = that.glyphs;
+    glyphPositionAdjustments = that.glyphPositionAdjustments;
+    lookupFlags = that.lookupFlags;
+    featureTag = newFeatureTag;
+    glyphTags = that.glyphTags;
+    glyphClassDefinitionTable = that.glyphClassDefinitionTable;
+    markAttachClassDefinitionTable = that.markAttachClassDefinitionTable;
+}
+
 GlyphIterator::GlyphIterator(GlyphIterator &that, le_uint16 newLookupFlags)
 {
     direction    = that.direction;

@@ -28,6 +28,8 @@ public:
 
     GlyphIterator(GlyphIterator &that);
 
+    GlyphIterator(GlyphIterator &that, LETag newFeatureTag);
+
     GlyphIterator(GlyphIterator &that, le_uint16 newLookupFlags);
 
     ~GlyphIterator();
