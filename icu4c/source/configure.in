@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.189 2003/06/03 16:57:07 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.190 2003/06/06 17:32:08 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -289,7 +289,7 @@ if test $ac_cv_header_inttypes_h = no; then
 else
  U_HAVE_INTTYPES_H=1
 fi
-if test $CC = ccc; then
+if test "$CC" = ccc; then
  AC_MSG_RESULT("C compiler set to CCC ${CC}" )
  case "${host}" in
         alpha*-*-*) U_HAVE_INTTYPES_H=0;
