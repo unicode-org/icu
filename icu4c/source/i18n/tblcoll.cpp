@@ -582,17 +582,9 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
   {
     status = U_ZERO_ERROR;
 
-    // TODO: 
     setUCollator(kRootLocaleName, status);
-    if (U_FAILURE(status))
-    {
-      status = U_ZERO_ERROR;
-
-      if (status == U_ZERO_ERROR)
-        status = U_USING_DEFAULT_ERROR;
-
-      if (status == U_MEMORY_ALLOCATION_ERROR)
-        return;
+    if (status == U_ZERO_ERROR) {
+		status = U_USING_DEFAULT_ERROR;
     }
   }
 
