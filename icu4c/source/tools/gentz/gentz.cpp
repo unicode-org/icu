@@ -37,7 +37,7 @@
 #define OUTPUT_FILE "tz.dat"
 
 /* UDataInfo cf. udata.h */
-static const UDataInfo dataInfo = {
+static UDataInfo dataInfo = {
     sizeof(UDataInfo),
     0,
 
