@@ -68,7 +68,7 @@ void U_CALLCONV TraceEntry(const void *context, int32_t fnNumber) {
     traceFnNestingDepth++;
 }
         
-void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, UTraceExitVal type, va_list args) {
+void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, int32_t type, va_list args) {
     char buf[2000];
     if (traceFnNestingDepth>0) {
         traceFnNestingDepth--;
