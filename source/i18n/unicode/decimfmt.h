@@ -555,7 +555,7 @@ class U_I18N_API DecimalFormat: public NumberFormat {
 public:
     /**
      * Rounding mode.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     enum ERoundingMode {
         kRoundCeiling,  /**< Round towards positive infinity */
@@ -573,7 +573,7 @@ public:
 
     /**
      * Pad position.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     enum EPadPosition {
         kPadBeforePrefix,
@@ -1268,7 +1268,7 @@ public:
      * @see setSecondaryGroupingSize
      * @see NumberFormat::isGroupingUsed
      * @see DecimalFormatSymbols::getGroupingSeparator
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     int32_t getSecondaryGroupingSize(void) const;
 
@@ -1281,7 +1281,7 @@ public:
      * @see getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols::setGroupingSeparator
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual void setSecondaryGroupingSize(int32_t newValue);
 
@@ -1748,11 +1748,11 @@ private:
 
 protected:
   /** number of integer digits 
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */  
     static const int32_t  kDoubleIntegerDigits;
   /** number of fraction digits 
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */  
     static const int32_t  kDoubleFractionDigits;
 

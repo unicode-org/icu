@@ -90,7 +90,7 @@
  * Compound statements (curly braces {}) must be used  for if-else-while... 
  * bodies and all macro statements should be terminated with semicolon.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 
 #ifndef __UTF_H__
@@ -102,7 +102,7 @@
  * ANSI C headers:
  * stddef.h defines wchar_t
  */
-#include "unicode/umachine.h"
+#include "unicode/utypes.h"
 #include <stddef.h>
 /* include the utfXX.h after the following definitions */
 
@@ -197,7 +197,7 @@
  * That is, the definition of UChar32 was platform-dependent.
  *
  * @see U_SENTINEL
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 typedef int32_t UChar32;
 
@@ -219,7 +219,7 @@ typedef int32_t UChar32;
  *
  * @return -1
  * @see UChar32
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_SENTINEL (-1)
 
@@ -227,7 +227,7 @@ typedef int32_t UChar32;
  * Is this code point a Unicode noncharacter?
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_IS_UNICODE_NONCHAR(c) \
     ((c)>=0xfdd0 && \
@@ -249,13 +249,15 @@ typedef int32_t UChar32;
  *
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_IS_UNICODE_CHAR(c) \
     ((uint32_t)(c)<0xd800 || \
         ((uint32_t)(c)>0xdfff && \
          (uint32_t)(c)<=0x10ffff && \
          !U_IS_UNICODE_NONCHAR(c)))
+
+#ifndef U_HIDE_DRAFT_API
 
 /**
  * Is this code point a BMP code point (U+0000..U+ffff)?
@@ -273,11 +275,13 @@ typedef int32_t UChar32;
  */
 #define U_IS_SUPPLEMENTARY(c) ((uint32_t)((c)-0x10000)<=0xfffff)
 
+#endif /*U_HIDE_DRAFT_API*/
+ 
 /**
  * Is this code point a lead surrogate (U+d800..U+dbff)?
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
 
@@ -285,7 +289,7 @@ typedef int32_t UChar32;
  * Is this code point a trail surrogate (U+dc00..U+dfff)?
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
 
@@ -293,7 +297,7 @@ typedef int32_t UChar32;
  * Is this code point a surrogate (U+d800..U+dfff)?
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_IS_SURROGATE(c) (((c)&0xfffff800)==0xd800)
 
@@ -302,7 +306,7 @@ typedef int32_t UChar32;
  * is it a lead surrogate?
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
 

@@ -265,7 +265,7 @@ typedef enum {
  * @see ucol_close
  * @stable ICU 2.0
  */
-U_CAPI UCollator* U_EXPORT2 
+U_STABLE UCollator* U_EXPORT2 
 ucol_open(const char *loc, UErrorCode *status);
 
 /**
@@ -293,7 +293,7 @@ ucol_open(const char *loc, UErrorCode *status);
  * @see ucol_close
  * @stable ICU 2.0
  */
-U_CAPI UCollator* U_EXPORT2 
+U_STABLE UCollator* U_EXPORT2 
 ucol_openRules( const UChar        *rules,
                 int32_t            rulesLength,
                 UColAttributeValue normalizationMode,
@@ -311,7 +311,7 @@ ucol_openRules( const UChar        *rules,
  * @see ucol_safeClone
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 ucol_close(UCollator *coll);
 
 /**
@@ -329,7 +329,7 @@ ucol_close(UCollator *coll);
  * @see ucol_equal
  * @stable ICU 2.0
  */
-U_CAPI UCollationResult U_EXPORT2 
+U_STABLE UCollationResult U_EXPORT2 
 ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -350,7 +350,7 @@ ucol_strcoll(    const    UCollator    *coll,
  * @see ucol_equal
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2 
+U_STABLE UBool U_EXPORT2 
 ucol_greater(const UCollator *coll,
              const UChar     *source, int32_t sourceLength,
              const UChar     *target, int32_t targetLength);
@@ -369,7 +369,7 @@ ucol_greater(const UCollator *coll,
  * @see ucol_equal
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2 
+U_STABLE UBool U_EXPORT2 
 ucol_greaterOrEqual(const UCollator *coll,
                     const UChar     *source, int32_t sourceLength,
                     const UChar     *target, int32_t targetLength);
@@ -388,7 +388,7 @@ ucol_greaterOrEqual(const UCollator *coll,
  * @see ucol_greaterOrEqual
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2 
+U_STABLE UBool U_EXPORT2 
 ucol_equal(const UCollator *coll,
            const UChar     *source, int32_t sourceLength,
            const UChar     *target, int32_t targetLength);
@@ -405,7 +405,7 @@ ucol_equal(const UCollator *coll,
  * @see ucol_strcoll
  * @draft ICU 2.6
  */
-U_CAPI UCollationResult U_EXPORT2 
+U_DRAFT UCollationResult U_EXPORT2 
 ucol_strcollIter(  const    UCollator    *coll,
                   UCharIterator *sIter,
                   UCharIterator *tIter,
@@ -420,7 +420,7 @@ ucol_strcollIter(  const    UCollator    *coll,
  * @see ucol_setStrength
  * @stable ICU 2.0
  */
-U_CAPI UCollationStrength U_EXPORT2 
+U_STABLE UCollationStrength U_EXPORT2 
 ucol_getStrength(const UCollator *coll);
 
 /**
@@ -432,7 +432,7 @@ ucol_getStrength(const UCollator *coll);
  * @see ucol_getStrength
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 ucol_setStrength(UCollator *coll,
                  UCollationStrength strength);
 
@@ -448,7 +448,7 @@ ucol_setStrength(UCollator *coll,
  * the output was truncated.
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_getDisplayName(    const    char        *objLoc,
             const    char        *dispLoc,
             UChar             *result,
@@ -464,7 +464,7 @@ ucol_getDisplayName(    const    char        *objLoc,
  * @see ucol_countAvailable
  * @stable ICU 2.0
  */
-U_CAPI const char* U_EXPORT2 
+U_STABLE const char* U_EXPORT2 
 ucol_getAvailable(int32_t index);
 
 /**
@@ -475,7 +475,7 @@ ucol_getAvailable(int32_t index);
  * @see ucol_getAvailable
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_countAvailable(void);
 
 /**
@@ -486,7 +486,7 @@ ucol_countAvailable(void);
  * @return The collation rules.
  * @stable ICU 2.0
  */
-U_CAPI const UChar* U_EXPORT2 
+U_STABLE const UChar* U_EXPORT2 
 ucol_getRules(    const    UCollator    *coll, 
         int32_t            *length);
 
@@ -502,7 +502,7 @@ ucol_getRules(    const    UCollator    *coll,
  * @see ucol_keyHashCode
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
@@ -530,7 +530,7 @@ ucol_getSortKey(const    UCollator    *coll,
  *          the sort key.
  *  @draft ICU 2.6
  */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 ucol_nextSortKeyPart(const UCollator *coll,
                      UCharIterator *iter,
                      uint32_t state[2],
@@ -591,7 +591,7 @@ typedef enum {
  * @see ucol_keyHashCode
  * @stable ICU 2.1
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_getBound(const uint8_t       *source,
         int32_t             sourceLength,
         UColBoundMode       boundType,
@@ -608,7 +608,7 @@ ucol_getBound(const uint8_t       *source,
  * @param info the version # information, the result will be filled in
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucol_getVersion(const UCollator* coll, UVersionInfo info);
 
 /**
@@ -618,7 +618,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * @param info the version # information, the result will be filled in
  * @draft ICU 2.8
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
 
 /** 
@@ -643,7 +643,7 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
  *         src1Length+src2Length-1
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
                    const uint8_t *src2, int32_t src2Length,
                    uint8_t *dest, int32_t destCapacity);
@@ -659,7 +659,7 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
  * @see ucol_getAttribute
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
 
 /**
@@ -673,7 +673,7 @@ ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value,
  * @see ucol_setAttribute
  * @stable ICU 2.0
  */
-U_CAPI UColAttributeValue  U_EXPORT2 
+U_STABLE UColAttributeValue  U_EXPORT2 
 ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
 /** Variable top
@@ -695,7 +695,7 @@ ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status)
  * @see ucol_restoreVariableTop
  * @stable ICU 2.0
  */
-U_CAPI uint32_t U_EXPORT2 
+U_STABLE uint32_t U_EXPORT2 
 ucol_setVariableTop(UCollator *coll, 
                     const UChar *varTop, int32_t len, 
                     UErrorCode *status);
@@ -711,7 +711,7 @@ ucol_setVariableTop(UCollator *coll,
  * @see ucol_restoreVariableTop
  * @stable ICU 2.0
  */
-U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
+U_STABLE uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
 
 /** 
  * Sets the variable top to a collation element value supplied. Variable top is 
@@ -724,7 +724,7 @@ U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode 
  * @see ucol_setVariableTop
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status);
 
 /**
@@ -749,7 +749,7 @@ ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *stat
  * @see ucol_close
  * @stable ICU 2.0
  */
-U_CAPI UCollator* U_EXPORT2 
+U_STABLE UCollator* U_EXPORT2 
 ucol_safeClone(const UCollator *coll,
                void            *stackBuffer,
                int32_t         *pBufferSize,
@@ -771,7 +771,7 @@ ucol_safeClone(const UCollator *coll,
  * @return current rules
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
 
 /**
@@ -788,7 +788,7 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
  *         NULL.
  * @deprecated ICU 2.8 Use ucol_getLocaleByType instead
  */
-U_CAPI const char * U_EXPORT2
+U_DEPRECATED const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
 
@@ -806,7 +806,7 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
  *         NULL.
  * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
  */
-U_CAPI const char * U_EXPORT2
+U_DRAFT const char * U_EXPORT2
 ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
 /**
@@ -817,9 +817,9 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
  * @return a pointer to newly created USet. Must be be disposed by using uset_close
  * @see ucol_openRules
  * @see uset_close
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI USet * U_EXPORT2
+U_STABLE USet * U_EXPORT2
 ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 
 #endif /* #if !UCONFIG_NO_COLLATION */

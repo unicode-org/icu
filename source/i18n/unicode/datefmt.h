@@ -133,7 +133,7 @@ public:
      * the DateTimePatterns resource. There are 4 time patterns, 4 date patterns,
      * and then the date-time pattern. Each block of 4 values in the resource occurs
      * in the order full, long, medium, short.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     enum EStyle
     {
@@ -558,7 +558,7 @@ protected:
      * The calendar that DateFormat uses to produce the time field values needed
      * to implement date/time formatting. Subclasses should generally initialize
      * this to the default calendar for the locale associated with this DateFormat.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     Calendar* fCalendar;
 
@@ -566,7 +566,7 @@ protected:
      * The number formatter that DateFormat uses to format numbers in dates and
      * times. Subclasses should generally initialize this to the default number
      * format for the locale associated with this DateFormat.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     NumberFormat* fNumberFormat;
 

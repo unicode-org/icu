@@ -38,7 +38,7 @@ class  StringThreadTest;
 
 #ifndef USTRING_H
 /* see ustring.h */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
 
@@ -1512,7 +1512,7 @@ public:
    *         than 'number'. Same as (u_countChar32(s, length)>number).
    * @see countChar32
    * @see u_strHasMoreChar32Than
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */
   UBool
   hasMoreChar32Than(int32_t start, int32_t length, int32_t number) const;
@@ -1591,7 +1591,7 @@ public:
    *
    * @param src The text containing the characters to replace.
    * @return a reference to this
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */
   UnicodeString &fastCopyFrom(const UnicodeString &src);
 
@@ -2133,7 +2133,7 @@ public:
   /**
    * Replaceable API
    * @return TRUE if it has MetaData
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */
   virtual UBool hasMetaData() const;
   
@@ -2836,21 +2836,21 @@ public:
 protected:
   /**
    * Implement Replaceable::getLength() (see jitterbug 1027).
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */
   virtual int32_t getLength() const;
 
   /**
    * The change in Replaceable to use virtual getCharAt() allows
    * UnicodeString::charAt() to be inline again (see jitterbug 709).
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */
   virtual UChar getCharAt(int32_t offset) const;
 
   /**
    * The change in Replaceable to use virtual getChar32At() allows
    * UnicodeString::char32At() to be inline again (see jitterbug 709).
-   * @draft ICU 2.4
+   * @stable ICU 2.4
    */
   virtual UChar32 getChar32At(int32_t offset) const;
 

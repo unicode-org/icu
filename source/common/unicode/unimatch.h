@@ -19,7 +19,7 @@ class UnicodeSet;
 /**
  * Constants returned by <code>UnicodeMatcher::matches()</code>
  * indicating the degree of match.
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 enum UMatchDegree {
     /**
@@ -27,7 +27,7 @@ enum UMatchDegree {
      * mismatch between the text and this matcher.  The text contains
      * a character which does not match, or the text does not contain
      * all desired characters for a non-incremental match.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     U_MISMATCH,
     
@@ -39,7 +39,7 @@ enum UMatchDegree {
      * complete match.  Alternatively, for variable-length matchers,
      * all characters of the text match, and if more characters were
      * supplied at limit, they might also match.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     U_PARTIAL_MATCH,
     
@@ -49,7 +49,7 @@ enum UMatchDegree {
      * incremental variable-length match, this value is returned if
      * the given text matches, and it is known that additional
      * characters would not alter the extent of the match.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     U_MATCH
 };
@@ -57,14 +57,14 @@ enum UMatchDegree {
 /**
  * <code>UnicodeMatcher</code> defines a protocol for objects that can
  * match a range of characters in a Replaceable string.
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 class U_COMMON_API UnicodeMatcher /* not : public UObject because this is an interface/mixin class */ {
 
 public:
     /**
      * Destructor.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual ~UnicodeMatcher();
 
@@ -112,7 +112,7 @@ public:
      * @return a match degree value indicating a full match, a partial
      * match, or a mismatch.  If incremental is FALSE then
      * U_PARTIAL_MATCH should never be returned.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UMatchDegree matches(const Replaceable& text,
                                  int32_t& offset,
@@ -129,7 +129,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
                                      UBool escapeUnprintable = FALSE) const = 0;
@@ -139,7 +139,7 @@ public:
      * & 0xFF == v, at offset, in the forward direction (with limit >
      * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UBool matchesIndexValue(uint8_t v) const = 0;
 
@@ -147,7 +147,7 @@ public:
      * Union the set of all characters that may be matched by this object
      * into the given set.
      * @param toUnionTo the set into which to union the source characters
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual void addMatchSetTo(UnicodeSet& toUnionTo) const = 0;
 };

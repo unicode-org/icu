@@ -198,7 +198,7 @@ protected:
 
     /**
      * Default constructor.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     Replaceable();
 
@@ -215,19 +215,19 @@ protected:
 
     /**
      * Virtual version of length().
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */ 
     virtual int32_t getLength() const = 0;
 
     /**
      * Virtual version of charAt().
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UChar getCharAt(int32_t offset) const = 0;
 
     /**
      * Virtual version of char32At().
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UChar32 getChar32At(int32_t offset) const = 0;
 };

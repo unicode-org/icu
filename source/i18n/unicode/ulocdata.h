@@ -38,10 +38,10 @@
  * @return USet*    The pointer to the fillIn USet object.
  * @draft ICU 2.8
  */
-U_CAPI USet* U_EXPORT2 
+U_DRAFT USet* U_EXPORT2 
 ulocdata_getExemplarSet(USet *fillIn, const char *localeID, UErrorCode *status);
 
-
+#ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for representing the measurement systems.
  * @draft ICU 2.8
@@ -51,6 +51,7 @@ typedef enum UMeasurementSystem {
     UMS_US,     /** Measurement system followed in the United States of America. */ 
     UMS_LIMIT
 } UMeasurementSystem;
+#endif /*U_HIDE_DRAFT_API */
 
 /**
  * Returns the measurement system used in the locale specified by the localeID.
@@ -61,7 +62,7 @@ typedef enum UMeasurementSystem {
  * @return UMeasurementSystem the measurement system used in the locale.
  * @draft ICU 2.8
  */
-U_CAPI UMeasurementSystem U_EXPORT2
+U_DRAFT UMeasurementSystem U_EXPORT2
 ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status);
 
 /**
@@ -79,7 +80,7 @@ ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status);
  *                      which must not indicate a failure before the function call.
  * @draft ICU 2.8
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 ulocdata_getPaperSize(const char *localeID, int32_t *height, int32_t *width, UErrorCode *status);
 
 #endif

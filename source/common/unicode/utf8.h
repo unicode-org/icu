@@ -36,6 +36,7 @@
 #   include "unicode/utf.h"
 #endif
 
+
 #ifndef __UTF8_H__
 #define __UTF8_H__
 
@@ -48,7 +49,7 @@
  * @internal
  */
 #ifdef U_UTF8_IMPL
-U_CAPI const uint8_t 
+U_STABLE const uint8_t 
 utf8_countTrailBytes[256];
 #else
 U_CFUNC U_IMPORT const uint8_t /* U_IMPORT2? */ /*U_IMPORT*/ 
@@ -71,28 +72,28 @@ utf8_countTrailBytes[256];
  * Function for handling "next code point" with error-checking.
  * @internal
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict);
 
 /**
  * Function for handling "append code point" with error-checking.
  * @internal
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError);
 
 /**
  * Function for handling "previous code point" with error-checking.
  * @internal
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict);
 
 /**
  * Function for handling "skip backward one code point" with error-checking.
  * @internal
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /* single-code point definitions -------------------------------------------- */
@@ -101,7 +102,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * Does this code unit (byte) encode a code point by itself (US-ASCII 0..0x7f)?
  * @param c 8-bit code unit (byte)
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_IS_SINGLE(c) (((c)&0x80)==0)
 
@@ -109,7 +110,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * Is this code unit (byte) a UTF-8 lead byte?
  * @param c 8-bit code unit (byte)
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_IS_LEAD(c) ((uint8_t)((c)-0xc0)<0x3e)
 
@@ -117,7 +118,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * Is this code unit (byte) a UTF-8 trail byte?
  * @param c 8-bit code unit (byte)
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_IS_TRAIL(c) (((c)&0xc0)==0x80)
 
@@ -126,7 +127,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * of this Unicode code point?
  * @param c 32-bit code point
  * @return 1..4, or 0 if c is a surrogate or not a Unicode code point
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_LENGTH(c) \
     ((uint32_t)(c)<=0x7f ? 1 : \
@@ -142,7 +143,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 /**
  * The maximum number of UTF-8 code units (bytes) per Unicode code point (U+0000..U+10ffff).
  * @return 4
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_MAX_LENGTH 4
 
@@ -160,7 +161,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset
  * @param c output UChar32 variable
  * @see U8_GET
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_GET_UNSAFE(s, i, c) { \
     int32_t __I=(int32_t)(i); \
@@ -184,7 +185,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param length string length
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_GET_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_GET(s, start, i, length, c) { \
     int32_t __I=(int32_t)(i); \
@@ -209,7 +210,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset
  * @param c output UChar32 variable
  * @see U8_NEXT
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_NEXT_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
@@ -246,7 +247,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param length string length
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_NEXT_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_NEXT(s, i, length, c) { \
     (c)=(s)[(i)++]; \
@@ -270,7 +271,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset
  * @param c code point to append
  * @see U8_APPEND
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_APPEND_UNSAFE(s, i, c) { \
     if((uint32_t)(c)<=0x7f) { \
@@ -306,7 +307,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param c code point to append
  * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
  * @see U8_APPEND_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_APPEND(s, i, length, c, isError) { \
     if((uint32_t)(c)<=0x7f) { \
@@ -324,7 +325,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param s const uint8_t * string
  * @param i string offset
  * @see U8_FWD_1
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_FWD_1_UNSAFE(s, i) { \
     (i)+=1+U8_COUNT_TRAIL_BYTES((s)[i]); \
@@ -339,7 +340,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset, i<length
  * @param length string length
  * @see U8_FWD_1_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_FWD_1(s, i, length) { \
     uint8_t __b=(s)[(i)++]; \
@@ -365,7 +366,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset
  * @param n number of code points to skip
  * @see U8_FWD_N
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_FWD_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
@@ -386,7 +387,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param length string length
  * @param n number of code points to skip
  * @see U8_FWD_N_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_FWD_N(s, i, length, n) { \
     int32_t __N=(n); \
@@ -407,7 +408,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param s const uint8_t * string
  * @param i string offset
  * @see U8_SET_CP_START
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_SET_CP_START_UNSAFE(s, i) { \
     while(U8_IS_TRAIL((s)[i])) { --(i); } \
@@ -425,7 +426,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param start starting string offset (usually 0)
  * @param i string offset, start<=i
  * @see U8_SET_CP_START_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_SET_CP_START(s, start, i) { \
     if(U8_IS_TRAIL((s)[(i)])) { \
@@ -452,7 +453,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset
  * @param c output UChar32 variable
  * @see U8_PREV
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_PREV_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
@@ -494,7 +495,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset, start<=i
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_PREV_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_PREV(s, start, i, c) { \
     (c)=(s)[--(i)]; \
@@ -516,7 +517,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param s const uint8_t * string
  * @param i string offset
  * @see U8_BACK_1
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_BACK_1_UNSAFE(s, i) { \
     while(U8_IS_TRAIL((s)[--(i)])) {} \
@@ -532,7 +533,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param start starting string offset (usually 0)
  * @param i string offset, start<=i
  * @see U8_BACK_1_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_BACK_1(s, start, i) { \
     if(U8_IS_TRAIL((s)[--(i)])) { \
@@ -551,7 +552,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset
  * @param n number of code points to skip
  * @see U8_BACK_N
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_BACK_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
@@ -573,7 +574,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset, i<length
  * @param n number of code points to skip
  * @see U8_BACK_N_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_BACK_N(s, start, i, n) { \
     int32_t __N=(n); \
@@ -594,7 +595,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param s const uint8_t * string
  * @param i string offset
  * @see U8_SET_CP_LIMIT
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_SET_CP_LIMIT_UNSAFE(s, i) { \
     U8_BACK_1_UNSAFE(s, i); \
@@ -614,7 +615,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param i string offset, start<=i<=length
  * @param length string length
  * @see U8_SET_CP_LIMIT_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U8_SET_CP_LIMIT(s, start, i, length) { \
     if((start)<(i) && (i)<(length)) { \

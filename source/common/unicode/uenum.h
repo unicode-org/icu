@@ -35,7 +35,7 @@ typedef struct UEnumeration UEnumeration;
  * @param en UEnumeration structure pointer
  * @stable ICU 2.2
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 uenum_close(UEnumeration* en);
 
 /**
@@ -52,7 +52,7 @@ uenum_close(UEnumeration* en);
  * @return number of elements in the iterator
  * @stable ICU 2.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uenum_count(UEnumeration* en, UErrorCode* status);
 
 /**
@@ -76,7 +76,7 @@ uenum_count(UEnumeration* en, UErrorCode* status);
  *         traversed, returns NULL.
  * @stable ICU 2.2
  */
-U_CAPI const UChar* U_EXPORT2
+U_STABLE const UChar* U_EXPORT2
 uenum_unext(UEnumeration* en,
             int32_t* resultLength,
             UErrorCode* status);
@@ -109,7 +109,7 @@ uenum_unext(UEnumeration* en,
  *         traversed, returns NULL.
  * @stable ICU 2.2
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 uenum_next(UEnumeration* en,
            int32_t* resultLength,
            UErrorCode* status);
@@ -123,7 +123,7 @@ uenum_next(UEnumeration* en,
  *               the iterator is out of sync with its service.  
  * @stable ICU 2.2
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 uenum_reset(UEnumeration* en, UErrorCode* status);
 
 #endif

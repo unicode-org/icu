@@ -70,7 +70,7 @@ class  RegexCImpl;
  *   @internal
  */
 #ifdef REGEX_DEBUG
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
     RegexPatternDump(const RegexPattern *pat);
 #else
     #define RegexPatternDump(pat)
@@ -87,7 +87,7 @@ U_CAPI void U_EXPORT2
   *
   * <p>Class RegexPattern is not intended to be subclassed.</p>
   *
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
 class U_I18N_API RegexPattern: public UObject {
 public:
@@ -97,21 +97,21 @@ public:
       *   pattern.  Not normally needed; RegexPattern objects are usually
       *   created using the factory method <code>compile()</code>.
       *
-      * @draft ICU 2.4
+      * @stable ICU 2.4
       */
     RegexPattern();
 
     /**
       * Copy Constructor.  Create a new RegexPattern object that is equivalent
       *                    to the source object.
-      * @draft ICU 2.4
+      * @stable ICU 2.4
       */
     RegexPattern(const RegexPattern &source);
 
     /**
       * Destructor.  Note that a RegexPattern object must persist so long as any
       *  RegexMatcher objects that were created from the RegexPattern are active.
-      * @draft ICU 2.4
+      * @stable ICU 2.4
       */
     virtual ~RegexPattern();
 
@@ -121,7 +121,7 @@ public:
       * settings.
       * @param that a RegexPattern object to compare with "this".
       * @return TRUE if the objects are equivalent.
-      * @draft ICU 2.4
+      * @stable ICU 2.4
       */
     UBool           operator==(const RegexPattern& that) const;
 
@@ -131,14 +131,14 @@ public:
       * settings.
       * @param that a RegexPattern object to compare with "this".
       * @return TRUE if the objects are different.
-      * @draft ICU 2.4
+      * @stable ICU 2.4
       */
     inline UBool    operator!=(const RegexPattern& that) const {return ! operator ==(that);};
 
     /**
      * Assignment operator.  After assignment, this RegexPattern will behave identically
      *     to the source object.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     RegexPattern  &operator =(const RegexPattern &source);
 
@@ -147,7 +147,7 @@ public:
      * intended to be subclasses, <code>clone()</code> and the copy construction are
      * equivalent operations.
      * @return the copy of this RegexPattern
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual RegexPattern  *clone() const;
 
@@ -170,7 +170,7 @@ public:
     *    @param status A reference to a UErrorCode to receive any errors.
     *    @return      A regexPattern object for the compiled pattern.
     *
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     static RegexPattern *compile( const UnicodeString &regex,
         UParseError          &pe,
@@ -194,7 +194,7 @@ public:
     *    @param status   A reference to a UErrorCode to receive any errors.
     *    @return      A regexPattern object for the compiled pattern.
     *
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     static RegexPattern *compile( const UnicodeString &regex,
         uint32_t             flags,
@@ -228,7 +228,7 @@ public:
    /**
     *     Get the match mode flags that were used when compiling this pattern.
     *     @return  the match mode flags
-    *     @draft ICU 2.4
+    *     @stable ICU 2.4
     */
     virtual uint32_t flags() const;
 
@@ -242,7 +242,7 @@ public:
     *   @param status   A reference to a UErrorCode to receive any errors.
     *   @return      A RegexMatcher object for this pattern and input.
     *
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual RegexMatcher *matcher(const UnicodeString &input,
         UErrorCode          &status) const;
@@ -274,7 +274,7 @@ public:
     *  @param status A reference to a UErrorCode to receive any errors.
     *  @return True if the regular expression exactly matches the full input string.
     *
-    *  @draft ICU 2.4
+    *  @stable ICU 2.4
     */
     static UBool matches(const UnicodeString   &regex,
         const UnicodeString   &input,
@@ -284,7 +284,7 @@ public:
 
    /**
     *    Returns the regular expression from which this pattern was compiled.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual UnicodeString pattern() const;
 
@@ -312,7 +312,7 @@ public:
      *                field delimiters, is placed in the last destination string.
      * @param status  A reference to a UErrorCode to receive any errors.
      * @return        The number of fields into which the input string was split.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual int32_t  split(const UnicodeString &input,
         UnicodeString    dest[],
@@ -323,14 +323,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UClassID getDynamicClassID() const; 
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static UClassID getStaticClassID(); 
 
@@ -407,7 +407,7 @@ private:
  *
  * <p>Class RegexMatcher is not intended to be subclassed.</p>
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 class U_I18N_API RegexMatcher: public UObject {
 public:
@@ -450,7 +450,7 @@ public:
    /**
     *   Destructor.  
     *
-    *  @draft ICU 2.4
+    *  @stable ICU 2.4
     */
     virtual ~RegexMatcher();
 
@@ -459,7 +459,7 @@ public:
     *   Attempts to match the entire input string against the pattern.
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *    @return TRUE if there is a match
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual UBool matches(UErrorCode &status);
 
@@ -486,7 +486,7 @@ public:
     *
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *    @return  TRUE if there is a match at the start of the input string.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual UBool lookingAt(UErrorCode &status);
 
@@ -516,7 +516,7 @@ public:
     *     use find(startPos, status) instead of find(), because the saved starting
     *     position may not be valid with the altered input string.</p>
     *  @return  TRUE if a match is found.
-    *  @draft ICU 2.4
+    *  @stable ICU 2.4
     */
     virtual UBool find();
 
@@ -528,7 +528,7 @@ public:
     *   @param   start     the position in the input string to begin the search
     *   @param   status    A reference to a UErrorCode to receive any errors.
     *   @return  TRUE if a match is found.
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual UBool find(int32_t start, UErrorCode &status);
 
@@ -540,7 +540,7 @@ public:
     *                        Possible errors are  U_REGEX_INVALID_STATE if no match
     *                        has been attempted or the last match failed.
     *   @return  a string containing the matched input text.
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual UnicodeString group(UErrorCode &status) const;
 
@@ -555,7 +555,7 @@ public:
     *                        has been attempted or the last match failed and
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number.
     *    @return the captured text
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual UnicodeString group(int32_t groupNum, UErrorCode &status) const;
 
@@ -563,7 +563,7 @@ public:
    /**
     *   Returns the number of capturing groups in this matcher's pattern.
     *   @return the number of capture groups
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual int32_t groupCount() const;
 
@@ -573,7 +573,7 @@ public:
     *   during the previous match operation.
     *    @param   status      a reference to a UErrorCode to receive any errors.
     *    @return              The position in the input string of the start of the last match.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual int32_t start(UErrorCode &status) const;
 
@@ -589,7 +589,7 @@ public:
     *                        attempted or the last match failed, and
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number
     *    @return the start position of substring matched by the specified group.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual int32_t start(int group, UErrorCode &status) const;
 
@@ -601,7 +601,7 @@ public:
     *                        errors are  U_REGEX_INVALID_STATE if no match has been
     *                        attempted or the last match failed.
     *    @return the index of the last character matched, plus one.
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual int32_t end(UErrorCode &status) const;
 
@@ -617,7 +617,7 @@ public:
     *    @return  the index of the last character, plus one, of the text
     *              captured by the specifed group during the previous match operation.
     *              Return -1 if the capture group was not part of the match.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual int32_t end(int group, UErrorCode &status) const;
 
@@ -628,7 +628,7 @@ public:
     *       the input string.
     *
     *   @return this RegexMatcher.
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual RegexMatcher &reset();
 
@@ -650,7 +650,7 @@ public:
     *     to be reused, which is more efficient than creating a new RegexMatcher for
     *     each input string to be processed.
     *   @return this RegexMatcher.
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual RegexMatcher &reset(const UnicodeString &input);
 
@@ -659,7 +659,7 @@ public:
     *   Returns the input string being matched.  The returned string is not a copy,
     *   but the live input string.  It should not be altered or deleted.
     *   @return the input string
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     */
     virtual const UnicodeString &input() const;
 
@@ -667,7 +667,7 @@ public:
    /**
     *    Returns the pattern that is interpreted by this matcher.
     *    @return  the RegexPattern for this RegexMatcher
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual const RegexPattern &pattern() const;
 
@@ -686,7 +686,7 @@ public:
     *    @param   replacement a string containing the replacement text.
     *    @param   status      a reference to a UErrorCode to receive any errors.
     *    @return              a string containing the results of the find and replace.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual UnicodeString replaceAll(const UnicodeString &replacement, UErrorCode &status);
 
@@ -709,7 +709,7 @@ public:
     *    @param   replacement a string containing the replacement text.
     *    @param   status      a reference to a UErrorCode to receive any errors.
     *    @return              a string containing the results of the find and replace.
-    *    @draft ICU 2.4
+    *    @stable ICU 2.4
     */
     virtual UnicodeString replaceFirst(const UnicodeString &replacement, UErrorCode &status);
 
@@ -737,7 +737,7 @@ public:
     *                        does not exist in the pattern.
     *
     *   @return  this  RegexMatcher
-    *   @draft ICU 2.4
+    *   @stable ICU 2.4
     *
     */
     virtual RegexMatcher &appendReplacement(UnicodeString &dest,
@@ -752,7 +752,7 @@ public:
     *
     *  @param dest A UnicodeString to which the results of the find-and-replace are appended.
     *  @return  the destination string.
-    *  @draft ICU 2.4
+    *  @stable ICU 2.4
     */
     virtual UnicodeString &appendTail(UnicodeString &dest);
 
