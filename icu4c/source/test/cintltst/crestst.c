@@ -15,13 +15,14 @@
 */
 
 
+#include <stdlib.h>
+#include <time.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "string.h"
 #include "cstring.h"
-#include <time.h>
 
 #define RESTEST_HEAP_CHECK 0
 
@@ -289,329 +290,327 @@ UBool testTag(const char* frag,
            UBool in_te,
            UBool in_te_IN)
 {
-  UBool pass=TRUE;
+    UBool pass=TRUE;
 
-  /* Make array from input params */
+    /* Make array from input params */
 
-  UBool is_in[3];
-  const char *NAME[] = { "ROOT", "TE", "TE_IN" };
+    UBool is_in[3];
+    const char *NAME[] = { "ROOT", "TE", "TE_IN" };
 
-  /* Now try to load the desired items */
-  UResourceBundle* theBundle = NULL;
-  char tag[99];
-  char action[256];
-  UErrorCode expected_status,status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
-  UChar* base = NULL;
-  UChar* expected_string = NULL;
-  const UChar* string = NULL;
-  char buf[5];
-  char item_tag[10];
-  int32_t i,j,k,row,col;
-  int32_t actual_bundle;
-  int32_t count = 0;
-  int32_t row_count=0;
-  int32_t column_count=0;
-  int32_t index = 0;
-  char testdatapath[256];
+    /* Now try to load the desired items */
+    UResourceBundle* theBundle = NULL;
+    char tag[99];
+    char action[256];
+    UErrorCode expected_status,status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
+    UChar* base = NULL;
+    UChar* expected_string = NULL;
+    const UChar* string = NULL;
+    char buf[5];
+    char item_tag[10];
+    int32_t i,j,k,row,col;
+    int32_t actual_bundle;
+    int32_t count = 0;
+    int32_t row_count=0;
+    int32_t column_count=0;
+    int32_t index = 0;
+    char testdatapath[256];
 
-  const char*    directory =  ctest_getTestDirectory();
+    const char*    directory =  ctest_getTestDirectory();
 
-  uprv_strcpy(testdatapath, directory);
-  uprv_strcat(testdatapath, "testdata");
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
 
-  is_in[0] = in_Root;
-  is_in[1] = in_te;
-  is_in[2] = in_te_IN;
+    is_in[0] = in_Root;
+    is_in[1] = in_te;
+    is_in[2] = in_te_IN;
 
-  strcpy(item_tag, "tag");
+    strcpy(item_tag, "tag");
 
-	status = U_ZERO_ERROR;
-	theBundle = ures_open(testdatapath, "root", &status);
-	if(U_FAILURE(status))
-	{
-		ures_close(theBundle);
-		log_err("Couldn't open root bundle in %s", testdatapath);
-		return FALSE;
-	}
-	ures_close(theBundle);
-	theBundle = NULL;
-	
-
-  for (i=0; i<bundles_count; ++i)
+    status = U_ZERO_ERROR;
+    theBundle = ures_open(testdatapath, "root", &status);
+    if(U_FAILURE(status))
     {
-      strcpy(action,"construction for");
-      strcat(action, param[i].name);
+        ures_close(theBundle);
+        log_err("Couldn't open root bundle in %s", testdatapath);
+        return FALSE;
+    }
+    ures_close(theBundle);
+    theBundle = NULL;
 
 
-      status = U_ZERO_ERROR;
-
-      theBundle = ures_open(testdatapath, param[i].name, &status);
-      /*theBundle = ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", param[i].name, &status);*/
-
-      CONFIRM_ErrorCode(status,param[i].expected_constructor_status);
-
-
-
-      if(i == 5)
-	actual_bundle = 0; /* ne -> default */
-      else if(i == 3)
-	actual_bundle = 1; /* te_NE -> te */
-      else if(i == 4)
-	actual_bundle = 2; /* te_IN_NE -> te_IN */
-      else
-	actual_bundle = i;
-
-      expected_resource_status = U_MISSING_RESOURCE_ERROR;
-      for (j=e_te_IN; j>=e_Root; --j)
-        {
-	  if (is_in[j] && param[i].inherits[j])
-            {
-	      
-	      if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
-		expected_resource_status = U_ZERO_ERROR;
-	      else if(j == 0)
-		expected_resource_status = U_USING_DEFAULT_ERROR;
-	      else
-		expected_resource_status = U_USING_FALLBACK_ERROR;
-
-	      log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
-			  param[i].name, 
-			  i,
-			  frag,
-			  j,
-			  is_in[j]?"Yes":"No",
-			  j,
-			  param[i].inherits[j]?"Yes":"No",
-			  param[actual_bundle].name);
-
-	      break;
-            }
-        }
-
-      for (j=param[i].where; j>=0; --j)
-        {
-      if (is_in[j])
-        {
-          if(base != NULL) {
-              free(base);
-              base = NULL;
-          }
-
-          base=(UChar*)malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
-          u_uastrcpy(base,NAME[j]);
-
-          break;
-            }
-      else {
-          if(base != NULL) {
-              free(base);
-              base = NULL;
-          }
-        base = (UChar*) malloc(sizeof(UChar) * 1);
-        *base = 0x0000;
-      }
-        }
-
-      /*-------------------------------------------------------------------- */
-      /* string */
-
-      strcpy(tag,"string_");
-      strcat(tag,frag);
-
-      strcpy(action,param[i].name);
-      strcat(action, ".ures_get(" );
-      strcat(action,tag);
-      strcat(action, ")");
-
-      string=    kERROR;
-
-      status = U_ZERO_ERROR;
-
-      ures_get(theBundle, tag, &status);
-      if(U_SUCCESS(status))
-	{
-	  status = U_ZERO_ERROR;
-	  string=ures_get(theBundle, tag, &status);
-	}
-
-      log_verbose("%s got %d, expected %d\n", action, status, expected_resource_status);
-
-      CONFIRM_ErrorCode(status, expected_resource_status);
-
-
-      if(U_SUCCESS(status)){
-	expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 3));
-	u_strcpy(expected_string,base);
-	
-	
-      }
-      else
+    for (i=0; i<bundles_count; ++i)
     {
-      expected_string = (UChar*)malloc(sizeof(UChar)*(u_strlen(kERROR) + 1));
-      u_strcpy(expected_string,kERROR);
-
-    }
+        strcpy(action,"construction for");
+        strcat(action, param[i].name);
 
 
+        status = U_ZERO_ERROR;
 
-      CONFIRM_EQ(string, expected_string);
+        theBundle = ures_open(testdatapath, param[i].name, &status);
+        /*theBundle = ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", param[i].name, &status);*/
 
-
-
-      /*-------------------------------------------------------------------- */
-      /*-------------------------------------------------------------------- */
-      /* arrayItem */
-
-      strcpy(tag,"array_");
-      strcat(tag,frag);
-
-      strcpy(action,param[i].name);
-      strcat(action, ".ures_getArrayItem(");
-      strcat(action, tag);
-      strcat(action, ")");
-      count=ures_countArrayItems(theBundle, tag, &status);
+        CONFIRM_ErrorCode(status,param[i].expected_constructor_status);
 
 
-      for(j = 0; j < count; j++)
+
+        if(i == 5)
+            actual_bundle = 0; /* ne -> default */
+        else if(i == 3)
+            actual_bundle = 1; /* te_NE -> te */
+        else if(i == 4)
+            actual_bundle = 2; /* te_IN_NE -> te_IN */
+        else
+            actual_bundle = i;
+
+        expected_resource_status = U_MISSING_RESOURCE_ERROR;
+        for (j=e_te_IN; j>=e_Root; --j)
         {
-
-      status = U_ZERO_ERROR;
-      string = kERROR;
-
-      index=j;
-      ures_getArrayItem(theBundle, tag,index , &status);
-      if(U_SUCCESS(status))
-        string=ures_getArrayItem(theBundle, tag, index, &status);
-
-
-      /* how could 'index==j' ever be >= count ? */
-      expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
-
-      log_verbose("Status for %s was %d, expected %d\n", action, status, expected_status);
-
-      CONFIRM_ErrorCode(status,expected_status);
-
-      if (U_SUCCESS(status))
+            if (is_in[j] && param[i].inherits[j])
             {
-          UChar element[3];
 
-          u_uastrcpy(element, itoa1(index,buf));
+                if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
+                    expected_resource_status = U_ZERO_ERROR;
+                else if(j == 0)
+                    expected_resource_status = U_USING_DEFAULT_ERROR;
+                else
+                    expected_resource_status = U_USING_FALLBACK_ERROR;
 
-          u_strcpy(expected_string,base);
-          u_strcat(expected_string,element);
+                log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
+                            param[i].name, 
+                            i,
+                            frag,
+                            j,
+                            is_in[j]?"Yes":"No",
+                            j,
+                            param[i].inherits[j]?"Yes":"No",
+                            param[actual_bundle].name);
 
-
+                break;
             }
-      else
+        }
+
+        for (j=param[i].where; j>=0; --j)
+        {
+            if (is_in[j])
             {
-          u_strcpy(expected_string,kERROR);
+                if(base != NULL) {
+                    free(base);
+                    base = NULL;
+                }
+
+                base=(UChar*)malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
+                u_uastrcpy(base,NAME[j]);
+
+                break;
             }
-      CONFIRM_EQ(string,expected_string);
+            else {
+                if(base != NULL) {
+                    free(base);
+                    base = NULL;
+                }
+                base = (UChar*) malloc(sizeof(UChar) * 1);
+                *base = 0x0000;
+            }
+        }
+
+        /*-------------------------------------------------------------------- */
+        /* string */
+
+        strcpy(tag,"string_");
+        strcat(tag,frag);
+
+        strcpy(action,param[i].name);
+        strcat(action, ".ures_get(" );
+        strcat(action,tag);
+        strcat(action, ")");
+
+        string=    kERROR;
+
+        status = U_ZERO_ERROR;
+
+        ures_get(theBundle, tag, &status);
+        if(U_SUCCESS(status))
+        {
+            status = U_ZERO_ERROR;
+            string=ures_get(theBundle, tag, &status);
+        }
+
+        log_verbose("%s got %d, expected %d\n", action, status, expected_resource_status);
+
+        CONFIRM_ErrorCode(status, expected_resource_status);
+
+
+        if(U_SUCCESS(status)){
+            expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 3));
+            u_strcpy(expected_string,base);
+
+        }
+        else
+        {
+            expected_string = (UChar*)malloc(sizeof(UChar)*(u_strlen(kERROR) + 1));
+            u_strcpy(expected_string,kERROR);
+
         }
 
 
-      /*-------------------------------------------------------------------- */
-      /* 2dArrayItem */
 
-      strcpy(tag,"array_2d_");
-      strcat(tag,frag);
-
-      strcpy(action,param[i].name);
-      strcat(action, ".get2dArrayItem(");
-      strcat(action, tag);
-      strcat(action, ")");
-      row_count=ures_countArrayItems(theBundle, tag, &status);
-      column_count=2;
-
-      for(k=0;k<row_count;k++){
-    for (j=0; j<column_count; ++j){
-
-      status = U_ZERO_ERROR;
-      string = kERROR;
-      row=k;
-      col=j;
-      ures_get2dArrayItem( theBundle, tag, row, col, &status);
-      if(U_SUCCESS(status))
-        string=ures_get2dArrayItem(theBundle, tag, row, col, &status);
-
-
-      expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
-        expected_resource_status : U_MISSING_RESOURCE_ERROR;
-
-      CONFIRM_ErrorCode(status,expected_status);
-
-      if (U_SUCCESS(status))
-	{
-          UChar element[3];
-          u_strcpy(expected_string,base);
-          u_uastrcpy(element,itoa1(row,buf));
-          u_strcat(expected_string, element);
-          u_uastrcpy(element,itoa1(col,buf));
-          u_strcat(expected_string, element);
-	  
-	}
-      else
-	{
-	  
-          u_strcpy(expected_string,kERROR);
-	}
-      CONFIRM_EQ(string,expected_string);
-    }
-      }
+        CONFIRM_EQ(string, expected_string);
 
 
 
-      /*-------------------------------------------------------------------- */
-      /* taggedArrayItem */
+        /*-------------------------------------------------------------------- */
+        /*-------------------------------------------------------------------- */
+        /* arrayItem */
 
-      strcpy(tag,"tagged_array_");
-      strcat(tag,frag);
+        strcpy(tag,"array_");
+        strcat(tag,frag);
 
-      strcpy(action,param[i].name);
-      strcat(action,".getTaggedArrayItem(");
-      strcat(action, tag);
-      strcat(action,")");
+        strcpy(action,param[i].name);
+        strcat(action, ".ures_getArrayItem(");
+        strcat(action, tag);
+        strcat(action, ")");
+        count=ures_countArrayItems(theBundle, tag, &status);
 
-      count = 0;
-      for (index=-20; index<20; ++index)
+
+        for(j = 0; j < count; j++)
         {
-      strcpy(item_tag, "tag");
-      strcat(item_tag, itoa1(index,buf));
 
-      status = U_ZERO_ERROR;
-      string = kERROR;
+            status = U_ZERO_ERROR;
+            string = kERROR;
 
-
-      ures_getTaggedArrayItem( theBundle, tag, item_tag, &status);
-      if(U_SUCCESS(status))
-        string=ures_getTaggedArrayItem(theBundle, tag, item_tag, &status);
+            index=j;
+            ures_getArrayItem(theBundle, tag,index , &status);
+            if(U_SUCCESS(status))
+                string=ures_getArrayItem(theBundle, tag, index, &status);
 
 
-      if (index < 0)
+            /* how could 'index==j' ever be >= count ? */
+            expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
+
+            log_verbose("Status for %s was %d, expected %d\n", action, status, expected_status);
+
+            CONFIRM_ErrorCode(status,expected_status);
+
+            if (U_SUCCESS(status))
             {
-	      CONFIRM_ErrorCode(status,U_MISSING_RESOURCE_ERROR);
+                UChar element[3];
+
+                u_uastrcpy(element, itoa1(index,buf));
+
+                u_strcpy(expected_string,base);
+                u_strcat(expected_string,element);
+
+
             }
-      else
-	{
-          UChar* element;
-          if (strcmp(myErrorName(status),"U_MISSING_RESOURCE_ERROR")!=0) {
-	    count++;
-	    u_strcpy(expected_string,base);
-	    element=(UChar*)malloc(sizeof(UChar) * (strlen(buf)+1));
-	    u_uastrcpy(element,buf);
-	    u_strcat(expected_string,element);
-	    free(element);
-	    CONFIRM_EQ(string,expected_string);
-          }
-	}
-      
+            else
+            {
+                u_strcpy(expected_string,kERROR);
+            }
+            CONFIRM_EQ(string,expected_string);
         }
-      
-      free(expected_string);
-      ures_close(theBundle);
+
+
+        /*-------------------------------------------------------------------- */
+        /* 2dArrayItem */
+
+        strcpy(tag,"array_2d_");
+        strcat(tag,frag);
+
+        strcpy(action,param[i].name);
+        strcat(action, ".get2dArrayItem(");
+        strcat(action, tag);
+        strcat(action, ")");
+        row_count=ures_countArrayItems(theBundle, tag, &status);
+        column_count=2;
+
+        for(k=0;k<row_count;k++){
+            for (j=0; j<column_count; ++j){
+
+                status = U_ZERO_ERROR;
+                string = kERROR;
+                row=k;
+                col=j;
+                ures_get2dArrayItem( theBundle, tag, row, col, &status);
+                if(U_SUCCESS(status))
+                    string=ures_get2dArrayItem(theBundle, tag, row, col, &status);
+
+
+                expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
+                expected_resource_status : U_MISSING_RESOURCE_ERROR;
+
+                CONFIRM_ErrorCode(status,expected_status);
+
+                if (U_SUCCESS(status))
+                {
+                    UChar element[3];
+                    u_strcpy(expected_string,base);
+                    u_uastrcpy(element,itoa1(row,buf));
+                    u_strcat(expected_string, element);
+                    u_uastrcpy(element,itoa1(col,buf));
+                    u_strcat(expected_string, element);
+
+                }
+                else
+                {
+                    u_strcpy(expected_string,kERROR);
+                }
+                CONFIRM_EQ(string,expected_string);
+            }
+        }
+
+
+
+        /*-------------------------------------------------------------------- */
+        /* taggedArrayItem */
+
+        strcpy(tag,"tagged_array_");
+        strcat(tag,frag);
+
+        strcpy(action,param[i].name);
+        strcat(action,".getTaggedArrayItem(");
+        strcat(action, tag);
+        strcat(action,")");
+
+        count = 0;
+        for (index=-20; index<20; ++index)
+        {
+            strcpy(item_tag, "tag");
+            strcat(item_tag, itoa1(index,buf));
+
+            status = U_ZERO_ERROR;
+            string = kERROR;
+
+
+            ures_getTaggedArrayItem( theBundle, tag, item_tag, &status);
+            if(U_SUCCESS(status))
+                string=ures_getTaggedArrayItem(theBundle, tag, item_tag, &status);
+
+
+            if (index < 0)
+            {
+                CONFIRM_ErrorCode(status,U_MISSING_RESOURCE_ERROR);
+            }
+            else
+            {
+                UChar* element;
+                if (strcmp(myErrorName(status),"U_MISSING_RESOURCE_ERROR")!=0) {
+                    count++;
+                    u_strcpy(expected_string,base);
+                    element=(UChar*)malloc(sizeof(UChar) * (strlen(buf)+1));
+                    u_uastrcpy(element,buf);
+                    u_strcat(expected_string,element);
+                    free(element);
+                    CONFIRM_EQ(string,expected_string);
+                }
+            }
+
+        }
+
+        free(expected_string);
+        ures_close(theBundle);
     }
-      free(base);
-  return pass;
+    free(base);
+    return pass;
 }
 
 void record_pass()
@@ -634,7 +633,7 @@ void TestFallback()
   UErrorCode status = U_ZERO_ERROR;
   UResourceBundle *fr_FR = NULL;
   const UChar *junk; /* ignored */
-  
+
   log_verbose("Opening fr_FR..");
   fr_FR = ures_open(NULL, "fr_FR", &status);
   if(U_FAILURE(status))
@@ -659,9 +658,9 @@ void TestFallback()
   if(status != U_USING_DEFAULT_ERROR)
     {
       log_err("Expected U_USING_DEFAULT_ERROR when trying to get Version from fr_FR, got %d\n", 
-	      status);
+          status);
     }
-  
+
   status = U_ZERO_ERROR;
 
   /* and this is a Fallback, to fr */
@@ -669,10 +668,10 @@ void TestFallback()
   if(status != U_USING_FALLBACK_ERROR)
     {
       log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
-	      status);
+          status);
     }
-  
+
   status = U_ZERO_ERROR;
-  
+
   ures_close(fr_FR);
 }

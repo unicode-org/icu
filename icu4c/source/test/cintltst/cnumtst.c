@@ -19,13 +19,14 @@
 
 /* C API TEST FOR NUMBER FORMAT */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cnumtst.h"
-#include<stdio.h>
 
 /* ### remove this include after the number format test is fixed with jitterbug 411, applyPattern() */
 #include "cstring.h"

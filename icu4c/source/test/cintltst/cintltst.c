@@ -15,6 +15,9 @@
 
 /*The main root for C API tests*/
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "unicode/utypes.h"
 
 #include "cintltst.h"
@@ -22,8 +25,6 @@ U_CDECL_BEGIN
 #include "cucdtst.h"
 U_CDECL_END
 
-#include <stdio.h>
-#include <string.h>
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"

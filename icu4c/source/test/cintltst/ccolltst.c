@@ -12,12 +12,13 @@
 *     Madhu Katragadda               Creation
 *********************************************************************************
 */
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "unicode/ucol.h"
-#include <string.h>
 #include "unicode/ustring.h"
-#include <stdio.h>
 
 void addCollAPITest(TestNode**);
 void addCurrencyTest(TestNode**);

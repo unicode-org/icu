@@ -12,6 +12,7 @@
 *     Madhu Katragadda            Ported for C API
 *********************************************************************************/
 /*tests for u_normalization*/
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -123,8 +124,9 @@ void TestDecomp()
         assertEqual(result, CharsToUChars(canonTests[x][1]), x);
         free(result);
     }
-    ucol_close(myCollation);            
+    ucol_close(myCollation);
 }
+
 void TestCompatDecomp() 
 {
     UErrorCode status = U_ZERO_ERROR;

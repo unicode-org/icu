@@ -12,12 +12,13 @@
 *     Madhu Katragadda            Ported for C API
 *********************************************************************************
 */
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/utypes.h"
 #include "cloctst.h"
 #include "unicode/uloc.h"
-#include <stdio.h>
-#include <string.h>
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "ccolltst.h"

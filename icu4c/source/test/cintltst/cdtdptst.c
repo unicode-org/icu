@@ -14,6 +14,9 @@
 */
 /* INDEPTH TEST FOR DATE FORMAT */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/udat.h"
@@ -23,8 +26,6 @@
 #include "cintltst.h"
 #include "cdtdptst.h"
 #include "cformtst.h"
-#include <stdio.h>
-#include <string.h>
 
 void addDtFrDepTest(TestNode** root)
 {
