@@ -184,7 +184,7 @@ $(TMPDATADIR)/icudata.lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbf
 	@echo Generating $@ list of data files
 	@$(mkinstalldirs) $(TMPDATADIR)
 	@-$(RMV) $(TMPDATADIR)/icudata.lst
-	for file in $(DATAFILES); do \
+	@for file in $(DATAFILES); do \
 	  echo $$file >> $(TMPDATADIR)/icudata.lst; \
 	done;
 
