@@ -44,13 +44,13 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * equivalents where available</li>
  * <li>surrounding spaces are removed from keywords and values</li>
  * <li>if there are multiple keywords, they are put in sorted order</li>
- * </li>
+ * </ul>
  * Canonicalization additionally performs the following:
  * <ul>
  * <li>POSIX ids are converted to ICU format IDs</li>
  * <li>'grandfathered' 3066 ids are converted to ICU standard form</li>
- * <li>'PRE_EURO' and 'EURO' variants are converted to currency keyword form, with the currency
- * id appropriate to the country of the locale (for PRE_EURO) or EUR (for EURO).
+ * <li>'PREEURO' and 'EURO' variants are converted to currency keyword form, with the currency
+ * id appropriate to the country of the locale (for PREEURO) or EUR (for EURO).
  * </ul>
  * All ULocale constructors automatically normalize the locale id.  To handle
  * POSIX ids, the <code>canonicalize</code> can be called to convert the id
