@@ -468,7 +468,6 @@ static void TestCurrencyPreEuro(void)
     log_verbose("\nTesting the number format with different currency patterns\n");
     for(i=0; i < 19; i++)
     {
-        char cStr[20]={0};
         currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
         if(U_FAILURE(status)){
             log_err("Error in the construction of number format with style currency:\n%s\n",
