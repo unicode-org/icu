@@ -353,109 +353,90 @@ const PatternEntry* MergeCollation::findLastWithNoExtension(int32_t i) const {
 // (which is usually at the end).
 //
 void MergeCollation::fixEntry(PatternEntry* newEntry,
-                              UErrorCode&    success)
-{
-  UnicodeString excess;
-  UBool changeLastEntry = TRUE;
+                              UErrorCode&    success) {
+    UnicodeString excess;
+    UBool changeLastEntry = TRUE;
 
-  if (newEntry->strength != PatternEntry::RESET)
-    {
-      int32_t oldIndex = -1;
+    if (newEntry->strength != PatternEntry::RESET) {
+        int32_t oldIndex = -1;
 
-      // Use statusArray to mark if a unicode character has been
-      // added in the table or not.  The same later entry will 
-      // replace the previous one.  This will improve the single
-      // char entries dramatically which is the majority of the 
-      // entries.
-      if (newEntry->chars.length() == 1)
-    {
-      UChar c = newEntry->chars[0];
-      int32_t statusIndex = c >> BYTEPOWER;
-      uint8_t bitClump = statusArray[statusIndex];
-      uint8_t setBit = BITARRAYMASK << (c & BYTEMASK);
+        // Use statusArray to mark if a unicode character has been
+        // added in the table or not.  The same later entry will 
+        // replace the previous one.  This will improve the single
+        // char entries dramatically which is the majority of the 
+        // entries.
+        if (newEntry->chars.length() == 1) {
+            UChar c = newEntry->chars[0];
+            int32_t statusIndex = c >> BYTEPOWER;
+            uint8_t bitClump = statusArray[statusIndex];
+            uint8_t setBit = BITARRAYMASK << (c & BYTEMASK);
 
-      if (bitClump != 0 && (bitClump & setBit) != 0)
-            {
-          int32_t i = 0;
+            if (bitClump != 0 && (bitClump & setBit) != 0) {
+                int32_t i = 0;
 
-          // Find the previous entry with the same key
-          for (i = patterns->size() - 1; i >= 0; i -= 1)
-        {
-          PatternEntry *entry = patterns->at(i);
+                // Find the previous entry with the same key
+                for (i = patterns->size() - 1; i >= 0; i -= 1) {
+                    PatternEntry *entry = patterns->at(i);
 
-          if ((entry != 0) &&
-              (entry->chars == newEntry->chars))
-            {
-              oldIndex = i;
-              break;
+                    if ((entry != 0) &&
+                        (entry->chars == newEntry->chars)) {
+                        oldIndex = i;
+                        break;
                     }
                 }
-        }
-      else
-        {
-          // We're going to add an element that starts with this
-          // character, so go ahead and set its bit.
-          statusArray[statusIndex] = (uint8_t)(bitClump | setBit);
+            } else {
+                // We're going to add an element that starts with this
+                // character, so go ahead and set its bit.
+                statusArray[statusIndex] = (uint8_t)(bitClump | setBit);
             } 
-        }
-      else
-    {
-      oldIndex = patterns->lastIndexOf(newEntry);
+        } else {
+            oldIndex = patterns->lastIndexOf(newEntry);
         }
 
-      if (oldIndex != -1)
-    {
-      PatternEntry *p = patterns->orphanAt(oldIndex);
-      delete p;
+        if (oldIndex != -1) {
+            PatternEntry *p = patterns->orphanAt(oldIndex);
+            delete p;
         }
 
-      // Find the insertion point for the new entry.
-      int32_t lastIndex = findLastEntry(lastEntry, excess, success);
+        // Find the insertion point for the new entry.
+        int32_t lastIndex = findLastEntry(lastEntry, excess, success);
+        if (U_FAILURE(success)) {
+            return;
+        }
 
-      if (U_FAILURE(success))
-    {
-      return;
-    }
-
-      // Do not change the last entry if the new entry is a expanding character
-      if (excess.length() != 0)
-    {
-      // newEntry.extension = excess + newEntry.extensions;
-      newEntry->extension.insert(0, excess);
-      if (lastIndex != patterns->size())
-        {
-          if(lastEntry != 0) {
-            if (lastEntry->strength == PatternEntry::RESET) {
-                delete lastEntry;
-            }
-          }
-          lastEntry = saveEntry;
-          changeLastEntry = FALSE;
+        // Do not change the last entry if the new entry is a expanding character
+        if (excess.length() != 0) {
+            // newEntry.extension = excess + newEntry.extensions;
+            newEntry->extension.insert(0, excess);
+            if (lastIndex != patterns->size()) {
+                if (lastEntry != 0) {
+                    if (lastEntry->strength == PatternEntry::RESET) {
+                        delete lastEntry;
+                    }
+                }
+                lastEntry = saveEntry;
+                changeLastEntry = FALSE;
             }
         }
 
-      // Add the entry at the end or insert it in the middle
-      if (lastIndex == patterns->size())
-    {
-      patterns->atPut(lastIndex, newEntry);
-      saveEntry = newEntry;
+        // Add the entry at the end or insert it in the middle
+        if (lastIndex == patterns->size()) {
+            patterns->atPut(lastIndex, newEntry);
+            saveEntry = newEntry;
 
+        } else {
+            patterns->atInsert(lastIndex, newEntry);  // add at end
         }
-      else
-    {
-      patterns->atInsert(lastIndex, newEntry);  // add at end
     }
-  }
     
-  if (changeLastEntry)
-  {
-      if(lastEntry != 0) {
+    if (changeLastEntry) {
+        if (lastEntry != 0) {
             if (lastEntry->strength == PatternEntry::RESET) {
                 delete lastEntry;
             }
-     }
-     lastEntry = newEntry;
-   }
+        }
+        lastEntry = newEntry;
+    }
 }
 
 int32_t
