@@ -326,6 +326,25 @@ void GlyphIterator::adjustCurrGlyphPositionAdjustment(float xPlacementAdjust, fl
     glyphPositionAdjustments[position].adjustYAdvance(yAdvanceAdjust);
 }
 
+void GlyphIterator::setCurrGlyphPositionAdjustment(float xPlacementAdjust, float yPlacementAdjust,
+                                                      float xAdvanceAdjust, float yAdvanceAdjust)
+{
+    if (direction < 0) {
+        if (position <= nextLimit || position >= prevLimit) {
+            return;
+        }
+    } else {
+        if (position <= prevLimit || position >= nextLimit) {
+            return;
+        }
+    }
+
+    glyphPositionAdjustments[position].setXPlacement(xPlacementAdjust);
+    glyphPositionAdjustments[position].setYPlacement(yPlacementAdjust);
+    glyphPositionAdjustments[position].setXAdvance(xAdvanceAdjust);
+    glyphPositionAdjustments[position].setYAdvance(yAdvanceAdjust);
+}
+
 void GlyphIterator::setCursiveFirstExitPoint()
 {
     if (direction < 0) {

@@ -83,14 +83,14 @@ le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, co
     glyphIterator->setCurrGlyphBaseOffset(baseIterator.getCurrStreamPosition());
 
     if (glyphIterator->isRightToLeft()) {
-        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX, anchorDiffY, -markAdvance.fX, -markAdvance.fY);
+        glyphIterator->setCurrGlyphPositionAdjustment(anchorDiffX, anchorDiffY, -markAdvance.fX, -markAdvance.fY);
     } else {
         LEPoint baseAdvance;
 
         fontInstance->getGlyphAdvance(baseGlyph, pixels);
         fontInstance->pixelsToUnits(pixels, baseAdvance);
 
-        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX - baseAdvance.fX, anchorDiffY - baseAdvance.fY, -markAdvance.fX, -markAdvance.fY);
+        glyphIterator->setCurrGlyphPositionAdjustment(anchorDiffX - baseAdvance.fX, anchorDiffY - baseAdvance.fY, -markAdvance.fX, -markAdvance.fY);
     }
 
     return 1;

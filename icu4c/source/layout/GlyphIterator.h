@@ -63,8 +63,11 @@ public:
     void setCurrStreamPosition(le_int32 position);
     void setCurrGlyphPositionAdjustment(const GlyphPositionAdjustment *adjustment);
     void setCurrGlyphBaseOffset(le_int32 baseOffset);
-    void adjustCurrGlyphPositionAdjustment(float xPlacmentAdjust, float yPlacementAdjust,
-                                           float xAdvanceAdjust, float yAdvanceAdjust);
+    void adjustCurrGlyphPositionAdjustment(float xPlacementAdjust, float yPlacementAdjust,
+                                           float xAdvanceAdjust,   float yAdvanceAdjust);
+
+    void setCurrGlyphPositionAdjustment(float xPlacementAdjust, float yPlacementAdjust,
+                                        float xAdvanceAdjust,   float yAdvanceAdjust);
 
     void setCursiveFirstExitPoint();
     void resetCursiveLastExitPoint();
