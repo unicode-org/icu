@@ -3787,7 +3787,8 @@ case "${host}" in
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
-		  tools/gencmn/gencmn tools/gencnval/gencnval \
+		  tools/gencmn/gencmn tools/gencmn/decmn \
+		  tools/gencnval/gencnval \
 		  tools/gennames/gennames tools/gentest/gentest \
           tools/pkgdata/pkgdata tools/genprops/genprops
 		do
