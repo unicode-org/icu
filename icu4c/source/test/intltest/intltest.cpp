@@ -406,7 +406,7 @@ void IntlTest::setICU_DATA() {
 
 #if defined (U_TOPBUILDDIR)
     {
-        static char env_string[] = U_TOPBUILDDIR "/data/";
+        static char env_string[] = U_TOPBUILDDIR "/data/out/";
         u_setDataDirectory(env_string);
         return;
     }
@@ -979,8 +979,8 @@ main(int argc, char* argv[])
     major.setQuick( quick );
     major.setLeaks( leaks );
     fprintf(stdout, "-----------------------------------------------\n");
-    fprintf(stdout, " IntlTest Test Suite for                       \n");
-    fprintf(stdout, "   International Classes for Unicode           \n");
+    fprintf(stdout, " IntlTest (C++) Test Suite for                 \n");
+    fprintf(stdout, "   International Components for Unicode %s\n", U_ICU_VERSION);
     fprintf(stdout, "-----------------------------------------------\n");
     fprintf(stdout, " Options:                                       \n");
     fprintf(stdout, "   all (a)               : %s\n", (all?        "On" : "Off"));
