@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Jul-22<br>
+    <p>Version: 2002-Jul-25<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -853,7 +853,7 @@
       <li>An ANSI C compiler installed on the target machine (for example:
       cc).</li>
 
-      <li>A recent version of GNU make (3.7+).</li>
+      <li>A recent version of GNU make (3.79+).</li>
 
       <li>For a list of z/OS tools please view the <a href=
       "#HowToBuildZOS">z/OS build section</a> of this document for further
@@ -933,9 +933,8 @@
     important that you understand a few details:</p>
 
     <ul>
-      <li>Older versions of os/390 may require APAR PQ58391 in order to get
-      some ICU number formatting functions to work properly. This APAR (patch)
-      is not needed for z/OS 1.2 or later.</li>
+      <li>APAR PQ58392 may be needed by z/OS 1.2 in order to get some ICU
+      number formatting functions to work properly.</li>
 
       <li>The gnu utilities gmake and gzip/gunzip are needed and can be
       obtained for z/OS from <a href=
@@ -974,7 +973,9 @@
 
       <li>Since the default make on z/OS is not gmake, the pkgdata tool
       requires that the "make" command is aliased to your installed version of
-      gmake.</li>
+      gmake. GNU make is available with the "z/OS Unix - Tools and Toys" that
+      was mentioned above. The required version is the same Unix build
+      instructions.</li>
 
       <li>The makedep executable that is used with the z/OS ICU build process
       is not shipped with ICU. It is available at the <a href=
@@ -994,8 +995,8 @@
     z/OS specific switch to build some libraries into PDS files. The switch is
     the environmental variable OS390BATCH, and if set, the following libraries
     are built into PDS files: libicuuc<i>XX</i>.dll, libicudt<i>XX</i>e.dll,
-    libicudt<i>XX</i>e_stub.dll, and libtestdata.dll. Turning on OS390BATCH does
-    not turn off the normal HFS build, thus the HFS dlls will always be
+    libicudt<i>XX</i>e_stub.dll, and libtestdata.dll. Turning on OS390BATCH
+    does not turn off the normal HFS build, thus the HFS dlls will always be
     created.</p>
 
     <p>The names of the PDS files are determined by the value of the
@@ -1102,7 +1103,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                                                                                  the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                                                                            the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
@@ -1233,9 +1234,10 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
     <p>If you are building on a Unix platform, and if you are installing ICU in
     a non-standard location, you may need to add the location of your ICU
-    libraries to your <strong>LD_LIBRARY_PATH</strong> environment variable (or
-    the equivalent runtime library path environment variable for your system).
-    The ICU libraries may not link or load properly without doing this.</p>
+    libraries to your <strong>LD_LIBRARY_PATH</strong> or
+    <strong>LIBPATH</strong> environment variable (or the equivalent runtime
+    library path environment variable for your system). The ICU libraries may
+    not link or load properly without doing this.</p>
 
     <p>Note that if you do not want to have to set this variable, you may
     instead use the --enable-rpath option at configuration time. This option
