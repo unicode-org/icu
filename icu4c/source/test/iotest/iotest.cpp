@@ -49,8 +49,15 @@ U_CDECL_END
 
 class DataDrivenLogger : public TestLog {
     static const char* fgDataDir;
+    static char *fgTestDataPath;
 
 public:
+    static void cleanUp() {
+        if (fgTestDataPath) {
+            free(fgTestDataPath);
+            fgTestDataPath = NULL;
+        }
+    }
     virtual void errln( const UnicodeString &message ) {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
@@ -124,8 +131,7 @@ public:
     }
 
     static const char* loadTestData(UErrorCode& err){
-        static char *testDataPath = NULL;
-        if( testDataPath == NULL){
+        if( fgTestDataPath == NULL){
             const char*      directory=NULL;
             UResourceBundle* test =NULL;
             char* tdpath=NULL;
@@ -157,10 +163,9 @@ public:
                 return "";
             }
             ures_close(test);
-            testDataPath = tdpath;
-            return testDataPath;
+            fgTestDataPath = tdpath;
         }
-        return testDataPath;
+        return fgTestDataPath;
     }
 
     virtual const char* getTestDataPath(UErrorCode& err) {
@@ -169,6 +174,7 @@ public:
 };
 
 const char* DataDrivenLogger::fgDataDir = NULL;
+char* DataDrivenLogger::fgTestDataPath = NULL;
 
 int64_t
 uto64(const UChar     *buffer)
@@ -736,6 +742,7 @@ int main(int argc, char* argv[])
 #endif
 
     cleanUpTestTree(root);
+    DataDrivenLogger::cleanUp();
     u_cleanup();
     return nerrors;
 }
