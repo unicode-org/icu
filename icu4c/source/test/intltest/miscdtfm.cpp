@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-1999, International Business Machines Corporation and
+ * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -48,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.12 $ $Date: 2000/08/23 19:11:16 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.13 $ $Date: 2001/03/21 20:09:55 $
  *
  * @bug 4097450
  */
@@ -140,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.12 $ $Date: 2000/08/23 19:11:16 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.13 $ $Date: 2001/03/21 20:09:55 $
  *
  * @bug 4099975
  */
