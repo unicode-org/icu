@@ -71,7 +71,7 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         for(i=0; i<fieldCount; ++i) {
             /* set the limit pointer of this field */
             limit=start;
-            while(*limit!=';' && *limit!=0) {
+            while(*limit!=delimiter && *limit!=0) {
                 ++limit;
             }
 
