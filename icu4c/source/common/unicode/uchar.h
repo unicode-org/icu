@@ -128,7 +128,7 @@ typedef enum UProperty {
 	debuggers display UCHAR_ALPHABETIC as the symbolic name for 0,
 	rather than UCHAR_BINARY_START.  Likewise for other *_START
 	identifiers. */
-    
+
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
         Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @stable ICU 2.1 */
     UCHAR_ALPHABETIC=0,
@@ -554,13 +554,13 @@ typedef enum UCharCategory
  * This specifies the language directional property of a character set.
  * @stable ICU 2.0
  */
-typedef enum UCharDirection { 
+typedef enum UCharDirection {
     /** See note !!.  Comments of the form "EN" are read by genpname. */
 
     /** L @stable ICU 2.0 */
-    U_LEFT_TO_RIGHT               = 0, 
+    U_LEFT_TO_RIGHT               = 0,
     /** R @stable ICU 2.0 */
-    U_RIGHT_TO_LEFT               = 1, 
+    U_RIGHT_TO_LEFT               = 1,
     /** EN @stable ICU 2.0 */
     U_EUROPEAN_NUMBER             = 2,
     /** ES @stable ICU 2.0 */
@@ -576,9 +576,9 @@ typedef enum UCharDirection {
     /** S @stable ICU 2.0 */
     U_SEGMENT_SEPARATOR           = 8,
     /** WS @stable ICU 2.0 */
-    U_WHITE_SPACE_NEUTRAL         = 9, 
+    U_WHITE_SPACE_NEUTRAL         = 9,
     /** ON @stable ICU 2.0 */
-    U_OTHER_NEUTRAL               = 10, 
+    U_OTHER_NEUTRAL               = 10,
     /** LRE @stable ICU 2.0 */
     U_LEFT_TO_RIGHT_EMBEDDING     = 11,
     /** LRO @stable ICU 2.0 */
@@ -618,13 +618,13 @@ enum UBlockCode {
 
     /** @stable ICU 2.0 */
     UBLOCK_IPA_EXTENSIONS =5, /*[0250]*/
-    
+
     /** @stable ICU 2.0 */
     UBLOCK_SPACING_MODIFIER_LETTERS =6, /*[02B0]*/
 
     /** @stable ICU 2.0 */
     UBLOCK_COMBINING_DIACRITICAL_MARKS =7, /*[0300]*/
-    
+
     /**
      * Unicode 3.2 renames this block to "Greek and Coptic".
      * @stable ICU 2.0
@@ -729,19 +729,19 @@ enum UBlockCode {
 
     /** @stable ICU 2.0 */
     UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS =41, /*[2070]*/
-    
+
     /** @stable ICU 2.0 */
     UBLOCK_CURRENCY_SYMBOLS =42, /*[20A0]*/
-    
+
     /**
      * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
      * @stable ICU 2.0
      */
     UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
-    
+
     /** @stable ICU 2.0 */
     UBLOCK_LETTERLIKE_SYMBOLS =44, /*[2100]*/
-    
+
     /** @stable ICU 2.0 */
     UBLOCK_NUMBER_FORMS =45, /*[2150]*/
 
@@ -756,7 +756,7 @@ enum UBlockCode {
 
     /** @stable ICU 2.0 */
     UBLOCK_CONTROL_PICTURES =49, /*[2400]*/
- 
+
     /** @stable ICU 2.0 */
     UBLOCK_OPTICAL_CHARACTER_RECOGNITION =50, /*[2440]*/
 
@@ -888,7 +888,7 @@ enum UBlockCode {
 
     /** @stable ICU 2.0 */
     UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87, /*[FF00]*/
-    
+
     /** @stable ICU 2.0 */
     UBLOCK_OLD_ITALIC = 88  , /*[10300]*/
     /** @stable ICU 2.0 */
@@ -1570,6 +1570,9 @@ u_getIntPropertyMaxValue(UProperty which);
  * For characters without any numeric values in the Unicode Character Database,
  * this function will return U_NO_NUMERIC_VALUE.
  *
+ * Similar to java.lang.Character.getNumericValue(), but u_getNumericValue()
+ * also supports negative values, large values, and fractions.
+ *
  * @param c Code point to get the numeric value for.
  * @return Numeric value of c, or U_NO_NUMERIC_VALUE if none is defined.
  *
@@ -2079,8 +2082,10 @@ U_CAPI uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c);
 
 /**
- * Returns the decimal numeric value of a digit character.
- * Also returns decimal values for primary numeric Han characters.
+ * Returns the decimal numeric value of a decimal digit character.
+ * Such characters have the general category "Nd" (decimal digit numbers)
+ * and a Numeric_Type of Decimal.
+ * Also returns decimal values for primary numeric Han digit characters.
  *
  * @param c the code point for which to get the decimal numeric value
  * @return the decimal numeric value of c in decimal radix,
@@ -2497,24 +2502,22 @@ u_isJavaIDStart(UChar32 c);
 U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c);
 
-/* ### ### TODO continue here */
-
 /**
  * The given character is mapped to its lowercase equivalent according to
- * UnicodeData.txt; if the character has no lowercase equivalent, the character 
+ * UnicodeData.txt; if the character has no lowercase equivalent, the character
  * itself is returned.
- * <P>
- * A character has a lowercase equivalent if and only if a lowercase mapping
- * is specified for the character in the UnicodeData.txt attribute table.
- * <P>
- * u_tolower() only deals with the general letter case conversion.
- * For language specific case conversion behavior, use ustrToUpper().
- * For example, the case conversion for dot-less i and dotted I in Turkish,
- * or for final sigma in Greek.
  *
- * @param c   the character to be converted
- * @return  the lowercase equivalent of the character, if any;
- *      otherwise the character itself.
+ * Same as java.lang.Character.toLowerCase().
+ *
+ * This function only returns the simple, single-code point case mapping.
+ * Full case mappings may result in zero, one or more code points and depend
+ * on context or language etc.
+ * Full case mappings are applied by the string case mapping functions,
+ * see ustring.h and the UnicodeString class.
+ *
+ * @param c the code point to be mapped
+ * @return the Simple_Lowercase_Mapping of the code point, if any;
+ *         otherwise the code point itself.
  * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
@@ -2522,34 +2525,41 @@ u_tolower(UChar32 c);
 
 /**
  * The given character is mapped to its uppercase equivalent according to UnicodeData.txt;
- * if the character has no uppercase equivalent, the character itself is 
+ * if the character has no uppercase equivalent, the character itself is
  * returned.
- * <P>
- * u_toupper() only deals with the general letter case conversion.
- * For language specific case conversion behavior, use ustrToUpper().
- * For example, the case conversion for dot-less i and dotted I in Turkish,
- * or ess-zed (i.e., "sharp S") in German.
  *
- * @param c   the character to be converted
- * @return  the uppercase equivalent of the character, if any;
- *      otherwise the character itself.
+ * Same as java.lang.Character.toUpperCase().
+ *
+ * This function only returns the simple, single-code point case mapping.
+ * Full case mappings may result in zero, one or more code points and depend
+ * on context or language etc.
+ * Full case mappings are applied by the string case mapping functions,
+ * see ustring.h and the UnicodeString class.
+ *
+ * @param c the code point to be mapped
+ * @return the Simple_Uppercase_Mapping of the code point, if any;
+ *         otherwise the code point itself.
  * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_toupper(UChar32 c);
 
 /**
- * The given character is mapped to its titlecase equivalent according to UnicodeData.txt.
- * There are only four Unicode characters that are truly titlecase forms
- * that are distinct from uppercase forms.  As a rule, if a character has no
- * true titlecase equivalent, its uppercase equivalent is returned.
- * <P>
- * A character has a titlecase equivalent if and only if a titlecase mapping
- * is specified for the character in the UnicodeData.txt data.
+ * The given character is mapped to its titlecase equivalent
+ * according to UnicodeData.txt;
+ * if none is defined, the character itself is returned.
  *
- * @param c   the character to be converted
- * @return  the titlecase equivalent of the character, if any;
- *      otherwise the character itself.
+ * Same as java.lang.Character.toTitleCase().
+ *
+ * This function only returns the simple, single-code point case mapping.
+ * Full case mappings may result in zero, one or more code points and depend
+ * on context or language etc.
+ * Full case mappings are applied by the string case mapping functions,
+ * see ustring.h and the UnicodeString class.
+ *
+ * @param c the code point to be mapped
+ * @return the Simple_Titlecase_Mapping of the code point, if any;
+ *         otherwise the code point itself.
  * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
@@ -2578,50 +2588,57 @@ u_totitle(UChar32 c);
 
 /**
  * The given character is mapped to its case folding equivalent according to
- * UnicodeData.txt and CaseFolding.txt; if the character has no case folding equivalent, the character 
+ * UnicodeData.txt and CaseFolding.txt;
+ * if the character has no case folding equivalent, the character
  * itself is returned.
- * Only "simple", single-code point case folding mappings are used.
- * "Full" mappings are used by u_strFoldCase().
  *
- * @param c     the character to be converted
+ * This function only returns the simple, single-code point case mapping.
+ * Full case mappings may result in zero, one or more code points and depend
+ * on context or language etc.
+ * Full case mappings are applied by the string case mapping functions,
+ * see ustring.h and the UnicodeString class.
+ *
+ * @param c the code point to be mapped
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
- * @return      the case folding equivalent of the character, if any;
- *              otherwise the character itself.
+ * @return the Simple_Case_Folding of the code point, if any;
+ *         otherwise the code point itself.
  * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
 
 /**
- * Returns the numeric value of the character <code>ch</code> in the 
- * specified radix. 
- * <p>
- * If the radix is not in the range <code>2 <= radix <= 36</code> or if the 
- * value of <code>ch</code> is not a valid digit in the specified 
- * radix, <code>-1</code> is returned. A character is a valid digit 
+ * Returns the decimal digit value of the code point in the
+ * specified radix.
+ *
+ * If the radix is not in the range <code>2<=radix<=36</code> or if the
+ * value of <code>c</code> is not a valid digit in the specified
+ * radix, <code>-1</code> is returned. A character is a valid digit
  * if at least one of the following is true:
  * <ul>
- * <li>The method <code>u_isdigit</code> is true of the character 
- *     and the Unicode decimal digit value of the character (or its 
- *     single-character decomposition) is less than the specified radix. 
- *     In this case the decimal digit value is returned. 
- * <li>The character is one of the uppercase Latin letters 
- *     <code>'A'</code> through <code>'Z'</code> and its code is less than
- *     <code>radix + 'A' - 10</code>. 
- *     In this case, <code>ch - 'A' + 10</code> 
- *     is returned. 
- * <li>The character is one of the lowercase Latin letters 
- *     <code>'a'</code> through <code>'z'</code> and its code is less than
- *     <code>radix + 'a' - 10</code>. 
- *     In this case, <code>ch - 'a' + 10</code> 
- *     is returned. 
+ * <li>The character has a decimal digit value.
+ *     Such characters have the general category "Nd" (decimal digit numbers)
+ *     and a Numeric_Type of Decimal.
+ *     In this case the value is the character's decimal digit value.</li>
+ * <li>The character is one of the uppercase Latin letters
+ *     <code>'A'</code> through <code>'Z'</code>.
+ *     In this case the value is <code>c-'A'+10</code>.</li>
+ * <li>The character is one of the lowercase Latin letters
+ *     <code>'a'</code> through <code>'z'</code>.
+ *     In this case the value is <code>ch-'a'+10</code>.</li>
+ * <li>The character is one of the primary numeric Han characters.
+ *     In this case, the value is the digit value for that Han character.</li>
  * </ul>
  *
- * @param   ch      the character to be converted.
+ * Same as java.lang.Character.digit() except that Java does not handle Han digits.
+ *
+ * @param   c       the code point to be tested.
  * @param   radix   the radix.
  * @return  the numeric value represented by the character in the
- *          specified radix.
+ *          specified radix,
+ *          or -1 if there is no value or if the value exceeds the radix.
  *
+ * @see     UCHAR_NUMERIC_TYPE
  * @see     u_forDigit
  * @see     u_charDigitValue
  * @see     u_isdigit
@@ -2631,25 +2648,27 @@ U_CAPI int32_t U_EXPORT2
 u_digit(UChar32 ch, int8_t radix);
 
 /**
- * Determines the character representation for a specific digit in 
- * the specified radix. If the value of <code>radix</code> is not a 
- * valid radix, or the value of <code>digit</code> is not a valid 
+ * Determines the character representation for a specific digit in
+ * the specified radix. If the value of <code>radix</code> is not a
+ * valid radix, or the value of <code>digit</code> is not a valid
  * digit in the specified radix, the null character
- * (<code>U+0000</code>) is returned. 
+ * (<code>U+0000</code>) is returned.
  * <p>
- * The <code>radix</code> argument is valid if it is greater than or 
+ * The <code>radix</code> argument is valid if it is greater than or
  * equal to 2 and less than or equal to 36.
  * The <code>digit</code> argument is valid if
- * <code>0 <= digit < radix</code>. 
+ * <code>0 <= digit < radix</code>.
  * <p>
- * If the digit is less than 10, then 
- * <code>'0' + digit</code> is returned. Otherwise, the value 
- * <code>'a' + digit - 10</code> is returned. 
+ * If the digit is less than 10, then
+ * <code>'0' + digit</code> is returned. Otherwise, the value
+ * <code>'a' + digit - 10</code> is returned.
+ *
+ * Same as java.lang.Character.forDigit().
  *
  * @param   digit   the number to convert to a character.
  * @param   radix   the radix.
  * @return  the <code>char</code> representation of the specified digit
- *          in the specified radix. 
+ *          in the specified radix.
  *
  * @see     u_digit
  * @see     u_charDigitValue
@@ -2677,10 +2696,14 @@ U_CAPI void U_EXPORT2
 u_charAge(UChar32 c, UVersionInfo versionArray);
 
 /**
- * Gets the Unicode version information.  The version array stores the version information
- * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
- * is then represented as 0x01031F02.
- * @param versionArray the version # information, the result will be filled in
+ * Gets the Unicode version information.
+ * The version array is filled in with the version information
+ * for the Unicode standard that is currently used by ICU.
+ * For example, Unicode version 3.1.1 is represented as an array with
+ * the values { 3, 1, 1, 0 }.
+ *
+ * @param versionArray an output array that will be filled in with
+ *                     the Unicode version number
  * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
@@ -2704,7 +2727,7 @@ u_getUnicodeVersion(UVersionInfo info);
  *         contains the truncated name and the returned length indicates the full
  *         length of the name.
  *         The length does not include the zero-termination.
- * 
+ *
  * @draft ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
