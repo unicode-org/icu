@@ -123,14 +123,21 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
 # else
     test(Locale::getDefault());
 
+#if 1
+    // installed locales
     for (int i=0; i < locCount; ++i) {
         test(avail[i]);
     }
+#endif
 
+#if 1
+    // special locales
     int32_t jCount = CalendarTest::testLocaleCount();
     for (int32_t j=0; j < jCount; ++j) {
         test(Locale(CalendarTest::testLocaleID(j)));
     }
+#endif
+
 # endif
 #endif
 
