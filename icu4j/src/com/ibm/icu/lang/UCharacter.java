@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/06/09 23:26:51 $ 
-* $Revision: 1.79 $
+* $Date: 2003/06/12 18:26:59 $ 
+* $Revision: 1.80 $
 *
 *******************************************************************************
 */
@@ -2524,10 +2524,12 @@ public final class UCharacter
     {
         // see java.lang.Character.isIdentifierIgnorable() on range of 
         // ignorable characters.
-        return ch <= 8 || (ch >= 0xe && ch <= 0x1b) 
-               || (ch >= 0x7f && ch <= 0x9f) 
-               || (ch >= 0x200a && ch <= 0x200f) 
-               || (ch >= 0x206a && ch <= 0x206f) || ch == 0xfeff;
+        if (ch <= 0x9f) {
+             return isISOControl(ch) 
+                    && !((ch >= 0x9 && ch <= 0xd) 
+                         || (ch >= 0x1c && ch <= 0x1f));
+        } 
+        return getType(ch) == UCharacterCategory.FORMAT;
     }
                       
     /**
