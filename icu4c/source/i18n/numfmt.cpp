@@ -38,6 +38,21 @@
 #include "cstring.h"
 #include <float.h>
 
+//#define FMT_DEBUG
+
+#ifdef FMT_DEBUG
+#include <stdio.h>
+static void debugout(UnicodeString s) {
+    char buf[2000];
+    s.extract((int32_t) 0, s.length(), buf);
+    printf("%s", buf);
+}
+#define debug(x) printf("%s", x);
+#else
+#define debugout(x)
+#define debug(x)
+#endif
+
 // If no number pattern can be located for a locale, this is the last
 // resort.
 static const UChar gLastResortDecimalPat[] = {
@@ -84,6 +99,7 @@ NumberFormat::NumberFormat()
     fMinFractionDigits(0),
     fParseIntegerOnly(FALSE)
 {
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -115,6 +131,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
         fMaxFractionDigits = rhs.fMaxFractionDigits;
         fMinFractionDigits = rhs.fMinFractionDigits;
         fParseIntegerOnly = rhs.fParseIntegerOnly;
+        u_strncpy(fCurrency, rhs.fCurrency, 4);
     }
     return *this;
 }
@@ -124,20 +141,54 @@ NumberFormat::operator=(const NumberFormat& rhs)
 UBool
 NumberFormat::operator==(const Format& that) const
 {
+    // Format::operator== guarantees this cast is safe
     NumberFormat* other = (NumberFormat*)&that;
+
+#ifdef FMT_DEBUG
+    // This code makes it easy to determine why two format objects that should
+    // be equal aren't.
+    UBool first = TRUE;
+    if (!Format::operator==(that)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("Format::!=");
+    }
+    if (!(fMaxIntegerDigits == other->fMaxIntegerDigits &&
+          fMinIntegerDigits == other->fMinIntegerDigits)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("Integer digits !=");
+    }
+    if (!(fMaxFractionDigits == other->fMaxFractionDigits &&
+          fMinFractionDigits == other->fMinFractionDigits)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("Fraction digits !=");
+    }
+    if (!(fGroupingUsed == other->fGroupingUsed)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("fGroupingUsed != ");
+    }
+    if (!(fParseIntegerOnly == other->fParseIntegerOnly)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("fParseIntegerOnly != ");
+    }
+    if (!(u_strcmp(fCurrency, other->fCurrency) == 0)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("fCurrency !=");
+    }
+    if (!first) { printf(" ]"); }    
+#endif
 
     return ((this == &that) ||
             ((Format::operator==(that) &&
-              getDynamicClassID()== that.getDynamicClassID() &&
               fMaxIntegerDigits == other->fMaxIntegerDigits &&
               fMinIntegerDigits == other->fMinIntegerDigits &&
               fMaxFractionDigits == other->fMaxFractionDigits &&
               fMinFractionDigits == other->fMinFractionDigits &&
               fGroupingUsed == other->fGroupingUsed &&
-              fParseIntegerOnly == other->fParseIntegerOnly)));
+              fParseIntegerOnly == other->fParseIntegerOnly &&
+              u_strcmp(fCurrency, other->fCurrency) == 0)));
 }
 
-// -------------------------------------
+// -------------------------------------x
 // Formats the number object and save the format
 // result in the toAppendTo string buffer.
 
@@ -629,17 +680,20 @@ NumberFormat::setMinimumFractionDigits(int32_t newValue)
 
 // -------------------------------------
 
-void NumberFormat::setCurrency(const UChar* theCurrency) {
+void NumberFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
+    if (U_FAILURE(ec)) {
+        return;
+    }
     if (theCurrency) {
-        u_strncpy(currency, theCurrency, 3);
-        currency[3] = 0;
+        u_strncpy(fCurrency, theCurrency, 3);
+        fCurrency[3] = 0;
     } else {
-        currency[0] = 0;
+        fCurrency[0] = 0;
     }
 }
 
 const UChar* NumberFormat::getCurrency() const {
-    return currency;
+    return fCurrency;
 }
 
 // -------------------------------------
