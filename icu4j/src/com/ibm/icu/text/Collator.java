@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/11/22 22:45:19 $ 
-* $Revision: 1.16 $
+* $Date: 2002/12/03 20:45:20 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -18,12 +18,9 @@ import java.util.Map;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICUService.Key;
-import com.ibm.icu.impl.LocaleUtility;
 
 /**
 * <p>Collator performs locale-sensitive string comparison. A concrete
@@ -122,8 +119,7 @@ import com.ibm.icu.impl.LocaleUtility;
 * @see RuleBasedCollator
 * @see CollationKey
 * @author Syn Wee Quek
-* @since release 2.2, April 18 2002
-* @draft 2.2 
+* @draft ICU 2.2 
 */
 public abstract class Collator implements Comparator, Cloneable
 {     
@@ -134,7 +130,7 @@ public abstract class Collator implements Comparator, Cloneable
      * between base characters. See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int PRIMARY = 0;
 
@@ -146,7 +142,7 @@ public abstract class Collator implements Comparator, Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int SECONDARY = 1;
 
@@ -158,7 +154,7 @@ public abstract class Collator implements Comparator, Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int TERTIARY = 2;                            
 
@@ -172,7 +168,7 @@ public abstract class Collator implements Comparator, Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int QUATERNARY = 3;
 
@@ -187,7 +183,7 @@ public abstract class Collator implements Comparator, Cloneable
      * <p>
      * Note this value is different from JDK's
      * </p>
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int IDENTICAL = 15;
 
@@ -201,7 +197,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #CANONICAL_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft 2.2 
+     * @draft ICU 2.2 
      */
     public final static int NO_DECOMPOSITION = 16;
 
@@ -217,7 +213,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #NO_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft 2.2 
+     * @draft ICU 2.2 
      */
     public final static int CANONICAL_DECOMPOSITION = 17;
     
@@ -243,7 +239,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #IDENTICAL
      * @exception IllegalArgumentException if the new strength value is not one 
      *                of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setStrength(int newStrength) 
     {
@@ -285,7 +281,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #CANONICAL_DECOMPOSITION
      * @exception IllegalArgumentException If the given value is not a valid 
      *            decomposition mode.
-     * @draft 2.2 
+     * @draft ICU 2.2 
      */
     public void setDecomposition(int decomposition) 
     {
@@ -307,7 +303,7 @@ public abstract class Collator implements Comparator, Cloneable
      *         will be returned.
      * @see java.util.Locale#getDefault()
      * @see #getInstance(Locale)
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public static final Collator getInstance() 
     {
@@ -326,7 +322,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see java.util.Locale
      * @see java.util.ResourceBundle
      * @see #getInstance()
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public static final Collator getInstance(Locale locale)
     {
@@ -375,7 +371,15 @@ public abstract class Collator implements Comparator, Cloneable
         }
         return false;
     }
-
+    
+    /**
+     * Get the set of Locales for which Collators are installed. 
+     * @return the list of available locales which collators are installed.
+     *         The set of Locales returned will be the ones registered in 
+     *         ICULocaleService, if ICULocaleService is used. Otherwise it will
+     *         be the set of Locales that are installed with ICU4J.
+     * @draft ICU 2.4
+     */
     public static final Locale[] getAvailableLocales() {
         if (service != null) {
             return service.getAvailableLocales();
@@ -405,7 +409,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #TERTIARY
      * @see #QUATERNARY
      * @see #IDENTICAL
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int getStrength()
     {
@@ -424,7 +428,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #setDecomposition
      * @see #NO_DECOMPOSITION
      * @see #CANONICAL_DECOMPOSITION
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int getDecomposition()
     {
@@ -450,7 +454,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @exception NullPointerException thrown if either arguments is null.
      *            IllegalArgumentException thrown if either source or target is
      *            not of the class String.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int compare(Object source, Object target)
     {
@@ -471,7 +475,7 @@ public abstract class Collator implements Comparator, Cloneable
      *         rules, otherwise false.
      * @see #compare
      * @exception NullPointerException thrown if either arguments is null.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public boolean equals(String source, String target) 
     {
@@ -496,7 +500,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param that the Collator to be compared with this.
      * @return true if this Collator is the same as that Collator;
      *         false otherwise.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public abstract boolean equals(Object that);
     
@@ -504,7 +508,7 @@ public abstract class Collator implements Comparator, Cloneable
 
     /**
      * Generates a unique hash code for this Collator.
-     * @draft 2.2
+     * @draft ICU 2.2
      * @return 32 bit unique hash code
      */
     public abstract int hashCode();
@@ -526,7 +530,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see CollationKey
      * @see #getCollationKey
      * @exception NullPointerException thrown if either arguments is null.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public abstract int compare(String source, String target);
 
@@ -543,12 +547,20 @@ public abstract class Collator implements Comparator, Cloneable
      *         CollationKey is returned.
      * @see CollationKey
      * @see #compare(String, String)
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public abstract CollationKey getCollationKey(String source);
     
     // protected constructor -------------------------------------------------
   
+    /**
+     * Empty default constructor to make javadocs happy
+     * @draft ICU 2.4
+     */
+    protected Collator()
+    {
+    }
+    
     // private data members --------------------------------------------------
     
     /**

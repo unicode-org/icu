@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/11/22 00:57:14 $ 
-* $Revision: 1.27 $
+* $Date: 2002/12/03 20:45:20 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -182,8 +182,7 @@ import com.ibm.icu.impl.ICUDebug;
  * This class is not subclassable
  * </p>
  * @author Syn Wee Quek
- * @since release 2.2, April 18 2002
- * @draft 2.2
+ * @draft ICU 2.2
  */
 public final class RuleBasedCollator extends Collator 
 {   
@@ -206,7 +205,7 @@ public final class RuleBasedCollator extends Collator
      * @exception ParseException and IOException thrown. ParseException thrown 
      *            when argument rules have an invalid syntax. IOException 
      *            thrown when an error occured while reading internal data.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public RuleBasedCollator(String rules) throws Exception
     {
@@ -224,11 +223,12 @@ public final class RuleBasedCollator extends Collator
         initUtility();
     }
     
-	// public methods --------------------------------------------------------
+    // public methods --------------------------------------------------------
     
     /**
      * Clones the RuleBasedCollator
      * @return a new instance of this RuleBasedCollator object
+     * @draft ICU 2.2
      */
     public Object clone() throws CloneNotSupportedException
     {
@@ -243,7 +243,7 @@ public final class RuleBasedCollator extends Collator
     /**
      * Return a CollationElementIterator for the given String.
      * @see CollationElementIterator
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public CollationElementIterator getCollationElementIterator(String source) 
     {
@@ -255,7 +255,7 @@ public final class RuleBasedCollator extends Collator
      * The source iterator's integrity will be preserved since a new copy 
      * will be created for use.
      * @see CollationElementIterator
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public CollationElementIterator getCollationElementIterator(
                                                 CharacterIterator source) 
@@ -267,34 +267,34 @@ public final class RuleBasedCollator extends Collator
     // public setters --------------------------------------------------------
     
     /**
-	 * Sets the Hiragana Quaternary mode to be on or off.
+     * Sets the Hiragana Quaternary mode to be on or off.
      * When the Hiragana Quaternary mode is turned on, the collator 
-	 * positions Hiragana characters before all non-ignorable characters in 
-	 * QUATERNARY strength. This is to produce a correct JIS collation order,
-	 * distinguishing between Katakana  and Hiragana characters. 
-	 * @param flag true if Hiragana Quaternary mode is to be on, false 
-	 *        otherwise
-	 * @see #setHiraganaQuaternaryDefault
-	 * @see #isHiraganaQuaternary
-	 * @draft 2.2
-	 */
-	public void setHiraganaQuaternary(boolean flag)
-	{
-		m_isHiragana4_ = flag;
-	}
+     * positions Hiragana characters before all non-ignorable characters in 
+     * QUATERNARY strength. This is to produce a correct JIS collation order,
+     * distinguishing between Katakana  and Hiragana characters. 
+     * @param flag true if Hiragana Quaternary mode is to be on, false 
+     *        otherwise
+     * @see #setHiraganaQuaternaryDefault
+     * @see #isHiraganaQuaternary
+     * @draft ICU 2.2
+     */
+    public void setHiraganaQuaternary(boolean flag)
+    {
+	m_isHiragana4_ = flag;	
+    }
 	
-	/**
-	 * Sets the Hiragana Quaternary mode to the initial mode set during 
-	 * construction of the RuleBasedCollator.
-	 * See setHiraganaQuaternary(boolean) for more details.
-	 * @see #setHiraganaQuaternary(boolean)
-	 * @see #isHiraganaQuaternary
-	 * @draft 2.2
-	 */
-	public void setHiraganaQuaternaryDefault()
-	{
-		m_isHiragana4_ = m_defaultIsHiragana4_;
-	}
+    /**
+     * Sets the Hiragana Quaternary mode to the initial mode set during 
+     * construction of the RuleBasedCollator.
+     * See setHiraganaQuaternary(boolean) for more details.
+     * @see #setHiraganaQuaternary(boolean)
+     * @see #isHiraganaQuaternary
+     * @draft ICU 2.2
+     */
+    public void setHiraganaQuaternaryDefault()
+    {
+	m_isHiragana4_ = m_defaultIsHiragana4_;	
+    }
     
     /**
      * Sets whether uppercase characters sort before lowercase
@@ -309,7 +309,7 @@ public final class RuleBasedCollator extends Collator
      * @see #isUpperCaseFirst
      * @see #setLowerCaseFirst
      * @see #setCaseFirstDefault
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setUpperCaseFirst(boolean upperfirst)
     {
@@ -328,8 +328,8 @@ public final class RuleBasedCollator extends Collator
         updateInternalState();
     }
 	
-	/**
-   	 * Sets the orders of lower cased characters to sort before upper cased 
+    /**
+     * Sets the orders of lower cased characters to sort before upper cased 
      * characters, in strength TERTIARY. The default 
      * mode is false.
      * If true is set, the RuleBasedCollator will sort lower cased characters 
@@ -343,51 +343,52 @@ public final class RuleBasedCollator extends Collator
      * @see #isUpperCaseFirst
      * @see #setUpperCaseFirst
      * @see #setCaseFirstDefault
-   	 */
-   	public void setLowerCaseFirst(boolean lowerfirst)
-   	{
-   		if (lowerfirst) {
+     * @draft ICU 2.2
+     */
+    public void setLowerCaseFirst(boolean lowerfirst)
+    {
+  	if (lowerfirst) {
             if(m_caseFirst_ != AttributeValue.LOWER_FIRST_) {
                 latinOneRegenTable_ = true;
             }            
    			m_caseFirst_ = AttributeValue.LOWER_FIRST_;
-   		}
-   		else {
+   	}
+   	else {
             if(m_caseFirst_ != AttributeValue.OFF_) {
                 latinOneRegenTable_ = true;
             }            
-   			m_caseFirst_ = AttributeValue.OFF_;
-   		}
-   		updateInternalState();
-   	}
+   	    m_caseFirst_ = AttributeValue.OFF_;
+    	}
+   	updateInternalState();
+    }
    	
-   	/**
-   	 * Sets the case first mode to the initial mode set during 
-	 * construction of the RuleBasedCollator.
-	 * See setUpperCaseFirst(boolean) and setLowerCaseFirst(boolean) for more 
+    /**
+     * Sets the case first mode to the initial mode set during 
+     * construction of the RuleBasedCollator.
+     * See setUpperCaseFirst(boolean) and setLowerCaseFirst(boolean) for more 
      * details.
-   	 * @see #isLowerCaseFirst
-   	 * @see #isUpperCaseFirst
-   	 * @see #setLowerCaseFirst(boolean)
+     * @see #isLowerCaseFirst
+     * @see #isUpperCaseFirst
+     * @see #setLowerCaseFirst(boolean)
      * @see #setUpperCaseFirst(boolean)
-   	 * @draft 2.2
-   	 */
-   	public final void setCaseFirstDefault()
-   	{
+     * @draft ICU 2.2
+     */
+    public final void setCaseFirstDefault()
+    {
         if(m_caseFirst_ != m_defaultCaseFirst_) {
             latinOneRegenTable_ = true;
         }            
-   		m_caseFirst_ = m_defaultCaseFirst_;
-   		updateInternalState();
-   	}
+	m_caseFirst_ = m_defaultCaseFirst_;
+	updateInternalState();
+    }
    
     /**
      * Sets the alternate handling mode to the initial mode set during 
-	 * construction of the RuleBasedCollator.
-	 * See setAlternateHandling(boolean) for more details.
-	 * @see #setAlternateHandlingShifted(boolean)
-	 * @see #isAlternateHandlingShifted()
-     * @draft 2.2
+     * construction of the RuleBasedCollator.
+     * See setAlternateHandling(boolean) for more details.
+     * @see #setAlternateHandlingShifted(boolean)
+     * @see #isAlternateHandlingShifted()
+     * @draft ICU 2.2
      */
     public void setAlternateHandlingDefault()
     {
@@ -397,11 +398,11 @@ public final class RuleBasedCollator extends Collator
     
     /**
      * Sets the case level mode to the initial mode set during 
-	 * construction of the RuleBasedCollator.
-	 * See setCaseLevel(boolean) for more details.
-	 * @see #setCaseLevel(boolean)
-	 * @see #isCaseLevel
-     * @draft 2.2
+     * construction of the RuleBasedCollator.
+     * See setCaseLevel(boolean) for more details.
+     * @see #setCaseLevel(boolean)
+     * @see #isCaseLevel
+     * @draft ICU 2.2
      */
     public void setCaseLevelDefault()
     {
@@ -415,7 +416,7 @@ public final class RuleBasedCollator extends Collator
      * See setDecomposition(int) for more details.
      * @see #getDecomposition
      * @see #setDecomposition(int)
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setDecompositionDefault()
     {
@@ -428,7 +429,7 @@ public final class RuleBasedCollator extends Collator
      * See setFrenchCollation(boolean) for more details.
      * @see #isFrenchCollation
      * @see #setFrenchCollation(boolean)
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setFrenchCollationDefault()
     {
@@ -445,7 +446,7 @@ public final class RuleBasedCollator extends Collator
      * See setStrength(int) for more details.
      * @see #setStrength(int)
      * @see #getStrength
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setStrengthDefault()
     {
@@ -462,7 +463,7 @@ public final class RuleBasedCollator extends Collator
      * <a href=http://oss.software.ibm.com/icu/userguide/Collate_ServiceArchitecture.html>
      * French collation</a> for more information.
      * @param flag true to set the French collation on, false to set it off
-     * @draft 2.2
+     * @draft ICU 2.2
      * @see #isFrenchCollation
      * @see #setFrenchCollationDefault
      */
@@ -494,7 +495,7 @@ public final class RuleBasedCollator extends Collator
      *        desired, false for the NON_IGNORABLE behaviour.
      * @see #isAlternateHandlingShifted
      * @see #setAlternateHandlingDefault
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setAlternateHandlingShifted(boolean shifted)
     {
@@ -520,9 +521,9 @@ public final class RuleBasedCollator extends Collator
      * case level</a> for more information.
      * </p>
      * @param flag true if case level sorting is required, false otherwise
-     * @draft 2.2
+     * @draft ICU 2.2
      * @see #setCaseLevelDefault
-	 * @see #isCaseLevel
+     * @see #isCaseLevel
      */
     public void setCaseLevel(boolean flag) 
     {
@@ -530,7 +531,7 @@ public final class RuleBasedCollator extends Collator
     	updateInternalState();
     }
 
-	/**
+    /**
      * <p>
      * Sets this Collator's strength property. The strength property 
      * determines the minimum level of difference considered significant 
@@ -547,9 +548,10 @@ public final class RuleBasedCollator extends Collator
      * @see #IDENTICAL
      * @exception IllegalArgumentException If the new strength value is not one 
      * 				of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
-    public void setStrength(int newStrength) {
+    public void setStrength(int newStrength) 
+    {
         super.setStrength(newStrength);
         updateInternalState();
     }
@@ -559,7 +561,7 @@ public final class RuleBasedCollator extends Collator
     /**
      * Gets the collation rules for this RuleBasedCollator.     
      * @return returns the collation rules
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public String getRules()
     {
@@ -576,17 +578,17 @@ public final class RuleBasedCollator extends Collator
      *            invalid syntax. IOException 
      * @draft ICU 2.4
      */
-  	public UnicodeSet getTailoredSet()
-  	{
+    public UnicodeSet getTailoredSet()
+    {
         try {
 	       CollationRuleParser src = new CollationRuleParser(getRules());
 	       return src.getTailoredSet();
         } catch(Exception e) {
             throw new InternalError("A tailoring rule should not have errors. Something is quite wrong!");
         }
-  	}
+    }
 
-	/**
+    /**
      * <p>
      * Get a Collation key for the argument String source from this 
      * RuleBasedCollator. 
@@ -608,7 +610,7 @@ public final class RuleBasedCollator extends Collator
      *         null, a null CollationKey is returned.
      * @see CollationKey
      * @see #compare(String, String)
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public CollationKey getCollationKey(String source)
     {
@@ -672,79 +674,79 @@ public final class RuleBasedCollator extends Collator
     		    
     /**
      * Return true if an uppercase character is sorted before the corresponding lowercase character.
-	 * See setCaseFirst(boolean) for details.
-	 * @see #setUpperCaseFirst
-	 * @see #setLowerCaseFirst
-   	 * @see #isLowerCaseFirst
-   	 * @see #setCaseFirstDefault
-	 * @return true if upper cased characters are sorted before lower cased 
-	 *         characters, false otherwise
-	 * @draft 2.2
-	 */
-	public boolean isUpperCaseFirst()
-	{
-		return (m_caseFirst_ == AttributeValue.UPPER_FIRST_);
-	}
-	
-	/**
-     * Return true if a lowercase character is sorted before the corresponding uppercase character.
-	 * See setCaseFirst(boolean) for details.
-	 * @see #setUpperCaseFirst
-	 * @see #setLowerCaseFirst
-   	 * @see #isUpperCaseFirst
-   	 * @see #setCaseFirstDefault
-	 * @return true lower cased characters are sorted before upper cased 
-	 *         characters, false otherwise
-	 * @draft 2.2
-	 */
-	public boolean isLowerCaseFirst()
-	{
-		return (m_caseFirst_ == AttributeValue.LOWER_FIRST_);
-	}
-	
-	/**
-	 * Checks if the alternate handling behaviour is the UCA defined SHIFTED or 
-	 * NON_IGNORABLE.
-	 * If return value is true, then the alternate handling attribute for the 
-	 * Collator is SHIFTED. Otherwise if return value is false, then the 
-	 * alternate handling attribute for the Collator is NON_IGNORABLE
-	 * See setAlternateHandlingShifted(boolean) for more details.
-	 * @return true or false 
-	 * @see #setAlternateHandlingShifted(boolean)
-	 * @see #setAlternateHandlingDefault
-     * @draft 2.2
+     * See setCaseFirst(boolean) for details.
+     * @see #setUpperCaseFirst
+     * @see #setLowerCaseFirst
+     * @see #isLowerCaseFirst
+     * @see #setCaseFirstDefault
+     * @return true if upper cased characters are sorted before lower cased 
+     *         characters, false otherwise
+     * @draft ICU 2.2
      */
-	public boolean isAlternateHandlingShifted()
-	{
-		return m_isAlternateHandlingShifted_;
-	}
+     public boolean isUpperCaseFirst()
+     {
+        return (m_caseFirst_ == AttributeValue.UPPER_FIRST_);
+     }
 	
-	/**
-	 * Checks if case level is set to true.
-	 * See setCaseLevel(boolean) for details.
-	 * @return the case level mode
-	 * @see #setCaseLevelDefault
-	 * @see #isCaseLevel
-	 * @see #setCaseLevel(boolean)
-	 * @draft 2.2
-	 */
-	public boolean isCaseLevel()
-	{
-		return m_isCaseLevel_;
-	}
+    /**
+     * Return true if a lowercase character is sorted before the corresponding uppercase character.
+     * See setCaseFirst(boolean) for details.
+     * @see #setUpperCaseFirst
+     * @see #setLowerCaseFirst
+     * @see #isUpperCaseFirst
+     * @see #setCaseFirstDefault
+     * @return true lower cased characters are sorted before upper cased 
+     *         characters, false otherwise
+     * @draft ICU 2.2
+     */
+    public boolean isLowerCaseFirst()
+    {
+        return (m_caseFirst_ == AttributeValue.LOWER_FIRST_);	
+    }
 	
-	/**
-	 * Checks if French Collation is set to true.
-	 * See setFrenchCollation(boolean) for details.
-	 * @return true if French Collation is set to true, false otherwise
-	 * @see #setFrenchCollation(boolean)
-	 * @see #setFrenchCollationDefault
-	 * @draft 2.2
-	 */
-	public boolean isFrenchCollation()
-	{
-		return m_isFrenchCollation_;
-	}
+    /**
+     * Checks if the alternate handling behaviour is the UCA defined SHIFTED or 
+     * NON_IGNORABLE.
+     * If return value is true, then the alternate handling attribute for the 
+     * Collator is SHIFTED. Otherwise if return value is false, then the 
+     * alternate handling attribute for the Collator is NON_IGNORABLE
+     * See setAlternateHandlingShifted(boolean) for more details.
+     * @return true or false 
+     * @see #setAlternateHandlingShifted(boolean)
+     * @see #setAlternateHandlingDefault
+     * @draft ICU 2.2
+     */
+    public boolean isAlternateHandlingShifted()
+    {
+	return m_isAlternateHandlingShifted_;
+    }
+	
+    /**
+     * Checks if case level is set to true.
+     * See setCaseLevel(boolean) for details.
+     * @return the case level mode
+     * @see #setCaseLevelDefault
+     * @see #isCaseLevel
+     * @see #setCaseLevel(boolean)
+     * @draft ICU 2.2
+     */
+    public boolean isCaseLevel()
+    {
+        return m_isCaseLevel_;	
+    }
+	
+    /**
+     * Checks if French Collation is set to true.
+     * See setFrenchCollation(boolean) for details.
+     * @return true if French Collation is set to true, false otherwise
+     * @see #setFrenchCollation(boolean)
+     * @see #setFrenchCollationDefault
+     * @draft ICU 2.2
+     */
+     public boolean isFrenchCollation()
+     {
+         return m_isFrenchCollation_;
+     }
 	
 	/**
 	 * Checks if the Hiragana Quaternary mode is set on.
@@ -752,7 +754,7 @@ public final class RuleBasedCollator extends Collator
 	 * @return flag true if Hiragana Quaternary mode is on, false otherwise
 	 * @see #setHiraganaQuaternaryDefault
 	 * @see #setHiraganaQuaternary(boolean)
-	 * @draft 2.2
+	 * @draft ICU 2.2
 	 */
 	public boolean isHiraganaQuaternary()
 	{
@@ -768,9 +770,10 @@ public final class RuleBasedCollator extends Collator
      * @param obj the RuleBasedCollator to be compared to.
      * @return true if this RuleBasedCollator has exactly the same 
      *         collation behaviour as obj, false otherwise.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) 
+    {
         if (obj == null) {
         	return false;  // super does class check
         }
@@ -861,7 +864,7 @@ public final class RuleBasedCollator extends Collator
 	/**
      * Generates a unique hash code for this RuleBasedCollator.
      * @return the unique hash code for this Collator
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int hashCode() 
     {
@@ -896,7 +899,7 @@ public final class RuleBasedCollator extends Collator
      *         value is greater than zero if source is greater than target.
      * @see CollationKey
      * @see #getCollationKey
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int compare(String source, String target)
     {
@@ -929,85 +932,6 @@ public final class RuleBasedCollator extends Collator
         } else {
           return compareRegular(source, target, offset);
         }        
-    }
-
-    private final int compareRegular(String source, String target, int offset) {
-        int strength = getStrength();
-		// setting up the collator parameters	
-		m_utilCompare0_ = m_isCaseLevel_;
-        m_utilCompare1_ = true;
-    	m_utilCompare2_ = strength >= SECONDARY;
-    	m_utilCompare3_ = strength >= TERTIARY;
-    	m_utilCompare4_ = strength >= QUATERNARY;
-		m_utilCompare5_ = strength == IDENTICAL;
-		boolean doFrench = m_isFrenchCollation_ && m_utilCompare2_;
-    	boolean doShift4 = m_isAlternateHandlingShifted_ && m_utilCompare4_;
-	    boolean doHiragana4 = m_isHiragana4_ && m_utilCompare4_;
-	
-	    if (doHiragana4 && doShift4) {
-	    	String sourcesub = source.substring(offset);
-	    	String targetsub = target.substring(offset);
-	      	return compareBySortKeys(sourcesub, targetsub);
-	    }
-	    
-		// This is the lowest primary value that will not be ignored if shifted
-	    int lowestpvalue = m_isAlternateHandlingShifted_ 
-	    									? m_variableTopValue_ << 16 : 0;
-        m_srcUtilCEBufferSize_ = 0;
-        m_tgtUtilCEBufferSize_ = 0;
-		int result = doPrimaryCompare(doHiragana4, lowestpvalue, source, 
-									  target, offset);
-		if (m_srcUtilCEBufferSize_ == -1 
-            && m_tgtUtilCEBufferSize_ == -1) {
-			// since the cebuffer is cleared when we have determined that
-			// either source is greater than target or vice versa, the return
-			// result is the comparison result and not the hiragana result
-			return result;
-		} 
-		
-		int hiraganaresult = result;
-		
-		if (m_utilCompare2_) {
-			result = doSecondaryCompare(doFrench);
-			if (result != 0) {
-				return result;
-			}
-		}
-		// doing the case bit
-	    if (m_utilCompare0_) {
-	    	result = doCaseCompare();
-			if (result != 0) {
-				return result;
-			}	
-	    }
-		// Tertiary level
-	    if (m_utilCompare3_) {
-	      	result = doTertiaryCompare();
-	      	if (result != 0) {
-	      		return result;
-	      	}
-	    }
-	
-		if (doShift4) {  // checkQuad
-	      	result = doQuaternaryCompare(lowestpvalue);
-	      	if (result != 0) {
-	      		return result;
-	      	}
-	    } 
-	    else if (doHiragana4 && hiraganaresult != 0) {
-	      	// If we're fine on quaternaries, we might be different
-	      	// on Hiragana. This, however, might fail us in shifted.
-	      	return hiraganaresult;
-	    }
-	
-	    // For IDENTICAL comparisons, we use a bitwise character comparison 
-	    // as a tiebreaker if all else is equal.                                
-	    // Getting here  should be quite rare - strings are not identical -     
-	    // that is checked first, but compared == through all other checks.  
-	    if (m_utilCompare5_) {
-	        return doIdenticalCompare(source, target, offset, true);
-	    }
-	    return 0;
     }
 
     // package private inner interfaces --------------------------------------
@@ -1461,12 +1385,55 @@ public final class RuleBasedCollator extends Collator
     * <p>
     * This constructor constructs the UCA collator internally
     * </p>
-    * @draft 2.2
     */
     RuleBasedCollator() 
     {
         initUtility();
     }
+    
+    /**
+     * Constructors a RuleBasedCollator from the argument locale.
+     * If no resource bundle is associated with the locale, UCA is used 
+     * instead.
+     * @param locale
+     * @exception Exception thrown when there's an error creating the Collator
+     */
+    RuleBasedCollator(Locale locale) // throws Exception
+    {
+        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+        initUtility();
+        if (rb != null) {
+            try {
+                Object elements = rb.getObject("CollationElements");
+                if (elements != null) {
+                    Object[][] rules = (Object[][])elements;
+                    m_rules_ = (String)rules[1][1];
+                    // %%CollationBin
+                    byte map[] = (byte [])rules[0][1];
+                    BufferedInputStream input = 
+                                             new BufferedInputStream(
+                                                new ByteArrayInputStream(map));
+                    CollatorReader reader = new CollatorReader(input, false);
+                    if (map.length > MIN_BINARY_DATA_SIZE_) {
+                        reader.read(this, null);
+                    } 
+                    else {
+                        reader.readHeader(this);
+                        reader.readOptions(this);
+                        // duplicating UCA_'s data
+                        setWithUCATables();
+                    } 
+                    init();
+                    return;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                // if failed use UCA.
+            }
+        }
+        setWithUCAData();
+    } 
     
     // package private methods -----------------------------------------------
     
@@ -1615,52 +1582,6 @@ public final class RuleBasedCollator extends Collator
         return ce != CollationElementIterator.NULLORDER 
                        && (ce & CE_CONTINUATION_TAG_) == CE_CONTINUATION_TAG_;
     }
-    
-    // protected constructor -------------------------------------------------
-  
-    /**
-     * Constructors a RuleBasedCollator from the argument locale.
-     * If no resource bundle is associated with the locale, UCA is used 
-     * instead.
-     * @param locale
-     * @exception Exception thrown when there's an error creating the Collator
-     */
-    RuleBasedCollator(Locale locale) // throws Exception
-    {
-        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-	    initUtility();
-	    if (rb != null) {
-            try {
-                Object elements = rb.getObject("CollationElements");
-                if (elements != null) {
-                    Object[][] rules = (Object[][])elements;
-                    m_rules_ = (String)rules[1][1];
-                    // %%CollationBin
-                    byte map[] = (byte [])rules[0][1];
-                    BufferedInputStream input = 
-        			                         new BufferedInputStream(
-                                                new ByteArrayInputStream(map));
-        			CollatorReader reader = new CollatorReader(input, false);
-        			if (map.length > MIN_BINARY_DATA_SIZE_) {
-        			    reader.read(this, null);
-        		    } 
-        		    else {
-        			    reader.readHeader(this);
-        			    reader.readOptions(this);
-        			    // duplicating UCA_'s data
-        			    setWithUCATables();
-                    } 
-                    init();
-                    return;
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                // if failed use UCA.
-            }
-	    }
-	    setWithUCAData();
-    } 
     
     // private inner classes ------------------------------------------------
     
@@ -1885,6 +1806,85 @@ public final class RuleBasedCollator extends Collator
     private int m_tgtUtilOffset_;
     
     // private methods -------------------------------------------------------
+    
+    private final int compareRegular(String source, String target, int offset) {
+        int strength = getStrength();
+        // setting up the collator parameters   
+        m_utilCompare0_ = m_isCaseLevel_;
+        m_utilCompare1_ = true;
+        m_utilCompare2_ = strength >= SECONDARY;
+        m_utilCompare3_ = strength >= TERTIARY;
+        m_utilCompare4_ = strength >= QUATERNARY;
+        m_utilCompare5_ = strength == IDENTICAL;
+        boolean doFrench = m_isFrenchCollation_ && m_utilCompare2_;
+        boolean doShift4 = m_isAlternateHandlingShifted_ && m_utilCompare4_;
+        boolean doHiragana4 = m_isHiragana4_ && m_utilCompare4_;
+    
+        if (doHiragana4 && doShift4) {
+            String sourcesub = source.substring(offset);
+            String targetsub = target.substring(offset);
+            return compareBySortKeys(sourcesub, targetsub);
+        }
+        
+        // This is the lowest primary value that will not be ignored if shifted
+        int lowestpvalue = m_isAlternateHandlingShifted_ 
+                                            ? m_variableTopValue_ << 16 : 0;
+        m_srcUtilCEBufferSize_ = 0;
+        m_tgtUtilCEBufferSize_ = 0;
+        int result = doPrimaryCompare(doHiragana4, lowestpvalue, source, 
+                                      target, offset);
+        if (m_srcUtilCEBufferSize_ == -1 
+            && m_tgtUtilCEBufferSize_ == -1) {
+            // since the cebuffer is cleared when we have determined that
+            // either source is greater than target or vice versa, the return
+            // result is the comparison result and not the hiragana result
+            return result;
+        } 
+        
+        int hiraganaresult = result;
+        
+        if (m_utilCompare2_) {
+            result = doSecondaryCompare(doFrench);
+            if (result != 0) {
+                return result;
+            }
+        }
+        // doing the case bit
+        if (m_utilCompare0_) {
+            result = doCaseCompare();
+            if (result != 0) {
+                return result;
+            }   
+        }
+        // Tertiary level
+        if (m_utilCompare3_) {
+            result = doTertiaryCompare();
+            if (result != 0) {
+                return result;
+            }
+        }
+    
+        if (doShift4) {  // checkQuad
+            result = doQuaternaryCompare(lowestpvalue);
+            if (result != 0) {
+                return result;
+            }
+        } 
+        else if (doHiragana4 && hiraganaresult != 0) {
+            // If we're fine on quaternaries, we might be different
+            // on Hiragana. This, however, might fail us in shifted.
+            return hiraganaresult;
+        }
+    
+        // For IDENTICAL comparisons, we use a bitwise character comparison 
+        // as a tiebreaker if all else is equal.                                
+        // Getting here  should be quite rare - strings are not identical -     
+        // that is checked first, but compared == through all other checks.  
+        if (m_utilCompare5_) {
+            return doIdenticalCompare(source, target, offset, true);
+        }
+        return 0;
+    }
     
     /**
      * Gets the 2 bytes of primary order and adds it to the primary byte array
@@ -3620,7 +3620,6 @@ public final class RuleBasedCollator extends Collator
     }
     
     private final boolean setUpLatinOne() {
-      boolean result = true;
       if(latinOneCEs_ == null) {
         latinOneCEs_ = new int[3*LATINONETABLELEN_]; 
         latinOneTableLen_ = LATINONETABLELEN_;
@@ -3830,7 +3829,7 @@ public final class RuleBasedCollator extends Collator
         char sChar = 0, tChar = 0;
         int sOrder=0, tOrder=0;
     
-        boolean endOfSource = false, endOfTarget = false;
+        boolean endOfSource = false;
     
         //uint32_t *elements = coll->latinOneCEs;
     
@@ -3934,7 +3933,7 @@ public final class RuleBasedCollator extends Collator
         if(strength >= SECONDARY) {
           // adjust the table beggining
           //latinOneCEs_ += coll->latinOneTableLen;
-          endOfSource = false; endOfTarget = false;
+          endOfSource = false; 
     
           if(!m_isFrenchCollation_) { // non French
             // This loop is a simplified copy of primary loop
@@ -4054,7 +4053,7 @@ public final class RuleBasedCollator extends Collator
           offset += latinOneTableLen_;
           //sIndex = 0; tIndex = 0;
           sIndex = startOffset; tIndex = startOffset;
-          endOfSource = false; endOfTarget = false;
+          endOfSource = false;
           for(;;) {
             while(sOrder==0) {
               if(sIndex==sLen) {
@@ -4105,6 +4104,5 @@ public final class RuleBasedCollator extends Collator
           }
         } 
         return 0;
-    }
-    
+    }    
 }
