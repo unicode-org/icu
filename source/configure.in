@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.106 2001/05/25 18:00:38 rviswanadha Exp $
+dnl $Id: configure.in,v 1.107 2001/06/06 23:32:41 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -595,6 +595,7 @@ fi
 
 case "$datapackaging" in
     files)
+	DATA_PACKAGING_CPPFLAGS=-DUDATA_FILES
 	DATA_PACKAGING_MODE=files
 	;;
     archive)
