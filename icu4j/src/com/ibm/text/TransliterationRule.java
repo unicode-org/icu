@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2000/03/10 04:07:24 $ 
- * $Revision: 1.14 $
+ * $Date: 2000/04/12 20:17:45 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -33,9 +33,12 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.14 $ $Date: 2000/03/10 04:07:24 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.15 $ $Date: 2000/04/12 20:17:45 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.15  2000/04/12 20:17:45  alan
+ * Delegate replace operation to rule object
+ *
  * Revision 1.14  2000/03/10 04:07:24  johnf
  * Copyright update
  *
@@ -193,22 +196,6 @@ class TransliterationRule {
     }
 
     /**
-     * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
-     * @return the length of the match key.
-     */
-    public int getKeyLength() {
-        return keyLength;
-    }
-
-    /**
-     * Return the output string.
-     * @return the output string.
-     */
-    public String getOutput() {
-        return output;
-    }
-
-    /**
      * Return the position of the cursor within the output string.
      * @return a value from 0 to <code>getOutput().length()</code>, inclusive.
      */
@@ -239,6 +226,23 @@ class TransliterationRule {
         }
         char c = pattern.charAt(anteContextLength);
         return variables.lookup(c) == null ? (c & 0xFF) : -1;
+    }
+
+    /**
+     * Do a replacement of the input pattern with the output text in
+     * the given string, at the given offset.  This method assumes
+     * that a match has already been found in the given text at the
+     * given position.
+     * @param text the text containing the substring to be replaced
+     * @param offset the offset into the text at which the pattern
+     * matches.  This is the offset to the point after the ante
+     * context, if any, and before the match string and any post
+     * context.
+     * @return the change in the length of the text
+     */
+    int replace(Replaceable text, int offset) {
+        text.replace(offset, offset + keyLength, output);
+        return output.length() - keyLength;
     }
 
     /**
