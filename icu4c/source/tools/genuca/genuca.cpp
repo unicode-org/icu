@@ -614,12 +614,39 @@ write_uca_table(const char *filename,
 #endif
 
 // * set to zero
+struct {
+      UChar32 start;
+      UChar32 end;
+      int32_t value;
+    } ranges[] =
+    {
+      {0xAC00, 0xD7AF, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
+      {0xD800, 0xDBFF, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
+      {0xDC00, 0xDFFF, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
+      {0x3400, 0x4DB5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
+      {0x4E00, 0x9FA5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
+      {0xF900, 0xFA2D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+      {0x20000, 0x2A6D6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //6 CJK_IMPLICIT_TAG,   /* 0x20000-0x2A6D6*/
+      {0x2F800, 0x2FA1D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
+    };
+    uint32_t i = 0;
+
+    for(i = 0; i<sizeof(ranges)/sizeof(ranges[0]); i++) {
+      ucmpe32_setRange32(t->mapping, ranges[i].start, ranges[i].end, ranges[i].value); 
+      test_uca_ranges(t->mapping, ranges[i].start, ranges[i].end, ranges[i].value); 
+    }
+
+
+#if 0
     uprv_uca_setRange(t, 0xAC00, 0xD7AF, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24), status);  // HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
     uprv_uca_setRange(t, 0xD800, 0xDBFF, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24), status);  // LEAD_SURROGATE_TAG,  /* D800-DBFF*/
     uprv_uca_setRange(t, 0xDC00, 0xDFFF, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24), status);  // TRAIL_SURROGATE DC00-DFFF
     uprv_uca_setRange(t, 0x3400, 0x4DB5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
     uprv_uca_setRange(t, 0x4E00, 0x9FA5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
     uprv_uca_setRange(t, 0xF900, 0xFA2D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+    uprv_uca_setRange(t, 0x2F800, 0x2FA1D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+    uprv_uca_setRange(t, 0x20000, 0x2A6D6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+#endif
 
 
 
@@ -641,14 +668,18 @@ write_uca_table(const char *filename,
 
             // if element is a contraction, we want to add it to contractions
             if(element->cSize > 1) { // this is a contraction
-              contractionCEs[noOfContractions][0] = element->cPoints[0];
-              contractionCEs[noOfContractions][1] = element->cPoints[1];
-              if(element->cSize > 2) { // the third one
-                contractionCEs[noOfContractions][2] = element->cPoints[2];
+              if(UTF_IS_LEAD(element->cPoints[0]) && UTF_IS_TRAIL(element->cPoints[1]) && element->cSize == 2) {
+                //fprintf(stdout, "Surrogate %04X %04X!\n", element->cPoints[0], element->cPoints[1]);
               } else {
-                contractionCEs[noOfContractions][2] = 0;
+                contractionCEs[noOfContractions][0] = element->cPoints[0];
+                contractionCEs[noOfContractions][1] = element->cPoints[1];
+                if(element->cSize > 2) { // the third one
+                  contractionCEs[noOfContractions][2] = element->cPoints[2];
+                } else {
+                  contractionCEs[noOfContractions][2] = 0;
+                }
+                noOfContractions++;
               }
-              noOfContractions++;
             }
 
             /* we're first adding to inverse, because addAnElement will reverse the order */

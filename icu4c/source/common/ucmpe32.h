@@ -31,6 +31,7 @@
 #define UCMPE32_H
 
 #define ICU_UCMPE32_VERSION 0x01260000
+#define INIT_UCMPE32_STAGE2_SIZE 60000
 
 #include "unicode/utypes.h"
 
@@ -69,13 +70,16 @@ typedef struct CompactEIntArray{
   UBool fCompact;    
   UBool fAlias;
   UBool fBogus;
+  UBool fInitPhase;
 
   uint16_t *stage1;
   int32_t *stage2;
   int32_t stage1Top;
   int32_t stage2Top;
+  int32_t stage2DefaultTop;
   int32_t fDefaultValue;
   int32_t fSurrogateValue;
+  int32_t stage2Size;
 } CompactEIntArray;
 
     
@@ -117,6 +121,9 @@ U_CAPI void U_EXPORT2 ucmpe32_close(CompactEIntArray* array);
  */
 #define ucmpe32_get(this_obj, index) (this_obj->stage2[(this_obj->stage1[(index >> _UCMPE32_TRIE_SHIFT)] )+ \
                            (index & _UCMPE32_STAGE_2_MASK)])
+U_CAPI
+int32_t 
+ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code);
 
 /** 
  * Get the mapped value of a confirmed surrogate. First value already comes 
@@ -148,6 +155,14 @@ ucmpe32_getSurrogateEx(CompactEIntArray *array, UChar lead, UChar trail);
 U_CAPI  void U_EXPORT2 ucmpe32_set32(CompactEIntArray *array,
                   UChar32 character,
                   int32_t value);
+/** 
+ * Sets an inclusive range of characters to the same value
+ * @param start start of the range
+ * @param end end of the range
+ * @param value value to be set
+ */
+U_CAPI void
+ucmpe32_setRange32(CompactEIntArray* this_obj, UChar32 start, UChar32 end, int32_t value);
 
 /** 
  * alias for compatibility
