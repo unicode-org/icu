@@ -137,8 +137,6 @@ U_CFUNC UBool u_ICUStaticInitFunc()
 {
     UErrorCode status = U_ZERO_ERROR;
 
-#if (ICU_USE_THREADS == 1)
-/* Initialize mutexes only if threading is supported */
     UBool heapInUse = cmemory_inUse();
     umtx_init(NULL);
     ucnv_init(&status);
@@ -149,7 +147,6 @@ U_CFUNC UBool u_ICUStaticInitFunc()
          *  have done some heap allocation. */
         cmemory_clearInUse();
     }
-#endif /* ICU_USE_THREADS==1 */
     return TRUE;
 }
 
