@@ -468,21 +468,6 @@ public:
      */
     virtual void setMinimumFractionDigits(int32_t newValue);
 
-    /**
-     * Applies the pattern to NumberFormat object. Pure virtual function
-     * subclasses must implement it
-     *
-     * @param pattern    The pattern to be applied.
-     * @param parseError Struct to recieve information on position 
-     *                   of error if an error is encountered
-     * @param status     Output param set to success/failure code on
-     *                   exit. If the pattern is invalid, this will be
-     *                   set to a failure result.
-     * @stable
-     */
-    virtual void applyPattern(const UnicodeString& pattern,
-                             UParseError& parseError,
-                             UErrorCode& status)=0;
 public:
 
     /**
