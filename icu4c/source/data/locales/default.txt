@@ -1,6 +1,8 @@
 // ****************************************************************************
 // *                                                                          *
 // * COPYRIGHT:                                                               *
+//  Copyright (C) 1999, International Business Machines
+//  Corporation and others.  All Rights Reserved.
 // * (C) Copyright Taligent, Inc.,  1997                                      *
 // * (C) Copyright International Business Machines Corporation,  1997-99      *
 // * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
@@ -8,6 +10,8 @@
 // * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
 // *                                                                          *
 // ****************************************************************************
+//  Date        Name        Description
+//  11/17/99    aliu        Added support for transliterators.
 
 default {
     Version { "3" }
@@ -27,7 +31,66 @@ default {
             "{0,choice,0#|1#{1}|2#{1},{2}|3#{1},{2},{3}}", // List
             "{0},{1}" // List composition
          }
-     }
+    }
+
+    //------------------------------------------------------------
+    // BEGIN Transliterator support
+    //------------------------------------------------------------
+     
+    // Map transliterator names to resource file names.  This
+    // mapping is required because transliterator names typically
+    // exceed the limits of 8.3 file names.
+
+    // Other places this index table could go are in the file
+    // data/translit/index.txt (doesn't exist yet), or some other
+    // dedicated index bundle, if we end up creating such a thing as
+    // part of the data layout reorganization to DLLs/memory mapped
+    // files.
+    
+    RuleBasedTransliteratorIDs {
+        // This is an n x 3 array of strings that serves as an index
+        // to the system rule-based transliterator resource bundle
+        // data files.  If RBT files are installed or removed from the
+        // system this table must be updated.  For each of the n rows,
+        // the first item is the ID of the forward transliterator for
+        // the rule.  The second item is the ID of the reverse
+        // transliterator for the rule.  Some rule files only contain
+        // forward direction rules; for those, the second item is a
+        // zero-length string.  The third item is the name of the
+        // resource bundle file, a string of 8 or fewer lowercase
+        // letters or digits.  This file will be sought in the data
+        // directory within the subdirectory "translit".  IDs must
+        // have the form "From-To" or "SingleName" to work properly
+        // with the Transliterator code.
+
+        // Basic language rules
+        { "Latin-Arabic",     "Arabic-Latin",     "larabic"  }
+        { "Latin-Devanagari", "Devanagari-Latin", "ldevan"   }
+        { "Latin-Greek",      "Greek-Latin",      "lgreek"   }
+        { "Latin-Hebrew",     "Hebrew-Latin",     "lhebrew"  }
+        { "Latin-Russian",    "Russian-Latin",    "lrussian" }
+        { "Latin-Halfwidth",  "Halfwidth-Latin",  "lhalfwid" }
+        { "Latin-Kana",       "Kana-Latin",       "lkana"    }
+
+        // Other miscellaneous rules
+        { "Expanded-Contracted", "Contracted-Expanded", "expcon" }
+        { "StraightQuotes-CurlyQuotes", "CurlyQuotes-StraightQuotes",
+              "quotes" }
+        { "KeyboardEscape-Latin1", "", "kbdescl1" }
+        { "UnicodeName-UnicodeChar", "", "ucname" }
+    }
+
+    // (Unlike the above table, this has to be here.)
+
+    TransliteratorNamePattern {
+        // Format for the display name of a Transliterator.
+        // This is the language-neutral form of this resource.
+        "{0,choice,0#|1#{1}|2#{1}-{2}}" // Display name
+    }
+
+    //------------------------------------------------------------
+    // END Transliterator support
+    //------------------------------------------------------------
 
     AmPmMarkers { 
             "AM",
