@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Gurmukhi.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 13 00:51:08 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Gurmukhi
@@ -141,6 +141,11 @@ translit_InterIndic_Gurmukhi {
 "\ue082>;" // FALLBACK BLOW AWAY LETTER O (\u0a02 = SIGN BINDI)
 "\ue084>;" // FALLBACK BLOW AWAY VOWEL SIGN E
 "\ue085>;" // FALLBACK BLOW AWAY VOWEL SIGN O (\u0a05 = LETTER A)
+
+"0 > \u0a66;"       // FALLBACK FOR TAMIL
+"1 > \u0a67;"
+"\ue0f0 >  \u0a30;"  // FALLBACK RA 
+"\ue0f1 >  \u0a30;"  // FALLBACK RA
 //    :: NFC (NFD) ;
 // eof
   }

@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Devanagari.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 13 00:51:07 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Devanagari
@@ -46,7 +46,8 @@ translit_InterIndic_Devanagari {
  
  //Decomposed compatibility transliterations
  "\ue012\ue057>\u0914;"   // FALLBACK FOR TAMIL AU
- "\u0030 > \u0966;"       // FALLBACK FOR TAMIL
+ "0 > \u0966;"       // FALLBACK FOR TAMIL
+ "1 > \u0967;"
 
  "\ue046\ue056 > \u0948;" // FALLBACK FOR TELUGU
  "\ue055>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU LENGTH MARK

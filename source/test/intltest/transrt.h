@@ -41,6 +41,34 @@ class TransliteratorRoundTripTest : public IntlTest {
     void TestDevanagariTelugu(void);
     void TestDevanagariKannada(void);
     void TestDevanagariMalayalam(void);
+    void TestBengaliGurmukhi(void);
+    void TestBengaliGujarati(void);
+    void TestBengaliOriya(void);
+    void TestBengaliTamil(void);
+    void TestBengaliTelugu(void);
+    void TestBengaliKannada(void);
+    void TestBengaliMalayalam(void);  
+    void TestGurmukhiGujarati(void);
+    void TestGurmukhiOriya(void);
+    void TestGurmukhiTamil(void);
+    void TestGurmukhiTelugu(void);
+    void TestGurmukhiKannada(void);
+    void TestGurmukhiMalayalam(void); 
+    void TestGujaratiOriya(void);
+    void TestGujaratiTamil(void);
+    void TestGujaratiTelugu(void);
+    void TestGujaratiKannada(void);
+    void TestGujaratiMalayalam(void);
+    void TestOriyaTamil(void);
+    void TestOriyaTelugu(void);
+    void TestOriyaKannada(void);
+    void TestOriyaMalayalam(void);
+    void TestTamilTelugu(void);
+    void TestTamilKannada(void);
+    void TestTamilMalayalam(void);
+    void TestTeluguKannada(void);
+    void TestTeluguMalayalam(void);
+    void TestKannadaMalayalam(void);
 };
 
 #endif

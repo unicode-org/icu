@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Malayalam.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 13 00:51:08 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Malayalam
@@ -133,10 +133,14 @@ translit_InterIndic_Malayalam {
 "\ue06d>\u0d6d;" // DIGIT SEVEN
 "\ue06e>\u0d6e;" // DIGIT EIGHT
 "\ue06f>\u0d6f;" // DIGIT NINE
-// \ue080>; # UNMAPPED InterIndic-Malayalam: ISSHAR
-
-
-
+"\ue080>;" // UNMAPPED InterIndic-Malayalam: ISSHAR
+"\ue072>;"
+"\ue073>;"
+"\ue074>;"
+"0 > \u0d66;"       // FALLBACK FOR TAMIL
+"1 > \u0d67;"
+"\ue0f0 >  \u0d30;"  // FALLBACK RA 
+"\ue0f1 >  \u0d30;"  // FALLBACK RA
 
 
 //    :: NFC (NFD) ;
