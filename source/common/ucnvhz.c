@@ -656,7 +656,11 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
             }
-            
+            if(((targetUniChar & 0x8080) != 0x8080)&& length==2){
+                reason =UCNV_ILLEGAL;
+                *err =U_INVALID_CHAR_FOUND;
+                goto CALLBACK;
+            }
             
             myConverterData->isTargetUCharDBCS = isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
             
