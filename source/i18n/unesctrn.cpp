@@ -68,27 +68,27 @@ static const UChar SPEC_Any[] = {
 };
 
 /**
- * Factory methods
+ * Factory methods.  Ignore the context.
  */
-Transliterator* UnescapeTransliterator::_createUnicode(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createUnicode(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_Unicode);
 }
-Transliterator* UnescapeTransliterator::_createJava(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createJava(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_Java);
 }
-Transliterator* UnescapeTransliterator::_createC(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createC(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_C);
 }
-Transliterator* UnescapeTransliterator::_createXML(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createXML(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_XML);
 }
-Transliterator* UnescapeTransliterator::_createXML10(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createXML10(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_XML10);
 }
-Transliterator* UnescapeTransliterator::_createPerl(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createPerl(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_Perl);
 }
-Transliterator* UnescapeTransliterator::_createAny(const UnicodeString& ID, Token context) {
+Transliterator* UnescapeTransliterator::_createAny(const UnicodeString& ID, Token /*context*/) {
     return new UnescapeTransliterator(ID, SPEC_Any);
 }
 
