@@ -361,7 +361,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
 }
 
 /* Opening Functions */
-struct SResource* table_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
+struct SResource* res_open(const struct UString* comment, UErrorCode* status){
     struct SResource *res;
 
     if (U_FAILURE(*status)) {
@@ -374,11 +374,29 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
+    
+    res->fComment = NULL;
+    if(comment != NULL){
+        res->fComment = (struct UString *) uprv_malloc(sizeof(struct UString));
+        if(res->fComment == NULL){
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        ustr_init(res->fComment);
+        ustr_cpy(res->fComment, comment, status);
+    }
+    return res;
+
+}
+struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct UString* comment, UErrorCode *status) {
+
+    struct SResource *res = res_open(comment, status);
 
     res->fType = URES_TABLE;
     res->fKey  = bundle_addtag(bundle, tag, status);
-
+ 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -394,17 +412,11 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
     return res;
 }
 
-struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
-    struct SResource *res;
+struct SResource* array_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status) {
+    
+    struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -412,6 +424,7 @@ struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -427,17 +440,10 @@ struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
     return res;
 }
 
-struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *value, int32_t len, UErrorCode *status) {
-    struct SResource *res;
+struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
+    struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -445,6 +451,7 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *va
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -467,17 +474,10 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *va
 }
 
 /* TODO: make alias_open and string_open use the same code */
-struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status) {
-    struct SResource *res;
+struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
+    struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -485,6 +485,7 @@ struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, in
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -507,17 +508,10 @@ struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, in
 }
 
 
-struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
-    struct SResource *res;
+struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status) {
+    struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -525,6 +519,7 @@ struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -544,17 +539,10 @@ struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *
     return res;
 }
 
-struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UErrorCode *status) {
-    struct SResource *res;
+struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, const struct UString* comment, UErrorCode *status) {
+    struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -562,6 +550,7 @@ struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UEr
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -573,17 +562,10 @@ struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UEr
     return res;
 }
 
-struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data,const char* fileName,UErrorCode *status) {
-    struct SResource *res;
+struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, const char* fileName, const struct UString* comment, UErrorCode *status) {
+    struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
-
-    if (res == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -591,6 +573,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
+        uprv_free(res->fComment);
         uprv_free(res);
         return NULL;
     }
@@ -623,7 +606,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
     return res;
 }
 
-struct SRBRoot *bundle_open(UErrorCode *status) {
+struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status) {
     struct SRBRoot *bundle = NULL;
 
     if (U_FAILURE(*status)) {
@@ -636,10 +619,13 @@ struct SRBRoot *bundle_open(UErrorCode *status) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
-
     bundle->fLocale   = NULL;
     bundle->fKeyPoint = 0;
     bundle->fKeys     = (char *) uprv_malloc(sizeof(char) * KEY_SPACE_SIZE);
+
+    if(comment != NULL){
+            
+    }
 
     if (bundle->fKeys == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -648,7 +634,7 @@ struct SRBRoot *bundle_open(UErrorCode *status) {
     }
 
     bundle->fCount = 0;
-    bundle->fRoot  = table_open(bundle, NULL, status);
+    bundle->fRoot  = table_open(bundle, NULL, comment, status);
 
     if (bundle->fRoot == NULL || U_FAILURE(*status)) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -911,6 +897,7 @@ void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status)
     u_UCharsToChars(locale, bundle->fLocale, u_strlen(locale)+1);
 
 }
+
 
 uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status) {
     uint16_t keypos;

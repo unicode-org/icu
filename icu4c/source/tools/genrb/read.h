@@ -45,6 +45,7 @@ void resetLineNumber(void);
 enum ETokenType getNextToken(UCHARBUF *buf,
                  struct UString *token,
                  uint32_t *linenumber, /* out: linenumber of token */
+                 struct UString *comment,
                  UErrorCode *status);
 
 #endif
