@@ -389,7 +389,6 @@ void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
 }
 
 #define MIN_VALUE 0x02
-#define UNMARKED 0x03
 #define UCOL_VARIABLE_MAX 0x20
 #define UCOL_NEW_IGNORABLE 0
 
@@ -433,11 +432,11 @@ int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t
           primary2 = (order >>= 8) & 0xFF;;
           primary1 = order >>= 8;
 
-          if((tertiary & 0xF0) == 0xF0) { /* This indicates a long primary (11110000) */
-            /* Note: long primary can appear both as a normal CE or as a continuation CE (not that it matters much) */
+          if(isLongPrimary(ce)) { 
+            /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
             primary3 = secondary;
-            secondary = (tertiary & 0x0F) + MIN_VALUE;
-            tertiary = UNMARKED;
+            secondary = UCOL_UNMARKED;
+            tertiary += MIN_VALUE;
           }
 
           if(shifted && primary1 < variableMax && primary1 != 0) { 
@@ -602,6 +601,11 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     uint8_t *caseStart = cases;
     uint8_t *quadStart = quads;
 
+    *(secondaries++) = UCOL_LEVELTERMINATOR;
+    *(tertiaries++) = UCOL_LEVELTERMINATOR;
+    *(cases++) = UCOL_LEVELTERMINATOR;
+    *(quads++) = UCOL_LEVELTERMINATOR;
+
     uint32_t order = 0;
     uint32_t ce = 0;
 
@@ -631,35 +635,23 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
             /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
             ce = order;
 
-            tertiary = (order & UCOL_TERTIARYORDERMASK);
+            tertiary = (order & UCOL_NEW_TERTIARYORDERMASK);
             secondary = (order >>= 8) & 0xFF;
-            if(!isContinuation(ce)) {
-              primary3 = 0; /* the third primary */
-              primary2 = (order >>= 8) & 0xFF;
-              primary1 = order >>= 8;
-              if(upperFirst && !isContinuation(ce)) {
-                /* Upper cases have this bit turned on, so that they always come after the lower cases */
-                /* if we want to reverse this situation, we'll flip this bit */
-                tertiary ^= 0x80;
-              }
+            primary3 = 0; /* the third primary */
+            primary2 = (order >>= 8) & 0xFF;
+            primary1 = order >>= 8;
 
-            } else {
-              primary3 = 0;
-              if(carry == 0) {
-                carry = (order >>= 8) & 0xF;
-                primary1 = (order >>= 4) & 0xFF;
-              } else {
-                primary2 = (order >>= 8) & 0xFF;
-                primary1 = ((order >>= 8) & 0xF) | carry<<4;
-                carry = 0;
-              }
+            if(upperFirst && ((ce & 0x80) == 0)) { /* if there is a case bit */
+              /* Upper cases have this bit turned on, so that they always come after the lower cases */
+              /* if we want to reverse this situation, we'll flip this bit */
+              tertiary ^= UCOL_CASE_BIT_MASK;
             }
             
-            if((tertiary & 0xF0) == 0xF0) { /* This indicates a long primary (11110000) */
-              /* Note: long primary can appear both as a normal CE or as a continuation CE (not that it matters much) */
+            if(isLongPrimary(ce)) { 
+              /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
               primary3 = secondary;
-              secondary = (tertiary & 0x0F) + MIN_VALUE;
-              tertiary = UNMARKED;
+              secondary = UCOL_UNMARKED;
+              tertiary += MIN_VALUE;
             }
 
 
@@ -694,29 +686,27 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                 }
               }               
 
-              if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
+              if(secondary > compareSec) { 
                 /* This thing should also contain the compression logic, as in: */
-                /*
-                  if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
-                      ++secondary[-1]; // simply increment!!
-                  else *secondary++ = ws;
-                */
-
-                *secondaries++ = secondary;
-                sortKeySize++;
-                if(isFrenchSec) {
-                  /* Do the special handling for French secondaries */
-                  /* We need to get continuation elements and do intermediate restore */
-                  /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
-                  if(isContinuation(ce)) {
-                    if (frenchStartPtr == NULL) {
-                      frenchStartPtr = secondaries - 2;
+                if (secondary == UCOL_COMMON2 && UCOL_COMMON2 <= *(secondaries-1) && *(secondaries-1) < UCOL_COMMON_MAX2) {
+                    ++*(secondaries-1); /* simply increment!! */
+                } else {
+                  *secondaries++ = secondary;
+                  sortKeySize++;
+                  if(isFrenchSec) {
+                    /* Do the special handling for French secondaries */
+                    /* We need to get continuation elements and do intermediate restore */
+                    /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
+                    if(isContinuation(ce)) {
+                      if (frenchStartPtr == NULL) {
+                        frenchStartPtr = secondaries - 2;
+                      }
+                      frenchEndPtr = secondaries-1;
+                    } else if (frenchStartPtr != NULL) {
+                        /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                      uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
+                      frenchStartPtr = NULL;
                     }
-                    frenchEndPtr = secondaries-1;
-                  } else if (frenchStartPtr != NULL) {
-                      /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
-                    uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
-                    frenchStartPtr = NULL;
                   }
                 }
               }
@@ -730,19 +720,21 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                 *(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);
               }
 
-              if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
+              if(tertiary > compareTer) { 
                 /* This thing should also contain the compression logic, as in: */
-                /*
-                  if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
-                      ++secondary[-1]; // simply increment!!
-                  else *secondary++ = ws;
-                */
-
-                *tertiaries++ = tertiary;
-                sortKeySize++;
+                if (tertiary == UCOL_COMMON3 && UCOL_COMMON3 <= *(tertiaries-1) && *(tertiaries-1) < UCOL_COMMON_MAX3) {
+                    ++*(tertiaries-1); /* simply increment!! */
+                } else {
+                  *tertiaries++ = tertiary;
+                  sortKeySize++;
+                }
               }
 
               if(shifted && primary1 > compareQuad) {
+                /* Some compression should go here also */
+                //if (tertiary == UCOL_COMMON3 && UCOL_COMMON3 <= *(tertiaries-1) && *(tertiaries-1) < UCOL_COMMON_MAX3) {
+                //    ++*(tertiaries-1); /* simply increment!! */
+                //} else {
                 *quads++ = 0xFF;
                 sortKeySize++;
               }
@@ -792,32 +784,29 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
           if(frenchStartPtr != NULL) { 
             uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
           }           
-          for(i = 0; i<secsize; i++) {
+          for(i = 1; i<secsize; i++) {
               *(primaries++) = *(secondaries-i-1);
           }
         } else { 
-          uprv_memcpy(primaries, secStart, secsize); 
+          uprv_memcpy(primaries, secStart+1, secsize); 
           primaries += secsize;
         }
 
       }
 
       if(doCase) {
-        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t casesize = cases - caseStart;
         uprv_memcpy(primaries, caseStart, casesize);
         primaries += casesize;
       }
 
       if(compareTer == 0) {
-        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t tersize = tertiaries - terStart;
         uprv_memcpy(primaries, terStart, tersize);
         primaries += tersize;
       }
 
       if(compareQuad == 0) {
-          *(primaries++) = UCOL_LEVELTERMINATOR;
           uint32_t quadsize = quads - quadStart;
           uprv_memcpy(primaries, quadStart, quadsize);
           primaries += quadsize;
