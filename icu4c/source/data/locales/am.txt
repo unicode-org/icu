@@ -208,6 +208,7 @@ am {
         za { "\u12E1\u12CB\u1295\u130D\u129B" }
         zh { "\u127B\u12ED\u1295\u129B" }
         zu { "\u12D9\u1209\u129B" }
+        byn { "\u1265\u120A\u1295" }
         gez { "\u130D\u12D5\u12DD\u129B" }
         tig { "\u1275\u130D\u1228" }
         sid { "\u1232\u12F3\u121D\u129B" }
