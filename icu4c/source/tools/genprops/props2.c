@@ -85,19 +85,6 @@ initAdditionalProperties() {
 }
 
 U_CFUNC void
-setMainProperties(uint32_t start, uint32_t limit, uint32_t value) {
-#if 0
-    /* ### TODO: remove this function */
-    UErrorCode errorCode=U_ZERO_ERROR;
-
-    if(!upvec_setValue(pv, start, limit, 2, value, 0xffffffff, &errorCode)) {
-        fprintf(stderr, "genprops: unable to set main properties: %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
-#endif
-}
-
-U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode) {
     char *basename;
     UErrorCode errorCode;
@@ -286,12 +273,12 @@ blockNames[UBLOCK_COUNT]={
     "IPA Extensions",
     "Spacing Modifier Letters",
     "Combining Diacritical Marks",
-    "Greek",
+    "Greek and Coptic",                         /* used to be just "Greek" before Unicode 3.2 */
     "Cyrillic",
     "Armenian",                                 /* 10 */
     "Hebrew",
     "Arabic",
-    "Syriac  ",
+    "Syriac",
     "Thaana",
     "Devanagari",
     "Bengali",
@@ -306,7 +293,7 @@ blockNames[UBLOCK_COUNT]={
     "Thai",
     "Lao",
     "Tibetan",
-    "Myanmar ",
+    "Myanmar",
     "Georgian",
     "Hangul Jamo",                              /* 30 */
     "Ethiopic",
@@ -321,7 +308,7 @@ blockNames[UBLOCK_COUNT]={
     "General Punctuation",                      /* 40 */
     "Superscripts and Subscripts",
     "Currency Symbols",
-    "Combining Marks for Symbols",
+    "Combining Diacritical Marks for Symbols",  /* used to be "Combining Marks for Symbols" before Unicode 3.2 */
     "Letterlike Symbols",
     "Number Forms",
     "Arrows",
@@ -356,7 +343,7 @@ blockNames[UBLOCK_COUNT]={
     "High Surrogates",
     "High Private Use Surrogates",
     "Low Surrogates",
-    "Private Use",
+    "Private Use Area",                         /* used to be "Private Use" before Unicode 3.2 */
     "CJK Compatibility Ideographs",
     "Alphabetic Presentation Forms",            /* 80 */
     "Arabic Presentation Forms-A",
@@ -374,7 +361,21 @@ blockNames[UBLOCK_COUNT]={
     "Mathematical Alphanumeric Symbols",
     "CJK Unified Ideographs Extension B",
     "CJK Compatibility Ideographs Supplement",
-    "Tags"
+    "Tags",
+    "Cyrillic Supplementary",                   /* first new block in Unicode 3.2 */
+    "Tagalog",
+    "Hanunoo",
+    "Buhid",                                    /* 100 */
+    "Tagbanwa",
+    "Miscellaneous Mathematical Symbols-A",
+    "Supplemental Arrows-A",
+    "Supplemental Arrows-B",
+    "Miscellaneous Mathematical Symbols-B",
+    "Supplemental Mathematical Operators",
+    "Katakana Phonetic Extensions",
+    "Variation Selectors",
+    "Supplementary Private Use Area-A",
+    "Supplementary Private Use Area-B"          /* 110 */
 };
 
 static void
@@ -394,9 +395,17 @@ blocksLineFn(void *context,
     /* parse block name */
     i=getTokenIndex(blockNames, UBLOCK_COUNT, fields[1][0]);
     if(i<0) {
-        fprintf(stderr, "genprops error: unknown block name \"%s\" in Blocks.txt\n", fields[1][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
+        if(isToken("Greek", fields[1][0])) {
+            i=UBLOCK_GREEK; /* Unicode 3.2 renames this to "Greek and Coptic" */
+        } else if(isToken("Combining Marks for Symbols", fields[1][0])) {
+            i=UBLOCK_COMBINING_MARKS_FOR_SYMBOLS; /* Unicode 3.2 renames this to "Combining Diacritical Marks for Symbols" */
+        } else if(isToken("Private Use", fields[1][0])) {
+            i=UBLOCK_PRIVATE_USE; /* Unicode 3.2 renames this to "Private Use Area" */
+        } else {
+            fprintf(stderr, "genprops error: unknown block name \"%s\" in Blocks.txt\n", fields[1][0]);
+            *pErrorCode=U_PARSE_ERROR;
+            exit(U_PARSE_ERROR);
+        }
     }
 
     if(!upvec_setValue(pv, start, limit, 0, (uint32_t)i<<UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK, pErrorCode)) {
@@ -463,8 +472,14 @@ propListLineFn(void *context,
     /* parse binary property name */
     i=getTokenIndex(propListNames, sizeof(propListNames)/sizeof(*propListNames), fields[1][0]);
     if(i<0) {
-        fprintf(stderr, "genprops warning: unknown binary property name \"%s\" in PropList.txt\n", fields[1][0]);
-    } else if(!upvec_setValue(pv, start, limit, 1, FLAG(i), FLAG(i), pErrorCode)) {
+        if(isToken("White_space", fields[1][0])) {
+            i=0; /* accept misspelled property name in Unicode 3.1.1 */
+        } else {
+            fprintf(stderr, "genprops warning: unknown binary property name \"%s\" in PropList.txt\n", fields[1][0]);
+            return;
+        }
+    }
+    if(!upvec_setValue(pv, start, limit, 1, FLAG(i), FLAG(i), pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set binary property: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
