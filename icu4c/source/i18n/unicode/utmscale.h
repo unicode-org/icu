@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and
+* Copyright (C) 2004 - 2005, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -66,7 +66,7 @@
  *    <td>Jan 1, 1601</td>
  *  </tr>
  *  <tr>
- *    <td>UDTS_WINDOWS_DATE_TIME</td>
+ *    <td>UDTS_DOTNET_DATE_TIME</td>
  *    <td>int64_t</td>
  *    <td>ticks (100 nanoseconds)</td>
  *
@@ -161,7 +161,7 @@
  *
  *<p>
  * So what to use for this pivot? Java time has plenty of range, but cannot represent
- * Windows datetimes without severe loss of precision. ICU4C time addresses this by using a
+ * .NET <code>System.DateTime</code> values without severe loss of precision. ICU4C time addresses this by using a
  * <code>double</code> that is otherwise equivalent to the Java time. However, there are disadvantages
  * with <code>doubles</code>. They provide for much more graceful degradation in arithmetic operations.
  * But they only have 53 bits of accuracy, which means that they will lose precision when
@@ -177,12 +177,12 @@
  * have a fixed size.
  *
  *<p>
- * Because of these issues, we ended up concluding that the Windows datetime would be the
- * best pivot. However, we use the full range allowed by the datatype, allowing for
- * datetimes back to 29,000 BC and up to 29,000 AD. This time scale is very fine grained,
- * does not lose precision, and covers a range that will meet almost all requirements.
- * It will not handle the range that Java times do, but frankly, being able to handle dates
- * before 29,000 BC or after 29,000 AD is of very limited interest.
+ * Because of these issues, we ended up concluding that the .NET framework's
+ * <code>System.DateTime</code> would be the best pivot. However, we use the full range
+ * allowed by the datatype, allowing for datetimes back to 29,000 BC and up to 29,000 AD.
+ * This time scale is very fine grained, does not lose precision, and covers a range that
+ * will meet almost all requirements. It will not handle the range that Java times do,
+ * but frankly, being able to handle dates before 29,000 BC or after 29,000 AD is of very limited interest.
  *
  */
 
@@ -226,12 +226,12 @@ typedef enum UDateTimeScale {
     UDTS_WINDOWS_FILE_TIME,
     
     /**
-     * Used in Windows for dates and times (?). Data is an <code>int64_t</code>. Value
+     * Used in the .NET framework's <code>System.DateTime</code> structure. Data is an <code>int64_t</code>. Value
      * is ticks (1 tick == 100 nanoseconds) since January 1, 0001.
      *
      * @draft ICU 3.2
      */
-    UDTS_WINDOWS_DATE_TIME,
+    UDTS_DOTNET_DATE_TIME,
     
     /**
      * Used in older Macintosh systems. Data is an <code>int32_t</code>. Value
