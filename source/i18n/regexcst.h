@@ -171,7 +171,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doLiteralChar, 255, 12,0,  TRUE}     //  78 
     , {doExit, 255, 79,0,  TRUE}     //  79      errorDeath
  };
-static const char *RegexStateNames[] = {    0,
+static const char * const RegexStateNames[] = {    0,
      "start",
      "term",
     0,
