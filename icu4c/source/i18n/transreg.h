@@ -19,6 +19,57 @@ class Entry;
 class Spec;
 class UnicodeString;
 
+//------------------------------------------------------------------
+// TransliteratorAlias
+//------------------------------------------------------------------
+
+/**
+ * A TransliteratorAlias object is returned by get() if the given ID
+ * actually translates into something else.  The caller then invokes
+ * the create() method on the alias to create the actual
+ * transliterator, and deletes the alias.
+ *
+ * Why all the shenanigans?  To prevent circular calls between
+ * the registry code and the transliterator code that deadlocks.
+ */
+class TransliteratorAlias {
+ public:
+    /**
+     * Construct a simple alias.
+     */
+    TransliteratorAlias(const UnicodeString& aliasID);
+    
+    /**
+     * Construct a compound RBT alias.
+     */
+    TransliteratorAlias(const UnicodeString& ID, const UnicodeString& idBlock,
+                        Transliterator* adopted, int32_t idSplitPoint);
+
+    ~TransliteratorAlias();
+    
+    /**
+     * The whole point of create() is that the caller must invoke
+     * it when the registry mutex is NOT held, to prevent deadlock.
+     * It may only be called once.
+     */
+    Transliterator* create(UParseError&, UErrorCode&);
+    
+ private:
+    // We actually come in two flavors:
+    // 1. Simple alias
+    //    Here aliasID is the alias string.  Everything else is
+    //    null, zero, empty.
+    // 2. CompoundRBT
+    //    Here ID is the ID, aliasID is the idBlock, trans is the
+    //    contained RBT, and idSplitPoint is the offet in aliasID
+    //    where the contained RBT goes.
+    UnicodeString ID;
+    UnicodeString aliasID;
+    Transliterator* trans; // owned
+    int32_t idSplitPoint;
+};
+
+
 /**
  * A registry of system transliterators.  This is the data structure
  * that implements the mapping between transliterator IDs and the data
@@ -57,13 +108,13 @@ class TransliteratorRegistry {
      * compound) attempt to instantiate it from the registry.  Return
      * 0 on failure.
      *
-     * Return a non-empty aliasReturn value if the ID points to an alias.
+     * Return a non-NULL aliasReturn value if the ID points to an alias.
      * We cannot instantiate it ourselves because the alias may contain
      * filters or compounds, which we do not understand.  Caller should
-     * make aliasReturn empty before calling.
+     * make aliasReturn NULL before calling.
      */
     Transliterator* get(const UnicodeString& ID,
-                        UnicodeString& aliasReturn,
+                        TransliteratorAlias*& aliasReturn,
                         UParseError& parseError,
                         UErrorCode& status);
 
@@ -246,7 +297,7 @@ class TransliteratorRegistry {
 
     Transliterator* instantiateEntry(const UnicodeString& ID,
                                      Entry *entry,
-                                     UnicodeString& aliasReturn,
+                                     TransliteratorAlias*& aliasReturn,
                                      UParseError& parseError,
                                      UErrorCode& status);
 

@@ -1029,29 +1029,28 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
 
     else {
         // Create the actual transliterator from the registry
-        //if (parseError != 0) {
-            parseError.line = parseError.offset = 0;
-            parseError.preContext[0] = parseError.postContext[0] = 0;
-        //}
         if (registry == 0) {
             initializeRegistry();
         }
+        parseError.line = parseError.offset = 0;
+        parseError.preContext[0] = parseError.postContext[0] = 0;
+        TransliteratorAlias* alias = 0;
         {
             Mutex lock(&registryMutex);
-            str.truncate(0);
-            t = registry->get(id, str, parseError,status);
+            t = registry->get(id, alias, parseError,status);
             // Need to enclose this in a block to prevent deadlock when
             // instantiating aliases (below).
         }
         
-        if (str.length() != 0) {
+        if (alias != 0) {
             // assert(t==0);
             // Instantiate an alias
-            t = createInstance(str, UTRANS_FORWARD, parseError,status);
+            t = alias->create(parseError, status);
+            delete alias;
         }
 
         if (t == 0) {
-            // Creation failed; the ID is invalid or is an alias
+            // Creation failed; the ID is invalid
             delete filter;
             return 0;
         }
