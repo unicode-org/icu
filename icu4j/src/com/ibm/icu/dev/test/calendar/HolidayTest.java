@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HolidayTest.java,v $ 
- * $Date: 2004/02/09 17:06:40 $ 
- * $Revision: 1.8 $
+ * $Date: 2004/02/25 00:04:39 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -125,12 +125,6 @@ public class HolidayTest extends TestFmwk {
         //        logln("rule: " + h.getRule().toString());
 
         //        h.setRule(h.getRule());
-    }
-    
-    private static Date getDate(int y, int m, int d) {
-    	final Calendar cal = new GregorianCalendar();
-    	cal.set(y, m, d);
-    	return cal.getTime();
     }
     
     public void TestCoverage(){
