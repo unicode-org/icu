@@ -107,12 +107,12 @@ void TestAliasConflict(void) {
 
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
-    if(U_FAILURE(status)) { 
+    if(U_FAILURE(status)) {
         log_err("Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(iw);
     result = ures_getStringByKey(he, "localPatternChars", &resultLen, &status);
-    if(U_FAILURE(status) || result == NULL) { 
+    if(U_FAILURE(status) || result == NULL) {
         log_err("Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(he);
@@ -145,7 +145,7 @@ void TestConstruction1()
     const char*      locale="te_IN";
 
     log_verbose("Testing ures_open()......\n");
-    
+
 
     testdatapath=loadTestData(&err);
     if(U_FAILURE(err))
@@ -153,7 +153,7 @@ void TestConstruction1()
         log_err("Could not load testdata.dat %s \n",myErrorName(err));
         return;
     }
-    
+
     test1=ures_open(testdatapath, NULL, &err);
     if(U_FAILURE(err))
     {
@@ -161,7 +161,7 @@ void TestConstruction1()
         return;
     }
 
-    
+
     test2=ures_open(testdatapath, locale, &err);
     if(U_FAILURE(err))
     {
@@ -170,13 +170,13 @@ void TestConstruction1()
     }
     result1= ures_getStringByKey(test1, "string_in_Root_te_te_IN", &resultLen, &err);
     result2= ures_getStringByKey(test2, "string_in_Root_te_te_IN", &resultLen, &err);
-    
-    
+
+
     if (U_FAILURE(err)) {
         log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(err));
         return;
     }
-    
+
     u_uastrcpy(temp, "TE_IN");
 
     if(u_strcmp(result2, temp)!=0)
@@ -186,30 +186,30 @@ void TestConstruction1()
         log_err("Construction test failed for ures_open();\n");
         if(!VERBOSITY)
             log_info("(run verbose for more information)\n");
-        
+
         log_verbose("\nGot->");
         for(n=0;result2[n];n++)
         {
             log_verbose("%04X ",result2[n]);
         }
         log_verbose("<\n");
-        
+
         log_verbose("\nWant>");
         for(n=0;temp[n];n++)
         {
             log_verbose("%04X ",temp[n]);
         }
         log_verbose("<\n");
-        
+
     }
-    
+
     log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", austrdup(result1));
     log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
-    
+
     /* Test getVersionNumber*/
     log_verbose("Testing version number\n");
     log_verbose("for getVersionNumber :  %s\n", ures_getVersionNumber(test1));
-    
+
     ures_close(test1);
     ures_close(test2);
 }
@@ -405,7 +405,7 @@ static void TestFallback()
     UResourceBundle *fr_FR = NULL;
     const UChar *junk; /* ignored */
     int32_t resultLen;
-    
+
     log_verbose("Opening fr_FR..");
     fr_FR = ures_open(NULL, "fr_FR", &status);
     if(U_FAILURE(status))
@@ -413,10 +413,10 @@ static void TestFallback()
         log_err("Couldn't open fr_FR - %d\n", status);
         return;
     }
-    
+
     status = U_ZERO_ERROR;
-    
-    
+
+
     /* clear it out..  just do some calls to get the gears turning */
     junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
     status = U_ZERO_ERROR;
@@ -424,17 +424,17 @@ static void TestFallback()
     status = U_ZERO_ERROR;
     junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
     status = U_ZERO_ERROR;
-    
+
     /* OK first one. This should be a Default value. */
     junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n",
             u_errorName(status));
     }
-    
+
     status = U_ZERO_ERROR;
-    
+
     /* and this is a Fallback, to fr */
     junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
@@ -442,9 +442,9 @@ static void TestFallback()
         log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %s\n", 
             u_errorName(status));
     }
-    
+
     status = U_ZERO_ERROR;
-    
+
     ures_close(fr_FR);
 }
 
@@ -513,105 +513,105 @@ TestOpenDirect(void) {
 }
 
 static void TestFileStream(void){
-	int32_t c = 0;
-	int32_t c1=0;
-	UErrorCode status = U_ZERO_ERROR;
-	const char* testdatapath = loadTestData(&status);
-	char* fileName = (char*) uprv_malloc(uprv_strlen(testdatapath) +10);
-	FileStream* stream = NULL;
-		/* these should not be closed */
-	FileStream* pStdin  = T_FileStream_stdin();
-	FileStream* pStdout = T_FileStream_stdout();
-	FileStream* pStderr = T_FileStream_stderr();
+    int32_t c = 0;
+    int32_t c1=0;
+    UErrorCode status = U_ZERO_ERROR;
+    const char* testdatapath = loadTestData(&status);
+    char* fileName = (char*) uprv_malloc(uprv_strlen(testdatapath) +10);
+    FileStream* stream = NULL;
+    /* these should not be closed */
+    FileStream* pStdin  = T_FileStream_stdin();
+    FileStream* pStdout = T_FileStream_stdout();
+    FileStream* pStderr = T_FileStream_stderr();
 
-	const char* testline = "This is a test line";
-	int32_t bufLen =uprv_strlen(testline)+10;
-	char* buf = (char*) uprv_malloc(bufLen);
-	int32_t retLen = 0;
-    
-	uprv_strcpy(fileName,testdatapath);
-	uprv_strcat(fileName,".dat");
-	stream = T_FileStream_open(fileName, "r");
-	if(stream==NULL){
-		log_data_err("T_FileStream_open failed to open %s\n",fileName);
-	}
-	if(!T_FileStream_file_exists(fileName)){
-		log_data_err("T_FileStream_file_exists failed to verify existence of %s \n",fileName);
-	}
+    const char* testline = "This is a test line";
+    int32_t bufLen =uprv_strlen(testline)+10;
+    char* buf = (char*) uprv_malloc(bufLen);
+    int32_t retLen = 0;
 
-	retLen=T_FileStream_read(stream,&c,1);
-	if(retLen==0){
-		log_data_err("T_FileStream_read failed to read from %s \n",fileName);
-	}
+    uprv_strcpy(fileName,testdatapath);
+    uprv_strcat(fileName,".dat");
+    stream = T_FileStream_open(fileName, "r");
+    if(stream==NULL){
+        log_data_err("T_FileStream_open failed to open %s\n",fileName);
+    }
+    if(!T_FileStream_file_exists(fileName)){
+        log_data_err("T_FileStream_file_exists failed to verify existence of %s \n",fileName);
+    }
+
+    retLen=T_FileStream_read(stream,&c,1);
+    if(retLen==0){
+        log_data_err("T_FileStream_read failed to read from %s \n",fileName);
+    }
     retLen=0;
-	T_FileStream_rewind(stream);
-	T_FileStream_read(stream,&c1,1);
-	if(c!=c1){
-		log_data_err("T_FileStream_rewind failed to rewind %s \n",fileName);
-	}
-	T_FileStream_rewind(stream);
-	c1 = T_FileStream_peek(stream);
-	if(c!=c1){
-		log_data_err("T_FileStream_peek failed to peekd %s \n",fileName);
-	}
-	c = T_FileStream_getc(stream);
-	T_FileStream_ungetc(c,stream);
-	if(c!= T_FileStream_getc(stream)){
-		log_data_err("T_FileStream_ungetc failed to d %s \n",fileName);
-	}
-	
-	if(T_FileStream_size(stream)<=0){
-		log_data_err("T_FileStream_size failed to d %s \n",fileName);
-	}
-	if(T_FileStream_error(stream)){
-		log_data_err("T_FileStream_error shouldn't have an error %s\n",fileName);
+    T_FileStream_rewind(stream);
+    T_FileStream_read(stream,&c1,1);
+    if(c!=c1){
+        log_data_err("T_FileStream_rewind failed to rewind %s \n",fileName);
     }
-    T_FileStream_putc(stream, 0x20);
-	if(!T_FileStream_error(stream)){
-		log_data_err("T_FileStream_error didn't get an error %s\n",fileName);
+    T_FileStream_rewind(stream);
+    c1 = T_FileStream_peek(stream);
+    if(c!=c1){
+        log_data_err("T_FileStream_peek failed to peekd %s \n",fileName);
+    }
+    c = T_FileStream_getc(stream);
+    T_FileStream_ungetc(c,stream);
+    if(c!= T_FileStream_getc(stream)){
+        log_data_err("T_FileStream_ungetc failed to d %s \n",fileName);
     }
 
-	T_FileStream_close(stream);
-	/* test writing function */
-	stream=NULL;
-	uprv_strcpy(fileName,testdatapath);
-	uprv_strcat(fileName,".tmp");
-	stream = T_FileStream_open(fileName,"w+");
-	
-	if(stream == NULL){
-		log_data_err("Could not open %s for writing\n",fileName);
-	}
-	c= '$';
-	T_FileStream_putc(stream,c);
-	T_FileStream_rewind(stream);
-	if(c != T_FileStream_getc(stream)){
-		log_data_err("T_FileStream_putc failed %s\n",fileName);
-	}
-	
-	T_FileStream_rewind(stream);
-	T_FileStream_writeLine(stream,testline);
-	T_FileStream_rewind(stream);
-	T_FileStream_readLine(stream,buf,bufLen);
-	if(uprv_strncmp(testline, buf,uprv_strlen(buf))!=0){
-		log_data_err("T_FileStream_writeLine failed %s\n",fileName);
-	}
-	
-	T_FileStream_rewind(stream);
-	T_FileStream_write(stream,testline,uprv_strlen(testline));
-	T_FileStream_rewind(stream);
-	retLen = T_FileStream_read(stream, buf, bufLen);
-	if(uprv_strncmp(testline, buf,retLen)!=0){
-		log_data_err("T_FileStream_write failed %s\n",fileName);
-	}
+    if(T_FileStream_size(stream)<=0){
+        log_data_err("T_FileStream_size failed to d %s \n",fileName);
+    }
+    if(T_FileStream_error(stream)){
+        log_data_err("T_FileStream_error shouldn't have an error %s\n",fileName);
+    }
+    T_FileStream_writeLine(stream,testline);
+    if(!T_FileStream_error(stream)){
+        log_data_err("T_FileStream_error didn't get an error %s\n",fileName);
+    }
 
-	T_FileStream_close(stream);
+    T_FileStream_close(stream);
+    /* test writing function */
+    stream=NULL;
+    uprv_strcpy(fileName,testdatapath);
+    uprv_strcat(fileName,".tmp");
+    stream = T_FileStream_open(fileName,"w+");
 
-	if(!T_FileStream_remove(fileName)){
-		log_data_err("T_FileStream_remove failed to delete %s\n",fileName);
-	}
-	
-	
-	uprv_free(fileName);
-	uprv_free(buf);
+    if(stream == NULL){
+        log_data_err("Could not open %s for writing\n",fileName);
+    }
+    c= '$';
+    T_FileStream_putc(stream,c);
+    T_FileStream_rewind(stream);
+    if(c != T_FileStream_getc(stream)){
+        log_data_err("T_FileStream_putc failed %s\n",fileName);
+    }
+
+    T_FileStream_rewind(stream);
+    T_FileStream_writeLine(stream,testline);
+    T_FileStream_rewind(stream);
+    T_FileStream_readLine(stream,buf,bufLen);
+    if(uprv_strncmp(testline, buf,uprv_strlen(buf))!=0){
+        log_data_err("T_FileStream_writeLine failed %s\n",fileName);
+    }
+
+    T_FileStream_rewind(stream);
+    T_FileStream_write(stream,testline,uprv_strlen(testline));
+    T_FileStream_rewind(stream);
+    retLen = T_FileStream_read(stream, buf, bufLen);
+    if(uprv_strncmp(testline, buf,retLen)!=0){
+        log_data_err("T_FileStream_write failed %s\n",fileName);
+    }
+
+    T_FileStream_close(stream);
+
+    if(!T_FileStream_remove(fileName)){
+        log_data_err("T_FileStream_remove failed to delete %s\n",fileName);
+    }
+
+
+    uprv_free(fileName);
+    uprv_free(buf);
 
 }
