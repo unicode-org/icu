@@ -100,16 +100,16 @@ static UMTX                LOCK;
 static TimeZone*           DEFAULT_ZONE = NULL;
 static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
 
-// #ifdef ICU_TIMEZONE_USE_DEPRECATES
+#ifdef U_USE_TIMEZONE_OBSOLETE_2_8
 static UnicodeString* OLSON_IDS = 0;
-// #endif
+#endif
 
 UBool timeZone_cleanup()
 {
-// #ifdef ICU_TIMEZONE_USE_DEPRECATES
+#ifdef U_USE_TIMEZONE_OBSOLETE_2_8
     delete []OLSON_IDS;
     OLSON_IDS = 0;
-// #endif
+#endif
 
     delete DEFAULT_ZONE;
     DEFAULT_ZONE = NULL;
@@ -316,8 +316,7 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
     return top;
 }
 
-// TODO: #ifdef out this code after 8-Nov-2003
-// #ifdef ICU_TIMEZONE_USE_DEPRECATES
+#ifdef U_USE_TIMEZONE_OBSOLETE_2_8
 
 /**
  * Load all the ids from the "zoneinfo" resource bundle into a static
@@ -372,7 +371,7 @@ static UBool loadOlsonIDs() {
     return TRUE;
 }
 
-// #endif //ICU_TIMEZONE_USE_DEPRECATES
+#endif
 
 // -------------------------------------
 
