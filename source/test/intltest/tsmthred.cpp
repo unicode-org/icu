@@ -20,7 +20,9 @@
 
 #define HAVE_IMP
 
+#if (ICU_USE_THREADS == 1)
 #include <pthread.h>
+#endif
 
 #if defined(__hpux) && defined(HPUX_CMA)
 # if defined(read)  // read being defined as cma_read causes trouble with iostream::read
