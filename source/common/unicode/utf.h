@@ -291,6 +291,7 @@ typedef int32_t UTextOffset;
  *
  * Set c to the code point that starts at code unit i
  * and advance i to beyond the code units of this code point (post-increment).
+ * i must point to the first code unit of a code point.
  * \pre 0<=i<length
  * \post 0<i<=length
  */
@@ -300,6 +301,7 @@ typedef int32_t UTextOffset;
  *
  * Append the code units of code point c to the string at index i
  * and advance i to beyond the new code units (post-increment).
+ * The code units beginning at index i will be overwritten.
  * \pre 0<c<0x10ffff
  * \pre 0<=i<length
  * \post 0<i<=length
@@ -310,6 +312,7 @@ typedef int32_t UTextOffset;
  *
  * Advance i to beyond the code units of the code point that begins at i.
  * I.e., advance i by one code point.
+ * i must point to the first code unit of a code point.
  * \pre 0<=i<length
  * \post 0<i<=length
  */
@@ -319,6 +322,7 @@ typedef int32_t UTextOffset;
  *
  * Advance i to beyond the code units of the n code points where the first one begins at i.
  * I.e., advance i by n code points.
+ * i must point to the first code unit of a code point.
  * \pre 0<=i<length
  * \post 0<i<=length
  */
@@ -330,6 +334,7 @@ typedef int32_t UTextOffset;
  * of a code point.
  * The input index points to any code unit of a code point and is moved to point to
  * the first code unit of the same code point. i is never incremented.
+ * This can be used to start an iteration with UTF_NEXT_CHAR() from a random index.
  * \pre start<=i<length
  * \post start<=i<length
  */
@@ -338,7 +343,9 @@ typedef int32_t UTextOffset;
  * \def UTF_PREV_CHAR(s, start, i, c)
  *
  * Set c to the code point that has code units before i
- * and move i forward to the first code unit of this code point (pre-increment).
+ * and move i backward (towards the beginning of the string)
+ * to the first code unit of this code point (pre-increment).
+ * i must point to the first code unit after the last unit of a code point (i==length is allowed).
  * \pre start<i<=length
  * \post start<=i<length
  */
@@ -346,8 +353,10 @@ typedef int32_t UTextOffset;
 /**
  * \def UTF_BACK_1(s, start, i)
  *
- * Move i forward to the first code unit of the code point that has code units before i.
- * I.e., move i forward by one code point.
+ * Move i backward (towards the beginning of the string)
+ * to the first code unit of the code point that has code units before i.
+ * I.e., move i backward by one code point.
+ * i must point to the first code unit after the last unit of a code point (i==length is allowed).
  * \pre start<i<=length
  * \post start<=i<length
  */
@@ -355,8 +364,10 @@ typedef int32_t UTextOffset;
 /**
  * \def UTF_BACK_N(s, start, i, n)
  *
- * Move i forward to the first code unit of the n code points that have code units before i.
- * I.e., move i forward by n code points.
+ * Move i backward (towards the beginning of the string)
+ * to the first code unit of the n code points that have code units before i.
+ * I.e., move i backward by n code points.
+ * i must point to the first code unit after the last unit of a code point (i==length is allowed).
  * \pre start<i<=length
  * \post start<=i<length
  */
@@ -364,10 +375,11 @@ typedef int32_t UTextOffset;
 /**
  * \def UTF_SET_CHAR_LIMIT(s, start, i, length)
  *
- * Take the random-access index i and adjust it so that it points beyond the
+ * Take the random-access index i and adjust it so that it points beyond
  * a code point. The input index points beyond any code unit
  * of a code point and is moved to point beyond the last code unit of the same
  * code point. i is never decremented.
+ * This can be used to start an iteration with UTF_PREV_CHAR() from a random index.
  * \pre start<i<=length
  * \post start<i<=length
  */
