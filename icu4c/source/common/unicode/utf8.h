@@ -58,7 +58,7 @@ utf8_countTrailBytes[256];
 #define UTF8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict);
+utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict, UBool *pIsError);
 
 U_CAPI int32_t U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c);
@@ -209,7 +209,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     (c)=(s)[(i)++]; \
     if((c)>=0x80) { \
         if(UTF8_IS_LEAD(c)) { \
-            (c)=utf8_nextCharSafeBody(s, &(i), (int32_t)(length), c, strict); \
+            (c)=utf8_nextCharSafeBody(s, &(i), (int32_t)(length), c, strict, NULL); \
         } else { \
             (c)=UTF8_ERROR_VALUE_1; \
         } \
