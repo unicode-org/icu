@@ -90,6 +90,9 @@ U_NAMESPACE_BEGIN
 class U_I18N_API Format : public UObject {
 public:
 
+    /** Destructor
+     * @draft ICU 2.4
+     */
     virtual ~Format();
 
     /**
@@ -256,6 +259,7 @@ protected:
      * @param pattern The pattern to copy into the parseError
      * @param pos The position in pattern where the error occured
      * @param parseError The UParseError object to fill in
+     * @draft ICU 2.4
      */
     inline void syntaxError(const UnicodeString& pattern,
                             int32_t pos,
