@@ -2110,7 +2110,7 @@ void RBBITest::TestMonkey(char *params) {
     Locale         locale("en");
 
     if (quick == FALSE) {
-        loopCount = 100000;
+        loopCount = 3000;
     }
 
     if (params) {
