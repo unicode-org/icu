@@ -211,7 +211,7 @@ public:
      * @return the number of zones in the equivalency group containing
      * 'id', or zero if 'id' is not a valid system ID
      * @see #getEquivalentID
-     * @draft ICU 1.7
+     * @stable
      */
     static int32_t countEquivalentIDs(const UnicodeString& id);
 
@@ -232,7 +232,7 @@ public:
      * containing 'id', or an empty string if 'id' is not a valid
      * system ID or 'index' is out of range
      * @see #countEquivalentIDs
-     * @draft ICU 1.7
+     * @stable
      */
     static const UnicodeString getEquivalentID(const UnicodeString& id,
                                                int32_t index);
