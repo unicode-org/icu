@@ -252,18 +252,17 @@ public:
      * objects with a UDate type. If a the Formattable object type is not a Date,
      * then it returns a failing UErrorCode.
      *
-     * @param obj           The object to format. Must be a Date.
-     * @param toAppendTo    The result of the formatting operation is appended to
-     *                      this string.
-     * @param pos           On input: an alignment field, if desired.
-     *                      On output: the offsets of the alignment field.
-     * @param status        Output param filled with success/failure status.
-     * @return              The value passed in as toAppendTo (this allows chaining,
-     *                      as with UnicodeString::append())
+     * @param obj       The object to format. Must be a Date.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
 
@@ -287,17 +286,17 @@ public:
      * fieldPosition.getEndIndex will be set to 5 and 8, respectively, for the first
      * occurence of the timezone pattern character 'z'.
      *
-     * @param cal           a Calendar set to the date and time to be formatted
+     * @param cal           Calendar set to the date and time to be formatted
      *                      into a date/time string.
-     * @param toAppendTo    the result of the formatting operation is appended to
-     *                      the end of this string.
+     * @param appendTo      Output parameter to receive result.
+     *                      Result is appended to existing contents.
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
      *                      On output: the offsets of the alignment field (see examples above)
-     * @return              A reference to 'toAppendTo'.
+     * @return              Reference to 'appendTo' parameter.
      * @draft ICU 2.1
      */
     virtual UnicodeString& format(  Calendar& cal,
-                                    UnicodeString& toAppendTo,
+                                    UnicodeString& appendTo,
                                     FieldPosition& fieldPosition) const = 0;
 
     /**
@@ -319,16 +318,16 @@ public:
      * fieldPosition.getEndIndex will be set to 5 and 8, respectively, for the first
      * occurence of the timezone pattern character 'z'.
      *
-     * @param date          a UDate to be formatted into a date/time string.
-     * @param toAppendTo    the result of the formatting operation is appended to
-     *                      the end of this string.
+     * @param date          UDate to be formatted into a date/time string.
+     * @param appendTo      Output parameter to receive result.
+     *                      Result is appended to existing contents.
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
      *                      On output: the offsets of the alignment field (see examples above)
-     * @return              A reference to 'toAppendTo'.
+     * @return              Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(  UDate date,
-                            UnicodeString& toAppendTo,
+                            UnicodeString& appendTo,
                             FieldPosition& fieldPosition) const;
 
     /**
@@ -337,23 +336,25 @@ public:
      * FieldPosition& to detect formatting problems.
      *
      * @param date      The UDate value to be formatted into a string.
-     * @param result    Output param which will receive the formatted date.
-     * @return          A reference to 'result'.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
-    UnicodeString& format(UDate date, UnicodeString& result) const;
+    UnicodeString& format(UDate date, UnicodeString& appendTo) const;
 
     /**
      * Redeclared Format method.
      *
      * @param obj       The object to be formatted into a string.
-     * @param result    Output param which will receive the formatted date.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param status    Output param filled with success/failure status.
-     * @return          A reference to 'result'.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
     /**
@@ -646,9 +647,9 @@ private:
 
 inline UnicodeString&
 DateFormat::format(const Formattable& obj,
-                   UnicodeString& result,
+                   UnicodeString& appendTo,
                    UErrorCode& status) const {
-    return Format::format(obj, result, status);
+    return Format::format(obj, appendTo, status);
 }
 U_NAMESPACE_END
 
