@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/12/31 21:22:16 $
- * $Revision: 1.17 $
+ * $Date: 2004/01/06 23:09:07 $
+ * $Revision: 1.18 $
  *
  *******************************************************************************
  */
@@ -305,7 +305,8 @@ public class CollationTest extends ModuleTest
         m_nextRelation_ = -1;
         m_target_.delete(0, m_target_.length());
         Vector vector = new Vector();
-        int lastsmallerthanindex = 0;
+        int lastsmallerthanindex = -1;
+        getNextInSequence();
         while (getNextInSequence()) {
             String target = m_target_.toString();
             doTest(this, col, m_source_, target, m_relation_);
