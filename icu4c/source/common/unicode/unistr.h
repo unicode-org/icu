@@ -365,7 +365,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t compareCodePointOrder(const UnicodeString& text) const;
 
@@ -386,7 +386,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t compareCodePointOrder(int32_t start,
                                       int32_t length,
@@ -411,7 +411,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
    inline int8_t compareCodePointOrder(int32_t start,
                                        int32_t length,
@@ -435,7 +435,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t compareCodePointOrder(const UChar *srcChars,
                                       int32_t srcLength) const;
@@ -457,7 +457,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t compareCodePointOrder(int32_t start,
                                       int32_t length,
@@ -482,7 +482,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t compareCodePointOrder(int32_t start,
                                       int32_t length,
@@ -509,7 +509,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t compareCodePointOrderBetween(int32_t start,
                                              int32_t limit,
@@ -533,7 +533,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompare(const UnicodeString& text, uint32_t options) const;
 
@@ -555,7 +555,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompare(int32_t start,
          int32_t length,
@@ -582,7 +582,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompare(int32_t start,
          int32_t length,
@@ -608,7 +608,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompare(const UChar *srcChars,
          int32_t srcLength,
@@ -632,7 +632,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompare(int32_t start,
          int32_t length,
@@ -659,7 +659,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompare(int32_t start,
          int32_t length,
@@ -688,7 +688,7 @@ public:
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft ICU 1.8
+   * @stable
    */
   inline int8_t caseCompareBetween(int32_t start,
             int32_t limit,
@@ -2435,7 +2435,7 @@ public:
    *
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A reference to this.
-   * @draft ICU 1.8
+   * @stable
    */
   UnicodeString &foldCase(uint32_t options=0 /*U_FOLD_CASE_DEFAULT*/);
 

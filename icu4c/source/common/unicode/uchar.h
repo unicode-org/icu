@@ -2178,7 +2178,7 @@ u_totitle(UChar32 c);
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @return      the case folding equivalent of the character, if any;
  *              otherwise the character itself.
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
