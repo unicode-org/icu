@@ -7135,7 +7135,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
         }
     } else {
         localCollator = (UCollator *)stackBuffer;
-        memcpy(localCollator, coll, sizeof(UCollator));
+        uprv_memcpy(localCollator, coll, sizeof(UCollator));
         localCollator->freeOnClose = FALSE;
 		localCollator->requestedLocale = NULL; // zero copies of pointers
 		localCollator->validLocale = NULL;
