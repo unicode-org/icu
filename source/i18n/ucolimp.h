@@ -21,6 +21,8 @@
 
 #include "unicode/ucol.h"
 #include "ucmp32.h"
+#include "unicode/ures.h"
+
 
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/
@@ -235,9 +237,21 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
 #define constructContractCE(CE) (UCOL_SPECIAL_FLAG | (CONTRACTION_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
 #define getContractOffset(CE) ((CE)&0xFFFFFF)
-
+#define getExpansionOffset(CE) (((CE)&0x00FFFFF0)>>4)
+#define getExpansionCount(CE) ((CE)&0xF)
 #define UCA_DATA_TYPE "dat"
 #define UCA_DATA_NAME "UCATable"
+
+typedef enum {
+    NOT_FOUND_TAG = 0,
+    EXPANSION_TAG = 1,
+    CONTRACTION_TAG = 2,
+    THAI_TAG = 3,
+    CHARSET_TAG = 4,
+    SURROGATE_TAG = 5,
+    CE_TAGS_COUNT
+} UColCETags;
+
 
 typedef struct {
       int32_t size;
@@ -263,6 +277,8 @@ typedef struct {
 } UCATableHeader;
 
 struct UCollatorNew {
+    UBool freeOnClose;
+    UResourceBundle *rb;
     const UCATableHeader *image;
     CompactIntArray *mapping; 
     const uint32_t *latinOneMapping;
@@ -284,6 +300,9 @@ struct UCollatorNew {
     UColAttributeValue normalizationModeDefault; /* attribute for normalization */
     UColAttributeValue strengthDefault;          /* attribute for strength */
 };
+
+uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCode *status);
+uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSource, UErrorCode *status);
 
 #endif
 
