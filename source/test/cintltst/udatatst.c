@@ -584,6 +584,7 @@ static void TestAppData()
   int32_t len;
 
   UErrorCode status = U_ZERO_ERROR;
+  char testMsgBuf[256];
 
   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
@@ -647,7 +648,7 @@ static void TestAppData()
   else
   {
     log_verbose("%s:%d:  appstr=%s, icustr=%s\n", __FILE__,
-      __LINE__, austrdup(appString), austrdup(icuString));
+      __LINE__, u_austrcpy(testMsgBuf, appString), u_austrcpy(testMsgBuf, icuString));
   }
 
   ures_close(tmp);
