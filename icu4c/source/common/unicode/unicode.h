@@ -950,53 +950,53 @@ protected:
 
 /* inline implementations --------------------------------------------------- */
 
-static inline bool_t
-isSingle(UChar c) {
+inline bool_t
+Unicode::isSingle(UChar c) {
     return UTF_IS_SINGLE(c);
 }
 
-static inline bool_t
-isLead(UChar c) {
+inline bool_t
+Unicode::isLead(UChar c) {
     return UTF_IS_LEAD(c);
 }
 
-static inline bool_t
-isTrail(UChar c) {
+inline bool_t
+Unicode::isTrail(UChar c) {
     return UTF_IS_TRAIL(c);
 }
 
-static inline bool_t
-isSurrogate(UChar32 c) {
+inline bool_t
+Unicode::isSurrogate(UChar32 c) {
     return UTF_IS_SURROGATE(c);
 }
 
-static inline bool_t
-isUnicodeChar(UChar32 c) {
+inline bool_t
+Unicode::isUnicodeChar(UChar32 c) {
     return UTF_IS_UNICODE_CHAR(c);
 }
 
-static inline bool_t
-isError(UChar32 c) {
+inline bool_t
+Unicode::isError(UChar32 c) {
     return UTF_IS_ERROR(c);
 }
 
-static inline bool_t
-isValid(UChar32 c) {
+inline bool_t
+Unicode::isValid(UChar32 c) {
     return UTF_IS_VALID(c);
 }
 
-static inline bool_t
-needMultipleUChar(UChar32 c) {
+inline bool_t
+Unicode::needMultipleUChar(UChar32 c) {
     return UTF_NEED_MULTIPLE_UCHAR(c);
 }
 
-static inline int32_t
-charLength(UChar32 c) {
+inline int32_t
+Unicode::charLength(UChar32 c) {
     return UTF_CHAR_LENGTH(c);
 }
 
-static inline int32_t
-arraySize(int32_t size) {
+inline int32_t
+Unicode::arraySize(int32_t size) {
     return UTF_ARRAY_SIZE(size);
 }
 
