@@ -428,8 +428,13 @@ void SimpleDateFormat::initializeDefaultCentury()
  */
 void SimpleDateFormat::parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status) 
 {
-    if(U_FAILURE(status))
+    if(U_FAILURE(status)) {
         return;
+    }
+    if(!fCalendar) {
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
         
     fCalendar->setTime(startDate, status);
     if(U_SUCCESS(status)) {

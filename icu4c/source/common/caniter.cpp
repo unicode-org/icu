@@ -180,10 +180,10 @@ UnicodeString CanonicalIterator::next() {
  * while changing the source string, saving object creation.
  */
 void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &status) {
+    Normalizer::normalize(newSource, UNORM_NFD, 0, source, status);
     if(U_FAILURE(status)) {
       return;
     }
-    Normalizer::normalize(newSource, UNORM_NFD, 0, source, status);
     done = FALSE;
 
     cleanPieces();

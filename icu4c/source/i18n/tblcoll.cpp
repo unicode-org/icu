@@ -157,6 +157,7 @@ RuleBasedCollator::construct(const UnicodeString& rules,
                              UColAttributeValue decompositionMode,
                              UErrorCode& status)
 {
+  urulestring = 0;
   ucollator = ucol_openRules(rules.getBuffer(), rules.length(),
                              decompositionMode, collationStrength,
                              NULL, &status);
@@ -596,13 +597,13 @@ RuleBasedCollator::setLocales(const Locale& requestedLocale, const Locale& valid
 // RuleBaseCollatorNew private constructor ----------------------------------
 
 RuleBasedCollator::RuleBasedCollator() 
-  : dataIsOwned(FALSE), isWriteThroughAlias(FALSE), ucollator(0)
+  : dataIsOwned(FALSE), isWriteThroughAlias(FALSE), ucollator(0), urulestring(0)
 {
 }
 
 RuleBasedCollator::RuleBasedCollator(UCollator *collator,
                                      UnicodeString *rule)
-  : dataIsOwned(FALSE), isWriteThroughAlias(FALSE) 
+  : dataIsOwned(FALSE), isWriteThroughAlias(FALSE), urulestring(0) 
 {
   ucollator = collator;
   urulestring = rule;
@@ -610,7 +611,7 @@ RuleBasedCollator::RuleBasedCollator(UCollator *collator,
 
 RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
                                            UErrorCode& status) :
-                                     dataIsOwned(FALSE), ucollator(0)
+                                     dataIsOwned(FALSE), ucollator(0), urulestring(0)
 {
   if (U_FAILURE(status))
     return;
