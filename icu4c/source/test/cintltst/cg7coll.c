@@ -117,7 +117,8 @@ const static int32_t results[TESTLOCALES][TOTALTESTSET] = {
     /* analogous to Japanese rules " & aa ; a- & ee ; e- & ii ; i- & oo ; o- & uu ; u- " */  /* loop to TOTALTESTSET */
     { 19, 22, 21, 23, 24, 25, 12, 13, 9, 0, 17, 16, 26, 27, 28, 15, 18, 14, 1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 }
 };
-UChar* 
+
+static UChar* 
 my_strncpy(UChar     *dst, 
      const UChar     *src, 
      int32_t     n) 
@@ -131,7 +132,7 @@ my_strncpy(UChar     *dst,
   return anchor;
 }
 
-UChar* 
+static UChar* 
 my_strcat(UChar     *dst, 
      const UChar     *src,
      int32_t n)
@@ -147,6 +148,7 @@ my_strcat(UChar     *dst,
   
   return anchor;
 }
+
 void addRuleBasedCollTest(TestNode** root)
 {
     addTest(root, &TestG7Locales, "tscoll/cg7coll/TestG7Locales");
@@ -157,7 +159,8 @@ void addRuleBasedCollTest(TestNode** root)
 
     
 }
-void doTest(UCollator *myCollation, const UChar source[], const UChar target[], UCollationResult result)
+
+static void doTest(UCollator *myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int32_t temp;
@@ -188,7 +191,7 @@ void doTest(UCollator *myCollation, const UChar source[], const UChar target[], 
     free(sortKey2);
 }
 
-void TestG7Locales()
+static void TestG7Locales()
 {
     UCollator *myCollation, *tblColl1;
     UErrorCode status = U_ZERO_ERROR;
@@ -235,7 +238,7 @@ void TestG7Locales()
     }
 }
 
-void TestDemo1()
+static void TestDemo1()
 {
     UCollator *col, *myCollation;
     const UChar *baseRules;
@@ -281,7 +284,8 @@ void TestDemo1()
     free(temp);
     free(newRules);
 }
-void TestDemo2()
+
+static void TestDemo2()
 {
     UCollator *col, *myCollation;
     UErrorCode status = U_ZERO_ERROR;
@@ -326,7 +330,7 @@ void TestDemo2()
     
 }
 
-void TestDemo3()
+static void TestDemo3()
 {
     UCollator *col, *myCollation;
     UErrorCode status = U_ZERO_ERROR;
@@ -372,7 +376,7 @@ void TestDemo3()
     
 }
 
-void TestDemo4()
+static void TestDemo4()
 {
     UCollator *col, *myCollation;
     UErrorCode status = U_ZERO_ERROR;

@@ -22,20 +22,20 @@
 static void TestBasic(void);
 static void TestOtherAPI(void);
 
-int32_t hashChars(const void* key);
+static int32_t hashChars(const void* key);
 
-UBool isEqualChars(const void* key1, const void* key2);
+static UBool isEqualChars(const void* key1, const void* key2);
 
 static void _put(UHashtable* hash,
                  const char* key,
                  int32_t value,
                  int32_t expectedOldValue);
 
-void _get(UHashtable* hash,
+static void _get(UHashtable* hash,
           const char* key,
           int32_t expectedValue);
 
-void _remove(UHashtable* hash,
+static void _remove(UHashtable* hash,
              const char* key,
              int32_t expectedValue);
 
@@ -54,7 +54,7 @@ void addHashtableTest(TestNode** root) {
  * Test Functions
  *********************************************************************/
 
-void TestBasic(void) {
+static void TestBasic(void) {
     const char one[4] =   {0x6F, 0x6E, 0x65, 0}; /* "one" */
     const char one2[4] =  {0x6F, 0x6E, 0x65, 0}; /* Get around compiler optimizations */
     const char two[4] =   {0x74, 0x77, 0x6F, 0}; /* "two" */
@@ -107,7 +107,8 @@ void TestBasic(void) {
     uhash_close(hash);
 
 }
-void TestOtherAPI(void){
+
+static void TestOtherAPI(void){
     
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash;
@@ -236,7 +237,7 @@ UBool isEqualChars(const void* key1, const void* key2) {
  * Wrapper Functions
  *********************************************************************/
 
-void _put(UHashtable* hash,
+static void _put(UHashtable* hash,
           const char* key,
           int32_t value,
           int32_t expectedOldValue) {
@@ -255,7 +256,7 @@ void _put(UHashtable* hash,
     }
 }
 
-void _get(UHashtable* hash,
+static void _get(UHashtable* hash,
           const char* key,
           int32_t expectedValue) {
     UErrorCode status = U_ZERO_ERROR;
@@ -272,7 +273,7 @@ void _get(UHashtable* hash,
     }
 }
 
-void _remove(UHashtable* hash,
+static void _remove(UHashtable* hash,
              const char* key,
              int32_t expectedValue) {
     int32_t value = (int32_t) uhash_remove(hash, key);
