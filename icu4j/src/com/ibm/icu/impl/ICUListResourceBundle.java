@@ -25,7 +25,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
     protected ICUListResourceBundle() {
     }
 
-
+    private Hashtable visited = new Hashtable();
     /**
      * Subclassers must statically initialize this
      */
@@ -45,7 +45,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
 		if (realContents == null) {
 		    realContents = contents;
 		    for (int i = 0; i < contents.length; ++i) {
-				Object newValue = getRedirectedValue((String)contents[i][0],contents[i][1]);
+				Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1]);
 				if (newValue != null) {
 				    if (realContents == contents) {
 					     realContents = (Object[][])contents.clone();
@@ -62,7 +62,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
      * Return null if value is already in existing contents array, otherwise fetch the
      * real value and return it.
      */
-    private Object getRedirectedValue(String key, Object value) {
+    private Object getRedirectedResource(String key, Object value) {
 	
 		if (value instanceof Object[][]) {
 		    Object[][] aValue = (Object[][])value;
@@ -70,29 +70,19 @@ public class ICUListResourceBundle extends ListResourceBundle {
             while(i < aValue.length){
                 int j=0;
                 while(j < aValue[i].length){
-                    aValue[i][j] = getRedirectedValue((String)aValue[i][0],aValue[i][j]);
+                    aValue[i][j] = getRedirectedResource((String)aValue[i][0],aValue[i][j]);
                     j++;
                 }
                 i++;
             }                  
 		}else if(value instanceof Alias){  
-            Hashtable visited = new Hashtable();
             String cName = this.getClass().getName();
+            visited.clear();
             visited.put(cName+key,"");        
             return ((Alias)value).getResource(cName,key,visited);
-        }else if(value instanceof CompressedString){
-            return ((CompressedString)value).getResource();
-        }else if(value instanceof CompressedBinary){
-            return ((CompressedBinary)value).getResource();
-        }else if(value instanceof ResourceBinary){
-            return ((ResourceBinary)value).getResource(this);
-        }else if(value instanceof ResourceString){
-            try{
-                return ((ResourceString)value).getResource(this);
-            }catch(UnsupportedEncodingException e){
-                throw new RuntimeException(e.toString());
-            }
-        }
+        }else if(value instanceof RedirectedResource){
+            return ((RedirectedResource)value).getResource(this);
+        }       
 			
 		return value;
     }
@@ -170,15 +160,14 @@ public class ICUListResourceBundle extends ListResourceBundle {
 		}
 		return data;
     }
-
-    ///CLOVER:OFF
-    public static class CompressedString{
+    /*
+    public static class CompressedString implements RedirectedResource{
         private String expanded=null;
         private String compressed=null;
         public CompressedString(String str){
            compressed=str;
         }
-        private Object getResource(){
+        public Object getResource(Object obj){
             if(compressed==null){
                 return null;
             }
@@ -188,15 +177,14 @@ public class ICUListResourceBundle extends ListResourceBundle {
             return expanded;
         }
     }
-    ///CLOVER:ON
-    
-    public static class CompressedBinary{
+    */
+    public static class CompressedBinary implements RedirectedResource{
         private byte[] expanded=null;
         private String compressed=null;
         public CompressedBinary(String str){
            compressed = str;
         }
-        private Object getResource(){
+        public Object getResource(Object obj){
             if(compressed==null){
                 return null;
             }
@@ -208,8 +196,11 @@ public class ICUListResourceBundle extends ListResourceBundle {
         }
     
     }
+    private interface RedirectedResource{
+        public Object getResource(Object obj);
+    }
     
-    public static class ResourceBinary{
+    public static class ResourceBinary implements RedirectedResource{
         private byte[] expanded=null;
         private String resName=null;
         public ResourceBinary(String name){
@@ -227,21 +218,26 @@ public class ICUListResourceBundle extends ListResourceBundle {
         }
     }
     
-    public static class ResourceString{
+    public static class ResourceString implements RedirectedResource{
         private char[] expanded=null;
         private String resName=null;
         public ResourceString(String name){
             resName=name;
         }
-        public Object getResource(Object obj) throws UnsupportedEncodingException{
+        public Object getResource(Object obj){
             if(expanded==null){
                 // Resource strings are always UTF-8
                 InputStream stream = obj.getClass().getResourceAsStream(resName);
                 if(stream==null){
                     throw new MissingResourceException("",obj.getClass().getName(),resName);
                 }
-                InputStreamReader reader =  new InputStreamReader(stream,ENCODING);
-                expanded = readToEOS(reader);
+                try{
+                    InputStreamReader reader =  new InputStreamReader(stream,ENCODING);
+                    expanded = readToEOS(reader);
+                }catch(UnsupportedEncodingException ex){
+                    throw new RuntimeException("Could open converter for encoding: " +ENCODING);
+                }
+                
             }
             return new String(expanded);
         }
@@ -336,7 +332,6 @@ public class ICUListResourceBundle extends ListResourceBundle {
         }
         private Object findResource(Object o , String[] keys, int start){
             Object obj = o;
-            int i=0;
             if( start < keys.length && keys[start] !=null){
 	            if(obj instanceof Object[][]){
 	                obj = findResource((Object[][])obj,keys[start]);   
