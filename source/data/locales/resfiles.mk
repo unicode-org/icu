@@ -7,23 +7,33 @@
 #
 # Instead of changing this file [unless you want to check it back in],
 # you should consider creating a 'reslocal.mk' file in this same directory.
-# Then, you can have your local changes remain even if you upgrade or re
-# configure the ICU.
+# Then, you can have your local changes remain even if you upgrade or re-
+# configure ICU.
 #
 # Example 'reslocal.mk' files:
 #
-#  * To add an additional converter to the list: 
+#  * To add an additional locale to the list: 
 #    _____________________________________________________
 #    |  GENRB_SOURCE_LOCAL =   myLocale.txt ...
 #
 #  * To REPLACE the default list and only build with a few
-#     converters:
+#     locale:
 #    _____________________________________________________
 #    |  GENRB_SOURCE = root.txt index.txt ar.txt ar_AE.txt
 #
 #
 
-GENRB_SOURCE = root.txt index.txt\
+
+# This is the list of locales that are built, but not considered installed in ICU.
+# These are usually aliased locales or the root locale.
+GENRB_ALIAS_SOURCE = root.txt\
+iw.txt iw_IL.txt\
+no.txt no_NO.txt no_NO_NY.txt\
+en_AS.txt en_GU.txt en_MH.txt en_MP.txt en_UM.txt
+
+
+# Please try to keep this list in alphabetical order
+GENRB_SOURCE = \
 af.txt af_ZA.txt\
 am.txt am_ET.txt\
 ar.txt ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt\
@@ -39,9 +49,9 @@ da.txt da_DK.txt\
 de.txt de__PHONEBOOK.txt de_AT.txt de_AT_PREEURO.txt de_BE.txt de_CH.txt\
 de_DE.txt de_DE_PREEURO.txt de_LU.txt de_LU_PREEURO.txt de_LI.txt div.txt div_MV.txt\
 el.txt el_GR.txt el_GR_PREEURO.txt\
-en.txt en_AS.txt en_AU.txt en_BE.txt en_BE_PREEURO.txt en_BW.txt en_BZ.txt en_CA.txt en_GB.txt en_GB_EURO.txt\
-en_GU.txt en_HK.txt en_IE.txt en_IE_PREEURO.txt en_IN.txt en_JM.txt en_MH.txt en_MP.txt en_NZ.txt en_PH.txt en_SG.txt en_MT.txt\
-en_TT.txt en_UM.txt en_US.txt en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt\
+en.txt en_AU.txt en_BE.txt en_BE_PREEURO.txt en_BW.txt en_BZ.txt en_CA.txt en_GB.txt en_GB_EURO.txt\
+en_HK.txt en_IE.txt en_IE_PREEURO.txt en_IN.txt en_JM.txt en_NZ.txt en_PH.txt en_SG.txt en_MT.txt\
+en_TT.txt en_US.txt en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt\
 eo.txt\
 es.txt es__TRADITIONAL.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
 es_CR.txt es_DO.txt es_EC.txt es_ES.txt es_ES_PREEURO.txt\
@@ -67,7 +77,6 @@ hy.txt hy_AM.txt hy_AM_REVISED.txt\
 id.txt id_ID.txt\
 is.txt is_IS.txt\
 it.txt it_CH.txt it_IT.txt it_IT_PREEURO.txt\
-iw.txt iw_IL.txt\
 ja.txt ja_JP.txt\
 ka.txt ka_GE.txt\
 kk.txt kk_KZ.txt\
@@ -87,7 +96,6 @@ ms.txt ms_MY.txt ms_BN.txt\
 nb.txt nb_NO.txt\
 nl.txt nl_BE.txt nl_BE_PREEURO.txt nl_NL.txt nl_NL_PREEURO.txt\
 nn.txt nn_NO.txt\
-no.txt no_NO.txt no_NO_NY.txt\
 om.txt om_ET.txt om_KE.txt\
 pa.txt pa_IN.txt\
 pl.txt pl_PL.txt\
