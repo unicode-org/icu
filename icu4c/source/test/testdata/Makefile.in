@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2000, International Business Machines
+#   Copyright (C) 1998-2004, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -18,20 +18,10 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = test/testdata
 
-## Optional directory setup
-@EXTRAS_TRUE@EXTRA = extra
-@TESTS_TRUE@TEST = test
-@SAMPLES_TRUE@SAMPLE = samples
-
-
 ## Files to remove for 'make clean'
 CLEANFILES = *~ 
 
-DOCDIRS = 
 SUBDIRS = 
-
-## Extra files to install [nothing at present]
-EXTRA_DATA =
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
