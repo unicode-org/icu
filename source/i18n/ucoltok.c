@@ -1,11 +1,12 @@
 #include "unicode/ustring.h"
+#include "unicode/uchar.h"
  
 #include "cmemory.h"
 #include "ucoltok.h"
 #include "uhash.h"
 #include "ucmp32.h"
 
-static UHashtable *uchars2tokens;
+static UHashtable *uchars2tokens = 0;
 
 static const UChar *rulesToParse = 0;
 
@@ -119,6 +120,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
   uint32_t newCharsLen = 0, newExtensionsLen = 0;
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t expandNext = 0;
+  UBool caseBit = FALSE;
 
   UColTokListHeader *ListList = NULL;
 
@@ -150,6 +152,9 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 charsOffset = src->current - src->source;
               }
               newCharsLen++;
+              if(u_tolower(ch)!=ch) {
+                caseBit = TRUE;
+              }
             } else {
               if(newExtensionsLen == 0) {
                 extensionOffset = src->current - src->source;
@@ -220,11 +225,17 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               if (newCharsLen == 0) {
                 charsOffset = src->current - src->source;
                 newCharsLen++;
+                if(u_tolower(ch)!=ch) {
+                  caseBit = TRUE;
+                }
               } else if (inChars) {
                 if(newCharsLen == 0) {
                   charsOffset = src->current - src->source;
                 }
                 newCharsLen++;
+                if(u_tolower(ch)!=ch) {
+                  caseBit = TRUE;
+                }
               } else {
                 newExtensionsLen++;
               }
@@ -257,11 +268,17 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                   charsOffset = src->current - src->source;
                 }
                 newCharsLen++;
+                if(u_tolower(ch)!=ch) {
+                  caseBit = TRUE;
+                }
               } else {
                 if(newExtensionsLen == 0) {
                   extensionOffset = src->current - src->source;
                 }
                 newExtensionsLen++;
+                if(u_tolower(ch)!=ch) {
+                  caseBit = TRUE;
+                }
               }
 
               break;
@@ -303,6 +320,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->source = newCharsLen << 24 | charsOffset;
           sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
+          sourceToken->caseBit = caseBit;
 
           sourceToken->debugSource = *(src->source + charsOffset);
           if(newExtensionsLen > 0) {
