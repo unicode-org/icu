@@ -56,6 +56,8 @@ class UnicodeString;
  *   following character</li>
  *   <li>If there is no following character (i.e. the replaceable was
  *   empty), use default metadata.<br>
+ *   <li>If the code point U+FFFF is seen, it should be interpreted as
+ *   a special marker having no metadata<li>
  *   </li>
  * </ul>
  * If this is not the behavior, the subclass should document any differences.
