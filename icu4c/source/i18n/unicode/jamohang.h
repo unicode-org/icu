@@ -16,7 +16,7 @@
  * A transliterator that converts Jamo to Hangul.
  *
  * @author Mark Davis
- * @version $RCSfile: jamohang.h,v $ $Revision: 1.2 $ $Date: 2000/01/18 18:27:27 $
+ * @version $RCSfile: jamohang.h,v $ $Revision: 1.3 $ $Date: 2000/01/18 18:43:00 $
  */
 class U_I18N_API JamoHangulTransliterator : public Transliterator {
 
@@ -60,11 +60,7 @@ public:
 
 private:
 
-    /**
-     * Return composed character (if it composes)
-     * 0 otherwise
-     */
-    static UChar composeHangul(UChar last, UChar ch);
+    static UChar composeHangul(UChar last, UChar ch, int32_t& count);
 };
 
 inline JamoHangulTransliterator::~JamoHangulTransliterator() {}
