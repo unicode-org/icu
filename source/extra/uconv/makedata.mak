@@ -70,7 +70,7 @@ PATH = $(PATH);$(ICUP)\bin
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
 
 # We're including a list of resource files.
-FILESEPCHAR=\
+FILESEPCHAR=\\
 
 !IF EXISTS("$(RESFILES)")
 !INCLUDE "$(RESFILES)"
