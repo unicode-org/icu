@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/10/04 22:33:53 $
- * $Revision: 1.30 $
+ * $Date: 2001/10/18 23:02:32 $
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.30 $ $Date: 2001/10/04 22:33:53 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.31 $ $Date: 2001/10/18 23:02:32 $
  */
 class TransliterationRule {
 
@@ -791,6 +791,11 @@ class TransliterationRule {
         boolean emitBraces =
             (anteContextLength != 0) || (keyLength != pattern.length());
 
+        // Emit start anchor
+        if ((flags & ANCHOR_START) != 0) {
+            rule.append('^');
+        }
+
         // Emit the input pattern
         for (i=0; i<pattern.length(); ++i) {
             if (emitBraces && i == anteContextLength) {
@@ -826,6 +831,11 @@ class TransliterationRule {
 
         if (emitBraces && i == (anteContextLength + keyLength)) {
             appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
+        }
+
+        // Emit end anchor
+        if ((flags & ANCHOR_END) != 0) {
+            rule.append('$');
         }
 
         appendToRule(rule, " > ", true, escapeUnprintable, quoteBuf);
@@ -905,6 +915,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.31  2001/10/18 23:02:32  alan
+ * jitterbug 60: fix handling of anchors in toRule
+ *
  * Revision 1.30  2001/10/04 22:33:53  alan
  * jitterbug 69: minor fix to incremental RBT code
  *
