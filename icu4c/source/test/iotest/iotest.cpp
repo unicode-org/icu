@@ -648,9 +648,9 @@ static void DataDrivenPrintfPrecision(void) {
 static void TestStream(void) {
 #if U_IOSTREAM_SOURCE >= 198506
     char testStreamBuf[512];
-    const char *testStr = "Beginning of test str1   <<432 1" C_NEW_LINE " UTF-8 \xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
+    static const char testStr[] = "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20\x73\x74\x72\x31\x20\x20\x20\x3C\x3C\x34\x33\x32\x20\x31" C_NEW_LINE "\x20\x55\x54\x46\x2D\x38\x20\xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
     ostrstream outTestStream(testStreamBuf, sizeof(testStreamBuf));
-    istrstream inTestStream(" tHis\xCE\xBC\xE2\x80\x82 mu world", 0);
+    istrstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64", 0);
     const UChar thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC, 0};
     const UChar mu[] = { 0x6D, 0x75, 0};
     UnicodeString str1 = UNICODE_STRING_SIMPLE("str1");
@@ -683,7 +683,7 @@ static void TestStream(void) {
     ucnv_setDefaultName("UTF-8");
 
     outTestStream << "Beginning of test ";
-    outTestStream << str1 << "  " << str2 << str3 << 3 << "2 " << 1.0 << C_NEW_LINE << str4 << ends;
+    outTestStream << str1 << "\x20\x20" << str2 << str3 << 3 << "\x32\x20" << 1.0 << C_NEW_LINE << str4 << ends;
     if (strcmp(testStreamBuf, testStr) != 0) {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
     }
