@@ -169,7 +169,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     }
 
     /* If it isn't a backslash, return it */
-    if (c1 != 0x005C /*|| *(buf->currentPos+1)==0x005C /*'\\'*/) {
+    if (c1 != 0x005C /*|| *(buf->currentPos+1)==0x005C */ /*'\\'*/) {
         return c1;
     }
 
