@@ -467,18 +467,17 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, U
 
 U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_t* len, UErrorCode* status) {
 
-        if (status==NULL || U_FAILURE(*status)) {
-                return NULL;
-        }
-        if(resB == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                return NULL;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
 
     switch(RES_GET_TYPE(resB->fRes)) {
         case RES_STRING:
             return res_getString(&(resB->fResData), resB->fRes, len);
-            break;
         case RES_INT:
         case RES_INT_VECTOR:
         case RES_BINARY:
@@ -486,16 +485,14 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
         case RES_TABLE:
         default:
             *status = U_RESOURCE_TYPE_MISMATCH;
-            return NULL;
-            break;
     }
 
-	return NULL;
+    return NULL;
 }
 
 U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int32_t* len, 
                                                UErrorCode*               status) {
-  
+
   if (status==NULL || U_FAILURE(*status)) {
     return NULL;
   }
@@ -506,7 +503,6 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
   switch(RES_GET_TYPE(resB->fRes)) {
   case RES_BINARY:
     return res_getBinary(&(resB->fResData), resB->fRes, len);
-    break;
   case RES_INT:
   case RES_STRING:
   case RES_INT_VECTOR:
@@ -514,8 +510,6 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
   case RES_TABLE:
   default:
     *status = U_RESOURCE_TYPE_MISMATCH;
-    return NULL;
-    break;
   }
 
   return NULL;
@@ -584,7 +578,6 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
   
   if(resB->fIndex == resB->fSize-1) {
     *status = U_INDEX_OUTOFBOUNDS_ERROR;
-        return NULL;
   } else {
     resB->fIndex++;
     switch(RES_GET_TYPE(resB->fRes)) {
@@ -592,28 +585,25 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
     case RES_BINARY:
     case RES_STRING:
       return res_getString(&(resB->fResData), resB->fRes, len); 
-      break;
     case RES_TABLE:
       r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, key);
       if(r == RES_BOGUS && resB->fHasFallback) {
         /* TODO: do the fallback */
       }
       return res_getString(&(resB->fResData), r, len); 
-      break;
-        case RES_ARRAY:
-          r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
-          if(r == RES_BOGUS && resB->fHasFallback) {
-            /* TODO: do the fallback */
-          }
-          return res_getString(&(resB->fResData), r, len);
-          break;
+    case RES_ARRAY:
+      r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
+      if(r == RES_BOGUS && resB->fHasFallback) {
+        /* TODO: do the fallback */
+      }
+      return res_getString(&(resB->fResData), r, len);
     case RES_INT_VECTOR:
     default:
       return NULL;
       break;
     }
-
   }
+
   return NULL;
 }
 
@@ -621,20 +611,19 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
     const char *key = NULL;
     Resource r = RES_BOGUS;
 
-        if (status==NULL || U_FAILURE(*status)) {
-                /*return NULL;*/
-                return fillIn;
-        }
-        if(resB == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                /*return NULL;*/
-                return fillIn;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+            /*return NULL;*/
+            return fillIn;
+    }
+    if(resB == NULL) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            /*return NULL;*/
+            return fillIn;
+    }
 
     if(resB->fIndex == resB->fSize-1) {
       *status = U_INDEX_OUTOFBOUNDS_ERROR;
-        /*return NULL;*/
-        return fillIn;
+      /*return NULL;*/
     } else {
         resB->fIndex++;
         switch(RES_GET_TYPE(resB->fRes)) {
@@ -642,26 +631,22 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
         case RES_BINARY:
         case RES_STRING:
             return copyResb(fillIn, resB, status);
-            break;
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
-            break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
-            break;
         case RES_INT_VECTOR:
         default:
             /*return NULL;*/
             return fillIn;
-            break;
         }
     }
     /*return NULL;*/
@@ -672,15 +657,15 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
     const char* key = NULL;
     Resource r = RES_BOGUS;
 
-        if (status==NULL || U_FAILURE(*status)) {
-            /*return NULL;*/
-            return fillIn;
-        }
-        if(resB == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                /*return NULL;*/
-                return fillIn;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        /*return NULL;*/
+        return fillIn;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        /*return NULL;*/
+        return fillIn;
+    }
 
     if(indexR >= 0 && resB->fSize > indexR) {
         switch(RES_GET_TYPE(resB->fRes)) {
@@ -688,31 +673,25 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
         case RES_BINARY:
         case RES_STRING:
             return copyResb(fillIn, resB, status);
-            break;
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, indexR, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
-            break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, indexR);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
-            break;
         case RES_INT_VECTOR:
         default:
             /*return NULL;*/
             return fillIn;
-            break;
         }
     } else {
         *status = U_MISSING_RESOURCE_ERROR;
-        /*return NULL;*/
-        return fillIn;
     }
     /*return NULL;*/
     return fillIn;
@@ -722,13 +701,13 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
     const char* key = NULL;
     Resource r = RES_BOGUS;
 
-        if (status==NULL || U_FAILURE(*status)) {
-                return NULL;
-        }
-        if(resB == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                return NULL;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
 
     if(indexS >= 0 && resB->fSize > indexS) {
         switch(RES_GET_TYPE(resB->fRes)) {
@@ -736,31 +715,26 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
         case RES_BINARY:
         case RES_STRING:
             return res_getString(&(resB->fResData), resB->fRes, len);
-            break;
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, indexS, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return res_getString(&(resB->fResData), r, len);
-            break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, indexS);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return res_getString(&(resB->fResData), r, len);
-            break;
         case RES_INT_VECTOR:
         default:
             return NULL;
-            break;
         }
     } else {
         *status = U_MISSING_RESOURCE_ERROR;
-        return NULL;
     }
-	return NULL;
+    return NULL;
 }
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
@@ -768,50 +742,44 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     UResourceDataEntry *realData = NULL;
     const char *key = inKey;
 
-        if (status==NULL || U_FAILURE(*status)) {
-            /*return NULL;*/
-            return fillIn;
-        }
-        if(resB == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                /*return NULL;*/
-                return fillIn;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        /*return NULL;*/
+        return fillIn;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        /*return NULL;*/
+        return fillIn;
+    }
 
     if(RES_GET_TYPE(resB->fRes) == RES_TABLE) {
         int32_t t;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
         if(res == RES_BOGUS) {
-          key = inKey;
-                if(resB->fHasFallback == TRUE) {
-                    const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
-                    if(U_FAILURE(*status)) {
-                        /*return NULL;*/
-                        return fillIn;
-                    } else {
-                        return init_resb_result(rd, res, key, realData, fillIn, status);
-                    }
+            key = inKey;
+            if(resB->fHasFallback == TRUE) {
+                const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
+                if(U_SUCCESS(*status)) {
+                    return init_resb_result(rd, res, key, realData, fillIn, status);
                 } else {
                     *status = U_MISSING_RESOURCE_ERROR;
-                    /*return NULL;*/
-                    return fillIn;
                 }
+            } else {
+                *status = U_MISSING_RESOURCE_ERROR;
+            }
         } else {
             return init_resb_result(&(resB->fResData), res, key, resB->fData, fillIn, status);
         }
     } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
         const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
-        if(U_FAILURE(*status)) {
-            /*return NULL;*/
-            return fillIn;
-        } else {
+        if(U_SUCCESS(*status)) {
             return init_resb_result(rd, res, key, realData, fillIn, status);
+        } else {
+            *status = U_MISSING_RESOURCE_ERROR;
         }
     } else {
         *status = U_RESOURCE_TYPE_MISMATCH;
-        /*return NULL;*/
-        return fillIn;
     }
     /*return NULL;*/
     return fillIn;
@@ -822,48 +790,44 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
     UResourceDataEntry *realData = NULL;
     const char* key = inKey;
 
-        if (status==NULL || U_FAILURE(*status)) {
-                return NULL;
-        }
-        if(resB == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                return NULL;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
 
     if(RES_GET_TYPE(resB->fRes) == RES_TABLE) {
         int32_t t=0;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
         if(res == RES_BOGUS) {
-          key = inKey;
-                if(resB->fHasFallback == TRUE) {
-                    const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
-                    if(U_FAILURE(*status)) {
-                        *status = U_MISSING_RESOURCE_ERROR;
-                        return NULL;
-                    } else {
-                        return res_getString(rd, res, len);
-                    }
+            key = inKey;
+            if(resB->fHasFallback == TRUE) {
+                const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
+                if(U_SUCCESS(*status)) {
+                    return res_getString(rd, res, len);
                 } else {
                     *status = U_MISSING_RESOURCE_ERROR;
-                    return NULL;
                 }
+            } else {
+                *status = U_MISSING_RESOURCE_ERROR;
+            }
         } else {
             return res_getString(&(resB->fResData), res, len);
         }
     } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
         const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
-        if(U_FAILURE(*status)) {
-            *status = U_MISSING_RESOURCE_ERROR;
-            return NULL;
-        } else {
+        if(U_SUCCESS(*status)) {
             return res_getString(rd, res, len);
+        } else {
+            *status = U_MISSING_RESOURCE_ERROR;
         }
     } else {
         *status = U_RESOURCE_TYPE_MISMATCH;
-        return NULL;
     }
-	return NULL;
+    return NULL;
 }
 
 
@@ -876,13 +840,14 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
     const UResourceDataEntry *resB = resourceBundle->fData;
-        if (status==NULL || U_FAILURE(*status)) {
-                return NULL;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
     if (!resourceBundle) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
+
     while(resB->fBogus != U_ZERO_ERROR && resB->fParent != NULL) {
         resB = resB->fParent;
     }
@@ -890,9 +855,8 @@ U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UE
         return resB->fName;
     } else {
         *status = U_INTERNAL_PROGRAM_ERROR;
-        return NULL;
     }
-	return NULL;
+    return NULL;
 }
 
 static void entryCloseInt(UResourceDataEntry *resB) {
@@ -1149,7 +1113,7 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
     ures_getByKey(resB, resourceTag, &res, status);
     if(U_SUCCESS(*status)) {
         UResourceBundle res2;
-	ures_setIsStackObject(&res2, TRUE);
+        ures_setIsStackObject(&res2, TRUE);
         ures_getByIndex(&res, rowIndex, &res2, status);
         ures_close(&res);
         if(U_SUCCESS(*status)) {
