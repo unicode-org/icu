@@ -46,6 +46,7 @@
 #include "cmemory.h"
 #include "mutex.h"
 #include "iculserv.h"
+#include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
 
@@ -148,12 +149,13 @@ static UMTX gLock = 0;
 static ICULocaleService* 
 getService(void)
 {
-  Mutex mutex(&gLock);
-  if (gService == NULL) {
-    gService = new ICUCollatorService();
-  }
+    Mutex mutex(&gLock);
+    if (gService == NULL) {
+        gService = new ICUCollatorService();
+        ucln_i18n_registerCleanup();
+    }
 
-  return gService;
+    return gService;
 }
 
 // -------------------------------------
