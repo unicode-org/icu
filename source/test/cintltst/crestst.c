@@ -809,7 +809,7 @@ static void TestGetSize(void) {
     { "emptyint", 1}, 
     { "emptybin", 1},
     { "testinclude", 1},
-    { "CollationElements", 3}, /* not 2 - there is hidden %%CollationBin */
+    { "collations", 1}, /* not 2 - there is hidden %%CollationBin */
   };
 
   UErrorCode status = U_ZERO_ERROR;
@@ -904,15 +904,15 @@ static void TestGetLocaleByType(void) {
     }
 
     locale = ures_getLocaleByType(res, ULOC_REQUESTED_LOCALE, &status);
-    if(strcmp(locale, test[i].requestedLocale) != 0) {
-      log_err("Expected requested locale to be %s. Got %s\n", test[i].requestedLocale, locale);
+    if(locale) {
+      log_err("Requested locale should return NULL\n");
     }
     locale = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &status);
-    if(strcmp(locale, test[i].validLocale) != 0) {
+    if(!locale || strcmp(locale, test[i].validLocale) != 0) {
       log_err("Expected valid locale to be %s. Got %s\n", test[i].requestedLocale, locale);
     }
     locale = ures_getLocaleByType(res, ULOC_ACTUAL_LOCALE, &status);
-    if(strcmp(locale, test[i].actualLocale) != 0) {
+    if(!locale || strcmp(locale, test[i].actualLocale) != 0) {
       log_err("Expected actual locale to be %s. Got %s\n", test[i].requestedLocale, locale);
     }
     ures_close(rb);
