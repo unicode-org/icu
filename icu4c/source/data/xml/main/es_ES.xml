@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="es" /> 
 		<territory type="ES" /> 
 	</identity>
@@ -118,8 +118,8 @@
 			<currency type="ESP">
 				<displayName>peseta española</displayName>
 				<symbol>₧</symbol>
-				<pattern>¤ #,##0;-¤ #,##0</pattern>
-				<decimal>¤ #,##0;-¤ #,##0</decimal>
+				<pattern>#,##0 ¤;-#,##0 ¤</pattern>
+				<decimal>#,##0 ¤;-#,##0 ¤</decimal>
 				<group>.</group>
 			</currency>
 		</currencies>

@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="el" /> 
 	</identity>
 	<localeDisplayNames>
@@ -333,18 +333,18 @@
 							<month type="12">Δ</month>
 						</monthWidth>
 						<monthWidth type="wide">
-							<month type="1">Ιανουάριος</month>
-							<month type="2">Φεβρουάριος</month>
-							<month type="3">Μάρτιος</month>
-							<month type="4">Απρίλιος</month>
-							<month type="5">Μάιος</month>
-							<month type="6">Ιούνιος</month>
-							<month type="7">Ιούλιος</month>
-							<month type="8">Αύγουστος</month>
-							<month type="9">Σεπτέμβριος</month>
-							<month type="10">Οκτώβριος</month>
-							<month type="11">Νοέμβριος</month>
-							<month type="12">Δεκέμβριος</month>
+							<month type="1">Ιανουαρίου</month>
+							<month type="2">Φεβρουαρίου</month>
+							<month type="3">Μαρτίου</month>
+							<month type="4">Απριλίου</month>
+							<month type="5">Μαΐου</month>
+							<month type="6">Ιουνίου</month>
+							<month type="7">Ιουλίου</month>
+							<month type="8">Αυγούστου</month>
+							<month type="9">Σεπτεμβρίου</month>
+							<month type="10">Οκτωβρίου</month>
+							<month type="11">Νοεμβρίου</month>
+							<month type="12">Δεκεμβρίου</month>
 						</monthWidth>
 					</monthContext>
 					<monthContext type="stand-alone">

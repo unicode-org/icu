@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="de" /> 
 		<territory type="LU" /> 
 	</identity>
@@ -57,7 +57,7 @@
 				<symbol>F</symbol>
 				<pattern>#,##0 ¤;-#,##0 ¤</pattern>
 				<decimal>#,##0 ¤;-#,##0 ¤</decimal>
-				<group>.</group>
+				<group>,</group>
 			</currency>
 		</currencies>
 	</numbers>
