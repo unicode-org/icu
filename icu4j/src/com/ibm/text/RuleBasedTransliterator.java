@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/25 01:42:58 $ 
- * $Revision: 1.27 $
+ * $Date: 2000/04/25 17:38:00 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.27 $ $Date: 2000/04/25 01:42:58 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.28 $ $Date: 2000/04/25 17:38:00 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -869,11 +869,9 @@ public class RuleBasedTransliterator extends Transliterator {
                             pp = new ParsePosition(0);
                         }
                         pp.setIndex(pos-1); // Backup to opening '['
-                        buf.append(parser.registerSet(new UnicodeSet(rule, pp, parser.parseData)));
+                        buf.append(parser.parseSet(rule, pp));
                         pos = pp.getIndex();
                         break;
-                    // case SET_CLOSE:
-                    //    syntaxError("Unquoted " + c, rule, start);
                     case CURSOR_POS:
                         if (cursor >= 0) {
                             syntaxError("Multiple cursors", rule, start);
@@ -902,6 +900,7 @@ public class RuleBasedTransliterator extends Transliterator {
                             }
                         }
                         break;
+                    // case SET_CLOSE:
                     default:
                         // Disallow unquoted characters other than [0-9A-Za-z]
                         // in the printable ASCII range.  These characters are
@@ -1125,7 +1124,22 @@ public class RuleBasedTransliterator extends Transliterator {
          * register it in the setVariables hash, and return the substitution
          * character.
          */
+        /*
         private final char registerSet(UnicodeSet set) {
+            if (variableNext >= variableLimit) {
+                throw new RuntimeException("Private use variables exhausted");
+            }
+            setVariablesVector.addElement(set);
+            return variableNext++;
+        }
+        */
+
+        /**
+         * Parse a UnicodeSet out, store it, and return the stand-in character
+         * used to represent it.
+         */
+        private final char parseSet(String rule, ParsePosition pos) {
+            UnicodeSet set = new UnicodeSet(rule, pos, parseData);
             if (variableNext >= variableLimit) {
                 throw new RuntimeException("Private use variables exhausted");
             }
@@ -1325,6 +1339,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.28  2000/04/25 17:38:00  alan
+ * Minor parser cleanup.
+ *
  * Revision 1.27  2000/04/25 01:42:58  alan
  * Allow arbitrary length variable values. Clean up Data API. Update javadocs.
  *
