@@ -38,4 +38,7 @@ extern const char *gCurrentFileName;
 void error   (uint32_t linenumber, const char *msg, ...);
 void warning (uint32_t linenumber, const char *msg, ...);
 
+/* Show warnings? */
+void setShowWarning(UBool val);
+
 #endif
