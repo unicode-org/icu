@@ -687,7 +687,7 @@ void CharIterTest::TestUCharIterator(UCharIterator *iter, CharacterIterator &ci,
         if(c2==0xffff) {
             c2=(UChar32)-1;
         }
-        if(c!=c2 || h!=h2 || ci.getIndex()!=iter->move(iter, 0, UITER_CURRENT)) {
+        if(c!=c2 || h!=h2 || ci.getIndex()!=iter->getIndex(iter, UITER_CURRENT)) {
             errln("error: UCharIterator(%s) misbehaving at \"%s\"[%d]='%c'", which, moves, m, moves[m]);
         }
     }
@@ -695,7 +695,7 @@ void CharIterTest::TestUCharIterator(UCharIterator *iter, CharacterIterator &ci,
 
 void CharIterTest::TestUCharIterator() {
     // test string of length 8
-    UnicodeString s=UnicodeString("a \\U00010001b\\U0010fffd z", "").unescape();
+    UnicodeString s=UnicodeString("a \\U00010001b\\U0010fffdz", "").unescape();
     const char *const moves=
         "0+++++++++" // 10 moves per line
         "----0-----"
@@ -716,4 +716,50 @@ void CharIterTest::TestUCharIterator() {
     TestUCharIterator(&cIter, compareCI, moves, "uiter_setCharacterIterator");
     compareCI.setIndex(0);
     TestUCharIterator(&rIter, compareCI, moves, "uiter_setReplaceable");
+
+    // test move & getIndex some more
+    sIter.start=2;
+    sIter.index=3;
+    sIter.limit=5;
+    if( sIter.getIndex(&sIter, UITER_ZERO)!=0 ||
+        sIter.getIndex(&sIter, UITER_START)!=2 ||
+        sIter.getIndex(&sIter, UITER_CURRENT)!=3 ||
+        sIter.getIndex(&sIter, UITER_LIMIT)!=5 ||
+        sIter.getIndex(&sIter, UITER_LENGTH)!=s.length()
+    ) {
+        errln("error: UCharIterator(string).getIndex returns wrong index");
+    }
+
+    if( sIter.move(&sIter, 4, UITER_ZERO)!=4 ||
+        sIter.move(&sIter, 1, UITER_START)!=3 ||
+        sIter.move(&sIter, 3, UITER_CURRENT)!=5 ||
+        sIter.move(&sIter, -1, UITER_LIMIT)!=4 ||
+        sIter.move(&sIter, -5, UITER_LENGTH)!=3 ||
+        sIter.move(&sIter, 0, UITER_CURRENT)!=sIter.getIndex(&sIter, UITER_CURRENT) ||
+        sIter.getIndex(&sIter, UITER_CURRENT)!=3
+    ) {
+        errln("error: UCharIterator(string).move sets/returns wrong index");
+    }
+
+    sci=StringCharacterIterator(s, 2, 5, 3);
+    uiter_setCharacterIterator(&cIter, &sci);
+    if( cIter.getIndex(&cIter, UITER_ZERO)!=0 ||
+        cIter.getIndex(&cIter, UITER_START)!=2 ||
+        cIter.getIndex(&cIter, UITER_CURRENT)!=3 ||
+        cIter.getIndex(&cIter, UITER_LIMIT)!=5 ||
+        cIter.getIndex(&cIter, UITER_LENGTH)!=s.length()
+    ) {
+        errln("error: UCharIterator(character iterator).getIndex returns wrong index");
+    }
+
+    if( cIter.move(&cIter, 4, UITER_ZERO)!=4 ||
+        cIter.move(&cIter, 1, UITER_START)!=3 ||
+        cIter.move(&cIter, 3, UITER_CURRENT)!=5 ||
+        cIter.move(&cIter, -1, UITER_LIMIT)!=4 ||
+        cIter.move(&cIter, -5, UITER_LENGTH)!=3 ||
+        cIter.move(&cIter, 0, UITER_CURRENT)!=cIter.getIndex(&cIter, UITER_CURRENT) ||
+        cIter.getIndex(&cIter, UITER_CURRENT)!=3
+    ) {
+        errln("error: UCharIterator(character iterator).move sets/returns wrong index");
+    }
 }
