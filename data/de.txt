@@ -214,7 +214,6 @@ de {
         AI { "Anguilla" }
         AQ { "Antarktis" }
         AW { "Aruba" }
-        SH { "Ascension" }
         SJ { "Svalbard und Jan Mayen" }
         BM { "Bermuda" }
         BV { "Bouvetinsel" }
