@@ -36,7 +36,21 @@
 #endif
 
 
-#if defined(POSIX) && !defined(APP_NO_THREADS)
+/* Check our settings... */
+#include "platform.h"
+
+/* APP_NO_THREADS is an old symbol. We'll honour it if present. */
+#ifdef APP_NO_THREADS
+# define ICU_USE_THREADS 0
+#endif
+
+/* Default: use threads. */
+#ifndef ICU_USE_THREADS
+# define ICU_USE_THREADS 1
+#endif
+
+
+#if defined(POSIX) && (ICU_USE_THREADS==1)
   /* Usage: uncomment the following, and breakpoint WeAreDeadlocked to
      find reentrant issues. */
 /* # define POSIX_DEBUG_REENTRANCY 1 */
@@ -53,7 +67,7 @@
     puts("ARGH!! We're deadlocked.. break on WeAreDeadlocked() next time.");
  }
 # endif /* POSIX_DEBUG_REENTRANCY */
-#endif /* POSIX && APP_NO_THREADS not defined */
+#endif /* POSIX && (ICU_USE_THREADS==1) */
 
 #ifdef _WIN32
 # include <WINDOWS.H>
@@ -67,7 +81,7 @@ UMTX    gGlobalMutex = NULL;
 
 void umtx_lock( UMTX *mutex )
 {
-#ifndef APP_NO_THREADS
+#if (ICU_USE_THREADS == 1)
   if( mutex == NULL )
     {
       mutex = &gGlobalMutex;
@@ -97,12 +111,12 @@ void umtx_lock( UMTX *mutex )
     gInMutex = TRUE;
 #  endif
 #endif
-#endif /* APP_NO_THREADS not defined */
+#endif /* ICU_USE_THREADS==1 */
 }
 
 void umtx_unlock( UMTX* mutex )
 {
-#ifndef APP_NO_THREADS
+#if (ICU_USE_THREADS==1)
   if( mutex == NULL )
     {
       mutex = &gGlobalMutex;
@@ -124,12 +138,12 @@ void umtx_unlock( UMTX* mutex )
 #endif
 
 #endif
-#endif /* APP_NO_THREADS not defined */
+#endif /* ICU_USE_THREADS == 1 */
 }
 
 U_CAPI void umtx_init( UMTX *mutex )
 {
-#ifndef APP_NO_THREADS
+#if (ICU_USE_THREADS == 1)
 
 if( mutex == NULL ) /* initialize the global mutex */
     {
@@ -159,7 +173,7 @@ if( mutex == NULL ) /* initialize the global mutex */
 # endif
 
 #endif
-#endif /* APP_NO_THREADS not defined */
+#endif /* ICU_USE_THREADS==1 */
 }
 
 

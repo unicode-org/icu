@@ -13,6 +13,49 @@
 // define NO_THREADED_INTL to not test ICU in a threaded way.
 
 
+/* Check our settings... */
+#include "platform.h"
+
+/* APP_NO_THREADS is an old symbol. We'll honour it if present. */
+#ifdef APP_NO_THREADS
+# define ICU_USE_THREADS 0
+#endif
+
+/* Default: use threads. */
+#ifndef ICU_USE_THREADS
+# define ICU_USE_THREADS 1
+#endif
+
+#include "tsmthred.h"
+
+
+MultithreadTest::MultithreadTest()
+{
+}
+
+MultithreadTest::~MultithreadTest()
+{
+}
+
+
+
+#if (ICU_USE_THREADS==0)
+void MultithreadTest::runIndexedTest( int32_t index, bool_t exec, 
+                char* &name, char* par ) {
+  if (exec) logln("TestSuite MultithreadTest: ");
+
+  if(index == 0)
+      name = "NO_THREADED_TESTS";
+  else
+      name = "";
+
+  if(exec) { logln("MultithreadTest - test DISABLED.  ICU_USE_THREADS set to 0, check your configuration if this is a problem..");
+  }
+}
+#else
+
+
+
 // Note: A LOT OF THE FUNCTIONS IN THIS FILE SHOULD LIVE ELSEWHERE!!!!!
 // Note: A LOT OF THE FUNCTIONS IN THIS FILE SHOULD LIVE ELSEWHERE!!!!!
 //   -srl
@@ -22,7 +65,6 @@
 #include <ctype.h>    // tolower, toupper
 
 #include "putil.h"
-#include "tsmthred.h"
 
 /* for mthreadtest*/
 #include "numfmt.h"
@@ -112,6 +154,7 @@ SimpleThread::sleep(int32_t millis)
   #define POSIX 1
 #endif
 
+
 #if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
 #define HAVE_IMP
 
@@ -192,14 +235,6 @@ void SimpleThread::sleep(int32_t millis)
 // *************** end fluff ******************
 
 /* now begins the real test. */
-MultithreadTest::MultithreadTest()
-{
-}
-
-MultithreadTest::~MultithreadTest()
-{
-}
-
 void MultithreadTest::runIndexedTest( int32_t index, bool_t exec, 
                 char* &name, char* par ) {
   if (exec) logln("TestSuite MultithreadTest: ");
@@ -368,13 +403,6 @@ void MultithreadTest::TestMutex()
 
 
 
-#ifdef NO_THREADED_INTL
-void MultithreadTest::TestThreadedIntl()
-{
-    logln("TestThreadedIntl - test DISABLED.  see tsutil/tsmthred.cpp, look for NO_THREADED_INTL. ");
-}
-
-#else
 
 // ** First, some utility classes.
 
@@ -748,4 +776,5 @@ void MultithreadTest::TestThreadedIntl()
     errln("patience exceeded. ");
 }
 
-#endif // NO_THREADED_INTL
+#endif // ICU_USE_THREADS
+
