@@ -39,13 +39,15 @@ typedef struct UConverter UConverter;
 
 U_CDECL_BEGIN
 
-/* maximum length of the converter names */
+/** Maximum length of a converter name including the terminating NULL */
 #define UCNV_MAX_CONVERTER_NAME_LENGTH 60
-/* maximum length of the converter name including path */
+/** Maximum length of a converter name including path and terminating NULL */
 #define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
 
-#define  UCNV_SI 0x0F           /*Shift in for EBDCDIC_STATEFUL and iso2022 states */
-#define  UCNV_SO 0x0E           /*Shift out for EBDCDIC_STATEFUL and iso2022 states */
+/** Shift in for EBDCDIC_STATEFUL and iso2022 states */
+#define  UCNV_SI 0x0F
+/** Shift out for EBDCDIC_STATEFUL and iso2022 states */
+#define  UCNV_SO 0x0E
 
 /**
  * Enum for specifying basic types of converters
