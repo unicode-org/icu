@@ -53,21 +53,32 @@ typedef struct {
 
 typedef struct {
   uint32_t *endExpansionCE;
+  UBool    *isV;
+  int       position;
+  int       size;
+  uint8_t   maxLSize;
+  uint8_t   maxVSize;
+  uint8_t   maxTSize;
+} MaxJamoExpansionTable;
+
+typedef struct {
+  uint32_t *endExpansionCE;
   uint8_t  *expansionCESize;
   int      position;
   int      size;
 } MaxExpansionTable;
 
 typedef struct {
-  CompactIntArray   *mapping; 
-  ExpansionTable    *expansions; 
-  struct CntTable   *contractions;
-  UCATableHeader    *image;
-  UColOptionSet     *options;
-  MaxExpansionTable *maxExpansions;
-  uint8_t           *unsafeCP;
-  uint8_t           *contrEndCP;
-  const UCollator         *UCA;
+  CompactIntArray       *mapping; 
+  ExpansionTable        *expansions; 
+  struct CntTable       *contractions;
+  UCATableHeader        *image;
+  UColOptionSet         *options;
+  MaxExpansionTable     *maxExpansions;
+  MaxJamoExpansionTable *maxJamoExpansions;
+  uint8_t               *unsafeCP;
+  uint8_t               *contrEndCP;
+  const UCollator       *UCA;
 } tempUCATable; 
 
 U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UErrorCode *status);
