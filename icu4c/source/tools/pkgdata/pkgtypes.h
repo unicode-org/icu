@@ -127,6 +127,7 @@ typedef struct UPKGOptions_
 #else  /* POSIX? */
 # define LIB_PREFIX "lib"
 # define OBJ_SUFFIX ".o"
+# define UDATA_LIB_SUFFIX ".a"
 #endif 
 
 

@@ -2,11 +2,12 @@
 .\"
 .\" pkgdata.8: manual page for the pkgdata utility
 .\"
-.\" Copyright (C) 2000 IBM, Inc. and others.
+.\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
+.\" Modified by Steven R. Loomis <srl@jtcsv.com>
 .\"
-.TH PKGDATA 8 "20 December 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH PKGDATA 8 "1 March 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B pkgdata
 \- package data for use by ICU
@@ -98,6 +99,23 @@ linked to the application that uses them. Such resource bundles can
 then be placed anywhere where the system's dynamic linker will be
 looking for shared libraries, instead of being forced to live inside
 the ICU data directory.
+.PP
+The
+.BR static
+packaging mode is similar to dll or library, however it produces a
+static library.  Note that many platforms are not able to dynamically load 
+symbols from static object files, so for this reason 
+.BR udata_setAppData() 
+must be called
+to install this data.  As a convenience, pkgdata will build a C source file
+and a header file. Given a data package named "\fIname\fP", in the output 
+directory will be created \fIname\fR.c and \fIname\fR.h with the single
+function \fBudata_install_\fIname\fB(UErrorCode *err)\fR. Call this function
+once early in the program. The error code returned is that of \fBudata_setAppData()\fP.
+Subsequently, the application can access this data by passing "\fIname\fP" for the "path"
+argument to functions such as \fBures_open()\fP.
+
+
 .PP
 Finally,
 .B pkgdata
