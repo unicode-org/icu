@@ -487,7 +487,7 @@ public:
   *             uloc.h
   * @return locale where the collation data lives. If the collator
   *         was instantiated from rules, locale is empty.
-  * @draft ICU 2.1
+  * @stable ICU 2.1
   */
   virtual const Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const = 0;
 
@@ -812,7 +812,7 @@ public:
      *               issued.
      * @return The size needed to fully store the bound. 
      * @see ucol_keyHashCode
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     static int32_t getBound(const uint8_t       *source,
             int32_t             sourceLength,

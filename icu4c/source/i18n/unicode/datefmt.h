@@ -295,7 +295,7 @@ public:
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
      *                      On output: the offsets of the alignment field (see examples above)
      * @return              Reference to 'appendTo' parameter.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     virtual UnicodeString& format(  Calendar& cal,
                                     UnicodeString& appendTo,
@@ -391,7 +391,7 @@ public:
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
      * @return      A valid UDate if the input could be parsed.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     virtual void parse( const UnicodeString& text,
                         Calendar& cal,

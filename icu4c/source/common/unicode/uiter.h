@@ -38,13 +38,13 @@
 U_CDECL_BEGIN
 
 struct UCharIterator;
-typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @draft ICU 2.1 */
+typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @stable ICU 2.1 */
 
 /**
  * Origin constants for UCharIterator.getIndex() and UCharIterator.move().
  * @see UCharIteratorMove
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef enum UCharIteratorOrigin {
     UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
@@ -98,7 +98,7 @@ enum {
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef int32_t U_CALLCONV
 UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
@@ -135,7 +135,7 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
  * @see UCharIteratorOrigin
  * @see UCharIterator
  * @see UITER_UNKNOWN_INDEX
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef int32_t U_CALLCONV
 UCharIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin);
@@ -150,7 +150,7 @@ UCharIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin
  * @return boolean value for whether current() and next() can still return another code unit
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef UBool U_CALLCONV
 UCharIteratorHasNext(UCharIterator *iter);
@@ -164,7 +164,7 @@ UCharIteratorHasNext(UCharIterator *iter);
  * @return boolean value for whether previous() can still return another code unit
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef UBool U_CALLCONV
 UCharIteratorHasPrevious(UCharIterator *iter);
@@ -179,7 +179,7 @@ UCharIteratorHasPrevious(UCharIterator *iter);
  * @return the current code unit
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef UChar32 U_CALLCONV
 UCharIteratorCurrent(UCharIterator *iter);
@@ -195,7 +195,7 @@ UCharIteratorCurrent(UCharIterator *iter);
  * @return the current code unit (and post-increment the current index)
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef UChar32 U_CALLCONV
 UCharIteratorNext(UCharIterator *iter);
@@ -211,7 +211,7 @@ UCharIteratorNext(UCharIterator *iter);
  * @return the previous code unit (after pre-decrementing the current index)
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef UChar32 U_CALLCONV
 UCharIteratorPrevious(UCharIterator *iter);
@@ -225,7 +225,7 @@ UCharIteratorPrevious(UCharIterator *iter);
  * @return some integer
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 typedef int32_t U_CALLCONV
 UCharIteratorReserved(UCharIterator *iter, int32_t something);
@@ -320,47 +320,47 @@ UCharIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCod
  * UCharIterator functions return code unit values 0..0xffff,
  * or U_SENTINEL if the iteration bounds are reached.
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 struct UCharIterator {
     /**
      * (protected) Pointer to string or wrapped object or similar.
      * Not used by caller.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     const void *context;
 
     /**
      * (protected) Length of string or similar.
      * Not used by caller.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     int32_t length;
 
     /**
      * (protected) Start index or similar.
      * Not used by caller.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     int32_t start;
 
     /**
      * (protected) Current index or similar.
      * Not used by caller.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     int32_t index;
 
     /**
      * (protected) Limit index or similar.
      * Not used by caller.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     int32_t limit;
 
     /**
      * (protected) Used by UTF-8 iterators and possibly others.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     int32_t reservedField;
 
@@ -369,7 +369,7 @@ struct UCharIterator {
      * start or limit index of the iteration range.
      *
      * @see UCharIteratorGetIndex
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorGetIndex *getIndex;
 
@@ -380,7 +380,7 @@ struct UCharIterator {
      * or backward by specifying a positive or negative delta.
      *
      * @see UCharIteratorMove
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorMove *move;
 
@@ -389,7 +389,7 @@ struct UCharIterator {
      * return another code unit.
      *
      * @see UCharIteratorHasNext
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorHasNext *hasNext;
 
@@ -397,7 +397,7 @@ struct UCharIterator {
      * (public) Check if previous() can still return another code unit.
      *
      * @see UCharIteratorHasPrevious
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorHasPrevious *hasPrevious;
 
@@ -406,7 +406,7 @@ struct UCharIterator {
      * or U_SENTINEL if there is none (index is at the limit).
      *
      * @see UCharIteratorCurrent
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorCurrent *current;
 
@@ -416,7 +416,7 @@ struct UCharIterator {
      * or return U_SENTINEL if there is none (index is at the limit).
      *
      * @see UCharIteratorNext
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorNext *next;
 
@@ -426,7 +426,7 @@ struct UCharIterator {
      * or return U_SENTINEL if there is none (index is at the start).
      *
      * @see UCharIteratorPrevious
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorPrevious *previous;
 
@@ -434,7 +434,7 @@ struct UCharIterator {
      * (public) Reserved for future use. Currently NULL.
      *
      * @see UCharIteratorReserved
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UCharIteratorReserved *reservedFn;
 
@@ -474,7 +474,7 @@ struct UCharIterator {
  * @see UCharIterator
  * @see U16_GET
  * @see UnicodeString::char32At()
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UChar32 U_EXPORT2
 uiter_current32(UCharIterator *iter);
@@ -491,7 +491,7 @@ uiter_current32(UCharIterator *iter);
  *
  * @see UCharIterator
  * @see U16_NEXT
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UChar32 U_EXPORT2
 uiter_next32(UCharIterator *iter);
@@ -508,7 +508,7 @@ uiter_next32(UCharIterator *iter);
  *
  * @see UCharIterator
  * @see U16_PREV
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI UChar32 U_EXPORT2
 uiter_previous32(UCharIterator *iter);
@@ -572,7 +572,7 @@ uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
  * @param length Length of s, or -1 if NUL-terminated
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI void U_EXPORT2
 uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
@@ -656,7 +656,7 @@ uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
  * @param charIter CharacterIterator to wrap
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI void U_EXPORT2
 uiter_setCharacterIterator(UCharIterator *iter, CharacterIterator *charIter);
@@ -681,7 +681,7 @@ uiter_setCharacterIterator(UCharIterator *iter, CharacterIterator *charIter);
  * @param rep Replaceable to iterate over
  *
  * @see UCharIterator
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI void U_EXPORT2
 uiter_setReplaceable(UCharIterator *iter, const Replaceable *rep);

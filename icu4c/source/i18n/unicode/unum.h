@@ -323,7 +323,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @param status A pointer to an UErrorCode to receive any errors
 * @see unum_toPattern
-* @draft ICU 2.0
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 unum_applyPattern(          UNumberFormat  *format,
@@ -357,7 +357,7 @@ unum_getAvailable(int32_t index);
 U_CAPI int32_t U_EXPORT2 
 unum_countAvailable(void);
 
-/** The possible UNumberFormat numeric attributes @draft ICU 2.0 */
+/** The possible UNumberFormat numeric attributes @stable ICU 2.0 */
 typedef enum UNumberFormatAttribute {
   /** Parse integers only */
   UNUM_PARSE_INT_ONLY,
