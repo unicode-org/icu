@@ -127,7 +127,13 @@
 /* We return QNAN rather than SNAN*/
 #define SIGN 0x80000000U
 
-#if defined(U_INT64_T_UNAVAILABLE)
+#if defined(__GNUC__) && __GNUC__ == 3
+/* gcc 3.2 has an optimization bug */
+static const int64_t gNan64 = 0x7FF8000000000000L;
+static const int64_t gInf64 = 0x7FF0000000000000L;
+static const double * const fgNan = (const double *)(&gNan64);
+static const double * const fgInf = (const double *)(&gInf64);
+#else
 #if IEEE_754
 #define NAN_TOP ((int16_t)0x7FF8)
 #define INF_TOP ((int16_t)0x7FF0)
@@ -141,12 +147,6 @@ static UBool fgNaNInitialized = FALSE;
 static UBool fgInfInitialized = FALSE;
 static double *fgNan;
 static double *fgInf;
-#else
-
-static const int64_t gNan64 = 0x7FF8000000000000U;
-static const int64_t gInf64 = 0x7FF0000000000000U;
-static const double * const fgNan = (const double *)(&gNan64);
-static const double * const fgInf = (const double *)(&gInf64);
 #endif
 
 /* prototypess */
@@ -224,7 +224,12 @@ U_CAPI UBool U_EXPORT2
 uprv_isNaN(double number)
 {
 #if IEEE_754
-#if defined(U_INT64_T_UNAVAILABLE)
+#if defined(__GNUC__) && __GNUC__ == 3
+    /* gcc 3.2 has an optimization bug */
+    /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
+    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) > gInf64);
+
+#else
     /* This should work in theory, but it doesn't, so we resort to the more*/
     /* complicated method below.*/
     /*  return number != number;*/
@@ -247,11 +252,6 @@ uprv_isNaN(double number)
 
     return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) &&
       (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
-
-#else
-
-    /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
-    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) > gInf64);
 #endif
 
 #elif defined(OS390)
@@ -275,7 +275,11 @@ U_CAPI UBool U_EXPORT2
 uprv_isInfinite(double number)
 {
 #if IEEE_754
-#if defined(U_INT64_T_UNAVAILABLE)
+#if defined(__GNUC__) && __GNUC__ == 3
+    /* gcc 3.2 has an optimization bug */
+    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) == gInf64);
+#else
+
     /* We know the top bit is the sign bit, so we mask that off in a copy of */
     /* the number and compare against infinity. [LIU]*/
     /* The following approach doesn't work for some reason, so we go ahead and */
@@ -295,9 +299,6 @@ uprv_isInfinite(double number)
 
     return (UBool)(((highBits  & ~SIGN) == 0x7FF00000U) &&
       (lowBits == 0x00000000U));
-#else
-
-    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) == gInf64);
 #endif
 
 #elif defined(OS390)
