@@ -1,4 +1,4 @@
-# Copyright (c) 2002, 2003  International Business Machines Corporation and
+# Copyright (c) 2002-2003  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line.txt
@@ -58,8 +58,6 @@ $ALPlus = $AL | $AI | $SA;
 
 #
 #  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
-#                     TODO:  This is going to produce some odd results, because of the non-combining
-#                            chars that are included in $CM.  Use $Extend instead, where possible.
 #
 $ALcm = $ALPlus $CM*;
 $IDcm = ($ID $CM* | $SP $CM+);

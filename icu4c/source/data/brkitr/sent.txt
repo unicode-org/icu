@@ -6,7 +6,7 @@
 #
 #   ICU Sentence Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on the draft dated 2003-03-31
+#      These rules are based on TR 29 version 4.0.0
 #
     
 

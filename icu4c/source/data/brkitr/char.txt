@@ -1,12 +1,12 @@
 #
-#   Copyright (C) 2002, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2003, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  char.txt 
 #
 #   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
-#      See Unicode Technical Report #29.
-#      These rules are based on the proposed draft dated 2002-08-06
+#      See Unicode Standard Annex #29.
+#      These rules are based on TR29 Version 4.0.0
 #
 
 #
@@ -31,6 +31,9 @@ $LVT = [:Hangul_Syllable_Type = LVT:];
 
 $HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
 
+#
+#  Forward Break Rules
+#
 $CR $LF;
 ([^$Control] | $HangulSyllable) $Extend*;
 .;
