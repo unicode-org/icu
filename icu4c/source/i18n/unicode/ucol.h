@@ -202,7 +202,7 @@ typedef enum {
      * For example, "ä" == "ä".
      *
      * UCollationStrength is also used to determine the strength of sort keys 
-     * generated from UCollatorOld objects
+     * generated from UCollator objects
      **/
 /** Possible collation strengths  - all under UColAttributeValue*/
 typedef UColAttributeValue UCollationStrength;
@@ -223,8 +223,8 @@ typedef enum {
 }  UColRuleOption ;
 
 /**
- * Open a UCollatorOld for comparing strings.
- * The UCollatorOld may be used in calls to \Ref{ucol_strcoll}.
+ * Open a UCollator for comparing strings.
+ * The UCollator may be used in calls to \Ref{ucol_strcoll}.
  * @param loc The locale containing the comparison conventions.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UCollator, or 0 if an error occurred.
@@ -237,8 +237,8 @@ ucol_open(    const    char         *loc,
         UErrorCode      *status);
 
 /**
- * Open a UCollatorOld for comparing strings.
- * The UCollatorOld may be used in calls to \Ref{ucol_strcoll}.
+ * Open a UCollator for comparing strings.
+ * The UCollator may be used in calls to \Ref{ucol_strcoll}.
  * @param rules A string describing the collation rules.
  * @param rulesLength The length of rules, or -1 if null-terminated.
  * @param mode The normalization mode; one of UCOL_NO_NORMALIZATION,
@@ -260,8 +260,8 @@ ucol_openRules(    const    UChar        *rules,
 
 /** 
  * Close a UCollator.
- * Once closed, a UCollatorOld should not be used.
- * @param coll The UCollatorOld to close.
+ * Once closed, a UCollator should not be used.
+ * @param coll The UCollator to close.
  * @stable
  */
 U_CAPI void
@@ -271,7 +271,7 @@ ucol_close(UCollator *coll);
  * Compare two strings.
  * The strings will be compared using the normalization mode and options
  * specified in \Ref{ucol_open} or \Ref{ucol_openRules}
- * @param coll The UCollatorOld containing the comparison rules.
+ * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -294,7 +294,7 @@ ucol_strcoll(    const    UCollator    *coll,
 /**
  * Determine if one string is greater than another.
  * This function is equivalent to \Ref{ucol_strcoll} == UCOL_GREATER
- * @param coll The UCollatorOld containing the comparison rules.
+ * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -315,7 +315,7 @@ ucol_greater(    const    UCollator    *coll,
 /**
  * Determine if one string is greater than or equal to another.
  * This function is equivalent to \Ref{ucol_strcoll} != UCOL_LESS
- * @param coll The UCollatorOld containing the comparison rules.
+ * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -336,7 +336,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
 /**
  * Compare two strings for equality.
  * This function is equivalent to \Ref{ucol_strcoll} == UCOL_EQUAL
- * @param coll The UCollatorOld containing the comparison rules.
+ * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -357,7 +357,7 @@ ucol_equal(    const    UCollator    *coll,
 /**
  * Get the collation strength used in a UCollator.
  * The strength influences how strings are compared.
- * @param coll The UCollatorOld to query.
+ * @param coll The UCollator to query.
  * @return The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
  * UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
  * @see ucol_setStrength
@@ -374,7 +374,7 @@ ucol_getStrength(const UCollator *coll);
  * .       UCollationResult result;
  * .       UChar *source, *target;
  * .       UErrorCode status = U_ZERO_ERROR;
- * .       UCollatorOld *myCollation = ucol_open("en_US", status);
+ * .       UCollator *myCollation = ucol_open("en_US", status);
  * .       if (U_FAILURE(&status)) return;
  * .       ucol_setStrength(myCollation, UCOL_PRIMARY);
  * .       u_uastrcpy(source, "abc");
@@ -383,7 +383,7 @@ ucol_getStrength(const UCollator *coll);
  * .       // tertiary differences will be ignored
  * .       result = ucol_strcoll(myCollation, source, u_strlen(source), target, u_strlen(target));
  * </pre>
- * @param coll The UCollatorOld to set.
+ * @param coll The UCollator to set.
  * @param strength The desired collation strength; one of UCOL_PRIMARY, 
  * UCOL_SECONDARY, UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
  * @see ucol_getStrength
@@ -396,7 +396,7 @@ ucol_setStrength(    UCollator            *coll,
 /**
  * Get the normalization mode used in a UCollator.
  * The normalization mode influences how strings are compared.
- * @param coll The UCollatorOld to query.
+ * @param coll The UCollator to query.
  * @return The normalization mode; one of UCOL_NO_NORMALIZATION, 
  * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP,
  * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
@@ -409,7 +409,7 @@ ucol_getNormalization(const UCollator* coll);
 /**
  * Set the normalization mode used in a UCollator.
  * The normalization mode influences how strings are compared.
- * @param coll The UCollatorOld to set.
+ * @param coll The UCollator to set.
  * @param mode The desired normalization mode; one of UCOL_NO_NORMALIZATION,
  * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP, 
  * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
@@ -465,7 +465,7 @@ ucol_countAvailable(void);
 /**
  * Get the collation rules from a UCollator.
  * The rules will follow the rule syntax.
- * @param coll The UCollatorOld to query.
+ * @param coll The UCollator to query.
  * @param length 
  * @return The collation rules.
  * @stable
@@ -477,7 +477,7 @@ ucol_getRules(    const    UCollator    *coll,
 /**
  * Get a sort key for a string from a UCollator.
  * Sort keys may be compared using <TT>strcmp</TT>.
- * @param coll The UCollatorOld containing the collation rules.
+ * @param coll The UCollator containing the collation rules.
  * @param source The string to transform.
  * @param sourecLength The length of source, or -1 if null-terminated.
  * @param result A pointer to a buffer to receive the attribute.
