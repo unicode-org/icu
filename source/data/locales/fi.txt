@@ -15,16 +15,36 @@ fi {
         }
     }
     Countries { 
-        AE { "Yhdistyneet Arabiemiraatit" }
+        AE { "Arabiemiirikunnat" }
+        //AE { "Yhdistyneet Arabiemiraatit" } // Old value
+        AF { "Afganistan" }
+        AG { "Antigua ja Barbuda" }
+        AN { "Alankomaiden Antillit" }
+        AQ { "Antarktis" }
+        AR { "Argentiina" }
+        AS { "Amerikan Samoa" }
         AT { "It\u00e4valta" }
-        BA { "Bosnia" }
+        AZ { "Azerbaidzan" }
+        BA { "Bosnia ja Hertsegovina" }
         BE { "Belgia" }
         BR { "Brasilia" }
+        BS { "Bahama" }
+        BV { "Bouvet'nsaari" }
         BY { "Valko-Ven\u00e4j\u00e4" }
         CA { "Kanada" }
+        CC { "Kookossaaret" }
+        CD { "Kongon demokraattinen tasavalta" }
+        CF { "Keski-Afrikan tasavalta" }
+        CG { "Kongo" }
         CH { "Sveitsi" }
+        CI { "Norsunluurannikko" }
+        CK { "Cookinsaaret" }
+        CM { "Kamerun" }
         CN { "Kiina" }
         CO { "Kolumbia" }
+        CV { "Kap Verde" }
+        CX { "Joulusaari" }
+        CY { "Kypros" }
         CZ { "Tsekin tasavalta" }
         DE { "Saksa" }
         DK { "Tanska" }
@@ -32,77 +52,102 @@ fi {
         EC { "Equador" }
         EE { "Viro" }
         EG { "Egypti" }
+        EH { "L\u00E4nsi-Sahara" }
         ES { "Espanja" }
+        ET { "Etiopia" }
         FI { "Suomi" }
+        FJ { "Fidzi" }
+        FK { "Falklandinsaaret" }
+        FM { "Mikronesia" }
+        FO { "F\u00E4rsaaret" }
         FR { "Ranska" }
         GB { "Iso-Britannia" }
+        GF { "Ranskan Guayana" }
+        GL { "Gr\u00F6nlanti" }
+        GQ { "P\u00E4iv\u00E4ntasaajan Guinea" }
         GR { "Kreikka" }
+        GS { "Etel\u00E4-Georgia ja Etel\u00E4iset Sandwichsaaret" }
+        HK { "Hongkongin erityishallintoalue" }
+        //HK { "Hongknog, erit.hall.alue" } // Old value
+        HM { "Heard ja McDonaldinsaaret" }
         HR { "Kroatia" }
         HU { "Unkari" }
-        HK { "Hongknog, erit.hall.alue" }
         IE { "Irlanti" }
         IN { "Intia" }
+        IO { "Brittil\u00E4inen Intian valtameren alue" }
         IS { "Islanti" }
         IT { "Italia" }
         JO { "Jordania" }
         JP { "Japani" }
-        KR { "Korea" }
-        LA { "Latinalainen Amerikka" }
+        KG { "Kirgisia" }
+        KH { "Kambodza" }
+        KM { "Komorit" }
+        KN { "Saint Kitts ja Nevis" }
+        //KR { "Korea" } //  Old Value
+        KR { "Korean tasavalta" }
+        KY { "Caymansaaret" }
+        KZ { "Kazakstan" }
+        //LA { "Laos" }
         LB { "Libanon" }
         LT { "Liettua" }
         LU { "Luxemburg" }
         MA { "Marokko" }
-        MK { "Makedonia (FYR)" }
-        MO { "Macao, erit.hall.alue" }
+        MG { "Madagaskar" }
+        MH { "Marshallinsaaret" }
+        MK { "Makedonia" }
+        //MK { "Makedonia (FYR)" } // Old value
+        //MO { "Macao, erit.hall.alue" } // Old value
+        MO { "Macaon erityishallintoalue" }
+        MP { "Pohjois-Mariaanit" }
+        MV { "Malediivit" }
         MX { "Meksiko" }
+        MY { "Malesia" }
+        MZ { "Mosambik" }
+        NC { "Uusi-Kaledonia" }
+        NF { "Norfolkinsaari" }
         NL { "Alankomaat" }
         NO { "Norja" }
         NZ { "Uusi Seelanti" }
+        //NZ { "Uusi-Seelanti" } // From translation center
+        PF { "Ranskan Polynesia" }
+        PG { "Papua-Uusi-Guinea" }
+        PH { "Filippiinit" }
         PL { "Puola" }
+        PM { "Saint-Pierre ja Miquelon" }
+        PS { "Palestiina" }
         PT { "Portugali" }
         RU { "Ven\u00e4j\u00e4" }
+        RW { "Ruanda" }
         SA { "Saudi-Arabia" }
+        SB { "Salomonsaaret" }
+        SC { "Seychellit" }
         SE { "Ruotsi" }
+        SJ { "Huippuvuoret ja Jan Mayen" }
+        ST { "Sao Tome ja Principe" }
         SY { "Syyria" }
+        SZ { "Swazimaa" }
+        TC { "Turks- ja Caicossaaret" }
+        TD { "Tsad" }
+        TF { "Ranskan etel\u00E4iset alueet" }
         TH { "Thaimaa" }
+        TJ { "Tadzikistan" }
+        TL { "It\u00E4-Timor" }
+        //TM { "Turkmenistan" }
         TR { "Turkki" }
+        TT { "Trinidad ja Tobago" }
+        TZ { "Tansania" }
         UA { "Ukraina" }
+        UM { "Yhdysvaltain pienet erillissaaret" }
         US { "Yhdysvallat" }
+        VA { "Vatikaani" }
+        VC { "Saint Vincent ja Grenadiinit" }
+        VG { "Brittil\u00E4iset Neitsytsaaret" }
+        VI { "Yhdysvaltain Neitsytsaaret" }
+        WF { "Wallis ja Futuna" }
         YE { "Jemen" }
+        YU { "Jugoslavia" }
         ZA { "Etel\u00e4-Afrikka" }
-    }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "d. MMMM'ta 'yyyy",
-        "d. MMMM'ta 'yyyy",
-        "d.M.yyyy",
-        "d.M.yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "su",
-        "ma",
-        "ti",
-        "ke",
-        "to",
-        "pe",
-        "la",
-    }
-    DayNames { 
-        "sunnuntai",
-        "maanantai",
-        "tiistai",
-        "keskiviikko",
-        "torstai",
-        "perjantai",
-        "lauantai",
+        ZM { "Sambia" }
     }
     Languages { 
         ar { "arabia" }
@@ -148,8 +193,8 @@ fi {
         pt { "portugali" }
         ro { "romania" }
         ru { "ven\u00e4j\u00e4" }
-        sk { "slovakia" }
-        sl { "slovenia" }
+        sk { "slovakki" }
+        sl { "sloveeni" }
         sq { "albania" }
         sr { "serbia" }
         sv { "ruotsi" }
@@ -162,6 +207,39 @@ fi {
         ur { "urdu" }
         uz { "uzbekki" }
         zh { "kiina" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "d. MMMM'ta 'yyyy",
+        "d. MMMM'ta 'yyyy",
+        "d.M.yyyy",
+        "d.M.yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "su",
+        "ma",
+        "ti",
+        "ke",
+        "to",
+        "pe",
+        "la",
+    }
+    DayNames { 
+        "sunnuntai",
+        "maanantai",
+        "tiistai",
+        "keskiviikko",
+        "torstai",
+        "perjantai",
+        "lauantai",
     }
     MonthAbbreviations { 
         "tammi",

@@ -17,8 +17,239 @@ cs {
         "ch <<< cH <<< Ch <<< CH & R < r\u030C <<< R\u030C& S < s\u030C <<< S\u030C& Z < z\u030C <<<"
         " Z\u030C" }
     }
-    Countries { 
+    Countries {
+        //AD { "Andorra" }
+        AE { "Spojen\u00E9 arabsk\u00E9 emir\u00E1ty" }
+        AF { "Afgh\u00E1nist\u00E1n" }
+        AG { "Antigua a Barbuda" }
+        AI { "Anguila" }
+        AL { "Alb\u00E1nie" }
+        AM { "Arm\u00E9nie" }
+        AN { "Nizozemsk\u00E9 Antily" }
+        //AO { "Angola" }
+        AQ { "Antarktida" }
+        //AR { "Argentina" }
+        AS { "Americk\u00E1 Samoa" }
+        AT { "Rakousko" }
+        AU { "Austr\u00E1lie" }
+        //AW { "Aruba" }
+        AZ { "\u00C1zerb\u00E1jd\u017E\u00E1n" }
+        BA { "Bosna a Hercegovina" }
+        //BB { "Barbados" }
+        BD { "Banglad\u00E9\u0161" }
+        BE { "Belgie" }
+        //BF { "Burkina Faso" }
+        BG { "Bulharsko" }
+        BH { "Bahrajn" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        BM { "Bermudy" }
+        BN { "Brunej Darussalam" }
+        BO { "Bol\u00EDvie" }
+        BR { "Braz\u00EDlie" }
+        BS { "Bahamy" }
+        BT { "Bh\u00FAt\u00E1n" }
+        BV { "Ostrov Bouvet" }
+        //BW { "Botswana" }
+        BY { "B\u011Blorusko" }
+        //BZ { "Belize" }
+        CA { "Kanada" }
+        CC { "Kokosov\u00E9 ostrovy" }
+        CD { "Kongo, demokratick\u00E1 republika" }
+        CF { "St\u0159edoafrick\u00E1 republika" }
+        CG { "Kongo" }
+        CH { "\u0160v\u00FDcarsko" }
+        CI { "Pob\u0159e\u017E\u00ED slonoviny" }
+        CK { "Cookovy ostrovy" }
+        //CL { "Chile" }
+        CM { "Kamerun" }
+        CN { "\u010C\u00EDna" }
+        CO { "Kolumbie" }
+        CR { "Kostarika" }
+        CV { "Kapverdy" }
+        CX { "V\u00E1no\u010Dn\u00ED ostrovy" }
+        CY { "Kypr" }
         CZ { "\u010Cesk\u00E1 republika" }
+        DE { "N\u011Bmecko" }
+        DJ { "D\u017Eibuti" }
+        DK { "D\u00E1nsko" }
+        DM { "Dominika" }
+        DO { "Dominik\u00E1nsk\u00E1 republika" }
+        DZ { "Al\u017E\u00EDrsko" }
+        EC { "Ekv\u00E1dor" }
+        EE { "Estonsko" }
+        //EG { "Egypt" }
+        EH { "Z\u00E1padn\u00ED Sahara" }
+        //ER { "Eritrea" }
+        ES { "\u0160pan\u011Blsko" }
+        ET { "Etiopie" }
+        FI { "Finsko" }
+        FJ { "Fid\u017Ei" }
+        FK { "Falklandsk\u00E9 ostrovy" }
+        FM { "Mikron\u00E9sie, federativn\u00ED st\u00E1t" }
+        FO { "Faersk\u00E9 ostrovy" }
+        FR { "Francie" }
+        //GA { "Gabon" }
+        GB { "Velk\u00E1 Brit\u00E1nie" }
+        //GD { "Grenada" }
+        GE { "Gruzie" }
+        GF { "Francouzsk\u00E1 Guyana" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Gr\u00F3nsko" }
+        GM { "Gambie" }
+        //GN { "Guinea" }
+        //GP { "Guadeloupe" }
+        GQ { "Rovn\u00EDkov\u00E1 Guinea" }
+        GR { "\u0158ecko" }
+        GS { "Ji\u017En\u00ED Georgie a Ji\u017En\u00ED Sandwichovy ostrovy" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
+        HK { "Hongkong, zvl\u00E1\u0161tn\u00ED administrativn\u00ED oblast \u010C\u00EDny" }
+        HM { "Ostrovy Heard a McDonald" }
+        //HN { "Honduras" }
+        HR { "Chorvatsko" }
+        //HT { "Haiti" }
+        HU { "Ma\u010Farsko" }
+        ID { "Indon\u00E9sie" }
+        IE { "Irsko" }
+        IL { "Izrael" }
+        IN { "Indie" }
+        IO { "Britsk\u00E9 \u00FAzem\u00ED v Indick\u00E9m oce\u00E1nu" }
+        IS { "Island" }
+        IT { "It\u00E1lie" }
+        JM { "Jamajka" }
+        JO { "Jord\u00E1nsko" }
+        JP { "Japonsko" }
+        KE { "Ke\u0148a" }
+        KG { "Kyrgyzst\u00E1n" }
+        KH { "Kambod\u017Ea" }
+        //KI { "Kiribati" }
+        KM { "Komory" }
+        KN { "Svat\u00FD Kitts a Nevis" }
+        KR { "Korea, republika" }
+        KW { "Kuvajt" }
+        KY { "Kajmansk\u00E9 ostrovy" }
+        KZ { "Kazachst\u00E1n" }
+        LA { "Lidov\u011B demokratick\u00E1 republika Laos" }
+        LB { "Libanon" }
+        LC { "Svat\u00E1 Lucie" }
+        LI { "Lichten\u0161tejnsko" }
+        LK { "Sr\u00ED Lanka" }
+        LR { "Lib\u00E9rie" }
+        //LS { "Lesotho" }
+        LT { "Litva" }
+        LU { "Lucembursko" }
+        LV { "Loty\u0161sko" }
+        MA { "Maroko" }
+        MC { "Monako" }
+        MD { "Moldavsko, republika" }
+        MG { "Madagaskar" }
+        MH { "Marshallovy ostrovy" }
+        //MK { "Makedonie, republika" }
+        //ML { "Mali" }
+        MM { "Myanmar (Burma)" }
+        MN { "Mongolsko" }
+        //MO { "\u010C\u00EDna, zvl\u00E1\u0161tn\u00ED administrativn\u00ED oblast \u010C\u00EDny" }
+        MP { "Severn\u00ED Mariany" }
+        MQ { "Martinik" }
+        MR { "Maurit\u00E1nie" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        MU { "Mauricius" }
+        MV { "Maladivy" }
+        //MW { "Malawi" }
+        MX { "Mexiko" }
+        MY { "Malajsie" }
+        MZ { "Mosambik" }
+        NA { "Namibie" }
+        NC { "Nov\u00E1 Kaledonie" }
+        //NE { "Niger" }
+        NF { "Norfolk" }
+        NG { "Nig\u00E9rie" }
+        NI { "Nikaragua" }
+        NL { "Nizozemsko" }
+        NO { "Norsko" }
+        NP { "Nep\u00E1l" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Nov\u00FD Z\u00E9land" }
+        OM { "Om\u00E1n" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Francouzsk\u00E1 Polyn\u00E9sie" }
+        PG { "Papua-Nov\u00E1 Guinea" }
+        PH { "Filip\u00EDny" }
+        PK { "P\u00E1kist\u00E1n" }
+        PL { "Polsko" }
+        PM { "Svat\u00FD Pierre a Miquelon" }
+        //PN { "Pitcairn" }
+        PR { "Portoriko" }
+        //PS { "Palestinsk\u00E9 \u00FAzem\u00ED" }
+        PT { "Portugalsko" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        QA { "Katar" }
+        //RE { "R\u00E9union" }
+        RO { "Rumunsko" }
+        RU { "Rusko" }
+        //RW { "Rwanda" }
+        SA { "Sa\u00FAdsk\u00E1 Ar\u00E1bie" }
+        SB { "\u0160alamounovy ostrovy" }
+        SC { "Seychely" }
+        SE { "\u0160v\u00E9dsko" }
+        SG { "Singapur" }
+        SH { "Svat\u00E1 Helena" }
+        SI { "Slovinsko" }
+        SJ { "Svalbard a Jan Mayen" }
+        SK { "Slovensko" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        SO { "Som\u00E1lsko" }
+        SR { "Surinam" }
+        ST { "Svat\u00FD Tom\u00E1\u0161" }
+        //SV { "El Salvador" }
+        SZ { "Svazijsko" }
+        TC { "Ostrovy Caicos a Turks" }
+        TD { "\u010Cad" }
+        TF { "Francouzsk\u00E1 ji\u017En\u00ED teritoria" }
+        //TG { "Togo" }
+        TH { "Thajsko" }
+        TJ { "T\u00E1d\u017Eikist\u00E1n" }
+        //TK { "Tokelau" }
+        TL { "V\u00FDchodn\u00ED Timor" }
+        TM { "Turkmenist\u00E1n" }
+        TN { "Tunisko" }
+        //TO { "Tonga" }
+        TR { "Turecko" }
+        TT { "Trinidad a Tobago" }
+        //TV { "Tuvalu" }
+        TW { "Tchaj-wan" }
+        TZ { "Tanzanie" }
+        UA { "Ukrajina" }
+        //UG { "Uganda" }
+        UM { "Men\u0161\u00ED odlehl\u00E9 ostrovy USA" }
+        US { "Spojen\u00E9 st\u00E1ty" }
+        //UY { "Uruguay" }
+        UZ { "Uzbekist\u00E1n" }
+        VA { "Svat\u00FD stolec" }
+        VC { "Svat\u00FD Vincent a Grenadiny" }
+        //VE { "Venezuela" }
+        VG { "Britsk\u00E9 Panensk\u00E9 ostrovy" }
+        VI { "Americk\u00E9 Panensk\u00E9 ostrovy" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis a Futuna" }
+        //WS { "Samoa" }
+        YE { "Jemen" }
+        //YT { "Mayotte" }
+        YU { "Jugosl\u00E1vie" }
+        ZA { "Ji\u017En\u00ED Afrika" }
+        ZM { "Zambie" }
+        //ZW { "Zimbabwe" }
     }
     DateTimePatterns { 
         "H:mm:ss z",
@@ -53,8 +284,40 @@ cs {
         "p\u0159.Kr.",
         "po Kr.",
     }
-    Languages { 
-        cs { "\u010De\u0161tina" }
+    Languages {
+        ar { "arapski" }
+        bg { "bugarski" }
+        cs { "\u010De\u0161ki" }
+        //cs { "\u010De\u0161tina" } // Old value
+        da { "danski" }
+        de { "njema\u010Dki" }
+        el { "gr\u010Dki" }
+        en { "engleski" }
+        es { "\u0161panjolski" }
+        et { "estonijski" }
+        fi { "finski" }
+        fr { "francuski" }
+        he { "hebrejski" }
+        hr { "hrvatski" }
+        hu { "ma\u0111arski" }
+        it { "talijanski" }
+        ja { "japanski" }
+        ko { "korejski" }
+        lt { "litvanski" }
+        lv { "latvijski" }
+        nl { "nizozemski" }
+        no { "norve\u0161kin" }
+        pl { "poljski" }
+        pt { "portugalski" }
+        ro { "rumunjski" }
+        ru { "ruski" }
+        sk { "slova\u010Dki" }
+        sl { "slovenski" }
+        sv { "\u0161vedski" }
+        tr { "turski" }
+        zh { "kineski" }
+        //zh_cn { "kineski (pojednostavljeni)" }
+        //zh_tw { "kineski (tradicionalni)" }
     }
     MonthAbbreviations { 
         "I",

@@ -8,79 +8,342 @@
 nb {
     Version{"2.0"}
     CollationElements {
-	    Version { "1.0" }
-		Sequence { "& Z < \u00E6<<< \u00C6  < a\u0308<<< A\u0308< \u00F8<<< \u00D8"
-        " < o\u0308<<< O\u0308< o\u030B<<< O\u030B < a\u030A<<< A\u030A<<< aa <<< aA <<< Aa <<< AA  & "
-        "V<<< w<<< W" }
-	}
+        Version { "1.0" }
+        Sequence { "& Z < \u00E6<<< \u00C6 < a\u0308<<< A\u0308< \u00F8<<< \u00D8"
+            " < o\u0308<<< O\u0308< o\u030B<<< O\u030B < a\u030A<<< A\u030A<<< aa <<< aA <<< Aa <<< AA & "
+            "V<<< w<<< W"
+        }
+    }
     Countries {
+        //AD { "Andorra" }
+        AE { "De forente arabiske emiratene" }
+        //AF { "Afghanistan" }
+        AG { "Antigua og Barbuda" }
+        //AI { "Anguilla" }
+        //AL { "Albania" }
+        //AM { "Armenia" }
+        AN { "De nederlandske antiller" }
+        //AO { "Angola" }
+        AQ { "Antarktis" }
+        //AR { "Argentina" }
+        AS { "Amerikansk Samoa" }
+        AT { "\u00D8sterrike" }
+        //AU { "Australia" }
+        //AW { "Aruba" }
+        AZ { "Aserbajdsjan" }
+        BA { "Bosnia og Hercegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
+        BE { "Belgia" }
+        //BF { "Burkina Faso" }
+        //BG { "Bulgaria" }
+        //BH { "Bahrain" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
+        BN { "Brunei Darussalam" }
+        //BO { "Bolivia" }
+        BR { "Brasil" }
+        //BS { "Bahamas" }
+        //BT { "Bhutan" }
+        BV { "Bouvet\u00F8ya" }
+        //BW { "Botswana" }
+        BY { "Hviterussland" }
+        //BZ { "Belize" }
+        //CA { "Canada" }
+        CC { "Kokos\u00F8yene (Keeling\u00F8yene)" }
+        CD { "Kongo, Den demokratiske republikken" }
+        CF { "Den sentralafrikanske republikk" }
+        CG { "Kongo" }
+        CH { "Sveits" }
+        CI { "Elfenbenskysten" }
+        CK { "Cook\u00F8yene" }
+        //CL { "Chile" }
+        CM { "Kamerun" }
+        CN { "Kina" }
+        //CO { "Colombia" }
+        //CR { "Costa Rica" }
+        CV { "Kapp Verde" }
+        CX { "Christmas\u00F8ya" }
+        CY { "Kypros" }
+        CZ { "Tsjekkia" }
+        DE { "Tyskland" }
+        //DJ { "Djibouti" }
+        DK { "Danmark" }
+        //DM { "Dominica" }
+        DO { "Den dominikanske republikk" }
+        DZ { "Algerie" }
+        //EC { "Ecuador" }
+        EE { "Estland" }
+        //EG { "Egypt" }
+        EH { "Vest-Sahara" }
+        //ER { "Eritrea" }
+        ES { "Spania" }
+        ET { "Etiopia" }
+        //FI { "Finland" }
+        //FJ { "Fiji" }
+        FK { "Falklands\u00F8yene" }
+        FM { "Mikronesiaf\u00F8derasjonen" }
+        FO { "F\u00E6r\u00F8yene" }
+        FR { "Frankrike" }
+        //GA { "Gabon" }
+        GB { "Storbritannia" }
+        //GD { "Grenada" }
+        //GE { "Georgia" }
+        GF { "Fransk Guyana" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Gr\u00F8nland" }
+        //GM { "Gambia" }
+        //GN { "Guinea" }
+        //GP { "Guadeloupe" }
+        GQ { "Ekvatorial-Guinea" }
+        GR { "Hellas" }
+        GS { "S\u00F8r-Georgia og S\u00F8r-Sandwich-\u00F8yene" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
+        HK { "Hong Kong S.A.R. (Kina)" }
+        HM { "Heard- og McDonalds\u00F8yene" }
+        //HN { "Honduras" }
+        HR { "Kroatia" }
+        //HT { "Haiti" }
+        HU { "Ungarn" }
+        //ID { "Indonesia" }
+        IE { "Irland" }
+        //IL { "Israel" }
+        //IN { "India" }
+        IO { "Britiske omr\u00E5der i det indiske hav" }
+        IS { "Island" }
+        IT { "Italia" }
+        //JM { "Jamaica" }
+        //JO { "Jordan" }
+        //JP { "Japan" }
+        //KE { "Kenya" }
+        KG { "Kirgisistan" }
+        KH { "Kambodsja" }
+        //KI { "Kiribati" }
+        KM { "Komorene" }
+        KN { "St. Christopher og Nevis" }
+        KR { "Korea, Republikken" }
+        //KW { "Kuwait" }
+        KY { "Cayman\u00F8yene" }
+        KZ { "Kasakhstan" }
+        LA { "Laos, Den folkedemokratiske republikken" }
+        LB { "Libanon" }
+        LC { "St. Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        //LS { "Lesotho" }
+        LT { "Litauen" }
+        //LU { "Luxembourg" }
+        //LV { "Latvia" }
+        MA { "Marokko" }
+        //MC { "Monaco" }
+        //MD { "Moldova" }
+        MG { "Madagaskar" }
+        MH { "Marshall\u00F8yene" }
+        MK { "Makedonia, Republikken" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        //MN { "Mongolia" }
+        MO { "Macao S.A.R. (Kina)" }
+        MP { "Nord-Marianene" }
+        //MQ { "Martinique" }
+        //MR { "Mauritania" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Maldivene" }
+        //MW { "Malawi" }
+        //MX { "Mexico" }
+        //MY { "Malaysia" }
+        MZ { "Mosambik" }
+        //NA { "Namibia" }
+        NC { "Ny-Caledonia" }
+        //NE { "Niger" }
+        NF { "Norfolk\u00F8yene" }
+        //NG { "Nigeria" }
+        //NI { "Nicaragua" }
+        NL { "Nederland" }
         NO { "Norge" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        //NZ { "New Zealand" }
+        //OM { "Oman" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Fransk Polynesia" }
+        PG { "Papua Ny-Guinea" }
+        PH { "Filippinene" }
+        //PK { "Pakistan" }
+        PL { "Polen" }
+        PM { "St. Pierre og Miquelon" }
+        //PN { "Pitcairn" }
+        //PR { "Puerto Rico" }
+        PS { "Palestinsk territorium" }
+        //PT { "Portugal" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        //QA { "Qatar" }
+        RE { "Reunion" }
+        //RO { "Romania" }
+        RU { "Den russiske f\u00F8derasjon" }
+        //RW { "Rwanda" }
+        //SA { "Saudi Arabia" }
+        SB { "Salomon\u00F8yene" }
+        SC { "Seychellene" }
+        SE { "Sverige" }
+        //SG { "Singapore" }
+        //SH { "St. Helena" }
+        //SI { "Slovenia" }
+        SJ { "Svalbard og Jan Mayen" }
+        //SK { "Slovakia" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        //SO { "Somalia" }
+        SR { "Surinam" }
+        ST { "Sao Tome og Principe" }
+        //SV { "El Salvador" }
+        //SZ { "Swaziland" }
+        TC { "Turks- og Caicos\u00F8yene" }
+        TD { "Tchad" }
+        TF { "Franske s\u00F8romr\u00E5der" }
+        //TG { "Togo" }
+        //TH { "Thailand" }
+        TJ { "Tadsjikistan" }
+        //TK { "Tokelau" }
+        TL { "\u00D8st-Timor" }
+        //TM { "Turkmenistan" }
+        //TN { "Tunisia" }
+        //TO { "Tonga" }
+        TR { "Tyrkia" }
+        TT { "Trinidad og Tobago" }
+        //TV { "Tuvalu" }
+        //TW { "Taiwan" }
+        //TZ { "Tanzania" }
+        UA { "Ukraina" }
+        //UG { "Uganda" }
+        UM { "USAs mindre \u00F8yer" }
+        //US { "USA" } // Poor translation. USA -> United States
+        //UY { "Uruguay" }
+        UZ { "Usbekistan" }
+        VA { "Vatikanstaten" }
+        VC { "St. Vincent og Grenadinene" }
+        //VE { "Venezuela" }
+        VG { "Jomfru\u00F8yene (britisk)" }
+        //VI { "Jomfru\u00F8yene (amerikansk)" } // Poor translation. amerikansk -> United States
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis og Futuna" }
+        //WS { "Samoa" }
+        //YE { "Yemen" }
+        //YT { "Mayotte" }
+        YU { "Jugoslavia" }
+        ZA { "S\u00F8r-Afrika" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
     }
     DateTimeElements:intvector {
         2,
         4,
     }
     DateTimePatterns {
-	    "'kl 'HH.mm z",
-	    "HH:mm:ss z",
-	    "HH:mm:ss",
-	    "HH:mm",
-	    "d. MMMM yyyy",
-	    "d. MMMM yyyy",
-	    "dd.MMM.yy",
-	    "dd.MM.yy",
-	    "{1} {0}",
+        "'kl 'HH.mm z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "d. MMMM yyyy",
+        "d. MMMM yyyy",
+        "dd.MMM.yy",
+        "dd.MM.yy",
+        "{1} {0}",
     }
     DayAbbreviations {
-	    "s\u00F8",
-	    "ma",
-	    "ti",
-	    "on",
-	    "to",
-	    "fr",
-	    "l\u00F8",
+        "s\u00F8",
+        "ma",
+        "ti",
+        "on",
+        "to",
+        "fr",
+        "l\u00F8",
     }
     DayNames {
-	    "s\u00F8ndag",
-	    "mandag",
-	    "tirsdag",
-	    "onsdag",
-	    "torsdag",
-	    "fredag",
-	    "l\u00F8rdag",
+        "s\u00F8ndag",
+        "mandag",
+        "tirsdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "l\u00F8rdag",
     }
     Languages {
-        nb { "bokm\u00E5l" }
-        nn { "nynorsk" }
-        no { "norsk" }
+        ar { "Arabisk" }
+        bg { "Bulgarsk" }
+        cs { "Tsjekkisk" }
+        da { "Dansk" }
+        de { "Tysk" }
+        el { "Gresk" }
+        en { "Engelsk" }
+        es { "Spansk" }
+        et { "Estisk" }
+        fi { "Finsk" }
+        fr { "Fransk" }
+        he { "Hebraisk" }
+        hr { "Kroatisk" }
+        hu { "Ungarsk" }
+        it { "Italiensk" }
+        ja { "Japansk" }
+        ko { "Koreansk" }
+        lt { "Litauisk" }
+        lv { "Latvisk" }
+        nb { "Norsk bokm\u00E5l" }
+        nl { "Nederlandsk" }
+        nn { "Norsk nynorsk" }
+        no { "Norsk" }
+        pl { "Polsk" }
+        pt { "Portugisisk" }
+        ro { "Rumensk" }
+        ru { "Russisk" }
+        sk { "Slovakisk" }
+        sl { "Slovensk" }
+        sv { "Svensk" }
+        tr { "Tyrkisk" }
+        zh { "Kinesisk" }
+        //zh_cn { "Kinesisk (forenklet)" }
+        //zh_tw { "Kinesisk (tradisjonell)" }
     }
     MonthAbbreviations {
-	    "jan",
-	    "feb",
-	    "mar",
-	    "apr",
-	    "mai",
-	    "jun",
-	    "jul",
-	    "aug",
-	    "sep",
-	    "okt",
-	    "nov",
-	    "des",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "mai",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "des",
     }
     MonthNames {
-	    "januar",
-	    "februar",
-	    "mars",
-	    "april",
-	    "mai",
-	    "juni",
-	    "juli",
-	    "august",
-	    "september",
-	    "oktober",
-	    "november",
-	    "desember",
+        "januar",
+        "februar",
+        "mars",
+        "april",
+        "mai",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "desember",
     }
     NumberElements {
         ",",
@@ -98,18 +361,18 @@ nb {
         "+",
     }
     Eras {
-	    "f.Kr.",
-	    "e.Kr.",
+        "f.Kr.",
+        "e.Kr.",
     }
 
     zoneStrings {
         {
-	        "Europe/Oslo",
-	        "Central European Time",
-	        "MET",
-	        "Central European Time (DST)",
-	        "MET",
-	        "Oslo"
+            "Europe/Oslo",
+            "Central European Time",
+            "MET",
+            "Central European Time (DST)",
+            "MET",
+            "Oslo"
         }
     }
 //    LocaleScript{  
