@@ -23,6 +23,7 @@
 #include "cmemory.h"
 #include "ustrfmt.h"
 #include "unicode/ustring.h"
+#include "unicode/uchar.h"
 #include "ucbuf.h"
 #include <stdio.h>
 
@@ -89,6 +90,42 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     }
 
     return TRUE; 
+}
+static UBool ucbuf_isCPKnown(const char* cp){
+    if(ucnv_compareNames("UTF-8",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-16BE",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-16LE",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-16",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-32",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-32BE",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-32LE",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-32BE",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("SCSU",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("BOCU",cp)){
+        return TRUE;
+    }
+    if(ucnv_compareNames("UTF-7",cp)){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 U_CAPI FileStream * U_EXPORT2
@@ -417,7 +454,8 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
             buf->conv=NULL;
             buf->showWarning = showWarning;
             buf->isBuffered = buffered;
-            if(*cp==NULL || **cp=='\0'){
+            buf->signatureLength=0;
+            if(*cp==NULL || **cp=='\0' || ucbuf_isCPKnown(*cp)/* to discard BOMs */){
                 /* don't have code page name... try to autodetect */
                 ucbuf_autodetect_fs(in,cp,&buf->conv,&buf->signatureLength,error);
             }
@@ -664,7 +702,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                     return NULL;
                 }
             }
-            if (c == 0x0a || c==0x2028) {  /* Unipad inserts 2028 line separators! */
+            if (u_charType(c) == U_LINE_SEPARATOR) {  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
@@ -685,7 +723,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                 *err = (UErrorCode) U_EOF;
                 return NULL;
             }
-            if (temp>=buf->bufLimit || c == 0x0a || c==0x2028) {  /* Unipad inserts 2028 line separators! */
+            if (temp>=buf->bufLimit || u_charType(c) == U_LINE_SEPARATOR) {  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
