@@ -26,6 +26,7 @@ void addDateForRgrTest(TestNode**);
 void addNumFrDepTest(TestNode**);
 void addDtFrDepTest(TestNode**);
 
+void addFormatTest(TestNode** root);
 
 void addFormatTest(TestNode** root)
 {
