@@ -254,8 +254,10 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
     UChar32* list; // MUST be terminated with HIGH
     UChar32* buffer; // internal buffer, may be NULL
 
-    static const UChar32 LOW; // LOW <= all valid values. ZERO for codepoints
+#ifndef HPUX
     static const UChar32 HIGH; // HIGH > all valid values. 110000 for codepoints
+#endif
+    static const UChar32 LOW; // LOW <= all valid values. ZERO for codepoints
 
     static const int32_t START_EXTRA; // initial storage. Must be >= 0
     static const int32_t GROW_EXTRA; // extra amount for growth. Must be >= 0

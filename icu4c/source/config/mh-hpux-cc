@@ -14,8 +14,8 @@ GEN_DEPS.c= 	:
 GEN_DEPS.cc= 	:
 
 ## Commands to compile
-COMPILE.c=	$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC)  -D__STDC__  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) +dup_static_removal +d -D__STDC__  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
