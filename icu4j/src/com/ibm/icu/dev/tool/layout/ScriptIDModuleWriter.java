@@ -3,12 +3,6 @@
  * Copyright (C) 1998-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptIDModuleWriter.java,v $
- * $Date: 2003/12/10 19:09:32 $
- * $Revision: 1.2 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 

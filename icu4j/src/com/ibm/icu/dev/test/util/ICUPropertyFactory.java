@@ -4,12 +4,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUPropertyFactory.java,v $
- * $Date: 2004/03/28 00:23:30 $
- * $Revision: 1.5 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 

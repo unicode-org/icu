@@ -6,8 +6,6 @@
  *
  * Created on Apr 14, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/TagUtilities.java,v $ $Date: 2003/05/21 16:32:08 $ $Revision: 1.3 $
- * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;

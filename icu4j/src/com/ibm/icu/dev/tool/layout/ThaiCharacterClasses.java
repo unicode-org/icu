@@ -6,10 +6,6 @@
  *
  * Created on Dec 09, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ThaiCharacterClasses.java,v $
- * $Date: 2003/12/09 23:55:16 $
- * $Revision: 1.1 $
- * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;

@@ -6,8 +6,6 @@
  *
  * Created on Apr 4, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/LanguageData.java,v $ $Date: 2003/12/09 01:18:12 $ $Revision: 1.3 $
- * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
