@@ -645,6 +645,13 @@ sub emitText {
 
         # Output either 's' or 'd' to indicate standard or DST
         my $isStd = ($zones->{$z}->{rule} eq $TZ::STANDARD);
+        if (!$isStd) {
+        	my $rule = $rules->{$zones->{$z}->{rule}};
+        	if (!(@{$rule} >= 4 && ($rule->[3] & 1) && ($rule->[3] & 2))) {
+        		$isStd = 1;
+        	}
+        }
+
         print OUT $isStd ? 's,' : 'd,';
         
         # Format the zone
@@ -771,6 +778,12 @@ sub emitJava {
 
         # Output either 's' or 'd' to indicate standard or DST
         my $isStd = ($zones->{$z}->{rule} eq $TZ::STANDARD);
+        if (!$isStd) {
+        	my $rule = $rules->{$zones->{$z}->{rule}};
+        	if (!(@{$rule} >= 4 && ($rule->[3] & 1) && ($rule->[3] & 2))) {
+        		$isStd = 1;
+        	}
+        }
         $_DATA .= $isStd ? '0/*s*/,' : '1/*d*/,';
         
         # Format the zone
@@ -1395,15 +1408,18 @@ sub formatZone { # ($z, $ZONES{$z}, \%RULES)
         # $rule is now an array ref, with [0] being the onset and
         # [1] being the cease.
         
-        formatRule($rule->[0], \@spec, \@notes); # Onset
-        formatRule($rule->[1], \@spec, \@notes); # Cease
-
-        my @a = parseTime($rule->[0]->{save});
-        if ($a[1] ne 'w') {
-            die "Strange DST savings value: \"$rule->[0]->{save}\"";
+        if (@{$rule} >= 4 && ($rule->[3] & 1) && ($rule->[3] & 2)) {
+			
+			formatRule($rule->[0], \@spec, \@notes); # Onset
+			formatRule($rule->[1], \@spec, \@notes); # Cease
+	
+			my @a = parseTime($rule->[0]->{save});
+			if ($a[1] ne 'w') {
+				die "Strange DST savings value: \"$rule->[0]->{save}\"";
+			}
+			push @notes, $rule->[0]->{save};
+			push @spec, $a[0];
         }
-        push @notes, $rule->[0]->{save};
-        push @spec, $a[0];
     }
 
     (\@spec, \@notes);

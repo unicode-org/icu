@@ -184,7 +184,7 @@ sub ParseFile {
                 # a current rule.  If so, do nothing.  If not, then
                 # save this rule line as the best one so far.
                 if (@{$ruleArray} < 3 ||
-                    !($ruleArray->[2] & $i)) {
+                    !($ruleArray->[2] & 1 << $i)) {
                     my $h = $ruleArray->[$i];
                     $ruleArray->[$i]->{from} = $from;
                     $ruleArray->[$i]->{to} = $to;
@@ -203,7 +203,8 @@ sub ParseFile {
                     if (($from == $YEAR && $to =~ /only/i) ||
                         ($from <= $YEAR &&
                          (($to =~ /^\d/ && $YEAR <= $to) || $to =~ /max/i))) {
-                        $ruleArray->[2] |= $i;
+                        $ruleArray->[2] |= 1 << $i;
+                        $ruleArray->[3] |= 1 << $i;
                     }
                 }
             } else {
