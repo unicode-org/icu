@@ -28,7 +28,7 @@
 #define RESTEST_HEAP_CHECK 0
 
 #include "unicode/uloc.h"
-#include "unicode/ures.h"
+#include "uresimp.h"
 #include "creststn.h"
 #include "unicode/ctest.h"
 
