@@ -7,7 +7,7 @@
 
 be {
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "1.0.1" }
 		Override { "FALSE" }
 		Sequence { // this needs to be checked again
 			"&\u0415 < \u0451, \u0401"

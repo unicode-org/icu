@@ -10,7 +10,7 @@ ar {
             "\u0635",
             "\u0645",
     }
-    Version{"1.1"}
+    Version{"1.1.1"}
     CollationElements { 
 	    Version { "2.0" }
             Override { "FALSE" }

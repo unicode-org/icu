@@ -8,7 +8,7 @@
 en_BE {
     Version { "1.0" }
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "1.0.1" }
 		Override { "FALSE" }
 		Sequence { "[backwards 2]" }
 	}
