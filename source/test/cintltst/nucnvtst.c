@@ -33,6 +33,8 @@ static void TestAmbiguous(void);
 static void TestUTF8(void);
 static void TestUTF16BE(void);
 static void TestUTF16LE(void);
+static void TestUTF32BE(void);
+static void TestUTF32LE(void);
 static void TestLATIN1(void);
 static void TestSBCS(void);
 static void TestDBCS(void);
@@ -173,6 +175,8 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
    addTest(root, &TestUTF16BE, "tsconv/nucnvtst/TestUTF16BE");
    addTest(root, &TestUTF16LE, "tsconv/nucnvtst/TestUTF16LE");
+   addTest(root, &TestUTF32BE, "tsconv/nucnvtst/TestUTF32BE");
+   addTest(root, &TestUTF32LE, "tsconv/nucnvtst/TestUTF32LE");
    addTest(root, &TestLATIN1, "tsconv/nucnvtst/TestLATIN1");
    addTest(root, &TestSBCS, "tsconv/nucnvtst/TestSBCS");
    addTest(root, &TestDBCS, "tsconv/nucnvtst/TestDBCS");
@@ -1051,7 +1055,7 @@ static TestUTF8() {
         0xe0, 0x80, 0x80,
         0xf0, 0x80, 0x80, 0x80,
         0xf4, 0x84, 0x8c, 0xa1,
-        0xf0, 0x90, 0x90, 0x81,
+        0xf0, 0x90, 0x90, 0x81
     };
 
     /* expected test results */
@@ -1062,7 +1066,7 @@ static TestUTF8() {
         3, 0,
         4, 0,
         4, 0x104321,
-        4, 0x10401,
+        4, 0x10401
     };
 
     const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
@@ -1073,8 +1077,8 @@ static TestUTF8() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "UTF-8");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     ucnv_close(cnv);
 }
 
@@ -1087,8 +1091,7 @@ static TestUTF16BE() {
         0x00, 0x31, 
         0x00, 0xf4, 
         0xce, 0xfe,
-        0xd8, 0x01, 0xdc, 0x01,
-                
+        0xd8, 0x01, 0xdc, 0x01
     };
 
     /* expected test results */
@@ -1099,8 +1102,7 @@ static TestUTF16BE() {
         2, 0x31, 
         2, 0xf4,
         2, 0xcefe,
-        4, 0x10401,
-        
+        4, 0x10401
     };
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
@@ -1111,8 +1113,8 @@ static TestUTF16BE() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "UTF-16BE");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for the condition where there is an invalid character*/
     {
         static const uint8_t source2[]={0x61};
@@ -1134,7 +1136,7 @@ TestUTF16LE() {
         0x31, 0x00,
         0x4e, 0x2e, 
         0x4e, 0x00,
-        0x01, 0xd8, 0x01, 0xdc,
+        0x01, 0xd8, 0x01, 0xdc
     };
 
     /* expected test results */
@@ -1144,7 +1146,7 @@ TestUTF16LE() {
         2, 0x31,
         2, 0x2e4e,
         2, 0x4e,
-        4, 0x10401,
+        4, 0x10401
     };
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
@@ -1155,8 +1157,8 @@ TestUTF16LE() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "UTF-16LE");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for the condition where there is an invalid character*/
     {
         static const uint8_t source2[]={0x61};
@@ -1168,6 +1170,78 @@ TestUTF16LE() {
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an truncated surrogate character");
     }
    
+    ucnv_close(cnv);
+}
+
+static void
+TestUTF32BE() {
+    /* test input */
+    static const uint8_t in[]={
+        0x00, 0x00, 0x00, 0x61,
+        0x00, 0x00, 0xd8, 0x00,
+        0x00, 0x00, 0xdf, 0xff,
+        0x00, 0x00, 0xff, 0xfd,
+        0x00, 0x10, 0xab, 0xcd
+    };
+    /* ### should also test error conditions (>0x10ffff) */
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        4, 0x61,
+        4, 0xd800,
+        4, 0xdfff,
+        4, 0xfffd,
+        4, 0x10abcd
+    };
+
+    const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("UTF-32BE", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a UTF-32BE converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+    TestNextUChar(cnv, source, limit, results, "UTF-32BE");
+
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+    ucnv_close(cnv);
+}
+
+static void
+TestUTF32LE() {
+    /* test input */
+    static const uint8_t in[]={
+        0x61, 0x00, 0x00, 0x00,
+        0x00, 0xd8, 0x00, 0x00,
+        0xff, 0xdf, 0x00, 0x00,
+        0xfd, 0xff, 0x00, 0x00,
+        0xcd, 0xab, 0x10, 0x00
+    };
+    /* ### should also test error conditions (>0x10ffff) */
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        4, 0x61,
+        4, 0xd800,
+        4, 0xdfff,
+        4, 0xfffd,
+        4, 0x10abcd
+    };
+
+    const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("UTF-32LE", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a UTF-32LE converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+    TestNextUChar(cnv, source, limit, results, "UTF-32LE");
+
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     ucnv_close(cnv);
 }
 
@@ -1204,8 +1278,8 @@ TestLATIN1() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "LATIN_1");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     ucnv_close(cnv);
 }
 
@@ -1232,8 +1306,8 @@ TestSBCS() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "SBCS(ibm-1281)");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for Illegal character*//*
     {
     static const uint8_t input1[]={ 0xA1 };
@@ -1275,8 +1349,8 @@ TestDBCS() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "DBCS(ibm-9027)");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for the condition where we have a truncated char*/
     {
         static const uint8_t source1[]={0xc4};
@@ -1325,8 +1399,8 @@ TestMBCS() {
         return;
     }
     TestNextUChar(cnv, source, limit, results, "MBCS(ibm-1363)");
-    /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for the condition where we have a truncated char*/
     {
         static const uint8_t source1[]={0xc4};
@@ -1379,9 +1453,9 @@ TestISO_2022() {
     }
     TestNextUChar(cnv, source, limit, results, "ISO_2022");
 
-    /*Test the condition when source > sourceLimit*/
+    /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source-1, U_ILLEGAL_ARGUMENT_ERROR, "sourceLimit < source");
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for the condition where we have a truncated char*/
     {
         static const uint8_t source1[]={0xc4};
@@ -2227,8 +2301,8 @@ TestEBCDIC_STATEFUL() {
     }
     TestNextUChar(cnv, source, limit, results, "EBCDIC_STATEFUL(ibm-930)");
     ucnv_reset(cnv);
-     /*Test the condition when source > sourceLimit*/
-    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+     /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     ucnv_reset(cnv);
     /*Test for the condition where source > sourcelimit after consuming the shift chracter */
     {
