@@ -38,6 +38,8 @@
 #include "normconf.h"
 #include "thcoll.h"
 
+#include "lcukocol.h"
+
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec)
@@ -275,6 +277,17 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
             logln("CollationThaiTest---"); 
             
             CollationThaiTest test;
+            callTest( test, par );
+        }
+        break;
+
+		case 18: //all
+		name = "LotusCollationTest";
+
+		name = "LotusCollationKoreanTest"; 
+        if (exec) {
+            logln("LotusCollationKoreanTest---"); logln("");
+            LotusCollationKoreanTest test;
             callTest( test, par );
         }
         break;

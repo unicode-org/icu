@@ -249,6 +249,10 @@ SOURCE=.\jamotest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\lcukocol.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\loctest.cpp
 # End Source File
 # Begin Source File
@@ -578,6 +582,10 @@ SOURCE=.\jahatrts.h
 # Begin Source File
 
 SOURCE=.\jamotest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\lcukocol.h
 # End Source File
 # Begin Source File
 
