@@ -360,7 +360,7 @@ main(int argc, char* argv[]) {
 
         sprintf(
             buffer,
-            "U_EXPORT const struct {\n"
+            "U_EXPORT struct {\n"
             "    uint16_t headerSize;\n"
             "    uint8_t magic1, magic2;\n"
             "    UDataInfo info;\n"
