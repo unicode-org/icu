@@ -515,52 +515,12 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * Overrides Calendar
-     * Date Arithmetic function.
-     * Adds the specified (signed) amount of time to the given time field,
-     * based on the calendar's rules.
-     * @param field the time field.
-     * @param amount the amount of date or time to be added to the field.
-     * @exception IllegalArgumentException if an unknown field is given.
-     * @stable ICU 2.0
-     */
-    public void add(int field, int amount) {
-        switch (field) {
-        case ERA:
-            {
-                int era = get(ERA) + amount;
-                if (era < 0) {
-                    era = 0;
-                } else if (era > getMaximum(ERA)) {
-                    era = getMaximum(ERA);
-                }
-                set(ERA, era);
-            }
-            return;
-
-        default:
-            super.add(field, amount);
-            break;
-        }
-    }
-
-    /**
      * Roll a field by a signed amount.
      * @stable ICU 2.0
      */
     public void roll(int field, int amount) {
 
         switch (field) {
-        case ERA:
-            {
-                int era = (get(ERA) + amount ) % 2;
-                if (era < 0) {
-                    era += 2;
-                }
-                set(ERA, era);
-                return;
-            }
-
         case WEEK_OF_YEAR:
             {
                 // Unlike WEEK_OF_MONTH, WEEK_OF_YEAR never shifts the day of the
