@@ -698,6 +698,14 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                     return NULL;
                 }
             }
+            /* Windows CR LF */
+            if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
+                *len = temp++ - buf->currentPos;
+                savePos = buf->currentPos;
+                buf->currentPos = temp;
+                return savePos;
+            }
+            /* else */
             if (temp>=buf->bufLimit|| c == 0x0a  || c==0x2028 || c==0x0085){  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
@@ -716,7 +724,15 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                 *err = (UErrorCode) U_EOF;
                 return NULL;
             }
-            if (temp>=buf->bufLimit|| c == 0x0a  || c==0x2028 || c==0x0085) {  /* Unipad inserts 2028 line separators! */
+            /* Windows CR LF */
+            if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
+                *len = temp++ - buf->currentPos;
+                savePos = buf->currentPos;
+                buf->currentPos = temp;
+                return savePos;
+            }
+            /* else */
+            if (temp>=buf->bufLimit|| c == 0x0a ||c== 0x0d || c==0x2028 || c==0x0085) {  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
