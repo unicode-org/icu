@@ -1,6 +1,7 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2002 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2002-2004 International Business Machines Corporation
+ * and others. All Rights Reserved.
  *
  ********************************************************************/
 /*****************************************************************************
