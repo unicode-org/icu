@@ -101,7 +101,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]>1);
+        pInfo->formatVersion[0]==2);
 }
 
 static UBool
@@ -135,7 +135,7 @@ haveAliasData(UErrorCode *pErrorCode) {
             table=NULL;
             converterTable = aliasTable + 1 + 2 * *aliasTable;
 
-            if (info.formatVersion[0] > 1 && info.formatVersion[1] > 0) {
+            if (info.formatVersion[0] == 2 && info.formatVersion[1] > 0) {
                 tagTable = converterTable + 1 + 2 * *converterTable;
             }
         }
