@@ -25,13 +25,19 @@
 
 #include "dadrcoll.h"
 
+static void U_CALLCONV deleteSeqElement(void *elem) {
+  delete((SeqElement *)elem);
+}
+
 DataDrivenCollatorTest::DataDrivenCollatorTest() 
-: seq(StringCharacterIterator(""))
+: seq(StringCharacterIterator("")),
+status(U_ZERO_ERROR),
+sequences(status)
 {
-  UErrorCode status = U_ZERO_ERROR;
   TestLog testLog;
 
   driver = TestDataModule::getTestDataModule("DataDrivenCollationTest", testLog, status);
+  sequences.setDeleter(deleteSeqElement);
 }
 
 DataDrivenCollatorTest::~DataDrivenCollatorTest() 
@@ -46,7 +52,6 @@ void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const ch
     {
         logln("TestSuite Collator: ");
     }
-    UErrorCode status = U_ZERO_ERROR;
     const DataMap *info = NULL;
     TestData *testData = driver->createTestData(index, status);
     if(U_SUCCESS(status)) {
@@ -58,7 +63,7 @@ void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const ch
         log(name);
           logln("---");
           logln("");
-          processTest(testData, status);
+          processTest(testData);
       }
       delete testData;
     } else {
@@ -73,16 +78,15 @@ void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const ch
 }
 
 UBool
-DataDrivenCollatorTest::setTestSequence(const UnicodeString &setSequence, UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status) {
+DataDrivenCollatorTest::setTestSequence(const UnicodeString &setSequence, SeqElement &el) {
   seq.setText(setSequence);
-  return getNextInSequence(source, relation, status);
+  return getNextInSequence(el);
 }
 
 // Parses the sequence to be tested
 UBool 
-DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status) {
-  source.truncate(0);
-  // TODO: add quoting support - will need it pretty soon!
+DataDrivenCollatorTest::getNextInSequence(SeqElement &el) {
+  el.source.truncate(0);
   UBool quoted = FALSE;
   UBool quotedsingle = FALSE;
   UChar32 currChar = 0;
@@ -97,15 +101,15 @@ DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComp
       case CharacterIterator::DONE:
         break;
       case 0x003C /* < */:
-        relation = Collator::LESS;
+        el.relation = Collator::LESS;
         currChar = CharacterIterator::DONE;
         break;
       case 0x003D /* = */:
-        relation = Collator::EQUAL;
+        el.relation = Collator::EQUAL;
         currChar = CharacterIterator::DONE;
         break;
       case 0x003E /* > */:
-        relation = Collator::GREATER;
+        el.relation = Collator::GREATER;
         currChar = CharacterIterator::DONE;
         break;
       case 0x0027 /* ' */: /* very basic quoting */
@@ -117,7 +121,7 @@ DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComp
         quotedsingle = TRUE;
         break;
       default:
-        source.append(currChar);
+        el.source.append(currChar);
       }
     } else {
       if(currChar == CharacterIterator::DONE) {
@@ -127,7 +131,7 @@ DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComp
       } else if(currChar == 0x0027) {
         quoted = FALSE;
       } else {
-        source.append(currChar);
+        el.source.append(currChar);
       }
       if(quotedsingle) {
         quoted = FALSE;
@@ -139,7 +143,7 @@ DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComp
 
 // Reads the options string and sets appropriate attributes in collator
 void 
-DataDrivenCollatorTest::processArguments(Collator *col, const UChar *start, int32_t optLen, UErrorCode &status) {
+DataDrivenCollatorTest::processArguments(Collator *col, const UChar *start, int32_t optLen) {
   const UChar *end = start+optLen;
   UColAttribute attrib;
   UColAttributeValue value;
@@ -158,73 +162,8 @@ DataDrivenCollatorTest::processArguments(Collator *col, const UChar *start, int3
 }
 
 void 
-DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
+DataDrivenCollatorTest::processTest(TestData *testData) {
   Collator *col = NULL;
-/*
-  UnicodeString testInit[256];
-  const char **testNames = new const char*[256];
-  int32_t settingsSetSize = 0;
-  const UChar *arguments = NULL;
-  int32_t argLen = 0;
-  int32_t i = 0;
-  while(settingsSetSize = driver->getNextSettingsSet(testNames, testInit, 256, status)) {
-    argLen = 0;
-    for(i = 0; i < settingsSetSize; i++) {
-      if(strcmp(testNames[i], "Locale") == 0) { // Make the locale dependent collator
-        if(col == NULL) {
-          char localeName[256];
-          testInit[i].extract(0, testInit[i].length(), localeName, "");
-          col = Collator::createInstance(localeName, status);
-          if(U_SUCCESS(status)) {
-            logln("Testing collator for locale "+testInit[i]);
-          } else {
-            errln("Unable to instantiate collator for locale "+testInit[i]);
-            return;
-          }
-        } else {
-          errln("Collator defined more than once!");
-          return;
-        }
-      } else if(strcmp(testNames[i], "Rules") == 0) {
-        if(col == NULL) {
-          col = new RuleBasedCollator(testInit[i], status);
-          if(U_SUCCESS(status)) {
-            logln("Testing collator for rules "+UnicodeString(testInit[i]));
-          } else {
-            errln("Unable to instantiate collator for rules "+UnicodeString(testInit[i]));
-            return;
-          }
-        } else {
-          errln("Collator defined more than once!");
-          return;
-        }
-      } else if(strcmp(testNames[i], "Attributes") == 0) {
-        logln("Arguments: "+testInit[i]);
-        argLen = testInit[i].length();
-        arguments = testInit[i].getBuffer();
-      } else {
-        errln("I don't understand the setting "+UnicodeString(testNames[i]));
-      }
-    }
-    if(col != NULL) {
-      if(argLen > 0) {
-        processArguments(col, arguments, argLen, status);
-        if(U_SUCCESS(status)) {
-          UnicodeString sequence[1];
-          while(driver->getNextTestCase(sequence, 1, status)) {
-            processSequence(col, *sequence, status);
-          }
-        } else {
-          errln("Couldn't process arguments");
-        }
-      }
-    } else {
-      errln("Couldn't instantiate a collator!");
-    }
-    delete col;
-  }
-  delete testNames;
-*/
   const UChar *arguments = NULL;
   int32_t argLen = 0;
   const DataMap *settings = NULL;
@@ -268,8 +207,8 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
         logln("Arguments: "+testSetting);
         argLen = testSetting.length();
         arguments = testSetting.getBuffer();
-        processArguments(col, arguments, argLen, intStatus);
-        if(U_FAILURE(intStatus)) {
+        processArguments(col, arguments, argLen);
+        if(U_FAILURE(status)) {
           errln("Couldn't process arguments");
           break;
         }
@@ -280,7 +219,7 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
       while(testData->nextCase(currentCase, status)) {
         UnicodeString sequence = currentCase->getString("sequence", status);
         if(U_SUCCESS(status)) {
-            processSequence(col, sequence, status);
+            processSequence(col, sequence);
         }
       }
     } else {
@@ -292,24 +231,33 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
 }
 
 void 
-DataDrivenCollatorTest::processSequence(Collator* col, const UnicodeString &sequence, UErrorCode &status) {
-  UnicodeString source;
-  UnicodeString target;
-  UnicodeString temp;
+DataDrivenCollatorTest::processSequence(Collator* col, const UnicodeString &sequence) {
   Collator::EComparisonResult relation = Collator::EQUAL;
-  Collator::EComparisonResult nextRelation = Collator::EQUAL;
   UBool hasNext;
+  SeqElement *source = NULL;
+  SeqElement *target = NULL;
+  int32_t j = 0;
 
-  setTestSequence(sequence, source, relation, status);
+  sequences.removeAllElements();
 
-  // TODO: have a smarter tester that remembers the sequence and ensures that
-  // the complete sequence is in order. That is why I have made a constraint
-  // in the sequence format.
+  target = new SeqElement(); 
+
+  setTestSequence(sequence, *target);
+  sequences.addElement(target, status);
+
   do {
-    hasNext = getNextInSequence(target, nextRelation, status);
-    doTest(col, source, target, relation);
+    relation = Collator::EQUAL;
+    target = new SeqElement(); 
+    hasNext = getNextInSequence(*target);
+    for(j = sequences.size(); j > 0; j--) {
+      source = (SeqElement *)sequences.elementAt(j-1);
+      if(relation == Collator::EQUAL && source->relation != Collator::EQUAL) {
+        relation = source->relation;
+      }
+      doTest(col, source->source, target->source, relation);     
+    }
+    sequences.addElement(target, status);
     source = target;
-    relation = nextRelation;
   } while(hasNext);
 }
 

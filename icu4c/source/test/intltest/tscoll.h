@@ -25,9 +25,11 @@ class IntlTestCollator: public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL );
 protected:
     // These two should probably go down in IntlTest
-    void doTest(Collator* col, UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-    void doTestVariant(Collator* col, UnicodeString &source, UnicodeString &target, Collator::EComparisonResult result);
-    virtual void reportCResult( UnicodeString &source, UnicodeString &target,
+    void doTest(Collator* col, const UChar *source, const UChar *target, Collator::EComparisonResult result);
+
+    void doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result);
+    void doTestVariant(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result);
+    virtual void reportCResult( const UnicodeString &source, const UnicodeString &target,
                                 CollationKey &sourceKey, CollationKey &targetKey,
                                 Collator::EComparisonResult compareResult,
                                 Collator::EComparisonResult keyResult,
