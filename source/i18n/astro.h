@@ -84,7 +84,12 @@ public:
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    Ecliptic(double lat, double lon) {
+    Ecliptic(double lat = 0, double lon = 0) {
+      latitude = lat;
+      longitude = lon;
+    }
+
+    void set(double lat, double lon) {
       latitude = lat;
       longitude = lon;
     }
@@ -151,8 +156,13 @@ public:
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    Equatorial(double asc, double dec)
+    Equatorial(double asc = 0, double dec = 0)
       : ascension(asc), declination(dec) { }
+
+      void set(double asc, double dec) {
+        ascension = asc;
+        declination = dec;
+      }
 
     /**
      * Return a string representation of this object, with the
@@ -225,8 +235,13 @@ public:
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    Horizon(double alt, double azim)
+    Horizon(double alt=0, double azim=0)
       : altitude(alt), azimuth(azim) { }
+
+      void set(double alt, double azim) {
+        altitude = alt; 
+        azimuth = azim;
+      }
 
     /**
      * Return a string representation of this object, with the
@@ -245,14 +260,14 @@ public:
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    const double altitude;
+    double altitude;
         
     /** 
      * The object's direction, in radians clockwise from north. 
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    const double azimuth;
+    double azimuth;
   };
 
 public:
@@ -563,8 +578,16 @@ public:
    */
   //private:
   double lstToUT(double lst);
-    
-  Equatorial* eclipticToEquatorial(Ecliptic& ecliptic);
+  
+  /**
+   *
+   * Convert from ecliptic to equatorial coordinates.
+   *
+   * @param ecliptic     The ecliptic
+   * @param result       Fillin result 
+   * @return reference to result
+   */
+   Equatorial& eclipticToEquatorial(Equatorial& result, const Ecliptic& ecliptic);
 
   /**
    * Convert from ecliptic to equatorial coordinates.
@@ -576,7 +599,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  Equatorial* eclipticToEquatorial(double eclipLong, double eclipLat);
+   Equatorial& eclipticToEquatorial(Equatorial& result, double eclipLong, double eclipLat);
 
   /**
    * Convert from ecliptic longitude to equatorial coordinates.
@@ -587,13 +610,13 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  Equatorial* eclipticToEquatorial(double eclipLong);
+  Equatorial& eclipticToEquatorial(Equatorial& result, double eclipLong) ;
 
   /**
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  Horizon* eclipticToHorizon(double eclipLong);
+   Horizon& eclipticToHorizon(Horizon& result, double eclipLong) ;
 
   //-------------------------------------------------------------------------
   // The Sun
@@ -678,16 +701,18 @@ public:
   /**
    * The position of the sun at this object's current date and time,
    * in equatorial coordinates.
+   * @param result fillin for the result
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  Equatorial* getSunPosition();
+  Equatorial& getSunPosition(Equatorial& result);
     
 public:
   class U_I18N_API SolarLongitude : public UMemory {
   public: 
     SolarLongitude(double l)
       :  value(l) { }
+      void set(double l) { value = l; }
     double value;
   };
     
@@ -1050,10 +1075,11 @@ public:
    * The position of the moon at the time set on this
    * object, in equatorial coordinates.
    * @internal
+   * @return const reference to internal field of calendar astronomer. Do not use outside of the lifetime of this astronomer.
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  Equatorial* getMoonPosition();
-    
+  const Equatorial& getMoonPosition();
+  
   /**
    * The "age" of the moon at the time specified in this object.
    * This is really the angle between the
@@ -1087,6 +1113,7 @@ public:
   public: 
     MoonAge(double l)
       :  value(l) { }
+      void set(double l) { value = l; }
     double value;
   };
 
@@ -1133,7 +1160,7 @@ public:
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getMoonTime(double desired, UBool next);
-  UDate getMoonTime(MoonAge desired, UBool next);
+  UDate getMoonTime(const MoonAge& desired, UBool next);
     
   /**
    * Returns the time (GMT) of sunrise or sunset on the local date to which
@@ -1159,7 +1186,7 @@ public:
     
   class U_I18N_API CoordFunc : public UMemory {
   public:
-    virtual Equatorial* eval(CalendarAstronomer&) = 0;
+    virtual void eval(Equatorial& result, CalendarAstronomer&) = 0;
   };
   friend class CoordFunc;
     
@@ -1256,7 +1283,8 @@ private:
    
   void clearCache();
   
-  Equatorial  *moonPosition;
+  Equatorial  moonPosition;
+  UBool       moonPositionSet;
 
   //private static void out(String s) {
   //    System.out.println(s);
