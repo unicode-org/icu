@@ -145,11 +145,11 @@ public class RoundTripTest extends TestFmwk {
     }
     
     public void TestThai() throws IOException, ParseException {
-        System.out.println("\nTest commented out, to be reinstated later");
-        /*
-         * new Test("Latin-Thai")
-          .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268]", "[:thai:]", null, this, new LegalThai());
-          */
+        //System.out.println("\nTest commented out, to be reinstated later");
+        
+        new Test("Latin-Thai")
+          .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268]", "[\u0E01-\u0E3A\u0E40-\u0E5B]", null, this, new LegalThai());
+        
     }
     
     //----------------------------------
@@ -642,13 +642,18 @@ public class RoundTripTest extends TestFmwk {
             if (sourceString.length() == 0) return true;
             char ch = sourceString.charAt(sourceString.length() - 1); // don't worry about surrogates.
             if (UCharacter.hasBinaryProperty(ch, UProperty.LOGICAL_ORDER_EXCEPTION)) return false;
-            /*
-            if (UTF16.countCodePoint(sourceString) <= 1) return true;
+            
             
             // disallow anything with a wordbreak between
+            /*
+            if (UTF16.countCodePoint(sourceString) <= 1) return true;
             thaiBreak.setText(sourceString);
-            
-            return true;
+            for (int pos = thaiBreak.first(); pos != BreakIterator.DONE; pos = thaiBreak.next()) {
+                if (pos > 0 && pos < sourceString.length()) {
+                    System.out.println("Skipping " + Utility.escape(sourceString));
+                    return false;
+                }
+            }
             */
             return true;
         }
