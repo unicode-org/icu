@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2004/02/12 08:23:19 $
-* $Revision: 1.20 $
+* $Date: 2005/04/06 08:48:17 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 
 public class WriteCharts implements UCD_Types {
 
+	static String WORKING_DIR = ".\\com\\ibm\\text\\UCA\\";
     static boolean HACK_KANA = false;
 
     static public void special() {
@@ -50,7 +51,7 @@ public class WriteCharts implements UCD_Types {
         //Normalizer nfc = new Normalizer(Normalizer.NFC);
 
         UCA.UCAContents cc = uca.getContents(UCA.FIXED_CE, null); // nfd instead of null if skipping decomps
-        cc.enableSamples();
+        cc.setDoEnableSamples(true);
 
         Set set = new TreeSet();
 
@@ -84,12 +85,12 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Collation Charts"};
         String folder = "charts\\uca\\";
 
-        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
-        Utility.copyTextFile("help.html", Utility.UTF8, folder + "help.html");
+        Utility.copyTextFile(WORKING_DIR + "index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile(WORKING_DIR + "charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile(WORKING_DIR + "help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
+        Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
 
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -100,6 +101,7 @@ public class WriteCharts implements UCD_Types {
         indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
         */
 
+        int lastCp = -1;
         while (it.hasNext()) {
             Utility.dot(counter);
 
@@ -110,6 +112,7 @@ public class WriteCharts implements UCD_Types {
             int cp = UTF16.charAt(s,0);
 
             byte script = Default.ucd().getScript(cp);
+            if (cp == 0x1DBF) script = UCD.GREEK_SCRIPT; // 4.1.0 hack
 
             // get first non-zero primary
             int currentPrimary = getFirstPrimary(sortKey);
@@ -128,6 +131,7 @@ public class WriteCharts implements UCD_Types {
             if (script == KATAKANA_SCRIPT) script = HIRAGANA_SCRIPT;
             else if ((script == INHERITED_SCRIPT || script == COMMON_SCRIPT) && oldScript >= 0) script = oldScript;
 
+            int veryOldScript = oldScript;
             if (script != oldScript
                     // && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
                     ) {
@@ -140,7 +144,9 @@ public class WriteCharts implements UCD_Types {
                 ++scriptCount[script+3];
                 if (scriptCount[script+3] > 1) {
                     System.out.println("\t\tFAIL: " + scriptCount[script+3] + ", " +
-                        getChunkName(script, LONG) + ", " + Default.ucd().getCodeAndName(s));
+                        getChunkName(script, LONG) + ", " + Default.ucd().getCodeAndName(s)
+						+ " - last char: " 
+						+ getChunkName(veryOldScript, LONG) + ", " + Default.ucd().getCodeAndName(lastCp));
                 }
                 output = openFile(scriptCount[script+3], folder, script);
             }
@@ -179,6 +185,7 @@ public class WriteCharts implements UCD_Types {
 
             output.println(breaker + outline);
             ++columnCount;
+            lastCp = cp;
         }
 
         closeFile(output);
@@ -265,7 +272,7 @@ public class WriteCharts implements UCD_Types {
         Utility.copyTextFile("norm_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
+        Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
 
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -373,7 +380,7 @@ public class WriteCharts implements UCD_Types {
         Utility.copyTextFile("case_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
+        Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
 
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -485,7 +492,7 @@ public class WriteCharts implements UCD_Types {
 			Utility.copyTextFile("script_help.html", Utility.UTF8, folder + "help.html");
 
 			indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-			Utility.appendFile("script_index_header.html", Utility.UTF8, indexFile, replacement);
+			Utility.appendFile(WORKING_DIR + "script_index_header.html", Utility.UTF8, indexFile, replacement);
 
 			/*
 			indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -607,7 +614,7 @@ public class WriteCharts implements UCD_Types {
         Utility.copyTextFile("name_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
-        Utility.appendFile("index_header.html", Utility.UTF8, indexFile, replacement);
+        Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
 
         int columnCount = 0;
         char lastInitial = 0;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2004/02/06 18:32:03 $ 
-* $Revision: 1.23 $
+* $Date: 2005/04/06 08:48:16 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,8 @@
 package com.ibm.text.UCA;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.PrintWriter;
@@ -108,13 +110,16 @@ final public class UCA implements Comparator, UCA_Types {
 // Main Methods
 // =============================================================
 
+    private String fileVersion = "??";
+    
     /**
      * Initializes the collation from a stream of rules in the normal formal.
      * If the source is null, uses the normal Unicode data files, which
      * need to be in BASE_DIR.
      */
-    public UCA(BufferedReader source, String unicodeVersion) throws java.io.IOException {
-        fullData = source == null;
+    public UCA(String sourceFile, String unicodeVersion) throws java.io.IOException {
+        fullData = sourceFile == null;
+        fileVersion = sourceFile;
         
         // load the normalizer
         if (toD == null) {
@@ -127,15 +132,19 @@ final public class UCA implements Comparator, UCA_Types {
         ucaData = new UCA_Data(toD, ucd);
         
         // either get the full sources, or just a demo set
-        if (fullData) {
+/*        if (fullData) {      
             for (int i = 0; i < KEYS.length; ++i) {
                 BufferedReader in = new BufferedReader(
                     new FileReader(KEYS[i]), BUFFER_SIZE);
                 addCollationElements(in);
                 in.close();
             }
-        } else {
-            addCollationElements(source);
+        } else */
+        {
+        	BufferedReader in = new BufferedReader(
+                    new FileReader(sourceFile), BUFFER_SIZE);
+            addCollationElements(in);
+            in.close();
         }
         cleanup();
     }
@@ -830,16 +839,17 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     /**
      * List of files to use for constructing the CE data, used by build()
      */
-    private static final String[] KEYS = {
+
+/*    private static final String[] KEYS = {
         //"D:\\UnicodeData\\testkeys.txt",
-        BASE_DIR + "Collation\\allkeys" + VERSION + ".txt",
-        /*
+        BASE_DIR + "UCA\\allkeys" + VERSION + ".txt",
+        
         BASE_DIR + "UnicodeData\\Collation\\basekeys" + VERSION + ".txt",
         BASE_DIR + "UnicodeData\\Collation\\compkeys" + VERSION + ".txt",
         BASE_DIR + "UnicodeData\\Collation\\ctrckeys" + VERSION + ".txt",
-        */
+        
     };
- 
+*/ 
     /**
      * File buffer size, used to make reads faster.
      */
@@ -1089,6 +1099,13 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     
     static boolean haveUnspecified = false;
     static UnicodeSet unspecified = new UnicodeSet();
+    UnicodeSet variantSecondaries = new UnicodeSet(0x0153,0x0154);
+    UnicodeSet digitSecondaries = new UnicodeSet(0x155,0x017F);
+    UnicodeSet homelessSecondaries;
+    
+    // static UnicodeSet homelessSecondaries = new UnicodeSet(0x0176, 0x0198);
+    //  0x0153..0x017F
+
         
     public class UCAContents {
         int current = -1;
@@ -1130,9 +1147,10 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         
         /**
          * use FIXED_CE as the limit
+         * @param newValue TODO
          */
-        public void enableSamples() {
-            doSamples = true;
+        public void setDoEnableSamples(boolean newValue) {
+            doSamples = newValue;
         }
         
         /**
@@ -1179,7 +1197,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             if (!haveUnspecified) {
                 if (DEBUG) System.out.println("Specified = " + unspecified.toPattern(true));
                 UnicodeSet temp = new UnicodeSet();
-                for (int i = 0; i < 0x10ffff; ++i) {
+                for (int i = 0; i <= 0x10ffff; ++i) {
                     if (!ucd.isAllocated(i)) continue;
                     if (!unspecified.contains(i)) {
                         temp.add(i);
@@ -1265,6 +1283,12 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             return true;
         }
         
+		/**
+		 * @return Returns the doSamples.
+		 */
+		public boolean isDoSamples() {
+			return doSamples;
+		}
     }
     
     static final int[][] SAMPLE_RANGES = {
@@ -1312,6 +1336,14 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         while (true) try {
             inputLine = in.readLine();
             if (inputLine == null) break;       // means file is done
+            
+            // HACK
+            if (inputLine.startsWith("# Variant secondaries:")) {
+            	variantSecondaries = extractSet(inputLine);
+            } else if (inputLine.startsWith("# Digit secondaries:")) {
+            	digitSecondaries = extractSet(inputLine);
+            }
+
             String line = cleanLine(inputLine); // remove comments, extra whitespace
             if (line.length() == 0) continue;   // skip empty lines
             
@@ -1407,7 +1439,18 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         }
     }
     
-    /*
+    /**
+	 * 
+	 */
+	private UnicodeSet extractSet(String inputLine) {
+        //# Variant secondaries:    0177..017B (5)
+		//# Digit secondaries:      017C..0198 (29)
+		Matcher m = Pattern.compile(".*:\\s*([0-9A-Fa-f]+)\\.\\.([0-9A-Fa-f]+).*").matcher("");
+		if (!m.reset(inputLine).matches()) throw new IllegalArgumentException("Failed to recognized special Ken lines: " + inputLine);
+		return new UnicodeSet(Integer.parseInt(m.group(1),16), Integer.parseInt(m.group(2),16));
+	}
+
+	/*
     private void concat(int[] ces1, int[] ces2) {
         
     }
@@ -1737,4 +1780,25 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             uniqueTable.put(ceObj, new Character(value));
         }
     }
+/**
+ * @return Returns the fileVersion.
+ */
+public String getFileVersion() {
+	return fileVersion;
+}
+/**
+ * @return Returns the uCA_GEN_DIR.
+ */
+public String getUCA_GEN_DIR() {
+	return BASE_UCA_GEN_DIR + getDataVersion() + "\\";
+}
+
+
+	/**
+	 * @return Returns the homelessSecondaries.
+	 */
+	public UnicodeSet getHomelessSecondaries() {
+		if (homelessSecondaries == null) homelessSecondaries = new UnicodeSet(variantSecondaries).addAll(digitSecondaries);
+		return homelessSecondaries;
+	}
 }

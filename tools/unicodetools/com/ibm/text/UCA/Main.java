@@ -5,19 +5,24 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2004/01/15 01:08:30 $ 
-* $Revision: 1.18 $
+* $Date: 2005/04/06 08:48:16 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCA;
+import java.io.File;
+
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
 
 
 public class Main {
-	static final String UCDVersion = "4.0.0";
+	//static final String UCDVersion = "4.0.0";
 	static final String[] ICU_FILES = {"writeCollationValidityLog", "writeFractionalUCA",
 		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted", 
 		"short", 
@@ -28,18 +33,10 @@ public class Main {
     };
 	
 	public static void main(String args[]) throws Exception {
-		
+		//checkCanonicalIterator();
 		// NOTE: so far, we don't need to build the UCA with anything but the latest versions.
 		// A few changes would need to be made to the code to do older versions.
         try {
-            System.out.println("Building UCA");
-            Default.setUCD(UCDVersion);
-            WriteCollationData.collator = new UCA(null, UCDVersion);
-            System.out.println("Built version " + WriteCollationData.collator.getDataVersion()
-            	+ "/ucd: " + WriteCollationData.collator.getUCDVersion());
-            
-            System.out.println("Building UCD data");
-            WriteCollationData.ucd = UCD.make(WriteCollationData.collator.getUCDVersion());
             
             if (args.length == 0) args = new String[] {"?"}; // force the help comment
             boolean shortPrint = false;
@@ -54,7 +51,22 @@ public class Main {
                     args = Utility.append(ICU_FILES, Utility.subarray(args, i+1));
                     i = -1;
                     continue;     
-                } 
+                }
+                if (arg.equalsIgnoreCase("version")) {
+                	Default.setUCD(args[++i]); // get next arg
+                	continue;
+                }
+                if (WriteCollationData.collator == null) {
+                    System.out.println("Building UCA");
+                    String file = Utility.searchDirectory(new File(UCD_Types.BASE_DIR + "UCA\\" + Default.ucdVersion() + "\\"), "allkeys", true, ".txt");
+                    WriteCollationData.collator = new UCA(file, Default.ucdVersion());
+                    System.out.println("Built version " + WriteCollationData.collator.getDataVersion()
+                    	+ "/ucd: " + WriteCollationData.collator.getUCDVersion());
+                    
+                    System.out.println("Building UCD data");
+                    WriteCollationData.ucd = UCD.make(WriteCollationData.collator.getUCDVersion());
+
+                }
                 if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(WriteCollationData.collator);
                 else if (arg.equalsIgnoreCase("validateUCA")) GenOverlap.validateUCA(WriteCollationData.collator);
                 //else if (arg.equalsIgnoreCase("writeNonspacingDifference")) WriteCollationData.writeNonspacingDifference();
@@ -125,4 +137,37 @@ public class Main {
             */
         }
     }
+
+	/**
+	 * 
+	 */
+	private static void checkCanonicalIterator() {
+		
+		int firstImplicit = WriteCollationData.getImplicitPrimary(UCD_Types.CJK_BASE);
+		System.out.println("UCD_Types.CJK_BASE: " + Utility.hex(UCD_Types.CJK_BASE));
+		System.out.println("first implicit: " + Utility.hex((long)(firstImplicit & 0xFFFFFFFFL)));
+		
+		CanonicalIterator it = new CanonicalIterator("");
+		String[] tests = new String[] {"\uF900"};
+		for (int j = 0; j < tests.length; ++j) {
+			System.out.println(tests[j]);
+			it.setSource(tests[j]);
+			String ss;
+			for (int i = 0; (ss = it.next()) != null; ++i) {
+				System.out.println(i + "\t" + Utility.hex(ss));
+			}
+		}
+		if (true) throw new IllegalArgumentException();
+		for (int i = 0; i < 0x10FFFF; ++i) {
+			int cat = UCharacter.getType(i);
+			if (cat == UCharacter.UNASSIGNED || cat == UCharacter.PRIVATE_USE || cat == UCharacter.SURROGATE) continue;
+			String s = UTF16.valueOf(i);
+			try {
+				it.setSource(s);
+			} catch (RuntimeException e) {
+				System.out.println("Failure with U+" + Utility.hex(i));
+				e.printStackTrace();
+			}
+		}
+	}
 }

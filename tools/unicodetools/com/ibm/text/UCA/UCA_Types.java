@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Types.java,v $ 
-* $Date: 2004/01/13 18:32:11 $ 
-* $Revision: 1.6 $
+* $Date: 2005/04/06 08:48:17 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -20,11 +20,11 @@ public interface UCA_Types {
      * Version of the UCA tables to use
      */
     //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
-    public static final String UCA_BASE = "4.0.0";  // "3.1.1"; //      ; // ""; // "-2.1.9d7"; 
-    public static final String VERSION = "-" + UCA_BASE; //  + "d6" ""; // "-2.1.9d7"; 
+    //public static final String UCA_BASE = "4.1.0";  // "3.1.1"; //      ; // ""; // "-2.1.9d7"; 
+    //public static final String VERSION = "-" + UCA_BASE; //  + "d6" ""; // "-2.1.9d7"; 
     public static final String ALLFILES = "allkeys"; // null if not there
 
-    public static final String UCA_GEN_DIR = UCD_Types.GEN_DIR + "collation_" + UCA_BASE + "\\";
+    public static final String BASE_UCA_GEN_DIR = UCD_Types.GEN_DIR + "collation" + "\\";
     public static final char LEVEL_SEPARATOR = '\u0000'; 
     /**
      * Expanding characters are marked with a exception bit combination
@@ -94,5 +94,5 @@ public interface UCA_Types {
         CJK_CE = 3, CJK_AB_CE = 4, HANGUL_CE = 5, UNSUPPORTED_CE = 7,
         FIXED_CE = 3;
         // SURROGATE_CE = 6, 
-   
+
 }
