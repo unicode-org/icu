@@ -1,7 +1,7 @@
 /*  
 ******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -22,6 +22,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "ubidi_props.h"
 
 /* miscellaneous definitions ---------------------------------------------- */
 
@@ -128,6 +129,8 @@ ubidi_getRuns(UBiDi *pBiDi);
 /* UBiDi structure ----------------------------------------------------------- */
 
 struct UBiDi {
+    UBiDiProps *bdp;
+
     /* alias pointer to the current text */
     const UChar *text;
 

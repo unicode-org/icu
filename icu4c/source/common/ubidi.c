@@ -24,6 +24,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
+#include "ubidi_props.h"
 #include "ubidiimp.h"
 
 /*
@@ -146,6 +147,13 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) 
 
     /* reset the object, all pointers NULL, all flags FALSE, all sizes 0 */
     uprv_memset(pBiDi, 0, sizeof(UBiDi));
+
+    /* get BiDi properties */
+    pBiDi->bdp=ubidi_getSingleton(pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        uprv_free(pBiDi);
+        return NULL;
+    }
 
     /* allocate memory for arrays as requested */
     if(maxLength>0) {
@@ -281,7 +289,7 @@ getDirProps(UBiDi *pBiDi, const UChar *text) {
             i0=i;           /* index of first code unit */
             UTF_NEXT_CHAR(text, i, length, uchar);
             i1=i-1;         /* index of last code unit, gets the directional property */
-            flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=u_charDirection(uchar));
+            flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=ubidi_getClass(pBiDi->bdp, uchar));
             if(i1>i0) {     /* set previous code units' properties to BN */
                 flags|=DIRPROP_FLAG(BN);
                 do {
@@ -314,7 +322,7 @@ getDirProps(UBiDi *pBiDi, const UChar *text) {
         i0=i;           /* index of first code unit */
         UTF_NEXT_CHAR(text, i, length, uchar);
         i1=i-1;         /* index of last code unit, gets the directional property */
-        flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=u_charDirection(uchar));
+        flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=ubidi_getClass(pBiDi->bdp, uchar));
         if(i1>i0) {     /* set previous code units' properties to BN */
             flags|=DIRPROP_FLAG(BN);
             do {
