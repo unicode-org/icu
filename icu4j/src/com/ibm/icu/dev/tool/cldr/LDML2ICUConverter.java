@@ -1942,16 +1942,21 @@ public class LDML2ICUConverter {
        return  (hours * 60  + minutes ) * 60 * 1000;
     }
     private ICUResourceWriter.Resource parseWeekend(Node root, StringBuffer xpath){
-        Node wkendStart = getVettedNode(root, LDMLConstants.WENDSTART, xpath);
-        Node wkendEnd = getVettedNode(root, LDMLConstants.WENDEND, xpath);
-        // TODO: fixme..
-        if(locName.equals("root")) {
+        boolean wasdraft = false;
+        // TODO: TIMEBOMB this - ignore draft
+        // TODO: for now we get whatever node is there, even if draft
+//        Node wkendStart = getVettedNode(root, LDMLConstants.WENDSTART, xpath);
+//        Node wkendEnd = getVettedNode(root, LDMLConstants.WENDEND, xpath);
+        Node wkendStart = LDMLUtilities.getNode(root, LDMLConstants.WENDSTART);
+        Node wkendEnd = LDMLUtilities.getNode(root, LDMLConstants.WENDEND);
+        
+        if((wkendEnd!=null)||(wkendStart!=null)) {
             if(wkendStart==null) { 
-                System.out.println("Note: attempting to override root's draft status for weekend-start"); 
+            // should check for draft 
                 wkendStart = LDMLUtilities.getNode(root, LDMLConstants.WENDSTART , fullyResolvedDoc, xpath.toString());
             }
             if(wkendEnd==null) { 
-                System.out.println("Note: attempting to override root's draft status for weekend-end"); 
+            // should check for draft 
                 wkendEnd = LDMLUtilities.getNode(root, LDMLConstants.WENDEND , fullyResolvedDoc, xpath.toString());
             }
         }
@@ -3477,6 +3482,7 @@ public class LDML2ICUConverter {
                     }
                     String aName = node.getNodeName();
                     if(aName.equals("overrideDraft")) {
+                        // TODO: TIMEBOMB: warn about draft overrides
                         String theLocale = LDMLUtilities.getAttributeValue(node, "locale");
                         //System.out.println("INFO: added override-draft locale " + theLocale);
                         overrideMap.put(theLocale,theLocale); // TODO: waste.
