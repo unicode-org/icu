@@ -867,11 +867,10 @@ _uhash_setElement(UHashtable *hash, UHashElement* e,
                   int32_t hashcode,
                   UHashTok key, UHashTok value, int8_t hint) {
 
-    void* oldKeyPtr = e->key.pointer;
     UHashTok oldValue = e->value;
-    if (hash->keyDeleter != NULL && oldKeyPtr != NULL &&
-        oldKeyPtr != key.pointer) { /* Avoid double deletion */
-        (*hash->keyDeleter)(oldKeyPtr);
+    if (hash->keyDeleter != NULL && e->key.pointer != NULL &&
+        e->key.pointer != key.pointer) { /* Avoid double deletion */
+        (*hash->keyDeleter)(e->key.pointer);
     }
     if (hash->valueDeleter != NULL) {
         if (oldValue.pointer != NULL &&
