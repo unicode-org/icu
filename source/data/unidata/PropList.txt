@@ -1,15 +1,13 @@
-# PropList-3.1.1.txt
+# PropList-3.2.0.txt
+# Date: 2002-03-19,23:31:21 GMT [MD]
 #
 # Unicode Character Database: Extended Properties
 # For documentation, see PropList.html
-# Date: 2001-07-12 14:15:00.0 PDT [KW]
 # Note: Unassigned and Noncharacter codepoints are omitted,
 #       except when listing Noncharacter or Cn.
 # ================================================
 
 # ================================================
-# Markus Scherer 2002mar01: fixed spelling to White_Space with uppercase "Case"
-# see Unicode 3.2
 
 0009..000D    ; White_Space # Cc   [5] <control>..<control>
 0020          ; White_Space # Zs       SPACE
@@ -174,12 +172,6 @@ FF64          ; Terminal_Punctuation # Po       HALFWIDTH IDEOGRAPHIC COMMA
 212F..2131    ; Other_Math # L&   [3] SCRIPT SMALL E..SCRIPT CAPITAL F
 2133..2134    ; Other_Math # L&   [2] SCRIPT CAPITAL M..SCRIPT SMALL O
 2135..2138    ; Other_Math # Lo   [4] ALEF SYMBOL..DALET SYMBOL
-2329          ; Other_Math # Ps       LEFT-POINTING ANGLE BRACKET
-232A          ; Other_Math # Pe       RIGHT-POINTING ANGLE BRACKET
-300A          ; Other_Math # Ps       LEFT DOUBLE ANGLE BRACKET
-300B          ; Other_Math # Pe       RIGHT DOUBLE ANGLE BRACKET
-301A          ; Other_Math # Ps       LEFT WHITE SQUARE BRACKET
-301B          ; Other_Math # Pe       RIGHT WHITE SQUARE BRACKET
 FE35          ; Other_Math # Ps       PRESENTATION FORM FOR VERTICAL LEFT PARENTHESIS
 FE36          ; Other_Math # Pe       PRESENTATION FORM FOR VERTICAL RIGHT PARENTHESIS
 FE37          ; Other_Math # Ps       PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET
@@ -235,7 +227,7 @@ FF5D          ; Other_Math # Pe       FULLWIDTH RIGHT CURLY BRACKET
 1D7C4..1D7C9  ; Other_Math # L&   [6] MATHEMATICAL SANS-SERIF BOLD ITALIC EPSILON SYMBOL..MATHEMATICAL SANS-SERIF BOLD ITALIC PI SYMBOL
 1D7CE..1D7FF  ; Other_Math # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 
-# Total code points: 1072
+# Total code points: 1066
 
 # ================================================
 
@@ -311,7 +303,6 @@ FF41..FF46    ; Hex_Digit # L&   [6] FULLWIDTH LATIN SMALL LETTER A..FULLWIDTH L
 0B56          ; Other_Alphabetic # Mn       ORIYA AI LENGTH MARK
 0B57          ; Other_Alphabetic # Mc       ORIYA AU LENGTH MARK
 0B82          ; Other_Alphabetic # Mn       TAMIL SIGN ANUSVARA
-0B83          ; Other_Alphabetic # Mc       TAMIL SIGN VISARGA
 0BBE..0BBF    ; Other_Alphabetic # Mc   [2] TAMIL VOWEL SIGN AA..TAMIL VOWEL SIGN I
 0BC0          ; Other_Alphabetic # Mn       TAMIL VOWEL SIGN II
 0BC1..0BC2    ; Other_Alphabetic # Mc   [2] TAMIL VOWEL SIGN U..TAMIL VOWEL SIGN UU
@@ -366,6 +357,10 @@ FF41..FF46    ; Hex_Digit # L&   [6] FULLWIDTH LATIN SMALL LETTER A..FULLWIDTH L
 1056..1057    ; Other_Alphabetic # Mc   [2] MYANMAR VOWEL SIGN VOCALIC R..MYANMAR VOWEL SIGN VOCALIC RR
 1058..1059    ; Other_Alphabetic # Mn   [2] MYANMAR VOWEL SIGN VOCALIC L..MYANMAR VOWEL SIGN VOCALIC LL
 16EE..16F0    ; Other_Alphabetic # Nl   [3] RUNIC ARLAUG SYMBOL..RUNIC BELGTHOR SYMBOL
+1712..1713    ; Other_Alphabetic # Mn   [2] TAGALOG VOWEL SIGN I..TAGALOG VOWEL SIGN U
+1732..1733    ; Other_Alphabetic # Mn   [2] HANUNOO VOWEL SIGN I..HANUNOO VOWEL SIGN U
+1752..1753    ; Other_Alphabetic # Mn   [2] BUHID VOWEL SIGN I..BUHID VOWEL SIGN U
+1772..1773    ; Other_Alphabetic # Mn   [2] TAGBANWA VOWEL SIGN I..TAGBANWA VOWEL SIGN U
 17B4..17B6    ; Other_Alphabetic # Mc   [3] KHMER VOWEL INHERENT AQ..KHMER VOWEL SIGN AA
 17B7..17BD    ; Other_Alphabetic # Mn   [7] KHMER VOWEL SIGN I..KHMER VOWEL SIGN UA
 17BE..17C5    ; Other_Alphabetic # Mc   [8] KHMER VOWEL SIGN OE..KHMER VOWEL SIGN AU
@@ -376,7 +371,7 @@ FF41..FF46    ; Hex_Digit # L&   [6] FULLWIDTH LATIN SMALL LETTER A..FULLWIDTH L
 FB1E          ; Other_Alphabetic # Mn       HEBREW POINT JUDEO-SPANISH VARIKA
 1034A         ; Other_Alphabetic # Nl       GOTHIC LETTER NINE HUNDRED
 
-# Total code points: 391
+# Total code points: 398
 
 # ================================================
 
@@ -541,3 +536,107 @@ FFFFE..FFFFF  ; Noncharacter_Code_Point # Cn   [2]
 10FFFE..10FFFF; Noncharacter_Code_Point # Cn   [2] 
 
 # Total code points: 66
+
+# ================================================
+
+FF9E..FF9F    ; Other_Grapheme_Extend # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK..HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
+
+# Total code points: 2
+
+# ================================================
+
+094D          ; Grapheme_Link # Mn       DEVANAGARI SIGN VIRAMA
+09CD          ; Grapheme_Link # Mn       BENGALI SIGN VIRAMA
+0A4D          ; Grapheme_Link # Mn       GURMUKHI SIGN VIRAMA
+0ACD          ; Grapheme_Link # Mn       GUJARATI SIGN VIRAMA
+0B4D          ; Grapheme_Link # Mn       ORIYA SIGN VIRAMA
+0BCD          ; Grapheme_Link # Mn       TAMIL SIGN VIRAMA
+0C4D          ; Grapheme_Link # Mn       TELUGU SIGN VIRAMA
+0CCD          ; Grapheme_Link # Mn       KANNADA SIGN VIRAMA
+0D4D          ; Grapheme_Link # Mn       MALAYALAM SIGN VIRAMA
+0DCA          ; Grapheme_Link # Mn       SINHALA SIGN AL-LAKUNA
+0E3A          ; Grapheme_Link # Mn       THAI CHARACTER PHINTHU
+1039          ; Grapheme_Link # Mn       MYANMAR SIGN VIRAMA
+17D2          ; Grapheme_Link # Mn       KHMER SIGN COENG
+
+# Total code points: 13
+
+# ================================================
+
+2FF0..2FF1    ; IDS_Binary_Operator # So   [2] IDEOGRAPHIC DESCRIPTION CHARACTER LEFT TO RIGHT..IDEOGRAPHIC DESCRIPTION CHARACTER ABOVE TO BELOW
+2FF4..2FFB    ; IDS_Binary_Operator # So   [8] IDEOGRAPHIC DESCRIPTION CHARACTER FULL SURROUND..IDEOGRAPHIC DESCRIPTION CHARACTER OVERLAID
+
+# Total code points: 10
+
+# ================================================
+
+2FF2..2FF3    ; IDS_Trinary_Operator # So   [2] IDEOGRAPHIC DESCRIPTION CHARACTER LEFT TO MIDDLE AND RIGHT..IDEOGRAPHIC DESCRIPTION CHARACTER ABOVE TO MIDDLE AND BELOW
+
+# Total code points: 2
+
+# ================================================
+
+2E80..2E99    ; Radical # So  [26] CJK RADICAL REPEAT..CJK RADICAL RAP
+2E9B..2EF3    ; Radical # So  [89] CJK RADICAL CHOKE..CJK RADICAL C-SIMPLIFIED TURTLE
+2F00..2FD5    ; Radical # So [214] KANGXI RADICAL ONE..KANGXI RADICAL FLUTE
+
+# Total code points: 329
+
+# ================================================
+
+3400..4DB5    ; Unified_Ideograph # Lo [6582] CJK UNIFIED IDEOGRAPH-3400..CJK UNIFIED IDEOGRAPH-4DB5
+4E00..9FA5    ; Unified_Ideograph # Lo [20902] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FA5
+FA0E..FA0F    ; Unified_Ideograph # Lo   [2] CJK COMPATIBILITY IDEOGRAPH-FA0E..CJK COMPATIBILITY IDEOGRAPH-FA0F
+FA11          ; Unified_Ideograph # Lo       CJK COMPATIBILITY IDEOGRAPH-FA11
+FA13..FA14    ; Unified_Ideograph # Lo   [2] CJK COMPATIBILITY IDEOGRAPH-FA13..CJK COMPATIBILITY IDEOGRAPH-FA14
+FA1F          ; Unified_Ideograph # Lo       CJK COMPATIBILITY IDEOGRAPH-FA1F
+FA21          ; Unified_Ideograph # Lo       CJK COMPATIBILITY IDEOGRAPH-FA21
+FA23..FA24    ; Unified_Ideograph # Lo   [2] CJK COMPATIBILITY IDEOGRAPH-FA23..CJK COMPATIBILITY IDEOGRAPH-FA24
+FA27..FA29    ; Unified_Ideograph # Lo   [3] CJK COMPATIBILITY IDEOGRAPH-FA27..CJK COMPATIBILITY IDEOGRAPH-FA29
+20000..2A6D6  ; Unified_Ideograph # Lo [42711] CJK UNIFIED IDEOGRAPH-20000..CJK UNIFIED IDEOGRAPH-2A6D6
+
+# Total code points: 70207
+
+# ================================================
+
+180B..180D    ; Other_Default_Ignorable_Code_Point # Mn   [3] MONGOLIAN FREE VARIATION SELECTOR ONE..MONGOLIAN FREE VARIATION SELECTOR THREE
+2060..2063    ; Other_Default_Ignorable_Code_Point # Cf   [4] WORD JOINER..INVISIBLE SEPARATOR
+2064..2069    ; Other_Default_Ignorable_Code_Point # Cn   [6] 
+206A..206F    ; Other_Default_Ignorable_Code_Point # Cf   [6] INHIBIT SYMMETRIC SWAPPING..NOMINAL DIGIT SHAPES
+FE00..FE0F    ; Other_Default_Ignorable_Code_Point # Mn  [16] VARIATION SELECTOR-1..VARIATION SELECTOR-16
+FFF0..FFF8    ; Other_Default_Ignorable_Code_Point # Cn   [9] 
+FFF9..FFFB    ; Other_Default_Ignorable_Code_Point # Cf   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATION TERMINATOR
+E0000         ; Other_Default_Ignorable_Code_Point # Cn       
+E0001         ; Other_Default_Ignorable_Code_Point # Cf       LANGUAGE TAG
+E0002..E001F  ; Other_Default_Ignorable_Code_Point # Cn  [30] 
+E0020..E007F  ; Other_Default_Ignorable_Code_Point # Cf  [96] TAG SPACE..CANCEL TAG
+E0080..E0FFF  ; Other_Default_Ignorable_Code_Point # Cn [3968] 
+
+# Total code points: 4143
+
+# ================================================
+
+0340..0341    ; Deprecated # Mn   [2] COMBINING GRAVE TONE MARK..COMBINING ACUTE TONE MARK
+206A..206F    ; Deprecated # Cf   [6] INHIBIT SYMMETRIC SWAPPING..NOMINAL DIGIT SHAPES
+
+# Total code points: 8
+
+# ================================================
+
+0069..006A    ; Soft_Dotted # L&   [2] LATIN SMALL LETTER I..LATIN SMALL LETTER J
+012F          ; Soft_Dotted # L&       LATIN SMALL LETTER I WITH OGONEK
+0268          ; Soft_Dotted # L&       LATIN SMALL LETTER I WITH STROKE
+0456          ; Soft_Dotted # L&       CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
+0458          ; Soft_Dotted # L&       CYRILLIC SMALL LETTER JE
+1E2D          ; Soft_Dotted # L&       LATIN SMALL LETTER I WITH TILDE BELOW
+1ECB          ; Soft_Dotted # L&       LATIN SMALL LETTER I WITH DOT BELOW
+
+# Total code points: 8
+
+# ================================================
+
+0E40..0E44    ; Logical_Order_Exception # Lo   [5] THAI CHARACTER SARA E..THAI CHARACTER SARA AI MAIMALAI
+0EC0..0EC4    ; Logical_Order_Exception # Lo   [5] LAO VOWEL SIGN E..LAO VOWEL SIGN AI
+
+# Total code points: 10
+
