@@ -597,6 +597,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 /* The maximum size for a textual number format symbol. */
 #define UNFSYMBOLSMAXSIZE 10
 
+#ifdef ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES
 /** The UNumberFormatSymbols struct
  * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
  */
@@ -663,6 +664,7 @@ U_CAPI void
 unum_setSymbols(    UNumberFormat*          fmt,
             const   UNumberFormatSymbols*   symbolsToSet,
             UErrorCode                *status);
+#endif /* ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES */
 
 /**
  * Constants for specifying a number format symbol.

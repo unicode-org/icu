@@ -40,6 +40,7 @@ static void TestNumberFormat()
 {
     UChar *result=NULL;
     UChar temp1[512];
+    UChar temp2[512];
 
     UChar temp[5];
 
@@ -59,7 +60,7 @@ static void TestNumberFormat()
     int32_t i;
 
     UNumberFormatAttribute attr;
-    UNumberFormatSymbols symbols1, symbols2;
+    UNumberFormatSymbol symType = UNUM_DECIMAL_SEPARATOR_SYMBOL;
     int32_t newvalue;
     UErrorCode status=U_ZERO_ERROR;
     UNumberFormatStyle style= UNUM_DEFAULT;
@@ -352,7 +353,16 @@ uprv_free(result);
 uprv_free(result);
 
     /*getting the symbols of cur_def */
-    unum_getSymbols(cur_def, &symbols1);
+    /*set the symbols of cur_frpattern to cur_def */
+    for (symType = UNUM_DECIMAL_SEPARATOR_SYMBOL; symType < UNUM_FORMAT_SYMBOL_COUNT; symType++) {
+        status=U_ZERO_ERROR;
+        unum_getSymbol(cur_def, symType, temp1, sizeof(temp1), &status);
+        unum_setSymbol(cur_frpattern, symType, temp1, -1, &status);
+        if(U_FAILURE(status))
+        {
+            log_err("Error in get/set symbols: %s\n", myErrorName(status));
+        }
+    }
 
     /*format to check the result */
     resultlength=0;
@@ -369,33 +379,22 @@ uprv_free(result);
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
 
-
-    /*set the symbols of cur_frpattern to cur_def */
-    unum_setSymbols(cur_frpattern, &symbols1, &status);
     if(U_FAILURE(status)){
         log_err("Fail: error in unum_setSymbols: %s\n", myErrorName(status));
     }
     unum_applyPattern(cur_frpattern, FALSE, result, u_strlen(result),NULL,NULL);
-    unum_getSymbols(cur_frpattern, &symbols2);
-    if((symbols1.decimalSeparator != symbols2.decimalSeparator) ||
-       (symbols1.groupingSeparator != symbols2.groupingSeparator) ||
-       (symbols1.patternSeparator != symbols2.patternSeparator) ||
-       (symbols1.percent != symbols2.percent) ||
-       (symbols1.zeroDigit != symbols2.zeroDigit) ||
-       (symbols1.digit != symbols2.digit) ||
-       (symbols1.minusSign != symbols2.minusSign) ||
-       (symbols1.plusSign != symbols2.plusSign) ||
-       (u_strcmp(symbols1.currency,symbols2.currency)!=0) ||
-       (u_strcmp(symbols1.intlCurrency,symbols2.intlCurrency)!=0) ||
-       (symbols1.monetarySeparator != symbols2.monetarySeparator) ||
-       (symbols1.exponential != symbols2.exponential) ||
-       (symbols1.perMill != symbols2.perMill) ||
-       (symbols1.padEscape != symbols2.padEscape) ||
-       (u_strcmp(symbols1.infinity,symbols2.infinity)!=0) ||
-       (u_strcmp(symbols1.naN,symbols2.naN)!=0))
-        log_err("Fail: error in setting and getting symbols\n");
-    else
-        log_verbose("Pass: get and set symbols successful\n");
+
+    for (symType = UNUM_DECIMAL_SEPARATOR_SYMBOL; symType < UNUM_FORMAT_SYMBOL_COUNT; symType++) {
+        status=U_ZERO_ERROR;
+        unum_getSymbol(cur_def, symType, temp1, sizeof(temp1), &status);
+        unum_getSymbol(cur_frpattern, symType, temp2, sizeof(temp2), &status);
+        if(U_FAILURE(status) || u_strcmp(temp1, temp2) != 0)
+        {
+            log_err("Fail: error in getting symbols\n");
+        }
+        else
+            log_verbose("Pass: get and set symbols successful\n");
+    }
 
     /*format and check with the previous result */
 

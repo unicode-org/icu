@@ -170,7 +170,7 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const Unic
             fSymbols[kDecimalSeparatorSymbol];
 
     fSymbols[kExponentialSymbol] = numberElements[7];
-    fSymbols[kPermillSymbol] = numberElements[8];
+    fSymbols[kPerMillSymbol] = numberElements[8];
     fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
     fSymbols[kInfinitySymbol] = numberElements[9];
     fSymbols[kNaNSymbol] = numberElements[10];
@@ -196,7 +196,7 @@ DecimalFormatSymbols::initialize() {
     (fSymbols[kIntlCurrencySymbol] = (UChar)0xa4).append((UChar)0xa4);
     fSymbols[kMonetarySeparatorSymbol] = (UChar)0x2e;   // '.' monetary decimal separator
     fSymbols[kExponentialSymbol] = (UChar)0x45;         // 'E' exponential
-    fSymbols[kPermillSymbol] = (UChar)0x2030;           // '%o' per mill
+    fSymbols[kPerMillSymbol] = (UChar)0x2030;           // '%o' per mill
     fSymbols[kPadEscapeSymbol] = (UChar)0x2a;           // '*' pad escape symbol
     fSymbols[kInfinitySymbol] = (UChar)0x221e;          // 'oo' infinite
     fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN

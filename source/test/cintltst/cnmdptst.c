@@ -516,7 +516,6 @@ static void TestSecondaryGrouping(void) {
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat *f = NULL, *g= NULL;
     UNumberFormat *us = unum_open(UNUM_DECIMAL,NULL,0, "en_US", NULL,&status);
-    UNumberFormatSymbols usSymbols;
     UFieldPosition pos;
     UChar resultBuffer[512];
     int32_t l = 1876543210L;
@@ -524,9 +523,6 @@ static void TestSecondaryGrouping(void) {
     UChar buffer[512];
     int32_t i;
     UBool expectGroup = FALSE, isGroup = FALSE;
-
-    unum_getSymbols(us, &usSymbols);
-    CHECK(status, "DecimalFormatSymbols ct");
 
     u_uastrcpy(buffer, "#,##,###");
     f = unum_open(UNUM_IGNORE,buffer, -1, "en_US",NULL, &status);

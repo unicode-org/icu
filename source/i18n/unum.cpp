@@ -583,6 +583,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
   return pat.extract(result, resultLength, *status);
 }
 
+#ifdef ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES
 U_CAPI void
 unum_getSymbols(const UNumberFormat* fmt,
         UNumberFormatSymbols *syms)
@@ -666,6 +667,9 @@ unum_setSymbols(            UNumberFormat*          fmt,
 
   ((DecimalFormat*)fmt)->adoptDecimalFormatSymbols(syms);
 }
+
+#endif /* ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES */
+
 
 U_CAPI int32_t U_EXPORT2
 unum_getSymbol(UNumberFormat *fmt,
