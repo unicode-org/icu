@@ -36,14 +36,6 @@ public:
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     /**
-     * Tests default rules based character iteration
-     **/ 
-    void TestDefaultRuleBasedCharacterIteration(void);
-     /**
-     * Tests default rules based word iteration
-     **/ 
-    void TestDefaultRuleBasedWordIteration(void);
-    /**
      * Tests Hindi(Devanagiri) character iteration
      **/  
     void TestHindiCharacterBreak(void);
