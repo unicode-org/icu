@@ -117,29 +117,30 @@ public final class CanonicalIterator {
         }
 
         // find the segments
-        List list = new ArrayList();
+        List segmentList = new ArrayList();
         int cp;
         int start = 0;
 
         // i should be the end of the first code point
+        // break up the string into segements
 
         int i = UTF16.findOffsetFromCodePoint(source, 1);
 
         for (; i < source.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(source, i);
             if (NormalizerImpl.isCanonSafeStart(cp)) {
-                list.add(source.substring(start, i)); // add up to i
+                segmentList.add(source.substring(start, i)); // add up to i
                 start = i;
             }
         }
-        list.add(source.substring(start, i)); // add last one
+        segmentList.add(source.substring(start, i)); // add last one
 
         // allocate the arrays, and find the strings that are CE to each segment
-        pieces = new String[list.size()][];
-        current = new int[list.size()];
+        pieces = new String[segmentList.size()][];
+        current = new int[segmentList.size()];
         for (i = 0; i < pieces.length; ++i) {
             if (PROGRESS) System.out.println("SEGMENT");
-            pieces[i] = getEquivalents((String) list.get(i));
+            pieces[i] = getEquivalents((String) segmentList.get(i));
         }
     }
 
@@ -285,12 +286,12 @@ public final class CanonicalIterator {
         StringBuffer workingBuffer = new StringBuffer();
 
         // cycle through all the characters
-        int cp=0,end=0;
+        int cp=0;
         int[] range = new int[2];
         for (int i = 0; i < segment.length(); i += UTF16.getCharCount(cp)) {
 
             // see if any character is at the start of some decomposition
-            cp = UTF16.charAt(segment, i);;
+            cp = UTF16.charAt(segment, i);
             USerializedSet starts = new USerializedSet();
 
             if (!NormalizerImpl.getCanonStartSet(cp, starts)) {
@@ -298,28 +299,27 @@ public final class CanonicalIterator {
             }
             int j=0;
             // if so, see which decompositions match
-            for(j = 0, cp = end+1; cp <= end ||starts.getRange(j++, range); ++cp) {
-                if(cp>end){
-                    cp=range[0];
-                    end=range[1];
+            int rangeCount = starts.countRanges();
+            for(j = 0; j < rangeCount; ++j) {
+            	starts.getRange(j, range);
+                int end=range[1];
+                for (int cp2 = range[0]; cp2 <= end; ++cp2) {
+	                Set remainder = extract(cp2, segment, i, workingBuffer);
+	                if (remainder == null) continue;
+	
+	                // there were some matches, so add all the possibilities to the set.
+	                String prefix= segment.substring(0,i);
+	                prefix += UTF16.valueOf(cp2);
+	                //int el = -1;
+	                Iterator iter = remainder.iterator();
+	                while (iter.hasNext()) {
+	                    String item = (String) iter.next();
+	                    String toAdd = new String(prefix);
+	                    toAdd += item;
+	                    result.add(toAdd);
+	                    //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*toAdd)));
+	                }
                 }
-
-                Set remainder = extract(cp, segment, i,workingBuffer);
-                if (remainder == null) continue;
-
-                // there were some matches, so add all the possibilities to the set.
-                String prefix= segment.substring(0,i);
-                prefix += UTF16.valueOf(cp);
-                //int el = -1;
-                Iterator iter = remainder.iterator();
-                while (iter.hasNext()) {
-                    String item = (String) iter.next();
-                    String toAdd = new String(prefix);
-                    toAdd += item;
-                    result.add(toAdd);
-                    //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*toAdd)));
-                }
-
             }
         }
         return result;
