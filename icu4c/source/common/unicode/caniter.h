@@ -134,8 +134,21 @@ public:
 private:
     // ===================== PRIVATES ==============================
     // private default constructor
-    CanonicalIterator();       
-    
+    CanonicalIterator(); 
+       
+
+    /**
+     * Copy constructor. Private for now.
+     * @internal
+     */
+    CanonicalIterator(const CanonicalIterator& other);
+
+    /**
+     * Assignment operator. Private for now.
+     * @internal
+     */
+    CanonicalIterator& operator=(const CanonicalIterator& other);
+
     // fields
     UnicodeString source;
     UBool done;

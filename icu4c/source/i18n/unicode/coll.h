@@ -767,6 +767,13 @@ protected:
   // Collator protected methods -----------------------------------------
 
 private:
+  /**
+   * Assignment operator. Private for now.
+   * @internal
+   */
+  Collator& operator=(const Collator& other);
+
+
  
   // Collator private data members ---------------------------------------
 
