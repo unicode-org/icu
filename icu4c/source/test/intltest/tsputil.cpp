@@ -339,7 +339,7 @@ PUtilTest::testZero(void)
     if(pzero <= nzero != TRUE) {
         errln("FAIL: 0.0 <= -0.0 returned FALSE, should be TRUE.");
     }
-
+#ifndef OS400 /* OS/400 will generate divide by zero exception MCH1214 */
     if(uprv_isInfinite(1/pzero) != TRUE) {
         errln("FAIL: isInfinite(1/0.0) returned FALSE, should be TRUE.");
     }
@@ -355,6 +355,7 @@ PUtilTest::testZero(void)
     if(uprv_isNegativeInfinity(1/nzero) != TRUE) {
         errln("FAIL: isNegativeInfinity(1/-0.0) returned FALSE, should be TRUE.");
     }
+#endif
 }
 
 //==============================
