@@ -1,3 +1,14 @@
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
+/*   file name:  sfwdchit.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*/
+
 #include "sfwdchit.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"

@@ -1,12 +1,11 @@
-/*****************************************************************************************
-*                                                                                       *
-* COPYRIGHT:                                                                            *
-*   (C) Copyright International Business Machines Corporation,  2000                    *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.                  *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure             *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                              *
-*                                                                                       *
-*****************************************************************************************
+
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
+
+/***********************************************************************
 ************************************************************************
 *   Date        Name        Description
 *   03/15/2000   Madhu        Creation.
