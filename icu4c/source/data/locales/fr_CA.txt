@@ -10,7 +10,7 @@ fr_CA {
     CurrencyElements { 
         "$",
         "CAD",
-        ".",
+        ",",
     }
     DateTimePatterns { 
         "HH' h 'mm' min 'ss' s 'z",
@@ -27,7 +27,7 @@ fr_CA {
 //    LocaleString { "fr_CA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0.00 \u00A4;(#,##0.00\u00A4)",
         "#,##0%",
         "#E0",
     }
