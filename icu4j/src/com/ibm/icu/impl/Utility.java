@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2001/11/20 00:25:27 $
- * $Revision: 1.11 $
+ * $Date: 2001/11/20 00:33:10 $
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -820,12 +820,7 @@ public final class Utility {
      * "0041".  Append the output to the given StringBuffer.
      */
     public static StringBuffer hex(char ch, StringBuffer output) {
-        String foo = Integer.toString(ch,16).toUpperCase();
-        for (int i = foo.length(); i < 4; ++i) {
-            output.append('0');
-        }
-        output.append(foo);
-        return output;
+        return appendNumber(output, ch, 16, 4);
     }
 
     /**
@@ -835,12 +830,7 @@ public final class Utility {
      * If width is too small to fit, nothing will be appended to output.
      */
     public static StringBuffer hex(int ch, int width, StringBuffer output) {
-        String foo = Integer.toString(ch, 16).toUpperCase();
-        for (int i = foo.length(); i < width; ++i) {
-            output.append('0');
-        }
-        output.append(foo);
-        return output;
+        return appendNumber(output, ch, 16, width);
     }
 
     /**
@@ -849,8 +839,8 @@ public final class Utility {
      * than width digits, more will be used.
      */
     public static String hex(int ch, int width) {
-        String foo = Integer.toString(ch, 16).toUpperCase();
-        return "0000000".substring(foo.length() + 7 - width) + foo;
+        StringBuffer buf = new StringBuffer();
+        return appendNumber(buf, ch, 16, width).toString();
     }
 
     /**
