@@ -5,12 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Quantifier.java,v $ 
- * $Date: 2001/10/25 22:32:02 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/20 00:25:18 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.text;
+import com.ibm.util.Utility;
 
 class Quantifier implements UnicodeMatcher {
 
@@ -70,25 +71,6 @@ class Quantifier implements UnicodeMatcher {
         return U_MISMATCH;
     }
 
-    static private final int[] POW10 = {1, 10, 100, 1000, 10000, 100000, 1000000,
-                                        10000000, 100000000, 1000000000};
-
-    static private void appendNumber(StringBuffer result, int n) {
-        // assert(n >= 0);
-        // assert(n < 1e10);
-        boolean show = false; // true if we should display digits
-        for (int p=9; p>=0; --p) {
-            int d = n / POW10[p];
-            n -= d * POW10[p];
-            if (d != 0 || p == 0) {
-                show = true;
-            }
-            if (show) {
-                result.append((char)('0'+d));
-            }
-        }
-    }
-
     /**
      * Implement UnicodeMatcher API
      */
@@ -106,10 +88,10 @@ class Quantifier implements UnicodeMatcher {
             return result.append('+').toString();
         }
         result.append('{');
-        appendNumber(result, minCount);
+        Utility.appendNumber(result, minCount);
         result.append(',');
         if (maxCount != MAX) {
-            appendNumber(result, maxCount);
+            Utility.appendNumber(result, maxCount);
         }
         result.append('}');
         return result.toString();
