@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/10/08 21:51:44 $
-* $Revision: 1.48 $
+* $Date: 2003/11/13 00:47:48 $
+* $Revision: 1.49 $
 *
 *******************************************************************************
 */
@@ -2041,7 +2041,6 @@ public final class RuleBasedCollator extends Collator
         setWithUCAData();
         CollationParsedRuleBuilder builder
                                        = new CollationParsedRuleBuilder(rules);
-
         builder.setRules(this);
         m_rules_ = rules;
         init();
