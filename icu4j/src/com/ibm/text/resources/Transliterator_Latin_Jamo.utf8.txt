@@ -2,741 +2,372 @@
 # Copyright (c) 1999-2001, International Business Machines
 # Corporation and others.  All Rights Reserved.
 #--------------------------------------------------------------------
-# Date: Tue Jan 23 12:18:45 2001
-#--------------------------------------------------------------------
 
 # Latin-Jamo
 
+# Transliteration from Latin characters to Korean script is done in
+# two steps: Latin to Jamo, then Jamo to Hangul.  The Jamo-Hangul
+# transliteration is done algorithmically following Unicode 3.0
+# section 3.11.  This file implements the Latin to Jamo
+# transliteration using rules.
 
-# VARIABLES
+# Jamo occupy the block 1100-11FF.  Within this block there are three
+# groups of characters: initial consonants or choseong (I), medial
+# vowels or jungseong (M), and trailing consonants or jongseong (F).
+# Standard Korean syllables are of the form I+M+F*.
 
-$initial=[ᄀ-ᅟ];
-$INITIAL=[bcdghjklmnpst];
-$medial=[ᅠ-ᆧ];
-$MEDIAL=[aeiou]; # as a left context
-$comp_med=[ᅠᅶ-ᆧ]; # compound medials and filler
-$final=[ᆨ-ᇹ]; # added - aliu
-$vowel=[aeiouwy$medial];
-# following line used to read "..$medial$final]"
-# assume this was a typo - liu
-$consonant=[bcdfghjklmnpqrstvxz$initial$final];
-$ye_=[yeYE];
-$ywe_=[yweYWE];
-$yw_=[ywYW];
-$nl_=[nlNL];
-$gnl_=[gnlGNL];
-$lsgb_=[lsgbLSGB];
-$ywao_=[ywaoYWAO];
-$bl_=[blBL];
+# Section 3.11 describes the use of 'filler' jamo to convert
+# nonstandard syllables to standard form: the choseong filler 115F and
+# the junseong filler 1160.  In this transliterator, we will not use
+# 115F or 1160.
 
-### $ieung = ᄋ;
+# We will, however, insert two 'null' jamo to make foreign words
+# conform to Korean syllable structure.  These are the null initial
+# consonant 110B (IEUNG) and the null vowel 1173 (EU).  In Latin text,
+# we will use the apostrophe in order to disambiguate strings,
+# e.g. "kan'ggan" (initial GG) vs. "kanggan" (final NG + initial G).
 
-# RULES
+# We will not use all of the characters in the jamo block.  We will
+# only use the 19 initials, 21 medials, and 27 finals possessing a
+# jamo short name as defined in section 4.4 of the Unicode book.
 
-# Hangul structure is IMF or IM
-# So you can have, because of adjacent sequences
-# IM, but not II or IF
-# MF or MI, but not MM
-# FI, but not FF or FM
+#----------------------------------------------------------------------
+# Variables
 
-# For English, we just have C or V.
-# To generate valid Hangul:
-# Vowels:
-# We insert IEUNG between VV, and otherwise map V to M
-# We also insert IEUNG if there is no
-# Consonants:
-# We don't break doubles
-# Cases like lmgg, we have to break at lm
-# So to guess whether a consonant is I or F
-# we map all C's to F, except when followed by a vowel, e.g.
-# X[{vowel}>CHOSEONG (initial)
-# X>JONGSEONG (final)
+# Some latin consonants or consonant pairs only occur as initials, and
+# some only as finals, but some occur as both.  This makes some jamo
+# consonants ambiguous when transliterated into latin.
+#   Initial only: IEUNG BB DD JJ R
+#   Final only: BS GS L LB LG LH LM LP LS LT NG NH NJ
+#   Initial and Final: B C D G GG H J K M N P S SS T
 
-# Below, insert an empty consonant in front of a vowel, if there is no Initial in front.
+  $Gi = \u1100;
+  $GGi = \u1101;
+  $Ni = \u1102;
+  $Di = \u1103;
+  $DD = \u1104;
+  $R = \u1105;
+  $Mi = \u1106;
+  $Bi = \u1107;
+  $BB = \u1108;
+  $Si = \u1109;
+  $SSi = \u110A;
+  $IEUNG = \u110B; # null initial, inserted during Latin-Jamo
+  $Ji = \u110C;
+  $JJ = \u110D;
+  $Ci = \u110E;
+  $Ki = \u110F;
+  $Ti = \u1110;
+  $Pi = \u1111;
+  $Hi = \u1112;
 
+  $A = \u1161;
+  $AE = \u1162;
+  $YA = \u1163;
+  $YAE = \u1164;
+  $EO = \u1165;
+  $E = \u1166;
+  $YEO = \u1167;
+  $YE = \u1168;
+  $O = \u1169;
+  $WA = \u116A;
+  $WAE = \u116B;
+  $OE = \u116C;
+  $YO = \u116D;
+  $U = \u116E;
+  $WEO = \u116F;
+  $WE = \u1170;
+  $WI = \u1171;
+  $YU = \u1172;
+  $EU = \u1173; # null medial, inserted during Latin-Jamo
+  $YI = \u1174;
+  $I = \u1175;
 
-# General strategy.
-#
-# 1. We support both the normal Jamo block, 1100 - 117F, and the
-# compatibility block, 3130 - 318F.  The former uses lowercase latin;
-# the latter uses uppercase.  See notes below for details of the
-# compatibility block.  Remaining items in this list pertain to the
-# normal Jamo block.
-#
-# 2. Canonical syllables should transliterate without special
-# characters.  Canonical syllables are either IMF or IM.
-#
-# 3. We want to support round-trip integrity from jamo to latin and back
-# to Jamo.  To do this we have to mark the jamo with special characters
-# when they occur in non-canonical positions.
-#
-# 4. When initial jamo occur in a non-canonical position, they are
-# marked with a leading '['.
-#
-# 5. When final jamo occur in a non-canonical position, they are marked
-# with a trailing ']'.
-#
-# 6. When medial jamo occur in a non-canonical position, they are marked
-# with a leading '~'.
-#
-# 7. Compound jamo characters are handled by enclosing them in
-# parentheses.  Initials are '((x)', medials are '(x)', and finals are
-# '(x))'.
-#
-# 8. Disambiguation of 'g' + 'g' vs. 'gg' is accomplished by inserting a
-# '' character between them.
-#
-# 9. IEUNG is used to mark medials not occuring after initials.
-# Isolated IEUNG is transliterated as a back tick.
-#
-# 10. Some old special case and completeness rules have been commented
-# out.  These can be reintroduced (and the existing rules modified as
-# needed) so long as round-trip integrity is maintained.
+  $Gf = \u11A8;
+  $GGf = \u11A9;
+  $GS = \u11AA;
+  $Nf = \u11AB;
+  $NJ = \u11AC;
+  $NH = \u11AD;
+  $Df = \u11AE;
+  $L = \u11AF;
+  $LG = \u11B0;
+  $LM = \u11B1;
+  $LB = \u11B2;
+  $LS = \u11B3;
+  $LT = \u11B4;
+  $LP = \u11B5;
+  $LH = \u11B6;
+  $Mf = \u11B7;
+  $Bf = \u11B8;
+  $BS = \u11B9;
+  $Sf = \u11BA;
+  $SSf = \u11BB;
+  $NG = \u11BC;
+  $Jf = \u11BD;
+  $Cf = \u11BE;
+  $Kf = \u11BF;
+  $Tf = \u11C0;
+  $Pf = \u11C1;
+  $Hf = \u11C2;
+  
+  $jamoInitial = [\u1100-\u1112];
 
-# We use the uppercase latin letters for the compatibility Jamo
-# U+3130 - U+318F.  The following rules are generated
-# programmatically by a perl script that analyzes the Unicode
-# database.  These rules are much simpler because there are no
-# separate code points for initial vs. final consonants, so no
-# contextual rules are needed.  The one wrinkle is, as usual, the
-# need to distinguish doubles from two singles, that is, GG vs G G.
-# The perl script finds these special cases by exhaustive search and
-# adds only the minimal rules needed to resolve these cases.  The one
-# modification that is made by hand is to replace '' with '/' so as
-# not to conflict with the normal IEUNG in the standard Jamo range. -
-# liu
-A '' <> {ㅏ} [ㅓㅡㅔ];
-B '' <> {ㅂ} [ㅂㅃ];
-D '' <> {ㄷ} [ㄷㄸ];
-E '' <> {ㅔ} [ㅚㅗㅜ];
-G '' <> {ㄱ} [ㄲㄳㄱㅆㅅ];
-J '' <> {ㅈ} [ㅉㅈ];
-L '' <> {ㄹ} [ㄲㄳㄱㅁㅂㅃㅆㅅㅌㅍ];
-N '' <> {ㄴ} [ㅉㅈㅎ];
-O '' <> {ㅗ} [ㅓㅡㅔ];
-S '' <> {ㅅ} [ㅆㅅ];
-WA '' <> {ㅘ} [ㅓㅡㅔ];
-WE '' <> {ㅞ} [ㅚㅗ];
-YA '' <> {ㅑ} [ㅓㅡㅔ];
-YE '' <> {ㅖ} [ㅚㅗ];
-YU <> ㅠ;
-YO <> ㅛ;
-YI <> ㅢ;
-YEO <> ㅕ;
-YE <> ㅖ;
-YAE <> ㅒ;
-YA <> ㅑ;
-WI <> ㅟ;
-WEO <> ㅝ;
-WE <> ㅞ;
-WAE <> ㅙ;
-WA <> ㅘ;
-U <> ㅜ;
-T <> ㅌ;
-S S <> ㅆ;
-S <> ㅅ;
-P <> ㅍ;
-OE <> ㅚ;
-O <> ㅗ;
-N J <> ㄵ;
-N H <> ㄶ;
-N <> ㄴ;
-M <> ㅁ;
-L T <> ㄾ;
-L S <> ㄽ;
-L P <> ㄿ;
-L M <> ㄻ;
-L G <> ㄺ;
-L B <> ㄼ;
-L <> ㄹ;
-K <> ㅋ;
-J J <> ㅉ;
-J <> ㅈ;
-I <> ㅣ;
-H <> ㅎ;
-G S <> ㄳ;
-G G <> ㄲ;
-G <> ㄱ;
-EU <> ㅡ;
-EO <> ㅓ;
-E <> ㅔ;
-D D <> ㄸ;
-D <> ㄷ;
-C <> ㅊ;
-B B <> ㅃ;
-B <> ㅂ;
-AE <> ㅐ;
-A <> ㅏ;
-'/' <> ㅇ;
-'(' YU YEO ')' <> ㆊ;
-'(' YU YE ')' <> ㆋ;
-'(' YU I ')' <> ㆌ;
-'(' YR ')' <> ㆆ;
-'(' YO YAE ')' <> ㆈ;
-'(' YO YA ')' <> ㆇ;
-'(' YO I ')' <> ㆉ;
-'(' YES S ')' <> ㆂ;
-'(' YES PAN ')' <> ㆃ;
-'(' YES ')' <> ㆁ;
-'(' S N ')' <> ㅻ;
-'(' S J ')' <> ㅾ;
-'(' S G ')' <> ㅺ;
-'(' S D ')' <> ㅼ;
-'(' S B ')' <> ㅽ;
-'(' PAN ')' <> ㅿ;
-'(' P '' ')' <> ㆄ;
-'(' N S ')' <> ㅧ;
-'(' N PAN ')' <> ㅨ;
-'(' N N ')' <> ㅥ;
-'(' N D ')' <> ㅦ;
-'(' M S ')' <> ㅯ;
-'(' M PAN ')' <> ㅰ;
-'(' M B ')' <> ㅮ;
-'(' M '' ')' <> ㅱ;
-'(' L YR ')' <> ㅭ;
-'(' L PAN ')' <> ㅬ;
-'(' L H ')' <> ㅀ;
-'(' L G S ')' <> ㅩ;
-'(' L D ')' <> ㅪ;
-'(' L B S ')' <> ㅫ;
-'(' HJF ')' <> ㅤ;
-'(' H H ')' <> ㆅ;
-'(' B T ')' <> ㅷ;
-'(' B S G ')' <> ㅴ;
-'(' B S D ')' <> ㅵ;
-'(' B S ')' <> ㅄ;
-'(' B J ')' <> ㅶ;
-'(' B G ')' <> ㅲ;
-'(' B D ')' <> ㅳ;
-'(' B B '' ')' <> ㅹ;
-'(' B '' ')' <> ㅸ;
-'(' AR I ')' <> ㆎ;
-'(' AR ')' <> ㆍ;
-'(' '' '' ')' <> ㆀ;
+  $jamoMedial = [\u1161-\u1175];
 
-# APOSTROPHE
+  # Any character in the latin transliteration of a medial
+  $latinMedial = [aeiouwy];
 
-# As always, an apostrophe is used to separate digraphs into
-# singles. That is, if you really wanted [KAN][GGAN], instead
-# of [KANG][GAN] you would write "kan'ggan".
+  # The last character of the latin transliteration of a medial
+  $latinMedialEnd = [aeiou];
 
-# Rules for inserting ' when mapping separated digraphs back
-# from Hangul to Latin. Catch every letter that can be the
-# LAST of a digraph (or multigraph) AND first of an initial
+#----------------------------------------------------------------------
+# Jamo-Latin
 
-# special insertion for funny sequences of vowels, and for empty consonant
+# Jamo to latin is very simple, since it is the latin that is
+# ambiguous.  Most rules are straightforward, and we encode them below
+# as simple add-on back rule, e.g.:
 
-#  + "'' < l{ }ᇀ;"      // hangul jongseong thieuth
-#  + "'' < $lsgb_{}ᆺ;" // hangul jongseong sios
-#  + "'' < l{ }ᇁ;"      // hangul jongseong phieuph
-#  + "'' < l{ }ᆷ;"      // hangul jongseong mieum
-#  + "'' < n{ }ᆽ;"      // hangul jongseong cieuc
-#  + "'' < $nl_{}ᇂ;"   // hangul jongseong hieuh
-#  + "'' < $gnl_{}ᆩ;"  // hangul jongseong ssangkiyeok
-#  + "'' < $bl_{}ᆸ;"   // hangul jongseong pieup
-#  + "'' < d{ }ᆮ;"      // hangul jongseong tikeut
-#
-#  + "'' < $ye_{}ᅮ;"   // hangul jungseong u
-#  + "'' < $ywe_{}ᅩ;"  // hangul jungseong o
-#  + "'' < $yw_{}ᅵ;"   // hangul jungseong i
-#  + "'' < $ywao_{}ᅦ;" // hangul jungseong e
-#  + "'' < $yw_{}ᅡ;"   // hangul jungseong a
-#
-#  + "'' < l{ }ᄐ;"      // hangul choseong thieuth
-#  + "'' < $lsgb_{}ᄊ;" // hangul choseong ssangsios
-#  + "'' < $lsgb_{}ᄉ;" // hangul choseong sios
-#  + "'' < l{ }ᄑ;"      // hangul choseong phieuph
-#  + "'' < l{ }ᄆ;"      // hangul choseong mieum
-#  + "'' < n{ }ᄌ;"      // hangul choseong cieuc
-#  + "'' < n{ }ᄍ;"
-#  + "'' < $nl_{}ᄒ;"   // hangul choseong hieuh
-#  + "'' < $gnl_{}ᄁ;"  // hangul choseong ssangkiyeok
-#  + "'' < $gnl_{}ᄀ;"  // hangul choseong kiyeok
-#  + "'' < d{ }ᄃ;"      // hangul choseong tikeut
-#  + "'' < d{ }ᄄ;"
-#  + "'' < $bl_{}ᄇ;"   // hangul choseong pieup
-#  + "'' < $bl_{}ᄈ;"
+#   $jamoMedial {bs} > $BS;
 
-# We transliterate the compound Jamo code points using ((x) for
-# initials, (x) for medials, and (x)) for finals. - liu
- '((' n g ')' <> ᄓ;
- '((' n n ')' <> ᄔ;
- '((' n d ')' <> ᄕ;
- '((' n b ')' <> ᄖ;
- '((' d g ')' <> ᄗ;
- '((' l n ')' <> ᄘ;
- '((' l l ')' <> ᄙ;
- '((' l h ')' <> ᄚ;
- '((' l '' ')' <> ᄛ;
- '((' m b ')' <> ᄜ;
- '((' m '' ')' <> ᄝ;
- '((' b g ')' <> ᄞ;
- '((' b n ')' <> ᄟ;
- '((' b d ')' <> ᄠ;
- '((' b s ')' <> ᄡ;
- '((' b s g ')' <> ᄢ;
- '((' b s d ')' <> ᄣ;
- '((' b s b ')' <> ᄤ;
- '((' b s s ')' <> ᄥ;
- '((' b s j ')' <> ᄦ;
- '((' b j ')' <> ᄧ;
- '((' b c ')' <> ᄨ;
- '((' b t ')' <> ᄩ;
- '((' b p ')' <> ᄪ;
- '((' b '' ')' <> ᄫ;
- '((' b b '' ')' <> ᄬ;
- '((' s g ')' <> ᄭ;
- '((' s n ')' <> ᄮ;
- '((' s d ')' <> ᄯ;
- '((' s l ')' <> ᄰ;
- '((' s m ')' <> ᄱ;
- '((' s b ')' <> ᄲ;
- '((' s b g ')' <> ᄳ;
- '((' s s s ')' <> ᄴ;
- '((' s '' ')' <> ᄵ;
- '((' s j ')' <> ᄶ;
- '((' s c ')' <> ᄷ;
- '((' s k ')' <> ᄸ;
- '((' s t ')' <> ᄹ;
- '((' s p ')' <> ᄺ;
- '((' s h ')' <> ᄻ;
- '((' chs ')' <> ᄼ;
- '((' chs chs ')' <> ᄽ;
- '((' ces ')' <> ᄾ;
- '((' ces ces ')' <> ᄿ;
- '((' pan ')' <> ᅀ;
- '((' '' g ')' <> ᅁ;
- '((' '' d ')' <> ᅂ;
- '((' '' m ')' <> ᅃ;
- '((' '' b ')' <> ᅄ;
- '((' '' s ')' <> ᅅ;
- '((' '' pan ')' <> ᅆ;
- '((' '' '' ')' <> ᅇ;
- '((' '' j ')' <> ᅈ;
- '((' '' c ')' <> ᅉ;
- '((' '' t ')' <> ᅊ;
- '((' '' p ')' <> ᅋ;
- '((' yes ')' <> ᅌ;
- '((' j '' ')' <> ᅍ;
- '((' chc ')' <> ᅎ;
- '((' chc chc ')' <> ᅏ;
- '((' cec ')' <> ᅐ;
- '((' cec cec ')' <> ᅑ;
- '((' c k ')' <> ᅒ;
- '((' c h ')' <> ᅓ;
- '((' cch ')' <> ᅔ;
- '((' ceh ')' <> ᅕ;
- '((' p b ')' <> ᅖ;
- '((' p '' ')' <> ᅗ;
- '((' h h ')' <> ᅘ;
- '((' yr ')' <> ᅙ;
- '((' hcf ')' <> ᅟ;
- '(' ahjf ')' <> ᅠ; # must start with vowel, hence 'a' + hjf
- '(' a o ')' <> ᅶ;
- '(' a u ')' <> ᅷ;
- '(' ya o ')' <> ᅸ;
- '(' ya yo ')' <> ᅹ;
- '(' eo o ')' <> ᅺ;
- '(' eo u ')' <> ᅻ;
- '(' eo eu ')' <> ᅼ;
- '(' yeo o ')' <> ᅽ;
- '(' yeo u ')' <> ᅾ;
- '(' o eo ')' <> ᅿ;
- '(' o e ')' <> ᆀ;
- '(' o ye ')' <> ᆁ;
- '(' o o ')' <> ᆂ;
- '(' o u ')' <> ᆃ;
- '(' yo ya ')' <> ᆄ;
- '(' yo yae ')' <> ᆅ;
- '(' yo yeo ')' <> ᆆ;
- '(' yo o ')' <> ᆇ;
- '(' yo i ')' <> ᆈ;
- '(' u a ')' <> ᆉ;
- '(' u ae ')' <> ᆊ;
- '(' u eo eu ')' <> ᆋ;
- '(' u ye ')' <> ᆌ;
- '(' u u ')' <> ᆍ;
- '(' yu a ')' <> ᆎ;
- '(' yu eo ')' <> ᆏ;
- '(' yu e ')' <> ᆐ;
- '(' yu yeo ')' <> ᆑ;
- '(' yu ye ')' <> ᆒ;
- '(' yu u ')' <> ᆓ;
- '(' yu i ')' <> ᆔ;
- '(' eu u ')' <> ᆕ;
- '(' eu eu ')' <> ᆖ;
- '(' yi u ')' <> ᆗ;
- '(' i a ')' <> ᆘ;
- '(' i ya ')' <> ᆙ;
- '(' i o ')' <> ᆚ;
- '(' i u ')' <> ᆛ;
- '(' i eu ')' <> ᆜ;
- '(' i ar ')' <> ᆝ;
- '(' ar ')' <> ᆞ;
- '(' ar eo ')' <> ᆟ;
- '(' ar u ')' <> ᆠ;
- '(' ar i ')' <> ᆡ;
- '(' ar ar ')' <> ᆢ;
- '(' g l '))' <> ᇃ;
- '(' g s g '))' <> ᇄ;
- '(' n g '))' <> ᇅ;
- '(' n d '))' <> ᇆ;
- '(' n s '))' <> ᇇ;
- '(' n pan '))' <> ᇈ;
- '(' n t '))' <> ᇉ;
- '(' d g '))' <> ᇊ;
- '(' d l '))' <> ᇋ;
- '(' l g s '))' <> ᇌ;
- '(' l n '))' <> ᇍ;
- '(' l d '))' <> ᇎ;
- '(' l d h '))' <> ᇏ;
- '(' l l '))' <> ᇐ;
- '(' l m g '))' <> ᇑ;
- '(' l m s '))' <> ᇒ;
- '(' l b s '))' <> ᇓ;
- '(' l b h '))' <> ᇔ;
- '(' l b ng '))' <> ᇕ;
- '(' l s s '))' <> ᇖ;
- '(' l pan '))' <> ᇗ;
- '(' l k '))' <> ᇘ;
- '(' l yr '))' <> ᇙ;
- '(' m g '))' <> ᇚ;
- '(' m l '))' <> ᇛ;
- '(' m b '))' <> ᇜ;
- '(' m s '))' <> ᇝ;
- '(' m s s '))' <> ᇞ;
- '(' m pan '))' <> ᇟ;
- '(' m c '))' <> ᇠ;
- '(' m h '))' <> ᇡ;
- '(' m ng '))' <> ᇢ;
- '(' b l '))' <> ᇣ;
- '(' b p '))' <> ᇤ;
- '(' b h '))' <> ᇥ;
- '(' b ng '))' <> ᇦ;
- '(' s g '))' <> ᇧ;
- '(' s d '))' <> ᇨ;
- '(' s l '))' <> ᇩ;
- '(' s b '))' <> ᇪ;
- '(' pan '))' <> ᇫ;
- '(' ng g '))' <> ᇬ;
- '(' ng g g '))' <> ᇭ;
- '(' ng ng '))' <> ᇮ;
- '(' ng k '))' <> ᇯ;
- '(' yes '))' <> ᇰ;
- '(' yes s '))' <> ᇱ;
- '(' yes pan '))' <> ᇲ;
- '(' p b '))' <> ᇳ;
- '(' p ng '))' <> ᇴ;
- '(' h n '))' <> ᇵ;
- '(' h l '))' <> ᇶ;
- '(' h m '))' <> ᇷ;
- '(' h b '))' <> ᇸ;
- '(' yr '))' <> ᇹ;
+# becomes
 
+#   $jamoMedial {bs} <> $BS;
 
-# INITIALS
+# Furthermore, we don't care about the ordering for Jamo-Latin because
+# we are going from single characters, so we can very easily piggyback
+# on the Latin-Jamo.
 
-# Added }$vowel post context - liu
-bb}$vowel<>ᄈ } $vowel;
-jj}$vowel<>ᄍ } $vowel;
-dd}$vowel<>ᄄ } $vowel;
-t }$vowel<>ᄐ } $vowel; # hangul choseong thieuth
-ss}$vowel<>ᄊ } $vowel; # hangul choseong ssangsios
-s }$vowel<>ᄉ } $vowel; # hangul choseong sios
-p }$vowel<>ᄑ } $vowel; # hangul choseong phieuph
-n }$vowel<>ᄂ } $vowel; # hangul choseong nieun
-m }$vowel<>ᄆ } $vowel; # hangul choseong mieum
-l }$vowel<>ᄅ } $vowel; # hangul choseong rieul
-k }$vowel<>ᄏ } $vowel; # hangul choseong khieukh
-j }$vowel<>ᄌ } $vowel; # hangul choseong cieuc
-h }$vowel<>ᄒ } $vowel; # hangul choseong hieuh
-gg}$vowel<>ᄁ } $vowel; # hangul choseong ssangkiyeok
-g }$vowel<>ᄀ } $vowel; # hangul choseong kiyeok
-d }$vowel<>ᄃ } $vowel; # hangul choseong tikeut
-c }$vowel<>ᄎ } $vowel; # hangul choseong chieuch
-b }$vowel<>ᄇ } $vowel; # hangul choseong pieup
+# Apostrophe insertion.  We insert apostrophes only for triple
+# consonants; double consonants between vowels are always split so
+# that "axye" yields A Xf Yi E if possible.  For three (or more)
+# consonants "axyz" we insert an apostrophe between "x" and "y" if
+# XYf, Xf, and YZi all exist, and we have A Xf YZi.  This prevents the
+# reverse transliteration to A XYf.
 
-# Take care of initial-compound medial - '(' $vowel - liu
-bb} '(' $vowel <> ᄈ } $comp_med;
-jj} '(' $vowel <> ᄍ } $comp_med;
-dd} '(' $vowel <> ᄄ } $comp_med;
-t } '(' $vowel <> ᄐ } $comp_med; # hangul choseong thieuth
-ss} '(' $vowel <> ᄊ } $comp_med; # hangul choseong ssangsios
-s } '(' $vowel <> ᄉ } $comp_med; # hangul choseong sios
-p } '(' $vowel <> ᄑ } $comp_med; # hangul choseong phieuph
-n } '(' $vowel <> ᄂ } $comp_med; # hangul choseong nieun
-m } '(' $vowel <> ᄆ } $comp_med; # hangul choseong mieum
-l } '(' $vowel <> ᄅ } $comp_med; # hangul choseong rieul
-k } '(' $vowel <> ᄏ } $comp_med; # hangul choseong khieukh
-j } '(' $vowel <> ᄌ } $comp_med; # hangul choseong cieuc
-h } '(' $vowel <> ᄒ } $comp_med; # hangul choseong hieuh
-gg} '(' $vowel <> ᄁ } $comp_med; # hangul choseong ssangkiyeok
-g } '(' $vowel <> ᄀ } $comp_med; # hangul choseong kiyeok
-d } '(' $vowel <> ᄃ } $comp_med; # hangul choseong tikeut
-c } '(' $vowel <> ᄎ } $comp_med; # hangul choseong chieuch
-b } '(' $vowel <> ᄇ } $comp_med; # hangul choseong pieup
+# For vowels the rule is similar.  (We shouldn't really see long
+# strings of medials, but if we do, we need to disambiguate them.)  If
+# there is a vowel "ae" such that "a" by itself and "e" by itself are
+# vowels, then the rule "'' < a {} [ E ];" must be used to introduce
+# and apostrophe between single "a" and single "e".  For vowels of the
+# form "aei", in theory both "ae" + "i" and "a" + "ei" must be tested,
+# but in practice only the former occurs.
 
-# Mark non-canonical initials with '[' - liu
-'[' bb <> ᄈ;
-'[' jj <> ᄍ;
-'[' dd <> ᄄ;
-'[' t  <> ᄐ; # hangul choseong thieuth
-'[' ss <> ᄊ; # hangul choseong ssangsios
-'[' s  <> ᄉ; # hangul choseong sios
-'[' p  <> ᄑ; # hangul choseong phieuph
-'[' n  <> ᄂ; # hangul choseong nieun
-'[' m  <> ᄆ; # hangul choseong mieum
-'[' l  <> ᄅ; # hangul choseong rieul
-'[' k  <> ᄏ; # hangul choseong khieukh
-'[' j  <> ᄌ; # hangul choseong cieuc
-'[' h  <> ᄒ; # hangul choseong hieuh
-'[' gg <> ᄁ; # hangul choseong ssangkiyeok
-'[' g  <> ᄀ; # hangul choseong kiyeok
-'[' d  <> ᄃ; # hangul choseong tikeut
-'[' c  <> ᄎ; # hangul choseong chieuch
-'[' b  <> ᄇ; # hangul choseong pieup
+# These rules are generated programmatically.  These rules must occur
+# before all other Jamo-Latin rules.
 
+  '' < $latinMedialEnd b {} [$SSi];
+  '' < $latinMedialEnd g {} [$GGi $SSi];
+  '' < $latinMedialEnd l {} [$BB $GGi $SSi];
+  '' < $latinMedialEnd n {} [$GGi $JJ];
+  '' < $latinMedialEnd s {} [$SSi];
+  '' < e {} [$O $U];
+  '' < [o a] {} $E;
 
-# If we have gotten through to these rules, and we start with
-# a consonant, then the remaining mappings would be to F,
-# because must have CC (or C<non-letter>), not CV.
-# If we have F before us, then
-# we would end up with FF, which is wrong. The simplest fix is
-# to still make it an initial, but also insert an "u",
-# so we end up with F, I, u, and then continue with the C
+# The other complication is handling of IEUNG, which we do below,
+# together with the deletion of apostrophes.
 
-# special, only initial
-#  + "bb > 뿌;"  // bb u hangul choseong ssangpieup
-#  + "jj > 쭈;"  // jj u hangul choseong ssangcieuc
-#  + "dd > 뚜;"  // dd u hangul choseong ssangtikeut
+#----------------------------------------------------------------------
+# Latin-Jamo
 
-#  + "$final{ t > 투;"   // hangul choseong thieuth
-#  + "$final{ ss> 쑤;"   // hangul choseong ssangsios
-#  + "$final{ s > 수;"   // hangul choseong sios
-#  + "$final{ p > 푸;"   // hangul choseong phieuph
-#  + "$final{ n > 누;"   // hangul choseong nieun
-#  + "$final{ m > 무;"   // hangul choseong mieum
-#  + "$final{ l > 루;"   // hangul choseong rieul
-#  + "$final{ k > 쿠;"   // hangul choseong khieukh
-#  + "$final{ j > 주;"   // hangul choseong cieuc
-#  + "$final{ h > 후;"   // hangul choseong hieuh
-#  + "$final{ gg> 꾸;"   // hangul choseong ssangkiyeok
-#  + "$final{ g > 구;"   // hangul choseong kiyeok
-#  + "$final{ d > 두;"   // hangul choseong tikeut
-#  + "$final{ c > 추;"   // hangul choseong chieuch
-#  + "$final{ b > 부;"   // hangul choseong pieup
+# [Basic, context-free Jamo-Latin rules are embedded here too.  See
+# above.]
 
-# MEDIALS after INITIALS
+# Split digraphs: Text of the form 'axye', where 'xy' is a final
+# digraph, 'x' is a final (by itself), 'y' is an initial, and 'a' and
+# 'e' are medials, we want to transliterate this as A Xf Yi E rather
+# than A XYf IEUNG E.  These rules are generated programmatically from
+# the jamo data.
 
-# MEDIALS (vowels) not after INITIALs
-# Added left $initial context - liu
-$initial{ yu <> $INITIAL{ ᅲ; # hangul jungseong yu
-$initial{ yo <> $INITIAL{ ᅭ; # hangul jungseong yo
-$initial{ yi <> $INITIAL{ ᅴ; # hangul jungseong yi
-$initial{ yeo<> $INITIAL{ ᅧ; # hangul jungseong yeo
-$initial{ ye <> $INITIAL{ ᅨ; # hangul jungseong ye
-$initial{ yae<> $INITIAL{ ᅤ; # hangul jungseong yae
-$initial{ ya <> $INITIAL{ ᅣ; # hangul jungseong ya
-$initial{ wi <> $INITIAL{ ᅱ; # hangul jungseong wi
-$initial{ weo<> $INITIAL{ ᅯ; # hangul jungseong weo
-$initial{ we <> $INITIAL{ ᅰ; # hangul jungseong we
-$initial{ wae<> $INITIAL{ ᅫ; # hangul jungseong wae
-$initial{ wa <> $INITIAL{ ᅪ; # hangul jungseong wa
-$initial{ u  <> $INITIAL{ ᅮ; # hangul jungseong u
-$initial{ oe <> $INITIAL{ ᅬ; # hangul jungseong oe
-$initial{ o  <> $INITIAL{ ᅩ; # hangul jungseong o
-$initial{ i  <> $INITIAL{ ᅵ; # hangul jungseong i
-$initial{ eu <> $INITIAL{ ᅳ; # hangul jungseong eu
-$initial{ eo <> $INITIAL{ ᅥ; # hangul jungseong eo
-$initial{ e  <> $INITIAL{ ᅦ; # hangul jungseong e
-$initial{ ae <> $INITIAL{ ᅢ; # hangul jungseong ae
-$initial{ a  <> $INITIAL{ ᅡ; # hangul jungseong a
+  $jamoMedial {b s} $latinMedial > $Bf $Si;
+  $jamoMedial {g g} $latinMedial > $Gf $Gi;
+  $jamoMedial {g s} $latinMedial > $Gf $Si;
+  $jamoMedial {l b} $latinMedial > $L $Bi;
+  $jamoMedial {l g} $latinMedial > $L $Gi;
+  $jamoMedial {l h} $latinMedial > $L $Hi;
+  $jamoMedial {l m} $latinMedial > $L $Mi;
+  $jamoMedial {l p} $latinMedial > $L $Pi;
+  $jamoMedial {l s} $latinMedial > $L $Si;
+  $jamoMedial {l t} $latinMedial > $L $Ti;
+  $jamoMedial {n g} $latinMedial > $Nf $Gi;
+  $jamoMedial {n h} $latinMedial > $Nf $Hi;
+  $jamoMedial {n j} $latinMedial > $Nf $Ji;
+  $jamoMedial {s s} $latinMedial > $Sf $Si;
 
-# Handle non-canonical isolated jungseong - liu
-'~'yu <> ᅲ; # hangul jungseong yu
-'~'yo <> ᅭ; # hangul jungseong yo
-'~'yi <> ᅴ; # hangul jungseong yi
-'~'yeo<> ᅧ; # hangul jungseong yeo
-'~'ye <> ᅨ; # hangul jungseong ye
-'~'yae<> ᅤ; # hangul jungseong yae
-'~'ya <> ᅣ; # hangul jungseong ya
-'~'wi <> ᅱ; # hangul jungseong wi
-'~'weo<> ᅯ; # hangul jungseong weo
-'~'we <> ᅰ; # hangul jungseong we
-'~'wae<> ᅫ; # hangul jungseong wae
-'~'wa <> ᅪ; # hangul jungseong wa
-'~'u  <> ᅮ; # hangul jungseong u
-'~'oe <> ᅬ; # hangul jungseong oe
-'~'o  <> ᅩ; # hangul jungseong o
-'~'i  <> ᅵ; # hangul jungseong i
-'~'eu <> ᅳ; # hangul jungseong eu
-'~'eo <> ᅥ; # hangul jungseong eo
-'~'e  <> ᅦ; # hangul jungseong e
-'~'ae <> ᅢ; # hangul jungseong ae
-'~'a  <> ᅡ; # hangul jungseong a
+# Single consonants are initials: Text of the form 'axe', where 'x'
+# can be an initial or a final, and 'a' and 'e' are medials, we want
+# to transliterate as A Xi E rather than A Xf IEUNG E.
 
-# MEDIALS (vowels) not after INITIALs
-# Changed from > to <> - liu
-yu <> ᄋ ᅲ; # hangul jungseong yu
-yo <> ᄋ ᅭ; # hangul jungseong yo
-yi <> ᄋ ᅴ; # hangul jungseong yi
-yeo<> ᄋ ᅧ; # hangul jungseong yeo
-ye <> ᄋ ᅨ; # hangul jungseong ye
-yae<> ᄋ ᅤ; # hangul jungseong yae
-ya <> ᄋ ᅣ; # hangul jungseong ya
-wi <> ᄋ ᅱ; # hangul jungseong wi
-weo<> ᄋ ᅯ; # hangul jungseong weo
-we <> ᄋ ᅰ; # hangul jungseong we
-wae<> ᄋ ᅫ; # hangul jungseong wae
-wa <> ᄋ ᅪ; # hangul jungseong wa
-u  <> ᄋ ᅮ; # hangul jungseong u
-oe <> ᄋ ᅬ; # hangul jungseong oe
-o  <> ᄋ ᅩ; # hangul jungseong o
-i  <> ᄋ ᅵ; # hangul jungseong i
-eu <> ᄋ ᅳ; # hangul jungseong eu
-eo <> ᄋ ᅥ; # hangul jungseong eo
-e  <> ᄋ ᅦ; # hangul jungseong e
-ae <> ᄋ ᅢ; # hangul jungseong ae
-a  <> ᄋ ᅡ; # hangul jungseong a
+  $jamoMedial {b} $latinMedial > $Bi;
+  $jamoMedial {c} $latinMedial > $Ci;
+  $jamoMedial {d} $latinMedial > $Di;
+  $jamoMedial {g} $latinMedial > $Gi;
+  $jamoMedial {h} $latinMedial > $Hi;
+  $jamoMedial {j} $latinMedial > $Ji;
+  $jamoMedial {k} $latinMedial > $Ki;
+  $jamoMedial {m} $latinMedial > $Mi;
+  $jamoMedial {n} $latinMedial > $Ni;
+  $jamoMedial {p} $latinMedial > $Pi;
+  $jamoMedial {s} $latinMedial > $Si;
+  $jamoMedial {t} $latinMedial > $Ti;
 
-\` <> ᄋ;
-# Moved down so as not to mask above rules - liu
-# + "'' < $consonant{ᄋ;" // insert a break between any consonant and the empty consonant.
-#  + "$medial{}$vowel<>ᄋ;"  // HANGUL CHOSEONG IEUNG
+# Finals: Attach consonant with preceding medial to preceding medial.
+# Do this BEFORE mapping consonants to initials.  Longer keys must
+# precede shorter keys that they start with, e.g., the rule for 'bs'
+# must precede 'b'.
 
+# [BASIC Jamo-Latin FINALS handled here.  Order irrelevant within this
+# block for Jamo-Latin.]
 
-# FINALS
+  $jamoMedial {bs} <> $BS;
+  $jamoMedial {b} <> $Bf;
+  $jamoMedial {c} <> $Cf;
+  $jamoMedial {d} <> $Df;
+  $jamoMedial {gg} <> $GGf;
+  $jamoMedial {gs} <> $GS;
+  $jamoMedial {g} <> $Gf;
+  $jamoMedial {h} <> $Hf;
+  $jamoMedial {j} <> $Jf;
+  $jamoMedial {k} <> $Kf;
+  $jamoMedial {lb} <> $LB;
+  $jamoMedial {lg} <> $LG;
+  $jamoMedial {lh} <> $LH;
+  $jamoMedial {lm} <> $LM;
+  $jamoMedial {lp} <> $LP;
+  $jamoMedial {ls} <> $LS;
+  $jamoMedial {lt} <> $LT;
+  $jamoMedial {l} <> $L;
+  $jamoMedial {m} <> $Mf;
+  $jamoMedial {ng} <> $NG;
+  $jamoMedial {nh} <> $NH;
+  $jamoMedial {nj} <> $NJ;
+  $jamoMedial {n} <> $Nf;
+  $jamoMedial {p} <> $Pf;
+  $jamoMedial {ss} <> $SSf;
+  $jamoMedial {s} <> $Sf;
+  $jamoMedial {t} <> $Tf;
 
- '' t  <> $consonant { ᇀ; # hangul jongseong thieuth
- '' ss <> $consonant { ᆻ; # hangul jongseong ssangsios
- '' s  <> $consonant { ᆺ; # hangul jongseong sios
- '' p  <> $consonant { ᇁ; # hangul jongseong phieuph
- '' nj <> $consonant { ᆬ; # hangul jongseong nieun-cieuc
- '' nh <> $consonant { ᆭ; # hangul jongseong nieun-hieuh
- '' ng <> $consonant { ᆼ; # hangul jongseong ieung
- '' n  <> $consonant { ᆫ; # hangul jongseong nieun
- '' m  <> $consonant { ᆷ; # hangul jongseong mieum
- '' lt <> $consonant { ᆴ; # hangul jongseong rieul-thieuth
- '' ls <> $consonant { ᆳ; # hangul jongseong rieul-sios
- '' lp <> $consonant { ᆵ; # hangul jongseong rieul-phieuph
- '' lm <> $consonant { ᆱ; # hangul jongseong rieul-mieum
- '' lh <> $consonant { ᆶ; # hangul jongseong rieul-hieuh
- '' lg <> $consonant { ᆰ; # hangul jongseong rieul-kiyeok
- '' lb <> $consonant { ᆲ; # hangul jongseong rieul-pieup
- '' l  <> $consonant { ᆯ; # hangul jongseong rieul
- '' k  <> $consonant { ᆿ; # hangul jongseong khieukh
- '' j  <> $consonant { ᆽ; # hangul jongseong cieuc
- '' h  <> $consonant { ᇂ; # hangul jongseong hieuh
- '' gs <> $consonant { ᆪ; # hangul jongseong kiyeok-sios
- '' gg <> $consonant { ᆩ; # hangul jongseong ssangkiyeok
- '' g  <> $consonant { ᆨ; # hangul jongseong kiyeok
- '' d  <> $consonant { ᆮ; # hangul jongseong tikeut
- '' c  <> $consonant { ᆾ; # hangul jongseong chieuch
- '' bs <> $consonant { ᆹ; # hangul jongseong pieup-sios
- '' b  <> $consonant { ᆸ; # hangul jongseong pieup
+# Initials: Attach single consonant to following medial.  Do this
+# AFTER mapping finals.  Longer keys must precede shorter keys that
+# they start with, e.g., the rule for 'gg' must precede 'g'.
 
-t  ']'> ᇀ; # hangul jongseong thieuth
-ss ']'> ᆻ; # hangul jongseong ssangsios
-s  ']'> ᆺ; # hangul jongseong sios
-p  ']'> ᇁ; # hangul jongseong phieuph
-nj ']'> ᆬ; # hangul jongseong nieun-cieuc
-nh ']'> ᆭ; # hangul jongseong nieun-hieuh
-ng ']'> ᆼ; # hangul jongseong ieung
-n  ']'> ᆫ; # hangul jongseong nieun
-m  ']'> ᆷ; # hangul jongseong mieum
-lt ']'> ᆴ; # hangul jongseong rieul-thieuth
-ls ']'> ᆳ; # hangul jongseong rieul-sios
-lp ']'> ᆵ; # hangul jongseong rieul-phieuph
-lm ']'> ᆱ; # hangul jongseong rieul-mieum
-lh ']'> ᆶ; # hangul jongseong rieul-hieuh
-lg ']'> ᆰ; # hangul jongseong rieul-kiyeok
-lb ']'> ᆲ; # hangul jongseong rieul-pieup
-l  ']'> ᆯ; # hangul jongseong rieul
-k  ']'> ᆿ; # hangul jongseong khieukh
-j  ']'> ᆽ; # hangul jongseong cieuc
-h  ']'> ᇂ; # hangul jongseong hieuh
-gs ']'> ᆪ; # hangul jongseong kiyeok-sios
-gg ']'> ᆩ; # hangul jongseong ssangkiyeok
-g  ']'> ᆨ; # hangul jongseong kiyeok
-d  ']'> ᆮ; # hangul jongseong tikeut
-c  ']'> ᆾ; # hangul jongseong chieuch
-bs ']'> ᆹ; # hangul jongseong pieup-sios
-b  ']'> ᆸ; # hangul jongseong pieup
+# [BASIC Jamo-Latin INITIALS handled here.  Order irrelevant within
+# this block for Jamo-Latin.]
 
-$medial{ t  <> $MEDIAL{ ᇀ; # hangul jongseong thieuth
-$medial{ ss <> $MEDIAL{ ᆻ; # hangul jongseong ssangsios
-$medial{ s  <> $MEDIAL{ ᆺ; # hangul jongseong sios
-$medial{ p  <> $MEDIAL{ ᇁ; # hangul jongseong phieuph
-$medial{ nj <> $MEDIAL{ ᆬ; # hangul jongseong nieun-cieuc
-$medial{ nh <> $MEDIAL{ ᆭ; # hangul jongseong nieun-hieuh
-$medial{ ng <> $MEDIAL{ ᆼ; # hangul jongseong ieung
-$medial{ n  <> $MEDIAL{ ᆫ; # hangul jongseong nieun
-$medial{ m  <> $MEDIAL{ ᆷ; # hangul jongseong mieum
-$medial{ lt <> $MEDIAL{ ᆴ; # hangul jongseong rieul-thieuth
-$medial{ ls <> $MEDIAL{ ᆳ; # hangul jongseong rieul-sios
-$medial{ lp <> $MEDIAL{ ᆵ; # hangul jongseong rieul-phieuph
-$medial{ lm <> $MEDIAL{ ᆱ; # hangul jongseong rieul-mieum
-$medial{ lh <> $MEDIAL{ ᆶ; # hangul jongseong rieul-hieuh
-$medial{ lg <> $MEDIAL{ ᆰ; # hangul jongseong rieul-kiyeok
-$medial{ lb <> $MEDIAL{ ᆲ; # hangul jongseong rieul-pieup
-$medial{ l  <> $MEDIAL{ ᆯ; # hangul jongseong rieul
-$medial{ k  <> $MEDIAL{ ᆿ; # hangul jongseong khieukh
-$medial{ j  <> $MEDIAL{ ᆽ; # hangul jongseong cieuc
-$medial{ h  <> $MEDIAL{ ᇂ; # hangul jongseong hieuh
-$medial{ gs <> $MEDIAL{ ᆪ; # hangul jongseong kiyeok-sios
-$medial{ gg <> $MEDIAL{ ᆩ; # hangul jongseong ssangkiyeok
-$medial{ g  <> $MEDIAL{ ᆨ; # hangul jongseong kiyeok
-$medial{ d  <> $MEDIAL{ ᆮ; # hangul jongseong tikeut
-$medial{ c  <> $MEDIAL{ ᆾ; # hangul jongseong chieuch
-$medial{ bs <> $MEDIAL{ ᆹ; # hangul jongseong pieup-sios
-$medial{ b  <> $MEDIAL{ ᆸ; # hangul jongseong pieup
+  {gg} $latinMedial <> $GGi;
+  {g} $latinMedial <> $Gi;
+  {n} $latinMedial <> $Ni;
+  {dd} $latinMedial <> $DD;
+  {d} $latinMedial <> $Di;
+  {r} $latinMedial <> $R;
+  {m} $latinMedial <> $Mi;
+  {bb} $latinMedial <> $BB;
+  {b} $latinMedial <> $Bi;
+  {ss} $latinMedial <> $SSi;
+  {s} $latinMedial <> $Si;
+  {jj} $latinMedial <> $JJ;
+  {j} $latinMedial <> $Ji;
+  {c} $latinMedial <> $Ci;
+  {k} $latinMedial <> $Ki;
+  {t} $latinMedial <> $Ti;
+  {p} $latinMedial <> $Pi;
+  {h} $latinMedial <> $Hi;
 
-t  ']'< ᇀ; # hangul jongseong thieuth
-ss ']'< ᆻ; # hangul jongseong ssangsios
-s  ']'< ᆺ; # hangul jongseong sios
-p  ']'< ᇁ; # hangul jongseong phieuph
-nj ']'< ᆬ; # hangul jongseong nieun-cieuc
-nh ']'< ᆭ; # hangul jongseong nieun-hieuh
-ng ']'< ᆼ; # hangul jongseong ieung
-n  ']'< ᆫ; # hangul jongseong nieun
-m  ']'< ᆷ; # hangul jongseong mieum
-lt ']'< ᆴ; # hangul jongseong rieul-thieuth
-ls ']'< ᆳ; # hangul jongseong rieul-sios
-lp ']'< ᆵ; # hangul jongseong rieul-phieuph
-lm ']'< ᆱ; # hangul jongseong rieul-mieum
-lh ']'< ᆶ; # hangul jongseong rieul-hieuh
-lg ']'< ᆰ; # hangul jongseong rieul-kiyeok
-lb ']'< ᆲ; # hangul jongseong rieul-pieup
-l  ']'< ᆯ; # hangul jongseong rieul
-k  ']'< ᆿ; # hangul jongseong khieukh
-j  ']'< ᆽ; # hangul jongseong cieuc
-h  ']'< ᇂ; # hangul jongseong hieuh
-gs ']'< ᆪ; # hangul jongseong kiyeok-sios
-gg ']'< ᆩ; # hangul jongseong ssangkiyeok
-g  ']'< ᆨ; # hangul jongseong kiyeok
-d  ']'< ᆮ; # hangul jongseong tikeut
-c  ']'< ᆾ; # hangul jongseong chieuch
-bs ']'< ᆹ; # hangul jongseong pieup-sios
-b  ']'< ᆸ; # hangul jongseong pieup
+# Initial + Final: If we match the next rule, we have initial then
+# final consonant with no intervening medial.  We insert the null
+# vowel BEFORE it to create a well-formed syllable.  (In the next rule
+# we insert a null vowel AFTER an anomalous initial.)
 
-# extra English letters
+  $jamoInitial {} [bcdghjklmnpst] > $EU;
 
-#  + "z > |s;"
-#  //{ + "Z > |s;" } masked
-#  + "x > |ks;"
-#  + "X > |ks;"
-#  + "v > |b;"
-#  + "V > |b;"
-#  + "r > |l;"
-#  + "R > |l;"
-#  + "q > |k;"
-#  + "Q > |k;"
-#  + "f > |p;"
-#  + "F > |p;"
-#  //{ + "c > |k;" } masked
-#  + "C > |k;"
+# Initial + X: This block matches an initial consonant not followed by
+# a medial.  We insert the null vowel after it.  We handle double
+# initials explicitly here; for single initial consonants we insert EU
+# (as Latin) after them and let standard rules do the rest.
 
-#  + "y > ᅲ;"   // hangul jungseong yu
-#  + "w > ᅱ;"   // hangul jungseong wi
+# BREAKS ROUND TRIP INTEGRITY
+
+  gg > $GGi $EU;
+  dd > $DD $EU;
+  bb > $BB $EU;
+  ss > $SSi $EU;
+  jj > $JJ $EU;
+
+  ([bcdghjkmnprst]) > | $1 eu;
+
+# X + Final: Finally we have to deal with a consonant that can only be
+# interpreted as a final (not an initial) and which is preceded
+# neither by an initial nor a medial.  It is the start of the
+# syllable, but cannot be.  Most of these will already be handled by
+# the above rules.  'bs' splits into Bi EU Sf.  Similar for 'gs' 'ng'
+# 'nh' 'nj'.  The only problem is 'l' and digraphs starting with 'l'.
+# For this isolated case, we could add a null initial and medial,
+# which would give "la" => IEUNG EU L IEUNG A, for example.  A more
+# economical solution is to transliterate isolated "l" (that is,
+# initial "l") to "r".  (Other similar conversions of consonants that
+# occur neither as initials nor as finals are handled below.)
+
+  l > | r;
+
+# Medials.  If a medial is preceded by an initial, then we proceed
+# normally.  As usual, longer keys must precede shorter ones.
+
+# [BASIC Jamo-Latin MEDIALS handled here.  Order irrelevant within
+# this block for Jamo-Latin.]
+
+  $jamoInitial {ae} <> $AE;
+  $jamoInitial {a} <> $A;
+  $jamoInitial {eo} <> $EO;
+  $jamoInitial {eu} <> $EU;
+  $jamoInitial {e} <> $E;
+  $jamoInitial {i} <> $I;
+  $jamoInitial {oe} <> $OE;
+  $jamoInitial {o} <> $O;
+  $jamoInitial {u} <> $U;
+  $jamoInitial {wae} <> $WAE;
+  $jamoInitial {wa} <> $WA;
+  $jamoInitial {weo} <> $WEO;
+  $jamoInitial {we} <> $WE;
+  $jamoInitial {wi} <> $WI;
+  $jamoInitial {yae} <> $YAE;
+  $jamoInitial {ya} <> $YA;
+  $jamoInitial {yeo} <> $YEO;
+  $jamoInitial {ye} <> $YE;
+  $jamoInitial {yi} <> $YI;
+  $jamoInitial {yo} <> $YO;
+  $jamoInitial {yu} <> $YU;
+
+# We may see an anomalous isolated 'w' or 'y'.  In that case, we
+# interpret it as 'wi' and 'yu', respectively.
+
+# BREAKS ROUND TRIP INTEGRITY
+
+  $jamoInitial {w} > | wi;
+  $jamoInitial {y} > | yu;
+
+# Otherwise, insert a null consonant IEUNG before the medial (which is
+# still an untransliterated latin vowel).
+
+  ($latinMedial) > $IEUNG | $1;
+
+# Convert non-jamo latin consonants to equivalents.  These occur as
+# neither initials nor finals in jamo.  'l' occurs as a final, but not
+# an initial; it is handled above.  The following letters (left hand
+# side) will never be output by Jamo-Latin.
+
+  f > | p;
+  q > | k;
+  v > | b;
+  x > | ks;
+  z > | s;
+
+# Delete apostrophes (Latin-Jamo).
+
+  '' > ;
+
+# Delete null consonants (Jamo-Latin).  Do NOT delete null EU vowels,
+# since these may also occur in text.
+
+  < $IEUNG;
 
 # eof
