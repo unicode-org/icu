@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/11/14 21:56:53 $
- * $Revision: 1.7 $
+ * $Date: 2003/11/17 23:48:19 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -19,7 +19,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import com.ibm.icu.dev.data.TestData;
 
 public class TestUtil {
     /**
