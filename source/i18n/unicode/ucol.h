@@ -643,10 +643,10 @@ ucol_setNormalization(  UCollator        *coll,
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
 
-#if ((U_ICU_VERSION_MAJOR_NUM != 1) || (U_ICU_VERSION_MINOR_NUM !=9))
+#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM !=0))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
-#   define ucol_openRules_1_9(rules,rulesLength,normalizationMode,strength,status) ucol_openRules(rules,rulesLength,(UColAttributeValue)normalizationMode,strength,NULL,status)
+#   define ucol_openRules_2_0(rules,rulesLength,normalizationMode,strength,status) ucol_openRules(rules,rulesLength,(UColAttributeValue)normalizationMode,strength,NULL,status)
 #endif
 
 #endif

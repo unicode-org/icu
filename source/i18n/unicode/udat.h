@@ -562,7 +562,7 @@ udat_setSymbols(    UDateFormat             *format,
  *@deprecated Remove after Aug 2002
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
-#if ((U_ICU_VERSION_MAJOR_NUM != 1) || (U_ICU_VERSION_MINOR_NUM !=9))
+#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM !=0))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
     static UDateFormat*
@@ -571,7 +571,7 @@ udat_setSymbols(    UDateFormat             *format,
         return udat_open(UDAT_IGNORE,UDAT_IGNORE,locale,NULL,0,pattern,patternLength,status);
     }
 
-#   define udat_open_1_9(timeStyle,dateStyle,locale,tzId,tzIdLength,status) udat_open(timeStyle,dateStyle,locale,tzId,tzIdLength,NULL,0,status)
+#   define udat_open_2_0(timeStyle,dateStyle,locale,tzId,tzIdLength,status) udat_open(timeStyle,dateStyle,locale,tzId,tzIdLength,NULL,0,status)
 #endif
 #endif
 /********************* End **********************************************/
