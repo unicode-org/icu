@@ -520,23 +520,6 @@ public final class UniversalTimeScale
     };
     
     /**
-     * Convert a <code>double</code> datetime from the given time scale to the universal time scale.
-     *
-     * @param otherTime The <code>double</code> datetime
-     * @param timeScale The time scale to convert from
-     * 
-     * @return The datetime converted to the universal time scale
-     *
-     * @draft ICU 3.2
-     */
-    public static long from(double otherTime, int timeScale)
-    {
-        TimeScaleData data = fromRangeCheck(otherTime, timeScale);
-        
-        return ((long)otherTime + data.epochOffset) * data.units;
-    }
-
-    /**
      * Convert a <code>long</code> datetime from the given time scale to the universal time scale.
      *
      * @param otherTime The <code>long</code> datetime
@@ -619,65 +602,6 @@ public final class UniversalTimeScale
         return otherTime.add(epochOffset).multiply(units);
     }
 
-    /**
-     * Convert a datetime from the universal time scale to a <code>double</code> in the given
-     * time scale.
-     * 
-     * Since this calculation requires a divide, we must round. The straight forward
-     * way to round by adding half of the divisor will push the sum out of range for values
-     * within half the divisor of the limits of the precision of a <code>long</code>. To get around this, we do
-     * the rounding like this:
-     * 
-     * <p><code>
-     * (universalTime - units + units/2) / units + 1
-     * </code>
-     * 
-     * <p>
-     * (i.e. we subtract units first to guarantee that we'll still be in range when we
-     * add <code>units/2</code>. We then need to add one to the quotent to make up for the extra subtraction.
-     * This simplifies to:
-     * 
-     * <p><code>
-     * (universalTime - units/2) / units - 1
-     * </code>
-     * 
-     * <p>
-     * For negative values to round away from zero, we need to flip the signs:
-     * 
-     * <p><code>
-     * (universalTime + units/2) / units + 1
-     * </code>
-     * 
-     * <p>
-     * Since we also need to subtract the epochOffset, we fold the <code>+/- 1</code>
-     * into the offset value. (i.e. <code>epochOffsetP1</code>, <code>epochOffsetM1</code>.)
-     *
-     * @param universal The datetime in the universal time scale
-     * @param timeScale The time scale to convert to
-     * 
-     * @return The datetime converted to the given time scale
-     *
-     * @draft ICU 3.2
-     */
-    public static double toDouble(long universalTime, int timeScale)
-    {
-        TimeScaleData data = toRangeCheck(universalTime, timeScale);
-        
-        if (universalTime < 0) {
-            if (universalTime < data.minRound) {
-                return (universalTime + data.unitsRound) / data.units - data.epochOffsetP1;
-            }
-            
-            return (universalTime - data.unitsRound) / data.units - data.epochOffset;
-        }
-        
-        if (universalTime > data.maxRound) {
-            return (universalTime - data.unitsRound) / data.units - data.epochOffsetM1;
-        }
-        
-        return (universalTime + data.unitsRound) / data.units - data.epochOffset;
-    }
-    
     /**
      * Convert a datetime from the universal time scale stored as a <code>BigDecimal</code> to a
      * <code>long</code> in the given time scale.
@@ -861,17 +785,6 @@ public final class UniversalTimeScale
     }
     
     private static TimeScaleData fromRangeCheck(long otherTime, int scale)
-    {
-        TimeScaleData data = getTimeScaleData(scale);
-          
-        if (otherTime >= data.fromMin && otherTime <= data.fromMax) {
-            return data;
-        }
-        
-        throw new IllegalArgumentException("otherTime out of range:" + otherTime);
-    }
-    
-    private static TimeScaleData fromRangeCheck(double otherTime, int scale)
     {
         TimeScaleData data = getTimeScaleData(scale);
           
