@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java,v $ 
- * $Date: 2003/11/14 21:56:53 $ 
- * $Revision: 1.10 $
+ * $Date: 2003/11/20 18:27:56 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -469,7 +469,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("Fail: " + e);
         } catch (Exception e) {
 	    System.out.println(e);
-	    System.out.println(e.getCause());
+	    //	    System.out.println(e.getCause());
             errln("Fail: " + e);
         }
     
