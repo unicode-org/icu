@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-sparcv9,v 1.17 2001/06/28 01:40:43 grhoten Exp $
+## $Id: mh-solaris-sparcv9,v 1.18 2001/08/21 00:19:05 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -xtarget=ultra -xarch=v9 -xM $(DEFS) $(CPPFLAGS)
@@ -52,7 +52,8 @@ INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
+LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -licudata
+LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT)
 LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
 LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
 LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
