@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/20 00:46:44 $
-* $Revision: 1.7 $
+* $Date: 2001/11/20 03:37:00 $
+* $Revision: 1.8 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -301,7 +301,10 @@ UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) 
     UErrorCode ec = U_ZERO_ERROR;
     const int32_t capacity = 10;
     UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
-    int32_t num = uscript_getCode(cvalueName,script,capacity, &ec);
+
+    // Ignore the return value of uscript_getCode
+    // since this is locale independent.
+    uscript_getCode(cvalueName,script,capacity, &ec);
 
     if (script[0] == USCRIPT_INVALID_CODE || U_FAILURE(ec)) {
         // Syntax error; unknown short name
@@ -492,8 +495,8 @@ void UnicodePropertySet::init() {
 
     NAME_MAP = new Hashtable(TRUE);
     CATEGORY_MAP = new Hashtable(TRUE);
-    CATEGORY_CACHE = new UnicodeSet[U_CHAR_CATEGORY_COUNT];
-    SCRIPT_CACHE = new UnicodeSet[USCRIPT_CODE_LIMIT];
+    CATEGORY_CACHE = new UnicodeSet[(size_t)U_CHAR_CATEGORY_COUNT];
+    SCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
 
     ucln_i18n_registerCleanup(); // Call this when allocating statics
 
