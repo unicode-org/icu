@@ -765,7 +765,7 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
       for(;;) {
         uint32_t tag = getCETag(CE);
         if(tag == THAI_TAG || tag == EXPANSION_TAG) {
-            uint32_t *CEOffset = t->expansions->CEs+(getExpansionOffset(CE) - (paddedsize(sizeof(UCATableHeader))>>2)); /* find the offset to expansion table */
+            uint32_t *CEOffset = t->expansions->CEs+(getExpansionOffset(CE) - (headersize>>2)); /* find the offset to expansion table */
             uint32_t size = getExpansionCount(CE);
             if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
               for(i = 0; i<size; i++) {
