@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 icuin.lib icuuc.lib icuio.lib icutu.lib /nologo /subsystem:console /machine:I386 /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib"
+# ADD LINK32 icuin.lib icuuc.lib icutu.lib /nologo /subsystem:console /machine:I386 /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib"
 # Begin Custom Build
 InputPath=.\Release\genrb.exe
 InputName=genrb
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuind.lib icuucd.lib icuiod.lib icutud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib"
+# ADD LINK32 icuind.lib icuucd.lib icutud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib"
 # Begin Custom Build
 InputPath=.\Debug\genrb.exe
 InputName=genrb
@@ -125,6 +125,10 @@ SOURCE=.\reslist.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucbuf.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustr.c
 # End Source File
 # Begin Source File
@@ -150,6 +154,10 @@ SOURCE=.\read.h
 # Begin Source File
 
 SOURCE=.\reslist.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucbuf.h
 # End Source File
 # Begin Source File
 
