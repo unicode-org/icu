@@ -19,7 +19,7 @@ public:
     virtual void shape(le_int32 outIndex, le_int32 shapeOffset) = 0;
 };
 
-class ArabicShaping : public UObject {
+class ArabicShaping /* not : public UObject because all methods are static */ {
 public:
     // shaping bit masks
     enum ShapingBitMasks
@@ -54,6 +54,9 @@ public:
     static const le_uint8 glyphDefinitionTable[];
 
 private:
+    // forbid instantiation
+    ArabicShaping();
+
     static ShapeType getShapeType(LEUnicode c);
 
     static const ShapeType shapeTypes[];
@@ -67,6 +70,20 @@ public:
 
     GlyphShaper(const LETag **outputTags);
     ~GlyphShaper();
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 private:
     const LETag **charTags;
@@ -85,6 +102,11 @@ private:
 
     static const LETag tagArray[];
 
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 class CharShaper : public Shaper

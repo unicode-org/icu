@@ -89,6 +89,8 @@ static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
 U_NAMESPACE_BEGIN
 
+const char ParsePosition::fgClassID=0;
+
 /**
  * Minimum value that can be stored in a UnicodeSet.
  */

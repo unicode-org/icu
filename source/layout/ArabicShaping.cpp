@@ -64,6 +64,8 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
     return ST_NOSHAPE_NONE;
 }
 
+const char GlyphShaper::fgClassID=0;
+
 #if 0
 const LETag GlyphShaper::isolFeatureTag  = 0x69736F6C; // 'isol'
 const LETag GlyphShaper::initFeatureTag  = 0x696E6974; // 'init'

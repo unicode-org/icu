@@ -22,6 +22,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char IndicOpenTypeLayoutEngine::fgClassID=0;
+
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                     const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)

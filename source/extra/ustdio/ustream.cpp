@@ -133,7 +133,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
 #endif
 
 #if 0
-/* UnicodeStringStreamer insternal API may be useful for future reference */
+/* UnicodeStringStreamer internal API may be useful for future reference */
 #ifndef UNISTRM_H
 #define UNISTRM_H
 
@@ -142,7 +142,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
 #include "unicode/unistr.h"
 
 
-class U_COMMON_API UnicodeStringStreamer : public UObject {
+class U_COMMON_API UnicodeStringStreamer /* not : public UObject because all methods are static */ {
 public:
     static void streamIn(UnicodeString* string, FileStream* is);
     static void streamOut(const UnicodeString* string, FileStream* os);

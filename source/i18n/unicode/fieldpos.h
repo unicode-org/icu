@@ -192,6 +192,20 @@ public:
      */
     void setEndIndex(int32_t ei) { fEndIndex = ei; }
     
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
     /**
      * Input: Desired field to determine start and end offsets for.
@@ -210,6 +224,12 @@ private:
      * If the field does not occur in the text, 0 is returned.
      */
     int32_t fEndIndex;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 inline FieldPosition&

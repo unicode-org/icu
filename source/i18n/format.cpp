@@ -27,6 +27,7 @@
 
 U_NAMESPACE_BEGIN
 
+const char FieldPosition::fgClassID=0;
 
 // -------------------------------------
 // default constructor

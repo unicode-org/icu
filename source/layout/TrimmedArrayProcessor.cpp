@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char TrimmedArrayProcessor::fgClassID=0;
+
 TrimmedArrayProcessor::TrimmedArrayProcessor()
 {
 }

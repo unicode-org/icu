@@ -37,6 +37,13 @@ class TestReplaceable : public Replaceable {
     UnicodeString styles;
     
     static const UChar defaultStyle;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
+
 public:    
     TestReplaceable (const UnicodeString& text, 
                      const UnicodeString& newStyles) {
@@ -69,6 +76,20 @@ public:
     void extractBetween(int32_t start, int32_t limit, UnicodeString& result) const {
         chars.extractBetween(start, limit, result);
     }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 protected:
     virtual int32_t getLength() const {
@@ -114,6 +135,8 @@ protected:
         styles.copy(start, limit, dest);
     }
 };
+
+const char TestReplaceable::fgClassID=0;
 
 const UChar TestReplaceable::defaultStyle  = 0x005F;
 

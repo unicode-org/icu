@@ -21,6 +21,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char Formattable::fgClassID=0;
+
 // -------------------------------------
 // default constructor.
 // Creates a formattable object with a long value 0.

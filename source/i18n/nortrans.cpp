@@ -30,6 +30,8 @@ static UnicodeSet* SKIPPABLES = NULL;
 
 static const int32_t D = 0, C = 1, KD= 2, KC = 3;
 
+const char NormalizationTransliterator::fgClassID=0;
+
 /**
  * System registration hook.
  */

@@ -68,6 +68,8 @@ static const UChar SPEC_Any[] = {
     END
 };
 
+const char UnescapeTransliterator::fgClassID=0;
+
 /**
  * Factory methods.  Ignore the context.
  */

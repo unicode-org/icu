@@ -12,6 +12,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char Quantifier::fgClassID=0;
+
 Quantifier::Quantifier(UnicodeFunctor *adoptedMatcher,
                        uint32_t _minCount, uint32_t _maxCount) {
     // assert(adopted != 0);

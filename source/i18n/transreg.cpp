@@ -55,6 +55,8 @@ U_NAMESPACE_BEGIN
 // Alias
 //------------------------------------------------------------------
 
+const char TransliteratorAlias::fgClassID=0;
+
 TransliteratorAlias::TransliteratorAlias(const UnicodeString& theAliasID) :
     ID(),
     aliasID(theAliasID),
@@ -131,6 +133,20 @@ class Spec : public UObject {
     operator const UnicodeString&() const { return get(); }
     const UnicodeString& getTop() const { return top; }
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
  private:
     void setupNext();
 
@@ -141,7 +157,15 @@ class Spec : public UObject {
     UBool isSpecLocale; // TRUE if spec is a locale
     UBool isNextLocale; // TRUE if nextSpec is a locale
     ResourceBundle* res;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
+
+const char Spec::fgClassID=0;
 
 Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     UErrorCode status = U_ZERO_ERROR;
@@ -349,7 +373,31 @@ public:
     void adoptPrototype(Transliterator* adopted);
     void setFactory(Transliterator::Factory factory,
                     Transliterator::Token context);
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
+
+const char Entry::fgClassID=0;
 
 Entry::Entry() {
     u.prototype = 0;
@@ -401,6 +449,8 @@ U_CDECL_END
 //----------------------------------------------------------------------
 // class TransliteratorRegistry: Basic public API
 //----------------------------------------------------------------------
+
+const char TransliteratorRegistry::fgClassID=0;
 
 TransliteratorRegistry::TransliteratorRegistry(UErrorCode& status) :
     registry(TRUE),

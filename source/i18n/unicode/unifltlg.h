@@ -30,7 +30,7 @@ class UnicodeFilter;
  * Unicode characters.  Likewise, createAnd(g, NULL) returns g->clone(),
  * and createAnd(NULL, NULL) returns NULL.
  */
-class U_I18N_API UnicodeFilterLogic : public UObject {
+class U_I18N_API UnicodeFilterLogic /* not : public UObject because all methods are static */ {
 
 public:
 

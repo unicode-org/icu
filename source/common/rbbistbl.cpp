@@ -23,6 +23,7 @@
 
 U_NAMESPACE_BEGIN
 
+const char RBBISymbolTable::fgClassID=0;
 
 //
 //  Forward Declarations
@@ -207,6 +208,8 @@ static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
     delete px;
 };
 U_CDECL_END
+
+const char RBBISymbolTableEntry::fgClassID=0;
 
 RBBISymbolTableEntry::~RBBISymbolTableEntry() {
     // The "val" of a symbol table entry is a variable reference node.

@@ -16,6 +16,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char IndicRearrangementProcessor::fgClassID=0;
+
 IndicRearrangementProcessor::IndicRearrangementProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)
 {

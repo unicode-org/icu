@@ -19,6 +19,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char TitlecaseTransliterator::fgClassID=0;
+
 /**
  * ID for this transliterator.
  */

@@ -34,10 +34,20 @@ U_NAMESPACE_BEGIN
  * C++ memory management by adding new/delete operators to this base class.
  * ICU itself will not declare and implement these new/delete operators, but
  * users of ICU can modify the ICU code for the base class.
+ *
+ * UObject contains pure virtual methods to allow derived classes like Format
+ * (which used to be base classes themselves before UObject was introduced)
+ * to have pure virtual methods.
+ *
+ * @draft ICU 2.2
  */
 class U_COMMON_API UObject {
 public:
-    // destructor
+    /**
+     * Destructor.
+     *
+     * @draft ICU 2.2
+     */
     virtual inline ~UObject() {}
 
     // possible overrides for ICU4C C++ memory management,
@@ -51,20 +61,27 @@ public:
     // void operator delete(void *p, size_t size);
     // void operator delete[](void *p, size_t size);
 
-    // ICU4C "poor man's RTTI"
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-    virtual inline UClassID getDynamicClassID() { return getStaticClassID(); }
+    /**
+     * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const = 0;
 
 protected:
     // the following functions are protected to prevent instantiation and
     // direct use of UObject itself
 
     // default constructor
-    inline UObject() {}
+    // commented out because UObject is abstract (see getDynamicClassID)
+    // inline UObject() {}
 
     // copy constructor
-    inline UObject(const UObject &other) {}
+    // commented out because UObject is abstract (see getDynamicClassID)
+    // inline UObject(const UObject &other) {}
 
+#if U_ICU_VERSION_MAJOR_NUM>2 || (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM>2)
+    // TODO post ICU 2.2
     // some or all of the following "boilerplate" functions may be made public
     // in a future ICU4C release when all subclasses implement them
 
@@ -81,10 +98,7 @@ protected:
     // some compilers do not support co-variant return types
     // (i.e., subclasses would have to return UObject& as well, instead of SubClass&)
     // virtual UObject *clone() const;
-
-private:
-    // for ICU4C "poor man's RTTI"
-    static const char fgClassID;
+#endif
 };
 
 U_NAMESPACE_END

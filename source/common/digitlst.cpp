@@ -54,6 +54,8 @@ enum {
 
 U_NAMESPACE_BEGIN
 
+const char DigitList::fgClassID=0;
+
 // -------------------------------------
 // default constructor
 

@@ -37,6 +37,7 @@
 
 U_NAMESPACE_BEGIN
 
+const char RBBIRuleScanner::fgClassID=0;
 
 //
 //  Forward Declarations

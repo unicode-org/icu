@@ -42,7 +42,7 @@ class UVector;
  *
  * @author Alan Liu
  */
-class TransliteratorIDParser : public UObject {
+class TransliteratorIDParser /* not : public UObject because all methods are static */ {
 
  public:
 
@@ -70,6 +70,28 @@ class TransliteratorIDParser : public UObject {
         Specs(const UnicodeString& s, const UnicodeString& t,
               const UnicodeString& v, UBool sawS,
               const UnicodeString& f);
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for the actual class.
+         *
+         * @draft ICU 2.2
+         */
+        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for this class.
+         *
+         * @draft ICU 2.2
+         */
+        static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    private:
+
+        /**
+         * The address of this static class variable serves as this class's ID
+         * for ICU "poor man's RTTI".
+         */
+        static const char fgClassID;
     };
 
     /**
@@ -96,6 +118,28 @@ class TransliteratorIDParser : public UObject {
                  const UnicodeString& f);
         SingleID(const UnicodeString& c, const UnicodeString& b);
         Transliterator* createInstance();
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for the actual class.
+         *
+         * @draft ICU 2.2
+         */
+        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for this class.
+         *
+         * @draft ICU 2.2
+         */
+        static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    private:
+
+        /**
+         * The address of this static class variable serves as this class's ID
+         * for ICU "poor man's RTTI".
+         */
+        static const char fgClassID;
     };
 
     /**
@@ -275,10 +319,12 @@ class TransliteratorIDParser : public UObject {
     static void cleanup();
 
  private:
-
     //----------------------------------------------------------------
     // Private implementation
     //----------------------------------------------------------------
+
+    // forbid instantiation
+    TransliteratorIDParser();
 
     /**
      * Parse an ID into component pieces.  Take IDs of the form T,

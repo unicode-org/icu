@@ -150,6 +150,8 @@ static void maskingError(const U_NAMESPACE_QUALIFIER TransliterationRule& rule1,
 
 U_NAMESPACE_BEGIN
 
+const char TransliterationRuleSet::fgClassID=0;
+
 /**
  * Construct a new empty rule set.
  */

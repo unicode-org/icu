@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.h,v $ 
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -48,6 +48,12 @@ class U_I18N_API AnyTransliterator : public Transliterator {
      */
     UScriptCode targetScript;
 
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
+
 public:
     
     /**
@@ -71,6 +77,20 @@ public:
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
     
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
 
     /**

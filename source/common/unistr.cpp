@@ -93,6 +93,8 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
 
 U_NAMESPACE_BEGIN
 
+const char UnicodeString::fgClassID=0;
+const char UCharReference::fgClassID=0;
 
 //========================================
 // Reference Counting functions, put at top of file so that optimizing compilers

@@ -83,8 +83,23 @@ public:
     void     printRanges();
     void     printRangeGroups();
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 private:
+    void           numberSets();
+
     RBBIRuleBuilder       *fRB;             // The RBBI Rule Compiler that owns us.
     UErrorCode            *fStatus;
 
@@ -100,10 +115,11 @@ private:
     //       Index 0 is not used.  Funny counting.
     int32_t               fGroupCount;
 
-
-
-private:
-    void           numberSets();
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 

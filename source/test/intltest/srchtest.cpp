@@ -1987,10 +1987,35 @@ public:
     void            setOffset(int32_t position, UErrorCode &status);
     int32_t     getOffset() const;
     SearchIterator* safeClone() const;
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 protected:
     int32_t     handleNext(int32_t position, UErrorCode &status);
     int32_t     handlePrev(int32_t position, UErrorCode &status);
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
+
+const char TempSearch::fgClassID=0;
 
 TempSearch::TempSearch() : SearchIterator()
 {

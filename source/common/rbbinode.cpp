@@ -31,6 +31,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char RBBINode::fgClassID=0;
+
 int  RBBINode::gLastSerial = 0;
 
 

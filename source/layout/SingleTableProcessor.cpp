@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char SingleTableProcessor::fgClassID=0;
+
 SingleTableProcessor::SingleTableProcessor()
 {
 }

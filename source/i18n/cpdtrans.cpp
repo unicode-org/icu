@@ -24,6 +24,8 @@ static const UChar EMPTY[] = {0}; //""
 
 U_NAMESPACE_BEGIN
 
+const char CompoundTransliterator::fgClassID=0;
+
 /**
  * Constructs a new compound transliterator given an array of
  * transliterators.  The array of transliterators may be of any
