@@ -327,16 +327,13 @@ public:
     UBool isLeapYear(int32_t year) const;
 
     /**
-     * Compares the equality of two GregorianCalendar objects. Objects of different
-     * subclasses are considered unequal.  This is a strict equality test; see the
-     * documentation for Calendar::operator==().
+     * Returns TRUE if the given Calendar object is equivalent to this
+     * one.  Calendar override.
      *
-     * @param that  The GregorianCalendar object to be compared with.
-     * @return      True if the given GregorianCalendar is the same as this
-     *              GregorianCalendar; false otherwise.
-     * @stable
+     * @param other the Calendar to be compared with this Calendar   
+     * @draft ICU 2.4
      */
-    virtual UBool operator==(const Calendar& that) const;
+    virtual UBool isEquivalentTo(const Calendar& other) const;
 
     /**
      * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
