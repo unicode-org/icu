@@ -955,11 +955,11 @@ getTrail:
                     break;
                 case MBCS_OUTPUT_2:
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*2;
-                    if(U_IS_BIG_ENDIAN) {
+#                   if U_IS_BIG_ENDIAN
                         value=*(uint16_t *)p;
-                    } else {
+#                   else
                         value=((uint32_t)*p<<8)|p[1];
-                    }
+#                   endif
                     if(value<=0xff) {
                         length=1;
                     } else {
@@ -979,11 +979,11 @@ getTrail:
                     break;
                 case MBCS_OUTPUT_4:
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*4;
-                    if(U_IS_BIG_ENDIAN) {
+#                   if U_IS_BIG_ENDIAN
                         value=*(uint32_t *)p;
-                    } else {
+#                   else
                         value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
-                    }
+#                   endif
                     if(value<=0xff) {
                         length=1;
                     } else if(value<=0xffff) {
@@ -996,11 +996,11 @@ getTrail:
                     break;
                 case MBCS_OUTPUT_3_EUC:
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*2;
-                    if(U_IS_BIG_ENDIAN) {
+#                   if U_IS_BIG_ENDIAN
                         value=*(uint16_t *)p;
-                    } else {
+#                   else
                         value=((uint32_t)*p<<8)|p[1];
-                    }
+#                   endif
                     /* EUC 16-bit fixed-length representation */
                     if(value<=0xff) {
                         length=1;
