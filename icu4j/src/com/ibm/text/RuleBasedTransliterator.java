@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/12 20:17:45 $ 
- * $Revision: 1.18 $
+ * $Date: 2000/04/19 16:34:18 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -209,9 +209,12 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.18 $ $Date: 2000/04/12 20:17:45 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.19 $ $Date: 2000/04/19 16:34:18 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.19  2000/04/19 16:34:18  alan
+ * Add segment support.
+ *
  * Revision 1.18  2000/04/12 20:17:45  alan
  * Delegate replace operation to rule object
  *
@@ -379,7 +382,7 @@ public class RuleBasedTransliterator extends Transliterator {
                 }
             } else {
                 // Delegate replacement to TransliterationRule object
-                limit += r.replace(text, cursor);
+                limit += r.replace(text, cursor, data);
                 // text.replace(cursor, cursor + r.getKeyLength(), r.getOutput());
                 // limit += r.getOutput().length() - r.getKeyLength();
                 cursor += r.getCursorPos();
@@ -448,18 +451,36 @@ public class RuleBasedTransliterator extends Transliterator {
         public UnicodeSet[] setVariables;
 
         /**
-         * The character represented by setVariables[0].
+         * The character that represents setVariables[0].  Characters
+         * setVariablesBase through setVariablesBase +
+         * setVariables.length - 1 represent UnicodeSet objects.
          */
         public char setVariablesBase;
 
         /**
-         * Return the UnicodeSet associated with the given character, or
+         * Return the UnicodeSet represented by the given character, or
          * null if none.
          */
         public UnicodeSet lookup(char c) {
             int i = c - setVariablesBase;
             return (i >= 0 && i < setVariables.length)
                 ? setVariables[i] : null;
+        }
+
+        /**
+         * The character that represents segment 1.  Characters segmentBase
+         * through segmentBase + 8 represent segments 1 through 9.
+         */
+        public char segmentBase;
+
+        /**
+         * Return the zero-based index of the segment represented by the given
+         * character, or -1 if none.  Repeat: This is a zero-based return value,
+         * 0..8, even though these are notated "$1".."$9".
+         */
+        public int lookupSegmentReference(char c) {
+            int i = c - segmentBase;
+            return (i >= 0 && i < 9) ? i : -1;
         }
     }
 
@@ -548,6 +569,12 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char SET_CLOSE           = ']';
         private static final char CURSOR_POS          = '|';
 
+        // Segments of the input string are delimited by "$(" and "$)".  In the
+        // output string these segments are referenced as "$1" through "$9".
+        private static final char SEGMENT_REF         = '$';
+        private static final char SEGMENT_OPEN        = '(';
+        private static final char SEGMENT_CLOSE       = ')';
+
         /**
          * @param rules list of rules, separated by semicolon characters
          * @exception IllegalArgumentException if there is a syntax error in the
@@ -633,6 +660,214 @@ public class RuleBasedTransliterator extends Transliterator {
         }
 
         /**
+         * A class representing one side of a rule.  This class knows how to
+         * parse half of a rule.  It is tightly coupled to the method
+         * RuleBasedTransliterator.Parser.parseRule().
+         */
+        static class RuleHalf {
+
+            public String text;
+
+            public int cursor = -1; // position of cursor in text
+            public int ante = -1;   // position of ante context marker ')' in text
+            public int post = -1;   // position of post context marker '(' in text
+
+            // Record the position of the segment substrings and references.  A
+            // given side should have segments or segment references, but not
+            // both.
+            public Vector segments = null; // ref substring start,limits
+            public int maxRef = -1; // index of largest ref (1..9)
+
+            /**
+             * Parse one side of a rule, stopping at either the limit,
+             * the END_OF_RULE character, or an operator.  Return
+             * the pos of the terminating character (or limit).
+             */
+            public int parse(String rule, int pos, int limit,
+                             RuleBasedTransliterator.Parser parser) {
+                int start = pos;
+                StringBuffer buf = new StringBuffer();
+                int postClose = -1; // position of post context close ')' in text
+
+            main:
+                while (pos < limit) {
+                    char c = rule.charAt(pos++);
+                    if (Character.isWhitespace(c)) {
+                        // Ignore whitespace.  Note that this is not Unicode
+                        // spaces, but Java spaces -- a subset, representing
+                        // whitespace likely to be seen in code.
+                        continue;
+                    }
+                    // Handle escapes
+                    if (c == ESCAPE) {
+                        if (pos == limit) {
+                            syntaxError("Trailing backslash", rule, start);
+                        }
+                        buf.append(rule.charAt(pos++));
+                        continue;
+                    }
+                    // Handle quoted matter
+                    if (c == QUOTE) {
+                        int iq = rule.indexOf(QUOTE, pos);
+                        if (iq == pos) {
+                            buf.append(c); // Parse [''] outside quotes as [']
+                            ++pos;
+                        } else {
+                            /* This loop picks up a segment of quoted text of the
+                             * form 'aaaa' each time through.  If this segment
+                             * hasn't really ended ('aaaa''bbbb') then it keeps
+                             * looping, each time adding on a new segment.  When it
+                             * reaches the final quote it breaks.
+                             */
+                            for (;;) {
+                                if (iq < 0) {
+                                    syntaxError("Unterminated quote", rule, start);
+                                }
+                                buf.append(rule.substring(pos, iq));
+                                pos = iq+1;
+                                if (pos < limit && rule.charAt(pos) == QUOTE) {
+                                // Parse [''] inside quotes as [']
+                                    iq = rule.indexOf(QUOTE, pos+1);
+                                // Continue looping
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                        continue;
+                    }
+                    if (OPERATORS.indexOf(c) >= 0) {
+                        --pos; // Backup to point to operator
+                        break main;
+                    }
+                    // Handle segment definitions "$(" ")$" and references "$1"
+                    // .. "$9".
+                    if (c == SEGMENT_REF) {
+                        // After a SEGMENT_REF, must see SEGMENT_OPEN,
+                        // SEGMENT_CLOSE, or a digit 1 to 9, with no intervening
+                        // whitespace
+                        if (pos == limit) {
+                            syntaxError("Trailing " + c, rule, start);
+                        }
+                        c = rule.charAt(pos++);
+                        if (c == SEGMENT_OPEN || c == SEGMENT_CLOSE) {
+                            // Parse "$(", "$)"
+                            if (segments == null) {
+                                segments = new Vector();
+                            }
+                            if ((c == SEGMENT_OPEN) !=
+                                (segments.size() % 2 == 0)) {
+                                syntaxError("Mismatched segment delimiters",
+                                            rule, start);
+                            }
+                            segments.addElement(new Integer(buf.length()));
+                        } else {
+                            // Parse "$1" "$2" .. "$9"
+                            int r = Character.digit(c, 10);
+                            if (r < 1 || r > 9) {
+                                syntaxError("Illegal char after " + SEGMENT_REF,
+                                            rule, start);
+                            }
+                            if (r > maxRef) {
+                                maxRef = r;
+                            }
+                            buf.append((char) (parser.data.segmentBase + r - 1));
+                        }
+                        continue;
+                    }
+                    switch (c) {
+                    case END_OF_RULE:
+                        --pos; // Backup to point to END_OF_RULE
+                        break main;
+                    case VARIABLE_REF_OPEN:
+                        {
+                            int j = rule.indexOf(VARIABLE_REF_CLOSE, pos);
+                            if (pos == j || j < 0) { // empty or unterminated
+                                syntaxError("Malformed variable reference", rule, start);
+                            }
+                            String name = rule.substring(pos, j);
+                            pos = j+1;
+                            buf.append(parser.getVariableDef(name));
+                        }
+                        break;
+                    case CONTEXT_OPEN:
+                        if (post >= 0) {
+                            syntaxError("Multiple post contexts", rule, start);
+                        }
+                        // Ignore CONTEXT_OPEN if buffer length is zero -- that means
+                        // this is the optional opening delimiter for the ante context.
+                        if (buf.length() > 0) {
+                            post = buf.length();
+                        }
+                        break;
+                    case CONTEXT_CLOSE:
+                        if (postClose >= 0) {
+                            syntaxError("Unexpected " + c, rule, start);
+                        }
+                        if (post >= 0) {
+                            // This is probably the optional closing delimiter
+                            // for the post context; save the pos and check later.
+                            postClose = buf.length();
+                        } else if (ante >= 0) {
+                            syntaxError("Multiple ante contexts", rule, start);
+                        } else {
+                            ante = buf.length();
+                        }
+                        break;
+                    case SET_OPEN:
+                        ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
+                        buf.append(parser.registerSet(new UnicodeSet(rule, pp, parser.parseData)));
+                        pos = pp.getIndex();
+                        break;
+                    case VARIABLE_REF_CLOSE:
+                    case SET_CLOSE:
+                        syntaxError("Unquoted " + c, rule, start);
+                    case CURSOR_POS:
+                        if (cursor >= 0) {
+                            syntaxError("Multiple cursors", rule, start);
+                        }
+                        cursor = buf.length();
+                        break;
+                    default:
+                        buf.append(c);
+                        break;
+                    }
+                }
+
+                // Check context close parameters
+                if (postClose >= 0 && postClose != buf.length()) {
+                    syntaxError("Extra text after ]", rule, start);
+                }
+
+                text = buf.toString();
+                return pos;
+            }
+
+            /**
+             * Remove context.
+             */
+            void removeContext() {
+                text = text.substring(ante < 0 ? 0 : ante,
+                                      post < 0 ? text.length() : post);
+                ante = post = -1;
+            }
+
+            /**
+             * Create and return an int[] array of segments.
+             */
+            int[] getSegments() {
+                if (segments == null) {
+                    return null;
+                }
+                int[] result = new int[segments.size()];
+                for (int i=0; i<segments.size(); ++i) {
+                    result[i] = ((Number)segments.elementAt(i)).intValue();
+                }
+                return result;
+            }
+        }
+
+        /**
          * MAIN PARSER.  Parse the next rule in the given rule string, starting
          * at pos.  Return the index after the last character parsed.  Do not
          * parse characters at or after limit.
@@ -644,221 +879,110 @@ public class RuleBasedTransliterator extends Transliterator {
          * parses the end-of-rule character.  It recognizes context and cursor
          * indicators.  Once it does a lexical breakdown of the rule at pos, it
          * creates a rule object and adds it to our rule list.
+         *
+         * This method is tightly coupled to the inner class RuleHalf.
          */
         private int parseRule(String rule, int pos, int limit) {
             // Locate the left side, operator, and right side
             int start = pos;
             char operator = 0;
 
-            StringBuffer buf = new StringBuffer();
-            int cursor = -1; // position of cursor in buf
-            int ante = -1;   // position of ante context marker ')' in buf
-            int post = -1;   // position of post context marker '(' in buf
-            int postClose = -1; // position of post context close ')' in buf
+            RuleHalf left  = new RuleHalf();
+            RuleHalf right = new RuleHalf();
 
-            // Assigned to buf and its adjuncts after the LHS has been
-            // parsed.  Thereafter, buf etc. refer to the RHS.
-            String left = null;
-            int leftCursor = -1, leftAnte = -1, leftPost = -1, leftPostClose = -1;
+            pos = left.parse(rule, pos, limit, this);
 
-        main:
-            while (pos < limit) {
-                char c = rule.charAt(pos++);
-                if (Character.isWhitespace(c)) {
-                    // Ignore whitespace.  Note that this is not Unicode
-                    // spaces, but Java spaces -- a subset, representing
-                    // whitespace likely to be seen in code.
-                    continue;
-                }
-                // Handle escapes
-                if (c == ESCAPE) {
-                    if (pos == limit) {
-                        syntaxError("Trailing backslash", rule, start);
-                    }
-                    buf.append(rule.charAt(pos++));
-                    continue;
-                }
-                // Handle quoted matter
-                if (c == QUOTE) {
-                    int iq = rule.indexOf(QUOTE, pos);
-                    if (iq == pos) {
-                        buf.append(c); // Parse [''] outside quotes as [']
-                        ++pos;
-                    } else {
-                        /* This loop picks up a segment of quoted text of the
-                         * form 'aaaa' each time through.  If this segment
-                         * hasn't really ended ('aaaa''bbbb') then it keeps
-                         * looping, each time adding on a new segment.  When it
-                         * reaches the final quote it breaks.
-                         */
-                        for (;;) {
-                            if (iq < 0) {
-                                syntaxError("Unterminated quote", rule, start);
-                            }
-                            buf.append(rule.substring(pos, iq));
-                            pos = iq+1;
-                            if (pos < limit && rule.charAt(pos) == QUOTE) {
-                                // Parse [''] inside quotes as [']
-                                iq = rule.indexOf(QUOTE, pos+1);
-                                // Continue looping
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    continue;
-                }
-                if (OPERATORS.indexOf(c) >= 0) {
-                    if (operator != 0) {
-                        syntaxError("Unquoted " + c, rule, start);
-                    }
-                    // Found an operator char.  Check for forward-reverse operator.
-                    if (c == REVERSE_RULE_OP &&
-                        (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
-                        ++pos;
-                        operator = FWDREV_RULE_OP;
-                    } else {
-                        operator = c;
-                    }
-                    left = buf.toString(); // lhs
-                    leftCursor = cursor;
-                    leftAnte = ante;
-                    leftPost = post;
-                    leftPostClose = postClose;
-
-                    buf.setLength(0);
-                    cursor = ante = post = postClose = -1;
-                    continue;
-                }
-                switch (c) {
-                case END_OF_RULE:
-                    break main;
-                case VARIABLE_REF_OPEN:
-                    {
-                        int j = rule.indexOf(VARIABLE_REF_CLOSE, pos);
-                        if (pos == j || j < 0) { // empty or unterminated
-                            syntaxError("Malformed variable reference", rule, start);
-                        }
-                        String name = rule.substring(pos, j);
-                        pos = j+1;
-                        buf.append(getVariableDef(name));
-                    }
-                    break;
-                case CONTEXT_OPEN:
-                    if (post >= 0) {
-                        syntaxError("Multiple post contexts", rule, start);
-                    }
-                    // Ignore CONTEXT_OPEN if buffer length is zero -- that means
-                    // this is the optional opening delimiter for the ante context.
-                    if (buf.length() > 0) {
-                        post = buf.length();
-                    }
-                    break;
-                case CONTEXT_CLOSE:
-                    if (postClose >= 0) {
-                        syntaxError("Unexpected " + c, rule, start);
-                    }
-                    if (post >= 0) {
-                        // This is probably the optional closing delimiter
-                        // for the post context; save the pos and check later.
-                        postClose = buf.length();
-                    } else if (ante >= 0) {
-                        syntaxError("Multiple ante contexts", rule, start);
-                    } else {
-                        ante = buf.length();
-                    }
-                    break;
-                case SET_OPEN:
-                    ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
-                    buf.append(registerSet(new UnicodeSet(rule, pp, parseData)));
-                    pos = pp.getIndex();
-                    break;
-                case VARIABLE_REF_CLOSE:
-                case SET_CLOSE:
-                    syntaxError("Unquoted " + c, rule, start);
-                case CURSOR_POS:
-                    if (cursor >= 0) {
-                        syntaxError("Multiple cursors", rule, start);
-                    }
-                    cursor = buf.length();
-                    break;
-                default:
-                    buf.append(c);
-                    break;
-                }
-            }
-            if (operator == 0) {
+            if (pos == limit ||
+                OPERATORS.indexOf(operator = rule.charAt(pos++)) < 0) {
                 syntaxError("No operator", rule, start);
             }
 
-            // Check context close parameters
-            if ((leftPostClose >= 0 && leftPostClose != left.length()) ||
-                (postClose >= 0 && postClose != buf.length())) {
-                syntaxError("Extra text after ]", rule, start);
+            // Found an operator char.  Check for forward-reverse operator.
+            if (operator == REVERSE_RULE_OP &&
+                (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
+                ++pos;
+                operator = FWDREV_RULE_OP;
             }
 
-            // Context is only allowed on the input side; that is, the left side
-            // for forward rules.  Cursors are only allowed on the output side;
-            // that is, the right side for forward rules.  Bidirectional rules
-            // ignore elements that do not apply.
+            pos = right.parse(rule, pos, limit, this);
 
-            switch (operator) {
-            case VARIABLE_DEF_OP:
+            if (pos < limit) {
+                if (rule.charAt(pos) == END_OF_RULE) {
+                    ++pos;
+                } else {
+                    // RuleHalf parser must have terminated at an operator
+                    syntaxError("Unquoted operator", rule, start);
+                }
+            }
+
+            if (operator == VARIABLE_DEF_OP) {
                 // LHS is the name.  RHS is a single character, either a literal
                 // or a set (already parsed).  If RHS is longer than one
                 // character, it is either a multi-character string, or multiple
                 // sets, or a mixture of chars and sets -- syntax error.
-                if (buf.length() != 1) {
+                if (right.text.length() != 1) {
                     syntaxError("Malformed RHS", rule, start);
                 }
-                if (data.variableNames.get(left) != null) {
+                if (data.variableNames.get(left.text) != null) {
                     syntaxError("Duplicate definition of {" +
-                                left + "}", rule, start);
+                                left.text + "}", rule, start);
                 }
-                data.variableNames.put(left, new Character(buf.charAt(0)));
-                break;
-
-            case FORWARD_RULE_OP:
-                if (direction == FORWARD) {
-                    if (ante >= 0 || post >= 0 || leftCursor >= 0) {
-                        syntaxError("Malformed rule", rule, start);
-                    }
-                    data.ruleSet.addRule(new TransliterationRule(
-                                             left, leftAnte, leftPost,
-                                             buf.toString(), cursor));
-                } // otherwise ignore the rule; it's not the direction we want
-                break;
-
-            case REVERSE_RULE_OP:
-                if (direction == REVERSE) {
-                    if (leftAnte >= 0 || leftPost >= 0 || cursor >= 0) {
-                        syntaxError("Malformed rule", rule, start);
-                    }
-                    data.ruleSet.addRule(new TransliterationRule(
-                                             buf.toString(), ante, post,
-                                             left, leftCursor));
-                } // otherwise ignore the rule; it's not the direction we want
-                break;
-
-            case FWDREV_RULE_OP:
-                if (direction == FORWARD) {
-                    // The output side is the right; trim off any context
-                    String output = buf.toString().substring(ante < 0 ? 0 : ante,
-                                                             post < 0 ? buf.length() : post);
-                    data.ruleSet.addRule(new TransliterationRule(
-                                             left, leftAnte, leftPost,
-                                             output, cursor));
-                } else {
-                    // The output side is the left; trim off any context
-                    String output = left.substring(leftAnte < 0 ? 0 : leftAnte,
-                                                   leftPost < 0 ? left.length() : leftPost);
-                    data.ruleSet.addRule(new TransliterationRule(
-                                             buf.toString(), ante, post,
-                                             output, leftCursor));
-                }
-                break;
+                data.variableNames.put(left.text, new Character(right.text.charAt(0)));
+                return pos;
             }
 
+            // If the direction we want doesn't match the rule
+            // direction, do nothing.
+            if (operator != FWDREV_RULE_OP &&
+                ((direction == FORWARD) != (operator == FORWARD_RULE_OP))) {
+                return pos;
+            }
+
+            // Transform the rule into a forward rule by swapping the
+            // sides if necessary.
+            if (direction == REVERSE) {
+                RuleHalf temp = left;
+                left = right;
+                right = temp;
+            }
+
+            // Remove non-applicable elements in forward-reverse
+            // rules.  Bidirectional rules ignore elements that do not
+            // apply.
+            if (operator == FWDREV_RULE_OP) {
+                right.removeContext();
+                right.segments = null;
+                left.cursor = left.maxRef = -1;
+            }
+
+            // Context is only allowed on the input side.  Cursors are only
+            // allowed on the output side.  Segment delimiters can only appear
+            // on the left, and references on the right.
+            if (right.ante >= 0 || right.post >= 0 || left.cursor >= 0 ||
+                right.segments != null || left.maxRef >= 0) {
+                syntaxError("Malformed rule", rule, start);
+            }
+
+            // Check integrity of segments and segment references.  Each
+            // segment's start must have a corresponding limit, and the
+            // references must not refer to segments that do not exist.
+            int[] segmentsArray = null;
+            if (left.segments != null) {
+                int n = left.segments.size();
+                if (n % 2 != 0) {
+                    syntaxError("Odd length segments", rule, start);
+                }
+                n /= 2;
+                if (right.maxRef > n) {
+                    syntaxError("Undefined segment reference " + right.maxRef, rule, start);
+                }
+            }
+
+            data.ruleSet.addRule(new TransliterationRule(
+                                         left.text, left.ante, left.post,
+                                         right.text, right.cursor,
+                                         left.getSegments(), data));
+            
             return pos;
         }
 
@@ -871,13 +995,13 @@ public class RuleBasedTransliterator extends Transliterator {
          * @param rule pattern string
          * @param start position of first character of current rule
          */
-        private static final void syntaxError(String msg, String rule, int start) {
+        static final void syntaxError(String msg, String rule, int start) {
             int end = quotedIndexOf(rule, start, rule.length(), ";");
             if (end < 0) {
                 end = rule.length();
             }
-            throw new IllegalArgumentException(msg + " in " +
-                                               rule.substring(start, end));
+            throw new IllegalArgumentException(msg + " in \"" +
+                                               Utility.escape(rule.substring(start, end)) + '"');
         }
         
         /**
@@ -928,7 +1052,9 @@ public class RuleBasedTransliterator extends Transliterator {
                     "No private use characters available for variables");
             }
 
-            data.setVariablesBase = variableNext = r.start;
+            // Allocate 9 characters for segment references 1 through 9
+            data.segmentBase = r.start;
+            data.setVariablesBase = variableNext = (char) (data.segmentBase + 9);
             variableLimit = (char) (r.start + r.length);
 
             if (variableNext >= variableLimit) {
