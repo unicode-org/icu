@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/05/14 19:03:16 $
- * $Revision: 1.43 $
+ * $Date: 2003/05/16 23:37:01 $
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -20,6 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
@@ -238,7 +240,7 @@ public class TestFmwk extends AbstractTestLog {
      */
     public class Target {
         private Target next;
-        protected final String name;
+        public final String name;
 
         public Target(String name) {
             this.name = name;
@@ -366,8 +368,7 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         private Target randomize(Target t) {
-            if (params.random != null && t != null && t.getNext() != null) {
-                Random r = params.random;
+            if (t != null && t.getNext() != null) {
                 ArrayList list = new ArrayList();
                 while (t != null) {
                     list.add(t);
@@ -376,12 +377,34 @@ public class TestFmwk extends AbstractTestLog {
 
                 Target[] arr = (Target[])list.toArray(new Target[list.size()]);
 
-                for (int i = arr.length; --i >= 1;) {
-                    int x = r.nextInt(i+1);
-                    t = arr[x].setNext(t);
-                    arr[x] = arr[i];
+                if (true) { // todo - add to params?
+                    // different jvms return class methods in different orders,
+                    // so we sort them (always, and then randomize them, so that 
+                    // forcing a seed will also work across jvms).
+                    Arrays.sort(arr, new Comparator() {
+                            public int compare(Object lhs, Object rhs) {
+                                // sort in reverse order, later we link up in forward order
+                                return ((Target)rhs).name.compareTo(((Target)lhs).name);
+                            }
+                        });
+
+                    // t is null to start, ends up as first element (arr[arr.length-1])
+                    for (int i = 0; i < arr.length; ++i) {
+                        t = arr[i].setNext(t); // relink in forward order
+                    }
                 }
-                t = arr[0].setNext(t);
+
+                if (params.random != null) {
+                    t = null; // reset t to null
+                    Random r = params.random;
+                    for (int i = arr.length; --i >= 1;) {
+                        int x = r.nextInt(i+1);
+                        t = arr[x].setNext(t);
+                        arr[x] = arr[i];
+                    }
+
+                    t = arr[0].setNext(t); // new first element
+                }
             }
 
             return t;
@@ -736,7 +759,9 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -n[othrow] Message on test failure rather than exception");
         System.out.println(" -prompt Prompt before exiting");
         System.out.println(" -q[uiet] Do not show warnings");
-        System.out.println(" -r[andom][:<n>] If present, randomize targets.  If n is present, use it as the seed.");
+        System.out.println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n" +
+                           "       use it as the seed.  If random is not set, targets will\n" +
+                           "       be in alphabetical order to ensure cross-platform consistency.");
         System.out.println(" -v[erbose] Show log messages");
         System.out.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
         System.out.println();
