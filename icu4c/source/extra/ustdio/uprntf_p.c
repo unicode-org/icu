@@ -101,7 +101,7 @@ u_printf_parse_spec (const UChar     *fmt,
   info->fIsLongLong   = FALSE;
 
   /* skip over the initial '%' */
-  *s++;
+  s++;
 
   /* Check for positional argument */
   if(ISDIGIT(*s)) {
@@ -126,7 +126,7 @@ u_printf_parse_spec (const UChar     *fmt,
     }
     /* munge the '$' */
     else
-      *s++;
+      s++;
   }
   
   /* Get any format flags */
@@ -169,7 +169,7 @@ u_printf_parse_spec (const UChar     *fmt,
       info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
       
       /* final character is ignored */
-      *s++;
+      s++;
       
       break;
     }
@@ -183,7 +183,7 @@ u_printf_parse_spec (const UChar     *fmt,
     info->fWidth = -2;
 
     /* Skip the '*' */
-    *s++;
+    s++;
 
     /* Save the current position */
     backup = s;
@@ -193,8 +193,8 @@ u_printf_parse_spec (const UChar     *fmt,
       spec->fWidthPos = (int) (*s++ - DIGIT_ZERO);
       
       while(ISDIGIT(*s)) {
-    spec->fWidthPos *= 10;
-    spec->fWidthPos += (int) (*s++ - DIGIT_ZERO);
+        spec->fWidthPos *= 10;
+        spec->fWidthPos += (int) (*s++ - DIGIT_ZERO);
       }
     }
 
@@ -205,7 +205,7 @@ u_printf_parse_spec (const UChar     *fmt,
     }
     /* munge the '$' */
     else
-      *s++;
+      s++;
   }
   /* read the width, if present */
   else if(ISDIGIT(*s)){
@@ -222,7 +222,7 @@ u_printf_parse_spec (const UChar     *fmt,
   if(*s == SPEC_PERIOD) {
     
     /* eat up the '.' */
-    *s++;
+    s++;
     
     /* precision is specified out of line */
     if(*s == SPEC_ASTERISK) {
@@ -230,7 +230,7 @@ u_printf_parse_spec (const UChar     *fmt,
       info->fPrecision = -2;
 
       /* Skip the '*' */
-      *s++;
+      s++;
 
       /* save the current position */
       backup = s;
@@ -251,7 +251,7 @@ u_printf_parse_spec (const UChar     *fmt,
         }
         else {
           /* munge the '$' */
-          *s++; 
+          s++; 
         }
       }
     }
@@ -280,7 +280,7 @@ u_printf_parse_spec (const UChar     *fmt,
       if(*s == MOD_LOWERL) {
         info->fIsLongLong = TRUE;
         /* skip over the next 'l' */
-        *s++;
+        s++;
       }
       else
         info->fIsLong = TRUE;
