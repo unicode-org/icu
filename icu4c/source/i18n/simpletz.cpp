@@ -54,6 +54,8 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
     endTime(0),
     startYear(0),
     dstSavings(U_MILLIS_PER_HOUR),
+    startMode(DOM_MODE),
+    endMode(DOM_MODE),
     useDaylight(FALSE)
 {
     setID(ID);
@@ -80,6 +82,8 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
     this->endDayOfWeek     = endDayOfWeek;
     this->endTime         = endTime;
     this->dstSavings     = U_MILLIS_PER_HOUR;
+    this->startMode      = DOM_MODE;
+    this->endMode        = DOM_MODE;
 
     decodeRules(status);
 }
@@ -105,6 +109,8 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
     this->endDayOfWeek     = endDayOfWeek;
     this->endTime         = endTime;
     this->dstSavings     = dstSavings;
+    this->startMode      = DOM_MODE;
+    this->endMode        = DOM_MODE;
 
     decodeRules(status);
 
