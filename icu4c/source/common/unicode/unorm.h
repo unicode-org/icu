@@ -138,7 +138,7 @@ typedef enum {
   UNORM_FCD = 6,
 
   /** One more than the highest normalization mode constant. @stable */
-  UNORM_MODE_COUNT,
+  UNORM_MODE_COUNT
 
   /* *** The rest of this enum is entirely deprecated. *** */
 
@@ -147,7 +147,7 @@ typedef enum {
    * No decomposition/composition
    * @deprecated To be removed after 2002-sep-30, use UNORM_NONE.
    */
-  UCOL_NO_NORMALIZATION = 1,
+  ,UCOL_NO_NORMALIZATION = 1,
   /**
    * Canonical decomposition
    * @deprecated To be removed after 2002-sep-30, use UNORM_NFD.
