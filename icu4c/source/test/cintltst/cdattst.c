@@ -193,6 +193,7 @@ static void TestDateFormat()
     log_verbose("\nTesting parsing using udat_parse()\n");
     u_uastrcpy(temp,"2/3/76 2:50 AM");
     parsepos=0;
+    status=U_ZERO_ERROR;
     
     d1=udat_parse(def, temp, u_strlen(temp), &parsepos, &status);
     if(U_FAILURE(status))
@@ -207,6 +208,18 @@ static void TestDateFormat()
     if(u_strcmp(myDateFormat(def, d1),temp)!=0)
         log_err("FAIL: error in parsing\n");
 
+    /*Testing parsing using udat_parse()*/
+    log_verbose("\nTesting parsing using udat_parse()\n");
+    u_uastrcpy(temp,"2/Don't parse this part");
+    status=U_ZERO_ERROR;
+    
+    d1=udat_parse(def, temp, u_strlen(temp), NULL, &status);
+    if(status != U_PARSE_ERROR)
+    {
+        log_err("FAIL: udat_parse(\"bad string\") passed when it should have failed\n");
+    }
+    else
+        log_verbose("PASS: parsing succesful\n");
         
         
     
