@@ -459,6 +459,7 @@ public:
       * its matcher() method to create the RegexMatcher objects.
       *
       *  @param regexp The Regular Expression to be compiled.
+      *  @param input  The string to match
       *  @param flags  Regular expression options, such as case insensitive matching.
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
@@ -544,7 +545,7 @@ public:
     *    Returns a string containing the text captured by the given group
     *    during the previous match operation.  Group(0) is the entire match.
     *
-    *    @param group the capture group number
+    *    @param groupNum the capture group number
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *                        Possible errors are  U_REGEX_INVALID_STATE if no match
     *                        has been attempted or the last match failed and
@@ -816,7 +817,7 @@ private:
 
 
     const RegexPattern  *fPattern;
-    UBool                fPatternOwned;    // True if this matcher owns the pattern, and
+    RegexPattern        *fPatternOwned;    // Non-NULL if this matcher owns the pattern, and
                                            //   should delete it when through.
     const UnicodeString *fInput;
 
