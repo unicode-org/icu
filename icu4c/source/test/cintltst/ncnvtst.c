@@ -23,6 +23,10 @@
 #include "unicode/ustring.h"
 
 #define MAX_LENGTH 50
+#ifdef TEST_BUFFER_SIZE
+#undef TEST_BUFFER_SIZE
+#endif
+#define TEST_BUFFER_SIZE 5555555
 
 static void printSeq(const unsigned char* a, int len);
 static void printSeqErr(const unsigned char* a, int len);
@@ -38,6 +42,8 @@ static void TestSurrogateBehaviour();
 static void TestErrorBehaviour();
 static void TestToUnicodeErrorBehaviour();
 static void TestGetNextErrorBehaviour();
+static void TestRegression();
+
 
 void printSeq(const unsigned char* a, int len)
 {
@@ -75,6 +81,7 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestErrorBehaviour, "tsconv/ncnvtst/TestErrorBehaviour");
      addTest(root, &TestToUnicodeErrorBehaviour, "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
      addTest(root, &TestGetNextErrorBehaviour, "tsconv/ncnvtst/TestGetNextErrorBehaviour");
+     addTest(root, &TestRegression, "tsconv/ncnvtst/TestRegression");
 
 }
 
@@ -393,6 +400,82 @@ void TestGetNextErrorBehaviour(){
     
             
 }
+void TestRegression(){
+    char *buffer=0;
+    UChar32 c;
+    char *targ;
+    char *targetLimit;
+    UChar *source;
+    UChar *src=0;
+    UChar *sourceLimit=0;
+    UChar *extractedTargetBuffer=0;
+    UChar *extractedTarget=0;
+    UChar *limit=0;
+   
+    int32_t offset=0;
+    int32_t sourceLength=0, i=0;
+    UErrorCode status=U_ZERO_ERROR;
+    UConverter *conv=ucnv_open("utf8", &status);
+    if(U_FAILURE(status)) {
+        log_err("Unable to open a utf-8 converter: %s\n", u_errorName(status));
+    }
+    source=(UChar*)malloc(sizeof(UChar) * TEST_BUFFER_SIZE);
+    extractedTargetBuffer=(UChar*)malloc(sizeof(UChar) * TEST_BUFFER_SIZE);
+    buffer=(char*)malloc(sizeof(char) * TEST_BUFFER_SIZE);
+
+    for(i =0; i< TEST_BUFFER_SIZE; i++){
+        buffer[i]=(char)0xF0;
+        source[i]=(UChar)0xFFFE;
+        extractedTargetBuffer[i]=(UChar)0xFFFE;
+    }
+    for(c=0x0000; c <= 0x10FFFF; c++){
+        UTF_APPEND_CHAR_SAFE(source, offset, u_strlen(source), c);
+    }
+      
+    src=source;
+    sourceLimit=src+(i * (sizeof(UChar)));
+    targ=buffer;
+    targetLimit=targ+TEST_BUFFER_SIZE;
+    ucnv_fromUnicode (conv,
+                  &targ,
+                  targetLimit,
+                  &src,
+                  sourceLimit,
+                  NULL,
+                  TRUE, 
+                  &status);
+
+    extractedTarget=extractedTargetBuffer;
+    limit=extractedTarget+TEST_BUFFER_SIZE;
+    ucnv_toUnicode(conv, 
+                   &extractedTarget, 
+                   limit, 
+                   &targ, 
+                   targetLimit, 
+                   NULL, 
+                   TRUE, 
+                   &status);
+
+    /*if(memcmp(source, extractedTarget, extractedTarget-extractedTargetBuffer) != 0){
+        log_err("FAILED\n");
+    }*/
+    for(i=0; i<extractedTarget-extractedTargetBuffer; i++){
+        if(source[i] != extractedTarget[i]){
+            log_err("FAILED: comparision failed at offset=%ld, source=0x%04X, extracted=0x%04X\n", i, source[i], extractedTarget[i]);
+            break;
+        }
+    }
+
+    ucnv_close(conv);
+    free(source);
+    free(extractedTargetBuffer);
+    free(buffer);
+
+
+
+
+}
+
 UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
                 const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
 {
