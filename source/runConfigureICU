@@ -241,15 +241,19 @@ case $platform in
         ;;
     LINUX/ECC)
         THE_OS="Linux"
-        THE_COMP="Intel ECC 70"
+        THE_COMP="Intel ECC 7.1"
         CC=ecc; export CC
-        CXX=ecc; export CXX
+        CXX=ecpc; export CXX
+        RELEASE_CFLAGS='-O3'
+        RELEASE_CXXFLAGS='-O3'
         ;;
     LINUX/ICC)
         THE_OS="Linux"
-        THE_COMP="Intel ICC"
+        THE_COMP="Intel ICC 6.0"
         CC=icc; export CC
-        CXX=icc; export CXX
+        CXX=icpc; export CXX
+        RELEASE_CFLAGS='-O0'
+        RELEASE_CXXFLAGS='-O0'
         ;;
     CygWin)
         THE_OS="CygWin"
@@ -383,4 +387,3 @@ echo
 echo If the result of the above commands looks okay to you, go to the directory
 echo source in the ICU distribution to build ICU. Please remember that ICU needs
 echo GNU make to build properly...
-
