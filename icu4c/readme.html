@@ -2,6 +2,7 @@
 
 <html lang="en-US">
   <head>
+    <title>ReadMe for ICU</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2004 IBM Corporation and others. All Rights Reserved.">
     <meta name="KEYWORDS" content=
@@ -9,19 +10,17 @@
     <meta name="DESCRIPTION" content=
     "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU.">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-    <title>ReadMe for ICU</title>
 <style type="text/css">
-      h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
-      h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
-      h2.TOC {page-break-before: auto}
-      h3 {margin-top: 2em; text-decoration: underline}
-      h4 {text-decoration: underline}
-      h5 {text-decoration: underline}
-      caption {font-weight: bold; text-align: left}
-      div.indent {margin-left: 2em}
-      ul.TOC {list-style-type: none}
-      samp {margin-left: 1em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+    h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
+    h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
+    h2.TOC {page-break-before: auto}
+    h3 {margin-top: 2em; text-decoration: underline}
+    h4 {text-decoration: underline}
+    h5 {text-decoration: underline}
+    caption {font-weight: bold; text-align: left}
+    div.indent {margin-left: 2em}
+    ul.TOC {list-style-type: none}
+    samp {margin-left: 1em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
 </style>
   </head>
 
@@ -963,8 +962,8 @@
       previous section</a>.</li>
     </ol>
 
-    <h3><a name="HowToBuildCygwin" href="#HowToBuildCygwin">How To
-    Build And Install On Windows with Cygwin</a></h3>
+    <h3><a name="HowToBuildCygwin" href="#HowToBuildCygwin">How To Build And
+    Install On Windows with Cygwin</a></h3>
 
     <p>Building International Components for Unicode with this configuration
     requires:</p>
@@ -974,44 +973,47 @@
 
       <li>Microsoft Visual C++ 6.0 or above (when gcc isn't used).</li>
 
-      <li>Cygwin with the following installed:
-      <ul>
-        <li>bash</li>
+      <li>
+        Cygwin with the following installed: 
 
-        <li>GNU make</li>
+        <ul>
+          <li>bash</li>
 
-        <li>man (if you plan to look at the man pages)</li>
-      </ul>
+          <li>GNU make</li>
+
+          <li>man (if you plan to look at the man pages)</li>
+        </ul>
       </li>
     </ul>
 
     <p>There are two ways you can build ICU with Cygwin. You can build with gcc
-    or Microsoft Visual C++. If you use gcc,
-    the resulting libraries and tools will depend on the Cygwin environment. If you use
-    Microsoft Visual C++, the resulting libraries and tools do not depend
-    on Cygwin and can be more easily distributed to other Windows computers
-    (the generated man pages and shell scripts still need Cygwin).
-    To build with gcc, please follow the 
-    "<a href="#HowToBuildUNIX">How To Build And Install On UNIX</a>"
-    instructions, while you are inside a Cygwin bash shell.
-    To build with Microsoft Visual C++, please use the following instructions:</p>
+    or Microsoft Visual C++. If you use gcc, the resulting libraries and tools
+    will depend on the Cygwin environment. If you use Microsoft Visual C++, the
+    resulting libraries and tools do not depend on Cygwin and can be more
+    easily distributed to other Windows computers (the generated man pages and
+    shell scripts still need Cygwin). To build with gcc, please follow the "<a
+    href="#HowToBuildUNIX">How To Build And Install On UNIX</a>" instructions,
+    while you are inside a Cygwin bash shell. To build with Microsoft Visual
+    C++, please use the following instructions:</p>
 
     <ol>
-      <li>Start the Windows "Command Prompt" window (this is different
-      from the gcc build, which requires the Cygwin Bash Shell).</li>
+      <li>Start the Windows "Command Prompt" window (this is different from the
+      gcc build, which requires the Cygwin Bash Shell).</li>
 
-      <li>If the computer isn't set up to use Visual C++ from the command
-      line, you need to run VCVARS32.BAT (for example:
-      "<tt>C:\Program Files\Microsoft Visual Studio\VC98\Bin\VCVARS32.BAT</tt>").</li>
+      <li>If the computer isn't set up to use Visual C++ from the command line,
+      you need to run VCVARS32.BAT (for example: "<tt>C:\Program
+      Files\Microsoft Visual Studio\VC98\Bin\VCVARS32.BAT</tt>").</li>
 
       <li>Unzip the icu-XXXX.zip file into any convenient location. Using
       command line zip, type "unzip -a icu-XXXX.zip -d drive:\directory", or
       just use WinZip.</li>
 
-      <li>Change directory to "icu/source", which is where you unzipped ICU.</li>
+      <li>Change directory to "icu/source", which is where you unzipped
+      ICU.</li>
 
-      <li>Run "<tt>bash <a href="source/runConfigureICU">./runConfigureICU</a> Cygwin/MSVC</tt>"
-      (See <a href="#HowToConfigureICU">configuration note</a> below).</li>
+      <li>Run "<tt>bash <a href="source/runConfigureICU">./runConfigureICU</a>
+      Cygwin/MSVC</tt>" (See <a href="#HowToConfigureICU">configuration
+      note</a> below).</li>
 
       <li>Type <tt>"make"</tt> to compile the libraries and all the data files.
       This make command should be GNU make.</li>
@@ -1298,8 +1300,9 @@ Data set name type  : PDS</samp>
 
     <ul>
       <li>QSHELL interpreter installed (install base option 30, operating
-      system)</li>
+      system) 
       <!--li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li-->
+      </li>
 
       <li>ILE C/C++ Compiler for iSeries, LPP 5722-WDS</li>
 
@@ -1337,8 +1340,9 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
         <i>libraryname</i> identifies target as400 library for *module, *pgm
         and *srvpgm objects.<br>
         <br>
+         
+        <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
       </li>
-      <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
 
       <li>Run <tt>'CHGJOB CCSID(37)'</tt></li>
 
@@ -1552,13 +1556,18 @@ del common/libicuuc.so
     Multithreaded Environment on HP-UX</a></h4>
 
     <p>If you are building ICU with a newer aCC compiler and you are planning
-    on using any RogueWave libraries, you will need to set a special flag
-    before building ICU. The <a href=
+    on using the older &lt;iostream.h&gt; instead of the newer
+    &lt;iostream&gt;, you will need to use a special configure flag before
+    building ICU. By default, the aCC <a href=
     "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
-    -AA</a> flag is needed in order to make ICU thread safe with RogueWave.</p>
-<pre>
-<samp>CXXFLAGS="-AA" ./runConfigureICU HP-UX11ACC</samp>
-</pre>
+    -AA</a> flag is used on HP-UX when the compiler supports that option in
+    order to make ICU thread safe with RogueWave and other libraries using the
+    2.0 Standard C++ library. Your applications that use ICU will also need to
+    use the <a href=
+    "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
+    -AA</a> compiler flag. To turn off this behavior in ICU, you will need to
+    use the --with-iostream= old configure option when you first use
+    runConfigureICU.</p>
 
     <h3><a name="CharStrings" href="#CharStrings">char * strings in
     ICU</a></h3>
@@ -1947,8 +1956,8 @@ del common/libicuuc.so
 
     <p>It may not be necessary for your use of ICU to make a full ICU build
     work. Most of the makefiles and build targets are for tools that are used
-    for building ICU's data &mdash; and an application's data if the
-    application uses ICU resource bundles and similar for its data.</p>
+    for building ICU's data, and an application's data, if the application uses
+    ICU resource bundles and similar for its data.</p>
 
     <p>Data files can be built on a different platform if both platforms share
     the same endianness and the same charset family, and if memory-mappable,
