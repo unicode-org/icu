@@ -19,6 +19,7 @@
 #ifndef UCMP32_H
 #define UCMP32_H
 
+#define ICU_UCMP32_VERSION 0x01260000
 
 #include "unicode/utypes.h"
 
@@ -76,7 +77,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.11 $ 8/25/98
+ * @version            $Revision: 1.12 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -86,12 +87,15 @@
  * The ATypes are used by value, so should be small, integers or pointers.
  *====================================
  */
-typedef struct{
+typedef struct CompactIntArray{
+    uint32_t fStructSize;
     int32_t* fArray;
     uint16_t* fIndex;
     int32_t fCount;
     UBool fCompact;    
     UBool fBogus;
+    UBool fAlias;
+    UBool fIAmOwned; /* don't free CBA on close */
 } CompactIntArray;
 
     U_CAPI int32_t U_EXPORT2 ucmp32_getkUnicodeCount(void);
@@ -218,6 +222,8 @@ U_CAPI void U_EXPORT2 ucmp32_streamOut(CompactIntArray* array, FileStream* os);
 U_CAPI void U_EXPORT2 ucmp32_streamMemIn( CompactIntArray* array, UMemoryStream* is);
 U_CAPI void U_EXPORT2 ucmp32_streamMemOut(CompactIntArray* array, UMemoryStream* os);
 
+U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp32(UMemoryStream *MS, const CompactIntArray* array);
+U_CAPI  void U_EXPORT2 ucmp32_initFromData(CompactIntArray *this_obj, const uint8_t **source, UErrorCode *status);
 
 #endif
 

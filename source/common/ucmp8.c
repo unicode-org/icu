@@ -198,8 +198,6 @@ CompactByteArray* ucmp8_initAdopt(CompactByteArray *this_obj,
                   int32_t count)
 {
   if (this_obj) {
-    this_obj->fArray = NULL;
-    this_obj->fIndex = NULL; 
     this_obj->fCount = count;
     this_obj->fBogus = FALSE;
     this_obj->fStructSize = sizeof(CompactByteArray);
@@ -491,6 +489,31 @@ ucmp8_compact(CompactByteArray* this_obj,
       uprv_free(tempIndex);
       this_obj->fCompact = TRUE;
     } /* endif (!this_obj->fCompact)*/
+}
+
+U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp8 (UMemoryStream *MS, const CompactByteArray* array)
+{
+  int32_t size = 0;
+
+  uprv_mstrm_write32(MS, ICU_UCMP8_VERSION);
+  size += 4;
+  
+  uprv_mstrm_write32(MS, array->fCount);
+  size += 4;
+  
+  uprv_mstrm_writeBlock(MS, array->fIndex, sizeof(array->fIndex[0])*UCMP8_kIndexCount);
+  size += sizeof(array->fIndex[0])*UCMP8_kIndexCount;
+  
+  uprv_mstrm_writeBlock(MS, array->fArray, sizeof(array->fArray[0])*array->fCount);
+  size += sizeof(array->fArray[0])*array->fCount;
+  
+  while(size%4) /* end padding */
+  {
+      uprv_mstrm_writePadding(MS, 1); /* Pad total so far to even size */
+      size += 1;
+  }
+
+  return size;
 }
 
 /* We use sizeof(*array), etc so that this code can be as portable as 
