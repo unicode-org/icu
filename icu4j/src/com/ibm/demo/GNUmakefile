@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.1 $ $Date: 2000/02/16 23:39:38 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/02/23 22:54:41 $
 #
 
 TOPDIR=		../../../..
@@ -7,7 +7,7 @@ PACKAGE=	com.ibm.demo
 
 include $(TOPDIR)/src/build/defs.gmk
 
-SUBDIRS=	calendar holiday rbnf RuleBasedBreakIterator
+SUBDIRS=	calendar holiday rbnf RuleBasedBreakIterator translit
 
 FILES_java=	$(TARGDIR)/DemoApplet.java			\
 			$(TARGDIR)/DemoUtility.java				\
