@@ -82,7 +82,7 @@ fa {
     LocaleID{ "29"}
 	CollationElements {
 	    Version { "1.0" }
-		Sequence { "[normalizaton on]" }
+		Sequence { "[normalization on]" }
 	}
             // /**************** Info Below is needed ****************/
             // Countries{}
