@@ -6,7 +6,7 @@
 
 hi {
     LocaleID { "39" }
-      Version { "1.0" }
+      Version { "1.0.1" }
     ShortLanguage { hin }
     Languages {
 
