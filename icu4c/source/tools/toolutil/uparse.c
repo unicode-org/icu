@@ -86,6 +86,11 @@ u_parseDelimitedFile(const char *filename, char delimiter,
             *limit=0;
         }
 
+        /* skip lines with only whitespace */
+        if(u_skipWhitespace(line)[0]==0) {
+            continue;
+        }
+
         /* for each field, call the corresponding field function */
         start=line;
         for(i=0; i<fieldCount; ++i) {
