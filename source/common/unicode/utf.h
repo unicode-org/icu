@@ -150,9 +150,13 @@ typedef int32_t UTextOffset;
 
 #   define UTF_GET_CHAR_UNSAFE(s, i, c)                 UTF16_GET_CHAR_UNSAFE(s, i, c)
 #   define UTF_GET_CHAR_SAFE(s, start, i, length, c, strict) UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict)
+#   define UTF_GET_CHAR_SAFE_STRICT(s, start, i, length, c) UTF16_GET_CHAR_SAFE_STRICT(s, start, i, length, c)
+#   define UTF_GET_CHAR_SAFE_LENIENT(s, start, i, length, c) UTF16_GET_CHAR_SAFE_LENIENT(s, start, i, length, c)
 
 #   define UTF_NEXT_CHAR_UNSAFE(s, i, c)                UTF16_NEXT_CHAR_UNSAFE(s, i, c)
 #   define UTF_NEXT_CHAR_SAFE(s, i, length, c, strict)  UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict)
+#   define UTF_NEXT_CHAR_SAFE_STRICT(s, i, length, c)   UTF16_NEXT_CHAR_SAFE_STRICT(s, i, length, c)
+#   define UTF_NEXT_CHAR_SAFE_LENIENT(s, i, length, c)  UTF16_NEXT_CHAR_SAFE_LENIENT(s, i, length, c)
 
 #   define UTF_APPEND_CHAR_UNSAFE(s, i, c)              UTF16_APPEND_CHAR_UNSAFE(s, i, c)
 #   define UTF_APPEND_CHAR_SAFE(s, i, length, c)        UTF16_APPEND_CHAR_SAFE(s, i, length, c)
@@ -168,6 +172,8 @@ typedef int32_t UTextOffset;
 
 #   define UTF_PREV_CHAR_UNSAFE(s, i, c)                UTF16_PREV_CHAR_UNSAFE(s, i, c)
 #   define UTF_PREV_CHAR_SAFE(s, start, i, c, strict)   UTF16_PREV_CHAR_SAFE(s, start, i, c, strict)
+#   define UTF_PREV_CHAR_SAFE_STRICT(s, start, i, c)    UTF16_PREV_CHAR_SAFE_STRICT(s, start, i, c)
+#   define UTF_PREV_CHAR_SAFE_LENIENT(s, start, i, c)   UTF16_PREV_CHAR_SAFE_LENIENT(s, start, i, c)
 
 #   define UTF_BACK_1_UNSAFE(s, i)                      UTF16_BACK_1_UNSAFE(s, i)
 #   define UTF_BACK_1_SAFE(s, start, i)                 UTF16_BACK_1_SAFE(s, start, i)
@@ -192,30 +198,30 @@ typedef int32_t UTextOffset;
 
 #ifdef UTF_SAFE
 
-#   define UTF_GET_CHAR(s, start, i, length, c) UTF_GET_CHAR_SAFE(s, start, i, length, c, FALSE)
+#   define UTF_GET_CHAR(s, start, i, length, c) UTF_GET_CHAR_SAFE_LENIENT(s, start, i, length, c)
 
-#   define UTF_NEXT_CHAR(s, i, length, c)       UTF_NEXT_CHAR_SAFE(s, i, length, c, FALSE)
+#   define UTF_NEXT_CHAR(s, i, length, c)       UTF_NEXT_CHAR_SAFE_LENIENT(s, i, length, c)
 #   define UTF_APPEND_CHAR(s, i, length, c)     UTF_APPEND_CHAR_SAFE(s, i, length, c)
 #   define UTF_FWD_1(s, i, length)              UTF_FWD_1_SAFE(s, i, length)
 #   define UTF_FWD_N(s, i, length, n)           UTF_FWD_N_SAFE(s, i, length, n)
 #   define UTF_SET_CHAR_START(s, start, i)      UTF_SET_CHAR_START_SAFE(s, start, i)
 
-#   define UTF_PREV_CHAR(s, start, i, c)        UTF_PREV_CHAR_SAFE(s, start, i, c, FALSE)
+#   define UTF_PREV_CHAR(s, start, i, c)        UTF_PREV_CHAR_SAFE_LENIENT(s, start, i, c)
 #   define UTF_BACK_1(s, start, i)              UTF_BACK_1_SAFE(s, start, i)
 #   define UTF_BACK_N(s, start, i, n)           UTF_BACK_N_SAFE(s, start, i, n)
 #   define UTF_SET_CHAR_LIMIT(s, start, i, length) UTF_SET_CHAR_LIMIT_SAFE(s, start, i, length)
 
 #elif defined(UTF_STRICT)
 
-#   define UTF_GET_CHAR(s, start, i, length, c) UTF_GET_CHAR_SAFE(s, start, i, length, c, TRUE)
+#   define UTF_GET_CHAR(s, start, i, length, c) UTF_GET_CHAR_SAFE_STRICT(s, start, i, length, c)
 
-#   define UTF_NEXT_CHAR(s, i, length, c)       UTF_NEXT_CHAR_SAFE(s, i, length, c, TRUE)
+#   define UTF_NEXT_CHAR(s, i, length, c)       UTF_NEXT_CHAR_SAFE_STRICT(s, i, length, c)
 #   define UTF_APPEND_CHAR(s, i, length, c)     UTF_APPEND_CHAR_SAFE(s, i, length, c)
 #   define UTF_FWD_1(s, i, length)              UTF_FWD_1_SAFE(s, i, length)
 #   define UTF_FWD_N(s, i, length, n)           UTF_FWD_N_SAFE(s, i, length, n)
 #   define UTF_SET_CHAR_START(s, start, i)      UTF_SET_CHAR_START_SAFE(s, start, i)
 
-#   define UTF_PREV_CHAR(s, start, i, c)        UTF_PREV_CHAR_SAFE(s, start, i, c, TRUE)
+#   define UTF_PREV_CHAR(s, start, i, c)        UTF_PREV_CHAR_SAFE_STRICT(s, start, i, c)
 #   define UTF_BACK_1(s, start, i)              UTF_BACK_1_SAFE(s, start, i)
 #   define UTF_BACK_N(s, start, i, n)           UTF_BACK_N_SAFE(s, start, i, n)
 #   define UTF_SET_CHAR_LIMIT(s, start, i, length) UTF_SET_CHAR_LIMIT_SAFE(s, start, i, length)
