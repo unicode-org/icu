@@ -208,6 +208,7 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestCanonicalization,     "tsutil/cloctst/TestCanonicalization");
     addTest(root, &TestDisplayKeywords,      "tsutil/cloctst/TestDisplayKeywords");
     addTest(root, &TestDisplayKeywordValues, "tsutil/cloctst/TestDisplayKeywordValues");
+    addTest(root, &TestGetBaseName,          "tsutil/cloctst/TestGetBaseName");
 }
 
 
@@ -2616,10 +2617,28 @@ static void TestDisplayKeywordValues(void){
 }
 													
 
+static void TestGetBaseName(void) {
+    struct {
+        const char *localeID;
+        const char *baseName;
+    } testCases[] = {
+        { "de_DE@  C o ll A t i o n   = Phonebook   ", "de_DE" },
+        { "de@currency = euro; CoLLaTion   = PHONEBOOk", "de" },
+        { "ja@calendar = buddhist", "ja" }
+    };
+
+    int32_t i = 0, baseNameLen = 0;
+    char baseName[256];
+    UErrorCode status = U_ZERO_ERROR;
+
+    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        baseNameLen = uloc_getBaseName(testCases[i].localeID, baseName, 256, &status);
+        if(strcmp(testCases[i].baseName, baseName)) {
+            log_err("For locale \"%s\" expected baseName \"%s\", but got \"%s\"\n",
+                testCases[i].localeID, testCases[i].baseName, baseName);
+            return;
+        }
+    }
 
 
-
-
-
-
-
+}

@@ -87,11 +87,13 @@ static  void TestDisplayNames(void);
 
  static void TestDisplayKeywordValues(void);
 
+ static void TestGetBaseName(void);
+
 /**
  * additional intialization for datatables storing expected values
  */
 static void setUpDataTable(void);
 static void cleanUpDataTable(void);
-void displayDataTable(void);
+static void displayDataTable(void);
 
 #endif
