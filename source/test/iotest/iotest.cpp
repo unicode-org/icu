@@ -349,7 +349,6 @@ static void DataDrivenScanf(void) {
     DataDrivenLogger logger;
     UChar uBuffer[512];
     char cBuffer[512];
-    char cFormat[sizeof(cBuffer)];
     char cExpected[sizeof(cBuffer)];
     UnicodeString tempStr;
     UChar format[512];
