@@ -28,7 +28,7 @@
 #include "cintltst.h"
 #include "cnumtst.h"
 
-/* ### remove this include after the number format test is fixed with jitterbug 411, applyPattern() */
+/* ### TODO: remove this include after the number format test is fixed with jitterbug 411, applyPattern() */
 #include "cstring.h"
 
 void addNumForTest(TestNode** root)
@@ -189,17 +189,35 @@ free(result);
 
     /* Testing unum_parse() and unum_parseDouble() */
     log_verbose("\nTesting unum_parseDouble()\n");
-/*    for (i = 0; i < 100000; i++)
-    {*/
+//    for (i = 0; i < 100000; i++)
+    {
         parsepos=0;
         d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
-/*    }*/
+    }
     if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
     }
 
     if(d1!=d)
+        log_err("Fail: Error in parsing\n");
+    else
+        log_verbose("Pass: parsing successful\n");
+
+/* performance testing */
+    u_uastrcpy(temp1, "$462.12345");
+    resultlength=u_strlen(temp1);
+//    for (i = 0; i < 100000; i++)
+    {
+        parsepos=0;
+        d1=unum_parseDouble(cur_def, temp1, resultlength, &parsepos, &status);
+    }
+    if(U_FAILURE(status))
+    {
+        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+    }
+
+    if(d1!=462.12345)
         log_err("Fail: Error in parsing\n");
     else
         log_verbose("Pass: parsing successful\n");
@@ -234,11 +252,11 @@ free(result);
     
     
     log_verbose("\nTesting unum_parse()\n");
-/*    for (i = 0; i < 100000; i++)
-    {*/
+//    for (i = 0; i < 100000; i++)
+    {
         parsepos=0;
         l1=unum_parse(per_fr, result, u_strlen(result), &parsepos, &status);
-/*    }*/
+    }
     if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
@@ -373,7 +391,7 @@ free(result);
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
-    /*
+    /* TODO: 
      * This test fails because we have not called unum_applyPattern().
      * Currently, such an applyPattern() does not exist on the C API, and
      * we have jitterbug 411 for it.
