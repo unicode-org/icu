@@ -606,9 +606,6 @@ void testPrimary(UCollator* col, const UChar* p,const UChar* q){
 void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
-    UChar temp[2] = {'\0'};
-    unsigned char utfSource[256] = {'\0'};
-    unsigned char utfTarget[256] = {'\0'};
 
     doTest(col, p, q, UCOL_LESS);
 /*
@@ -634,19 +631,19 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"secondary swamps 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
     }
 */
-    /*
-    source[0] = '\0';
-    u_strcat(source,p);
-    source[u_strlen(p)] = 0x62;
-    source[u_strlen(p+1)] = 0;
 
-    target[0] = '\0';
-    u_strcat(target,q);
+
+    u_strcpy(source,p);
+    source[u_strlen(p)] = 0x62;
+    source[u_strlen(p)+1] = 0;
+
+
+    u_strcpy(target,q);
     target[u_strlen(q)] = 0x61;
-    target[u_strlen(q+1)] = 0;
+    target[u_strlen(q)+1] = 0;
 
     doTest(col, source, target, UCOL_GREATER);
-    */
+
 /*
     result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
     if(result!=UCOL_GREATER){
@@ -686,19 +683,17 @@ void testTertiary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"Tertiary swamps 4th failed  source: %s target: %s \n", utfSource,utfTarget);
     }
 */
-    /*
-    source[0] = '\0';
-    u_strcat(source,p);
-    source[u_strlen(p)] = 0xE0;
-    source[u_strlen(p+1)] = 0;
 
-    target[0] = '\0';
-    u_strcat(target,q);
+    u_strcpy(source,p);
+    source[u_strlen(p)] = 0xE0;
+    source[u_strlen(p)+1] = 0;
+
+    u_strcpy(target,q);
     target[u_strlen(q)] = 0x61;
-    target[u_strlen(q+1)] = 0;
+    target[u_strlen(q)+1] = 0;
 
     doTest(col, source, target, UCOL_GREATER);
-    */
+
 /*
     result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
     if(result!=UCOL_GREATER){
@@ -753,7 +748,7 @@ void testCollator(UCollator* col, const UChar* p,const UChar* q, uint32_t streng
 }
 
 static char* localesToTest[] = {
-"ar", "bg", "ca", "cs", /*"da", */
+  "ar", "bg", "ca", "cs", /*"da",*/
 "el", "en_BE", "en_US_POSIX", 
 "es", "et", "fi", "fr", "hi", 
 "hr", "hu", "is", "iw", "ja", 
