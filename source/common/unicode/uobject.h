@@ -26,18 +26,24 @@ U_NAMESPACE_BEGIN
  * \brief C++ API: Common ICU base class UObject.
  */
 
-/* TODO undefine this symbol except for tests! See uobject.cpp */
-// #define U_CPP_MEMORY_TEST
+ /*  U_OVERRIDE_CXX_ALLOCATION - Define this to override operator new and
+  *                              delete in UObject.  Enabled by default for ICU.
+  *
+  *         Enabling forces all allocation of ICU object types to use ICU's
+  *         memory allocation.  On Windows, this allows the ICU DLL to be used by
+  *         applications that statically link the C Runtime library, meaning that
+  *         the app and ICU sill be using different heaps.
+  */                              
 #define U_OVERRIDE_CXX_ALLOCATION 1
-
 /**
  * UObject is the common ICU base class.
  * All other ICU C++ classes are derived from UObject (starting with ICU 2.2).
  *
  * This is primarily to make it possible and simple to override the
  * C++ memory management by adding new/delete operators to this base class.
- * ICU itself will not declare and implement these new/delete operators, but
- * users of ICU can modify the ICU code for the base class.
+ *
+ * To override ALL ICU memory management, including that from plain C code,
+ * replace the allocation functions declared in cmemory.h
  *
  * UObject contains pure virtual methods to allow derived classes like Format
  * (which used to be base classes themselves before UObject was introduced)
