@@ -40,16 +40,10 @@
 #include "cstring.h"
 
 /*
- * _MBCSHeader versions 1 & 2
+ * _MBCSHeader versions 1 to 3
  * (Note that the _MBCSHeader version is in addition to the converter formatVersion.)
  *
- * The differences between versions 1 and 2 are small; version 2 adds:
- * - toUnicode: unassigned and illegal action codes have U+fffe and U+ffff
- *              instead of unused bits; this is useful for _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP()
- * - fromUnicode: the converter checks for known output types, which allows
- *                adding new ones without crashing an unaware converter
- *
- * Converting stateless codepage data
+ * Converting stateless codepage data ---------------------------------------***
  * (or codepage data with simple states) to Unicode.
  *
  * Data structure and algorithm for converting from complex legacy codepages
@@ -182,6 +176,92 @@
  * encodings without any additional logic.
  * Especially simple Shift-In/Shift-Out schemes could be handled with
  * appropriate state tables (especially EBCDIC_STATEFUL!).
+ *
+ * MBCS version 2 added:
+ * unassigned and illegal action codes have U+fffe and U+ffff
+ * instead of unused bits; this is useful for _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP()
+ *
+ * Converting from Unicode to codepage bytes --------------------------------***
+ *
+ * The conversion data structure for fromUnicode is designed for the known
+ * structure of Unicode. It maps from 21-bit code points (0..0x10ffff) to
+ * a sequence of 1..4 bytes, in addition to a flag that indicates if there is
+ * a roundtrip mapping.
+ *
+ * The lookup is done with a 3-stage trie, using 11/6/4 bits for stage 1/2/3
+ * like in the character properties table.
+ * The beginning of the trie is at offsetFromUTable, the beginning of stage 3
+ * with the resulting bytes is at offsetFromUBytes.
+ *
+ * The trie lookup works as follows:
+ * Stage 1/2: set i to the first of 2 entries in the second stage
+ *     (_MBCSHeader version 3)
+ *     uint32_t i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+2*((c>>4)&0x3f);
+ *     // i is an index into stage 2 based on table=offsetFromUTable=start of stage 1
+ *
+ *     (_MBCSHeader version 1 & 2)
+ *     uint32_t i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+ *     // i is an index into stage 2 based on table=offsetFromUTable=start of stage 1
+ *
+ * Note that stage 1 always contains 0x440=1088 entries (0x440==0x110000>>10),
+ * or (version 3) for BMP-only codepages, it contains 64 entries.
+ *
+ * In version 3, stage 2 blocks may overlap by multiples of the multiplier
+ * for compaction.
+ *
+ * Is this an assigned code point?
+ * The following test is done to determine if the code point has a roundtrip
+ * assignment. If not, then a fallback mapping might be stored.
+ * It will be retrieved if fallbacks are used.
+ *     is-roundtrip-assigned=(table[i]&(1<<(c&0xf)))!=0
+ *
+ * If the value is to be retrieved, then it is looked up in the bytes table
+ * depending on the number of bytes that are stored per character:
+ *     p=bytes array;
+ *     ++i; // advance beyond assignment flags in stage 2 to the bytes index
+ *     p+=(16*(uint32_t)table[i]+(c&0xf))*bytes-stored-per-character;
+ *
+ * That is, the bytes array index is 16 times the index from stage 2,
+ * plus the last 4 bits from the code point, and indexing as many bytes
+ * per entry as are stored per character.
+ * Leading zeros are then removed, and the number of bytes is counted.
+ * A zero byte mapping result is possible as a roundtrip result.
+ * For some output types, the actual result is processed from this;
+ * see _MBCSFromUnicodeWithOffsets().
+ *
+ * MBCS version 2 added:
+ * the converter checks for known output types, which allows
+ * adding new ones without crashing an unaware converter
+ *
+ * ---
+ * Reasons for the multiplier MBCS_STAGE_2_MULTIPLIER=4
+ * in the calculation of the stage 2 index above:
+ * ->It must be a power of two.
+ *
+ * The stage 1 entry needs to be able to address blocks of 64 stage 2 entries each,
+ * with 2 16-bit words per entry: stage 2 blocks have 128 16-bit entries.
+ * ->The multiplier must be at most 128 to address each block.
+ *
+ * Beginning with version 3, stage 1 entries are based on the beginning of the
+ * stage table, which means the beginning of stage 1, not the beginning of stage 2.
+ * This means that the first stage 2 block begins at the 1088th (1088=17*64)
+ * or 64th (BMP-only codepages) 16-bit table entry.
+ * ->Therefore, the multiplier must be at most 64 to address the first block.
+ *
+ * Stages 1 & 2 contain 16-bit entries for indexing. Stage 3 can hold up to
+ * 1M byte result sequences. Stage 2 entries index 16-entry blocks in stage 3,
+ * which means that all stage 2 blocks index up to 64k stage 3 blocks.
+ * This means that there may be as many as 128k entries in stage 2, in
+ * up to 1k stage 2 blocks.
+ * ->The 16-bit indexes in stage 1 must be multiplied by at least 2 to reach
+ * all of stage 2.
+ *
+ * Since with version 3 the stage 2 indexes are offset by the length of stage 1,
+ * ->the multiplier must be at least the next greater power of 2, which is 4.
+ *
+ * This results in a possible range for the mutliplier from 4 to 64.
+ * ->A small multiplier allows stage 2 blocks to overlap for compaction.
+ * 4 is chosen.
  */
 
 /* prototypes --------------------------------------------------------------- */
@@ -267,7 +347,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
     UConverterMBCSTable *mbcsTable=&sharedData->table->mbcs;
     _MBCSHeader *header=(_MBCSHeader *)raw;
 
-    if(header->version[0]>2) {
+    if(header->version[0]!=3) {
         *pErrorCode=U_INVALID_TABLE_FORMAT;
         return;
     }
@@ -1749,12 +1829,14 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     uint32_t i;
     uint32_t value;
     int32_t length, prevLength;
+    UBool hasSupplementary;
 
     /* use optimized function if possible */
     cnv=pArgs->converter;
     outputType=cnv->sharedData->table->mbcs.outputType;
+    hasSupplementary=cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY;
     if(outputType==MBCS_OUTPUT_1) {
-        if(!(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        if(!hasSupplementary) {
             _MBCSSingleFromBMPWithOffsets(pArgs, pErrorCode);
         } else {
             _MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
@@ -1825,6 +1907,13 @@ getTrail:
                             ++source;
                             ++nextSourceIndex;
                             c=UTF16_GET_PAIR_VALUE(c, trail);
+                            if(!hasSupplementary) {
+                                /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+                                /* callback(unassigned) */
+                                reason=UCNV_UNASSIGNED;
+                                *pErrorCode=U_INVALID_CHAR_FOUND;
+                                goto callback;
+                            }
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
@@ -1856,6 +1945,12 @@ getTrail:
              * reach up to 0x10ffff) are used as an index into table[],
              * then bits 9..4 are added to that and together multiplied by 2
              * to be used as an index into a second table that starts at table+0x440.
+             * With version 3 of the data structure, that offset of 0x440 is taken into
+             * account in the stage 1 entry.
+             * Also with version 3, if a codepage maps only from BMP code points,
+             * then there are only 64=0x40 entries in stage 1.
+             * For more details about the indexing and the multiplier, see the
+             * comments at the beginning of this file.
              *
              * In that second table, there will be two 16-bit values
              * (and therefore we multiplied by two in the previous step):
@@ -1888,7 +1983,7 @@ getTrail:
              * The data structure does not support zero byte output as a fallback
              * for other code points, and also does not allow output of leading zeros.
              */
-            i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+            i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
 
             /* is this code point assigned, or do we use fallbacks? */
             if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
@@ -2250,6 +2345,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     UConverterCallbackReason reason;
     uint32_t i;
     uint8_t value;
+    UBool hasSupplementary;
 
     /* set up the local pointers */
     cnv=pArgs->converter;
@@ -2261,6 +2357,8 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     table=cnv->sharedData->table->mbcs.fromUnicodeTable;
     bytes=cnv->sharedData->table->mbcs.fromUnicodeBytes;
+
+    hasSupplementary=cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY;
 
     /* get the converter state from UConverter */
     c=cnv->fromUSurrogateLead;
@@ -2301,6 +2399,13 @@ getTrail:
                             ++source;
                             ++nextSourceIndex;
                             c=UTF16_GET_PAIR_VALUE(c, trail);
+                            if(!hasSupplementary) {
+                                /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+                                /* callback(unassigned) */
+                                reason=UCNV_UNASSIGNED;
+                                *pErrorCode=U_INVALID_CHAR_FOUND;
+                                goto callback;
+                            }
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
@@ -2324,7 +2429,7 @@ getTrail:
             }
 
             /* convert the Unicode code point in c into codepage bytes */
-            i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+            i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
 
             /* is this code point assigned, or do we use fallbacks? */
             if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
@@ -2509,7 +2614,7 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
         c=*source++;
         if(!UTF_IS_SURROGATE(c)) {
             /* convert the Unicode code point in c into codepage bytes */
-            i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+            i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
 
             /* is this code point assigned, or do we use fallbacks? */
             if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
@@ -2698,8 +2803,13 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
     uint32_t value;
     int32_t length;
 
+    /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+    if(c>=0x10000 && !(sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        return 0;
+    }
+
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
-    i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+    i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
 
     /* is this code point assigned, or do we use fallbacks? */
     if((table[i++]&(1<<(c&0xf)))!=0 || FROM_U_USE_FALLBACK(useFallback, c)) {
@@ -2820,8 +2930,13 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
     uint32_t i;
     int32_t value;
 
+    /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+    if(c>=0x10000 && !(sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        return -1;
+    }
+
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
-    i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+    i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
 
     /* is this code point assigned, or do we use fallbacks? */
     if((table[i++]&(1<<(c&0xf)))!=0 || FROM_U_USE_FALLBACK(useFallback, c)) {
