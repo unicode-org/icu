@@ -422,7 +422,7 @@ int32_t  RegexPattern::split(const UnicodeString &input,
 //           Debugging function only.
 //
 //---------------------------------------------------------------------
-static const char *opNames[] = {URX_OPCODE_NAMES};
+static const char * const opNames[] = {URX_OPCODE_NAMES};
 
 void   RegexPattern::dumpOp(int32_t index) const {
     int32_t op          = fCompiledPat->elementAti(index);
