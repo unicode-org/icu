@@ -22,58 +22,6 @@
 static const UChar *rulesToParse = 0;
 static const InverseTableHeader* invUCA = NULL;
 
-
-/* there are two hashtables - both holding the same stuff but with a little bit different keys */
-/* This one is needed for finding tailored CEs */
-/* This was found by Min Cui and the Shangai team */
-int32_t
-uhash_hashStrRep(const void *k) {
-  int32_t hash = 0;
-  if (k != NULL) {
-    const uint32_t key = (const uint32_t)k;
-      int32_t len = (key & 0xFF000000)>>24;
-      int32_t inc = ((len - 32) / 32) + 1;
-
-      const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
-      const UChar *limit = p + len;    
-
-      while (p<limit) {
-          hash = (hash * 37) + *p;
-          p += inc;
-      }
-  }
-  return hash;
-}
-
-UBool uhash_compareStrReps(const void *key1, const void *key2) {
-  const uint32_t p1 = (const uint32_t)key1;
-  const uint32_t p2 = (const uint32_t)key2;
-
-  const UChar *s1 = (p1 & 0x00FFFFFF) + rulesToParse;
-  const UChar *s2 = (p2 & 0x00FFFFFF) + rulesToParse;
-  uint32_t s1L = ((p1 & 0xFF000000) >> 24);
-  uint32_t s2L = ((p2 & 0xFF000000) >> 24);
-
-  if (p1 == p2) {
-      return TRUE;
-  }
-  if (p1 == 0 || p2 == 0) {
-      return FALSE;
-  }
-  if(s1L != s2L) {
-    return FALSE;
-  }
-  while(s1 < s1+s1L-1 && *s1 == *s2) {
-    ++s1;
-    ++s2;
-  }
-  if(*s1 == *s2) {
-    return TRUE;
-  } else {
-    return FALSE;
-  }
-}
-
 static UBool U_CALLCONV
 isAcceptableInvUCA(void *context, 
              const char *type, const char *name,
@@ -263,7 +211,7 @@ U_CFUNC void ucol_inv_getGapPositions(/*UColTokenParser *src,*/ UColTokListHeade
   int32_t pos;
 
 
-  UColToken *tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
+  UColToken *tok = lh->first;
   uint32_t tokStrength = tok->strength;
 
   for(i = 0; i<3; i++) {
@@ -360,8 +308,6 @@ U_CFUNC void ucol_inv_getGapPositions(/*UColTokenParser *src,*/ UColTokListHeade
       }
     }
   }
-
-
 }
 
 
@@ -467,7 +413,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   return g->current;
 }
 
-U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, UErrorCode *status) {
+U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UErrorCode *status) {
   /* this one makes the table and stuff */
   uint32_t noOfBytes[3];
   uint32_t i;
@@ -507,14 +453,6 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
     tok->noOfCEs = CEi;
   }
 
-
-  /* We'll need to handle expansions slightly differently than in */
-  /* UCA generation since we don't know if the value for expansion is from UCA or is it tailored */
-
-  uhash_put(tailored, (void *)tok->source, tok, status);
-
-
-  /* and add them to a data table        */
 #if UCOL_DEBUG==2
   fprintf(stderr, "%04X str: %i, [%08X, %08X, %08X]: tok: ", tok->debugSource, tok->strength, CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
   for(i = 0; i<tok->noOfCEs; i++) {
@@ -524,14 +462,14 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
 #endif
 }
 
-U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
+U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, UErrorCode *status) {
 
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
 
   uint32_t i = 0;
 
-  UColToken *tok = lh->last[UCOL_TOK_POLARITY_POSITIVE];
+  UColToken *tok = lh->last;
   uint32_t t[UCOL_STRENGTH_LIMIT];
 
   for(i=0; i<UCOL_STRENGTH_LIMIT; i++) {
@@ -580,7 +518,7 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
   } while(tok != NULL);
 #endif
 
-  tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
+  tok = lh->first;
   uint32_t fStrength = UCOL_IDENTICAL;
   uint32_t initStrength = UCOL_IDENTICAL;
 
@@ -630,7 +568,7 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
         CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[UCOL_TERTIARY], tok, UCOL_TERTIARY, status);
       }
     }
-    ucol_doCE(CEparts, tok, tailored, status);
+    ucol_doCE(CEparts, tok, status);
     tok = tok->next;
   }
 }
@@ -750,9 +688,9 @@ uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t l
   }
 }
 
-U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
+U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UErrorCode *status) {
   UCAElements el;
-  UColToken *tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
+  UColToken *tok = lh->first;
   UColToken *expt = NULL;
   uint32_t i = 0, j = 0;
 
@@ -770,7 +708,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         currentSequenceLen = len;
         while(currentSequenceLen > 0) {
           exp = (currentSequenceLen << 24) | expOffset;
-          if((expt = (UColToken *)uhash_get(tailored, (void *)exp)) != NULL) { /* expansion is tailored */
+          if((expt = (UColToken *)uhash_get(src->tailored, (void *)exp)) != NULL && expt->strength != UCOL_TOK_RESET) { /* expansion is tailored */
             uint32_t noOfCEsToCopy = expt->noOfCEs;
             for(j = 0; j<noOfCEsToCopy; j++) {
               tok->expCEs[tok->noOfExpCEs + j] = expt->CEs[j];
@@ -789,18 +727,12 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           /* will have to get one from UCA */
           /* first, get the UChars from the rules */
           /* then pick CEs out until there is no more and stuff them into expansion */
-          //UChar source[256],buff[256];
           collIterate s;
           uint32_t order = 0;
-          //uint32_t normSize = 0;
-          //uprv_memcpy(buff, expOffset + src->source, 1*sizeof(UChar));
-          //normSize = unorm_normalize(buff, 1, UNORM_NFD, 0, source, 256, status);
-          //init_collIterate(src->UCA, source, normSize, &s);
           init_collIterate(src->UCA, expOffset + src->source, 1, &s);
 
           for(;;) {
             order = ucol_getNextCE(src->UCA, &s, status);
-            /*UCOL_GETNEXTCE(order, src->UCA, s, status);*/
             if(order == UCOL_NO_MORE_CES) {
                 break;
             }
@@ -859,25 +791,6 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);
       el.CEs[0] |= (caseCE & 0xC0);
     }
-#if 0
-    /* we also need a case bit here, and we'll fish it out from the UCA for the first codepoint */
-    uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);
-    if((caseCE & 0x40) != 0) {
-      el.caseBit = TRUE;
-/*      for(i = 0; i<el.noOfCEs; i++) {*/
-/* we don't want to change the case of expansion CEs */
-      for(i = 0; i<tok->noOfCEs; i++) {
-        el.CEs[i] |= 0x40;
-      }
-    } else {
-      el.caseBit = FALSE;
-/*      for(i = 0; i<el.noOfCEs; i++) {*/
-/* we don't want to change the case of expansion CEs */
-      for(i = 0; i<tok->noOfCEs; i++) {
-        el.CEs[i] &= 0xFFFFFFBF;
-      }
-    }
-#endif
 
     /* and then, add it */
 #if UCOL_DEBUG==2
@@ -893,10 +806,255 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
 
     tok = tok->next;
   }
-
 }
 
 
+  
+UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
+  uint32_t i = 0;
+  if(U_FAILURE(*status)) {
+    return NULL;
+  }
+/*
+2.  Eliminate the negative lists by doing the following for each non-null negative list: 
+    o   if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
+    create new ListHeader X 
+    o   reverse the list, add to the end of X's positive list. Reset the strength of the 
+    first item you add, based on the stronger strength levels of the two lists. 
+*/
+/*
+3.  For each ListHeader with a non-null positive list: 
+*/
+/*
+    o   Find all character strings with CEs between the baseCE and the 
+    next/previous CE, at the strength of the first token. Add these to the 
+    tailoring. 
+      ? That is, if UCA has ...  x <<< X << x' <<< X' < y ..., and the 
+      tailoring has & x < z... 
+      ? Then we change the tailoring to & x  <<< X << x' <<< X' < z ... 
+*/
+  /* It is possible that this part should be done even while constructing list */
+  /* The problem is that it is unknown what is going to be the strongest weight */
+  /* So we might as well do it here */
+
+/*
+    o   Allocate CEs for each token in the list, based on the total number N of the 
+    largest level difference, and the gap G between baseCE and nextCE at that 
+    level. The relation * between the last item and nextCE is the same as the 
+    strongest strength. 
+    o   Example: baseCE < a << b <<< q << c < d < e * nextCE(X,1) 
+      ? There are 3 primary items: a, d, e. Fit them into the primary gap. 
+      Then fit b and c into the secondary gap between a and d, then fit q 
+      into the tertiary gap between b and c. 
+
+    o   Example: baseCE << b <<< q << c * nextCE(X,2) 
+      ? There are 2 secondary items: b, c. Fit them into the secondary gap. 
+      Then fit q into the tertiary gap between b and c. 
+    o   When incrementing primary values, we will not cross high byte 
+    boundaries except where there is only a single-byte primary. That is to 
+    ensure that the script reordering will continue to work. 
+*/
+  rulesToParse = src->source;
+  UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
+  uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
+
+  for(i = 0; i<src->resultLen; i++) {
+    /* now we need to generate the CEs */ 
+    /* We stuff the initial value in the buffers, and increase the appropriate buffer */
+    /* According to strength                                                          */
+    if(U_SUCCESS(*status)) {
+      ucol_initBuffers(&src->lh[i], status);
+    }
+  }
+
+  if(src->varTop != NULL) { /* stuff the variable top value */
+    src->opts->variableTopValue = (*(src->varTop->CEs))>>16;
+    /* remove it from the list */
+    if(src->varTop->listHeader->first == src->varTop) { /* first in list */
+      src->varTop->listHeader->first = src->varTop->next;
+    }
+    if(src->varTop->listHeader->last == src->varTop) { /* first in list */
+      src->varTop->listHeader->last = src->varTop->previous;    
+    }
+    if(src->varTop->next != NULL) {
+      src->varTop->next->previous = src->varTop->previous;
+    }
+    if(src->varTop->previous != NULL) {
+      src->varTop->previous->next = src->varTop->next;
+    }
+  }
+
+
+  tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, status);
+
+
+  /* After this, we have assigned CE values to all regular CEs      */
+  /* now we will go through list once more and resolve expansions,  */
+  /* make UCAElements structs and add them to table                 */
+  for(i = 0; i<src->resultLen; i++) {
+    /* now we need to generate the CEs */ 
+    /* We stuff the initial value in the buffers, and increase the appropriate buffer */
+    /* According to strength                                                          */
+    if(U_SUCCESS(*status)) {
+      ucol_createElements(src, t, &src->lh[i], status);
+    }
+  }
+
+  {
+    UChar decomp[256];
+    uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
+    UChar u = 0;
+    UCAElements el;
+    el.isThai = FALSE;
+    collIterate colIt;
+
+    /* add latin-1 stuff */
+    if(U_SUCCESS(*status)) {
+      for(u = 0; u<0x100; u++) {
+        if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND 
+          /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
+          /* the table, even if it results in more false closure elements */
+          || ((isContraction(CE)) &&
+          (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
+          ) {
+          decomp[0] = (UChar)u;
+          el.uchars[0] = (UChar)u;
+          el.cPoints = el.uchars;
+          el.cSize = 1;
+          el.noOfCEs = 0;
+          init_collIterate(src->UCA, decomp, 1, &colIt);
+          while(CE != UCOL_NO_MORE_CES) {
+            CE = ucol_getNextCE(src->UCA, &colIt, status);
+            if(CE != UCOL_NO_MORE_CES) {
+              el.CEs[el.noOfCEs++] = CE;
+            }
+          }
+          uprv_uca_addAnElement(t, &el, status);
+        }
+      }
+    }
+
+    if(U_SUCCESS(*status)) {
+      /* copy contractions from the UCA - this is felt mostly for cyrillic*/
+
+      uint32_t ucaCE = UCOL_NOT_FOUND, tailoredCE = UCOL_NOT_FOUND;
+      uint16_t *conts = (uint16_t *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
+      UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
+      while(*conts != 0) {
+        tailoredCE = ucmp32_get(t->mapping, *conts);
+        if(tailoredCE != UCOL_NOT_FOUND) {         
+          UBool needToAdd = TRUE;
+          if(isContraction(tailoredCE)) {
+            if(uprv_cnttab_isTailored(t->contractions, tailoredCE, conts+1, status) == TRUE) {
+              needToAdd = FALSE;
+            }
+          }
+
+          if(needToAdd == TRUE) { // we need to add if this contraction is not tailored.
+            el.cPoints = el.uchars;
+            el.noOfCEs = 0;
+            el.uchars[0] = *conts;
+            el.uchars[1] = *(conts+1);
+            if(*(conts+2)!=0) {
+              el.uchars[2] = *(conts+2);
+              el.cSize = 3;
+            } else {
+              el.cSize = 2;
+            }
+            ucol_setText(ucaEl, el.uchars, el.cSize, status);
+            while ((el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
+              el.noOfCEs++;
+            }
+            uprv_uca_addAnElement(t, &el, status);
+          }
+
+        }
+        conts+=3;
+      }
+      ucol_closeElements(ucaEl);
+
+      UCollator *tempColl = NULL;
+      if(U_SUCCESS(*status)) {
+        tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+        UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+        tempColl = ucol_initCollator(tempData, 0, status);
+
+        if(U_SUCCESS(*status)) {
+          tempColl->rb = NULL;
+          tempColl->hasRealData = TRUE;
+        }
+        uprv_uca_closeTempTable(tempTable);    
+      }
+
+      /* produce canonical closure */
+      UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
+      for(u = 0; u < 0xFFFF; u++) {
+        if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
+          || (noOfDec == 1 && *decomp != (UChar)u))
+        {
+          if(ucol_strcoll(tempColl, (UChar *)&u, 1, decomp, noOfDec) != UCOL_EQUAL) {
+            el.uchars[0] = (UChar)u;
+            el.cPoints = el.uchars;
+            el.cSize = 1;
+            el.noOfCEs = 0;
+
+            ucol_setText(colEl, decomp, noOfDec, status);
+            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+              el.noOfCEs++;
+            }
+
+            uprv_uca_addAnElement(t, &el, status);
+          }
+        }
+      }
+      ucol_closeElements(colEl);
+      ucol_close(tempColl);
+    }
+  }
+
+    /* still need to produce compatibility closure */
+
+  UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
+
+  uprv_uca_closeTempTable(t);    
+
+  return myData;
+}
+
+const InverseTableHeader *ucol_initInverseUCA(UErrorCode *status) {
+  if(U_FAILURE(*status)) return NULL;
+
+  if(invUCA == NULL) {
+    InverseTableHeader *newInvUCA = NULL;
+    UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
+
+    if(U_FAILURE(*status)) {
+        udata_close(result);
+        uprv_free(newInvUCA);
+    }
+
+    if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
+      newInvUCA = (InverseTableHeader *)udata_getMemory(result);
+
+      umtx_lock(NULL);
+      if(invUCA == NULL) {
+          invUCA = newInvUCA;
+          newInvUCA = NULL;
+      }
+      umtx_unlock(NULL);
+
+      if(newInvUCA != NULL) {
+          udata_close(result);
+          uprv_free(newInvUCA);
+      }
+    }
+
+  }
+  return invUCA;
+}
+
+#if 0
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t uprv_getSpecialDynamicCE(const tempUCATable *t, uint32_t CE, collIterate *source, UErrorCode *status) {
@@ -1037,7 +1195,6 @@ uint32_t uprv_ucol_getNextDynamicCE(tempUCATable *t, collIterate *collationSourc
   return order; /* return the CE */
 }
 
-#if 0
 uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp, uint32_t noOfDec, uint32_t *result, uint32_t resultSize, UErrorCode *status) {
   uint32_t resLen = 0;
   collIterate colIt;
@@ -1053,269 +1210,3 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
   return resLen;
 }
 #endif
-  
-UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
-  uint32_t i = 0;
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-/*
-2.  Eliminate the negative lists by doing the following for each non-null negative list: 
-    o   if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
-    create new ListHeader X 
-    o   reverse the list, add to the end of X's positive list. Reset the strength of the 
-    first item you add, based on the stronger strength levels of the two lists. 
-*/
-/*
-3.  For each ListHeader with a non-null positive list: 
-*/
-/*
-    o   Find all character strings with CEs between the baseCE and the 
-    next/previous CE, at the strength of the first token. Add these to the 
-    tailoring. 
-      ? That is, if UCA has ...  x <<< X << x' <<< X' < y ..., and the 
-      tailoring has & x < z... 
-      ? Then we change the tailoring to & x  <<< X << x' <<< X' < z ... 
-*/
-  /* It is possible that this part should be done even while constructing list */
-  /* The problem is that it is unknown what is going to be the strongest weight */
-  /* So we might as well do it here */
-
-/*
-    o   Allocate CEs for each token in the list, based on the total number N of the 
-    largest level difference, and the gap G between baseCE and nextCE at that 
-    level. The relation * between the last item and nextCE is the same as the 
-    strongest strength. 
-    o   Example: baseCE < a << b <<< q << c < d < e * nextCE(X,1) 
-      ? There are 3 primary items: a, d, e. Fit them into the primary gap. 
-      Then fit b and c into the secondary gap between a and d, then fit q 
-      into the tertiary gap between b and c. 
-
-    o   Example: baseCE << b <<< q << c * nextCE(X,2) 
-      ? There are 2 secondary items: b, c. Fit them into the secondary gap. 
-      Then fit q into the tertiary gap between b and c. 
-    o   When incrementing primary values, we will not cross high byte 
-    boundaries except where there is only a single-byte primary. That is to 
-    ensure that the script reordering will continue to work. 
-*/
-  rulesToParse = src->source;
-  UHashtable *tailored = uhash_open(uhash_hashStrRep, uhash_compareStrReps, status);
-  UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
-  uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
-
-  for(i = 0; i<src->resultLen; i++) {
-    /* now we need to generate the CEs */ 
-    /* We stuff the initial value in the buffers, and increase the appropriate buffer */
-    /* According to strength                                                          */
-    if(U_SUCCESS(*status)) {
-      ucol_initBuffers(&src->lh[i], tailored, status);
-    }
-  }
-
-  if(src->varTop != NULL) { /* stuff the variable top value */
-    src->opts->variableTopValue = (*(src->varTop->CEs))>>16;
-    /* remove it from the list */
-    if(src->varTop->listHeader->first[src->varTop->polarity] == src->varTop) { /* first in list */
-      src->varTop->listHeader->first[src->varTop->polarity] = src->varTop->next;
-    }
-    if(src->varTop->listHeader->last[src->varTop->polarity] == src->varTop) { /* first in list */
-      src->varTop->listHeader->last[src->varTop->polarity] = src->varTop->previous;    
-    }
-    if(src->varTop->next != NULL) {
-      src->varTop->next->previous = src->varTop->previous;
-    }
-    if(src->varTop->previous != NULL) {
-      src->varTop->previous->next = src->varTop->next;
-    }
-  }
-
-
-  tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, status);
-
-
-  /* After this, we have assigned CE values to all regular CEs      */
-  /* now we will go through list once more and resolve expansions,  */
-  /* make UCAElements structs and add them to table                 */
-  for(i = 0; i<src->resultLen; i++) {
-    /* now we need to generate the CEs */ 
-    /* We stuff the initial value in the buffers, and increase the appropriate buffer */
-    /* According to strength                                                          */
-    if(U_SUCCESS(*status)) {
-      ucol_createElements(src, t, &src->lh[i], tailored, status);
-    }
-  }
-
-  {
-    UChar decomp[256];
-    uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
-    UChar u = 0;
-    UCAElements el;
-    el.isThai = FALSE;
-    collIterate colIt;
-
-    /* add latin-1 stuff */
-    if(U_SUCCESS(*status)) {
-      for(u = 0; u<0x100; u++) {
-        if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND 
-          /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
-          /* the table, even if it results in more false closure elements */
-          || ((isContraction(CE)) &&
-          (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
-          ) {
-          decomp[0] = (UChar)u;
-          el.uchars[0] = (UChar)u;
-          el.cPoints = el.uchars;
-          el.cSize = 1;
-          el.noOfCEs = 0;
-          init_collIterate(src->UCA, decomp, 1, &colIt);
-          while(CE != UCOL_NO_MORE_CES) {
-            CE = ucol_getNextCE(src->UCA, &colIt, status);
-            if(CE != UCOL_NO_MORE_CES) {
-              el.CEs[el.noOfCEs++] = CE;
-            }
-          }
-          uprv_uca_addAnElement(t, &el, status);
-        }
-      }
-    }
-
-    UCollator *tempColl = NULL;
-    if(U_SUCCESS(*status)) {
-      tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
-
-      UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-      tempColl = ucol_initCollator(tempData, 0, status);
-
-      if(U_SUCCESS(*status)) {
-        tempColl->rb = NULL;
-        tempColl->hasRealData = TRUE;
-      }
-      uprv_uca_closeTempTable(tempTable);    
-    }
-    if(U_SUCCESS(*status)) {
-      /* copy contractions */
-      uint32_t ucaCE = UCOL_NOT_FOUND, tailoredCE = UCOL_NOT_FOUND;
-      uint16_t *conts = (uint16_t *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
-      while(*conts != 0) {
-        tailoredCE = ucmp32_get(tempColl->mapping, *conts);
-        if(tailoredCE != UCOL_NOT_FOUND) {
-          UBool isTailoredContraction = isContraction(tailoredCE);
-          el.cPoints = el.uchars;
-          el.noOfCEs = 0;
-          el.uchars[0] = *conts;
-          el.uchars[1] = *(conts+1);
-          if(*(conts+2)!=0) {
-            el.uchars[2] = *(conts+2);
-            el.cSize = 3;
-          } else {
-            el.cSize = 2;
-          }
-          UCollationElements *ucaEl = ucol_openElements(src->UCA, el.uchars, el.cSize, status);
-          UCollationElements *tailorEl = ucol_openElements(tempColl, el.uchars, el.cSize, status);
-          UBool needToAdd = TRUE;
-          if(isTailoredContraction) {
-            do {
-              el.CEs[el.noOfCEs] = ucol_next(ucaEl, status);
-              tailoredCE = ucol_next(tailorEl, status);
-              if(tailoredCE == el.CEs[el.noOfCEs]) {
-                el.noOfCEs++;
-              } else {
-                needToAdd = FALSE;
-                break;
-              }
-            } while(tailoredCE != UCOL_NULLORDER);
-
-            if(needToAdd == TRUE) {
-              el.noOfCEs--; // remove UCOL_NULLORDER
-              uprv_uca_addAnElement(t, &el, status);
-            }
-          } else { // if the tailored CE is not a contraction, we need to add this onelk
-            while ((el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
-              el.noOfCEs++;
-            }
-            uprv_uca_addAnElement(t, &el, status);
-          }
-
-        }
-        conts+=3;
-      }
-      if(U_SUCCESS(*status)) {
-        ucol_close(tempColl);
-        tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
-
-        UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-        tempColl = ucol_initCollator(tempData, 0, status);
-
-        if(U_SUCCESS(*status)) {
-          tempColl->rb = NULL;
-          tempColl->hasRealData = TRUE;
-        }
-        uprv_uca_closeTempTable(tempTable);    
-      }
-
-      /* produce canonical closure */
-      for(u = 0; u < 0xFFFF; u++) {
-        if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
-          || (noOfDec == 1 && *decomp != (UChar)u))
-        {
-          if(ucol_strcoll(tempColl, (UChar *)&u, 1, decomp, noOfDec) != UCOL_EQUAL) {
-            el.uchars[0] = (UChar)u;
-            el.cPoints = el.uchars;
-            el.cSize = 1;
-            el.noOfCEs = 0;
-            UCollationElements* colEl = ucol_openElements(tempColl, decomp, noOfDec, status);
-
-            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
-              el.noOfCEs++;
-            }
-
-            uprv_uca_addAnElement(t, &el, status);
-          }
-        }
-      }
-      ucol_close(tempColl);
-    }
-  }
-
-    /* still need to produce compatibility closure */
-
-  UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
-
-  uhash_close(tailored);
-  uprv_uca_closeTempTable(t);    
-
-  return myData;
-}
-
-const InverseTableHeader *ucol_initInverseUCA(UErrorCode *status) {
-  if(U_FAILURE(*status)) return NULL;
-
-  if(invUCA == NULL) {
-    InverseTableHeader *newInvUCA = NULL; /*(InverseTableHeader *)uprv_malloc(sizeof(InverseTableHeader ));*/
-    UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
-
-    if(U_FAILURE(*status)) {
-        udata_close(result);
-        uprv_free(newInvUCA);
-    }
-
-    if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
-      newInvUCA = (InverseTableHeader *)udata_getMemory(result);
-
-      umtx_lock(NULL);
-      if(invUCA == NULL) {
-          invUCA = newInvUCA;
-          newInvUCA = NULL;
-      }
-      umtx_unlock(NULL);
-
-      if(newInvUCA != NULL) {
-          udata_close(result);
-          uprv_free(newInvUCA);
-      }
-    }
-
-  }
-  return invUCA;
-}
-
