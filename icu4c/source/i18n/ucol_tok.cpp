@@ -652,9 +652,9 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
   return src->current;
 }
 
-inline void getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32_t strength, uint32_t *charsOffset, uint32_t *newCharsLen, UErrorCode *status) {
+inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32_t strength, uint32_t *charsOffset, uint32_t *newCharsLen, UErrorCode *status) {
   if(U_FAILURE(*status)) {
-    return;
+    return NULL;
   }
       /* this is a virgin before - we need to fish the anchor from the UCA */
   collIterate s;
@@ -695,12 +695,13 @@ inline void getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32
   uint32_t key = (*newCharsLen << 24) | *charsOffset;
 
   sourceToken = (UColToken *)uhash_geti(src->tailored, (int32_t)key);
+  return sourceToken;
   
   // if we found a tailored thing, we have to get one further down the line
-  if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
-    src->extraCurrent--;
-    getVirginBefore(src, sourceToken, strength, charsOffset, newCharsLen, status);
-  }
+  //if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
+    //src->extraCurrent--;
+    //getVirginBefore(src, sourceToken, strength, charsOffset, newCharsLen, status);
+  //}
 
 
 }
@@ -949,12 +950,12 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             } else { /* we hit NULL */
               /* we should be doing the else part */
               sourceToken = sourceToken->listHeader->reset;
-              getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
-              sourceToken = NULL;
+              sourceToken = getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
+              //sourceToken = NULL;
             }
           } else {
-            getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
-            sourceToken = NULL;
+            sourceToken = getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
+            //sourceToken = NULL;
           }
         }
 
