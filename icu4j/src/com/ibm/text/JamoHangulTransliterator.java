@@ -37,27 +37,28 @@ public class JamoHangulTransliterator extends Transliterator {
         int limit = offsets[LIMIT];
         if (cursor >= limit) return;
         
-        // get last character
-        char last = filteredCharAt(text, cursor++);
-        // testing
-        if (limit - cursor > 2) {
-          last = (char)(last + 0);
+        int count[] = new int[1];
+        if (limit - cursor > 1) {
+          count[0] = 5; // debugging spot
         }
 
-    loop:
-        while (cursor < limit) {
-            char c = filteredCharAt(text, cursor);
-            char replacement = composeHangul(last, c);
-            if (replacement != 0) {
-              text.replace(cursor-1, cursor+1, String.valueOf(replacement));
+        char last = filteredCharAt(text, cursor++);
+        while (cursor <= limit) {
+            char next = 0xFFFF; // go over end of string, just in case
+            if (cursor < limit) next = filteredCharAt(text, cursor);
+            char replacement = composeHangul(last, next, count);
+            if (replacement != last) {
+              text.replace(cursor-1, cursor-1 + count[0], String.valueOf(replacement));
+              limit = limit - count[0] + 1; // fix up limit 2 => -1, 1 => 0
               last = replacement;
-              // leave cursor where it is
-              --limit; // fix up limit
+              if (next == 0xFFFF) break;
+              // don't change cursor, so we revisit char
             } else {
               ++cursor;
+              last = next;
             }
         }
-
+        
         offsets[LIMIT] = limit + 1;
         offsets[CURSOR] = cursor;
     }
@@ -67,13 +68,16 @@ public class JamoHangulTransliterator extends Transliterator {
         SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
         LCount = 19, VCount = 21, TCount = 28,
         NCount = VCount * TCount,   // 588
-        SCount = LCount * NCount;   // 11172
+        SCount = LCount * NCount,   // 11172
+        LLimit = 0x1200;
    
    /**
-    * Return composed character (if it composes)
-    * 0 otherwise
+    * Return composed character (if it is a modern jamo)
+    * last otherwise.
+    * If there is a replacement, returns count[0] = 2 if ch was used, 1 otherwise
     */
-   public static char composeHangul(char last, char ch) {
+   public static char composeHangul(char last, char ch, int[] count) {
+      count[0] = 2; // default is replace 2 chars
       // check to see if two current characters are L and V
       int LIndex = last - LBase;
       if (0 <= LIndex && LIndex < LCount) {
@@ -81,8 +85,31 @@ public class JamoHangulTransliterator extends Transliterator {
           if (0 <= VIndex && VIndex < VCount) {
               // make syllable of form LV
               return (char)(SBase + (LIndex * VCount + VIndex) * TCount);
+          } else {
+            // it is isolated, so fix!
+            count[0] = 1; // not using ch
+            return (char)(SBase + (LIndex * VCount) * TCount);
           }
       }
+      
+      // if neither case was true, see if we have an isolated Jamo we need to fix
+      if (LBase <= last && last < LLimit) {
+        // need to fix: it is either medial or final!
+        int VIndex = last - VBase;
+        if (0 <= VIndex && VIndex < VCount) {
+            LIndex = 0x110B - LBase; // use empty consonant
+            // make syllable of form LV
+            count[0] = 1; // not using ch
+            return (char)(SBase + (LIndex * VCount + VIndex) * TCount);
+        }
+        // ok, see if final. Use null consonant + a + final
+        int TIndex = last - TBase;
+        if (0 <= TIndex && TIndex <= TCount) {  // need to fix!
+            count[0] = 1; // not using ch
+            return (char)(0xC544 + TIndex);
+        }
+      }
+ 
       // check to see if two current characters are LV and T
       int SIndex = last - SBase;
       if (0 <= SIndex && SIndex < SCount && (SIndex % TCount) == 0) {
@@ -92,7 +119,7 @@ public class JamoHangulTransliterator extends Transliterator {
               return (char)(last + TIndex);
           }
       }
-      // if neither case was true, skip
-      return '\u0000';
+      
+      return last;
     }    
 }
