@@ -512,9 +512,9 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
 
                 coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
-                ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
 
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
+                    ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
                     if(U_SUCCESS(*status) && data != NULL) {
                         temp1 = bin_open(bundle, "%%Collation", len, binColData, status);
@@ -677,9 +677,9 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                     coll = ucol_openRules(token.fChars, token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
                 }
 
-                ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
 
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
+                    ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
                     if(U_SUCCESS(*status) && data != NULL) {
                         temp1 = bin_open(bundle, "%%Collation", len, binColData, status);
