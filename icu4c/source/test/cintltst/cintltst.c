@@ -39,7 +39,6 @@
 #define CTST_LEAK_CHECK 1
 #ifdef CTST_LEAK_CHECK
 U_CFUNC void ctst_freeAll(void);
-U_CFUNC void ctst_init(void);
 #endif
 
 static char* _testDataPath=NULL;
@@ -104,7 +103,7 @@ int main(int argc, const char* const argv[])
 
     U_MAIN_INIT_ARGS(argc, argv);
 
-    argv2 = (const char**) ctst_malloc(sizeof(char*) * argc);
+    argv2 = (const char**) malloc(sizeof(char*) * argc);
     if (argv2 == NULL) {
         printf("*** Error: Out of memory (too many cmd line args?)\n");
         return 1;
@@ -149,10 +148,6 @@ int main(int argc, const char* const argv[])
     
     while (REPEAT_TESTS > 0) {   /* Loop runs once per complete execution of the tests 
                                   *   used for -r  (repeat) test option.                */
-
-#ifdef CTST_LEAK_CHECK
-        ctst_init();
-#endif
 
         /* Check whether ICU will initialize without forcing the build data directory into
          *  the ICU_DATA path.  Success here means either the data dll contains data, or that
@@ -244,6 +239,7 @@ int main(int argc, const char* const argv[])
 
     }  /* End of loop that repeats the entire test, if requested.  (Normally doesn't loop)  */
 
+    free((void*)argv2);
     return nerrors ? 1 : 0;
 }
 
@@ -623,16 +619,9 @@ U_CFUNC void ctest_resetTimeZone(void) {
 
 #define CTST_MAX_ALLOC 10000
 /* Array used as a queue */
-static void * ctst_allocated_stuff[CTST_MAX_ALLOC];
+static void * ctst_allocated_stuff[CTST_MAX_ALLOC] = {0};
 static int ctst_allocated = 0;
 static UBool ctst_free = FALSE;
-
-void ctst_init(void) {
-    int i;
-    for(i=0; i<CTST_MAX_ALLOC; i++) {
-        ctst_allocated_stuff[i] = NULL;
-    }
-}
 
 void *ctst_malloc(size_t size) {
     if(ctst_allocated >= CTST_MAX_ALLOC - 1) {
@@ -651,12 +640,15 @@ void ctst_freeAll() {
     if(ctst_free == 0) {
         for(i=0; i<ctst_allocated; i++) {
             free(ctst_allocated_stuff[i]);
+            ctst_allocated_stuff[i] = NULL;
         }
     } else {
         for(i=0; i<CTST_MAX_ALLOC; i++) {
             free(ctst_allocated_stuff[i]);
+            ctst_allocated_stuff[i] = NULL;
         }
     }
+    ctst_allocated = 0;
     _testDataPath=NULL;
 }
 #endif
