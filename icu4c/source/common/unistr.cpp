@@ -20,14 +20,12 @@
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-#include "unicode/locid.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "uhash.h"
 #include "ustr_imp.h"
-#include "unormimp.h"
 #include "umutex.h"
 
 #if 0
