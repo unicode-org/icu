@@ -1,4 +1,4 @@
- /*
+/*
 *******************************************************************************
 *   Copyright (C) 1996-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -490,6 +490,7 @@ clean:
   ures_close(collations); //??? we have to decide on that. Probably affects something :)
   return result;
 }
+
 
 U_CAPI void U_EXPORT2
 ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt)
@@ -1730,7 +1731,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
               order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
           }
-          if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
+          if(order == UCOL_NOT_FOUND && coll->UCA) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
             order = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
 
@@ -2140,10 +2141,12 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                   }
                   else {
                         /*result = ucmpe32_get(UCA->mapping, ch);*/
+                      if(coll->UCA) {
                         result = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
+                      }
                   }
 
-                  if (result > UCOL_NOT_FOUND) {
+                  if (result > UCOL_NOT_FOUND && coll->UCA) {
                     result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
                   }
                 }
@@ -6999,7 +7002,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
       CE = coll->latinOneMapping[ch];
     } else {
       CE = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
-      if(CE == UCOL_NOT_FOUND) {
+      if(CE == UCOL_NOT_FOUND && coll->UCA) {
         CE = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
       }
     }
@@ -7634,7 +7637,11 @@ ucol_getVersion(const UCollator* coll,
     versionInfo[0] = (uint8_t)(cmbVersion>>8);
     versionInfo[1] = (uint8_t)cmbVersion;
     versionInfo[2] = coll->image->version[1];
-    versionInfo[3] = coll->UCA->image->UCAVersion[0];
+    if(coll->UCA) {
+        versionInfo[3] = coll->UCA->image->UCAVersion[0];
+    } else {
+        versionInfo[3] = 0;
+    }
 }
 
 
@@ -7648,7 +7655,7 @@ ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
       return FALSE;
     } else if(u < 0x100) { /* latin-1 */
       CE = coll->latinOneMapping[u];
-      if(CE == coll->UCA->latinOneMapping[u]) {
+      if(coll->UCA && CE == coll->UCA->latinOneMapping[u]) {
         return FALSE;
       }
     } else { /* regular */
@@ -9116,7 +9123,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
   if(status == NULL || U_FAILURE(*status)) {
     return NULL;
   }
-  if(coll == NULL) {
+  if(coll == NULL || coll->UCA == NULL) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
   }
   UParseError parseError;
@@ -9268,9 +9275,172 @@ returnResult:
 
 U_CAPI void U_EXPORT2
 ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
-  if(coll) {
+  if(coll && coll->UCA) {
     uprv_memcpy(info, coll->UCA->image->UCAVersion, sizeof(UVersionInfo));
   }
+}
+
+U_CAPI int32_t U_EXPORT2
+ucol_cloneBinary(const UCollator *coll, 
+                 uint8_t *buffer, int32_t capacity,
+                 UErrorCode *status) 
+{
+    int32_t length = 0;
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+    if(coll->hasRealData == TRUE) {
+        length = coll->image->size;
+        if(length <= capacity) {
+            uprv_memcpy(buffer, coll->image, length);
+        }
+    } else {
+        length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
+        if(length <= capacity) {
+            /* build the UCATableHeader with minimal entries */
+            /* do not copy the header from the UCA file because its values are wrong! */
+            /* uprv_memcpy(result, UCA->image, sizeof(UCATableHeader)); */
+
+            /* reset everything */
+            uprv_memset(buffer, 0, length);
+
+            /* set the tailoring-specific values */
+            UCATableHeader *myData = (UCATableHeader *)buffer;
+            myData->size = length;
+
+            /* offset for the options, the only part of the data that is present after the header */
+            myData->options = sizeof(UCATableHeader);
+
+            /* need to always set the expansion value for an upper bound of the options */
+            myData->expansion = myData->options + sizeof(UColOptionSet);
+
+            myData->magic = UCOL_HEADER_MAGIC;
+            myData->isBigEndian = U_IS_BIG_ENDIAN;
+            myData->charSetFamily = U_CHARSET_FAMILY;
+
+            /* copy UCA's version; genrb will override all but the builder version with tailoring data */
+            uprv_memcpy(myData->version, coll->image->version, sizeof(UVersionInfo));
+
+            uprv_memcpy(myData->UCAVersion, coll->image->UCAVersion, sizeof(UVersionInfo));
+            uprv_memcpy(myData->UCDVersion, coll->image->UCDVersion, sizeof(UVersionInfo));
+            uprv_memcpy(myData->formatVersion, coll->image->formatVersion, sizeof(UVersionInfo));
+            myData->jamoSpecial = coll->image->jamoSpecial;
+
+            /* copy the collator options */
+            uprv_memcpy(buffer+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
+        }
+    }
+    return length;
+}
+
+U_CAPI UCollator* U_EXPORT2
+ucol_openBinary(const uint8_t *bin, int32_t length, 
+                const UCollator *base, 
+                UErrorCode *status) 
+{
+    UCollator *result = NULL;
+    if(U_FAILURE(*status)){
+        return NULL;
+    }
+    if(base == NULL) {
+        // we don't support null base yet
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    UCATableHeader *colData = (UCATableHeader *)bin;
+    // do we want version check here? We're trying to figure out whether collators are compatible
+    if(uprv_memcmp(colData->UCAVersion, base->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
+        uprv_memcmp(colData->UCDVersion, base->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
+        colData->version[0] != UCOL_BUILDER_VERSION) {
+            *status = U_COLLATOR_VERSION_MISMATCH;
+            return NULL;
+        } else {
+            if((uint32_t)length > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
+                result = ucol_initCollator((const UCATableHeader *)bin, result, base, status);
+                if(U_FAILURE(*status)){
+                    return NULL;
+                }
+                result->hasRealData = TRUE;
+            } else {
+                if(base) {
+                    result = ucol_initCollator(base->image, result, base, status);
+                    ucol_setOptionsFromHeader(result, (UColOptionSet *)(bin+((const UCATableHeader *)bin)->options), status);
+                    if(U_FAILURE(*status)){
+                        return NULL;
+                    }
+                    result->hasRealData = FALSE;
+                } else {
+                    *status = U_USELESS_COLLATOR_ERROR;
+                    return NULL;
+                }
+            }
+            result->freeImageOnClose = FALSE;
+        }
+        result->validLocale = NULL;
+        result->requestedLocale = NULL;
+        result->rules = NULL;
+        result->rulesLength = 0;
+        result->freeRulesOnClose = FALSE;
+        result->rb = NULL;
+        result->elements = NULL;
+        return result;
+}
+
+U_CAPI UCollator* U_EXPORT2
+ucol_openFromImage( const uint8_t   *image,
+                   UCollator *coll,
+                   UErrorCode         *status)
+{
+    return NULL;
+#if 0
+    if(status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+
+    if(image == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    ucol_initUCA(status);
+
+    if(U_FAILURE(*status)){
+        return NULL;
+    }
+
+    int32_t len = ((UCATableHeader *)image)->size;
+    UCATableHeader *table = (UCATableHeader *) uprv_malloc(len);
+    /* test for NULL */
+    if (table == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    uprv_memcpy(table, image, len);
+
+    UCollator *result = ucol_initCollator(table,0,status);
+
+    if (result != NULL) {
+        result->freeImageOnClose = TRUE;
+        result->rules = NULL;
+        result->rulesLength = 0;
+        result->freeRulesOnClose = FALSE;
+        result->rb = NULL;
+        result->elements = NULL;
+        result->validLocale = NULL;
+        result->requestedLocale = NULL;
+        if(U_SUCCESS(*status)) {
+            result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
+            result->hasRealData = len > paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet));
+        } else {
+            ucol_close(result);
+            result = NULL;
+        }
+    } else {
+        uprv_free(table);
+    }
+
+    return result;
+#endif
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

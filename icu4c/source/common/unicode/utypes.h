@@ -576,6 +576,8 @@ typedef enum UErrorCode {
     U_ENUM_OUT_OF_SYNC_ERROR  = 25,     /**< UEnumeration out of sync with underlying collection */
     U_INVARIANT_CONVERSION_ERROR = 26,  /**< Unable to convert a UChar* string to char* with the invariant converter. */
     U_INVALID_STATE_ERROR     = 27,     /**< Requested operation can not be completed with ICU in its current state */
+    U_COLLATOR_VERSION_MISMATCH = 28,   /**< Collator version is not compatible with the base version */
+    U_USELESS_COLLATOR_ERROR  = 29,     /**< Collator is options only and no base is specified */
 
     U_STANDARD_ERROR_LIMIT,             /**< This must always be the last value to indicate the limit for standard errors */
     /*
