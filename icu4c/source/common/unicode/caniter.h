@@ -12,7 +12,13 @@
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
-#define SKIP_ZEROES TRUE
+/** Should permutation skip characters with combining class zero
+ *  Should be either TRUE or FALSE. This is a compile time option
+ *  @draft ICU 2.4
+ */
+#ifndef CANITER_SKIP_ZEROES
+#define CANITER_SKIP_ZEROES TRUE
+#endif
 
 U_NAMESPACE_BEGIN
 
