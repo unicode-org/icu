@@ -5,15 +5,18 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/01/10 22:45:44 $
- * $Revision: 1.56 $
+ * $Date: 2004/01/11 20:20:25 $
+ * $Revision: 1.57 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test;
 import com.ibm.icu.util.TimeZone;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
@@ -331,8 +334,11 @@ public class TestFmwk extends AbstractTestLog {
                 } catch( IllegalAccessException e ) {
                     errln("Can't access test method " + testMethod.getName());
                 } catch( InvocationTargetException e ) {
-                    String msg = "Uncaught exception \"" + e.getTargetException().getStackTrace()
-                        +"\" thrown in test method " + testMethod.getName()
+                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                    PrintStream ps = new PrintStream(bs);
+                    e.getTargetException().printStackTrace(ps);
+                    String msg = "Uncaught exception " + bs.toString()
+                        +" thrown in test method " + testMethod.getName()
                         +" accessed under name " + name;
                     if (params.nothrow) {
                         errln(msg);
