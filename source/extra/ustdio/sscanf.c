@@ -565,7 +565,6 @@ u_sscanf_uinteger_handler(u_localized_string    *input,
     uint32_t            *num         = (uint32_t*) (args[0].ptrValue);
     double currDouble;
 
-    memcpy(&uint_args, args, sizeof(ufmt_args));
     uint_args.ptrValue = &currDouble;
     converted_args = u_sscanf_double_handler(input, info, &uint_args, fmt, consumed);
 
