@@ -129,15 +129,23 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
     }
 
     /* try algorithmic names first */
-    p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
-    i=*p;
-    algRange=(AlgorithmicRange *)(p+1);
-    while(i>0) {
-        if(algRange->start<=code && code<=algRange->end) {
-            return getAlgName(algRange, code, nameChoice, buffer, (uint16_t)bufferLength);
+    if(nameChoice==U_UNICODE_CHAR_NAME) {
+        /*
+         * Do not try algorithmic names for Unicode 1.0 because
+         * Unihan names are the same as the modern ones,
+         * extension A was only introduced with Unicode 3.0, and
+         * the Hangul syllable block was moved and changed around Unicode 1.1.5.
+         */
+        p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+        i=*p;
+        algRange=(AlgorithmicRange *)(p+1);
+        while(i>0) {
+            if(algRange->start<=code && code<=algRange->end) {
+                return getAlgName(algRange, code, nameChoice, buffer, (uint16_t)bufferLength);
+            }
+            algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
+            --i;
         }
-        algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
-        --i;
     }
 
     /* normal character name */
@@ -237,7 +245,7 @@ expandGroupName(UCharNames *names, Group *group,
             /* double-nibble length spread across two bytes */
             length=(uint16_t)(((length&0x3)<<4|lengthByte>>4)+12);
             lengthByte&=0xf;
-        } else if((lengthByte&0xf0)>=0xc0) {
+        } else if((lengthByte /* &0xf0 */)>=0xc0) {
             /* double-nibble length spread across this one byte */
             length=(uint16_t)((lengthByte&0x3f)+12);
         } else {
@@ -295,12 +303,24 @@ expandName(UCharNames *names,
     uint8_t c;
 
     if(nameChoice!=U_UNICODE_CHAR_NAME) {
-        /* skip the modern name */
-        while(nameLength>0) {
-            --nameLength;
-            if(*name++==';') {
-                break;
+        /*
+         * skip the modern name if it is not requested _and_
+         * if the semicolon byte value is a character, not a token number
+         */
+        if((uint8_t)';'>=tokenCount || tokens[(uint8_t)';']==(uint16_t)(-1)) {
+            while(nameLength>0) {
+                --nameLength;
+                if(*name++==';') {
+                    break;
+                }
             }
+        } else {
+            /*
+             * the semicolon byte value is a token number, therefore
+             * only modern names are stored in unames.dat and there is no
+             * such requested Unicode 1.0 name here
+             */
+            nameLength=0;
         }
     }
 
@@ -309,14 +329,14 @@ expandName(UCharNames *names,
         --nameLength;
         c=*name++;
 
-        if(c==';') {
-            /* finished */
-            break;
-        }
-
         if(c>=tokenCount) {
-            /* implicit letter */
-            WRITE_CHAR(buffer, bufferLength, bufferPos, c);
+            if(c!=';') {
+                /* implicit letter */
+                WRITE_CHAR(buffer, bufferLength, bufferPos, c);
+            } else {
+                /* finished */
+                break;
+            }
         } else {
             token=tokens[c];
             if(token==(uint16_t)(-2)) {
@@ -325,8 +345,13 @@ expandName(UCharNames *names,
                 --nameLength;
             }
             if(token==(uint16_t)(-1)) {
-                /* explicit letter */
-                WRITE_CHAR(buffer, bufferLength, bufferPos, c);
+                if(c!=';') {
+                    /* explicit letter */
+                    WRITE_CHAR(buffer, bufferLength, bufferPos, c);
+                } else {
+                    /* finished */
+                    break;
+                }
             } else {
                 /* write token word */
                 uint8_t *tokenString=tokenStrings+token;
