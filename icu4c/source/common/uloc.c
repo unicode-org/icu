@@ -126,7 +126,7 @@ static const char * const LANGUAGES[] = {
     "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",
     "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",
     "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",
-    "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",
+    "bai", "bal", "ban", "bas", "bat", "be",  "bej",
     "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",
     "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",
     "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",
@@ -209,12 +209,12 @@ static const char * const LANGUAGES_3[] = {
     "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
 /*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
     "ath", "aus", "ava", "awa", "aym", "aze", "bak", "bad",
-/*  "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",    */
-    "bai", "bal", "bam", "ban", "bas", "bat", "bel", "bej",
+/*  "bai", "bal", "ban", "bas", "bat", "be",  "bej",    */
+    "bai", "bal", "ban", "bas", "bat", "bel", "bej",
 /*  "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
     "bem", "ber", "bul", "bih", "bho", "bis", "bik", "bin",
 /*  "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
-    "bla", "bm",  "ben", "bnt", "bod", "bre", "bra", "bos",
+    "bla", "bam", "ben", "bnt", "bod", "bre", "bra", "bos",
 /*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
     "btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
 /*  "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
