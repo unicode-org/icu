@@ -446,11 +446,6 @@ Locale &Locale::operator=(const Locale &other)
         fullName = fullNameBuffer;
     }
 
-    if(baseName && baseName != baseNameBuffer) {
-        uprv_free(baseName);
-        baseName = NULL;
-    }
-
     /* Allocate the full name if necessary */
     if(other.fullName != other.fullNameBuffer) {
         fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
@@ -458,15 +453,19 @@ Locale &Locale::operator=(const Locale &other)
     /* Copy the full name */
     uprv_strcpy(fullName, other.fullName);
 
-    if(other.baseName) {
-        if(other.baseName != other.baseNameBuffer) {
-            baseName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
-        } else {
-            baseName = baseNameBuffer;
-        }
-        uprv_strcpy(baseName, other.baseName);
+    /* baseName is the cached result of getBaseName.  if 'other' has a
+       baseName and it fits in baseNameBuffer, then copy it. otherwise set
+       it to NULL, and let the user lazy-create it (in getBaseName) if they
+       want it. */
+    if(baseName && baseName != baseNameBuffer) {
+        uprv_free(baseName);
     }
+    baseName = NULL;
 
+    if(other.baseName == other.baseNameBuffer) {
+        uprv_strcpy(baseNameBuffer, other.baseNameBuffer);
+        baseName = baseNameBuffer;
+    }
 
     /* Copy the language and country fields */
     uprv_strcpy(language, other.language);
