@@ -174,7 +174,8 @@ static UBool getOlsonMeta() {
 
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
 {
-    UnicodeString copy = id;
+    UnicodeString copy;
+    copy.fastCopyFrom(id);
     const UChar* buf = copy.getTerminatedBuffer();
     const UChar* u = NULL;
     
