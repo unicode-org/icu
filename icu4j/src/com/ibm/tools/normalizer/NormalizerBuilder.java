@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/07/12 16:49:22 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/13 21:25:51 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -66,7 +66,7 @@ public final class NormalizerBuilder
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data")) {
-                uinfo = new UInfo(args[++i]);
+                uinfo = new UInfo(args[++i], args[++i]);
             }
             else if (args[i].equals("-write")) {
                 fWriteData = true;
@@ -372,11 +372,12 @@ public final class NormalizerBuilder
             if (category == uinfo.SURROGATE) continue;
 
             boolean canon = uinfo.hasCanonicalDecomposition(ch);
+            boolean compat = uinfo.hasCompatibilityDecomposition(ch);
 
-            if (uinfo.hasCanonicalDecomposition(ch)) canonCount++;
-            if (uinfo.hasCompatibilityDecomposition(ch)) compatCount++;
+            if (canon) canonCount++;
+            if (compat) compatCount++;
 
-            if (canon || uinfo.hasCompatibilityDecomposition(ch)) {
+            if (canon || compat) {
                 String decomp = uinfo.getFullDecomposition(ch, canon);
                 temp.setLength(0);
                 temp.append(decomp);

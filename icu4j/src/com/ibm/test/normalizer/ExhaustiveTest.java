@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/normalizer/Attic/ExhaustiveTest.java,v $ 
- * $Date: 2000/07/12 16:43:38 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/13 21:26:01 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,7 @@ public class ExhaustiveTest extends TestFmwk
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data")) {
-                tempInfo = new UInfo(args[++i]);
+                tempInfo = new UInfo(args[++i], args[++i]);
             } else {
                 tempArgs[count++] = args[i];
             }
