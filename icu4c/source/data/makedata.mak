@@ -340,7 +340,7 @@ CLEAN : GODATA
 # Batch infrence rule for creating transliterator resource files
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt.res::
 	@echo Making Transliterator Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(ICUPKG)" -d"$(ICUBLD)" $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -t -p"$(ICUPKG)" -d"$(ICUBLD)" $<
 
 # Inference rule for creating resource bundle files
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICULOC)}.txt.res::
@@ -354,7 +354,7 @@ res_index {
 }
 <<KEEP
 	echo Making Locale Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(ICUPKG)" -d"$(ICUBLD)" .\res_index.txt $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -t -p"$(ICUPKG)" -d"$(ICUBLD)" .\res_index.txt $<
 
 # DLL version information
 "$(ICUBLD)\$(ICUDT)icudata.res": "$(ICUMISC)\icudata.rc"

@@ -116,12 +116,12 @@ main(int argc, char* argv[]) {
     }
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(argc < 0 ? stderr : stdout,
-            "%csage: %s [ -h, -?, --help ] [ -V, --version ]"
-            " [ -v, --verbose ] [ -e, --encoding encoding ] [ --bom ]"
-            " [ -t, --truncate [ size ] ]"
-            " [ -s, --sourcedir source ] [ -d, --destdir destination ]"
-            " [ -i, --icudatadir directory ] [ -c, --to-stdout ]"
-            " [ -A, --suppressAliases]"
+            "%csage: %s [ -h, -?, --help ] [ -V, --version ]\n"
+            " [ -v, --verbose ] [ -e, --encoding encoding ] [ --bom ]\n"
+            " [ -t, --truncate [ size ] ]\n"
+            " [ -s, --sourcedir source ] [ -d, --destdir destination ]\n"
+            " [ -i, --icudatadir directory ] [ -c, --to-stdout ]\n"
+            " [ -A, --suppressAliases]\n"
             " bundle ...\n", argc < 0 ? 'u' : 'U',
             pname);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
@@ -224,7 +224,7 @@ main(int argc, char* argv[]) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
 #ifdef WIN32
             if (!absfilename) {
-                absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0]) 
+                absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0])
                   && arg[1] == ':' && arg[2] == U_FILE_SEP_CHAR);
             }
 #endif
@@ -234,7 +234,7 @@ main(int argc, char* argv[]) {
               q = uprv_strrchr(arg, U_FILE_SEP_CHAR);
               uprv_strcpy(infile, inputDir);
               if(q != NULL) {
-                uprv_strcat(infile, U_FILE_SEP_STRING), 
+                uprv_strcat(infile, U_FILE_SEP_STRING),
                 strncat(infile, arg, q-arg);
               }
               thename = infile;
@@ -497,7 +497,7 @@ derb_getTableItem(const Resource *pRoot, const Resource res, uint16_t indexR) {
 static void printOutAlias(FILE *out,  UConverter *converter, UResourceBundle *parent, Resource r, const char *key, int32_t indent, const char *pname, UErrorCode *status) {
     static const UChar cr[] = { '\n' };
     int32_t len = 0;
-    const UChar* thestr = derb_getString(&(parent->fResData), r, &len); 
+    const UChar* thestr = derb_getString(&(parent->fResData), r, &len);
     UChar *string = quotedString(thestr);
     if(trunc && len > truncsize) {
         char msg[128];

@@ -49,7 +49,8 @@ enum
     PACKAGE_NAME,
     BUNDLE_NAME,
     WRITE_XML,
-    TOUCHFILE
+    TOUCHFILE,
+    STRICT
 };
 
 UOption options[]={
@@ -67,11 +68,11 @@ UOption options[]={
                       UOPTION_PACKAGE_NAME,
                       UOPTION_BUNDLE_NAME,
                       UOPTION_DEF( "write-xml", 'x', UOPT_NO_ARG),
-                      UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 13 */
+                      UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG),
+                      UOPTION_DEF( "strict",    'k', UOPT_NO_ARG) /* 14 */
 
                   };
 
-static     UBool       verbose = FALSE;
 static     UBool       write_java = FALSE;
 static     UBool       write_xml = FALSE;
 static     UBool       touchfile = FALSE;
@@ -143,19 +144,22 @@ main(int argc,
         fprintf(stderr,
                 "\t-b or --bundle-name      bundle name for writing the ListResourceBundle for ICU4J,\n"
                 "\t                         defaults to LocaleElements\n"
-                "\t-x or --write-xml        write a XML file for the resource bundle.\n");
+                "\t-x or --write-xml        write a XML file for the resource bundle.\n"
+                "\t-k or --strict                use pedantic parsing of syntax\n");
 
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     if(options[VERBOSE].doesOccur) {
-        verbose = TRUE;
+        setVerbose(TRUE);
     }
 
     if(options[QUIET].doesOccur) {
         setShowWarning(FALSE);
     }
-    
+    if(options[STRICT].doesOccur) {
+        setStrict(TRUE);
+    }
     if(options[COPYRIGHT].doesOccur){
         setIncludeCopyright(TRUE);
     }
@@ -222,8 +226,8 @@ main(int argc,
         }
         uprv_strcat(theCurrentFileName, arg);
 
-        if (verbose) {
-            printf("processing file \"%s\"\n", theCurrentFileName);
+        if (isVerbose()) {
+            printf("Processing file \"%s\"\n", theCurrentFileName);
         }
         processFile(arg, encoding, inputDir, outputDir, gPackageName, &status);
     }
