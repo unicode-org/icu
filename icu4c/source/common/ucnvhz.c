@@ -60,9 +60,6 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args,
 U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs *args,
                                                               UErrorCode *err);
 
-U_CFUNC UChar32 UConverter_getNextUChar_HZ (UConverterToUnicodeArgs *pArgs,
-                                                    UErrorCode *pErrorCode);   
-
 static UConverterImpl _HZImpl={
     UCNV_HZ,
     
@@ -77,7 +74,7 @@ static UConverterImpl _HZImpl={
     UConverter_toUnicode_HZ_OFFSETS_LOGIC,
     UConverter_fromUnicode_HZ,
     UConverter_fromUnicode_HZ_OFFSETS_LOGIC,
-    UConverter_getNextUChar_HZ,
+    NULL,
     
     NULL,
     NULL
@@ -997,32 +994,4 @@ CALLBACK:
     myConverterData->isTargetUCharDBCS = isTargetUCharDBCS;
     
     return;
-}
-
-U_CFUNC UChar32 UConverter_getNextUChar_HZ (UConverterToUnicodeArgs * pArgs,
-                                            UErrorCode *pErrorCode){
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    const char *realLimit=pArgs->sourceLimit;
-    
-    pArgs->target=buffer;
-    pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-    
-    while(pArgs->source<realLimit) {
-        /* feed in one byte at a time to make sure to get only one character out */
-        pArgs->sourceLimit=pArgs->source+1;
-        pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
-        UConverter_toUnicode_HZ(pArgs, pErrorCode);
-        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-            return 0xffff;
-        } else if(pArgs->target!=buffer) {
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-            }
-            return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
-        }
-    }
-    
-    /* no output because of empty input or only state changes and skipping callbacks */
-    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-    return 0xffff;
 }
