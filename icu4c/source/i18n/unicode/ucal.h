@@ -286,7 +286,7 @@ typedef enum UCalendarAMPMs UCalendarAMPMs;
 * @see ucal_countAvailableTZIDs
 * @stable
 */
-U_CAPI const UChar*
+U_CAPI const UChar* U_EXPORT2 
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
                 int32_t         index,
                 UErrorCode*     status);
@@ -300,7 +300,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 * @see ucal_getAvailableTZIDs
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ucal_countAvailableTZIDs(int32_t rawOffset);
 
 /**
@@ -309,7 +309,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset);
 * @return The current date and time.
 * @stable
 */
-U_CAPI UDate
+U_CAPI UDate U_EXPORT2 
 ucal_getNow(void);
 
 /**
@@ -324,7 +324,7 @@ ucal_getNow(void);
 * @return A pointer to a UCalendar, or 0 if an error occurred.
 * @stable
 */
-U_CAPI UCalendar*
+U_CAPI UCalendar* U_EXPORT2 
 ucal_open(    const    UChar*          zoneID,
             int32_t        len,
         const    char*           locale,
@@ -337,7 +337,7 @@ ucal_open(    const    UChar*          zoneID,
 * @param cal The UCalendar to close.
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_close(UCalendar *cal);
 
 /**
@@ -349,7 +349,7 @@ ucal_close(UCalendar *cal);
 * @param status A pointer to an UErrorCode to receive any errors.
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_setTimeZone(        UCalendar*      cal,
             const    UChar*        zoneID,
                 int32_t        len,
@@ -387,7 +387,7 @@ typedef enum UCalendarDisplayNameType UCalendarDisplayNameType;
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
                     UCalendarDisplayNameType     type,
                 const      char                     *locale,
@@ -403,7 +403,7 @@ ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
 * @return TRUE if cal is currently in daylight savings time, FALSE otherwise
 * @stable
 */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2 
 ucal_inDaylightTime(    const    UCalendar*      cal,
                 UErrorCode*     status );
 
@@ -433,7 +433,7 @@ typedef enum UCalendarAttribute UCalendarAttribute;
 * @see ucal_setAttribute
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ucal_getAttribute(    const    UCalendar*              cal,
                 UCalendarAttribute      attr);
 
@@ -448,7 +448,7 @@ ucal_getAttribute(    const    UCalendar*              cal,
 * @see ucal_getAttribute
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_setAttribute(      UCalendar*              cal,
             UCalendarAttribute      attr,
             int32_t                 newValue);
@@ -462,7 +462,7 @@ ucal_setAttribute(      UCalendar*              cal,
 * @see ucal_countAvailable
 * @stable
 */
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2 
 ucal_getAvailable(int32_t index);
 
 /**
@@ -473,7 +473,7 @@ ucal_getAvailable(int32_t index);
 * @see ucal_getAvailable
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ucal_countAvailable(void);
 
 /**
@@ -487,7 +487,7 @@ ucal_countAvailable(void);
 * @see ucal_setDateTime
 * @stable
 */
-U_CAPI UDate
+U_CAPI UDate U_EXPORT2 
 ucal_getMillis(    const    UCalendar*      cal,
             UErrorCode*     status);
 
@@ -502,7 +502,7 @@ ucal_getMillis(    const    UCalendar*      cal,
 * @see ucal_setDateTime
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_setMillis(        UCalendar*      cal,
             UDate           dateTime,
             UErrorCode*     status );
@@ -521,7 +521,7 @@ ucal_setMillis(        UCalendar*      cal,
 * @see ucal_setDateTime
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_setDate(        UCalendar*        cal,
             int32_t            year,
             int32_t            month,
@@ -545,7 +545,7 @@ ucal_setDate(        UCalendar*        cal,
 * @see ucal_setDate
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_setDateTime(    UCalendar*        cal,
             int32_t            year,
             int32_t            month,
@@ -564,7 +564,7 @@ ucal_setDateTime(    UCalendar*        cal,
 * @return TRUE if cal1 and cal2 represent the same date, FALSE otherwise.
 * @stable
 */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2 
 ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2);
 
@@ -583,7 +583,7 @@ ucal_equivalentTo(    const UCalendar*      cal1,
 * @see ucal_roll
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_add(    UCalendar*            cal,
         UCalendarDateFields        field,
         int32_t                amount,
@@ -604,7 +604,7 @@ ucal_add(    UCalendar*            cal,
 * @see ucal_add
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_roll(        UCalendar*        cal,
             UCalendarDateFields     field,
             int32_t            amount,
@@ -626,7 +626,7 @@ ucal_roll(        UCalendar*        cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ucal_get(    const    UCalendar*            cal,
             UCalendarDateFields        field,
             UErrorCode*            status );
@@ -646,7 +646,7 @@ ucal_get(    const    UCalendar*            cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_set(    UCalendar*            cal,
         UCalendarDateFields        field,
         int32_t                value);
@@ -666,7 +666,7 @@ ucal_set(    UCalendar*            cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2 
 ucal_isSet(    const    UCalendar*        cal,
             UCalendarDateFields    field);
 
@@ -684,7 +684,7 @@ ucal_isSet(    const    UCalendar*        cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_clearField(    UCalendar*        cal,
             UCalendarDateFields     field);
 
@@ -698,7 +698,7 @@ ucal_clearField(    UCalendar*        cal,
 * @see ucal_clearField
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucal_clear(UCalendar* calendar);
 
 /** Possible limit values for a UCalendar 
@@ -736,7 +736,7 @@ typedef enum UCalendarLimitType UCalendarLimitType;
 * @return The requested value.
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ucal_getLimit(    const    UCalendar*              cal,
             UCalendarDateFields     field,
             UCalendarLimitType      type,

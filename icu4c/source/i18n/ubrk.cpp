@@ -14,7 +14,7 @@
 
 U_NAMESPACE_USE
 
-U_CAPI UBreakIterator*
+U_CAPI UBreakIterator* U_EXPORT2
 ubrk_open(UBreakIteratorType type,
       const char *locale,
       const UChar *text,
@@ -67,7 +67,7 @@ ubrk_open(UBreakIteratorType type,
   return (UBreakIterator*)result;
 }
 
-U_CAPI UBreakIterator*
+U_CAPI UBreakIterator* U_EXPORT2
 ubrk_openRules(const UChar *rules,
            int32_t rulesLength,
            const UChar *text,
@@ -79,7 +79,7 @@ ubrk_openRules(const UChar *rules,
   return 0;
 }
 
-U_CAPI UBreakIterator *
+U_CAPI UBreakIterator * U_EXPORT2
 ubrk_safeClone(
           const UBreakIterator *bi,
           void *stackBuffer,
@@ -97,7 +97,7 @@ ubrk_safeClone(
         createBufferClone(stackBuffer, *pBufferSize, *status));
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ubrk_close(UBreakIterator *bi)
 {
 
@@ -107,7 +107,7 @@ ubrk_close(UBreakIterator *bi)
     }
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ubrk_setText(UBreakIterator* bi,
              const UChar*    text,
              int32_t         textLength,
@@ -133,42 +133,42 @@ ubrk_setText(UBreakIterator* bi,
   }
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_current(const UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->current();
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_next(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->next();
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_previous(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->previous();
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_first(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->first();
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_last(UBreakIterator *bi)
 {
 
   return ((BreakIterator*)bi)->last();
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_preceding(UBreakIterator *bi,
            UTextOffset offset)
 {
@@ -176,7 +176,7 @@ ubrk_preceding(UBreakIterator *bi,
   return ((BreakIterator*)bi)->preceding(offset);
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ubrk_following(UBreakIterator *bi,
            UTextOffset offset)
 {
@@ -184,14 +184,14 @@ ubrk_following(UBreakIterator *bi,
   return ((BreakIterator*)bi)->following(offset);
 }
 
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 ubrk_getAvailable(int32_t index)
 {
 
   return uloc_getAvailable(index);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ubrk_countAvailable()
 {
 

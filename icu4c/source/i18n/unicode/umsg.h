@@ -196,7 +196,7 @@
  * @see u_parseMessage
  * @draft  should this just be usprintf?
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 u_formatMessage(const char  *locale,
                  const UChar *pattern,
                 int32_t     patternLength,
@@ -222,7 +222,7 @@ u_formatMessage(const char  *locale,
  * output was truncated.
  * @see u_parseMessage
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 u_vformatMessage(   const char  *locale,
                     const UChar *pattern,
                     int32_t     patternLength,
@@ -247,7 +247,7 @@ u_vformatMessage(   const char  *locale,
  * @see u_formatMessage
  * @draft
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 u_parseMessage( const char   *locale,
                 const UChar  *pattern,
                 int32_t      patternLength,
@@ -271,7 +271,7 @@ u_parseMessage( const char   *locale,
  * specified in pattern.
  * @see u_formatMessage
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 u_vparseMessage(const char  *locale,
                 const UChar *pattern,
                 int32_t     patternLength,
@@ -300,7 +300,7 @@ u_vparseMessage(const char  *locale,
  * @see u_parseMessage
  * @draft  
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 u_formatMessageWithError(   const char    *locale,
                             const UChar   *pattern,
                             int32_t       patternLength,
@@ -328,7 +328,7 @@ u_formatMessageWithError(   const char    *locale,
  * @return The total buffer size needed; if greater than resultLength, the
  * output was truncated.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 u_vformatMessageWithError(  const char   *locale,
                             const UChar  *pattern,
                             int32_t      patternLength,
@@ -356,7 +356,7 @@ u_vformatMessageWithError(  const char   *locale,
 * @see u_formatMessage
 * @draft
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 u_parseMessageWithError(const char  *locale,
                         const UChar *pattern,
                         int32_t     patternLength,
@@ -383,7 +383,7 @@ u_parseMessageWithError(const char  *locale,
 * specified in pattern.
 * @see u_formatMessage
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 u_vparseMessageWithError(const char  *locale,
                          const UChar *pattern,
                          int32_t     patternLength,
@@ -410,7 +410,7 @@ typedef void* UMessageFormat;
  *                      messages, or 0 if an error occurred. 
  * @draft
  */
-U_CAPI UMessageFormat*
+U_CAPI UMessageFormat* U_EXPORT2 
 umsg_open(  const UChar     *pattern,
             int32_t         patternLength,
             const  char     *locale,
@@ -423,7 +423,7 @@ umsg_open(  const UChar     *pattern,
  * @param fmt The formatter to close.
  * @draft
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 umsg_close(UMessageFormat* format);
 
 /**
@@ -434,7 +434,7 @@ umsg_close(UMessageFormat* format);
  * @return A pointer to a UDateFormat identical to fmt.
  * @draft
  */
-U_CAPI UMessageFormat
+U_CAPI UMessageFormat U_EXPORT2 
 umsg_clone(const UMessageFormat *fmt,
            UErrorCode *status);
 /**
@@ -443,7 +443,7 @@ umsg_clone(const UMessageFormat *fmt,
  * @param fmt The formatter to set
  * @param locale The locale the formatter should use.
  */
-U_CAPI void 
+U_CAPI void  U_EXPORT2 
 umsg_setLocale(UMessageFormat *fmt,
                const char* locale);
 
@@ -453,7 +453,7 @@ umsg_setLocale(UMessageFormat *fmt,
  * @param The formatter to querry
  * @draft
  */
-U_CAPI const char* 
+U_CAPI const char*  U_EXPORT2 
 umsg_getLocale(UMessageFormat *fmt);
 
 /**
@@ -468,7 +468,7 @@ umsg_getLocale(UMessageFormat *fmt);
  *                      set to a failure result.
  * @draft
  */
-U_CAPI void 
+U_CAPI void  U_EXPORT2 
 umsg_applyPattern( UMessageFormat *fmt,
                    const UChar* pattern,
                    int32_t patternLength,
@@ -485,7 +485,7 @@ umsg_applyPattern( UMessageFormat *fmt,
  *                     set to a failure result.   
  * @draft
  */
-U_CAPI int32_t 
+U_CAPI int32_t  U_EXPORT2 
 umsg_toPattern(UMessageFormat *fmt,
                UChar* result, 
                int32_t resultLength,
@@ -506,7 +506,7 @@ umsg_toPattern(UMessageFormat *fmt,
  *                      the output was truncated.
  * @draft
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 umsg_format(    UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
@@ -527,7 +527,7 @@ umsg_format(    UMessageFormat *fmt,
  * @return             The total buffer size needed; if greater than resultLength, 
  *                     the output was truncated.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 umsg_vformat(   UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
@@ -548,7 +548,7 @@ umsg_vformat(   UMessageFormat *fmt,
  *                      specified in pattern.
  * @draft
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 umsg_parse( UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,
@@ -570,7 +570,7 @@ umsg_parse( UMessageFormat *fmt,
  *                      specified in pattern.
  * @see u_formatMessage
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 umsg_vparse(UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,

@@ -52,7 +52,7 @@ u_formatMessage(const char  *locale,
   return actLen;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_vformatMessage(   const char  *locale,
                     const UChar *pattern,
                     int32_t     patternLength,
@@ -93,7 +93,7 @@ u_formatMessageWithError(const char *locale,
   return actLen;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_vformatMessageWithError(  const char  *locale,
                             const UChar *pattern,
                             int32_t     patternLength,
@@ -138,7 +138,7 @@ u_parseMessage( const char   *locale,
 
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 u_vparseMessage(const char  *locale,
                 const UChar *pattern,
                 int32_t     patternLength,
@@ -175,7 +175,7 @@ u_parseMessageWithError(const char  *locale,
   // end vararg processing
   va_end(ap);
 }
-U_CAPI void
+U_CAPI void U_EXPORT2
 u_vparseMessageWithError(const char  *locale,
                          const UChar *pattern,
                          int32_t     patternLength,
@@ -197,7 +197,7 @@ u_vparseMessageWithError(const char  *locale,
 /////////////////////////////////////////////////////////////////////////////////
 
 
-U_CAPI UMessageFormat*
+U_CAPI UMessageFormat* U_EXPORT2
 umsg_open(  const UChar     *pattern,
             int32_t         patternLength,
             const  char     *locale,
@@ -230,13 +230,13 @@ umsg_open(  const UChar     *pattern,
     return retVal;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 umsg_close(UMessageFormat* format)
 {
     delete (MessageFormat*) format;
 }
 
-U_CAPI UMessageFormat
+U_CAPI UMessageFormat U_EXPORT2
 umsg_clone(const UMessageFormat *fmt,
            UErrorCode *status)
 {
@@ -248,19 +248,19 @@ umsg_clone(const UMessageFormat *fmt,
     return retVal;    
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 umsg_setLocale(UMessageFormat *fmt, const char* locale)
 {
     ((MessageFormat*)fmt)->setLocale(Locale(locale));   
 }
 
-U_CAPI const char* 
+U_CAPI const char*  U_EXPORT2
 umsg_getLocale(UMessageFormat *fmt)
 {
     return ((MessageFormat*)fmt)->getLocale().getName();
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 umsg_applyPattern(UMessageFormat *fmt,
                            const UChar* pattern,
                            int32_t patternLength,
@@ -276,7 +276,7 @@ umsg_applyPattern(UMessageFormat *fmt,
   ((MessageFormat*)fmt)->applyPattern(UnicodeString(pattern,patternLength),*parseError,*status);  
 }
 
-U_CAPI int32_t 
+U_CAPI int32_t  U_EXPORT2
 umsg_toPattern(UMessageFormat *fmt,
                UChar* result, 
                int32_t resultLength,
@@ -315,7 +315,7 @@ umsg_format(    UMessageFormat *fmt,
     return actLen;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 umsg_vformat(   UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
@@ -411,7 +411,7 @@ umsg_parse( UMessageFormat *fmt,
     va_end(ap);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 umsg_vparse(UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,

@@ -197,7 +197,7 @@ typedef enum UBreakIteratorType UBreakIteratorType;
  * @see ubrk_openRules
  * @stable
  */
-U_CAPI UBreakIterator*
+U_CAPI UBreakIterator* U_EXPORT2 
 ubrk_open(UBreakIteratorType type,
       const char *locale,
       const UChar *text,
@@ -216,7 +216,7 @@ ubrk_open(UBreakIteratorType type,
  * @see ubrk_open
  * @stable
  */
-U_CAPI UBreakIterator*
+U_CAPI UBreakIterator* U_EXPORT2 
 ubrk_openRules(const UChar *rules,
            int32_t rulesLength,
            const UChar *text,
@@ -241,7 +241,7 @@ ubrk_openRules(const UChar *rules,
  */
 
 
-U_CAPI UBreakIterator *
+U_CAPI UBreakIterator * U_EXPORT2 
 ubrk_safeClone(
           const UBreakIterator *bi,
           void *stackBuffer,
@@ -256,14 +256,14 @@ ubrk_safeClone(
 * @param bi The break iterator to close.
  * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ubrk_close(UBreakIterator *bi);
 
 /**
  * Sets an existing iterator to point to a new piece of text
  * @stable
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ubrk_setText(UBreakIterator* bi,
              const UChar*    text,
              int32_t         textLength,
@@ -277,7 +277,7 @@ ubrk_setText(UBreakIterator* bi,
  * \Ref{ubrk_first}, or \Ref{ubrk_last}.
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_current(const UBreakIterator *bi);
 
 /**
@@ -289,7 +289,7 @@ ubrk_current(const UBreakIterator *bi);
  * @see ubrk_previous
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_next(UBreakIterator *bi);
 
 /**
@@ -301,7 +301,7 @@ ubrk_next(UBreakIterator *bi);
  * @see ubrk_next
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_previous(UBreakIterator *bi);
 
 /**
@@ -312,7 +312,7 @@ ubrk_previous(UBreakIterator *bi);
  * @see ubrk_last
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_first(UBreakIterator *bi);
 
 /**
@@ -325,7 +325,7 @@ ubrk_first(UBreakIterator *bi);
  * @see ubrk_first
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_last(UBreakIterator *bi);
 
 /**
@@ -337,7 +337,7 @@ ubrk_last(UBreakIterator *bi);
  * @see ubrk_following
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_preceding(UBreakIterator *bi,
            UTextOffset offset);
 
@@ -350,7 +350,7 @@ ubrk_preceding(UBreakIterator *bi,
  * @see ubrk_preceding
  * @stable
  */
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2 
 ubrk_following(UBreakIterator *bi,
            UTextOffset offset);
 
@@ -363,7 +363,7 @@ ubrk_following(UBreakIterator *bi,
 * @see ubrk_countAvailable
 * @stable
 */
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2 
 ubrk_getAvailable(int32_t index);
 
 /**
@@ -374,7 +374,7 @@ ubrk_getAvailable(int32_t index);
 * @see ubrk_getAvailable
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 ubrk_countAvailable(void);
 
 #endif

@@ -176,7 +176,7 @@ utrans_openRules(const char* id,
 }
 #endif
 
-U_CAPI UTransliterator*
+U_CAPI UTransliterator* U_EXPORT2
 utrans_open(const char* id,
             UTransDirection dir,
             const UChar* rules,         /* may be Null */
@@ -226,7 +226,7 @@ utrans_open(const char* id,
     }
 }
 
-U_CAPI UTransliterator*
+U_CAPI UTransliterator* U_EXPORT2
 utrans_openInverse(const UTransliterator* trans,
                    UErrorCode* status) {
 
@@ -238,7 +238,7 @@ utrans_openInverse(const UTransliterator* trans,
     return result;
 }
 
-U_CAPI UTransliterator*
+U_CAPI UTransliterator* U_EXPORT2
 utrans_clone(const UTransliterator* trans,
              UErrorCode* status) {
 
@@ -256,19 +256,19 @@ utrans_clone(const UTransliterator* trans,
     return (UTransliterator*) t;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_close(UTransliterator* trans) {
     delete (Transliterator*) trans;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 utrans_getID(const UTransliterator* trans,
              char* buf,
              int32_t bufCapacity) {
     return ((Transliterator*) trans)->getID().extract(0, 0x7fffffff, buf, bufCapacity, "");
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_register(UTransliterator* adoptedTrans,
                 UErrorCode* status) {
     utrans_ENTRY(status);
@@ -276,13 +276,13 @@ utrans_register(UTransliterator* adoptedTrans,
     Transliterator::registerInstance((Transliterator*) adoptedTrans);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_unregister(const char* id) {
     UnicodeString ID(id, ""); // use invariant converter
     Transliterator::unregister(ID);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_setFilter(UTransliterator* trans,
                  const UChar* filterPattern,
                  int32_t filterPatternLen,
@@ -302,12 +302,12 @@ utrans_setFilter(UTransliterator* trans,
     ((Transliterator*) trans)->adoptFilter(filter);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 utrans_countAvailableIDs(void) {
     return Transliterator::countAvailableIDs();
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 utrans_getAvailableID(int32_t index,
                       char* buf, // may be NULL
                       int32_t bufCapacity) {
@@ -318,7 +318,7 @@ utrans_getAvailableID(int32_t index,
  * Transliteration API
  ********************************************************************/
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_trans(const UTransliterator* trans,
              UReplaceable* rep,
              UReplaceableCallbacks* repFunc,
@@ -338,7 +338,7 @@ utrans_trans(const UTransliterator* trans,
     *limit = ((Transliterator*) trans)->transliterate(r, start, *limit);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_transIncremental(const UTransliterator* trans,
                         UReplaceable* rep,
                         UReplaceableCallbacks* repFunc,
@@ -357,7 +357,7 @@ utrans_transIncremental(const UTransliterator* trans,
     ((Transliterator*) trans)->transliterate(r, *pos, *status);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_transUChars(const UTransliterator* trans,
                    UChar* text,
                    int32_t* textLength,
@@ -388,7 +388,7 @@ utrans_transUChars(const UTransliterator* trans,
     }
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 utrans_transIncrementalUChars(const UTransliterator* trans,
                               UChar* text,
                               int32_t* textLength,

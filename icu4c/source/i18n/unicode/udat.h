@@ -173,7 +173,7 @@ typedef enum UDateFormatStyle UDateFormatStyle;
  * an error occurred.
  * @draft
  */
-U_CAPI UDateFormat*
+U_CAPI UDateFormat* U_EXPORT2 
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
           const char        *locale,
@@ -190,7 +190,7 @@ udat_open(UDateFormatStyle  timeStyle,
 * @param fmt The formatter to close.
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_close(UDateFormat* format);
 
 /**
@@ -201,7 +201,7 @@ udat_close(UDateFormat* format);
  * @return A pointer to a UDateFormat identical to fmt.
  * @stable
  */
-U_CAPI UDateFormat*
+U_CAPI UDateFormat* U_EXPORT2 
 udat_clone(const UDateFormat *fmt,
        UErrorCode *status);
 
@@ -224,7 +224,7 @@ udat_clone(const UDateFormat *fmt,
 * @see UFieldPosition
 * @draft
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 udat_format(    const    UDateFormat*    format,
                         UDate           dateToFormat,
                         UChar*          result,
@@ -246,7 +246,7 @@ udat_format(    const    UDateFormat*    format,
 * @see udat_format
 * @draft
 */
-U_CAPI UDate
+U_CAPI UDate U_EXPORT2 
 udat_parse(    const    UDateFormat*    format,
             const    UChar*          text,
                     int32_t         textLength,
@@ -262,7 +262,7 @@ udat_parse(    const    UDateFormat*    format,
 * @see udat_setLenient
 * @stable
 */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2 
 udat_isLenient(const UDateFormat* fmt);
 
 /**
@@ -274,7 +274,7 @@ udat_isLenient(const UDateFormat* fmt);
 * @see dat_isLenient
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_setLenient(    UDateFormat*    fmt,
                     UBool          isLenient);
 
@@ -287,7 +287,7 @@ udat_setLenient(    UDateFormat*    fmt,
 * @see udat_setCalendar
 * @stable
 */
-U_CAPI const UCalendar*
+U_CAPI const UCalendar* U_EXPORT2 
 udat_getCalendar(const UDateFormat* fmt);
 
 /**
@@ -299,7 +299,7 @@ udat_getCalendar(const UDateFormat* fmt);
 * @see udat_setCalendar
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_setCalendar(            UDateFormat*    fmt,
                     const   UCalendar*      calendarToSet);
 
@@ -312,7 +312,7 @@ udat_setCalendar(            UDateFormat*    fmt,
 * @see udat_setNumberFormat
 * @stable
 */
-U_CAPI const UNumberFormat*
+U_CAPI const UNumberFormat* U_EXPORT2 
 udat_getNumberFormat(const UDateFormat* fmt);
 
 /**
@@ -324,7 +324,7 @@ udat_getNumberFormat(const UDateFormat* fmt);
 * @see udat_getNumberFormat
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_setNumberFormat(            UDateFormat*    fmt,
                         const   UNumberFormat*  numberFormatToSet);
 
@@ -337,7 +337,7 @@ udat_setNumberFormat(            UDateFormat*    fmt,
 * @see udat_countAvailable
 * @stable
 */
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2 
 udat_getAvailable(int32_t index);
 
 /**
@@ -348,7 +348,7 @@ udat_getAvailable(int32_t index);
 * @see udat_getAvailable
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 udat_countAvailable(void);
 
 /**
@@ -361,7 +361,7 @@ udat_countAvailable(void);
 * @see udat_Set2DigitYearStart
 * @stable
 */
-U_CAPI UDate
+U_CAPI UDate U_EXPORT2 
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
                                     UErrorCode      *status);
 
@@ -375,7 +375,7 @@ udat_get2DigitYearStart(    const   UDateFormat     *fmt,
 * @see udat_Set2DigitYearStart
 * @stable
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_set2DigitYearStart(    UDateFormat     *fmt,
                             UDate           d,
                             UErrorCode      *status);
@@ -392,7 +392,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 * @see udat_applyPattern
 * @draft
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 udat_toPattern(    const   UDateFormat     *fmt,
                         UBool          localized,
                         UChar           *result,
@@ -409,7 +409,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 * @see udat_toPattern
 * @draft
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_applyPattern(            UDateFormat     *format,
                             UBool          localized,
                     const   UChar           *pattern,
@@ -456,7 +456,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * @see udat_setSymbols
 * @draft
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 udat_getSymbols(const   UDateFormat             *fmt,
                         UDateFormatSymbolType   type,
                         int32_t                 index,
@@ -476,7 +476,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 * @see udat_setSymbols
 * @stable
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 udat_countSymbols(    const    UDateFormat                *fmt,
                             UDateFormatSymbolType    type);
 
@@ -496,7 +496,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @see udat_countSymbols
 * @draft
 */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 udat_setSymbols(    UDateFormat             *format,
                     UDateFormatSymbolType   type,
                     int32_t                 index,
