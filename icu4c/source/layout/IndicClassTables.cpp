@@ -290,7 +290,8 @@ static const IndicClassTable *indicClassTables[] = {
     NULL,            /* 'osma' (OSMANYA) */
     NULL,            /* 'shaw' (SHAVIAN) */
     NULL,            /* 'tale' (TAI_LE) */
-    NULL             /* 'ugar' (UGARITIC) */
+    NULL,            /* 'ugar' (UGARITIC) */
+    NULL             /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
