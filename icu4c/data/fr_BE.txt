@@ -8,8 +8,8 @@
 fr_BE {
     Version{ "1.0" }
     CurrencyElements { 
-            "FB",
-            "BEF",
+            "\u20AC",
+            "EUR",
             ",",
     }
     DateTimePatterns { 

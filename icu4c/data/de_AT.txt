@@ -7,8 +7,8 @@
 
 de_AT {
     CurrencyElements { 
-            "\u00F6S",
-            "ATS",
+            "\u20AC",
+            "EUR",
             ",",
     }
     DateTimeElements { 

@@ -7,8 +7,8 @@
 
 fi_FI {
     CurrencyElements { 
-            "mk",
-            "FIM",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "fi_FI" }

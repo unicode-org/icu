@@ -8,8 +8,8 @@
 pt_PT {
     Version{ "1.0" }
     CurrencyElements { 
-            "Esc.",
-            "PTE",
+            "\u20AC",
+            "EUR",
             "$",
     }
     LocaleString { "pt_PT" }

@@ -12,11 +12,6 @@ en_BE {
 		Override { "FALSE" }
 		Sequence { "[backwards 2]" }
 	}
-    CurrencyElements {
-            "BF",
-            "BEF ",
-            ",",
-    }
     DateTimePatterns {
             "H' h 'mm' min 'ss' s 'z",
             "H:mm:ss z",
@@ -42,10 +37,16 @@ en_BE {
             "\u221E",
             "\uFFFD",
     }
-    NumberPatterns {
+    ShortCountry { "BEL" }
+    CurrencyElements { 
+            "\u20AC",
+            "EUR",
+            ",",
+    }
+
+    NumberPatterns { 
             "#,##0.###;-#,##0.###",
-            "#,##0.00 \u00a4;-#,##0.00 \u00a4",
+            "#,##0.0000\u00A4;-\u00A4#,##0.0000",
             "#,##0%",
     }
-    ShortCountry { "BEL" }
 }

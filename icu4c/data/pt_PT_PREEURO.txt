@@ -5,19 +5,10 @@
 // *
 // *******************************************************************************
 
-pt_PT {
-    Version{ "1.0" }
+pt_PT_PREEURO {
     CurrencyElements { 
-            "\u20AC",
-            "EUR",
+            "Esc.",
+            "PTE",
             "$",
     }
-    LocaleString { "pt_PT" }
-    NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "#,##0 \u00A4;-#,##0 \u00A4",
-            "#,##0%",
-    }
-    ShortCountry { "PRT" }
-    LocaleID { "0816" }
 }

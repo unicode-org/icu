@@ -6,13 +6,8 @@
 // *******************************************************************************
 
 eu_ES {
-    // /* Discarding duplicate data for tag: AmPmMarkers */
     Version { "x0.0" }
-    CurrencyElements {
-            "Pts",
-            "ESP",
-            ",",
-    }
+    // /* Discarding duplicate data for tag: AmPmMarkers */
     DateTimePatterns {
             "h:mm:ss a",
             "h:mm:ss a",
@@ -24,11 +19,15 @@ eu_ES {
             "yy'-'MM'-'dd",
             "{1} {0}",
     }
-
-    NumberPatterns {
-            "#,#0.##;-#,#0.##",
-            "\u00a4 #,##0.#;-\u00a4 #,##0.#",
-            "#,#0%",
+    CurrencyElements { 
+            "\u20AC",
+            "EUR",
+            ",",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
     }
     LocaleID{ "042D"}
 }

@@ -7,8 +7,8 @@
 
 fr_LU {
     CurrencyElements { 
-            "F",
-            "LUF",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "fr_LU" }

@@ -8,10 +8,16 @@
 gl_ES {
     Version { "x0.1" }
     CurrencyElements { 
-            "Pta",
-            "ESP",
+            "\u20AC",
+            "EUR",
             ",",
     }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+
     DateTimePatterns { 
             "h:mm:ss a",
             "h:mm:ss a",
@@ -22,11 +28,6 @@ gl_ES {
             "MMM dd,yy",
             "dd/MM/yy",
             "{1} {0}",
-    }
-    NumberPatterns { 
-            "#,#0.##;-#,#0.##",
-            "\u00a4 #,##0.#;-\u00a4 #,##0.#",
-            "#,#0%",
     }
 
 }

@@ -6,15 +6,15 @@
 // *******************************************************************************
 
 es_ES {
+    LocaleString { "es_ES" }
     CurrencyElements { 
-            "Pts",
-            "ESP",
+            "\u20AC",
+            "EUR",
             ",",
     }
-    LocaleString { "es_ES" }
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
-            "#,##0 \u00A4;-#,##0 \u00A4",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
             "#,##0%",
     }
     ShortCountry { "ESP" }
