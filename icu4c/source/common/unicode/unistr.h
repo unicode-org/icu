@@ -14,6 +14,7 @@
 *   04/20/99    stephen     Overhauled per 4/16 code review.
 *   11/18/99    aliu        Made to inherit from Replaceable.  Added method
 *                           handleReplaceBetween(); other methods unchanged.
+*   06/25/01    grhoten     Remove dependency on iostream.
 ******************************************************************************
 */
 
@@ -26,24 +27,11 @@
 
 class Locale;               // unicode/locid.h
 class UCharReference;
-class UnicodeStringStreamer;// unicode/unistrm.h
 class UnicodeConverter;     // unicode/convert.h
 struct UConverter;          // unicode/ucnv.h
+class UnicodeStreamer;      // unicode/ustream.h
 
-// for unistrm.h
-/**
- * Write the contents of a UnicodeString to an ostream. This functions writes
- * the characters in a UnicodeString to an ostream. The UChars in the
- * UnicodeString are truncated to char, leading to undefined results with
- * anything not in the Latin1 character set.
- */
-#if U_IOSTREAM_SOURCE >= 199711
-#include <iostream>
-U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
-#elif U_IOSTREAM_SOURCE >= 198506
-#include <iostream.h>
-U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
-#endif
+/* The <iostream> include has been moved to unicode/ustream.h */
 
 /**
  * Unicode String literals in C++.
@@ -2415,15 +2403,10 @@ private:
 
   static UConverter *fgDefaultConverter;
 
-  friend class UnicodeStringStreamer;
   friend class UnicodeConverter;
   friend class Normalizer;
 
-#if U_IOSTREAM_SOURCE >= 199711
-  friend U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
-#elif U_IOSTREAM_SOURCE >= 198506
-  friend U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
-#endif
+  friend class UnicodeStreamer;
 
   friend class StringCharacterIterator;
 
