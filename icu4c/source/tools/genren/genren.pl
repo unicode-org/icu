@@ -17,8 +17,20 @@
 #*  Run on UNIX platforms (linux) in order to catch all the exports
 
 $headername = 'urename.h';
-$U_ICU_VERSION_SUFFIX = "_1_9";
 
+$path = substr($0, 0, rindex($0, "/")+1)."../../common/unicode/uversion.h";
+
+(-e $path) || die "Cannot find uversion.h";
+
+open(UVERSION, $path);
+while(<UVERSION>) {
+    if(/\#define U_ICU_VERSION_SUFFIX/) {
+        chop;
+        s/\#define U_ICU_VERSION_SUFFIX //;
+        $U_ICU_VERSION_SUFFIX = "$_";
+        last;
+    }
+}
 
 while($ARGV[0] =~ /^-/) { # detects whether there are any arguments
     $_ = shift @ARGV;      # extracts the argument for processing
