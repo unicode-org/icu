@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-ptx,v 1.16 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-ptx,v 1.17 2002/01/04 23:48:43 yves-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -53,13 +53,13 @@ STATIC_O = ao
 
 ## Dependency rules
 %.d : $(srcdir)/%.c
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
 		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
 		[ -s $@ ] || rm -f $@'
 
 %.d : $(srcdir)/%.cpp
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 	@$(SHELL) -ec '$(GEN_DEPS.cc) -o $@ $< \
 		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
 		[ -s $@ ] || rm -f $@'

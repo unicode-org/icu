@@ -97,14 +97,14 @@ ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RE
 CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES) *.o *.c thaidict.brk
 
 icudata.lst: $(SRCLISTDEPS)
-	@echo Generating $@ list of data files
+	@echo "generating $@ (list of data files)"
 	@-$(RMV) $@
 	@for file in $(ALL_FILES); do \
 	  echo $$file >> $@; \
 	done;
 
 $(TESTOBJDATADIR)/testdata.lst: $(SRCLISTDEPS)
-	@echo Generating $@ list of data files
+	@echo "generating $@ (list of data files)"
 	@-$(RMV) $@
 	@for file in $(TEST_RES_FILES) $(TEST_DAT_FILES); do \
 	  echo $$file >> $@; \
@@ -119,17 +119,13 @@ endif
 #
 
 build-data: $(ALL_FILES) icudata.lst  $(OS390LIST)
-	@echo "ICU data files are up to date."
 
 clean-local:
-	@echo '#' removing built files: .brk .dat .cnv .res ...
-	@$(RMV) $(CLEANFILES)
-	@echo Cleaning up..
+	$(RMV) $(CLEANFILES)
 
 #$(ALL_TEST_FILES)
 
-build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst ja_data.bin
-	@echo "ICU test data files are up to date."
+build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst $(TESTOBJDATADIR)/ja_data.res
 
 # Now, sections for building each kind of data.
 
@@ -138,45 +134,37 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst ja_data.bin
 
 # uprops.dat
 uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT)
-	@echo Creating uprops.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
 # unorm.dat
 unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
-	@echo Creating unorm.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
 # ucadata.dat
 ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT)
-	@echo Creating ucadata.dat and invuca.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d .
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d .
 
 # unames.dat
 unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
-	@echo Creating unames.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennames/gennames -d . $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennames/gennames -d . $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
 
 # cnvalias.dat
 cnvalias.dat: $(SRCDATADIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
-	@echo Creating $@
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d . $(SRCDATADIR)/convrtrs.txt
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d . $(SRCDATADIR)/convrtrs.txt
 
 # tz.dat
 tz.dat: $(SRCDATADIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
-	@echo Creating $@
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentz/gentz -d . $(SRCDATADIR)/timezone.txt
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentz/gentz -d . $(SRCDATADIR)/timezone.txt
 
 # test.dat
 $(TESTOBJDATADIR)/test.dat: $(TOOLDIR)/gentest/gentest$(EXEEXT)
-	@echo Creating $@
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTOBJDATADIR) 
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTOBJDATADIR) 
 
 ####################################################    BRK
 # BRK FILES
 
 thaidict.brk: $(SRCDATADIR)/thaidict.brk
-	@echo $@
-	@$(RMV) $@ && ln -s $< $@
+	$(RMV) $@ && ln -s $< $@
 
 # copy the right endianness
 
@@ -191,24 +179,23 @@ endif
 ####################################################    CNV
 # CNV FILES
 %.cnv: $(SRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(SRCDATADIR)/$(<F)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(SRCDATADIR)/$(<F)
 
 %.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(TESTSRCDATADIR)/$(<F)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(TESTSRCDATADIR)/$(<F)
 
 ####################################################    RES
 # RES FILES
 $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
-ja_data.bin:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	echo  Creating $@
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR)  -eISO_2022_JP -d $(TESTOBJDATADIR) $(<F) >/dev/null  
+$(TESTOBJDATADIR)/ja_data.res:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR)  -eISO_2022_JP -d $(TESTOBJDATADIR) $(<F) >/dev/null  
 
 
 
 %.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) ucadata.dat uprops.dat unorm.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(SRCDATADIR) -d . $(<F)
+	ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(SRCDATADIR) -d . $(<F)
 
 ###################################################################
 
@@ -223,7 +210,7 @@ UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
 ALLFILES390=uprops.dat unorm.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
 
 icudata390.lst:  $(SRCLISTDEPS)
-	@echo Generating $@ list of 390 data files
+	@echo "generating $@ (list of 390 data files)"
 	@-$(RMV) $@
 	@for file in $(ALLFILES390); do \
 	  echo $$file >> $@; \

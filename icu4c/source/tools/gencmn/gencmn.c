@@ -176,10 +176,12 @@ main(int argc, char* argv[]) {
         }
     }
 
-    if(sourceTOC) {
-        printf("Generating %s_%s.c Table of Contents source file\n", options[6].value, options[7].value);
-    } else {
-        printf("Generating %s.%s common data file with Table of Contents\n", options[6].value, options[7].value);
+    if (options[2].doesOccur) {
+        if(sourceTOC) {
+            printf("Generating %s_%s.c Table of Contents source file\n", options[6].value, options[7].value);
+        } else {
+            printf("Generating %s.%s common data file with Table of Contents\n", options[6].value, options[7].value);
+        }
     }
 
     /* read the list of files and get their lengths */
@@ -210,7 +212,7 @@ main(int argc, char* argv[]) {
     }
 
     if(fileCount==0) {
-        printf("gencmn: no files listed in %s\n", argc==2 ? "<stdin>" : argv[2]);
+        fprintf(stderr, "gencmn: no files listed in %s\n", argc==2 ? "<stdin>" : argv[2]);
         return 0;
     }
 

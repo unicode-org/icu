@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.14 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-os400,v 1.15 2002/01/04 23:48:43 yves-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -101,12 +101,12 @@ LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
 #		[ -s $@ ] || rm -f $@ ; rm -f $<'
 
 %.u : $(srcdir)/%.c
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 #	@$(SHELL) -ec 'touch            $*.u  > /dev/null 2>&1'
 #	@$(SHELL) -ec '$(GEN_DEPS.c) -f $*.u $< > /dev/null 2>&1'
 
 %.u : $(srcdir)/%.cpp
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 #	@$(SHELL) -ec 'touch              $*.u  > /dev/null 2>&1'
 #	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
 
