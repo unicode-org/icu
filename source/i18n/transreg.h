@@ -38,7 +38,7 @@ class UnicodeString;
  * Why all the shenanigans?  To prevent circular calls between
  * the registry code and the transliterator code that deadlocks.
  */
-class TransliteratorAlias : public UObject {
+class TransliteratorAlias : public UMemory {
  public:
     /**
      * Construct a simple alias.
@@ -62,20 +62,6 @@ class TransliteratorAlias : public UObject {
      */
     Transliterator* create(UParseError&, UErrorCode&);
     
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
  private:
     // We actually come in two flavors:
     // 1. Simple alias
@@ -92,11 +78,8 @@ class TransliteratorAlias : public UObject {
     const UnicodeSet* compoundFilter; // alias
     int32_t idSplitPoint;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    TransliteratorAlias(const TransliteratorAlias &other); // forbid copying of this class
+    TransliteratorAlias &operator=(const TransliteratorAlias &other); // forbid copying of this class
 };
 
 
@@ -118,7 +101,7 @@ class TransliteratorAlias : public UObject {
  *
  * @author Alan Liu
  */
-class TransliteratorRegistry : public UObject {
+class TransliteratorRegistry : public UMemory {
 
  public:
 
@@ -299,20 +282,6 @@ class TransliteratorRegistry : public UObject {
                                        const UnicodeString& target,
                                        UnicodeString& result);
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
  private:
 
     //----------------------------------------------------------------
@@ -393,11 +362,8 @@ class TransliteratorRegistry : public UObject {
      */
     UVector availableIDs;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    TransliteratorRegistry(const TransliteratorRegistry &other); // forbid copying of this class
+    TransliteratorRegistry &operator=(const TransliteratorRegistry &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END
