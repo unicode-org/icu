@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2003/06/06 20:54:00 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/06/11 22:27:10 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -748,272 +748,278 @@ public class CalendarAstronomer {
         return t;
     }
 
-    //-------------------------------------------------------------------------
-    // Alternate Sun Rise/Set
-    // See Duffett-Smith p.93
-    //-------------------------------------------------------------------------
+// Commented out - currently unused. ICU 2.6, Alan
+//    //-------------------------------------------------------------------------
+//    // Alternate Sun Rise/Set
+//    // See Duffett-Smith p.93
+//    //-------------------------------------------------------------------------
+//
+//    // This yields worse results (as compared to USNO data) than getSunRiseSet().
+//    /**
+//     * TODO Make this public when the entire class is package-private.
+//     */
+//    /*public*/ long getSunRiseSet2(boolean rise) {
+//        // 1. Calculate coordinates of the sun's center for midnight
+//        double jd = Math.floor(getJulianDay() - 0.5) + 0.5;
+//        double[] sl = getSunLongitude(jd);
+//        double lambda1 = sl[0];
+//        Equatorial pos1 = eclipticToEquatorial(lambda1, 0);
+//
+//        // 2. Add ... to lambda to get position 24 hours later
+//        double lambda2 = lambda1 + 0.985647*DEG_RAD;
+//        Equatorial pos2 = eclipticToEquatorial(lambda2, 0);
+//
+//        // 3. Calculate LSTs of rising and setting for these two positions
+//        double tanL = Math.tan(fLatitude);
+//        double H = Math.acos(-tanL * Math.tan(pos1.declination));
+//        double lst1r = (PI2 + pos1.ascension - H) * 24 / PI2;
+//        double lst1s = (pos1.ascension + H) * 24 / PI2;
+//               H = Math.acos(-tanL * Math.tan(pos2.declination));
+//        double lst2r = (PI2-H + pos2.ascension ) * 24 / PI2;
+//        double lst2s = (H + pos2.ascension ) * 24 / PI2;
+//        if (lst1r > 24) lst1r -= 24;
+//        if (lst1s > 24) lst1s -= 24;
+//        if (lst2r > 24) lst2r -= 24;
+//        if (lst2s > 24) lst2s -= 24;
+//        
+//        // 4. Convert LSTs to GSTs.  If GST1 > GST2, add 24 to GST2.
+//        double gst1r = lstToGst(lst1r);
+//        double gst1s = lstToGst(lst1s);
+//        double gst2r = lstToGst(lst2r);
+//        double gst2s = lstToGst(lst2s);
+//        if (gst1r > gst2r) gst2r += 24;
+//        if (gst1s > gst2s) gst2s += 24;
+//
+//        // 5. Calculate GST at 0h UT of this date
+//        double t00 = utToGst(0);
+//        
+//        // 6. Calculate GST at 0h on the observer's longitude
+//        double offset = Math.round(fLongitude*12/PI); // p.95 step 6; he _rounds_ to nearest 15 deg.
+//        double t00p = t00 - offset*1.002737909;
+//        if (t00p < 0) t00p += 24; // do NOT normalize
+//        
+//        // 7. Adjust
+//        if (gst1r < t00p) {
+//            gst1r += 24;
+//            gst2r += 24;
+//        }
+//        if (gst1s < t00p) {
+//            gst1s += 24;
+//            gst2s += 24;
+//        }
+//
+//        // 8.
+//        double gstr = (24.07*gst1r-t00*(gst2r-gst1r))/(24.07+gst1r-gst2r);
+//        double gsts = (24.07*gst1s-t00*(gst2s-gst1s))/(24.07+gst1s-gst2s);
+//
+//        // 9. Correct for parallax, refraction, and sun's diameter
+//        double dec = (pos1.declination + pos2.declination) / 2;
+//        double psi = Math.acos(Math.sin(fLatitude) / Math.cos(dec));
+//        double x = 0.830725 * DEG_RAD; // parallax+refraction+diameter
+//        double y = Math.asin(Math.sin(x) / Math.sin(psi)) * RAD_DEG;
+//        double delta_t = 240 * y / Math.cos(dec) / 3600; // hours
+//
+//        // 10. Add correction to GSTs, subtract from GSTr
+//        gstr -= delta_t;
+//        gsts += delta_t;
+//
+//        // 11. Convert GST to UT and then to local civil time
+//        double ut = gstToUt(rise ? gstr : gsts);
+//        //System.out.println((rise?"rise=":"set=") + ut + ", delta_t=" + delta_t);
+//        long midnight = DAY_MS * (time / DAY_MS); // Find UT midnight on this day
+//        return midnight + (long) (ut * 3600000);
+//    }
 
-    // This yields worse results (as compared to USNO data) than getSunRiseSet().
-    /**
-     * TODO Make this public when the entire class is package-private.
-     */
-    /*public*/ long getSunRiseSet2(boolean rise) {
-        // 1. Calculate coordinates of the sun's center for midnight
-        double jd = Math.floor(getJulianDay() - 0.5) + 0.5;
-        double[] sl = getSunLongitude(jd);
-        double lambda1 = sl[0];
-        Equatorial pos1 = eclipticToEquatorial(lambda1, 0);
+// Commented out - currently unused. ICU 2.6, Alan
+//    /**
+//     * Convert local sidereal time to Greenwich sidereal time.
+//     * Section 15.  Duffett-Smith p.21
+//     * @param lst in hours (0..24)
+//     * @return GST in hours (0..24)
+//     */
+//    double lstToGst(double lst) {
+//        double delta = fLongitude * 24 / PI2;
+//        return normalize(lst - delta, 24);
+//    }
+ 
+// Commented out - currently unused. ICU 2.6, Alan
+//    /**
+//     * Convert UT to GST on this date.
+//     * Section 12.  Duffett-Smith p.17
+//     * @param ut in hours
+//     * @return GST in hours
+//     */
+//    double utToGst(double ut) {
+//        return normalize(getT0() + ut*1.002737909, 24);
+//    }
 
-        // 2. Add ... to lambda to get position 24 hours later
-        double lambda2 = lambda1 + 0.985647*DEG_RAD;
-        Equatorial pos2 = eclipticToEquatorial(lambda2, 0);
+// Commented out - currently unused. ICU 2.6, Alan
+//    /**
+//     * Convert GST to UT on this date.
+//     * Section 13.  Duffett-Smith p.18
+//     * @param gst in hours
+//     * @return UT in hours
+//     */
+//    double gstToUt(double gst) {
+//        return normalize(gst - getT0(), 24) * 0.9972695663;
+//    }
 
-        // 3. Calculate LSTs of rising and setting for these two positions
-        double tanL = Math.tan(fLatitude);
-        double H = Math.acos(-tanL * Math.tan(pos1.declination));
-        double lst1r = (PI2 + pos1.ascension - H) * 24 / PI2;
-        double lst1s = (pos1.ascension + H) * 24 / PI2;
-               H = Math.acos(-tanL * Math.tan(pos2.declination));
-        double lst2r = (PI2-H + pos2.ascension ) * 24 / PI2;
-        double lst2s = (H + pos2.ascension ) * 24 / PI2;
-        if (lst1r > 24) lst1r -= 24;
-        if (lst1s > 24) lst1s -= 24;
-        if (lst2r > 24) lst2r -= 24;
-        if (lst2s > 24) lst2s -= 24;
-        
-        // 4. Convert LSTs to GSTs.  If GST1 > GST2, add 24 to GST2.
-        double gst1r = lstToGst(lst1r);
-        double gst1s = lstToGst(lst1s);
-        double gst2r = lstToGst(lst2r);
-        double gst2s = lstToGst(lst2s);
-        if (gst1r > gst2r) gst2r += 24;
-        if (gst1s > gst2s) gst2s += 24;
+// Commented out - currently unused. ICU 2.6, Alan
+//    double getT0() {
+//        // Common computation for UT <=> GST
+//
+//        // Find JD for 0h UT
+//        double jd = Math.floor(getJulianDay() - 0.5) + 0.5;
+//
+//        double s = jd - 2451545.0;
+//        double t = s / 36525.0;
+//        double t0 = 6.697374558 + (2400.051336 + 0.000025862*t)*t;
+//        return t0;
+//    }
 
-        // 5. Calculate GST at 0h UT of this date
-        double t00 = utToGst(0);
-        
-        // 6. Calculate GST at 0h on the observer's longitude
-        double offset = Math.round(fLongitude*12/PI); // p.95 step 6; he _rounds_ to nearest 15 deg.
-        double t00p = t00 - offset*1.002737909;
-        if (t00p < 0) t00p += 24; // do NOT normalize
-        
-        // 7. Adjust
-        if (gst1r < t00p) {
-            gst1r += 24;
-            gst2r += 24;
-        }
-        if (gst1s < t00p) {
-            gst1s += 24;
-            gst2s += 24;
-        }
-
-        // 8.
-        double gstr = (24.07*gst1r-t00*(gst2r-gst1r))/(24.07+gst1r-gst2r);
-        double gsts = (24.07*gst1s-t00*(gst2s-gst1s))/(24.07+gst1s-gst2s);
-
-        // 9. Correct for parallax, refraction, and sun's diameter
-        double dec = (pos1.declination + pos2.declination) / 2;
-        double psi = Math.acos(Math.sin(fLatitude) / Math.cos(dec));
-        double x = 0.830725 * DEG_RAD; // parallax+refraction+diameter
-        double y = Math.asin(Math.sin(x) / Math.sin(psi)) * RAD_DEG;
-        double delta_t = 240 * y / Math.cos(dec) / 3600; // hours
-
-        // 10. Add correction to GSTs, subtract from GSTr
-        gstr -= delta_t;
-        gsts += delta_t;
-
-        // 11. Convert GST to UT and then to local civil time
-        double ut = gstToUt(rise ? gstr : gsts);
-        //System.out.println((rise?"rise=":"set=") + ut + ", delta_t=" + delta_t);
-        long midnight = DAY_MS * (time / DAY_MS); // Find UT midnight on this day
-        return midnight + (long) (ut * 3600000);
-    }
-
-    /**
-     * Convert local sidereal time to Greenwich sidereal time.
-     * Section 15.  Duffett-Smith p.21
-     * @param lst in hours (0..24)
-     * @return GST in hours (0..24)
-     */
-    double lstToGst(double lst) {
-        double delta = fLongitude * 24 / PI2;
-        return normalize(lst - delta, 24);
-    }
-
-    /**
-     * Convert UT to GST on this date.
-     * Section 12.  Duffett-Smith p.17
-     * @param ut in hours
-     * @return GST in hours
-     */
-    double utToGst(double ut) {
-        return normalize(getT0() + ut*1.002737909, 24);
-    }
-
-    /**
-     * Convert GST to UT on this date.
-     * Section 13.  Duffett-Smith p.18
-     * @param gst in hours
-     * @return UT in hours
-     */
-    double gstToUt(double gst) {
-        return normalize(gst - getT0(), 24) * 0.9972695663;
-    }
-
-    double getT0() {
-        // Common computation for UT <=> GST
-
-        // Find JD for 0h UT
-        double jd = Math.floor(getJulianDay() - 0.5) + 0.5;
-
-        double s = jd - 2451545.0;
-        double t = s / 36525.0;
-        double t0 = 6.697374558 + (2400.051336 + 0.000025862*t)*t;
-        return t0;
-    }
-
-    //-------------------------------------------------------------------------
-    // Alternate Sun Rise/Set
-    // See sci.astro FAQ
-    // http://www.faqs.org/faqs/astronomy/faq/part3/section-5.html
-    //-------------------------------------------------------------------------
-
-    // Note: This method appears to produce inferior accuracy as
-    // compared to getSunRiseSet(). 
-
-    /**
-     * TODO Make this public when the entire class is package-private.
-     */
-    /*public*/ long getSunRiseSet3(boolean rise) {
-
-        // Compute day number for 0.0 Jan 2000 epoch
-        double d = (double)(time - EPOCH_2000_MS) / DAY_MS;
-
-        // Now compute the Local Sidereal Time, LST:
-        // 
-        double LST  =  98.9818  +  0.985647352 * d  +  /*UT*15  +  long*/
-            fLongitude*RAD_DEG;
-        // 
-        // (east long. positive).  Note that LST is here expressed in degrees,
-        // where 15 degrees corresponds to one hour.  Since LST really is an angle,
-        // it's convenient to use one unit---degrees---throughout.
-
-        // 	COMPUTING THE SUN'S POSITION
-        // 	----------------------------
-        // 
-        // To be able to compute the Sun's rise/set times, you need to be able to
-        // compute the Sun's position at any time.  First compute the "day
-        // number" d as outlined above, for the desired moment.  Next compute:
-        // 
-        double oblecl = 23.4393 - 3.563E-7 * d;
-        // 
-        double w  =  282.9404  +  4.70935E-5   * d;
-        double M  =  356.0470  +  0.9856002585 * d;
-        double e  =  0.016709  -  1.151E-9     * d;
-        // 
-        // This is the obliquity of the ecliptic, plus some of the elements of
-        // the Sun's apparent orbit (i.e., really the Earth's orbit): w =
-        // argument of perihelion, M = mean anomaly, e = eccentricity.
-        // Semi-major axis is here assumed to be exactly 1.0 (while not strictly
-        // true, this is still an accurate approximation).  Next compute E, the
-        // eccentric anomaly:
-        // 
-        double E = M + e*(180/PI) * Math.sin(M*DEG_RAD) * ( 1.0 + e*Math.cos(M*DEG_RAD) );
-        // 
-        // where E and M are in degrees.  This is it---no further iterations are
-        // needed because we know e has a sufficiently small value.  Next compute
-        // the true anomaly, v, and the distance, r:
-        // 
-        /*      r * cos(v)  =  */ double A  =  Math.cos(E*DEG_RAD) - e;
-        /*      r * sin(v)  =  */ double B  =  Math.sqrt(1 - e*e) * Math.sin(E*DEG_RAD);
-        // 
-        // and
-        // 
-        //      r  =  sqrt( A*A + B*B )
-        double v  =  Math.atan2( B, A )*RAD_DEG;
-        // 
-        // The Sun's true longitude, slon, can now be computed:
-        // 
-        double slon  =  v + w;
-        // 
-        // Since the Sun is always at the ecliptic (or at least very very close to
-        // it), we can use simplified formulae to convert slon (the Sun's ecliptic
-        // longitude) to sRA and sDec (the Sun's RA and Dec):
-        // 
-        //                   sin(slon) * cos(oblecl)
-        //     tan(sRA)  =  -------------------------
-        // 			cos(slon)
-        // 
-        //     sin(sDec) =  sin(oblecl) * sin(slon)
-        // 
-        // As was the case when computing az, the Azimuth, if possible use an
-        // atan2() function to compute sRA.
-
-        double sRA = Math.atan2(Math.sin(slon*DEG_RAD) * Math.cos(oblecl*DEG_RAD), Math.cos(slon*DEG_RAD))*RAD_DEG;
-
-        double sin_sDec = Math.sin(oblecl*DEG_RAD) * Math.sin(slon*DEG_RAD);
-        double sDec = Math.asin(sin_sDec)*RAD_DEG;
-
-        // 	COMPUTING RISE AND SET TIMES
-        // 	----------------------------
-        // 
-        // To compute when an object rises or sets, you must compute when it
-        // passes the meridian and the HA of rise/set.  Then the rise time is
-        // the meridian time minus HA for rise/set, and the set time is the
-        // meridian time plus the HA for rise/set.
-        // 
-        // To find the meridian time, compute the Local Sidereal Time at 0h local
-        // time (or 0h UT if you prefer to work in UT) as outlined above---name
-        // that quantity LST0.  The Meridian Time, MT, will now be:
-        // 
-        //     MT  =  RA - LST0
-        double MT = normalize(sRA - LST, 360);
-        // 
-        // where "RA" is the object's Right Ascension (in degrees!).  If negative,
-        // add 360 deg to MT.  If the object is the Sun, leave the time as it is,
-        // but if it's stellar, multiply MT by 365.2422/366.2422, to convert from
-        // sidereal to solar time.  Now, compute HA for rise/set, name that
-        // quantity HA0:
-        // 
-        //                 sin(h0)  -  sin(lat) * sin(Dec)
-        // cos(HA0)  =  ---------------------------------
-        //                      cos(lat) * cos(Dec)
-        // 
-        // where h0 is the altitude selected to represent rise/set.  For a purely
-        // mathematical horizon, set h0 = 0 and simplify to:
-        // 
-        // 	cos(HA0)  =  - tan(lat) * tan(Dec)
-        // 
-        // If you want to account for refraction on the atmosphere, set h0 = -35/60
-        // degrees (-35 arc minutes), and if you want to compute the rise/set times
-        // for the Sun's upper limb, set h0 = -50/60 (-50 arc minutes).
-        // 
-        double h0 = -50/60 * DEG_RAD;
-
-        double HA0 = Math.acos(
-          (Math.sin(h0) - Math.sin(fLatitude) * sin_sDec) /
-          (Math.cos(fLatitude) * Math.cos(sDec*DEG_RAD)))*RAD_DEG;
-
-        // When HA0 has been computed, leave it as it is for the Sun but multiply
-        // by 365.2422/366.2422 for stellar objects, to convert from sidereal to
-        // solar time.  Finally compute:
-        // 
-        //    Rise time  =  MT - HA0
-        //    Set  time  =  MT + HA0
-        // 
-        // convert the times from degrees to hours by dividing by 15.
-        // 
-        // If you'd like to check that your calculations are accurate or just
-        // need a quick result, check the USNO's Sun or Moon Rise/Set Table,
-        // <URL:http://aa.usno.navy.mil/AA/data/docs/RS_OneYear.html>.
-
-        double result = MT + (rise ? -HA0 : HA0); // in degrees
-
-        // Find UT midnight on this day
-        long midnight = DAY_MS * (time / DAY_MS);
-
-        return midnight + (long) (result * 3600000 / 15);
-    }
+// Commented out - currently unused. ICU 2.6, Alan
+//    //-------------------------------------------------------------------------
+//    // Alternate Sun Rise/Set
+//    // See sci.astro FAQ
+//    // http://www.faqs.org/faqs/astronomy/faq/part3/section-5.html
+//    //-------------------------------------------------------------------------
+//
+//    // Note: This method appears to produce inferior accuracy as
+//    // compared to getSunRiseSet(). 
+//
+//    /**
+//     * TODO Make this public when the entire class is package-private.
+//     */
+//    /*public*/ long getSunRiseSet3(boolean rise) {
+//
+//        // Compute day number for 0.0 Jan 2000 epoch
+//        double d = (double)(time - EPOCH_2000_MS) / DAY_MS;
+//
+//        // Now compute the Local Sidereal Time, LST:
+//        // 
+//        double LST  =  98.9818  +  0.985647352 * d  +  /*UT*15  +  long*/
+//            fLongitude*RAD_DEG;
+//        // 
+//        // (east long. positive).  Note that LST is here expressed in degrees,
+//        // where 15 degrees corresponds to one hour.  Since LST really is an angle,
+//        // it's convenient to use one unit---degrees---throughout.
+//
+//        // 	COMPUTING THE SUN'S POSITION
+//        // 	----------------------------
+//        // 
+//        // To be able to compute the Sun's rise/set times, you need to be able to
+//        // compute the Sun's position at any time.  First compute the "day
+//        // number" d as outlined above, for the desired moment.  Next compute:
+//        // 
+//        double oblecl = 23.4393 - 3.563E-7 * d;
+//        // 
+//        double w  =  282.9404  +  4.70935E-5   * d;
+//        double M  =  356.0470  +  0.9856002585 * d;
+//        double e  =  0.016709  -  1.151E-9     * d;
+//        // 
+//        // This is the obliquity of the ecliptic, plus some of the elements of
+//        // the Sun's apparent orbit (i.e., really the Earth's orbit): w =
+//        // argument of perihelion, M = mean anomaly, e = eccentricity.
+//        // Semi-major axis is here assumed to be exactly 1.0 (while not strictly
+//        // true, this is still an accurate approximation).  Next compute E, the
+//        // eccentric anomaly:
+//        // 
+//        double E = M + e*(180/PI) * Math.sin(M*DEG_RAD) * ( 1.0 + e*Math.cos(M*DEG_RAD) );
+//        // 
+//        // where E and M are in degrees.  This is it---no further iterations are
+//        // needed because we know e has a sufficiently small value.  Next compute
+//        // the true anomaly, v, and the distance, r:
+//        // 
+//        /*      r * cos(v)  =  */ double A  =  Math.cos(E*DEG_RAD) - e;
+//        /*      r * sin(v)  =  */ double B  =  Math.sqrt(1 - e*e) * Math.sin(E*DEG_RAD);
+//        // 
+//        // and
+//        // 
+//        //      r  =  sqrt( A*A + B*B )
+//        double v  =  Math.atan2( B, A )*RAD_DEG;
+//        // 
+//        // The Sun's true longitude, slon, can now be computed:
+//        // 
+//        double slon  =  v + w;
+//        // 
+//        // Since the Sun is always at the ecliptic (or at least very very close to
+//        // it), we can use simplified formulae to convert slon (the Sun's ecliptic
+//        // longitude) to sRA and sDec (the Sun's RA and Dec):
+//        // 
+//        //                   sin(slon) * cos(oblecl)
+//        //     tan(sRA)  =  -------------------------
+//        // 			cos(slon)
+//        // 
+//        //     sin(sDec) =  sin(oblecl) * sin(slon)
+//        // 
+//        // As was the case when computing az, the Azimuth, if possible use an
+//        // atan2() function to compute sRA.
+//
+//        double sRA = Math.atan2(Math.sin(slon*DEG_RAD) * Math.cos(oblecl*DEG_RAD), Math.cos(slon*DEG_RAD))*RAD_DEG;
+//
+//        double sin_sDec = Math.sin(oblecl*DEG_RAD) * Math.sin(slon*DEG_RAD);
+//        double sDec = Math.asin(sin_sDec)*RAD_DEG;
+//
+//        // 	COMPUTING RISE AND SET TIMES
+//        // 	----------------------------
+//        // 
+//        // To compute when an object rises or sets, you must compute when it
+//        // passes the meridian and the HA of rise/set.  Then the rise time is
+//        // the meridian time minus HA for rise/set, and the set time is the
+//        // meridian time plus the HA for rise/set.
+//        // 
+//        // To find the meridian time, compute the Local Sidereal Time at 0h local
+//        // time (or 0h UT if you prefer to work in UT) as outlined above---name
+//        // that quantity LST0.  The Meridian Time, MT, will now be:
+//        // 
+//        //     MT  =  RA - LST0
+//        double MT = normalize(sRA - LST, 360);
+//        // 
+//        // where "RA" is the object's Right Ascension (in degrees!).  If negative,
+//        // add 360 deg to MT.  If the object is the Sun, leave the time as it is,
+//        // but if it's stellar, multiply MT by 365.2422/366.2422, to convert from
+//        // sidereal to solar time.  Now, compute HA for rise/set, name that
+//        // quantity HA0:
+//        // 
+//        //                 sin(h0)  -  sin(lat) * sin(Dec)
+//        // cos(HA0)  =  ---------------------------------
+//        //                      cos(lat) * cos(Dec)
+//        // 
+//        // where h0 is the altitude selected to represent rise/set.  For a purely
+//        // mathematical horizon, set h0 = 0 and simplify to:
+//        // 
+//        // 	cos(HA0)  =  - tan(lat) * tan(Dec)
+//        // 
+//        // If you want to account for refraction on the atmosphere, set h0 = -35/60
+//        // degrees (-35 arc minutes), and if you want to compute the rise/set times
+//        // for the Sun's upper limb, set h0 = -50/60 (-50 arc minutes).
+//        // 
+//        double h0 = -50/60 * DEG_RAD;
+//
+//        double HA0 = Math.acos(
+//          (Math.sin(h0) - Math.sin(fLatitude) * sin_sDec) /
+//          (Math.cos(fLatitude) * Math.cos(sDec*DEG_RAD)))*RAD_DEG;
+//
+//        // When HA0 has been computed, leave it as it is for the Sun but multiply
+//        // by 365.2422/366.2422 for stellar objects, to convert from sidereal to
+//        // solar time.  Finally compute:
+//        // 
+//        //    Rise time  =  MT - HA0
+//        //    Set  time  =  MT + HA0
+//        // 
+//        // convert the times from degrees to hours by dividing by 15.
+//        // 
+//        // If you'd like to check that your calculations are accurate or just
+//        // need a quick result, check the USNO's Sun or Moon Rise/Set Table,
+//        // <URL:http://aa.usno.navy.mil/AA/data/docs/RS_OneYear.html>.
+//
+//        double result = MT + (rise ? -HA0 : HA0); // in degrees
+//
+//        // Find UT midnight on this day
+//        long midnight = DAY_MS * (time / DAY_MS);
+//
+//        return midnight + (long) (result * 3600000 / 15);
+//    }
 
     //-------------------------------------------------------------------------
     // The Moon
