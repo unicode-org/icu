@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/14 00:11:30 $ 
- * $Revision: 1.43 $
+ * $Date: 2003/02/14 18:26:01 $ 
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -748,16 +748,13 @@ public class UnicodeSetTest extends TestFmwk {
     * Test the [:Latin:] syntax.
     */
     public void TestScriptSet() {
-        UnicodeSet set = new UnicodeSet("[:Latin:]");
 
-        expectContainment(set, "aA", CharsToUnicodeString("\\u0391\\u03B1"));
+        expectContainment("[:Latin:]", "aA", CharsToUnicodeString("\\u0391\\u03B1"));
 
-        UnicodeSet set2 = new UnicodeSet("[:Greek:]");
-        expectContainment(set2, CharsToUnicodeString("\\u0391\\u03B1"), "aA");
+        expectContainment("[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
         
         /* Jitterbug 1423 */
-        UnicodeSet set3 = new UnicodeSet("[[:Common:][:Inherited:]]");
-        expectContainment(set3, CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
+        expectContainment("[[:Common:][:Inherited:]]", CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
 
     }
     
@@ -836,16 +833,8 @@ public class UnicodeSetTest extends TestFmwk {
             "\u03D6", // 1.1
         };
 
-        for (int i=0; i<DATA.length; i+=3) {
-            UnicodeSet set;
-            try {
-                set = new UnicodeSet(DATA[i]);
-            } catch (IllegalArgumentException e) {
-                errln("FAIL: Couldn't create UnicodeSet from pattern \"" +
-                      DATA[i] + '"');
-                continue;
-            }
-            expectContainment(set, DATA[i+1], DATA[i+2]);
+        for (int i=0; i<DATA.length; i+=3) {  
+            expectContainment(DATA[i], DATA[i+1], DATA[i+2]);
         }
     }
 
@@ -937,7 +926,7 @@ public class UnicodeSetTest extends TestFmwk {
      * Test closure API.
      */
     public void TestCloseOver() {
-        String CASE = "1";
+        String CASE = String.valueOf(UnicodeSet.CASE);
         String[] DATA = {
             // selector, input, output
             CASE,
@@ -980,6 +969,12 @@ public class UnicodeSetTest extends TestFmwk {
                       s.toPattern(true) + ", expected " + exp);
             }
         }
+
+        // Test the pattern API
+        s.applyPattern("[abc]", UnicodeSet.CASE);
+        expectContainment(s, "abcABC", "defDEF");
+        s = new UnicodeSet("[^abc]", UnicodeSet.CASE);
+        expectContainment(s, "defDEF", "abcABC");
     }
 
     void _testComplement(int a) {
@@ -1245,6 +1240,22 @@ public class UnicodeSetTest extends TestFmwk {
     }
     		
     
+    /**
+     * Expect the given set to contain the characters in charsIn and
+     * to not contain those in charsOut.
+     */
+    void expectContainment(String pat, String charsIn, String charsOut) {
+        UnicodeSet set;
+        try {
+            set = new UnicodeSet(pat);
+        } catch (IllegalArgumentException e) {
+            errln("FAIL: Couldn't create UnicodeSet from pattern \"" +
+                  pat + '"');
+            return;
+        }
+        expectContainment(set, charsIn, charsOut);
+    }
+
     /**
      * Expect the given set to contain the characters in charsIn and
      * to not contain those in charsOut.
