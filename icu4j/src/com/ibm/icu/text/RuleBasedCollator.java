@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/04/09 20:03:43 $
-* $Revision: 1.37 $
+* $Date: 2003/05/14 22:37:36 $
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.ICULocaleData;
@@ -1399,6 +1400,18 @@ public final class RuleBasedCollator extends Collator
      * The smallest codepoint that could be the end of a contraction
      */
     char m_minContractionEnd_;
+    /**
+     * General version of the collator
+     */
+    VersionInfo m_version_;
+    /**
+     * UCA version
+     */
+    VersionInfo m_UCA_version_;
+    /**
+     * UCD version
+     */
+    VersionInfo m_UCD_version_;
 
     /**
      * UnicodeData.txt property object
@@ -1519,6 +1532,14 @@ public final class RuleBasedCollator extends Collator
                             reader.readOptions(this);
                             // duplicating UCA_'s data
                             setWithUCATables();
+                        }
+                        // at this point, we have read in the collator
+                        // now we need to check whether the binary image has
+                        // the right UCA and other versions
+                        if(!m_UCA_version_.equals(UCA_.m_UCA_version_) ||
+                        !m_UCD_version_.equals(UCA_.m_UCD_version_)) {
+                            init((String)rules[1][1]);
+                            return;
                         }
                         init();
                         return;

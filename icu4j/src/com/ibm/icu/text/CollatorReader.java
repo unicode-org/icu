@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/11/20 19:14:09 $ 
-* $Revision: 1.10 $
+* $Date: 2003/05/14 22:37:36 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.IntTrie;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * <p>Internal reader class for ICU data file uca.icu containing 
@@ -44,7 +46,14 @@ final class CollatorReader
     */
     protected CollatorReader(InputStream inputStream) throws IOException
     {
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
+        byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
+        // weiv: check that we have the correct Unicode version in 
+        // binary files
+        VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
+        if(UnicodeVersion[0] != UCDVersion.getMajor() 
+        || UnicodeVersion[1] < UCDVersion.getMinor()) {
+            throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
+        }
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
     
@@ -59,8 +68,15 @@ final class CollatorReader
     														throws IOException
     {
     	if (readICUHeader) {
-        	ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
+        	byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
                                  UCA_AUTHENTICATE_);
+            // weiv: check that we have the correct Unicode version in 
+            // binary files
+            VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
+            if(UnicodeVersion[0] != UCDVersion.getMajor() 
+            || UnicodeVersion[1] < UCDVersion.getMinor()) {
+                throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
+            }
     	}
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
@@ -115,11 +131,12 @@ final class CollatorReader
       	rbc.m_isJamoSpecial_ = m_dataInputStream_.readBoolean(); 
         // padding
       	m_dataInputStream_.skipBytes(3);
-      	// byte version[] = new byte[4];
-      	m_dataInputStream_.skipBytes(4);
+        rbc.m_version_ = readVersion(m_dataInputStream_);
+        rbc.m_UCA_version_ = readVersion(m_dataInputStream_);
+        rbc.m_UCD_version_ = readVersion(m_dataInputStream_);
       	// byte charsetName[] = new byte[32]; // for charset CEs
       	m_dataInputStream_.skipBytes(32);
-      	m_dataInputStream_.skipBytes(64); // for future use 
+      	m_dataInputStream_.skipBytes(56); // for future use 
       	if (rbc.m_contractionOffset_ == 0) { // contraction can be null
       		rbc.m_contractionOffset_ = mapping;
       		contractionCE = mapping;
@@ -344,8 +361,17 @@ final class CollatorReader
                                                       InputStream inputStream)
                                                       throws IOException
     {
-         ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
+         byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
                               INVERSE_UCA_AUTHENTICATE_);
+                              
+        // weiv: check that we have the correct Unicode version in 
+        // binary files
+        VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
+        if(UnicodeVersion[0] != UCDVersion.getMajor() 
+        || UnicodeVersion[1] < UCDVersion.getMinor()) {
+            throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
+        }
+                              
         CollationParsedRuleBuilder.InverseUCA result = 
                                   new CollationParsedRuleBuilder.InverseUCA();
         DataInputStream input = new DataInputStream(inputStream);        
@@ -354,6 +380,9 @@ final class CollatorReader
         int contsize = input.readInt();  // in char size
         input.readInt(); // table in bytes
         input.readInt(); // conts in bytes
+        result.m_UCA_version_ = readVersion(input);
+        input.skipBytes(8); // skip padding
+        
         int size = tablesize * 3; // one column for each strength
         result.m_table_ = new int[size];
         result.m_continuations_ = new char[contsize];
@@ -365,6 +394,32 @@ final class CollatorReader
             result.m_continuations_[i] = input.readChar();
         }
         input.close();
+        return result;
+    }
+    
+    /**
+     * Reads four bytes from the input and returns a VersionInfo
+     * object. Use it to read different collator versions.
+     * @param input already instantiated DataInputStream, positioned 
+     *              at the start of four version bytes
+     * @return a ready VersionInfo object
+     * @throws IOException thrown when error occurs while reading  
+     *            version bytes
+     */
+    
+    protected static VersionInfo readVersion(DataInputStream input) 
+        throws IOException {
+        byte[] version = new byte[4];
+        version[0] = input.readByte();
+        version[1] = input.readByte();
+        version[2] = input.readByte();
+        version[3] = input.readByte();
+        
+        VersionInfo result = 
+        VersionInfo.getInstance(
+            (int)version[0], (int)version[1], 
+            (int)version[2], (int)version[3]);
+        
         return result;
     }
     
@@ -412,7 +467,7 @@ final class CollatorReader
     * No guarantees are made if a older version is used
     */
     private static final byte DATA_FORMAT_VERSION_[] = 
-                                   {(byte)0x2, (byte)0x1, (byte)0x0, (byte)0x0};
+                                   {(byte)0x2, (byte)0x2, (byte)0x0, (byte)0x0};
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x43,  
                                                     (byte)0x6f, (byte)0x6c};
     /**
@@ -420,7 +475,7 @@ final class CollatorReader
     * No guarantees are made if a older version is used
     */
     private static final byte INVERSE_UCA_DATA_FORMAT_VERSION_[] = 
-                                   {(byte)0x2, (byte)0x0, (byte)0x0, (byte)0x0};
+                                   {(byte)0x2, (byte)0x1, (byte)0x0, (byte)0x0};
     private static final byte INVERSE_UCA_DATA_FORMAT_ID_[] = {(byte)0x49, 
                                                                (byte)0x6e,  
                                                                (byte)0x76, 
@@ -431,6 +486,12 @@ final class CollatorReader
     private static final String CORRUPTED_DATA_ERROR_ =
                                 "Data corrupted in Collation data file";
                                 
+    /**
+    * Wrong unicode version error string
+    */
+    private static final String WRONG_UNICODE_VERSION_ERROR_ =
+                                "Unicode version in binary image is not compatible with the current Unicode version";
+
     /**
      * Size of expansion table in bytes
      */

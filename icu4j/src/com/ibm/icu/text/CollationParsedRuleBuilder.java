@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/04/09 20:03:43 $ 
-* $Revision: 1.16 $
+* $Date: 2003/05/14 22:37:36 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -28,6 +28,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * Class for building a collator from a list of collation rules.
@@ -77,6 +78,11 @@ final class CollationParsedRuleBuilder
          * Array list of continuation characters
          */
         char m_continuations_[];
+        
+        /**
+         * UCA version of inverse UCA table
+         */
+        VersionInfo m_UCA_version_;
         
         // package private method --------------------------------------------
         
@@ -352,6 +358,18 @@ final class CollationParsedRuleBuilder
     static final InverseUCA INVERSE_UCA_; 
     
     /**
+     * UCA and Inverse UCA version do not match
+     */
+    private static final String INV_UCA_VERSION_MISMATCH_ =
+                                "UCA versions of UCA and inverse UCA should match";
+           
+    /**
+     * UCA and Inverse UCA version do not match
+     */
+    private static final String UCA_NOT_INSTANTIATED_ =
+                                "UCA is not instantiated!";
+    
+    /**
      * Initializing the inverse UCA
      */
     static {
@@ -368,6 +386,13 @@ final class CollationParsedRuleBuilder
         {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
+        }
+        if(RuleBasedCollator.UCA_ != null) {
+            if(!INVERSE_UCA_.m_UCA_version_.equals(RuleBasedCollator.UCA_.m_UCA_version_)) {
+                throw new RuntimeException(INV_UCA_VERSION_MISMATCH_);
+            }
+        } else {
+            throw new RuntimeException(UCA_NOT_INSTANTIATED_);
         }
     }
     
