@@ -57,7 +57,13 @@
 #   include <fcntl.h>
 
 #   ifndef MAP_FAILED
-#       define MAP_FAILED ((void*)-1)
+#       ifdef U_OSF
+            /* This is the older definition and is not UNIX95 or XPG4-UNIX
+               source code compatible. */
+#           define MAP_FAILED ((caddr_t)-1)
+#       else
+#           define MAP_FAILED ((void*)-1)
+#       endif
 #   endif
 
 #   if defined(OS390) && defined (OS390_STUBDATA)
