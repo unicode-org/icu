@@ -86,6 +86,11 @@ Note 3 is the minimum value for Thai collation to work correctly.
                               /* UCOL_ITER_ALLOCATED - set if this iterator has        */
                               /*    malloced storage to expand a buffer.               */
 #define UCOL_ITER_ALLOCATED 8
+                              /* UCOL_HIRAGANA_Q - note if the codepoint was hiragana  */
+#define UCOL_HIRAGANA_Q     16
+                              /* UCOL_WAS_HIRAGANA - set to TRUE if there was a Hiragana */
+                              /* otherwise set to false                                  */
+#define UCOL_WAS_HIRAGANA   32 
 
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
 
