@@ -49,7 +49,6 @@
 #include "unicode/utypes.h"
 #include "unicode/resbund.h"
 
-#include "rbdata.h"
 #include "uresimp.h"
 
 /*-----------------------------------------------------------------------------
@@ -166,10 +165,6 @@
  */
 //-----------------------------------------------------------------------------
 
-const char* ResourceBundle::kDefaultFilename    = "root";
-
-//-----------------------------------------------------------------------------
-
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const Locale&           locale,
                                 UErrorCode&              error)
@@ -188,33 +183,6 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
 {
     constructForLocale(path, Locale::getDefault(), error);
-}
-
-/**
- * This constructor is used by TableCollation to load a resource
- * bundle from a specific file, without trying other files.  This is
- * used by the TableCollation caching mechanism.  This is not a public
- * API constructor.  
- */
-ResourceBundle::ResourceBundle( const UnicodeString&    path,
-                                const char *localeName,
-                                UErrorCode&              status)
-  :   fRealLocale(localeName)
-{
-    int32_t patlen = path.length();
-
-    if(patlen > 0) {
-        char pathName[128];
-        path.extract(0, patlen, pathName, "");
-        pathName[patlen] = '\0';
-        resource = ures_openNoFallback(pathName, localeName, &status);
-    } else {
-        resource = ures_openNoFallback(0, localeName, &status);
-    }
-
-    if(U_SUCCESS(status)) {
-        fRealLocale = Locale(localeName);
-    }
 }
 
 ResourceBundle::ResourceBundle(const wchar_t* path,

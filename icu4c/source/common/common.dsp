@@ -175,11 +175,6 @@ SOURCE=.\putil.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbdata.cpp
-# ADD CPP /Za
-# End Source File
-# Begin Source File
-
 SOURCE=.\resbund.cpp
 # ADD CPP /Za
 # End Source File
@@ -631,10 +626,6 @@ InputPath=.\unicode\pwin32.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbdata.h
 # End Source File
 # Begin Source File
 

@@ -73,7 +73,6 @@ struct UResourceBundle {
     Resource fRes;
 };
 
-U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status);
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
 U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state);
 U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status);

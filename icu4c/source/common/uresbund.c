@@ -395,44 +395,6 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
  * Functions to create and destroy resource bundles.
  */
 
-/**
- *  INTERNAL: This function is used to open a resource bundle 
- *  without initializing fallback data. It is exclusively used 
- *  for initing Collation data at this point.
- */
-U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status) {
-    UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
-    if(r == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-
-    r->fHasFallback = FALSE;
-    r->fIsTopLevel = TRUE;
-    ures_setIsStackObject(r, FALSE);
-    r->fIndex = -1;
-    r->fData = entryOpen(path, localeID, status);
-    if(U_FAILURE(*status)) {
-        uprv_free(r);
-        return NULL;
-    }
-    if(r->fData->fBogus != U_ZERO_ERROR) {
-        entryClose(r->fData);
-        uprv_free(r);
-        *status = U_MISSING_RESOURCE_ERROR;
-        return NULL;
-    }
-
-    r->fKey = NULL;
-    r->fVersion = NULL;
-    r->fResData.data = r->fData->fData.data;
-    r->fResData.pRoot = r->fData->fData.pRoot;
-    r->fResData.rootRes = r->fData->fData.rootRes;
-    r->fRes = r->fResData.rootRes;
-    r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
-    return r;
-}
-
 /* INTERNAL: */
 static UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
     if(status == NULL || U_FAILURE(*status)) {
