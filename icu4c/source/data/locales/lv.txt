@@ -22,7 +22,7 @@ lv {
         "HH:mm:ss",
         "HH:mm",
         "EEEE, yyyy'. gada 'd. MMMM",
-        "EEEE, yyyy'. gada 'd.",
+        "yyyy'. gada 'd. MMMM",
         "yyyy.d.M",
         "yy.d.M",
         "{1} {0}",
