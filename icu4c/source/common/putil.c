@@ -1508,6 +1508,7 @@ static const char *uprv_getPOSIXID(void)
 }
 #endif
 
+/* NOTE: The caller should handle thread safety */
 U_CAPI const char* U_EXPORT2
 uprv_getDefaultLocaleID()
 {
@@ -1615,12 +1616,10 @@ The leftmost codepage (.xxx) wins.
         posixID = uprv_strcpy(correctedPOSIXLocale, posixID);
     }
 
-    umtx_lock(NULL);
     if (gCorrectedPOSIXLocale == NULL) {
         gCorrectedPOSIXLocale = correctedPOSIXLocale;
         correctedPOSIXLocale = NULL;
     }
-    umtx_unlock(NULL);
 
     if (correctedPOSIXLocale != NULL) {  /* Was already set - clean up. */
         uprv_free(correctedPOSIXLocale); 
