@@ -1,22 +1,14 @@
 /*
- * $RCSfile: HolidayCalendarDemo.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:48 $
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * (C) Copyright Taligent, Inc. 1996 - 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayCalendarDemo.java,v $ 
+ * $Date: 2000/03/10 03:47:43 $ 
+ * $Revision: 1.2 $
  *
- *   The original version of this source code and documentation is copyrighted
- * and owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These
- * materials are provided under terms of a License Agreement between Taligent
- * and Sun. This technology is protected by multiple US and International
- * patents. This notice and attribution to Taligent may not be removed.
- *   Taligent is a registered trademark of Taligent, Inc.
- *
- * Permission to use, copy, modify, and distribute this software
- * and its documentation for NON-COMMERCIAL purposes and without
- * fee is hereby granted provided that this copyright notice
- * appears in all copies. Please refer to the file "copyright.html"
- * for further important copyright and licensing information.
- *
+ *****************************************************************************************
  */
 
 package com.ibm.demo.holiday;

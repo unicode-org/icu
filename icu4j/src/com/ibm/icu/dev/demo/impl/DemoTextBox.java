@@ -1,31 +1,14 @@
 /*
- * $RCSfile: DemoTextBox.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:47 $
+ *******************************************************************************
+ * Copyright (C) 1997-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * (C) Copyright Taligent, Inc. 1996 - 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoTextBox.java,v $ 
+ * $Date: 2000/03/10 03:47:42 $ 
+ * $Revision: 1.2 $
  *
- * Portions copyright (c) 1996 Sun Microsystems, Inc. All Rights Reserved.
- *
- *   The original version of this source code and documentation is copyrighted
- * and owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These
- * materials are provided under terms of a License Agreement between Taligent
- * and Sun. This technology is protected by multiple US and International
- * patents. This notice and attribution to Taligent may not be removed.
- *   Taligent is a registered trademark of Taligent, Inc.
- *
- * Permission to use, copy, modify, and distribute this software
- * and its documentation for NON-COMMERCIAL purposes and without
- * fee is hereby granted provided that this copyright notice
- * appears in all copies. Please refer to the file "copyright.html"
- * for further important copyright and licensing information.
- *
- * SUN MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
- * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. SUN SHALL NOT BE LIABLE FOR
- * ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR
- * DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
- *
+ *****************************************************************************************
  */
 package com.ibm.demo;
 

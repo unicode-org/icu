@@ -1,17 +1,15 @@
-/* ************************************************************* */
-/* (C) Copyright Taligent, Inc. 1996-All Rights Reserved.        */
-/* (C) Copyright IBM Corporation 1996 - 1998                     */
-/*                                                               */
-/* Permission is granted to copy, use, modify, and merge this    */
-/* software into your applications  and to permit others to do   */
-/* any of the foregoing. You must include this permission and    */
-/* copyright notice in all copies and modified versions of this  */
-/* software, and include attribution to Taligent in all splash   */
-/* screens included in any application using this software.      */
-/* THIS SOFTWARE IS PROVIDED IN ITS 'AS IS' CONDITION. TALIGENT  */
-/* DISCLAIMS ANY LIABILITY OF ANY KIND FOR DAMAGES WHATSOEVER    */
-/* RESULTING FROM THE USE OF THIS SOFTWARE.                      */
-/* ************************************************************* */
+/*
+ *******************************************************************************
+ * Copyright (C) 1997-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/holiday/Attic/HolidayBorderPanel.java,v $ 
+ * $Date: 2000/03/10 03:47:43 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.demo.holiday;
 
 import com.ibm.demo.*;
