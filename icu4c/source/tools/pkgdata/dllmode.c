@@ -204,7 +204,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "\n\n");
   
   T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(TARGET)\n"
-                                   "\t$(INSTALL-S) $(TARGETDIR)/$(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
+                                   "\t$(INSTALL-L) $(TARGETDIR)/$(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
 
 *status = U_ZERO_ERROR;
 

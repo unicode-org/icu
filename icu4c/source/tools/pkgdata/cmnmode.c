@@ -95,7 +95,7 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "\n\n");
     
     sprintf(tmp, "install: $(TARGET)\n"
-            "\t$(INSTALL-S) $(TARGET) $(INSTALLTO)%s$(TARGETNAME)\n\n",
+            "\t$(INSTALL_DATA) $(TARGET) $(INSTALLTO)%s$(TARGETNAME)\n\n",
             U_FILE_SEP_STRING);
 
     T_FileStream_writeLine(makefile, tmp);

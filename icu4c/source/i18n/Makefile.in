@@ -63,10 +63,14 @@ endif
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICU-UC) @LIBS@
 
 OBJECTS = brkiter.o calendar.o chbkdat.o choicfmt.o colcache.o \
@@ -108,10 +112,10 @@ install-local: install-headers install-library
 install-library: all-local
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
 ifneq ($(ENABLE_STATIC),)
-	$(INSTALL-S) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
 endif
 ifneq ($(ENABLE_SHARED),)
-	$(INSTALL-S) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
 ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
 	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
