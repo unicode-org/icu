@@ -5,7 +5,7 @@
 *******************************************************************************
 */
 
-#include "unicode/ucol.h"
+#include "ucolimp.h"
 
 #include "unicode/uloc.h"
 #include "unicode/coll.h"
@@ -1666,6 +1666,7 @@ ucol_strcoll(    const    UCollator    *coll,
     return result;
 }
 
+
 /* This is the original sort key function */
 U_CAPI int32_t
 ucol_getSortKeyEx(const    UCollator    *coll,
@@ -1759,13 +1760,13 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 }
     
 
-
-U_CAPI int32_t
-ucol_getSortKey(const    UCollator    *coll,
+int32_t
+ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        uint8_t        *result,
-        int32_t        resultLength)
+        uint8_t        **result,
+        int32_t        resultLength,
+        UBool allocatePrimary)
 {
 
     uint32_t i = 0; // general purpose counter
@@ -1774,7 +1775,12 @@ ucol_getSortKey(const    UCollator    *coll,
 
     uint8_t second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER];
 
-    uint8_t *primaries = result, *secondaries = second, *tertiaries = tert;
+    uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert;
+
+    if(primaries == NULL && allocatePrimary == TRUE) {
+        primaries = *result = (uint8_t *)uprv_malloc(UCOL_MAX_BUFFER);
+        resultLength = UCOL_MAX_BUFFER;
+    }
 
     int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
 
@@ -1878,9 +1884,20 @@ ucol_getSortKey(const    UCollator    *coll,
                 }
             }
             if(sortKeySize>resultLength) {
-                resultOverflow = TRUE;
-                sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
-                goto cleanup;
+                if(allocatePrimary == FALSE) {
+                    resultOverflow = TRUE;
+                    sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
+                    goto cleanup;
+                } else {
+                    uint8_t *newStart;
+                    newStart = (uint8_t *)uprv_realloc(primStart, 2*resultLength);
+                    if(primStart == NULL) {
+                        /*freak out*/
+                    }
+                    primaries=newStart+(primaries-primStart);
+                    resultLength *= 2;
+                    primStart = *result = newStart;
+                }
             }
         }
         if(finished) {
@@ -2010,6 +2027,25 @@ cleanup:
     }
 
     return sortKeySize;
+}
+
+U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll, 
+        const    UChar        *source,
+        int32_t            sourceLength,
+        int32_t *resultLen) {
+    uint8_t *result = NULL;
+    *resultLen = ucol_calcSortKey(coll, source, sourceLength, &result, 0, TRUE);
+    return result;
+}
+
+U_CAPI int32_t
+ucol_getSortKey(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        uint8_t        *result,
+        int32_t        resultLength)
+{
+    return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE);
 }
 
 U_CAPI int32_t

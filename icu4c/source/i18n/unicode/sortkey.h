@@ -93,7 +93,9 @@ public:
 	 * @deprecated
      */
      CollationKey();
-    /**
+
+
+     /**
      * Creates a collation key based on the collation key values.  
      * @param values the collation key values
      * @param count number of collation key values, including trailing nulls.
@@ -207,6 +209,13 @@ private:
     */
             uint16_t*               copyValues(int32_t &size) const;
 
+            void adopt(uint8_t *values, int32_t count);
+
+    /**
+     * The secret adopting constructor!
+     */
+    CollationKey(int32_t count, uint8_t *values);
+
     /*
      * Creates a collation key with a string.
      */
@@ -225,7 +234,7 @@ private:
     static const int32_t            kInvalidHashCode;
     static const int32_t            kEmptyHashCode;
 
-            UBool                  fBogus;
+            UBool                   fBogus;
             int32_t                 fCount;
             int32_t                 fCapacity;
             int32_t                 fHashCode;

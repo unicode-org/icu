@@ -32,6 +32,8 @@
 #include "cmemory.h"
 #endif
 
+#include "uhash.h"
+
 // A hash code of kInvalidHashCode indicates that the has code needs
 // to be computed. A hash code of kEmptyHashCode is used for empty keys
 // and for any key whose computed hash code is kInvalidHashCode.
@@ -44,12 +46,19 @@ CollationKey::CollationKey()
 {
 }
 
+// Adopt bytes allocated with malloc
+CollationKey::CollationKey(int32_t count, uint8_t *values)
+    : fBogus(FALSE), fBytes(values), fCount(count), fCapacity(count), 
+      fHashCode(kInvalidHashCode)
+{
+}
+
 // Create a collation key from a bit array.
 CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
     : fBogus(FALSE), fCount(count), fCapacity(count),
       fHashCode(kInvalidHashCode)
 {
-    fBytes = new uint8_t[count];
+    fBytes = (uint8_t *)uprv_malloc(count);
 
     if (fBytes == NULL)
     {
@@ -75,7 +84,7 @@ CollationKey::CollationKey(const CollationKey& other)
         return;
     }
 
-    fBytes = new uint8_t[fCapacity];
+    fBytes = (uint8_t *)uprv_malloc(fCapacity);
 
     if (fBytes == NULL)
     {
@@ -91,9 +100,19 @@ CollationKey::CollationKey(const CollationKey& other)
 
 CollationKey::~CollationKey()
 {
-    delete[] fBytes;
+        uprv_free(fBytes);
 }
 
+void CollationKey::adopt(uint8_t *values, int32_t count) {
+    if(fBytes != NULL) {
+        uprv_free(fBytes);
+    }
+    fBogus = FALSE;
+    fBytes = values;
+    fCount = count;
+    fCapacity = count;
+    fHashCode = kInvalidHashCode;
+}
 // set the key to an empty state
 CollationKey&
 CollationKey::reset()
@@ -205,9 +224,9 @@ CollationKey::ensureCapacity(int32_t newSize)
 {
     if (fCapacity < newSize)
     {
-        delete[] fBytes;
+        uprv_free(fBytes);
 
-        fBytes = new uint8_t[newSize];
+        fBytes = (uint8_t *)uprv_malloc(newSize);
 
         if (fBytes == NULL)
         {
@@ -338,6 +357,8 @@ CollationKey::hashCode() const
 
     if (fHashCode == kInvalidHashCode)
     {
+        ((CollationKey *)this)->fHashCode = uhash_hashChars(fBytes);
+#if 0
         // We compute the hash by iterating sparsely over 64 (at most) characters
         // spaced evenly through the string.  For each character, we multiply the
         // previous hash value by a prime number and add the new character in,
@@ -361,6 +382,7 @@ CollationKey::hashCode() const
         }
 
         ((CollationKey *)this)->fHashCode = hash; // cast away const
+#endif
     }
 
     return fHashCode;

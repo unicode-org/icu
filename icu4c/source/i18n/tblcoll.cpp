@@ -6,7 +6,7 @@
 *
 * File tblcoll.cpp
 *
-* Created by: Helena Shih
+* Created by: Helena Shih 
 *
 * Modification History:
 *
@@ -56,6 +56,8 @@
 #include "tcoldata.h"
 
 #include "unicode/tblcoll.h"
+
+#include "ucolimp.h"
 
 #include "unicode/coleitr.h"
 #include "unicode/locid.h"
@@ -152,6 +154,7 @@ const int32_t RuleBasedCollator::TERIGNORABLE = 0x02;
 const int16_t RuleBasedCollator::FILEID = 0x5443;                    // unique file id for parity check
 const char* RuleBasedCollator::kFilenameSuffix = ".col";             // binary collation file extension
 char  RuleBasedCollator::fgClassID = 0; // Value is irrelevant       // class id
+UChar RuleBasedCollator::cacheKey = 0;
 
 UMTX RuleBasedCollator::collMutex = NULL;
 UBool RuleBasedCollator::isMutexInited = RuleBasedCollator::initMutex();
@@ -706,6 +709,7 @@ void RuleBasedCollator::constructFromRules(const UnicodeString& rules,
         data = 0;
     }
 
+    status = U_ZERO_ERROR;
     isOverIgnore = FALSE;
     setStrength(Collator::TERTIARY);
 
@@ -724,6 +728,7 @@ void RuleBasedCollator::constructFromRules(const UnicodeString& rules,
     // Now that we've got all the buffers allocated, do the actual work
     mPattern = 0;
     build(rules, status);
+    addToCache(UnicodeString(cacheKey++));
 }
 
 void
@@ -1695,18 +1700,11 @@ RuleBasedCollator::getCollationKey( const   UChar*  source,
         return sortkey.reset();
     }
 
-	uint8_t result[tblcoll_StackBufferLen];
-	uint8_t *allocRes = result;
-	int32_t resLen = ucol_getSortKey((UCollator *)this, source, sourceLen, allocRes, tblcoll_StackBufferLen);
-	// if the result is too big
-	if(resLen > tblcoll_StackBufferLen) {
-		allocRes = new uint8_t[resLen];
-		resLen = ucol_getSortKey((UCollator *)this, source, sourceLen, allocRes, tblcoll_StackBufferLen);
-	}
-	sortkey = CollationKey(allocRes, resLen);
-	if(allocRes != result) {
-		delete[] allocRes;
-	}
+    uint8_t *result;  
+	int32_t resLen = 0;
+    result = ucol_getSortKeyWithAllocation((UCollator *)this, source, sourceLen, &resLen);
+
+    sortkey.adopt(result, resLen);
 
 	return sortkey;
 }
@@ -3012,16 +3010,32 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCod
 }
 
 Collator* RuleBasedCollator::safeClone(void) {
-    umtx_lock(&collMutex);
-    Collator *result = new RuleBasedCollator(*this);
-    umtx_unlock(&collMutex);
-	return result;
+    return new RuleBasedCollator(*this);
+}
+
+UChar forwardCharIteratorGlue(void *iterator) {
+    ForwardCharacterIterator *iter = ((ForwardCharacterIterator *)iterator);
+    UChar result = iter->nextPostInc();
+    if(result == ForwardCharacterIterator::DONE) {
+        return 0xFFFF;
+    } else {
+        return result;
+    }
 }
 
 
 Collator::EComparisonResult RuleBasedCollator::compare(ForwardCharacterIterator &source,
 											 ForwardCharacterIterator &target) {
-	return EQUAL;
+
+	UCollationResult strcoll_result = ucol_strcollinc((UCollator *)this, forwardCharIteratorGlue, &source, forwardCharIteratorGlue, &target);
+	
+	if(strcoll_result == UCOL_LESS) {
+		return Collator::LESS;
+	} else if(strcoll_result == UCOL_GREATER) {
+		return Collator::GREATER;
+	} else {
+		return Collator::EQUAL;
+	}
 }
 
 int32_t RuleBasedCollator::getSortKey(const   UnicodeString&  source,
