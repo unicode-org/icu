@@ -818,9 +818,17 @@ public:
      */
     static void registerInstance(Transliterator* adoptedObj);
 
+private:
+
+    friend class NormalizationTransliterator;
+
+    static void _registerFactory(const UnicodeString& id,
+                                 Factory factory,
+                                 Token context);
+
     /**
      * Register two targets as being inverses of one another.  For
-     * example, calling registerSpecialInverses("NFC", "NFD") causes
+     * example, calling registerSpecialInverse("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
      *
      * <pre>NFC => NFD
@@ -843,20 +851,16 @@ public:
      * have canonical casing (the casing desired to be produced when
      * an inverse is formed) and should contain no whitespace or other
      * extraneous characters.
+     *
+     * @param target the target against which to register the inverse
+     * @param inverseTarget the inverse of target, that is
+     * Any-target.getInverse() => Any-inverseTarget
+     * @param bidirectional if true, register the reverse relation
+     * as well, that is, Any-inverseTarget.getInverse() => Any-target
      */
-    static void registerSpecialInverses(const UnicodeString& target1,
-                                        const UnicodeString& target2);
-
-private:
-
-    friend class NormalizationTransliterator;
-
-    static void _registerFactory(const UnicodeString& id,
-                                 Factory factory,
-                                 Token context);
-
-    static void _registerSpecialInverses(const UnicodeString& target1,
-                                         const UnicodeString& target2);
+    static void _registerSpecialInverse(const UnicodeString& target,
+                                        const UnicodeString& inverseTarget,
+                                        UBool bidirectional);
 
 public:
 

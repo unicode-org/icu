@@ -1430,24 +1430,15 @@ void Transliterator::_registerFactory(const UnicodeString& id,
     registry->put(id, factory, context, TRUE);
 }
 
-// For public consumption
-void Transliterator::registerSpecialInverses(const UnicodeString& target1,
-                                             const UnicodeString& target2) {
-    if (registry == 0) {
-        initializeRegistry();
-    }
-    Mutex lock(&registryMutex);
-    _registerSpecialInverses(target1, target2);
-}
-
 // To be called only by Transliterator subclasses that are called
 // to register themselves by initializeRegistry().
-void Transliterator::_registerSpecialInverses(const UnicodeString& target1,
-                                              const UnicodeString& target2) {
+void Transliterator::_registerSpecialInverse(const UnicodeString& target,
+                                             const UnicodeString& inverseTarget,
+                                             UBool bidirectional) {
     UErrorCode ec = U_ZERO_ERROR;
-    specialInverses->put(target1, new UnicodeString(target2), ec);
-    if (0 != target1.caseCompare(target2, U_FOLD_CASE_DEFAULT)) {
-        specialInverses->put(target2, new UnicodeString(target1), ec);
+    specialInverses->put(target, new UnicodeString(inverseTarget), ec);
+    if (bidirectional && 0 != target.caseCompare(inverseTarget, U_FOLD_CASE_DEFAULT)) {
+        specialInverses->put(inverseTarget, new UnicodeString(target), ec);
     }
 }
 
@@ -1674,8 +1665,8 @@ void Transliterator::initializeRegistry(void) {
 
     specialInverses = new Hashtable(TRUE);
     specialInverses->setValueDeleter(uhash_deleteUnicodeString);
-    _registerSpecialInverses(NullTransliterator::SHORT_ID,
-                             NullTransliterator::SHORT_ID);
+    _registerSpecialInverse(NullTransliterator::SHORT_ID,
+                            NullTransliterator::SHORT_ID, FALSE);
 
     // Manually add prototypes that the system knows about to the
     // cache.  This is how new non-rule-based transliterators are
@@ -1688,6 +1679,8 @@ void Transliterator::initializeRegistry(void) {
     registry->put(new LowercaseTransliterator(), TRUE);
     registry->put(new UppercaseTransliterator(), TRUE);
     registry->put(new TitlecaseTransliterator(), TRUE);
+    _registerSpecialInverse("Upper", "Lower", TRUE);
+    _registerSpecialInverse("Title", "Lower", FALSE);
     registry->put(new UnicodeNameTransliterator(), TRUE);
     registry->put(new NameUnicodeTransliterator(), TRUE);
     NormalizationTransliterator::registerIDs();

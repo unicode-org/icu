@@ -120,10 +120,10 @@ void NormalizationTransliterator::registerIDs() {
                                      _create, integerToken(UNORM_NFD));
     Transliterator::_registerFactory(UnicodeString("Any-NFKD", ""),
                                      _create, integerToken(UNORM_NFKD));
-    Transliterator::_registerSpecialInverses(UnicodeString("NFC", ""),
-                                             UnicodeString("NFD", ""));
-    Transliterator::_registerSpecialInverses(UnicodeString("NFKC", ""),
-                                             UnicodeString("NFKD", ""));
+    Transliterator::_registerSpecialInverse(UnicodeString("NFC", ""),
+                                            UnicodeString("NFD", ""), TRUE);
+    Transliterator::_registerSpecialInverse(UnicodeString("NFKC", ""),
+                                            UnicodeString("NFKD", ""), TRUE);
 }
 
 /**
