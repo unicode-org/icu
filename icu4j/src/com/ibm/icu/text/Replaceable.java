@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2002/07/03 00:30:54 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/11/14 00:06:03 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,9 @@ package com.ibm.icu.text;
  *   <li>If there is no previous character (i.e. start == 0), use the
  *   following character</li>
  *   <li>If there is no following character (i.e. the replaceable was
- *   empty), use default metadata.<br>
+ *   empty), use default metadata<br>
+ *   <li>If the code point U+FFFF is seen, it should be interpreted as
+ *   a special marker having no metadata<li>
  *   </li>
  * </ul>
  * If this is not the behavior, the subclass should document any differences.
@@ -54,7 +56,7 @@ package com.ibm.icu.text;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Replaceable.java,v $ $Revision: 1.8 $ $Date: 2002/07/03 00:30:54 $
+ * @version $RCSfile: Replaceable.java,v $ $Revision: 1.9 $ $Date: 2002/11/14 00:06:03 $
  */
 public interface Replaceable {
     /**
