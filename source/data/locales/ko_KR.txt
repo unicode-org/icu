@@ -21,7 +21,7 @@ ko_KR {
     }
 //    ShortCountry { "KOR" }
     LocaleID:int { 0x0412 }
-    Countries {
+//    Countries {
         //KR { "\uB300\uD55C\uBBFC\uAD6D" }
         //KP { "\uC870\uC120 \uBBFC\uC8FC\uC8FC\uC758 \uC778\uBBFC \uACF5\uD654\uAD6D" }
         //US { "\uBBF8\uAD6D" }
@@ -30,7 +30,7 @@ ko_KR {
         //DE { "\uB3C5\uC77C" }
         //FR { "\uD504\uB791\uC2A4" }
         //CA { "\uCE90\uB098\uB2E4" }
-    }
+//    }
     DateTimePatterns {
         "a h'\uC2DC' mm'\uBD84' ss'\uCD08' z",
         "a h'\uC2DC' mm'\uBD84' ss'\uCD08'",
