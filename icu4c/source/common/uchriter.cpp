@@ -6,6 +6,7 @@
 */
 
 #include "unicode/uchriter.h"
+#include "unicode/ustring.h"
 #include "uhash.h"
 
 U_NAMESPACE_BEGIN
@@ -21,7 +22,7 @@ UCharCharacterIterator::UCharCharacterIterator()
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
                                                int32_t length)
- : CharacterIterator(textPtr != 0 ? length : 0),
+  : CharacterIterator(textPtr != 0 ? (length>=0 ? length : u_strlen(textPtr)) : 0),
   text(textPtr)
 {
 }
@@ -29,7 +30,7 @@ UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
 UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
                                                int32_t length,
                                                UTextOffset position)
-  : CharacterIterator(textPtr != 0 ? length : 0, position),
+  : CharacterIterator(textPtr != 0 ? (length>=0 ? length : u_strlen(textPtr)) : 0, position),
   text(textPtr)
 {
 }
@@ -39,7 +40,7 @@ UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
                                                UTextOffset textBegin,
                                                UTextOffset textEnd,
                                                UTextOffset position)
-  : CharacterIterator(textPtr != 0 ? length : 0, textBegin, textEnd, position),
+  : CharacterIterator(textPtr != 0 ? (length>=0 ? length : u_strlen(textPtr)) : 0, textBegin, textEnd, position),
   text(textPtr)
 {
 }
