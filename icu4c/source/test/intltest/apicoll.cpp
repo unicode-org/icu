@@ -1405,10 +1405,10 @@ void CollationAPITest::TestGetLocale() {
 
   int32_t i = 0;
 
-  struct {
-    char* requestedLocale;
-    char* validLocale;
-    char* actualLocale;
+  static const struct {
+    const char* requestedLocale;
+    const char* validLocale;
+    const char* actualLocale;
   } testStruct[] = {
     { "sr_YU", "sr_YU", "root" },
     { "sh_YU", "sh_YU", "sh" },
