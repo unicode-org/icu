@@ -60,11 +60,6 @@
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS 1
 
-/* Determine whether to disable renaming or not */
-#ifndef U_DISABLE_RENAMING
-#define U_DISABLE_RENAMING 0
-#endif
-
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
