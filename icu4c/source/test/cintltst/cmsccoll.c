@@ -32,6 +32,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "unicode/parseerr.h"
+#include "unicode/ucnv.h"
 
 #define MAX_TOKEN_LEN 16
 #define RULE_BUFFER_LEN 8192
@@ -2193,6 +2194,12 @@ static void TestIncrementalNormalize(void) {
     UErrorCode       status = U_ZERO_ERROR;
     UCollationResult result;
 
+    int32_t myQ = QUICK;
+
+    if(QUICK < 0) {
+      QUICK = 1;
+    }
+
     {
         /* Test 1.  Run very long unnormalized strings, to force overflow of*/
         /*          most buffers along the way.*/
@@ -2205,9 +2212,11 @@ static void TestIncrementalNormalize(void) {
         coll = ucol_open("en_US", &status);
         ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
 
-        /*for (sLen = 257; sLen<maxSLen; sLen++) { */
+        /*for (sLen = 257; sLen<maxSLen; sLen++) {*/
         /*for (sLen = 4; sLen<maxSLen; sLen++) {*/
-        for (sLen = 1000; sLen<1001; sLen++) {
+        /*for (sLen = 1000; sLen<1001; sLen++) {*/
+        for (sLen = 500; sLen<501; sLen++) {
+          log_info("%i ", sLen);
             strA[0] = baseA;
             strB[0] = baseA;
             for (i=1; i<=sLen-1; i++) {
@@ -2225,6 +2234,8 @@ static void TestIncrementalNormalize(void) {
         free(strA);
         free(strB);
     }
+
+    QUICK = myQ;
 
 
     /*  Test 2:  Non-normal sequence in a string that extends to the last character*/
@@ -3188,9 +3199,9 @@ static void TestPrefix(void) {
     const char *data[50];
     const uint32_t len;
   } tests[] = {  
-/*    { "&z <<< z|a", 
+    { "&z <<< z|a", 
       {"zz", "za"}, 2 },
-*/
+
     { "[strength I]"
       "&a=\\ud900\\udc25"
       "&z<<<\\ud900\\udc25|a", 
@@ -3706,6 +3717,142 @@ static void TestOptimize(void) {
   }
 }
 
+/*
+cycheng@ca.ibm.c...	we got inconsistent results when using the UTF-16BE iterator and the UTF-8 iterator.
+weiv	ucol_strcollIter?
+cycheng@ca.ibm.c...	e.g. s1 = 0xfffc0062, and s2 = d8000021
+weiv	these are the input strings?
+cycheng@ca.ibm.c...	yes, using the utf-16 iterator and UCA with normalization on, we have s1 > s2
+weiv	will check - could be a problem with utf-8 iterator
+cycheng@ca.ibm.c...	but if we use the utf-8 iterator, i.e. s1 = efbfbc62 and s2 = eda08021, we have s1 < s2
+weiv	hmmm
+cycheng@ca.ibm.c...	note that we have a standalone high surrogate
+weiv	that doesn't sound right
+cycheng@ca.ibm.c...	we got the same inconsistent results on AIX and Win2000
+weiv	so you have two strings, you convert them to utf-8 and to utf-16BE
+cycheng@ca.ibm.c...	yes
+weiv	and then do the comparison
+cycheng@ca.ibm.c...	in one case, the input strings are in utf8, and in the other case the input strings are in utf-16be
+weiv	utf-16 strings look like a little endian ones in the example you sent me
+weiv	It could be a bug - let me try to test it out
+cycheng@ca.ibm.c...	ok
+cycheng@ca.ibm.c...	we can wait till the conf. call
+cycheng@ca.ibm.c...	next weke
+weiv	that would be great
+weiv	hmmm
+weiv	I might be wrong
+weiv	let me play with it some more
+cycheng@ca.ibm.c...	ok
+cycheng@ca.ibm.c...	also please check s3 = 0x0e3a0062  and s4 = 0x0e400021. both are in utf-16be
+cycheng@ca.ibm.c...	seems with icu 2.2 we have s3 > s4, but not in icu 2.4 that's built for db2
+cycheng@ca.ibm.c...	also s1 & s2 that I sent you earlier are also in utf-16be
+weiv	ok
+cycheng@ca.ibm.c...	i ask sherman to send you more inconsistent data 
+weiv	thanks
+cycheng@ca.ibm.c...	the 4 strings we sent are just samples
+*/
+
+static void Alexis(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_open("", &status);
+
+
+  const char utf16be[2][4] = {
+    { (char)0xd8, (char)0x00, (char)0x00, (char)0x21 },
+    { (char)0xff, (char)0xfc, (char)0x00, (char)0x62 }
+  };
+
+  const char utf8[2][4] = {
+    { (char)0xed, (char)0xa0, (char)0x80, (char)0x21 },
+    { (char)0xef, (char)0xbf, (char)0xbc, (char)0x62 },
+  };
+
+  UCharIterator iterU161, iterU162;
+  UCharIterator iterU81, iterU82;
+
+  UCollationResult resU16, resU8;
+
+  uiter_setUTF16BE(&iterU161, utf16be[0], 4);
+  uiter_setUTF16BE(&iterU162, utf16be[1], 4);
+
+  uiter_setUTF8(&iterU81, utf8[0], 4);
+  uiter_setUTF8(&iterU82, utf8[1], 4);
+
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+
+  resU16 = ucol_strcollIter(coll, &iterU161, &iterU162, &status);
+  resU8 = ucol_strcollIter(coll, &iterU81, &iterU82, &status);
+
+
+  if(resU16 != resU8) {
+    log_err("different results\n");
+  }
+
+  ucol_close(coll);
+}
+
+#define CMSCOLL_ALEXIS2_BUFFER_SIZE 256
+static void Alexis2(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_open("", &status);
+  UChar U16Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U16Target[CMSCOLL_ALEXIS2_BUFFER_SIZE];
+  char U16BESource[CMSCOLL_ALEXIS2_BUFFER_SIZE], U16BETarget[CMSCOLL_ALEXIS2_BUFFER_SIZE];
+  char U8Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U8Target[CMSCOLL_ALEXIS2_BUFFER_SIZE]; 
+  int32_t U16LenS = 0, U16LenT = 0, U16BELenS = 0, U16BELenT = 0, U8LenS = 0, U8LenT = 0;
+
+  UConverter *conv = ucnv_open("UTF16BE", &status);
+
+  UCharIterator U16BEItS, U16BEItT;
+  UCharIterator U8ItS, U8ItT;
+
+  UCollationResult resU16, resU16BE, resU8;
+
+  const char* pairs[][2] = {
+    /*{ "\\ud800\\u0021", "\\uFFFC\\u0062"},*/
+    { "\\u0435\\u0308\\u0334", "\\u0415\\u0334\\u0340" },
+    { "\\u0E40\\u0021", "\\u00A1\\u0021"},
+    { "\\u0E40\\u0021", "\\uFE57\\u0062"},
+  };
+
+  int32_t i = 0;
+
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+
+  for(i = 0; i < sizeof(pairs)/sizeof(pairs[0]); i++) {
+    U16LenS = u_unescape(pairs[i][0], U16Source, CMSCOLL_ALEXIS2_BUFFER_SIZE);
+    U16LenT = u_unescape(pairs[i][1], U16Target, CMSCOLL_ALEXIS2_BUFFER_SIZE);
+
+    resU16 = ucol_strcoll(coll, U16Source, U16LenS, U16Target, U16LenT);
+
+    U16BELenS = ucnv_fromUChars(conv, U16BESource, CMSCOLL_ALEXIS2_BUFFER_SIZE, U16Source, U16LenS, &status);
+    U16BELenT = ucnv_fromUChars(conv, U16BETarget, CMSCOLL_ALEXIS2_BUFFER_SIZE, U16Target, U16LenT, &status);
+
+    uiter_setUTF16BE(&U16BEItS, U16BESource, U16BELenS);
+    uiter_setUTF16BE(&U16BEItT, U16BETarget, U16BELenT);
+
+    resU16BE = ucol_strcollIter(coll, &U16BEItS, &U16BEItT, &status);
+
+    if(resU16 != resU16BE) {
+      log_verbose("Different results between UTF16 and UTF16BE for %s & %s\n", pairs[i][0], pairs[i][1]);
+    }
+
+    u_strToUTF8(U8Source, CMSCOLL_ALEXIS2_BUFFER_SIZE, &U8LenS, U16Source, U16LenS, &status);
+    u_strToUTF8(U8Target, CMSCOLL_ALEXIS2_BUFFER_SIZE, &U8LenT, U16Target, U16LenT, &status);
+
+    uiter_setUTF8(&U8ItS, U8Source, U8LenS);
+    uiter_setUTF8(&U8ItT, U8Target, U8LenT);
+
+    resU8 = ucol_strcollIter(coll, &U8ItS, &U8ItT, &status);
+
+    if(resU16 != resU8) {
+      log_verbose("Different results between UTF16 and UTF8 for %s & %s\n", pairs[i][0], pairs[i][1]);
+    }
+
+  }
+
+  ucol_close(coll);
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -3754,6 +3901,7 @@ void addMiscCollTest(TestNode** root)
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
     TEST(TestOptimize);
     TEST(TestSuppressContractions);
+    TEST(Alexis2);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
