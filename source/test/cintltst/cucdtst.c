@@ -287,6 +287,14 @@ void TestMisc()
       }
 #endif
 
+    /* test u_versionToString() error checking */
+    u_versionToString(NULL, icuVersion);
+    if(icuVersion[0]!=0) {
+        log_err("u_versionToString() failed to deal with a NULL version array and wrote a non-empty string.\n");
+    }
+
+    /* this just blows up if it does not check... */
+    u_versionToString("1.2.3", NULL);
 }
 
 
