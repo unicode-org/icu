@@ -1,0 +1,81 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+gl {
+    DayAbbreviations { 
+            "Dom",
+            "Lun",
+            "Mar",
+            "Mér",
+            "Xov",
+            "Ven",
+            "Sáb",
+    }
+    DayNames { 
+            "Domingo",
+            "Luns",
+            "Martes",
+            "Mércores",
+            "Xoves",
+            "Venres",
+            "Sábado",
+    }
+    MonthAbbreviations { 
+            "Xan",
+            "Feb",
+            "Mar",
+            "Abr",
+            "Mai",
+            "Xuñ",
+            "Xul",
+            "Ago",
+            "Set",
+            "Out",
+            "Nov",
+            "Dec",
+            "",
+    }
+    MonthNames { 
+            "Xaneiro",
+            "Febreiro",
+            "Marzo",
+            "Abril",
+            "Maio",
+            "Xuño",
+            "Xullo",
+            "Agosto",
+            "Setembro",
+            "Outubro",
+            "Novembro",
+            "Decembro",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "‰",
+            "∞",
+            "�",
+    }
+	            
+            // /**************** Info Below is needed ****************/
+            // CollationElements{}
+            // Countries{}
+            // Eras{}
+            // Languages{}
+            // ShortLanguage { }
+            // localPatternChars{}
+            //
+
+}
