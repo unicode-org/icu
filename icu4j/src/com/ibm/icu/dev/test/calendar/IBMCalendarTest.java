@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/05/09 18:44:53 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/05/09 18:46:44 $ 
+ * $Revision: 1.17 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -442,10 +442,10 @@ public class IBMCalendarTest extends CalendarTest {
                     errln(tz[z] + " " +
                           dateFormat.format(yesterday) + " +1d= " +
                           dateFormat.format(cal.getTime()));
+                }
             }
         }
     }
-}
 
     /**
      * Miscellaneous tests to increase coverage.
