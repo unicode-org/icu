@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.119 $
+ * $Date: 2003/02/05 20:47:48 $
+ * $Revision: 1.120 $
  *
  *****************************************************************************************
  */
@@ -881,10 +881,51 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     public void TestCreateInstance() {
-        Transliterator myTrans = Transliterator.getInstance("Latin-Hangul", Transliterator.REVERSE);
-        String newID = myTrans.getID();
-        if (!newID.equals("Hangul-Latin")) {
-            errln("FAIL: Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed");
+        String FORWARD = "F";
+        String REVERSE = "R";
+        String DATA[] = {
+            // Column 1: id
+            // Column 2: direction
+            // Column 3: expected ID, or "" if expect failure
+            "Latin-Hangul", REVERSE, "Hangul-Latin", // JB#912
+            
+            // JB#2689: bad compound causes crash
+            "InvalidSource-InvalidTarget", FORWARD, "",
+            "InvalidSource-InvalidTarget", REVERSE, "",
+            "Hex-Any;InvalidSource-InvalidTarget", FORWARD, "",
+            "Hex-Any;InvalidSource-InvalidTarget", REVERSE, "",
+            "InvalidSource-InvalidTarget;Hex-Any", FORWARD, "",
+            "InvalidSource-InvalidTarget;Hex-Any", REVERSE, "",
+            
+            null
+        };
+        
+        for (int i=0; DATA[i]!=null; i+=3) {
+            String id=DATA[i];
+            int dir = (DATA[i+1]==FORWARD)?
+                Transliterator.FORWARD:Transliterator.REVERSE;
+            String expID=DATA[i+2];
+            Exception e = null;
+            Transliterator t;
+            try {
+                t = Transliterator.getInstance(id,dir);
+            } catch (Exception e1) {
+                e = e1;
+                t = null;
+            }
+            String newID = (t!=null)?t.getID():"";
+            boolean ok = (newID.equals(expID));
+            if (t==null) {
+                newID = e.getMessage();
+            }
+            if (ok) {
+                logln("Ok: createInstance(" +
+                      id + "," + DATA[i+1] + ") => " + newID);
+            } else {
+                errln("FAIL: createInstance(" +
+                      id + "," + DATA[i+1] + ") => " + newID +
+                      ", expected " + expID);
+            }
         }
     }
 
