@@ -580,10 +580,50 @@ U_CAPI void U_EXPORT2
 ucnv_resetFromUnicode(UConverter *converter);
 
 /**
- * Returns the maximum length of bytes used by a character. This varies 
- * between 1 and 4
- * @param converter the Unicode converter
- * @return the maximum number of bytes allowed by this particular converter
+ * Returns the maximum number of bytes that are output per UChar in conversion
+ * from Unicode using this converter.
+ * The returned number can be used with UCNV_GET_MAX_BYTES_FOR_STRING
+ * to calculate the size of a target buffer for conversion from Unicode.
+ *
+ * Note: Before ICU 2.8, this function did not return reliable numbers for
+ * some stateful converters (EBCDIC_STATEFUL, ISO-2022) and LMBCS.
+ *
+ * This number may not be the same as the maximum number of bytes per
+ * "conversion unit". In other words, it may not be the intuitively expected
+ * number of bytes per character that would be published for a charset,
+ * and may not fulfill any other purpose than the allocation of an output
+ * buffer of guaranteed sufficient size for a given input length and converter.
+ *
+ * Examples for special cases that are taken into account:
+ * - Supplementary code points may convert to more bytes than BMP code points.
+ *   This function returns bytes per UChar (UTF-16 code unit), not per
+ *   Unicode code point, for efficient buffer allocation.
+ * - State-shifting output (SI/SO, escapes, etc.) from stateful converters.
+ * - When m input UChars are converted to n output bytes, then the maximum m/n
+ *   is taken into account.
+ *
+ * The number returned here does not take into account
+ * (see UCNV_GET_MAX_BYTES_FOR_STRING):
+ * - callbacks which output more than one charset character sequence per call,
+ *   like escape callbacks
+ * - initial and final non-character bytes that are output by some converters
+ *   (automatic BOMs, initial escape sequence, final SI, etc.)
+ *
+ * Examples for returned values:
+ * - SBCS charsets: 1
+ * - Shift-JIS: 2
+ * - UTF-16: 2 (2 per BMP, 4 per surrogate _pair_, BOM not counted)
+ * - UTF-8: 3 (3 per BMP, 4 per surrogate _pair_)
+ * - EBCDIC_STATEFUL (EBCDIC mixed SBCS/DBCS): 3 (SO + DBCS)
+ * - ISO-2022: 3 (always outputs UTF-8)
+ * - ISO-2022-JP: 6 (4-byte escape sequences + DBCS)
+ * - ISO-2022-CN: 8 (4-byte designator sequences + 2-byte SS2/SS3 + DBCS)
+ *
+ * @param converter The Unicode converter.
+ * @return The maximum number of bytes per UChar that are output by ucnv_fromUnicode(),
+ *         to be used together with UCNV_GET_MAX_BYTES_FOR_STRING for buffer allocation.
+ *
+ * @see UCNV_GET_MAX_BYTES_FOR_STRING
  * @see ucnv_getMinCharSize
  * @stable ICU 2.0
  */
@@ -591,8 +631,30 @@ U_CAPI int8_t U_EXPORT2
 ucnv_getMaxCharSize(const UConverter *converter);
 
 /**
+ * Calculates the size of a buffer for conversion from Unicode to a charset.
+ * The calculated size is guaranteed to be sufficient for this conversion.
+ *
+ * It takes into account initial and final non-character bytes that are output
+ * by some converters.
+ * It does not take into account callbacks which output more than one charset
+ * character sequence per call, like escape callbacks.
+ * The default (substitution) callback only outputs one charset character sequence.
+ *
+ * @param length Number of UChars to be converted.
+ * @param maxCharSize Return value from ucnv_getMaxCharSize() for the converter
+ *                    that will be used.
+ * @return Size of a buffer that will be large enough to hold the output bytes of
+ *         converting length UChars with the converter that returned the maxCharSize.
+ *
+ * @see ucnv_getMaxCharSize
+ * @draft ICU 2.8
+ */
+#define UCNV_GET_MAX_BYTES_FOR_STRING(length, maxCharSize) \
+     (((int32_t)(length)+10)*(int32_t)(maxCharSize))
+
+/**
  * Returns the minimum byte length for characters in this codepage. 
- * This is either 1 or 2 for all supported codepages.
+ * This is usually either 1 or 2.
  * @param converter the Unicode converter
  * @return the minimum number of bytes allowed by this particular converter
  * @see ucnv_getMaxCharSize
@@ -970,7 +1032,7 @@ ucnv_toUnicode(UConverter *converter,
  * It is only useful for whole strings, not for streaming conversion.
  *
  * The maximum output buffer capacity required (barring output from callbacks) will be
- * srcLength*ucnv_getMaxCharSize(cnv).
+ * UCNV_GET_MAX_BYTES_FOR_STRING(srcLength, ucnv_getMaxCharSize(cnv)).
  *
  * @param cnv the converter object to be used (ucnv_resetFromUnicode() will be called)
  * @param src the input Unicode string
@@ -986,6 +1048,7 @@ ucnv_toUnicode(UConverter *converter,
  *         and a buffer of the indicated length would need to be passed in
  * @see ucnv_fromUnicode
  * @see ucnv_convert
+ * @see UCNV_GET_MAX_BYTES_FOR_STRING
  * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2

@@ -55,4 +55,10 @@ CHARMAP
 # add a mapping that turns the above's Unicode side into a prefix
 <U50005><U60006> \x06 |1
 
+# many bytes, and bytes per UChar
+<U30ab><U309a> \x01\x02\x03\x0a\x01\x02\x03\x0b\x01\x02\x03\x0c\x01\x02\x03\x0d\x01\x02\x03\x0e\x01\x02\x03\x0f\x01\x02\x03\x0a\x05\x06\x07 |0
+
+# many UChars, and UChars per byte
+<U304b><U309a><U304d><U309a><U304f><U309a><U3051><U309a><U3053><U309a><U30ab><U309a><U30ad><U309a><U30af><U309a><U30b1><U309a><U0300> \x08\x09 |0
+
 END CHARMAP
