@@ -56,13 +56,13 @@ They do need to be listed there if one wants to give them aliases, or
 tags, though.
 .SH OPTIONS
 .TP
-.BR \-h\fP, \fB\-?\fP, \fB\-\-help
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 Print help about usage and exit.
 .TP
-.BR \-c\fP, \fB\-\-copyright
+.BR "\-c\fP, \fB\-\-copyright"
 Include a copyright notice in the binary data.
 .TP
-.BR \-v\fP, \fB\-\-verbose
+.BR "\-v\fP, \fB\-\-verbose"
 Display extra informative messages during execution.
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
