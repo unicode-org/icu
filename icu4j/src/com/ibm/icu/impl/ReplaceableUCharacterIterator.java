@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ReplaceableUCharacterIterator.java,v $ 
- * $Date: 2002/07/19 22:08:46 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/07/31 03:04:28 $ 
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -52,19 +52,6 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
             throw new IllegalArgumentException();
         }
         this.replaceable  = new ReplaceableString(str);
-        this.currentIndex = 0;
-        this.length       = replaceable.length();
-    }
-    
-    /**
-     * Public constructor
-     * @param src an array of characters on which the iterator will be based
-     */
-    public ReplaceableUCharacterIterator(char[] src){
-        if(src==null){
-            throw new IllegalArgumentException();
-        }
-        this.replaceable  = new ReplaceableString(new String(src));
         this.currentIndex = 0;
         this.length       = replaceable.length();
     }
@@ -137,14 +124,6 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         return ch;
     }
     
-    /**
-     * Returns the start of the text.
-     * @return 0
-     */
-    public int getBeginIndex(){
-        return 0;
-    }
-
     /**
      * Returns the length of the text
      * @return length of the text

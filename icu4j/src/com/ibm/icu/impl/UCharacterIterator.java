@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/07/19 22:08:45 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/31 03:04:28 $ 
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -303,20 +303,7 @@ public abstract class UCharacterIterator
      * @exception IndexOutOfBounds exception if there is not enough
      *            room after offset in the array, or if offset < 0.  
      */
-    public int getText(char[] fillIn, int offset) {
-		int len = getLength();
-		if (offset < 0 || offset + len > fillIn.length) {
-		    throw new IndexOutOfBoundsException(Integer.toString(offset));
-		}
-		int index = getIndex();
-		setToStart();
-		int ch;
-		while ((ch = next())!= DONE) {
-		    fillIn[offset++] = (char)ch;
-		}
-		setIndex(index);
-		return len;
-    }
+    public abstract int getText(char[] fillIn, int offset); 
 
     /**
      * Convenience override for <code>getText(char[], int)>/code> that provides

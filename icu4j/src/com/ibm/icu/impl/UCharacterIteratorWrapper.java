@@ -42,7 +42,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @see #getBeginIndex()
      */
     public char first(){
-        iterator.setToStart();
+        iterator.setIndex(beginIndex);
         return (char)iterator.current();
     }
 
@@ -53,7 +53,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @see #getEndIndex()
      */
     public char last(){
-        iterator.setToLimit();
+        iterator.setIndex(length-1);
         return (char)iterator.current();
     }
 
@@ -122,7 +122,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return the index after the last character in the text
      */
     public int getEndIndex(){
-        return length-1;
+        return length;
     }
 
     /**
