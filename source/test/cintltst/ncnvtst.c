@@ -1291,7 +1291,8 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 
 
         status = U_ZERO_ERROR;
-
+        if(gInBufferSize ==999 && gOutBufferSize==999)
+            doFlush = FALSE;
         ucnv_fromUnicode (conv,
                   (char **)&targ,
                   (const char *)end,
@@ -1300,7 +1301,11 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
                   offs,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
-        if(testReset) ucnv_resetToUnicode(conv);
+        if(testReset) 
+            ucnv_resetToUnicode(conv);
+        if(gInBufferSize ==999 && gOutBufferSize==999)
+            ucnv_resetToUnicode(conv);
+
       } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
 
     if(U_FAILURE(status)) {
@@ -1399,6 +1404,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     UBool   checkOffsets = TRUE;
     int32_t   realBufferSize;
     UChar *realBufferEnd;
+    UBool doFlush;
 
     UConverterToUCallback oldAction = NULL;
     void* oldContext = NULL;
@@ -1458,17 +1464,20 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
         /* oldTarg = targ; */
 
         status = U_ZERO_ERROR;
-
+        doFlush=(gInBufferSize ==999 && gOutBufferSize==999)?(UBool)(srcLimit == realSourceEnd) : FALSE;
+            
         ucnv_toUnicode (conv,
                 &targ,
                 end,
                 (const char **)&src,
                 (const char *)srcLimit,
                 offs,
-                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+                doFlush, /* flush if we're at the end of hte source data */
                 &status);
-        if(testReset) ucnv_resetFromUnicode(conv);
-            
+        if(testReset) 
+            ucnv_resetFromUnicode(conv);
+        if(gInBufferSize ==999 && gOutBufferSize==999)
+            ucnv_resetToUnicode(conv);    
         /*        offs += (targ-oldTarg); */
 
       } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
