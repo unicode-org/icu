@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/07/16 00:31:35 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/07/16 18:51:59 $ 
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -55,7 +55,7 @@ public abstract class UCharacterIterator
      * @exception IllegalArgumentException if the argument is null
      */
     public static final UCharacterIterator getInstance(Replaceable source){
-        return new ReplaceableCharacterIterator(source);
+        return new ReplaceableUCharacterIterator(source);
     }
     
     /**
@@ -66,7 +66,7 @@ public abstract class UCharacterIterator
      * @exception IllegalArgumentException if the argument is null
      */
     public static final UCharacterIterator getInstance(String source){
-        return new ReplaceableCharacterIterator(source);
+        return new ReplaceableUCharacterIterator(source);
     }
     
     /**
@@ -98,7 +98,7 @@ public abstract class UCharacterIterator
      * @exception IllegalArgumentException if the argument is null
      */
     public static final UCharacterIterator getInstance(StringBuffer source){
-        return new ReplaceableCharacterIterator(source);
+        return new ReplaceableUCharacterIterator(source);
     }
 
     /**
