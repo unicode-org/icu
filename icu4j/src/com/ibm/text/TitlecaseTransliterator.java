@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/11/17 20:45:35 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/11/17 20:56:13 $ 
+ * $Revision: 1.6 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -41,6 +41,8 @@ class TitlecaseTransliterator extends Transliterator {
                 return new TitlecaseTransliterator();
             }
         });
+
+        registerSpecialInverse("Title", "Lower", false);
     }
 
     /**
