@@ -36,7 +36,7 @@ import com.ibm.icu.impl.LocaleUtility;
  * @author Alan Liu
  * @stable ICU 2.2
  */
-public class Currency implements Serializable {
+public class Currency extends Unit implements Serializable {
 
     /**
      * ISO 4217 3-letter code.
@@ -191,23 +191,15 @@ public class Currency implements Serializable {
      * @stable ICU 2.2
      */
     public boolean equals(Object rhs) {
+        if (rhs == null) return false;
+        if (rhs == this) return true;
         try {
-            return equals((Currency)rhs);
+            Currency c = (Currency) rhs;
+            return isoCode.equals(c.isoCode);
         }
         catch (ClassCastException e) {
             return false;
         }
-    }
-
-    /**
-     * Return true if c is non-null and has the same currency code.
-     * @stable ICU 2.2
-     */
-    public boolean equals(Currency c) {
-        if (c == null) return false;
-        if (c == this) return true;
-        return c.getClass() == Currency.class &&
-            this.isoCode.equals(c.isoCode);
     }
 
     /**

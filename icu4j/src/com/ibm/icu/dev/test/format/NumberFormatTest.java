@@ -1006,7 +1006,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         /*5*/ "p:",   // <pattern or '-'> <string> <exp. number>
         /*6*/ "perr:", // <pattern or '-'> <invalid string>
         /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
-        /*8*/ "fpc:", // <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+        /*8*/ "fpc:", // <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
     };
 
     public void TestCases() {
@@ -1016,7 +1016,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         Locale loc = new Locale("en", "US", "");
         DecimalFormat ref = null, fmt = null;
-        String pat = null;
+        MeasureFormat mfmt = null;
+        String pat = null, str = null, mloc = null;
 
         try {
             for (;;) {
@@ -1040,7 +1041,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 case 3: // fp:
                 case 4: // rt:
                 case 5: // p:
-                case 8: // fpc:
                 	tok = tokens.next();
                     if (!tok.equals("-")) {
                     	pat = tok;
@@ -1051,11 +1051,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             iae.printStackTrace();
                             tokens.next(); // consume remaining tokens
                             tokens.next();
-                            if (cmd == 3 || cmd == 8) tokens.next();
+                            if (cmd == 3) tokens.next();
                             continue;
                         }
                     }
-                    String str = null;
+                    str = null;
                     try {
                         if (cmd == 2 || cmd == 3 || cmd == 4) {
                             // f: <pattern or '-'> <number> <exp. string>
@@ -1073,17 +1073,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
                                              n, fmt.parse(str));
                             } 
-                        }
-                        // fpc: <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
-                        else if (cmd == 8) {
-                            String currAmt = tokens.next();
-                            str = tokens.next();
-                            CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
-                            assertEquals(where + '"' + pat + "\".format(" + currAmt + ")",
-                                         str, fmt.format(n));
-                            n = parseCurrencyAmount(tokens.next(), ref, '/');
-                            assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
-                                         n, fmt.parseCurrency(str));
                         }
                         // p: <pattern or '-'> <string to parse> <exp. number>
                         else {
@@ -1139,6 +1128,40 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                   "\" threw an exception");
                             iae2.printStackTrace();
                         }
+                    }
+                    break;
+                case 8: // fpc:
+                    mloc = tokens.next();
+                    if (!mloc.equals("-")) {
+                        Locale l = LocaleUtility.getLocaleFromName(mloc);
+                        try {
+                            mfmt = MeasureFormat.getCurrencyFormat(new ULocale(l));
+                        } catch (IllegalArgumentException iae) {
+                            errln(where + "Loc \"" + tok + '"');
+                            iae.printStackTrace();
+                            tokens.next(); // consume remaining tokens
+                            tokens.next();
+                            tokens.next();
+                            continue;
+                        }
+                    }
+                    str = null;
+                    try {
+                        // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+                        if (cmd == 8) {
+                            String currAmt = tokens.next();
+                            str = tokens.next();
+                            CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
+                            assertEquals(where + mloc + ".format(" + currAmt + ")",
+                                         str, mfmt.format(n));
+                            n = parseCurrencyAmount(tokens.next(), ref, '/');
+                            assertEquals(where + mloc + ".parse(\"" + str + "\")",
+                                         n, (CurrencyAmount) mfmt.parseObject(str));
+                        }
+                    } catch (ParseException e) {
+                        errln(where + '"' + pat + "\".parse(\"" + str +
+                              "\") threw an exception");
+                        e.printStackTrace();
                     }
                     break;
                 case -1:

@@ -1317,10 +1317,13 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Parses text from the given string as a CurrencyAmount.  This
-     * method will fail if this format is not a currency format, that
-     * is, if it does not contain the currency pattern symbol (U+00A4)
-     * in its prefix or suffix.
+     * Parses text from the given string as a CurrencyAmount.  Unlike
+     * the parse() method, this method will attempt to parse a generic
+     * currency name, searching for a match of this object's locale's
+     * currency display names, or for a 3-letter ISO currency code.
+     * This method will fail if this format is not a currency format,
+     * that is, if it does not contain the currency pattern symbol
+     * (U+00A4) in its prefix or suffix.
      *
      * @param text the string to parse
      * @param pos input-output position; on input, the position within
@@ -1328,9 +1331,9 @@ public class DecimalFormat extends NumberFormat {
      * on output, the position after the last matched character. If
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
-     * @draft ICU 3.0
+     * @internal
      */
-    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         return (CurrencyAmount) parse(text, pos, true);
     }
 
@@ -1421,7 +1424,8 @@ public class DecimalFormat extends NumberFormat {
         }
 
         // Assemble into CurrencyAmount if necessary
-        return parseCurrency ? new CurrencyAmount(n, currency[0]) : n;
+        return parseCurrency ? (Object) new CurrencyAmount(n, currency[0])
+                             : (Object) n;
     }
 
     private static final int STATUS_INFINITE = 0;
