@@ -29,7 +29,7 @@ CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) mkmap.tmp $(ALL_MAN_FILES)
 TARGET = pkgdata
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
-DEFS += -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
+DEFS += -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o filemode.o sttcmode.o
