@@ -32,84 +32,10 @@ class RBBIDataWrapper;
 
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
+ * <p>Instances of this class are most commonly created by the factory methods of
+ *  BreakIterator::createWordInstance(), BreakIterator::createLineInstance(), etc. </p>
+ * <p>See the ICU User Guide for information on Break Iterator Rules.</p>
  *
- * <p>There are two kinds of rules, which are separated by semicolons: <i>variable definitions</i>
- * and <i>regular expressions.</i></p>
- *
- * <p>A varialbe definition defines a variable name that can be used in subsequent expressions.
- * It consists of a name preceded by a dollar sign, an equals
- * sign, and an expression.
- * A $variable is visible after its definition.
- * Variable definitions can contain other variables, as
- * long as those variables have been defined first. Variables are generally used to
- * make the regular expressions (which can get quite complex) shorter and easier to read.
- * They typically define either character categories or commonly-used subexpressions.</p>
- *
- * <p>A regular expression uses a subset of the normal Unix regular-expression syntax, and
- * defines a sequence of characters to be kept together. With one significant exception, the
- * iterator uses a longest-possible-match algorithm when matching text to regular
- * expressions. The iterator also treats descriptions containing multiple regular expressions
- * as if they were ORed together (i.e., as if they were separated by |).</p>
- *
- * <p>The special characters recognized by the regular-expression parser are as follows:</p>
- *
- * <blockquote>
- *   <table border="1" width="100%">
- *     <tr>
- *       <td width="6%">*</td>
- *       <td width="94%">Specifies that the expression preceding the asterisk may occur any number
- *       of times (including not at all).</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">()</td>
- *       <td width="94%">Encloses a sequence of characters.&nbsp; If followed by *, the sequence
- *       repeats.&nbsp; Otherwise, the parentheses are just a grouping device and a way to delimit
- *       the ends of expressions containing |.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">|</td>
- *       <td width="94%">Separates two alternative sequences of characters.&nbsp; Either one
- *       sequence or the other, but not both, matches this expression.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">.</td>
- *       <td width="94%">Matches any character.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">[]</td>
- *       <td width="94%">Specify a set of characters.&nbsp; A [] expression will
- *       match any single character that is specified in the [] expression.&nbsp; For more on the
- *       syntax of [] expressions, see the ICU User Guide description of UnicodeSet.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">/</td>
- *       <td width="94%">Specifies where the break position should go if text matches this
- *       expression.&nbsp; (e.g., &quot;[a-z]&#42;/[:Zs:]*1&quot; will match if the iterator sees a run
- *       of letters, followed by a run of whitespace, followed by a digit, but the break position
- *       will actually go before the whitespace).&nbsp; Expressions that don't contain / put the
- *       break position at the end of the matching text.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">\</td>
- *       <td width="94%">Escape character.&nbsp; The \ itself is ignored, but causes the next
- *       character to be treated as literal character.&nbsp;  Except for letters and numbers,
- *       characters in the ASCII range must be escaped to be considered as literals.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">!</td>
- *       <td width="94%">If ! appears at the beginning of a regular expression, it tells the regexp
- *       parser that this expression specifies the backwards-iteration behavior of the iterator,
- *       and not its normal iteration behavior.&nbsp;  The backwards rules must move the
- *       iterator to a safe position at or before the previous break position; forwards rules
- *       will then be used to find the exact previous position</td>
- *     </tr>
- *     <tr>
- *       <td width="6%"><em>(all others)</em></td>
- *       <td width="94%">All other characters are treated as literal characters, which must match
- *       the corresponding character(s) in the text exactly.</td>
- *     </tr>
- *   </table>
- * </blockquote>
  */
 
 
@@ -135,7 +61,7 @@ protected:
     /**
      * Rule tag value valid flag.
      * Some iterator operations don't intrinsically set the correct tag value.
-     * This flag lets us lazily compute it if we are ever asked for the value.
+     * This flag lets us lazily compute the value if we are ever asked for it.
      */
     UBool               fLastBreakTagValid;
 
@@ -204,10 +130,14 @@ public:
 
     /**
      * Construct a RuleBasedBreakIterator from a set of rules supplied as a string.
+     * @param rules The break rules to be used.
+     * @param parseError  In the event of a syntax error in the rules, provides the location
+     *                    within the rules of the problem.
+     * @param status Information on any errors encountered.
      */
     RuleBasedBreakIterator( const UnicodeString    &rules,
-                             UParseError             &parseError,
-                             UErrorCode              &status);
+                             UParseError           &parseError,
+                             UErrorCode            &status);
     /**
      * Destructor
      */
@@ -243,6 +173,8 @@ public:
      * behavior, and iterating over the same text, as this one.
      * Differs from the copy constructor in that it is polymorphic, and
      *   will correctly clone (copy) a derived class.
+     * clone() is thread safe.  Multiple threads may simultaeneously
+     * clone the same source break iterator.
      */
     virtual BreakIterator* clone() const;
 
@@ -319,7 +251,7 @@ public:
     virtual int32_t next(void);
 
     /**
-     * Advances the iterator backwards, to the last boundary preceding this one.
+     * Moves the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
      */
     virtual int32_t previous(void);
@@ -357,7 +289,7 @@ public:
 
 
     /**
-     * Return the status from the break rule that determined the most recently
+     * Return the status tag from the break rule that determined the most recently
      * returned break position.  The values appear in the rule source
      * within brackets, {123}, for example.  For rules that do not specify a
      * status, a default value of 0 is returned.
@@ -390,6 +322,29 @@ public:
      */
     inline static UClassID getStaticClassID(void);
 
+    /*
+     * Create a clone (copy) of this break iterator in memory provided
+     *  by the caller.  The idea is to increase performance by avoiding
+     *  a storage allocation.  Use of this functoin is NOT RECOMMENDED.
+     *  Performance gains are minimal, and correct buffer management is
+     *  tricky.  Use clone() instead.
+     *
+     * @param stackBuffer  The pointer to the memory into which the cloned object
+     *                     should be placed.  If NULL,  allocate heap memory
+     *                     for the cloned object.
+     * @param BufferSize   The size of the buffer.  If zero, return the required
+     *                     buffer size, but do not clone the object.  If the
+     *                     size was too small (but not zero), allocate heap
+     *                     storage for the cloned object.
+     * 
+     * @param status       Error status.  U_SAFECLONE_ALLOCATED_WARNING will be
+     *                     returned if the the provided buffer was too small, and
+     *                     the clone was therefore put on the heap.
+     *
+     * @return  Pointer to the clone object.  This may differ from the stackBuffer
+     *          address if the byte alignment of the stack buffer was not suitable
+     *          or if the stackBuffer was too small to hold the clone.
+     */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
@@ -398,15 +353,17 @@ public:
     /**
      * Return the binary form of compiled break rules,
      * which can then be used to create a new break iterator at some
-     * time in the future.  Creating a break iterator in this way
+     * time in the future.  Creating a break iterator from pre-compiled rules
      * is much faster than building one from the source form of the
      * break rules.
      *
      * The binary data is can only be used with the same version of ICU
      *  and on the same platform type (processor endian-ness)
      *
+     * @param length Returns the length of the binary data.  (Out paramter.)
+     *
      * @return   A pointer to the binary (compiled) rule data.  The storage
-     *           belongs to the RulesBasedBreakIterator object, no the
+     *           belongs to the RulesBasedBreakIterator object, not the
      *           caller, and must not be modified or deleted.
      */
     virtual const uint8_t *getBinaryRules(uint32_t &length);
