@@ -116,6 +116,179 @@ abstract public class TimeZone implements Serializable, Cloneable {
                                   int dayOfWeek, int milliseconds);
 
     /**
+     * Returns the time zone raw and GMT offset for the given moment
+     * in time.  Upon return, local-millis = GMT-millis + rawOffset +
+     * dstOffset.  All computations are performed in the proleptic
+     * Gregorian calendar.  The default implementation in the TimeZone
+     * class delegates to the 8-argument getOffset().
+     *
+     * @param date moment in time for which to return offsets, in
+     * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
+     * time or local wall time, depending on `local'.
+     * @param local if true, `date' is local wall time; otherwise it
+     * is in GMT time.
+     * @param offsets output parameter to receive the raw offset, that
+     * is, the offset not including DST adjustments, in offsets[0],
+     * and the DST offset, that is, the offset to be added to
+     * `rawOffset' to obtain the total offset between local and GMT
+     * time, in offsets[1]. If DST is not in effect, the DST offset is
+     * zero; otherwise it is a positive value, typically one hour.
+     *
+     * @draft ICU 2.8
+     */
+    public void getOffset(long date, boolean local, int[] offsets) {
+        offsets[0] = getRawOffset();
+        
+        // Convert to local wall millis if necessary
+        if (!local) {
+            date += offsets[0]; // now in local standard millis
+        }
+
+        // When local==FALSE, we might have to recompute. This loop is
+        // executed once, unless a recomputation is required; then it is
+        // executed twice.
+        for (int pass=0; ; ++pass) {
+            int fields[] = new int[4];
+            int day = (int) floorDivide(date, MILLIS_PER_DAY, fields);
+            int millis = fields[0];
+            
+            computeGregorianFields(day, fields);
+            
+            offsets[1] = getOffset(GregorianCalendar.AD,
+                                   fields[0], fields[1], fields[2],
+                                   fields[3], millis) - offsets[0];
+            
+            // Recompute if local==FALSE, dstOffset!=0, and addition of
+            // the dstOffset puts us in a different day.
+            if (pass!=0 || local || offsets[1]==0) {
+                break;
+            }
+            date += offsets[1];
+            if (floorDivide(date, MILLIS_PER_DAY) == day) {
+                break;
+            }
+        }
+    }
+    
+    /**
+     * Divide two long integers, returning the floor of the quotient.
+     * <p>
+     * Unlike the built-in division, this is mathematically well-behaved.
+     * E.g., <code>-1/4</code> => 0
+     * but <code>floorDivide(-1,4)</code> => -1.
+     * @param numerator the numerator
+     * @param denominator a divisor which must be > 0
+     * @return the floor of the quotient.
+     * @stable ICU 2.0
+     */
+    static final long floorDivide(long numerator, long denominator) {
+        // We do this computation in order to handle
+        // a numerator of Long.MIN_VALUE correctly
+        return (numerator >= 0) ?
+            numerator / denominator :
+            ((numerator + 1) / denominator) - 1;
+    }
+
+    /**
+     * Divide two integers, returning the floor of the quotient, and
+     * the modulus remainder.
+     * <p>
+     * Unlike the built-in division, this is mathematically well-behaved.
+     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
+     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
+     * @param numerator the numerator
+     * @param denominator a divisor which must be > 0
+     * @param remainder an array of at least one element in which the value
+     * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
+     * % denominator</code>, this will always be non-negative.
+     * @return the floor of the quotient.
+     * @stable ICU 2.0
+     */
+    static final int floorDivide(long numerator, int denominator, int[] remainder) {
+        if (numerator >= 0) {
+            remainder[0] = (int)(numerator % denominator);
+            return (int)(numerator / denominator);
+        }
+        int quotient = (int)(((numerator + 1) / denominator) - 1);
+        remainder[0] = (int)(numerator - (quotient * denominator));
+        return quotient;
+    }
+
+    /**
+     * Compute the Gregorian calendar year, month, and day of month from the
+     * epoch day.
+     */
+    final void computeGregorianFields(int day,
+                                                int fields[]) {
+        int year, month, dayOfMonth, dayOfYear;
+
+        // Here we convert from the day number to the multiple radix
+        // representation.  We use 400-year, 100-year, and 4-year cycles.
+        // For example, the 4-year cycle has 4 years + 1 leap day; giving
+        // 1461 == 365*4 + 1 days.
+        int[] rem = new int[1];
+        int n400 = floorDivide(day, 146097, rem); // 400-year cycle length
+        int n100 = floorDivide(rem[0], 36524, rem); // 100-year cycle length
+        int n4 = floorDivide(rem[0], 1461, rem); // 4-year cycle length
+        int n1 = floorDivide(rem[0], 365, rem);
+        year = 400*n400 + 100*n100 + 4*n4 + n1;
+        dayOfYear = rem[0]; // zero-based day of year
+        if (n100 == 4 || n1 == 4) {
+            dayOfYear = 365; // Dec 31 at end of 4- or 400-yr cycle
+        } else {
+            ++year;
+        }
+
+        boolean isLeap = ((year&0x3) == 0) && // equiv. to (year%4 == 0)
+            (year%100 != 0 || year%400 == 0);
+
+        int correction = 0;
+        int march1 = isLeap ? 60 : 59; // zero-based DOY for March 1
+        if (dayOfYear >= march1) correction = isLeap ? 1 : 2;
+        month = (12 * (dayOfYear + correction) + 6) / 367; // zero-based month
+        dayOfMonth = dayOfYear -
+            GREGORIAN_MONTH_COUNT[month][isLeap?1:0] + 1; // one-based DOM
+
+        // Jan 1 1970 is Thursday
+        int dayOfWeek = (day + Calendar.THURSDAY) % 7;
+        if (dayOfWeek < Calendar.SUNDAY) {
+            dayOfWeek += 7;
+        }
+
+        fields[0] = year;
+        fields[1] = month; // 0-based already
+        fields[2] = dayOfMonth; // 1-based already
+        fields[3] = dayOfWeek; // 1-based already
+        //fields[4] = dayOfYear + 1; // Convert from 0-based to 1-based
+    }
+
+    /**
+     * The number of milliseconds in one day.  Although ONE_DAY and
+     * ONE_WEEK can fit into ints, they must be longs in order to prevent
+     * arithmetic overflow when performing (bug 4173516).
+     * @stable ICU 2.0
+     */
+    protected static final int MILLIS_PER_DAY    = 24*60*60*1000;
+
+    private static final int[][] GREGORIAN_MONTH_COUNT = {
+        // st  st2
+        {   0,   0 }, // Jan
+        {  31,  31 }, // Feb
+        {  59,  60 }, // Mar
+        {  90,  91 }, // Apr
+        { 120, 121 }, // May
+        { 151, 152 }, // Jun
+        { 181, 182 }, // Jul
+        { 212, 213 }, // Aug
+        { 243, 244 }, // Sep
+        { 273, 274 }, // Oct
+        { 304, 305 }, // Nov
+        { 334, 335 }  // Dec
+        // st   days in year before start of month
+        // st2  days in year before month in leap year
+    };
+
+    /**
      * Sets the base time zone offset to GMT.
      * This is the offset to add *to* UTC to get local time.
      * @param offsetMillis the given base time zone offset to GMT.
