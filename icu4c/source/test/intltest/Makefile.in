@@ -36,7 +36,7 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
 OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
-caltztst.o citrtest.o cntabcol.o cppcnvt.o cputilst.o currcoll.o dacoll.o		\
+caltztst.o citrtest.o cntabcol.o cppcnvt.o cputilst.o currcoll.o dacoll.o	\
 dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o itconv.o	\
 itercoll.o itformat.o itmajor.o ittxtbd.o itutil.o jacoll.o lcukocol.o	\
@@ -46,7 +46,7 @@ tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\
 tsmthred.o tsmutex.o tsnmfmt.o tsputil.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o transtst.o strtest.o thcoll.o \
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o unhxtrts.o hxuntrts.o \
-ufltlgts.o testutil.o transrt.o normconf.o sfwdchit.o \
+ufltlgts.o testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o \
 itrbnf.o itrbnfrt.o
 
