@@ -954,6 +954,11 @@ ko {
         Ugar { "\uC6B0\uAC00\uB9BF\uC5B4" }
         Yiii { "\uC774\uC5B4" }
     }
+    Keys{
+         collation { "\uC870\uD569" }
+         calendar  { "\uB2EC\uB825" }
+         currency  { "\uD1B5\uD654" }
+    }
     Types{
         collation{
             direct      { "\uC21C\uC11C" }
