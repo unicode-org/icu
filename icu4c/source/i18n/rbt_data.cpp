@@ -17,16 +17,15 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
         return;
     }
     variableNames = uhash_open((UHashFunction)uhash_hashUString, &status);
-    setVariables = uhash_open(0, &status);
+    setVariables = 0;
+    setVariablesLength = 0;
 }
 
 TransliterationRuleData::~TransliterationRuleData() {
     if (variableNames != 0) {
         uhash_close(variableNames);
     }
-    if (setVariables != 0) {
-        uhash_close(setVariables);
-    }
+    delete[] setVariables;
 }
 
 void
@@ -35,31 +34,6 @@ TransliterationRuleData::defineVariable(const UnicodeString& name,
                                         UErrorCode& status) {
     uhash_putKey(variableNames, name.hashCode() & 0x7FFFFFFF,
                  (void*) value,
-                 &status);
-}
-
-void
-TransliterationRuleData::defineVariable(const UnicodeString& name,
-                                        UChar standIn,
-                                        UnicodeSet* adoptedSet,
-                                        UErrorCode& status) {
-    defineVariable(name, standIn, status);
-    defineSet(standIn, adoptedSet, status);
-}
-
-void
-TransliterationRuleData::defineSet(UChar standIn,
-                                   UnicodeSet* adoptedSet,
-                                   UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (adoptedSet == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    uhash_putKey(setVariables, (int32_t) (standIn & 0x7FFFFFFF),
-                 adoptedSet,
                  &status);
 }
 
@@ -76,10 +50,10 @@ TransliterationRuleData::lookupVariable(const UnicodeString& name,
     return (UChar) (int32_t) value;
 }
 
-UnicodeSet*
+const UnicodeSet*
 TransliterationRuleData::lookupSet(UChar standIn) const {
-    void* value = uhash_get(setVariables, (int32_t) (standIn & 0x7FFFFFFF));
-    return (UnicodeSet*) value;
+    int32_t i = standIn - setVariablesBase;
+    return (i >= 0 && i < setVariablesLength) ? setVariables[i] : 0;
 }
 
 bool_t

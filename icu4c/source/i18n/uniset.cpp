@@ -10,7 +10,7 @@
 
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
-#include "rbt_data.h"
+#include "symtable.h"
 
 // N.B.: This mapping is different in ICU and Java
 const UnicodeString UnicodeSet::CATEGORY_NAMES(
@@ -77,10 +77,11 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
     applyPattern(pattern, status);
 }
 
+// For internal use by RuleBasedTransliterator
 UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-                       const TransliterationRuleData* data,
+                       const SymbolTable& symbols,
                        UErrorCode& status) {
-    parse(pairs, pattern, pos, data, status);
+    parse(pairs, pattern, pos, &symbols, status);
 }
 
 /**
@@ -452,7 +453,7 @@ void UnicodeSet::clear(void) {
 UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                                  const UnicodeString& pattern,
                                  ParsePosition& pos,
-                                 const TransliterationRuleData* data,
+                                 const SymbolTable* symbols,
                                  UErrorCode& status) {
     if (U_FAILURE(status)) {
         return pairsBuf;
@@ -583,9 +584,10 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
          * Variable names are only parsed if varNameToChar is not null.
          * Set variables are only looked up if varCharToSet is not null.
          */
-        else if (data != NULL && !isLiteral && c == VARIABLE_REF_OPEN) {
+        else if (symbols != NULL && !isLiteral && c == VARIABLE_REF_OPEN) {
             ++i;
             int32_t j = pattern.indexOf(VARIABLE_REF_CLOSE, i);
+            UnicodeSet* set = NULL;
             if (i == j || j < 0) { // empty or unterminated
                 // throw new IllegalArgumentException("Illegal variable reference");
                 status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -593,7 +595,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                 scratch.truncate(0);
                 pattern.extractBetween(i, j, scratch);
                 ++j;
-                c = data->lookupVariable(scratch, status);
+                symbols->lookup(scratch, c, set, status);
             }
             if (U_FAILURE(status)) {
                 // Either the reference was ill-formed (empty name, or no
@@ -602,7 +604,6 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
             }
             isLiteral = TRUE;
 
-            UnicodeSet* set = data->lookupSet(c);
             if (set != NULL) {
                 nestedPairs = &set->pairs;
             }
@@ -638,7 +639,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
             } else {
                 // Recurse to get the pairs for this nested set.
                 pos.setIndex(i);
-                nestedPairs = &parse(nestedAux, pattern, pos, data, status);
+                nestedPairs = &parse(nestedAux, pattern, pos, symbols, status);
                 if (U_FAILURE(status)) {
                     return pairsBuf;
                 }
