@@ -190,6 +190,10 @@ public:
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
 
+#ifndef U_USE_DEPRECATED_TRANSLITERATOR_API
+ public:
+#endif
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
