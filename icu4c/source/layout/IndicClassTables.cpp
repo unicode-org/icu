@@ -154,15 +154,20 @@ static const IndicClassTable::CharClass teluCharClasses[] =
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0C60 - 0C6F
 };
 
-// FIXME: is 0CD5 a dr or an lm??
+// U+CC3 and U+CC4 are _lm here not _dr since the Kannada rendering
+// rules want them below and to the right of the entire cluster
+//
+// There's some information about this in:
+//
+//  http://brahmi.sourceforge.net/docs/KannadaComputing.html
 static const IndicClassTable::CharClass kndaCharClasses[] =
 {
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, // 0C80 - 0C8F
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C90 - 0C9F
     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0CA0 - 0CAF
     _rb, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _dr, _da, // 0CB0 - 0CBF
-    _s1, _dr, _dr, _dr, _dr, _xx, _da, _s2, _s3, _xx, _s4, _s5, _da, _vr, _xx, _xx, // 0CC0 - 0CCF
-    _xx, _xx, _xx, _xx, _xx, _lm, _dr, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _ct, _xx, // 0CD0 - 0CDF
+    _s1, _dr, _dr, _lm, _lm, _xx, _da, _s2, _s3, _xx, _s4, _s5, _da, _vr, _xx, _xx, // 0CC0 - 0CCF
+    _xx, _xx, _xx, _xx, _xx, _lm, _lm, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _ct, _xx, // 0CD0 - 0CDF
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0CE0 - 0CEF
 };
 
