@@ -869,6 +869,52 @@ public:
                        UErrorCode& status) const;
 
     /**
+     * Parses text from the given string as a currency amount.  Unlike
+     * the parse() method, this method will attempt to parse a generic
+     * currency name, searching for a match of this object's locale's
+     * currency display names, or for a 3-letter ISO currency code.
+     * This method will fail if this format is not a currency format,
+     * that is, if it does not contain the currency pattern symbol
+     * (U+00A4) in its prefix or suffix.
+     *
+     * @param text the string to parse
+     * @param result output parameter to receive result. This will have
+     * its currency set to the parsed ISO currency code.
+     * @param pos input-output position; on input, the position within
+     * text to match; must have 0 <= pos.getIndex() < text.length();
+     * on output, the position after the last matched character. If
+     * the parse fails, the position in unchanged upon output.
+     * @return a reference to result
+     * @draft ICU 3.0
+     */
+    virtual Formattable& parseCurrency(const UnicodeString& text,
+                                       Formattable& result,
+                                       ParsePosition& pos) const;
+
+    // Redeclare here, otherwise function will be hidden
+    /**
+     * Parses text from the beginning of the given string as a
+     * currency amount.  The method might not use the entire text of
+     * the given string.  Unlike the parse() method, this method will
+     * attempt to parse a generic currency name, searching for a match
+     * of this object's locale's currency display names, or for a
+     * 3-letter ISO currency code.  This method will fail if this
+     * format is not a currency format, that is, if it does not
+     * contain the currency pattern symbol (U+00A4) in its prefix or
+     * suffix.
+     *
+     * @param text the string to parse
+     * @param result output parameter to receive result. This will have
+     * its currency set to the parsed ISO currency code.
+     * @param status input-output error code
+     * @return a reference to result
+     * @draft ICU 3.0
+     */
+    Formattable& parseCurrency(const UnicodeString& text,
+                               Formattable& result,
+                               UErrorCode& status) const;
+
+    /**
      * Returns the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @return desired DecimalFormatSymbols
@@ -1621,32 +1667,27 @@ private:
                              DigitList& digits,
                              UBool         isInteger) const;
 
+    void parse(const UnicodeString& text,
+               Formattable& result,
+               ParsePosition& pos,
+               UBool parseCurrency) const;
+
     enum {
         fgStatusInfinite,
         fgStatusLength      // Leave last in list.
     } StatusFlags;
 
-    /**
-     * Parse the given text into a number.  The text is parsed beginning at
-     * parsePosition, until an unparseable character is seen.
-     * @param text The string to parse.
-     * @param parsePosition The position at which to being parsing.  Upon
-     *                      return, the first unparseable character.
-     * @param digits        The DigitList to set to the parsed value.
-     * @param isExponent    If true, parse an exponent.  This means no
-     *                      infinite values and integer only.
-     * @param status        Upon return contains boolean status flags indicating
-     *                      whether the value was infinite and whether it was positive.
-     */
     UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
-                    DigitList& digits, UBool* status) const;
+                   DigitList& digits, UBool* status,
+                   UChar* currency) const;
 
     int32_t skipPadding(const UnicodeString& text, int32_t position) const;
 
     int32_t compareAffix(const UnicodeString& input,
                          int32_t pos,
                          UBool isNegative,
-                         UBool isPrefix) const;
+                         UBool isPrefix,
+                         UChar* currency) const;
     
     static int32_t compareSimpleAffix(const UnicodeString& affix,
                                       const UnicodeString& input,
@@ -1658,7 +1699,8 @@ private:
     
     int32_t compareComplexAffix(const UnicodeString& affixPat,
                                 const UnicodeString& input,
-                                int32_t pos) const;
+                                int32_t pos,
+                                UChar* currency) const;
 
     static int32_t match(const UnicodeString& text, int32_t pos, UChar32 ch);
 
@@ -1756,6 +1798,17 @@ private:
     EPadPosition            fPadPosition;
 
 protected:
+
+    /**
+     * Returns the currency in effect for this formatter.  Subclasses
+     * should override this method as needed.  Unlike getCurrency(),
+     * this method should never return "".
+     * @result output parameter for null-terminated result, which must
+     * have a capacity of at least 4
+     * @internal
+     */
+    virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
+
   /** number of integer digits 
    * @stable ICU 2.4
    */  

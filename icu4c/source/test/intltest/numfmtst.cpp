@@ -1534,8 +1534,9 @@ static const char* KEYWORDS[] = {
     /*3*/ "fp:",  // <pattern or '-'> <number> <exp. string> <exp. number>
     /*4*/ "rt:",  // <pattern or '-'> <(exp.) number> <(exp.) string>
     /*5*/ "p:",   // <pattern or '-'> <string> <exp. number>
-    /*6*/ "perr:",   // <pattern or '-'> <invalid string>
+    /*6*/ "perr:", // <pattern or '-'> <invalid string>
     /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
+    /*8*/ "fpc:", // <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
     0
 };
 
@@ -1552,6 +1553,23 @@ static int32_t keywordIndex(const UnicodeString& tok) {
         }
     }
     return -1;
+}
+
+/**
+ * Parse a CurrencyAmount using the given NumberFormat, with
+ * the 'delim' character separating the number and the currency.
+ */
+static void parseCurrencyAmount(const UnicodeString& str,
+                                const NumberFormat& fmt,
+                                UChar delim,
+                                Formattable& result,
+                                UErrorCode& ec) {
+    UnicodeString num, cur;
+    int32_t i = str.indexOf(delim);
+    str.extractBetween(0, i, num);
+    str.extractBetween(i+1, INT32_MAX, cur);
+    fmt.parse(num, result, ec);
+    result.setCurrency(cur.getTerminatedBuffer());
 }
 
 void NumberFormatTest::TestCases() {
@@ -1591,17 +1609,18 @@ void NumberFormatTest::TestCases() {
         case 3: // fp:
         case 4: // rt:
         case 5: // p:
+        case 8: // fpc:
             if (!tokens.next(tok, ec)) goto error;
             if (tok != "-") {
                 pat = tok;
                 delete fmt;
                 fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc, ec), ec);
                 if (U_FAILURE(ec)) {
-                    errln("FAIL: " + where + "Pattern \"" + pat + "\"");
+                    errln("FAIL: " + where + "Pattern \"" + pat + "\": " + u_errorName(ec));
                     ec = U_ZERO_ERROR;
                     if (!tokens.next(tok, ec)) goto error;
                     if (!tokens.next(tok, ec)) goto error;
-                    if (cmd == 3) {
+                    if (cmd == 3 || cmd == 8) {
                         if (!tokens.next(tok, ec)) goto error;
                     }
                     continue;
@@ -1632,6 +1651,36 @@ void NumberFormatTest::TestCases() {
                     assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
                                  n, m);
                 } 
+            }
+            // fpc: <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+            else if (cmd == 8) {
+                UnicodeString currAmt;
+                if (!tokens.next(currAmt, ec)) goto error;
+                if (!tokens.next(str, ec)) goto error;
+                Formattable n;
+                parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
+                if (assertSuccess("parseCurrencyAmount", ec)) {
+                    UChar save[4];
+                    u_strcpy(save, fmt->getCurrency());
+                    assertEquals(where + "\"" + pat + "\".format(" + currAmt + ")",
+                                 str, fmt->format(n, out.remove(), ec));
+                    assertSuccess("format", ec);
+                    if (u_strcmp(save, fmt->getCurrency()) != 0) {
+                        errln((UnicodeString)"FAIL: " + where +
+                              "NumberFormat.getCurrency() => " + fmt->getCurrency() +
+                              ", expected " + save);
+                    }
+                }
+                if (!tokens.next(currAmt, ec)) goto error;
+                parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
+                if (assertSuccess("parseCurrencyAmount", ec)) {
+                    Formattable m;
+                    fmt->parseCurrency(str, m, ec);
+                    if (assertSuccess("parseCurrency", ec)) {
+                        assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
+                                     n, m);
+                    }
+                }
             }
             // p: <pattern or '-'> <string to parse> <exp. number>
             else {
