@@ -111,15 +111,15 @@ void CanonicalIteratorTest::TestExhaustive() {
 
 void CanonicalIteratorTest::TestBasic() {
 
-  UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
-  UnicodeString testArray[][2] = {
-        {CharsToUnicodeString("Åd\\u0307\\u0327"), CharsToUnicodeString("A\\u030Ad\\u0307\\u0327, A\\u030Ad\\u0327\\u0307, A\\u030A\\u1E0B\\u0327, "
+    static const char * const testArray[][2] = {
+        {"\\u00C5d\\u0307\\u0327", "A\\u030Ad\\u0307\\u0327, A\\u030Ad\\u0327\\u0307, A\\u030A\\u1E0B\\u0327, "
             "A\\u030A\\u1E11\\u0307, \\u00C5d\\u0307\\u0327, \\u00C5d\\u0327\\u0307, "
             "\\u00C5\\u1E0B\\u0327, \\u00C5\\u1E11\\u0307, \\u212Bd\\u0307\\u0327, "
-            "\\u212Bd\\u0327\\u0307, \\u212B\\u1E0B\\u0327, \\u212B\\u1E11\\u0307")},
-        {CharsToUnicodeString("\\u010d\\u017E"), CharsToUnicodeString("c\\u030Cz\\u030C, c\\u030C\\u017E, \\u010Dz\\u030C, \\u010D\\u017E")},
-        {CharsToUnicodeString("x\\u0307\\u0327"), CharsToUnicodeString("x\\u0307\\u0327, x\\u0327\\u0307, \\u1E8B\\u0327")},
+            "\\u212Bd\\u0327\\u0307, \\u212B\\u1E0B\\u0327, \\u212B\\u1E11\\u0307"},
+        {"\\u010d\\u017E", "c\\u030Cz\\u030C, c\\u030C\\u017E, \\u010Dz\\u030C, \\u010D\\u017E"},
+        {"x\\u0307\\u0327", "x\\u0307\\u0327, x\\u0327\\u0307, \\u1E8B\\u0327"},
     };
     
 #if 0
@@ -157,17 +157,19 @@ void CanonicalIteratorTest::TestBasic() {
     CanonicalIterator it("", status);
     for (i = 0; i < ARRAY_LENGTH(testArray); ++i) {
         //logln("Results for: " + name.transliterate(testArray[i]));
-        it.setSource(testArray[i][0], status);
+        UnicodeString testStr = CharsToUnicodeString(testArray[i][0]);
+        it.setSource(testStr, status);
         int counter = 0;
         set->removeAll();
         while (TRUE) {
             UnicodeString *result = new UnicodeString(it.next());
-            if (*result == "") break;
+            if (*result == "")
+                break;
             set->put(*result, result, status); // Add result to the table
             //logln(++counter + ": " + hex.transliterate(result));
             //logln(" = " + name.transliterate(result));
         }
-        expectEqual(i + ": ", testArray[i][0], collectionToString(set), testArray[i][1]);
+        expectEqual(i + ": ", testStr, collectionToString(set), CharsToUnicodeString(testArray[i][1]));
 
     }
     delete set;
