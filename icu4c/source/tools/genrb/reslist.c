@@ -16,6 +16,7 @@
 */
 
 #include <assert.h>
+#include <stdio.h>
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
@@ -38,7 +39,7 @@ static const UDataInfo dataInfo= {
     0,
 
     {0x52, 0x65, 0x73, 0x42},     /* dataFormat="resb" */
-    {1, 0, 0, 0},                 /* formatVersion */
+    {1, 1, 0, 0},                 /* formatVersion */
     {1, 4, 0, 0}                  /* dataVersion take a look at version inside parsed resb*/
 };
 
@@ -205,7 +206,7 @@ static uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
             assert(i < res->u.fTable.fCount);
 
             /* where the key is plus root pointer */
-            keys[i] = (uint16_t) (current->fKey + sizeof(uint32_t));
+            keys[i] = (uint16_t) current->fKey;
 
             if (current->fType == URES_INT) {
                 resources[i] = (current->fType << 28) | (current->u.fIntValue.fValue & 0xFFFFFFF);
@@ -279,7 +280,9 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
     uint8_t         pad        = 0;
     uint32_t        root       = 0;
     uint32_t        usedOffset = 0;
+    uint32_t        top, size;
     char            dataName[1024];
+    int32_t         indexes[URES_INDEX_TOP];
 
     if (writtenFilename && writtenFilenameLen) {
         *writtenFilename = 0;
@@ -345,19 +348,49 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
     }
     pad = calcPadding(bundle->fKeyPoint);
 
-    usedOffset = sizeof(uint32_t) + bundle->fKeyPoint + pad ; /*this is how much root and keys are taking up*/
+    usedOffset = bundle->fKeyPoint + pad ; /* top of the strings */
 
-    root = ((usedOffset + bundle->fRoot->u.fTable.fChildrenSize) >> 2) | (URES_TABLE << 28); /* we're gonna put the main table at the end */
+    /* we're gonna put the main table at the end */
+    top = usedOffset + bundle->fRoot->u.fTable.fChildrenSize;
+    root = (top) >> 2 | (bundle->fRoot->fType << 28);
 
+    /* write the root item */
     udata_write32(mem, root);
 
-    udata_writeBlock(mem, bundle->fKeys, bundle->fKeyPoint);
+    /* add to top the size of the root item */
+    top += bundle->fRoot->fSize;
+    top += calcPadding(top);
 
+    /*
+     * formatVersion 1.1 (ICU 2.8):
+     * write int32_t indexes[] after root and before the strings
+     * to make it easier to parse resource bundles in icuswap or from Java etc.
+     */
+    indexes[URES_INDEX_LENGTH]=             URES_INDEX_TOP;
+    indexes[URES_INDEX_STRINGS_TOP]=        (int32_t)(usedOffset>>2);
+    indexes[URES_INDEX_RESOURCES_TOP]=      (int32_t)(top>>2);
+    indexes[URES_INDEX_BUNDLE_TOP]=         indexes[URES_INDEX_RESOURCES_TOP];
+    indexes[URES_INDEX_MAX_TABLE_LENGTH]=   bundle->fMaxTableLength;
+
+    /* write the indexes[] */
+    udata_writeBlock(mem, indexes, sizeof(indexes));
+
+    /* write the table key strings */
+    udata_writeBlock(mem, bundle->fKeys+URES_STRINGS_BOTTOM,
+                          bundle->fKeyPoint-URES_STRINGS_BOTTOM);
+
+    /* write the padding bytes after the table key strings */
     udata_writePadding(mem, pad);
 
+    /* write all of the bundle contents: the root item and its children */
     usedOffset = res_write(mem, bundle->fRoot, usedOffset, status);
 
-    udata_finish(mem, status);
+    size = udata_finish(mem, status);
+    if(top != size) {
+        fprintf(stderr, "genrb error: wrote %u bytes but counted %u\n",
+                size, top);
+        *status = U_INTERNAL_PROGRAM_ERROR;
+    }
 }
 
 /* Opening Functions */
@@ -619,8 +652,10 @@ struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
+    uprv_memset(bundle, 0, sizeof(struct SRBRoot));
+
     bundle->fLocale   = NULL;
-    bundle->fKeyPoint = 0;
+
     bundle->fKeys     = (char *) uprv_malloc(sizeof(char) * KEY_SPACE_SIZE);
 
     if(comment != NULL){
@@ -633,11 +668,17 @@ struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status) {
         return NULL;
     }
 
+    /* formatVersion 1.1: start fKeyPoint after the root item and indexes[] */
+    bundle->fKeyPoint = URES_STRINGS_BOTTOM;
+    uprv_memset(bundle->fKeys, 0, URES_STRINGS_BOTTOM);
+
     bundle->fCount = 0;
     bundle->fRoot  = table_open(bundle, NULL, comment, status);
 
     if (bundle->fRoot == NULL || U_FAILURE(*status)) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
+        if (U_SUCCESS(*status)) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        }
 
         uprv_free(bundle->fKeys);
         uprv_free(bundle);
@@ -790,6 +831,10 @@ void table_add(struct SResource *table, struct SResource *res, int linenumber, U
     list = &(table->u.fTable);
 
     ++(list->fCount);
+    if(list->fCount > list->fRoot->fMaxTableLength) {
+        list->fRoot->fMaxTableLength = list->fCount;
+    }
+
     table->fSize += sizeof(uint32_t) + sizeof(uint16_t);
 
     table->u.fTable.fChildrenSize += res->fSize + calcPadding(res->fSize);
@@ -899,27 +944,29 @@ void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status)
 }
 
 
-uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status) {
-    uint16_t keypos;
+int32_t
+bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status) {
+    int32_t keypos, length;
 
     if (U_FAILURE(*status)) {
-        return (uint16_t) - 1;
+        return -1;
     }
 
     if (tag == NULL) {
-        return (uint16_t) - 1;
+        /* do not set an error: the root table has a NULL tag */
+        return -1;
     }
 
-    keypos = (uint16_t)bundle->fKeyPoint;
+    keypos = bundle->fKeyPoint;
 
-    bundle->fKeyPoint += (uint16_t) (uprv_strlen(tag) + 1);
+    bundle->fKeyPoint += length = (int32_t) (uprv_strlen(tag) + 1);
 
     if (bundle->fKeyPoint > KEY_SPACE_SIZE) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return (uint16_t) - 1;
+        return -1;
     }
 
-    uprv_strcpy(bundle->fKeys + keypos, tag);
+    uprv_memcpy(bundle->fKeys + keypos, tag, length);
 
     return keypos;
 }
