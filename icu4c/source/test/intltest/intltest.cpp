@@ -1012,7 +1012,9 @@ main(int argc, char* argv[])
             else if (strcmp("w", str) == 0) {
               warnOnMissingData = TRUE;
               warnOrErr = "WARNING";
-            } else if (strcmp("tz", str) == 0) {
+            }
+#if !UCONFIG_NO_FORMATTING
+            else if (strcmp("tz", str) == 0) {
                 zone = 0;
                 if ((i+1) < argc) {
                     switch (argv[i+1][0]) {
@@ -1027,7 +1029,9 @@ main(int argc, char* argv[])
                         break;
                     }
                 }
-            } else {
+            }
+#endif
+            else {
                 syntax = TRUE;
             }
         }else{
@@ -1046,10 +1050,16 @@ main(int argc, char* argv[])
                 "### Syntax:\n"
                 "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
                 "### where options are: verbose (v), all (a), noerrormsg (n), \n"
-                "### exhaustive (e), leaks (l), and default time zone (tz). \n"
+                "### exhaustive (e), leaks (l)"
+#if !UCONFIG_NO_FORMATTING
+                                              ", and default time zone (tz)"
+#endif
+                                                                           ". \n"
+#if !UCONFIG_NO_FORMATTING
                 "### -tz takes an optional zone argument.  If absent, \n"
                 "### or if the empty string, then the default time zone \n"
                 "### is not set (host time zone is used). \n"
+#endif
                 "### (Specify either -all (shortcut -a) or a test name). \n"
                 "### -all will run all of the tests.\n"
                 "### \n"
@@ -1081,7 +1091,9 @@ main(int argc, char* argv[])
     fprintf(stdout, "   No error messages (n) : %s\n", (no_err_msg? "On" : "Off"));
     fprintf(stdout, "   Exhaustive (e)        : %s\n", (!quick?     "On" : "Off"));
     fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
+#if !UCONFIG_NO_FORMATTING
     fprintf(stdout, "   Time zone (tz)        : %s\n", (zone?       zone : "UNSET"));
+#endif
     fprintf(stdout, "-----------------------------------------------\n");
 
     // Check that u_init() works
@@ -1147,6 +1159,7 @@ main(int argc, char* argv[])
         }
     }
 
+#if !UCONFIG_NO_FORMATTING
     /* Set the default time zone */
     if (zone != 0) {
         UErrorCode ec = U_ZERO_ERROR;
@@ -1171,6 +1184,7 @@ main(int argc, char* argv[])
         }
         TimeZone::adoptDefault(z);
     }
+#endif
 
     /* TODO: Add option to call u_cleanup and rerun tests. */
     if (all) {
