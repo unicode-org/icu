@@ -1175,6 +1175,7 @@
 #define ExtensionSubtable ExtensionSubtable_2_6
 #define FeatureListTable FeatureListTable_2_6
 #define FieldPosition FieldPosition_2_6
+#define FontRuns FontRuns_2_6
 #define Format Format_2_6
 #define Format1AnchorTable Format1AnchorTable_2_6
 #define Format2AnchorTable Format2AnchorTable_2_6
@@ -1219,12 +1220,14 @@
 #define LECharMapper LECharMapper_2_6
 #define LEFontInstance LEFontInstance_2_6
 #define LEGlyphFilter LEGlyphFilter_2_6
+#define LXUtilities LXUtilities_2_6
 #define LayoutEngine LayoutEngine_2_6
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_2_6
 #define LigatureSubstitutionSubtable LigatureSubstitutionSubtable_2_6
 #define Locale Locale_2_6
 #define LocaleKey LocaleKey_2_6
 #define LocaleKeyFactory LocaleKeyFactory_2_6
+#define LocaleRuns LocaleRuns_2_6
 #define LocaleUtility LocaleUtility_2_6
 #define LookupListTable LookupListTable_2_6
 #define LookupProcessor LookupProcessor_2_6
@@ -1262,6 +1265,7 @@
 #define PairPositioningFormat1Subtable PairPositioningFormat1Subtable_2_6
 #define PairPositioningFormat2Subtable PairPositioningFormat2Subtable_2_6
 #define PairPositioningSubtable PairPositioningSubtable_2_6
+#define ParagraphLayout ParagraphLayout_2_6
 #define ParseData ParseData_2_6
 #define ParsePosition ParsePosition_2_6
 #define PropertyAliases PropertyAliases_2_6
@@ -1289,6 +1293,7 @@
 #define RuleBasedNumberFormat RuleBasedNumberFormat_2_6
 #define RuleBasedTransliterator RuleBasedTransliterator_2_6
 #define RuleHalf RuleHalf_2_6
+#define RunArray RunArray_2_6
 #define SameValueSubstitution SameValueSubstitution_2_6
 #define ScriptListTable ScriptListTable_2_6
 #define ScriptRunIterator ScriptRunIterator_2_6
@@ -1320,6 +1325,7 @@
 #define StringPrep StringPrep_2_6
 #define StringReplacer StringReplacer_2_6
 #define StringSearch StringSearch_2_6
+#define StyleRuns StyleRuns_2_6
 #define SubstitutionLookup SubstitutionLookup_2_6
 #define SubtableProcessor SubtableProcessor_2_6
 #define SymbolTable SymbolTable_2_6
@@ -1360,6 +1366,7 @@
 #define UnicodeToHexTransliterator UnicodeToHexTransliterator_2_6
 #define UppercaseTransliterator UppercaseTransliterator_2_6
 #define ValueRecord ValueRecord_2_6
+#define ValueRuns ValueRuns_2_6
 #define _UF _UF_2_6
 #define locale_set_default_internal locale_set_default_internal_2_6
 #define uprv_cnttab_cloneContraction uprv_cnttab_cloneContraction_2_6
